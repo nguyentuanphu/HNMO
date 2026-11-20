@@ -22,3 +22,22 @@
   An alert lists both owners and the item's history.
 - **Market access:** paid once per account, in the game (F6) or on the website, with a receipt. It is checked by
   the market on list and buy (game and website).
+
+## Done (2026-11-20, Sydney)
+
+- **Serials:** `Item.Serial` (database column `data."Item"."Serial"` with an index, migration `AddItemSerial`), copied by
+  every copy of an item (`AssignValues` and the generated clones). Given once: by every scan in the database (player
+  items only; NPC shop stock and quest reward templates never get one, because buying copies them), and to the bag
+  and vault of a character entering the game.
+- **Scan:** `DuplicateItemsPlugIn` (on by default; admin panel Plugins: scan every 60 minutes, freeze on/off). It gives
+  the missing serials, finds serials held by more than one item (`PostgresItemSerialDatabase`) and records a case in the
+  state file. A case stays frozen until decided; a decided case isn't opened again.
+- **Freeze:** a frozen item can't be traded, sold, dropped, put in a store, listed, put in escrow, mixed or moved into
+  the vault (the account safety's item lock checks, and the item move).
+- **Admin:** page "Duplicate items" (`/duplicate-items`, players group): the cases with both owners and where the items
+  are, "Scan now", "Mark decided" with a note; times in Sydney time.
+- **Checked on PostgreSQL:** the migration ran at the server's start; the first scan gave 3,653 player items a serial
+  (963 shop and quest template items none); a copied serial was found by "Scan now", listing the frozen item on the
+  market was refused in the game with the EN notice, and after "Mark decided" the same listing went through.
+- **Gap:** an item made during a session and copied in the same session (before any scan or the next login) has no
+  serial yet, so its copy isn't found. Copies of items older than the last scan or login are.

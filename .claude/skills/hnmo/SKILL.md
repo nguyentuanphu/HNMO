@@ -460,3 +460,18 @@ The desktop code stays the reference for how the classic game behaves (parity ru
   `ItemStackRules.CurrentPlayer` (set in `RemotePlayer.PacketReceivedAsync`). Kinds in `ItemStackConfiguration`.
 - test300 has no WCoin (C): browser tests can't buy unlocks with it. They check the refusal ("needs 500") and use free
   kinds (potions); paid paths are covered by server tests (`ItemStackRulesTest`).
+
+## Database changes (2026-11-20)
+- New column: add the property to `DataModel/Entities/*.cs` (and to `AssignValues` if copies keep it), build, then
+  `dotnet ef migrations add <Name> --context EntityDataContext --configuration Release --no-build` in
+  `server/src/Persistence/EntityFramework`, and the compiled models with
+  `dotnet ef dbcontext optimize -c <AccountContext|TradeContext|EntityDataContext> -o CompiledModels/<ctx> -n HNMO.Persistence.EntityFramework.CompiledModels.For<ctx> --startup-project ../EntityFramework.DesignTime --configuration Release --no-build`
+  (the DesignTime project keeps the fully qualified names; without it every file changes). Then
+  `HNMO_UPDATE_GENERATED_CODE=1 dotnet test tests/HNMO.Tests --filter FullyQualifiedName~GameConfigurationLoaderGeneratorTest`.
+  Strip the BOM the tool adds and keep `[DbContext(typeof(HNMO.Persistence.EntityFramework.EntityDataContext))]`.
+  The tool leaves a folder literally named `bin\Release` in EntityFramework.DesignTime: delete it, never commit it.
+- A live PostgreSQL for tests: `su hnmo -c "initdb -D /home/hnmo/pgtest -U postgres --auth=trust; pg_ctl -D /home/hnmo/pgtest -o '-p 5432 -k /tmp' start"`,
+  then the server from `server/src/Startup/bin/Release` with `-reinit -autostart` (its ConnectionSettings use port 5432).
+  Plug-ins that are off by default can be switched on with SQL on `config."PlugInConfiguration"` ("IsActive").
+- Duplicate check: `Item.Serial`, `DuplicateItemsPlugIn` (hourly), admin page `/duplicate-items`; frozen items are refused
+  by `AccountSafetyPlugIn.RefuseLockedItemAsync` and the item move.
