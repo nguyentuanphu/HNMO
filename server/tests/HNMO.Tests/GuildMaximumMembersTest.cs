@@ -39,13 +39,14 @@ public class GuildMaximumMembersTest
         Assert.That(await this.IsJoinDeniedAsync(guildSize: 120, memberCount).ConfigureAwait(false), Is.EqualTo(denied));
     }
 
-    /// <summary>A master whose guild size is 60 can't take a 61st member, but a 60th.</summary>
+    /// <summary>A master whose own guild size is 60 can still take up to 80 members: only the cap limits (owner, 20 Nov).</summary>
     /// <param name="memberCount">The members the guild has, the master included.</param>
     /// <param name="denied">Whether another member is denied.</param>
     /// <returns>The task.</returns>
-    [TestCase(59, false)]
-    [TestCase(60, true)]
-    public async Task GuildSizeBelow80StaysTheLimitAsync(int memberCount, bool denied)
+    [TestCase(60, false)]
+    [TestCase(79, false)]
+    [TestCase(80, true)]
+    public async Task OwnGuildSizeIsNoLimitAsync(int memberCount, bool denied)
     {
         Assert.That(await this.IsJoinDeniedAsync(guildSize: 60, memberCount).ConfigureAwait(false), Is.EqualTo(denied));
     }

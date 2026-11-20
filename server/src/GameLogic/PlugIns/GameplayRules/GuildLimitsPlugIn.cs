@@ -62,21 +62,15 @@ public sealed class GuildLimitsPlugIn :
     }
 
     /// <summary>
-    /// Gets the most members the guild of the guild master can have: the master's guild size (level / 10, plus
-    /// leadership / 10 for a Dark Lord), but never more than <see cref="GuildLimitsConfiguration.MaximumMembers"/>.
+    /// Gets the most members the guild of the guild master can have: <see cref="GuildLimitsConfiguration.MaximumMembers"/>
+    /// (80 by default, like the Season 6/9 server suites). The master's own guild size (level / 10) is not a limit in HNMO
+    /// (owner, 20 Nov 2026).
     /// </summary>
     /// <param name="guildMaster">The guild master.</param>
     /// <returns>The most members of the guild, the master included; 0 when there is no limit.</returns>
     internal int GetMaximumMembers(Player guildMaster)
     {
-        var cap = Math.Max(0, (this.Configuration ?? new GuildLimitsConfiguration()).MaximumMembers);
-        var guildSize = (int)(guildMaster.Attributes?[Stats.MaximumGuildSize] ?? 0);
-        if (guildSize <= 0)
-        {
-            return cap;
-        }
-
-        return cap > 0 ? Math.Min(guildSize, cap) : guildSize;
+        return Math.Max(0, (this.Configuration ?? new GuildLimitsConfiguration()).MaximumMembers);
     }
 
     /// <inheritdoc />
