@@ -5,6 +5,7 @@
 namespace HNMO.Tests;
 
 using System.IO;
+using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Configuration.Items;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic;
@@ -170,5 +171,61 @@ public class S6EventsTests
         Assert.That(history, Has.Count.EqualTo(1));
         Assert.That(history[0].CharacterName, Is.EqualTo("FighterOne"));
         Assert.That(history[0].Kills, Is.EqualTo(1));
+    }
+
+    /// <summary>
+    /// Verifies that a Last Man Standing round which is cancelled for too few contestants gives
+    /// the entry fee back, and doesn't leave the contestants in the arena.
+    /// </summary>
+    [Test]
+    public async ValueTask CancelledLastManStandingRefundsTheEntryFeeAndWarpsBackAsync()
+    {
+        var gameConfig = PlayerTestHelper.CreateGameConfiguration();
+        gameConfig.MaximumInventoryMoney = int.MaxValue;
+        var arena = new Moq.Mock<GameMapDefinition>();
+        arena.SetupAllProperties();
+        arena.Setup(m => m.DropItemGroups).Returns(new List<DropItemGroup>());
+        arena.Setup(m => m.MonsterSpawns).Returns(new List<MonsterSpawnArea>());
+        arena.Setup(m => m.ExitGates).Returns(new List<ExitGate>());
+        arena.Object.TerrainData = new byte[ushort.MaxValue + 3];
+        arena.Object.Number = 64;
+        gameConfig.Maps.Add(arena.Object);
+        var mapInit = new MapInitializer(gameConfig, new NullLogger<MapInitializer>(), NullDropGenerator.Instance, null);
+        var gameContext = new GameContext(gameConfig, new InMemoryPersistenceContextProvider(), mapInit, new NullLoggerFactory(), new HNMO.PlugIns.PlugInManager(null, new NullLoggerFactory(), null, null), NullDropGenerator.Instance, new ConfigurationChangeMediator());
+        mapInit.PlugInManager = gameContext.PlugInManager;
+        mapInit.PathFinderPool = gameContext.PathFinderPool;
+
+        var player = await PlayerTestHelper.CreatePlayerAsync(gameContext).ConfigureAwait(false);
+        player.Attributes![Stats.Level] = 100;
+        player.Money = 5_000;
+
+        var cfg = new S6EventsConfiguration
+        {
+            Enabled = true,
+            FileName = this._statePath,
+            LmsEnabled = true,
+            LmsMinPlayers = 2,
+            LmsMinLevel = 50,
+            LmsEntryFeeZen = 1_000,
+            LmsRewardCoins = 0,
+            LmsRewardItemGroup = -1,
+        };
+        gameContext.PlugInManager.RegisterPlugIn<IPeriodicTaskPlugIn, S6EventsPlugIn>();
+        gameContext.PlugInManager.ActivatePlugIn<S6EventsPlugIn>();
+        var active = S6EventsPlugIn.Get(gameContext)!;
+        active.Configuration = cfg;
+
+        await S6EventsPlugIn.TriggerLmsNowAsync([gameContext]).ConfigureAwait(false);
+        await active.HandleLmsCommandAsync(player).ConfigureAwait(false);
+        Assert.That(active.CurrentContestantCount, Is.EqualTo(1));
+        Assert.That(player.Money, Is.EqualTo(4_000));
+
+        Assert.That(player.SelectedCharacter!.CurrentMap!.Number, Is.EqualTo(cfg.LmsArenaMapNumber));
+
+        await active.BeginLmsFightOrCancelAsync(gameContext, cfg).ConfigureAwait(false);
+
+        Assert.That(active.CurrentLmsPhase, Is.EqualTo(S6EventsPlugIn.LmsPhase.Idle));
+        Assert.That(player.Money, Is.EqualTo(5_000));
+        Assert.That(player.SelectedCharacter!.CurrentMap!.Number, Is.EqualTo(cfg.LmsReturnMapNumber));
     }
 }

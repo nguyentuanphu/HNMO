@@ -43,6 +43,9 @@ public sealed class S6EventsPlugIn :
 
     private readonly object _roundLock = new();
     private readonly ConcurrentDictionary<Player, int> _lmsContestants = new();
+
+    /// <summary>The entry fee each contestant of the current registration paid, to refund it when the round is cancelled.</summary>
+    private readonly ConcurrentDictionary<Player, int> _lmsPaidFees = new();
     private LmsPhase _lmsPhase = LmsPhase.Idle;
     private DateTime _phaseDeadlineUtc = DateTime.MinValue;
     private DateTime _lastTickUtc = DateTime.MinValue;
@@ -218,6 +221,9 @@ public sealed class S6EventsPlugIn :
 
         if (currentState.IsDisconnectedOrFinished() && this._lmsContestants.TryRemove(player, out _))
         {
+            // A contestant who leaves gives up the entry, like at the gate of a mini game.
+            this._lmsPaidFees.TryRemove(player, out _);
+
             if (this._lmsPhase == LmsPhase.Fighting)
             {
                 await this.CheckLmsCompletionAsync(player.GameContext, cfg, timedOut: false).ConfigureAwait(false);
@@ -285,6 +291,7 @@ public sealed class S6EventsPlugIn :
             }
 
             await player.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
+            this._lmsPaidFees[player] = cfg.LmsEntryFeeZen;
         }
 
         this._lmsContestants.TryAdd(player, 0);
@@ -320,14 +327,30 @@ public sealed class S6EventsPlugIn :
         if (this._lmsContestants.Count < Math.Max(2, cfg.LmsMinPlayers))
         {
             this._lmsPhase = LmsPhase.Idle;
+            var contestants = this._lmsContestants.Keys.ToList();
             this._lmsContestants.Clear();
             await this.BroadcastGoldenAsync(
                 gameContext,
                 "Last Man Standing cancelled due to insufficient contestants.",
                 "Chiến Trường Sinh Tử bị hủy do chưa đủ số người tham gia.").ConfigureAwait(false);
+
+            // Like a mini game which can't start, the round gives the entry fee back, and the
+            // contestants don't stay behind in the arena they were warped into.
+            foreach (var contestant in contestants)
+            {
+                if (this._lmsPaidFees.TryRemove(contestant, out var fee) && fee > 0 && contestant.TryAddMoney(fee))
+                {
+                    await contestant.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
+                }
+
+                await this.WarpBackToSafezoneAsync(contestant, cfg).ConfigureAwait(false);
+            }
+
+            this._lmsPaidFees.Clear();
             return;
         }
 
+        this._lmsPaidFees.Clear();
         this._lmsPhase = LmsPhase.Fighting;
         this._phaseDeadlineUtc = DateTime.UtcNow.AddMinutes(Math.Clamp(cfg.LmsDurationMinutes, 1, 60));
         await this.BroadcastGoldenAsync(
@@ -405,6 +428,7 @@ public sealed class S6EventsPlugIn :
         lock (this._roundLock)
         {
             this._lmsContestants.Clear();
+            this._lmsPaidFees.Clear();
             this._activeRoundId = Guid.NewGuid().ToString("N");
             this._lmsPhase = LmsPhase.Registration;
             this._phaseDeadlineUtc = DateTime.UtcNow.AddMinutes(Math.Clamp(cfg.LmsRegistrationMinutes, 1, 15));
