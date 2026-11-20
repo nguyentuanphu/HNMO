@@ -569,6 +569,7 @@ public class MoveItemActionTests
         gameConfig.Setup(c => c.Maps).Returns(new List<GameMapDefinition>());
         gameConfig.Setup(c => c.Items).Returns(new List<ItemDefinition>());
         gameConfig.Setup(c => c.Skills).Returns(new List<Skill>());
+        gameConfig.Setup(c => c.Monsters).Returns(new List<HNMO.DataModel.Configuration.MonsterDefinition>());
         gameConfig.Setup(c => c.PlugInConfigurations).Returns(new List<PlugInConfiguration>());
         gameConfig.Setup(c => c.CharacterClasses).Returns(new List<CharacterClass>());
         gameConfig.Setup(c => c.Attributes).Returns(new List<AttributeDefinition>());
@@ -649,6 +650,7 @@ public class MoveItemActionTests
         gameConfig.Setup(c => c.Maps).Returns(new List<GameMapDefinition>());
         gameConfig.Setup(c => c.Items).Returns(new List<ItemDefinition>());
         gameConfig.Setup(c => c.Skills).Returns(new List<Skill>());
+        gameConfig.Setup(c => c.Monsters).Returns(new List<HNMO.DataModel.Configuration.MonsterDefinition>());
         gameConfig.Setup(c => c.PlugInConfigurations).Returns(new List<PlugInConfiguration>());
         gameConfig.Setup(c => c.CharacterClasses).Returns(new List<CharacterClass>());
         gameConfig.Setup(c => c.Attributes).Returns(new List<AttributeDefinition>());
