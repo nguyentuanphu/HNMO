@@ -47,6 +47,48 @@ public class SummonPartySkillPlugin : TargetedSkillPluginBase
         _ = Task.Run(() => this.RunSummonPartyAsync(player, cancellationTokenSource));
     }
 
+    /// <summary>
+    /// Summons the targets next to the summoner, unless the rules of a warp refuse it for a target.
+    /// </summary>
+    /// <param name="player">The summoning Dark Lord.</param>
+    /// <param name="targetPlayers">The party members to summon.</param>
+    /// <returns>The task.</returns>
+    internal async ValueTask SummonTargetsAsync(Player player, IEnumerable<Player> targetPlayers)
+    {
+        foreach (var targetPlayer in targetPlayers)
+        {
+            Point targetPoint = player.Position;
+            bool foundValidPoint = false;
+            int maxAttempts = 10;
+            int attempts = 0;
+
+            while (!foundValidPoint && attempts < maxAttempts)
+            {
+                attempts++;
+
+                var offsetX = Rand.NextInt(-2, 3);
+                var offsetY = Rand.NextInt(-2, 3);
+                Point testPoint = new((byte)(player.Position.X + offsetX), (byte)(player.Position.Y + offsetY));
+
+                if (player.CurrentMap!.Terrain.WalkMap[testPoint.X, testPoint.Y]
+                    && player.Position.EuclideanDistanceTo(targetPoint) < 6)
+                {
+                    targetPoint = testPoint;
+                    foundValidPoint = true;
+                }
+            }
+
+            // The rules of a warp apply (map requirements, and not while duelling, trading or dead).
+            if (PlugIns.HnmoWarpGuard.Refusal(targetPlayer, player.CurrentMap!.Definition) is { } refusal)
+            {
+                await targetPlayer.ShowBlueMessageAsync(PlugIns.HnmoWarpGuard.TextFor(targetPlayer, refusal)).ConfigureAwait(false);
+                continue;
+            }
+
+            await targetPlayer.TeleportToMapAsync(player.CurrentMap!, targetPoint).ConfigureAwait(false);
+        }
+    }
+
     private static async ValueTask SendSummonCanceledMessageAsync(Player player)
     {
         if (player.Party is not { } party)
@@ -117,48 +159,6 @@ public class SummonPartySkillPlugin : TargetedSkillPluginBase
         {
             player.SkillCancelTokenSource?.Dispose();
             player.SkillCancelTokenSource = null;
-        }
-    }
-
-    /// <summary>
-    /// Summons the targets next to the summoner, unless the rules of a warp refuse it for a target.
-    /// </summary>
-    /// <param name="player">The summoning Dark Lord.</param>
-    /// <param name="targetPlayers">The party members to summon.</param>
-    /// <returns>The task.</returns>
-    internal async ValueTask SummonTargetsAsync(Player player, IEnumerable<Player> targetPlayers)
-    {
-        foreach (var targetPlayer in targetPlayers)
-        {
-            Point targetPoint = player.Position;
-            bool foundValidPoint = false;
-            int maxAttempts = 10;
-            int attempts = 0;
-
-            while (!foundValidPoint && attempts < maxAttempts)
-            {
-                attempts++;
-
-                var offsetX = Rand.NextInt(-2, 3);
-                var offsetY = Rand.NextInt(-2, 3);
-                Point testPoint = new((byte)(player.Position.X + offsetX), (byte)(player.Position.Y + offsetY));
-
-                if (player.CurrentMap!.Terrain.WalkMap[testPoint.X, testPoint.Y]
-                    && player.Position.EuclideanDistanceTo(targetPoint) < 6)
-                {
-                    targetPoint = testPoint;
-                    foundValidPoint = true;
-                }
-            }
-
-            // The rules of a warp apply (map requirements, and not while duelling, trading or dead).
-            if (PlugIns.HnmoWarpGuard.Refusal(targetPlayer, player.CurrentMap!.Definition) is { } refusal)
-            {
-                await targetPlayer.ShowBlueMessageAsync(PlugIns.HnmoWarpGuard.TextFor(targetPlayer, refusal)).ConfigureAwait(false);
-                continue;
-            }
-
-            await targetPlayer.TeleportToMapAsync(player.CurrentMap!, targetPoint).ConfigureAwait(false);
         }
     }
 
