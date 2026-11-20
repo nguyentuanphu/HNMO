@@ -469,4 +469,5 @@
   <data name="Tanker" xml:space="preserve"><value>tàu chở dầu</value></data>
   <data name="Balgass" xml:space="preserve"><value>Balgas</value></data>
   <data name="IllusionSorcererSpirit" xml:space="preserve"><value>Pháp sư ảo ảnh. tinh thần</value></data>
+  <data name="ArenaHerald" xml:space="preserve"><value>Sứ giả Đấu trường</value></data>
 </root>

@@ -851,4 +851,7 @@
   <data name="IllusionSorcererSpirit" xml:space="preserve">
     <value>幻影术士之灵</value>
   </data>
+  <data name="ArenaHerald" xml:space="preserve">
+    <value>竞技场使者</value>
+  </data>
 </root>

@@ -5,6 +5,8 @@
 namespace HNMO.Persistence.Initialization.VersionSeasonSix;
 
 using HNMO.DataModel.Configuration;
+using HNMO.Interfaces;
+using HNMO.Persistence.Initialization.Properties;
 using HNMO.Persistence.Initialization.Version075.Maps;
 
 /// <summary>
@@ -46,7 +48,7 @@ public sealed class HnmoArenaHeraldInitializer
         {
             herald = this._context.CreateNew<MonsterDefinition>();
             herald.Number = Number;
-            herald.Designation = "Arena Herald||vi=Sứ giả Đấu trường";
+            herald.Designation = LocalizedString.FromResource(() => MonsterNames.ArenaHerald);
             herald.ObjectKind = NpcObjectKind.PassiveNpc;
             herald.SetGuid(herald.Number);
             this._gameConfiguration.Monsters.Add(herald);
