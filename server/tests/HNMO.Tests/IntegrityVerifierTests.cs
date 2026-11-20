@@ -61,7 +61,8 @@ public class IntegrityVerifierTests
 
     /// <summary>
     /// If a file no longer matches its hash in the signed manifest, verification fails with
-    /// <see cref="IntegrityStatus.FileMismatch"/> and the file is reported.
+    /// <see cref="IntegrityStatus.FileMismatch"/>, the file is reported, and a shipped build refuses to start (a host
+    /// can opt out with <c>OnMismatch=warn</c>).
     /// </summary>
     [Test]
     public void TamperedFileFails()
@@ -77,8 +78,8 @@ public class IntegrityVerifierTests
 
         Assert.That(result.Status, Is.EqualTo(IntegrityStatus.FileMismatch));
         Assert.That(result.MismatchedFiles, Has.Count.EqualTo(1));
-        Assert.That(result.ShouldRefuseStartup(true), Is.True);
-        Assert.That(result.ShouldRefuseStartup(false), Is.False);
+        Assert.That(result.ShouldRefuseStartup(allowOnMismatch: false), Is.True, "a tampered signed build refuses by default");
+        Assert.That(result.ShouldRefuseStartup(allowOnMismatch: true), Is.False, "the host can opt out with OnMismatch=warn");
     }
 
     /// <summary>

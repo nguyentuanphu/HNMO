@@ -258,8 +258,8 @@ internal sealed class Program : IDisposable
     /// <summary>
     /// Verifies the signed HNMO build integrity manifest, if one is present. An unsigned build
     /// (e.g. a local/development build) logs a warning and continues. A present but invalid
-    /// signature always refuses to start; a file mismatch refuses only when configured to
-    /// (<c>Integrity:OnMismatch</c> = <c>refuse</c>), otherwise it warns and continues.
+    /// signature always refuses to start; a changed file in a validly-signed build (a tampered
+    /// release) refuses too, unless the host opted out with <c>Integrity:OnMismatch</c> = <c>warn</c>.
     /// </summary>
     private void VerifyBuildIntegrity()
     {
@@ -274,7 +274,7 @@ internal sealed class Program : IDisposable
         var serverDir = AppContext.BaseDirectory;
         var contentRoot = Path.GetFullPath(Path.Combine(serverDir, ".."));
         var result = IntegrityVerifier.VerifyFolder(serverDir, contentRoot, publicKeyPem);
-        var enforceOnMismatch = string.Equals(this._configuration["Integrity:OnMismatch"], "refuse", StringComparison.OrdinalIgnoreCase);
+        var allowOnMismatch = string.Equals(this._configuration["Integrity:OnMismatch"], "warn", StringComparison.OrdinalIgnoreCase);
 
         DeveloperHub.Integrity = result.Status switch
         {
@@ -294,7 +294,7 @@ internal sealed class Program : IDisposable
             this._logger.Warning("HNMO integrity: {File}", file);
         }
 
-        if (result.ShouldRefuseStartup(enforceOnMismatch))
+        if (result.ShouldRefuseStartup(allowOnMismatch))
         {
             throw new StartupCancelledException(result.Message);
         }

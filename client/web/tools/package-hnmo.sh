@@ -105,10 +105,16 @@ cp -r "$WEB/node_modules/three/build" "$OUT/web/vendor/three/build"
 # unbundled public/js). three stays external (resolved by the page's import map), and
 # the Data files stay separate. The individual modules are then dropped from the folder.
 echo "Bundling the web client (esbuild)"
-# The game keeps its function names (no identifier minifying), so the performance report's profile
-# (Settings, "Performance report") names the functions that take the time.
+# A shipped build mangles the game's names too, so the bundle is hard to read or change. Set
+# HNMO_KEEP_JS_NAMES=1 to keep them, so the performance report (Settings, "Performance report")
+# can name the functions that take the time.
+if [ "${HNMO_KEEP_JS_NAMES:-}" = "1" ]; then
+  MAIN_MINIFY=(--minify-whitespace --minify-syntax)
+else
+  MAIN_MINIFY=(--minify)
+fi
 "$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/main.js" \
-  --bundle --minify-whitespace --minify-syntax --format=esm --external:three \
+  --bundle "${MAIN_MINIFY[@]}" --format=esm --external:three \
   --outfile="$OUT/web/wwwroot/js/main.min.js" --log-level=warning
 # The website (home.html) has its own script: bundled the same way.
 "$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/website.js" \
@@ -172,6 +178,18 @@ fi
 
 # The game server talks to the folder's own database on its own port
 sed -i 's/Port=5432;/Port=55432;/g' "$OUT/server/ConnectionSettings.xml"
+
+# A shipped build is signed: a changed file in it must stop the server (not just warn). The dev
+# appsettings keeps "warn" so a local unsigned build still runs; here it is forced to refuse.
+if [ -f "$OUT/server/appsettings.json" ]; then
+  node -e '
+    const fs = require("fs");
+    const file = process.argv[1];
+    const data = JSON.parse(fs.readFileSync(file, "utf8"));
+    data.Integrity = { ...(data.Integrity || {}), OnMismatch: "refuse" };
+    fs.writeFileSync(file, JSON.stringify(data, null, 2) + "\n");
+  ' "$OUT/server/appsettings.json"
+fi
 
 cat > "$OUT/web/appsettings.json" <<JSON
 {

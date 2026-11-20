@@ -61,11 +61,27 @@ Outcomes:
 | Valid signature, all files match | `Ok` | starts, logs a confirmation |
 | No manifest / no signature | `Unsigned` | starts, logs a warning (dev build) |
 | Signature present but invalid | `SignatureInvalid` | **refuses to start** |
-| Signature valid, a file changed | `FileMismatch` | warns and starts; refuses if `Integrity:OnMismatch` = `refuse` |
+| Signature valid, a file changed | `FileMismatch` | **refuses to start** (a tampered signed build); warns only if `Integrity:OnMismatch` = `warn` |
 
-`Integrity:OnMismatch` is set in `server/appsettings.json` (default `warn`, so a legit
-unsigned/dev build still runs). A tampered **signed** build can be made to refuse by setting it
-to `refuse`.
+A **shipped** build refuses to start when a signed file was changed: `package-hnmo.sh` sets
+`Integrity:OnMismatch` = `refuse` in the packaged `server/appsettings.json`. The repo's dev
+`appsettings.json` keeps `warn`, so a local unsigned/dev build still runs. A host who knowingly
+swaps a file can set it back to `warn`.
+
+## 3a. Obfuscation of the shipped code
+
+- **Web** — `package-hnmo.sh` bundles the game with esbuild `--minify`, which mangles the local
+  names as well as the whitespace, so the shipped `web/wwwroot/js/main.min.js` is hard to read or
+  change (about 18% smaller than the names-kept bundle). Set `HNMO_KEEP_JS_NAMES=1` to keep the
+  names for a profiling run (the performance report then names the functions). The website,
+  top-up, calculator and item bundles were already fully minified.
+- **Server** — shipped as a single self-contained executable with no PDB, no XML docs and no
+  loose DLLs, so the assemblies are bundled and symbols stripped. Full IL **name** obfuscation
+  (e.g. Obfuscar) is **not** applied: the server maps entity types and properties to database
+  columns through EF Core (and compiled models with fully-qualified names) and discovers plug-ins
+  by type, so renaming types or members would break the database and the plug-ins. That step, if
+  wanted, needs its own tested pass (keep every entity, plug-in and public type; test every admin
+  page and plug-in) — ask the owner before adding it.
 
 ## 4. The private signing key
 
