@@ -80,4 +80,44 @@ public class SimpleItemCraftingRateTest
         Assert.That(result, Is.Null);
         Assert.That(successRate, Is.EqualTo(100));
     }
+
+    /// <summary>
+    /// Tests that an item worth more than 255 times the price divisor of its required item (e.g. the
+    /// excellent item of the second wing mix) gives the maximum success rate, too, instead of a rate
+    /// which wrapped around at 256.
+    /// </summary>
+    [Test]
+    public async ValueTask ExpensiveItemsGiveTheMaximumRateWithTheDivisorOfTheRequiredItemAsync()
+    {
+        var player = await PlayerTestHelper.CreatePlayerAsync(this._gameContext).ConfigureAwait(false);
+        var priceCalculator = new ItemPriceCalculator();
+
+        // An item whose price wraps around to less than 100 percent, when it's cast to a byte.
+        Item? item = null;
+        foreach (var definition in this._gameConfiguration.Items.Where(d => d.Width == 1 && d.Height == 1 && !d.IsAmmunition))
+        {
+            var candidate = player.PersistenceContext.CreateNew<Item>();
+            candidate.Definition = definition;
+            candidate.Durability = definition.Durability;
+            var price = priceCalculator.CalculateFinalBuyingPrice(candidate);
+            if (price > byte.MaxValue && price % 256 < 100)
+            {
+                item = candidate;
+                break;
+            }
+        }
+
+        Assert.That(item, Is.Not.Null, "The test needs an item which is worth more than 255 zen.");
+        await player.TemporaryStorage!.AddItemAsync(item!).ConfigureAwait(false);
+
+        var settings = new Persistence.BasicModel.SimpleCraftingSettings();
+        var requiredItem = new Persistence.BasicModel.ItemCraftingRequiredItem { MinimumAmount = 1, MaximumAmount = 1, MaximumItemLevel = 15, NpcPriceDivisor = 1 };
+        requiredItem.PossibleItems.Add(item!.Definition!);
+        settings.RequiredItems.Add(requiredItem);
+
+        var result = new SimpleItemCraftingHandler(settings).TryGetRequiredItems(player, out _, out var successRate);
+
+        Assert.That(result, Is.Null);
+        Assert.That(successRate, Is.EqualTo(100));
+    }
 }

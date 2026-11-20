@@ -69,8 +69,12 @@ public class SimpleItemCraftingHandler : BaseItemCraftingHandler
                 rate += (byte)(requiredItem.AddPercentage * (itemCount - requiredItem.MinimumAmount));
                 if (requiredItem.NpcPriceDivisor > 0)
                 {
-                    rate += (byte)(foundItems.Sum(this._priceCalculator.CalculateFinalBuyingPrice)
-                        / requiredItem.NpcPriceDivisor);
+                    // Capped like the rate of the price divisor of the settings below: a cast to a byte
+                    // wrapped the rate of expensive items (e.g. an excellent item in the second wing mix,
+                    // worth more than 255 times the divisor) around to a small value.
+                    rate += (int)Math.Min(
+                        byte.MaxValue,
+                        foundItems.Sum(this._priceCalculator.CalculateFinalBuyingPrice) / requiredItem.NpcPriceDivisor);
                 }
 
                 foreach (var item in foundItems)
