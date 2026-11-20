@@ -75,8 +75,7 @@ public static class AttackableExtensions
         Player? attackerPlayer = attacker is AttackerSurrogate surrogate ? surrogate.Owner : (attacker is Player player ? player : null);
         bool isPvp = attackerPlayer is not null && defender is Player;
         bool isClassicPvp = isPvp && defender.Attributes[Stats.MaximumShield] == 0;
-        bool isClassicPvpDuel = isClassicPvp && attackerPlayer!.DuelRoom?.Opponent == defender;
-        var duelDmgDec = isClassicPvpDuel ? 0.6 : 1;
+        var duelDmgDec = GetDuelDamageFactor(attackerPlayer, defender);
 
         DamageAttributes attributes = DamageAttributes.Undefined;
         bool isCriticalHit = Rand.NextRandomBool(attacker.Attributes[Stats.CriticalDamageChance]);
@@ -309,6 +308,20 @@ public static class AttackableExtensions
         dmg = PlugIns.GameplayRules.RateTuningPlugIn.ApplyClassDamageMultiplier(attacker, isPvp, dmg);
         dmg = PlugIns.GameplayRules.CombatLimitsPlugIn.ApplyDamageLimits(attacker, defender, isPvp, dmg);
         return defender.GetHitInfo((uint)dmg, attributes, attacker, (uint)manaToll, skill, (uint)petDamage);
+    }
+
+    /// <summary>
+    /// Gets the factor of the damage of a hit in a duel: duel hits do 60 % damage, with or without shield
+    /// (Season 6/9 server suites: DamageReduction 60, all damage types).
+    /// </summary>
+    /// <param name="attackerPlayer">The attacking player (the owner of a pet), if any.</param>
+    /// <param name="defender">The defender.</param>
+    /// <returns>0.6 for a hit at the duel opponent; otherwise 1.</returns>
+    internal static double GetDuelDamageFactor(Player? attackerPlayer, IAttackable defender)
+    {
+        var isDuel = attackerPlayer is not null && defender is Player && attackerPlayer.DuelRoom is { } room
+                     && (room.Opponent == defender || room.Requester == defender);
+        return isDuel ? 0.6 : 1;
     }
 
     /// <summary>
