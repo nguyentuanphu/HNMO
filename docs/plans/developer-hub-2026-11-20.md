@@ -2,7 +2,7 @@
 
 ## The owner's decisions (pop-ups, 2026-11-20 afternoon)
 
-- Bug reports a server's owner sends on go to **GitHub, the way the owner's other game does it**: a small web
+- Bug reports a server's owner sends on go to **GitHub**: a small web
   function takes them (no token in the game or on any website the hosts see), and an hourly GitHub Action turns them
   into issues, one issue per bug with a count of the servers that saw it, labels by game area, a daily summary.
   Discord stays as an optional notice.
@@ -15,7 +15,7 @@
 - **A Developer page** in the admin panel, shown only on the owner's computer (where the private key file is): sign
   and renew licences with a form instead of the command line, the hosts, their reports and requests. The key never
   leaves that computer.
-- **A bug robot** (Claude on GitHub Actions, as the other game has): later, once real reports come in.
+- **A bug robot** (Claude on GitHub Actions): later, once real reports come in.
 
 ## Steps
 

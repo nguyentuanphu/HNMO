@@ -484,8 +484,10 @@ The desktop code stays the reference for how the classic game behaves (parity ru
 - Bug reports (owner 2026-11-20): F5 54/55 (next free: 56), Alt+B / 🐞, admin page `/bug-reports`. Reports reach the
   owner (HNMO developer) through the owner's own Discord webhook, which each server owner pastes into the plug-in's
   settings; no screenshots; rewards are each server owner's choice (off by default).
-- Developer hub (owner 2026-11-20, `docs/plans/developer-hub-2026-11-20.md`): host bug reports go to GitHub like the
-  owner's other game (web function + hourly Action → issues in a private repo, one per bug); licence in Host settings;
+- Never mention the owner's other projects (by name or as "the other game") anywhere in HNMO: code, docs, commits,
+  PRs (owner, 2026-11-20).
+- Developer hub (owner 2026-11-20, `docs/plans/developer-hub-2026-11-20.md`): host bug reports go to GitHub (a
+  web function + hourly Action → issues in a private repo, one per bug); licence in Host settings;
   a Developer page only where the private key is; unlicensed servers may report with a daily limit; bug robot later.
 - Update plug-ins that read saved plug-in settings must drop the admin editor's "$id"/"$values" markers first (a
   saved list is `{"$values": [...]}`); an update that throws stops the server from starting.
