@@ -99,7 +99,7 @@ export async function mountMarketWidget(container: HTMLElement, creds: MarketCre
             const msg = next.state ? `${next.result ?? 'OK'}` : '';
             render(next, msg);
           } else if (next.error === 'access') {
-            render(data, tx('Unlock the market in the game first (F6): a one-off access fee for your account.', 'Hãy mở chợ trong game trước (F6): phí vào chợ một lần cho tài khoản.'));
+            render(data, tx('Unlock buying in the game first (F6): a one-off fee for your account on this season\'s market.', 'Hãy mở quyền mua trong game trước (F6): phí một lần cho tài khoản ở chợ season này.'));
           } else if (next.error === 'online') {
             // The account is playing: the purchase waits for the game, where it's made with F6.
             render(data, tx('You are in the game: buy there (F6), or log out first.', 'Bạn đang trong game: hãy mua trong game (F6), hoặc thoát game trước.'));

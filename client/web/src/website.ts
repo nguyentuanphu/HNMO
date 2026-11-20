@@ -353,6 +353,8 @@ const copy = {
     marketOffline: "Item Market data is unavailable: the server didn't answer.",
     marketOff: "Item Market is turned off on this server.",
     marketNone: "No items listed right now.",
+    marketServer: "Server",
+    marketFees: "One-off fees per account on each season's market: buying {buy}, selling {sell}; every sale pays a {tax}% tax.",
     marketItem: "Item",
     marketSeller: "Seller",
     marketPrice: "Price",
@@ -801,6 +803,8 @@ const copy = {
     marketOffline: "Không xem được Chợ vật phẩm: máy chủ không trả lời.",
     marketOff: "Chợ vật phẩm đang tắt trên máy chủ này.",
     marketNone: "Hiện chưa có vật phẩm nào được rao bán.",
+    marketServer: "Máy chủ",
+    marketFees: "Phí một lần cho mỗi tài khoản ở chợ từng season: mua {buy}, bán {sell}; mỗi lần bán đóng thuế {tax}%.",
     marketItem: "Vật phẩm",
     marketSeller: "Người bán",
     marketPrice: "Giá",
@@ -2635,8 +2639,34 @@ interface PublicMarket {
   v: number;
   enabled: boolean;
   listings?: PublicMarketListing[];
+  rules?: { feePercent?: number; accessFee?: number; buyerAccessFee?: number; accessCoin?: string };
 }
 let marketData: PublicMarket | null = null;
+// Each season's server has its own market; Season 9's shows when its program runs (seasons.json).
+let marketSeason: "s6" | "s9" = "s6";
+let marketHasSeasonNine = false;
+
+function renderMarketSeasons(): void {
+  const picker = element("market-seasons");
+  picker.hidden = !marketHasSeasonNine;
+  picker.replaceChildren();
+  if (!marketHasSeasonNine) return;
+  picker.setAttribute("aria-label", t("marketServer"));
+  picker.append(node("span", `${t("marketServer")}:`));
+  for (const key of ["s6", "s9"] as const) {
+    const choice = document.createElement("button");
+    choice.type = "button";
+    choice.dataset.season = key;
+    choice.textContent = key === "s6" ? "Season 6" : "Season 9";
+    choice.setAttribute("aria-pressed", String(marketSeason === key));
+    choice.addEventListener("click", () => {
+      marketSeason = key;
+      renderMarketSeasons();
+      void refreshMarket();
+    });
+    picker.append(choice);
+  }
+}
 
 function renderMarket(): void {
   const notice = element("market-notice");
@@ -2646,6 +2676,13 @@ function renderMarket(): void {
   else if (!data.enabled) notice.textContent = t("marketOff");
   else notice.textContent = "";
   const listings = data && data.enabled ? data.listings ?? [] : [];
+  const rules = data?.enabled ? data.rules : undefined;
+  element("market-fees").textContent = rules && typeof rules.accessFee === "number"
+    ? t("marketFees")
+      .replace("{buy}", `${(rules.buyerAccessFee ?? 0).toLocaleString()} ${rules.accessCoin ?? "WCoinC"}`)
+      .replace("{sell}", `${rules.accessFee.toLocaleString()} ${rules.accessCoin ?? "WCoinC"}`)
+      .replace("{tax}", String(rules.feePercent ?? 0))
+    : "";
   const fmt = new Intl.DateTimeFormat(vi ? "vi-VN" : "en-AU", { month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Australia/Sydney" });
   const rows = listings.map((l) => {
     const nm = (vi ? l.item.NameVi : l.item.NameEn) || l.item.NameEn;
@@ -2666,7 +2703,7 @@ function renderMarket(): void {
 
 async function refreshMarket(): Promise<void> {
   try {
-    const response = await fetch("/website/market", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    const response = await fetch(marketSeason === "s9" ? "/website/market/s9" : "/website/market", { cache: "no-store", signal: AbortSignal.timeout(10000) });
     if (!response.ok) throw new Error("Server unavailable");
     const data = (await response.json()) as PublicMarket;
     if (typeof data !== "object" || data === null || typeof data.enabled !== "boolean") throw new Error("Invalid market");
@@ -2677,9 +2714,19 @@ async function refreshMarket(): Promise<void> {
   renderMarket();
 }
 
-for (const id of ["en", "vi"]) element(id).addEventListener("click", () => { renderMarket(); renderJewelBank(); });
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => { renderMarketSeasons(); renderMarket(); renderJewelBank(); });
 element("refresh").addEventListener("click", () => { void refreshMarket(); void refreshJewelBank(); });
 void refreshMarket();
+void (async () => {
+  try {
+    const response = await fetch("/data/seasons.json", { cache: "no-store", signal: AbortSignal.timeout(5000) });
+    const seasons = response.ok ? (await response.json()) as { connect?: { s9?: number | null } } : null;
+    marketHasSeasonNine = typeof seasons?.connect?.s9 === "number";
+  } catch {
+    marketHasSeasonNine = false;
+  }
+  renderMarketSeasons();
+})();
 setInterval(() => {
   if (!document.hidden) void refreshMarket();
 }, 120000);

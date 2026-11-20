@@ -288,7 +288,7 @@ public sealed class MarketPlugIn :
             return;
         }
 
-        if (!await this.EnsureAccessAsync(player, engine, login).ConfigureAwait(false))
+        if (!await this.EnsureAccessAsync(player, engine, login, seller: false).ConfigureAwait(false))
         {
             return;
         }
@@ -433,10 +433,11 @@ public sealed class MarketPlugIn :
         await this.NotifyAsync(player, bagFull ? "BagFull" : "Claimed", en, vi).ConfigureAwait(false);
     }
 
-    /// <summary>Pays the market's one-off access fee for the player's account.</summary>
+    /// <summary>Pays one of the market's one-off access fees for the player's account.</summary>
     /// <param name="player">The player.</param>
+    /// <param name="seller"><c>true</c> for the seller access (selling and buying), <c>false</c> for buying only.</param>
     /// <returns>A task representing the payment.</returns>
-    public async ValueTask PayAccessAsync(Player player)
+    public async ValueTask PayAccessAsync(Player player, bool seller = true)
     {
         if (player.Account is not { LoginName: { Length: > 0 } login } account)
         {
@@ -445,13 +446,13 @@ public sealed class MarketPlugIn :
 
         var engine = this.GetEngine();
         var cfg = engine.Configuration;
-        if (engine.HasAccess(login))
+        if (seller ? engine.HasAccess(login) : engine.HasBuyerAccess(login))
         {
-            await this.NotifyAsync(player, "AccessPaid", "Your account can already buy and sell on the market.", "Tài khoản của bạn đã được mua bán ở chợ.").ConfigureAwait(false);
+            await this.NotifyAsync(player, "AccessPaid", seller ? "Your account can already sell on this market." : "Your account can already buy on this market.", seller ? "Tài khoản của bạn đã được bán ở chợ này." : "Tài khoản của bạn đã được mua ở chợ này.").ConfigureAwait(false);
             return;
         }
 
-        var fee = cfg.AccessFee;
+        var fee = seller ? cfg.AccessFee : cfg.BuyerAccessFee;
         await this._accessGate.WaitAsync().ConfigureAwait(false);
         try
         {
@@ -459,7 +460,7 @@ public sealed class MarketPlugIn :
             var balance = account.GetCashShopCoins(cfg.AccessFeeCoinType);
             if (balance < fee)
             {
-                await this.NotifyAsync(player, "AccessNotEnough", $"The market access costs {fee:N0} {cfg.AccessFeeCoinType}; you have {balance:N0}.", $"Phí vào chợ là {fee:N0} {cfg.AccessFeeCoinType}; bạn có {balance:N0}.").ConfigureAwait(false);
+                await this.NotifyAsync(player, "AccessNotEnough", $"This costs {fee:N0} {cfg.AccessFeeCoinType}; you have {balance:N0}.", $"Cần {fee:N0} {cfg.AccessFeeCoinType}; bạn có {balance:N0}.").ConfigureAwait(false);
                 return;
             }
 
@@ -473,14 +474,17 @@ public sealed class MarketPlugIn :
                 return;
             }
 
-            engine.GrantAccess(login);
+            engine.GrantAccess(login, seller);
         }
         finally
         {
             this._accessGate.Release();
         }
 
-        await this.NotifyAsync(player, "AccessPaid", $"Market unlocked for your account ({fee:N0} {cfg.AccessFeeCoinType}). Every sale pays a {cfg.FeePercent:0.#}% tax.", $"Đã mở chợ cho tài khoản ({fee:N0} {cfg.AccessFeeCoinType}). Mỗi lần bán đóng thuế {cfg.FeePercent:0.#}%.").ConfigureAwait(false);
+        var (en, vi) = seller
+            ? ($"Selling unlocked on this market ({fee:N0} {cfg.AccessFeeCoinType}); you can buy too. Every sale pays a {cfg.FeePercent:0.#}% tax.", $"Đã mở quyền bán ở chợ này ({fee:N0} {cfg.AccessFeeCoinType}); bạn cũng mua được. Mỗi lần bán đóng thuế {cfg.FeePercent:0.#}%.")
+            : ($"Buying unlocked on this market ({fee:N0} {cfg.AccessFeeCoinType}).", $"Đã mở quyền mua ở chợ này ({fee:N0} {cfg.AccessFeeCoinType}).");
+        await this.NotifyAsync(player, "AccessPaid", en, vi).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -588,15 +592,18 @@ public sealed class MarketPlugIn :
         return true;
     }
 
-    private async ValueTask<bool> EnsureAccessAsync(Player player, MarketEngine engine, string login)
+    private async ValueTask<bool> EnsureAccessAsync(Player player, MarketEngine engine, string login, bool seller = true)
     {
-        if (engine.HasAccess(login))
+        if (seller ? engine.HasAccess(login) : engine.HasBuyerAccess(login))
         {
             return true;
         }
 
         var cfg = engine.Configuration;
-        await this.NotifyAsync(player, "AccessRequired", $"Unlock the market first: a one-off {cfg.AccessFee:N0} {cfg.AccessFeeCoinType} for your account.", $"Hãy mở chợ trước: phí một lần {cfg.AccessFee:N0} {cfg.AccessFeeCoinType} cho tài khoản.").ConfigureAwait(false);
+        var (en, vi) = seller
+            ? ($"Unlock selling first: a one-off {cfg.AccessFee:N0} {cfg.AccessFeeCoinType} for your account on this season's market.", $"Hãy mở quyền bán trước: phí một lần {cfg.AccessFee:N0} {cfg.AccessFeeCoinType} cho tài khoản ở chợ season này.")
+            : ($"Unlock buying first: a one-off {cfg.BuyerAccessFee:N0} {cfg.AccessFeeCoinType} for your account on this season's market.", $"Hãy mở quyền mua trước: phí một lần {cfg.BuyerAccessFee:N0} {cfg.AccessFeeCoinType} cho tài khoản ở chợ season này.");
+        await this.NotifyAsync(player, "AccessRequired", en, vi).ConfigureAwait(false);
         return false;
     }
 

@@ -106,9 +106,9 @@ public sealed class WebsiteMarketController(
         }
 
         // The market's one-off access fee is paid in the game (F6).
-        if (!engine.HasAccess(account.LoginName))
+        if (!engine.HasBuyerAccess(account.LoginName))
         {
-            return this.StatusCode(403, new { error = "access", fee = engine.Configuration.AccessFee, coin = engine.Configuration.AccessFeeCoinType.ToString() });
+            return this.StatusCode(403, new { error = "access", fee = engine.Configuration.BuyerAccessFee, coin = engine.Configuration.AccessFeeCoinType.ToString() });
         }
 
         // One purchase of an account at a time: two requests at once would both see the same balance and

@@ -52,3 +52,14 @@
   fee stays.
 - Checked live on PostgreSQL: test2 (1,500 WCoinC) was refused when listing, unlocked the market (500 left), then the
   same listing went through. `MarketControllerTests` checks the website refusal.
+
+## Market per season, buyer fee (owner, 2026-11-20 afternoon)
+
+- One market per season (each season's server program has its own database and market). The website's market has a
+  Season 6 / Season 9 choice; Season 9's listings come from its own server (`/website/market/s9`, shown when the Season
+  9 program runs). The fees line under it shows that season's fees.
+- Fees per account, per season: buying 200 WCoinC (`BuyerAccessFee`, action `PayBuyerAccess` = 7), selling (and
+  buying) 1,000 WCoinC (`AccessFee`, action `PayAccess` = 6); the seller pays the 5% tax. The market window shows the
+  Unlock buttons it needs. The website's buy needs the buyer access (`access` error otherwise).
+- Checked: test3 (300 WCoinC) was refused buying, unlocked buying (100 left), bought a jewel, and selling stayed locked;
+  the website showed both seasons' markets (Season 9 from a stand-in server, since this machine has no Season 9 data).

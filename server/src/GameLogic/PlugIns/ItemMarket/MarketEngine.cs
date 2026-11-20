@@ -82,24 +82,34 @@ public sealed class MarketEngine
         _ => false,
     };
 
-    /// <summary>Gets a value indicating whether an account may buy and sell: it paid the access fee, or there's none.</summary>
+    /// <summary>Gets a value indicating whether an account may sell: it paid the seller access fee, or there's none.</summary>
     /// <param name="loginName">The account's login name.</param>
     /// <returns><c>true</c>, if it may.</returns>
     public bool HasAccess(string loginName) =>
         this.Configuration.AccessFee <= 0
-        || this.Store.Read(d => d.AccessPaid.Any(l => string.Equals(l, loginName, StringComparison.OrdinalIgnoreCase)));
+        || this.Store.Read(d => Contains(d.AccessPaid, loginName));
 
-    /// <summary>Records that an account paid the access fee.</summary>
+    /// <summary>Gets a value indicating whether an account may buy: it paid either access fee, or buying is free.</summary>
     /// <param name="loginName">The account's login name.</param>
-    public void GrantAccess(string loginName) =>
+    /// <returns><c>true</c>, if it may.</returns>
+    public bool HasBuyerAccess(string loginName) =>
+        this.Configuration.BuyerAccessFee <= 0
+        || this.HasAccess(loginName)
+        || this.Store.Read(d => Contains(d.BuyerAccessPaid, loginName));
+
+    /// <summary>Records that an account paid an access fee.</summary>
+    /// <param name="loginName">The account's login name.</param>
+    /// <param name="seller"><c>true</c> for the seller access (selling and buying), <c>false</c> for buying only.</param>
+    public void GrantAccess(string loginName, bool seller = true) =>
         this.Store.Mutate(d =>
         {
-            if (d.AccessPaid.Any(l => string.Equals(l, loginName, StringComparison.OrdinalIgnoreCase)))
+            var list = seller ? d.AccessPaid : d.BuyerAccessPaid;
+            if (Contains(list, loginName))
             {
                 return (false, false);
             }
 
-            d.AccessPaid.Add(loginName);
+            list.Add(loginName);
             return (true, true);
         });
 
@@ -476,4 +486,7 @@ public sealed class MarketEngine
             data.AuditLog.RemoveRange(max, data.AuditLog.Count - max);
         }
     }
+
+    private static bool Contains(List<string> logins, string loginName) =>
+        logins.Any(l => string.Equals(l, loginName, StringComparison.OrdinalIgnoreCase));
 }

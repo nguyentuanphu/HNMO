@@ -71,10 +71,12 @@ export interface MarketStatePayload {
     maxListings: number;
     /** The one-off access fee of an account (0: none) and its coin. */
     accessFee?: number;
+    buyerAccessFee?: number;
     accessCoin?: string;
   };
-  /** Whether this account paid the access fee (null on public states). */
+  /** Whether this account may sell / buy on this season's market (null on public states). */
   accessPaid?: boolean | null;
+  buyerAccessPaid?: boolean | null;
   listings: MarketListingDto[];
   deliveries: MarketDeliveryDto[];
   pendingZen: number;
@@ -88,7 +90,7 @@ export interface MarketWindowOptions {
 }
 
 const SUBCODE_STATE = 0x39;
-const CMD = { Request: 1, List: 2, Buy: 3, Cancel: 4, Claim: 5, PayAccess: 6 } as const;
+const CMD = { Request: 1, List: 2, Buy: 3, Cancel: 4, Claim: 5, PayAccess: 6, PayBuyerAccess: 7 } as const;
 const CURRENCY_CODE: Record<MarketCurrencyName, number> = {
   Zen: 0,
   WCoinC: 1,
@@ -235,27 +237,35 @@ export class MarketWindow {
     );
     body.append(info);
 
-    // The one-off access fee: buying and selling open after it's paid.
-    const accessFee = s.rules.accessFee ?? 0;
-    if (s.accessPaid === false && accessFee > 0) {
+    // The one-off access fees of this season's market: selling (and buying), or buying only (cheaper).
+    const sellFee = s.rules.accessFee ?? 0;
+    const buyFee = s.rules.buyerAccessFee ?? 0;
+    const canSell = s.accessPaid !== false || sellFee <= 0;
+    const canBuy = s.buyerAccessPaid !== false || buyFee <= 0 || canSell;
+    if (!canSell || !canBuy) {
       const accessBar = document.createElement('div');
       accessBar.className = 'hnmo-card';
       accessBar.id = 'market-access';
       const coin = s.rules.accessCoin ?? 'WCoinC';
+      const amount = (n: number) => `${n.toLocaleString(locale())} ${coin}`;
       const label = document.createElement('span');
-      label.textContent = tx(
-        `Buying and selling need a one-off market access of ${accessFee.toLocaleString(locale())} ${coin} for your account.`,
-        `Mua bán cần trả phí vào chợ một lần ${accessFee.toLocaleString(locale())} ${coin} cho tài khoản.`,
-      );
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'hnmo-btn';
-      btn.id = 'market-access-btn';
-      btn.textContent = tx(`Unlock market (${accessFee.toLocaleString(locale())} ${coin})`, `Mở chợ (${accessFee.toLocaleString(locale())} ${coin})`);
-      btn.addEventListener('click', () => {
-        this.options.send('HnmoMarketCommand', { Action: CMD.PayAccess, Slot: 0, Currency: 0, Price: 0, ListingId: '' });
-      });
-      accessBar.append(label, btn);
+      label.textContent = canBuy
+        ? tx(`Selling needs a one-off ${amount(sellFee)} for your account on this season's market.`, `Bán đồ cần trả phí một lần ${amount(sellFee)} cho tài khoản ở chợ season này.`)
+        : tx(`One-off fees for your account on this season's market: buying ${amount(buyFee)}, selling (and buying) ${amount(sellFee)}.`, `Phí một lần cho tài khoản ở chợ season này: mua ${amount(buyFee)}, bán (và mua) ${amount(sellFee)}.`);
+      accessBar.append(label);
+      const button = (id: string, en: string, vi: string, action: number) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'hnmo-btn';
+        btn.id = id;
+        btn.textContent = tx(en, vi);
+        btn.addEventListener('click', () => {
+          this.options.send('HnmoMarketCommand', { Action: action, Slot: 0, Currency: 0, Price: 0, ListingId: '' });
+        });
+        accessBar.append(btn);
+      };
+      if (!canBuy) button('market-buyer-access-btn', `Unlock buying (${amount(buyFee)})`, `Mở quyền mua (${amount(buyFee)})`, CMD.PayBuyerAccess);
+      button('market-access-btn', `Unlock selling (${amount(sellFee)})`, `Mở quyền bán (${amount(sellFee)})`, CMD.PayAccess);
       body.append(accessBar);
     }
 

@@ -112,8 +112,9 @@ public class MarketControllerTests
         Assert.That(((ObjectResult)noAccess).StatusCode, Is.EqualTo(403));
         Assert.That(JsonSerializer.Serialize(((ObjectResult)noAccess).Value), Does.Contain("\"access\""));
         Assert.That(store.Read(d => d.Listings.Any(l => l.Id == affordable.Id)), Is.True);
-        engine.GrantAccess("buyer");
-        Assert.That(engine.HasAccess("BUYER"), Is.True, "login names are matched without case");
+        engine.GrantAccess("buyer", seller: false);
+        Assert.That(engine.HasBuyerAccess("BUYER"), Is.True, "login names are matched without case");
+        Assert.That(engine.HasAccess("buyer"), Is.False, "the buyer access doesn't allow selling");
 
         // Buying expensive listing (500 > 300 WCoinC) fails & restores listing
         var insufResult = (ContentResult)await controller.BuyAsync(new MarketActionRequest("buyer", "pass123", expensive!.Id)).ConfigureAwait(false);

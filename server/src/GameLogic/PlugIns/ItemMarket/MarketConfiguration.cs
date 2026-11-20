@@ -49,11 +49,18 @@ public sealed class MarketConfiguration
     public bool AllowGoblinPoints { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets the one-off fee an account pays before it can buy or sell on the market (0: free). Owner's choice
-    /// 2026-11-20: 1,000 W Coin (C).
+    /// Gets or sets the one-off fee an account pays before it can sell (and buy) on the market (0: free). Owner's
+    /// choice 2026-11-20: 1,000 W Coin (C), paid once per season (each season's server has its own market).
     /// </summary>
     [Range(0, 1_000_000)]
     public int AccessFee { get; set; } = 1_000;
+
+    /// <summary>
+    /// Gets or sets the cheaper one-off fee an account pays before it can buy on the market (0: buying is free).
+    /// Owner's choice 2026-11-20: 200 W Coin (C).
+    /// </summary>
+    [Range(0, 1_000_000)]
+    public int BuyerAccessFee { get; set; } = 200;
 
     /// <summary>Gets or sets the coin the access fee is paid in.</summary>
     public CashShopCoinType AccessFeeCoinType { get; set; } = CashShopCoinType.WCoinC;

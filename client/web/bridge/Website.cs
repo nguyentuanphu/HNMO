@@ -1,8 +1,18 @@
 // Read-only game data for the public website. No API key or account details cross this boundary.
 internal static class Website
 {
-    public static void Map(WebApplication app, PortalOptions options, IHttpClientFactory clients)
+    public static void Map(WebApplication app, PortalOptions options, IHttpClientFactory clients, string? seasonNineApiBaseUrl = null)
     {
+        // Each season's server program has its own market: Season 9's comes from its own admin panel.
+        if (!string.IsNullOrWhiteSpace(seasonNineApiBaseUrl))
+        {
+            Forward(app, "/website/market/s9", "api/website/market", options, clients, seasonNineApiBaseUrl);
+        }
+        else
+        {
+            app.MapGet("/website/market/s9", () => Results.NotFound());
+        }
+
         Forward(app, "/website/data", "api/website", options, clients);
         Forward(app, "/website/details", "api/website/details", options, clients);
         Forward(app, "/website/missions", "api/website/missions", options, clients);
@@ -89,7 +99,7 @@ internal static class Website
         });
     }
 
-    private static void Forward(WebApplication app, string route, string apiPath, PortalOptions options, IHttpClientFactory clients)
+    private static void Forward(WebApplication app, string route, string apiPath, PortalOptions options, IHttpClientFactory clients, string? apiBaseUrl = null)
     {
         app.MapGet(route, async (HttpContext context) =>
         {
@@ -98,7 +108,7 @@ internal static class Website
             timeout.CancelAfter(TimeSpan.FromSeconds(10));
             try
             {
-                var source = new Uri(new Uri(options.ApiBaseUrl), apiPath);
+                var source = new Uri(new Uri(apiBaseUrl ?? options.ApiBaseUrl), apiPath);
                 using var response = await clients.CreateClient().GetAsync(source, timeout.Token).ConfigureAwait(false);
                 if (!response.IsSuccessStatusCode)
                 {

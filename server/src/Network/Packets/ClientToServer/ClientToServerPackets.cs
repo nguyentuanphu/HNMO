@@ -20448,9 +20448,14 @@ public readonly struct HnmoMarketCommand
             Claim = 5,
 
         /// <summary>
-        /// Pay the market's one-off access fee for this account.
+        /// Pay the market's one-off seller access fee for this account (selling and buying).
         /// </summary>
             PayAccess = 6,
+
+        /// <summary>
+        /// Pay the market's one-off buyer access fee for this account (buying only).
+        /// </summary>
+            PayBuyerAccess = 7,
     }
 
     private readonly Memory<byte> _data;

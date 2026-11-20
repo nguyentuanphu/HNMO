@@ -5204,8 +5204,13 @@
             </EnumValue>
             <EnumValue>
               <Name>PayAccess</Name>
-              <Description>Pay the market's one-off access fee for this account.</Description>
+              <Description>Pay the market's one-off seller access fee for this account (selling and buying).</Description>
               <Value>6</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>PayBuyerAccess</Name>
+              <Description>Pay the market's one-off buyer access fee for this account (buying only).</Description>
+              <Value>7</Value>
             </EnumValue>
           </Values>
         </Enum>
