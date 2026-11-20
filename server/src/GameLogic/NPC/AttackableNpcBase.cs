@@ -475,7 +475,10 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
             exp += share.Experience;
         }
 
-        var (generatedItems, droppedMoney) = await this._dropGenerator.GenerateItemDropsAsync(this.Definition, exp, killer).ConfigureAwait(false);
+        // The zen of a kill follows the experience of the kill, but not the server's experience rate: with a rate of
+        // 1000 every kill dropped 1000 times the zen. The zen multipliers (rate tuning, map rules) scale the zen.
+        var moneyExperience = KillMoney.ExperienceForMoney(exp, killer.GameContext.ExperienceRate);
+        var (generatedItems, droppedMoney) = await this._dropGenerator.GenerateItemDropsAsync(this.Definition, moneyExperience, killer).ConfigureAwait(false);
         if (droppedMoney > 0)
         {
             await this.HandleMoneyDropAsync(droppedMoney.Value, killer, experienceShares).ConfigureAwait(false);
