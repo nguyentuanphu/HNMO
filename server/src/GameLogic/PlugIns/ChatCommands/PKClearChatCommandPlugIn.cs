@@ -130,7 +130,7 @@ public class PkClearChatCommandPlugIn : ChatCommandPlugInBase<PkClearChatCommand
         /// Gets or sets the Zen cost per kill.
         /// </summary>
         [Display(Name = nameof(HNMO.GameLogic.Properties.PlugInResources.PKClearConfiguration_ZenCostPerKill_Name), Description = nameof(HNMO.GameLogic.Properties.PlugInResources.PKClearConfiguration_ZenCostPerKill_Description), ResourceType = typeof(HNMO.GameLogic.Properties.PlugInResources))]
-        public int ZenCostPerKill { get; set; } = 10_000_000;
+        public int ZenCostPerKill { get; set; } = 1_000_000;
 
         /// <summary>
         /// Gets or sets a value indicating whether regular players are allowed to clear their PK status.
