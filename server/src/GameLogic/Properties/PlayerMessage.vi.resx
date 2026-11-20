@@ -57,6 +57,9 @@
   <data name="AwardMoneyFailByFullInventory" xml:space="preserve">
     <value>Không thể nhận zen thưởng, hành trang đã đầy.</value>
   </data>
+  <data name="TradeMoneyExceedsMaximum" xml:space="preserve">
+    <value>Giao dịch đã bị hủy: một người sẽ mang nhiều zen hơn mức hành trang cho phép.</value>
+  </data>
   <data name="CantEnterEventWithItem" xml:space="preserve">
     <value>Không thể vào sự kiện khi đang mặc '{0}'.</value>
   </data>

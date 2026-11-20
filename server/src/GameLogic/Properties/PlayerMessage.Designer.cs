@@ -167,6 +167,15 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("AwardMoneyFailByFullInventory", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The trade was cancelled: a trader would carry more zen than the inventory can hold..
+        /// </summary>
+        public static string TradeMoneyExceedsMaximum {
+            get {
+                return ResourceManager.GetString("TradeMoneyExceedsMaximum", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to {0} has acquired the {1}.

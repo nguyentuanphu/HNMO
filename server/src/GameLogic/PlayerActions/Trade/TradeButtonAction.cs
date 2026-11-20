@@ -55,6 +55,12 @@ public class TradeButtonAction : BaseTradeAction
         }
     }
 
+    private static bool ExceedsMaximumMoney(ITrader receiver, int receivedMoney)
+    {
+        var maximumMoney = receiver.GameContext?.Configuration?.MaximumInventoryMoney ?? int.MaxValue;
+        return (long)receiver.Money + receivedMoney > maximumMoney;
+    }
+
     private static async ValueTask<bool> TryAddItemsOfTradingPartnerAsync(ITrader trader)
     {
         if (trader.TradingPartner?.TemporaryStorage?.Items.Any() ?? false)
@@ -90,6 +96,16 @@ public class TradeButtonAction : BaseTradeAction
         var partnerItemsAreTradable = await this.CheckItemsAreTradableAsync(tradingPartner, tradePartnerItems).ConfigureAwait(false);
         if (!traderItemsAreTradable || !partnerItemsAreTradable)
         {
+            return TradeResult.Cancelled;
+        }
+
+        // The escrowed zen is added to the inventory money of the partner below. Like in classic MU,
+        // the trade fails when that would exceed the maximum inventory money - otherwise the money
+        // grows past the configured limit, or even wraps around to a negative amount.
+        if (ExceedsMaximumMoney(trader, partnerMoney) || ExceedsMaximumMoney(tradingPartner, traderMoney))
+        {
+            await this.SendMessageAsync(trader, nameof(PlayerMessage.TradeMoneyExceedsMaximum)).ConfigureAwait(false);
+            await this.SendMessageAsync(tradingPartner, nameof(PlayerMessage.TradeMoneyExceedsMaximum)).ConfigureAwait(false);
             return TradeResult.Cancelled;
         }
 
