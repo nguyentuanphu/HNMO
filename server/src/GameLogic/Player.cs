@@ -997,6 +997,14 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     public ValueTask AddExperienceAsync(int experience, IAttackable? killedObject) => this._experience.AddExperienceAsync(experience, killedObject);
 
     /// <summary>
+    /// Adds the experience of an event reward: its amount times the server's experience rate, as master experience
+    /// at the maximum level of a master class.
+    /// </summary>
+    /// <param name="baseExperience">The reward's experience amount.</param>
+    /// <returns>The experience added.</returns>
+    public ValueTask<long> AddRewardExperienceAsync(long baseExperience) => this._experience.AddRewardExperienceAsync(baseExperience);
+
+    /// <summary>
     /// Moves the player to the specified coordinate.
     /// </summary>
     /// <param name="target">The target.</param>

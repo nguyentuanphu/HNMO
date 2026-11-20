@@ -131,6 +131,36 @@ internal sealed class PlayerExperience
     }
 
     /// <summary>
+    /// Adds the experience of an event reward (Blood Castle, Devil Square, Chaos Castle ...): the reward's amount
+    /// times the server's experience rate, as master experience at the maximum level of a master class. It was added
+    /// as it is, so with an experience rate of 1000 an event gave next to nothing, and a character at the maximum
+    /// level lost it.
+    /// </summary>
+    /// <param name="baseExperience">The reward's experience amount.</param>
+    /// <returns>The experience added.</returns>
+    public async ValueTask<long> AddRewardExperienceAsync(long baseExperience)
+    {
+        if (baseExperience <= 0 || !this.TryGetExperienceKind(out var isMasterExperience))
+        {
+            return 0;
+        }
+
+        var rate = isMasterExperience ? this._player.GameContext.MasterExperienceRate : this._player.GameContext.ExperienceRate;
+        var experience = (int)Math.Clamp(baseExperience * (double)Math.Max(0, rate), 0, int.MaxValue);
+        using var d = await this._lock.LockAsync().ConfigureAwait(false);
+        if (isMasterExperience)
+        {
+            await this.AddMasterExperienceCoreAsync(experience, null).ConfigureAwait(false);
+        }
+        else
+        {
+            await this.AddExperienceCoreAsync(experience, null).ConfigureAwait(false);
+        }
+
+        return experience;
+    }
+
+    /// <summary>
     /// Determines whether the player gains master experience instead of normal experience.
     /// </summary>
     /// <param name="isMasterExperience">If set to <c>true</c>, master experience is gained.</param>
