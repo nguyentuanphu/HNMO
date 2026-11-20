@@ -128,9 +128,11 @@ public class DefaultDropGenerator : IDropGenerator
                 extraRolls++;
             }
 
+            // The extra rolls of an item drop bonus (map rules, happy hours, server rates) give items only: their zen
+            // was added too, so "+30 % item drops" also gave up to +30 % zen. The zen bonuses are the zen multipliers.
             for (var r = 0; r < extraRolls; r++)
             {
-                var (extraItems, extraMoney) = this.GenerateDrops(monster, gainedExperience);
+                var (extraItems, _) = this.GenerateDrops(monster, gainedExperience);
                 if (extraItems is { Count: > 0 })
                 {
                     droppedItems ??= new List<Item>(extraItems.Count);
@@ -138,12 +140,6 @@ public class DefaultDropGenerator : IDropGenerator
                     {
                         droppedItems.Add(extra);
                     }
-                }
-
-                if (extraMoney > 0)
-                {
-                    extraMoney = PlugIns.GameplayRules.RateTuningPlugIn.GetTableZen(player, (int)monster[Stats.Level], this._randomizer) ?? extraMoney;
-                    money += (uint)Math.Max(1, Math.Round(extraMoney * totalZenMult));
                 }
             }
         }
