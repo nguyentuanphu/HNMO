@@ -395,9 +395,13 @@ test.describe('on a phone', () => {
     expect(cardBox.height).toBeLessThanOrEqual(360 * 0.45 + 2);
     expect(overlaps(cardBox, await box('#mobileThumbstick'))).toBe(false);
     expect(overlaps(cardBox, await box('#touchFight .fight'))).toBe(false);
+    // Nor the chat bubble over the joystick, where the touch HUD has one.
+    const bubble = (await page.locator('#mobileChatToggle').count()) ? await page.locator('#mobileChatToggle').boundingBox() : null;
+    if (bubble) expect(overlaps(cardBox, bubble)).toBe(false);
     const close = page.locator('.rml-hnmo_onboarding .ob-close');
     expect((await close.boundingBox())!.height).toBeGreaterThanOrEqual(35.5);
 
+    await page.screenshot({ path: 'test-results/onboarding-phone-open.png' });
     // Closed: the "Guide n/m" button, 36 px, clear of the top-right row and the fight buttons.
     await close.click();
     const button = page.locator('.hnmo-guide-button');

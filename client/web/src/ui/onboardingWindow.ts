@@ -441,7 +441,8 @@ export class OnboardingWindow {
       doc.root.append(style);
     }
     if (!touch) {
-      for (const key of ['left', 'right', 'top', 'width', 'maxHeight', 'overflowY', 'pointerEvents'] as const) panel.style[key] = '';
+      this.model.positioned = false;
+      for (const key of ['right', 'width', 'maxHeight', 'overflowY', 'pointerEvents'] as const) panel.style[key] = '';
       return;
     }
     const px = (value: number) => `${value / scale}px`;
@@ -449,8 +450,12 @@ export class OnboardingWindow {
     // Above the chat bubble and joystick (bottom left, about 160 px tall), never more than 45% of the screen.
     const height = Math.max(120, Math.min(window.innerHeight * 0.45, window.innerHeight - top - 160));
     doc.root.style.setProperty('--ob-touch-36', px(36));
+    // The window shell places its frame by the model (positioned, root_x, root_y), as a dragged window.
+    this.model.positioned = true;
+    this.model.root_x = 8 / scale;
+    this.model.root_y = top / scale;
     Object.assign(panel.style, {
-      left: px(8), right: 'auto', top: px(top), width: px(Math.min(260, window.innerWidth * 0.42)),
+      right: 'auto', width: px(Math.min(260, window.innerWidth * 0.42)),
       maxHeight: px(height), overflowY: 'auto', pointerEvents: 'auto',
     });
   }
