@@ -872,4 +872,6 @@
   </data>
   <data name="AddArenaHeraldUpdatePlugIn_Name" xml:space="preserve"><value>Thêm Sứ giả Đấu trường</value></data>
   <data name="AddArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Thêm Sứ giả Đấu trường HNMO, NPC ở Lorencia, Devias, Noria và Elbeland, mở cửa sổ Đấu trường.</value></data>
+  <data name="RenumberArenaHeraldUpdatePlugIn_Name" xml:space="preserve"><value>Sứ giả Đấu trường: số NPC riêng</value></data>
+  <data name="RenumberArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Chuyển Sứ giả Đấu trường của bản lưu cũ từ NPC 595 sang 900 để web game hiện lại.</value></data>
 </root>

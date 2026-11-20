@@ -19,6 +19,9 @@ public sealed class HnmoArenaHeraldInitializer
     /// <summary>The Herald's NPC number (free in the game data; the web game's monster data knows it).</summary>
     public const short Number = 900;
 
+    /// <summary>The Herald's first number, before it moved to <see cref="Number"/>.</summary>
+    internal const short EarlyNumber = 595;
+
     private readonly IContext _context;
     private readonly GameConfiguration _gameConfiguration;
 
@@ -44,6 +47,14 @@ public sealed class HnmoArenaHeraldInitializer
     public void Initialize()
     {
         var herald = this._gameConfiguration.Monsters.FirstOrDefault(m => m.Number == Number);
+        if (herald is null && this._gameConfiguration.Monsters.FirstOrDefault(IsEarlyHerald) is { } early)
+        {
+            // A save made before the Herald moved to 900 (595 is a monster of the Season 9 data): renumbered, kept.
+            early.Number = Number;
+            early.Designation = LocalizedString.FromResource(() => MonsterNames.ArenaHerald);
+            herald = early;
+        }
+
         if (herald is null)
         {
             herald = this._context.CreateNew<MonsterDefinition>();
@@ -76,4 +87,8 @@ public sealed class HnmoArenaHeraldInitializer
             map.MonsterSpawns.Add(spawn);
         }
     }
+
+    private static bool IsEarlyHerald(MonsterDefinition monster) =>
+        monster.Number == EarlyNumber
+        && (monster.Designation.ValueInNeutralLanguage ?? string.Empty).StartsWith("Arena Herald", StringComparison.Ordinal);
 }
