@@ -22,6 +22,12 @@ public class DropItemAction
     /// <param name="target">The target coordinates.</param>
     public async ValueTask DropItemAsync(Player player, byte slot, Point target)
     {
+        if (await PlugIns.Arena.ArenaRules.RefuseAsync(player, PlugIns.Arena.ArenaRules.Action.Drop).ConfigureAwait(false))
+        {
+            await player.InvokeViewPlugInAsync<IItemDropResultPlugIn>(p => p.ItemDropResultAsync(slot, false)).ConfigureAwait(false);
+            return;
+        }
+
         var item = player.Inventory?.GetItem(slot);
 
         if (item is null

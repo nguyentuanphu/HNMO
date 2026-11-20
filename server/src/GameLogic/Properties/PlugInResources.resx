@@ -2234,4 +2234,6 @@
   <data name="DuplicateItemsConfiguration_ScanIntervalMinutes_Description" xml:space="preserve"><value>How often the database is scanned for duplicate items.</value></data>
   <data name="DuplicateItemsConfiguration_FreezeDuplicates_Caption" xml:space="preserve"><value>Freeze duplicates</value></data>
   <data name="DuplicateItemsConfiguration_FreezeDuplicates_Description" xml:space="preserve"><value>Found duplicates can not be traded, sold, dropped, stored, listed or mixed until an administrator decides.</value></data>
+  <data name="ArenaPlugIn_Name" xml:space="preserve"><value>HNMO Arena characters</value></data>
+  <data name="ArenaPlugIn_Description" xml:space="preserve"><value>In the Arena program: the picked character becomes the arena character of its class (level, stats, gear and potions from the templates) on the arena map. Does nothing on other servers.</value></data>
 </root>

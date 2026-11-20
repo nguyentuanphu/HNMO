@@ -6111,5 +6111,11 @@ namespace HNMO.GameLogic.Properties {
         /// <summary>Gets the localized duplicate item check text.</summary>
         public static string DuplicateItemsConfiguration_FreezeDuplicates_Description => ResourceManager.GetString("DuplicateItemsConfiguration_FreezeDuplicates_Description", resourceCulture)!;
 
+        /// <summary>Gets the localized HNMO Arena text.</summary>
+        public static string ArenaPlugIn_Name => ResourceManager.GetString("ArenaPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized HNMO Arena text.</summary>
+        public static string ArenaPlugIn_Description => ResourceManager.GetString("ArenaPlugIn_Description", resourceCulture)!;
+
     }
 }

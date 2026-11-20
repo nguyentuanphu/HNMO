@@ -74,6 +74,12 @@ public class SelectCharacterAction
             return;
         }
 
+        // The HNMO Arena: the picked character becomes the arena character of its class (only in the Arena program).
+        if (PlugIns.Arena.ArenaPlugIn.Get(player.GameContext) is { } arena)
+        {
+            await arena.ApplyTemplateAsync(player, candidate).ConfigureAwait(false);
+        }
+
         await player.SetSelectedCharacterAsync(candidate).ConfigureAwait(false);
     }
 }

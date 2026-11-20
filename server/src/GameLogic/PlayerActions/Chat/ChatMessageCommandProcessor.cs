@@ -47,6 +47,12 @@ public class ChatMessageCommandProcessor : IChatMessageProcessor
             return;
         }
 
+        if (commandHandler.MinCharacterStatusRequirement < CharacterStatus.GameMaster
+            && await PlugIns.Arena.ArenaRules.RefuseAsync(sender, PlugIns.Arena.ArenaRules.Action.Command).ConfigureAwait(false))
+        {
+            return;
+        }
+
         if (sender.BackupInventory is not null && commandHandler.MinCharacterStatusRequirement < CharacterStatus.GameMaster)
         {
             // A trade or crafting dialog keeps a backup of the inventory and the money, which comes back when

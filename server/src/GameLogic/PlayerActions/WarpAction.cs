@@ -23,6 +23,11 @@ public class WarpAction
     /// <param name="warpInfo">The warp information.</param>
     public async ValueTask WarpToAsync(Player player, WarpInfo warpInfo)
     {
+        if (await PlugIns.Arena.ArenaRules.RefuseAsync(player, PlugIns.Arena.ArenaRules.Action.Warp).ConfigureAwait(false))
+        {
+            return;
+        }
+
         if (warpInfo.Gate is { } gate
             && player.GameContext.PlugInManager.GetPlugInPoint<IWarpGateEnteringPlugIn>() is { } plugInPoint)
         {

@@ -34,6 +34,11 @@ public class PickupItemAction
     /// <param name="dropId">The drop identifier.</param>
     public async ValueTask PickupItemAsync(Player player, ushort dropId)
     {
+        if (await PlugIns.Arena.ArenaRules.RefuseAsync(player, PlugIns.Arena.ArenaRules.Action.PickUp).ConfigureAwait(false))
+        {
+            return;
+        }
+
         var droppedLocateable = player.CurrentMap?.GetDrop(dropId);
 
         switch (droppedLocateable)

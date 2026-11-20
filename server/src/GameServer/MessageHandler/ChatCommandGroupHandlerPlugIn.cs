@@ -63,6 +63,12 @@ internal class ChatCommandGroupHandlerPlugIn : GroupPacketHandlerPlugIn
             return;
         }
 
+        // The Arena keeps one HNMO window, its own travel window (GameLogic.PlugIns.Arena.ArenaRules).
+        if (isHnmoPacket && !GameLogic.PlugIns.Arena.ArenaRules.AllowsHnmoMessage(packet.Span[subTypeIndex]))
+        {
+            return;
+        }
+
         if (isHnmoPacket && !RateLimiter.TryTake(player))
         {
             return;

@@ -20,6 +20,11 @@ public class OpenStoreAction
     /// <param name="storeName">Name of the store.</param>
     public async ValueTask OpenStoreAsync(Player player, string storeName)
     {
+        if (await PlugIns.Arena.ArenaRules.RefuseAsync(player, PlugIns.Arena.ArenaRules.Action.Store).ConfigureAwait(false))
+        {
+            return;
+        }
+
         using var loggerScope = player.Logger.BeginScope(this.GetType());
         var character = player.SelectedCharacter;
         if (character is null)

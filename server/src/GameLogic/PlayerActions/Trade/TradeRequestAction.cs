@@ -19,6 +19,11 @@ public class TradeRequestAction
     /// <returns>The success of sending the request to the <paramref name="partner"/>.</returns>
     public async ValueTask<bool> RequestTradeAsync(ITrader player, ITrader partner)
     {
+        if (player is Player arenaPlayer && await PlugIns.Arena.ArenaRules.RefuseAsync(arenaPlayer, PlugIns.Arena.ArenaRules.Action.Trade).ConfigureAwait(false))
+        {
+            return false;
+        }
+
         if (player.IsTemplatePlayer || partner.IsTemplatePlayer)
         {
             player.Logger.LogWarning("This or the requested player is template player, cannot trade.");

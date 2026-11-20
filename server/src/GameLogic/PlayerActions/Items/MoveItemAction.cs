@@ -70,6 +70,14 @@ public class MoveItemAction
             return;
         }
 
+        // The HNMO Arena: no vault there (everyone plays the same arena characters).
+        if ((fromStorage == Storages.Vault || toStorage == Storages.Vault)
+            && await PlugIns.Arena.ArenaRules.RefuseAsync(player, PlugIns.Arena.ArenaRules.Action.Vault).ConfigureAwait(false))
+        {
+            await player.InvokeViewPlugInAsync<IItemMoveFailedPlugIn>(p => p.ItemMoveFailedAsync(item)).ConfigureAwait(false);
+            return;
+        }
+
         // HNMO's duplicate check: a frozen item stays where it is (the bag, or the vault it's in).
         if (fromStorage != toStorage && toStorage != Storages.Inventory
             && await PlugIns.DuplicateItems.DuplicateItemsPlugIn.RefuseFrozenAsync(player, item).ConfigureAwait(false))
