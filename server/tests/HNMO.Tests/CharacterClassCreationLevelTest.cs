@@ -33,7 +33,7 @@ public class CharacterClassCreationLevelTest
 
         var account = context.CreateNew<Account>();
         var character = context.CreateNew<Character>();
-        var level = new StatAttribute(levelDefinition, 150);
+        var level = new HNMO.Persistence.BasicModel.StatAttribute(levelDefinition, 150);
         character.Attributes.Add(level);
         account.Characters.Add(character);
 
