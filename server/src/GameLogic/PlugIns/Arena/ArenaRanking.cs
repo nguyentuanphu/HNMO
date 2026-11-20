@@ -39,6 +39,12 @@ public static class ArenaRanking
         return $"{ISOWeek.GetYear(sydney)}-W{ISOWeek.GetWeekOfYear(sydney):00}";
     }
 
+    /// <summary>The Sydney day of a time, e.g. "2026-11-20" (the daily points cap counts these).</summary>
+    /// <param name="utc">The time (UTC).</param>
+    /// <returns>The day.</returns>
+    public static string SydneyDay(DateTime utc) =>
+        TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(utc, DateTimeKind.Utc), Sydney).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+
     /// <summary>The widest rating gap two queued players are matched over: 100, and 50 more for every 10 s waited.</summary>
     /// <param name="waited">How long the one waiting longer has waited.</param>
     /// <returns>The gap.</returns>

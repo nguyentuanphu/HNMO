@@ -5,6 +5,7 @@
 namespace HNMO.GameLogic.PlugIns.Arena;
 
 using System.ComponentModel.DataAnnotations;
+using HNMO.DataModel.Configuration;
 
 /// <summary>The configuration of the <see cref="ArenaPlugIn"/>: the arena map and the arena character of every class.</summary>
 public sealed class ArenaConfiguration
@@ -31,6 +32,22 @@ public sealed class ArenaConfiguration
     /// <summary>Gets or sets how many large healing potions every arena character carries.</summary>
     [Range(0, 255)]
     public byte HealingPotions { get; set; } = 100;
+
+    /// <summary>Gets or sets where arena characters stand on the arena map (enter, come back, respawn): X1. The map's own gates lie partly on blocked tiles.</summary>
+    [Range(0, 255)]
+    public byte HomeX1 { get; set; } = 95;
+
+    /// <summary>Gets or sets where arena characters stand on the arena map (enter, come back, respawn): Y1. The map's own gates lie partly on blocked tiles.</summary>
+    [Range(0, 255)]
+    public byte HomeY1 { get; set; } = 105;
+
+    /// <summary>Gets or sets where arena characters stand on the arena map (enter, come back, respawn): X2. The map's own gates lie partly on blocked tiles.</summary>
+    [Range(0, 255)]
+    public byte HomeX2 { get; set; } = 100;
+
+    /// <summary>Gets or sets where arena characters stand on the arena map (enter, come back, respawn): Y2. The map's own gates lie partly on blocked tiles.</summary>
+    [Range(0, 255)]
+    public byte HomeY2 { get; set; } = 110;
 
     /// <summary>Gets or sets the map 5v5 team battles play on (owner's choice 2026-11-20: 30, Valley of Loren).</summary>
     [Range(0, 1000)]
@@ -63,6 +80,49 @@ public sealed class ArenaConfiguration
     /// <summary>Gets or sets the arena points a 5v5 loss gives (owner's choice 2026-11-20: 3).</summary>
     [Range(0, 1000)]
     public int TeamPointsPerLoss { get; set; } = 3;
+
+    /// <summary>Gets or sets the red team's gate on the battle map: X1 (where it starts and comes back).</summary>
+    [Range(0, 255)]
+    public byte TeamAX1 { get; set; } = 60;
+
+    /// <summary>Gets or sets the red team's gate on the battle map: Y1 (where it starts and comes back).</summary>
+    [Range(0, 255)]
+    public byte TeamAY1 { get; set; } = 24;
+
+    /// <summary>Gets or sets the red team's gate on the battle map: X2 (where it starts and comes back).</summary>
+    [Range(0, 255)]
+    public byte TeamAX2 { get; set; } = 66;
+
+    /// <summary>Gets or sets the red team's gate on the battle map: Y2 (where it starts and comes back).</summary>
+    [Range(0, 255)]
+    public byte TeamAY2 { get; set; } = 30;
+
+    /// <summary>Gets or sets the blue team's gate on the battle map: X1 (where it starts and comes back).</summary>
+    [Range(0, 255)]
+    public byte TeamBX1 { get; set; } = 112;
+
+    /// <summary>Gets or sets the blue team's gate on the battle map: Y1 (where it starts and comes back).</summary>
+    [Range(0, 255)]
+    public byte TeamBY1 { get; set; } = 24;
+
+    /// <summary>Gets or sets the blue team's gate on the battle map: X2 (where it starts and comes back).</summary>
+    [Range(0, 255)]
+    public byte TeamBX2 { get; set; } = 118;
+
+    /// <summary>Gets or sets the blue team's gate on the battle map: Y2 (where it starts and comes back).</summary>
+    [Range(0, 255)]
+    public byte TeamBY2 { get; set; } = 30;
+
+    /// <summary>The gate arena characters stand at on the arena map, if the map exists.</summary>
+    /// <param name="gameConfiguration">The game configuration.</param>
+    /// <returns>The gate, or <c>null</c>.</returns>
+    public ExitGate? HomeGate(GameConfiguration gameConfiguration)
+    {
+        ArgumentNullException.ThrowIfNull(gameConfiguration);
+        return gameConfiguration.Maps.FirstOrDefault(m => m.Number == this.MapNumber) is { } map
+            ? new ExitGate { Map = map, X1 = this.HomeX1, Y1 = this.HomeY1, X2 = this.HomeX2, Y2 = this.HomeY2, Direction = Direction.South, IsSpawnGate = true }
+            : null;
+    }
 
     /// <summary>Gets or sets the arena character of every class.</summary>
     public List<ArenaClassTemplate> Templates { get; set; } = DefaultTemplates();

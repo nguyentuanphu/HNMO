@@ -27,6 +27,8 @@ public sealed class ArenaPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn, IPe
 
     private readonly object _duelsGate = new();
     private ArenaDuels? _duels;
+    private ArenaTeams? _teams;
+    private DateTime _nextTeamTickUtc;
     private DateTime _nextMatchUtc;
     private DateTime _nextReturnUtc;
 
@@ -42,6 +44,18 @@ public sealed class ArenaPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn, IPe
             {
                 var cfg = this.Configuration ?? new ArenaConfiguration();
                 return this._duels ??= new ArenaDuels(cfg.FileName, cfg);
+            }
+        }
+    }
+
+    /// <summary>Gets the 5v5 team battles of this game server.</summary>
+    public ArenaTeams Teams
+    {
+        get
+        {
+            lock (this._duelsGate)
+            {
+                return this._teams ??= new ArenaTeams(this.Configuration ?? new ArenaConfiguration());
             }
         }
     }
@@ -70,17 +84,23 @@ public sealed class ArenaPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn, IPe
             await this.Duels.MatchAsync(logger).ConfigureAwait(false);
         }
 
+        if (now >= this._nextTeamTickUtc)
+        {
+            this._nextTeamTickUtc = now.AddSeconds(1);
+            await this.Teams.TickAsync(gameContext, this.Duels, logger).ConfigureAwait(false);
+        }
+
         if (now >= this._nextReturnUtc)
         {
             // After a duel the game moves both players to the duel exit: arena characters belong on the arena map.
             this._nextReturnUtc = now.AddSeconds(5);
             var cfg = this.Configuration ?? new ArenaConfiguration();
-            if (gameContext.Configuration.Maps.FirstOrDefault(m => m.Number == cfg.MapNumber) is { } map
-                && map.ExitGates.FirstOrDefault(g => g.IsSpawnGate) is { } gate)
+            if (cfg.HomeGate(gameContext.Configuration) is { } gate)
             {
                 foreach (var player in await gameContext.GetPlayersAsync().ConfigureAwait(false))
                 {
                     if (player.PlayerState.CurrentState == PlayerState.EnteredWorld && player.DuelRoom is null && player.IsAlive
+                        && this.Teams.SideOf(player) == 0
                         && !player.IsTeleporting && player.CurrentMap is { } current && current.MapId != cfg.MapNumber)
                     {
                         await player.WarpToAsync(gate).ConfigureAwait(false);
@@ -168,14 +188,11 @@ public sealed class ArenaPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn, IPe
             }
         }
 
-        if (gameConfiguration.Maps.FirstOrDefault(m => m.Number == cfg.MapNumber) is { } map)
+        if (cfg.HomeGate(gameConfiguration) is { Map: { } map } gate)
         {
             character.CurrentMap = map;
-            if (map.ExitGates.FirstOrDefault(g => g.IsSpawnGate) is { } gate)
-            {
-                character.PositionX = (byte)Rand.NextInt(gate.X1, gate.X2 + 1);
-                character.PositionY = (byte)Rand.NextInt(gate.Y1, gate.Y2 + 1);
-            }
+            character.PositionX = (byte)Rand.NextInt(gate.X1, gate.X2 + 1);
+            character.PositionY = (byte)Rand.NextInt(gate.Y1, gate.Y2 + 1);
         }
 
         player.Logger.LogInformation("Arena: {Name} plays the {Template} arena character (level {Level}).", character.Name, template.Name, level);

@@ -454,6 +454,12 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     /// <inheritdoc/>
     public bool IsAlive { get; set; }
 
+    /// <summary>
+    /// Gets or sets how long the player stays dead before coming back (e.g. the Arena's team battles); <c>null</c> for
+    /// the usual three seconds.
+    /// </summary>
+    public TimeSpan? RespawnDelay { get; set; }
+
     /// <inheritdoc/>
     public bool IsTeleporting { get; internal set; }
 
@@ -1908,7 +1914,7 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
         {
             try
             {
-                await Task.Delay(3000, cancellationToken).ConfigureAwait(false);
+                await Task.Delay(this.RespawnDelay ?? TimeSpan.FromSeconds(3), cancellationToken).ConfigureAwait(false);
 
                 if (cancellationToken.IsCancellationRequested || this.CurrentMap is null)
                 {

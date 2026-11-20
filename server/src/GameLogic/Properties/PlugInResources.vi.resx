@@ -2425,4 +2425,6 @@
   <data name="ArenaShopPlugIn_Description" xml:space="preserve"><value>Ở các server nhà: điểm Đấu trường, kiếm được từ các trận xếp hạng, đổi ngọc, bùa, vé sự kiện và đồ trang trí (đồ được tạo mới ở đây). Món và giá chỉnh ở đây.</value></data>
   <data name="BugReportsPlugIn_Name" xml:space="preserve"><value>Báo lỗi HNMO</value></data>
   <data name="BugReportsPlugIn_Description" xml:space="preserve"><value>Người chơi gửi báo lỗi từ trong game (theo giới hạn mỗi ngày); chủ server đọc, trả lời và xử lý ở trang "Báo lỗi", có thể thưởng xu cho lỗi được xác nhận và gửi báo lỗi tới nhà phát triển HNMO (thành một issue; có thể thêm link Discord để nhận thông báo).</value></data>
+  <data name="ArenaTeamRulesPlugIn_Name" xml:space="preserve"><value>Luật trận đấu đội Đấu trường HNMO</value></data>
+  <data name="ArenaTeamRulesPlugIn_Description" xml:space="preserve"><value>Trong chương trình Đấu trường, khi có trận đấu đội 5v5: chỉ đánh được đội kia, không bị phạt giết người, đếm mạng, người bị hạ hồi sinh ở cửa đội mình.</value></data>
 </root>

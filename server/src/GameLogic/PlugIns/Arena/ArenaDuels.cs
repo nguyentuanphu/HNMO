@@ -121,9 +121,10 @@ public sealed class ArenaDuels
             List<(Player A, Player B)> pairs = [];
             lock (this._gate)
             {
-                this._queue.RemoveAll(e => e.Player.SelectedCharacter is null || e.Player.PlayerState.CurrentState != PlayerState.EnteredWorld || e.Player.DuelRoom is not null);
+                // Only who left the game (or is in a duel) leaves the queue; a map change is no reason.
+                this._queue.RemoveAll(e => e.Player.SelectedCharacter is null || !e.Player.IsConnected || e.Player.DuelRoom is not null);
                 var ratings = this._store.Read(d => this._queue.ToDictionary(e => e.Player, e => ArenaRanking.Of(d, e.Player.Account?.LoginName ?? string.Empty, now).Rating));
-                var waiting = this._queue.OrderBy(e => e.JoinedUtc).ToList();
+                var waiting = this._queue.Where(e => e.Player.PlayerState.CurrentState == PlayerState.EnteredWorld && e.Player.IsAlive).OrderBy(e => e.JoinedUtc).ToList();
                 var taken = new HashSet<Player>();
                 foreach (var (a, joined) in waiting)
                 {

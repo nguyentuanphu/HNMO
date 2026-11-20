@@ -15,6 +15,8 @@ export interface ArenaTravelState {
   message?: string | null;
   /** In the Arena: the ranked 1v1 record, the queue and the leaderboards. */
   ranked?: ArenaRanked | null;
+  /** In the Arena: the 5v5 team battle queue and the battle being fought. */
+  team?: ArenaTeam | null;
   /** At home: the account's Arena points and the points shop. */
   shop?: ArenaShop | null;
 }
@@ -57,6 +59,32 @@ export interface ArenaRanked {
   waiting: number;
   top: ArenaRankRow[];
   week: ArenaRankRow[];
+}
+
+/** A fighter of a team battle and their kills. */
+export interface ArenaFighter {
+  name: string;
+  kills: number;
+}
+
+/** The 5v5 team battles: the queue, and the battle being fought (side 1 red, 2 blue, 0 not fighting). */
+export interface ArenaTeam {
+  queued: boolean;
+  waiting: number;
+  size: number;
+  minSize: number;
+  killsToWin: number;
+  minutes: number;
+  running: boolean;
+  side: number;
+  scoreA: number;
+  scoreB: number;
+  secondsLeft: number;
+  ended: boolean;
+  /** 1 red, -1 blue, 0 a draw (once ended). */
+  winner: number;
+  teamA?: ArenaFighter[] | null;
+  teamB?: ArenaFighter[] | null;
 }
 
 /** The home server to come back to: its start screen column and server id. */
@@ -102,6 +130,10 @@ export class ArenaWindow {
   private state: ArenaTravelState | null = null;
   private travelling = false;
   private refreshTimer: number | undefined;
+  private battleTimer: number | undefined;
+  private scoreboard: HTMLElement | null = null;
+  /** The last answer drawn, so a refresh that changed nothing doesn't rebuild the buttons under the pointer. */
+  private drawn = '';
 
   constructor(private readonly options: {
     send: Send;
@@ -123,6 +155,7 @@ export class ArenaWindow {
   open(): void {
     this.panel.setTitle(tx('Arena', 'Đấu trường'));
     this.panel.open();
+    this.drawn = '';
     this.render();
     this.options.send('HnmoArenaTravelRequest', { Action: 0, Index: 0 });
     // While open, the queue and the leaderboards stay current.
@@ -147,8 +180,9 @@ export class ArenaWindow {
   handle(bytes: Uint8Array): boolean {
     if (bytes.length < 5 || bytes[0] !== 0xc2 || bytes[3] !== 0xf5 || bytes[4] !== 0x53) return false;
     const parsed = read('ServerToClient', 'HnmoArenaTravelState', bytes);
+    const json = typeof parsed.Json === 'string' ? parsed.Json : '';
     try {
-      this.state = JSON.parse(typeof parsed.Json === 'string' ? parsed.Json : '') as ArenaTravelState;
+      this.state = JSON.parse(json) as ArenaTravelState;
     } catch {
       return true;
     }
@@ -167,7 +201,11 @@ export class ArenaWindow {
       return true;
     }
     this.travelling = false;
-    if (this.panel.isOpen()) this.render();
+    this.updateScoreboard(state.team ?? null);
+    if (this.panel.isOpen() && json !== this.drawn) {
+      this.drawn = json;
+      this.render();
+    }
     return true;
   }
 
@@ -208,8 +246,104 @@ export class ArenaWindow {
       if (state.shop) this.renderShop(body, state.shop);
     } else {
       body.append(button);
+      if (state.team) this.renderTeam(body, state.team);
       if (state.ranked) this.renderRanked(body, state.ranked);
     }
+  }
+
+  private renderTeam(body: HTMLElement, team: ArenaTeam): void {
+    const head = document.createElement('h3');
+    head.className = 'hnmo-arena-head';
+    // While a battle runs, its own size (a 3v3 when fewer came); otherwise the full size the queue looks for.
+    const n = team.running && team.teamA?.length ? team.teamA.length : team.size;
+    head.textContent = tx(`Team battle ${n}v${n}`, `Đấu đội ${n}v${n}`);
+    const rules = document.createElement('p');
+    rules.className = 'hnmo-muted';
+    rules.textContent = tx(
+      `Valley of Loren: the most kills in ${team.minutes} minutes, or ${team.killsToWin} kills first, wins. Queue alone or as a party (the leader queues it). After a minute of waiting a ${team.minSize}v${team.minSize} may start.`,
+      `Thung lũng Loren: đội hạ nhiều hơn trong ${team.minutes} phút, hoặc đủ ${team.killsToWin} mạng trước, sẽ thắng. Xếp hàng một mình hoặc cả nhóm (trưởng nhóm xếp). Chờ quá một phút có thể đấu ${team.minSize}v${team.minSize}.`,
+    );
+    body.append(head, rules);
+    if (team.side) {
+      const score = document.createElement('p');
+      score.id = 'arena-team-score';
+      score.textContent = this.scoreText(team);
+      body.append(score);
+      const sides: [string, ArenaFighter[] | null | undefined][] = [[tx('Red', 'Đỏ'), team.teamA], [tx('Blue', 'Xanh'), team.teamB]];
+      for (const [name, fighters] of sides) {
+        const p = document.createElement('p');
+        p.className = 'hnmo-muted';
+        p.textContent = `${name}: ${(fighters ?? []).map((f) => `${f.name} (${f.kills})`).join(', ')}`;
+        body.append(p);
+      }
+      return;
+    }
+    const queue = document.createElement('button');
+    queue.type = 'button';
+    queue.className = 'hnmo-btn';
+    queue.id = team.queued ? 'arena-team-leave' : 'arena-team-join';
+    queue.textContent = team.queued
+      ? tx(`Leave the team queue (${team.waiting} waiting)`, `Rời hàng chờ đấu đội (${team.waiting} người chờ)`)
+      : team.running
+        ? tx('Queue for the next team battle', 'Xếp hàng trận đấu đội tiếp theo')
+        : tx('Find a team battle', 'Tìm trận đấu đội');
+    queue.addEventListener('click', () => {
+      this.options.send('HnmoArenaTravelRequest', { Action: team.queued ? 6 : 5, Index: 0 });
+    });
+    body.append(queue);
+    if (team.running) {
+      const busy = document.createElement('p');
+      busy.className = 'hnmo-muted';
+      busy.textContent = tx(`A battle is being fought (${team.scoreA} : ${team.scoreB}).`, `Đang có trận đấu (${team.scoreA} : ${team.scoreB}).`);
+      body.append(busy);
+    }
+  }
+
+  private scoreText(team: ArenaTeam): string {
+    const time = `${Math.floor(team.secondsLeft / 60)}:${String(team.secondsLeft % 60).padStart(2, '0')}`;
+    const mine = team.side === 1 ? tx('you: Red', 'bạn: Đỏ') : tx('you: Blue', 'bạn: Xanh');
+    if (team.ended) {
+      const result = team.winner === 0 ? tx('Draw', 'Hoà')
+        : (team.winner === 1) === (team.side === 1) ? tx('Victory', 'Thắng') : tx('Defeat', 'Thua');
+      return `${result} · ${tx('Red', 'Đỏ')} ${team.scoreA} : ${team.scoreB} ${tx('Blue', 'Xanh')}`;
+    }
+    return `${tx('Red', 'Đỏ')} ${team.scoreA} : ${team.scoreB} ${tx('Blue', 'Xanh')} · ${time} · ${mine}`;
+  }
+
+  /**
+   * While the player waits for or fights a team battle, the state is asked for every 2 s (also with the window closed),
+   * and while they fight a small score bar stays on screen.
+   */
+  private updateScoreboard(team: ArenaTeam | null): void {
+    const fighting = !!team && team.running && team.side !== 0;
+    const watching = fighting || !!team?.queued;
+    if (!watching) {
+      window.clearInterval(this.battleTimer);
+      this.battleTimer = undefined;
+    }
+    if (!fighting || !team) {
+      this.scoreboard?.remove();
+      this.scoreboard = null;
+      if (!watching) return;
+    }
+    if (fighting && team) {
+      if (!this.scoreboard) this.scoreboard = this.createScoreboard();
+      this.scoreboard.textContent = this.scoreText(team);
+    }
+    if (this.battleTimer === undefined) {
+      this.battleTimer = window.setInterval(() => {
+        this.options.send('HnmoArenaTravelRequest', { Action: 0, Index: 0 });
+      }, 2000);
+    }
+  }
+
+  private createScoreboard(): HTMLElement {
+    const bar = document.createElement('div');
+    bar.id = 'arena-scoreboard';
+    bar.setAttribute('role', 'status');
+    bar.style.cssText = 'position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:30;padding:4px 12px;border-radius:6px;background:rgba(0,0,0,.7);color:#f0e0b0;font:600 14px sans-serif;pointer-events:none;white-space:nowrap';
+    document.body.append(bar);
+    return bar;
   }
 
   private renderRanked(body: HTMLElement, ranked: ArenaRanked): void {

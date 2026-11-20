@@ -70,6 +70,14 @@ internal sealed class HnmoArenaTravelRequestHandlerPlugIn : ISubPacketHandlerPlu
             message = vi ? viText : en;
         }
 
+        if (arena is not null && request.Action is 5 or 6)
+        {
+            var (en, viText) = request.Action == 5
+                ? arena.Teams.Join(player)
+                : (arena.Teams.Leave(player) ? ("You left the team battle queue.", "Bạn đã rời hàng chờ đấu đội.") : ("You weren't in the team battle queue.", "Bạn không ở trong hàng chờ đấu đội."));
+            message = vi ? viText : en;
+        }
+
         var shop = inArena ? null : GameLogic.PlugIns.Arena.ArenaShopPlugIn.Get(player.GameContext);
         if (shop is not null && request.Action == 4)
         {
@@ -77,7 +85,7 @@ internal sealed class HnmoArenaTravelRequestHandlerPlugIn : ISubPacketHandlerPlu
             message = vi ? viText : en;
         }
 
-        var json = JsonSerializer.Serialize(new { inArena, account = login, ticket, message, ranked = arena?.Duels.StateOf(player), shop = shop?.StateOf(player) });
+        var json = JsonSerializer.Serialize(new { inArena, account = login, ticket, message, ranked = arena?.Duels.StateOf(player), team = arena?.Teams.StateOf(player), shop = shop?.StateOf(player) });
         await player.InvokeViewPlugInAsync<IHnmoArenaTravelViewPlugIn>(p => p.ShowArenaTravelAsync(json)).ConfigureAwait(false);
     }
 }
