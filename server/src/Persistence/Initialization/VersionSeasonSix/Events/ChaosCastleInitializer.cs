@@ -90,6 +90,7 @@ internal class ChaosCastleInitializer : InitializerBase
         chaosCastle.GameDuration = TimeSpan.FromMinutes(10);
         chaosCastle.ExitDuration = TimeSpan.FromMinutes(1);
         chaosCastle.MaximumPlayerCount = 70;
+        chaosCastle.MinimumPlayerCount = 2;
         chaosCastle.Entrance = this.GameConfiguration.Maps.First(m => m.Number == mapNumber).ExitGates.First();
         chaosCastle.Type = MiniGameType.ChaosCastle;
         chaosCastle.TicketItem = this.GameConfiguration.Items.Single(item => item is { Group: 13, Number: 29 });
