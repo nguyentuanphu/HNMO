@@ -1,4 +1,4 @@
-# Feature audit, groups 5 to 13 (20 Nov 2026)
+# Feature audit, groups 5 to 13 (20-21 Nov 2026)
 
 Continues the audits of EXP, drops, zen, chaos machine, jewels, resets, character creation
 ([docs/feature-audit-shops-events-2026-11-20.md](feature-audit-shops-events-2026-11-20.md) covers shops, money and events).
@@ -118,7 +118,7 @@ Not changed yet: NPC jewel prices — the web client computes shop prices itself
 | Marriage | Note | HNMO's own system (level 100, 1 M zen, Devias ceremony area, EXP / defense bonus, divorce 2 M); the suites: level 50, 200 zen, no bonus. Kept as an HNMO feature. |
 | Friends list, chat channels | Not checked in depth | |
 
-## 10. Trade, market, personal shop (in progress)
+## 10. Trade, market, personal shop
 
 | Check | Result | Notes |
 |---|---|---|
@@ -127,7 +127,7 @@ Not changed yet: NPC jewel prices — the web client computes shop prices itself
 
 Left from #181 for the owner: (1) the web and desktop clients read option values from `client/src/bin/Data/Items/Options/Option.json`, which has 4 values per option, so +20..+28 items show as +16 until that file (and the desktop client's tests) get 7 values; (2) the classic client price formula adds nothing above +16 while the server keeps adding, so the shown and the charged price differ above +16; (3) ring and pendant recovery stays at 1..3 %.
 
-## 11. PK (first notes)
+## 11. PK
 
 | Check | Result | Notes |
 |---|---|---|
