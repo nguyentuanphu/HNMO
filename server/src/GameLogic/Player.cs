@@ -1510,7 +1510,7 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     /// <param name="killedPlayer">The player killed.</param>
     internal async ValueTask AfterKilledPlayerAsync(Player killedPlayer)
     {
-        if (this.DuelRoom?.State == DuelState.DuelStarted)
+        if (this.DuelRoom is { State: DuelState.DuelStarted } duelRoom && duelRoom.IsDuelist(this))
         {
             return;
         }

@@ -24,8 +24,9 @@ public static class HnmoWarpGuard
             return ("You can't warp while dead.", "Không thể dịch chuyển khi đã chết.");
         }
 
-        if (player.DuelRoom is { State: DuelState.DuelStarted })
+        if (player.DuelRoom is { State: DuelState.DuelStarted } duelRoom && duelRoom.IsDuelist(player))
         {
+            // Spectators may leave; their room removes them when they leave the duel map.
             return ("You can't warp during a duel.", "Không thể dịch chuyển khi đang đấu tay đôi.");
         }
 
