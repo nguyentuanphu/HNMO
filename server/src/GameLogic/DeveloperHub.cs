@@ -16,8 +16,9 @@ using System.Threading;
 /// <summary>
 /// The HNMO developer's hub (owner's choice, 2026-11-20): a server asks it for a licence (and fetches the licence the
 /// developer issues with a one-time secret only it knows), and sends it a weekly report with the bug reports its owner
-/// forwarded. A licensed server is known by its signed licence file; no login, e-mail or IP is sent. The weekly answer
-/// says whether the licence was withdrawn.
+/// forwarded. A licensed server is known by its signed licence file and its machine id; no player login or e-mail is sent.
+/// The weekly answer says whether the licence was withdrawn. Once, at the first setup, it sends the host's system and game
+/// (owner's choice, 2026-11-21; the setup page says so), and the hub keeps the IP it came from with it.
 /// </summary>
 public static class DeveloperHub
 {
@@ -45,6 +46,9 @@ public static class DeveloperHub
 
     /// <summary>Gets or sets this computer's id (the one a licence is bound to).</summary>
     public static string MachineId { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets the id earlier HNMO versions used for this computer (the computer name's hash).</summary>
+    public static string LegacyMachineId { get; set; } = string.Empty;
 
     /// <summary>Gets or sets the file check's result: ok, modified, unsigned or unknown.</summary>
     public static string Integrity { get; set; } = "unknown";
@@ -264,6 +268,28 @@ public static class DeveloperHub
         return (ok, withdrawn, ok ? string.Empty : en);
     }
 
+    /// <summary>Sends the first-setup report once (the hub takes a few a day per computer).</summary>
+    /// <param name="setup">The report: system and game (see <c>HostSetupReport</c>).</param>
+    /// <param name="client">The HTTP client (tests).</param>
+    /// <returns>Whether it was taken, and the EN text of a refusal.</returns>
+    public static async Task<(bool Ok, string Error)> SendSetupAsync(JsonObject setup, HttpClient? client = null)
+    {
+        ArgumentNullException.ThrowIfNull(setup);
+        var state = ReadState();
+        setup["host"] = new JsonObject { ["name"] = state.HostName, ["contact"] = state.HostContact };
+        var (ok, _, en, _) = await PostAsync("api/setup", setup, client).ConfigureAwait(false);
+        var now = DateTime.UtcNow;
+        ChangeState(s =>
+        {
+            s.SetupTriedUtc = now;
+            if (ok)
+            {
+                s.SetupReportedUtc = now;
+            }
+        });
+        return (ok, ok ? string.Empty : en);
+    }
+
     /// <summary>For tests: forgets the state kept without a file.</summary>
     internal static void ResetMemoryState() => _memoryState = null;
 
@@ -281,6 +307,12 @@ public static class DeveloperHub
         }
 
         message["machine"] = MachineId;
+        if (LegacyMachineId.Length > 0 && !string.Equals(LegacyMachineId, MachineId, StringComparison.OrdinalIgnoreCase))
+        {
+            // Licences issued before the real machine id are bound to this one; the hub sees both as one computer.
+            message["legacyMachine"] = LegacyMachineId;
+        }
+
         message["version"] = Version;
         message["licence"] = LicenceFile;
         try

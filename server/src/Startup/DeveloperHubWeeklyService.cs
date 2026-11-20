@@ -20,7 +20,7 @@ using Microsoft.Extensions.Logging;
 /// bug reports the server's owner forwarded, the licence, version, system, uptime, players (the most at once against the
 /// limit, accounts and characters), crashes, the file check and the features on. Never player accounts, e-mails or IPs.
 /// It also fetches a licence the developer issued for this server's request, and goes back to the free limit when the
-/// developer withdrew the licence.
+/// developer withdrew the licence. Once, at the first setup, it sends the first-setup report (<see cref="HostSetupReport"/>).
 /// </summary>
 internal sealed class DeveloperHubWeeklyService : BackgroundService
 {
@@ -86,6 +86,11 @@ internal sealed class DeveloperHubWeeklyService : BackgroundService
             await this.FetchLicenceAsync().ConfigureAwait(false);
             var state = DeveloperHub.ReadState();
             var now = DateTime.UtcNow;
+            if (state.SetupReportedUtc is null && (state.SetupTriedUtc is not { } setupTried || now - setupTried >= TimeSpan.FromHours(6)))
+            {
+                await this.SendSetupAsync().ConfigureAwait(false);
+            }
+
             var due = state.LastWeeklyUtc is not { } last || now - last >= TimeSpan.FromDays(DeveloperHub.WeeklyDays);
             var triedLately = state.LastWeeklyTryUtc is { } tried && now - tried < TimeSpan.FromHours(6);
             if (due && !triedLately)
@@ -119,6 +124,22 @@ internal sealed class DeveloperHubWeeklyService : BackgroundService
         await File.WriteAllTextAsync(path, licence).ConfigureAwait(false);
         var applied = this._licences.Apply(settings?.LicenseFilePath);
         this._logger.LogInformation("HNMO developer hub: the licence for {Licensee} arrived and is in use (up to {Players} players).", applied.Licensee, applied.MaximumPlayers);
+    }
+
+    private async Task SendSetupAsync()
+    {
+        var contexts = this._servers.Servers.OfType<IGameServerContextProvider>().Select(s => s.Context).ToList();
+        var settings = HostSettingsStore.TryLoad(HostSettingsStore.ResolveDefaultPath(AppContext.BaseDirectory));
+        var saveDir = Path.GetDirectoryName(HostSettingsStore.ResolveDefaultPath(AppContext.BaseDirectory)) ?? AppContext.BaseDirectory;
+        var (ok, error) = await DeveloperHub.SendSetupAsync(HostSetupReport.Build(contexts, settings, saveDir)).ConfigureAwait(false);
+        if (ok)
+        {
+            this._logger.LogInformation("HNMO developer hub: the first-setup report was sent.");
+        }
+        else
+        {
+            this._logger.LogInformation("HNMO developer hub: the first-setup report wasn't taken ({Error}); it is tried again later.", error);
+        }
     }
 
     private async Task SendWeeklyAsync(DateTime? since)

@@ -22,6 +22,18 @@ public sealed class DeveloperHubState
     /// </summary>
     public DateTime? GraceStartedUtc { get; set; }
 
+    /// <summary>Gets or sets when the first-setup report was taken by the hub (UTC); none: not yet.</summary>
+    public DateTime? SetupReportedUtc { get; set; }
+
+    /// <summary>Gets or sets when the first-setup report was last tried (UTC).</summary>
+    public DateTime? SetupTriedUtc { get; set; }
+
+    /// <summary>Gets or sets the host's name for the first-setup report (optional, the setup page).</summary>
+    public string HostName { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets how the developer can reach the host (optional, the setup page).</summary>
+    public string HostContact { get; set; } = string.Empty;
+
     /// <summary>Gets or sets the ids of licences the developer withdrew.</summary>
     public List<string> WithdrawnLicences { get; set; } = [];
 }

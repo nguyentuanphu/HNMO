@@ -241,9 +241,10 @@ internal sealed class Program : IDisposable
         candidates.Add(Path.Combine(folder, PlayerLicense.FileName));
         candidates.Add(Path.Combine(serverDir, PlayerLicense.FileName));
         var file = candidates.FirstOrDefault(File.Exists);
-        var license = PlayerLicense.CheckWithEmbeddedKeys(file is null ? null : File.ReadAllBytes(file), PlayerLicense.MachineId, DateOnly.FromDateTime(DateTime.UtcNow));
+        var license = PlayerLicense.CheckWithEmbeddedKeys(file is null ? null : File.ReadAllBytes(file), PlayerLicense.MachineId, DateOnly.FromDateTime(DateTime.UtcNow), PlayerLicense.LegacyMachineId);
         DeveloperHub.StateFile = Path.Combine(Path.GetDirectoryName(HostSettingsStore.ResolveDefaultPath(serverDir)) ?? serverDir, "developer-hub.json");
         DeveloperHub.MachineId = PlayerLicense.MachineId;
+        DeveloperHub.LegacyMachineId = PlayerLicense.LegacyMachineId;
         DeveloperHub.LicenceFile = file is null ? null : File.ReadAllText(file);
         if (license.IsValid && DeveloperHub.IsWithdrawn(DeveloperHub.LicenceFile))
         {
@@ -637,7 +638,7 @@ internal sealed class Program : IDisposable
 
         private static LicenseStatusInfo Describe(byte[]? content, string resolved, bool exists)
         {
-            var license = PlayerLicense.CheckWithEmbeddedKeys(content, PlayerLicense.MachineId, DateOnly.FromDateTime(DateTime.UtcNow));
+            var license = PlayerLicense.CheckWithEmbeddedKeys(content, PlayerLicense.MachineId, DateOnly.FromDateTime(DateTime.UtcNow), PlayerLicense.LegacyMachineId);
             if (license.IsValid && content is not null && DeveloperHub.IsWithdrawn(System.Text.Encoding.UTF8.GetString(content)))
             {
                 license = PlayerLicense.Default("The HNMO developer withdrew this licence: up to 10 players at once.");
