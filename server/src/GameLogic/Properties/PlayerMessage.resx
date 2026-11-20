@@ -546,6 +546,9 @@
   <data name="MiniGameCharacterLevelTooHighFormat" xml:space="preserve">
     <value>Your level is too high. You need to be at most level {0} to enter this event.</value>
   </data>
+  <data name="PlayerKillersCantUseNpcShops" xml:space="preserve">
+    <value>Outlaws of PK level 2 and above can't use NPC shops.</value>
+  </data>
   <data name="MiniGameTicketRequired" xml:space="preserve">
     <value>You need a ticket to enter this event.</value>
   </data>

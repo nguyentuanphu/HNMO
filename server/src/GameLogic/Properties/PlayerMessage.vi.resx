@@ -441,6 +441,9 @@
   <data name="MiniGameCharacterLevelTooHighFormat" xml:space="preserve">
     <value>Cấp của bạn quá cao. Chỉ tối đa cấp {0} mới vào được sự kiện này.</value>
   </data>
+  <data name="PlayerKillersCantUseNpcShops" xml:space="preserve">
+    <value>Sát thủ từ cấp PK 2 trở lên không được dùng cửa hàng NPC.</value>
+  </data>
   <data name="MiniGameTicketRequired" xml:space="preserve">
     <value>Bạn cần vé để vào sự kiện này.</value>
   </data>
