@@ -2202,6 +2202,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   if (state.combat) state.combat.skills = {
     current: () => { const skill = skills.skillAt(skills.current); return skill > 0 ? skill : null; },
     mana: () => stats.mana, ability: () => stats.ability,
+    requirementsMet: (skill) => skillRequirementsMet(skill, stats, character.classIndex),
     outOfMana: () => {
       // FindManaItemIndex: drink the best mana potion there is.
       for (const type of itemTypesInUseOrder('manaPotion')) {
