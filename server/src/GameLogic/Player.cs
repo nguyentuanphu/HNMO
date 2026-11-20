@@ -49,13 +49,6 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     };
 
     /// <summary>
-    /// How long an outlaw (player killer) state lasts until it falls back one step. Each player kill
-    /// (re)starts it, and kills which can't escalate the state any further stack on top of it.
-    /// It can be shortened by killing monsters.
-    /// </summary>
-    private static readonly TimeSpan PlayerKillerStateDuration = TimeSpan.FromHours(3);
-
-    /// <summary>
     /// The duration until a hero state falls back one step.
     /// </summary>
     private static readonly TimeSpan HeroStateDuration = TimeSpan.FromHours(1);
@@ -1560,17 +1553,16 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
                 this._selectedCharacter.State++;
             }
 
-            // Stepping up to the next outlaw state restarts the clock for that state. Math.Max, so that
-            // a kill can never shorten an already longer remaining time.
+            // Stepping up to the next outlaw state starts it with the points of that state. Math.Max, so
+            // that a kill can never lower already higher remaining points.
             this._selectedCharacter.StateRemainingSeconds = Math.Max(
                 this._selectedCharacter.StateRemainingSeconds,
-                (int)PlayerKillerStateDuration.TotalSeconds);
+                OutlawPoints.GetStagePoints(this._selectedCharacter.State));
         }
         else
         {
-            // Further kills as a 2nd stage outlaw can't escalate the state anymore, so they stack on
-            // top of the remaining time instead.
-            this._selectedCharacter.StateRemainingSeconds += (int)PlayerKillerStateDuration.TotalSeconds;
+            // Further kills as a murderer can't escalate the state anymore, so they add points instead.
+            this._selectedCharacter.StateRemainingSeconds += OutlawPoints.FurtherKillPoints;
         }
 
         this._selectedCharacter.PlayerKillCount += 1;
@@ -1777,10 +1769,12 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
         }
         else
         {
-            var stateDuration = currentCharacter.State > HeroState.Normal ? PlayerKillerStateDuration : HeroStateDuration;
+            var stateDuration = currentCharacter.State > HeroState.Normal
+                ? OutlawPoints.GetStagePoints(currentCharacter.State)
+                : (int)HeroStateDuration.TotalSeconds;
 
             // May still be below zero, if the surplus exceeds this step as well. Then the next tick steps down again.
-            currentCharacter.StateRemainingSeconds = (int)stateDuration.TotalSeconds - surplusSeconds;
+            currentCharacter.StateRemainingSeconds = stateDuration - surplusSeconds;
         }
 
         await this.ForEachWorldObserverAsync<IUpdateCharacterHeroStatePlugIn>(p => p.UpdateCharacterHeroStateAsync(this), true).ConfigureAwait(false);
@@ -1801,9 +1795,10 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
 
         var maximumSeconds = character.State switch
         {
-            // Every kill after the one which reached the 2nd stage adds another state duration on top.
-            HeroState.PlayerKiller2ndStage => (int)PlayerKillerStateDuration.TotalSeconds * Math.Max(character.PlayerKillCount - 2, 1),
-            > HeroState.Normal => (int)PlayerKillerStateDuration.TotalSeconds,
+            // Every kill after the one which reached the murderer stage adds further points on top.
+            HeroState.PlayerKiller2ndStage => OutlawPoints.PlayerKiller2ndStagePoints
+                + (OutlawPoints.FurtherKillPoints * Math.Max(character.PlayerKillCount - 3, 0)),
+            > HeroState.Normal => OutlawPoints.GetStagePoints(character.State),
             _ => (int)HeroStateDuration.TotalSeconds,
         };
 
