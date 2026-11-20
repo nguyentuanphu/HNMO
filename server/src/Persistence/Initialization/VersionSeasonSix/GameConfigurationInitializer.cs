@@ -20,6 +20,13 @@ using HNMO.Persistence.Initialization.VersionSeasonSix.Items;
 public class GameConfigurationInitializer : GameConfigurationInitializerBase
 {
     /// <summary>
+    /// The maximum level of the additional option (<see cref="ItemOptionTypes.Option"/>): the Jewel of Life raises it
+    /// up to +28 (level 7), like the Season 6/9 server suites do. Drops keep their own maximum
+    /// (<see cref="GameConfiguration.MaximumItemOptionLevelDrop"/>).
+    /// </summary>
+    internal const int MaximumAdditionalOptionLevel = 7;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="GameConfigurationInitializer"/> class.
     /// </summary>
     /// <param name="context">The context.</param>
@@ -43,6 +50,9 @@ public class GameConfigurationInitializer : GameConfigurationInitializerBase
                 .ToList();
         }
     }
+
+    /// <inheritdoc />
+    protected override int MaximumOptionLevel => MaximumAdditionalOptionLevel;
 
     /// <inheritdoc />
     public override void Initialize()
