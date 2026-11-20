@@ -478,7 +478,9 @@ The desktop code stays the reference for how the classic game behaves (parity ru
 - Market (owner 2026-11-20): one market per season; fees per account per season: buying 200 WCoinC, selling 1,000
   WCoinC, 5% tax paid by the seller; the website's market has a Season 6 / Season 9 choice. Friends work across the
   servers of one season; friends across seasons come with the Arena (owner's choice).
-- F5 codes: Arena travel 52 (request: Action 0 state, 1 travel) / 53 (state JSON with a one-time ticket). Next free: 54.
+- F5 codes: Arena travel 52 (request: Action 0 state, 1 travel, 2/3 join/leave the 1v1 queue, 4 buy shop item `Index`) / 53
+  (state JSON: ticket, `ranked` in the Arena, `shop` at home). Next free: 54. Arena points and ratings live in the shared
+  database (`ArenaShared.Current`, table `data."HnmoArenaAccount"`); test them by setting points with SQL.
   The Arena program: `HNMO_SEASON=arena` (ports +200, database `hnmo_arena`, save `save/arena/`, admin panel 8097); start
   it next to Season 6.3 for tests like Season 9 (`ASPNETCORE_URLS=http://127.0.0.1:8097`), and a bridge with
   `--Launcher:ArenaEnabled=true` to see the Arena column.

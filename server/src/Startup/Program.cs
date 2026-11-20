@@ -940,6 +940,9 @@ internal sealed class Program : IDisposable
 
         // The website's login tickets, in the shared database: "Play" works for a server of either season.
         SharedLoginTicketStore.Current = new PostgresSharedLoginTicketStore(builder.ToString());
+
+        // The HNMO Arena's points and ratings, in the shared database: earned in the Arena, spent and shown at home.
+        ArenaShared.Current = new PostgresArenaShared(builder.ToString());
         if (!HnmoSeasonInstance.IsSecondary)
         {
             return;

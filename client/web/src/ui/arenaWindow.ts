@@ -15,6 +15,23 @@ export interface ArenaTravelState {
   message?: string | null;
   /** In the Arena: the ranked 1v1 record, the queue and the leaderboards. */
   ranked?: ArenaRanked | null;
+  /** At home: the account's Arena points and the points shop. */
+  shop?: ArenaShop | null;
+}
+
+/** An item of the Arena points shop. */
+export interface ArenaShopEntry {
+  index: number;
+  Category: string;
+  NameEn: string;
+  NameVi: string;
+  Price: number;
+}
+
+/** The account's Arena points and the shop's items. */
+export interface ArenaShop {
+  points: number;
+  items: ArenaShopEntry[];
 }
 
 /** A row of the Arena's leaderboards. */
@@ -70,6 +87,16 @@ export function savedArenaHome(): ArenaHome | null {
   return null;
 }
 
+function categoryName(category: string): string {
+  switch (category.toLowerCase()) {
+    case 'jewels': return tx('Jewels', 'Ngọc');
+    case 'charms': return tx('Charms', 'Bùa');
+    case 'tickets': return tx('Event tickets', 'Vé sự kiện');
+    case 'cosmetic': case 'cosmetics': return tx('Cosmetics', 'Trang trí');
+    default: return category;
+  }
+}
+
 export class ArenaWindow {
   private readonly panel: HnmoPanel;
   private state: ArenaTravelState | null = null;
@@ -97,12 +124,12 @@ export class ArenaWindow {
     this.panel.setTitle(tx('Arena', 'Đấu trường'));
     this.panel.open();
     this.render();
-    this.options.send('HnmoArenaTravelRequest', { Action: 0 });
+    this.options.send('HnmoArenaTravelRequest', { Action: 0, Index: 0 });
     // While open, the queue and the leaderboards stay current.
     window.clearInterval(this.refreshTimer);
     this.refreshTimer = window.setInterval(() => {
       if (!this.panel.isOpen()) { window.clearInterval(this.refreshTimer); return; }
-      if (this.state?.inArena) this.options.send('HnmoArenaTravelRequest', { Action: 0 });
+      if (this.state?.inArena) this.options.send('HnmoArenaTravelRequest', { Action: 0, Index: 0 });
     }, 5000);
   }
 
@@ -178,6 +205,7 @@ export class ArenaWindow {
         note.textContent = running ? '' : tx('The Arena isn\'t open right now.', 'Đấu trường hiện chưa mở.');
       });
       body.append(button, note);
+      if (state.shop) this.renderShop(body, state.shop);
     } else {
       body.append(button);
       if (state.ranked) this.renderRanked(body, state.ranked);
@@ -205,7 +233,7 @@ export class ArenaWindow {
         ? tx(`Leave the queue (${ranked.waiting} waiting)`, `Rời hàng chờ (${ranked.waiting} người chờ)`)
         : tx('Find a 1v1 opponent', 'Tìm đối thủ 1v1');
     queue.addEventListener('click', () => {
-      this.options.send('HnmoArenaTravelRequest', { Action: ranked.queued ? 3 : 2 });
+      this.options.send('HnmoArenaTravelRequest', { Action: ranked.queued ? 3 : 2, Index: 0 });
     });
     body.append(head, me, queue);
     const list = (title: string, rows: ArenaRankRow[], week: boolean): void => {
@@ -227,11 +255,50 @@ export class ArenaWindow {
     list(tx('All time', 'Mọi thời điểm'), ranked.top, false);
   }
 
+  private renderShop(body: HTMLElement, shop: ArenaShop): void {
+    const head = document.createElement('h3');
+    head.className = 'hnmo-arena-head';
+    head.textContent = tx('Arena points shop', 'Cửa hàng điểm Đấu trường');
+    const points = document.createElement('p');
+    points.id = 'arena-points';
+    points.textContent = tx(
+      `You have ${shop.points} Arena points (win 5, loss 2 in ranked duels).`,
+      `Bạn có ${shop.points} điểm Đấu trường (thắng 5, thua 2 trong đấu xếp hạng).`,
+    );
+    body.append(head, points);
+    const categories = [...new Set(shop.items.map((i) => i.Category))];
+    for (const category of categories) {
+      const caption = document.createElement('p');
+      caption.className = 'hnmo-muted';
+      caption.textContent = categoryName(category);
+      const ul = document.createElement('ul');
+      ul.className = 'hnmo-arena-shop';
+      for (const item of shop.items.filter((i) => i.Category === category)) {
+        const li = document.createElement('li');
+        const name = document.createElement('span');
+        name.textContent = `${tx(item.NameEn, item.NameVi || item.NameEn)} · ${item.Price} ${tx('points', 'điểm')}`;
+        const buy = document.createElement('button');
+        buy.type = 'button';
+        buy.className = 'hnmo-btn';
+        buy.dataset.index = String(item.index);
+        buy.textContent = tx('Buy', 'Mua');
+        buy.disabled = shop.points < item.Price;
+        buy.addEventListener('click', () => {
+          buy.disabled = true;
+          this.options.send('HnmoArenaTravelRequest', { Action: 4, Index: item.index });
+        });
+        li.append(name, ' ', buy);
+        ul.append(li);
+      }
+      body.append(caption, ul);
+    }
+  }
+
   private async travel(): Promise<void> {
     if (this.travelling || !this.state) return;
     if (!this.state.inArena && !(await this.options.arenaRunning())) return;
     this.travelling = true;
     this.render();
-    this.options.send('HnmoArenaTravelRequest', { Action: 1 });
+    this.options.send('HnmoArenaTravelRequest', { Action: 1, Index: 0 });
   }
 }

@@ -22149,7 +22149,7 @@ public readonly struct HnmoArenaTravelRequest
     /// <summary>
     /// Gets the initial length of this data packet. When the size is dynamic, this value may be bigger than actually needed.
     /// </summary>
-    public static int Length => 5;
+    public static int Length => 6;
 
     /// <summary>
     /// Gets the header of this packet.
@@ -22157,12 +22157,21 @@ public readonly struct HnmoArenaTravelRequest
     public C1HeaderWithSubCode Header => new (this._data);
 
     /// <summary>
-    /// Gets or sets 0 = RequestState, 1 = Travel (a one-time ticket for the other side), 2 = JoinRankedQueue (in the Arena), 3 = LeaveRankedQueue.
+    /// Gets or sets 0 = RequestState, 1 = Travel (a one-time ticket for the other side), 2 = JoinRankedQueue (in the Arena), 3 = LeaveRankedQueue, 4 = BuyFromPointsShop (at home).
     /// </summary>
     public byte Action
     {
         get => this._data.Span[4];
         set => this._data.Span[4] = value;
+    }
+
+    /// <summary>
+    /// Gets or sets for BuyFromPointsShop: the item's index in the shop.
+    /// </summary>
+    public byte Index
+    {
+        get => this._data.Span[5];
+        set => this._data.Span[5] = value;
     }
 
     /// <summary>

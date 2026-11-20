@@ -40,7 +40,8 @@ public sealed class ArenaPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn, IPe
         {
             lock (this._duelsGate)
             {
-                return this._duels ??= new ArenaDuels((this.Configuration ?? new ArenaConfiguration()).FileName);
+                var cfg = this.Configuration ?? new ArenaConfiguration();
+                return this._duels ??= new ArenaDuels(cfg.FileName, cfg);
             }
         }
     }

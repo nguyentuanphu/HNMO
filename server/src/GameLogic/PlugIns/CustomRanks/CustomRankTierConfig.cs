@@ -55,6 +55,10 @@ public sealed class CustomRankTierConfig
     [Display(Name = "Min Achievements")]
     public int MinMissionsClaimed { get; set; }
 
+    /// <summary>Gets or sets the minimum HNMO Arena ranked rating required (<c>0</c> = no requirement; 1 = any ranked duel played).</summary>
+    [Display(Name = "Min Arena Rating")]
+    public int MinArenaRating { get; set; }
+
     /// <summary>Gets or sets an optional achievement key explicitly granted to special winners/events (empty = not required).</summary>
     [Display(Name = "Required Achievement Key")]
     public string RequiredAchievementKey { get; set; } = string.Empty;

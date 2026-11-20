@@ -18,16 +18,21 @@ public sealed class ArenaDuels
     /// <summary>Kills to win a ranked duel (best of 3).</summary>
     public const int RoundsToWin = 2;
 
+    private static readonly TimeZoneInfo SydneyZone = ResolveSydney();
+
     private readonly object _gate = new();
     private readonly List<(Player Player, DateTime JoinedUtc)> _queue = [];
     private readonly ArenaStore _store;
+    private readonly ArenaConfiguration _configuration;
     private int _matching;
 
     /// <summary>Initializes a new instance of the <see cref="ArenaDuels"/> class.</summary>
     /// <param name="fileName">The state file.</param>
-    public ArenaDuels(string? fileName)
+    /// <param name="configuration">The Arena's configuration (points), or the defaults.</param>
+    public ArenaDuels(string? fileName, ArenaConfiguration? configuration = null)
     {
         this._store = ArenaStore.Open(fileName);
+        this._configuration = configuration ?? new ArenaConfiguration();
     }
 
     /// <summary>Gets the store of the ranked records.</summary>
@@ -178,6 +183,68 @@ public sealed class ArenaDuels
         };
     }
 
+    /// <summary>Records a ranked duel's result: both ratings, arena points, and tells both players.</summary>
+    /// <param name="winner">The winner.</param>
+    /// <param name="loser">The loser.</param>
+    /// <returns>The task.</returns>
+    internal async ValueTask RecordAsync(Player winner, Player loser)
+    {
+        var now = DateTime.UtcNow;
+        var (w, l) = this._store.Mutate(d =>
+        {
+            var before = (Winner: ArenaRanking.Of(d, winner.Account?.LoginName ?? string.Empty, now).Rating, Loser: ArenaRanking.Of(d, loser.Account?.LoginName ?? string.Empty, now).Rating);
+            var after = ArenaRanking.Record(
+                d,
+                (winner.Account?.LoginName ?? winner.Name, winner.Name, ClassOf(winner)),
+                (loser.Account?.LoginName ?? loser.Name, loser.Name, ClassOf(loser)),
+                now);
+            return (true, ((Rating: after.Winner.Rating, Change: after.Winner.Rating - before.Winner), (Rating: after.Loser.Rating, Change: after.Loser.Rating - before.Loser)));
+        });
+
+        // Arena points and the ratings go to the shared database: points are spent at home, ratings give the titles.
+        var (winnerPoints, loserPoints) = (0, 0);
+        if (Persistence.ArenaShared.Current is { } shared)
+        {
+            var day = TimeZoneInfo.ConvertTimeFromUtc(now, SydneyZone).ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+            try
+            {
+                if (winner.Account?.LoginName is { Length: > 0 } wl)
+                {
+                    winnerPoints = shared.AddPoints(wl, this._configuration.PointsPerWin, this._configuration.DailyPointsCap, day);
+                    shared.SetRating(wl, w.Rating);
+                }
+
+                if (loser.Account?.LoginName is { Length: > 0 } ll)
+                {
+                    loserPoints = shared.AddPoints(ll, this._configuration.PointsPerLoss, this._configuration.DailyPointsCap, day);
+                    shared.SetRating(ll, l.Rating);
+                }
+            }
+            catch (Exception ex)
+            {
+                winner.Logger.LogError(ex, "Arena: the points and ratings couldn't be saved to the shared database.");
+            }
+        }
+
+        await TellAsync(winner, $"You won the ranked 1v1! Rating {w.Rating} (+{w.Change}), +{winnerPoints} arena points.", $"Bạn thắng trận xếp hạng 1v1! Điểm {w.Rating} (+{w.Change}), +{winnerPoints} điểm Đấu trường.").ConfigureAwait(false);
+        await TellAsync(loser, $"You lost the ranked 1v1. Rating {l.Rating} ({l.Change}), +{loserPoints} arena points.", $"Bạn thua trận xếp hạng 1v1. Điểm {l.Rating} ({l.Change}), +{loserPoints} điểm Đấu trường.").ConfigureAwait(false);
+
+        static async ValueTask TellAsync(Player player, string en, string vi) =>
+            await player.ShowBlueMessageAsync(player.Culture.TwoLetterISOLanguageName == "vi" ? vi : en).ConfigureAwait(false);
+    }
+
+    private static TimeZoneInfo ResolveSydney()
+    {
+        try
+        {
+            return TimeZoneInfo.FindSystemTimeZoneById("Australia/Sydney");
+        }
+        catch (TimeZoneNotFoundException)
+        {
+            return TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time");
+        }
+    }
+
     private static string ClassOf(Player player) => player.SelectedCharacter?.CharacterClass?.Name.ToString() ?? string.Empty;
 
     private async ValueTask StartAsync(Player a, Player b, ILogger logger)
@@ -222,25 +289,5 @@ public sealed class ArenaDuels
         // The game's own duel: b takes a's request (the same checks and the warp into a duel arena).
         await new DuelActions().HandleDuelResponseAsync(b, a, true).ConfigureAwait(false);
         logger.LogInformation("Arena: ranked 1v1 {A} against {B}.", a.Name, b.Name);
-    }
-
-    internal async ValueTask RecordAsync(Player winner, Player loser)
-    {
-        var now = DateTime.UtcNow;
-        var (w, l) = this._store.Mutate(d =>
-        {
-            var before = (Winner: ArenaRanking.Of(d, winner.Account?.LoginName ?? string.Empty, now).Rating, Loser: ArenaRanking.Of(d, loser.Account?.LoginName ?? string.Empty, now).Rating);
-            var after = ArenaRanking.Record(
-                d,
-                (winner.Account?.LoginName ?? winner.Name, winner.Name, ClassOf(winner)),
-                (loser.Account?.LoginName ?? loser.Name, loser.Name, ClassOf(loser)),
-                now);
-            return (true, ((Rating: after.Winner.Rating, Change: after.Winner.Rating - before.Winner), (Rating: after.Loser.Rating, Change: after.Loser.Rating - before.Loser)));
-        });
-        await TellAsync(winner, $"You won the ranked 1v1! Rating {w.Rating} (+{w.Change}).", $"Bạn thắng trận xếp hạng 1v1! Điểm {w.Rating} (+{w.Change}).").ConfigureAwait(false);
-        await TellAsync(loser, $"You lost the ranked 1v1. Rating {l.Rating} ({l.Change}).", $"Bạn thua trận xếp hạng 1v1. Điểm {l.Rating} ({l.Change}).").ConfigureAwait(false);
-
-        static async ValueTask TellAsync(Player player, string en, string vi) =>
-            await player.ShowBlueMessageAsync(player.Culture.TwoLetterISOLanguageName == "vi" ? vi : en).ConfigureAwait(false);
     }
 }

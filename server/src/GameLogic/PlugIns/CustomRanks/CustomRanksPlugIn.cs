@@ -70,7 +70,21 @@ public sealed class CustomRanksPlugIn :
             missionsClaimed = missions.GetEngine().GetAchievementCount(ch.Id.ToString("N"));
         }
 
-        return new CustomRankSubject(name, level, masterLevel, resets, vipLevel, missionsClaimed);
+        // The HNMO Arena's ranked rating, from the shared database (a copy refreshed every minute).
+        var arenaRating = 0;
+        if (player.Account?.LoginName is { Length: > 0 } login && Persistence.ArenaShared.Current is { } arena)
+        {
+            try
+            {
+                arenaRating = arena.GetRating(login) ?? 0;
+            }
+            catch (Exception ex)
+            {
+                player.Logger.LogDebug(ex, "Custom ranks: the arena rating couldn't be read.");
+            }
+        }
+
+        return new CustomRankSubject(name, level, masterLevel, resets, vipLevel, missionsClaimed, arenaRating);
     }
 
     /// <inheritdoc />

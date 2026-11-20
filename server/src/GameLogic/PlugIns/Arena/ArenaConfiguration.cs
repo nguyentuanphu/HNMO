@@ -16,6 +16,18 @@ public sealed class ArenaConfiguration
     /// <summary>Gets or sets the HNMO state file of the Arena's ranked records (in the Arena's own save folder).</summary>
     public string FileName { get; set; } = HnmoStateStore.StateFileName;
 
+    /// <summary>Gets or sets the arena points a ranked 1v1 win gives (owner's choice 2026-11-20: 5).</summary>
+    [Range(0, 1000)]
+    public int PointsPerWin { get; set; } = 5;
+
+    /// <summary>Gets or sets the arena points a ranked 1v1 loss gives (owner's choice 2026-11-20: 2).</summary>
+    [Range(0, 1000)]
+    public int PointsPerLoss { get; set; } = 2;
+
+    /// <summary>Gets or sets the most arena points an account earns a day (Sydney day; 0: no cap), against farming.</summary>
+    [Range(0, 100000)]
+    public int DailyPointsCap { get; set; } = 100;
+
     /// <summary>Gets or sets how many large healing potions every arena character carries.</summary>
     [Range(0, 255)]
     public byte HealingPotions { get; set; } = 100;

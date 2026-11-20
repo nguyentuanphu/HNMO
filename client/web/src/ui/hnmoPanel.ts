@@ -242,6 +242,10 @@ function ensurePanelStyle(): void {
     .hnmo-btn.danger { background: #4a1f1c; border-color: #b44b42; }
     .hnmo-btn.danger:hover { background: #692c27; }
     .hnmo-panel .hnmo-muted { color: #b2a489; font-size: 12px; }
+    .hnmo-panel .hnmo-arena-shop { margin: 4px 0 10px; padding-left: 18px; }
+    .hnmo-panel .hnmo-arena-shop li { margin: 2px 0; }
+    .hnmo-panel .hnmo-arena-shop .hnmo-btn { padding: 1px 8px; }
+    .hnmo-panel .hnmo-arena-head { margin: 12px 0 4px; }
     .hnmo-badge {
       display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 11px;
       background: #332919; border: 1px solid #755b2f; color: #f2cf78;

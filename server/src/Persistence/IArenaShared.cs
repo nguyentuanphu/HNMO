@@ -1,0 +1,46 @@
+// <copyright file="IArenaShared.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.Persistence;
+
+/// <summary>
+/// What the HNMO Arena shares with the players' home servers, in the shared (Season 6.3) database: each account's arena
+/// points (earned in the Arena, spent in the Arena points shop at home) and ranked rating (for the arena titles).
+/// </summary>
+public interface IArenaShared
+{
+    /// <summary>Adds points to an account, within a daily cap (Sydney day).</summary>
+    /// <param name="login">The login name.</param>
+    /// <param name="points">The points to add.</param>
+    /// <param name="dailyCap">The most an account earns a day (0: no cap).</param>
+    /// <param name="dayKey">The day, e.g. "2026-11-20".</param>
+    /// <returns>The points actually added.</returns>
+    int AddPoints(string login, int points, int dailyCap, string dayKey);
+
+    /// <summary>Takes points from an account when it has enough.</summary>
+    /// <param name="login">The login name.</param>
+    /// <param name="points">The points to take.</param>
+    /// <returns><c>true</c>, if they were taken.</returns>
+    bool TrySpendPoints(string login, int points);
+
+    /// <summary>Gives points back (a purchase that couldn't be delivered).</summary>
+    /// <param name="login">The login name.</param>
+    /// <param name="points">The points.</param>
+    void RefundPoints(string login, int points);
+
+    /// <summary>Gets an account's points.</summary>
+    /// <param name="login">The login name.</param>
+    /// <returns>The points.</returns>
+    int GetPoints(string login);
+
+    /// <summary>Records an account's ranked rating.</summary>
+    /// <param name="login">The login name.</param>
+    /// <param name="rating">The rating.</param>
+    void SetRating(string login, int rating);
+
+    /// <summary>Gets an account's ranked rating (from a copy refreshed every minute), or <c>null</c> without one.</summary>
+    /// <param name="login">The login name.</param>
+    /// <returns>The rating.</returns>
+    int? GetRating(string login);
+}

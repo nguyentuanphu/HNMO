@@ -87,5 +87,57 @@ public sealed class CustomRankConfiguration
             ColorHex = "#fb7185",
             MinResets = 10,
         },
+
+        // HNMO Arena titles by ranked rating (owner's choice 2026-11-20: Bronze, Silver, Gold, Platinum, Diamond).
+        new()
+        {
+            Id = "arena-bronze",
+            Enabled = true,
+            Priority = 60,
+            TitleEn = "[Arena Bronze]",
+            TitleVi = "[Đấu trường Đồng]",
+            ColorHex = "#cd7f32",
+            MinArenaRating = 1,
+        },
+        new()
+        {
+            Id = "arena-silver",
+            Enabled = true,
+            Priority = 70,
+            TitleEn = "[Arena Silver]",
+            TitleVi = "[Đấu trường Bạc]",
+            ColorHex = "#c0c0c0",
+            MinArenaRating = 1100,
+        },
+        new()
+        {
+            Id = "arena-gold",
+            Enabled = true,
+            Priority = 80,
+            TitleEn = "[Arena Gold]",
+            TitleVi = "[Đấu trường Vàng]",
+            ColorHex = "#ffd700",
+            MinArenaRating = 1250,
+        },
+        new()
+        {
+            Id = "arena-platinum",
+            Enabled = true,
+            Priority = 90,
+            TitleEn = "[Arena Platinum]",
+            TitleVi = "[Đấu trường Bạch kim]",
+            ColorHex = "#9fe2e8",
+            MinArenaRating = 1400,
+        },
+        new()
+        {
+            Id = "arena-diamond",
+            Enabled = true,
+            Priority = 100,
+            TitleEn = "[Arena Diamond]",
+            TitleVi = "[Đấu trường Kim cương]",
+            ColorHex = "#7dd3fc",
+            MinArenaRating = 1600,
+        },
     ];
 }

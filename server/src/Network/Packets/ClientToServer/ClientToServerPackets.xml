@@ -5555,7 +5555,7 @@
       <Code>F5</Code>
       <SubCode>52</SubCode>
       <Name>HnmoArenaTravelRequest</Name>
-      <Length>5</Length>
+      <Length>6</Length>
       <Direction>ClientToServer</Direction>
       <SentWhen>Sent by the web client to ask about the HNMO Arena, or for a one-time ticket to travel to the Arena (or from the Arena back home).</SentWhen>
       <CausedReaction>The server answers with HnmoArenaTravelState (F5 53).</CausedReaction>
@@ -5564,7 +5564,13 @@
           <Index>4</Index>
           <Type>Byte</Type>
           <Name>Action</Name>
-          <Description>0 = RequestState, 1 = Travel (a one-time ticket for the other side), 2 = JoinRankedQueue (in the Arena), 3 = LeaveRankedQueue.</Description>
+          <Description>0 = RequestState, 1 = Travel (a one-time ticket for the other side), 2 = JoinRankedQueue (in the Arena), 3 = LeaveRankedQueue, 4 = BuyFromPointsShop (at home).</Description>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>Byte</Type>
+          <Name>Index</Name>
+          <Description>For BuyFromPointsShop: the item's index in the shop.</Description>
         </Field>
       </Fields>
     </Packet>

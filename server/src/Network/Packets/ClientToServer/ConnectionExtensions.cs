@@ -6874,12 +6874,13 @@ public static class ConnectionExtensions
     /// Sends a <see cref="HnmoArenaTravelRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>
-    /// <param name="action">0 = RequestState, 1 = Travel (a one-time ticket for the other side), 2 = JoinRankedQueue (in the Arena), 3 = LeaveRankedQueue.</param>
+    /// <param name="action">0 = RequestState, 1 = Travel (a one-time ticket for the other side), 2 = JoinRankedQueue (in the Arena), 3 = LeaveRankedQueue, 4 = BuyFromPointsShop (at home).</param>
+    /// <param name="index">For BuyFromPointsShop: the item's index in the shop.</param>
     /// <remarks>
     /// Is sent by the client when: Sent by the web client to ask about the HNMO Arena, or for a one-time ticket to travel to the Arena (or from the Arena back home).
     /// Causes reaction on server side: The server answers with HnmoArenaTravelState (F5 53).
     /// </remarks>
-    public static async ValueTask SendHnmoArenaTravelRequestAsync(this IConnection? connection, byte @action)
+    public static async ValueTask SendHnmoArenaTravelRequestAsync(this IConnection? connection, byte @action, byte @index)
     {
         if (connection is null)
         {
@@ -6891,6 +6892,7 @@ public static class ConnectionExtensions
             var length = HnmoArenaTravelRequestRef.Length;
             var packet = new HnmoArenaTravelRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.Action = @action;
+            packet.Index = @index;
 
             return packet.Header.Length;
         }

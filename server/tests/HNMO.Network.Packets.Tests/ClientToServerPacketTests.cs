@@ -4739,7 +4739,7 @@ public class PacketStructureTests
     public void HnmoArenaTravelRequest_PacketSizeValidation()
     {
         // Fixed-length packet validation
-        const int expectedLength = 5;
+        const int expectedLength = 6;
         var actualLength = HnmoArenaTravelRequestRef.Length;
         
         Assert.That(actualLength, Is.EqualTo(expectedLength), 
@@ -4748,6 +4748,10 @@ public class PacketStructureTests
         // Validate field 'Action' boundary
         Assert.That(4 + 1, Is.LessThanOrEqualTo(expectedLength), 
             "Field 'Action' exceeds packet boundary");
+        
+        // Validate field 'Index' boundary
+        Assert.That(5 + 1, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'Index' exceeds packet boundary");
     }
 
     /// <summary>

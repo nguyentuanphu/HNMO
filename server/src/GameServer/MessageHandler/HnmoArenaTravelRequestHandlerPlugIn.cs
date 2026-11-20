@@ -70,7 +70,14 @@ internal sealed class HnmoArenaTravelRequestHandlerPlugIn : ISubPacketHandlerPlu
             message = vi ? viText : en;
         }
 
-        var json = JsonSerializer.Serialize(new { inArena, account = login, ticket, message, ranked = arena?.Duels.StateOf(player) });
+        var shop = inArena ? null : GameLogic.PlugIns.Arena.ArenaShopPlugIn.Get(player.GameContext);
+        if (shop is not null && request.Action == 4)
+        {
+            var (en, viText) = await shop.BuyAsync(player, request.Index).ConfigureAwait(false);
+            message = vi ? viText : en;
+        }
+
+        var json = JsonSerializer.Serialize(new { inArena, account = login, ticket, message, ranked = arena?.Duels.StateOf(player), shop = shop?.StateOf(player) });
         await player.InvokeViewPlugInAsync<IHnmoArenaTravelViewPlugIn>(p => p.ShowArenaTravelAsync(json)).ConfigureAwait(false);
     }
 }

@@ -2421,4 +2421,6 @@
   <data name="DuplicateItemsConfiguration_FreezeDuplicates_Description" xml:space="preserve"><value>Đồ nhân bản bị phát hiện không thể giao dịch, bán, vứt, cất rương, rao bán hay ép cho tới khi quản trị viên quyết định.</value></data>
   <data name="ArenaPlugIn_Name" xml:space="preserve"><value>Nhân vật Đấu trường HNMO</value></data>
   <data name="ArenaPlugIn_Description" xml:space="preserve"><value>Trong chương trình Đấu trường: nhân vật được chọn trở thành nhân vật đấu trường của class đó (cấp, chỉ số, trang bị và bình máu theo mẫu) trên bản đồ đấu trường. Không ảnh hưởng các server khác.</value></data>
+  <data name="ArenaShopPlugIn_Name" xml:space="preserve"><value>Cửa hàng điểm Đấu trường HNMO</value></data>
+  <data name="ArenaShopPlugIn_Description" xml:space="preserve"><value>Ở các server nhà: điểm Đấu trường, kiếm được từ các trận xếp hạng, đổi ngọc, bùa, vé sự kiện và đồ trang trí (đồ được tạo mới ở đây). Món và giá chỉnh ở đây.</value></data>
 </root>

@@ -61,6 +61,11 @@ public sealed class CustomRankEngine
             return false;
         }
 
+        if (tier.MinArenaRating > 0 && subject.ArenaRating < tier.MinArenaRating)
+        {
+            return false;
+        }
+
         if (!string.IsNullOrWhiteSpace(tier.RequiredAchievementKey))
         {
             var required = tier.RequiredAchievementKey.Trim();
