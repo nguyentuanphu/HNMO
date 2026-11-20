@@ -58,14 +58,9 @@ public partial class HostSettingsPage
     /// <inheritdoc />
     protected override void OnInitialized()
     {
-        // Ports, paths, the database password and the licence: only from the host computer, never through the
-        // website's admin path or another proxy.
+        // Ports, paths and the database password: only from the host computer, never through the website's admin path or
+        // another proxy. The licence also from afar, signed in as an admin (owner, 2026-11-21).
         this.IsHostComputer = HostComputerRequest.IsFromHostComputer(this.HttpContextAccessor.HttpContext);
-        if (!this.IsHostComputer)
-        {
-            return;
-        }
-
         this._settings = this.SettingsService.Load();
         this._relayAllowedHostsText = string.Join(", ", this._settings.RelayAllowedHosts);
         this._initialPorts = [this._settings.WebPort, this._settings.AdminPort, this._settings.ConnectServerPort, this._settings.DatabasePort];
@@ -80,7 +75,7 @@ public partial class HostSettingsPage
 
     private async Task SaveAsync()
     {
-        if (this._settings is null)
+        if (!this.IsHostComputer || this._settings is null)
         {
             return;
         }
@@ -113,7 +108,7 @@ public partial class HostSettingsPage
 
     private async Task OnLicenseUploadAsync(InputFileChangeEventArgs e)
     {
-        if (!this.IsHostComputer || this._settings is null)
+        if (this._settings is null)
         {
             return;
         }
@@ -132,7 +127,7 @@ public partial class HostSettingsPage
 
     private async Task SaveLicenseTextAsync()
     {
-        if (!this.IsHostComputer || this._settings is null || string.IsNullOrWhiteSpace(this._licenseText))
+        if (this._settings is null || string.IsNullOrWhiteSpace(this._licenseText))
         {
             return;
         }
@@ -170,7 +165,7 @@ public partial class HostSettingsPage
 
     private async Task RequestLicenseAsync()
     {
-        if (!this.IsHostComputer || this._requestSending)
+        if (this._requestSending)
         {
             return;
         }
@@ -208,7 +203,7 @@ public partial class HostSettingsPage
     /// <summary>Asks the hub whether the developer issued the requested licence; a licence that came is used at once.</summary>
     private async Task CheckRequestAsync()
     {
-        if (!this.IsHostComputer || this._requestSending)
+        if (this._requestSending)
         {
             return;
         }

@@ -49,6 +49,8 @@
 
 @if (this._settings is not null)
 {
+@if (this.IsHostComputer)
+{
     <div class="card mb-3">
         <div class="card-header fw-bold">@Resources.HostSettingsPortsSection</div>
         <div class="card-body row g-3">
@@ -173,6 +175,7 @@
             </div>
         </div>
     </div>
+}
 
     <div class="card mb-3" id="license-card">
         <div class="card-header fw-bold">@Resources.HostSettingsLicenseSection</div>
@@ -195,7 +198,7 @@
                     <div class="d-flex flex-wrap gap-2 align-items-center">
                         <span>@L("This computer's id (send it to the HNMO developer to get a license for this computer):", "Mã máy này (gửi cho nhà phát triển HNMO để xin giấy phép cho máy này):")</span>
                         <code id="machine-id">@license.MachineId</code>
-                        <button type="button" class="btn btn-sm btn-outline-secondary" id="copy-machine-id" @onclick="this.CopyMachineIdAsync">@(this._copied ? L("Copied", "Đã copy") : L("Copy", "Copy"))</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" id="copy-machine-id" title="@L("Copies this computer's id", "Chép mã máy này")" @onclick="this.CopyMachineIdAsync">@(this._copied ? L("Copied", "Đã copy") : L("Copy", "Copy"))</button>
                     </div>
                 </div>
             }
@@ -206,7 +209,7 @@
             <div class="col-md-6">
                 <label class="form-label" for="license-text">@L("…or paste its content", "…hoặc dán nội dung file")</label>
                 <textarea id="license-text" class="form-control" rows="2" @bind="this._licenseText" placeholder='{"payload": "...", "signature": "..."}'></textarea>
-                <button type="button" class="btn btn-sm btn-primary mt-2" id="license-paste-save" @onclick="this.SaveLicenseTextAsync">@L("Check and use this license", "Kiểm tra và dùng giấy phép này")</button>
+                <button type="button" class="btn btn-sm btn-primary mt-2" id="license-paste-save" title="@L("Checks the pasted licence and uses it at once if it is good", "Kiểm tra giấy phép vừa dán và dùng ngay nếu hợp lệ")" @onclick="this.SaveLicenseTextAsync">@L("Check and use this license", "Kiểm tra và dùng giấy phép này")</button>
             </div>
             <div class="col-12">
                 <small class="text-muted" id="weekly-report-status">@L($"Weekly report to the HNMO developer (licence, version, players, crashes, features, forwarded bug reports; never player accounts): last sent {(this._hubState.LastWeeklyUtc is { } sent ? sent.ToLocalTime().ToString("yyyy-MM-dd") : "not yet")}.", $"Báo cáo hằng tuần gửi nhà phát triển HNMO (giấy phép, phiên bản, người chơi, số lần sập, tính năng, báo lỗi đã chuyển; không bao giờ có tài khoản người chơi): lần gửi gần nhất {(this._hubState.LastWeeklyUtc is { } sentVi ? sentVi.ToLocalTime().ToString("yyyy-MM-dd") : "chưa có")}.")</small>
@@ -233,7 +236,7 @@
                         <div class="col-md-4"><input id="license-request-players" type="number" min="1" class="form-control" placeholder="@L("Players at once", "Số người chơi cùng lúc")" @bind="this._requestPlayers" /></div>
                         <div class="col-12"><textarea id="license-request-message" class="form-control" rows="2" placeholder="@L("A note (optional)", "Ghi chú (không bắt buộc)")" @bind="this._requestMessage"></textarea></div>
                         <div class="col-12 d-flex gap-2 align-items-center">
-                            <button type="button" id="license-request-send" class="btn btn-sm btn-outline-primary" disabled="@this._requestSending" @onclick="this.RequestLicenseAsync">@L("Send the request", "Gửi yêu cầu")</button>
+                            <button type="button" id="license-request-send" title="@L("Sends the licence request to the HNMO developer", "Gửi yêu cầu giấy phép tới nhà phát triển HNMO")" class="btn btn-sm btn-outline-primary" disabled="@this._requestSending" @onclick="this.RequestLicenseAsync">@L("Send the request", "Gửi yêu cầu")</button>
                             <small class="text-muted">@L("It carries this computer's id and the HNMO version. The licence the developer issues comes here by itself (checked every hour).", "Yêu cầu gửi kèm mã máy này và phiên bản HNMO. Giấy phép nhà phát triển cấp sẽ tự về đây (kiểm tra mỗi giờ).")</small>
                         </div>
                     </div>
@@ -246,6 +249,8 @@
         </div>
     </div>
 
+@if (this.IsHostComputer)
+{
     <div class="d-flex gap-2 mb-4">
         <button type="button" id="save-host-settings-btn" class="btn btn-primary" @onclick="this.SaveAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">
             @Resources.HostSettingsSaveButton
@@ -268,4 +273,5 @@
             </button>
         }
     </div>
+}
 }

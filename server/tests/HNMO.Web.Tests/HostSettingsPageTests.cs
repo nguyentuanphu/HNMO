@@ -59,7 +59,8 @@ public class HostSettingsPageTests
 
     /// <summary>
     /// Through the website's admin path (a forwarded request), the page shows no settings and saves nothing: only
-    /// the host computer changes ports, folders, the database password and the licence (audit 2.5).
+    /// the host computer changes ports, folders and the database password (audit 2.5). The licence card is there:
+    /// an admin may paste or ask for a licence from afar (owner, 2026-11-21).
     /// </summary>
     [Test]
     public void ThroughTheWebsiteNothingIsShownOrSaved()
@@ -77,23 +78,29 @@ public class HostSettingsPageTests
             Assert.That(cut.FindAll("#host-settings-host-only"), Has.Count.EqualTo(1));
             Assert.That(cut.FindAll("#save-host-settings-btn"), Is.Empty);
             Assert.That(cut.FindAll("#web-port"), Is.Empty);
+            Assert.That(cut.FindAll("#db-password-new"), Is.Empty);
+            Assert.That(cut.FindAll("#restart-hnmo-btn"), Is.Empty);
+            Assert.That(cut.FindAll("#license-card"), Has.Count.EqualTo(1), "the licence from afar");
             Assert.That(fakeService.SavedSettings, Is.Null);
         });
     }
 
     /// <summary>
     /// A pasted license is checked before it is saved: a bad one is refused and nothing is written; a good one is saved
-    /// and used at once, and the page shows whom it is for and how many players it allows.
+    /// and used at once, and the page shows whom it is for and how many players it allows. The same on the host computer
+    /// and through the website's admin path (owner, 2026-11-21).
     /// </summary>
-    [Test]
-    public void ALicenseIsCheckedBeforeItIsSavedAndUsedAtOnce()
+    /// <param name="forwarded">Whether the page is opened through the website.</param>
+    [TestCase(false)]
+    [TestCase(true)]
+    public void ALicenseIsCheckedBeforeItIsSavedAndUsedAtOnce(bool forwarded)
     {
         using var ctx = new BunitContext();
         ctx.JSInterop.Mode = JSRuntimeMode.Loose;
         var fakeService = new FakeHostSettingsService();
         ctx.Services.AddSingleton<IHostSettingsService>(fakeService);
         ctx.Services.AddSingleton<IServerRestartService>(new FakeRestartService());
-        ctx.Services.AddSingleton<Microsoft.AspNetCore.Http.IHttpContextAccessor>(HostRequest(forwarded: false));
+        ctx.Services.AddSingleton<Microsoft.AspNetCore.Http.IHttpContextAccessor>(HostRequest(forwarded));
         var cut = ctx.Render<HostSettingsPage>();
         Assert.That(cut.Find("#machine-id").TextContent, Is.EqualTo("TEST-MACHINE"));
 
