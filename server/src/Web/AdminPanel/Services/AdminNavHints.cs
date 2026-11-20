@@ -49,6 +49,7 @@ public static class AdminNavHints
         ["event-alerts"] = ("Push and Discord alerts", "Thông báo đẩy và Discord"),
         ["world-bosses-rankings"] = ("Boss spawns, weekly prizes", "Boss, phần thưởng tuần"),
         ["top-races"] = ("Daily/weekly contests", "Đua top ngày/tuần"),
+        ["arena"] = ("Arena classes and battles", "Lớp & trận Đấu trường"),
         ["missions-rewards"] = ("Daily missions, coins", "Nhiệm vụ ngày, coin"),
         ["gift-codes"] = ("Make gift codes", "Tạo mã quà tặng"),
         ["topup-milestones"] = ("Top-up reward tiers", "Mốc thưởng nạp"),

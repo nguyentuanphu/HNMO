@@ -5240,4 +5240,7 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   <data name="PageHelpTextBugReports" xml:space="preserve">
     <value>Báo lỗi người chơi gửi từ trong game (🐞). Xác nhận, đánh dấu đã sửa, không phải lỗi hoặc trùng, và trả lời: người chơi thấy trong game. Lỗi được xác nhận nhận phần thưởng bạn đặt trong Plugins (Báo lỗi HNMO). "Gửi cho nhà phát triển HNMO" gửi báo lỗi (không có tài khoản, email hay IP) tới nhà phát triển HNMO, kèm tên giấy phép của server.</value>
   </data>
+  <data name="ArenaSettingsPage" xml:space="preserve">
+    <value>Nhân vật &amp; trận đấu Đấu trường</value>
+  </data>
 </root>

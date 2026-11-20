@@ -25,6 +25,9 @@ public sealed class ArenaPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn, IPe
 {
     private const byte FirstBagSlot = 12;
 
+    /// <summary>The attribute systems the class balance was put on already (once per entry; map changes enter the world again).</summary>
+    private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<object, object> Balanced = new();
+
     private readonly object _duelsGate = new();
     private ArenaDuels? _duels;
     private ArenaTeams? _teams;
@@ -140,6 +143,22 @@ public sealed class ArenaPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn, IPe
         if (!ArenaRules.Active || currentState != PlayerState.EnteredWorld || player.Attributes is not { } attributes)
         {
             return ValueTask.CompletedTask;
+        }
+
+        // The class balance (admin, per class): the damage dealt and taken, put on once per entry.
+        if (player.SelectedCharacter?.CharacterClass is { } characterClass && this.TemplateOf(characterClass.Number) is { } template
+            && (template.DamagePercent != 100 || template.DefensePercent != 100)
+            && Balanced.TryAdd(attributes, attributes))
+        {
+            if (template.DamagePercent != 100)
+            {
+                attributes.AddElement(new ConstantElement(Math.Clamp(template.DamagePercent, 10, 500) / 100f, AggregateType.Multiplicate), Stats.AttackDamageIncrease);
+            }
+
+            if (template.DefensePercent != 100)
+            {
+                attributes.AddElement(new ConstantElement(100f / Math.Clamp(template.DefensePercent, 10, 500), AggregateType.Multiplicate), Stats.DamageReceiveDecrement);
+            }
         }
 
         attributes[Stats.CurrentHealth] = attributes[Stats.MaximumHealth];

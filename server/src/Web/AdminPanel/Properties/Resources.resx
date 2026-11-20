@@ -5200,4 +5200,7 @@ On your account page, open Security and paste this code to confirm your new emai
   <data name="PageHelpTextBugReports" xml:space="preserve">
     <value>The bug reports players send from the game (🐞). Confirm, mark fixed, not a bug or a duplicate, and answer: the player sees it in the game. A confirmed bug gives the reward you set in Plugins (HNMO bug reports). "Send to the HNMO developer" sends the report (no login, e-mail or IP) to the HNMO developer, with this server's licence name.</value>
   </data>
+  <data name="ArenaSettingsPage" xml:space="preserve">
+    <value>Arena characters &amp; battles</value>
+  </data>
 </root>

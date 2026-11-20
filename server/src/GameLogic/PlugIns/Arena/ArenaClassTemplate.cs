@@ -36,4 +36,12 @@ public sealed class ArenaClassTemplate
 
     /// <summary>Gets or sets the gear.</summary>
     public List<ArenaTemplateItem> Items { get; set; } = [];
+
+    /// <summary>Gets or sets the class's damage in the Arena, in percent (class balance; 100 = unchanged).</summary>
+    [System.ComponentModel.DataAnnotations.Range(10, 500)]
+    public int DamagePercent { get; set; } = 100;
+
+    /// <summary>Gets or sets the class's toughness in the Arena, in percent (class balance; 100 = unchanged, 125 = takes 1/1.25 of the damage).</summary>
+    [System.ComponentModel.DataAnnotations.Range(10, 500)]
+    public int DefensePercent { get; set; } = 100;
 }

@@ -13388,6 +13388,15 @@ namespace HNMO.Web.AdminPanel.Properties {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Arena characters &amp; battles.
+        /// </summary>
+        public static string ArenaSettingsPage {
+            get {
+                return ResourceManager.GetString("ArenaSettingsPage", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Resets and relife.
         /// </summary>
         public static string ResetsRelifePage {
