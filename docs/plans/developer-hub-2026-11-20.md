@@ -106,3 +106,22 @@
   language), the host's name and contact (two optional fields on the setup page), the country from the IP **and the IP
   itself** (owner's choice: this changes the hub's earlier "no raw IP" rule for this report).
 - **Telling the host:** a clear line on the setup page that this is sent to the HNMO developer (never player accounts).
+
+### Done (2026-11-21, Sydney)
+
+- **Machine id** (`PlayerLicense.MachineId`): the first 16 hex digits of SHA-256("hnmo-machine|" + the system id): Windows
+  `HKLM\SOFTWARE\Microsoft\Cryptography\MachineGuid`, Linux `/etc/machine-id` (or `/var/lib/dbus/machine-id`), macOS
+  `IOPlatformUUID` (`ioreg`). Where none is found, the old id. `PlayerLicense.LegacyMachineId` is the old id (the
+  computer name's hash): a licence bound to it is still accepted, and every message to the hub carries it as
+  `legacyMachine`, so the hub treats both as one computer (its host record moves to the new id, a licence request made
+  under the old id is still fetched). Test `PlayerLicenseTests`.
+- **First-setup report** (`HostSetupReport`, sent by `DeveloperHubWeeklyService` about 10 minutes after the first start,
+  retried every 6 hours until the hub takes it): `POST /api/setup` with the system, the game and the host's name and
+  contact. The setup page (`/setup`) shows the card `HostSetupReportCard`: what is sent, the IP included, never player
+  accounts; the two optional fields; when it was sent (Sydney time). Changing the name or contact after it went sends it
+  again. Tests `PlayerLicenseTests`, `HostSetupReportCardTests`.
+- **Hub** (hnmobug): `/api/setup` keeps `setups/<machine>` with the IP and Netlify's country, 3 a day per computer;
+  the console's "First setups" tab lists them. Every weekly report with a hub licence notes the computer in
+  `seen/<licence>`; 2 or more computers in 30 days withdraw the licence by itself (`revokedReason` shown in red with
+  the computers); "Give back" clears it and sets `manyComputers`, so more computers are fine for that licence. The
+  server learns of the withdrawal from the weekly answer. hnmobug's `CLAUDE.md` now allows the IP for this report only.
