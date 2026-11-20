@@ -2129,6 +2129,15 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("MuHelperConfiguration_MinLevel_Name", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Minimum character level for VIP accounts.
+        /// </summary>
+        public static string MuHelperConfiguration_VipMinLevel_Name {
+            get {
+                return ResourceManager.GetString("MuHelperConfiguration_VipMinLevel_Name", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Pay interval.

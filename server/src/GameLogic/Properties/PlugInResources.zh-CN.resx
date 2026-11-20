@@ -1069,6 +1069,9 @@
   <data name="MuHelperConfiguration_MinLevel_Name" xml:space="preserve">
     <value>最低角色等级</value>
   </data>
+  <data name="MuHelperConfiguration_VipMinLevel_Name" xml:space="preserve">
+    <value>VIP账号的最低角色等级</value>
+  </data>
   <data name="MuHelperConfiguration_MaxLevel_Name" xml:space="preserve">
     <value>最高角色等级</value>
   </data>

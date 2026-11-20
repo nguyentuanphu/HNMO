@@ -34,10 +34,23 @@ public class MuHelperConfiguration
     public TimeSpan StageInterval { get; set; } = TimeSpan.FromMinutes(200);
 
     /// <summary>
-    /// Gets or sets the minimum character level.
+    /// Gets or sets the minimum character level (80 like the Season 6/9 server suites).
     /// </summary>
     [Display(ResourceType = typeof(PlugInResources), Name = nameof(PlugInResources.MuHelperConfiguration_MinLevel_Name))]
-    public int MinLevel { get; set; } = 1;
+    public int MinLevel { get; set; } = 80;
+
+    /// <summary>
+    /// Gets or sets the minimum character level of VIP accounts (HNMO: from level 1).
+    /// </summary>
+    [Display(ResourceType = typeof(PlugInResources), Name = nameof(PlugInResources.MuHelperConfiguration_VipMinLevel_Name))]
+    public int VipMinLevel { get; set; } = 1;
+
+    /// <summary>
+    /// Gets the minimum character level for an account with or without VIP.
+    /// </summary>
+    /// <param name="isVip">Whether the account is a VIP.</param>
+    /// <returns>The minimum level.</returns>
+    public int GetMinimumLevel(bool isVip) => isVip ? Math.Min(this.VipMinLevel, this.MinLevel) : this.MinLevel;
 
     /// <summary>
     /// Gets or sets the maximum character level.
