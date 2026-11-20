@@ -281,7 +281,8 @@ public sealed class ImperialGuardianContext : MiniGameContext
             var experience = this._definition.GetExperienceReward(playerLevel, this.Day);
             if (experience > 0)
             {
-                await player.AddExperienceAsync(experience, null).ConfigureAwait(false);
+                // Times the server's experience rate, and master experience at the maximum level.
+                await player.AddRewardExperienceAsync(experience).ConfigureAwait(false);
             }
 
             await player.InvokeViewPlugInAsync<IImperialGuardianViewPlugIn>(p => p.ShowResultAsync(ImperialGuardianResult.Success, experience)).ConfigureAwait(false);

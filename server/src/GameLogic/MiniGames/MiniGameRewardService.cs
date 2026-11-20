@@ -151,13 +151,15 @@ internal sealed class MiniGameRewardService
         switch (reward.RewardType)
         {
             case MiniGameRewardType.Experience:
-                await player.AddExperienceAsync(reward.RewardAmount, null).ConfigureAwait(false);
+                // Times the server's experience rate, and master experience at the maximum level, as in the classic
+                // events; it was the plain amount, and lost at the maximum level.
+                await player.AddRewardExperienceAsync(reward.RewardAmount).ConfigureAwait(false);
                 break;
             case MiniGameRewardType.ExperiencePerRemainingSeconds:
                 var seconds = (int)this._remainingTimeProvider().TotalSeconds;
                 if (seconds > 0)
                 {
-                    await player.AddExperienceAsync(seconds * reward.RewardAmount, null).ConfigureAwait(false);
+                    await player.AddRewardExperienceAsync((long)seconds * reward.RewardAmount).ConfigureAwait(false);
                 }
 
                 break;
