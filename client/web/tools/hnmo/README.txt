@@ -55,10 +55,10 @@ IN THE GAME
 
 ADMIN PANEL
   http://localhost:8095/  - on the host computer.
-  Through the website: http://YOUR-ADDRESS:8080/adminpanel (an admin login is always
-  needed there; it stays closed until an admin user exists). Change "adminpanel" to an
-  address that's hard to guess: admin panel, Plugins, "Website (admin address, Google
-  sign-in)". Leave it empty to allow the admin panel only on the host computer.
+  Through the website: a random, hard-to-guess address made for this folder, shown on
+  http://localhost:8080/control (an admin login is always needed there; it stays closed
+  until an admin user exists). Change it in the admin panel, Plugins, "Website (admin
+  address, Google sign-in)". Leave it empty to allow the admin panel only on the host computer.
 
 PLAYERS AT ONCE
   Up to 10 players can be in the game at once. A license file from the owner

@@ -17,6 +17,16 @@ public class WebsiteConfiguration
     public const string DefaultAdminPath = "adminpanel";
 
     /// <summary>
+    /// Makes a hard-to-guess admin path ("admin-" and 16 random letters and digits) for a new HNMO folder.
+    /// </summary>
+    /// <returns>The new path.</returns>
+    public static string NewRandomAdminPath()
+    {
+        const string letters = "abcdefghijkmnpqrstuvwxyz23456789";
+        return "admin-" + System.Security.Cryptography.RandomNumberGenerator.GetString(letters, 16);
+    }
+
+    /// <summary>
     /// Gets or sets the path under which the website opens the admin panel (e.g. "adminpanel" for
     /// https://your-site/adminpanel). Choose something hard to guess; empty turns the website's
     /// admin access off (the admin panel then only opens on the host computer).

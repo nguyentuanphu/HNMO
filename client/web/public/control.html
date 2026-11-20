@@ -94,6 +94,7 @@
         <a id="openGame" href="/" target="_blank"><button type="button" data-i18n="btnOpenGame">Open game</button></a>
         <a id="openAdmin" href="http://127.0.0.1:8095/" target="_blank"><button type="button" data-i18n="btnOpenAdmin">Open admin panel</button></a>
       </div>
+      <p id="adminPathLine" style="margin:12px 0 0"><span data-i18n="adminPathLabel">Admin panel through the website (keep it secret):</span> <code id="adminPath"></code></p>
     </section>
 
     <section class="card">
@@ -192,6 +193,7 @@
         svcServer: 'Game server',
         svcWeb: 'Web game',
         svcAdmin: 'Admin panel',
+        adminPathLabel: 'Admin panel through the website (keep it secret):',
         btnStart: 'Start',
         btnStop: 'Stop',
         btnRestart: 'Restart',
@@ -253,6 +255,7 @@
         svcServer: 'Máy chủ game',
         svcWeb: 'Trò chơi web',
         svcAdmin: 'Trang quản trị',
+        adminPathLabel: 'Trang quản trị qua website (giữ bí mật):',
         btnStart: 'Khởi động',
         btnStop: 'Dừng',
         btnRestart: 'Khởi động lại',
@@ -331,6 +334,9 @@
         document.getElementById('dotAdmin').classList.toggle('on', !!s.adminPanel);
         document.getElementById('openGame').href = s.gameUrl;
         document.getElementById('openAdmin').href = s.adminUrl;
+        document.getElementById('adminPath').textContent = s.websiteAdminPath
+          ? `${location.protocol}//${location.host}${s.websiteAdminPath}/`
+          : (lang === 'vi' ? 'tắt (trang quản trị chỉ mở trên máy này)' : 'off (the admin panel opens only on this computer)');
         document.getElementById('wizardCard').style.display = s.setupNeeded ? 'block' : 'none';
         document.getElementById('btnAutoStart').textContent = (lang === 'vi' ? 'Tự khởi động cùng máy tính: ' : 'Start HNMO when this computer starts: ') + (s.autoStartEnabled ? 'ON' : 'OFF');
         document.getElementById('btnService').textContent = s.serviceInstalled

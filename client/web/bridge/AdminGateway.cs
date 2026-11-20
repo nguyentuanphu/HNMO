@@ -21,12 +21,16 @@ internal sealed class AdminGateway(PortalOptions options, IHttpForwarder forward
 
     private readonly HostKeepingTransformer _transformer = new();
 
+    /// <summary>Gets the gateway the web server uses (for the host's control page).</summary>
+    public static AdminGateway? Current { get; private set; }
+
     // The current admin path ("/adminpanel"), or "" when the website's admin access is off.
     private volatile string _path = DefaultPath;
     private DateTime _nextRefresh = DateTime.MinValue;
 
     public static void Use(WebApplication app, AdminGateway gateway)
     {
+        Current = gateway;
         app.Use(async (context, next) =>
         {
             context.Request.Headers.Remove(PrefixHeader);
@@ -62,7 +66,8 @@ internal sealed class AdminGateway(PortalOptions options, IHttpForwarder forward
         }
     }
 
-    private async Task<string> PathAsync(CancellationToken cancellationToken)
+    // The website's admin path ("/admin-..."), or "" when the website's admin access is off.
+    public async Task<string> PathAsync(CancellationToken cancellationToken)
     {
         if (DateTime.UtcNow < this._nextRefresh)
         {

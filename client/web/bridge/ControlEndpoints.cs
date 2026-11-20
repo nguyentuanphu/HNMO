@@ -91,6 +91,7 @@ internal static class ControlEndpoints
             var backups = ControlOperations.ListBackups(saveDir);
             var disk = ControlOperations.GetDiskUsage(saveDir, settings.LowDiskWarningMb);
             var incidents = CrashWatchStore.ListIncidents(saveDir);
+            var websiteAdminPath = AdminGateway.Current is { } gateway ? await gateway.PathAsync(ctx.RequestAborted).ConfigureAwait(false) : string.Empty;
 
             return Results.Ok(new
             {
@@ -120,6 +121,7 @@ internal static class ControlEndpoints
                 lastAutoBackupSydney = maintenance?.LastAutoBackupSydney,
                 lastVacuumSydney = maintenance?.LastVacuumSydney,
                 adminUrl = options.AdminUrl,
+                websiteAdminPath,
                 gameUrl = options.OpenBrowserUrl ?? $"http://localhost:{options.WebPort}/",
                 os = OperatingSystem.IsWindows() ? "windows" : OperatingSystem.IsMacOS() ? "macos" : "linux",
                 ports = new

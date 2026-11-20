@@ -111,8 +111,9 @@ expired), then finds the game account with that e-mail (the player may set a new
 or creates one with the name and password the player chooses. The game itself still logs in with
 the account name and password.
 
-**Admin panel through the website.** `https://your-site/adminpanel` opens the admin panel's login.
-Change the address in the same plug-in (e.g. to something hard to guess); the website follows
+**Admin panel through the website.** A new HNMO folder gets a random, hard-to-guess address
+(`https://your-site/admin-<16 letters>`), shown on the host's control page (`/control`); folders made
+before keep `/adminpanel`. Change the address in the same plug-in; the website follows
 within 30 seconds and the old address stops working. The admin panel always asks for an admin
 login there, and stays closed there until an admin user exists (create it on the host computer at
 http://127.0.0.1:8095 first). The address is never sent to visitors. Empty turns it off.
