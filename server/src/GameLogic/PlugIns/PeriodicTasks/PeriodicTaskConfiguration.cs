@@ -121,7 +121,15 @@ public class PeriodicTaskConfiguration
         {
             foreach (var time in this.Timetable)
             {
-                var startUtc = TimeZoneInfo.ConvertTimeToUtc(date.ToDateTime(time, DateTimeKind.Unspecified), serverTimeZone);
+                var startLocal = date.ToDateTime(time, DateTimeKind.Unspecified);
+                if (serverTimeZone.IsInvalidTime(startLocal))
+                {
+                    // Skipped by the clock change to daylight saving time, so it doesn't start at all.
+                    // The conversion would throw for it.
+                    continue;
+                }
+
+                var startUtc = TimeZoneInfo.ConvertTimeToUtc(startLocal, serverTimeZone);
                 if (startUtc > utcNow && (result is null || startUtc < result))
                 {
                     result = startUtc;
