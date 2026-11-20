@@ -19,7 +19,7 @@ public class PacketDefinitions
     /// <summary>
     /// The XML namespace for this class.
     /// </summary>
-    internal const string XmlNamespace = "https://github.com/nguyentuanphu/HNMO/PacketDefinitions";
+    internal const string XmlNamespace = "urn:hnmo:packet-definitions";
 
     /// <summary>
     /// Gets or sets the description.

@@ -19,7 +19,7 @@ public class CastleSiegePacketDefinitionTests
 {
     private const string ClientPacketDefinitions = "src/Network/Packets/ClientToServer/ClientToServerPackets.xml";
     private const string ServerPacketDefinitions = "src/Network/Packets/ServerToClient/ServerToClientPackets.xml";
-    private static readonly XNamespace PacketDefinitionNamespace = "https://github.com/nguyentuanphu/HNMO/PacketDefinitions";
+    private static readonly XNamespace PacketDefinitionNamespace = "urn:hnmo:packet-definitions";
 
     /// <summary>
     /// Verifies a client-to-server packet definition against the desktop client's sending layout.

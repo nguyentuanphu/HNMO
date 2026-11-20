@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text.Json;
 
 /// <summary>
-/// Result of checking GitHub for a newer release.
+/// Result of checking the developer's hub for a newer release.
 /// </summary>
 /// <param name="LatestTag">Latest release tag name.</param>
 /// <param name="PublishedAtSydney">Release timestamp in Sydney time.</param>

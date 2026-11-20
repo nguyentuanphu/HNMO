@@ -450,18 +450,24 @@ internal static class ControlEndpoints
 
             try
             {
-                using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.github.com/repos/nguyentuanphu/HNMO/releases/latest");
+                // The newest release as the HNMO developer published it on the hub (no link to where HNMO is built).
+                if (DeveloperHubAddress.LatestRelease is not { Length: > 0 } latestUrl)
+                {
+                    return Results.BadRequest(new { message = "Update checks are off on this server." });
+                }
+
+                using var request = new HttpRequestMessage(HttpMethod.Get, latestUrl);
                 request.Headers.UserAgent.ParseAdd("HNMO-Control");
                 using var response = await http.SendAsync(request, ctx.RequestAborted).ConfigureAwait(false);
                 if (!response.IsSuccessStatusCode)
                 {
-                    return Results.BadRequest(new { message = $"GitHub returned {(int)response.StatusCode}." });
+                    return Results.BadRequest(new { message = response.StatusCode == System.Net.HttpStatusCode.NotFound ? "No release published yet." : $"The update check answered {(int)response.StatusCode}." });
                 }
 
                 var json = await response.Content.ReadAsStringAsync(ctx.RequestAborted).ConfigureAwait(false);
                 var stampFile = Path.Combine(webRoot, ".hnmo-build");
                 var localStamp = File.Exists(stampFile) ? File.ReadAllText(stampFile).Trim() : null;
-                return Results.Ok(ControlOperations.ParseGitHubRelease(json, localStamp));
+                return Results.Ok(ControlOperations.ParseRelease(json, localStamp));
             }
             catch (Exception ex)
             {

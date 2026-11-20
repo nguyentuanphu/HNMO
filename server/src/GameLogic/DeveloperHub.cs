@@ -24,7 +24,7 @@ using System.Threading;
 public static class DeveloperHub
 {
     /// <summary>The hub's address unless <c>HNMO_DEVELOPER_HUB</c> names another.</summary>
-    public const string DefaultUrl = "https://hnmobug.netlify.app";
+    public const string DefaultUrl = HNMO.Interfaces.DeveloperHubAddress.Default;
 
     /// <summary>The days between two weekly reports (the hub takes one in six days).</summary>
     public const int WeeklyDays = 7;
@@ -40,7 +40,7 @@ public static class DeveloperHub
     private static DeveloperHubState? _memoryState;
 
     /// <summary>Gets the hub's address (empty: sending is off).</summary>
-    public static string Url => (Environment.GetEnvironmentVariable("HNMO_DEVELOPER_HUB") ?? DefaultUrl).Trim().TrimEnd('/');
+    public static string Url => HNMO.Interfaces.DeveloperHubAddress.Url;
 
     /// <summary>Gets or sets this folder's licence file as text (set at start and when a licence is saved), if any.</summary>
     public static string? LicenceFile { get; set; }

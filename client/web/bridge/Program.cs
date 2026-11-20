@@ -252,6 +252,36 @@ AdminGateway.Use(app, new AdminGateway(
     () => launcherOptions.ArenaEnabled ? launcherOptions.ArenaAdminUrl : null));
 
 app.MapGet("/health", () => "ok");
+
+// The website's "Download HNMO": the newest release's link as the HNMO developer published it on the hub (owner,
+// 2026-11-21: no HNMO folder points at where HNMO is built); the home page while none is published.
+app.MapGet("/download", async (HttpContext ctx, IHttpClientFactory clients) =>
+{
+    if (HNMO.Interfaces.DeveloperHubAddress.LatestRelease is { Length: > 0 } latestUrl)
+    {
+        try
+        {
+            using var timeout = CancellationTokenSource.CreateLinkedTokenSource(ctx.RequestAborted);
+            timeout.CancelAfter(TimeSpan.FromSeconds(5));
+            using var response = await clients.CreateClient().GetAsync(latestUrl, timeout.Token).ConfigureAwait(false);
+            if (response.IsSuccessStatusCode)
+            {
+                using var document = System.Text.Json.JsonDocument.Parse(await response.Content.ReadAsStringAsync(timeout.Token).ConfigureAwait(false));
+                if (document.RootElement.TryGetProperty("html_url", out var link) && link.GetString() is { } url
+                    && Uri.TryCreate(url, UriKind.Absolute, out var uri) && uri.Scheme == Uri.UriSchemeHttps)
+                {
+                    return Results.Redirect(uri.ToString());
+                }
+            }
+        }
+        catch (Exception error) when (error is HttpRequestException or OperationCanceledException or System.Text.Json.JsonException)
+        {
+            // The hub can't be reached now: the home page.
+        }
+    }
+
+    return Results.Redirect("/home.html");
+});
 app.MapGet("/", () => Results.Redirect("/home.html"));
 
 // The game's name players see: set in the admin panel (the "Game name" plug-in), asked from its public

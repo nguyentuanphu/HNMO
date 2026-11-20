@@ -11,10 +11,13 @@ using System.Xml.Serialization;
 /// The database connection settings xml serialization class.
 /// </summary>
 [Serializable]
-[XmlType(AnonymousType = true, Namespace = "https://github.com/nguyentuanphu/HNMO/ConnectionSettings")]
-[XmlRoot(Namespace = "https://github.com/nguyentuanphu/HNMO/ConnectionSettings", IsNullable = false)]
+[XmlType(AnonymousType = true, Namespace = ConnectionSettings.XmlNamespace)]
+[XmlRoot(Namespace = ConnectionSettings.XmlNamespace, IsNullable = false)]
 public class ConnectionSettings : IDeserializationCallback
 {
+    /// <summary>The XML namespace of the settings file.</summary>
+    public const string XmlNamespace = "urn:hnmo:connection-settings";
+
     /// <summary>
     /// Initializes a new instance of the <see cref="ConnectionSettings"/> class.
     /// </summary>

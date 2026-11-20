@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 /// Defines a structure which can be defined as packet header or part of a packet.
 /// </summary>
 [Serializable]
-[XmlType(Namespace = "https://github.com/nguyentuanphu/HNMO/PacketDefinitions")]
+[XmlType(Namespace = "urn:hnmo:packet-definitions")]
 public class Structure
 {
     /// <summary>

@@ -175,18 +175,19 @@ public static class ControlOperations
     }
 
     /// <summary>
-    /// Parses a GitHub Releases API JSON payload and compares it to the local build stamp.
+    /// Parses the newest release's details (from the developer's hub, <see cref="DeveloperHubAddress.LatestRelease"/>)
+    /// and compares it to the local build stamp.
     /// </summary>
-    /// <param name="releaseJson">Raw JSON from <c>/repos/.../releases/latest</c>.</param>
+    /// <param name="releaseJson">Raw JSON: tag_name, published_at, body, html_url (the download link).</param>
     /// <param name="localBuildStamp">Local <c>.hnmo-build</c> stamp, if present.</param>
     /// <returns>Parsed update check result.</returns>
-    public static UpdateCheckResult ParseGitHubRelease(string releaseJson, string? localBuildStamp)
+    public static UpdateCheckResult ParseRelease(string releaseJson, string? localBuildStamp)
     {
         using var doc = JsonDocument.Parse(releaseJson);
         var root = doc.RootElement;
         var tag = root.TryGetProperty("tag_name", out var t) ? (t.GetString() ?? "latest") : "latest";
         var body = root.TryGetProperty("body", out var b) ? (b.GetString() ?? string.Empty) : string.Empty;
-        var htmlUrl = root.TryGetProperty("html_url", out var u) ? (u.GetString() ?? "https://github.com/nguyentuanphu/HNMO/releases") : "https://github.com/nguyentuanphu/HNMO/releases";
+        var htmlUrl = root.TryGetProperty("html_url", out var u) ? (u.GetString() ?? string.Empty) : string.Empty;
         var published = string.Empty;
         var isNewer = false;
 

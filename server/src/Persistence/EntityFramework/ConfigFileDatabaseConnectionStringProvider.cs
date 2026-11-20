@@ -148,7 +148,12 @@ public class ConfigFileDatabaseConnectionStringProvider : IDatabaseConnectionSet
             : Path.GetDirectoryName(new Uri(assemblyLocation).LocalPath)!;
         var configurationFilePath = Path.Combine(baseDirectory, this._fileName);
         var hostSettings = HostSettingsStore.TryLoad(HostSettingsStore.ResolveDefaultPath(baseDirectory));
-        using var xmlReader = XmlReader.Create(File.OpenRead(configurationFilePath), settings);
+        // A file from an earlier HNMO folder names its settings with the earlier namespace: read it the same way.
+        var text = System.Text.RegularExpressions.Regex.Replace(
+            File.ReadAllText(configurationFilePath),
+            "xmlns=\"https?://[^\"]+/ConnectionSettings\"",
+            $"xmlns=\"{ConnectionSettings.XmlNamespace}\"");
+        using var xmlReader = XmlReader.Create(new StringReader(text), settings);
         var serializer = new XmlSerializer(typeof(ConnectionSettings));
         if (serializer.CanDeserialize(xmlReader))
         {

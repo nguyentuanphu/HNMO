@@ -73,23 +73,26 @@ public class ControlServiceTests
     }
 
     /// <summary>
-    /// Verifies that GitHub release JSON is parsed with Sydney time and compared against local build stamp.
+    /// Verifies that the hub's release JSON is parsed with Sydney time and compared against local build stamp, and that
+    /// no link is made up when the release has none.
     /// </summary>
     [Test]
-    public void ParseGitHubReleaseDetectsNewerVersion()
+    public void ParseReleaseDetectsNewerVersion()
     {
         var json = """
             {
               "tag_name": "hnmo-20261120",
               "published_at": "2026-11-20T01:00:00Z",
               "body": "Bug fixes",
-              "html_url": "https://github.com/nguyentuanphu/HNMO/releases/latest"
+              "html_url": "https://downloads.example/HNMO.zip"
             }
             """;
 
-        var result = ControlOperations.ParseGitHubRelease(json, "HNMO-001-20261116");
+        var result = ControlOperations.ParseRelease(json, "HNMO-001-20261116");
         Assert.That(result.LatestTag, Is.EqualTo("hnmo-20261120"));
         Assert.That(result.IsUpdateAvailable, Is.True);
         Assert.That(result.PublishedAtSydney, Is.EqualTo("2026-11-20 12:00:00"));
+        Assert.That(result.DownloadUrl, Is.EqualTo("https://downloads.example/HNMO.zip"));
+        Assert.That(ControlOperations.ParseRelease("""{"tag_name":"v1"}""", null).DownloadUrl, Is.Empty, "no link of its own");
     }
 }

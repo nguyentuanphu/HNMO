@@ -486,7 +486,7 @@
       try {
         const u = await api('/api/control/updates');
         const info = document.getElementById('updateInfo');
-        const link = /^https:\/\/github\.com\//.test(String(u.downloadUrl || '')) ? esc(u.downloadUrl) : '#';
+        const link = /^https:\/\/[^\s]+$/.test(String(u.downloadUrl || '')) ? esc(u.downloadUrl) : '#';
         info.innerHTML = `<strong>${esc(u.latestTag)}</strong> (${esc(u.publishedAtSydney)}) — ${u.isUpdateAvailable ? 'Update available!' : 'Up to date'} — <a href="${link}" target="_blank" rel="noopener">Download</a><pre style="margin-top:8px">${esc(u.releaseNotes || '')}</pre>`;
       } catch (e) { showMsg(e.message, true); }
     };
