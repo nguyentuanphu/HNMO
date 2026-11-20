@@ -57,6 +57,13 @@ public class TradeButtonAction : BaseTradeAction
 
     private static bool ExceedsMaximumMoney(ITrader receiver, int receivedMoney)
     {
+        // A trader who receives no zen keeps their money, so an item-only trade is never refused,
+        // even if the money is already above a limit which was lowered afterwards.
+        if (receivedMoney <= 0)
+        {
+            return false;
+        }
+
         var maximumMoney = receiver.GameContext?.Configuration?.MaximumInventoryMoney ?? int.MaxValue;
         return (long)receiver.Money + receivedMoney > maximumMoney;
     }
