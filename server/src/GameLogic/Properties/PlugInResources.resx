@@ -2244,4 +2244,6 @@
   <data name="ArenaTeamRulesPlugIn_Description" xml:space="preserve"><value>In the Arena program, during a 5v5 team battle: only the other team can be hurt, no player-kill penalty, kills are counted, and the fallen come back at their team's gate.</value></data>
   <data name="StartRoyaleChatCommandPlugIn_Name" xml:space="preserve"><value>Chat command: /startroyale (HNMO Arena)</value></data>
   <data name="StartRoyaleChatCommandPlugIn_Description" xml:space="preserve"><value>A game master in the Arena opens the battle royale's sign-up now: /startroyale [seconds until the start, default 120].</value></data>
+  <data name="ArenaHeraldPlugIn_Name" xml:space="preserve"><value>HNMO Arena Herald</value></data>
+  <data name="ArenaHeraldPlugIn_Description" xml:space="preserve"><value>Talking to the Arena Herald (NPC 595, in the main towns) opens the Arena window in the web game.</value></data>
 </root>

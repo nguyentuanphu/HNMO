@@ -870,4 +870,6 @@
   <data name="StrongerHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
     <value>Bản cập nhật này làm 28 kỹ năng HNMO mạnh hơn 20 % (sát thương, buff và debuff; chi phí và thời gian hồi giữ nguyên) và cho nhiệm vụ thử thách của lính Elf yêu cầu 200 lần hạ quái và năm ngọc Chaos.</value>
   </data>
+  <data name="AddArenaHeraldUpdatePlugIn_Name" xml:space="preserve"><value>Thêm Sứ giả Đấu trường</value></data>
+  <data name="AddArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Thêm Sứ giả Đấu trường HNMO, NPC ở Lorencia, Devias, Noria và Elbeland, mở cửa sổ Đấu trường.</value></data>
 </root>

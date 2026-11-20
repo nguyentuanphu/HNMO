@@ -215,7 +215,13 @@ export class ArenaWindow {
     const parsed = read('ServerToClient', 'HnmoArenaTravelState', bytes);
     const json = typeof parsed.Json === 'string' ? parsed.Json : '';
     try {
-      this.state = JSON.parse(json) as ArenaTravelState;
+      const answer = JSON.parse(json) as ArenaTravelState | { open: true };
+      // The Arena Herald (an NPC in the towns) opens the window, which then asks for the full state.
+      if ('open' in answer) {
+        if (!this.panel.isOpen()) this.open();
+        return true;
+      }
+      this.state = answer;
     } catch {
       return true;
     }
@@ -488,8 +494,8 @@ export class ArenaWindow {
     const points = document.createElement('p');
     points.id = 'arena-points';
     points.textContent = tx(
-      `You have ${shop.points} Arena points (win 5, loss 2 in ranked duels).`,
-      `Bạn có ${shop.points} điểm Đấu trường (thắng 5, thua 2 trong đấu xếp hạng).`,
+      `You have ${shop.points} Arena points (ranked 1v1: win 5, loss 2; team battle: win 8, loss 3; battle royale: winner 20, others 2; up to 100 a day).`,
+      `Bạn có ${shop.points} điểm Đấu trường (xếp hạng 1v1: thắng 5, thua 2; đấu đội: thắng 8, thua 3; sinh tồn: người thắng 20, còn lại 2; tối đa 100 mỗi ngày).`,
     );
     body.append(head, points);
     const categories = [...new Set(shop.items.map((i) => i.Category))];

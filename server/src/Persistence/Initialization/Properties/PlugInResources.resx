@@ -464,4 +464,6 @@
   <data name="StrongerHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
     <value>This update makes the 28 HNMO skills 20 % stronger (damage, buffs and debuffs; costs and cooldowns stay) and lets the trial quests of the Elf Soldier ask for 200 kills and five Jewels of Chaos.</value>
   </data>
+  <data name="AddArenaHeraldUpdatePlugIn_Name" xml:space="preserve"><value>Add the Arena Herald</value></data>
+  <data name="AddArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Adds the HNMO Arena Herald, an NPC in Lorencia, Devias, Noria and Elbeland which opens the Arena window.</value></data>
 </root>

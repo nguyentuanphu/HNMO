@@ -94,6 +94,7 @@ public class GameConfigurationInitializer : GameConfigurationInitializerBase
         // The HNMO skills; their trial quests need the monsters, the items and the elf soldier.
         new Skills.HnmoSkillsInitializer(this.Context, this.GameConfiguration).Initialize();
         new Skills.HnmoTrialQuestsInitializer(this.Context, this.GameConfiguration).Initialize();
+        new HnmoArenaHeraldInitializer(this.Context, this.GameConfiguration).Initialize();
         new DevilSquareInitializer(this.Context, this.GameConfiguration).Initialize();
         new BloodCastleInitializer(this.Context, this.GameConfiguration).Initialize();
         new ChaosCastleInitializer(this.Context, this.GameConfiguration).Initialize();
