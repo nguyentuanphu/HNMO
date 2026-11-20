@@ -5,6 +5,8 @@
 namespace HNMO.Persistence.Initialization.Updates;
 
 using System.Runtime.InteropServices;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.PlugIns.CustomRanks;
 using HNMO.PlugIns;
@@ -43,9 +45,26 @@ public class ArenaTitlesUpdatePlugIn : UpdatePlugInBase
     protected override ValueTask ApplyAsync(IContext context, GameConfiguration gameConfiguration)
     {
         if (gameConfiguration.PlugInConfigurations.FirstOrDefault(c => c.TypeId == typeof(CustomRanksPlugIn).GUID) is not { } plugInConfiguration
-            || plugInConfiguration.GetConfiguration<CustomRankConfiguration>(null) is not { } configuration)
+            || string.IsNullOrWhiteSpace(plugInConfiguration.CustomConfiguration))
         {
             // No saved settings: the plug-in's defaults have the titles.
+            return ValueTask.CompletedTask;
+        }
+
+        CustomRankConfiguration? configuration;
+        try
+        {
+            // Settings saved by the admin panel's editor carry reference markers ("$id", lists as "$values").
+            configuration = WithoutReferences(JsonNode.Parse(plugInConfiguration.CustomConfiguration))?.Deserialize<CustomRankConfiguration>();
+        }
+        catch (JsonException)
+        {
+            // Settings this update can't read stay as they are; the titles can be added on the admin panel.
+            return ValueTask.CompletedTask;
+        }
+
+        if (configuration is null)
+        {
             return ValueTask.CompletedTask;
         }
 
@@ -60,5 +79,35 @@ public class ArenaTitlesUpdatePlugIn : UpdatePlugInBase
         }
 
         return ValueTask.CompletedTask;
+    }
+
+    private static JsonNode? WithoutReferences(JsonNode? node)
+    {
+        switch (node)
+        {
+            case JsonObject obj when obj["$values"] is JsonArray values:
+                return WithoutReferences(values);
+            case JsonObject obj:
+                var result = new JsonObject();
+                foreach (var (key, value) in obj)
+                {
+                    if (key is not ("$id" or "$ref"))
+                    {
+                        result[key] = WithoutReferences(value);
+                    }
+                }
+
+                return result;
+            case JsonArray array:
+                var list = new JsonArray();
+                foreach (var item in array)
+                {
+                    list.Add(WithoutReferences(item));
+                }
+
+                return list;
+            default:
+                return node?.DeepClone();
+        }
     }
 }

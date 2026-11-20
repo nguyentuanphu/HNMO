@@ -396,6 +396,7 @@
   * [C2 F5 4F - HnmoVaultPageState (by server)](C2-F5-4F-HnmoVaultPageState_by-server.md)
   * [C2 F5 51 - HnmoItemStackState (by server)](C2-F5-51-HnmoItemStackState_by-server.md)
   * [C2 F5 53 - HnmoArenaTravelState (by server)](C2-F5-53-HnmoArenaTravelState_by-server.md)
+  * [C2 F5 55 - HnmoBugReportState (by server)](C2-F5-55-HnmoBugReportState_by-server.md)
   * [C1 F6 00 - QuestEventLimitResult (by server)](C1-F6-00-QuestEventLimitResult_by-server.md)
   * [C1 F6 03 - QuestEventResponse (by server)](C1-F6-03-QuestEventResponse_by-server.md)
   * [C1 F6 04 - QuestStartedByItem (by server)](C1-F6-04-QuestStartedByItem_by-server.md)

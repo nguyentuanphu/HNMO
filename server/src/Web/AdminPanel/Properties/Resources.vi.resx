@@ -5237,4 +5237,7 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   <data name="ArenaEnabledHint" xml:space="preserve">
     <value>Trình khởi động chạy thêm Đấu trường HNMO (database riêng, cổng connect server +200, trang quản trị cách hai cổng; dùng chung tài khoản). Khởi động lại HNMO sau khi đổi.</value>
   </data>
+  <data name="PageHelpTextBugReports" xml:space="preserve">
+    <value>Báo lỗi người chơi gửi từ trong game (🐞). Xác nhận, đánh dấu đã sửa, không phải lỗi hoặc trùng, và trả lời: người chơi thấy trong game. Lỗi được xác nhận nhận phần thưởng bạn đặt trong Plugins (Báo lỗi HNMO). "Gửi cho nhà phát triển HNMO" gửi báo lỗi (không có tài khoản, email hay IP) tới link Discord nhà phát triển đưa cho bạn.</value>
+  </data>
 </root>

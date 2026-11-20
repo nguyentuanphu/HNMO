@@ -2238,4 +2238,6 @@
   <data name="ArenaPlugIn_Description" xml:space="preserve"><value>In the Arena program: the picked character becomes the arena character of its class (level, stats, gear and potions from the templates) on the arena map. Does nothing on other servers.</value></data>
   <data name="ArenaShopPlugIn_Name" xml:space="preserve"><value>HNMO Arena points shop</value></data>
   <data name="ArenaShopPlugIn_Description" xml:space="preserve"><value>On the home servers: arena points, earned in the Arena's ranked duels, buy jewels, charms, event tickets and cosmetics (made new here). Items and prices are set here.</value></data>
+  <data name="BugReportsPlugIn_Name" xml:space="preserve"><value>HNMO bug reports</value></data>
+  <data name="BugReportsPlugIn_Description" xml:space="preserve"><value>Players send bug reports from the game (up to the daily limit); the owner reads, answers and decides them on the "Bug reports" page, may reward confirmed bugs with coins and may send a report to the HNMO developer's Discord (the link the developer gives).</value></data>
 </root>

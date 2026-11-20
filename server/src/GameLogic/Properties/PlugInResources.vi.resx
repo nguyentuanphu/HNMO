@@ -2423,4 +2423,6 @@
   <data name="ArenaPlugIn_Description" xml:space="preserve"><value>Trong chương trình Đấu trường: nhân vật được chọn trở thành nhân vật đấu trường của class đó (cấp, chỉ số, trang bị và bình máu theo mẫu) trên bản đồ đấu trường. Không ảnh hưởng các server khác.</value></data>
   <data name="ArenaShopPlugIn_Name" xml:space="preserve"><value>Cửa hàng điểm Đấu trường HNMO</value></data>
   <data name="ArenaShopPlugIn_Description" xml:space="preserve"><value>Ở các server nhà: điểm Đấu trường, kiếm được từ các trận xếp hạng, đổi ngọc, bùa, vé sự kiện và đồ trang trí (đồ được tạo mới ở đây). Món và giá chỉnh ở đây.</value></data>
+  <data name="BugReportsPlugIn_Name" xml:space="preserve"><value>Báo lỗi HNMO</value></data>
+  <data name="BugReportsPlugIn_Description" xml:space="preserve"><value>Người chơi gửi báo lỗi từ trong game (theo giới hạn mỗi ngày); chủ server đọc, trả lời và xử lý ở trang "Báo lỗi", có thể thưởng xu cho lỗi được xác nhận và gửi báo lỗi tới Discord của nhà phát triển HNMO (link nhà phát triển cấp).</value></data>
 </root>

@@ -16993,6 +16993,23 @@
     <Packet>
       <HeaderType>C2HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
+      <SubCode>55</SubCode>
+      <Name>HnmoBugReportState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent after HnmoBugReportCommand (F5 54).</SentWhen>
+      <CausedReaction>The web client shows the bug report window: reports left today, the categories, the player's reports with their status and answers, and the result of a send.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON: left, maxLength, categories, reward, mine (id, category, text, status, duplicateOf, reply, sent, reward), message, sent.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
       <SubCode>53</SubCode>
       <Name>HnmoArenaTravelState</Name>
       <Direction>ServerToClient</Direction>

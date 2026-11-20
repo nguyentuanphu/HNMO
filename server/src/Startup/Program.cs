@@ -245,6 +245,7 @@ internal sealed class Program : IDisposable
             ? PlayerLicense.Default("No public key is embedded: up to 10 players at once.")
             : PlayerLicense.Check(file is null ? null : File.ReadAllBytes(file), publicKeyPem, PlayerLicense.MachineId, DateOnly.FromDateTime(DateTime.UtcNow));
         LicensedPlayerLimit.Maximum = license.MaximumPlayers;
+        LicensedPlayerLimit.Licensee = license.IsValid ? license.Licensee : null;
         this._logger.Information("HNMO license: {Message} (this computer's id: {MachineId})", license.Message, PlayerLicense.MachineId);
     }
 

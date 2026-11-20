@@ -31,6 +31,12 @@ public static class LicensedPlayerLimit
     }
 
     /// <summary>
+    /// Gets or sets who the folder's license is for (<c>null</c> without a valid license); bug reports sent to the HNMO
+    /// developer name it.
+    /// </summary>
+    public static string? Licensee { get; set; }
+
+    /// <summary>
     /// Gets the number of accounts in the game now.
     /// </summary>
     public static int Count

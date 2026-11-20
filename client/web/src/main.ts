@@ -49,6 +49,7 @@ import { LuckyNumberWindow } from './ui/luckyNumberWindow.js';
 import { MarriageWindow } from './ui/marriageWindow.js';
 import { MarketWindow } from './ui/marketWindow.js';
 import { ArenaWindow, savedArenaHome, type ArenaHome } from './ui/arenaWindow.js';
+import { BugReportWindow, installErrorLog } from './ui/bugReportWindow.js';
 import { EscrowWindow } from './ui/escrowWindow.js';
 import { VaultPages } from './ui/vaultPages.js';
 import { ItemStacks } from './ui/itemStacks.js';
@@ -219,6 +220,8 @@ export interface GameState {
   market?: MarketWindow;
   /** The HNMO Arena window (ui/arenaWindow.ts). */
   arena?: ArenaWindow;
+  /** The bug report window (ui/bugReportWindow.ts). */
+  bugReports?: BugReportWindow;
   escrow?: EscrowWindow;
   jewelBank?: JewelBankWindow;
   vip?: VipWindow;
@@ -339,6 +342,7 @@ root.rotation.x = -Math.PI / 2;
 scene.add(root);
 
 const state: GameState = { world: null, hero: null, online: null, mapNumber: null, camera };
+installErrorLog();
 state.cooldowns = skillCooldowns;
 state.chat = chat;
 window.__game = state; // for automated tests and debugging from the console
@@ -1888,6 +1892,19 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     if (event.key.toLowerCase() === 'a' && event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) { event.preventDefault(); arena.toggle(); }
   });
   window.addEventListener('hnmo-arena-open', () => { arena.open(); });
+  // Bug reports (Alt+B, 🐞 in the phone menu): to the server's owner, who may send them on to the HNMO developer.
+  const bugReports = new BugReportWindow({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => chat.add(text, 'system'),
+    details: () => ({ map: state.mapNumber, server: playedServer ? `${playedServer.column} ${playedServer.serverId}` : null }),
+  });
+  state.bugReports = bugReports;
+  connection.onPacket((bytes) => { bugReports.handle(bytes); });
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+    if (event.key.toLowerCase() === 'b' && event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) { event.preventDefault(); bugReports.toggle(); }
+  });
+  window.addEventListener('hnmo-bug-report-open', () => { bugReports.open(); });
   // VIP shares the website's reviewed offers and stable retry identifier, using the authenticated game session.
   const vip = new VipWindow({ send: (name, fields) => connection.send('ClientToServer', name, fields), message: (text) => chat.add(text, 'system') });
   state.vip = vip;

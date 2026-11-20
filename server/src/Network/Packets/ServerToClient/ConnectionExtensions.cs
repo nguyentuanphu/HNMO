@@ -11176,6 +11176,34 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoBugReportState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON: left, maxLength, categories, reward, mine (id, category, text, status, duplicateOf, reply, sent, reward), message, sent.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent after HnmoBugReportCommand (F5 54).
+    /// Causes reaction on client side: The web client shows the bug report window: reports left today, the categories, the player's reports with their status and answers, and the result of a send.
+    /// </remarks>
+    public static async ValueTask SendHnmoBugReportStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoBugReportStateRef.GetRequiredSize(json);
+            var packet = new HnmoBugReportStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="HnmoArenaTravelState" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

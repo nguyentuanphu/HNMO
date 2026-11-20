@@ -17,6 +17,9 @@ public static class ArenaRules
     /// <summary>The F5 sub code of the Arena travel request (F5 52), the one HNMO window the Arena keeps.</summary>
     public const byte ArenaTravelSubCode = 0x52;
 
+    /// <summary>The F5 sub code of the bug report command (F5 54), which works in the Arena too.</summary>
+    public const byte BugReportSubCode = 0x54;
+
     /// <summary>What a refusal is about.</summary>
     public enum Action
     {
@@ -80,5 +83,5 @@ public static class ArenaRules
     /// <summary>Gets a value indicating whether an HNMO message (F5 sub code 2 and up) is handled in the Arena.</summary>
     /// <param name="subCode">The sub code.</param>
     /// <returns><c>true</c>, if it's handled: everywhere but the Arena, and in the Arena only the travel request.</returns>
-    public static bool AllowsHnmoMessage(byte subCode) => !Active || subCode == ArenaTravelSubCode;
+    public static bool AllowsHnmoMessage(byte subCode) => !Active || subCode is ArenaTravelSubCode or BugReportSubCode;
 }

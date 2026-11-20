@@ -29,6 +29,7 @@ public static class AdminNavHints
         ["banned-words"] = ("Words blocked in chat", "Từ bị chặn khi chat"),
         ["account-safety"] = ("Vault PIN, item lock", "Mã kho, khóa đồ"),
         ["duplicate-items"] = ("Frozen duplicate items", "Đồ nhân bản bị đóng băng"),
+        ["bug-reports"] = ("Players' bug reports", "Báo lỗi của người chơi"),
         ["audit"] = ("What admins changed", "Quản trị đã đổi gì"),
         ["activity-log"] = ("Trades, coins, drops", "Giao dịch, coin, rớt đồ"),
         ["bans"] = ("Ban accounts, mute chat", "Khóa tài khoản, cấm chat"),

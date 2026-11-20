@@ -6123,5 +6123,11 @@ namespace HNMO.GameLogic.Properties {
         /// <summary>Gets the localized HNMO Arena text.</summary>
         public static string ArenaShopPlugIn_Description => ResourceManager.GetString("ArenaShopPlugIn_Description", resourceCulture)!;
 
+        /// <summary>Gets the localized HNMO bug reports text.</summary>
+        public static string BugReportsPlugIn_Name => ResourceManager.GetString("BugReportsPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized HNMO bug reports text.</summary>
+        public static string BugReportsPlugIn_Description => ResourceManager.GetString("BugReportsPlugIn_Description", resourceCulture)!;
+
     }
 }

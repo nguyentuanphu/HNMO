@@ -1,0 +1,306 @@
+// <copyright file="BugReportsPlugIn.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.GameLogic.PlugIns.BugReports;
+
+using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using HNMO.GameLogic.PlugIns.Missions;
+using HNMO.GameLogic.PlugIns.News;
+using HNMO.Interfaces;
+using HNMO.PlugIns;
+
+/// <summary>
+/// HNMO's bug reports (owner's choice, 2026-11-20): a player sends a report from the game (the 🐞 window; up to 5 a
+/// Sydney day), the server's owner reads it on the admin panel's "Bug reports" page, sets its status, answers it (the
+/// player sees the answer in the window and when entering the game), may reward a confirmed bug with coins (the owner
+/// chooses) and may send it to the HNMO developer's Discord.
+/// </summary>
+[PlugIn]
+[Display(Name = nameof(Properties.PlugInResources.BugReportsPlugIn_Name), Description = nameof(Properties.PlugInResources.BugReportsPlugIn_Description), ResourceType = typeof(Properties.PlugInResources))]
+[Guid("5E9C1A47-2D83-4B6F-9A05-C7E3B1D84F29")]
+public sealed class BugReportsPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn, ISupportCustomConfiguration<BugReportsConfiguration>, ISupportDefaultCustomConfiguration
+{
+    /// <summary>The name in the coins history.</summary>
+    public const string GrantedBy = "HNMO bug reports";
+
+    private static readonly TimeZoneInfo Sydney = NewsStore.ResolveSydneyZone();
+
+    private readonly object _storeGate = new();
+    private BugReportStore? _store;
+    private string? _storeFile;
+
+    /// <inheritdoc />
+    public BugReportsConfiguration? Configuration { get; set; }
+
+    private BugReportsConfiguration Settings => this.Configuration ?? new BugReportsConfiguration();
+
+    private BugReportStore Store
+    {
+        get
+        {
+            // One store per file (a blank file name keeps the reports in one temporary file of this plug-in).
+            lock (this._storeGate)
+            {
+                var file = this.Settings.FileName ?? string.Empty;
+                if (this._store is null || this._storeFile != file)
+                {
+                    this._store = BugReportStore.Open(file);
+                    this._storeFile = file;
+                }
+
+                return this._store;
+            }
+        }
+    }
+
+    /// <summary>Gets the active plug-in of a game context.</summary>
+    /// <param name="gameContext">The game context.</param>
+    /// <returns>The plug-in, or <c>null</c>.</returns>
+    public static BugReportsPlugIn? Get(IGameContext? gameContext) => gameContext?.FeaturePlugIns.GetPlugIn<BugReportsPlugIn>();
+
+    /// <summary>The time in Sydney as text.</summary>
+    /// <param name="utc">The time (UTC).</param>
+    /// <returns>The text.</returns>
+    public static string SydneyText(DateTime utc) =>
+        TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(utc, DateTimeKind.Utc), Sydney).ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+
+    /// <inheritdoc />
+    public object CreateDefaultConfig() => new BugReportsConfiguration();
+
+    /// <summary>Sends a player's report.</summary>
+    /// <param name="player">The player.</param>
+    /// <param name="category">The category.</param>
+    /// <param name="text">What the player wrote.</param>
+    /// <param name="info">What the game added.</param>
+    /// <returns>The EN and VI message, and whether it was sent.</returns>
+    public (string En, string Vi, bool Sent) Submit(Player player, string? category, string? text, string? info)
+    {
+        if (player.Account?.LoginName is not { Length: > 0 } login || player.SelectedCharacter is not { } character)
+        {
+            return ("Enter the game first.", "Hãy vào game trước.", false);
+        }
+
+        var serverId = (player.GameContext as IGameServerContext)?.Id ?? 0;
+        var report = new BugReport
+        {
+            Login = login,
+            Character = character.Name ?? string.Empty,
+            Server = $"{HnmoSeasonInstance.Current} server {serverId}",
+            Place = player.CurrentMap is { } map ? $"{map.Definition.Name.ValueInNeutralLanguage} ({player.Position.X}, {player.Position.Y})" : string.Empty,
+            Category = (category ?? "other").Trim().ToLowerInvariant(),
+            Text = text ?? string.Empty,
+            Info = Clean(info),
+        };
+        var settings = this.Settings;
+        var (added, en, vi) = this.Store.Mutate(data =>
+        {
+            var result = BugReportEngine.Submit(data, report, settings, DateTime.UtcNow, Sydney);
+            return (result.Report is not null, result);
+        });
+        if (added is not null)
+        {
+            player.Logger.LogInformation("Bug report {Id} from {Login}/{Character} ({Category}).", added.Id, login, added.Character, added.Category);
+        }
+
+        return (en, vi, added is not null);
+    }
+
+    /// <summary>The window's state for a player: reports left today, the categories and the player's reports.</summary>
+    /// <param name="player">The player.</param>
+    /// <returns>The values to put in the JSON.</returns>
+    public object StateOf(Player player)
+    {
+        var login = player.Account?.LoginName ?? string.Empty;
+        var settings = this.Settings;
+        return this.Store.Read(data => new
+        {
+            left = BugReportEngine.LeftToday(data, login, settings, DateTime.UtcNow, Sydney),
+            maxLength = settings.MaxTextLength,
+            categories = BugReportEngine.Categories,
+            reward = settings.RewardConfirmedBugs && settings.RewardAmount > 0 ? $"{settings.RewardAmount} {settings.RewardCoinType}" : null,
+            mine = BugReportEngine.Mine(data, login).Select(r => new
+            {
+                id = r.Id,
+                category = r.Category,
+                text = r.Text.Length > 200 ? r.Text[..200] + "…" : r.Text,
+                status = r.Status.ToString(),
+                duplicateOf = r.DuplicateOf,
+                reply = r.Reply,
+                sent = SydneyText(r.CreatedUtc),
+                reward = r.RewardGiven,
+            }).ToList(),
+        });
+    }
+
+    /// <summary>Sets a report's status (admin panel); a confirmed or fixed bug gives its reward once, if the owner chose one.</summary>
+    /// <param name="gameContexts">The game servers of this program (the first gives the coins; the player is told on whichever they play).</param>
+    /// <param name="id">The report.</param>
+    /// <param name="status">The status.</param>
+    /// <param name="duplicateOf">For a duplicate: the report it repeats.</param>
+    /// <returns>Whether it was set.</returns>
+    public async ValueTask<bool> SetStatusAsync(IReadOnlyList<IGameContext> gameContexts, string id, BugReportStatus status, string? duplicateOf = null)
+    {
+        ArgumentNullException.ThrowIfNull(gameContexts);
+        var settings = this.Settings;
+        var report = this.Store.Mutate(data =>
+        {
+            var r = BugReportEngine.SetStatus(data, id, status, duplicateOf);
+            return (r is not null, r);
+        });
+        if (report is null)
+        {
+            return false;
+        }
+
+        if (status is BugReportStatus.Confirmed or BugReportStatus.Fixed && settings.RewardConfirmedBugs && settings.RewardAmount > 0 && report.RewardGiven == 0
+            && gameContexts.FirstOrDefault() is { } gameContext)
+        {
+            var grant = new CoinGrant(report.Login, settings.RewardCoinType, settings.RewardAmount, $"Bug report {report.Id}", $"hnmo-bug-{report.Id}-{report.CreatedUtc.Ticks}");
+            if (await MissionCoinGranter.GrantAsync(gameContext, grant, GrantedBy).ConfigureAwait(false))
+            {
+                this.Store.Mutate(data =>
+                {
+                    var saved = BugReportEngine.Find(data, report.Id);
+                    saved?.RewardGiven = settings.RewardAmount;
+                    return (saved is not null, true);
+                });
+            }
+        }
+
+        await this.TellAsync(gameContexts, report.Login).ConfigureAwait(false);
+        return true;
+    }
+
+    /// <summary>Answers a report (admin panel); the player sees it at once when online.</summary>
+    /// <param name="gameContexts">The game servers of this program.</param>
+    /// <param name="id">The report.</param>
+    /// <param name="text">The answer.</param>
+    /// <returns>Whether it was saved.</returns>
+    public async ValueTask<bool> ReplyAsync(IReadOnlyList<IGameContext> gameContexts, string id, string text)
+    {
+        var report = this.Store.Mutate(data =>
+        {
+            var r = BugReportEngine.Reply(data, id, text, DateTime.UtcNow);
+            return (r is not null, r);
+        });
+        if (report is null)
+        {
+            return false;
+        }
+
+        await this.TellAsync(gameContexts, report.Login).ConfigureAwait(false);
+        return true;
+    }
+
+    /// <summary>Sends a report to the HNMO developer's Discord (admin panel).</summary>
+    /// <param name="id">The report.</param>
+    /// <param name="licensee">Whom the server's license is for.</param>
+    /// <returns>Whether it was sent, and an error.</returns>
+    public async Task<(bool Ok, string? Error)> ForwardAsync(string id, string? licensee)
+    {
+        var settings = this.Settings;
+        if (string.IsNullOrWhiteSpace(settings.DeveloperWebhookUrl))
+        {
+            return (false, "The HNMO developer's Discord link isn't set (Plugins, Bug reports).");
+        }
+
+        if (this.Store.Read(data => BugReportEngine.Find(data, id)) is not { } report)
+        {
+            return (false, "There's no such report.");
+        }
+
+        var result = await BugReportForwarder.SendAsync(settings.DeveloperWebhookUrl, report, licensee, settings.ShareCharacterNames).ConfigureAwait(false);
+        if (result.Ok)
+        {
+            this.Store.Mutate(data =>
+            {
+                var saved = BugReportEngine.Find(data, id);
+                saved?.ForwardedUtc = DateTime.UtcNow;
+                return (saved is not null, true);
+            });
+        }
+
+        return result;
+    }
+
+    /// <summary>All reports, newest first (admin panel).</summary>
+    /// <returns>The reports.</returns>
+    public List<BugReport> All() => this.Store.Read(data => data.Reports.AsEnumerable().Reverse().ToList());
+
+    /// <summary>A player entering the game sees news about their reports.</summary>
+    /// <param name="player">The player.</param>
+    /// <param name="previousState">The previous state.</param>
+    /// <param name="currentState">The current state.</param>
+    /// <returns>The task.</returns>
+    public async ValueTask PlayerStateChangedAsync(Player player, State previousState, State currentState)
+    {
+        if (currentState == PlayerState.EnteredWorld && player.Account?.LoginName is { Length: > 0 } login)
+        {
+            await this.TellPlayerAsync(player, login).ConfigureAwait(false);
+        }
+    }
+
+    private static string Clean(string? info)
+    {
+        if (string.IsNullOrEmpty(info))
+        {
+            return string.Empty;
+        }
+
+        // The game adds plain details; nothing which looks like a password or a ticket is kept.
+        var lines = info.Split('\n').Where(l => !l.Contains("password", StringComparison.OrdinalIgnoreCase) && !l.Contains("ticket", StringComparison.OrdinalIgnoreCase));
+        return string.Join('\n', lines).Trim();
+    }
+
+    private static string StatusText(BugReport report, bool vi) => report.Status switch
+    {
+        BugReportStatus.Confirmed => vi ? "đã được xác nhận" : "was confirmed",
+        BugReportStatus.Fixed => vi ? "đã được sửa" : "is fixed",
+        BugReportStatus.NotABug => vi ? "không phải lỗi" : "isn't a bug",
+        BugReportStatus.Duplicate => vi ? $"trùng với {report.DuplicateOf}" : $"repeats {report.DuplicateOf}",
+        _ => vi ? "đang chờ xem" : "is waiting",
+    };
+
+    private async ValueTask TellAsync(IReadOnlyList<IGameContext> gameContexts, string login)
+    {
+        foreach (var gameContext in gameContexts)
+        {
+            foreach (var player in await gameContext.GetPlayersAsync().ConfigureAwait(false))
+            {
+                if (string.Equals(player.Account?.LoginName, login, StringComparison.OrdinalIgnoreCase) && player.PlayerState.CurrentState == PlayerState.EnteredWorld)
+                {
+                    await this.TellPlayerAsync(player, login).ConfigureAwait(false);
+                    return;
+                }
+            }
+        }
+    }
+
+    private async ValueTask TellPlayerAsync(Player player, string login)
+    {
+        var news = this.Store.Mutate(data =>
+        {
+            var unseen = BugReportEngine.TakeUnseen(data, login);
+            return (unseen.Count > 0, unseen);
+        });
+        var vi = player.Culture.TwoLetterISOLanguageName == "vi";
+        foreach (var report in news)
+        {
+            var text = vi ? $"Báo lỗi {report.Id} {StatusText(report, true)}." : $"Bug report {report.Id} {StatusText(report, false)}.";
+            if (report.RewardGiven > 0)
+            {
+                text += vi ? $" Thưởng: {report.RewardGiven} xu." : $" Reward: {report.RewardGiven} coins.";
+            }
+
+            if (!string.IsNullOrWhiteSpace(report.Reply))
+            {
+                text += vi ? $" Trả lời: {report.Reply}" : $" Answer: {report.Reply}";
+            }
+
+            await player.ShowBlueMessageAsync(text).ConfigureAwait(false);
+        }
+    }
+}

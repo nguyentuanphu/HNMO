@@ -1,0 +1,89 @@
+@page "/bug-reports"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.GameLogic.PlugIns.BugReports
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @L("Bug reports", "Báo lỗi")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@L("Bug reports", "Báo lỗi")" />
+<h1>@L("Bug reports", "Báo lỗi")</h1>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextBugReports" />
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else
+{
+    @if (!this._active)
+    {
+        <div class="alert alert-secondary" role="status">@L("Bug reports are off: switch on \"HNMO bug reports\" in Plugins.", "Báo lỗi đang tắt: bật \"Báo lỗi HNMO\" trong Plugins.")</div>
+    }
+
+    <div class="d-flex flex-wrap gap-2 align-items-center mb-3" id="bug-filter">
+        <label for="bug-status">@L("Show", "Hiện")</label>
+        <select id="bug-status" class="form-select form-select-sm" style="max-width: 14rem" @bind="this._filter">
+            <option value="open">@L("New and confirmed", "Mới và đã xác nhận")</option>
+            <option value="all">@L("All", "Tất cả")</option>
+            @foreach (var s in Enum.GetValues<BugReportStatus>())
+            {
+                <option value="@s">@StatusLabel(s)</option>
+            }
+        </select>
+        <span class="ms-2 text-muted">@L($"Reward for a confirmed bug: {this.RewardText}", $"Thưởng cho lỗi được xác nhận: {this.RewardText}")</span>
+        <span class="ms-2 text-muted">@(this._canForward ? L("Developer's Discord: set", "Discord nhà phát triển: đã có") : L("Developer's Discord: not set (Plugins, HNMO bug reports)", "Discord nhà phát triển: chưa có (Plugins, Báo lỗi HNMO)"))</span>
+    </div>
+
+    var shown = this.Shown().ToList();
+    @if (shown.Count == 0)
+    {
+        <p class="text-muted" id="bug-none">@L("No bug reports here.", "Không có báo lỗi nào ở đây.")</p>
+    }
+
+    @foreach (var r in shown)
+    {
+        <section class="card mb-3 bug-report" data-id="@r.Id">
+            <div class="card-body">
+                <p class="mb-1">
+                    <strong>@r.Id</strong> · <span class="badge bg-secondary">@CategoryLabel(r.Category)</span> · <span class="badge @StatusClass(r.Status)">@StatusLabel(r.Status)</span>
+                    @if (r.Status == BugReportStatus.Duplicate)
+                    {
+                        <span> @L("of", "của") @r.DuplicateOf</span>
+                    }
+                    · @BugReportsPlugIn.SydneyText(r.CreatedUtc) · @r.Login / @r.Character · @r.Server · @r.Place
+                    @if (r.RewardGiven > 0)
+                    {
+                        <span> · @L($"rewarded {r.RewardGiven}", $"đã thưởng {r.RewardGiven}")</span>
+                    }
+                    @if (r.ForwardedUtc is { } fw)
+                    {
+                        <span> · @L("sent to the developer", "đã gửi nhà phát triển") @BugReportsPlugIn.SydneyText(fw)</span>
+                    }
+                </p>
+                <p class="mb-2 bug-text" style="white-space: pre-wrap">@r.Text</p>
+                @if (r.Info.Length > 0)
+                {
+                    <details class="mb-2"><summary>@L("Details the game added", "Chi tiết game tự thêm")</summary><pre class="small mb-0">@r.Info</pre></details>
+                }
+                @if (!string.IsNullOrWhiteSpace(r.Reply))
+                {
+                    <p class="mb-2"><em>@L("Your answer:", "Bạn đã trả lời:")</em> @r.Reply</p>
+                }
+                <div class="d-flex flex-wrap gap-2">
+                    <button type="button" class="btn btn-sm btn-success" title="@L("It's a real bug (gives the reward, if one is set).", "Đúng là lỗi (trao thưởng, nếu có).")" @onclick="() => this.SetStatusAsync(r.Id, BugReportStatus.Confirmed)">@L("Confirm", "Xác nhận")</button>
+                    <button type="button" class="btn btn-sm btn-outline-success" @onclick="() => this.SetStatusAsync(r.Id, BugReportStatus.Fixed)">@L("Fixed", "Đã sửa")</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="() => this.SetStatusAsync(r.Id, BugReportStatus.NotABug)">@L("Not a bug", "Không phải lỗi")</button>
+                    <input class="form-control form-control-sm" style="max-width: 7rem" placeholder="@L("e.g. B3", "vd. B3")" @bind="this._duplicateOf[r.Id]" />
+                    <button type="button" class="btn btn-sm btn-outline-secondary" title="@L("The same bug as the report named on the left.", "Cùng lỗi với báo lỗi ghi bên trái.")" @onclick="() => this.SetStatusAsync(r.Id, BugReportStatus.Duplicate)">@L("Duplicate", "Trùng")</button>
+                    <button type="button" class="btn btn-sm btn-outline-primary ms-auto bug-forward" disabled="@(!this._canForward)"
+                            title="@L("Send this report to the HNMO developer's Discord (no login, e-mail or IP).", "Gửi báo lỗi này tới Discord của nhà phát triển HNMO (không có tài khoản, email hay IP).")"
+                            @onclick="() => this.ForwardAsync(r.Id)">@L("Send to the HNMO developer", "Gửi cho nhà phát triển HNMO")</button>
+                </div>
+                <div class="d-flex gap-2 mt-2">
+                    <input class="form-control form-control-sm bug-reply" placeholder="@L("Answer the player (they see it in the game)", "Trả lời người chơi (họ thấy trong game)")" @bind="this._replies[r.Id]" />
+                    <button type="button" class="btn btn-sm btn-primary" @onclick="() => this.ReplyAsync(r.Id)">@L("Answer", "Trả lời")</button>
+                </div>
+            </div>
+        </section>
+    }
+}

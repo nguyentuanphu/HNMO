@@ -5551,6 +5551,29 @@
       </Fields>
     </Packet>
     <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>54</SubCode>
+      <Name>HnmoBugReportCommand</Name>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client when the player opens the bug report window or sends a bug report.</SentWhen>
+      <CausedReaction>The server keeps the report for the server's owner and answers with HnmoBugReportState (F5 55).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>Byte</Type>
+          <Name>Action</Name>
+          <Description>0 = RequestState, 1 = Send.</Description>
+        </Field>
+        <Field>
+          <Index>6</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>For Send: plain-ASCII JSON with category, text and info (what the game adds: version, browser, device, recent errors); empty otherwise.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
       <SubCode>52</SubCode>

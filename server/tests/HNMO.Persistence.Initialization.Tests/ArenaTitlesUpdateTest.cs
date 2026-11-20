@@ -35,4 +35,24 @@ internal class ArenaTitlesUpdateTest
         Assert.That(tiers.Select(t => t.Id), Is.EquivalentTo(new[] { "veteran", "arena-gold", "arena-bronze", "arena-silver", "arena-platinum", "arena-diamond" }));
         Assert.That(tiers.Single(t => t.Id == "arena-gold").MinArenaRating, Is.EqualTo(1300), "the host's own setting stays");
     }
+
+    /// <summary>Settings the admin panel saved (with "$id" and "$values" markers) get the titles too.</summary>
+    /// <returns>The task.</returns>
+    [Test]
+    public async Task SettingsSavedByTheAdminPanelGetTheTitlesAsync()
+    {
+        var configuration = new HNMO.Persistence.BasicModel.GameConfiguration();
+        var plugIn = new HNMO.Persistence.BasicModel.PlugInConfiguration
+        {
+            TypeId = typeof(CustomRanksPlugIn).GUID,
+            IsActive = true,
+            CustomConfiguration = """{ "$id": "", "Enabled": true, "Tiers": { "$id": "", "$values": [ { "$id": "", "Id": "veteran", "MinLevel": 400 } ] } }""",
+        };
+        configuration.PlugInConfigurations.Add(plugIn);
+
+        await new ArenaTitlesUpdatePlugIn().ApplyUpdateAsync(new HNMO.Persistence.InMemory.InMemoryPersistenceContextProvider().CreateNewContext(), configuration).ConfigureAwait(false);
+
+        var tiers = plugIn.GetConfiguration<CustomRankConfiguration>(null)!.Tiers;
+        Assert.That(tiers.Select(t => t.Id), Is.EquivalentTo(new[] { "veteran", "arena-bronze", "arena-silver", "arena-gold", "arena-platinum", "arena-diamond" }));
+    }
 }

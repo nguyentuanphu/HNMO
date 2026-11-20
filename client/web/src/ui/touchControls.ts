@@ -43,6 +43,7 @@ const MORE: { label: string; title: string; key: string; event?: string }[] = [
   { label: '💍', title: 'Marriage', key: '', event: 'hnmo-marriage-open' },
   { label: '🏪', title: 'Item market', key: '', event: 'hnmo-market-open' },
   { label: '🏟', title: 'Arena', key: '', event: 'hnmo-arena-open' },
+  { label: '🐞', title: 'Report a bug', key: '', event: 'hnmo-bug-report-open' },
   { label: '📜', title: 'Escrow contracts', key: '', event: 'hnmo-escrow-open' },
   { label: '💎', title: 'Jewel bank', key: '', event: 'hnmo-jewel-bank-open' },
   { label: 'VIP', title: 'VIP', key: '', event: 'hnmo-vip-open' },

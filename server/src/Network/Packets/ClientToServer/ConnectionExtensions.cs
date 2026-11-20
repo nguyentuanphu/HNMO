@@ -6871,6 +6871,36 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoBugReportCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">0 = RequestState, 1 = Send.</param>
+    /// <param name="json">For Send: plain-ASCII JSON with category, text and info (what the game adds: version, browser, device, recent errors); empty otherwise.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client when the player opens the bug report window or sends a bug report.
+    /// Causes reaction on server side: The server keeps the report for the server's owner and answers with HnmoBugReportState (F5 55).
+    /// </remarks>
+    public static async ValueTask SendHnmoBugReportCommandAsync(this IConnection? connection, byte @action, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoBugReportCommandRef.GetRequiredSize(json);
+            var packet = new HnmoBugReportCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="HnmoArenaTravelRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

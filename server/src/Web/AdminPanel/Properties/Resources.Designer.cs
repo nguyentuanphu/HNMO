@@ -16201,6 +16201,13 @@ namespace HNMO.Web.AdminPanel.Properties {
         }
 
         /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextBugReports {
+            get {
+                return ResourceManager.GetString("PageHelpTextBugReports", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
         public static string AccountCoinHistoryMarketAccess {
             get {
                 return ResourceManager.GetString("AccountCoinHistoryMarketAccess", resourceCulture);
