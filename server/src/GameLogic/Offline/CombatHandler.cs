@@ -30,6 +30,12 @@ public sealed class CombatHandler
     private const int CompetitorLookupRangeFactor = 2;
 
     /// <summary>
+    /// The long range counter attack reaches up to this multiple of the hunting range (around the
+    /// player), the same limit as the self-defense against a player.
+    /// </summary>
+    private const int CounterAttackRangeFactor = 2;
+
+    /// <summary>
     /// How many levels above its own a bot may still consider a monster: without it, a level-1
     /// character (0 resets, 0 master level) could never engage anything above its nominal level.
     /// The real safety net is the damage/defense/hit-budget math below, not this ceiling, so a
@@ -109,6 +115,12 @@ public sealed class CombatHandler
 
     /// <summary>How long an unreachable target is ignored before it may be considered again.</summary>
     private static readonly TimeSpan UnreachableTargetBlacklistDuration = TimeSpan.FromSeconds(10);
+
+    /// <summary>
+    /// How long a monster's hit keeps it a target of the long range counter attack. Like the web
+    /// client's auto play: a monster that keeps attacking stays a target, one that stopped is let go.
+    /// </summary>
+    private static readonly TimeSpan CounterAttackMemory = TimeSpan.FromSeconds(5);
 
     private static readonly TargetedSkillDefaultPlugin DefaultPlugin = new();
 
@@ -290,7 +302,8 @@ public sealed class CombatHandler
         byte attackRange = this.GetEffectiveAttackRange();
         if (!this.IsTargetInAttackRange(this._currentTarget, attackRange))
         {
-            if (await this._movementHandler.MoveCloserToTargetAsync(this._currentTarget, attackRange).ConfigureAwait(false))
+            var isCounterAttack = ReferenceEquals(this._currentTarget, this.GetCounterAttackTarget());
+            if (await this._movementHandler.MoveCloserToTargetAsync(this._currentTarget, attackRange, isCounterAttack).ConfigureAwait(false))
             {
                 this._approachFailures = 0;
             }
@@ -519,6 +532,15 @@ public sealed class CombatHandler
         }
 
         var targets = this.GetAttackableTargetsInHuntingRange().ToList();
+        if (this._currentTarget is null
+            && this.GetCounterAttackTarget() is { } counterAttackTarget
+            && (counterAttackTarget.Id != this._unreachableTargetId || DateTime.UtcNow >= this._unreachableTargetUntilUtc))
+        {
+            // Long range counter attack: a monster that is hitting the player is fought back first,
+            // even when it stands outside of the hunting range (e.g. an archer shooting from afar).
+            this._currentTarget = counterAttackTarget;
+        }
+
         if (this._currentTarget is null)
         {
             // The competitor lookup is a second area-of-interest query, so it only runs when a new target
@@ -635,7 +657,28 @@ public sealed class CombatHandler
         return target.IsAlive
                && !target.IsAtSafezone()
                && !target.IsTeleporting
-               && target.IsInRange(this.OriginPosition, this.HuntingRange);
+               && (target.IsInRange(this.OriginPosition, this.HuntingRange)
+                   || ReferenceEquals(target, this.GetCounterAttackTarget()));
+    }
+
+    /// <summary>
+    /// Gets the monster to fight back against with the long range counter attack: the monster which
+    /// hit the player within the last few seconds, as long as it is a regular attackable monster and
+    /// not too far away. The hunting range does not apply to it.
+    /// </summary>
+    private Monster? GetCounterAttackTarget()
+    {
+        if (this._config?.LongRangeCounterAttack != true
+            || this._player.GetRecentMonsterAttacker(CounterAttackMemory) is not { } monster)
+        {
+            return null;
+        }
+
+        return ReferenceEquals(monster.CurrentMap, this._player.CurrentMap)
+               && this.IsMonsterAttackable(monster)
+               && monster.IsInRange(this._player.Position, this.HuntingRange * CounterAttackRangeFactor)
+            ? monster
+            : null;
     }
 
     private bool IsMonsterAttackable(Monster monster)
