@@ -122,6 +122,8 @@ export class OnboardingWindow {
     this.button.addEventListener('pointerdown', (event) => event.stopPropagation());
     document.body.append(this.button);
     window.addEventListener('resize', () => this.place());
+    // The touch HUD (mobileHud.ts) comes and goes with the body's class: the panel moves with it.
+    new MutationObserver(() => this.place()).observe(document.body, { attributes: true, attributeFilter: ['class'] });
     window.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && this.isOpen) { event.preventDefault(); this.close(); }
     });
@@ -417,6 +419,44 @@ export class OnboardingWindow {
       transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none', zIndex: '24',
     });
     doc.setScale(scale);
+    this.placeForTouch(doc, scale);
     doc.update();
+  }
+
+  /**
+   * With the touch HUD on (body.hnmo-modern-hud), a compact card on the left under the hero card: at most 260 px wide
+   * and 45% of the height, scrolling inside, clear of the joystick (bottom left) and the fight buttons (bottom right);
+   * its buttons at least 36 px. Without it, the desktop's place (the document's own style) is left as it is.
+   */
+  private placeForTouch(doc: RmlDocument, scale: number): void {
+    const panel = doc.$('#panel');
+    if (!panel) return;
+    const touch = document.body.classList.contains('hnmo-modern-hud');
+    doc.root.classList.toggle('hnmo-onboarding-touch', touch);
+    if (!doc.root.querySelector('style[data-touch]')) {
+      const style = document.createElement('style');
+      style.dataset.touch = '';
+      style.textContent = '.hnmo-onboarding-touch .ob-btn { min-height: var(--ob-touch-36); display: flex; align-items: center; justify-content: center; }'
+        + ' .hnmo-onboarding-touch .ob-scroll { max-height: none; }';
+      doc.root.append(style);
+    }
+    if (!touch) {
+      this.model.positioned = false;
+      for (const key of ['right', 'width', 'maxHeight', 'overflowY', 'pointerEvents'] as const) panel.style[key] = '';
+      return;
+    }
+    const px = (value: number) => `${value / scale}px`;
+    const top = 58;
+    // Above the chat bubble and joystick (bottom left, about 160 px tall), never more than 45% of the screen.
+    const height = Math.max(120, Math.min(window.innerHeight * 0.45, window.innerHeight - top - 160));
+    doc.root.style.setProperty('--ob-touch-36', px(36));
+    // The window shell places its frame by the model (positioned, root_x, root_y), as a dragged window.
+    this.model.positioned = true;
+    this.model.root_x = 8 / scale;
+    this.model.root_y = top / scale;
+    Object.assign(panel.style, {
+      right: 'auto', width: px(Math.min(260, window.innerWidth * 0.42)),
+      maxHeight: px(height), overflowY: 'auto', pointerEvents: 'auto',
+    });
   }
 }
