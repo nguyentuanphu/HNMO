@@ -71,7 +71,7 @@ public abstract class ItemUpgradeConsumeHandlerPlugIn : ItemModifyConsumeHandler
         var (successChance, maxOptionLevel) = this._configuration.OptionType == ItemOptionTypes.Option
             ? PlugIns.GameplayRules.RateTuningPlugIn.GetEffectiveLifeOptionSettings(this.CurrentPlayer, this._configuration.SuccessChance)
             : (this._configuration.SuccessChance, null);
-        return this.ModifyItemWithSettings(item, persistenceContext, successChance, maxOptionLevel);
+        return this.ModifyItemWithSettings(item, persistenceContext, this.GetBoostedSuccessChance(item, successChance), maxOptionLevel);
     }
 
     /// <summary>
@@ -94,7 +94,26 @@ public abstract class ItemUpgradeConsumeHandlerPlugIn : ItemModifyConsumeHandler
     /// <param name="item">The item to upgrade.</param>
     /// <returns>Flag indicating whether the item option was upgraded.</returns>
     protected virtual bool TryUpgradeItemOption(Item item) =>
-        this.TryUpgradeItemOptionWithSettings(item, this._configuration.SuccessChance, null);
+        this.TryUpgradeItemOptionWithSettings(item, this.GetBoostedSuccessChance(item, this._configuration.SuccessChance), null);
+
+    /// <summary>
+    /// Gets the success chance with the boost of the configuration (<see cref="ItemUpgradeConfiguration.BoostOptionType"/>,
+    /// <see cref="ItemUpgradeConfiguration.SuccessChanceBoost"/>), e.g. more chance for an item with luck.
+    /// </summary>
+    /// <param name="item">The item to upgrade.</param>
+    /// <param name="successChance">The success chance without the boost.</param>
+    /// <returns>The success chance, at most 1.</returns>
+    internal double GetBoostedSuccessChance(Item item, double successChance)
+    {
+        if (this._configuration.BoostOptionType is not { } boostType || this._configuration.SuccessChanceBoost <= 0)
+        {
+            return successChance;
+        }
+
+        return item.ItemOptions.Any(o => o.ItemOption?.OptionType == boostType)
+            ? Math.Min(1.0, successChance + this._configuration.SuccessChanceBoost)
+            : successChance;
+    }
 
     private ItemUpgradeConfiguration NormalizeConfiguration(ItemUpgradeConfiguration? configuration)
     {
