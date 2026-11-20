@@ -221,6 +221,18 @@ public sealed class ArenaConfiguration
     [Range(0, 1000)]
     public int GuildWarPointsLoss { get; set; } = 4;
 
+    /// <summary>Gets or sets the guild experience of the winning guild of a guild war (owner's choice 2026-11-21: 500).</summary>
+    [Range(0, 1000000)]
+    public int GuildWarXpWin { get; set; } = 500;
+
+    /// <summary>Gets or sets the guild experience of the losing guild, and of both in a draw (owner's choice: 150).</summary>
+    [Range(0, 1000000)]
+    public int GuildWarXpLoss { get; set; } = 150;
+
+    /// <summary>Gets or sets the extra guild experience of the week's guild war champion (owner's choice: 1000).</summary>
+    [Range(0, 1000000)]
+    public int GuildWarXpChampion { get; set; } = 1000;
+
     /// <summary>The battle royale's match settings.</summary>
     /// <returns>The settings.</returns>
     public ArenaRoyaleEngine.Settings RoyaleSettings() =>

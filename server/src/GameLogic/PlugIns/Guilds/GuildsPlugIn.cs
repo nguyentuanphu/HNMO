@@ -267,6 +267,7 @@ public class GuildsPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn, IMi
             if (serverId == Contexts.Keys.Min())
             {
                 await this.PayWeeksAsync(gameContext, now).ConfigureAwait(false);
+                this.TakeArenaGuildXp(engine, now, gameContext.LoggerFactory.CreateLogger<GuildsPlugIn>());
             }
 
             this.Save();
@@ -283,6 +284,34 @@ public class GuildsPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn, IMi
 
     /// <inheritdoc />
     public void ForceStart() => this._nextTickUtc = DateTime.UtcNow;
+
+    /// <summary>
+    /// Credits the guild experience the Arena's guild war owes (owner's choice, 2026-11-21): only Season 6.3 holds the
+    /// guilds the Arena fights for; each owed row is taken once.
+    /// </summary>
+    /// <param name="engine">The guild engine.</param>
+    /// <param name="nowUtc">The moment.</param>
+    /// <param name="logger">The logger.</param>
+    internal void TakeArenaGuildXp(GuildEngine engine, DateTime nowUtc, ILogger logger)
+    {
+        if (HNMO.Interfaces.HnmoSeasonInstance.IsSecondary || Persistence.ArenaShared.Current is not { } shared)
+        {
+            return;
+        }
+
+        try
+        {
+            foreach (var (reference, guildId, guildName, xp, reason) in shared.ClaimGuildXp(50))
+            {
+                var result = engine.AddXp(guildId, guildName, null, null, GuildXpSource.CastleSiege, xp, nowUtc);
+                logger.LogInformation("Guilds: {Guild} got {Xp} guild experience from the Arena ({Reason}, {Reference}).", guildName, result.Granted, reason, reference);
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "Guilds: the Arena's guild experience couldn't be taken now; the next tick tries again.");
+        }
+    }
 
     /// <inheritdoc />
     public async ValueTask AttackableGotKilledAsync(IAttackable killed, IAttacker? killer)

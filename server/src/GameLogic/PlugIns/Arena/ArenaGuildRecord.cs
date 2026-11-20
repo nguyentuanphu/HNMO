@@ -10,6 +10,9 @@ public sealed class ArenaGuildRecord
     /// <summary>Gets or sets the guild's name.</summary>
     public string Name { get; set; } = string.Empty;
 
+    /// <summary>Gets or sets the guild's id on Season 6.3 (for its guild experience).</summary>
+    public Guid GuildId { get; set; }
+
     /// <summary>Gets or sets the wins of all time.</summary>
     public int Wins { get; set; }
 

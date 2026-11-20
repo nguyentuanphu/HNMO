@@ -315,6 +315,7 @@ public sealed class ArenaGuildWar
         try
         {
             var now = DateTime.UtcNow;
+            this.PayChampion(now, logger);
             (string En, string Vi)? broadcast = null;
             Dictionary<Guid, Signup>? starting = null;
             Match? finish = null;
@@ -432,6 +433,41 @@ public sealed class ArenaGuildWar
         }
     }
 
+    /// <summary>
+    /// Once a Sydney week is over, its guild war champion (most wins) gets the champion's guild experience, once.
+    /// </summary>
+    /// <param name="nowUtc">The moment.</param>
+    /// <param name="logger">The logger.</param>
+    internal void PayChampion(DateTime nowUtc, ILogger logger)
+    {
+        var lastWeek = ArenaRanking.WeekKey(nowUtc.AddDays(-7));
+        var thisWeek = ArenaRanking.WeekKey(nowUtc);
+        var champion = this._store.Mutate(d =>
+        {
+            if (d.ChampionPaidWeek == lastWeek || d.ChampionPaidWeek == thisWeek)
+            {
+                return (false, (ArenaGuildRecord?)null);
+            }
+
+            d.ChampionPaidWeek = lastWeek;
+            var best = d.Guilds.Values.Where(g => g.Week == lastWeek && g.WeekWins > 0)
+                .OrderByDescending(g => g.WeekWins).ThenBy(g => g.WeekLosses).ThenBy(g => g.Name, StringComparer.Ordinal).FirstOrDefault();
+            return (true, best);
+        });
+        if (champion is { GuildId: var id } && id != Guid.Empty && this._configuration.GuildWarXpChampion > 0 && Persistence.ArenaShared.Current is { } shared)
+        {
+            try
+            {
+                shared.OweGuildXp($"guildwar-champion:{lastWeek}", id, champion.Name, this._configuration.GuildWarXpChampion, "guild war champion of the week");
+                logger.LogInformation("Arena: {Guild} is the guild war champion of {Week}.", champion.Name, lastWeek);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Arena: the champion's guild experience couldn't be saved to the shared database.");
+            }
+        }
+    }
+
     private static string Score(Match match) => $"{match.GuildA} {match.ScoreA} : {match.ScoreB} {match.GuildB}";
 
     private static string SydneyText(DateTime utc, bool withDay = false) =>
@@ -485,6 +521,7 @@ public sealed class ArenaGuildWar
     private async ValueTask PlanAsync(Dictionary<Guid, Signup> signups, ArenaTeams teams, ArenaRoyale royale, ILogger logger)
     {
         var cfg = this._configuration;
+        var ids = signups.ToDictionary(e => e.Value.Name, e => e.Key);
         var ready = signups.Values
             .Select(s => (s.Name, Players: s.Players.Where(p => p.IsConnected && p.PlayerState.CurrentState == PlayerState.EnteredWorld && teams.SideOf(p) == 0 && !royale.IsFighter(p)).Take(cfg.GuildWarMaxMembers).ToList(), All: s.Players))
             .ToList();
@@ -495,7 +532,7 @@ public sealed class ArenaGuildWar
         {
             foreach (var (a, b) in pairs)
             {
-                this._pending.Add(new PendingMatch(a, enough.First(r => r.Name == a).Players, b, enough.First(r => r.Name == b).Players));
+                this._pending.Add(new PendingMatch(a, ids[a], enough.First(r => r.Name == a).Players, b, ids[b], enough.First(r => r.Name == b).Players));
             }
         }
 
@@ -526,6 +563,9 @@ public sealed class ArenaGuildWar
         ArenaGuildWarEngine.TryParseFlags(cfg.GuildWarFlags, out var flagTiles);
         var match = new Match(pending.GuildA, pending.GuildB, DateTime.UtcNow + TimeSpan.FromMinutes(cfg.GuildWarMinutes))
         {
+            GuildIdA = pending.GuildIdA,
+            GuildIdB = pending.GuildIdB,
+            StartUtc = DateTime.UtcNow,
             Flags = flagTiles.Select(f => new ArenaGuildWarEngine.Flag(f.X, f.Y)).ToList(),
         };
         foreach (var p in pending.PlayersA.Where(p => p.IsConnected))
@@ -615,6 +655,8 @@ public sealed class ArenaGuildWar
                     d.Guilds[name] = record;
                 }
 
+                record.GuildId = name == match.GuildA ? match.GuildIdA : match.GuildIdB;
+
                 if (record.Week != week)
                 {
                     record.Week = week;
@@ -640,6 +682,26 @@ public sealed class ArenaGuildWar
 
             return (true, 0);
         });
+
+        // Guild experience for both guilds, credited by Season 6.3 (owner's choice: win 500, loss or draw 150).
+        if (Persistence.ArenaShared.Current is { } owed)
+        {
+            try
+            {
+                foreach (var (id, name, won) in new[] { (match.GuildIdA, match.GuildA, match.Winner > 0), (match.GuildIdB, match.GuildB, match.Winner < 0) })
+                {
+                    var xp = won ? cfg.GuildWarXpWin : cfg.GuildWarXpLoss;
+                    if (xp > 0 && id != Guid.Empty)
+                    {
+                        owed.OweGuildXp($"guildwar:{match.StartUtc:O}:{id}", id, name, xp, won ? "guild war won" : "guild war fought");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Arena: the guild war's guild experience couldn't be saved to the shared database.");
+            }
+        }
 
         var day = ArenaRanking.SydneyDay(nowUtc);
         List<(Player Player, int Side)> fighters;
@@ -699,13 +761,19 @@ public sealed class ArenaGuildWar
         public List<Player> Players { get; } = [];
     }
 
-    private sealed record PendingMatch(string GuildA, List<Player> PlayersA, string GuildB, List<Player> PlayersB);
+    private sealed record PendingMatch(string GuildA, Guid GuildIdA, List<Player> PlayersA, string GuildB, Guid GuildIdB, List<Player> PlayersB);
 
     private sealed class Match(string guildA, string guildB, DateTime endsUtc)
     {
         public string GuildA { get; } = guildA;
 
         public string GuildB { get; } = guildB;
+
+        public Guid GuildIdA { get; init; }
+
+        public Guid GuildIdB { get; init; }
+
+        public DateTime StartUtc { get; init; }
 
         public Dictionary<Player, int> Sides { get; } = [];
 

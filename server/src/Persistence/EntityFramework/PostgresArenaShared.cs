@@ -25,6 +25,14 @@ public sealed class PostgresArenaShared : IArenaShared
             "Times" text NOT NULL DEFAULT '',
             "NextStartUtc" timestamp with time zone NULL,
             "UpdatedUtc" timestamp with time zone NOT NULL);
+        CREATE TABLE IF NOT EXISTS data."HnmoArenaGuildXp" (
+            "Reference" text PRIMARY KEY,
+            "GuildId" uuid NOT NULL,
+            "GuildName" text NOT NULL,
+            "Xp" integer NOT NULL,
+            "Reason" text NOT NULL DEFAULT '',
+            "CreatedUtc" timestamp with time zone NOT NULL,
+            "ClaimedUtc" timestamp with time zone NULL);
         """;
 
     private readonly string _connectionString;
@@ -204,6 +212,48 @@ public sealed class PostgresArenaShared : IArenaShared
                 reader.GetString(2),
                 reader.IsDBNull(3) ? null : DateTime.SpecifyKind(reader.GetDateTime(3), DateTimeKind.Utc),
                 DateTime.SpecifyKind(reader.GetDateTime(4), DateTimeKind.Utc)));
+        }
+
+        return result;
+    }
+
+    /// <inheritdoc />
+    public void OweGuildXp(string reference, Guid guildId, string guildName, int xp, string reason)
+    {
+        using var connection = this.Open();
+        using var command = new NpgsqlCommand(
+            """
+            INSERT INTO data."HnmoArenaGuildXp" ("Reference", "GuildId", "GuildName", "Xp", "Reason", "CreatedUtc")
+            VALUES (@reference, @guild, @name, @xp, @reason, @now) ON CONFLICT ("Reference") DO NOTHING
+            """,
+            connection);
+        command.Parameters.AddWithValue("reference", reference);
+        command.Parameters.AddWithValue("guild", guildId);
+        command.Parameters.AddWithValue("name", guildName);
+        command.Parameters.AddWithValue("xp", xp);
+        command.Parameters.AddWithValue("reason", reason);
+        command.Parameters.AddWithValue("now", DateTime.UtcNow);
+        command.ExecuteNonQuery();
+    }
+
+    /// <inheritdoc />
+    public IReadOnlyList<(string Reference, Guid GuildId, string GuildName, int Xp, string Reason)> ClaimGuildXp(int max)
+    {
+        using var connection = this.Open();
+        using var command = new NpgsqlCommand(
+            """
+            UPDATE data."HnmoArenaGuildXp" SET "ClaimedUtc" = @now
+            WHERE "Reference" IN (SELECT "Reference" FROM data."HnmoArenaGuildXp" WHERE "ClaimedUtc" IS NULL ORDER BY "CreatedUtc" LIMIT @max FOR UPDATE SKIP LOCKED)
+            RETURNING "Reference", "GuildId", "GuildName", "Xp", "Reason"
+            """,
+            connection);
+        command.Parameters.AddWithValue("now", DateTime.UtcNow);
+        command.Parameters.AddWithValue("max", max);
+        using var reader = command.ExecuteReader();
+        var result = new List<(string, Guid, string, int, string)>();
+        while (reader.Read())
+        {
+            result.Add((reader.GetString(0), reader.GetGuid(1), reader.GetString(2), reader.GetInt32(3), reader.GetString(4)));
         }
 
         return result;

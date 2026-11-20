@@ -64,4 +64,19 @@ public interface IArenaShared
     /// <summary>Gets the Arena's scheduled battles as last published (only those published in the last ten minutes: the Arena runs).</summary>
     /// <returns>The battles.</returns>
     IReadOnlyList<ArenaScheduleEntry> Schedules() => [];
+
+    /// <summary>Owes guild experience to a Season 6.3 guild (the guild war); kept once per reference.</summary>
+    /// <param name="reference">The reference (paid once).</param>
+    /// <param name="guildId">The guild.</param>
+    /// <param name="guildName">The guild's name.</param>
+    /// <param name="xp">The experience.</param>
+    /// <param name="reason">Why (shown in the logs).</param>
+    void OweGuildXp(string reference, Guid guildId, string guildName, int xp, string reason)
+    {
+    }
+
+    /// <summary>Takes the guild experience owed and not taken yet (each row is taken once, by one program).</summary>
+    /// <param name="max">The most rows to take.</param>
+    /// <returns>The rows taken.</returns>
+    IReadOnlyList<(string Reference, Guid GuildId, string GuildName, int Xp, string Reason)> ClaimGuildXp(int max) => [];
 }

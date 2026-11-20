@@ -147,6 +147,16 @@ public partial class ArenaSettings : ComponentBase
             errors.Add(L("Battle royale times: write them as HH:mm, separated by commas (Sydney time).", "Giờ đấu sinh tồn: ghi dạng HH:mm, cách nhau bằng dấu phẩy (giờ Sydney)."));
         }
 
+        if (!ArenaGuildWarEngine.TryParseDays(configuration.GuildWarDays, out _) || !WorldBossSchedule.TryParseTimes(configuration.GuildWarTimes, out _))
+        {
+            errors.Add(L("Guild war: days like \"Sat, Sun\" and times like \"21:00\".", "Bang chiến: ngày như \"Sat, Sun\" và giờ như \"21:00\"."));
+        }
+
+        if (configuration.GuildWarMinMembers > configuration.GuildWarMaxMembers)
+        {
+            errors.Add(L("Guild war: the fewest members can't be more than the most.", "Bang chiến: số người tối thiểu không được lớn hơn tối đa."));
+        }
+
         if (configuration.TeamMinSize > configuration.TeamSize || configuration.RoyaleMinPlayers > configuration.RoyaleMaxPlayers)
         {
             errors.Add(L("The fewest players can't be more than the most.", "Số người tối thiểu không được lớn hơn tối đa."));

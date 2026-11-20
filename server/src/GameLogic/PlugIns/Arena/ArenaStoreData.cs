@@ -12,4 +12,7 @@ public sealed class ArenaStoreData
 
     /// <summary>Gets or sets the guild war records, by guild name.</summary>
     public Dictionary<string, ArenaGuildRecord> Guilds { get; set; } = [];
+
+    /// <summary>Gets or sets the Sydney week whose guild war champion got its guild experience.</summary>
+    public string ChampionPaidWeek { get; set; } = string.Empty;
 }
