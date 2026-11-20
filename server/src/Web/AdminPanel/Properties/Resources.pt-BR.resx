@@ -1504,6 +1504,9 @@
   <data name="ItemDropDurationSeconds" xml:space="preserve">
     <value>Duração da queda do item (segundos)</value>
   </data>
+  <data name="MoneyDropDurationSeconds" xml:space="preserve">
+    <value>Duração do zen no chão (segundos)</value>
+  </data>
   <data name="ItemDrops" xml:space="preserve">
     <value>Quedas de itens</value>
   </data>

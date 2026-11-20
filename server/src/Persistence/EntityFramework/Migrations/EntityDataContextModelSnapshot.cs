@@ -1860,6 +1860,11 @@ namespace HNMO.Persistence.EntityFramework.Migrations
                     b.Property<byte>("MinimumMonsterLevelForMasterExperience")
                         .HasColumnType("smallint");
 
+                    b.Property<TimeSpan>("MoneyDropDuration")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("interval")
+                        .HasDefaultValue(new TimeSpan(0, 0, 0, 15, 0));
+
                     b.Property<bool>("PreventExperienceOverflow")
                         .HasColumnType("boolean");
 

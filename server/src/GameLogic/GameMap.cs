@@ -53,6 +53,7 @@ public class GameMap
         this.Id = Guid.NewGuid();
         this.Definition = mapDefinition;
         this.ItemDropDuration = itemDropDuration;
+        this.MoneyDropDuration = itemDropDuration;
         this.Terrain = new GameMapTerrain(this.Definition);
 
         this._areaOfInterestManager = new BucketAreaOfInterestManager(chunkSize);
@@ -91,6 +92,12 @@ public class GameMap
     /// Gets the duration about how long drops are laying on the ground until they are disappearing.
     /// </summary>
     public TimeSpan ItemDropDuration { get; }
+
+    /// <summary>
+    /// Gets or sets the duration about how long dropped money (zen) is laying on the ground until it disappears.
+    /// It is the <see cref="ItemDropDuration"/> unless the game configuration sets its own.
+    /// </summary>
+    public TimeSpan MoneyDropDuration { get; set; }
 
     /// <summary>
     /// Gets the definition of the map.

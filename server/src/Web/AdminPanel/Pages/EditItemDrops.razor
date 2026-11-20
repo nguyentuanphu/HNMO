@@ -48,6 +48,12 @@
                    @bind:set="@(value => gameConfiguration.ItemDropDuration = TimeSpan.FromSeconds(Math.Max(1, value)))" />
         </div>
         <div class="col-md-3">
+            <label for="moneyDropDuration" class="form-label">@Resources.MoneyDropDurationSeconds</label>
+            <input id="moneyDropDuration" type="number" class="form-control form-control-sm" min="1"
+                   @bind:get="gameConfiguration.MoneyDropDuration.TotalSeconds"
+                   @bind:set="@(value => gameConfiguration.MoneyDropDuration = TimeSpan.FromSeconds(Math.Max(1, value)))" />
+        </div>
+        <div class="col-md-3">
             <label for="maximumItemOptionLevelDrop" class="form-label" title="@Resources.MaximumItemOptionLevelDropHint">@Resources.MaximumItemOptionLevelDrop</label>
             <input id="maximumItemOptionLevelDrop" type="number" class="form-control form-control-sm" min="1" max="4" @bind="gameConfiguration.MaximumItemOptionLevelDrop" />
         </div>

@@ -187,6 +187,12 @@ public partial class GameConfiguration
     public TimeSpan ItemDropDuration { get; set; }
 
     /// <summary>
+    /// Gets or sets the duration of money (zen) drops on the ground.
+    /// </summary>
+    /// <remarks>Default value is 15 seconds (Season 9 server suites).</remarks>
+    public TimeSpan MoneyDropDuration { get; set; }
+
+    /// <summary>
     /// Gets or sets the maximum droppable item option level.
     /// </summary>
     /// <remarks>Default value is 3.</remarks>

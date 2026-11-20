@@ -21,7 +21,7 @@ namespace HNMO.Persistence.EntityFramework.CompiledModels.ForPlugInConfiguration
                 "HNMO.Persistence.EntityFramework.Model.GameConfiguration",
                 typeof(HNMO.Persistence.EntityFramework.Model.GameConfiguration),
                 baseEntityType,
-                propertyCount: 33,
+                propertyCount: 34,
                 navigationCount: 1,
                 keyCount: 1);
 
@@ -275,6 +275,16 @@ namespace HNMO.Persistence.EntityFramework.CompiledModels.ForPlugInConfiguration
                 fieldInfo: typeof(HNMO.DataModel.Configuration.GameConfiguration).GetField("<MinimumMonsterLevelForMasterExperience>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 sentinel: (byte)0);
             minimumMonsterLevelForMasterExperience.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+
+            var moneyDropDuration = runtimeEntityType.AddProperty(
+                "MoneyDropDuration",
+                typeof(TimeSpan),
+                propertyInfo: typeof(HNMO.DataModel.Configuration.GameConfiguration).GetProperty("MoneyDropDuration", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(HNMO.DataModel.Configuration.GameConfiguration).GetField("<MoneyDropDuration>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                valueGenerated: ValueGenerated.OnAdd,
+                sentinel: new TimeSpan(0, 0, 0, 0, 0));
+            moneyDropDuration.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+            moneyDropDuration.AddAnnotation("Relational:DefaultValue", new TimeSpan(0, 0, 0, 15, 0));
 
             var preventExperienceOverflow = runtimeEntityType.AddProperty(
                 "PreventExperienceOverflow",
