@@ -107,6 +107,12 @@ public class RageSkillAttackAction
             return;
         }
 
+        // Dark Side pays its mana and AG here: the client sends no other skill request for it.
+        if (!await player.TryConsumeForSkillAsync(skill).ConfigureAwait(false))
+        {
+            return;
+        }
+
         if (explicitTarget is null)
         {
             await player.ForEachWorldObserverAsync<IShowRageAttackPlugIn>(p => p.ShowAttackAsync(player, targets.First(), skillId), true).ConfigureAwait(false);
