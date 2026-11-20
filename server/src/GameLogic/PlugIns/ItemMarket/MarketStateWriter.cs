@@ -113,6 +113,7 @@ public static class MarketStateWriter
         {
             v = 1,
             enabled = engine.Enabled,
+            accessPaid = string.IsNullOrWhiteSpace(loginName) ? (bool?)null : engine.HasAccess(loginName),
             allowWebsite = cfg.AllowWebsite,
             now = ToMs(utcNow),
             rules = new
@@ -122,6 +123,8 @@ public static class MarketStateWriter
                 allowWCoinP = cfg.AllowWCoinP,
                 allowGoblinPoints = cfg.AllowGoblinPoints,
                 feePercent = cfg.FeePercent,
+                accessFee = cfg.AccessFee,
+                accessCoin = cfg.AccessFeeCoinType.ToString(),
                 listingZenFee = cfg.ListingZenFee,
                 maxListings = cfg.MaxListingsPerAccount,
             },

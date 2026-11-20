@@ -50,6 +50,7 @@ export const accountPageTexts = {
   giftPurchaseReason: ['Gift for {0}: {1}', 'Tặng {0}: {1}'],
   coinExtraVault: ['Extra vault purchase', 'Mua thêm rương'],
   coinStackUnlock: ['Item stack unlock', 'Mở khoá chồng đồ'],
+  coinMarketAccess: ['Market access', 'Phí vào chợ'],
   coinMarketPurchase: ['Item market purchase', 'Mua vật phẩm ở chợ'],
   coinMarketSale: ['Item market sale', 'Bán vật phẩm ở chợ'],
   coinPlayerStorePurchase: ['Player store purchase from {0}', 'Mua tại cửa hàng của {0}'],

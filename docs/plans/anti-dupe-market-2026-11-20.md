@@ -41,3 +41,14 @@
   market was refused in the game with the EN notice, and after "Mark decided" the same listing went through.
 - **Gap:** an item made during a session and copied in the same session (before any scan or the next login) has no
   serial yet, so its copy isn't found. Copies of items older than the last scan or login are.
+
+## Market access fee and tax: done (2026-11-20, Sydney)
+
+- `MarketConfiguration.AccessFee` (1,000) and `AccessFeeCoinType` (WCoinC), set in the admin panel; 0 makes the
+  market free. Paid once per account with the market window's "Unlock market" button (packet action `PayAccess` = 6),
+  with a coin receipt "Market access"; the paid accounts are kept in the market's state (`AccessPaid`).
+- Listing and buying in the game are refused until it's paid; the website's buy answers `access` (pay in the game).
+- The 5% sale tax is the existing `FeePercent` (5), now called a tax in the window and the guide; the 10,000 zen listing
+  fee stays.
+- Checked live on PostgreSQL: test2 (1,500 WCoinC) was refused when listing, unlocked the market (500 left), then the
+  same listing went through. `MarketControllerTests` checks the website refusal.

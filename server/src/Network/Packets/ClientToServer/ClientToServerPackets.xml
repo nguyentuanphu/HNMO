@@ -5202,6 +5202,11 @@
               <Description>Claim bought/returned items into bag and collect pending Zen payouts.</Description>
               <Value>5</Value>
             </EnumValue>
+            <EnumValue>
+              <Name>PayAccess</Name>
+              <Description>Pay the market's one-off access fee for this account.</Description>
+              <Value>6</Value>
+            </EnumValue>
           </Values>
         </Enum>
       </Enums>

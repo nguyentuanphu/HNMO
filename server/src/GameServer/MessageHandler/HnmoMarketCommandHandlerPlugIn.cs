@@ -67,6 +67,9 @@ internal sealed class HnmoMarketCommandHandlerPlugIn : ISubPacketHandlerPlugIn
             case HnmoMarketCommand.HnmoMarketActionType.Claim:
                 await plugIn.ClaimAsync(player).ConfigureAwait(false);
                 break;
+            case HnmoMarketCommand.HnmoMarketActionType.PayAccess:
+                await plugIn.PayAccessAsync(player).ConfigureAwait(false);
+                break;
         }
     }
 }

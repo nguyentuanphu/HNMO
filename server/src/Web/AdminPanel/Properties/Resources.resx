@@ -5182,4 +5182,7 @@ On your account page, open Security and paste this code to confirm your new emai
   <data name="PageHelpTextDuplicateItems" xml:space="preserve">
     <value>Items which share one origin serial (a possible duplicate) are listed here; the hourly scan freezes them. Check the owners, remove the copies you don't want in the account editor, then mark the case decided.</value>
   </data>
+  <data name="AccountCoinHistoryMarketAccess" xml:space="preserve">
+    <value>Item market access</value>
+  </data>
 </root>

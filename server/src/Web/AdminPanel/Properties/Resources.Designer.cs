@@ -16199,5 +16199,12 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("PageHelpTextDuplicateItems", resourceCulture);
             }
         }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string AccountCoinHistoryMarketAccess {
+            get {
+                return ResourceManager.GetString("AccountCoinHistoryMarketAccess", resourceCulture);
+            }
+        }
     }
 }

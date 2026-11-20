@@ -48,7 +48,17 @@ public sealed class MarketConfiguration
     /// <summary>Gets or sets a value indicating whether Goblin Points listings are permitted.</summary>
     public bool AllowGoblinPoints { get; set; } = true;
 
-    /// <summary>Gets or sets the percentage fee charged on completed sales (deducted from seller payout).</summary>
+    /// <summary>
+    /// Gets or sets the one-off fee an account pays before it can buy or sell on the market (0: free). Owner's choice
+    /// 2026-11-20: 1,000 W Coin (C).
+    /// </summary>
+    [Range(0, 1_000_000)]
+    public int AccessFee { get; set; } = 1_000;
+
+    /// <summary>Gets or sets the coin the access fee is paid in.</summary>
+    public CashShopCoinType AccessFeeCoinType { get; set; } = CashShopCoinType.WCoinC;
+
+    /// <summary>Gets or sets the tax in percent on every sale (deducted from the seller's payout).</summary>
     [Range(0, 50)]
     public double FeePercent { get; set; } = 5.0;
 

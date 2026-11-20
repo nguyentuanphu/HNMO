@@ -21,6 +21,9 @@ public sealed class MarketStoreData
     /// <summary>Gets or sets net Zen payouts awaiting collection.</summary>
     public List<MarketPendingZen> PendingZen { get; set; } = [];
 
+    /// <summary>Gets or sets the accounts (login names) which paid the access fee.</summary>
+    public List<string> AccessPaid { get; set; } = [];
+
     /// <summary>Gets or sets newest-first audit log entries.</summary>
     public List<MarketAuditEntry> AuditLog { get; set; } = [];
 }

@@ -6,6 +6,7 @@ namespace HNMO.GameLogic.PlugIns.ItemMarket;
 
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Threading;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Configuration.Items;
 using HNMO.GameLogic.Administration;
@@ -35,6 +36,7 @@ public sealed class MarketPlugIn :
     ISupportDefaultCustomConfiguration,
     IDisabledByDefault
 {
+    private readonly SemaphoreSlim _accessGate = new(1, 1);
     private (MarketConfiguration Config, MarketEngine Engine)? _engine;
     private DateTime _lastExpireUtc = DateTime.MinValue;
 
@@ -176,6 +178,11 @@ public sealed class MarketPlugIn :
             return;
         }
 
+        if (!await this.EnsureAccessAsync(player, engine, login).ConfigureAwait(false))
+        {
+            return;
+        }
+
         var item = player.Inventory.GetItem(slot);
         if (item?.Definition is null || slot < InventoryConstants.EquippableSlotsCount || slot >= InventoryConstants.FirstStoreItemSlotIndex)
         {
@@ -277,6 +284,11 @@ public sealed class MarketPlugIn :
 
         var engine = this.GetEngine();
         if (!await this.EnsureSafeZoneAsync(player, engine).ConfigureAwait(false))
+        {
+            return;
+        }
+
+        if (!await this.EnsureAccessAsync(player, engine, login).ConfigureAwait(false))
         {
             return;
         }
@@ -421,6 +433,56 @@ public sealed class MarketPlugIn :
         await this.NotifyAsync(player, bagFull ? "BagFull" : "Claimed", en, vi).ConfigureAwait(false);
     }
 
+    /// <summary>Pays the market's one-off access fee for the player's account.</summary>
+    /// <param name="player">The player.</param>
+    /// <returns>A task representing the payment.</returns>
+    public async ValueTask PayAccessAsync(Player player)
+    {
+        if (player.Account is not { LoginName: { Length: > 0 } login } account)
+        {
+            return;
+        }
+
+        var engine = this.GetEngine();
+        var cfg = engine.Configuration;
+        if (engine.HasAccess(login))
+        {
+            await this.NotifyAsync(player, "AccessPaid", "Your account can already buy and sell on the market.", "Tài khoản của bạn đã được mua bán ở chợ.").ConfigureAwait(false);
+            return;
+        }
+
+        var fee = cfg.AccessFee;
+        await this._accessGate.WaitAsync().ConfigureAwait(false);
+        try
+        {
+            await player.ApplyPendingCashShopCoinGrantsAsync().ConfigureAwait(false);
+            var balance = account.GetCashShopCoins(cfg.AccessFeeCoinType);
+            if (balance < fee)
+            {
+                await this.NotifyAsync(player, "AccessNotEnough", $"The market access costs {fee:N0} {cfg.AccessFeeCoinType}; you have {balance:N0}.", $"Phí vào chợ là {fee:N0} {cfg.AccessFeeCoinType}; bạn có {balance:N0}.").ConfigureAwait(false);
+                return;
+            }
+
+            account.SetCashShopCoins(cfg.AccessFeeCoinType, balance - fee);
+            CashShopBalanceReceipt.Record(player.PersistenceContext, account, cfg.AccessFeeCoinType, -fee, CashShopBalanceReason.MarketAccess);
+            if (!await player.SaveProgressAsync().ConfigureAwait(false))
+            {
+                // Nothing is bought when the payment couldn't be saved: the coins go back.
+                account.SetCashShopCoins(cfg.AccessFeeCoinType, account.GetCashShopCoins(cfg.AccessFeeCoinType) + fee);
+                await this.NotifyAsync(player, "AccessFailed", "The payment couldn't be saved; no coins were taken. Please try again.", "Không lưu được giao dịch, chưa trừ xu. Vui lòng thử lại.").ConfigureAwait(false);
+                return;
+            }
+
+            engine.GrantAccess(login);
+        }
+        finally
+        {
+            this._accessGate.Release();
+        }
+
+        await this.NotifyAsync(player, "AccessPaid", $"Market unlocked for your account ({fee:N0} {cfg.AccessFeeCoinType}). Every sale pays a {cfg.FeePercent:0.#}% tax.", $"Đã mở chợ cho tài khoản ({fee:N0} {cfg.AccessFeeCoinType}). Mỗi lần bán đóng thuế {cfg.FeePercent:0.#}%.").ConfigureAwait(false);
+    }
+
     /// <inheritdoc />
     public void ForceStart()
     {
@@ -524,6 +586,18 @@ public sealed class MarketPlugIn :
         }
 
         return true;
+    }
+
+    private async ValueTask<bool> EnsureAccessAsync(Player player, MarketEngine engine, string login)
+    {
+        if (engine.HasAccess(login))
+        {
+            return true;
+        }
+
+        var cfg = engine.Configuration;
+        await this.NotifyAsync(player, "AccessRequired", $"Unlock the market first: a one-off {cfg.AccessFee:N0} {cfg.AccessFeeCoinType} for your account.", $"Hãy mở chợ trước: phí một lần {cfg.AccessFee:N0} {cfg.AccessFeeCoinType} cho tài khoản.").ConfigureAwait(false);
+        return false;
     }
 
     private async ValueTask<bool> EnsureSafeZoneAsync(Player player, MarketEngine engine)

@@ -33,3 +33,4 @@ Item market command action.
 | 3 | Buy | Atomically purchase a listing. |
 | 4 | Cancel | Cancel your own listing and return item to escrow claim. |
 | 5 | Claim | Claim bought/returned items into bag and collect pending Zen payouts. |
+| 6 | PayAccess | Pay the market's one-off access fee for this account. |

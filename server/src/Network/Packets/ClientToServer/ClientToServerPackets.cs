@@ -20446,6 +20446,11 @@ public readonly struct HnmoMarketCommand
         /// Claim bought/returned items into bag and collect pending Zen payouts.
         /// </summary>
             Claim = 5,
+
+        /// <summary>
+        /// Pay the market's one-off access fee for this account.
+        /// </summary>
+            PayAccess = 6,
     }
 
     private readonly Memory<byte> _data;

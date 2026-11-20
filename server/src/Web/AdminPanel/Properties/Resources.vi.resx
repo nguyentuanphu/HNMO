@@ -5222,4 +5222,7 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   <data name="PageHelpTextDuplicateItems" xml:space="preserve">
     <value>Các vật phẩm cùng một số serial gốc (có thể là đồ nhân bản) được liệt kê ở đây; lần quét mỗi giờ đóng băng chúng. Kiểm tra chủ sở hữu, xóa bản sao không muốn giữ trong trình sửa tài khoản, rồi đánh dấu đã quyết định.</value>
   </data>
+  <data name="AccountCoinHistoryMarketAccess" xml:space="preserve">
+    <value>Phí vào chợ</value>
+  </data>
 </root>

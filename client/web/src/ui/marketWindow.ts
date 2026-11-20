@@ -69,7 +69,12 @@ export interface MarketStatePayload {
     feePercent: number;
     listingZenFee: number;
     maxListings: number;
+    /** The one-off access fee of an account (0: none) and its coin. */
+    accessFee?: number;
+    accessCoin?: string;
   };
+  /** Whether this account paid the access fee (null on public states). */
+  accessPaid?: boolean | null;
   listings: MarketListingDto[];
   deliveries: MarketDeliveryDto[];
   pendingZen: number;
@@ -83,7 +88,7 @@ export interface MarketWindowOptions {
 }
 
 const SUBCODE_STATE = 0x39;
-const CMD = { Request: 1, List: 2, Buy: 3, Cancel: 4, Claim: 5 } as const;
+const CMD = { Request: 1, List: 2, Buy: 3, Cancel: 4, Claim: 5, PayAccess: 6 } as const;
 const CURRENCY_CODE: Record<MarketCurrencyName, number> = {
   Zen: 0,
   WCoinC: 1,
@@ -225,10 +230,34 @@ export class MarketWindow {
     const info = document.createElement('div');
     info.className = 'hnmo-muted';
     info.textContent = tx(
-      `Market fee: ${s.rules.feePercent}% • Listing Zen fee: ${s.rules.listingZenFee.toLocaleString(locale())} • Max listings: ${s.rules.maxListings}`,
+      `Sale tax: ${s.rules.feePercent}% • Listing Zen fee: ${s.rules.listingZenFee.toLocaleString(locale())} • Max listings: ${s.rules.maxListings}`,
       `Thuế chợ: ${s.rules.feePercent}% • Phí đăng: ${s.rules.listingZenFee.toLocaleString(locale())} Zen • Tối đa: ${s.rules.maxListings} tin`,
     );
     body.append(info);
+
+    // The one-off access fee: buying and selling open after it's paid.
+    const accessFee = s.rules.accessFee ?? 0;
+    if (s.accessPaid === false && accessFee > 0) {
+      const accessBar = document.createElement('div');
+      accessBar.className = 'hnmo-card';
+      accessBar.id = 'market-access';
+      const coin = s.rules.accessCoin ?? 'WCoinC';
+      const label = document.createElement('span');
+      label.textContent = tx(
+        `Buying and selling need a one-off market access of ${accessFee.toLocaleString(locale())} ${coin} for your account.`,
+        `Mua bán cần trả phí vào chợ một lần ${accessFee.toLocaleString(locale())} ${coin} cho tài khoản.`,
+      );
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'hnmo-btn';
+      btn.id = 'market-access-btn';
+      btn.textContent = tx(`Unlock market (${accessFee.toLocaleString(locale())} ${coin})`, `Mở chợ (${accessFee.toLocaleString(locale())} ${coin})`);
+      btn.addEventListener('click', () => {
+        this.options.send('HnmoMarketCommand', { Action: CMD.PayAccess, Slot: 0, Currency: 0, Price: 0, ListingId: '' });
+      });
+      accessBar.append(label, btn);
+      body.append(accessBar);
+    }
 
     // Escrow Claim banner if items or Zen are waiting
     const claimCount = s.deliveries.length;
@@ -483,7 +512,7 @@ export class MarketWindow {
       const fee = Math.floor(p * (s.rules.feePercent / 100));
       const net = Math.max(0, p - fee);
       preview.textContent = tx(
-        `Net payout if sold: ${net.toLocaleString(locale())} ${this.selectedCurrency} (${s.rules.feePercent}% fee = ${fee.toLocaleString(locale())}). Safe zone required.`,
+        `Net payout if sold: ${net.toLocaleString(locale())} ${this.selectedCurrency} (${s.rules.feePercent}% tax = ${fee.toLocaleString(locale())}). Safe zone required.`,
         `Thực nhận khi bán được: ${net.toLocaleString(locale())} ${this.selectedCurrency} (thuế ${s.rules.feePercent}% = ${fee.toLocaleString(locale())}). Cần đứng trong thành.`,
       );
     };

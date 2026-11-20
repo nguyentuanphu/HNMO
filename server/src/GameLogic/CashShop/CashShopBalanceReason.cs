@@ -39,4 +39,7 @@ public enum CashShopBalanceReason
 
     /// <summary>A payment to unlock bigger stacks of a kind of items.</summary>
     StackUnlock,
+
+    /// <summary>The item market's one-off access fee.</summary>
+    MarketAccess,
 }

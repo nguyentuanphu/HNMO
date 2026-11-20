@@ -106,6 +106,15 @@ public class MarketControllerTests
             Assert.That(doc.RootElement.GetProperty("listings").GetArrayLength(), Is.EqualTo(2));
         }
 
+        // Without the market's one-off access fee paid, the website refuses and nothing is bought.
+        var noAccess = await controller.BuyAsync(new MarketActionRequest("buyer", "pass123", affordable!.Id)).ConfigureAwait(false);
+        Assert.That(noAccess, Is.TypeOf<ObjectResult>());
+        Assert.That(((ObjectResult)noAccess).StatusCode, Is.EqualTo(403));
+        Assert.That(JsonSerializer.Serialize(((ObjectResult)noAccess).Value), Does.Contain("\"access\""));
+        Assert.That(store.Read(d => d.Listings.Any(l => l.Id == affordable.Id)), Is.True);
+        engine.GrantAccess("buyer");
+        Assert.That(engine.HasAccess("BUYER"), Is.True, "login names are matched without case");
+
         // Buying expensive listing (500 > 300 WCoinC) fails & restores listing
         var insufResult = (ContentResult)await controller.BuyAsync(new MarketActionRequest("buyer", "pass123", expensive!.Id)).ConfigureAwait(false);
         using (var doc = JsonDocument.Parse(insufResult.Content!))

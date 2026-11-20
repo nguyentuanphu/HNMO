@@ -82,6 +82,27 @@ public sealed class MarketEngine
         _ => false,
     };
 
+    /// <summary>Gets a value indicating whether an account may buy and sell: it paid the access fee, or there's none.</summary>
+    /// <param name="loginName">The account's login name.</param>
+    /// <returns><c>true</c>, if it may.</returns>
+    public bool HasAccess(string loginName) =>
+        this.Configuration.AccessFee <= 0
+        || this.Store.Read(d => d.AccessPaid.Any(l => string.Equals(l, loginName, StringComparison.OrdinalIgnoreCase)));
+
+    /// <summary>Records that an account paid the access fee.</summary>
+    /// <param name="loginName">The account's login name.</param>
+    public void GrantAccess(string loginName) =>
+        this.Store.Mutate(d =>
+        {
+            if (d.AccessPaid.Any(l => string.Equals(l, loginName, StringComparison.OrdinalIgnoreCase)))
+            {
+                return (false, false);
+            }
+
+            d.AccessPaid.Add(loginName);
+            return (true, true);
+        });
+
     /// <summary>Returns whether an item (<c>group:number</c>) is banned from the market.</summary>
     /// <param name="group">Item group.</param>
     /// <param name="number">Item number.</param>

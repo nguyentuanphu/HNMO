@@ -174,7 +174,7 @@ function historyReason(entry: AccountSnapshot['history'][number]): string {
   if (entry.vipPurchase) return t('vipPurchaseReason').replace('{0}', language === 'vi' ? entry.vipPurchase.nameVi : entry.vipPurchase.nameEn).replace('{1}', String(entry.vipPurchase.days));
   if (entry.vipDaily) return t('vipDailyReason').replace('{0}', language === 'vi' ? entry.vipDaily.nameVi : entry.vipDaily.nameEn);
   if (entry.balanceChange) {
-    const keys: Readonly<Record<string, AccountTextKey>> = { ExtraVault: 'coinExtraVault', MarketPurchase: 'coinMarketPurchase', MarketSale: 'coinMarketSale', PlayerStorePurchase: 'coinPlayerStorePurchase', PlayerStoreSale: 'coinPlayerStoreSale', Reset: 'coinReset', Relife: 'coinRelife', ClearStats: 'coinClearStats', ClearMaster: 'coinClearMaster', PlayTime: 'coinPlayTime', StackUnlock: 'coinStackUnlock' };
+    const keys: Readonly<Record<string, AccountTextKey>> = { ExtraVault: 'coinExtraVault', MarketPurchase: 'coinMarketPurchase', MarketSale: 'coinMarketSale', PlayerStorePurchase: 'coinPlayerStorePurchase', PlayerStoreSale: 'coinPlayerStoreSale', Reset: 'coinReset', Relife: 'coinRelife', ClearStats: 'coinClearStats', ClearMaster: 'coinClearMaster', PlayTime: 'coinPlayTime', StackUnlock: 'coinStackUnlock', MarketAccess: 'coinMarketAccess' };
     const key = keys[entry.balanceChange.action];
     if (key) return t(key).replace('{0}', entry.balanceChange.otherCharacter || t('unknown'));
   }
