@@ -156,14 +156,30 @@ test('Modern Touch HUD: thumbstick vector, minimap tap-to-walk/zoom, swipeable c
   await expect(page.locator('#mobileHud')).toBeVisible();
   await expect(page.locator('#mobileHeroCard')).toContainText('DKKySi');
   await expect(page.locator('#mobileHeroCard')).toContainText('Safe Zone');
-  await expect(page.locator('#mobileMiniMap')).toContainText('Lorencia 130,63');
 
-  // 1. Collapsible ribbon
-  await expect(page.locator('#mobileTopRibbon')).toBeVisible();
-  await page.locator('#mobileRibbonToggle').click();
-  await expect(page.locator('#mobileTopRibbon')).toBeHidden();
-  await page.locator('#mobileRibbonToggle').click();
-  await expect(page.locator('#mobileTopRibbon')).toBeVisible();
+  // 0. Compact by default: chat and mini map closed, and no HUD part over the centre 40% of the screen.
+  await expect(page.locator('#mobileChatBox')).toBeHidden();
+  await expect(page.locator('#mobileMiniMapCanvas')).toBeHidden();
+  const overCentre = await page.evaluate(() => {
+    const w = innerWidth, h = innerHeight;
+    const box = { left: w * 0.3, right: w * 0.7, top: h * 0.3, bottom: h * 0.7 };
+    const parts = [...document.querySelectorAll('#mobileHud *, #touchFight button, #touchBar button')] as HTMLElement[];
+    return parts.filter((el) => {
+      const r = el.getBoundingClientRect();
+      if (r.width === 0 || r.height === 0 || getComputedStyle(el).visibility === 'hidden') return false;
+      return r.left < box.right && r.right > box.left && r.top < box.bottom && r.bottom > box.top;
+    }).map((el) => el.id || el.className);
+  });
+  expect(overCentre).toEqual([]);
+
+  // 1. One top row: auto play on / off and the menu; the mini map opens from its round button.
+  await expect(page.locator('#mobileAutoToggle')).toContainText('Auto ON');
+  // The menu: ☰ of the HUD, or the key bar's ⋯ (☰) when the touch key bar shows on this page.
+  const menuButton = page.locator('#mobileMenuBtn:visible, #touchBar button.more:visible');
+  await expect(menuButton).toHaveCount(1);
+  await page.locator('#mobileMiniMapToggle').click();
+  await expect(page.locator('#mobileMiniMap')).toContainText('Lorencia 130,63');
+  await expect(page.locator('#mobileMiniMapCanvas')).toBeVisible();
 
   // 2. Virtual Analog Thumbstick drag emits normalized vector then resets to 0
   const stick = page.locator('#mobileThumbstick');
@@ -187,11 +203,14 @@ test('Modern Touch HUD: thumbstick vector, minimap tap-to-walk/zoom, swipeable c
   expect(walks[0].x).toBeGreaterThanOrEqual(0);
   expect(walks[0].x).toBeLessThanOrEqual(255);
 
-  // 4. Target lock updates badge
+  // 4. Target lock (on the fight ring) says the locked monster
   await page.locator('#mobileTargetLock').click();
-  await expect(page.locator('#mobileTargetLock')).toContainText('Golden Dragon');
+  await expect(page.locator('#mobileTargetLock')).toHaveAttribute('title', /Golden Dragon/);
+  await expect(page.locator('#mobileTargetLock')).toHaveClass(/on/);
 
-  // 5. Chat macros (click + edit & save) and EN/VI language switch
+  // 5. Chat opens from 💬; macros (click + edit & save) and EN/VI language switch
+  await page.locator('#mobileChatToggle').click();
+  await expect(page.locator('#mobileChatBox')).toBeVisible();
   await page.locator('#mobileMacroBar button[data-macro="0"]').click();
   await page.locator('#mobileMacroEditBtn').click();
   await expect(page.locator('#mobileHudSheet')).toBeVisible();
@@ -203,7 +222,7 @@ test('Modern Touch HUD: thumbstick vector, minimap tap-to-walk/zoom, swipeable c
   await expect(page.locator('#mobileMacroBar button[data-macro="0"]')).toContainText('Boss!');
 
   // 6. Quick QoL menu sheet (Sell Junk / Repair All / Auto-Loot Filter)
-  await page.locator('#mobileMenuBtn').click();
+  await menuButton.click();
   await expect(page.locator('#mobileHudSheet')).toBeVisible();
   await page.locator('#mobileQolLootFilter').click();
   await expect(page.locator('#mobileQolLootFilter')).toContainText('Jewels + Exc');
@@ -216,6 +235,25 @@ test('Modern Touch HUD: thumbstick vector, minimap tap-to-walk/zoom, swipeable c
   await page.evaluate(() => (window as unknown as { __mhTest: { setLanguage(l: string): Promise<void> } }).__mhTest.setLanguage('vi'));
   await expect(page.locator('#mobileHeroCard')).toContainText('An Toàn');
   await expect(page.locator('#mobileChatBox')).toContainText('Thế giới');
+
+  // 8. Hero bars with numbers, no target bar without a target, the skill page and the grouped menu
+  await expect(page.locator('#mobileHeroCard')).toContainText('HP 5200 / 5293');
+  await expect(page.locator('#mobileHeroCard')).toContainText('SD 1500 / 1600');
+  await expect(page.locator('#mobileTargetBar')).toBeHidden();
+  await expect(page.locator('#mobileSkillPage')).toHaveText('1/2');
+  await page.locator('#mobileSkillPage').click();
+  await expect(page.locator('#mobileSkillPage')).toHaveText('2/2');
+  await page.locator('#mobileSkillPage').click();
+  await menuButton.click();
+  await expect(page.locator('#mobileMenuGroups .mh-menu-group')).toHaveCount(7);
+  await page.locator('#mobileMenuGroups .mh-menu-group').nth(1).click();
+  await expect(page.locator('#mobileMenuGroups .mh-menu-item').first()).toBeVisible();
+  // Warp, Auto buff and Party live in the menu now (Character / Social groups).
+  await page.locator('#mobileMenuGroups .mh-menu-group').nth(0).click();
+  await page.locator('#mobileMenuGroups .mh-menu-item', { hasText: 'Tự buff' }).click();
+  await expect(page.locator('#mobileHudSheet')).toBeHidden();
+  const after = await page.evaluate(() => (window as unknown as { __mhTest: { qolCalls: string[] } }).__mhTest.qolCalls);
+  expect(after).toContain('autoBuff');
 
   expect(errors).toEqual([]);
 });
