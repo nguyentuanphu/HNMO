@@ -522,3 +522,17 @@ The desktop code stays the reference for how the classic game behaves (parity ru
   keep restarts in a script file (e.g. /tmp/claude-0/bin/hnmo-up.sh) and kill by PID from `pgrep`.
 - Known open: a "speedhack" warning at the first walk right after being warped into a battle (8-12 tiles), seen on the
   slow test machine only so far; check with real players.
+
+## Licence machine id, setup report, sound out of sight (2026-11-21, early morning)
+
+- Machine id = the system's own id (MachineGuid / machine-id / IOPlatformUUID), not the computer name; the old name
+  hash stays accepted (`LegacyMachineId`) and is sent to the hub as `legacyMachine`. Never break old licences.
+- The first-setup report (system, game, host name/contact, IP + country at the hub) is the one place the hub keeps an
+  IP; the setup page must keep saying so. Hub rule changes go into hnmobug's CLAUDE.md too.
+- A hub licence on 2+ computers in 30 days is withdrawn by itself; the owner's "Give back" allows more computers.
+- Owner reported music going on after leaving the phone's home screen: the web game pauses all sound while the page is
+  hidden and keeps the connection (like the desktop's minimised window). Prove a bug fix with a test that fails without
+  it (`sound.spec.ts` does).
+- New NPC/monster names go into `MonsterNames*.resx` (en, vi, de, zh-CN) via `LocalizedString.FromResource`; an inline
+  "Name||vi=…" fails `AllCaptionsCanBeTranslated`. Every admin button needs a `title` (EveryAdminPageHelpTests).
+- While a long `dotnet test --no-build` runs in the background, don't rebuild: wait, or results mix.
