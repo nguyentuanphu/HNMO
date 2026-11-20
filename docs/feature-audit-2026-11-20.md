@@ -175,3 +175,20 @@ Left from #181 for the owner: (1) the web and desktop clients read option values
 12. Atlans while riding Uniria/Dinorant: refuse (classic)?
 13. Spouse warp: require the target map's warp level?
 14. Personal shop buy race (group 10): fix with a concurrency test?
+
+### Owner's answers (21 Nov 2026)
+
+1. NPC jewel prices like the suites (3 M / 16 M / 15 M / 15 M): change server and web client (desktop client shows the old price until rebuilt).
+2. Jewel of Life +28: client option data gets 7 levels; the price keeps rising above +16 (client formula follows the server).
+3. Happy hour excellent bonus: +5/10000 (0.2 % → 0.25 %).
+4. Alliance: each guild needs at least 10 members (setting, default 10).
+5. /post: 1,000 zen and 5 s wait (settings).
+6. PK duration: the suite's points (21,600 / 43,200 / 86,400, +3,600 per kill, a monster kill removes level / 2).
+7. Zen loss on death: from the bag only (HNMO's 1-4 % kept), not from the vault.
+8. EXP loss on death: the suite's rows for everyone (normal 3/2/1 % by level, warning 5 %, PK2 10 %, murderer 20 %).
+9. Murderers: no NPC shops for PKs, M-menu warp x50 from PK2, PK2+ can't be summoned.
+10. Outlaws can't enter events (any PK stage).
+11. Warp maximum levels: keep none.
+12. Atlans while riding Uniria/Dinorant: refused.
+13. Spouse warp: needs the target map's warp level.
+14. Personal shop buy race: fix with a concurrency test.
