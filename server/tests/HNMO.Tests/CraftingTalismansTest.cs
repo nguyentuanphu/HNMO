@@ -189,6 +189,28 @@ public class CraftingTalismansTest
         return requirement;
     }
 
+    /// <summary>
+    /// A low rate minus the penalty of a socket item ends at 0: the rate was a byte, so 10 - 20 wrapped around to
+    /// 246, and the crafting became a sure success.
+    /// </summary>
+    /// <returns>The task.</returns>
+    [Test]
+    public async ValueTask PenaltiesBelowZeroEndAtZeroAsync()
+    {
+        var player = await PlayerTestHelper.CreatePlayerAsync(this._gameContext).ConfigureAwait(false);
+        var item = await AddItemAsync(player, this._gameConfiguration.Items.First(i => i.Group == 0), 9, 20).ConfigureAwait(false);
+        item.SocketCount = 1;
+        var settings = new Persistence.BasicModel.SimpleCraftingSettings { SuccessPercent = 10, SuccessPercentageAdditionForSocketItem = -20 };
+        var requiredItem = new Persistence.BasicModel.ItemCraftingRequiredItem { MinimumAmount = 1, MaximumAmount = 1, MaximumItemLevel = 15 };
+        requiredItem.PossibleItems.Add(item.Definition!);
+        settings.RequiredItems.Add(requiredItem);
+
+        var result = new SimpleItemCraftingHandler(settings).TryGetRequiredItems(player, out _, out var successRate);
+
+        Assert.That(result, Is.Null);
+        Assert.That(successRate, Is.EqualTo(0));
+    }
+
     private static async ValueTask<Item> AddItemAsync(Player player, ItemDefinition definition, byte level, byte durability)
     {
         var item = player.PersistenceContext.CreateNew<Item>();
