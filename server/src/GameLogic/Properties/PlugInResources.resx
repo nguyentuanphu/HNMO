@@ -1131,6 +1131,9 @@
   <data name="MuHelperConfiguration_MinLevel_Name" xml:space="preserve">
     <value>Minimum character level</value>
   </data>
+  <data name="MuHelperConfiguration_VipMinLevel_Name" xml:space="preserve">
+    <value>Minimum character level for VIP accounts</value>
+  </data>
   <data name="MuHelperConfiguration_MaxLevel_Name" xml:space="preserve">
     <value>Maximum character level</value>
   </data>

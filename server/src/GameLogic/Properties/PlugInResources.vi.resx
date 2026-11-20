@@ -1026,6 +1026,9 @@
   <data name="MuHelperConfiguration_MinLevel_Name" xml:space="preserve">
     <value>Cấp nhân vật tối thiểu</value>
   </data>
+  <data name="MuHelperConfiguration_VipMinLevel_Name" xml:space="preserve">
+    <value>Cấp nhân vật tối thiểu cho tài khoản VIP</value>
+  </data>
   <data name="MuHelperConfiguration_MaxLevel_Name" xml:space="preserve">
     <value>Cấp nhân vật tối đa</value>
   </data>

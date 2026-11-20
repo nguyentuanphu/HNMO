@@ -57,9 +57,10 @@ public class MuHelper : AsyncDisposable
             return false;
         }
 
-        if (this._player.Level < this._configuration.MinLevel)
+        var minimumLevel = this._configuration.GetMinimumLevel((this._player.Attributes?[Stats.IsVip] ?? 0) > 0);
+        if (this._player.Level < minimumLevel)
         {
-            await this._player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.MuHelperMinimumLevel), this._configuration.MinLevel).ConfigureAwait(false);
+            await this._player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.MuHelperMinimumLevel), minimumLevel).ConfigureAwait(false);
             return false;
         }
 
