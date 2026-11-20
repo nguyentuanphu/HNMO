@@ -341,3 +341,75 @@ test('the guide opens by itself once per character, then waits as a button', asy
   await expect(button).toHaveClass(/hnmo-guide-button-flash/);
   await expectNoPageErrors(errors);
 });
+
+// A phone on its side with the touch HUD: the guide is a compact card on the left that leaves the joystick and the
+// attack button free, its buttons are big enough to tap, and closed it waits as a button clear of the top-right row
+// and the fight buttons. The touch HUD (ui/mobileHud.ts) and the fight buttons (ui/touchControls.ts) are the page's
+// own, so the same check holds for whichever touch layout the branch has.
+test.describe('on a phone', () => {
+  test.use({ viewport: { width: 740, height: 360 }, isMobile: true, hasTouch: true });
+
+  test('the guide card leaves the joystick and the attack button free', async ({ page }) => {
+    test.setTimeout(2 * 60_000);
+    const errors: string[] = [];
+    page.on('pageerror', (error) => errors.push(error.message));
+    await page.goto('/index.html');
+    await page.evaluate(async () => {
+      const { OnboardingWindow } = await import('/js/ui/onboardingWindow.js' as string) as { OnboardingWindow: new (options: unknown) => Panel };
+      const { Chat } = await import('/js/game/chat.js' as string) as { Chat: new () => unknown };
+      const { MobileHud } = await import('/js/ui/mobileHud.js' as string) as { MobileHud: new (actions: unknown) => { setMode(m: string): void; setInWorld(b: boolean): void } };
+      const w = window as unknown as Win;
+      w.__sent = [];
+      w.__chat = [];
+      const login = document.getElementById('login');
+      if (login) login.hidden = true;
+      // The touch HUD as in the world (its actions do nothing here); the fight buttons are on the page already.
+      const noop = () => undefined;
+      const hud = new MobileHud(new Proxy({ chat: new Chat() }, {
+        get: (target, key) => (key in target ? (target as Record<string | symbol, unknown>)[key] : key === 'cycleTarget' ? () => null : noop),
+      }));
+      hud.setMode('modern');
+      hud.setInWorld(true);
+      document.getElementById('touchBar')?.classList.add('shown');
+      document.getElementById('touchFight')?.classList.add('shown');
+      try { localStorage.removeItem('hnmo.onboarding.shown.PhoneGuide'); } catch { /* none */ }
+      w.__panel = new OnboardingWindow({
+        send: (name: string, fields: Record<string, unknown>) => w.__sent.push({ name, fields: { ...fields } }),
+        message: (text: string) => w.__chat.push(text),
+        itemName: () => 'item',
+        characterName: () => 'PhoneGuide',
+      });
+      w.__panel.start();
+    });
+    await expect(page.locator('body')).toHaveClass(/hnmo-modern-hud/);
+    await feed(page, state('talk-merchant', { kit: true }));
+    const card = page.locator('.rml-hnmo_onboarding #panel');
+    await expect(card).toBeVisible();
+
+    type Box = { x: number; y: number; width: number; height: number };
+    const overlaps = (a: Box, b: Box) => a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
+    const box = async (selector: string) => (await page.locator(selector).first().boundingBox())!;
+    await expect.poll(async () => (await card.boundingBox())?.x ?? 999).toBeLessThan(20);
+    const cardBox = (await card.boundingBox())!;
+    expect(cardBox.width).toBeLessThanOrEqual(262);
+    expect(cardBox.height).toBeLessThanOrEqual(360 * 0.45 + 2);
+    expect(overlaps(cardBox, await box('#mobileThumbstick'))).toBe(false);
+    expect(overlaps(cardBox, await box('#touchFight .fight'))).toBe(false);
+    const close = page.locator('.rml-hnmo_onboarding .ob-close');
+    expect((await close.boundingBox())!.height).toBeGreaterThanOrEqual(35.5);
+
+    // Closed: the "Guide n/m" button, 36 px, clear of the top-right row and the fight buttons.
+    await close.click();
+    const button = page.locator('.hnmo-guide-button');
+    await expect(button).toBeVisible();
+    await expect(button).toHaveText('Guide 1/3');
+    const buttonBox = (await button.boundingBox())!;
+    expect(buttonBox.height).toBeGreaterThanOrEqual(35.5);
+    const others = await page.evaluate(() => [...document.querySelectorAll('#touchFight button, #touchBar button, #mobileTopRight button, #mobileMiniMap, #mobileRightTools button')]
+      .map((el) => el.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0).map((r) => ({ x: r.x, y: r.y, width: r.width, height: r.height })));
+    expect(others.length).toBeGreaterThan(0);
+    expect(others.filter((other) => overlaps(buttonBox, other))).toEqual([]);
+    await page.screenshot({ path: 'test-results/onboarding-phone.png' });
+    await expectNoPageErrors(errors);
+  });
+});
