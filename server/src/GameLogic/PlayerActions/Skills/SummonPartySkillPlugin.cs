@@ -120,7 +120,13 @@ public class SummonPartySkillPlugin : TargetedSkillPluginBase
         }
     }
 
-    private async ValueTask SummonTargetsAsync(Player player, IEnumerable<Player> targetPlayers)
+    /// <summary>
+    /// Summons the targets next to the summoner, unless the rules of a warp refuse it for a target.
+    /// </summary>
+    /// <param name="player">The summoning Dark Lord.</param>
+    /// <param name="targetPlayers">The party members to summon.</param>
+    /// <returns>The task.</returns>
+    internal async ValueTask SummonTargetsAsync(Player player, IEnumerable<Player> targetPlayers)
     {
         foreach (var targetPlayer in targetPlayers)
         {
@@ -145,9 +151,10 @@ public class SummonPartySkillPlugin : TargetedSkillPluginBase
                 }
             }
 
-            if (player.CurrentMap!.Definition.TryGetRequirementError(targetPlayer, out var errorMessage))
+            // The rules of a warp apply (map requirements, and not while duelling, trading or dead).
+            if (PlugIns.HnmoWarpGuard.Refusal(targetPlayer, player.CurrentMap!.Definition) is { } refusal)
             {
-                await targetPlayer.ShowBlueMessageAsync(errorMessage).ConfigureAwait(false);
+                await targetPlayer.ShowBlueMessageAsync(PlugIns.HnmoWarpGuard.TextFor(targetPlayer, refusal)).ConfigureAwait(false);
                 continue;
             }
 
