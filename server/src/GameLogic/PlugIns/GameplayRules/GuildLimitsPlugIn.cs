@@ -21,6 +21,7 @@ using HNMO.PlugIns;
 public sealed class GuildLimitsPlugIn :
     IGuildCreatingPlugIn,
     IGuildJoinRequestingPlugIn,
+    IGuildRelationshipChangingPlugIn,
     ISupportCustomConfiguration<GuildLimitsConfiguration>,
     ISupportDefaultCustomConfiguration
 {
@@ -62,6 +63,29 @@ public sealed class GuildLimitsPlugIn :
     }
 
     /// <inheritdoc />
+    public async ValueTask GuildRelationshipChangingAsync(Player requester, Player targetGuildMaster, GuildRelationshipType relationshipType, GuildRelationshipRequestType requestType, CancelEventArgs eventArgs)
+    {
+        var minimum = this.Configuration?.MinimumAllianceGuildMembers ?? 0;
+        if (minimum <= 0
+            || relationshipType != GuildRelationshipType.Alliance
+            || requestType != GuildRelationshipRequestType.Join
+            || (requester.GameContext as IGameServerContext)?.GuildServer is not { } guildServer)
+        {
+            return;
+        }
+
+        foreach (var guildId in new[] { requester.GuildStatus?.GuildId, targetGuildMaster.GuildStatus?.GuildId })
+        {
+            if (guildId is not { } id || (await guildServer.GetGuildListAsync(id).ConfigureAwait(false)).Count < minimum)
+            {
+                eventArgs.Cancel = true;
+                await requester.ShowBlueMessageAsync($"Each guild of an alliance needs at least {minimum} members. / Mỗi bang hội trong liên minh cần ít nhất {minimum} thành viên.").ConfigureAwait(false);
+                return;
+            }
+        }
+    }
+
+    /// <inheritdoc />
     public object CreateDefaultConfig() => new GuildLimitsConfiguration();
 }
 
@@ -73,4 +97,9 @@ public sealed class GuildLimitsConfiguration
 
     /// <summary>Gets or sets the most members a guild can have (0: no limit).</summary>
     public int MaximumMembers { get; set; }
+
+    /// <summary>
+    /// Gets or sets the members each guild needs to form or join an alliance (0: any; 10 like the Season 6/9 server suites).
+    /// </summary>
+    public int MinimumAllianceGuildMembers { get; set; } = 10;
 }
