@@ -1194,4 +1194,7 @@ Inventory Extensions: {18}</value>
   </data>
   <data name="VipActiveNotice" xml:space="preserve"><value>VIP {0} is active until {1} (Sydney).</value></data>
   <data name="VipExpiringNotice" xml:space="preserve"><value>VIP {0} ends within one day, at {1} (Sydney). Renew in the VIP window (Alt+U) or on your account page.</value></data>
+  <data name="AtlansNoRiding" xml:space="preserve">
+    <value>Uniria and Dinorant can't enter Atlans.</value>
+  </data>
 </root>

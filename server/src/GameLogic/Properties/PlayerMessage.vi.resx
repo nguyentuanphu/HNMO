@@ -1085,4 +1085,7 @@ Mở rộng hành trang: {18}</value>
   <data name="ShopCurrencyWCoinP" xml:space="preserve"><value>WCoin (P)</value></data>
   <data name="VipActiveNotice" xml:space="preserve"><value>VIP {0} có hiệu lực đến {1} (giờ Sydney).</value></data>
   <data name="VipExpiringNotice" xml:space="preserve"><value>VIP {0} sẽ hết hạn trong vòng một ngày, lúc {1} (giờ Sydney). Gia hạn tại cửa sổ VIP (Alt+U) hoặc trang tài khoản.</value></data>
+  <data name="AtlansNoRiding" xml:space="preserve">
+    <value>Không thể vào Atlans khi cưỡi Uniria hoặc Dinorant.</value>
+  </data>
 </root>

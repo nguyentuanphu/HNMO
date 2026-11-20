@@ -3258,5 +3258,13 @@ namespace HNMO.GameLogic.Properties {
         /// <summary>Gets the localized VIP notice.</summary>
         public static string VipExpiringNotice => ResourceManager.GetString("VipExpiringNotice", resourceCulture)!;
 
+        /// <summary>
+        ///   Looks up a localized string similar to Uniria and Dinorant can't enter Atlans..
+        /// </summary>
+        public static string AtlansNoRiding {
+            get {
+                return ResourceManager.GetString("AtlansNoRiding", resourceCulture);
+            }
+        }
     }
 }

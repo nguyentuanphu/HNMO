@@ -1194,4 +1194,7 @@ Extensões de inventário: {18}</value>
   <data name="TradeMoneyExceedsMaximum" xml:space="preserve">
     <value>A troca foi cancelada: um dos jogadores levaria mais zen do que o inventário comporta.</value>
   </data>
+  <data name="AtlansNoRiding" xml:space="preserve">
+    <value>Uniria e Dinorant não podem entrar em Atlans.</value>
+  </data>
 </root>

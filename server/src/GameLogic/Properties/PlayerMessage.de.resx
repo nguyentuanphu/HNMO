@@ -1027,4 +1027,7 @@ Inventarerweiterungen: {18}</value>
   <data name="TradeMoneyExceedsMaximum" xml:space="preserve">
     <value>Der Handel wurde abgebrochen: ein Händler hätte mehr Zen, als das Inventar fassen kann.</value>
   </data>
+  <data name="AtlansNoRiding" xml:space="preserve">
+    <value>Uniria und Dinorant können Atlans nicht betreten.</value>
+  </data>
 </root>
