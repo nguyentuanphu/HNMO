@@ -41,4 +41,10 @@ public sealed class MarketItemSnapshot
 
     /// <summary>Gets or sets the Vietnamese item display name.</summary>
     public string NameVi { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the item storage which holds the real item while the market has it (<see cref="HeldItems"/>);
+    /// empty for listings made before, whose item is made again from this record.
+    /// </summary>
+    public Guid StorageId { get; set; }
 }

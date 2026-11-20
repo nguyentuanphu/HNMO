@@ -195,12 +195,6 @@ public sealed class MarketPlugIn :
             return;
         }
 
-        if (await Escrow.EscrowContractsPlugIn.RefuseItemLosingDetailAsync(player, item).ConfigureAwait(false))
-        {
-            await this.SendStateAsync(player, true).ConfigureAwait(false);
-            return;
-        }
-
         var fee = Math.Max(0, engine.Configuration.ListingZenFee);
         if (fee > 0 && player.Money < fee)
         {
@@ -208,10 +202,22 @@ public sealed class MarketPlugIn :
             return;
         }
 
+        // The real item leaves the bag into a storage of its own; the listing keeps that storage's id, so the buyer
+        // gets this very item with all its details. Listing, fee and move are saved together; anything failing on
+        // the way puts everything back.
         var snapshot = SnapshotFromItem(item);
-        var listResult = engine.CreateListing(login, charName, snapshot, currency, price, DateTime.UtcNow, out var listing);
-        if (listResult != MarketListResult.Success)
+        var held = await HeldItems.HoldAsync(player, item).ConfigureAwait(false);
+        if (held is null || held.Id == Guid.Empty)
         {
+            await this.NotifyAsync(player, "ListFailed", "The item could not be listed; it stays in your bag.", "Không thể đăng bán; vật phẩm vẫn ở trong túi đồ.").ConfigureAwait(false);
+            return;
+        }
+
+        snapshot.StorageId = held.Id;
+        var listResult = engine.CreateListing(login, charName, snapshot, currency, price, DateTime.UtcNow, out var listing);
+        if (listResult != MarketListResult.Success || listing is null)
+        {
+            await HeldItems.ReleaseAsync(player, held).ConfigureAwait(false);
             var (en, vi) = listResult switch
             {
                 MarketListResult.ItemBanned => ($"{snapshot.NameEn} is banned from listing on the market.", $"{snapshot.NameVi} nằm trong danh sách cấm rao bán."),
@@ -224,28 +230,34 @@ public sealed class MarketPlugIn :
             return;
         }
 
-        // The listing is stored; now the item leaves the bag. If that fails before the item is out, the listing is
-        // taken back, so the item is never both in the bag and on the market.
-        var itemRemoved = false;
+        var feePaid = fee > 0 && player.TryRemoveMoney(fee);
+        bool saved;
         try
         {
-            await player.Inventory.RemoveItemAsync(item).ConfigureAwait(false);
-            itemRemoved = true;
-            await player.PersistenceContext.DeleteAsync(item).ConfigureAwait(false);
-            if (fee > 0)
-            {
-                player.TryRemoveMoney(fee);
-            }
-
-            await player.InvokeViewPlugInAsync<IItemRemovedPlugIn>(p => p.RemoveItemAsync(slot)).ConfigureAwait(false);
-            await player.SaveProgressAsync().ConfigureAwait(false);
+            saved = await player.SaveProgressAsync().ConfigureAwait(false);
         }
-        catch (Exception ex) when (!itemRemoved && listing is not null)
+        catch (Exception ex)
+        {
+            player.Logger.LogError(ex, "Market: listing {ListingId} couldn't be saved.", listing.Id);
+            saved = false;
+        }
+
+        if (!saved)
         {
             engine.WithdrawListing(listing.Id);
-            player.Logger.LogError(ex, "Market: listing {ListingId} taken back, the item could not leave the bag.", listing.Id);
+            await HeldItems.ReleaseAsync(player, held).ConfigureAwait(false);
+            if (feePaid)
+            {
+                player.TryAddMoney(fee);
+            }
+
             await this.NotifyAsync(player, "ListFailed", "The item could not be listed; it stays in your bag.", "Không thể đăng bán; vật phẩm vẫn ở trong túi đồ.").ConfigureAwait(false);
             return;
+        }
+
+        if (feePaid)
+        {
+            await player.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
         }
 
         await this.NotifyAsync(player, "Listed", $"Listed {snapshot.NameEn} for {price:N0} {currency}!", $"Đã đăng bán {snapshot.NameVi} với giá {price:N0} {currency}!").ConfigureAwait(false);
@@ -311,11 +323,10 @@ public sealed class MarketPlugIn :
 
         // Try immediate bag delivery; fall back to the market's claim list if the bag is full or the delivery fails,
         // so the paid purchase is always recorded.
-        var reward = ToOwedReward(listing.Item);
         bool deliveredDirectly;
         try
         {
-            deliveredDirectly = await GiftCodeRewards.GiveGoodsAsync(player, reward).ConfigureAwait(false);
+            deliveredDirectly = await GiveItemAsync(player, listing.Item, listing.Id).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -379,7 +390,7 @@ public sealed class MarketPlugIn :
         var bagFull = false;
         foreach (var d in deliveries)
         {
-            if (await GiftCodeRewards.GiveGoodsAsync(player, ToOwedReward(d.Item)).ConfigureAwait(false))
+            if (await GiveItemAsync(player, d.Item, d.Id).ConfigureAwait(false))
             {
                 engine.CompleteDelivery(d.Id);
                 itemsGiven++;
@@ -413,6 +424,28 @@ public sealed class MarketPlugIn :
     /// <inheritdoc />
     public void ForceStart()
     {
+    }
+
+    /// <summary>
+    /// Gives the item of a listing or delivery: the real held item when the market keeps one, otherwise (listings made
+    /// before) an item made from the record. Returns whether it's in the bag now (a held item is saved there at once).
+    /// </summary>
+    private static async ValueTask<bool> GiveItemAsync(Player player, MarketItemSnapshot item, string reference)
+    {
+        if (item.StorageId == Guid.Empty)
+        {
+            return await GiftCodeRewards.GiveGoodsAsync(player, ToOwedReward(item)).ConfigureAwait(false);
+        }
+
+        var result = await HeldItems.GiveAsync(player, item.StorageId).ConfigureAwait(false);
+        if (result == HeldItems.GiveResult.Gone)
+        {
+            // Given before (a delivery can't be paid twice): count it as done, so the list doesn't keep it forever.
+            player.Logger.LogWarning("Market: the held item of {Reference} (storage {StorageId}) was given before.", reference, item.StorageId);
+            return true;
+        }
+
+        return result == HeldItems.GiveResult.Given;
     }
 
     private static GiftCodeOwedReward ToOwedReward(MarketItemSnapshot s) => new()

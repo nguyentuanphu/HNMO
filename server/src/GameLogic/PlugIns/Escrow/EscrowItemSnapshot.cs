@@ -41,4 +41,10 @@ public sealed class EscrowItemSnapshot
 
     /// <summary>Gets or sets item origin provenance looked up from Activity Log.</summary>
     public string OriginSummary { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the item storage which holds the real item while the contract has it (<see cref="HeldItems"/>);
+    /// empty for contracts made before, whose item is made again from this record.
+    /// </summary>
+    public Guid StorageId { get; set; }
 }

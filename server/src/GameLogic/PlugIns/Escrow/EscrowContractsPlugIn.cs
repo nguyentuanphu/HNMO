@@ -92,50 +92,6 @@ public sealed class EscrowContractsPlugIn :
         return true;
     }
 
-    /// <summary>
-    /// Checks whether <paramref name="item"/> has something the stored snapshot of the market and of escrow can't keep
-    /// (an ancient set, sockets, harmony / guardian / wing options, pet experience). Such an item would come back to
-    /// its owner or reach its buyer without it, so it isn't taken.
-    /// </summary>
-    /// <param name="player">Holding player.</param>
-    /// <param name="item">Candidate item.</param>
-    /// <returns><see langword="true"/> when refused with an EN/VI notice.</returns>
-    public static async ValueTask<bool> RefuseItemLosingDetailAsync(Player player, Item item)
-    {
-        if (!LosesDetailWhenStored(item))
-        {
-            return false;
-        }
-
-        var isVi = string.Equals(player.Culture.TwoLetterISOLanguageName, "vi", StringComparison.OrdinalIgnoreCase);
-        await player.ShowBlueMessageAsync(isVi
-            ? "Vật phẩm này có thuộc tính đặc biệt (đồ thần, socket, harmony, tùy chọn 380, cánh hoặc thú nuôi) chưa thể ký gửi: hãy giao dịch trực tiếp."
-            : "This item has special properties (ancient, sockets, harmony, level 380 option, wing options or a pet) which can't be stored yet: trade it directly.").ConfigureAwait(false);
-        return true;
-    }
-
-    /// <summary>Tells whether an item has properties outside of what the market and escrow snapshots keep.</summary>
-    /// <param name="item">The item.</param>
-    /// <returns><see langword="true"/>, if storing it would drop something.</returns>
-    public static bool LosesDetailWhenStored(Item item)
-    {
-        ArgumentNullException.ThrowIfNull(item);
-        if (item.SocketCount > 0 || item.PetExperience > 0)
-        {
-            return true;
-        }
-
-        if (item.ItemSetGroups is { } sets && sets.Any(s => s.AncientSetDiscriminator != 0))
-        {
-            return true;
-        }
-
-        return item.ItemOptions.Any(o => o.ItemOption?.OptionType is { } type
-            && type != ItemOptionTypes.Option
-            && type != ItemOptionTypes.Luck
-            && !(type == ItemOptionTypes.Excellent && o.ItemOption.Number is >= 1 and <= 8));
-    }
-
     /// <summary>Builds a rich item snapshot plus Activity Log origin lookup.</summary>
     /// <param name="item">Inventory item.</param>
     /// <param name="ownerLogin">Current owner account login.</param>
@@ -771,12 +727,6 @@ public sealed class EscrowContractsPlugIn :
                 return;
             }
 
-            if (await RefuseItemLosingDetailAsync(player, item).ConfigureAwait(false))
-            {
-                await this.SendStateAsync(player, true, "This item can't be stored in escrow.", "Vật phẩm này không thể ký gửi.", true).ConfigureAwait(false);
-                return;
-            }
-
             pickedItems.Add((item, BuildItemSnapshot(item, login, cfg.ActivityLogFileName)));
         }
 
@@ -840,6 +790,32 @@ public sealed class EscrowContractsPlugIn :
             }
         }
 
+        // The real items leave the bag into storages of their own; the contract keeps their ids, so whoever gets them
+        // gets these very items with all their details. They go back to the bag if the contract isn't made.
+        var heldItems = new List<HeldItems.Held>();
+        foreach (var (entity, snapshot) in pickedItems)
+        {
+            if (await HeldItems.HoldAsync(player, entity).ConfigureAwait(false) is not { Id: var heldId } held || heldId == Guid.Empty)
+            {
+                foreach (var back in heldItems)
+                {
+                    await HeldItems.ReleaseAsync(player, back).ConfigureAwait(false);
+                }
+
+                RefundAccountCoins(player, coinType, sellerCoinDebit);
+                if (jewelsList.Count > 0)
+                {
+                    RefundJewelsToBank(jewelStore, login, jewelsList);
+                }
+
+                await this.SendStateAsync(player, true, "The items couldn't be placed in escrow; they stay in your bag.", "Không thể ký gửi vật phẩm; chúng vẫn ở trong túi đồ.", true).ConfigureAwait(false);
+                return;
+            }
+
+            snapshot.StorageId = heldId;
+            heldItems.Add(held);
+        }
+
         var snapshots = pickedItems.Select(p => p.Snapshot).ToList();
         var (err, created) = directVnd
             ? this.GetDirectEngine().CreateDirectVndContract(
@@ -890,6 +866,11 @@ public sealed class EscrowContractsPlugIn :
 
         if (err != "Ok" || created is null)
         {
+            foreach (var back in heldItems)
+            {
+                await HeldItems.ReleaseAsync(player, back).ConfigureAwait(false);
+            }
+
             RefundAccountCoins(player, coinType, sellerCoinDebit);
             if (jewelsList.Count > 0)
             {
@@ -905,14 +886,6 @@ public sealed class EscrowContractsPlugIn :
         {
             player.TryRemoveMoney((int)Math.Min(int.MaxValue, escrowedZen));
             await player.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
-        }
-
-        foreach (var (entity, _) in pickedItems)
-        {
-            var removedSlot = entity.ItemSlot;
-            await player.Inventory!.RemoveItemAsync(entity).ConfigureAwait(false);
-            await player.PersistenceContext.DeleteAsync(entity).ConfigureAwait(false);
-            await player.InvokeViewPlugInAsync<IItemRemovedPlugIn>(p => p.RemoveItemAsync(removedSlot)).ConfigureAwait(false);
         }
 
         // The contract holds the items and Zen now: save the player at once, so a restart can't bring them back
@@ -1404,14 +1377,36 @@ public sealed class EscrowContractsPlugIn :
                 continue;
             }
 
-            // Zen + Items -> Bag via GiftCodeRewards all-or-nothing!
+            // Held items (the real ones) first, each saved into the bag at once; what doesn't fit stays owed.
+            var heldLeft = new List<EscrowItemSnapshot>();
+            foreach (var snap in delivery.Items.Where(i => i.StorageId != Guid.Empty))
+            {
+                var given = await HeldItems.GiveAsync(player, snap.StorageId).ConfigureAwait(false);
+                if (given == HeldItems.GiveResult.Gone)
+                {
+                    player.Logger.LogWarning("Escrow: the held item {Name} of delivery {DeliveryId} (storage {StorageId}) was given before.", snap.NameEn, delivery.DeliveryId, snap.StorageId);
+                }
+                else if (given != HeldItems.GiveResult.Given)
+                {
+                    heldLeft.Add(snap);
+                }
+            }
+
+            if (heldLeft.Count > 0)
+            {
+                delivery.Items = [.. heldLeft, .. delivery.Items.Where(i => i.StorageId == Guid.Empty)];
+                engine.RestoreOwedDelivery(delivery);
+                continue;
+            }
+
+            // Zen + items of older contracts (made again from their records) -> bag, all or nothing.
             var giftReward = new GiftCodes.GiftCodeOwedReward
             {
                 Reference = delivery.DeliveryId,
                 CodeId = delivery.ContractId,
                 Code = delivery.ReasonEn,
                 Zen = (int)Math.Min(int.MaxValue, Math.Max(0L, delivery.Zen)),
-                Items = delivery.Items.Select(snap => new GiftCodes.GiftCodeItem
+                Items = delivery.Items.Where(snap => snap.StorageId == Guid.Empty).Select(snap => new GiftCodes.GiftCodeItem
                 {
                     Group = snap.Group,
                     Number = snap.Number,
@@ -1428,6 +1423,8 @@ public sealed class EscrowContractsPlugIn :
             if ((giftReward.Items.Count > 0 || giftReward.Zen > 0)
                 && !await GiftCodes.GiftCodeRewards.GiveGoodsAsync(player, giftReward).ConfigureAwait(false))
             {
+                // The held items are in the bag now; what's left is owed.
+                delivery.Items = delivery.Items.Where(i => i.StorageId == Guid.Empty).ToList();
                 engine.RestoreOwedDelivery(delivery);
                 continue;
             }
