@@ -256,8 +256,8 @@ function randInt(low, high) {
 function randFloat(low, high) {
   return low + Math.random() * (high - low);
 }
-function randFloatSpread(range) {
-  return range * (0.5 - Math.random());
+function randFloatSpread(range2) {
+  return range2 * (0.5 - Math.random());
 }
 function seededRandom(s) {
   if (s !== void 0) _seed = s;
@@ -7824,20 +7824,20 @@ function WebGLAttributes(gl, capabilities) {
     }
     if (updateRanges.length !== 0) {
       for (let i = 0, l = updateRanges.length; i < l; i++) {
-        const range = updateRanges[i];
+        const range2 = updateRanges[i];
         if (isWebGL2) {
           gl.bufferSubData(
             bufferType,
-            range.start * array.BYTES_PER_ELEMENT,
+            range2.start * array.BYTES_PER_ELEMENT,
             array,
-            range.start,
-            range.count
+            range2.start,
+            range2.count
           );
         } else {
           gl.bufferSubData(
             bufferType,
-            range.start * array.BYTES_PER_ELEMENT,
-            array.subarray(range.start, range.start + range.count)
+            range2.start * array.BYTES_PER_ELEMENT,
+            array.subarray(range2.start, range2.start + range2.count)
           );
         }
       }
@@ -24282,18 +24282,90 @@ var INDOOR_FADES = {
   2: { types: [81, 82, 96, 98, 99], indoors: (tile) => tile === 3 || tile >= 10 }
   // Devias
 };
-var HIDDEN_OBJECTS = {
-  0: [130, 131, 132, 133],
-  // Lorencia: MODEL_LIGHT01 to + 2 (fire, not drawn yet), MODEL_POSE_BOX
-  1: [60],
+var HIDDEN_OBJECTS = hiddenObjects([
+  // Each map's CreateObject and its per-frame object code (MoveObject, the maps' Move...Visual and their effect
+  // passes) in ZzzObject.cpp and World/GameMaps: the types it sets HiddenMesh -2 for with no condition. They are
+  // light, smoke and sound emitters, sitting spots and other markers.
+  [[0], [130, 131, 132, 133]],
+  // Lorencia: MODEL_LIGHT01 to + 2 (their fire is drawn), MODEL_POSE_BOX
+  [[1], [39, 40, 51, 52, 60]],
   // Dungeon
-  2: [91, 100],
+  [[2], [91, 100]],
   // Devias
-  3: [38],
+  [[3], [38]],
   // Noria
-  7: [39]
+  [[4], [24, 25]],
+  // Lost Tower
+  [[6], [38]],
+  // Arena
+  [[7], [22, 39]],
   // Atlans
-};
+  [[8], [60, 63, 64, 70, 76, 83]],
+  // Tarkan
+  [[10], range(0, 5)],
+  // Icarus
+  // Blood Castle: two markers stay hidden until the event's action shows them (PKKey 4), which isn't played here.
+  [[...range(11, 17), 52], [9, 10]],
+  // Chaos Castle: 6-12 always; 18-35 are hidden from the start and shown only at some castle levels, which aren't
+  // played here.
+  [[...range(18, 23), 53], [...range(6, 12), ...range(18, 35)]],
+  [[...range(24, 29), 36], range(35, 40)],
+  // Hellas (Kalima)
+  // Valley of Loren: always 0, 42, 52-54; the rest as when no siege runs (GMBattleCastle.cpp; type 4 left out, the
+  // map's code both hides and shows it every frame).
+  [[30], [0, 11, 37, 41, ...range(42, 48), ...range(52, 54), 66, 67, 68, 69, ...range(71, 76), 88]],
+  [[31], [1, 3, 42, 44, 45, 53]],
+  // Land of Trials
+  [[33, 54], [56, 57, 58, 59, 60, 62, 63, 67, 70]],
+  // Aida, the character scene
+  [[34], [82, 83, 84]],
+  // Crywolf
+  [[35], [2, 3, 5, 6]],
+  // Crywolf's second map
+  [[37, 40], [37, 59, 60, 61, 62, 81, 82, 83, 97, 107, 108]],
+  // Kanturu, the GM area
+  [[38], [...range(45, 56), 65]],
+  // Kanturu Relics
+  [[39], [1, 11, 32, ...range(45, 53), 57, 58, 70]],
+  // Kanturu's Refinery Tower
+  [[41, 42], [2, 3, 5, 6, 58, 59, 60, ...range(85, 93)]],
+  // the third class change quest
+  [[...range(45, 50)], range(70, 79)],
+  // Illusion Temple
+  [[51], [0, 54, ...range(58, 62), ...range(133, 147), ...range(149, 155)]],
+  // Elbeland
+  [[55], [84, 85, 87, 89]],
+  // the login scene
+  [[56], [57, 71, 72, 73, 74, 77, 78]],
+  // Swamp of Calmness
+  [[57, 58], [70, 80]],
+  // Raklion
+  [[62], [26, 27, 28]],
+  // Santa's Village
+  [[63], range(0, 6)],
+  // Vulcanus
+  [[64], [34, 35, 36]],
+  // the duel arena
+  [[65], [70, 80, 99, 101]],
+  // Doppelganger
+  [[66], [...range(0, 6), 47, 48]],
+  [[67], [22, 47, 48]],
+  [[68], [37, 47, 48, 59, 60, 61, 62, 81, 82, 83, 97, 107, 108]],
+  [[...range(69, 74)], [79, 80, 82, 83, 84, 85, 86, 129, 130, 131, 132]],
+  // Imperial Guardian, the new scenes
+  [[79], [54, 55, 56, 57, 58, 67]],
+  // Loren Market
+  [[80, 81], [113, 114, 115, 116, 118]]
+  // Karutan
+]);
+function range(first, last) {
+  return Array.from({ length: last - first + 1 }, (_, index) => first + index);
+}
+function hiddenObjects(rows) {
+  const out = {};
+  for (const [maps, types] of rows) for (const map of maps) out[map] = [.../* @__PURE__ */ new Set([...out[map] ?? [], ...types])];
+  return out;
+}
 var LORENCIA_MODELS = [
   ["Tree", 0, 13],
   ["Grass", 20, 8],
@@ -24458,10 +24530,7 @@ async function buildObjectType(objectDir, fileName, placements, light) {
     return mesh;
   }));
 }
-async function createWorld(data, fog, onProgress) {
-  const group = new Group();
-  const terrain = await createTerrain({ worldDir: data.dir, heights: data.heights, mapping: data.mapping, light: data.light, fog });
-  group.add(terrain);
+function drawnObjects(data) {
   const files = worldModelFiles(data.worldNumber);
   const byType = /* @__PURE__ */ new Map();
   const hidden = HIDDEN_OBJECTS[data.mapNumber];
@@ -24470,6 +24539,14 @@ async function createWorld(data, fog, onProgress) {
     if (!byType.has(object.type)) byType.set(object.type, []);
     byType.get(object.type).push(object);
   }
+  return byType;
+}
+async function createWorld(data, fog, onProgress) {
+  const group = new Group();
+  const terrain = await createTerrain({ worldDir: data.dir, heights: data.heights, mapping: data.mapping, light: data.light, fog });
+  group.add(terrain);
+  const files = worldModelFiles(data.worldNumber);
+  const byType = drawnObjects(data);
   const objectDir = `Object${data.worldNumber}`;
   const fadeRule = INDOOR_FADES[data.mapNumber];
   const indoorFade = fadeRule ? { meshes: [], indoors: fadeRule.indoors, alpha: 1 } : null;
