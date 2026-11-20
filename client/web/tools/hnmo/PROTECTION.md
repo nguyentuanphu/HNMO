@@ -79,9 +79,11 @@ swaps a file can set it back to `warn`.
   loose DLLs, so the assemblies are bundled and symbols stripped. Full IL **name** obfuscation
   (e.g. Obfuscar) is **not** applied: the server maps entity types and properties to database
   columns through EF Core (and compiled models with fully-qualified names) and discovers plug-ins
-  by type, so renaming types or members would break the database and the plug-ins. That step, if
-  wanted, needs its own tested pass (keep every entity, plug-in and public type; test every admin
-  page and plug-in) — ask the owner before adding it.
+  by type, so renaming types or members would break the database and the plug-ins.
+  - A no-rename obfuscation was looked at (owner, 2026-11-20): on .NET 10 there is no reliable free
+    control-flow obfuscator, and string encryption (Obfuscar) needs the loose dependency DLLs, so
+    it would mean dropping the single-file ship. The owner chose to keep the current protections
+    (single-file, no symbols, the tamper signature, the watermarks) rather than make that trade.
 
 ## 4. The private signing key
 
