@@ -165,6 +165,7 @@ public class BuyRequestAction
             {
                 player.Logger.LogCritical("Bought item {0} didn't fit into the inventory of {1} after the payment.", item, player.Name);
             }
+
             requestedPlayer.PersistenceContext.Detach(item);
             foreach (var (paymentItem, _) in purchase.PaymentItems)
             {
