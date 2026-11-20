@@ -95,7 +95,9 @@ public class PkClearChatCommandPlugIn : ChatCommandPlugInBase<PkClearChatCommand
 
         if (!isGameMaster)
         {
-            var cost = (long)targetCharacter.PlayerKillCount * configuration.ZenCostPerKill;
+            // A player who is still in a PK state without counted kills pays at least the price of one kill,
+            // otherwise the PK state could be cleared for free.
+            var cost = (long)Math.Max(1, targetCharacter.PlayerKillCount) * configuration.ZenCostPerKill;
             if (cost > int.MaxValue)
             {
                 cost = int.MaxValue;
