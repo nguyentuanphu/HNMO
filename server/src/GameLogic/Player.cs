@@ -1841,6 +1841,12 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
             return;
         }
 
+        if (hitInfo.Attributes.HasFlag(DamageAttributes.Reflected))
+        {
+            // Classic MU: returned damage only lowers the attacker's life, it is not reflected again.
+            return;
+        }
+
         if (attacker is IAttackable or AttackerSurrogate)
         {
             var attackableAttacker = attacker is AttackerSurrogate surrogate ? surrogate.Owner : (IAttackable)attacker;
