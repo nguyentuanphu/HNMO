@@ -20,7 +20,7 @@
 import * as THREE from 'three';
 import { angleEuler, createAngle2D, randInt, rotateByAngle } from './core.js';
 import type { EffectSystem } from './effectSystem.js';
-import { EXTRA_EFFECTS, EXTRA_JOINTS, EXTRA_PARTICLES } from './extraEffects.js';
+import { EXTRA_EFFECTS, EXTRA_JOINTS, EXTRA_PARTICLES, PREWARM_LOADS } from './extraEffects.js';
 import type { Effect, EffectOwner } from './types.js';
 import { computeBoneMatrices, loadModel } from '../../bmd.js';
 import type { BMDModel } from '../../formats.js';
@@ -618,6 +618,73 @@ EXTRA_JOINTS.groundWind = {
   },
 };
 
+// ---------------------------------------------------------------------------
+// Phoenix Shot: a bird of fire beats its wings over the target.
+// ---------------------------------------------------------------------------
+
+// MODEL_PHOENIX_SHOT (Effect/phoenix_shot_effect.bmd) has no meshes: eight bones, two wings of four (R0-R03, L0-L03)
+// about 120 over the ground, that fold back, spread 200 wide and beat forward over its 19 keys. The web draws the
+// wings with the game's own flames (BITMAP_FIRE_HIK1 / _CURSEDLICH, as Dragon Roar's volcano), a glow on the body and
+// the wing tips, and an orange light on the ground; the target bursts in fire as the wings beat down.
+const PHOENIX_KEYS_PER_TICK = 0.6;
+const PHOENIX_WING_BONES: readonly number[] = [1, 2, 3, 5, 6, 7];
+const PHOENIX_TIPS: readonly number[] = [3, 7];
+const PHOENIX_FIRE = new THREE.Vector3(1, 0.55, 0.2);
+const PHOENIX_GLOW = new THREE.Vector3(1, 0.4, 0.1);
+let phoenixModel: BMDModel | null = null;
+let phoenixLoad: Promise<void> | null = null;
+function phoenixDummyModel(): Promise<void> {
+  phoenixLoad ??= loadModel('Effect', 'phoenix_shot_effect.bmd').then((model) => { phoenixModel = model; }).catch(() => { /* the fallback wings */ });
+  return phoenixLoad;
+}
+PREWARM_LOADS.push(phoenixDummyModel);
+
+/** A wing bone at `frame`, in the world; without the model, a plain pair of wings opening and closing. */
+function phoenixBone(o: Effect, bone: number, frame: number): THREE.Vector3 {
+  const matrix = phoenixModel ? computeBoneMatrices(phoenixModel, 0, frame)[bone] : undefined;
+  const local = new THREE.Vector3();
+  if (matrix) local.applyMatrix4(matrix);
+  else {
+    const side = bone < 4 ? 1 : -1, reach = (bone % 4) * 60 * (0.4 + 0.6 * Math.sin(frame / 18 * Math.PI));
+    local.set(-reach * 0.4, side * reach, 120);
+  }
+  return local.multiplyScalar(o.scale).applyEuler(angleEuler(o.angle, euler)).add(o.position);
+}
+
+EXTRA_EFFECTS.phoenixShot = {
+  create: (o) => {
+    o.scale = o.callScale || 1;
+    o.lifeTime = Math.ceil(18 / PHOENIX_KEYS_PER_TICK) + 4;
+    o.distance = 0; // the dummy's key
+    void phoenixDummyModel();
+    return o.target !== null;
+  },
+  move: (o, system) => {
+    const target = o.target;
+    if (target && live(target)) o.position.copy(target.position);
+    const before = o.distance;
+    const frame = Math.min(18, before + PHOENIX_KEYS_PER_TICK);
+    o.distance = frame;
+    const fade = Math.min(1, o.lifeTime / 6);
+    const fire = PHOENIX_FIRE.clone().multiplyScalar(fade);
+    for (const bone of PHOENIX_WING_BONES) {
+      const p = phoenixBone(o, bone, frame);
+      system.createParticle('fireHik1', p, o.angle, fire, 0, (randInt(4) + 9) * 0.1 * o.scale);
+    }
+    for (const bone of PHOENIX_TIPS) system.createSprite('flareRed', phoenixBone(o, bone, frame), 1.6 * o.scale, PHOENIX_GLOW.clone().multiplyScalar(fade));
+    const body = phoenixBone(o, 0, frame);
+    system.createSprite('light', body, 3.5 * o.scale, PHOENIX_GLOW.clone().multiplyScalar(fade));
+    if (Math.trunc(o.lifeTime) % 2 === 0) system.createParticle('fireCursedLich', body, o.angle, fire, 4, 1.4 * o.scale);
+    system.addTerrainLight(o.position.x, o.position.y, PHOENIX_GLOW.clone().multiplyScalar(fade), 3);
+    // The wings' downbeat (keys 12-15 come forward): the burst at the target.
+    if (before < 12 && frame >= 12) {
+      for (let i = 0; i < 2; i++) system.createParticle('explosion', o.position.clone().setZ(o.position.z + 80), o.angle, WHITE);
+      for (let i = 0; i < 6; i++) system.createParticle('fireCursedLich', o.position.clone().setZ(o.position.z + 40 + randInt(60)), o.angle, PHOENIX_FIRE, 9, 1.6 * o.scale);
+    }
+    return false; // no model and no drift: the shared tail only counts the life time
+  },
+};
+
 /** The rings ahead of the fighter (Dragon Slasher; the same as Multi-Shot's). */
 function ringsAhead(system: EffectSystem, o: EffectOwner, angle: THREE.Vector3): void {
   const light = new THREE.Vector3(0.8, 0.9, 1.6);
@@ -682,10 +749,16 @@ export function rageCreateEffect(system: EffectSystem, skill: number, caster: Ef
     case RageSkill.CHARGE: // AT_SKILL_OCCUPY: the rings in front as the fighter rushes
       ringsAhead(system, caster, caster.angle);
       return false; // its attack (the rush's sparks) follows
-    case RageSkill.PHOENIX_SHOT:
-      // MODEL_PHOENIX_SHOT at the target: CreateEffect has no case for it, so it gets no life time and ends the tick
-      // it is made; the desktop shows nothing for it.
+    case RageSkill.PHOENIX_SHOT: {
+      // MODEL_PHOENIX_SHOT at the target, turned from the fighter towards it (RageCreateEffect). The open client's
+      // CreateEffect has no case for it (no life time: gone the tick it is made, so nothing showed); the web flies its
+      // dummy's wings in fire (phoenixShot below).
+      if (!target) return true;
+      const angle = caster.angle.clone();
+      angle.z = createAngle2D(caster.position, target.position);
+      system.createEffect('phoenixShot', target.position, angle, WHITE, 0, caster, 1, { target });
       return true;
+    }
     case RageSkill.ATT_UP:
     case RageSkill.HP_UP:
     case RageSkill.DEF_UP: {
