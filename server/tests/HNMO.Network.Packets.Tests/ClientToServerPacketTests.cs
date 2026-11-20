@@ -4733,6 +4733,22 @@ public class PacketStructureTests
     }
 
     /// <summary>
+    /// Tests the packet size calculation for HnmoItemStackCommand.
+    /// </summary>
+    [Test]
+    public void HnmoItemStackCommand_PacketSizeValidation()
+    {
+        // Variable-length packet validation
+        // Test GetRequiredSize method with sample data
+        const string testString = "TestData";
+        var calculatedSize = HnmoItemStackCommandRef.GetRequiredSize(testString);
+        var expectedMinSize = Encoding.UTF8.GetByteCount(testString) + 1 + 8;
+        
+        Assert.That(calculatedSize, Is.GreaterThanOrEqualTo(expectedMinSize), 
+            "GetRequiredSize calculation incorrect for string field");
+    }
+
+    /// <summary>
     /// Tests the packet size calculation for HnmoVipRequest.
     /// </summary>
     [Test]

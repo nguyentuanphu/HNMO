@@ -329,7 +329,7 @@
     <value>F11 - Restablecer vista de cámara</value>
   </data>
   <data name="Home - Toggle MU Helper" xml:space="preserve">
-    <value>Home - Alternar MU Helper</value>
+    <value>Home - Alternar Auto Play</value>
   </data>
   <data name="Enter: Chatting Mode" xml:space="preserve">
     <value>Ingrese: Modo de chat</value>
@@ -8393,19 +8393,19 @@
     <value>No hay ningún elemento seleccionado</value>
   </data>
   <data name="Any characters under level %d can't run Official MU Helper." xml:space="preserve">
-    <value>Cualquier personaje por debajo del nivel %d no puede ejecutar Official MU Helper.</value>
+    <value>Cualquier personaje por debajo del nivel %d no puede ejecutar Auto Play.</value>
   </data>
   <data name="Official MU Helper only runs in filed" xml:space="preserve">
     <value>El asistente oficial de MU solo se ejecuta en archivos</value>
   </data>
   <data name="In order to run Official MU Helper, please close Inventory window" xml:space="preserve">
-    <value>Para ejecutar Official MU Helper, cierre la ventana de Inventario</value>
+    <value>Para ejecutar Auto Play, cierre la ventana de Inventario</value>
   </data>
   <data name="In order to run Official MU Helper, please close MU Guide window" xml:space="preserve">
-    <value>Para ejecutar Official MU Helper, cierre la ventana de la Guía MU</value>
+    <value>Para ejecutar Auto Play, cierre la ventana de la Guía MU</value>
   </data>
   <data name="InOrderToRunOfficialMU" xml:space="preserve">
-    <value>Para ejecutar Official MU Helper correctamente, registre las habilidades (excepto Fairy)</value>
+    <value>Para ejecutar Auto Play correctamente, registre las habilidades (excepto Fairy)</value>
   </data>
   <data name="Official MU Helper is running." xml:space="preserve">
     <value>El asistente oficial de MU se está ejecutando.</value>
@@ -8414,10 +8414,10 @@
     <value>El asistente oficial de MU está cerrado</value>
   </data>
   <data name="Official MU Helper Setting has been saved." xml:space="preserve">
-    <value>Se ha guardado la configuración oficial de MU Helper.</value>
+    <value>Se ha guardado la configuración oficial de Auto Play.</value>
   </data>
   <data name="Official MU Helper can't be implemented in this region." xml:space="preserve">
-    <value>El MU Helper oficial no se puede implementar en esta región.</value>
+    <value>El Auto Play oficial no se puede implementar en esta región.</value>
   </data>
   <data name="CertainAmountOfZenIsSpent" xml:space="preserve">
     <value>Se gasta cierta cantidad de zen cada 5 minutos en la implementación del asistente oficial de MU.</value>
@@ -8435,10 +8435,10 @@
     <value>Se han gastado zen %d en la implementación del asistente oficial de MU.</value>
   </data>
   <data name="Zen is not sufficient to run Official MU Helper" xml:space="preserve">
-    <value>Zen no es suficiente para ejecutar Official MU Helper</value>
+    <value>Zen no es suficiente para ejecutar Auto Play</value>
   </data>
   <data name="In order to run Official MU Helper, please install Add-on first" xml:space="preserve">
-    <value>Para ejecutar Official MU Helper, primero instale el complemento</value>
+    <value>Para ejecutar Auto Play, primero instale el complemento</value>
   </data>
   <data name="Official MU Helper is closed due to the excess of %d hour(s)" xml:space="preserve">
     <value>El asistente oficial de MU está cerrado debido al exceso de hora(s) %d</value>

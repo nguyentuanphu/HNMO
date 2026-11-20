@@ -535,16 +535,16 @@
     <value>Xử lý gói tin yêu cầu trạng thái mở của sự kiện.</value>
   </data>
   <data name="MuHelperSaveDataRequestHandlerPlugin_Name" xml:space="preserve">
-    <value>Xử lý lưu dữ liệu trợ lý tự động đánh</value>
+    <value>Xử lý lưu dữ liệu tự động chơi</value>
   </data>
   <data name="MuHelperSaveDataRequestHandlerPlugin_Description" xml:space="preserve">
-    <value>Xử lý yêu cầu lưu dữ liệu trợ lý tự động đánh.</value>
+    <value>Xử lý yêu cầu lưu dữ liệu tự động chơi.</value>
   </data>
   <data name="MuHelperStatusChangeRequestHandlerPlugIn_Name" xml:space="preserve">
-    <value>Xử lý đổi trạng thái trợ lý tự động đánh</value>
+    <value>Xử lý đổi trạng thái tự động chơi</value>
   </data>
   <data name="MuHelperStatusChangeRequestHandlerPlugIn_Description" xml:space="preserve">
-    <value>Xử lý yêu cầu đổi trạng thái trợ lý tự động đánh.</value>
+    <value>Xử lý yêu cầu đổi trạng thái tự động chơi.</value>
   </data>
   <data name="PartyKickHandlerPlugIn_Name" xml:space="preserve">
     <value>Xử lý đuổi khỏi tổ đội</value>
@@ -1297,16 +1297,16 @@
     <value>Bản cài đặt mặc định của IUpdateMiniGameStateViewPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
   </data>
   <data name="MuHelperConfigurationUpdatePlugIn_Name" xml:space="preserve">
-    <value>Cập nhật cấu hình trợ lý tự động đánh</value>
+    <value>Cập nhật cấu hình tự động chơi</value>
   </data>
   <data name="MuHelperConfigurationUpdatePlugIn_Description" xml:space="preserve">
-    <value>Gửi trạng thái trợ lý tự động đánh mới đến client.</value>
+    <value>Gửi trạng thái tự động chơi mới đến client.</value>
   </data>
   <data name="MuHelperStatusUpdatePlugIn_Name" xml:space="preserve">
-    <value>Cập nhật trạng thái trợ lý tự động đánh</value>
+    <value>Cập nhật trạng thái tự động chơi</value>
   </data>
   <data name="MuHelperStatusUpdatePlugIn_Description" xml:space="preserve">
-    <value>Gửi cập nhật trạng thái trợ lý tự động đánh đến client.</value>
+    <value>Gửi cập nhật trạng thái tự động chơi đến client.</value>
   </data>
   <data name="NpcDialogClosedPlugIn075_Name" xml:space="preserve">
     <value>Đã đóng hội thoại NPC (075)</value>
@@ -2155,10 +2155,10 @@
     <value>Xử lý gói tin đăng xuất (do gian lận).</value>
   </data>
   <data name="MuHelperGroupHandler_Name" xml:space="preserve">
-    <value>Nhóm xử lý trợ lý tự động đánh</value>
+    <value>Nhóm xử lý tự động chơi</value>
   </data>
   <data name="MuHelperGroupHandler_Description" xml:space="preserve">
-    <value>Nhóm xử lý gói tin trợ lý tự động đánh (mã 0xBF).</value>
+    <value>Nhóm xử lý gói tin tự động chơi (mã 0xBF).</value>
   </data>
   <data name="PlayerShopBuyRequestPacketHandlerPlugIn_Name" xml:space="preserve">
     <value>Cửa hàng người chơi - Yêu cầu mua</value>
@@ -2299,10 +2299,10 @@
     <value>Bản cài đặt mở rộng của IAppearanceChangedPlugIn, chuyển thay đổi ngoại hình của người chơi khác đến game client bằng các gói dữ liệu riêng.</value>
   </data>
   <data name="MuHelperSettingsInitializationPlugIn_Name" xml:space="preserve">
-    <value>Khởi tạo cài đặt trợ lý tự động đánh</value>
+    <value>Khởi tạo cài đặt tự động chơi</value>
   </data>
   <data name="MuHelperSettingsInitializationPlugIn_Description" xml:space="preserve">
-    <value>Khởi tạo cài đặt trợ lý tự động đánh khi người chơi vào game.</value>
+    <value>Khởi tạo cài đặt tự động chơi khi người chơi vào game.</value>
   </data>
   <data name="ChatCommandListViewPlugIn_Name" xml:space="preserve">
     <value>Hiển thị danh sách lệnh chat</value>

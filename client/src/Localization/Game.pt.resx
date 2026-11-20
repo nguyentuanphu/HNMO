@@ -329,7 +329,7 @@
     <value>F11 - Redefinir visão da câmera</value>
   </data>
   <data name="Home - Toggle MU Helper" xml:space="preserve">
-    <value>Home - Alternar MU Helper</value>
+    <value>Home - Alternar Auto Play</value>
   </data>
   <data name="Enter: Chatting Mode" xml:space="preserve">
     <value>Entre: modo de bate-papo</value>
@@ -8393,34 +8393,34 @@
     <value>Não há item selecionado</value>
   </data>
   <data name="Any characters under level %d can't run Official MU Helper." xml:space="preserve">
-    <value>Qualquer personagem abaixo do nível %d não pode executar o Official MU Helper.</value>
+    <value>Qualquer personagem abaixo do nível %d não pode executar o Auto Play.</value>
   </data>
   <data name="Official MU Helper only runs in filed" xml:space="preserve">
-    <value>O MU Helper oficial só é executado em campo</value>
+    <value>O Auto Play oficial só é executado em campo</value>
   </data>
   <data name="In order to run Official MU Helper, please close Inventory window" xml:space="preserve">
-    <value>Para executar o Official MU Helper, feche a janela de inventário</value>
+    <value>Para executar o Auto Play, feche a janela de inventário</value>
   </data>
   <data name="In order to run Official MU Helper, please close MU Guide window" xml:space="preserve">
-    <value>Para executar o Official MU Helper, feche a janela do MU Guide</value>
+    <value>Para executar o Auto Play, feche a janela do MU Guide</value>
   </data>
   <data name="InOrderToRunOfficialMU" xml:space="preserve">
-    <value>Para executar o Official MU Helper corretamente, registre habilidades (exceto Fairy)</value>
+    <value>Para executar o Auto Play corretamente, registre habilidades (exceto Fairy)</value>
   </data>
   <data name="Official MU Helper is running." xml:space="preserve">
-    <value>O MU Helper oficial está em execução.</value>
+    <value>O Auto Play oficial está em execução.</value>
   </data>
   <data name="Official MU Helper is closed" xml:space="preserve">
-    <value>O MU Helper oficial está fechado</value>
+    <value>O Auto Play oficial está fechado</value>
   </data>
   <data name="Official MU Helper Setting has been saved." xml:space="preserve">
-    <value>A configuração oficial do MU Helper foi salva.</value>
+    <value>A configuração oficial do Auto Play foi salva.</value>
   </data>
   <data name="Official MU Helper can't be implemented in this region." xml:space="preserve">
-    <value>O MU Helper oficial não pode ser implementado nesta região.</value>
+    <value>O Auto Play oficial não pode ser implementado nesta região.</value>
   </data>
   <data name="CertainAmountOfZenIsSpent" xml:space="preserve">
-    <value>Certa quantidade de zen é gasta a cada 5 minutos na implementação do Official MU Helper</value>
+    <value>Certa quantidade de zen é gasta a cada 5 minutos na implementação do Auto Play</value>
   </data>
   <data name="Spent Time %d Minute(s)/" xml:space="preserve">
     <value>Tempo gasto %d Minuto(s)/</value>
@@ -8432,16 +8432,16 @@
     <value>Tempo gasto %d hora(s) %d Minuto(s)/ Zen gasto %d Estágio / Custo %d zen(s)</value>
   </data>
   <data name="%d zen(s) have been spent in implementing Official MU Helper" xml:space="preserve">
-    <value>%d zen(s) foram gastos na implementação do Official MU Helper</value>
+    <value>%d zen(s) foram gastos na implementação do Auto Play</value>
   </data>
   <data name="Zen is not sufficient to run Official MU Helper" xml:space="preserve">
-    <value>Zen não é suficiente para executar o Official MU Helper</value>
+    <value>Zen não é suficiente para executar o Auto Play</value>
   </data>
   <data name="In order to run Official MU Helper, please install Add-on first" xml:space="preserve">
-    <value>Para executar o Official MU Helper, instale o complemento primeiro</value>
+    <value>Para executar o Auto Play, instale o complemento primeiro</value>
   </data>
   <data name="Official MU Helper is closed due to the excess of %d hour(s)" xml:space="preserve">
-    <value>O MU Helper oficial está fechado devido ao excesso de hora(s) %d</value>
+    <value>O Auto Play oficial está fechado devido ao excesso de hora(s) %d</value>
   </data>
   <data name="Other Settings" xml:space="preserve">
     <value>Outras configurações</value>

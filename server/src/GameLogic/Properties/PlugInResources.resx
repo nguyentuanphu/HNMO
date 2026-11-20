@@ -148,10 +148,10 @@
     <value>Shows Land of Trials availability and its applicable entry fee.</value>
   </data>
   <data name="MuHelperFeaturePlugIn_Name" xml:space="preserve">
-    <value>Auto-Play Helper Feature</value>
+    <value>Auto Play</value>
   </data>
   <data name="MuHelperFeaturePlugIn_Description" xml:space="preserve">
-    <value>Provides configuration for the auto-play helper feature.</value>
+    <value>Provides configuration for auto play.</value>
   </data>
   <data name="UpdatePetCommandManagerOnItemMovePlugIn_Name" xml:space="preserve">
     <value>Update Pet Command Manager On Item Move</value>

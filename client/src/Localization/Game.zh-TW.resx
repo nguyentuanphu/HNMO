@@ -329,7 +329,7 @@
     <value>F11 - 重置攝影機視角</value>
   </data>
   <data name="Home - Toggle MU Helper" xml:space="preserve">
-    <value>Home - 切換 MU Helper</value>
+    <value>Home - 切換 Auto Play</value>
   </data>
   <data name="Enter: Chatting Mode" xml:space="preserve">
     <value>進入：聊天模式</value>
@@ -8393,34 +8393,34 @@
     <value>沒有選擇的項目</value>
   </data>
   <data name="Any characters under level %d can't run Official MU Helper." xml:space="preserve">
-    <value>%d級別以下的任何角色都無法運行官方MU Helper。</value>
+    <value>%d級別以下的任何角色都無法運行官方Auto Play。</value>
   </data>
   <data name="Official MU Helper only runs in filed" xml:space="preserve">
-    <value>官方 MU Helper 僅在歸檔中運行</value>
+    <value>官方 Auto Play 僅在歸檔中運行</value>
   </data>
   <data name="In order to run Official MU Helper, please close Inventory window" xml:space="preserve">
-    <value>為了運行官方 MU Helper，請關閉庫存窗口</value>
+    <value>為了運行官方 Auto Play，請關閉庫存窗口</value>
   </data>
   <data name="In order to run Official MU Helper, please close MU Guide window" xml:space="preserve">
-    <value>為了運行官方MU Helper，請關閉MU Guide窗口</value>
+    <value>為了運行官方Auto Play，請關閉MU Guide窗口</value>
   </data>
   <data name="InOrderToRunOfficialMU" xml:space="preserve">
     <value>為了正常運行官方MU助手，請註冊技能（仙女除外）</value>
   </data>
   <data name="Official MU Helper is running." xml:space="preserve">
-    <value>官方 MU Helper 正在運行。</value>
+    <value>官方 Auto Play 正在運行。</value>
   </data>
   <data name="Official MU Helper is closed" xml:space="preserve">
     <value>官方MU助理已關閉</value>
   </data>
   <data name="Official MU Helper Setting has been saved." xml:space="preserve">
-    <value>官方 MU Helper 設定已儲存。</value>
+    <value>官方 Auto Play 設定已儲存。</value>
   </data>
   <data name="Official MU Helper can't be implemented in this region." xml:space="preserve">
-    <value>官方 MU Helper 無法在該地區實施。</value>
+    <value>官方 Auto Play 無法在該地區實施。</value>
   </data>
   <data name="CertainAmountOfZenIsSpent" xml:space="preserve">
-    <value>每5分鐘花費一定量的zen來實現官方MU Helper</value>
+    <value>每5分鐘花費一定量的zen來實現官方Auto Play</value>
   </data>
   <data name="Spent Time %d Minute(s)/" xml:space="preserve">
     <value>花費時間 %d 分鐘/</value>
@@ -8432,16 +8432,16 @@
     <value>花費時間 %d 小時 %d 分鐘/花費 Zen %d 階段/成本 %d zen</value>
   </data>
   <data name="%d zen(s) have been spent in implementing Official MU Helper" xml:space="preserve">
-    <value>%d zen(s) 已用於實施官方 MU Helper</value>
+    <value>%d zen(s) 已用於實施官方 Auto Play</value>
   </data>
   <data name="Zen is not sufficient to run Official MU Helper" xml:space="preserve">
-    <value>Zen 不足以運行官方 MU Helper</value>
+    <value>Zen 不足以運行官方 Auto Play</value>
   </data>
   <data name="In order to run Official MU Helper, please install Add-on first" xml:space="preserve">
-    <value>為了運行官方MU Helper，請先安裝插件</value>
+    <value>為了運行官方Auto Play，請先安裝插件</value>
   </data>
   <data name="Official MU Helper is closed due to the excess of %d hour(s)" xml:space="preserve">
-    <value>由於 %d 小時數過多，官方 MU Helper 已關閉</value>
+    <value>由於 %d 小時數過多，官方 Auto Play 已關閉</value>
   </data>
   <data name="Other Settings" xml:space="preserve">
     <value>其他設定</value>

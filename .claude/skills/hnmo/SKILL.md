@@ -452,3 +452,11 @@ The desktop code stays the reference for how the classic game behaves (parity ru
   (license.hnmo, sign-license.sh) on 2026-11-21 09:00 Sydney (a scheduled reminder exists).
 - (10:20) Release plan: ONE release with everything, the Arena (all 4 modes) included. Until then keep merging
   verified work into the working branch; main and HNMO.zip wait for the owner's OK after all of it is done.
+
+## Vault pages and item stacks (2026-11-20)
+- F5 codes: vault pages 4E (command: Action, Page) / 4F (state JSON); item stacks 50 (command: Action 0 state,
+  1 split, 2 unlock; Storage 0 bag / 1 vault; Slot; Count; Kind) / 51 (state JSON). Next free: 52.
+- Stack limits come from `HNMO.DataModel.ItemExtensions.StackLimit` (set by `ItemStackRules.Configure`); the player is
+  `ItemStackRules.CurrentPlayer` (set in `RemotePlayer.PacketReceivedAsync`). Kinds in `ItemStackConfiguration`.
+- test300 has no WCoin (C): browser tests can't buy unlocks with it. They check the refusal ("needs 500") and use free
+  kinds (potions); paid paths are covered by server tests (`ItemStackRulesTest`).

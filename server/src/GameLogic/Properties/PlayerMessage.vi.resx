@@ -61,16 +61,16 @@
     <value>Không thể vào sự kiện khi đang mặc '{0}'.</value>
   </data>
   <data name="MuHelperAlreadyRunning" xml:space="preserve">
-    <value>Trợ lý tự động đánh đang chạy rồi.</value>
+    <value>Tự động chơi đang chạy rồi.</value>
   </data>
   <data name="MuHelperMinimumLevel" xml:space="preserve">
-    <value>Trợ lý tự động đánh dùng được từ cấp {0}.</value>
+    <value>Tự động chơi dùng được từ cấp {0}.</value>
   </data>
   <data name="MuHelperMaximumLevel" xml:space="preserve">
-    <value>Trợ lý tự động đánh không dùng được sau cấp {0}.</value>
+    <value>Tự động chơi không dùng được sau cấp {0}.</value>
   </data>
   <data name="MuHelperRequiresMoney" xml:space="preserve">
-    <value>Trợ lý tự động đánh cần {0} zen.</value>
+    <value>Tự động chơi cần {0} zen.</value>
   </data>
   <data name="AlreadyInDuel" xml:space="preserve">
     <value>Bạn đang trong một trận đấu tay đôi.</value>
@@ -547,10 +547,10 @@
     <value>Rất tiếc, đã có lỗi khi gửi thư.</value>
   </data>
   <data name="MuHelperIsDisabled" xml:space="preserve">
-    <value>Trợ lý tự động đánh đã bị tắt</value>
+    <value>Tự động chơi đã bị tắt</value>
   </data>
   <data name="MuHelperCantHandleStatus" xml:space="preserve">
-    <value>Trợ lý tự động đánh không xử lý được trạng thái: {0}</value>
+    <value>Tự động chơi không xử lý được trạng thái: {0}</value>
   </data>
   <data name="PartyNotPossibleDuringEvent" xml:space="preserve">
     <value>Không thể lập tổ đội trong sự kiện này.</value>
@@ -706,7 +706,7 @@
     <value>Chưa chọn nhân vật.</value>
   </data>
   <data name="OfflineLevelingMuHelperNotRunning" xml:space="preserve">
-    <value>Trợ lý tự động đánh phải đang chạy để bắt đầu luyện cấp offline.</value>
+    <value>Tự động chơi phải đang chạy để bắt đầu luyện cấp offline.</value>
   </data>
   <data name="StatResetNotEnabled" xml:space="preserve">
     <value>Chưa bật đặt lại chỉ số.</value>
