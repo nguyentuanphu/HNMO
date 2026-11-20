@@ -94,3 +94,15 @@
   reset it): more may play, and every admin panel page shows a banner asking the host to pay for a licence, with the
   date it ends. After the week the limit holds again (the banner says so). One grace per server; a new licence
   applied ends it. The weekly report carries the day it started, and the console shows "over the limit since".
+
+## Owner decisions (pop-up, 2026-11-21 morning, Sydney)
+
+- **Licence binding:** a real machine id from the system's own id (Windows MachineGuid, Linux /etc/machine-id, macOS
+  IOPlatformUUID; renaming the computer doesn't change it), not the computer name. A licence seen from 2 or more
+  machines in the weekly reports / licence fetches is **withdrawn automatically** by the hub (the console shows why;
+  the owner can undo). No IP binding.
+- **First setup report:** at the first setup HNMO sends the hub: the system (OS, CPU name and cores, RAM, free disk,
+  HNMO and .NET versions, machine id), the game (display name, servers / seasons on, public address if filled in,
+  language), the host's name and contact (two optional fields on the setup page), the country from the IP **and the IP
+  itself** (owner's choice: this changes the hub's earlier "no raw IP" rule for this report).
+- **Telling the host:** a clear line on the setup page that this is sent to the HNMO developer (never player accounts).
