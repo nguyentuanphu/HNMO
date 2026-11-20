@@ -13397,6 +13397,15 @@ namespace HNMO.Web.AdminPanel.Properties {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Server log.
+        /// </summary>
+        public static string ServerLogPage {
+            get {
+                return ResourceManager.GetString("ServerLogPage", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Resets and relife.
         /// </summary>
         public static string ResetsRelifePage {

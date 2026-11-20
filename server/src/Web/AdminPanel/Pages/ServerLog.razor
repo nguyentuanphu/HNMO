@@ -1,0 +1,39 @@
+@page "/server-log"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @Resources.ServerLogPage</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@Resources.ServerLogPage" />
+<h1>@Resources.ServerLogPage</h1>
+<PageHelp Text="@L("What the black window used to show: the launcher's lines, and the game server's and database's logs (save/logs). It refreshes every 3 seconds while 'Live' is on. 'Stop HNMO' stops the game, the database and the launcher, like closing the old window.", "Những gì cửa sổ đen từng hiện: chữ của chương trình khởi động, và log của máy chủ game và cơ sở dữ liệu (save/logs). Trang tự làm mới mỗi 3 giây khi bật 'Trực tiếp'. 'Tắt HNMO' tắt game, cơ sở dữ liệu và chương trình khởi động, như đóng cửa sổ cũ.")" />
+
+<div class="d-flex flex-wrap gap-2 align-items-center mb-2">
+    @foreach (var f in this._files)
+    {
+        var file = f.FileName;
+        <button type="button" class="btn btn-sm @(file == this._file ? "btn-primary" : "btn-outline-secondary")" title="@L($"Show {file}", $"Xem {file}")" @onclick="() => this.Choose(file)">@file</button>
+    }
+    <label class="form-check-label ms-2"><input type="checkbox" class="form-check-input me-1" id="server-log-live" @bind="this._live" />@L("Live", "Trực tiếp")</label>
+    <span class="ms-auto"></span>
+    @if (this._stopped)
+    {
+        <span class="text-muted" id="server-log-stopped">@L("HNMO is stopping. Start it again from its folder.", "HNMO đang tắt. Mở lại từ thư mục của nó.")</span>
+    }
+    else if (this._confirmStop)
+    {
+        <span>@L("Stop the game for everyone?", "Tắt game cho mọi người?")</span>
+        <button type="button" class="btn btn-sm btn-danger" id="server-log-stop-yes" title="@L("Yes, stop HNMO", "Có, tắt HNMO")" @onclick="this.StopHnmoAsync">@L("Stop", "Tắt")</button>
+        <button type="button" class="btn btn-sm btn-secondary" title="@L("Keep HNMO running", "Giữ HNMO chạy")" @onclick="() => this._confirmStop = false">@L("Cancel", "Huỷ")</button>
+    }
+    else
+    {
+        <button type="button" class="btn btn-sm btn-outline-danger" id="server-log-stop" title="@L("Stop the game, the database and the launcher", "Tắt game, cơ sở dữ liệu và chương trình khởi động")" @onclick="() => this._confirmStop = true">@L("Stop HNMO", "Tắt HNMO")</button>
+    }
+</div>
+
+<pre id="server-log-lines" class="border rounded p-2 small" style="max-height: 70vh; overflow: auto; white-space: pre-wrap;">@string.Join("\n", this._lines)</pre>
+@if (this._lines.Count == 0)
+{
+    <p class="text-muted">@L("Nothing in this log yet.", "Log này chưa có gì.")</p>
+}

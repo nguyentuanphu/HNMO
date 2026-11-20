@@ -166,6 +166,23 @@ internal static class ControlEndpoints
             return Results.Ok(new { ok = true });
         });
 
+        // "Stop HNMO" (owner's choice 2026-11-21: no console window to close): stops the game, the database and this program.
+        app.MapPost("/api/control/shutdown", (HttpContext ctx) =>
+        {
+            if (!IsLoopback(ctx))
+            {
+                return Forbidden();
+            }
+
+            logger.LogInformation("Stopping HNMO (asked from {Page}).", ctx.Request.Headers.Referer.ToString());
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(500).ConfigureAwait(false); // the answer goes out first
+                app.Services.GetRequiredService<IHostApplicationLifetime>().StopApplication();
+            });
+            return Results.Ok(new { ok = true });
+        });
+
         app.MapPost("/api/control/restart", (HttpContext ctx) =>
         {
             if (!IsLoopback(ctx))

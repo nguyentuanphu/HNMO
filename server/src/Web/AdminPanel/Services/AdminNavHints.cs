@@ -50,6 +50,7 @@ public static class AdminNavHints
         ["world-bosses-rankings"] = ("Boss spawns, weekly prizes", "Boss, phần thưởng tuần"),
         ["top-races"] = ("Daily/weekly contests", "Đua top ngày/tuần"),
         ["arena"] = ("Arena classes and battles", "Lớp & trận Đấu trường"),
+        ["server-log"] = ("Live logs, stop HNMO", "Log trực tiếp, tắt HNMO"),
         ["missions-rewards"] = ("Daily missions, coins", "Nhiệm vụ ngày, coin"),
         ["gift-codes"] = ("Make gift codes", "Tạo mã quà tặng"),
         ["topup-milestones"] = ("Top-up reward tiers", "Mốc thưởng nạp"),

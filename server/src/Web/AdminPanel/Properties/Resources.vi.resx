@@ -5243,4 +5243,7 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   <data name="ArenaSettingsPage" xml:space="preserve">
     <value>Nhân vật &amp; trận đấu Đấu trường</value>
   </data>
+  <data name="ServerLogPage" xml:space="preserve">
+    <value>Nhật ký máy chủ</value>
+  </data>
 </root>

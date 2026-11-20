@@ -116,6 +116,16 @@ if (HasArg("--Launcher:AdminUrl") && !HasArg("--Portal:ApiBaseUrl"))
     portalOptions.ApiBaseUrl = launcherOptions.AdminUrl;
 }
 
+// What the console window used to show also goes to save/logs/launcher.log (the admin panel's "Server log").
+try
+{
+    builder.Logging.AddProvider(new LauncherFileLoggerProvider(Path.Combine(Path.GetFullPath(Path.Combine(bridgeRoot, launcherOptions.SavePath)), "logs")));
+}
+catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+{
+    // A read-only folder: the console (where there is one) still shows it.
+}
+
 builder.Services.AddSingleton(services => new GameLauncher(
     launcherOptions,
     builder.Environment.ContentRootPath,
