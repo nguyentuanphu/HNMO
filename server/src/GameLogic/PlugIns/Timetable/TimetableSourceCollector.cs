@@ -132,7 +132,39 @@ public static class TimetableSourceCollector
             }
         }
 
+        // The Arena's scheduled battles, as the Arena program published them (not in the Arena itself).
+        if (!HNMO.Interfaces.HnmoSeasonInstance.IsArena)
+        {
+            items.AddRange(Arena.ArenaScheduleNoticesPlugIn.Schedules().Select(FromArena));
+        }
+
         return items;
+    }
+
+    /// <summary>Creates a timetable source item for one of the Arena's scheduled battles.</summary>
+    /// <param name="entry">The battle as the Arena published it.</param>
+    /// <returns>The timetable source item.</returns>
+    public static TimetableSourceItem FromArena(Persistence.ArenaScheduleEntry entry)
+    {
+        ArgumentNullException.ThrowIfNull(entry);
+        var royale = entry.Kind == "royale";
+        WorldBossSchedule.TryParseTimes(entry.Times, out var times);
+        Arena.ArenaGuildWarEngine.TryParseDays(entry.Days, out var days);
+        return new TimetableSourceItem
+        {
+            Id = royale ? "arena-royale" : "arena-guildwar",
+            Category = "event",
+            NameEn = royale ? "Arena: battle royale" : "Arena: guild war",
+            NameVi = royale ? "Đấu trường: đấu sinh tồn" : "Đấu trường: bang chiến",
+            MapsEn = royale ? "Arena (Lorencia)" : "Arena (Valley of Loren)",
+            MapsVi = royale ? "Đấu trường (Lorencia)" : "Đấu trường (Thung lũng Loren)",
+            DropsEn = royale ? "Arena points: winner 20, others 2" : "Arena points: win 15, loss 4; guild XP",
+            DropsVi = royale ? "Điểm Đấu trường: người thắng 20, còn lại 2" : "Điểm Đấu trường: thắng 15, thua 4; XP bang",
+            DailyTimes = times,
+            AllowedDays = days,
+            Duration = TimeSpan.FromMinutes(royale ? 12 : 15),
+            ExplicitNextStartUtc = entry.NextStartUtc,
+        };
     }
 
     /// <summary>Creates a timetable source item for a mini-game start plug-in.</summary>

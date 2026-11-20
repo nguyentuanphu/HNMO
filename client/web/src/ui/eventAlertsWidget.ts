@@ -20,6 +20,7 @@ const CATEGORY_LABELS: Record<string, { en: string; vi: string }> = {
   chaos_castle: { en: 'Chaos Castle', vi: 'Hỗn Nguyên Lâu' },
   world_boss: { en: 'World Bosses', vi: 'Boss Thế Giới' },
   invasion: { en: 'Map Invasions', vi: 'Sự Kiện Xâm Lăng' },
+  arena: { en: 'Arena battles (battle royale, guild war)', vi: 'Trận Đấu trường (sinh tồn, bang chiến)' },
 };
 
 function tx(en: string, vi: string): string {
@@ -49,7 +50,7 @@ export async function mountEventAlertsWidget(container: HTMLElement, getLanguage
   let config: EventAlertsPublicConfig | null = null;
   let statusText = '';
   let statusError = false;
-  let selected = new Set<string>(['blood_castle', 'devil_square', 'chaos_castle', 'world_boss', 'invasion']);
+  let selected = new Set<string>(['blood_castle', 'devil_square', 'chaos_castle', 'world_boss', 'invasion', 'arena']);
 
   const refreshConfig = async () => {
     try {

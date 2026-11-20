@@ -36,7 +36,7 @@ public sealed class WebsiteEventAlertsController(IPersistenceContextProvider per
             {
                 off = true,
                 leadTimeMinutes = cfg.LeadTimeMinutes,
-                categories = cfg.AvailableCategories ?? [],
+                categories = WithArena(cfg.AvailableCategories),
                 vapidPublicKey = string.Empty,
                 subscriberCount = 0,
             });
@@ -49,7 +49,7 @@ public sealed class WebsiteEventAlertsController(IPersistenceContextProvider per
             off = false,
             leadTimeMinutes = cfg.LeadTimeMinutes,
             remindAtStart = cfg.RemindAtStart,
-            categories = cfg.AvailableCategories ?? [],
+            categories = WithArena(cfg.AvailableCategories),
             vapidPublicKey = pub,
             subscriberCount = store.ListSubscriptions().Count,
         });
@@ -123,4 +123,8 @@ public sealed class WebsiteEventAlertsController(IPersistenceContextProvider per
 
     /// <summary>Request payload for browser Web Push endpoint removal.</summary>
     public sealed record UnsubscribeAlertRequest(string? Endpoint);
+
+    /// <summary>The categories offered, with the Arena's battles also for saves made before they existed.</summary>
+    private static List<string> WithArena(List<string>? categories) =>
+        (categories ?? []).Contains("arena") ? categories! : [.. categories ?? [], "arena"];
 }

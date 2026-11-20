@@ -58,5 +58,6 @@ public sealed class EventAlertsConfiguration
         "chaos_castle",
         "world_boss",
         "invasion",
+        "arena",
     ];
 }

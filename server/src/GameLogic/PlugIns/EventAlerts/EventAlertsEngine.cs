@@ -36,6 +36,11 @@ public static class EventAlertsEngine
             return "chaos_castle";
         }
 
+        if (id.StartsWith("arena-", StringComparison.Ordinal))
+        {
+            return "arena";
+        }
+
         if (string.Equals(entry.Category, "boss", StringComparison.OrdinalIgnoreCase)
             || id.Contains("boss", StringComparison.Ordinal))
         {

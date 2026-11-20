@@ -2433,4 +2433,6 @@
   <data name="ArenaHeraldPlugIn_Description" xml:space="preserve"><value>Nói chuyện với Sứ giả Đấu trường (NPC 595, ở các thị trấn chính) sẽ mở cửa sổ Đấu trường trong web game.</value></data>
   <data name="StartGuildWarChatCommandPlugIn_Name" xml:space="preserve"><value>Lệnh chat: /startguildwar (Đấu trường HNMO)</value></data>
   <data name="StartGuildWarChatCommandPlugIn_Description" xml:space="preserve"><value>Game master trong Đấu trường mở đăng ký bang chiến ngay, tới lúc bắt đầu: /startguildwar [số giây tới lúc bắt đầu, mặc định 120].</value></data>
+  <data name="ArenaScheduleNoticesPlugIn_Name" xml:space="preserve"><value>Thông báo trận Đấu trường HNMO</value></data>
+  <data name="ArenaScheduleNoticesPlugIn_Description" xml:space="preserve"><value>Ở máy chủ nhà: báo đấu sinh tồn và bang chiến của Đấu trường trong game trước 10 phút và lúc bắt đầu, theo lịch Đấu trường công bố.</value></data>
 </root>

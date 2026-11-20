@@ -34,6 +34,7 @@ public sealed class ArenaPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn, IPe
     private ArenaRoyale? _royale;
     private ArenaGuildWar? _guildWar;
     private DateTime _nextTeamTickUtc;
+    private DateTime _nextPublishUtc;
     private DateTime _nextMatchUtc;
     private DateTime _nextReturnUtc;
 
@@ -119,6 +120,22 @@ public sealed class ArenaPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn, IPe
             await this.Teams.TickAsync(gameContext, this.Duels, logger).ConfigureAwait(false);
             await this.Royale.TickAsync(gameContext, this.Teams, this.Duels, logger).ConfigureAwait(false);
             await this.GuildWar.TickAsync(gameContext, this.Teams, this.Royale, this.Duels, logger).ConfigureAwait(false);
+        }
+
+        if (now >= this._nextPublishUtc && Persistence.ArenaShared.Current is { } shared)
+        {
+            // The home servers show and announce the scheduled battles from what the Arena publishes.
+            this._nextPublishUtc = now.AddMinutes(1);
+            var cfg = this.Configuration ?? new ArenaConfiguration();
+            try
+            {
+                shared.PublishSchedule("royale", string.Empty, cfg.RoyaleTimes, this.Royale.NextStartUtc);
+                shared.PublishSchedule("guildwar", cfg.GuildWarDays, cfg.GuildWarTimes, this.GuildWar.NextStartUtc);
+            }
+            catch (Exception ex)
+            {
+                logger.LogWarning(ex, "Arena: the schedule couldn't be published for the home servers.");
+            }
         }
 
         if (now >= this._nextReturnUtc)

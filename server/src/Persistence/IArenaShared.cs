@@ -51,4 +51,17 @@ public interface IArenaShared
     /// <param name="login">The login name.</param>
     /// <returns>The guild's id and name.</returns>
     (Guid Id, string Name)? GuildOf(string login) => null;
+
+    /// <summary>Publishes one of the Arena's scheduled battles, so that the home servers can show and announce it.</summary>
+    /// <param name="kind">The battle ("royale" or "guildwar").</param>
+    /// <param name="days">The days (empty: every day).</param>
+    /// <param name="times">The Sydney times.</param>
+    /// <param name="nextStartUtc">The next start, if one is planned.</param>
+    void PublishSchedule(string kind, string days, string times, DateTime? nextStartUtc)
+    {
+    }
+
+    /// <summary>Gets the Arena's scheduled battles as last published (only those published in the last ten minutes: the Arena runs).</summary>
+    /// <returns>The battles.</returns>
+    IReadOnlyList<ArenaScheduleEntry> Schedules() => [];
 }

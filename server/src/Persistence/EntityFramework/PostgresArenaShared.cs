@@ -19,6 +19,12 @@ public sealed class PostgresArenaShared : IArenaShared
             "EarnedDay" text NOT NULL DEFAULT '',
             "EarnedToday" integer NOT NULL DEFAULT 0,
             "Rating" integer NULL);
+        CREATE TABLE IF NOT EXISTS data."HnmoArenaSchedule" (
+            "Kind" text PRIMARY KEY,
+            "Days" text NOT NULL DEFAULT '',
+            "Times" text NOT NULL DEFAULT '',
+            "NextStartUtc" timestamp with time zone NULL,
+            "UpdatedUtc" timestamp with time zone NOT NULL);
         """;
 
     private readonly string _connectionString;
@@ -162,6 +168,45 @@ public sealed class PostgresArenaShared : IArenaShared
         }
 
         return this._ratings.TryGetValue(Key(login), out var rating) ? rating : null;
+    }
+
+    /// <inheritdoc />
+    public void PublishSchedule(string kind, string days, string times, DateTime? nextStartUtc)
+    {
+        using var connection = this.Open();
+        using var command = new NpgsqlCommand(
+            """
+            INSERT INTO data."HnmoArenaSchedule" ("Kind", "Days", "Times", "NextStartUtc", "UpdatedUtc") VALUES (@kind, @days, @times, @next, @now)
+            ON CONFLICT ("Kind") DO UPDATE SET "Days" = @days, "Times" = @times, "NextStartUtc" = @next, "UpdatedUtc" = @now
+            """,
+            connection);
+        command.Parameters.AddWithValue("kind", kind);
+        command.Parameters.AddWithValue("days", days);
+        command.Parameters.AddWithValue("times", times);
+        command.Parameters.AddWithValue("next", nextStartUtc is { } next ? DateTime.SpecifyKind(next, DateTimeKind.Utc) : DBNull.Value);
+        command.Parameters.AddWithValue("now", DateTime.UtcNow);
+        command.ExecuteNonQuery();
+    }
+
+    /// <inheritdoc />
+    public IReadOnlyList<ArenaScheduleEntry> Schedules()
+    {
+        using var connection = this.Open();
+        using var command = new NpgsqlCommand("""SELECT "Kind", "Days", "Times", "NextStartUtc", "UpdatedUtc" FROM data."HnmoArenaSchedule" WHERE "UpdatedUtc" > @since""", connection);
+        command.Parameters.AddWithValue("since", DateTime.UtcNow.AddMinutes(-10));
+        using var reader = command.ExecuteReader();
+        var result = new List<ArenaScheduleEntry>();
+        while (reader.Read())
+        {
+            result.Add(new ArenaScheduleEntry(
+                reader.GetString(0),
+                reader.GetString(1),
+                reader.GetString(2),
+                reader.IsDBNull(3) ? null : DateTime.SpecifyKind(reader.GetDateTime(3), DateTimeKind.Utc),
+                DateTime.SpecifyKind(reader.GetDateTime(4), DateTimeKind.Utc)));
+        }
+
+        return result;
     }
 
     /// <inheritdoc />

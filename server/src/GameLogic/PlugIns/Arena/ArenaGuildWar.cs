@@ -47,6 +47,18 @@ public sealed class ArenaGuildWar
     /// <summary>Gets or sets how the guild of a login is found (default: the shared Season 6.3 database).</summary>
     public Func<string, (Guid Id, string Name)?> GuildOf { get; set; } = login => Persistence.ArenaShared.Current?.GuildOf(login);
 
+    /// <summary>Gets the next start (UTC), if one is planned.</summary>
+    public DateTime? NextStartUtc
+    {
+        get
+        {
+            lock (this._gate)
+            {
+                return this._startUtc;
+            }
+        }
+    }
+
     /// <summary>Gets a value indicating whether the guild war holds the battle map (a match runs or waits to run).</summary>
     public bool Busy
     {
