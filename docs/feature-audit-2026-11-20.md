@@ -208,7 +208,7 @@ Left from #181 for the owner: (1) the web and desktop clients read option values
 | Answer | PR |
 |---|---|
 | 1. Jewel NPC prices (server + web client; desktop client keeps the old table until rebuilt) | [#192](https://github.com/nguyentuanphu/HNMO/pull/192) |
-| 2. Jewel of Life +28 on the clients | in progress (server part in #181) |
+| 2. Jewel of Life +28 on the clients (web tested; desktop C++ changed but not built here) | [#202](https://github.com/nguyentuanphu/HNMO/pull/202) (server part #181) |
 | 3. Happy hour excellent +5/10000 | second commit of [#178](https://github.com/nguyentuanphu/HNMO/pull/178) |
 | 4. Alliance needs 10 members per guild | [#196](https://github.com/nguyentuanphu/HNMO/pull/196) |
 | 5. /post 1,000 zen, 5 s | [#194](https://github.com/nguyentuanphu/HNMO/pull/194) |
