@@ -364,6 +364,24 @@ public sealed class MarriagePlugIn :
         this.GetEngine().ForgetCharacter(deletedCharacter.Name);
     }
 
+    /// <summary>
+    /// Gets the level a player needs to warp to the map: the lowest level of the warps to it, with the reduction of the
+    /// player's class (e.g. Magic Gladiator); <c>null</c> when no warp leads to the map.
+    /// </summary>
+    /// <param name="player">The player.</param>
+    /// <param name="map">The map.</param>
+    /// <returns>The level, or <c>null</c>.</returns>
+    internal static int? GetSpouseWarpLevel(Player player, GameMapDefinition map)
+    {
+        var lowest = player.GameContext.Configuration.WarpList
+            .Where(warp => warp.Gate?.Map == map)
+            .Select(warp => (int?)warp.LevelRequirement)
+            .Min();
+        return lowest is { } level && player.SelectedCharacter is { } character
+            ? character.GetEffectiveMoveLevelRequirement(level)
+            : lowest;
+    }
+
     /// <summary>Warps the player to their online spouse's current field map coordinates.</summary>
     /// <param name="player">The requesting player.</param>
     /// <returns>A task representing the warp.</returns>
@@ -405,6 +423,14 @@ public sealed class MarriagePlugIn :
         if (HnmoWarpGuard.Refusal(player, spouse.CurrentMap.Definition) is { } refusal)
         {
             await this.NotifyPlayerAsync(player, "WarpRefused", refusal.En, refusal.Vi).ConfigureAwait(false);
+            return;
+        }
+
+        // The spouse's map needs the level of its warp, like a normal warp (owner, 21 Nov 2026).
+        if (GetSpouseWarpLevel(player, spouse.CurrentMap.Definition) is { } requiredLevel
+            && (player.Attributes?[Stats.Level] ?? 0) < requiredLevel)
+        {
+            await this.NotifyPlayerAsync(player, "WarpLevel", $"You need level {requiredLevel} to warp to that map.", $"Cần cấp {requiredLevel} để dịch chuyển tới bản đồ đó.").ConfigureAwait(false);
             return;
         }
 
