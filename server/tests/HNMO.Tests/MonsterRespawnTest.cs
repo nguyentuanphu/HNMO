@@ -36,15 +36,20 @@ public class MonsterRespawnTest
         await monster.ReflectDamageAsync(killer, 1_000_000).ConfigureAwait(false);
         Assert.That(monster.IsAlive, Is.False);
 
-        // A respawning monster is alive a moment before it's back on the map: wait for both.
+        // A respawning monster is alive a moment before it's back on the map: wait for both. Once back, it may walk
+        // off its spawn point right away, so what counts is that it was seen there alive.
         var deadline = DateTime.UtcNow.AddSeconds(10);
-        while (!(monster.IsAlive && monster.CurrentMap.GetNpcsInRange(SpawnPoint, 1).Contains(monster)) && DateTime.UtcNow < deadline)
+        var seenBack = false;
+        while (!seenBack && DateTime.UtcNow < deadline)
         {
-            await Task.Delay(50).ConfigureAwait(false);
+            seenBack = monster.IsAlive && monster.CurrentMap.GetNpcsInRange(SpawnPoint, 1).Contains(monster);
+            if (!seenBack)
+            {
+                await Task.Delay(50).ConfigureAwait(false);
+            }
         }
 
-        Assert.That(monster.IsAlive, Is.True);
-        Assert.That(monster.CurrentMap.GetNpcsInRange(SpawnPoint, 1), Does.Contain(monster));
+        Assert.That(seenBack, Is.True, "the monster came back alive at its spawn point");
     }
 
     /// <summary>

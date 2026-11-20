@@ -38,7 +38,7 @@ test('a long walk goes on after the server puts the hero back a little', async (
   // a step back on its way, as the server's refusal of that part does. The part is caught as the client sends it
   // (walkNextPart called again for the walk) and the correction comes right after, whatever the frame rate: the test
   // machine draws a frame or two a second, sometimes less. "Back" is a cell the hero stood on a step before.
-  const back = await page.evaluate(async (target) => {
+  const attempt = () => page.evaluate(async (target) => {
     const { write } = await import('/js/net/packets.js' as string) as { write(group: string, name: string, values: Record<string, unknown>): Uint8Array };
     const g = (window as unknown as Win).__game;
     const online = g.online as unknown as { walkNextPart(): boolean; walkTo(cell: { x: number; y: number }): boolean };
@@ -52,7 +52,7 @@ test('a long walk goes on after the server puts the hero back a little', async (
     record();
     const original = online.walkNextPart;
     let parts = 0;
-    const answer = new Promise<{ x: number; y: number; resumesLeft?: number; goal: { x: number; y: number } | null }>((resolve, reject) => {
+    const answer = new Promise<{ x: number; y: number; resumesLeft?: number; goal: { x: number; y: number } | null; endedBefore: boolean }>((resolve, reject) => {
       const timer = setTimeout(() => { online.walkNextPart = original; recording = false; reject(new Error(`the walk sent no second part: ${g.hero.cell.x},${g.hero.cell.y}`)); }, 60_000);
       online.walkNextPart = function walkNextPart(this: unknown): boolean {
         const sent = original.call(online);
@@ -68,9 +68,12 @@ test('a long walk goes on after the server puts the hero back a little', async (
             const near = visited.filter((c) => Math.max(Math.abs(c.x - here.x), Math.abs(c.y - here.y)) === 1);
             const to = near[near.length - 1] ?? { x: here.x, y: here.y };
             const resumesLeft = g.online.resumesLeft;
+            // The real server may have ended the walk already (on a slow machine it trails more than 3 cells, and
+            // its correction then ends the walk, as it should): this try doesn't test the decision, it's walked again.
+            const endedBefore = !g.online.goal;
             g.connection.dispatch(write('ServerToClient', 'ObjectMoved', { HeaderCode: 0x15, ObjectId: g.online.playerId, PositionX: to.x, PositionY: to.y }));
             // The client's decision, read at once (later frames bring the real server's answers to the walk).
-            resolve({ ...to, resumesLeft, goal: g.online.goal ? { x: g.online.goal.x, y: g.online.goal.y } : null });
+            resolve({ ...to, resumesLeft, endedBefore, goal: g.online.goal ? { x: g.online.goal.x, y: g.online.goal.y } : null });
           }, 0);
         }
         return sent;
@@ -79,6 +82,12 @@ test('a long walk goes on after the server puts the hero back a little', async (
     online.walkTo(target);
     return answer;
   }, FIELD);
+  let back = await attempt();
+  for (let tries = 1; back.endedBefore && tries < 3; tries++) {
+    await walkAndWait(page, TOWN);
+    back = await attempt();
+  }
+  expect(back.endedBefore, 'the real server let the walk run up to the test\'s correction in one of 3 tries').toBe(false);
   expect(back.goal, `the goal is kept after the hero was put back to ${back.x},${back.y} (resumes left before: ${back.resumesLeft})`).toEqual(FIELD);
   await expect.poll(() => game(page, (g) => (!g.hero.isWalking && !g.online.goal ? `${g.hero.cell.x},${g.hero.cell.y}` : 'walking')), { timeout: 90_000 }).toBe(`${FIELD.x},${FIELD.y}`);
 
