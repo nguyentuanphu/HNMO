@@ -2297,6 +2297,9 @@ namespace HNMO.Persistence.EntityFramework.Migrations
                     b.Property<int>("PetExperience")
                         .HasColumnType("integer");
 
+                    b.Property<Guid?>("Serial")
+                        .HasColumnType("uuid");
+
                     b.Property<int>("SocketCount")
                         .HasColumnType("integer");
 
@@ -2314,6 +2317,8 @@ namespace HNMO.Persistence.EntityFramework.Migrations
                     b.HasIndex("DefinitionId");
 
                     b.HasIndex("ItemStorageId");
+
+                    b.HasIndex("Serial");
 
                     b.HasIndex("StorePriceItemDefinitionId");
 

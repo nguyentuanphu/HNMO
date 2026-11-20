@@ -2413,4 +2413,10 @@
   <data name="VipPlugIn_Description" xml:space="preserve"><value>Gói VIP có thời hạn, tăng kinh nghiệm và Zen, cùng quà xu hằng ngày. Chỉ hoạt động khi chủ máy chủ bật.</value></data>
   <data name="GiftBoxActivityPlugIn_Name" xml:space="preserve"><value>Theo dõi hoạt động hộp thư quà tặng</value></data>
   <data name="GiftBoxActivityPlugIn_Description" xml:space="preserve"><value>Ghi nhận thời điểm người chơi vào và rời thế giới để lọc người chơi hoạt động gần đây cho hộp thư quà.</value></data>
+  <data name="DuplicateItemsPlugIn_Name" xml:space="preserve"><value>Kiểm tra đồ nhân bản</value></data>
+  <data name="DuplicateItemsPlugIn_Description" xml:space="preserve"><value>Gắn cho mỗi món đồ một số serial gốc và quét cơ sở dữ liệu tìm hai món cùng serial; cả hai bị đóng băng cho tới khi quản trị viên quyết định ở trang Đồ nhân bản.</value></data>
+  <data name="DuplicateItemsConfiguration_ScanIntervalMinutes_Caption" xml:space="preserve"><value>Quét mỗi (phút)</value></data>
+  <data name="DuplicateItemsConfiguration_ScanIntervalMinutes_Description" xml:space="preserve"><value>Bao lâu quét cơ sở dữ liệu tìm đồ nhân bản một lần.</value></data>
+  <data name="DuplicateItemsConfiguration_FreezeDuplicates_Caption" xml:space="preserve"><value>Đóng băng đồ nhân bản</value></data>
+  <data name="DuplicateItemsConfiguration_FreezeDuplicates_Description" xml:space="preserve"><value>Đồ nhân bản bị phát hiện không thể giao dịch, bán, vứt, cất rương, rao bán hay ép cho tới khi quản trị viên quyết định.</value></data>
 </root>

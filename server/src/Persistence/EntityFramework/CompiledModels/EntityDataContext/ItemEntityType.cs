@@ -24,10 +24,10 @@ namespace HNMO.Persistence.EntityFramework.CompiledModels.ForEntityDataContext
                 "HNMO.Persistence.EntityFramework.Model.Item",
                 typeof(HNMO.Persistence.EntityFramework.Model.Item),
                 baseEntityType,
-                propertyCount: 12,
+                propertyCount: 13,
                 navigationCount: 5,
                 foreignKeyCount: 3,
-                unnamedIndexCount: 3,
+                unnamedIndexCount: 4,
                 keyCount: 1);
 
             var id = runtimeEntityType.AddProperty(
@@ -97,6 +97,14 @@ namespace HNMO.Persistence.EntityFramework.CompiledModels.ForEntityDataContext
                 sentinel: 0);
             petExperience.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
+            var serial = runtimeEntityType.AddProperty(
+                "Serial",
+                typeof(Guid?),
+                propertyInfo: typeof(HNMO.DataModel.Entities.Item).GetProperty("Serial", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(HNMO.DataModel.Entities.Item).GetField("<Serial>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
+            serial.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+
             var socketCount = runtimeEntityType.AddProperty(
                 "SocketCount",
                 typeof(int),
@@ -140,6 +148,9 @@ namespace HNMO.Persistence.EntityFramework.CompiledModels.ForEntityDataContext
                 new[] { itemStorageId });
 
             var index1 = runtimeEntityType.AddIndex(
+                new[] { serial });
+
+            var index2 = runtimeEntityType.AddIndex(
                 new[] { storePriceItemDefinitionId });
 
             return runtimeEntityType;

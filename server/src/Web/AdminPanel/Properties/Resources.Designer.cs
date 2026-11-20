@@ -16192,5 +16192,12 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("PageHelpHintAction", resourceCulture);
             }
         }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextDuplicateItems {
+            get {
+                return ResourceManager.GetString("PageHelpTextDuplicateItems", resourceCulture);
+            }
+        }
     }
 }

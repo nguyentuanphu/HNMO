@@ -71,6 +71,7 @@ public class PersistenceContextProvider : IMigratableDatabaseContextProvider
         if (!string.IsNullOrWhiteSpace(connectionString))
         {
             HnmoPlayerStateRowStoreRegistry.ConfigurePostgresFactory(_ => new PostgresHnmoPlayerStateRowBackend(connectionString));
+            ItemSerials.Configure(new PostgresItemSerialDatabase(connectionString));
         }
     }
 

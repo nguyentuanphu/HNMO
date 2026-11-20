@@ -12,7 +12,7 @@ namespace HNMO.Persistence.EntityFramework.CompiledModels.ForAccountContext
     public partial class AccountContextModel
     {
         private AccountContextModel()
-            : base(skipDetectChanges: false, modelId: new Guid("58d27c62-721e-444e-a4f1-8bdbbd4d4ad7"), entityTypeCount: 49)
+            : base(skipDetectChanges: false, modelId: new Guid("37846428-cce9-4b8a-9507-c407e33a1e8c"), entityTypeCount: 49)
         {
         }
 

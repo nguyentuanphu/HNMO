@@ -164,6 +164,9 @@ public class EntityDataContext : ExtendedTypeContext
         modelBuilder.Entity<ItemStatTerms>().Apply();
         modelBuilder.Entity<ItemRequirementFormula>().Apply();
         modelBuilder.Entity<ItemStorage>().Apply();
+
+        // HNMO's duplicate scan groups the items by their origin serial.
+        modelBuilder.Entity<Item>().HasIndex(item => item.Serial);
         modelBuilder.Entity<ItemBasePowerUpDefinition>();
         modelBuilder.Entity<LevelBonus>().Apply();
         modelBuilder.Entity<MagicEffectDefinition>().Apply();

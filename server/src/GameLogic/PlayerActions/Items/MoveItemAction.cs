@@ -70,6 +70,14 @@ public class MoveItemAction
             return;
         }
 
+        // HNMO's duplicate check: a frozen item stays where it is (the bag, or the vault it's in).
+        if (fromStorage != toStorage && toStorage != Storages.Inventory
+            && await PlugIns.DuplicateItems.DuplicateItemsPlugIn.RefuseFrozenAsync(player, item).ConfigureAwait(false))
+        {
+            await player.InvokeViewPlugInAsync<IItemMoveFailedPlugIn>(p => p.ItemMoveFailedAsync(item)).ConfigureAwait(false);
+            return;
+        }
+
         // HNMO's account safety: a locked item stays out of trades, stores and mixes; taking things out of the
         // vault may need the second password.
         if (fromStorage != toStorage && PlugIns.AccountSafety.AccountSafetyPlugIn.Get(player.GameContext) is { } safety

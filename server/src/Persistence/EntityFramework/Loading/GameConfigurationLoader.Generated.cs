@@ -77,7 +77,7 @@ internal sealed partial class GameConfigurationLoader
         "select \"Id\", \"AddPercentage\", \"FailResult\", \"MaximumAmount\", \"MaximumItemLevel\", \"MinimumAmount\", \"MinimumItemLevel\", \"NpcPriceDivisor\", \"Reference\", \"SimpleCraftingSettingsId\", \"SuccessResult\" from config.\"ItemCraftingRequiredItem\"",
         "select \"Id\", \"AddLevel\", \"Durability\", \"ItemDefinitionId\", \"RandomMaximumLevel\", \"RandomMinimumLevel\", \"Reference\", \"SimpleCraftingSettingsId\" from config.\"ItemCraftingResultItem\"",
         "select \"Id\", \"Money\" from data.\"ItemStorage\" where (\"Id\" in (select \"MerchantStoreId\" from config.\"MonsterDefinition\"))",
-        "select \"Id\", \"DefinitionId\", \"Durability\", \"HasSkill\", \"ItemSlot\", \"ItemStorageId\", \"Level\", \"PetExperience\", \"SocketCount\", \"StorePrice\", \"StorePriceCoinType\", \"StorePriceItemDefinitionId\" from data.\"Item\" where (\"ItemStorageId\" in (select \"Id\" from (select * from data.\"ItemStorage\" where (\"Id\" in (select \"MerchantStoreId\" from config.\"MonsterDefinition\"))) \"ItemStorage\") or \"Id\" in (select \"ItemRewardId\" from config.\"QuestReward\"))",
+        "select \"Id\", \"DefinitionId\", \"Durability\", \"HasSkill\", \"ItemSlot\", \"ItemStorageId\", \"Level\", \"PetExperience\", \"Serial\", \"SocketCount\", \"StorePrice\", \"StorePriceCoinType\", \"StorePriceItemDefinitionId\" from data.\"Item\" where (\"ItemStorageId\" in (select \"Id\" from (select * from data.\"ItemStorage\" where (\"Id\" in (select \"MerchantStoreId\" from config.\"MonsterDefinition\"))) \"ItemStorage\") or \"Id\" in (select \"ItemRewardId\" from config.\"QuestReward\"))",
         "select \"Id\", \"Index\", \"ItemId\", \"ItemOptionId\", \"Level\" from data.\"ItemOptionLink\" where (\"ItemId\" in (select \"Id\" from (select * from data.\"Item\" where (\"ItemStorageId\" in (select \"Id\" from (select * from data.\"ItemStorage\" where (\"Id\" in (select \"MerchantStoreId\" from config.\"MonsterDefinition\"))) \"ItemStorage\") or \"Id\" in (select \"ItemRewardId\" from config.\"QuestReward\"))) \"Item\"))",
         "select \"Id\", \"Group\", \"MaximumCharacterLevel\", \"MinimumCharacterLevel\", \"MonsterDefinitionId\", \"Name\", \"Number\", \"QualifiedCharacterId\", \"QuestGiverId\", \"RefuseNumber\", \"Repeatable\", \"RequiredStartMoney\", \"RequiresClientAction\", \"StartingNumber\" from config.\"QuestDefinition\"",
         "select \"Id\", \"DropItemGroupId\", \"ItemId\", \"MinimumNumber\", \"QuestDefinitionId\" from config.\"QuestItemRequirement\"",
@@ -1526,12 +1526,13 @@ internal sealed partial class GameConfigurationLoader
             if (!reader.IsDBNull(5)) { entity.ItemStorageId = reader.GetGuid(5); }
             entity.Level = (global::System.Byte)reader.GetInt16(6);
             entity.PetExperience = reader.GetInt32(7);
-            entity.SocketCount = reader.GetInt32(8);
-            if (!reader.IsDBNull(9)) { entity.StorePrice = reader.GetInt32(9); }
-            if (!reader.IsDBNull(10)) { entity.StorePriceCoinType = (global::HNMO.DataModel.Configuration.CashShopCoinType)reader.GetInt32(10); }
-            if (!reader.IsDBNull(11)) { entity.StorePriceItemDefinitionId = reader.GetGuid(11); }
+            if (!reader.IsDBNull(8)) { entity.Serial = reader.GetGuid(8); }
+            entity.SocketCount = reader.GetInt32(9);
+            if (!reader.IsDBNull(10)) { entity.StorePrice = reader.GetInt32(10); }
+            if (!reader.IsDBNull(11)) { entity.StorePriceCoinType = (global::HNMO.DataModel.Configuration.CashShopCoinType)reader.GetInt32(11); }
+            if (!reader.IsDBNull(12)) { entity.StorePriceItemDefinitionId = reader.GetGuid(12); }
             this._Item[entity.Id] = entity;
-            this._ItemRows.Add((entity, reader.IsDBNull(1) ? null : reader.GetGuid(1), reader.IsDBNull(5) ? null : reader.GetGuid(5), reader.IsDBNull(11) ? null : reader.GetGuid(11)));
+            this._ItemRows.Add((entity, reader.IsDBNull(1) ? null : reader.GetGuid(1), reader.IsDBNull(5) ? null : reader.GetGuid(5), reader.IsDBNull(12) ? null : reader.GetGuid(12)));
         }
     }
 

@@ -6093,5 +6093,23 @@ namespace HNMO.GameLogic.Properties {
         /// <summary>Gets the localized gift box activity plug-in text.</summary>
         public static string GiftBoxActivityPlugIn_Description => ResourceManager.GetString("GiftBoxActivityPlugIn_Description", resourceCulture)!;
 
+        /// <summary>Gets the localized duplicate item check text.</summary>
+        public static string DuplicateItemsPlugIn_Name => ResourceManager.GetString("DuplicateItemsPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized duplicate item check text.</summary>
+        public static string DuplicateItemsPlugIn_Description => ResourceManager.GetString("DuplicateItemsPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized duplicate item check text.</summary>
+        public static string DuplicateItemsConfiguration_ScanIntervalMinutes_Caption => ResourceManager.GetString("DuplicateItemsConfiguration_ScanIntervalMinutes_Caption", resourceCulture)!;
+
+        /// <summary>Gets the localized duplicate item check text.</summary>
+        public static string DuplicateItemsConfiguration_ScanIntervalMinutes_Description => ResourceManager.GetString("DuplicateItemsConfiguration_ScanIntervalMinutes_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized duplicate item check text.</summary>
+        public static string DuplicateItemsConfiguration_FreezeDuplicates_Caption => ResourceManager.GetString("DuplicateItemsConfiguration_FreezeDuplicates_Caption", resourceCulture)!;
+
+        /// <summary>Gets the localized duplicate item check text.</summary>
+        public static string DuplicateItemsConfiguration_FreezeDuplicates_Description => ResourceManager.GetString("DuplicateItemsConfiguration_FreezeDuplicates_Description", resourceCulture)!;
+
     }
 }

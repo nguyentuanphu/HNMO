@@ -1826,6 +1826,7 @@ internal sealed class BasicModelConverter
         target.StorePriceItemDefinition = (HNMO.DataModel.Configuration.Items.ItemDefinition)this.ConvertObject(source.StorePriceItemDefinition)!;
         target.StorePriceCoinType = source.StorePriceCoinType;
         target.PetExperience = source.PetExperience;
+        target.Serial = source.Serial;
         return target;
     }
 

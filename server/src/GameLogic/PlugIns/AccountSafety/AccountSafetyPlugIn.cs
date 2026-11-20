@@ -229,6 +229,11 @@ public class AccountSafetyPlugIn : IPlayerStateChangedPlugIn, IItemDropPlugIn, I
     /// <returns><c>true</c>, if the item is locked.</returns>
     public async ValueTask<bool> RefuseLockedItemAsync(Player player, Item item)
     {
+        if (await DuplicateItems.DuplicateItemsPlugIn.RefuseFrozenAsync(player, item).ConfigureAwait(false))
+        {
+            return true;
+        }
+
         if (player.Account?.LoginName is not { Length: > 0 } login || !this.GetEngine().IsLocked(login, HNMO.Persistence.ObjectExtensions.GetId(item), DateTime.UtcNow))
         {
             return false;

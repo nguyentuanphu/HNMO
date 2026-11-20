@@ -2228,4 +2228,10 @@
   <data name="VipPlugIn_Description" xml:space="preserve"><value>Optional paid VIP time, experience and zen bonuses, and daily coins. Disabled until the host enables it.</value></data>
   <data name="GiftBoxActivityPlugIn_Name" xml:space="preserve"><value>Gift box activity tracking</value></data>
   <data name="GiftBoxActivityPlugIn_Description" xml:space="preserve"><value>Records observed player world entry and departure timestamps for gift box recent-player audiences.</value></data>
+  <data name="DuplicateItemsPlugIn_Name" xml:space="preserve"><value>Duplicate item check</value></data>
+  <data name="DuplicateItemsPlugIn_Description" xml:space="preserve"><value>Gives every item an origin serial and scans the database for two items with one serial; both are frozen until an administrator decides on the Duplicate items page.</value></data>
+  <data name="DuplicateItemsConfiguration_ScanIntervalMinutes_Caption" xml:space="preserve"><value>Scan every (minutes)</value></data>
+  <data name="DuplicateItemsConfiguration_ScanIntervalMinutes_Description" xml:space="preserve"><value>How often the database is scanned for duplicate items.</value></data>
+  <data name="DuplicateItemsConfiguration_FreezeDuplicates_Caption" xml:space="preserve"><value>Freeze duplicates</value></data>
+  <data name="DuplicateItemsConfiguration_FreezeDuplicates_Description" xml:space="preserve"><value>Found duplicates can not be traded, sold, dropped, stored, listed or mixed until an administrator decides.</value></data>
 </root>
