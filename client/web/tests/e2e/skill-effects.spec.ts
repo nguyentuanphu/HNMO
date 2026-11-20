@@ -67,6 +67,8 @@ const KNIGHT: Case[] = [
   // Its blades follow the swing's keys (PLAYER_ATTACK_ONE_FLASH), played by the hero here.
   { skill: 57, name: 'spiral-slash', expect: ['joint:flare'], shotAt: 520, action: 136 },
   { skill: 232, name: 'strike-of-destruction', expect: ['effect:blowOfDestruction', 'effect:nightWater1', 'effect:knightPlancrackA', 'effect:knightPlancrackB', 'effect:raklionBossCrackEffect', 'particle:waterfall5', 'particle:smoke'], shotAt: 840, area: true, model: 'knightPlancrackA', warm: [['Effect', 'nightwater01.bmd'], ['Effect', 'knight_plancrack_a.bmd'], ['Effect', 'knight_plancrack_b.bmd'], ['Effect', 'knight_plancrack_grand.bmd']] },
+  // HNMO's Blood Slash (game/newSkills.ts): three red slashes across the target.
+  { skill: 701, name: 'blood-slash', expect: ['particle:damage2', 'particle:damage1', 'particle:blood2', 'particle:spark'], shotAt: 440 },
   { skill: 44, name: 'crescent-moon-slash', expect: ['joint:jointSpark', 'particle:fire', 'effect:swordForce', 'joint:jointForce'], shotAt: 600, action: 137 },
 ];
 
