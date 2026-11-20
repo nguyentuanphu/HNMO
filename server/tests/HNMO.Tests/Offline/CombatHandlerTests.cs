@@ -104,6 +104,58 @@ public class CombatHandlerTests
     }
 
     /// <summary>
+    /// Tests that with the long range counter attack the auto play fights back against a monster
+    /// which hit the player, although it stands outside of the hunting range (like the web client's
+    /// auto play does).
+    /// </summary>
+    [Test]
+    public async ValueTask PerformAttackAsync_LongRangeCounterAttack_TargetsAttackerOutsideHuntingRangeAsync()
+    {
+        var (player, monster, handler) = await this.CreateCounterAttackSetupAsync(longRangeCounterAttack: true, monsterPosition: new Point(105, 100)).ConfigureAwait(false);
+
+        await player.ApplyBleedingDamageAsync(monster, 1).ConfigureAwait(false);
+        await handler.PerformAttackAsync().ConfigureAwait(false);
+        await Task.Delay(1000).ConfigureAwait(false);
+        await handler.PerformAttackAsync().ConfigureAwait(false);
+
+        Assert.That(player.IsWalking, Is.True);
+    }
+
+    /// <summary>
+    /// Tests that without the long range counter attack a monster outside of the hunting range is
+    /// ignored, even if it hit the player.
+    /// </summary>
+    [Test]
+    public async ValueTask PerformAttackAsync_WithoutLongRangeCounterAttack_IgnoresAttackerOutsideHuntingRangeAsync()
+    {
+        var (player, monster, handler) = await this.CreateCounterAttackSetupAsync(longRangeCounterAttack: false, monsterPosition: new Point(105, 100)).ConfigureAwait(false);
+
+        await player.ApplyBleedingDamageAsync(monster, 1).ConfigureAwait(false);
+        await handler.PerformAttackAsync().ConfigureAwait(false);
+        await Task.Delay(1000).ConfigureAwait(false);
+        await handler.PerformAttackAsync().ConfigureAwait(false);
+
+        Assert.That(player.IsWalking, Is.False);
+    }
+
+    /// <summary>
+    /// Tests that the long range counter attack only reaches twice the hunting range: a monster
+    /// further away is not chased across the map.
+    /// </summary>
+    [Test]
+    public async ValueTask PerformAttackAsync_LongRangeCounterAttack_IgnoresAttackerBeyondTwiceTheHuntingRangeAsync()
+    {
+        var (player, monster, handler) = await this.CreateCounterAttackSetupAsync(longRangeCounterAttack: true, monsterPosition: new Point(110, 100)).ConfigureAwait(false);
+
+        await player.ApplyBleedingDamageAsync(monster, 1).ConfigureAwait(false);
+        await handler.PerformAttackAsync().ConfigureAwait(false);
+        await Task.Delay(1000).ConfigureAwait(false);
+        await handler.PerformAttackAsync().ConfigureAwait(false);
+
+        Assert.That(player.IsWalking, Is.False);
+    }
+
+    /// <summary>
     /// Tests that <see cref="CombatHandler.PerformDrainLifeRecoveryAsync"/> uses Drain Life when HP is low.
     /// </summary>
     [Test]
@@ -177,6 +229,20 @@ public class CombatHandlerTests
         var monster = await this.CreateMonsterAsync(default, 30, 2, 2, 5, 300, 28).ConfigureAwait(false);
 
         Assert.That(CombatHandler.IsSafeTarget(player, monster.Definition), Is.False);
+    }
+
+    private async ValueTask<(OfflinePlayer Player, Monster Monster, CombatHandler Handler)> CreateCounterAttackSetupAsync(bool longRangeCounterAttack, Point monsterPosition)
+    {
+        var player = await this.CreateOfflinePlayerAsync().ConfigureAwait(false);
+        player.Position = this._origin;
+        var monster = await this.CreateMonsterAsync(monsterPosition).ConfigureAwait(false);
+        await player.CurrentMap!.AddAsync(monster).ConfigureAwait(false);
+
+        // Hunting range 3: the monster is outside of it (5 or 10 tiles away).
+        var config = new MuHelperSettings { HuntingRange = 3, LongRangeCounterAttack = longRangeCounterAttack };
+        player.HuntingOrigin = this._origin;
+        var handler = new CombatHandler(player, config, new MovementHandler(player, config));
+        return (player, monster, handler);
     }
 
     private async ValueTask<OfflinePlayer> CreateOfflinePlayerAsync()

@@ -119,6 +119,12 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     private Lazy<ComboStateMachine>? _comboStateLazy;
 
     /// <summary>
+    /// The monster which hit this player last, and when. Written by the thread which applies the hit and
+    /// read by the auto-play combat (long range counter attack), so it is replaced as a whole.
+    /// </summary>
+    private volatile MonsterHit? _lastMonsterHit;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="Player" /> class.
     /// </summary>di
     /// <param name="gameContext">The game context.</param>
@@ -1566,6 +1572,22 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     }
 
     /// <summary>
+    /// Gets the monster which hit this player within the specified time, if it is still alive.
+    /// Used by the MU helper's long range counter attack, which fights back against such a monster
+    /// even outside of the hunting range.
+    /// </summary>
+    /// <param name="maximumAge">How long ago the hit may have been.</param>
+    /// <returns>The monster, or <c>null</c> if no living monster hit this player recently.</returns>
+    internal Monster? GetRecentMonsterAttacker(TimeSpan maximumAge)
+    {
+        return this._lastMonsterHit is { } hit
+               && DateTime.UtcNow - hit.AtUtc <= maximumAge
+               && hit.Monster.IsAlive
+            ? hit.Monster
+            : null;
+    }
+
+    /// <summary>
     /// Sets the current values of the regeneration attributes to their maximum values.
     /// </summary>
     internal void SetReclaimableAttributesToMaximum()
@@ -1860,6 +1882,12 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     private async ValueTask HitAsync(HitInfo hitInfo, IAttacker attacker, Skill? skill, bool? isFinalStreakHit = null)
     {
         this._summon.RegisterHit(attacker);
+        if (attacker is Monster { SummonedBy: null } monsterAttacker
+            && !hitInfo.Attributes.HasFlag(DamageAttributes.Reflected))
+        {
+            this._lastMonsterHit = new MonsterHit(monsterAttacker, DateTime.UtcNow);
+        }
+
         var healthDamage = hitInfo.HealthDamage;
         int oversd = (int)(this.Attributes![Stats.CurrentShield] - hitInfo.ShieldDamage);
         if (oversd < 0)
@@ -2710,4 +2738,6 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
             await cancelAction.CancelTradeAsync(this).ConfigureAwait(false);
         }
     }
+
+    private sealed record MonsterHit(Monster Monster, DateTime AtUtc);
 }

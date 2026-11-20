@@ -71,10 +71,11 @@ public sealed class MovementHandler
     /// </summary>
     /// <param name="target">The target to move closer to.</param>
     /// <param name="range">The range to stop within.</param>
+    /// <param name="outsideHuntingRange">If set to <c>true</c>, the target may stand outside of the hunting range (long range counter attack).</param>
     /// <returns>True, if a walk towards the target was started; false, if no path exists or walking is not possible.</returns>
-    public async ValueTask<bool> MoveCloserToTargetAsync(IAttackable target, byte range)
+    public async ValueTask<bool> MoveCloserToTargetAsync(IAttackable target, byte range, bool outsideHuntingRange = false)
     {
-        if (this._player.CurrentMap is { } map && target.IsInRange(this.OriginPosition, this.HuntingRange))
+        if (this._player.CurrentMap is { } map && (outsideHuntingRange || target.IsInRange(this.OriginPosition, this.HuntingRange)))
         {
             var walkTarget = GetApproachPoint(map, this._player.Position, target.Position, range);
             return await this.WalkToAsync(walkTarget).ConfigureAwait(false);
