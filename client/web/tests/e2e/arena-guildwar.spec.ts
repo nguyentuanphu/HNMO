@@ -40,6 +40,7 @@ const mapOf = (page: Page) => page.evaluate(() => (window as unknown as Win).__g
 const score = (text: string) => { const m = /(\d+) : (\d+)/.exec(text); return m ? Number(m[1]) + Number(m[2]) : -1; };
 
 test('the Arena guild war, played by the machine', async ({ browser }) => {
+  test.skip(!process.env.ARENA_GUILD_WAR, 'Plays a whole guild war (about 25 minutes); needs the Arena program, two guilds in the save and the minimum lowered: set ARENA_GUILD_WAR=1.');
   test.setTimeout(45 * 60_000);
   const contexts: BrowserContext[] = [];
   const pages: Page[] = [];

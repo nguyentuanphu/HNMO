@@ -36,6 +36,7 @@ const heroName = (page: Page) => page.evaluate(() => document.querySelector('#he
 const leftOf = (text: string) => Number(/(\d+) left/.exec(text)?.[1] ?? -1);
 
 test('the Arena battle royale, played by the machine', async ({ browser }) => {
+  test.skip(!process.env.ARENA_BATTLES, 'Plays a whole battle royale (about 10 minutes) and needs the Arena program next to the web client: set ARENA_BATTLES=1.');
   test.setTimeout(45 * 60_000);
   const contexts: BrowserContext[] = [];
   const pages: Page[] = [];

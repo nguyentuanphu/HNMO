@@ -45,6 +45,7 @@ async function score(page: Page): Promise<{ red: number; blue: number; text: str
 }
 
 test('the Arena team battle, played by the machine', async ({ browser }) => {
+  test.skip(!process.env.ARENA_BATTLES, 'Plays a whole team battle (about 20 minutes) and needs the Arena program next to the web client: set ARENA_BATTLES=1.');
   test.setTimeout(40 * 60_000);
   const contexts: BrowserContext[] = [];
   const pages: Page[] = [];
