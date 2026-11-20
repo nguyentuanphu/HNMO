@@ -2075,6 +2075,15 @@ namespace HNMO.GameLogic.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your guild owns the castle and can't be disbanded..
+        /// </summary>
+        public static string GuildOwnsCastleCantDisband {
+            get {
+                return ResourceManager.GetString("GuildOwnsCastleCantDisband", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The auto-play helper can be used after level {0}..
         /// </summary>
         public static string MuHelperMinimumLevel {

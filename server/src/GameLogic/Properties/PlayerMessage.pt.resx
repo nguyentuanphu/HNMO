@@ -171,6 +171,9 @@
   <data name="MuHelperMinimumLevel" xml:space="preserve">
     <value>O assistente de jogo automático pode ser usado a partir do nível {0}.</value>
   </data>
+  <data name="GuildOwnsCastleCantDisband" xml:space="preserve">
+    <value>Sua guilda é dona do castelo e não pode ser dissolvida.</value>
+  </data>
   <data name="MuHelperMaximumLevel" xml:space="preserve">
     <value>O assistente de jogo automático não pode ser usado depois do nível {0}.</value>
   </data>

@@ -66,6 +66,9 @@
   <data name="MuHelperMinimumLevel" xml:space="preserve">
     <value>Tự động chơi dùng được từ cấp {0}.</value>
   </data>
+  <data name="GuildOwnsCastleCantDisband" xml:space="preserve">
+    <value>Guild của bạn đang giữ thành nên không thể giải tán.</value>
+  </data>
   <data name="MuHelperMaximumLevel" xml:space="preserve">
     <value>Tự động chơi không dùng được sau cấp {0}.</value>
   </data>
