@@ -132,3 +132,46 @@ Left from #181 for the owner: (1) the web and desktop clients read option values
 | Check | Result | Notes |
 |---|---|---|
 | Items dropped when a PK player dies | OK | None in HNMO (`Player.OnDeathAsync` has a TODO); the suites have `PKItemDrop = 0` too. |
+| Duel spectators: visible again, no crash on leaving | **Fixed** [#182](https://github.com/nguyentuanphu/HNMO/pull/182) | The room never set the spectator's duel room; spectators stayed invisible (monsters ignored them) and removing one crashed. |
+| Dark raven kills and hits count for its owner | **Fixed** [#183](https://github.com/nguyentuanphu/HNMO/pull/183) | Raven kills made no outlaw, and the victim's counter-attack made the victim the outlaw. |
+| Item drop, zen and EXP loss on death, PK duration, murderer limits, outlaws in events | Owner questions | See the morning questions below. |
+| Damage over time / reflect landing after the victim enters a safe zone; a duelist killing a third player is exempt | Found, minor | Not fixed. |
+| Arena internals | Not checked | |
+
+## 12. Maps and movement
+
+| Check | Result | Notes |
+|---|---|---|
+| Warp (M menu, /move, gates) while trading, dead or duelling | **Fixed** | [#184](https://github.com/nguyentuanphu/HNMO/pull/184): a warp during a trade left the player off the map and still took the zen; dead players could warp. One shared check now. |
+| Spouse warp and Teleport NPC skipping the map entry rules | **Fixed** | [#185](https://github.com/nguyentuanphu/HNMO/pull/185): non-Gens into the Gens battle zone, anyone into the closed Raklion boss room. |
+| Lost Map (Kalima) limits | **Fixed** | [#186](https://github.com/nguyentuanphu/HNMO/pull/186): any character could open Kalima 7, even from inside Kalima; now the ticket's level limits. |
+| Dark Lord party summon skipping map, Gens zone, PK and duel rules | Found, not fixed | Proposed: reuse the warp guard and entry rules of #184/#185. |
+| Warp maximum level (Atlans 220, Kanturu ruins 350 in the suites), Atlans while riding Uniria/Dinorant, spouse warp level | Owner questions | |
+| Land of Trials, Aida, Raklion entry, safe-zone terrain, leaving an event with /move | Not checked | |
+
+## 13. HNMO extras and settings without effect
+
+| Check | Result | Notes |
+|---|---|---|
+| Crafting "maximum excellent options" setting | **Fixed** | [#187](https://github.com/nguyentuanphu/HNMO/pull/187): it had no effect (Golden Cherry Blossom items got 2 where it says 1). |
+| Jewel upgrade luck boost (`BoostOptionType`, `SuccessChanceBoost`) | Found, not fixed | Never read. |
+| MU helper "long range counter attack" | Found, not fixed | Never read. |
+| Other settings no code reads | Note | `MaximumPasswordLength`, `PerLevelAfterHalving`; `LevelRequirementByCreation` only on the website; `ConfigurationUpdate.UpdatedAt/InstalledAt` only on the Updates page. All other entries of the scan are read (same file, pattern matching, website, launcher, EF relations). |
+| VIP, starter kit, bots, anti-cheat | Not checked | |
+
+## Morning questions for the owner (21 Nov)
+
+1. NPC jewel prices like the suites (3 M / 16 M / 15 M / 15 M)? Needs the web client's price table changed too (desktop client too).
+2. Jewel of Life +28: change the client option data (web + desktop) so +20..+28 show, and pick a price rule above +16?
+3. Happy hour excellent bonus "ExcDropBonus 5": +5 % or +5/10000?
+4. Alliance needs guilds of at least 10 members (suites)?
+5. /post: 1,000 zen and 5 s wait (suites)?
+6. PK duration: the suite's points (Warning 21,600 / PK2 43,200 / Murderer 86,400, +3,600 per kill, monster kill level/2) instead of HNMO's 3 h per stage (outlaws clear 2-3 times faster in HNMO)?
+7. Zen loss on death: only from the bag (suite), not the vault?
+8. EXP loss on death: suite rows (Normal 3/2/1 %, Warning 5, PK2 10, Murderer 20)?
+9. Murderer limits: no shops for PKs, M-menu warp 50x for PK2+, PK2+ can't be summoned?
+10. Outlaws (Warning stage) in events: refuse like the suites?
+11. Warp maximum levels (Atlans 220, Kanturu ruins 350)? Recommended: keep none.
+12. Atlans while riding Uniria/Dinorant: refuse (classic)?
+13. Spouse warp: require the target map's warp level?
+14. Personal shop buy race (group 10): fix with a concurrency test?
