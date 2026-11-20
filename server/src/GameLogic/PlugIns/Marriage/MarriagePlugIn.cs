@@ -416,6 +416,14 @@ public sealed class MarriagePlugIn :
             Y1 = spouse.Position.Y,
             Y2 = spouse.Position.Y,
         };
+
+        // The rules of the warp gates apply too, e.g. only Gens members may enter the Gens battle zone.
+        if (await WarpGateRules.RefuseAsync(player, gate).ConfigureAwait(false))
+        {
+            await this.NotifyPlayerAsync(player, "WarpRefused", "You can't enter that map now.", "Không thể vào bản đồ đó lúc này.").ConfigureAwait(false);
+            return;
+        }
+
         await player.WarpToAsync(gate).ConfigureAwait(false);
         await this.NotifyPlayerAsync(player, "Warped", $"Warped to {spouseName}!", $"Đã dịch chuyển tới bên cạnh {spouseName}!").ConfigureAwait(false);
     }
