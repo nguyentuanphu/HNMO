@@ -155,6 +155,57 @@ public class ExperienceRateSplitTest
     }
 
     /// <summary>
+    /// Verifies that a party of two gets 160 % of the kill's EXP together (Season 6/9 server suites; it was 210 %).
+    /// </summary>
+    [Test]
+    public async ValueTask PartyOfTwoGetsTheSuitesBonusAsync()
+    {
+        var context = this.CreateGameServerContext(
+            normalExperienceRate: 1.0f,
+            globalMasterExperienceRate: 1.0f,
+            maximumLevel: 400,
+            maximumMasterLevel: 200);
+        var first = await this.CreatePlayerAsync(context, level: 100, totalLevel: 100, isMasterClass: false).ConfigureAwait(false);
+        var second = await this.CreatePlayerAsync(context, level: 100, totalLevel: 100, isMasterClass: false).ConfigureAwait(false);
+        var party = new Party(new PartyManager(5, new NullLogger<Party>()), 5, new NullLogger<Party>());
+        await party.AddAsync(first).ConfigureAwait(false);
+        await party.AddAsync(second).ConfigureAwait(false);
+        await first.AddObserverAsync(second).ConfigureAwait(false);
+        var killed = CreateKilledObject(level: 150).Object;
+
+        var shares = await party.DistributeExperienceAfterKillAsync(killed, first).ConfigureAwait(false);
+
+        var expected = killed.CalculateBaseExperience(100) * 1.6;
+        Assert.That(shares.Sum(s => (double)s.Experience), Is.EqualTo(expected).Within(2));
+    }
+
+    /// <summary>
+    /// Verifies the default party bonuses: 100 % alone, 160 / 180 / 200 / 220 % for 2 to 5 members,
+    /// 230 / 270 / 300 % for a set party of 3 to 5 members of different classes.
+    /// </summary>
+    /// <param name="members">The number of members.</param>
+    /// <param name="differentClasses">Whether all members have different classes.</param>
+    /// <param name="expected">The expected multiplier.</param>
+    [TestCase(1, false, 1.0)]
+    [TestCase(2, false, 1.6)]
+    [TestCase(2, true, 1.6)]
+    [TestCase(3, false, 1.8)]
+    [TestCase(3, true, 2.3)]
+    [TestCase(4, false, 2.0)]
+    [TestCase(4, true, 2.7)]
+    [TestCase(5, false, 2.2)]
+    [TestCase(5, true, 3.0)]
+    [TestCase(6, true, 3.0)]
+    public void DefaultPartyBonuses(int members, bool differentClasses, double expected)
+    {
+        var multiplier = HNMO.GameLogic.PlugIns.GameplayRules.RateTuningPlugIn.GetPartyExpMultiplier(
+            members,
+            differentClasses,
+            HNMO.GameLogic.PlugIns.GameplayRules.RateTuningPlugIn.DefaultPartyExpBonuses);
+        Assert.That(multiplier, Is.EqualTo(expected).Within(0.0001));
+    }
+
+    /// <summary>
     /// Verifies that the party experience is split by the total levels, so a member with master levels below the
     /// maximum level gets its share of the master levels, too.
     /// </summary>

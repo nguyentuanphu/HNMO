@@ -343,10 +343,9 @@ public sealed class Party : AsyncDisposable
         var averageLevel = totalLevel / memberCount;
         var baseExperience = killed.CalculateBaseExperience(averageLevel);
 
-        // HNMO: every member's EXP, +5 % per further member. With the servers' party bonuses configured (rate tuning),
-        // the party gets the kill's EXP times the bonus of its size (160 % for two ...), shared by level as before.
-        var partyMultiplier = PlugIns.GameplayRules.RateTuningPlugIn.GetPartyExpMultiplier(recipients)
-            ?? memberCount * Math.Pow(1.05, memberCount - 1);
+        // The party gets the kill's EXP times the bonus of its size (160 % for two ..., more for a set party), shared by
+        // level: the host's bonuses (rate tuning) or those of the Season 6/9 server suites.
+        var partyMultiplier = PlugIns.GameplayRules.RateTuningPlugIn.GetPartyExpMultiplierOrDefault(recipients);
         var mapExperienceMultiplier = killed.CurrentMap?.Definition.ExpMultiplier ?? 1;
         var totalBaseExperience = baseExperience * partyMultiplier * mapExperienceMultiplier;
 

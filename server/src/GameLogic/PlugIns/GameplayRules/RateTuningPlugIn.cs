@@ -101,17 +101,61 @@ public sealed class RateTuningPlugIn :
     {
         var cfg = recipients.Count > 0 ? recipients[0].GameContext.FeaturePlugIns.GetPlugIn<RateTuningPlugIn>()?.Configuration : null;
         if (cfg is not { Enabled: true } || cfg.PartyExpBonuses.Count == 0
-            || cfg.PartyExpBonuses.Find(e => e.PartySize == recipients.Count) is not { } entry)
+            || cfg.PartyExpBonuses.Find(e => e.PartySize == recipients.Count) is null)
         {
             return null;
         }
 
-        var differentClasses = recipients.Count >= 3
-            && recipients.Select(p => p.SelectedCharacter?.CharacterClass?.Number).Where(n => n.HasValue)
-                .Select(n => ResolveClassLine(n!.Value)).Distinct().Count() == recipients.Count;
+        return GetPartyExpMultiplier(recipients.Count, HaveDifferentClasses(recipients), cfg.PartyExpBonuses);
+    }
+
+    /// <summary>
+    /// Gets the party EXP bonuses of the Season 6/9 server suites, which apply when the host configured none:
+    /// 2, 3, 4, 5 members 160, 180, 200, 220 %; a set party (3 or more members of different classes) 230, 270, 300 %.
+    /// </summary>
+    public static IReadOnlyList<PartyExpBonusEntry> DefaultPartyExpBonuses { get; } =
+    [
+        new() { PartySize = 2, ExpPercent = 160 },
+        new() { PartySize = 3, ExpPercent = 180, DifferentClassesExpPercent = 230 },
+        new() { PartySize = 4, ExpPercent = 200, DifferentClassesExpPercent = 270 },
+        new() { PartySize = 5, ExpPercent = 220, DifferentClassesExpPercent = 300 },
+    ];
+
+    /// <summary>
+    /// Returns the multiplier of the kill's base EXP for the party: the configured bonuses, or else
+    /// <see cref="DefaultPartyExpBonuses"/>.
+    /// </summary>
+    /// <param name="recipients">The party members who get EXP of the kill.</param>
+    /// <returns>The multiplier of the kill's base EXP.</returns>
+    public static double GetPartyExpMultiplierOrDefault(IReadOnlyList<Player> recipients)
+        => GetPartyExpMultiplier(recipients)
+           ?? GetPartyExpMultiplier(recipients.Count, HaveDifferentClasses(recipients), DefaultPartyExpBonuses);
+
+    /// <summary>
+    /// Returns the multiplier of the kill's base EXP for a party of <paramref name="memberCount"/> members.
+    /// One member gets 100 %; a party bigger than the table gets the bonus of the biggest entry.
+    /// </summary>
+    /// <param name="memberCount">The number of members who get EXP.</param>
+    /// <param name="differentClasses">Whether it is a set party (3 or more members, all of different classes).</param>
+    /// <param name="bonuses">The bonuses by party size.</param>
+    /// <returns>The multiplier.</returns>
+    internal static double GetPartyExpMultiplier(int memberCount, bool differentClasses, IReadOnlyList<PartyExpBonusEntry> bonuses)
+    {
+        var entry = bonuses.FirstOrDefault(e => e.PartySize == memberCount)
+                    ?? (memberCount > 1 ? bonuses.Where(e => e.PartySize < memberCount).MaxBy(e => e.PartySize) : null);
+        if (entry is null)
+        {
+            return 1.0;
+        }
+
         var percent = differentClasses && entry.DifferentClassesExpPercent > 0 ? entry.DifferentClassesExpPercent : entry.ExpPercent;
         return Math.Max(0, percent) / 100.0;
     }
+
+    private static bool HaveDifferentClasses(IReadOnlyList<Player> recipients)
+        => recipients.Count >= 3
+           && recipients.Select(p => p.SelectedCharacter?.CharacterClass?.Number).Where(n => n.HasValue)
+               .Select(n => ResolveClassLine(n!.Value)).Distinct().Count() == recipients.Count;
 
     /// <summary>
     /// Returns the zen a monster drops on the player's map from the zen table, when the table is on and lists the map;
