@@ -66,9 +66,14 @@ ADMIN PANEL
   http://localhost:8080/control (an admin login is always needed there; it stays closed
   until an admin user exists). Change it in the admin panel, Plugins, "Website (admin
   address, Google sign-in)". Leave it empty to allow the admin panel only on the host computer.
+  From afar the 6-digit code of an authenticator app is needed: set it up first on the
+  host computer (admin panel, "2FA & Security"). The same address opens every panel:
+  Season 9's under ".../s9/", the Arena's under ".../arena/", one sign-in for all.
+  From afar, Host settings shows only the licence (ports and folders: host computer only).
 
 PLAYERS AT ONCE
-  Up to 10 players can be in the game at once. A license file from the owner
+  Up to 10 players can be in the game at once, Season 6.3, Season 9 and the Arena
+  together (an account playing in two of them counts once). A license file from the owner
   (license.hnmo) raises that: put it next to "Start HNMO" and restart. The server's log
   says what it allows ("HNMO license: ...") and this computer's id, which the owner needs
   for a license tied to this computer.

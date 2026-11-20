@@ -38,6 +38,37 @@ public static class SeasonPanels
         ];
     }
 
+    /// <summary>
+    /// The panels through the website's admin path (owner, 2026-11-21): one path for all of them, Season 6.3's at the
+    /// path itself, Season 9's under "s9/" and the Arena's under "arena/".
+    /// </summary>
+    /// <param name="current">The season of this panel.</param>
+    /// <param name="settings">The host settings (Season 9 and Arena switches).</param>
+    /// <param name="baseUri">This panel's base address (e.g. "https://site/admin-x/s9/").</param>
+    /// <returns>The three panels.</returns>
+    public static IReadOnlyList<SeasonPanel> ForWebsite(string current, HostSettings settings, string baseUri)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+        ArgumentNullException.ThrowIfNull(baseUri);
+        var root = baseUri.EndsWith('/') ? baseUri : baseUri + "/";
+        foreach (var own in new[] { "s9/", "arena/" })
+        {
+            if (current != HnmoSeasonInstance.SeasonSix && root.EndsWith("/" + own, StringComparison.OrdinalIgnoreCase))
+            {
+                root = root[..^own.Length];
+            }
+        }
+
+        var seasonNineOn = settings.SeasonNineEnabled || current == HnmoSeasonInstance.SeasonNine;
+        var arenaOn = settings.ArenaEnabled || current == HnmoSeasonInstance.Arena;
+        return
+        [
+            new SeasonPanel(HnmoSeasonInstance.SeasonSix, root, current == HnmoSeasonInstance.SeasonSix),
+            new SeasonPanel(HnmoSeasonInstance.SeasonNine, seasonNineOn ? root + "s9/" : null, current == HnmoSeasonInstance.SeasonNine),
+            new SeasonPanel(HnmoSeasonInstance.Arena, arenaOn ? root + "arena/" : null, current == HnmoSeasonInstance.Arena),
+        ];
+    }
+
     /// <summary>The address of the shared settings: Season 6.3's panel, on its accounts page.</summary>
     /// <param name="panels">The panels from <see cref="For"/>.</param>
     /// <returns>The address.</returns>

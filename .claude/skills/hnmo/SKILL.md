@@ -536,3 +536,7 @@ The desktop code stays the reference for how the classic game behaves (parity ru
 - New NPC/monster names go into `MonsterNames*.resx` (en, vi, de, zh-CN) via `LocalizedString.FromResource`; an inline
   "Name||vi=…" fails `AllCaptionsCanBeTranslated`. Every admin button needs a `title` (EveryAdminPageHelpTests).
 - While a long `dotnet test --no-build` runs in the background, don't rebuild: wait, or results mix.
+- Player limit = one for the whole folder (S6 + S9 + Arena), shared via `HnmoLicensedLogin`. Admin from afar = website
+  admin path + 6-digit code, `/s9/` and `/arena/` under the same path; Host settings from afar shows only the licence.
+- Blazor admin pages in Playwright: forms answer only once the live connection is up; retry fill+submit in a poll.
+  The panel caches "an admin user exists": restart the servers after deleting test admin users.

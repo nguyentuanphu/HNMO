@@ -70,6 +70,7 @@ public static partial class WebsitePrefixMiddleware
         });
     }
 
-    [GeneratedRegex("^/[A-Za-z0-9][A-Za-z0-9_-]{2,39}$")]
+    // The website's admin path, and under it Season 9's and the Arena's panels (owner, 2026-11-21).
+    [GeneratedRegex("^/[A-Za-z0-9][A-Za-z0-9_-]{2,39}(/s9|/arena)?$")]
     private static partial Regex PrefixPattern();
 }

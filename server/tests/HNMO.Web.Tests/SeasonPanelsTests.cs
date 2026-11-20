@@ -55,4 +55,22 @@ public class SeasonPanelsTests
             Assert.That(SeasonPanels.SharedSettingsUrl(inArena), Is.EqualTo("http://localhost:8095/accounts"));
         });
     }
+
+    /// <summary>
+    /// Through the website's admin path (owner, 2026-11-21) every panel is under one path: Season 6.3's at the path,
+    /// Season 9's under "s9/", the Arena's under "arena/", seen from whichever panel.
+    /// </summary>
+    [Test]
+    public void ThroughTheWebsiteThePanelsShareOnePath()
+    {
+        var settings = new HostSettings { SeasonNineEnabled = true, ArenaEnabled = true };
+        foreach (var (current, baseUri) in new[] { ("s6", "https://site.vn/admin-x/"), ("s9", "https://site.vn/admin-x/s9/"), ("arena", "https://site.vn/admin-x/arena/") })
+        {
+            var panels = SeasonPanels.ForWebsite(current, settings, baseUri);
+            Assert.That(panels.Select(p => p.Url), Is.EqualTo(new[] { "https://site.vn/admin-x/", "https://site.vn/admin-x/s9/", "https://site.vn/admin-x/arena/" }), current);
+            Assert.That(panels.Single(p => p.IsCurrent).Season, Is.EqualTo(current));
+        }
+
+        Assert.That(SeasonPanels.ForWebsite("s6", new HostSettings(), "https://site.vn/admin-x/")[2].Url, Is.Null, "the Arena is off");
+    }
 }

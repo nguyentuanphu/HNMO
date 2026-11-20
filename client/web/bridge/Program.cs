@@ -243,7 +243,13 @@ app.Use(async (context, next) =>
 var visitorLimits = new VisitorLimits(app.Configuration.GetSection("Limits").Get<VisitorLimitOptions>() ?? new VisitorLimitOptions());
 
 // The admin panel at the website's secret admin path (AdminGateway.cs); before everything else.
-AdminGateway.Use(app, new AdminGateway(portalOptions, app.Services.GetRequiredService<Yarp.ReverseProxy.Forwarder.IHttpForwarder>(), app.Services.GetRequiredService<IHttpClientFactory>(), app.Services.GetRequiredService<ILogger<AdminGateway>>()));
+AdminGateway.Use(app, new AdminGateway(
+    portalOptions,
+    app.Services.GetRequiredService<Yarp.ReverseProxy.Forwarder.IHttpForwarder>(),
+    app.Services.GetRequiredService<IHttpClientFactory>(),
+    app.Services.GetRequiredService<ILogger<AdminGateway>>(),
+    () => launcherOptions.SeasonNineEnabled ? launcherOptions.SeasonNineAdminUrl : null,
+    () => launcherOptions.ArenaEnabled ? launcherOptions.ArenaAdminUrl : null));
 
 app.MapGet("/health", () => "ok");
 app.MapGet("/", () => Results.Redirect("/home.html"));

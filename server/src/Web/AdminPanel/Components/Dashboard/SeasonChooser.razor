@@ -56,6 +56,9 @@
             settings = new HostSettings();
         }
 
-        this._panels = SeasonPanels.For(HnmoSeasonInstance.Current, settings, uri.Scheme, uri.Host);
+        // Through the website's admin path the panels are under one path; on the host computer, on their ports.
+        this._panels = new Uri(this.Navigation.BaseUri).AbsolutePath.Length > 1
+            ? SeasonPanels.ForWebsite(HnmoSeasonInstance.Current, settings, this.Navigation.BaseUri)
+            : SeasonPanels.For(HnmoSeasonInstance.Current, settings, uri.Scheme, uri.Host);
     }
 }
