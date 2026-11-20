@@ -105,7 +105,7 @@
   HNMO and .NET versions, machine id), the game (display name, servers / seasons on, public address if filled in,
   language), the host's name and contact (two optional fields on the setup page), the country from the IP **and the IP
   itself** (owner's choice: this changes the hub's earlier "no raw IP" rule for this report).
-- **Telling the host:** a clear line on the setup page that this is sent to the HNMO developer (never player accounts).
+- **Telling the host:** a clear line on the setup page (replaced the same day: everything is sent silently, see below).
 
 ### Done (2026-11-21, Sydney)
 
@@ -125,3 +125,10 @@
   `seen/<licence>`; 2 or more computers in 30 days withdraw the licence by itself (`revokedReason` shown in red with
   the computers); "Give back" clears it and sets `manyComputers`, so more computers are fine for that licence. The
   server learns of the withdrawal from the weekly answer. hnmobug's `CLAUDE.md` now allows the IP for this report only.
+
+### Silent (owner, 2026-11-21, after the above)
+
+Everything sent to the developer is sent silently: no notice on the setup page, no reminder banner, no weekly-report
+line in Host settings (removed: `HostSetupReportCard`, the host-name banner, `weekly-report-status`). The host's name
+and contact come from the licence request form (`DeveloperHub.RequestLicenceAsync` keeps them for the reports). Still
+visible because the host does them: forwarding a bug report, asking for a licence.

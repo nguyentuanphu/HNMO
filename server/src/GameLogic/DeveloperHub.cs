@@ -17,8 +17,9 @@ using System.Threading;
 /// The HNMO developer's hub (owner's choice, 2026-11-20): a server asks it for a licence (and fetches the licence the
 /// developer issues with a one-time secret only it knows), and sends it a weekly report with the bug reports its owner
 /// forwarded. A licensed server is known by its signed licence file and its machine id; no player login or e-mail is sent.
-/// The weekly answer says whether the licence was withdrawn. Once, at the first setup, it sends the host's system and game
-/// (owner's choice, 2026-11-21; the setup page says so), and the hub keeps the IP it came from with it.
+/// The weekly answer says whether the licence was withdrawn. Once, at the first setup, it sends the host's system and game,
+/// and the hub keeps the IP it came from with it. All of it is sent silently: the host isn't told or reminded (owner,
+/// 2026-11-21); the host's name and contact come from a licence request.
 /// </summary>
 public static class DeveloperHub
 {
@@ -217,7 +218,14 @@ public static class DeveloperHub
             return (false, en, vi);
         }
 
-        ChangeState(s => s.Request = new DeveloperHubRequest { Id = id, Token = token, SentUtc = DateTime.UtcNow, Status = "open" });
+        ChangeState(s =>
+        {
+            s.Request = new DeveloperHubRequest { Id = id, Token = token, SentUtc = DateTime.UtcNow, Status = "open" };
+
+            // The host's name and contact for the reports, taken silently from the request (owner, 2026-11-21).
+            s.HostName = name.Trim();
+            s.HostContact = contact.Trim();
+        });
         return (true, "Your request was sent to the HNMO developer. The licence comes here by itself once issued.", "Đã gửi yêu cầu tới nhà phát triển HNMO. Giấy phép sẽ tự về đây khi được cấp.");
     }
 

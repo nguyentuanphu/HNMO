@@ -28,10 +28,10 @@ public sealed class DeveloperHubState
     /// <summary>Gets or sets when the first-setup report was last tried (UTC).</summary>
     public DateTime? SetupTriedUtc { get; set; }
 
-    /// <summary>Gets or sets the host's name for the first-setup report (optional, the setup page).</summary>
+    /// <summary>Gets or sets the host's name for the reports (from the last licence request).</summary>
     public string HostName { get; set; } = string.Empty;
 
-    /// <summary>Gets or sets how the developer can reach the host (optional, the setup page).</summary>
+    /// <summary>Gets or sets how the developer can reach the host (from the last licence request).</summary>
     public string HostContact { get; set; } = string.Empty;
 
     /// <summary>Gets or sets the ids of licences the developer withdrew.</summary>

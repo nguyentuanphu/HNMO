@@ -152,7 +152,13 @@ public class PlayerLicenseTests
         DeveloperHub.LegacyMachineId = "bbbbbbbbbbbbbbbb";
         try
         {
-            DeveloperHub.ChangeState(s => (s.HostName, s.HostContact) = ("Minh", "zalo 0900"));
+            // The host's name and contact come silently from a licence request (owner, 2026-11-21).
+            using (var requestClient = new HttpClient(new RecordingHandler(HttpStatusCode.OK, """{"request":"R-1"}""")))
+            {
+                await DeveloperHub.RequestLicenceAsync(" Minh ", "zalo 0900", 20, "hello", requestClient).ConfigureAwait(false);
+            }
+
+            Assert.That((DeveloperHub.ReadState().HostName, DeveloperHub.ReadState().HostContact), Is.EqualTo(("Minh", "zalo 0900")));
             var refuse = new RecordingHandler(HttpStatusCode.TooManyRequests);
             using (var client = new HttpClient(refuse))
             {
@@ -272,7 +278,7 @@ public class PlayerLicenseTests
         public void PublishLicensed(string season, IReadOnlyCollection<string> logins) => this.Published.Add(logins.ToArray());
     }
 
-    private sealed class RecordingHandler(HttpStatusCode status) : HttpMessageHandler
+    private sealed class RecordingHandler(HttpStatusCode status, string answer = "{\"ok\":true}") : HttpMessageHandler
     {
         public string? Path { get; private set; }
 
@@ -282,7 +288,7 @@ public class PlayerLicenseTests
         {
             this.Path = request.RequestUri?.AbsolutePath;
             this.Body = request.Content is null ? null : await request.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-            return new HttpResponseMessage(status) { Content = new StringContent("{\"ok\":true}") };
+            return new HttpResponseMessage(status) { Content = new StringContent(answer) };
         }
     }
 }

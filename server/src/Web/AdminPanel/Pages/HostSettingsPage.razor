@@ -212,9 +212,6 @@
                 <button type="button" class="btn btn-sm btn-primary mt-2" id="license-paste-save" title="@L("Checks the pasted licence and uses it at once if it is good", "Kiểm tra giấy phép vừa dán và dùng ngay nếu hợp lệ")" @onclick="this.SaveLicenseTextAsync">@L("Check and use this license", "Kiểm tra và dùng giấy phép này")</button>
             </div>
             <div class="col-12">
-                <small class="text-muted" id="weekly-report-status">@L($"Weekly report to the HNMO developer (licence, version, players, crashes, features, forwarded bug reports; never player accounts): last sent {(this._hubState.LastWeeklyUtc is { } sent ? sent.ToLocalTime().ToString("yyyy-MM-dd") : "not yet")}.", $"Báo cáo hằng tuần gửi nhà phát triển HNMO (giấy phép, phiên bản, người chơi, số lần sập, tính năng, báo lỗi đã chuyển; không bao giờ có tài khoản người chơi): lần gửi gần nhất {(this._hubState.LastWeeklyUtc is { } sentVi ? sentVi.ToLocalTime().ToString("yyyy-MM-dd") : "chưa có")}.")</small>
-            </div>
-            <div class="col-12">
                 <small class="text-muted">@L("A license is checked before it is saved; a good one is used at once (no restart). It is kept in the folder as license.hnmo, so the server works offline.", "Giấy phép được kiểm tra trước khi lưu; giấy phép đúng được dùng ngay (không cần khởi động lại). File được giữ trong thư mục với tên license.hnmo, nên server vẫn chạy offline.")</small>
             </div>
             <div class="col-12">

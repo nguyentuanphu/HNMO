@@ -544,3 +544,4 @@ The desktop code stays the reference for how the classic game behaves (parity ru
   missing entries by name (`<data name>` / `public static string X`). Then rebuild and parse the resx as XML.
 - A renamed NPC/monster number needs its own update that moves the old one: "add if missing" updates count as done.
 - e2e social/guild tests fail when test accounts are left in guilds by other tests (guild war); clean guild membership.
+- Owner (2026-11-21): everything sent to the developer's hub is SILENT: no notice, banner or status line for the host.
