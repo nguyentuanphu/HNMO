@@ -71,11 +71,37 @@ public class GuildKickPlayerAction
         if (isKickingHimself && player.GuildStatus?.Position == GuildPosition.GuildMaster)
         {
             var guildId = player.GuildStatus.GuildId;
+            if (await OwnsTheCastleAsync(guildServer, guildId, CastleSiege.CastleSiegeContextResolver.GetContext(player)).ConfigureAwait(false))
+            {
+                // Classic MU (Season 6/9 server suites: CastleOwnerGuildDestroyLimit): the castle owner guild can't be disbanded.
+                await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.GuildOwnsCastleCantDisband)).ConfigureAwait(false);
+                await player.InvokeViewPlugInAsync<IGuildKickResultPlugIn>(p => p.GuildKickResultAsync(GuildKickSuccess.Failed)).ConfigureAwait(false);
+                return;
+            }
+
             await player.InvokeViewPlugInAsync<IGuildKickResultPlugIn>(p => p.GuildKickResultAsync(GuildKickSuccess.GuildDisband)).ConfigureAwait(false);
             await guildServer.KickMemberAsync(guildId, nickname).ConfigureAwait(false);
             return;
         }
 
         await guildServer.KickMemberAsync(player.GuildStatus!.GuildId, nickname).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Determines whether the guild owns the castle.
+    /// </summary>
+    /// <param name="guildServer">The guild server.</param>
+    /// <param name="guildId">The id of the guild on the guild server.</param>
+    /// <param name="context">The Castle Siege context, if Castle Siege runs.</param>
+    /// <returns><see langword="true"/> when the guild owns the castle.</returns>
+    internal static async ValueTask<bool> OwnsTheCastleAsync(IGuildServer guildServer, uint guildId, CastleSiege.CastleSiegeContext? context)
+    {
+        if (context is not { SiegeData.IsOccupied: true })
+        {
+            return false;
+        }
+
+        return await guildServer.GetPersistentGuildIdAsync(guildId).ConfigureAwait(false) is { } persistentGuildId
+               && persistentGuildId == context.SiegeData.OwnerGuildId;
     }
 }

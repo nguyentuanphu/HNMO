@@ -171,6 +171,9 @@
   <data name="MuHelperMinimumLevel" xml:space="preserve">
     <value>Der Auto-Play-Helfer kann ab Level {0} verwendet werden.</value>
   </data>
+  <data name="GuildOwnsCastleCantDisband" xml:space="preserve">
+    <value>Deine Gilde besitzt die Burg und kann nicht aufgelöst werden.</value>
+  </data>
   <data name="MuHelperMaximumLevel" xml:space="preserve">
     <value>Der Auto-Play-Helfer kann ab Level {0} nicht mehr verwendet werden.</value>
   </data>
