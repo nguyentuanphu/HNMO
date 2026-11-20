@@ -44,21 +44,33 @@ public sealed class GuildLimitsPlugIn :
     /// <inheritdoc />
     public async ValueTask GuildJoinRequestingAsync(Player requester, Player guildMaster, CancelEventArgs eventArgs)
     {
-        if (this.Configuration is not { MaximumMembers: > 0 } cfg
-            || guildMaster.GuildStatus is not { } status
-            || (guildMaster.GameContext as IGameServerContext)?.GuildServer is not { } guildServer)
+        if (guildMaster.GuildStatus is not { } status
+            || (guildMaster.GameContext as IGameServerContext)?.GuildServer is not { } guildServer
+            || this.GetMaximumMembers(guildMaster) is not (> 0 and var maximumMembers))
         {
             return;
         }
 
         var members = await guildServer.GetGuildListAsync(status.GuildId).ConfigureAwait(false);
-        if (members.Count < cfg.MaximumMembers)
+        if (members.Count < maximumMembers)
         {
             return;
         }
 
         eventArgs.Cancel = true;
         await requester.InvokeViewPlugInAsync<IGuildJoinResponsePlugIn>(p => p.ShowGuildJoinResponseAsync(GuildRequestAnswerResult.GuildFull)).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Gets the most members the guild of the guild master can have: <see cref="GuildLimitsConfiguration.MaximumMembers"/>
+    /// (80 by default, like the Season 6/9 server suites). The master's own guild size (level / 10) is not a limit in HNMO
+    /// (owner, 20 Nov 2026).
+    /// </summary>
+    /// <param name="guildMaster">The guild master.</param>
+    /// <returns>The most members of the guild, the master included; 0 when there is no limit.</returns>
+    internal int GetMaximumMembers(Player guildMaster)
+    {
+        return Math.Max(0, (this.Configuration ?? new GuildLimitsConfiguration()).MaximumMembers);
     }
 
     /// <inheritdoc />
@@ -71,6 +83,9 @@ public sealed class GuildLimitsConfiguration
     /// <summary>Gets or sets the level a character needs to create a guild (0: any).</summary>
     public int MinimumCreateLevel { get; set; }
 
-    /// <summary>Gets or sets the most members a guild can have (0: no limit).</summary>
-    public int MaximumMembers { get; set; }
+    /// <summary>
+    /// Gets or sets the most members a guild can have, whatever its master's guild size is (0: no cap). It's 80,
+    /// like the Season 6/9 server suites.
+    /// </summary>
+    public int MaximumMembers { get; set; } = 80;
 }
