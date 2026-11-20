@@ -79,58 +79,27 @@ public class PlayerLosesExperienceAfterDeathPlugIn : IAttackableGotKilledPlugIn,
 
     private static PlayerLosesExperienceAfterDeathPlugInConfiguration CreateDefaultConfiguration()
     {
+        // The rows of the Season 6/9 server suites: players without outlaw state lose 3 % (level 11-150),
+        // 2 % (151-220) or 1 % (221 and up, master levels too); Warning 5 %, PK level 2 10 %, murderer 20 %.
+        static List<PlayerLosesExperienceAfterDeathPlugInConfiguration.LossPerStage> Row(double normal) =>
+        [
+            new(HeroState.New, normal),
+            new(HeroState.Hero, normal),
+            new(HeroState.LightHero, normal),
+            new(HeroState.Normal, normal),
+            new(HeroState.PlayerKillWarning, 5),
+            new(HeroState.PlayerKiller1stStage, 10),
+            new(HeroState.PlayerKiller2ndStage, 20),
+        ];
+
         return new()
         {
             LossesPerLevel =
             [
-                new(
-                    10,
-                    false,
-                    [
-                        new(HeroState.New, 1),
-                        new(HeroState.Hero, 1),
-                        new(HeroState.LightHero, 1),
-                        new(HeroState.Normal, 1),
-                        new(HeroState.PlayerKillWarning, 5),
-                        new(HeroState.PlayerKiller1stStage, 6),
-                        new(HeroState.PlayerKiller2ndStage, 7),
-                    ]),
-                new(
-                    150,
-                    false,
-                    [
-                        new(HeroState.New, 1),
-                        new(HeroState.Hero, 1),
-                        new(HeroState.LightHero, 1),
-                        new(HeroState.Normal, 1),
-                        new(HeroState.PlayerKillWarning, 4),
-                        new(HeroState.PlayerKiller1stStage, 5),
-                        new(HeroState.PlayerKiller2ndStage, 6),
-                    ]),
-                new(
-                    220,
-                    false,
-                    [
-                        new(HeroState.New, 1),
-                        new(HeroState.Hero, 1),
-                        new(HeroState.LightHero, 1),
-                        new(HeroState.Normal, 1),
-                        new(HeroState.PlayerKillWarning, 3),
-                        new(HeroState.PlayerKiller1stStage, 4),
-                        new(HeroState.PlayerKiller2ndStage, 5),
-                    ]),
-                new(
-                    0,
-                    true,
-                    [
-                        new(HeroState.New, 0.7),
-                        new(HeroState.Hero, 0.7),
-                        new(HeroState.LightHero, 0.7),
-                        new(HeroState.Normal, 0.7),
-                        new(HeroState.PlayerKillWarning, 2),
-                        new(HeroState.PlayerKiller1stStage, 3),
-                        new(HeroState.PlayerKiller2ndStage, 4),
-                    ]),
+                new(11, false, Row(3)),
+                new(151, false, Row(2)),
+                new(221, false, Row(1)),
+                new(0, true, Row(1)),
             ],
         };
     }
