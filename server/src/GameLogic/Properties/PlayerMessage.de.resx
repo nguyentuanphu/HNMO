@@ -1021,4 +1021,7 @@ Inventarerweiterungen: {18}</value>
   <data name="SkillLearned" xml:space="preserve">
     <value>Du hast {0} gelernt.</value>
   </data>
+  <data name="TradeMoneyExceedsMaximum" xml:space="preserve">
+    <value>Der Handel wurde abgebrochen: ein Händler hätte mehr Zen, als das Inventar fassen kann.</value>
+  </data>
 </root>

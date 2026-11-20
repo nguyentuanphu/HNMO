@@ -1188,4 +1188,7 @@ Extensões de inventário: {18}</value>
   </data>
   <data name="VipActiveNotice" xml:space="preserve"><value>VIP {0} está ativo até {1} (horário de Sydney).</value></data>
   <data name="VipExpiringNotice" xml:space="preserve"><value>VIP {0} termina dentro de um dia, em {1} (horário de Sydney). Renove na janela VIP (Alt+U) ou na página da sua conta.</value></data>
+  <data name="TradeMoneyExceedsMaximum" xml:space="preserve">
+    <value>A troca foi cancelada: um dos jogadores levaria mais zen do que o inventário comporta.</value>
+  </data>
 </root>
