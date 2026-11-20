@@ -449,6 +449,7 @@ EXTRA_JOINTS.flare = {
 // BITMAP_FLARE SubType 23 (Spiral Slash): five white blades curl out of the knight (PKKey 0-4 their way: up or down
 // on either side, or ahead), each after a few ticks' delay, then hold; a big flame burns at each blade's head.
 const SPIRAL_SPEED = 200;
+const SPIRAL_FLAME_SHARE = 0.1;
 function spiralSlashInit(o: Joint): boolean {
   o.lifeTime = 20 + (4 - o.pkKey);
   o.maxTails = 15;
@@ -495,7 +496,10 @@ function spiralSlashMove(o: Joint, system: EffectSystem): void {
     }
   }
   if (o.lifeTime < 10) o.light.multiplyScalar(1 / 1.2);
-  system.createSprite('flame', o.position, o.scale + (20 - o.lifeTime) / 5, o.light, null, randInt(360));
+  // The desktop draws this flame at the joint's Scale (40, its trail's width) plus (20 - LifeTime) / 5: its 64-pixel
+  // texture then stands 2600 units wide and washes the whole screen in glow (the web's Spiral Slash, 20 Nov 2026). The
+  // web keeps the flame at each blade's head at a tenth of that, about three cells.
+  system.createSprite('flame', o.position, (o.scale + (20 - o.lifeTime) / 5) * SPIRAL_FLAME_SHARE, o.light, null, randInt(360));
 }
 
 /** AttackStage AT_SKILL_SPIRAL_SLASH: two blades as the swing passes key 2.3-2.6, three more after key 5 (then the release). */
