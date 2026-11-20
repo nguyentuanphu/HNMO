@@ -32,6 +32,38 @@ public sealed class ArenaConfiguration
     [Range(0, 255)]
     public byte HealingPotions { get; set; } = 100;
 
+    /// <summary>Gets or sets the map 5v5 team battles play on (owner's choice 2026-11-20: 30, Valley of Loren).</summary>
+    [Range(0, 1000)]
+    public short TeamMapNumber { get; set; } = 30;
+
+    /// <summary>Gets or sets the players a 5v5 team has at most (owner's choice 2026-11-20: 5).</summary>
+    [Range(1, 20)]
+    public int TeamSize { get; set; } = 5;
+
+    /// <summary>Gets or sets the fewest players a team may start a battle with when the wait is long (3: a 3v3).</summary>
+    [Range(1, 20)]
+    public int TeamMinSize { get; set; } = 3;
+
+    /// <summary>Gets or sets the kills that win a team battle at once (owner's choice: 30).</summary>
+    [Range(1, 1000)]
+    public int TeamKillsToWin { get; set; } = 30;
+
+    /// <summary>Gets or sets how many minutes a team battle lasts before the most kills wins (owner's choice: 10).</summary>
+    [Range(1, 120)]
+    public int TeamMinutes { get; set; } = 10;
+
+    /// <summary>Gets or sets the seconds a fallen player waits before coming back at their team's gate (owner's choice: 5).</summary>
+    [Range(0, 120)]
+    public int TeamRespawnSeconds { get; set; } = 5;
+
+    /// <summary>Gets or sets the arena points a 5v5 win gives (owner's choice 2026-11-20: 8).</summary>
+    [Range(0, 1000)]
+    public int TeamPointsPerWin { get; set; } = 8;
+
+    /// <summary>Gets or sets the arena points a 5v5 loss gives (owner's choice 2026-11-20: 3).</summary>
+    [Range(0, 1000)]
+    public int TeamPointsPerLoss { get; set; } = 3;
+
     /// <summary>Gets or sets the arena character of every class.</summary>
     public List<ArenaClassTemplate> Templates { get; set; } = DefaultTemplates();
 
