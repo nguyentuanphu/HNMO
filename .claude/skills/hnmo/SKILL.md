@@ -540,3 +540,7 @@ The desktop code stays the reference for how the classic game behaves (parity ru
   admin path + 6-digit code, `/s9/` and `/arena/` under the same path; Host settings from afar shows only the licence.
 - Blazor admin pages in Playwright: forms answer only once the live connection is up; retry fill+submit in a poll.
   The panel caches "an admin user exists": restart the servers after deleting test admin users.
+- Merging resx/Designer conflicts: never let git's hunks or a line-dedupe decide; take ours and add the branch's
+  missing entries by name (`<data name>` / `public static string X`). Then rebuild and parse the resx as XML.
+- A renamed NPC/monster number needs its own update that moves the old one: "add if missing" updates count as done.
+- e2e social/guild tests fail when test accounts are left in guilds by other tests (guild war); clean guild membership.
