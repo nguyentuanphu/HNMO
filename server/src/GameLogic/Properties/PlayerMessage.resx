@@ -162,6 +162,9 @@
   <data name="AwardMoneyFailByFullInventory" xml:space="preserve">
     <value>Couldn't add reward money, inventory is full.</value>
   </data>
+  <data name="TradeMoneyExceedsMaximum" xml:space="preserve">
+    <value>The trade was cancelled: a trader would carry more zen than the inventory can hold.</value>
+  </data>
   <data name="CantEnterEventWithItem" xml:space="preserve">
     <value>Can't enter event with equipped item '{0}'.</value>
   </data>

@@ -326,6 +326,44 @@ public class TradeTest
         Assert.That(trader2.TradingPartner, Is.Null);
     }
 
+    /// <summary>
+    /// A trade must not give a trader more zen than the maximum inventory money. Like in classic MU,
+    /// the trade fails instead, and nothing is moved.
+    /// </summary>
+    [Test]
+    public async ValueTask TradeFailsWhenReceivedZenExceedsMaximumInventoryMoneyAsync()
+    {
+        var trader1 = this.CreateTrader(PlayerState.TradeOpened);
+        var trader2 = this.CreateTrader(PlayerState.TradeOpened);
+        trader1.TradingPartner = trader2;
+        trader2.TradingPartner = trader1;
+        trader1.Money = 1_900_000_000;
+        trader2.Money = 1000;
+        trader1.TradingMoney = 0;
+        trader2.TradingMoney = 200_000_000;
+
+        var tradeContext = new Mock<IContext>();
+        tradeContext.Setup(c => c.SaveChangesAsync(It.IsAny<CancellationToken>())).Returns(new ValueTask<bool>(true));
+        var provider = new Mock<IPersistenceContextProvider>();
+        provider.Setup(p => p.CreateNewTradeContext()).Returns(tradeContext.Object);
+        var gameContext = new Mock<IGameContext>();
+        gameContext.Setup(c => c.PersistenceContextProvider).Returns(provider.Object);
+        gameContext.Setup(c => c.PlugInManager).Returns(new PlugInManager(null, new NullLoggerFactory(), null, null));
+        gameContext.Setup(c => c.Configuration).Returns(new HNMO.Persistence.BasicModel.GameConfiguration { MaximumInventoryMoney = 2_000_000_000 });
+        Mock.Get(trader1).Setup(t => t.GameContext).Returns(gameContext.Object);
+        Mock.Get(trader2).Setup(t => t.GameContext).Returns(gameContext.Object);
+
+        var action = new TradeButtonAction();
+        await action.TradeButtonChangedAsync(trader1, TradeButtonState.Checked).ConfigureAwait(false);
+        await action.TradeButtonChangedAsync(trader2, TradeButtonState.Checked).ConfigureAwait(false);
+
+        tradeContext.Verify(c => c.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
+        Mock.Get(trader1.ViewPlugIns.GetPlugIn<ITradeFinishedPlugIn>()!)
+            .Verify(v => v!.TradeFinishedAsync(TradeResult.Success), Times.Never);
+        Assert.That(trader1.Money, Is.EqualTo(1_900_000_000));
+        Assert.That(trader2.Money, Is.EqualTo(1000));
+    }
+
     private Item GetItem()
     {
         var item = new Mock<Item>();
