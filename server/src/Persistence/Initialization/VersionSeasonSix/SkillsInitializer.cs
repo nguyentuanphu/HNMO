@@ -192,7 +192,7 @@ internal class SkillsInitializer : SkillsInitializerBase
         this.CreateSkill(SkillNumber.SwellMana, LocalizedString.FromResource(() => SkillNames.SwellMana), CharacterClasses.All, abilityConsumption: 30, manaConsumption: 35, cooldownMinutes: 4);
         this.CreateSkill(SkillNumber.Invisibility, LocalizedString.FromResource(() => SkillNames.Invisibility), CharacterClasses.All, abilityConsumption: 60, manaConsumption: 80, cooldownMinutes: 5);
         this.CreateSkill(SkillNumber.CancelInvisibility, LocalizedString.FromResource(() => SkillNames.CancelInvisibility), CharacterClasses.All, abilityConsumption: 30, manaConsumption: 40, cooldownMinutes: 2);
-        this.CreateSkill(SkillNumber.AbolishMagic, LocalizedString.FromResource(() => SkillNames.AbolishMagic), CharacterClasses.AllLords, abilityConsumption: 70, manaConsumption: 90, cooldownMinutes: 8);
+        this.CreateSkill(SkillNumber.AbolishMagic, LocalizedString.FromResource(() => SkillNames.AbolishMagic), CharacterClasses.AllLords, abilityConsumption: 70, manaConsumption: 90, skillType: SkillType.Other, cooldownMinutes: 8);
         this.CreateSkill(SkillNumber.ManaRays, LocalizedString.FromResource(() => SkillNames.ManaRays), CharacterClasses.AllMGs, DamageType.Wizardry, 85, 6, 7, 130);
         this.CreateSkill(SkillNumber.FireBlast, LocalizedString.FromResource(() => SkillNames.FireBlast), CharacterClasses.AllLords, DamageType.Physical, 150, 6, 10, 30);
         this.CreateSkill(SkillNumber.PlasmaStorm, LocalizedString.FromResource(() => SkillNames.PlasmaStorm), CharacterClasses.AllMastersAndSecondClass, DamageType.Fenrir, damage: 60, distance: 6, abilityConsumption: 20, manaConsumption: 50, levelRequirement: 110, skillType: SkillType.AreaSkillAutomaticHits);
