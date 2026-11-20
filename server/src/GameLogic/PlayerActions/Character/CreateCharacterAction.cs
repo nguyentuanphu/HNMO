@@ -4,6 +4,7 @@
 
 namespace HNMO.GameLogic.PlayerActions.Character;
 
+using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.PlugIns.BannedWords;
 using HNMO.GameLogic.Views.Character;
@@ -42,6 +43,25 @@ public class CreateCharacterAction
         await player.InvokeViewPlugInAsync<IShowCharacterCreationFailedPlugIn>(p => p.ShowCharacterCreationFailedAsync()).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Tells whether the account may create a character of the class: the class needs no level, or it was unlocked
+    /// for the account, or a character of the account has the level already (characters which reached it before the
+    /// unlock existed never level up to it again).
+    /// </summary>
+    /// <param name="account">The account.</param>
+    /// <param name="characterClass">The character class.</param>
+    /// <returns><see langword="true"/> if the class can be created.</returns>
+    internal static bool IsClassAvailable(DataModel.Entities.Account account, CharacterClass characterClass)
+    {
+        if (characterClass.LevelRequirementByCreation <= 0
+            || account.UnlockedCharacterClasses.Any(c => c.Number == characterClass.Number))
+        {
+            return true;
+        }
+
+        return account.Characters.Any(c => c.Attributes.FirstOrDefault(a => a.Definition?.Id == Stats.Level.Id)?.Value >= characterClass.LevelRequirementByCreation);
+    }
+
     private async ValueTask<DataModel.Entities.Character?> CreateCharacterAsync(Player player, string name, CharacterClass characterClass)
     {
         var account = player.Account;
@@ -73,6 +93,17 @@ public class CreateCharacterAction
         // The character starts on the home map, so it must be available in the game.
         if (!characterClass.CanGetCreated || !characterClass.IsActive || characterClass.HomeMap is not { IsActive: true })
         {
+            return null;
+        }
+
+        // Magic Gladiator, Dark Lord and Rage Fighter need a character of the account at a level first (220, 250,
+        // 150). The class is unlocked when a character reaches it (UnlockCharacterAtLevelBase), but the creation
+        // itself didn't check it, so any account could create them from the start.
+        if (!IsClassAvailable(account, characterClass))
+        {
+            player.Logger.LogInformation("Account {account} can't create {class} yet: it needs a character of level {level}.", account.LoginName, characterClass.Name, characterClass.LevelRequirementByCreation);
+            await player.ShowBlueMessageAsync(
+                $"{characterClass.Name.ValueInNeutralLanguage}: a character of level {characterClass.LevelRequirementByCreation} is needed first. / Cần một nhân vật cấp {characterClass.LevelRequirementByCreation} trước.").ConfigureAwait(false);
             return null;
         }
 
