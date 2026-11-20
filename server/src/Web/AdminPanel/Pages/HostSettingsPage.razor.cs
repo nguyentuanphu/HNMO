@@ -37,6 +37,7 @@ public partial class HostSettingsPage
     private int? _requestPlayers;
     private string _requestMessage = string.Empty;
     private bool _requestSending;
+    private HNMO.GameLogic.DeveloperHubState _hubState = new();
     private bool _copied;
 
     [Inject]
@@ -69,6 +70,7 @@ public partial class HostSettingsPage
         this._relayAllowedHostsText = string.Join(", ", this._settings.RelayAllowedHosts);
         this._initialPorts = [this._settings.WebPort, this._settings.AdminPort, this._settings.ConnectServerPort, this._settings.DatabasePort];
         this._licenseStatus = this.SettingsService.GetLicenseStatus(this._settings.LicenseFilePath);
+        this._hubState = HNMO.GameLogic.DeveloperHub.ReadState();
     }
 
     private static string L(string en, string vi) =>
@@ -184,24 +186,54 @@ public partial class HostSettingsPage
         this._requestSending = true;
         try
         {
-            var message = new System.Text.Json.Nodes.JsonObject
-            {
-                ["kind"] = "licence-request",
-                ["name"] = this._requestName.Trim(),
-                ["contact"] = this._requestContact.Trim(),
-                ["players"] = this._requestPlayers ?? 0,
-                ["message"] = this._requestMessage.Trim(),
-            };
-            var (ok, en, vi) = await HNMO.GameLogic.DeveloperHub.SendAsync(message).ConfigureAwait(true);
+            var (ok, en, vi) = await HNMO.GameLogic.DeveloperHub.RequestLicenceAsync(this._requestName.Trim(), this._requestContact.Trim(), this._requestPlayers ?? 0, this._requestMessage.Trim()).ConfigureAwait(true);
             if (ok)
             {
-                this._statusMessage = L("Your request was sent to the HNMO developer.", "Đã gửi yêu cầu tới nhà phát triển HNMO.");
+                this._statusMessage = L(en, vi);
                 this._requestMessage = string.Empty;
             }
             else
             {
                 this._errors.Add(L(en, vi));
             }
+
+            this._hubState = HNMO.GameLogic.DeveloperHub.ReadState();
+        }
+        finally
+        {
+            this._requestSending = false;
+        }
+    }
+
+    /// <summary>Asks the hub whether the developer issued the requested licence; a licence that came is used at once.</summary>
+    private async Task CheckRequestAsync()
+    {
+        if (!this.IsHostComputer || this._requestSending)
+        {
+            return;
+        }
+
+        this._errors.Clear();
+        this._statusMessage = null;
+        this._requestSending = true;
+        try
+        {
+            var (status, licence) = await HNMO.GameLogic.DeveloperHub.FetchLicenceAsync().ConfigureAwait(true);
+            if (status == "issued" && licence is not null)
+            {
+                await this.UseLicenseAsync(System.Text.Encoding.UTF8.GetBytes(licence)).ConfigureAwait(true);
+            }
+            else
+            {
+                this._statusMessage = status switch
+                {
+                    "declined" => L("The HNMO developer declined the request.", "Nhà phát triển HNMO đã từ chối yêu cầu."),
+                    "open" => L("Not issued yet; it comes here by itself once it is.", "Chưa được cấp; khi cấp xong giấy phép sẽ tự về đây."),
+                    _ => L("The hub couldn't be asked now; try later.", "Chưa hỏi được hub lúc này; hãy thử lại sau."),
+                };
+            }
+
+            this._hubState = HNMO.GameLogic.DeveloperHub.ReadState();
         }
         finally
         {

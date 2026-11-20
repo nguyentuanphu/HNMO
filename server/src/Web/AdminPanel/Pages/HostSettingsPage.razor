@@ -209,11 +209,24 @@
                 <button type="button" class="btn btn-sm btn-primary mt-2" id="license-paste-save" @onclick="this.SaveLicenseTextAsync">@L("Check and use this license", "Kiểm tra và dùng giấy phép này")</button>
             </div>
             <div class="col-12">
+                <small class="text-muted" id="weekly-report-status">@L($"Weekly report to the HNMO developer (licence, version, players, crashes, features, forwarded bug reports; never player accounts): last sent {(this._hubState.LastWeeklyUtc is { } sent ? sent.ToLocalTime().ToString("yyyy-MM-dd") : "not yet")}.", $"Báo cáo hằng tuần gửi nhà phát triển HNMO (giấy phép, phiên bản, người chơi, số lần sập, tính năng, báo lỗi đã chuyển; không bao giờ có tài khoản người chơi): lần gửi gần nhất {(this._hubState.LastWeeklyUtc is { } sentVi ? sentVi.ToLocalTime().ToString("yyyy-MM-dd") : "chưa có")}.")</small>
+            </div>
+            <div class="col-12">
                 <small class="text-muted">@L("A license is checked before it is saved; a good one is used at once (no restart). It is kept in the folder as license.hnmo, so the server works offline.", "Giấy phép được kiểm tra trước khi lưu; giấy phép đúng được dùng ngay (không cần khởi động lại). File được giữ trong thư mục với tên license.hnmo, nên server vẫn chạy offline.")</small>
             </div>
             <div class="col-12">
                 <details id="license-request" class="border rounded p-2">
                     <summary class="fw-semibold">@L("Ask the HNMO developer for a licence", "Xin giấy phép từ nhà phát triển HNMO")</summary>
+                    @if (this._hubState.Request is { } request)
+                    {
+                        <div class="d-flex flex-wrap gap-2 align-items-center mt-2" id="license-request-status">
+                            <span>@L($"Last request: {request.SentUtc.ToLocalTime():yyyy-MM-dd HH:mm}, {request.Status}.", $"Yêu cầu gần nhất: {request.SentUtc.ToLocalTime():yyyy-MM-dd HH:mm}, {request.Status}.")</span>
+                            @if (request.Status == "open")
+                            {
+                                <button type="button" id="license-request-check" class="btn btn-sm btn-outline-secondary" disabled="@this._requestSending" @onclick="this.CheckRequestAsync">@L("Check now", "Kiểm tra ngay")</button>
+                            }
+                        </div>
+                    }
                     <div class="row g-2 mt-1">
                         <div class="col-md-4"><input id="license-request-name" class="form-control" placeholder="@L("Your name or server name", "Tên bạn hoặc tên server")" @bind="this._requestName" /></div>
                         <div class="col-md-4"><input id="license-request-contact" class="form-control" placeholder="@L("How to reach you (Zalo, Facebook, e-mail)", "Cách liên lạc (Zalo, Facebook, email)")" @bind="this._requestContact" /></div>
@@ -221,7 +234,7 @@
                         <div class="col-12"><textarea id="license-request-message" class="form-control" rows="2" placeholder="@L("A note (optional)", "Ghi chú (không bắt buộc)")" @bind="this._requestMessage"></textarea></div>
                         <div class="col-12 d-flex gap-2 align-items-center">
                             <button type="button" id="license-request-send" class="btn btn-sm btn-outline-primary" disabled="@this._requestSending" @onclick="this.RequestLicenseAsync">@L("Send the request", "Gửi yêu cầu")</button>
-                            <small class="text-muted">@L("It carries this computer's id and the HNMO version; the developer answers with a licence file.", "Yêu cầu gửi kèm mã máy này và phiên bản HNMO; nhà phát triển trả lời bằng một file giấy phép.")</small>
+                            <small class="text-muted">@L("It carries this computer's id and the HNMO version. The licence the developer issues comes here by itself (checked every hour).", "Yêu cầu gửi kèm mã máy này và phiên bản HNMO. Giấy phép nhà phát triển cấp sẽ tự về đây (kiểm tra mỗi giờ).")</small>
                         </div>
                     </div>
                 </details>

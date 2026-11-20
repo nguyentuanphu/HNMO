@@ -39,6 +39,34 @@ public sealed record PlayerLicense(bool IsValid, int MaximumPlayers, string? Lic
     public static PlayerLicense Default(string message) => new(false, DefaultMaximumPlayers, null, null, message);
 
     /// <summary>
+    /// Reads and checks a license file against the HNMO build key and, once embedded, the developer hub's licence key.
+    /// </summary>
+    /// <param name="fileBytes">The file's content; <c>null</c> when there is none.</param>
+    /// <param name="machineId">This computer's id.</param>
+    /// <param name="today">Today's date.</param>
+    /// <returns>The license, or the default limit with the reason.</returns>
+    public static PlayerLicense CheckWithEmbeddedKeys(byte[]? fileBytes, string machineId, DateOnly today)
+    {
+        var buildKey = IntegrityVerifier.LoadEmbeddedPublicKeyPem();
+        if (buildKey is null)
+        {
+            return Default($"No public key is embedded: up to {DefaultMaximumPlayers} players at once.");
+        }
+
+        var result = Check(fileBytes, buildKey, machineId, today);
+        if (!result.IsValid && IntegrityVerifier.LoadEmbeddedLicenceKeyPem() is { } licenceKey)
+        {
+            var withLicenceKey = Check(fileBytes, licenceKey, machineId, today);
+            if (withLicenceKey.IsValid || !withLicenceKey.Message.Contains("signature", StringComparison.Ordinal))
+            {
+                return withLicenceKey;
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
     /// Reads and checks a license file.
     /// </summary>
     /// <param name="fileBytes">The file's content; <c>null</c> when there is none.</param>

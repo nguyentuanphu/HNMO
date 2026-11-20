@@ -488,7 +488,9 @@ The desktop code stays the reference for how the classic game behaves (parity ru
   PRs (owner, 2026-11-20).
 - Developer hub (owner 2026-11-20, `docs/plans/developer-hub-2026-11-20.md`): host bug reports go to GitHub (a
   web function + hourly Action → issues in a private repo, one per bug); licence in Host settings;
-  a Developer page only where the private key is; unlicensed servers may report with a daily limit; bug robot later.
+  changed the same day: the hub (private repo `hnmobug`, Netlify) is the owner's console behind a cover blog (password +
+  authenticator), licences issued there with their own key (`client/web/tools/hnmo/licence-pub.pem` once made), weekly
+  reports with queued bug reports (`Startup/DeveloperHubWeeklyService.cs`), bug robot later.
 - Update plug-ins that read saved plug-in settings must drop the admin editor's "$id"/"$values" markers first (a
   saved list is `{"$values": [...]}`); an update that throws stops the server from starting.
   The Arena program: `HNMO_SEASON=arena` (ports +200, database `hnmo_arena`, save `save/arena/`, admin panel 8097); start

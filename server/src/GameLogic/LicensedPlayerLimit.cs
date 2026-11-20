@@ -66,6 +66,7 @@ public static class LicensedPlayerLimit
             }
 
             Admitted[loginName] = player;
+            DeveloperHub.NotePlayers(Admitted.Count);
         }
 
         if (player is not null)

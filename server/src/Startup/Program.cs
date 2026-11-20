@@ -88,6 +88,7 @@ internal sealed class Program : IDisposable
         this._logger = new LoggerConfiguration()
             .ReadFrom.Configuration(configuration)
             .WriteTo.Providers(this._loggerProviders)
+            .WriteTo.Sink(new ErrorCountingSink())
             .CreateLogger();
     }
 
@@ -240,14 +241,17 @@ internal sealed class Program : IDisposable
         candidates.Add(Path.Combine(folder, PlayerLicense.FileName));
         candidates.Add(Path.Combine(serverDir, PlayerLicense.FileName));
         var file = candidates.FirstOrDefault(File.Exists);
-        var publicKeyPem = IntegrityVerifier.LoadEmbeddedPublicKeyPem();
-        var license = publicKeyPem is null
-            ? PlayerLicense.Default("No public key is embedded: up to 10 players at once.")
-            : PlayerLicense.Check(file is null ? null : File.ReadAllBytes(file), publicKeyPem, PlayerLicense.MachineId, DateOnly.FromDateTime(DateTime.UtcNow));
-        LicensedPlayerLimit.Maximum = license.MaximumPlayers;
-        LicensedPlayerLimit.Licensee = license.IsValid ? license.Licensee : null;
+        var license = PlayerLicense.CheckWithEmbeddedKeys(file is null ? null : File.ReadAllBytes(file), PlayerLicense.MachineId, DateOnly.FromDateTime(DateTime.UtcNow));
+        DeveloperHub.StateFile = Path.Combine(Path.GetDirectoryName(HostSettingsStore.ResolveDefaultPath(serverDir)) ?? serverDir, "developer-hub.json");
         DeveloperHub.MachineId = PlayerLicense.MachineId;
         DeveloperHub.LicenceFile = file is null ? null : File.ReadAllText(file);
+        if (license.IsValid && DeveloperHub.IsWithdrawn(DeveloperHub.LicenceFile))
+        {
+            license = PlayerLicense.Default("The HNMO developer withdrew this licence: up to 10 players at once.");
+        }
+
+        LicensedPlayerLimit.Maximum = license.MaximumPlayers;
+        LicensedPlayerLimit.Licensee = license.IsValid ? license.Licensee : null;
         this._logger.Information("HNMO license: {Message} (this computer's id: {MachineId})", license.Message, PlayerLicense.MachineId);
     }
 
@@ -262,6 +266,7 @@ internal sealed class Program : IDisposable
         var publicKeyPem = IntegrityVerifier.LoadEmbeddedPublicKeyPem();
         if (publicKeyPem is null)
         {
+            DeveloperHub.Integrity = "unsigned";
             this._logger.Warning("HNMO integrity: no public key is embedded; skipping the build integrity check.");
             return;
         }
@@ -271,6 +276,12 @@ internal sealed class Program : IDisposable
         var result = IntegrityVerifier.VerifyFolder(serverDir, contentRoot, publicKeyPem);
         var enforceOnMismatch = string.Equals(this._configuration["Integrity:OnMismatch"], "refuse", StringComparison.OrdinalIgnoreCase);
 
+        DeveloperHub.Integrity = result.Status switch
+        {
+            IntegrityStatus.Ok => "ok",
+            IntegrityStatus.Unsigned => "unsigned",
+            _ => "modified",
+        };
         if (result.Status == IntegrityStatus.Ok)
         {
             this._logger.Information(result.Message);
@@ -512,6 +523,7 @@ internal sealed class Program : IDisposable
             .AddSingleton<IServerProvider, LocalServerProvider>()
             .AddSingleton<IServerRestartService>(s => new ServerRestartService(s.GetRequiredService<IHostApplicationLifetime>(), this._servers))
             .AddSingleton<IHostLicenseProvider, HostLicenseProvider>()
+            .AddHostedService<DeveloperHubWeeklyService>()
             .AddSingleton<IDatabasePasswordUpdater, PostgresPasswordUpdater>()
             .AddSingleton<IPacketCaptureService>(CreatePacketCaptureService)
             .AddSingleton<ICollection<PlugInConfiguration>>(this.PlugInConfigurationsFactory)
@@ -619,10 +631,12 @@ internal sealed class Program : IDisposable
 
         private static LicenseStatusInfo Describe(byte[]? content, string resolved, bool exists)
         {
-            var publicKeyPem = IntegrityVerifier.LoadEmbeddedPublicKeyPem();
-            var license = publicKeyPem is null
-                ? PlayerLicense.Default("No public key is embedded: up to 10 players at once.")
-                : PlayerLicense.Check(content, publicKeyPem, PlayerLicense.MachineId, DateOnly.FromDateTime(DateTime.UtcNow));
+            var license = PlayerLicense.CheckWithEmbeddedKeys(content, PlayerLicense.MachineId, DateOnly.FromDateTime(DateTime.UtcNow));
+            if (license.IsValid && content is not null && DeveloperHub.IsWithdrawn(System.Text.Encoding.UTF8.GetString(content)))
+            {
+                license = PlayerLicense.Default("The HNMO developer withdrew this licence: up to 10 players at once.");
+            }
+
             return new LicenseStatusInfo(license.MaximumPlayers, license.Message, PlayerLicense.MachineId, resolved, exists, license.IsValid, license.Licensee, license.Expires);
         }
 

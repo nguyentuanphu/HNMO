@@ -65,3 +65,18 @@
   characters; crashes and serious errors in the week, the file integrity result; Season 9 / Arena on, the plug-ins on,
   EXP and drop rates; the bug reports.
 - A licence can be withdrawn: the next weekly answer tells the server, which goes back to the free limit.
+
+## Done: the console and the weekly report (2026-11-20 evening, Sydney)
+
+- Hub (`nguyentuanphu/hnmobug`): notes blog in front; console at `/c/<slug>/` (password; a new browser also an
+  authenticator code; trusted 30 days; trusted browsers removable); licence key made there; requests issued or
+  declined; licences copied or withdrawn; servers with their weekly numbers; `/api/request`, `/api/licence`,
+  `/api/weekly`; daily filing of bug reports as issues. 6 tests on a store in memory (sign-in, issuing, fetching,
+  weekly limit, withdrawal, removing a browser).
+- HNMO: `DeveloperHubWeeklyService` (Startup) sends the weekly report (main program only) and fetches an issued licence
+  every hour; "Send to the HNMO developer" queues a report for the weekly report; Host settings' request uses a
+  one-time secret and has "Check now"; a withdrawn licence goes back to the free limit, also after a restart
+  (`save/developer-hub.json`); log errors counted (`ErrorCountingSink`); the hub's licence key is read from
+  `client/web/tools/hnmo/licence-pub.pem` once the owner has made it (`PlayerLicense.CheckWithEmbeddedKeys`).
+- Not checked live: against the deployed hub (the owner sets it up first; then a real request, licence and weekly
+  report from the test folder).

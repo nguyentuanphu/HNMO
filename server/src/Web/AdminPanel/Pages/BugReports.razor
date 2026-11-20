@@ -59,6 +59,10 @@ else
                     {
                         <span> · @L("sent to the developer", "đã gửi nhà phát triển") @BugReportsPlugIn.SydneyText(fw)</span>
                     }
+                    else if (r.QueuedUtc is not null)
+                    {
+                        <span class="bug-queued"> · @L("goes to the developer with the weekly report", "sẽ gửi nhà phát triển cùng báo cáo hằng tuần")</span>
+                    }
                 </p>
                 <p class="mb-2 bug-text" style="white-space: pre-wrap">@r.Text</p>
                 @if (r.Info.Length > 0)
@@ -75,8 +79,8 @@ else
                     <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="() => this.SetStatusAsync(r.Id, BugReportStatus.NotABug)">@L("Not a bug", "Không phải lỗi")</button>
                     <input class="form-control form-control-sm" style="max-width: 7rem" placeholder="@L("e.g. B3", "vd. B3")" @bind="this._duplicateOf[r.Id]" />
                     <button type="button" class="btn btn-sm btn-outline-secondary" title="@L("The same bug as the report named on the left.", "Cùng lỗi với báo lỗi ghi bên trái.")" @onclick="() => this.SetStatusAsync(r.Id, BugReportStatus.Duplicate)">@L("Duplicate", "Trùng")</button>
-                    <button type="button" class="btn btn-sm btn-outline-primary ms-auto bug-forward" disabled="@(!this._canForward)"
-                            title="@L("Send this report to the HNMO developer (no login, e-mail or IP).", "Gửi báo lỗi này tới nhà phát triển HNMO (không có tài khoản, email hay IP).")"
+                    <button type="button" class="btn btn-sm btn-outline-primary ms-auto bug-forward" disabled="@(!this._canForward || r.QueuedUtc is not null)"
+                            title="@L("Send this report to the HNMO developer with this server's weekly report (no login, e-mail or IP).", "Gửi báo lỗi này tới nhà phát triển HNMO cùng báo cáo hằng tuần của server (không có tài khoản, email hay IP).")"
                             @onclick="() => this.ForwardAsync(r.Id)">@L("Send to the HNMO developer", "Gửi cho nhà phát triển HNMO")</button>
                 </div>
                 <div class="d-flex gap-2 mt-2">

@@ -166,11 +166,11 @@ public partial class BugReports : ComponentBase
         var (ok, error) = await this.PlugIn().ForwardAsync(id, LicensedPlayerLimit.Licensee).ConfigureAwait(true);
         if (ok)
         {
-            this.ToastService.ShowSuccess(L("Sent to the HNMO developer.", "Đã gửi cho nhà phát triển HNMO."));
+            this.ToastService.ShowSuccess(L("It goes to the HNMO developer with this server's weekly report.", "Báo lỗi sẽ gửi tới nhà phát triển HNMO cùng báo cáo hằng tuần của server."));
         }
         else
         {
-            this.ToastService.ShowError(L($"Not sent: {error}", $"Chưa gửi được: {error}"));
+            this.ToastService.ShowError(L($"Not queued: {error}", $"Chưa xếp vào hàng gửi: {error}"));
         }
 
         await this.LoadAsync().ConfigureAwait(true);

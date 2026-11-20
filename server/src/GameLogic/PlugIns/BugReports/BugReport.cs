@@ -52,6 +52,9 @@ public sealed class BugReport
     /// <summary>Gets or sets the coins given for the confirmed bug (0 for none).</summary>
     public int RewardGiven { get; set; }
 
+    /// <summary>Gets or sets when the server's owner chose to send it to the HNMO developer (UTC); it goes with the next weekly report.</summary>
+    public DateTime? QueuedUtc { get; set; }
+
     /// <summary>Gets or sets when it was sent to the HNMO developer (UTC).</summary>
     public DateTime? ForwardedUtc { get; set; }
 }

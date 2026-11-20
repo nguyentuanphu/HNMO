@@ -67,6 +67,29 @@ public sealed class BugReportsPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn
     public static string SydneyText(DateTime utc) =>
         TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(utc, DateTimeKind.Utc), Sydney).ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
 
+    /// <summary>What the developer's hub gets of a report: no login, e-mail or IP; the character only when allowed.</summary>
+    /// <param name="report">The report.</param>
+    /// <param name="shareCharacter">Whether to name the character.</param>
+    /// <returns>The message.</returns>
+    public static System.Text.Json.Nodes.JsonObject HubMessage(BugReport report, bool shareCharacter)
+    {
+        ArgumentNullException.ThrowIfNull(report);
+        return new System.Text.Json.Nodes.JsonObject
+        {
+            ["kind"] = "bug",
+            ["id"] = report.Id,
+            ["category"] = report.Category,
+            ["text"] = report.Text,
+            ["server"] = report.Server,
+            ["place"] = report.Place,
+            ["status"] = report.Status.ToString(),
+            ["info"] = report.Info,
+            ["reply"] = report.Reply ?? string.Empty,
+            ["character"] = shareCharacter ? report.Character : string.Empty,
+            ["created"] = SydneyText(report.CreatedUtc) + " Sydney",
+        };
+    }
+
     /// <inheritdoc />
     public object CreateDefaultConfig() => new BugReportsConfiguration();
 
@@ -195,60 +218,73 @@ public sealed class BugReportsPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn
         return true;
     }
 
-    /// <summary>Sends a report to the HNMO developer's Discord (admin panel).</summary>
+    /// <summary>
+    /// Puts a report in the queue for the HNMO developer (admin panel): it goes with the server's next weekly report (the
+    /// hub takes one a week). A Discord link, if set, gets a notice at once.
+    /// </summary>
     /// <param name="id">The report.</param>
     /// <param name="licensee">Whom the server's license is for.</param>
-    /// <returns>Whether it was sent, and an error.</returns>
+    /// <returns>Whether it was queued, and an error.</returns>
     public async Task<(bool Ok, string? Error)> ForwardAsync(string id, string? licensee)
     {
         var settings = this.Settings;
-        if (this.Store.Read(data => BugReportEngine.Find(data, id)) is not { } report)
+        var (report, alreadyQueued) = this.Store.Mutate(data =>
+        {
+            var found = BugReportEngine.Find(data, id);
+            if (found is null || found.QueuedUtc is not null)
+            {
+                return (false, (found, found is not null));
+            }
+
+            found.QueuedUtc = DateTime.UtcNow;
+            return (true, (found, false));
+        });
+        if (report is null)
         {
             return (false, "There's no such report.");
         }
 
-        // The developer's hub files it as an issue; a Discord link, if set, also gets a notice.
-        var (ok, en, _) = await DeveloperHub.SendAsync(HubMessage(report, settings.ShareCharacterNames)).ConfigureAwait(false);
+        if (alreadyQueued)
+        {
+            return (false, "It is already waiting for the weekly report.");
+        }
+
         if (BugReportForwarder.IsDiscordWebhook(settings.DeveloperWebhookUrl))
         {
-            var discord = await BugReportForwarder.SendAsync(settings.DeveloperWebhookUrl, report, licensee, settings.ShareCharacterNames).ConfigureAwait(false);
-            ok |= discord.Ok;
+            await BugReportForwarder.SendAsync(settings.DeveloperWebhookUrl, report, licensee, settings.ShareCharacterNames).ConfigureAwait(false);
         }
 
-        if (ok)
-        {
-            this.Store.Mutate(data =>
-            {
-                var saved = BugReportEngine.Find(data, id);
-                saved?.ForwardedUtc = DateTime.UtcNow;
-                return (saved is not null, true);
-            });
-        }
-
-        return (ok, ok ? null : en);
+        return (true, null);
     }
 
-    /// <summary>What the developer's hub gets of a report: no login, e-mail or IP; the character only when allowed.</summary>
-    /// <param name="report">The report.</param>
-    /// <param name="shareCharacter">Whether to name the character.</param>
-    /// <returns>The message.</returns>
-    public static System.Text.Json.Nodes.JsonObject HubMessage(BugReport report, bool shareCharacter)
+    /// <summary>The reports queued for the HNMO developer and not sent yet (the weekly report takes them), at most 50.</summary>
+    /// <returns>The hub's messages of the reports, with their ids.</returns>
+    public List<(string Id, System.Text.Json.Nodes.JsonObject Message)> QueuedForDeveloper()
     {
-        ArgumentNullException.ThrowIfNull(report);
-        return new System.Text.Json.Nodes.JsonObject
+        var share = this.Settings.ShareCharacterNames;
+        return this.Store.Read(data => data.Reports
+            .Where(r => r.QueuedUtc is not null && r.ForwardedUtc is null)
+            .Take(50)
+            .Select(r => (r.Id, HubMessage(r, share)))
+            .ToList());
+    }
+
+    /// <summary>Marks queued reports as sent (the weekly report was taken).</summary>
+    /// <param name="ids">The reports.</param>
+    public void MarkSentToDeveloper(IReadOnlyCollection<string> ids)
+    {
+        var now = DateTime.UtcNow;
+        this.Store.Mutate(data =>
         {
-            ["kind"] = "bug",
-            ["id"] = report.Id,
-            ["category"] = report.Category,
-            ["text"] = report.Text,
-            ["server"] = report.Server,
-            ["place"] = report.Place,
-            ["status"] = report.Status.ToString(),
-            ["info"] = report.Info,
-            ["reply"] = report.Reply ?? string.Empty,
-            ["character"] = shareCharacter ? report.Character : string.Empty,
-            ["created"] = SydneyText(report.CreatedUtc) + " Sydney",
-        };
+            var changed = false;
+            foreach (var report in data.Reports.Where(r => ids.Contains(r.Id)))
+            {
+                report.ForwardedUtc = now;
+                changed = true;
+            }
+
+            return (changed, true);
+        });
     }
 
     /// <summary>All reports, newest first (admin panel).</summary>

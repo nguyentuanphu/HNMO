@@ -98,46 +98,87 @@ public sealed class BugReportsTest
     }
 
     /// <summary>
-    /// The developer's hub gets the report with this computer's id, the version and the licence file, never the login;
-    /// a refusal for the daily limit is told in words; without a machine id nothing is sent.
+    /// The developer's hub: a licence request carries a one-time secret, kept to fetch the answer; the issued licence
+    /// comes back with it. The weekly report carries this computer's id, the version and the licence, never the login;
+    /// a withdrawn licence is remembered. Without a machine id nothing is sent.
     /// </summary>
     /// <returns>The task.</returns>
     [Test]
     [NonParallelizable]
-    public async Task TheHubGetsTheReportWithTheLicenceNotTheLoginAsync()
+    public async Task TheHubTakesRequestsAndWeeklyReportsAsync()
     {
-        var report = Report("Skills show no effect");
-        report.Id = "B9";
-        report.Character = "HeroDk";
-        var message = BugReportsPlugIn.HubMessage(report, shareCharacter: false);
-        var previous = (GameLogic.DeveloperHub.MachineId, GameLogic.DeveloperHub.LicenceFile);
+        var file = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"hnmo-hub-{Guid.NewGuid():N}.json");
+        var previous = (GameLogic.DeveloperHub.MachineId, GameLogic.DeveloperHub.LicenceFile, GameLogic.DeveloperHub.StateFile);
+        Environment.SetEnvironmentVariable("HNMO_DEVELOPER_HUB", "https://hub.example");
         try
         {
+            GameLogic.DeveloperHub.StateFile = file;
             GameLogic.DeveloperHub.MachineId = string.Empty;
-            Assert.That((await GameLogic.DeveloperHub.SendAsync(message, url: "https://hub.example").ConfigureAwait(false)).Ok, Is.False);
+            Assert.That((await GameLogic.DeveloperHub.RequestLicenceAsync("Minh", "zalo", 30, "hi").ConfigureAwait(false)).Ok, Is.False, "no machine id");
 
             GameLogic.DeveloperHub.MachineId = "8e5abdd396d53501";
-            GameLogic.DeveloperHub.LicenceFile = "{\"payload\":\"x\",\"signature\":\"y\"}";
-            var handler = new RecordingHandler();
+            var licence = "{\"payload\":\"" + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes("{\"licensee\":\"Minh\",\"maxPlayers\":30,\"id\":\"L-1\"}")) + "\",\"signature\":\"x\"}";
+            var handler = new RecordingHandler { Answer = "{\"ok\":true,\"request\":\"R-1\"}", Status = HttpStatusCode.OK };
             using var client = new HttpClient(handler);
-            var (ok, _, _) = await GameLogic.DeveloperHub.SendAsync(message, client, "https://hub.example/").ConfigureAwait(false);
-            Assert.That(ok, Is.True);
-            Assert.That(handler.Url, Is.EqualTo("https://hub.example/api/report"));
-            var sent = JsonNode.Parse(handler.Body!)!;
-            Assert.That(sent["kind"]!.GetValue<string>(), Is.EqualTo("bug"));
-            Assert.That(sent["machine"]!.GetValue<string>(), Is.EqualTo("8e5abdd396d53501"));
-            Assert.That(sent["licence"]!.GetValue<string>(), Does.Contain("payload"));
-            Assert.That(handler.Body, Does.Not.Contain("alice").And.Not.Contain("HeroDk"));
+            var asked = await GameLogic.DeveloperHub.RequestLicenceAsync("Minh", "zalo", 30, "hi", client).ConfigureAwait(false);
+            Assert.That(asked.Ok, Is.True, asked.En);
+            Assert.That(handler.Url, Is.EqualTo("https://hub.example/api/request"));
+            var request = GameLogic.DeveloperHub.ReadState().Request!;
+            Assert.That(request.Id, Is.EqualTo("R-1"));
+            Assert.That(handler.Body, Does.Contain(request.Token).And.Contain("8e5abdd396d53501"));
+
+            handler.Answer = "{\"status\":\"issued\",\"licence\":" + System.Text.Json.JsonSerializer.Serialize(licence) + "}";
+            var (status, issued) = await GameLogic.DeveloperHub.FetchLicenceAsync(client).ConfigureAwait(false);
+            Assert.That((status, issued), Is.EqualTo(("issued", licence)));
+            Assert.That(handler.Body, Does.Contain("R-1").And.Contain(request.Token));
+            Assert.That(GameLogic.DeveloperHub.ReadState().Request!.Status, Is.EqualTo("issued"));
+            Assert.That((await GameLogic.DeveloperHub.FetchLicenceAsync(client).ConfigureAwait(false)).Status, Is.Null, "asked once");
+
+            GameLogic.DeveloperHub.LicenceFile = licence;
+            Assert.That(GameLogic.DeveloperHub.LicenceIdOf(licence), Is.EqualTo("L-1"));
+            var report = Report("Skills show no effect");
+            report.Character = "HeroDk";
+            var weekly = new JsonObject { ["players"] = new JsonObject { ["peak"] = 5 }, ["bugs"] = new JsonArray { BugReportsPlugIn.HubMessage(report, shareCharacter: false) } };
+            handler.Answer = "{\"ok\":true,\"revoked\":true}";
+            var sent = await GameLogic.DeveloperHub.SendWeeklyAsync(weekly, client).ConfigureAwait(false);
+            Assert.That((sent.Ok, sent.Withdrawn), Is.EqualTo((true, true)));
+            Assert.That(handler.Url, Is.EqualTo("https://hub.example/api/weekly"));
+            Assert.That(handler.Body, Does.Contain("Skills show no effect").And.Contain("eyJsaWNlbnNlZSI6").And.Not.Contain("alice").And.Not.Contain("HeroDk"));
+            Assert.That(GameLogic.DeveloperHub.IsWithdrawn(licence), Is.True, "remembered");
+            Assert.That(GameLogic.DeveloperHub.ReadState().LastWeeklyUtc, Is.Not.Null);
 
             handler.Status = (HttpStatusCode)429;
-            var limited = await GameLogic.DeveloperHub.SendAsync(BugReportsPlugIn.HubMessage(report, false), client, "https://hub.example").ConfigureAwait(false);
+            var limited = await GameLogic.DeveloperHub.SendWeeklyAsync(new JsonObject(), client).ConfigureAwait(false);
             Assert.That(limited.Ok, Is.False);
-            Assert.That(limited.Vi, Does.Contain("hết lượt"));
+            Assert.That(limited.Error, Does.Contain("once a week"));
         }
         finally
         {
-            (GameLogic.DeveloperHub.MachineId, GameLogic.DeveloperHub.LicenceFile) = previous;
+            Environment.SetEnvironmentVariable("HNMO_DEVELOPER_HUB", null);
+            (GameLogic.DeveloperHub.MachineId, GameLogic.DeveloperHub.LicenceFile, GameLogic.DeveloperHub.StateFile) = previous;
+            System.IO.File.Delete(file);
         }
+    }
+
+    /// <summary>A forwarded report waits for the weekly report, once; sent, it leaves the queue.</summary>
+    /// <returns>The task.</returns>
+    [Test]
+    public async Task AForwardedReportWaitsForTheWeeklyReportAsync()
+    {
+        var context = GameContextTestHelper.CreateGameContext([]);
+        var player = await PlayerTestHelper.CreatePlayerAsync(context).ConfigureAwait(false);
+        player.Account = new HNMO.Persistence.BasicModel.Account { LoginName = "dave" };
+        var plugIn = new BugReportsPlugIn { Configuration = new BugReportsConfiguration { FileName = string.Empty } };
+        plugIn.Submit(player, "item", "The jewel vanished from the bag", null);
+        var id = plugIn.All().Single().Id;
+        Assert.That((await plugIn.ForwardAsync(id, null).ConfigureAwait(false)).Ok, Is.True);
+        Assert.That((await plugIn.ForwardAsync(id, null).ConfigureAwait(false)).Ok, Is.False, "once");
+        var queued = plugIn.QueuedForDeveloper();
+        Assert.That(queued.Select(q => q.Id), Is.EqualTo(new[] { id }));
+        Assert.That(queued[0].Message.ToJsonString(), Does.Not.Contain("dave"));
+        plugIn.MarkSentToDeveloper([id]);
+        Assert.That(plugIn.QueuedForDeveloper(), Is.Empty);
+        Assert.That(plugIn.All().Single().ForwardedUtc, Is.Not.Null);
     }
 
     /// <summary>A player sends a report from the game; the window's state lists it and the reports left.</summary>
@@ -169,11 +210,13 @@ public sealed class BugReportsTest
 
         public HttpStatusCode Status { get; set; } = HttpStatusCode.NoContent;
 
+        public string Answer { get; set; } = string.Empty;
+
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             this.Url = request.RequestUri?.ToString();
             this.Body = request.Content is null ? null : await request.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-            return new HttpResponseMessage(this.Status);
+            return new HttpResponseMessage(this.Status) { Content = new StringContent(this.Answer) };
         }
     }
 }
