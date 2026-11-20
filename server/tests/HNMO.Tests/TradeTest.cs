@@ -111,6 +111,38 @@ public class TradeTest
     }
 
     /// <summary>
+    /// The zen which is already offered in a trade still belongs to the player, so the offer can be
+    /// changed to any amount up to the inventory money plus the offered money.
+    /// </summary>
+    [Test]
+    public async ValueTask TradeMoneyCanBeChangedWithTheAlreadyOfferedZenAsync()
+    {
+        var trader = await PlayerTestHelper.CreatePlayerAsync().ConfigureAwait(false);
+        var partner = await PlayerTestHelper.CreatePlayerAsync().ConfigureAwait(false);
+        trader.Money = 1_000;
+        await new TradeRequestAction().RequestTradeAsync(trader, partner).ConfigureAwait(false);
+        await new TradeAcceptAction().HandleTradeAcceptAsync(partner, true).ConfigureAwait(false);
+        var action = new TradeMoneyAction();
+
+        await action.TradeMoneyAsync(trader, 1_000).ConfigureAwait(false);
+        Assert.That(trader.TradingMoney, Is.EqualTo(1_000));
+        Assert.That(trader.Money, Is.EqualTo(0));
+
+        await action.TradeMoneyAsync(trader, 400).ConfigureAwait(false);
+        Assert.That(trader.TradingMoney, Is.EqualTo(400));
+        Assert.That(trader.Money, Is.EqualTo(600));
+
+        await action.TradeMoneyAsync(trader, 900).ConfigureAwait(false);
+        Assert.That(trader.TradingMoney, Is.EqualTo(900));
+        Assert.That(trader.Money, Is.EqualTo(100));
+
+        // More than the player owns in total is refused, and changes nothing.
+        await action.TradeMoneyAsync(trader, 1_001).ConfigureAwait(false);
+        Assert.That(trader.TradingMoney, Is.EqualTo(900));
+        Assert.That(trader.Money, Is.EqualTo(100));
+    }
+
+    /// <summary>
     /// Tests a trade of items.
     /// </summary>
     [Test]
