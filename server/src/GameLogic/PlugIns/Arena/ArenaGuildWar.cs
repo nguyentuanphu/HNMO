@@ -546,8 +546,8 @@ public sealed class ArenaGuildWar
             Refill(player);
             await TellAsync(
                 player,
-                $"Guild war: {match.GuildA} (red) against {match.GuildB} (blue), {cfg.GuildWarMinutes} minutes. A kill is a point; hold the flags at {flagsText} alone for {cfg.GuildWarCaptureSeconds} s to take them: each gives a point every {cfg.GuildWarFlagPointSeconds} s.",
-                $"Bang chiến: {match.GuildA} (đỏ) đấu {match.GuildB} (xanh), {cfg.GuildWarMinutes} phút. Hạ một người được một điểm; đứng một mình ở cờ {flagsText} trong {cfg.GuildWarCaptureSeconds} giây để chiếm: mỗi cờ cho một điểm mỗi {cfg.GuildWarFlagPointSeconds} giây.").ConfigureAwait(false);
+                $"Guild war: {match.GuildA} (west gate) against {match.GuildB} (east gate), {cfg.GuildWarMinutes} minutes. A kill is a point; hold the flags at {flagsText} alone for {cfg.GuildWarCaptureSeconds} s to take them: each gives a point every {cfg.GuildWarFlagPointSeconds} s.",
+                $"Bang chiến: {match.GuildA} (cửa Tây) đấu {match.GuildB} (cửa Đông), {cfg.GuildWarMinutes} phút. Hạ một người được một điểm; đứng một mình ở cờ {flagsText} trong {cfg.GuildWarCaptureSeconds} giây để chiếm: mỗi cờ cho một điểm mỗi {cfg.GuildWarFlagPointSeconds} giây.").ConfigureAwait(false);
         }
 
         logger.LogInformation("Arena: guild war {A} against {B} started ({Count} fighters).", match.GuildA, match.GuildB, match.Sides.Count);
