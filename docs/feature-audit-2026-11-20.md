@@ -70,3 +70,15 @@ Compared on 20 Nov 2026 (defaults of a new Season 6 database vs the suites' text
 | MU helper | from level 1 | from level 80 | host setting |
 
 Equal: Jewel of Soul / Life / Harmony rates, refining, wing and Fenrir mixes, the 380 mix, EXP tables, maximum levels, sell divisor, per-class damage rates.
+
+### Owner decisions on these settings (20 Nov 2026)
+
+Change to the suites' value: party EXP bonus (160-220 %, set party 230-300 %); excellent drop 0.2 %; Jewel of Life up to +28;
+items / zen on the ground 20 s / 15 s (Season 9 values); PK clear 1 M zen per kill; NPC jewel prices; Chaos Castle needs 2
+players; duel damage 60 % for every hit; Devil Square 15 players; happy hour 8 h with EXP and drop bonus.
+
+Change differently: guild size capped at 80 (creation level 100, 5-guild alliance and mixed Gens stay as HNMO); MU helper from
+level 80, VIP accounts from level 1.
+
+Keep HNMO: EXP rate 1x; luck on drops 25 %; event timetables; +12 / +14 mix rates; trading harmony and full-excellent items;
+extra vault pages on.
