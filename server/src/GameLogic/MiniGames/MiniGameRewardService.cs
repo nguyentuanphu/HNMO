@@ -162,12 +162,21 @@ internal sealed class MiniGameRewardService
 
                 break;
             case MiniGameRewardType.Money:
-                if (!player.TryAddMoney(reward.RewardAmount))
+                // When the whole amount doesn't fit, the player gets as much as fits up to the maximum
+                // inventory money. The score table shows what was actually paid.
+                var maximumMoney = player.GameContext.Configuration?.MaximumInventoryMoney ?? int.MaxValue;
+                var paidMoney = (int)Math.Clamp((long)maximumMoney - player.Money, 0, Math.Max(0, reward.RewardAmount));
+                if (paidMoney > 0 && !player.TryAddMoney(paidMoney))
+                {
+                    paidMoney = 0;
+                }
+
+                if (paidMoney < reward.RewardAmount)
                 {
                     await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.AwardMoneyFailByFullInventory)).ConfigureAwait(false);
                 }
 
-                return (0, reward.RewardAmount);
+                return (0, paidMoney);
             case MiniGameRewardType.Item:
                 await this.GiveItemRewardAsync(player, reward).ConfigureAwait(false);
                 break;
