@@ -48,6 +48,11 @@ export interface SkillSource {
   current: () => number | null;
   mana: () => number;
   ability: () => number;
+  /**
+   * CSkillManager::AreSkillAttributeRequirementsMet: the hero's level, strength, agility, energy and command reach the
+   * skill's (CanExecuteSkill drops a cast that doesn't; the server refuses it too).
+   */
+  requirementsMet?: (skill: number) => boolean;
   /** Mana ran short: the desktop drinks a mana potion then (FindManaItemIndex). */
   outOfMana?: () => void;
 }
@@ -190,6 +195,7 @@ export class Combat {
 
   /** Whether the hero has a way to cast a skill now (a cast plan for its class and equipment). */
   castable(skill: number): boolean {
+    if (this.skills?.requirementsMet && !this.skills.requirementsMet(skill)) return false;
     const plan = skillCastPlan(skill, this.classIndex, this.castContext());
     return plan !== null && plan.packet !== 'none';
   }
@@ -254,6 +260,7 @@ export class Combat {
     const target = pending.target;
     if (this.hero.dead || (target && (target.dead || (target !== this.hero && !this.online.characters.has(target.id))))) { this.pendingSkill = null; return; }
     if (this.inSafeZone()) { this.pendingSkill = null; return; } // CanExecuteSkill: no skills in a safe zone
+    if (this.skills?.requirementsMet && !this.skills.requirementsMet(skill)) { this.pendingSkill = null; return; } // CanExecuteSkill
     const data = skillInfo(skill);
     const range = skillRange(skill, data?.distance ?? 0);
     const aim = target && target !== this.hero ? target.cell : pending.cell;
