@@ -19,7 +19,7 @@ import {
   type AttackLookInput, type DamageText, type HandItem, type MonsterAttackState, type Mount,
 } from './combatLook.js';
 import {
-  areaSkillRotation, isBeastUppercut, isDarkSide, isKillingBlow, isPartyMemberSkill, isRageHalfwaySkill, rageSkillAction, RAGE_BUFFS,
+  areaSkillRotation, isBeastUppercut, isDarkSide, isKillingBlow, isPartyMemberSkill, isRageHalfwaySkill, rageRefusal, rageSkillAction, RAGE_BUFFS,
   skillCastPlan, skillAnimationAction, skillRange, SkillId, type SkillCastContext, type SkillCastPlan,
 } from './skillCast.js';
 import { itemDefinition } from './items.js';
@@ -275,7 +275,13 @@ export class Combat {
     // CheckSkillDelay: not while the skill cools down; casting starts its delay. AttackRagefighter leaves the check out
     // (only its Plasma Storm calls it).
     if (data && (!rage || skill === SkillId.PLASMA_STORM_FENRIR) && !skillCooldowns.tryStart(skill, data.delay)) { this.pendingSkill = null; return; }
-    if (rage && !plan.equipmentOk) { this.pendingSkill = null; return; } // UseSkillRagefighter's ring, mount and glove checks
+    if (rage && !plan.equipmentOk) {
+      // UseSkillRagefighter's ring, mount and glove checks: the desktop drops the cast without a word; the web says why.
+      const why = rageRefusal(skill, this.castContext());
+      if (why) this.events.onMessage?.(why === 'riding' ? 'This skill cannot be used while riding.' : 'This skill needs sword-form gloves.');
+      this.pendingSkill = null;
+      return;
+    }
     if (aim) this.hero.faceTo(aim);
     if (plan.heroAction !== null) this.hero.playOnce(plan.heroAction);
     const degrees = ((this.hero.angle * 180) / Math.PI + 360) % 360;

@@ -666,11 +666,20 @@ export function isSwordformGloves(item: Pick<HandItem, 'group' | 'number'> | nul
   return !!item && item.group === 0 && item.number >= 32 && item.number <= 35;
 }
 
+/**
+ * Why UseSkillRagefighter drops a fighter's skill with this equipment: a horn mount (Uniria, Dinorant, Fenrir) is worn
+ * (CMonkSystem::IsRideNotUseSkill), or no sword-form gloves are held (IsSwordformGlovesUseSkill); null when it casts.
+ */
+export function rageRefusal(skill: number, ctx: SkillCastContext): 'riding' | 'gloves' | null {
+  const mount = gearOf(ctx).mount;
+  if ((mount === 'uniria' || mount === 'dinorant' || mount === 'fenrir') && RAGE_NOT_RIDING.includes(skill)) return 'riding';
+  if (RAGE_GLOVE_SKILLS.includes(skill) && !isSwordformGloves(ctx.rightHand) && !isSwordformGloves(ctx.leftHand)) return 'gloves';
+  return null;
+}
+
 function rageFighterPlan(skill: number, ctx: SkillCastContext, g: Gear, plan: (p: PlanParts) => SkillCastPlan): SkillCastPlan | null {
   if (skill === S.PLASMA_STORM_FENRIR) return plasmaStorm(C.RAGE_FIGHTER, ctx, g, plan, 'AttackRagefighter AT_SKILL_PLASMA_STORM_FENRIR');
-  const hornMount = g.mount === 'uniria' || g.mount === 'dinorant' || g.mount === 'fenrir';
-  const gloves = isSwordformGloves(ctx.rightHand) || isSwordformGloves(ctx.leftHand);
-  const equipmentOk = !(hornMount && RAGE_NOT_RIDING.includes(skill)) && (!RAGE_GLOVE_SKILLS.includes(skill) || gloves);
+  const equipmentOk = rageRefusal(skill, ctx) === null;
   const atTarget = { needsTarget: true, equipmentOk, heroAction: rageSkillAction(skill) };
   if (KILLING_BLOWS.includes(skill) || skill === S.OCCUPY) {
     // SendRequestMagic at the target with an instant move before it; Occupy's rush comes with ReceiveMagic.
