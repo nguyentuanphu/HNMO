@@ -17,6 +17,11 @@ using HNMO.Interfaces;
 public class WarpAction
 {
     /// <summary>
+    /// The multiplier of the warp costs for outlaws from PK level 2 up (Season 6/9 server suites).
+    /// </summary>
+    private const int PlayerKillerCostsMultiplier = 50;
+
+    /// <summary>
     /// Warps the player.
     /// </summary>
     /// <param name="player">The player.</param>
@@ -58,6 +63,20 @@ public class WarpAction
         }
     }
 
+    /// <summary>
+    /// Gets the warp costs. As in the Season 6/9 server suites, outlaws from PK level 2 up pay
+    /// <see cref="PlayerKillerCostsMultiplier"/> times the costs.
+    /// </summary>
+    /// <param name="player">The player.</param>
+    /// <param name="warpInfo">The warp information.</param>
+    /// <returns>The costs in zen.</returns>
+    private static int GetCosts(Player player, WarpInfo warpInfo)
+    {
+        return player.SelectedCharacter?.State >= HeroState.PlayerKiller1stStage
+            ? warpInfo.Costs * PlayerKillerCostsMultiplier
+            : warpInfo.Costs;
+    }
+
     private bool CheckRequirements(Player player, WarpInfo warpInfo, [MaybeNullWhen(true)] out string errorMessage)
     {
         errorMessage = null;
@@ -82,22 +101,13 @@ public class WarpAction
         }
 
         // Money check should be last to avoid getting zen when other checks failed
-        if (!this.CheckMoneyRequirement(player, warpInfo))
+        var costs = GetCosts(player, warpInfo);
+        if (!player.TryRemoveMoney(costs))
         {
-            errorMessage = $"You need {warpInfo.Costs} in order to warp";
+            errorMessage = $"You need {costs} in order to warp";
             return false;
         }
 
         return true;
-    }
-
-    private bool CheckMoneyRequirement(Player player, WarpInfo warpInfo)
-    {
-        if (player.TryRemoveMoney(warpInfo.Costs))
-        {
-            return true;
-        }
-
-        return false;
     }
 }
