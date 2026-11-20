@@ -333,8 +333,10 @@ public static class AttackableExtensions
             return new HitInfo(damage, (uint)shieldDamage, attributes, manaToll, petDamage, skill, triggersHitShock);
         }
 
+        // Classic MU Season 6: the shield (SD) only takes hits of players (and their pets); monsters hit the life directly.
+        var attackerIsPlayer = attacker is Player or IPlayerSurrogate;
         var shieldBypass = Rand.NextRandomBool(attacker.Attributes[Stats.ShieldBypassChance]);
-        if (shieldBypass || defender.Attributes[Stats.CurrentShield] < 1)
+        if (!attackerIsPlayer || shieldBypass || defender.Attributes[Stats.CurrentShield] < 1)
         {
             return new HitInfo(damage, 0, attributes, manaToll, petDamage, skill, triggersHitShock);
         }
