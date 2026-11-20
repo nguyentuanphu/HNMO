@@ -52,6 +52,9 @@ public sealed class LegacyImportBackupSnapshot
     /// <summary>Gets or sets the chance of the common excellent item drop group before the import.</summary>
     public double? PreviousExcellentItemDropChance { get; set; }
 
+    /// <summary>Gets or sets the success rates of the chaos machine craftings before the import changed them.</summary>
+    public List<BackupCraftingRate> PreviousCraftingRates { get; set; } = [];
+
     /// <summary>Gets or sets previous plugin configuration JSON blobs keyed by plugin TypeId string.</summary>
     public List<BackupPlugInState> PreviousPlugIns { get; set; } = [];
 

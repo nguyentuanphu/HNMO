@@ -19,6 +19,9 @@ public static class LegacyFileParsers
 {
     private static readonly char[] WhitespaceSeparators = [' ', '\t'];
 
+    /// <summary>The file name of the item bag a monster drops: "Monster_(275)_Kundun.xml" is monster 275's.</summary>
+    private static readonly Regex MonsterBagName = new(@"^Monster_\((\d+)\)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
     /// <summary>
     /// Detects whether a legacy server folder targets Season 6 or Season 9 based on structural markers.
     /// </summary>
@@ -70,7 +73,8 @@ public static class LegacyFileParsers
             }
         }
 
-        if (hasBattleCore || hasMuun || hasPentagram || hasArca || hasTormented
+        // Muun pets alone do not make a Season 9 server: IGCN's Season 6 Episode 3 suite has them too.
+        if (hasBattleCore || hasPentagram || hasArca || hasTormented
             || signals.Any(s => s.Contains(">200", StringComparison.Ordinal)))
         {
             return (LegacyServerVersion.Season9, signals);
@@ -154,6 +158,10 @@ public static class LegacyFileParsers
                     rates.ZenMultiplier = Math.Max(0.0, zenMult);
                 }
             }
+
+            rates.SoulSuccessPercent = ReadPercent(kv, "UseSoulRate") ?? rates.SoulSuccessPercent;
+            rates.SoulWithLuckSuccessPercent = ReadPercent(kv, "UseSoulWithLuckRate") ?? rates.SoulWithLuckSuccessPercent;
+            rates.LifeSuccessPercent = ReadPercent(kv, "UseLifeRate") ?? rates.LifeSuccessPercent;
         }
 
         return rates;
@@ -231,7 +239,8 @@ public static class LegacyFileParsers
                     var npcIndex = ReadIntAttr(shopEl, "NPCIndex", -1);
                     var mapNum = ReadIntAttr(shopEl, "MapNumber", 0);
                     var fileName = shopEl.Attribute("FileName")?.Value?.Trim();
-                    if (npcIndex < 0 || string.IsNullOrWhiteSpace(fileName))
+                    // GMShop="1" is the game masters' test shop: it sits on an NPC of the normal shops (Lumen, 255).
+                    if (npcIndex < 0 || string.IsNullOrWhiteSpace(fileName) || ReadIntAttr(shopEl, "GMShop", 0) != 0)
                     {
                         continue;
                     }
@@ -311,6 +320,10 @@ public static class LegacyFileParsers
                         ? ReadIntAttr(ev, "ItemDropBonus", 15)
                         : ReadIntAttr(ev, "DropBonus", 15);
                     var windowText = endH >= 0 ? $"Window {startH:D2}:{startM:D2}-{endH:D2}:{startM:D2}" : string.Empty;
+
+                    // The window runs from StartHour to EndHour (across midnight when it ends earlier); it was taken as
+                    // one hour although the servers' windows are two.
+                    var duration = endH >= 0 ? ((((endH - startH) * 60) % 1440) + 1440) % 1440 : 60;
                     events.Add(new LegacyEventScheduleEntry
                     {
                         EventId = $"imported-bonus-{idx}",
@@ -321,6 +334,9 @@ public static class LegacyFileParsers
                         ExpBonusPercent = expBonus,
                         DropBonusPercent = dropBonus,
                         RewardSummary = windowText,
+                        IsBonusWindow = true,
+                        DurationMinutes = duration == 0 ? 1440 : duration,
+                        DayOfWeek = ReadIntAttr(ev, "DayOfWeek", -1),
                     });
                 }
             }
@@ -450,7 +466,15 @@ public static class LegacyFileParsers
             return spawns;
         }
 
-        foreach (var file in FindFiles(rootFolder, "MonsterSetBase*.txt"))
+        // A suite has the spawns of its normal game servers in MonsterSetBase.txt and those of its castle siege server in
+        // MonsterSetBase_CS.txt, which is almost the same list: reading both put every monster in twice.
+        var setBaseFiles = FindFiles(rootFolder, "MonsterSetBase*.txt").ToList();
+        if (setBaseFiles.Any(f => !IsCastleSiegeFile(f)))
+        {
+            setBaseFiles.RemoveAll(IsCastleSiegeFile);
+        }
+
+        foreach (var file in setBaseFiles)
         {
             var currentGroup = -1;
             foreach (var rawLine in File.ReadLines(file))
@@ -508,6 +532,8 @@ public static class LegacyFileParsers
                 }
                 else
                 {
+                    // The third column (30 for nearly every monster, 0 for NPCs) is the monster's roaming distance,
+                    // not a spawn area, so a single spot stays a single cell, as in HNMO's own map data.
                     TryParseInt(tokens[5], out var spawnDir);
                     spawns.Add(new LegacySpawnEntry
                     {
@@ -613,10 +639,14 @@ public static class LegacyFileParsers
                     var minLv = ReadIntAttr(ruleEl, "MonsterMinLevel", 0);
                     var maxLv = ReadIntAttr(ruleEl, "MonsterMaxLevel", 255);
                     var mapNum = ReadIntAttr(ruleEl, "MapNumber", -1);
-                    foreach (var itemEl in ruleEl.Elements().Where(e => e.Name.LocalName.Equals("ItemDrop", StringComparison.OrdinalIgnoreCase)))
+                    // DropUseRate is the chance per 1,000,000 that an ancient item drops at all; each item's DropRate is
+                    // its weight among the rule's items (it was read as n/10000 against the item weights).
+                    var itemEls = ruleEl.Elements().Where(e => e.Name.LocalName.Equals("ItemDrop", StringComparison.OrdinalIgnoreCase)).ToList();
+                    var totalWeight = Math.Max(1.0, itemEls.Sum(i => Math.Max(1, ReadIntAttr(i, "DropRate", 1))));
+                    foreach (var itemEl in itemEls)
                     {
                         var dropRate = Math.Max(1, ReadIntAttr(itemEl, "DropRate", 1));
-                        var chance = Math.Clamp((double)dropRate / Math.Max(10000.0, globalRate), 0.0001, 1.0);
+                        var chance = Math.Clamp(globalRate / 1_000_000.0 * (dropRate / totalWeight), 0.000001, 1.0);
                         if (TryCreateDropRule(itemEl, monsterNum, minLv, maxLv, mapNum, chance, forceAncient: true, out var rule))
                         {
                             results.Add(rule);
@@ -645,6 +675,14 @@ public static class LegacyFileParsers
 
                 var bagConfig = doc.Root.Elements().FirstOrDefault(e => e.Name.LocalName.Equals("BagConfig", StringComparison.OrdinalIgnoreCase));
                 var bagRate = bagConfig is not null ? Math.Clamp(ReadIntAttr(bagConfig, "ItemRate", 10000), 1, 10000) : 10000;
+
+                // Only "Monster_(N)_Name.xml" bags are what monster N drops. The others are what a box, an event, a
+                // chaos mix or an NPC hands out (Item_, Event_, Mix_, NPC_, Buff_ ...): they were made drops of every
+                // monster on every map, so a Lucky Coin reward bag of 100 % made every kill drop an item.
+                var bagFileName = Path.GetFileName(file);
+                var monsterBag = MonsterBagName.Match(bagFileName);
+                var bagMonster = monsterBag.Success ? int.Parse(monsterBag.Groups[1].Value, CultureInfo.InvariantCulture) : -1;
+                var rewardBag = monsterBag.Success ? null : bagFileName;
                 foreach (var allowEl in doc.Descendants().Where(e => e.Name.LocalName.Equals("DropAllow", StringComparison.OrdinalIgnoreCase)))
                 {
                     var mapNum = ReadIntAttr(allowEl, "MapNumber", -1);
@@ -662,8 +700,11 @@ public static class LegacyFileParsers
                         var effectiveChance = Math.Clamp((bagRate / 10000.0) * (poolRate / totalPoolRate) / items.Count, 0.0001, 1.0);
                         foreach (var itemEl in items)
                         {
-                            if (TryCreateDropRule(itemEl, -1, 0, 255, mapNum, effectiveChance, forceAncient: false, out var rule))
+                            if (TryCreateDropRule(itemEl, bagMonster, 0, 255, mapNum, effectiveChance, forceAncient: false, out var rule))
                             {
+                                // The bag's ItemRate is the chance that the monster drops one item of it at all.
+                                rule.GroupChance = bagRate / 10000.0;
+                                rule.RewardBagName = rewardBag;
                                 results.Add(rule);
                             }
                         }
@@ -917,6 +958,8 @@ public static class LegacyFileParsers
                                 continue;
                             }
 
+                            // Distance (30 for nearly every monster, 0 for NPCs, as the third column of MonsterSetBase.txt)
+                            // is how far the monster roams, not a spawn area: a single spot stays a single cell.
                             var x2 = spawnEl.Attribute("EndX") is not null ? ReadIntAttr(spawnEl, "EndX", x1) : x1;
                             var y2 = spawnEl.Attribute("EndY") is not null ? ReadIntAttr(spawnEl, "EndY", y1) : y1;
                             var dir = ReadIntAttr(spawnEl, "Dir", 0);
@@ -948,9 +991,24 @@ public static class LegacyFileParsers
         }
     }
 
+    /// <summary>
+    /// Finds the server's files of a pattern, leaving out the suite's "Tools" folders: their editors carry copies and
+    /// samples of the data files (Tools/ToolKit Silver/Data/MSB/MonsterSetBase.txt), which were imported as well.
+    /// </summary>
     private static IEnumerable<string> FindFiles(string rootFolder, string pattern) =>
         Directory.EnumerateFiles(rootFolder, pattern, SearchOption.AllDirectories)
+            .Where(p => !Path.GetRelativePath(rootFolder, p)
+                .Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                .Any(part => part.Equals("Tools", StringComparison.OrdinalIgnoreCase)))
             .OrderBy(p => p, StringComparer.OrdinalIgnoreCase);
+
+    private static int? ReadPercent(Dictionary<string, string> keyValues, string key)
+        => keyValues.TryGetValue(key, out var raw) && int.TryParse(raw, NumberStyles.Integer, CultureInfo.InvariantCulture, out var value)
+            ? Math.Clamp(value, 0, 100)
+            : null;
+
+    private static bool IsCastleSiegeFile(string filePath)
+        => Path.GetFileNameWithoutExtension(filePath).EndsWith("_CS", StringComparison.OrdinalIgnoreCase);
 
     private static Dictionary<string, string> ReadIniKeyValues(string filePath)
     {

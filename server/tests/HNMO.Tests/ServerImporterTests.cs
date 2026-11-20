@@ -107,6 +107,12 @@ public class ServerImporterTests
         var context = persistence.CreateNewContext();
         var config = CreateSyntheticConfig(context);
         config.ExperienceRate = 1.0f;
+        var goblin = context.CreateNew<MonsterDefinition>();
+        goblin.Number = 238;
+        goblin.Designation = new LocalizedString("Chaos Goblin");
+        config.Monsters.Add(goblin);
+        var plus10 = AddUpgradeCrafting(context, goblin, 3, 60);
+        var plus15 = AddUpgradeCrafting(context, goblin, 50, 50);
 
         var itemSlot = new byte[16];
         itemSlot[0] = 1; // Short Sword index 1
@@ -162,12 +168,13 @@ public class ServerImporterTests
         Assert.That(config.ExperienceRate, Is.EqualTo(500.0f));
         Assert.That(config.DropItemGroups.Count, Is.EqualTo(1));
 
-        // The +10 and +15 rates go to the +10 and +15 upgrade craftings (3 and 50), not to recipes 10-15 (wings, pets,
-        // potions); the zen multiplier 2.5 is applied as 250 %.
-        var chaos = config.PlugInConfigurations.Single(p => p.TypeId == typeof(ChaosRatesPlugIn).GUID).GetConfiguration<ChaosRatesConfiguration>(null)!;
-        Assert.That(chaos.RecipeOverrides.Select(r => (r.RecipeNumber, r.SuccessRateOverridePercent)), Is.EquivalentTo(new (byte, byte?)[] { (3, 75), (50, 45) }));
-        var tuning = config.PlugInConfigurations.Single(p => p.TypeId == typeof(RateTuningPlugIn).GUID).GetConfiguration<RateTuningConfiguration>(null)!;
-        Assert.That(tuning.ZenDropMultiplierPercent, Is.EqualTo(250));
+        // The +10 and +15 rates are the base rates of the +10 and +15 upgrade craftings (3 and 50), not of recipes 10-15
+        // (wings, pets, potions), and MixAddLuckRate is what luck adds to them. ZenDropMultipler is the master-level zen
+        // bonus, not a zen multiplier, so it changes nothing.
+        Assert.That((plus10.SuccessPercent, plus10.SuccessPercentageAdditionForLuck), Is.EqualTo(((byte)75, 20)));
+        Assert.That((plus15.SuccessPercent, plus15.SuccessPercentageAdditionForLuck), Is.EqualTo(((byte)45, 20)));
+        Assert.That(config.PlugInConfigurations.Any(p => p.TypeId == typeof(RateTuningPlugIn).GUID), Is.False);
+        Assert.That(config.Monsters.First(m => m.Number == 2).DropItemGroups, Has.Count.EqualTo(1), "the monster's drops are the monster's");
 
         var hanzo = config.Monsters.First(m => m.Number == 251);
         Assert.That(hanzo.MerchantStore?.Items.Count, Is.EqualTo(1));
@@ -189,6 +196,8 @@ public class ServerImporterTests
         Assert.That(rolledBack, Is.True);
         Assert.That(config.ExperienceRate, Is.EqualTo(1.0f));
         Assert.That(config.DropItemGroups.Count, Is.Zero);
+        Assert.That(config.Monsters.First(m => m.Number == 2).DropItemGroups, Is.Empty);
+        Assert.That((plus10.SuccessPercent, plus10.SuccessPercentageAdditionForLuck), Is.EqualTo(((byte)60, 25)));
         Assert.That(lorencia.MonsterSpawns.Count, Is.Zero);
         Assert.That(hanzo.MerchantStore, Is.Null);
         Assert.That((await context.GetAsync<Account>().ConfigureAwait(false)).Any(a => a.LoginName == "legacyuser1"), Is.False);
@@ -274,6 +283,189 @@ public class ServerImporterTests
             Assert.That(devilSquares[1].MonsterSpawns, Is.Empty);
             Assert.That(devilSquares[2].MonsterSpawns, Is.Empty);
         });
+    }
+
+    /// <summary>
+    /// A "Monster_(N)" item bag is what monster N drops, with the bag's ItemRate as the chance, and the group is the
+    /// monster's own (a group only in the configuration's list is never rolled). The other bags (boxes, event and mix
+    /// rewards) are not monster drops: they made every kill drop an item.
+    /// </summary>
+    [Test]
+    public async Task ItemBagsBecomeTheMonstersDropsAndRewardBagsAreLeftOutAsync()
+    {
+        var bags = Path.Combine(this._tempDir, "IGCData", "ItemBags");
+        Directory.CreateDirectory(bags);
+        const string Pool = "<DropAllow DW=\"1\"><Drop Rate=\"10000\" Count=\"1\"><Item Cat=\"0\" Index=\"1\" ItemMinLevel=\"0\" Exc=\"0\" /></Drop></DropAllow>";
+        File.WriteAllText(Path.Combine(bags, "Monster_(2)_Budge_Dragon.xml"), $"<ItemBag><BagConfig ItemRate=\"1000\" />{Pool}</ItemBag>");
+        File.WriteAllText(Path.Combine(bags, "Mix_LuckyCoin(30)_Reward.xml"), $"<ItemBag><BagConfig ItemRate=\"10000\" />{Pool}</ItemBag>");
+
+        var context = new InMemoryPersistenceContextProvider().CreateNewContext();
+        var config = CreateSyntheticConfig(context);
+        var options = new LegacyImportOptions { FolderPath = this._tempDir };
+        var preview = await LegacyServerImportEngine.BuildDryRunPreviewAsync(options, config, new StubDatabaseReader(new LegacyDatabaseSnapshot())).ConfigureAwait(false);
+        await LegacyServerImportEngine.ApplyImportAsync(options, context, config, this._backupDir, new StubDatabaseReader(new LegacyDatabaseSnapshot())).ConfigureAwait(false);
+
+        var budge = config.Monsters.First(m => m.Number == 2);
+        Assert.Multiple(() =>
+        {
+            Assert.That(preview.UnmappedWarnings.Any(w => w.Contains("Mix_LuckyCoin(30)_Reward.xml", StringComparison.Ordinal)), Is.True);
+            Assert.That(config.DropItemGroups, Has.Count.EqualTo(1));
+            Assert.That(budge.DropItemGroups, Has.Count.EqualTo(1));
+            Assert.That(budge.DropItemGroups.Single().Chance, Is.EqualTo(0.1).Within(1e-9));
+            Assert.That(config.Maps.Single().DropItemGroups, Is.Empty, "no drop of every monster on the map");
+        });
+    }
+
+    /// <summary>
+    /// The spawns a map already has are not added again; the event and invasion spawns (groups 3 and 4), the castle
+    /// siege copy of the list and the copies in the suite's Tools folder are not imported; the facing direction is kept.
+    /// </summary>
+    [Test]
+    public async Task SpawnsAreNotDoubledAsync()
+    {
+        var spawns = Path.Combine(this._tempDir, "Data", "Monster", "Spawns");
+        Directory.CreateDirectory(spawns);
+        Directory.CreateDirectory(Path.Combine(this._tempDir, "Tools", "MSB"));
+        const string List = "0\n251 0 0 116 141 3\nend\n1\n2 0 30 120 120 140 140 -1 5\n2 9 30 119 80 150 115 -1 35\nend\n2\n2 0 30 60 60 -1\nend\n4\n2 0 30 13 45 0\nend\n3\n2 0 30 10 10 240 240 -1 2\nend\n";
+        File.WriteAllText(Path.Combine(spawns, "MonsterSetBase.txt"), List);
+        File.WriteAllText(Path.Combine(spawns, "MonsterSetBase_CS.txt"), List);
+        File.WriteAllText(Path.Combine(this._tempDir, "Tools", "MSB", "MonsterSetBase.txt"), List);
+
+        var context = new InMemoryPersistenceContextProvider().CreateNewContext();
+        var config = CreateSyntheticConfig(context);
+        var lorencia = config.Maps.Single();
+        var existing = context.CreateNew<MonsterSpawnArea>();
+        existing.GameMap = lorencia;
+        existing.MonsterDefinition = config.Monsters.First(m => m.Number == 2);
+        existing.X1 = 121;
+        existing.Y1 = 119;
+        existing.X2 = 141;
+        existing.Y2 = 140;
+        existing.Quantity = 5;
+        lorencia.MonsterSpawns.Add(existing);
+
+        // Devil Square: its monsters come in waves with the event.
+        var devilSquare = context.CreateNew<GameMapDefinition>();
+        devilSquare.Number = 9;
+        devilSquare.Name = new LocalizedString("Devil Square");
+        config.Maps.Add(devilSquare);
+        var wave = context.CreateNew<MonsterSpawnArea>();
+        wave.GameMap = devilSquare;
+        wave.MonsterDefinition = existing.MonsterDefinition;
+        wave.SpawnTrigger = SpawnTrigger.ManuallyForEvent;
+        devilSquare.MonsterSpawns.Add(wave);
+
+        var options = new LegacyImportOptions { FolderPath = this._tempDir };
+        await LegacyServerImportEngine.ApplyImportAsync(options, context, config, this._backupDir, new StubDatabaseReader(new LegacyDatabaseSnapshot())).ConfigureAwait(false);
+
+        // The map had the field spawn; Hanzo and the single Budge Dragon are new. Devil Square keeps its waves only.
+        Assert.That(lorencia.MonsterSpawns, Has.Count.EqualTo(3));
+        Assert.That(devilSquare.MonsterSpawns, Has.Count.EqualTo(1));
+        var hanzo = lorencia.MonsterSpawns.Single(s => s.MonsterDefinition?.Number == 251);
+        Assert.That((hanzo.X1, hanzo.Y1, hanzo.Direction), Is.EqualTo(((byte)116, (byte)141, Direction.SouthEast)));
+    }
+
+    /// <summary>
+    /// The servers' bonus windows without a map are server-wide happy hours: they go to the bonus events (they went to
+    /// the timetable, which only shows them), last from StartHour to EndHour, and their ItemDropBonus, percentage points
+    /// added to ItemDropPer, becomes the matching share of the drops. Importing again does not add them twice.
+    /// </summary>
+    [Test]
+    public async Task BonusWindowsBecomeServerWideBonusEventsAsync()
+    {
+        Directory.CreateDirectory(Path.Combine(this._tempDir, "Data"));
+        File.WriteAllText(Path.Combine(this._tempDir, "Data", "CommonServer.cfg"), "ItemDropPer = 50\n");
+        File.WriteAllText(
+            Path.Combine(this._tempDir, "IGC_BonusEvent.xml"),
+            "<BonusEvent Enable=\"1\"><Event DayOfWeek=\"-1\" StartHour=\"20\" EndHour=\"22\" ExpMultiplier=\"1.5\" ItemDropBonus=\"15\" /><Event DayOfWeek=\"-1\" StartHour=\"23\" EndHour=\"1\" ExpMultiplier=\"2\" ItemDropBonus=\"0\" /></BonusEvent>");
+
+        var context = new InMemoryPersistenceContextProvider().CreateNewContext();
+        var config = CreateSyntheticConfig(context);
+        var options = new LegacyImportOptions { FolderPath = this._tempDir };
+        await LegacyServerImportEngine.ApplyImportAsync(options, context, config, this._backupDir, new StubDatabaseReader(new LegacyDatabaseSnapshot())).ConfigureAwait(false);
+        await LegacyServerImportEngine.ApplyImportAsync(options, context, config, this._backupDir, new StubDatabaseReader(new LegacyDatabaseSnapshot())).ConfigureAwait(false);
+
+        var bonus = config.PlugInConfigurations.Single(p => p.TypeId == typeof(BonusEventsPlugIn).GUID).GetConfiguration<BonusEventsConfiguration>(null)!;
+        Assert.That(bonus.Events, Has.Count.EqualTo(2));
+        var evening = bonus.Events.Single(e => e.StartTimeSydney == "20:00");
+        Assert.Multiple(() =>
+        {
+            Assert.That(evening.MapNumber, Is.Null);
+            Assert.That(evening.DurationMinutes, Is.EqualTo(120));
+            Assert.That(evening.ExpBonusPercent, Is.EqualTo(50));
+            Assert.That(evening.ItemDropBonusPercent, Is.EqualTo(30));
+            Assert.That(bonus.Events.Single(e => e.StartTimeSydney == "23:00").DurationMinutes, Is.EqualTo(120));
+        });
+    }
+
+    /// <summary>
+    /// A shop's items take the first free place of the 8-column grid they fit in (they got slots 0, 1, 2 ... and
+    /// overlapped), keep their luck and option, and the game masters' test shop is not imported.
+    /// </summary>
+    [Test]
+    public async Task ShopItemsArePlacedOnTheGridWithTheirOptionsAsync()
+    {
+        Directory.CreateDirectory(Path.Combine(this._tempDir, "Shops"));
+        File.WriteAllText(
+            Path.Combine(this._tempDir, "IGC_ShopList.xml"),
+            "<ShopList><Shop NPCIndex=\"251\" MapNumber=\"0\" GMShop=\"1\" FileName=\"Test.xml\" /><Shop NPCIndex=\"251\" MapNumber=\"0\" GMShop=\"0\" FileName=\"Hanzo.xml\" /></ShopList>");
+        var nineSwords = string.Concat(Enumerable.Repeat("<Item Cat=\"0\" Index=\"1\" Level=\"0\" Durability=\"0\" Skill=\"0\" Luck=\"1\" Option=\"1\" Exc=\"0\" />", 9));
+        File.WriteAllText(Path.Combine(this._tempDir, "Shops", "Hanzo.xml"), $"<Shop>{nineSwords}</Shop>");
+        File.WriteAllText(Path.Combine(this._tempDir, "Shops", "Test.xml"), "<Shop><Item Cat=\"0\" Index=\"1\" /></Shop>");
+
+        var context = new InMemoryPersistenceContextProvider().CreateNewContext();
+        var config = CreateSyntheticConfig(context);
+        var sword = config.Items.Single();
+        var optionDefinition = context.CreateNew<ItemOptionDefinition>();
+        foreach (var type in new[] { ItemOptionTypes.Luck, ItemOptionTypes.Option })
+        {
+            var option = context.CreateNew<IncreasableItemOption>();
+            option.OptionType = type;
+            optionDefinition.PossibleOptions.Add(option);
+        }
+
+        sword.PossibleItemOptions.Add(optionDefinition);
+
+        var options = new LegacyImportOptions { FolderPath = this._tempDir };
+        await LegacyServerImportEngine.ApplyImportAsync(options, context, config, this._backupDir, new StubDatabaseReader(new LegacyDatabaseSnapshot())).ConfigureAwait(false);
+
+        var store = config.Monsters.First(m => m.Number == 251).MerchantStore!;
+        Assert.Multiple(() =>
+        {
+            Assert.That(store.Items.Select(i => (int)i.ItemSlot).Order(), Is.EqualTo(new[] { 0, 1, 2, 3, 4, 5, 6, 7, 24 }));
+            Assert.That(store.Items.All(i => i.ItemOptions.Any(o => o.ItemOption?.OptionType == ItemOptionTypes.Luck)), Is.True);
+            Assert.That(store.Items.All(i => i.ItemOptions.Any(o => o.ItemOption?.OptionType == ItemOptionTypes.Option && o.Level == 1)), Is.True);
+        });
+    }
+
+    /// <summary>The servers' Jewel of Soul and Jewel of Life rates go to the rate tuning.</summary>
+    [Test]
+    public async Task JewelRatesGoToTheRateTuningAsync()
+    {
+        File.WriteAllText(Path.Combine(this._tempDir, "IGC_Common.ini"), "UseSoulRate = 55\nUseSoulWithLuckRate = 75\nUseLifeRate = 45\nZenDropMultipler = 1.0\n");
+        var context = new InMemoryPersistenceContextProvider().CreateNewContext();
+        var config = CreateSyntheticConfig(context);
+        var options = new LegacyImportOptions { FolderPath = this._tempDir };
+        await LegacyServerImportEngine.ApplyImportAsync(options, context, config, this._backupDir, new StubDatabaseReader(new LegacyDatabaseSnapshot())).ConfigureAwait(false);
+
+        var tuning = config.PlugInConfigurations.Single(p => p.TypeId == typeof(RateTuningPlugIn).GUID).GetConfiguration<RateTuningConfiguration>(null)!;
+        Assert.Multiple(() =>
+        {
+            Assert.That((tuning.OverrideSoulRates, tuning.SoulSuccessRatePercent, tuning.SoulLuckBonusPercent), Is.EqualTo((true, 55, 20)));
+            Assert.That((tuning.OverrideLifeRate, tuning.LifeSuccessRatePercent), Is.EqualTo((true, 45)));
+            Assert.That(tuning.ZenDropMultiplierPercent, Is.EqualTo(100));
+        });
+    }
+
+    private static HNMO.DataModel.Configuration.ItemCrafting.SimpleCraftingSettings AddUpgradeCrafting(HNMO.Persistence.IContext context, MonsterDefinition goblin, byte number, byte successPercent)
+    {
+        var crafting = context.CreateNew<HNMO.DataModel.Configuration.ItemCrafting.ItemCrafting>();
+        crafting.Number = number;
+        crafting.SimpleCraftingSettings = context.CreateNew<HNMO.DataModel.Configuration.ItemCrafting.SimpleCraftingSettings>();
+        crafting.SimpleCraftingSettings.SuccessPercent = successPercent;
+        crafting.SimpleCraftingSettings.SuccessPercentageAdditionForLuck = 25;
+        goblin.ItemCraftings.Add(crafting);
+        return crafting.SimpleCraftingSettings;
     }
 
     private static GameConfiguration CreateSyntheticConfig(HNMO.Persistence.IContext context)

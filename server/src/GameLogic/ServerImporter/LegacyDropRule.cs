@@ -48,4 +48,16 @@ public sealed class LegacyDropRule
 
     /// <summary>Gets or sets optional companion evolution category (Season 9+ only).</summary>
     public int? CompanionEvolutionGroup { get; set; }
+
+    /// <summary>
+    /// Gets or sets the chance that the whole group this rule belongs to drops something (0..1), when the source gives
+    /// it directly, as an item bag's <c>ItemRate</c> does. Otherwise the group's chance is the sum of its rules' chances.
+    /// </summary>
+    public double? GroupChance { get; set; }
+
+    /// <summary>
+    /// Gets or sets the item bag file name when the rule comes from a bag that is not a monster's drop: a box, an
+    /// event or chaos-mix reward, an NPC gift. Such rules are rewards of their own and never become monster drops.
+    /// </summary>
+    public string? RewardBagName { get; set; }
 }
