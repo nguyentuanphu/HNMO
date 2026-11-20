@@ -118,6 +118,7 @@ public class BannedWordsTests
 
         // /post command also uses BannedWordsPlugIn
         sender.SelectedCharacter.Name = "Hero";
+        sender.Money = 10_000; // /post costs 1,000 zen
         await onCtx.AddPlayerAsync(observer).ConfigureAwait(false);
         var postPlugIn = new HNMO.GameLogic.PlugIns.ChatCommands.PostChatCommandPlugIn();
         await postPlugIn.HandleCommandAsync(sender, "/post sell fuck item").ConfigureAwait(false);
