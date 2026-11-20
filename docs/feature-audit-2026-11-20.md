@@ -116,3 +116,10 @@ Not changed yet: NPC jewel prices — the web client computes shop prices itself
 | Gens: start contribution 10, abuse warning 3 / limit 6 / 60 min, battle zone kills, rank bonuses | OK | As the suites; the "unused settings" scan missed them because they are read inside `GensConfiguration`. |
 | Marriage | Note | HNMO's own system (level 100, 1 M zen, Devias ceremony area, EXP / defense bonus, divorce 2 M); the suites: level 50, 200 zen, no bonus. Kept as an HNMO feature. |
 | Friends list, chat channels | Not checked in depth | |
+
+## 10. Trade, market, personal shop (in progress)
+
+| Check | Result | Notes |
+|---|---|---|
+| Trade completion | OK | Player-state transition for both, items checked again at the end, one save of both sides, money moved after the commit, a failure after the commit is never reported as a cancel; zen over the maximum in #152. |
+| Personal shop: buyer's free slot | **Found, not fixed yet** | `BuyRequestAction` finds the buyer's free slot before taking the shop lock and before reading the slot's item again, and ignores the result of `Inventory.AddItemAsync`. If the buyer's inventory fills in between (e.g. two buys at two shops at once), the payment is taken and the item is removed from the shop but lands nowhere. Proposed fix: check the space again inside the lock for the item read there, and refuse before paying; treat a failed `AddItemAsync` as an error that returns the item to the shop. Needs a concurrency test, so it waits for the morning. |
