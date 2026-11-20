@@ -2082,6 +2082,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     itemName: (group, number) => itemName(group, number),
     mapName: (map) => mapName(map),
     mapNumber: () => state.mapNumber,
+    characterName: () => character.name,
     confirm: (text) => confirmInGame(text),
     direction: (x, y) => {
       const hero = online.hero, world = state.world;

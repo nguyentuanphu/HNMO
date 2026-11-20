@@ -46,6 +46,8 @@ export interface OnboardingWindowOptions {
   direction?: (x: number, y: number) => { angle: number; steps: number } | null;
   /** Asks the player to confirm (the game's own dialog). */
   confirm?: (text: string) => Promise<boolean>;
+  /** The hero's name: the guide opens by itself once per character (remembered in this browser). */
+  characterName?: () => string | null;
 }
 
 interface StepLine { id: string; line: string; done: boolean; current: boolean }
@@ -80,6 +82,7 @@ export class OnboardingWindow {
   private lastCurrent: string | null = null;
   private readonly model: OnboardingModel;
   private readonly arrow: HTMLDivElement;
+  private readonly button: HTMLButtonElement;
   private timer: number | null = null;
 
   constructor(private readonly options: OnboardingWindowOptions) {
@@ -111,6 +114,13 @@ export class OnboardingWindow {
     label.className = 'hnmo-guide-label';
     this.arrow.append(pointer, label);
     document.body.append(this.arrow);
+    this.button = document.createElement('button');
+    this.button.type = 'button';
+    this.button.className = 'hnmo-guide-button';
+    this.button.hidden = true;
+    this.button.addEventListener('click', () => this.open());
+    this.button.addEventListener('pointerdown', (event) => event.stopPropagation());
+    document.body.append(this.button);
     window.addEventListener('resize', () => this.place());
     window.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && this.isOpen) { event.preventDefault(); this.close(); }
@@ -140,10 +150,12 @@ export class OnboardingWindow {
     this.doc?.close();
     this.doc = null;
     this.tick();
+    this.updateButton();
   }
 
   open(): void {
     this.wanted = true;
+    this.updateButton();
     this.options.send('HnmoOnboardingRequest', {});
     this.fill();
     this.tick();
@@ -178,10 +190,14 @@ export class OnboardingWindow {
     if (state.kit) this.tellKit(state.kit);
     if (state.event) this.notice(state, previous, state.event);
     this.tellNext(state);
-    // The guide shows itself for a character whose guide runs (once per visit; it can be closed and reopened with Y).
+    // The guide shows itself once for a character whose guide runs (its first time in the world); after that it waits
+    // as a small button with the step (or Y). It used to open on every visit, over the game's own windows.
     if (state.status === 'active' && state.current && !this.autoOpened) {
       this.autoOpened = true;
-      if (!this.wanted) this.open();
+      if (!this.wanted && !this.shownBefore()) {
+        this.rememberShown();
+        this.open();
+      }
     }
     this.fill();
     this.tick();
@@ -244,6 +260,7 @@ export class OnboardingWindow {
           const reward = this.reward(step.reward);
           say(tr('Step done: %s.', this.stepTitle(step)) + (reward ? ` ${reward}` : ''));
         }
+        if (!this.wanted) this.flashButton();
         if (event.type === 'final') {
           const reward = this.reward(state.final);
           say(tr('You finished the new-player guide!') + (reward ? ` ${reward}` : ''));
@@ -330,6 +347,42 @@ export class OnboardingWindow {
     });
     m.has_owed = m.owed.length > 0;
     this.doc?.update();
+    this.updateButton();
+  }
+
+  /** The browser's key for "the guide has opened by itself for this character". */
+  private shownKey(): string | null {
+    const name = this.options.characterName?.();
+    return name ? `hnmo.onboarding.shown.${name}` : null;
+  }
+
+  private shownBefore(): boolean {
+    const key = this.shownKey();
+    if (!key) return false;
+    try { return localStorage.getItem(key) === '1'; } catch { return false; }
+  }
+
+  private rememberShown(): void {
+    const key = this.shownKey();
+    if (!key) return;
+    try { localStorage.setItem(key, '1'); } catch { /* private window: it opens again next time */ }
+  }
+
+  /** The small button the guide waits in while its panel is closed: the step it's at ("Guide 2/10"). */
+  private updateButton(): void {
+    const state = this.state;
+    const running = state?.status === 'active' && !!state.current;
+    this.button.hidden = !running || this.wanted;
+    if (!running || !state) return;
+    this.button.textContent = tr('Guide %d/%d', Math.min(state.done + 1, state.total), state.total);
+    this.button.title = `${tr('New-player guide')} (Y)`;
+  }
+
+  /** A step done while the panel is closed: the button glows for a moment instead of the panel opening. */
+  private flashButton(): void {
+    this.button.classList.remove('hnmo-guide-button-flash');
+    void this.button.offsetWidth;
+    this.button.classList.add('hnmo-guide-button-flash');
   }
 
   /** The arrow towards the current step's NPC or spot, while the panel is open and it's on this map. */
