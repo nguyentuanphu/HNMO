@@ -43,7 +43,8 @@ public class SelfDefensePlugIn : IPeriodicTaskPlugIn, IAttackableGotHitPlugIn, I
     public void AttackableGotHit(IAttackable attackable, IAttacker attacker, HitInfo hitInfo)
     {
         var defender = attackable as Player ?? (attackable as Monster)?.SummonedBy;
-        var attackerPlayer = attacker as Player ?? (attacker as Monster)?.SummonedBy;
+        // The dark raven of a dark lord attacks for its owner.
+        var attackerPlayer = attacker as Player ?? (attacker as IPlayerSurrogate)?.Owner ?? (attacker as Monster)?.SummonedBy;
         if (defender is null || attackerPlayer is null || defender == attackerPlayer)
         {
             return;
