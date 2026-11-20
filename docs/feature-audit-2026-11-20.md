@@ -205,7 +205,7 @@ Left from #181 for the owner: (1) the web and desktop clients read option values
 | 6. PK time in points (one running total, about 24 h for a murderer) | [#189](https://github.com/nguyentuanphu/HNMO/pull/189) |
 | 7. Zen loss from the bag only | [#191](https://github.com/nguyentuanphu/HNMO/pull/191) |
 | 8. EXP loss rows of the suites | [#193](https://github.com/nguyentuanphu/HNMO/pull/193) |
-| 9. Murderers: M-menu warp x50 from PK2; no summon of PK2+; no NPC shops from PK2 | [#195](https://github.com/nguyentuanphu/HNMO/pull/195), [#197](https://github.com/nguyentuanphu/HNMO/pull/197), shop ban in progress |
+| 9. Murderers: M-menu warp x50 from PK2; no summon of PK2+; no NPC shops from PK2 | [#195](https://github.com/nguyentuanphu/HNMO/pull/195), [#197](https://github.com/nguyentuanphu/HNMO/pull/197), [#201](https://github.com/nguyentuanphu/HNMO/pull/201) |
 | 10. Outlaws can't enter events | [#199](https://github.com/nguyentuanphu/HNMO/pull/199) |
 | 12. No Atlans while riding Uniria/Dinorant | [#198](https://github.com/nguyentuanphu/HNMO/pull/198) |
 | 13. Spouse warp needs the map's warp level | [#200](https://github.com/nguyentuanphu/HNMO/pull/200) |
