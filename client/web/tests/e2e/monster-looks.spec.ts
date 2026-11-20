@@ -59,6 +59,10 @@ const audit = (page: Page, numbers?: number[]): Promise<AuditRow[]> => page.eval
   return rows;
 })()`);
 
+/** The numbers of the web's Season 9 list (public/data/Monsters/Season9.json). */
+const season9Numbers = (page: Page): Promise<number[]> => page.evaluate(() => fetch('/data/Monsters/Season9.json').then((r) => r.json())
+  .then((file: { monsters: { numbers: { number: number }[] }[] }) => file.monsters.flatMap((monster) => monster.numbers.map((own) => own.number))));
+
 test.describe('monster looks', () => {
   test.beforeEach(async ({ page }) => {
     page.on('pageerror', (error) => { throw error; });
@@ -89,7 +93,9 @@ test.describe('monster looks', () => {
 
   test('every monster and NPC of the list is drawn, none falls back without a reason', async ({ page }) => {
     test.setTimeout(10 * 60_000);
-    const rows = await audit(page);
+    // The Season 9 list's numbers have their own test below (their files are in the Season 9 pack only).
+    const season9 = new Set(await season9Numbers(page));
+    const rows = (await audit(page)).filter((row) => !season9.has(row.number));
     expect(rows.length).toBeGreaterThan(500);
     const errors = rows.filter((row) => row.error).map((row) => `${row.number} ${row.name}: ${row.error}`);
     expect(errors).toEqual([]);
@@ -105,6 +111,37 @@ test.describe('monster looks', () => {
     console.log(`monster looks: ${rows.length} looks, ${new Set(rows.map((row) => row.number)).size} numbers, `
       + `${rows.filter((row) => row.playerShaped).length} player-shaped`);
     for (const [field, numbers] of [...ignored].sort()) console.log(`  not drawn by the web: ${field} (${numbers.length}: ${numbers.slice(0, 12).join(', ')}${numbers.length > 12 ? ', …' : ''})`);
+  });
+
+  // The map check of 2026-11-20: the Season 9 monsters and NPCs (Nars, Ferea, Uruk Mountain, Loren Market, ...)
+  // had no entry, so every one was the unknown monsters' ghost. They are drawn with their Season 9 models now.
+  test('the Season 9 monsters and NPCs are drawn with their Season 9 models, not the ghost', async ({ page }) => {
+    const seasons = await page.evaluate(() => fetch('/data/seasons.json').then((r) => r.json())) as { s9?: boolean };
+    const numbers = await season9Numbers(page);
+    expect(numbers.length).toBeGreaterThanOrEqual(30);
+    for (const season of ['s9', 's6']) {
+      const rows = await page.evaluate(`(async () => {
+        (await import('/js/dataRoot.js')).setSeason(${JSON.stringify(season)});
+        const viewer = await import('/js/dev/monsterViewer.js');
+        await viewer.ready();
+        const rows = [];
+        for (const number of ${JSON.stringify(numbers)}) { const { row, character } = await viewer.auditOne(number); character?.release(); rows.push(row); }
+        return rows;
+      })()`) as AuditRow[];
+      for (const row of rows) {
+        // Every number has an entry and a model (no "noEntry" or "noModel" ghost in either season).
+        expect(row.unknown === null || row.unknown === 'missingFile', `${season} ${row.number} ${row.name}: ${row.unknown}`).toBe(true);
+        expect(row.model, `${row.number}`).toMatch(/^(MONSTER_)?MODEL_S9_/);
+        expect(row.error, `${row.number}`).toBeNull();
+        if (!seasons.s9) continue; // without the Season 9 pack the files are missing: the ghost, for a reason
+        // With the pack (both seasons: the files are Season 9's own, whichever season plays): its body, textured.
+        expect(row.unknown, `${season} ${row.number} ${row.name}`).toBeNull();
+        expect(row.playerShaped, `${row.number}`).toBe(false);
+        expect(row.visibleMeshes, `${season} ${row.number} ${row.name}`).toBeGreaterThan(0);
+        expect(row.untextured, `${season} ${row.number} ${row.name}: ${row.warnings.join('; ')}`).toBe(0);
+      }
+    }
+    test.info().annotations.push({ type: 'season 9 pack', description: seasons.s9 ? 'served: bodies checked' : 'not served: entries only' });
   });
 
   test('a monster that comes back into view reuses its buffers, textures and programs', async ({ page }) => {

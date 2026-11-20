@@ -211,11 +211,32 @@ export function numberEntry(monster: MonsterEntry, own: MonsterEntry['numbers'][
   return entry as NumberEntry;
 }
 
-export function buildMonsterCatalog(monsters: MonstersFile, models: ModelsFile): MonsterCatalog {
+/** The web's list of the Season 9 monsters and NPCs the base game lacks, with their models (public/data). */
+export interface ExtraMonstersFile {
+  monsters: MonsterEntry[];
+  models: ModelEntry[];
+}
+
+/** The web's own list of the Season 9 monsters and NPCs (their numbers are no Season 6.3 monster's). */
+export const SEASON9_MONSTERS_URL = '/data/Monsters/Season9.json';
+
+/**
+ * The catalog of Monsters.json and Models.json, with the extra lists' monsters and models after them: an extra number
+ * or slot the game's files already have is left out (the game's own data comes first).
+ */
+export function buildMonsterCatalog(monsters: MonstersFile, models: ModelsFile, extras: ExtraMonstersFile[] = []): MonsterCatalog {
   const modelsBySlot = new Map(models.models.map((model) => [model.slot, model]));
   const byNumber = new Map<number, NumberEntry>();
   for (const monster of monsters.monsters) {
     for (const own of monster.numbers) byNumber.set(own.number, numberEntry(monster, own as MonsterEntry['numbers'][number] & Record<string, unknown>));
+  }
+  for (const extra of extras) {
+    for (const model of extra.models) if (!modelsBySlot.has(model.slot)) modelsBySlot.set(model.slot, model);
+    for (const monster of extra.monsters) {
+      for (const own of monster.numbers) {
+        if (!byNumber.has(own.number)) byNumber.set(own.number, numberEntry(monster, own as MonsterEntry['numbers'][number] & Record<string, unknown>));
+      }
+    }
   }
   return { byNumber, modelsBySlot, unknown: monsters.unknownMonsters ?? { model: 'MONSTER_MODEL_GHOST', scale: 1 } };
 }
@@ -223,8 +244,10 @@ export function buildMonsterCatalog(monsters: MonstersFile, models: ModelsFile):
 export function loadMonsterCatalog(): Promise<MonsterCatalog> {
   if (catalog) return Promise.resolve(catalog);
   if (!catalogLoading) {
-    catalogLoading = Promise.all([fetchJson<MonstersFile>('/data/Monsters/Monsters.json'), fetchJson<ModelsFile>('/data/Monsters/Models.json')])
-      .then(([monsters, models]) => (catalog = buildMonsterCatalog(monsters, models)));
+    // Without the Season 9 list (an older web folder) those numbers keep the unknown monsters' look.
+    const season9 = fetchJson<ExtraMonstersFile>(SEASON9_MONSTERS_URL).catch(() => null);
+    catalogLoading = Promise.all([fetchJson<MonstersFile>('/data/Monsters/Monsters.json'), fetchJson<ModelsFile>('/data/Monsters/Models.json'), season9])
+      .then(([monsters, models, extra]) => (catalog = buildMonsterCatalog(monsters, models, extra ? [extra] : [])));
     catalogLoading.catch(() => { catalogLoading = null; });
   }
   return catalogLoading;
