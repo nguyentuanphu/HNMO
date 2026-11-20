@@ -64,6 +64,25 @@ public class KalimaTicketConsumeHandlerPlugIn : BaseConsumeHandlerPlugIn, ISuppo
     public object CreateDefaultConfig() => new KalimaTicketConsumeHandlerConfiguration();
 
     /// <summary>
+    /// Gets the highest level of Kalima which the character may open, by the minimum levels of the active
+    /// Kalima ticket handler (its defaults, if it isn't active). The Lost Map uses the same limits as the ticket.
+    /// </summary>
+    /// <param name="player">The player.</param>
+    /// <returns>The level of Kalima, or 0 if the character didn't reach any minimum level.</returns>
+    internal static int GetAllowedKalimaLevel(Player player)
+    {
+        if (player.SelectedCharacter is not { } character || player.Attributes is not { } attributes)
+        {
+            return 0;
+        }
+
+        var configuration = (player.GameContext.PlugInManager.GetStrategy<ItemIdentifier, IItemConsumeHandlerPlugIn>(ItemConstants.KalimaTicket) as KalimaTicketConsumeHandlerPlugIn)?.Configuration
+                            ?? new KalimaTicketConsumeHandlerConfiguration();
+        var minimumLevels = character.IsSpecialCharacter() ? configuration.SpecialCharacterMinimumLevels : configuration.MinimumLevels;
+        return GetKalimaLevel(minimumLevels, (int)attributes[Stats.Level]);
+    }
+
+    /// <summary>
     /// Gets the highest level of Kalima whose minimum character level the character reached.
     /// The minimum levels don't need to be ordered, so a lower level of Kalima with a higher minimum doesn't count.
     /// </summary>
