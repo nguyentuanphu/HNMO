@@ -36,6 +36,11 @@ public class DefaultDropGenerator : IDropGenerator
     /// A re-usable list of drop item groups.
     /// </summary>
     private readonly List<DropItemGroup> _chanceDropGroups = new(64);
+
+    /// <summary>
+    /// The extra chance of the common excellent drop groups for the kill which is being calculated (a running Happy Hour).
+    /// </summary>
+    private double _excellentChanceBonus;
     private readonly List<DropItemGroup> _guaranteedDropGroups = new(16);
 
     private readonly AsyncLock _lock = new();
@@ -86,6 +91,7 @@ public class DefaultDropGenerator : IDropGenerator
         using var l = await this._lock.LockAsync().ConfigureAwait(false);
         this._guaranteedDropGroups.Clear();
         this._chanceDropGroups.Clear();
+        this._excellentChanceBonus = PlugIns.PeriodicTasks.HappyHourPlugIn.GetExcellentDropBonus(player.GameContext);
 
         if (monster.ObjectKind == NpcObjectKind.Destructible)
         {
@@ -378,12 +384,12 @@ public class DefaultDropGenerator : IDropGenerator
             double totalChance = 0;
             foreach (var group in this._chanceDropGroups)
             {
-                totalChance += group.Chance;
+                totalChance += GetChance(group, this._excellentChanceBonus);
             }
 
             for (int i = 0; i < remainingDrops; i++)
             {
-                var group = this.SelectRandomGroup(this._chanceDropGroups, totalChance);
+                var group = this.SelectRandomGroup(this._chanceDropGroups, totalChance, this._excellentChanceBonus);
                 if (group is null)
                 {
                     continue;
@@ -642,7 +648,18 @@ public class DefaultDropGenerator : IDropGenerator
         };
     }
 
-    private DropItemGroup? SelectRandomGroup(IEnumerable<DropItemGroup> groups, double totalChance)
+    /// <summary>
+    /// Gets the chance of a drop group, with the extra chance of the common excellent groups (no monster, no items of its own).
+    /// </summary>
+    /// <param name="group">The group.</param>
+    /// <param name="excellentBonus">The extra chance of the common excellent groups.</param>
+    /// <returns>The chance.</returns>
+    internal static double GetChance(DropItemGroup group, double excellentBonus)
+        => excellentBonus > 0 && group.ItemType == SpecialItemType.Excellent && group.Monster is null && group.PossibleItems.Count == 0
+            ? group.Chance + excellentBonus
+            : group.Chance;
+
+    private DropItemGroup? SelectRandomGroup(IEnumerable<DropItemGroup> groups, double totalChance, double excellentBonus = 0)
     {
         var remainingThreshold = this._randomizer.NextDouble();
         if (totalChance > 1.0)
@@ -652,9 +669,9 @@ public class DefaultDropGenerator : IDropGenerator
 
         foreach (var group in groups)
         {
-            if (remainingThreshold > group.Chance)
+            if (remainingThreshold > GetChance(group, excellentBonus))
             {
-                remainingThreshold -= group.Chance;
+                remainingThreshold -= GetChance(group, excellentBonus);
             }
             else
             {

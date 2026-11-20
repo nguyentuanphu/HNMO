@@ -30,6 +30,11 @@ public class HappyHourPlugIn : PeriodicTaskBasePlugIn<HappyHourConfiguration, Pe
     /// </summary>
     private static readonly ConcurrentDictionary<IGameContext, double> ActiveItemDropMultipliers = new();
 
+    /// <summary>
+    /// The extra excellent drop chances of the running happy hours, by game context.
+    /// </summary>
+    private static readonly ConcurrentDictionary<IGameContext, double> ActiveExcellentDropBonuses = new();
+
     /// <inheritdoc />
     public object CreateDefaultConfig() => HappyHourConfiguration.Default;
 
@@ -79,6 +84,14 @@ public class HappyHourPlugIn : PeriodicTaskBasePlugIn<HappyHourConfiguration, Pe
         => ActiveItemDropMultipliers.TryGetValue(gameContext, out var multiplier) ? multiplier : 1.0;
 
     /// <summary>
+    /// Gets the extra chance of the common excellent item drop of a running happy hour of the game context (0 when none runs).
+    /// </summary>
+    /// <param name="gameContext">The game context.</param>
+    /// <returns>The extra chance (0.0005 for 5/10000).</returns>
+    public static double GetExcellentDropBonus(IGameContext gameContext)
+        => ActiveExcellentDropBonuses.TryGetValue(gameContext, out var bonus) ? bonus : 0;
+
+    /// <summary>
     /// Gets the multiplier element of the specified game context, creating a neutral one on demand.
     /// </summary>
     /// <param name="gameContext">The game context.</param>
@@ -110,6 +123,7 @@ public class HappyHourPlugIn : PeriodicTaskBasePlugIn<HappyHourConfiguration, Pe
     {
         this.GetMultiplierElement(state.Context).Value = this.Configuration?.ExperienceMultiplier ?? 1;
         ActiveItemDropMultipliers[state.Context] = 1 + (Math.Max(0, this.Configuration?.ItemDropBonusPercent ?? 0) / 100.0);
+        ActiveExcellentDropBonuses[state.Context] = Math.Max(0, this.Configuration?.ExcellentDropBonusPerTenThousand ?? 0) / 10000.0;
 
         return ValueTask.CompletedTask;
     }
@@ -119,6 +133,7 @@ public class HappyHourPlugIn : PeriodicTaskBasePlugIn<HappyHourConfiguration, Pe
     {
         this.GetMultiplierElement(state.Context).Value = 1;
         ActiveItemDropMultipliers.TryRemove(state.Context, out _);
+        ActiveExcellentDropBonuses.TryRemove(state.Context, out _);
 
         return ValueTask.CompletedTask;
     }

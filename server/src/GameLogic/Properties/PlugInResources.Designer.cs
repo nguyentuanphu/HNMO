@@ -1598,6 +1598,15 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("HappyHourConfiguration_ItemDropBonusPercent_Name", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Extra excellent drop chance (1/10000).
+        /// </summary>
+        public static string HappyHourConfiguration_ExcellentDropBonusPerTenThousand_Name {
+            get {
+                return ResourceManager.GetString("HappyHourConfiguration_ExcellentDropBonusPerTenThousand_Name", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Handle Happy Hour event.

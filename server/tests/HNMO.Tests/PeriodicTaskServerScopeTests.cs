@@ -304,6 +304,7 @@ public class PeriodicTaskServerScopeTests
                 TaskDuration = TimeSpan.FromHours(1),
                 PreStartMessageDelay = TimeSpan.Zero,
                 ItemDropBonusPercent = 15,
+                ExcellentDropBonusPerTenThousand = 5,
             },
         };
         var allowedMock = this.CreateServerContextMock(serverId: 0);
@@ -319,6 +320,8 @@ public class PeriodicTaskServerScopeTests
         {
             Assert.That(HappyHourPlugIn.GetItemDropMultiplier(allowedMock.Object), Is.EqualTo(1.15).Within(0.0001));
             Assert.That(HappyHourPlugIn.GetItemDropMultiplier(excludedMock.Object), Is.EqualTo(1.0));
+            Assert.That(HappyHourPlugIn.GetExcellentDropBonus(allowedMock.Object), Is.EqualTo(0.0005).Within(0.0000001));
+            Assert.That(HappyHourPlugIn.GetExcellentDropBonus(excludedMock.Object), Is.EqualTo(0.0));
         });
     }
 
@@ -336,6 +339,7 @@ public class PeriodicTaskServerScopeTests
             Assert.That(configuration.TaskDuration, Is.EqualTo(TimeSpan.FromHours(2)));
             Assert.That(configuration.ExperienceMultiplier, Is.EqualTo(1.5f));
             Assert.That(configuration.ItemDropBonusPercent, Is.EqualTo(15));
+            Assert.That(configuration.ExcellentDropBonusPerTenThousand, Is.EqualTo(5));
         });
     }
 

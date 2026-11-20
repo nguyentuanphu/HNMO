@@ -1278,6 +1278,9 @@
   <data name="HappyHourConfiguration_ItemDropBonusPercent_Name" xml:space="preserve">
     <value>Zusätzliche Item-Drops (%)</value>
   </data>
+  <data name="HappyHourConfiguration_ExcellentDropBonusPerTenThousand_Name" xml:space="preserve">
+    <value>Zusätzliche Chance auf exzellente Drops (1/10000)</value>
+  </data>
   <data name="WanderingMerchantsConfiguration_MinimumSpawnDuration_Name" xml:space="preserve">
     <value>Minimale Spawn-Dauer</value>
   </data>
