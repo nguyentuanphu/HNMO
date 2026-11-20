@@ -2084,6 +2084,15 @@ namespace HNMO.GameLogic.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Uniria and Dinorant can't enter Atlans..
+        /// </summary>
+        public static string AtlansNoRiding {
+            get {
+                return ResourceManager.GetString("AtlansNoRiding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The auto-play helper can be used after level {0}..
         /// </summary>
         public static string MuHelperMinimumLevel {

@@ -11,6 +11,8 @@ using System.Diagnostics.CodeAnalysis;
 /// </summary>
 public static class GameMapDefinitionExtensions
 {
+    private const short AtlansMapNumber = 7;
+
     /// <summary>
     /// Checks if the map is active and the <see cref="GameMapDefinition.MapRequirements"/> for the specified player.
     /// </summary>
@@ -25,6 +27,14 @@ public static class GameMapDefinitionExtensions
         if (!gameMapDefinition.IsActive)
         {
             errorMessage = player.GetLocalizedMessage(nameof(PlayerMessage.MapIsNotActive));
+            return true;
+        }
+
+        // Classic MU: Uniria and Dinorant can't go under water.
+        if (gameMapDefinition.Number == AtlansMapNumber
+            && player.Inventory?.GetItem(InventoryConstants.PetSlot)?.Definition is { Group: 13, Number: 2 or 3 })
+        {
+            errorMessage = player.GetLocalizedMessage(nameof(PlayerMessage.AtlansNoRiding));
             return true;
         }
 

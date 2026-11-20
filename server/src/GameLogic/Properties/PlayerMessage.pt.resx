@@ -171,6 +171,9 @@
   <data name="MuHelperMinimumLevel" xml:space="preserve">
     <value>O assistente de jogo automático pode ser usado a partir do nível {0}.</value>
   </data>
+  <data name="AtlansNoRiding" xml:space="preserve">
+    <value>Uniria e Dinorant não podem entrar em Atlans.</value>
+  </data>
   <data name="MuHelperMaximumLevel" xml:space="preserve">
     <value>O assistente de jogo automático não pode ser usado depois do nível {0}.</value>
   </data>

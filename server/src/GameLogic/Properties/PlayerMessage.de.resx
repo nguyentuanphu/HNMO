@@ -171,6 +171,9 @@
   <data name="MuHelperMinimumLevel" xml:space="preserve">
     <value>Der Auto-Play-Helfer kann ab Level {0} verwendet werden.</value>
   </data>
+  <data name="AtlansNoRiding" xml:space="preserve">
+    <value>Uniria und Dinorant können Atlans nicht betreten.</value>
+  </data>
   <data name="MuHelperMaximumLevel" xml:space="preserve">
     <value>Der Auto-Play-Helfer kann ab Level {0} nicht mehr verwendet werden.</value>
   </data>
