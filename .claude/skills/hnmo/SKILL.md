@@ -496,3 +496,11 @@ The desktop code stays the reference for how the classic game behaves (parity ru
   The Arena program: `HNMO_SEASON=arena` (ports +200, database `hnmo_arena`, save `save/arena/`, admin panel 8097); start
   it next to Season 6.3 for tests like Season 9 (`ASPNETCORE_URLS=http://127.0.0.1:8097`), and a bridge with
   `--Launcher:ArenaEnabled=true` to see the Arena column.
+
+## Developer hub (2026-11-20)
+- The hub is the Netlify site `hnmobug` (https://hnmobug.netlify.app); its production deploy follows the hub repo's
+  working branch. Visitor access must protect non-production deploys only (all deploys = 401 for HNMO servers).
+  The Netlify MCP tools can read deploys, function logs (observability) and change visitor access.
+- The hub allows 3 licence requests per computer and per address a Sydney day: don't probe /api/request with curl.
+- A request's state can be checked with POST /api/licence {machine, request, token} (token in save/developer-hub.json).
+- The licence flow and the weekly report were verified live on 2026-11-20; the owner issues licences in the console.

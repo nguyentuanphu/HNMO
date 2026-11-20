@@ -78,8 +78,14 @@
   one-time secret and has "Check now"; a withdrawn licence goes back to the free limit, also after a restart
   (`save/developer-hub.json`); log errors counted (`ErrorCountingSink`); the hub's licence key is read from
   `client/web/tools/hnmo/licence-pub.pem` once the owner has made it (`PlayerLicense.CheckWithEmbeddedKeys`).
-- Not checked live: against the deployed hub (the owner sets it up first; then a real request, licence and weekly
-  report from the test folder).
+- Checked live (2026-11-20, 19:47-20:00 Sydney) against https://hnmobug.netlify.app from the test server: request sent
+  from Host settings → the owner issued it in the console (25 players, signed with the hub's licence key) → "Check
+  now" saved license.hnmo and used it at once ("Licensed to …: up to 25 players at once"); the weekly report went out
+  by itself 10 minutes after the start ("the weekly report was sent").
+- Found on the way: the Netlify site had team login on every deploy (production too), so everything answered 401;
+  now only non-production deploys need it. The hub's request/weekly functions couldn't find the build key file in
+  the deployed bundle (502); fixed in the hub. The console now refreshes by itself (a new request showed only after a
+  reload). The hub allows 3 licence requests per computer and per address a Sydney day: test sparingly.
 
 ## A week of grace over the player limit (owner, 2026-11-20, 18:00 Sydney)
 
