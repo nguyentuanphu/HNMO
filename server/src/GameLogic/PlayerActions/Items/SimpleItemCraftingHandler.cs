@@ -205,8 +205,13 @@ public class SimpleItemCraftingHandler : BaseItemCraftingHandler
                     o.PossibleOptions.Any(p => p.OptionType == ItemOptionTypes.Excellent || p.OptionType == ItemOptionTypes.Wing))
                 is { } optionDefinition)
         {
+            // The crafting may allow fewer options than the option definition, e.g. one for the Golden Cherry
+            // Blossom mix; 0 means no limit of its own.
+            var maximumOptions = this._settings.ResultItemMaxExcOptionCount > 0
+                ? Math.Min(optionDefinition.MaximumOptionsPerItem, this._settings.ResultItemMaxExcOptionCount)
+                : optionDefinition.MaximumOptionsPerItem;
             for (int j = 0;
-                j < optionDefinition.MaximumOptionsPerItem && Rand.NextRandomBool(this._settings.ResultItemExcellentOptionChance);
+                j < maximumOptions && Rand.NextRandomBool(this._settings.ResultItemExcellentOptionChance);
                 j++)
             {
                 var link = player.PersistenceContext.CreateNew<ItemOptionLink>();
