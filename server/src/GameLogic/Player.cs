@@ -1935,7 +1935,9 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
         this._respawnAfterDeathCts = new CancellationTokenSource();
         await this.ForEachWorldObserverAsync<IObjectGotKilledPlugIn>(p => p.ObjectGotKilledAsync(this, killer), true).ConfigureAwait(false);
 
-        if (killer is Player killerAfterKilled
+        // A kill by the dark raven of a dark lord counts as the kill of its owner.
+        if ((killer as Player ?? (killer as IPlayerSurrogate)?.Owner) is { } killerAfterKilled
+            && killerAfterKilled != this
             && !(killerAfterKilled.GuildWarContext?.Score is { } score && score == this.GuildWarContext?.Score)
             && this.CurrentMiniGame?.AllowPlayerKilling is not true)
         {
