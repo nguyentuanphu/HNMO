@@ -57,6 +57,12 @@ public partial class Login : IAsyncDisposable
     private AdminLoginService LoginService { get; set; } = null!;
 
     [Inject]
+    private Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor { get; set; } = null!;
+
+    /// <summary>Gets a value indicating whether the page was opened from afar (through the website), not on the host computer.</summary>
+    private bool IsFromAfar => !Services.HostComputerRequest.IsFromHostComputer(this.HttpContextAccessor.HttpContext);
+
+    [Inject]
     private AdminAuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
 
     [Inject]
@@ -111,7 +117,7 @@ public partial class Login : IAsyncDisposable
         try
         {
             var result = await this.LoginService
-                .CheckPasswordAsync(this._passwordInput.LoginName, this._passwordInput.Password, this._passwordInput.RememberMe)
+                .CheckPasswordAsync(this._passwordInput.LoginName, this._passwordInput.Password, this._passwordInput.RememberMe, this.IsFromAfar)
                 .ConfigureAwait(true);
             this._passwordInput.Password = string.Empty;
 
@@ -122,6 +128,11 @@ public partial class Login : IAsyncDisposable
                     break;
                 case AdminLoginStatus.LockedOut:
                     this._errorMessage = Resources.AccountLockedOut;
+                    break;
+                case AdminLoginStatus.TwoFactorSetupRequired:
+                    this._errorMessage = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi"
+                        ? "Đăng nhập từ xa cần mã 6 số. Hãy bật mã xác thực cho tài khoản này trên máy chủ trước (Bảo mật tài khoản), rồi đăng nhập lại."
+                        : "Signing in from afar needs the 6-digit code. Set up the authenticator for this user on the host computer first (Account security), then sign in again.";
                     break;
                 case AdminLoginStatus.Succeeded:
                     await this.CompleteLoginAsync(result).ConfigureAwait(true);

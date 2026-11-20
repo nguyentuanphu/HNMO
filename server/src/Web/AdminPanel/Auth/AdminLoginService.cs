@@ -82,8 +82,9 @@ public class AdminLoginService
     /// <param name="loginName">The login name.</param>
     /// <param name="password">The password.</param>
     /// <param name="isPersistent">If set to <c>true</c>, the session survives a browser restart.</param>
+    /// <param name="fromAfar">Whether the login comes from afar (through the website): then the 6-digit code is required.</param>
     /// <returns>The result of the attempt.</returns>
-    public async Task<AdminLoginResult> CheckPasswordAsync(string loginName, string password, bool isPersistent)
+    public async Task<AdminLoginResult> CheckPasswordAsync(string loginName, string password, bool isPersistent, bool fromAfar = false)
     {
         this._pendingTwoFactorUser = null;
 
@@ -105,6 +106,13 @@ public class AdminLoginService
             await this._userManager.AccessFailedAsync(user).ConfigureAwait(false);
             this._logger.LogWarning("Failed admin panel login attempt for user '{LoginName}' (wrong password).", user.LoginName);
             return await this.GetFailedResultAsync(user).ConfigureAwait(false);
+        }
+
+        if (fromAfar && !user.IsTwoFactorEnabled)
+        {
+            // From afar, the 6-digit code is required (owner, 2026-11-21); it is set up on the host computer first.
+            this._logger.LogWarning("Admin panel login from afar for user '{LoginName}' refused: no authenticator set up.", user.LoginName);
+            return new AdminLoginResult(AdminLoginStatus.TwoFactorSetupRequired);
         }
 
         if (user.IsTwoFactorEnabled)

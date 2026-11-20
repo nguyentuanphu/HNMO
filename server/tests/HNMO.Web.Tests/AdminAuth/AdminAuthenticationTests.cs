@@ -59,6 +59,27 @@ public class AdminAuthenticationTests
     }
 
     /// <summary>
+    /// From afar (through the website) the 6-digit code is required (owner, 2026-11-21): a user without an authenticator
+    /// is told to set one up on the host computer; a user with one is asked for the code.
+    /// </summary>
+    /// <returns>The task.</returns>
+    [Test]
+    public async Task FromAfarTheSecondFactorIsRequiredAsync()
+    {
+        await this.CreateUserAsync("plain").ConfigureAwait(false);
+        var plain = await this.GetLoginService().CheckPasswordAsync("plain", TestPassword, false, fromAfar: true).ConfigureAwait(false);
+        Assert.That(plain.Status, Is.EqualTo(AdminLoginStatus.TwoFactorSetupRequired));
+        Assert.That(plain.Ticket, Is.Null);
+
+        var (_, key) = await this.CreateUserWithAuthenticatorAsync("secured").ConfigureAwait(false);
+        var loginService = this.GetLoginService();
+        var secured = await loginService.CheckPasswordAsync("secured", TestPassword, false, fromAfar: true).ConfigureAwait(false);
+        Assert.That(secured.Status, Is.EqualTo(AdminLoginStatus.TwoFactorRequired));
+        var code = await loginService.CheckTwoFactorAsync(TestTotpGenerator.Generate(key), false).ConfigureAwait(false);
+        Assert.That(code.Status, Is.EqualTo(AdminLoginStatus.Succeeded));
+    }
+
+    /// <summary>
     /// Tests that a wrong password is rejected.
     /// </summary>
     [Test]

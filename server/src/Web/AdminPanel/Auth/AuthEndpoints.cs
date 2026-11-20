@@ -38,6 +38,13 @@ public static class AuthEndpoints
                         return Results.Unauthorized();
                     }
 
+                    // From afar (through the website) only with the 6-digit code (owner, 2026-11-21).
+                    if (!Services.HostComputerRequest.IsFromHostComputer(httpContext)
+                        && !ticket.Claims.Any(c => c.Type == AdminAuthenticationDefaults.AuthenticationMethodClaimType && c.Value == AdminAuthenticationDefaults.MultiFactorAuthenticationMethod))
+                    {
+                        return Results.Unauthorized();
+                    }
+
                     var identity = new ClaimsIdentity(
                         ticket.Claims,
                         CookieAuthenticationDefaults.AuthenticationScheme,
