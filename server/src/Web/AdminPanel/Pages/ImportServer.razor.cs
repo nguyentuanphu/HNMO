@@ -21,6 +21,29 @@ using Microsoft.Extensions.Logging;
 /// </summary>
 public partial class ImportServer : ComponentBase
 {
+    /// <summary>The time zones offered for the server files and for HNMO (IANA ids, which .NET resolves on every platform).</summary>
+    private static readonly (string Id, string Name)[] TimeZoneChoices =
+    [
+        ("Asia/Ho_Chi_Minh", "Việt Nam (UTC+7)"),
+        ("Asia/Bangkok", "Thailand (UTC+7)"),
+        ("Asia/Singapore", "Singapore / Malaysia (UTC+8)"),
+        ("Asia/Manila", "Philippines (UTC+8)"),
+        ("Asia/Shanghai", "China (UTC+8)"),
+        ("Asia/Seoul", "Korea (UTC+9)"),
+        ("Asia/Tokyo", "Japan (UTC+9)"),
+        ("Australia/Perth", "Perth (UTC+8)"),
+        ("Australia/Brisbane", "Brisbane (UTC+10)"),
+        ("Australia/Sydney", "Sydney / Melbourne (UTC+10/+11)"),
+        ("Pacific/Auckland", "New Zealand (UTC+12/+13)"),
+        ("Etc/UTC", "UTC"),
+        ("Europe/London", "London (UTC+0/+1)"),
+        ("Europe/Berlin", "Central Europe (UTC+1/+2)"),
+        ("Europe/Moscow", "Moscow (UTC+3)"),
+        ("America/Sao_Paulo", "Brazil (UTC-3)"),
+        ("America/New_York", "US East (UTC-5/-4)"),
+        ("America/Los_Angeles", "US West (UTC-8/-7)"),
+    ];
+
     private readonly LegacyImportOptions _options = new();
     private LegacyImportPreview? _preview;
     private List<LegacyImportBackupSnapshot> _backups = [];

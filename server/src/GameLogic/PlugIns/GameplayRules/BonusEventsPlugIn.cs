@@ -49,7 +49,8 @@ public sealed class BonusEventsPlugIn :
     /// <param name="utcNow">Current UTC timestamp.</param>
     /// <param name="mapNumber">Optional map filter (<c>null</c> checks any map).</param>
     /// <returns><c>true</c> if active.</returns>
-    public static bool IsWindowActive(BonusEventEntry ev, DateTime utcNow, short? mapNumber = null)
+    /// <param name="zone">The time zone of the event's start time (default: Sydney).</param>
+    public static bool IsWindowActive(BonusEventEntry ev, DateTime utcNow, short? mapNumber = null, TimeZoneInfo? zone = null)
     {
         ArgumentNullException.ThrowIfNull(ev);
         if (!ev.Enabled)
@@ -68,12 +69,16 @@ public sealed class BonusEventsPlugIn :
         }
 
         var duration = TimeSpan.FromMinutes(Math.Clamp(ev.DurationMinutes, 1, 1440));
-        var localNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(utcNow, DateTimeKind.Utc), SydneyZone);
+        var localNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(utcNow, DateTimeKind.Utc), zone ?? SydneyZone);
         var todayStart = localNow.Date + start.ToTimeSpan();
         var yesterdayStart = todayStart.AddDays(-1);
-        return (localNow >= todayStart && localNow < todayStart + duration)
-            || (localNow >= yesterdayStart && localNow < yesterdayStart + duration);
+        return (localNow >= todayStart && localNow < todayStart + duration && RunsOn(ev, todayStart.DayOfWeek))
+            || (localNow >= yesterdayStart && localNow < yesterdayStart + duration && RunsOn(ev, yesterdayStart.DayOfWeek));
     }
+
+    /// <summary>Tells whether a bonus event starts on a day of the week (every day, when it has no days).</summary>
+    private static bool RunsOn(BonusEventEntry ev, DayOfWeek day)
+        => ev.DaysOfWeek is not { Count: > 0 } days || days.Contains(day);
 
     /// <summary>Gets combined active <c>(ExpMultiplier, ItemDropMultiplier, ZenDropMultiplier)</c> for <paramref name="player"/>.</summary>
     /// <param name="player">The player.</param>
@@ -101,7 +106,8 @@ public sealed class BonusEventsPlugIn :
     /// <param name="ev">Event entry.</param>
     /// <param name="utcNow">Current UTC timestamp.</param>
     /// <returns>Next start UTC timestamp, or <c>null</c> if disabled/invalid.</returns>
-    public static DateTime? NextStartUtc(BonusEventEntry ev, DateTime utcNow)
+    /// <param name="zone">The time zone of the event's start time (default: Sydney).</param>
+    public static DateTime? NextStartUtc(BonusEventEntry ev, DateTime utcNow, TimeZoneInfo? zone = null)
     {
         ArgumentNullException.ThrowIfNull(ev);
         if (!ev.Enabled || !TimeOnly.TryParseExact(ev.StartTimeSydney?.Trim(), "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out var start))
@@ -109,15 +115,22 @@ public sealed class BonusEventsPlugIn :
             return null;
         }
 
-        var localNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(utcNow, DateTimeKind.Utc), SydneyZone);
+        zone ??= SydneyZone;
+        var localNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(utcNow, DateTimeKind.Utc), zone);
         var candidate = localNow.Date + start.ToTimeSpan();
-        if (candidate <= localNow)
+        for (var day = 0; day < 8; day++, candidate = candidate.AddDays(1))
         {
-            candidate = candidate.AddDays(1);
+            if (candidate > localNow && RunsOn(ev, candidate.DayOfWeek))
+            {
+                return TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(candidate, DateTimeKind.Unspecified), zone);
+            }
         }
 
-        return TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(candidate, DateTimeKind.Unspecified), SydneyZone);
+        return null;
     }
+
+    /// <summary>Gets the time zone the events' start times are in (<see cref="BonusEventsConfiguration.TimeZone"/>, default Sydney).</summary>
+    public TimeZoneInfo Zone => HnmoStateStore.ResolveTimeZone(this.Configuration?.TimeZone);
 
     /// <summary>Gets active multipliers for <paramref name="mapNumber"/> at <paramref name="utcNow"/>.</summary>
     /// <param name="mapNumber">Target map number.</param>
@@ -133,9 +146,10 @@ public sealed class BonusEventsPlugIn :
         var expBonus = 0;
         var itemBonus = 0;
         var zenBonus = 0;
+        var zone = this.Zone;
         foreach (var ev in cfg.Events)
         {
-            if (IsWindowActive(ev, utcNow, mapNumber))
+            if (IsWindowActive(ev, utcNow, mapNumber, zone))
             {
                 expBonus += ev.ExpBonusPercent;
                 itemBonus += ev.ItemDropBonusPercent;
@@ -166,8 +180,8 @@ public sealed class BonusEventsPlugIn :
                 e.NameEn,
                 e.NameVi,
                 e.MapNumber,
-                IsWindowActive(e, utcNow),
-                NextStartUtc(e, utcNow),
+                IsWindowActive(e, utcNow, zone: this.Zone),
+                NextStartUtc(e, utcNow, this.Zone),
                 e.ExpBonusPercent,
                 e.ItemDropBonusPercent,
                 e.ZenDropBonusPercent))
@@ -189,7 +203,8 @@ public sealed class BonusEventsPlugIn :
         }
 
         var now = (this.TimeProviderOverride ?? TimeProvider.System).GetUtcNow().UtcDateTime;
-        var currentActive = cfg.Events.Where(e => IsWindowActive(e, now)).ToList();
+        var zone = this.Zone;
+        var currentActive = cfg.Events.Where(e => IsWindowActive(e, now, zone: zone)).ToList();
         var prevSet = this._activeAnnouncements.GetOrAdd(gameContext, _ => []);
 
         List<BonusEventEntry> started;

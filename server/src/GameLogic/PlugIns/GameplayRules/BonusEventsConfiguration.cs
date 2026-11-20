@@ -15,6 +15,12 @@ public sealed class BonusEventsConfiguration
     /// <summary>Gets or sets a value indicating whether start/end announcements are sent in chat.</summary>
     public bool AnnounceInChat { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets the time zone (IANA id, e.g. "Asia/Ho_Chi_Minh", or Windows id) the events' start times are in.
+    /// Empty or unknown: Sydney.
+    /// </summary>
+    public string TimeZone { get; set; } = "Australia/Sydney";
+
     /// <summary>Gets or sets configured bonus event schedules.</summary>
     public List<BonusEventEntry> Events { get; set; } = [];
 }

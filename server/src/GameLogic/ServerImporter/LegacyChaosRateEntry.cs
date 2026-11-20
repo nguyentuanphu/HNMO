@@ -21,4 +21,10 @@ public sealed class LegacyChaosRateEntry
 
     /// <summary>Gets or sets optional Luck bonus percent.</summary>
     public int LuckBonusPercent { get; set; }
+
+    /// <summary>
+    /// Gets or sets the HNMO crafting number when the rate is the highest success rate of a crafting whose rate comes
+    /// from the items put in (wings, capes, the Feather of Condor), rather than a base rate.
+    /// </summary>
+    public byte? MaximumOfCrafting { get; set; }
 }

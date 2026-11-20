@@ -4,6 +4,7 @@
 
 namespace HNMO.GameLogic.PlugIns.GameplayRules;
 
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 /// <summary>
@@ -48,4 +49,7 @@ public sealed class BonusEventEntry
 
     /// <summary>Gets or sets a value indicating whether this scheduled rule is enabled.</summary>
     public bool Enabled { get; set; } = true;
+
+    /// <summary>Gets or sets the days of the week the event starts on; empty: every day.</summary>
+    public List<DayOfWeek> DaysOfWeek { get; set; } = [];
 }

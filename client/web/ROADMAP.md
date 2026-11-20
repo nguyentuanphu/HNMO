@@ -823,7 +823,7 @@ ChatGPT is stopped (slow, mistakes). Its unfinished work moves to Antigravity: g
 chatgpt-gift-box-wip), ban/mute manager, admin help on every page (#33), character tools, GM manager + commands, news
 manager, VIP servers, admin redesign + guide split. Antigravity may push to the chatgpt-* branches. After its queue,
 Antigravity audits all of ChatGPT's work (#2-#6, #8, #9, #12, #16, #26, #29, #33, #39, #62, #64) and fixes what's wrong.
-VPS deployment kit: on hold (owner, 2026-11-18). IGCN: features rebuilt in HNMO's own code + a local importer for the
-owner's own data; no IGCN files, code or text in the repo.
+VPS deployment kit: on hold (owner, 2026-11-18). Old server suites: features rebuilt in HNMO's own code + a local importer for the
+owner's own data; no files, code or text of theirs in the repo.
 Packet numbers from now: Antigravity uses F5 27-2F (ChatGPT's unused numbers) and F5 50-6F; 23 gift codes, 24 login
 ticket, 25/26 VIP, 30-4F Antigravity's earlier features.

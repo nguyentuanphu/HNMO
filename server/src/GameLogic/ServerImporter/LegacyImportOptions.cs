@@ -36,6 +36,20 @@ public sealed class LegacyImportOptions
     /// <summary>Gets or sets a value indicating whether monster/NPC spawn tables should be imported.</summary>
     public bool ImportMonsterSpawns { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets the time zone the legacy server ran in (IANA id, e.g. "Asia/Ho_Chi_Minh"): the times in its files
+    /// (happy hours, event starts) are in it, and are converted to HNMO's. Empty: the same time zone as HNMO's.
+    /// </summary>
+    public string SourceTimeZone { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the time zone HNMO's events run in (IANA id); the converted times are in it. Empty: Sydney.
+    /// </summary>
+    public string TargetTimeZone { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets a value indicating whether the monsters' stats (MonsterList.xml) should be imported where they differ.</summary>
+    public bool ImportMonsterStats { get; set; } = true;
+
     /// <summary>Gets or sets a value indicating whether accounts, characters, inventories, vaults, and guilds should be imported from MSSQL.</summary>
     public bool ImportDatabaseEntities { get; set; }
 

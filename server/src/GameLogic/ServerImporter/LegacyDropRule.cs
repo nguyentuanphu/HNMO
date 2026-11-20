@@ -48,4 +48,34 @@ public sealed class LegacyDropRule
 
     /// <summary>Gets or sets optional companion evolution category (Season 9+ only).</summary>
     public int? CompanionEvolutionGroup { get; set; }
+
+    /// <summary>
+    /// Gets or sets the chance that the whole group this rule belongs to drops something (0..1), when the source gives
+    /// it directly, as an item bag's <c>ItemRate</c> does. Otherwise the group's chance is the sum of its rules' chances.
+    /// </summary>
+    public double? GroupChance { get; set; }
+
+    /// <summary>
+    /// Gets or sets the item bag file name when the rule comes from a bag that is not a monster's drop: a box, an
+    /// event or chaos-mix reward, an NPC gift. Such rules are rewards of their own and never become monster drops.
+    /// </summary>
+    public string? RewardBagName { get; set; }
+
+    /// <summary>
+    /// Gets or sets the list the rule comes from (an item bag's file name, "AppointItemDrop" ...): rules of different
+    /// lists are separate drops of the monster, each with its own chance.
+    /// </summary>
+    public string? SourceName { get; set; }
+
+    /// <summary>
+    /// Gets or sets the box the rule is the content of, when it comes from an "Item_(group,number,level)" bag: what a
+    /// player gets on opening (dropping) that box.
+    /// </summary>
+    public (byte Group, short Number, byte Level)? BoxItem { get; set; }
+
+    /// <summary>
+    /// Gets or sets the mini game whose winners get this item, when the rule comes from an "Event_BloodCastle(N)_Reward"
+    /// or "Event_ChaosCastle(N)_Reward" bag: the event ("BloodCastle" or "ChaosCastle") and its level N.
+    /// </summary>
+    public (string Event, byte Level)? EventReward { get; set; }
 }

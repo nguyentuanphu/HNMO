@@ -91,6 +91,57 @@ public sealed class RateTuningPlugIn :
         return Math.Clamp(cfg.ZenDropMultiplierPercent, 10, 1000) / 100.0;
     }
 
+    /// <summary>
+    /// Returns the multiplier of the base EXP of a kill for a party, when party EXP bonuses are configured;
+    /// otherwise <see langword="null"/> (HNMO's own rule).
+    /// </summary>
+    /// <param name="recipients">The party members who get EXP of the kill.</param>
+    /// <returns>The multiplier of the kill's base EXP, or <see langword="null"/>.</returns>
+    public static double? GetPartyExpMultiplier(IReadOnlyList<Player> recipients)
+    {
+        var cfg = recipients.Count > 0 ? recipients[0].GameContext.FeaturePlugIns.GetPlugIn<RateTuningPlugIn>()?.Configuration : null;
+        if (cfg is not { Enabled: true } || cfg.PartyExpBonuses.Count == 0
+            || cfg.PartyExpBonuses.Find(e => e.PartySize == recipients.Count) is not { } entry)
+        {
+            return null;
+        }
+
+        var differentClasses = recipients.Count >= 3
+            && recipients.Select(p => p.SelectedCharacter?.CharacterClass?.Number).Where(n => n.HasValue)
+                .Select(n => ResolveClassLine(n!.Value)).Distinct().Count() == recipients.Count;
+        var percent = differentClasses && entry.DifferentClassesExpPercent > 0 ? entry.DifferentClassesExpPercent : entry.ExpPercent;
+        return Math.Max(0, percent) / 100.0;
+    }
+
+    /// <summary>
+    /// Returns the zen a monster drops on the player's map from the zen table, when the table is on and lists the map;
+    /// otherwise <see langword="null"/> (the zen then comes from the gained experience).
+    /// </summary>
+    /// <param name="player">Killer player.</param>
+    /// <param name="monsterLevel">The killed monster's level.</param>
+    /// <param name="randomizer">The randomizer.</param>
+    /// <returns>The zen amount, or <see langword="null"/>.</returns>
+    public static uint? GetTableZen(Player? player, int monsterLevel, IRandomizer randomizer)
+    {
+        var cfg = player?.GameContext.FeaturePlugIns.GetPlugIn<RateTuningPlugIn>()?.Configuration;
+        if (cfg is not { Enabled: true, ZenTableEnabled: true } || player?.CurrentMap?.Definition is not { } map
+            || cfg.ZenTable.Find(e => e.MapNumber == map.Number) is not { } entry)
+        {
+            return null;
+        }
+
+        var minimum = Math.Max(0, Math.Min(entry.MinimumZen, entry.MaximumZen));
+        var maximum = Math.Max(minimum, entry.MaximumZen);
+        long zen = randomizer.NextInt(minimum, maximum + 1);
+        if (cfg.ZenTableMultiplyByMonsterLevel
+            && randomizer.NextRandomBool(Math.Clamp(cfg.ZenTableMultiplyChancePerTenThousand, 0, 10000) / 10000.0))
+        {
+            zen *= Math.Max(1, monsterLevel);
+        }
+
+        return (uint)Math.Clamp(zen, 0, int.MaxValue);
+    }
+
     /// <summary>Maps any 1st/2nd/3rd job class number to its canonical base class line number.</summary>
     /// <param name="classNumber">Character class number.</param>
     /// <returns>Canonical class line number.</returns>

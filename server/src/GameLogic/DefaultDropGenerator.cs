@@ -103,7 +103,7 @@ public class DefaultDropGenerator : IDropGenerator
         var (droppedItems, moneyResult) = this.GenerateDrops(monster, gainedExperience);
         if (moneyResult > 0)
         {
-            money = moneyResult;
+            money = PlugIns.GameplayRules.RateTuningPlugIn.GetTableZen(player, (int)monster[Stats.Level], this._randomizer) ?? moneyResult;
         }
 
         var (mapItemMult, mapZenMult) = PlugIns.GameplayRules.MapRulesPlugIn.GetDropModifiers(player);
@@ -142,6 +142,7 @@ public class DefaultDropGenerator : IDropGenerator
 
                 if (extraMoney > 0)
                 {
+                    extraMoney = PlugIns.GameplayRules.RateTuningPlugIn.GetTableZen(player, (int)monster[Stats.Level], this._randomizer) ?? extraMoney;
                     money += (uint)Math.Max(1, Math.Round(extraMoney * totalZenMult));
                 }
             }
