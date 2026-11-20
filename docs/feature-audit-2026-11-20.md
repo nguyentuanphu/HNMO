@@ -97,6 +97,7 @@ extra vault pages on.
 | Duel hits 60 % for both duelists, with shield too | [#176](https://github.com/nguyentuanphu/HNMO/pull/176) |
 | MU helper from level 80, VIP from level 1 | [#177](https://github.com/nguyentuanphu/HNMO/pull/177) |
 | Happy Hour 4 x 2 h, EXP x1.5, items +15 % | [#178](https://github.com/nguyentuanphu/HNMO/pull/178) |
+| Jewel of Life up to +28 | [#181](https://github.com/nguyentuanphu/HNMO/pull/181) (server; option levels 5-7 for weapons, armour, shields, wings; drops stay at +12) |
 
 Not changed yet: NPC jewel prices — the web client computes shop prices itself with the classic client's table (9 M / 45 M / 36 M / 60 M), so a server-only change would show one price and charge another (owner question).
 
@@ -123,7 +124,6 @@ Not changed yet: NPC jewel prices — the web client computes shop prices itself
 |---|---|---|
 | Trade completion | OK | Player-state transition for both, items checked again at the end, one save of both sides, money moved after the commit, a failure after the commit is never reported as a cancel; zen over the maximum in #152. |
 | Personal shop: buyer's free slot | **Found, not fixed yet** | `BuyRequestAction` finds the buyer's free slot before taking the shop lock and before reading the slot's item again, and ignores the result of `Inventory.AddItemAsync`. If the buyer's inventory fills in between (e.g. two buys at two shops at once), the payment is taken and the item is removed from the shop but lands nowhere. Proposed fix: check the space again inside the lock for the item read there, and refuse before paying; treat a failed `AddItemAsync` as an error that returns the item to the shop. Needs a concurrency test, so it waits for the morning. |
-| Jewel of Life up to +28 | [#181](https://github.com/nguyentuanphu/HNMO/pull/181) (server; option levels 5-7 for weapons, armour, shields, wings; drops stay at +12) |
 
 Left from #181 for the owner: (1) the web and desktop clients read option values from `client/src/bin/Data/Items/Options/Option.json`, which has 4 values per option, so +20..+28 items show as +16 until that file (and the desktop client's tests) get 7 values; (2) the classic client price formula adds nothing above +16 while the server keeps adding, so the shown and the charged price differ above +16; (3) ring and pendant recovery stays at 1..3 %.
 
