@@ -749,6 +749,9 @@ function knightPlan(
       case S.FIREBURST:
       case S.SPACE_SPLIT: return null; // The SkillAnimation from the server plays the strike.
       case S.RUSH: return A.ATTACK_RUSH;
+      // UseSkillWarrior leaves Spiral Slash to its default; ReceiveMagic AT_SKILL_SPIRAL_SLASH then plays the swing. The
+      // web hero skips its own SkillAnimation, so the swing plays at the cast.
+      case S.SPIRAL_SLASH: return A.ATTACK_ONE_FLASH;
       default:
         if (g.mount === 'fenrir' && g.riding) return A.FENRIR_ATTACK_MAGIC;
         // PLAYER_ATTACK_SKILL_SWORD1 + skill - AT_SKILL_FALLING_SLASH (Falling Slash..Slash: SWORD1..SWORD5).
@@ -775,6 +778,7 @@ function knightPlan(
     case S.FORCE_WAVE:
     case S.FIREBURST:
     case S.RUSH:
+    case S.SPIRAL_SLASH:
     case S.SPACE_SPLIT:
       // SkillWarrior first list -> CastWarriorSkill -> UseSkillWarrior: SendRequestMagic(skill, target).
       return plan({ packet: 'targeted', needsTarget: true, heroAction: warriorAction(), equipmentOk: warriorTargetOk(), source: 'SkillWarrior -> CastWarriorSkill -> UseSkillWarrior' });
