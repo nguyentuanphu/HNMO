@@ -475,3 +475,6 @@ The desktop code stays the reference for how the classic game behaves (parity ru
   Plug-ins that are off by default can be switched on with SQL on `config."PlugInConfiguration"` ("IsActive").
 - Duplicate check: `Item.Serial`, `DuplicateItemsPlugIn` (hourly), admin page `/duplicate-items`; frozen items are refused
   by `AccountSafetyPlugIn.RefuseLockedItemAsync` and the item move.
+- Market (owner 2026-11-20): one market per season; fees per account per season: buying 200 WCoinC, selling 1,000
+  WCoinC, 5% tax paid by the seller; the website's market has a Season 6 / Season 9 choice. Friends work across the
+  servers of one season; friends across seasons come with the Arena (owner's choice).
