@@ -8,7 +8,7 @@ using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.PlayerActions;
 
 /// <summary>
-/// The state checks of HNMO's own warps (spouse warp, Teleport NPC), as the game's warps have them (audit 1.10):
+/// The state checks of the warps (M menu, /move, gates, spouse warp, Teleport NPC) (audits 1.10 and 12):
 /// alive, not in a duel, no trade, and the target map's own rules.
 /// </summary>
 public static class HnmoWarpGuard
@@ -42,4 +42,11 @@ public static class HnmoWarpGuard
 
         return null;
     }
+
+    /// <summary>Gets the text of a refusal in the language of the player.</summary>
+    /// <param name="player">The player.</param>
+    /// <param name="refusal">The refusal.</param>
+    /// <returns>The text.</returns>
+    public static string TextFor(Player player, (string En, string Vi) refusal) =>
+        string.Equals(player.Culture.TwoLetterISOLanguageName, "vi", StringComparison.OrdinalIgnoreCase) ? refusal.Vi : refusal.En;
 }

@@ -28,6 +28,14 @@ public class WarpAction
             return;
         }
 
+        // Not while dead, duelling or trading: a trade state can't change to the map change state, so the
+        // player would be taken off its map without a map change (and pay the zen).
+        if (warpInfo.Gate?.Map is { } targetMap && HnmoWarpGuard.Refusal(player, targetMap) is { } refusal)
+        {
+            await player.ShowBlueMessageAsync(HnmoWarpGuard.TextFor(player, refusal)).ConfigureAwait(false);
+            return;
+        }
+
         if (warpInfo.Gate is { } gate
             && player.GameContext.PlugInManager.GetPlugInPoint<IWarpGateEnteringPlugIn>() is { } plugInPoint)
         {
