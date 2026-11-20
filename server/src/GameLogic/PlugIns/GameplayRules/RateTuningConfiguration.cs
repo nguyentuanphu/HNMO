@@ -31,8 +31,11 @@ public sealed class RateTuningConfiguration
     /// <summary>Gets or sets Jewel of Life success percentage (0..100).</summary>
     public int LifeSuccessRatePercent { get; set; } = 50;
 
-    /// <summary>Gets or sets maximum Jewel of Life option level (4 = +16 / 4% rec, 7 = +28 / 7% rec).</summary>
-    public int MaxLifeOptionLevel { get; set; } = 4;
+    /// <summary>
+    /// Gets or sets maximum Jewel of Life option level (4 = +16 / 4% rec, 7 = +28 / 7% rec).
+    /// The default is +28, like the Season 6/9 server suites.
+    /// </summary>
+    public int MaxLifeOptionLevel { get; set; } = 7;
 
     /// <summary>Gets or sets a value indicating whether high-level Chaos Mix successes are broadcast globally.</summary>
     public bool BroadcastHighLevelChaosMix { get; set; } = true;

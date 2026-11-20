@@ -37,6 +37,10 @@ public class Wings : WingsInitializerBase
     /// <inheritdoc />
     protected override int MaximumItemLevel => 15;
 
+    /// <inheritdoc />
+    /// <remarks>The wings' additional option goes up to +28 (or 7 % recovery) with the Jewel of Life, too.</remarks>
+    protected override int MaximumOptionLevel => GameConfigurationInitializer.MaximumAdditionalOptionLevel;
+
     /// <summary>
     /// Initializes all wings.
     /// </summary>

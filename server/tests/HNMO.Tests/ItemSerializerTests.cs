@@ -141,6 +141,31 @@ public class ItemSerializerTests<T>
     }
 
     /// <summary>
+    /// Tests if the additional option at +28 (level 7, which the Jewel of Life reaches) is correctly (de)serialized.
+    /// </summary>
+    [Test]
+    public void OptionLevelSeven()
+    {
+        using var context = this._contextProvider.CreateNewContext(this._gameConfiguration);
+        var item = context.CreateNew<Item>();
+        item.Definition = this._gameConfiguration.Items.First(i => i.Name.ValueInNeutralLanguage == "Blade");
+        item.Durability = 23;
+        var option = context.CreateNew<ItemOptionLink>();
+        option.ItemOption = item.Definition.PossibleItemOptions.SelectMany(def =>
+            def.PossibleOptions.Where(p => p.OptionType == ItemOptionTypes.Option)).First();
+        option.Level = 7;
+        item.ItemOptions.Add(option);
+
+        var array = new byte[this._itemSerializer.NeededSpace];
+        this._itemSerializer.SerializeItem(array, item);
+        var deserializedItem = this._itemSerializer.DeserializeItem(array, this._gameConfiguration, context);
+
+        var deserializedOption = deserializedItem.ItemOptions.Single(link => link.ItemOption!.OptionType == ItemOptionTypes.Option);
+        Assert.That(deserializedOption.ItemOption, Is.SameAs(option.ItemOption));
+        Assert.That(deserializedOption.Level, Is.EqualTo(7));
+    }
+
+    /// <summary>
     /// Tests if the options of a dinorant are correctly (de)serialized.
     /// </summary>
     /// <param name="optionBits">The bits of the dinorant options, which are the numbers of the options.</param>

@@ -25,7 +25,7 @@ public class RateTuningPageTests
 
         var cfg = new RateTuningConfiguration();
         Assert.That(cfg.Enabled, Is.False);
-        Assert.That(cfg.MaxLifeOptionLevel, Is.EqualTo(4));
+        Assert.That(cfg.MaxLifeOptionLevel, Is.EqualTo(7), "the Jewel of Life goes up to +28 by default");
         Assert.That(cfg.ClassDamageRates, Has.Count.EqualTo(7));
     }
 }
