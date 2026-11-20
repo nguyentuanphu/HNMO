@@ -504,3 +504,21 @@ The desktop code stays the reference for how the classic game behaves (parity ru
 - The hub allows 3 licence requests per computer and per address a Sydney day: don't probe /api/request with curl.
 - A request's state can be checked with POST /api/licence {machine, request, token} (token in save/developer-hub.json).
 - The licence flow and the weekly report were verified live on 2026-11-20; the owner issues licences in the console.
+
+## Arena battles (2026-11-20 night)
+- Arena modes live in `GameLogic/PlugIns/Arena`: `ArenaTeams` (5v5), `ArenaRoyale` (battle royale), `ArenaGuildWar`, each
+  with a pure engine and tests; `ArenaTeamRulesPlugIn` holds the in-game rules (who may hurt whom, no PK penalty, spawn
+  gates, kills); `ArenaPlugIn` ticks them every second. F5 52 actions: 2/3 1v1, 5/6 team, 7/8 royale, 9/10 guild war.
+- The Arena runs as its own program: `HNMO_SEASON=arena ASPNETCORE_URLS=http://127.0.0.1:8097 dotnet HNMO.Startup.dll
+  -autostart -resolveIP:loopback` (connect 44606, DB `hnmo_arena`, files `save/arena/`); its admin panel is on 8097
+  (`/arena` edits the class templates and battle settings). The bridge needs `--Launcher:ArenaEnabled=true`.
+- GM test commands in the Arena: `/startroyale [s]`, `/startguildwar [s]`. Guild war tests need guilds in the Season 6.3
+  DB (SQL insert into guild."Guild"/"GuildMember") and `GuildWarMinMembers` lowered in the Arena's plug-in JSON.
+- The Arena map's own gates (map 6) lie partly on blocked tiles: use `ArenaConfiguration.HomeGate` for anything that
+  places players there. Queues must not drop players who are just changing maps (only disconnected ones).
+- Browser tests of battles: log in through `.season-arena .choice` with a retry (`toPass`) — with 5+ browsers the Arena's
+  server list can come late. A 3v3 / 4-player royale / 3v3 guild war each take 10-25 minutes on the test machine.
+- Never `pkill -f` with a pattern that also matches your own shell command line (it killed the session's worker):
+  keep restarts in a script file (e.g. /tmp/claude-0/bin/hnmo-up.sh) and kill by PID from `pgrep`.
+- Known open: a "speedhack" warning at the first walk right after being warped into a battle (8-12 tiles), seen on the
+  slow test machine only so far; check with real players.
