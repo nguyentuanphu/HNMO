@@ -378,14 +378,15 @@ bool IsJewelryWithOption(int type)
 }
 
 // The additional option the code before the definitions gave an item at `level` (SetItemAttributes up to 9a2), without
-// the Horn of Dinorant and the wings, whose code stays. Its levels end at Season 6's: 4, the jewelry's 3.
+// the Horn of Dinorant and the wings, whose code stays, with the same step per level up to level 7 (the Jewel of Life
+// up to +28, as HNMO). The jewelry's levels end at 3.
 std::optional<OptionSlot> OldAdditionalOption(int type, int optionLevel)
 {
     if (optionLevel == 0)
     {
         return std::nullopt;
     }
-    const int level = std::min(optionLevel, 4);
+    const int level = std::min(optionLevel, 7);
     const int jewelryLevel = std::min(optionLevel, 3);
     if (type >= ITEM_SWORD && type < ITEM_BOW + MAX_ITEM_INDEX)
     {
@@ -507,9 +508,10 @@ TEST_CASE("Every item's additional option comes from its option links as the cod
     CHECK(itemsWithOption > 400);
 }
 
-// Above the list (a server that sends more than Season 6 has) the last value counts; a longer list gives such a server
-// its own values.
-TEST_CASE("An additional option above its list has the list's last value [data][items]")
+// The Jewel of Life raises the additional option up to +28 (level 7), as HNMO does: the weapons', staffs', books' and
+// armour's options go on by 4 a level (+20, +24, +28), the shields' by 5 (+25, +30, +35). Above a list (the rings' 3
+// levels) the last value counts.
+TEST_CASE("An additional option goes up to level 7, and above its list has the list's last value [data][items]")
 {
     ClientDataScope client(ClientDirectory);
     I18N::SetLocale("en");
@@ -520,13 +522,77 @@ TEST_CASE("An additional option above its list has the list's last value [data][
     for (int level = 5; level <= 7; ++level)
     {
         CAPTURE(level);
-        const std::vector<OptionSlot> kris = DefinitionSlots(MakeItemWithOption(ITEM_KRIS, level));
-        REQUIRE(kris.size() == 1);
-        CHECK(kris.front().value == 16);
+        const auto valueOf = [level](int type)
+        {
+            const std::vector<OptionSlot> slots = DefinitionSlots(MakeItemWithOption(type, level));
+            REQUIRE(slots.size() == 1);
+            return slots.front().value;
+        };
+        CHECK(valueOf(ITEM_KRIS) == level * 4);
+        CHECK(valueOf(ITEM_RUNE_BLADE) == level * 4);
+        CHECK(valueOf(ITEM_STAFF) == level * 4);
+        CHECK(valueOf(ITEM_HELM) == level * 4);
+        CHECK(valueOf(ITEM_SMALL_SHIELD) == level * 5);
     }
     const std::vector<OptionSlot> ring = DefinitionSlots(MakeItemWithOption(ITEM_RING_OF_ICE, 4));
     REQUIRE(ring.size() == 1);
     CHECK(ring.front().value == 3);
+    const std::vector<OptionSlot> ringAtSeven = DefinitionSlots(MakeItemWithOption(ITEM_RING_OF_ICE, 7));
+    REQUIRE(ringAtSeven.size() == 1);
+    CHECK(ringAtSeven.front().value == 3);
+}
+
+// The price of the additional option: up to +16 (level 4) 60 %, 140 %, 280 %, 560 % more as classic MU, and above it
+// HNMO's ItemPriceCalculator (ApplyOptionModifiers), so the shop asks what the server charges:
+//   level 1:      price + (long)(price * 0.6)
+//   level n >= 2: price + (long)(price * 0.7 * 2^(n - 1))
+TEST_CASE("The additional option's price follows the server's formula up to level 7 [items]")
+{
+    // 1,000,000 zen: +60 %, +140 %, +280 %, +560 %, then +1120 %, +2240 %, +4480 % (0.7 * 16, 32, 64).
+    const std::array<int64_t, 8> million{1000000, 1600000, 2400000, 3800000, 6600000, 12200000, 23400000, 45800000};
+    // 7,654,321 zen, the same formula.
+    const std::array<int64_t, 8> odd{7654321, 12246913, 18370370, 29086419, 50518518, 93382716, 179111111, 350567901};
+    for (int level = 0; level <= 7; ++level)
+    {
+        CAPTURE(level);
+        CHECK(AddAdditionalOptionPrice(1000000, level) == million[static_cast<size_t>(level)]);
+        CHECK(AddAdditionalOptionPrice(7654321, level) == odd[static_cast<size_t>(level)]);
+    }
+}
+
+// The shop's price (rounded to hundreds) of a +15 Kris (+4 damage a level) and Small Shield (+5 defense rate a level):
+// one-handed, so 80 % of 100 + (40 + L) * L * L / 8 with L = the drop level + 15 * 3 + 365, the Kris 7,891,433 zen
+// (L 416) and the shield 7,726,855 zen (L 413); then the server's formula at the option levels 0 to 7.
+TEST_CASE("A weapon and a shield cost more at +20, +24 and +28 as the server prices them [data][items]")
+{
+    ClientDataScope client(ClientDirectory);
+    I18N::SetLocale("en");
+    std::string errorMessage;
+    REQUIRE(g_ItemDataHandler.Load(errorMessage));
+    HeroScope hero;
+
+    const auto price = [](int type, int optionLevel)
+    {
+        ItemCreationParams params{};
+        params.Group = type / MAX_ITEM_INDEX;
+        params.Number = type % MAX_ITEM_INDEX;
+        params.Level = 15;
+        params.Durability = 255;
+        params.WithOption = optionLevel > 0;
+        params.OptionLevel = static_cast<BYTE>(optionLevel);
+        ITEM item;
+        FillItemFromParameters(item, params);
+        return ItemValue(&item, 0);
+    };
+    const std::array<int64_t, 8> kris{7891400, 12626200, 18939400, 29987400, 52083400, 96275400, 184659500, 361427600};
+    const std::array<int64_t, 8> shield{7726800,  12362900,  18544400,  29362000,
+                                        50997200, 94267600, 180808400, 353889900};
+    for (int level = 0; level <= 7; ++level)
+    {
+        CAPTURE(level);
+        CHECK(price(ITEM_KRIS, level) == kris[static_cast<size_t>(level)]);
+        CHECK(price(ITEM_SMALL_SHIELD, level) == shield[static_cast<size_t>(level)]);
+    }
 }
 
 // A magic sword's one option shows two lines, the damage and the wizardry damage; the rings' lines show the per cent.
@@ -545,6 +611,12 @@ TEST_CASE("The additional option's tooltip lines come from its texts [data][item
     CHECK(WriteDefinitionOptionLines(sword, 0, 0, MaxTextListRows) == 2);
     CHECK(std::wstring(TextList[0]) == L"Additional Dmg +16");
     CHECK(std::wstring(TextList[1]) == L"Additional Wizardry Dmg +16");
+    // Up to +28 with the Jewel of Life.
+    const ITEM swordAtSeven = MakeItemWithOption(ITEM_RUNE_BLADE, 7);
+    REQUIRE(swordAtSeven.SpecialNum == 1);
+    CHECK(WriteDefinitionOptionLines(swordAtSeven, 0, 0, MaxTextListRows) == 2);
+    CHECK(std::wstring(TextList[0]) == L"Additional Dmg +28");
+    CHECK(std::wstring(TextList[1]) == L"Additional Wizardry Dmg +28");
 
     const ITEM ring = MakeItemWithOption(ITEM_RING_OF_ICE, 3);
     REQUIRE(ring.SpecialNum == 1);
@@ -647,9 +719,11 @@ TEST_CASE("The strength requirement grows by the additional option's counted lev
     // An option type that turns no option on adds no strength.
     CHECK(GameLogic::Items::GetAdditionalOptionLevel(MakeItemWithOption(ITEM_KRIS, 2, 2)) == 0);
     CHECK(MakeItemWithOption(ITEM_KRIS, 2, 2).RequireStrength == plain.RequireStrength);
+    // Up to level 7 (+28) the option's level counts, 5 strength each, as HNMO adds it.
+    CHECK(GameLogic::Items::GetAdditionalOptionLevel(MakeItemWithOption(ITEM_KRIS, 7)) == 7);
+    CHECK(MakeItemWithOption(ITEM_KRIS, 7).RequireStrength == MakeItemWithOption(ITEM_KRIS, 4).RequireStrength + 3 * 5);
     // Above the list the last level counts.
-    CHECK(GameLogic::Items::GetAdditionalOptionLevel(MakeItemWithOption(ITEM_KRIS, 7)) == 4);
-    CHECK(MakeItemWithOption(ITEM_KRIS, 7).RequireStrength == MakeItemWithOption(ITEM_KRIS, 4).RequireStrength);
+    CHECK(GameLogic::Items::GetAdditionalOptionLevel(MakeItemWithOption(ITEM_RING_OF_ICE, 7)) == 3);
     // The wings keep their option level, their option still code.
     CHECK(GameLogic::Items::GetAdditionalOptionLevel(MakeItemWithOption(ITEM_WINGS_OF_SATAN, 3)) == 3);
     CHECK(GameLogic::Items::GetAdditionalOptionLevel(MakeItemWithOption(ITEM_LOCHS_FEATHER, 3)) == 0);

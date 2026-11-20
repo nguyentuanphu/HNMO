@@ -995,19 +995,25 @@ HNMO's server values: a 25 % chance, one per item):
 
 | Definition | Attribute | Value by level | Lines | Items |
 |---|---|---|---|---|
-| `physicalDamageOption` | `physicalBaseDmg` | 4, 8, 12, 16 | Additional Dmg | Groups 0 to 4 but arrows, bolts and magic swords |
-| `physicalAndWizardryDamageOption` | `baseDamageBonus` | 4, 8, 12, 16 | Additional Dmg, Additional Wizardry Dmg | Magic swords |
-| `wizardryDamageOption` | `wizardryBaseDmg` | 4, 8, 12, 16 | Additional Wizardry Dmg | Group 5 but the summoner's books |
-| `curseDamageOption` | `curseBaseDmg` | 4, 8, 12, 16 | Additional Curse Spell | The summoner's books |
-| `defenseRateOption` | `defenseRatePvm` | 5, 10, 15, 20 | Additional defense rate | Shields |
-| `defenseOption` | `defenseBase` | 4, 8, 12, 16 | Additional defense | Groups 7 to 11 |
+| `physicalDamageOption` | `physicalBaseDmg` | 4, 8, 12, 16, 20, 24, 28 | Additional Dmg | Groups 0 to 4 but arrows, bolts and magic swords |
+| `physicalAndWizardryDamageOption` | `baseDamageBonus` | 4, 8, 12, 16, 20, 24, 28 | Additional Dmg, Additional Wizardry Dmg | Magic swords |
+| `wizardryDamageOption` | `wizardryBaseDmg` | 4, 8, 12, 16, 20, 24, 28 | Additional Wizardry Dmg | Group 5 but the summoner's books |
+| `curseDamageOption` | `curseBaseDmg` | 4, 8, 12, 16, 20, 24, 28 | Additional Curse Spell | The summoner's books |
+| `defenseRateOption` | `defenseRatePvm` | 5, 10, 15, 20, 25, 30, 35 | Additional defense rate | Shields |
+| `defenseOption` | `defenseBase` | 4, 8, 12, 16, 20, 24, 28 | Additional defense | Groups 7 to 11 |
 | `jewelryHealthRecovery` | `healthRecoveryMultiplier` (per cent) | 1, 2, 3 | Automatic HP recovery | The rings 13/8, 13/9, 13/21 to 13/23 and the pendants 13/12, 13/13, 13/25 to 13/27 |
 | `ringOfMagicMana` | `maximumMana` (per cent) | 1, 2, 3 | Max mana increased by | The Ring of Magic (13/24) |
 | `pendantOfAbilityAg` | `maximumAbility` (per cent) | 1, 2, 3 | Max AG increased by | The Pendant of Ability (13/28) |
 
-The lists end where Season 6 does; a level above a list counts as its
-last value, and a longer list gives a server that sends more its own
-values. A magic sword's one option fills one slot and shows two lines. The
+The weapons', armour's and shields' lists go up to level 7 (+28, the
+shields' +35), as far as HNMO's Jewel of Life raises the option, like the
+Season 6/9 server suites; the jewelry's end at 3 % as on HNMO. A level
+above a list counts as its last value, and a longer list gives a server
+that sends more its own values. The shop price grows with the level: 60 %,
+140 %, 280 % and 560 % more at the levels 1 to 4 as classic MU, and above
+that HNMO's `ItemPriceCalculator` step, `price * 0.7 * 2^(level - 1)` more
+(`AddAdditionalOptionPrice` in `ZzzInfomation.cpp`,
+`addAdditionalOptionPrice` in the web client's `itemValue.ts`). A magic sword's one option fills one slot and shows two lines. The
 other items of group 13 (the Transformation Rings, the quest items, Loch's
 Feather and the others) have no additional option, as on HNMO. The
 wings, the capes and the Horn of Dinorant keep their additional options in
