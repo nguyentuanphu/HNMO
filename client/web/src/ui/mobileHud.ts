@@ -330,6 +330,18 @@ body.hnmo-modern-hud .rml-chat_log,
 body.hnmo-modern-hud .rml-system_log,
 body.hnmo-modern-hud .rml-mu_helper_bar { display: none !important; }
 
+/* The status line ("entered the world", …) as a one-line toast, top centre under the top row. */
+body.hnmo-modern-hud #loading {
+  top: max(52px, calc(env(safe-area-inset-top, 0px) + 50px));
+  bottom: auto;
+  width: auto;
+  max-width: min(360px, 46vw);
+  padding: 3px 10px;
+  pointer-events: none;
+}
+body.hnmo-modern-hud #loading #status { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 11px; }
+body.hnmo-modern-hud #loading #track { display: none; }
+
 /* HUD size S / M / L (remembered): the HUD's parts and the fight buttons. */
 #mobileHud > *, body.hnmo-modern-hud #touchFight, body.hnmo-modern-hud #touchBar { zoom: var(--mh-scale, 1); }
 

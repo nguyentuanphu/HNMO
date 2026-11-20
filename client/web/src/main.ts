@@ -400,7 +400,8 @@ function setStatus(text: string, progress?: number): void {
   clearTimeout(statusTimer);
   box.style.transition = 'opacity .6s';
   box.style.opacity = '1';
-  if (progress === 1) statusTimer = setTimeout(() => { box.style.opacity = '0'; }, 6000);
+  // The touch HUD's toast goes sooner.
+  if (progress === 1) statusTimer = setTimeout(() => { box.style.opacity = '0'; }, document.body.classList.contains('hnmo-modern-hud') ? 4000 : 6000);
 }
 
 function resize() {
@@ -2456,7 +2457,10 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   hideLoadingScreen();
   connection.onClose = () => { vip.reset(); vip.close(); giftBox.reset(); giftBox.close(); setStatus('Disconnected from the server. Reload the page to log in again.'); };
   warmCharacterModels();
-  setStatus(`${character.name} entered the world. Left-click to walk, right-drag to turn, wheel to zoom, I for the inventory, click an NPC to talk.`, 1);
+  // The touch HUD shows this line as a short toast with touch wording (mobileHud.ts styles #loading).
+  setStatus(state.mobileHud.active
+    ? `${character.name}: ${currentLanguage() === 'vi' ? 'Kéo cần để đi, chạm quái để đánh, chạm NPC để nói chuyện' : 'Drag the stick to walk, tap a monster to attack, tap an NPC to talk'}`
+    : `${character.name} entered the world. Left-click to walk, right-drag to turn, wheel to zoom, I for the inventory, click an NPC to talk.`, 1);
 }
 
 function startGame(play: () => Promise<void>): void {
