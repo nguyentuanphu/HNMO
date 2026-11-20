@@ -5,7 +5,7 @@
   <data name="TheJewelsDropItemGroup01PercentDropChance" xml:space="preserve"><value>Nhóm vật phẩm rơi ra trang sức (0,1 % d cơ hội rơi)</value></data>
   <data name="TheCommonDropItemGroupForRandomItems30PercentDropChance" xml:space="preserve"><value>Nhóm vật phẩm rơi ra phổ biến cho các vật phẩm ngẫu nhiên (30 cơ hội % drop)</value></data>
   <data name="TheCommonMoneyDropItemGroup50PercentDropChance" xml:space="preserve"><value>Nhóm vật phẩm rơi ra tiền thông thường (50 % drop)</value></data>
-  <data name="TheCommonDropItemGroupForRandomExcellentItems001PercentDropChance" xml:space="preserve"><value>Nhóm vật phẩm rơi ra phổ biến dành cho các vật phẩm xuất sắc ngẫu nhiên (0,01 % d cơ hội rơi)</value></data>
+  <data name="TheCommonDropItemGroupForRandomExcellentItems001PercentDropChance" xml:space="preserve"><value>Nhóm vật phẩm rơi ra phổ biến dành cho các vật phẩm xuất sắc ngẫu nhiên (0,2 % cơ hội rơi)</value></data>
   <data name="ItemsFromRedDragon" xml:space="preserve"><value>Vật phẩm từ rồng đỏ</value></data>
   <data name="BoxOfKundunPlus2" xml:space="preserve"><value>Hộp Kundun +2</value></data>
   <data name="BoxOfLuck" xml:space="preserve"><value>Hộp may mắn</value></data>

@@ -22,7 +22,7 @@
     <value>Die allgemeine Drop-Gruppe für Geld (50 % Drop-Chance)</value>
   </data>
   <data name="TheCommonDropItemGroupForRandomExcellentItems001PercentDropChance" xml:space="preserve">
-    <value>Die allgemeine Drop-Gruppe für zufällige exzellente Gegenstände (0,01 % Drop-Chance)</value>
+    <value>Die allgemeine Drop-Gruppe für zufällige exzellente Gegenstände (0,2 % Drop-Chance)</value>
   </data>
   <data name="ItemsFromRedDragon" xml:space="preserve">
     <value>Gegenstände vom Roten Drachen</value>

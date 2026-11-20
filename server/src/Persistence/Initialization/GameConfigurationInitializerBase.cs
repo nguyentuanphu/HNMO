@@ -204,7 +204,7 @@ public abstract class GameConfigurationInitializerBase : InitializerBase
         {
             var excellentItemDropItemGroup = this.Context.CreateNew<DropItemGroup>();
             excellentItemDropItemGroup.SetGuid(3);
-            excellentItemDropItemGroup.Chance = 0.0001;
+            excellentItemDropItemGroup.Chance = 0.002;
             excellentItemDropItemGroup.ItemType = SpecialItemType.Excellent;
             excellentItemDropItemGroup.ItemLevel = 0;
             excellentItemDropItemGroup.Description =

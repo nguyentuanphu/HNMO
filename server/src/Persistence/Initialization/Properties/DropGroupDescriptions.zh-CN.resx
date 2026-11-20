@@ -22,7 +22,7 @@
     <value>普通金币掉落组（50%掉落率）</value>
   </data>
   <data name="TheCommonDropItemGroupForRandomExcellentItems001PercentDropChance" xml:space="preserve">
-    <value>随机卓越物品掉落组（0.01%掉落率）</value>
+    <value>随机卓越物品掉落组（0.2%掉落率）</value>
   </data>
   <data name="ItemsFromRedDragon" xml:space="preserve">
     <value>红龙掉落物品</value>
