@@ -43,6 +43,29 @@ public sealed class RateTuningConfiguration
     /// <summary>Gets or sets global monster Zen drop multiplier percentage (10..1000, 100 = 1.0x).</summary>
     public int ZenDropMultiplierPercent { get; set; } = 100;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether the zen of a kill comes from <see cref="ZenTable"/> on the maps it lists
+    /// (as the servers' IGC_ZenDrop.xml) instead of from the gained experience. The multipliers still apply.
+    /// </summary>
+    public bool ZenTableEnabled { get; set; }
+
+    /// <summary>Gets or sets a value indicating whether the table's zen is multiplied by the monster's level.</summary>
+    public bool ZenTableMultiplyByMonsterLevel { get; set; }
+
+    /// <summary>Gets or sets the chance, per 10,000, that the zen is multiplied by the monster's level.</summary>
+    [Range(0, 10000)]
+    public int ZenTableMultiplyChancePerTenThousand { get; set; } = 10000;
+
+    /// <summary>Gets or sets the zen a monster drops on each map listed.</summary>
+    public List<ZenTableEntry> ZenTable { get; set; } = [];
+
+    /// <summary>
+    /// Gets or sets the party EXP of a kill by party size, as the servers have it: the party gets the EXP of the
+    /// kill times this percent (160 % for two members ...), shared by level. Empty: HNMO's own rule (every member's
+    /// EXP, +5 % per further member).
+    /// </summary>
+    public List<PartyExpBonusEntry> PartyExpBonuses { get; set; } = [];
+
     /// <summary>Gets or sets per-class PvP and PvM damage multiplier entries.</summary>
     public List<ClassDamageRateEntry> ClassDamageRates { get; set; } = CreateDefaultClassRates();
 

@@ -55,6 +55,36 @@ public class ServerImporterRealServerTrial
             }
         }
 
+        report.AppendLine("Monster stat differences (HNMO -> server), first 25:");
+        foreach (var stats in preview.MonsterStats.Take(25))
+        {
+            var monster = config.Monsters.First(m => m.Number == stats.Number);
+            float Of(HNMO.AttributeSystem.AttributeDefinition stat) => monster.Attributes.FirstOrDefault(a => a.AttributeDefinition?.Id == stat.Id)?.Value ?? 0;
+            var parts = new List<string>();
+            void Diff(string name, double before, double after)
+            {
+                if (Math.Abs(before - after) > 0.001)
+                {
+                    parts.Add(string.Create(CultureInfo.InvariantCulture, $"{name} {before}->{after}"));
+                }
+            }
+
+            Diff("lvl", Of(HNMO.GameLogic.Attributes.Stats.Level), stats.Level);
+            Diff("hp", Of(HNMO.GameLogic.Attributes.Stats.MaximumHealth), stats.Health);
+            Diff("dmin", Of(HNMO.GameLogic.Attributes.Stats.MinimumPhysBaseDmg), stats.DamageMin);
+            Diff("dmax", Of(HNMO.GameLogic.Attributes.Stats.MaximumPhysBaseDmg), stats.DamageMax);
+            Diff("def", Of(HNMO.GameLogic.Attributes.Stats.DefenseBase), stats.Defense);
+            Diff("ar", Of(HNMO.GameLogic.Attributes.Stats.AttackRatePvm), stats.AttackRate);
+            Diff("dr", Of(HNMO.GameLogic.Attributes.Stats.DefenseRatePvm), stats.DefenseRate);
+            Diff("move", monster.MoveRange, stats.MoveRange);
+            Diff("atkRange", monster.AttackRange, stats.AttackRange);
+            Diff("view", monster.ViewRange, stats.ViewRange);
+            Diff("moveMs", monster.MoveDelay.TotalMilliseconds, stats.MoveDelayMilliseconds);
+            Diff("atkMs", monster.AttackDelay.TotalMilliseconds, stats.AttackDelayMilliseconds);
+            Diff("respawnS", monster.RespawnDelay.TotalSeconds, stats.RespawnSeconds);
+            report.AppendLine(CultureInfo.InvariantCulture, $"    {stats.Number} {stats.Name}: {string.Join(", ", parts)}");
+        }
+
         var backups = Path.Combine(Path.GetTempPath(), $"hnmo-import-trial-{Guid.NewGuid():N}");
         var result = await LegacyServerImportEngine.ApplyImportAsync(options, context, config, backups).ConfigureAwait(false);
         report.AppendLine(CultureInfo.InvariantCulture, $"Applied {result.AppliedCount}, skipped {result.SkippedCount}");

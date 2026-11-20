@@ -60,4 +60,16 @@ public sealed class LegacyDropRule
     /// event or chaos-mix reward, an NPC gift. Such rules are rewards of their own and never become monster drops.
     /// </summary>
     public string? RewardBagName { get; set; }
+
+    /// <summary>
+    /// Gets or sets the list the rule comes from (an item bag's file name, "AppointItemDrop" ...): rules of different
+    /// lists are separate drops of the monster, each with its own chance.
+    /// </summary>
+    public string? SourceName { get; set; }
+
+    /// <summary>
+    /// Gets or sets the box the rule is the content of, when it comes from an "Item_(group,number,level)" bag: what a
+    /// player gets on opening (dropping) that box.
+    /// </summary>
+    public (byte Group, short Number, byte Level)? BoxItem { get; set; }
 }

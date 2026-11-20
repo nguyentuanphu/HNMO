@@ -24,6 +24,12 @@ public sealed class LegacyImportPreview
     /// <summary>Gets or sets parsed drop rules.</summary>
     public List<LegacyDropRule> DropRules { get; set; } = [];
 
+    /// <summary>Gets or sets the contents of boxes (Item_(group,number,level) item bags) whose items exist in HNMO.</summary>
+    public List<LegacyDropRule> BoxContents { get; set; } = [];
+
+    /// <summary>Gets or sets the stats of the monsters HNMO has, where they differ from HNMO's.</summary>
+    public List<LegacyMonsterStats> MonsterStats { get; set; } = [];
+
     /// <summary>Gets or sets parsed NPC shop definitions.</summary>
     public List<LegacyShopDefinition> Shops { get; set; } = [];
 

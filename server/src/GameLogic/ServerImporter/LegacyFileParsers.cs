@@ -22,6 +22,9 @@ public static class LegacyFileParsers
     /// <summary>The file name of the item bag a monster drops: "Monster_(275)_Kundun.xml" is monster 275's.</summary>
     private static readonly Regex MonsterBagName = new(@"^Monster_\((\d+)\)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
+    /// <summary>The file name of a box's content: "Item_(14,11,8)_Kundun_Box+1.xml" is item 14:11 +8's.</summary>
+    private static readonly Regex BoxBagName = new(@"^Item_\((\d+),(\d+),(\d+)\)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
     /// <summary>
     /// Detects whether a legacy server folder targets Season 6 or Season 9 based on structural markers.
     /// </summary>
@@ -162,8 +165,28 @@ public static class LegacyFileParsers
             rates.SoulSuccessPercent = ReadPercent(kv, "UseSoulRate") ?? rates.SoulSuccessPercent;
             rates.SoulWithLuckSuccessPercent = ReadPercent(kv, "UseSoulWithLuckRate") ?? rates.SoulWithLuckSuccessPercent;
             rates.LifeSuccessPercent = ReadPercent(kv, "UseLifeRate") ?? rates.LifeSuccessPercent;
+            rates.ItemLuckDropPercent = ReadPercent(kv, "ItemLuckDrop") ?? rates.ItemLuckDropPercent;
+            rates.MaximumLevel = ReadInt(kv, "MaxNormalLevel") ?? rates.MaximumLevel;
+            rates.MaximumMasterLevel = ReadInt(kv, "MaxMasterLevel") ?? rates.MaximumMasterLevel;
+            rates.PkClearCost = ReadInt(kv, "PkClearCost") ?? rates.PkClearCost;
+            rates.GuildCreateLevel = ReadInt(kv, "GuildCreateLevel") ?? rates.GuildCreateLevel;
+            rates.MaximumGuildMembers = ReadInt(kv, "MaxGuildMember") ?? rates.MaximumGuildMembers;
+            for (var size = 2; size <= 5; size++)
+            {
+                if (ReadInt(kv, $"NormalParty{size}ExpBonus") is { } normal)
+                {
+                    rates.PartyExpBonusPercent[size] = normal;
+                }
+
+                if (ReadInt(kv, $"SetParty{size}ExpBonus") is { } set)
+                {
+                    rates.SetPartyExpBonusPercent[size] = set;
+                }
+            }
         }
 
+        ParseZenTable(rootFolder, rates);
+        ParseMapAttributes(rootFolder, rates);
         return rates;
     }
 
@@ -212,6 +235,7 @@ public static class LegacyFileParsers
 
         ParseSetItemDropManagers(rootFolder, results);
         ParseItemBags(rootFolder, results);
+        ParseAppointItemDrops(rootFolder, results);
 
         return results;
     }
@@ -435,6 +459,23 @@ public static class LegacyFileParsers
                 ("Mix14Rate_Normal", "+14"),
                 ("Mix15Rate_Normal", "+15"),
             };
+
+            // [Wings]: the highest success rates of the second wings (crafting 7), Cape of Lord (24), Feather of Condor
+            // (38) and third wings (39). Wing25MixMaxRate is for Season 9 monster wings, which HNMO has not.
+            var maximums = new (string Key, byte Crafting)[]
+            {
+                ("Wing2MixMaxRate", 7),
+                ("CapeOfLordMixMaxRate", 24),
+                ("FeatherOfCondorMaxRate", 38),
+                ("Wing3MixMaxRate", 39),
+            };
+            foreach (var (key, crafting) in maximums)
+            {
+                if (ReadPercent(kv, key) is { } maximum)
+                {
+                    results.Add(new LegacyChaosRateEntry { Key = key, CraftNamePattern = key, SuccessPercent = maximum, MaximumOfCrafting = crafting });
+                }
+            }
 
             foreach (var (key, pattern) in mappings)
             {
@@ -683,6 +724,10 @@ public static class LegacyFileParsers
                 var monsterBag = MonsterBagName.Match(bagFileName);
                 var bagMonster = monsterBag.Success ? int.Parse(monsterBag.Groups[1].Value, CultureInfo.InvariantCulture) : -1;
                 var rewardBag = monsterBag.Success ? null : bagFileName;
+                var boxBag = BoxBagName.Match(bagFileName);
+                (byte, short, byte)? boxItem = boxBag.Success
+                    ? ((byte)int.Parse(boxBag.Groups[1].Value, CultureInfo.InvariantCulture), (short)int.Parse(boxBag.Groups[2].Value, CultureInfo.InvariantCulture), (byte)int.Parse(boxBag.Groups[3].Value, CultureInfo.InvariantCulture))
+                    : null;
                 foreach (var allowEl in doc.Descendants().Where(e => e.Name.LocalName.Equals("DropAllow", StringComparison.OrdinalIgnoreCase)))
                 {
                     var mapNum = ReadIntAttr(allowEl, "MapNumber", -1);
@@ -705,6 +750,8 @@ public static class LegacyFileParsers
                                 // The bag's ItemRate is the chance that the monster drops one item of it at all.
                                 rule.GroupChance = bagRate / 10000.0;
                                 rule.RewardBagName = rewardBag;
+                                rule.SourceName = bagFileName;
+                                rule.BoxItem = boxItem;
                                 results.Add(rule);
                             }
                         }
@@ -714,6 +761,48 @@ public static class LegacyFileParsers
             catch
             {
                 // Ignore malformed optional ItemBag XML file
+            }
+        }
+    }
+
+    /// <summary>
+    /// Reads IGC_AppointItemDrop.xml: monsters that drop items of a drop group, each at DropRate / Denominator
+    /// (per 10,000,000), besides their normal drops.
+    /// </summary>
+    private static void ParseAppointItemDrops(string rootFolder, List<LegacyDropRule> results)
+    {
+        foreach (var file in FindFiles(rootFolder, "*AppointItemDrop*.xml"))
+        {
+            try
+            {
+                var doc = XDocument.Load(file);
+                var groups = doc.Descendants().Where(e => e.Name.LocalName.Equals("DropGroup", StringComparison.OrdinalIgnoreCase))
+                    .GroupBy(g => ReadIntAttr(g, "ID", -1))
+                    .ToDictionary(g => g.Key, g => g.First());
+                foreach (var monster in doc.Descendants().Where(e => e.Name.LocalName.Equals("Monster", StringComparison.OrdinalIgnoreCase)))
+                {
+                    var monsterNumber = ReadIntAttr(monster, "ID", -1);
+                    if (monsterNumber < 0 || !groups.TryGetValue(ReadIntAttr(monster, "DropGroup", -1), out var group))
+                    {
+                        continue;
+                    }
+
+                    var denominator = Math.Max(1.0, ReadIntAttr(group, "Denominator", 10_000_000));
+                    foreach (var itemEl in group.Elements().Where(e => e.Name.LocalName.Equals("Item", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        var chance = Math.Max(0, ReadIntAttr(itemEl, "DropRate", 0)) / denominator;
+                        if (chance > 0 && TryCreateDropRule(itemEl, monsterNumber, 0, 255, -1, chance, forceAncient: false, out var rule))
+                        {
+                            rule.Chance = chance;
+                            rule.SourceName = Path.GetFileName(file);
+                            results.Add(rule);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // Ignore malformed optional XML file
             }
         }
     }
@@ -788,7 +877,11 @@ public static class LegacyFileParsers
             return;
         }
 
-        var parsedTimes = xmlFiles.Select(ReadScheduleTimesFromXml).FirstOrDefault(t => t is not null);
+        // Season 9 keeps the start times in the event's XML (<Start Hour= Minute= />), the Season 6 suite in
+        // Data/Events/<Event>.dat, in the section of "hour minute" lines. They were only read from XML, so Devil Square
+        // and Chaos Castle of the Season 6 suite got made-up times.
+        var parsedTimes = xmlFiles.Select(ReadScheduleTimesFromXml).FirstOrDefault(t => t is not null)
+            ?? ReadScheduleTimesFromDat(rootFolder, eventId);
         events.Add(new LegacyEventScheduleEntry
         {
             EventId = eventId,
@@ -796,7 +889,60 @@ public static class LegacyFileParsers
             IsSeason9Only = false,
             ScheduleTimes = parsedTimes ?? fallbackTimes,
             RewardSummary = rewardSummary,
+            HasRealTimes = parsedTimes is not null,
         });
+    }
+
+    /// <summary>Reads the start times of an event from its Season 6 .dat file (DevilSquare.dat section 4, ChaosCastle.dat section 2, BloodCastle.dat section 4).</summary>
+    private static string? ReadScheduleTimesFromDat(string rootFolder, string eventId)
+    {
+        var (fileName, section) = eventId switch
+        {
+            "imported-devil-square" => ("DevilSquare.dat", 4),
+            "imported-chaos-castle" => ("ChaosCastle.dat", 2),
+            "imported-blood-castle" => ("BloodCastle.dat", 4),
+            _ => (null, -1),
+        };
+        if (fileName is null || FindFiles(rootFolder, fileName).FirstOrDefault() is not { } file)
+        {
+            return null;
+        }
+
+        var current = -1;
+        var times = new List<string>();
+        foreach (var rawLine in File.ReadLines(file))
+        {
+            var line = StripLineComment(rawLine).Trim();
+            if (line.Length == 0)
+            {
+                continue;
+            }
+
+            if (line.Equals("end", StringComparison.OrdinalIgnoreCase))
+            {
+                current = -1;
+                continue;
+            }
+
+            var tokens = line.Split(WhitespaceSeparators, StringSplitOptions.RemoveEmptyEntries);
+            if (current < 0)
+            {
+                if (tokens.Length == 1 && TryParseInt(tokens[0], out var number))
+                {
+                    current = number;
+                }
+
+                continue;
+            }
+
+            if (current == section && tokens.Length >= 2 && TryParseInt(tokens[0], out var hour) && TryParseInt(tokens[1], out var minute)
+                && hour is >= 0 and <= 23 && minute is >= 0 and <= 59)
+            {
+                times.Add($"{hour:D2}:{minute:D2}");
+            }
+        }
+
+        return times.Count > 0 ? string.Join(", ", times.Distinct(StringComparer.Ordinal)) : null;
     }
 
     private static string? ReadScheduleTimesFromXml(string filePath)
@@ -1001,6 +1147,120 @@ public static class LegacyFileParsers
                 .Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
                 .Any(part => part.Equals("Tools", StringComparison.OrdinalIgnoreCase)))
             .OrderBy(p => p, StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>Parses the monsters' stats from the server's MonsterList.xml.</summary>
+    /// <param name="rootFolder">The server root directory.</param>
+    /// <returns>The monsters' stats.</returns>
+    public static List<LegacyMonsterStats> ParseMonsterStats(string rootFolder)
+    {
+        var result = new List<LegacyMonsterStats>();
+        if (!Directory.Exists(rootFolder))
+        {
+            return result;
+        }
+
+        // Season 6: Data/Monster/Settings/MonsterList.xml; Season 9: IGCData/Monsters/IGC_MonsterList.xml.
+        foreach (var file in FindFiles(rootFolder, "*MonsterList.xml"))
+        {
+            try
+            {
+                foreach (var el in XDocument.Load(file).Descendants().Where(e => e.Name.LocalName.Equals("Monster", StringComparison.OrdinalIgnoreCase)))
+                {
+                    var number = ReadIntAttr(el, "Index", -1);
+                    if (number < 0 || result.Any(m => m.Number == number))
+                    {
+                        continue;
+                    }
+
+                    result.Add(new LegacyMonsterStats
+                    {
+                        Number = number,
+                        Name = el.Attribute("Name")?.Value ?? string.Empty,
+                        Level = ReadIntAttr(el, "Level", 0),
+                        Health = ReadIntAttr(el, "HP", 0),
+                        DamageMin = ReadIntAttr(el, "DamageMin", 0),
+                        DamageMax = ReadIntAttr(el, "DamageMax", 0),
+                        Defense = ReadIntAttr(el, "Defense", 0),
+                        AttackRate = ReadIntAttr(el, "AttackRate", 0),
+                        DefenseRate = ReadIntAttr(el, "BlockRate", 0),
+                        MoveRange = ReadIntAttr(el, "MoveRange", 0),
+                        AttackRange = ReadIntAttr(el, "AttackRange", 0),
+                        ViewRange = ReadIntAttr(el, "ViewRange", 0),
+                        MoveDelayMilliseconds = ReadIntAttr(el, "MoveSpeed", 0),
+                        AttackDelayMilliseconds = ReadIntAttr(el, "AttackSpeed", 0),
+                        RespawnSeconds = ReadIntAttr(el, "RegenTime", 0),
+                    });
+                }
+            }
+            catch
+            {
+                // Ignore malformed optional XML file
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>Reads IGC_ZenDrop.xml: the zen a monster drops on each map (when the file is enabled).</summary>
+    private static void ParseZenTable(string rootFolder, LegacyParsedRates rates)
+    {
+        foreach (var file in FindFiles(rootFolder, "*ZenDrop*.xml"))
+        {
+            try
+            {
+                var root = XDocument.Load(file).Root;
+                if (root is null || ReadIntAttr(root, "Enable", 0) == 0)
+                {
+                    continue;
+                }
+
+                rates.ZenTableEnabled = true;
+                rates.ZenTableMultiplyByMonsterLevel = ReadIntAttr(root, "MultiplyByMonsterLevel", 0) != 0;
+                rates.ZenTableMultiplyChancePerTenThousand = Math.Clamp(ReadIntAttr(root, "MultiplyChanceRate", 10000), 0, 10000);
+                foreach (var map in root.Elements().Where(e => e.Name.LocalName.Equals("Map", StringComparison.OrdinalIgnoreCase)))
+                {
+                    var number = ReadIntAttr(map, "Number", -1);
+                    if (number is >= 0 and <= short.MaxValue)
+                    {
+                        var minimum = Math.Max(0, ReadIntAttr(map, "MinMoneyCount", 0));
+                        rates.ZenTable.Add(((short)number, minimum, Math.Max(minimum, ReadIntAttr(map, "MaxMoneyCount", minimum))));
+                    }
+                }
+            }
+            catch
+            {
+                // Ignore malformed optional XML file
+            }
+        }
+    }
+
+    /// <summary>Reads the EXP bonus of the maps from IGC_MapAttribute.xml.</summary>
+    private static void ParseMapAttributes(string rootFolder, LegacyParsedRates rates)
+    {
+        foreach (var file in FindFiles(rootFolder, "*MapAttribute*.xml"))
+        {
+            try
+            {
+                foreach (var map in XDocument.Load(file).Descendants().Where(e => e.Name.LocalName.Equals("Map", StringComparison.OrdinalIgnoreCase)))
+                {
+                    var number = ReadIntAttr(map, "Number", -1);
+                    if (number is >= 0 and <= short.MaxValue && TryReadFloatAttr(map, "ExpBonus", out var bonus) && bonus > 0)
+                    {
+                        rates.MapExpBonuses[(short)number] = bonus;
+                    }
+                }
+            }
+            catch
+            {
+                // Ignore malformed optional XML file
+            }
+        }
+    }
+
+    private static int? ReadInt(Dictionary<string, string> keyValues, string key)
+        => keyValues.TryGetValue(key, out var raw) && int.TryParse(raw, NumberStyles.Integer, CultureInfo.InvariantCulture, out var value)
+            ? value
+            : null;
 
     private static int? ReadPercent(Dictionary<string, string> keyValues, string key)
         => keyValues.TryGetValue(key, out var raw) && int.TryParse(raw, NumberStyles.Integer, CultureInfo.InvariantCulture, out var value)

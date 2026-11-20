@@ -40,6 +40,9 @@ public sealed class LegacyEventScheduleEntry
     /// <summary>Gets or sets how long a bonus window lasts, in minutes (from its StartHour to its EndHour).</summary>
     public int DurationMinutes { get; set; } = 60;
 
+    /// <summary>Gets or sets a value indicating whether the times were read from the server's files (not fallback times).</summary>
+    public bool HasRealTimes { get; set; }
+
     /// <summary>Gets or sets the day of the week a bonus window runs on (0 = Sunday), or -1 for every day.</summary>
     public int DayOfWeek { get; set; } = -1;
 

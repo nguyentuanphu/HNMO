@@ -60,6 +60,31 @@
                        @bind="this._options.MssqlConnectionString" />
             </div>
 
+            <div class="col-md-6">
+                <label class="form-label" for="impSourceZone" title="@L("The time zone the old server ran in. Happy hours and event start times in its files are converted to HNMO's time zone.", "Múi giờ máy chủ cũ đã chạy. Giờ vàng và giờ sự kiện trong file sẽ được đổi sang múi giờ của HNMO.")">
+                    @L("Time zone of the server files", "Múi giờ của file máy chủ")
+                </label>
+                <select id="impSourceZone" class="form-select form-select-sm" @bind="this._options.SourceTimeZone">
+                    <option value="">@L("Same as HNMO (no conversion)", "Giống HNMO (không đổi giờ)")</option>
+                    @foreach (var (id, name) in TimeZoneChoices)
+                    {
+                        <option value="@id">@name</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" for="impTargetZone" title="@L("The time zone HNMO's events and happy hours run in.", "Múi giờ các sự kiện và giờ vàng của HNMO chạy theo.")">
+                    @L("HNMO time zone", "Múi giờ của HNMO")
+                </label>
+                <select id="impTargetZone" class="form-select form-select-sm" @bind="this._options.TargetTimeZone">
+                    <option value="">@L("Default (Sydney)", "Mặc định (Sydney)")</option>
+                    @foreach (var (id, name) in TimeZoneChoices)
+                    {
+                        <option value="@id">@name</option>
+                    }
+                </select>
+            </div>
+
             <div class="col-12">
                 <div class="d-flex flex-wrap gap-3">
                     <div class="form-check">
@@ -85,6 +110,10 @@
                     <div class="form-check">
                         <input id="impSpawns" class="form-check-input" type="checkbox" @bind="this._options.ImportMonsterSpawns" />
                         <label class="form-check-label" for="impSpawns" title="@L("Import NPC, point, and area spawns from MonsterSetBase text files.", "Nhập bãi quái và NPC từ tệp MonsterSetBase.")">@L("Monster Spawns", "Bãi Quái & NPC")</label>
+                    </div>
+                    <div class="form-check">
+                        <input id="impStats" class="form-check-input" type="checkbox" @bind="this._options.ImportMonsterStats" />
+                        <label class="form-check-label" for="impStats" title="@L("Import the monsters' life, damage, defense, rates, ranges, speeds and respawn times from MonsterList.xml where they differ.", "Nhập máu, sát thương, phòng thủ, tỉ lệ, tầm, tốc độ và thời gian hồi sinh của quái từ MonsterList.xml khi khác HNMO.")">@L("Monster Stats", "Chỉ Số Quái")</label>
                     </div>
                     <div class="form-check">
                         <input id="impDb" class="form-check-input" type="checkbox" @bind="this._options.ImportDatabaseEntities" />

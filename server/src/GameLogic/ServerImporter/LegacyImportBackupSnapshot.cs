@@ -52,6 +52,18 @@ public sealed class LegacyImportBackupSnapshot
     /// <summary>Gets or sets the chance of the common excellent item drop group before the import.</summary>
     public double? PreviousExcellentItemDropChance { get; set; }
 
+    /// <summary>Gets or sets the highest character level before the import.</summary>
+    public short? PreviousMaximumLevel { get; set; }
+
+    /// <summary>Gets or sets the highest master level before the import.</summary>
+    public short? PreviousMaximumMasterLevel { get; set; }
+
+    /// <summary>Gets or sets the chance that a dropped item has luck before the import.</summary>
+    public float? PreviousLuckAddChance { get; set; }
+
+    /// <summary>Gets or sets the EXP multipliers of the maps the import changed, before it, by map number.</summary>
+    public Dictionary<short, double> PreviousMapExpMultipliers { get; set; } = [];
+
     /// <summary>Gets or sets the success rates of the chaos machine craftings before the import changed them.</summary>
     public List<BackupCraftingRate> PreviousCraftingRates { get; set; } = [];
 
@@ -63,6 +75,12 @@ public sealed class LegacyImportBackupSnapshot
 
     /// <summary>Gets or sets descriptions of <see cref="HNMO.DataModel.Configuration.DropItemGroup"/> entries created by this import.</summary>
     public List<string> CreatedDropGroupTags { get; set; } = [];
+
+    /// <summary>Gets or sets the stats of the monsters the import changed, before it.</summary>
+    public List<BackupMonsterStats> PreviousMonsterStats { get; set; } = [];
+
+    /// <summary>Gets or sets the descriptions of the box contents (item drop groups of boxes) created by this import.</summary>
+    public List<string> CreatedBoxContentTags { get; set; } = [];
 
     /// <summary>Gets or sets descriptors of <see cref="HNMO.DataModel.Configuration.MonsterSpawnArea"/> entries created by this import.</summary>
     public List<BackupSpawnEntry> CreatedSpawnAreas { get; set; } = [];

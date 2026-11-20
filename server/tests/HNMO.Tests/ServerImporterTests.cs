@@ -457,6 +457,188 @@ public class ServerImporterTests
         });
     }
 
+    /// <summary>
+    /// The per-map zen table, the level limits, the map EXP bonus, the party EXP bonuses, the PK clear cost and the
+    /// guild limits go to their HNMO settings, and the undo puts the configuration values back.
+    /// </summary>
+    [Test]
+    public async Task ZenTableLimitsPartyAndGuildSettingsAreImportedAsync()
+    {
+        Directory.CreateDirectory(Path.Combine(this._tempDir, "Data"));
+        File.WriteAllText(Path.Combine(this._tempDir, "IGC_Common.ini"), "MaxNormalLevel = 400\nMaxMasterLevel = 330\nGuildCreateLevel = 150\nMaxGuildMember = 80\n");
+        File.WriteAllText(Path.Combine(this._tempDir, "Data", "CommonServer.cfg"), "NormalParty2ExpBonus = 160\nNormalParty3ExpBonus = 180\nSetParty3ExpBonus = 230\nPkClearCost = 1000000\n");
+        File.WriteAllText(Path.Combine(this._tempDir, "IGC_ExpSystem.xml"), "<ExpSystem><StaticExp Normal=\"1000\" Master=\"1000\" /></ExpSystem>");
+        File.WriteAllText(Path.Combine(this._tempDir, "IGC_ZenDrop.xml"), "<ZenDropSystem Enable=\"1\" MultiplyByMonsterLevel=\"1\" MultiplyChanceRate=\"5000\"><Map Number=\"0\" MinMoneyCount=\"100\" MaxMoneyCount=\"200\" /></ZenDropSystem>");
+        File.WriteAllText(Path.Combine(this._tempDir, "IGC_MapAttribute.xml"), "<MapAttribute><Map Number=\"0\" ExpBonus=\"2.0\" /></MapAttribute>");
+
+        var context = new InMemoryPersistenceContextProvider().CreateNewContext();
+        var config = CreateSyntheticConfig(context);
+        config.MaximumLevel = 400;
+        config.MaximumMasterLevel = 200;
+        var lorencia = config.Maps.Single();
+        lorencia.ExpMultiplier = 1;
+        var options = new LegacyImportOptions { FolderPath = this._tempDir };
+        var result = await LegacyServerImportEngine.ApplyImportAsync(options, context, config, this._backupDir, new StubDatabaseReader(new LegacyDatabaseSnapshot())).ConfigureAwait(false);
+
+        var tuning = config.PlugInConfigurations.Single(p => p.TypeId == typeof(RateTuningPlugIn).GUID).GetConfiguration<RateTuningConfiguration>(null)!;
+        var guild = config.PlugInConfigurations.Single(p => p.TypeId == typeof(GuildLimitsPlugIn).GUID).GetConfiguration<GuildLimitsConfiguration>(null)!;
+        var pkClear = config.PlugInConfigurations.Single(p => p.TypeId == typeof(HNMO.GameLogic.PlugIns.ChatCommands.PkClearChatCommandPlugIn).GUID)
+            .GetConfiguration<HNMO.GameLogic.PlugIns.ChatCommands.PkClearChatCommandPlugIn.PKClearConfiguration>(null)!;
+        Assert.Multiple(() =>
+        {
+            Assert.That((tuning.ZenTableEnabled, tuning.ZenTableMultiplyByMonsterLevel, tuning.ZenTableMultiplyChancePerTenThousand), Is.EqualTo((true, true, 5000)));
+            Assert.That(tuning.ZenTable.Select(z => (z.MapNumber, z.MinimumZen, z.MaximumZen)), Is.EqualTo(new[] { ((short)0, 100, 200) }));
+            Assert.That(tuning.PartyExpBonuses.Select(p => (p.PartySize, p.ExpPercent, p.DifferentClassesExpPercent)), Is.EqualTo(new[] { (2, 160, 0), (3, 180, 230) }));
+            Assert.That((guild.MinimumCreateLevel, guild.MaximumMembers), Is.EqualTo((150, 80)));
+            Assert.That(pkClear.ZenCostPerKill, Is.EqualTo(1_000_000));
+            Assert.That(config.MaximumMasterLevel, Is.EqualTo((short)200), "master levels above 200 are not applied");
+            Assert.That(lorencia.ExpMultiplier, Is.EqualTo(1.002).Within(1e-6));
+        });
+
+        config.MaximumLevel = 1;
+        Assert.That(await LegacyServerImportEngine.UndoBackupAsync(result.BackupId, this._backupDir, context, config).ConfigureAwait(false), Is.True);
+        Assert.Multiple(() =>
+        {
+            Assert.That(config.MaximumLevel, Is.EqualTo((short)400));
+            Assert.That(lorencia.ExpMultiplier, Is.EqualTo(1.0).Within(1e-9));
+            Assert.That(config.PlugInConfigurations.Any(p => p.TypeId == typeof(GuildLimitsPlugIn).GUID), Is.False);
+        });
+    }
+
+    /// <summary>
+    /// The times in the server's files are in the old server's time zone: with one given, the happy hours are converted
+    /// to the time zone HNMO's bonus events run in, and run on the right weekday.
+    /// </summary>
+    [Test]
+    public async Task BonusWindowTimesAreConvertedBetweenTimeZonesAsync()
+    {
+        File.WriteAllText(
+            Path.Combine(this._tempDir, "IGC_BonusEvent.xml"),
+            "<BonusEvent Enable=\"1\"><Event DayOfWeek=\"5\" StartHour=\"20\" EndHour=\"22\" ExpMultiplier=\"1.5\" ItemDropBonus=\"0\" /></BonusEvent>");
+        var context = new InMemoryPersistenceContextProvider().CreateNewContext();
+        var config = CreateSyntheticConfig(context);
+        var options = new LegacyImportOptions { FolderPath = this._tempDir, SourceTimeZone = "Asia/Ho_Chi_Minh", TargetTimeZone = "Australia/Sydney" };
+        await LegacyServerImportEngine.ApplyImportAsync(options, context, config, this._backupDir, new StubDatabaseReader(new LegacyDatabaseSnapshot())).ConfigureAwait(false);
+
+        var vietnam = TimeZoneInfo.FindSystemTimeZoneById("Asia/Ho_Chi_Minh");
+        var sydney = TimeZoneInfo.FindSystemTimeZoneById("Australia/Sydney");
+        var today = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, vietnam).Date;
+        var expected = TimeZoneInfo.ConvertTime(DateTime.SpecifyKind(today.AddHours(20), DateTimeKind.Unspecified), vietnam, sydney);
+        var expectedDay = (DayOfWeek)((5 + (expected.Date - today).Days + 7) % 7);
+
+        var bonus = config.PlugInConfigurations.Single(p => p.TypeId == typeof(BonusEventsPlugIn).GUID).GetConfiguration<BonusEventsConfiguration>(null)!;
+        var window = bonus.Events.Single();
+        Assert.Multiple(() =>
+        {
+            Assert.That(bonus.TimeZone, Is.EqualTo("Australia/Sydney"));
+            Assert.That(window.StartTimeSydney, Is.EqualTo(expected.ToString("HH:mm", CultureInfo.InvariantCulture)));
+            Assert.That(window.DaysOfWeek, Is.EqualTo(new[] { expectedDay }));
+        });
+    }
+
+    /// <summary>A bonus event runs at its start time in the configured time zone.</summary>
+    [Test]
+    public void BonusEventsRunInTheirTimeZone()
+    {
+        var ev = new BonusEventEntry { StartTimeSydney = "20:00", DurationMinutes = 60 };
+        var vietnam = TimeZoneInfo.FindSystemTimeZoneById("Asia/Ho_Chi_Minh");
+        var eightThirtyInVietnam = new DateTime(2026, 11, 20, 13, 30, 0, DateTimeKind.Utc); // UTC+7
+        Assert.Multiple(() =>
+        {
+            Assert.That(BonusEventsPlugIn.IsWindowActive(ev, eightThirtyInVietnam, zone: vietnam), Is.True);
+            Assert.That(BonusEventsPlugIn.IsWindowActive(ev, eightThirtyInVietnam), Is.False, "it is 00:30 in Sydney");
+        });
+    }
+
+    /// <summary>The Season 6 suite keeps the event start times in Data/Events/*.dat: they become the events' timetables.</summary>
+    [Test]
+    public async Task EventStartTimesFromDatFilesBecomeTheTimetablesAsync()
+    {
+        var events = Path.Combine(this._tempDir, "Data", "Events");
+        Directory.CreateDirectory(events);
+        File.WriteAllText(Path.Combine(this._tempDir, "IGC_DevilSquare.ini"), "[Common]\n");
+        File.WriteAllText(Path.Combine(events, "DevilSquare.dat"), "0\n35 5 20\nend\n1\n0 17 0 7\nend\n4 // start hours\n0 0\n2 0\n4 30\nend\n");
+
+        var context = new InMemoryPersistenceContextProvider().CreateNewContext();
+        var config = CreateSyntheticConfig(context);
+        var options = new LegacyImportOptions { FolderPath = this._tempDir };
+        await LegacyServerImportEngine.ApplyImportAsync(options, context, config, this._backupDir, new StubDatabaseReader(new LegacyDatabaseSnapshot())).ConfigureAwait(false);
+
+        var devilSquare = config.PlugInConfigurations.Single(p => p.TypeId == typeof(HNMO.GameLogic.PlugIns.PeriodicTasks.DevilSquareStartPlugIn).GUID)
+            .GetConfiguration<HNMO.GameLogic.PlugIns.PeriodicTasks.DevilSquareStartConfiguration>(null)!;
+        Assert.That(devilSquare.Timetable, Is.EqualTo(new[] { new TimeOnly(0, 0), new TimeOnly(2, 0), new TimeOnly(4, 30) }));
+    }
+
+    /// <summary>
+    /// A box's item bag ("Item_(14,11,8)_...") becomes what the box gives at that level, unless HNMO fills it already;
+    /// IGC_AppointItemDrop.xml adds a monster's extra drops at DropRate / Denominator.
+    /// </summary>
+    [Test]
+    public async Task BoxContentsAndAppointedDropsAreImportedAsync()
+    {
+        var bags = Path.Combine(this._tempDir, "IGCData", "ItemBags");
+        Directory.CreateDirectory(bags);
+        File.WriteAllText(Path.Combine(bags, "Item_(14,11,8)_Kundun_Box+1.xml"), "<ItemBag><BagConfig ItemRate=\"10000\" /><DropAllow><Drop Rate=\"10000\"><Item Cat=\"0\" Index=\"1\" /></Drop></DropAllow></ItemBag>");
+        File.WriteAllText(
+            Path.Combine(this._tempDir, "IGC_AppointItemDrop.xml"),
+            "<AppointItemDrop><MonsterList><Monster ID=\"2\" DropGroup=\"0\" /></MonsterList><ItemDrop><DropGroup ID=\"0\" Denominator=\"10000000\"><Item Cat=\"0\" Index=\"1\" DropRate=\"5000\" /></DropGroup></ItemDrop></AppointItemDrop>");
+
+        var context = new InMemoryPersistenceContextProvider().CreateNewContext();
+        var config = CreateSyntheticConfig(context);
+        var box = context.CreateNew<ItemDefinition>();
+        box.Group = 14;
+        box.Number = 11;
+        box.Name = new LocalizedString("Box of Kundun");
+        config.Items.Add(box);
+
+        var options = new LegacyImportOptions { FolderPath = this._tempDir };
+        var result = await LegacyServerImportEngine.ApplyImportAsync(options, context, config, this._backupDir, new StubDatabaseReader(new LegacyDatabaseSnapshot())).ConfigureAwait(false);
+
+        var budge = config.Monsters.First(m => m.Number == 2);
+        Assert.Multiple(() =>
+        {
+            Assert.That(box.DropItems.Select(g => (g.SourceItemLevel, g.PossibleItems.Count)), Is.EqualTo(new[] { ((byte)8, 1) }));
+            Assert.That(budge.DropItemGroups.Single().Chance, Is.EqualTo(0.0005).Within(1e-9));
+        });
+
+        Assert.That(await LegacyServerImportEngine.UndoBackupAsync(result.BackupId, this._backupDir, context, config).ConfigureAwait(false), Is.True);
+        Assert.That(box.DropItems, Is.Empty);
+    }
+
+    /// <summary>The monsters' stats from MonsterList.xml replace HNMO's where they differ, and the undo puts them back.</summary>
+    [Test]
+    public async Task MonsterStatsAreImportedAndUndoneAsync()
+    {
+        File.WriteAllText(
+            Path.Combine(this._tempDir, "MonsterList.xml"),
+            "<MonsterList><Monster Index=\"2\" Name=\"Budge Dragon\" Level=\"4\" HP=\"90\" DamageMin=\"10\" DamageMax=\"13\" Defense=\"3\" AttackRate=\"18\" BlockRate=\"3\" MoveRange=\"3\" AttackRange=\"1\" ViewRange=\"4\" MoveSpeed=\"400\" AttackSpeed=\"2000\" RegenTime=\"10\" /></MonsterList>");
+
+        var context = new InMemoryPersistenceContextProvider().CreateNewContext();
+        var config = CreateSyntheticConfig(context);
+        var health = context.CreateNew<AttributeDefinition>();
+        health.Id = Stats.MaximumHealth.Id;
+        health.Designation = Stats.MaximumHealth.Designation;
+        config.Attributes.Add(health);
+        var budge = config.Monsters.First(m => m.Number == 2);
+        var life = context.CreateNew<MonsterAttribute>();
+        life.AttributeDefinition = health;
+        life.Value = 60;
+        budge.Attributes.Add(life);
+
+        var options = new LegacyImportOptions { FolderPath = this._tempDir };
+        var preview = await LegacyServerImportEngine.BuildDryRunPreviewAsync(options, config, new StubDatabaseReader(new LegacyDatabaseSnapshot())).ConfigureAwait(false);
+        var result = await LegacyServerImportEngine.ApplyImportAsync(options, context, config, this._backupDir, new StubDatabaseReader(new LegacyDatabaseSnapshot())).ConfigureAwait(false);
+        Assert.Multiple(() =>
+        {
+            Assert.That(preview.MonsterStats, Has.Count.EqualTo(1));
+            Assert.That(life.Value, Is.EqualTo(90));
+            Assert.That(budge.RespawnDelay, Is.EqualTo(TimeSpan.FromSeconds(10)));
+        });
+
+        Assert.That(await LegacyServerImportEngine.UndoBackupAsync(result.BackupId, this._backupDir, context, config).ConfigureAwait(false), Is.True);
+        Assert.That(life.Value, Is.EqualTo(60));
+    }
+
     private static HNMO.DataModel.Configuration.ItemCrafting.SimpleCraftingSettings AddUpgradeCrafting(HNMO.Persistence.IContext context, MonsterDefinition goblin, byte number, byte successPercent)
     {
         var crafting = context.CreateNew<HNMO.DataModel.Configuration.ItemCrafting.ItemCrafting>();

@@ -18,7 +18,9 @@ using HNMO.DataModel.Configuration.Items;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.PlugIns.ChatCommands;
 using HNMO.GameLogic.PlugIns.GameplayRules;
+using HNMO.GameLogic.PlugIns.PeriodicTasks;
 using HNMO.GameLogic.PlugIns.Timetable;
 using HNMO.Interfaces;
 using HNMO.Persistence;
@@ -35,6 +37,8 @@ public static class LegacyServerImportEngine
     {
         ["+10"] = 3, ["+11"] = 4, ["+12"] = 22, ["+13"] = 23, ["+14"] = 49, ["+15"] = 50,
     };
+
+    private const int MaximumSupportedMasterLevel = 200;
 
     private const int ShopColumns = 8;
 
@@ -140,6 +144,14 @@ public static class LegacyServerImportEngine
             var rewardBags = new SortedDictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             foreach (var d in rawDrops)
             {
+                // A box's content: what a player gets when opening the box.
+                if (d.BoxItem is { } box && itemsByKey.ContainsKey($"{box.Group}:{box.Number}") && itemsByKey.ContainsKey($"{d.ItemGroup}:{d.ItemNumber}")
+                    && d.ElementalAttribute == 0 && !d.CompanionEvolutionGroup.HasValue)
+                {
+                    preview.BoxContents.Add(d);
+                    continue;
+                }
+
                 if (d.RewardBagName is { } bagName)
                 {
                     // Boxes, event and chaos-mix rewards, NPC gifts: not a monster's drop, and not mapped yet.
@@ -184,7 +196,7 @@ public static class LegacyServerImportEngine
                 NameVi = "Danh Sách Rơi Vật Phẩm",
                 MappedCount = mappedDrops,
                 SkippedCount = skippedDrops,
-                Details = [$"{preview.DropRules.Select(d => d.MonsterNumber).Where(m => m >= 0).Distinct().Count()} monsters get their own drops; {rewardBags.Count} reward bags left out"],
+                Details = [$"{preview.DropRules.Select(d => d.MonsterNumber).Where(m => m >= 0).Distinct().Count()} monsters get their own drops; {preview.BoxContents.Select(b => b.BoxItem).Distinct().Count()} boxes get contents; {rewardBags.Count} event, mix and NPC reward bags left out"],
             });
         }
 
@@ -334,6 +346,37 @@ public static class LegacyServerImportEngine
             });
         }
 
+        if (options.ImportMonsterStats)
+        {
+            var allStats = LegacyFileParsers.ParseMonsterStats(options.FolderPath);
+            var unknown = 0;
+            foreach (var stats in allStats)
+            {
+                if (!monstersByNumber.TryGetValue(stats.Number, out var monster))
+                {
+                    unknown++;
+                    continue;
+                }
+
+                if (MonsterStatsDiffer(monster, stats))
+                {
+                    preview.MonsterStats.Add(stats);
+                }
+            }
+
+            if (allStats.Count > 0)
+            {
+                preview.Categories.Add(new LegacyPreviewCategory
+                {
+                    NameEn = "Monster Stats",
+                    NameVi = "Chỉ Số Quái",
+                    MappedCount = preview.MonsterStats.Count,
+                    SkippedCount = unknown,
+                    Details = [$"{preview.MonsterStats.Count} of {allStats.Count - unknown} monsters differ from HNMO's (life, damage, defense, rates, ranges, speeds, respawn); {unknown} are not in HNMO"],
+                });
+            }
+        }
+
         if (options.ImportDatabaseEntities && !string.IsNullOrWhiteSpace(options.MssqlConnectionString) && dbReader is not null)
         {
             var db = await dbReader.ReadAsync(options.MssqlConnectionString, cancellationToken).ConfigureAwait(false);
@@ -431,6 +474,14 @@ public static class LegacyServerImportEngine
         snapshot.PreviousExcellentItemDropChance = CommonDropGroup(config, SpecialItemType.Excellent)?.Chance;
         BackupPlugInConfig(config, typeof(TimetablePlugIn).GUID, snapshot);
         BackupPlugInConfig(config, typeof(BonusEventsPlugIn).GUID, snapshot);
+        BackupPlugInConfig(config, typeof(GuildLimitsPlugIn).GUID, snapshot);
+        BackupPlugInConfig(config, typeof(PkClearChatCommandPlugIn).GUID, snapshot);
+        BackupPlugInConfig(config, typeof(DevilSquareStartPlugIn).GUID, snapshot);
+        BackupPlugInConfig(config, typeof(ChaosCastleStartPlugIn).GUID, snapshot);
+        BackupPlugInConfig(config, typeof(BloodCastleStartPlugIn).GUID, snapshot);
+        snapshot.PreviousMaximumLevel = config.MaximumLevel;
+        snapshot.PreviousMaximumMasterLevel = config.MaximumMasterLevel;
+        snapshot.PreviousLuckAddChance = LuckOptionDefinition(config)?.AddChance;
 
         var monstersByNum = config.Monsters.GroupBy(m => (int)m.Number).ToDictionary(g => g.Key, g => g.First());
         var itemsByKey = config.Items.ToDictionary(i => $"{i.Group}:{i.Number}", StringComparer.Ordinal);
@@ -460,6 +511,11 @@ public static class LegacyServerImportEngine
                                 Level = oldItem.Level,
                                 Durability = oldItem.Durability,
                                 HasSkill = oldItem.HasSkill,
+                                HasLuck = oldItem.ItemOptions.Any(o => o.ItemOption?.OptionType == ItemOptionTypes.Luck),
+                                OptionLevel = (byte)(oldItem.ItemOptions.FirstOrDefault(o => o.ItemOption?.OptionType == ItemOptionTypes.Option)?.Level ?? 0),
+                                ExcellentBits = (byte)oldItem.ItemOptions
+                                    .Where(o => o.ItemOption?.OptionType == ItemOptionTypes.Excellent && o.ItemOption.Number is >= 1 and <= 6)
+                                    .Aggregate(0, (bits, o) => bits | (1 << (o.ItemOption!.Number - 1))),
                             });
                         }
                     }
@@ -494,10 +550,36 @@ public static class LegacyServerImportEngine
             // ZenDropMultipler (IGC_Common.ini) is not a multiplier of all zen: it scales the extra zen of master-level
             // characters (Money += exp / BaseMasterExperience * ZenDropMultipler). It is shown in the preview only.
             // The jewel success rates go to the rate tuning, which has the same settings.
-            if (rates.SoulSuccessPercent.HasValue || rates.LifeSuccessPercent.HasValue)
+            if (rates.SoulSuccessPercent.HasValue || rates.LifeSuccessPercent.HasValue || rates.ZenTableEnabled || rates.PartyExpBonusPercent.Count > 0)
             {
                 var tuning = ReadPlugInConfig<RateTuningConfiguration>(config, typeof(RateTuningPlugIn).GUID) ?? new RateTuningConfiguration();
                 tuning.Enabled = true;
+
+                // IGC_ZenDrop.xml: the zen of a kill is an amount of the map's range (times the monster level, at a
+                // chance), not the gained EXP; HNMO's zen follows the EXP, so with EXP x1000 the zen was x1000 too.
+                if (rates.ZenTableEnabled)
+                {
+                    tuning.ZenTableEnabled = true;
+                    tuning.ZenTableMultiplyByMonsterLevel = rates.ZenTableMultiplyByMonsterLevel;
+                    tuning.ZenTableMultiplyChancePerTenThousand = rates.ZenTableMultiplyChancePerTenThousand;
+                    tuning.ZenTable = rates.ZenTable
+                        .Select(z => new ZenTableEntry { MapNumber = z.MapNumber, MinimumZen = z.Minimum, MaximumZen = z.Maximum })
+                        .ToList();
+                }
+
+                // NormalParty2..5ExpBonus and SetParty3..5ExpBonus: the party's EXP of a kill by its size.
+                if (rates.PartyExpBonusPercent.Count > 0)
+                {
+                    tuning.PartyExpBonuses = rates.PartyExpBonusPercent.OrderBy(p => p.Key)
+                        .Select(p => new PartyExpBonusEntry
+                        {
+                            PartySize = p.Key,
+                            ExpPercent = p.Value,
+                            DifferentClassesExpPercent = rates.SetPartyExpBonusPercent.GetValueOrDefault(p.Key),
+                        })
+                        .ToList();
+                }
+
                 if (rates.SoulSuccessPercent is { } soul)
                 {
                     tuning.OverrideSoulRates = true;
@@ -529,6 +611,68 @@ public static class LegacyServerImportEngine
                 excellentGroup.Chance = excellent / 10000.0;
                 result.AppliedCount++;
             }
+
+            // ItemLuckDrop: the chance that a dropped item has luck (HNMO: 25 %).
+            if (rates.ItemLuckDropPercent is { } luckPercent && LuckOptionDefinition(config) is { } luckDefinition)
+            {
+                luckDefinition.AddChance = luckPercent / 100f;
+                result.AppliedCount++;
+            }
+
+            if (rates.MaximumLevel is int maximumLevel and > 0 and <= short.MaxValue)
+            {
+                config.MaximumLevel = (short)maximumLevel;
+                result.AppliedCount++;
+            }
+
+            // HNMO's master skill tree goes to master level 200 (Season 6); a higher one (Season 9: 330) is kept out.
+            if (rates.MaximumMasterLevel is { } maximumMasterLevel)
+            {
+                if (maximumMasterLevel is > 0 and <= MaximumSupportedMasterLevel)
+                {
+                    config.MaximumMasterLevel = (short)maximumMasterLevel;
+                    result.AppliedCount++;
+                }
+                else
+                {
+                    result.SummaryLines.Add($"MaxMasterLevel {maximumMasterLevel} not applied: HNMO's master levels go to {MaximumSupportedMasterLevel}.");
+                }
+            }
+
+            // IGC_MapAttribute.xml ExpBonus is added to the server's EXP rate on the map (rate 1000 + 2 = x1.002).
+            if (rates.ExperienceRate is float baseRate and > 0)
+            {
+                foreach (var (mapNumber, bonus) in rates.MapExpBonuses)
+                {
+                    foreach (var map in config.Maps.Where(m => m.Number == mapNumber))
+                    {
+                        snapshot.PreviousMapExpMultipliers.TryAdd(map.Number, map.ExpMultiplier);
+                        map.ExpMultiplier = (baseRate + bonus) / baseRate;
+                    }
+                }
+            }
+
+            // PkClearCost: the zen of a PK clear per kill. The plug-in keeps its on/off state (it is on when it has
+            // no settings yet).
+            if (rates.PkClearCost is int pkClearCost and > 0)
+            {
+                var pkClearId = typeof(PkClearChatCommandPlugIn).GUID;
+                var pkClear = ReadPlugInConfig<PkClearChatCommandPlugIn.PKClearConfiguration>(config, pkClearId) ?? new PkClearChatCommandPlugIn.PKClearConfiguration();
+                pkClear.ZenCostPerKill = pkClearCost;
+                WritePlugInConfig(persistenceContext, config, pkClearId, pkClear, activate: config.PlugInConfigurations.All(p => p.TypeId != pkClearId));
+                result.AppliedCount++;
+            }
+
+            if (rates.GuildCreateLevel is > 0 || rates.MaximumGuildMembers is > 0)
+            {
+                var guildLimits = new GuildLimitsConfiguration
+                {
+                    MinimumCreateLevel = Math.Max(0, rates.GuildCreateLevel ?? 0),
+                    MaximumMembers = Math.Max(0, rates.MaximumGuildMembers ?? 0),
+                };
+                WritePlugInConfig(persistenceContext, config, typeof(GuildLimitsPlugIn).GUID, guildLimits, activate: true);
+                result.AppliedCount++;
+            }
         }
 
         if (options.ImportDropLists && preview.DropRules.Count > 0)
@@ -540,11 +684,11 @@ public static class LegacyServerImportEngine
             // (DefaultDropGenerator reads the monster's, the map's and the character's groups), so the imported drops
             // did nothing in game.
             var bagTotals = preview.DropRules.Where(d => d.GroupChance.HasValue)
-                .GroupBy(d => (d.MonsterNumber, d.MapNumber))
+                .GroupBy(d => (d.MonsterNumber, d.MapNumber, d.SourceName))
                 .ToDictionary(g => g.Key, g => g.Sum(d => d.Chance));
-            foreach (var groupSlice in preview.DropRules.GroupBy(d => (d.MonsterNumber, d.MapNumber, d.IsExcellent, d.IsAncient)))
+            foreach (var groupSlice in preview.DropRules.GroupBy(d => (d.MonsterNumber, d.MapNumber, d.IsExcellent, d.IsAncient, d.SourceName)))
             {
-                var (monsterNumber, mapNumber, isExcellent, isAncient) = groupSlice.Key;
+                var (monsterNumber, mapNumber, isExcellent, isAncient, sourceName) = groupSlice.Key;
                 var targetMonster = monsterNumber >= 0 ? monstersByNum.GetValueOrDefault(monsterNumber) : null;
                 var targetMaps = monsterNumber >= 0 ? new List<GameMapDefinition>()
                     : mapNumber >= 0 ? config.Maps.Where(m => m.Number == mapNumber).ToList()
@@ -555,13 +699,14 @@ public static class LegacyServerImportEngine
                     continue;
                 }
 
-                var tag = $"[{backupId}] Imported Drops #{monsterNumber}" + (mapNumber >= 0 ? $" map {mapNumber}" : string.Empty);
+                var tag = $"[{backupId}] Imported Drops #{monsterNumber}" + (mapNumber >= 0 ? $" map {mapNumber}" : string.Empty)
+                    + (sourceName is null ? string.Empty : $" ({sourceName})") + (isExcellent ? " exc" : string.Empty) + (isAncient ? " anc" : string.Empty);
                 var dropGroup = persistenceContext.CreateNew<DropItemGroup>();
                 dropGroup.Description = new LocalizedString(tag);
                 // A bag is split into its normal and its excellent group: each gets its share of the bag's chance, as
                 // each item of the bag has its share; each got the whole chance, so the bag dropped twice as often.
                 var groupChance = groupSlice.Select(x => x.GroupChance).FirstOrDefault(c => c.HasValue) is { } bagChance
-                    ? bagChance * groupSlice.Sum(x => x.Chance) / Math.Max(1e-12, bagTotals.GetValueOrDefault((monsterNumber, mapNumber)))
+                    ? bagChance * groupSlice.Sum(x => x.Chance) / Math.Max(1e-12, bagTotals.GetValueOrDefault((monsterNumber, mapNumber, sourceName)))
                     : groupSlice.Sum(x => x.Chance);
                 dropGroup.Chance = Math.Clamp(groupChance, 0.000001, 1.0);
                 dropGroup.ItemType = isAncient
@@ -593,6 +738,46 @@ public static class LegacyServerImportEngine
 
                 snapshot.CreatedDropGroupTags.Add(tag);
                 result.AppliedCount++;
+            }
+        }
+
+        // Boxes (Item_(group,number,level) bags): what a player gets on opening the box. A box HNMO already fills at
+        // that level keeps HNMO's content; the others get the server's.
+        if (options.ImportDropLists && preview.BoxContents.Count > 0)
+        {
+            var kept = 0;
+            foreach (var box in preview.BoxContents.GroupBy(b => b.BoxItem!.Value))
+            {
+                var boxDefinition = itemsByKey[$"{box.Key.Group}:{box.Key.Number}"];
+                if (boxDefinition.DropItems.Any(g => g.SourceItemLevel == box.Key.Level))
+                {
+                    kept++;
+                    continue;
+                }
+
+                var tag = $"[{backupId}] Imported Box {box.Key.Group}:{box.Key.Number}+{box.Key.Level}";
+                var content = persistenceContext.CreateNew<ItemDropItemGroup>();
+                content.Description = new LocalizedString(tag);
+                content.SourceItemLevel = box.Key.Level;
+                content.Chance = 1.0;
+                content.ItemType = SpecialItemType.None;
+                foreach (var rule in box)
+                {
+                    var item = itemsByKey[$"{rule.ItemGroup}:{rule.ItemNumber}"];
+                    if (!content.PossibleItems.Contains(item))
+                    {
+                        content.PossibleItems.Add(item);
+                    }
+                }
+
+                boxDefinition.DropItems.Add(content);
+                snapshot.CreatedBoxContentTags.Add(tag);
+                result.AppliedCount++;
+            }
+
+            if (kept > 0)
+            {
+                result.SummaryLines.Add($"{kept} boxes keep HNMO's own contents.");
             }
         }
 
@@ -654,6 +839,31 @@ public static class LegacyServerImportEngine
             var applied = 0;
             foreach (var c in preview.ChaosRates)
             {
+                if (c.MaximumOfCrafting is { } maximumOf)
+                {
+                    if (!craftings.TryGetValue(maximumOf, out var capped))
+                    {
+                        result.SkippedCount++;
+                        continue;
+                    }
+
+                    var cappedSettings = capped.SimpleCraftingSettings!;
+                    if (snapshot.PreviousCraftingRates.All(b => b.CraftingNumber != maximumOf))
+                    {
+                        snapshot.PreviousCraftingRates.Add(new BackupCraftingRate
+                        {
+                            CraftingNumber = maximumOf,
+                            SuccessPercent = cappedSettings.SuccessPercent,
+                            LuckBonusPercent = cappedSettings.SuccessPercentageAdditionForLuck,
+                            MaximumSuccessPercent = cappedSettings.MaximumSuccessPercent,
+                        });
+                    }
+
+                    cappedSettings.MaximumSuccessPercent = (byte)Math.Clamp(c.SuccessPercent, 1, 100);
+                    applied++;
+                    continue;
+                }
+
                 // The rate goes to the crafting it is for: the +10..+15 item upgrades are craftings 3, 4, 22, 23, 49
                 // and 50 (VersionSeasonSix/ChaosMixes.cs). They were numbered 10-15 here, which are First Wings,
                 // Dark Horse, Dark Raven and Potion of Bless, so the imported rates changed those instead.
@@ -676,6 +886,7 @@ public static class LegacyServerImportEngine
                         CraftingNumber = recipeNumber,
                         SuccessPercent = settings.SuccessPercent,
                         LuckBonusPercent = settings.SuccessPercentageAdditionForLuck,
+                        MaximumSuccessPercent = settings.MaximumSuccessPercent,
                     });
                 }
 
@@ -710,6 +921,34 @@ public static class LegacyServerImportEngine
 
             WritePlugInConfig(persistenceContext, config, typeof(TimetablePlugIn).GUID, timetable, activate: true);
 
+            // The start times read from the server's files are the events' real timetables; they only went to the
+            // timetable display, so the events kept HNMO's times (every 4 hours).
+            foreach (var ev in preview.EventSchedules.Where(e => e.HasRealTimes))
+            {
+                var times = ConvertTimes(ParseTimes(ev.ScheduleTimes), options);
+                if (times.Count == 0)
+                {
+                    continue;
+                }
+
+                switch (ev.EventId)
+                {
+                    case "imported-devil-square":
+                        SetTimetable(persistenceContext, config, typeof(DevilSquareStartPlugIn).GUID, DevilSquareStartConfiguration.Default, times);
+                        break;
+                    case "imported-chaos-castle":
+                        SetTimetable(persistenceContext, config, typeof(ChaosCastleStartPlugIn).GUID, ChaosCastleStartConfiguration.Default, times);
+                        break;
+                    case "imported-blood-castle":
+                        SetTimetable(persistenceContext, config, typeof(BloodCastleStartPlugIn).GUID, BloodCastleStartConfiguration.Default, times);
+                        break;
+                    default:
+                        continue;
+                }
+
+                result.SummaryLines.Add($"{ev.Name} starts at {string.Join(", ", times.Select(t => t.ToString("HH:mm", CultureInfo.InvariantCulture)))}.");
+            }
+
             // The bonus windows ("happy hours") go to the bonus events, which raise EXP and drops while they run. Those
             // without a map are server-wide (MapNumber null): they went to the timetable, which only shows them, so the
             // servers' four daily two-hour windows of EXP x1.5 did nothing.
@@ -718,21 +957,21 @@ public static class LegacyServerImportEngine
             {
                 var bonusCfg = ReadPlugInConfig<BonusEventsConfiguration>(config, typeof(BonusEventsPlugIn).GUID) ?? new BonusEventsConfiguration();
                 bonusCfg.Enabled = true;
+                if (!string.IsNullOrWhiteSpace(options.SourceTimeZone) && !string.IsNullOrWhiteSpace(options.TargetTimeZone))
+                {
+                    bonusCfg.TimeZone = options.TargetTimeZone;
+                }
                 foreach (var be in bonusEvents)
                 {
-                    if (be.DayOfWeek is >= 0 and <= 6)
-                    {
-                        // HNMO's bonus events run every day.
-                        result.SkippedCount++;
-                        result.SummaryLines.Add($"Bonus window '{be.Name}' at {be.ScheduleTimes} skipped: it runs on one weekday only ({(DayOfWeek)be.DayOfWeek}).");
-                        continue;
-                    }
-
                     // ItemDropBonus is added to the base chance in percentage points (50 % + 15 = 65 %), so it is
                     // 15 / 50 = +30 % of the drops; it was taken as +15 %.
                     var dropBonus = preview.Rates?.ItemDropPercent is int basePercent and > 0
                         ? (int)Math.Round(be.DropBonusPercent * 100.0 / basePercent)
                         : be.DropBonusPercent;
+
+                    var startTime = TimeOnly.TryParseExact(be.ScheduleTimes, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsedStart)
+                        ? ConvertTime(parsedStart, options, bonusCfg.TimeZone) // to the time zone the bonus events run in
+                        : (Time: new TimeOnly(20, 0), DayShift: 0);
 
                     // Importing again replaces the window it imported before instead of adding it a second time, which
                     // stacked the bonuses.
@@ -743,11 +982,12 @@ public static class LegacyServerImportEngine
                         NameEn = be.Name,
                         NameVi = be.Name,
                         MapNumber = be.MapNumber,
-                        StartTimeSydney = be.ScheduleTimes,
+                        StartTimeSydney = startTime.Time.ToString("HH:mm", CultureInfo.InvariantCulture),
                         DurationMinutes = be.DurationMinutes,
                         ExpBonusPercent = be.ExpBonusPercent,
                         ItemDropBonusPercent = dropBonus,
                         ZenDropBonusPercent = 0,
+                        DaysOfWeek = be.DayOfWeek is >= 0 and <= 6 ? [(DayOfWeek)(((be.DayOfWeek + startTime.DayShift) % 7 + 7) % 7)] : [],
                     });
                 }
 
@@ -830,6 +1070,63 @@ public static class LegacyServerImportEngine
                 result.SkippedCount += eventMapSpawns;
                 result.SummaryLines.Add($"{eventMapSpawns} spawns skipped: they are on event maps (Devil Square, Blood Castle ...), whose monsters come with the event.");
             }
+        }
+
+        // MonsterList.xml: the monsters' stats where they differ from HNMO's, each changed monster backed up.
+        foreach (var stats in preview.MonsterStats.Where(_ => options.ImportMonsterStats))
+        {
+            if (!monstersByNum.TryGetValue(stats.Number, out var monster))
+            {
+                continue;
+            }
+
+            var backup = new BackupMonsterStats
+            {
+                Number = monster.Number,
+                MoveRange = monster.MoveRange,
+                AttackRange = monster.AttackRange,
+                ViewRange = monster.ViewRange,
+                MoveDelay = monster.MoveDelay,
+                AttackDelay = monster.AttackDelay,
+                RespawnDelay = monster.RespawnDelay,
+            };
+            foreach (var (stat, value) in MonsterStatTable(stats))
+            {
+                var attribute = monster.Attributes.FirstOrDefault(a => a.AttributeDefinition?.Id == stat.Id);
+                if (attribute is not null)
+                {
+                    backup.Attributes[stat.Id] = attribute.Value;
+                    attribute.Value = value;
+                }
+                else if (config.Attributes.FirstOrDefault(a => a.Id == stat.Id) is { } definition)
+                {
+                    attribute = persistenceContext.CreateNew<MonsterAttribute>();
+                    attribute.AttributeDefinition = definition;
+                    attribute.Value = value;
+                    monster.Attributes.Add(attribute);
+                }
+            }
+
+            monster.MoveRange = (byte)Math.Clamp(stats.MoveRange, 0, 255);
+            monster.AttackRange = (byte)Math.Clamp(stats.AttackRange, 0, 255);
+            monster.ViewRange = (short)Math.Clamp(stats.ViewRange, 0, short.MaxValue);
+            if (stats.MoveDelayMilliseconds > 0)
+            {
+                monster.MoveDelay = TimeSpan.FromMilliseconds(stats.MoveDelayMilliseconds);
+            }
+
+            if (stats.AttackDelayMilliseconds > 0)
+            {
+                monster.AttackDelay = TimeSpan.FromMilliseconds(stats.AttackDelayMilliseconds);
+            }
+
+            if (stats.RespawnSeconds > 0)
+            {
+                monster.RespawnDelay = TimeSpan.FromSeconds(stats.RespawnSeconds);
+            }
+
+            snapshot.PreviousMonsterStats.Add(backup);
+            result.AppliedCount++;
         }
 
         if (options.ImportDatabaseEntities && preview.DatabaseSnapshot is { } db)
@@ -937,6 +1234,21 @@ public static class LegacyServerImportEngine
             {
                 excGroup.Chance = excChance;
             }
+
+            config.MaximumLevel = snapshot.PreviousMaximumLevel ?? config.MaximumLevel;
+            config.MaximumMasterLevel = snapshot.PreviousMaximumMasterLevel ?? config.MaximumMasterLevel;
+            if (snapshot.PreviousLuckAddChance is { } luckChance && LuckOptionDefinition(config) is { } luckDefinition)
+            {
+                luckDefinition.AddChance = luckChance;
+            }
+
+            foreach (var (mapNumber, multiplier) in snapshot.PreviousMapExpMultipliers)
+            {
+                foreach (var map in config.Maps.Where(m => m.Number == mapNumber))
+                {
+                    map.ExpMultiplier = multiplier;
+                }
+            }
         }
 
         foreach (var prevPlugin in snapshot.PreviousPlugIns)
@@ -968,6 +1280,54 @@ public static class LegacyServerImportEngine
                 {
                     crafting.SimpleCraftingSettings!.SuccessPercent = rate.SuccessPercent;
                     crafting.SimpleCraftingSettings.SuccessPercentageAdditionForLuck = rate.LuckBonusPercent;
+                    crafting.SimpleCraftingSettings.MaximumSuccessPercent = rate.MaximumSuccessPercent;
+                }
+            }
+        }
+
+        foreach (var previous in snapshot.PreviousMonsterStats)
+        {
+            if (config.Monsters.FirstOrDefault(m => m.Number == previous.Number) is not { } monster)
+            {
+                continue;
+            }
+
+            monster.MoveRange = previous.MoveRange;
+            monster.AttackRange = previous.AttackRange;
+            monster.ViewRange = previous.ViewRange;
+            monster.MoveDelay = previous.MoveDelay;
+            monster.AttackDelay = previous.AttackDelay;
+            monster.RespawnDelay = previous.RespawnDelay;
+            foreach (var stat in MonsterStatTable(new LegacyMonsterStats()).Select(s => s.Stat.Id))
+            {
+                var attribute = monster.Attributes.FirstOrDefault(a => a.AttributeDefinition?.Id == stat);
+                if (attribute is null)
+                {
+                    continue;
+                }
+
+                if (previous.Attributes.TryGetValue(stat, out var value))
+                {
+                    attribute.Value = value;
+                }
+                else
+                {
+                    // The import added it.
+                    monster.Attributes.Remove(attribute);
+                    await persistenceContext.DeleteAsync(attribute).ConfigureAwait(false);
+                }
+            }
+        }
+
+        var boxTags = snapshot.CreatedBoxContentTags.ToHashSet(StringComparer.Ordinal);
+        if (boxTags.Count > 0)
+        {
+            foreach (var item in config.Items)
+            {
+                foreach (var content in item.DropItems.Where(g => boxTags.Contains(g.Description.ValueInNeutralLanguage)).ToList())
+                {
+                    item.DropItems.Remove(content);
+                    await persistenceContext.DeleteAsync(content).ConfigureAwait(false);
                 }
             }
         }
@@ -1041,6 +1401,7 @@ public static class LegacyServerImportEngine
                 restored.Level = prevItem.Level;
                 restored.Durability = prevItem.Durability;
                 restored.HasSkill = prevItem.HasSkill;
+                AddLegacyOptions(persistenceContext, restored, prevItem.HasLuck, prevItem.OptionLevel, prevItem.ExcellentBits);
                 npc.MerchantStore.Items.Add(restored);
             }
         }
@@ -1279,6 +1640,72 @@ public static class LegacyServerImportEngine
     private static DropItemGroup? CommonDropGroup(GameConfiguration config, SpecialItemType type)
         => config.DropItemGroups.FirstOrDefault(g => g.ItemType == type && g.Monster is null && g.PossibleItems.Count == 0);
 
+    /// <summary>The attributes of a monster the server's MonsterList.xml sets, with their values.</summary>
+    private static IEnumerable<(AttributeDefinition Stat, float Value)> MonsterStatTable(LegacyMonsterStats stats)
+    {
+        yield return (Stats.Level, stats.Level);
+        yield return (Stats.MaximumHealth, stats.Health);
+        yield return (Stats.MinimumPhysBaseDmg, stats.DamageMin);
+        yield return (Stats.MaximumPhysBaseDmg, stats.DamageMax);
+        yield return (Stats.DefenseBase, stats.Defense);
+        yield return (Stats.AttackRatePvm, stats.AttackRate);
+        yield return (Stats.DefenseRatePvm, stats.DefenseRate);
+    }
+
+    private static bool MonsterStatsDiffer(MonsterDefinition monster, LegacyMonsterStats stats)
+        => MonsterStatTable(stats).Any(s => Math.Abs((monster.Attributes.FirstOrDefault(a => a.AttributeDefinition?.Id == s.Stat.Id)?.Value ?? 0) - s.Value) > 0.001f)
+            || monster.MoveRange != stats.MoveRange
+            || monster.AttackRange != stats.AttackRange
+            || monster.ViewRange != stats.ViewRange
+            || (stats.MoveDelayMilliseconds > 0 && (int)monster.MoveDelay.TotalMilliseconds != stats.MoveDelayMilliseconds)
+            || (stats.AttackDelayMilliseconds > 0 && (int)monster.AttackDelay.TotalMilliseconds != stats.AttackDelayMilliseconds)
+            || (stats.RespawnSeconds > 0 && (int)monster.RespawnDelay.TotalSeconds != stats.RespawnSeconds);
+
+    /// <summary>
+    /// Converts a time of day of the legacy server's time zone to the target time zone (both from the options; no
+    /// conversion when the source is not given), as of today. Returns the converted time and how many days it moved
+    /// (-1, 0 or +1), for events on one weekday.
+    /// </summary>
+    private static (TimeOnly Time, int DayShift) ConvertTime(TimeOnly time, LegacyImportOptions options, string? targetZoneId = null)
+    {
+        if (string.IsNullOrWhiteSpace(options.SourceTimeZone))
+        {
+            return (time, 0);
+        }
+
+        var source = HnmoStateStore.ResolveTimeZone(options.SourceTimeZone);
+        var target = HnmoStateStore.ResolveTimeZone(string.IsNullOrWhiteSpace(targetZoneId) ? options.TargetTimeZone : targetZoneId);
+        var today = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, source).Date;
+        var sourceTime = DateTime.SpecifyKind(today + time.ToTimeSpan(), DateTimeKind.Unspecified);
+        var targetTime = TimeZoneInfo.ConvertTime(sourceTime, source, target);
+        return (TimeOnly.FromDateTime(targetTime), (targetTime.Date - today).Days);
+    }
+
+    private static List<TimeOnly> ConvertTimes(IEnumerable<TimeOnly> times, LegacyImportOptions options)
+        => times.Select(t => ConvertTime(t, options).Time).Distinct().Order().ToList();
+
+    private static List<TimeOnly> ParseTimes(string scheduleTimes)
+        => scheduleTimes.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Select(t => TimeOnly.TryParseExact(t, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out var time) ? time : (TimeOnly?)null)
+            .Where(t => t.HasValue)
+            .Select(t => t!.Value)
+            .Distinct()
+            .Order()
+            .ToList();
+
+    /// <summary>Sets the timetable of a mini game's start plug-in, keeping its other settings and its on/off state.</summary>
+    private static void SetTimetable<T>(IContext context, GameConfiguration config, Guid typeId, T defaults, List<TimeOnly> times)
+        where T : PeriodicTaskConfiguration
+    {
+        var settings = ReadPlugInConfig<T>(config, typeId) ?? defaults;
+        settings.Timetable = times;
+        WritePlugInConfig(context, config, typeId, settings, activate: config.PlugInConfigurations.All(p => p.TypeId != typeId));
+    }
+
+    /// <summary>The option definition of luck, whose AddChance is the chance that a dropped item has luck.</summary>
+    private static ItemOptionDefinition? LuckOptionDefinition(GameConfiguration config)
+        => config.ItemOptions.FirstOrDefault(o => o.AddsRandomly && o.PossibleOptions.Count > 0 && o.PossibleOptions.All(p => p.OptionType == ItemOptionTypes.Luck));
+
     private static void BackupPlugInConfig(GameConfiguration config, Guid typeId, LegacyImportBackupSnapshot snapshot)
     {
         var existing = config.PlugInConfigurations.FirstOrDefault(p => p.TypeId == typeId);
@@ -1302,7 +1729,8 @@ public static class LegacyServerImportEngine
 
         try
         {
-            return JsonSerializer.Deserialize<T>(entry.CustomConfiguration);
+            // With the plug-ins' own JSON converters (LocalizedString of the event messages ...), as the server reads them.
+            return entry.GetConfiguration<T>(null);
         }
         catch
         {
@@ -1325,7 +1753,7 @@ public static class LegacyServerImportEngine
             config.PlugInConfigurations.Add(entry);
         }
 
-        entry.CustomConfiguration = JsonSerializer.Serialize(model);
+        entry.SetConfiguration(model, null);
         if (activate)
         {
             entry.IsActive = true;

@@ -23,12 +23,29 @@ suites were imported for real into a fresh Season 6 configuration (in memory,
 | Accounts | Items in inventories and vaults lost luck/option/excellent; 32-byte slots read as 16 | Options kept, slot size detected |
 | Version | S6 suite detected as Season 9 because it has Muun files | Season 6 |
 
-## Still open (not done in this branch)
+## Round 2: the open list, done
 
-1. Per-map zen table (`IGC_ZenDrop.xml`: S6 disabled, S9 Min/Max 100 per map), `IGC_AppointItemDrop.xml` (54 monster drops), `IGC_MonsterItemDropRate.xml`.
-2. Box, event and mix reward bags (Kundun boxes, Blood Castle/Chaos Castle rewards, Lucky Coin): need the item-drop and reward configs, not monster drops.
-3. Real Devil Square / Chaos Castle start times from `Data/Events/*.dat` (fallback times are used and only shown).
-4. Character limits and rules: max level 400, master level 200/330, party EXP bonuses, guild size and creation level, PK settings, VIP rates, map EXP bonuses (`IGC_MapAttribute.xml`).
-5. Monster stats (`MonsterList.xml`), wing/feather/cape chaos rates, item luck drop 50 % (HNMO 25 %).
-6. Weekday-only bonus windows are skipped (HNMO's bonus events run daily); none exist in either suite.
-7. Undo of a shop restores HNMO's old items without their options (backup does not store options).
+| Area | Now |
+|---|---|
+| Zen per map (`IGC_ZenDrop.xml`) | New zen table in the rate tuning: on the listed maps the zen of a kill is Min..Max (x monster level at MultiplyChanceRate) instead of the gained EXP (with EXP x1000, HNMO's zen was x1000 too). S9 has it on (100 x level, 50 %); S6 has it off |
+| `IGC_AppointItemDrop.xml` | Extra monster drops at DropRate / Denominator, as their own groups (their S9 items are not in HNMO, so none apply today) |
+| Box bags `Item_(g,n,l)` | Box contents (`ItemDefinition.DropItems`) where HNMO has none at that level: 1 box gets contents, 29 keep HNMO's |
+| Event, mix and NPC reward bags | Still not imported (Blood Castle / Chaos Castle rewards come from HNMO's mini games) and listed in the preview |
+| Devil Square / Chaos Castle / Blood Castle | Real start times from `Data/Events/*.dat` (S6) or the event XML (S9) are written to the events' timetables |
+| Levels | `MaxNormalLevel` applied; `MaxMasterLevel` above 200 (S9: 330) is kept out, HNMO's master tree stops at 200 |
+| Party EXP | New party EXP table in the rate tuning (`NormalParty2..5ExpBonus`, `SetParty3..5ExpBonus` for different classes) used by the party EXP; empty = HNMO's rule |
+| Guild | New "Guild limits" plug-in: `GuildCreateLevel` 150, `MaxGuildMember` 80 |
+| PK | `PkClearCost` → PK clear command cost; `PKItemDrop = 0` matches HNMO (no item drop on PK death) |
+| Map EXP | `IGC_MapAttribute.xml` ExpBonus → map EXP multiplier ((rate + bonus) / rate) |
+| Luck on drops | `ItemLuckDrop` 50 % → luck option add chance (HNMO 25 %) |
+| Wings | `Wing2MixMaxRate`, `CapeOfLordMixMaxRate`, `FeatherOfCondorMaxRate`, `Wing3MixMaxRate` → maximum rates of craftings 7, 24, 38, 39 |
+| Monster stats | `MonsterList.xml` / `IGC_MonsterList.xml` → level, life, damage, defense, rates, ranges, speeds, respawn where they differ (S6: 287 of 381 monsters HNMO has), with undo |
+| Weekday happy hours | Bonus events can run on chosen weekdays |
+| Shop undo | Restores luck, option and excellent options |
+| Time zones | Bonus events have a time zone setting (default Sydney); the import page asks the old server's time zone and HNMO's, and converts happy hours and event starts (weekday shifted when the day changes) |
+| Plug-in settings | Written and read with the plug-ins' own JSON converters |
+
+## Still open
+
+- Event, mix and NPC reward bags (they belong to HNMO's mini game rewards).
+- Season 9-only items, maps and monsters (Arca, Acheron, elemental spawns, Muun) are skipped by design.

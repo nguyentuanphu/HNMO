@@ -15,4 +15,7 @@ public sealed class BackupCraftingRate
 
     /// <summary>Gets or sets the percent added for an item with luck.</summary>
     public int LuckBonusPercent { get; set; }
+
+    /// <summary>Gets or sets the highest success percent.</summary>
+    public byte MaximumSuccessPercent { get; set; }
 }
