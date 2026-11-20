@@ -12,6 +12,7 @@ using System.Text.Json.Nodes;
 using System.Threading;
 using HNMO.GameLogic;
 using HNMO.Integrity;
+using HNMO.Persistence;
 using NUnit.Framework;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
@@ -186,6 +187,42 @@ public class PlayerLicenseTests
         }
     }
 
+    /// <summary>
+    /// One limit for the whole folder (owner, 2026-11-21): accounts playing in another program (Season 9, the Arena)
+    /// take places too, an account playing elsewhere coming here takes none, and this program publishes its accounts.
+    /// </summary>
+    [Test]
+    [NonParallelizable]
+    public void TheLimitCountsEveryProgramTogether()
+    {
+        var previousShared = ArenaShared.Current;
+        var previousFile = DeveloperHub.StateFile;
+        var shared = new LimitShared { Elsewhere = ["s9player", "arenaplayer"] };
+        ArenaShared.Current = shared;
+        DeveloperHub.StateFile = null;
+        DeveloperHub.ResetMemoryState();
+        DeveloperHub.ChangeState(s => s.GraceStartedUtc = DateTime.UtcNow.AddDays(-DeveloperHub.GraceDays - 1));
+        LicensedPlayerLimit.Reset();
+        LicensedPlayerLimit.Maximum = 3;
+        try
+        {
+            Assert.That(LicensedPlayerLimit.TryAdmit(null!, "home"), Is.True, "2 elsewhere + 1 here = 3");
+            Assert.That(LicensedPlayerLimit.TotalCount, Is.EqualTo(3));
+            Assert.That(LicensedPlayerLimit.TryAdmit(null!, "fourth"), Is.False, "the folder is full");
+            Assert.That(LicensedPlayerLimit.TryAdmit(null!, "ARENAPLAYER"), Is.True, "an account playing elsewhere takes no new place");
+            Assert.That(LicensedPlayerLimit.TotalCount, Is.EqualTo(3));
+            Assert.That(() => shared.Published.Any(p => p.Contains("home")), Is.True.After(5000, 20), "this program publishes its accounts");
+        }
+        finally
+        {
+            ArenaShared.Current = previousShared;
+            LicensedPlayerLimit.Maximum = LicensedPlayerLimit.DefaultMaximum;
+            LicensedPlayerLimit.Reset();
+            DeveloperHub.ResetMemoryState();
+            DeveloperHub.StateFile = previousFile;
+        }
+    }
+
     private byte[] File(string payloadJson)
     {
         var payload = Encoding.UTF8.GetBytes(payloadJson);
@@ -194,6 +231,33 @@ public class PlayerLicenseTests
         signer.BlockUpdate(payload, 0, payload.Length);
         var signature = signer.GenerateSignature();
         return Encoding.UTF8.GetBytes($$"""{"payload":"{{Convert.ToBase64String(payload)}}","signature":"{{Convert.ToBase64String(signature)}}"}""");
+    }
+
+    private sealed class LimitShared : IArenaShared
+    {
+        public IReadOnlyList<string> Elsewhere { get; init; } = [];
+
+        public System.Collections.Concurrent.ConcurrentBag<string[]> Published { get; } = [];
+
+        public int AddPoints(string login, int points, int dailyCap, string dayKey) => points;
+
+        public bool TrySpendPoints(string login, int points) => false;
+
+        public void RefundPoints(string login, int points)
+        {
+        }
+
+        public int GetPoints(string login) => 0;
+
+        public void SetRating(string login, int rating)
+        {
+        }
+
+        public int? GetRating(string login) => null;
+
+        public IReadOnlyList<string> LicensedElsewhere(string season) => this.Elsewhere;
+
+        public void PublishLicensed(string season, IReadOnlyCollection<string> logins) => this.Published.Add(logins.ToArray());
     }
 
     private sealed class RecordingHandler(HttpStatusCode status) : HttpMessageHandler

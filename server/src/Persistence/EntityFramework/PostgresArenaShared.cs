@@ -39,6 +39,11 @@ public sealed class PostgresArenaShared : IArenaShared
             "Season" text NOT NULL,
             "ServerId" integer NOT NULL,
             "UpdatedUtc" timestamp with time zone NOT NULL);
+        CREATE TABLE IF NOT EXISTS data."HnmoLicensedLogin" (
+            "Login" text NOT NULL,
+            "Season" text NOT NULL,
+            "UpdatedUtc" timestamp with time zone NOT NULL,
+            PRIMARY KEY ("Login", "Season"));
         CREATE TABLE IF NOT EXISTS data."HnmoCrossWhisper" (
             "Id" bigserial PRIMARY KEY,
             "From" text NOT NULL,
@@ -302,6 +307,51 @@ public sealed class PostgresArenaShared : IArenaShared
         remove.Parameters.AddWithValue("now", now);
         remove.ExecuteNonQuery();
         transaction.Commit();
+    }
+
+    /// <inheritdoc />
+    public void PublishLicensed(string season, IReadOnlyCollection<string> logins)
+    {
+        using var connection = this.Open();
+        using var transaction = connection.BeginTransaction();
+        var now = DateTime.UtcNow;
+        foreach (var login in logins)
+        {
+            using var upsert = new NpgsqlCommand(
+                """
+                INSERT INTO data."HnmoLicensedLogin" ("Login", "Season", "UpdatedUtc") VALUES (@login, @season, @now)
+                ON CONFLICT ("Login", "Season") DO UPDATE SET "UpdatedUtc" = @now
+                """,
+                connection,
+                transaction);
+            upsert.Parameters.AddWithValue("login", login.Trim().ToLowerInvariant());
+            upsert.Parameters.AddWithValue("season", season);
+            upsert.Parameters.AddWithValue("now", now);
+            upsert.ExecuteNonQuery();
+        }
+
+        using var remove = new NpgsqlCommand("""DELETE FROM data."HnmoLicensedLogin" WHERE "Season" = @season AND "UpdatedUtc" < @now""", connection, transaction);
+        remove.Parameters.AddWithValue("season", season);
+        remove.Parameters.AddWithValue("now", now);
+        remove.ExecuteNonQuery();
+        transaction.Commit();
+    }
+
+    /// <inheritdoc />
+    public IReadOnlyList<string> LicensedElsewhere(string season)
+    {
+        using var connection = this.Open();
+        using var command = new NpgsqlCommand("""SELECT DISTINCT "Login" FROM data."HnmoLicensedLogin" WHERE "Season" <> @season AND "UpdatedUtc" > @since""", connection);
+        command.Parameters.AddWithValue("season", season);
+        command.Parameters.AddWithValue("since", DateTime.UtcNow.AddMinutes(-2));
+        using var reader = command.ExecuteReader();
+        var result = new List<string>();
+        while (reader.Read())
+        {
+            result.Add(reader.GetString(0));
+        }
+
+        return result;
     }
 
     /// <inheritdoc />

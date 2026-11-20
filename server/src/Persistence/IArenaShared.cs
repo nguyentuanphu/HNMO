@@ -88,6 +88,21 @@ public interface IArenaShared
     {
     }
 
+    /// <summary>
+    /// Publishes the accounts which hold a place of the licence's player limit in this program (owner, 2026-11-21: one
+    /// limit for the whole folder, whatever the season); the rows of this program not in the list are removed.
+    /// </summary>
+    /// <param name="season">This program ("s6", "s9" or "arena").</param>
+    /// <param name="logins">The accounts' login names.</param>
+    void PublishLicensed(string season, IReadOnlyCollection<string> logins)
+    {
+    }
+
+    /// <summary>Gets the accounts holding a place of the player limit in the other programs (published in the last two minutes).</summary>
+    /// <param name="season">This program.</param>
+    /// <returns>The login names.</returns>
+    IReadOnlyList<string> LicensedElsewhere(string season) => [];
+
     /// <summary>Gets who plays in the other programs (published in the last two minutes).</summary>
     /// <param name="season">This program.</param>
     /// <returns>The accounts playing elsewhere.</returns>

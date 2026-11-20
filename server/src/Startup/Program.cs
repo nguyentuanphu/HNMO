@@ -988,6 +988,9 @@ internal sealed class Program : IDisposable
 
         // The HNMO Arena's points and ratings, in the shared database: earned in the Arena, spent and shown at home.
         ArenaShared.Current = new PostgresArenaShared(builder.ToString());
+
+        // One player limit for the whole folder (owner, 2026-11-21): every program publishes its accounts there.
+        LicensedPlayerLimit.StartSharing();
         if (!HnmoSeasonInstance.IsSecondary)
         {
             return;

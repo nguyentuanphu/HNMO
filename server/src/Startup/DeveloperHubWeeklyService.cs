@@ -165,7 +165,7 @@ internal sealed class DeveloperHubWeeklyService : BackgroundService
         }
 
         var crashes = CrashWatchStore.ListIncidents(saveDir).Count(i => since is null || i.OccurredAtUtc.UtcDateTime > since);
-        var online = LicensedPlayerLimit.Count;
+        var online = LicensedPlayerLimit.TotalCount;
         var plugins = new JsonArray();
         if (first is not null)
         {
