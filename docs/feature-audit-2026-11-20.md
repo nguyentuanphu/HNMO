@@ -82,3 +82,37 @@ level 80, VIP accounts from level 1.
 
 Keep HNMO: EXP rate 1x; luck on drops 25 %; event timetables; +12 / +14 mix rates; trading harmony and full-excellent items;
 extra vault pages on.
+
+## Setting changes made on 20 Nov (owner's decisions above)
+
+| Change | PR |
+|---|---|
+| Party EXP bonuses of the suites (160-220 %, set party 230-300 %) | [#169](https://github.com/nguyentuanphu/HNMO/pull/169) |
+| Excellent drop 0.2 % | [#170](https://github.com/nguyentuanphu/HNMO/pull/170) |
+| Chaos Castle needs 2 players | [#171](https://github.com/nguyentuanphu/HNMO/pull/171) |
+| Items 20 s / zen 15 s on the ground (new zen setting + migration) | [#172](https://github.com/nguyentuanphu/HNMO/pull/172) |
+| Devil Square 15 players | [#173](https://github.com/nguyentuanphu/HNMO/pull/173) |
+| PK clear 1 M zen per kill | [#174](https://github.com/nguyentuanphu/HNMO/pull/174) |
+| Guild capped at 80 members | [#175](https://github.com/nguyentuanphu/HNMO/pull/175) |
+| Duel hits 60 % for both duelists, with shield too | [#176](https://github.com/nguyentuanphu/HNMO/pull/176) |
+| MU helper from level 80, VIP from level 1 | [#177](https://github.com/nguyentuanphu/HNMO/pull/177) |
+| Happy Hour 4 x 2 h, EXP x1.5, items +15 % | [#178](https://github.com/nguyentuanphu/HNMO/pull/178) |
+
+Not changed yet: NPC jewel prices — the web client computes shop prices itself with the classic client's table (9 M / 45 M / 36 M / 60 M), so a server-only change would show one price and charge another (owner question).
+
+## 9. Social
+
+| Check | Result | Notes |
+|---|---|---|
+| Party size 5, party EXP | OK / changed | Size as the suites; EXP bonuses changed in #169. |
+| Party with a member of the other Gens, party in a battle zone | OK | Both refused by default (as the suites). |
+| Guild creation level 100, alliance of 5 guilds, mixed Gens in guild/alliance | Owner: keep | Suites: 150, 3, not allowed. |
+| Guild size | Changed | Cap 80 (#175); the master's level / 10 is still not a limit (owner). |
+| Alliance needs guilds of at least 10 members | Owner question | The suites have `AllianceMinGuildMember = 10`; HNMO has no minimum. |
+| Disbanding the castle owner guild | **Fixed** | [#179](https://github.com/nguyentuanphu/HNMO/pull/179): it was allowed and left the castle to a guild that no longer exists. |
+| Chat mute and spam guard on /post | **Fixed** | [#180](https://github.com/nguyentuanphu/HNMO/pull/180): chat commands skipped both, so a muted player could post to the whole server. |
+| /post cost and cooldown | Owner question | Suites: 1,000 zen and 5 s; HNMO: free (now only the spam guard). |
+| Letters | OK | 1,000 zen, 50 letters (classic). |
+| Gens: start contribution 10, abuse warning 3 / limit 6 / 60 min, battle zone kills, rank bonuses | OK | As the suites; the "unused settings" scan missed them because they are read inside `GensConfiguration`. |
+| Marriage | Note | HNMO's own system (level 100, 1 M zen, Devias ceremony area, EXP / defense bonus, divorce 2 M); the suites: level 50, 200 zen, no bonus. Kept as an HNMO feature. |
+| Friends list, chat channels | Not checked in depth | |
