@@ -650,6 +650,11 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     public DateTime PotionCooldownUntil { get; set; } = DateTime.UtcNow;
 
     /// <summary>
+    /// Gets the times when the skills with a delay (<see cref="SkillDelays"/>) were used last, by skill number.
+    /// </summary>
+    internal System.Collections.Concurrent.ConcurrentDictionary<short, DateTime> SkillLastUses { get; } = new();
+
+    /// <summary>
     /// Gets or sets the timestamp of when the shield hiatus was last accrued.
     /// </summary>
     public DateTime LastShieldRecoveryHiatusAccrual { get; set; } = DateTime.UtcNow;
@@ -1287,9 +1292,23 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
             return false;
         }
 
+        var now = DateTime.UtcNow;
+        var lastUse = this.SkillLastUses.TryGetValue(skill.Number, out var last) ? last : (DateTime?)null;
+        if (!SkillDelays.HasPassed(skill.Number, lastUse, now))
+        {
+            // The client checks the delay too, so this is a modified client or a macro.
+            this.Logger.LogDebug("Skill {skill} used again before its delay passed by {player}", skill.Number, this);
+            return false;
+        }
+
         foreach (var requirement in skill.ConsumeRequirements)
         {
             this.Attributes![requirement.Attribute] -= this.GetRequiredValue(requirement, skillEntry);
+        }
+
+        if (SkillDelays.GetDelay(skill.Number) > TimeSpan.Zero)
+        {
+            this.SkillLastUses[skill.Number] = now;
         }
 
         return true;
