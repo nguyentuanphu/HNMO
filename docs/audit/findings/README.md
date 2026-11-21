@@ -22,5 +22,6 @@ The suite files themselves are not in the repo; they are on the owner's PC. Task
 | [kundun-refill-texts.json](kundun-refill-texts.json) | Ready translations (4 languages) of the Kundun refill plug-in's settings, for the resource files |
 
 | [status-game-data.md](status-game-data.md) | Game data answers: done (#233 #234 #237 #240 #242 #250-#253), drafts #257 (fixes 4 failing base tests) and #258, not done with reasons |
+| [../data/README.md](../data/README.md) | Raw probe JSON outputs (`probes/skillsweep/`, `probes/mapcheck/`) saved from local audit runs |
 
 All local agents have stopped (owner's instruction, 21 Nov evening).

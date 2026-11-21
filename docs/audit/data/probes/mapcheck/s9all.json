@@ -1,0 +1,8277 @@
+{
+ "season": "s9",
+ "account": "testgm",
+ "started": "2026-11-20T05:05:56.330Z",
+ "maps": [
+  {
+   "map": 0,
+   "name": "Lorencia",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 62,
+      "y": 130
+     },
+     "at": [
+      62,
+      130
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 122,
+      "y": 110
+     },
+     "at": [
+      122,
+      110
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 96,
+      "y": 129
+     },
+     "at": [
+      96,
+      129
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 174,
+      "y": 129
+     },
+     "at": [
+      174,
+      129
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 132,
+      "y": 165
+     },
+     "at": [
+      132,
+      165
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 136,
+      "y": 88
+     },
+     "at": [
+      136,
+      88
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 141,
+      "y": 143
+     },
+     "at": [
+      141,
+      143
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 6,
+      "y": 145
+     },
+     "at": [
+      6,
+      145
+     ],
+     "seen": 0
+    },
+    {
+     "goal": {
+      "x": 146,
+      "y": 110
+     },
+     "at": [
+      146,
+      110
+     ],
+     "seen": 2
+    }
+   ],
+   "monsters": {
+    "0": {
+     "number": 0,
+     "name": "Bull Fighter",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_BULL_FIGHTER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster01.bmd",
+     "meshes": 14,
+     "shown": 13,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      143,
+      86
+     ],
+     "count": 1
+    },
+    "1": {
+     "number": 1,
+     "name": "Hound",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_HOUND",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster02.bmd",
+     "meshes": 3,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      61,
+      130
+     ],
+     "count": 3
+    },
+    "2": {
+     "number": 2,
+     "name": "Budge Dragon",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_BUDGE_DRAGON",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster03.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      145,
+      77
+     ],
+     "count": 1
+    },
+    "3": {
+     "number": 3,
+     "name": "Spider",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_SPIDER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster10.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      174,
+      128
+     ],
+     "count": 1
+    },
+    "4": {
+     "number": 4,
+     "name": "Elite Bull Fighter",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_BULL_FIGHTER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster01.bmd",
+     "meshes": 14,
+     "shown": 14,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      72,
+      139
+     ],
+     "count": 2
+    },
+    "6": {
+     "number": 6,
+     "name": "LIch",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_LICH",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster05.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      134,
+      172
+     ],
+     "count": 2
+    },
+    "14": {
+     "number": 14,
+     "name": "Skeleton",
+     "kind": "monster",
+     "model": "player",
+     "unknown": null,
+     "playerShaped": true,
+     "skin": "Skeleton01.bmd",
+     "body": "player",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      132,
+      174
+     ],
+     "count": 1
+    },
+    "226": {
+     "number": 226,
+     "name": "Trainer",
+     "kind": "npc",
+     "model": "MODEL_NPC_BREEDER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/Breeder.bmd",
+     "meshes": 6,
+     "shown": 6,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      122,
+      110
+     ],
+     "count": 1
+    },
+    "230": {
+     "number": 230,
+     "name": "Wandering Merchant Alex",
+     "kind": "npc",
+     "model": "MODEL_MERCHANT_MAN",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/Man01.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      62,
+      130
+     ],
+     "count": 1
+    },
+    "236": {
+     "number": 236,
+     "name": "Golden Archer",
+     "kind": "npc",
+     "model": "player",
+     "unknown": null,
+     "playerShaped": true,
+     "skin": "Skeleton02.bmd",
+     "body": "player",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      175,
+      120
+     ],
+     "count": 1
+    },
+    "240": {
+     "number": 240,
+     "name": "Safety Guardian",
+     "kind": "npc",
+     "model": "MODEL_STORAGE",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/Storage01.bmd",
+     "meshes": 14,
+     "shown": 13,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      147,
+      145
+     ],
+     "count": 2
+    },
+    "247": {
+     "number": 247,
+     "name": "Guard",
+     "kind": "npc",
+     "model": "player",
+     "unknown": null,
+     "playerShaped": true,
+     "skin": null,
+     "body": "player",
+     "meshes": 9,
+     "shown": 6,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      117,
+      127
+     ],
+     "count": 1
+    },
+    "249": {
+     "number": 249,
+     "name": "Guard",
+     "kind": "npc",
+     "model": "player",
+     "unknown": null,
+     "playerShaped": true,
+     "skin": null,
+     "body": "player",
+     "meshes": 9,
+     "shown": 6,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      94,
+      125
+     ],
+     "count": 5
+    },
+    "250": {
+     "number": 250,
+     "name": "Wandering Merchant",
+     "kind": "npc",
+     "model": "MODEL_MERCHANT_MAN",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/Man01.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      183,
+      137
+     ],
+     "count": 1
+    },
+    "253": {
+     "number": 253,
+     "name": "Potion Girl Amy",
+     "kind": "npc",
+     "model": "MODEL_MERCHANT_GIRL",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/Girl01.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      127,
+      86
+     ],
+     "count": 1
+    },
+    "254": {
+     "number": 254,
+     "name": "Pasi the Mage",
+     "kind": "npc",
+     "model": "MODEL_SCIENTIST",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/Wizard01.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      118,
+      113
+     ],
+     "count": 1
+    },
+    "257": {
+     "number": 257,
+     "name": "Shadow Phantom Soldier",
+     "kind": "npc",
+     "model": "player",
+     "unknown": null,
+     "playerShaped": true,
+     "skin": null,
+     "body": "player",
+     "meshes": 14,
+     "shown": 11,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      96,
+      129
+     ],
+     "count": 4
+    },
+    "371": {
+     "number": 371,
+     "name": "Leo the Helper",
+     "kind": "npc",
+     "model": "player",
+     "unknown": null,
+     "playerShaped": true,
+     "skin": null,
+     "body": "player",
+     "meshes": 9,
+     "shown": 6,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      130,
+      126
+     ],
+     "count": 2
+    },
+    "375": {
+     "number": 375,
+     "name": "Chaos Card Master",
+     "kind": "npc",
+     "model": "player",
+     "unknown": null,
+     "playerShaped": true,
+     "skin": null,
+     "body": "player",
+     "meshes": 8,
+     "shown": 8,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      132,
+      161
+     ],
+     "count": 1
+    },
+    "543": {
+     "number": 543,
+     "name": "Gens Duprian Steward",
+     "kind": "npc",
+     "model": "MODAL_GENS_NPC_DUPRIAN",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/duprian.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      141,
+      143
+     ],
+     "count": 1
+    },
+    "547": {
+     "number": 547,
+     "name": "Market Union Member Julia",
+     "kind": "npc",
+     "model": "MODEL_UNITEDMARKETPLACE_JULIA",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/UnitedMarkedPlace_julia.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      139,
+      138
+     ],
+     "count": 1
+    }
+   },
+   "objects": {
+    "worldFolder": "World1",
+    "placed": 2797,
+    "types": 109,
+    "skippedTypes": []
+   },
+   "http": [
+    "404 /data/s9/Skill/Swordeff_mono.jpg",
+    "404 /data/s9/Skill/grandmark2.jpg",
+    "404 /data/s9/Skill/lines2.jpg",
+    "404 /data/s9/Skill/grandmark.jpg",
+    "404 /data/s9/Skill/JointSpirit03.TGA",
+    "404 /data/s9/Skill/Shockwave.jpg",
+    "404 /data/s9/Skill/shockwave.jpg",
+    "404 /data/s9/Skill/firehik02.JPG",
+    "404 /data/s9/Skill/flamestani.jpg",
+    "404 /data/s9/Skill/Chrome01.jpg",
+    "404 /data/s9/Skill/testmsop.jpg",
+    "404 /data/s9/Skill/monolines.jpg",
+    "404 /data/s9/Skill/Damage1mono.jpg",
+    "404 /data/s9/Skill/Damage2.jpg",
+    "404 /data/s9/Skill/Damage1.JPG",
+    "404 /data/s9/Skill/Damage1.jpg",
+    "404 /data/s9/Skill/volcano_of_stone.TGA",
+    "404 /data/s9/Skill/volcano_stone.jpg",
+    "404 /data/s9/Skill/volcano_core.jpg",
+    "404 /data/s9/Skill/blur02.jpg",
+    "404 /data/s9/Skill/flare.jpg",
+    "404 /data/s9/Skill/Kwave.jpg",
+    "404 /data/s9/Skill/Kwave2.jpg",
+    "404 /data/s9/Skill/ground_wind.jpg",
+    "404 /data/s9/Skill/magic_ground1.jpg",
+    "404 /data/s9/Skill/shiny05.jpg"
+   ],
+   "ktx2Misses": 80,
+   "console": [],
+   "pageErrors": [],
+   "shot": "000-lorencia.jpg"
+  },
+  {
+   "map": 1,
+   "name": "Dungeon",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 42,
+      "y": 122
+     },
+     "at": [
+      43,
+      122
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 4,
+      "y": 73
+     },
+     "at": [
+      4,
+      74
+     ],
+     "seen": 3
+    },
+    {
+     "goal": {
+      "x": 108,
+      "y": 9
+     },
+     "at": [
+      108,
+      9
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 120,
+      "y": 232
+     },
+     "at": [
+      120,
+      232
+     ],
+     "seen": 7
+    },
+    {
+     "goal": {
+      "x": 98,
+      "y": 221
+     },
+     "at": [
+      98,
+      221
+     ],
+     "seen": 8
+    },
+    {
+     "goal": {
+      "x": 65,
+      "y": 205
+     },
+     "at": [
+      65,
+      205
+     ],
+     "seen": 8
+    },
+    {
+     "goal": {
+      "x": 84,
+      "y": 244
+     },
+     "at": [
+      84,
+      244
+     ],
+     "seen": 2
+    },
+    {
+     "goal": {
+      "x": 61,
+      "y": 169
+     },
+     "at": [
+      61,
+      169
+     ],
+     "seen": 6
+    },
+    {
+     "goal": {
+      "x": 108,
+      "y": 195
+     },
+     "at": [
+      108,
+      195
+     ],
+     "seen": 4
+    }
+   ],
+   "monsters": {
+    "8": {
+     "number": 8,
+     "name": "Poison Bull Fighter",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_BULL_FIGHTER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster01.bmd",
+     "meshes": 14,
+     "shown": 14,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      26,
+      114
+     ],
+     "count": 5
+    },
+    "9": {
+     "number": 9,
+     "name": "Thunder Lich",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_LICH",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster05.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      39,
+      119
+     ],
+     "count": 3
+    },
+    "11": {
+     "number": 11,
+     "name": "Ghost",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_GHOST",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster08.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 2,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      122,
+      218
+     ],
+     "count": 7
+    },
+    "12": {
+     "number": 12,
+     "name": "Larva",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_LARVA",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster07.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      130,
+      240
+     ],
+     "count": 6
+    },
+    "14": {
+     "number": 14,
+     "name": "Skeleton",
+     "kind": "monster",
+     "model": "player",
+     "unknown": null,
+     "playerShaped": true,
+     "skin": "Skeleton01.bmd",
+     "body": "player",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      105,
+      235
+     ],
+     "count": 16
+    },
+    "15": {
+     "number": 15,
+     "name": "Skeleton Archer",
+     "kind": "monster",
+     "model": "player",
+     "unknown": null,
+     "playerShaped": true,
+     "skin": "Skeleton02.bmd",
+     "body": "player",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      61,
+      169
+     ],
+     "count": 1
+    },
+    "16": {
+     "number": 16,
+     "name": "Chief Skeleton Warrior",
+     "kind": "monster",
+     "model": "player",
+     "unknown": null,
+     "playerShaped": true,
+     "skin": "Skeleton03.bmd",
+     "body": "player",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      108,
+      9
+     ],
+     "count": 3
+    },
+    "17": {
+     "number": 17,
+     "name": "Cyclops",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_CYCLOPS",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster11.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      128,
+      231
+     ],
+     "count": 3
+    },
+    "101": {
+     "number": 101,
+     "name": "Iron Stick",
+     "kind": "trap",
+     "model": "mapObject 40",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Object2/Object41.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      48,
+      193
+     ],
+     "count": 2
+    }
+   },
+   "objects": {
+    "worldFolder": "World2",
+    "placed": 4499,
+    "types": 62,
+    "skippedTypes": []
+   },
+   "http": [],
+   "ktx2Misses": 55,
+   "console": [],
+   "pageErrors": [],
+   "shot": "001-dungeon.jpg"
+  },
+  {
+   "map": 2,
+   "name": "Devias",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 233,
+      "y": 66
+     },
+     "at": [
+      233,
+      66
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 181,
+      "y": 35
+     },
+     "at": [
+      181,
+      35
+     ],
+     "seen": 6
+    },
+    {
+     "goal": {
+      "x": 197,
+      "y": 53
+     },
+     "at": [
+      197,
+      53
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 193,
+      "y": 13
+     },
+     "at": [
+      193,
+      13
+     ],
+     "seen": 2
+    },
+    {
+     "goal": {
+      "x": 229,
+      "y": 221
+     },
+     "at": [
+      229,
+      221
+     ],
+     "seen": 2
+    },
+    {
+     "goal": {
+      "x": 13,
+      "y": 28
+     },
+     "at": [
+      13,
+      28
+     ],
+     "seen": 1
+    },
+    {
+     "goal": {
+      "x": 217,
+      "y": 29
+     },
+     "at": [
+      210,
+      45
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 208,
+      "y": 140
+     },
+     "at": [
+      212,
+      42
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 108,
+      "y": 125
+     },
+     "at": [
+      108,
+      125
+     ],
+     "seen": 4
+    }
+   ],
+   "monsters": {
+    "19": {
+     "number": 19,
+     "name": "Yeti",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_YETI",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster13.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      110,
+      123
+     ],
+     "count": 2
+    },
+    "20": {
+     "number": 20,
+     "name": "Elite Yeti",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_ELITE_YETI",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster14.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      239,
+      209
+     ],
+     "count": 2
+    },
+    "22": {
+     "number": 22,
+     "name": "Ice Monster",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_ICE_MONSTER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster16.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": true,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      114,
+      132
+     ],
+     "count": 1
+    },
+    "233": {
+     "number": 233,
+     "name": "Messenger of Archangel",
+     "kind": "npc",
+     "model": "MODEL_NPC_ARCHANGEL_MESSENGER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/BloodCastle02.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      217,
+      29
+     ],
+     "count": 1
+    },
+    "235": {
+     "number": 235,
+     "name": "Sebina the Priest",
+     "kind": "npc",
+     "model": "MODEL_NPC_SEVINA",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/Sevina01.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      183,
+      32
+     ],
+     "count": 1
+    },
+    "240": {
+     "number": 240,
+     "name": "Safety Guardian",
+     "kind": "npc",
+     "model": "MODEL_STORAGE",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/Storage01.bmd",
+     "meshes": 14,
+     "shown": 13,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      218,
+      63
+     ],
+     "count": 2
+    },
+    "241": {
+     "number": 241,
+     "name": "Royal Guard Captain Lorence",
+     "kind": "npc",
+     "model": "MODEL_MASTER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/Master01.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      215,
+      45
+     ],
+     "count": 3
+    },
+    "244": {
+     "number": 244,
+     "name": "Caren the Barmaid",
+     "kind": "npc",
+     "model": "MODEL_SNOW_MERCHANT",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/SnowMerchant01.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      226,
+      25
+     ],
+     "count": 1
+    },
+    "245": {
+     "number": 245,
+     "name": "Wizard Izabel",
+     "kind": "npc",
+     "model": "MODEL_SNOW_WIZARD",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/SnowWizard01.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      225,
+      41
+     ],
+     "count": 1
+    },
+    "246": {
+     "number": 246,
+     "name": "Weapons Merchant Zienna",
+     "kind": "npc",
+     "model": "MODEL_SNOW_SMITH",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/SnowSmith01.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      186,
+      47
+     ],
+     "count": 2
+    },
+    "247": {
+     "number": 247,
+     "name": "Guard",
+     "kind": "npc",
+     "model": "player",
+     "unknown": null,
+     "playerShaped": true,
+     "skin": null,
+     "body": "player",
+     "meshes": 9,
+     "shown": 6,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      219,
+      79
+     ],
+     "count": 4
+    },
+    "256": {
+     "number": 256,
+     "name": "Lahap",
+     "kind": "npc",
+     "model": "MODEL_NPC_SERBIS",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/npc_mulyak.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      193,
+      13
+     ],
+     "count": 1
+    },
+    "257": {
+     "number": 257,
+     "name": "Shadow Phantom Soldier",
+     "kind": "npc",
+     "model": "player",
+     "unknown": null,
+     "playerShaped": true,
+     "skin": null,
+     "body": "player",
+     "meshes": 14,
+     "shown": 11,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      219,
+      76
+     ],
+     "count": 1
+    },
+    "379": {
+     "number": 379,
+     "name": "Natasha the Firecracker Merchant",
+     "kind": "npc",
+     "model": "MODEL_WEDDING_NPC",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/Wedding.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      13,
+      28
+     ],
+     "count": 1
+    },
+    "385": {
+     "number": 385,
+     "name": "Mirage",
+     "kind": "npc",
+     "model": "MODEL_CURSEDTEMPLE_ENTER_NPC",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/mirazu.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      197,
+      53
+     ],
+     "count": 2
+    },
+    "406": {
+     "number": 406,
+     "name": "Apostle Devin",
+     "kind": "npc",
+     "model": "MODEL_NPC_DEVIN",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/devin.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      181,
+      35
+     ],
+     "count": 1
+    },
+    "478": {
+     "number": 478,
+     "name": "Delgado",
+     "kind": "npc",
+     "model": "MODEL_NPC_SERBIS",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/npc_mulyak.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      191,
+      17
+     ],
+     "count": 2
+    },
+    "522": {
+     "number": 522,
+     "name": "Jerint the Assistant",
+     "kind": "npc",
+     "model": "MONSTER_MODEL_JERRY",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster166.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      229,
+      221
+     ],
+     "count": 1
+    },
+    "540": {
+     "number": 540,
+     "name": "Lugard",
+     "kind": "npc",
+     "model": "MODEL_DOPPELGANGER_NPC_LUGARD",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/Lugard.bmd",
+     "meshes": 6,
+     "shown": 6,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      233,
+      66
+     ],
+     "count": 1
+    },
+    "566": {
+     "number": 566,
+     "name": "Mercenary Guild Manager Tercia",
+     "kind": "npc",
+     "model": "MODEL_TERSIA",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/tersia.bmd",
+     "meshes": 6,
+     "shown": 6,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      204,
+      61
+     ],
+     "count": 2
+    }
+   },
+   "objects": {
+    "worldFolder": "World3",
+    "placed": 2246,
+    "types": 105,
+    "skippedTypes": []
+   },
+   "http": [],
+   "ktx2Misses": 153,
+   "console": [],
+   "pageErrors": [],
+   "shot": "002-devias.jpg"
+  },
+  {
+   "map": 3,
+   "name": "Noria",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 187,
+      "y": 125
+     },
+     "at": [
+      187,
+      125
+     ],
+     "seen": 6
+    },
+    {
+     "goal": {
+      "x": 169,
+      "y": 88
+     },
+     "at": [
+      169,
+      88
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 132,
+      "y": 114
+     },
+     "at": [
+      132,
+      114
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 192,
+      "y": 180
+     },
+     "at": [
+      192,
+      180
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 191,
+      "y": 58
+     },
+     "at": [
+      191,
+      58
+     ],
+     "seen": 15
+    },
+    {
+     "goal": {
+      "x": 177,
+      "y": 22
+     },
+     "at": [
+      177,
+      22
+     ],
+     "seen": 6
+    },
+    {
+     "goal": {
+      "x": 94,
+      "y": 56
+     },
+     "at": [
+      94,
+      56
+     ],
+     "seen": 9
+    },
+    {
+     "goal": {
+      "x": 35,
+      "y": 90
+     },
+     "at": [
+      35,
+      90
+     ],
+     "seen": 1
+    },
+    {
+     "goal": {
+      "x": 74,
+      "y": 144
+     },
+     "at": [
+      74,
+      144
+     ],
+     "seen": 4
+    }
+   ],
+   "monsters": {
+    "3": {
+     "number": 3,
+     "name": "Spider",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_SPIDER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster10.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      182,
+      137
+     ],
+     "count": 4
+    },
+    "26": {
+     "number": 26,
+     "name": "Goblin",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_GOBLIN",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster20.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      192,
+      179
+     ],
+     "count": 7
+    },
+    "27": {
+     "number": 27,
+     "name": "Chain Scorpion",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_CHAIN_SCORPION",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster21.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      124,
+      122
+     ],
+     "count": 15
+    },
+    "28": {
+     "number": 28,
+     "name": "Beetle Monster",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_BEETLE_MONSTER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster22.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      167,
+      12
+     ],
+     "count": 4
+    },
+    "29": {
+     "number": 29,
+     "name": "Hunter",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_HUNTER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster23.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      160,
+      24
+     ],
+     "count": 8
+    },
+    "30": {
+     "number": 30,
+     "name": "Forest Monster",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_FOREST_MONSTER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster24.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      74,
+      133
+     ],
+     "count": 1
+    },
+    "31": {
+     "number": 31,
+     "name": "Agon",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_AGON",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster25.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      18,
+      80
+     ],
+     "count": 4
+    },
+    "33": {
+     "number": 33,
+     "name": "Elite Goblin",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_GOBLIN",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster20.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      176,
+      21
+     ],
+     "count": 3
+    },
+    "229": {
+     "number": 229,
+     "name": "Marlon",
+     "kind": "npc",
+     "model": "player",
+     "unknown": null,
+     "playerShaped": true,
+     "skin": null,
+     "body": "player",
+     "meshes": 9,
+     "shown": 6,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      169,
+      88
+     ],
+     "count": 1
+    },
+    "238": {
+     "number": 238,
+     "name": "Chaos Goblin",
+     "kind": "npc",
+     "model": "MODEL_MIX_NPC",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/MixNpc01.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      180,
+      103
+     ],
+     "count": 1
+    },
+    "240": {
+     "number": 240,
+     "name": "Safety Guardian",
+     "kind": "npc",
+     "model": "MODEL_STORAGE",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/Storage01.bmd",
+     "meshes": 14,
+     "shown": 13,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      172,
+      96
+     ],
+     "count": 1
+    },
+    "242": {
+     "number": 242,
+     "name": "Elf Lala",
+     "kind": "npc",
+     "model": "MODEL_ELF_WIZARD",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/ElfWizard01.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      173,
+      125
+     ],
+     "count": 1
+    },
+    "243": {
+     "number": 243,
+     "name": "Eo the Craftsman",
+     "kind": "npc",
+     "model": "MODEL_ELF_MERCHANT",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/ElfMerchant01.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      195,
+      124
+     ],
+     "count": 1
+    },
+    "450": {
+     "number": 450,
+     "name": "Cherry Blossom Spirit",
+     "kind": "npc",
+     "model": "MODEL_NPC_CHERRYBLOSSOM",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/cherryblossom/cherry_blossom.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      179,
+      126
+     ],
+     "count": 1
+    },
+    "451": {
+     "number": 451,
+     "name": "Cherry Blossom Tree",
+     "kind": "other",
+     "model": "MODEL_NPC_CHERRYBLOSSOMTREE",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/cherryblossom/sakuratree.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      179,
+      129
+     ],
+     "count": 1
+    },
+    "544": {
+     "number": 544,
+     "name": "Gens Vanert Steward",
+     "kind": "npc",
+     "model": "MODAL_GENS_NPC_BARNERT",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/barnert.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      187,
+      125
+     ],
+     "count": 1
+    }
+   },
+   "objects": {
+    "worldFolder": "World4",
+    "placed": 10139,
+    "types": 40,
+    "skippedTypes": []
+   },
+   "http": [
+    "404 /data/s9/World4/TileGrass02.jpg",
+    "404 /data/s9/Skill/Swordeff_mono.jpg",
+    "404 /data/s9/Skill/grandmark2.jpg",
+    "404 /data/s9/Skill/lines2.jpg",
+    "404 /data/s9/Skill/grandmark.jpg",
+    "404 /data/s9/Skill/JointSpirit03.TGA",
+    "404 /data/s9/Skill/Shockwave.jpg",
+    "404 /data/s9/Skill/shockwave.jpg",
+    "404 /data/s9/Skill/firehik02.JPG",
+    "404 /data/s9/Skill/flamestani.jpg",
+    "404 /data/s9/Skill/Chrome01.jpg",
+    "404 /data/s9/Skill/testmsop.jpg",
+    "404 /data/s9/Skill/monolines.jpg",
+    "404 /data/s9/Skill/Damage1mono.jpg",
+    "404 /data/s9/Skill/Damage2.jpg",
+    "404 /data/s9/Skill/Damage1.JPG",
+    "404 /data/s9/Skill/Damage1.jpg",
+    "404 /data/s9/Skill/volcano_of_stone.TGA",
+    "404 /data/s9/Skill/volcano_stone.jpg",
+    "404 /data/s9/Skill/volcano_core.jpg",
+    "404 /data/s9/Skill/blur02.jpg",
+    "404 /data/s9/Skill/flare.jpg",
+    "404 /data/s9/Skill/Kwave.jpg",
+    "404 /data/s9/Skill/Kwave2.jpg",
+    "404 /data/s9/Skill/ground_wind.jpg",
+    "404 /data/s9/Skill/magic_ground1.jpg",
+    "404 /data/s9/Skill/shiny05.jpg"
+   ],
+   "ktx2Misses": 143,
+   "console": [],
+   "pageErrors": [],
+   "shot": "003-noria.jpg"
+  },
+  {
+   "map": 4,
+   "name": "Lost Tower",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 207,
+      "y": 76
+     },
+     "at": [
+      207,
+      76
+     ],
+     "seen": 11
+    },
+    {
+     "goal": {
+      "x": 6,
+      "y": 98
+     },
+     "at": [
+      6,
+      98
+     ],
+     "seen": 12
+    },
+    {
+     "goal": {
+      "x": 193,
+      "y": 239
+     },
+     "at": [
+      193,
+      239
+     ],
+     "seen": 10
+    },
+    {
+     "goal": {
+      "x": 191,
+      "y": 131
+     },
+     "at": [
+      191,
+      131
+     ],
+     "seen": 6
+    },
+    {
+     "goal": {
+      "x": 164,
+      "y": 29
+     },
+     "at": [
+      164,
+      29
+     ],
+     "seen": 3
+    },
+    {
+     "goal": {
+      "x": 164,
+      "y": 63
+     },
+     "at": [
+      164,
+      63
+     ],
+     "seen": 2
+    },
+    {
+     "goal": {
+      "x": 195,
+      "y": 40
+     },
+     "at": [
+      195,
+      40
+     ],
+     "seen": 11
+    },
+    {
+     "goal": {
+      "x": 244,
+      "y": 72
+     },
+     "at": [
+      244,
+      72
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 244,
+      "y": 100
+     },
+     "at": [
+      244,
+      100
+     ],
+     "seen": 7
+    }
+   ],
+   "monsters": {
+    "34": {
+     "number": 34,
+     "name": "Cursed Wizard",
+     "kind": "monster",
+     "model": "player",
+     "unknown": null,
+     "playerShaped": true,
+     "skin": null,
+     "body": "player",
+     "meshes": 11,
+     "shown": 7,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      198,
+      226
+     ],
+     "count": 3
+    },
+    "35": {
+     "number": 35,
+     "name": "Death Gorgon",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_GORGON",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster12.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      5,
+      98
+     ],
+     "count": 3
+    },
+    "36": {
+     "number": 36,
+     "name": "Shadow",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_SHADOW",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster29.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      195,
+      64
+     ],
+     "count": 29
+    },
+    "39": {
+     "number": 39,
+     "name": "Poison Shadow",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_SHADOW",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster29.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      220,
+      81
+     ],
+     "count": 16
+    },
+    "40": {
+     "number": 40,
+     "name": "Death Knight",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_DEATH_KNIGHT",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster30.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      6,
+      98
+     ],
+     "count": 9
+    },
+    "103": {
+     "number": 103,
+     "name": "Meteorite",
+     "kind": "trap",
+     "model": "mapObject 25",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Object5/Object26.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      202,
+      45
+     ],
+     "count": 4
+    },
+    "240": {
+     "number": 240,
+     "name": "Safety Guardian",
+     "kind": "npc",
+     "model": "MODEL_STORAGE",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/Storage01.bmd",
+     "meshes": 14,
+     "shown": 13,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      201,
+      76
+     ],
+     "count": 1
+    },
+    "253": {
+     "number": 253,
+     "name": "Potion Girl Amy",
+     "kind": "npc",
+     "model": "MODEL_MERCHANT_GIRL",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/Girl01.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      207,
+      76
+     ],
+     "count": 1
+    }
+   },
+   "objects": {
+    "worldFolder": "World5",
+    "placed": 5381,
+    "types": 39,
+    "skippedTypes": []
+   },
+   "http": [],
+   "ktx2Misses": 42,
+   "console": [],
+   "pageErrors": [],
+   "shot": "004-lost-tower.jpg"
+  },
+  {
+   "map": 6,
+   "name": "Arena",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 58,
+      "y": 140
+     },
+     "at": [
+      58,
+      140
+     ],
+     "seen": 2
+    }
+   ],
+   "monsters": {
+    "239": {
+     "number": 239,
+     "name": "Arena Guard",
+     "kind": "npc",
+     "model": "MODEL_TOURNAMENT",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/Tournament01.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      67,
+      140
+     ],
+     "count": 1
+    },
+    "240": {
+     "number": 240,
+     "name": "Safety Guardian",
+     "kind": "npc",
+     "model": "MODEL_STORAGE",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/Storage01.bmd",
+     "meshes": 14,
+     "shown": 13,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      58,
+      140
+     ],
+     "count": 1
+    }
+   },
+   "objects": {
+    "worldFolder": "World7",
+    "placed": 1417,
+    "types": 39,
+    "skippedTypes": [
+     "-515x1"
+    ]
+   },
+   "http": [
+    "404 /data/s9/Local/Eng/Minimap/Minimap_World7_eng.bmd",
+    "404 /data/s9/Skill/wwe.jpg",
+    "404 /data/World7/mini_map.tga"
+   ],
+   "ktx2Misses": 28,
+   "console": [],
+   "pageErrors": [],
+   "shot": "006-arena.jpg"
+  },
+  {
+   "map": 7,
+   "name": "Atlans",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 17,
+      "y": 35
+     },
+     "at": [
+      17,
+      35
+     ],
+     "seen": 3
+    },
+    {
+     "goal": {
+      "x": 236,
+      "y": 177
+     },
+     "at": [
+      234,
+      176
+     ],
+     "seen": 8
+    },
+    {
+     "goal": {
+      "x": 212,
+      "y": 96
+     },
+     "at": [
+      212,
+      96
+     ],
+     "seen": 7
+    },
+    {
+     "goal": {
+      "x": 39,
+      "y": 23
+     },
+     "at": [
+      39,
+      23
+     ],
+     "seen": 6
+    },
+    {
+     "goal": {
+      "x": 39,
+      "y": 63
+     },
+     "at": [
+      39,
+      63
+     ],
+     "seen": 12
+    },
+    {
+     "goal": {
+      "x": 72,
+      "y": 42
+     },
+     "at": [
+      72,
+      42
+     ],
+     "seen": 12
+    },
+    {
+     "goal": {
+      "x": 62,
+      "y": 21
+     },
+     "at": [
+      62,
+      21
+     ],
+     "seen": 10
+    },
+    {
+     "goal": {
+      "x": 24,
+      "y": 86
+     },
+     "at": [
+      24,
+      86
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 19,
+      "y": 125
+     },
+     "at": [
+      19,
+      125
+     ],
+     "seen": 4
+    }
+   ],
+   "monsters": {
+    "45": {
+     "number": 45,
+     "name": "Bahamut",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_BAHAMUT",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster34.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      16,
+      34
+     ],
+     "count": 26
+    },
+    "46": {
+     "number": 46,
+     "name": "Vepar",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_VEPAR",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster35.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      36,
+      23
+     ],
+     "count": 25
+    },
+    "48": {
+     "number": 48,
+     "name": "Lizard King",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_LIZARD",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster37.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      234,
+      170
+     ],
+     "count": 7
+    },
+    "51": {
+     "number": 51,
+     "name": "Great Bahamut",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_BAHAMUT",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster34.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      210,
+      95
+     ],
+     "count": 5
+    },
+    "52": {
+     "number": 52,
+     "name": "Silver Valkyrie",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_VALKYRIE",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster36.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      236,
+      175
+     ],
+     "count": 3
+    },
+    "240": {
+     "number": 240,
+     "name": "Safety Guardian",
+     "kind": "npc",
+     "model": "MODEL_STORAGE",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/Storage01.bmd",
+     "meshes": 14,
+     "shown": 13,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      23,
+      17
+     ],
+     "count": 1
+    }
+   },
+   "objects": {
+    "worldFolder": "World8",
+    "placed": 5436,
+    "types": 40,
+    "skippedTypes": []
+   },
+   "http": [
+    "404 /data/s9/World8/TileWater01.jpg"
+   ],
+   "ktx2Misses": 45,
+   "console": [],
+   "pageErrors": [],
+   "shot": "007-atlans.jpg"
+  },
+  {
+   "map": 8,
+   "name": "Tarkan",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 7,
+      "y": 205
+     },
+     "at": [
+      7,
+      205
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 6,
+      "y": 228
+     },
+     "at": [
+      6,
+      228
+     ],
+     "seen": 7
+    },
+    {
+     "goal": {
+      "x": 146,
+      "y": 53
+     },
+     "at": [
+      146,
+      53
+     ],
+     "seen": 7
+    },
+    {
+     "goal": {
+      "x": 72,
+      "y": 167
+     },
+     "at": [
+      72,
+      167
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 149,
+      "y": 28
+     },
+     "at": [
+      149,
+      28
+     ],
+     "seen": 6
+    },
+    {
+     "goal": {
+      "x": 134,
+      "y": 82
+     },
+     "at": [
+      134,
+      82
+     ],
+     "seen": 8
+    },
+    {
+     "goal": {
+      "x": 157,
+      "y": 89
+     },
+     "at": [
+      157,
+      89
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 171,
+      "y": 116
+     },
+     "at": [
+      171,
+      116
+     ],
+     "seen": 8
+    },
+    {
+     "goal": {
+      "x": 197,
+      "y": 108
+     },
+     "at": [
+      197,
+      108
+     ],
+     "seen": 3
+    }
+   ],
+   "monsters": {
+    "57": {
+     "number": 57,
+     "name": "Iron Wheel",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_GOLDEN_WHEEL",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster42.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      122,
+      70
+     ],
+     "count": 1
+    },
+    "58": {
+     "number": 58,
+     "name": "Tantalos",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_TANTALLOS",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster43.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      5,
+      218
+     ],
+     "count": 4
+    },
+    "59": {
+     "number": 59,
+     "name": "Zaikan",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_TANTALLOS",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster43.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      14,
+      241
+     ],
+     "count": 1
+    },
+    "60": {
+     "number": 60,
+     "name": "Bloody wolf",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_BLOODY_WOLF",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster44.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      132,
+      41
+     ],
+     "count": 6
+    },
+    "61": {
+     "number": 61,
+     "name": "Beam Knight",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_BEAM_KNIGHT",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster45.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      7,
+      205
+     ],
+     "count": 11
+    },
+    "62": {
+     "number": 62,
+     "name": "Mutant",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_MUTANT",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster46.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      129,
+      66
+     ],
+     "count": 30
+    }
+   },
+   "objects": {
+    "worldFolder": "World9",
+    "placed": 3382,
+    "types": 81,
+    "skippedTypes": []
+   },
+   "http": [],
+   "ktx2Misses": 74,
+   "console": [],
+   "pageErrors": [],
+   "shot": "008-tarkan.jpg"
+  },
+  {
+   "map": 9,
+   "name": null,
+   "arrived": false,
+   "spots": [],
+   "monsters": {},
+   "objects": null,
+   "http": [],
+   "ktx2Misses": 0,
+   "console": [],
+   "pageErrors": []
+  },
+  {
+   "map": 10,
+   "name": "Icarus",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 66,
+      "y": 68
+     },
+     "at": [
+      66,
+      68
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 85,
+      "y": 88
+     },
+     "at": [
+      85,
+      88
+     ],
+     "seen": 2
+    },
+    {
+     "goal": {
+      "x": 41,
+      "y": 113
+     },
+     "at": [
+      41,
+      113
+     ],
+     "seen": 7
+    },
+    {
+     "goal": {
+      "x": 42,
+      "y": 135
+     },
+     "at": [
+      42,
+      135
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 32,
+      "y": 87
+     },
+     "at": [
+      32,
+      87
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 84,
+      "y": 47
+     },
+     "at": [
+      84,
+      47
+     ],
+     "seen": 6
+    },
+    {
+     "goal": {
+      "x": 58,
+      "y": 42
+     },
+     "at": [
+      58,
+      42
+     ],
+     "seen": 9
+    },
+    {
+     "goal": {
+      "x": 41,
+      "y": 157
+     },
+     "at": [
+      41,
+      157
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 21,
+      "y": 39
+     },
+     "at": [
+      21,
+      39
+     ],
+     "seen": 6
+    }
+   ],
+   "monsters": {
+    "69": {
+     "number": 69,
+     "name": "Alquamos",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_ALQUAMOS",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster51.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": true,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      82,
+      50
+     ],
+     "count": 11
+    },
+    "70": {
+     "number": 70,
+     "name": "Queen Rainier",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_QUEEN_RAINER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster52.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      57,
+      79
+     ],
+     "count": 6
+    },
+    "71": {
+     "number": 71,
+     "name": "Mega Crust",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_CRUST",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster53.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      74,
+      33
+     ],
+     "count": 8
+    },
+    "72": {
+     "number": 72,
+     "name": "Phantom Knight",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_PHANTOM_KNIGHT",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster54.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      35,
+      118
+     ],
+     "count": 10
+    },
+    "73": {
+     "number": 73,
+     "name": "Drakan",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_DRAKAN",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster55.bmd",
+     "meshes": 5,
+     "shown": 5,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      61,
+      69
+     ],
+     "count": 3
+    },
+    "74": {
+     "number": 74,
+     "name": "Alpha Crust",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_CRUST",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster53.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      31,
+      103
+     ],
+     "count": 6
+    },
+    "75": {
+     "number": 75,
+     "name": "Great Drakan",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_DRAKAN",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster55.bmd",
+     "meshes": 5,
+     "shown": 5,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      51,
+      160
+     ],
+     "count": 2
+    }
+   },
+   "objects": {
+    "worldFolder": "World11",
+    "placed": 715,
+    "types": 15,
+    "skippedTypes": []
+   },
+   "http": [],
+   "ktx2Misses": 18,
+   "console": [],
+   "pageErrors": [],
+   "shot": "010-icarus.jpg"
+  },
+  {
+   "map": 11,
+   "name": "Blood Castle",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 14,
+      "y": 34
+     },
+     "at": [
+      14,
+      34
+     ],
+     "seen": 0
+    },
+    {
+     "goal": {
+      "x": 15,
+      "y": 63
+     },
+     "at": [
+      15,
+      63
+     ],
+     "seen": 0
+    },
+    {
+     "goal": {
+      "x": 14,
+      "y": 90
+     },
+     "at": [
+      14,
+      90
+     ],
+     "seen": 0
+    },
+    {
+     "goal": {
+      "x": 10,
+      "y": 9
+     },
+     "at": [
+      10,
+      9
+     ],
+     "seen": 1
+    }
+   ],
+   "monsters": {
+    "232": {
+     "number": 232,
+     "name": "Archangel",
+     "kind": "npc",
+     "model": "MODEL_NPC_ARCHANGEL",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/BloodCastle01.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      10,
+      9
+     ],
+     "count": 1
+    }
+   },
+   "objects": {
+    "worldFolder": "World12",
+    "placed": 229,
+    "types": 36,
+    "skippedTypes": []
+   },
+   "http": [
+    "404 /data/s9/Local/Eng/Minimap/Minimap_World12_eng.bmd",
+    "404 /data/World12/mini_map.tga"
+   ],
+   "ktx2Misses": 37,
+   "console": [],
+   "pageErrors": [],
+   "shot": "011-blood-castle.jpg"
+  },
+  {
+   "map": 18,
+   "name": "Chaos Castle",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 26,
+      "y": 105
+     },
+     "at": [
+      26,
+      105
+     ],
+     "seen": 0
+    },
+    {
+     "goal": {
+      "x": 28,
+      "y": 82
+     },
+     "at": [
+      28,
+      82
+     ],
+     "seen": 0
+    }
+   ],
+   "monsters": {},
+   "objects": {
+    "worldFolder": "World19",
+    "placed": 194,
+    "types": 33,
+    "skippedTypes": []
+   },
+   "http": [
+    "404 /data/s9/Local/Eng/Minimap/Minimap_World19_eng.bmd",
+    "404 /data/World19/mini_map.tga"
+   ],
+   "ktx2Misses": 6,
+   "console": [],
+   "pageErrors": [],
+   "shot": "018-chaos-castle.jpg"
+  },
+  {
+   "map": 24,
+   "name": "Kalima",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 120,
+      "y": 50
+     },
+     "at": [
+      120,
+      50
+     ],
+     "seen": 6
+    },
+    {
+     "goal": {
+      "x": 111,
+      "y": 72
+     },
+     "at": [
+      111,
+      72
+     ],
+     "seen": 6
+    },
+    {
+     "goal": {
+      "x": 118,
+      "y": 95
+     },
+     "at": [
+      118,
+      95
+     ],
+     "seen": 2
+    },
+    {
+     "goal": {
+      "x": 87,
+      "y": 90
+     },
+     "at": [
+      87,
+      90
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 68,
+      "y": 77
+     },
+     "at": [
+      68,
+      77
+     ],
+     "seen": 6
+    },
+    {
+     "goal": {
+      "x": 110,
+      "y": 9
+     },
+     "at": [
+      110,
+      9
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 30,
+      "y": 75
+     },
+     "at": [
+      30,
+      75
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 35,
+      "y": 21
+     },
+     "at": [
+      35,
+      21
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 60,
+      "y": 9
+     },
+     "at": [
+      60,
+      9
+     ],
+     "seen": 6
+    }
+   ],
+   "monsters": {
+    "144": {
+     "number": 144,
+     "name": "Death Angel",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_DEATH_ANGEL",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster64.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      105,
+      52
+     ],
+     "count": 9
+    },
+    "145": {
+     "number": 145,
+     "name": "Death Centurion",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_DEATH_CENTURION",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/monster68.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      89,
+      90
+     ],
+     "count": 4
+    },
+    "146": {
+     "number": 146,
+     "name": "Blood Soldier",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_BLOOD_SOLDIER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster66.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      112,
+      36
+     ],
+     "count": 5
+    },
+    "147": {
+     "number": 147,
+     "name": "Aegis",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_AEGIS",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster67.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      30,
+      75
+     ],
+     "count": 9
+    },
+    "148": {
+     "number": 148,
+     "name": "Rogue Centurion",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_DEATH_CENTURION",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/monster68.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      101,
+      15
+     ],
+     "count": 6
+    },
+    "149": {
+     "number": 149,
+     "name": "Necron",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_NECRON",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/monster69.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      120,
+      79
+     ],
+     "count": 9
+    },
+    "160": {
+     "number": 160,
+     "name": "Schriker",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_SHRIKER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster70.bmd",
+     "meshes": 7,
+     "shown": 7,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      27,
+      58
+     ],
+     "count": 3
+    },
+    "161": {
+     "number": 161,
+     "name": "Illusion of Kundun",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_SHRIKER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster70.bmd",
+     "meshes": 7,
+     "shown": 7,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      26,
+      76
+     ],
+     "count": 1
+    }
+   },
+   "objects": {
+    "worldFolder": "World25",
+    "placed": 2421,
+    "types": 56,
+    "skippedTypes": []
+   },
+   "http": [
+    "404 /data/s9/Local/Eng/Minimap/Minimap_World25_eng.bmd",
+    "404 /data/World25/mini_map.tga"
+   ],
+   "ktx2Misses": 48,
+   "console": [],
+   "pageErrors": [],
+   "shot": "024-kalima.jpg"
+  },
+  {
+   "map": 30,
+   "name": "Valley of Loren",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 176,
+      "y": 212
+     },
+     "at": [
+      176,
+      212
+     ],
+     "seen": 3
+    },
+    {
+     "goal": {
+      "x": 139,
+      "y": 101
+     },
+     "at": [
+      139,
+      101
+     ],
+     "seen": 1
+    },
+    {
+     "goal": {
+      "x": 86,
+      "y": 61
+     },
+     "at": [
+      86,
+      61
+     ],
+     "seen": 2
+    },
+    {
+     "goal": {
+      "x": 90,
+      "y": 218
+     },
+     "at": [
+      90,
+      218
+     ],
+     "seen": 1
+    }
+   ],
+   "monsters": {
+    "216": {
+     "number": 216,
+     "name": "Crown",
+     "kind": "npc",
+     "model": "MODEL_NPC_CROWN",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/NpcCrown.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      176,
+      212
+     ],
+     "count": 2
+    },
+    "220": {
+     "number": 220,
+     "name": "Gatekeeper",
+     "kind": "npc",
+     "model": "MONSTER_MODEL_BATTLE_GUARD2",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster78.bmd",
+     "meshes": 5,
+     "shown": 5,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      139,
+      101
+     ],
+     "count": 1
+    },
+    "223": {
+     "number": 223,
+     "name": "Senior",
+     "kind": "npc",
+     "model": "MODEL_NPC_SENATUS",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/NpcSenatus.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      179,
+      214
+     ],
+     "count": 1
+    },
+    "224": {
+     "number": 224,
+     "name": "Guardsman",
+     "kind": "npc",
+     "model": "MODEL_NPC_CLERK",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/NpcClerk.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      86,
+      61
+     ],
+     "count": 2
+    },
+    "377": {
+     "number": 377,
+     "name": "Angela the Supplier",
+     "kind": "npc",
+     "model": "MODEL_BC_NPC2",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/npcpharmercy2.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      90,
+      218
+     ],
+     "count": 1
+    }
+   },
+   "objects": {
+    "worldFolder": "World31",
+    "placed": 3747,
+    "types": 86,
+    "skippedTypes": []
+   },
+   "http": [
+    "404 /data/s9/Object31/Object36.bmd",
+    "404 /data/s9/Local/Eng/Minimap/Minimap_World31_eng.bmd",
+    "404 /data/World31/mini_map.tga",
+    "404 /84a2f00e-5215-458c-aca5-81726c57f329",
+    "404 /5d702f28-d5b8-433f-9bef-75331e56c5f6",
+    "404 /95953a06-16da-4f95-ae04-fd629c915eac",
+    "404 /095bd143-321f-4139-b684-3bf551192124",
+    "404 /a1cfbdfe-08c3-4aba-9029-0a8dcebc1214",
+    "404 /76501533-adff-40a8-897c-3eac5909faa7",
+    "404 /b100e202-0e3a-481b-b1bd-6e968b555c9b",
+    "404 /6defa0ed-7dd1-41fa-b9fa-a840ae25fca7"
+   ],
+   "ktx2Misses": 98,
+   "console": [
+    "Model missing: Object31/Object36.bmd 404 /data/s9/Object31/Object36.bmd"
+   ],
+   "pageErrors": [],
+   "shot": "030-valley-of-loren.jpg"
+  },
+  {
+   "map": 31,
+   "name": "Land of Trials",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 69,
+      "y": 103
+     },
+     "at": [
+      69,
+      103
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 69,
+      "y": 75
+     },
+     "at": [
+      69,
+      75
+     ],
+     "seen": 7
+    },
+    {
+     "goal": {
+      "x": 233,
+      "y": 36
+     },
+     "at": [
+      233,
+      36
+     ],
+     "seen": 7
+    },
+    {
+     "goal": {
+      "x": 228,
+      "y": 109
+     },
+     "at": [
+      228,
+      109
+     ],
+     "seen": 7
+    },
+    {
+     "goal": {
+      "x": 212,
+      "y": 22
+     },
+     "at": [
+      212,
+      22
+     ],
+     "seen": 7
+    },
+    {
+     "goal": {
+      "x": 204,
+      "y": 61
+     },
+     "at": [
+      204,
+      61
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 234,
+      "y": 75
+     },
+     "at": [
+      234,
+      75
+     ],
+     "seen": 8
+    },
+    {
+     "goal": {
+      "x": 50,
+      "y": 60
+     },
+     "at": [
+      50,
+      60
+     ],
+     "seen": 6
+    },
+    {
+     "goal": {
+      "x": 92,
+      "y": 83
+     },
+     "at": [
+      92,
+      83
+     ],
+     "seen": 2
+    }
+   ],
+   "monsters": {
+    "290": {
+     "number": 290,
+     "name": "Lizard Warrior",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_LIZARD_WARRIOR",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster82.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      69,
+      103
+     ],
+     "count": 26
+    },
+    "293": {
+     "number": 293,
+     "name": "Poison Golem",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_POISON_GOLEM",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster85.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      70,
+      101
+     ],
+     "count": 13
+    },
+    "294": {
+     "number": 294,
+     "name": "Ax Warrior",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_AXE_HERO",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster86.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      70,
+      74
+     ],
+     "count": 15
+    }
+   },
+   "objects": {
+    "worldFolder": "World32",
+    "placed": 7819,
+    "types": 57,
+    "skippedTypes": []
+   },
+   "http": [],
+   "ktx2Misses": 54,
+   "console": [],
+   "pageErrors": [],
+   "shot": "031-land-of-trials.jpg"
+  },
+  {
+   "map": 32,
+   "name": null,
+   "arrived": false,
+   "spots": [],
+   "monsters": {},
+   "objects": null,
+   "http": [],
+   "ktx2Misses": 0,
+   "console": [],
+   "pageErrors": []
+  },
+  {
+   "map": 33,
+   "name": "Aida",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 78,
+      "y": 13
+     },
+     "at": [
+      78,
+      13
+     ],
+     "seen": 2
+    },
+    {
+     "goal": {
+      "x": 88,
+      "y": 73
+     },
+     "at": [
+      88,
+      73
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 106,
+      "y": 49
+     },
+     "at": [
+      106,
+      49
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 120,
+      "y": 97
+     },
+     "at": [
+      120,
+      97
+     ],
+     "seen": 6
+    },
+    {
+     "goal": {
+      "x": 137,
+      "y": 125
+     },
+     "at": [
+      137,
+      125
+     ],
+     "seen": 3
+    },
+    {
+     "goal": {
+      "x": 141,
+      "y": 76
+     },
+     "at": [
+      141,
+      76
+     ],
+     "seen": 7
+    },
+    {
+     "goal": {
+      "x": 83,
+      "y": 121
+     },
+     "at": [
+      83,
+      121
+     ],
+     "seen": 3
+    },
+    {
+     "goal": {
+      "x": 94,
+      "y": 158
+     },
+     "at": [
+      94,
+      158
+     ],
+     "seen": 7
+    },
+    {
+     "goal": {
+      "x": 157,
+      "y": 166
+     },
+     "at": [
+      157,
+      166
+     ],
+     "seen": 2
+    }
+   ],
+   "monsters": {
+    "304": {
+     "number": 304,
+     "name": "Witch Queen",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_WITCH_QUEEN",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/monster101.bmd",
+     "meshes": 6,
+     "shown": 6,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      88,
+      73
+     ],
+     "count": 5
+    },
+    "305": {
+     "number": 305,
+     "name": "Blue Golem",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_GOLDEN_STONE_GOLEM",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/monster102.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      87,
+      74
+     ],
+     "count": 22
+    },
+    "306": {
+     "number": 306,
+     "name": "Death Rider",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_DEATH_RIDER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/monster103.bmd",
+     "meshes": 5,
+     "shown": 5,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      95,
+      57
+     ],
+     "count": 7
+    },
+    "307": {
+     "number": 307,
+     "name": "Forest Orc",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_FOREST_ORC",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/monster104.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      93,
+      174
+     ],
+     "count": 1
+    },
+    "309": {
+     "number": 309,
+     "name": "Hell Maine",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_HELL_MAINE",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/monster106.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      105,
+      50
+     ],
+     "count": 2
+    },
+    "369": {
+     "number": 369,
+     "name": "Osbourne",
+     "kind": "npc",
+     "model": "MODEL_REFINERY_NPC",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/os.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      78,
+      13
+     ],
+     "count": 1
+    },
+    "370": {
+     "number": 370,
+     "name": "Jerridon",
+     "kind": "npc",
+     "model": "MODEL_RECOVERY_NPC",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/je.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      86,
+      14
+     ],
+     "count": 1
+    }
+   },
+   "objects": {
+    "worldFolder": "World34",
+    "placed": 4071,
+    "types": 74,
+    "skippedTypes": []
+   },
+   "http": [
+    "404 /data/s9/World34/ExtTile02.jpg"
+   ],
+   "ktx2Misses": 92,
+   "console": [],
+   "pageErrors": [],
+   "shot": "033-aida.jpg"
+  },
+  {
+   "map": 34,
+   "name": "Crywolf Fortress",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 228,
+      "y": 48
+     },
+     "at": [
+      228,
+      48
+     ],
+     "seen": 1
+    },
+    {
+     "goal": {
+      "x": 62,
+      "y": 239
+     },
+     "at": [
+      62,
+      239
+     ],
+     "seen": 2
+    },
+    {
+     "goal": {
+      "x": 135,
+      "y": 47
+     },
+     "at": [
+      234,
+      39
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 99,
+      "y": 40
+     },
+     "at": [
+      99,
+      40
+     ],
+     "seen": 3
+    },
+    {
+     "goal": {
+      "x": 145,
+      "y": 14
+     },
+     "at": [
+      145,
+      14
+     ],
+     "seen": 1
+    },
+    {
+     "goal": {
+      "x": 118,
+      "y": 11
+     },
+     "at": [
+      118,
+      11
+     ],
+     "seen": 1
+    },
+    {
+     "goal": {
+      "x": 58,
+      "y": 47
+     },
+     "at": [
+      58,
+      47
+     ],
+     "seen": 3
+    },
+    {
+     "goal": {
+      "x": 65,
+      "y": 24
+     },
+     "at": [
+      65,
+      24
+     ],
+     "seen": 3
+    },
+    {
+     "goal": {
+      "x": 83,
+      "y": 10
+     },
+     "at": [
+      83,
+      10
+     ],
+     "seen": 2
+    }
+   ],
+   "monsters": {
+    "206": {
+     "number": 206,
+     "name": "Wolf Altar2",
+     "kind": "npc",
+     "model": "MODEL_CRYWOLF_ALTAR2",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Object35/Object57.bmd",
+     "meshes": 1,
+     "shown": 0,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      126,
+      35
+     ],
+     "count": 1
+    },
+    "207": {
+     "number": 207,
+     "name": "Wolf Altar3",
+     "kind": "npc",
+     "model": "MODEL_CRYWOLF_ALTAR3",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Object35/Object57.bmd",
+     "meshes": 1,
+     "shown": 0,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      120,
+      38
+     ],
+     "count": 1
+    },
+    "224": {
+     "number": 224,
+     "name": "Guardsman",
+     "kind": "npc",
+     "model": "MODEL_NPC_CLERK",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/NpcClerk.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      118,
+      11
+     ],
+     "count": 1
+    },
+    "226": {
+     "number": 226,
+     "name": "Trainer",
+     "kind": "npc",
+     "model": "MODEL_NPC_BREEDER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/Breeder.bmd",
+     "meshes": 6,
+     "shown": 6,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      135,
+      47
+     ],
+     "count": 1
+    },
+    "251": {
+     "number": 251,
+     "name": "Hanzo the Blacksmith",
+     "kind": "npc",
+     "model": "MODEL_SMITH",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/Smith01.bmd",
+     "meshes": 5,
+     "shown": 5,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      145,
+      14
+     ],
+     "count": 1
+    },
+    "256": {
+     "number": 256,
+     "name": "Lahap",
+     "kind": "npc",
+     "model": "MODEL_NPC_SERBIS",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/npc_mulyak.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      96,
+      25
+     ],
+     "count": 1
+    },
+    "310": {
+     "number": 310,
+     "name": "Hammer Scout",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_SCOUT",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster99.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      80,
+      46
+     ],
+     "count": 9
+    },
+    "311": {
+     "number": 311,
+     "name": "Lance Scout",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_SOLAM",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster98.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      42,
+      51
+     ],
+     "count": 1
+    },
+    "317": {
+     "number": 317,
+     "name": "Soram",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_SORAM",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster95.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      65,
+      234
+     ],
+     "count": 1
+    },
+    "406": {
+     "number": 406,
+     "name": "Apostle Devin",
+     "kind": "npc",
+     "model": "MODEL_NPC_DEVIN",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/devin.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      228,
+      48
+     ],
+     "count": 2
+    },
+    "407": {
+     "number": 407,
+     "name": "Werewolf Quarel",
+     "kind": "npc",
+     "model": "MODEL_NPC_QUARREL",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/WereQuarrel.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      62,
+      239
+     ],
+     "count": 1
+    }
+   },
+   "objects": {
+    "worldFolder": "World35",
+    "placed": 6608,
+    "types": 76,
+    "skippedTypes": []
+   },
+   "http": [
+    "404 /data/s9/Object35/bons.jpg",
+    "404 /data/s9/Item/bons.jpg"
+   ],
+   "ktx2Misses": 82,
+   "console": [
+    "Texture missing: bons.jpg in Object35, Item"
+   ],
+   "pageErrors": [],
+   "shot": "034-crywolf-fortress.jpg"
+  },
+  {
+   "map": 36,
+   "name": "Lost Kalima",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 120,
+      "y": 50
+     },
+     "at": [
+      120,
+      50
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 111,
+      "y": 72
+     },
+     "at": [
+      111,
+      72
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 118,
+      "y": 95
+     },
+     "at": [
+      118,
+      95
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 87,
+      "y": 90
+     },
+     "at": [
+      87,
+      90
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 68,
+      "y": 77
+     },
+     "at": [
+      140,
+      123
+     ],
+     "seen": 10
+    },
+    {
+     "goal": {
+      "x": 110,
+      "y": 9
+     },
+     "at": [
+      110,
+      9
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 30,
+      "y": 75
+     },
+     "at": [
+      30,
+      75
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 35,
+      "y": 21
+     },
+     "at": [
+      35,
+      21
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 60,
+      "y": 9
+     },
+     "at": [
+      60,
+      9
+     ],
+     "seen": 7
+    }
+   ],
+   "monsters": {
+    "240": {
+     "number": 240,
+     "name": "Safety Guardian",
+     "kind": "npc",
+     "model": "MODEL_STORAGE",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/Storage01.bmd",
+     "meshes": 14,
+     "shown": 13,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      146,
+      110
+     ],
+     "count": 1
+    },
+    "257": {
+     "number": 257,
+     "name": "Shadow Phantom Soldier",
+     "kind": "npc",
+     "model": "player",
+     "unknown": null,
+     "playerShaped": true,
+     "skin": null,
+     "body": "player",
+     "meshes": 14,
+     "shown": 11,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      130,
+      128
+     ],
+     "count": 1
+    },
+    "275": {
+     "number": 275,
+     "name": "Kundun",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_ILLUSION_OF_KUNDUN",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/monster65.bmd",
+     "meshes": 10,
+     "shown": 10,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      26,
+      76
+     ],
+     "count": 1
+    },
+    "331": {
+     "number": 331,
+     "name": "Aegis",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_AEGIS",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster67.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      30,
+      75
+     ],
+     "count": 10
+    },
+    "332": {
+     "number": 332,
+     "name": "Rogue Centurion",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_DEATH_CENTURION",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/monster68.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      96,
+      6
+     ],
+     "count": 6
+    },
+    "333": {
+     "number": 333,
+     "name": "Blood Soldier",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_BLOOD_SOLDIER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster66.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      116,
+      50
+     ],
+     "count": 4
+    },
+    "334": {
+     "number": 334,
+     "name": "Death Angel",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_DEATH_ANGEL",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster64.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      117,
+      53
+     ],
+     "count": 9
+    },
+    "335": {
+     "number": 335,
+     "name": "Necron",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_NECRON",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/monster69.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      118,
+      94
+     ],
+     "count": 9
+    },
+    "336": {
+     "number": 336,
+     "name": "Death Centurion",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_DEATH_CENTURION",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/monster68.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      87,
+      93
+     ],
+     "count": 5
+    },
+    "337": {
+     "number": 337,
+     "name": "Schriker",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_SHRIKER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster70.bmd",
+     "meshes": 7,
+     "shown": 7,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      29,
+      61
+     ],
+     "count": 3
+    },
+    "371": {
+     "number": 371,
+     "name": "Leo the Helper",
+     "kind": "npc",
+     "model": "player",
+     "unknown": null,
+     "playerShaped": true,
+     "skin": null,
+     "body": "player",
+     "meshes": 9,
+     "shown": 6,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      130,
+      126
+     ],
+     "count": 1
+    }
+   },
+   "objects": {
+    "worldFolder": "World25",
+    "placed": 2421,
+    "types": 56,
+    "skippedTypes": []
+   },
+   "http": [],
+   "ktx2Misses": 11,
+   "console": [],
+   "pageErrors": [],
+   "shot": "036-lost-kalima.jpg"
+  },
+  {
+   "map": 37,
+   "name": "Kanturu",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 188,
+      "y": 11
+     },
+     "at": [
+      188,
+      11
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 151,
+      "y": 11
+     },
+     "at": [
+      151,
+      11
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 154,
+      "y": 41
+     },
+     "at": [
+      154,
+      41
+     ],
+     "seen": 9
+    },
+    {
+     "goal": {
+      "x": 92,
+      "y": 34
+     },
+     "at": [
+      92,
+      34
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 85,
+      "y": 61
+     },
+     "at": [
+      85,
+      61
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 61,
+      "y": 31
+     },
+     "at": [
+      61,
+      31
+     ],
+     "seen": 11
+    },
+    {
+     "goal": {
+      "x": 64,
+      "y": 97
+     },
+     "at": [
+      64,
+      97
+     ],
+     "seen": 6
+    },
+    {
+     "goal": {
+      "x": 31,
+      "y": 87
+     },
+     "at": [
+      31,
+      87
+     ],
+     "seen": 3
+    },
+    {
+     "goal": {
+      "x": 38,
+      "y": 51
+     },
+     "at": [
+      38,
+      51
+     ],
+     "seen": 8
+    }
+   ],
+   "monsters": {
+    "350": {
+     "number": 350,
+     "name": "Berserker",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_BERSERK",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster107.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      188,
+      11
+     ],
+     "count": 22
+    },
+    "354": {
+     "number": 354,
+     "name": "Blade Hunter",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_BLADE_HUNTER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/monster111.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      188,
+      12
+     ],
+     "count": 7
+    },
+    "355": {
+     "number": 355,
+     "name": "Kentauros",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_KENTAUROS",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/monster112.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      187,
+      12
+     ],
+     "count": 7
+    },
+    "356": {
+     "number": 356,
+     "name": "Gigantis",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_GIGANTIS",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster113.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      93,
+      32
+     ],
+     "count": 9
+    },
+    "357": {
+     "number": 357,
+     "name": "Genocider",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_GENOCIDER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster114.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      62,
+      95
+     ],
+     "count": 8
+    }
+   },
+   "objects": {
+    "worldFolder": "World38",
+    "placed": 3810,
+    "types": 100,
+    "skippedTypes": []
+   },
+   "http": [],
+   "ktx2Misses": 120,
+   "console": [],
+   "pageErrors": [],
+   "shot": "037-kanturu.jpg"
+  },
+  {
+   "map": 38,
+   "name": "Kanturu Relics",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 141,
+      "y": 191
+     },
+     "at": [
+      74,
+      107
+     ],
+     "seen": 0
+    },
+    {
+     "goal": {
+      "x": 106,
+      "y": 159
+     },
+     "at": [
+      106,
+      159
+     ],
+     "seen": 7
+    },
+    {
+     "goal": {
+      "x": 140,
+      "y": 76
+     },
+     "at": [
+      76,
+      107
+     ],
+     "seen": 8
+    },
+    {
+     "goal": {
+      "x": 97,
+      "y": 78
+     },
+     "at": [
+      97,
+      78
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 183,
+      "y": 86
+     },
+     "at": [
+      183,
+      86
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 105,
+      "y": 133
+     },
+     "at": [
+      105,
+      133
+     ],
+     "seen": 3
+    },
+    {
+     "goal": {
+      "x": 135,
+      "y": 150
+     },
+     "at": [
+      71,
+      108
+     ],
+     "seen": 10
+    },
+    {
+     "goal": {
+      "x": 177,
+      "y": 129
+     },
+     "at": [
+      81,
+      104
+     ],
+     "seen": 7
+    },
+    {
+     "goal": {
+      "x": 193,
+      "y": 146
+     },
+     "at": [
+      193,
+      146
+     ],
+     "seen": 6
+    }
+   ],
+   "monsters": {
+    "105": {
+     "number": 105,
+     "name": "Canon Trap",
+     "kind": "trap",
+     "model": "MODEL_TRAP_CANON",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/c_mon.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      107,
+      153
+     ],
+     "count": 9
+    },
+    "106": {
+     "number": 106,
+     "name": "Laser Trap",
+     "kind": "trap",
+     "model": "mapObject 51",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": null,
+     "meshes": 0,
+     "shown": 0,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      138,
+      166
+     ],
+     "count": 3
+    },
+    "358": {
+     "number": 358,
+     "name": "Persona",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_PERSONA",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster115.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      107,
+      151
+     ],
+     "count": 17
+    },
+    "359": {
+     "number": 359,
+     "name": "Twin Tale",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_TWIN_TAIL",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster116.bmd",
+     "meshes": 6,
+     "shown": 6,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      135,
+      88
+     ],
+     "count": 14
+    },
+    "360": {
+     "number": 360,
+     "name": "Dreadfear",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_DREADFEAR",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster117.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      106,
+      134
+     ],
+     "count": 7
+    }
+   },
+   "objects": {
+    "worldFolder": "World39",
+    "placed": 2129,
+    "types": 69,
+    "skippedTypes": []
+   },
+   "http": [
+    "404 /data/s9/Object39/Object70.bmd",
+    "404 /data/s9/Object39/Object85.bmd",
+    "404 /data/s9/Object39/Object26.bmd",
+    "404 /data/s9/Object39/Object40.bmd",
+    "404 /data/s9/Object39/Object23.bmd",
+    "404 /data/s9/Object39/Object43.bmd",
+    "404 /data/s9/Object39/Object29.bmd",
+    "404 /data/s9/Object39/Object44.bmd",
+    "404 /data/s9/Object39/Object41.bmd",
+    "404 /data/s9/Object39/Object22.bmd",
+    "404 /data/s9/Object39/Object52.bmd"
+   ],
+   "ktx2Misses": 80,
+   "console": [
+    "Model missing: Object39/Object70.bmd 404 /data/s9/Object39/Object70.bmd",
+    "Model missing: Object39/Object85.bmd 404 /data/s9/Object39/Object85.bmd",
+    "Model missing: Object39/Object26.bmd 404 /data/s9/Object39/Object26.bmd",
+    "Model missing: Object39/Object40.bmd 404 /data/s9/Object39/Object40.bmd",
+    "Model missing: Object39/Object23.bmd 404 /data/s9/Object39/Object23.bmd",
+    "Model missing: Object39/Object43.bmd 404 /data/s9/Object39/Object43.bmd",
+    "Model missing: Object39/Object29.bmd 404 /data/s9/Object39/Object29.bmd",
+    "Model missing: Object39/Object44.bmd 404 /data/s9/Object39/Object44.bmd",
+    "Model missing: Object39/Object41.bmd 404 /data/s9/Object39/Object41.bmd",
+    "Model missing: Object39/Object22.bmd 404 /data/s9/Object39/Object22.bmd"
+   ],
+   "pageErrors": [],
+   "shot": "038-kanturu-relics.jpg"
+  },
+  {
+   "map": 39,
+   "name": null,
+   "arrived": false,
+   "spots": [],
+   "monsters": {},
+   "objects": null,
+   "http": [],
+   "ktx2Misses": 0,
+   "console": [],
+   "pageErrors": []
+  },
+  {
+   "map": 40,
+   "name": null,
+   "arrived": false,
+   "spots": [],
+   "monsters": {},
+   "objects": null,
+   "http": [],
+   "ktx2Misses": 0,
+   "console": [],
+   "pageErrors": []
+  },
+  {
+   "map": 41,
+   "name": "Barracks of Balgass",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 119,
+      "y": 168
+     },
+     "at": [
+      29,
+      79
+     ],
+     "seen": 0
+    },
+    {
+     "goal": {
+      "x": 39,
+      "y": 101
+     },
+     "at": [
+      39,
+      101
+     ],
+     "seen": 2
+    },
+    {
+     "goal": {
+      "x": 52,
+      "y": 134
+     },
+     "at": [
+      52,
+      134
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 67,
+      "y": 112
+     },
+     "at": [
+      67,
+      112
+     ],
+     "seen": 2
+    },
+    {
+     "goal": {
+      "x": 87,
+      "y": 90
+     },
+     "at": [
+      87,
+      90
+     ],
+     "seen": 3
+    },
+    {
+     "goal": {
+      "x": 90,
+      "y": 67
+     },
+     "at": [
+      90,
+      67
+     ],
+     "seen": 3
+    },
+    {
+     "goal": {
+      "x": 109,
+      "y": 101
+     },
+     "at": [
+      109,
+      101
+     ],
+     "seen": 7
+    },
+    {
+     "goal": {
+      "x": 137,
+      "y": 140
+     },
+     "at": [
+      137,
+      140
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 146,
+      "y": 164
+     },
+     "at": [
+      30,
+      81
+     ],
+     "seen": 0
+    }
+   ],
+   "monsters": {
+    "409": {
+     "number": 409,
+     "name": "Balram (Trainee Soldier)",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_BALRAM",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster92.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      39,
+      101
+     ],
+     "count": 10
+    },
+    "410": {
+     "number": 410,
+     "name": "Death Spirit (Trainee Soldier)",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_DEATH_SPIRIT",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster94.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      54,
+      130
+     ],
+     "count": 10
+    },
+    "411": {
+     "number": 411,
+     "name": "Soram (Trainee Soldier)",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_SORAM",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster95.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      107,
+      100
+     ],
+     "count": 6
+    }
+   },
+   "objects": {
+    "worldFolder": "World42",
+    "placed": 1530,
+    "types": 61,
+    "skippedTypes": []
+   },
+   "http": [
+    "404 /data/s9/World42/TileRock05.jpg",
+    "404 /data/s9/Object42/bons.jpg"
+   ],
+   "ktx2Misses": 46,
+   "console": [
+    "Texture missing: bons.jpg in Object42, Item"
+   ],
+   "pageErrors": [],
+   "shot": "041-barracks-of-balgass.jpg"
+  },
+  {
+   "map": 42,
+   "name": "Balgass Refuge",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 104,
+      "y": 179
+     },
+     "at": [
+      104,
+      179
+     ],
+     "seen": 2
+    },
+    {
+     "goal": {
+      "x": 86,
+      "y": 199
+     },
+     "at": [
+      86,
+      199
+     ],
+     "seen": 3
+    }
+   ],
+   "monsters": {
+    "410": {
+     "number": 410,
+     "name": "Death Spirit (Trainee Soldier)",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_DEATH_SPIRIT",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster94.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      104,
+      179
+     ],
+     "count": 2
+    },
+    "411": {
+     "number": 411,
+     "name": "Soram (Trainee Soldier)",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_SORAM",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster95.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      83,
+      192
+     ],
+     "count": 2
+    },
+    "412": {
+     "number": 412,
+     "name": "Dark Elf (Trainee Soldier)",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_DARK_ELF",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster127.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      103,
+      179
+     ],
+     "count": 1
+    }
+   },
+   "objects": {
+    "worldFolder": "World43",
+    "placed": 367,
+    "types": 39,
+    "skippedTypes": []
+   },
+   "http": [
+    "404 /data/s9/World43/TileRock05.jpg",
+    "404 /data/s9/Object43/bons.jpg",
+    "404 /data/s9/Local/Eng/Minimap/Minimap_World43_eng.bmd",
+    "404 /data/World43/mini_map.tga"
+   ],
+   "ktx2Misses": 37,
+   "console": [
+    "Texture missing: bons.jpg in Object43, Item"
+   ],
+   "pageErrors": [],
+   "shot": "042-balgass-refuge.jpg"
+  },
+  {
+   "map": 45,
+   "name": "Illusion Temple",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 207,
+      "y": 47
+     },
+     "at": [
+      207,
+      47
+     ],
+     "seen": 0
+    },
+    {
+     "goal": {
+      "x": 134,
+      "y": 121
+     },
+     "at": [
+      134,
+      121
+     ],
+     "seen": 0
+    },
+    {
+     "goal": {
+      "x": 139,
+      "y": 46
+     },
+     "at": [
+      139,
+      46
+     ],
+     "seen": 0
+    },
+    {
+     "goal": {
+      "x": 194,
+      "y": 123
+     },
+     "at": [
+      194,
+      123
+     ],
+     "seen": 0
+    }
+   ],
+   "monsters": {},
+   "objects": {
+    "worldFolder": "World47",
+    "placed": 1957,
+    "types": 77,
+    "skippedTypes": []
+   },
+   "http": [
+    "404 /data/s9/World47/TileWood01.jpg",
+    "404 /data/s9/Object47/Object82.bmd",
+    "404 /data/s9/Local/Eng/Minimap/Minimap_World47_eng.bmd",
+    "404 /data/World47/mini_map.tga"
+   ],
+   "ktx2Misses": 51,
+   "console": [
+    "Model missing: Object47/Object82.bmd 404 /data/s9/Object47/Object82.bmd"
+   ],
+   "pageErrors": [],
+   "shot": "045-illusion-temple.jpg"
+  },
+  {
+   "map": 51,
+   "name": "Elveland",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 37,
+      "y": 242
+     },
+     "at": [
+      37,
+      242
+     ],
+     "seen": 7
+    },
+    {
+     "goal": {
+      "x": 37,
+      "y": 218
+     },
+     "at": [
+      37,
+      218
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 44,
+      "y": 189
+     },
+     "at": [
+      44,
+      189
+     ],
+     "seen": 2
+    },
+    {
+     "goal": {
+      "x": 57,
+      "y": 231
+     },
+     "at": [
+      57,
+      231
+     ],
+     "seen": 7
+    },
+    {
+     "goal": {
+      "x": 35,
+      "y": 147
+     },
+     "at": [
+      52,
+      224
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 122,
+      "y": 216
+     },
+     "at": [
+      122,
+      216
+     ],
+     "seen": 16
+    },
+    {
+     "goal": {
+      "x": 71,
+      "y": 156
+     },
+     "at": [
+      71,
+      156
+     ],
+     "seen": 10
+    },
+    {
+     "goal": {
+      "x": 113,
+      "y": 195
+     },
+     "at": [
+      113,
+      195
+     ],
+     "seen": 11
+    },
+    {
+     "goal": {
+      "x": 106,
+      "y": 130
+     },
+     "at": [
+      51,
+      225
+     ],
+     "seen": 5
+    }
+   ],
+   "monsters": {
+    "3": {
+     "number": 3,
+     "name": "Spider",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_SPIDER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster10.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      104,
+      207
+     ],
+     "count": 12
+    },
+    "240": {
+     "number": 240,
+     "name": "Safety Guardian",
+     "kind": "npc",
+     "model": "MODEL_STORAGE",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/Storage01.bmd",
+     "meshes": 14,
+     "shown": 13,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      51,
+      229
+     ],
+     "count": 5
+    },
+    "256": {
+     "number": 256,
+     "name": "Lahap",
+     "kind": "npc",
+     "model": "MODEL_NPC_SERBIS",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/npc_mulyak.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      37,
+      242
+     ],
+     "count": 1
+    },
+    "257": {
+     "number": 257,
+     "name": "Shadow Phantom Soldier",
+     "kind": "npc",
+     "model": "player",
+     "unknown": null,
+     "playerShaped": true,
+     "skin": null,
+     "body": "player",
+     "meshes": 14,
+     "shown": 11,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      44,
+      189
+     ],
+     "count": 4
+    },
+    "385": {
+     "number": 385,
+     "name": "Mirage",
+     "kind": "npc",
+     "model": "MODEL_CURSEDTEMPLE_ENTER_NPC",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/mirazu.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      55,
+      243
+     ],
+     "count": 2
+    },
+    "415": {
+     "number": 415,
+     "name": "Silvia",
+     "kind": "npc",
+     "model": "MODEL_ELBELAND_SILVIA",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/silvia.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      44,
+      229
+     ],
+     "count": 5
+    },
+    "416": {
+     "number": 416,
+     "name": "Rhea",
+     "kind": "npc",
+     "model": "MODEL_ELBELAND_RHEA",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/rhea.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      29,
+      237
+     ],
+     "count": 1
+    },
+    "417": {
+     "number": 417,
+     "name": "Marce",
+     "kind": "npc",
+     "model": "MODEL_ELBELAND_MARCE",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/marce.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      37,
+      218
+     ],
+     "count": 2
+    },
+    "418": {
+     "number": 418,
+     "name": "Strange Rabbit",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_RABBIT",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster129.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      108,
+      217
+     ],
+     "count": 20
+    },
+    "421": {
+     "number": 421,
+     "name": "Polluted Butterfly",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_WEREWOLF2",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster132.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      133,
+      207
+     ],
+     "count": 5
+    },
+    "452": {
+     "number": 452,
+     "name": "Seed Master",
+     "kind": "npc",
+     "model": "MODEL_SEED_MASTER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/goblinmaster.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      45,
+      243
+     ],
+     "count": 2
+    },
+    "453": {
+     "number": 453,
+     "name": "Seed Researcher",
+     "kind": "npc",
+     "model": "MODEL_SEED_INVESTIGATOR",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/seedgoblin.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      49,
+      243
+     ],
+     "count": 2
+    },
+    "540": {
+     "number": 540,
+     "name": "Lugard",
+     "kind": "npc",
+     "model": "MODEL_DOPPELGANGER_NPC_LUGARD",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/Lugard.bmd",
+     "meshes": 6,
+     "shown": 6,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      49,
+      216
+     ],
+     "count": 4
+    },
+    "568": {
+     "number": 568,
+     "name": "Wandering Merchant Zyro",
+     "kind": "npc",
+     "model": "MODEL_GAMBLE_NPC_MOSS",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/gambler_moss.bmd",
+     "meshes": 12,
+     "shown": 12,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      55,
+      199
+     ],
+     "count": 1
+    }
+   },
+   "objects": {
+    "worldFolder": "World52",
+    "placed": 5137,
+    "types": 130,
+    "skippedTypes": [
+     "165x1"
+    ]
+   },
+   "http": [
+    "404 /data/s9/World52/TileGround01.jpg"
+   ],
+   "ktx2Misses": 139,
+   "console": [],
+   "pageErrors": [],
+   "shot": "051-elveland.jpg"
+  },
+  {
+   "map": 56,
+   "name": "Swamp of Calmness",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 68,
+      "y": 192
+     },
+     "at": [
+      68,
+      192
+     ],
+     "seen": 3
+    },
+    {
+     "goal": {
+      "x": 68,
+      "y": 215
+     },
+     "at": [
+      68,
+      215
+     ],
+     "seen": 7
+    },
+    {
+     "goal": {
+      "x": 46,
+      "y": 203
+     },
+     "at": [
+      46,
+      203
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 42,
+      "y": 229
+     },
+     "at": [
+      42,
+      229
+     ],
+     "seen": 9
+    },
+    {
+     "goal": {
+      "x": 33,
+      "y": 184
+     },
+     "at": [
+      33,
+      184
+     ],
+     "seen": 6
+    },
+    {
+     "goal": {
+      "x": 10,
+      "y": 192
+     },
+     "at": [
+      10,
+      192
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 14,
+      "y": 224
+     },
+     "at": [
+      14,
+      224
+     ],
+     "seen": 7
+    },
+    {
+     "goal": {
+      "x": 110,
+      "y": 210
+     },
+     "at": [
+      110,
+      210
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 134,
+      "y": 232
+     },
+     "at": [
+      140,
+      108
+     ],
+     "seen": 5
+    }
+   ],
+   "monsters": {
+    "443": {
+     "number": 443,
+     "name": "Sapi-Tres",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_SAPITRES",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster139.bmd",
+     "meshes": 5,
+     "shown": 5,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      68,
+      192
+     ],
+     "count": 10
+    },
+    "448": {
+     "number": 448,
+     "name": "Ghost Napin",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_GHOST_NAPIN",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster144.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      64,
+      204
+     ],
+     "count": 14
+    },
+    "449": {
+     "number": 449,
+     "name": "Blaze Napin",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_BLAZE_NAPIN",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster145.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      84,
+      226
+     ],
+     "count": 17
+    },
+    "557": {
+     "number": 557,
+     "name": "Sapi Queen",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_SAPI_QUEEN",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/monster202.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      110,
+      210
+     ],
+     "count": 3
+    },
+    "558": {
+     "number": 558,
+     "name": "Ice Napin",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_ICE_NAPIN",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/monster203.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      108,
+      211
+     ],
+     "count": 2
+    },
+    "559": {
+     "number": 559,
+     "name": "Shadow Master",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_SHADOW_MASTER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/monster204.bmd",
+     "meshes": 5,
+     "shown": 5,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      111,
+      212
+     ],
+     "count": 4
+    }
+   },
+   "objects": {
+    "worldFolder": "World57",
+    "placed": 4170,
+    "types": 87,
+    "skippedTypes": []
+   },
+   "http": [
+    "404 /data/s9/Object57/Object59.bmd",
+    "404 /data/s9/Object57/Object65.bmd",
+    "404 /data/s9/Object57/Object60.bmd"
+   ],
+   "ktx2Misses": 91,
+   "console": [
+    "Model missing: Object57/Object59.bmd 404 /data/s9/Object57/Object59.bmd",
+    "Model missing: Object57/Object65.bmd 404 /data/s9/Object57/Object65.bmd",
+    "Model missing: Object57/Object60.bmd 404 /data/s9/Object57/Object60.bmd"
+   ],
+   "pageErrors": [],
+   "shot": "056-swamp-of-calmness.jpg"
+  },
+  {
+   "map": 57,
+   "name": "Raklion",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 203,
+      "y": 204
+     },
+     "at": [
+      203,
+      204
+     ],
+     "seen": 3
+    },
+    {
+     "goal": {
+      "x": 179,
+      "y": 204
+     },
+     "at": [
+      222,
+      211
+     ],
+     "seen": 6
+    },
+    {
+     "goal": {
+      "x": 204,
+      "y": 104
+     },
+     "at": [
+      222,
+      211
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 154,
+      "y": 129
+     },
+     "at": [
+      154,
+      129
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 223,
+      "y": 150
+     },
+     "at": [
+      223,
+      211
+     ],
+     "seen": 2
+    },
+    {
+     "goal": {
+      "x": 157,
+      "y": 217
+     },
+     "at": [
+      223,
+      211
+     ],
+     "seen": 6
+    },
+    {
+     "goal": {
+      "x": 162,
+      "y": 182
+     },
+     "at": [
+      162,
+      182
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 197,
+      "y": 132
+     },
+     "at": [
+      222,
+      211
+     ],
+     "seen": 3
+    },
+    {
+     "goal": {
+      "x": 136,
+      "y": 106
+     },
+     "at": [
+      223,
+      211
+     ],
+     "seen": 5
+    }
+   ],
+   "monsters": {
+    "454": {
+     "number": 454,
+     "name": "Ice Walker",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_ICE_WALKER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster146.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      187,
+      204
+     ],
+     "count": 9
+    },
+    "455": {
+     "number": 455,
+     "name": "Giant Mammoth",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_GIANT_MAMMOTH",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster147.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      169,
+      201
+     ],
+     "count": 6
+    },
+    "456": {
+     "number": 456,
+     "name": "Ice Giant",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_ICE_GIANT",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster148.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      168,
+      214
+     ],
+     "count": 12
+    },
+    "457": {
+     "number": 457,
+     "name": "Coolutin",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_COOLUTIN",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster149.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      195,
+      118
+     ],
+     "count": 5
+    },
+    "458": {
+     "number": 458,
+     "name": "Iron Knight",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_IRON_KNIGHT",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster150.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      203,
+      110
+     ],
+     "count": 8
+    }
+   },
+   "objects": {
+    "worldFolder": "World58",
+    "placed": 1478,
+    "types": 70,
+    "skippedTypes": [
+     "247x65"
+    ]
+   },
+   "http": [],
+   "ktx2Misses": 88,
+   "console": [],
+   "pageErrors": [],
+   "shot": "057-raklion.jpg"
+  },
+  {
+   "map": 58,
+   "name": null,
+   "arrived": false,
+   "spots": [],
+   "monsters": {},
+   "objects": null,
+   "http": [],
+   "ktx2Misses": 0,
+   "console": [],
+   "pageErrors": []
+  },
+  {
+   "map": 62,
+   "name": "Santa Village",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 202,
+      "y": 41
+     },
+     "at": [
+      202,
+      41
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 222,
+      "y": 24
+     },
+     "at": [
+      222,
+      24
+     ],
+     "seen": 4
+    }
+   ],
+   "monsters": {
+    "467": {
+     "number": 467,
+     "name": "Snowman",
+     "kind": "npc",
+     "model": "MODEL_XMAS2008_SNOWMAN_NPC",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/snowman.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      202,
+      41
+     ],
+     "count": 1
+    },
+    "468": {
+     "number": 468,
+     "name": "Dasher",
+     "kind": "npc",
+     "model": "MODEL_LITTLESANTA",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/xmassanta.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      222,
+      24
+     ],
+     "count": 1
+    },
+    "469": {
+     "number": 469,
+     "name": "Kermit",
+     "kind": "npc",
+     "model": "MODEL_LITTLESANTA+1",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/xmassanta.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      202,
+      33
+     ],
+     "count": 1
+    },
+    "470": {
+     "number": 470,
+     "name": "Little Santa",
+     "kind": "npc",
+     "model": "MODEL_LITTLESANTA+2",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/xmassanta.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      192,
+      24
+     ],
+     "count": 1
+    },
+    "472": {
+     "number": 472,
+     "name": "Prancer",
+     "kind": "npc",
+     "model": "MODEL_LITTLESANTA+4",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/xmassanta.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      225,
+      11
+     ],
+     "count": 1
+    },
+    "473": {
+     "number": 473,
+     "name": "Donner",
+     "kind": "npc",
+     "model": "MODEL_LITTLESANTA+5",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/xmassanta.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      232,
+      13
+     ],
+     "count": 1
+    },
+    "474": {
+     "number": 474,
+     "name": "Vixen",
+     "kind": "npc",
+     "model": "MODEL_LITTLESANTA+6",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/xmassanta.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      216,
+      19
+     ],
+     "count": 1
+    },
+    "475": {
+     "number": 475,
+     "name": "Blitzen",
+     "kind": "npc",
+     "model": "MODEL_LITTLESANTA+7",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/xmassanta.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      193,
+      27
+     ],
+     "count": 1
+    }
+   },
+   "objects": {
+    "worldFolder": "World63",
+    "placed": 679,
+    "types": 38,
+    "skippedTypes": []
+   },
+   "http": [
+    "404 /data/s9/Object63/Object41.bmd",
+    "404 /data/s9/Object63/Object38.bmd",
+    "404 /data/s9/Object63/Object52.bmd",
+    "404 /data/s9/Local/Eng/Minimap/Minimap_World63_eng.bmd",
+    "404 /data/World63/mini_map.tga"
+   ],
+   "ktx2Misses": 62,
+   "console": [
+    "Model missing: Object63/Object41.bmd 404 /data/s9/Object63/Object41.bmd",
+    "Model missing: Object63/Object38.bmd 404 /data/s9/Object63/Object38.bmd",
+    "Model missing: Object63/Object52.bmd 404 /data/s9/Object63/Object52.bmd"
+   ],
+   "pageErrors": [],
+   "shot": "062-santa-village.jpg"
+  },
+  {
+   "map": 63,
+   "name": "Vulcanus",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 122,
+      "y": 135
+     },
+     "at": [
+      122,
+      135
+     ],
+     "seen": 1
+    },
+    {
+     "goal": {
+      "x": 94,
+      "y": 72
+     },
+     "at": [
+      94,
+      72
+     ],
+     "seen": 10
+    },
+    {
+     "goal": {
+      "x": 85,
+      "y": 30
+     },
+     "at": [
+      122,
+      132
+     ],
+     "seen": 1
+    },
+    {
+     "goal": {
+      "x": 43,
+      "y": 54
+     },
+     "at": [
+      120,
+      131
+     ],
+     "seen": 1
+    },
+    {
+     "goal": {
+      "x": 49,
+      "y": 157
+     },
+     "at": [
+      49,
+      157
+     ],
+     "seen": 9
+    },
+    {
+     "goal": {
+      "x": 67,
+      "y": 211
+     },
+     "at": [
+      67,
+      211
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 149,
+      "y": 203
+     },
+     "at": [
+      149,
+      203
+     ],
+     "seen": 9
+    },
+    {
+     "goal": {
+      "x": 201,
+      "y": 225
+     },
+     "at": [
+      201,
+      225
+     ],
+     "seen": 7
+    },
+    {
+     "goal": {
+      "x": 207,
+      "y": 183
+     },
+     "at": [
+      121,
+      131
+     ],
+     "seen": 1
+    }
+   ],
+   "monsters": {
+    "479": {
+     "number": 479,
+     "name": "Doorkeeper Titus",
+     "kind": "npc",
+     "model": "MODEL_DUEL_NPC_TITUS",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/titus.bmd",
+     "meshes": 5,
+     "shown": 5,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      122,
+      135
+     ],
+     "count": 4
+    },
+    "480": {
+     "number": 480,
+     "name": "Zombie Fighter",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_ZOMBIE_FIGHTER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/MONSTER158.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      87,
+      60
+     ],
+     "count": 8
+    },
+    "481": {
+     "number": 481,
+     "name": "Zombie Fighter",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_ZOMBIE_FIGHTER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/MONSTER158.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      95,
+      72
+     ],
+     "count": 1
+    },
+    "482": {
+     "number": 482,
+     "name": "Resurrected Gladiator",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_GLADIATOR",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/MONSTER159.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      93,
+      62
+     ],
+     "count": 7
+    },
+    "483": {
+     "number": 483,
+     "name": "Resurrected Gladiator",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_GLADIATOR",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/MONSTER159.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      44,
+      166
+     ],
+     "count": 2
+    },
+    "484": {
+     "number": 484,
+     "name": "Ash Slaughterer",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_SLAUGTHERER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/MONSTER160.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      34,
+      156
+     ],
+     "count": 12
+    },
+    "485": {
+     "number": 485,
+     "name": "Ash Slaughterer",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_SLAUGTHERER",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/MONSTER160.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      154,
+      186
+     ],
+     "count": 3
+    },
+    "486": {
+     "number": 486,
+     "name": "Blood Assassin",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_BLOOD_ASSASSIN",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/MONSTER161.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": true,
+     "dead": false,
+     "cell": [
+      138,
+      201
+     ],
+     "count": 7
+    }
+   },
+   "objects": {
+    "worldFolder": "World64",
+    "placed": 2290,
+    "types": 62,
+    "skippedTypes": []
+   },
+   "http": [
+    "404 /data/s9/World64/TileRock05.jpg",
+    "404 /data/s9/World64/TileRock06.jpg",
+    "404 /data/s9/Object64/Object55.bmd",
+    "404 /data/s9/Object64/bons.jpg"
+   ],
+   "ktx2Misses": 61,
+   "console": [
+    "Model missing: Object64/Object55.bmd 404 /data/s9/Object64/Object55.bmd",
+    "Texture missing: bons.jpg in Object64, Item"
+   ],
+   "pageErrors": [],
+   "shot": "063-vulcanus.jpg"
+  },
+  {
+   "map": 64,
+   "name": null,
+   "arrived": false,
+   "spots": [],
+   "monsters": {},
+   "objects": null,
+   "http": [],
+   "ktx2Misses": 0,
+   "console": [],
+   "pageErrors": []
+  },
+  {
+   "map": 65,
+   "name": null,
+   "arrived": false,
+   "spots": [],
+   "monsters": {},
+   "objects": null,
+   "http": [],
+   "ktx2Misses": 0,
+   "console": [],
+   "pageErrors": []
+  },
+  {
+   "map": 69,
+   "name": null,
+   "arrived": false,
+   "spots": [],
+   "monsters": {},
+   "objects": null,
+   "http": [],
+   "ktx2Misses": 0,
+   "console": [],
+   "pageErrors": []
+  },
+  {
+   "map": 79,
+   "name": "Loren Market",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 113,
+      "y": 116
+     },
+     "at": [
+      113,
+      116
+     ],
+     "seen": 1
+    },
+    {
+     "goal": {
+      "x": 123,
+      "y": 140
+     },
+     "at": [
+      123,
+      140
+     ],
+     "seen": 1
+    }
+   ],
+   "monsters": {
+    "545": {
+     "number": 545,
+     "name": "Christine the General Goods Merchant",
+     "kind": "npc",
+     "model": "MODEL_UNITEDMARKETPLACE_CHRISTIN",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/UnitedMarketPlace_christine.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      113,
+      116
+     ],
+     "count": 1
+    },
+    "547": {
+     "number": 547,
+     "name": "Market Union Member Julia",
+     "kind": "npc",
+     "model": "MODEL_UNITEDMARKETPLACE_JULIA",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/UnitedMarkedPlace_julia.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      123,
+      140
+     ],
+     "count": 1
+    }
+   },
+   "objects": {
+    "worldFolder": "World80",
+    "placed": 527,
+    "types": 54,
+    "skippedTypes": []
+   },
+   "http": [
+    "404 /data/s9/Object80/Object61.bmd",
+    "404 /data/s9/Object80/Object01.bmd",
+    "404 /data/s9/Local/Eng/Minimap/Minimap_World80_eng.bmd",
+    "404 /data/World80/mini_map.tga",
+    "404 /data/s9/NPC/flareRed.jpg",
+    "404 /data/s9/NPC/youmuk01aeff.jpg",
+    "404 /data/s9/NPC/sulnalbagiteam.jpg",
+    "404 /data/s9/NPC/xmaseffitemx.jpg",
+    "404 /data/s9/NPC/puckitemz.jpg",
+    "404 /data/s9/NPC/sulnalbagiteampeg.jpg",
+    "404 /data/s9/NPC/motion_blur_r3.JPG"
+   ],
+   "ktx2Misses": 77,
+   "console": [
+    "Model missing: Object80/Object61.bmd 404 /data/s9/Object80/Object61.bmd",
+    "Model missing: Object80/Object01.bmd 404 /data/s9/Object80/Object01.bmd",
+    "Texture missing: flareRed.jpg in NPC",
+    "Texture missing: youmuk01aeff.jpg in NPC",
+    "Texture missing: sulnalbagiteam.jpg in NPC",
+    "Texture missing: xmaseffitemx.jpg in NPC",
+    "Texture missing: puckitemz.jpg in NPC",
+    "Texture missing: sulnalbagiteampeg.jpg in NPC",
+    "Texture missing: motion_blur_r3.JPG in NPC"
+   ],
+   "pageErrors": [],
+   "shot": "079-loren-market.jpg"
+  },
+  {
+   "map": 80,
+   "name": "Karutan 1",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 121,
+      "y": 102
+     },
+     "at": [
+      121,
+      102
+     ],
+     "seen": 2
+    },
+    {
+     "goal": {
+      "x": 117,
+      "y": 126
+     },
+     "at": [
+      117,
+      126
+     ],
+     "seen": 2
+    },
+    {
+     "goal": {
+      "x": 158,
+      "y": 126
+     },
+     "at": [
+      158,
+      126
+     ],
+     "seen": 2
+    },
+    {
+     "goal": {
+      "x": 129,
+      "y": 59
+     },
+     "at": [
+      129,
+      59
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 148,
+      "y": 81
+     },
+     "at": [
+      148,
+      81
+     ],
+     "seen": 6
+    },
+    {
+     "goal": {
+      "x": 166,
+      "y": 66
+     },
+     "at": [
+      166,
+      66
+     ],
+     "seen": 6
+    },
+    {
+     "goal": {
+      "x": 183,
+      "y": 43
+     },
+     "at": [
+      183,
+      43
+     ],
+     "seen": 5
+    },
+    {
+     "goal": {
+      "x": 189,
+      "y": 72
+     },
+     "at": [
+      189,
+      72
+     ],
+     "seen": 3
+    },
+    {
+     "goal": {
+      "x": 192,
+      "y": 109
+     },
+     "at": [
+      192,
+      109
+     ],
+     "seen": 6
+    }
+   ],
+   "monsters": {
+    "240": {
+     "number": 240,
+     "name": "Safety Guardian",
+     "kind": "npc",
+     "model": "MODEL_STORAGE",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/Storage01.bmd",
+     "meshes": 14,
+     "shown": 13,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      122,
+      96
+     ],
+     "count": 3
+    },
+    "569": {
+     "number": 569,
+     "name": "Venomous Chain Scorpion",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_VENOMOUS_CHAIN_SCORPION",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster210.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      171,
+      122
+     ],
+     "count": 15
+    },
+    "570": {
+     "number": 570,
+     "name": "Bone Scorpion",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_BONE_SCORPION",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster211.bmd",
+     "meshes": 1,
+     "shown": 1,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      131,
+      61
+     ],
+     "count": 14
+    },
+    "571": {
+     "number": 571,
+     "name": "Orcus",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_ORCUS",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster212.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      184,
+      44
+     ],
+     "count": 2
+    },
+    "577": {
+     "number": 577,
+     "name": "Leina the General Goods Merchant",
+     "kind": "npc",
+     "model": "MODEL_KARUTAN_NPC_REINA",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/UnitedMarketPlace_christine.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      121,
+      102
+     ],
+     "count": 1
+    },
+    "578": {
+     "number": 578,
+     "name": "Weapons Merchant Bolo",
+     "kind": "npc",
+     "model": "MODEL_KARUTAN_NPC_VOLVO",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/volvo.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      117,
+      126
+     ],
+     "count": 1
+    }
+   },
+   "objects": {
+    "worldFolder": "World81",
+    "placed": 2125,
+    "types": 104,
+    "skippedTypes": []
+   },
+   "http": [],
+   "ktx2Misses": 99,
+   "console": [],
+   "pageErrors": [],
+   "shot": "080-karutan-1.jpg"
+  },
+  {
+   "map": 81,
+   "name": "Karutan 2",
+   "arrived": true,
+   "spots": [
+    {
+     "goal": {
+      "x": 58,
+      "y": 160
+     },
+     "at": [
+      58,
+      160
+     ],
+     "seen": 7
+    },
+    {
+     "goal": {
+      "x": 134,
+      "y": 141
+     },
+     "at": [
+      134,
+      141
+     ],
+     "seen": 7
+    },
+    {
+     "goal": {
+      "x": 197,
+      "y": 157
+     },
+     "at": [
+      197,
+      157
+     ],
+     "seen": 10
+    },
+    {
+     "goal": {
+      "x": 64,
+      "y": 134
+     },
+     "at": [
+      64,
+      134
+     ],
+     "seen": 11
+    },
+    {
+     "goal": {
+      "x": 132,
+      "y": 117
+     },
+     "at": [
+      132,
+      117
+     ],
+     "seen": 8
+    },
+    {
+     "goal": {
+      "x": 214,
+      "y": 133
+     },
+     "at": [
+      214,
+      133
+     ],
+     "seen": 7
+    },
+    {
+     "goal": {
+      "x": 78,
+      "y": 42
+     },
+     "at": [
+      78,
+      42
+     ],
+     "seen": 6
+    },
+    {
+     "goal": {
+      "x": 58,
+      "y": 59
+     },
+     "at": [
+      124,
+      124
+     ],
+     "seen": 4
+    },
+    {
+     "goal": {
+      "x": 114,
+      "y": 61
+     },
+     "at": [
+      114,
+      61
+     ],
+     "seen": 5
+    }
+   ],
+   "monsters": {
+    "240": {
+     "number": 240,
+     "name": "Safety Guardian",
+     "kind": "npc",
+     "model": "MODEL_STORAGE",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/Storage01.bmd",
+     "meshes": 14,
+     "shown": 13,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      123,
+      132
+     ],
+     "count": 1
+    },
+    "571": {
+     "number": 571,
+     "name": "Orcus",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_ORCUS",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster212.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      56,
+      159
+     ],
+     "count": 19
+    },
+    "572": {
+     "number": 572,
+     "name": "Gollock",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_GOLLOCK",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster213.bmd",
+     "meshes": 3,
+     "shown": 3,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      57,
+      161
+     ],
+     "count": 15
+    },
+    "575": {
+     "number": 575,
+     "name": "Condra",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_CONDRA",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster216.bmd",
+     "meshes": 4,
+     "shown": 4,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      60,
+      120
+     ],
+     "count": 17
+    },
+    "576": {
+     "number": 576,
+     "name": "Narcondra",
+     "kind": "monster",
+     "model": "MONSTER_MODEL_NACONDRA",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "Monster/Monster217.bmd",
+     "meshes": 6,
+     "shown": 6,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      64,
+      132
+     ],
+     "count": 12
+    },
+    "578": {
+     "number": 578,
+     "name": "Weapons Merchant Bolo",
+     "kind": "npc",
+     "model": "MODEL_KARUTAN_NPC_VOLVO",
+     "unknown": null,
+     "playerShaped": false,
+     "skin": null,
+     "body": "NPC/volvo.bmd",
+     "meshes": 2,
+     "shown": 2,
+     "untextured": 0,
+     "seeThrough": 0,
+     "additiveOnly": false,
+     "groupVisible": true,
+     "culled": false,
+     "dead": false,
+     "cell": [
+      117,
+      126
+     ],
+     "count": 1
+    }
+   },
+   "objects": {
+    "worldFolder": "World82",
+    "placed": 1783,
+    "types": 83,
+    "skippedTypes": []
+   },
+   "http": [],
+   "ktx2Misses": 68,
+   "console": [],
+   "pageErrors": [],
+   "shot": "081-karutan-2.jpg"
+  },
+  {
+   "map": 82,
+   "name": null,
+   "arrived": false,
+   "spots": [],
+   "monsters": {},
+   "objects": null,
+   "http": [],
+   "ktx2Misses": 0,
+   "console": [],
+   "pageErrors": []
+  },
+  {
+   "map": 91,
+   "name": null,
+   "arrived": false,
+   "spots": [],
+   "monsters": {},
+   "objects": null,
+   "http": [],
+   "ktx2Misses": 0,
+   "console": [],
+   "pageErrors": []
+  },
+  {
+   "map": 93,
+   "name": null,
+   "arrived": false,
+   "spots": [],
+   "monsters": {},
+   "objects": null,
+   "http": [],
+   "ktx2Misses": 0,
+   "console": [],
+   "pageErrors": []
+  },
+  {
+   "map": 94,
+   "name": null,
+   "arrived": false,
+   "spots": [],
+   "monsters": {},
+   "objects": null,
+   "http": [],
+   "ktx2Misses": 0,
+   "console": [],
+   "pageErrors": []
+  },
+  {
+   "map": 95,
+   "name": null,
+   "arrived": false,
+   "spots": [],
+   "monsters": {},
+   "objects": null,
+   "http": [],
+   "ktx2Misses": 0,
+   "console": [],
+   "pageErrors": []
+  },
+  {
+   "map": 98,
+   "name": null,
+   "arrived": false,
+   "spots": [],
+   "monsters": {},
+   "objects": null,
+   "http": [],
+   "ktx2Misses": 0,
+   "console": [],
+   "pageErrors": []
+  },
+  {
+   "map": 100,
+   "name": null,
+   "arrived": false,
+   "spots": [],
+   "monsters": {},
+   "objects": null,
+   "http": [],
+   "ktx2Misses": 0,
+   "console": [],
+   "pageErrors": []
+  },
+  {
+   "map": 102,
+   "name": null,
+   "arrived": false,
+   "spots": [],
+   "monsters": {},
+   "objects": null,
+   "http": [],
+   "ktx2Misses": 0,
+   "console": [],
+   "pageErrors": []
+  }
+ ],
+ "hero": {
+  "name": "testgmDk",
+  "map": 0,
+  "season": null
+ },
+ "clientSeason": "s9"
+}

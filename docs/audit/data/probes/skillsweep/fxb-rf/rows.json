@@ -1,0 +1,137 @@
+{
+ "rows": [
+  {
+   "n": 262,
+   "castable": true,
+   "cast": true,
+   "target": "Budge Dragon",
+   "dist": 1,
+   "onSkill": [],
+   "effects": 0,
+   "made": {},
+   "damage": 1,
+   "p95": 17,
+   "max": 67,
+   "casting": false,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": "rageAttack",
+     "equipmentOk": false,
+     "needsTarget": true,
+     "heroAction": 249
+    },
+    "info": {
+     "mana": 15,
+     "ag": 20,
+     "distance": 4,
+     "delay": 700
+    },
+    "mana": 3452,
+    "ag": 2432,
+    "safe": false
+   }
+  },
+  {
+   "n": 265,
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "dist": 1,
+   "onSkill": [],
+   "effects": 0,
+   "made": {},
+   "damage": 1,
+   "p95": 17,
+   "max": 17,
+   "casting": false,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": "rageAttack",
+     "equipmentOk": false,
+     "needsTarget": true,
+     "heroAction": 252
+    },
+    "info": {
+     "mana": 100,
+     "ag": 100,
+     "distance": 4,
+     "delay": 3000
+    },
+    "mana": 3452,
+    "ag": 2533,
+    "safe": false
+   }
+  },
+  {
+   "n": 269,
+   "castable": true,
+   "cast": true,
+   "target": "Budge Dragon",
+   "dist": 1,
+   "onSkill": [],
+   "effects": 0,
+   "made": {},
+   "damage": 1,
+   "p95": 17,
+   "max": 17,
+   "casting": false,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": false,
+     "needsTarget": true,
+     "heroAction": null
+    },
+    "info": {
+     "mana": 20,
+     "ag": 15,
+     "distance": 4,
+     "delay": 0
+    },
+    "mana": 3452,
+    "ag": 2734,
+    "safe": false
+   }
+  },
+  {
+   "n": 270,
+   "castable": true,
+   "cast": true,
+   "target": "Budge Dragon",
+   "dist": 1,
+   "onSkill": [
+    270
+   ],
+   "effects": 10,
+   "made": {
+    "particle:blood2": 10
+   },
+   "damage": 1,
+   "p95": 17,
+   "max": 17,
+   "casting": false,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "heroAction": 254
+    },
+    "info": {
+     "mana": 30,
+     "ag": 0,
+     "distance": 4,
+     "delay": 1200
+    },
+    "mana": 3452,
+    "ag": 3037,
+    "safe": false
+   }
+  }
+ ],
+ "errors": []
+}
