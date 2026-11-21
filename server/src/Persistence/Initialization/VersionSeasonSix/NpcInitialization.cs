@@ -223,6 +223,8 @@ internal partial class NpcInitialization : Version095d.NpcInitialization
             def.Number = 379;
             def.Designation = LocalizedString.FromResource(() => MonsterNames.FireworksGirl);
             def.ObjectKind = NpcObjectKind.PassiveNpc;
+            def.NpcWindow = NpcWindow.Merchant;
+            def.MerchantStore = this.CreateRheaStore(def.Number); // armors and weapons (shop list of the Season 6 server suite)
             this.GameConfiguration.Monsters.Add(def);
             def.SetGuid(def.Number);
         }
@@ -549,7 +551,7 @@ internal partial class NpcInitialization : Version095d.NpcInitialization
             def.Designation = LocalizedString.FromResource(() => MerchantNames.Silvia);
             def.ObjectKind = NpcObjectKind.PassiveNpc;
             def.NpcWindow = NpcWindow.Merchant;
-            def.MerchantStore = this.CreatePotionGirlItemStorage(def.Number);
+            def.MerchantStore = this.CreateMarceStore(def.Number); // the scrolls (shop list of the Season 6 server suite)
             this.GameConfiguration.Monsters.Add(def);
             def.SetGuid(def.Number);
         }
@@ -560,7 +562,7 @@ internal partial class NpcInitialization : Version095d.NpcInitialization
             def.Designation = LocalizedString.FromResource(() => MerchantNames.Rhea);
             def.ObjectKind = NpcObjectKind.PassiveNpc;
             def.NpcWindow = NpcWindow.Merchant;
-            def.MerchantStore = this.CreateRheaStore(def.Number);
+            def.MerchantStore = this.CreatePotionGirlItemStorage(def.Number); // the potions (shop list of the Season 6 server suite)
             this.GameConfiguration.Monsters.Add(def);
             def.SetGuid(def.Number);
         }
@@ -570,7 +572,7 @@ internal partial class NpcInitialization : Version095d.NpcInitialization
             def.Number = 417;
             def.Designation = LocalizedString.FromResource(() => MerchantNames.Marce);
             def.ObjectKind = NpcObjectKind.PassiveNpc;
-            def.MerchantStore = this.CreateMarceStore(def.Number);
+            def.MerchantStore = this.CreateBoloStore(def.Number); // weapons (shop list of the Season 6 server suite)
             def.NpcWindow = NpcWindow.Merchant;
             this.GameConfiguration.Monsters.Add(def);
             def.SetGuid(def.Number);
