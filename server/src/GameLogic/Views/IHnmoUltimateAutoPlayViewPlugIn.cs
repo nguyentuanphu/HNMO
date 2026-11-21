@@ -10,5 +10,7 @@ namespace HNMO.GameLogic.Views;
 public interface IHnmoUltimateAutoPlayViewPlugIn : IViewPlugIn
 {
     /// <summary>Sends the policy JSON to the player's client.</summary>
+    /// <param name="json">The policy JSON.</param>
+    /// <returns>The task.</returns>
     ValueTask ShowUltimateAutoPlayPolicyAsync(string json);
 }

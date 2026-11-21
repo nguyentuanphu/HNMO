@@ -12,16 +12,20 @@ using System.Text.Json;
 /// </summary>
 public static class UltimateAutoPlayPolicyWriter
 {
+    /// <summary>Disabled policy payload sent when the plug-in is inactive or disabled.</summary>
+    public const string DisabledPolicyJson = "{\"v\":1,\"enabled\":false,\"isVip\":false,\"features\":{}}";
+
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         Encoder = JavaScriptEncoder.Default,
         WriteIndented = false,
     };
 
-    /// <summary>Disabled policy payload sent when the plug-in is inactive or disabled.</summary>
-    public const string DisabledPolicyJson = "{\"v\":1,\"enabled\":false,\"isVip\":false,\"features\":{}}";
-
     /// <summary>Builds the JSON policy payload for a player.</summary>
+    /// <param name="cfg">The settings.</param>
+    /// <param name="plugInActive">Whether the plug-in is active.</param>
+    /// <param name="isVip">Whether the player has VIP.</param>
+    /// <returns>The policy JSON.</returns>
     public static string Write(UltimateAutoPlayConfiguration cfg, bool plugInActive, bool isVip)
     {
         var enabled = plugInActive && cfg.Enabled;

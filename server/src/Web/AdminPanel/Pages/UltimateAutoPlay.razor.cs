@@ -24,7 +24,6 @@ public partial class UltimateAutoPlay : ComponentBase
     private bool _isActive = true;
     private bool _isLoading = true;
     private bool _isSaving;
-    private bool _showHelp;
 
     [Inject]
     private IPersistenceContextProvider PersistenceContextProvider { get; set; } = null!;
@@ -44,36 +43,45 @@ public partial class UltimateAutoPlay : ComponentBase
     private static string L(string en, string vi) =>
         CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("vi", StringComparison.OrdinalIgnoreCase) ? vi : en;
 
+    private static IEnumerable<(UltimateFeatureMode Mode, string Label)> ModeLabels() =>
+    [
+        (UltimateFeatureMode.Off, L("Off", "Tắt")),
+        (UltimateFeatureMode.Free, L("Free (All)", "Miễn phí")),
+        (UltimateFeatureMode.VipOnly, L("VIP Only", "Chỉ VIP")),
+    ];
+
     private RenderFragment RenderModeSelect(string id, UltimateFeatureMode current, Action<UltimateFeatureMode> setter) => builder =>
     {
         builder.OpenElement(0, "select");
         builder.AddAttribute(1, "id", id);
         builder.AddAttribute(2, "class", "form-select form-select-sm");
         builder.AddAttribute(3, "value", (int)current);
-        builder.AddAttribute(4, "onchange", EventCallback.Factory.Create<ChangeEventArgs>(this, e =>
+        builder.AddAttribute(4, "title", L("Who may use this function", "Ai được dùng tính năng này"));
+        builder.AddAttribute(5, "onchange", EventCallback.Factory.Create<ChangeEventArgs>(this, e =>
         {
             if (int.TryParse(e.Value?.ToString(), out var parsed) && Enum.IsDefined(typeof(UltimateFeatureMode), parsed))
             {
                 setter((UltimateFeatureMode)parsed);
             }
         }));
-        AddOption(builder, 5, UltimateFeatureMode.Off, L("Off", "Tắt"));
-        AddOption(builder, 8, UltimateFeatureMode.Free, L("Free (All)", "Miễn phí"));
-        AddOption(builder, 11, UltimateFeatureMode.VipOnly, L("VIP Only", "Chỉ VIP"));
+        foreach (var (mode, label) in ModeLabels())
+        {
+            builder.OpenElement(6, "option");
+            builder.AddAttribute(7, "value", (int)mode);
+            builder.AddContent(8, label);
+            builder.CloseElement();
+        }
+
         builder.CloseElement();
     };
 
-    private static void AddOption(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder builder, int seq, UltimateFeatureMode mode, string label)
-    {
-        builder.OpenElement(seq, "option");
-        builder.AddAttribute(seq + 1, "value", (int)mode);
-        builder.AddContent(seq + 2, label);
-        builder.CloseElement();
-    }
-
     private void ApplyRecommendedSplit()
     {
-        if (this._configuration is null) return;
+        if (this._configuration is null)
+        {
+            return;
+        }
+
         this._configuration.Enabled = true;
         this._configuration.SparkleGuide = UltimateFeatureMode.Free;
         this._configuration.PresetsAndStats = UltimateFeatureMode.Free;
@@ -91,7 +99,11 @@ public partial class UltimateAutoPlay : ComponentBase
 
     private void SetAllModes(UltimateFeatureMode mode)
     {
-        if (this._configuration is null) return;
+        if (this._configuration is null)
+        {
+            return;
+        }
+
         this._configuration.Enabled = true;
         this._configuration.SparkleGuide = mode;
         this._configuration.ManaSdPotions = mode;

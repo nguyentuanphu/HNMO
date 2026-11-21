@@ -13,6 +13,9 @@ import { gameName } from '../gameName.js';
 import type { TargetPriority, UltimateAutoPlayHooks } from './autoPlay.js';
 import type { Character } from './characters.js';
 import type { Item } from './inventory.js';
+import { currentLanguage } from '../i18n.js';
+
+const tx = (en: string, vi: string): string => (currentLanguage() === 'vi' ? vi : en);
 
 export type UltimatePreset = 'balanced' | 'afkFarm' | 'bossHunt' | 'custom';
 
@@ -413,7 +416,7 @@ export class AutoPlayExtras {
         else if (now - this.pendingDeathReturn.respawnedAt >= 5000) {
           const ret = this.pendingDeathReturn;
           this.pendingDeathReturn = null;
-          this.world.message('Auto play: respawned, returning to hunting spot.');
+          this.world.message(tx('Auto play: respawned, returning to the hunting spot.', 'Tự động: đã hồi sinh, đang quay lại bãi săn.'));
           this.trip = { step: 'warpBack', map: ret.map, spot: ret.spot, since: now, bought: 0, boughtMana: 0, lastAt: 0 };
         }
       }
@@ -454,7 +457,7 @@ export class AutoPlayExtras {
       this.lastJewelDepositAt = now;
       if (this.world.depositAllJewels?.()) {
         this.stats.jewelDeposits++;
-        this.world.message('Ultimate Auto play: deposited jewels to Jewel Bank.');
+        this.world.message(tx('Auto play: jewels deposited in the Jewel Bank.', 'Tự động: đã gửi ngọc vào Ngân hàng ngọc.'));
         full = this.world.bagFull();
       }
     }
@@ -519,7 +522,7 @@ export class AutoPlayExtras {
     this.lastMonsterSeenAt = now;
     this.world.setOrigin?.({ x: next.x, y: next.y });
     this.world.walkTo({ x: next.x, y: next.y });
-    this.world.message(`Ultimate Auto play: patrolling to spot (${next.x}, ${next.y}).`);
+    this.world.message(tx(`Auto play: patrolling to spot (${next.x}, ${next.y}).`, `Tự động: chuyển sang bãi (${next.x}, ${next.y}).`));
   }
 
   private next(step: TripStep, now: number): void {

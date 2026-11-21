@@ -7,21 +7,8 @@
 <PageTitle>HNMO: @L("Ultimate Autoplay", "Autoplay Toàn Diện")</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@L("Ultimate Autoplay", "Autoplay Toàn Diện")" />
 
-<div class="d-flex align-items-center gap-2 mb-2">
-    <h1 class="mb-0">@L("Ultimate Autoplay switches & Free/VIP policy", "Công tắc Autoplay Toàn Diện & phân quyền Free/VIP")</h1>
-    <button type="button" class="btn btn-sm btn-outline-info" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
-</div>
-
-@if (this._showHelp)
-{
-    <div class="alert alert-info mb-3" role="note">
-        <strong>@L("How it works", "Cách hoạt động"):</strong>
-        <ul class="mb-0 mt-1">
-            <li>@L("Set each Ultimate Autoplay function to Off, Free (all players), or VIP Only (requires Stats.IsVip).", "Chỉnh từng tính năng về Tắt, Miễn phí (tất cả người chơi), hoặc Chỉ VIP (yêu cầu Stats.IsVip).")</li>
-            <li>@L("Changes are sent to web clients on login and when Ultimate Autoplay is opened (Alt+Z).", "Thay đổi được gửi tới web client khi đăng nhập và khi mở Autoplay Toàn Diện (Alt+Z).")</li>
-        </ul>
-    </div>
-}
+<h1>@L("Ultimate Autoplay switches & Free/VIP policy", "Công tắc Autoplay Toàn Diện & phân quyền Free/VIP")</h1>
+<PageHelp Text="@L("Set each Ultimate Autoplay function to Off, Free (every player) or VIP Only (players with VIP on the character or the account). Players in the game get the new settings as soon as you save; others when they enter the game.", "Chỉnh từng tính năng Autoplay Toàn Diện về Tắt, Miễn phí (mọi người chơi) hoặc Chỉ VIP (người chơi có VIP trên nhân vật hoặc tài khoản). Người đang chơi nhận cài đặt mới ngay khi bạn lưu; người khác khi vào game.")" />
 
 @if (this._isLoading || this._configuration is not { } cfg)
 {
@@ -43,9 +30,9 @@ else
                     </div>
                 </div>
                 <div class="btn-group btn-group-sm" role="group">
-                    <button type="button" class="btn btn-outline-primary" id="uap-preset-split" @onclick="this.ApplyRecommendedSplit">@L("Recommended Free/VIP Split", "Phân chia Free/VIP đề xuất")</button>
-                    <button type="button" class="btn btn-outline-success" id="uap-preset-free" @onclick="this.ApplyAllFree">@L("All Free", "Tất cả Miễn phí")</button>
-                    <button type="button" class="btn btn-outline-warning" id="uap-preset-vip" @onclick="this.ApplyAllVip">@L("All VIP Only", "Tất cả Chỉ VIP")</button>
+                    <button type="button" class="btn btn-outline-primary" id="uap-preset-split" title="@L("Sparkles and presets free, the rest for VIP", "Vệt sáng và preset miễn phí, còn lại chỉ VIP")" @onclick="this.ApplyRecommendedSplit">@L("Recommended Free/VIP Split", "Phân chia Free/VIP đề xuất")</button>
+                    <button type="button" class="btn btn-outline-success" id="uap-preset-free" title="@L("Every function free for every player", "Mọi tính năng miễn phí cho mọi người chơi")" @onclick="this.ApplyAllFree">@L("All Free", "Tất cả Miễn phí")</button>
+                    <button type="button" class="btn btn-outline-warning" id="uap-preset-vip" title="@L("Every function for VIP players only", "Mọi tính năng chỉ cho người chơi VIP")" @onclick="this.ApplyAllVip">@L("All VIP Only", "Tất cả Chỉ VIP")</button>
                 </div>
             </div>
 
@@ -103,7 +90,7 @@ else
                 </table>
             </div>
 
-            <button type="button" class="btn btn-primary" id="uap-admin-save" disabled="@this._isSaving" @onclick="this.SaveAsync">
+            <button type="button" class="btn btn-primary" id="uap-admin-save" title="@L("Save; players in the game get it at once", "Lưu; người đang chơi nhận ngay")" disabled="@this._isSaving" @onclick="this.SaveAsync">
                 @(this._isSaving ? L("Saving...", "Đang lưu...") : Resources.Save)
             </button>
         </div>

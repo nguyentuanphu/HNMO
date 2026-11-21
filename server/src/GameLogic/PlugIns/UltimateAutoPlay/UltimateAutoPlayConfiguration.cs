@@ -45,7 +45,7 @@ public class UltimateAutoPlayConfiguration
     /// <summary>Gets or sets access for emergency low-HP retreat and auto-return after death.</summary>
     public UltimateFeatureMode Survival { get; set; } = UltimateFeatureMode.VipOnly;
 
-    /// <summary>Gets or sets access for World Boss & Quest focus and boss spawn alerts.</summary>
+    /// <summary>Gets or sets access for World Boss &amp; Quest focus and boss spawn alerts.</summary>
     public UltimateFeatureMode BossFocus { get; set; } = UltimateFeatureMode.VipOnly;
 
     /// <summary>Gets or sets access for presets, auto-pick best skills, anti-stuck watchdog, and live HUD stats.</summary>

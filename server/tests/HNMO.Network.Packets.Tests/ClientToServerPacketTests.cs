@@ -4733,6 +4733,20 @@ public class PacketStructureTests
     }
 
     /// <summary>
+    /// Tests the packet size calculation for HnmoUltimateAutoPlayRequest.
+    /// </summary>
+    [Test]
+    public void HnmoUltimateAutoPlayRequest_PacketSizeValidation()
+    {
+        // Fixed-length packet validation
+        const int expectedLength = 4;
+        var actualLength = HnmoUltimateAutoPlayRequestRef.Length;
+        
+        Assert.That(actualLength, Is.EqualTo(expectedLength), 
+            "Packet length mismatch: declared length does not match calculated size");
+    }
+
+    /// <summary>
     /// Tests the packet size calculation for HnmoBugReportCommand.
     /// </summary>
     [Test]

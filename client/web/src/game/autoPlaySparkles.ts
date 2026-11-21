@@ -18,7 +18,8 @@ export interface SparkleGoal {
 }
 
 export interface SparkleWorld {
-  scene: THREE.Scene;
+  /** The game's root group (game coordinates: x east, y north, z up), not the three.js scene itself. */
+  scene: THREE.Object3D;
   heights: Float32Array;
   flags: Uint16Array;
   heroCell: () => { x: number; y: number };

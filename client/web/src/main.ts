@@ -462,7 +462,7 @@ async function loadMapNow(mapNumber: number): Promise<void> {
   state.world = { ...data, terrain: world.terrain };
   state.autoPlaySparkles?.dispose();
   state.autoPlaySparkles = new AutoPlaySparkles({
-    scene,
+    scene: root,
     heights: data.heights,
     flags: data.flags,
     heroCell: () => state.hero?.cell ?? { x: 0, y: 0 },
@@ -1899,14 +1899,15 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
       autoPlay.setConfig(next);
       settingsWindow.load(next);
       connection.send('ClientToServer', 'MuHelperSaveDataRequest', { HelperData: encodeAutoPlayConfig(next) });
-      chat.add('Ultimate Autoplay: auto-picked learned skills and buffs.', 'system');
+      chat.add(currentLanguage() === 'vi' ? 'Autoplay: đã tự chọn skill và buff đã học.' : 'Autoplay: picked the learned skills and buffs.', 'system');
       return true;
     },
   });
   state.ultimateAutoPlay = ultimateAutoPlay;
   const applyUltimatePolicy = (bytes: Uint8Array) => {
+    // Only F5 57: every packet comes here, and other JSON packets (world bosses, the timetable…) aren't the policy.
+    if (bytes.length < 5 || bytes[0] !== 0xc2 || bytes[3] !== 0xf5 || bytes[4] !== 0x57) return;
     const pkt = read('ServerToClient', 'HnmoUltimateAutoPlayPolicy', bytes);
-    if (!pkt) return;
     autoPlayExtras.setPolicy(String(pkt.Json ?? ''));
     ultimateAutoPlay.refresh(0);
   };
