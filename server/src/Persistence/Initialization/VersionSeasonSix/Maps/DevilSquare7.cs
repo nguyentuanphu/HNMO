@@ -142,10 +142,10 @@ internal class DevilSquare7 : BaseMapInitializer
             monster.Number = 436;
             monster.Designation = LocalizedString.FromResource(() => MonsterNames.BalramTrainee);
             monster.MoveRange = 6;
-            monster.AttackRange = 7;
+            monster.AttackRange = 4;
             monster.ViewRange = 7;
-            monster.MoveDelay = new TimeSpan(700 * TimeSpan.TicksPerMillisecond);
-            monster.AttackDelay = new TimeSpan(1700 * TimeSpan.TicksPerMillisecond);
+            monster.MoveDelay = new TimeSpan(500 * TimeSpan.TicksPerMillisecond);
+            monster.AttackDelay = new TimeSpan(1500 * TimeSpan.TicksPerMillisecond);
             monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 1;
@@ -174,10 +174,10 @@ internal class DevilSquare7 : BaseMapInitializer
             monster.Number = 437;
             monster.Designation = LocalizedString.FromResource(() => MonsterNames.SoramTrainee);
             monster.MoveRange = 6;
-            monster.AttackRange = 4;
+            monster.AttackRange = 2;
             monster.ViewRange = 7;
-            monster.MoveDelay = new TimeSpan(700 * TimeSpan.TicksPerMillisecond);
-            monster.AttackDelay = new TimeSpan(1700 * TimeSpan.TicksPerMillisecond);
+            monster.MoveDelay = new TimeSpan(500 * TimeSpan.TicksPerMillisecond);
+            monster.AttackDelay = new TimeSpan(1500 * TimeSpan.TicksPerMillisecond);
             monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 1;

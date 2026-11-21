@@ -245,7 +245,7 @@ internal class InvasionMobsInitialization : Version095d.InvasionMobsInitializati
             monster.AttackSkill = this.GameConfiguration.Skills.FirstOrDefault(s => s.Number == (short)SkillNumber.MonsterSkill);
             monster.ViewRange = 6;
             monster.MoveDelay = new TimeSpan(400 * TimeSpan.TicksPerMillisecond);
-            monster.AttackDelay = new TimeSpan(1400 * TimeSpan.TicksPerMillisecond);
+            monster.AttackDelay = new TimeSpan(2200 * TimeSpan.TicksPerMillisecond);
             monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 1;
@@ -285,7 +285,7 @@ internal class InvasionMobsInitialization : Version095d.InvasionMobsInitializati
             monster.AttackSkill = this.GameConfiguration.Skills.FirstOrDefault(s => s.Number == (short)SkillNumber.MonsterSkill);
             monster.ViewRange = 3;
             monster.MoveDelay = new TimeSpan(400 * TimeSpan.TicksPerMillisecond);
-            monster.AttackDelay = new TimeSpan(1400 * TimeSpan.TicksPerMillisecond);
+            monster.AttackDelay = new TimeSpan(1500 * TimeSpan.TicksPerMillisecond);
             monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 1;
@@ -325,7 +325,7 @@ internal class InvasionMobsInitialization : Version095d.InvasionMobsInitializati
             monster.AttackSkill = this.GameConfiguration.Skills.FirstOrDefault(s => s.Number == (short)SkillNumber.MonsterSkill);
             monster.ViewRange = 5;
             monster.MoveDelay = new TimeSpan(400 * TimeSpan.TicksPerMillisecond);
-            monster.AttackDelay = new TimeSpan(1600 * TimeSpan.TicksPerMillisecond);
+            monster.AttackDelay = new TimeSpan(1800 * TimeSpan.TicksPerMillisecond);
             monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 1;

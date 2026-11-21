@@ -670,7 +670,7 @@ internal class SwampOfCalmness : BaseMapInitializer
             monster.AttackRange = 2;
             monster.ViewRange = 9;
             monster.MoveDelay = new TimeSpan(700 * TimeSpan.TicksPerMillisecond);
-            monster.AttackDelay = new TimeSpan(2550 * TimeSpan.TicksPerMillisecond);
+            monster.AttackDelay = new TimeSpan(2500 * TimeSpan.TicksPerMillisecond);
             monster.RespawnDelay = new TimeSpan(8 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 1;
@@ -702,7 +702,7 @@ internal class SwampOfCalmness : BaseMapInitializer
             monster.AttackRange = 2;
             monster.ViewRange = 9;
             monster.MoveDelay = new TimeSpan(700 * TimeSpan.TicksPerMillisecond);
-            monster.AttackDelay = new TimeSpan(2550 * TimeSpan.TicksPerMillisecond);
+            monster.AttackDelay = new TimeSpan(2500 * TimeSpan.TicksPerMillisecond);
             monster.RespawnDelay = new TimeSpan(8 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 1;

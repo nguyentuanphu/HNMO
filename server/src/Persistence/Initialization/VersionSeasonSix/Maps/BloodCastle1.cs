@@ -209,7 +209,7 @@ internal class BloodCastle1 : BloodCastleBase
             monster.Number = 86;
             monster.Designation = LocalizedString.FromResource(() => MonsterNames.DarkSkullSoldier1);
             monster.MoveRange = 3;
-            monster.AttackRange = 4;
+            monster.AttackRange = 1;
             monster.ViewRange = 3;
             monster.MoveDelay = new TimeSpan(400 * TimeSpan.TicksPerMillisecond);
             monster.AttackDelay = new TimeSpan(2000 * TimeSpan.TicksPerMillisecond);
@@ -309,7 +309,7 @@ internal class BloodCastle1 : BloodCastleBase
             monster.AttackRange = 4;
             monster.ViewRange = 6;
             monster.MoveDelay = new TimeSpan(400 * TimeSpan.TicksPerMillisecond);
-            monster.AttackDelay = new TimeSpan(1800 * TimeSpan.TicksPerMillisecond);
+            monster.AttackDelay = new TimeSpan(1600 * TimeSpan.TicksPerMillisecond);
             monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 1;
