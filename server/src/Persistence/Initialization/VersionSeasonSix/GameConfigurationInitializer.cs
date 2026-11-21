@@ -92,6 +92,9 @@ public class GameConfigurationInitializer : GameConfigurationInitializerBase
         new NpcInitialization(this.Context, this.GameConfiguration).Initialize();
         new InvasionMobsInitialization(this.Context, this.GameConfiguration).Initialize();
         new GameMapsInitializer(this.Context, this.GameConfiguration).Initialize();
+
+        // The jewels drop by monster level (monster item drop rate table of the Season 6/9 server suites).
+        Updates.JewelDropsByMonsterLevelUpdatePlugIn.Apply(this.Context, this.GameConfiguration);
         this.AssignCharacterClassHomeMaps();
         this.WireRenaDropToEventMaps();
         new SocketSystem(this.Context, this.GameConfiguration).Initialize();
