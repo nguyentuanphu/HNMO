@@ -12,3 +12,13 @@ Working ledgers and findings of the full-read audit. They are folded into `docs/
 | [owner-answers-game-data-2026-11-21.md](owner-answers-game-data-2026-11-21.md) | Owner's decisions on the game data questions |
 
 The suite files themselves are not in the repo; they are on the owner's PC. Tasks that need them are done by the local session.
+
+## Final status (21 Nov, evening)
+
+| File | What |
+|---|---|
+| [status-monsters.md](status-monsters.md) | Monster decisions: done (#224-#228), values chosen without a suite value, Maya body question, Kundun refill texts follow-up |
+| [status-player-actions.md](status-player-actions.md) | Player-action answers: done (#221 #229 #231 #236), not finished, not started |
+| [kundun-refill-texts.json](kundun-refill-texts.json) | Ready translations (4 languages) of the Kundun refill plug-in's settings, for the resource files |
+
+The game data agent is still finishing; its final status follows in a later update.
