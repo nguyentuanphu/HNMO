@@ -548,3 +548,15 @@ The desktop code stays the reference for how the classic game behaves (parity ru
 - Owner (2026-11-21): nothing a host or player gets may point at the code repository (links, update checks, XML
   namespaces, package metadata, strings in DLLs). Updates and downloads go through the hub's `/api/latest` (set in its
   console). Check built DLLs with `grep -l -a <owner name>` before a release.
+
+## Auto updates (2026-11-21)
+
+- Owner's choices: the host presses a button (admin panel "HNMO update"); files on Cloudflare R2; semver from 1.0.0
+  (`VERSION`); only changed files; the database is kept (backup first, back to the old version and backup on failure).
+- Test the updater for real on the packaged folder: a fake hub with `python3 -m http.server` serving `api/latest`,
+  `releases/<v>/manifest.json`, `files/<sha256>`; run with `HNMO_DEVELOPER_HUB=http://127.0.0.1:<port>`
+  `HNMO_UPDATE_START_MINUTES=2`; break a release (random bytes in `server/HNMO.Startup`) to test the rollback.
+- Self-contained single-file folders: never copy a framework-dependent `HNMO.dll` into `web/` (start-hnmo.sh then looks
+  for dotnet); publish the bridge with `-r linux-x64 --self-contained -p:PublishSingleFile=true`.
+- A backup must never hold `save/updates/` (the running update helper): restoring it fails with "Text file busy".
+- Logs the host reads (update.log) are in Sydney time like everything else.

@@ -73,6 +73,14 @@ ADMIN PANEL
   Season 9's under ".../s9/", the Arena's under ".../arena/", one sign-in for all.
   From afar, Host settings shows only the licence (ports and folders: host computer only).
 
+UPDATES
+  Admin panel, "HNMO update": shows this folder's version and the newest one, with its
+  notes. "Update to <version>" downloads only the files that changed, makes a backup of the save
+  game, stops HNMO, puts the new files in and starts it again (a few minutes; players
+  are disconnected meanwhile). The save game stays as it is. If the new version doesn't
+  start, the old files and the save game from before the update come back by themselves.
+  What happened is in save/logs/update.log; the backup is in save/backups.
+
 PLAYERS AT ONCE
   Up to 10 players can be in the game at once, Season 6.3, Season 9 and the Arena
   together (an account playing in two of them counts once). A license file from the owner

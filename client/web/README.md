@@ -29,6 +29,29 @@ web/tools/package-hnmo.sh <path to the server repository> win-x64
 
 The GitHub workflow "HNMO package" builds the Windows folder as a download.
 
+### Versions and updates
+
+`VERSION` (repository root, semver, from 1.0.0) is the version of every HNMO program. The packaged folder holds
+`version.json` and `manifest.json` (every file with its size and SHA-256; `tools/write-update-manifest.py`, called at
+the end of `package-hnmo.sh`; `save/` is never listed).
+
+A host updates from the admin panel ("HNMO update", `/hnmo-update`); the launcher does the work
+(`bridge/Updater.cs`, `/api/control/update`):
+
+1. The hub's `/api/latest` names the newest version and its `manifest_url` and `files_url` (Cloudflare R2:
+   `releases/<version>/manifest.json`, `files/<sha256>`).
+2. Only files whose hash changed are downloaded (to `save/updates/<version>/`) and checked.
+3. A backup of the save game is made (`/api/control/backup`, the database dump included).
+4. A copy of the launcher (`save/updates/runner`) waits for HNMO to stop, swaps the files (the old ones kept aside),
+   starts HNMO and waits for the game and the admin panel (`HNMO_UPDATE_START_MINUTES`, default 10).
+5. If it doesn't come up: the old files back, HNMO restarted, the backup restored. `save/updates/last.json` and
+   `save/logs/update.log` say what happened. A backup leaves out `save/updates/`, `save/backups/` and the logs.
+
+The package workflow uploads to R2 (secrets `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`,
+`R2_BUCKET`): new file hashes, `builds/<run>/manifest.json`, and `releases/<version>/` plus `HNMO.zip` when that version
+isn't there yet. The hub serves it once its console's "Newest HNMO release" names the version (Netlify setting
+`UPDATES_URL` = the bucket's public address). Tests: `launcher-tests/` (`dotnet test`).
+
 ### From source (developers)
 
 You need the .NET 10 SDK, Node.js 22 and a running server,
@@ -126,7 +149,7 @@ names, and the Doppelganger and Imperial Guardian events.
 
 The hero uses the existing six `Interface/lo_back_im*.OZJ` game artwork tiles, assembled as
 `public/images/realm.jpg`; no artwork from any other site is used. The Windows download points
-to this repository's latest release.
+to the newest release the developer hub offers (`/api/latest`).
 
 Tests: `tests/e2e/website.spec.ts` and `website-details.spec.ts` use fixtures (routed responses);
 `tests/e2e/website-live.spec.ts` checks a real server (`LIVE_SERVER=1 BASE_URL=…`).
