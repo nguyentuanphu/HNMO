@@ -868,4 +868,6 @@
   <data name="AddArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Thêm Sứ giả Đấu trường HNMO, NPC ở Lorencia, Devias, Noria và Elbeland, mở cửa sổ Đấu trường.</value></data>
   <data name="RenumberArenaHeraldUpdatePlugIn_Name" xml:space="preserve"><value>Sứ giả Đấu trường: số NPC riêng</value></data>
   <data name="RenumberArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Chuyển Sứ giả Đấu trường của bản lưu cũ từ NPC 595 sang 900 để web game hiện lại.</value></data>
+  <data name="SkillEnergyRequirementsUpdatePlugIn_Name" xml:space="preserve"><value>Sửa yêu cầu năng lượng của Recovery và Power Slash</value></data>
+  <data name="SkillEnergyRequirementsUpdatePlugIn_Description" xml:space="preserve"><value>Đặt yêu cầu năng lượng của Recovery thành 168 (khớp bộ máy chủ Season 6/9 và Crystal of Recovery) và của Power Slash thành 100.</value></data>
 </root>
