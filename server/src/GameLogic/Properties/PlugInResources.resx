@@ -2261,4 +2261,6 @@
   <data name="ArenaScheduleNoticesPlugIn_Description" xml:space="preserve"><value>On the home servers: announces the Arena's battle royale and guild war in the game 10 minutes before and at the start, from the schedule the Arena publishes.</value></data>
   <data name="CrossSeasonFriendsPlugIn_Name" xml:space="preserve"><value>HNMO friends across seasons</value></data>
   <data name="CrossSeasonFriendsPlugIn_Description" xml:space="preserve"><value>Friends playing in another HNMO program (Season 6.3, Season 9, the Arena) show where they play in the friend list, and whispers reach them there. No trading between seasons.</value></data>
+  <data name="MonsterAiPlugIn_Name" xml:space="preserve"><value>Monster AI Rules</value></data>
+  <data name="MonsterAiPlugIn_Description" xml:space="preserve"><value>Configures monster attacker chasing, spawn-area leashing, and heal-on-leash behavior.</value></data>
 </root>

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "e977aa40",
+  "generatedAt": "60a0a80f",
   "maxLines": 6000,
   "units": [
     {
@@ -145,12 +145,15 @@
       ],
       "files": 25,
       "lines": 4123,
-      "status": "Checked",
+      "status": "Changed since check",
       "checkedAt": "e977aa40",
       "checkedOn": "2026-11-21",
       "references": "Season 6/9 server suites; docs/audit/findings/owner-answers-monsters-2026-11-21.md",
       "evidence": "ExpSplitByDamageAndDropTest, ExperienceRateSplitTest",
-      "prs": ""
+      "prs": "",
+      "changedFiles": [
+        "server/src/GameLogic/Party.cs"
+      ]
     },
     {
       "id": "server/src/GameLogic (files 4)",
@@ -180,12 +183,16 @@
       ],
       "files": 21,
       "lines": 5948,
-      "status": "Checked",
+      "status": "Changed since check",
       "checkedAt": "e977aa40",
       "checkedOn": "2026-11-21",
       "references": "Season 6/9 server suites; docs/audit/findings/owner-answers-monsters-2026-11-21.md",
       "evidence": "ExpSplitByDamageAndDropTest, ExperienceRateSplitTest",
-      "prs": ""
+      "prs": "",
+      "changedFiles": [
+        "server/src/GameLogic/Player.cs",
+        "server/src/GameLogic/PlayerExperience.cs"
+      ]
     },
     {
       "id": "server/src/GameLogic (files 5)",
@@ -650,12 +657,15 @@
       ],
       "files": 22,
       "lines": 2929,
-      "status": "Checked",
+      "status": "Changed since check",
       "checkedAt": "e977aa40",
       "checkedOn": "2026-11-21",
       "references": "Season 6/9 server suites (gObjMonsterExp, gObjMonsterTopHitDamageUser); docs/audit/findings/owner-answers-monsters-2026-11-21.md",
       "evidence": "MonsterChaseLeashHealTest, ExpSplitByDamageAndDropTest",
-      "prs": "#235"
+      "prs": "#235",
+      "changedFiles": [
+        "server/src/GameLogic/NPC/AttackableNpcBase.cs"
+      ]
     },
     {
       "id": "server/src/GameLogic/Offline",
@@ -1654,12 +1664,16 @@
       ],
       "files": 25,
       "lines": 2081,
-      "status": "Checked",
+      "status": "Changed since check",
       "checkedAt": "e977aa40",
       "checkedOn": "2026-11-21",
       "references": "Season 6/9 server suites; docs/audit/findings/owner-answers-monsters-2026-11-21.md",
       "evidence": "MonsterChaseLeashHealTest, ExpSplitByDamageAndDropTest",
-      "prs": "#235"
+      "prs": "#235",
+      "changedFiles": [
+        "server/src/GameLogic/PlugIns/GameplayRules/MonsterAiConfiguration.cs",
+        "server/src/GameLogic/PlugIns/GameplayRules/MonsterAiPlugIn.cs"
+      ]
     },
     {
       "id": "server/src/GameLogic/PlugIns/GiftBox",

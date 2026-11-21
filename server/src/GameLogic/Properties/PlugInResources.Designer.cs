@@ -6192,5 +6192,11 @@ namespace HNMO.GameLogic.Properties {
         /// <summary>Gets the localized HNMO bug reports text.</summary>
         public static string BugReportsPlugIn_Description => ResourceManager.GetString("BugReportsPlugIn_Description", resourceCulture)!;
 
+        /// <summary>Gets the localized Monster AI Rules plug-in name.</summary>
+        public static string MonsterAiPlugIn_Name => ResourceManager.GetString("MonsterAiPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Monster AI Rules plug-in description.</summary>
+        public static string MonsterAiPlugIn_Description => ResourceManager.GetString("MonsterAiPlugIn_Description", resourceCulture)!;
+
     }
 }
