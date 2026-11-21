@@ -10,6 +10,8 @@ using HNMO.DataModel.Attributes;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Configuration.Items;
 using HNMO.GameLogic.Attributes;
+using HNMO.Interfaces;
+using HNMO.Persistence.Initialization.Properties;
 using HNMO.PlugIns;
 
 /// <summary>
@@ -63,7 +65,7 @@ public class SecondWingOptionsUpdatePlugIn : UpdatePlugInBase
         {
             var capeOptions = context.CreateNew<ItemOptionDefinition>();
             capeOptions.SetGuid(CapeOfFighterOptionsNumber);
-            capeOptions.Name = "Cape of Fighter Options";
+            capeOptions.Name = LocalizedString.FromResource(() => ItemOptionNames.CapeOfFighterOptions); // texts in every language
             capeOptions.AddChance = secondWings.AddChance;
             capeOptions.AddsRandomly = secondWings.AddsRandomly;
             capeOptions.MaximumOptionsPerItem = secondWings.MaximumOptionsPerItem;
