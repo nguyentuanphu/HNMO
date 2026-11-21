@@ -199,9 +199,10 @@ public class TalkNpcAction
 
     private async ValueTask<bool> IsPlayedAllowedToCreateGuildAsync(Player player)
     {
-        if (player.Level < Guild.GuildCreateAction.MinimumLevel)
+        var minimumLevel = PlugIns.GameplayRules.GuildLimitsPlugIn.GetMinimumCreateLevel(player.GameContext);
+        if (player.Level < minimumLevel)
         {
-            await player.InvokeViewPlugInAsync<IShowMessageOfObjectPlugIn>(p => p.ShowMessageOfObjectAsync("Your level should be at least level 100", player.OpenedNpc!)).ConfigureAwait(false);
+            await player.InvokeViewPlugInAsync<IShowMessageOfObjectPlugIn>(p => p.ShowMessageOfObjectAsync($"Your level should be at least level {minimumLevel}", player.OpenedNpc!)).ConfigureAwait(false);
             return false;
         }
 

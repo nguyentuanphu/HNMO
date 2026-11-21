@@ -14,10 +14,6 @@ using HNMO.GameLogic.Views.Guild;
 /// </summary>
 public class GuildCreateAction
 {
-    /// <summary>
-    /// The minimum character level to create a guild, as the guild master NPC requires it.
-    /// </summary>
-    internal const int MinimumLevel = 100;
 
     /// <summary>
     /// Creates the guild.
@@ -43,9 +39,10 @@ public class GuildCreateAction
             return;
         }
 
-        if (creator.Level < MinimumLevel)
+        var minimumLevel = PlugIns.GameplayRules.GuildLimitsPlugIn.GetMinimumCreateLevel(creator.GameContext);
+        if (creator.Level < minimumLevel)
         {
-            creator.Logger.LogWarning("Account {account} requested to create a guild below level {level}.", creator.Account?.LoginName, MinimumLevel);
+            creator.Logger.LogWarning("Account {account} requested to create a guild below level {level}.", creator.Account?.LoginName, minimumLevel);
             await creator.InvokeViewPlugInAsync<IShowGuildCreateResultPlugIn>(p => p.ShowGuildCreateResultAsync(GuildCreateErrorDetail.GuildAlreadyExist)).ConfigureAwait(false);
             return;
         }

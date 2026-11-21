@@ -124,7 +124,7 @@ public class GuildActionTest : GuildTestBase
     [Test]
     public async ValueTask GuildCreateAsync()
     {
-        this._player.Attributes![Stats.Level] = 100;
+        this._player.Attributes![Stats.Level] = 150;
         var action = new GuildCreateAction();
         await action.CreateGuildAsync(this._player, "Foobar2", []).ConfigureAwait(false);
         Assert.That(this._player.GuildStatus, Is.Not.Null);
@@ -141,7 +141,7 @@ public class GuildActionTest : GuildTestBase
     [Test]
     public async ValueTask GuildCreateBelowMinimumLevelIsRejectedAsync()
     {
-        this._player.Attributes![Stats.Level] = 99;
+        this._player.Attributes![Stats.Level] = 149;
 
         await new GuildCreateAction().CreateGuildAsync(this._player, "Foobar3", []).ConfigureAwait(false);
 

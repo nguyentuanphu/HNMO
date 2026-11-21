@@ -99,13 +99,30 @@ public sealed class GuildLimitsPlugIn :
 
     /// <inheritdoc />
     public object CreateDefaultConfig() => new GuildLimitsConfiguration();
+
+    /// <summary>
+    /// Gets the level a character needs to create a guild: <see cref="GuildLimitsConfiguration.MinimumCreateLevel"/>
+    /// of the active guild limits, otherwise its default (150, like the Season 6/9 server suites).
+    /// </summary>
+    /// <param name="gameContext">The game context.</param>
+    /// <returns>The level; 0 when any level may create a guild.</returns>
+    internal static int GetMinimumCreateLevel(IGameContext gameContext)
+    {
+        var configuration = gameContext.PlugInManager.GetActivePlugInsOf<IGuildCreatingPlugIn>()
+            .OfType<GuildLimitsPlugIn>()
+            .FirstOrDefault()?.Configuration;
+        return Math.Max(0, (configuration ?? new GuildLimitsConfiguration()).MinimumCreateLevel);
+    }
 }
 
 /// <summary>The configuration of <see cref="GuildLimitsPlugIn"/>.</summary>
 public sealed class GuildLimitsConfiguration
 {
-    /// <summary>Gets or sets the level a character needs to create a guild (0: any).</summary>
-    public int MinimumCreateLevel { get; set; }
+    /// <summary>
+    /// Gets or sets the level a character needs to create a guild (0: any). It's 150, like the Season 6/9 server
+    /// suites (GuildCreateLevel); the guild master asks for it, and the creation request checks it again.
+    /// </summary>
+    public int MinimumCreateLevel { get; set; } = 150;
 
     /// <summary>
     /// Gets or sets the most members a guild can have, whatever its master's guild size is (0: no cap). It's 80,
