@@ -160,14 +160,14 @@ public class BotGearPlannerTests
 
     /// <summary>
     /// Tests that the budget grows with the points: with enough of them, the same knight plans for the
-    /// top set.
+    /// top set (at level 400: the Titan set needs level 380, as in the Season 6/9 server suites).
     /// </summary>
     [Test]
     public void TopSetWithinBudgetIsPlanned()
     {
         var knight = this.GetClass(BotClassNumbers.DarkKnightNumber);
         var titan = this.GetQualified(knight, ArmorGroup).OrderByDescending(d => this.InvestedRequirement(Wear(d, 0), knight, Stats.BaseStrength)).First();
-        const int level = 150;
+        const int level = 400;
 
         var chosenArmor = this.ChosenOfGroup(knight, NameOfVariant(1), level, 5000, ArmorGroup);
 
@@ -199,12 +199,13 @@ public class BotGearPlannerTests
     /// <summary>
     /// Tests that of two sets of a similar tier the one cut for the build is planned: an energy Magic
     /// Gladiator takes its energy set, not the strength set lying a few drop levels above it.
+    /// At level 400, because both sets need level 380.
     /// </summary>
     [Test]
     public void SetOfTheBuildIsPreferredOverStrongerSetOfAnotherBuild()
     {
         var gladiator = this.GetClass(BotClassNumbers.MagicGladiatorNumber);
-        const int level = 300;
+        const int level = 400;
         var points = level * 7;
 
         var forEnergy = this.ChosenOfGroup(gladiator, NameOfVariant(1), level, points, ArmorGroup)!;
