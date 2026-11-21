@@ -183,6 +183,7 @@ public class OfflineTradeTests
         character.Inventory.Money = 2000;
         character.StoreName = "Cheap Sword";
         character.IsStoreOpened = true;
+        character.Attributes.Add(new HNMO.Persistence.BasicModel.StatAttribute(Stats.Level, 6)); // a store opens from level 6
         var storeItem = baseCtx.CreateNew<HNMO.Persistence.BasicModel.Item>();
         storeItem.Definition = storeDef;
         storeItem.ItemSlot = InventoryConstants.FirstStoreItemSlotIndex;
