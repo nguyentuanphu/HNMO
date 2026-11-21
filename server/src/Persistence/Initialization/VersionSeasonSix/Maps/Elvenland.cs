@@ -45,63 +45,63 @@ internal class Elvenland : BaseMapInitializer
         new(201, 3, 102, 142, 194, 238, 15), // Spider
         new(202, 418, 54, 88, 131, 180, 10), // Strange Rabbit
         new(203, 418, 84, 142, 178, 212, 10), // Strange Rabbit
-        new(204, 421, 87, 125, 90, 170, 10), // Werewolf
-        new(205, 421, 118, 164, 130, 172, 10), // Werewolf
-        new(206, 419, 118, 160, 87, 141, 20), // Polluted Butterfly
+        new(204, 421, 87, 125, 90, 170, 10), // Polluted Butterfly
+        new(205, 421, 118, 164, 130, 172, 10), // Polluted Butterfly
+        new(206, 419, 118, 160, 87, 141, 20), // Hideous Rabbit
         new(207, 425, 205, 205, 16, 16, 1), // Captain Grizzly
         new(208, 425, 200, 200, 54, 54, 1), // Captain Grizzly
         new(209, 425, 219, 219, 74, 74, 1), // Captain Grizzly
         new(210, 423, 230, 230, 143, 143, 1), // Totem Golem
         new(211, 423, 196, 196, 171, 171, 1), // Totem Golem
-        new(212, 420, 74, 74, 81, 81, 1), // Hideous Rabbit
-        new(213, 420, 102, 102, 106, 106, 1), // Hideous Rabbit
+        new(212, 420, 74, 74, 81, 81, 1), // Werewolf
+        new(213, 420, 102, 102, 106, 106, 1), // Werewolf
         new(214, 424, 169, 169, 124, 124, 1), // Grizzly
-        new(215, 419, 93, 93, 117, 117, 1), // Polluted Butterfly
+        new(215, 419, 93, 93, 117, 117, 1), // Hideous Rabbit
         new(216, 423, 202, 202, 193, 193, 1), // Totem Golem
         new(217, 423, 184, 184, 194, 194, 1), // Totem Golem
         new(218, 422, 135, 135, 89, 89, 1), // Cursed Lich
-        new(219, 419, 139, 139, 141, 141, 1), // Polluted Butterfly
-        new(220, 419, 129, 129, 119, 119, 1), // Polluted Butterfly
-        new(221, 419, 130, 130, 132, 132, 1), // Polluted Butterfly
-        new(222, 419, 115, 115, 109, 109, 1), // Polluted Butterfly
+        new(219, 419, 139, 139, 141, 141, 1), // Hideous Rabbit
+        new(220, 419, 129, 129, 119, 119, 1), // Hideous Rabbit
+        new(221, 419, 130, 130, 132, 132, 1), // Hideous Rabbit
+        new(222, 419, 115, 115, 109, 109, 1), // Hideous Rabbit
         new(223, 418, 45, 45, 160, 160, 1), // Strange Rabbit
         new(224, 418, 31, 31, 157, 157, 1), // Strange Rabbit
         new(225, 418, 50, 50, 149, 149, 1), // Strange Rabbit
         new(226, 418, 24, 24, 144, 144, 1), // Strange Rabbit
-        new(227, 421, 68, 68, 137, 137, 1), // Werewolf
-        new(228, 421, 122, 122, 189, 189, 1), // Werewolf
-        new(229, 421, 133, 133, 213, 213, 1), // Werewolf
-        new(230, 421, 33, 33, 130, 130, 1), // Werewolf
+        new(227, 421, 68, 68, 137, 137, 1), // Polluted Butterfly
+        new(228, 421, 122, 122, 189, 189, 1), // Polluted Butterfly
+        new(229, 421, 133, 133, 213, 213, 1), // Polluted Butterfly
+        new(230, 421, 33, 33, 130, 130, 1), // Polluted Butterfly
         new(231, 425, 205, 205, 16, 16, 1), // Captain Grizzly
         new(232, 425, 219, 219, 74, 74, 1), // Captain Grizzly
         new(233, 423, 230, 230, 143, 143, 1), // Totem Golem
         new(234, 423, 196, 196, 171, 171, 1), // Totem Golem
-        new(235, 420, 74, 74, 81, 81, 1), // Hideous Rabbit
+        new(235, 420, 74, 74, 81, 81, 1), // Werewolf
         new(236, 423, 202, 202, 193, 193, 1), // Totem Golem
         new(237, 423, 184, 184, 194, 194, 1), // Totem Golem
         new(238, 425, 185, 185, 20, 20, 1), // Captain Grizzly
-        new(239, 419, 139, 139, 141, 141, 1), // Polluted Butterfly
-        new(240, 419, 129, 129, 119, 119, 1), // Polluted Butterfly
-        new(241, 419, 130, 130, 132, 132, 1), // Polluted Butterfly
+        new(239, 419, 139, 139, 141, 141, 1), // Hideous Rabbit
+        new(240, 419, 129, 129, 119, 119, 1), // Hideous Rabbit
+        new(241, 419, 130, 130, 132, 132, 1), // Hideous Rabbit
         new(242, 418, 45, 45, 160, 160, 1), // Strange Rabbit
         new(243, 418, 31, 31, 157, 157, 1), // Strange Rabbit
         new(244, 418, 50, 50, 149, 149, 1), // Strange Rabbit
         new(245, 418, 24, 24, 144, 144, 1), // Strange Rabbit
-        new(246, 421, 68, 68, 137, 137, 1), // Werewolf
-        new(247, 421, 122, 122, 189, 189, 1), // Werewolf
-        new(248, 421, 93, 93, 117, 117, 1), // Werewolf
-        new(249, 421, 119, 119, 139, 139, 1), // Werewolf
-        new(250, 419, 135, 135, 89, 89, 1), // Polluted Butterfly
-        new(251, 419, 169, 169, 124, 124, 1), // Polluted Butterfly
+        new(246, 421, 68, 68, 137, 137, 1), // Polluted Butterfly
+        new(247, 421, 122, 122, 189, 189, 1), // Polluted Butterfly
+        new(248, 421, 93, 93, 117, 117, 1), // Polluted Butterfly
+        new(249, 421, 119, 119, 139, 139, 1), // Polluted Butterfly
+        new(250, 419, 135, 135, 89, 89, 1), // Hideous Rabbit
+        new(251, 419, 169, 169, 124, 124, 1), // Hideous Rabbit
         new(252, 422, 118, 118, 49, 49, 1), // Cursed Lich
         new(253, 423, 228, 228, 130, 130, 1), // Totem Golem
-        new(254, 419, 150, 150, 110, 110, 1), // Polluted Butterfly
+        new(254, 419, 150, 150, 110, 110, 1), // Hideous Rabbit
         new(255, 423, 226, 226, 149, 149, 1), // Totem Golem
         new(256, 425, 202, 202, 57, 57, 1), // Captain Grizzly
         new(257, 425, 205, 205, 53, 53, 1), // Captain Grizzly
         new(258, 424, 176, 176, 68, 68, 1), // Grizzly
         new(259, 425, 176, 176, 38, 38, 1), // Captain Grizzly
-        new(260, 419, 111, 111, 127, 127, 1), // Polluted Butterfly
+        new(260, 419, 111, 111, 127, 127, 1), // Hideous Rabbit
         new(261, 425, 196, 196, 38, 38, 1), // Captain Grizzly
         new(262, 425, 212, 212, 20, 20, 1), // Captain Grizzly
         new(263, 425, 230, 230, 48, 48, 1), // Captain Grizzly
@@ -118,22 +118,22 @@ internal class Elvenland : BaseMapInitializer
         new(274, 424, 186, 186, 75, 75, 1), // Grizzly
         new(275, 424, 180, 180, 75, 75, 1), // Grizzly
         new(276, 424, 184, 184, 79, 79, 1), // Grizzly
-        new(277, 420, 45, 45, 77, 77, 1), // Hideous Rabbit
+        new(277, 420, 45, 45, 77, 77, 1), // Werewolf
         new(278, 425, 168, 168, 24, 24, 1), // Captain Grizzly
         new(279, 424, 195, 195, 33, 33, 1), // Grizzly
         new(280, 424, 193, 193, 88, 88, 1), // Grizzly
         new(281, 424, 192, 192, 93, 93, 1), // Grizzly
         new(282, 424, 152, 152, 51, 51, 1), // Grizzly
         new(283, 425, 177, 177, 33, 33, 1), // Captain Grizzly
-        new(284, 419, 151, 151, 156, 156, 1), // Polluted Butterfly
-        new(285, 419, 155, 155, 147, 147, 1), // Polluted Butterfly
+        new(284, 419, 151, 151, 156, 156, 1), // Hideous Rabbit
+        new(285, 419, 155, 155, 147, 147, 1), // Hideous Rabbit
         new(286, 422, 115, 115, 89, 89, 1), // Cursed Lich
-        new(287, 421, 135, 135, 195, 195, 1), // Werewolf
+        new(287, 421, 135, 135, 195, 195, 1), // Polluted Butterfly
         new(288, 418, 75, 75, 173, 173, 1), // Strange Rabbit
-        new(289, 421, 75, 75, 154, 154, 1), // Werewolf
-        new(290, 419, 102, 102, 139, 139, 1), // Polluted Butterfly
+        new(289, 421, 75, 75, 154, 154, 1), // Polluted Butterfly
+        new(290, 419, 102, 102, 139, 139, 1), // Hideous Rabbit
         new(291, 422, 121, 121, 23, 23, 1), // Cursed Lich
-        new(292, 420, 68, 68, 30, 30, 1), // Hideous Rabbit
+        new(292, 420, 68, 68, 30, 30, 1), // Werewolf
         new(293, 422, 125, 125, 38, 38, 1), // Cursed Lich
         new(294, 424, 182, 182, 98, 98, 1), // Grizzly
         new(295, 424, 173, 173, 94, 94, 1), // Grizzly
@@ -168,39 +168,39 @@ internal class Elvenland : BaseMapInitializer
         new(324, 422, 104, 104, 67, 67, 1), // Cursed Lich
         new(325, 422, 104, 104, 30, 30, 1), // Cursed Lich
         new(326, 422, 102, 102, 32, 32, 1), // Cursed Lich
-        new(327, 419, 137, 137, 103, 103, 1), // Polluted Butterfly
-        new(328, 421, 115, 115, 163, 163, 1), // Werewolf
-        new(329, 421, 82, 82, 138, 138, 1), // Werewolf
-        new(330, 419, 150, 150, 129, 129, 1), // Polluted Butterfly
-        new(331, 419, 151, 151, 126, 126, 1), // Polluted Butterfly
+        new(327, 419, 137, 137, 103, 103, 1), // Hideous Rabbit
+        new(328, 421, 115, 115, 163, 163, 1), // Polluted Butterfly
+        new(329, 421, 82, 82, 138, 138, 1), // Polluted Butterfly
+        new(330, 419, 150, 150, 129, 129, 1), // Hideous Rabbit
+        new(331, 419, 151, 151, 126, 126, 1), // Hideous Rabbit
         new(332, 418, 105, 105, 201, 201, 1), // Strange Rabbit
         new(333, 418, 106, 106, 187, 187, 1), // Strange Rabbit
         new(334, 418, 97, 97, 190, 190, 1), // Strange Rabbit
-        new(335, 419, 128, 128, 169, 169, 1), // Polluted Butterfly
-        new(336, 420, 72, 72, 32, 32, 1), // Hideous Rabbit
+        new(335, 419, 128, 128, 169, 169, 1), // Hideous Rabbit
+        new(336, 420, 72, 72, 32, 32, 1), // Werewolf
         new(337, 422, 87, 87, 39, 39, 1), // Cursed Lich
-        new(338, 420, 92, 92, 58, 58, 1), // Hideous Rabbit
-        new(339, 421, 118, 118, 155, 155, 1), // Werewolf
+        new(338, 420, 92, 92, 58, 58, 1), // Werewolf
+        new(339, 421, 118, 118, 155, 155, 1), // Polluted Butterfly
         new(340, 422, 76, 76, 15, 15, 1), // Cursed Lich
         new(341, 422, 80, 80, 16, 16, 1), // Cursed Lich
-        new(342, 419, 97, 97, 105, 105, 1), // Polluted Butterfly
-        new(343, 420, 69, 69, 59, 59, 1), // Hideous Rabbit
-        new(344, 420, 72, 72, 60, 60, 1), // Hideous Rabbit
-        new(345, 420, 70, 70, 63, 63, 1), // Hideous Rabbit
-        new(346, 420, 46, 46, 82, 82, 1), // Hideous Rabbit
-        new(347, 420, 57, 57, 91, 91, 1), // Hideous Rabbit
-        new(348, 420, 52, 52, 69, 69, 1), // Hideous Rabbit
-        new(349, 420, 65, 65, 75, 75, 1), // Hideous Rabbit
-        new(350, 420, 73, 73, 84, 84, 1), // Hideous Rabbit
+        new(342, 419, 97, 97, 105, 105, 1), // Hideous Rabbit
+        new(343, 420, 69, 69, 59, 59, 1), // Werewolf
+        new(344, 420, 72, 72, 60, 60, 1), // Werewolf
+        new(345, 420, 70, 70, 63, 63, 1), // Werewolf
+        new(346, 420, 46, 46, 82, 82, 1), // Werewolf
+        new(347, 420, 57, 57, 91, 91, 1), // Werewolf
+        new(348, 420, 52, 52, 69, 69, 1), // Werewolf
+        new(349, 420, 65, 65, 75, 75, 1), // Werewolf
+        new(350, 420, 73, 73, 84, 84, 1), // Werewolf
         new(351, 422, 127, 127, 40, 40, 1), // Cursed Lich
         new(352, 422, 135, 135, 28, 28, 1), // Cursed Lich
         new(353, 422, 135, 135, 25, 25, 1), // Cursed Lich
         new(354, 422, 96, 96, 45, 45, 1), // Cursed Lich
-        new(355, 420, 83, 83, 57, 57, 1), // Hideous Rabbit
+        new(355, 420, 83, 83, 57, 57, 1), // Werewolf
         new(356, 422, 104, 104, 49, 49, 1), // Cursed Lich
         new(357, 422, 104, 104, 63, 63, 1), // Cursed Lich
-        new(358, 420, 84, 84, 42, 42, 1), // Hideous Rabbit
-        new(359, 421, 132, 132, 209, 209, 1), // Werewolf
+        new(358, 420, 84, 84, 42, 42, 1), // Werewolf
+        new(359, 421, 132, 132, 209, 209, 1), // Polluted Butterfly
     ];
 
     /// <inheritdoc/>
@@ -250,9 +250,9 @@ internal class Elvenland : BaseMapInitializer
             monster.Designation = LocalizedString.FromResource(() => MonsterNames.StrangeRabbit);
             monster.MoveRange = 3;
             monster.AttackRange = 1;
-            monster.ViewRange = 5;
+            monster.ViewRange = 4;
             monster.MoveDelay = new TimeSpan(400 * TimeSpan.TicksPerMillisecond);
-            monster.AttackDelay = new TimeSpan(1500 * TimeSpan.TicksPerMillisecond);
+            monster.AttackDelay = new TimeSpan(2000 * TimeSpan.TicksPerMillisecond);
             monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 1;
@@ -263,7 +263,7 @@ internal class Elvenland : BaseMapInitializer
                 { Stats.MinimumPhysBaseDmg, 10 },
                 { Stats.MaximumPhysBaseDmg, 13 },
                 { Stats.DefenseBase, 3 },
-                { Stats.AttackRatePvm, 10 },
+                { Stats.AttackRatePvm, 18 },
                 { Stats.DefenseRatePvm, 3 },
             };
 
@@ -274,13 +274,13 @@ internal class Elvenland : BaseMapInitializer
         {
             var monster = this.Context.CreateNew<MonsterDefinition>();
             this.GameConfiguration.Monsters.Add(monster);
-            monster.Number = 419;
+            monster.Number = 421;
             monster.Designation = LocalizedString.FromResource(() => MonsterNames.PollutedButterfly);
             monster.MoveRange = 3;
             monster.AttackRange = 1;
-            monster.ViewRange = 5;
+            monster.ViewRange = 4;
             monster.MoveDelay = new TimeSpan(400 * TimeSpan.TicksPerMillisecond);
-            monster.AttackDelay = new TimeSpan(1500 * TimeSpan.TicksPerMillisecond);
+            monster.AttackDelay = new TimeSpan(1600 * TimeSpan.TicksPerMillisecond);
             monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 1;
@@ -291,7 +291,7 @@ internal class Elvenland : BaseMapInitializer
                 { Stats.MinimumPhysBaseDmg, 37 },
                 { Stats.MaximumPhysBaseDmg, 42 },
                 { Stats.DefenseBase, 13 },
-                { Stats.AttackRatePvm, 10 },
+                { Stats.AttackRatePvm, 58 },
                 { Stats.DefenseRatePvm, 13 },
             };
 
@@ -302,13 +302,13 @@ internal class Elvenland : BaseMapInitializer
         {
             var monster = this.Context.CreateNew<MonsterDefinition>();
             this.GameConfiguration.Monsters.Add(monster);
-            monster.Number = 420;
+            monster.Number = 419;
             monster.Designation = LocalizedString.FromResource(() => MonsterNames.HideousRabbit);
             monster.MoveRange = 3;
             monster.AttackRange = 1;
-            monster.ViewRange = 5;
+            monster.ViewRange = 4;
             monster.MoveDelay = new TimeSpan(400 * TimeSpan.TicksPerMillisecond);
-            monster.AttackDelay = new TimeSpan(1500 * TimeSpan.TicksPerMillisecond);
+            monster.AttackDelay = new TimeSpan(1400 * TimeSpan.TicksPerMillisecond);
             monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 1;
@@ -319,7 +319,7 @@ internal class Elvenland : BaseMapInitializer
                 { Stats.MinimumPhysBaseDmg, 68 },
                 { Stats.MaximumPhysBaseDmg, 72 },
                 { Stats.DefenseBase, 22 },
-                { Stats.AttackRatePvm, 10 },
+                { Stats.AttackRatePvm, 93 },
                 { Stats.DefenseRatePvm, 22 },
             };
 
@@ -330,13 +330,13 @@ internal class Elvenland : BaseMapInitializer
         {
             var monster = this.Context.CreateNew<MonsterDefinition>();
             this.GameConfiguration.Monsters.Add(monster);
-            monster.Number = 421;
+            monster.Number = 420;
             monster.Designation = LocalizedString.FromResource(() => MonsterNames.Werewolf421);
-            monster.MoveRange = 2;
+            monster.MoveRange = 3;
             monster.AttackRange = 1;
             monster.ViewRange = 5;
             monster.MoveDelay = new TimeSpan(400 * TimeSpan.TicksPerMillisecond);
-            monster.AttackDelay = new TimeSpan(1500 * TimeSpan.TicksPerMillisecond);
+            monster.AttackDelay = new TimeSpan(1800 * TimeSpan.TicksPerMillisecond);
             monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 1;
@@ -347,7 +347,7 @@ internal class Elvenland : BaseMapInitializer
                 { Stats.MinimumPhysBaseDmg, 85 },
                 { Stats.MaximumPhysBaseDmg, 90 },
                 { Stats.DefenseBase, 30 },
-                { Stats.AttackRatePvm, 10 },
+                { Stats.AttackRatePvm, 120 },
                 { Stats.DefenseRatePvm, 30 },
             };
 
@@ -361,10 +361,10 @@ internal class Elvenland : BaseMapInitializer
             monster.Number = 422;
             monster.Designation = LocalizedString.FromResource(() => MonsterNames.CursedLich);
             monster.MoveRange = 3;
-            monster.AttackRange = 1;
-            monster.ViewRange = 5;
+            monster.AttackRange = 4;
+            monster.ViewRange = 7;
             monster.MoveDelay = new TimeSpan(400 * TimeSpan.TicksPerMillisecond);
-            monster.AttackDelay = new TimeSpan(1500 * TimeSpan.TicksPerMillisecond);
+            monster.AttackDelay = new TimeSpan(2000 * TimeSpan.TicksPerMillisecond);
             monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 1;
@@ -376,8 +376,8 @@ internal class Elvenland : BaseMapInitializer
                 { Stats.MinimumPhysBaseDmg, 105 },
                 { Stats.MaximumPhysBaseDmg, 110 },
                 { Stats.DefenseBase, 33 },
-                { Stats.AttackRatePvm, 10 },
-                { Stats.DefenseRatePvm, 33 },
+                { Stats.AttackRatePvm, 150 },
+                { Stats.DefenseRatePvm, 36 },
                 { Stats.PoisonResistance, 4f / 255 },
                 { Stats.IceResistance, 4f / 255 },
                 { Stats.WaterResistance, 4f / 255 },
@@ -395,9 +395,9 @@ internal class Elvenland : BaseMapInitializer
             monster.Designation = LocalizedString.FromResource(() => MonsterNames.TotemGolem);
             monster.MoveRange = 3;
             monster.AttackRange = 1;
-            monster.ViewRange = 5;
+            monster.ViewRange = 6;
             monster.MoveDelay = new TimeSpan(400 * TimeSpan.TicksPerMillisecond);
-            monster.AttackDelay = new TimeSpan(1500 * TimeSpan.TicksPerMillisecond);
+            monster.AttackDelay = new TimeSpan(1400 * TimeSpan.TicksPerMillisecond);
             monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 1;
@@ -408,8 +408,8 @@ internal class Elvenland : BaseMapInitializer
                 { Stats.MinimumPhysBaseDmg, 120 },
                 { Stats.MaximumPhysBaseDmg, 125 },
                 { Stats.DefenseBase, 50 },
-                { Stats.AttackRatePvm, 10 },
-                { Stats.DefenseRatePvm, 50 },
+                { Stats.AttackRatePvm, 180 },
+                { Stats.DefenseRatePvm, 43 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -422,11 +422,11 @@ internal class Elvenland : BaseMapInitializer
             monster.Number = 424;
             monster.Designation = LocalizedString.FromResource(() => MonsterNames.Grizzly);
             monster.MoveRange = 2;
-            monster.AttackRange = 1;
-            monster.ViewRange = 5;
+            monster.AttackRange = 2;
+            monster.ViewRange = 6;
             monster.MoveDelay = new TimeSpan(400 * TimeSpan.TicksPerMillisecond);
-            monster.AttackDelay = new TimeSpan(1500 * TimeSpan.TicksPerMillisecond);
-            monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
+            monster.AttackDelay = new TimeSpan(1600 * TimeSpan.TicksPerMillisecond);
+            monster.RespawnDelay = new TimeSpan(8 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 1;
             monster.AttackSkill = this.GameConfiguration.Skills.FirstOrDefault(s => s.Number == (short)SkillNumber.EnergyBall);
@@ -435,10 +435,10 @@ internal class Elvenland : BaseMapInitializer
                 { Stats.Level, 43 },
                 { Stats.MaximumHealth, 2400 },
                 { Stats.MinimumPhysBaseDmg, 130 },
-                { Stats.MaximumPhysBaseDmg, 145 },
+                { Stats.MaximumPhysBaseDmg, 140 },
                 { Stats.DefenseBase, 65 },
-                { Stats.AttackRatePvm, 10 },
-                { Stats.DefenseRatePvm, 65 },
+                { Stats.AttackRatePvm, 215 },
+                { Stats.DefenseRatePvm, 52 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -450,11 +450,11 @@ internal class Elvenland : BaseMapInitializer
             this.GameConfiguration.Monsters.Add(monster);
             monster.Number = 425;
             monster.Designation = LocalizedString.FromResource(() => MonsterNames.CaptainGrizzly);
-            monster.MoveRange = 2;
+            monster.MoveRange = 3;
             monster.AttackRange = 1;
             monster.ViewRange = 5;
             monster.MoveDelay = new TimeSpan(400 * TimeSpan.TicksPerMillisecond);
-            monster.AttackDelay = new TimeSpan(1500 * TimeSpan.TicksPerMillisecond);
+            monster.AttackDelay = new TimeSpan(1400 * TimeSpan.TicksPerMillisecond);
             monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 1;
@@ -465,7 +465,7 @@ internal class Elvenland : BaseMapInitializer
                 { Stats.MinimumPhysBaseDmg, 150 },
                 { Stats.MaximumPhysBaseDmg, 155 },
                 { Stats.DefenseBase, 80 },
-                { Stats.AttackRatePvm, 10 },
+                { Stats.AttackRatePvm, 240 },
                 { Stats.DefenseRatePvm, 70 },
             };
 
