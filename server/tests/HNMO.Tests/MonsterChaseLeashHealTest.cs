@@ -9,6 +9,7 @@ using HNMO.DataModel.Configuration;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.NPC;
+using HNMO.GameLogic.PlugIns.GameplayRules;
 using HNMO.Pathfinding;
 using MonsterAttribute = HNMO.Persistence.BasicModel.MonsterAttribute;
 using MonsterDefinition = HNMO.Persistence.BasicModel.MonsterDefinition;
@@ -112,5 +113,59 @@ public class MonsterChaseLeashHealTest
         Assert.That(ai.IsTargetingPlayer(player), Is.False, "Leashed monster must drop its target.");
         Assert.That(monster.Health, Is.EqualTo(1000), "Leashed monster must heal to full.");
         Assert.That(monster.IsWalking || monster.Position.X < 192, Is.True, "Leashed monster must walk back toward spawn area.");
+    }
+
+    /// <summary>
+    /// The admin's settings are what the monsters do: with the leash switched off, a monster pulled far away keeps its
+    /// target and isn't healed.
+    /// </summary>
+    [Test]
+    public async Task TheLeashSettingIsReadFromThePlugInAsync()
+    {
+        var (context, _, monster, ai, player) = await CreateSetupAsync(new Point(180, 130), new Point(195, 130)).ConfigureAwait(false);
+        var plugIn = context.PlugInManager.GetActivePlugInsOf<IFeaturePlugIn>().OfType<MonsterAiPlugIn>().Single();
+        plugIn.Configuration = new MonsterAiConfiguration { LeashToSpawnArea = false };
+
+        monster.Position = new Point(192, 130);
+        monster.Health = 300;
+        ai.RegisterHit(player);
+        await InvokeTickAsync(ai).ConfigureAwait(false);
+
+        Assert.That(ai.IsTargetingPlayer(player), Is.True, "Without the leash the monster keeps its target.");
+        Assert.That(monster.Health, Is.EqualTo(300), "Without the leash the monster isn't healed.");
+    }
+
+    /// <summary>The plug-in switched off: the rules before it, so a monster pulled far away isn't leashed or healed.</summary>
+    [Test]
+    public async Task WithThePlugInOffThereIsNoLeashAsync()
+    {
+        var (context, _, monster, ai, player) = await CreateSetupAsync(new Point(180, 130), new Point(195, 130)).ConfigureAwait(false);
+        context.PlugInManager.DeactivatePlugIn<MonsterAiPlugIn>();
+
+        monster.Position = new Point(192, 130);
+        monster.Health = 300;
+        ai.RegisterHit(player);
+        await InvokeTickAsync(ai).ConfigureAwait(false);
+
+        Assert.That(monster.Health, Is.EqualTo(300));
+        Assert.That(typeof(BasicMonsterIntelligence).GetField("_isReturningHome", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(ai), Is.False);
+    }
+
+    /// <summary>A leashed monster which can't walk home is put back into its spawn area, and fights again.</summary>
+    [Test]
+    public async Task ALeashedMonsterWithoutAWayHomeIsPutBackAsync()
+    {
+        var (_, _, monster, ai, player) = await CreateSetupAsync(new Point(180, 130), new Point(195, 130)).ConfigureAwait(false);
+        monster.Position = new Point(192, 130);
+        ai.RegisterHit(player);
+        await InvokeTickAsync(ai).ConfigureAwait(false);
+
+        // Twenty seconds later it still isn't home (it was held, or the way is blocked).
+        typeof(BasicMonsterIntelligence).GetField("_returningHomeSince", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(ai, DateTime.UtcNow.AddSeconds(-21));
+        await monster.MoveAsync(new Point(192, 130)).ConfigureAwait(false);
+        await InvokeTickAsync(ai).ConfigureAwait(false);
+
+        Assert.That(monster.Position.X, Is.InRange(179, 181), "Back in its spawn area.");
+        Assert.That(typeof(BasicMonsterIntelligence).GetField("_isReturningHome", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(ai), Is.False);
     }
 }

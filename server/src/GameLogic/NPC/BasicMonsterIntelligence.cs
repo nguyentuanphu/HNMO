@@ -16,10 +16,14 @@ using HNMO.PlugIns;
 /// </summary>
 public class BasicMonsterIntelligence : INpcIntelligence, IDisposable
 {
+    /// <summary>How long a leashed monster may walk home before it is put back into its spawn area.</summary>
+    private static readonly TimeSpan MaximumWalkHomeTime = TimeSpan.FromSeconds(20);
+
     private Timer? _aiTimer;
     private Monster? _monster;
     private IAttackable? _provokedTarget;
     private bool _isReturningHome;
+    private DateTime _returningHomeSince;
 
     /// <summary>
     /// Finalizes an instance of the <see cref="BasicMonsterIntelligence"/> class.
@@ -253,6 +257,7 @@ public class BasicMonsterIntelligence : INpcIntelligence, IDisposable
                 this.CurrentTarget = null;
                 this._provokedTarget = null;
                 this._isReturningHome = true;
+                this._returningHomeSince = DateTime.UtcNow;
                 if (cfg.HealToFullOnLeash)
                 {
                     this.Monster.RestoreHealth(int.MaxValue);
@@ -271,9 +276,14 @@ public class BasicMonsterIntelligence : INpcIntelligence, IDisposable
                 }
                 else
                 {
-                    if (this.Monster.Attributes[Stats.IsFrozen] == 0)
+                    if (this.Monster.Attributes[Stats.IsFrozen] == 0
+                        && (DateTime.UtcNow - this._returningHomeSince > MaximumWalkHomeTime
+                            || !await this.Monster.WalkToAsync(this.GetSpawnHomePoint()).ConfigureAwait(false)))
                     {
-                        await this.Monster.WalkToAsync(this.GetSpawnHomePoint()).ConfigureAwait(false);
+                        // No way home (or it takes too long): back into its spawn area at once, instead of standing
+                        // somewhere for good while it ignores every hit.
+                        await this.Monster.TeleportAsync(this.GetSpawnHomePoint()).ConfigureAwait(false);
+                        this._isReturningHome = false;
                     }
 
                     return;
@@ -374,15 +384,7 @@ public class BasicMonsterIntelligence : INpcIntelligence, IDisposable
                && this.Monster.HasLineOfSightTo(this.CurrentTarget);
     }
 
-    private MonsterAiConfiguration GetConfig()
-    {
-        return this.Monster.PlugInManager?
-                   .GetActivePlugInsOf<ISupportCustomConfiguration<MonsterAiConfiguration>>()
-                   .OfType<MonsterAiPlugIn>()
-                   .FirstOrDefault()?
-                   .Configuration
-               ?? new MonsterAiConfiguration();
-    }
+    private MonsterAiConfiguration GetConfig() => MonsterAiPlugIn.For(this.Monster.PlugInManager);
 
     private int DistanceFromSpawnArea(Point position)
     {
@@ -401,6 +403,11 @@ public class BasicMonsterIntelligence : INpcIntelligence, IDisposable
         var area = this.Monster.SpawnArea;
         var cx = (byte)((Math.Min(area.X1, area.X2) + Math.Max(area.X1, area.X2)) / 2);
         var cy = (byte)((Math.Min(area.Y1, area.Y2) + Math.Max(area.Y1, area.Y2)) / 2);
-        return new Point(cx, cy);
+        var center = new Point(cx, cy);
+
+        // The middle of an area may be a wall: a walkable cell next to it.
+        return this.Monster.CurrentMap?.Terrain is { } terrain && !terrain.WalkMap[cx, cy]
+            ? terrain.GetRandomCoordinate(center, 3)
+            : center;
     }
 }
