@@ -22,6 +22,15 @@ using HNMO.Network.SimpleModulus;
 using HNMO.Network.Xor;
 using Pipelines.Sockets.Unofficial;
 
+// The installer of an update (Updater.cs): a copy of this program in save/updates/runner, started by the launcher
+// before it stops HNMO; it swaps the files, starts HNMO again and goes back to the old version if that fails.
+if (args.Length >= 2 && args[0] == "--apply-update")
+{
+    var waitPid = args.Length >= 4 && args[2] == "--wait-pid" && int.TryParse(args[3], out var pid) ? pid : 0;
+    Environment.ExitCode = await UpdateApplier.RunAsync(args[1], waitPid).ConfigureAwait(false);
+    return;
+}
+
 if (args.Length >= 3 && args[0] == "--pack-icons")
 {
     DataPackArchive.BuildItemIconsZip(args[1], args[2]);

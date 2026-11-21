@@ -24,4 +24,14 @@
     <PackageReference Include="Pipelines.Sockets.Unofficial" Version="2.2.8" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="HNMO.Launcher.Tests" />
+  </ItemGroup>
+
+  <!-- The HNMO version from the VERSION file at the repository's root (as the server's Directory.Build.props). -->
+  <PropertyGroup>
+    <HnmoVersionFile>$([MSBuild]::GetPathOfFileAbove('VERSION', '$(MSBuildThisFileDirectory)'))</HnmoVersionFile>
+    <Version Condition="'$(HnmoVersionFile)' != '' and Exists('$(HnmoVersionFile)')">$([System.IO.File]::ReadAllText('$(HnmoVersionFile)').Trim())</Version>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+  </PropertyGroup>
 </Project>

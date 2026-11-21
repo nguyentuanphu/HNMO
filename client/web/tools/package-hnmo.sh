@@ -380,6 +380,11 @@ if [ -n "$LEAKED" ]; then
   exit 1
 fi
 
+# The version and the update manifest (every file with its size and SHA-256), for the updater: it downloads only
+# the files that changed (owner, 2026-11-21). Written last, after everything else is in place.
+HNMO_VERSION="$(tr -d '[:space:]' < "$REPO_ROOT/VERSION")"
+python3 "$WEB/tools/write-update-manifest.py" "$OUT" "$HNMO_VERSION" "$STAMP"
+
 echo ""
 echo "Package summary ($OUT):"
 printf '  %-16s %10s %10s\n' "Folder" "Files" "MB"
