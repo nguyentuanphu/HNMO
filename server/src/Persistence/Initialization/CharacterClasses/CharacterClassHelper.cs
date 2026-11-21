@@ -66,7 +66,8 @@ public static class CharacterClassHelper
                         yield return second;
                     }
 
-                    if (characterClasses.FirstOrDefault(c => c.Number == (int)firstClass) is { } first)
+                    // Rank 1 is the first class and up, rank 2 the second class and up (Season 6/9 server suites).
+                    if (classValue < 2 && characterClasses.FirstOrDefault(c => c.Number == (int)firstClass) is { } first)
                     {
                         yield return first;
                     }
