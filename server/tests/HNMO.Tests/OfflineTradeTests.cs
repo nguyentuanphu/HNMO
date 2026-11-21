@@ -212,6 +212,7 @@ public class OfflineTradeTests
             // Now a buyer purchases the last item; seller receives Zen and stops automatically.
             var buyer = await PlayerTestHelper.CreatePlayerAsync(gameContext).ConfigureAwait(false);
             buyer.Money = 10000;
+            await offlinePlayer.AddObserverAsync(buyer).ConfigureAwait(false);
             await new BuyRequestAction().BuyItemAsync(buyer, offlinePlayer, InventoryConstants.FirstStoreItemSlotIndex).ConfigureAwait(false);
 
             Assert.That(buyer.Money, Is.EqualTo(8500));
