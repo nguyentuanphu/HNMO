@@ -1,5 +1,5 @@
 {
-  "generatedAt": "c3b967d6",
+  "generatedAt": "3d267cf1",
   "maxLines": 6000,
   "units": [
     {
@@ -105,7 +105,7 @@
         "server/src/GameLogic/ItemStorageAdapter.cs"
       ],
       "files": 53,
-      "lines": 5979,
+      "lines": 5988,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -179,7 +179,7 @@
         "server/src/GameLogic/SkillDelays.cs"
       ],
       "files": 21,
-      "lines": 5909,
+      "lines": 5943,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -649,7 +649,7 @@
         "server/src/GameLogic/NPC"
       ],
       "files": 22,
-      "lines": 2740,
+      "lines": 2852,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -709,7 +709,7 @@
         "server/src/GameLogic/PlayerActions/WizardTeleportAction.cs"
       ],
       "files": 16,
-      "lines": 1948,
+      "lines": 1949,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -799,7 +799,7 @@
         "server/src/GameLogic/PlayerActions/Duel"
       ],
       "files": 3,
-      "lines": 443,
+      "lines": 451,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -829,7 +829,7 @@
         "server/src/GameLogic/PlayerActions/Guild"
       ],
       "files": 11,
-      "lines": 1140,
+      "lines": 1160,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -859,7 +859,7 @@
         "server/src/GameLogic/PlayerActions/Items"
       ],
       "files": 25,
-      "lines": 3197,
+      "lines": 3209,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -889,7 +889,7 @@
         "server/src/GameLogic/PlayerActions/MiniGames"
       ],
       "files": 7,
-      "lines": 739,
+      "lines": 792,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -934,7 +934,7 @@
         "server/src/GameLogic/PlayerActions/PlayerStore"
       ],
       "files": 5,
-      "lines": 524,
+      "lines": 532,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -979,7 +979,7 @@
         "server/src/GameLogic/PlayerActions/Trade"
       ],
       "files": 6,
-      "lines": 641,
+      "lines": 681,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -1111,6 +1111,8 @@
         "server/src/GameLogic/PlugIns/IllusionTempleTeamStorageTalkPlugInBase.cs",
         "server/src/GameLogic/PlugIns/KalimaConstants.cs",
         "server/src/GameLogic/PlugIns/KanturuGatewayPlugIn.cs",
+        "server/src/GameLogic/PlugIns/KundunHealthRefillConfiguration.cs",
+        "server/src/GameLogic/PlugIns/KundunHealthRefillPlugIn.cs",
         "server/src/GameLogic/PlugIns/LearnSkillsByLevelPlugIn.cs",
         "server/src/GameLogic/PlugIns/LearnSkillsByLevelPlugInConfiguration.cs",
         "server/src/GameLogic/PlugIns/LoginTimeoutPlugIn.cs",
@@ -1141,13 +1143,10 @@
         "server/src/GameLogic/PlugIns/PlayerLosesMoneyAfterDeathPlugInConfiguration.cs",
         "server/src/GameLogic/PlugIns/PlugInPointNotificationExtensions.cs",
         "server/src/GameLogic/PlugIns/QuestMonsterKillCountPlugIn.cs",
-        "server/src/GameLogic/PlugIns/QuestMonsterKillCountPlugInConfiguration.cs",
-        "server/src/GameLogic/PlugIns/SelfDefensePlugIn.cs",
-        "server/src/GameLogic/PlugIns/SelfDefensePlugInConfiguration.cs",
-        "server/src/GameLogic/PlugIns/ServerAnnouncementsConfiguration.cs"
+        "server/src/GameLogic/PlugIns/QuestMonsterKillCountPlugInConfiguration.cs"
       ],
-      "files": 124,
-      "lines": 5968,
+      "files": 123,
+      "lines": 5901,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -1159,6 +1158,9 @@
       "id": "server/src/GameLogic/PlugIns (files 2)",
       "kind": "Server rules",
       "paths": [
+        "server/src/GameLogic/PlugIns/SelfDefensePlugIn.cs",
+        "server/src/GameLogic/PlugIns/SelfDefensePlugInConfiguration.cs",
+        "server/src/GameLogic/PlugIns/ServerAnnouncementsConfiguration.cs",
         "server/src/GameLogic/PlugIns/ServerAnnouncementsPlugIn.cs",
         "server/src/GameLogic/PlugIns/ShowMessageToAllWhenPlayerEnteredWorldPlugIn.cs",
         "server/src/GameLogic/PlugIns/SignOfDimensionsStackedPlugIn.cs",
@@ -1186,8 +1188,8 @@
         "server/src/GameLogic/PlugIns/WebsiteTheme.cs",
         "server/src/GameLogic/PlugIns/WebsiteThemeLabels.cs"
       ],
-      "files": 26,
-      "lines": 2069,
+      "files": 29,
+      "lines": 2272,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -1650,8 +1652,8 @@
       "paths": [
         "server/src/GameLogic/PlugIns/GameplayRules"
       ],
-      "files": 23,
-      "lines": 1983,
+      "files": 25,
+      "lines": 2053,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -2026,7 +2028,7 @@
         "server/src/GameLogic/PlugIns/Talismans"
       ],
       "files": 10,
-      "lines": 866,
+      "lines": 873,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -3335,7 +3337,7 @@
         "server/src/Persistence/Initialization/WingsInitializerBase.cs"
       ],
       "files": 23,
-      "lines": 3254,
+      "lines": 3276,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -3527,6 +3529,7 @@
         "server/src/Persistence/Initialization/Updates/AddWhiteWizardInvasionMobsUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/AdjustIceArrowFreezeDurationUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/ArenaTitlesUpdatePlugIn.cs",
+        "server/src/Persistence/Initialization/Updates/BloodCastleDurationUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/ChainLightningUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/ChaosCastleDataUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/CircularUpdateDependencyException.cs",
@@ -3536,6 +3539,7 @@
         "server/src/Persistence/Initialization/Updates/ConfigureNpcTalkPlugInsPlugInBase.cs",
         "server/src/Persistence/Initialization/Updates/ConfigureNpcTalkPlugInsPlugInSeason6.cs",
         "server/src/Persistence/Initialization/Updates/DarkLordAttackRateUpdatePlugIn.cs",
+        "server/src/Persistence/Initialization/Updates/DarkWizardTeleportSoulBarrierUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/DataUpdateService.cs",
         "server/src/Persistence/Initialization/Updates/DevilSquarePlayerLimitUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/ExcellentDropChanceUpdatePlugIn.cs",
@@ -3544,6 +3548,7 @@
         "server/src/Persistence/Initialization/Updates/FieldMonsterSpawnsUpdatePlugIn095d.cs",
         "server/src/Persistence/Initialization/Updates/FieldMonsterSpawnsUpdatePlugInBase.cs",
         "server/src/Persistence/Initialization/Updates/FieldMonsterSpawnsUpdatePlugInSeason6.cs",
+        "server/src/Persistence/Initialization/Updates/FieldSpawnCountsFromSuitesUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/FinishDarkKnightMasterTreePlugIn075.cs",
         "server/src/Persistence/Initialization/Updates/FinishDarkKnightMasterTreePlugIn095d.cs",
         "server/src/Persistence/Initialization/Updates/FinishDarkKnightMasterTreePlugInBase.cs",
@@ -3555,7 +3560,6 @@
         "server/src/Persistence/Initialization/Updates/FinishSummonerMasterTreePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/FixAncientDiscriminatorsUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/FixAttackSpeedCalculationUpdate.cs",
-        "server/src/Persistence/Initialization/Updates/FixBloodCastleMonsterAttributesUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/FixChaosMixesPlugIn095D.cs",
         "server/src/Persistence/Initialization/Updates/FixChaosMixesPlugInBase.cs",
         "server/src/Persistence/Initialization/Updates/FixChaosMixesPlugInSeason6.cs",
@@ -3568,8 +3572,8 @@
         "server/src/Persistence/Initialization/Updates/FixDamageCalcsPlugIn075.cs",
         "server/src/Persistence/Initialization/Updates/FixDamageCalcsPlugIn095d.cs"
       ],
-      "files": 45,
-      "lines": 5673,
+      "files": 47,
+      "lines": 5893,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -3593,6 +3597,7 @@
         "server/src/Persistence/Initialization/Updates/FixDinorantOptionNumbersPlugInSeason6.cs",
         "server/src/Persistence/Initialization/Updates/FixDrainLifeSkillUpdate.cs",
         "server/src/Persistence/Initialization/Updates/FixDuelArenaSafezoneMapUpdate.cs",
+        "server/src/Persistence/Initialization/Updates/FixElvenlandMonstersUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/FixEventItemsDropFromMonstersUpdatePlugIn095d.cs",
         "server/src/Persistence/Initialization/Updates/FixEventItemsDropFromMonstersUpdatePlugInBase.cs",
         "server/src/Persistence/Initialization/Updates/FixEventItemsDropFromMonstersUpdatePlugInSeason6.cs",
@@ -3615,6 +3620,7 @@
         "server/src/Persistence/Initialization/Updates/FixLevelDiv20ExcOptionUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/FixLifeSwellEffectUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/FixMaxManaAndAbilityJewelryOptionsUpdateSeason6.cs",
+        "server/src/Persistence/Initialization/Updates/FixMonsterStatTyposUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/FixMurenRingOfFireBonusPlugIn.cs",
         "server/src/Persistence/Initialization/Updates/FixOrbRequirementsPlugIn075.cs",
         "server/src/Persistence/Initialization/Updates/FixOrbRequirementsPlugIn095D.cs",
@@ -3633,12 +3639,10 @@
         "server/src/Persistence/Initialization/Updates/FixVulcanusWarpIndexUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/FixWarpLevelUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/FixWarriorMorningStarPlugIn.cs",
-        "server/src/Persistence/Initialization/Updates/FixWeaponRisePercentagePlugIn075.cs",
-        "server/src/Persistence/Initialization/Updates/FixWeaponRisePercentagePlugIn095d.cs",
-        "server/src/Persistence/Initialization/Updates/FixWeaponRisePercentagePlugInBase.cs"
+        "server/src/Persistence/Initialization/Updates/FixWeaponRisePercentagePlugIn075.cs"
       ],
       "files": 55,
-      "lines": 5905,
+      "lines": 5995,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -3650,6 +3654,8 @@
       "id": "server/src/Persistence/Initialization/Updates (files 4)",
       "kind": "Game data (Season 6/9)",
       "paths": [
+        "server/src/Persistence/Initialization/Updates/FixWeaponRisePercentagePlugIn095d.cs",
+        "server/src/Persistence/Initialization/Updates/FixWeaponRisePercentagePlugInBase.cs",
         "server/src/Persistence/Initialization/Updates/FixWeaponRisePercentagePlugInSeason6.cs",
         "server/src/Persistence/Initialization/Updates/FixWingsAndCapesCraftingsUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/FixWingsDmgRatesUpdatePlugIn075.cs",
@@ -3657,6 +3663,7 @@
         "server/src/Persistence/Initialization/Updates/FixWingsDmgRatesUpdatePlugInBase.cs",
         "server/src/Persistence/Initialization/Updates/FixWingsDmgRatesUpdatePlugInSeason6.cs",
         "server/src/Persistence/Initialization/Updates/GroundDropDurationUpdatePlugIn.cs",
+        "server/src/Persistence/Initialization/Updates/GuildCreateLevelUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/GuildMembersCapUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/HappyHourScheduleUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/IConfigurationUpdatePlugIn.cs",
@@ -3668,9 +3675,17 @@
         "server/src/Persistence/Initialization/Updates/ItemDurabilityRefactorPlugInSeason6.cs",
         "server/src/Persistence/Initialization/Updates/JewelNpcPricesUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/JewelOfLifeOption28UpdatePlugIn.cs",
+        "server/src/Persistence/Initialization/Updates/KundunFromSuitesUpdatePlugIn.cs",
+        "server/src/Persistence/Initialization/Updates/Level380ItemRequirementsUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/LimitWhiteWizardDropsUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/MagicGladiatorDefenseUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/MissingUpdateDependencyException.cs",
+        "server/src/Persistence/Initialization/Updates/MonsterResistancesFromSuitesUpdatePlugIn.cs",
+        "server/src/Persistence/Initialization/Updates/MonsterRespawnFromSuitesUpdatePlugIn.cs",
+        "server/src/Persistence/Initialization/Updates/MonsterSpeedsAndRangesFromSuitesUpdatePlugIn.cs",
+        "server/src/Persistence/Initialization/Updates/MonsterStatsFromSuitesUpdatePlugIn.cs",
+        "server/src/Persistence/Initialization/Updates/MonsterValueChange.cs",
+        "server/src/Persistence/Initialization/Updates/MonsterValuesUpdatePlugInBase.cs",
         "server/src/Persistence/Initialization/Updates/MoveServerPortsOutOfDynamicRangePlugIn075.cs",
         "server/src/Persistence/Initialization/Updates/MoveServerPortsOutOfDynamicRangePlugIn095d.cs",
         "server/src/Persistence/Initialization/Updates/MoveServerPortsOutOfDynamicRangePlugInBase.cs",
@@ -3678,6 +3693,7 @@
         "server/src/Persistence/Initialization/Updates/MuHelperLevelUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/NewDatabaseUpdates.cs",
         "server/src/Persistence/Initialization/Updates/PkClearCostUpdatePlugIn.cs",
+        "server/src/Persistence/Initialization/Updates/RaklionSwampGateLevelsUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/RegenerationsRefactorPlugIn075.cs",
         "server/src/Persistence/Initialization/Updates/RegenerationsRefactorPlugIn095d.cs",
         "server/src/Persistence/Initialization/Updates/RegenerationsRefactorPlugInBase.cs",
@@ -3696,7 +3712,22 @@
         "server/src/Persistence/Initialization/Updates/SetIntroducedGameVersionsPlugIn095d.cs",
         "server/src/Persistence/Initialization/Updates/SetIntroducedGameVersionsPlugInBase.cs",
         "server/src/Persistence/Initialization/Updates/SetIntroducedGameVersionsPlugInSeason6.cs",
-        "server/src/Persistence/Initialization/Updates/SpawnFixesUpdatePlugIn.cs",
+        "server/src/Persistence/Initialization/Updates/SocketCriticalDamageUpdatePlugIn.cs",
+        "server/src/Persistence/Initialization/Updates/SpawnFixesUpdatePlugIn.cs"
+      ],
+      "files": 60,
+      "lines": 5989,
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
+      "prs": ""
+    },
+    {
+      "id": "server/src/Persistence/Initialization/Updates (files 5)",
+      "kind": "Game data (Season 6/9)",
+      "paths": [
         "server/src/Persistence/Initialization/Updates/StandardizeEventEnterDurationPlugIn095d.cs",
         "server/src/Persistence/Initialization/Updates/StandardizeEventEnterDurationPlugInBase.cs",
         "server/src/Persistence/Initialization/Updates/StandardizeEventEnterDurationPlugInSeason6.cs",
@@ -3711,8 +3742,8 @@
         "server/src/Persistence/Initialization/Updates/WizEnhanceAndRagefighterSkillsUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/ZenLossBagOnlyUpdatePlugIn.cs"
       ],
-      "files": 60,
-      "lines": 4529,
+      "files": 13,
+      "lines": 754,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -3835,7 +3866,7 @@
         "server/src/Persistence/Initialization/VersionSeasonSix/NpcInitialization.cs"
       ],
       "files": 11,
-      "lines": 5468,
+      "lines": 5471,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -3898,7 +3929,7 @@
         "server/src/Persistence/Initialization/VersionSeasonSix/Items/PackedJewels.cs"
       ],
       "files": 18,
-      "lines": 5810,
+      "lines": 5811,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -3954,7 +3985,7 @@
         "server/src/Persistence/Initialization/VersionSeasonSix/Maps/CrywolfFortress.cs"
       ],
       "files": 21,
-      "lines": 5949,
+      "lines": 5990,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -3996,11 +4027,10 @@
         "server/src/Persistence/Initialization/VersionSeasonSix/Maps/Kalima5.cs",
         "server/src/Persistence/Initialization/VersionSeasonSix/Maps/Kalima6.cs",
         "server/src/Persistence/Initialization/VersionSeasonSix/Maps/Kalima7.cs",
-        "server/src/Persistence/Initialization/VersionSeasonSix/Maps/KalimaBase.cs",
-        "server/src/Persistence/Initialization/VersionSeasonSix/Maps/KanturuEvent.cs"
+        "server/src/Persistence/Initialization/VersionSeasonSix/Maps/KalimaBase.cs"
       ],
-      "files": 32,
-      "lines": 5949,
+      "files": 31,
+      "lines": 5710,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4012,6 +4042,7 @@
       "id": "server/src/Persistence/Initialization/VersionSeasonSix/Maps (files 3)",
       "kind": "Game data (Season 6/9)",
       "paths": [
+        "server/src/Persistence/Initialization/VersionSeasonSix/Maps/KanturuEvent.cs",
         "server/src/Persistence/Initialization/VersionSeasonSix/Maps/KanturuRelics.cs",
         "server/src/Persistence/Initialization/VersionSeasonSix/Maps/KanturuRuins.cs",
         "server/src/Persistence/Initialization/VersionSeasonSix/Maps/Karutan1.cs",
@@ -4029,8 +4060,8 @@
         "server/src/Persistence/Initialization/VersionSeasonSix/Maps/ValleyOfLoren.cs",
         "server/src/Persistence/Initialization/VersionSeasonSix/Maps/Vulcanus.cs"
       ],
-      "files": 16,
-      "lines": 4523,
+      "files": 17,
+      "lines": 4921,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4325,7 +4356,7 @@
         "client/web/src/vipTexts.ts"
       ],
       "files": 8,
-      "lines": 4673,
+      "lines": 4686,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4399,7 +4430,7 @@
         "client/web/src/game/combat.ts"
       ],
       "files": 12,
-      "lines": 5375,
+      "lines": 5379,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4426,7 +4457,7 @@
         "client/web/src/game/instanceEvents.ts"
       ],
       "files": 13,
-      "lines": 5958,
+      "lines": 5962,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4480,7 +4511,7 @@
         "client/web/src/game/resets.ts"
       ],
       "files": 17,
-      "lines": 5451,
+      "lines": 5454,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -7840,8 +7871,8 @@
       "paths": [
         "server/src/Web"
       ],
-      "files": 812,
-      "lines": 94857,
+      "files": 814,
+      "lines": 95078,
       "status": "No game rules",
       "checkedAt": "",
       "checkedOn": "",
@@ -7856,7 +7887,7 @@
         "server/src/Persistence/EntityFramework"
       ],
       "files": 251,
-      "lines": 30967,
+      "lines": 30975,
       "status": "No game rules",
       "checkedAt": "",
       "checkedOn": "",

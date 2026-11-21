@@ -24,6 +24,7 @@ public partial class GameplayRules : ComponentBase
     private MapRulesConfiguration _mapConfig = new();
     private BonusEventsConfiguration _bonusConfig = new();
     private CombatLimitsConfiguration _combatConfig = new();
+    private MonsterAiConfiguration _monsterAiConfig = new();
     private bool _isLoading = true;
     private bool _isSaving;
     private bool _showHelp;
@@ -74,10 +75,12 @@ public partial class GameplayRules : ComponentBase
             var (_, _, mapSaved) = await PlugInSettings.ReadStoredAsync<MapRulesConfiguration>(this.PersistenceContextProvider, typeof(MapRulesPlugIn), default).ConfigureAwait(true);
             var (_, _, bonusSaved) = await PlugInSettings.ReadStoredAsync<BonusEventsConfiguration>(this.PersistenceContextProvider, typeof(BonusEventsPlugIn), default).ConfigureAwait(true);
             var (_, _, combatSaved) = await PlugInSettings.ReadStoredAsync<CombatLimitsConfiguration>(this.PersistenceContextProvider, typeof(CombatLimitsPlugIn), default).ConfigureAwait(true);
+            var (_, _, monsterAiSaved) = await PlugInSettings.ReadStoredAsync<MonsterAiConfiguration>(this.PersistenceContextProvider, typeof(MonsterAiPlugIn), default).ConfigureAwait(true);
 
             this._mapConfig = CloneConfig(mapSaved ?? new MapRulesConfiguration());
             this._bonusConfig = CloneConfig(bonusSaved ?? new BonusEventsConfiguration());
             this._combatConfig = CloneConfig(combatSaved ?? new CombatLimitsConfiguration());
+            this._monsterAiConfig = CloneConfig(monsterAiSaved ?? new MonsterAiConfiguration());
         }
         catch (Exception ex)
         {
@@ -102,6 +105,9 @@ public partial class GameplayRules : ComponentBase
 
     private Task SaveCombatLimitsAsync() =>
         this.SavePlugInAsync(typeof(CombatLimitsPlugIn).GUID, this._combatConfig, L("Saved combat damage limits.", "Đã lưu giới hạn chiến đấu."));
+
+    private Task SaveMonsterAiAsync() =>
+        this.SavePlugInAsync(typeof(MonsterAiPlugIn).GUID, this._monsterAiConfig, L("Saved monster AI rules.", "Đã lưu quy tắc AI quái vật."));
 
     private async Task SavePlugInAsync<T>(Guid plugInTypeId, T cfg, string successMessage)
         where T : notnull

@@ -76,6 +76,9 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
     /// <inheritdoc />
     public DeathInformation? LastDeath { get; protected set; }
 
+    /// <summary>Gets the plug-in manager for this NPC's game context.</summary>
+    internal PlugInManager? PlugInManager => this._plugInManager;
+
     /// <inheritdoc/>
     public override Point Position
     {
