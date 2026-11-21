@@ -252,6 +252,13 @@ public sealed class TalismanPlugIn :
             return (false, false);
         }
 
+        if (player.PlayerState.CurrentState != PlayerState.EnteredWorld)
+        {
+            // The same state check as every other item use (BaseConsumeHandlerPlugIn): not while dead, trading
+            // or in an NPC dialog.
+            return (true, false);
+        }
+
         var isVi = player.Culture.TwoLetterISOLanguageName.Equals("vi", StringComparison.OrdinalIgnoreCase);
         if (!decision.Allowed)
         {
