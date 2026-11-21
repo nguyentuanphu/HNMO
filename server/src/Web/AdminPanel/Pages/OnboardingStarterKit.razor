@@ -185,6 +185,10 @@ else
                     <input class="form-check-input" type="checkbox" id="kit-account" @bind="kit.PerAccount" />
                     <label class="form-check-label" for="kit-account">@Resources.OnboardingKitPerAccount</label>
                 </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="kit-money-account" @bind="kit.MoneyPerAccount" disabled="@kit.PerAccount" />
+                    <label class="form-check-label" for="kit-money-account">@Resources.OnboardingKitMoneyPerAccount</label>
+                </div>
             </div>
 
             <h3 class="h6 mt-3">@Resources.OnboardingKitItems</h3>

@@ -202,6 +202,43 @@ public class OnboardingEngineTest
     }
 
     /// <summary>
+    /// Coins (kept on the account) and zen go only to the account's first new character, so they can't be collected
+    /// again by creating and deleting characters; every new character still gets the items and the buff. Switched off,
+    /// every new character gets them all (owner's choice, 2026-11-21: on by default).
+    /// </summary>
+    [Test]
+    public void ZenAndCoinsOnlyOncePerAccount()
+    {
+        var configuration = Configuration();
+        configuration.StarterKit = new StarterKitConfiguration
+        {
+            Zen = 50_000, Coins = 20,
+            Items = [new() { Group = 14, Number = 1, Count = 2 }],
+            ExperienceBuff = new StarterKitBuffConfiguration { Minutes = 60 },
+        };
+        Assert.That(configuration.StarterKit.MoneyPerAccount, Is.True, "On by default.");
+        var engine = CreateEngine(configuration);
+
+        engine.See("first", "acc", "F", Now, 1, Now);
+        var first = engine.TakeStarterKit("first", "acc", 0, Now)!;
+        Assert.That((first.Zen, first.Coins), Is.EqualTo((50_000, 20)));
+
+        // The first character was deleted and a new one made: items and buff, but no zen or coins again.
+        engine.See("second", "ACC", "S", Now, 1, Now);
+        var second = engine.TakeStarterKit("second", "ACC", 0, Now)!;
+        Assert.That((second.Zen, second.Coins), Is.EqualTo((0, 0)));
+        Assert.That(second.Items, Has.Count.EqualTo(1));
+        Assert.That(second.BuffMinutes, Is.EqualTo(60));
+
+        engine.See("other", "other", "O", Now, 1, Now);
+        Assert.That(engine.TakeStarterKit("other", "other", 0, Now)!.Coins, Is.EqualTo(20), "Another account.");
+
+        configuration.StarterKit.MoneyPerAccount = false;
+        engine.See("third", "acc", "T", Now, 1, Now);
+        Assert.That(engine.TakeStarterKit("third", "acc", 0, Now)!.Coins, Is.EqualTo(20), "Switched off: every new character.");
+    }
+
+    /// <summary>
     /// Per account, only the account's first new character gets the kit; its stat points are given when it's created.
     /// </summary>
     [Test]

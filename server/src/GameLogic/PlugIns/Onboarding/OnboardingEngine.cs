@@ -317,6 +317,9 @@ public sealed class OnboardingEngine
                 return null;
             }
 
+            // Zen and coins once per account: not when another character of the account got its kit already.
+            var money = !kit.MoneyPerAccount || kit.PerAccount
+                || !this.Store.Data.Characters.Any(c => c.Key != characterId && c.Value.KitGiven && string.Equals(c.Value.Account, login, StringComparison.OrdinalIgnoreCase));
             state.KitGiven = true;
             var reward = new OnboardingOwedReward
             {
@@ -326,8 +329,8 @@ public sealed class OnboardingEngine
                 TitleVi = "Quà tân thủ",
                 Reason = "Starter kit",
                 Login = login,
-                Zen = kit.ZenEnabled ? Math.Max(0, kit.Zen) : 0,
-                Coins = kit.CoinsEnabled ? Math.Max(0, kit.Coins) : 0,
+                Zen = money && kit.ZenEnabled ? Math.Max(0, kit.Zen) : 0,
+                Coins = money && kit.CoinsEnabled ? Math.Max(0, kit.Coins) : 0,
                 CoinType = kit.CoinType,
                 Items = kit.ItemsEnabled ? KitItemsOf(kit, classNumber) : new List<StarterKitItem>(),
                 BuffMinutes = kit.ExperienceBuff.Enabled ? Math.Max(0, kit.ExperienceBuff.Minutes) : 0,
