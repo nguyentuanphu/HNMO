@@ -86,6 +86,19 @@ public class ChaosMixes : InitializerBase
         david.ItemCraftings.Add(new LuckyItems(this.Context, this.GameConfiguration).CreateTicketExchangeCrafting());
     }
 
+    /// <summary>
+    /// Gets the base success rate of the item upgrade to +10 .. +15, as in the Season 6/9 server suites
+    /// (60, 60, 60, 55, 55, 50; the luck, excellent, ancient and socket additions apply on top).
+    /// </summary>
+    /// <param name="targetLevel">The level the item gets on success.</param>
+    /// <returns>The base success rate in percent.</returns>
+    internal static byte PlusItemLevelUpgradeSuccessPercent(byte targetLevel) => targetLevel switch
+    {
+        <= 12 => 60,
+        <= 14 => 55,
+        _ => 50,
+    };
+
     private ItemCrafting ItemLevelUpgradeCrafting(byte craftingNumber, byte targetLevel)
     {
         var crafting = this.Context.CreateNew<ItemCrafting>();
@@ -95,7 +108,7 @@ public class ChaosMixes : InitializerBase
 
         crafting.SimpleCraftingSettings = craftingSettings;
         craftingSettings.Money = 2_000_000 * (targetLevel - 9);
-        craftingSettings.SuccessPercent = (byte)(60 - ((targetLevel - 10) / 2 * 5));
+        craftingSettings.SuccessPercent = PlusItemLevelUpgradeSuccessPercent(targetLevel);
         craftingSettings.SuccessPercentageAdditionForLuck = 25;
         craftingSettings.SuccessPercentageAdditionForExcellentItem = -10;
         craftingSettings.SuccessPercentageAdditionForAncientItem = -10;
