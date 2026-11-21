@@ -168,7 +168,7 @@ internal class CrywolfInitializer : InitializerBase
         warpInfo.Index = WarpIndex;
         warpInfo.Name = LocalizedString.FromResource(() => WarpNames.Crywolf);
         warpInfo.Costs = 10000;
-        warpInfo.LevelRequirement = 190;
+        warpInfo.LevelRequirement = 300; // the move list of the Season 6 server suite
         warpInfo.Gate = gate;
         this.GameConfiguration.WarpList.Add(warpInfo);
     }
