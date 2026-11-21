@@ -466,4 +466,6 @@
   <data name="AddArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Adds the HNMO Arena Herald, an NPC in Lorencia, Devias, Noria and Elbeland which opens the Arena window.</value></data>
   <data name="RenumberArenaHeraldUpdatePlugIn_Name" xml:space="preserve"><value>Arena Herald: its own NPC number</value></data>
   <data name="RenumberArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Moves the Arena Herald of an older save from NPC 595 to 900, so the web game shows it again.</value></data>
+  <data name="SwellLifeDurationUpdatePlugIn_Name" xml:space="preserve"><value>Align Swell Life duration with the Season 6 suite</value></data>
+  <data name="SwellLifeDurationUpdatePlugIn_Description" xml:space="preserve"><value>Updates Swell Life and Swell Life Proficiency duration from 60 + Energy / 180 s (180 s cap) to 60 + Energy / 10 s without a cap, matching the Season 6 server suite.</value></data>
 </root>

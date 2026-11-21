@@ -38,12 +38,12 @@ public class LifeSwellEffectInitializer : InitializerBase
         magicEffect.StopByDeath = true;
         magicEffect.Duration = this.Context.CreateNew<PowerUpDefinitionValue>();
         magicEffect.Duration.ConstantValue.Value = 60f;
-        magicEffect.Duration.MaximumValue = 180f;
+        magicEffect.Duration.MaximumValue = null;
 
         var durationPerEnergy = this.Context.CreateNew<AttributeRelationship>();
         durationPerEnergy.InputAttribute = Stats.TotalEnergy.GetPersistent(this.GameConfiguration);
         durationPerEnergy.InputOperator = InputOperator.Multiply;
-        durationPerEnergy.InputOperand = 1f / 180f; // 180 energy adds 1 second duration
+        durationPerEnergy.InputOperand = 1f / 10f; // 10 energy adds 1 second duration
         magicEffect.Duration.RelatedValues.Add(durationPerEnergy);
 
         var healthPowerUpDefinition = this.Context.CreateNew<PowerUpDefinition>();

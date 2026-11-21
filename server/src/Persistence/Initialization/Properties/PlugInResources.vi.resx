@@ -868,4 +868,6 @@
   <data name="AddArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Thêm Sứ giả Đấu trường HNMO, NPC ở Lorencia, Devias, Noria và Elbeland, mở cửa sổ Đấu trường.</value></data>
   <data name="RenumberArenaHeraldUpdatePlugIn_Name" xml:space="preserve"><value>Sứ giả Đấu trường: số NPC riêng</value></data>
   <data name="RenumberArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Chuyển Sứ giả Đấu trường của bản lưu cũ từ NPC 595 sang 900 để web game hiện lại.</value></data>
+  <data name="SwellLifeDurationUpdatePlugIn_Name" xml:space="preserve"><value>Chỉnh thời gian Swell Life theo bộ máy chủ Season 6</value></data>
+  <data name="SwellLifeDurationUpdatePlugIn_Description" xml:space="preserve"><value>Cập nhật thời gian duy trì của Swell Life và Swell Life Proficiency từ 60 + Energy / 180 giây (tối đa 180 giây) thành 60 + Energy / 10 giây không giới hạn trần, khớp bộ máy chủ Season 6.</value></data>
 </root>

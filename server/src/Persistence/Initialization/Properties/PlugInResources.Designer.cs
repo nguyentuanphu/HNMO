@@ -1114,5 +1114,11 @@ namespace HNMO.Persistence.Initialization.Properties {
 
         /// <summary>Gets the localized StrongerHnmoSkillsUpdatePlugIn_Description text.</summary>
         public static string StrongerHnmoSkillsUpdatePlugIn_Description => ResourceManager.GetString("StrongerHnmoSkillsUpdatePlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized SwellLifeDurationUpdatePlugIn_Name text.</summary>
+        public static string SwellLifeDurationUpdatePlugIn_Name => ResourceManager.GetString("SwellLifeDurationUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized SwellLifeDurationUpdatePlugIn_Description text.</summary>
+        public static string SwellLifeDurationUpdatePlugIn_Description => ResourceManager.GetString("SwellLifeDurationUpdatePlugIn_Description", resourceCulture)!;
     }
 }

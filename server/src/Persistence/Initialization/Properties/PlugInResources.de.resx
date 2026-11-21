@@ -964,4 +964,6 @@
   <data name="StrongerHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
     <value>Dieses Update macht die 28 HNMO-Fertigkeiten um 20 % stärker (Schaden, Buffs und Debuffs; Kosten und Abklingzeiten bleiben) und lässt die Prüfungsquests des Elfensoldaten 200 Tötungen und fünf Juwelen des Chaos verlangen.</value>
   </data>
+  <data name="SwellLifeDurationUpdatePlugIn_Name" xml:space="preserve"><value>Swell-Life-Dauer an das Season-6-Serverpaket anpassen</value></data>
+  <data name="SwellLifeDurationUpdatePlugIn_Description" xml:space="preserve"><value>Aktualisiert die Dauer von Swell Life und Swell Life Proficiency von 60 + Energie / 180 s (Obergrenze 180 s) auf 60 + Energie / 10 s ohne Obergrenze, passend zum Season-6-Serverpaket.</value></data>
 </root>
