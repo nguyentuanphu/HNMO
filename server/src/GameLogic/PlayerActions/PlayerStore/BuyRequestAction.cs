@@ -33,6 +33,14 @@ public class BuyRequestAction
             return;
         }
 
+        if (player.BackupInventory is not null || requestedPlayer.BackupInventory is not null)
+        {
+            // A trade or a crafting window of the buyer or the seller is open: a cancel (or a disconnect)
+            // rolls that inventory back to its backup, which would undo one half of the purchase.
+            await player.InvokeViewPlugInAsync<IPlayerShopBuyRequestResultPlugIn>(p => p.ShowResultAsync(requestedPlayer, ItemBuyResult.Undefined, null)).ConfigureAwait(false);
+            return;
+        }
+
         if (!(requestedPlayer.ShopStorage?.StoreOpen ?? false))
         {
             player.Logger.LogDebug("Store not open, Character {0}", requestedPlayer.SelectedCharacter?.Name);
