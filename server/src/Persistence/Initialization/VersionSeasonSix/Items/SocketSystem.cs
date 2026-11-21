@@ -363,7 +363,7 @@ public class SocketSystem : InitializerBase
 
         definition.PossibleOptions.Add(this.CreateSocketOption(0, SocketSubOptionType.Lightning, Stats.ExcellentDamageBonus, AggregateType.AddRaw, 15, 20, 25, 30, 40));
         definition.PossibleOptions.Add(this.CreateSocketOption(1, SocketSubOptionType.Lightning, Stats.ExcellentDamageChance, AggregateType.AddRaw, 0.10f, 0.11f, 0.12f, 0.13f, 0.14f));
-        definition.PossibleOptions.Add(this.CreateSocketOption(2, SocketSubOptionType.Lightning, Stats.CriticalDamageBonus, AggregateType.AddRaw, 15, 20, 25, 30, 40));
+        definition.PossibleOptions.Add(this.CreateSocketOption(2, SocketSubOptionType.Lightning, Stats.CriticalDamageBonus, AggregateType.AddRaw, 30, 32, 35, 40, 50));
         definition.PossibleOptions.Add(this.CreateSocketOption(3, SocketSubOptionType.Lightning, Stats.CriticalDamageChance, AggregateType.AddRaw, 0.08f, 0.09f, 0.10f, 0.11f, 0.12f));
         return definition;
     }
