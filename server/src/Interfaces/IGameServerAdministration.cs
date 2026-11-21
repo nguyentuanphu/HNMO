@@ -57,6 +57,22 @@ public interface IGameServerAdministration : IGameServerPluginOperations
     /// <returns>The confirmed action result.</returns>
     ValueTask<GameServerAdminResult> SetLevelAsync(string characterName, Guid characterId, int level, bool master, CancellationToken cancellationToken);
 
+    /// <summary>Applies a timed buff effect to a live character.</summary>
+    /// <param name="characterName">The exact character name.</param>
+    /// <param name="characterId">The expected character identifier.</param>
+    /// <param name="effectNumber">The magic effect definition number.</param>
+    /// <param name="durationSeconds">The duration in seconds.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The confirmed action result.</returns>
+    ValueTask<GameServerAdminResult> ApplyBuffAsync(string characterName, Guid characterId, short effectNumber, int durationSeconds, CancellationToken cancellationToken);
+
+    /// <summary>Clears active timed buff effects from a live character.</summary>
+    /// <param name="characterName">The exact character name.</param>
+    /// <param name="characterId">The expected character identifier.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The confirmed action result.</returns>
+    ValueTask<GameServerAdminResult> ClearBuffsAsync(string characterName, Guid characterId, CancellationToken cancellationToken);
+
     /// <summary>Reads the configured periodic mini game schedules.</summary>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The bounded event schedule.</returns>
