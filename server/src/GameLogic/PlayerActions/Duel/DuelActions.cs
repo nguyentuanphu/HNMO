@@ -83,6 +83,14 @@ public class DuelActions
             return;
         }
 
+        if (duelRoom.State != DuelState.DuelRequested || duelRoom.Opponent != player)
+        {
+            // Only the requested player answers, and only once: a repeated answer would take the entrance
+            // fees again and start the duel a second time, or cancel the running duel.
+            player.Logger.LogWarning("Player {player} answered a duel which isn't waiting for its answer (state {state}).", player.Name, duelRoom.State);
+            return;
+        }
+
         if (!await CheckIfDuelCanBeStartedAsync(player, target).ConfigureAwait(false))
         {
             await duelRoom.ResetAndDisposeAsync(DuelStartResult.FailedByError).ConfigureAwait(false);
