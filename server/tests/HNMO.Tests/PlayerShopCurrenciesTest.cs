@@ -111,6 +111,7 @@ public class PlayerShopCurrenciesTest
     public async ValueTask StoreWithDisabledCurrencyIsNotOpenedAsync()
     {
         var (seller, _) = await this.CreatePlayersAsync(isFeatureActive: false).ConfigureAwait(false);
+        seller.Attributes![HNMO.GameLogic.Attributes.Stats.Level] = 6; // so only the currency refuses the store
         await this.AddStoreItemAsync(seller, new ShopPrice(10, this._jewelOfBless)).ConfigureAwait(false);
 
         await new OpenStoreAction().OpenStoreAsync(seller, "Test").ConfigureAwait(false);
