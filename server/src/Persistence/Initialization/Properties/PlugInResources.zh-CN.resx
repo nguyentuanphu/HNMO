@@ -491,4 +491,6 @@
   <data name="StrongerHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
     <value>将 28 个 HNMO 技能增强 20%（伤害、增益和减益效果；消耗和冷却时间不变），并将精灵士兵的试炼任务改为击杀 200 个怪物并上交五颗玛雅之石。</value>
   </data>
+  <data name="IncreaseBlockMasterFlatUpdatePlugIn_Name" xml:space="preserve"><value>将斗神-御强化大师加成设为固定值</value></data>
+  <data name="IncreaseBlockMasterFlatUpdatePlugIn_Description" xml:space="preserve"><value>将格斗家的斗神-御强化大师技能从按 PvM 防御成功率百分比加成改为固定防御成功率加成，与 Season 6 服务端套件一致。</value></data>
 </root>

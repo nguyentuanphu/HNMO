@@ -964,4 +964,6 @@
   <data name="StrongerHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
     <value>Dieses Update macht die 28 HNMO-Fertigkeiten um 20 % stärker (Schaden, Buffs und Debuffs; Kosten und Abklingzeiten bleiben) und lässt die Prüfungsquests des Elfensoldaten 200 Tötungen und fünf Juwelen des Chaos verlangen.</value>
   </data>
+  <data name="IncreaseBlockMasterFlatUpdatePlugIn_Name" xml:space="preserve"><value>Increase Block Power Up als festen Bonus festlegen</value></data>
+  <data name="IncreaseBlockMasterFlatUpdatePlugIn_Description" xml:space="preserve"><value>Ändert die Master-Fertigkeit Increase Block Power Up des Rage Fighters von einem Prozentsatz der PvM-Verteidigungsrate auf einen festen Verteidigungsratenbonus, passend zum Season-6-Serverpaket.</value></data>
 </root>
