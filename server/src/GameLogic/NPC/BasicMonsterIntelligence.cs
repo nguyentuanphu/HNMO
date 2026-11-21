@@ -7,7 +7,9 @@ namespace HNMO.GameLogic.NPC;
 using System.Diagnostics;
 using System.Threading;
 using HNMO.GameLogic.Attributes;
+using HNMO.GameLogic.PlugIns.GameplayRules;
 using HNMO.Pathfinding;
+using HNMO.PlugIns;
 
 /// <summary>
 /// A basic monster AI which is pretty basic.
@@ -16,6 +18,8 @@ public class BasicMonsterIntelligence : INpcIntelligence, IDisposable
 {
     private Timer? _aiTimer;
     private Monster? _monster;
+    private IAttackable? _provokedTarget;
+    private bool _isReturningHome;
 
     /// <summary>
     /// Finalizes an instance of the <see cref="BasicMonsterIntelligence"/> class.
@@ -76,9 +80,22 @@ public class BasicMonsterIntelligence : INpcIntelligence, IDisposable
     /// <inheritdoc/>
     public virtual void RegisterHit(IAttacker attacker)
     {
-        if (this.CurrentTarget is null && attacker is IAttackable attackable)
+        if (this._isReturningHome)
         {
-            this.CurrentTarget = attackable;
+            return;
+        }
+
+        if (attacker is IAttackable attackable)
+        {
+            if (this.GetConfig().ChaseAttacker)
+            {
+                this._provokedTarget = attackable;
+            }
+
+            if (this.CurrentTarget is null)
+            {
+                this.CurrentTarget = attackable;
+            }
         }
     }
 
@@ -211,6 +228,8 @@ public class BasicMonsterIntelligence : INpcIntelligence, IDisposable
         if (!this.Monster.IsAlive)
         {
             this.CurrentTarget = null;
+            this._provokedTarget = null;
+            this._isReturningHome = false;
             return;
         }
 
@@ -222,6 +241,44 @@ public class BasicMonsterIntelligence : INpcIntelligence, IDisposable
         if (this.Monster.Attributes[Stats.IsStunned] > 0 || this.Monster.Attributes[Stats.IsAsleep] > 0)
         {
             return;
+        }
+
+        var cfg = this.GetConfig();
+        if (cfg.LeashToSpawnArea && this.Monster.Definition.MoveRange > 0)
+        {
+            var distFromSpawn = this.DistanceFromSpawnArea(this.Monster.Position);
+            var leashLimit = this.Monster.Definition.MoveRange + Math.Max(0, cfg.LeashExtraRange);
+            if (!this._isReturningHome && distFromSpawn > leashLimit)
+            {
+                this.CurrentTarget = null;
+                this._provokedTarget = null;
+                this._isReturningHome = true;
+                if (cfg.HealToFullOnLeash)
+                {
+                    this.Monster.RestoreHealth(int.MaxValue);
+                }
+            }
+
+            if (this._isReturningHome)
+            {
+                if (distFromSpawn <= 1)
+                {
+                    this._isReturningHome = false;
+                    if (cfg.HealToFullOnLeash)
+                    {
+                        this.Monster.RestoreHealth(int.MaxValue);
+                    }
+                }
+                else
+                {
+                    if (this.Monster.Attributes[Stats.IsFrozen] == 0)
+                    {
+                        await this.Monster.WalkToAsync(this.GetSpawnHomePoint()).ConfigureAwait(false);
+                    }
+
+                    return;
+                }
+            }
         }
 
         if (!await this.CanAttackAsync().ConfigureAwait(false))
@@ -257,7 +314,8 @@ public class BasicMonsterIntelligence : INpcIntelligence, IDisposable
 
         // Target tracked but outside attack range (or without line of sight),
         // walk toward it to get into a hittable position.
-        if (this.CurrentTarget.IsInRange(this.Monster.Position, this.Monster.Definition.ViewRange + 1))
+        var isProvoked = cfg.ChaseAttacker && ReferenceEquals(this.CurrentTarget, this._provokedTarget);
+        if (isProvoked || this.CurrentTarget.IsInRange(this.Monster.Position, this.Monster.Definition.ViewRange + 1))
         {
             var walkTarget = this.Monster.CurrentMap!.Terrain.GetRandomCoordinate(this.CurrentTarget.Position, this.Monster.Definition.AttackRange);
             if (await this.Monster.WalkToAsync(walkTarget).ConfigureAwait(false))
@@ -296,12 +354,53 @@ public class BasicMonsterIntelligence : INpcIntelligence, IDisposable
     /// </summary>
     private bool IsCurrentTargetValid()
     {
-        return this.CurrentTarget is not null
-               && this.CurrentTarget.IsAlive
-               && this.CurrentTarget is not Player { IsInvisible: true }
-               && !this.CurrentTarget.IsTeleporting
-               && !this.CurrentTarget.IsAtSafezone()
-               && this.CurrentTarget.IsInRange(this.Monster.Position, this.Npc.Definition.ViewRange)
+        if (this.CurrentTarget is null
+            || !this.CurrentTarget.IsAlive
+            || this.CurrentTarget is Player { IsInvisible: true }
+            || this.CurrentTarget.IsTeleporting
+            || this.CurrentTarget.IsAtSafezone())
+        {
+            return false;
+        }
+
+        var cfg = this.GetConfig();
+        if (cfg.ChaseAttacker && ReferenceEquals(this.CurrentTarget, this._provokedTarget))
+        {
+            var chaseRange = Math.Max((int)this.Npc.Definition.ViewRange, this.Npc.Definition.MoveRange + Math.Max(0, cfg.LeashExtraRange) + 2);
+            return this.CurrentTarget.IsInRange(this.Monster.Position, chaseRange);
+        }
+
+        return this.CurrentTarget.IsInRange(this.Monster.Position, this.Npc.Definition.ViewRange)
                && this.Monster.HasLineOfSightTo(this.CurrentTarget);
+    }
+
+    private MonsterAiConfiguration GetConfig()
+    {
+        return this.Monster.PlugInManager?
+                   .GetActivePlugInsOf<ISupportCustomConfiguration<MonsterAiConfiguration>>()
+                   .OfType<MonsterAiPlugIn>()
+                   .FirstOrDefault()?
+                   .Configuration
+               ?? new MonsterAiConfiguration();
+    }
+
+    private int DistanceFromSpawnArea(Point position)
+    {
+        var area = this.Monster.SpawnArea;
+        var minX = Math.Min(area.X1, area.X2);
+        var maxX = Math.Max(area.X1, area.X2);
+        var minY = Math.Min(area.Y1, area.Y2);
+        var maxY = Math.Max(area.Y1, area.Y2);
+        var dx = position.X < minX ? minX - position.X : (position.X > maxX ? position.X - maxX : 0);
+        var dy = position.Y < minY ? minY - position.Y : (position.Y > maxY ? position.Y - maxY : 0);
+        return Math.Max(dx, dy);
+    }
+
+    private Point GetSpawnHomePoint()
+    {
+        var area = this.Monster.SpawnArea;
+        var cx = (byte)((Math.Min(area.X1, area.X2) + Math.Max(area.X1, area.X2)) / 2);
+        var cy = (byte)((Math.Min(area.Y1, area.Y2) + Math.Max(area.Y1, area.Y2)) / 2);
+        return new Point(cx, cy);
     }
 }

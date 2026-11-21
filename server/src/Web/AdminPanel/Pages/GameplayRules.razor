@@ -175,4 +175,35 @@ else
             <button type="button" class="btn btn-sm btn-primary" id="gr-combat-save" disabled="@this._isSaving" @onclick="this.SaveCombatLimitsAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@L("Save combat limits", "Lưu giới hạn chiến đấu")</button>
         </div>
     </section>
+
+    <section class="card mt-3" id="gr-monster-ai-card">
+        <div class="card-body">
+            <h2 class="h5 mb-2">@L("4. Monster chase, leash & heal", "4. Quái đuổi theo, quay về bãi & hồi máu")</h2>
+            <div class="row g-2 mb-3">
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="form-check">
+                        <input class="form-check-input" id="gr-mob-chase" type="checkbox" @bind="this._monsterAiConfig.ChaseAttacker" />
+                        <label class="form-check-label" for="gr-mob-chase" title="@L("Monsters chase players who hit them from outside view range.", "Quái đuổi theo người chơi đánh nó từ ngoài tầm nhìn.")">@L("Chase attacker", "Đuổi người đánh")</label>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="form-check">
+                        <input class="form-check-input" id="gr-mob-leash" type="checkbox" @bind="this._monsterAiConfig.LeashToSpawnArea" />
+                        <label class="form-check-label" for="gr-mob-leash" title="@L("Monsters drop target and walk home if pulled out of their spawn area.", "Quái bỏ mục tiêu và quay về bãi nếu bị kéo ra quá xa.")">@L("Leash to spawn area", "Quay về bãi khi kéo xa")</label>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="form-check">
+                        <input class="form-check-input" id="gr-mob-heal" type="checkbox" @bind="this._monsterAiConfig.HealToFullOnLeash" />
+                        <label class="form-check-label" for="gr-mob-heal" title="@L("Monsters heal to full HP when leashing home.", "Quái hồi đầy máu khi quay về bãi.")">@L("Heal to full on leash", "Hồi đầy máu khi về bãi")</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" for="gr-mob-leash-extra" title="@L("Extra tiles beyond MoveRange before leashing home (0..30).", "Số ô cộng thêm ngoài tầm di chuyển trước khi quay về bãi (0..30).")">@L("Leash extra range", "Phạm vi kéo thêm")</label>
+                    <input class="form-control form-control-sm" id="gr-mob-leash-extra" type="number" min="0" max="30" @bind="this._monsterAiConfig.LeashExtraRange" />
+                </div>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary" id="gr-monster-ai-save" disabled="@this._isSaving" @onclick="this.SaveMonsterAiAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@L("Save monster AI rules", "Lưu quy tắc AI quái")</button>
+        </div>
+    </section>
 }
