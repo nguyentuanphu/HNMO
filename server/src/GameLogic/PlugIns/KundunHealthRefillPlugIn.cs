@@ -78,13 +78,14 @@ public class KundunHealthRefillPlugIn : IPeriodicTaskPlugIn, ISupportCustomConfi
     /// <returns>The health which was given back in total.</returns>
     internal static int Refill(GameMap map, short monsterNumber, int amount)
     {
-        if (!map.Definition.MonsterSpawns.Any(spawn => spawn.MonsterDefinition?.Number == monsterNumber))
+        // A map which is torn down, or one without a spawn of the monster, is skipped: the task runs every second on every map.
+        if (map.IsTornDown || map.Definition?.MonsterSpawns?.Any(spawn => spawn.MonsterDefinition?.Number == monsterNumber) != true)
         {
             return 0;
         }
 
         var restored = 0;
-        foreach (var monster in map.GetAttackableNpcs().Where(npc => npc.Definition.Number == monsterNumber && npc.IsAlive))
+        foreach (var monster in map.GetAttackableNpcs().Where(npc => npc.Definition?.Number == monsterNumber && npc.IsAlive))
         {
             restored += monster.RestoreHealth(amount);
         }
