@@ -1,0 +1,361 @@
+{
+ "rows": [
+  {
+   "n": 24,
+   "name": "Triple Shot",
+   "cast": true,
+   "target": "LIch",
+   "dist": 8,
+   "damage": 1,
+   "effectPeak": 3,
+   "kinds": [
+    "particle:fire",
+    "particle:blood2"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 781
+  },
+  {
+   "n": 26,
+   "name": "Heal",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 1,
+   "kinds": [
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 786
+  },
+  {
+   "n": 27,
+   "name": "Greater Defense",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 0,
+   "kinds": [],
+   "p95": 17,
+   "max": 17,
+   "mana": 785
+  },
+  {
+   "n": 28,
+   "name": "Greater Damage",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 7,
+   "kinds": [
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 775
+  },
+  {
+   "n": 30,
+   "name": "Summon Goblin",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 42,
+   "kinds": [
+    "particle:fire",
+    "effect:magicGround2",
+    "joint:jointHealing",
+    "sprite:shiny2"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 774
+  },
+  {
+   "n": 31,
+   "name": "Summon Stone Golem",
+   "cast": true,
+   "target": "Goblin of testgmElf",
+   "dist": 2,
+   "damage": 0,
+   "effectPeak": 43,
+   "kinds": [
+    "particle:fire",
+    "effect:magicGround2",
+    "joint:jointHealing",
+    "particle:blood2",
+    "sprite:shiny2"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 786
+  },
+  {
+   "n": 32,
+   "name": "Summon Assassin",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 40,
+   "kinds": [
+    "effect:magicGround2",
+    "joint:jointHealing",
+    "sprite:shiny2"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 786
+  },
+  {
+   "n": 33,
+   "name": "Summon Elite Yeti",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 39,
+   "kinds": [
+    "particle:fire",
+    "effect:magicGround2",
+    "joint:jointHealing",
+    "sprite:shiny2"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 786
+  },
+  {
+   "n": 34,
+   "name": "Summon Dark Knight",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 41,
+   "kinds": [
+    "particle:fire",
+    "effect:magicGround2",
+    "joint:jointHealing",
+    "sprite:shiny2"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 786
+  },
+  {
+   "n": 35,
+   "name": "Summon Bali",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 40,
+   "kinds": [
+    "effect:magicGround2",
+    "joint:jointHealing",
+    "sprite:shiny2"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 786
+  },
+  {
+   "n": 36,
+   "name": "Summon Soldier",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 35,
+   "kinds": [
+    "particle:fire",
+    "effect:magicGround2",
+    "joint:jointHealing",
+    "sprite:shiny2"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 786
+  },
+  {
+   "n": 46,
+   "name": "Starfall",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 5,
+   "kinds": [
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 786
+  },
+  {
+   "n": 51,
+   "name": "Ice Arrow",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 0,
+   "kinds": [],
+   "p95": 17,
+   "max": 17,
+   "mana": 786
+  },
+  {
+   "n": 52,
+   "name": "Penetration",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 24,
+   "kinds": [
+    "effect:gathering",
+    "particle:spark3",
+    "sprite:shiny2",
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 786
+  },
+  {
+   "n": 76,
+   "name": "Plasma Storm",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 1,
+   "kinds": [
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 786
+  },
+  {
+   "n": 77,
+   "name": "Infinity Arrow",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 6,
+   "kinds": [
+    "effect:infinityArrow",
+    "effect:infinityArrow1",
+    "effect:infinityArrow2",
+    "effect:infinityArrow3",
+    "effect:infinityArrow4"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 765
+  },
+  {
+   "n": 234,
+   "name": "Recovery",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 111,
+   "kinds": [
+    "effect:summon",
+    "effect:twlight",
+    "effect:flare",
+    "joint:flare",
+    "particle:fire",
+    "particle:light"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 775
+  },
+  {
+   "n": 235,
+   "name": "Multi-Shot",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 12,
+   "kinds": [
+    "effect:multiShot3",
+    "effect:multiShot1",
+    "effect:multiShot2",
+    "effect:bladeSkill",
+    "sprite:shiny2",
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 786
+  },
+  {
+   "n": 708,
+   "name": "Phoenix Arrow",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 81,
+   "kinds": [
+    "effect:fireModel",
+    "particle:fire",
+    "effect:stone2",
+    "effect:stone1",
+    "particle:explosion"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 785
+  },
+  {
+   "n": 709,
+   "name": "Frost Arrow Rain",
+   "cast": true,
+   "target": "Golden Budge Dragon",
+   "dist": 5,
+   "damage": 3,
+   "effectPeak": 50,
+   "kinds": [
+    "particle:spark",
+    "particle:energy",
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 50,
+   "mana": 755
+  },
+  {
+   "n": 710,
+   "name": "Forest Blessing",
+   "cast": true,
+   "target": "Golden Budge Dragon",
+   "dist": 6,
+   "damage": 0,
+   "effectPeak": 7,
+   "kinds": [
+    "particle:energy",
+    "sprite:shiny2"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 735
+  }
+ ],
+ "errors": []
+}

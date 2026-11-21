@@ -1,0 +1,1027 @@
+{
+ "who": {
+  "name": "testgmDl",
+  "map": 3,
+  "classIndex": 4,
+  "season": null
+ },
+ "rows": [
+  {
+   "n": 60,
+   "name": "Force",
+   "castable": true,
+   "cast": true,
+   "target": "Chain Scorpion",
+   "targetId": 633,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 151,
+    "y": 146
+   },
+   "targetCell": {
+    "x": 152,
+    "y": 145
+   },
+   "heroMid": {
+    "x": 151,
+    "y": 146
+   },
+   "heroAfter": {
+    "x": 151,
+    "y": 146
+   },
+   "targetAfter": {
+    "x": 152,
+    "y": 145,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    31034
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 1,
+   "onSkill": [
+    60
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 23,
+   "made": {
+    "particle:smoke": 1,
+    "particle:blood2": 10,
+    "effect:waves": 7,
+    "joint:piercing": 4,
+    "effect:piercing2": 1
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Force",
+     "mana": 10,
+     "ag": 0,
+     "distance": 4,
+     "damage": 10
+    },
+    "mana": 3598,
+    "ag": 3538
+   }
+  },
+  {
+   "n": 61,
+   "name": "Fire Burst",
+   "castable": true,
+   "cast": true,
+   "target": "Goblin",
+   "targetId": 588,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 151,
+    "y": 146
+   },
+   "targetCell": {
+    "x": 151,
+    "y": 147
+   },
+   "heroMid": {
+    "x": 151,
+    "y": 146
+   },
+   "heroAfter": {
+    "x": 151,
+    "y": 146
+   },
+   "targetAfter": {
+    "x": 151,
+    "y": 147,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    14561
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    61
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 309,
+   "made": {
+    "particle:blood2": 10,
+    "effect:pierPart": 150,
+    "effect:darkLordSkill": 2,
+    "particle:fire2": 147
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Fire Burst",
+     "mana": 25,
+     "ag": 0,
+     "distance": 6,
+     "damage": 100
+    },
+    "mana": 3598,
+    "ag": 3813
+   }
+  },
+  {
+   "n": 62,
+   "name": "Earthshake",
+   "castable": true,
+   "cast": true,
+   "target": "Goblin",
+   "targetId": 589,
+   "dist": 5,
+   "near": 1,
+   "heroCell": {
+    "x": 151,
+    "y": 151
+   },
+   "targetCell": {
+    "x": 147,
+    "y": 154
+   },
+   "heroMid": {
+    "x": 151,
+    "y": 151
+   },
+   "heroAfter": {
+    "x": 151,
+    "y": 151
+   },
+   "targetAfter": {
+    "x": 147,
+    "y": 154,
+    "dead": true
+   },
+   "hits": 2,
+   "targetsHit": 2,
+   "hp": [
+    21275,
+    20705
+   ],
+   "sd": [
+    0,
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    62
+   ],
+   "area": [
+    {
+     "s": 62,
+     "x": 151,
+     "y": 151,
+     "rot": 165,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 196,
+   "made": {
+    "effect:darkHorseSkill": 1,
+    "particle:smoke": 39,
+    "effect:shockWave": 4,
+    "particle:blood2": 10,
+    "effect:skillFuryStrike": 1,
+    "effect:groundStone2": 7,
+    "effect:groundStone": 5,
+    "particle:explosion": 1,
+    "effect:earthQuake3": 1,
+    "effect:earthQuake1": 1,
+    "effect:earthQuake2": 1,
+    "effect:earthQuake4": 5,
+    "effect:earthQuake5": 5,
+    "effect:earthQuake7": 20,
+    "effect:earthQuake8": 20,
+    "effect:stone2": 29,
+    "effect:stone1": 28,
+    "particle:fire": 18
+   },
+   "p95": 17,
+   "max": 100,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Earthshake",
+     "mana": 0,
+     "ag": 50,
+     "distance": 10,
+     "damage": 150
+    },
+    "mana": 3598,
+    "ag": 4225
+   }
+  },
+  {
+   "n": 63,
+   "name": "Summon",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 557,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 151,
+    "y": 151
+   },
+   "targetCell": {
+    "x": 150,
+    "y": 150
+   },
+   "heroMid": {
+    "x": 151,
+    "y": 151
+   },
+   "heroAfter": {
+    "x": 151,
+    "y": 151
+   },
+   "targetAfter": {
+    "x": 150,
+    "y": 150,
+    "dead": false
+   },
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 2,
+   "onSkill": [
+    63
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 80,
+   "made": {
+    "effect:circle": 1,
+    "effect:circleLight": 1,
+    "particle:blood2": 10,
+    "particle:flareBlue": 34,
+    "joint:flareBlueJoint": 34
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Summon",
+     "mana": 70,
+     "ag": 30,
+     "distance": 0,
+     "damage": 0
+    },
+    "mana": 3598,
+    "ag": 4450
+   }
+  },
+  {
+   "n": 64,
+   "name": "Increase Critical Damage",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 557,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 151,
+    "y": 151
+   },
+   "targetCell": {
+    "x": 150,
+    "y": 150
+   },
+   "heroMid": {
+    "x": 151,
+    "y": 151
+   },
+   "heroAfter": {
+    "x": 151,
+    "y": 151
+   },
+   "targetAfter": {
+    "x": 150,
+    "y": 150,
+    "dead": false
+   },
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 2,
+   "onSkill": [
+    64
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 672,
+   "made": {
+    "effect:flareForce": 3,
+    "joint:flareForceJoint": 9,
+    "sprite:flare": 648,
+    "effect:darkLordSkill": 2,
+    "particle:blood2": 10
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Increase Critical Damage",
+     "mana": 50,
+     "ag": 50,
+     "distance": 0,
+     "damage": 0
+    },
+    "mana": 3598,
+    "ag": 4521
+   }
+  },
+  {
+   "n": 65,
+   "name": "Electric Spike",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 557,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 151,
+    "y": 151
+   },
+   "targetCell": {
+    "x": 150,
+    "y": 150
+   },
+   "heroMid": {
+    "x": 151,
+    "y": 151
+   },
+   "heroAfter": {
+    "x": 151,
+    "y": 151
+   },
+   "targetAfter": {
+    "x": 150,
+    "y": 150,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    16602
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    65
+   ],
+   "area": [
+    {
+     "s": 65,
+     "x": 151,
+     "y": 151,
+     "rot": 224,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 15,
+   "made": {
+    "effect:flareForce": 1,
+    "joint:flareForceJoint": 4,
+    "particle:blood2": 10
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Electric Spike",
+     "mana": 0,
+     "ag": 100,
+     "distance": 10,
+     "damage": 250
+    },
+    "mana": 3598,
+    "ag": 4521
+   }
+  },
+  {
+   "n": 72,
+   "name": "Abolish Magic",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 557,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 164,
+    "y": 137
+   },
+   "targetCell": {
+    "x": 164,
+    "y": 138
+   },
+   "heroMid": {
+    "x": 164,
+    "y": 137
+   },
+   "heroAfter": {
+    "x": 164,
+    "y": 137
+   },
+   "targetAfter": {
+    "x": 164,
+    "y": 138,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    4217
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    72
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 0,
+   "made": {},
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Abolish Magic",
+     "mana": 90,
+     "ag": 70,
+     "distance": 0,
+     "damage": 0
+    },
+    "mana": 3598,
+    "ag": 4521
+   }
+  },
+  {
+   "n": 74,
+   "name": "Fire Blast",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 533,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 197,
+    "y": 141
+   },
+   "targetCell": {
+    "x": 196,
+    "y": 141
+   },
+   "heroMid": {
+    "x": 197,
+    "y": 141
+   },
+   "heroAfter": {
+    "x": 197,
+    "y": 141
+   },
+   "targetAfter": {
+    "x": 196,
+    "y": 141,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    13328
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    74
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 41,
+   "made": {
+    "particle:blood2": 10,
+    "effect:pierPart": 1,
+    "joint:jointForce": 6,
+    "effect:skillInferno": 24
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Fire Blast",
+     "mana": 30,
+     "ag": 10,
+     "distance": 6,
+     "damage": 150
+    },
+    "mana": 3598,
+    "ag": 4521
+   }
+  },
+  {
+   "n": 78,
+   "name": "Fire Scream",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 581,
+   "dist": 5,
+   "near": 1,
+   "heroCell": {
+    "x": 197,
+    "y": 150
+   },
+   "targetCell": {
+    "x": 197,
+    "y": 145
+   },
+   "heroMid": {
+    "x": 197,
+    "y": 150
+   },
+   "heroAfter": {
+    "x": 197,
+    "y": 150
+   },
+   "targetAfter": {
+    "x": 197,
+    "y": 145,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    16897
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    78
+   ],
+   "area": [
+    {
+     "s": 78,
+     "x": 197,
+     "y": 150,
+     "rot": 0,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 136,
+   "made": {
+    "effect:darkScream": 3,
+    "joint:jointForce": 3,
+    "particle:blueBlur": 3,
+    "effect:darkScreamFire": 3,
+    "particle:blood2": 10,
+    "particle:flame": 114
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Fire Scream",
+     "mana": 45,
+     "ag": 10,
+     "distance": 6,
+     "damage": 130
+    },
+    "mana": 3598,
+    "ag": 4521
+   }
+  },
+  {
+   "n": 238,
+   "name": "Chaotic Diseier",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 577,
+   "dist": 4,
+   "near": 1,
+   "heroCell": {
+    "x": 189,
+    "y": 143
+   },
+   "targetCell": {
+    "x": 192,
+    "y": 146
+   },
+   "heroMid": {
+    "x": 189,
+    "y": 143
+   },
+   "heroAfter": {
+    "x": 189,
+    "y": 143
+   },
+   "targetAfter": {
+    "x": 192,
+    "y": 146,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    11672
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    238
+   ],
+   "area": [
+    {
+     "s": 238,
+     "x": 189,
+     "y": 143,
+     "rot": 95,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 799,
+   "made": {
+    "effect:shiny5": 5,
+    "joint:twoLineGhost": 8,
+    "effect:desair": 5,
+    "particle:spark": 20,
+    "particle:explosion": 1,
+    "sprite:shiny5": 120,
+    "particle:smoke": 580,
+    "effect:feather": 50,
+    "particle:blood2": 10
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Chaotic Diseier",
+     "mana": 50,
+     "ag": 15,
+     "distance": 6,
+     "damage": 190
+    },
+    "mana": 3598,
+    "ag": 4521
+   }
+  },
+  {
+   "n": 716,
+   "name": "Shadow Ravens",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 530,
+   "dist": 4,
+   "near": 1,
+   "heroCell": {
+    "x": 183,
+    "y": 158
+   },
+   "targetCell": {
+    "x": 185,
+    "y": 154
+   },
+   "heroMid": {
+    "x": 183,
+    "y": 158
+   },
+   "heroAfter": {
+    "x": 183,
+    "y": 158
+   },
+   "targetAfter": {
+    "x": 185,
+    "y": 154,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    14437
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 1,
+   "onSkill": [
+    716
+   ],
+   "area": [
+    {
+     "s": 716,
+     "x": 185,
+     "y": 154,
+     "rot": 18,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 61,
+   "made": {
+    "particle:smoke": 51,
+    "particle:spark": 10
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": "target"
+    },
+    "info": {
+     "name": "Shadow Ravens",
+     "mana": 40,
+     "ag": 10,
+     "distance": 6,
+     "damage": 102
+    },
+    "mana": 3598,
+    "ag": 4521
+   }
+  },
+  {
+   "n": 717,
+   "name": "War Command",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 552,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 183,
+    "y": 158
+   },
+   "targetCell": {
+    "x": 184,
+    "y": 158
+   },
+   "heroMid": {
+    "x": 183,
+    "y": 158
+   },
+   "heroAfter": {
+    "x": 183,
+    "y": 158
+   },
+   "targetAfter": {
+    "x": 184,
+    "y": 158,
+    "dead": false
+   },
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 2,
+   "onSkill": [
+    717
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 37,
+   "made": {
+    "effect:magicGround2": 1,
+    "particle:spark": 16,
+    "sprite:shiny2": 20
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "War Command",
+     "mana": 70,
+     "ag": 25,
+     "distance": 0,
+     "damage": 0
+    },
+    "mana": 3598,
+    "ag": 4521
+   }
+  },
+  {
+   "n": 718,
+   "name": "Earth Stomp",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 552,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 183,
+    "y": 158
+   },
+   "targetCell": {
+    "x": 184,
+    "y": 158
+   },
+   "heroMid": {
+    "x": 183,
+    "y": 158
+   },
+   "heroAfter": {
+    "x": 183,
+    "y": 158
+   },
+   "targetAfter": {
+    "x": 184,
+    "y": 158,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    17443
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    718
+   ],
+   "area": [
+    {
+     "s": 718,
+     "x": 183,
+     "y": 158,
+     "rot": 64,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 221,
+   "made": {
+    "particle:smoke": 130,
+    "effect:stone1": 12,
+    "effect:magic2": 1,
+    "particle:fire": 38,
+    "sprite:shiny2": 40
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Earth Stomp",
+     "mana": 60,
+     "ag": 20,
+     "distance": 3,
+     "damage": 132
+    },
+    "mana": 3598,
+    "ag": 4521
+   }
+  }
+ ],
+ "errors": []
+}

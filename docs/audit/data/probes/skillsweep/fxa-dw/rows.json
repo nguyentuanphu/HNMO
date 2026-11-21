@@ -1,0 +1,44 @@
+{
+ "rows": [
+  {
+   "n": 17,
+   "castable": true,
+   "cast": true,
+   "target": "Budge Dragon",
+   "dist": 0,
+   "onSkill": [
+    17
+   ],
+   "effects": 51,
+   "made": {
+    "particle:blood2": 10,
+    "effect:energy": 1,
+    "particle:energy": 20,
+    "particle:spark3": 20
+   },
+   "damage": 1,
+   "p95": 17,
+   "max": 50,
+   "casting": false,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "heroAction": 97
+    },
+    "info": {
+     "mana": 1,
+     "ag": 0,
+     "distance": 6,
+     "delay": 0
+    },
+    "mana": 3260,
+    "ag": 357,
+    "safe": false
+   }
+  }
+ ],
+ "errors": []
+}

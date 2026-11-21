@@ -1,0 +1,244 @@
+{
+ "rows": [
+  {
+   "n": 22,
+   "name": "Cyclone",
+   "cast": true,
+   "target": "Spider",
+   "dist": 4,
+   "damage": 1,
+   "effectPeak": 42,
+   "kinds": [
+    "particle:fire",
+    "particle:lightningMega",
+    "sprite:light",
+    "sprite:magicGround1",
+    "sprite:flareRed",
+    "particle:blood2"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 420
+  },
+  {
+   "n": 41,
+   "name": "Twisting Slash",
+   "cast": true,
+   "target": "Budge Dragon",
+   "dist": 3,
+   "damage": 2,
+   "effectPeak": 365,
+   "kinds": [
+    "particle:fire",
+    "particle:lightningMega",
+    "sprite:light",
+    "sprite:magicGround1",
+    "sprite:flareRed",
+    "effect:skillWheel1"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 420
+  },
+  {
+   "n": 42,
+   "name": "Rageful Blow",
+   "cast": true,
+   "target": "Spider",
+   "dist": 1,
+   "damage": 1,
+   "effectPeak": 64,
+   "kinds": [
+    "particle:fire",
+    "particle:lightningMega",
+    "sprite:light",
+    "sprite:magicGround1",
+    "sprite:flareRed",
+    "effect:skillFuryStrike"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 420
+  },
+  {
+   "n": 43,
+   "name": "Death Stab",
+   "cast": true,
+   "target": "Budge Dragon",
+   "dist": 0,
+   "damage": 2,
+   "effectPeak": 111,
+   "kinds": [
+    "joint:spearSkill",
+    "particle:fire",
+    "particle:lightningMega",
+    "sprite:light",
+    "sprite:magicGround1",
+    "sprite:flareRed"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 420
+  },
+  {
+   "n": 44,
+   "name": "Crescent Moon Slash",
+   "cast": true,
+   "target": "Budge Dragon",
+   "dist": 11,
+   "damage": 0,
+   "effectPeak": 1,
+   "kinds": [
+    "particle:fire",
+    "particle:lightningMega",
+    "sprite:light",
+    "sprite:magicGround1",
+    "sprite:flareRed"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 420
+  },
+  {
+   "n": 47,
+   "name": "Impale",
+   "cast": true,
+   "target": "Budge Dragon",
+   "dist": 12,
+   "damage": 0,
+   "effectPeak": 106,
+   "kinds": [
+    "joint:jointSpark",
+    "particle:fire",
+    "particle:lightningMega",
+    "sprite:light",
+    "sprite:magicGround1",
+    "sprite:flareRed"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 420
+  },
+  {
+   "n": 48,
+   "name": "Swell Life",
+   "cast": true,
+   "target": "Budge Dragon",
+   "dist": 5,
+   "damage": 1,
+   "effectPeak": 139,
+   "kinds": [
+    "effect:buffLight",
+    "particle:fire",
+    "particle:lightningMega",
+    "particle:light",
+    "sprite:light",
+    "sprite:magicGround1"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 420
+  },
+  {
+   "n": 76,
+   "name": "Plasma Storm",
+   "cast": true,
+   "target": "Budge Dragon",
+   "dist": 1,
+   "damage": 1,
+   "effectPeak": 16,
+   "kinds": [
+    "effect:buffLight",
+    "particle:fire",
+    "particle:light",
+    "particle:lightningMega",
+    "sprite:light",
+    "sprite:magicGround1"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 420
+  },
+  {
+   "n": 232,
+   "name": "Strike of Destruction",
+   "cast": true,
+   "target": "Budge Dragon",
+   "dist": 10,
+   "damage": 0,
+   "effectPeak": 0,
+   "kinds": [
+    "effect:buffLight",
+    "particle:fire",
+    "particle:light",
+    "particle:lightningMega",
+    "sprite:light",
+    "sprite:magicGround1"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 420
+  },
+  {
+   "n": 700,
+   "name": "Earth Splitter",
+   "cast": true,
+   "target": "Spider",
+   "dist": 9,
+   "damage": 0,
+   "effectPeak": 242,
+   "kinds": [
+    "effect:buffLight",
+    "effect:blowOfDestruction",
+    "effect:nightWater1",
+    "effect:raklionBossCrackEffect",
+    "effect:stone2",
+    "effect:stone1"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 420
+  },
+  {
+   "n": 701,
+   "name": "Blood Slash",
+   "cast": true,
+   "target": "Spider",
+   "dist": 1,
+   "damage": 1,
+   "effectPeak": 62,
+   "kinds": [
+    "effect:buffLight",
+    "particle:fire",
+    "particle:light",
+    "particle:lightningMega",
+    "sprite:light",
+    "sprite:magicGround1"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 385
+  },
+  {
+   "n": 702,
+   "name": "Iron Guard",
+   "cast": true,
+   "target": "Spider",
+   "dist": 1,
+   "damage": 2,
+   "effectPeak": 5,
+   "kinds": [
+    "effect:buffLight",
+    "particle:spark",
+    "particle:fire",
+    "particle:light",
+    "particle:lightningMega",
+    "sprite:light"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 393
+  }
+ ],
+ "errors": []
+}

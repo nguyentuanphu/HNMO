@@ -1,0 +1,853 @@
+{
+ "who": {
+  "name": "testgm2Rf",
+  "map": 0,
+  "classIndex": 6,
+  "season": null
+ },
+ "rows": [
+  {
+   "n": 76,
+   "name": "Plasma Storm",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 625,
+   "dist": 4,
+   "near": 1,
+   "heroCell": {
+    "x": 190,
+    "y": 131
+   },
+   "targetCell": {
+    "x": 190,
+    "y": 127
+   },
+   "heroMid": {
+    "x": 190,
+    "y": 128
+   },
+   "heroAfter": {
+    "x": 190,
+    "y": 128
+   },
+   "targetAfter": {
+    "x": 190,
+    "y": 127,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    1352
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [],
+   "area": [],
+   "msgs": [],
+   "effects": 0,
+   "made": {},
+   "p95": 17,
+   "max": 67,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": false,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Plasma Storm",
+     "mana": 50,
+     "ag": 20,
+     "distance": 6,
+     "damage": 60
+    },
+    "mana": 3252,
+    "ag": 3300
+   }
+  },
+  {
+   "n": 262,
+   "name": "Chain Drive",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 624,
+   "dist": 5,
+   "near": 1,
+   "heroCell": {
+    "x": 190,
+    "y": 151
+   },
+   "targetCell": {
+    "x": 193,
+    "y": 155
+   },
+   "heroMid": {
+    "x": 192,
+    "y": 153
+   },
+   "heroAfter": {
+    "x": 192,
+    "y": 154
+   },
+   "targetAfter": {
+    "x": 191,
+    "y": 152,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    3150
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    262
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 73,
+   "made": {
+    "particle:fire": 11,
+    "effect:swordEffect": 1,
+    "joint:swordEff": 17,
+    "effect:shockWave1": 1,
+    "effect:wolfHeadEffect2": 8,
+    "effect:damage1": 1,
+    "particle:damage1": 4,
+    "particle:blood2": 10,
+    "effect:shockWave2": 1,
+    "effect:shockWaveSpin1": 2,
+    "effect:ring": 1,
+    "particle:shiny4": 16
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": "rageAttack",
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Chain Drive",
+     "mana": 15,
+     "ag": 20,
+     "distance": 4,
+     "damage": 0
+    },
+    "mana": 3252,
+    "ag": 3300
+   }
+  },
+  {
+   "n": 263,
+   "name": "Dark Side",
+   "castable": true,
+   "cast": true,
+   "target": null,
+   "targetId": null,
+   "dist": null,
+   "near": 0,
+   "heroCell": {
+    "x": 150,
+    "y": 200
+   },
+   "targetCell": null,
+   "heroMid": {
+    "x": 150,
+    "y": 200
+   },
+   "heroAfter": {
+    "x": 150,
+    "y": 200
+   },
+   "targetAfter": null,
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    263
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 5,
+   "made": {
+    "effect:eventCloud": 1,
+    "effect:magic": 1,
+    "effect:windForce": 3
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": "darkSide",
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Dark Side",
+     "mana": 70,
+     "ag": 0,
+     "distance": 4,
+     "damage": 0
+    },
+    "mana": 3252,
+    "ag": 3300
+   }
+  },
+  {
+   "n": 264,
+   "name": "Dragon Roar",
+   "castable": true,
+   "cast": false,
+   "target": null,
+   "targetId": null,
+   "dist": null,
+   "near": 0,
+   "heroCell": {
+    "x": 150,
+    "y": 200
+   },
+   "targetCell": null,
+   "heroMid": {
+    "x": 150,
+    "y": 200
+   },
+   "heroAfter": {
+    "x": 150,
+    "y": 200
+   },
+   "targetAfter": null,
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [],
+   "area": [],
+   "msgs": [],
+   "effects": 0,
+   "made": {},
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Dragon Roar",
+     "mana": 50,
+     "ag": 30,
+     "distance": 3,
+     "damage": 0
+    },
+    "mana": 3252,
+    "ag": 3300
+   }
+  },
+  {
+   "n": 265,
+   "name": "Dragon Slasher",
+   "castable": true,
+   "cast": false,
+   "target": null,
+   "targetId": null,
+   "dist": null,
+   "near": 0,
+   "heroCell": {
+    "x": 200,
+    "y": 160
+   },
+   "targetCell": null,
+   "heroMid": {
+    "x": 200,
+    "y": 160
+   },
+   "heroAfter": {
+    "x": 200,
+    "y": 160
+   },
+   "targetAfter": null,
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [],
+   "area": [],
+   "msgs": [],
+   "effects": 0,
+   "made": {},
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": "rageAttack",
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Dragon Slasher",
+     "mana": 100,
+     "ag": 100,
+     "distance": 4,
+     "damage": 0
+    },
+    "mana": 3252,
+    "ag": 3300
+   }
+  },
+  {
+   "n": 266,
+   "name": "Ignore Defense",
+   "castable": true,
+   "cast": true,
+   "target": null,
+   "targetId": null,
+   "dist": null,
+   "near": 0,
+   "heroCell": {
+    "x": 150,
+    "y": 200
+   },
+   "targetCell": null,
+   "heroMid": {
+    "x": 150,
+    "y": 200
+   },
+   "heroAfter": {
+    "x": 150,
+    "y": 200
+   },
+   "targetAfter": null,
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    266
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 110,
+   "made": {
+    "effect:swordEffectMono": 1,
+    "effect:shockWaveGround1": 3,
+    "effect:eventCloud": 3,
+    "effect:windForce": 3,
+    "effect:magic": 1,
+    "effect:lightRed": 1,
+    "particle:smokeLine1": 87,
+    "particle:swordEffectMonoParticle": 10,
+    "effect:shockWave1": 1
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Ignore Defense",
+     "mana": 50,
+     "ag": 10,
+     "distance": 3,
+     "damage": 0
+    },
+    "mana": 3252,
+    "ag": 3300
+   }
+  },
+  {
+   "n": 267,
+   "name": "Increase Health",
+   "castable": true,
+   "cast": true,
+   "target": null,
+   "targetId": null,
+   "dist": null,
+   "near": 0,
+   "heroCell": {
+    "x": 150,
+    "y": 200
+   },
+   "targetCell": null,
+   "heroMid": {
+    "x": 150,
+    "y": 200
+   },
+   "heroAfter": {
+    "x": 150,
+    "y": 200
+   },
+   "targetAfter": null,
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    267
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 66,
+   "made": {
+    "effect:swordEffectMono": 1,
+    "effect:shockWaveGround1": 3,
+    "effect:eventCloud": 3,
+    "effect:windForce": 3,
+    "effect:magic": 1,
+    "effect:lightRed": 1,
+    "particle:smokeLine1": 43,
+    "particle:swordEffectMonoParticle": 10,
+    "effect:shockWave1": 1
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Increase Health",
+     "mana": 50,
+     "ag": 10,
+     "distance": 7,
+     "damage": 0
+    },
+    "mana": 3252,
+    "ag": 3300
+   }
+  },
+  {
+   "n": 268,
+   "name": "Increase Block",
+   "castable": true,
+   "cast": true,
+   "target": null,
+   "targetId": null,
+   "dist": null,
+   "near": 0,
+   "heroCell": {
+    "x": 200,
+    "y": 160
+   },
+   "targetCell": null,
+   "heroMid": {
+    "x": 200,
+    "y": 160
+   },
+   "heroAfter": {
+    "x": 200,
+    "y": 160
+   },
+   "targetAfter": null,
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    268
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 25,
+   "made": {
+    "effect:swordEffectMono": 1,
+    "effect:shockWaveGround1": 3,
+    "effect:eventCloud": 3,
+    "effect:windForce": 4,
+    "effect:magic": 1,
+    "effect:lightRed": 1,
+    "particle:swordEffectMonoParticle": 10,
+    "effect:shockWave1": 1,
+    "effect:windForceMirror": 1
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Increase Block",
+     "mana": 50,
+     "ag": 10,
+     "distance": 7,
+     "damage": 0
+    },
+    "mana": 3252,
+    "ag": 3360
+   }
+  },
+  {
+   "n": 269,
+   "name": "Charge",
+   "castable": true,
+   "cast": false,
+   "target": null,
+   "targetId": null,
+   "dist": null,
+   "near": 0,
+   "heroCell": {
+    "x": 150,
+    "y": 200
+   },
+   "targetCell": null,
+   "heroMid": {
+    "x": 150,
+    "y": 200
+   },
+   "heroAfter": {
+    "x": 150,
+    "y": 200
+   },
+   "targetAfter": null,
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [],
+   "area": [],
+   "msgs": [],
+   "effects": 0,
+   "made": {},
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Charge",
+     "mana": 20,
+     "ag": 15,
+     "distance": 4,
+     "damage": 90
+    },
+    "mana": 3252,
+    "ag": 3300
+   }
+  },
+  {
+   "n": 270,
+   "name": "Phoenix Shot",
+   "castable": true,
+   "cast": false,
+   "target": null,
+   "targetId": null,
+   "dist": null,
+   "near": 0,
+   "heroCell": {
+    "x": 150,
+    "y": 200
+   },
+   "targetCell": null,
+   "heroMid": {
+    "x": 150,
+    "y": 200
+   },
+   "heroAfter": {
+    "x": 150,
+    "y": 200
+   },
+   "targetAfter": null,
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [],
+   "area": [],
+   "msgs": [],
+   "effects": 0,
+   "made": {},
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Phoenix Shot",
+     "mana": 30,
+     "ag": 0,
+     "distance": 4,
+     "damage": 0
+    },
+    "mana": 3252,
+    "ag": 3300
+   }
+  },
+  {
+   "n": 724,
+   "name": "Dragon Fist",
+   "castable": true,
+   "cast": true,
+   "target": null,
+   "targetId": null,
+   "dist": null,
+   "near": 0,
+   "heroCell": {
+    "x": 200,
+    "y": 160
+   },
+   "targetCell": null,
+   "heroMid": {
+    "x": 200,
+    "y": 160
+   },
+   "heroAfter": {
+    "x": 200,
+    "y": 160
+   },
+   "targetAfter": null,
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    724
+   ],
+   "area": [
+    {
+     "s": 724,
+     "x": 200,
+     "y": 160,
+     "rot": 159,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 11,
+   "made": {
+    "particle:fire": 3,
+    "effect:fireModel": 1,
+    "effect:stone1": 3,
+    "effect:stone2": 3,
+    "particle:explosion": 1
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "target"
+    },
+    "info": {
+     "name": "Dragon Fist",
+     "mana": 30,
+     "ag": 10,
+     "distance": 5,
+     "damage": 108
+    },
+    "mana": 3252,
+    "ag": 3300
+   }
+  },
+  {
+   "n": 725,
+   "name": "Whirl Kicks",
+   "castable": true,
+   "cast": true,
+   "target": null,
+   "targetId": null,
+   "dist": null,
+   "near": 0,
+   "heroCell": {
+    "x": 150,
+    "y": 200
+   },
+   "targetCell": null,
+   "heroMid": {
+    "x": 150,
+    "y": 200
+   },
+   "heroAfter": {
+    "x": 150,
+    "y": 200
+   },
+   "targetAfter": null,
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    725
+   ],
+   "area": [
+    {
+     "s": 725,
+     "x": 150,
+     "y": 200,
+     "rot": 160,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 48,
+   "made": {
+    "particle:spark": 40,
+    "particle:smoke": 8
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Whirl Kicks",
+     "mana": 40,
+     "ag": 15,
+     "distance": 2,
+     "damage": 36
+    },
+    "mana": 3252,
+    "ag": 3300
+   }
+  },
+  {
+   "n": 726,
+   "name": "Iron Body",
+   "castable": true,
+   "cast": true,
+   "target": null,
+   "targetId": null,
+   "dist": null,
+   "near": 0,
+   "heroCell": {
+    "x": 150,
+    "y": 200
+   },
+   "targetCell": null,
+   "heroMid": {
+    "x": 150,
+    "y": 200
+   },
+   "heroAfter": {
+    "x": 150,
+    "y": 200
+   },
+   "targetAfter": null,
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    726
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 31,
+   "made": {
+    "effect:magicGround2": 1,
+    "sprite:shiny2": 20,
+    "particle:spark": 10
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Iron Body",
+     "mana": 70,
+     "ag": 25,
+     "distance": 0,
+     "damage": 0
+    },
+    "mana": 3252,
+    "ag": 3300
+   }
+  }
+ ],
+ "errors": []
+}

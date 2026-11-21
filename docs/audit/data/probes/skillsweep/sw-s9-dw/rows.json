@@ -1,0 +1,2000 @@
+{
+ "who": {
+  "name": "testgmDw",
+  "map": 0,
+  "classIndex": 0,
+  "season": null
+ },
+ "rows": [
+  {
+   "n": 1,
+   "name": "Poison",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 583,
+   "dist": 5,
+   "near": 1,
+   "heroCell": {
+    "x": 156,
+    "y": 125
+   },
+   "targetCell": {
+    "x": 151,
+    "y": 126
+   },
+   "heroMid": {
+    "x": 156,
+    "y": 125
+   },
+   "heroAfter": {
+    "x": 156,
+    "y": 125
+   },
+   "targetAfter": {
+    "x": 151,
+    "y": 126,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    1383
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    1
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 21,
+   "made": {
+    "particle:blood2": 10,
+    "effect:poison": 1,
+    "particle:smoke": 10
+   },
+   "p95": 17,
+   "max": 83,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Poison",
+     "mana": 42,
+     "ag": 0,
+     "distance": 6,
+     "damage": 12
+    },
+    "mana": 3260,
+    "ag": 336
+   }
+  },
+  {
+   "n": 2,
+   "name": "Meteorite",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 528,
+   "dist": 1,
+   "near": 2,
+   "heroCell": {
+    "x": 156,
+    "y": 137
+   },
+   "targetCell": {
+    "x": 155,
+    "y": 137
+   },
+   "heroMid": {
+    "x": 156,
+    "y": 137
+   },
+   "heroAfter": {
+    "x": 156,
+    "y": 137
+   },
+   "targetAfter": {
+    "x": 155,
+    "y": 137,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    847
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 2,
+   "onSkill": [
+    2
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 39,
+   "made": {
+    "particle:blood2": 10,
+    "effect:fireModel": 1,
+    "particle:fire": 21,
+    "effect:stone1": 2,
+    "effect:stone2": 4,
+    "particle:explosion": 1
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Meteorite",
+     "mana": 12,
+     "ag": 0,
+     "distance": 6,
+     "damage": 21
+    },
+    "mana": 3260,
+    "ag": 381
+   }
+  },
+  {
+   "n": 3,
+   "name": "Lightning",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 575,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 156,
+    "y": 137
+   },
+   "targetCell": {
+    "x": 155,
+    "y": 137
+   },
+   "heroMid": {
+    "x": 156,
+    "y": 137
+   },
+   "heroAfter": {
+    "x": 156,
+    "y": 137
+   },
+   "targetAfter": {
+    "x": 155,
+    "y": 137,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    1442
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    3
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 99,
+   "made": {
+    "joint:jointThunder": 28,
+    "particle:energy": 56,
+    "particle:smoke": 5,
+    "particle:blood2": 10
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Lightning",
+     "mana": 15,
+     "ag": 0,
+     "distance": 6,
+     "damage": 17
+    },
+    "mana": 3260,
+    "ag": 411
+   }
+  },
+  {
+   "n": 4,
+   "name": "Fire Ball",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 540,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 168,
+    "y": 143
+   },
+   "targetCell": {
+    "x": 168,
+    "y": 144
+   },
+   "heroMid": {
+    "x": 168,
+    "y": 143
+   },
+   "heroAfter": {
+    "x": 168,
+    "y": 143
+   },
+   "targetAfter": {
+    "x": 168,
+    "y": 144,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    1093
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 1,
+   "onSkill": [
+    4
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 71,
+   "made": {
+    "particle:blood2": 10,
+    "effect:fireModel": 1,
+    "particle:fire": 60
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Fire Ball",
+     "mana": 3,
+     "ag": 0,
+     "distance": 6,
+     "damage": 8
+    },
+    "mana": 3260,
+    "ag": 441
+   }
+  },
+  {
+   "n": 5,
+   "name": "Flame",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 557,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 168,
+    "y": 143
+   },
+   "targetCell": {
+    "x": 168,
+    "y": 142
+   },
+   "heroMid": {
+    "x": 168,
+    "y": 143
+   },
+   "heroAfter": {
+    "x": 168,
+    "y": 143
+   },
+   "targetAfter": {
+    "x": 168,
+    "y": 142,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    1490
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    5
+   ],
+   "area": [
+    {
+     "s": 5,
+     "x": 168,
+     "y": 142,
+     "rot": 0,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 387,
+   "made": {
+    "effect:flame": 1,
+    "particle:blood2": 10,
+    "particle:flame": 240,
+    "effect:stone2": 24,
+    "effect:stone1": 16,
+    "particle:fire": 96
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "target"
+    },
+    "info": {
+     "name": "Flame",
+     "mana": 50,
+     "ag": 0,
+     "distance": 6,
+     "damage": 25
+    },
+    "mana": 3260,
+    "ag": 441
+   }
+  },
+  {
+   "n": 6,
+   "name": "Teleport",
+   "castable": false,
+   "cast": false,
+   "target": "Spider",
+   "targetId": 566,
+   "dist": 4,
+   "near": 1,
+   "heroCell": {
+    "x": 174,
+    "y": 141
+   },
+   "targetCell": {
+    "x": 171,
+    "y": 144
+   },
+   "heroMid": {
+    "x": 174,
+    "y": 141
+   },
+   "heroAfter": {
+    "x": 174,
+    "y": 141
+   },
+   "targetAfter": {
+    "x": 175,
+    "y": 142,
+    "dead": false
+   },
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [],
+   "area": [],
+   "msgs": [],
+   "effects": 0,
+   "made": {},
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "none",
+     "special": "teleport",
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Teleport",
+     "mana": 30,
+     "ag": 0,
+     "distance": 6,
+     "damage": 0
+    },
+    "mana": 3260,
+    "ag": 441
+   }
+  },
+  {
+   "n": 7,
+   "name": "Ice",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 566,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 174,
+    "y": 141
+   },
+   "targetCell": {
+    "x": 175,
+    "y": 142
+   },
+   "heroMid": {
+    "x": 174,
+    "y": 141
+   },
+   "heroAfter": {
+    "x": 174,
+    "y": 141
+   },
+   "targetAfter": {
+    "x": 175,
+    "y": 142,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    1120
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 1,
+   "onSkill": [
+    7
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 40,
+   "made": {
+    "particle:blood2": 10,
+    "effect:ice": 1,
+    "effect:iceSmall": 5,
+    "particle:smoke": 24
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Ice",
+     "mana": 38,
+     "ag": 0,
+     "distance": 6,
+     "damage": 10
+    },
+    "mana": 3260,
+    "ag": 441
+   }
+  },
+  {
+   "n": 8,
+   "name": "Twister",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 568,
+   "dist": 0,
+   "near": 4,
+   "heroCell": {
+    "x": 147,
+    "y": 91
+   },
+   "targetCell": {
+    "x": 147,
+    "y": 91
+   },
+   "heroMid": {
+    "x": 147,
+    "y": 91
+   },
+   "heroAfter": {
+    "x": 147,
+    "y": 91
+   },
+   "targetAfter": {
+    "x": 147,
+    "y": 91,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    1554
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 6,
+   "onSkill": [
+    8
+   ],
+   "area": [
+    {
+     "s": 8,
+     "x": 147,
+     "y": 91,
+     "rot": 224,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 139,
+   "made": {
+    "effect:storm": 1,
+    "particle:blood2": 10,
+    "particle:smoke": 59,
+    "joint:jointThunder": 57,
+    "effect:stone1": 8,
+    "effect:stone2": 4
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Twister",
+     "mana": 60,
+     "ag": 0,
+     "distance": 6,
+     "damage": 35
+    },
+    "mana": 3260,
+    "ag": 441
+   }
+  },
+  {
+   "n": 9,
+   "name": "Evil Spirit",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 552,
+   "dist": 1,
+   "near": 3,
+   "heroCell": {
+    "x": 147,
+    "y": 91
+   },
+   "targetCell": {
+    "x": 147,
+    "y": 92
+   },
+   "heroMid": {
+    "x": 147,
+    "y": 91
+   },
+   "heroAfter": {
+    "x": 147,
+    "y": 91
+   },
+   "targetAfter": {
+    "x": 147,
+    "y": 92,
+    "dead": true
+   },
+   "hits": 3,
+   "targetsHit": 3,
+   "hp": [
+    1615,
+    870,
+    1221
+   ],
+   "sd": [
+    0,
+    0,
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    9
+   ],
+   "area": [
+    {
+     "s": 9,
+     "x": 147,
+     "y": 91,
+     "rot": 128,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 218,
+   "made": {
+    "joint:jointSpirit": 8,
+    "particle:blood2": 10,
+    "effect:laser": 200
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Evil Spirit",
+     "mana": 90,
+     "ag": 0,
+     "distance": 6,
+     "damage": 45
+    },
+    "mana": 3260,
+    "ag": 441
+   }
+  },
+  {
+   "n": 10,
+   "name": "Hellfire",
+   "castable": true,
+   "cast": true,
+   "target": "Chain Scorpion",
+   "targetId": 620,
+   "dist": 1,
+   "near": 2,
+   "heroCell": {
+    "x": 130,
+    "y": 84
+   },
+   "targetCell": {
+    "x": 131,
+    "y": 84
+   },
+   "heroMid": {
+    "x": 130,
+    "y": 84
+   },
+   "heroAfter": {
+    "x": 130,
+    "y": 84
+   },
+   "targetAfter": {
+    "x": 131,
+    "y": 84,
+    "dead": true
+   },
+   "hits": 2,
+   "targetsHit": 2,
+   "hp": [
+    2492,
+    1682
+   ],
+   "sd": [
+    0,
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    10
+   ],
+   "area": [
+    {
+     "s": 10,
+     "x": 130,
+     "y": 84,
+     "rot": 64,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 20,
+   "made": {
+    "effect:circle": 1,
+    "effect:circleLight": 1,
+    "particle:blood2": 10,
+    "effect:stone1": 5,
+    "effect:stone2": 3
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Hellfire",
+     "mana": 160,
+     "ag": 0,
+     "distance": 0,
+     "damage": 120
+    },
+    "mana": 3260,
+    "ag": 441
+   }
+  },
+  {
+   "n": 11,
+   "name": "Power Wave",
+   "castable": true,
+   "cast": true,
+   "target": "Elite Goblin",
+   "targetId": 713,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 129,
+    "y": 91
+   },
+   "targetCell": {
+    "x": 128,
+    "y": 92
+   },
+   "heroMid": {
+    "x": 129,
+    "y": 91
+   },
+   "heroAfter": {
+    "x": 129,
+    "y": 91
+   },
+   "targetAfter": {
+    "x": 128,
+    "y": 92,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    756
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    11
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 91,
+   "made": {
+    "particle:blood2": 10,
+    "effect:magic2": 1,
+    "particle:smoke": 80
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Power Wave",
+     "mana": 5,
+     "ag": 0,
+     "distance": 6,
+     "damage": 14
+    },
+    "mana": 3260,
+    "ag": 441
+   }
+  },
+  {
+   "n": 12,
+   "name": "Aqua Beam",
+   "castable": true,
+   "cast": true,
+   "target": "Chain Scorpion",
+   "targetId": 632,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 119,
+    "y": 95
+   },
+   "targetCell": {
+    "x": 118,
+    "y": 94
+   },
+   "heroMid": {
+    "x": 119,
+    "y": 95
+   },
+   "heroAfter": {
+    "x": 119,
+    "y": 95
+   },
+   "targetAfter": {
+    "x": 118,
+    "y": 94,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    1717
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    12
+   ],
+   "area": [
+    {
+     "s": 12,
+     "x": 119,
+     "y": 95,
+     "rot": 224,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 391,
+   "made": {
+    "effect:bossLaser": 1,
+    "particle:blood2": 10,
+    "sprite:spark3": 380
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Aqua Beam",
+     "mana": 140,
+     "ag": 0,
+     "distance": 6,
+     "damage": 80
+    },
+    "mana": 3260,
+    "ag": 441
+   }
+  },
+  {
+   "n": 13,
+   "name": "Cometfall",
+   "castable": true,
+   "cast": true,
+   "target": "Beetle Monster",
+   "targetId": 741,
+   "dist": 1,
+   "near": 2,
+   "heroCell": {
+    "x": 114,
+    "y": 94
+   },
+   "targetCell": {
+    "x": 115,
+    "y": 94
+   },
+   "heroMid": {
+    "x": 114,
+    "y": 94
+   },
+   "heroAfter": {
+    "x": 114,
+    "y": 94
+   },
+   "targetAfter": {
+    "x": 115,
+    "y": 94,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    2108
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 1,
+   "onSkill": [
+    13
+   ],
+   "area": [
+    {
+     "s": 13,
+     "x": 115,
+     "y": 94,
+     "rot": 64,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 58,
+   "made": {
+    "effect:skillBlast": 2,
+    "joint:jointEnergy": 2,
+    "particle:blood2": 10,
+    "effect:stone2": 4,
+    "effect:stone1": 8,
+    "particle:shiny4": 2,
+    "particle:explosion": 2,
+    "particle:fire": 28
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": "target"
+    },
+    "info": {
+     "name": "Cometfall",
+     "mana": 150,
+     "ag": 0,
+     "distance": 3,
+     "damage": 70
+    },
+    "mana": 3260,
+    "ag": 441
+   }
+  },
+  {
+   "n": 14,
+   "name": "Inferno",
+   "castable": true,
+   "cast": true,
+   "target": "Goblin",
+   "targetId": 588,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 114,
+    "y": 94
+   },
+   "targetCell": {
+    "x": 113,
+    "y": 93
+   },
+   "heroMid": {
+    "x": 114,
+    "y": 94
+   },
+   "heroAfter": {
+    "x": 114,
+    "y": 94
+   },
+   "targetAfter": {
+    "x": 113,
+    "y": 93,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    1961
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 1,
+   "onSkill": [
+    14
+   ],
+   "area": [
+    {
+     "s": 14,
+     "x": 114,
+     "y": 94,
+     "rot": 224,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 207,
+   "made": {
+    "particle:spark": 160,
+    "particle:explosion": 8,
+    "effect:stone1": 9,
+    "effect:stone2": 7,
+    "effect:skillInferno": 1,
+    "particle:blood2": 10,
+    "particle:fire": 12
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Inferno",
+     "mana": 200,
+     "ag": 0,
+     "distance": 0,
+     "damage": 100
+    },
+    "mana": 3260,
+    "ag": 441
+   }
+  },
+  {
+   "n": 15,
+   "name": "Teleport Ally",
+   "castable": false,
+   "cast": false,
+   "target": "Chain Scorpion",
+   "targetId": 629,
+   "dist": 3,
+   "near": 1,
+   "heroCell": {
+    "x": 131,
+    "y": 101
+   },
+   "targetCell": {
+    "x": 128,
+    "y": 100
+   },
+   "heroMid": {
+    "x": 131,
+    "y": 101
+   },
+   "heroAfter": {
+    "x": 131,
+    "y": 101
+   },
+   "targetAfter": {
+    "x": 130,
+    "y": 102,
+    "dead": false
+   },
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 2,
+   "onSkill": [],
+   "area": [],
+   "msgs": [],
+   "effects": 0,
+   "made": {},
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "none",
+     "special": "teleportAlly",
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Teleport Ally",
+     "mana": 90,
+     "ag": 25,
+     "distance": 6,
+     "damage": 0
+    },
+    "mana": 3260,
+    "ag": 441
+   }
+  },
+  {
+   "n": 16,
+   "name": "Soul Barrier",
+   "castable": true,
+   "cast": true,
+   "target": "Chain Scorpion",
+   "targetId": 629,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 131,
+    "y": 101
+   },
+   "targetCell": {
+    "x": 130,
+    "y": 102
+   },
+   "heroMid": {
+    "x": 131,
+    "y": 101
+   },
+   "heroAfter": {
+    "x": 131,
+    "y": 101
+   },
+   "targetAfter": {
+    "x": 130,
+    "y": 102,
+    "dead": false
+   },
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 2,
+   "onSkill": [
+    16
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 840,
+   "made": {
+    "joint:spearSkill": 10,
+    "sprite:flareBlue": 820,
+    "particle:blood2": 10
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Soul Barrier",
+     "mana": 70,
+     "ag": 22,
+     "distance": 6,
+     "damage": 0
+    },
+    "mana": 3260,
+    "ag": 441
+   }
+  },
+  {
+   "n": 17,
+   "name": "Energy Ball",
+   "castable": true,
+   "cast": true,
+   "target": "Chain Scorpion",
+   "targetId": 629,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 131,
+    "y": 101
+   },
+   "targetCell": {
+    "x": 130,
+    "y": 102
+   },
+   "heroMid": {
+    "x": 131,
+    "y": 101
+   },
+   "heroAfter": {
+    "x": 131,
+    "y": 101
+   },
+   "targetAfter": {
+    "x": 130,
+    "y": 102,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    797
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    17
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 51,
+   "made": {
+    "particle:blood2": 10,
+    "effect:energy": 1,
+    "particle:energy": 20,
+    "particle:spark3": 20
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Energy Ball",
+     "mana": 1,
+     "ag": 0,
+     "distance": 6,
+     "damage": 3
+    },
+    "mana": 3260,
+    "ag": 441
+   }
+  },
+  {
+   "n": 38,
+   "name": "Decay",
+   "castable": true,
+   "cast": true,
+   "target": "Chain Scorpion",
+   "targetId": 624,
+   "dist": 0,
+   "near": 2,
+   "heroCell": {
+    "x": 116,
+    "y": 112
+   },
+   "targetCell": {
+    "x": 116,
+    "y": 112
+   },
+   "heroMid": {
+    "x": 116,
+    "y": 112
+   },
+   "heroAfter": {
+    "x": 116,
+    "y": 112
+   },
+   "targetAfter": {
+    "x": 116,
+    "y": 112,
+    "dead": true
+   },
+   "hits": 2,
+   "targetsHit": 2,
+   "hp": [
+    1922,
+    1301
+   ],
+   "sd": [
+    0,
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    38
+   ],
+   "area": [
+    {
+     "s": 38,
+     "x": 116,
+     "y": 112,
+     "rot": 160,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 155,
+   "made": {
+    "effect:fireModel": 2,
+    "joint:smokeTrail": 2,
+    "particle:blood2": 10,
+    "sprite:shiny2": 36,
+    "particle:fire": 59,
+    "effect:skillInferno": 2,
+    "particle:smoke": 30,
+    "effect:stone2": 8,
+    "effect:stone1": 4,
+    "particle:explosion": 2
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "target"
+    },
+    "info": {
+     "name": "Decay",
+     "mana": 110,
+     "ag": 7,
+     "distance": 6,
+     "damage": 95
+    },
+    "mana": 3260,
+    "ag": 441
+   }
+  },
+  {
+   "n": 39,
+   "name": "Ice Storm",
+   "castable": true,
+   "cast": true,
+   "target": "Goblin",
+   "targetId": 592,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 116,
+    "y": 112
+   },
+   "targetCell": {
+    "x": 115,
+    "y": 111
+   },
+   "heroMid": {
+    "x": 116,
+    "y": 112
+   },
+   "heroAfter": {
+    "x": 116,
+    "y": 112
+   },
+   "targetAfter": {
+    "x": 115,
+    "y": 111,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    1349
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    39
+   ],
+   "area": [
+    {
+     "s": 39,
+     "x": 115,
+     "y": 111,
+     "rot": 224,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 427,
+   "made": {
+    "effect:blizzardModel": 20,
+    "particle:blood2": 10,
+    "particle:smoke": 139,
+    "particle:energy": 65,
+    "sprite:shiny2": 129,
+    "particle:fire3": 64
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "target"
+    },
+    "info": {
+     "name": "Ice Storm",
+     "mana": 100,
+     "ag": 5,
+     "distance": 6,
+     "damage": 80
+    },
+    "mana": 3260,
+    "ag": 441
+   }
+  },
+  {
+   "n": 40,
+   "name": "Nova",
+   "castable": true,
+   "cast": true,
+   "target": "Chain Scorpion",
+   "targetId": 622,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 127,
+    "y": 111
+   },
+   "targetCell": {
+    "x": 127,
+    "y": 112
+   },
+   "heroMid": {
+    "x": 127,
+    "y": 111
+   },
+   "heroAfter": {
+    "x": 127,
+    "y": 111
+   },
+   "targetAfter": {
+    "x": 127,
+    "y": 112,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    369
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    40
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 1084,
+   "made": {
+    "sprite:light": 1001,
+    "effect:circle": 1,
+    "particle:blood2": 10,
+    "joint:jointSpirit": 72
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": "nova",
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Nova",
+     "mana": 180,
+     "ag": 45,
+     "distance": 6,
+     "damage": 0
+    },
+    "mana": 3260,
+    "ag": 441
+   }
+  },
+  {
+   "n": 45,
+   "name": "Lance",
+   "castable": true,
+   "cast": true,
+   "target": "Elite Goblin",
+   "targetId": 705,
+   "dist": 2,
+   "near": 1,
+   "heroCell": {
+    "x": 131,
+    "y": 98
+   },
+   "targetCell": {
+    "x": 129,
+    "y": 99
+   },
+   "heroMid": {
+    "x": 131,
+    "y": 98
+   },
+   "heroAfter": {
+    "x": 131,
+    "y": 98
+   },
+   "targetAfter": {
+    "x": 129,
+    "y": 99,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    1885
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    45
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 33,
+   "made": {
+    "particle:blood2": 10,
+    "effect:skillJavelin": 3,
+    "particle:poundingBall": 20
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Lance",
+     "mana": 150,
+     "ag": 10,
+     "distance": 6,
+     "damage": 90
+    },
+    "mana": 3260,
+    "ag": 441
+   }
+  },
+  {
+   "n": 76,
+   "name": "Plasma Storm",
+   "castable": true,
+   "cast": true,
+   "target": "Chain Scorpion",
+   "targetId": 620,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 152,
+    "y": 120
+   },
+   "targetCell": {
+    "x": 151,
+    "y": 121
+   },
+   "heroMid": {
+    "x": 152,
+    "y": 120
+   },
+   "heroAfter": {
+    "x": 152,
+    "y": 120
+   },
+   "targetAfter": {
+    "x": 151,
+    "y": 121,
+    "dead": true
+   },
+   "hits": 2,
+   "targetsHit": 2,
+   "hp": [
+    2510,
+    2567
+   ],
+   "sd": [
+    0,
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    76
+   ],
+   "area": [
+    {
+     "s": 76,
+     "x": 152,
+     "y": 120,
+     "rot": 160,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 20,
+   "made": {
+    "particle:blood2": 10,
+    "joint:fenrirSkillThunder": 4,
+    "joint:flareForceJoint": 6
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Plasma Storm",
+     "mana": 50,
+     "ag": 20,
+     "distance": 6,
+     "damage": 60
+    },
+    "mana": 3260,
+    "ag": 441
+   }
+  },
+  {
+   "n": 233,
+   "name": "Expansion of Wizardry",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 539,
+   "dist": 7,
+   "near": 1,
+   "heroCell": {
+    "x": 138,
+    "y": 79
+   },
+   "targetCell": {
+    "x": 141,
+    "y": 85
+   },
+   "heroMid": {
+    "x": 138,
+    "y": 82
+   },
+   "heroAfter": {
+    "x": 140,
+    "y": 84
+   },
+   "targetAfter": {
+    "x": 141,
+    "y": 85,
+    "dead": false
+   },
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    233
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 3355,
+   "made": {
+    "sprite:light": 3310,
+    "effect:swellOfMagicPower": 1,
+    "effect:swellOfMagicPowerBuffEffect": 1,
+    "effect:shockWave": 6,
+    "effect:twlight": 3,
+    "effect:arrowsre6": 2,
+    "joint:twoLineGhost": 32
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Expansion of Wizardry",
+     "mana": 200,
+     "ag": 50,
+     "distance": 6,
+     "damage": 0
+    },
+    "mana": 3260,
+    "ag": 441
+   }
+  },
+  {
+   "n": 704,
+   "name": "Ice Dragon",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 539,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 140,
+    "y": 84
+   },
+   "targetCell": {
+    "x": 141,
+    "y": 85
+   },
+   "heroMid": {
+    "x": 140,
+    "y": 84
+   },
+   "heroAfter": {
+    "x": 140,
+    "y": 84
+   },
+   "targetAfter": {
+    "x": 141,
+    "y": 85,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    1898
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    704
+   ],
+   "area": [
+    {
+     "s": 704,
+     "x": 141,
+     "y": 85,
+     "rot": 96,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 74,
+   "made": {
+    "sprite:flareBlue": 60,
+    "particle:energy": 12,
+    "effect:arrowsre6": 2
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "target"
+    },
+    "info": {
+     "name": "Ice Dragon",
+     "mana": 70,
+     "ag": 8,
+     "distance": 7,
+     "damage": 90
+    },
+    "mana": 3180,
+    "ag": 406
+   }
+  },
+  {
+   "n": 705,
+   "name": "Meteor Rain",
+   "castable": true,
+   "cast": true,
+   "target": null,
+   "targetId": null,
+   "dist": null,
+   "near": 0,
+   "heroCell": {
+    "x": 152,
+    "y": 116
+   },
+   "targetCell": null,
+   "heroMid": {
+    "x": 152,
+    "y": 116
+   },
+   "heroAfter": {
+    "x": 152,
+    "y": 116
+   },
+   "targetAfter": null,
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    705
+   ],
+   "area": [
+    {
+     "s": 705,
+     "x": 152,
+     "y": 116,
+     "rot": 96,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 354,
+   "made": {
+    "particle:fire": 146,
+    "particle:smoke": 200,
+    "effect:stone1": 6,
+    "effect:arrowsre6": 2
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "target"
+    },
+    "info": {
+     "name": "Meteor Rain",
+     "mana": 110,
+     "ag": 12,
+     "distance": 6,
+     "damage": 48
+    },
+    "mana": 3260,
+    "ag": 441
+   }
+  },
+  {
+   "n": 706,
+   "name": "Thunder Cage",
+   "castable": true,
+   "cast": false,
+   "target": null,
+   "targetId": null,
+   "dist": null,
+   "near": 0,
+   "heroCell": {
+    "x": 140,
+    "y": 84
+   },
+   "targetCell": null,
+   "heroMid": {
+    "x": 140,
+    "y": 84
+   },
+   "heroAfter": {
+    "x": 140,
+    "y": 84
+   },
+   "targetAfter": null,
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [],
+   "area": [],
+   "msgs": [],
+   "effects": 2,
+   "made": {
+    "effect:arrowsre6": 2
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Thunder Cage",
+     "mana": 80,
+     "ag": 10,
+     "distance": 6,
+     "damage": 72
+    },
+    "mana": 3260,
+    "ag": 441
+   }
+  }
+ ],
+ "errors": []
+}

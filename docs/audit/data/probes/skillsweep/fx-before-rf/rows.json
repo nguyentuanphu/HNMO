@@ -1,0 +1,88 @@
+{
+ "rows": [
+  {
+   "n": 262,
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "dist": 1,
+   "onSkill": [],
+   "effects": 1476,
+   "made": {
+    "particle:fire": 336,
+    "sprite:light": 855,
+    "sprite:magicGround1": 95,
+    "sprite:flareRed": 95,
+    "particle:lightningMega": 95
+   },
+   "damage": 1,
+   "p95": 17,
+   "max": 50,
+   "casting": false
+  },
+  {
+   "n": 265,
+   "castable": true,
+   "cast": true,
+   "target": "Budge Dragon",
+   "dist": 1,
+   "onSkill": [],
+   "effects": 1468,
+   "made": {
+    "particle:fire": 328,
+    "sprite:light": 855,
+    "sprite:magicGround1": 95,
+    "sprite:flareRed": 95,
+    "particle:lightningMega": 95
+   },
+   "damage": 1,
+   "p95": 17,
+   "max": 17,
+   "casting": false
+  },
+  {
+   "n": 269,
+   "castable": true,
+   "cast": true,
+   "target": "Budge Dragon",
+   "dist": 2,
+   "onSkill": [],
+   "effects": 1296,
+   "made": {
+    "sprite:light": 864,
+    "sprite:magicGround1": 96,
+    "sprite:flareRed": 96,
+    "particle:lightningMega": 96,
+    "particle:fire": 144
+   },
+   "damage": 1,
+   "p95": 17,
+   "max": 17,
+   "casting": false
+  },
+  {
+   "n": 270,
+   "castable": true,
+   "cast": true,
+   "target": "Budge Dragon",
+   "dist": 1,
+   "onSkill": [
+    270
+   ],
+   "effects": 1136,
+   "made": {
+    "sprite:light": 810,
+    "sprite:magicGround1": 90,
+    "sprite:flareRed": 90,
+    "particle:lightningMega": 90,
+    "particle:fire": 46,
+    "particle:blood2": 10
+   },
+   "damage": 1,
+   "p95": 17,
+   "max": 17,
+   "casting": false
+  }
+ ],
+ "errors": []
+}
