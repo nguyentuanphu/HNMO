@@ -111,7 +111,8 @@ public class MonsterChaseLeashHealTest
         await InvokeTickAsync(ai).ConfigureAwait(false);
 
         Assert.That(ai.IsTargetingPlayer(player), Is.False, "Leashed monster must drop its target.");
-        Assert.That(monster.Health, Is.EqualTo(1000), "Leashed monster must heal to full.");
+        // Full = the monster's maximum health now (other game rules, e.g. a health multiplier, may raise the definition's 1000).
+        Assert.That(monster.Health, Is.EqualTo((int)monster.Attributes[Stats.MaximumHealth]).And.GreaterThanOrEqualTo(1000), "Leashed monster must heal to full.");
         Assert.That(monster.IsWalking || monster.Position.X < 192, Is.True, "Leashed monster must walk back toward spawn area.");
     }
 
