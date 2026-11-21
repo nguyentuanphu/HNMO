@@ -482,7 +482,7 @@ internal static class UpdateApplier
         var saveDir = Path.Combine(plan.Root, "save");
         var log = Path.Combine(saveDir, "logs", "update.log");
         Directory.CreateDirectory(Path.GetDirectoryName(log)!);
-        void Log(string text) => File.AppendAllText(log, $"{DateTimeOffset.Now:yyyy-MM-dd HH:mm:ss} {text}{Environment.NewLine}");
+        void Log(string text) => File.AppendAllText(log, $"{ControlOperations.FormatSydneyTime(DateTimeOffset.UtcNow)} {text}{Environment.NewLine}");
 
         Log($"Update {plan.FromVersion} → {plan.ToVersion}: waiting for HNMO to stop.");
         await WaitForExitAsync(waitForProcess).ConfigureAwait(false);

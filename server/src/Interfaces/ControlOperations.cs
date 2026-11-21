@@ -68,11 +68,7 @@ public static class ControlOperations
                 foreach (var file in Directory.EnumerateFiles(saveDirectory, "*", SearchOption.AllDirectories))
                 {
                     var rel = Path.GetRelativePath(saveDirectory, file).Replace('\\', '/');
-                    if (rel.StartsWith("backups/", StringComparison.OrdinalIgnoreCase)
-                        || rel.StartsWith("logs/", StringComparison.OrdinalIgnoreCase)
-                        || rel.StartsWith("database/", StringComparison.OrdinalIgnoreCase)
-                        || rel.EndsWith(".pid", StringComparison.OrdinalIgnoreCase)
-                        || rel.EndsWith(".tmp", StringComparison.OrdinalIgnoreCase))
+                    if (IsLeftOutOfBackup(rel))
                     {
                         continue;
                     }
@@ -90,6 +86,24 @@ public static class ControlOperations
         File.Move(tempZip, zipPath, overwrite: true);
         var info = new FileInfo(zipPath);
         return new BackupInfo(fileName, info.Length, FormatSydneyTime(utcNow ?? DateTimeOffset.UtcNow));
+    }
+
+    /// <summary>
+    /// Whether a file of the <c>save/</c> folder stays out of a backup (and is never written back by a restore): the
+    /// backups themselves, the logs, the database files (the backup holds a dump instead), the updater's downloads and
+    /// helper (<c>updates/</c>), process ids and unfinished files.
+    /// </summary>
+    /// <param name="relativePath">The path inside <c>save/</c>, with forward slashes.</param>
+    /// <returns><c>true</c> if the file is left out.</returns>
+    public static bool IsLeftOutOfBackup(string relativePath)
+    {
+        var rel = relativePath.Replace('\\', '/');
+        return rel.StartsWith("backups/", StringComparison.OrdinalIgnoreCase)
+            || rel.StartsWith("logs/", StringComparison.OrdinalIgnoreCase)
+            || rel.StartsWith("database/", StringComparison.OrdinalIgnoreCase)
+            || rel.StartsWith("updates/", StringComparison.OrdinalIgnoreCase)
+            || rel.EndsWith(".pid", StringComparison.OrdinalIgnoreCase)
+            || rel.EndsWith(".tmp", StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>
@@ -155,6 +169,12 @@ public static class ControlOperations
             if (entry.FullName.StartsWith("save/", StringComparison.OrdinalIgnoreCase))
             {
                 var rel = entry.FullName["save/".Length..];
+                if (IsLeftOutOfBackup(rel))
+                {
+                    // Older backups held the updater's folder; restoring it would overwrite the running update helper.
+                    continue;
+                }
+
                 var dest = Path.GetFullPath(Path.Combine(fullSaveDir, rel));
                 if (!dest.StartsWith(fullSaveDir + Path.DirectorySeparatorChar, StringComparison.Ordinal))
                 {
