@@ -231,4 +231,160 @@
   <data name="FlameOfCondor" xml:space="preserve">
     <value>Kondorflamme</value>
   </data>
+  <data name="JewelByMonsterLevelJewelOfLife10To19" xml:space="preserve">
+    <value>Juwel des Lebens von Monstern der Stufe 10 bis 19</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless20To29" xml:space="preserve">
+    <value>Juwel des Segens von Monstern der Stufe 20 bis 29</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLife20To29" xml:space="preserve">
+    <value>Juwel des Lebens von Monstern der Stufe 20 bis 29</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless30To39" xml:space="preserve">
+    <value>Juwel des Segens von Monstern der Stufe 30 bis 39</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul30To39" xml:space="preserve">
+    <value>Juwel der Seele von Monstern der Stufe 30 bis 39</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLife30To39" xml:space="preserve">
+    <value>Juwel des Lebens von Monstern der Stufe 30 bis 39</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless40To49" xml:space="preserve">
+    <value>Juwel des Segens von Monstern der Stufe 40 bis 49</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul40To49" xml:space="preserve">
+    <value>Juwel der Seele von Monstern der Stufe 40 bis 49</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLife40To49" xml:space="preserve">
+    <value>Juwel des Lebens von Monstern der Stufe 40 bis 49</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless50To59" xml:space="preserve">
+    <value>Juwel des Segens von Monstern der Stufe 50 bis 59</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul50To59" xml:space="preserve">
+    <value>Juwel der Seele von Monstern der Stufe 50 bis 59</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLife50To59" xml:space="preserve">
+    <value>Juwel des Lebens von Monstern der Stufe 50 bis 59</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless60To69" xml:space="preserve">
+    <value>Juwel des Segens von Monstern der Stufe 60 bis 69</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul60To69" xml:space="preserve">
+    <value>Juwel der Seele von Monstern der Stufe 60 bis 69</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLife60To69" xml:space="preserve">
+    <value>Juwel des Lebens von Monstern der Stufe 60 bis 69</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless70To79" xml:space="preserve">
+    <value>Juwel des Segens von Monstern der Stufe 70 bis 79</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul70To79" xml:space="preserve">
+    <value>Juwel der Seele von Monstern der Stufe 70 bis 79</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation70To79" xml:space="preserve">
+    <value>Juwel der Schöpfung von Monstern der Stufe 70 bis 79</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos70To79" xml:space="preserve">
+    <value>Juwel des Chaos von Monstern der Stufe 70 bis 79</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless80To89" xml:space="preserve">
+    <value>Juwel des Segens von Monstern der Stufe 80 bis 89</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul80To89" xml:space="preserve">
+    <value>Juwel der Seele von Monstern der Stufe 80 bis 89</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation80To89" xml:space="preserve">
+    <value>Juwel der Schöpfung von Monstern der Stufe 80 bis 89</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos80To89" xml:space="preserve">
+    <value>Juwel des Chaos von Monstern der Stufe 80 bis 89</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless90To99" xml:space="preserve">
+    <value>Juwel des Segens von Monstern der Stufe 90 bis 99</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul90To99" xml:space="preserve">
+    <value>Juwel der Seele von Monstern der Stufe 90 bis 99</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation90To99" xml:space="preserve">
+    <value>Juwel der Schöpfung von Monstern der Stufe 90 bis 99</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos90To99" xml:space="preserve">
+    <value>Juwel des Chaos von Monstern der Stufe 90 bis 99</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless100To109" xml:space="preserve">
+    <value>Juwel des Segens von Monstern der Stufe 100 bis 109</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul100To109" xml:space="preserve">
+    <value>Juwel der Seele von Monstern der Stufe 100 bis 109</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation100To109" xml:space="preserve">
+    <value>Juwel der Schöpfung von Monstern der Stufe 100 bis 109</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos100To109" xml:space="preserve">
+    <value>Juwel des Chaos von Monstern der Stufe 100 bis 109</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless110To119" xml:space="preserve">
+    <value>Juwel des Segens von Monstern der Stufe 110 bis 119</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul110To119" xml:space="preserve">
+    <value>Juwel der Seele von Monstern der Stufe 110 bis 119</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation110To119" xml:space="preserve">
+    <value>Juwel der Schöpfung von Monstern der Stufe 110 bis 119</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos110To119" xml:space="preserve">
+    <value>Juwel des Chaos von Monstern der Stufe 110 bis 119</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless120To129" xml:space="preserve">
+    <value>Juwel des Segens von Monstern der Stufe 120 bis 129</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul120To129" xml:space="preserve">
+    <value>Juwel der Seele von Monstern der Stufe 120 bis 129</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation120To129" xml:space="preserve">
+    <value>Juwel der Schöpfung von Monstern der Stufe 120 bis 129</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos120To129" xml:space="preserve">
+    <value>Juwel des Chaos von Monstern der Stufe 120 bis 129</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless130To139" xml:space="preserve">
+    <value>Juwel des Segens von Monstern der Stufe 130 bis 139</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul130To139" xml:space="preserve">
+    <value>Juwel der Seele von Monstern der Stufe 130 bis 139</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation130To139" xml:space="preserve">
+    <value>Juwel der Schöpfung von Monstern der Stufe 130 bis 139</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos130To139" xml:space="preserve">
+    <value>Juwel des Chaos von Monstern der Stufe 130 bis 139</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless140To149" xml:space="preserve">
+    <value>Juwel des Segens von Monstern der Stufe 140 bis 149</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul140To149" xml:space="preserve">
+    <value>Juwel der Seele von Monstern der Stufe 140 bis 149</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation140To149" xml:space="preserve">
+    <value>Juwel der Schöpfung von Monstern der Stufe 140 bis 149</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos140To149" xml:space="preserve">
+    <value>Juwel des Chaos von Monstern der Stufe 140 bis 149</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBlessFrom150" xml:space="preserve">
+    <value>Juwel des Segens von Monstern ab Stufe 150</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoulFrom150" xml:space="preserve">
+    <value>Juwel der Seele von Monstern ab Stufe 150</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLifeFrom150" xml:space="preserve">
+    <value>Juwel des Lebens von Monstern ab Stufe 150</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreationFrom150" xml:space="preserve">
+    <value>Juwel der Schöpfung von Monstern ab Stufe 150</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaosFrom150" xml:space="preserve">
+    <value>Juwel des Chaos von Monstern ab Stufe 150</value>
+  </data>
 </root>

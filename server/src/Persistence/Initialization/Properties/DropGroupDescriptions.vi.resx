@@ -75,4 +75,160 @@
   <data name="CompensationBoxLochsFeather" xml:space="preserve"><value>Hộp bồi thường: Lông của Loch</value></data>
   <data name="CompensationBoxJewel" xml:space="preserve"><value>Hộp bồi thường: Ngọc</value></data>
   <data name="FlameOfCondor" xml:space="preserve"><value>Ngọn lửa thần điêu</value></data>
+  <data name="JewelByMonsterLevelJewelOfLife10To19" xml:space="preserve">
+    <value>Viên ngọc cuộc sống từ quái level 10 đến 19</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless20To29" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 20 đến 29</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLife20To29" xml:space="preserve">
+    <value>Viên ngọc cuộc sống từ quái level 20 đến 29</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless30To39" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 30 đến 39</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul30To39" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 30 đến 39</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLife30To39" xml:space="preserve">
+    <value>Viên ngọc cuộc sống từ quái level 30 đến 39</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless40To49" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 40 đến 49</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul40To49" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 40 đến 49</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLife40To49" xml:space="preserve">
+    <value>Viên ngọc cuộc sống từ quái level 40 đến 49</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless50To59" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 50 đến 59</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul50To59" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 50 đến 59</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLife50To59" xml:space="preserve">
+    <value>Viên ngọc cuộc sống từ quái level 50 đến 59</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless60To69" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 60 đến 69</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul60To69" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 60 đến 69</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLife60To69" xml:space="preserve">
+    <value>Viên ngọc cuộc sống từ quái level 60 đến 69</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless70To79" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 70 đến 79</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul70To79" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 70 đến 79</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation70To79" xml:space="preserve">
+    <value>Viên ngọc sáng tạo từ quái level 70 đến 79</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos70To79" xml:space="preserve">
+    <value>Viên ngọc hỗn loạn từ quái level 70 đến 79</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless80To89" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 80 đến 89</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul80To89" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 80 đến 89</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation80To89" xml:space="preserve">
+    <value>Viên ngọc sáng tạo từ quái level 80 đến 89</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos80To89" xml:space="preserve">
+    <value>Viên ngọc hỗn loạn từ quái level 80 đến 89</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless90To99" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 90 đến 99</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul90To99" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 90 đến 99</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation90To99" xml:space="preserve">
+    <value>Viên ngọc sáng tạo từ quái level 90 đến 99</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos90To99" xml:space="preserve">
+    <value>Viên ngọc hỗn loạn từ quái level 90 đến 99</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless100To109" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 100 đến 109</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul100To109" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 100 đến 109</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation100To109" xml:space="preserve">
+    <value>Viên ngọc sáng tạo từ quái level 100 đến 109</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos100To109" xml:space="preserve">
+    <value>Viên ngọc hỗn loạn từ quái level 100 đến 109</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless110To119" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 110 đến 119</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul110To119" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 110 đến 119</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation110To119" xml:space="preserve">
+    <value>Viên ngọc sáng tạo từ quái level 110 đến 119</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos110To119" xml:space="preserve">
+    <value>Viên ngọc hỗn loạn từ quái level 110 đến 119</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless120To129" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 120 đến 129</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul120To129" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 120 đến 129</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation120To129" xml:space="preserve">
+    <value>Viên ngọc sáng tạo từ quái level 120 đến 129</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos120To129" xml:space="preserve">
+    <value>Viên ngọc hỗn loạn từ quái level 120 đến 129</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless130To139" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 130 đến 139</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul130To139" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 130 đến 139</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation130To139" xml:space="preserve">
+    <value>Viên ngọc sáng tạo từ quái level 130 đến 139</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos130To139" xml:space="preserve">
+    <value>Viên ngọc hỗn loạn từ quái level 130 đến 139</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless140To149" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 140 đến 149</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul140To149" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 140 đến 149</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation140To149" xml:space="preserve">
+    <value>Viên ngọc sáng tạo từ quái level 140 đến 149</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos140To149" xml:space="preserve">
+    <value>Viên ngọc hỗn loạn từ quái level 140 đến 149</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBlessFrom150" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 150 trở lên</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoulFrom150" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 150 trở lên</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLifeFrom150" xml:space="preserve">
+    <value>Viên ngọc cuộc sống từ quái level 150 trở lên</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreationFrom150" xml:space="preserve">
+    <value>Viên ngọc sáng tạo từ quái level 150 trở lên</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaosFrom150" xml:space="preserve">
+    <value>Viên ngọc hỗn loạn từ quái level 150 trở lên</value>
+  </data>
 </root>

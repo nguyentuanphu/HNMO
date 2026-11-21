@@ -7,6 +7,8 @@ namespace HNMO.Persistence.Initialization.Updates;
 using System.Runtime.InteropServices;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Configuration.Items;
+using HNMO.Interfaces;
+using HNMO.Persistence.Initialization.Properties;
 using HNMO.PlugIns;
 
 /// <summary>
@@ -40,6 +42,21 @@ public class JewelDropsByMonsterLevelUpdatePlugIn : UpdatePlugInBase
 
     /// <summary>The level from which the suites' table has no jewels.</summary>
     internal const byte HighLevel = 150;
+
+    /// <inheritdoc />
+    public override string Name => PlugInName;
+
+    /// <inheritdoc />
+    public override string Description => PlugInDescription;
+
+    /// <inheritdoc />
+    public override string DataInitializationKey => VersionSeasonSix.DataInitialization.Id;
+
+    /// <inheritdoc />
+    public override bool IsMandatory => true;
+
+    /// <inheritdoc />
+    public override DateTime CreatedAt => new(2026, 11, 21, 17, 30, 0, DateTimeKind.Utc);
 
     /// <summary>Gets the chance per kill of each jewel by monster level band: minimum and maximum level, group, number, chance.</summary>
     internal static IReadOnlyList<(byte MinimumLevel, byte MaximumLevel, byte Group, short Number, double Chance)> Bands { get; } =
@@ -96,21 +113,6 @@ public class JewelDropsByMonsterLevelUpdatePlugIn : UpdatePlugInBase
     /// <summary>Gets the five jewels: group and number.</summary>
     internal static IReadOnlyList<(byte Group, short Number)> Jewels { get; } = [(14, 13), (14, 14), (14, 16), (14, 22), (12, 15)];
 
-    /// <inheritdoc />
-    public override string Name => PlugInName;
-
-    /// <inheritdoc />
-    public override string Description => PlugInDescription;
-
-    /// <inheritdoc />
-    public override string DataInitializationKey => VersionSeasonSix.DataInitialization.Id;
-
-    /// <inheritdoc />
-    public override bool IsMandatory => true;
-
-    /// <inheritdoc />
-    public override DateTime CreatedAt => new(2026, 11, 21, 17, 30, 0, DateTimeKind.Utc);
-
     /// <summary>Moves the five jewels out of the old group into the groups by monster level.</summary>
     /// <param name="context">The context.</param>
     /// <param name="gameConfiguration">The game configuration.</param>
@@ -142,7 +144,7 @@ public class JewelDropsByMonsterLevelUpdatePlugIn : UpdatePlugInBase
         {
             if (jewels.FirstOrDefault(j => j.Group == group && j.Number == number) is { } jewel)
             {
-                AddGroup(index, $"{jewel.Name.ValueInNeutralLanguage} from monsters of level {minimumLevel} to {maximumLevel}", minimumLevel, maximumLevel, chance, jewel);
+                AddGroup(index, $"JewelByMonsterLevel{ResourceKeyOf(jewel)}{minimumLevel}To{maximumLevel}", minimumLevel, maximumLevel, chance, jewel);
             }
 
             index++;
@@ -150,14 +152,14 @@ public class JewelDropsByMonsterLevelUpdatePlugIn : UpdatePlugInBase
 
         foreach (var jewel in jewels)
         {
-            AddGroup(index++, $"{jewel.Name.ValueInNeutralLanguage} from monsters of level {HighLevel} and up", HighLevel, null, HighLevelChancePerJewel, jewel);
+            AddGroup(index++, $"JewelByMonsterLevel{ResourceKeyOf(jewel)}From{HighLevel}", HighLevel, null, HighLevelChancePerJewel, jewel);
         }
 
-        void AddGroup(short subNumber, string description, byte minimumLevel, byte? maximumLevel, double chance, ItemDefinition jewel)
+        void AddGroup(short subNumber, string descriptionKey, byte minimumLevel, byte? maximumLevel, double chance, ItemDefinition jewel)
         {
             var dropGroup = context.CreateNew<DropItemGroup>();
             dropGroup.SetGuid(GroupNumber, subNumber);
-            dropGroup.Description = description;
+            dropGroup.Description = DropGroupDescriptions.ResourceManager.GetLocalizedString(descriptionKey); // texts in every language
             dropGroup.Chance = chance;
             dropGroup.MinimumMonsterLevel = minimumLevel;
             dropGroup.MaximumMonsterLevel = maximumLevel;
@@ -177,4 +179,14 @@ public class JewelDropsByMonsterLevelUpdatePlugIn : UpdatePlugInBase
         Apply(context, gameConfiguration);
         return ValueTask.CompletedTask;
     }
+
+    /// <summary>The resource key part of a jewel, as in the item names.</summary>
+    private static string ResourceKeyOf(ItemDefinition jewel) => (jewel.Group, jewel.Number) switch
+    {
+        (14, 13) => "JewelOfBless",
+        (14, 14) => "JewelOfSoul",
+        (14, 16) => "JewelOfLife",
+        (14, 22) => "JewelOfCreation",
+        _ => "JewelOfChaos",
+    };
 }
