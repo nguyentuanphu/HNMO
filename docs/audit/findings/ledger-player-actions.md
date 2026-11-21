@@ -101,3 +101,15 @@ Read in full: WarpAction, WarpGateAction, WizardTeleportAction, CloseNpcDialogAc
 - #216 No item duplication through the inventory rollback of a trade.
 - #219 Duel: a request is answered once, by the requested player.
 - #221 Guild: creation and join answers check their requirements.
+
+## Owner answers (21 Nov 2026) and their PRs
+| Answer | Result |
+|---|---|
+| Q1 Guild creation level 150, as a setting | #221 updated: `GuildLimitsConfiguration.MinimumCreateLevel` defaults to 150 (was 0); guild master dialog and creation request read it; mandatory `GuildCreateLevelUpdatePlugIn` replaces the saved earlier default 0; admin panel: Plug-ins → "Guild limits" → configure, caption/description in en/de/vi/zh-CN, `GuildLimitsSettingsTest` |
+| Q5 Mini game entry refused while trading, in an NPC dialog (other than the game's entry NPC), dead or duelling; duel TODO done | #229 |
+| Q4 Talisman stat items: same state check as other items | #231 |
+| Q8a Personal store opens from level 6, not while trading, in a dialog, dead or duelling | #236 |
+| Q8b Buying from a personal store only within view range (buyer observes the seller) | not finished: local commit dab2f24b on branch `store-buy-view-range` in HNMO-fix3b, not pushed, no PR; red shown, green and full runs never got the build lock |
+| Q6 Repair-all without NPC stays allowed (2.5x price); only the wrong "cheater" log removed | not done (prepared: fix3b\prRepair.ps1) |
+| Q7 Quests complete only at that quest's NPC | not done (prepared: fix3b\prQuest\apply.ps1) |
+| Party kick index out of range refused quietly | not done (prepared: fix3b\prParty\) |
