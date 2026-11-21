@@ -43,7 +43,15 @@ with a test that fails before the fix; **Owner** = the owner decided; **Note** =
 | Dark Side mana | **Fixed** | [#168](https://github.com/nguyentuanphu/HNMO/pull/168): it was free (the rage range request never charged the skill). |
 | Mana / AG paid once per cast, refused casts free | OK | `Player.TryConsumeForSkillAsync` for all skill actions, bots and offline play. |
 | Client skips its delay check for Rage Fighter skills | Note | Same as the desktop client; the server check covers it now. |
-| Buff and debuff durations, master tree values | Not checked in depth | The suites keep most of these inside the program; spot checks only. |
+| Buff and debuff values and durations (21 Nov) | OK | Greater Defense / Damage, Soul Barrier (value, duration, mana toll, 90 % cap), Swell Life HP, Critical Damage, Berserker, Weakness, Innovation, Sleep, Reflection, Stun, Poison, Decay, Ice, Freeze, Bleeding, Infinity Arrow, Increase Health; debuffs don't stack; buffs of one kind replace each other. |
+| Rage Fighter resistance master skills | **Fixed** | [#246](https://github.com/nguyentuanphu/HNMO/pull/246): they added a hundredth of the other classes' resistance (poisoned about 92 % instead of about 10 % at level 20). |
+| Master tree ranks and links | **Fixed** | [#248](https://github.com/nguyentuanphu/HNMO/pull/248): Lightning / Ice Resistance at ranks 3 / 4 (were 2), Summoned Monster Str 2 after Str 1, Command Attack Increase after Scepter Pet Str. All other ranks and links match `MasterSkillTree.xml`. |
+| Phoenix Shot decrease block (PvP) | **Fixed** | [#249](https://github.com/nguyentuanphu/HNMO/pull/249): lowered the defense rate against monsters instead of the PvP defense rate. |
+| Swell Life duration (`60 + energy / 180`, cap 180 s) | Owner: the local session checks the Season 6 suite | Classic is believed to be `60 + energy / 10`. |
+| Pet durability master skills (Durability Reduction 3, Pet Durability Str: x12 to x90) | Owner: the local session checks the Season 6 suite | The weapon and jewelry ones are x1.12 to x1.9. |
+| Berserker Proficiency applied twice to wizardry and curse damage | Owner: the local session checks the Season 6 suite | In the wizardry multiplier and again as a final factor (`AttackableExtensions.cs`). |
+| Increase Block: flat base value, percentage master value | Owner: the local session checks the Season 6 suite | |
+| Elf Attack / Defense Increase Mastery: longer duration and higher value | Note | Classic may do only one of them. |
 
 ## Settings that differ from the Season 6/9 server suites
 
@@ -157,7 +165,9 @@ Left from #181 for the owner: (1) the web and desktop clients read option values
 | Jewel upgrade luck boost (`BoostOptionType`, `SuccessChanceBoost`) | Found, not fixed | Never read. |
 | MU helper "long range counter attack" | Found, not fixed | Never read. |
 | Other settings no code reads | Note | `MaximumPasswordLength`, `PerLevelAfterHalving`; `LevelRequirementByCreation` only on the website; `ConfigurationUpdate.UpdatedAt/InstalledAt` only on the Updates page. All other entries of the scan are read (same file, pattern matching, website, launcher, EF relations). |
-| VIP, starter kit, bots, anti-cheat | Not checked | |
+| VIP (21 Nov) | OK | Account VIP (grants and permanent) is part of the character's stats, so every VIP check agrees; grants end on time. |
+| Starter kit (21 Nov) | **Fixed** | [#245](https://github.com/nguyentuanphu/HNMO/pull/245): zen and coins (kept on the account) could be collected again by creating and deleting characters; now once per account (owner's choice, setting). |
+| Bots, anti-cheat | Not checked | Next. |
 
 ## Morning questions for the owner (21 Nov)
 
