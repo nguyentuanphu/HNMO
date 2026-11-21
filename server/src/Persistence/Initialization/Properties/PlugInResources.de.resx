@@ -964,4 +964,6 @@
   <data name="StrongerHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
     <value>Dieses Update macht die 28 HNMO-Fertigkeiten um 20 % stärker (Schaden, Buffs und Debuffs; Kosten und Abklingzeiten bleiben) und lässt die Prüfungsquests des Elfensoldaten 200 Tötungen und fünf Juwelen des Chaos verlangen.</value>
   </data>
+  <data name="SeasonNineSharedItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Regeln gemeinsamer Gegenstände</value></data>
+  <data name="SeasonNineSharedItemsUpdatePlugIn_Description" xml:space="preserve"><value>Wendet im Season-9-Betrieb die Season-9-Werte auf gemeinsame Gegenstände an (Cape of Fighter Drop-Stufe 150, Cape of Lord Stufenanforderung 150, native 255er-Trankstapel); angepasste Werte bleiben erhalten.</value></data>
 </root>

@@ -868,4 +868,6 @@
   <data name="AddArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Thêm Sứ giả Đấu trường HNMO, NPC ở Lorencia, Devias, Noria và Elbeland, mở cửa sổ Đấu trường.</value></data>
   <data name="RenumberArenaHeraldUpdatePlugIn_Name" xml:space="preserve"><value>Sứ giả Đấu trường: số NPC riêng</value></data>
   <data name="RenumberArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Chuyển Sứ giả Đấu trường của bản lưu cũ từ NPC 595 sang 900 để web game hiện lại.</value></data>
+  <data name="SeasonNineSharedItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: quy tắc vật phẩm dùng chung</value></data>
+  <data name="SeasonNineSharedItemsUpdatePlugIn_Description" xml:space="preserve"><value>Áp dụng thông số Season 9 cho các vật phẩm dùng chung (cấp rơi Cape of Fighter 150, cấp yêu cầu Cape of Lord 150, gộp tối đa 255 bình thuốc) khi chạy Season 9; giữ nguyên giá trị đã tùy chỉnh.</value></data>
 </root>
