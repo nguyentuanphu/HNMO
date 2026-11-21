@@ -54,6 +54,9 @@ public class HarmonyOptions : InitializerBase
         this.CreatePhysicalAttackOptions();
         this.CreateWizardryAttackOptions();
 
+        // The values for items +14 and +15 (harmony option table of the Season 6/9 server suites).
+        Updates.HarmonyLevels14And15UpdatePlugIn.AddLevels(this.Context, this.GameConfiguration);
+
         // this.CreateCurseAttackOptions();
     }
 
