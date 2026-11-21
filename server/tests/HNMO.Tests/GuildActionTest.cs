@@ -124,6 +124,7 @@ public class GuildActionTest : GuildTestBase
     [Test]
     public async ValueTask GuildCreateAsync()
     {
+        this._player.Attributes![Stats.Level] = 100;
         var action = new GuildCreateAction();
         await action.CreateGuildAsync(this._player, "Foobar2", []).ConfigureAwait(false);
         Assert.That(this._player.GuildStatus, Is.Not.Null);
@@ -131,6 +132,52 @@ public class GuildActionTest : GuildTestBase
         var context = this.PersistenceContextProvider.CreateNewGuildContext();
         var newGuild = (await context.GetAsync<DataModel.Entities.Guild>().ConfigureAwait(false)).First(g => g.Name == "Foobar2");
         Assert.That(newGuild.Members.Any(m => m.Id == this._player.SelectedCharacter!.Id), Is.True);
+    }
+
+    /// <summary>
+    /// A guild can't be created below the level the guild master asks for, even when the creation
+    /// request is sent without asking him.
+    /// </summary>
+    [Test]
+    public async ValueTask GuildCreateBelowMinimumLevelIsRejectedAsync()
+    {
+        this._player.Attributes![Stats.Level] = 99;
+
+        await new GuildCreateAction().CreateGuildAsync(this._player, "Foobar3", []).ConfigureAwait(false);
+
+        Assert.That(this._player.GuildStatus, Is.Null);
+        var context = this.PersistenceContextProvider.CreateNewGuildContext();
+        Assert.That((await context.GetAsync<DataModel.Entities.Guild>().ConfigureAwait(false)).Any(g => g.Name == "Foobar3"), Is.False);
+    }
+
+    /// <summary>
+    /// A guild member can't create another guild.
+    /// </summary>
+    [Test]
+    public async ValueTask GuildCreateByAGuildMemberIsRejectedAsync()
+    {
+        Assert.That(this._guildMasterPlayer.GuildStatus, Is.Not.Null, "test setup");
+
+        await new GuildCreateAction().CreateGuildAsync(this._guildMasterPlayer, "Foobar4", []).ConfigureAwait(false);
+
+        var context = this.PersistenceContextProvider.CreateNewGuildContext();
+        Assert.That((await context.GetAsync<DataModel.Entities.Guild>().ConfigureAwait(false)).Any(g => g.Name == "Foobar4"), Is.False);
+    }
+
+    /// <summary>
+    /// When the requester is busy (e.g. in a trade) by the time the guild master accepts, the request is
+    /// refused - not answered with "busy" and accepted anyway.
+    /// </summary>
+    [Test]
+    public async ValueTask GuildRequestAcceptWhileRequesterIsBusyIsRefusedAsync()
+    {
+        await new GuildRequestAction().RequestGuildAsync(this._player, this._guildMasterPlayer.Id).ConfigureAwait(false);
+        Assert.That(await this._player.PlayerState.TryAdvanceToAsync(PlayerState.TradeRequested).ConfigureAwait(false), Is.True, "test setup");
+
+        await new GuildRequestAnswerAction().AnswerRequestAsync(this._guildMasterPlayer, true).ConfigureAwait(false);
+
+        Assert.That(this._player.GuildStatus, Is.Null);
+        Mock.Get(this._player.ViewPlugIns.GetPlugIn<IGuildJoinResponsePlugIn>()!).Verify(g => g!.ShowGuildJoinResponseAsync(GuildRequestAnswerResult.Accepted), Times.Never);
     }
 
     /// <summary>
