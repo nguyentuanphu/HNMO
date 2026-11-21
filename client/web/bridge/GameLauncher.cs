@@ -203,7 +203,7 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
         AppDomain.CurrentDomain.ProcessExit += (_, _) => this.StopNow();
 
         // Start in the background, so the web part answers right away and shows the game/control page while the server comes up.
-        _ = Task.Run(() => this.LaunchAsync(cancellationToken), CancellationToken.None);
+        _ = Task.Run(() => this.LaunchAsync(cancellationToken, openControlOnFailure: true), CancellationToken.None);
         return Task.CompletedTask;
     }
 
@@ -351,7 +351,7 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
         }
     }
 
-    private async Task LaunchAsync(CancellationToken cancellationToken)
+    private async Task LaunchAsync(CancellationToken cancellationToken, bool openControlOnFailure = false)
     {
         try
         {
@@ -361,9 +361,14 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
             await this.StopLeftoverServerAsync(cancellationToken).ConfigureAwait(false);
             if (await IsPortOpenAsync(options.ConnectServerPort, cancellationToken).ConfigureAwait(false))
             {
+                var owner = PortOwner.Describe(options.ConnectServerPort);
                 throw new InvalidOperationException(
-                    $"Another program uses port {options.ConnectServerPort} (another HNMO folder, or a game server started by hand). "
-                    + "Close it (Task Manager: \".NET Host\" / \"dotnet\" / \"HNMO\"), or restart the computer, and start HNMO again.");
+                    $"Another program uses port {options.ConnectServerPort}"
+                    + (owner is null ? " (another HNMO folder, or a game server started by hand)" : $": {owner}")
+                    + ". Close it (Task Manager: \".NET Host\" / \"dotnet\" / \"HNMO\"), or restart the computer, then press Start on the control page. / "
+                    + $"Một chương trình khác đang dùng cổng {options.ConnectServerPort}"
+                    + (owner is null ? string.Empty : $": {owner}")
+                    + ". Hãy tắt nó (Task Manager) hoặc khởi động lại máy, rồi bấm Start trên trang điều khiển.");
             }
 
             await this.StartDatabaseAsync(cancellationToken).ConfigureAwait(false);
@@ -382,6 +387,12 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
         {
             this.LastError = ex.Message;
             logger.LogError(ex, "HNMO couldn't start. See the logs in {LogDirectory}.", this.LogDirectory);
+            if (openControlOnFailure)
+            {
+                // This window stays and keeps the web port: the control page shows why and has the Start button,
+                // so the host doesn't start the folder again (which only fails on the web port as well).
+                OpenBrowser($"http://localhost:{options.WebPort}/control");
+            }
         }
         finally
         {
@@ -743,7 +754,7 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
         }
     }
 
-    private static async Task<bool> IsPortOpenAsync(int port, CancellationToken cancellationToken)
+    internal static async Task<bool> IsPortOpenAsync(int port, CancellationToken cancellationToken)
     {
         try
         {
@@ -777,7 +788,7 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
         throw new TimeoutException($"The game server didn't open port {port} in time.");
     }
 
-    private static void OpenBrowser(string? url)
+    internal static void OpenBrowser(string? url)
     {
         if (string.IsNullOrEmpty(url))
         {

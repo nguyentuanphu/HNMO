@@ -66,6 +66,19 @@ var portalOptions = builder.Configuration.GetSection("Portal").Get<PortalOptions
 
 bool HasArg(string prefix) => args.Any(a => a.StartsWith(prefix, StringComparison.OrdinalIgnoreCase));
 
+static async Task<bool> AlreadyRunningHnmoAsync(int webPort)
+{
+    try
+    {
+        using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(3) };
+        return (await client.GetStringAsync($"http://127.0.0.1:{webPort}/health").ConfigureAwait(false)).Trim() == "ok";
+    }
+    catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
+    {
+        return false;
+    }
+}
+
 var bridgeRoot = builder.Environment.ContentRootPath;
 var configuredSaveDir = Path.GetFullPath(Path.Combine(bridgeRoot, launcherOptions.SavePath));
 var settingsFileEnv = Environment.GetEnvironmentVariable(HostSettingsStore.EnvironmentVariableName);
@@ -120,6 +133,25 @@ if (launcherOptions.Enabled || File.Exists(settingsPath))
 }
 
 portalOptions.ConnectServerPort = launcherOptions.ConnectServerPort;
+
+// Started again while this HNMO (or another) already runs: its web port is taken. An HNMO there answers /health:
+// open its control page instead of failing on the port (owner's report, 2026-11-21: a second start only failed).
+if (launcherOptions.Enabled && await GameLauncher.IsPortOpenAsync(launcherOptions.WebPort, CancellationToken.None).ConfigureAwait(false))
+{
+    var control = $"http://localhost:{launcherOptions.WebPort}/control";
+    if (await AlreadyRunningHnmoAsync(launcherOptions.WebPort).ConfigureAwait(false))
+    {
+        Console.WriteLine($"HNMO is already running: {control} / HNMO đang chạy rồi: {control}");
+        GameLauncher.OpenBrowser(control);
+        return;
+    }
+
+    var owner = PortOwner.Describe(launcherOptions.WebPort);
+    Console.Error.WriteLine($"Another program uses port {launcherOptions.WebPort}{(owner is null ? string.Empty : $": {owner}")}. Close it and start HNMO again. / "
+        + $"Một chương trình khác đang dùng cổng {launcherOptions.WebPort}{(owner is null ? string.Empty : $": {owner}")}. Hãy tắt nó rồi mở lại HNMO.");
+    Environment.ExitCode = 1;
+    return;
+}
 if (HasArg("--Launcher:AdminUrl") && !HasArg("--Portal:ApiBaseUrl"))
 {
     portalOptions.ApiBaseUrl = launcherOptions.AdminUrl;
