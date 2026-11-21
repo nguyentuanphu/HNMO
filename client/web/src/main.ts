@@ -304,7 +304,11 @@ THREE.ColorManagement.enabled = false;
 const FOG = { color: new THREE.Color(0x0a0d14), near: 2600, far: 4200 };
 const CAMERA = { distance: 1250, minDistance: 500, maxDistance: 2600, pitch: 48 * Math.PI / 180, yaw: -45 * Math.PI / 180 };
 const LABEL_RANGE_CELLS = 18;
-const MAX_FRAME_SECONDS = 0.5; // a hidden tab still catches up on walks, but not on minutes
+const MAX_FRAME_SECONDS = 0.5; // animations and effects don't jump minutes after a hidden tab
+// Walks always catch up with the clock (up to a minute, longer than any walk part): the server walks the character
+// in real time, so a slow or hidden page that walked less fell behind it, and its next walk was refused as a speed
+// hack (seen in Arena battles with many slow pages; a player switching tabs while walking had it too).
+const MAX_WALK_CATCH_UP_SECONDS = 60;
 const SETTINGS_KEY = 'hnmo-login';
 
 // The page's elements: all of them are always in index.html.
@@ -791,8 +795,15 @@ let frames = 0, fpsTime = 0, currentFps = 0;
 
 function frame(now: number): void {
   if (!frameDue(now)) { requestAnimationFrame(frame); return; } // the settings' FPS limit
-  const dt = Math.min((now - last) / 1000, MAX_FRAME_SECONDS);
+  const elapsed = (now - last) / 1000;
+  const dt = Math.min(elapsed, MAX_FRAME_SECONDS);
   last = now;
+  // The time the frame cap left out: the walks still move on by it.
+  const walkCatchUp = Math.min(elapsed, MAX_WALK_CATCH_UP_SECONDS) - dt;
+  if (walkCatchUp > 0 && state.hero && state.world) {
+    state.hero.advance(walkCatchUp, state.world);
+    for (const character of state.online?.characters.values() ?? []) character.advance(walkCatchUp, state.world);
+  }
   frames++; fpsTime += dt;
   if (fpsTime >= 1) { currentFps = Math.round(frames / fpsTime); ui.fps.textContent = `${currentFps} fps`; frames = 0; fpsTime = 0; }
   // The performance report measures the frame's parts while it records (game/perfRecorder.ts).

@@ -29,6 +29,8 @@ test('the sound pauses while the game is out of sight', async ({ page, context }
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await enterWorld(page, 'test6');
+  // In Lorencia's town, where its music plays (another test may have left the hero out in a field).
+  await page.evaluate(() => (window as unknown as { __game: { online: { say(text: string): void } } }).__game.online.say('/move lorencia'));
   await page.mouse.click(5, 5); // a gesture lets the browser play sound
   const state = () => page.evaluate(async () => {
     const audio = (await import('/js/audio/index.js' as string)) as { audioSystem(): { isMusicPlaying: boolean; isHiddenPaused: boolean } };

@@ -183,6 +183,37 @@ internal static class ControlEndpoints
             return Results.Ok(new { ok = true });
         });
 
+        // HNMO updates (owner's choice, 2026-11-21: the host presses "Update"; Updater.cs). The HNMO folder is the one
+        // above the web folder; a folder without manifest.json (a developer's checkout) can't update itself.
+        var adminPort = Uri.TryCreate(options.AdminUrl, UriKind.Absolute, out var adminUri) ? adminUri.Port : 8095;
+        var updater = new HnmoUpdater(Path.GetFullPath(Path.Combine(contentRoot, "..")), saveDir, options.WebPort, adminPort, app.Services.GetRequiredService<IHttpClientFactory>(), logger);
+        app.MapGet("/api/control/update", async (HttpContext ctx) =>
+        {
+            if (!IsLoopback(ctx))
+            {
+                return Forbidden();
+            }
+
+            var check = ctx.Request.Query.ContainsKey("check");
+            return Results.Ok(await updater.StatusAsync(check, ctx.RequestAborted).ConfigureAwait(false));
+        });
+
+        app.MapPost("/api/control/update", (HttpContext ctx) =>
+        {
+            if (!IsLoopback(ctx))
+            {
+                return Forbidden();
+            }
+
+            var (ok, message) = updater.Start(() =>
+            {
+                logger.LogInformation("Stopping HNMO for the update.");
+                app.Services.GetRequiredService<IHostApplicationLifetime>().StopApplication();
+                return Task.CompletedTask;
+            });
+            return ok ? Results.Ok(new { ok, message }) : Results.BadRequest(new { message });
+        });
+
         app.MapPost("/api/control/restart", (HttpContext ctx) =>
         {
             if (!IsLoopback(ctx))

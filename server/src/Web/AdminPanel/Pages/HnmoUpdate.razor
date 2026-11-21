@@ -1,0 +1,62 @@
+﻿@page "/hnmo-update"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @Resources.HnmoUpdatePage</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@Resources.HnmoUpdatePage" />
+<h1>@Resources.HnmoUpdatePage</h1>
+<PageHelp Text="@L("The version of this HNMO and the newest one offered. 'Update' downloads only the files that changed, backs up the save game (the database included), stops HNMO, puts the new files in place and starts it again: the players are disconnected for a minute or two. If the new version doesn't start, the old one and the save game from before come back by themselves. Your save game (accounts, characters, settings) is never replaced.", "Phiên bản HNMO đang chạy và bản mới nhất được đưa ra. 'Cập nhật' chỉ tải những file đã đổi, sao lưu dữ liệu (cả database), tắt HNMO, đặt file mới vào rồi bật lại: người chơi bị ngắt một hai phút. Nếu bản mới không chạy được, bản cũ và dữ liệu trước khi cập nhật tự quay về. Dữ liệu của bạn (tài khoản, nhân vật, cài đặt) không bao giờ bị thay.")" />
+
+<div class="card mb-3" id="hnmo-update-card">
+    <div class="card-body">
+        <p class="mb-1">@L("This HNMO", "HNMO đang chạy"): <strong id="hnmo-update-current">@(this._status?.Current ?? "…")</strong></p>
+        @if (this._error is { } error)
+        {
+            <div class="alert alert-warning py-2" id="hnmo-update-error">@error</div>
+        }
+        else if (this._status is { } status)
+        {
+            @if (status.Available)
+            {
+                <p class="mb-1">@L("Newest", "Mới nhất"): <strong id="hnmo-update-latest">@status.Latest</strong></p>
+                @if (!string.IsNullOrWhiteSpace(status.Notes))
+                {
+                    <pre class="border rounded p-2 small" id="hnmo-update-notes" style="white-space: pre-wrap;">@status.Notes</pre>
+                }
+            }
+            else
+            {
+                <p class="text-success mb-1" id="hnmo-update-uptodate">@L("Up to date.", "Đã là bản mới nhất.")</p>
+            }
+
+            @if (status.State is "downloading" or "installing")
+            {
+                <div class="progress mb-2" style="height: 1.2rem;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: @(status.Percent)%" aria-valuenow="@status.Percent" aria-valuemin="0" aria-valuemax="100">@status.Percent %</div>
+                </div>
+                <p class="mb-1" id="hnmo-update-state">@(status.State == "installing" ? L("Installing: HNMO restarts and this page comes back in a minute or two.", "Đang cài: HNMO khởi động lại, trang này quay lại sau một hai phút.") : L($"Downloading {status.ChangedFiles} changed files ({status.DownloadBytes / 1048576.0:0.#} MB)…", $"Đang tải {status.ChangedFiles} file đã đổi ({status.DownloadBytes / 1048576.0:0.#} MB)…"))</p>
+            }
+            else if (status.Available)
+            {
+                @if (this._confirm)
+                {
+                    <span>@L("Update now? The game stops for everyone for a minute or two.", "Cập nhật ngay? Game tạm dừng cho mọi người một hai phút.")</span>
+                    <button type="button" class="btn btn-primary btn-sm ms-2" id="hnmo-update-yes" title="@L("Download and install the new version", "Tải và cài bản mới")" @onclick="this.StartAsync">@L("Update", "Cập nhật")</button>
+                    <button type="button" class="btn btn-secondary btn-sm ms-1" title="@L("Not now", "Để sau")" @onclick="() => this._confirm = false">@L("Cancel", "Huỷ")</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-primary" id="hnmo-update-start" title="@L("Update HNMO to the newest version", "Cập nhật HNMO lên bản mới nhất")" @onclick="() => this._confirm = true">@L($"Update to {status.Latest}", $"Cập nhật lên {status.Latest}")</button>
+                }
+            }
+
+            @if (status.State is "done" or "failed" or "rolled-back" && status.Message is { } message)
+            {
+                <div class="alert @(status.State == "done" ? "alert-success" : "alert-warning") py-2 mt-2" id="hnmo-update-last">@message</div>
+            }
+        }
+
+        <button type="button" class="btn btn-link btn-sm px-0 mt-2" id="hnmo-update-check" title="@L("Ask again for the newest version", "Hỏi lại bản mới nhất")" @onclick="() => this.RefreshAsync(true)">@L("Check again", "Kiểm tra lại")</button>
+    </div>
+</div>

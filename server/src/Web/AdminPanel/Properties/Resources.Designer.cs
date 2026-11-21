@@ -13406,6 +13406,15 @@ namespace HNMO.Web.AdminPanel.Properties {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to HNMO update.
+        /// </summary>
+        public static string HnmoUpdatePage {
+            get {
+                return ResourceManager.GetString("HnmoUpdatePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Server log.
         /// </summary>
         public static string ServerLogPage {

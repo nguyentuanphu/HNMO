@@ -5249,4 +5249,7 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   <data name="ServerLogPage" xml:space="preserve">
     <value>Nhật ký máy chủ</value>
   </data>
+  <data name="HnmoUpdatePage" xml:space="preserve">
+    <value>Cập nhật HNMO</value>
+  </data>
 </root>
