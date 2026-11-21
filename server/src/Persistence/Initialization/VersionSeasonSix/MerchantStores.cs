@@ -456,12 +456,14 @@ internal partial class NpcInitialization
             this.ItemHelper.CreateItem(50, 50, 13, 1, 3), // Illusion Sorcerer Covenant
             this.ItemHelper.CreateItem(51, 50, 13, 1, 4), // Illusion Sorcerer Covenant
             this.ItemHelper.CreateItem(52, 50, 13, 1, 5), // Illusion Sorcerer Covenant
+            this.ItemHelper.CreateItem(58, 50, 13, 1, 6), // Illusion Sorcerer Covenant + 6 (Season 6 server suite)
 
             this.ItemHelper.CreateItem(53, 49, 13, 1, 1), // Old Scroll
             this.ItemHelper.CreateItem(54, 49, 13, 1, 2), // Old Scroll
             this.ItemHelper.CreateItem(55, 49, 13, 1, 3), // Old Scroll
             this.ItemHelper.CreateItem(61, 49, 13, 1, 4), // Old Scroll
             this.ItemHelper.CreateItem(62, 49, 13, 1, 5), // Old Scroll
+            this.ItemHelper.CreateItem(63, 49, 13, 1, 6), // Old Scroll + 6 (Season 6 server suite)
             this.ItemHelper.CreatePotion(64, 9, 1, 0), // Ale
             this.ItemHelper.CreateItem(65, 29, 13, 1, 0), // Armor of Guardsman
         };
