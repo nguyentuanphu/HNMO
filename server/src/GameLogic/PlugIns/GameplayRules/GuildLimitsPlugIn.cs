@@ -122,6 +122,7 @@ public sealed class GuildLimitsConfiguration
     /// Gets or sets the level a character needs to create a guild (0: any). It's 150, like the Season 6/9 server
     /// suites (GuildCreateLevel); the guild master asks for it, and the creation request checks it again.
     /// </summary>
+    [Display(Name = nameof(Properties.PlugInResources.GuildLimitsConfiguration_MinimumCreateLevel_Caption), Description = nameof(Properties.PlugInResources.GuildLimitsConfiguration_MinimumCreateLevel_Description), ResourceType = typeof(Properties.PlugInResources))]
     public int MinimumCreateLevel { get; set; } = 150;
 
     /// <summary>

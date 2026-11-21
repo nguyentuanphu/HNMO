@@ -2031,6 +2031,12 @@
   <data name="CashShopCoinGrantsAdminOperationPlugIn_Description" xml:space="preserve">
     <value>Erlaubt dem Admin-Panel, gewährte Shop-Münzen einem Konto im Spiel sofort gutzuschreiben, statt erst beim nächsten Öffnen des Shops.</value>
   </data>
+  <data name="GuildLimitsConfiguration_MinimumCreateLevel_Caption" xml:space="preserve">
+    <value>Stufe für die Gildengründung</value>
+  </data>
+  <data name="GuildLimitsConfiguration_MinimumCreateLevel_Description" xml:space="preserve">
+    <value>Die Stufe, die ein Charakter braucht, um eine Gilde zu gründen (0: jede Stufe). 150 wie bei den Season-6/9-Server-Suites.</value>
+  </data>
   <data name="MonsterAiPlugIn_Name" xml:space="preserve"><value>Monster-KI-Regeln</value></data>
   <data name="MonsterAiPlugIn_Description" xml:space="preserve"><value>Konfiguriert das Verfolgen von Angreifern, die Rückkehr zum Spawnbereich und die vollständige Heilung bei Rückkehr.</value></data>
 </root>
