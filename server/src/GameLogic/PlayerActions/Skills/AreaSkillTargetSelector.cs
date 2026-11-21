@@ -62,7 +62,7 @@ public static class AreaSkillTargetSelector
         // slack is added here, unlike for the client-aimed point.
         if (extraTarget is not null
             && extraTarget.CheckSkillTargetRestrictions(player, skill)
-            && player.IsInRange(extraTarget.Position, skill.Range)
+            && player.IsInRange(extraTarget.Position, Math.Max(skill.Range, skill.AreaSkillSettings?.EffectRange ?? 0))
             && !extraTarget.IsAtSafezone())
         {
             yield return extraTarget;
