@@ -130,6 +130,13 @@ public class PlayerInMemoryContext : InMemoryContext, IPlayerContext
     }
 
     /// <inheritdoc />
+    public async ValueTask<int> GetLetterCountAsync(string receiverName, CancellationToken cancellationToken = default)
+    {
+        var account = await this.GetAccountByCharacterNameAsync(receiverName, cancellationToken).ConfigureAwait(false);
+        return account?.Characters.FirstOrDefault(c => c.Name == receiverName)?.Letters.Count ?? 0;
+    }
+
+    /// <inheritdoc />
     public async ValueTask<DataModel.Entities.Account?> GetAccountByCharacterNameAsync(string characterName, CancellationToken cancellationToken = default)
     {
         var allAccounts = await this.Provider.GetRepository<Account>().GetAllAsync(cancellationToken).ConfigureAwait(false);
