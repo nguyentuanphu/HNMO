@@ -47,6 +47,16 @@ public class EnterMiniGameAction
             return;
         }
 
+        if (IsBusy(player, miniGameType))
+        {
+            // Not while trading, in another NPC dialog, dead or duelling: the ticket and the fee are taken from an
+            // inventory which a cancelled trade (or a closed crafting dialog) rolls back, and the warp can't leave
+            // these states. The game's own entry NPC (e.g. the Messenger of Archangel) may have its dialog open.
+            await ShowRefusalAsync(player, nameof(PlayerMessage.MiniGameEnterFailed)).ConfigureAwait(false);
+            await player.InvokeViewPlugInAsync<IShowMiniGameEnterResultPlugIn>(p => p.ShowResultAsync(miniGameType, EnterResult.Failed)).ConfigureAwait(false);
+            return;
+        }
+
         var isSpecialCharacter = player.SelectedCharacter.IsSpecialCharacter();
         var characterLevel = player.Attributes![Stats.Level];
         var minLevel = isSpecialCharacter ? miniGameDefinition.MinimumSpecialCharacterLevel : miniGameDefinition.MinimumCharacterLevel;
@@ -107,7 +117,6 @@ public class EnterMiniGameAction
             return;
         }
 
-        // TODO: Check Duel state when duels are implemented
         if (miniGameDefinition.MapCreationPolicy == MiniGameMapCreationPolicy.Shared)
         {
             var miniGameStrategy = player.GameContext.PlugInManager.GetStrategy<MiniGameType, IPeriodicMiniGameStartPlugIn>(miniGameDefinition.Type);
@@ -275,6 +284,50 @@ public class EnterMiniGameAction
             && requiredItemDefinition.Equals(ticketItem.Definition)
             && ticketItem.Durability > 0
             && ticketItem.Level == miniGameDefinition.TicketItemLevel;
+    }
+
+    /// <summary>
+    /// Determines whether the player is busy with something else: dead, duelling (or watching a duel), trading,
+    /// or in the dialog of an NPC which isn't the entry NPC of the mini game.
+    /// </summary>
+    /// <param name="player">The player.</param>
+    /// <param name="miniGameType">The type of the mini game the player wants to enter.</param>
+    /// <returns><c>true</c>, if the player can't enter now.</returns>
+    internal static bool IsBusy(Player player, MiniGameType miniGameType)
+    {
+        if (!player.IsAlive || player.DuelRoom is not null)
+        {
+            return true;
+        }
+
+        var state = player.PlayerState.CurrentState;
+        if (state == PlayerState.EnteredWorld)
+        {
+            return false;
+        }
+
+        return state != PlayerState.NpcDialogOpened || !IsEntryNpcOpened(player, miniGameType);
+    }
+
+    private static bool IsEntryNpcOpened(Player player, MiniGameType miniGameType)
+    {
+        if (player.OpenedNpc?.Definition is not { } npc)
+        {
+            return false;
+        }
+
+        return (miniGameType, npc.NpcWindow) switch
+        {
+            (MiniGameType.BloodCastle, NpcWindow.BloodCastle) => true,
+            (MiniGameType.DevilSquare, NpcWindow.DevilSquare) => true,
+            (MiniGameType.IllusionTemple, NpcWindow.IllusionTemple) => true,
+            (MiniGameType.Doppelganger, NpcWindow.LugardDoppelgangerEntry) => true,
+            (MiniGameType.ImperialGuardian, NpcWindow.JerintGaionEvententry) => true,
+
+            // The Kanturu entry is only accepted from the gateway NPC (KanturuEnterRequestHandlerPlugIn).
+            (MiniGameType.Kanturu, _) => true,
+            _ => false,
+        };
     }
 
     private bool CheckEntranceFee(MiniGameDefinition miniGameDefinition, Player player, out int entranceFee)
