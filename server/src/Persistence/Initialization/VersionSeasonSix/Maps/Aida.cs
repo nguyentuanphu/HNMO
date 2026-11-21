@@ -336,6 +336,7 @@ internal class Aida : BaseMapInitializer
                 { Stats.PoisonResistance, 22f / 255 },
                 { Stats.IceResistance, 22f / 255 },
                 { Stats.FireResistance, 22f / 255 },
+                { Stats.LightningResistance, 22f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -367,6 +368,7 @@ internal class Aida : BaseMapInitializer
                 { Stats.PoisonResistance, 21f / 255 },
                 { Stats.IceResistance, 21f / 255 },
                 { Stats.FireResistance, 21f / 255 },
+                { Stats.LightningResistance, 21f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -398,6 +400,7 @@ internal class Aida : BaseMapInitializer
                 { Stats.PoisonResistance, 20f / 255 },
                 { Stats.IceResistance, 20f / 255 },
                 { Stats.FireResistance, 20f / 255 },
+                { Stats.LightningResistance, 20f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -429,6 +432,7 @@ internal class Aida : BaseMapInitializer
                 { Stats.PoisonResistance, 19f / 255 },
                 { Stats.IceResistance, 19f / 255 },
                 { Stats.FireResistance, 19f / 255 },
+                { Stats.LightningResistance, 19f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -460,6 +464,7 @@ internal class Aida : BaseMapInitializer
                 { Stats.PoisonResistance, 18f / 255 },
                 { Stats.IceResistance, 18f / 255 },
                 { Stats.FireResistance, 18f / 255 },
+                { Stats.LightningResistance, 18f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -491,6 +496,7 @@ internal class Aida : BaseMapInitializer
                 { Stats.PoisonResistance, 50f / 255 },
                 { Stats.IceResistance, 50f / 255 },
                 { Stats.FireResistance, 50f / 255 },
+                { Stats.LightningResistance, 50f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -522,6 +528,7 @@ internal class Aida : BaseMapInitializer
                 { Stats.PoisonResistance, 20f / 255 },
                 { Stats.IceResistance, 20f / 255 },
                 { Stats.FireResistance, 150f / 255 },
+                { Stats.LightningResistance, 20f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -553,6 +560,7 @@ internal class Aida : BaseMapInitializer
                 { Stats.PoisonResistance, 20f / 255 },
                 { Stats.IceResistance, 20f / 255 },
                 { Stats.FireResistance, 150f / 255 },
+                { Stats.LightningResistance, 20f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -584,6 +592,7 @@ internal class Aida : BaseMapInitializer
                 { Stats.PoisonResistance, 20f / 255 },
                 { Stats.IceResistance, 20f / 255 },
                 { Stats.FireResistance, 150f / 255 },
+                { Stats.LightningResistance, 20f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -615,6 +624,7 @@ internal class Aida : BaseMapInitializer
                 { Stats.PoisonResistance, 20f / 255 },
                 { Stats.IceResistance, 20f / 255 },
                 { Stats.FireResistance, 150f / 255 },
+                { Stats.LightningResistance, 20f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);

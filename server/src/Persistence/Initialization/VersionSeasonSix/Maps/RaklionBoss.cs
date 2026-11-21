@@ -126,7 +126,7 @@ internal class RaklionBoss : BaseMapInitializer
                 { Stats.DefenseRatePvm, 1800 },
                 { Stats.PoisonResistance, 254f / 255 },
                 { Stats.IceResistance, 254f / 255 },
-                { Stats.WaterResistance, 150f / 255 },
+                { Stats.LightningResistance, 150f / 255 },
                 { Stats.FireResistance, 150f / 255 },
                 { Stats.SkillMultiplier, 2 },
             };
@@ -161,7 +161,7 @@ internal class RaklionBoss : BaseMapInitializer
                 { Stats.DefenseRatePvm, 280 },
                 { Stats.PoisonResistance, 50f / 255 },
                 { Stats.IceResistance, 50f / 255 },
-                { Stats.WaterResistance, 50f / 255 },
+                { Stats.LightningResistance, 50f / 255 },
                 { Stats.FireResistance, 50f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -192,7 +192,7 @@ internal class RaklionBoss : BaseMapInitializer
                 { Stats.DefenseRatePvm, 280 },
                 { Stats.PoisonResistance, 50f / 255 },
                 { Stats.IceResistance, 50f / 255 },
-                { Stats.WaterResistance, 50f / 255 },
+                { Stats.LightningResistance, 50f / 255 },
                 { Stats.FireResistance, 50f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -223,7 +223,7 @@ internal class RaklionBoss : BaseMapInitializer
                 { Stats.DefenseRatePvm, 280 },
                 { Stats.PoisonResistance, 50f / 255 },
                 { Stats.IceResistance, 50f / 255 },
-                { Stats.WaterResistance, 50f / 255 },
+                { Stats.LightningResistance, 50f / 255 },
                 { Stats.FireResistance, 50f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);

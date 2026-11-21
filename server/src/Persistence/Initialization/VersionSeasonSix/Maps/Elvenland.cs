@@ -265,6 +265,10 @@ internal class Elvenland : BaseMapInitializer
                 { Stats.DefenseBase, 3 },
                 { Stats.AttackRatePvm, 18 },
                 { Stats.DefenseRatePvm, 3 },
+                { Stats.IceResistance, 0f / 255 },
+                { Stats.PoisonResistance, 0f / 255 },
+                { Stats.LightningResistance, 0f / 255 },
+                { Stats.FireResistance, 0f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -293,6 +297,10 @@ internal class Elvenland : BaseMapInitializer
                 { Stats.DefenseBase, 13 },
                 { Stats.AttackRatePvm, 58 },
                 { Stats.DefenseRatePvm, 13 },
+                { Stats.IceResistance, 0f / 255 },
+                { Stats.PoisonResistance, 0f / 255 },
+                { Stats.LightningResistance, 0f / 255 },
+                { Stats.FireResistance, 0f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -321,6 +329,10 @@ internal class Elvenland : BaseMapInitializer
                 { Stats.DefenseBase, 22 },
                 { Stats.AttackRatePvm, 93 },
                 { Stats.DefenseRatePvm, 22 },
+                { Stats.IceResistance, 0f / 255 },
+                { Stats.PoisonResistance, 0f / 255 },
+                { Stats.LightningResistance, 0f / 255 },
+                { Stats.FireResistance, 0f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -349,6 +361,10 @@ internal class Elvenland : BaseMapInitializer
                 { Stats.DefenseBase, 30 },
                 { Stats.AttackRatePvm, 120 },
                 { Stats.DefenseRatePvm, 30 },
+                { Stats.IceResistance, 0f / 255 },
+                { Stats.PoisonResistance, 0f / 255 },
+                { Stats.LightningResistance, 0f / 255 },
+                { Stats.FireResistance, 0f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -378,10 +394,10 @@ internal class Elvenland : BaseMapInitializer
                 { Stats.DefenseBase, 33 },
                 { Stats.AttackRatePvm, 150 },
                 { Stats.DefenseRatePvm, 36 },
-                { Stats.PoisonResistance, 4f / 255 },
-                { Stats.IceResistance, 4f / 255 },
-                { Stats.WaterResistance, 4f / 255 },
-                { Stats.FireResistance, 4f / 255 },
+                { Stats.PoisonResistance, 2f / 255 },
+                { Stats.IceResistance, 0f / 255 },
+                { Stats.LightningResistance, 0f / 255 },
+                { Stats.FireResistance, 0f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -410,6 +426,10 @@ internal class Elvenland : BaseMapInitializer
                 { Stats.DefenseBase, 50 },
                 { Stats.AttackRatePvm, 180 },
                 { Stats.DefenseRatePvm, 43 },
+                { Stats.IceResistance, 0f / 255 },
+                { Stats.PoisonResistance, 0f / 255 },
+                { Stats.LightningResistance, 0f / 255 },
+                { Stats.FireResistance, 0f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -439,6 +459,10 @@ internal class Elvenland : BaseMapInitializer
                 { Stats.DefenseBase, 65 },
                 { Stats.AttackRatePvm, 215 },
                 { Stats.DefenseRatePvm, 52 },
+                { Stats.IceResistance, 0f / 255 },
+                { Stats.PoisonResistance, 3f / 255 },
+                { Stats.LightningResistance, 0f / 255 },
+                { Stats.FireResistance, 0f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -467,6 +491,10 @@ internal class Elvenland : BaseMapInitializer
                 { Stats.DefenseBase, 80 },
                 { Stats.AttackRatePvm, 240 },
                 { Stats.DefenseRatePvm, 70 },
+                { Stats.IceResistance, 3f / 255 },
+                { Stats.PoisonResistance, 3f / 255 },
+                { Stats.LightningResistance, 3f / 255 },
+                { Stats.FireResistance, 5f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);

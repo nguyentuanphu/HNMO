@@ -97,7 +97,7 @@ internal class DevilSquare7 : BaseMapInitializer
                 { Stats.WindResistance, 0f / 255 },
                 { Stats.PoisonResistance, 25f / 255 },
                 { Stats.IceResistance, 25f / 255 },
-                { Stats.WaterResistance, 25f / 255 },
+                { Stats.LightningResistance, 25f / 255 },
                 { Stats.FireResistance, 25f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -129,7 +129,7 @@ internal class DevilSquare7 : BaseMapInitializer
                 { Stats.WindResistance, 0f / 255 },
                 { Stats.PoisonResistance, 50f / 255 },
                 { Stats.IceResistance, 50f / 255 },
-                { Stats.WaterResistance, 50f / 255 },
+                { Stats.LightningResistance, 50f / 255 },
                 { Stats.FireResistance, 50f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -161,7 +161,7 @@ internal class DevilSquare7 : BaseMapInitializer
                 { Stats.WindResistance, 0f / 255 },
                 { Stats.PoisonResistance, 23f / 255 },
                 { Stats.IceResistance, 23f / 255 },
-                { Stats.WaterResistance, 23f / 255 },
+                { Stats.LightningResistance, 23f / 255 },
                 { Stats.FireResistance, 23f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -193,7 +193,7 @@ internal class DevilSquare7 : BaseMapInitializer
                 { Stats.WindResistance, 0f / 255 },
                 { Stats.PoisonResistance, 25f / 255 },
                 { Stats.IceResistance, 25f / 255 },
-                { Stats.WaterResistance, 25f / 255 },
+                { Stats.LightningResistance, 25f / 255 },
                 { Stats.FireResistance, 25f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -225,7 +225,7 @@ internal class DevilSquare7 : BaseMapInitializer
                 { Stats.WindResistance, 0f / 255 },
                 { Stats.PoisonResistance, 29f / 255 },
                 { Stats.IceResistance, 29f / 255 },
-                { Stats.WaterResistance, 29f / 255 },
+                { Stats.LightningResistance, 29f / 255 },
                 { Stats.FireResistance, 29f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -257,7 +257,7 @@ internal class DevilSquare7 : BaseMapInitializer
                 { Stats.WindResistance, 0f / 255 },
                 { Stats.PoisonResistance, 27f / 255 },
                 { Stats.IceResistance, 27f / 255 },
-                { Stats.WaterResistance, 27f / 255 },
+                { Stats.LightningResistance, 27f / 255 },
                 { Stats.FireResistance, 27f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -289,7 +289,7 @@ internal class DevilSquare7 : BaseMapInitializer
                 { Stats.WindResistance, 23f / 255 },
                 { Stats.PoisonResistance, 23f / 255 },
                 { Stats.IceResistance, 23f / 255 },
-                { Stats.WaterResistance, 23f / 255 },
+                { Stats.LightningResistance, 23f / 255 },
                 { Stats.FireResistance, 23f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);

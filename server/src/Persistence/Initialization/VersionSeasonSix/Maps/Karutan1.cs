@@ -207,6 +207,7 @@ internal class Karutan1 : BaseMapInitializer
                 { Stats.PoisonResistance, 254f / 255 },
                 { Stats.IceResistance, 100f / 255 },
                 { Stats.FireResistance, 200f / 255 },
+                { Stats.LightningResistance, 100f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -238,6 +239,7 @@ internal class Karutan1 : BaseMapInitializer
                 { Stats.PoisonResistance, 254f / 255 },
                 { Stats.IceResistance, 100f / 255 },
                 { Stats.FireResistance, 200f / 255 },
+                { Stats.LightningResistance, 100f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -269,6 +271,7 @@ internal class Karutan1 : BaseMapInitializer
                 { Stats.PoisonResistance, 100f / 255 },
                 { Stats.IceResistance, 100f / 255 },
                 { Stats.FireResistance, 240f / 255 },
+                { Stats.LightningResistance, 100f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -300,6 +303,7 @@ internal class Karutan1 : BaseMapInitializer
                 { Stats.PoisonResistance, 254f / 255 },
                 { Stats.IceResistance, 150f / 255 },
                 { Stats.FireResistance, 150f / 255 },
+                { Stats.LightningResistance, 100f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -331,6 +335,7 @@ internal class Karutan1 : BaseMapInitializer
                 { Stats.PoisonResistance, 254f / 255 },
                 { Stats.IceResistance, 150f / 255 },
                 { Stats.FireResistance, 150f / 255 },
+                { Stats.LightningResistance, 100f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
