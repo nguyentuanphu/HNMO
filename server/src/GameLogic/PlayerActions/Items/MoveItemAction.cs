@@ -401,7 +401,10 @@ public class MoveItemAction
 
             if (item.CanCompletelyStackOn(targetItem))
             {
-                return Movement.CompleteStack;
+                // A complete stack removes the moved item. While a trade or a crafting window is open, a
+                // cancel (or a disconnect) rolls the inventory back to its backup: the removed item would
+                // come back, and the target would keep the stacked pieces.
+                return player.BackupInventory is null ? Movement.CompleteStack : Movement.None;
             }
 
             if (item.CanPartiallyStackOn(targetItem))

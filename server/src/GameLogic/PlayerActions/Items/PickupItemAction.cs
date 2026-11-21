@@ -39,6 +39,14 @@ public class PickupItemAction
             return;
         }
 
+        if (player.BackupInventory is not null)
+        {
+            // A trade or a crafting window is open: when it's cancelled (or the player disconnects), the
+            // inventory is rolled back to the backup, and the picked up item or zen would be lost.
+            await player.InvokeViewPlugInAsync<IItemPickUpFailedPlugIn>(p => p.ItemPickUpFailedAsync(ItemPickFailReason.General)).ConfigureAwait(false);
+            return;
+        }
+
         var droppedLocateable = player.CurrentMap?.GetDrop(dropId);
 
         switch (droppedLocateable)
