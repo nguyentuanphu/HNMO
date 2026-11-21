@@ -41,6 +41,14 @@ public class BuyRequestAction
             return;
         }
 
+        if (!await SeesTheStoreAsync(player, requestedPlayer).ConfigureAwait(false))
+        {
+            // Only from within view range of the store (owner, 21 Nov 2026): the store is opened by clicking it.
+            player.Logger.LogDebug("Store of {0} is out of view range of {1}", requestedPlayer.SelectedCharacter?.Name, player.SelectedCharacter?.Name);
+            await player.InvokeViewPlugInAsync<IPlayerShopBuyRequestResultPlugIn>(p => p.ShowResultAsync(requestedPlayer, ItemBuyResult.ShopNotOpened, null)).ConfigureAwait(false);
+            return;
+        }
+
         if (!(requestedPlayer.ShopStorage?.StoreOpen ?? false))
         {
             player.Logger.LogDebug("Store not open, Character {0}", requestedPlayer.SelectedCharacter?.Name);
@@ -231,6 +239,23 @@ public class BuyRequestAction
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// Determines whether the buyer sees the seller, i.e. whether the seller is in the buyer's view range.
+    /// </summary>
+    /// <param name="buyer">The buyer.</param>
+    /// <param name="seller">The seller.</param>
+    /// <returns><c>true</c>, if the buyer observes the seller.</returns>
+    internal static async ValueTask<bool> SeesTheStoreAsync(Player buyer, Player seller)
+    {
+        if (ReferenceEquals(buyer, seller))
+        {
+            return true;
+        }
+
+        using var readerLock = await seller.ObserverLock.ReaderLockAsync().ConfigureAwait(false);
+        return seller.Observers.Contains(buyer);
     }
 
     private async ValueTask ShowPaymentFailedAsync(Player player, Player seller, ShopPrice price, ShopPaymentResult paymentResult)
