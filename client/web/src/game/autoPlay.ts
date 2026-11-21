@@ -118,6 +118,15 @@ export interface AutoPlayWorld {
 }
 
 // ComputeDistanceBetween: the distance in whole cells, rounded up.
+export type TargetPriority = 'nearest' | 'aggroFirst' | 'lowestHp';
+
+export interface UltimateAutoPlayHooks {
+  targetPriority?: TargetPriority;
+  prioritizeRareDrops?: boolean;
+  onKill?: () => void;
+  onRareDropPicked?: () => void;
+}
+
 const distanceBetween = (a: { x: number; y: number }, b: { x: number; y: number }) => Math.ceil(Math.hypot(a.x - b.x, a.y - b.y));
 // ComputeDistanceByRange: a range setting as a distance (the diagonal of a range x range square).
 const distanceByRange = (range: number) => distanceBetween({ x: 0, y: 0 }, { x: range, y: range });
@@ -153,9 +162,37 @@ export class AutoPlay {
   private timerActivatedBuffOngoing = false;
   private petActivated = false;
   private readonly listeners = new Set<() => void>();
+  private ultimateHooks: UltimateAutoPlayHooks = {};
+  private stuckTargetId: number | null = null;
+  private stuckHeroX = -1;
+  private stuckHeroY = -1;
+  private stuckSince = 0;
 
   constructor(private readonly connection: Connection, private readonly world: AutoPlayWorld) {
     connection.onPacket((bytes) => this.handle(bytes));
+  }
+
+  /** Configures optional Ultimate Autoplay overrides without altering base MUHelper behavior. */
+  setUltimateHooks(hooks: UltimateAutoPlayHooks): void {
+    this.ultimateHooks = hooks;
+  }
+
+  /** Updates the regrouping origin (used when multi-spot patrol moves to a new spot). */
+  setOrigin(cell: { x: number; y: number }): void {
+    this.origin = { ...cell };
+    this.secondsAway = 0;
+  }
+
+  /** Current regrouping origin cell while AutoPlay is active. */
+  getOrigin(): { x: number; y: number } | null {
+    return this.active ? { ...this.origin } : null;
+  }
+
+  /** Current target cell (drop or monster) for 3D ground sparkle guidance. */
+  getTargetCell(): { x: number; y: number } | null {
+    if (!this.active) return null;
+    if (this.currentTarget && !this.currentTarget.dead) return { ...this.currentTarget.cell };
+    return null;
   }
 
   onChange(listener: () => void): () => void {
@@ -256,6 +293,24 @@ export class AutoPlay {
       this.nextSecondAt += 1000;
     }
     this.work(now);
+    this.checkAntiStuck(now, hero);
+  }
+
+  // Anti-stuck watchdog: if stuck on the same unreachable target without moving for 8s, forget it.
+  private checkAntiStuck(now: number, hero: Character): void {
+    const tid = this.currentTarget?.id ?? null;
+    if (tid === null || tid !== this.stuckTargetId || hero.cell.x !== this.stuckHeroX || hero.cell.y !== this.stuckHeroY) {
+      this.stuckTargetId = tid;
+      this.stuckHeroX = hero.cell.x;
+      this.stuckHeroY = hero.cell.y;
+      this.stuckSince = now;
+      return;
+    }
+    if (now - this.stuckSince >= 8000 && this.currentTarget) {
+      this.forgetTarget(this.currentTarget, now);
+      this.stuckTargetId = null;
+      this.stuckSince = now;
+    }
   }
 
   // Work: the pet, potions, buffs, heals, then the drop being fetched, regrouping, more loot,
@@ -444,12 +499,20 @@ export class AutoPlay {
     if (this.currentItem !== null && !drops.has(this.currentItem)) this.forgetItem(this.currentItem);
     if (this.currentItem === null) {
       let best: AutoPlayDrop | null = null;
+      let bestRare = false;
       let bestDistance = this.config!.obtainingRange;
+      const preferRare = this.ultimateHooks.prioritizeRareDrops ?? false;
       for (const drop of drops.values()) {
         const retry = this.itemRetryAt.get(drop.id);
         if ((retry !== undefined && now < retry) || !this.wanted(drop)) continue;
         const distance = distanceBetween(hero.cell, drop.cell);
-        if (distance <= bestDistance) { bestDistance = distance; best = drop; }
+        if (distance > this.config!.obtainingRange) continue;
+        const rare = preferRare && this.isRareDrop(drop);
+        if (!best || (rare && !bestRare) || (rare === bestRare && distance < bestDistance)) {
+          best = drop;
+          bestRare = rare;
+          bestDistance = distance;
+        }
       }
       if (!best) return true;
       this.currentItem = best.id;
@@ -462,10 +525,17 @@ export class AutoPlay {
     if (requests > MAX_PICKUP_REQUESTS) { this.forgetItem(drop.id); return true; }
     this.itemRequests.set(drop.id, requests);
     this.itemRetryAt.set(drop.id, now + PICKUP_REQUEST_RETRY_SECONDS * 1000 * (1 << (requests - 1)));
+    if (requests === 1 && this.isRareDrop(drop)) this.ultimateHooks.onRareDropPicked?.();
     this.world.pickUp(drop.id);
     if (!this.world.pickingUp()) this.currentItem = null; // asked at once (it was within reach)
     void PICKUP_RETRY_SECONDS;
     return false;
+  }
+
+  private isRareDrop(drop: AutoPlayDrop): boolean {
+    const item = drop.item;
+    if (!item) return false;
+    return this.world.isJewel(item) || item.ancientSet > 0 || item.excellent > 0;
   }
 
   private forgetItem(id: number): void {
@@ -500,6 +570,7 @@ export class AutoPlay {
     for (const id of this.attackers) if (!alive.has(id)) this.attackers.delete(id);
     const current = this.currentTarget;
     if (current && alive.has(current.id) && this.inHuntingRange(current)) return current;
+    if (current && (current.dead || !alive.has(current.id))) this.ultimateHooks.onKill?.();
     this.currentTarget = null;
     if (this.config!.longRangeCounterAttack) {
       let far: Character | null = null, farDistance = -1;
@@ -510,8 +581,31 @@ export class AutoPlay {
       }
       this.currentTarget = far;
     }
-    if (!this.currentTarget) this.currentTarget = this.nearestTarget(now, monsters);
+    if (!this.currentTarget) this.currentTarget = this.prioritizedTarget(now, monsters);
     return this.currentTarget;
+  }
+
+  // Picks the next monster in hunting range by the configured target priority (nearest by default).
+  private prioritizedTarget(now: number, monsters: Character[]): Character | null {
+    const priority = this.ultimateHooks.targetPriority ?? 'nearest';
+    if (priority === 'nearest') return this.nearestTarget(now, monsters);
+    let best: Character | null = null;
+    let bestScore = Infinity;
+    let bestDistance = this.huntingDistance;
+    for (const m of monsters) {
+      if (this.coolingDown(m.id, now)) continue;
+      const d = this.distanceTo(m);
+      if (d > this.huntingDistance) continue;
+      let score = d;
+      if (priority === 'aggroFirst') score = this.attackers.has(m.id) ? d : 1000 + d;
+      else if (priority === 'lowestHp') score = m.healthStatus >= 0 ? m.healthStatus * 100 : 1000 + d;
+      if (!best || score < bestScore || (score === bestScore && d < bestDistance)) {
+        best = m;
+        bestScore = score;
+        bestDistance = d;
+      }
+    }
+    return best;
   }
 
   // GetNearestTarget: the nearest living monster in the hunting range that isn't cooling down.
@@ -600,8 +694,8 @@ export class AutoPlay {
   }
 
   /** An unreachable monster isn't chosen again for a while (ForgetTarget). */
-  forgetTarget(target: Character): void {
-    this.targetRetryAt.set(target.id, performance.now() + TARGET_RETRY_SECONDS * 1000);
+  forgetTarget(target: Character, now = performance.now()): void {
+    this.targetRetryAt.set(target.id, now + TARGET_RETRY_SECONDS * 1000);
     if (this.currentTarget === target) this.currentTarget = null;
   }
 }

@@ -36,11 +36,13 @@ import { skillTooltipLines } from './game/skillTooltip.js';
 import { loadItemValueData, repairAllCost } from './game/itemValue.js';
 import { CharacterWindow } from './ui/characterWindow.js';
 import { setupMasterLevel } from './ui/masterLevelWindow.js';
-import { AutoPlay } from './game/autoPlay.js';
+import { AutoPlay, helperBuffOf } from './game/autoPlay.js';
 import { AutoPlayBar } from './ui/autoPlayBar.js';
 import { TopUpMilestonesWindow } from './ui/topUpMilestonesWindow.js';
 import { AutoPlayExtras } from './game/autoPlayExtras.js';
+import { AutoPlaySparkles } from './game/autoPlaySparkles.js';
 import { AutoPlayExtrasPanel } from './ui/autoPlayExtrasPanel.js';
+import { UltimateAutoPlayWindow } from './ui/ultimateAutoPlayWindow.js';
 import { MissionsWindow } from './ui/missionsWindow.js';
 import { WorldBossWindow } from './ui/worldBossWindow.js';
 import { TimetableWindow } from './ui/timetableWindow.js';
@@ -212,6 +214,8 @@ export interface GameState {
   autoPlay?: AutoPlay;
   autoPlayBar?: AutoPlayBar;
   autoPlayExtras?: AutoPlayExtras;
+  ultimateAutoPlay?: UltimateAutoPlayWindow;
+  autoPlaySparkles?: AutoPlaySparkles;
   missions?: MissionsWindow;
   worldBosses?: WorldBossWindow;
   timetable?: TimetableWindow;
@@ -456,6 +460,27 @@ async function loadMapNow(mapNumber: number): Promise<void> {
   const data = await loadWorldData(mapNumber);
   const world = await createWorld(data, FOG, (progress) => setStatus('Loading world objects…', 0.1 + progress * 0.8));
   state.world = { ...data, terrain: world.terrain };
+  state.autoPlaySparkles?.dispose();
+  state.autoPlaySparkles = new AutoPlaySparkles({
+    scene,
+    heights: data.heights,
+    flags: data.flags,
+    heroCell: () => state.hero?.cell ?? { x: 0, y: 0 },
+    originCell: () => state.autoPlay?.getOrigin() ?? null,
+    huntingRange: () => state.autoPlayExtras?.isFeatureAllowed('sparkleGuide') ? 6 : 0,
+    autoPlayActive: () => state.autoPlay?.active ?? false,
+    enabled: () => Boolean(state.autoPlayExtras?.settings.sparkleGuide && state.autoPlayExtras.isFeatureAllowed('sparkleGuide')),
+    goal: () => {
+      const target = state.autoPlay?.getTargetCell();
+      if (target) return { kind: 'autoplay', cell: target };
+      const extras = state.autoPlayExtras;
+      if (extras?.settings.bossFocus && extras.isFeatureAllowed('bossFocus')) {
+        const boss = [...(state.online?.characters.values() ?? [])].find((c) => !c.dead && c.kind === 'monster' && /boss|kundun|selupan|erochim|medusa|hell maine|golden/i.test(c.name));
+        if (boss) return { kind: 'boss', cell: { ...boss.cell } };
+      }
+      return null;
+    },
+  });
   state.worldGroup = world.group;
   state.indoorFade = world.indoorFade;
   state.objectFires = objectFires(mapNumber, data.objects, (x, y) => {
@@ -841,6 +866,8 @@ function step(dt: number, rec: PerfRecorder | null): void {
       sounds.frame(state.mapNumber, hero, world.mapping.layer1[index] ?? 0, (world.flags[index] & TerrainFlag.SAFEZONE) !== 0, numKeys);
     }
     state.autoPlayExtras?.update();
+    state.ultimateAutoPlay?.refresh();
+    state.autoPlaySparkles?.update();
     if (state.autoPlayBar && state.hero && state.mapNumber !== null) state.autoPlayBar.set(mapName(state.mapNumber), state.hero.cell, state.autoPlay?.active ?? false);
     state.overlay?.update(dt);
     state.miniMap?.update();
@@ -1808,9 +1835,84 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     // Kept: everything but plain weapons and armour (groups 0-11) that aren't expensive or unsellable.
     isKeeper: (item) => item.group > 11 || isHighValue(item) || isSellingBan(item),
     message: (text) => chat.add(text, 'system'),
+    life: () => stats.life,
+    maxLife: () => stats.maxLife,
+    mana: () => stats.mana,
+    maxMana: () => stats.maxMana,
+    drinkManaPotion: () => {
+      for (const type of itemTypesInUseOrder('manaPotion')) {
+        const slot = findItemReverse(inventory.items, type, -1);
+        if (slot !== null) return itemUser.use(slot);
+      }
+      return false;
+    },
+    isManaPotion: (item) => itemDefinition(item.group, item.number)?.tags?.includes('manaPotion') ?? false,
+    manaPotions: () => {
+      let count = 0;
+      for (const [slot, item] of inventory.items) if (slot >= 12 && (itemDefinition(item.group, item.number)?.tags?.includes('manaPotion') ?? false)) count += Math.max(1, item.durability);
+      return count;
+    },
+    shield: () => stats.shield,
+    maxShield: () => stats.maxShield,
+    drinkSdPotion: () => {
+      for (const number of [133, 37, 36, 35]) {
+        const slot = findItemReverse(inventory.items, 14 * 512 + number, -1);
+        if (slot !== null) return itemUser.use(slot);
+      }
+      return false;
+    },
+    experience: () => stats.experience,
+    money: () => inventory.money,
+    hasJewels: () => [...inventory.items].some(([slot, item]) => slot >= 12 && (itemDefinition(item.group, item.number)?.tags?.includes('jewel') ?? false)),
+    depositAllJewels: () => {
+      connection.send('ClientToServer', 'HnmoJewelBankCommand', { Action: 3, Slot: 0, Amount: 0, Key: '' });
+      return true;
+    },
+    monsters: () => online.characters.values(),
+    huntingRange: () => autoPlayConfig.huntingRange,
+    setOrigin: (cell) => autoPlay.setOrigin(cell),
+    applyUltimateHooks: (hooks) => autoPlay.setUltimateHooks(hooks),
   });
   state.autoPlayExtras = autoPlayExtras;
   const extrasPanel = new AutoPlayExtrasPanel(autoPlayExtras);
+  const ultimateAutoPlay = new UltimateAutoPlayWindow({
+    extras: autoPlayExtras,
+    isActive: () => autoPlay.active,
+    toggleActive: () => autoPlay.toggle(),
+    mapName,
+    currentMap: () => state.mapNumber,
+    message: (text) => chat.add(text, 'system'),
+    onRequestPolicy: () => connection.send('ClientToServer', 'HnmoUltimateAutoPlayRequest', {}),
+    onAutoPickSkills: () => {
+      const learned = [...skills.skills.values()];
+      if (learned.length === 0) { chat.add('No learned skills to auto-pick yet.', 'system'); return false; }
+      const next = { ...autoPlayConfig, skills: [...autoPlayConfig.skills] as [number, number, number], buffs: [...autoPlayConfig.buffs] as [number, number, number] };
+      const buffList = learned.filter((s) => helperBuffOf(s) !== null);
+      const attackList = learned.filter((s) => helperBuffOf(s) === null);
+      if (next.skills[0] <= 0 && attackList.length > 0) next.skills[0] = attackList[0];
+      if (next.skills[1] <= 0 && attackList.length > 1) next.skills[1] = attackList[1];
+      let bi = 0;
+      for (let i = 0; i < 3 && bi < buffList.length; i++) {
+        if (next.buffs[i] <= 0) next.buffs[i] = buffList[bi++];
+      }
+      autoPlayConfig = next;
+      autoPlay.setConfig(next);
+      settingsWindow.load(next);
+      connection.send('ClientToServer', 'MuHelperSaveDataRequest', { HelperData: encodeAutoPlayConfig(next) });
+      chat.add('Ultimate Autoplay: auto-picked learned skills and buffs.', 'system');
+      return true;
+    },
+  });
+  state.ultimateAutoPlay = ultimateAutoPlay;
+  const applyUltimatePolicy = (bytes: Uint8Array) => {
+    const pkt = read('ServerToClient', 'HnmoUltimateAutoPlayPolicy', bytes);
+    if (!pkt) return;
+    autoPlayExtras.setPolicy(String(pkt.Json ?? ''));
+    ultimateAutoPlay.refresh(0);
+  };
+  connection.onPacket(applyUltimatePolicy);
+  earlyPackets.forEach(applyUltimatePolicy);
+  connection.send('ClientToServer', 'HnmoUltimateAutoPlayRequest', {});
   // HNMO's missions window (J): daily and weekly missions, the streak, the login calendar, earned coins.
   const missions = new MissionsWindow({
     send: (name, fields) => connection.send('ClientToServer', name, fields),
@@ -2193,7 +2295,8 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   window.addEventListener('keydown', (event) => {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
     if (event.key === 'Home') { event.preventDefault(); autoPlay.toggle(); }
-    if (event.key.toLowerCase() === 'z' && event.shiftKey) { event.preventDefault(); extrasPanel.toggle(); }
+    if (event.key.toLowerCase() === 'z' && event.altKey) { event.preventDefault(); ultimateAutoPlay.toggle(); }
+    else if (event.key.toLowerCase() === 'z' && event.shiftKey) { event.preventDefault(); extrasPanel.toggle(); }
     else if (event.key.toLowerCase() === 'z' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void settingsWindow.toggle(); }
   });
   hud.setSkills({

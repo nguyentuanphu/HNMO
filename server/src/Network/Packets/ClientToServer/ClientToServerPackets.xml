@@ -5551,6 +5551,17 @@
       </Fields>
     </Packet>
     <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>56</SubCode>
+      <Name>HnmoUltimateAutoPlayRequest</Name>
+      <Length>4</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client on login or when opening Ultimate Autoplay to fetch the current policy.</SentWhen>
+      <CausedReaction>The server answers with HnmoUltimateAutoPlayPolicy (F5 57).</CausedReaction>
+      <Fields />
+    </Packet>
+    <Packet>
       <HeaderType>C2HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
       <SubCode>54</SubCode>

@@ -11176,6 +11176,34 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoUltimateAutoPlayPolicy" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON: v, enabled, isVip, features (sparkleGuide, manaSdPotions, jewelDeposit, targetPriority, patrol, survival, bossFocus, presetsStats).</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent on entering the game and after HnmoUltimateAutoPlayRequest (F5 56).
+    /// Causes reaction on client side: The web client enables or VIP-gates Ultimate Autoplay features according to server configuration and Stats.IsVip.
+    /// </remarks>
+    public static async ValueTask SendHnmoUltimateAutoPlayPolicyAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoUltimateAutoPlayPolicyRef.GetRequiredSize(json);
+            var packet = new HnmoUltimateAutoPlayPolicyRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="HnmoBugReportState" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>
