@@ -57,9 +57,12 @@ public class SelfDefensePlugIn : IPeriodicTaskPlugIn, IAttackableGotHitPlugIn, I
             return;
         }
 
-        if (attackerPlayer.DuelRoom is not null || defender.DuelRoom is not null)
+        if (attackerPlayer.DuelRoom is { } duelRoom
+            && duelRoom.IsDuelist(attackerPlayer)
+            && duelRoom.IsDuelist(defender))
         {
-            // No self-defense during a duel.
+            // No self-defense between the two duelists. A duelist hitting (or being hit by) a third
+            // player is an ordinary attack.
             return;
         }
 
