@@ -1,0 +1,111 @@
+@page "/ultimate-autoplay"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.GameLogic.PlugIns.UltimateAutoPlay
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @L("Ultimate Autoplay", "Autoplay Toàn Diện")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@L("Ultimate Autoplay", "Autoplay Toàn Diện")" />
+
+<div class="d-flex align-items-center gap-2 mb-2">
+    <h1 class="mb-0">@L("Ultimate Autoplay switches & Free/VIP policy", "Công tắc Autoplay Toàn Diện & phân quyền Free/VIP")</h1>
+    <button type="button" class="btn btn-sm btn-outline-info" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
+</div>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info mb-3" role="note">
+        <strong>@L("How it works", "Cách hoạt động"):</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("Set each Ultimate Autoplay function to Off, Free (all players), or VIP Only (requires Stats.IsVip).", "Chỉnh từng tính năng về Tắt, Miễn phí (tất cả người chơi), hoặc Chỉ VIP (yêu cầu Stats.IsVip).")</li>
+            <li>@L("Changes are sent to web clients on login and when Ultimate Autoplay is opened (Alt+Z).", "Thay đổi được gửi tới web client khi đăng nhập và khi mở Autoplay Toàn Diện (Alt+Z).")</li>
+        </ul>
+    </div>
+}
+
+@if (this._isLoading || this._configuration is not { } cfg)
+{
+    <p>@L("Loading...", "Đang tải...")</p>
+}
+else
+{
+    <section class="card mb-3" id="uap-admin-settings">
+        <div class="card-body">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+                <div class="d-flex flex-wrap gap-3">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="uap-plugin-active" @bind="this._isActive" />
+                        <label class="form-check-label" for="uap-plugin-active">@L("Plug-in Active", "Kích hoạt Plug-in")</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="uap-enabled" @bind="cfg.Enabled" />
+                        <label class="form-check-label" for="uap-enabled">@L("Enable Ultimate Autoplay", "Bật Autoplay Toàn Diện")</label>
+                    </div>
+                </div>
+                <div class="btn-group btn-group-sm" role="group">
+                    <button type="button" class="btn btn-outline-primary" id="uap-preset-split" @onclick="this.ApplyRecommendedSplit">@L("Recommended Free/VIP Split", "Phân chia Free/VIP đề xuất")</button>
+                    <button type="button" class="btn btn-outline-success" id="uap-preset-free" @onclick="this.ApplyAllFree">@L("All Free", "Tất cả Miễn phí")</button>
+                    <button type="button" class="btn btn-outline-warning" id="uap-preset-vip" @onclick="this.ApplyAllVip">@L("All VIP Only", "Tất cả Chỉ VIP")</button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-sm align-middle">
+                    <thead>
+                        <tr>
+                            <th>@L("Function", "Tính năng")</th>
+                            <th>@L("Description", "Mô tả")</th>
+                            <th style="width: 180px;">@L("Access", "Quyền truy cập")</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>@L("3D Ground Sparkle Trail & Ring", "Vệt sáng dẫn đường 3D & Vòng phạm vi")</strong></td>
+                            <td class="text-muted small">@L("Color-coded sparkles on the terrain to targets, quests, and World Bosses.", "Vệt sáng lấp lánh trên mặt đất dẫn tới quái, nhiệm vụ và Boss thế giới.")</td>
+                            <td>@this.RenderModeSelect("uap-mode-sparkle", cfg.SparkleGuide, v => cfg.SparkleGuide = v)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>@L("Auto Mana & SD Potions", "Tự uống bình Mana & SD")</strong></td>
+                            <td class="text-muted small">@L("Auto-drink Mana/SD potions by % threshold and restock Mana in Lorencia.", "Tự uống bình Mana/SD theo ngưỡng % và mua thêm Mana khi về thành.")</td>
+                            <td>@this.RenderModeSelect("uap-mode-potions", cfg.ManaSdPotions, v => cfg.ManaSdPotions = v)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>@L("Auto-Deposit Jewels (F7)", "Tự gửi Ngọc vào Ngân hàng (F7)")</strong></td>
+                            <td class="text-muted small">@L("Deposits bag jewels to Jewel Bank before a full-bag town trip.", "Tự gửi ngọc vào Ngân hàng ngọc khi đầy túi để đỡ phải về thành.")</td>
+                            <td>@this.RenderModeSelect("uap-mode-jewel", cfg.JewelDeposit, v => cfg.JewelDeposit = v)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>@L("Target & Rare-Drop Priority", "Ưu tiên mục tiêu & Đồ hiếm")</strong></td>
+                            <td class="text-muted small">@L("Aggro-first / Lowest-HP targeting and pick up Jewels/Exc/Ancient first.", "Ưu tiên quái đang đánh mình / ít máu và nhặt Ngọc/Hoàn hảo/Thần trước.")</td>
+                            <td>@this.RenderModeSelect("uap-mode-target", cfg.TargetPriority, v => cfg.TargetPriority = v)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>@L("Multi-Spot Patrol", "Tuần tra nhiều bãi")</strong></td>
+                            <td class="text-muted small">@L("Save 2–8 spots on a map and rotate automatically when a spawn is empty.", "Lưu 2–8 tọa độ trên bản đồ và tự chuyển bãi khi hết quái.")</td>
+                            <td>@this.RenderModeSelect("uap-mode-patrol", cfg.Patrol, v => cfg.Patrol = v)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>@L("Emergency Retreat & Auto-Return", "Chạy khẩn cấp & Tự quay lại")</strong></td>
+                            <td class="text-muted small">@L("Emergency /move lorencia on critical HP and optional auto-resume after death.", "Tự về Lorencia khi máu nguy kịch hết bình và tùy chọn tự chạy lại bãi sau khi chết.")</td>
+                            <td>@this.RenderModeSelect("uap-mode-survival", cfg.Survival, v => cfg.Survival = v)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>@L("World Boss & Quest Focus", "Tập trung Boss & Nhiệm vụ")</strong></td>
+                            <td class="text-muted small">@L("Alerts and crimson 3D sparkle trail when a World Boss spawns on your map.", "Cảnh báo và vệt sáng đỏ dẫn tới Boss thế giới trên bản đồ.")</td>
+                            <td>@this.RenderModeSelect("uap-mode-boss", cfg.BossFocus, v => cfg.BossFocus = v)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>@L("Presets, Skill Auto-Pick & Live HUD", "Preset, Tự chọn skill & Thống kê HUD")</strong></td>
+                            <td class="text-muted small">@L("1-click presets, class best-skill auto-fill, anti-stuck watchdog, and Kills/EXP HUD.", "Preset nhanh, tự chọn skill theo hệ, chống kẹt và bảng đếm Quái/EXP.")</td>
+                            <td>@this.RenderModeSelect("uap-mode-presets", cfg.PresetsAndStats, v => cfg.PresetsAndStats = v)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="uap-admin-save" disabled="@this._isSaving" @onclick="this.SaveAsync">
+                @(this._isSaving ? L("Saving...", "Đang lưu...") : Resources.Save)
+            </button>
+        </div>
+    </section>
+}

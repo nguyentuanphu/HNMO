@@ -6871,6 +6871,31 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoUltimateAutoPlayRequest" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client on login or when opening Ultimate Autoplay to fetch the current policy.
+    /// Causes reaction on server side: The server answers with HnmoUltimateAutoPlayPolicy (F5 57).
+    /// </remarks>
+    public static async ValueTask SendHnmoUltimateAutoPlayRequestAsync(this IConnection? connection)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoUltimateAutoPlayRequestRef.Length;
+            var packet = new HnmoUltimateAutoPlayRequestRef(connection.Output.GetSpan(length)[..length]);
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="HnmoBugReportCommand" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

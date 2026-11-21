@@ -16993,6 +16993,23 @@
     <Packet>
       <HeaderType>C2HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
+      <SubCode>57</SubCode>
+      <Name>HnmoUltimateAutoPlayPolicy</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent on entering the game and after HnmoUltimateAutoPlayRequest (F5 56).</SentWhen>
+      <CausedReaction>The web client enables or VIP-gates Ultimate Autoplay features according to server configuration and Stats.IsVip.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON: v, enabled, isVip, features (sparkleGuide, manaSdPotions, jewelDeposit, targetPriority, patrol, survival, bossFocus, presetsStats).</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
       <SubCode>55</SubCode>
       <Name>HnmoBugReportState</Name>
       <Direction>ServerToClient</Direction>
