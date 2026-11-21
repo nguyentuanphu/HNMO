@@ -997,8 +997,9 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     /// Adds experience points after killing the target object.
     /// </summary>
     /// <param name="killedObject">The killed object.</param>
+    /// <param name="damageShare">The share of damage dealt (0..1, default 1).</param>
     /// <returns>The gained experience.</returns>
-    public ValueTask<int> AddExpAfterKillAsync(IAttackable killedObject) => this._experience.AddAfterKillAsync(killedObject);
+    public ValueTask<int> AddExpAfterKillAsync(IAttackable killedObject, double damageShare = 1.0) => this._experience.AddAfterKillAsync(killedObject, damageShare);
 
     /// <summary>
     /// Calculates the amount of experience gained after a kill, without applying it to the character.

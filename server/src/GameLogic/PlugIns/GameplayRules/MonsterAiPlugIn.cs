@@ -19,7 +19,14 @@ public sealed class MonsterAiPlugIn :
     ISupportDefaultCustomConfiguration
 {
     /// <summary>Gets the rules when the plug-in is switched off: no chase from afar, no leash (the behaviour before it).</summary>
-    public static MonsterAiConfiguration Off { get; } = new() { ChaseAttacker = false, LeashToSpawnArea = false, HealToFullOnLeash = false };
+    public static MonsterAiConfiguration Off { get; } = new()
+    {
+        ChaseAttacker = false,
+        LeashToSpawnArea = false,
+        HealToFullOnLeash = false,
+        SplitExpByDamage = false,
+        DropToTopDamageDealer = false,
+    };
 
     /// <inheritdoc />
     public MonsterAiConfiguration? Configuration { get; set; }

@@ -202,6 +202,18 @@ else
                     <label class="form-label" for="gr-mob-leash-extra" title="@L("Extra tiles beyond MoveRange before leashing home (0..30).", "Số ô cộng thêm ngoài tầm di chuyển trước khi quay về bãi (0..30).")">@L("Leash extra range", "Phạm vi kéo thêm")</label>
                     <input class="form-control form-control-sm" id="gr-mob-leash-extra" type="number" min="0" max="30" @bind="this._monsterAiConfig.LeashExtraRange" />
                 </div>
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="form-check">
+                        <input class="form-check-input" id="gr-mob-exp-split" type="checkbox" @bind="this._monsterAiConfig.SplitExpByDamage" />
+                        <label class="form-check-label" for="gr-mob-exp-split" title="@L("Split monster kill EXP by the share of damage each player or party dealt.", "Chia EXP quái vật theo tỉ lệ sát thương mỗi người chơi hoặc tổ đội gây ra.")">@L("Split EXP by damage", "Chia EXP theo sát thương")</label>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="form-check">
+                        <input class="form-check-input" id="gr-mob-top-drop" type="checkbox" @bind="this._monsterAiConfig.DropToTopDamageDealer" />
+                        <label class="form-check-label" for="gr-mob-top-drop" title="@L("Assign the monster's item drop to the top damage dealer instead of the last hitter.", "Trao quyền nhặt vật phẩm rơi cho người gây sát thương cao nhất thay vì người kết liễu.")">@L("Drop to top damage dealer", "Rớt đồ cho top sát thương")</label>
+                    </div>
+                </div>
             </div>
             <button type="button" class="btn btn-sm btn-primary" id="gr-monster-ai-save" disabled="@this._isSaving" @onclick="this.SaveMonsterAiAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@L("Save monster AI rules", "Lưu quy tắc AI quái")</button>
         </div>
