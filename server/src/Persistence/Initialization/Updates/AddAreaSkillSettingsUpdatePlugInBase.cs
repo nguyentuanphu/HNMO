@@ -53,7 +53,7 @@ public abstract class AddAreaSkillSettingsUpdatePlugInBase : UpdatePlugInBase
     {
         this.AddAreaSkillSettings(gameConfiguration, context, SkillNumber.Flame, false, default, default, default, true, TimeSpan.Zero, TimeSpan.FromMilliseconds(500), 1, 2, default, 0.5f, targetAreaDiameter: 2, useTargetAreaFilter: true);
         this.AddAreaSkillSettings(gameConfiguration, context, SkillNumber.Twister, true, 1.5f, 1.5f, 6f, true, TimeSpan.FromMilliseconds(300), TimeSpan.FromMilliseconds(1000), 1, 2, default, 0.7f);
-        this.AddAreaSkillSettings(gameConfiguration, context, SkillNumber.EvilSpirit, false, default, default, default, true, TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(1000), 1, 2, default, 0.7f, newRange: 7);
+        this.AddAreaSkillSettings(gameConfiguration, context, SkillNumber.EvilSpirit, false, default, default, default, true, TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(1000), 1, 2, default, 0.7f);
         this.AddAreaSkillSettings(gameConfiguration, context, SkillNumber.AquaBeam, true, 1.5f, 1.5f, 8f);
         this.AddAreaSkillSettings(gameConfiguration, context, SkillNumber.Cometfall, false, default, default, default, targetAreaDiameter: 2, useTargetAreaFilter: true);
         this.AddAreaSkillSettings(gameConfiguration, context, SkillNumber.TripleShot, true, 1f, 4.5f, 7f, true, TimeSpan.FromMilliseconds(50), TimeSpan.FromMilliseconds(100), maximumHitsPerTarget: 3, maximumHitsPerAttack: 3);
@@ -130,7 +130,6 @@ public abstract class AddAreaSkillSettingsUpdatePlugInBase : UpdatePlugInBase
         var hellfireStrengthener = gameConfiguration.Skills.FirstOrDefault(s => s.Number == (short)SkillNumber.HellfireStrengthener);
         if (hellfireStrengthener != null)
         {
-            hellfireStrengthener.Range = 4;
             hellfireStrengthener.AttackDamage = 3;
 
             if (hellfireStrengthener.AreaSkillSettings == null)
