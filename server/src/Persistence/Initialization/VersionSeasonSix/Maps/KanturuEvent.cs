@@ -204,7 +204,7 @@ internal class KanturuEvent : BaseMapInitializer
             monster.ViewRange = 7;
             monster.MoveDelay = new TimeSpan(500 * TimeSpan.TicksPerMillisecond);
             monster.AttackDelay = new TimeSpan(1500 * TimeSpan.TicksPerMillisecond);
-            monster.RespawnDelay = new TimeSpan(0);
+            monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 7;
             var attributes = new Dictionary<AttributeDefinition, float>
@@ -236,7 +236,7 @@ internal class KanturuEvent : BaseMapInitializer
             monster.ViewRange = 7;
             monster.MoveDelay = new TimeSpan(700 * TimeSpan.TicksPerMillisecond);
             monster.AttackDelay = new TimeSpan(1700 * TimeSpan.TicksPerMillisecond);
-            monster.RespawnDelay = new TimeSpan(0);
+            monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 5;
 
@@ -271,7 +271,7 @@ internal class KanturuEvent : BaseMapInitializer
             monster.ViewRange = 7;
             monster.MoveDelay = new TimeSpan(700 * TimeSpan.TicksPerMillisecond);
             monster.AttackDelay = new TimeSpan(1700 * TimeSpan.TicksPerMillisecond);
-            monster.RespawnDelay = new TimeSpan(0);
+            monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 3;
 
@@ -306,7 +306,7 @@ internal class KanturuEvent : BaseMapInitializer
             monster.ViewRange = 7;
             monster.MoveDelay = new TimeSpan(700 * TimeSpan.TicksPerMillisecond);
             monster.AttackDelay = new TimeSpan(1700 * TimeSpan.TicksPerMillisecond);
-            monster.RespawnDelay = new TimeSpan(0);
+            monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 3;
 

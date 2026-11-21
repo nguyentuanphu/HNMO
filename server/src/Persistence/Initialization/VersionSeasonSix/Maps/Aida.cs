@@ -96,6 +96,7 @@ internal class Aida : BaseMapInitializer
         yield return this.CreateMonsterSpawn(135, this.NpcDictionary[305], 114, 101); // Blue Golem
         yield return this.CreateMonsterSpawn(136, this.NpcDictionary[305], 086, 155); // Blue Golem
         yield return this.CreateMonsterSpawn(137, this.NpcDictionary[305], 230, 132); // Blue Golem
+        yield return this.CreateMonsterSpawn(919, this.NpcDictionary[305], 094, 158); // Blue Golem
 
         yield return this.CreateMonsterSpawn(200, this.NpcDictionary[306], 215, 032); // Death Rider
         yield return this.CreateMonsterSpawn(201, this.NpcDictionary[306], 217, 036); // Death Rider
@@ -136,6 +137,7 @@ internal class Aida : BaseMapInitializer
         yield return this.CreateMonsterSpawn(236, this.NpcDictionary[306], 090, 203); // Death Rider
         yield return this.CreateMonsterSpawn(237, this.NpcDictionary[306], 188, 027); // Death Rider
         yield return this.CreateMonsterSpawn(238, this.NpcDictionary[306], 228, 060); // Death Rider
+        yield return this.CreateMonsterSpawn(920, this.NpcDictionary[306], 126, 156); // Death Rider
 
         yield return this.CreateMonsterSpawn(300, this.NpcDictionary[307], 168, 082); // Forest Orc
         yield return this.CreateMonsterSpawn(301, this.NpcDictionary[307], 166, 073); // Forest Orc
@@ -257,6 +259,9 @@ internal class Aida : BaseMapInitializer
         yield return this.CreateMonsterSpawn(722, this.NpcDictionary[550], 206, 197); // Bloody Death Rider
         yield return this.CreateMonsterSpawn(723, this.NpcDictionary[550], 026, 054); // Bloody Death Rider
         yield return this.CreateMonsterSpawn(724, this.NpcDictionary[550], 053, 053); // Bloody Death Rider
+        yield return this.CreateMonsterSpawn(921, this.NpcDictionary[550], 104, 203); // Bloody Death Rider
+        yield return this.CreateMonsterSpawn(922, this.NpcDictionary[550], 099, 203); // Bloody Death Rider
+        yield return this.CreateMonsterSpawn(923, this.NpcDictionary[550], 075, 228); // Bloody Death Rider
 
         yield return this.CreateMonsterSpawn(800, this.NpcDictionary[551], 128, 190); // Bloody Golem
         yield return this.CreateMonsterSpawn(801, this.NpcDictionary[551], 143, 198); // Bloody Golem

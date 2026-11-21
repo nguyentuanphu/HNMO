@@ -199,6 +199,9 @@ internal class LandOfTrials : BaseMapInitializer
         yield return this.CreateMonsterSpawn(436, this.NpcDictionary[293], 117, 143); // Poison Golem
         yield return this.CreateMonsterSpawn(437, this.NpcDictionary[293], 152, 098); // Poison Golem
         yield return this.CreateMonsterSpawn(438, this.NpcDictionary[293], 150, 106); // Poison Golem
+        yield return this.CreateMonsterSpawn(601, this.NpcDictionary[293], 192, 127); // Poison Golem
+        yield return this.CreateMonsterSpawn(602, this.NpcDictionary[293], 180, 117); // Poison Golem
+        yield return this.CreateMonsterSpawn(603, this.NpcDictionary[293], 191, 112); // Poison Golem
 
         yield return this.CreateMonsterSpawn(500, this.NpcDictionary[294], 228, 042); // Ax Warrior
         yield return this.CreateMonsterSpawn(501, this.NpcDictionary[294], 182, 031); // Ax Warrior
@@ -247,6 +250,7 @@ internal class LandOfTrials : BaseMapInitializer
         yield return this.CreateMonsterSpawn(544, this.NpcDictionary[294], 143, 056); // Ax Warrior
         yield return this.CreateMonsterSpawn(545, this.NpcDictionary[294], 059, 071); // Ax Warrior
         yield return this.CreateMonsterSpawn(546, this.NpcDictionary[294], 073, 069); // Ax Warrior
+        yield return this.CreateMonsterSpawn(604, this.NpcDictionary[294], 014, 043); // Axe Warrior
 
         yield return this.CreateMonsterSpawn(600, this.NpcDictionary[295], 220, 211); // Erohim
     }

@@ -24,6 +24,24 @@ internal class Atlans : Version075.Maps.Atlans
     /// <inheritdoc />
     protected override string TerrainVersionPrefix => string.Empty;
 
+    /// <summary>
+    /// Gets the spawns of the older version which Season 6 leaves out: the Season 6/9 server suites don't have these spots.
+    /// </summary>
+    protected override IReadOnlySet<short> LeftOutSpawnNumbers { get; } = new HashSet<short> { 297 };
+
+    /// <inheritdoc/>
+    protected override IEnumerable<MonsterSpawnArea> CreateMonsterSpawns()
+    {
+        foreach (var spawn in base.CreateMonsterSpawns())
+        {
+            yield return spawn;
+        }
+
+        // The spots of the Season 6/9 server suites which the older version doesn't have.
+        yield return this.CreateMonsterSpawn(438, this.NpcDictionary[51], 251, 051); // Great Bahamut
+        yield return this.CreateMonsterSpawn(439, this.NpcDictionary[51], 007, 052); // Great Bahamut
+    }
+
     /// <inheritdoc />
     protected override IEnumerable<MonsterSpawnArea> CreateNpcSpawns()
     {
