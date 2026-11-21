@@ -184,6 +184,16 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
     }
 
     /// <summary>
+    /// Gives health back, up to the maximum health. A dead instance gets nothing.
+    /// </summary>
+    /// <param name="amount">The amount of health.</param>
+    /// <returns>The restored health.</returns>
+    public int RestoreHealth(int amount)
+    {
+        return this.RestoreHealth(amount, this.SpawnArea.MaximumHealthOverride ?? (int)this.Attributes[Stats.MaximumHealth]);
+    }
+
+    /// <summary>
     /// Reloads the attributes from the <see cref="NonPlayerCharacter.Definition"/>, so that changes
     /// to the monster definition take effect on this already spawned instance.
     /// </summary>
