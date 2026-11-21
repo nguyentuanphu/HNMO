@@ -580,7 +580,7 @@
     <value>Aura Helm</value>
   </data>
   <data name="LiliumHelm" xml:space="preserve">
-    <value>Lilium Helm</value>
+    <value>Eternal Wing Helm</value>
   </data>
   <data name="TitanHelm" xml:space="preserve">
     <value>Titan Helm</value>
@@ -745,7 +745,7 @@
     <value>Aura Armor</value>
   </data>
   <data name="LiliumArmor" xml:space="preserve">
-    <value>Lilium Armor</value>
+    <value>Eternal Wing Armor</value>
   </data>
   <data name="TitanArmor" xml:space="preserve">
     <value>Titan Armor</value>
@@ -916,7 +916,7 @@
     <value>Aura Pants</value>
   </data>
   <data name="LiliumPants" xml:space="preserve">
-    <value>Lilium Pants</value>
+    <value>Eternal Wing Pants</value>
   </data>
   <data name="TitanPants" xml:space="preserve">
     <value>Titan Pants</value>
@@ -1087,7 +1087,7 @@
     <value>Aura Gloves</value>
   </data>
   <data name="LiliumGloves" xml:space="preserve">
-    <value>Lilium Gloves</value>
+    <value>Eternal Wing Gloves</value>
   </data>
   <data name="TitanGloves" xml:space="preserve">
     <value>Titan Gloves</value>
@@ -1246,7 +1246,7 @@
     <value>Aura Boots</value>
   </data>
   <data name="LiliumBoots" xml:space="preserve">
-    <value>Lilium Boots</value>
+    <value>Eternal Wing Boots</value>
   </data>
   <data name="TitanBoots" xml:space="preserve">
     <value>Titan Boots</value>

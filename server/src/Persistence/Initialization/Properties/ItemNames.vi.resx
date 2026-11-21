@@ -191,7 +191,7 @@
   <data name="AncientHelm" xml:space="preserve"><value>Mũ cổ</value></data>
   <data name="BlackRoseHelm" xml:space="preserve"><value>Mũ bảo hiểm hoa hồng đen</value></data>
   <data name="AuraHelm" xml:space="preserve"><value>Mũ bảo hiểm hào quang</value></data>
-  <data name="LiliumHelm" xml:space="preserve"><value>mũ bảo hiểm lilium</value></data>
+  <data name="LiliumHelm" xml:space="preserve"><value>Mũ Cánh Vĩnh Cửu</value></data>
   <data name="TitanHelm" xml:space="preserve"><value>Mũ bảo hiểm Titan</value></data>
   <data name="BraveHelm" xml:space="preserve"><value>Mũ bảo hiểm dũng cảm</value></data>
   <data name="SeraphimHelm" xml:space="preserve"><value>Mũ bảo hiểm Seraphim</value></data>
@@ -246,7 +246,7 @@
   <data name="AncientArmor" xml:space="preserve"><value>Áo Giáp Cổ</value></data>
   <data name="BlackRoseArmor" xml:space="preserve"><value>Giáp Hoa Hồng Đen</value></data>
   <data name="AuraArmor" xml:space="preserve"><value>Giáp hào quang</value></data>
-  <data name="LiliumArmor" xml:space="preserve"><value>Giáp Lilium</value></data>
+  <data name="LiliumArmor" xml:space="preserve"><value>Giáp Cánh Vĩnh Cửu</value></data>
   <data name="TitanArmor" xml:space="preserve"><value>Giáp Titan</value></data>
   <data name="BraveArmor" xml:space="preserve"><value>Giáp dũng cảm</value></data>
   <data name="DestroyArmor" xml:space="preserve"><value>Phá hủy áo giáp</value></data>
@@ -303,7 +303,7 @@
   <data name="AncientPants" xml:space="preserve"><value>Quần cổ</value></data>
   <data name="BlackRosePants" xml:space="preserve"><value>Quần hoa hồng đen</value></data>
   <data name="AuraPants" xml:space="preserve"><value>Quần hào quang</value></data>
-  <data name="LiliumPants" xml:space="preserve"><value>quần hoa huệ</value></data>
+  <data name="LiliumPants" xml:space="preserve"><value>Quần Cánh Vĩnh Cửu</value></data>
   <data name="TitanPants" xml:space="preserve"><value>Quần Titan</value></data>
   <data name="BravePants" xml:space="preserve"><value>Quần dũng cảm</value></data>
   <data name="DestroyPants" xml:space="preserve"><value>Phá hủy quần</value></data>
@@ -360,7 +360,7 @@
   <data name="AncientGloves" xml:space="preserve"><value>Găng Tay Cổ</value></data>
   <data name="BlackRoseGloves" xml:space="preserve"><value>Găng tay hoa hồng đen</value></data>
   <data name="AuraGloves" xml:space="preserve"><value>Găng tay hào quang</value></data>
-  <data name="LiliumGloves" xml:space="preserve"><value>Găng tay hoa huệ</value></data>
+  <data name="LiliumGloves" xml:space="preserve"><value>Găng tay Cánh Vĩnh Cửu</value></data>
   <data name="TitanGloves" xml:space="preserve"><value>Găng tay Titan</value></data>
   <data name="BraveGloves" xml:space="preserve"><value>Găng tay dũng cảm</value></data>
   <data name="DestroyGloves" xml:space="preserve"><value>Phá hủy găng tay</value></data>
@@ -413,7 +413,7 @@
   <data name="AncientBoots" xml:space="preserve"><value>Giày cổ</value></data>
   <data name="BlackRoseBoots" xml:space="preserve"><value>Giày hoa hồng đen</value></data>
   <data name="AuraBoots" xml:space="preserve"><value>Giày hào quang</value></data>
-  <data name="LiliumBoots" xml:space="preserve"><value>Giày bốt hoa huệ</value></data>
+  <data name="LiliumBoots" xml:space="preserve"><value>Giày Cánh Vĩnh Cửu</value></data>
   <data name="TitanBoots" xml:space="preserve"><value>Giày Titan</value></data>
   <data name="BraveBoots" xml:space="preserve"><value>Giày dũng cảm</value></data>
   <data name="DestroyBoots" xml:space="preserve"><value>Phá hủy ủng</value></data>
