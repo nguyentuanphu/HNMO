@@ -4,6 +4,8 @@
 
 namespace HNMO.GameLogic.PlayerActions.Trade;
 
+using System.Runtime.CompilerServices;
+using System.Threading;
 using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.Views.Trade;
 using HNMO.Persistence;
@@ -13,6 +15,13 @@ using HNMO.Persistence;
 /// </summary>
 public class TradeButtonAction : BaseTradeAction
 {
+    /// <summary>
+    /// A number per trader which gives every pair of traders the same order to lock their state machines in.
+    /// </summary>
+    private static readonly ConditionalWeakTable<ITrader, StrongBox<long>> LockOrder = new();
+
+    private static long _lockOrderCounter;
+
     /// <summary>
     /// Tries to change the trade button change to the new <paramref name="tradeButtonState"/>.
     /// </summary>
@@ -34,7 +43,16 @@ public class TradeButtonAction : BaseTradeAction
             && tradingPartner is not null
             && tradingPartner.PlayerState.CurrentState == PlayerState.TradeButtonPressed)
         {
-            TradeResult result = await this.InternalFinishTradeAsync(trader, tradingPartner).ConfigureAwait(false);
+            // Both traders may press the button at the same time, on two connections: then both
+            // see the other as pressed and both get here. The two state machines are locked in the
+            // same order for both, so the second waits instead of deadlocking (each holding its own
+            // lock and waiting for the other's), and then finds the trade finished.
+            var (first, second) = InLockOrder(trader, tradingPartner);
+            if (await this.InternalFinishTradeAsync(first, second).ConfigureAwait(false) is not { } result)
+            {
+                return;
+            }
+
             if (result != TradeResult.Success)
             {
                 await this.CancelTradeAsync(tradingPartner, false).ConfigureAwait(false);
@@ -53,6 +71,14 @@ public class TradeButtonAction : BaseTradeAction
         {
             // nothing to do.
         }
+    }
+
+    private static (ITrader First, ITrader Second) InLockOrder(ITrader trader, ITrader partner)
+    {
+        return LockOrder.GetValue(trader, _ => new StrongBox<long>(Interlocked.Increment(ref _lockOrderCounter))).Value
+               < LockOrder.GetValue(partner, _ => new StrongBox<long>(Interlocked.Increment(ref _lockOrderCounter))).Value
+            ? (trader, partner)
+            : (partner, trader);
     }
 
     private static bool ExceedsMaximumMoney(ITrader receiver, int receivedMoney)
@@ -78,10 +104,24 @@ public class TradeButtonAction : BaseTradeAction
         return true;
     }
 
-    private async ValueTask<TradeResult> InternalFinishTradeAsync(ITrader trader, ITrader tradingPartner)
+    /// <summary>
+    /// Finishes the trade: checks it, moves the items and the zen and saves it.
+    /// </summary>
+    /// <param name="trader">The trader whose state machine is locked first.</param>
+    /// <param name="tradingPartner">The other trader.</param>
+    /// <returns>The result, or <c>null</c> if the other trader finished the trade in the meantime.</returns>
+    private async ValueTask<TradeResult?> InternalFinishTradeAsync(ITrader trader, ITrader tradingPartner)
     {
         await using var context = await trader.PlayerState.TryBeginAdvanceToAsync(PlayerState.EnteredWorld).ConfigureAwait(false);
         await using var partnerContext = await tradingPartner.PlayerState.TryBeginAdvanceToAsync(PlayerState.EnteredWorld).ConfigureAwait(false);
+        if (!ReferenceEquals(trader.TradingPartner, tradingPartner) || !ReferenceEquals(tradingPartner.TradingPartner, trader))
+        {
+            // The other trader's press finished (or cancelled) this trade while we waited for the locks.
+            context.Allowed = false;
+            partnerContext.Allowed = false;
+            return null;
+        }
+
         if (!context.Allowed || !partnerContext.Allowed)
         {
             context.Allowed = false;
