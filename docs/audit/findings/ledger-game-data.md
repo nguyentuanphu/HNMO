@@ -99,3 +99,25 @@ Not done, with the reason:
 - Noted: HNMO's 13-50 is named "Scroll of Blood" (2x2) where the suites have the Illusion Sorcerer Covenant (1x1) and
   13-51 the Scroll of Blood; Lumen sells 13-50 as the covenant. Item data question, not changed.
 - Noted: Scroll of Fire Scream (12,35) - suites let the Rage Fighter read it too; HNMO only the Dark Lord.
+
+## PRs from the owner's answers (21 Nov), state at the end of the run
+
+| item | PR | state |
+|---|---|---|
+| socket shield protection level 5: 20 % (S6) | #233 | merged |
+| 3rd wings luck 10 % | #234 | merged |
+| class rank 2 = second class and up (102 items) | #237 | merged |
+| Crywolf warp level 300 | #240 | merged |
+| lucky gloves/boots speeds | #242 | merged |
+| shops (Silvia, Rhea, Marce, Natasha, Lumen +6) | #250 | merged (pushed and merged by the coordinator from the first run, before the merchant-count test fix) |
+| 2nd wing AG and speed options | #251 | merged (first run, before the caption fix) |
+| harmony +14/+15 | #252 | merged (second run; its full test run was cut off, not verified by me) |
+| jewel drops by monster level | #253 | merged (first run, before the caption fix) |
+| caption and merchant-count fix-up for #250/#251/#253 | #257 | draft (red: 4 failures on base; green 973/985 + 3712/3714) |
+| Eternal Wing set (set 44) | #258 | draft (green except the 4 base failures that #257 fixes; HNMO.Tests 3712/3714) |
+
+Before the fix-up the base branch had 4 failing Persistence.Initialization tests (969 passed, 12 skipped of 985).
+
+Not done (reasons above): area-skill distances (needs code), socket weapon mix (no recipe), Arena Guard / Jin / Moss
+shops (NPCs, maps or items missing), Horn of Fenrir rank 2 (pet data; owner question).
+- #254 (data-skill-ranges-nova-ag, merged) is not mine; the area-skill distances may be handled there.
