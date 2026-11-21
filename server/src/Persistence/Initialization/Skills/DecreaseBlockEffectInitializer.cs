@@ -49,7 +49,7 @@ public class DecreaseBlockEffectInitializer : InitializerBase
 
         var decDefRatePowerUpDefinitionPvp = this.Context.CreateNew<PowerUpDefinition>();
         magicEffect.PowerUpDefinitionsPvp.Add(decDefRatePowerUpDefinitionPvp);
-        decDefRatePowerUpDefinitionPvp.TargetAttribute = Stats.DefenseRatePvm.GetPersistent(this.GameConfiguration);
+        decDefRatePowerUpDefinitionPvp.TargetAttribute = Stats.DefenseRatePvp.GetPersistent(this.GameConfiguration); // PvP hits read the PvP defense rate
         decDefRatePowerUpDefinitionPvp.Boost = this.Context.CreateNew<PowerUpDefinitionValue>();
         decDefRatePowerUpDefinitionPvp.Boost.ConstantValue.Value = -20f;
         decDefRatePowerUpDefinitionPvp.Boost.ConstantValue.AggregateType = AggregateType.AddFinal;

@@ -223,7 +223,7 @@ public class FixRageFighterMultipleHitSkillsPlugIn : UpdatePlugInBase
 
         var decDefRatePowerUpDefinitionPvp = context.CreateNew<PowerUpDefinition>();
         magicEffect.PowerUpDefinitionsPvp.Add(decDefRatePowerUpDefinitionPvp);
-        decDefRatePowerUpDefinitionPvp.TargetAttribute = Stats.DefenseRatePvm.GetPersistent(gameConfiguration);
+        decDefRatePowerUpDefinitionPvp.TargetAttribute = Stats.DefenseRatePvp.GetPersistent(gameConfiguration); // PvP hits read the PvP defense rate
         decDefRatePowerUpDefinitionPvp.Boost = context.CreateNew<PowerUpDefinitionValue>();
         decDefRatePowerUpDefinitionPvp.Boost.ConstantValue.Value = -20f;
         decDefRatePowerUpDefinitionPvp.Boost.ConstantValue.AggregateType = AggregateType.AddFinal;
