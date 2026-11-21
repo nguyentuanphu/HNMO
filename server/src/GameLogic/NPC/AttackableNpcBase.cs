@@ -10,6 +10,7 @@ using System.Threading;
 using HNMO.AttributeSystem;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.PlugIns.GameplayRules;
 using HNMO.GameLogic.Views.World;
 using HNMO.Pathfinding;
 using HNMO.Persistence;
@@ -27,6 +28,8 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
     private readonly IEventStateProvider? _eventStateProvider;
     private readonly IDropGenerator _dropGenerator;
     private readonly PlugInManager _plugInManager;
+    private readonly Lock _damageLock = new();
+    private readonly Dictionary<Player, long> _damageByPlayer = new();
 
     private int _health;
 
@@ -76,9 +79,6 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
     /// <inheritdoc />
     public DeathInformation? LastDeath { get; protected set; }
 
-    /// <summary>Gets the plug-in manager for this NPC's game context.</summary>
-    internal PlugInManager? PlugInManager => this._plugInManager;
-
     /// <inheritdoc/>
     public override Point Position
     {
@@ -101,6 +101,9 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
         get => Math.Max(Volatile.Read(ref this._health), 0);
         set => Interlocked.Exchange(ref this._health, value);
     }
+
+    /// <summary>Gets the plug-in manager for this NPC's game context.</summary>
+    internal PlugInManager? PlugInManager => this._plugInManager;
 
     private bool ShouldRespawn => this.SpawnArea.SpawnTrigger == SpawnTrigger.Automatic
                                   || (this.SpawnArea.SpawnTrigger == SpawnTrigger.AutomaticDuringEvent && (this._eventStateProvider?.IsEventRunning ?? false))
@@ -212,6 +215,10 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
         {
             this.Died = null;
             this.IsAlive = false;
+            lock (this._damageLock)
+            {
+                this._damageByPlayer.Clear();
+            }
         }
 
         base.Dispose(managed);
@@ -248,6 +255,15 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
         var player = this.GetHitNotificationTarget(attacker);
         if (player is not null)
         {
+            var dealtDamage = (long)hitInfo.HealthDamage + hitInfo.ShieldDamage;
+            if (dealtDamage > 0)
+            {
+                lock (this._damageLock)
+                {
+                    this._damageByPlayer[player] = this._damageByPlayer.GetValueOrDefault(player) + dealtDamage;
+                }
+            }
+
             if (isFinalStreakHit.HasValue)
             {
                 hitInfo.Attributes |= DamageAttributes.RageFighterStreakHit;
@@ -327,6 +343,14 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
                     currentHealth + restoredHealth,
                     currentHealth) == currentHealth)
             {
+                if (currentHealth + restoredHealth >= maximumHealth)
+                {
+                    lock (this._damageLock)
+                    {
+                        this._damageByPlayer.Clear();
+                    }
+                }
+
                 return restoredHealth;
             }
         }
@@ -338,6 +362,15 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
     /// <param name="attacker">The attacker which killed this instance.</param>
     protected virtual async ValueTask OnDeathAsync(IAttacker attacker)
     {
+        List<KeyValuePair<Player, long>> damagers;
+        lock (this._damageLock)
+        {
+            damagers = this._damageByPlayer
+                .Where(kv => kv.Value > 0 && kv.Key.SelectedCharacter is not null && kv.Key.CurrentMap == this.CurrentMap)
+                .ToList();
+            this._damageByPlayer.Clear();
+        }
+
         if (this.ShouldRespawn)
         {
             // The killer's logger: a respawn that fails would otherwise leave the monster gone without a trace.
@@ -362,9 +395,40 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
         var player = this.GetHitNotificationTarget(attacker);
         if (player is { })
         {
-            var experienceShares = player.Party is { } party
-                ? await party.DistributeExperienceAfterKillAsync(this, player).ConfigureAwait(false)
-                : [new ExperienceShare(player, await player.AddExpAfterKillAsync(this).ConfigureAwait(false))];
+            var aiConfig = MonsterAiPlugIn.For(this._plugInManager);
+            var dropOwner = aiConfig.DropToTopDamageDealer && damagers.Count > 0
+                ? damagers.OrderByDescending(kv => kv.Value).ThenByDescending(kv => kv.Key == player).First().Key
+                : player;
+
+            IReadOnlyList<ExperienceShare> experienceShares;
+            if (aiConfig.SplitExpByDamage && damagers.Count > 1)
+            {
+                var totalDamage = Math.Max(1L, damagers.Sum(kv => kv.Value));
+                var shares = new List<ExperienceShare>(damagers.Count);
+                foreach (var group in damagers.GroupBy(kv => (object?)kv.Key.Party ?? kv.Key))
+                {
+                    var groupDamage = group.Sum(kv => kv.Value);
+                    var share = groupDamage / (double)totalDamage;
+                    if (group.Key is Party party)
+                    {
+                        var rep = group.OrderByDescending(kv => kv.Value).First().Key;
+                        shares.AddRange(await party.DistributeExperienceAfterKillAsync(this, rep, share).ConfigureAwait(false));
+                    }
+                    else if (group.Key is Player soloPlayer)
+                    {
+                        shares.Add(new ExperienceShare(soloPlayer, await soloPlayer.AddExpAfterKillAsync(this, share).ConfigureAwait(false)));
+                    }
+                }
+
+                experienceShares = shares;
+            }
+            else
+            {
+                experienceShares = player.Party is { } party
+                    ? await party.DistributeExperienceAfterKillAsync(this, player).ConfigureAwait(false)
+                    : [new ExperienceShare(player, await player.AddExpAfterKillAsync(this).ConfigureAwait(false))];
+            }
+
             if (attacker == player)
             {
                 await player.AfterKilledMonsterAsync().ConfigureAwait(false);
@@ -384,7 +448,7 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
                     await player.RemoveOutlawPointsAsync(OutlawPoints.GetMonsterKillPoints((int)this.Attributes[Stats.Level])).ConfigureAwait(false);
                 }
 
-                _ = this.DropItemDelayedAsync(player, experienceShares); // don't wait for completion.
+                _ = this.DropItemDelayedAsync(dropOwner, experienceShares); // don't wait for completion.
             }
         }
     }
@@ -403,6 +467,11 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
     {
         try
         {
+            lock (this._damageLock)
+            {
+                this._damageByPlayer.Clear();
+            }
+
             if (this.IsDisposed || this.IsDisposing)
             {
                 // It got disposed while waiting for the respawn, e.g. because its spawn area was removed.

@@ -23,4 +23,10 @@ public sealed class MonsterAiConfiguration
 
     /// <summary>Gets or sets a value indicating whether a monster heals to full health when leashing back to its spawn area.</summary>
     public bool HealToFullOnLeash { get; set; } = true;
+
+    /// <summary>Gets or sets a value indicating whether monster kill EXP is split by damage dealt instead of going 100% to the last hitter.</summary>
+    public bool SplitExpByDamage { get; set; } = true;
+
+    /// <summary>Gets or sets a value indicating whether the monster's drop belongs to the top damage dealer instead of the last hitter.</summary>
+    public bool DropToTopDamageDealer { get; set; } = true;
 }
