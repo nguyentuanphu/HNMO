@@ -20,6 +20,13 @@ public class StarterKitConfiguration
     /// <summary>Gets or sets a value indicating whether it's given once per account (to its first new character) instead of once per character.</summary>
     public bool PerAccount { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether the zen and the coins go only to the account's first new character, while
+    /// the items and the buff go to every new character (owner's choice, 2026-11-21: coins kept on the account could
+    /// otherwise be collected again and again by creating and deleting characters).
+    /// </summary>
+    public bool MoneyPerAccount { get; set; } = true;
+
     /// <summary>Gets or sets a value indicating whether the items are given.</summary>
     public bool ItemsEnabled { get; set; } = true;
 

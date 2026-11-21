@@ -3609,6 +3609,9 @@
   <data name="OnboardingKitPerAccount" xml:space="preserve">
     <value>Một lần mỗi tài khoản (thay vì mỗi nhân vật)</value>
   </data>
+  <data name="OnboardingKitMoneyPerAccount" xml:space="preserve">
+    <value>Zen và coin chỉ cho nhân vật mới đầu tiên của tài khoản (đồ và buff cho mọi nhân vật mới)</value>
+  </data>
   <data name="OnboardingKitItems" xml:space="preserve">
     <value>Vật phẩm</value>
   </data>

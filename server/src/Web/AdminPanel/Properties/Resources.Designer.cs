@@ -10579,6 +10579,14 @@ namespace HNMO.Web.AdminPanel.Properties {
             }
         }
         /// <summary>
+        ///   Looks up a localized string similar to Zen and coins only to the account&apos;s first new character (items and buff to every new one).
+        /// </summary>
+        public static string OnboardingKitMoneyPerAccount {
+            get {
+                return ResourceManager.GetString("OnboardingKitMoneyPerAccount", resourceCulture);
+            }
+        }
+        /// <summary>
         ///   Looks up a localized string similar to Items.
         /// </summary>
         public static string OnboardingKitItems {

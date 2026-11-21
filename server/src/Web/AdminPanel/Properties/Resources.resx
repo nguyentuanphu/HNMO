@@ -3569,6 +3569,9 @@
   <data name="OnboardingKitPerAccount" xml:space="preserve">
     <value>Once per account (instead of per character)</value>
   </data>
+  <data name="OnboardingKitMoneyPerAccount" xml:space="preserve">
+    <value>Zen and coins only to the account's first new character (items and buff to every new one)</value>
+  </data>
   <data name="OnboardingKitItems" xml:space="preserve">
     <value>Items</value>
   </data>
