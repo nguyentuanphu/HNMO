@@ -567,7 +567,7 @@ internal class SwampOfCalmness : BaseMapInitializer
                 { Stats.MinimumPhysBaseDmg, 635 },
                 { Stats.MaximumPhysBaseDmg, 665 },
                 { Stats.DefenseBase, 535 },
-                { Stats.AttackRatePvm, 983 },
+                { Stats.AttackRatePvm, 980 },
                 { Stats.DefenseRatePvm, 295 },
                 { Stats.PoisonResistance, 30f / 255 },
             };

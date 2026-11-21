@@ -216,8 +216,6 @@
   <data name="RegenerationsRefactorPlugInBase_Description" xml:space="preserve"><value>This update fixes and reworks some regeneration attributes (health, mana, ability).</value></data>
   <data name="AddDuelConfigurationPlugIn_Name" xml:space="preserve"><value>Add duel configuration</value></data>
   <data name="AddDuelConfigurationPlugIn_Description" xml:space="preserve"><value>This update adds data for the duel configuration</value></data>
-  <data name="FixBloodCastleMonsterAttributesUpdatePlugIn_Name" xml:space="preserve"><value>Fix Blood Castle 7/8 Monster Attributes</value></data>
-  <data name="FixBloodCastleMonsterAttributesUpdatePlugIn_Description" xml:space="preserve"><value>Swaps attribute values between BC7 (monsters 138-143) and BC8 (monsters 428-433) so progression is correct: BC6 → BC7 → BC8.</value></data>
   <data name="AddDoppelgangerDataUpdatePlugIn_Name" xml:space="preserve"><value>Add Doppelganger data</value></data>
   <data name="AddDoppelgangerDataUpdatePlugIn_Description" xml:space="preserve"><value>This update adds the doppelganger event configuration.</value></data>
   <data name="FinishSummonerMasterTreePlugIn_Name" xml:space="preserve"><value>Finish Summoner Master Tree PlugIn</value></data>

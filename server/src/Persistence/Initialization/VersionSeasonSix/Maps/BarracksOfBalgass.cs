@@ -146,7 +146,7 @@ internal class BarracksOfBalgass : BaseMapInitializer
             monster.NumberOfMaximumItemDrops = 1;
             var attributes = new Dictionary<AttributeDefinition, float>
             {
-                { Stats.Level, 119 },
+                { Stats.Level, 118 },
                 { Stats.MaximumHealth, 85000 },
                 { Stats.MinimumPhysBaseDmg, 580 },
                 { Stats.MaximumPhysBaseDmg, 680 },

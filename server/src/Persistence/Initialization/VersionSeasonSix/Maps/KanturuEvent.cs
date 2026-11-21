@@ -209,13 +209,13 @@ internal class KanturuEvent : BaseMapInitializer
             monster.NumberOfMaximumItemDrops = 7;
             var attributes = new Dictionary<AttributeDefinition, float>
             {
-                { Stats.Level, 140 },
-                { Stats.MaximumHealth, 5_000_000 },
-                { Stats.MinimumPhysBaseDmg, 2500 },
-                { Stats.MaximumPhysBaseDmg, 3000 },
-                { Stats.DefenseBase, 6500 },
-                { Stats.AttackRatePvm, 2800 },
-                { Stats.DefenseRatePvm, 2200 },
+                { Stats.Level, 111 },
+                { Stats.MaximumHealth, 300 },
+                { Stats.MinimumPhysBaseDmg, 712 },
+                { Stats.MaximumPhysBaseDmg, 752 },
+                { Stats.DefenseBase, 584 },
+                { Stats.AttackRatePvm, 850 },
+                { Stats.DefenseRatePvm, 315 },
                 { Stats.PoisonResistance, 50f / 255 },
                 { Stats.IceResistance, 50f / 255 },
                 { Stats.LightningResistance, 50f / 255 },
@@ -244,13 +244,13 @@ internal class KanturuEvent : BaseMapInitializer
             monster.AttackSkill = this.GameConfiguration.Skills.FirstOrDefault(s => s.Number == (short)SkillNumber.Decay);
             var attributes = new Dictionary<AttributeDefinition, float>
             {
-                { Stats.Level, 145 },
+                { Stats.Level, 135 },
                 { Stats.MaximumHealth, 1_500_000 },
-                { Stats.MinimumPhysBaseDmg, 3000 },
-                { Stats.MaximumPhysBaseDmg, 3500 },
-                { Stats.DefenseBase, 7500 },
-                { Stats.AttackRatePvm, 3000 },
-                { Stats.DefenseRatePvm, 2500 },
+                { Stats.MinimumPhysBaseDmg, 1225 },
+                { Stats.MaximumPhysBaseDmg, 1468 },
+                { Stats.DefenseBase, 1000 },
+                { Stats.AttackRatePvm, 2000 },
+                { Stats.DefenseRatePvm, 420 },
                 { Stats.PoisonResistance, 50f / 255 },
                 { Stats.IceResistance, 50f / 255 },
                 { Stats.LightningResistance, 50f / 255 },
@@ -279,13 +279,13 @@ internal class KanturuEvent : BaseMapInitializer
             monster.AttackSkill = this.GameConfiguration.Skills.FirstOrDefault(s => s.Number == (short)SkillNumber.IceStorm);
             var attributes = new Dictionary<AttributeDefinition, float>
             {
-                { Stats.Level, 130 },
+                { Stats.Level, 135 },
                 { Stats.MaximumHealth, 400_000 },
-                { Stats.MinimumPhysBaseDmg, 2000 },
-                { Stats.MaximumPhysBaseDmg, 2500 },
-                { Stats.DefenseBase, 5000 },
+                { Stats.MinimumPhysBaseDmg, 732 },
+                { Stats.MaximumPhysBaseDmg, 932 },
+                { Stats.DefenseBase, 315 },
                 { Stats.AttackRatePvm, 2000 },
-                { Stats.DefenseRatePvm, 1500 },
+                { Stats.DefenseRatePvm, 1445 },
                 { Stats.PoisonResistance, 40f / 255 },
                 { Stats.IceResistance, 40f / 255 },
                 { Stats.LightningResistance, 40f / 255 },
@@ -314,13 +314,13 @@ internal class KanturuEvent : BaseMapInitializer
             monster.AttackSkill = this.GameConfiguration.Skills.FirstOrDefault(s => s.Number == (short)SkillNumber.IceStorm);
             var attributes = new Dictionary<AttributeDefinition, float>
             {
-                { Stats.Level, 130 },
+                { Stats.Level, 135 },
                 { Stats.MaximumHealth, 350_000 },
-                { Stats.MinimumPhysBaseDmg, 2000 },
-                { Stats.MaximumPhysBaseDmg, 2500 },
-                { Stats.DefenseBase, 5000 },
-                { Stats.AttackRatePvm, 2100 },
-                { Stats.DefenseRatePvm, 1600 },
+                { Stats.MinimumPhysBaseDmg, 732 },
+                { Stats.MaximumPhysBaseDmg, 932 },
+                { Stats.DefenseBase, 800 },
+                { Stats.AttackRatePvm, 2000 },
+                { Stats.DefenseRatePvm, 550 },
                 { Stats.PoisonResistance, 40f / 255 },
                 { Stats.IceResistance, 40f / 255 },
                 { Stats.LightningResistance, 40f / 255 },

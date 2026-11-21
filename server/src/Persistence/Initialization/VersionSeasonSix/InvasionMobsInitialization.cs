@@ -53,12 +53,12 @@ internal class InvasionMobsInitialization : Version095d.InvasionMobsInitializati
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 20 },
-                { Stats.MaximumHealth, 3200 },
+                { Stats.MaximumHealth, 3100 },
                 { Stats.MinimumPhysBaseDmg, 125 },
                 { Stats.MaximumPhysBaseDmg, 130 },
                 { Stats.DefenseBase, 50 },
                 { Stats.AttackRatePvm, 100 },
-                { Stats.DefenseRatePvm, 50 },
+                { Stats.DefenseRatePvm, 30 },
                 { Stats.PoisonResistance, 2f / 255 },
                 { Stats.IceResistance, 2f / 255 },
                 { Stats.WaterResistance, 2f / 255 },
@@ -86,7 +86,7 @@ internal class InvasionMobsInitialization : Version095d.InvasionMobsInitializati
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 80 },
-                { Stats.MaximumHealth, 22000 },
+                { Stats.MaximumHealth, 23000 },
                 { Stats.MinimumPhysBaseDmg, 300 },
                 { Stats.MaximumPhysBaseDmg, 350 },
                 { Stats.DefenseBase, 230 },
@@ -119,7 +119,7 @@ internal class InvasionMobsInitialization : Version095d.InvasionMobsInitializati
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 61 },
-                { Stats.MaximumHealth, 10000 },
+                { Stats.MaximumHealth, 6300 },
                 { Stats.MinimumPhysBaseDmg, 190 },
                 { Stats.MaximumPhysBaseDmg, 200 },
                 { Stats.DefenseBase, 110 },
@@ -212,7 +212,7 @@ internal class InvasionMobsInitialization : Version095d.InvasionMobsInitializati
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 90 },
-                { Stats.MaximumHealth, 32000 },
+                { Stats.MaximumHealth, 30000 },
                 { Stats.MinimumPhysBaseDmg, 450 },
                 { Stats.MaximumPhysBaseDmg, 560 },
                 { Stats.DefenseBase, 300 },

@@ -331,7 +331,7 @@ internal class Kalima4 : KalimaBase
                 { Stats.MaximumPhysBaseDmg, 435 },
                 { Stats.DefenseBase, 300 },
                 { Stats.AttackRatePvm, 575 },
-                { Stats.DefenseRatePvm, 245 },
+                { Stats.DefenseRatePvm, 215 },
                 { Stats.PoisonResistance, 23f / 255 },
                 { Stats.IceResistance, 23f / 255 },
                 { Stats.LightningResistance, 23f / 255 },

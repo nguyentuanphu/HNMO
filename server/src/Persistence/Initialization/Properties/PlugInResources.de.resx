@@ -266,12 +266,6 @@
   <data name="AddDuelConfigurationPlugIn_Description" xml:space="preserve">
     <value>Diese Aktualisierung fügt Daten für die Duellkonfiguration hinzu</value>
   </data>
-  <data name="FixBloodCastleMonsterAttributesUpdatePlugIn_Name" xml:space="preserve">
-    <value>Korrektur der Monsterattribute von Blutburg 7/8</value>
-  </data>
-  <data name="FixBloodCastleMonsterAttributesUpdatePlugIn_Description" xml:space="preserve">
-    <value>Tauscht die Attributwerte zwischen BC7 (Monster 138-143) und BC8 (Monster 428-433), damit die Progression stimmt: BC6 → BC7 → BC8.</value>
-  </data>
   <data name="AddDoppelgangerDataUpdatePlugIn_Name" xml:space="preserve">
     <value>Doppelgänger-Daten hinzufügen</value>
   </data>
