@@ -197,6 +197,7 @@ public class BannedWordsTests
 
         var guildCreator = await PlayerTestHelper.CreatePlayerAsync(ctx).ConfigureAwait(false);
         await guildCreator.PlayerState.TryAdvanceToAsync(PlayerState.EnteredWorld).ConfigureAwait(false);
+        guildCreator.Attributes![HNMO.GameLogic.Attributes.Stats.Level] = 150; // the guild creation level
         await new GuildCreateAction().CreateGuildAsync(guildCreator, "VclGuild", new byte[32]).ConfigureAwait(false);
         Mock.Get(guildCreator.ViewPlugIns.GetPlugIn<IShowGuildCreateResultPlugIn>()!)
             .Verify(v => v.ShowGuildCreateResultAsync(GuildCreateErrorDetail.GuildAlreadyExist), Times.Once);

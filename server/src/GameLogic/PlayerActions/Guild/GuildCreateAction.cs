@@ -14,6 +14,7 @@ using HNMO.GameLogic.Views.Guild;
 /// </summary>
 public class GuildCreateAction
 {
+
     /// <summary>
     /// Creates the guild.
     /// </summary>
@@ -26,6 +27,23 @@ public class GuildCreateAction
         if (creator.PlayerState.CurrentState != PlayerState.EnteredWorld)
         {
             creator.Logger.LogError($"Account {creator.Account?.LoginName} not in the right state, but {creator.PlayerState.CurrentState}.");
+            return;
+        }
+
+        // The guild master checks these when he's asked for the creation dialog (TalkNpcAction), but the creation
+        // request itself can be sent without asking him.
+        if (creator.GuildStatus is not null)
+        {
+            creator.Logger.LogWarning("Account {account} requested to create a guild, but is already a guild member.", creator.Account?.LoginName);
+            await creator.InvokeViewPlugInAsync<IShowGuildCreateResultPlugIn>(p => p.ShowGuildCreateResultAsync(GuildCreateErrorDetail.GuildAlreadyExist)).ConfigureAwait(false);
+            return;
+        }
+
+        var minimumLevel = PlugIns.GameplayRules.GuildLimitsPlugIn.GetMinimumCreateLevel(creator.GameContext);
+        if (creator.Level < minimumLevel)
+        {
+            creator.Logger.LogWarning("Account {account} requested to create a guild below level {level}.", creator.Account?.LoginName, minimumLevel);
+            await creator.InvokeViewPlugInAsync<IShowGuildCreateResultPlugIn>(p => p.ShowGuildCreateResultAsync(GuildCreateErrorDetail.GuildAlreadyExist)).ConfigureAwait(false);
             return;
         }
 
