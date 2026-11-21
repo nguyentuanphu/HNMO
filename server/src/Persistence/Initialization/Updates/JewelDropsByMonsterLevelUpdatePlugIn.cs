@@ -7,6 +7,7 @@ namespace HNMO.Persistence.Initialization.Updates;
 using System.Runtime.InteropServices;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Configuration.Items;
+using HNMO.Interfaces;
 using HNMO.PlugIns;
 
 /// <summary>
@@ -142,7 +143,7 @@ public class JewelDropsByMonsterLevelUpdatePlugIn : UpdatePlugInBase
         {
             if (jewels.FirstOrDefault(j => j.Group == group && j.Number == number) is { } jewel)
             {
-                AddGroup(index, $"{jewel.Name.ValueInNeutralLanguage} from monsters of level {minimumLevel} to {maximumLevel}", minimumLevel, maximumLevel, chance, jewel);
+                AddGroup(index, minimumLevel, maximumLevel, chance, jewel);
             }
 
             index++;
@@ -150,14 +151,14 @@ public class JewelDropsByMonsterLevelUpdatePlugIn : UpdatePlugInBase
 
         foreach (var jewel in jewels)
         {
-            AddGroup(index++, $"{jewel.Name.ValueInNeutralLanguage} from monsters of level {HighLevel} and up", HighLevel, null, HighLevelChancePerJewel, jewel);
+            AddGroup(index++, HighLevel, null, HighLevelChancePerJewel, jewel);
         }
 
-        void AddGroup(short subNumber, string description, byte minimumLevel, byte? maximumLevel, double chance, ItemDefinition jewel)
+        void AddGroup(short subNumber, byte minimumLevel, byte? maximumLevel, double chance, ItemDefinition jewel)
         {
             var dropGroup = context.CreateNew<DropItemGroup>();
             dropGroup.SetGuid(GroupNumber, subNumber);
-            dropGroup.Description = description;
+            dropGroup.Description = GroupDescription(jewel);
             dropGroup.Chance = chance;
             dropGroup.MinimumMonsterLevel = minimumLevel;
             dropGroup.MaximumMonsterLevel = maximumLevel;
@@ -170,6 +171,18 @@ public class JewelDropsByMonsterLevelUpdatePlugIn : UpdatePlugInBase
             }
         }
     }
+
+    /// <summary>Gets the description of a jewel's groups; the monster level range is in the group's own fields.</summary>
+    /// <param name="jewel">The jewel.</param>
+    /// <returns>The description, translatable by its resource.</returns>
+    private static LocalizedString GroupDescription(ItemDefinition jewel) => (jewel.Group, jewel.Number) switch
+    {
+        (14, 13) => LocalizedString.FromResource(() => DropGroupDescriptions.JewelOfBlessByMonsterLevel),
+        (14, 14) => LocalizedString.FromResource(() => DropGroupDescriptions.JewelOfSoulByMonsterLevel),
+        (14, 16) => LocalizedString.FromResource(() => DropGroupDescriptions.JewelOfLifeByMonsterLevel),
+        (14, 22) => LocalizedString.FromResource(() => DropGroupDescriptions.JewelOfCreationByMonsterLevel),
+        _ => LocalizedString.FromResource(() => DropGroupDescriptions.JewelOfChaosByMonsterLevel),
+    };
 
     /// <inheritdoc />
     protected override ValueTask ApplyAsync(IContext context, GameConfiguration gameConfiguration)

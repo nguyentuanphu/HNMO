@@ -182,6 +182,13 @@ namespace HNMO.Persistence.Initialization.Properties {
             }
         }
 
+        /// <summary>Gets CapeOfFighterWingOptions from the configuration name resources.</summary>
+        public static string CapeOfFighterWingOptions {
+            get {
+                return ResourceManager.GetString("CapeOfFighterWingOptions", resourceCulture);
+            }
+        }
+
         /// <summary>Gets CapeOfLordOptions from the configuration name resources.</summary>
         public static string CapeOfLordOptions {
             get {

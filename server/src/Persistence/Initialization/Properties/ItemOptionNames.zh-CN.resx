@@ -327,4 +327,7 @@
   <data name="ChamerAncientSet" xml:space="preserve">
     <value>卡默套装属性</value>
   </data>
+  <data name="CapeOfFighterWingOptions" xml:space="preserve">
+    <value>斗士披风翅膀属性</value>
+  </data>
 </root>

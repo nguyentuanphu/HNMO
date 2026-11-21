@@ -231,4 +231,19 @@
   <data name="FlameOfCondor" xml:space="preserve">
     <value>Kondorflamme</value>
   </data>
+  <data name="JewelOfBlessByMonsterLevel" xml:space="preserve">
+    <value>Juwel des Segens nach Monsterstufe</value>
+  </data>
+  <data name="JewelOfSoulByMonsterLevel" xml:space="preserve">
+    <value>Juwel der Seele nach Monsterstufe</value>
+  </data>
+  <data name="JewelOfLifeByMonsterLevel" xml:space="preserve">
+    <value>Juwel des Lebens nach Monsterstufe</value>
+  </data>
+  <data name="JewelOfCreationByMonsterLevel" xml:space="preserve">
+    <value>Juwel der Schöpfung nach Monsterstufe</value>
+  </data>
+  <data name="JewelOfChaosByMonsterLevel" xml:space="preserve">
+    <value>Juwel des Chaos nach Monsterstufe</value>
+  </data>
 </root>

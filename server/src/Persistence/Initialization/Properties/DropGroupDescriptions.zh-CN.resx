@@ -231,4 +231,19 @@
   <data name="FlameOfCondor" xml:space="preserve">
     <value>神鹰火种</value>
   </data>
+  <data name="JewelOfBlessByMonsterLevel" xml:space="preserve">
+    <value>祝福宝石（按怪物等级）</value>
+  </data>
+  <data name="JewelOfSoulByMonsterLevel" xml:space="preserve">
+    <value>灵魂宝石（按怪物等级）</value>
+  </data>
+  <data name="JewelOfLifeByMonsterLevel" xml:space="preserve">
+    <value>生命宝石（按怪物等级）</value>
+  </data>
+  <data name="JewelOfCreationByMonsterLevel" xml:space="preserve">
+    <value>创造宝石（按怪物等级）</value>
+  </data>
+  <data name="JewelOfChaosByMonsterLevel" xml:space="preserve">
+    <value>玛雅宝石（按怪物等级）</value>
+  </data>
 </root>

@@ -327,4 +327,7 @@
   <data name="ChamerAncientSet" xml:space="preserve">
     <value>Chamer (Ancient-Set)</value>
   </data>
+  <data name="CapeOfFighterWingOptions" xml:space="preserve">
+    <value>Flügeloptionen des Umhangs des Kämpfers</value>
+  </data>
 </root>

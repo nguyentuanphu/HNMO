@@ -107,4 +107,5 @@
   <data name="WizardryBaseDamageMinAndMaxOption" xml:space="preserve"><value>Tùy chọn sát thương cơ bản của thuật sĩ (tối thiểu và tối đa)</value></data>
   <data name="VegaAncientSet" xml:space="preserve"><value>Vega (Bộ cổ)</value></data>
   <data name="ChamerAncientSet" xml:space="preserve"><value>Chamer (Bộ cổ)</value></data>
+  <data name="CapeOfFighterWingOptions" xml:space="preserve"><value>Tùy chọn cánh Áo choàng Chiến binh</value></data>
 </root>

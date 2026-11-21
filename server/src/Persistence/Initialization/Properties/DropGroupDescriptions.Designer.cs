@@ -49,6 +49,41 @@ namespace HNMO.Persistence.Initialization.Properties {
             }
         }
 
+        /// <summary>Gets JewelOfBlessByMonsterLevel from the configuration name resources.</summary>
+        public static string JewelOfBlessByMonsterLevel {
+            get {
+                return ResourceManager.GetString("JewelOfBlessByMonsterLevel", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets JewelOfSoulByMonsterLevel from the configuration name resources.</summary>
+        public static string JewelOfSoulByMonsterLevel {
+            get {
+                return ResourceManager.GetString("JewelOfSoulByMonsterLevel", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets JewelOfLifeByMonsterLevel from the configuration name resources.</summary>
+        public static string JewelOfLifeByMonsterLevel {
+            get {
+                return ResourceManager.GetString("JewelOfLifeByMonsterLevel", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets JewelOfCreationByMonsterLevel from the configuration name resources.</summary>
+        public static string JewelOfCreationByMonsterLevel {
+            get {
+                return ResourceManager.GetString("JewelOfCreationByMonsterLevel", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets JewelOfChaosByMonsterLevel from the configuration name resources.</summary>
+        public static string JewelOfChaosByMonsterLevel {
+            get {
+                return ResourceManager.GetString("JewelOfChaosByMonsterLevel", resourceCulture);
+            }
+        }
+
         /// <summary>Gets TheJewelsDropItemGroup01PercentDropChance from the configuration name resources.</summary>
         public static string TheJewelsDropItemGroup01PercentDropChance {
             get {

@@ -75,4 +75,9 @@
   <data name="CompensationBoxLochsFeather" xml:space="preserve"><value>Hộp bồi thường: Lông của Loch</value></data>
   <data name="CompensationBoxJewel" xml:space="preserve"><value>Hộp bồi thường: Ngọc</value></data>
   <data name="FlameOfCondor" xml:space="preserve"><value>Ngọn lửa thần điêu</value></data>
+  <data name="JewelOfBlessByMonsterLevel" xml:space="preserve"><value>Viên ngọc phước lành theo cấp quái vật</value></data>
+  <data name="JewelOfSoulByMonsterLevel" xml:space="preserve"><value>Viên ngọc tâm hồn theo cấp quái vật</value></data>
+  <data name="JewelOfLifeByMonsterLevel" xml:space="preserve"><value>Viên ngọc cuộc sống theo cấp quái vật</value></data>
+  <data name="JewelOfCreationByMonsterLevel" xml:space="preserve"><value>Viên ngọc sáng tạo theo cấp quái vật</value></data>
+  <data name="JewelOfChaosByMonsterLevel" xml:space="preserve"><value>Viên ngọc hỗn loạn theo cấp quái vật</value></data>
 </root>

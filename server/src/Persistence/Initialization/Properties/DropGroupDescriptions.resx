@@ -231,4 +231,19 @@
   <data name="FlameOfCondor" xml:space="preserve">
     <value>Flame of Condor</value>
   </data>
+  <data name="JewelOfBlessByMonsterLevel" xml:space="preserve">
+    <value>Jewel of Bless by monster level</value>
+  </data>
+  <data name="JewelOfSoulByMonsterLevel" xml:space="preserve">
+    <value>Jewel of Soul by monster level</value>
+  </data>
+  <data name="JewelOfLifeByMonsterLevel" xml:space="preserve">
+    <value>Jewel of Life by monster level</value>
+  </data>
+  <data name="JewelOfCreationByMonsterLevel" xml:space="preserve">
+    <value>Jewel of Creation by monster level</value>
+  </data>
+  <data name="JewelOfChaosByMonsterLevel" xml:space="preserve">
+    <value>Jewel of Chaos by monster level</value>
+  </data>
 </root>
