@@ -32,16 +32,6 @@ public class EternalWingSetUpdatePlugIn : UpdatePlugInBase
     /// <summary>The durability of all pieces.</summary>
     internal const byte Durability = 86;
 
-    /// <summary>Gets the group, the old and new drop level, the new defense and the new durability of the five pieces.</summary>
-    internal static IReadOnlyList<(byte Group, byte OldDropLevel, byte DropLevel, int Defense)> Pieces { get; } =
-    [
-        (7, 110, 116, 35),
-        (8, 113, 131, 49),
-        (9, 102, 122, 41),
-        (10, 82, 102, 29),
-        (11, 90, 99, 32),
-    ];
-
     /// <inheritdoc />
     public override string Name => PlugInName;
 
@@ -56,6 +46,16 @@ public class EternalWingSetUpdatePlugIn : UpdatePlugInBase
 
     /// <inheritdoc />
     public override DateTime CreatedAt => new(2026, 11, 21, 17, 0, 0, DateTimeKind.Utc);
+
+    /// <summary>Gets the group, the old and new drop level, the new defense and the new durability of the five pieces.</summary>
+    internal static IReadOnlyList<(byte Group, byte OldDropLevel, byte DropLevel, int Defense)> Pieces { get; } =
+    [
+        (7, 110, 116, 35),
+        (8, 113, 131, 49),
+        (9, 102, 122, 41),
+        (10, 82, 102, 29),
+        (11, 90, 99, 32),
+    ];
 
     /// <inheritdoc />
     protected override ValueTask ApplyAsync(IContext context, GameConfiguration gameConfiguration)
