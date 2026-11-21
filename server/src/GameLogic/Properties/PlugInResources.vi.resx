@@ -2446,4 +2446,6 @@
   <data name="ArenaScheduleNoticesPlugIn_Description" xml:space="preserve"><value>Ở máy chủ nhà: báo đấu sinh tồn và bang chiến của Đấu trường trong game trước 10 phút và lúc bắt đầu, theo lịch Đấu trường công bố.</value></data>
   <data name="CrossSeasonFriendsPlugIn_Name" xml:space="preserve"><value>Bạn bè khác season HNMO</value></data>
   <data name="CrossSeasonFriendsPlugIn_Description" xml:space="preserve"><value>Bạn bè đang chơi ở chương trình HNMO khác (Season 6.3, Season 9, Đấu trường) hiện nơi họ đang chơi trong danh sách bạn, và thì thầm tới được họ. Không giao dịch giữa các season.</value></data>
+  <data name="MonsterAiPlugIn_Name" xml:space="preserve"><value>Quy tắc AI quái vật</value></data>
+  <data name="MonsterAiPlugIn_Description" xml:space="preserve"><value>Cấu hình quái đuổi người tấn công, giới hạn quay về vùng sinh và hồi đầy máu khi quay về.</value></data>
 </root>

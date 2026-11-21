@@ -169,4 +169,22 @@ public class MonsterChaseLeashHealTest
         Assert.That(monster.Position.X, Is.InRange(179, 181), "Back in its spawn area.");
         Assert.That(typeof(BasicMonsterIntelligence).GetField("_isReturningHome", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(ai), Is.False);
     }
+
+    /// <summary>Verifies that MonsterAiPlugIn display name and description are localized via PlugInResources in en, vi, de, and zh-CN.</summary>
+    [Test]
+    public void PlugInDisplayTextsExistInAllLanguages()
+    {
+        var display = typeof(MonsterAiPlugIn).GetCustomAttribute<System.ComponentModel.DataAnnotations.DisplayAttribute>();
+        Assert.That(display, Is.Not.Null);
+        Assert.That(display!.ResourceType, Is.EqualTo(typeof(HNMO.GameLogic.Properties.PlugInResources)));
+
+        foreach (var cultureName in new[] { "en", "vi", "de", "zh-CN" })
+        {
+            var culture = System.Globalization.CultureInfo.GetCultureInfo(cultureName);
+            var name = HNMO.GameLogic.Properties.PlugInResources.ResourceManager.GetString(display.Name!, culture);
+            var desc = HNMO.GameLogic.Properties.PlugInResources.ResourceManager.GetString(display.Description!, culture);
+            Assert.That(name, Is.Not.Null.And.Not.Empty, $"Missing MonsterAiPlugIn name for {cultureName}");
+            Assert.That(desc, Is.Not.Null.And.Not.Empty, $"Missing MonsterAiPlugIn description for {cultureName}");
+        }
+    }
 }

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "3d267cf1",
+  "generatedAt": "e977aa40",
   "maxLines": 6000,
   "units": [
     {
@@ -649,7 +649,7 @@
         "server/src/GameLogic/NPC"
       ],
       "files": 22,
-      "lines": 2852,
+      "lines": 2860,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -1653,13 +1653,13 @@
         "server/src/GameLogic/PlugIns/GameplayRules"
       ],
       "files": 25,
-      "lines": 2053,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
-      "prs": ""
+      "lines": 2068,
+      "status": "Checked",
+      "checkedAt": "e977aa40",
+      "checkedOn": "2026-11-21",
+      "references": "Season 6/9 server suites; docs/audit/findings/owner-answers-monsters-2026-11-21.md",
+      "evidence": "MonsterChaseLeashHealTest",
+      "prs": "#235"
     },
     {
       "id": "server/src/GameLogic/PlugIns/GiftBox",
@@ -2097,6 +2097,21 @@
       "prs": ""
     },
     {
+      "id": "server/src/GameLogic/PlugIns/UltimateAutoPlay",
+      "kind": "Server rules",
+      "paths": [
+        "server/src/GameLogic/PlugIns/UltimateAutoPlay"
+      ],
+      "files": 3,
+      "lines": 240,
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
+      "prs": ""
+    },
+    {
       "id": "server/src/GameLogic/PlugIns/UnlockCharacterClass",
       "kind": "Server rules",
       "paths": [
@@ -2268,6 +2283,7 @@
         "server/src/GameLogic/Views/IHnmoTimetableViewPlugIn.cs",
         "server/src/GameLogic/Views/IHnmoTopRacesViewPlugIn.cs",
         "server/src/GameLogic/Views/IHnmoTopUpMilestonesViewPlugIn.cs",
+        "server/src/GameLogic/Views/IHnmoUltimateAutoPlayViewPlugIn.cs",
         "server/src/GameLogic/Views/IHnmoVaultPageViewPlugIn.cs",
         "server/src/GameLogic/Views/IHnmoVipViewPlugIn.cs",
         "server/src/GameLogic/Views/IHnmoWorldBossesViewPlugIn.cs",
@@ -2275,8 +2291,8 @@
         "server/src/GameLogic/Views/IViewPlugIn.cs",
         "server/src/GameLogic/Views/ViewExtensions.cs"
       ],
-      "files": 39,
-      "lines": 817,
+      "files": 40,
+      "lines": 834,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -2665,6 +2681,7 @@
         "server/src/GameServer/MessageHandler/HnmoTopRacesActionHandlerPlugIn.cs",
         "server/src/GameServer/MessageHandler/HnmoTopRacesRequestHandlerPlugIn.cs",
         "server/src/GameServer/MessageHandler/HnmoTopUpMilestonesCommandHandlerPlugIn.cs",
+        "server/src/GameServer/MessageHandler/HnmoUltimateAutoPlayRequestHandlerPlugIn.cs",
         "server/src/GameServer/MessageHandler/HnmoVaultPageCommandHandlerPlugIn.cs",
         "server/src/GameServer/MessageHandler/HnmoVipRequestHandlerPlugIn.cs",
         "server/src/GameServer/MessageHandler/HnmoWorldBossesActionHandlerPlugIn.cs",
@@ -2692,8 +2709,8 @@
         "server/src/GameServer/MessageHandler/WarpHandlerPlugIn.cs",
         "server/src/GameServer/MessageHandler/WhisperedChatMessageHandlerPlugIn.cs"
       ],
-      "files": 95,
-      "lines": 4883,
+      "files": 96,
+      "lines": 4924,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -2998,6 +3015,7 @@
         "server/src/GameServer/RemoteView/HnmoTimetableViewPlugIn.cs",
         "server/src/GameServer/RemoteView/HnmoTopRacesViewPlugIn.cs",
         "server/src/GameServer/RemoteView/HnmoTopUpMilestonesViewPlugIn.cs",
+        "server/src/GameServer/RemoteView/HnmoUltimateAutoPlayViewPlugIn.cs",
         "server/src/GameServer/RemoteView/HnmoVaultPageViewPlugIn.cs",
         "server/src/GameServer/RemoteView/HnmoVipViewPlugIn.cs",
         "server/src/GameServer/RemoteView/HnmoWorldBossesViewPlugIn.cs",
@@ -3014,8 +3032,8 @@
         "server/src/GameServer/RemoteView/ShowMessagePlugIn.cs",
         "server/src/GameServer/RemoteView/ViewPlugInContainer.cs"
       ],
-      "files": 53,
-      "lines": 5189,
+      "files": 54,
+      "lines": 5223,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -3713,10 +3731,10 @@
         "server/src/Persistence/Initialization/Updates/SetIntroducedGameVersionsPlugInBase.cs",
         "server/src/Persistence/Initialization/Updates/SetIntroducedGameVersionsPlugInSeason6.cs",
         "server/src/Persistence/Initialization/Updates/SocketCriticalDamageUpdatePlugIn.cs",
-        "server/src/Persistence/Initialization/Updates/SpawnFixesUpdatePlugIn.cs"
+        "server/src/Persistence/Initialization/Updates/SocketShieldProtectionUpdatePlugIn.cs"
       ],
       "files": 60,
-      "lines": 5989,
+      "lines": 5899,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -3728,6 +3746,7 @@
       "id": "server/src/Persistence/Initialization/Updates (files 5)",
       "kind": "Game data (Season 6/9)",
       "paths": [
+        "server/src/Persistence/Initialization/Updates/SpawnFixesUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/StandardizeEventEnterDurationPlugIn095d.cs",
         "server/src/Persistence/Initialization/Updates/StandardizeEventEnterDurationPlugInBase.cs",
         "server/src/Persistence/Initialization/Updates/StandardizeEventEnterDurationPlugInSeason6.cs",
@@ -3736,14 +3755,15 @@
         "server/src/Persistence/Initialization/Updates/SystemConfigurationAddedPlugIn095d.cs",
         "server/src/Persistence/Initialization/Updates/SystemConfigurationAddedPlugInBase.cs",
         "server/src/Persistence/Initialization/Updates/SystemConfigurationAddedPlugInSeason6.cs",
+        "server/src/Persistence/Initialization/Updates/ThirdWingsLuckUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/UpdateDependency.cs",
         "server/src/Persistence/Initialization/Updates/UpdatePlugInBase.cs",
         "server/src/Persistence/Initialization/Updates/VaultPagesDefaultsUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/WizEnhanceAndRagefighterSkillsUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/ZenLossBagOnlyUpdatePlugIn.cs"
       ],
-      "files": 13,
-      "lines": 754,
+      "files": 15,
+      "lines": 968,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -3950,7 +3970,7 @@
         "server/src/Persistence/Initialization/VersionSeasonSix/Items/Wings.cs"
       ],
       "files": 7,
-      "lines": 2982,
+      "lines": 2983,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4356,7 +4376,7 @@
         "client/web/src/vipTexts.ts"
       ],
       "files": 8,
-      "lines": 4686,
+      "lines": 4790,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4420,17 +4440,17 @@
         "client/web/src/game/autoPlay.ts",
         "client/web/src/game/autoPlayConfig.ts",
         "client/web/src/game/autoPlayExtras.ts",
+        "client/web/src/game/autoPlaySparkles.ts",
         "client/web/src/game/buffs.ts",
         "client/web/src/game/cashShopScript.ts",
         "client/web/src/game/castleSiege.ts",
         "client/web/src/game/characterCalc.ts",
         "client/web/src/game/characters.ts",
         "client/web/src/game/chat.ts",
-        "client/web/src/game/chatExtras.ts",
-        "client/web/src/game/combat.ts"
+        "client/web/src/game/chatExtras.ts"
       ],
       "files": 12,
-      "lines": 5379,
+      "lines": 5472,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4442,6 +4462,7 @@
       "id": "client/web/src/game (files 2)",
       "kind": "Web client",
       "paths": [
+        "client/web/src/game/combat.ts",
         "client/web/src/game/combatEffects.ts",
         "client/web/src/game/combatLook.ts",
         "client/web/src/game/crywolf.ts",
@@ -4453,11 +4474,10 @@
         "client/web/src/game/gates.ts",
         "client/web/src/game/gens.ts",
         "client/web/src/game/groundItems.ts",
-        "client/web/src/game/guild.ts",
-        "client/web/src/game/instanceEvents.ts"
+        "client/web/src/game/guild.ts"
       ],
       "files": 13,
-      "lines": 5962,
+      "lines": 5939,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4469,6 +4489,7 @@
       "id": "client/web/src/game (files 3)",
       "kind": "Web client",
       "paths": [
+        "client/web/src/game/instanceEvents.ts",
         "client/web/src/game/inventory.ts",
         "client/web/src/game/itemGlow.ts",
         "client/web/src/game/itemLooks.ts",
@@ -4476,11 +4497,10 @@
         "client/web/src/game/itemUse.ts",
         "client/web/src/game/itemValue.ts",
         "client/web/src/game/items.ts",
-        "client/web/src/game/kalima.ts",
-        "client/web/src/game/legacyQuestDialog.generated.ts"
+        "client/web/src/game/kalima.ts"
       ],
       "files": 9,
-      "lines": 5770,
+      "lines": 5120,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4492,6 +4512,7 @@
       "id": "client/web/src/game (files 4)",
       "kind": "Web client",
       "paths": [
+        "client/web/src/game/legacyQuestDialog.generated.ts",
         "client/web/src/game/masterLevel.ts",
         "client/web/src/game/messenger.ts",
         "client/web/src/game/miniMapData.ts",
@@ -4505,13 +4526,10 @@
         "client/web/src/game/pathfinding.ts",
         "client/web/src/game/perfRecorder.ts",
         "client/web/src/game/pets.ts",
-        "client/web/src/game/prewarm.ts",
-        "client/web/src/game/questData.ts",
-        "client/web/src/game/quests.ts",
-        "client/web/src/game/resets.ts"
+        "client/web/src/game/prewarm.ts"
       ],
-      "files": 17,
-      "lines": 5454,
+      "files": 15,
+      "lines": 5819,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4523,6 +4541,9 @@
       "id": "client/web/src/game (files 5)",
       "kind": "Web client",
       "paths": [
+        "client/web/src/game/questData.ts",
+        "client/web/src/game/quests.ts",
+        "client/web/src/game/resets.ts",
         "client/web/src/game/skillCast.ts",
         "client/web/src/game/skillTooltip.ts",
         "client/web/src/game/skills.ts",
@@ -4532,8 +4553,8 @@
         "client/web/src/game/textFormat.ts",
         "client/web/src/game/warps.ts"
       ],
-      "files": 8,
-      "lines": 2225,
+      "files": 11,
+      "lines": 3135,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4764,12 +4785,13 @@
         "client/web/src/ui/topUpMilestonesWindow.ts",
         "client/web/src/ui/touchControls.ts",
         "client/web/src/ui/tradeWindow.ts",
+        "client/web/src/ui/ultimateAutoPlayWindow.ts",
         "client/web/src/ui/vaultPages.ts",
         "client/web/src/ui/vipWindow.ts",
         "client/web/src/ui/worldBossWindow.ts"
       ],
-      "files": 16,
-      "lines": 4197,
+      "files": 17,
+      "lines": 4612,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -7857,7 +7879,7 @@
         "server/src/Network"
       ],
       "files": 198,
-      "lines": 215431,
+      "lines": 215824,
       "status": "No game rules",
       "checkedAt": "",
       "checkedOn": "",
@@ -7871,8 +7893,8 @@
       "paths": [
         "server/src/Web"
       ],
-      "files": 814,
-      "lines": 95078,
+      "files": 816,
+      "lines": 95372,
       "status": "No game rules",
       "checkedAt": "",
       "checkedOn": "",
