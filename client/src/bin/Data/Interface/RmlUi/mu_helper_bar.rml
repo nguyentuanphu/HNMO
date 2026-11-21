@@ -1,6 +1,6 @@
 <rml>
 <head>
-	<title>MU Helper Bar</title>
+	<title>Auto Play Bar</title>
 	<link type="text/rcss" href="base.rcss"/>
 	<link type="text/rcss" href="mu_helper_bar.rcss"/>
 </head>

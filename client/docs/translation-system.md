@@ -681,3 +681,48 @@ data files, two commits are the headlines:
 The leftover binary `text.bmd` / `NPCDialogue.bmd` / per-language
 `Dialog_*.bmd` files are pure data; nothing in the C++ source loads them
 anymore.
+
+## Vietnamese editor interface
+
+Choose **Tiếng Việt** in the editor's language menu. Editor controls, field
+metadata, popup captions and map import messages use the Vietnamese catalogs.
+The locale menu reads the generated locale list automatically; the editor's
+font ranges already include Vietnamese characters. Resource keys, filenames,
+technical identifiers and formatting arguments retain their original meaning.
+
+The catalogs include every key in `Editor.en.resx` and `Metadata.en.resx`.
+Run `python3 client/tools/check-editor-vi.py` to check coverage, hidden widget
+IDs, numbers and formatting placeholders. Build the resource generator using
+its normal `--wide-groups Game,Dialog --item-text-groups Game,Dialog` options.
+Missing entries were drafted with translation assistance, then checked against
+existing Vietnamese terminology and corrected for technical terms and numeric
+formatting. Complete editorial review and a live editor walkthrough are still
+needed; coverage alone does not certify wording or layout.
+
+The standalone runtime check is
+`tools/ResxGen/tests/editor-locale-smoke.cpp`. Compile it as C++20 together with
+the generated `All.cpp`, `Editor.cpp`, `Metadata.cpp`, `Game.cpp` and
+`Dialog.cpp`, using the generated directory as an include path. It checks
+Vietnamese locale selection, captions, formatted import status and restoration
+of English without needing to start the editor.
+
+## Vietnamese on the public website
+
+The account page and the guide have **English / Tiếng Việt** controls at the top.
+On the account page, changing the language updates registration, coins, gift
+codes, resets and account safety together. The homepage, game and these pages
+remember the same language choice. Account names, passwords and the configured
+game name retain their original text.
+
+Server labels and game-content names use Vietnamese resource files. Empty
+neutral descriptions remain empty; proper names, commands, key bindings and
+technical currency names may be unchanged. The web dictionary and its maintained
+overrides cover interface text and public-page instructions, including long
+guide paragraphs.
+
+Run `python3 client/web/tools/lang/check-vi.py` from the repository root to check
+nonempty server-resource coverage, dictionary/override parity and formatting
+placeholders. This checks coverage and formatting, not Vietnamese fluency.
+New translations in this pass were machine-assisted with existing translations
+as a glossary; full terminology and sentence-by-sentence editorial review remains
+necessary before treating the catalog as final.

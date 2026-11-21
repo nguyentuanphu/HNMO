@@ -88,7 +88,7 @@ public class TranslationCoverageTests
     /// <summary>Checks that the player messages are resolved in the culture of the player.</summary>
     /// <param name="culture">The culture of the player.</param>
     /// <param name="expected">The expected message.</param>
-    [TestCase("pt", "O MU Helper requer 1000 zen.")]
+    [TestCase("pt", "O assistente de jogo automático requer 1000 zen.")]
     public void PlayerMessageIsResolvedInCulture(string culture, string expected)
     {
         var format = HNMO.GameLogic.Properties.PlayerMessage.ResourceManager.GetString(nameof(HNMO.GameLogic.Properties.PlayerMessage.MuHelperRequiresMoney), CultureInfo.GetCultureInfo(culture));

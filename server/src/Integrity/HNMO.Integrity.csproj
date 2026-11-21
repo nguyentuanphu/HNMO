@@ -24,6 +24,8 @@
   <ItemGroup>
     <!-- The signing public key is embedded so a tamperer cannot simply swap a file on disk. -->
     <EmbeddedResource Include="..\..\..\client\web\tools\hnmo\integrity-pub.pem" Link="integrity-pub.pem" />
+    <!-- The developer hub's licence key (public half), once the developer made it on the hub. -->
+    <EmbeddedResource Include="..\..\..\client\web\tools\hnmo\licence-pub.pem" Link="licence-pub.pem" Condition="Exists('..\..\..\client\web\tools\hnmo\licence-pub.pem')" />
   </ItemGroup>
 
 </Project>

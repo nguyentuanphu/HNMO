@@ -50,6 +50,11 @@ public class CashShopActions
     /// <param name="player">The player.</param>
     public async ValueTask OpenAsync(Player player)
     {
+        if (await PlugIns.Arena.ArenaRules.RefuseAsync(player, PlugIns.Arena.ArenaRules.Action.CashShop).ConfigureAwait(false))
+        {
+            return;
+        }
+
         var isAllowed = IsAllowedToUse(player);
         player.IsCashShopOpen = isAllowed;
         await player.InvokeViewPlugInAsync<ICashShopViewPlugIn>(p => p.ShowOpenResultAsync(isAllowed)).ConfigureAwait(false);
@@ -92,6 +97,11 @@ public class CashShopActions
     /// <param name="coinType">The coin type with which the player wants to pay; <c>null</c>, if the client sent an unknown one.</param>
     public async ValueTask BuyAsync(Player player, int packageSequence, int priceSequence, CashShopCoinType? coinType)
     {
+        if (await PlugIns.Arena.ArenaRules.RefuseAsync(player, PlugIns.Arena.ArenaRules.Action.CashShop).ConfigureAwait(false))
+        {
+            return;
+        }
+
         if (!IsOpenAndAllowed(player)
             || player.Account is not { } account
             || player.GameContext.Configuration.CashShopConfiguration is not { } configuration)
@@ -136,6 +146,11 @@ public class CashShopActions
     /// <param name="message">The message of the gift.</param>
     public async ValueTask GiftAsync(Player player, int packageSequence, int priceSequence, CashShopCoinType? coinType, string recipientName, string message)
     {
+        if (await PlugIns.Arena.ArenaRules.RefuseAsync(player, PlugIns.Arena.ArenaRules.Action.CashShop).ConfigureAwait(false))
+        {
+            return;
+        }
+
         if (!IsOpenAndAllowed(player)
             || player.Account is not { } account
             || player.SelectedCharacter is not { } character
@@ -202,6 +217,11 @@ public class CashShopActions
     /// <param name="priceSequence">The price sequence number of the item, to verify that the index still refers to it.</param>
     public async ValueTask UseStorageItemAsync(Player player, int storageIndex, int priceSequence)
     {
+        if (await PlugIns.Arena.ArenaRules.RefuseAsync(player, PlugIns.Arena.ArenaRules.Action.CashShop).ConfigureAwait(false))
+        {
+            return;
+        }
+
         if (!IsOpenAndAllowed(player)
             || player.Account is not { } account
             || player.GameContext.Configuration.CashShopConfiguration is not { } configuration)
@@ -359,6 +379,7 @@ public class CashShopActions
                 storageItems.Add(storageItem);
             }
 
+            var receipt = CashShopPurchaseReceipt.Create(player.PersistenceContext, account, package, price, giftRecipientName);
             if (await TrySaveAsync(player).ConfigureAwait(false))
             {
                 boughtPackage = package;
@@ -368,6 +389,7 @@ public class CashShopActions
             }
 
             account.SetCashShopCoins(package.CoinType, coins);
+            await player.PersistenceContext.DeleteAsync(receipt).ConfigureAwait(false);
             foreach (var storageItem in storageItems)
             {
                 await player.PersistenceContext.DeleteAsync(storageItem).ConfigureAwait(false);

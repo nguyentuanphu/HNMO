@@ -5,9 +5,9 @@
 namespace HNMO.Persistence;
 
 using System.Collections;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel;
 using HNMO.DataModel.Configuration;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Provider which provides the latest <see cref="GameConfiguration"/> and

@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>HenryN Mu Online Account</title>
+  <title>{game}</title>
+  <link rel="stylesheet" href="/account-dashboard.css">
   <style>
     [hidden] { display: none !important; }
     :root { --panel: rgba(10, 12, 20, .86); --line: rgba(255, 255, 255, .14); --gold: #c9a24a; --text: #e6e8ef; --muted: #9aa0b2; --error: #ef7a6c; --ok: #7cc98a; }
@@ -63,12 +64,41 @@
     .safety-facts { font-size: 13px; color: var(--muted); margin: 0; padding-left: 18px; }
   </style>
 </head>
-<body>
+<body data-page-label="Account">
   <main>
     <header>
-      <h1 data-game-name>HenryN Mu Online</h1>
+      <h1 data-game-name></h1>
       <a href="/">Play the game →</a>
+      <span role="group" aria-label="Page language" style="display:inline-flex;gap:6px"><button type="button" data-site-language="en">English</button><button type="button" data-site-language="vi">Tiếng Việt</button></span>
     </header>
+
+    <section class="panel" id="accountLoginPanel" data-no-i18n>
+      <h2 data-at="signIn">Sign in to my account</h2>
+      <div class="account-actions" role="group" aria-label="English / Tiếng Việt">
+        <button type="button" data-account-language="en" title="Read in English / Đọc bằng tiếng Anh">English</button>
+        <button type="button" data-account-language="vi" title="Read in Vietnamese / Đọc bằng tiếng Việt">Tiếng Việt</button>
+      </div>
+      <p data-at="privacy">This page does not save your password in browser storage. Log out when using a shared computer.</p>
+      <form id="accountSignIn" class="panel" style="padding:0;border:0;background:none">
+        <label><span data-at="accountName">Account name</span><input id="accountUser" required maxlength="10" autocomplete="username"></label>
+        <label><span data-at="password">Password</span><input id="accountSecret" type="password" required maxlength="20" autocomplete="current-password"></label>
+        <button id="accountSignInButton" type="submit" data-at="signIn" data-at-title="signInHint">Sign in to my account</button>
+      </form>
+    </section>
+    <div id="accountDashboard" data-no-i18n>
+      <div id="accountToolbar" hidden>
+        <button type="button" data-account-language="en" title="Read in English / Đọc bằng tiếng Anh">English</button>
+        <button type="button" data-account-language="vi" title="Read in Vietnamese / Đọc bằng tiếng Việt">Tiếng Việt</button>
+        <button type="button" id="accountHelpButton" aria-expanded="false" aria-controls="accountHelp" data-at="helpTitle" data-at-title="helpHint">How to use this page</button>
+        <button type="button" id="accountRefresh" data-at="refresh" data-at-title="refreshHint">Refresh</button>
+        <button type="button" id="accountLogout" data-at="logout" data-at-title="logoutHint">Log out</button>
+        <div id="accountHelp" role="note" data-at="help" hidden></div>
+      </div>
+      <p id="accountMessage" role="status" aria-live="polite"></p>
+      <nav id="accountNav" aria-label="Account sections / Các mục tài khoản" hidden></nav>
+      <select id="accountSectionSelect" aria-label="Account sections / Các mục tài khoản"></select>
+      <div id="accountPanels"></div>
+    </div>
 
     <section class="panel notice" id="setupPanel" hidden>
       <h2>Finish the setup (host only)</h2>
@@ -83,6 +113,25 @@
       </form>
     </section>
 
+    <section class="panel" id="play" aria-labelledby="playTitle">
+      <div class="gift-head">
+        <h2 id="playTitle" data-pt="title">Play in browser</h2>
+        <div class="langs" role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-play-lang="en">EN</button> <button type="button" data-play-lang="vi">VI</button></div>
+      </div>
+      <p data-pt="intro">Sign in here once, then click Play now to open the game straight at server selection without typing your password again.</p>
+      <form id="playLogin" class="safety-row">
+        <label><span data-pt="account">Account name</span> <input id="playAccount" name="loginName" required maxlength="10" autocomplete="username"></label>
+        <label><span data-pt="password">Password</span> <input id="playPassword" name="password" type="password" required maxlength="20" autocomplete="current-password"></label>
+        <button type="submit" id="playSignInButton" data-pt="login">Sign in</button>
+      </form>
+      <div id="playSignedIn" class="safety-row" hidden>
+        <p style="margin:0;flex:1 1 200px"><span data-pt="signedInAs">Signed in as</span> <strong id="playSignedName"></strong></p>
+        <button type="button" id="playNowButton" data-pt="playNow">Play now</button>
+        <button type="button" id="playSignOutButton" data-pt="signOut" style="background:transparent;color:var(--gold)">Sign out</button>
+      </div>
+      <p class="message" id="playMessage" role="status" aria-live="polite"></p>
+    </section>
+
     <div class="grid">
       <form class="panel" id="registerForm">
         <h2>Create an account</h2>
@@ -94,21 +143,9 @@
         <p class="message" id="registerMessage" role="status"></p>
       </form>
 
-      <form class="panel" id="coinsForm">
-        <h2>My coins</h2>
-        <p>Spend them in the game's cash shop. The host can give more in the admin panel, and playing earns Goblin Points.</p>
-        <label>Account name <input id="coinsAccount" name="account" required maxlength="10"></label>
-        <button type="submit">Show my coins</button>
-        <div class="coins" id="coins" hidden>
-          <div class="coin"><strong id="wcoinc">0</strong><span>WCoin (C)</span></div>
-          <div class="coin"><strong id="wcoinp">0</strong><span>WCoin (P)</span></div>
-          <div class="coin"><strong id="goblin">0</strong><span>Goblin Points</span></div>
-        </div>
-        <p class="message" id="coinsMessage" role="status"></p>
-      </form>
     </div>
 
-    <section class="panel" id="gift" aria-labelledby="giftTitle">
+    <section class="panel" id="gift" data-no-i18n aria-labelledby="giftTitle">
       <div class="gift-head">
         <h2 id="giftTitle" data-gt="title">Gift code</h2>
         <div class="langs" role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-gift-lang="en">EN</button> <button type="button" data-gift-lang="vi">VI</button></div>
@@ -128,7 +165,7 @@
       <p class="message" id="giftMessage" role="status" aria-live="polite"></p>
     </section>
 
-    <section class="panel" id="resets" aria-labelledby="resetsTitle">
+    <section class="panel" id="resets" data-no-i18n aria-labelledby="resetsTitle">
       <div class="gift-head">
         <h2 id="resetsTitle" data-rt="title">Resets and stats</h2>
         <div class="langs" role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-reset-lang="en">EN</button> <button type="button" data-reset-lang="vi">VI</button></div>
@@ -143,7 +180,7 @@
       <p class="message" id="resetsMessage" role="status" aria-live="polite"></p>
       <div class="reset-cards" id="resetCards"></div>
     </section>
-    <section class="panel" id="safety" aria-labelledby="safetyTitle">
+    <section class="panel" id="safety" data-no-i18n aria-labelledby="safetyTitle">
       <div class="gift-head">
         <h2 id="safetyTitle" data-st="title">Account safety</h2>
         <div class="langs" role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-safety-lang="en">EN</button> <button type="button" data-safety-lang="vi">VI</button></div>
@@ -217,35 +254,21 @@
       try {
         const result = await call('/portal/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ loginName: form.loginName, password: form.password, eMail: form.eMail || null }) });
         show($('registerMessage'), `Account ${form.loginName} created${result.coins ? ` with ${result.coins}` : ''}. You can log in to the game now.`, true);
-        $('coinsAccount').value = form.loginName;
         event.target.reset();
       } catch (error) { show($('registerMessage'), error.message, false); }
     });
 
-    $('coinsForm').addEventListener('submit', async (event) => {
-      event.preventDefault();
-      try {
-        const coins = await call(`/portal/coins/${encodeURIComponent($('coinsAccount').value)}`);
-        // Grants the game server hasn't applied yet count too: it adds them when the player opens the cash shop.
-        const pending = { WCoinC: 0, WCoinP: 0, GoblinPoints: 0 };
-        for (const grant of coins.grants ?? []) if (!grant.appliedAt) pending[grant.coinType] = (pending[grant.coinType] ?? 0) + grant.amount;
-        $('wcoinc').textContent = (coins.wCoinC ?? 0) + pending.WCoinC;
-        $('wcoinp').textContent = (coins.wCoinP ?? 0) + pending.WCoinP;
-        $('goblin').textContent = (coins.goblinPoints ?? 0) + pending.GoblinPoints;
-        $('coins').hidden = false;
-        const waiting = pending.WCoinC + pending.WCoinP + pending.GoblinPoints;
-        show($('coinsMessage'), waiting ? `Includes ${waiting} new coins, which arrive in your account when you open the cash shop in the game.` : '', true);
-      } catch (error) { $('coins').hidden = true; show($('coinsMessage'), error.message, false); }
-    });
   </script>
   <script type="module">
+    import { deviceId } from '/js/deviceId.js';
+    import { giftCodeIdentityText } from '/js/giftCodeIdentity.js';
     // The gift code panel (English and Vietnamese): the account's name and password are checked by the game server
     // through this site's bridge, which lists the characters; the code is then entered for the chosen character.
     const TEXT = {
       en: {
         title: 'Gift code', account: 'Account name', password: 'Password', login: 'Show my characters',
         character: 'Character (gets the zen and items)', code: 'Gift code', use: 'Use the code',
-        intro: 'Enter a gift code for one of your characters: coins go to the account, zen and items to the character (they arrive in its bag when it\'s in the game). In the game you can also type /code CODE.',
+        intro: 'A code may allow one claim per network or browser device. People sharing Wi-Fi may share this limit. Enter a gift code for one of your characters: coins go to the account, zen and items to the character (they arrive in its bag when it\'s in the game). In the game you can also type /code CODE.',
         off: 'Gift codes can\'t be entered on the website on this server: use /code CODE in the game.',
         loginWrong: 'Wrong account name or password.', noCharacters: 'This account has no character yet: create one in the game first.',
         server: 'The game server didn\'t answer. Try again later.', busy: 'Too many requests from your address. Wait a minute.', setup: 'The account page isn\'t set up yet (host: see README.txt).',
@@ -260,7 +283,7 @@
       vi: {
         title: 'Gift code', account: 'Tên tài khoản', password: 'Mật khẩu', login: 'Xem nhân vật của tôi',
         character: 'Nhân vật (nhận zen và vật phẩm)', code: 'Gift code', use: 'Dùng mã',
-        intro: 'Nhập gift code cho một nhân vật của bạn: coin vào tài khoản, zen và vật phẩm vào nhân vật (vào túi đồ khi nhân vật ở trong game). Trong game bạn cũng có thể gõ /code MÃ.',
+        intro: 'Gift code có thể giới hạn một lần nhận cho mỗi mạng hoặc thiết bị trình duyệt. Người dùng chung Wi-Fi có thể dùng chung hạn mức này. Nhập gift code cho một nhân vật của bạn: coin vào tài khoản, zen và vật phẩm vào nhân vật (vào túi đồ khi nhân vật ở trong game). Trong game bạn cũng có thể gõ /code MÃ.',
         off: 'Máy chủ này không cho nhập gift code trên website: hãy dùng /code MÃ trong game.',
         loginWrong: 'Sai tên tài khoản hoặc mật khẩu.', noCharacters: 'Tài khoản này chưa có nhân vật: hãy tạo nhân vật trong game trước.',
         server: 'Máy chủ game không trả lời. Hãy thử lại sau.', busy: 'Quá nhiều yêu cầu từ địa chỉ của bạn. Hãy chờ một phút.', setup: 'Trang tài khoản chưa được cài đặt (chủ server: xem README.txt).',
@@ -291,6 +314,8 @@
       return parts.join(' + ');
     }
     function resultText(answer) {
+      const identityText = giftCodeIdentityText(answer.result, lang);
+      if (identityText) return identityText;
       const d = answer.details ?? {};
       const minMax = answer.result.startsWith('Level') ? [d.minLevel, d.maxLevel] : [d.minResets, d.maxResets];
       return t(answer.result)
@@ -343,7 +368,7 @@
       event.preventDefault();
       if (!login) return;
       try {
-        const answer = await post('/portal/gift-codes/redeem', { ...login, character: $('giftCharacter').value, code: $('giftCode').value.trim() });
+        const answer = await post('/portal/gift-codes/redeem', { ...login, character: $('giftCharacter').value, code: $('giftCode').value.trim(), deviceId: deviceId() });
         if (!answer.ok) { last = { text: () => errorText(answer.status, answer.data), ok: false }; say(last.text(), false); return; }
         last = { text: () => resultText(answer.data), ok: answer.data.result === 'Ok' };
         say(last.text(), last.ok);
@@ -785,25 +810,123 @@
     });
     applyLanguage();
   </script>
-  <script>
-    // The game's name from the admin panel (the "Game name" plug-in), else the default above.
-    fetch('/game-name.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : null)).then((d) => {
-      const name = d && typeof d.name === 'string' && d.name.trim() ? d.name.trim().slice(0, 60) : null;
-      if (d && d.links) {
-        const labels = { zalo: 'Zalo', discord: 'Discord', facebook: 'Facebook' };
-        for (const box of document.querySelectorAll('[data-community-links]')) {
-          const found = Object.entries(d.links).filter(([kind, url]) => labels[kind] && typeof url === 'string' && url.startsWith('https://'));
-          if (!found.length) continue;
-          box.hidden = false;
-          box.replaceChildren(document.createTextNode(box.dataset.communityLinks || 'Contact: '), ...found.map(([kind, url]) => {
-            const a = document.createElement('a'); a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.textContent = labels[kind]; a.style.marginRight = '10px'; return a;
-          }));
-        }
+  <script type="module" src="/js/siteLanguage.js"></script>
+  <script type="module">
+    const PLAY_TEXT = {
+      en: {
+        title: 'Play in browser',
+        intro: 'Sign in here once, then click Play now to open the game straight at server selection without typing your password again.',
+        account: 'Account name', password: 'Password', login: 'Sign in',
+        signedInAs: 'Signed in as', playNow: 'Play now', signOut: 'Sign out',
+        signedInMsg: 'Signed in. Click Play now to enter the game.',
+        loginWrong: 'Wrong account name or password.',
+        blocked: 'This account is blocked.',
+        busy: 'Too many requests from your address. Wait a minute.',
+        setup: 'The account page isn\'t set up yet (host: see README.txt).',
+        server: 'The game server didn\'t answer. Try again later.',
+      },
+      vi: {
+        title: 'Chơi trên trình duyệt',
+        intro: 'Đăng nhập tại đây một lần, rồi bấm Chơi ngay để vào thẳng phần chọn máy chủ mà không cần nhập lại mật khẩu.',
+        account: 'Tên tài khoản', password: 'Mật khẩu', login: 'Đăng nhập',
+        signedInAs: 'Đang đăng nhập:', playNow: 'Chơi ngay', signOut: 'Đăng xuất',
+        signedInMsg: 'Đã đăng nhập. Bấm Chơi ngay để vào game.',
+        loginWrong: 'Sai tên tài khoản hoặc mật khẩu.',
+        blocked: 'Tài khoản này đang bị khóa.',
+        busy: 'Quá nhiều yêu cầu từ địa chỉ của bạn. Hãy đợi một phút.',
+        setup: 'Trang tài khoản chưa được thiết lập (chủ máy: xem README.txt).',
+        server: 'Máy chủ game không trả lời. Hãy thử lại sau.',
+      },
+    };
+    const $ = (id) => document.getElementById(id);
+    let playLang = (() => { try { return localStorage.getItem('hnmo.language') === 'vi' ? 'vi' : 'en'; } catch { return 'en'; } })();
+    const pt = (k) => (PLAY_TEXT[playLang] ?? PLAY_TEXT.en)[k] ?? k;
+    let sessionCreds = null;
+    let lastPlayStatus = null;
+
+    function sayPlay(text, ok) {
+      const el = $('playMessage');
+      el.textContent = text;
+      el.className = text ? `message ${ok ? 'ok' : 'error'}` : 'message';
+    }
+
+    function applyPlayLanguage() {
+      for (const element of document.querySelectorAll('#play [data-pt]')) element.textContent = pt(element.dataset.pt);
+      for (const b of document.querySelectorAll('[data-play-lang]')) b.setAttribute('aria-pressed', String(b.dataset.playLang === playLang));
+      if (lastPlayStatus) sayPlay(pt(lastPlayStatus.key), lastPlayStatus.ok);
+    }
+
+    for (const b of document.querySelectorAll('[data-play-lang]')) {
+      b.addEventListener('click', () => {
+        playLang = b.dataset.playLang;
+        try { localStorage.setItem('hnmo.language', playLang); } catch {}
+        applyPlayLanguage();
+      });
+    }
+
+    async function requestTicket(creds) {
+      const response = await fetch('/portal/login-ticket', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(creds),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        const key = response.status === 401 ? 'loginWrong'
+          : response.status === 403 ? 'blocked'
+          : response.status === 429 ? 'busy'
+          : data.error === 'setup' ? 'setup'
+          : 'server';
+        throw new Error(key);
       }
-      if (!name) return;
-      document.title = document.title.replace('HenryN Mu Online', name);
-      for (const e of document.querySelectorAll('[data-game-name]')) e.textContent = (e.dataset.gameName || '{game}').replaceAll('{game}', name);
-    }).catch(() => {});
+      return data;
+    }
+
+    $('playLogin').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const creds = { loginName: $('playAccount').value.trim(), password: $('playPassword').value };
+      try {
+        const data = await requestTicket(creds);
+        sessionCreds = { loginName: data.loginName || creds.loginName, password: creds.password };
+        $('playPassword').value = '';
+        $('playSignedName').textContent = sessionCreds.loginName;
+        $('playLogin').hidden = true;
+        $('playSignedIn').hidden = false;
+        lastPlayStatus = { key: 'signedInMsg', ok: true };
+        sayPlay(pt('signedInMsg'), true);
+      } catch (err) {
+        const key = err instanceof Error && PLAY_TEXT.en[err.message] ? err.message : 'server';
+        lastPlayStatus = { key, ok: false };
+        sayPlay(pt(key), false);
+      }
+    });
+
+    $('playNowButton').addEventListener('click', async () => {
+      if (!sessionCreds) return;
+      $('playNowButton').disabled = true;
+      try {
+        const data = await requestTicket(sessionCreds);
+        const ticket = encodeURIComponent(data.ticket);
+        const account = encodeURIComponent(data.loginName || sessionCreds.loginName);
+        location.href = `/index.html#ticket=${ticket}&account=${account}`;
+      } catch (err) {
+        $('playNowButton').disabled = false;
+        const key = err instanceof Error && PLAY_TEXT.en[err.message] ? err.message : 'server';
+        lastPlayStatus = { key, ok: false };
+        sayPlay(pt(key), false);
+      }
+    });
+
+    $('playSignOutButton').addEventListener('click', () => {
+      sessionCreds = null;
+      $('playSignedIn').hidden = true;
+      $('playLogin').hidden = false;
+      lastPlayStatus = null;
+      sayPlay('', true);
+    });
+
+    applyPlayLanguage();
   </script>
+  <script type="module" src="/js/accountPage.js"></script>
 </body>
 </html>

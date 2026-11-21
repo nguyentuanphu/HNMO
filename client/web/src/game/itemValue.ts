@@ -536,11 +536,11 @@ function wingOption(type: number, optionType: number, option3: number, add: (opt
 
 // COMGEM::Check_Jewel's bundles (group 12) and COMGEM::CalcItemValue's price of one jewel of each.
 const BUNDLE_JEWEL_PRICES = new Map<number, number>([
-  [t(12, 30), 9000000], // Jewel of Bless
+  [t(12, 30), 3000000], // Jewel of Bless
   [t(12, 31), 6000000], // Jewel of Soul
-  [t(12, 136), 45000000], // Jewel of Life
-  [t(12, 137), 36000000], // Jewel of Creation
-  [t(12, 138), 60000000], // Jewel of Guardian
+  [t(12, 136), 16000000], // Jewel of Life
+  [t(12, 137), 15000000], // Jewel of Creation
+  [t(12, 138), 15000000], // Jewel of Guardian
   [t(12, 139), 18600], // Gemstone
   [t(12, 140), 18600], // Jewel of Harmony
   [t(12, 141), 810000], // Jewel of Chaos
@@ -587,6 +587,18 @@ function socketBonus(item: Item, gold: number): number {
 // ---------- ItemValue ----------
 
 /**
+ * AddAdditionalOptionPrice: the price with the additional option at `optionLevel` (+4 damage, +5 defense rate or 1 %
+ * recovery a level). 60 %, 140 %, 280 % and 560 % more at the levels 1 to 4, as classic MU; above 4 (the Jewel of Life
+ * up to +28) HNMO's ItemPriceCalculator step, 0.7 * 2^(level - 1) times the price more. Level 0 adds nothing.
+ */
+export function addAdditionalOptionPrice(gold: number, optionLevel: number): number {
+  if (optionLevel < 1) return gold;
+  const tenths = [6, 14, 28, 56][optionLevel - 1];
+  if (tenths !== undefined) return gold + Math.trunc(gold * tenths / 10);
+  return gold + Math.trunc(gold * 0.7 * 2 ** (optionLevel - 1));
+}
+
+/**
  * ItemValue: the item's price. goldType 0 = what an NPC shop asks for it, 1 = what it pays for it (a third, less the
  * wear), 2 = the base of the repair cost (a third, rounded first). A Dark Lord pet (Dark Horse, Dark Raven) is priced
  * by its level, which comes from the pet's own data: without `petLevel` it is -1, as the desktop's "no pet info".
@@ -620,11 +632,11 @@ export function itemValue(item: Item, goldType: 0 | 1 | 2, petLevel?: number): n
   } else if (BUNDLE_JEWEL_PRICES.has(type)) {
     // COMGEM::CalcItemValue (an int)
     gold = imul(BUNDLE_JEWEL_PRICES.get(type) ?? 0, level + 1, COMGEM_FIRST);
-  } else if (type === ITEM_JEWEL_OF_BLESS) gold = 9000000;
+  } else if (type === ITEM_JEWEL_OF_BLESS) gold = 3000000;
   else if (type === ITEM_JEWEL_OF_SOUL) gold = 6000000;
   else if (type === ITEM_JEWEL_OF_CHAOS) gold = 810000;
-  else if (type === ITEM_JEWEL_OF_LIFE) gold = 45000000;
-  else if (type === ITEM_JEWEL_OF_CREATION) gold = 36000000;
+  else if (type === ITEM_JEWEL_OF_LIFE) gold = 16000000;
+  else if (type === ITEM_JEWEL_OF_CREATION) gold = 15000000;
   else if (type === ITEM_POTION + 141) gold = 224000 * 3;
   else if (type === ITEM_POTION + 142) gold = 182000 * 3;
   else if (type === ITEM_POTION + 143) gold = 157000 * 3;
@@ -668,7 +680,7 @@ export function itemValue(item: Item, goldType: 0 | 1 | 2, petLevel?: number): n
   else if (type === ITEM_FIRECRACKER) gold = 200000;
   else if (type === ITEM_GM_GIFT) gold = 33 * 3;
   else if (type === ITEM_TOWN_PORTAL_SCROLL) gold = 750;
-  else if (type === ITEM_JEWEL_OF_GUARDIAN) gold = 60000000;
+  else if (type === ITEM_JEWEL_OF_GUARDIAN) gold = 15000000;
   else if (type === ITEM_SIEGE_POTION) {
     gold = level === 0 ? 900000 * item.durability : level === 1 ? 450000 * item.durability : 0;
   } else if (type === ITEM_CONTRACT_SUMMON) {
@@ -734,8 +746,7 @@ export function itemValue(item: Item, goldType: 0 | 1 | 2, petLevel?: number): n
       || (type >= ITEM_WING_OF_STORM && type <= ITEM_WING_OF_DIMENSION)
       || (type >= ITEM_CAPE_OF_FIGHTER && type <= ITEM_CAPE_OF_OVERRULE);
     const byStep = (value: number, step: number): void => {
-      const tenths = [6, 14, 28, 56][value / step - 1];
-      if (Number.isInteger(value / step) && tenths !== undefined) gold += Math.trunc(gold * tenths / 10);
+      if (value > 0 && value % step === 0) gold = addAdditionalOptionPrice(gold, value / step);
     };
     for (const slot of slots) {
       const option = slot.option;
@@ -743,7 +754,8 @@ export function itemValue(item: Item, goldType: 0 | 1 | 2, petLevel?: number): n
         gold += Math.trunc(gold * 1.5);
       } else if (option === AT_IMPROVE_DAMAGE || option === AT_IMPROVE_MAGIC || option === AT_IMPROVE_CURSE
         || option === AT_IMPROVE_DEFENSE || option === AT_LIFE_REGENERATION) {
-        // The additional option: +60%, +140%, +280%, +560% at 4, 8, 12, 16 (a wing's regeneration counts 4 a level).
+        // The additional option: +60%, +140%, +280%, +560% at 4, 8, 12, 16 and more up to +28 (a wing's regeneration
+        // counts 4 a level; the rings' 1 to 3 % add nothing).
         byStep(wingOptions && option === AT_LIFE_REGENERATION ? slot.value * 4 : slot.value, 4);
       } else if (option === AT_IMPROVE_BLOCKING) {
         byStep(slot.value, 5);

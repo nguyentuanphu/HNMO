@@ -10,6 +10,7 @@ using System.Threading;
 using HNMO.AttributeSystem;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.PlugIns.GameplayRules;
 using HNMO.GameLogic.Views.World;
 using HNMO.Pathfinding;
 using HNMO.Persistence;
@@ -27,6 +28,8 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
     private readonly IEventStateProvider? _eventStateProvider;
     private readonly IDropGenerator _dropGenerator;
     private readonly PlugInManager _plugInManager;
+    private readonly Lock _damageLock = new();
+    private readonly Dictionary<Player, long> _damageByPlayer = new();
 
     private int _health;
 
@@ -98,6 +101,9 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
         get => Math.Max(Volatile.Read(ref this._health), 0);
         set => Interlocked.Exchange(ref this._health, value);
     }
+
+    /// <summary>Gets the plug-in manager for this NPC's game context.</summary>
+    internal PlugInManager? PlugInManager => this._plugInManager;
 
     private bool ShouldRespawn => this.SpawnArea.SpawnTrigger == SpawnTrigger.Automatic
                                   || (this.SpawnArea.SpawnTrigger == SpawnTrigger.AutomaticDuringEvent && (this._eventStateProvider?.IsEventRunning ?? false))
@@ -184,6 +190,16 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
     }
 
     /// <summary>
+    /// Gives health back, up to the maximum health. A dead instance gets nothing.
+    /// </summary>
+    /// <param name="amount">The amount of health.</param>
+    /// <returns>The restored health.</returns>
+    public int RestoreHealth(int amount)
+    {
+        return this.RestoreHealth(amount, this.SpawnArea.MaximumHealthOverride ?? (int)this.Attributes[Stats.MaximumHealth]);
+    }
+
+    /// <summary>
     /// Reloads the attributes from the <see cref="NonPlayerCharacter.Definition"/>, so that changes
     /// to the monster definition take effect on this already spawned instance.
     /// </summary>
@@ -199,6 +215,10 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
         {
             this.Died = null;
             this.IsAlive = false;
+            lock (this._damageLock)
+            {
+                this._damageByPlayer.Clear();
+            }
         }
 
         base.Dispose(managed);
@@ -235,6 +255,15 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
         var player = this.GetHitNotificationTarget(attacker);
         if (player is not null)
         {
+            var dealtDamage = (long)hitInfo.HealthDamage + hitInfo.ShieldDamage;
+            if (dealtDamage > 0)
+            {
+                lock (this._damageLock)
+                {
+                    this._damageByPlayer[player] = this._damageByPlayer.GetValueOrDefault(player) + dealtDamage;
+                }
+            }
+
             if (isFinalStreakHit.HasValue)
             {
                 hitInfo.Attributes |= DamageAttributes.RageFighterStreakHit;
@@ -314,6 +343,14 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
                     currentHealth + restoredHealth,
                     currentHealth) == currentHealth)
             {
+                if (currentHealth + restoredHealth >= maximumHealth)
+                {
+                    lock (this._damageLock)
+                    {
+                        this._damageByPlayer.Clear();
+                    }
+                }
+
                 return restoredHealth;
             }
         }
@@ -325,6 +362,15 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
     /// <param name="attacker">The attacker which killed this instance.</param>
     protected virtual async ValueTask OnDeathAsync(IAttacker attacker)
     {
+        List<KeyValuePair<Player, long>> damagers;
+        lock (this._damageLock)
+        {
+            damagers = this._damageByPlayer
+                .Where(kv => kv.Value > 0 && kv.Key.SelectedCharacter is not null && kv.Key.CurrentMap == this.CurrentMap)
+                .ToList();
+            this._damageByPlayer.Clear();
+        }
+
         if (this.ShouldRespawn)
         {
             // The killer's logger: a respawn that fails would otherwise leave the monster gone without a trace.
@@ -349,9 +395,40 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
         var player = this.GetHitNotificationTarget(attacker);
         if (player is { })
         {
-            var experienceShares = player.Party is { } party
-                ? await party.DistributeExperienceAfterKillAsync(this, player).ConfigureAwait(false)
-                : [new ExperienceShare(player, await player.AddExpAfterKillAsync(this).ConfigureAwait(false))];
+            var aiConfig = MonsterAiPlugIn.For(this._plugInManager);
+            var dropOwner = aiConfig.DropToTopDamageDealer && damagers.Count > 0
+                ? damagers.OrderByDescending(kv => kv.Value).ThenByDescending(kv => kv.Key == player).First().Key
+                : player;
+
+            IReadOnlyList<ExperienceShare> experienceShares;
+            if (aiConfig.SplitExpByDamage && damagers.Count > 1)
+            {
+                var totalDamage = Math.Max(1L, damagers.Sum(kv => kv.Value));
+                var shares = new List<ExperienceShare>(damagers.Count);
+                foreach (var group in damagers.GroupBy(kv => (object?)kv.Key.Party ?? kv.Key))
+                {
+                    var groupDamage = group.Sum(kv => kv.Value);
+                    var share = groupDamage / (double)totalDamage;
+                    if (group.Key is Party party)
+                    {
+                        var rep = group.OrderByDescending(kv => kv.Value).First().Key;
+                        shares.AddRange(await party.DistributeExperienceAfterKillAsync(this, rep, share).ConfigureAwait(false));
+                    }
+                    else if (group.Key is Player soloPlayer)
+                    {
+                        shares.Add(new ExperienceShare(soloPlayer, await soloPlayer.AddExpAfterKillAsync(this, share).ConfigureAwait(false)));
+                    }
+                }
+
+                experienceShares = shares;
+            }
+            else
+            {
+                experienceShares = player.Party is { } party
+                    ? await party.DistributeExperienceAfterKillAsync(this, player).ConfigureAwait(false)
+                    : [new ExperienceShare(player, await player.AddExpAfterKillAsync(this).ConfigureAwait(false))];
+            }
+
             if (attacker == player)
             {
                 await player.AfterKilledMonsterAsync().ConfigureAwait(false);
@@ -366,12 +443,12 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
             {
                 if (selectedCharacter.State > HeroState.Normal)
                 {
-                    // An outlaw can shorten its remaining state time by hunting monsters, on any map:
-                    // the level of the killed monster is subtracted in seconds.
-                    selectedCharacter.StateRemainingSeconds -= (int)this.Attributes[Stats.Level];
+                    // An outlaw can clear its points faster by hunting monsters, on any map:
+                    // half of the level of the killed monster is subtracted, and the stage follows the total.
+                    await player.RemoveOutlawPointsAsync(OutlawPoints.GetMonsterKillPoints((int)this.Attributes[Stats.Level])).ConfigureAwait(false);
                 }
 
-                _ = this.DropItemDelayedAsync(player, experienceShares); // don't wait for completion.
+                _ = this.DropItemDelayedAsync(dropOwner, experienceShares); // don't wait for completion.
             }
         }
     }
@@ -390,6 +467,11 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
     {
         try
         {
+            lock (this._damageLock)
+            {
+                this._damageByPlayer.Clear();
+            }
+
             if (this.IsDisposed || this.IsDisposing)
             {
                 // It got disposed while waiting for the respawn, e.g. because its spawn area was removed.
@@ -438,13 +520,28 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
         }
     }
 
+    /// <summary>
+    /// Determines whether killing monsters gives zen in the mini game the killer takes part in.
+    /// Like in classic MU, the monsters of Devil Square and Chaos Castle give no zen at all; the
+    /// other mini games (e.g. Blood Castle) keep their zen.
+    /// </summary>
+    /// <param name="miniGameType">The type of the mini game of the killer, or <c>null</c> outside of mini games.</param>
+    /// <returns><c>true</c>, if the kill gives zen; otherwise, <c>false</c>.</returns>
+    internal static bool GivesMoneyForKills(DataModel.Configuration.MiniGameType? miniGameType)
+        => miniGameType is not (DataModel.Configuration.MiniGameType.DevilSquare or DataModel.Configuration.MiniGameType.ChaosCastle);
+
     private async ValueTask HandleMoneyDropAsync(uint amount, Player killer, IReadOnlyList<ExperienceShare> experienceShares)
     {
+        if (!GivesMoneyForKills(killer.CurrentMiniGame?.Definition.Type))
+        {
+            return;
+        }
+
         // Each player gets the part of the money which matches the experience they gained from the kill,
         // so that money follows the same distribution as the experience it is derived from.
         var shares = MoneyDistribution.CreateShares(amount, experienceShares);
 
-        // We don't drop money in Devil Square, etc.
+        // Inside a mini game (e.g. Blood Castle) the money is not dropped, but paid directly.
         var shouldDropMoney = killer.GameContext.Configuration.ShouldDropMoney && killer.CurrentMiniGame is null;
         if (!shouldDropMoney)
         {
@@ -475,7 +572,10 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
             exp += share.Experience;
         }
 
-        var (generatedItems, droppedMoney) = await this._dropGenerator.GenerateItemDropsAsync(this.Definition, exp, killer).ConfigureAwait(false);
+        // The zen of a kill follows the experience of the kill, but not the server's experience rate: with a rate of
+        // 1000 every kill dropped 1000 times the zen. The zen multipliers (rate tuning, map rules) scale the zen.
+        var moneyExperience = KillMoney.ExperienceForMoney(exp, killer.GameContext.ExperienceRate);
+        var (generatedItems, droppedMoney) = await this._dropGenerator.GenerateItemDropsAsync(this.Definition, moneyExperience, killer).ConfigureAwait(false);
         if (droppedMoney > 0)
         {
             await this.HandleMoneyDropAsync(droppedMoney.Value, killer, experienceShares).ConfigureAwait(false);

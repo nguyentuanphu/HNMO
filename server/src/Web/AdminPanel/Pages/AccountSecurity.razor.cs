@@ -4,14 +4,14 @@
 
 namespace HNMO.Web.AdminPanel.Pages;
 
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.JSInterop;
 using HNMO.Persistence.AdminAuth;
 using HNMO.Web.AdminPanel.Auth;
 using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.Shared.Components.Toast;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.JSInterop;
 
 /// <summary>
 /// The page at which a user manages the second factor of its own account.
@@ -190,6 +190,28 @@ public partial class AccountSecurity : IAsyncDisposable
             this._remainingRecoveryCodes = 0;
             await this.RefreshSessionAsync(user, usedSecondFactor: false).ConfigureAwait(true);
             this.ToastService.ShowSuccess(Resources.TwoFactorDisabled);
+        }
+        finally
+        {
+            this._isBusy = false;
+        }
+    }
+
+    private async Task ForgetTrustedBrowsersAsync()
+    {
+        if (this._user is not { } user)
+        {
+            return;
+        }
+
+        this._isBusy = true;
+        try
+        {
+            await this.SetupService.ForgetTrustedBrowsersAsync(user).ConfigureAwait(true);
+            await this.RefreshSessionAsync(user, usedSecondFactor: true).ConfigureAwait(true);
+            this.ToastService.ShowSuccess(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi"
+                ? "Đã quên mọi trình duyệt tin cậy: lần đăng nhập sau sẽ hỏi lại mã 6 số."
+                : "Every trusted browser was forgotten: the next sign-in asks for the 6-digit code again.");
         }
         finally
         {

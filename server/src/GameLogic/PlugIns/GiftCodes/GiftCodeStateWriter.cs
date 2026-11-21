@@ -123,6 +123,8 @@ public static class GiftCodeStateWriter
     private static object Rules(GiftCodeEngine engine, GiftCodeDefinition code) => new
     {
         limit = code.Limit,
+        oncePerNetwork = code.OncePerNetwork,
+        oncePerDevice = code.OncePerDevice,
         start = engine.StartUtc(code) is { } start ? ToMs(start) : (long?)null,
         end = engine.EndUtc(code) is { } end ? ToMs(end) : (long?)null,
         minLevel = code.MinLevel,

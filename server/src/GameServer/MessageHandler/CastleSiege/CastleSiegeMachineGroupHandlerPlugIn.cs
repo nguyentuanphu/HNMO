@@ -5,8 +5,8 @@
 namespace HNMO.GameServer.MessageHandler.CastleSiege;
 
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Packet handler for Castle Siege warfare-machine packets with the 0xB7 identifier.

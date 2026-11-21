@@ -75,14 +75,25 @@ const rain = (particle: ParticleType, color: Rgb, radius: number, count: number,
 const stones = (at: Anchor, count: number): Step => ({ make: { effect: 'stone1' }, at, shape: 'ring', radius: 120, count, color: EARTH });
 const fireBall = (color: Rgb): Step => ({ make: { effect: 'fireModel' }, at: 'caster', shape: 'line', count: 1, height: 100, color });
 const wave = (color: Rgb): Step => ({ make: { effect: 'magic2', subType: 2 }, at: 'caster', shape: 'point', count: 1, color });
+/** One slash across the target at tick `start`: a red cut flash, a flare, blood and sparks. */
+const slash = (start: number): Step[] => [
+  { make: { particle: 'damage2' }, at: 'target', shape: 'point', count: 1, height: 0, color: RED, start },
+  { make: { particle: 'damage1' }, at: 'target', shape: 'point', count: 1, height: 110, color: RED, scale: 1.2, start },
+  { ...burst('blood2', RED, 5), start },
+  { ...burst('spark', RED, 6), start },
+];
 
 /** The 28 skills' looks, by skill number (700 + 4 × class + letter; the server's class order). */
 export const NEW_SKILL_LOOKS: Record<number, NewSkillLook> = {
   // Dark Knight
   700: { action: A.ATTACK_SKILL_SWORD4, packet: 'area', areaAt: 'self', needsTarget: false, friendly: false, icon: { from: 42, hue: 30 }, sound: 'SOUND_SKILL_SWORD4',
     effect: [stones('caster', 10), ring('smoke', EARTH, 220, 16), ring('spark', ICE, 180, 10)] },
-  701: { action: A.ATTACK_SKILL_SWORD5, packet: 'targeted', needsTarget: true, friendly: false, icon: { from: 23, hue: -30 }, sound: 'SOUND_SKILL_SWORD2',
-    effect: [{ ...burst('blood2', RED, 12), ticks: 3, start: 2 }, { ...burst('spark', RED, 8), ticks: 3, start: 2 }] },
+  // Three quick red slashes across the target (the hit flashes of Dark Side's and Chain Drive's strikes, BITMAP_DAMAGE2
+  // and BITMAP_DAMAGE1, in red), each with blood and sparks, and a red glow on it while they land.
+  // An AreaSkill with the target as its ExtraTargetId: the server has it as an explicit-target area skill (three hits,
+  // BloodSlashSkillPlugIn heals the knight); as a TargetedSkill it hit nothing.
+  701: { action: A.ATTACK_SKILL_SWORD5, packet: 'area', areaAt: 'target', needsTarget: true, friendly: false, icon: { from: 23, hue: -30 }, sound: 'SOUND_SKILL_SWORD2',
+    effect: [...slash(2), ...slash(6), ...slash(10), glow('flareRed', RED, 2.2, 'target', 14)] },
   702: { action: A.SKILL_VITALITY, packet: 'targeted', needsTarget: false, friendly: true, icon: { from: 27, hue: 40 }, sound: 'SOUND_SOULBARRIER',
     effect: [circle(GOLD), glow('shiny2', GOLD, 2.5, 'caster', 20), ring('spark', GOLD, 90, 12)] },
   703: { action: A.ATTACK_SKILL_SWORD2, packet: 'targeted', needsTarget: true, friendly: false, icon: { from: 20, hue: 200 }, sound: 'SOUND_RIDINGSPEAR',
@@ -130,7 +141,8 @@ export const NEW_SKILL_LOOKS: Record<number, NewSkillLook> = {
     effect: [circle(RED), ring('fire', RED, 100, 10), glow('light', RED, 2.5, 'caster', 12)] },
   722: { action: 'magic', packet: 'targeted', needsTarget: true, friendly: false, icon: { from: 221, hue: 140 }, sound: 'SOUND_EVIL',
     effect: [beam(DARK), ring('smoke', DARK, 70, 8, 'target', 20)] },
-  723: { action: 'magic', packet: 'targeted', needsTarget: true, friendly: false, icon: { from: 214, hue: 180 }, sound: 'SOUND_SKILL_DRAIN_LIFE',
+  // Like Blood Slash: an explicit-target area skill on the server (SoulDrainSkillPlugIn).
+  723: { action: 'magic', packet: 'area', areaAt: 'target', needsTarget: true, friendly: false, icon: { from: 214, hue: 180 }, sound: 'SOUND_SKILL_DRAIN_LIFE',
     effect: [beam(ICE), { make: { particle: 'energy' }, at: 'target', shape: 'line', count: 8, height: 110, color: ICE, ticks: 10 }] },
   // Rage Fighter
   724: { action: A.SKILL_DRAGONLORE, packet: 'area', areaAt: 'target', needsTarget: false, friendly: false, icon: { from: 264, hue: 40 }, sound: 'SOUND_CRITICAL',
@@ -297,12 +309,12 @@ function make(system: EffectSystem, step: Step, at: THREE.Vector3, caster: Effec
 }
 
 /** The buffs and debuffs of HNMO's skills (the server's magic effects 180-186), for the buff strip: a name, what it does, and the game buff whose icon it shows. */
-export const NEW_SKILL_BUFFS: { number: number; name: string; kind: 'buff' | 'debuff'; text: string; iconFrom: number }[] = [
-  { number: 180, name: 'Iron Guard', kind: 'buff', text: 'Damage taken decreases by 24%.', iconFrom: 2 },
-  { number: 181, name: 'Mana Shield', kind: 'buff', text: 'Part of the damage taken is paid with mana.', iconFrom: 4 },
-  { number: 182, name: 'Forest Blessing', kind: 'buff', text: 'Life recovers over time.', iconFrom: 8 },
-  { number: 183, name: 'Twin Power', kind: 'buff', text: 'All damage increases by 12%.', iconFrom: 1 },
-  { number: 184, name: 'War Command', kind: 'buff', text: 'Attack and magic speed increase.', iconFrom: 5 },
-  { number: 185, name: 'Iron Body', kind: 'buff', text: 'Defence increases and part of the damage is reflected.', iconFrom: 2 },
-  { number: 186, name: 'Weakening Curse', kind: 'debuff', text: 'Defence decreases by 24%.', iconFrom: 58 },
+export const NEW_SKILL_BUFFS: { number: number; name: string; nameVi: string; kind: 'buff' | 'debuff'; text: string; textVi: string; iconFrom: number }[] = [
+  { number: 180, name: 'Iron Guard', nameVi: 'Phòng hộ thép', kind: 'buff', text: 'Damage taken decreases by 24%.', textVi: 'Giảm sát thương nhận vào 24%.', iconFrom: 2 },
+  { number: 181, name: 'Mana Shield', nameVi: 'Khiên Mana', kind: 'buff', text: 'Part of the damage taken is paid with mana.', textVi: 'Dùng Mana để gánh một phần sát thương nhận vào.', iconFrom: 4 },
+  { number: 182, name: 'Forest Blessing', nameVi: 'Phước lành rừng xanh', kind: 'buff', text: 'Life recovers over time.', textVi: 'Hồi máu theo thời gian.', iconFrom: 8 },
+  { number: 183, name: 'Twin Power', nameVi: 'Sức mạnh song hành', kind: 'buff', text: 'All damage increases by 12%.', textVi: 'Tăng toàn bộ sát thương thêm 12%.', iconFrom: 1 },
+  { number: 184, name: 'War Command', nameVi: 'Mệnh lệnh chiến đấu', kind: 'buff', text: 'Attack and magic speed increase.', textVi: 'Tăng tốc độ tấn công và tốc độ thi triển phép.', iconFrom: 5 },
+  { number: 185, name: 'Iron Body', nameVi: 'Thân thể thép', kind: 'buff', text: 'Defence increases and part of the damage is reflected.', textVi: 'Tăng phòng thủ và phản lại một phần sát thương.', iconFrom: 2 },
+  { number: 186, name: 'Weakening Curse', nameVi: 'Lời nguyền suy yếu', kind: 'debuff', text: 'Defence decreases by 24%.', textVi: 'Giảm phòng thủ 24%.', iconFrom: 58 },
 ];

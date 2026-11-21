@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<PacketDefinitions xmlns="https://github.com/nguyentuanphu/HNMO/PacketDefinitions">
+<PacketDefinitions xmlns="urn:hnmo:packet-definitions">
   <Description>This file contains common enum definitions which are used by server and client messages.</Description>
   <Structures />
   <Packets />

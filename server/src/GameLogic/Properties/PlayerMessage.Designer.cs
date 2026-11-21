@@ -167,6 +167,15 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("AwardMoneyFailByFullInventory", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The trade was cancelled: a trader would carry more zen than the inventory can hold..
+        /// </summary>
+        public static string TradeMoneyExceedsMaximum {
+            get {
+                return ResourceManager.GetString("TradeMoneyExceedsMaximum", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to {0} has acquired the {1}.
@@ -2039,7 +2048,7 @@ namespace HNMO.GameLogic.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MU Helper is already running..
+        ///   Looks up a localized string similar to The auto-play helper is already running..
         /// </summary>
         public static string MuHelperAlreadyRunning {
             get {
@@ -2048,7 +2057,7 @@ namespace HNMO.GameLogic.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MU Helper can&apos;t handle status: {0}.
+        ///   Looks up a localized string similar to The auto-play helper can&apos;t handle status: {0}.
         /// </summary>
         public static string MuHelperCantHandleStatus {
             get {
@@ -2057,7 +2066,7 @@ namespace HNMO.GameLogic.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MU Helper is disabled.
+        ///   Looks up a localized string similar to The auto-play helper is disabled.
         /// </summary>
         public static string MuHelperIsDisabled {
             get {
@@ -2066,7 +2075,7 @@ namespace HNMO.GameLogic.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MU Helper cannot be used after level {0}..
+        ///   Looks up a localized string similar to The auto-play helper cannot be used after level {0}..
         /// </summary>
         public static string MuHelperMaximumLevel {
             get {
@@ -2075,7 +2084,16 @@ namespace HNMO.GameLogic.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MU Helper can be used after level {0}..
+        ///   Looks up a localized string similar to Your guild owns the castle and can't be disbanded..
+        /// </summary>
+        public static string GuildOwnsCastleCantDisband {
+            get {
+                return ResourceManager.GetString("GuildOwnsCastleCantDisband", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The auto-play helper can be used after level {0}..
         /// </summary>
         public static string MuHelperMinimumLevel {
             get {
@@ -2084,7 +2102,7 @@ namespace HNMO.GameLogic.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MU Helper requires {0} zen..
+        ///   Looks up a localized string similar to The auto-play helper requires {0} zen..
         /// </summary>
         public static string MuHelperRequiresMoney {
             get {
@@ -2795,6 +2813,15 @@ namespace HNMO.GameLogic.Properties {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Outlaws of PK level 2 and above can&apos;t use NPC shops..
+        /// </summary>
+        public static string PlayerKillersCantUseNpcShops {
+            get {
+                return ResourceManager.GetString("PlayerKillersCantUseNpcShops", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to You need a ticket to enter this event..
         /// </summary>
         public static string MiniGameTicketRequired {
@@ -3083,7 +3110,7 @@ namespace HNMO.GameLogic.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mu Helper is not running..
+        ///   Looks up a localized string similar to The auto-play helper must be running to start offline leveling..
         /// </summary>
         public static string OfflineLevelingMuHelperNotRunning {
             get {
@@ -3232,6 +3259,20 @@ namespace HNMO.GameLogic.Properties {
         public static string ChatSpamWarning {
             get {
                 return ResourceManager.GetString("ChatSpamWarning", resourceCulture);
+            }
+        }
+        /// <summary>Gets the localized VIP notice.</summary>
+        public static string VipActiveNotice => ResourceManager.GetString("VipActiveNotice", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP notice.</summary>
+        public static string VipExpiringNotice => ResourceManager.GetString("VipExpiringNotice", resourceCulture)!;
+
+        /// <summary>
+        ///   Looks up a localized string similar to Uniria and Dinorant can't enter Atlans..
+        /// </summary>
+        public static string AtlansNoRiding {
+            get {
+                return ResourceManager.GetString("AtlansNoRiding", resourceCulture);
             }
         }
     }

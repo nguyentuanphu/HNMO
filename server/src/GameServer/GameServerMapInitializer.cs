@@ -4,9 +4,9 @@
 
 namespace HNMO.GameServer;
 
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// A game map initializer which takes aspects of the <see cref="GameServer"/> into account.

@@ -329,7 +329,7 @@
     <value>F11 - Kameraansicht zurücksetzen</value>
   </data>
   <data name="Home - Toggle MU Helper" xml:space="preserve">
-    <value>Home - MU Helper umschalten</value>
+    <value>Home - Auto Play umschalten</value>
   </data>
   <data name="Enter: Chatting Mode" xml:space="preserve">
     <value>Eingabe: Chat-Modus</value>
@@ -8311,7 +8311,7 @@
     <value>Zusammen angreifen</value>
   </data>
   <data name="Official MU Helper" xml:space="preserve">
-    <value>Offizieller MU Helper</value>
+    <value>Offizieller Auto Play</value>
   </data>
   <data name="Used Extension function" xml:space="preserve">
     <value>Verwendete Erweiterungsfunktion</value>
@@ -8377,13 +8377,13 @@
     <value>Mehr als 5 Monster</value>
   </data>
   <data name="Official MU Helper Setting" xml:space="preserve">
-    <value>Einstellungen des offiziellen MU Helper</value>
+    <value>Einstellungen des offiziellen Auto Play</value>
   </data>
   <data name="Start Official MU Helper" xml:space="preserve">
-    <value>Offiziellen MU Helper starten</value>
+    <value>Offiziellen Auto Play starten</value>
   </data>
   <data name="Stop Official MU Helper" xml:space="preserve">
-    <value>Offiziellen MU Helper stoppen</value>
+    <value>Offiziellen Auto Play stoppen</value>
   </data>
   <data name="InTheCaseOfDeregisteringBasic" xml:space="preserve">
     <value>Wenn Grundfähigkeit und Aktivierungsfähigkeit 1 und 2 entfernt werden, kann die Kombo-Fähigkeit nicht verwendet werden.</value>
@@ -8413,34 +8413,34 @@
     <value>Es ist kein Gegenstand ausgewählt</value>
   </data>
   <data name="Any characters under level %d can't run Official MU Helper." xml:space="preserve">
-    <value>Charaktere unter Level %d können den offiziellen MU Helper nicht verwenden.</value>
+    <value>Charaktere unter Level %d können den offiziellen Auto Play nicht verwenden.</value>
   </data>
   <data name="Official MU Helper only runs in filed" xml:space="preserve">
-    <value>Der offizielle MU Helper funktioniert nur außerhalb der Stadt</value>
+    <value>Der offizielle Auto Play funktioniert nur außerhalb der Stadt</value>
   </data>
   <data name="In order to run Official MU Helper, please close Inventory window" xml:space="preserve">
-    <value>Um den offiziellen MU Helper zu verwenden, schließen Sie bitte das Inventar</value>
+    <value>Um den offiziellen Auto Play zu verwenden, schließen Sie bitte das Inventar</value>
   </data>
   <data name="In order to run Official MU Helper, please close MU Guide window" xml:space="preserve">
-    <value>Um den offiziellen MU Helper zu verwenden, schließen Sie bitte das MU-Guide-Fenster</value>
+    <value>Um den offiziellen Auto Play zu verwenden, schließen Sie bitte das MU-Guide-Fenster</value>
   </data>
   <data name="InOrderToRunOfficialMU" xml:space="preserve">
-    <value>Um den offiziellen MU Helper richtig zu verwenden, registrieren Sie bitte Fähigkeiten (außer Fee)</value>
+    <value>Um den offiziellen Auto Play richtig zu verwenden, registrieren Sie bitte Fähigkeiten (außer Fee)</value>
   </data>
   <data name="Official MU Helper is running." xml:space="preserve">
-    <value>Der offizielle MU Helper läuft.</value>
+    <value>Der offizielle Auto Play läuft.</value>
   </data>
   <data name="Official MU Helper is closed" xml:space="preserve">
-    <value>Der offizielle MU Helper wurde beendet</value>
+    <value>Der offizielle Auto Play wurde beendet</value>
   </data>
   <data name="Official MU Helper Setting has been saved." xml:space="preserve">
-    <value>Die Einstellungen des offiziellen MU Helper wurden gespeichert.</value>
+    <value>Die Einstellungen des offiziellen Auto Play wurden gespeichert.</value>
   </data>
   <data name="Official MU Helper can't be implemented in this region." xml:space="preserve">
-    <value>Der offizielle MU Helper kann in diesem Gebiet nicht verwendet werden.</value>
+    <value>Der offizielle Auto Play kann in diesem Gebiet nicht verwendet werden.</value>
   </data>
   <data name="CertainAmountOfZenIsSpent" xml:space="preserve">
-    <value>Für den offiziellen MU Helper wird alle 5 Minuten eine bestimmte Menge Zen verbraucht</value>
+    <value>Für den offiziellen Auto Play wird alle 5 Minuten eine bestimmte Menge Zen verbraucht</value>
   </data>
   <data name="Spent Time %d Minute(s)/" xml:space="preserve">
     <value>Laufzeit %d Minute(n)/</value>
@@ -8452,16 +8452,16 @@
     <value>Laufzeit %d Stunde(n) %d Minute(n)/ Verbrauchtes Zen: Stufe %d / Kosten %d Zen</value>
   </data>
   <data name="%d zen(s) have been spent in implementing Official MU Helper" xml:space="preserve">
-    <value>Für den offiziellen MU Helper wurden %d Zen verbraucht</value>
+    <value>Für den offiziellen Auto Play wurden %d Zen verbraucht</value>
   </data>
   <data name="Zen is not sufficient to run Official MU Helper" xml:space="preserve">
-    <value>Nicht genug Zen für den offiziellen MU Helper</value>
+    <value>Nicht genug Zen für den offiziellen Auto Play</value>
   </data>
   <data name="In order to run Official MU Helper, please install Add-on first" xml:space="preserve">
-    <value>Um den offiziellen MU Helper zu verwenden, installieren Sie bitte zuerst das Add-on</value>
+    <value>Um den offiziellen Auto Play zu verwenden, installieren Sie bitte zuerst das Add-on</value>
   </data>
   <data name="Official MU Helper is closed due to the excess of %d hour(s)" xml:space="preserve">
-    <value>Der offizielle MU Helper wurde beendet, da %d Stunde(n) überschritten wurden</value>
+    <value>Der offizielle Auto Play wurde beendet, da %d Stunde(n) überschritten wurden</value>
   </data>
   <data name="Other Settings" xml:space="preserve">
     <value>Weitere Einstellungen</value>

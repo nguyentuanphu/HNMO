@@ -413,12 +413,6 @@ namespace HNMO.Persistence.Initialization.Properties {
         /// <summary>Gets the localized AddDuelConfigurationPlugIn_Description text.</summary>
         public static string AddDuelConfigurationPlugIn_Description => ResourceManager.GetString("AddDuelConfigurationPlugIn_Description", resourceCulture)!;
 
-        /// <summary>Gets the localized FixBloodCastleMonsterAttributesUpdatePlugIn_Name text.</summary>
-        public static string FixBloodCastleMonsterAttributesUpdatePlugIn_Name => ResourceManager.GetString("FixBloodCastleMonsterAttributesUpdatePlugIn_Name", resourceCulture)!;
-
-        /// <summary>Gets the localized FixBloodCastleMonsterAttributesUpdatePlugIn_Description text.</summary>
-        public static string FixBloodCastleMonsterAttributesUpdatePlugIn_Description => ResourceManager.GetString("FixBloodCastleMonsterAttributesUpdatePlugIn_Description", resourceCulture)!;
-
         /// <summary>Gets the localized AddDoppelgangerDataUpdatePlugIn_Name text.</summary>
         public static string AddDoppelgangerDataUpdatePlugIn_Name => ResourceManager.GetString("AddDoppelgangerDataUpdatePlugIn_Name", resourceCulture)!;
 
@@ -526,6 +520,12 @@ namespace HNMO.Persistence.Initialization.Properties {
 
         /// <summary>Gets the localized AddRenaItemUpdatePlugIn_Description text.</summary>
         public static string AddRenaItemUpdatePlugIn_Description => ResourceManager.GetString("AddRenaItemUpdatePlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized AddStardustItemUpdatePlugIn_Name text.</summary>
+        public static string AddStardustItemUpdatePlugIn_Name => ResourceManager.GetString("AddStardustItemUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized AddStardustItemUpdatePlugIn_Description text.</summary>
+        public static string AddStardustItemUpdatePlugIn_Description => ResourceManager.GetString("AddStardustItemUpdatePlugIn_Description", resourceCulture)!;
 
         /// <summary>Gets the localized AddCrestOfMonarchDropGroupUpdateSeason6_Name text.</summary>
         public static string AddCrestOfMonarchDropGroupUpdateSeason6_Name => ResourceManager.GetString("AddCrestOfMonarchDropGroupUpdateSeason6_Name", resourceCulture)!;
@@ -1090,6 +1090,18 @@ namespace HNMO.Persistence.Initialization.Properties {
 
         /// <summary>Gets the localized AddProtectionTalismansUpdatePlugIn_Description text.</summary>
         public static string AddProtectionTalismansUpdatePlugIn_Description => ResourceManager.GetString("AddProtectionTalismansUpdatePlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized RenumberArenaHeraldUpdatePlugIn_Name text.</summary>
+        public static string RenumberArenaHeraldUpdatePlugIn_Name => ResourceManager.GetString("RenumberArenaHeraldUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized RenumberArenaHeraldUpdatePlugIn_Description text.</summary>
+        public static string RenumberArenaHeraldUpdatePlugIn_Description => ResourceManager.GetString("RenumberArenaHeraldUpdatePlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized AddArenaHeraldUpdatePlugIn_Name text.</summary>
+        public static string AddArenaHeraldUpdatePlugIn_Name => ResourceManager.GetString("AddArenaHeraldUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized AddArenaHeraldUpdatePlugIn_Description text.</summary>
+        public static string AddArenaHeraldUpdatePlugIn_Description => ResourceManager.GetString("AddArenaHeraldUpdatePlugIn_Description", resourceCulture)!;
 
         /// <summary>Gets the localized AddHnmoSkillsUpdatePlugIn_Name text.</summary>
         public static string AddHnmoSkillsUpdatePlugIn_Name => ResourceManager.GetString("AddHnmoSkillsUpdatePlugIn_Name", resourceCulture)!;

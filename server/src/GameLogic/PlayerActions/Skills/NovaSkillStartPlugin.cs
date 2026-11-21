@@ -47,14 +47,17 @@ public class NovaSkillStartPlugin : TargetedSkillPluginBase
             return;
         }
 
-        // Consume full ability points first...
+        // Consume full ability points first (from NovaStart or from Nova skill 40)...
         var novaStart = player.GameContext.Configuration.Skills.First(s => s.Number == skillId);
-        if (novaStart.ConsumeRequirements.Any(r => player.GetRequiredValue(r) > player.Attributes![r.Attribute]))
+        var startRequirements = novaStart.ConsumeRequirements
+            .Concat(skillEntry.Skill.ConsumeRequirements.Where(r => r.Attribute == Stats.CurrentAbility && novaStart.ConsumeRequirements.All(n => n.Attribute != Stats.CurrentAbility)))
+            .ToList();
+        if (startRequirements.Any(r => player.GetRequiredValue(r) > player.Attributes![r.Attribute]))
         {
             return;
         }
 
-        foreach (var requirement in novaStart.ConsumeRequirements)
+        foreach (var requirement in startRequirements)
         {
             player.Attributes![requirement.Attribute] -= player.GetRequiredValue(requirement);
         }
@@ -87,7 +90,7 @@ public class NovaSkillStartPlugin : TargetedSkillPluginBase
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    if (!await player.TryConsumeForSkillAsync(skillEntry).ConfigureAwait(false))
+                    if (!this.TryConsumeNovaStepRequirements(player, skillEntry.Skill))
                     {
                         break;
                     }
@@ -198,5 +201,26 @@ public class NovaSkillStartPlugin : TargetedSkillPluginBase
             .Where(a => a is not Player || FilterPlayer((Player)a));
 
         return targets;
+    }
+
+    private bool TryConsumeNovaStepRequirements(Player player, Skill skill)
+    {
+        if (player.Attributes is not { } attributes)
+        {
+            return false;
+        }
+
+        var stepRequirements = skill.ConsumeRequirements.Where(r => r.Attribute != Stats.CurrentAbility).ToList();
+        if (stepRequirements.Any(r => player.GetRequiredValue(r) > attributes[r.Attribute]))
+        {
+            return false;
+        }
+
+        foreach (var requirement in stepRequirements)
+        {
+            attributes[requirement.Attribute] -= player.GetRequiredValue(requirement);
+        }
+
+        return true;
     }
 }

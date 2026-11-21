@@ -535,16 +535,16 @@
     <value>Xử lý gói tin yêu cầu trạng thái mở của sự kiện.</value>
   </data>
   <data name="MuHelperSaveDataRequestHandlerPlugin_Name" xml:space="preserve">
-    <value>Xử lý lưu dữ liệu MU Helper</value>
+    <value>Xử lý lưu dữ liệu tự động chơi</value>
   </data>
   <data name="MuHelperSaveDataRequestHandlerPlugin_Description" xml:space="preserve">
-    <value>Xử lý yêu cầu lưu dữ liệu MU Helper.</value>
+    <value>Xử lý yêu cầu lưu dữ liệu tự động chơi.</value>
   </data>
   <data name="MuHelperStatusChangeRequestHandlerPlugIn_Name" xml:space="preserve">
-    <value>Xử lý đổi trạng thái MU Helper</value>
+    <value>Xử lý đổi trạng thái tự động chơi</value>
   </data>
   <data name="MuHelperStatusChangeRequestHandlerPlugIn_Description" xml:space="preserve">
-    <value>Xử lý yêu cầu đổi trạng thái MU Helper.</value>
+    <value>Xử lý yêu cầu đổi trạng thái tự động chơi.</value>
   </data>
   <data name="PartyKickHandlerPlugIn_Name" xml:space="preserve">
     <value>Xử lý đuổi khỏi tổ đội</value>
@@ -1297,16 +1297,16 @@
     <value>Bản cài đặt mặc định của IUpdateMiniGameStateViewPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
   </data>
   <data name="MuHelperConfigurationUpdatePlugIn_Name" xml:space="preserve">
-    <value>Cập nhật cấu hình MU Helper</value>
+    <value>Cập nhật cấu hình tự động chơi</value>
   </data>
   <data name="MuHelperConfigurationUpdatePlugIn_Description" xml:space="preserve">
-    <value>Gửi trạng thái MU Helper mới đến client.</value>
+    <value>Gửi trạng thái tự động chơi mới đến client.</value>
   </data>
   <data name="MuHelperStatusUpdatePlugIn_Name" xml:space="preserve">
-    <value>Cập nhật trạng thái MU Helper</value>
+    <value>Cập nhật trạng thái tự động chơi</value>
   </data>
   <data name="MuHelperStatusUpdatePlugIn_Description" xml:space="preserve">
-    <value>Gửi cập nhật trạng thái MU Helper đến client.</value>
+    <value>Gửi cập nhật trạng thái tự động chơi đến client.</value>
   </data>
   <data name="NpcDialogClosedPlugIn075_Name" xml:space="preserve">
     <value>Đã đóng hội thoại NPC (075)</value>
@@ -2155,10 +2155,10 @@
     <value>Xử lý gói tin đăng xuất (do gian lận).</value>
   </data>
   <data name="MuHelperGroupHandler_Name" xml:space="preserve">
-    <value>Nhóm xử lý MU Helper</value>
+    <value>Nhóm xử lý tự động chơi</value>
   </data>
   <data name="MuHelperGroupHandler_Description" xml:space="preserve">
-    <value>Nhóm xử lý gói tin MU Helper (mã 0xBF).</value>
+    <value>Nhóm xử lý gói tin tự động chơi (mã 0xBF).</value>
   </data>
   <data name="PlayerShopBuyRequestPacketHandlerPlugIn_Name" xml:space="preserve">
     <value>Cửa hàng người chơi - Yêu cầu mua</value>
@@ -2299,10 +2299,10 @@
     <value>Bản cài đặt mở rộng của IAppearanceChangedPlugIn, chuyển thay đổi ngoại hình của người chơi khác đến game client bằng các gói dữ liệu riêng.</value>
   </data>
   <data name="MuHelperSettingsInitializationPlugIn_Name" xml:space="preserve">
-    <value>Khởi tạo cài đặt MU Helper</value>
+    <value>Khởi tạo cài đặt tự động chơi</value>
   </data>
   <data name="MuHelperSettingsInitializationPlugIn_Description" xml:space="preserve">
-    <value>Khởi tạo cài đặt MU Helper khi người chơi vào game.</value>
+    <value>Khởi tạo cài đặt tự động chơi khi người chơi vào game.</value>
   </data>
   <data name="ChatCommandListViewPlugIn_Name" xml:space="preserve">
     <value>Hiển thị danh sách lệnh chat</value>
@@ -2831,5 +2831,19 @@
   </data>
   <data name="HnmoAccountSafetyViewPlugIn_Description" xml:space="preserve">
     <value>Gửi trạng thái bảo vệ tài khoản (mật khẩu cấp 2, thao tác cần mật khẩu, vật phẩm bị khóa) cho web game đã yêu cầu.</value>
+  </data>
+  <data name="HnmoVipRequestHandlerPlugIn_Name" xml:space="preserve"><value>Yêu cầu VIP</value></data>
+  <data name="HnmoVipRequestHandlerPlugIn_Description" xml:space="preserve"><value>Xử lý cửa sổ VIP của tài khoản đang chơi trên web.</value></data>
+  <data name="HnmoVipViewPlugIn_Name" xml:space="preserve"><value>Cửa sổ VIP</value></data>
+  <data name="HnmoVipViewPlugIn_Description" xml:space="preserve"><value>Hiển thị gói VIP và kết quả mua cho tài khoản đang chơi trên web.</value></data>
+  <data name="HnmoGiftBoxRequestHandlerPlugIn_Name" xml:space="preserve"><value>Yêu cầu hộp thư quà (F5 27)</value></data>
+  <data name="HnmoGiftBoxRequestHandlerPlugIn_Description" xml:space="preserve"><value>Xử lý danh sách thư quà và nhận quà trực tiếp an toàn dưới khóa tài khoản trong game.</value></data>
+  <data name="HnmoGiftBoxViewPlugIn_Name" xml:space="preserve"><value>Cửa sổ hộp thư quà (F5 28)</value></data>
+  <data name="HnmoGiftBoxViewPlugIn_Description" xml:space="preserve"><value>Hiển thị hộp thư quà tặng và kết quả nhận quà trong trò chơi trên web.</value></data>
+  <data name="HnmoBanNoticeViewPlugIn_Name" xml:space="preserve">
+    <value>HNMO: thông báo khóa / cấm chat (F5 29)</value>
+  </data>
+  <data name="HnmoBanNoticeViewPlugIn_Description" xml:space="preserve">
+    <value>Gửi lý do khóa tài khoản, nhân vật hoặc cấm chat cùng thời hạn theo giờ Sydney tới client.</value>
   </data>
 </root>

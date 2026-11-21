@@ -10,12 +10,12 @@ using System.Text;
 using System.Threading;
 using global::Discord;
 using global::Discord.WebSocket;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Entities;
 using HNMO.Discord.ChatBridge;
 using HNMO.Discord.Properties;
 using HNMO.Discord.Provisioning;
 using HNMO.Interfaces;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The part of the <see cref="DiscordBot"/> which runs the chat bridge between the game and Discord.

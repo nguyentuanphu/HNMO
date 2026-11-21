@@ -6,6 +6,7 @@ namespace HNMO.GameLogic;
 
 using HNMO.DataModel.Configuration.Items;
 using HNMO.GameLogic.Attributes;
+using HNMO.GameLogic.PlugIns.FixedItemOptions;
 using Nito.AsyncEx;
 
 /// <summary>
@@ -35,6 +36,11 @@ public class DefaultDropGenerator : IDropGenerator
     /// A re-usable list of drop item groups.
     /// </summary>
     private readonly List<DropItemGroup> _chanceDropGroups = new(64);
+
+    /// <summary>
+    /// The extra chance of the common excellent drop groups for the kill which is being calculated (a running Happy Hour).
+    /// </summary>
+    private double _excellentChanceBonus;
     private readonly List<DropItemGroup> _guaranteedDropGroups = new(16);
 
     private readonly AsyncLock _lock = new();
@@ -67,6 +73,11 @@ public class DefaultDropGenerator : IDropGenerator
             .ToList();
     }
 
+    /// <summary>
+    /// Gets or sets the optional game context used to apply post-drop option plug-ins.
+    /// </summary>
+    public IGameContext? GameContext { get; set; }
+
     /// <inheritdoc/>
     public async ValueTask<(IEnumerable<Item> Items, uint? Money)> GenerateItemDropsAsync(MonsterDefinition monster, int gainedExperience, Player player)
     {
@@ -80,6 +91,7 @@ public class DefaultDropGenerator : IDropGenerator
         using var l = await this._lock.LockAsync().ConfigureAwait(false);
         this._guaranteedDropGroups.Clear();
         this._chanceDropGroups.Clear();
+        this._excellentChanceBonus = PlugIns.PeriodicTasks.HappyHourPlugIn.GetExcellentDropBonus(player.GameContext);
 
         if (monster.ObjectKind == NpcObjectKind.Destructible)
         {
@@ -97,18 +109,74 @@ public class DefaultDropGenerator : IDropGenerator
         var (droppedItems, moneyResult) = this.GenerateDrops(monster, gainedExperience);
         if (moneyResult > 0)
         {
-            money = moneyResult;
+            money = PlugIns.GameplayRules.RateTuningPlugIn.GetTableZen(player, (int)monster[Stats.Level], this._randomizer) ?? moneyResult;
+        }
+
+        var (mapItemMult, mapZenMult) = PlugIns.GameplayRules.MapRulesPlugIn.GetDropModifiers(player);
+        var (_, bonusItemMult, bonusZenMult) = PlugIns.GameplayRules.BonusEventsPlugIn.GetDropModifiers(player, DateTime.UtcNow);
+
+        // A running happy hour adds item drops too; it doesn't stack with a bonus event: the larger bonus applies.
+        bonusItemMult = Math.Max(bonusItemMult, PlugIns.PeriodicTasks.HappyHourPlugIn.GetItemDropMultiplier(player.GameContext));
+        var rateZenMult = PlugIns.GameplayRules.RateTuningPlugIn.GetZenDropMultiplier(player);
+        var (serverDropMult, serverZenMult) = player.GameContext is IGameServerContext serverCtx
+            ? PlugIns.Vip.GameServerRateStore.OpenDefault().GetRates(serverCtx.Id)
+            : (1.0f, 1.0f);
+        var totalZenMult = mapZenMult * bonusZenMult * rateZenMult * serverZenMult;
+        if (money > 0 && Math.Abs(totalZenMult - 1.0) > 0.0001)
+        {
+            money = (uint)Math.Max(1, Math.Round(money * totalZenMult));
+        }
+
+        var totalItemMult = mapItemMult * bonusItemMult * serverDropMult;
+        if (totalItemMult > 1.0001)
+        {
+            var extraRolls = (int)Math.Floor(totalItemMult - 1.0);
+            var fractionalChance = totalItemMult - 1.0 - extraRolls;
+            if (fractionalChance > 0 && this._randomizer.NextRandomBool(fractionalChance))
+            {
+                extraRolls++;
+            }
+
+            // The extra rolls of an item drop bonus (map rules, happy hours, server rates) give items only: their zen
+            // was added too, so "+30 % item drops" also gave up to +30 % zen. The zen bonuses are the zen multipliers.
+            for (var r = 0; r < extraRolls; r++)
+            {
+                var (extraItems, _) = this.GenerateDrops(monster, gainedExperience);
+                if (extraItems is { Count: > 0 })
+                {
+                    droppedItems ??= new List<Item>(extraItems.Count);
+                    foreach (var extra in extraItems)
+                    {
+                        droppedItems.Add(extra);
+                    }
+                }
+            }
+        }
+        else if (totalItemMult < 0.9999 && droppedItems is { Count: > 0 })
+        {
+            droppedItems = droppedItems.Where(_ => this._randomizer.NextRandomBool(totalItemMult)).ToList();
         }
 
         this._guaranteedDropGroups.Clear();
         this._chanceDropGroups.Clear();
+        if (droppedItems is { Count: > 0 })
+        {
+            FixedItemOptionsPlugIn.ApplyToItems(player.GameContext, droppedItems, "drop", map.Number, this._randomizer);
+        }
+
         return (droppedItems ?? Enumerable.Empty<Item>(), money > 0 ? money : null);
     }
 
     /// <inheritdoc/>
     public Item? GenerateItemDrop(DropItemGroup selectedGroup)
     {
-        return this.GenerateItemDrop(selectedGroup, selectedGroup.PossibleItems);
+        var item = this.GenerateItemDrop(selectedGroup, selectedGroup.PossibleItems);
+        if (item is not null)
+        {
+            FixedItemOptionsPlugIn.ApplyToItems(this.GameContext, [item], "box_event", null, this._randomizer);
+        }
+
+        return item;
     }
 
     /// <inheritdoc/>
@@ -316,12 +384,12 @@ public class DefaultDropGenerator : IDropGenerator
             double totalChance = 0;
             foreach (var group in this._chanceDropGroups)
             {
-                totalChance += group.Chance;
+                totalChance += GetChance(group, this._excellentChanceBonus);
             }
 
             for (int i = 0; i < remainingDrops; i++)
             {
-                var group = this.SelectRandomGroup(this._chanceDropGroups, totalChance);
+                var group = this.SelectRandomGroup(this._chanceDropGroups, totalChance, this._excellentChanceBonus);
                 if (group is null)
                 {
                     continue;
@@ -580,7 +648,18 @@ public class DefaultDropGenerator : IDropGenerator
         };
     }
 
-    private DropItemGroup? SelectRandomGroup(IEnumerable<DropItemGroup> groups, double totalChance)
+    /// <summary>
+    /// Gets the chance of a drop group, with the extra chance of the common excellent groups (no monster, no items of its own).
+    /// </summary>
+    /// <param name="group">The group.</param>
+    /// <param name="excellentBonus">The extra chance of the common excellent groups.</param>
+    /// <returns>The chance.</returns>
+    internal static double GetChance(DropItemGroup group, double excellentBonus)
+        => excellentBonus > 0 && group.ItemType == SpecialItemType.Excellent && group.Monster is null && group.PossibleItems.Count == 0
+            ? group.Chance + excellentBonus
+            : group.Chance;
+
+    private DropItemGroup? SelectRandomGroup(IEnumerable<DropItemGroup> groups, double totalChance, double excellentBonus = 0)
     {
         var remainingThreshold = this._randomizer.NextDouble();
         if (totalChance > 1.0)
@@ -590,9 +669,9 @@ public class DefaultDropGenerator : IDropGenerator
 
         foreach (var group in groups)
         {
-            if (remainingThreshold > group.Chance)
+            if (remainingThreshold > GetChance(group, excellentBonus))
             {
-                remainingThreshold -= group.Chance;
+                remainingThreshold -= GetChance(group, excellentBonus);
             }
             else
             {
@@ -619,5 +698,3 @@ public class DefaultDropGenerator : IDropGenerator
                  select it).ToList();
     }
 }
-
-

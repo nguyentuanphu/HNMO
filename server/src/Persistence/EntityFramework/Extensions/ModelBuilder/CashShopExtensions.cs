@@ -4,9 +4,9 @@
 
 namespace HNMO.Persistence.EntityFramework.Extensions.ModelBuilder;
 
+using HNMO.Persistence.EntityFramework.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using HNMO.Persistence.EntityFramework.Model;
 
 /// <summary>
 /// Extensions for cash shop related <see cref="EntityTypeBuilder"/>s.

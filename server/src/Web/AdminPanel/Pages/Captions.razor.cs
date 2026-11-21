@@ -7,12 +7,12 @@ namespace HNMO.Web.AdminPanel.Pages;
 using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Rendering;
-using Microsoft.Extensions.Logging;
 using HNMO.Persistence;
 using HNMO.Persistence.Initialization.Captions;
 using HNMO.Web.AdminPanel.Properties;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Page which compares the captions of the configuration with their sources and applies selected changes.

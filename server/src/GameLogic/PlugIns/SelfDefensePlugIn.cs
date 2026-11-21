@@ -43,7 +43,9 @@ public class SelfDefensePlugIn : IPeriodicTaskPlugIn, IAttackableGotHitPlugIn, I
     public void AttackableGotHit(IAttackable attackable, IAttacker attacker, HitInfo hitInfo)
     {
         var defender = attackable as Player ?? (attackable as Monster)?.SummonedBy;
-        var attackerPlayer = attacker as Player ?? (attacker as Monster)?.SummonedBy;
+
+        // The dark raven of a dark lord attacks for its owner.
+        var attackerPlayer = attacker as Player ?? (attacker as IPlayerSurrogate)?.Owner ?? (attacker as Monster)?.SummonedBy;
         if (defender is null || attackerPlayer is null || defender == attackerPlayer)
         {
             return;
@@ -55,9 +57,12 @@ public class SelfDefensePlugIn : IPeriodicTaskPlugIn, IAttackableGotHitPlugIn, I
             return;
         }
 
-        if (attackerPlayer.DuelRoom is not null || defender.DuelRoom is not null)
+        if (attackerPlayer.DuelRoom is { } duelRoom
+            && duelRoom.IsDuelist(attackerPlayer)
+            && duelRoom.IsDuelist(defender))
         {
-            // No self-defense during a duel.
+            // No self-defense between the two duelists. A duelist hitting (or being hit by) a third
+            // player is an ordinary attack.
             return;
         }
 

@@ -5,8 +5,8 @@
 namespace HNMO.ConnectServer;
 
 using System.Net.Sockets;
-using Microsoft.Extensions.Logging;
 using HNMO.Interfaces;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Plugin which checks if the maximum number of connections got exceeded. Refuses the connection to new clients, if that happens.

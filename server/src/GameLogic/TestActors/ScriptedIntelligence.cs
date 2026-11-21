@@ -6,7 +6,6 @@ namespace HNMO.GameLogic.TestActors;
 
 using System.Threading;
 using System.Threading.Channels;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.Attributes;
@@ -16,6 +15,7 @@ using HNMO.GameLogic.PlayerActions.Items;
 using HNMO.GameLogic.PlayerActions.Skills;
 using HNMO.GameLogic.PlugIns;
 using HNMO.Pathfinding;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// What the MU Helper AI is to an offline player, this is to a scripted actor: the one place which

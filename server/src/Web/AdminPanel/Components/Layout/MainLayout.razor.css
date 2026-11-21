@@ -112,3 +112,7 @@ main {
     right: 0.75rem;
     top: 0.5rem;
 }
+
+.hn-season-badge { flex: none; padding: .3rem .9rem; border-radius: .5rem; font-weight: 700; font-size: 1.05rem; text-decoration: none; border: 2px solid; white-space: nowrap; }
+.hn-season-s6 { color: #a87c22; border-color: #b8913f; background: rgba(184, 145, 63, .1); }
+.hn-season-s9 { color: #2a7fa6; border-color: #3b8bb0; background: rgba(59, 139, 176, .1); }

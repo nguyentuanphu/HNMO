@@ -4,8 +4,8 @@
 
 namespace HNMO.Web.AdminPanel.Auth;
 
-using Microsoft.AspNetCore.Identity;
 using HNMO.Persistence.AdminAuth;
+using Microsoft.AspNetCore.Identity;
 using QRCoder;
 
 /// <summary>
@@ -77,6 +77,17 @@ public class AuthenticatorSetupService
         await this._userManager.UpdateSecurityStampAsync(user).ConfigureAwait(false);
 
         return recoveryCodes?.ToList() ?? new List<string>();
+    }
+
+    /// <summary>
+    /// Forgets every browser the user trusted (owner, 2026-11-21): the code is asked again everywhere. The user's other
+    /// sessions end too; the page re-issues its own.
+    /// </summary>
+    /// <param name="user">The user.</param>
+    /// <returns>The task.</returns>
+    public async Task ForgetTrustedBrowsersAsync(AdminUser user)
+    {
+        await this._userManager.UpdateSecurityStampAsync(user).ConfigureAwait(false);
     }
 
     /// <summary>

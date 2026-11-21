@@ -6,9 +6,9 @@
 
 global using System.ComponentModel.DataAnnotations;
 
-global using Microsoft.Extensions.Logging;
-
 global using HNMO.DataModel;
+
 global using HNMO.DataModel.Configuration;
 global using HNMO.DataModel.Entities;
 global using HNMO.GameLogic.Properties;
+global using Microsoft.Extensions.Logging;

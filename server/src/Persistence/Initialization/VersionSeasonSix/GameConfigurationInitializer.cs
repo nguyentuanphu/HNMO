@@ -20,6 +20,13 @@ using HNMO.Persistence.Initialization.VersionSeasonSix.Items;
 public class GameConfigurationInitializer : GameConfigurationInitializerBase
 {
     /// <summary>
+    /// The maximum level of the additional option (<see cref="ItemOptionTypes.Option"/>): the Jewel of Life raises it
+    /// up to +28 (level 7), like the Season 6/9 server suites do. Drops keep their own maximum
+    /// (<see cref="GameConfiguration.MaximumItemOptionLevelDrop"/>).
+    /// </summary>
+    internal const int MaximumAdditionalOptionLevel = 7;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="GameConfigurationInitializer"/> class.
     /// </summary>
     /// <param name="context">The context.</param>
@@ -43,6 +50,9 @@ public class GameConfigurationInitializer : GameConfigurationInitializerBase
                 .ToList();
         }
     }
+
+    /// <inheritdoc />
+    protected override int MaximumOptionLevel => MaximumAdditionalOptionLevel;
 
     /// <inheritdoc />
     public override void Initialize()
@@ -82,6 +92,9 @@ public class GameConfigurationInitializer : GameConfigurationInitializerBase
         new NpcInitialization(this.Context, this.GameConfiguration).Initialize();
         new InvasionMobsInitialization(this.Context, this.GameConfiguration).Initialize();
         new GameMapsInitializer(this.Context, this.GameConfiguration).Initialize();
+
+        // The jewels drop by monster level (monster item drop rate table of the Season 6/9 server suites).
+        Updates.JewelDropsByMonsterLevelUpdatePlugIn.Apply(this.Context, this.GameConfiguration);
         this.AssignCharacterClassHomeMaps();
         this.WireRenaDropToEventMaps();
         new SocketSystem(this.Context, this.GameConfiguration).Initialize();
@@ -94,6 +107,7 @@ public class GameConfigurationInitializer : GameConfigurationInitializerBase
         // The HNMO skills; their trial quests need the monsters, the items and the elf soldier.
         new Skills.HnmoSkillsInitializer(this.Context, this.GameConfiguration).Initialize();
         new Skills.HnmoTrialQuestsInitializer(this.Context, this.GameConfiguration).Initialize();
+        new HnmoArenaHeraldInitializer(this.Context, this.GameConfiguration).Initialize();
         new DevilSquareInitializer(this.Context, this.GameConfiguration).Initialize();
         new BloodCastleInitializer(this.Context, this.GameConfiguration).Initialize();
         new ChaosCastleInitializer(this.Context, this.GameConfiguration).Initialize();

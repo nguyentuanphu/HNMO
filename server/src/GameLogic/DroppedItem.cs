@@ -281,7 +281,7 @@ public sealed class DroppedItem : AsyncDisposable, ILocateable
                 return;
             }
 
-            var partialAmount = (byte)Math.Min(partialTarget.Definition!.Durability - partialTarget.Durability, this.Item.Durability);
+            var partialAmount = (byte)Math.Min(partialTarget.MaximumStackSize() - partialTarget.Durability, this.Item.Durability);
             if (partialAmount <= 0)
             {
                 return;

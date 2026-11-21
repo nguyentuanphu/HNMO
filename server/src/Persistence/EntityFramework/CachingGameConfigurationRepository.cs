@@ -5,11 +5,11 @@
 namespace HNMO.Persistence.EntityFramework;
 
 using System.Threading;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using HNMO.Persistence.EntityFramework.Json;
 using HNMO.Persistence.EntityFramework.Loading;
 using HNMO.Persistence.EntityFramework.Model;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The game configuration repository, which loads the configuration by using the

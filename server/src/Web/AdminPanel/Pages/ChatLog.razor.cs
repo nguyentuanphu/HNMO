@@ -6,8 +6,6 @@ namespace HNMO.Web.AdminPanel.Pages;
 
 using System.Globalization;
 using System.Threading;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.PlugIns.Chat;
 using HNMO.GameLogic.Views;
@@ -16,6 +14,8 @@ using HNMO.Persistence.AdminAuth;
 using HNMO.Web.AdminPanel.Auth;
 using HNMO.Web.AdminPanel.Operations;
 using HNMO.Web.AdminPanel.Properties;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The chat log for game masters: the last chat lines of the game servers of this process, newest first,

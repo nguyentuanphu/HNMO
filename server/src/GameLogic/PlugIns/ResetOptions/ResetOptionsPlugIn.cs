@@ -8,9 +8,11 @@ using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
 using System.Threading;
 using HNMO.GameLogic.Attributes;
+using HNMO.GameLogic.CashShop;
 using HNMO.GameLogic.NPC;
 using HNMO.GameLogic.Offline;
 using HNMO.GameLogic.PlayerActions;
+using HNMO.GameLogic.PlugIns.CatchupCap;
 using HNMO.GameLogic.PlugIns.GiftCodes;
 using HNMO.GameLogic.PlugIns.TopRaces;
 using HNMO.GameLogic.Views;
@@ -304,7 +306,7 @@ public class ResetOptionsPlugIn : IPeriodicTaskPlugIn, IPlayerStateChangedPlugIn
         }
 
         var now = DateTime.UtcNow;
-        var plan = engine.PlanReset(subject, now, ResetSource.Delegated);
+        var plan = engine.PlanReset(subject, now, ResetSource.Delegated, CatchupCapPlugIn.GetEffectiveDailyResetCap(player.GameContext, now));
         if (plan.Result != ResetResult.Ok)
         {
             if (plan.Result != ResetResult.LevelTooLow)
@@ -404,6 +406,11 @@ public class ResetOptionsPlugIn : IPeriodicTaskPlugIn, IPlayerStateChangedPlugIn
             return ResetResult.NotEnoughCoins;
         }
 
+        if (player.Account is { } payingAccount)
+        {
+            ResetCoinHistory.Record(player.PersistenceContext, payingAccount, plan, plan.IsRelife ? CashShopBalanceReason.Relife : CashShopBalanceReason.Reset);
+        }
+
         foreach (var item in items)
         {
             await player.DestroyInventoryItemAsync(item).ConfigureAwait(false);
@@ -418,6 +425,7 @@ public class ResetOptionsPlugIn : IPeriodicTaskPlugIn, IPlayerStateChangedPlugIn
         TopRacesPlugIn.ObserveCharacter(player.GameContext, subject.CharacterId, subject.Name, subject.Login, subject.Class, subject.Level, subject.Resets);
         ResetApplier.Apply(player.SelectedCharacter!, plan, keepBuild, a => attributes[a], (a, v) => attributes[a] = v);
         this.GetEngine().Record(subject, plan, now, source);
+        CatchupCapPlugIn.Get(player.GameContext)?.GetEngine().ObserveResets(subject.Name, plan.ResetsAfter, now);
         TopRacesPlugIn.ObserveCharacter(player.GameContext, subject.CharacterId, subject.Name, subject.Login, subject.Class, plan.LevelAfter, plan.ResetsAfter);
     }
 
@@ -451,7 +459,9 @@ public class ResetOptionsPlugIn : IPeriodicTaskPlugIn, IPlayerStateChangedPlugIn
         var engine = this.GetEngine();
         var names = GiftCodesPlugIn.ItemNames(player.GameContext.Configuration);
         var now = DateTime.UtcNow;
-        var plan = relife ? engine.PlanRelife(subject, now) : engine.PlanReset(subject, now, ResetSource.Game);
+        var plan = relife
+            ? engine.PlanRelife(subject, now)
+            : engine.PlanReset(subject, now, ResetSource.Game, CatchupCapPlugIn.GetEffectiveDailyResetCap(player.GameContext, now));
         var kind = relife ? "relife" : "reset";
         if (plan.Result == ResetResult.Ok)
         {

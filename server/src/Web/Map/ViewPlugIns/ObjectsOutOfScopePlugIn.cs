@@ -5,9 +5,9 @@
 namespace HNMO.Web.Map.ViewPlugIns;
 
 using System.Collections.Concurrent;
-using Microsoft.JSInterop;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Views.World;
+using Microsoft.JSInterop;
 
 /// <summary>
 /// Implementation of <see cref="IObjectsOutOfScopePlugIn"/> which uses the javascript map app.

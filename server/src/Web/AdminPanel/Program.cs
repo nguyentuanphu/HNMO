@@ -8,12 +8,12 @@ using System.Runtime.CompilerServices;
 
 namespace HNMO.Web.AdminPanel;
 
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using HNMO.DataModel.Configuration;
 using HNMO.Interfaces;
 using HNMO.Persistence;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 /// <summary>
 /// The class of the entry point.

@@ -527,7 +527,7 @@ void MuMonsterAttacksUI::RenderRotation(MonsterDefinition& monster, int modelSlo
     for (size_t index = 0; index < rotation.size(); ++index)
     {
         ImGui::PushID(static_cast<int>(index));
-        ImGui::Text("%zu", index + 1);
+        ImGui::Text(I18N::Editor::Zu, index + 1);
         ImGui::SameLine();
         if (AnimationCombo("##Turn", rotation[index], modelSlot))
         {

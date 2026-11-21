@@ -151,23 +151,34 @@ internal sealed class MiniGameRewardService
         switch (reward.RewardType)
         {
             case MiniGameRewardType.Experience:
-                await player.AddExperienceAsync(reward.RewardAmount, null).ConfigureAwait(false);
+                // Times the server's experience rate, and master experience at the maximum level, as in the classic
+                // events; it was the plain amount, and lost at the maximum level.
+                await player.AddRewardExperienceAsync(reward.RewardAmount).ConfigureAwait(false);
                 break;
             case MiniGameRewardType.ExperiencePerRemainingSeconds:
                 var seconds = (int)this._remainingTimeProvider().TotalSeconds;
                 if (seconds > 0)
                 {
-                    await player.AddExperienceAsync(seconds * reward.RewardAmount, null).ConfigureAwait(false);
+                    await player.AddRewardExperienceAsync((long)seconds * reward.RewardAmount).ConfigureAwait(false);
                 }
 
                 break;
             case MiniGameRewardType.Money:
-                if (!player.TryAddMoney(reward.RewardAmount))
+                // When the whole amount doesn't fit, the player gets as much as fits up to the maximum
+                // inventory money. The score table shows what was actually paid.
+                var maximumMoney = player.GameContext.Configuration?.MaximumInventoryMoney ?? int.MaxValue;
+                var paidMoney = (int)Math.Clamp((long)maximumMoney - player.Money, 0, Math.Max(0, reward.RewardAmount));
+                if (paidMoney > 0 && !player.TryAddMoney(paidMoney))
+                {
+                    paidMoney = 0;
+                }
+
+                if (paidMoney < reward.RewardAmount)
                 {
                     await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.AwardMoneyFailByFullInventory)).ConfigureAwait(false);
                 }
 
-                return (0, reward.RewardAmount);
+                return (0, paidMoney);
             case MiniGameRewardType.Item:
                 await this.GiveItemRewardAsync(player, reward).ConfigureAwait(false);
                 break;

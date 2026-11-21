@@ -67,10 +67,30 @@ else
     -p:DebugType=none -p:DebugSymbols=false -p:GenerateDocumentationFile=false \
     -p:AllowedReferenceRelatedFileExtensions=.no-related-files \
     -o "$OUT/server" -v quiet
-  dotnet publish "$WEB/bridge/HNMO.Web.csproj" -c Release -r "$RUNTIME" --self-contained -o "$OUT/web" -v quiet \
+  dotnet publish "$WEB/bridge/HNMO.Web.csproj" -c Release -r "$RUNTIME" --self-contained \
+    -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true \
     -p:HnmoServerSource="$SERVER_SOURCE" -p:DebugType=none -p:DebugSymbols=false -p:GenerateDocumentationFile=false \
-    -p:AllowedReferenceRelatedFileExtensions=.no-related-files
+    -p:AllowedReferenceRelatedFileExtensions=.no-related-files -o "$OUT/web" -v quiet
   find "$OUT/web" -maxdepth 1 \( -name "*.pdb" -o -name "*.xml" \) -delete
+fi
+
+# Strip any precompressed .br/.gz copies from server/wwwroot and pack ItemEditor icons into items.zip.
+if [ -d "$OUT/server/wwwroot" ]; then
+  SERVER_WWWROOT_BEFORE_FILES="$(find "$OUT/server/wwwroot" -type f | wc -l | tr -d ' ')"
+  SERVER_WWWROOT_BEFORE_MB="$(du -sm "$OUT/server/wwwroot" | awk '{print $1}')"
+  find "$OUT/server/wwwroot" -type f \( -name '*.br' -o -name '*.gz' \) -delete
+  ITEM_ICONS_DIR="$OUT/server/wwwroot/_content/HNMO.Web.ItemEditor/img/items"
+  if [ -d "$ITEM_ICONS_DIR" ]; then
+    echo "Packing ItemEditor icons"
+    dotnet run --project "$WEB/bridge/HNMO.Web.csproj" -c Release -p:HnmoServerSource="$SERVER_SOURCE" -- \
+      --pack-icons "$ITEM_ICONS_DIR" "$OUT/server/wwwroot/_content/HNMO.Web.ItemEditor/img/items.zip"
+    rm -rf "$ITEM_ICONS_DIR"
+  fi
+  # The server's static asset manifest still names the deleted files; without this the admin panel
+  # gets empty scripts (integrity error, no styles, nothing saves).
+  node "$WEB/tools/prune-static-endpoints.mjs" "$OUT/server"
+  SERVER_WWWROOT_AFTER_FILES="$(find "$OUT/server/wwwroot" -type f | wc -l | tr -d ' ')"
+  SERVER_WWWROOT_AFTER_MB="$(du -sm "$OUT/server/wwwroot" | awk '{print $1}')"
 fi
 
 # The web client (TypeScript, built and type-checked here; a type error stops the build) and its library
@@ -85,20 +105,56 @@ cp -r "$WEB/node_modules/three/build" "$OUT/web/vendor/three/build"
 # unbundled public/js). three stays external (resolved by the page's import map), and
 # the Data files stay separate. The individual modules are then dropped from the folder.
 echo "Bundling the web client (esbuild)"
-# The game keeps its function names (no identifier minifying), so the performance report's profile
-# (Settings, "Performance report") names the functions that take the time.
+# A shipped build mangles the game's names too, so the bundle is hard to read or change. Set
+# HNMO_KEEP_JS_NAMES=1 to keep them, so the performance report (Settings, "Performance report")
+# can name the functions that take the time.
+if [ "${HNMO_KEEP_JS_NAMES:-}" = "1" ]; then
+  MAIN_MINIFY=(--minify-whitespace --minify-syntax)
+else
+  MAIN_MINIFY=(--minify)
+fi
 "$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/main.js" \
-  --bundle --minify-whitespace --minify-syntax --format=esm --external:three \
+  --bundle "${MAIN_MINIFY[@]}" --format=esm --external:three \
   --outfile="$OUT/web/wwwroot/js/main.min.js" --log-level=warning
 # The website (home.html) has its own script: bundled the same way.
 "$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/website.js" \
   --bundle --minify --format=esm --external:three \
   --outfile="$OUT/web/wwwroot/js/website.min.js" --log-level=warning
-find "$OUT/web/wwwroot/js" -name '*.js' ! -name 'main.min.js' ! -name 'website.min.js' -delete
+"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/topupPage.js" \
+  --bundle --minify --format=esm \
+  --outfile="$OUT/web/wwwroot/js/topupPage.min.js" --log-level=warning
+"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/calculator.js" \
+  --bundle --minify --format=esm \
+  --outfile="$OUT/web/wwwroot/js/calculator.min.js" --log-level=warning
+"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/accountPage.js" \
+  --bundle --minify --format=esm \
+  --outfile="$OUT/web/wwwroot/js/accountPage.min.js" --log-level=warning
+"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/siteLanguage.js" \
+  --bundle --minify --format=esm \
+  --outfile="$OUT/web/wwwroot/js/siteLanguage.min.js" --log-level=warning
+"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/deviceId.js" \
+  --bundle --minify --format=esm \
+  --outfile="$OUT/web/wwwroot/js/deviceId.min.js" --log-level=warning
+"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/giftCodeIdentity.js" \
+  --bundle --minify --format=esm \
+  --outfile="$OUT/web/wwwroot/js/giftCodeIdentity.min.js" --log-level=warning
+find "$OUT/web/wwwroot/js" -name '*.js' \
+  ! -name 'main.min.js' ! -name 'website.min.js' ! -name 'topupPage.min.js' ! -name 'calculator.min.js' \
+  ! -name 'accountPage.min.js' ! -name 'siteLanguage.min.js' ! -name 'deviceId.min.js' ! -name 'giftCodeIdentity.min.js' \
+  -delete
 find "$OUT/web/wwwroot/js" -mindepth 1 -type d -empty -delete
 # Point the packaged pages at the bundles (dev pages are untouched).
 sed -i 's#src="/js/main.js"#src="/js/main.min.js"#' "$OUT/web/wwwroot/index.html"
 sed -i 's#src="/js/website.js"#src="/js/website.min.js"#' "$OUT/web/wwwroot/home.html"
+sed -i 's#src="/js/topupPage.js"#src="/js/topupPage.min.js"#' "$OUT/web/wwwroot/topup.html"
+sed -i 's#src="/js/calculator.js"#src="/js/calculator.min.js"#' "$OUT/web/wwwroot/calculator.html"
+sed -i \
+  -e 's#src="/js/accountPage.js"#src="/js/accountPage.min.js"#g' \
+  -e 's#src="/js/siteLanguage.js"#src="/js/siteLanguage.min.js"#g' \
+  -e "s#/js/deviceId.js#/js/deviceId.min.js#g" \
+  -e "s#/js/giftCodeIdentity.js#/js/giftCodeIdentity.min.js#g" \
+  "$OUT/web/wwwroot/account.html"
+sed -i 's#src="/js/siteLanguage.js"#src="/js/siteLanguage.min.js"#' "$OUT/web/wwwroot/guide.html"
 # Every script a page loads must be in the folder (a missing one leaves the page empty).
 missing=0
 for page in "$OUT/web/wwwroot"/*.html; do
@@ -123,6 +179,18 @@ fi
 # The game server talks to the folder's own database on its own port
 sed -i 's/Port=5432;/Port=55432;/g' "$OUT/server/ConnectionSettings.xml"
 
+# A shipped build is signed: a changed file in it must stop the server (not just warn). The dev
+# appsettings keeps "warn" so a local unsigned build still runs; here it is forced to refuse.
+if [ -f "$OUT/server/appsettings.json" ]; then
+  node -e '
+    const fs = require("fs");
+    const file = process.argv[1];
+    const data = JSON.parse(fs.readFileSync(file, "utf8"));
+    data.Integrity = { ...(data.Integrity || {}), OnMismatch: "refuse" };
+    fs.writeFileSync(file, JSON.stringify(data, null, 2) + "\n");
+  ' "$OUT/server/appsettings.json"
+fi
+
 cat > "$OUT/web/appsettings.json" <<JSON
 {
   "Urls": "http://0.0.0.0:8080",
@@ -144,6 +212,16 @@ JSON
 if [ "$WITH_DATA" = 1 ]; then
   echo "Copying the game data"
   cp -r "$CLIENT_REPO/src/bin/Data" "$OUT/Data"
+  # A Season 9 data pack (HNMO_S9_DATA_DIR, never part of the repository) gets its own folder, Data_S9,
+  # served under /data/s9/ to players of Season 9 worlds only. It must never be copied into Data: files of
+  # the same name would replace what Season 6 worlds show.
+  S9_SOUND_DIRS=()
+  if [ -n "${HNMO_S9_DATA_DIR:-}" ] && [ -d "$HNMO_S9_DATA_DIR" ]; then
+    echo "Copying the Season 9 data pack from $HNMO_S9_DATA_DIR to Data_S9"
+    mkdir -p "$OUT/Data_S9"
+    cp -rf "$HNMO_S9_DATA_DIR/." "$OUT/Data_S9/"
+    for dir in Sound Music; do [ -d "$OUT/Data_S9/$dir" ] && S9_SOUND_DIRS+=("$OUT/Data_S9/$dir"); done
+  fi
   # Sounds and music as Opus: about 250 MB less (WAV effects shrink ~95 %). The web game asks for
   # the .opus names when Data/Audio/Opus.json is there and the browser plays Opus. Set
   # HNMO_KEEP_WAV=1 to keep the original files.
@@ -161,7 +239,7 @@ if [ "$WITH_DATA" = 1 ]; then
     }
     export -f convert_audio
     # The web game's own sounds (the HNMO skills', web/wwwroot/data/Sound) go with them.
-    find "$OUT/Data/Sound" "$OUT/Data/Music" "$OUT/web/wwwroot/data/Sound" -type f \( -iname '*.wav' -o -iname '*.mp3' -o -iname '*.ogg' \) -print0 \
+    find "$OUT/Data/Sound" "$OUT/Data/Music" "$OUT/web/wwwroot/data/Sound" ${S9_SOUND_DIRS[@]+"${S9_SOUND_DIRS[@]}"} -type f \( -iname '*.wav' -o -iname '*.mp3' -o -iname '*.ogg' \) -print0 \
       | xargs -0 -P "$(nproc)" -I{} bash -c 'convert_audio "$1"' _ {}
     mkdir -p "$OUT/Data/Audio"
     printf '{ "opus": true }\n' > "$OUT/Data/Audio/Opus.json"
@@ -169,6 +247,22 @@ if [ "$WITH_DATA" = 1 ]; then
   elif [ "${HNMO_KEEP_WAV:-0}" != 1 ]; then
     echo "WARNING: ffmpeg not found: the sounds stay WAV / MP3 (about 250 MB more)."
   fi
+
+  DATA_BEFORE_FILES="$(find "$OUT/Data" -type f | wc -l | tr -d ' ')"
+  DATA_BEFORE_MB="$(du -sm "$OUT/Data" | awk '{print $1}')"
+  ALLOWLIST_FILE="$(mktemp)"
+  echo "Building web Data allowlist and packing Data/packs"
+  node "$WEB/tools/build-allowlist.mjs" "$OUT/Data" "$ALLOWLIST_FILE"
+  if [ "${HNMO_SKIP_KTX2:-0}" != 1 ]; then
+    echo "Converting 3D textures to KTX2 (UASTC/ETC1S with mipmaps)"
+    node "$WEB/tools/convert-textures-ktx2.mjs" "$OUT/Data" "$ALLOWLIST_FILE"
+  fi
+  dotnet run --project "$WEB/bridge/HNMO.Web.csproj" -c Release -p:HnmoServerSource="$SERVER_SOURCE" -- \
+    --pack "$OUT/Data" "$OUT/Data/packs" --allowlist "$ALLOWLIST_FILE"
+  rm -f "$ALLOWLIST_FILE"
+  find "$OUT/Data" -mindepth 1 -maxdepth 1 ! -name 'packs' -exec rm -rf {} +
+  DATA_AFTER_FILES="$(find "$OUT/Data" -type f | wc -l | tr -d ' ')"
+  DATA_AFTER_MB="$(du -sm "$OUT/Data" | awk '{print $1}')"
 else
   mkdir -p "$OUT/Data"
 fi
@@ -197,10 +291,14 @@ notice() { printf '=============================================================
   fi
 } > "$OUT/licenses/THIRD-PARTY-NOTICES.txt"
 cp "$WEB/tools/hnmo/README.txt" "$OUT/README.txt"
-cp "$WEB/tools/hnmo/start-hnmo.sh" "$WEB/tools/hnmo/Start HNMO.bat" "$OUT/"
+cp "$WEB/tools/hnmo/start-hnmo.sh" "$WEB/tools/hnmo/stop-hnmo.sh" "$WEB/tools/hnmo/Start HNMO.bat" "$WEB/tools/hnmo/Start HNMO (window).bat" "$OUT/"
+# Windows: HNMO without a console window, its icon next to the clock (launcher/hnmo-tray.ps1, started hidden by
+# launcher/start-hidden.vbs from "Start HNMO.bat").
+mkdir -p "$OUT/launcher"
+cp "$WEB/tools/hnmo/launcher/hnmo-tray.ps1" "$WEB/tools/hnmo/launcher/start-hidden.vbs" "$OUT/launcher/"
 # Windows reads batch files reliably only with Windows line endings (CRLF), whatever the checkout has.
-sed -i 's/\r*$/\r/' "$OUT/Start HNMO.bat"
-chmod +x "$OUT/start-hnmo.sh"
+sed -i 's/\r*$/\r/' "$OUT/Start HNMO.bat" "$OUT/Start HNMO (window).bat" "$OUT/launcher/start-hidden.vbs" "$OUT/launcher/hnmo-tray.ps1"
+chmod +x "$OUT/start-hnmo.sh" "$OUT/stop-hnmo.sh"
 
 # HNMO ownership watermark. The marker locations are documented in the (unshipped)
 # note client/web/tools/hnmo/WATERMARKS.private.md. See also PROTECTION.md.
@@ -282,4 +380,30 @@ if [ -n "$LEAKED" ]; then
   exit 1
 fi
 
+# The version and the update manifest (every file with its size and SHA-256), for the updater: it downloads only
+# the files that changed (owner, 2026-11-21). Written last, after everything else is in place.
+HNMO_VERSION="$(tr -d '[:space:]' < "$REPO_ROOT/VERSION")"
+python3 "$WEB/tools/write-update-manifest.py" "$OUT" "$HNMO_VERSION" "$STAMP"
+
+echo ""
+echo "Package summary ($OUT):"
+printf '  %-16s %10s %10s\n' "Folder" "Files" "MB"
+for dir in Data server web postgres licenses; do
+  if [ -d "$OUT/$dir" ]; then
+    fcount="$(find "$OUT/$dir" -type f | wc -l | tr -d ' ')"
+    mb="$(du -sm "$OUT/$dir" | awk '{print $1}')"
+    printf '  %-16s %10s %10s\n' "$dir" "$fcount" "${mb} MB"
+  fi
+done
+if [ -n "${DATA_BEFORE_FILES:-}" ]; then
+  printf '  Data before pack: %s files, %s MB -> after pack: %s files, %s MB\n' \
+    "$DATA_BEFORE_FILES" "$DATA_BEFORE_MB" "$DATA_AFTER_FILES" "$DATA_AFTER_MB"
+fi
+if [ -n "${SERVER_WWWROOT_BEFORE_FILES:-}" ]; then
+  printf '  server/wwwroot before: %s files, %s MB -> after: %s files, %s MB\n' \
+    "$SERVER_WWWROOT_BEFORE_FILES" "$SERVER_WWWROOT_BEFORE_MB" "$SERVER_WWWROOT_AFTER_FILES" "$SERVER_WWWROOT_AFTER_MB"
+fi
+TOTAL_FILES="$(find "$OUT" -type f | wc -l | tr -d ' ')"
+TOTAL_MB="$(du -sm "$OUT" | awk '{print $1}')"
+printf '  %-16s %10s %10s\n' "TOTAL" "$TOTAL_FILES" "${TOTAL_MB} MB"
 echo "Done: $OUT"

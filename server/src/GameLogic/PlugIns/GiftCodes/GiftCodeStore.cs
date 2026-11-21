@@ -6,110 +6,10 @@ namespace HNMO.GameLogic.PlugIns.GiftCodes;
 
 using System.Collections.Concurrent;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text.Json;
 using HNMO.DataModel.Configuration;
-
-/// <summary>
-/// A redemption of a gift code (the admin panel's log).
-/// </summary>
-public sealed class GiftCodeLogEntry
-{
-    /// <summary>Gets or sets when.</summary>
-    public DateTime AtUtc { get; set; }
-
-    /// <summary>Gets or sets the code's id.</summary>
-    public string CodeId { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets the code which was entered (normalized).</summary>
-    public string Code { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets the account's login name.</summary>
-    public string Login { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets the character's id.</summary>
-    public string CharacterId { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets the character's name.</summary>
-    public string CharacterName { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets where it was entered: "game" or "website".</summary>
-    public string Source { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets the reference which makes the reward count once.</summary>
-    public string Reference { get; set; } = string.Empty;
-}
-
-/// <summary>
-/// Coins of a redemption which weren't given yet (they're given once, by their reference).
-/// </summary>
-public sealed class GiftCodePendingCoins
-{
-    /// <summary>Gets or sets the reference.</summary>
-    public string Reference { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets the account's login name.</summary>
-    public string Login { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets the coin type.</summary>
-    public CashShopCoinType CoinType { get; set; }
-
-    /// <summary>Gets or sets the amount.</summary>
-    public int Amount { get; set; }
-
-    /// <summary>Gets or sets the reason in the coins history.</summary>
-    public string Reason { get; set; } = string.Empty;
-}
-
-/// <summary>
-/// Zen and items of a redemption which wait for the character to be in the game with room in the bag.
-/// </summary>
-public sealed class GiftCodeOwedReward
-{
-    /// <summary>Gets or sets the reference; it makes the reward count once.</summary>
-    public string Reference { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets the code's id.</summary>
-    public string CodeId { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets the code which was entered.</summary>
-    public string Code { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets the zen.</summary>
-    public int Zen { get; set; }
-
-    /// <summary>Gets or sets the items.</summary>
-    public List<GiftCodeItem> Items { get; set; } = new();
-}
-
-/// <summary>
-/// The saved state of the gift codes, in a JSON file in the save folder (no database table).
-/// </summary>
-public sealed class GiftCodeStoreData
-{
-    /// <summary>Gets or sets the codes.</summary>
-    public List<GiftCodeDefinition> Codes { get; set; } = new();
-
-    /// <summary>Gets or sets how often each code was used, by code id.</summary>
-    public Dictionary<string, int> Uses { get; set; } = new(StringComparer.Ordinal);
-
-    /// <summary>Gets or sets who used each code ("a:login" and "c:character id"), by code id.</summary>
-    public Dictionary<string, HashSet<string>> Claims { get; set; } = new(StringComparer.Ordinal);
-
-    /// <summary>Gets or sets the batch codes which were used (normalized), with the reference of their redemption.</summary>
-    public Dictionary<string, string> UsedBatchCodes { get; set; } = new(StringComparer.Ordinal);
-
-    /// <summary>Gets or sets the redemptions, newest first.</summary>
-    public List<GiftCodeLogEntry> Log { get; set; } = new();
-
-    /// <summary>Gets or sets the coins which weren't given yet.</summary>
-    public List<GiftCodePendingCoins> PendingCoins { get; set; } = new();
-
-    /// <summary>Gets or sets the zen and items waiting for the character, by character id.</summary>
-    public Dictionary<string, List<GiftCodeOwedReward>> Owed { get; set; } = new(StringComparer.Ordinal);
-
-    /// <summary>Gets or sets the times of wrong codes, by login name (lower case).</summary>
-    public Dictionary<string, List<DateTime>> WrongTries { get; set; } = new(StringComparer.Ordinal);
-}
+using HNMO.Persistence;
 
 /// <summary>
 /// Keeps the <see cref="GiftCodeStoreData"/>; with a file, it outlasts a restart of the server. All game servers, the
@@ -117,10 +17,18 @@ public sealed class GiftCodeStoreData
 /// </summary>
 public sealed class GiftCodeStore
 {
+    private const string FeatureClaims = "giftCodes.claims";
+    private const string FeatureOwed = "giftCodes.owed";
+    private const string FeatureWrongTries = "giftCodes.wrongTries";
+    private const string SectionKey = "giftCodes";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
-    private static readonly ConcurrentDictionary<string, GiftCodeStore> Shared = new(StringComparer.Ordinal);
+    private static readonly ConcurrentDictionary<string, Lazy<GiftCodeStore>> Shared = new(OperatingSystem.IsWindows() ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal);
 
-    private readonly string? _filePath;
+    private readonly HnmoStateStore? _stateStore;
+    private readonly IHnmoPlayerStateRowBackend _rowBackend;
+    private readonly HnmoFeatureRowSync<HashSet<string>> _claimsSync = new();
+    private readonly HnmoFeatureRowSync<List<GiftCodeOwedReward>> _owedSync = new();
+    private readonly HnmoFeatureRowSync<List<DateTime>> _wrongTriesSync = new();
     private bool _changed;
 
     /// <summary>
@@ -129,8 +37,24 @@ public sealed class GiftCodeStore
     /// <param name="filePath">The file; <c>null</c> keeps the data in memory only.</param>
     public GiftCodeStore(string? filePath = null)
     {
-        this._filePath = filePath;
+        this._stateStore = HnmoStateStore.Open(filePath, SectionKey);
+        this._rowBackend = HnmoPlayerStateRowStoreRegistry.GetBackend(this._stateStore?.FilePath);
         this.Data = this.Load();
+        if (string.IsNullOrEmpty(this.Data.IdentitySalt))
+        {
+            if (this.Data.Claims.Values.Any(claims => claims.Any(c => c.StartsWith("n:", StringComparison.Ordinal) || c.StartsWith("d:", StringComparison.Ordinal))))
+            {
+                throw new InvalidDataException("Gift-code identity claims cannot be opened without their original salt.");
+            }
+
+            this.Data.IdentitySalt = Convert.ToHexString(RandomNumberGenerator.GetBytes(32));
+            this.Changed();
+            this.SaveIfChanged();
+            if (this._stateStore is not null && this._changed)
+            {
+                throw new IOException("The gift-code identity salt could not be saved.");
+            }
+        }
     }
 
     /// <summary>Gets the lock which every access holds.</summary>
@@ -149,8 +73,10 @@ public sealed class GiftCodeStore
     /// <returns>The store.</returns>
     public static GiftCodeStore Open(string? fileName)
     {
-        var path = string.IsNullOrWhiteSpace(fileName) ? string.Empty : Path.GetFullPath(fileName.Trim(), AppContext.BaseDirectory);
-        return Shared.GetOrAdd(path, p => new GiftCodeStore(p.Length == 0 ? null : p));
+        var path = string.IsNullOrWhiteSpace(fileName) ? string.Empty : HnmoStateStore.ResolveStateFilePath(Path.GetFullPath(fileName.Trim(), AppContext.BaseDirectory))!;
+
+        // GetOrAdd may run competing factories; only the winning lazy value may create and persist a salt.
+        return Shared.GetOrAdd(path, p => new Lazy<GiftCodeStore>(() => new GiftCodeStore(p.Length == 0 ? null : p))).Value;
     }
 
     /// <summary>Marks the data as changed.</summary>
@@ -168,23 +94,25 @@ public sealed class GiftCodeStore
     /// </summary>
     public void SaveIfChanged()
     {
-        if (!this._changed || this._filePath is null)
+        if (!this._changed || this._stateStore is null)
         {
             this._changed = false;
             return;
         }
 
+        DateTime? ClaimExpiry(string codeId, HashSet<string> claimants)
+        {
+            var def = this.Data.Codes.FirstOrDefault(c => string.Equals(c.Id, codeId, StringComparison.Ordinal));
+            return ParseEndUtc(def?.End);
+        }
+
+        this._claimsSync.SaveChanges(this._rowBackend, FeatureClaims, this.Data.Claims, JsonOptions, ClaimExpiry, useDirtySetOnly: true);
+        this._owedSync.SaveChanges(this._rowBackend, FeatureOwed, this.Data.Owed, JsonOptions, useDirtySetOnly: true);
+        this._wrongTriesSync.SaveChanges(this._rowBackend, FeatureWrongTries, this.Data.WrongTries, JsonOptions, useDirtySetOnly: true);
+
         try
         {
-            var directory = Path.GetDirectoryName(this._filePath);
-            if (!string.IsNullOrEmpty(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
-
-            var temporary = this._filePath + ".tmp";
-            File.WriteAllText(temporary, JsonSerializer.Serialize(this.Data, JsonOptions));
-            File.Move(temporary, this._filePath, true);
+            this._stateStore.WriteSection(SectionKey, this.BuildServerOnlyData(), JsonOptions);
             this._changed = false;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
@@ -193,35 +121,69 @@ public sealed class GiftCodeStore
         }
     }
 
+    private static DateTime? ParseEndUtc(string? endText)
+    {
+        if (string.IsNullOrWhiteSpace(endText)
+            || HNMO.GameLogic.PlugIns.TopRaces.TopRaceEngine.ParseLocal(endText) is not { } local)
+        {
+            return null;
+        }
+
+        return HNMO.GameLogic.PlugIns.TopRaces.TopRaceEngine.LocalToUtc(
+            local,
+            new HNMO.GameLogic.PlugIns.Missions.MissionClock("Australia/Sydney", 0).TimeZone);
+    }
+
+    private GiftCodeStoreData BuildServerOnlyData() => new()
+    {
+        IdentitySalt = this.Data.IdentitySalt,
+        Codes = this.Data.Codes,
+        Uses = this.Data.Uses,
+        UsedBatchCodes = this.Data.UsedBatchCodes,
+        Log = this.Data.Log,
+        PendingCoins = this.Data.PendingCoins,
+    };
+
     private GiftCodeStoreData Load()
     {
-        if (this._filePath is null || !File.Exists(this._filePath))
+        if (this._stateStore is null)
         {
             return new GiftCodeStoreData();
         }
 
-        try
-        {
-            var data = JsonSerializer.Deserialize<GiftCodeStoreData>(File.ReadAllText(this._filePath), JsonOptions) ?? new GiftCodeStoreData();
-            data.Uses = new Dictionary<string, int>(data.Uses, StringComparer.Ordinal);
-            data.Claims = data.Claims.ToDictionary(p => p.Key, p => new HashSet<string>(p.Value, StringComparer.Ordinal), StringComparer.Ordinal);
-            data.UsedBatchCodes = new Dictionary<string, string>(data.UsedBatchCodes, StringComparer.Ordinal);
-            data.Owed = new Dictionary<string, List<GiftCodeOwedReward>>(data.Owed, StringComparer.Ordinal);
-            data.WrongTries = new Dictionary<string, List<DateTime>>(data.WrongTries, StringComparer.Ordinal);
-            return data;
-        }
-        catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
-        {
-            try
-            {
-                File.Copy(this._filePath, this._filePath + ".broken", true);
-            }
-            catch (Exception copyError) when (copyError is IOException or UnauthorizedAccessException)
-            {
-                // nothing more to do
-            }
+        var data = this._stateStore.ReadSection<GiftCodeStoreData>(SectionKey, JsonOptions) ?? new GiftCodeStoreData();
+        data.Uses = new Dictionary<string, int>(data.Uses, StringComparer.Ordinal);
+        data.Claims = data.Claims.ToDictionary(p => p.Key, p => new HashSet<string>(p.Value, StringComparer.Ordinal), StringComparer.Ordinal);
+        data.UsedBatchCodes = new Dictionary<string, string>(data.UsedBatchCodes, StringComparer.Ordinal);
+        data.Owed = new Dictionary<string, List<GiftCodeOwedReward>>(data.Owed, StringComparer.Ordinal);
+        data.WrongTries = new Dictionary<string, List<DateTime>>(data.WrongTries, StringComparer.Ordinal);
 
-            return new GiftCodeStoreData();
+        DateTime? ClaimExpiry(string codeId, HashSet<string> claimants)
+        {
+            var def = data.Codes.FirstOrDefault(c => string.Equals(c.Id, codeId, StringComparison.Ordinal));
+            return ParseEndUtc(def?.End);
         }
+
+        var m1 = this._claimsSync.LoadOrMigrate(this._rowBackend, FeatureClaims, data.Claims, JsonOptions, ClaimExpiry);
+        var m2 = this._owedSync.LoadOrMigrate(this._rowBackend, FeatureOwed, data.Owed, JsonOptions);
+        var m3 = this._wrongTriesSync.LoadOrMigrate(this._rowBackend, FeatureWrongTries, data.WrongTries, JsonOptions);
+        data.Claims = new Dictionary<string, HashSet<string>>(data.Claims, StringComparer.Ordinal);
+        if (m1 || m2 || m3)
+        {
+            this._stateStore.WriteSection(
+                SectionKey,
+                new GiftCodeStoreData
+                {
+                    IdentitySalt = data.IdentitySalt,
+                    Codes = data.Codes,
+                    Uses = data.Uses,
+                    UsedBatchCodes = data.UsedBatchCodes,
+                    Log = data.Log,
+                    PendingCoins = data.PendingCoins,
+                },
+                JsonOptions);
+        }
+
+        return data;
     }
 }

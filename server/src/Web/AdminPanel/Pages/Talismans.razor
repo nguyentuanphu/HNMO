@@ -1,0 +1,229 @@
+@page "/talismans"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @this.L("Talismans & Stat Consumables", "Bùa Túi Đồ & Vật Phẩm Cộng Điểm")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@this.L("Talismans & Stat Consumables", "Bùa Túi Đồ & Vật Phẩm Cộng Điểm")" />
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+    <div class="d-flex align-items-center gap-2">
+        <h1 class="mb-0">@this.L("Talismans & Stat Consumables", "Bùa Túi Đồ & Vật Phẩm Cộng Điểm")</h1>
+        <button type="button"
+                class="btn btn-sm btn-outline-info"
+                title="@this.L("Show or hide usage help", "Hiện hoặc ẩn hướng dẫn sử dụng")"
+                @onclick="() => this._showHelp = !this._showHelp">
+            ?
+        </button>
+    </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextTalismans" />
+    <div class="btn-group btn-group-sm" role="group" aria-label="Language">
+        <button type="button"
+                class="btn @(this._isVi ? "btn-outline-secondary" : "btn-primary")"
+                title="Switch interface to English"
+                @onclick="() => this.SetLanguage(false)">
+            EN
+        </button>
+        <button type="button"
+                class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")"
+                title="Chuyển giao diện sang tiếng Việt"
+                @onclick="() => this.SetLanguage(true)">
+            VI
+        </button>
+    </div>
+</div>
+
+<p class="text-muted">
+    @this.L(
+        "Define talismans/figurines that grant passive bonuses or buffs while carried in the bag, and consumable items that add extra stat points up to a per-character cap. Disabled until turned on.",
+        "Định nghĩa bùa/tượng nhỏ cộng chỉ số hoặc hiệu ứng khi mang trong túi đồ, và vật phẩm sử dụng cộng thêm điểm tiềm năng/chỉ số có giới hạn tối đa. Mặc định TẮT cho tới khi bật.")
+</p>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info mb-3" role="region" id="talismans-help">
+        <strong>@this.L("How to use this page:", "Cách sử dụng trang này:")</strong>
+        <ul class="mb-0 mt-1">
+            <li>@this.L("Bag talismans activate automatically whenever matching items sit in inventory slots (12–203), and deactivate as soon as removed.", "Bùa túi đồ tự động kích hoạt khi nằm trong ô túi đồ (không cần trang bị) và tắt ngay khi bỏ khỏi túi.")</li>
+            <li>@this.L("Optionally specify a Magic Effect ID (e.g. 1 = Greater Defense, 2 = Soul Barrier, 3 = Greater Damage) to grant an existing buff while carried.", "Có thể nhập mã Hiệu ứng phép (ví dụ 1, 2, 3) để tự bật bùa tương ứng khi giữ trong túi.")</li>
+            <li>@this.L("Stat consumables track per-character claims safely so characters cannot exceed the global or item cap.", "Vật phẩm cộng điểm lưu lại số điểm đã nhận theo từng nhân vật để không thể vượt quá giới hạn tối đa.")</li>
+        </ul>
+    </div>
+}
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is not { } c)
+{
+    <div class="alert alert-warning" role="status">@this.L("Talismans configuration is unavailable.", "Không tải được cấu hình Bùa túi đồ.")</div>
+}
+else
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
+                <div class="form-check form-switch" title="@this.L("Enable or disable bag talismans & capped stat consumables (OFF by default).", "Bật hoặc tắt Bùa túi đồ & vật phẩm cộng điểm (mặc định TẮT).")">
+                    <input class="form-check-input" type="checkbox" id="tal-active" @bind="this._isActive" />
+                    <label class="form-check-label fw-semibold" for="tal-active">@this.L("Enable Talismans & Stat Consumables", "Bật Bùa Túi Đồ & Vật Phẩm Cộng Điểm")</label>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <label class="form-label mb-0" for="tal-cap" title="@this.L("Default maximum cumulative extra points a character can gain from stat consumables.", "Tổng điểm thưởng tối đa mặc định mỗi nhân vật có thể dùng từ vật phẩm cộng điểm.")">
+                        @this.L("Global stat consumable cap:", "Giới hạn điểm vật phẩm mặc định:")
+                    </label>
+                    <input class="form-control" style="width:130px" type="number" min="1" max="1000000" id="tal-cap" @bind="c.GlobalStatPointsCap" />
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h2 class="h6 mb-0">@this.L("Carried Bag Talismans / Figurines", "Danh sách Bùa / Tượng mang trong túi")</h2>
+                <button type="button" class="btn btn-sm btn-outline-primary" @onclick="this.AddTalisman" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAdd">+ @this.L("Add Talisman", "Thêm Bùa")</button>
+            </div>
+
+            @for (var i = 0; i < c.Talismans.Count; i++)
+            {
+                var idx = i;
+                var t = c.Talismans[idx];
+                <div class="border rounded p-2 mb-2 bg-body-tertiary">
+                    <div class="row g-2 align-items-end">
+                        <div class="col-sm-2">
+                            <label class="form-label small mb-0">@this.L("Group", "Nhóm")</label>
+                            <input class="form-control form-control-sm" type="number" min="0" max="15" @bind="t.ItemGroup" />
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="form-label small mb-0">@this.L("Number", "Mã")</label>
+                            <input class="form-control form-control-sm" type="number" min="0" max="511" @bind="t.ItemNumber" />
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="form-label small mb-0">@this.L("Min Lv", "Cấp món min")</label>
+                            <input class="form-control form-control-sm" type="number" min="0" max="15" @bind="t.MinItemLevel" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="form-label small mb-0">@this.L("Name (EN)", "Tên (EN)")</label>
+                            <input class="form-control form-control-sm" @bind="t.NameEn" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="form-label small mb-0">@this.L("Name (VI)", "Tên (VI)")</label>
+                            <input class="form-control form-control-sm" @bind="t.NameVi" />
+                        </div>
+                    </div>
+                    <div class="row g-2 align-items-end mt-1">
+                        <div class="col-sm-2">
+                            <label class="form-label small mb-0">+Exp %</label>
+                            <input class="form-control form-control-sm" type="number" step="0.5" min="0" @bind="t.BonusExpPercent" />
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="form-label small mb-0">+Zen %</label>
+                            <input class="form-control form-control-sm" type="number" step="0.5" min="0" @bind="t.BonusZenPercent" />
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="form-label small mb-0">+Dmg</label>
+                            <input class="form-control form-control-sm" type="number" min="0" @bind="t.BonusDamage" />
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="form-label small mb-0">+Def</label>
+                            <input class="form-control form-control-sm" type="number" min="0" @bind="t.BonusDefense" />
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="form-label small mb-0">+Max HP</label>
+                            <input class="form-control form-control-sm" type="number" min="0" @bind="t.BonusMaxHp" />
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="form-label small mb-0">@this.L("Buff ID", "Mã Buff")</label>
+                            <input class="form-control form-control-sm" type="number" min="0" @bind="t.GrantedMagicEffectNumber" />
+                        </div>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-2">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="form-check mb-0">
+                                <input class="form-check-input" type="checkbox" id="tal-stk-@idx" @bind="t.StackCopies" />
+                                <label class="form-check-label small" for="tal-stk-@idx">@this.L("Stack multiple copies", "Cộng dồn nhiều cái")</label>
+                            </div>
+                            <div class="d-flex align-items-center gap-1">
+                                <label class="small mb-0">@this.L("Max stacks:", "Tối đa:")</label>
+                                <input class="form-control form-control-sm" style="width:68px" type="number" min="1" max="64" @bind="t.MaxStacks" />
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.RemoveTalisman(idx)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">
+                            @this.L("Remove", "Xóa")
+                        </button>
+                    </div>
+                </div>
+            }
+
+            <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
+                <h2 class="h6 mb-0">@this.L("Stat-Point Consumables", "Vật phẩm sử dụng cộng điểm")</h2>
+                <button type="button" class="btn btn-sm btn-outline-primary" @onclick="this.AddConsumable" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAdd">+ @this.L("Add Consumable", "Thêm Vật phẩm")</button>
+            </div>
+
+            @for (var i = 0; i < c.StatConsumables.Count; i++)
+            {
+                var idx = i;
+                var sc = c.StatConsumables[idx];
+                <div class="border rounded p-2 mb-2 bg-body-tertiary">
+                    <div class="row g-2 align-items-end">
+                        <div class="col-sm-1">
+                            <label class="form-label small mb-0">@this.L("Grp", "Nhóm")</label>
+                            <input class="form-control form-control-sm" type="number" min="0" max="15" @bind="sc.ItemGroup" />
+                        </div>
+                        <div class="col-sm-1">
+                            <label class="form-label small mb-0">@this.L("Num", "Mã")</label>
+                            <input class="form-control form-control-sm" type="number" min="0" max="511" @bind="sc.ItemNumber" />
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="form-label small mb-0">@this.L("Name (EN)", "Tên (EN)")</label>
+                            <input class="form-control form-control-sm" @bind="sc.NameEn" />
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="form-label small mb-0">@this.L("Name (VI)", "Tên (VI)")</label>
+                            <input class="form-control form-control-sm" @bind="sc.NameVi" />
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="form-label small mb-0">@this.L("Target", "Mục tiêu")</label>
+                            <select class="form-select form-select-sm" @bind="sc.TargetBucket">
+                                <option value="levelUpPoints">@this.L("Free Level-Up Points", "Điểm tiềm năng")</option>
+                                <option value="str">STR</option>
+                                <option value="agi">AGI</option>
+                                <option value="vit">VIT</option>
+                                <option value="ene">ENE</option>
+                                <option value="cmd">CMD</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-1">
+                            <label class="form-label small mb-0">+Pts</label>
+                            <input class="form-control form-control-sm" type="number" min="1" max="10000" @bind="sc.PointsPerUse" />
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="form-label small mb-0">@this.L("Cap override", "Giới hạn riêng")</label>
+                            <input class="form-control form-control-sm" type="number" min="1" @bind="sc.MaxCapOverride" placeholder="@c.GlobalStatPointsCap" />
+                        </div>
+                        <div class="col-sm-1 text-end">
+                            <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.RemoveConsumable(idx)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">
+                                ×
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="d-flex gap-2 mt-3">
+                <button type="button"
+                        class="btn btn-primary"
+                        id="tal-save"
+                        disabled="@this._isSaving"
+                        title="@this.L("Save Talismans & Stat Consumables settings", "Lưu cài đặt Bùa túi đồ & Vật phẩm cộng điểm")"
+                        @onclick="this.SaveAsync">
+                    @this.L("Save changes", "Lưu thay đổi")
+                </button>
+                <button type="button"
+                        class="btn btn-outline-secondary"
+                        disabled="@this._isSaving"
+                        title="@this.L("Reload saved configuration", "Tải lại cấu hình đã lưu")"
+                        @onclick="this.LoadAsync">
+                    @this.L("Reload", "Tải lại")
+                </button>
+            </div>
+        </div>
+    </div>
+}

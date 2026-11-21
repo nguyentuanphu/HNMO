@@ -5,8 +5,6 @@
 namespace HNMO.Web.AdminPanel.Components.Layout;
 
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Routing;
 using HNMO.AttributeSystem;
 using HNMO.DataModel;
 using HNMO.DataModel.Configuration;
@@ -14,9 +12,11 @@ using HNMO.DataModel.Configuration.ItemCrafting;
 using HNMO.DataModel.Configuration.Items;
 using HNMO.DataModel.Configuration.Quests;
 using HNMO.Web.AdminPanel.Properties;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Routing;
 
 /// <summary>
-/// The menu part with the game configuration, grouped by topic, so that every kind of game data has a direct link.
+/// Generic data-model grid and root configuration editors grouped by topic under Advanced mode.
 /// </summary>
 public partial class ConfigNavMenu
 {
@@ -73,15 +73,10 @@ public partial class ConfigNavMenu
             new(Resources.WarpList, Grid<WarpInfo>(), "oi-transfer"),
             new(Resources.MiniGames, Grid<MiniGameDefinition>(), "oi-timer"),
             GridEntry<QuestDefinition>("oi-book"),
-            new(Resources.MapEditor, "map-editor", "oi-globe"),
-            new(Resources.TerrainEditor, "terrain-editor", "oi-brush"),
         ]),
         new("economy", Resources.NavShopsAndDrops, "oi-cart",
         [
-            new(Resources.MerchantStores, "merchants/", "oi-cart"),
-            new(Resources.CashShopCatalog, "cash-shop-catalog", "oi-credit-card"),
             new(Resources.DropItemGroups, Grid<DropItemGroup>(), "oi-random"),
-            new(Resources.ItemDrops, "edit-item-drops", "oi-data-transfer-download"),
         ]),
         new("rules", Resources.NavRulesAndEvents, "oi-shield",
         [
@@ -89,18 +84,6 @@ public partial class ConfigNavMenu
             GridEntry<DuelConfiguration>("oi-target"),
             GridEntry<CastleSiegeConfiguration>("oi-shield"),
             GridEntry<CashShopConfiguration>("oi-dollar"),
-            new(Resources.ContentActivation, "content-activation", "oi-circle-check"),
-            new(Resources.MissionsAndRewards, "missions-rewards", "oi-star"),
-            new(Resources.WorldBossesAndRankings, "world-bosses-rankings", "oi-bolt"),
-            new(Resources.OnboardingAndStarterKit, "onboarding-starter-kit", "oi-flag"),
-            new(Resources.GuildsLevelsAndLadder, "guilds-levels-ladder", "oi-people"),
-            new(Resources.CommunityPage, "community", "oi-chat"),
-            new(Resources.TopRacesPage, "top-races", "oi-badge"),
-            new(Resources.GiftCodesPage, "gift-codes", "oi-tag"),
-            new(Resources.ResetsRelifePage, "resets-relife", "oi-loop-circular"),
-            new(Resources.AccountSafetyPage, "account-safety", "oi-lock-locked"),
-            new(Resources.Plugins, "plugins", "oi-puzzle-piece"),
-            new(Resources.ChatCommands, "chat-commands", "oi-terminal"),
         ]),
         new("advanced", Resources.NavAdvanced, "oi-cog",
         [

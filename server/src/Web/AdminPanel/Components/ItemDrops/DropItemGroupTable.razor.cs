@@ -5,12 +5,12 @@
 namespace HNMO.Web.AdminPanel.Components.ItemDrops;
 
 using System.Globalization;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Configuration.Items;
 using HNMO.Interfaces;
 using HNMO.Web.AdminPanel.Properties;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 
 /// <summary>
 /// A compact, inline editable table of <see cref="DropItemGroup"/>s.

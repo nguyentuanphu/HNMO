@@ -622,16 +622,16 @@
     <value>Handler für Anfragepakete zum Öffnungsstatus von Minispielen.</value>
   </data>
   <data name="MuHelperSaveDataRequestHandlerPlugin_Name" xml:space="preserve">
-    <value>Handler für das Speichern von MU-Helper-Daten</value>
+    <value>Handler für das Speichern von Auto-Play-Helfer-Daten</value>
   </data>
   <data name="MuHelperSaveDataRequestHandlerPlugin_Description" xml:space="preserve">
     <value>Handler für Speicheranfragen von MU-Bot-Daten.</value>
   </data>
   <data name="MuHelperStatusChangeRequestHandlerPlugIn_Name" xml:space="preserve">
-    <value>Handler für Statusänderungen des MU Helper</value>
+    <value>Handler für Statusänderungen des Auto-Play-Helfers</value>
   </data>
   <data name="MuHelperStatusChangeRequestHandlerPlugIn_Description" xml:space="preserve">
-    <value>Handler für Anfragen zur Statusänderung des MU Helper.</value>
+    <value>Handler für Anfragen zur Statusänderung des Auto-Play-Helfers.</value>
   </data>
   <data name="PartyKickHandlerPlugIn_Name" xml:space="preserve">
     <value>Handler für das Entfernen aus der Party</value>
@@ -1378,16 +1378,16 @@
     <value>Die Standardimplementierung von IUpdateMiniGameStateViewPlugIn, die alles mit spezifischen Datenpaketen an den Spielclient weiterleitet.</value>
   </data>
   <data name="MuHelperConfigurationUpdatePlugIn_Name" xml:space="preserve">
-    <value>Aktualisierung der MU-Helper-Konfiguration</value>
+    <value>Aktualisierung der Auto-Play-Helfer-Konfiguration</value>
   </data>
   <data name="MuHelperConfigurationUpdatePlugIn_Description" xml:space="preserve">
-    <value>Sendet den neuen MU-Helper-Status an den Client.</value>
+    <value>Sendet den neuen Auto-Play-Helfer-Status an den Client.</value>
   </data>
   <data name="MuHelperStatusUpdatePlugIn_Name" xml:space="preserve">
-    <value>Aktualisierung des MU-Helper-Status</value>
+    <value>Aktualisierung des Auto-Play-Helfer-Status</value>
   </data>
   <data name="MuHelperStatusUpdatePlugIn_Description" xml:space="preserve">
-    <value>Sendet die Aktualisierung des MU-Helper-Status an den Client.</value>
+    <value>Sendet die Aktualisierung des Auto-Play-Helfer-Status an den Client.</value>
   </data>
   <data name="NpcDialogClosedPlugIn075_Name" xml:space="preserve">
     <value>NPC-Dialog geschlossen (075)</value>
@@ -2230,10 +2230,10 @@
     <value>Handler für Abmeldepakete (wegen Cheats).</value>
   </data>
   <data name="MuHelperGroupHandler_Name" xml:space="preserve">
-    <value>Handler-Gruppe für den MU Helper</value>
+    <value>Handler-Gruppe für den Auto-Play-Helfer</value>
   </data>
   <data name="MuHelperGroupHandler_Description" xml:space="preserve">
-    <value>Gruppen-Paket-Handler für MU-Helper-Pakete (Kennung 0xBF).</value>
+    <value>Gruppen-Paket-Handler für Auto-Play-Helfer-Pakete (Kennung 0xBF).</value>
   </data>
   <data name="PlayerShopBuyRequestPacketHandlerPlugIn_Name" xml:space="preserve">
     <value>Spielerladen - Kaufanfrage</value>
@@ -2374,10 +2374,10 @@
     <value>Die erweiterte Implementierung von IAppearanceChangedPlugIn, die Änderungen des Aussehens anderer Spieler mit spezifischen Datenpaketen an den Spielclient weiterleitet.</value>
   </data>
   <data name="MuHelperSettingsInitializationPlugIn_Name" xml:space="preserve">
-    <value>Initialisierung der MU-Helper-Einstellungen</value>
+    <value>Initialisierung der Auto-Play-Helfer-Einstellungen</value>
   </data>
   <data name="MuHelperSettingsInitializationPlugIn_Description" xml:space="preserve">
-    <value>Initialisiert die Einstellungen des MU Helper, wenn der Spieler die Welt betritt.</value>
+    <value>Initialisiert die Einstellungen des Auto-Play-Helfers, wenn der Spieler die Welt betritt.</value>
   </data>
   <data name="ChatCommandListViewPlugIn_Name" xml:space="preserve">
     <value>Ansicht der Chatbefehlsliste</value>

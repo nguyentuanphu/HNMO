@@ -62,20 +62,35 @@ public abstract class ItemUpgradeConsumeHandlerPlugIn : ItemModifyConsumeHandler
         set => this._configuration = this.NormalizeConfiguration(value);
     }
 
+    /// <inheritdoc />
+    public object CreateDefaultConfig() => this._defaultConfiguration.Clone();
+
+    /// <summary>
+    /// Gets the success chance with the boost of the configuration (<see cref="ItemUpgradeConfiguration.BoostOptionType"/>,
+    /// <see cref="ItemUpgradeConfiguration.SuccessChanceBoost"/>), e.g. more chance for an item with luck.
+    /// </summary>
+    /// <param name="item">The item to upgrade.</param>
+    /// <param name="successChance">The success chance without the boost.</param>
+    /// <returns>The success chance, at most 1.</returns>
+    internal double GetBoostedSuccessChance(Item item, double successChance)
+    {
+        if (this._configuration.BoostOptionType is not { } boostType || this._configuration.SuccessChanceBoost <= 0)
+        {
+            return successChance;
+        }
+
+        return item.ItemOptions.Any(o => o.ItemOption?.OptionType == boostType)
+            ? Math.Min(1.0, successChance + this._configuration.SuccessChanceBoost)
+            : successChance;
+    }
+
     /// <inheritdoc/>
     protected override bool ModifyItem(Item item, IContext persistenceContext)
     {
-        if (!this.ItemCanHaveOption(item))
-        {
-            return false;
-        }
-
-        if (this.ItemHasOptionAlready(item))
-        {
-            return this.TryUpgradeItemOption(item);
-        }
-
-        return this.TryAddItemOption(item, persistenceContext);
+        var (successChance, maxOptionLevel) = this._configuration.OptionType == ItemOptionTypes.Option
+            ? PlugIns.GameplayRules.RateTuningPlugIn.GetEffectiveLifeOptionSettings(this.CurrentPlayer, this._configuration.SuccessChance)
+            : (this._configuration.SuccessChance, null);
+        return this.ModifyItemWithSettings(item, persistenceContext, this.GetBoostedSuccessChance(item, successChance), maxOptionLevel);
     }
 
     /// <summary>
@@ -97,35 +112,8 @@ public abstract class ItemUpgradeConsumeHandlerPlugIn : ItemModifyConsumeHandler
     /// </summary>
     /// <param name="item">The item to upgrade.</param>
     /// <returns>Flag indicating whether the item option was upgraded.</returns>
-    protected virtual bool TryUpgradeItemOption(Item item)
-    {
-        if (!this._configuration.IncreasesOption)
-        {
-            return false;
-        }
-
-        var itemOption = item.ItemOptions.First(o => o.ItemOption?.OptionType == this._configuration.OptionType);
-        var increasableOption = itemOption.ItemOption;
-        var higherOptionPossible = increasableOption?.LevelDependentOptions.Any(o => o.Level > itemOption.Level && o.RequiredItemLevel <= item.Level) ?? false;
-        if (!higherOptionPossible)
-        {
-            return false;
-        }
-
-        if (Rand.NextRandomBool(this._configuration.SuccessChance))
-        {
-            itemOption.Level++;
-        }
-        else
-        {
-            this.HandleFailedUpgrade(item, itemOption);
-        }
-
-        return true;
-    }
-
-    /// <inheritdoc />
-    public object CreateDefaultConfig() => this._defaultConfiguration.Clone();
+    protected virtual bool TryUpgradeItemOption(Item item) =>
+        this.TryUpgradeItemOptionWithSettings(item, this.GetBoostedSuccessChance(item, this._configuration.SuccessChance), null);
 
     private ItemUpgradeConfiguration NormalizeConfiguration(ItemUpgradeConfiguration? configuration)
     {
@@ -161,14 +149,62 @@ public abstract class ItemUpgradeConsumeHandlerPlugIn : ItemModifyConsumeHandler
         }
     }
 
-    private bool TryAddItemOption(Item item, IContext persistenceContext)
+    private bool TryAddItemOption(Item item, IContext persistenceContext) =>
+        this.TryAddItemOptionWithSettings(item, persistenceContext, this._configuration.SuccessChance);
+
+    private bool ModifyItemWithSettings(Item item, IContext persistenceContext, double successChance, int? maxOptionLevel)
+    {
+        if (!this.ItemCanHaveOption(item))
+        {
+            return false;
+        }
+
+        if (this.ItemHasOptionAlready(item))
+        {
+            return this.TryUpgradeItemOptionWithSettings(item, successChance, maxOptionLevel);
+        }
+
+        return this.TryAddItemOptionWithSettings(item, persistenceContext, successChance);
+    }
+
+    private bool TryUpgradeItemOptionWithSettings(Item item, double successChance, int? maxOptionLevel)
+    {
+        if (!this._configuration.IncreasesOption)
+        {
+            return false;
+        }
+
+        var itemOption = item.ItemOptions.First(o => o.ItemOption?.OptionType == this._configuration.OptionType);
+        var increasableOption = itemOption.ItemOption;
+        var higherOptionPossible = increasableOption?.LevelDependentOptions.Any(o =>
+            o.Level > itemOption.Level
+            && (maxOptionLevel is null || o.Level <= maxOptionLevel.Value)
+            && o.RequiredItemLevel <= item.Level) ?? false;
+        if (!higherOptionPossible)
+        {
+            return false;
+        }
+
+        if (Rand.NextRandomBool(successChance))
+        {
+            itemOption.Level++;
+        }
+        else
+        {
+            this.HandleFailedUpgrade(item, itemOption);
+        }
+
+        return true;
+    }
+
+    private bool TryAddItemOptionWithSettings(Item item, IContext persistenceContext, double successChance)
     {
         if (!this._configuration.AddsOption || item.Definition is null)
         {
             return false;
         }
 
-        if (Rand.NextRandomBool(this._configuration.SuccessChance))
+        if (Rand.NextRandomBool(successChance))
         {
             var possibleOptions = item.Definition.PossibleItemOptions.
                 SelectMany(o => o.PossibleOptions).

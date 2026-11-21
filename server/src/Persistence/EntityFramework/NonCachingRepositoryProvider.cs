@@ -4,8 +4,8 @@
 
 namespace HNMO.Persistence.EntityFramework;
 
-using Microsoft.Extensions.Logging;
 using HNMO.Interfaces;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// A repository provider which does only provide non-caching repositories.
@@ -36,6 +36,7 @@ internal class NonCachingRepositoryProvider : RepositoryProvider
 
         this.RegisterRepository(new AccountRepository(this._parent ?? this, this.LoggerFactory)); // never cache accounts, so we pass this
         this.RegisterRepository(new LetterBodyRepository(this._parent ?? this, this.LoggerFactory)); // never cache letters, so we pass this
+        this.RegisterRepository(new ItemStorageRepository(this._parent ?? this, this.LoggerFactory)); // the extra vaults of the multi-vault feature, loaded with their items
 
         this.RegisterMissingRepositoriesAsGeneric();
         base.Initialize();

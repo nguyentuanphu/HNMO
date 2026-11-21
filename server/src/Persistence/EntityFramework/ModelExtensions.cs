@@ -5,10 +5,10 @@
 namespace HNMO.Persistence.EntityFramework;
 
 using System.Reflection;
+using HNMO.DataModel.Composition;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using HNMO.DataModel.Composition;
 
 /// <summary>
 /// Extensions for <see cref="INavigation"/>s.

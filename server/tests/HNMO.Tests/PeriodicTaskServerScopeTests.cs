@@ -290,6 +290,60 @@ public class PeriodicTaskServerScopeTests
     }
 
     /// <summary>
+    /// A running Happy Hour adds 15 % item drops on its server (Season 6/9 server suites), none elsewhere.
+    /// </summary>
+    [Test]
+    public async Task HappyHourAddsItemDropsOnItsServerAsync()
+    {
+        var plugIn = new HappyHourPlugIn
+        {
+            Configuration = new HappyHourConfiguration
+            {
+                AllowedServerIds = new List<byte> { 0 },
+                Timetable = new List<TimeOnly>(),
+                TaskDuration = TimeSpan.FromHours(1),
+                PreStartMessageDelay = TimeSpan.Zero,
+                ItemDropBonusPercent = 15,
+                ExcellentDropBonusPerTenThousand = 5,
+            },
+        };
+        var allowedMock = this.CreateServerContextMock(serverId: 0);
+        var excludedMock = this.CreateServerContextMock(serverId: 1);
+        Assert.That(HappyHourPlugIn.GetItemDropMultiplier(allowedMock.Object), Is.EqualTo(1.0));
+
+        plugIn.ForceStart();
+        await plugIn.ExecuteTaskAsync(allowedMock.Object).ConfigureAwait(false);
+        await plugIn.ExecuteTaskAsync(allowedMock.Object).ConfigureAwait(false);
+        await plugIn.ExecuteTaskAsync(excludedMock.Object).ConfigureAwait(false);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(HappyHourPlugIn.GetItemDropMultiplier(allowedMock.Object), Is.EqualTo(1.15).Within(0.0001));
+            Assert.That(HappyHourPlugIn.GetItemDropMultiplier(excludedMock.Object), Is.EqualTo(1.0));
+            Assert.That(HappyHourPlugIn.GetExcellentDropBonus(allowedMock.Object), Is.EqualTo(0.0005).Within(0.0000001));
+            Assert.That(HappyHourPlugIn.GetExcellentDropBonus(excludedMock.Object), Is.EqualTo(0.0));
+        });
+    }
+
+    /// <summary>
+    /// The default Happy Hour runs 4 times 2 hours a day, at 02:00, 08:00, 14:00 and 20:00 server time,
+    /// with 1.5 times the EXP and 15 % more item drops (Season 6/9 server suites).
+    /// </summary>
+    [Test]
+    public void HappyHourDefaultIsTheSuitesSchedule()
+    {
+        var configuration = HappyHourConfiguration.Default;
+        Assert.Multiple(() =>
+        {
+            Assert.That(configuration.Timetable, Is.EqualTo(new[] { new TimeOnly(2, 0), new TimeOnly(8, 0), new TimeOnly(14, 0), new TimeOnly(20, 0) }));
+            Assert.That(configuration.TaskDuration, Is.EqualTo(TimeSpan.FromHours(2)));
+            Assert.That(configuration.ExperienceMultiplier, Is.EqualTo(1.5f));
+            Assert.That(configuration.ItemDropBonusPercent, Is.EqualTo(15));
+            Assert.That(configuration.ExcellentDropBonusPerTenThousand, Is.EqualTo(5));
+        });
+    }
+
+    /// <summary>
     /// A server added back to the list doesn't start a stale forced event: while excluded,
     /// its ticks already observed (and consumed) the force.
     /// </summary>

@@ -50,6 +50,11 @@ internal class NewDatabaseInitializationTest
 
         Assert.That(gameConfiguration.Items.Count(item => item.Group == 14 && item.Number == 21), Is.EqualTo(1), "the Rena item, once");
         Assert.That(updates.Single(update => update.Key == typeof(AddRenaItemUpdatePlugIn).GUID).InstalledAt, Is.Not.Null);
+
+        var stardust = gameConfiguration.Items.Where(item => item.Group == 14 && item.Number == 153).ToList();
+        Assert.That(stardust, Has.Count.EqualTo(1), "the Stardust item, once");
+        Assert.That((stardust[0].Name.ValueInNeutralLanguage, stardust[0].Width, stardust[0].Height, stardust[0].DropsFromMonsters), Is.EqualTo(("Stardust", (byte)1, (byte)1, false)));
+        Assert.That(updates.Single(update => update.Key == typeof(AddStardustItemUpdatePlugIn).GUID).InstalledAt, Is.Not.Null);
     }
 }
 

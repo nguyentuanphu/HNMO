@@ -62,16 +62,6 @@ public enum InviteResult
 }
 
 /// <summary>
-/// A coin grant which the engine decided on; the plug-in gives it.
-/// </summary>
-/// <param name="LoginName">The account.</param>
-/// <param name="CoinType">The coin type.</param>
-/// <param name="Amount">The amount.</param>
-/// <param name="Reason">The reason, for the coins history.</param>
-/// <param name="Reference">The unique reference, so it counts once.</param>
-public sealed record CoinGrant(string LoginName, CashShopCoinType CoinType, int Amount, string Reason, string Reference);
-
-/// <summary>
 /// The rules of the missions, the streak and the earned coins, without the game: it works on the
 /// <see cref="MissionStore"/> with given times, so it's tested on its own. Every method takes the store's lock.
 /// </summary>
@@ -241,6 +231,22 @@ public sealed class MissionEngine
             this.RollPeriods(state, nowUtc);
             var progress = this.ProgressOf(state, mission, false);
             return (progress?.Value ?? 0, progress?.Claimed ?? false);
+        }
+    }
+
+    /// <summary>
+    /// Counts the claimed daily/weekly missions and level milestones for a character.
+    /// </summary>
+    /// <param name="characterId">The character id.</param>
+    /// <returns>The achievement count.</returns>
+    public int GetAchievementCount(string characterId)
+    {
+        lock (this.Store.Lock)
+        {
+            var state = this.Store.Character(characterId);
+            return state.Daily.Values.Count(p => p.Claimed)
+                + state.Weekly.Values.Count(p => p.Claimed)
+                + state.MilestonesRewarded.Count;
         }
     }
 

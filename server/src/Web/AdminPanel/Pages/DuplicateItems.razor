@@ -1,0 +1,73 @@
+@page "/duplicate-items"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.GameLogic.PlugIns.DuplicateItems
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @L("Duplicate items", "Đồ nhân bản")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@L("Duplicate items", "Đồ nhân bản")" />
+<h1>@L("Duplicate items", "Đồ nhân bản")</h1>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextDuplicateItems" />
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else
+{
+    <div class="d-flex flex-wrap gap-2 align-items-center mb-3" id="duplicate-status">
+        <span>@L("Last scan (Sydney):", "Lần quét gần nhất (giờ Sydney):") <strong>@(this._data.LastScanUtc is { } last ? SydneyTime(last) : L("not yet", "chưa có"))</strong></span>
+        <span class="ms-2">@L($"Serials given then: {this._data.LastScanSerialsGiven}", $"Số serial gắn lần đó: {this._data.LastScanSerialsGiven}")</span>
+        <button type="button" class="btn btn-sm btn-outline-primary ms-auto" disabled="@(this._isScanning || !this._hasDatabase)"
+                title="@L("Scan the database for duplicates now (otherwise it runs every hour).", "Quét cơ sở dữ liệu tìm đồ nhân bản ngay (bình thường chạy mỗi giờ).")"
+                @onclick="this.ScanNowAsync">@L("Scan now", "Quét ngay")</button>
+    </div>
+    @if (!this._hasDatabase)
+    {
+        <div class="alert alert-secondary" role="status">@L("This server has no database (demo): there's nothing to scan.", "Máy chủ này không có cơ sở dữ liệu (bản demo): không có gì để quét.")</div>
+    }
+
+    var open = this._data.Cases.Where(c => !c.Resolved).OrderByDescending(c => c.FoundAtUtc).ToList();
+    <h2 class="h5">@L($"Frozen, waiting for a decision ({open.Count})", $"Đang đóng băng, chờ quyết định ({open.Count})")</h2>
+    @if (open.Count == 0)
+    {
+        <p class="text-muted" id="duplicate-none">@L("No duplicates found.", "Không có đồ nhân bản.")</p>
+    }
+    @foreach (var c in open)
+    {
+        <section class="card mb-3 duplicate-case" data-serial="@c.Serial">
+            <div class="card-body">
+                <p class="mb-1"><strong>@c.Items.FirstOrDefault()?.ItemName</strong> · @L("serial", "serial") <code>@c.Serial</code> · @L("found", "phát hiện") @SydneyTime(c.FoundAtUtc)</p>
+                <table class="table table-sm mb-2">
+                    <thead><tr><th>@L("Account", "Tài khoản")</th><th>@L("Character", "Nhân vật")</th><th>@L("Where", "Ở đâu")</th><th>@L("Level", "Cấp")</th><th>@L("Item id", "Mã vật phẩm")</th></tr></thead>
+                    <tbody>
+                        @foreach (var i in c.Items)
+                        {
+                            <tr><td>@i.AccountLogin</td><td>@i.CharacterName</td><td>@PlaceLabel(i.Place)</td><td>+@i.Level</td><td><code>@i.ItemId</code></td></tr>
+                        }
+                    </tbody>
+                </table>
+                <p class="small text-muted mb-2">@L("Remove the copies you don't want in the account editor (Accounts), then mark the case decided: the remaining items aren't frozen any more.", "Xóa các bản sao không muốn giữ trong trình sửa tài khoản (Accounts), rồi đánh dấu đã quyết định: các món còn lại hết bị đóng băng.")</p>
+                <div class="d-flex gap-2">
+                    <input class="form-control form-control-sm" style="max-width: 28rem" placeholder="@L("Note (what you decided)", "Ghi chú (bạn đã quyết định gì)")" @bind="this._notes[c.Serial]" />
+                    <button type="button" class="btn btn-sm btn-success" title="@L("Unfreeze these items and close the case.", "Bỏ đóng băng các món này và đóng vụ việc.")" @onclick="() => this.ResolveAsync(c.Serial)">@L("Mark decided", "Đánh dấu đã quyết định")</button>
+                </div>
+            </div>
+        </section>
+    }
+
+    var decided = this._data.Cases.Where(c => c.Resolved).OrderByDescending(c => c.ResolvedAtUtc).Take(50).ToList();
+    @if (decided.Count > 0)
+    {
+        <h2 class="h5 mt-4">@L("Decided", "Đã quyết định")</h2>
+        <table class="table table-sm">
+            <thead><tr><th>@L("Item", "Vật phẩm")</th><th>@L("Accounts", "Tài khoản")</th><th>@L("Decided (Sydney)", "Quyết định lúc (giờ Sydney)")</th><th>@L("By", "Bởi")</th><th>@L("Note", "Ghi chú")</th></tr></thead>
+            <tbody>
+                @foreach (var c in decided)
+                {
+                    <tr><td>@c.Items.FirstOrDefault()?.ItemName</td><td>@string.Join(", ", c.Items.Select(i => i.AccountLogin).Distinct())</td><td>@(c.ResolvedAtUtc is { } at ? SydneyTime(at) : string.Empty)</td><td>@c.ResolvedBy</td><td>@c.Note</td></tr>
+                }
+            </tbody>
+        </table>
+    }
+}

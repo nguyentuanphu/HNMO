@@ -2,13 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
     <meta name="theme-color" content="#11110e" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="icon" href="/images/icon-192.png" />
     <link rel="apple-touch-icon" href="/images/icon-192.png" />
     <title>{game}</title>
     <link rel="stylesheet" href="/home.css" />
+    <link rel="stylesheet" href="/website-themes.css" />
   </head>
   <body>
     <header>
@@ -17,21 +18,35 @@
       ></a>
       <nav>
         <a href="#realm" data-t="realm"></a
+        ><a href="#news" data-t="newsNav"></a
         ><a href="#schedule" data-t="scheduleNav"></a
         ><a href="#newplayers" data-t="newNav"></a
         ><a href="#missions" data-t="missionsNav"></a
         ><a href="#bosses" data-t="bossesNav"></a
-        ><a href="#guilds" data-t="guildsNav"></a
-        ><a href="#social" data-t="communityNav"></a
-        ><a href="#races" data-t="racesNav"></a
-        ><a href="#gifts" data-t="giftNav"></a
-        ><a href="#resets" data-t="resetsNav"></a
         ><a href="#rankings" data-t="rankingsNav"></a
-        ><a href="#events" data-t="events"></a
-        ><a href="#world" data-t="world"></a
         ><a href="#account" data-t="accountNav"></a
-        ><a href="#phone" data-t="phoneNav"></a
-        ><a href="#start" data-t="start"></a>
+        ><a href="#start" data-t="start"></a
+        ><details class="nav-more">
+          <summary data-t="explore"></summary>
+          <div class="nav-more-menu">
+            <a href="#guilds" data-t="guildsNav"></a>
+            <a href="#social" data-t="communityNav"></a>
+            <a href="#races" data-t="racesNav"></a>
+            <a href="#gifts" data-t="giftNav"></a>
+            <a href="#resets" data-t="resetsNav"></a>
+            <a href="#market" data-t="marketNav"></a>
+            <a href="#arena" data-t="arenaNav" id="arena-nav" hidden></a>
+            <a href="#jewel-bank" data-t="jbNav"></a>
+            <a href="#catchup" data-t="cuNav"></a>
+            <a href="#season-plan" data-t="spNav"></a>
+            <a href="#leftovers" data-t="leftoversNav"></a>
+            <a href="#mounts" data-t="mountsNav"></a>
+            <a href="#party-spots" data-t="partySpotsNav"></a>
+            <a href="#events" data-t="events"></a>
+            <a href="#world" data-t="world"></a>
+            <a href="#phone" data-t="phoneNav"></a>
+          </div>
+        </details>
       </nav>
       <div class="languages">
         <button id="en" lang="en">EN</button
@@ -69,11 +84,23 @@
           ></label>
         </div>
         <p id="notice" role="status"></p>
+        <div id="worlds-group" class="worlds-group"></div>
         <div class="stats" id="stats"></div>
         <div class="realm-bottom">
           <p data-t="truth"></p>
           <span id="updated"></span>
         </div>
+      </section>
+      <section id="news">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow"><span data-t="newsNav"></span></p>
+            <h2 data-t="newsTitle"></h2>
+          </div>
+        </div>
+        <p class="muted" data-t="newsHint"></p>
+        <p class="muted" id="news-notice" role="status"></p>
+        <div id="news-list" class="event-list"></div>
       </section>
       <section id="events">
         <div class="section-head">
@@ -95,6 +122,10 @@
         </div>
         <p class="muted" id="details-notice" role="status"></p>
         <div id="upcoming" class="upcoming"></div>
+        <div id="timetable-filters" class="row" style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap"></div>
+        <p class="muted" id="timetable-notice" role="status"></p>
+        <table id="timetable-table"></table>
+        <p class="muted" id="timetable-gm-winners"></p>
       </section>
       <section id="newplayers">
         <div class="section-head">
@@ -146,6 +177,29 @@
         <h3 class="mission-period" data-t="bossesLastWeek"></h3>
         <div id="bosses-last-week" class="boss-rankings"></div>
         <p class="muted" id="bosses-siege"></p>
+      </section>
+      <section id="lucky-number">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow"><span data-t="luckyNav"></span></p>
+            <h2 data-t="luckyTitle"></h2>
+          </div>
+          <span class="muted" id="lucky-draw-time"></span>
+        </div>
+        <p class="muted" id="lucky-summary"></p>
+        <p class="muted" id="lucky-notice" role="status"></p>
+        <div class="table-wrap"><table id="lucky-draws" class="table"></table></div>
+      </section>
+      <section id="marriage">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow"><span data-t="marriageNav"></span></p>
+            <h2 data-t="marriageTitle"></h2>
+          </div>
+          <span class="muted" id="marriage-rules"></span>
+        </div>
+        <p class="muted" id="marriage-notice" role="status"></p>
+        <div class="table-wrap"><table id="marriage-couples" class="table"></table></div>
       </section>
       <section id="guilds">
         <div class="section-head">
@@ -269,6 +323,114 @@
           </article>
         </div>
       </section>
+      <section id="market">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow"><span data-t="marketNav"></span></p>
+            <h2 data-t="marketTitle"></h2>
+          </div>
+        </div>
+        <div id="market-seasons" class="season-picker" role="group" hidden></div>
+        <p class="muted" data-t="marketHint"></p>
+        <p class="muted" id="market-fees"></p>
+        <p class="muted" id="market-notice" role="status"></p>
+        <div class="table-wrap"><table id="market-table" class="table"></table></div>
+      </section>
+      <section id="arena" hidden>
+        <div class="section-head">
+          <div>
+            <p class="eyebrow"><span data-t="arenaNav"></span></p>
+            <h2 data-t="arenaTitle"></h2>
+          </div>
+        </div>
+        <p class="muted" data-t="arenaHint"></p>
+        <h3 data-t="arenaWeek"></h3>
+        <div class="table-wrap"><table id="arena-week-table" class="table"></table></div>
+        <h3 data-t="arenaAllTime"></h3>
+        <div class="table-wrap"><table id="arena-all-table" class="table"></table></div>
+        <h3 data-t="arenaGuildWar"></h3>
+        <p class="muted" id="arena-guild-champion"></p>
+        <div class="table-wrap"><table id="arena-guild-table" class="table"></table></div>
+      </section>
+      <section id="jewel-bank">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow"><span data-t="jbNav"></span></p>
+            <h2 data-t="jbTitle"></h2>
+          </div>
+        </div>
+        <p class="muted" data-t="jbHint"></p>
+        <p class="muted" id="jb-notice" role="status"></p>
+        <div class="table-wrap"><table id="jb-table" class="table"></table></div>
+      </section>
+      <section id="catchup">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow"><span data-t="cuNav"></span></p>
+            <h2 data-t="cuTitle"></h2>
+          </div>
+        </div>
+        <p class="muted" data-t="cuHint"></p>
+        <p class="muted" id="catchup-notice" role="status"></p>
+        <div id="catchup-cards" class="boss-list"></div>
+      </section>
+      <section id="season-plan">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow"><span data-t="spNav"></span></p>
+            <h2 data-t="spTitle"></h2>
+          </div>
+        </div>
+        <p class="muted" data-t="spHint"></p>
+        <p class="muted" id="sp-notice" role="status"></p>
+        <div id="sp-timeline" class="boss-list"></div>
+      </section>
+      <section id="leftovers">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow"><span data-t="leftoversNav"></span></p>
+            <h2 data-t="leftoversTitle"></h2>
+          </div>
+          <p class="section-note" id="leftovers-note"></p>
+        </div>
+        <p id="leftovers-empty" class="empty" hidden></p>
+        <div id="leftovers-body" class="world-grid">
+          <article class="panel">
+            <h3 data-t="leftoversRecipesTitle"></h3>
+            <div class="table-wrap"><table id="leftovers-recipes" class="table"></table></div>
+          </article>
+          <article class="panel">
+            <h3 data-t="leftoversOffersTitle"></h3>
+            <div class="table-wrap"><table id="leftovers-offers" class="table"></table></div>
+          </article>
+        </div>
+      </section>
+      <section id="mounts">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow"><span data-t="mountsNav"></span></p>
+            <h2 data-t="mountsTitle"></h2>
+          </div>
+          <p class="section-note" id="mounts-note"></p>
+        </div>
+        <p id="mounts-empty" class="empty" hidden></p>
+        <div id="mounts-body" class="panel">
+          <div class="table-wrap"><table id="mounts-table" class="table"></table></div>
+        </div>
+      </section>
+      <section id="party-spots">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow"><span data-t="partySpotsNav"></span></p>
+            <h2 data-t="partySpotsTitle"></h2>
+          </div>
+          <p class="section-note" id="party-spots-note"></p>
+        </div>
+        <p id="party-spots-empty" class="empty" hidden></p>
+        <div id="party-spots-body" class="panel">
+          <div class="table-wrap"><table id="party-spots-table" class="table"></table></div>
+        </div>
+      </section>
       <section id="rankings">
         <div class="section-head">
           <div>
@@ -340,7 +502,7 @@
             <form id="register" class="form" autocomplete="on">
               <label><span data-t="loginName"></span><input name="loginName" required minlength="3" maxlength="10" pattern="[A-Za-z0-9]+" autocomplete="username" /></label>
               <label><span data-t="password"></span><input name="password" type="password" required minlength="3" maxlength="20" autocomplete="new-password" /></label>
-              <label><span data-t="email"></span><input name="email" type="email" maxlength="60" autocomplete="email" /></label>
+              <p class="muted" data-t="email"></p>
               <button class="primary" type="submit" data-t="registerButton"></button>
               <p class="form-message" id="register-message" role="status"></p>
             </form>
@@ -359,7 +521,7 @@
               <p><span data-t="googleLinked"></span> <strong id="google-login"></strong></p>
               <label><span data-t="newPassword"></span><input name="newPassword" type="password" minlength="3" maxlength="20" autocomplete="new-password" /></label>
               <button type="submit" data-t="setPassword"></button>
-              <a class="primary" href="/index.html" data-t="play"></a>
+              <a class="primary" href="/index.html" id="google-play" data-t="play"></a>
             </form>
             <p class="form-message" id="google-message" role="status"></p>
           </article>
@@ -409,11 +571,17 @@
             <h3 data-t="download"></h3>
             <p data-t="downloadText"></p>
             <a
-              href="https://github.com/nguyentuanphu/HNMO/releases/latest/download/HNMO.zip"
+              href="/download"
               data-t="downloadLink"
             ></a>
           </article>
         </div>
+      </section>
+
+      <section class="panel" id="topup-milestones-section" hidden>
+        <h2 id="topup-milestones-heading">Top-up milestones</h2>
+        <p id="topup-milestones-notice" class="muted"></p>
+        <div id="topup-milestones-list" class="grid"></div>
       </section>
     </main>
     <footer>
@@ -422,5 +590,6 @@
       ><a href="#" data-t="top"></a>
     </footer>
     <script type="module" src="/js/website.js"></script>
+    <script>if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw-game.js').catch(function () {}); }</script>
   </body>
 </html>

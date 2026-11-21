@@ -22,7 +22,7 @@
     <value>The common money drop item group (50 % drop chance)</value>
   </data>
   <data name="TheCommonDropItemGroupForRandomExcellentItems001PercentDropChance" xml:space="preserve">
-    <value>The common drop item group for random excellent items (0.01 % drop chance)</value>
+    <value>The common drop item group for random excellent items (0.2 % drop chance)</value>
   </data>
   <data name="ItemsFromRedDragon" xml:space="preserve">
     <value>Items from red dragon</value>
@@ -230,5 +230,161 @@
   </data>
   <data name="FlameOfCondor" xml:space="preserve">
     <value>Flame of Condor</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLife10To19" xml:space="preserve">
+    <value>Jewel of Life from monsters of level 10 to 19</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless20To29" xml:space="preserve">
+    <value>Jewel of Bless from monsters of level 20 to 29</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLife20To29" xml:space="preserve">
+    <value>Jewel of Life from monsters of level 20 to 29</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless30To39" xml:space="preserve">
+    <value>Jewel of Bless from monsters of level 30 to 39</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul30To39" xml:space="preserve">
+    <value>Jewel of Soul from monsters of level 30 to 39</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLife30To39" xml:space="preserve">
+    <value>Jewel of Life from monsters of level 30 to 39</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless40To49" xml:space="preserve">
+    <value>Jewel of Bless from monsters of level 40 to 49</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul40To49" xml:space="preserve">
+    <value>Jewel of Soul from monsters of level 40 to 49</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLife40To49" xml:space="preserve">
+    <value>Jewel of Life from monsters of level 40 to 49</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless50To59" xml:space="preserve">
+    <value>Jewel of Bless from monsters of level 50 to 59</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul50To59" xml:space="preserve">
+    <value>Jewel of Soul from monsters of level 50 to 59</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLife50To59" xml:space="preserve">
+    <value>Jewel of Life from monsters of level 50 to 59</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless60To69" xml:space="preserve">
+    <value>Jewel of Bless from monsters of level 60 to 69</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul60To69" xml:space="preserve">
+    <value>Jewel of Soul from monsters of level 60 to 69</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLife60To69" xml:space="preserve">
+    <value>Jewel of Life from monsters of level 60 to 69</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless70To79" xml:space="preserve">
+    <value>Jewel of Bless from monsters of level 70 to 79</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul70To79" xml:space="preserve">
+    <value>Jewel of Soul from monsters of level 70 to 79</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation70To79" xml:space="preserve">
+    <value>Jewel of Creation from monsters of level 70 to 79</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos70To79" xml:space="preserve">
+    <value>Jewel of Chaos from monsters of level 70 to 79</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless80To89" xml:space="preserve">
+    <value>Jewel of Bless from monsters of level 80 to 89</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul80To89" xml:space="preserve">
+    <value>Jewel of Soul from monsters of level 80 to 89</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation80To89" xml:space="preserve">
+    <value>Jewel of Creation from monsters of level 80 to 89</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos80To89" xml:space="preserve">
+    <value>Jewel of Chaos from monsters of level 80 to 89</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless90To99" xml:space="preserve">
+    <value>Jewel of Bless from monsters of level 90 to 99</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul90To99" xml:space="preserve">
+    <value>Jewel of Soul from monsters of level 90 to 99</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation90To99" xml:space="preserve">
+    <value>Jewel of Creation from monsters of level 90 to 99</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos90To99" xml:space="preserve">
+    <value>Jewel of Chaos from monsters of level 90 to 99</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless100To109" xml:space="preserve">
+    <value>Jewel of Bless from monsters of level 100 to 109</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul100To109" xml:space="preserve">
+    <value>Jewel of Soul from monsters of level 100 to 109</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation100To109" xml:space="preserve">
+    <value>Jewel of Creation from monsters of level 100 to 109</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos100To109" xml:space="preserve">
+    <value>Jewel of Chaos from monsters of level 100 to 109</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless110To119" xml:space="preserve">
+    <value>Jewel of Bless from monsters of level 110 to 119</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul110To119" xml:space="preserve">
+    <value>Jewel of Soul from monsters of level 110 to 119</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation110To119" xml:space="preserve">
+    <value>Jewel of Creation from monsters of level 110 to 119</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos110To119" xml:space="preserve">
+    <value>Jewel of Chaos from monsters of level 110 to 119</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless120To129" xml:space="preserve">
+    <value>Jewel of Bless from monsters of level 120 to 129</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul120To129" xml:space="preserve">
+    <value>Jewel of Soul from monsters of level 120 to 129</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation120To129" xml:space="preserve">
+    <value>Jewel of Creation from monsters of level 120 to 129</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos120To129" xml:space="preserve">
+    <value>Jewel of Chaos from monsters of level 120 to 129</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless130To139" xml:space="preserve">
+    <value>Jewel of Bless from monsters of level 130 to 139</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul130To139" xml:space="preserve">
+    <value>Jewel of Soul from monsters of level 130 to 139</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation130To139" xml:space="preserve">
+    <value>Jewel of Creation from monsters of level 130 to 139</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos130To139" xml:space="preserve">
+    <value>Jewel of Chaos from monsters of level 130 to 139</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless140To149" xml:space="preserve">
+    <value>Jewel of Bless from monsters of level 140 to 149</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul140To149" xml:space="preserve">
+    <value>Jewel of Soul from monsters of level 140 to 149</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation140To149" xml:space="preserve">
+    <value>Jewel of Creation from monsters of level 140 to 149</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos140To149" xml:space="preserve">
+    <value>Jewel of Chaos from monsters of level 140 to 149</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBlessFrom150" xml:space="preserve">
+    <value>Jewel of Bless from monsters of level 150 and up</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoulFrom150" xml:space="preserve">
+    <value>Jewel of Soul from monsters of level 150 and up</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLifeFrom150" xml:space="preserve">
+    <value>Jewel of Life from monsters of level 150 and up</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreationFrom150" xml:space="preserve">
+    <value>Jewel of Creation from monsters of level 150 and up</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaosFrom150" xml:space="preserve">
+    <value>Jewel of Chaos from monsters of level 150 and up</value>
   </data>
 </root>

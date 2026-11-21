@@ -10,11 +10,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.Json.Serialization;
 using System.Threading;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using HNMO.ChatServer;
 using HNMO.ConnectServer;
 using HNMO.DataModel.Configuration;
@@ -46,6 +41,11 @@ using HNMO.Web.AdminPanel.Mcp;
 using HNMO.Web.Map;
 using HNMO.Web.Map.Map;
 using HNMO.Web.Shared;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Nito.AsyncEx.Synchronous;
 using Serilog;
 using Serilog.Debugging;
@@ -58,6 +58,9 @@ internal sealed class Program : IDisposable
 {
     private static bool _confirmExit;
     private static SystemConfiguration? _systemConfiguration;
+
+    /// <summary>The connect server's port of a new save (Season 6.3).</summary>
+    private const int DefaultConnectServerPort = 44406;
 
     private readonly IDictionary<int, IGameServer> _gameServers = new Dictionary<int, IGameServer>();
     private readonly IList<IManageableServer> _servers = new List<IManageableServer>();
@@ -85,6 +88,7 @@ internal sealed class Program : IDisposable
         this._logger = new LoggerConfiguration()
             .ReadFrom.Configuration(configuration)
             .WriteTo.Providers(this._loggerProviders)
+            .WriteTo.Sink(new ErrorCountingSink())
             .CreateLogger();
     }
 
@@ -218,26 +222,52 @@ internal sealed class Program : IDisposable
     {
         var serverDir = AppContext.BaseDirectory;
         var folder = Path.GetFullPath(Path.Combine(serverDir, ".."));
-        var file = new[] { Path.Combine(folder, PlayerLicense.FileName), Path.Combine(serverDir, PlayerLicense.FileName) }.FirstOrDefault(File.Exists);
-        var publicKeyPem = IntegrityVerifier.LoadEmbeddedPublicKeyPem();
-        var license = publicKeyPem is null
-            ? PlayerLicense.Default("No public key is embedded: up to 10 players at once.")
-            : PlayerLicense.Check(file is null ? null : File.ReadAllBytes(file), publicKeyPem, PlayerLicense.MachineId, DateOnly.FromDateTime(DateTime.UtcNow));
+        var hostSettings = HostSettingsStore.TryLoad(HostSettingsStore.ResolveDefaultPath(serverDir));
+        var configured = hostSettings?.LicenseFilePath;
+        var candidates = new List<string>();
+        if (!string.IsNullOrWhiteSpace(configured))
+        {
+            if (Path.IsPathRooted(configured))
+            {
+                candidates.Add(configured);
+            }
+            else
+            {
+                candidates.Add(Path.Combine(folder, configured));
+                candidates.Add(Path.Combine(serverDir, configured));
+            }
+        }
+
+        candidates.Add(Path.Combine(folder, PlayerLicense.FileName));
+        candidates.Add(Path.Combine(serverDir, PlayerLicense.FileName));
+        var file = candidates.FirstOrDefault(File.Exists);
+        var license = PlayerLicense.CheckWithEmbeddedKeys(file is null ? null : File.ReadAllBytes(file), PlayerLicense.MachineId, DateOnly.FromDateTime(DateTime.UtcNow), PlayerLicense.LegacyMachineId);
+        DeveloperHub.StateFile = Path.Combine(Path.GetDirectoryName(HostSettingsStore.ResolveDefaultPath(serverDir)) ?? serverDir, "developer-hub.json");
+        DeveloperHub.MachineId = PlayerLicense.MachineId;
+        DeveloperHub.LegacyMachineId = PlayerLicense.LegacyMachineId;
+        DeveloperHub.LicenceFile = file is null ? null : File.ReadAllText(file);
+        if (license.IsValid && DeveloperHub.IsWithdrawn(DeveloperHub.LicenceFile))
+        {
+            license = PlayerLicense.Default("The HNMO developer withdrew this licence: up to 10 players at once.");
+        }
+
         LicensedPlayerLimit.Maximum = license.MaximumPlayers;
+        LicensedPlayerLimit.Licensee = license.IsValid ? license.Licensee : null;
         this._logger.Information("HNMO license: {Message} (this computer's id: {MachineId})", license.Message, PlayerLicense.MachineId);
     }
 
     /// <summary>
     /// Verifies the signed HNMO build integrity manifest, if one is present. An unsigned build
     /// (e.g. a local/development build) logs a warning and continues. A present but invalid
-    /// signature always refuses to start; a file mismatch refuses only when configured to
-    /// (<c>Integrity:OnMismatch</c> = <c>refuse</c>), otherwise it warns and continues.
+    /// signature always refuses to start; a changed file in a validly-signed build (a tampered
+    /// release) refuses too, unless the host opted out with <c>Integrity:OnMismatch</c> = <c>warn</c>.
     /// </summary>
     private void VerifyBuildIntegrity()
     {
         var publicKeyPem = IntegrityVerifier.LoadEmbeddedPublicKeyPem();
         if (publicKeyPem is null)
         {
+            DeveloperHub.Integrity = "unsigned";
             this._logger.Warning("HNMO integrity: no public key is embedded; skipping the build integrity check.");
             return;
         }
@@ -245,8 +275,14 @@ internal sealed class Program : IDisposable
         var serverDir = AppContext.BaseDirectory;
         var contentRoot = Path.GetFullPath(Path.Combine(serverDir, ".."));
         var result = IntegrityVerifier.VerifyFolder(serverDir, contentRoot, publicKeyPem);
-        var enforceOnMismatch = string.Equals(this._configuration["Integrity:OnMismatch"], "refuse", StringComparison.OrdinalIgnoreCase);
+        var allowOnMismatch = string.Equals(this._configuration["Integrity:OnMismatch"], "warn", StringComparison.OrdinalIgnoreCase);
 
+        DeveloperHub.Integrity = result.Status switch
+        {
+            IntegrityStatus.Ok => "ok",
+            IntegrityStatus.Unsigned => "unsigned",
+            _ => "modified",
+        };
         if (result.Status == IntegrityStatus.Ok)
         {
             this._logger.Information(result.Message);
@@ -259,7 +295,7 @@ internal sealed class Program : IDisposable
             this._logger.Warning("HNMO integrity: {File}", file);
         }
 
-        if (result.ShouldRefuseStartup(enforceOnMismatch))
+        if (result.ShouldRefuseStartup(allowOnMismatch))
         {
             throw new StartupCancelledException(result.Message);
         }
@@ -486,6 +522,10 @@ internal sealed class Program : IDisposable
             .AddSingleton<IFriendNotifier, FriendNotifierToGameServer>()
             .AddSingleton<PlugInManager>()
             .AddSingleton<IServerProvider, LocalServerProvider>()
+            .AddSingleton<IServerRestartService>(s => new ServerRestartService(s.GetRequiredService<IHostApplicationLifetime>(), this._servers))
+            .AddSingleton<IHostLicenseProvider, HostLicenseProvider>()
+            .AddHostedService<DeveloperHubWeeklyService>()
+            .AddSingleton<IDatabasePasswordUpdater, PostgresPasswordUpdater>()
             .AddSingleton<IPacketCaptureService>(CreatePacketCaptureService)
             .AddSingleton<ICollection<PlugInConfiguration>>(this.PlugInConfigurationsFactory)
             .AddTransient<ReferenceHandler, ByDataSourceReferenceHandler>(provider =>
@@ -552,6 +592,107 @@ internal sealed class Program : IDisposable
         this._logger.Information("Host started, elapsed time: {elapsed}", stopwatch.Elapsed);
         this._logger.Information("Admin Panel bound to urls: {urls}", string.Join("; ", host.Urls));
         return host;
+    }
+
+    private sealed class ServerRestartService(IHostApplicationLifetime lifetime, IList<IManageableServer> servers) : IServerRestartService
+    {
+        public bool IsSupported => true;
+
+        public async Task RequestRestartAsync(CancellationToken cancellationToken = default)
+        {
+            foreach (var server in servers)
+            {
+                await server.ShutdownAsync().ConfigureAwait(false);
+            }
+
+            Environment.ExitCode = HostSettingsStore.RestartExitCode;
+            lifetime.StopApplication();
+        }
+    }
+
+    private sealed class HostLicenseProvider : IHostLicenseProvider
+    {
+        public LicenseStatusInfo GetStatus(string? configuredPath)
+        {
+            var resolved = ResolvePath(configuredPath);
+            var exists = File.Exists(resolved);
+            return Describe(exists ? File.ReadAllBytes(resolved) : null, resolved, exists);
+        }
+
+        public LicenseStatusInfo Check(byte[] content) => Describe(content, string.Empty, true);
+
+        public LicenseStatusInfo Apply(string? configuredPath)
+        {
+            var status = this.GetStatus(configuredPath);
+            LicensedPlayerLimit.Maximum = status.MaximumPlayers;
+            LicensedPlayerLimit.Licensee = status.IsValid ? status.Licensee : null;
+            DeveloperHub.LicenceFile = status.Exists ? File.ReadAllText(status.ResolvedPath) : null;
+            if (status.IsValid)
+            {
+                // A new licence ends the grace week (it was the reason for it).
+                DeveloperHub.ClearGrace();
+            }
+
+            return status;
+        }
+
+        private static LicenseStatusInfo Describe(byte[]? content, string resolved, bool exists)
+        {
+            var license = PlayerLicense.CheckWithEmbeddedKeys(content, PlayerLicense.MachineId, DateOnly.FromDateTime(DateTime.UtcNow), PlayerLicense.LegacyMachineId);
+            if (license.IsValid && content is not null && DeveloperHub.IsWithdrawn(System.Text.Encoding.UTF8.GetString(content)))
+            {
+                license = PlayerLicense.Default("The HNMO developer withdrew this licence: up to 10 players at once.");
+            }
+
+            return new LicenseStatusInfo(license.MaximumPlayers, license.Message, PlayerLicense.MachineId, resolved, exists, license.IsValid, license.Licensee, license.Expires);
+        }
+
+        private static string ResolvePath(string? configuredPath)
+        {
+            var serverDir = AppContext.BaseDirectory;
+            var folder = Path.GetFullPath(Path.Combine(serverDir, ".."));
+            var candidates = new List<string>();
+            if (!string.IsNullOrWhiteSpace(configuredPath))
+            {
+                if (Path.IsPathRooted(configuredPath))
+                {
+                    candidates.Add(configuredPath);
+                }
+                else
+                {
+                    candidates.Add(Path.Combine(folder, configuredPath));
+                    candidates.Add(Path.Combine(serverDir, configuredPath));
+                }
+            }
+
+            candidates.Add(Path.Combine(folder, PlayerLicense.FileName));
+            candidates.Add(Path.Combine(serverDir, PlayerLicense.FileName));
+            return candidates.FirstOrDefault(File.Exists) ?? candidates[0];
+        }
+    }
+
+    private sealed class PostgresPasswordUpdater : IDatabasePasswordUpdater
+    {
+        public async Task UpdatePasswordAsync(HostSettings settings, string newPassword, CancellationToken cancellationToken = default)
+        {
+            var builder = new Npgsql.NpgsqlConnectionStringBuilder
+            {
+                Host = settings.DatabaseHost,
+                Port = settings.DatabasePort,
+                Database = settings.DatabaseName,
+                Username = settings.DatabaseUser,
+                Password = settings.DatabasePassword,
+                Timeout = 5,
+            };
+
+            await using var conn = new Npgsql.NpgsqlConnection(builder.ToString());
+            await conn.OpenAsync(cancellationToken).ConfigureAwait(false);
+            var safeUser = settings.DatabaseUser.Replace("\"", "\"\"", StringComparison.Ordinal);
+            var safePassword = newPassword.Replace("'", "''", StringComparison.Ordinal);
+            await using var cmd = conn.CreateCommand();
+            cmd.CommandText = $"ALTER USER \"{safeUser}\" WITH PASSWORD '{safePassword}';";
+            await cmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+        }
     }
 
     /// <summary>
@@ -781,10 +922,19 @@ internal sealed class Program : IDisposable
             contextProvider = inMemoryProvider;
             await this.InitializeDataAsync(version, loggerFactory, contextProvider).ConfigureAwait(false);
             inMemoryProvider.ChangePublisher = changePublisher;
+
+            _ = int.TryParse(Environment.GetEnvironmentVariable("HNMO_PORT_OFFSET"), out var portOffset);
+            portOffset += HnmoSeasonInstance.PortOffsetFor(HnmoSeasonInstance.Current);
+            if (portOffset != 0)
+            {
+                await ShiftPortsAsync(contextProvider, portOffset).ConfigureAwait(false);
+            }
         }
         else
         {
             contextProvider = await this.PrepareRepositoryProviderAsync(args.Contains("-reinit"), version, loggerFactory, changeListener).ConfigureAwait(false);
+            await this.MoveSeasonNinePortsAsync().ConfigureAwait(false);
+            this.UseSharedAccounts();
         }
 
         await this.ReadSystemConfigurationAsync(contextProvider).ConfigureAwait(false);
@@ -792,9 +942,136 @@ internal sealed class Program : IDisposable
         return contextProvider;
     }
 
+    private static async Task ShiftPortsAsync(IPersistenceContextProvider contextProvider, int portOffset)
+    {
+        using var portContext = contextProvider.CreateNewConfigurationContext();
+        foreach (var cs in await portContext.GetAsync<ConnectServerDefinition>().ConfigureAwait(false))
+        {
+            cs.ClientListenerPort += portOffset;
+        }
+
+        foreach (var gs in await portContext.GetAsync<GameServerDefinition>().ConfigureAwait(false))
+        {
+            foreach (var ep in gs.Endpoints)
+            {
+                ep.NetworkPort += portOffset;
+            }
+        }
+
+        foreach (var ep in await portContext.GetAsync<HNMO.DataModel.Configuration.ChatServerEndpoint>().ConfigureAwait(false))
+        {
+            ep.NetworkPort += portOffset;
+        }
+
+        await portContext.SaveChangesAsync().ConfigureAwait(false);
+    }
+
+    /// <summary>Gets the name of this program's season in the log.</summary>
+    private static string SeasonLabel => HnmoSeasonInstance.IsArena ? "Arena" : "Season 9";
+
+    /// <summary>
+    /// A Season 9 or Arena program takes logins and coins from the shared (Season 6.3) database (owner's decisions,
+    /// 2026-11-19 and 2026-11-20).
+    /// </summary>
+    private void UseSharedAccounts()
+    {
+        if (PersistenceContextProvider.ResolveConnectionString() is not { Length: > 0 } connectionString)
+        {
+            return;
+        }
+
+        var builder = new Npgsql.NpgsqlConnectionStringBuilder(connectionString);
+        builder.Database = HnmoSeasonInstance.SharedDatabaseName(builder.Database ?? string.Empty);
+
+        // The website's login tickets, in the shared database: "Play" works for a server of either season.
+        SharedLoginTicketStore.Current = new PostgresSharedLoginTicketStore(builder.ToString());
+
+        // The HNMO Arena's points and ratings, in the shared database: earned in the Arena, spent and shown at home.
+        ArenaShared.Current = new PostgresArenaShared(builder.ToString());
+
+        // One player limit for the whole folder (owner, 2026-11-21): every program publishes its accounts there.
+        LicensedPlayerLimit.StartSharing();
+        if (!HnmoSeasonInstance.IsSecondary)
+        {
+            return;
+        }
+
+        SharedAccountStore.Current = new PostgresSharedAccountStore(builder.ToString());
+        this._logger.Information("{Season}: accounts and coins are shared with Season 6.3 (database {Database}).", SeasonLabel, builder.Database);
+    }
+
+    /// <summary>
+    /// A Season 9 or Arena program runs next to Season 6.3's, so its servers listen on other ports (Season 9 100 higher,
+    /// the Arena 200: connect server 44506 or 44606 instead of 44406). Done once, on its database's first start: a port
+    /// an administrator changed afterwards stays as set.
+    /// </summary>
+    private async Task MoveSeasonNinePortsAsync()
+    {
+        if (!HnmoSeasonInstance.IsSecondary || PersistenceContextProvider.ResolveConnectionString() is not { Length: > 0 } connectionString)
+        {
+            return;
+        }
+
+        // The configuration contexts may only read: the ports change with the database's own role, in one transaction.
+        await using var connection = new Npgsql.NpgsqlConnection(connectionString);
+        await connection.OpenAsync().ConfigureAwait(false);
+        await using var transaction = await connection.BeginTransactionAsync().ConfigureAwait(false);
+        await using var command = connection.CreateCommand();
+        command.Transaction = transaction;
+        command.CommandText = """
+            SELECT count(*) FROM config."ConnectServerDefinition" WHERE "ClientListenerPort" = @port;
+            """;
+        command.Parameters.AddWithValue("port", DefaultConnectServerPort);
+        if (Convert.ToInt64(await command.ExecuteScalarAsync().ConfigureAwait(false), System.Globalization.CultureInfo.InvariantCulture) == 0)
+        {
+            return;
+        }
+
+        command.Parameters.Clear();
+        var offset = HnmoSeasonInstance.PortOffsetFor(HnmoSeasonInstance.Current);
+        command.Parameters.AddWithValue("offset", offset);
+        command.CommandText = """
+            UPDATE config."ConnectServerDefinition" SET "ClientListenerPort" = "ClientListenerPort" + @offset;
+            UPDATE config."GameServerEndpoint" SET "NetworkPort" = "NetworkPort" + @offset;
+            UPDATE config."ChatServerEndpoint" SET "NetworkPort" = "NetworkPort" + @offset;
+            """;
+        await command.ExecuteNonQueryAsync().ConfigureAwait(false);
+        await transaction.CommitAsync().ConfigureAwait(false);
+        this._logger.Information("{Season}: its servers listen {Offset} ports above Season 6.3's (connect server {Port}).", SeasonLabel, offset, DefaultConnectServerPort + offset);
+    }
+
     private async Task<IMigratableDatabaseContextProvider> PrepareRepositoryProviderAsync(bool reinit, string version, ILoggerFactory loggerFactory, IConfigurationChangeListener changeListener)
     {
         var contextProvider = new PersistenceContextProvider(loggerFactory, changeListener);
+        contextProvider.EnableHnmoRowPersistence();
+        if (PersistenceContextProvider.ResolveConnectionString() is { } dbConn && !string.IsNullOrWhiteSpace(dbConn))
+        {
+            PostgresDbLogRetentionStore.RegisterExporter(dbConn);
+            HNMO.GameLogic.PlugIns.Chat.ChatLog.PersistentSink = entry =>
+            {
+                _ = Task.Run(() =>
+                {
+                    try
+                    {
+                        PostgresDbLogRetentionStore.AppendChatLine(
+                            dbConn,
+                            entry.TimeUtc,
+                            entry.ServerId,
+                            entry.MapName,
+                            entry.Sender,
+                            entry.AccountId,
+                            (int)entry.Kind,
+                            entry.Receiver,
+                            entry.Text);
+                    }
+                    catch
+                    {
+                        // Avoid disrupting game chat if DB is busy or offline.
+                    }
+                });
+            };
+        }
+
         if (reinit || !await contextProvider.DatabaseExistsAsync().ConfigureAwait(false))
         {
             // The database can be provisioned externally (e.g. by a Kubernetes operator,

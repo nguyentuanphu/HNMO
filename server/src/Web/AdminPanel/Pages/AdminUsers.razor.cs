@@ -4,9 +4,9 @@
 
 namespace HNMO.Web.AdminPanel.Pages;
 
-using Microsoft.AspNetCore.Components;
 using HNMO.Persistence.AdminAuth;
 using HNMO.Web.AdminPanel.Services;
+using Microsoft.AspNetCore.Components;
 
 /// <summary>
 /// The page which manages the users of the admin panel.

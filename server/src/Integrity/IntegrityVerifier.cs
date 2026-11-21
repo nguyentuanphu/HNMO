@@ -37,26 +37,14 @@ public static class IntegrityVerifier
     /// Loads the Ed25519 public key (PEM) embedded in this assembly.
     /// </summary>
     /// <returns>The PEM bytes, or <c>null</c> if the resource is missing.</returns>
-    public static byte[]? LoadEmbeddedPublicKeyPem()
-    {
-        var assembly = typeof(IntegrityVerifier).Assembly;
-        var name = assembly.GetManifestResourceNames()
-            .FirstOrDefault(n => n.EndsWith(EmbeddedPublicKeyResourceSuffix, StringComparison.OrdinalIgnoreCase));
-        if (name is null)
-        {
-            return null;
-        }
+    public static byte[]? LoadEmbeddedPublicKeyPem() => LoadEmbeddedPem(EmbeddedPublicKeyResourceSuffix);
 
-        using var stream = assembly.GetManifestResourceStream(name);
-        if (stream is null)
-        {
-            return null;
-        }
-
-        using var memory = new MemoryStream();
-        stream.CopyTo(memory);
-        return memory.ToArray();
-    }
+    /// <summary>
+    /// Loads the HNMO developer hub's licence key (PEM), once its public half is embedded (licence-pub.pem): licences
+    /// issued on the hub are signed with it; the build key above stays on the developer's computer.
+    /// </summary>
+    /// <returns>The PEM bytes, or <c>null</c> if it isn't embedded yet.</returns>
+    public static byte[]? LoadEmbeddedLicenceKeyPem() => LoadEmbeddedPem("licence-pub.pem");
 
     /// <summary>
     /// Verifies the build against a manifest and detached signature found in <paramref name="manifestDir"/>,
@@ -151,28 +139,6 @@ public static class IntegrityVerifier
         return new IntegrityResult(IntegrityStatus.Ok, $"HNMO integrity: verified {entries.Count} file(s) against the signed manifest ({buildStamp}).", Array.Empty<string>());
     }
 
-    private static (string BuildStamp, IReadOnlyList<IntegrityManifestEntry> Entries) ParseManifest(byte[] manifestBytes)
-    {
-        using var document = JsonDocument.Parse(manifestBytes);
-        var root = document.RootElement;
-        var buildStamp = root.TryGetProperty("buildStamp", out var stampElement) ? stampElement.GetString() ?? string.Empty : string.Empty;
-        var entries = new List<IntegrityManifestEntry>();
-        if (root.TryGetProperty("files", out var files) && files.ValueKind == JsonValueKind.Array)
-        {
-            foreach (var file in files.EnumerateArray())
-            {
-                var path = file.TryGetProperty("path", out var p) ? p.GetString() : null;
-                var hash = file.TryGetProperty("sha256", out var h) ? h.GetString() : null;
-                if (!string.IsNullOrEmpty(path) && !string.IsNullOrEmpty(hash))
-                {
-                    entries.Add(new IntegrityManifestEntry(path, hash));
-                }
-            }
-        }
-
-        return (buildStamp, entries);
-    }
-
     /// <summary>Verifies an Ed25519 signature over a message with a public key (PEM).</summary>
     /// <param name="message">The signed bytes.</param>
     /// <param name="signature">The raw signature.</param>
@@ -198,5 +164,48 @@ public static class IntegrityVerifier
         {
             return false;
         }
+    }
+
+    private static (string BuildStamp, IReadOnlyList<IntegrityManifestEntry> Entries) ParseManifest(byte[] manifestBytes)
+    {
+        using var document = JsonDocument.Parse(manifestBytes);
+        var root = document.RootElement;
+        var buildStamp = root.TryGetProperty("buildStamp", out var stampElement) ? stampElement.GetString() ?? string.Empty : string.Empty;
+        var entries = new List<IntegrityManifestEntry>();
+        if (root.TryGetProperty("files", out var files) && files.ValueKind == JsonValueKind.Array)
+        {
+            foreach (var file in files.EnumerateArray())
+            {
+                var path = file.TryGetProperty("path", out var p) ? p.GetString() : null;
+                var hash = file.TryGetProperty("sha256", out var h) ? h.GetString() : null;
+                if (!string.IsNullOrEmpty(path) && !string.IsNullOrEmpty(hash))
+                {
+                    entries.Add(new IntegrityManifestEntry(path, hash));
+                }
+            }
+        }
+
+        return (buildStamp, entries);
+    }
+
+    private static byte[]? LoadEmbeddedPem(string suffix)
+    {
+        var assembly = typeof(IntegrityVerifier).Assembly;
+        var name = assembly.GetManifestResourceNames()
+            .FirstOrDefault(n => n.EndsWith(suffix, StringComparison.OrdinalIgnoreCase));
+        if (name is null)
+        {
+            return null;
+        }
+
+        using var stream = assembly.GetManifestResourceStream(name);
+        if (stream is null)
+        {
+            return null;
+        }
+
+        using var memory = new MemoryStream();
+        stream.CopyTo(memory);
+        return memory.ToArray();
     }
 }

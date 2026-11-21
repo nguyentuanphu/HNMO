@@ -5,15 +5,15 @@
 namespace HNMO.Web.AdminPanel.API;
 
 using System.Threading;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.PlugIns.GiftCodes;
 using HNMO.Persistence;
 using HNMO.Web.AdminPanel.Auth;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The website's gift codes: the public codes (read-only, no account data), and, for the account page through the
@@ -102,7 +102,7 @@ public sealed class WebsiteGiftCodesController(
             return this.BadRequest(new { error = "character" });
         }
 
-        var who = new GiftCodeRedeemer(account.LoginName, character.Id.ToString(), character.Name, Level(character), Resets(character), character.CharacterClass?.Number ?? 0);
+        var who = new GiftCodeRedeemer(account.LoginName, character.Id.ToString(), character.Name, Level(character), Resets(character), character.CharacterClass?.Number ?? 0, WebsiteGiftCodeAddress.Read(this.HttpContext), request.DeviceId);
         var outcome = engine.Redeem(request.Code, who, DateTime.UtcNow, "website");
         if (outcome.Result == GiftCodeResult.Ok)
         {
@@ -180,19 +180,3 @@ public sealed class WebsiteGiftCodesController(
         }
     }
 }
-
-/// <summary>
-/// An account's login for the website's gift codes.
-/// </summary>
-/// <param name="LoginName">The login name.</param>
-/// <param name="Password">The password.</param>
-public sealed record GiftCodeAccountRequest(string? LoginName, string? Password);
-
-/// <summary>
-/// A gift code entered on the website.
-/// </summary>
-/// <param name="LoginName">The login name.</param>
-/// <param name="Password">The password.</param>
-/// <param name="Character">The character which gets the zen and items.</param>
-/// <param name="Code">The code.</param>
-public sealed record GiftCodeRedeemRequest(string? LoginName, string? Password, string? Character, string? Code);

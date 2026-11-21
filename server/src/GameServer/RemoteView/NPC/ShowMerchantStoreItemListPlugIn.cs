@@ -5,12 +5,12 @@
 namespace HNMO.GameServer.RemoteView.NPC;
 
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.Views.NPC;
 using HNMO.Network;
 using HNMO.Network.Packets.ServerToClient;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The default implementation of the <see cref="IShowMerchantStoreItemListPlugIn"/> which is forwarding everything to the game client with specific data packets.

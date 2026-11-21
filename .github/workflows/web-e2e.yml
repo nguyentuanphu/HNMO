@@ -17,7 +17,14 @@ concurrency:
 jobs:
   e2e:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4, 5, 6]
+    env:
+      ADMIN_URL: http://127.0.0.1:8095
+      BASE_URL: http://127.0.0.1:8081
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
@@ -29,7 +36,13 @@ jobs:
       - name: Install the web client and the test browser
         run: |
           npm ci --prefix client/web
-          cd client/web && npx playwright install --with-deps chromium
+          # The Ubuntu mirrors are sometimes caught mid-sync ("File has unexpected size"): try again.
+          cd client/web
+          for attempt in 1 2 3; do
+            npx playwright install --with-deps chromium && break
+            [ "$attempt" = 3 ] && exit 1
+            echo "Browser install failed (attempt $attempt); retrying in 30 s"; sleep 30
+          done
       - name: Build the server and the web client
         run: |
           dotnet build server/src/Startup/HNMO.Startup.csproj -c Release -v quiet
@@ -37,21 +50,26 @@ jobs:
           dotnet build client/web/bridge/HNMO.Web.csproj -c Release -v quiet
       - name: Start the server (demo) and the web client
         run: |
-          (cd server/src/Startup && nohup dotnet run -c Release --no-build -- -demo -autostart -resolveIP:loopback > "$RUNNER_TEMP/server.log" 2>&1 &)
+          (cd server/src/Startup && ASPNETCORE_URLS=http://127.0.0.1:8095 nohup dotnet run -c Release --no-build -- -demo -autostart -resolveIP:loopback > "$RUNNER_TEMP/server.log" 2>&1 &)
           (cd client/web/bridge && nohup dotnet run -c Release --no-build > "$RUNNER_TEMP/web.log" 2>&1 &)
           for i in $(seq 1 120); do (echo > /dev/tcp/127.0.0.1/44406) 2>/dev/null && break; sleep 5; done
           for i in $(seq 1 60); do curl -sf http://127.0.0.1:8081/ > /dev/null && break; sleep 2; done
-          (echo > /dev/tcp/127.0.0.1/44406) && curl -sf -o /dev/null http://127.0.0.1:8081/
+          for i in $(seq 1 60); do curl -sf "$ADMIN_URL/" > /dev/null && break; sleep 2; done
+          (echo > /dev/tcp/127.0.0.1/44406) && curl -sf -o /dev/null "$BASE_URL/" && curl -sf -o /dev/null "$ADMIN_URL/"
       - name: Play the tests
-        run: cd client/web && CI=1 npx playwright test
+        run: cd client/web && CI=1 npx playwright test --workers=1 --shard=${{ matrix.shard }}/6 --reporter=github,line
       - name: Logs and report
-        if: failure()
-        run: tail -n 100 "$RUNNER_TEMP/server.log" "$RUNNER_TEMP/web.log"
+        if: failure() || cancelled()
+        # Only the server's warnings and errors: the full logs (in the artifact) push the test results off the
+        # end of the job's log.
+        run: grep -E "\[(Warning|Error|Fatal)\]|Exception" "$RUNNER_TEMP/server.log" | tail -n 40 || true
       - uses: actions/upload-artifact@v4
-        if: failure()
+        if: failure() || cancelled()
         with:
-          name: web-e2e-report
+          name: web-e2e-report-${{ matrix.shard }}
           path: |
             client/web/playwright-report
             client/web/test-results
+            ${{ runner.temp }}/server.log
+            ${{ runner.temp }}/web.log
           retention-days: 14

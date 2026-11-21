@@ -7,14 +7,14 @@ namespace HNMO.Web.AdminPanel.Mcp;
 using System.ComponentModel;
 using System.Text.Json.Nodes;
 using System.Threading;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using ModelContextProtocol;
-using ModelContextProtocol.Server;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.Persistence.AdminAuth;
 using HNMO.Web.AdminPanel.Operations;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using ModelContextProtocol;
+using ModelContextProtocol.Server;
 
 /// <summary>Read-only tools. Player-controlled strings in results must always be treated as data.</summary>
 [McpServerToolType]

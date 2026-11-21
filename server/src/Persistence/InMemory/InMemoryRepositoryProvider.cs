@@ -17,7 +17,7 @@ public class InMemoryRepositoryProvider : BaseRepositoryProvider
     /// <summary>
     /// Gets all <see cref="IMemoryRepository"/> which were added to this manager.
     /// </summary>
-    internal IEnumerable<IMemoryRepository> MemoryRepositories => base.Repositories.Values.OfType<IMemoryRepository>();
+    internal IEnumerable<IMemoryRepository> MemoryRepositories => this.Repositories.Values.OfType<IMemoryRepository>();
 
     /// <summary>
     /// Gets the memory repository, and creates it if it wasn't created yet.

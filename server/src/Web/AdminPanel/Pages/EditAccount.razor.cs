@@ -5,12 +5,12 @@
 namespace HNMO.Web.AdminPanel.Pages;
 
 using System.Threading;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components;
 using HNMO.DataModel.Entities;
 using HNMO.Persistence;
 using HNMO.Web.AdminPanel.Auth;
 using HNMO.Web.Shared.Components.Form;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
 
 /// <summary>
 /// The edit page for account data.

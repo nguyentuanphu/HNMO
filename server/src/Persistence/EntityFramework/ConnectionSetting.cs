@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 /// The configured database engine.
 /// </summary>
 [Serializable]
-[XmlType(Namespace = "https://github.com/nguyentuanphu/HNMO/ConnectionSettings")]
+[XmlType(Namespace = ConnectionSettings.XmlNamespace)]
 public enum DatabaseEngine
 {
     /// <summary>
@@ -35,7 +35,7 @@ public enum DatabaseEngine
 /// A database connection setting for the specified role.
 /// </summary>
 [Serializable]
-[XmlType(Namespace = "https://github.com/nguyentuanphu/HNMO/ConnectionSettings")]
+[XmlType(Namespace = ConnectionSettings.XmlNamespace)]
 public class ConnectionSetting
 {
     /// <summary>

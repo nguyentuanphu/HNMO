@@ -4,6 +4,7 @@
 
 namespace HNMO.GameLogic.PlayerActions.PlayerStore;
 
+using HNMO.GameLogic.Offline;
 using HNMO.GameLogic.PlayerShopCurrencies;
 using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.Views;
@@ -29,6 +30,22 @@ public class BuyRequestAction
         if (requestedPlayer.IsTemplatePlayer || player.IsTemplatePlayer)
         {
             await player.InvokeViewPlugInAsync<IPlayerShopBuyRequestResultPlugIn>(p => p.ShowResultAsync(requestedPlayer, ItemBuyResult.ItemBlock, null)).ConfigureAwait(false);
+            return;
+        }
+
+        if (player.BackupInventory is not null || requestedPlayer.BackupInventory is not null)
+        {
+            // A trade or a crafting window of the buyer or the seller is open: a cancel (or a disconnect)
+            // rolls that inventory back to its backup, which would undo one half of the purchase.
+            await player.InvokeViewPlugInAsync<IPlayerShopBuyRequestResultPlugIn>(p => p.ShowResultAsync(requestedPlayer, ItemBuyResult.Undefined, null)).ConfigureAwait(false);
+            return;
+        }
+
+        if (!await SeesTheStoreAsync(player, requestedPlayer).ConfigureAwait(false))
+        {
+            // Only from within view range of the store (owner, 21 Nov 2026): the store is opened by clicking it.
+            player.Logger.LogDebug("Store of {0} is out of view range of {1}", requestedPlayer.SelectedCharacter?.Name, player.SelectedCharacter?.Name);
+            await player.InvokeViewPlugInAsync<IPlayerShopBuyRequestResultPlugIn>(p => p.ShowResultAsync(requestedPlayer, ItemBuyResult.ShopNotOpened, null)).ConfigureAwait(false);
             return;
         }
 
@@ -133,6 +150,16 @@ public class BuyRequestAction
                 return;
             }
 
+            // The free slot is checked again for the item read under the lock, right before the payment: the buyer's
+            // inventory may have filled up since the first check (e.g. by a buy at another store at the same time).
+            freeslot = player.Inventory?.CheckInvSpace(item);
+            if (freeslot is null)
+            {
+                await player.InvokeViewPlugInAsync<IPlayerShopBuyRequestResultPlugIn>(p => p.ShowResultAsync(requestedPlayer, ItemBuyResult.MoneyOverflowOrNotEnoughSpace, null)).ConfigureAwait(false);
+                await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.InventoryNotEnoughSpace)).ConfigureAwait(false);
+                return;
+            }
+
             player.Logger.LogDebug("BuyRequest, Item Price: {0} {1}", price.Amount, price.PriceItem?.ToString() ?? price.CoinType?.ToString() ?? "zen");
             using var itemContext = requestedPlayer.GameContext.PersistenceContextProvider.CreateNewTradeContext();
             var purchase = new ShopPurchase(player, requestedPlayer, price, itemContext);
@@ -150,7 +177,11 @@ public class BuyRequestAction
             await requestedPlayer.InvokeViewPlugInAsync<IItemRemovedPlugIn>(p => p.RemoveItemAsync(slot)).ConfigureAwait(false);
             item.ItemSlot = (byte)freeslot;
             item.SetStorePrice(null);
-            await player.Inventory!.AddItemAsync(item).ConfigureAwait(false);
+            if (!await player.Inventory!.AddItemAsync(item).ConfigureAwait(false))
+            {
+                player.Logger.LogCritical("Bought item {0} didn't fit into the inventory of {1} after the payment.", item, player.Name);
+            }
+
             requestedPlayer.PersistenceContext.Detach(item);
             foreach (var (paymentItem, _) in purchase.PaymentItems)
             {
@@ -175,11 +206,18 @@ public class BuyRequestAction
                 item,
                 price.Kind == ShopPriceKind.Zen ? price.Amount : 0,
                 price.Kind == ShopPriceKind.Zen ? null : $"{price.Amount} {player.GetCurrencyName(price)}");
+            PlugIns.ActivityLog.ActivityLogPlugIn.Get(player.GameContext)?.RecordPersonalStore(
+                requestedPlayer,
+                player,
+                item,
+                price.Kind == ShopPriceKind.Zen ? price.Amount : 0,
+                price.Kind == ShopPriceKind.Zen ? null : $"{price.Amount} {player.GetCurrencyName(price)}");
         }
 
         if (itemSold)
         {
-            if (requestedPlayer.ShopStorage.Items.Any())
+            var hasRemaining = requestedPlayer.ShopStorage.Items.Any();
+            if (hasRemaining)
             {
                 // this update may be sent to other players as well which are currently looking at the store
                 await player.InvokeViewPlugInAsync<Views.PlayerShop.IShowShopItemListPlugIn>(p => p.ShowShopItemListAsync(requestedPlayer, true)).ConfigureAwait(false);
@@ -188,7 +226,36 @@ public class BuyRequestAction
             {
                 await this._closeStoreAction.CloseStoreAsync(requestedPlayer).ConfigureAwait(false);
             }
+
+            if (requestedPlayer is OfflinePlayer { IsOffTrade: true } offTrader)
+            {
+                if (!hasRemaining && offTrader.OffTradeStopWhenSoldOut && offTrader.AccountLoginName is { } offLogin)
+                {
+                    await requestedPlayer.GameContext.OfflinePlayerManager.StopAsync(offLogin).ConfigureAwait(false);
+                }
+                else
+                {
+                    offTrader.MarkOffTradePendingSave();
+                }
+            }
         }
+    }
+
+    /// <summary>
+    /// Determines whether the buyer sees the seller, i.e. whether the seller is in the buyer's view range.
+    /// </summary>
+    /// <param name="buyer">The buyer.</param>
+    /// <param name="seller">The seller.</param>
+    /// <returns><c>true</c>, if the buyer observes the seller.</returns>
+    internal static async ValueTask<bool> SeesTheStoreAsync(Player buyer, Player seller)
+    {
+        if (ReferenceEquals(buyer, seller))
+        {
+            return true;
+        }
+
+        using var readerLock = await seller.ObserverLock.ReaderLockAsync().ConfigureAwait(false);
+        return seller.Observers.Contains(buyer);
     }
 
     private async ValueTask ShowPaymentFailedAsync(Player player, Player seller, ShopPrice price, ShopPaymentResult paymentResult)

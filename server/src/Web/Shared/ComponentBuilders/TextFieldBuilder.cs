@@ -5,9 +5,9 @@
 namespace HNMO.Web.Shared.ComponentBuilders;
 
 using System.Reflection;
-using Microsoft.AspNetCore.Components.Rendering;
 using HNMO.Web.Shared.Components.Form;
 using HNMO.Web.Shared.Services;
+using Microsoft.AspNetCore.Components.Rendering;
 
 /// <summary>
 /// A <see cref="IComponentBuilder"/> for string fields.

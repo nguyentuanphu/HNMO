@@ -5,9 +5,9 @@
 namespace HNMO.ConnectServer.PacketHandler;
 
 using System.Net;
-using Microsoft.Extensions.Logging;
 using HNMO.Network;
 using HNMO.Network.Packets.ConnectServer;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Handles the server info request of a client, which means the client wants to know the connect data of the server it just clicked on.

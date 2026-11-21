@@ -4,11 +4,11 @@
 
 namespace HNMO.GameLogic.TestActors;
 
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.Bots;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The <c>bots</c> command of the control endpoint: switches the server's own population bots on and

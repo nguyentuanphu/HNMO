@@ -5,12 +5,12 @@
 namespace HNMO.GameLogic.PlayerActions.Items;
 
 using System.ComponentModel;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Configuration.Items;
 using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.Views.Inventory;
 using HNMO.GameLogic.Views.Trade;
+using Microsoft.Extensions.Logging;
 using static HNMO.DataModel.InventoryConstants;
 
 /// <summary>
@@ -66,6 +66,22 @@ public class MoveItemAction
                 item,
                 toStorage);
             await player.ShowLocalizedBlueMessageAsync(blockedMessage).ConfigureAwait(false);
+            await player.InvokeViewPlugInAsync<IItemMoveFailedPlugIn>(p => p.ItemMoveFailedAsync(item)).ConfigureAwait(false);
+            return;
+        }
+
+        // The HNMO Arena: no vault there (everyone plays the same arena characters).
+        if ((fromStorage == Storages.Vault || toStorage == Storages.Vault)
+            && await PlugIns.Arena.ArenaRules.RefuseAsync(player, PlugIns.Arena.ArenaRules.Action.Vault).ConfigureAwait(false))
+        {
+            await player.InvokeViewPlugInAsync<IItemMoveFailedPlugIn>(p => p.ItemMoveFailedAsync(item)).ConfigureAwait(false);
+            return;
+        }
+
+        // HNMO's duplicate check: a frozen item stays where it is (the bag, or the vault it's in).
+        if (fromStorage != toStorage && toStorage != Storages.Inventory
+            && await PlugIns.DuplicateItems.DuplicateItemsPlugIn.RefuseFrozenAsync(player, item).ConfigureAwait(false))
+        {
             await player.InvokeViewPlugInAsync<IItemMoveFailedPlugIn>(p => p.ItemMoveFailedAsync(item)).ConfigureAwait(false);
             return;
         }
@@ -169,7 +185,7 @@ public class MoveItemAction
 
     private async ValueTask PartiallyStackAsync(Player player, Item sourceItem, Item targetItem)
     {
-        var partialAmount = (byte)Math.Min(targetItem.Definition!.Durability - targetItem.Durability, sourceItem.Durability);
+        var partialAmount = (byte)Math.Min(targetItem.MaximumStackSize() - targetItem.Durability, sourceItem.Durability);
         targetItem.Durability += partialAmount;
         sourceItem.Durability -= partialAmount;
         await player.InvokeViewPlugInAsync<IItemMoveFailedPlugIn>(p => p.ItemMoveFailedAsync(sourceItem)).ConfigureAwait(false);
@@ -385,7 +401,10 @@ public class MoveItemAction
 
             if (item.CanCompletelyStackOn(targetItem))
             {
-                return Movement.CompleteStack;
+                // A complete stack removes the moved item. While a trade or a crafting window is open, a
+                // cancel (or a disconnect) rolls the inventory back to its backup: the removed item would
+                // come back, and the target would keep the stacked pieces.
+                return player.BackupInventory is null ? Movement.CompleteStack : Movement.None;
             }
 
             if (item.CanPartiallyStackOn(targetItem))

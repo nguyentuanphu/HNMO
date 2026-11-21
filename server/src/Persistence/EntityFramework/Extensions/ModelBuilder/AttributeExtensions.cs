@@ -4,8 +4,8 @@
 
 namespace HNMO.Persistence.EntityFramework.Extensions.ModelBuilder;
 
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using HNMO.Persistence.EntityFramework.Model;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 /// <summary>
 /// Extensions for the <see cref="Attribute"/>-related <see cref="EntityTypeBuilder"/>s.

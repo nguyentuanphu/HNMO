@@ -1069,6 +1069,9 @@
   <data name="MuHelperConfiguration_MinLevel_Name" xml:space="preserve">
     <value>最低角色等级</value>
   </data>
+  <data name="MuHelperConfiguration_VipMinLevel_Name" xml:space="preserve">
+    <value>VIP账号的最低角色等级</value>
+  </data>
   <data name="MuHelperConfiguration_MaxLevel_Name" xml:space="preserve">
     <value>最高角色等级</value>
   </data>
@@ -1206,6 +1209,12 @@
   </data>
   <data name="HappyHourConfiguration_ExperienceMultiplier_Name" xml:space="preserve">
     <value>经验倍率</value>
+  </data>
+  <data name="HappyHourConfiguration_ItemDropBonusPercent_Name" xml:space="preserve">
+    <value>额外物品掉落（%）</value>
+  </data>
+  <data name="HappyHourConfiguration_ExcellentDropBonusPerTenThousand_Name" xml:space="preserve">
+    <value>额外卓越掉落几率（1/10000）</value>
   </data>
   <data name="WanderingMerchantsConfiguration_MinimumSpawnDuration_Name" xml:space="preserve">
     <value>最短出现时间</value>
@@ -1816,4 +1825,6 @@
   <data name="CashShopCoinGrantsAdminOperationPlugIn_Description" xml:space="preserve">
     <value>允许管理面板立即为在线账号发放已授予的商城币，而不必等到玩家下次打开商城。</value>
   </data>
+  <data name="MonsterAiPlugIn_Name" xml:space="preserve"><value>怪物 AI 规则</value></data>
+  <data name="MonsterAiPlugIn_Description" xml:space="preserve"><value>配置怪物追击攻击者、脱离刷新范围脱战返回以及脱战回满生命值行为。</value></data>
 </root>

@@ -63,127 +63,6 @@ public enum ResetResult
 }
 
 /// <summary>
-/// Coins a reset costs.
-/// </summary>
-/// <param name="CoinType">The coin type.</param>
-/// <param name="Amount">The amount.</param>
-public sealed record ResetCoinCost(CashShopCoinType CoinType, int Amount);
-
-/// <summary>
-/// A character which is checked for a reset or relife.
-/// </summary>
-public sealed class ResetSubject
-{
-    /// <summary>Gets or sets the character's id.</summary>
-    public string CharacterId { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets the character's name.</summary>
-    public string Name { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets the account's login name.</summary>
-    public string Login { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets the character class number.</summary>
-    public int Class { get; set; }
-
-    /// <summary>Gets or sets the level.</summary>
-    public int Level { get; set; }
-
-    /// <summary>Gets or sets the resets.</summary>
-    public int Resets { get; set; }
-
-    /// <summary>Gets or sets the zen in the bag.</summary>
-    public long Zen { get; set; }
-
-    /// <summary>Gets or sets the account's coins.</summary>
-    public IReadOnlyDictionary<CashShopCoinType, int> Coins { get; set; } = new Dictionary<CashShopCoinType, int>();
-
-    /// <summary>Gets or sets the account's VIP value.</summary>
-    public int VipLevel { get; set; }
-
-    /// <summary>Gets or sets how many pieces of an item the bag has; <c>null</c> counts none.</summary>
-    public Func<ResetItemCost, int>? CountItems { get; set; }
-}
-
-/// <summary>
-/// What a reset or relife needs and does.
-/// </summary>
-public sealed class ResetPlan
-{
-    /// <summary>Gets or sets the result of the check.</summary>
-    public ResetResult Result { get; set; }
-
-    /// <summary>Gets or sets a value indicating whether it's a relife.</summary>
-    public bool IsRelife { get; set; }
-
-    /// <summary>Gets or sets a value indicating whether the VIP advantages count.</summary>
-    public bool Vip { get; set; }
-
-    /// <summary>Gets or sets the level needed.</summary>
-    public int RequiredLevel { get; set; }
-
-    /// <summary>Gets or sets the level after.</summary>
-    public int LevelAfter { get; set; } = 1;
-
-    /// <summary>Gets or sets the resets after.</summary>
-    public int ResetsAfter { get; set; }
-
-    /// <summary>Gets or sets the relifes after.</summary>
-    public int RelifesAfter { get; set; }
-
-    /// <summary>Gets or sets the zen it costs.</summary>
-    public long Zen { get; set; }
-
-    /// <summary>Gets or sets the coins it costs.</summary>
-    public List<ResetCoinCost> Coins { get; set; } = new();
-
-    /// <summary>Gets or sets the items it takes.</summary>
-    public List<ResetItemCost> Items { get; set; } = new();
-
-    /// <summary>Gets or sets the first missing item, if any.</summary>
-    public ResetItemCost? MissingItem { get; set; }
-
-    /// <summary>Gets or sets what happens with the free points.</summary>
-    public ResetPointsMode PointsMode { get; set; }
-
-    /// <summary>Gets or sets the points: the new free points (<see cref="ResetPointsMode.Total"/>) or the points added (<see cref="ResetPointsMode.Add"/>).</summary>
-    public int Points { get; set; }
-
-    /// <summary>Gets or sets a value indicating whether the stats go back to the start values.</summary>
-    public bool ClearStats { get; set; }
-
-    /// <summary>Gets or sets the resets (or relifes) done today.</summary>
-    public int Today { get; set; }
-
-    /// <summary>Gets or sets the resets (or relifes) allowed today; 0 is no limit.</summary>
-    public int DailyLimit { get; set; }
-
-    /// <summary>Gets or sets the delegated resets done today.</summary>
-    public int TodayDelegated { get; set; }
-
-    /// <summary>Gets or sets the delegated resets allowed today; 0 is only the tier's limit.</summary>
-    public int DelegatedDailyLimit { get; set; }
-
-    /// <summary>Gets or sets the most resets (or relifes); 0 is no limit.</summary>
-    public int Maximum { get; set; }
-
-    /// <summary>Gets or sets the relife resets needed (only for a relife).</summary>
-    public int ResetsNeeded { get; set; }
-}
-
-/// <summary>
-/// A place in a reset ranking.
-/// </summary>
-/// <param name="Rank">The rank, from 1.</param>
-/// <param name="CharacterId">The character's id.</param>
-/// <param name="Name">The name.</param>
-/// <param name="Class">The class number.</param>
-/// <param name="Value">The resets of the month, or the relifes.</param>
-/// <param name="Resets">The resets after the last reset or relife.</param>
-/// <param name="Relifes">The relifes.</param>
-public sealed record ResetRankingEntry(int Rank, string CharacterId, string Name, int Class, int Value, int Resets, int Relifes);
-
-/// <summary>
 /// HNMO's reset rules (pure, no game objects): the tier of a reset count, VIP advantages, daily limits, the relife and
 /// what each costs and gives; the store keeps relifes, daily counts, the monthly ranking and the log.
 /// </summary>
@@ -352,8 +231,9 @@ public sealed class ResetEngine
     /// <param name="subject">The character.</param>
     /// <param name="nowUtc">The time.</param>
     /// <param name="source">Where it would be done.</param>
+    /// <param name="catchupDailyCap">Optional server-wide catch-up daily reset cap.</param>
     /// <returns>The plan; <see cref="ResetPlan.Result"/> says whether it can be done.</returns>
-    public ResetPlan PlanReset(ResetSubject subject, DateTime nowUtc, ResetSource source)
+    public ResetPlan PlanReset(ResetSubject subject, DateTime nowUtc, ResetSource source, int? catchupDailyCap = null)
     {
         var configuration = this.Configuration;
         var record = this.RecordOf(subject.CharacterId, nowUtc);
@@ -393,6 +273,10 @@ public sealed class ResetEngine
         plan.ClearStats = tier.ClearStats;
         plan.PointsMode = tier.PointsMode;
         plan.DailyLimit = tier.DailyLimit > 0 ? tier.DailyLimit + (vip ? configuration.Vip.ExtraDailyResets : 0) : 0;
+        if (catchupDailyCap is { } cap && cap >= 0)
+        {
+            plan.DailyLimit = plan.DailyLimit > 0 ? Math.Min(plan.DailyLimit, cap) : cap;
+        }
 
         var zen = (long)Math.Max(0, tier.Zen) * (tier.ZenTimesResetNumber ? plan.ResetsAfter : 1);
         plan.Zen = vip ? Discount(zen, configuration.Vip.ZenDiscountPercent) : zen;

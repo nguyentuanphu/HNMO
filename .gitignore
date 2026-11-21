@@ -6,3 +6,6 @@ client/web/save/
 # Built by the map project from its TypeScript (TypeScript build output, not source)
 server/src/Web/Map/wwwroot/js/HNMO.Web.Map.js
 server/src/Web/Map/wwwroot/js/HNMO.Web.Map.js.map
+
+# The world editor bundle's source map is rebuilt by every web client build.
+server/src/Web/AdminPanel/wwwroot/js/world-editor.js.map

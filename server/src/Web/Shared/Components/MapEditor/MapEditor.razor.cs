@@ -10,13 +10,13 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using BlazorInputFile;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.JSInterop;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic;
 using HNMO.Persistence;
 using HNMO.Web.Shared.Services;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 
 /// <summary>
 /// A graphical editor for a <see cref="GameMapDefinition"/>.

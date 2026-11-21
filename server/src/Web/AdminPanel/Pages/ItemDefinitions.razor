@@ -1,0 +1,323 @@
+@page "/item-definitions"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using Microsoft.AspNetCore.Authorization
+@using HNMO.GameLogic.ItemDefinitions
+@using HNMO.Web.AdminPanel.Auth
+
+<PageTitle>@L("Item Definitions & Client Sync", "Định Nghĩa Vật Phẩm & Đồng Bộ Client")</PageTitle>
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+    <div class="d-flex align-items-center gap-2">
+        <h3 class="mb-0">@L("Item Definitions & Client Sync", "Định Nghĩa Vật Phẩm & Đồng Bộ Client")</h3>
+        <button type="button"
+                class="btn btn-sm btn-outline-info"
+                title="@L("Show or hide setup instructions for this page.", "Hiện hoặc ẩn hướng dẫn sử dụng trang này.")"
+                @onclick="() => this._showHelp = !this._showHelp">
+            ?
+        </button>
+    </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextItemDefinitions" />
+    <div class="btn-group btn-group-sm" role="group" aria-label="@L("Language", "Ngôn ngữ")">
+        <button type="button" class="btn @(!this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(false)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintLanguageEn">English</button>
+        <button type="button" class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(true)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintLanguageVi">Tiếng Việt</button>
+    </div>
+</div>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info mb-3" role="note">
+        <strong>@L("How to use this page", "Hướng dẫn sử dụng trang này"):</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("Edit any existing item or create a new one: EN/VI name, inventory size (Width x Height), drop/tier level, equip requirements (Level, Str, Agi, Vit, Ene, Cmd), glow color, and custom EN/VI tooltip text.", "Chỉnh sửa vật phẩm sẵn có hoặc tạo mới: tên EN/VI, kích thước túi (Rộng x Cao), cấp rơi, yêu cầu trang bị (Cấp, Sức mạnh, Nhanh nhẹn, Thể lực, Năng lượng, Mệnh lệnh), màu phát sáng và ghi chú tooltip EN/VI.")</li>
+            <li>@L("Saving updates the server GameConfiguration in PostgreSQL and publishes a live feed to /api/website/items (proxied as /website/items) so the web game receives changes automatically without manual JSON editing.", "Khi lưu, máy chủ cập nhật GameConfiguration trong PostgreSQL và phát trực tiếp qua /api/website/items (qua /website/items) để bản web nhận ngay mà không cần sửa file thủ công.")</li>
+            <li>@L("Use Sync to Data Folder when running with loose client Data files so packed or loose web builds pick up updated JSON files.", "Dùng Đồng Bộ Thư Mục Data khi chạy Data rời để bản dựng web cập nhật trực tiếp tệp JSON.")</li>
+        </ul>
+    </div>
+}
+
+<div class="card mb-3">
+    <div class="card-body d-flex flex-wrap align-items-center justify-content-between gap-2">
+        <div>
+            <div>
+                <strong>@L("Customized items synced to web client:", "Vật phẩm tùy biến đồng bộ bản web:")</strong>
+                <span class="badge bg-primary ms-1">@this._overrides.Count</span>
+            </div>
+            <div class="small text-muted">
+                @if (this._resolvedDataRoot is not null)
+                {
+                    @L($"Loose Data folder detected: {this._resolvedDataRoot}", $"Đã tìm thấy thư mục Data rời: {this._resolvedDataRoot}")
+                }
+                else
+                {
+                    @L("Running in packed/DB mode: web game reads live changes directly via /website/items.", "Đang chạy chế độ gói nén/CSDL: bản web nhận thay đổi trực tiếp qua /website/items.")
+                }
+            </div>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+            <button type="button"
+                    class="btn btn-success btn-sm"
+                    title="@L("Create a brand-new item definition in server configuration and web client override feed.", "Tạo định nghĩa vật phẩm mới trong cấu hình máy chủ và dữ liệu web.")"
+                    @onclick="this.StartNewItem">
+                + @L("New Item", "Thêm Vật Phẩm")
+            </button>
+            <button type="button"
+                    class="btn btn-outline-primary btn-sm"
+                    disabled="@(this._resolvedDataRoot is null || this._overrides.Count == 0 || this._isSaving)"
+                    title="@L("Write customized EN/VI names, sizes, requirements, glow colors, and tooltip notes directly into Data/Items/*.json.", "Ghi tên EN/VI, kích thước, yêu cầu, màu phát sáng và tooltip tùy biến vào Data/Items/*.json.")"
+                    @onclick="this.SyncDataFolder">
+                @L("Sync to Data Folder", "Đồng Bộ Thư Mục Data")
+            </button>
+        </div>
+    </div>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(this._statusMessage))
+{
+    <div class="alert @(this._statusIsError ? "alert-danger" : "alert-success") py-2 mb-3">@this._statusMessage</div>
+}
+
+@if (this._editing is not null)
+{
+    <div class="card border-primary mb-3">
+        <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white">
+            <span>
+                @(this._isNewItem
+                    ? L("Create New Item Definition", "Tạo Định Nghĩa Vật Phẩm Mới")
+                    : L($"Edit Item ({this._editing.Group}:{this._editing.Number})", $"Sửa Vật Phẩm ({this._editing.Group}:{this._editing.Number})"))
+            </span>
+            <button type="button" class="btn btn-sm btn-light" @onclick="this.CancelEdit" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintCancel">@L("Close", "Đóng")</button>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-2">
+                    <label class="form-label" title="@L("Item group (0=Sword .. 15=Etc).", "Nhóm vật phẩm (0=Kiếm .. 15=Khác).")">@L("Group (0-15)", "Nhóm (0-15)")</label>
+                    <select class="form-select form-select-sm" disabled="@(!this._isNewItem)" @bind="this._editing.Group">
+                        @for (byte g = 0; g < ItemClientDataSync.GroupFileNames.Count; g++)
+                        {
+                            <option value="@g">@g - @ItemClientDataSync.GroupFileNames[g]</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" title="@L("Unique item number within this group (0-511).", "Số hiệu duy nhất trong nhóm (0-511).")">@L("Number", "Số hiệu")</label>
+                    <input type="number" class="form-control form-control-sm" min="0" max="511" disabled="@(!this._isNewItem)" @bind="this._editing.Number" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" title="@L("English display name shown in neutral locale and exported to Item JSON.", "Tên tiếng Anh hiển thị mặc định và xuất ra JSON vật phẩm.")">@L("Name (English)", "Tên (Tiếng Anh)")</label>
+                    <input type="text" class="form-control form-control-sm" maxlength="100" @bind="this._editing.NameEn" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" title="@L("Vietnamese display name shown when client language is VI.", "Tên tiếng Việt hiển thị khi client chọn Tiếng Việt.")">@L("Name (Vietnamese)", "Tên (Tiếng Việt)")</label>
+                    <input type="text" class="form-control form-control-sm" maxlength="100" @bind="this._editing.NameVi" />
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label" title="@L("Inventory grid width in cells (1-8).", "Chiều rộng ô túi đồ (1-8).")">@L("Width", "Rộng")</label>
+                    <input type="number" class="form-control form-control-sm" min="1" max="8" @bind="this._editing.Width" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" title="@L("Inventory grid height in cells (1-8).", "Chiều cao ô túi đồ (1-8).")">@L("Height", "Cao")</label>
+                    <input type="number" class="form-control form-control-sm" min="1" max="8" @bind="this._editing.Height" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" title="@L("Minimum monster level for drop and base item tier level (0-255).", "Cấp quái tối thiểu rơi đồ và cấp cơ bản (0-255).")">@L("Drop / Tier Level", "Cấp Rơi / Bậc")</label>
+                    <input type="number" class="form-control form-control-sm" min="0" max="255" @bind="this._editing.DropLevel" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" title="@L("Maximum enhancement level (+0 to +15).", "Cấp cường hóa tối đa (+0 đến +15).")">@L("Max Item Level", "Cấp Tối Đa")</label>
+                    <input type="number" class="form-control form-control-sm" min="0" max="15" @bind="this._editing.MaximumItemLevel" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" title="@L("Base durability at +0 (0-255).", "Độ bền cơ bản ở +0 (0-255).")">@L("Durability", "Độ Bền")</label>
+                    <input type="number" class="form-control form-control-sm" min="0" max="255" @bind="this._editing.Durability" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" title="@L("Zen buy/worth value on server and web shop.", "Giá trị Zen cơ bản trên máy chủ.")">@L("Zen Value", "Giá Zen")</label>
+                    <input type="number" class="form-control form-control-sm" min="0" max="2000000000" @bind="this._editing.BuyPrice" />
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label" title="@L("Minimum character level to equip/use.", "Cấp nhân vật tối thiểu để trang bị.")">@L("Req Level", "YC Cấp")</label>
+                    <input type="number" class="form-control form-control-sm" min="0" max="1000" @bind="this._editing.LevelRequirement" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" title="@L("Required Strength stat at +0.", "Sức mạnh yêu cầu ở +0.")">@L("Req Strength", "YC Sức Mạnh")</label>
+                    <input type="number" class="form-control form-control-sm" min="0" max="65000" @bind="this._editing.StrengthRequirement" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" title="@L("Required Agility (Dexterity) stat at +0.", "Nhanh nhẹn yêu cầu ở +0.")">@L("Req Agility", "YC Nhanh Nhẹn")</label>
+                    <input type="number" class="form-control form-control-sm" min="0" max="65000" @bind="this._editing.AgilityRequirement" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" title="@L("Required Vitality stat at +0.", "Thể lực yêu cầu ở +0.")">@L("Req Vitality", "YC Thể Lực")</label>
+                    <input type="number" class="form-control form-control-sm" min="0" max="65000" @bind="this._editing.VitalityRequirement" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" title="@L("Required Energy stat at +0.", "Năng lượng yêu cầu ở +0.")">@L("Req Energy", "YC Năng Lượng")</label>
+                    <input type="number" class="form-control form-control-sm" min="0" max="65000" @bind="this._editing.EnergyRequirement" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" title="@L("Required Leadership/Command stat at +0.", "Mệnh lệnh yêu cầu ở +0.")">@L("Req Leadership", "YC Mệnh Lệnh")</label>
+                    <input type="number" class="form-control form-control-sm" min="0" max="65000" @bind="this._editing.LeadershipRequirement" />
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label" title="@L("Named preset from GlowColors.json (e.g. gold, azure, crimson) or a custom #rrggbb hex color.", "Tên màu trong GlowColors.json (ví dụ gold, azure, crimson) hoặc mã màu #rrggbb.")">@L("Glow Color", "Màu Phát Sáng")</label>
+                    <div class="input-group input-group-sm">
+                        <select class="form-select form-select-sm" @bind="this._editing.GlowColor">
+                            <option value="">@L("(Default)", "(Mặc định)")</option>
+                            @foreach (var colorName in ItemClientDataSync.StandardGlowColors)
+                            {
+                                <option value="@colorName">@colorName</option>
+                            }
+                        </select>
+                        <input type="text"
+                               class="form-control form-control-sm"
+                               placeholder="#ffaa00"
+                               maxlength="24"
+                               title="@L("Or type a preset name / #rrggbb hex code.", "Hoặc nhập tên màu / mã #rrggbb.")"
+                               @bind="this._editing.GlowColor" />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" title="@L("Optional source item group to borrow 3D BMD model/textures from for brand-new items.", "Nhóm vật phẩm mẫu để mượn mô hình 3D BMD khi tạo vật phẩm mới.")">@L("Model Src Group", "Nhóm Mô Hình")</label>
+                    <input type="number" class="form-control form-control-sm" min="0" max="15" @bind="this._editing.ModelSourceGroup" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" title="@L("Optional source item number to borrow 3D BMD model/textures from.", "Số hiệu vật phẩm mẫu để mượn mô hình 3D BMD.")">@L("Model Src Number", "Số Mô Hình")</label>
+                    <input type="number" class="form-control form-control-sm" min="0" max="511" @bind="this._editing.ModelSourceNumber" />
+                </div>
+                <div class="col-md-4 d-flex align-items-end gap-3">
+                    <div class="form-check">
+                        <input id="dropsFromMonsters" class="form-check-input" type="checkbox" @bind="this._editing.DropsFromMonsters" />
+                        <label class="form-check-label" for="dropsFromMonsters" title="@L("Allow monsters to drop this item naturally.", "Cho phép quái vật đánh rơi vật phẩm này.")">@L("Drops From Monsters", "Rơi Từ Quái")</label>
+                    </div>
+                    <div class="form-check">
+                        <input id="autoSyncDisk" class="form-check-input" type="checkbox" @bind="this._autoSyncDataOnSave" disabled="@(this._resolvedDataRoot is null)" />
+                        <label class="form-check-label" for="autoSyncDisk" title="@L("Immediately write changes to loose Data JSON files on Save.", "Tự động ghi thay đổi ra file Data JSON rời khi Lưu.")">@L("Auto-sync Data JSON", "Tự Đồng Bộ JSON")</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label" title="@L("Extra tooltip lines shown in English item tooltips (one line per row).", "Dòng ghi chú tooltip hiển thị bằng Tiếng Anh (mỗi dòng một ý).")">@L("Custom Tooltip Text (EN)", "Nội Dung Tooltip (EN)")</label>
+                    <textarea class="form-control form-control-sm" rows="3" maxlength="500" @bind="this._editing.TooltipTextEn"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" title="@L("Extra tooltip lines shown in Vietnamese item tooltips (one line per row).", "Dòng ghi chú tooltip hiển thị bằng Tiếng Việt (mỗi dòng một ý).")">@L("Custom Tooltip Text (VI)", "Nội Dung Tooltip (VI)")</label>
+                    <textarea class="form-control form-control-sm" rows="3" maxlength="500" @bind="this._editing.TooltipTextVi"></textarea>
+                </div>
+            </div>
+            <div class="mt-3 d-flex flex-wrap gap-2">
+                <button type="button" class="btn btn-primary btn-sm" disabled="@this._isSaving" @onclick="this.SaveEditingItemAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">
+                    @L("Save Item Definition", "Lưu Định Nghĩa Vật Phẩm")
+                </button>
+                @if (!this._isNewItem && this.HasOverride(this._editing.Group, this._editing.Number))
+                {
+                    <button type="button" class="btn btn-outline-danger btn-sm" disabled="@this._isSaving" @onclick="this.ResetOverride" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">
+                        @L("Clear Client Override", "Xóa Tùy Biến Client")
+                    </button>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+<div class="card">
+    <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
+        <div class="d-flex flex-wrap align-items-center gap-2">
+            <input type="text"
+                   class="form-control form-control-sm"
+                   style="width: 240px;"
+                   placeholder="@L("Search name or group:number...", "Tìm theo tên hoặc nhóm:số...")"
+                   title="@L("Filter items by English/Vietnamese name or group:number.", "Lọc vật phẩm theo tên Anh/Việt hoặc nhóm:số.")"
+                   @bind="this._searchTerm"
+                   @bind:event="oninput" />
+            <select class="form-select form-select-sm" style="width: 190px;" @bind="this._selectedGroupFilter">
+                <option value="-1">@L("All Groups (0-15)", "Tất Cả Nhóm (0-15)")</option>
+                @for (int g = 0; g < ItemClientDataSync.GroupFileNames.Count; g++)
+                {
+                    <option value="@g">@g - @ItemClientDataSync.GroupFileNames[g]</option>
+                }
+            </select>
+            <div class="form-check mb-0 ms-1">
+                <input id="onlyCustomFilter" class="form-check-input" type="checkbox" @bind="this._onlyCustomized" />
+                <label class="form-check-label small" for="onlyCustomFilter">@L("Customized only", "Chỉ hiện đã sửa")</label>
+            </div>
+        </div>
+        <div class="small text-muted">
+            @L($"Showing {this.PagedItems.Count} of {this.FilteredItems.Count} items", $"Đang hiện {this.PagedItems.Count} / {this.FilteredItems.Count} vật phẩm")
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-sm table-hover mb-0 align-middle">
+            <thead>
+                <tr>
+                    <th>@L("ID", "Mã")</th>
+                    <th>@L("Name (EN / VI)", "Tên (EN / VI)")</th>
+                    <th>@L("Size", "Cỡ")</th>
+                    <th>@L("Lvl", "Cấp")</th>
+                    <th>@L("Requirements", "Yêu Cầu")</th>
+                    <th>@L("Glow", "Sáng")</th>
+                    <th>@L("Tooltip", "Tooltip")</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (this._isLoading)
+                {
+                    <tr><td colspan="8" class="text-center py-3">@L("Loading...", "Đang tải...")</td></tr>
+                }
+                else if (this.PagedItems.Count == 0)
+                {
+                    <tr><td colspan="8" class="text-center text-muted py-3">@L("No items match your filter.", "Không có vật phẩm nào khớp bộ lọc.")</td></tr>
+                }
+                else
+                {
+                    @foreach (var item in this.PagedItems)
+                    {
+                        var meta = this.BuildPreviewRow(item);
+                        var isCustom = this.HasOverride(item.Group, item.Number);
+                        <tr class="@(isCustom ? "table-info" : string.Empty)">
+                            <td><code>@item.Group:@item.Number</code></td>
+                            <td>
+                                <div><strong>@meta.NameEn</strong></div>
+                                @if (!string.IsNullOrWhiteSpace(meta.NameVi))
+                                {
+                                    <div class="small text-muted">@meta.NameVi</div>
+                                }
+                            </td>
+                            <td>@(meta.Width)x@(meta.Height)</td>
+                            <td>@meta.DropLevel</td>
+                            <td class="small">@this.FormatRequirements(meta)</td>
+                            <td>
+                                @if (!string.IsNullOrWhiteSpace(meta.GlowColor))
+                                {
+                                    <span class="badge bg-dark">@meta.GlowColor</span>
+                                }
+                            </td>
+                            <td class="small text-truncate" style="max-width: 180px;">@(string.IsNullOrWhiteSpace(meta.TooltipTextEn) ? meta.TooltipTextVi : meta.TooltipTextEn)</td>
+                            <td class="text-end">
+                                <button type="button" class="btn btn-sm btn-outline-primary" @onclick="() => this.StartEditItem(item)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintEdit">
+                                    @L("Edit", "Sửa")
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    @if (this.TotalPages > 1)
+    {
+        <div class="card-footer d-flex justify-content-between align-items-center py-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary" disabled="@(this._pageIndex <= 0)" @onclick="() => this._pageIndex = Math.Max(0, this._pageIndex - 1)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDisable">
+                @L("Previous", "Trước")
+            </button>
+            <span class="small">@L($"Page {this._pageIndex + 1} / {this.TotalPages}", $"Trang {this._pageIndex + 1} / {this.TotalPages}")</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary" disabled="@(this._pageIndex + 1 >= this.TotalPages)" @onclick="() => this._pageIndex = Math.Min(this.TotalPages - 1, this._pageIndex + 1)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDisable">
+                @L("Next", "Sau")
+            </button>
+        </div>
+    }
+</div>

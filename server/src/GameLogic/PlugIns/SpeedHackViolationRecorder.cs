@@ -6,8 +6,8 @@ namespace HNMO.GameLogic.PlugIns;
 
 using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Records speed hack warnings and applies the configured sanction.

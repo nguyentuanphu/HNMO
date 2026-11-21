@@ -11,15 +11,15 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using HNMO.Discord.Properties;
+using HNMO.Interfaces;
+using HNMO.Persistence;
+using HNMO.PlugIns;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
-using HNMO.Discord.Properties;
-using HNMO.Interfaces;
-using HNMO.Persistence;
-using HNMO.PlugIns;
 
 /// <summary>
 /// The Discord integration of the server, as it's configured in the <see cref="DiscordSettings.SectionName"/> section

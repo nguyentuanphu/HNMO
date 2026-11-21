@@ -4,9 +4,9 @@
 
 namespace HNMO.Web.AdminPanel.Components.NetworkAnalyzer;
 
-using Microsoft.AspNetCore.Components;
 using HNMO.Interfaces;
 using HNMO.Network.Analyzer;
+using Microsoft.AspNetCore.Components;
 
 /// <summary>
 /// The list of the connections which can be analyzed, grouped by their server.

@@ -7404,6 +7404,146 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoTopUpMilestonesState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">The state as JSON in plain ASCII: enabled, totalVnd, steps, owed rewards, and optional result message.</param>
+    /// <remarks>
+    /// Is sent by the server when: After HnmoTopUpMilestonesCommand or when a top-up changes the account's milestone progress.
+    /// Causes reaction on client side: The client renders the top-up milestones window and shows any notice.
+    /// </remarks>
+    public static async ValueTask SendHnmoTopUpMilestonesStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoTopUpMilestonesStateRef.GetRequiredSize(json);
+            var packet = new HnmoTopUpMilestonesStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoTimetableState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">The timetable state as JSON, in plain ASCII (other characters are escaped): every event, invasion and boss with category, English and Vietnamese names, map names, drops, next start time in UTC, and Sydney wall-clock schedule.</param>
+    /// <remarks>
+    /// Is sent by the server when: After the client requested the HNMO event and boss timetable (HnmoTimetableCommand).
+    /// Causes reaction on client side: The web game updates the Event and Boss Timetable window with Sydney and local times, maps, and drops.
+    /// </remarks>
+    public static async ValueTask SendHnmoTimetableStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoTimetableStateRef.GetRequiredSize(json);
+            var packet = new HnmoTimetableStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoLuckyNumberState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON containing round date, next draw UTC timestamp, number range, odds, prizes, account picks, owed rewards, recent draw results, and event status.</param>
+    /// <remarks>
+    /// Is sent by the server when: After the client requests the Daily Lucky Number state, picks a number, claims owed rewards, or when the daily draw runs.
+    /// Causes reaction on client side: The web game updates the Daily Lucky Number window (L) and posts draw/win chat notices.
+    /// </remarks>
+    public static async ValueTask SendHnmoLuckyNumberStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoLuckyNumberStateRef.GetRequiredSize(json);
+            var packet = new HnmoLuckyNumberStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoMarriageState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON containing marital state, couple title, party bonus status, ceremony location, divorce rules, and public couples summary.</param>
+    /// <remarks>
+    /// Is sent by the server when: After any marriage command or when marital/proposal/couple bonus status changes.
+    /// Causes reaction on client side: The web game updates the Marriage window (Shift+M) and displays ceremony/proposal notices.
+    /// </remarks>
+    public static async ValueTask SendHnmoMarriageStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoMarriageStateRef.GetRequiredSize(json);
+            var packet = new HnmoMarriageStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoMarketState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON containing active listings, listable bag items, waiting deliveries/payouts, currency rules, and fee percent.</param>
+    /// <remarks>
+    /// Is sent by the server when: After any Item Market action or when listings/payouts change.
+    /// Causes reaction on client side: The web game updates the Item Market window (F6) and posts transaction notices.
+    /// </remarks>
+    public static async ValueTask SendHnmoMarketStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoMarketStateRef.GetRequiredSize(json);
+            var packet = new HnmoMarketStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="ExternalChatMessage" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>
@@ -10721,6 +10861,542 @@ public static class ConnectionExtensions
         {
             var length = ActiveQuestListReadyRef.Length;
             var packet = new ActiveQuestListReadyRef(connection.Output.GetSpan(length)[..length]);
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoJewelBankState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON payload containing enabled state, jewel rules, stored balances, bag jewels, and master skill summary.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent after entering the world or processing HnmoJewelBankCommand.
+    /// Causes reaction on client side: Updates the web client's Jewel Bank window.
+    /// </remarks>
+    public static async ValueTask SendHnmoJewelBankStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoJewelBankStateRef.GetRequiredSize(json);
+            var packet = new HnmoJewelBankStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoCatchupCapState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON payload containing today's level cap, daily reset cap, first achiever, and next Sydney day reset countdown.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent on entering the world, when today's cap increases, or upon HnmoCatchupCapRequest.
+    /// Causes reaction on client side: Updates today's Catch-up Level/Reset Cap notice in the web client.
+    /// </remarks>
+    public static async ValueTask SendHnmoCatchupCapStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoCatchupCapStateRef.GetRequiredSize(json);
+            var packet = new HnmoCatchupCapStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoSeasonPlanState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON payload containing active stage, unlocked feature gates, and all stage conditions/dates.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent after entering the world, when a new season stage unlocks, or upon HnmoSeasonPlanRequest.
+    /// Causes reaction on client side: Updates the web client's Season Plan (F8) timeline.
+    /// </remarks>
+    public static async ValueTask SendHnmoSeasonPlanStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoSeasonPlanStateRef.GetRequiredSize(json);
+            var packet = new HnmoSeasonPlanStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoLeftoversState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON payload containing recipes, exchange offers, bag counts, and season box cap.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent when entering the world, talking to the exchange NPC, or after HnmoLeftoversCommand.
+    /// Causes reaction on client side: Updates the web client's Combining Leftovers and Exchange NPC window (F10).
+    /// </remarks>
+    public static async ValueTask SendHnmoLeftoversStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoLeftoversStateRef.GetRequiredSize(json);
+            var packet = new HnmoLeftoversStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoMountChainState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON payload describing mount chain tiers, shards, duplicate bag mounts, and unlocked collection.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent when entering the world, defeating a golden boss, or after HnmoMountChainCommand.
+    /// Causes reaction on client side: Updates the web client's Mount Chain window (Shift+U).
+    /// </remarks>
+    public static async ValueTask SendHnmoMountChainStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoMountChainStateRef.GetRequiredSize(json);
+            var packet = new HnmoMountChainStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoPartyOptionsState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON payload listing active party advertisement state and open hunting spot parties.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent after HnmoPartyOptionsCommand or when opening the Party window options drawer.
+    /// Causes reaction on client side: Updates the web client's Party password and Auto-party spot finder drawer.
+    /// </remarks>
+    public static async ValueTask SendHnmoPartyOptionsStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoPartyOptionsStateRef.GetRequiredSize(json);
+            var packet = new HnmoPartyOptionsStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoRankingState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON payload containing ranked characters, online leaders, guilds, mini-game events, player rank summary, and bulk add-stats status.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent after HnmoRankingCommand or /rank to deliver in-game player, online, guild, and event rankings and add-stats status.
+    /// Causes reaction on client side: Updates the web client's Player Rankings window.
+    /// </remarks>
+    public static async ValueTask SendHnmoRankingStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoRankingStateRef.GetRequiredSize(json);
+            var packet = new HnmoRankingStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoCustomRanksState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON payload listing rank tiers, the hero's unlocked and equipped rank, and online players' active titles.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent when entering the world, when active titles change, or after HnmoCustomRanksCommand.
+    /// Causes reaction on client side: Updates the web client's custom title badges (nameplates and chat) and /title selector.
+    /// </remarks>
+    public static async ValueTask SendHnmoCustomRanksStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoCustomRanksStateRef.GetRequiredSize(json);
+            var packet = new HnmoCustomRanksStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoTeleportNpcState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON payload containing Teleport NPC destinations, requirements, Zen fees, and warp result status.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent when talking to a Teleport NPC or after HnmoTeleportNpcCommand.
+    /// Causes reaction on client side: Opens or updates the Teleport NPC map-warp menu in the web client.
+    /// </remarks>
+    public static async ValueTask SendHnmoTeleportNpcStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoTeleportNpcStateRef.GetRequiredSize(json);
+            var packet = new HnmoTeleportNpcStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoEscrowState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON payload containing contracts, owed deliveries, safety flags, reputation, and notices.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent when the player requests escrow contracts (F9 / /contract) or completes an escrow operation.
+    /// Causes reaction on client side: Updates the Contracts window and reputation/owed summary in the web client.
+    /// </remarks>
+    public static async ValueTask SendHnmoEscrowStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoEscrowStateRef.GetRequiredSize(json);
+            var packet = new HnmoEscrowStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoVaultPageState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON: enabled, active, unlocked, max, price, coinType, balance, result message (EN/VI by the player's language).</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent after HnmoVaultPageCommand (F5 4E), and when the vault page changes.
+    /// Causes reaction on client side: The web client's vault window shows the page buttons, the page in use and the price of one more page.
+    /// </remarks>
+    public static async ValueTask SendHnmoVaultPageStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoVaultPageStateRef.GetRequiredSize(json);
+            var packet = new HnmoVaultPageStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoUltimateAutoPlayPolicy" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON: v, enabled, isVip, features (sparkleGuide, manaSdPotions, jewelDeposit, targetPriority, patrol, survival, bossFocus, presetsStats).</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent on entering the game and after HnmoUltimateAutoPlayRequest (F5 56).
+    /// Causes reaction on client side: The web client enables or VIP-gates Ultimate Autoplay features according to server configuration and Stats.IsVip.
+    /// </remarks>
+    public static async ValueTask SendHnmoUltimateAutoPlayPolicyAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoUltimateAutoPlayPolicyRef.GetRequiredSize(json);
+            var packet = new HnmoUltimateAutoPlayPolicyRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoBugReportState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON: left, maxLength, categories, reward, mine (id, category, text, status, duplicateOf, reply, sent, reward), message, sent.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent after HnmoBugReportCommand (F5 54).
+    /// Causes reaction on client side: The web client shows the bug report window: reports left today, the categories, the player's reports with their status and answers, and the result of a send.
+    /// </remarks>
+    public static async ValueTask SendHnmoBugReportStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoBugReportStateRef.GetRequiredSize(json);
+            var packet = new HnmoBugReportStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoArenaTravelState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON: inArena (this server is the Arena), account, ticket (empty without travel), message (EN/VI by the player's language).</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent after HnmoArenaTravelRequest (F5 52).
+    /// Causes reaction on client side: The web client shows the Arena window; with a ticket it reloads into the Arena (or back home) with that ticket.
+    /// </remarks>
+    public static async ValueTask SendHnmoArenaTravelStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoArenaTravelStateRef.GetRequiredSize(json);
+            var packet = new HnmoArenaTravelStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoItemStackState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON: enabled, coinType, balance, kinds (key, name, free, unlocked, limit, price, items), result message (EN/VI by the player's language).</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent after HnmoItemStackCommand (F5 50).
+    /// Causes reaction on client side: The web client knows which items stack and how many (its counts and the split), and shows the stack kinds with their unlocks.
+    /// </remarks>
+    public static async ValueTask SendHnmoItemStackStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoItemStackStateRef.GetRequiredSize(json);
+            var packet = new HnmoItemStackStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoVipState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="requestId">A nonzero request correlation identifier; not an authentication token.</param>
+    /// <param name="json">ASCII-safe JSON using the shared VIP account state; Unicode is escaped and no private receipt or credential is included.</param>
+    /// <remarks>
+    /// Is sent by the server when: The server finishes a correlated own-account VIP request.
+    /// Causes reaction on client side: The web game updates VIP status, reviewed offers and the localized action result.
+    /// </remarks>
+    public static async ValueTask SendHnmoVipStateAsync(this IConnection? connection, uint @requestId, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoVipStateRef.GetRequiredSize(json);
+            var packet = new HnmoVipStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.RequestId = @requestId;
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoGiftBoxState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="requestId">A nonzero request correlation identifier; not an authentication token.</param>
+    /// <param name="json">ASCII-safe JSON using the shared mailbox projection without private host or proof secrets.</param>
+    /// <remarks>
+    /// Is sent by the server when: The server finishes a correlated own-account gift box / mailbox request.
+    /// Causes reaction on client side: The web game updates the inbox, selected letter details and collection result.
+    /// </remarks>
+    public static async ValueTask SendHnmoGiftBoxStateAsync(this IConnection? connection, uint @requestId, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoGiftBoxStateRef.GetRequiredSize(json);
+            var packet = new HnmoGiftBoxStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.RequestId = @requestId;
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoBanNotice" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">UTF-8 JSON payload containing kind, reasonEn, reasonVi, expiresAtUtc, sydneyEn, and sydneyVi.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent when a login, character selection, or chat attempt is blocked by an active account, character, network, device ban or mute.
+    /// Causes reaction on client side: The client displays the bilingual EN/VI ban or mute reason and Sydney expiration time.
+    /// </remarks>
+    public static async ValueTask SendHnmoBanNoticeAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoBanNoticeRef.GetRequiredSize(json);
+            var packet = new HnmoBanNoticeRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoNewsNotice" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">JSON payload containing the latest published EN/VI news post and fresh flag.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent when entering the world with a published post or when an admin publishes a new news post.
+    /// Causes reaction on client side: Shows a bilingual news notice in the in-game chat box.
+    /// </remarks>
+    public static async ValueTask SendHnmoNewsNoticeAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoNewsNoticeRef.GetRequiredSize(json);
+            var packet = new HnmoNewsNoticeRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
             return packet.Header.Length;
         }
 

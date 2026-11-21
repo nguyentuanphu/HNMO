@@ -14,17 +14,39 @@ using HNMO.GameLogic.Views.PlayerShop;
 public class OpenStoreAction
 {
     /// <summary>
+    /// The level a character needs to open a personal store, the same as to set the prices (<see cref="SetItemPriceAction"/>).
+    /// </summary>
+    internal const int MinimumLevel = 6;
+
+    /// <summary>
     /// Opens the player store.
     /// </summary>
     /// <param name="player">The player.</param>
     /// <param name="storeName">Name of the store.</param>
     public async ValueTask OpenStoreAsync(Player player, string storeName)
     {
+        if (await PlugIns.Arena.ArenaRules.RefuseAsync(player, PlugIns.Arena.ArenaRules.Action.Store).ConfigureAwait(false))
+        {
+            return;
+        }
+
         using var loggerScope = player.Logger.BeginScope(this.GetType());
         var character = player.SelectedCharacter;
         if (character is null)
         {
             player.Logger.LogWarning("OpenStore request failed: No character selected.");
+            return;
+        }
+
+        if (player.Level < MinimumLevel)
+        {
+            player.Logger.LogWarning("OpenStore request failed: Character level below {0}. Player: [{1}]", MinimumLevel, character.Name);
+            return;
+        }
+
+        if (IsBusy(player))
+        {
+            player.Logger.LogWarning("OpenStore request failed: The player is trading, in an NPC dialog, dead or duelling. Player: [{0}], State: {1}", character.Name, player.PlayerState.CurrentState);
             return;
         }
 
@@ -93,4 +115,22 @@ public class OpenStoreAction
             character.IsStoreOpened = false;
         }
     }
+
+    /// <summary>
+    /// Determines whether the player is busy with something else (owner, 21 Nov 2026): trading, in an NPC dialog,
+    /// dead or duelling.
+    /// </summary>
+    /// <param name="player">The player.</param>
+    /// <returns><c>true</c>, if the store can't be opened now.</returns>
+    internal static bool IsBusy(Player player)
+    {
+        var state = player.PlayerState.CurrentState;
+        return !player.IsAlive
+               || player.DuelRoom is not null
+               || state == PlayerState.TradeRequested
+               || state == PlayerState.TradeOpened
+               || state == PlayerState.TradeButtonPressed
+               || state == PlayerState.NpcDialogOpened;
+    }
+
 }

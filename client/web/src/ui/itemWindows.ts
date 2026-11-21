@@ -2,6 +2,7 @@
 // CMyInventory and CStorageInventory: the equipment slots and the 8 x 8 bag, the vault's 8 x 15
 // grid, the money, and moving items by clicking an item to pick it up and clicking where it goes.
 
+import { translate } from '../i18n.js';
 import { openDocument, prepareDocument } from './rml.js';
 import type { RmlDocument, RmlModel } from './rml.js';
 import { drawItem } from './itemIcons.js';
@@ -111,6 +112,14 @@ export function emptyCells(count: number): GridCell[] {
 }
 
 // The item following the mouse after it was picked up (CInventoryCtrl's picked item).
+/** Which items show their durability as a count: the potions group, and HNMO's stack kinds (ui/itemStacks.ts). */
+let stackCountRule: (item: Item) => boolean = (item) => item.group === 14;
+
+/** Sets which items show their durability as a count (HNMO's bigger stacks). */
+export function setStackCountRule(rule: (item: Item) => boolean): void {
+  stackCountRule = rule;
+}
+
 export class PickedItem {
   canvas: HTMLCanvasElement;
   source: PickedSource | null;
@@ -170,6 +179,8 @@ export class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
   onDropOnItem?: (from: { storage: number; slot: number; item: Item }, slot: number, target: Item) => boolean;
   /** A left click on an item, before it's picked up: true when handled (the shop's repair mode). */
   onItemClick?: (slot: number, item: Item) => boolean;
+  /** A Shift + click on an item (HNMO: split a stack); returns whether it was taken. */
+  onShiftClick?: (slot: number, item: Item) => boolean;
   /** A right click on an item of the window (CInventoryActionController::HandleRightClick). */
   onRightClick?: (slot: number, item: Item) => void;
   /** A right click on an item, before onRightClick: true when handled (the open trade takes bag items). */
@@ -217,6 +228,7 @@ export class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
 
   private async openDocument(parent: HTMLElement): Promise<void> {
     this.doc = await openDocument(this.documentName, this.model, { parent, scale: uiScale() });
+    this.doc.host.style.zIndex = '28';
     this.panel = this.doc.$('#panel')!;
     // The theme leaves pointer events to the game's own hit tests (as the desktop client does them in C++).
     this.panel.style.pointerEvents = 'auto';
@@ -321,6 +333,7 @@ export class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
     const equipment = this.equipmentSlotAt(point);
     const slot = equipment !== null && this.items.has(equipment) ? equipment : this.itemAtGridSlot(this.gridSlotAt(point));
     if (slot === null || !this.items.has(slot) || this.inventory.pendingMove) return;
+    if (event.shiftKey && this.onShiftClick?.(slot, this.items.get(slot)!)) return;
     if (this.onItemClick?.(slot, this.items.get(slot)!)) return;
     this.picked.pick({ storage: this.storageKind, slot }, this.items.get(slot)!);
     this.picked.follow(event);
@@ -385,7 +398,7 @@ export class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
       if (slot < this.grid.firstSlot) continue;
       const hidden = this.picked.source?.storage === this.storageKind && this.picked.source.slot === slot;
       for (const cell of Inventory.cellsOf(this.grid, slot, item) ?? []) cells[cell - this.grid.firstSlot].tint = hidden ? '' : 'tint-normal';
-      if (item.group === 14 && item.durability > 1 && !hidden) cells[slot - this.grid.firstSlot].count = String(item.durability);
+      if (stackCountRule(item) && item.durability > 1 && !hidden) cells[slot - this.grid.firstSlot].count = String(item.durability);
     }
     this.model.grid_cells = cells;
     this.updateModel();
@@ -721,7 +734,7 @@ export class TradeWindow extends ItemWindow<TradeModel> {
     const cells = emptyCells(TRADE.columns * TRADE.rows);
     for (const [slot, item] of view.partner) {
       for (const cell of Inventory.cellsOf(TRADE, slot, item) ?? []) cells[cell].tint = 'tint-normal';
-      if (item.group === 14 && item.durability > 1) cells[slot].count = String(item.durability);
+      if (stackCountRule(item) && item.durability > 1) cells[slot].count = String(item.durability);
     }
     this.model.partner_cells = cells;
     this.model.big_text_px = nativeTextPx('big');
@@ -803,6 +816,10 @@ export class ItemWindows {
   message: (text: string) => void = () => undefined;
   /** HNMO's extra tooltip lines of an item at a storage's slot (the account safety's lock). */
   extraTooltipLines: (storage: number, slot: number) => TooltipLine[] = () => [];
+  /** The vault window was shown or hidden (HNMO's vault pages follow it). */
+  onVaultShown: (shown: boolean) => void = () => undefined;
+  /** The windows were placed again (a resize, a docked panel). */
+  onPlaced: () => void = () => undefined;
 
   constructor({ inventory, parent = document.body as HTMLElement, character = () => null, groundCell = () => null }: {
     inventory: Inventory; parent?: HTMLElement; character?: () => TooltipCharacter | null;
@@ -903,11 +920,14 @@ export class ItemWindows {
     }
     if (this.shop.isOpen) { this.shop.close(); this.repairMode = false; this.placeAll(); }
     if (this.inventory.openWindow === NpcWindow.VAULT) {
+      const wasOpen = this.vault.isOpen;
       await this.bag.open(this.parent);
       await this.vault.open(this.parent);
       this.placeAll();
+      if (!wasOpen) this.onVaultShown(true);
     } else if (this.vault.isOpen) {
       this.vault.close();
+      this.onVaultShown(false);
       this.placeAll();
     }
   }
@@ -916,7 +936,7 @@ export class ItemWindows {
     if (this.docked.some((d) => d.window.isOpen && !d.close())) return;
     this.tooltip.hide();
     if (this.picked.source) this.picked.drop();
-    if (this.vault.isOpen) { this.vault.close(); this.inventory.closeVault(); }
+    if (this.vault.isOpen) { this.vault.close(); this.inventory.closeVault(); this.onVaultShown(false); }
     if (this.shop.isOpen) { this.shop.close(); this.repairMode = false; this.inventory.closeShop(); }
     // Closing the inventory (or Escape) while trading cancels the trade (CSystem's HideAllGroupA, CTrade::UpdateKeyEvent).
     if (this.trade.isOpen) { this.trade.close(); this.onTradeClosed(); }
@@ -932,7 +952,7 @@ export class ItemWindows {
   async openTrade(): Promise<void> {
     this.tooltip.hide();
     if (this.picked.source) this.picked.drop();
-    if (this.vault.isOpen) { this.vault.close(); this.inventory.closeVault(); }
+    if (this.vault.isOpen) { this.vault.close(); this.inventory.closeVault(); this.onVaultShown(false); }
     if (this.shop.isOpen) { this.shop.close(); this.repairMode = false; this.inventory.closeShop(); }
     await this.bag.open(this.parent);
     await this.trade.open(this.parent);
@@ -961,6 +981,7 @@ export class ItemWindows {
     this.vault.refresh();
     this.shop.refresh();
     this.trade.refresh();
+    this.onPlaced();
   }
 
   refresh(): void {
@@ -976,12 +997,13 @@ export class ItemWindows {
   sell(slot: number, item: Item): void {
     if (this.inventory.sellingSlot !== null) return;
     if (isSellingBan(item)) { this.message('These items cannot be traded.'); return; }
-    if (isHighValue(item) && !window.confirm('An expensive item. Check the item, please. Are you sure you want to sell it?')) return;
+    if (isHighValue(item) && !window.confirm(translate('An expensive item. Check the item, please. Are you sure you want to sell it?') ?? 'An expensive item. Check the item, please. Are you sure you want to sell it?')) return;
     this.inventory.sell(slot);
   }
 
   askMoney(toVault: boolean): void {
-    const text = window.prompt(toVault ? 'How much zen to deposit?' : 'How much zen to withdraw?', '0');
+    const question = toVault ? 'How much zen to deposit?' : 'How much zen to withdraw?';
+    const text = window.prompt(translate(question) ?? question, '0');
     const amount = Math.floor(Number(text));
     if (amount > 0) this.inventory.moveMoney(toVault, amount);
   }

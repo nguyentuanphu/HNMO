@@ -5,8 +5,8 @@
 namespace HNMO.ServerClients;
 
 using Dapr.Client;
-using Microsoft.Extensions.Logging;
 using HNMO.Interfaces;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Implementation of an <see cref="IFriendServer"/> which accesses another friend server remotely over Dapr.

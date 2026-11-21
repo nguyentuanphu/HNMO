@@ -7,9 +7,9 @@ namespace HNMO.Dapr.Common;
 using System.Threading;
 using global::Dapr;
 using global::Dapr.Client;
+using HNMO.Persistence.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using HNMO.Persistence.EntityFramework;
 
 /// <summary>
 /// Implementation of <see cref="IDatabaseConnectionSettingProvider"/> which retrieves the settings from the

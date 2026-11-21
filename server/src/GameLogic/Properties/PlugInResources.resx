@@ -148,10 +148,10 @@
     <value>Shows Land of Trials availability and its applicable entry fee.</value>
   </data>
   <data name="MuHelperFeaturePlugIn_Name" xml:space="preserve">
-    <value>MU Helper Feature</value>
+    <value>Auto Play</value>
   </data>
   <data name="MuHelperFeaturePlugIn_Description" xml:space="preserve">
-    <value>Provides configuration for the MU Helper feature.</value>
+    <value>Provides configuration for auto play.</value>
   </data>
   <data name="UpdatePetCommandManagerOnItemMovePlugIn_Name" xml:space="preserve">
     <value>Update Pet Command Manager On Item Move</value>
@@ -1131,6 +1131,9 @@
   <data name="MuHelperConfiguration_MinLevel_Name" xml:space="preserve">
     <value>Minimum character level</value>
   </data>
+  <data name="MuHelperConfiguration_VipMinLevel_Name" xml:space="preserve">
+    <value>Minimum character level for VIP accounts</value>
+  </data>
   <data name="MuHelperConfiguration_MaxLevel_Name" xml:space="preserve">
     <value>Maximum character level</value>
   </data>
@@ -1286,6 +1289,12 @@
   </data>
   <data name="HappyHourConfiguration_ExperienceMultiplier_Name" xml:space="preserve">
     <value>Experience multiplier</value>
+  </data>
+  <data name="HappyHourConfiguration_ItemDropBonusPercent_Name" xml:space="preserve">
+    <value>Extra item drops (%)</value>
+  </data>
+  <data name="HappyHourConfiguration_ExcellentDropBonusPerTenThousand_Name" xml:space="preserve">
+    <value>Extra excellent drop chance (1/10000)</value>
   </data>
   <data name="WanderingMerchantsConfiguration_MinimumSpawnDuration_Name" xml:space="preserve">
     <value>Minimum spawn duration</value>
@@ -2044,6 +2053,18 @@
   <data name="WebsiteConfiguration_GoogleClientId_Description" xml:space="preserve">
     <value>The client id of a Google Cloud OAuth client (type: Web application, with your website address as an authorized JavaScript origin). Empty: no "Sign in with Google".</value>
   </data>
+  <data name="WebsiteConfiguration_RequireWebsiteLogin_Caption" xml:space="preserve">
+    <value>Web game: require website login</value>
+  </data>
+  <data name="WebsiteConfiguration_RequireWebsiteLogin_Description" xml:space="preserve">
+    <value>When on, the web game hides its own password form and players sign in on the website first (then click Play now).</value>
+  </data>
+  <data name="HnmoTicketLoginHandlerPlugIn_Name" xml:space="preserve">
+    <value>Web login ticket handler</value>
+  </data>
+  <data name="HnmoTicketLoginHandlerPlugIn_Description" xml:space="preserve">
+    <value>Handles one-time web login tickets issued on the website.</value>
+  </data>
   <data name="IllusionTempleStartPlugIn_Name" xml:space="preserve">
     <value>Illusion Temple</value>
   </data>
@@ -2212,4 +2233,34 @@
   <data name="UnlockItemChatCommandPlugIn_Description" xml:space="preserve">
     <value>Asks the unlock of a bag item with the second password: /unlockitem CELL PIN.</value>
   </data>
+  <data name="VipPlugIn_Name" xml:space="preserve"><value>VIP memberships</value></data>
+  <data name="VipPlugIn_Description" xml:space="preserve"><value>Optional paid VIP time, experience and zen bonuses, and daily coins. Disabled until the host enables it.</value></data>
+  <data name="GiftBoxActivityPlugIn_Name" xml:space="preserve"><value>Gift box activity tracking</value></data>
+  <data name="GiftBoxActivityPlugIn_Description" xml:space="preserve"><value>Records observed player world entry and departure timestamps for gift box recent-player audiences.</value></data>
+  <data name="DuplicateItemsPlugIn_Name" xml:space="preserve"><value>Duplicate item check</value></data>
+  <data name="DuplicateItemsPlugIn_Description" xml:space="preserve"><value>Gives every item an origin serial and scans the database for two items with one serial; both are frozen until an administrator decides on the Duplicate items page.</value></data>
+  <data name="DuplicateItemsConfiguration_ScanIntervalMinutes_Caption" xml:space="preserve"><value>Scan every (minutes)</value></data>
+  <data name="DuplicateItemsConfiguration_ScanIntervalMinutes_Description" xml:space="preserve"><value>How often the database is scanned for duplicate items.</value></data>
+  <data name="DuplicateItemsConfiguration_FreezeDuplicates_Caption" xml:space="preserve"><value>Freeze duplicates</value></data>
+  <data name="DuplicateItemsConfiguration_FreezeDuplicates_Description" xml:space="preserve"><value>Found duplicates can not be traded, sold, dropped, stored, listed or mixed until an administrator decides.</value></data>
+  <data name="ArenaPlugIn_Name" xml:space="preserve"><value>HNMO Arena characters</value></data>
+  <data name="ArenaPlugIn_Description" xml:space="preserve"><value>In the Arena program: the picked character becomes the arena character of its class (level, stats, gear and potions from the templates) on the arena map. Does nothing on other servers.</value></data>
+  <data name="ArenaShopPlugIn_Name" xml:space="preserve"><value>HNMO Arena points shop</value></data>
+  <data name="ArenaShopPlugIn_Description" xml:space="preserve"><value>On the home servers: arena points, earned in the Arena's ranked duels, buy jewels, charms, event tickets and cosmetics (made new here). Items and prices are set here.</value></data>
+  <data name="BugReportsPlugIn_Name" xml:space="preserve"><value>HNMO bug reports</value></data>
+  <data name="BugReportsPlugIn_Description" xml:space="preserve"><value>Players send bug reports from the game (up to the daily limit); the owner reads, answers and decides them on the "Bug reports" page, may reward confirmed bugs with coins and may send a report to the HNMO developer (filed as an issue; a Discord link can also get a notice).</value></data>
+  <data name="ArenaTeamRulesPlugIn_Name" xml:space="preserve"><value>HNMO Arena team battle rules</value></data>
+  <data name="ArenaTeamRulesPlugIn_Description" xml:space="preserve"><value>In the Arena program, during a 5v5 team battle: only the other team can be hurt, no player-kill penalty, kills are counted, and the fallen come back at their team's gate.</value></data>
+  <data name="StartRoyaleChatCommandPlugIn_Name" xml:space="preserve"><value>Chat command: /startroyale (HNMO Arena)</value></data>
+  <data name="StartRoyaleChatCommandPlugIn_Description" xml:space="preserve"><value>A game master in the Arena opens the battle royale's sign-up now: /startroyale [seconds until the start, default 120].</value></data>
+  <data name="ArenaHeraldPlugIn_Name" xml:space="preserve"><value>HNMO Arena Herald</value></data>
+  <data name="ArenaHeraldPlugIn_Description" xml:space="preserve"><value>Talking to the Arena Herald (NPC 900, in the main towns) opens the Arena window in the web game.</value></data>
+  <data name="StartGuildWarChatCommandPlugIn_Name" xml:space="preserve"><value>Chat command: /startguildwar (HNMO Arena)</value></data>
+  <data name="StartGuildWarChatCommandPlugIn_Description" xml:space="preserve"><value>A game master in the Arena opens the guild war's sign-up now, until the start: /startguildwar [seconds until the start, default 120].</value></data>
+  <data name="ArenaScheduleNoticesPlugIn_Name" xml:space="preserve"><value>HNMO Arena battle notices</value></data>
+  <data name="ArenaScheduleNoticesPlugIn_Description" xml:space="preserve"><value>On the home servers: announces the Arena's battle royale and guild war in the game 10 minutes before and at the start, from the schedule the Arena publishes.</value></data>
+  <data name="CrossSeasonFriendsPlugIn_Name" xml:space="preserve"><value>HNMO friends across seasons</value></data>
+  <data name="CrossSeasonFriendsPlugIn_Description" xml:space="preserve"><value>Friends playing in another HNMO program (Season 6.3, Season 9, the Arena) show where they play in the friend list, and whispers reach them there. No trading between seasons.</value></data>
+  <data name="MonsterAiPlugIn_Name" xml:space="preserve"><value>Monster AI Rules</value></data>
+  <data name="MonsterAiPlugIn_Description" xml:space="preserve"><value>Configures monster attacker chasing, spawn-area leashing, and heal-on-leash behavior.</value></data>
 </root>

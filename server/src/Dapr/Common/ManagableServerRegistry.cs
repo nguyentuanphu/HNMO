@@ -9,8 +9,8 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using global::Dapr.Client;
-using Microsoft.Extensions.Logging;
 using HNMO.Interfaces;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// A registry for all <see cref="IManageableServer"/>s in the system.

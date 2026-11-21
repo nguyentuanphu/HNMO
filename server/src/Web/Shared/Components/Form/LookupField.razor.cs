@@ -6,9 +6,9 @@ namespace HNMO.Web.Shared.Components.Form;
 
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.AspNetCore.Components;
 using HNMO.Persistence;
 using HNMO.Web.Shared.Services;
+using Microsoft.AspNetCore.Components;
 
 /// <summary>
 /// Lookup-Field which allows to select an object of the specified <typeparamref name="TObject"/>.

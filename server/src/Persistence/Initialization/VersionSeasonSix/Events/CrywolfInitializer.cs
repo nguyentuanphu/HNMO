@@ -61,7 +61,7 @@ internal class CrywolfInitializer : InitializerBase
         this.CreateMonster(341, LocalizedString.FromResource(() => MonsterNames.Soram), 134, 100_000, 600, 700, 500, 1500, 397, 6, 4, 7, 25);
         this.CreateMonster(344, LocalizedString.FromResource(() => MonsterNames.Balram), 134, 90_000, 600, 700, 500, 1500, 370, 6, 7, 7, 23);
         this.CreateMonster(345, LocalizedString.FromResource(() => MonsterNames.DeathSpirit), 134, 95_000, 600, 700, 500, 1500, 397, 6, 6, 7, 25);
-        this.CreateMonster(348, LocalizedString.FromResource(() => MonsterNames.Tanker), 133, 450_000, 800, 1000, 840, 1500, 370, 0, 6, 7, 23);
+        this.CreateMonster(348, LocalizedString.FromResource(() => MonsterNames.Tanker), 133, 450_000, 800, 1000, 840, 1500, 370, 6, 6, 7, 23);
         this.CreateMonster(349, LocalizedString.FromResource(() => MonsterNames.Balgass), 135, 500_000, 1000, 1500, 800, 2000, 370, 6, 6, 7, 23);
     }
 
@@ -168,7 +168,7 @@ internal class CrywolfInitializer : InitializerBase
         warpInfo.Index = WarpIndex;
         warpInfo.Name = LocalizedString.FromResource(() => WarpNames.Crywolf);
         warpInfo.Costs = 10000;
-        warpInfo.LevelRequirement = 190;
+        warpInfo.LevelRequirement = 300; // the move list of the Season 6 server suite
         warpInfo.Gate = gate;
         this.GameConfiguration.WarpList.Add(warpInfo);
     }

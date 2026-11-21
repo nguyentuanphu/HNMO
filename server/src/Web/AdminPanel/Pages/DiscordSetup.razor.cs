@@ -9,10 +9,6 @@ using System.Globalization;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Routing;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.Discord;
 using HNMO.Discord.ChatBridge;
@@ -24,6 +20,10 @@ using HNMO.PlugIns;
 using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.AdminPanel.Services;
 using HNMO.Web.Shared.Components.Toast;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The page which guides through the setup of the Discord integration, and edits all of its settings.

@@ -9,8 +9,6 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Authors>HNMO</Authors>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <RepositoryUrl>https://github.com/nguyentuanphu/HNMO/tree/master/src/Network</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/nguyentuanphu/HNMO</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>HNMO Network TCP</PackageTags>
     <PackageId>HNMO.Network</PackageId>

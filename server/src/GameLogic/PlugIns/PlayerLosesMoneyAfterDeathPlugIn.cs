@@ -73,14 +73,15 @@ public class PlayerLosesMoneyAfterDeathPlugIn : IAttackableGotKilledPlugIn, ISup
 
     private static PlayerLosesMoneyAfterDeathPlugInConfiguration CreateDefaultConfiguration()
     {
+        // As the Season 6/9 server suites, the zen is only taken from the bag, not from the vault.
         return new()
         {
             LossesPerLevel =
             [
-                new(10, false, 1, 1),
-                new(150, false, 2, 2),
-                new(220, false, 3, 3),
-                new(0, true, 4, 4),
+                new(10, false, 1, 0),
+                new(150, false, 2, 0),
+                new(220, false, 3, 0),
+                new(0, true, 4, 0),
             ],
         };
     }

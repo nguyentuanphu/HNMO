@@ -6,12 +6,12 @@ namespace HNMO.Web.AdminPanel.API;
 
 using System.Text.Json.Nodes;
 using System.Threading;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using HNMO.Persistence.AdminAuth;
 using HNMO.Web.AdminPanel.Auth;
 using HNMO.Web.AdminPanel.Operations;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 /// <summary>
 /// API controller which creates accounts, e.g. for the registration form of a website.

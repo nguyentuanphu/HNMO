@@ -1,0 +1,221 @@
+@page "/gameplay-rules"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.GameLogic.PlugIns.GameplayRules
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @L("Gameplay rules & happy hours", "Luật bản đồ, Giờ vàng & Giới hạn chiến đấu")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@L("Gameplay rules & happy hours", "Luật bản đồ, Giờ vàng & Giới hạn chiến đấu")" />
+<div class="d-flex align-items-center gap-2 mb-2">
+    <h1 class="mb-0">@L("Gameplay rules & happy hours", "Luật bản đồ, Giờ vàng & Giới hạn chiến đấu")</h1>
+    <button type="button" class="btn btn-sm btn-outline-info" id="gr-help-btn" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
+</div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextGameplayRules" />
+<p class="text-muted">@L("Configure per-map PvP/PK/rate overrides, Sydney-scheduled Happy Hour bonus events (with chat notices and timetable integration), and hit damage / PvP / Castle Siege combat limits.", "Cấu hình PvP/PK/tỉ lệ EXP-Rớt đồ theo từng bản đồ, Giờ vàng theo giờ Sydney (tự thông báo chat và hiện lịch sự kiện), cùng giới hạn sát thương PvP / Công Thành.")</p>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info" role="region" id="gameplay-rules-help">
+        <strong>@L("How to use this page:", "Hướng dẫn:")</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("Each feature is OFF by default until you check Enabled and click its Save button.", "Mỗi tính năng mặc định TẮT cho tới khi bạn tick Bật và nhấn Lưu.")</li>
+            <li>@L("Bonus event start times use Sydney local time (Australia/Sydney) and combine cleanly with per-map EXP and drop modifiers.", "Thời gian Giờ vàng tính theo giờ địa phương Sydney và tự động cộng dồn với thưởng EXP / Rớt đồ của từng bản đồ.")</li>
+            <li>@L("Set Max Damage Per Hit to 0 for unlimited damage, or configure a cap plus PvP and Valley of Loren (Castle Siege) reductions.", "Đặt Sát thương tối đa = 0 để không giới hạn, hoặc thiết lập trần sát thương cùng % giảm PvP / Công Thành.")</li>
+        </ul>
+    </div>
+}
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else
+{
+    <section class="card mb-3" id="gr-map-card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h2 class="h5 mb-0">@L("1. Per-map rules", "1. Luật theo từng bản đồ")</h2>
+                <div class="form-check">
+                    <input class="form-check-input" id="gr-map-enabled" type="checkbox" @bind="this._mapConfig.Enabled" />
+                    <label class="form-check-label" for="gr-map-enabled" title="@L("Enable per-map PvP, PK penalty, EXP, item drop, and zen drop rules", "Bật ghi đè luật PvP, PK, EXP và rớt đồ theo bản đồ")">@L("Enabled", "Bật luật bản đồ")</label>
+                </div>
+            </div>
+            <div class="table-responsive mb-2">
+                <table class="table table-sm align-middle mb-0" id="gr-map-table">
+                    <thead>
+                        <tr>
+                            <th>@L("Map #", "Mã bản đồ")</th>
+                            <th>@L("Name", "Tên")</th>
+                            <th>@L("PvP", "PvP")</th>
+                            <th>@L("PK penalty", "Tội PK")</th>
+                            <th>@L("EXP %", "EXP %")</th>
+                            <th>@L("Item drop %", "Rớt đồ %")</th>
+                            <th>@L("Zen drop %", "Rớt Zen %")</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var i = 0; i < this._mapConfig.Rules.Count; i++)
+                        {
+                            var idx = i;
+                            var r = this._mapConfig.Rules[idx];
+                            <tr>
+                                <td><input class="form-control form-control-sm" type="number" @bind="r.MapNumber" /></td>
+                                <td><input class="form-control form-control-sm" @bind="r.MapName" placeholder="Lorencia" /></td>
+                                <td><input class="form-check-input" type="checkbox" @bind="r.PvpEnabled" /></td>
+                                <td><input class="form-check-input" type="checkbox" @bind="r.PkPenaltyEnabled" /></td>
+                                <td><input class="form-control form-control-sm" type="number" @bind="r.ExpBonusPercent" /></td>
+                                <td><input class="form-control form-control-sm" type="number" @bind="r.ItemDropBonusPercent" /></td>
+                                <td><input class="form-control form-control-sm" type="number" @bind="r.ZenDropBonusPercent" /></td>
+                                <td><button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this._mapConfig.Rules.RemoveAt(idx)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">×</button></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-sm btn-outline-secondary" id="gr-map-add" title="@L("Add a new map rule", "Thêm luật bản đồ mới")" @onclick="this.AddMapRule">@L("+ Add map rule", "+ Thêm bản đồ")</button>
+                <button type="button" class="btn btn-sm btn-primary" id="gr-map-save" disabled="@this._isSaving" @onclick="this.SaveMapRulesAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@L("Save map rules", "Lưu luật bản đồ")</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-3" id="gr-bonus-card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                <h2 class="h5 mb-0">@L("2. Scheduled bonus events (Sydney time)", "2. Giờ vàng sự kiện (Giờ Sydney)")</h2>
+                <div class="d-flex gap-3">
+                    <div class="form-check">
+                        <input class="form-check-input" id="gr-bonus-enabled" type="checkbox" @bind="this._bonusConfig.Enabled" />
+                        <label class="form-check-label" for="gr-bonus-enabled" title="@L("Enable scheduled bonus events", "Bật sự kiện Giờ vàng")">@L("Enabled", "Bật Giờ vàng")</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" id="gr-bonus-chat" type="checkbox" @bind="this._bonusConfig.AnnounceInChat" />
+                        <label class="form-check-label" for="gr-bonus-chat" title="@L("Announce event start and end in EN/VI chat", "Thông báo chat EN/VI khi bắt đầu và kết thúc")">@L("Chat announcements", "Thông báo chat")</label>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive mb-2">
+                <table class="table table-sm align-middle mb-0" id="gr-bonus-table">
+                    <thead>
+                        <tr>
+                            <th>@L("Title EN", "Tên EN")</th>
+                            <th>@L("Title VI", "Tên VI")</th>
+                            <th>@L("Map # (blank=all)", "Bản đồ (trống=tất cả)")</th>
+                            <th>@L("Start (Sydney HH:mm)", "Bắt đầu (Sydney)")</th>
+                            <th>@L("Mins", "Phút")</th>
+                            <th>@L("EXP %", "EXP %")</th>
+                            <th>@L("Item %", "Đồ %")</th>
+                            <th>@L("Zen %", "Zen %")</th>
+                            <th>@L("Status (Sydney)", "Trạng thái")</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var i = 0; i < this._bonusConfig.Events.Count; i++)
+                        {
+                            var idx = i;
+                            var ev = this._bonusConfig.Events[idx];
+                            var active = BonusEventsPlugIn.IsWindowActive(ev, DateTime.UtcNow);
+                            <tr>
+                                <td><input class="form-control form-control-sm" @bind="ev.NameEn" /></td>
+                                <td><input class="form-control form-control-sm" @bind="ev.NameVi" /></td>
+                                <td><input class="form-control form-control-sm" type="number" @bind="ev.MapNumber" /></td>
+                                <td><input class="form-control form-control-sm" @bind="ev.StartTimeSydney" placeholder="20:00" /></td>
+                                <td><input class="form-control form-control-sm" type="number" @bind="ev.DurationMinutes" /></td>
+                                <td><input class="form-control form-control-sm" type="number" @bind="ev.ExpBonusPercent" /></td>
+                                <td><input class="form-control form-control-sm" type="number" @bind="ev.ItemDropBonusPercent" /></td>
+                                <td><input class="form-control form-control-sm" type="number" @bind="ev.ZenDropBonusPercent" /></td>
+                                <td class="small text-nowrap">
+                                    @if (active)
+                                    {
+                                        <span class="badge bg-success">@L("Active now", "Đang diễn ra")</span>
+                                    }
+                                    else if (BonusEventsPlugIn.NextStartUtc(ev, DateTime.UtcNow) is { } nextUtc)
+                                    {
+                                        <span>@SydneyTime(nextUtc)</span>
+                                    }
+                                </td>
+                                <td><button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this._bonusConfig.Events.RemoveAt(idx)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">×</button></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-sm btn-outline-secondary" id="gr-bonus-add" title="@L("Add a scheduled bonus event", "Thêm khung giờ vàng mới")" @onclick="this.AddBonusEvent">@L("+ Add bonus event", "+ Thêm giờ vàng")</button>
+                <button type="button" class="btn btn-sm btn-primary" id="gr-bonus-save" disabled="@this._isSaving" @onclick="this.SaveBonusEventsAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@L("Save bonus events", "Lưu giờ vàng")</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="card" id="gr-combat-card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h2 class="h5 mb-0">@L("3. Combat damage limits", "3. Giới hạn sát thương chiến đấu")</h2>
+                <div class="form-check">
+                    <input class="form-check-input" id="gr-combat-enabled" type="checkbox" @bind="this._combatConfig.Enabled" />
+                    <label class="form-check-label" for="gr-combat-enabled" title="@L("Enable damage cap and PvP/Siege damage reductions", "Bật giới hạn sát thương và giảm sát thương PvP/Công Thành")">@L("Enabled", "Bật giới hạn")</label>
+                </div>
+            </div>
+            <div class="row g-2 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label" for="gr-max-dmg" title="@L("Maximum damage per hit (0 = unlimited)", "Sát thương tối đa mỗi đòn (0 = không giới hạn)")">@L("Max damage per hit", "Sát thương tối đa / đòn")</label>
+                    <input class="form-control form-control-sm" id="gr-max-dmg" type="number" min="0" @bind="this._combatConfig.MaxDamagePerHit" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" for="gr-pvp-red" title="@L("Percentage reduction applied to player-vs-player hits (0..95)", "Phần trăm giảm sát thương PvP (0..95)")">@L("PvP damage reduction (%)", "Giảm sát thương PvP (%)")</label>
+                    <input class="form-control form-control-sm" id="gr-pvp-red" type="number" min="0" max="95" @bind="this._combatConfig.PvpDamageReductionPercent" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" for="gr-cs-red" title="@L("Percentage reduction applied in Castle Siege / Valley of Loren (0..95)", "Phần trăm giảm sát thương Công Thành (0..95)")">@L("Castle Siege reduction (%)", "Giảm sát thương Công Thành (%)")</label>
+                    <input class="form-control form-control-sm" id="gr-cs-red" type="number" min="0" max="95" @bind="this._combatConfig.CastleSiegeDamageReductionPercent" />
+                </div>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary" id="gr-combat-save" disabled="@this._isSaving" @onclick="this.SaveCombatLimitsAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@L("Save combat limits", "Lưu giới hạn chiến đấu")</button>
+        </div>
+    </section>
+
+    <section class="card mt-3" id="gr-monster-ai-card">
+        <div class="card-body">
+            <h2 class="h5 mb-2">@L("4. Monster chase, leash & heal", "4. Quái đuổi theo, quay về bãi & hồi máu")</h2>
+            <div class="row g-2 mb-3">
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="form-check">
+                        <input class="form-check-input" id="gr-mob-chase" type="checkbox" @bind="this._monsterAiConfig.ChaseAttacker" />
+                        <label class="form-check-label" for="gr-mob-chase" title="@L("Monsters chase players who hit them from outside view range.", "Quái đuổi theo người chơi đánh nó từ ngoài tầm nhìn.")">@L("Chase attacker", "Đuổi người đánh")</label>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="form-check">
+                        <input class="form-check-input" id="gr-mob-leash" type="checkbox" @bind="this._monsterAiConfig.LeashToSpawnArea" />
+                        <label class="form-check-label" for="gr-mob-leash" title="@L("Monsters drop target and walk home if pulled out of their spawn area.", "Quái bỏ mục tiêu và quay về bãi nếu bị kéo ra quá xa.")">@L("Leash to spawn area", "Quay về bãi khi kéo xa")</label>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="form-check">
+                        <input class="form-check-input" id="gr-mob-heal" type="checkbox" @bind="this._monsterAiConfig.HealToFullOnLeash" />
+                        <label class="form-check-label" for="gr-mob-heal" title="@L("Monsters heal to full HP when leashing home.", "Quái hồi đầy máu khi quay về bãi.")">@L("Heal to full on leash", "Hồi đầy máu khi về bãi")</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" for="gr-mob-leash-extra" title="@L("Extra tiles beyond MoveRange before leashing home (0..30).", "Số ô cộng thêm ngoài tầm di chuyển trước khi quay về bãi (0..30).")">@L("Leash extra range", "Phạm vi kéo thêm")</label>
+                    <input class="form-control form-control-sm" id="gr-mob-leash-extra" type="number" min="0" max="30" @bind="this._monsterAiConfig.LeashExtraRange" />
+                </div>
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="form-check">
+                        <input class="form-check-input" id="gr-mob-exp-split" type="checkbox" @bind="this._monsterAiConfig.SplitExpByDamage" />
+                        <label class="form-check-label" for="gr-mob-exp-split" title="@L("Split monster kill EXP by the share of damage each player or party dealt.", "Chia EXP quái vật theo tỉ lệ sát thương mỗi người chơi hoặc tổ đội gây ra.")">@L("Split EXP by damage", "Chia EXP theo sát thương")</label>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="form-check">
+                        <input class="form-check-input" id="gr-mob-top-drop" type="checkbox" @bind="this._monsterAiConfig.DropToTopDamageDealer" />
+                        <label class="form-check-label" for="gr-mob-top-drop" title="@L("Assign the monster's item drop to the top damage dealer instead of the last hitter.", "Trao quyền nhặt vật phẩm rơi cho người gây sát thương cao nhất thay vì người kết liễu.")">@L("Drop to top damage dealer", "Rớt đồ cho top sát thương")</label>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary" id="gr-monster-ai-save" disabled="@this._isSaving" @onclick="this.SaveMonsterAiAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@L("Save monster AI rules", "Lưu quy tắc AI quái")</button>
+        </div>
+    </section>
+}

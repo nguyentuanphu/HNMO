@@ -19,7 +19,7 @@ import {
   type AttackLookInput, type DamageText, type HandItem, type MonsterAttackState, type Mount,
 } from './combatLook.js';
 import {
-  areaSkillRotation, isBeastUppercut, isDarkSide, isKillingBlow, isPartyMemberSkill, isRageHalfwaySkill, rageSkillAction, RAGE_BUFFS,
+  areaSkillRotation, isBeastUppercut, isDarkSide, isKillingBlow, isPartyMemberSkill, isRageHalfwaySkill, rageRefusal, rageSkillAction, RAGE_BUFFS,
   skillCastPlan, skillAnimationAction, skillRange, SkillId, type SkillCastContext, type SkillCastPlan,
 } from './skillCast.js';
 import { itemDefinition } from './items.js';
@@ -48,6 +48,11 @@ export interface SkillSource {
   current: () => number | null;
   mana: () => number;
   ability: () => number;
+  /**
+   * CSkillManager::AreSkillAttributeRequirementsMet: the hero's level, strength, agility, energy and command reach the
+   * skill's (CanExecuteSkill drops a cast that doesn't; the server refuses it too).
+   */
+  requirementsMet?: (skill: number) => boolean;
   /** Mana ran short: the desktop drinks a mana potion then (FindManaItemIndex). */
   outOfMana?: () => void;
 }
@@ -179,7 +184,7 @@ export class Combat {
     const skill = skillNumber ?? this.skills?.current() ?? null;
     if (skill === null || this.hero.dead) return false;
     const plan = skillCastPlan(skill, this.classIndex, this.castContext());
-    if (!plan || (plan.packet === 'none' && plan.special !== 'phoenixShot')) return false;
+    if (!plan || plan.packet === 'none') return false;
     if (target && target.dead) target = null;
     if (plan.needsTarget && !target) return false;
     this.pendingSkill = { skill, plan, target, cell: cell ?? (target ? { ...target.cell } : null) };
@@ -190,8 +195,9 @@ export class Combat {
 
   /** Whether the hero has a way to cast a skill now (a cast plan for its class and equipment). */
   castable(skill: number): boolean {
+    if (this.skills?.requirementsMet && !this.skills.requirementsMet(skill)) return false;
     const plan = skillCastPlan(skill, this.classIndex, this.castContext());
-    return plan !== null && (plan.packet !== 'none' || plan.special === 'phoenixShot');
+    return plan !== null && plan.packet !== 'none';
   }
 
   /** Whether a skill is about to be cast (walking into its range or waiting for the last swing). */
@@ -254,6 +260,7 @@ export class Combat {
     const target = pending.target;
     if (this.hero.dead || (target && (target.dead || (target !== this.hero && !this.online.characters.has(target.id))))) { this.pendingSkill = null; return; }
     if (this.inSafeZone()) { this.pendingSkill = null; return; } // CanExecuteSkill: no skills in a safe zone
+    if (this.skills?.requirementsMet && !this.skills.requirementsMet(skill)) { this.pendingSkill = null; return; } // CanExecuteSkill
     const data = skillInfo(skill);
     const range = skillRange(skill, data?.distance ?? 0);
     const aim = target && target !== this.hero ? target.cell : pending.cell;
@@ -275,16 +282,16 @@ export class Combat {
     // CheckSkillDelay: not while the skill cools down; casting starts its delay. AttackRagefighter leaves the check out
     // (only its Plasma Storm calls it).
     if (data && (!rage || skill === SkillId.PLASMA_STORM_FENRIR) && !skillCooldowns.tryStart(skill, data.delay)) { this.pendingSkill = null; return; }
-    if (rage && !plan.equipmentOk) { this.pendingSkill = null; return; } // UseSkillRagefighter's ring, mount and glove checks
+    if (rage && !plan.equipmentOk) {
+      // UseSkillRagefighter's ring, mount and glove checks: the desktop drops the cast without a word; the web says why.
+      const why = rageRefusal(skill, this.castContext());
+      if (why) this.events.onMessage?.(why === 'riding' ? 'This skill cannot be used while riding.' : 'This skill needs sword-form gloves.');
+      this.pendingSkill = null;
+      return;
+    }
     if (aim) this.hero.faceTo(aim);
     if (plan.heroAction !== null) this.hero.playOnce(plan.heroAction);
     const degrees = ((this.hero.angle * 180) / Math.PI + 360) % 360;
-    if (plan.special === 'phoenixShot') {
-      // UseSkillRagefighter: the hero stops; nothing is sent and nothing plays.
-      this.pendingSkill = null;
-      this.repeatSkill = null;
-      return;
-    }
     if (plan.special === 'rageAttack' && target && target !== this.hero) {
       this.connection.send('ClientToServer', 'RageAttackRequest', { SkillId: skill, TargetId: target.id });
       this.rageHits = { skill, target, action: plan.heroAction ?? -1, frames: plan.hitFrames ?? [3, 9999], state: 0, effectDone: false };
@@ -302,17 +309,24 @@ export class Combat {
       this.connection.send('ClientToServer', 'TargetedSkill', { SkillId: skill, TargetId: id });
       if (plan.instantMove && target && target !== this.hero) this.sendInstantMove(target, skill === SkillId.OCCUPY);
     } else if (plan.packet === 'area') {
-      // AreaSkill: at the hero's own tile or the target's, with the selected character when the skill names one.
-      const at = plan.areaAt === 'self' ? this.hero.cell : aim;
-      if (at) {
-        const extra = plan.areaExtraTarget && target && target !== this.hero ? target.id : 0xffff;
-        this.connection.send('ClientToServer', 'AreaSkill', { SkillId: skill, TargetX: at.x, TargetY: at.y, Rotation: areaSkillRotation(degrees, plan.rotationScale), ExtraTargetId: extra, AnimationCounter: 0 });
-      }
+      this.sendAreaSkill(pending, aim, degrees);
     }
     if (plan.special !== 'rageAttack' && plan.special !== 'darkSide') this.events.onSkill?.(this.hero, skill, target, aim);
     this.pendingSkill = null;
     // Auto attack keeps casting at a monster for attack skills (Attacking = 2).
     this.repeatSkill = plan.keepAutoAttack && target && target !== this.hero && !plan.friendly ? pending : null;
+  }
+
+  /** Send the area cast at action start; the server selects and damages its targets. */
+  private sendAreaSkill(pending: PendingSkill, aim: { x: number; y: number } | null, degrees: number): void {
+    const { skill, plan, target } = pending;
+    const at = plan.areaAt === 'self' ? this.hero.cell : aim;
+    if (!at) return;
+    const extra = plan.areaExtraTarget && target && target !== this.hero ? target.id : 0xffff;
+    this.connection.send('ClientToServer', 'AreaSkill', {
+      SkillId: skill, TargetX: at.x, TargetY: at.y, Rotation: areaSkillRotation(degrees, plan.rotationScale),
+      ExtraTargetId: extra, AnimationCounter: 0,
+    });
   }
 
   /**

@@ -5,12 +5,12 @@
 namespace HNMO.Web.AdminPanel.Pages;
 
 using System.Globalization;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components;
 using HNMO.DataModel.Configuration;
 using HNMO.Web.AdminPanel.Auth;
 using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.Shared.Components.Form;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
 
 /// <summary>
 /// A generic edit page, which shows an <see cref="AutoForm{T}"/> for the given <see cref="EditBase.TypeString"/> and <see cref="EditBase.Id"/>.

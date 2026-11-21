@@ -4,9 +4,9 @@
 
 namespace HNMO.Web.AdminPanel.Pages;
 
-using Microsoft.AspNetCore.Components;
 using HNMO.Web.Shared.Models;
 using HNMO.Web.Shared.Services;
+using Microsoft.AspNetCore.Components;
 
 /// <summary>
 /// Page which shows the details of a single guild, including its members.

@@ -5,10 +5,10 @@
 namespace HNMO.Web.AdminPanel.Components.NetworkAnalyzer;
 
 using System.Runtime.CompilerServices;
-using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using HNMO.Network.Analyzer;
 using HNMO.Network.PlugIns;
+using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 /// <summary>
 /// The grid which shows the captured data packets of a connection.

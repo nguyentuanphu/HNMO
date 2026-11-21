@@ -394,6 +394,14 @@ internal static class BotProgression
     public static bool RequiresMount(Skill skill) => MountRequiredSkillNumbers.Contains(skill.Number);
 
     /// <summary>
+    /// Whether the skill is one of HNMO's skills learnt only by a trial quest (703, 707, ... 727:
+    /// the fourth of each class's four).
+    /// </summary>
+    /// <param name="number">The skill number.</param>
+    /// <returns><c>true</c> for a trial quest skill.</returns>
+    public static bool IsTrialQuestSkill(int number) => number is >= 700 and <= 727 && (number - 700) % 4 == 3;
+
+    /// <summary>
     /// Determines whether the skill is one a bot may own at all: an actual attack skill, or a
     /// self/party buff or heal with a magic effect (which the offline buff/heal handlers know how to
     /// cast) - but never a master skill (those go through the regular master action like for a human
@@ -403,15 +411,8 @@ internal static class BotProgression
     /// debuffs and utility skills are left out.
     /// </summary>
     /// <param name="skill">The skill to check.</param>
-    /// <summary>
-    /// Whether the skill is one of HNMO's skills learnt only by a trial quest (703, 707, ... 727:
-    /// the fourth of each class's four).
-    /// </summary>
-    /// <param name="number">The skill number.</param>
-    /// <returns><c>true</c> for a trial quest skill.</returns>
-    public static bool IsTrialQuestSkill(int number) => number is >= 700 and <= 727 && (number - 700) % 4 == 3;
-
-        public static bool MayBotOwnSkill(Skill skill)
+    /// <returns><c>true</c>, if a bot may own the skill.</returns>
+    public static bool MayBotOwnSkill(Skill skill)
     {
         if (IsTrialQuestSkill(skill.Number))
         {

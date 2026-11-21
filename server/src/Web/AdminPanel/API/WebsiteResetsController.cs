@@ -6,21 +6,23 @@ namespace HNMO.Web.AdminPanel.API;
 
 using System.Security.Cryptography;
 using System.Threading;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using HNMO.AttributeSystem;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Attributes;
+using HNMO.GameLogic.CashShop;
 using HNMO.GameLogic.Offline;
+using HNMO.GameLogic.PlugIns.CatchupCap;
 using HNMO.GameLogic.PlugIns.GiftCodes;
 using HNMO.GameLogic.PlugIns.ResetOptions;
 using HNMO.GameLogic.PlugIns.TopRaces;
 using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.Web.AdminPanel.Auth;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The website's resets: the public rankings (resets of the month, relifes) and rules, and, for the account page through
@@ -106,6 +108,7 @@ public sealed class WebsiteResetsController(
             "relife" => options.AllowRelife && engine.Configuration.Relife.Enabled,
             "add-stats" => options.AllowAddStats,
             "clear-stats" => options.AllowClearStats,
+            "clear-master" => options.AllowClearMasterSkills,
             "delegated-on" or "delegated-off" => options.AllowDelegatedSwitch && engine.Configuration.Delegated.Enabled,
             _ => (bool?)null,
         };
@@ -176,12 +179,24 @@ public sealed class WebsiteResetsController(
                     return this.BadRequest(new { error = "character" });
                 }
 
-                (result, plan) = action switch
+                Action? postSave = null;
+                switch (action)
                 {
-                    "reset" or "relife" => await this.ResetAsync(engine, context, account, character, action == "relife", names).ConfigureAwait(false),
-                    "add-stats" => (AddStats(character, request, (a, v) => Set(context, character, a, v)), null),
-                    _ => (ClearStatsPaid(engine.Configuration.Website, context, account, character), null),
-                };
+                    case "reset":
+                    case "relife":
+                        (result, plan, postSave) = await this.ResetAsync(engine, context, account, character, action == "relife", names).ConfigureAwait(false);
+                        break;
+                    case "add-stats":
+                        (result, plan) = (AddStats(character, request, (a, v) => Set(context, character, a, v)), null);
+                        break;
+                    case "clear-master":
+                        (result, plan) = (await ClearMasterPaidAsync(engine.Configuration.Website, context, account, character).ConfigureAwait(false), null);
+                        break;
+                    default:
+                        (result, plan) = (ClearStatsPaid(engine.Configuration.Website, context, account, character), null);
+                        break;
+                }
+
                 if (result == nameof(ResetResult.Ok) && !await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false))
                 {
                     result = "Failed";
@@ -189,6 +204,7 @@ public sealed class WebsiteResetsController(
 
                 if (result == nameof(ResetResult.Ok))
                 {
+                    postSave?.Invoke();
                     logger.LogInformation("Resets: {Login} did {Action} for {Character} on the website.", login, action, character.Name);
                 }
             }
@@ -271,6 +287,10 @@ public sealed class WebsiteResetsController(
         clearStatsZen = configuration.Website.ClearStatsZen,
         clearStatsCoins = configuration.Website.ClearStatsCoins,
         clearStatsCoinType = configuration.Website.ClearStatsCoinType,
+        allowClearMasterSkills = configuration.Website.AllowClearMasterSkills,
+        clearMasterSkillsZen = configuration.Website.ClearMasterSkillsZen,
+        clearMasterSkillsCoins = configuration.Website.ClearMasterSkillsCoins,
+        clearMasterSkillsCoinType = configuration.Website.ClearMasterSkillsCoinType,
         allowDelegated = configuration.Website.AllowDelegatedSwitch && configuration.Delegated.Enabled,
     };
 
@@ -279,6 +299,8 @@ public sealed class WebsiteResetsController(
         cls = character.CharacterClass?.Number ?? 0,
         className = character.CharacterClass?.Name.ValueInNeutralLanguage ?? string.Empty,
         freePoints = character.LevelUpPoints,
+        masterFreePoints = character.MasterLevelUpPoints,
+        masterSpentPoints = ResetApplier.CountSpentMasterPoints(character),
         zen = character.Inventory?.Money ?? 0,
         stats = ResetApplier.IncreasableStats(character).Where(s => ResetApplier.StatKey(s.Attribute!) is not null)
             .ToDictionary(s => ResetApplier.StatKey(s.Attribute!)!, s => (int)Get(character, s.Attribute!)),
@@ -343,12 +365,49 @@ public sealed class WebsiteResetsController(
             return nameof(ResetResult.NotEnoughCoins);
         }
 
+        ResetCoinHistory.Record(context, account, plan, CashShopBalanceReason.ClearStats);
+
         if (zen > 0)
         {
             character.Inventory!.Money -= zen;
         }
 
         ResetApplier.ClearStats(character, a => Get(character, a), (a, v) => Set(context, character, a, v));
+        return nameof(ResetResult.Ok);
+    }
+
+    private static async Task<string> ClearMasterPaidAsync(WebsiteResetOptions options, IContext context, Account account, Character character)
+    {
+        if (ResetApplier.CountSpentMasterPoints(character) <= 0)
+        {
+            return "NothingToClear";
+        }
+
+        var zen = Math.Max(0, options.ClearMasterSkillsZen);
+        if ((character.Inventory?.Money ?? 0) < zen)
+        {
+            return nameof(ResetResult.NotEnoughZen);
+        }
+
+        var plan = new ResetPlan();
+        if (options.ClearMasterSkillsCoins > 0)
+        {
+            plan.Coins.Add(new ResetCoinCost(options.ClearMasterSkillsCoinType, options.ClearMasterSkillsCoins));
+        }
+
+        if (!ResetApplier.TryTakeCoins(account, plan))
+        {
+            return nameof(ResetResult.NotEnoughCoins);
+        }
+
+        ResetCoinHistory.Record(context, account, plan, CashShopBalanceReason.ClearMaster);
+
+        if (zen > 0)
+        {
+            character.Inventory!.Money -= zen;
+        }
+
+        await ResetApplier.ClearMasterSkillsOfflineAsync(character, context).ConfigureAwait(false);
         return nameof(ResetResult.Ok);
     }
 
@@ -371,31 +430,36 @@ public sealed class WebsiteResetsController(
         }
     }
 
-    private async Task<(string Result, object? Plan)> ResetAsync(ResetEngine engine, IContext context, Account account, Character character, bool relife, Func<short, short, string?> names)
+    private async Task<(string Result, object? Plan, Action? PostSave)> ResetAsync(ResetEngine engine, IContext context, Account account, Character character, bool relife, Func<short, short, string?> names)
     {
         var subject = SubjectOf(account, character);
         var now = DateTime.UtcNow;
-        var plan = relife ? engine.PlanRelife(subject, now) : engine.PlanReset(subject, now, ResetSource.Website);
+        var catchupCfg = await PlugInSettings.ReadActiveAsync<CatchupCapConfiguration>(persistence, typeof(CatchupCapPlugIn), () => new CatchupCapConfiguration(), default).ConfigureAwait(false);
+        var catchupEngine = catchupCfg is null ? null : new CatchupCapEngine(catchupCfg, CatchupCapStore.Open(catchupCfg.FileName), enabled: true);
+        int? dailyCap = catchupEngine is { } ce && ce.GetSnapshot(now) is { ResetCapEnabled: true } cs ? cs.TodayDailyResetCap : null;
+        var plan = relife ? engine.PlanRelife(subject, now) : engine.PlanReset(subject, now, ResetSource.Website, dailyCap);
         if (plan.Result != ResetResult.Ok)
         {
-            return (plan.Result.ToString(), ResetStateWriter.Plan(plan, names));
+            return (plan.Result.ToString(), ResetStateWriter.Plan(plan, names), null);
         }
 
         var items = ResetApplier.PickItems(character.Inventory?.Items ?? Enumerable.Empty<Item>(), plan);
         if (items is null)
         {
-            return (nameof(ResetResult.NotEnoughItems), ResetStateWriter.Plan(plan, names));
+            return (nameof(ResetResult.NotEnoughItems), ResetStateWriter.Plan(plan, names), null);
         }
 
         if (plan.Zen > (character.Inventory?.Money ?? 0))
         {
-            return (nameof(ResetResult.NotEnoughZen), ResetStateWriter.Plan(plan, names));
+            return (nameof(ResetResult.NotEnoughZen), ResetStateWriter.Plan(plan, names), null);
         }
 
         if (!ResetApplier.TryTakeCoins(account, plan))
         {
-            return (nameof(ResetResult.NotEnoughCoins), ResetStateWriter.Plan(plan, names));
+            return (nameof(ResetResult.NotEnoughCoins), ResetStateWriter.Plan(plan, names), null);
         }
+
+        ResetCoinHistory.Record(context, account, plan, relife ? CashShopBalanceReason.Relife : CashShopBalanceReason.Reset);
 
         if (plan.Zen > 0)
         {
@@ -408,7 +472,6 @@ public sealed class WebsiteResetsController(
             await context.DeleteAsync(item).ConfigureAwait(false);
         }
 
-        TopRacesPlugIn.ObserveCharacter(null, subject.CharacterId, subject.Name, subject.Login, subject.Class, subject.Level, subject.Resets);
         ResetApplier.Apply(character, plan, false, a => Get(character, a), (a, v) => Set(context, character, a, v));
         if (engine.Configuration.MoveHome && character.CharacterClass?.HomeMap is { } home && home.ExitGates.FirstOrDefault(g => g.IsSpawnGate) is { } gate)
         {
@@ -417,9 +480,12 @@ public sealed class WebsiteResetsController(
             character.PositionY = (byte)((gate.Y1 + gate.Y2) / 2);
         }
 
-        engine.Record(subject, plan, now, ResetSource.Website);
-        TopRacesPlugIn.ObserveCharacter(null, subject.CharacterId, subject.Name, subject.Login, subject.Class, plan.LevelAfter, plan.ResetsAfter);
-        return (nameof(ResetResult.Ok), ResetStateWriter.Plan(plan, names));
+        return (nameof(ResetResult.Ok), ResetStateWriter.Plan(plan, names), () =>
+        {
+            TopRacesPlugIn.ObserveCharacter(null, subject.CharacterId, subject.Name, subject.Login, subject.Class, subject.Level, subject.Resets);
+            engine.Record(subject, plan, now, ResetSource.Website);
+            TopRacesPlugIn.ObserveCharacter(null, subject.CharacterId, subject.Name, subject.Login, subject.Class, plan.LevelAfter, plan.ResetsAfter);
+        });
     }
 
     private async Task<IActionResult> AnswerAsync(ResetEngine engine, GameConfiguration configuration, string login, string characterName, string result, object? plan, Func<short, short, string?> names, CancellationToken cancellationToken)
@@ -478,24 +544,3 @@ public sealed class WebsiteResetsController(
         return configuration is null ? null : new ResetEngine(configuration, ResetStore.Open(configuration.FileName));
     }
 }
-
-/// <summary>
-/// An account's login for the website's resets.
-/// </summary>
-/// <param name="LoginName">The login name.</param>
-/// <param name="Password">The password.</param>
-public sealed record ResetAccountRequest(string? LoginName, string? Password);
-
-/// <summary>
-/// An action of the website's resets.
-/// </summary>
-/// <param name="LoginName">The login name.</param>
-/// <param name="Password">The password.</param>
-/// <param name="Character">The character.</param>
-/// <param name="Action">"reset", "relife", "add-stats", "clear-stats", "delegated-on" or "delegated-off".</param>
-/// <param name="Str">The points added to strength.</param>
-/// <param name="Agi">The points added to agility.</param>
-/// <param name="Vit">The points added to vitality.</param>
-/// <param name="Ene">The points added to energy.</param>
-/// <param name="Cmd">The points added to command.</param>
-public sealed record ResetActionRequest(string? LoginName, string? Password, string? Character, string? Action, int? Str = null, int? Agi = null, int? Vit = null, int? Ene = null, int? Cmd = null);

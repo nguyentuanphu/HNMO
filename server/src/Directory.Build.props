@@ -36,4 +36,24 @@
             </ItemGroup>
         </Otherwise>
     </Choose>
+
+    <!-- The HNMO version (owner, 2026-11-21: 1.0.0, fixes raise the last number, features the middle one) from the
+         VERSION file at the repository's root, given to every assembly: the admin panel, the reports and the updates
+         read it. -->
+    <PropertyGroup>
+        <HnmoVersionFile>$([MSBuild]::GetPathOfFileAbove('VERSION', '$(MSBuildThisFileDirectory)..'))</HnmoVersionFile>
+        <HnmoVersion Condition="'$(HnmoVersionFile)' != '' and Exists('$(HnmoVersionFile)')">$([System.IO.File]::ReadAllText('$(HnmoVersionFile)').Trim())</HnmoVersion>
+        <HnmoVersion Condition="'$(HnmoVersion)' == ''">0.0.0</HnmoVersion>
+    </PropertyGroup>
+    <Target Name="HnmoVersionInfo" BeforeTargets="CoreCompile" Condition="'$(Language)' == 'C#'">
+        <PropertyGroup>
+            <HnmoVersionInfoFile>$(IntermediateOutputPath)HnmoVersion.g.cs</HnmoVersionInfoFile>
+        </PropertyGroup>
+        <WriteLinesToFile File="$(HnmoVersionInfoFile)" Overwrite="true" WriteOnlyWhenDifferent="true"
+            Lines="// Generated from the VERSION file.;[assembly: System.Reflection.AssemblyVersion(&quot;$(HnmoVersion).0&quot;)];[assembly: System.Reflection.AssemblyFileVersion(&quot;$(HnmoVersion).0&quot;)];[assembly: System.Reflection.AssemblyInformationalVersion(&quot;$(HnmoVersion)&quot;)]" />
+        <ItemGroup>
+            <Compile Include="$(HnmoVersionInfoFile)" />
+            <FileWrites Include="$(HnmoVersionInfoFile)" />
+        </ItemGroup>
+    </Target>
 </Project>

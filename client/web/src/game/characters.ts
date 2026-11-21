@@ -9,9 +9,10 @@ import { sampleHeight, sampleModelLight } from '../terrain.js';
 import { BODY_PART_SLOTS as BODY_PART_SLOT_NAMES, describeMonster, isSkeletonSkin, MonsterAction } from './monsterData.js';
 import { itemDefinition, itemModel, partModel, ItemGroup } from './items.js';
 import { addItemGlow, reflectionMaterial, setCloaked, setItemGlowState, updateReflections } from './itemGlow.js';
+import { performanceFlags } from '../render/quality.js';
 import { createCompanions, isDarkRaven } from './pets.js';
 import type { Companion, CompanionOwner } from './pets.js';
-import { playerActionSpeed, playerStopAction, playerWalkAction, type MonsterAttacksData, type Mount } from './combatLook.js';
+import { isRunning, playerActionSpeed, playerMoveSpeed, playerStopAction, playerWalkAction, WALK_MOVE_SPEED, type MonsterAttacksData, type Mount, type MoveSpeedInput } from './combatLook.js';
 import type { BMDModel, Vec3 } from '../formats.js';
 import type { GeometryPart, ModelPart } from '../bmd.js';
 import type { DescribeOptions, MonsterLook, MonsterSetupData } from './monsterData.js';
@@ -52,7 +53,12 @@ export function setPlayerAnimationSpeeds(attackSpeed: number, magicSpeed: number
 const BODY_PARTS = ['Helm', 'Armor', 'Pant', 'Glove', 'Boot'] as const;
 const PLAYER_SKELETON = { dir: 'Player', fileName: 'player.bmd' } as const;
 const NO_BODY: BMDModel = { name: 'none', meshes: [], actions: [], bones: [] };
-export const WALK_CELLS_PER_SECOND = 3.3;
+/**
+ * A walk's cells a second: the desktop moves 12 units a frame at its 25 frames a second over cells of 100 units
+ * (CharacterMoveSpeed, MoveCharacterPosition), and the server times a walk the same way (PlayerMovement.GetStepDelay).
+ * Faster speeds (running, wings, mounts) scale it: see playerMoveSpeed.
+ */
+export const WALK_CELLS_PER_SECOND = (WALK_MOVE_SPEED * 25) / 100;
 const DEGREES = Math.PI / 180;
 const ROTATION_STEP_DEGREES = 45;
 
@@ -365,6 +371,16 @@ function turnAngleTowards(current: number, target: number, dt: number): number {
 }
 
 const WALK_GRACE_SECONDS = 0.25;
+// The pick boxes (MonsterModelBody.h): DefaultBoxMin/Max for monsters and NPCs, PlayerBoxMax for the player model.
+const DEFAULT_PICK_BOX_MIN = [-60, -60, 0];
+const DEFAULT_PICK_BOX_MAX = [50, 50, 150];
+const PLAYER_PICK_BOX_MAX = [40, 40, 120];
+
+/** A model's own pick box corner from Models.json ("boundingBox": { "min": [x, y, z], "max": [x, y, z] }). */
+function pickBoxCorner(box: unknown, corner: 'min' | 'max'): number[] | null {
+  const value = box && typeof box === 'object' ? (box as Record<string, unknown>)[corner] : undefined;
+  return Array.isArray(value) && value.length === 3 && value.every((n) => typeof n === 'number') ? value as number[] : null;
+}
 
 export class Character {
   id: number;
@@ -425,6 +441,19 @@ export class Character {
   fixedHeight: number | null = null;
   /** Its body beside its tile, in world units (setup "positionOffset"). */
   bodyOffset = new THREE.Vector2();
+  /**
+   * The box a click picks it by, in its model's units around its feet (the desktop's BoundingBoxMin/Max,
+   * MonsterModelBody.h; a model's own in Models.json "boundingBox"). Its drawn mesh can't be measured for this:
+   * the bones bend it on the GPU, so the mesh's own bounds are a small knot at its feet.
+   */
+  pickBoxMin = new THREE.Vector3().fromArray(DEFAULT_PICK_BOX_MIN);
+  pickBoxMax = new THREE.Vector3().fromArray(DEFAULT_PICK_BOX_MAX);
+
+  /** Its pick box in world space, placed, turned and scaled like its body (for clicks, hovers and marks over it). */
+  pickBounds(out: THREE.Box3): THREE.Box3 {
+    this.group.updateMatrixWorld();
+    return out.set(this.pickBoxMin, this.pickBoxMax).applyMatrix4(this.group.matrixWorld);
+  }
   /** Faces this way whatever the server sends (setup "facing"), in radians. */
   fixedAngle: number | null = null;
   /** The animation it stands in (setup "startAction"), else its stop action. */
@@ -477,6 +506,7 @@ export class Character {
   /** What its buffs do to how its items are drawn (RenderPartObjectEffect): see itemGlow.ts setItemGlowState / setCloaked. */
   itemLooks = { debuffed: false, hardened: false, cloaked: false };
   private looksDirty = false;
+  private lastReducedEffects = false;
 
   setItemLooks(looks: { debuffed: boolean; hardened: boolean; cloaked: boolean }): void {
     const now = this.itemLooks;
@@ -505,9 +535,11 @@ export class Character {
   private applyItemLooks(): void {
     this.looksDirty = false;
     const { debuffed, hardened, cloaked } = this.itemLooks;
+    const reduced = performanceFlags().reducedEffects;
+    this.lastReducedEffects = reduced;
     for (const model of [this.model, ...this.attachments.map((attachment) => attachment.model)]) {
       if (!cloaked) void setCloaked(model, false);
-      setItemGlowState(model, { debuffed: debuffed || cloaked, hardened: hardened || cloaked });
+      setItemGlowState(model, { debuffed: debuffed || cloaked || reduced, hardened: hardened || cloaked || reduced });
       if (cloaked) void setCloaked(model, true);
     }
   }
@@ -575,6 +607,30 @@ export class Character {
     if (dx || dy) this.angle = Math.atan2(dx, -dy);
   }
 
+  /** How long it has walked without stopping (the desktop's c->Run, which SetPlayerStop and a safe zone set back). */
+  private walkedSeconds = 0;
+
+  /** A debuff slowing its walk (Freeze, Blow of Destruction), set from its buffs. */
+  slowedBy: 'freeze' | 'blowOfDestruction' | null = null;
+
+  /** What its moving speed depends on (a player's class, wings, mount, boots and gloves, the safe zone, the map). */
+  private moveInput(world: CharacterWorld): MoveSpeedInput | null {
+    if (this.classIndex === null || !this.equipment) return null;
+    const pet = this.equipment.pet;
+    return {
+      classIndex: this.classIndex,
+      mount: mountOfPet(pet),
+      fenrirExcellent: pet?.excellent === true,
+      wings: this.equipment.wings && this.equipment.wings.group === 12 ? this.equipment.wings.number : this.equipment.wings ? -1 : null,
+      bootsLevel: this.equipment.boots?.glowLevel ?? 0,
+      glovesLevel: this.equipment.gloves?.glowLevel ?? 0,
+      safeZone: (world.flags[this.cell.y * TERRAIN_SIZE + this.cell.x] & TerrainFlag.SAFEZONE) !== 0,
+      mapNumber: world.mapNumber ?? 0,
+      walkedSeconds: this.walkedSeconds,
+      slowedBy: this.slowedBy,
+    };
+  }
+
   // How it stands or walks: a player by its class, weapons, wings and the safe zone (the desktop's
   // SetPlayerStop / SetPlayerWalk); others always with their stop and walk actions.
   private stanceAction(world: CharacterWorld): number {
@@ -586,12 +642,13 @@ export class Character {
       mount: mountOfPet(this.equipment.pet), wings: Boolean(this.equipment.wings),
       safeZone: (world.flags[this.cell.y * TERRAIN_SIZE + this.cell.x] & TerrainFlag.SAFEZONE) !== 0,
     };
-    const action = walking ? playerWalkAction(input) : playerStopAction(input);
+    const move = this.moveInput(world);
+    const action = walking ? playerWalkAction({ ...input, running: move ? isRunning(move) : false }) : playerStopAction(input);
     return action >= 0 ? action : this.action;
   }
 
   update(dt: number, world: CharacterWorld): void {
-    if (!this.dead) this.advance(dt);
+    if (!this.dead) this.advance(dt, world);
     const keys = (action: number) => Math.max(1, this.model.skeleton.actions[action]?.numKeys ?? 1);
     if (this.oneShot) {
       const shot = this.oneShot;
@@ -621,6 +678,8 @@ export class Character {
       for (const child of this.culledChildren) if (child.parent === this.group) child.visible = true;
       this.culledChildren.length = 0;
     }
+    const perf = performanceFlags();
+    if (perf.reducedEffects !== this.lastReducedEffects) this.looksDirty = true;
     this.model.pose(this.action, this.time);
     if (this.looksDirty) this.applyItemLooks();
     this.clock += dt;
@@ -633,17 +692,28 @@ export class Character {
     this.weaponsOnBack = !this.holdWeapons && !castle && (world.flags[this.cell.y * TERRAIN_SIZE + this.cell.x] & TerrainFlag.SAFEZONE) !== 0;
     const backs = this.classIndex !== null;
     for (const attachment of this.attachments) {
+      if (perf.hideWingsPets && attachment.slot === 'wings') {
+        attachment.model.group.visible = false;
+        continue;
+      }
       // Only the player model has a back; a monster model shows its weapons in its hands, outside a safe zone.
       const ornament = attachment.slot === 'ornament';
       const onBack = !ornament && (this.weaponsOnBack || attachment.ammunition);
       // The +15 armour's decorations: not in Chaos Castle (DrawsNextGradeObjects).
-      const shown = ornament ? !((mapNumber >= 18 && mapNumber <= 23) || mapNumber === 53) : attachment.slot === 'wings' || backs || !onBack;
+      const shown = ornament ? !(perf.reducedEffects || (mapNumber >= 18 && mapNumber <= 23) || mapNumber === 53) : attachment.slot === 'wings' || backs || !onBack;
       attachment.model.group.visible = shown;
       if (!shown) continue;
       attachment.place(this.model.matrices, onBack, this.clock);
       attachment.model.setLight(light, this.clock);
     }
-    if (this.companions.length) this.updateCompanions(dt, world);
+    if (this.companions.length) {
+      if (perf.hideWingsPets) {
+        for (const companion of this.companions) companion.group.visible = false;
+      } else {
+        for (const companion of this.companions) companion.group.visible = true;
+        this.updateCompanions(dt, world);
+      }
+    }
   }
 
   private updateCompanions(dt: number, world: CharacterWorld): void {
@@ -656,14 +726,19 @@ export class Character {
     for (const companion of this.companions) companion.update(dt, owner, world.light);
   }
 
-  advance(dt: number): void {
+  advance(dt: number, world?: CharacterWorld): void {
     if (this.path.length > 0) {
       this.walkGrace = WALK_GRACE_SECONDS;
     } else if (this.walkGrace > 0) {
       this.walkGrace = Math.max(0, this.walkGrace - dt);
     }
 
-    let budget = WALK_CELLS_PER_SECOND * TERRAIN_SCALE * dt;
+    // A player moves at the desktop's speed for its gear and place (CharacterMoveSpeed), as the server times its walk.
+    const move = world ? this.moveInput(world) : null;
+    if (move && this.path.length && !move.safeZone) this.walkedSeconds += dt;
+    else if (move) this.walkedSeconds = 0;
+    const speedFactor = move ? playerMoveSpeed({ ...move, walkedSeconds: this.walkedSeconds }) / WALK_MOVE_SPEED : 1;
+    let budget = WALK_CELLS_PER_SECOND * speedFactor * TERRAIN_SCALE * dt;
     while (budget > 0 && this.path.length) {
       const next = this.path[0];
       const tx = cellCenter(next.x), ty = cellCenter(next.y);
@@ -738,6 +813,7 @@ export async function createPlayerCharacter({ id, name, bodySet, equipment, kind
   character.setCompanions(companions);
   if (kind === 'player') character.classIndex = Math.max(0, bodySet - 1);
   character.equipment = equipment ?? {};
+  character.pickBoxMax.fromArray(PLAYER_PICK_BOX_MAX);
   return character;
 }
 
@@ -868,6 +944,10 @@ async function buildMonsterCharacter(id: number, look: MonsterLook): Promise<Cha
   character.monsterModel = look.model;
   character.attacks = look.attacks;
   character.look = look;
+  if (look.player) character.pickBoxMax.fromArray(PLAYER_PICK_BOX_MAX);
+  const boxMin = pickBoxCorner(setup.boundingBox, 'min'), boxMax = pickBoxCorner(setup.boundingBox, 'max');
+  if (boxMin) character.pickBoxMin.fromArray(boxMin);
+  if (boxMax) character.pickBoxMax.fromArray(boxMax);
   if (setup.light === false) character.fullBright = true;
   if (setup.heightOffset !== undefined) character.heightOffset = setup.heightOffset;
   if (setup.height !== undefined) character.fixedHeight = setup.height;

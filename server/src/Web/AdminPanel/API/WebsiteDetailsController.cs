@@ -6,10 +6,6 @@ namespace HNMO.Web.AdminPanel.API;
 
 using System.Globalization;
 using System.Threading;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using HNMO.AttributeSystem;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.Attributes;
@@ -18,6 +14,10 @@ using HNMO.GameServer;
 using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.Web.AdminPanel.Operations;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The website's slower-changing data, read from the server: the character ranking (level, master level,

@@ -1,0 +1,783 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="Kris" xml:space="preserve"><value>Kris</value></data>
+  <data name="ShortSword" xml:space="preserve"><value>Kiếm ngắn</value></data>
+  <data name="Rapier" xml:space="preserve"><value>Rapier</value></data>
+  <data name="Katache" xml:space="preserve"><value>Katache</value></data>
+  <data name="SwordOfAssassin" xml:space="preserve"><value>Thanh kiếm sát thủ</value></data>
+  <data name="Blade" xml:space="preserve"><value>lưỡi dao</value></data>
+  <data name="Gladius" xml:space="preserve"><value>Gladius</value></data>
+  <data name="Falchion" xml:space="preserve"><value>Falchion</value></data>
+  <data name="SerpentSword" xml:space="preserve"><value>Thanh kiếm rắn</value></data>
+  <data name="SwordOfSalamander" xml:space="preserve"><value>Thanh kiếm của Salamander</value></data>
+  <data name="LightSaber" xml:space="preserve"><value>Saber ánh sáng</value></data>
+  <data name="LegendarySword" xml:space="preserve"><value>Thanh kiếm huyền thoại</value></data>
+  <data name="HeliacalSword" xml:space="preserve"><value>Thanh kiếm Heliacal</value></data>
+  <data name="DoubleBlade" xml:space="preserve"><value>Lưỡi đôi</value></data>
+  <data name="LightingSword" xml:space="preserve"><value>Thanh kiếm ánh sáng</value></data>
+  <data name="GiantSword" xml:space="preserve"><value>Thanh kiếm khổng lồ</value></data>
+  <data name="SwordOfDestruction" xml:space="preserve"><value>Thanh kiếm hủy diệt</value></data>
+  <data name="DarkBreaker" xml:space="preserve"><value>Kẻ phá bóng tối</value></data>
+  <data name="ThunderBlade" xml:space="preserve"><value>Lưỡi sấm sét</value></data>
+  <data name="DivineSwordOfArchangel" xml:space="preserve"><value>Thanh kiếm thần thánh của tổng lãnh thiên thần</value></data>
+  <data name="KnightBlade" xml:space="preserve"><value>Lưỡi hiệp sĩ</value></data>
+  <data name="DarkReignBlade" xml:space="preserve"><value>Lưỡi kiếm thống trị bóng tối</value></data>
+  <data name="BoneBlade" xml:space="preserve"><value>Lưỡi xương</value></data>
+  <data name="ExplosionBlade" xml:space="preserve"><value>Lưỡi nổ</value></data>
+  <data name="Daybreak" xml:space="preserve"><value>Bình minh</value></data>
+  <data name="SwordDancer" xml:space="preserve"><value>Vũ công kiếm</value></data>
+  <data name="Flamberge" xml:space="preserve"><value>Flamberge</value></data>
+  <data name="SwordBreaker" xml:space="preserve"><value>Kẻ Phá Kiếm</value></data>
+  <data name="ImperialSword" xml:space="preserve"><value>Thanh kiếm hoàng gia</value></data>
+  <data name="RuneBlade" xml:space="preserve"><value>Lưỡi kiếm cổ ngữ</value></data>
+  <data name="SacredGlove" xml:space="preserve"><value>Găng tay thiêng liêng</value></data>
+  <data name="StormHardGlove" xml:space="preserve"><value>Găng tay cứng bão</value></data>
+  <data name="PiercingBladeGlove" xml:space="preserve"><value>Găng tay xuyên thấu</value></data>
+  <data name="PhoenixSoulStar" xml:space="preserve"><value>Phượng Hoàng Hồn Tinh</value></data>
+  <data name="SmallAxe" xml:space="preserve"><value>Rìu nhỏ</value></data>
+  <data name="HandAxe" xml:space="preserve"><value>Rìu tay</value></data>
+  <data name="DoubleAxe" xml:space="preserve"><value>Rìu đôi</value></data>
+  <data name="Tomahawk" xml:space="preserve"><value>Tomahawk</value></data>
+  <data name="ElvenAxe" xml:space="preserve"><value>Rìu yêu tinh</value></data>
+  <data name="BattleAxe" xml:space="preserve"><value>Rìu chiến</value></data>
+  <data name="NikkeaAxe" xml:space="preserve"><value>Rìu Nikkoa</value></data>
+  <data name="LarkanAxe" xml:space="preserve"><value>Rìu Larkan</value></data>
+  <data name="CrescentAxe" xml:space="preserve"><value>Rìu lưỡi liềm</value></data>
+  <data name="Mace" xml:space="preserve"><value>chùy</value></data>
+  <data name="MorningStar" xml:space="preserve"><value>Sao Mai</value></data>
+  <data name="Flail" xml:space="preserve"><value>đập mạnh</value></data>
+  <data name="GreatHammer" xml:space="preserve"><value>Búa vĩ đại</value></data>
+  <data name="CrystalMorningStar" xml:space="preserve"><value>Sao Mai Pha Lê</value></data>
+  <data name="CrystalSword" xml:space="preserve"><value>Thanh kiếm pha lê</value></data>
+  <data name="ChaosDragonAxe" xml:space="preserve"><value>Rìu rồng hỗn loạn</value></data>
+  <data name="ElementalMace" xml:space="preserve"><value>Chùy nguyên tố</value></data>
+  <data name="BattleScepter" xml:space="preserve"><value>Vương trượng chiến đấu</value></data>
+  <data name="MasterScepter" xml:space="preserve"><value>Vương trượng bậc thầy</value></data>
+  <data name="GreatScepter" xml:space="preserve"><value>Vương trượng vĩ đại</value></data>
+  <data name="LordScepter" xml:space="preserve"><value>Vương trượng</value></data>
+  <data name="GreatLordScepter" xml:space="preserve"><value>Vương trượng vĩ đại</value></data>
+  <data name="DivineScepterOfArchangel" xml:space="preserve"><value>Vương trượng thần thánh của tổng lãnh thiên thần</value></data>
+  <data name="SoleilScepter" xml:space="preserve"><value>Vương trượng Soleil</value></data>
+  <data name="ShiningScepter" xml:space="preserve"><value>Vương trượng tỏa sáng</value></data>
+  <data name="FrostMace" xml:space="preserve"><value>Chùy băng giá</value></data>
+  <data name="AbsoluteScepter" xml:space="preserve"><value>Vương trượng tuyệt đối</value></data>
+  <data name="StrykerScepter" xml:space="preserve"><value>Vương trượng Stryker</value></data>
+  <data name="LightSpear" xml:space="preserve"><value>Ngọn giáo ánh sáng</value></data>
+  <data name="Spear" xml:space="preserve"><value>giáo</value></data>
+  <data name="DragonLance" xml:space="preserve"><value>Thương Rồng</value></data>
+  <data name="GiantTrident" xml:space="preserve"><value>Cây đinh ba khổng lồ</value></data>
+  <data name="SerpentSpear" xml:space="preserve"><value>Thương Rắn</value></data>
+  <data name="DoublePoleaxe" xml:space="preserve"><value>Rìu đôi</value></data>
+  <data name="Halberd" xml:space="preserve"><value>kích</value></data>
+  <data name="Berdysh" xml:space="preserve"><value>Berdysh</value></data>
+  <data name="GreatScythe" xml:space="preserve"><value>Lưỡi hái lớn</value></data>
+  <data name="BillOfBalrog" xml:space="preserve"><value>Dự luật Balrog</value></data>
+  <data name="DragonSpear" xml:space="preserve"><value>Thương Rồng</value></data>
+  <data name="Beuroba" xml:space="preserve"><value>Beuroba</value></data>
+  <data name="ShortBow" xml:space="preserve"><value>Cung ngắn</value></data>
+  <data name="Bow" xml:space="preserve"><value>Cung</value></data>
+  <data name="ElvenBow" xml:space="preserve"><value>Cung yêu tinh</value></data>
+  <data name="BattleBow" xml:space="preserve"><value>Cung chiến</value></data>
+  <data name="TigerBow" xml:space="preserve"><value>Cung hổ</value></data>
+  <data name="SilverBow" xml:space="preserve"><value>Cung bạc</value></data>
+  <data name="ChaosNatureBow" xml:space="preserve"><value>Mai Hoa Cung</value></data>
+  <data name="Bolt" xml:space="preserve"><value>bu lông</value></data>
+  <data name="Crossbow" xml:space="preserve"><value>nỏ</value></data>
+  <data name="GoldenCrossbow" xml:space="preserve"><value>Nỏ vàng</value></data>
+  <data name="Arquebus" xml:space="preserve"><value>súng hỏa mai</value></data>
+  <data name="LightCrossbow" xml:space="preserve"><value>Nỏ nhẹ</value></data>
+  <data name="SerpentCrossbow" xml:space="preserve"><value>Nỏ Rắn</value></data>
+  <data name="BluewingCrossbow" xml:space="preserve"><value>nỏ cánh xanh</value></data>
+  <data name="AquagoldCrossbow" xml:space="preserve"><value>Nỏ Aquagold</value></data>
+  <data name="Arrows" xml:space="preserve"><value>Mũi tên</value></data>
+  <data name="SaintCrossbow" xml:space="preserve"><value>Thánh Nỏ</value></data>
+  <data name="CelestialBow" xml:space="preserve"><value>Cung thiên</value></data>
+  <data name="DivineCrossbowOfArchangel" xml:space="preserve"><value>Nỏ thần thánh của Archangel</value></data>
+  <data name="GreatReignCrossbow" xml:space="preserve"><value>Nỏ trị vì vĩ đại</value></data>
+  <data name="ArrowViperBow" xml:space="preserve"><value>Mũi tên Viper Cung</value></data>
+  <data name="SylphWindBow" xml:space="preserve"><value>Cung gió Sylph</value></data>
+  <data name="AlbatrossBow" xml:space="preserve"><value>Cung hải âu</value></data>
+  <data name="StingerBow" xml:space="preserve"><value>Cung Stinger</value></data>
+  <data name="AirLynBow" xml:space="preserve"><value>Air Lyn Bow</value></data>
+  <data name="SkullStaff" xml:space="preserve"><value>trượng đầu lâu</value></data>
+  <data name="AngelicStaff" xml:space="preserve"><value>Quyền trượng thiên thần</value></data>
+  <data name="SerpentStaff" xml:space="preserve"><value>Trượng Rắn</value></data>
+  <data name="ThunderStaff" xml:space="preserve"><value>Trượng Sấm Sét</value></data>
+  <data name="GorgonStaff" xml:space="preserve"><value>nhân viên Gorgon</value></data>
+  <data name="LegendaryStaff" xml:space="preserve"><value>nhân viên huyền thoại</value></data>
+  <data name="StaffOfResurrection" xml:space="preserve"><value>Nhân viên phục sinh</value></data>
+  <data name="ChaosLightningStaff" xml:space="preserve"><value>Trượng Tia Chớp Hỗn Loạn</value></data>
+  <data name="StaffOfDestruction" xml:space="preserve"><value>Nhân viên hủy diệt</value></data>
+  <data name="DragonSoulStaff" xml:space="preserve"><value>Trượng Hồn Rồng</value></data>
+  <data name="DivineStaffOfArchangel" xml:space="preserve"><value>Quyền Trượng Thần Thánh của Tổng Lãnh Thiên Thần</value></data>
+  <data name="StaffOfKundun" xml:space="preserve"><value>Nhân viên Kundun</value></data>
+  <data name="GrandViperStaff" xml:space="preserve"><value>Trượng Viper Vĩ Đại</value></data>
+  <data name="PlatinaStaff" xml:space="preserve"><value>nhân viên bạch kim</value></data>
+  <data name="MisteryStick" xml:space="preserve"><value>Cây gậy bí ẩn</value></data>
+  <data name="ViolentWindStick" xml:space="preserve"><value>Gậy Gió Bạo Lực</value></data>
+  <data name="RedWingStick" xml:space="preserve"><value>Gậy cánh đỏ</value></data>
+  <data name="AncientStick" xml:space="preserve"><value>Cây gậy cổ</value></data>
+  <data name="DemonicStick" xml:space="preserve"><value>Cây gậy quỷ</value></data>
+  <data name="StormBlitzStick" xml:space="preserve"><value>Gậy Bão Blitz</value></data>
+  <data name="EternalWingStick" xml:space="preserve"><value>Cây gậy cánh vĩnh cửu</value></data>
+  <data name="BookOfSahamutt" xml:space="preserve"><value>Sách Sahamutt</value></data>
+  <data name="BookOfNeil" xml:space="preserve"><value>Cuốn sách của Neil</value></data>
+  <data name="BookOfLagle" xml:space="preserve"><value>Sách Lagle</value></data>
+  <data name="DeadlyStaff" xml:space="preserve"><value>Nhân viên chết người</value></data>
+  <data name="ImperialStaff" xml:space="preserve"><value>nhân viên hoàng gia</value></data>
+  <data name="ChromaticStaff" xml:space="preserve"><value>Nhân viên màu sắc</value></data>
+  <data name="RavenStick" xml:space="preserve"><value>Cây gậy quạ</value></data>
+  <data name="DivineStickOfArchangel" xml:space="preserve"><value>Cây gậy thần thánh của tổng lãnh thiên thần</value></data>
+  <data name="SmallShield" xml:space="preserve"><value>Khiên nhỏ</value></data>
+  <data name="HornShield" xml:space="preserve"><value>Khiên sừng</value></data>
+  <data name="KiteShield" xml:space="preserve"><value>Lá chắn diều</value></data>
+  <data name="ElvenShield" xml:space="preserve"><value>Khiên yêu tinh</value></data>
+  <data name="Buckler" xml:space="preserve"><value>chiếc khiên</value></data>
+  <data name="DragonSlayerShield" xml:space="preserve"><value>Khiên diệt rồng</value></data>
+  <data name="SkullShield" xml:space="preserve"><value>Khiên đầu lâu</value></data>
+  <data name="SpikedShield" xml:space="preserve"><value>Khiên có gai</value></data>
+  <data name="TowerShield" xml:space="preserve"><value>Lá chắn tháp</value></data>
+  <data name="PlateShield" xml:space="preserve"><value>Tấm khiên</value></data>
+  <data name="BigRoundShield" xml:space="preserve"><value>Khiên tròn lớn</value></data>
+  <data name="SerpentShield" xml:space="preserve"><value>Khiên rắn</value></data>
+  <data name="BronzeShield" xml:space="preserve"><value>Khiên đồng</value></data>
+  <data name="DragonShield" xml:space="preserve"><value>Khiên rồng</value></data>
+  <data name="LegendaryShield" xml:space="preserve"><value>Khiên huyền thoại</value></data>
+  <data name="GrandSoulShield" xml:space="preserve"><value>Khiên linh hồn lớn</value></data>
+  <data name="ElementalShield" xml:space="preserve"><value>Lá chắn nguyên tố</value></data>
+  <data name="CrimsonGlory" xml:space="preserve"><value>Hồng quang vinh quang</value></data>
+  <data name="SalamanderShield" xml:space="preserve"><value>Khiên kỳ nhông</value></data>
+  <data name="FrostBarrier" xml:space="preserve"><value>Rào chắn băng giá</value></data>
+  <data name="GuardianShield" xml:space="preserve"><value>Khiên bảo vệ</value></data>
+  <data name="CrossShield" xml:space="preserve"><value>Khiên chéo</value></data>
+  <data name="BronzeHelm" xml:space="preserve"><value>Mũ đồng</value></data>
+  <data name="DragonHelm" xml:space="preserve"><value>Mũ Rồng</value></data>
+  <data name="PadHelm" xml:space="preserve"><value>Mũ bảo hiểm</value></data>
+  <data name="LegendaryHelm" xml:space="preserve"><value>Chiếc mũ huyền thoại</value></data>
+  <data name="BoneHelm" xml:space="preserve"><value>Mũ Xương</value></data>
+  <data name="LeatherHelm" xml:space="preserve"><value>Mũ da</value></data>
+  <data name="ScaleHelm" xml:space="preserve"><value>mũ bảo hiểm quy mô</value></data>
+  <data name="SphinxMask" xml:space="preserve"><value>Mặt nạ nhân sư</value></data>
+  <data name="BrassHelm" xml:space="preserve"><value>Mũ đồng thau</value></data>
+  <data name="PlateHelm" xml:space="preserve"><value>tấm mũ bảo hiểm</value></data>
+  <data name="VineHelm" xml:space="preserve"><value>Mũ nho</value></data>
+  <data name="SilkHelm" xml:space="preserve"><value>Mũ lụa</value></data>
+  <data name="WindHelm" xml:space="preserve"><value>Mũ gió</value></data>
+  <data name="SpiritHelm" xml:space="preserve"><value>Mũ bảo hiểm tinh thần</value></data>
+  <data name="GuardianHelm" xml:space="preserve"><value>Mũ bảo hiểm</value></data>
+  <data name="BlackDragonHelm" xml:space="preserve"><value>Mũ Rồng Đen</value></data>
+  <data name="DarkPhoenixHelm" xml:space="preserve"><value>Mũ bảo hiểm Phượng hoàng bóng tối</value></data>
+  <data name="GrandSoulHelm" xml:space="preserve"><value>Mũ bảo hiểm linh hồn lớn</value></data>
+  <data name="DivineHelm" xml:space="preserve"><value>Mũ Thần Thánh</value></data>
+  <data name="GreatDragonHelm" xml:space="preserve"><value>Mũ rồng lớn</value></data>
+  <data name="DarkSoulHelm" xml:space="preserve"><value>Mũ bảo hiểm linh hồn bóng tối</value></data>
+  <data name="RedSpiritHelm" xml:space="preserve"><value>Mũ bảo hiểm thần đỏ</value></data>
+  <data name="LightPlateMask" xml:space="preserve"><value>Mặt nạ tấm nhẹ</value></data>
+  <data name="AdamantineMask" xml:space="preserve"><value>Mặt nạ kim cương</value></data>
+  <data name="DarkSteelMask" xml:space="preserve"><value>Mặt nạ thép đen</value></data>
+  <data name="DarkMasterMask" xml:space="preserve"><value>Mặt nạ chủ nhân bóng tối</value></data>
+  <data name="DragonKnightHelm" xml:space="preserve"><value>Mũ bảo hiểm hiệp sĩ rồng</value></data>
+  <data name="VenomMistHelm" xml:space="preserve"><value>Mũ bảo hiểm sương mù nọc độc</value></data>
+  <data name="SylphidRayHelm" xml:space="preserve"><value>Mũ bảo hiểm tia Sylphid</value></data>
+  <data name="SunlightMask" xml:space="preserve"><value>Mặt nạ chống nắng</value></data>
+  <data name="AshcrowHelm" xml:space="preserve"><value>Mũ tro tro</value></data>
+  <data name="EclipseHelm" xml:space="preserve"><value>Mũ bảo hiểm nhật thực</value></data>
+  <data name="IrisHelm" xml:space="preserve"><value>Mũ bảo hiểm Iris</value></data>
+  <data name="GloriousMask" xml:space="preserve"><value>Mặt nạ vinh quang</value></data>
+  <data name="MisteryHelm" xml:space="preserve"><value>Mũ bảo hiểm bí ẩn</value></data>
+  <data name="RedWingHelm" xml:space="preserve"><value>Mũ cánh đỏ</value></data>
+  <data name="AncientHelm" xml:space="preserve"><value>Mũ cổ</value></data>
+  <data name="BlackRoseHelm" xml:space="preserve"><value>Mũ bảo hiểm hoa hồng đen</value></data>
+  <data name="AuraHelm" xml:space="preserve"><value>Mũ bảo hiểm hào quang</value></data>
+  <data name="LiliumHelm" xml:space="preserve"><value>Mũ Cánh Vĩnh Cửu</value></data>
+  <data name="TitanHelm" xml:space="preserve"><value>Mũ bảo hiểm Titan</value></data>
+  <data name="BraveHelm" xml:space="preserve"><value>Mũ bảo hiểm dũng cảm</value></data>
+  <data name="SeraphimHelm" xml:space="preserve"><value>Mũ bảo hiểm Seraphim</value></data>
+  <data name="FaithHelm" xml:space="preserve"><value>Mũ bảo hiểm niềm tin</value></data>
+  <data name="PaewangMask" xml:space="preserve"><value>Mặt nạ Paewang</value></data>
+  <data name="HadesHelm" xml:space="preserve"><value>Mũ bảo hiểm của Hades</value></data>
+  <data name="SacredHelm" xml:space="preserve"><value>Mũ thiêng</value></data>
+  <data name="StormHardHelm" xml:space="preserve"><value>Mũ bảo hiểm cứng bão</value></data>
+  <data name="PiercingHelm" xml:space="preserve"><value>Mũ xuyên thấu</value></data>
+  <data name="PhoenixSoulHelmet" xml:space="preserve"><value>Mũ bảo hiểm linh hồn Phượng hoàng</value></data>
+  <data name="BronzeArmor" xml:space="preserve"><value>Áo Giáp Đồng</value></data>
+  <data name="DragonArmor" xml:space="preserve"><value>Áo Giáp Rồng</value></data>
+  <data name="PadArmor" xml:space="preserve"><value>Giáp giáp</value></data>
+  <data name="LegendaryArmor" xml:space="preserve"><value>Giáp huyền thoại</value></data>
+  <data name="BoneArmor" xml:space="preserve"><value>Giáp xương</value></data>
+  <data name="LeatherArmor" xml:space="preserve"><value>Áo giáp da</value></data>
+  <data name="ScaleArmor" xml:space="preserve"><value>Giáp vảy</value></data>
+  <data name="SphinxArmor" xml:space="preserve"><value>Giáp nhân sư</value></data>
+  <data name="BrassArmor" xml:space="preserve"><value>Áo giáp đồng thau</value></data>
+  <data name="PlateArmor" xml:space="preserve"><value>Áo giáp tấm</value></data>
+  <data name="VineArmor" xml:space="preserve"><value>Giáp Nho</value></data>
+  <data name="SilkArmor" xml:space="preserve"><value>Giáp lụa</value></data>
+  <data name="WindArmor" xml:space="preserve"><value>Áo giáp gió</value></data>
+  <data name="SpiritArmor" xml:space="preserve"><value>Giáp Thần</value></data>
+  <data name="GuardianArmor" xml:space="preserve"><value>Giáp hộ mệnh</value></data>
+  <data name="StormCrowArmor" xml:space="preserve"><value>Giáp Quạ Bão</value></data>
+  <data name="BlackDragonArmor" xml:space="preserve"><value>Giáp Rồng Đen</value></data>
+  <data name="DarkPhoenixArmor" xml:space="preserve"><value>Giáp Phượng Hoàng Bóng Tối</value></data>
+  <data name="GrandSoulArmor" xml:space="preserve"><value>Giáp linh hồn lớn</value></data>
+  <data name="DivineArmor" xml:space="preserve"><value>Áo Giáp Thần Thánh</value></data>
+  <data name="ThunderHawkArmor" xml:space="preserve"><value>Giáp Diều Hâu Sấm Sét</value></data>
+  <data name="GreatDragonArmor" xml:space="preserve"><value>Áo giáp rồng lớn</value></data>
+  <data name="DarkSoulArmor" xml:space="preserve"><value>Giáp linh hồn bóng tối</value></data>
+  <data name="HurricaneArmor" xml:space="preserve"><value>Áo giáp bão</value></data>
+  <data name="RedSpritArmor" xml:space="preserve"><value>Giáp Tinh Linh Đỏ</value></data>
+  <data name="LightPlateArmor" xml:space="preserve"><value>Áo giáp nhẹ</value></data>
+  <data name="AdamantineArmor" xml:space="preserve"><value>Giáp kim cương</value></data>
+  <data name="DarkSteelArmor" xml:space="preserve"><value>Giáp thép đen</value></data>
+  <data name="DarkMasterArmor" xml:space="preserve"><value>Giáp chủ nhân bóng tối</value></data>
+  <data name="DragonKnightArmor" xml:space="preserve"><value>Áo giáp hiệp sĩ rồng</value></data>
+  <data name="VenomMistArmor" xml:space="preserve"><value>Giáp sương mù nọc độc</value></data>
+  <data name="SylphidRayArmor" xml:space="preserve"><value>Giáp tia Sylphid</value></data>
+  <data name="VolcanoArmor" xml:space="preserve"><value>Giáp núi lửa</value></data>
+  <data name="SunlightArmor" xml:space="preserve"><value>Giáp Ánh Nắng</value></data>
+  <data name="AshcrowArmor" xml:space="preserve"><value>Giáp Ashcrow</value></data>
+  <data name="EclipseArmor" xml:space="preserve"><value>Áo Giáp Nhật Thực</value></data>
+  <data name="IrisArmor" xml:space="preserve"><value>Giáp Iris</value></data>
+  <data name="ValiantArmor" xml:space="preserve"><value>Giáp dũng cảm</value></data>
+  <data name="GloriousArmor" xml:space="preserve"><value>Giáp vinh quang</value></data>
+  <data name="MisteryArmor" xml:space="preserve"><value>Giáp bí ẩn</value></data>
+  <data name="RedWingArmor" xml:space="preserve"><value>Giáp cánh đỏ</value></data>
+  <data name="AncientArmor" xml:space="preserve"><value>Áo Giáp Cổ</value></data>
+  <data name="BlackRoseArmor" xml:space="preserve"><value>Giáp Hoa Hồng Đen</value></data>
+  <data name="AuraArmor" xml:space="preserve"><value>Giáp hào quang</value></data>
+  <data name="LiliumArmor" xml:space="preserve"><value>Giáp Cánh Vĩnh Cửu</value></data>
+  <data name="TitanArmor" xml:space="preserve"><value>Giáp Titan</value></data>
+  <data name="BraveArmor" xml:space="preserve"><value>Giáp dũng cảm</value></data>
+  <data name="DestroyArmor" xml:space="preserve"><value>Phá hủy áo giáp</value></data>
+  <data name="PhantomArmor" xml:space="preserve"><value>Giáp ma</value></data>
+  <data name="SeraphimArmor" xml:space="preserve"><value>Giáp Seraphim</value></data>
+  <data name="FaithArmor" xml:space="preserve"><value>Giáp đức tin</value></data>
+  <data name="PaewangArmor" xml:space="preserve"><value>Giáp Paewang</value></data>
+  <data name="HadesArmor" xml:space="preserve"><value>Áo Giáp Địa Ngục</value></data>
+  <data name="SacredArmor" xml:space="preserve"><value>Giáp Thánh</value></data>
+  <data name="StormHardArmor" xml:space="preserve"><value>Áo giáp cứng bão</value></data>
+  <data name="PiercingArmor" xml:space="preserve"><value>xuyên giáp</value></data>
+  <data name="PhoenixSoulArmor" xml:space="preserve"><value>Giáp Hồn Phượng Hoàng</value></data>
+  <data name="BronzePants" xml:space="preserve"><value>Quần đồng</value></data>
+  <data name="DragonPants" xml:space="preserve"><value>Quần rồng</value></data>
+  <data name="PadPants" xml:space="preserve"><value>Quần lót</value></data>
+  <data name="LegendaryPants" xml:space="preserve"><value>Chiếc quần huyền thoại</value></data>
+  <data name="BonePants" xml:space="preserve"><value>Quần xương</value></data>
+  <data name="LeatherPants" xml:space="preserve"><value>Quần da</value></data>
+  <data name="ScalePants" xml:space="preserve"><value>Quần vảy</value></data>
+  <data name="SphinxPants" xml:space="preserve"><value>quần nhân sư</value></data>
+  <data name="BrassPants" xml:space="preserve"><value>Quần đồng thau</value></data>
+  <data name="PlatePants" xml:space="preserve"><value>Quần tấm</value></data>
+  <data name="VinePants" xml:space="preserve"><value>quần nho</value></data>
+  <data name="SilkPants" xml:space="preserve"><value>Quần lụa</value></data>
+  <data name="WindPants" xml:space="preserve"><value>Quần gió</value></data>
+  <data name="SpiritPants" xml:space="preserve"><value>Quần thần</value></data>
+  <data name="GuardianPants" xml:space="preserve"><value>Quần bảo vệ</value></data>
+  <data name="StormCrowPants" xml:space="preserve"><value>Quần quạ bão</value></data>
+  <data name="BlackDragonPants" xml:space="preserve"><value>Quần Rồng đen</value></data>
+  <data name="DarkPhoenixPants" xml:space="preserve"><value>Quần phượng hoàng đen</value></data>
+  <data name="GrandSoulPants" xml:space="preserve"><value>Quần linh hồn lớn</value></data>
+  <data name="DivinePants" xml:space="preserve"><value>Quần thần thánh</value></data>
+  <data name="ThunderHawkPants" xml:space="preserve"><value>Quần diều hâu sấm sét</value></data>
+  <data name="GreatDragonPants" xml:space="preserve"><value>Quần rồng lớn</value></data>
+  <data name="DarkSoulPants" xml:space="preserve"><value>Quần linh hồn bóng tối</value></data>
+  <data name="HurricanePants" xml:space="preserve"><value>Quần bão</value></data>
+  <data name="RedSpiritPants" xml:space="preserve"><value>Quần thần đỏ</value></data>
+  <data name="LightPlatePants" xml:space="preserve"><value>Quần tấm nhẹ</value></data>
+  <data name="AdamantinePants" xml:space="preserve"><value>Quần kim cương</value></data>
+  <data name="DarkSteelPants" xml:space="preserve"><value>Quần thép tối màu</value></data>
+  <data name="DarkMasterPants" xml:space="preserve"><value>Quần chủ bóng tối</value></data>
+  <data name="DragonKnightPants" xml:space="preserve"><value>Quần hiệp sĩ rồng</value></data>
+  <data name="VenomMistPants" xml:space="preserve"><value>Quần sương mù nọc độc</value></data>
+  <data name="SylphidRayPants" xml:space="preserve"><value>Quần Ray Sylphid</value></data>
+  <data name="VolcanoPants" xml:space="preserve"><value>Quần núi lửa</value></data>
+  <data name="SunlightPants" xml:space="preserve"><value>Quần chống nắng</value></data>
+  <data name="AshcrowPants" xml:space="preserve"><value>quần tro</value></data>
+  <data name="EclipsePants" xml:space="preserve"><value>quần nhật thực</value></data>
+  <data name="IrisPants" xml:space="preserve"><value>Quần Iris</value></data>
+  <data name="ValiantPants" xml:space="preserve"><value>Quần dũng cảm</value></data>
+  <data name="GloriousPants" xml:space="preserve"><value>Quần vinh quang</value></data>
+  <data name="MisteryPants" xml:space="preserve"><value>Quần bí ẩn</value></data>
+  <data name="RedWingPants" xml:space="preserve"><value>Quần cánh đỏ</value></data>
+  <data name="AncientPants" xml:space="preserve"><value>Quần cổ</value></data>
+  <data name="BlackRosePants" xml:space="preserve"><value>Quần hoa hồng đen</value></data>
+  <data name="AuraPants" xml:space="preserve"><value>Quần hào quang</value></data>
+  <data name="LiliumPants" xml:space="preserve"><value>Quần Cánh Vĩnh Cửu</value></data>
+  <data name="TitanPants" xml:space="preserve"><value>Quần Titan</value></data>
+  <data name="BravePants" xml:space="preserve"><value>Quần dũng cảm</value></data>
+  <data name="DestroyPants" xml:space="preserve"><value>Phá hủy quần</value></data>
+  <data name="PhantomPants" xml:space="preserve"><value>Quần ma</value></data>
+  <data name="SeraphimPants" xml:space="preserve"><value>Quần Seraphim</value></data>
+  <data name="FaithPants" xml:space="preserve"><value>Quần đức tin</value></data>
+  <data name="PaewangPants" xml:space="preserve"><value>Quần Paewang</value></data>
+  <data name="HadesPants" xml:space="preserve"><value>Quần âm phủ</value></data>
+  <data name="SacredPants" xml:space="preserve"><value>Quần thần thánh</value></data>
+  <data name="StormHardPants" xml:space="preserve"><value>Quần cứng bão</value></data>
+  <data name="PiercingPants" xml:space="preserve"><value>Quần xuyên thấu</value></data>
+  <data name="PhoenixSoulPants" xml:space="preserve"><value>Quần Phượng Hồn</value></data>
+  <data name="BronzeGloves" xml:space="preserve"><value>Găng tay đồng</value></data>
+  <data name="DragonGloves" xml:space="preserve"><value>Găng Tay Rồng</value></data>
+  <data name="PadGloves" xml:space="preserve"><value>Găng tay đệm</value></data>
+  <data name="LegendaryGloves" xml:space="preserve"><value>Găng tay huyền thoại</value></data>
+  <data name="BoneGloves" xml:space="preserve"><value>Găng tay xương</value></data>
+  <data name="LeatherGloves" xml:space="preserve"><value>Găng tay da</value></data>
+  <data name="ScaleGloves" xml:space="preserve"><value>Găng tay vảy</value></data>
+  <data name="SphinxGloves" xml:space="preserve"><value>Găng tay nhân sư</value></data>
+  <data name="BrassGloves" xml:space="preserve"><value>Găng tay đồng thau</value></data>
+  <data name="PlateGloves" xml:space="preserve"><value>Găng tay tấm</value></data>
+  <data name="VineGloves" xml:space="preserve"><value>Găng tay nho</value></data>
+  <data name="SilkGloves" xml:space="preserve"><value>Găng tay lụa</value></data>
+  <data name="WindGloves" xml:space="preserve"><value>Găng tay gió</value></data>
+  <data name="SpiritGloves" xml:space="preserve"><value>Găng Tay Thần Linh</value></data>
+  <data name="GuardianGloves" xml:space="preserve"><value>Găng tay bảo vệ</value></data>
+  <data name="StormCrowGloves" xml:space="preserve"><value>Găng Tay Quạ Bão</value></data>
+  <data name="BlackDragonGloves" xml:space="preserve"><value>Găng Tay Rồng Đen</value></data>
+  <data name="DarkPhoenixGloves" xml:space="preserve"><value>Găng tay Phượng hoàng bóng tối</value></data>
+  <data name="GrandSoulGloves" xml:space="preserve"><value>Găng tay linh hồn lớn</value></data>
+  <data name="DivineGloves" xml:space="preserve"><value>Găng Tay Thần Thánh</value></data>
+  <data name="ThunderHawkGloves" xml:space="preserve"><value>Găng tay diều hâu sấm sét</value></data>
+  <data name="GreatDragonGloves" xml:space="preserve"><value>Găng tay rồng lớn</value></data>
+  <data name="DarkSoulGloves" xml:space="preserve"><value>Găng tay linh hồn bóng tối</value></data>
+  <data name="HurricaneGloves" xml:space="preserve"><value>Găng tay bão</value></data>
+  <data name="RedSpiritGloves" xml:space="preserve"><value>Găng tay thần đỏ</value></data>
+  <data name="LightPlateGloves" xml:space="preserve"><value>Găng tay tấm nhẹ</value></data>
+  <data name="AdamantineGloves" xml:space="preserve"><value>Găng tay kim cương</value></data>
+  <data name="DarkSteelGloves" xml:space="preserve"><value>Găng tay thép đen</value></data>
+  <data name="DarkMasterGloves" xml:space="preserve"><value>Găng Tay Hắc Ám</value></data>
+  <data name="DragonKnightGloves" xml:space="preserve"><value>Găng tay hiệp sĩ rồng</value></data>
+  <data name="VenomMistGloves" xml:space="preserve"><value>Găng tay phun sương nọc độc</value></data>
+  <data name="SylphidRayGloves" xml:space="preserve"><value>Găng tay tia Sylphid</value></data>
+  <data name="VolcanoGloves" xml:space="preserve"><value>Găng Tay Núi Lửa</value></data>
+  <data name="SunlightGloves" xml:space="preserve"><value>Găng tay chống nắng</value></data>
+  <data name="AshcrowGloves" xml:space="preserve"><value>Găng tay tro</value></data>
+  <data name="EclipseGloves" xml:space="preserve"><value>Găng tay nhật thực</value></data>
+  <data name="IrisGloves" xml:space="preserve"><value>Găng tay mống mắt</value></data>
+  <data name="ValiantGloves" xml:space="preserve"><value>Găng tay dũng cảm</value></data>
+  <data name="GloriousGloves" xml:space="preserve"><value>Găng tay vinh quang</value></data>
+  <data name="MisteryGloves" xml:space="preserve"><value>Găng tay bí ẩn</value></data>
+  <data name="RedWingGloves" xml:space="preserve"><value>Găng Tay Cánh Đỏ</value></data>
+  <data name="AncientGloves" xml:space="preserve"><value>Găng Tay Cổ</value></data>
+  <data name="BlackRoseGloves" xml:space="preserve"><value>Găng tay hoa hồng đen</value></data>
+  <data name="AuraGloves" xml:space="preserve"><value>Găng tay hào quang</value></data>
+  <data name="LiliumGloves" xml:space="preserve"><value>Găng tay Cánh Vĩnh Cửu</value></data>
+  <data name="TitanGloves" xml:space="preserve"><value>Găng tay Titan</value></data>
+  <data name="BraveGloves" xml:space="preserve"><value>Găng tay dũng cảm</value></data>
+  <data name="DestroyGloves" xml:space="preserve"><value>Phá hủy găng tay</value></data>
+  <data name="PhantomGloves" xml:space="preserve"><value>Găng tay ma</value></data>
+  <data name="SeraphimGloves" xml:space="preserve"><value>Găng Tay Seraphim</value></data>
+  <data name="FaithGloves" xml:space="preserve"><value>Găng tay đức tin</value></data>
+  <data name="PaewangGloves" xml:space="preserve"><value>Găng tay Paewang</value></data>
+  <data name="HadesGloves" xml:space="preserve"><value>Găng tay địa ngục</value></data>
+  <data name="BronzeBoots" xml:space="preserve"><value>Giày đồng</value></data>
+  <data name="DragonBoots" xml:space="preserve"><value>Giày rồng</value></data>
+  <data name="PadBoots" xml:space="preserve"><value>Giày bốt</value></data>
+  <data name="LegendaryBoots" xml:space="preserve"><value>Đôi giày huyền thoại</value></data>
+  <data name="BoneBoots" xml:space="preserve"><value>Giày xương</value></data>
+  <data name="LeatherBoots" xml:space="preserve"><value>Giày da</value></data>
+  <data name="ScaleBoots" xml:space="preserve"><value>Ủng cân</value></data>
+  <data name="SphinxBoots" xml:space="preserve"><value>Giày nhân sư</value></data>
+  <data name="BrassBoots" xml:space="preserve"><value>Ủng đồng thau</value></data>
+  <data name="PlateBoots" xml:space="preserve"><value>Giày bốt</value></data>
+  <data name="VineBoots" xml:space="preserve"><value>Giày bốt nho</value></data>
+  <data name="SilkBoots" xml:space="preserve"><value>Giày lụa</value></data>
+  <data name="WindBoots" xml:space="preserve"><value>Giày gió</value></data>
+  <data name="SpiritBoots" xml:space="preserve"><value>Giày tinh thần</value></data>
+  <data name="GuardianBoots" xml:space="preserve"><value>Giày bảo vệ</value></data>
+  <data name="StormCrowBoots" xml:space="preserve"><value>Giày bốt quạ bão</value></data>
+  <data name="BlackDragonBoots" xml:space="preserve"><value>Giày Rồng Đen</value></data>
+  <data name="DarkPhoenixBoots" xml:space="preserve"><value>Giày Phượng hoàng bóng tối</value></data>
+  <data name="GrandSoulBoots" xml:space="preserve"><value>Giày linh hồn lớn</value></data>
+  <data name="DivineBoots" xml:space="preserve"><value>Đôi giày thần thánh</value></data>
+  <data name="ThunderHawkBoots" xml:space="preserve"><value>Giày bốt Thunder Hawk</value></data>
+  <data name="GreatDragonBoots" xml:space="preserve"><value>Giày rồng lớn</value></data>
+  <data name="DarkSoulBoots" xml:space="preserve"><value>Giày linh hồn bóng tối</value></data>
+  <data name="HurricaneBoots" xml:space="preserve"><value>Giày chống bão</value></data>
+  <data name="RedSpiritBoots" xml:space="preserve"><value>Giày tinh thần đỏ</value></data>
+  <data name="LightPlateBoots" xml:space="preserve"><value>Giày bốt nhẹ</value></data>
+  <data name="AdamantineBoots" xml:space="preserve"><value>Giày kim cương</value></data>
+  <data name="DarkSteelBoots" xml:space="preserve"><value>Giày thép đen</value></data>
+  <data name="DarkMasterBoots" xml:space="preserve"><value>Giày bóng tối</value></data>
+  <data name="DragonKnightBoots" xml:space="preserve"><value>Giày hiệp sĩ rồng</value></data>
+  <data name="VenomMistBoots" xml:space="preserve"><value>Giày phun sương nọc độc</value></data>
+  <data name="SylphidRayBoots" xml:space="preserve"><value>Giày bốt cá đuối Sylphid</value></data>
+  <data name="VolcanoBoots" xml:space="preserve"><value>Giày núi lửa</value></data>
+  <data name="SunlightBoots" xml:space="preserve"><value>Giày chống nắng</value></data>
+  <data name="AshcrowBoots" xml:space="preserve"><value>Giày bốt tro</value></data>
+  <data name="EclipseBoots" xml:space="preserve"><value>Giày Eclipse</value></data>
+  <data name="IrisBoots" xml:space="preserve"><value>Giày Iris</value></data>
+  <data name="ValiantBoots" xml:space="preserve"><value>Giày dũng cảm</value></data>
+  <data name="GloriousBoots" xml:space="preserve"><value>Giày vinh quang</value></data>
+  <data name="MisteryBoots" xml:space="preserve"><value>Giày bí ẩn</value></data>
+  <data name="RedWingBoots" xml:space="preserve"><value>Giày cánh đỏ</value></data>
+  <data name="AncientBoots" xml:space="preserve"><value>Giày cổ</value></data>
+  <data name="BlackRoseBoots" xml:space="preserve"><value>Giày hoa hồng đen</value></data>
+  <data name="AuraBoots" xml:space="preserve"><value>Giày hào quang</value></data>
+  <data name="LiliumBoots" xml:space="preserve"><value>Giày Cánh Vĩnh Cửu</value></data>
+  <data name="TitanBoots" xml:space="preserve"><value>Giày Titan</value></data>
+  <data name="BraveBoots" xml:space="preserve"><value>Giày dũng cảm</value></data>
+  <data name="DestroyBoots" xml:space="preserve"><value>Phá hủy ủng</value></data>
+  <data name="PhantomBoots" xml:space="preserve"><value>Giày ma quái</value></data>
+  <data name="SeraphimBoots" xml:space="preserve"><value>Giày Seraphim</value></data>
+  <data name="FaithBoots" xml:space="preserve"><value>Giày đức tin</value></data>
+  <data name="PhaewangBoots" xml:space="preserve"><value>Giày Phaewang</value></data>
+  <data name="HadesBoots" xml:space="preserve"><value>Giày địa ngục</value></data>
+  <data name="SacredBoots" xml:space="preserve"><value>Đôi giày thần thánh</value></data>
+  <data name="StormHardBoots" xml:space="preserve"><value>Giày cứng bão</value></data>
+  <data name="PiercingBoots" xml:space="preserve"><value>Giày xỏ khuyên</value></data>
+  <data name="PhoenixSoulBoots" xml:space="preserve"><value>Giày linh hồn Phượng hoàng</value></data>
+  <data name="WingsOfElf" xml:space="preserve"><value>Đôi cánh của yêu tinh</value></data>
+  <data name="WingsOfHeaven" xml:space="preserve"><value>Đôi cánh thiên đường</value></data>
+  <data name="WingsOfSatan" xml:space="preserve"><value>Đôi cánh của Satan</value></data>
+  <data name="WingsOfSpirits" xml:space="preserve"><value>Đôi cánh tinh thần</value></data>
+  <data name="WingsOfSoul" xml:space="preserve"><value>Đôi cánh tâm hồn</value></data>
+  <data name="WingsOfDragon" xml:space="preserve"><value>Cánh Rồng</value></data>
+  <data name="WingsOfDarkness" xml:space="preserve"><value>Đôi cánh bóng tối</value></data>
+  <data name="OrbOfTwistingSlash" xml:space="preserve"><value>Quả cầu xoắn</value></data>
+  <data name="OrbOfHealing" xml:space="preserve"><value>Quả cầu chữa bệnh</value></data>
+  <data name="OrbOfGreaterDefense" xml:space="preserve"><value>Quả cầu phòng thủ lớn hơn</value></data>
+  <data name="OrbOfGreaterDamage" xml:space="preserve"><value>Quả cầu có sức sát thương lớn hơn</value></data>
+  <data name="OrbOfSummoning" xml:space="preserve"><value>Quả cầu triệu hồi</value></data>
+  <data name="OrbOfRagefulBlow" xml:space="preserve"><value>Quả cầu của đòn cuồng nộ</value></data>
+  <data name="OrbOfImpale" xml:space="preserve"><value>Quả cầu xiên</value></data>
+  <data name="OrbOfGreaterFortitude" xml:space="preserve"><value>Quả cầu sức mạnh lớn hơn</value></data>
+  <data name="JewelOfChaos" xml:space="preserve"><value>Viên ngọc hỗn loạn</value></data>
+  <data name="OrbOfFireSlash" xml:space="preserve"><value>Quả cầu lửa chém</value></data>
+  <data name="OrbOfPenetration" xml:space="preserve"><value>Quả cầu xuyên thấu</value></data>
+  <data name="OrbOfIceArrow" xml:space="preserve"><value>Quả cầu mũi tên băng</value></data>
+  <data name="OrbOfDeathStab" xml:space="preserve"><value>Quả cầu đâm tử thần</value></data>
+  <data name="ScrollOfFireBurst" xml:space="preserve"><value>Cuộn FireBurst</value></data>
+  <data name="ScrollOfSummon" xml:space="preserve"><value>Cuộn giấy triệu tập</value></data>
+  <data name="ScrollOfCriticalDamage" xml:space="preserve"><value>Cuộn sát thương chí mạng</value></data>
+  <data name="ScrollOfElectricSpark" xml:space="preserve"><value>Cuộn tia lửa điện</value></data>
+  <data name="PackedJewelOfBless" xml:space="preserve"><value>Viên ngọc phước lành được đóng gói</value></data>
+  <data name="PackedJewelOfSoul" xml:space="preserve"><value>Viên ngọc tâm hồn được đóng gói</value></data>
+  <data name="RedRibbonBox" xml:space="preserve"><value>Hộp ruy băng đỏ</value></data>
+  <data name="GreenRibbonBox" xml:space="preserve"><value>Hộp ruy băng xanh</value></data>
+  <data name="BlueRibbonBox" xml:space="preserve"><value>Hộp ruy băng màu xanh</value></data>
+  <data name="ScrollOfFireScream" xml:space="preserve"><value>Cuộn lửa hét lên</value></data>
+  <data name="WingOfStorm" xml:space="preserve"><value>Cánh bão</value></data>
+  <data name="WingOfEternal" xml:space="preserve"><value>Cánh vĩnh cửu</value></data>
+  <data name="WingOfIllusion" xml:space="preserve"><value>Cánh ảo tưởng</value></data>
+  <data name="WingOfRuin" xml:space="preserve"><value>Cánh tàn tích</value></data>
+  <data name="CapeOfEmperor" xml:space="preserve"><value>Mũi hoàng đế</value></data>
+  <data name="WingsOfCurse" xml:space="preserve"><value>Đôi cánh nguyền rủa</value></data>
+  <data name="WingsOfDespair" xml:space="preserve"><value>Đôi cánh tuyệt vọng</value></data>
+  <data name="WingOfDimension" xml:space="preserve"><value>Cánh kích thước</value></data>
+  <data name="CrystalOfDestruction" xml:space="preserve"><value>Tinh thể hủy diệt</value></data>
+  <data name="CrystalOfMultiShot" xml:space="preserve"><value>Tinh thể bắn nhiều phát</value></data>
+  <data name="CrystalOfRecovery" xml:space="preserve"><value>Tinh thể phục hồi</value></data>
+  <data name="CrystalOfFlameStrike" xml:space="preserve"><value>Pha lê lửa tấn công</value></data>
+  <data name="ScrollOfChaoticDiseier" xml:space="preserve"><value>Cuộn giấy hỗn loạn</value></data>
+  <data name="CapeOfFighter" xml:space="preserve"><value>Mũi chiến đấu</value></data>
+  <data name="CapeOfOverrule" xml:space="preserve"><value>Mũi Overrule</value></data>
+  <data name="SeedFire" xml:space="preserve"><value>Hạt giống (Lửa)</value></data>
+  <data name="SeedWater" xml:space="preserve"><value>Hạt giống (Nước)</value></data>
+  <data name="SeedIce" xml:space="preserve"><value>Hạt giống (đá)</value></data>
+  <data name="SeedWind" xml:space="preserve"><value>Hạt Giống (Gió)</value></data>
+  <data name="SeedLightning" xml:space="preserve"><value>Hạt giống (Sét)</value></data>
+  <data name="SeedEarth" xml:space="preserve"><value>Hạt giống (Trái đất)</value></data>
+  <data name="SphereMono" xml:space="preserve"><value>Hình cầu (Mono)</value></data>
+  <data name="SphereDi" xml:space="preserve"><value>Hình cầu (Di)</value></data>
+  <data name="SphereTri" xml:space="preserve"><value>Quả cầu (Tri)</value></data>
+  <data name="Sphere4" xml:space="preserve"><value>Quả cầu (4)</value></data>
+  <data name="Sphere5" xml:space="preserve"><value>Hình cầu (5)</value></data>
+  <data name="SeedSphereFire1" xml:space="preserve"><value>Hạt Giống (Lửa) (1)</value></data>
+  <data name="SeedSphereWater1" xml:space="preserve"><value>Quả Cầu Hạt (Nước) (1)</value></data>
+  <data name="SeedSphereIce1" xml:space="preserve"><value>Hạt giống (Băng) (1)</value></data>
+  <data name="SeedSphereWind1" xml:space="preserve"><value>Quả Cầu Hạt Giống (Gió) (1)</value></data>
+  <data name="SeedSphereLightning1" xml:space="preserve"><value>Quả cầu hạt giống (Sét) (1)</value></data>
+  <data name="SeedSphereEarth1" xml:space="preserve"><value>Quả cầu hạt giống (Trái đất) (1)</value></data>
+  <data name="SeedSphereFire2" xml:space="preserve"><value>Hạt Giống (Lửa) (2)</value></data>
+  <data name="SeedSphereWater2" xml:space="preserve"><value>Quả Cầu Hạt (Nước) (2)</value></data>
+  <data name="SeedSphereIce2" xml:space="preserve"><value>Hạt giống (Băng) (2)</value></data>
+  <data name="SeedSphereWind2" xml:space="preserve"><value>Hạt Giống (Gió) (2)</value></data>
+  <data name="SeedSphereLightning2" xml:space="preserve"><value>Quả cầu hạt giống (Sét) (2)</value></data>
+  <data name="SeedSphereEarth2" xml:space="preserve"><value>Quả cầu hạt giống (Trái đất) (2)</value></data>
+  <data name="SeedSphereFire3" xml:space="preserve"><value>Hạt Giống (Lửa) (3)</value></data>
+  <data name="SeedSphereWater3" xml:space="preserve"><value>Quả Cầu Hạt (Nước) (3)</value></data>
+  <data name="SeedSphereIce3" xml:space="preserve"><value>Hạt giống (Băng) (3)</value></data>
+  <data name="SeedSphereWind3" xml:space="preserve"><value>Hạt Giống (Gió) (3)</value></data>
+  <data name="SeedSphereLightning3" xml:space="preserve"><value>Quả cầu hạt giống (Sét) (3)</value></data>
+  <data name="SeedSphereEarth3" xml:space="preserve"><value>Quả cầu hạt giống (Trái đất) (3)</value></data>
+  <data name="SeedSphereFire4" xml:space="preserve"><value>Hạt Giống (Lửa) (4)</value></data>
+  <data name="SeedSphereWater4" xml:space="preserve"><value>Quả Cầu Hạt (Nước) (4)</value></data>
+  <data name="SeedSphereIce4" xml:space="preserve"><value>Hạt giống (Băng) (4)</value></data>
+  <data name="SeedSphereWind4" xml:space="preserve"><value>Hạt Giống (Gió) (4)</value></data>
+  <data name="SeedSphereLightning4" xml:space="preserve"><value>Quả cầu hạt giống (Sét) (4)</value></data>
+  <data name="SeedSphereEarth4" xml:space="preserve"><value>Quả cầu hạt giống (Trái đất) (4)</value></data>
+  <data name="SeedSphereFire5" xml:space="preserve"><value>Quả cầu hạt giống (Lửa) (5)</value></data>
+  <data name="SeedSphereWater5" xml:space="preserve"><value>Quả Cầu Hạt (Nước) (5)</value></data>
+  <data name="SeedSphereIce5" xml:space="preserve"><value>Hạt giống (Băng) (5)</value></data>
+  <data name="SeedSphereWind5" xml:space="preserve"><value>Hạt Giống (Gió) (5)</value></data>
+  <data name="SeedSphereLightning5" xml:space="preserve"><value>Quả cầu hạt giống (Sét) (5)</value></data>
+  <data name="SeedSphereEarth5" xml:space="preserve"><value>Quả cầu hạt giống (Trái đất) (5)</value></data>
+  <data name="PackedJewelOfLife" xml:space="preserve"><value>Viên ngọc cuộc sống được đóng gói</value></data>
+  <data name="PackedJewelOfCreation" xml:space="preserve"><value>Viên ngọc sáng tạo được đóng gói</value></data>
+  <data name="PackedJewelOfGuardian" xml:space="preserve"><value>Viên ngọc đóng gói của người giám hộ</value></data>
+  <data name="PackedGemstone" xml:space="preserve"><value>Đá quý đóng gói</value></data>
+  <data name="PackedJewelOfHarmony" xml:space="preserve"><value>Viên ngọc hài hòa đóng gói</value></data>
+  <data name="PackedJewelOfChaos" xml:space="preserve"><value>Viên ngọc hỗn loạn được đóng gói</value></data>
+  <data name="PackedLowerRefineStone" xml:space="preserve"><value>Đá tinh chế đóng gói thấp hơn</value></data>
+  <data name="PackedHigherRefineStone" xml:space="preserve"><value>Đá tinh luyện cao hơn được đóng gói</value></data>
+  <data name="GuardianAngel" xml:space="preserve"><value>Thần hộ mệnh</value></data>
+  <data name="Imp" xml:space="preserve"><value>Imp</value></data>
+  <data name="HornOfUniria" xml:space="preserve"><value>Sừng Uniria</value></data>
+  <data name="HornOfDinorant" xml:space="preserve"><value>Sừng khủng long</value></data>
+  <data name="DarkHorse" xml:space="preserve"><value>Dark Horse</value></data>
+  <data name="DarkRaven" xml:space="preserve"><value>Quạ Tinh</value></data>
+  <data name="RingOfIce" xml:space="preserve"><value>Chiếc nhẫn băng</value></data>
+  <data name="RingOfPoison" xml:space="preserve"><value>Chiếc nhẫn độc</value></data>
+  <data name="TransformationRing" xml:space="preserve"><value>Nhẫn biến hình</value></data>
+  <data name="LifeStone" xml:space="preserve"><value>Đá hồi sinh</value></data>
+  <data name="PendantOfLighting" xml:space="preserve"><value>Mặt dây chuyền chiếu sáng</value></data>
+  <data name="PendantOfFire" xml:space="preserve"><value>Mặt dây chuyền lửa</value></data>
+  <data name="LochSFeather" xml:space="preserve"><value>Lông của Loch</value></data>
+  <data name="Fruits" xml:space="preserve"><value>trái cây</value></data>
+  <data name="ScrollOfArchangel" xml:space="preserve"><value>Cuộn tổng lãnh thiên thần</value></data>
+  <data name="BloodBone" xml:space="preserve"><value>xương máu</value></data>
+  <data name="InvisibilityCloak" xml:space="preserve"><value>Áo choàng tàng hình</value></data>
+  <data name="WeaponOfArchangel" xml:space="preserve"><value>Vũ khí của tổng lãnh thiên thần</value></data>
+  <data name="WizardSRing" xml:space="preserve"><value>Chiếc nhẫn phù thủy</value></data>
+  <data name="RingOfFire" xml:space="preserve"><value>Vòng lửa</value></data>
+  <data name="RingOfEarth" xml:space="preserve"><value>Chiếc nhẫn Trái đất</value></data>
+  <data name="RingOfWind" xml:space="preserve"><value>Chiếc nhẫn gió</value></data>
+  <data name="RingOfMagic" xml:space="preserve"><value>Chiếc nhẫn ma thuật</value></data>
+  <data name="PendantOfIce" xml:space="preserve"><value>Mặt dây chuyền băng</value></data>
+  <data name="PendantOfWind" xml:space="preserve"><value>Mặt dây chuyền gió</value></data>
+  <data name="PendantOfWater" xml:space="preserve"><value>Mặt dây chuyền nước</value></data>
+  <data name="PendantOfAbility" xml:space="preserve"><value>Mặt dây chuyền khả năng</value></data>
+  <data name="ArmorOfGuardsman" xml:space="preserve"><value>Giáp vệ binh</value></data>
+  <data name="CapeOfLord" xml:space="preserve"><value>Áo choàng của Vua</value></data>
+  <data name="Spirit" xml:space="preserve"><value>tinh thần</value></data>
+  <data name="SplinterOfArmor" xml:space="preserve"><value>Mảnh giáp</value></data>
+  <data name="BlessOfGuardian" xml:space="preserve"><value>Phước lành của người giám hộ</value></data>
+  <data name="ClawOfBeast" xml:space="preserve"><value>Móng vuốt quái thú</value></data>
+  <data name="FragmentOfHorn" xml:space="preserve"><value>Mảnh sừng</value></data>
+  <data name="BrokenHorn" xml:space="preserve"><value>Sừng gãy</value></data>
+  <data name="HornOfFenrir" xml:space="preserve"><value>Sừng Fenrir</value></data>
+  <data name="MoonstonePendant" xml:space="preserve"><value>Mặt dây chuyền đá mặt trăng</value></data>
+  <data name="EliteSkeletonTransformationRing" xml:space="preserve"><value>Nhẫn biến hình bộ xương tinh anh</value></data>
+  <data name="JackOLanternTransformationRing" xml:space="preserve"><value>Nhẫn biến hình Jack O'lantern</value></data>
+  <data name="ChristmasTransformationRing" xml:space="preserve"><value>Nhẫn biến hình Giáng sinh</value></data>
+  <data name="GameMasterTransformationRing" xml:space="preserve"><value>Nhẫn biến hình bậc thầy trò chơi</value></data>
+  <data name="OldScroll" xml:space="preserve"><value>Cuộn giấy cũ</value></data>
+  <data name="IllusionSorcererCovenant" xml:space="preserve"><value>Hiệp ước phù thủy ảo ảnh</value></data>
+  <data name="ScrollOfBlood" xml:space="preserve"><value>Huyet thu</value></data>
+  <data name="FlameOfCondor" xml:space="preserve"><value>Ngọn lửa thần điêu</value></data>
+  <data name="FeatherOfCondor" xml:space="preserve"><value>Lông của Condor</value></data>
+  <data name="Demon" xml:space="preserve"><value>Con quỷ</value></data>
+  <data name="SpiritOfGuardian" xml:space="preserve"><value>Thần hộ mệnh</value></data>
+  <data name="PetRudolf" xml:space="preserve"><value>Thú cưng Rudolf</value></data>
+  <data name="SnowmanTransformationRing" xml:space="preserve"><value>Nhẫn biến hình người tuyết</value></data>
+  <data name="PandaTransformationRing" xml:space="preserve"><value>Nhẫn biến hình gấu trúc</value></data>
+  <data name="PetPanda" xml:space="preserve"><value>Gấu trúc cưng</value></data>
+  <data name="PetUnicorn" xml:space="preserve"><value>Kỳ lân thú cưng</value></data>
+  <data name="SkeletonTransformationRing" xml:space="preserve"><value>Vòng biến đổi bộ xương</value></data>
+  <data name="PetSkeleton" xml:space="preserve"><value>Bộ xương thú cưng</value></data>
+  <data name="Apple" xml:space="preserve"><value>táo</value></data>
+  <data name="SmallHealingPotion" xml:space="preserve"><value>Thuốc chữa bệnh nhỏ</value></data>
+  <data name="MediumHealingPotion" xml:space="preserve"><value>Thuốc chữa bệnh trung bình</value></data>
+  <data name="LargeHealingPotion" xml:space="preserve"><value>Thuốc chữa bệnh lớn</value></data>
+  <data name="SmallManaPotion" xml:space="preserve"><value>Thuốc mana nhỏ</value></data>
+  <data name="MediumManaPotion" xml:space="preserve"><value>Thuốc mana trung bình</value></data>
+  <data name="LargeManaPotion" xml:space="preserve"><value>Thuốc mana lớn</value></data>
+  <data name="PotionOfBlessPotionOfSoul" xml:space="preserve"><value>Thuốc ban phước; Thuốc linh hồn</value></data>
+  <data name="Antidote" xml:space="preserve"><value>thuốc giải độc</value></data>
+  <data name="Ale" xml:space="preserve"><value>bia</value></data>
+  <data name="TownPortalScroll" xml:space="preserve"><value>Cuộn cổng thông tin thị trấn</value></data>
+  <data name="BoxOfLuck" xml:space="preserve"><value>Hộp may mắn</value></data>
+  <data name="JewelOfBless" xml:space="preserve"><value>Viên ngọc phước lành</value></data>
+  <data name="JewelOfSoul" xml:space="preserve"><value>Viên ngọc tâm hồn</value></data>
+  <data name="JewelOfLife" xml:space="preserve"><value>Viên ngọc cuộc sống</value></data>
+  <data name="DevilSEye" xml:space="preserve"><value>Mắt quỷ</value></data>
+  <data name="DevilSKey" xml:space="preserve"><value>Chìa khóa của quỷ</value></data>
+  <data name="DevilSInvitation" xml:space="preserve"><value>Lời mời của quỷ</value></data>
+  <data name="Rena" xml:space="preserve"><value>Rena</value></data>
+  <data name="Stardust" xml:space="preserve"><value>Bụi sao</value></data>
+  <data name="JewelOfCreation" xml:space="preserve"><value>Viên ngọc sáng tạo</value></data>
+  <data name="ScrollOfEmperorRingOfHonor" xml:space="preserve"><value>Cuộn giấy của Hoàng đế;Nhẫn danh dự</value></data>
+  <data name="BrokenSwordDarkStone" xml:space="preserve"><value>Kiếm gãy;Đá đen</value></data>
+  <data name="TearOfElf" xml:space="preserve"><value>Nước mắt của yêu tinh</value></data>
+  <data name="SoulShardOfWizard" xml:space="preserve"><value>Mảnh linh hồn của pháp sư</value></data>
+  <data name="LostMap" xml:space="preserve"><value>Bản đồ bị mất</value></data>
+  <data name="SymbolOfKundun" xml:space="preserve"><value>Biểu tượng của Kundun</value></data>
+  <data name="JewelOfGuardian" xml:space="preserve"><value>Viên ngọc bảo vệ</value></data>
+  <data name="PinkChocolateBox" xml:space="preserve"><value>Hộp sô cô la hồng</value></data>
+  <data name="RedChocolateBox" xml:space="preserve"><value>Hộp sô cô la đỏ</value></data>
+  <data name="BlueChocolateBox" xml:space="preserve"><value>Hộp sô cô la màu xanh</value></data>
+  <data name="SmallShieldPotion" xml:space="preserve"><value>Thuốc khiên nhỏ</value></data>
+  <data name="MediumShieldPotion" xml:space="preserve"><value>Thuốc khiên trung bình</value></data>
+  <data name="LargeShieldPotion" xml:space="preserve"><value>Thuốc khiên lớn</value></data>
+  <data name="SmallComplexPotion" xml:space="preserve"><value>Thuốc phức tạp nhỏ</value></data>
+  <data name="MediumComplexPotion" xml:space="preserve"><value>Thuốc phức tạp trung bình</value></data>
+  <data name="LargeComplexPotion" xml:space="preserve"><value>Thuốc phức hợp lớn</value></data>
+  <data name="Gemstone" xml:space="preserve"><value>Đá quý</value></data>
+  <data name="JewelOfHarmony" xml:space="preserve"><value>Viên ngọc hài hòa</value></data>
+  <data name="LowerRefineStone" xml:space="preserve"><value>Đá tinh chế thấp hơn</value></data>
+  <data name="HigherRefineStone" xml:space="preserve"><value>Đá tinh chế cao hơn</value></data>
+  <data name="PumpkinOfLuck" xml:space="preserve"><value>Bí ngô may mắn</value></data>
+  <data name="JackOLanternBlessings" xml:space="preserve"><value>Lời chúc phúc của Jack O'Lantern</value></data>
+  <data name="JackOLanternWrath" xml:space="preserve"><value>Cơn thịnh nộ của Jack O'Lantern</value></data>
+  <data name="JackOLanternCry" xml:space="preserve"><value>Jack O'Lantern Khóc</value></data>
+  <data name="JackOLanternFood" xml:space="preserve"><value>Thức ăn của Jack O'Lantern</value></data>
+  <data name="JackOLanternDrink" xml:space="preserve"><value>Nước uống Jack O'Lantern</value></data>
+  <data name="ChristmasStar" xml:space="preserve"><value>Ngôi sao Giáng sinh</value></data>
+  <data name="GMGift" xml:space="preserve"><value>Quà tặng GM</value></data>
+  <data name="Firecracker" xml:space="preserve"><value>pháo nổ</value></data>
+  <data name="FlameOfDeathBeamKnight" xml:space="preserve"><value>Ngọn lửa của Death Beam Knight</value></data>
+  <data name="HornOfHellMaine" xml:space="preserve"><value>Sừng địa ngục Maine</value></data>
+  <data name="FeatherOfDarkPhoenix" xml:space="preserve"><value>Lông của Dark Phoenix</value></data>
+  <data name="EyeOfAbyssal" xml:space="preserve"><value>Con mắt vực thẳm</value></data>
+  <data name="CherryBlossomPlayBox" xml:space="preserve"><value>Hộp chơi hoa anh đào</value></data>
+  <data name="CherryBlossomWine" xml:space="preserve"><value>Rượu hoa anh đào</value></data>
+  <data name="CherryBlossomRiceCake" xml:space="preserve"><value>Bánh gạo hoa anh đào</value></data>
+  <data name="CherryBlossomFlowerPetal" xml:space="preserve"><value>Cánh hoa anh đào</value></data>
+  <data name="GoldenCherryBlossomBranch" xml:space="preserve"><value>Nhánh hoa anh đào vàng</value></data>
+  <data name="ChristmasFirecracker" xml:space="preserve"><value>Pháo giáng sinh</value></data>
+  <data name="SuspiciousScrapOfPaper" xml:space="preserve"><value>Lời chú giải cho sự nghi vấn</value></data>
+  <data name="GaionSOrder" xml:space="preserve"><value>Mệnh lệnh của Gaion</value></data>
+  <data name="FirstSecromiconFragment" xml:space="preserve"><value>Đoạn Secroicon đầu tiên</value></data>
+  <data name="SecondSecromiconFragment" xml:space="preserve"><value>Đoạn Secroicon thứ hai</value></data>
+  <data name="ThirdSecromiconFragment" xml:space="preserve"><value>Đoạn Secroicon thứ ba</value></data>
+  <data name="FourthSecromiconFragment" xml:space="preserve"><value>Đoạn Secroicon thứ tư</value></data>
+  <data name="FifthSecromiconFragment" xml:space="preserve"><value>Đoạn Secroicon thứ năm</value></data>
+  <data name="SixthSecromiconFragment" xml:space="preserve"><value>Đoạn Secromicon thứ sáu</value></data>
+  <data name="CompleteSecromicon" xml:space="preserve"><value>Secromicon đã hoàn thành</value></data>
+  <data name="ScrollOfPoison" xml:space="preserve"><value>Cuộn thuốc độc</value></data>
+  <data name="ScrollOfMeteorite" xml:space="preserve"><value>Cuộn thiên thạch</value></data>
+  <data name="ScrollOfLighting" xml:space="preserve"><value>Cuộn ánh sáng</value></data>
+  <data name="ScrollOfFireBall" xml:space="preserve"><value>Cuộn cầu lửa</value></data>
+  <data name="ScrollOfFlame" xml:space="preserve"><value>Cuộn lửa</value></data>
+  <data name="ScrollOfTeleport" xml:space="preserve"><value>Cuộn dịch chuyển</value></data>
+  <data name="ScrollOfIce" xml:space="preserve"><value>Cuộn băng</value></data>
+  <data name="ScrollOfTwister" xml:space="preserve"><value>Cuộn Twister</value></data>
+  <data name="ScrollOfEvilSpirit" xml:space="preserve"><value>Cuộn linh hồn ác quỷ</value></data>
+  <data name="ScrollOfHellfire" xml:space="preserve"><value>Cuộn lửa địa ngục</value></data>
+  <data name="ScrollOfPowerWave" xml:space="preserve"><value>Cuộn sóng điện</value></data>
+  <data name="ScrollOfAquaBeam" xml:space="preserve"><value>Cuộn Aqua Beam</value></data>
+  <data name="ScrollOfCometfall" xml:space="preserve"><value>Cuộn sao chổi rơi</value></data>
+  <data name="ScrollOfInferno" xml:space="preserve"><value>Cuộn địa ngục</value></data>
+  <data name="ScrollOfTeleportAlly" xml:space="preserve"><value>Cuộn dịch chuyển đồng minh</value></data>
+  <data name="ScrollOfSoulBarrier" xml:space="preserve"><value>Cuộn rào chắn linh hồn</value></data>
+  <data name="ScrollOfDecay" xml:space="preserve"><value>Cuộn phân rã</value></data>
+  <data name="ScrollOfIceStorm" xml:space="preserve"><value>Cuộn bão băng</value></data>
+  <data name="ScrollOfNova" xml:space="preserve"><value>Cuộn giấy Nova</value></data>
+  <data name="ChainLightningParchment" xml:space="preserve"><value>Giấy da tia sét</value></data>
+  <data name="DrainLifeParchment" xml:space="preserve"><value>Xả giấy da cuộc sống</value></data>
+  <data name="LightningShockParchment" xml:space="preserve"><value>Giấy da sốc sét</value></data>
+  <data name="DamageReflectionParchment" xml:space="preserve"><value>Giấy da phản ánh thiệt hại</value></data>
+  <data name="BerserkerParchment" xml:space="preserve"><value>Giấy da Berserker</value></data>
+  <data name="SleepParchment" xml:space="preserve"><value>Giấy ngủ</value></data>
+  <data name="WeaknessParchment" xml:space="preserve"><value>Giấy da điểm yếu</value></data>
+  <data name="InnovationParchment" xml:space="preserve"><value>Giấy đổi mới</value></data>
+  <data name="ScrollOfWizardryEnhance" xml:space="preserve"><value>Cuộn nâng cao pháp thuật</value></data>
+  <data name="ScrollOfGiganticStorm" xml:space="preserve"><value>Cuộn cơn bão khổng lồ</value></data>
+  <data name="ChainDriveParchment" xml:space="preserve"><value>Giấy da truyền động xích</value></data>
+  <data name="DarkSideParchment" xml:space="preserve"><value>Giấy da mặt tối</value></data>
+  <data name="DragonRoarParchment" xml:space="preserve"><value>Giấy da rồng gầm</value></data>
+  <data name="DragonSlasherParchment" xml:space="preserve"><value>Giấy da diệt rồng</value></data>
+  <data name="IgnoreDefenseParchment" xml:space="preserve"><value>Bỏ qua giấy da phòng thủ</value></data>
+  <data name="IncreaseHealthParchment" xml:space="preserve"><value>Tăng giấy da sức khỏe</value></data>
+  <data name="IncreaseBlockParchment" xml:space="preserve"><value>Tăng khối giấy da</value></data>
+  <data name="SmallCapeOfLord" xml:space="preserve"><value>Mũi nhỏ của Chúa</value></data>
+  <data name="SmallWingOfCurse" xml:space="preserve"><value>Cánh lời nguyền nhỏ</value></data>
+  <data name="SmallWingsOfElf" xml:space="preserve"><value>Đôi cánh nhỏ của yêu tinh</value></data>
+  <data name="SmallWingsOfHeaven" xml:space="preserve"><value>Đôi cánh thiên đường nhỏ</value></data>
+  <data name="SmallWingsOfSatan" xml:space="preserve"><value>Đôi cánh nhỏ của Satan</value></data>
+  <data name="LittleWarriorsCloak" xml:space="preserve"><value>Áo choàng chiến binh nhỏ</value></data>
+  <data name="MagicBackpack" xml:space="preserve"><value>Ba lô ma thuật</value></data>
+  <data name="VaultExpansionCertificate" xml:space="preserve"><value>Chứng chỉ mở rộng Vault</value></data>
+  <data name="SummonerCharacterCard" xml:space="preserve"><value>Thẻ nhân vật Thuật sư</value></data>
+  <data name="RageFighterCharacterCard" xml:space="preserve"><value>Thẻ nhân vật Thiết binh</value></data>
+  <data name="SignOfDimensions" xml:space="preserve"><value>Ký hiệu kích thước</value></data>
+  <data name="DoppelgangerFreeTicket" xml:space="preserve"><value>Vé miễn phí song trùng</value></data>
+  <data name="ResetFruitStrength" xml:space="preserve"><value>Đặt lại trái cây (Sức mạnh)</value></data>
+  <data name="ResetFruitAgility" xml:space="preserve"><value>Đặt lại trái cây (Nhanh nhẹn)</value></data>
+  <data name="ResetFruitVitality" xml:space="preserve"><value>Đặt lại trái cây (Sức sống)</value></data>
+  <data name="ResetFruitEnergy" xml:space="preserve"><value>Đặt lại trái cây (Năng lượng)</value></data>
+  <data name="ResetFruitCommand" xml:space="preserve"><value>Đặt lại trái cây (Lệnh)</value></data>
+  <data name="DevilSquareFreeTicket" xml:space="preserve"><value>Vé Quảng Trường Quỷ</value></data>
+  <data name="BloodCastleFreeTicket" xml:space="preserve"><value>Vé Lâu Đài Máu</value></data>
+  <data name="IllusionTempleFreeTicket" xml:space="preserve"><value>Vé Đền Ảo Ảnh</value></data>
+  <data name="ChaosCastleFreeTicket" xml:space="preserve"><value>Vé vào cửa mở tới Chaos Castle</value></data>
+  <data name="MirrorOfDimensions" xml:space="preserve"><value>Vé vào Dopple</value></data>
+  <data name="ShiningJewelleryCase" xml:space="preserve"><value>Hộp đựng đồ trang sức sáng bóng</value></data>
+  <data name="ElegantJewelleryCase" xml:space="preserve"><value>Hộp đựng trang sức thanh lịch</value></data>
+  <data name="SteelJewelleryCase" xml:space="preserve"><value>Hộp đựng đồ trang sức bằng thép</value></data>
+  <data name="OldJewelleryCase" xml:space="preserve"><value>Hộp đựng đồ trang sức cũ</value></data>
+  <data name="CursedCastleWater" xml:space="preserve"><value>Nước lâu đài bị nguyền rủa</value></data>
+  <data name="SilverKey" xml:space="preserve"><value>Chìa khóa bạc</value></data>
+  <data name="GoldKey" xml:space="preserve"><value>Chìa Khóa Vàng</value></data>
+  <data name="SealedGoldenBox" xml:space="preserve"><value>Hộp vàng niêm phong</value></data>
+  <data name="SealedSilverBox" xml:space="preserve"><value>Hộp bạc kín</value></data>
+  <data name="GoldenBox" xml:space="preserve"><value>Hộp Vàng</value></data>
+  <data name="SilverBox" xml:space="preserve"><value>Hộp Bạc</value></data>
+  <data name="KalimaTicket" xml:space="preserve"><value>Vé Kalima</value></data>
+  <data name="LethalWizardsRing" xml:space="preserve"><value>Chiếc nhẫn phù thủy sát thương</value></data>
+  <data name="SapphireRing" xml:space="preserve"><value>Nhẫn Sapphire</value></data>
+  <data name="RubyRing" xml:space="preserve"><value>Nhẫn Ruby</value></data>
+  <data name="TopazRing" xml:space="preserve"><value>Nhẫn Topaz</value></data>
+  <data name="AmethystRing" xml:space="preserve"><value>Nhẫn thạch anh tím</value></data>
+  <data name="RubyNecklace" xml:space="preserve"><value>Vòng cổ Ruby</value></data>
+  <data name="EmeraldNecklace" xml:space="preserve"><value>Vòng cổ ngọc lục bảo</value></data>
+  <data name="SapphireNecklace" xml:space="preserve"><value>Vòng cổ sapphire</value></data>
+  <data name="EliteHealingPotion" xml:space="preserve"><value>Thuốc chữa bệnh ưu tú</value></data>
+  <data name="EliteManaPotion" xml:space="preserve"><value>Thuốc mana ưu tú</value></data>
+  <data name="MediumEliteHealingPotion" xml:space="preserve"><value>Thuốc chữa bệnh cấp trung bình</value></data>
+  <data name="EliteShieldPotion" xml:space="preserve"><value>Thuốc SD ưu tú</value></data>
+  <data name="SphinxHelm" xml:space="preserve"><value>Mũ nhân sư</value></data>
+  <data name="ViolentWindHelm" xml:space="preserve"><value>Mũ gió hung bạo</value></data>
+  <data name="ViolentWindArmor" xml:space="preserve"><value>Giáp gió hung bạo</value></data>
+  <data name="ViolentWindPants" xml:space="preserve"><value>Quần Gió Bạo Lực</value></data>
+  <data name="ViolentWindGloves" xml:space="preserve"><value>Găng Tay Gió Bạo Lực</value></data>
+  <data name="ViolentWindBoots" xml:space="preserve"><value>Giày Gió Bạo Lực</value></data>
+  <data name="AtlansArmor" xml:space="preserve"><value>Giáp Atlas</value></data>
+  <data name="AtlansPants" xml:space="preserve"><value>Quần Atlan</value></data>
+  <data name="AtlansGloves" xml:space="preserve"><value>Găng Tay Atlan</value></data>
+  <data name="AtlansBoots" xml:space="preserve"><value>Giày Atlans</value></data>
+  <data name="StormJahadHelm" xml:space="preserve"><value>Mũ bảo hiểm bão Jahad</value></data>
+  <data name="StormJahadArmor" xml:space="preserve"><value>Giáp Bão Jahad</value></data>
+  <data name="StormJahadPants" xml:space="preserve"><value>Quần Jahad bão</value></data>
+  <data name="StormJahadBoots" xml:space="preserve"><value>Giày Storm Jahad</value></data>
+  <data name="FirstLuckyArmorTicket" xml:space="preserve"><value>Vé Giáp May Mắn Lần 1</value></data>
+  <data name="FirstLuckyPantsTicket" xml:space="preserve"><value>Vé may mắn lần 1</value></data>
+  <data name="FirstLuckyHelmTicket" xml:space="preserve"><value>Vé Mũ May Mắn Lần 1</value></data>
+  <data name="FirstLuckyGlovesTicket" xml:space="preserve"><value>Vé Găng Tay May Mắn Lần 1</value></data>
+  <data name="FirstLuckyBootsTicket" xml:space="preserve"><value>Vé Giày May Mắn Lần 1</value></data>
+  <data name="SecondLuckyArmorTicket" xml:space="preserve"><value>Vé Giáp May Mắn Lần 2</value></data>
+  <data name="SecondLuckyPantsTicket" xml:space="preserve"><value>Vé may mắn thứ 2</value></data>
+  <data name="SecondLuckyHelmTicket" xml:space="preserve"><value>Vé mũ may mắn thứ 2</value></data>
+  <data name="SecondLuckyGlovesTicket" xml:space="preserve"><value>Vé Găng tay may mắn thứ 2</value></data>
+  <data name="SecondLuckyBootsTicket" xml:space="preserve"><value>Vé ủng may mắn thứ 2</value></data>
+  <data name="JewelOfExtension" xml:space="preserve"><value>Viên ngọc mở rộng</value></data>
+  <data name="JewelOfElevation" xml:space="preserve"><value>Viên ngọc của độ cao</value></data>
+  <data name="SealOfAscension" xml:space="preserve"><value>Dấu ấn thăng thiên</value></data>
+  <data name="SealOfWealth" xml:space="preserve"><value>Con dấu của cải</value></data>
+  <data name="SealOfSustenance" xml:space="preserve"><value>Con dấu dinh dưỡng</value></data>
+  <data name="SealOfHealing" xml:space="preserve"><value>Con dấu chữa lành</value></data>
+  <data name="SealOfDivinity" xml:space="preserve"><value>Dấu ấn thần thánh</value></data>
+  <data name="MasterSealOfAscension" xml:space="preserve"><value>Dấu ấn thăng thiên của bậc thầy</value></data>
+  <data name="MasterSealOfWealth" xml:space="preserve"><value>Con dấu của sự giàu có</value></data>
+  <data name="MaxAgBoostAura" xml:space="preserve"><value>Hào quang tăng cường AG tối đa</value></data>
+  <data name="MaxSdBoostAura" xml:space="preserve"><value>Hào quang tăng cường SD tối đa</value></data>
+  <data name="ScrollOfQuickness" xml:space="preserve"><value>Cuộn nhanh chóng</value></data>
+  <data name="ScrollOfDefense" xml:space="preserve"><value>Cuộn phòng thủ</value></data>
+  <data name="ScrollOfWrath" xml:space="preserve"><value>Cuộn giận dữ</value></data>
+  <data name="ScrollOfWizardry" xml:space="preserve"><value>Cuộn phép thuật</value></data>
+  <data name="ScrollOfHealth" xml:space="preserve"><value>Cuộn sức khỏe</value></data>
+  <data name="ScrollOfMana" xml:space="preserve"><value>Cuộn Mana</value></data>
+  <data name="ElixirOfStrength" xml:space="preserve"><value>Thuốc tiên sức mạnh</value></data>
+  <data name="ElixirOfAgility" xml:space="preserve"><value>Thuốc tiên của sự nhanh nhẹn</value></data>
+  <data name="ElixirOfHealth" xml:space="preserve"><value>Thuốc tiên của sức khỏe</value></data>
+  <data name="ElixirOfEnergy" xml:space="preserve"><value>Tiên dược năng lượng</value></data>
+  <data name="ElixirOfControl" xml:space="preserve"><value>Thuốc tiên kiểm soát</value></data>
+  <data name="ScrollOfBattle" xml:space="preserve"><value>Cuộn chiến đấu</value></data>
+  <data name="ScrollOfStrength" xml:space="preserve"><value>Cuộn sức mạnh</value></data>
+  <data name="ScrollOfHealing" xml:space="preserve"><value>Cuộn chữa bệnh</value></data>
+  <data name="TalismanOfLuck" xml:space="preserve"><value>Bùa may mắn</value></data>
+  <data name="TalismanOfChaosAssembly" xml:space="preserve"><value>Bùa hộ mệnh hỗn loạn</value></data>
+  <data name="InvitationToSantaVillage" xml:space="preserve"><value>Lời mời đến làng ông già Noel</value></data>
+  <data name="TalismanOfGuardian" xml:space="preserve"><value>Bùa hộ mệnh</value></data>
+  <data name="TalismanOfItemProtection" xml:space="preserve"><value>Bùa bảo vệ vật phẩm</value></data>
+</root>

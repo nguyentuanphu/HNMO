@@ -5,10 +5,10 @@
 namespace HNMO.GameServer.MessageHandler.MiniGames;
 
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
 using HNMO.GameServer.Properties;
 using HNMO.Network.PlugIns;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Group packet handler for the 0xBD (Crywolf) packet group.

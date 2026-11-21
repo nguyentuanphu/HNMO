@@ -1,0 +1,272 @@
+@page "/economy-dashboard"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using System.Globalization
+@using HNMO.GameLogic.PlugIns.Economy
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @L("Economy dashboard", "Bảng điều khiển Kinh tế")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@L("Economy dashboard", "Bảng điều khiển Kinh tế")" />
+<div class="d-flex align-items-center gap-2 mb-2">
+    <h1 class="mb-0">@L("Economy dashboard", "Bảng điều khiển Kinh tế")</h1>
+    <button type="button" class="btn btn-sm btn-outline-info" id="ed-help-btn" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
+</div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextEconomyDashboard" />
+<p class="text-muted">@L("Track daily server totals of Zen, Coins, Jewels, and valuable items, daily drop vs. sink rates, top holders, and sudden jump anomalies linked to the Player Activity Log.", "Theo dõi tổng Zen, Xu, Ngọc, đồ giá trị theo ngày, tỷ lệ rơi/tiêu thụ, người giữ nhiều nhất và cảnh báo tăng đột biến liên kết trực tiếp sang Nhật ký hoạt động.")</p>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info" role="region" id="economy-dashboard-help">
+        <strong>@L("How to use this page:", "Hướng dẫn:")</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("Click Capture today's snapshot to scan all accounts (inventories, vaults, and external hooks like Jewel Bank / Item Market) plus today's activity log drop and sink totals.", "Nhấn Chụp thống kê hôm nay để quét toàn bộ tài khoản (túi đồ, rương, ngân hàng ngọc / chợ đồ nếu có) và tổng hợp lượng rơi/tiêu thụ trong ngày.")</li>
+            <li>@L("Anomalies trigger automatically whenever Global or per-account Zen, Coins, or Jewels jump above your configured % and minimum delta thresholds compared to the prior day.", "Cảnh báo tự động kích hoạt khi Zen, Xu hoặc Ngọc toàn máy chủ hoặc từng tài khoản tăng vượt ngưỡng % và mức tối thiểu so với hôm trước.")</li>
+            <li>@L("Click any flagged account or top holder name to jump straight into /activity-log filtered for that account.", "Nhấn vào tên tài khoản để mở ngay trang Nhật ký hoạt động (/activity-log) đã lọc sẵn tài khoản đó.")</li>
+        </ul>
+    </div>
+}
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is { } c)
+{
+    <section class="card mb-3" id="ed-settings">
+        <div class="card-body">
+            <div class="row g-2 align-items-end">
+                <div class="col-md-2">
+                    <label class="form-label" for="ed-pct" title="@L("Minimum day-over-day % jump before flagging an anomaly", "Tỷ lệ tăng % tối thiểu so với hôm trước để báo bất thường")">@L("Jump % threshold", "Ngưỡng tăng %")</label>
+                    <input class="form-control form-control-sm" id="ed-pct" type="number" min="5" max="10000" @bind="c.AnomalyJumpPercentThreshold" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" for="ed-zen-delta" title="@L("Minimum Zen delta required to flag an anomaly", "Lượng Zen tăng tối thiểu để báo bất thường")">@L("Min Zen delta", "Zen tối thiểu")</label>
+                    <input class="form-control form-control-sm" id="ed-zen-delta" type="number" min="1" @bind="c.AnomalyMinZenDelta" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" for="ed-jewel-delta" title="@L("Minimum jewel delta required to flag an anomaly", "Số Ngọc tăng tối thiểu để báo bất thường")">@L("Min Jewel delta", "Ngọc tối thiểu")</label>
+                    <input class="form-control form-control-sm" id="ed-jewel-delta" type="number" min="1" @bind="c.AnomalyMinJewelDelta" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" for="ed-coin-delta" title="@L("Minimum coin delta required to flag an anomaly", "Số Xu tăng tối thiểu để báo bất thường")">@L("Min Coin delta", "Xu tối thiểu")</label>
+                    <input class="form-control form-control-sm" id="ed-coin-delta" type="number" min="1" @bind="c.AnomalyMinCoinDelta" />
+                </div>
+                <div class="col-md-4 d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-outline-primary" id="ed-save" disabled="@this._isSaving" title="@L("Save dashboard thresholds", "Lưu ngưỡng cảnh báo")" @onclick="this.SaveAsync">@Resources.Save</button>
+                    <button type="button" class="btn btn-sm btn-primary" id="ed-capture" disabled="@this._isSaving" title="@L("Scan economy totals and update today's snapshot", "Quét kinh tế và cập nhật thống kê hôm nay")" @onclick="this.CaptureNowAsync">@L("Capture today's snapshot", "Chụp thống kê hôm nay")</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @if (this.Latest is { } latest)
+    {
+        <div class="row g-3 mb-3" id="ed-kpis">
+            <div class="col-md-3">
+                <div class="card"><div class="card-body">
+                    <div class="text-muted small">@L("Total Zen", "Tổng Zen")</div>
+                    <div class="h4 mb-0" id="ed-kpi-zen">@latest.TotalZen.ToString("N0", CultureInfo.InvariantCulture)</div>
+                </div></div>
+            </div>
+            <div class="col-md-3">
+                <div class="card"><div class="card-body">
+                    <div class="text-muted small">@L("Total Coins", "Tổng Xu")</div>
+                    <div class="h4 mb-0" id="ed-kpi-coins">@latest.TotalCoins.ToString("N0", CultureInfo.InvariantCulture)</div>
+                </div></div>
+            </div>
+            <div class="col-md-3">
+                <div class="card"><div class="card-body">
+                    <div class="text-muted small">@L("Total Jewels", "Tổng Ngọc")</div>
+                    <div class="h4 mb-0" id="ed-kpi-jewels">@latest.TotalJewels.ToString("N0", CultureInfo.InvariantCulture)</div>
+                </div></div>
+            </div>
+            <div class="col-md-3">
+                <div class="card"><div class="card-body">
+                    <div class="text-muted small">@L("Valuable items", "Đồ giá trị")</div>
+                    <div class="h4 mb-0" id="ed-kpi-items">@latest.TotalValuableItems.ToString("N0", CultureInfo.InvariantCulture)</div>
+                </div></div>
+            </div>
+        </div>
+
+        <section class="card mb-3" id="ed-chart-card">
+            <div class="card-body">
+                <h2 class="h5">@L("Economy history chart (Sydney dates)", "Biểu đồ xu hướng theo ngày (Giờ Sydney)")</h2>
+                <svg viewBox="0 0 640 160" class="w-100 border rounded bg-light" id="ed-trend-svg" role="img" aria-label="@L("Economy daily chart", "Biểu đồ kinh tế theo ngày")">
+                    <polyline fill="none" stroke="#0d6efd" stroke-width="3" points="@this.ZenPolyline()" />
+                    <polyline fill="none" stroke="#198754" stroke-width="2" stroke-dasharray="5,4" points="@this.JewelPolyline()" />
+                    @foreach (var label in this.ChartLabels())
+                    {
+                        @((MarkupString)$"<text x=\"{label.X}\" y=\"152\" font-size=\"10\" fill=\"#666\" text-anchor=\"middle\">{System.Net.WebUtility.HtmlEncode(label.Text)}</text>")
+                    }
+                </svg>
+                <div class="small text-muted mt-1">@L("Blue solid = Total Zen | Green dashed = Total Jewels", "Đường xanh dương = Tổng Zen | Nét đứt xanh lá = Tổng Ngọc")</div>
+            </div>
+        </section>
+
+        @if (this.AllAnomalies.Count > 0)
+        {
+            <section class="card border-warning mb-3" id="ed-anomalies">
+                <div class="card-body">
+                    <h2 class="h5 text-warning-emphasis">@L("Sudden jump anomalies", "Cảnh báo tăng đột biến")</h2>
+                    <div class="table-responsive">
+                        <table class="table table-sm mb-0" id="ed-anomalies-table">
+                            <thead>
+                                <tr>
+                                    <th>@L("Date (Sydney)", "Ngày (Sydney)")</th>
+                                    <th>@L("Scope", "Phạm vi")</th>
+                                    <th>@L("Account", "Tài khoản")</th>
+                                    <th>@L("Metric", "Chỉ số")</th>
+                                    <th>@L("Before -> After", "Trước -> Sau")</th>
+                                    <th>@L("Jump", "Mức tăng")</th>
+                                    <th>@L("Inspect", "Tra cứu")</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var a in this.AllAnomalies)
+                                {
+                                    <tr>
+                                        <td>@a.DateSydney</td>
+                                        <td>@a.Scope</td>
+                                        <td>@(string.IsNullOrEmpty(a.AccountLogin) ? "-" : a.AccountLogin)</td>
+                                        <td>@a.Metric</td>
+                                        <td>@a.PreviousValue.ToString("N0", CultureInfo.InvariantCulture) -> @a.NewValue.ToString("N0", CultureInfo.InvariantCulture)</td>
+                                        <td><span class="badge bg-warning text-dark">+@a.PercentIncrease.ToString("F1", CultureInfo.InvariantCulture)%</span></td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(a.AccountLogin))
+                                            {
+                                                <a href="/activity-log?account=@Uri.EscapeDataString(a.AccountLogin)">@L("View logs", "Xem nhật ký")</a>
+                                            }
+                                            else
+                                            {
+                                                <a href="/activity-log">@L("View logs", "Xem nhật ký")</a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        }
+
+        <div class="row g-3">
+            <div class="col-lg-6">
+                <section class="card h-100" id="ed-top-holders">
+                    <div class="card-body">
+                        <h2 class="h5">@L("Top holders", "Top tài khoản sở hữu")</h2>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-striped mb-0" id="ed-holders-table">
+                                <thead>
+                                    <tr>
+                                        <th>@L("Account", "Tài khoản")</th>
+                                        <th class="text-end">@L("Zen", "Zen")</th>
+                                        <th class="text-end">@L("Jewels", "Ngọc")</th>
+                                        <th class="text-end">@L("Coins", "Xu")</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var h in latest.TopHolders)
+                                    {
+                                        <tr>
+                                            <td><a href="/activity-log?account=@Uri.EscapeDataString(h.AccountLogin)">@h.AccountLogin</a></td>
+                                            <td class="text-end">@h.Zen.ToString("N0", CultureInfo.InvariantCulture)</td>
+                                            <td class="text-end">@h.Jewels</td>
+                                            <td class="text-end">@h.Coins</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-lg-6">
+                <section class="card h-100" id="ed-rates">
+                    <div class="card-body">
+                        <h2 class="h5">@L("Daily drop vs. sink rates", "Tỷ lệ rơi và tiêu thụ mỗi ngày")</h2>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-striped mb-0" id="ed-rates-table">
+                                <thead>
+                                    <tr>
+                                        <th>@L("Date (Sydney)", "Ngày (Sydney)")</th>
+                                        <th class="text-end">@L("Valuable drops", "Nhặt đồ quý")</th>
+                                        <th class="text-end">@L("Chaos mixes", "Xoay Chaos")</th>
+                                        <th class="text-end">@L("NPC Zen sink", "Tiêu NPC")</th>
+                                        <th class="text-end">@L("NPC Zen drop", "Bán NPC")</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var s in this._snapshots.Reverse())
+                                    {
+                                        <tr>
+                                            <td>@s.DateSydney</td>
+                                            <td class="text-end">@s.DropsPickedPerDay</td>
+                                            <td class="text-end">@s.ChaosMixesPerDay</td>
+                                            <td class="text-end">@s.NpcBuyZenSinkPerDay.ToString("N0", CultureInfo.InvariantCulture)</td>
+                                            <td class="text-end">@s.NpcSellZenDropPerDay.ToString("N0", CultureInfo.InvariantCulture)</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    }
+    else
+    {
+        <p class="text-muted" id="ed-no-snapshots">@L("No daily economy snapshots recorded yet. Click Capture today's snapshot above.", "Chưa có dữ liệu thống kê kinh tế. Hãy nhấn Chụp thống kê hôm nay ở trên.")</p>
+    }
+
+    <section class="card mt-3" id="ed-escrow-fees">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h2 class="h5 mb-0">@L("Escrow contract fee income", "Thu nhập phí hợp đồng ký gửi")</h2>
+                <a class="btn btn-sm btn-outline-secondary" href="/escrow-contracts">@L("Manage escrow", "Quản lý ký gửi")</a>
+            </div>
+            @if (this._escrowFeeTotals.Count == 0)
+            {
+                <p class="text-muted mb-0" id="ed-escrow-fees-empty">@L("No completed escrow fees recorded yet.", "Chưa có phí hợp đồng ký gửi nào được ghi nhận.")</p>
+            }
+            else
+            {
+                <div class="row g-2 mb-2">
+                    @foreach (var row in this._escrowFeeTotals)
+                    {
+                        <div class="col-md-3">
+                            <div class="border rounded p-2">
+                                <div class="small text-muted">@row.Currency (@row.Count)</div>
+                                <div class="fw-bold">@row.TotalFee.ToString("N0", CultureInfo.InvariantCulture)</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-sm mb-0" id="ed-escrow-fees-table">
+                        <thead>
+                            <tr>
+                                <th>@L("Time (Sydney)", "Thời gian (Sydney)")</th>
+                                <th>@L("Contract", "Hợp đồng")</th>
+                                <th>@L("Currency", "Loại tiền")</th>
+                                <th class="text-end">@L("Fee", "Phí")</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var entry in this._escrowFeeLedger.Take(10))
+                            {
+                                <tr>
+                                    <td>@entry.TimestampSydney</td>
+                                    <td><code>@entry.ContractId</code></td>
+                                    <td>@entry.Currency</td>
+                                    <td class="text-end">@entry.FeeAmount.ToString("N0", CultureInfo.InvariantCulture)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </section>
+}

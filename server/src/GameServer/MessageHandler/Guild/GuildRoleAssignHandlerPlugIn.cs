@@ -5,13 +5,13 @@
 namespace HNMO.GameServer.MessageHandler.Guild;
 
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
 using HNMO.GameLogic;
 using HNMO.GameLogic.PlayerActions.Guild;
 using HNMO.GameLogic.Views.Guild;
 using HNMO.GameServer.RemoteView.Guild;
 using HNMO.Network.Packets.ClientToServer;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Handler for guild role assign packets.

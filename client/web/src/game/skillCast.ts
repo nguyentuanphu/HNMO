@@ -171,9 +171,7 @@ export type SkillSpecial =
    * Dark Side: RageAttackRangeRequest (C1 4B) and RageAttackRequest (C3 4A); the server's target list (C1 4B) then
    * drives the dash (CMonkSystem::SetDarksideTargetIndex), or a TargetedSkill at the hero when it names nobody.
    */
-  | 'darkSide'
-  /** Phoenix Shot: AttackRagefighter walks into its range, but UseSkillRagefighter has no case for it and sends nothing. */
-  | 'phoenixShot';
+  | 'darkSide';
 
 export interface SkillCastPlan {
   /** What the hero sends when casting. */
@@ -651,7 +649,7 @@ export const isDarkSide = (skill: number): boolean => DARK_SIDES.includes(skill)
 export const isKillingBlow = (skill: number): boolean => KILLING_BLOWS.includes(skill);
 export const isBeastUppercut = (skill: number): boolean => BEAST_UPPERCUTS.includes(skill);
 
-/** CMonkSystem::SetRageSkillAni: the action a Rage Fighter skill plays (null: none). */
+/** CMonkSystem::SetRageSkillAni, plus the HNMO Phoenix Shot cast action (null: none). */
 export function rageSkillAction(skill: number): number | null {
   if (KILLING_BLOWS.includes(skill)) return A.SKILL_THRUST;
   if (BEAST_UPPERCUTS.includes(skill)) return A.SKILL_STAMP;
@@ -659,6 +657,7 @@ export function rageSkillAction(skill: number): number | null {
   if (DARK_SIDES.includes(skill)) return A.SKILL_DARKSIDE_READY;
   if (DRAGON_ROARS.includes(skill)) return A.SKILL_DRAGONLORE;
   if (skill === S.DRAGON_KICK) return A.SKILL_DRAGONKICK;
+  if (skill === S.PHOENIX_SHOT) return A.SKILL_PHOENIX_SHOT;
   return null;
 }
 
@@ -667,11 +666,20 @@ export function isSwordformGloves(item: Pick<HandItem, 'group' | 'number'> | nul
   return !!item && item.group === 0 && item.number >= 32 && item.number <= 35;
 }
 
+/**
+ * Why UseSkillRagefighter drops a fighter's skill with this equipment: a horn mount (Uniria, Dinorant, Fenrir) is worn
+ * (CMonkSystem::IsRideNotUseSkill), or no sword-form gloves are held (IsSwordformGlovesUseSkill); null when it casts.
+ */
+export function rageRefusal(skill: number, ctx: SkillCastContext): 'riding' | 'gloves' | null {
+  const mount = gearOf(ctx).mount;
+  if ((mount === 'uniria' || mount === 'dinorant' || mount === 'fenrir') && RAGE_NOT_RIDING.includes(skill)) return 'riding';
+  if (RAGE_GLOVE_SKILLS.includes(skill) && !isSwordformGloves(ctx.rightHand) && !isSwordformGloves(ctx.leftHand)) return 'gloves';
+  return null;
+}
+
 function rageFighterPlan(skill: number, ctx: SkillCastContext, g: Gear, plan: (p: PlanParts) => SkillCastPlan): SkillCastPlan | null {
   if (skill === S.PLASMA_STORM_FENRIR) return plasmaStorm(C.RAGE_FIGHTER, ctx, g, plan, 'AttackRagefighter AT_SKILL_PLASMA_STORM_FENRIR');
-  const hornMount = g.mount === 'uniria' || g.mount === 'dinorant' || g.mount === 'fenrir';
-  const gloves = isSwordformGloves(ctx.rightHand) || isSwordformGloves(ctx.leftHand);
-  const equipmentOk = !(hornMount && RAGE_NOT_RIDING.includes(skill)) && (!RAGE_GLOVE_SKILLS.includes(skill) || gloves);
+  const equipmentOk = rageRefusal(skill, ctx) === null;
   const atTarget = { needsTarget: true, equipmentOk, heroAction: rageSkillAction(skill) };
   if (KILLING_BLOWS.includes(skill) || skill === S.OCCUPY) {
     // SendRequestMagic at the target with an instant move before it; Occupy's rush comes with ReceiveMagic.
@@ -692,7 +700,8 @@ function rageFighterPlan(skill: number, ctx: SkillCastContext, g: Gear, plan: (p
     return plan({ packet: 'area', ...atTarget, areaAt: 'self', rotationScale: 255, source: 'UseSkillRagefighter AT_SKILL_DRAGON_ROAR' });
   }
   if (skill === S.PHOENIX_SHOT) {
-    return plan({ packet: 'none', ...atTarget, special: 'phoenixShot', source: 'AttackRagefighter AT_SKILL_PHOENIX_SHOT (UseSkillRagefighter sends nothing)' });
+    // Owner decision (2026-11-16): HNMO sends the area cast at action start, like Dragon Roar.
+    return plan({ packet: 'area', ...atTarget, areaAt: 'self', rotationScale: 255, source: 'HNMO Phoenix Shot area cast (owner decision 2026-11-16)' });
   }
   if (DARK_SIDES.includes(skill)) {
     return plan({ packet: 'targeted', heroAction: A.SKILL_DARKSIDE_READY, special: 'darkSide', ignoresRange: true, source: 'UseSkillRagefighter AT_SKILL_DARKSIDE' });
@@ -749,6 +758,9 @@ function knightPlan(
       case S.FIREBURST:
       case S.SPACE_SPLIT: return null; // The SkillAnimation from the server plays the strike.
       case S.RUSH: return A.ATTACK_RUSH;
+      // UseSkillWarrior leaves Spiral Slash to its default; ReceiveMagic AT_SKILL_SPIRAL_SLASH then plays the swing. The
+      // web hero skips its own SkillAnimation, so the swing plays at the cast.
+      case S.SPIRAL_SLASH: return A.ATTACK_ONE_FLASH;
       default:
         if (g.mount === 'fenrir' && g.riding) return A.FENRIR_ATTACK_MAGIC;
         // PLAYER_ATTACK_SKILL_SWORD1 + skill - AT_SKILL_FALLING_SLASH (Falling Slash..Slash: SWORD1..SWORD5).
@@ -775,6 +787,7 @@ function knightPlan(
     case S.FORCE_WAVE:
     case S.FIREBURST:
     case S.RUSH:
+    case S.SPIRAL_SLASH:
     case S.SPACE_SPLIT:
       // SkillWarrior first list -> CastWarriorSkill -> UseSkillWarrior: SendRequestMagic(skill, target).
       return plan({ packet: 'targeted', needsTarget: true, heroAction: warriorAction(), equipmentOk: warriorTargetOk(), source: 'SkillWarrior -> CastWarriorSkill -> UseSkillWarrior' });

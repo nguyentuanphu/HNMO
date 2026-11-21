@@ -22,9 +22,16 @@ public class DropItemAction
     /// <param name="target">The target coordinates.</param>
     public async ValueTask DropItemAsync(Player player, byte slot, Point target)
     {
+        if (await PlugIns.Arena.ArenaRules.RefuseAsync(player, PlugIns.Arena.ArenaRules.Action.Drop).ConfigureAwait(false))
+        {
+            await player.InvokeViewPlugInAsync<IItemDropResultPlugIn>(p => p.ItemDropResultAsync(slot, false)).ConfigureAwait(false);
+            return;
+        }
+
         var item = player.Inventory?.GetItem(slot);
 
         if (item is null
+            || player.BackupInventory is not null
             || !(player.CurrentMap?.Terrain.WalkMap[target.X, target.Y] ?? false))
         {
             await player.InvokeViewPlugInAsync<IItemDropResultPlugIn>(p => p.ItemDropResultAsync(slot, false)).ConfigureAwait(false);
@@ -109,6 +116,7 @@ public class DropItemAction
         var wasItemPersisted = player.PersistenceContext.Detach(item);
         var droppedItem = new DroppedItem(item, target, player.CurrentMap!, player, owners, wasItemPersisted);
         await player.CurrentMap!.AddAsync(droppedItem).ConfigureAwait(false);
+        PlugIns.ActivityLog.ActivityLogPlugIn.Get(player.GameContext)?.RecordDrop(player, item, player.CurrentMap.Definition?.Name.ValueInNeutralLanguage ?? string.Empty);
         player.Logger.LogInformation("Item dropped: {Player} dropped '{DroppedItem}' from slot {Slot} (persisted: {Persisted}).", player, droppedItem, originalSlot, wasItemPersisted);
     }
 

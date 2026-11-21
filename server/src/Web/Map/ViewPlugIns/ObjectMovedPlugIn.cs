@@ -4,12 +4,12 @@
 
 namespace HNMO.Web.Map.ViewPlugIns;
 
-using Microsoft.JSInterop;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Views.World;
 using HNMO.Pathfinding;
 using HNMO.Web.Map.Map;
+using Microsoft.JSInterop;
 
 /// <summary>
 /// Implementation of <see cref="IObjectMovedPlugIn"/> which uses the javascript map app.

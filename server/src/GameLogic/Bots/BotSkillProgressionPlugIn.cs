@@ -5,13 +5,13 @@
 namespace HNMO.GameLogic.Bots;
 
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
 using HNMO.AttributeSystem;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.PlayerActions.Character;
 using HNMO.GameLogic.PlugIns;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Grows a server-side bot like a real player when it levels up during play: the earned stat points are

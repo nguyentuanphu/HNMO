@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/edit-item-drops"
 @attribute [Authorize(Policy = AdminPolicies.Administrator)]
 
@@ -11,6 +12,8 @@
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.ItemDrops" />
 
 <h1>@Resources.ItemDrops</h1>
+<PageHelp Text="@HelpResources.PageHelpTextEditItemDrops" />
+
 <p class="text-muted">@Resources.ItemDropsPageDescription</p>
 
 @if (this._gameConfiguration is not { } gameConfiguration || this._persistenceContext is null)
@@ -26,8 +29,8 @@
         <input type="text" class="form-control" placeholder="@($"{Resources.Search}...")"
                @bind="this._filter" @bind:event="oninput" />
     </div>
-    <button type="button" class="btn btn-primary" @onclick="this.OnSaveButtonClickAsync">@Resources.SaveChanges</button>
-    <button type="button" class="btn btn-secondary" @onclick="this.OnCancelButtonClickAsync">@Resources.DiscardChanges</button>
+    <button title="@HelpResources.PageHelpHintSave" type="button" class="btn btn-primary" @onclick="this.OnSaveButtonClickAsync">@Resources.SaveChanges</button>
+    <button title="@HelpResources.PageHelpHintCancel" type="button" class="btn btn-secondary" @onclick="this.OnCancelButtonClickAsync">@Resources.DiscardChanges</button>
 </div>
 
 <CollapsibleSection Title="@Resources.GeneralDropSettings" InitiallyExpanded="true">
@@ -43,6 +46,12 @@
             <input id="itemDropDuration" type="number" class="form-control form-control-sm" min="1"
                    @bind:get="gameConfiguration.ItemDropDuration.TotalSeconds"
                    @bind:set="@(value => gameConfiguration.ItemDropDuration = TimeSpan.FromSeconds(Math.Max(1, value)))" />
+        </div>
+        <div class="col-md-3">
+            <label for="moneyDropDuration" class="form-label">@Resources.MoneyDropDurationSeconds</label>
+            <input id="moneyDropDuration" type="number" class="form-control form-control-sm" min="1"
+                   @bind:get="gameConfiguration.MoneyDropDuration.TotalSeconds"
+                   @bind:set="@(value => gameConfiguration.MoneyDropDuration = TimeSpan.FromSeconds(Math.Max(1, value)))" />
         </div>
         <div class="col-md-3">
             <label for="maximumItemOptionLevelDrop" class="form-label" title="@Resources.MaximumItemOptionLevelDropHint">@Resources.MaximumItemOptionLevelDrop</label>
@@ -101,7 +110,7 @@
                         OnMapsChanged="@this.StateHasChanged"
                         OnRemove="@this.OnDeleteGroupAsync"
                         RemoveTitle="@Resources.Delete" />
-    <button type="button" class="btn btn-sm btn-outline-primary" @onclick="this.OnAddMapGroup">
+    <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-sm btn-outline-primary" @onclick="this.OnAddMapGroup">
         <span class="oi oi-plus" aria-hidden="true"></span> @Resources.AddDropItemGroup
     </button>
 </CollapsibleSection>
@@ -122,7 +131,7 @@
                                 UsageProvider="@this.GetUsage"
                                 OnRemove="@(group => this.OnRemoveGroupFromMonsterAsync(monster, group))"
                                 RemoveTitle="@Resources.RemoveFromMonster" />
-            <button type="button" class="btn btn-sm btn-outline-primary" @onclick="() => this.OnAddMonsterGroup(monster)">
+            <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-sm btn-outline-primary" @onclick="() => this.OnAddMonsterGroup(monster)">
                 <span class="oi oi-plus" aria-hidden="true"></span> @Resources.AddDropItemGroup
             </button>
         </div>
@@ -134,7 +143,7 @@
                              Label="@Resources.AddDropsForMonster"
                              @bind-Value="this._addition.Monster" />
             </div>
-            <button type="button" class="btn btn-sm btn-primary mb-3" disabled="@(this._addition.Monster is null)" @onclick="this.OnAddGroupForSelectedMonster">
+            <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-sm btn-primary mb-3" disabled="@(this._addition.Monster is null)" @onclick="this.OnAddGroupForSelectedMonster">
                 <span class="oi oi-plus" aria-hidden="true"></span> @Resources.AddDropItemGroup
             </button>
         </div>
@@ -158,7 +167,7 @@
                                 IsItemBoxDrop="true"
                                 OnRemove="@(group => this.OnRemoveBoxGroupAsync(boxItem, group))"
                                 RemoveTitle="@Resources.Delete" />
-            <button type="button" class="btn btn-sm btn-outline-primary" @onclick="() => this.OnAddBoxGroup(boxItem)">
+            <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-sm btn-outline-primary" @onclick="() => this.OnAddBoxGroup(boxItem)">
                 <span class="oi oi-plus" aria-hidden="true"></span> @Resources.AddDropItemGroup
             </button>
         </div>
@@ -170,7 +179,7 @@
                              Label="@Resources.AddDropsForItem"
                              @bind-Value="this._addition.Item" />
             </div>
-            <button type="button" class="btn btn-sm btn-primary mb-3" disabled="@(this._addition.Item is null)" @onclick="this.OnAddGroupForSelectedItem">
+            <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-sm btn-primary mb-3" disabled="@(this._addition.Item is null)" @onclick="this.OnAddGroupForSelectedItem">
                 <span class="oi oi-plus" aria-hidden="true"></span> @Resources.AddDropItemGroup
             </button>
         </div>
@@ -237,8 +246,8 @@
 </CollapsibleSection>
 
 <div class="d-flex gap-2 mb-5">
-    <button type="button" class="btn btn-primary" @onclick="this.OnSaveButtonClickAsync">@Resources.SaveChanges</button>
-    <button type="button" class="btn btn-secondary" @onclick="this.OnCancelButtonClickAsync">@Resources.DiscardChanges</button>
+    <button title="@HelpResources.PageHelpHintSave" type="button" class="btn btn-primary" @onclick="this.OnSaveButtonClickAsync">@Resources.SaveChanges</button>
+    <button title="@HelpResources.PageHelpHintCancel" type="button" class="btn btn-secondary" @onclick="this.OnCancelButtonClickAsync">@Resources.DiscardChanges</button>
 </div>
 
 </CascadingValue>

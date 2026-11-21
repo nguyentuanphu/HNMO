@@ -5,8 +5,8 @@
 namespace HNMO.GameLogic.PlugIns;
 
 using System;
-using Microsoft.Extensions.Logging;
 using HNMO.GameLogic.Attributes;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Compares the timing and attack speed reported by client ping packets with the server.

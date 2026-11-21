@@ -120,7 +120,27 @@ public static class ItemExtensions
     /// <returns>
     ///   <c>true</c> if the specified item is stackable; otherwise, <c>false</c>.
     /// </returns>
-    public static bool IsStackable(this Item item) => !item.IsWearable() && item.Definition?.Durability > 1;
+    public static bool IsStackable(this Item item) => !item.IsWearable() && item.MaximumStackSize() > 1;
+
+    /// <summary>
+    /// Gets or sets HNMO's stack rules: the most pieces one slot may hold of an item, or <c>null</c> to keep the item
+    /// definition's own durability as the limit. Set by the game logic's item stack plug-in; it may depend on the
+    /// account whose items are being handled.
+    /// </summary>
+    public static Func<Item, int?>? StackLimit { get; set; }
+
+    /// <summary>Gets the most pieces one slot may hold of this item (1 for an item which doesn't stack).</summary>
+    /// <param name="item">The item.</param>
+    /// <returns>The most pieces in one slot.</returns>
+    public static int MaximumStackSize(this Item item)
+    {
+        if (item.Definition is not { } definition)
+        {
+            return 1;
+        }
+
+        return Math.Clamp(StackLimit?.Invoke(item) ?? definition.Durability, 1, byte.MaxValue);
+    }
 
     /// <summary>
     /// Determines whether this item can be completely stacked on the specified other item.
@@ -131,7 +151,7 @@ public static class ItemExtensions
     /// <returns>
     ///   <c>true</c> if this item can be completely stacked on the specified other item; otherwise, <c>false</c>.
     /// </returns>
-    public static bool CanCompletelyStackOn(this Item item, Item otherItem) => item.IsStackable() && item.IsSameItemAs(otherItem) && (item.Durability + otherItem.Durability) <= item.Definition?.Durability;
+    public static bool CanCompletelyStackOn(this Item item, Item otherItem) => item.IsStackable() && item.IsSameItemAs(otherItem) && (item.Durability + otherItem.Durability) <= otherItem.MaximumStackSize();
 
     /// <summary>
     /// Determines whether this item can be partially stacked on the specified other item.
@@ -142,7 +162,7 @@ public static class ItemExtensions
     /// <returns>
     ///   <c>true</c> if this item can be partially stacked on the specified other item; otherwise, <c>false</c>.
     /// </returns>
-    public static bool CanPartiallyStackOn(this Item item, Item otherItem) => item.IsStackable() && item.IsSameItemAs(otherItem) && otherItem.Durability < otherItem.Definition?.Durability;
+    public static bool CanPartiallyStackOn(this Item item, Item otherItem) => item.IsStackable() && item.IsSameItemAs(otherItem) && otherItem.Durability < otherItem.MaximumStackSize();
 
     /// <summary>
     /// Determines whether this item is of the same type as the specified other item.

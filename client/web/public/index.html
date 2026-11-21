@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, viewport-fit=cover">
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="icon" href="/images/icon-192.png">
   <meta name="theme-color" content="#11110e">
@@ -16,9 +16,31 @@
     html, body { height: 100%; margin: 0; background: #0a0d14; color: var(--text); font: 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
     #stage { position: fixed; inset: 0; }
     #view { width: 100%; height: 100%; display: block; }
-    .hud { position: fixed; left: 12px; right: 12px; top: calc(5.5vh + 6px); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; pointer-events: none; }
+    .hud { position: fixed; left: max(12px, env(safe-area-inset-left, 0px)); right: max(12px, env(safe-area-inset-right, 0px)); top: max(calc(5.5vh + 6px), env(safe-area-inset-top, 0px)); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; pointer-events: none; }
+    /* In the game, on the line of the map's frame (the auto play bar: map, cell, helper buttons), right of it (ui/autoPlayBar.ts measures it). */
+    @media (min-width: 821px) {
+      html[style*="--helper-bar-right"] .hud { left: calc(var(--helper-bar-right) + 8px); top: calc(var(--helper-bar-middle) - 17px); right: auto; flex-wrap: nowrap; }
+      html[style*="--helper-bar-right"] .hnmo-guide-button { top: calc(var(--helper-bar-bottom) + 6px); }
+    }
+    body.hnmo-modern-hud .hud { display: none; }
     .chip { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 5px 10px; font-variant-numeric: tabular-nums; }
     .chip label, .chip select { pointer-events: auto; }
+    /* HNMO's vault pages, above the open vault window. */
+    .hnmo-vault-pages { position: fixed; z-index: 30; display: flex; flex-direction: column; align-items: stretch; gap: 4px; padding: 4px 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; color: var(--text); font-size: 12px; pointer-events: auto; }
+    .hnmo-vault-pages[hidden] { display: none; }
+    .hnmo-vault-pages-label { color: var(--gold); text-align: center; font-size: 11px; }
+    .hnmo-vault-pages button { min-width: 26px; min-height: 24px; padding: 2px 6px; border-radius: 4px; border: 1px solid var(--line); background: rgba(255, 255, 255, .06); color: var(--text); font: inherit; cursor: pointer; }
+    .hnmo-vault-pages button[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: #1a1408; font-weight: 600; cursor: default; }
+    .hnmo-vault-pages button:disabled:not([aria-pressed="true"]) { opacity: .5; cursor: default; }
+    .hnmo-vault-pages .hnmo-vault-page-buy { color: var(--gold); border-style: dashed; }
+    .hnmo-stacks-panel { position: fixed; z-index: 31; width: 240px; display: flex; flex-direction: column; gap: 6px; padding: 8px; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; color: var(--text); font-size: 12px; pointer-events: auto; }
+    .hnmo-stacks-panel[hidden] { display: none; }
+    .hnmo-stacks-title { color: var(--gold); font-weight: 600; }
+    .hnmo-stacks-row { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+    .hnmo-stacks-row button, .hnmo-stacks-close { min-height: 24px; padding: 2px 8px; border-radius: 4px; border: 1px solid var(--gold); background: rgba(201, 162, 74, .15); color: var(--text); font: inherit; cursor: pointer; }
+    .hnmo-stacks-on { color: #7fd18b; }
+    .hnmo-vault-pages .hnmo-stacks-button { font-size: 11px; }
+    .hnmo-vault-pages .hnmo-stacks-button[hidden] { display: none; }
     select, input { background: #151a26; color: inherit; border: 1px solid #2c3446; border-radius: 4px; padding: 6px 8px; font: inherit; }
     #loading { position: fixed; left: 50%; bottom: 32px; transform: translateX(-50%); width: min(520px, 86vw); }
     #track { height: 4px; background: rgba(255, 255, 255, .12); border-radius: 2px; overflow: hidden; margin-top: 6px; }
@@ -32,7 +54,15 @@
       #login:not([hidden]) ~ #loading { display: none; }
     }
     /* The game's touch buttons only in the world, not over the login and character choice. */
-    #login:not([hidden]) ~ #touchBar, #login:not([hidden]) ~ #touchFight, #login:not([hidden]) ~ #touchMore, #login:not([hidden]) ~ #touchRotate { display: none !important; }
+    #login:not([hidden]) ~ #touchBar, #login:not([hidden]) ~ #touchFight, #login:not([hidden]) ~ #touchMore, #login:not([hidden]) ~ #touchRotate, #login:not([hidden]) ~ #mobileHud, #login:not([hidden]) ~ #mobileHudSheet { display: none !important; }
+    .saved-accounts { display: grid; gap: 6px; padding: 8px 10px; border-radius: 8px; border: 1px solid rgba(201, 162, 74, .28); background: rgba(255, 255, 255, .03); }
+    .saved-accounts-head { font-size: 11px; color: var(--gold); text-transform: uppercase; letter-spacing: .06em; }
+    .saved-accounts-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .saved-account-chip { display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255, 255, 255, .05); padding: 2px 6px 2px 10px; }
+    .saved-account-pick { all: unset; cursor: pointer; font-size: 12px; color: var(--text); font-weight: 600; }
+    .saved-account-pick small { color: var(--muted); font-weight: 400; margin-left: 4px; }
+    .saved-account-del { all: unset; cursor: pointer; width: 18px; height: 18px; border-radius: 50%; text-align: center; line-height: 18px; color: var(--muted); font-size: 13px; }
+    .saved-account-del:hover { color: var(--error); background: rgba(239, 122, 108, .15); }
     .panel { width: min(380px, 100%); background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 22px; display: grid; gap: 14px; }
     .panel h1 { margin: 0; font-size: 20px; letter-spacing: .04em; color: var(--gold); }
     fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 10px; }
@@ -44,10 +74,32 @@
     .buttons { display: flex; gap: 8px; }
     button { font: inherit; border-radius: 6px; padding: 8px 14px; cursor: pointer; border: 1px solid var(--line); background: #1b2131; color: var(--text); }
     button.primary { background: var(--gold); color: #1a1408; border-color: var(--gold); font-weight: 600; flex: 1; }
+    a.website-login { display: block; text-align: center; text-decoration: none; font: inherit; border-radius: 6px; padding: 9px 14px; background: var(--gold); color: #1a1408; border: 1px solid var(--gold); font-weight: 600; }
+    a.website-login:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
     button:focus-visible, input:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
     .choices { display: grid; gap: 6px; }
     .choice { text-align: left; display: flex; justify-content: space-between; gap: 8px; }
     .choice small { color: var(--muted); }
+    .season-badge { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: .02em; vertical-align: middle; }
+    .season-badge.season-s6 { background: #3a3324; color: #e3c07a; border: 1px solid #6b5a36; }
+    .season-badge.season-s9 { background: #1f3340; color: #8fd3f0; border: 1px solid #3b6d85; }
+    /* The start screen: Season 6.3 and Season 9 servers side by side (one column on a phone). */
+    #login .panel:has(#servers.seasons:not([hidden])) { width: min(760px, 100%); }
+    #servers.seasons { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); align-items: start; gap: 12px; }
+    @media (max-width: 560px) { #servers.seasons { grid-template-columns: minmax(0, 1fr); } }
+    .season-column .choice { display: grid; gap: 2px; }
+    .season-column .server-name { overflow-wrap: anywhere; }
+    #servers .seasons-title { grid-column: 1 / -1; margin: 0; color: var(--muted); font-size: 12px; }
+    .season-column { display: grid; gap: 6px; align-content: start; padding: 10px; border-radius: 8px; border: 1px solid var(--line); background: rgba(255, 255, 255, .02); }
+    .season-column.season-s6 { border-color: #6b5a36; }
+    .season-column.season-s9 { border-color: #3b6d85; }
+    .season-column.season-arena { border-color: #8a3b3b; }
+    .season-column h2 { margin: 0 0 2px; font-size: 15px; display: grid; gap: 2px; }
+    .season-column.season-s6 h2 { color: #e3c07a; }
+    .season-column.season-s9 h2 { color: #8fd3f0; }
+    .season-column.season-arena h2 { color: #f0a08f; }
+    .season-column h2 small { color: var(--muted); font-size: 11px; font-weight: 400; }
+    .season-empty { margin: 0; color: var(--muted); font-size: 12px; }
     #loginError { color: var(--error); margin: 0; }
     .hint { color: var(--muted); font-size: 12px; margin: 0; }
     #labels { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
@@ -60,42 +112,83 @@
     .community-link:hover { background: var(--gold); color: #1b1408; }
     .community-zalo { border-color: #0068ff; color: #6aa8ff; }
     .community-zalo:hover { background: #0068ff; color: #fff; }
+    .login-news { margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,.1); font-size: 12px; }
+    .login-news summary { cursor: pointer; color: var(--gold); font-weight: 600; }
+    .login-news-list { display: grid; gap: 6px; margin-top: 6px; max-height: 170px; overflow-y: auto; }
+    .login-news-item { padding: 6px 8px; border: 1px solid rgba(255,255,255,.08); border-radius: 6px; background: rgba(0,0,0,.28); display: grid; gap: 3px; }
+    .login-news-meta { display: flex; gap: 6px; align-items: center; color: var(--muted); font-size: 11px; }
+    .login-news-pin { padding: 1px 6px; border-radius: 999px; background: rgba(212,175,55,.22); border: 1px solid var(--gold); color: var(--gold); font-weight: 600; }
+    .login-news-title { color: var(--text); font-size: 12px; }
+    .login-news-body { margin: 0; color: var(--muted); white-space: pre-line; }
+    .login-news-img { max-width: 100%; max-height: 96px; object-fit: cover; border-radius: 4px; margin-top: 2px; }
     .language-picker { pointer-events: auto; display: inline-flex; gap: 4px; align-items: center; }
     .language-picker button { height: 30px; min-width: 38px; padding: 0 8px; color: var(--text); background: var(--panel); border: 1px solid var(--line); border-radius: 6px; font: 600 12px system-ui, sans-serif; }
     .language-picker button[aria-pressed="true"] { color: #1b1408; background: var(--gold); border-color: var(--gold); }
     .language-picker select { height: 30px; max-width: 120px; color: var(--text); background: var(--panel); border: 1px solid var(--line); border-radius: 6px; font: 12px system-ui, sans-serif; }
     #guideButton { pointer-events: auto; width: 30px; height: 30px; padding: 0; border-radius: 50%; font: italic 700 16px/1 Georgia, serif; color: var(--gold); background: var(--panel); border: 1px solid var(--gold); }
     #settingsButton { pointer-events: auto; width: 30px; height: 30px; padding: 0; border-radius: 50%; font: 700 16px/1 system-ui, sans-serif; color: var(--gold); background: var(--panel); border: 1px solid var(--gold); }
+    /* The bar: two groups of one height, each one panel; the buttons inside are flat. */
+    .hud-group { display: inline-flex; align-items: center; gap: 2px; height: 34px; padding: 0 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 999px; font-variant-numeric: tabular-nums; }
+    .hud-status { padding: 0 12px; gap: 8px; font-size: 13px; }
+    .hud-status #heroName { font-weight: 600; color: var(--text); }
+    .hud-status #fps { color: var(--muted); font-size: 12px; }
+    .hud-sep { width: 1px; height: 16px; background: var(--line); margin: 0 4px; }
+    .hud-tools { pointer-events: auto; }
+    .hud-tools #soundButton, .hud-tools #guideButton, .hud-tools #settingsButton { width: 28px; height: 28px; background: transparent; border-color: transparent; }
+    .hud-tools #soundButton:hover, .hud-tools #guideButton:hover, .hud-tools #settingsButton:hover { border-color: var(--gold); }
+    .hud-tools .language-picker button, .hud-tools .language-picker select { height: 26px; background: transparent; border-color: transparent; }
+    .hud-tools .language-picker select { padding: 0 4px; line-height: 24px; vertical-align: middle; }
+    .hud-tools .language-picker select option { background: #1b2131; color: var(--text); }
+    .hud-tools .language-picker button[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); }
+    @media (max-width: 520px) { .hud-tools .language-picker select { max-width: 76px; } .hud-status #fps { display: none; } }
+    /* The new-player guide waiting as a button while its panel is closed (ui/onboardingWindow.ts). */
+    .hnmo-guide-button { position: fixed; z-index: 60; left: max(12px, env(safe-area-inset-left, 0px)); top: calc(max(calc(5.5vh + 6px), env(safe-area-inset-top, 0px)) + 42px); height: 28px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--gold); background: var(--panel); color: #ffe9a8; font: 600 12px system-ui, sans-serif; cursor: pointer; }
+    .hnmo-guide-button:hover { background: #2a2414; }
+    .hnmo-guide-button[hidden] { display: none; }
+    .hnmo-guide-button-flash { animation: hnmo-guide-flash 1.2s ease-in-out 3; }
+    @keyframes hnmo-guide-flash { 50% { box-shadow: 0 0 12px 3px var(--gold); background: #3a2f12; } }
+    /* With the touch HUD: under the hero card on the left, clear of the top-right row and the fight buttons; 36 px to tap. */
+    body.hnmo-modern-hud .hnmo-guide-button { top: 72px; height: 36px; min-width: 36px; }
     #guide { position: fixed; inset: 0; z-index: 100; background: rgba(0, 0, 0, .6); display: grid; place-items: center; padding: 16px; }
     #guide .frame { position: relative; width: min(900px, 100%); height: min(88vh, 100%); background: #0b0e16; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
     #guide iframe { width: 100%; height: 100%; border: 0; display: block; }
     #guide .close { position: absolute; right: 10px; top: 10px; padding: 4px 10px; }
     #guide .onboarding { position: absolute; right: 80px; top: 10px; padding: 4px 10px; }
+    #guide .timetable { position: absolute; right: 205px; top: 10px; padding: 4px 10px; }
     .map-picker { position: fixed; right: 12px; top: 12px; display: flex; gap: 8px; align-items: center; }
     .map-picker label { color: var(--muted); font-size: 12px; }
   </style>
   <script type="importmap">
-    { "imports": { "three": "/vendor/three/build/three.module.js" } }
+    {
+      "imports": {
+        "three": "/vendor/three/build/three.module.js",
+        "three/examples/jsm/loaders/KTX2Loader.js": "/vendor/three/examples/jsm/loaders/KTX2Loader.js"
+      }
+    }
   </script>
 </head>
 <body>
   <div id="stage"><canvas id="view"></canvas></div>
   <div id="labels"></div>
   <div id="guide" hidden role="dialog" aria-label="Guide" data-game-name="{game} guide" data-game-name-attr="aria-label">
-    <div class="frame"><iframe title="Guide" src="about:blank"></iframe><button type="button" class="onboarding" id="guideOnboarding" title="The guided first steps for new characters (Y)">New-player guide</button><button type="button" class="close">Close</button></div>
+    <div class="frame"><iframe title="Guide" src="about:blank"></iframe><button type="button" class="timetable" id="guideTimetable" title="Event and boss timetable (H)">Timetable (H)</button><button type="button" class="onboarding" id="guideOnboarding" title="The guided first steps for new characters (Y)">New-player guide</button><button type="button" class="close">Close</button></div>
   </div>
   <div class="hud" id="hud" hidden>
-    <span class="chip" id="heroName">-</span>
-    <span class="chip">Cell <span id="position">-</span></span>
-    <span class="chip" id="fps">- fps</span>
-    <button type="button" id="soundButton" title="Sound on / off" aria-label="Sound on or off" aria-pressed="false">♪</button>
-    <button type="button" id="guideButton" title="Guide: what to play and what each feature does" aria-label="Open the guide" data-game-name="Open the {game} guide" data-game-name-attr="aria-label">i</button>
-    <span class="language-picker" data-no-i18n role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-lang="en" aria-pressed="true" title="English">EN</button><button type="button" data-lang="vi" aria-pressed="false" title="Tiếng Việt">VN</button><select class="language-more" title="More languages" aria-label="More languages"><option value="">More…</option></select></span>
-    <button type="button" id="settingsButton" title="Settings (O)" aria-label="Open the settings">⚙</button>
+    <!-- The map's frame (top left) shows the map and the hero's cell: the bar has the name and the frame rate, then the tools. -->
+    <span class="hud-group hud-status"><span id="heroName">-</span><span class="hud-sep" aria-hidden="true"></span><span id="fps">- fps</span><span id="position" hidden>-</span></span>
+    <span class="hud-group hud-tools">
+      <button type="button" id="soundButton" title="Sound on / off" aria-label="Sound on or off" aria-pressed="false">♪</button>
+      <button type="button" id="guideButton" title="Guide: what to play and what each feature does" aria-label="Open the guide" data-game-name="Open the {game} guide" data-game-name-attr="aria-label">i</button>
+      <span class="hud-sep" aria-hidden="true"></span>
+      <span class="language-picker" data-no-i18n role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-lang="en" aria-pressed="true" title="English">EN</button><button type="button" data-lang="vi" aria-pressed="false" title="Tiếng Việt">VN</button><select class="language-more" title="More languages" aria-label="More languages"><option value="">More…</option></select></span>
+      <span class="hud-sep" aria-hidden="true"></span>
+      <button type="button" id="settingsButton" title="Settings (O)" aria-label="Open the settings">⚙</button>
+    </span>
   </div>
   <div id="login">
     <form class="panel" id="loginForm" autocomplete="on">
       <h1 data-game-name>HenryN Mu Online</h1>
+      <a class="website-login" id="websiteLoginButton" href="/account.html#play">Log in on the website</a>
       <fieldset>
         <div class="row"><label for="username">Account</label><input id="username" name="username" required maxlength="10" autocomplete="username"></div>
         <div class="row"><label for="password">Password</label><input id="password" name="password" type="password" required maxlength="20" autocomplete="current-password"></div>
@@ -112,14 +205,17 @@
           <button class="primary" type="submit">Connect</button>
         </div>
       </fieldset>
+      <div class="saved-accounts" id="savedAccounts" hidden></div>
       <p id="loginError" role="alert" hidden></p>
       <div class="choices" id="servers" hidden></div>
       <div class="choices" id="characters" hidden></div>
       <p class="hint community" id="communityLinks" data-community-links="Contact:" hidden></p>
-      <p class="hint">No account yet? <a href="/account.html" style="color:var(--gold)">Create one</a> (free coins included). <a href="/topup.html" style="color:var(--gold)">Top up coins</a>. Test accounts: test300 / test300. New here? <a href="#" id="loginGuide" style="color:var(--gold)">Read the guide</a>.</p>
+      <div class="login-news" id="loginNewsPanel" hidden></div>
+      <p class="hint">New here? <a href="#" id="loginGuide" style="color:var(--gold)">Read the guide</a>.</p>
     </form>
   </div>
   <div id="loading" class="chip"><div id="status">Log in to play.</div><div id="track"><div id="bar"></div></div></div>
   <script type="module" src="/js/main.js"></script>
+  <script>if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw-game.js').catch(function () {}); }</script>
 </body>
 </html>

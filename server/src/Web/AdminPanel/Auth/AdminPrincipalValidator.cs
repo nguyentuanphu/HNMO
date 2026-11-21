@@ -6,9 +6,9 @@ namespace HNMO.Web.AdminPanel.Auth;
 
 using System.Security.Claims;
 using System.Threading;
+using HNMO.Persistence.AdminAuth;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using HNMO.Persistence.AdminAuth;
 
 /// <summary>
 /// Checks if the user of an authenticated admin panel principal still exists, isn't disabled

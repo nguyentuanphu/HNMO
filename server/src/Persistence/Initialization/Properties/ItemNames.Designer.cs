@@ -4193,6 +4193,13 @@ namespace HNMO.Persistence.Initialization.Properties {
             }
         }
 
+        /// <summary>Gets Stardust from the configuration name resources.</summary>
+        public static string Stardust {
+            get {
+                return ResourceManager.GetString("Stardust", resourceCulture);
+            }
+        }
+
         /// <summary>Gets JewelOfCreation from the configuration name resources.</summary>
         public static string JewelOfCreation {
             get {

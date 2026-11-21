@@ -5,7 +5,6 @@
 namespace HNMO.GameServer.RemoteView.Quest;
 
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
 using HNMO.AttributeSystem;
 using HNMO.DataModel.Configuration.Quests;
 using HNMO.GameLogic;
@@ -16,6 +15,7 @@ using HNMO.GameLogic.Views.Quest;
 using HNMO.GameServer.MessageHandler.Quests;
 using HNMO.Network.Packets.ServerToClient;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The default implementation of the <see cref="ILegacyQuestRewardPlugIn"/> which is forwarding everything to the game client with specific data packets.

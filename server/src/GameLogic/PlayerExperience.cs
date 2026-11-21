@@ -6,6 +6,8 @@ namespace HNMO.GameLogic;
 
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.PlugIns.CatchupCap;
+using HNMO.GameLogic.PlugIns.SeasonPlan;
 using HNMO.GameLogic.Views.Character;
 using HNMO.GameLogic.Views.World;
 using Nito.AsyncEx;
@@ -32,15 +34,19 @@ internal sealed class PlayerExperience
     /// Adds experience points after killing the target object.
     /// </summary>
     /// <param name="killedObject">The killed object.</param>
+    /// <param name="damageShare">The share of damage dealt (0..1, default 1).</param>
     /// <returns>The gained experience.</returns>
-    public async ValueTask<int> AddAfterKillAsync(IAttackable killedObject)
+    public async ValueTask<int> AddAfterKillAsync(IAttackable killedObject, double damageShare = 1.0)
     {
         if (!this.TryGetExperienceKind(out var isMasterExperience))
         {
             return 0;
         }
 
-        var experience = await this.CalculateAfterKillAsync(killedObject).ConfigureAwait(false);
+        var rawExperience = await this.CalculateAfterKillAsync(killedObject).ConfigureAwait(false);
+        var experience = damageShare >= 1.0
+            ? rawExperience
+            : (int)Math.Round(rawExperience * Math.Clamp(damageShare, 0.0, 1.0));
         if (experience == 0)
         {
             return 0;
@@ -129,6 +135,40 @@ internal sealed class PlayerExperience
     }
 
     /// <summary>
+    /// Adds the experience of an event reward (Blood Castle, Devil Square, Chaos Castle ...): the reward's amount
+    /// times the server's experience rate, as master experience at the maximum level of a master class. It was added
+    /// as it is, so with an experience rate of 1000 an event gave next to nothing, and a character at the maximum
+    /// level lost it.
+    /// </summary>
+    /// <param name="baseExperience">The reward's experience amount.</param>
+    /// <returns>The experience added.</returns>
+    public async ValueTask<long> AddRewardExperienceAsync(long baseExperience)
+    {
+        if (baseExperience <= 0 || !this.TryGetExperienceKind(out var isMasterExperience))
+        {
+            return 0;
+        }
+
+        var rate = isMasterExperience ? this._player.GameContext.MasterExperienceRate : this._player.GameContext.ExperienceRate;
+        if (rate <= 0)
+        {
+            rate = 1; // not set: the plain amount
+        }
+        var experience = (int)Math.Clamp(baseExperience * (double)rate, 0, int.MaxValue);
+        using var d = await this._lock.LockAsync().ConfigureAwait(false);
+        if (isMasterExperience)
+        {
+            await this.AddMasterExperienceCoreAsync(experience, null).ConfigureAwait(false);
+        }
+        else
+        {
+            await this.AddExperienceCoreAsync(experience, null).ConfigureAwait(false);
+        }
+
+        return experience;
+    }
+
+    /// <summary>
     /// Determines whether the player gains master experience instead of normal experience.
     /// </summary>
     /// <param name="isMasterExperience">If set to <c>true</c>, master experience is gained.</param>
@@ -143,8 +183,11 @@ internal sealed class PlayerExperience
         }
 
         var currentLevel = (short)attributes[Stats.Level];
-        var isMaxLevel = currentLevel == this._player.GameContext.Configuration.MaximumLevel;
-        isMasterExperience = characterClass.IsMasterClass && isMaxLevel;
+        var isMaxLevel = currentLevel >= CatchupCapPlugIn.GetEffectiveMaximumLevel(this._player.GameContext);
+        isMasterExperience = characterClass.IsMasterClass
+            && isMaxLevel
+            && currentLevel >= this._player.GameContext.Configuration.MaximumLevel
+            && SeasonPlanPlugIn.IsFeatureUnlocked(this._player.GameContext, SeasonFeatureGate.MasterLevels);
         return true;
     }
 
@@ -200,7 +243,7 @@ internal sealed class PlayerExperience
         var remainingExperience = experience;
         while (remainingExperience > 0)
         {
-            if (player.Attributes![Stats.Level] >= player.GameContext.Configuration.MaximumLevel)
+            if (player.Attributes![Stats.Level] >= CatchupCapPlugIn.GetEffectiveMaximumLevel(player.GameContext))
             {
                 await player.InvokeViewPlugInAsync<IAddExperiencePlugIn>(p => p.AddExperienceAsync(0, killedObject, ExperienceType.MaxLevelReached)).ConfigureAwait(false);
                 return;
@@ -237,7 +280,7 @@ internal sealed class PlayerExperience
 
             remainingExperience -= (int)gainedExperience;
             if (remainingExperience <= 0
-                || player.Attributes[Stats.Level] >= player.GameContext.Configuration.MaximumLevel
+                || player.Attributes[Stats.Level] >= CatchupCapPlugIn.GetEffectiveMaximumLevel(player.GameContext)
                 || player.GameContext.Configuration.PreventExperienceOverflow)
             {
                 return;

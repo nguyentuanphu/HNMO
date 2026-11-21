@@ -5,8 +5,6 @@
 namespace HNMO.Startup;
 
 using System.Threading;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic;
 using HNMO.GameServer;
@@ -17,6 +15,8 @@ using HNMO.Network.PlugIns;
 using HNMO.Persistence;
 using HNMO.Persistence.Initialization;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// A container which keeps all <see cref="IGameServer"/>s in one <see cref="IHostedService"/>.

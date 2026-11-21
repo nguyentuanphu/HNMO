@@ -60,30 +60,16 @@ public enum GiftCodeResult
 
     /// <summary>The character's class can't use it.</summary>
     WrongClass,
+
+    /// <summary>The network address used this code already.</summary>
+    AlreadyUsedNetwork,
+
+    /// <summary>The known browser device used this code already.</summary>
+    AlreadyUsedDevice,
+
+    /// <summary>A network-limited code cannot be checked without a valid connection address.</summary>
+    NetworkAddressUnknown,
 }
-
-/// <summary>
-/// Who enters a code: the account and the character which gets the zen and items.
-/// </summary>
-/// <param name="Login">The account's login name.</param>
-/// <param name="CharacterId">The character's id.</param>
-/// <param name="CharacterName">The character's name.</param>
-/// <param name="Level">The character's level.</param>
-/// <param name="Resets">The character's resets.</param>
-/// <param name="ClassNumber">The number of the character's class.</param>
-public sealed record GiftCodeRedeemer(string Login, string CharacterId, string CharacterName, int Level, int Resets, int ClassNumber);
-
-/// <summary>
-/// The outcome of entering a code.
-/// </summary>
-/// <param name="Result">The result.</param>
-/// <param name="Code">The code, when one was found.</param>
-/// <param name="Entry">The log entry of a redemption.</param>
-/// <param name="Coins">The coins to give now (also kept as pending until they're given).</param>
-/// <param name="Owed">The zen and items which wait for the character.</param>
-/// <param name="TriesLeft">How many wrong codes the account may still enter in the window.</param>
-/// <param name="RetryAtUtc">When the account may try again after <see cref="GiftCodeResult.TooManyTries"/>.</param>
-public sealed record GiftCodeOutcome(GiftCodeResult Result, GiftCodeDefinition? Code = null, GiftCodeLogEntry? Entry = null, GiftCodePendingCoins? Coins = null, GiftCodeOwedReward? Owed = null, int TriesLeft = 0, DateTime? RetryAtUtc = null);
 
 /// <summary>
 /// HNMO's gift codes, without the game: finding a code (without regard to case), its rules (dates on the Sydney wall
@@ -227,6 +213,19 @@ public sealed class GiftCodeEngine
         }
     }
 
+    /// <summary>Gets the distinct known networks and browser devices recorded for a code, without exposing hashes.</summary>
+    /// <param name="codeId">The code identifier.</param>
+    /// <returns>The number of networks and devices; older claims may have neither.</returns>
+    public (int Networks, int Devices) IdentityUsesOf(string codeId)
+    {
+        lock (this.Store.Lock)
+        {
+            var claims = this.Store.Data.Claims.GetValueOrDefault(codeId);
+            return (claims?.Count(c => c.StartsWith("n:", StringComparison.Ordinal)) ?? 0,
+                claims?.Count(c => c.StartsWith("d:", StringComparison.Ordinal)) ?? 0);
+        }
+    }
+
     /// <summary>
     /// Gets every code of the store (normalized): the single codes and the batch codes.
     /// </summary>
@@ -324,6 +323,16 @@ public sealed class GiftCodeEngine
 
             claims.Add("a:" + login);
             claims.Add("c:" + who.CharacterId);
+            if (GiftCodeIdentity.NetworkClaim(data.IdentitySalt, who.NetworkAddress) is { } networkClaim)
+            {
+                claims.Add(networkClaim);
+            }
+
+            if (GiftCodeIdentity.DeviceClaim(data.IdentitySalt, who.DeviceId) is { } deviceClaim)
+            {
+                claims.Add(deviceClaim);
+            }
+
             if (found.Batch)
             {
                 data.UsedBatchCodes[normalized] = reference;
@@ -601,6 +610,23 @@ public sealed class GiftCodeEngine
             {
                 return GiftCodeResult.AlreadyUsedCharacter;
             }
+        }
+
+        var network = GiftCodeIdentity.NetworkClaim(data.IdentitySalt, who.NetworkAddress);
+        var device = GiftCodeIdentity.DeviceClaim(data.IdentitySalt, who.DeviceId);
+        if (code.OncePerNetwork && network is null)
+        {
+            return GiftCodeResult.NetworkAddressUnknown;
+        }
+
+        if (code.OncePerNetwork && network is not null && claims?.Contains(network) is true)
+        {
+            return GiftCodeResult.AlreadyUsedNetwork;
+        }
+
+        if (code.OncePerDevice && device is not null && claims?.Contains(device) is true)
+        {
+            return GiftCodeResult.AlreadyUsedDevice;
         }
 
         if (code.MinLevel > 0 && who.Level < code.MinLevel)

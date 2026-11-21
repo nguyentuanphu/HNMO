@@ -149,4 +149,7 @@
   <data name="DoppelgangerSummoner" xml:space="preserve">
     <value>Doppelgänger-Beschwörer</value>
   </data>
+  <data name="ArenaHerald" xml:space="preserve">
+    <value>Herold der Arena</value>
+  </data>
 </root>

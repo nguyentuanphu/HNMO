@@ -4,11 +4,10 @@
 
 namespace HNMO.Persistence.EntityFramework;
 
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-
 using HNMO.Interfaces;
 using HNMO.Persistence.EntityFramework.Model;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// A context which is used by the <see cref="IFriendServer"/>.

@@ -82,6 +82,12 @@ public partial class Item
     public int PetExperience { get; set; }
 
     /// <summary>
+    /// Gets or sets the item's origin serial (HNMO): given once to every item and kept by every move and copy, so two
+    /// live items with one serial are a duplicate. Empty for an item that hasn't been given one yet.
+    /// </summary>
+    public Guid? Serial { get; set; }
+
+    /// <summary>
     /// Assigns the values of another item to this item.
     /// </summary>
     /// <param name="otherItem">The other item.</param>
@@ -93,6 +99,7 @@ public partial class Item
         this.HasSkill = otherItem.HasSkill;
         this.SocketCount = otherItem.SocketCount;
         this.PetExperience = otherItem.PetExperience;
+        this.Serial = otherItem.Serial;
         if (otherItem.ItemOptions != null && otherItem.ItemOptions.Any())
         {
             this.ItemOptions.Clear();

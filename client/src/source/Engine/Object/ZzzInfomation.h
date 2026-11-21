@@ -21,6 +21,10 @@ extern ActionSkillType GetSkillByBook(int Type);
 void SetItemAttributes(ITEM* ip);
 extern float CalcDurabilityPercent(BYTE dur, BYTE maxDur, int Level, int excellentFlags, int ancientDiscriminator = 0);
 extern int64_t ItemValue(const ITEM* ip, int goldType = 1);
+// The price with the additional option at `optionLevel` (+4 damage, +5 defense rate or 1 % recovery a level): 60 %,
+// 140 %, 280 % and 560 % more at the levels 1 to 4, as classic MU; above 4 (the Jewel of Life up to +28) HNMO's
+// ItemPriceCalculator step, 0.7 * 2^(level - 1) times the price more. Level 0 adds nothing.
+extern int64_t AddAdditionalOptionPrice(int64_t gold, int optionLevel);
 
 // The monster's name from the monster list; "()" for a number without an entry.
 extern const wchar_t* getMonsterName(int type);

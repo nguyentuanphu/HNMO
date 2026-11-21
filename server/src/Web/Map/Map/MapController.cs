@@ -6,14 +6,14 @@ namespace HNMO.Web.Map.Map;
 
 using System.Collections.Concurrent;
 using System.Threading;
-using Microsoft.Extensions.Logging;
-using Microsoft.JSInterop;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Views;
 using HNMO.GameLogic.Views.World;
 using HNMO.Pathfinding;
 using HNMO.PlugIns;
 using HNMO.Web.Map.ViewPlugIns;
+using Microsoft.Extensions.Logging;
+using Microsoft.JSInterop;
 using Nito.AsyncEx;
 
 /// <summary>

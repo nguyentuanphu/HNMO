@@ -190,7 +190,7 @@ internal class Karutan1 : BaseMapInitializer
             monster.MoveRange = 6;
             monster.AttackRange = 2;
             monster.ViewRange = 10;
-            monster.MoveDelay = new TimeSpan(400 * TimeSpan.TicksPerMillisecond);
+            monster.MoveDelay = new TimeSpan(900 * TimeSpan.TicksPerMillisecond);
             monster.AttackDelay = new TimeSpan(1500 * TimeSpan.TicksPerMillisecond);
             monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
@@ -207,6 +207,7 @@ internal class Karutan1 : BaseMapInitializer
                 { Stats.PoisonResistance, 254f / 255 },
                 { Stats.IceResistance, 100f / 255 },
                 { Stats.FireResistance, 200f / 255 },
+                { Stats.LightningResistance, 100f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -221,7 +222,7 @@ internal class Karutan1 : BaseMapInitializer
             monster.MoveRange = 6;
             monster.AttackRange = 2;
             monster.ViewRange = 10;
-            monster.MoveDelay = new TimeSpan(400 * TimeSpan.TicksPerMillisecond);
+            monster.MoveDelay = new TimeSpan(900 * TimeSpan.TicksPerMillisecond);
             monster.AttackDelay = new TimeSpan(1500 * TimeSpan.TicksPerMillisecond);
             monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
@@ -232,12 +233,13 @@ internal class Karutan1 : BaseMapInitializer
                 { Stats.MaximumHealth, 60000 },
                 { Stats.MinimumPhysBaseDmg, 595 },
                 { Stats.MaximumPhysBaseDmg, 635 },
-                { Stats.DefenseBase, 283 },
+                { Stats.DefenseBase, 485 },
                 { Stats.AttackRatePvm, 915 },
-                { Stats.DefenseRatePvm, 363 },
+                { Stats.DefenseRatePvm, 283 },
                 { Stats.PoisonResistance, 254f / 255 },
                 { Stats.IceResistance, 100f / 255 },
                 { Stats.FireResistance, 200f / 255 },
+                { Stats.LightningResistance, 100f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -252,8 +254,8 @@ internal class Karutan1 : BaseMapInitializer
             monster.MoveRange = 6;
             monster.AttackRange = 2;
             monster.ViewRange = 10;
-            monster.MoveDelay = new TimeSpan(400 * TimeSpan.TicksPerMillisecond);
-            monster.AttackDelay = new TimeSpan(1500 * TimeSpan.TicksPerMillisecond);
+            monster.MoveDelay = new TimeSpan(700 * TimeSpan.TicksPerMillisecond);
+            monster.AttackDelay = new TimeSpan(1800 * TimeSpan.TicksPerMillisecond);
             monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 1;
@@ -269,6 +271,7 @@ internal class Karutan1 : BaseMapInitializer
                 { Stats.PoisonResistance, 100f / 255 },
                 { Stats.IceResistance, 100f / 255 },
                 { Stats.FireResistance, 240f / 255 },
+                { Stats.LightningResistance, 100f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -283,8 +286,8 @@ internal class Karutan1 : BaseMapInitializer
             monster.MoveRange = 6;
             monster.AttackRange = 1;
             monster.ViewRange = 10;
-            monster.MoveDelay = new TimeSpan(400 * TimeSpan.TicksPerMillisecond);
-            monster.AttackDelay = new TimeSpan(1500 * TimeSpan.TicksPerMillisecond);
+            monster.MoveDelay = new TimeSpan(800 * TimeSpan.TicksPerMillisecond);
+            monster.AttackDelay = new TimeSpan(1700 * TimeSpan.TicksPerMillisecond);
             monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 1;
@@ -300,6 +303,7 @@ internal class Karutan1 : BaseMapInitializer
                 { Stats.PoisonResistance, 254f / 255 },
                 { Stats.IceResistance, 150f / 255 },
                 { Stats.FireResistance, 150f / 255 },
+                { Stats.LightningResistance, 100f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -314,8 +318,8 @@ internal class Karutan1 : BaseMapInitializer
             monster.MoveRange = 6;
             monster.AttackRange = 2;
             monster.ViewRange = 10;
-            monster.MoveDelay = new TimeSpan(400 * TimeSpan.TicksPerMillisecond);
-            monster.AttackDelay = new TimeSpan(1500 * TimeSpan.TicksPerMillisecond);
+            monster.MoveDelay = new TimeSpan(800 * TimeSpan.TicksPerMillisecond);
+            monster.AttackDelay = new TimeSpan(1700 * TimeSpan.TicksPerMillisecond);
             monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 1;
@@ -326,11 +330,12 @@ internal class Karutan1 : BaseMapInitializer
                 { Stats.MinimumPhysBaseDmg, 720 },
                 { Stats.MaximumPhysBaseDmg, 770 },
                 { Stats.DefenseBase, 575 },
-                { Stats.AttackRatePvm, 11400 },
+                { Stats.AttackRatePvm, 1140 },
                 { Stats.DefenseRatePvm, 375 },
                 { Stats.PoisonResistance, 254f / 255 },
                 { Stats.IceResistance, 150f / 255 },
                 { Stats.FireResistance, 150f / 255 },
+                { Stats.LightningResistance, 100f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);

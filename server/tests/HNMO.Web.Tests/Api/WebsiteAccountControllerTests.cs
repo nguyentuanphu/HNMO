@@ -1,0 +1,417 @@
+// <copyright file="WebsiteAccountControllerTests.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.Web.Tests.Api;
+
+using System.Text.Json;
+using System.Threading;
+using HNMO.DataModel.Configuration;
+using HNMO.DataModel.Entities;
+using HNMO.GameLogic.CashShop;
+using HNMO.GameLogic.PlugIns.GiftBox;
+using HNMO.GameLogic.PlugIns.Vip;
+using HNMO.Interfaces;
+using HNMO.Persistence;
+using HNMO.Persistence.InMemory;
+using HNMO.Web.AdminPanel.API;
+using HNMO.Web.AdminPanel.Auth;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging.Abstractions;
+using Moq;
+
+/// <summary>Account isolation, bounded history and safe snapshots for the player dashboard.</summary>
+[TestFixture]
+public class WebsiteAccountControllerTests
+{
+    private WebsiteAccountController _controller = null!;
+    private Account _account = null!;
+    private IPersistenceContextProvider _persistence = null!;
+    private GameConfiguration _configuration = null!;
+
+    private Mock<ILoginServer> _login = null!;
+    private Mock<IManageableServer> _server = null!;
+    private IList<IManageableServer> _servers = null!;
+
+    /// <summary>Creates two accounts whose grants must never be mixed.</summary>
+    /// <returns>The setup task.</returns>
+    [SetUp]
+    public async Task SetUpAsync()
+    {
+        var provider = new InMemoryPersistenceContextProvider();
+        this._persistence = provider;
+        using var setup = provider.CreateNewContext();
+        var configuration = setup.CreateNew<GameConfiguration>();
+        this._configuration = configuration;
+        await setup.SaveChangesAsync().ConfigureAwait(false);
+        using var players = provider.CreateNewPlayerContext(configuration);
+        this._account = players.CreateNew<Account>();
+        this._account.LoginName = "ann";
+        this._account.PasswordHash = BCrypt.Net.BCrypt.HashPassword("secret", 4);
+        this._account.EMail = "private@example.test";
+        this._account.VaultPassword = "private-pin";
+        this._account.WCoinC = 150;
+        var character = players.CreateNew<Character>();
+        character.Name = "AnnKnight";
+        this._account.Characters.Add(character);
+        for (var index = 0; index < 21; index++)
+        {
+            var grant = players.CreateNew<CashShopCoinGrant>();
+            grant.AccountId = this._account.GetId();
+            grant.Amount = index;
+            grant.Reason = $"Own reward {index}";
+            grant.CreatedAt = new DateTime(2026, 11, 16, 0, index, 0, DateTimeKind.Utc);
+        }
+
+        var other = players.CreateNew<Account>();
+        other.LoginName = "bob";
+        var otherGrant = players.CreateNew<CashShopCoinGrant>();
+        otherGrant.AccountId = other.GetId();
+        otherGrant.Reason = "Other account private reward";
+        otherGrant.CreatedAt = DateTime.UtcNow;
+        await players.SaveChangesAsync().ConfigureAwait(false);
+        var source = new Mock<IDataSource<GameConfiguration>>();
+        source.Setup(s => s.GetOwnerAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync(configuration);
+        this._login = new Mock<ILoginServer>();
+        this._login.Setup(s => s.GetSnapshotAsync()).ReturnsAsync(new Dictionary<string, byte> { ["ann"] = 0 });
+        this._login.Setup(s => s.TryReserveAccountAsync(It.IsAny<string>(), It.IsAny<int>())).ReturnsAsync(true);
+        this._server = new Mock<IManageableServer>();
+        this._server.SetupGet(s => s.Id).Returns(0);
+        this._server.SetupGet(s => s.Type).Returns(ServerType.GameServer);
+        this._server.As<IGameServerAdministration>();
+        this._servers = new List<IManageableServer> { this._server.Object };
+        var servers = new Mock<IServerProvider>();
+        servers.SetupGet(s => s.Servers).Returns(this._servers);
+        this._controller = new WebsiteAccountController(provider, source.Object, this._login.Object, servers.Object, NullLogger<WebsiteAccountController>.Instance)
+        {
+            ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() },
+        };
+    }
+
+    /// <summary>Wrong, missing and banned credentials all reveal no account data.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task RejectsInvalidCredentialsAsync()
+    {
+        foreach (var request in new[] { new WebsiteAccountRequest("ann", "wrong"), new WebsiteAccountRequest("missing", "secret"), new WebsiteAccountRequest(null, null) })
+        {
+            Assert.That(await this._controller.OverviewAsync(request).ConfigureAwait(false), Is.InstanceOf<UnauthorizedObjectResult>());
+        }
+
+        this._account.State = AccountState.Banned;
+        Assert.That(await this._controller.OverviewAsync(new("ann", "secret")).ConfigureAwait(false), Is.InstanceOf<UnauthorizedObjectResult>());
+    }
+
+    /// <summary>Pages contain only this account's grants, with no password, PIN or e-mail disclosure.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task PagesHistoryWithoutLeakingOtherAccountsOrSecretsAsync()
+    {
+        var first = await this.ReadAsync(0).ConfigureAwait(false);
+        Assert.That(first.GetProperty("history").GetArrayLength(), Is.EqualTo(20));
+        Assert.That(first.GetProperty("hasMore").GetBoolean(), Is.True);
+        Assert.That(first.GetProperty("accountOnline").GetBoolean(), Is.True);
+        Assert.That(first.GetProperty("balances").GetProperty("wCoinC").GetInt32(), Is.EqualTo(150));
+        Assert.That(first.GetRawText(), Does.Not.Contain("private").And.Not.Contain("secret").And.Not.Contain("Password").And.Not.Contain("Other account"));
+        var second = await this.ReadAsync(1).ConfigureAwait(false);
+        Assert.That(second.GetProperty("history").GetArrayLength(), Is.EqualTo(1));
+        Assert.That(second.GetProperty("hasMore").GetBoolean(), Is.False);
+        Assert.That(first.GetProperty("history")[0].GetProperty("createdAt").GetString(), Does.EndWith("Z"));
+        Assert.That(this._controller.Response.Headers.CacheControl.ToString(), Is.EqualTo("no-store"));
+    }
+
+    /// <summary>Unbounded reads are rejected before querying persistence.</summary>
+    /// <param name="page">An invalid page.</param>
+    /// <returns>The test task.</returns>
+    [TestCase(-1)]
+    [TestCase(107374182)]
+    [TestCase(int.MaxValue)]
+    public async Task RejectsUnboundedPagesAsync(int page)
+        => Assert.That(await this._controller.OverviewAsync(new("ann", "secret", page)).ConfigureAwait(false), Is.InstanceOf<BadRequestObjectResult>());
+
+    /// <summary>Retained entries beyond the old thousand-entry ceiling remain accessible in bounded pages.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task PagesBeyondOneThousandEntriesAsync()
+    {
+        using var context = this._persistence.CreateNewPlayerContext(this._configuration);
+        for (var index = 0; index < 1000; index++)
+        {
+            var grant = context.CreateNew<CashShopCoinGrant>();
+            grant.AccountId = this._account.GetId();
+            grant.CreatedAt = new DateTime(2026, 11, 17, 0, 0, 0, DateTimeKind.Utc).AddMinutes(index);
+        }
+
+        await context.SaveChangesAsync().ConfigureAwait(false);
+        var page = await this.ReadAsync(50).ConfigureAwait(false);
+        Assert.That(page.GetProperty("history").GetArrayLength(), Is.EqualTo(20));
+        Assert.That(page.GetProperty("hasMore").GetBoolean(), Is.True);
+        var last = await this.ReadAsync(51).ConfigureAwait(false);
+        Assert.That(last.GetProperty("history").GetArrayLength(), Is.EqualTo(1));
+        Assert.That(last.GetProperty("history")[0].GetProperty("reason").GetString(), Is.EqualTo("Own reward 0"));
+        Assert.That(last.GetProperty("hasMore").GetBoolean(), Is.False);
+    }
+
+    /// <summary>Purchase metadata is returned as data for bilingual rendering, without changing legacy reasons.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task ReturnsBilingualPurchaseMetadataAsync()
+    {
+        using var context = this._persistence.CreateNewPlayerContext(this._configuration);
+        var package = context.CreateNew<CashShopPackage>();
+        package.Name = new LocalizedString("en=Test package||vi=Gói thử nghiệm");
+        CashShopPurchaseReceipt.Create(context, this._account, package, 10, "AnnMage");
+        await context.SaveChangesAsync().ConfigureAwait(false);
+        var json = await this.ReadAsync(0).ConfigureAwait(false);
+        var row = json.GetProperty("history")[0];
+        Assert.That(row.GetProperty("amount").GetInt32(), Is.EqualTo(-10));
+        Assert.That(row.GetProperty("purchase").GetProperty("nameVi").GetString(), Is.EqualTo("Gói thử nghiệm"));
+        Assert.That(row.GetProperty("purchase").GetProperty("giftRecipient").GetString(), Is.EqualTo("AnnMage"));
+        Assert.That(row.GetProperty("pending").GetBoolean(), Is.False);
+    }
+
+    /// <summary>Already-applied direct balance receipts expose safe metadata without becoming a second payment.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task ReturnsAppliedBalanceMetadataAsync()
+    {
+        using var context = this._persistence.CreateNewPlayerContext(this._configuration);
+        var receipt = CashShopBalanceReceipt.Record(context, this._account, CashShopCoinType.WCoinC, -5, CashShopBalanceReason.PlayerStorePurchase, "<OtherKnight>")!;
+        await context.SaveChangesAsync().ConfigureAwait(false);
+        var json = await this.ReadAsync(0).ConfigureAwait(false);
+        var row = json.GetProperty("history").EnumerateArray().Single(entry => entry.GetProperty("id").GetGuid() == receipt.GetId());
+        Assert.That(row.GetProperty("amount").GetInt32(), Is.EqualTo(-5));
+        Assert.That(row.GetProperty("balanceChange").GetProperty("action").GetString(), Is.EqualTo("PlayerStorePurchase"));
+        Assert.That(row.GetProperty("balanceChange").GetProperty("otherCharacter").GetString(), Is.EqualTo("<OtherKnight>"));
+        Assert.That(row.GetProperty("pending").GetBoolean(), Is.False);
+        Assert.That(this._account.WCoinC, Is.EqualTo(150));
+    }
+
+    /// <summary>VIP history retains bilingual display data without returning account or internal grant identifiers in its reason.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task RedactsVipReceiptInternalsAndKeepsDisplayMetadataAsync()
+    {
+        using var context = this._persistence.CreateNewPlayerContext(this._configuration);
+        var now = DateTime.UtcNow;
+        var plan = new VipPurchasePlan("ANN", 1, 7, 100, CashShopCoinType.WCoinC, now, null, now.AddDays(7));
+        var intent = new VipWalletIntent(this._account.GetId(), Guid.NewGuid(), plan, new("ANN", 1, now, plan.UntilUtc), 5, 5, "Bronze", "Đồng", []);
+        var privateIds = new[] { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
+        var purchase = context.CreateNew<CashShopCoinGrant>();
+        purchase.AccountId = this._account.GetId();
+        purchase.Amount = -100;
+        purchase.CreatedAt = now;
+        purchase.AppliedAt = now;
+        purchase.Reason = JsonSerializer.Serialize(new VipWalletReceipt("vip-wallet-v1", intent, privateIds.ToList()));
+        var daily = context.CreateNew<CashShopCoinGrant>();
+        daily.AccountId = this._account.GetId();
+        daily.Amount = 10;
+        daily.CreatedAt = now;
+        daily.Reason = JsonSerializer.Serialize(new VipDailyReceipt("vip-daily-v1", this._account.GetId(), "2026-11-18", intent.OperationId, "Bronze", "Đồng"));
+        var removalOperation = Guid.NewGuid();
+        var removal = context.CreateNew<CashShopCoinGrant>();
+        removal.AccountId = this._account.GetId();
+        removal.CreatedAt = now;
+        removal.AppliedAt = now;
+        removal.Reason = JsonSerializer.Serialize(new VipRemovalReceipt("vip-remove-v1", new(this._account.GetId(), removalOperation, "ANN", new("private-host", "private operational reason"), now, privateIds.ToList())));
+        await context.SaveChangesAsync().ConfigureAwait(false);
+        var json = await this.ReadAsync(0).ConfigureAwait(false);
+        var entries = json.GetProperty("history").EnumerateArray().ToArray();
+        var purchaseRow = entries.Single(row => row.GetProperty("id").GetGuid() == purchase.GetId());
+        var dailyRow = entries.Single(row => row.GetProperty("id").GetGuid() == daily.GetId());
+        var removalRow = entries.Single(row => row.GetProperty("id").GetGuid() == removal.GetId());
+        Assert.That(removalRow.GetProperty("vipRemoved").GetBoolean(), Is.True);
+        Assert.That(removalRow.GetProperty("reason").ValueKind, Is.EqualTo(JsonValueKind.Null));
+        Assert.That(json.GetRawText(), Does.Not.Contain("private-host").And.Not.Contain("private operational reason").And.Not.Contain(removalOperation.ToString()));
+        Assert.That(purchaseRow.GetProperty("reason").ValueKind, Is.EqualTo(JsonValueKind.Null));
+        Assert.That(purchaseRow.GetProperty("vipPurchase").GetProperty("nameVi").GetString(), Is.EqualTo("Đồng"));
+        Assert.That(purchaseRow.GetProperty("vipPurchase").GetProperty("days").GetInt32(), Is.EqualTo(7));
+        Assert.That(dailyRow.GetProperty("reason").ValueKind, Is.EqualTo(JsonValueKind.Null));
+        Assert.That(dailyRow.GetProperty("vipDaily").GetProperty("nameEn").GetString(), Is.EqualTo("Bronze"));
+        foreach (var id in privateIds.Append(this._account.GetId()).Append(intent.OperationId))
+        {
+            Assert.That(json.GetRawText(), Does.Not.Contain(id.ToString()));
+        }
+    }
+
+    /// <summary>Collected gift history retains bilingual public titles without returning internal proof identifiers.</summary>
+    /// <param name="language">The host display language.</param>
+    /// <returns>The test task.</returns>
+    [TestCase("en")]
+    [TestCase("vi")]
+    [NonParallelizable]
+    public async Task GiftHistoryIsRedactedAndLocalizedAsync(string language)
+    {
+        using var context = this._persistence.CreateNewPlayerContext(this._configuration);
+        var letter = Guid.NewGuid();
+        var character = Guid.NewGuid();
+        var item = Guid.NewGuid();
+        var grant = context.CreateNew<CashShopCoinGrant>();
+        grant.AccountId = this._account.GetId();
+        grant.CoinType = CashShopCoinType.WCoinC;
+        grant.Amount = 10;
+        grant.CreatedAt = DateTime.UtcNow;
+        grant.AppliedAt = DateTime.UtcNow;
+        grant.GrantedBy = GiftBoxCollection.GrantedBy;
+        grant.Reference = $"mail:{this._account.GetId():N}:{letter:N}";
+        grant.Reason = JsonSerializer.Serialize(new GiftBoxReceipt("gift-box-v1", this._account.GetId(), letter, character, [item], 100, 10, grant.CoinType, "Event gift", "Quà sự kiện"));
+        await context.SaveChangesAsync().ConfigureAwait(false);
+        var json = await this.ReadAsync(0).ConfigureAwait(false);
+        var row = json.GetProperty("history").EnumerateArray().Single(value => value.GetProperty("id").GetGuid() == grant.GetId());
+        Assert.That(row.GetProperty("reason").ValueKind, Is.EqualTo(JsonValueKind.Null));
+        Assert.That(row.GetProperty("giftBox").GetProperty("titleVi").GetString(), Is.EqualTo("Quà sự kiện"));
+        foreach (var id in new[] { this._account.GetId(), letter, character, item })
+        {
+            Assert.That(json.GetRawText(), Does.Not.Contain(id.ToString()));
+        }
+
+        var previous = System.Globalization.CultureInfo.CurrentUICulture;
+        try
+        {
+            System.Globalization.CultureInfo.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo(language);
+            Assert.That(HNMO.Web.AdminPanel.Services.CashShopHistoryText.Format(grant.Reason), Is.EqualTo(language == "vi" ? "Đã nhận quà: Quà sự kiện" : "Gift collected: Event gift"));
+        }
+        finally
+        {
+            System.Globalization.CultureInfo.CurrentUICulture = previous;
+        }
+    }
+
+    /// <summary>A valid player password alone cannot bypass the trusted bridge's API-key policy.</summary>
+    [Test]
+    public void RequiresTrustedBridgeAuthorization()
+    {
+        var policy = typeof(WebsiteAccountController).GetCustomAttributes(typeof(AuthorizeAttribute), false).Cast<AuthorizeAttribute>().Single();
+        Assert.That(policy.Policy, Is.EqualTo(AdminPolicies.AuthenticatedOperator));
+        Assert.That(policy.AuthenticationSchemes, Is.EqualTo(ApiKeyAuthenticationDefaults.ApiSchemes));
+    }
+
+    /// <summary>Live presence requires both the authenticated account and its exact persistent character identity.</summary>
+    /// <param name="sameAccount">Whether the live result belongs to the account.</param>
+    /// <param name="sameCharacter">Whether the live result has the character's identifier.</param>
+    /// <returns>The test task.</returns>
+    [TestCase(true, true)]
+    [TestCase(false, true)]
+    [TestCase(true, false)]
+    public async Task ScopesLivePresenceToOwnCharacterAsync(bool sameAccount, bool sameCharacter)
+    {
+        var character = this._account.Characters.Single();
+        var live = new LivePlayerInfo(sameCharacter ? character.GetId() : Guid.NewGuid(), sameAccount ? "ann" : "bob", character.Name, 0, 1, 2, 300, 0, null, false);
+        this._server.As<IGameServerAdministration>().Setup(s => s.GetPlayerAsync(character.Name, It.IsAny<CancellationToken>())).ReturnsAsync(live);
+        var json = await this.ReadAsync(0).ConfigureAwait(false);
+        Assert.That(json.GetProperty("characters")[0].GetProperty("online").ValueKind, Is.EqualTo(sameAccount && sameCharacter ? JsonValueKind.True : JsonValueKind.Null));
+        Assert.That(json.ToString(), Does.Not.Contain("bob"));
+    }
+
+    /// <summary>An account outside the game confirms its characters are offline without live-server queries.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task ReportsOfflineCharactersWithoutQueryingAServerAsync()
+    {
+        this._login.Setup(s => s.GetSnapshotAsync()).ReturnsAsync(new Dictionary<string, byte>());
+        var json = await this.ReadAsync(0).ConfigureAwait(false);
+        Assert.That(json.GetProperty("characters")[0].GetProperty("online").GetBoolean(), Is.False);
+        this._server.As<IGameServerAdministration>().Verify(s => s.GetPlayerAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    /// <summary>A missing server channel is shown as unknown instead of inventing offline status.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task ReportsUnknownPresenceWhenTheServerChannelIsMissingAsync()
+    {
+        this._servers.Clear();
+        var json = await this.ReadAsync(0).ConfigureAwait(false);
+        Assert.That(json.GetProperty("characters")[0].GetProperty("online").ValueKind, Is.EqualTo(JsonValueKind.Null));
+    }
+
+    /// <summary>A failed live query leaves saved account data available and marks presence unknown.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task KeepsSavedDataWhenTheLiveServerFailsAsync()
+    {
+        this._server.As<IGameServerAdministration>().Setup(s => s.GetPlayerAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ThrowsAsync(new TimeoutException("unavailable"));
+        var json = await this.ReadAsync(0).ConfigureAwait(false);
+        Assert.That(json.GetProperty("characters")[0].GetProperty("online").ValueKind, Is.EqualTo(JsonValueKind.Null));
+        Assert.That(json.GetProperty("balances").GetProperty("wCoinC").GetInt32(), Is.EqualTo(150));
+    }
+
+    /// <summary>A valid password change hashes the replacement, exposes no secrets and releases its reservation.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task ChangesPasswordAndReleasesReservationAsync()
+    {
+        var result = await this._controller.ChangePasswordAsync(new("ann", "secret", "replacement")).ConfigureAwait(false);
+        Assert.That(result, Is.InstanceOf<OkObjectResult>());
+        Assert.That(BCrypt.Net.BCrypt.Verify("replacement", this._account.PasswordHash), Is.True);
+        Assert.That(BCrypt.Net.BCrypt.Verify("secret", this._account.PasswordHash), Is.False);
+        var response = JsonSerializer.Serialize(((OkObjectResult)result).Value);
+        Assert.That(response, Does.Not.Contain("secret").And.Not.Contain("replacement").And.Not.Contain(this._account.PasswordHash));
+        Assert.That(this._controller.Response.Headers.CacheControl.ToString(), Is.EqualTo("no-store"));
+        this._login.Verify(s => s.ReleaseAccountReservationAsync("ann", It.IsAny<int>()), Times.Once);
+    }
+
+    /// <summary>A live or already reserved account cannot have its saved password overwritten.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task RefusesPasswordChangeWhenAccountIsOnlineAsync()
+    {
+        this._login.Setup(s => s.TryReserveAccountAsync("ann", It.IsAny<int>())).ReturnsAsync(false);
+        Assert.That(await this._controller.ChangePasswordAsync(new("ann", "secret", "replacement")).ConfigureAwait(false), Is.InstanceOf<ConflictObjectResult>());
+        Assert.That(BCrypt.Net.BCrypt.Verify("secret", this._account.PasswordHash), Is.True);
+        this._login.Verify(s => s.ReleaseAccountReservationAsync(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
+    }
+
+    /// <summary>Wrong, missing, banned and automated accounts cannot enter the password-change reservation.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task RejectsUnauthorizedPasswordChangesAsync()
+    {
+        Assert.That(await this._controller.ChangePasswordAsync(new("ann", "wrong", "replacement")).ConfigureAwait(false), Is.InstanceOf<UnauthorizedObjectResult>());
+        Assert.That(await this._controller.ChangePasswordAsync(new("missing", "secret", "replacement")).ConfigureAwait(false), Is.InstanceOf<UnauthorizedObjectResult>());
+        Assert.That(await this._controller.ChangePasswordAsync(new(null, null, "replacement")).ConfigureAwait(false), Is.InstanceOf<UnauthorizedObjectResult>());
+        this._account.State = AccountState.Banned;
+        Assert.That(await this._controller.ChangePasswordAsync(new("ann", "secret", "replacement")).ConfigureAwait(false), Is.InstanceOf<UnauthorizedObjectResult>());
+        this._account.State = AccountState.Normal;
+        this._account.IsBot = true;
+        Assert.That(await this._controller.ChangePasswordAsync(new("ann", "secret", "replacement")).ConfigureAwait(false), Is.InstanceOf<UnauthorizedObjectResult>());
+        Assert.That(BCrypt.Net.BCrypt.Verify("secret", this._account.PasswordHash), Is.True);
+        this._login.Verify(s => s.TryReserveAccountAsync(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
+    }
+
+    /// <summary>Authentication is checked again after reservation, rejecting credentials invalidated by a competing change.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task RejectsCredentialsChangedBeforeReservationAsync()
+    {
+        this._login.Setup(s => s.TryReserveAccountAsync("ann", It.IsAny<int>()))
+            .Callback(() => this._account.PasswordHash = BCrypt.Net.BCrypt.HashPassword("other-change", 4))
+            .ReturnsAsync(true);
+        Assert.That(await this._controller.ChangePasswordAsync(new("ann", "secret", "replacement")).ConfigureAwait(false), Is.InstanceOf<UnauthorizedObjectResult>());
+        Assert.That(BCrypt.Net.BCrypt.Verify("other-change", this._account.PasswordHash), Is.True);
+        this._login.Verify(s => s.ReleaseAccountReservationAsync("ann", It.IsAny<int>()), Times.Once);
+    }
+
+    /// <summary>Invalid replacement values cannot mutate or reserve an account.</summary>
+    /// <param name="password">An invalid new password.</param>
+    /// <returns>The test task.</returns>
+    [TestCase(null)]
+    [TestCase("")]
+    [TestCase("ab")]
+    [TestCase("abcdefghijklmnopqrstu")]
+    [TestCase("mật-khẩu")]
+    [TestCase("line\nbreak")]
+    public async Task RejectsInvalidNewPasswordsAsync(string? password)
+    {
+        Assert.That(await this._controller.ChangePasswordAsync(new("ann", "secret", password)).ConfigureAwait(false), Is.InstanceOf<BadRequestObjectResult>());
+        Assert.That(BCrypt.Net.BCrypt.Verify("secret", this._account.PasswordHash), Is.True);
+        this._login.Verify(s => s.TryReserveAccountAsync(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
+    }
+
+    private async ValueTask<JsonElement> ReadAsync(int page)
+    {
+        var result = (OkObjectResult)await this._controller.OverviewAsync(new("ann", "secret", page)).ConfigureAwait(false);
+        return JsonSerializer.SerializeToElement(result.Value, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+    }
+}

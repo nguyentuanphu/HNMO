@@ -9,83 +9,6 @@ using System.Net;
 using HNMO.GameLogic.PlugIns.Missions;
 
 /// <summary>
-/// The actions which can need the second password.
-/// </summary>
-public enum SafetyAction
-{
-    /// <summary>Taking items or zen out of the vault.</summary>
-    Vault,
-
-    /// <summary>Starting or accepting a trade.</summary>
-    Trade,
-
-    /// <summary>Opening the personal store.</summary>
-    PersonalStore,
-
-    /// <summary>Dropping or selling a valuable item.</summary>
-    ValuableItem,
-}
-
-/// <summary>
-/// The result of a second password which was entered.
-/// </summary>
-public enum PinCheckResult
-{
-    /// <summary>It's right.</summary>
-    Ok,
-
-    /// <summary>It's wrong.</summary>
-    Wrong,
-
-    /// <summary>Too many wrong ones were entered: wait until the lockout ends.</summary>
-    LockedOut,
-
-    /// <summary>The account has no second password.</summary>
-    NoPin,
-}
-
-/// <summary>
-/// The result of a check of a second password, with the tries left and the end of a lockout.
-/// </summary>
-/// <param name="Result">The result.</param>
-/// <param name="TriesLeft">The wrong tries left before the lockout.</param>
-/// <param name="LockedOutUntilUtc">The end of the lockout.</param>
-public readonly record struct PinCheck(PinCheckResult Result, int TriesLeft, DateTime? LockedOutUntilUtc);
-
-/// <summary>
-/// The result of locking or unlocking an item.
-/// </summary>
-public enum ItemLockResult
-{
-    /// <summary>The item is locked now.</summary>
-    Locked,
-
-    /// <summary>The item was locked already.</summary>
-    AlreadyLocked,
-
-    /// <summary>The item's asked unlock was cancelled: it stays locked.</summary>
-    UnlockCancelled,
-
-    /// <summary>The unlock was asked; it happens after the wait.</summary>
-    UnlockStarted,
-
-    /// <summary>The unlock was asked before; it still waits.</summary>
-    UnlockWaiting,
-
-    /// <summary>The item is unlocked now.</summary>
-    Unlocked,
-
-    /// <summary>The item isn't locked.</summary>
-    NotLocked,
-
-    /// <summary>The account locked as many items as it may.</summary>
-    TooMany,
-
-    /// <summary>The item lock is switched off.</summary>
-    Off,
-}
-
-/// <summary>
 /// The rules of HNMO's account safety, without the game: the second password (with its wrong-try limits), which
 /// actions need it, the item locks with their unlock wait, and the login and trade history. Every method holds the
 /// store's lock; the caller saves (<see cref="AccountSafetyStore.SaveIfChanged"/>).
@@ -93,6 +16,7 @@ public enum ItemLockResult
 public sealed class AccountSafetyEngine
 {
     private const int MaxLoginsKept = 500;
+
     private const int MaxTradesKept = 1000;
 
     /// <summary>
@@ -211,6 +135,16 @@ public sealed class AccountSafetyEngine
 
         return address.Length <= 3 ? "x" : address[..3] + "…";
     }
+
+    /// <summary>
+    /// Gets a value indicating whether a login came from another address than the previous successful one.
+    /// </summary>
+    /// <param name="previous">The previous successful login.</param>
+    /// <param name="address">The address of this login.</param>
+    /// <returns><c>true</c>, if the address differs.</returns>
+    public static bool IsNewAddress(SafetyLoginEntry? previous, string? address) =>
+        previous is not null && !string.IsNullOrEmpty(previous.Address) && !string.IsNullOrEmpty(address)
+        && !string.Equals(previous.Address, address, StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
     /// Gets a value indicating whether an item counts as valuable: excellent, ancient, or of the configured level.
@@ -550,16 +484,6 @@ public sealed class AccountSafetyEngine
             return previous;
         }
     }
-
-    /// <summary>
-    /// Gets a value indicating whether a login came from another address than the previous successful one.
-    /// </summary>
-    /// <param name="previous">The previous successful login.</param>
-    /// <param name="address">The address of this login.</param>
-    /// <returns><c>true</c>, if the address differs.</returns>
-    public static bool IsNewAddress(SafetyLoginEntry? previous, string? address) =>
-        previous is not null && !string.IsNullOrEmpty(previous.Address) && !string.IsNullOrEmpty(address)
-        && !string.Equals(previous.Address, address, StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
     /// Gets the newest logins of an account.

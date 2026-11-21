@@ -5,11 +5,11 @@
 namespace HNMO.GameLogic.CastleSiege;
 
 using System.Threading;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.CastleSiege.NPC;
 using HNMO.GameLogic.Views.CastleSiege;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Holds the runtime state of Castle Siege for one game context.

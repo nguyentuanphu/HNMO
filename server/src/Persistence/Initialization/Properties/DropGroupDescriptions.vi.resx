@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="TheJewelsDropItemGroup01PercentDropChance" xml:space="preserve"><value>Nhóm vật phẩm rơi ra trang sức (0,1 % d cơ hội rơi)</value></data>
+  <data name="TheCommonDropItemGroupForRandomItems30PercentDropChance" xml:space="preserve"><value>Nhóm vật phẩm rơi ra phổ biến cho các vật phẩm ngẫu nhiên (30 cơ hội % drop)</value></data>
+  <data name="TheCommonMoneyDropItemGroup50PercentDropChance" xml:space="preserve"><value>Nhóm vật phẩm rơi ra tiền thông thường (50 % drop)</value></data>
+  <data name="TheCommonDropItemGroupForRandomExcellentItems001PercentDropChance" xml:space="preserve"><value>Nhóm vật phẩm rơi ra phổ biến dành cho các vật phẩm xuất sắc ngẫu nhiên (0,2 % cơ hội rơi)</value></data>
+  <data name="ItemsFromRedDragon" xml:space="preserve"><value>Vật phẩm từ rồng đỏ</value></data>
+  <data name="BoxOfKundunPlus2" xml:space="preserve"><value>Hộp Kundun +2</value></data>
+  <data name="BoxOfLuck" xml:space="preserve"><value>Hộp may mắn</value></data>
+  <data name="TheDropItemGroupForSymbolOfKundunLevel7" xml:space="preserve"><value>Nhóm vật phẩm rơi ra cho Biểu tượng Kundun (Cấp 7)</value></data>
+  <data name="TheDropItemGroupForSymbolOfKundunLevel6" xml:space="preserve"><value>Nhóm vật phẩm rơi ra cho Biểu tượng Kundun (Cấp 6)</value></data>
+  <data name="TheDropItemGroupForSymbolOfKundunLevel5" xml:space="preserve"><value>Nhóm vật phẩm rơi ra cho Biểu tượng Kundun (Cấp 5)</value></data>
+  <data name="TheDropItemGroupForSymbolOfKundunLevel4" xml:space="preserve"><value>Nhóm vật phẩm rơi ra cho Biểu tượng Kundun (Cấp 4)</value></data>
+  <data name="TheDropItemGroupForSymbolOfKundunLevel3" xml:space="preserve"><value>Nhóm vật phẩm rơi ra cho Biểu tượng Kundun (Cấp 3)</value></data>
+  <data name="TheDropItemGroupForSymbolOfKundunLevel2" xml:space="preserve"><value>Nhóm vật phẩm rơi ra cho Biểu tượng Kundun (Cấp 2)</value></data>
+  <data name="TheDropItemGroupForSymbolOfKundunLevel1" xml:space="preserve"><value>Nhóm vật phẩm rơi ra cho Biểu tượng Kundun (Cấp 1)</value></data>
+  <data name="DarkRavenSpirit" xml:space="preserve"><value>Linh hồn quạ đen</value></data>
+  <data name="DarkHorseSpirit" xml:space="preserve"><value>Tinh thần ngựa đen</value></data>
+  <data name="SignOfDimensions" xml:space="preserve"><value>Ký hiệu kích thước</value></data>
+  <data name="QuestItemBrokenSwordDarkStoneBladeKnight" xml:space="preserve"><value>Vật phẩm nhiệm vụ 'Kiếm gãy; Đá đen' (Kỵ sĩ)</value></data>
+  <data name="QuestItemScrollOfEmperorRingOfHonorBloodySummoner" xml:space="preserve"><value>Vật phẩm nhiệm vụ 'Cuộn giấy của Hoàng đế; Nhẫn danh dự' (Bloody Thuật sư)</value></data>
+  <data name="QuestItemScrollOfEmperorRingOfHonorMuseElf" xml:space="preserve"><value>Vật phẩm nhiệm vụ 'Cuộn giấy của Hoàng đế; Chiếc nhẫn danh dự' (Muse Elf)</value></data>
+  <data name="QuestItemScrollOfEmperorRingOfHonorSoulMaster" xml:space="preserve"><value>Vật phẩm nhiệm vụ 'Cuộn giấy của Hoàng đế; Nhẫn danh dự' (Pháp sư)</value></data>
+  <data name="QuestItemScrollOfEmperorRingOfHonorBladeKnight" xml:space="preserve"><value>Vật phẩm nhiệm vụ 'Cuộn giấy của Hoàng đế; Nhẫn danh dự' (Kỵ sĩ)</value></data>
+  <data name="CrestOfMonarch" xml:space="preserve"><value>Huy hiệu của vua</value></data>
+  <data name="LochsFeather" xml:space="preserve"><value>Lông của Loch</value></data>
+  <data name="QuestItemFeatherOfDarkPhoenix" xml:space="preserve"><value>Vật phẩm nhiệm vụ 'Lông Phượng Hoàng Bóng Tối' ()</value></data>
+  <data name="QuestItemHornOfHellMaine" xml:space="preserve"><value>Vật phẩm nhiệm vụ 'Sừng địa ngục Maine' ()</value></data>
+  <data name="QuestItemFlameOfDeathBeamKnight" xml:space="preserve"><value>Vật phẩm nhiệm vụ 'Ngọn lửa của hiệp sĩ tia tử thần' ()</value></data>
+  <data name="QuestItemEyeOfAbyssalSummoner" xml:space="preserve"><value>Vật phẩm nhiệm vụ 'Con mắt của vực thẳm' (Thuật sư)</value></data>
+  <data name="QuestItemSoulShardOfWizardDarkWizard" xml:space="preserve"><value>Vật phẩm nhiệm vụ 'Mảnh linh hồn của pháp sư' (Phù thủy)</value></data>
+  <data name="QuestItemTearOfElfFairyElf" xml:space="preserve"><value>Vật phẩm nhiệm vụ 'Nước mắt của yêu tinh' (Fairy Elf)</value></data>
+  <data name="QuestItemBrokenSwordDarkStoneDarkKnight" xml:space="preserve"><value>Vật phẩm nhiệm vụ 'Kiếm gãy; Đá đen' (Chiến binh)</value></data>
+  <data name="QuestItemScrollOfEmperorRingOfHonorSummoner" xml:space="preserve"><value>Vật phẩm nhiệm vụ 'Cuộn giấy của Hoàng đế; Nhẫn danh dự' (Thuật sư)</value></data>
+  <data name="QuestItemScrollOfEmperorRingOfHonorDarkWizard" xml:space="preserve"><value>Vật phẩm nhiệm vụ 'Cuộn giấy của Hoàng đế; Nhẫn danh dự' (Phù thủy)</value></data>
+  <data name="QuestItemScrollOfEmperorRingOfHonorFairyElf" xml:space="preserve"><value>Vật phẩm nhiệm vụ 'Cuộn giấy của Hoàng đế; Nhẫn danh dự' (Yêu tinh cổ tích)</value></data>
+  <data name="QuestItemScrollOfEmperorRingOfHonorDarkKnight" xml:space="preserve"><value>Vật phẩm nhiệm vụ 'Cuộn giấy của Hoàng đế; Nhẫn danh dự' (Chiến binh)</value></data>
+  <data name="JewelOfGuardian" xml:space="preserve"><value>Viên ngọc bảo vệ</value></data>
+  <data name="RewardedAncientItemsForChaosCastle7" xml:space="preserve"><value>Phần thưởng vật phẩm cổ xưa cho Chaos Castle 7</value></data>
+  <data name="RewardedJewelsForChaosCastle7" xml:space="preserve"><value>Phần thưởng trang sức cho Chaos Castle 7</value></data>
+  <data name="RewardedAncientItemsForChaosCastle6" xml:space="preserve"><value>Phần thưởng vật phẩm cổ xưa cho Chaos Castle 6</value></data>
+  <data name="RewardedJewelsForChaosCastle6" xml:space="preserve"><value>Phần thưởng trang sức cho Chaos Castle 6</value></data>
+  <data name="RewardedAncientItemsForChaosCastle5" xml:space="preserve"><value>Phần thưởng vật phẩm cổ xưa cho Chaos Castle 5</value></data>
+  <data name="RewardedJewelsForChaosCastle5" xml:space="preserve"><value>Phần thưởng trang sức cho Chaos Castle 5</value></data>
+  <data name="RewardedAncientItemsForChaosCastle4" xml:space="preserve"><value>Phần thưởng vật phẩm cổ xưa cho Chaos Castle 4</value></data>
+  <data name="RewardedJewelsForChaosCastle4" xml:space="preserve"><value>Phần thưởng trang sức cho Chaos Castle 4</value></data>
+  <data name="RewardedAncientItemsForChaosCastle3" xml:space="preserve"><value>Phần thưởng vật phẩm cổ xưa cho Chaos Castle 3</value></data>
+  <data name="RewardedJewelsForChaosCastle3" xml:space="preserve"><value>Phần thưởng trang sức cho Chaos Castle 3</value></data>
+  <data name="RewardedAncientItemsForChaosCastle2" xml:space="preserve"><value>Phần thưởng vật phẩm cổ xưa cho Chaos Castle 2</value></data>
+  <data name="RewardedJewelsForChaosCastle2" xml:space="preserve"><value>Phần thưởng trang sức cho Chaos Castle 2</value></data>
+  <data name="RewardedJewelsForChaosCastle1" xml:space="preserve"><value>Trang sức được thưởng cho Chaos Castle 1</value></data>
+  <data name="TheDropItemGroupForRena" xml:space="preserve"><value>Nhóm vật phẩm rơi ra cho Rena</value></data>
+  <data name="ArchangelWeaponBloodCastle" xml:space="preserve"><value>Vũ khí tổng lãnh thiên thần (Lâu đài máu)</value></data>
+  <data name="RewardedItemsForBloodCastle8" xml:space="preserve"><value>Vật phẩm thưởng cho Blood Castle 8</value></data>
+  <data name="RewardedItemsForBloodCastle7" xml:space="preserve"><value>Vật phẩm thưởng cho Blood Castle 7</value></data>
+  <data name="RewardedItemsForBloodCastle6" xml:space="preserve"><value>Vật phẩm thưởng cho Blood Castle 6</value></data>
+  <data name="RewardedItemsForBloodCastle5" xml:space="preserve"><value>Vật phẩm thưởng cho Blood Castle 5</value></data>
+  <data name="RewardedItemsForBloodCastle4" xml:space="preserve"><value>Vật phẩm thưởng cho Blood Castle 4</value></data>
+  <data name="RewardedItemsForBloodCastle3" xml:space="preserve"><value>Vật phẩm thưởng cho Blood Castle 3</value></data>
+  <data name="RewardedItemsForBloodCastle2" xml:space="preserve"><value>Vật phẩm thưởng cho Blood Castle 2</value></data>
+  <data name="RewardedItemsForBloodCastle1" xml:space="preserve"><value>Vật phẩm thưởng cho Blood Castle 1</value></data>
+  <data name="WizardsRingFromDestructiveOgreArcher" xml:space="preserve"><value>Chiếc nhẫn phù thủy từ cung thủ yêu tinh hủy diệt</value></data>
+  <data name="WizardsRingFromDestructiveOgreSoldier" xml:space="preserve"><value>Chiếc nhẫn phù thủy từ người lính yêu tinh hủy diệt</value></data>
+  <data name="JewelOfBlessFromWhiteWizard" xml:space="preserve"><value>Viên ngọc ban phước của pháp sư trắng</value></data>
+  <data name="BoxOfKundunPlus5" xml:space="preserve"><value>Hộp Kundun +5</value></data>
+  <data name="BoxOfKundunPlus4" xml:space="preserve"><value>Hộp Kundun +4</value></data>
+  <data name="BoxOfKundunPlus3" xml:space="preserve"><value>Hộp Kundun +3</value></data>
+  <data name="BoxOfKundunPlus1" xml:space="preserve"><value>Hộp Kundun +1</value></data>
+  <data name="GoldenCompensationBoxCrestOfMonarch" xml:space="preserve"><value>Hộp đền bù vàng: Huy hiệu của quân chủ</value></data>
+  <data name="GoldenCompensationBoxLochsFeather" xml:space="preserve"><value>Hộp Bồi Thường Vàng: Lông Loch</value></data>
+  <data name="GoldenCompensationBoxJewel" xml:space="preserve"><value>Hộp Bồi Thường Vàng: Ngọc</value></data>
+  <data name="CompensationBoxCrestOfMonarch" xml:space="preserve"><value>Hộp bồi thường: Huy hiệu của Monarch</value></data>
+  <data name="CompensationBoxLochsFeather" xml:space="preserve"><value>Hộp bồi thường: Lông của Loch</value></data>
+  <data name="CompensationBoxJewel" xml:space="preserve"><value>Hộp bồi thường: Ngọc</value></data>
+  <data name="FlameOfCondor" xml:space="preserve"><value>Ngọn lửa thần điêu</value></data>
+  <data name="JewelByMonsterLevelJewelOfLife10To19" xml:space="preserve">
+    <value>Viên ngọc cuộc sống từ quái level 10 đến 19</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless20To29" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 20 đến 29</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLife20To29" xml:space="preserve">
+    <value>Viên ngọc cuộc sống từ quái level 20 đến 29</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless30To39" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 30 đến 39</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul30To39" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 30 đến 39</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLife30To39" xml:space="preserve">
+    <value>Viên ngọc cuộc sống từ quái level 30 đến 39</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless40To49" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 40 đến 49</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul40To49" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 40 đến 49</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLife40To49" xml:space="preserve">
+    <value>Viên ngọc cuộc sống từ quái level 40 đến 49</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless50To59" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 50 đến 59</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul50To59" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 50 đến 59</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLife50To59" xml:space="preserve">
+    <value>Viên ngọc cuộc sống từ quái level 50 đến 59</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless60To69" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 60 đến 69</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul60To69" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 60 đến 69</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLife60To69" xml:space="preserve">
+    <value>Viên ngọc cuộc sống từ quái level 60 đến 69</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless70To79" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 70 đến 79</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul70To79" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 70 đến 79</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation70To79" xml:space="preserve">
+    <value>Viên ngọc sáng tạo từ quái level 70 đến 79</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos70To79" xml:space="preserve">
+    <value>Viên ngọc hỗn loạn từ quái level 70 đến 79</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless80To89" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 80 đến 89</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul80To89" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 80 đến 89</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation80To89" xml:space="preserve">
+    <value>Viên ngọc sáng tạo từ quái level 80 đến 89</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos80To89" xml:space="preserve">
+    <value>Viên ngọc hỗn loạn từ quái level 80 đến 89</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless90To99" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 90 đến 99</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul90To99" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 90 đến 99</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation90To99" xml:space="preserve">
+    <value>Viên ngọc sáng tạo từ quái level 90 đến 99</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos90To99" xml:space="preserve">
+    <value>Viên ngọc hỗn loạn từ quái level 90 đến 99</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless100To109" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 100 đến 109</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul100To109" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 100 đến 109</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation100To109" xml:space="preserve">
+    <value>Viên ngọc sáng tạo từ quái level 100 đến 109</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos100To109" xml:space="preserve">
+    <value>Viên ngọc hỗn loạn từ quái level 100 đến 109</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless110To119" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 110 đến 119</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul110To119" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 110 đến 119</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation110To119" xml:space="preserve">
+    <value>Viên ngọc sáng tạo từ quái level 110 đến 119</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos110To119" xml:space="preserve">
+    <value>Viên ngọc hỗn loạn từ quái level 110 đến 119</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless120To129" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 120 đến 129</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul120To129" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 120 đến 129</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation120To129" xml:space="preserve">
+    <value>Viên ngọc sáng tạo từ quái level 120 đến 129</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos120To129" xml:space="preserve">
+    <value>Viên ngọc hỗn loạn từ quái level 120 đến 129</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless130To139" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 130 đến 139</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul130To139" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 130 đến 139</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation130To139" xml:space="preserve">
+    <value>Viên ngọc sáng tạo từ quái level 130 đến 139</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos130To139" xml:space="preserve">
+    <value>Viên ngọc hỗn loạn từ quái level 130 đến 139</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBless140To149" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 140 đến 149</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoul140To149" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 140 đến 149</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreation140To149" xml:space="preserve">
+    <value>Viên ngọc sáng tạo từ quái level 140 đến 149</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaos140To149" xml:space="preserve">
+    <value>Viên ngọc hỗn loạn từ quái level 140 đến 149</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfBlessFrom150" xml:space="preserve">
+    <value>Viên ngọc phước lành từ quái level 150 trở lên</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfSoulFrom150" xml:space="preserve">
+    <value>Viên ngọc tâm hồn từ quái level 150 trở lên</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfLifeFrom150" xml:space="preserve">
+    <value>Viên ngọc cuộc sống từ quái level 150 trở lên</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfCreationFrom150" xml:space="preserve">
+    <value>Viên ngọc sáng tạo từ quái level 150 trở lên</value>
+  </data>
+  <data name="JewelByMonsterLevelJewelOfChaosFrom150" xml:space="preserve">
+    <value>Viên ngọc hỗn loạn từ quái level 150 trở lên</value>
+  </data>
+</root>

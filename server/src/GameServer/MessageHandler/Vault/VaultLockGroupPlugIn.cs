@@ -5,8 +5,8 @@
 namespace HNMO.GameServer.MessageHandler.Vault;
 
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Packet handler for vault lock packets (0x83 identifier).

@@ -9,13 +9,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
-using Microsoft.AspNetCore.Components;
 using HNMO.DataModel;
 using HNMO.DataModel.Composition;
 using HNMO.Persistence;
 using HNMO.Web.Shared;
 using HNMO.Web.Shared.Components.Form.Modal;
 using HNMO.Web.Shared.Components.Modal;
+using Microsoft.AspNetCore.Components;
 
 /// <summary>
 /// A component that shows a collection of <typeparamref name="TItem"/> in a table.

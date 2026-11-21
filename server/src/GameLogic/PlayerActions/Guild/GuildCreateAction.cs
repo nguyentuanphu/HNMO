@@ -6,6 +6,7 @@ namespace HNMO.GameLogic.PlayerActions.Guild;
 
 using System.ComponentModel;
 using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.PlugIns.BannedWords;
 using HNMO.GameLogic.Views.Guild;
 
 /// <summary>
@@ -13,6 +14,7 @@ using HNMO.GameLogic.Views.Guild;
 /// </summary>
 public class GuildCreateAction
 {
+
     /// <summary>
     /// Creates the guild.
     /// </summary>
@@ -28,10 +30,33 @@ public class GuildCreateAction
             return;
         }
 
+        // The guild master checks these when he's asked for the creation dialog (TalkNpcAction), but the creation
+        // request itself can be sent without asking him.
+        if (creator.GuildStatus is not null)
+        {
+            creator.Logger.LogWarning("Account {account} requested to create a guild, but is already a guild member.", creator.Account?.LoginName);
+            await creator.InvokeViewPlugInAsync<IShowGuildCreateResultPlugIn>(p => p.ShowGuildCreateResultAsync(GuildCreateErrorDetail.GuildAlreadyExist)).ConfigureAwait(false);
+            return;
+        }
+
+        var minimumLevel = PlugIns.GameplayRules.GuildLimitsPlugIn.GetMinimumCreateLevel(creator.GameContext);
+        if (creator.Level < minimumLevel)
+        {
+            creator.Logger.LogWarning("Account {account} requested to create a guild below level {level}.", creator.Account?.LoginName, minimumLevel);
+            await creator.InvokeViewPlugInAsync<IShowGuildCreateResultPlugIn>(p => p.ShowGuildCreateResultAsync(GuildCreateErrorDetail.GuildAlreadyExist)).ConfigureAwait(false);
+            return;
+        }
+
         if (string.IsNullOrWhiteSpace(guildName))
         {
             // The client doesn't send an empty name; a crafted packet does. The protocol knows no better result.
             creator.Logger.LogWarning("Account {account} requested a guild with an empty name.", creator.Account?.LoginName);
+            await creator.InvokeViewPlugInAsync<IShowGuildCreateResultPlugIn>(p => p.ShowGuildCreateResultAsync(GuildCreateErrorDetail.GuildAlreadyExist)).ConfigureAwait(false);
+            return;
+        }
+
+        if (!await BannedWordsPlugIn.IsGuildNameAllowedAsync(creator, guildName).ConfigureAwait(false))
+        {
             await creator.InvokeViewPlugInAsync<IShowGuildCreateResultPlugIn>(p => p.ShowGuildCreateResultAsync(GuildCreateErrorDetail.GuildAlreadyExist)).ConfigureAwait(false);
             return;
         }

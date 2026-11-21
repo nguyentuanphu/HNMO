@@ -7,8 +7,6 @@ namespace HNMO.Web.AdminPanel.Pages;
 using System.Globalization;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
 using HNMO.GameLogic.PlugIns.Missions;
 using HNMO.GameLogic.PlugIns.TopRaces;
 using HNMO.Persistence;
@@ -18,6 +16,8 @@ using HNMO.Web.AdminPanel.Operations;
 using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.AdminPanel.Services;
 using HNMO.Web.Shared.Components.Toast;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The page "Top races": the races of the <see cref="TopRacesPlugIn"/> with every field (kind, classes, period, dates,

@@ -4,9 +4,9 @@
 
 namespace HNMO.Web.AdminPanel.Components.Layout;
 
+using HNMO.Web.Shared.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
-using HNMO.Web.Shared.Services;
 
 /// <summary>
 /// Renders collapsible groups of links in the sidebar. A group which contains the current page is open,
@@ -75,21 +75,3 @@ public partial class NavGroupMenu : IDisposable
         _ = this.InvokeAsync(this.StateHasChanged);
     }
 }
-
-/// <summary>
-/// A link of the sidebar.
-/// </summary>
-/// <param name="Caption">The caption.</param>
-/// <param name="Href">The relative link.</param>
-/// <param name="Icon">The icon class.</param>
-/// <param name="Match">How the link matches the current page.</param>
-public sealed record NavEntry(string Caption, string Href, string Icon, NavLinkMatch Match = NavLinkMatch.Prefix);
-
-/// <summary>
-/// A collapsible group of links of the sidebar.
-/// </summary>
-/// <param name="Key">The key of the group.</param>
-/// <param name="Caption">The caption.</param>
-/// <param name="Icon">The icon class.</param>
-/// <param name="Entries">The links.</param>
-public sealed record NavGroup(string Key, string Caption, string Icon, IReadOnlyList<NavEntry> Entries);

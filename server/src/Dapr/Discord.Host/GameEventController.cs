@@ -5,9 +5,9 @@
 namespace HNMO.Discord.Host;
 
 using global::Dapr;
+using HNMO.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using HNMO.Interfaces;
 
 /// <summary>
 /// Receives the <see cref="GameEvent"/>s which the game servers publish, and passes them to the <see cref="IGameEventListener"/>s.

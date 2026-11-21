@@ -6,11 +6,6 @@ namespace HNMO.Web.AdminPanel.Pages;
 
 using System.ComponentModel;
 using System.Threading;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.QuickGrid;
-using Microsoft.AspNetCore.Components.Routing;
-using Microsoft.Extensions.Logging;
-using Microsoft.JSInterop;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.Persistence;
@@ -18,6 +13,11 @@ using HNMO.Web.AdminPanel.Auth;
 using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.Shared.Components.Toast;
 using HNMO.Web.Shared.Services;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.QuickGrid;
+using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.Extensions.Logging;
+using Microsoft.JSInterop;
 
 /// <summary>
 /// Razor page which shows objects of the specified type in a grid.

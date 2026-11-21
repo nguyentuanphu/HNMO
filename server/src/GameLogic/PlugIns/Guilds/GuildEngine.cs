@@ -8,26 +8,6 @@ using System.Globalization;
 using HNMO.GameLogic.PlugIns.Missions;
 
 /// <summary>
-/// The result of adding guild experience.
-/// </summary>
-/// <param name="Granted">The experience the guild got (less than asked when the member's daily cap was reached).</param>
-/// <param name="OldLevel">The level before.</param>
-/// <param name="NewLevel">The level after.</param>
-public sealed record GuildXpResult(int Granted, int OldLevel, int NewLevel)
-{
-    /// <summary>Gets a value indicating whether the guild reached a new level.</summary>
-    public bool LeveledUp => this.NewLevel > this.OldLevel;
-}
-
-/// <summary>
-/// A guild's place in this week's ladder.
-/// </summary>
-/// <param name="Rank">The rank, from 1.</param>
-/// <param name="GuildId">The persistent guild id.</param>
-/// <param name="Progress">The guild's progress.</param>
-public sealed record GuildLadderEntry(int Rank, Guid GuildId, GuildProgress Progress);
-
-/// <summary>
 /// The rules of HNMO's guild levels (pure, unit-tested): guild experience from the members' play with a daily cap per
 /// member, levels by experience, the buff of a level, the weekly ladder (Monday 00:00 in the configured time zone) whose
 /// finished weeks are paid once, the castle siege results and the rewards which wait for room in the bag.
@@ -63,6 +43,40 @@ public sealed class GuildEngine
 
     /// <summary>Gets the levels, lowest first.</summary>
     public IReadOnlyList<GuildLevelDefinition> Levels => this.Configuration.Levels.Where(l => l.Level >= 1).OrderBy(l => l.Level).ToList();
+
+    /// <summary>
+    /// The coin grant of a ladder reward for a member: the coins, plus the master's bonus, with a unique reference.
+    /// </summary>
+    /// <param name="week">The week.</param>
+    /// <param name="line">The guild's line.</param>
+    /// <param name="reward">The reward.</param>
+    /// <param name="memberId">The member's character id.</param>
+    /// <param name="memberName">The member's name.</param>
+    /// <param name="login">The member's login name.</param>
+    /// <param name="isMaster">Whether the member is the guild master.</param>
+    /// <returns>The grant; <c>null</c> without coins.</returns>
+    public static CoinGrant? LadderGrant(string week, GuildLadderLine line, GuildLadderReward reward, Guid memberId, string memberName, string login, bool isMaster)
+    {
+        var coins = reward.CoinsPerMember + (isMaster ? reward.MasterBonusCoins : 0);
+        if (coins <= 0)
+        {
+            return null;
+        }
+
+        return new CoinGrant(
+            login,
+            reward.CoinType,
+            coins,
+            string.Create(CultureInfo.InvariantCulture, $"Guild ladder, week of {week}: rank {line.Rank} ({line.Name}, {memberName})"),
+            LadderReference(week, line.GuildId, memberId));
+    }
+
+    /// <summary>Gets the reference of a member's ladder reward.</summary>
+    /// <param name="week">The week.</param>
+    /// <param name="guildId">The guild.</param>
+    /// <param name="memberId">The member.</param>
+    /// <returns>The reference.</returns>
+    public static string LadderReference(string week, Guid guildId, Guid memberId) => $"hnmo-guild-week:{week}:{guildId:N}:{memberId:N}";
 
     /// <summary>
     /// Gets the level of an experience: the highest level whose experience is reached (at least 1).
@@ -504,40 +518,6 @@ public sealed class GuildEngine
             this.Store.Changed();
         }
     }
-
-    /// <summary>
-    /// The coin grant of a ladder reward for a member: the coins, plus the master's bonus, with a unique reference.
-    /// </summary>
-    /// <param name="week">The week.</param>
-    /// <param name="line">The guild's line.</param>
-    /// <param name="reward">The reward.</param>
-    /// <param name="memberId">The member's character id.</param>
-    /// <param name="memberName">The member's name.</param>
-    /// <param name="login">The member's login name.</param>
-    /// <param name="isMaster">Whether the member is the guild master.</param>
-    /// <returns>The grant; <c>null</c> without coins.</returns>
-    public static CoinGrant? LadderGrant(string week, GuildLadderLine line, GuildLadderReward reward, Guid memberId, string memberName, string login, bool isMaster)
-    {
-        var coins = reward.CoinsPerMember + (isMaster ? reward.MasterBonusCoins : 0);
-        if (coins <= 0)
-        {
-            return null;
-        }
-
-        return new CoinGrant(
-            login,
-            reward.CoinType,
-            coins,
-            string.Create(CultureInfo.InvariantCulture, $"Guild ladder, week of {week}: rank {line.Rank} ({line.Name}, {memberName})"),
-            LadderReference(week, line.GuildId, memberId));
-    }
-
-    /// <summary>Gets the reference of a member's ladder reward.</summary>
-    /// <param name="week">The week.</param>
-    /// <param name="guildId">The guild.</param>
-    /// <param name="memberId">The member.</param>
-    /// <returns>The reference.</returns>
-    public static string LadderReference(string week, Guid guildId, Guid memberId) => $"hnmo-guild-week:{week}:{guildId:N}:{memberId:N}";
 
     private static List<GuildLadderEntry> LadderLocked(GuildStoreData data, int count) =>
         data.Guilds.Where(g => g.Value.WeekXp > 0)

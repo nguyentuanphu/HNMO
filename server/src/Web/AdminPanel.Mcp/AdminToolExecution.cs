@@ -5,8 +5,8 @@
 namespace HNMO.Web.AdminPanel.Mcp;
 
 using System.Text.Json.Nodes;
-using ModelContextProtocol;
 using HNMO.Web.AdminPanel.Operations;
+using ModelContextProtocol;
 
 /// <summary>Returns safe operational messages while leaving unexpected exception details to the SDK.</summary>
 internal static class AdminToolExecution

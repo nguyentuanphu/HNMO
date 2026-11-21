@@ -7,10 +7,10 @@ namespace HNMO.Persistence.EntityFramework;
 using System.Linq;
 using System.Threading;
 using BCrypt.Net;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using HNMO.Persistence.EntityFramework.Json;
 using HNMO.Persistence.EntityFramework.Model;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Repository for accounts.

@@ -5,12 +5,6 @@
 namespace HNMO.Web.AdminPanel;
 
 using System.IO;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Hosting;
 using HNMO.DataModel.Entities;
 using HNMO.Web.AdminPanel.Auth;
 using HNMO.Web.AdminPanel.Components;
@@ -20,6 +14,13 @@ using HNMO.Web.Shared;
 using HNMO.Web.Shared.Components.Modal;
 using HNMO.Web.Shared.Models;
 using HNMO.Web.Shared.Services;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
 
 /// <summary>
 /// The startup class for the blazor app.
@@ -85,6 +86,7 @@ public class Startup
         services.AddScoped<IChangeNotificationService, ChangeNotificationService>();
         services.AddScoped<AdminUserManagementService>();
         services.AddScoped<CastleSiegeManagementService>();
+        services.TryAddSingleton<WorldEditorDataService>();
         services.AddAdminPanelAuth(this.Configuration);
     }
 

@@ -6,7 +6,6 @@ namespace HNMO.Web.AdminPanel.Pages;
 
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
-using Microsoft.AspNetCore.Components;
 using HNMO.DataModel.Configuration;
 using HNMO.Interfaces;
 using HNMO.Persistence;
@@ -14,6 +13,7 @@ using HNMO.Web.AdminPanel.Auth;
 using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.Shared.Components.Toast;
 using HNMO.Web.Shared.Services;
+using Microsoft.AspNetCore.Components;
 
 /// <summary>
 /// Razor page which shows objects of the specified type in a grid.

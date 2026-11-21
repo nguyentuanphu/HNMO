@@ -43,10 +43,10 @@
     <value>Cho biết Land of Trials có mở không và phí vào hiện áp dụng.</value>
   </data>
   <data name="MuHelperFeaturePlugIn_Name" xml:space="preserve">
-    <value>Tính năng MU Helper</value>
+    <value>Tự động chơi</value>
   </data>
   <data name="MuHelperFeaturePlugIn_Description" xml:space="preserve">
-    <value>Cung cấp cấu hình cho tính năng MU Helper.</value>
+    <value>Cung cấp cấu hình cho tính năng tự động chơi.</value>
   </data>
   <data name="UpdatePetCommandManagerOnItemMovePlugIn_Name" xml:space="preserve">
     <value>Cập nhật lệnh thú cưng khi di chuyển vật phẩm</value>
@@ -1026,6 +1026,9 @@
   <data name="MuHelperConfiguration_MinLevel_Name" xml:space="preserve">
     <value>Cấp nhân vật tối thiểu</value>
   </data>
+  <data name="MuHelperConfiguration_VipMinLevel_Name" xml:space="preserve">
+    <value>Cấp nhân vật tối thiểu cho tài khoản VIP</value>
+  </data>
   <data name="MuHelperConfiguration_MaxLevel_Name" xml:space="preserve">
     <value>Cấp nhân vật tối đa</value>
   </data>
@@ -1181,6 +1184,12 @@
   </data>
   <data name="HappyHourConfiguration_ExperienceMultiplier_Name" xml:space="preserve">
     <value>Hệ số kinh nghiệm</value>
+  </data>
+  <data name="HappyHourConfiguration_ItemDropBonusPercent_Name" xml:space="preserve">
+    <value>Thêm tỉ lệ rơi đồ (%)</value>
+  </data>
+  <data name="HappyHourConfiguration_ExcellentDropBonusPerTenThousand_Name" xml:space="preserve">
+    <value>Thêm tỉ lệ rơi đồ excellent (1/10000)</value>
   </data>
   <data name="WanderingMerchantsConfiguration_MinimumSpawnDuration_Name" xml:space="preserve">
     <value>Thời gian xuất hiện tối thiểu</value>
@@ -2214,6 +2223,18 @@
   <data name="WebsiteConfiguration_GoogleClientId_Description" xml:space="preserve">
     <value>Client id của một OAuth client Google Cloud (loại: Web application, với địa chỉ website của bạn là JavaScript origin được phép). Để trống: không có "Đăng nhập bằng Google".</value>
   </data>
+  <data name="WebsiteConfiguration_RequireWebsiteLogin_Caption" xml:space="preserve">
+    <value>Game web: yêu cầu đăng nhập trên website</value>
+  </data>
+  <data name="WebsiteConfiguration_RequireWebsiteLogin_Description" xml:space="preserve">
+    <value>Khi bật, game web ẩn khung nhập mật khẩu riêng và người chơi đăng nhập trên website trước (rồi bấm Chơi ngay).</value>
+  </data>
+  <data name="HnmoTicketLoginHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý vé đăng nhập web</value>
+  </data>
+  <data name="HnmoTicketLoginHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý vé đăng nhập dùng một lần được cấp từ website.</value>
+  </data>
   <data name="IllusionTempleStartPlugIn_Name" xml:space="preserve">
     <value>Đền Ảo Ảnh</value>
   </data>
@@ -2382,4 +2403,49 @@
   <data name="UnlockItemChatCommandPlugIn_Description" xml:space="preserve">
     <value>Yêu cầu mở khóa một vật phẩm trong túi bằng mật khẩu cấp 2: /unlockitem Ô PIN.</value>
   </data>
+  <data name="InvasionSpawnConfiguration_X_Caption" xml:space="preserve">
+    <value>X</value>
+  </data>
+  <data name="InvasionSpawnConfiguration_Y_Caption" xml:space="preserve">
+    <value>Y</value>
+  </data>
+  <data name="GameNameConfiguration_ZaloLink_Caption" xml:space="preserve">
+    <value>Zalo</value>
+  </data>
+  <data name="GameNameConfiguration_DiscordLink_Caption" xml:space="preserve">
+    <value>Discord</value>
+  </data>
+  <data name="GameNameConfiguration_FacebookLink_Caption" xml:space="preserve">
+    <value>Facebook</value>
+  </data>
+  <data name="VipPlugIn_Name" xml:space="preserve"><value>Gói VIP</value></data>
+  <data name="VipPlugIn_Description" xml:space="preserve"><value>Gói VIP có thời hạn, tăng kinh nghiệm và Zen, cùng quà xu hằng ngày. Chỉ hoạt động khi chủ máy chủ bật.</value></data>
+  <data name="GiftBoxActivityPlugIn_Name" xml:space="preserve"><value>Theo dõi hoạt động hộp thư quà tặng</value></data>
+  <data name="GiftBoxActivityPlugIn_Description" xml:space="preserve"><value>Ghi nhận thời điểm người chơi vào và rời thế giới để lọc người chơi hoạt động gần đây cho hộp thư quà.</value></data>
+  <data name="DuplicateItemsPlugIn_Name" xml:space="preserve"><value>Kiểm tra đồ nhân bản</value></data>
+  <data name="DuplicateItemsPlugIn_Description" xml:space="preserve"><value>Gắn cho mỗi món đồ một số serial gốc và quét cơ sở dữ liệu tìm hai món cùng serial; cả hai bị đóng băng cho tới khi quản trị viên quyết định ở trang Đồ nhân bản.</value></data>
+  <data name="DuplicateItemsConfiguration_ScanIntervalMinutes_Caption" xml:space="preserve"><value>Quét mỗi (phút)</value></data>
+  <data name="DuplicateItemsConfiguration_ScanIntervalMinutes_Description" xml:space="preserve"><value>Bao lâu quét cơ sở dữ liệu tìm đồ nhân bản một lần.</value></data>
+  <data name="DuplicateItemsConfiguration_FreezeDuplicates_Caption" xml:space="preserve"><value>Đóng băng đồ nhân bản</value></data>
+  <data name="DuplicateItemsConfiguration_FreezeDuplicates_Description" xml:space="preserve"><value>Đồ nhân bản bị phát hiện không thể giao dịch, bán, vứt, cất rương, rao bán hay ép cho tới khi quản trị viên quyết định.</value></data>
+  <data name="ArenaPlugIn_Name" xml:space="preserve"><value>Nhân vật Đấu trường HNMO</value></data>
+  <data name="ArenaPlugIn_Description" xml:space="preserve"><value>Trong chương trình Đấu trường: nhân vật được chọn trở thành nhân vật đấu trường của class đó (cấp, chỉ số, trang bị và bình máu theo mẫu) trên bản đồ đấu trường. Không ảnh hưởng các server khác.</value></data>
+  <data name="ArenaShopPlugIn_Name" xml:space="preserve"><value>Cửa hàng điểm Đấu trường HNMO</value></data>
+  <data name="ArenaShopPlugIn_Description" xml:space="preserve"><value>Ở các server nhà: điểm Đấu trường, kiếm được từ các trận xếp hạng, đổi ngọc, bùa, vé sự kiện và đồ trang trí (đồ được tạo mới ở đây). Món và giá chỉnh ở đây.</value></data>
+  <data name="BugReportsPlugIn_Name" xml:space="preserve"><value>Báo lỗi HNMO</value></data>
+  <data name="BugReportsPlugIn_Description" xml:space="preserve"><value>Người chơi gửi báo lỗi từ trong game (theo giới hạn mỗi ngày); chủ server đọc, trả lời và xử lý ở trang "Báo lỗi", có thể thưởng xu cho lỗi được xác nhận và gửi báo lỗi tới nhà phát triển HNMO (thành một issue; có thể thêm link Discord để nhận thông báo).</value></data>
+  <data name="ArenaTeamRulesPlugIn_Name" xml:space="preserve"><value>Luật trận đấu đội Đấu trường HNMO</value></data>
+  <data name="ArenaTeamRulesPlugIn_Description" xml:space="preserve"><value>Trong chương trình Đấu trường, khi có trận đấu đội 5v5: chỉ đánh được đội kia, không bị phạt giết người, đếm mạng, người bị hạ hồi sinh ở cửa đội mình.</value></data>
+  <data name="StartRoyaleChatCommandPlugIn_Name" xml:space="preserve"><value>Lệnh chat: /startroyale (Đấu trường HNMO)</value></data>
+  <data name="StartRoyaleChatCommandPlugIn_Description" xml:space="preserve"><value>Game master trong Đấu trường mở đăng ký đấu sinh tồn ngay: /startroyale [số giây tới lúc bắt đầu, mặc định 120].</value></data>
+  <data name="ArenaHeraldPlugIn_Name" xml:space="preserve"><value>Sứ giả Đấu trường HNMO</value></data>
+  <data name="ArenaHeraldPlugIn_Description" xml:space="preserve"><value>Nói chuyện với Sứ giả Đấu trường (NPC 900, ở các thị trấn chính) sẽ mở cửa sổ Đấu trường trong web game.</value></data>
+  <data name="StartGuildWarChatCommandPlugIn_Name" xml:space="preserve"><value>Lệnh chat: /startguildwar (Đấu trường HNMO)</value></data>
+  <data name="StartGuildWarChatCommandPlugIn_Description" xml:space="preserve"><value>Game master trong Đấu trường mở đăng ký bang chiến ngay, tới lúc bắt đầu: /startguildwar [số giây tới lúc bắt đầu, mặc định 120].</value></data>
+  <data name="ArenaScheduleNoticesPlugIn_Name" xml:space="preserve"><value>Thông báo trận Đấu trường HNMO</value></data>
+  <data name="ArenaScheduleNoticesPlugIn_Description" xml:space="preserve"><value>Ở máy chủ nhà: báo đấu sinh tồn và bang chiến của Đấu trường trong game trước 10 phút và lúc bắt đầu, theo lịch Đấu trường công bố.</value></data>
+  <data name="CrossSeasonFriendsPlugIn_Name" xml:space="preserve"><value>Bạn bè khác season HNMO</value></data>
+  <data name="CrossSeasonFriendsPlugIn_Description" xml:space="preserve"><value>Bạn bè đang chơi ở chương trình HNMO khác (Season 6.3, Season 9, Đấu trường) hiện nơi họ đang chơi trong danh sách bạn, và thì thầm tới được họ. Không giao dịch giữa các season.</value></data>
+  <data name="MonsterAiPlugIn_Name" xml:space="preserve"><value>Quy tắc AI quái vật</value></data>
+  <data name="MonsterAiPlugIn_Description" xml:space="preserve"><value>Cấu hình quái đuổi người tấn công, giới hạn quay về vùng sinh và hồi đầy máu khi quay về.</value></data>
 </root>

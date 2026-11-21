@@ -7,133 +7,7 @@ namespace HNMO.GameLogic.PlugIns.Missions;
 using System.IO;
 using System.Text.Json;
 using HNMO.DataModel.Configuration;
-
-/// <summary>
-/// The progress of a mission in its current period.
-/// </summary>
-public sealed class MissionProgressState
-{
-    /// <summary>Gets or sets the count so far (at most the target).</summary>
-    public int Value { get; set; }
-
-    /// <summary>Gets or sets a value indicating whether the reward was claimed.</summary>
-    public bool Claimed { get; set; }
-}
-
-/// <summary>
-/// The mission progress of a character.
-/// </summary>
-public sealed class MissionCharacterState
-{
-    /// <summary>Gets or sets the character name (for the logs and the admin panel).</summary>
-    public string? Name { get; set; }
-
-    /// <summary>Gets or sets the login name of its account.</summary>
-    public string? Account { get; set; }
-
-    /// <summary>Gets or sets the game day of <see cref="Daily"/>.</summary>
-    public string DailyKey { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets the game week (its Monday) of <see cref="Weekly"/>.</summary>
-    public string WeeklyKey { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets the daily progress by mission id.</summary>
-    public Dictionary<string, MissionProgressState> Daily { get; set; } = new(StringComparer.Ordinal);
-
-    /// <summary>Gets or sets the weekly progress by mission id.</summary>
-    public Dictionary<string, MissionProgressState> Weekly { get; set; } = new(StringComparer.Ordinal);
-
-    /// <summary>Gets or sets the days of the streak, counted up to <see cref="StreakLastDay"/>.</summary>
-    public int StreakCount { get; set; }
-
-    /// <summary>Gets or sets the last game day which counted for the streak.</summary>
-    public string? StreakLastDay { get; set; }
-
-    /// <summary>Gets or sets the game day of a streak bonus which wasn't claimed yet.</summary>
-    public string? StreakBonusDay { get; set; }
-
-    /// <summary>Gets or sets the levels whose milestone coins were given.</summary>
-    public List<int> MilestonesRewarded { get; set; } = new();
-
-    /// <summary>Gets or sets the resets whose coins were given; -1 until the character was seen.</summary>
-    public int ResetsRewarded { get; set; } = -1;
-}
-
-/// <summary>
-/// Earned coins which didn't fit under the daily cap; they're given on a later day.
-/// </summary>
-public sealed class OwedCoinsState
-{
-    /// <summary>Gets or sets the grant reference.</summary>
-    public string Reference { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets the reason.</summary>
-    public string Reason { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets the amount.</summary>
-    public int Amount { get; set; }
-
-    /// <summary>Gets or sets the coin type.</summary>
-    public CashShopCoinType CoinType { get; set; }
-}
-
-/// <summary>
-/// The earned coins of an account.
-/// </summary>
-public sealed class MissionAccountState
-{
-    /// <summary>Gets or sets the game day of the daily counters.</summary>
-    public string DayKey { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets the earned coins of the day, over all capped sources.</summary>
-    public int EarnedToday { get; set; }
-
-    /// <summary>Gets or sets the counted seconds in the game of the day (auto play counts half).</summary>
-    public int OnlineSecondsToday { get; set; }
-
-    /// <summary>Gets or sets the full hours which were paid today.</summary>
-    public int OnlineHoursPaidToday { get; set; }
-
-    /// <summary>Gets or sets the coins for the online time of the day.</summary>
-    public int OnlineCoinsToday { get; set; }
-
-    /// <summary>Gets or sets the month of <see cref="CalendarDays"/>.</summary>
-    public string CalendarMonth { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets the claimed days of the login calendar in its month.</summary>
-    public int CalendarDays { get; set; }
-
-    /// <summary>Gets or sets the game day of the last claim of the login calendar.</summary>
-    public string? CalendarLastDay { get; set; }
-
-    /// <summary>Gets or sets the account's own invite code.</summary>
-    public string? InviteCode { get; set; }
-
-    /// <summary>Gets or sets the login name of the account which invited this one.</summary>
-    public string? InvitedBy { get; set; }
-
-    /// <summary>Gets or sets a value indicating whether the invite reward was handled.</summary>
-    public bool InviteRewarded { get; set; }
-
-    /// <summary>Gets or sets the network address of the last login.</summary>
-    public string? LastAddress { get; set; }
-
-    /// <summary>Gets or sets the earned coins which wait for room under the daily cap.</summary>
-    public List<OwedCoinsState> Owed { get; set; } = new();
-}
-
-/// <summary>
-/// The saved data of the missions and earned coins, in a JSON file in the save folder (no database table):
-/// the progress per character and the earned coins per account.
-/// </summary>
-public sealed class MissionStoreData
-{
-    /// <summary>Gets or sets the characters by their id.</summary>
-    public Dictionary<string, MissionCharacterState> Characters { get; set; } = new(StringComparer.Ordinal);
-
-    /// <summary>Gets or sets the accounts by their login name.</summary>
-    public Dictionary<string, MissionAccountState> Accounts { get; set; } = new(StringComparer.OrdinalIgnoreCase);
-}
+using HNMO.Persistence;
 
 /// <summary>
 /// Keeps the <see cref="MissionStoreData"/>; with a file, it outlasts a restart of the server.
@@ -142,9 +16,15 @@ public sealed class MissionStoreData
 /// </summary>
 public sealed class MissionStore
 {
+    private const string FeatureCharacters = "missions.char";
+    private const string FeatureAccounts = "missions.account";
+    private const string SectionKey = "missions";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
 
-    private readonly string? _filePath;
+    private readonly HnmoStateStore? _stateStore;
+    private readonly IHnmoPlayerStateRowBackend _rowBackend;
+    private readonly HnmoFeatureRowSync<MissionCharacterState> _charSync = new();
+    private readonly HnmoFeatureRowSync<MissionAccountState> _accountSync = new();
     private bool _changed;
 
     /// <summary>
@@ -153,7 +33,8 @@ public sealed class MissionStore
     /// <param name="filePath">The file; <c>null</c> keeps the data in memory only.</param>
     public MissionStore(string? filePath = null)
     {
-        this._filePath = filePath;
+        this._stateStore = HnmoStateStore.Open(filePath, SectionKey);
+        this._rowBackend = HnmoPlayerStateRowStoreRegistry.GetBackend(this._stateStore?.FilePath);
         this.Data = this.Load();
     }
 
@@ -161,10 +42,13 @@ public sealed class MissionStore
     public object Lock { get; } = new();
 
     /// <summary>Gets the file, if any.</summary>
-    public string? FilePath => this._filePath;
+    public string? FilePath => this._stateStore?.FilePath;
 
     /// <summary>Gets the data.</summary>
     public MissionStoreData Data { get; }
+
+    /// <summary>Gets the row backend backing per-account/per-character mission state.</summary>
+    public IHnmoPlayerStateRowBackend RowBackend => this._rowBackend;
 
     /// <summary>
     /// Gets the state of a character, created when it's new.
@@ -177,6 +61,7 @@ public sealed class MissionStore
         {
             state = new MissionCharacterState();
             this.Data.Characters[characterId] = state;
+            this._charSync.MarkDirty(characterId);
             this._changed = true;
         }
 
@@ -194,6 +79,7 @@ public sealed class MissionStore
         {
             state = new MissionAccountState();
             this.Data.Accounts[loginName] = state;
+            this._accountSync.MarkDirty(loginName);
             this._changed = true;
         }
 
@@ -209,67 +95,62 @@ public sealed class MissionStore
         this.Data.Accounts.FirstOrDefault(a => string.Equals(a.Value.InviteCode, code, StringComparison.OrdinalIgnoreCase)).Key;
 
     /// <summary>Marks the data as changed.</summary>
-    public void Changed() => this._changed = true;
+    public void Changed()
+    {
+        this._charSync.MarkFullScanPending();
+        this._accountSync.MarkFullScanPending();
+        this._changed = true;
+    }
+
+    /// <summary>Marks one account dirty for O(1) individual row persistence.</summary>
+    /// <param name="loginName">Account login key.</param>
+    public void MarkAccountDirty(string loginName)
+    {
+        this._accountSync.MarkDirty(loginName);
+        this._changed = true;
+    }
+
+    /// <summary>Marks one character dirty for O(1) individual row persistence.</summary>
+    /// <param name="characterId">Character ID key.</param>
+    public void MarkCharacterDirty(string characterId)
+    {
+        this._charSync.MarkDirty(characterId);
+        this._changed = true;
+    }
 
     /// <summary>
     /// Saves the data when it changed. The caller holds <see cref="Lock"/>.
     /// </summary>
     public void SaveIfChanged()
     {
-        if (!this._changed || this._filePath is null)
+        if (!this._changed || this._stateStore is null)
         {
             this._changed = false;
             return;
         }
 
-        try
-        {
-            var directory = Path.GetDirectoryName(this._filePath);
-            if (!string.IsNullOrEmpty(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
-
-            var temporary = this._filePath + ".tmp";
-            File.WriteAllText(temporary, JsonSerializer.Serialize(this.Data, JsonOptions));
-            File.Move(temporary, this._filePath, true);
-            this._changed = false;
-        }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-        {
-            // It's saved with the next change.
-        }
+        this._charSync.SaveChanges(this._rowBackend, FeatureCharacters, this.Data.Characters, JsonOptions, useDirtySetOnly: true);
+        this._accountSync.SaveChanges(this._rowBackend, FeatureAccounts, this.Data.Accounts, JsonOptions, useDirtySetOnly: true);
+        this._changed = false;
     }
 
     private MissionStoreData Load()
     {
-        if (this._filePath is null || !File.Exists(this._filePath))
+        if (this._stateStore is null)
         {
             return new MissionStoreData();
         }
 
-        try
+        var data = this._stateStore.ReadSection<MissionStoreData>(SectionKey, JsonOptions) ?? new MissionStoreData();
+        data.Characters = new Dictionary<string, MissionCharacterState>(data.Characters, StringComparer.Ordinal);
+        data.Accounts = new Dictionary<string, MissionAccountState>(data.Accounts, StringComparer.OrdinalIgnoreCase);
+        var migratedChars = this._charSync.LoadOrMigrate(this._rowBackend, FeatureCharacters, data.Characters, JsonOptions);
+        var migratedAccs = this._accountSync.LoadOrMigrate(this._rowBackend, FeatureAccounts, data.Accounts, JsonOptions);
+        if (migratedChars || migratedAccs)
         {
-            var data = JsonSerializer.Deserialize<MissionStoreData>(File.ReadAllText(this._filePath), JsonOptions) ?? new MissionStoreData();
-
-            // The dictionaries are read with the default comparer; put them back into the intended ones.
-            data.Characters = new Dictionary<string, MissionCharacterState>(data.Characters, StringComparer.Ordinal);
-            data.Accounts = new Dictionary<string, MissionAccountState>(data.Accounts, StringComparer.OrdinalIgnoreCase);
-            return data;
+            this._stateStore.RemoveSection(SectionKey);
         }
-        catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
-        {
-            // A broken file is kept aside, so nothing is lost silently.
-            try
-            {
-                File.Copy(this._filePath, this._filePath + ".broken", true);
-            }
-            catch (Exception copyError) when (copyError is IOException or UnauthorizedAccessException)
-            {
-                // nothing more to do
-            }
 
-            return new MissionStoreData();
-        }
+        return data;
     }
 }

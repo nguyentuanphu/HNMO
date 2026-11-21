@@ -1568,6 +1568,72 @@ export function playerStopAction(input: StanceInput): number {
   return bareHandStopAction(input, false);
 }
 
+/** What decides how fast a player moves (CharacterMoveSpeed, Engine/Object/ZzzCharacter.cpp). */
+export interface MoveSpeedInput {
+  classIndex: number;
+  mount: Mount;
+  /** The Fenrir's excellent (gold) look: the fastest run. */
+  fenrirExcellent?: boolean;
+  /** The wings' item number (group 12), if any. */
+  wings?: number | null;
+  /** The boots' and gloves' glow levels (5 or more: +5 or more). */
+  bootsLevel?: number;
+  glovesLevel?: number;
+  safeZone: boolean;
+  mapNumber: number;
+  /** How long it has walked without stopping, in seconds (c->Run, frames at 25 per second). */
+  walkedSeconds: number;
+  /** A debuff slowing the walk: Freeze halves it, Blow of Destruction leaves a third. */
+  slowedBy?: 'freeze' | 'blowOfDestruction' | null;
+}
+
+/** The desktop's speed units (12 a walk) per frame at its 25 frames a second. */
+export const WALK_MOVE_SPEED = 12;
+const RUN_FRAMES = 40;
+const FENRIR_RUN_DELAY = 20;
+const REFERENCE_FPS = 25;
+const ATLANS = 7, DOPPELGANGER_3 = 67;
+const inHellas = (map: number) => (map >= 24 && map <= 29) || map === 36;
+const inChaosCastle = (map: number) => (map >= 18 && map <= 23) || map === 53;
+
+/** Whether the character builds up to running (the classes that run, +5 boots, or +5 gloves under water, Fenrir). */
+export function buildsUpRun(input: MoveSpeedInput): boolean {
+  if (input.safeZone) return false;
+  if (input.classIndex === CharacterClass.DARK_KNIGHT || input.classIndex === CharacterClass.DARK_LORD || input.classIndex === CharacterClass.RAGE_FIGHTER) return true;
+  const underWater = input.mapNumber === ATLANS || inHellas(input.mapNumber) || input.mapNumber === DOPPELGANGER_3;
+  if (underWater ? (input.glovesLevel ?? 0) >= 5 : (input.bootsLevel ?? 0) >= 5) return true;
+  return input.mount === 'fenrir';
+}
+
+/**
+ * How fast a player moves, in the desktop's speed units (CharacterMoveSpeed): 12 walking; 15 running (after 40 frames
+ * of walking for those who build up to it); wings, Uniria or Dinorant 15 (Dragon and Storm wings 16); the Dark Horse 17;
+ * the Fenrir 15, 16, then 17 (19 the excellent one); in a safe zone everyone walks; Chaos Castle 15. The server times
+ * a walk by the same speeds, so a client that walked slower fell behind it.
+ */
+export function playerMoveSpeed(input: MoveSpeedInput): number {
+  const run = input.walkedSeconds * REFERENCE_FPS;
+  let speed: number;
+  if (input.mount === 'fenrir' && !input.safeZone) {
+    speed = run < FENRIR_RUN_DELAY / 2 ? 15 : run < FENRIR_RUN_DELAY ? 16 : input.fenrirExcellent ? 19 : 17;
+  } else if (input.mount === 'darkHorse' && !input.safeZone) {
+    speed = 17;
+  } else if ((input.wings != null || input.mount === 'uniria' || input.mount === 'dinorant') && !input.safeZone) {
+    speed = input.wings === 5 || input.wings === 36 ? 16 : 15; // MODEL_WINGS_OF_DRAGON, MODEL_WING_OF_STORM
+  } else {
+    speed = buildsUpRun(input) && run >= RUN_FRAMES ? 15 : WALK_MOVE_SPEED;
+  }
+  if (inChaosCastle(input.mapNumber)) speed = 15;
+  if (input.slowedBy === 'freeze') speed *= 0.5;
+  else if (input.slowedBy === 'blowOfDestruction') speed *= 0.33;
+  return speed;
+}
+
+/** Whether the player plays its running walk (c->Run reached 40, or it always runs: wings and mounts set it). */
+export function isRunning(input: MoveSpeedInput): boolean {
+  return !input.safeZone && (playerMoveSpeed({ ...input, slowedBy: null }) > WALK_MOVE_SPEED || input.walkedSeconds * REFERENCE_FPS >= RUN_FRAMES && buildsUpRun(input));
+}
+
 /**
  * SetPlayerWalk: the walking (or running) action. `running` is whether the run
  * counter has passed its delay (see canRun and RUN_DELAY_SECONDS /

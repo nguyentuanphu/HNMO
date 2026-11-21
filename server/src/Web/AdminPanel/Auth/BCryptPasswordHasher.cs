@@ -4,8 +4,8 @@
 
 namespace HNMO.Web.AdminPanel.Auth;
 
-using Microsoft.AspNetCore.Identity;
 using HNMO.Persistence.AdminAuth;
+using Microsoft.AspNetCore.Identity;
 
 /// <summary>
 /// An <see cref="IPasswordHasher{TUser}"/> which uses BCrypt, like the rest of this project does.

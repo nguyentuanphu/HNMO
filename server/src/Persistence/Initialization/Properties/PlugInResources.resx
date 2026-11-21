@@ -216,8 +216,6 @@
   <data name="RegenerationsRefactorPlugInBase_Description" xml:space="preserve"><value>This update fixes and reworks some regeneration attributes (health, mana, ability).</value></data>
   <data name="AddDuelConfigurationPlugIn_Name" xml:space="preserve"><value>Add duel configuration</value></data>
   <data name="AddDuelConfigurationPlugIn_Description" xml:space="preserve"><value>This update adds data for the duel configuration</value></data>
-  <data name="FixBloodCastleMonsterAttributesUpdatePlugIn_Name" xml:space="preserve"><value>Fix Blood Castle 7/8 Monster Attributes</value></data>
-  <data name="FixBloodCastleMonsterAttributesUpdatePlugIn_Description" xml:space="preserve"><value>Swaps attribute values between BC7 (monsters 138-143) and BC8 (monsters 428-433) so progression is correct: BC6 → BC7 → BC8.</value></data>
   <data name="AddDoppelgangerDataUpdatePlugIn_Name" xml:space="preserve"><value>Add Doppelganger data</value></data>
   <data name="AddDoppelgangerDataUpdatePlugIn_Description" xml:space="preserve"><value>This update adds the doppelganger event configuration.</value></data>
   <data name="FinishSummonerMasterTreePlugIn_Name" xml:space="preserve"><value>Finish Summoner Master Tree PlugIn</value></data>
@@ -254,6 +252,8 @@
   <data name="FixWingsAndCapesCraftingsUpdatePlugIn_Description" xml:space="preserve"><value>This update sets the right settings for the wings and capes craftings.</value></data>
   <data name="AddRenaItemUpdatePlugIn_Name" xml:space="preserve"><value>Add Rena Item</value></data>
   <data name="AddRenaItemUpdatePlugIn_Description" xml:space="preserve"><value>This update adds the missing Rena item, which is required for the item registration feature.</value></data>
+  <data name="AddStardustItemUpdatePlugIn_Name" xml:space="preserve"><value>Add Stardust Item</value></data>
+  <data name="AddStardustItemUpdatePlugIn_Description" xml:space="preserve"><value>This update adds the Stardust item (14:153), which the game's item list has.</value></data>
   <data name="AddCrestOfMonarchDropGroupUpdateSeason6_Name" xml:space="preserve"><value>Add Crest of Monarch Drop Group</value></data>
   <data name="AddCrestOfMonarchDropGroupUpdateSeason6_Description" xml:space="preserve"><value>Adds the Crest of Monarch (Loch's Feather +1) drop item group to Icarus.</value></data>
   <data name="FixSummonerCurseSkillsPlugIn_Name" xml:space="preserve"><value>Fix Summoner Curse Skills</value></data>
@@ -462,4 +462,8 @@
   <data name="StrongerHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
     <value>This update makes the 28 HNMO skills 20 % stronger (damage, buffs and debuffs; costs and cooldowns stay) and lets the trial quests of the Elf Soldier ask for 200 kills and five Jewels of Chaos.</value>
   </data>
+  <data name="AddArenaHeraldUpdatePlugIn_Name" xml:space="preserve"><value>Add the Arena Herald</value></data>
+  <data name="AddArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Adds the HNMO Arena Herald, an NPC in Lorencia, Devias, Noria and Elbeland which opens the Arena window.</value></data>
+  <data name="RenumberArenaHeraldUpdatePlugIn_Name" xml:space="preserve"><value>Arena Herald: its own NPC number</value></data>
+  <data name="RenumberArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Moves the Arena Herald of an older save from NPC 595 to 900, so the web game shows it again.</value></data>
 </root>

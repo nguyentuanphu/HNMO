@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:d="https://github.com/nguyentuanphu/HNMO/PacketDefinitions"
+                xmlns:d="urn:hnmo:packet-definitions"
                 version="3.0">
 
   <xsl:output method="text" />

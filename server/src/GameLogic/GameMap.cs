@@ -53,6 +53,7 @@ public class GameMap
         this.Id = Guid.NewGuid();
         this.Definition = mapDefinition;
         this.ItemDropDuration = itemDropDuration;
+        this.MoneyDropDuration = itemDropDuration;
         this.Terrain = new GameMapTerrain(this.Definition);
 
         this._areaOfInterestManager = new BucketAreaOfInterestManager(chunkSize);
@@ -93,6 +94,12 @@ public class GameMap
     public TimeSpan ItemDropDuration { get; }
 
     /// <summary>
+    /// Gets or sets the duration about how long dropped money (zen) is laying on the ground until it disappears.
+    /// It is the <see cref="ItemDropDuration"/> unless the game configuration sets its own.
+    /// </summary>
+    public TimeSpan MoneyDropDuration { get; set; }
+
+    /// <summary>
     /// Gets the definition of the map.
     /// </summary>
     public GameMapDefinition Definition { get; }
@@ -125,6 +132,15 @@ public class GameMap
     public IList<Player> GetPlayers()
     {
         return this._objectsInMap.Values.OfType<Player>().ToList();
+    }
+
+    /// <summary>
+    /// Gets the attackable non-player characters (e.g. monsters) which are currently on this map.
+    /// </summary>
+    /// <returns>The attackable non-player characters which are currently on this map.</returns>
+    public IList<AttackableNpcBase> GetAttackableNpcs()
+    {
+        return this._objectsInMap.Values.OfType<AttackableNpcBase>().ToList();
     }
 
     /// <summary>

@@ -6,11 +6,11 @@ namespace HNMO.GameServer.RemoteView;
 
 using System.ComponentModel.Design;
 using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Views;
 using HNMO.Network.PlugIns;
 using HNMO.PlugIns;
+using Microsoft.Extensions.DependencyInjection;
 
 /// <summary>
 /// A plugin container which selects plugin based on the provided version/season metadata.
@@ -105,7 +105,7 @@ internal sealed class ViewPlugInContainer : CustomPlugInContainerBase<IViewPlugI
     private void OnClientVersionChanged(object? sender, EventArgs e)
     {
         this.Client = this._player.ClientVersion;
-        foreach (var activePlugIn in this.ActivePlugIns)
+        foreach (var activePlugIn in this.ActivePlugIns.ToList())
         {
             if (!this.Client.IsPlugInSuitable(activePlugIn.GetType()))
             {

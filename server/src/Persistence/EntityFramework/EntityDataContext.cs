@@ -5,12 +5,12 @@
 namespace HNMO.Persistence.EntityFramework;
 
 using System.Threading;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using HNMO.AttributeSystem;
 using HNMO.Persistence.EntityFramework.Extensions;
 using HNMO.Persistence.EntityFramework.Extensions.ModelBuilder;
 using HNMO.Persistence.EntityFramework.Model;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 /// <summary>
 /// Context for all types of the data model.
@@ -164,6 +164,9 @@ public class EntityDataContext : ExtendedTypeContext
         modelBuilder.Entity<ItemStatTerms>().Apply();
         modelBuilder.Entity<ItemRequirementFormula>().Apply();
         modelBuilder.Entity<ItemStorage>().Apply();
+
+        // HNMO's duplicate scan groups the items by their origin serial.
+        modelBuilder.Entity<Item>().HasIndex(item => item.Serial);
         modelBuilder.Entity<ItemBasePowerUpDefinition>();
         modelBuilder.Entity<LevelBonus>().Apply();
         modelBuilder.Entity<MagicEffectDefinition>().Apply();

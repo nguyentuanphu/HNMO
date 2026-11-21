@@ -5,8 +5,8 @@
 namespace HNMO.Web.Shared.Components.Form;
 
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.AspNetCore.Components;
 using HNMO.Persistence;
+using Microsoft.AspNetCore.Components;
 
 /// <summary>
 /// A component which shows a collection of <typeparamref name="TValue"/> in a table.
@@ -64,7 +64,7 @@ public partial class ValueTable<TValue>
         }
 
         this.WrappedList ??= new ValueListWrapper<TValue>(this.Value);
-        this.WrappedList!.Add(new TValue());
+        this.WrappedList!.Add(default);
         await this.InvokeAsync(this.StateHasChanged).ConfigureAwait(false);
     }
 

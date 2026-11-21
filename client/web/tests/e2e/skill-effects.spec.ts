@@ -67,6 +67,8 @@ const KNIGHT: Case[] = [
   // Its blades follow the swing's keys (PLAYER_ATTACK_ONE_FLASH), played by the hero here.
   { skill: 57, name: 'spiral-slash', expect: ['joint:flare'], shotAt: 520, action: 136 },
   { skill: 232, name: 'strike-of-destruction', expect: ['effect:blowOfDestruction', 'effect:nightWater1', 'effect:knightPlancrackA', 'effect:knightPlancrackB', 'effect:raklionBossCrackEffect', 'particle:waterfall5', 'particle:smoke'], shotAt: 840, area: true, model: 'knightPlancrackA', warm: [['Effect', 'nightwater01.bmd'], ['Effect', 'knight_plancrack_a.bmd'], ['Effect', 'knight_plancrack_b.bmd'], ['Effect', 'knight_plancrack_grand.bmd']] },
+  // HNMO's Blood Slash (game/newSkills.ts): three red slashes across the target.
+  { skill: 701, name: 'blood-slash', expect: ['particle:damage2', 'particle:damage1', 'particle:blood2', 'particle:spark'], shotAt: 440 },
   { skill: 44, name: 'crescent-moon-slash', expect: ['joint:jointSpark', 'particle:fire', 'effect:swordForce', 'joint:jointForce'], shotAt: 600, action: 137 },
 ];
 
@@ -162,6 +164,8 @@ const FIGHTER: Case[] = [
   // While Increase Attack lasts (eBuff_Att_up_Ourforces = 129) red smoke lines rise from the fists.
   { skill: 266, name: 'increase-attack-buff', expect: ['effect:lightRed', 'particle:smokeLine1'], shotAt: 1600, buffs: [129] },
   { skill: 269, name: 'charge', expect: ['effect:multiShot1', 'effect:multiShot2', 'effect:multiShot3', 'joint:jointSpark'], shotAt: 240, action: 137 },
+  // The burning wings of MODEL_PHOENIX_SHOT's dummy over the target.
+  { skill: 270, name: 'phoenix-shot', expect: ['effect:phoenixShot', 'particle:fireHik1', 'particle:explosion'], shotAt: 560 },
   { skill: 263, name: 'dark-side', expect: ['effect:eventCloud', 'effect:magic', 'effect:windForce'], shotAt: 300 },
   // Chain Drive follows the giant swing (PLAYER_SKILL_GIANTSWING), played by the hero here: the fist's trail, the first
   // blow's wave and wolf heads at key 6, the second wave and spinning waves at key 11.
@@ -392,17 +396,32 @@ test('effect light reaches the characters in it', async ({ page }) => {
   test.setTimeout(3 * 60_000);
   await enterWorld(page, 'test400');
   await page.evaluate(() => (window as unknown as Win).__game.effects.ready);
+  // In town, out of the monsters' reach: the skill cases before this one leave the account at the hunting spot, where
+  // the monsters' hits keep putting debuffs (and their tint) on the hero.
+  await page.evaluate(() => (window as unknown as Win).__game.online.say('/move lorencia'));
+  await expect.poll(() => game(page, (g) => !g.online.hero.isWalking && ![...g.online.characters.values()]
+    .some((c) => c.kind === 'monster' && !c.dead && Math.hypot(c.cell.x - g.online.hero.cell.x, c.cell.y - g.online.hero.cell.y) < 10)), { timeout: 60_000 }).toBe(true);
+  // A known start, as the other cases set the hero's buffs: no buff or debuff left from an earlier test of the
+  // account (a debuff colours the body with its own tint, which the ground's light then doesn't reach).
+  await page.evaluate(() => { const g = (window as unknown as { __game: { buffs: { replace(id: number, b: number[]): void }; online: { playerId: number } } }).__game; g.buffs.replace(g.online.playerId, []); });
+  await expect.poll(() => page.evaluate(() => (window as unknown as { __game: { online: { hero: { bodyTint: unknown } } } }).__game.online.hero.bodyTint === null), { timeout: 10_000 }).toBe(true);
   type Lit = { light: { r: number; g: number; b: number }; position: { x: number; y: number } };
   type LightGame = { online: { hero: Lit }; effects: { schedule(task: (tick: number) => boolean): void; groundLight(at: { x: number; y: number }, r: number, g: number, b: number, range: number): void } };
   const before = await page.evaluate(() => { const l = (window as unknown as { __game: LightGame }).__game.online.hero.light; return { r: l.r, g: l.g, b: l.b }; });
   await page.evaluate(() => {
     const g = (window as unknown as { __game: LightGame }).__game;
-    let ticks = 0;
-    g.effects.schedule(() => { g.effects.groundLight(g.online.hero.position, 1, -1, -1, 3); return ++ticks < 150; });
+    const w = window as unknown as { __lightTicks: number };
+    w.__lightTicks = 0;
+    g.effects.schedule(() => { g.effects.groundLight(g.online.hero.position, 1, -1, -1, 3); return ++w.__lightTicks < 150; });
   });
-  await expect.poll(() => page.evaluate(() => { const l = (window as unknown as { __game: LightGame }).__game.online.hero.light; return l.r - l.g; }), { timeout: 10_000 })
+  // The light is laid by the effect ticks, which run with the frames: on a machine drawing a frame or two a second
+  // the first ones come late. Wait until the light has been laid a few times, then for the hero's colour.
+  await expect.poll(() => page.evaluate(() => (window as unknown as { __lightTicks: number }).__lightTicks), { timeout: 120_000 }).toBeGreaterThanOrEqual(10);
+  await expect.poll(() => page.evaluate(() => { const l = (window as unknown as { __game: LightGame }).__game.online.hero.light; return l.r - l.g; }), { timeout: 20_000 })
     .toBeGreaterThan(before.r - before.g + 0.3);
-  // When the light ends the body takes the ground's own light again.
+  // When the light ends the body takes the ground's own light again. Its 150 ticks take longer when the machine
+  // draws few frames (at most 10 ticks run per frame), so wait for them to be over first.
+  await expect.poll(() => page.evaluate(() => (window as unknown as { __lightTicks: number }).__lightTicks), { timeout: 120_000 }).toBeGreaterThanOrEqual(150);
   await expect.poll(() => page.evaluate(() => { const l = (window as unknown as { __game: LightGame }).__game.online.hero.light; return Math.abs(l.r - l.g); }), { timeout: 20_000 })
     .toBeLessThan(Math.abs(before.r - before.g) + 0.05);
 });

@@ -95,7 +95,9 @@ public class PkClearChatCommandPlugIn : ChatCommandPlugInBase<PkClearChatCommand
 
         if (!isGameMaster)
         {
-            var cost = (long)targetCharacter.PlayerKillCount * configuration.ZenCostPerKill;
+            // A player who is still in a PK state without counted kills pays at least the price of one kill,
+            // otherwise the PK state could be cleared for free.
+            var cost = (long)Math.Max(1, targetCharacter.PlayerKillCount) * configuration.ZenCostPerKill;
             if (cost > int.MaxValue)
             {
                 cost = int.MaxValue;
@@ -130,7 +132,7 @@ public class PkClearChatCommandPlugIn : ChatCommandPlugInBase<PkClearChatCommand
         /// Gets or sets the Zen cost per kill.
         /// </summary>
         [Display(Name = nameof(HNMO.GameLogic.Properties.PlugInResources.PKClearConfiguration_ZenCostPerKill_Name), Description = nameof(HNMO.GameLogic.Properties.PlugInResources.PKClearConfiguration_ZenCostPerKill_Description), ResourceType = typeof(HNMO.GameLogic.Properties.PlugInResources))]
-        public int ZenCostPerKill { get; set; } = 10_000_000;
+        public int ZenCostPerKill { get; set; } = 1_000_000;
 
         /// <summary>
         /// Gets or sets a value indicating whether regular players are allowed to clear their PK status.

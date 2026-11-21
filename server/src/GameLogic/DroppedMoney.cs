@@ -42,7 +42,7 @@ public sealed class DroppedMoney : AsyncDisposable, ILocateable
         this._pickupLock = new();
         this.Position = position;
         this.CurrentMap = map;
-        this._removeTimer = new Timer(this.OnTimerTimeout, null, (int)map.ItemDropDuration.TotalMilliseconds, Timeout.Infinite);
+        this._removeTimer = new Timer(this.OnTimerTimeout, null, (int)map.MoneyDropDuration.TotalMilliseconds, Timeout.Infinite);
     }
 
     /// <summary>

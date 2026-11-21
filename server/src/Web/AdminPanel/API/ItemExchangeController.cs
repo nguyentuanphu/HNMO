@@ -5,11 +5,11 @@
 namespace HNMO.Web.AdminPanel.API;
 
 using System.Threading;
+using HNMO.Web.AdminPanel.Auth;
+using HNMO.Web.AdminPanel.Operations.ItemExchange;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using HNMO.Web.AdminPanel.Auth;
-using HNMO.Web.AdminPanel.Operations.ItemExchange;
 
 /// <summary>
 /// Provides the items as an item exchange file of the desktop client, which its editor downloads.

@@ -130,6 +130,11 @@ test('talks to a class change quest NPC', async ({ page }) => {
   await page.evaluate(() => (window as unknown as Win).__game.online.walkTo({ x: 184, y: 34 }));
   const sebina = () => page.evaluate(() => [...(window as unknown as Win).__game.online.characters.values()].find((c) => c.monsterNumber === 235)?.id ?? null);
   await expect.poll(sebina, OPEN).not.toBeNull();
+  await expect.poll(() => page.evaluate(() => {
+    const { hero, characters } = (window as unknown as Win).__game.online;
+    const npc = [...characters.values()].find((c) => c.monsterNumber === 235);
+    return npc ? Math.max(Math.abs(hero.cell.x - npc.cell.x), Math.abs(hero.cell.y - npc.cell.y)) : 99;
+  }), OPEN).toBeLessThanOrEqual(4);
   await page.evaluate((id) => { const g = (window as unknown as Win).__game; g.online.talkTo(g.online.characters.get(id)); }, (await sebina())!);
   await expect(page.locator('.rml-npc_quest #content_root')).toBeVisible(OPEN);
   await expect.poll(async () => (await texts(page, '.rml-npc_quest .nq-message-line')).join(' '), OPEN).not.toBe('');

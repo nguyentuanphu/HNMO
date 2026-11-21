@@ -4,9 +4,9 @@
 
 namespace HNMO.Persistence.EntityFramework;
 
-using Microsoft.EntityFrameworkCore;
 using HNMO.Persistence.EntityFramework.Extensions;
 using HNMO.Persistence.EntityFramework.Model;
+using Microsoft.EntityFrameworkCore;
 
 /// <summary>
 /// Context to load instances of <see cref="Friend"/>s.

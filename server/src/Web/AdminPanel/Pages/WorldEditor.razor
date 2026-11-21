@@ -1,0 +1,410 @@
+@page "/world-editor"
+@page "/world-editor/{SelectedMapId:guid}"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.DataModel.Configuration
+@using HNMO.Persistence
+@using HNMO.Web.AdminPanel.Auth
+@using HNMO.Web.AdminPanel.Properties
+@using HNMO.Web.AdminPanel.Services
+
+@implements IAsyncDisposable
+
+<PageTitle>HNMO: @L("3D World Editor", "Trình chỉnh sửa thế giới 3D")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@L("3D World Editor", "Trình chỉnh sửa thế giới 3D")" />
+
+<div class="d-flex align-items-center gap-2 mb-2">
+    <h1 class="mb-0">@L("3D World Editor", "Trình chỉnh sửa thế giới 3D")</h1>
+    <button type="button"
+            class="btn btn-sm btn-outline-info"
+            id="world-editor-help-btn"
+            title="@L("How to use the 3D World Editor", "Hướng dẫn sử dụng Trình chỉnh sửa thế giới 3D")"
+            @onclick="() => this._showHelp = !this._showHelp">?</button>
+</div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextWorldEditor" />
+<p class="text-muted">
+    @L("Inspect maps in the web game's Three.js 3D renderer, paint safe/blocked/no-ground/water zones, place monster spawns and gates, and save to server configuration and web client data together.", "Xem bản đồ trực tiếp trên trình kết xuất Three.js 3D của game web, tô vùng an toàn/cấm đi/nước, đặt bãi quái và cổng dịch chuyển, rồi lưu đồng bộ giữa cấu hình máy chủ và dữ liệu client web.")
+</p>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info" role="region" id="world-editor-help">
+        <strong>@L("How to use this page:", "Hướng dẫn:")</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("Select Inspect to orbit, zoom, and pan freely with the mouse. Select any Brush or Placement tool and left-click/drag directly on the 3D terrain.", "Chọn Kiểm tra để xoay/thu phóng camera tự do bằng chuột. Chọn cọ địa hình hoặc công cụ đặt để nhấp/kéo trực tiếp trên nền đất 3D.")</li>
+            <li>@L("Toggle Player View vs Orbit 3D to verify sightlines at the exact isometric chase angle used by players in-game.", "Chuyển đổi giữa Góc nhìn người chơi và Xoay 3D tự do để kiểm tra tầm nhìn giống hệt trong game.")</li>
+            <li>@L("Clicking Save All updates GameConfiguration in PostgreSQL AND writes encrypted EncTerrainN.att files into the web and server Data folders together.", "Nhấn Lưu tất cả sẽ cập nhật GameConfiguration trong PostgreSQL VÀ ghi đồng bộ tệp mã hóa EncTerrainN.att cho web và máy chủ.")</li>
+        </ul>
+    </div>
+}
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._selectedMap is null)
+{
+    <div class="alert alert-warning">@L("No game maps found in the configuration.", "Không tìm thấy bản đồ nào trong cấu hình.")</div>
+}
+else
+{
+    <div class="card mb-3">
+        <div class="card-body py-2">
+            <div class="row g-2 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label mb-1" for="we-map-select" title="@L("Choose the map to edit in 3D", "Chọn bản đồ để chỉnh sửa 3D")">@L("Map", "Bản đồ")</label>
+                    <select id="we-map-select" class="form-select form-select-sm" value="@this._selectedMap.GetId()" @onchange="this.OnMapChangedAsync">
+                        @foreach (var map in this._maps)
+                        {
+                            <option value="@map.GetId()">@($"{map.Number}: {map.Name}")</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label mb-1" title="@L("Switch camera angle", "Đổi góc camera")">@L("Camera", "Camera")</label>
+                    <div class="btn-group btn-group-sm w-100" role="group">
+                        <button type="button"
+                                class="btn @(this._cameraMode == "player" ? "btn-primary" : "btn-outline-secondary")"
+                                title="@L("Isometric player view", "Góc nhìn người chơi")"
+                                @onclick='() => this.SetCameraModeAsync("player")'>@L("Player", "Game")</button>
+                        <button type="button"
+                                class="btn @(this._cameraMode == "orbit" ? "btn-primary" : "btn-outline-secondary")"
+                                title="@L("Free 3D orbit camera", "Xoay 3D tự do")"
+                                @onclick='() => this.SetCameraModeAsync("orbit")'>@L("Orbit", "3D")</button>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label mb-1" title="@L("Visibility of zone overlays, monster spawns, and gates", "Bật/tắt lớp phủ vùng, bãi quái và cổng")">@L("3D Layers", "Lớp hiển thị 3D")</label>
+                    <div class="d-flex gap-2 small flex-wrap">
+                        <label class="form-check-label" title="@L("Show zone colors on ground", "Hiện màu vùng địa hình")">
+                            <input class="form-check-input me-1" type="checkbox" checked="@this._showOverlay" @onchange="this.ToggleOverlayAsync" />@L("Zones", "Vùng")
+                        </label>
+                        <label class="form-check-label" title="@L("Show monster spawn boxes", "Hiện khung bãi quái")">
+                            <input class="form-check-input me-1" type="checkbox" checked="@this._showSpawns" @onchange="this.ToggleSpawnsAsync" />@L("Spawns", "Quái")
+                        </label>
+                        <label class="form-check-label" title="@L("Show enter/exit gate markers", "Hiện cổng dịch chuyển")">
+                            <input class="form-check-input me-1" type="checkbox" checked="@this._showGates" @onchange="this.ToggleGatesAsync" />@L("Gates", "Cổng")
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4 d-flex justify-content-md-end gap-1 flex-wrap">
+                    <button type="button"
+                            class="btn btn-sm btn-outline-secondary"
+                            id="world-editor-undo-btn"
+                            disabled="@(!this._canUndo)"
+                            title="@L("Undo last terrain brush stroke", "Hoàn tác nét vẽ vừa rồi")"
+                            @onclick="this.UndoAsync">@L("Undo", "Hoàn tác")</button>
+                    <button type="button"
+                            class="btn btn-sm btn-outline-secondary"
+                            id="world-editor-redo-btn"
+                            disabled="@(!this._canRedo)"
+                            title="@L("Redo undone stroke", "Làm lại nét vẽ")"
+                            @onclick="this.RedoAsync">@L("Redo", "Làm lại")</button>
+                    <button type="button"
+                            class="btn btn-sm btn-outline-info"
+                            id="world-editor-minimap-btn"
+                            disabled="@this._isSaving"
+                            title="@L("Render top-down minimap and save mini_map.tga/.ozt", "Kết xuất lại bản đồ nhỏ mini_map.tga/.ozt")"
+                            @onclick="this.RegenerateMinimapAsync">@L("Minimap", "Tạo Minimap")</button>
+                    <button type="button"
+                            class="btn btn-sm btn-outline-warning"
+                            id="world-editor-pack-btn"
+                            disabled="@this._isSaving"
+                            title="@L("Rebuild worldN.hpk pack archive for this map", "Đóng gói lại tệp worldN.hpk cho bản đồ này")"
+                            @onclick="this.RebuildPackAsync">@L("Rebuild .hpk", "Đóng gói .hpk")</button>
+                    <button type="button"
+                            class="btn btn-sm btn-primary"
+                            id="world-editor-save-btn"
+                            disabled="@this._isSaving"
+                            title="@L("Save terrain, objects, lights, spawns, and gates to Server DB and Web Data together", "Lưu đồng bộ địa hình, vật thể 3D, ánh sáng, bãi quái và cổng vào máy chủ và web")"
+                            @onclick="this.SaveAllAsync">
+                        @(this._isSaving ? L("Saving...", "Đang lưu...") : L("Save all", "Lưu tất cả"))
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(this._statusMessage))
+    {
+        <div class="alert @(this._statusError ? "alert-danger" : "alert-success") py-2 mb-3" id="world-editor-status">
+            @this._statusMessage
+        </div>
+    }
+
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header py-2 d-flex justify-content-between align-items-center small">
+                    <span>
+                        <strong>@this._selectedMap.Name</strong> (@L("Folder", "Thư mục") <code>World@(WorldEditorDataService.GetWorldFolderNumber(this._selectedMap.Number))</code>)
+                        · <span class="badge bg-secondary" id="world-editor-render-mode">@this._renderModeLabel</span>
+                    </span>
+                    <span id="world-editor-cursor" class="font-monospace">
+                        X: @this._cursorX, Y: @this._cursorY | Z: @this._cursorHeight | @FormatFlags(this._cursorFlags)
+                    </span>
+                </div>
+                <div class="card-body p-0">
+                    <div @ref="this._viewportRef"
+                         id="world-editor-viewport"
+                         style="width: 100%; height: 540px; background: #14181f; position: relative;"></div>
+                </div>
+                <div class="card-footer py-2 small d-flex flex-wrap gap-3">
+                    <span><span class="badge" style="background:#50c850;">&nbsp;</span> @L("Walkable", "Đi được")</span>
+                    <span><span class="badge" style="background:#c8cdd8;color:#111;">&nbsp;</span> @L("Safezone", "An toàn (Safezone)")</span>
+                    <span><span class="badge" style="background:#d23c3c;">&nbsp;</span> @L("Blocked / No-Move", "Cấm đi (Blocked)")</span>
+                    <span><span class="badge" style="background:#141418;">&nbsp;</span> @L("No-Ground / Void", "Vực / Không đất")</span>
+                    <span><span class="badge" style="background:#3080e6;">&nbsp;</span> @L("Water", "Nước")</span>
+                    <span><span class="badge" style="background:#ff9800;">&nbsp;</span> @L("Monster Spawn", "Bãi quái")</span>
+                    <span><span class="badge" style="background:#00e5ff;color:#111;">&nbsp;</span> @L("Enter Gate", "Cổng vào")</span>
+                    <span><span class="badge" style="background:#b388ff;color:#111;">&nbsp;</span> @L("Exit Gate", "Điểm ra")</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card mb-3">
+                <div class="card-header py-2"><strong>@L("Tools & Brush", "Công cụ & Cọ vẽ")</strong></div>
+                <div class="card-body">
+                    <div class="d-grid gap-1 mb-3" style="grid-template-columns: 1fr 1fr;">
+                        <button type="button" class="btn btn-sm @(this._activeTool == "inspect" ? "btn-dark" : "btn-outline-secondary")" title="@L("Orbit and zoom camera", "Xoay & thu phóng camera")" @onclick='() => this.SetToolAsync("inspect")'>@L("Inspect / Orbit", "Kiểm tra / Xoay")</button>
+                        <button type="button" class="btn btn-sm @(this._activeTool == "safezone" ? "btn-primary" : "btn-outline-primary")" title="@L("Paint safezone (non-PvP town)", "Tô vùng an toàn (không PK)")" @onclick='() => this.SetToolAsync("safezone")'>@L("Safezone", "An toàn")</button>
+                        <button type="button" class="btn btn-sm @(this._activeTool == "blocked" ? "btn-danger" : "btn-outline-danger")" title="@L("Paint unwalkable barrier tiles", "Tô ô vật cản cấm đi")" @onclick='() => this.SetToolAsync("blocked")'>@L("Blocked", "Cấm đi")</button>
+                        <button type="button" class="btn btn-sm @(this._activeTool == "water" ? "btn-info" : "btn-outline-info")" title="@L("Paint water attribute tiles", "Tô ô nước")" @onclick='() => this.SetToolAsync("water")'>@L("Water", "Nước")</button>
+                        <button type="button" class="btn btn-sm @(this._activeTool == "noground" ? "btn-secondary" : "btn-outline-secondary")" title="@L("Paint no-ground void tiles", "Tô ô vực thẳm")" @onclick='() => this.SetToolAsync("noground")'>@L("No-Ground", "Không đất")</button>
+                        <button type="button" class="btn btn-sm @(this._activeTool == "clear" ? "btn-success" : "btn-outline-success")" title="@L("Clear flags back to walkable", "Xóa cờ về đất đi được")" @onclick='() => this.SetToolAsync("clear")'>@L("Walkable (Clear)", "Đi được (Xóa)")</button>
+                        <button type="button" class="btn btn-sm @(this._activeTool == "spawn" ? "btn-warning" : "btn-outline-warning")" title="@L("Click terrain to place a monster spawn area", "Nhấp lên đất để đặt bãi quái mới")" @onclick='() => this.SetToolAsync("spawn")'>+ @L("Monster Spawn", "Đặt bãi quái")</button>
+                        <button type="button" class="btn btn-sm @(this._activeTool == "enterGate" ? "btn-info" : "btn-outline-info")" title="@L("Click terrain to place an enter gate", "Nhấp lên đất để đặt cổng vào")" @onclick='() => this.SetToolAsync("enterGate")'>+ @L("Enter Gate", "Đặt cổng vào")</button>
+                        <button type="button" class="btn btn-sm @(this._activeTool == "exitGate" ? "btn-secondary" : "btn-outline-secondary")" title="@L("Click terrain to place an exit/spawn gate", "Nhấp lên đất để đặt điểm ra")" @onclick='() => this.SetToolAsync("exitGate")'>+ @L("Exit Gate", "Đặt điểm ra")</button>
+                        <button type="button" class="btn btn-sm @(this._activeTool == "addObject" ? "btn-primary" : "btn-outline-primary")" title="@L("Click terrain to place a 3D world object", "Nhấp lên đất để đặt vật thể 3D")" @onclick='() => this.SetToolAsync("addObject")'>+ @L("3D Object", "Đặt vật thể 3D")</button>
+                        <button type="button" class="btn btn-sm @(this._activeTool == "lightPaint" ? "btn-warning" : "btn-outline-warning")" title="@L("Paint light map color directly onto terrain", "Tô màu ánh sáng lên bản đồ")" @onclick='() => this.SetToolAsync("lightPaint")'>@L("Light Brush", "Cọ ánh sáng")</button>
+                    </div>
+                    @if (this._activeTool == "addObject")
+                    {
+                        <div class="row g-1 mb-2 small">
+                            <div class="col-6">
+                                <label class="form-label mb-0" title="@L("Model type index (EncTerrainN.obj)", "Mã kiểu vật thể 3D")">@L("Object Type", "Mã vật thể")</label>
+                                <input type="number" class="form-control form-control-sm" min="0" max="159" @bind="this._newObjectType" />
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label mb-0" title="@L("Initial scale multiplier", "Tỉ lệ phóng đại")">@L("Scale", "Tỉ lệ")</label>
+                                <input type="number" step="0.1" min="0.1" max="10" class="form-control form-control-sm" @bind="this._newObjectScale" />
+                            </div>
+                        </div>
+                    }
+                    @if (this._activeTool == "lightPaint")
+                    {
+                        <div class="row g-1 mb-2 small align-items-center">
+                            <div class="col-5">
+                                <label class="form-label mb-0" title="@L("Light brush RGB tint", "Màu cọ ánh sáng")">@L("Brush Color", "Màu cọ")</label>
+                                <input type="color" class="form-control form-control-color form-control-sm w-100" value="@this._lightBrushColor" @onchange="this.OnLightBrushChangedAsync" />
+                            </div>
+                            <div class="col-7">
+                                <label class="form-label mb-0">@L("Strength", "Độ mạnh"): @this._lightBrushIntensity.ToString("0.00")</label>
+                                <input type="range" class="form-range" min="0.05" max="1" step="0.05" value="@this._lightBrushIntensity" @onchange="this.OnLightIntensityChangedAsync" />
+                            </div>
+                        </div>
+                    }
+                    <div class="mb-2">
+                        <label class="form-label form-label-sm d-flex justify-content-between" for="we-brush-size" title="@L("Brush radius in terrain tiles (1-12)", "Kích thước bán kính cọ (1-12 ô)")">
+                            <span>@L("Brush radius", "Kích thước cọ")</span>
+                            <strong>@this._brushRadius</strong>
+                        </label>
+                        <input id="we-brush-size" type="range" class="form-range" min="1" max="12" value="@this._brushRadius" @onchange="this.OnBrushRadiusChangedAsync" />
+                    </div>
+                    @if (this._activeTool == "spawn")
+                    {
+                        <div class="mb-2">
+                            <label class="form-label form-label-sm" for="we-default-monster" title="@L("Monster species placed on next click", "Loài quái sẽ đặt khi nhấp bản đồ")">@L("Placement Monster", "Loài quái khi đặt")</label>
+                            <select id="we-default-monster" class="form-select form-select-sm" @bind="this._defaultMonsterNumber">
+                                @foreach (var m in this._monsters)
+                                {
+                                    <option value="@m.Number">@($"{m.Number} - {m.Designation}")</option>
+                                }
+                            </select>
+                        </div>
+                    }
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text">@L("Jump", "Đi tới")</span>
+                        <input type="number" class="form-control" min="0" max="255" @bind="this._jumpX" placeholder="X" aria-label="X" />
+                        <input type="number" class="form-control" min="0" max="255" @bind="this._jumpY" placeholder="Y" aria-label="Y" />
+                        <button type="button" class="btn btn-outline-secondary" @onclick="this.FocusCoordinatesAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintEdit">@L("Go", "Tới")</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header py-1">
+                    <ul class="nav nav-tabs card-header-tabs small">
+                        <li class="nav-item">
+                            <button type="button" class="nav-link @(this._activeTab == "spawns" ? "active" : string.Empty)" @onclick='() => this._activeTab = "spawns"' title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAction">
+                                @L("Spawns", "Bãi quái") (@this._selectedMap.MonsterSpawns.Count)
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button type="button" class="nav-link @(this._activeTab == "enterGates" ? "active" : string.Empty)" @onclick='() => this._activeTab = "enterGates"' title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAction">
+                                @L("Enter Gates", "Cổng vào") (@this._selectedMap.EnterGates.Count)
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button type="button" class="nav-link @(this._activeTab == "exitGates" ? "active" : string.Empty)" @onclick='() => this._activeTab = "exitGates"' title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAction">
+                                @L("Exit Gates", "Điểm ra") (@this._selectedMap.ExitGates.Count)
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button type="button" class="nav-link @(this._activeTab == "objects" ? "active" : string.Empty)" @onclick="this.OpenObjectsTabAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAction">
+                                @L("3D Objects", "Vật thể 3D") (@this._totalWorldObjects)
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button type="button" class="nav-link @(this._activeTab == "lights" ? "active" : string.Empty)" @onclick='() => this._activeTab = "lights"' title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAction">
+                                @L("Lights", "Ánh sáng")
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body p-2" style="max-height: 290px; overflow-y: auto;">
+                    @if (this._activeTab == "spawns")
+                    {
+                        @foreach (var spawn in this._selectedMap.MonsterSpawns.Take(60))
+                        {
+                            <div class="border rounded p-2 mb-2 small">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <strong>@(spawn.MonsterDefinition?.Designation ?? L("Unknown", "Chưa rõ"))</strong>
+                                    <div class="d-flex gap-1">
+                                        <button type="button" class="btn btn-xs btn-outline-primary py-0 px-1" title="@L("Focus camera on spawn", "Đưa camera tới bãi quái")" @onclick="() => this.FocusTileAsync(spawn.X1, spawn.Y1)">@L("View", "Xem")</button>
+                                        <button type="button" class="btn btn-xs btn-outline-danger py-0 px-1" title="@L("Remove monster spawn", "Xóa bãi quái")" @onclick="() => this.RemoveSpawnAsync(spawn)">×</button>
+                                    </div>
+                                </div>
+                                <div class="row g-1">
+                                    <div class="col-3"><label class="form-label mb-0">X1</label><input type="number" min="0" max="255" class="form-control form-control-sm" value="@spawn.X1" @onchange="async e => await this.UpdateSpawnCoordAsync(spawn, 1, e)" /></div>
+                                    <div class="col-3"><label class="form-label mb-0">Y1</label><input type="number" min="0" max="255" class="form-control form-control-sm" value="@spawn.Y1" @onchange="async e => await this.UpdateSpawnCoordAsync(spawn, 2, e)" /></div>
+                                    <div class="col-3"><label class="form-label mb-0">X2</label><input type="number" min="0" max="255" class="form-control form-control-sm" value="@spawn.X2" @onchange="async e => await this.UpdateSpawnCoordAsync(spawn, 3, e)" /></div>
+                                    <div class="col-3"><label class="form-label mb-0">Y2</label><input type="number" min="0" max="255" class="form-control form-control-sm" value="@spawn.Y2" @onchange="async e => await this.UpdateSpawnCoordAsync(spawn, 4, e)" /></div>
+                                    <div class="col-4"><label class="form-label mb-0">@L("Qty", "SL")</label><input type="number" min="1" max="500" class="form-control form-control-sm" @bind="spawn.Quantity" /></div>
+                                    <div class="col-8">
+                                        <label class="form-label mb-0">@L("Trigger", "Kiểu")</label>
+                                        <select class="form-select form-select-sm" @bind="spawn.SpawnTrigger">
+                                            @foreach (var trigger in Enum.GetValues<SpawnTrigger>())
+                                            {
+                                                <option value="@trigger">@trigger</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else if (this._activeTab == "enterGates")
+                    {
+                        @foreach (var gate in this._selectedMap.EnterGates)
+                        {
+                            <div class="border rounded p-2 mb-2 small">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <strong>@L("Gate", "Cổng") #@gate.Number (@gate.X1,@gate.Y1)</strong>
+                                    <div class="d-flex gap-1">
+                                        <button type="button" class="btn btn-xs btn-outline-primary py-0 px-1" @onclick="() => this.FocusTileAsync(gate.X1, gate.Y1)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintEdit">@L("View", "Xem")</button>
+                                        <button type="button" class="btn btn-xs btn-outline-danger py-0 px-1" @onclick="() => this.RemoveEnterGateAsync(gate)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">×</button>
+                                    </div>
+                                </div>
+                                <div class="row g-1">
+                                    <div class="col-4"><label class="form-label mb-0">#</label><input type="number" class="form-control form-control-sm" @bind="gate.Number" /></div>
+                                    <div class="col-4"><label class="form-label mb-0">@L("Req Lv", "Cấp YC")</label><input type="number" class="form-control form-control-sm" @bind="gate.LevelRequirement" /></div>
+                                    <div class="col-4"><label class="form-label mb-0">X1,Y1</label><div class="form-control form-control-sm bg-light">@gate.X1,@gate.Y1</div></div>
+                                    <div class="col-12">
+                                        <label class="form-label mb-0">@L("Destination Exit Gate", "Đích đến")</label>
+                                        <select class="form-select form-select-sm" value="@(gate.TargetGate?.GetId() ?? Guid.Empty)" @onchange="e => this.UpdateEnterGateTarget(gate, e)">
+                                            @foreach (var target in this._allExitGates)
+                                            {
+                                                <option value="@target.GetId()">@($"{target.Map?.Name}: ({target.X1},{target.Y1})")</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else if (this._activeTab == "exitGates")
+                    {
+                        @foreach (var gate in this._selectedMap.ExitGates)
+                        {
+                            <div class="border rounded p-2 mb-2 small">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <strong>@L("Exit", "Điểm ra") (@gate.X1,@gate.Y1)</strong>
+                                    <div class="d-flex gap-1">
+                                        <button type="button" class="btn btn-xs btn-outline-primary py-0 px-1" @onclick="() => this.FocusTileAsync(gate.X1, gate.Y1)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintEdit">@L("View", "Xem")</button>
+                                        <button type="button" class="btn btn-xs btn-outline-danger py-0 px-1" @onclick="() => this.RemoveExitGateAsync(gate)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">×</button>
+                                    </div>
+                                </div>
+                                <div class="row g-1">
+                                    <div class="col-6">
+                                        <label class="form-check-label">
+                                            <input type="checkbox" class="form-check-input me-1" @bind="gate.IsSpawnGate" />@L("Spawn gate", "Điểm hồi sinh")
+                                        </label>
+                                    </div>
+                                    <div class="col-6">
+                                        <select class="form-select form-select-sm" @bind="gate.Direction">
+                                            @foreach (var dir in Enum.GetValues<Direction>())
+                                            {
+                                                <option value="@dir">@dir</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else if (this._activeTab == "objects")
+                    {
+                        <div class="d-flex justify-content-between align-items-center mb-2 small">
+                            <span>@L("Showing first 60 of", "Hiển thị 60 /") @this._totalWorldObjects</span>
+                            <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" @onclick="this.RefreshObjectsListAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintRefresh">@L("Refresh", "Làm mới")</button>
+                        </div>
+                        @foreach (var obj in this._worldObjects)
+                        {
+                            <div class="border rounded p-2 mb-2 small">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <strong>#@obj.Index Type @obj.Type</strong>
+                                    <div class="d-flex gap-1">
+                                        <button type="button" class="btn btn-xs btn-outline-primary py-0 px-1" @onclick="() => this.SelectWorldObjectAsync(obj.Index)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintEdit">@L("Focus", "Tới")</button>
+                                        <button type="button" class="btn btn-xs btn-outline-danger py-0 px-1" @onclick="() => this.RemoveWorldObjectAsync(obj.Index)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">×</button>
+                                    </div>
+                                </div>
+                                <div class="row g-1">
+                                    <div class="col-4"><label class="form-label mb-0">X</label><input type="number" class="form-control form-control-sm" @bind="obj.X" /></div>
+                                    <div class="col-4"><label class="form-label mb-0">Y</label><input type="number" class="form-control form-control-sm" @bind="obj.Y" /></div>
+                                    <div class="col-4"><label class="form-label mb-0">Z</label><input type="number" class="form-control form-control-sm" @bind="obj.Z" /></div>
+                                    <div class="col-3"><label class="form-label mb-0">RX</label><input type="number" class="form-control form-control-sm" @bind="obj.AngleX" /></div>
+                                    <div class="col-3"><label class="form-label mb-0">RY</label><input type="number" class="form-control form-control-sm" @bind="obj.AngleY" /></div>
+                                    <div class="col-3"><label class="form-label mb-0">RZ</label><input type="number" class="form-control form-control-sm" @bind="obj.AngleZ" /></div>
+                                    <div class="col-3"><label class="form-label mb-0">Scale</label><input type="number" step="0.1" class="form-control form-control-sm" @bind="obj.Scale" /></div>
+                                </div>
+                                <button type="button" class="btn btn-xs btn-outline-success w-100 mt-1 py-0" @onclick="() => this.ApplyObjectTransformAsync(obj)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintApply">@L("Apply 3D Transform", "Áp dụng vị trí/góc 3D")</button>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="small">
+                            <div class="mb-2">
+                                <label class="form-label mb-1" title="@L("Preview ambient scene color", "Màu ánh sáng môi trường")">@L("Ambient Scene Color", "Màu ánh sáng môi trường")</label>
+                                <input type="color" class="form-control form-control-color form-control-sm" value="@this._ambientColor" @onchange="this.OnAmbientColorChangedAsync" />
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label mb-1">@L("Ambient Intensity", "Cường độ ánh sáng"): @this._ambientIntensity.ToString("0.00")</label>
+                                <input type="range" class="form-range" min="0.2" max="2.5" step="0.05" value="@this._ambientIntensity" @onchange="this.OnAmbientIntensityChangedAsync" />
+                            </div>
+                            @if (!string.IsNullOrEmpty(this._minimapPreviewUrl))
+                            {
+                                <div class="mt-2">
+                                    <div class="mb-1"><strong>@L("Regenerated Minimap Preview:", "Xem trước Minimap mới:")</strong></div>
+                                    <img id="world-editor-minimap-preview" src="@this._minimapPreviewUrl" alt="Minimap preview" class="img-thumbnail" style="max-width: 160px;" />
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="StaffRiseEven" xml:space="preserve"><value>Nhân viên tăng tiền thưởng cho mỗi cấp độ vật phẩm cho cả các gậy sức mạnh ma thuật.</value></data>
+  <data name="WeaponDamageIncrease" xml:space="preserve"><value>Sát thương tăng theo cấp độ vũ khí. Nó tăng thêm 3 mỗi cấp và thêm 1 sau cấp 10.</value></data>
+  <data name="ShieldDefenseRateIncrease" xml:space="preserve"><value>Xác định mức tăng tỷ lệ phòng thủ theo cấp độ vật phẩm cho khiên. Đó là 3 cho mỗi cấp độ vật phẩm cho đến cấp 9, sau đó luôn là 1 nữa cho mỗi cấp.</value></data>
+  <data name="ShieldDefenseIncrease" xml:space="preserve"><value>Xác định mức tăng phòng thủ theo cấp độ vật phẩm cho khiên. Nó luôn luôn là 1 cho mỗi cấp độ vật phẩm.</value></data>
+  <data name="RunningMovementSpeed" xml:space="preserve"><value>Xác định tốc độ di chuyển khi chạy cho ủng và găng tay dưới nước từ vật phẩm cấp 5.</value></data>
+  <data name="ArmorDefenseIncrease" xml:space="preserve"><value>Xác định mức tăng phòng thủ theo cấp độ trang bị cho áo giáp. Đó là 3 cho mỗi cấp độ vật phẩm cho đến cấp 9, sau đó luôn là 1 nữa cho mỗi cấp.</value></data>
+  <data name="StaffRiseOdd" xml:space="preserve"><value>Nhân viên tăng tiền thưởng cho mỗi cấp độ vật phẩm đối với các gậy sức mạnh ma thuật kỳ lạ.</value></data>
+  <data name="TransformationRingSkinsTransformationRing" xml:space="preserve"><value>Chứa số skin cho các cấp độ khác nhau của vòng biến hình (Vòng biến hình).</value></data>
+  <data name="JeweleryElementalResistances" xml:space="preserve"><value>Xác định điện trở nguyên tố cho đồ trang sức. Đó là 1 cho mỗi cấp độ vật phẩm.</value></data>
+  <data name="FirstAndThirdWingsDamageIncrease" xml:space="preserve"><value>Hệ số tăng sát thương của cánh cấp một và cấp ba: tăng 2 % mỗi cấp cánh.</value></data>
+  <data name="FirstAndSecondWingsDefenseBonus" xml:space="preserve"><value>Xác định phần thưởng phòng thủ theo cấp độ cho cánh cấp 1 và cấp 2.</value></data>
+  <data name="WingDamageAbsorb" xml:space="preserve"><value>Khả năng hấp thụ sát thương của cánh theo cấp độ vật phẩm, 2 sát thương % less mỗi cấp.</value></data>
+  <data name="AmmunitionDamageIncrease" xml:space="preserve"><value>Sát thương tăng % theo cấp độ đạn dược.</value></data>
+  <data name="ScepterRiseEven" xml:space="preserve"><value>Phần thưởng tăng quyền trượng cho mỗi cấp độ vật phẩm đối với cả quyền trượng sức mạnh ma thuật.</value></data>
+  <data name="ScepterRiseOdd" xml:space="preserve"><value>Phần thưởng tăng quyền trượng cho mỗi cấp độ vật phẩm đối với quyền trượng sức mạnh ma thuật kỳ lạ.</value></data>
+  <data name="AmmunitionManaLoss" xml:space="preserve"><value>Lượng mana mất đi cho mỗi kỹ năng trúng mỗi cấp độ đạn dược do hiệu ứng mũi tên vô cực.</value></data>
+  <data name="AmmunitionDamageIncreasePerLevel" xml:space="preserve"><value>Phần trăm tăng sát thương theo mỗi cấp đạn.</value></data>
+  <data name="ThirdWingsDefenseBonus" xml:space="preserve"><value>Xác định phần thưởng phòng thủ theo cấp độ cho cánh cấp 3.</value></data>
+  <data name="SecondWingsDamageIncrease" xml:space="preserve"><value>Hệ số tăng sát thương của cánh cấp hai: tăng 1 % mỗi cấp cánh.</value></data>
+  <data name="TransformationRingSkinsSkeletonTransformationRing" xml:space="preserve"><value>Chứa số lượng giao diện cho các cấp độ khác nhau của vòng biến hình (Vòng biến hình bộ xương).</value></data>
+  <data name="TransformationRingSkinsPandaTransformationRing" xml:space="preserve"><value>Chứa số skin cho các cấp độ khác nhau của vòng biến hình (Nhẫn biến hình gấu trúc).</value></data>
+  <data name="TransformationRingSkinsSnowmanTransformationRing" xml:space="preserve"><value>Chứa số skin cho các cấp độ khác nhau của vòng biến hình (Nhẫn biến hình Người tuyết).</value></data>
+  <data name="TransformationRingSkinsGameMasterTransformationRing" xml:space="preserve"><value>Chứa số skin cho các cấp độ khác nhau của vòng biến hình (Vòng biến hình Game Master).</value></data>
+  <data name="TransformationRingSkinsChristmasTransformationRing" xml:space="preserve"><value>Chứa số skin cho các cấp độ khác nhau của vòng biến hình (Nhẫn biến hình Giáng sinh).</value></data>
+  <data name="TransformationRingSkinsJackOLanternTransformationRing" xml:space="preserve"><value>Chứa số skin cho các cấp độ khác nhau của vòng biến hình (Nhẫn biến hình Jack O'lantern).</value></data>
+  <data name="TransformationRingSkinsEliteSkeletonTransformationRing" xml:space="preserve"><value>Chứa số skin cho các cấp độ khác nhau của vòng biến hình (Vòng biến hình bộ xương tinh nhuệ).</value></data>
+  <data name="DeathCowTransformationRingHealthBonus" xml:space="preserve"><value>Tăng máu tối đa thêm 20% ở cấp độ trang bị 5.</value></data>
+</root>

@@ -227,6 +227,9 @@ internal class LuckyItems : InitializerBase
         this.CreateLuckyArmor(70, 11, 2, 2, LocalizedString.FromResource(() => ItemNames.RedWingBoots), 46, 17, 150, CharacterClasses.AllSummoners);
         this.CreateLuckyArmor(71, 11, 2, 2, LocalizedString.FromResource(() => ItemNames.AtlansBoots), 72, 27, 150, CharacterClasses.AllMGs);
         this.CreateLuckyArmor(72, 11, 2, 2, LocalizedString.FromResource(() => ItemNames.StormJahadBoots), 62, 20, 150, CharacterClasses.AllFighters);
+
+        // The attack speed of the gloves and the walk speed of the boots (item list of the Season 6/9 server suites).
+        Updates.LuckyItemSpeedsUpdatePlugIn.AddMissingSpeeds(this.Context, this.GameConfiguration);
     }
 
     private void CreateTickets()

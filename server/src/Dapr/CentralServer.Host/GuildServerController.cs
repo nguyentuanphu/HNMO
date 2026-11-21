@@ -5,10 +5,10 @@
 namespace HNMO.CentralServer.Host;
 
 using System.Collections.Immutable;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using HNMO.Interfaces;
 using HNMO.ServerClients;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Controller which handles external requests coming from other dapr applications,

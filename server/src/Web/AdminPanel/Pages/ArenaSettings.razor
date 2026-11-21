@@ -1,0 +1,93 @@
+@page "/arena"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.GameLogic.PlugIns.Arena
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @Resources.ArenaSettingsPage</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@Resources.ArenaSettingsPage" />
+<h1>@Resources.ArenaSettingsPage</h1>
+<PageHelp Text="@L("Set the arena character of every class (level, stats, gear one item a line, damage and toughness in percent for balance) and the main numbers of the team battles and the battle royale, then Save. Arena characters are made again at every entry, so changes count from the next one. Use this page in the Arena's admin panel.", "Đặt nhân vật đấu trường của từng lớp (cấp, chỉ số, trang bị mỗi dòng một món, sát thương và chịu đòn theo % để cân bằng) và các số chính của đấu đội và đấu sinh tồn, rồi bấm Lưu. Nhân vật đấu trường được tạo lại mỗi lần vào, nên thay đổi có hiệu lực từ lần vào sau. Dùng trang này trong admin panel của Đấu trường.")" />
+
+<p class="text-muted">@L("Everyone in the Arena plays the arena character of their class: the level, stats and gear set here (made again at every entry), with a class balance for the damage dealt and taken. Below: the 5v5 team battles and the battle royale.", "Trong Đấu trường mọi người dùng nhân vật đấu trường theo lớp: cấp, chỉ số và trang bị đặt ở đây (tạo lại mỗi lần vào), kèm cân bằng lớp cho sát thương gây ra và nhận vào. Bên dưới: trận đấu đội 5v5 và đấu sinh tồn.")</p>
+
+@if (!InArena)
+{
+    <div class="alert alert-info" role="status" id="arena-not-here">@L("These settings are used by the Arena program: open the Arena's admin panel (the \"Arena\" button on the home page) to change what players get there. Saved here, they only apply to this program.", "Các cài đặt này do chương trình Đấu trường dùng: hãy mở admin panel của Đấu trường (nút \"Arena\" ở trang chủ) để thay đổi. Lưu ở đây chỉ áp dụng cho chương trình này.")</div>
+}
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is not { } c)
+{
+    <div class="alert alert-warning" role="status">@L("The Arena plug-in isn't installed in this save yet; start the server once.", "Plug-in Đấu trường chưa có trong save này; hãy khởi động máy chủ một lần.")</div>
+}
+else
+{
+    @if (this._errors.Count > 0)
+    {
+        <div class="alert alert-danger" role="alert" id="arena-errors">
+            <ul class="mb-0">
+                @foreach (var error in this._errors)
+                {
+                    <li>@error</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <h2 class="h4 mt-3">@L("Arena characters", "Nhân vật Đấu trường")</h2>
+    @foreach (var row in this._rows)
+    {
+        var t = row.Template;
+        <section class="card mb-3" data-class="@t.ClassFamily">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="h5 mb-2">@t.Name</h3>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" title="@L("Put this class back to the default template (not saved yet)", "Đưa lớp này về mẫu mặc định (chưa lưu)")" @onclick="() => this.ResetTemplate(row)">@L("Default", "Mặc định")</button>
+                </div>
+                <div class="row g-2">
+                    <div class="col-6 col-md-2"><label class="form-label">@L("Level", "Cấp")<input type="number" class="form-control" min="1" max="1000" @bind="t.Level" /></label></div>
+                    <div class="col-6 col-md-2"><label class="form-label">@L("Strength", "Sức mạnh")<input type="number" class="form-control" min="0" @bind="t.Strength" /></label></div>
+                    <div class="col-6 col-md-2"><label class="form-label">@L("Agility", "Nhanh nhẹn")<input type="number" class="form-control" min="0" @bind="t.Agility" /></label></div>
+                    <div class="col-6 col-md-2"><label class="form-label">@L("Vitality", "Thể lực")<input type="number" class="form-control" min="0" @bind="t.Vitality" /></label></div>
+                    <div class="col-6 col-md-2"><label class="form-label">@L("Energy", "Năng lượng")<input type="number" class="form-control" min="0" @bind="t.Energy" /></label></div>
+                    <div class="col-6 col-md-2"><label class="form-label">@L("Command", "Mệnh lệnh")<input type="number" class="form-control" min="0" @bind="t.Leadership" /></label></div>
+                    <div class="col-6 col-md-2"><label class="form-label">@L("Damage %", "Sát thương %")<input type="number" class="form-control arena-damage" min="10" max="500" @bind="t.DamagePercent" /></label></div>
+                    <div class="col-6 col-md-2"><label class="form-label">@L("Toughness %", "Chịu đòn %")<input type="number" class="form-control" min="10" max="500" @bind="t.DefensePercent" /></label></div>
+                    <div class="col-12 col-md-8">
+                        <label class="form-label w-100">@L("Gear, one item a line: slot, group, number, level, skill (0/1), luck (0/1), option (0-7), excellent (bits), durability", "Trang bị, mỗi dòng một món: ô, nhóm, số, cấp, skill (0/1), luck (0/1), option (0-7), excellent (bit), độ bền")
+                            <textarea class="form-control font-monospace arena-items" rows="5" @bind="row.ItemsText"></textarea>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+
+    <h2 class="h4 mt-3">@L("Battles", "Trận đấu")</h2>
+    <section class="card mb-3">
+        <div class="card-body row g-2">
+            <div class="col-6 col-md-3"><label class="form-label">@L("Ranked 1v1: win / loss points", "Xếp hạng 1v1: điểm thắng / thua")<span class="d-flex gap-1"><input type="number" class="form-control" min="0" @bind="c.PointsPerWin" /><input type="number" class="form-control" min="0" @bind="c.PointsPerLoss" /></span></label></div>
+            <div class="col-6 col-md-3"><label class="form-label">@L("Points a day at most", "Điểm tối đa mỗi ngày")<input type="number" class="form-control" min="0" @bind="c.DailyPointsCap" /></label></div>
+            <div class="col-6 col-md-3"><label class="form-label">@L("Team size / fewest", "Cỡ đội / tối thiểu")<span class="d-flex gap-1"><input type="number" class="form-control" min="1" max="20" @bind="c.TeamSize" /><input type="number" class="form-control" min="1" max="20" @bind="c.TeamMinSize" /></span></label></div>
+            <div class="col-6 col-md-3"><label class="form-label">@L("Team battle: minutes / kills to win", "Đấu đội: phút / mạng để thắng")<span class="d-flex gap-1"><input type="number" class="form-control" min="1" max="120" @bind="c.TeamMinutes" /><input type="number" class="form-control" min="1" @bind="c.TeamKillsToWin" /></span></label></div>
+            <div class="col-6 col-md-3"><label class="form-label">@L("Team battle: win / loss points", "Đấu đội: điểm thắng / thua")<span class="d-flex gap-1"><input type="number" class="form-control" min="0" @bind="c.TeamPointsPerWin" /><input type="number" class="form-control" min="0" @bind="c.TeamPointsPerLoss" /></span></label></div>
+            <div class="col-6 col-md-3"><label class="form-label">@L("Team battle: respawn seconds", "Đấu đội: giây hồi sinh")<input type="number" class="form-control" min="0" max="120" @bind="c.TeamRespawnSeconds" /></label></div>
+            <div class="col-12 col-md-6"><label class="form-label w-100">@L("Battle royale times (Sydney, HH:mm, commas)", "Giờ đấu sinh tồn (giờ Sydney, HH:mm, cách nhau dấu phẩy)")<input type="text" class="form-control" id="arena-royale-times" @bind="c.RoyaleTimes" /></label></div>
+            <div class="col-6 col-md-3"><label class="form-label">@L("Royale: fewest / most players", "Sinh tồn: ít nhất / nhiều nhất")<span class="d-flex gap-1"><input type="number" class="form-control" min="2" @bind="c.RoyaleMinPlayers" /><input type="number" class="form-control" min="2" @bind="c.RoyaleMaxPlayers" /></span></label></div>
+            <div class="col-6 col-md-3"><label class="form-label">@L("Royale: sign-up minutes before", "Sinh tồn: mở đăng ký trước (phút)")<input type="number" class="form-control" min="1" max="60" @bind="c.RoyaleSignupMinutes" /></label></div>
+            <div class="col-6 col-md-3"><label class="form-label">@L("Royale: minutes / zone shrinks after", "Sinh tồn: phút / vùng thu sau")<span class="d-flex gap-1"><input type="number" class="form-control" min="2" @bind="c.RoyaleMinutes" /><input type="number" class="form-control" min="0" @bind="c.RoyaleGraceMinutes" /></span></label></div>
+            <div class="col-6 col-md-3"><label class="form-label">@L("Royale: winner / others points", "Sinh tồn: điểm người thắng / còn lại")<span class="d-flex gap-1"><input type="number" class="form-control" min="0" @bind="c.RoyalePointsWinner" /><input type="number" class="form-control" min="0" @bind="c.RoyalePointsOthers" /></span></label></div>
+            <div class="col-12 col-md-6"><label class="form-label w-100">@L("Guild war: days and times (Sydney)", "Bang chiến: ngày và giờ (giờ Sydney)")<span class="d-flex gap-1"><input type="text" class="form-control" @bind="c.GuildWarDays" /><input type="text" class="form-control" @bind="c.GuildWarTimes" /></span></label></div>
+            <div class="col-6 col-md-3"><label class="form-label">@L("Guild war: win / loss points", "Bang chiến: điểm thắng / thua")<span class="d-flex gap-1"><input type="number" class="form-control" min="0" @bind="c.GuildWarPointsWin" /><input type="number" class="form-control" min="0" @bind="c.GuildWarPointsLoss" /></span></label></div>
+            <div class="col-6 col-md-3"><label class="form-label">@L("Guild war: fewest / most members", "Bang chiến: ít nhất / nhiều nhất")<span class="d-flex gap-1"><input type="number" class="form-control" min="1" @bind="c.GuildWarMinMembers" /><input type="number" class="form-control" min="1" @bind="c.GuildWarMaxMembers" /></span></label></div>
+            <div class="col-12 col-md-6"><label class="form-label w-100">@L("Guild XP: win / loss / champion of the week", "XP bang: thắng / thua / vô địch tuần")<span class="d-flex gap-1"><input type="number" class="form-control" min="0" @bind="c.GuildWarXpWin" /><input type="number" class="form-control" min="0" @bind="c.GuildWarXpLoss" /><input type="number" class="form-control" min="0" @bind="c.GuildWarXpChampion" /></span></label></div>
+            <div class="col-12"><small class="text-muted">@L("Every other value (maps, gates, zone size, damage outside the zone) is in Plugins, \"HNMO Arena characters\".", "Các giá trị khác (bản đồ, cửa, cỡ vùng, sát thương ngoài vùng) ở trang Plugins, \"Nhân vật Đấu trường HNMO\".")</small></div>
+        </div>
+    </section>
+
+    <button type="button" class="btn btn-primary" id="arena-save" title="@L("Save the templates and battle settings", "Lưu mẫu nhân vật và cài đặt trận đấu")" disabled="@this._isSaving" @onclick="this.SaveAsync">@L("Save", "Lưu")</button>
+}

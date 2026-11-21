@@ -202,13 +202,14 @@ public sealed class Party : AsyncDisposable
     /// </summary>
     /// <param name="killedObject">The object that was killed.</param>
     /// <param name="killer">The killer who is a party member.</param>
+    /// <param name="damageShare">The share of damage dealt by the party (0..1, default 1).</param>
     /// <returns>The experience which each party member gained, with all experience rates applied.</returns>
-    public async ValueTask<IReadOnlyList<ExperienceShare>> DistributeExperienceAfterKillAsync(IAttackable killedObject, IObservable killer)
+    public async ValueTask<IReadOnlyList<ExperienceShare>> DistributeExperienceAfterKillAsync(IAttackable killedObject, IObservable killer, double damageShare = 1.0)
     {
         using var l = await this._distributionLock.LockAsync().ConfigureAwait(false);
         try
         {
-            return await this.InternalDistributeExperienceAfterKillAsync(killedObject, killer).ConfigureAwait(false);
+            return await this.InternalDistributeExperienceAfterKillAsync(killedObject, killer, damageShare).ConfigureAwait(false);
         }
         finally
         {
@@ -343,9 +344,11 @@ public sealed class Party : AsyncDisposable
         var averageLevel = totalLevel / memberCount;
         var baseExperience = killed.CalculateBaseExperience(averageLevel);
 
-        var partyBonusMultiplier = Math.Pow(1.05, memberCount - 1);
+        // The party gets the kill's EXP times the bonus of its size (160 % for two ..., more for a set party), shared by
+        // level: the host's bonuses (rate tuning) or those of the Season 6/9 server suites.
+        var partyMultiplier = PlugIns.GameplayRules.RateTuningPlugIn.GetPartyExpMultiplierOrDefault(recipients);
         var mapExperienceMultiplier = killed.CurrentMap?.Definition.ExpMultiplier ?? 1;
-        var totalBaseExperience = baseExperience * memberCount * partyBonusMultiplier * mapExperienceMultiplier;
+        var totalBaseExperience = baseExperience * partyMultiplier * mapExperienceMultiplier;
 
         var attributes = recipients[0].Attributes!;
         var randomMinMultiplier = attributes[Stats.RandomExperienceMinMultiplier];
@@ -502,7 +505,7 @@ public sealed class Party : AsyncDisposable
         }
     }
 
-    private async ValueTask<IReadOnlyList<ExperienceShare>> InternalDistributeExperienceAfterKillAsync(IAttackable killedObject, IObservable killer)
+    private async ValueTask<IReadOnlyList<ExperienceShare>> InternalDistributeExperienceAfterKillAsync(IAttackable killedObject, IObservable killer, double damageShare = 1.0)
     {
         if (killedObject.IsSummonedMonster)
         {
@@ -522,7 +525,8 @@ public sealed class Party : AsyncDisposable
             return [];
         }
 
-        var perLevel = CalculatePartyExperiencePerLevel(this._distributionList, killedObject);
+        var perLevel = CalculatePartyExperiencePerLevel(this._distributionList, killedObject)
+                       * (float)Math.Clamp(damageShare, 0.0, 1.0);
 
         // The shares are copied into their own list, because _distributionList is reused and cleared by the caller.
         var shares = new List<ExperienceShare>(this._distributionList.Count);

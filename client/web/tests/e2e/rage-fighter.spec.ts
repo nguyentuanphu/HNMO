@@ -4,6 +4,22 @@
 // Rage Fighter that knows every skill (it rides a Fenrir, which the desktop doesn't allow for the close skills: the
 // test first checks that refusal, then takes the horn off on the client side only and puts it back at the end).
 import { test, expect, type Page } from '@playwright/test';
+import net from 'node:net';
+import { fileURLToPath } from 'node:url';
+import { read } from '../../src/net/packets.js';
+import type { Character } from '../../src/game/characters.js';
+import type { OnlineWorld } from '../../src/game/online.js';
+import type { Inventory } from '../../src/game/inventory.js';
+
+// Live scenarios retain their real-server coverage; the packet regression below needs only static files.
+function gameServerAvailable(): Promise<boolean> {
+  return new Promise((resolve) => {
+    const socket = net.connect(44406, '127.0.0.1');
+    socket.once('connect', () => { socket.destroy(); resolve(true); });
+    socket.once('error', () => resolve(false));
+    socket.setTimeout(2_000, () => { socket.destroy(); resolve(false); });
+  });
+}
 
 interface Fighter { id: number; kind: string; dead: boolean; cell: { x: number; y: number } }
 interface RageGame {
@@ -44,7 +60,8 @@ const nearestMonster = (page: Page) => page.evaluate(() => {
   return best ? { id: best.id, distance: bestDistance } : null;
 });
 
-test('the Rage Fighter casts each skill at a monster as the desktop does', async ({ page }) => {
+test('the Rage Fighter casts each skill at a monster with the HNMO Phoenix Shot decision', async ({ page }) => {
+  test.skip(!(await gameServerAvailable()), 'No live game server runs on 44406.');
   test.setTimeout(12 * 60_000);
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
@@ -92,11 +109,51 @@ test('the Rage Fighter casts each skill at a monster as the desktop does', async
     { skill: 263, name: 'Dark Side', sends: (b) => b.some((x) => isRange(x, 263)) && b.some((x) => isRage(x, 263)), effects: ['effect:eventCloud'] },
   ];
   const results: string[] = [];
+  await page.evaluate(() => {
+    type Watcher = {
+      step(): void;
+      createEffect: (...args: unknown[]) => unknown;
+      census(): Record<string, number>;
+      __origStep?: () => void;
+      __origCreate?: (...args: unknown[]) => unknown;
+      __seen?: Record<string, number>;
+      __darkTargets?: number;
+      __darkGhosts?: number;
+    };
+    const g = (window as unknown as Win).__game;
+    const e = g.effects as unknown as Watcher;
+    const record = () => {
+      for (const [k, v] of Object.entries(e.census())) e.__seen![k] = Math.max(e.__seen![k] ?? 0, v);
+      const ds = g.darkSide();
+      e.__darkTargets = Math.max(e.__darkTargets ?? 0, ds.dash?.targetCount ?? 0);
+      e.__darkGhosts = Math.max(e.__darkGhosts ?? 0, ds.ghosts);
+    };
+    e.__origStep ??= e.step;
+    e.__origCreate ??= e.createEffect;
+    e.__seen = {};
+    e.__darkTargets = 0;
+    e.__darkGhosts = 0;
+    const origStep = e.__origStep;
+    const origCreate = e.__origCreate;
+    e.createEffect = function (this: Watcher, ...args: unknown[]) {
+      const created = origCreate.apply(this, args);
+      record();
+      return created;
+    };
+    e.step = function (this: Watcher) {
+      origStep.call(this);
+      record();
+    };
+  });
   for (const c of cases) {
     await expect.poll(() => page.evaluate(() => { const h = (window as unknown as Win).__game.online.hero; return !h.isPlayingOnce && !h.isWalking; }), { timeout: 30_000 }).toBe(true);
+    await page.evaluate(() => {
+      const e = (window as unknown as Win).__game.effects as unknown as { __seen: Record<string, number>; __darkTargets: number; __darkGhosts: number };
+      e.__seen = {};
+      e.__darkTargets = 0;
+      e.__darkGhosts = 0;
+    });
     const mark = sent.length;
-    const census: Record<string, number>[] = [];
-    const sampler = setInterval(() => { void page.evaluate(() => (window as unknown as Win).__game.effects.census()).then((x) => census.push(x)).catch(() => undefined); }, 150);
     // The nearest living monster (another player may kill it first: then the next one).
     let target = { id: 0, distance: 0 };
     let roam = 0;
@@ -111,6 +168,16 @@ test('the Rage Fighter casts each skill at a monster as the desktop does', async
       }
       expect(nearest).not.toBeNull();
       target = nearest!;
+      if (c.skill === 263 && target.distance > 5) {
+        await page.evaluate((id) => {
+          const g = (window as unknown as Win).__game;
+          const m = g.online.characters.get(id);
+          if (m) g.online.walkTo(m.cell);
+        }, target.id);
+        await expect.poll(() => page.evaluate(() => (window as unknown as Win).__game.online.hero.isWalking), { timeout: 60_000 }).toBe(false);
+        const closer = await nearestMonster(page);
+        if (closer) target = closer;
+      }
       const cast = await page.evaluate(([id, skill]) => { const g = (window as unknown as Win).__game; return g.combat.cast(g.online.characters.get(id), null, skill); }, [target.id, c.skill] as const);
       expect(cast, c.name).toBe(true);
     }).toPass({ timeout: 240_000 });
@@ -118,35 +185,42 @@ test('the Rage Fighter casts each skill at a monster as the desktop does', async
     if (c.skill === 263) {
       // The server's target list (C1 4B, skill little endian at 4) and the dash with its afterimages.
       await expect.poll(() => received.some((b) => b[0] === 0xc1 && b[2] === 0x4b && (b[4] | (b[5] << 8)) === 263), { timeout: 30_000 }).toBe(true);
-      await expect.poll(() => page.evaluate(() => (window as unknown as Win).__game.darkSide().dash?.targetCount ?? 0), { timeout: 10_000 }).toBeGreaterThan(0);
-      await expect.poll(() => page.evaluate(() => (window as unknown as Win).__game.darkSide().ghosts), { timeout: 10_000, intervals: [50] }).toBeGreaterThan(0);
+      await expect.poll(() => page.evaluate(() => {
+        const e = (window as unknown as Win).__game.effects as unknown as { __darkTargets: number; __darkGhosts: number };
+        return e.__darkTargets > 0 && e.__darkGhosts > 0;
+      }), { timeout: 30_000, message: 'Dark Side targetCount and ghosts' }).toBe(true);
       await page.screenshot({ path: 'test-results/rage-fighter-dark-side.png' });
     }
-    await page.waitForTimeout(1_500);
-    clearInterval(sampler);
-    for (const effect of c.effects) expect(census.some((x) => (x[effect] ?? 0) > 0), `${c.name} makes ${effect}`).toBe(true);
+    if (c.effects.length > 0) {
+      await expect.poll(() => page.evaluate((effects) => {
+        const seen = ((window as unknown as Win).__game.effects as unknown as { __seen: Record<string, number> }).__seen;
+        return effects.every((effect) => (seen[effect] ?? 0) > 0);
+      }, c.effects), { timeout: 15_000, message: `${c.name} makes ${c.effects.join(', ')}` }).toBe(true);
+    }
     console.log(`${c.name}: done`);
     results.push(`${c.name}: ${sent.slice(mark).map((b) => b.slice(0, 3).map((n) => n.toString(16)).join(' ')).join(', ')}`);
     await page.evaluate(() => (window as unknown as Win).__game.combat.cancel());
   }
-  // Phoenix Shot: AttackRagefighter walks up, UseSkillRagefighter sends nothing.
+  // HNMO owner decision: Phoenix Shot walks into range and sends the area cast, like Dragon Roar.
   const target = (await nearestMonster(page))!;
   const mark = sent.length;
   await page.evaluate((id) => { const g = (window as unknown as Win).__game; g.combat.cast(g.online.characters.get(id), null, 270); }, target.id);
   await expect.poll(() => page.evaluate(() => (window as unknown as Win).__game.combat.casting), { timeout: 60_000 }).toBe(false);
-  expect(sent.slice(mark).some((b) => (b[0] === 0xc3 || b[0] === 0xc1) && ((b[3] << 8) | b[4]) === 270)).toBe(false);
+  await expect.poll(() => sent.slice(mark).some((b) => isArea(b, 270) && ((b[10] << 8) | b[11]) === target.id && b[12] === 0)).toBe(true);
   console.log(results.join('\n'));
   if (horn) await page.reload(); // the horn comes back with the inventory the server sends
   expect(errors).toEqual([]);
 });
 
 test('Dark Side dashes through a fed target list with its afterimages', async ({ page }) => {
+  test.skip(!(await gameServerAvailable()), 'No live game server runs on 44406.');
   test.setTimeout(6 * 60_000);
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await enterAsFighter(page);
   await page.waitForFunction(() => (window as unknown as Win).__game.combat !== undefined, null, { timeout: 120_000 });
-  await expect.poll(() => page.evaluate(() => [...(window as unknown as Win).__game.online.characters.values()].filter((c) => c.kind !== 'player').length), { timeout: 60_000 }).toBeGreaterThan(0);
+  await page.evaluate(() => (window as unknown as Win).__game.online.say('/move lorencia'));
+  await expect.poll(() => page.evaluate(() => [...(window as unknown as Win).__game.online.characters.values()].filter((c) => c.kind !== 'player').length), { timeout: 60_000 }).toBeGreaterThan(1);
   // The ids of two monsters or NPCs near the hero, and the fed packets of a Dark Side from the hero at them.
   const feed = () => page.evaluate(() => {
     const g = (window as unknown as Win).__game;
@@ -207,4 +281,121 @@ test('Dark Side dashes through a fed target list with its afterimages', async ({
   expect(result.dashed).toBeGreaterThan(0);
   expect((result.census['effect:shockWave1'] ?? 0) + (result.census['particle:damage2'] ?? 0)).toBeGreaterThan(0);
   expect(errors).toEqual([]);
+});
+
+// Real Combat / SkillList / Connection / packet serialization, with controlled world movement and resources.
+test('learned Phoenix Shot walks into range and sends the exact area cast with resource checks and repeat', async ({ page }) => {
+  const sent: number[][] = [];
+  await page.routeWebSocket('**/phoenix-shot-relay?*', socket => {
+    socket.onMessage(message => { if (typeof message !== 'string') sent.push([...message]); });
+  });
+  await page.route('**/phoenix-shot-check', route => route.fulfill({
+    contentType: 'text/html',
+    body: '<!doctype html><html><head><script type="importmap">{"imports":{"three":"/vendor/three/build/three.module.js","three/":"/vendor/three/"}}</script></head><body></body></html>',
+  }));
+  await page.route('**/vendor/three/build/three.module.js', route => route.fulfill({
+    path: fileURLToPath(new URL('../../node_modules/three/build/three.module.js', import.meta.url)),
+    contentType: 'text/javascript',
+  }));
+  // A controlled skill data record: range 4, mana 30, AG 7 (the server remains authoritative).
+  const recordSize = 108, skill = 270;
+  const data = Buffer.alloc(recordSize * (skill + 1));
+  data.writeUInt16LE(30, skill * recordSize + 54);
+  data.writeUInt16LE(7, skill * recordSize + 56);
+  data.writeUInt32LE(4, skill * recordSize + 60);
+  const key = [0xfc, 0xcf, 0xab];
+  for (let i = 0; i < data.length; i++) data[i] ^= key[(i % recordSize) % key.length];
+  await page.route('**/data/Local/Eng/skill_eng.bmd', route => route.fulfill({ body: data }));
+  await page.route('**/data/new-skills.json', route => route.fulfill({ json: [] }));
+  await page.goto('/phoenix-shot-check');
+  const result = await page.evaluate(async () => {
+    const combatPath = '/js/game/combat.js', skillPath = '/js/game/skills.js';
+    const connectionPath = '/js/net/connection.js', characterPath = '/js/game/characters.js';
+    const threePath = '/vendor/three/build/three.module.js';
+    const { Combat } = await import(combatPath) as typeof import('../../src/game/combat.js');
+    const { SkillList, loadSkillData } = await import(skillPath) as typeof import('../../src/game/skills.js');
+    const { Connection } = await import(connectionPath) as typeof import('../../src/net/connection.js');
+    const { Character } = await import(characterPath) as typeof import('../../src/game/characters.js');
+    const { Vector2 } = await import(threePath) as typeof import('three');
+    await loadSkillData();
+    const relay = `${location.origin.replace('http', 'ws')}/phoenix-shot-relay`;
+    const connection = await new Connection(relay, { host: 'localhost', port: 44406, encrypted: true }).open();
+    const skills = new SkillList(connection, 6, () => undefined);
+    // SkillListUpdate: learn skill 270 at index 0, then cast the selected learned skill.
+    connection.dispatch(new Uint8Array([0xc1, 10, 0xf3, 0x11, 1, 0, 0, 0x0e, 0x01, 0]));
+    skills.select(0);
+    const actions: number[] = [];
+    const hero = {
+      id: 1, cell: { x: 10, y: 10 }, position: new Vector2(1050, 1050), angle: 0,
+      dead: false, isWalking: false, isPlayingOnce: false,
+      faceTo: Character.prototype.faceTo,
+      playOnce(action: number) { actions.push(action); this.isPlayingOnce = true; },
+    };
+    const target = { id: 0x1234, kind: 'monster', dead: false, cell: { x: 20, y: 10 } } as Character;
+    const flags = new Uint8Array(256 * 256);
+    const walks: { x: number; y: number }[] = [];
+    const online = {
+      hero, playerId: hero.id, characters: new Map([[target.id, target]]), world: { flags },
+      cellNextTo: () => ({ x: 19, y: 10 }),
+      walkTo(cell: { x: number; y: number }) { walks.push(cell); hero.isWalking = true; return true; },
+    };
+    const combat = new Combat(connection, online as unknown as OnlineWorld, { items: new Map() } as Inventory, 6);
+    const resources = { mana: 30, ability: 7, potions: 0 };
+    combat.skills = {
+      current: () => skills.skillAt(skills.current), mana: () => resources.mana, ability: () => resources.ability,
+      outOfMana: () => { resources.potions++; },
+    };
+    const learned = [...skills.skills.values()];
+    const castable = combat.castable(270), accepted = combat.cast(target, null);
+    combat.update(); // Too far: walking starts; no action or cast packet yet.
+    const walking = { count: walks.length, actions: actions.length, pending: combat.casting };
+    hero.cell = { x: 16, y: 10 }; hero.position.set(1650, 1050);
+    combat.update(); // In range but still walking: no cast.
+    const duringWalk = actions.length;
+    hero.isWalking = false; hero.isPlayingOnce = true;
+    combat.update(); // Wait for the previous action.
+    const duringAction = actions.length;
+    hero.isPlayingOnce = false;
+    combat.update(); // Action 254 starts and AreaSkill goes out, like Dragon Roar.
+    const first = { actions: [...actions], pending: combat.casting };
+    combat.update(); combat.update(); // Auto attack waits for the cast action to finish.
+    const held = actions.length;
+    hero.isPlayingOnce = false;
+    combat.update(); // Repeat sends one more area cast.
+    const repeated = actions.length;
+    combat.cancel(); hero.isPlayingOnce = false;
+    resources.mana = 29; combat.cast(target, null); combat.update();
+    const noMana = { actions: actions.length, pending: combat.casting, potions: resources.potions };
+    combat.cancel(); resources.mana = 30; resources.ability = 6;
+    combat.cast(target, null); combat.update();
+    const noAg = { actions: actions.length, pending: combat.casting };
+    combat.cancel(); resources.ability = 7;
+    combat.cast(target, null); combat.update(); // Exact resource boundaries permit the cast.
+    combat.cancel(); hero.isPlayingOnce = false;
+    const noTarget = combat.cast(null, null);
+    combat.cast(target, null); target.dead = true; combat.update();
+    const deadTarget = { actions: actions.length, pending: combat.casting };
+    target.dead = false; combat.cancel();
+    flags[10 * 256 + 16] = 1; // SAFEZONE
+    combat.cast(target, null); combat.update();
+    const safeZone = { actions: actions.length, pending: combat.casting };
+    combat.cancel(); combat.update();
+    return { learned, castable, accepted, walking, duringWalk, duringAction, first, held, repeated, noMana, noAg, noTarget, deadTarget, safeZone, walks };
+  });
+  expect(result).toEqual({
+    learned: [270], castable: true, accepted: true,
+    walking: { count: 1, actions: 0, pending: true }, duringWalk: 0, duringAction: 0,
+    first: { actions: [254], pending: false }, held: 1, repeated: 2,
+    noMana: { actions: 2, pending: false, potions: 1 }, noAg: { actions: 2, pending: false },
+    noTarget: false, deadTarget: { actions: 3, pending: false }, safeZone: { actions: 3, pending: false },
+    walks: [{ x: 19, y: 10 }],
+  });
+  await expect.poll(() => sent.length).toBe(3);
+  for (const bytes of sent) {
+    // C3 0D 1E = AreaSkill, not TargetedSkill/RageAttack/AreaSkillHit; both reserved bytes stay zero.
+    expect(bytes).toEqual([0xc3, 13, 0x1e, 0x01, 0x0e, 16, 10, 63, 0, 0, 0x12, 0x34, 0]);
+    expect(read('ClientToServer', 'AreaSkill', new Uint8Array(bytes))).toEqual({
+      SkillId: 270, TargetX: 16, TargetY: 10, Rotation: 63, ExtraTargetId: 0x1234, AnimationCounter: 0,
+    });
+  }
 });

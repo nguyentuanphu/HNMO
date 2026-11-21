@@ -8,11 +8,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using global::Discord;
 using global::Discord.WebSocket;
-using Microsoft.Extensions.Logging;
 using HNMO.Discord.Properties;
 using HNMO.Discord.Provisioning;
 using HNMO.GameLogic.AccountLinking;
 using HNMO.Interfaces;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The part of the <see cref="DiscordBot"/> with the commands for game masters, the direct messages

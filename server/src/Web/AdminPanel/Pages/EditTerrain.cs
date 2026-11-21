@@ -4,12 +4,12 @@
 
 namespace HNMO.Web.AdminPanel.Pages;
 
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components;
 using HNMO.DataModel.Configuration;
 using HNMO.Web.AdminPanel.Auth;
 using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.Shared.Components.TerrainEditor;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
 
 /// <summary>
 /// A page, which shows a <see cref="TerrainEditor"/> for the terrains of all <see cref="GameConfiguration.Maps"/>.
@@ -21,4 +21,7 @@ public sealed class EditTerrain : MapEditorPageBase<TerrainEditor>
 {
     /// <inheritdoc />
     protected override string Caption => Resources.TerrainEditor;
+
+    /// <inheritdoc />
+    protected override string HelpText => Resources.PageHelpTextEditTerrain;
 }

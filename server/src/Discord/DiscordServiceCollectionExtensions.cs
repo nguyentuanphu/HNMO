@@ -5,9 +5,6 @@
 namespace HNMO.Discord;
 
 using System.Net.Http;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.Discord.ChatBridge;
 using HNMO.Discord.Provisioning;
@@ -15,6 +12,9 @@ using HNMO.GameLogic.AccountLinking;
 using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Extensions to add the Discord integration to the services of a host.

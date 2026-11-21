@@ -22,6 +22,13 @@ public class ChatMessageWhisperProcessor : BannableChatMessageBaseProcessor
                               ?? OnlineCharacters.Get(content.PlayerName);
         if (whisperReceiver is null)
         {
+            // A friend playing in another HNMO program (Season 6.3, Season 9 or the Arena) gets it there.
+            if (await PlugIns.Chat.CrossSeasonFriendsPlugIn.TrySendAsync(sender, content.PlayerName, content.Message).ConfigureAwait(false))
+            {
+                ChatLogPlugIn.Record(sender, ChatMessageType.Whisper, content.PlayerName, content.Message);
+                return;
+            }
+
             // Kept until the receiver enters the game, if the offline whispers are active.
             if (OfflineWhisperPlugIn.Get(sender.GameContext) is { } offlineWhispers
                 && await offlineWhispers.StoreAsync(sender, content.PlayerName, content.Message).ConfigureAwait(false))

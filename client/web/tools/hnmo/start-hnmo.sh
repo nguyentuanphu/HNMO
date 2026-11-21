@@ -1,11 +1,23 @@
 #!/usr/bin/env bash
 # Starts HNMO: the save game database, the game server with its admin panel, and the
-# game, which opens in your browser. Press Ctrl+C to stop everything.
+# game, which opens in your browser.
+# In the background by default (owner's choice, 2026-11-21: no console window to keep open): the Terminal can be
+# closed; the log is in the admin panel ("Server log") and save/logs; stop HNMO there ("Stop HNMO") or with
+# ./stop-hnmo.sh. "./start-hnmo.sh --foreground" runs it in this Terminal as before (Ctrl+C stops it).
 set -euo pipefail
 cd "$(dirname "$0")"
-if [ ! -d Data/Monsters ]; then
+if [ ! -d Data/Monsters ] && [ ! -d Data/packs ]; then
   echo "The game data is missing. Copy the Data folder of the game into $(pwd)/Data."
   exit 1
+fi
+if [ "${1:-}" != "--foreground" ] && [ -z "${HNMO_FOREGROUND:-}" ]; then
+  mkdir -p save/logs
+  HNMO_FOREGROUND=1 nohup "$0" --foreground > save/logs/console.log 2>&1 &
+  echo $! > save/hnmo.pid
+  echo "HNMO is starting in the background; the game opens in your browser."
+  echo "Log: the admin panel's \"Server log\" (or save/logs). Stop: \"Stop HNMO\" there, or ./stop-hnmo.sh."
+  echo "HNMO đang khởi động chạy nền; game sẽ mở trong trình duyệt. Tắt: \"Tắt HNMO\" trong admin panel, hoặc ./stop-hnmo.sh."
+  exit 0
 fi
 cd web
 # The folder for every system: the .NET runtime of this computer's system (runtime/<system>).

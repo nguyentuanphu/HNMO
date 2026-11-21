@@ -52,7 +52,9 @@ public class PkChatCommandPlugIn : ChatCommandPlugInBase<PkChatCommandArgs>
         }
 
         character.State = HeroState.Normal + arguments.Level;
-        character.StateRemainingSeconds = (int)TimeSpan.FromHours(arguments.Count).TotalSeconds;
+
+        // The outlaw points total starts at the lowest total of the stage, 21,600 for the Warning stage.
+        character.StateRemainingSeconds = Math.Max(OutlawPoints.GetMinimumPoints(character.State), OutlawPoints.WarningPoints);
         character.PlayerKillCount = arguments.Count;
         await targetPlayer!.ForEachWorldObserverAsync<IUpdateCharacterHeroStatePlugIn>(p => p.UpdateCharacterHeroStateAsync(targetPlayer!), true).ConfigureAwait(false);
 

@@ -46,6 +46,14 @@ public class LetterSendAction
         {
             using (var context = player.GameContext.PersistenceContextProvider.CreateNewPlayerContext(player.GameContext.Configuration))
             {
+                var maximumLetters = player.GameContext.Configuration.MaximumLetters;
+                if (maximumLetters > 0 && await context.GetLetterCountAsync(receiver).ConfigureAwait(false) >= maximumLetters)
+                {
+                    // The mailbox holds as many letters as the client shows (classic: 50); more would only pile up.
+                    await player.InvokeViewPlugInAsync<ILetterSendResultPlugIn>(p => p.LetterSendResultAsync(LetterSendSuccess.MailboxFull, letterId)).ConfigureAwait(false);
+                    return;
+                }
+
                 letter = this.CreateLetter(context, player, receiver, message, title, rotation, animation);
                 if (!await context.CanSaveLetterAsync(letter).ConfigureAwait(false))
                 {

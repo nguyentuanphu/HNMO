@@ -329,7 +329,7 @@
     <value>F11 - I-reset ang Camera View</value>
   </data>
   <data name="Home - Toggle MU Helper" xml:space="preserve">
-    <value>Home - I-toggle ang MU Helper</value>
+    <value>Home - I-toggle ang Auto Play</value>
   </data>
   <data name="Enter: Chatting Mode" xml:space="preserve">
     <value>Pumasok: Chatting Mode</value>
@@ -8393,10 +8393,10 @@
     <value>Walang napiling item</value>
   </data>
   <data name="Any characters under level %d can't run Official MU Helper." xml:space="preserve">
-    <value>Anumang mga character sa ilalim ng antas na %d ay hindi maaaring magpatakbo ng Opisyal na MU Helper.</value>
+    <value>Anumang mga character sa ilalim ng antas na %d ay hindi maaaring magpatakbo ng Opisyal na Auto Play.</value>
   </data>
   <data name="Official MU Helper only runs in filed" xml:space="preserve">
-    <value>Ang opisyal na MU Helper ay tumatakbo lamang sa isinampa</value>
+    <value>Ang opisyal na Auto Play ay tumatakbo lamang sa isinampa</value>
   </data>
   <data name="In order to run Official MU Helper, please close Inventory window" xml:space="preserve">
     <value>Upang mapatakbo ang Opisyal na Katulong sa MU, mangyaring isara ang window ng Imbentaryo</value>
@@ -8408,7 +8408,7 @@
     <value>Upang mapatakbo nang maayos ang Opisyal na Katulong sa MU, mangyaring magrehistro ng mga kasanayan (Maliban sa Diwata)</value>
   </data>
   <data name="Official MU Helper is running." xml:space="preserve">
-    <value>Ang opisyal na MU Helper ay tumatakbo.</value>
+    <value>Ang opisyal na Auto Play ay tumatakbo.</value>
   </data>
   <data name="Official MU Helper is closed" xml:space="preserve">
     <value>Sarado ang Opisyal na Katulong ng MU</value>
@@ -8417,7 +8417,7 @@
     <value>Na-save na ang Opisyal na Setting ng Katulong sa MU.</value>
   </data>
   <data name="Official MU Helper can't be implemented in this region." xml:space="preserve">
-    <value>Hindi maipapatupad ang opisyal na MU Helper sa rehiyong ito.</value>
+    <value>Hindi maipapatupad ang opisyal na Auto Play sa rehiyong ito.</value>
   </data>
   <data name="CertainAmountOfZenIsSpent" xml:space="preserve">
     <value>Ang ilang halaga ng zen ay ginagastos bawat 5 minuto sa pagpapatupad ng Opisyal na Katulong sa MU</value>

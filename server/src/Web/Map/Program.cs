@@ -5,9 +5,9 @@
 namespace HNMO.Web.Map;
 
 using System.ComponentModel;
+using HNMO.GameLogic;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using HNMO.GameLogic;
 
 /// <summary>
 /// The class of the entry point.

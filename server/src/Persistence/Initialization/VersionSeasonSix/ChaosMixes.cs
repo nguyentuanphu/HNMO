@@ -515,7 +515,7 @@ public class ChaosMixes : InitializerBase
 
         // Result:
         craftingSettings.ResultItemSelect = ResultItemSelection.Any;
-        craftingSettings.ResultItemLuckOptionChance = 5;
+        craftingSettings.ResultItemLuckOptionChance = 10; // the Season 6 server suite's chaos box settings
 
         var wingsOfStorm = this.Context.CreateNew<ItemCraftingResultItem>();
         wingsOfStorm.ItemDefinition = this.GameConfiguration.Items.First(i => i.Group == 12 && i.Number == 36);

@@ -5,12 +5,12 @@
 namespace HNMO.Web.Shared.Components.MapEditor;
 
 using System.Globalization;
-using Microsoft.AspNetCore.Components;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.PlugIns;
 using HNMO.Persistence;
 using HNMO.PlugIns;
 using HNMO.Web.Shared.Properties;
+using Microsoft.AspNetCore.Components;
 
 /// <summary>
 /// Sets the monster amount multiplier (×0.5 to ×5) of a map, in the configuration of the <see cref="MonsterAmountPlugIn"/>.

@@ -37,6 +37,10 @@ public class Wings : WingsInitializerBase
     /// <inheritdoc />
     protected override int MaximumItemLevel => 15;
 
+    /// <inheritdoc />
+    /// <remarks>The wings' additional option goes up to +28 (or 7 % recovery) with the Jewel of Life, too.</remarks>
+    protected override int MaximumOptionLevel => GameConfigurationInitializer.MaximumAdditionalOptionLevel;
+
     /// <summary>
     /// Initializes all wings.
     /// </summary>
@@ -89,6 +93,9 @@ public class Wings : WingsInitializerBase
         var capeOfLord = this.CreateWing(30, 2, 3, LocalizedString.FromResource(() => ItemNames.CapeOfLord), 180, 15, 200, 180, 0, 0, 0, 0, 1, 0, 0, this.BuildOptions((0b00, OptionType.PhysDamage)), 20, 10, this._damageIncreaseByLevelTable, this.CreateCapeOptions());
         capeOfLord.Group = 13;
         capeOfLord.SetGuid(capeOfLord.Group, capeOfLord.Number);
+
+        // The 2nd wings' maximum AG and attack speed options (Season 6/9 server suites); the Cape of Fighter keeps three.
+        Updates.SecondWingOptionsUpdatePlugIn.Apply(this.Context, this.GameConfiguration);
 
         this.CreateSmallWings();
 

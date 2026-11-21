@@ -19,13 +19,16 @@ internal static class SpeedHackCheckExtensions
     /// <returns><c>true</c> if no check plugin is registered or the attack is allowed; otherwise, <c>false</c>.</returns>
     internal static async ValueTask<bool> IsAttackAllowedAsync(this Player player, Skill? skill)
     {
-        if (player.GameContext.PlugInManager.GetPlugInPoint<IAttackSpeedCheckPlugIn>() is not { } speedCheck)
+        var eventArgs = new SpeedHackCheckEventArgs();
+        foreach (var speedCheck in player.GameContext.PlugInManager.GetActivePlugInsOf<IAttackSpeedCheckPlugIn>())
         {
-            return true;
+            await speedCheck.AttackCheatCheckAsync(player, skill, eventArgs).ConfigureAwait(false);
+            if (eventArgs.IsCheatDetected)
+            {
+                return false;
+            }
         }
 
-        var eventArgs = new SpeedHackCheckEventArgs();
-        await speedCheck.AttackCheatCheckAsync(player, skill, eventArgs).ConfigureAwait(false);
-        return !eventArgs.IsCheatDetected;
+        return true;
     }
 }

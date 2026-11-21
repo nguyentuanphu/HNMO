@@ -4,18 +4,41 @@
 
 namespace HNMO.Web.AdminPanel.API;
 
+using HNMO.GameLogic.PlugIns.Vip;
 using HNMO.GameServer;
 using HNMO.Interfaces;
+using HNMO.Persistence.Worlds;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 /// <summary>Publishes an allowlisted snapshot of player-facing game configuration.</summary>
 /// <param name="servers">The running game servers.</param>
+/// <param name="worldRegistry">Optional multi-world registry.</param>
 [ApiController]
 [AllowAnonymous]
 [Route("api/website")]
-public sealed class WebsiteController(IDictionary<int, IGameServer> servers) : ControllerBase
+public sealed class WebsiteController(IDictionary<int, IGameServer> servers, WorldRegistryService? worldRegistry = null) : ControllerBase
 {
+    /// <summary>Reads configured worlds grouped with their sub-servers and Sydney opening times.</summary>
+    /// <returns>Grouped worlds list.</returns>
+    [HttpGet("worlds")]
+    public IActionResult GetWorlds()
+    {
+        var registry = worldRegistry ?? new WorldRegistryService();
+        var running = servers.Values.OfType<IGameServer>().OrderBy(s => s.Id).ToArray();
+        var worlds = registry.BuildGroupedSnapshot(running, DateTimeOffset.UtcNow);
+        if (this.HttpContext is not null)
+        {
+            this.Response.Headers.CacheControl = "no-store";
+        }
+
+        return this.Ok(new
+        {
+            updatedAt = DateTimeOffset.UtcNow,
+            worlds,
+        });
+    }
+
     /// <summary>Reads current rates, maps, classes and event rules without account data.</summary>
     /// <returns>A fresh snapshot, or 503 while no game server is available.</returns>
     [HttpGet]
@@ -27,21 +50,49 @@ public sealed class WebsiteController(IDictionary<int, IGameServer> servers) : C
             return this.StatusCode(503);
         }
 
-        this.Response.Headers.CacheControl = "no-store";
+        var nowUtc = DateTimeOffset.UtcNow;
+        var registry = worldRegistry ?? new WorldRegistryService();
+        var worlds = registry.BuildGroupedSnapshot(running.Cast<IGameServer>(), nowUtc);
+        var worldByServerId = worlds
+            .SelectMany(w => w.Servers.Select(s => (ServerId: s.Id, World: w)))
+            .GroupBy(x => x.ServerId)
+            .ToDictionary(g => g.Key, g => g.First().World);
+
+        if (this.HttpContext is not null)
+        {
+            this.Response.Headers.CacheControl = "no-store";
+        }
+
         return this.Ok(new
         {
-            updatedAt = DateTimeOffset.UtcNow,
+            updatedAt = nowUtc,
+            worlds,
             servers = running.Select(server =>
             {
                 var context = server.Context;
                 var config = context.Configuration;
+                var (dropRate, zenRate) = GameServerRateStore.OpenDefault().GetRates(context.Id);
+                worldByServerId.TryGetValue(context.Id, out var ownerWorld);
                 return new
                 {
                     id = context.Id,
+                    description = server.Description,
+                    vipOnly = GameServerRateStore.IsVipOnly(context),
+                    pvpEnabled = context.PvpEnabled,
+                    worldId = ownerWorld?.WorldId ?? "main",
+                    worldNameEn = ownerWorld?.NameEn ?? "World 1",
+                    worldNameVi = ownerWorld?.NameVi ?? "Thế giới 1",
+                    season = ownerWorld?.Season ?? "s6",
+                    seasonBadge = ownerWorld?.SeasonBadge ?? "S6.3",
+                    isOpen = ownerWorld?.IsOpen ?? true,
+                    openingDateUtc = ownerWorld?.OpeningDateUtc,
+                    openingDateSydney = ownerWorld?.OpeningDateSydney ?? string.Empty,
                     players = context.PlayerCount,
                     capacity = context.ServerConfiguration.MaximumPlayers,
                     config.ExperienceRate,
                     config.MasterExperienceRate,
+                    dropRate,
+                    zenRate,
                     config.MaximumLevel,
                     config.MaximumMasterLevel,
                     config.MaximumPartySize,

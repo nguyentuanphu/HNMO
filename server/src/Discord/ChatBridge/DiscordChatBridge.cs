@@ -7,13 +7,13 @@ namespace HNMO.Discord.ChatBridge;
 using System.ComponentModel;
 using System.Globalization;
 using System.Threading;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.AccountLinking;
 using HNMO.GameLogic.PlugIns;
 using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The chat bridge between the game and Discord: It mirrors the guild, alliance and world chat

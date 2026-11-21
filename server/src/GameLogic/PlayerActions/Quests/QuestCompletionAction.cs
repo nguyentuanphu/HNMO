@@ -34,6 +34,14 @@ public class QuestCompletionAction
             return;
         }
 
+        if (player.OpenedNpc?.Definition is not { } openedNpc
+            || (!openedNpc.Quests.Contains(activeQuest)
+                && (activeQuest.QuestGiver is null || !Equals(openedNpc, activeQuest.QuestGiver) || openedNpc.Number != activeQuest.QuestGiver.Number)))
+        {
+            player.Logger.LogDebug("Failed, quest giver NPC dialog is not open.");
+            return;
+        }
+
         foreach (var requiredItem in activeQuest.RequiredItems)
         {
             var requiredLevel = requiredItem.DropItemGroup?.ItemLevel;

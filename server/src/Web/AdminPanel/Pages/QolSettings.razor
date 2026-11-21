@@ -1,0 +1,124 @@
+@page "/qol-settings"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using Microsoft.AspNetCore.Authorization
+@using HNMO.GameLogic.PlugIns.Qol
+@using HNMO.Web.AdminPanel.Auth
+
+<PageTitle>@L("QoL Commands & Mining Settings", "Cài Đặt Lệnh Tiện Ích & Đào Khoáng")</PageTitle>
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+    <div class="d-flex align-items-center gap-2">
+        <h3 class="mb-0">@L("QoL Commands & Mining Settings", "Cài Đặt Lệnh Tiện Ích & Đào Khoáng")</h3>
+        <button type="button"
+                class="btn btn-sm btn-outline-info"
+                title="@L("Show or hide setup instructions for this page.", "Hiện hoặc ẩn hướng dẫn sử dụng trang này.")"
+                @onclick="() => this._showHelp = !this._showHelp">
+            ?
+        </button>
+    </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextQolSettings" />
+    <div class="btn-group btn-group-sm" role="group" aria-label="@L("Language", "Ngôn ngữ")">
+        <button type="button" class="btn @(!this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(false)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintLanguageEn">English</button>
+        <button type="button" class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(true)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintLanguageVi">Tiếng Việt</button>
+    </div>
+</div>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info mb-3" role="note">
+        <strong>@L("How to use this page", "Hướng dẫn sử dụng trang này"):</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("Disabled by default until both Plug-in Active and Feature Enabled are turned on.", "Mặc định tắt cho tới khi bật cả Kích Hoạt Plug-in và Bật Tính Năng QoL.")</li>
+            <li>@L("/requests on|off lets players auto-refuse incoming trade, party, and duel requests.", "/requests on|off cho phép người chơi tự động từ chối lời mời giao dịch, tổ đội và thách đấu.")</li>
+            <li>@L("/srvinfo displays live EXP, Drop, Zen multipliers, Life cap, and account coin balances.", "/srvinfo hiển thị nhanh tỉ lệ EXP, Drop, Zen, giới hạn Life và số dư coin.")</li>
+            <li>@L("/mine lets players excavate minerals for Zen or jewels on allowed maps with an optional Mining Pick item requirement.", "/mine cho phép đào khoáng nhận Zen/ngọc theo thời gian hồi và bản đồ chỉ định.")</li>
+        </ul>
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(this._statusMessage))
+{
+    <div class="alert @(this._statusIsError ? "alert-danger" : "alert-success") py-2 mb-3">@this._statusMessage</div>
+}
+
+@if (this._isLoading || this._configuration is null)
+{
+    <p>@L("Loading...", "Đang tải...")</p>
+}
+else
+{
+    <div class="card mb-3">
+        <div class="card-header">@L("Commands & Excavation Settings", "Cài Đặt Lệnh & Đào Khoáng")</div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-12 d-flex flex-wrap gap-3">
+                    <div class="form-check form-switch">
+                        <input id="qolActive" class="form-check-input" type="checkbox" @bind="this._isActive" />
+                        <label class="form-check-label" for="qolActive" title="@L("Activate QoL plug-in instance in server.", "Kích hoạt plug-in trong máy chủ.")">@L("Plug-in Active", "Kích Hoạt Plug-in")</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input id="qolEnabled" class="form-check-input" type="checkbox" @bind="this._configuration.Enabled" />
+                        <label class="form-check-label" for="qolEnabled" title="@L("Master toggle for /requests, /srvinfo, and /mine.", "Công tắc chính bật /requests, /srvinfo và /mine.")">@L("QoL Enabled", "Bật Tính Năng QoL")</label>
+                    </div>
+                    <div class="form-check">
+                        <input id="qolReq" class="form-check-input" type="checkbox" @bind="this._configuration.RequestsToggleEnabled" />
+                        <label class="form-check-label" for="qolReq" title="@L("Enable /requests on|off auto-refusal.", "Bật lệnh /requests on|off.")">@L("Enable /requests", "Bật /requests")</label>
+                    </div>
+                    <div class="form-check">
+                        <input id="qolSrv" class="form-check-input" type="checkbox" @bind="this._configuration.ServerInfoEnabled" />
+                        <label class="form-check-label" for="qolSrv" title="@L("Enable /srvinfo command.", "Bật lệnh /srvinfo.")">@L("Enable /srvinfo", "Bật /srvinfo")</label>
+                    </div>
+                    <div class="form-check">
+                        <input id="qolMine" class="form-check-input" type="checkbox" @bind="this._configuration.MiningEnabled" />
+                        <label class="form-check-label" for="qolMine" title="@L("Enable /mine excavation mini-system.", "Bật tính năng đào khoáng /mine.")">@L("Enable /mine", "Bật /mine")</label>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label" title="@L("Seconds between mining attempts.", "Thời gian chờ giữa 2 lần đào (giây).")">@L("Mining Cooldown (s)", "Hồi Chiêu Đào (giây)")</label>
+                    <input type="number" class="form-control form-control-sm" min="1" max="3600" @bind="this._configuration.MiningCooldownSeconds" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" title="@L("Required pickaxe item group (-1 = no item required).", "Nhóm trang bị cuốc bắt buộc (-1 = không yêu cầu).")">@L("Required Pick Group", "Nhóm Cuốc (-1 = Tắt)")</label>
+                    <input type="number" class="form-control form-control-sm" min="-1" max="15" @bind="this._configuration.MiningRequiredItemGroup" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" title="@L("Required pickaxe item number.", "Mã vật phẩm cuốc đào.")">@L("Required Pick Item #", "Mã Cuốc Đào")</label>
+                    <input type="number" class="form-control form-control-sm" min="0" max="511" @bind="this._configuration.MiningRequiredItemNumber" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" title="@L("Comma-separated map numbers allowed for mining (blank = all maps).", "Các mã bản đồ cho phép đào cách nhau bởi dấu phẩy (trống = mọi map).")">@L("Allowed Maps", "Bản Đồ Được Đào")</label>
+                    <input type="text" class="form-control form-control-sm" @bind="this._allowedMapsText" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2 mb-3">
+        <button type="button" class="btn btn-primary" disabled="@this._isSaving" @onclick="this.SaveAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">
+            @(this._isSaving ? L("Saving...", "Đang lưu...") : L("Save QoL Settings", "Lưu Cài Đặt QoL"))
+        </button>
+        <button type="button" class="btn btn-outline-secondary" @onclick="this.ReloadState" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintRefresh">@L("Refresh Mining Logs", "Làm Mới Nhật Ký Đào")</button>
+    </div>
+
+    <div class="card">
+        <div class="card-header">@L("Mining Summary & Recent Finds", "Thống Kê Đào Khoáng Gần Đây")</div>
+        <div class="card-body">
+            <p class="small text-muted mb-2">@L("Total Excavations:", "Tổng số lần đào:") <strong>@this._state.TotalMinesCompleted</strong></p>
+            @if (this._state.RecentMineLogs.Count == 0)
+            {
+                <p class="text-muted mb-0">@L("No excavations logged yet.", "Chưa có dữ liệu đào khoáng.")</p>
+            }
+            else
+            {
+                <ul class="small mb-0">
+                    @foreach (var line in this._state.RecentMineLogs.Take(25))
+                    {
+                        <li>@line</li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+}

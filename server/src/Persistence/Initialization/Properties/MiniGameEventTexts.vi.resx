@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="StageTerrainChangeEvent" xml:space="preserve"><value>Sự kiện thay đổi địa hình sân khấu</value></data>
+  <data name="StatueSpawnEvent" xml:space="preserve"><value>Sự kiện xuất hiện tượng</value></data>
+  <data name="KundunMinionsHaveBeenSubduedDestroyTheCrystalStatue" xml:space="preserve"><value>Tay sai Kundun đã bị khuất phục! Phá hủy bức tượng pha lê!</value></data>
+  <data name="GateToggleEvent" xml:space="preserve"><value>Sự kiện chuyển đổi cổng</value></data>
+  <data name="Level0HasDemolishedTheCastleGate" xml:space="preserve"><value>{0} đã phá hủy Cổng Lâu đài!</value></data>
+  <data name="BridgeToggleEvent" xml:space="preserve"><value>Sự kiện chuyển đổi cầu</value></data>
+  <data name="EnoughMonsterKillsNowDestroyTheCastleGate" xml:space="preserve"><value>Giết đủ quái vật rồi, bây giờ hãy phá hủy Cổng Lâu đài!</value></data>
+  <data name="EntranceToggleEvent" xml:space="preserve"><value>Sự kiện chuyển đổi lối vào</value></data>
+</root>

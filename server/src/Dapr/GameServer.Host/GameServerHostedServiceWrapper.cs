@@ -6,12 +6,12 @@ namespace HNMO.GameServer.Host;
 
 using System.Collections.Generic;
 using System.Threading;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using HNMO.Dapr.Common;
 using HNMO.Interfaces;
 using HNMO.PlugIns;
 using HNMO.Web.Map;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 /// <summary>
 /// A wrapper which takes a <see cref="Interfaces.IGameServer"/> and wraps it as <see cref="IHostedLifecycleService"/>,

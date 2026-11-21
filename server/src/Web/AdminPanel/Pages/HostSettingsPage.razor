@@ -1,0 +1,274 @@
+@page "/host-settings"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+@using Resources = HNMO.Web.AdminPanel.Properties.Resources
+
+<PageTitle>@Resources.HostSettingsPage</PageTitle>
+
+<div class="d-flex align-items-center gap-2 mb-3">
+    <h1 class="mb-0">@Resources.HostSettingsPage</h1>
+    <button type="button"
+            id="host-settings-help-btn"
+            class="btn btn-sm btn-outline-secondary"
+            title="@Resources.HostSettingsHelpTitle"
+            @onclick="this.ToggleHelp">?</button>
+</div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextHostSettings" />
+
+@if (this._showHelp)
+{
+    <div id="host-settings-help" class="alert alert-info" role="region">
+        <strong>@Resources.HostSettingsHelpTitle</strong>
+        <p class="mb-1">@Resources.HostSettingsHelpBody</p>
+        <small>@Resources.HostSettingsRestartNote</small>
+    </div>
+}
+
+@if (this._errors.Count > 0)
+{
+    <div id="host-settings-errors" class="alert alert-danger" role="alert">
+        <ul class="mb-0">
+            @foreach (var err in this._errors)
+            {
+                <li>@err</li>
+            }
+        </ul>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(this._statusMessage))
+{
+    <div id="host-settings-status" class="alert alert-success" role="status">@this._statusMessage</div>
+}
+
+<div class="alert alert-warning py-2">@Resources.HostSettingsRestartNote</div>
+
+@if (!this.IsHostComputer)
+{
+    <div class="alert alert-warning" id="host-settings-host-only" role="alert">@Resources.HostSettingsHostOnly</div>
+}
+
+@if (this._settings is not null)
+{
+@if (this.IsHostComputer)
+{
+    <div class="card mb-3">
+        <div class="card-header fw-bold">@Resources.HostSettingsPortsSection</div>
+        <div class="card-body row g-3">
+            <div class="col-md-3">
+                <label class="form-label" title="HTTP port for the web game bridge (default 8080)">Web port</label>
+                <input id="web-port" type="number" class="form-control" @bind="this._settings.WebPort" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label" title="Loopback HTTP port for the admin panel (default 8095)">Admin port</label>
+                <input id="admin-port" type="number" class="form-control" @bind="this._settings.AdminPort" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label" title="TCP port for the Connect Server (default 44406)">Connect server port</label>
+                <input id="connect-port" type="number" class="form-control" @bind="this._settings.ConnectServerPort" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label" title="PostgreSQL port on 127.0.0.1 (default 55432)">Database port</label>
+                <input id="db-port" type="number" class="form-control" @bind="this._settings.DatabasePort" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" title="Public domain or IP players use to reach the web game">Public address</label>
+                <input id="public-address" type="text" class="form-control" @bind="this._settings.PublicAddress" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" title="URL opened automatically when HNMO starts">Open browser URL</label>
+                <input id="open-browser-url" type="text" class="form-control" @bind="this._settings.OpenBrowserUrl" />
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header fw-bold">@Resources.HostSettingsBridgeSection</div>
+        <div class="card-body row g-3">
+            <div class="col-md-6">
+                <label class="form-label" title="Listening URLs for the web bridge (e.g. http://0.0.0.0:8080)">Web URLs</label>
+                <input id="web-urls" type="text" class="form-control" @bind="this._settings.WebUrls" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" title="Comma-separated hosts the WebSocket relay may connect to">Relay allowed hosts</label>
+                <input id="relay-hosts" type="text" class="form-control" @bind="this._relayAllowedHostsText" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" title="Path to web client static files">WebRoot</label>
+                <input type="text" class="form-control" @bind="this._settings.WebRoot" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" title="Path to game Data folder">DataPath</label>
+                <input type="text" class="form-control" @bind="this._settings.DataPath" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" title="Path to vendor libraries">VendorPath</label>
+                <input type="text" class="form-control" @bind="this._settings.VendorPath" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label" title="TCP connect timeout in seconds (1-120)">Relay timeout (s)</label>
+                <input type="number" class="form-control" @bind="this._settings.RelayConnectTimeoutSeconds" />
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <div class="form-check">
+                    <input id="relay-loopback" type="checkbox" class="form-check-input" @bind="this._settings.RelayAllowLoopback" />
+                    <label class="form-check-label" for="relay-loopback" title="Allow relay connections to 127.0.0.1 / ::1">Relay allow loopback</label>
+                </div>
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <div class="form-check">
+                    <input id="launcher-enabled" type="checkbox" class="form-check-input" @bind="this._settings.LauncherEnabled" />
+                    <label class="form-check-label" for="launcher-enabled" title="Start PostgreSQL and game server from the web bridge">Launcher enabled</label>
+                </div>
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <div class="form-check">
+                    <input id="season-nine-enabled" type="checkbox" class="form-check-input" @bind="this._settings.SeasonNineEnabled" />
+                    <label class="form-check-label" for="season-nine-enabled" title="The launcher also starts a Season 9 server (its own database, connect server port +100, admin panel on the next port; accounts and coins shared). Restart HNMO after changing it.">@Resources.SeasonNineButton</label>
+                </div>
+                <div class="form-check">
+                    <input id="arena-enabled" type="checkbox" class="form-check-input" @bind="this._settings.ArenaEnabled" />
+                    <label class="form-check-label" for="arena-enabled" title="@Resources.ArenaEnabledHint">@Resources.ArenaButton</label>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label" title="PostgreSQL bin directory">PostgresPath</label>
+                <input type="text" class="form-control" @bind="this._settings.PostgresPath" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" title="Save directory containing hnmo-settings.json and database">SavePath</label>
+                <input type="text" class="form-control" @bind="this._settings.SavePath" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" title="Game server directory">ServerPath</label>
+                <input type="text" class="form-control" @bind="this._settings.ServerPath" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" title="Game server executable name">ServerProgram</label>
+                <input type="text" class="form-control" @bind="this._settings.ServerProgram" />
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header fw-bold">@Resources.HostSettingsDatabaseSection</div>
+        <div class="card-body row g-3">
+            <div class="col-md-4">
+                <label class="form-label" title="PostgreSQL hostname or IP">Database host</label>
+                <input id="db-host" type="text" class="form-control" @bind="this._settings.DatabaseHost" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" title="PostgreSQL database name">Database name</label>
+                <input id="db-name" type="text" class="form-control" @bind="this._settings.DatabaseName" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" title="PostgreSQL username">Database user</label>
+                <input id="db-user" type="text" class="form-control" @bind="this._settings.DatabaseUser" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" title="Current password is never displayed">Current database password</label>
+                <input id="db-password-masked" type="text" class="form-control" value="••••••••" readonly />
+                <div class="form-text">@Resources.HostSettingsPasswordMasked</div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" title="Leave blank to keep current password">New database password</label>
+                <input id="db-password-new" type="password" class="form-control" @bind="this._newDatabasePassword" autocomplete="new-password" />
+            </div>
+        </div>
+    </div>
+}
+
+    <div class="card mb-3" id="license-card">
+        <div class="card-header fw-bold">@Resources.HostSettingsLicenseSection</div>
+        <div class="card-body row g-3">
+            @if (this._licenseStatus is { } license)
+            {
+                <div class="col-12" id="license-status">
+                    @if (license.IsValid)
+                    {
+                        <div class="alert alert-success mb-2" role="status">
+                            @L($"Licensed to {license.Licensee}: up to {license.MaximumPlayers} players at once", $"Giấy phép của {license.Licensee}: tối đa {license.MaximumPlayers} người chơi cùng lúc")@(license.Expires is { } until ? L($", until {until:yyyy-MM-dd}.", $", đến hết {until:yyyy-MM-dd}.") : ".")
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-secondary mb-2" role="status">
+                            @L($"No valid license: up to {license.MaximumPlayers} players at once.", $"Chưa có giấy phép hợp lệ: tối đa {license.MaximumPlayers} người chơi cùng lúc.") <small class="text-muted">(@license.Message)</small>
+                        </div>
+                    }
+                    <div class="d-flex flex-wrap gap-2 align-items-center">
+                        <span>@L("This computer's id (send it to the HNMO developer to get a license for this computer):", "Mã máy này (gửi cho nhà phát triển HNMO để xin giấy phép cho máy này):")</span>
+                        <code id="machine-id">@license.MachineId</code>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" id="copy-machine-id" title="@L("Copies this computer's id", "Chép mã máy này")" @onclick="this.CopyMachineIdAsync">@(this._copied ? L("Copied", "Đã copy") : L("Copy", "Copy"))</button>
+                    </div>
+                </div>
+            }
+            <div class="col-md-6">
+                <label class="form-label" for="license-upload">@L("Upload a license file (.hnmo)", "Tải file giấy phép lên (.hnmo)")</label>
+                <Microsoft.AspNetCore.Components.Forms.InputFile id="license-upload" class="form-control" accept=".hnmo" OnChange="this.OnLicenseUploadAsync" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" for="license-text">@L("…or paste its content", "…hoặc dán nội dung file")</label>
+                <textarea id="license-text" class="form-control" rows="2" @bind="this._licenseText" placeholder='{"payload": "...", "signature": "..."}'></textarea>
+                <button type="button" class="btn btn-sm btn-primary mt-2" id="license-paste-save" title="@L("Checks the pasted licence and uses it at once if it is good", "Kiểm tra giấy phép vừa dán và dùng ngay nếu hợp lệ")" @onclick="this.SaveLicenseTextAsync">@L("Check and use this license", "Kiểm tra và dùng giấy phép này")</button>
+            </div>
+            <div class="col-12">
+                <small class="text-muted">@L("A license is checked before it is saved; a good one is used at once (no restart). It is kept in the folder as license.hnmo, so the server works offline.", "Giấy phép được kiểm tra trước khi lưu; giấy phép đúng được dùng ngay (không cần khởi động lại). File được giữ trong thư mục với tên license.hnmo, nên server vẫn chạy offline.")</small>
+            </div>
+            <div class="col-12">
+                <details id="license-request" class="border rounded p-2">
+                    <summary class="fw-semibold">@L("Ask the HNMO developer for a licence", "Xin giấy phép từ nhà phát triển HNMO")</summary>
+                    @if (this._hubState.Request is { } request)
+                    {
+                        <div class="d-flex flex-wrap gap-2 align-items-center mt-2" id="license-request-status">
+                            <span>@L($"Last request: {request.SentUtc.ToLocalTime():yyyy-MM-dd HH:mm}, {request.Status}.", $"Yêu cầu gần nhất: {request.SentUtc.ToLocalTime():yyyy-MM-dd HH:mm}, {request.Status}.")</span>
+                            @if (request.Status == "open")
+                            {
+                                <button type="button" id="license-request-check" class="btn btn-sm btn-outline-secondary" disabled="@this._requestSending" @onclick="this.CheckRequestAsync">@L("Check now", "Kiểm tra ngay")</button>
+                            }
+                        </div>
+                    }
+                    <div class="row g-2 mt-1">
+                        <div class="col-md-4"><input id="license-request-name" class="form-control" placeholder="@L("Your name or server name", "Tên bạn hoặc tên server")" @bind="this._requestName" /></div>
+                        <div class="col-md-4"><input id="license-request-contact" class="form-control" placeholder="@L("How to reach you (Zalo, Facebook, e-mail)", "Cách liên lạc (Zalo, Facebook, email)")" @bind="this._requestContact" /></div>
+                        <div class="col-md-4"><input id="license-request-players" type="number" min="1" class="form-control" placeholder="@L("Players at once", "Số người chơi cùng lúc")" @bind="this._requestPlayers" /></div>
+                        <div class="col-12"><textarea id="license-request-message" class="form-control" rows="2" placeholder="@L("A note (optional)", "Ghi chú (không bắt buộc)")" @bind="this._requestMessage"></textarea></div>
+                        <div class="col-12 d-flex gap-2 align-items-center">
+                            <button type="button" id="license-request-send" title="@L("Sends the licence request to the HNMO developer", "Gửi yêu cầu giấy phép tới nhà phát triển HNMO")" class="btn btn-sm btn-outline-primary" disabled="@this._requestSending" @onclick="this.RequestLicenseAsync">@L("Send the request", "Gửi yêu cầu")</button>
+                            <small class="text-muted">@L("It carries this computer's id and the HNMO version. The licence the developer issues comes here by itself (checked every hour).", "Yêu cầu gửi kèm mã máy này và phiên bản HNMO. Giấy phép nhà phát triển cấp sẽ tự về đây (kiểm tra mỗi giờ).")</small>
+                        </div>
+                    </div>
+                </details>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" for="license-path" title="Path to license.hnmo">@L("License file path (advanced)", "Đường dẫn file giấy phép (nâng cao)")</label>
+                <input id="license-path" type="text" class="form-control" @bind="this._settings.LicenseFilePath" />
+            </div>
+        </div>
+    </div>
+
+@if (this.IsHostComputer)
+{
+    <div class="d-flex gap-2 mb-4">
+        <button type="button" id="save-host-settings-btn" class="btn btn-primary" @onclick="this.SaveAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">
+            @Resources.HostSettingsSaveButton
+        </button>
+
+        @if (!this._confirmRestart)
+        {
+            <button type="button" id="restart-hnmo-btn" class="btn btn-danger" @onclick="() => this._confirmRestart = true" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAction">
+                @Resources.HostSettingsRestartButton
+            </button>
+        }
+        else
+        {
+            <span class="align-self-center text-danger fw-bold">@Resources.HostSettingsRestartConfirm</span>
+            <button type="button" id="confirm-restart-hnmo-btn" class="btn btn-danger" @onclick="this.RestartAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAction">
+                @Resources.HostSettingsRestartButton
+            </button>
+            <button type="button" class="btn btn-secondary" @onclick="() => this._confirmRestart = false" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintCancel">
+                Cancel
+            </button>
+        }
+    </div>
+}
+}

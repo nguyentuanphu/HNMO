@@ -1589,6 +1589,24 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("HappyHourConfiguration_ExperienceMultiplier_Name", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Extra item drops (%).
+        /// </summary>
+        public static string HappyHourConfiguration_ItemDropBonusPercent_Name {
+            get {
+                return ResourceManager.GetString("HappyHourConfiguration_ItemDropBonusPercent_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Extra excellent drop chance (1/10000).
+        /// </summary>
+        public static string HappyHourConfiguration_ExcellentDropBonusPerTenThousand_Name {
+            get {
+                return ResourceManager.GetString("HappyHourConfiguration_ExcellentDropBonusPerTenThousand_Name", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Handle Happy Hour event.
@@ -2129,6 +2147,15 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("MuHelperConfiguration_MinLevel_Name", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Minimum character level for VIP accounts.
+        /// </summary>
+        public static string MuHelperConfiguration_VipMinLevel_Name {
+            get {
+                return ResourceManager.GetString("MuHelperConfiguration_VipMinLevel_Name", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Pay interval.
@@ -2158,7 +2185,7 @@ namespace HNMO.GameLogic.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provides configuration for the MU Helper feature..
+        ///   Looks up a localized string similar to Provides configuration for the auto-play helper feature..
         /// </summary>
         public static string MuHelperFeaturePlugIn_Description {
             get {
@@ -2167,7 +2194,7 @@ namespace HNMO.GameLogic.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MU Helper Feature.
+        ///   Looks up a localized string similar to Auto-Play Helper Feature.
         /// </summary>
         public static string MuHelperFeaturePlugIn_Name {
             get {
@@ -5549,6 +5576,42 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("WebsiteConfiguration_GoogleClientId_Description", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to WebsiteConfiguration_RequireWebsiteLogin_Caption.
+        /// </summary>
+        public static string WebsiteConfiguration_RequireWebsiteLogin_Caption {
+            get {
+                return ResourceManager.GetString("WebsiteConfiguration_RequireWebsiteLogin_Caption", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to WebsiteConfiguration_RequireWebsiteLogin_Description.
+        /// </summary>
+        public static string WebsiteConfiguration_RequireWebsiteLogin_Description {
+            get {
+                return ResourceManager.GetString("WebsiteConfiguration_RequireWebsiteLogin_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HnmoTicketLoginHandlerPlugIn_Name.
+        /// </summary>
+        public static string HnmoTicketLoginHandlerPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoTicketLoginHandlerPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HnmoTicketLoginHandlerPlugIn_Description.
+        /// </summary>
+        public static string HnmoTicketLoginHandlerPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoTicketLoginHandlerPlugIn_Description", resourceCulture);
+            }
+        }
             /// <summary>
         ///   Looks up a localized string similar to IllusionTempleStartPlugIn_Name.
         /// </summary>
@@ -6045,5 +6108,95 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("UnlockItemChatCommandPlugIn_Description", resourceCulture);
             }
         }
+        /// <summary>Gets the localized VIP plug-in text.</summary>
+        public static string VipPlugIn_Name => ResourceManager.GetString("VipPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP plug-in text.</summary>
+        public static string VipPlugIn_Description => ResourceManager.GetString("VipPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized gift box activity plug-in text.</summary>
+        public static string GiftBoxActivityPlugIn_Name => ResourceManager.GetString("GiftBoxActivityPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized gift box activity plug-in text.</summary>
+        public static string GiftBoxActivityPlugIn_Description => ResourceManager.GetString("GiftBoxActivityPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized duplicate item check text.</summary>
+        public static string DuplicateItemsPlugIn_Name => ResourceManager.GetString("DuplicateItemsPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized duplicate item check text.</summary>
+        public static string DuplicateItemsPlugIn_Description => ResourceManager.GetString("DuplicateItemsPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized duplicate item check text.</summary>
+        public static string DuplicateItemsConfiguration_ScanIntervalMinutes_Caption => ResourceManager.GetString("DuplicateItemsConfiguration_ScanIntervalMinutes_Caption", resourceCulture)!;
+
+        /// <summary>Gets the localized duplicate item check text.</summary>
+        public static string DuplicateItemsConfiguration_ScanIntervalMinutes_Description => ResourceManager.GetString("DuplicateItemsConfiguration_ScanIntervalMinutes_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized duplicate item check text.</summary>
+        public static string DuplicateItemsConfiguration_FreezeDuplicates_Caption => ResourceManager.GetString("DuplicateItemsConfiguration_FreezeDuplicates_Caption", resourceCulture)!;
+
+        /// <summary>Gets the localized duplicate item check text.</summary>
+        public static string DuplicateItemsConfiguration_FreezeDuplicates_Description => ResourceManager.GetString("DuplicateItemsConfiguration_FreezeDuplicates_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized HNMO Arena text.</summary>
+        public static string ArenaPlugIn_Name => ResourceManager.GetString("ArenaPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized HNMO Arena text.</summary>
+        public static string ArenaPlugIn_Description => ResourceManager.GetString("ArenaPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized HNMO Arena text.</summary>
+        public static string ArenaTeamRulesPlugIn_Name => ResourceManager.GetString("ArenaTeamRulesPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized HNMO Arena text.</summary>
+        public static string ArenaTeamRulesPlugIn_Description => ResourceManager.GetString("ArenaTeamRulesPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized HNMO Arena text.</summary>
+        public static string StartRoyaleChatCommandPlugIn_Name => ResourceManager.GetString("StartRoyaleChatCommandPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized HNMO Arena text.</summary>
+        public static string StartRoyaleChatCommandPlugIn_Description => ResourceManager.GetString("StartRoyaleChatCommandPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized HNMO Arena text.</summary>
+        public static string StartGuildWarChatCommandPlugIn_Name => ResourceManager.GetString("StartGuildWarChatCommandPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized HNMO Arena text.</summary>
+        public static string StartGuildWarChatCommandPlugIn_Description => ResourceManager.GetString("StartGuildWarChatCommandPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized HNMO Arena text.</summary>
+        public static string ArenaHeraldPlugIn_Name => ResourceManager.GetString("ArenaHeraldPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized HNMO Arena text.</summary>
+        public static string ArenaHeraldPlugIn_Description => ResourceManager.GetString("ArenaHeraldPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized HNMO Arena text.</summary>
+        public static string ArenaScheduleNoticesPlugIn_Name => ResourceManager.GetString("ArenaScheduleNoticesPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized HNMO Arena text.</summary>
+        public static string ArenaScheduleNoticesPlugIn_Description => ResourceManager.GetString("ArenaScheduleNoticesPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized HNMO text.</summary>
+        public static string CrossSeasonFriendsPlugIn_Name => ResourceManager.GetString("CrossSeasonFriendsPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized HNMO text.</summary>
+        public static string CrossSeasonFriendsPlugIn_Description => ResourceManager.GetString("CrossSeasonFriendsPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized HNMO Arena text.</summary>
+        public static string ArenaShopPlugIn_Name => ResourceManager.GetString("ArenaShopPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized HNMO Arena text.</summary>
+        public static string ArenaShopPlugIn_Description => ResourceManager.GetString("ArenaShopPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized HNMO bug reports text.</summary>
+        public static string BugReportsPlugIn_Name => ResourceManager.GetString("BugReportsPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized HNMO bug reports text.</summary>
+        public static string BugReportsPlugIn_Description => ResourceManager.GetString("BugReportsPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized Monster AI Rules plug-in name.</summary>
+        public static string MonsterAiPlugIn_Name => ResourceManager.GetString("MonsterAiPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Monster AI Rules plug-in description.</summary>
+        public static string MonsterAiPlugIn_Description => ResourceManager.GetString("MonsterAiPlugIn_Description", resourceCulture)!;
+
     }
 }

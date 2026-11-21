@@ -5,10 +5,10 @@
 namespace HNMO.Web.Shared.Components.Form.Modal;
 
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Components;
 using HNMO.Persistence;
 using HNMO.Web.Shared.Components.Modal;
 using HNMO.Web.Shared.Services;
+using Microsoft.AspNetCore.Components;
 
 /// <summary>
 /// A component which allows to select an instance of <typeparamref name="TItem"/> through the <see cref="ILookupController"/>.

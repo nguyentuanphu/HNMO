@@ -4,10 +4,10 @@
 
 namespace HNMO.Web.AdminPanel.Pages;
 
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components;
 using HNMO.DataModel.Configuration;
 using HNMO.Web.AdminPanel.Auth;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
 
 /// <summary>
 /// Edit page for the <see cref="HNMO.Web.AdminPanel.Components.ConnectServer.ConnectServerConfiguration"/>.

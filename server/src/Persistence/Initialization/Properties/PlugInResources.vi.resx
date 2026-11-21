@@ -174,12 +174,6 @@
   <data name="AddDuelConfigurationPlugIn_Description" xml:space="preserve">
     <value>Bản cập nhật này thêm dữ liệu cho cấu hình đấu tay đôi</value>
   </data>
-  <data name="FixBloodCastleMonsterAttributesUpdatePlugIn_Name" xml:space="preserve">
-    <value>Sửa thuộc tính quái Huyết Lâu 7/8</value>
-  </data>
-  <data name="FixBloodCastleMonsterAttributesUpdatePlugIn_Description" xml:space="preserve">
-    <value>Đổi giá trị thuộc tính giữa BC7 (quái 138-143) và BC8 (quái 428-433) để độ khó tăng đúng: BC6 → BC7 → BC8.</value>
-  </data>
   <data name="AddDoppelgangerDataUpdatePlugIn_Name" xml:space="preserve">
     <value>Thêm dữ liệu Doppelganger</value>
   </data>
@@ -287,6 +281,12 @@
   </data>
   <data name="AddRenaItemUpdatePlugIn_Description" xml:space="preserve">
     <value>Bản cập nhật này thêm vật phẩm Rena còn thiếu, cần cho tính năng đăng ký vật phẩm.</value>
+  </data>
+  <data name="AddStardustItemUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm vật phẩm Stardust</value>
+  </data>
+  <data name="AddStardustItemUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm vật phẩm Stardust (14:153) có trong danh sách vật phẩm của game.</value>
   </data>
   <data name="AddCrestOfMonarchDropGroupUpdateSeason6_Name" xml:space="preserve">
     <value>Thêm nhóm rơi Crest of Monarch</value>
@@ -864,4 +864,8 @@
   <data name="StrongerHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
     <value>Bản cập nhật này làm 28 kỹ năng HNMO mạnh hơn 20 % (sát thương, buff và debuff; chi phí và thời gian hồi giữ nguyên) và cho nhiệm vụ thử thách của lính Elf yêu cầu 200 lần hạ quái và năm ngọc Chaos.</value>
   </data>
+  <data name="AddArenaHeraldUpdatePlugIn_Name" xml:space="preserve"><value>Thêm Sứ giả Đấu trường</value></data>
+  <data name="AddArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Thêm Sứ giả Đấu trường HNMO, NPC ở Lorencia, Devias, Noria và Elbeland, mở cửa sổ Đấu trường.</value></data>
+  <data name="RenumberArenaHeraldUpdatePlugIn_Name" xml:space="preserve"><value>Sứ giả Đấu trường: số NPC riêng</value></data>
+  <data name="RenumberArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Chuyển Sứ giả Đấu trường của bản lưu cũ từ NPC 595 sang 900 để web game hiện lại.</value></data>
 </root>

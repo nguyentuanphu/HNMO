@@ -28,4 +28,10 @@ public enum AdminLoginStatus
     /// The login succeeded.
     /// </summary>
     Succeeded,
+
+    /// <summary>
+    /// The password was correct, but the login comes from afar (through the website) and the user has no authenticator
+    /// set up yet: it has to be set up on the host computer first (owner, 2026-11-21).
+    /// </summary>
+    TwoFactorSetupRequired,
 }

@@ -399,3 +399,164 @@ No Android/iOS store apps and no desktop client: everything ships as the web gam
 "Add to Home Screen"). Don't plan or build native apps or desktop work unless the owner asks again.
 The desktop client is dropped for now: HNMO is played through the web game. New features get web windows only.
 The desktop code stays the reference for how the classic game behaves (parity rule unchanged).
+
+## Handover and re-audit (2026-11-19)
+- Roles: main Claude audits, fixes, merges into `main`, ships; Antigravity does the Windows-only work on
+  `antigravity-*` branches with full prompts; the first helper stopped on 2026-11-18. See
+  `docs/HANDOVER-2026-11-19.md`, `docs/WORKBOARD.md`, `docs/audit-2026-11-19.md`.
+- A fresh cloud container has no .NET and no `hnmo` user: install with `dotnet-install.sh --channel 10.0
+  --install-dir ~/.dotnet`, `useradd -m hnmo`, package to `/home/hnmo/HNMO`, `chown -R hnmo`, start with
+  `su hnmo -c ./start-hnmo.sh` (ready in under a minute). PostgreSQL 16 and ffmpeg are there.
+- A full `dotnet test` of the solution takes about 12 minutes (the initialization tests are 11 of them); run it
+  in the background and never edit-and-build the same projects meanwhile.
+- Tests that import `/js/...` modules or start `dotnet` (control.spec, party-options.spec, buffs-vi-language)
+  only work against the developer web client (`bridge` on its own port), not against the packaged folder.
+- Helpers' code: don't trust their own audits. What they got wrong most: features that take items or money
+  without thinking of the trade / crafting inventory backup, a lock per wrapper over one shared file,
+  `innerHTML` with player text, "local connection = the host", saved files in the program folder.
+- Never name a vendor or the original game in the repository, local disk paths included.
+- Only use the GitHub tools for GitHub (no direct API calls).
+
+## Seasons (2026-11-19)
+- A world has a season (`WorldDefinition.Season`, S6.3 default). The website and the game's server list show
+  it; the game loads `/data/...` for S6.3 and `/data/s9/...` for S9 (`client/web/src/dataRoot.ts`,
+  `bridge/SeasonData.cs`: only maps, models, effects and sounds come from the Season 9 pack in `Data_S9`).
+- The server runs one game configuration for all worlds. Plan for Season 9 content: add it to that one
+  configuration and switch it on per game server by its world's season (maps in the server's map list,
+  season-only features behind a season check), not a second configuration or database.
+- A world's rates are its servers' own rates (the per-server rates of the Servers page).
+
+## Owner decisions 2026-11-20 (morning)
+- Release (merge #85 into main, HNMO.zip): wait for local Claude's additional work, then check again with the owner.
+- Vault pages: 3 free, VIP +1, buy more with coins; page buttons in the vault window. Stacks: potions, event
+  tickets and keys stack free; jewels, boxes/quest items and crafting materials stack after a coin unlock; up to
+  255 per slot; in the vault AND the bag. Plan: `docs/plans/vault-stacking-pages-2026-11-20.md`.
+- When the owner says "give me more options", list more choices in the next pop-up instead of deciding.
+- (07:10) Stack unlocks per kind, 500 WCoinC each; extra vault page 200 WCoinC; web only (desktop later).
+- "MU Helper" texts: rename all to "Auto play" (VI "Tự động chơi").
+- Admin path through the website: a Host setting; a fresh folder gets a random hard-to-guess path shown to the host.
+- Market/escrow (audit 1.4): do the full fix, keeping the real item in a system storage (like vault pages).
+- Season 9 new classes: local Claude checks the owner's Season 9 data for them.
+- (08:30) Vault pages: 2 free (not 3). Anti-dupe: item origin serials + hourly scan + freeze + admin alert.
+  Market: one-off access fee 1,000 WCoinC + 5% tax per sale (listing fee stays). Arena across servers/seasons:
+  same template per class, all 4 modes (1v1 always; 5v5, battle royale, guild war scheduled), rewards = titles,
+  arena points shop on home servers, website leaderboard (no coins). Plans: docs/plans/arena-2026-11-20.md,
+  docs/plans/anti-dupe-market-2026-11-20.md.
+- Messages for local Claude (owner, 2026-11-20): the owner relays them by hand and can miss some. Send ONE combined,
+  copyable message that replaces all earlier unsent ones, and ask in a pop-up whether it was sent. Don't add a new
+  message per small change: fold it into the next combined one.
+- (09:20) The owner calls HNMO's server and game proprietary and will share them free, but not to be cracked or
+  misused. Protections chosen: obfuscate HNMO's own server code in the package, refuse to start when a signed
+  package's files were changed, obfuscate the web game in the package. (Not chosen: licence required to host.)
+  Keep third-party license notices; game data isn't the owner's. Remind about multi-player licenses
+  (license.hnmo, sign-license.sh) on 2026-11-21 09:00 Sydney (a scheduled reminder exists).
+- (10:20) Release plan: ONE release with everything, the Arena (all 4 modes) included. Until then keep merging
+  verified work into the working branch; main and HNMO.zip wait for the owner's OK after all of it is done.
+
+## Vault pages and item stacks (2026-11-20)
+- F5 codes: vault pages 4E (command: Action, Page) / 4F (state JSON); item stacks 50 (command: Action 0 state,
+  1 split, 2 unlock; Storage 0 bag / 1 vault; Slot; Count; Kind) / 51 (state JSON). Next free: 52.
+- Stack limits come from `HNMO.DataModel.ItemExtensions.StackLimit` (set by `ItemStackRules.Configure`); the player is
+  `ItemStackRules.CurrentPlayer` (set in `RemotePlayer.PacketReceivedAsync`). Kinds in `ItemStackConfiguration`.
+- test300 has no WCoin (C): browser tests can't buy unlocks with it. They check the refusal ("needs 500") and use free
+  kinds (potions); paid paths are covered by server tests (`ItemStackRulesTest`).
+
+## Database changes (2026-11-20)
+- New column: add the property to `DataModel/Entities/*.cs` (and to `AssignValues` if copies keep it), build, then
+  `dotnet ef migrations add <Name> --context EntityDataContext --configuration Release --no-build` in
+  `server/src/Persistence/EntityFramework`, and the compiled models with
+  `dotnet ef dbcontext optimize -c <AccountContext|TradeContext|EntityDataContext> -o CompiledModels/<ctx> -n HNMO.Persistence.EntityFramework.CompiledModels.For<ctx> --startup-project ../EntityFramework.DesignTime --configuration Release --no-build`
+  (the DesignTime project keeps the fully qualified names; without it every file changes). Then
+  `HNMO_UPDATE_GENERATED_CODE=1 dotnet test tests/HNMO.Tests --filter FullyQualifiedName~GameConfigurationLoaderGeneratorTest`.
+  Strip the BOM the tool adds and keep `[DbContext(typeof(HNMO.Persistence.EntityFramework.EntityDataContext))]`.
+  The tool leaves a folder literally named `bin\Release` in EntityFramework.DesignTime: delete it, never commit it.
+- A live PostgreSQL for tests: `su hnmo -c "initdb -D /home/hnmo/pgtest -U postgres --auth=trust; pg_ctl -D /home/hnmo/pgtest -o '-p 5432 -k /tmp' start"`,
+  then the server from `server/src/Startup/bin/Release` with `-reinit -autostart` (its ConnectionSettings use port 5432).
+  Plug-ins that are off by default can be switched on with SQL on `config."PlugInConfiguration"` ("IsActive").
+- Duplicate check: `Item.Serial`, `DuplicateItemsPlugIn` (hourly), admin page `/duplicate-items`; frozen items are refused
+  by `AccountSafetyPlugIn.RefuseLockedItemAsync` and the item move.
+- Market (owner 2026-11-20): one market per season; fees per account per season: buying 200 WCoinC, selling 1,000
+  WCoinC, 5% tax paid by the seller; the website's market has a Season 6 / Season 9 choice. Friends work across the
+  servers of one season; friends across seasons come with the Arena (owner's choice).
+- F5 codes: Arena travel 52 (request: Action 0 state, 1 travel, 2/3 join/leave the 1v1 queue, 4 buy shop item `Index`) / 53
+  (state JSON: ticket, `ranked` in the Arena, `shop` at home). Next free: 56 (54/55 are bug reports). Arena points and ratings live in the shared
+  database (`ArenaShared.Current`, table `data."HnmoArenaAccount"`); test them by setting points with SQL.
+- Bug reports (owner 2026-11-20): F5 54/55 (next free: 56), Alt+B / 🐞, admin page `/bug-reports`. Reports reach the
+  owner (HNMO developer) through the owner's own Discord webhook, which each server owner pastes into the plug-in's
+  settings; no screenshots; rewards are each server owner's choice (off by default).
+- Never mention the owner's other projects (by name or as "the other game") anywhere in HNMO: code, docs, commits,
+  PRs (owner, 2026-11-20).
+- Developer hub (owner 2026-11-20, `docs/plans/developer-hub-2026-11-20.md`): host bug reports go to GitHub (a
+  web function + hourly Action → issues in a private repo, one per bug); licence in Host settings;
+  changed the same day: the hub (private repo `hnmobug`, Netlify) is the owner's console behind a cover blog (password +
+  authenticator), licences issued there with their own key (`client/web/tools/hnmo/licence-pub.pem` once made), weekly
+  reports with queued bug reports (`Startup/DeveloperHubWeeklyService.cs`), bug robot later.
+- Update plug-ins that read saved plug-in settings must drop the admin editor's "$id"/"$values" markers first (a
+  saved list is `{"$values": [...]}`); an update that throws stops the server from starting.
+  The Arena program: `HNMO_SEASON=arena` (ports +200, database `hnmo_arena`, save `save/arena/`, admin panel 8097); start
+  it next to Season 6.3 for tests like Season 9 (`ASPNETCORE_URLS=http://127.0.0.1:8097`), and a bridge with
+  `--Launcher:ArenaEnabled=true` to see the Arena column.
+
+## Developer hub (2026-11-20)
+- The hub is the Netlify site `hnmobug` (https://hnmobug.netlify.app); its production deploy follows the hub repo's
+  working branch. Visitor access must protect non-production deploys only (all deploys = 401 for HNMO servers).
+  The Netlify MCP tools can read deploys, function logs (observability) and change visitor access.
+- The hub allows 3 licence requests per computer and per address a Sydney day: don't probe /api/request with curl.
+- A request's state can be checked with POST /api/licence {machine, request, token} (token in save/developer-hub.json).
+- The licence flow and the weekly report were verified live on 2026-11-20; the owner issues licences in the console.
+
+## Arena battles (2026-11-20 night)
+- Arena modes live in `GameLogic/PlugIns/Arena`: `ArenaTeams` (5v5), `ArenaRoyale` (battle royale), `ArenaGuildWar`, each
+  with a pure engine and tests; `ArenaTeamRulesPlugIn` holds the in-game rules (who may hurt whom, no PK penalty, spawn
+  gates, kills); `ArenaPlugIn` ticks them every second. F5 52 actions: 2/3 1v1, 5/6 team, 7/8 royale, 9/10 guild war.
+- The Arena runs as its own program: `HNMO_SEASON=arena ASPNETCORE_URLS=http://127.0.0.1:8097 dotnet HNMO.Startup.dll
+  -autostart -resolveIP:loopback` (connect 44606, DB `hnmo_arena`, files `save/arena/`); its admin panel is on 8097
+  (`/arena` edits the class templates and battle settings). The bridge needs `--Launcher:ArenaEnabled=true`.
+- GM test commands in the Arena: `/startroyale [s]`, `/startguildwar [s]`. Guild war tests need guilds in the Season 6.3
+  DB (SQL insert into guild."Guild"/"GuildMember") and `GuildWarMinMembers` lowered in the Arena's plug-in JSON.
+- The Arena map's own gates (map 6) lie partly on blocked tiles: use `ArenaConfiguration.HomeGate` for anything that
+  places players there. Queues must not drop players who are just changing maps (only disconnected ones).
+- Browser tests of battles: log in through `.season-arena .choice` with a retry (`toPass`) — with 5+ browsers the Arena's
+  server list can come late. A 3v3 / 4-player royale / 3v3 guild war each take 10-25 minutes on the test machine.
+- Never `pkill -f` with a pattern that also matches your own shell command line (it killed the session's worker):
+  keep restarts in a script file (e.g. /tmp/claude-0/bin/hnmo-up.sh) and kill by PID from `pgrep`.
+- Known open: a "speedhack" warning at the first walk right after being warped into a battle (8-12 tiles), seen on the
+  slow test machine only so far; check with real players.
+
+## Licence machine id, setup report, sound out of sight (2026-11-21, early morning)
+
+- Machine id = the system's own id (MachineGuid / machine-id / IOPlatformUUID), not the computer name; the old name
+  hash stays accepted (`LegacyMachineId`) and is sent to the hub as `legacyMachine`. Never break old licences.
+- The first-setup report (system, game, host name/contact, IP + country at the hub) is the one place the hub keeps an
+  IP; the setup page must keep saying so. Hub rule changes go into hnmobug's CLAUDE.md too.
+- A hub licence on 2+ computers in 30 days is withdrawn by itself; the owner's "Give back" allows more computers.
+- Owner reported music going on after leaving the phone's home screen: the web game pauses all sound while the page is
+  hidden and keeps the connection (like the desktop's minimised window). Prove a bug fix with a test that fails without
+  it (`sound.spec.ts` does).
+- New NPC/monster names go into `MonsterNames*.resx` (en, vi, de, zh-CN) via `LocalizedString.FromResource`; an inline
+  "Name||vi=…" fails `AllCaptionsCanBeTranslated`. Every admin button needs a `title` (EveryAdminPageHelpTests).
+- While a long `dotnet test --no-build` runs in the background, don't rebuild: wait, or results mix.
+- Player limit = one for the whole folder (S6 + S9 + Arena), shared via `HnmoLicensedLogin`. Admin from afar = website
+  admin path + 6-digit code, `/s9/` and `/arena/` under the same path; Host settings from afar shows only the licence.
+- Blazor admin pages in Playwright: forms answer only once the live connection is up; retry fill+submit in a poll.
+  The panel caches "an admin user exists": restart the servers after deleting test admin users.
+- Merging resx/Designer conflicts: never let git's hunks or a line-dedupe decide; take ours and add the branch's
+  missing entries by name (`<data name>` / `public static string X`). Then rebuild and parse the resx as XML.
+- A renamed NPC/monster number needs its own update that moves the old one: "add if missing" updates count as done.
+- e2e social/guild tests fail when test accounts are left in guilds by other tests (guild war); clean guild membership.
+- Owner (2026-11-21): everything sent to the developer's hub is SILENT: no notice, banner or status line for the host.
+- Owner (2026-11-21): nothing a host or player gets may point at the code repository (links, update checks, XML
+  namespaces, package metadata, strings in DLLs). Updates and downloads go through the hub's `/api/latest` (set in its
+  console). Check built DLLs with `grep -l -a <owner name>` before a release.
+
+## Auto updates (2026-11-21)
+
+- Owner's choices: the host presses a button (admin panel "HNMO update"); files on Cloudflare R2; semver from 1.0.0
+  (`VERSION`); only changed files; the database is kept (backup first, back to the old version and backup on failure).
+- Test the updater for real on the packaged folder: a fake hub with `python3 -m http.server` serving `api/latest`,
+  `releases/<v>/manifest.json`, `files/<sha256>`; run with `HNMO_DEVELOPER_HUB=http://127.0.0.1:<port>`
+  `HNMO_UPDATE_START_MINUTES=2`; break a release (random bytes in `server/HNMO.Startup`) to test the rollback.
+- Self-contained single-file folders: never copy a framework-dependent `HNMO.dll` into `web/` (start-hnmo.sh then looks
+  for dotnet); publish the bridge with `-r linux-x64 --self-contained -p:PublishSingleFile=true`.
+- A backup must never hold `save/updates/` (the running update helper): restoring it fails with "Text file busy".
+- Logs the host reads (update.log) are in Sydney time like everything else.

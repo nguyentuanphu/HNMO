@@ -5,11 +5,11 @@
 namespace HNMO.Web.AdminPanel.Pages;
 
 using System.ComponentModel.DataAnnotations;
+using HNMO.Web.AdminPanel.Auth;
+using HNMO.Web.AdminPanel.Properties;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
-using HNMO.Web.AdminPanel.Auth;
-using HNMO.Web.AdminPanel.Properties;
 
 /// <summary>
 /// The login page of the admin panel.
@@ -55,6 +55,15 @@ public partial class Login : IAsyncDisposable
 
     [Inject]
     private AdminLoginService LoginService { get; set; } = null!;
+
+    [Inject]
+    private Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor { get; set; } = null!;
+
+    /// <summary>Gets a value indicating whether the page was opened from afar (through the website), not on the host computer.</summary>
+    private bool IsFromAfar => !Services.HostComputerRequest.IsFromHostComputer(this.HttpContextAccessor.HttpContext);
+
+    /// <summary>Gets this browser's trusted-browser cookie, if it has one (owner, 2026-11-21).</summary>
+    private string? TrustedBrowserCookie => this.HttpContextAccessor.HttpContext?.Request.Cookies[TrustedBrowserService.CookieName];
 
     [Inject]
     private AdminAuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
@@ -111,7 +120,7 @@ public partial class Login : IAsyncDisposable
         try
         {
             var result = await this.LoginService
-                .CheckPasswordAsync(this._passwordInput.LoginName, this._passwordInput.Password, this._passwordInput.RememberMe)
+                .CheckPasswordAsync(this._passwordInput.LoginName, this._passwordInput.Password, this._passwordInput.RememberMe, this.IsFromAfar, this.TrustedBrowserCookie)
                 .ConfigureAwait(true);
             this._passwordInput.Password = string.Empty;
 
@@ -122,6 +131,11 @@ public partial class Login : IAsyncDisposable
                     break;
                 case AdminLoginStatus.LockedOut:
                     this._errorMessage = Resources.AccountLockedOut;
+                    break;
+                case AdminLoginStatus.TwoFactorSetupRequired:
+                    this._errorMessage = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi"
+                        ? "Đăng nhập từ xa cần mã 6 số. Hãy bật mã xác thực cho tài khoản này trên máy chủ trước (Bảo mật tài khoản), rồi đăng nhập lại."
+                        : "Signing in from afar needs the 6-digit code. Set up the authenticator for this user on the host computer first (Account security), then sign in again.";
                     break;
                 case AdminLoginStatus.Succeeded:
                     await this.CompleteLoginAsync(result).ConfigureAwait(true);
@@ -149,7 +163,7 @@ public partial class Login : IAsyncDisposable
         try
         {
             var result = await this.LoginService
-                .CheckTwoFactorAsync(this._twoFactorInput.Code, this._twoFactorInput.UseRecoveryCode)
+                .CheckTwoFactorAsync(this._twoFactorInput.Code, this._twoFactorInput.UseRecoveryCode, this._twoFactorInput.TrustBrowser)
                 .ConfigureAwait(true);
             this._twoFactorInput.Code = string.Empty;
 
@@ -244,5 +258,7 @@ public partial class Login : IAsyncDisposable
         public string Code { get; set; } = string.Empty;
 
         public bool UseRecoveryCode { get; set; }
+
+        public bool TrustBrowser { get; set; } = true;
     }
 }

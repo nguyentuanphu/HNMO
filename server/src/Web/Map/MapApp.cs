@@ -5,11 +5,11 @@
 namespace HNMO.Web.Map;
 
 using System.Threading;
+using HNMO.Web.Map.Map;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using HNMO.Web.Map.Map;
 
 /// <summary>
 /// The admin panel host class which provides a web server over ASP.NET Core Kestrel.

@@ -4,10 +4,10 @@
 
 namespace HNMO.Persistence.EntityFramework;
 
+using HNMO.Persistence.EntityFramework.Model;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
-using HNMO.Persistence.EntityFramework.Model;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure.Internal;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Migrations;
 

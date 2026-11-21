@@ -35,6 +35,14 @@ public interface IPlayerContext : IContext
     ValueTask<bool> CanSaveLetterAsync(LetterHeader letterHeader, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Gets the number of letters in the mailbox of a character, to refuse a letter to a full mailbox.
+    /// </summary>
+    /// <param name="receiverName">The name of the character.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The number of letters; 0 if the context can't tell.</returns>
+    ValueTask<int> GetLetterCountAsync(string receiverName, CancellationToken cancellationToken = default) => ValueTask.FromResult(0);
+
+    /// <summary>
     /// Authenticates the account by login name and password, returning minimal account state.
     /// This is a lightweight alternative to <see cref="GetAccountByLoginNameAsync(string, string, CancellationToken)"/>
     /// that avoids loading the full account data.
@@ -181,6 +189,16 @@ public interface IPlayerContext : IContext
         Guid accountId,
         int maximumCount,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets one bounded page of an account's complete retained coin history.
+    /// </summary>
+    /// <param name="accountId">The authenticated account identifier.</param>
+    /// <param name="offset">The number of older entries to skip.</param>
+    /// <param name="maximumCount">The page size, between one and 101.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The entries, newest first with a stable identifier tie-breaker.</returns>
+    ValueTask<IReadOnlyList<CashShopCoinGrant>> GetCashShopCoinHistoryAsync(Guid accountId, int offset, int maximumCount, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Gets the grant of cash shop coins with the specified reference.

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ConnectionSettings xmlns="https://github.com/nguyentuanphu/HNMO/ConnectionSettings">
+<ConnectionSettings xmlns="urn:hnmo:connection-settings">
   <Connections>
     <Connection>
       <!-- The user role of this context should have rights to create/update a database and user roles. -->

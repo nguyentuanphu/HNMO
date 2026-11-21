@@ -1,10 +1,15 @@
-﻿@using HNMO.Web.AdminPanel.Properties
+@using System.Globalization
+@using Microsoft.Extensions.DependencyInjection
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
+@using HNMO.Web.AdminPanel.Properties
+@using HNMO.Web.AdminPanel.Services
 @using HNMO.Web.Shared.Services
 @using Microsoft.Extensions.Options
 
 @inherits LayoutComponentBase
 @inject IOptions<AdminPanelAuthOptions> AuthOptions
 @inject NavigationManager NavigationManager
+@inject IServiceProvider ServiceProvider
 
 @code {
     [CascadingParameter]
@@ -14,6 +19,22 @@
     private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
 
     private bool _isTwoFactorSetupPending;
+
+    private string SeasonName => HNMO.Interfaces.HnmoSeasonInstance.Current switch
+    {
+        HNMO.Interfaces.HnmoSeasonInstance.SeasonNine => Resources.SeasonNineButton,
+        HNMO.Interfaces.HnmoSeasonInstance.Arena => Resources.ArenaButton,
+        _ => Resources.SeasonSixButton,
+    };
+    private AdminNavigationPreferences? _prefs;
+
+    private AdminNavigationPreferences Preferences =>
+        this._prefs ??= this.ServiceProvider.GetService<AdminNavigationPreferences>() ?? new AdminNavigationPreferences();
+
+    private string CurrentRouteKey =>
+        AdminNavigationPreferences.NormalizeRoute(this.NavigationManager.ToBaseRelativePath(this.NavigationManager.Uri));
+
+    private AdminNavEntry? CurrentNavEntry => AdminNavCatalog.FindByRoute(this.CurrentRouteKey);
 
     private bool IsDarkTheme => string.Equals(
         this.HttpContext?.Request.Cookies[ThemeController.CookieName],
@@ -25,7 +46,13 @@
     {
         await base.OnParametersSetAsync();
         this._isTwoFactorSetupPending = await this.IsTwoFactorSetupPendingAsync();
+        this.Preferences.RecordVisit(this.CurrentRouteKey);
     }
+
+    private static string L(string en, string vi) =>
+        CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("vi", StringComparison.OrdinalIgnoreCase) ? vi : en;
+
+    private void ToggleFavouriteCurrent() => this.Preferences.ToggleFavourite(this.CurrentRouteKey);
 
     /// <summary>
     /// Determines whether the signed in user still has to set its second factor up.
@@ -64,6 +91,9 @@
         <header class="main-header navbar navbar-expand border-bottom">
             <div class="container-fluid px-4">
                 <div class="header-content d-flex align-items-center w-100">
+                    @* Which season this panel sets up: each season has its own admin panel (seasons plan, step 2). *@
+                    <a href="/" class="hn-season-badge hn-season-@HNMO.Interfaces.HnmoSeasonInstance.Current me-3" id="season-badge"
+                       title="@string.Format(Resources.SeasonBadgeTitle, this.SeasonName)">@this.SeasonName</a>
                     <div class="header-search flex-grow-1">
                         <ConfigurationSearch />
                     </div>
@@ -76,30 +106,95 @@
         </header>
 
         <div class="breadcrumb-bar px-4 py-3">
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center justify-content-between gap-2 w-100">
                 <BreadcrumbNavigation />
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button"
+                            id="toggle-favourite-page"
+                            class="btn btn-sm @(this.Preferences.IsFavourite(this.CurrentRouteKey) ? "btn-warning" : "btn-outline-secondary")"
+                            title="@L("Pin or unpin this page in Favourites", "Ghim hoặc bỏ ghim trang này vào Yêu thích")"
+                            @onclick="this.ToggleFavouriteCurrent">
+                        <span class="oi oi-star" aria-hidden="true"></span>
+                    </button>
+                    <a class="btn btn-sm btn-outline-info" href="admin-guide" title="@L("Open searchable Admin Guide & recipes", "Mở Cẩm nang quản trị")">
+                        <span class="oi oi-book" aria-hidden="true"></span>
+                    </a>
+                </div>
             </div>
         </div>
 
         <ToastContainer />
 
         <article class="content px-4 py-3">
+            @if (HNMO.GameLogic.DeveloperHub.ReadState().GraceStartedUtc is { } graceStarted)
+            {
+                var graceEnds = graceStarted.AddDays(HNMO.GameLogic.DeveloperHub.GraceDays);
+                var graceOver = DateTime.UtcNow >= graceEnds;
+                var startedText = graceStarted.ToLocalTime().ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+                var endsText = graceEnds.ToLocalTime().ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+                <div class="alert @(graceOver ? "alert-danger" : "alert-warning")" role="alert" id="licence-grace-banner">
+                    @if (graceOver)
+                    {
+                        @L($"More than {HNMO.GameLogic.LicensedPlayerLimit.Maximum} players were in the game at once ({startedText}); the week of grace ended {endsText}, so at most {HNMO.GameLogic.LicensedPlayerLimit.Maximum} players can play at once now. Get a licence from the HNMO developer to raise it.", $"Đã có hơn {HNMO.GameLogic.LicensedPlayerLimit.Maximum} người chơi cùng lúc ({startedText}); tuần ân hạn đã hết lúc {endsText}, nên bây giờ chỉ tối đa {HNMO.GameLogic.LicensedPlayerLimit.Maximum} người chơi cùng lúc. Hãy xin giấy phép từ nhà phát triển HNMO để nâng giới hạn.")
+                    }
+                    else
+                    {
+                        @L($"More than {HNMO.GameLogic.LicensedPlayerLimit.Maximum} players were in the game at once ({startedText}). They may keep playing until {endsText}; then the server goes back to {HNMO.GameLogic.LicensedPlayerLimit.Maximum} players at once unless a licence is in place. Pay for a licence from the HNMO developer to keep them.", $"Đã có hơn {HNMO.GameLogic.LicensedPlayerLimit.Maximum} người chơi cùng lúc ({startedText}). Họ vẫn chơi được đến {endsText}; sau đó server quay về tối đa {HNMO.GameLogic.LicensedPlayerLimit.Maximum} người cùng lúc nếu chưa có giấy phép. Hãy thanh toán giấy phép với nhà phát triển HNMO để giữ họ.")
+                    }
+                    <a class="btn btn-sm btn-light ms-2" href="host-settings#license-card">@L("Licence", "Giấy phép")</a>
+                </div>
+            }
             @if (this._isTwoFactorSetupPending)
             {
                 <div class="alert alert-warning" role="alert">
                     <h2 class="h5">@Resources.TwoFactorRequiredTitle</h2>
                     <p class="mb-2">@Resources.TwoFactorRequiredDescription</p>
-                    <a class="btn btn-primary btn-sm" href="account/security">@Resources.SetUpAuthenticator</a>
+                    <a title="@HelpResources.PageHelpHintNavigate" class="btn btn-primary btn-sm" href="account/security">@Resources.SetUpAuthenticator</a>
                 </div>
             }
             else
             {
                 @Body
             }
+
+            @if (this.CurrentNavEntry is { RelatedRoutes.Length: > 0 } currentEntry)
+            {
+                <aside class="mt-4 pt-3 border-top d-flex flex-wrap align-items-center gap-2" id="related-pages-bar">
+                    <span class="small fw-semibold text-body-secondary">@L("Related pages:", "Trang liên quan:")</span>
+                    @foreach (var rel in currentEntry.RelatedRoutes)
+                    {
+                        if (AdminNavCatalog.FindByRoute(rel) is { } relEntry)
+                        {
+                            <a class="btn btn-sm btn-outline-secondary"
+                               href="@(string.IsNullOrEmpty(relEntry.Route) ? "" : relEntry.Route)"
+                               title="@relEntry.LocalizedDescription">
+                                <span class="oi @relEntry.Icon me-1" aria-hidden="true"></span>@relEntry.LocalizedTitle
+                            </a>
+                        }
+                    }
+                </aside>
+            }
         </article>
     </main>
     <CreationPanel />
 </div>
+
+<script>
+(() => {
+  if (window.__hnmoAdminCtrlKBound) return;
+  window.__hnmoAdminCtrlKBound = true;
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      const input = document.getElementById('admin-global-search-input');
+      if (input) {
+        e.preventDefault();
+        input.focus();
+        input.select?.();
+      }
+    }
+  });
+})();
+</script>
 
 <div id="blazor-error-ui" data-nosnippet>
   @Resources.UnhandledErrorOccurred

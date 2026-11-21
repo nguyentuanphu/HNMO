@@ -44,6 +44,12 @@ public class BuyNpcItemAction
             return;
         }
 
+        if (await OutlawNpcShopRule.RefuseAsync(player).ConfigureAwait(false))
+        {
+            await player.InvokeViewPlugInAsync<IBuyNpcItemFailedPlugIn>(p => p.BuyNpcItemFailedAsync()).ConfigureAwait(false);
+            return;
+        }
+
         var storeItem = npcDefinition.MerchantStore.Items.FirstOrDefault(i => i.ItemSlot == slot);
         if (storeItem is null || storeItem.Definition is { IsActive: false })
         {
@@ -85,6 +91,7 @@ public class BuyNpcItemAction
             // be sent on actual failures; the durability update tells the client the new stack size.
             await player.InvokeViewPlugInAsync<INpcItemBoughtPlugIn>(p => p.NpcItemBoughtAsync(targetItem)).ConfigureAwait(false);
             await player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(targetItem, false)).ConfigureAwait(false);
+            PlugIns.ActivityLog.ActivityLogPlugIn.Get(player.GameContext)?.RecordNpcBuy(player, targetItem, merchant.Definition?.Designation ?? string.Empty, price);
             if (purchasePlugIns is not null)
             {
                 await purchasePlugIns.AfterPurchaseAsync(player, merchant, purchase, targetItem).ConfigureAwait(false);
@@ -113,6 +120,7 @@ public class BuyNpcItemAction
             await player.InvokeViewPlugInAsync<INpcItemBoughtPlugIn>(p => p.NpcItemBoughtAsync(newItem)).ConfigureAwait(false);
             await player.Inventory.AddItemAsync(newItem).ConfigureAwait(false);
             player.GameContext.PlugInManager.GetPlugInPoint<IItemBoughtFromMerchantPlugIn>()?.ItemBought(player, newItem, storeItem, merchant);
+            PlugIns.ActivityLog.ActivityLogPlugIn.Get(player.GameContext)?.RecordNpcBuy(player, newItem, merchant.Definition?.Designation ?? string.Empty, price);
             if (purchasePlugIns is not null)
             {
                 await purchasePlugIns.AfterPurchaseAsync(player, merchant, purchase, newItem).ConfigureAwait(false);

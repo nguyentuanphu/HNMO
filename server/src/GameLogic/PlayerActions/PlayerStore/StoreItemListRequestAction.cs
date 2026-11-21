@@ -21,6 +21,12 @@ public class StoreItemListRequestAction
     /// <param name="requestedPlayer">The requested player.</param>
     public async ValueTask RequestStoreItemListAsync(Player player, Player requestedPlayer)
     {
+        if (!await BuyRequestAction.SeesTheStoreAsync(player, requestedPlayer).ConfigureAwait(false))
+        {
+            await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.PlayerStoreNotOpen)).ConfigureAwait(false);
+            return;
+        }
+
         if (!(requestedPlayer.ShopStorage?.StoreOpen ?? false))
         {
             await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.PlayerStoreNotOpen)).ConfigureAwait(false);

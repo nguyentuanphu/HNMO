@@ -6,15 +6,15 @@ namespace HNMO.Web.Shared.Components.TerrainEditor;
 
 using System.IO;
 using BlazorInputFile;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
-using Microsoft.JSInterop;
 using HNMO.DataModel;
 using HNMO.DataModel.Configuration;
 using HNMO.Persistence;
 using HNMO.Web.Shared.Components.MapEditor;
 using HNMO.Web.Shared.Components.Toast;
 using HNMO.Web.Shared.Properties;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
+using Microsoft.JSInterop;
 
 /// <summary>
 /// A graphical editor for the terrains of a <see cref="GameMapDefinition"/>, which are its

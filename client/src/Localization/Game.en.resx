@@ -329,7 +329,7 @@
     <value>F11 - Reset Camera View</value>
   </data>
   <data name="Home - Toggle MU Helper" xml:space="preserve">
-    <value>Home - Toggle MU Helper</value>
+    <value>Home - Toggle Auto Play</value>
   </data>
   <data name="Enter: Chatting Mode" xml:space="preserve">
     <value>Enter: Chatting Mode</value>
@@ -8692,7 +8692,7 @@
     <value>Attack Together</value>
   </data>
   <data name="Official MU Helper" xml:space="preserve">
-    <value>Official MU Helper</value>
+    <value>Auto Play</value>
   </data>
   <data name="Used Extension function" xml:space="preserve">
     <value>Used Extension function</value>
@@ -8758,13 +8758,13 @@
     <value>More than 5 mobs</value>
   </data>
   <data name="Official MU Helper Setting" xml:space="preserve">
-    <value>Official MU Helper Setting</value>
+    <value>Auto Play Setting</value>
   </data>
   <data name="Start Official MU Helper" xml:space="preserve">
-    <value>Start Official MU Helper</value>
+    <value>Start Auto Play</value>
   </data>
   <data name="Stop Official MU Helper" xml:space="preserve">
-    <value>Stop Official MU Helper</value>
+    <value>Stop Auto Play</value>
   </data>
   <data name="InTheCaseOfDeregisteringBasic" xml:space="preserve">
     <value>In the case of deregistering Basic skill and activation skill 1&amp;2, combo skill can't be used.</value>
@@ -8794,34 +8794,34 @@
     <value>There is no selected item</value>
   </data>
   <data name="Any characters under level %d can't run Official MU Helper." xml:space="preserve">
-    <value>Any characters under level %d can't run Official MU Helper.</value>
+    <value>Any characters under level %d can't run Auto Play.</value>
   </data>
   <data name="Official MU Helper only runs in filed" xml:space="preserve">
-    <value>Official MU Helper only runs in filed</value>
+    <value>Auto Play only runs in filed</value>
   </data>
   <data name="In order to run Official MU Helper, please close Inventory window" xml:space="preserve">
-    <value>In order to run Official MU Helper, please close Inventory window</value>
+    <value>In order to run Auto Play, please close Inventory window</value>
   </data>
   <data name="In order to run Official MU Helper, please close MU Guide window" xml:space="preserve">
-    <value>In order to run Official MU Helper, please close MU Guide window</value>
+    <value>In order to run Auto Play, please close MU Guide window</value>
   </data>
   <data name="InOrderToRunOfficialMU" xml:space="preserve">
-    <value>In order to run Official MU Helper properly, please register skills (Except Fairy)</value>
+    <value>In order to run Auto Play properly, please register skills (Except Fairy)</value>
   </data>
   <data name="Official MU Helper is running." xml:space="preserve">
-    <value>Official MU Helper is running.</value>
+    <value>Auto Play is running.</value>
   </data>
   <data name="Official MU Helper is closed" xml:space="preserve">
-    <value>Official MU Helper is closed</value>
+    <value>Auto Play is closed</value>
   </data>
   <data name="Official MU Helper Setting has been saved." xml:space="preserve">
-    <value>Official MU Helper Setting has been saved.</value>
+    <value>Auto Play Setting has been saved.</value>
   </data>
   <data name="Official MU Helper can't be implemented in this region." xml:space="preserve">
-    <value>Official MU Helper can't be implemented in this region.</value>
+    <value>Auto Play can't be implemented in this region.</value>
   </data>
   <data name="CertainAmountOfZenIsSpent" xml:space="preserve">
-    <value>Certain amount of zen is spent every 5 minutes in implementing Official MU Helper</value>
+    <value>Certain amount of zen is spent every 5 minutes in implementing Auto Play</value>
   </data>
   <data name="Spent Time %d Minute(s)/" xml:space="preserve">
     <value>Spent Time %d Minute(s)/</value>
@@ -8833,16 +8833,16 @@
     <value>Spent Time %d hour(s) %d Minute(s)/ Spent Zen  %d Stage / Cost %d zen(s)</value>
   </data>
   <data name="%d zen(s) have been spent in implementing Official MU Helper" xml:space="preserve">
-    <value>%d zen(s) have been spent in implementing Official MU Helper</value>
+    <value>%d zen(s) have been spent in implementing Auto Play</value>
   </data>
   <data name="Zen is not sufficient to run Official MU Helper" xml:space="preserve">
-    <value>Zen is not sufficient to run Official MU Helper</value>
+    <value>Zen is not sufficient to run Auto Play</value>
   </data>
   <data name="In order to run Official MU Helper, please install Add-on first" xml:space="preserve">
-    <value>In order to run Official MU Helper, please install Add-on first</value>
+    <value>In order to run Auto Play, please install Add-on first</value>
   </data>
   <data name="Official MU Helper is closed due to the excess of %d hour(s)" xml:space="preserve">
-    <value>Official MU Helper is closed due to the excess of %d hour(s)</value>
+    <value>Auto Play is closed due to the excess of %d hour(s)</value>
   </data>
   <data name="Other Settings" xml:space="preserve">
     <value>Other Settings</value>

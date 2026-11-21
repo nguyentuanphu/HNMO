@@ -5,8 +5,8 @@
 namespace HNMO.GameLogic.TestActors;
 
 using System.Threading;
-using Microsoft.Extensions.Logging;
 using HNMO.GameLogic.Offline;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The actors of this process.

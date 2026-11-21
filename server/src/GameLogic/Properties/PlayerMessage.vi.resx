@@ -57,20 +57,26 @@
   <data name="AwardMoneyFailByFullInventory" xml:space="preserve">
     <value>Không thể nhận zen thưởng, hành trang đã đầy.</value>
   </data>
+  <data name="TradeMoneyExceedsMaximum" xml:space="preserve">
+    <value>Giao dịch đã bị hủy: một người sẽ mang nhiều zen hơn mức hành trang cho phép.</value>
+  </data>
   <data name="CantEnterEventWithItem" xml:space="preserve">
     <value>Không thể vào sự kiện khi đang mặc '{0}'.</value>
   </data>
   <data name="MuHelperAlreadyRunning" xml:space="preserve">
-    <value>MU Helper đang chạy rồi.</value>
+    <value>Tự động chơi đang chạy rồi.</value>
   </data>
   <data name="MuHelperMinimumLevel" xml:space="preserve">
-    <value>MU Helper dùng được từ cấp {0}.</value>
+    <value>Tự động chơi dùng được từ cấp {0}.</value>
+  </data>
+  <data name="GuildOwnsCastleCantDisband" xml:space="preserve">
+    <value>Guild của bạn đang giữ thành nên không thể giải tán.</value>
   </data>
   <data name="MuHelperMaximumLevel" xml:space="preserve">
-    <value>MU Helper không dùng được sau cấp {0}.</value>
+    <value>Tự động chơi không dùng được sau cấp {0}.</value>
   </data>
   <data name="MuHelperRequiresMoney" xml:space="preserve">
-    <value>MU Helper cần {0} zen.</value>
+    <value>Tự động chơi cần {0} zen.</value>
   </data>
   <data name="AlreadyInDuel" xml:space="preserve">
     <value>Bạn đang trong một trận đấu tay đôi.</value>
@@ -435,6 +441,9 @@
   <data name="MiniGameCharacterLevelTooHighFormat" xml:space="preserve">
     <value>Cấp của bạn quá cao. Chỉ tối đa cấp {0} mới vào được sự kiện này.</value>
   </data>
+  <data name="PlayerKillersCantUseNpcShops" xml:space="preserve">
+    <value>Sát thủ từ cấp PK 2 trở lên không được dùng cửa hàng NPC.</value>
+  </data>
   <data name="MiniGameTicketRequired" xml:space="preserve">
     <value>Bạn cần vé để vào sự kiện này.</value>
   </data>
@@ -547,10 +556,10 @@
     <value>Rất tiếc, đã có lỗi khi gửi thư.</value>
   </data>
   <data name="MuHelperIsDisabled" xml:space="preserve">
-    <value>MU Helper đã bị tắt</value>
+    <value>Tự động chơi đã bị tắt</value>
   </data>
   <data name="MuHelperCantHandleStatus" xml:space="preserve">
-    <value>MU Helper không xử lý được trạng thái: {0}</value>
+    <value>Tự động chơi không xử lý được trạng thái: {0}</value>
   </data>
   <data name="PartyNotPossibleDuringEvent" xml:space="preserve">
     <value>Không thể lập tổ đội trong sự kiện này.</value>
@@ -706,7 +715,7 @@
     <value>Chưa chọn nhân vật.</value>
   </data>
   <data name="OfflineLevelingMuHelperNotRunning" xml:space="preserve">
-    <value>MU Helper phải đang chạy để bắt đầu luyện cấp offline.</value>
+    <value>Tự động chơi phải đang chạy để bắt đầu luyện cấp offline.</value>
   </data>
   <data name="StatResetNotEnabled" xml:space="preserve">
     <value>Chưa bật đặt lại chỉ số.</value>
@@ -1074,5 +1083,12 @@ Mở rộng hành trang: {18}</value>
   </data>
   <data name="ChatSpamWarning" xml:space="preserve">
     <value>Vui lòng không spam.</value>
+  </data>
+  <data name="ShopCurrencyWCoinC" xml:space="preserve"><value>WCoin (C)</value></data>
+  <data name="ShopCurrencyWCoinP" xml:space="preserve"><value>WCoin (P)</value></data>
+  <data name="VipActiveNotice" xml:space="preserve"><value>VIP {0} có hiệu lực đến {1} (giờ Sydney).</value></data>
+  <data name="VipExpiringNotice" xml:space="preserve"><value>VIP {0} sẽ hết hạn trong vòng một ngày, lúc {1} (giờ Sydney). Gia hạn tại cửa sổ VIP (Alt+U) hoặc trang tài khoản.</value></data>
+  <data name="AtlansNoRiding" xml:space="preserve">
+    <value>Không thể vào Atlans khi cưỡi Uniria hoặc Dinorant.</value>
   </data>
 </root>

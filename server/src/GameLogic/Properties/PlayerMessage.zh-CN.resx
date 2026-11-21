@@ -18,4 +18,7 @@
   <data name="SkillLearned" xml:space="preserve">
     <value>你学会了 {0}。</value>
   </data>
+  <data name="TradeMoneyExceedsMaximum" xml:space="preserve">
+    <value>交易已取消：一方的金币将超过背包上限。</value>
+  </data>
 </root>

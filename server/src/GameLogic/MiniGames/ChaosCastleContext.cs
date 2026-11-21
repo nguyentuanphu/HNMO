@@ -17,7 +17,7 @@ using Nito.Disposables.Internals;
 /// </summary>
 /// <remarks>
 /// A chaos castle event works like that:
-///   First, one to 70 players enter the chaos castle.
+///   First, two (see <see cref="MinimumPlayerCount"/>) to 70 players enter the chaos castle.
 ///   The map starts as a safezone.
 ///   Then the event starts:
 ///     * The map terrain is redefined of not being a safezone anymore.
@@ -39,6 +39,11 @@ using Nito.Disposables.Internals;
 /// </remarks>
 public sealed class ChaosCastleContext : MiniGameContext
 {
+    /// <summary>
+    /// The minimum player count to start a round, when the mini game definition doesn't configure one.
+    /// </summary>
+    public const int DefaultMinimumPlayerCount = 2;
+
     private const int MaxObjectsCount = 100;
 
     private const int MonsterKillPoints = 2;
@@ -88,8 +93,12 @@ public sealed class ChaosCastleContext : MiniGameContext
     /// <inheritdoc />
     protected override TimeSpan RemainingTime => this._remainingTime;
 
-    /// <inheritdoc />
-    protected override int MinimumPlayerCount => 1;
+    /// <summary>
+    /// Gets the minimum player count to start the game. It's <see cref="MiniGameDefinition.MinimumPlayerCount"/>
+    /// when the host configured it (greater than 0); otherwise <see cref="DefaultMinimumPlayerCount"/>, like the
+    /// Season 6/9 server suites. With fewer players, the round doesn't start and the entrance fee is refunded.
+    /// </summary>
+    protected override int MinimumPlayerCount => this.Definition.MinimumPlayerCount > 0 ? this.Definition.MinimumPlayerCount : DefaultMinimumPlayerCount;
 
     /// <inheritdoc />
     public override bool IsItemAllowedToEquip(Item item)

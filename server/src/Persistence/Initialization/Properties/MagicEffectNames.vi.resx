@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="AlcoholEffect" xml:space="preserve"><value>Tác dụng của rượu</value></data>
+  <data name="HealEffect" xml:space="preserve"><value>Hiệu ứng chữa lành</value></data>
+  <data name="GreaterDefenseBuffSkillEffect" xml:space="preserve"><value>Hiệu ứng kỹ năng Buff phòng thủ lớn hơn</value></data>
+  <data name="GreaterDamageBuffSkillEffect" xml:space="preserve"><value>Hiệu ứng kỹ năng Buff sát thương lớn hơn</value></data>
+  <data name="ShieldDefenseSkillEffect" xml:space="preserve"><value>Hiệu ứng kỹ năng phòng thủ khiên</value></data>
+  <data name="Iced" xml:space="preserve"><value>đá</value></data>
+  <data name="Poisoned" xml:space="preserve"><value>Bị đầu độc</value></data>
+  <data name="Cold" xml:space="preserve"><value>tot</value></data>
+  <data name="InfinityArrowSkillEffect" xml:space="preserve"><value>Hiệu ứng kỹ năng mũi tên vô cực</value></data>
+  <data name="ElfSoldierBuff" xml:space="preserve"><value>Người lính yêu tinh được hỗ trợ</value></data>
+  <data name="CastleSiegeAttack3" xml:space="preserve"><value>Cuộc tấn công bao vây lâu đài3</value></data>
+  <data name="CastleSiegeAttack2" xml:space="preserve"><value>Cuộc tấn công bao vây lâu đài2</value></data>
+  <data name="CastleSiegeAttack1" xml:space="preserve"><value>Cuộc tấn công bao vây lâu đài1</value></data>
+  <data name="CastleSiegeDefense" xml:space="preserve"><value>Phòng thủ bao vây lâu đài</value></data>
+  <data name="IncreaseBlockMasterySkillEffect" xml:space="preserve"><value>Tăng hiệu ứng kỹ năng làm chủ khối</value></data>
+  <data name="IncreaseBlockPowerUpSkillEffect" xml:space="preserve"><value>Tăng hiệu ứng kỹ năng tăng sức mạnh khối</value></data>
+  <data name="IncreaseHealthStrengthenerSkillEffect" xml:space="preserve"><value>Tăng hiệu ứng kỹ năng tăng cường sức khỏe</value></data>
+  <data name="WizardryEnhanceMasterySkillEffect" xml:space="preserve"><value>Hiệu ứng kỹ năng nâng cao khả năng làm chủ thuật sĩ</value></data>
+  <data name="WizardryEnhanceStrengthenerSkillEffect" xml:space="preserve"><value>Hiệu ứng kỹ năng tăng cường pháp thuật</value></data>
+  <data name="LifeSwellProficiencySkillEffect" xml:space="preserve"><value>Hiệu ứng kỹ năng thành thạo Life Swell</value></data>
+  <data name="CriticalDamageIncreaseMasterySkillEffect" xml:space="preserve"><value>Sát thương chí mạng Tăng hiệu ứng kỹ năng thông thạo</value></data>
+  <data name="StunEffect" xml:space="preserve"><value>Hiệu ứng choáng</value></data>
+  <data name="RequiemEffect" xml:space="preserve"><value>Hiệu ứng cầu hồn</value></data>
+  <data name="ExplosionEffect" xml:space="preserve"><value>Hiệu ứng nổ</value></data>
+  <data name="DecreaseBlockEffectPhoenixShot" xml:space="preserve"><value>Giảm hiệu ứng chặn (Phoenix Shot)</value></data>
+  <data name="DefenseReductionEffectBeastUppercut" xml:space="preserve"><value>Hiệu ứng giảm phòng thủ (Beast Uppercut)</value></data>
+  <data name="ReflectionEffect" xml:space="preserve"><value>Hiệu ứng phản chiếu</value></data>
+  <data name="InnovationEffect" xml:space="preserve"><value>Hiệu ứng đổi mới</value></data>
+  <data name="WeaknessEffectSummoner" xml:space="preserve"><value>Hiệu ứng điểm yếu (Thuật sư)</value></data>
+  <data name="SleepEffect" xml:space="preserve"><value>Hiệu ứng giấc ngủ</value></data>
+  <data name="WeaknessEffectKillingBlow" xml:space="preserve"><value>Hiệu ứng điểm yếu (Đòn kết liễu)</value></data>
+  <data name="BerserkerBuffSkillEffect" xml:space="preserve"><value>Hiệu ứng kỹ năng của Berserker Buff</value></data>
+  <data name="PotionOfBlessEffect" xml:space="preserve"><value>Thuốc có tác dụng ban phước</value></data>
+  <data name="PotionOfSoulEffect" xml:space="preserve"><value>Thuốc hiệu ứng linh hồn</value></data>
+  <data name="WizEnhanceSkillEffect" xml:space="preserve"><value>Hiệu ứng kỹ năng nâng cao Wiz</value></data>
+  <data name="IncreaseBlockSkillEffect" xml:space="preserve"><value>Tăng hiệu ứng kỹ năng chặn</value></data>
+  <data name="IncreaseHealthSkillEffect" xml:space="preserve"><value>Tăng hiệu ứng kỹ năng sức khỏe</value></data>
+  <data name="IgnoreDefenseSkillEffect" xml:space="preserve"><value>Bỏ qua hiệu ứng kỹ năng phòng thủ</value></data>
+  <data name="Invisible" xml:space="preserve"><value>Ẩn</value></data>
+  <data name="DefenseReductionEffectFireSlash" xml:space="preserve"><value>Hiệu ứng giảm phòng thủ (Chém lửa)</value></data>
+  <data name="ShieldRecoverEffect" xml:space="preserve"><value>Hiệu ứng phục hồi khiên</value></data>
+  <data name="CriticalDamageIncreaseSkillEffect" xml:space="preserve"><value>Hiệu ứng kỹ năng tăng sát thương chí mạng</value></data>
+  <data name="LifeSwellSkillEffect" xml:space="preserve"><value>Hiệu ứng kỹ năng tăng sức sống</value></data>
+  <data name="SoulBarrier" xml:space="preserve"><value>Rào cản linh hồn</value></data>
+  <data name="Freeze" xml:space="preserve"><value>đóng băng</value></data>
+  <data name="IllusionTempleOrderOfProtection" xml:space="preserve"><value>Đền ảo ảnh - Lệnh bảo vệ</value></data>
+  <data name="IllusionTempleRestraint" xml:space="preserve"><value>Đền ảo ảnh - Kiềm chế</value></data>
+  <data name="IronGuardEffect" xml:space="preserve"><value>Bảo vệ sắt</value></data>
+  <data name="ManaShieldEffect" xml:space="preserve"><value>Khiên mana</value></data>
+  <data name="ForestBlessingEffect" xml:space="preserve"><value>Phước lành rừng</value></data>
+  <data name="TwinPowerEffect" xml:space="preserve"><value>Sức mạnh đôi</value></data>
+  <data name="WarCommandEffect" xml:space="preserve"><value>Bộ chỉ huy chiến tranh</value></data>
+  <data name="IronBodyEffect" xml:space="preserve"><value>Thân sắt</value></data>
+  <data name="WeakeningCurseEffect" xml:space="preserve"><value>Lời nguyền suy yếu</value></data>
+</root>

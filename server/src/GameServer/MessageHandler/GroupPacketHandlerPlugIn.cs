@@ -5,9 +5,9 @@
 namespace HNMO.GameServer.MessageHandler;
 
 using System.Reflection;
-using Microsoft.Extensions.Logging;
 using HNMO.GameLogic;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// An abstract base class for a packet handler which has sub-packet handlers, implemented as
@@ -33,7 +33,7 @@ internal abstract class GroupPacketHandlerPlugIn : PacketHandlerPlugInContainer<
     public abstract bool IsEncryptionExpected { get; }
 
     /// <inheritdoc />
-    public async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
+    public virtual async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
         var subTypeIndex = packet.Span[0] % 2 == 1 ? 3 : 4;
         var subPacketType = packet.Span[subTypeIndex];

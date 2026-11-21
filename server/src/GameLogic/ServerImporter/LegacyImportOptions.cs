@@ -1,0 +1,61 @@
+// <copyright file="LegacyImportOptions.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.GameLogic.ServerImporter;
+
+using System;
+using System.Collections.Generic;
+
+/// <summary>
+/// Options controlling a dry-run preview or applied import from a local legacy server folder and optional MSSQL database.
+/// </summary>
+public sealed class LegacyImportOptions
+{
+    /// <summary>Gets or sets the local folder path containing legacy server configs (<c>Data/</c> and/or structured XML config folders).</summary>
+    public string FolderPath { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets an optional local MSSQL connection string (left blank to skip database entity import).</summary>
+    public string MssqlConnectionString { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets a value indicating whether EXP and drop rate settings should be imported.</summary>
+    public bool ImportRates { get; set; } = true;
+
+    /// <summary>Gets or sets a value indicating whether custom monster/item drop rules should be imported.</summary>
+    public bool ImportDropLists { get; set; } = true;
+
+    /// <summary>Gets or sets a value indicating whether NPC merchant shop inventories should be imported.</summary>
+    public bool ImportShops { get; set; } = true;
+
+    /// <summary>Gets or sets a value indicating whether event schedules and bonus rate windows should be imported.</summary>
+    public bool ImportEventSchedules { get; set; } = true;
+
+    /// <summary>Gets or sets a value indicating whether Chaos Machine mix success rates should be imported.</summary>
+    public bool ImportChaosMixRates { get; set; } = true;
+
+    /// <summary>Gets or sets a value indicating whether monster/NPC spawn tables should be imported.</summary>
+    public bool ImportMonsterSpawns { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets the time zone the legacy server ran in (IANA id, e.g. "Asia/Ho_Chi_Minh"): the times in its files
+    /// (happy hours, event starts) are in it, and are converted to HNMO's. Empty: the same time zone as HNMO's.
+    /// </summary>
+    public string SourceTimeZone { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the time zone HNMO's events run in (IANA id); the converted times are in it. Empty: Sydney.
+    /// </summary>
+    public string TargetTimeZone { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets a value indicating whether the monsters' stats (MonsterList.xml) should be imported where they differ.</summary>
+    public bool ImportMonsterStats { get; set; } = true;
+
+    /// <summary>Gets or sets a value indicating whether accounts, characters, inventories, vaults, and guilds should be imported from MSSQL.</summary>
+    public bool ImportDatabaseEntities { get; set; }
+
+    /// <summary>Gets or sets how imported account passwords are secured via BCrypt.</summary>
+    public LegacyPasswordMigrationMode PasswordMode { get; set; } = LegacyPasswordMigrationMode.ForceRandomReset;
+
+    /// <summary>Gets or sets the temporary passphrase when <see cref="PasswordMode"/> is <see cref="LegacyPasswordMigrationMode.UseTemporaryPassphrase"/>.</summary>
+    public string TemporaryPassphrase { get; set; } = string.Empty;
+}

@@ -10,8 +10,6 @@
     <Authors>HNMO</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <RepositoryUrl>https://github.com/nguyentuanphu/HNMO/tree/master/src/Network/Packets</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/nguyentuanphu/HNMO</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>HNMO Network Packets</PackageTags>
     <PackageId>HNMO.Network.Packets</PackageId>

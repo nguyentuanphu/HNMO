@@ -46,6 +46,8 @@ export interface OnboardingWindowOptions {
   direction?: (x: number, y: number) => { angle: number; steps: number } | null;
   /** Asks the player to confirm (the game's own dialog). */
   confirm?: (text: string) => Promise<boolean>;
+  /** The hero's name: the guide opens by itself once per character (remembered in this browser). */
+  characterName?: () => string | null;
 }
 
 interface StepLine { id: string; line: string; done: boolean; current: boolean }
@@ -80,6 +82,7 @@ export class OnboardingWindow {
   private lastCurrent: string | null = null;
   private readonly model: OnboardingModel;
   private readonly arrow: HTMLDivElement;
+  private readonly button: HTMLButtonElement;
   private timer: number | null = null;
 
   constructor(private readonly options: OnboardingWindowOptions) {
@@ -111,7 +114,16 @@ export class OnboardingWindow {
     label.className = 'hnmo-guide-label';
     this.arrow.append(pointer, label);
     document.body.append(this.arrow);
+    this.button = document.createElement('button');
+    this.button.type = 'button';
+    this.button.className = 'hnmo-guide-button';
+    this.button.hidden = true;
+    this.button.addEventListener('click', () => this.open());
+    this.button.addEventListener('pointerdown', (event) => event.stopPropagation());
+    document.body.append(this.button);
     window.addEventListener('resize', () => this.place());
+    // The touch HUD (mobileHud.ts) comes and goes with the body's class: the panel moves with it.
+    new MutationObserver(() => this.place()).observe(document.body, { attributes: true, attributeFilter: ['class'] });
     window.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && this.isOpen) { event.preventDefault(); this.close(); }
     });
@@ -140,10 +152,12 @@ export class OnboardingWindow {
     this.doc?.close();
     this.doc = null;
     this.tick();
+    this.updateButton();
   }
 
   open(): void {
     this.wanted = true;
+    this.updateButton();
     this.options.send('HnmoOnboardingRequest', {});
     this.fill();
     this.tick();
@@ -178,10 +192,14 @@ export class OnboardingWindow {
     if (state.kit) this.tellKit(state.kit);
     if (state.event) this.notice(state, previous, state.event);
     this.tellNext(state);
-    // The guide shows itself for a character whose guide runs (once per visit; it can be closed and reopened with Y).
+    // The guide shows itself once for a character whose guide runs (its first time in the world); after that it waits
+    // as a small button with the step (or Y). It used to open on every visit, over the game's own windows.
     if (state.status === 'active' && state.current && !this.autoOpened) {
       this.autoOpened = true;
-      if (!this.wanted) this.open();
+      if (!this.wanted && !this.shownBefore()) {
+        this.rememberShown();
+        this.open();
+      }
     }
     this.fill();
     this.tick();
@@ -244,6 +262,7 @@ export class OnboardingWindow {
           const reward = this.reward(step.reward);
           say(tr('Step done: %s.', this.stepTitle(step)) + (reward ? ` ${reward}` : ''));
         }
+        if (!this.wanted) this.flashButton();
         if (event.type === 'final') {
           const reward = this.reward(state.final);
           say(tr('You finished the new-player guide!') + (reward ? ` ${reward}` : ''));
@@ -330,6 +349,42 @@ export class OnboardingWindow {
     });
     m.has_owed = m.owed.length > 0;
     this.doc?.update();
+    this.updateButton();
+  }
+
+  /** The browser's key for "the guide has opened by itself for this character". */
+  private shownKey(): string | null {
+    const name = this.options.characterName?.();
+    return name ? `hnmo.onboarding.shown.${name}` : null;
+  }
+
+  private shownBefore(): boolean {
+    const key = this.shownKey();
+    if (!key) return false;
+    try { return localStorage.getItem(key) === '1'; } catch { return false; }
+  }
+
+  private rememberShown(): void {
+    const key = this.shownKey();
+    if (!key) return;
+    try { localStorage.setItem(key, '1'); } catch { /* private window: it opens again next time */ }
+  }
+
+  /** The small button the guide waits in while its panel is closed: the step it's at ("Guide 2/10"). */
+  private updateButton(): void {
+    const state = this.state;
+    const running = state?.status === 'active' && !!state.current;
+    this.button.hidden = !running || this.wanted;
+    if (!running || !state) return;
+    this.button.textContent = tr('Guide %d/%d', Math.min(state.done + 1, state.total), state.total);
+    this.button.title = `${tr('New-player guide')} (Y)`;
+  }
+
+  /** A step done while the panel is closed: the button glows for a moment instead of the panel opening. */
+  private flashButton(): void {
+    this.button.classList.remove('hnmo-guide-button-flash');
+    void this.button.offsetWidth;
+    this.button.classList.add('hnmo-guide-button-flash');
   }
 
   /** The arrow towards the current step's NPC or spot, while the panel is open and it's on this map. */
@@ -361,9 +416,47 @@ export class OnboardingWindow {
     const scale = typographyScale();
     Object.assign(doc.host.style, {
       position: 'fixed', left: '0px', top: '0px', width: `${window.innerWidth / scale}px`, height: `${window.innerHeight / scale}px`,
-      transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none', zIndex: '80',
+      transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none', zIndex: '24',
     });
     doc.setScale(scale);
+    this.placeForTouch(doc, scale);
     doc.update();
+  }
+
+  /**
+   * With the touch HUD on (body.hnmo-modern-hud), a compact card on the left under the hero card: at most 260 px wide
+   * and 45% of the height, scrolling inside, clear of the joystick (bottom left) and the fight buttons (bottom right);
+   * its buttons at least 36 px. Without it, the desktop's place (the document's own style) is left as it is.
+   */
+  private placeForTouch(doc: RmlDocument, scale: number): void {
+    const panel = doc.$('#panel');
+    if (!panel) return;
+    const touch = document.body.classList.contains('hnmo-modern-hud');
+    doc.root.classList.toggle('hnmo-onboarding-touch', touch);
+    if (!doc.root.querySelector('style[data-touch]')) {
+      const style = document.createElement('style');
+      style.dataset.touch = '';
+      style.textContent = '.hnmo-onboarding-touch .ob-btn { min-height: var(--ob-touch-36); display: flex; align-items: center; justify-content: center; }'
+        + ' .hnmo-onboarding-touch .ob-scroll { max-height: none; }';
+      doc.root.append(style);
+    }
+    if (!touch) {
+      this.model.positioned = false;
+      for (const key of ['right', 'width', 'maxHeight', 'overflowY', 'pointerEvents'] as const) panel.style[key] = '';
+      return;
+    }
+    const px = (value: number) => `${value / scale}px`;
+    const top = 58;
+    // Above the chat bubble and joystick (bottom left, about 160 px tall), never more than 45% of the screen.
+    const height = Math.max(120, Math.min(window.innerHeight * 0.45, window.innerHeight - top - 160));
+    doc.root.style.setProperty('--ob-touch-36', px(36));
+    // The window shell places its frame by the model (positioned, root_x, root_y), as a dragged window.
+    this.model.positioned = true;
+    this.model.root_x = 8 / scale;
+    this.model.root_y = top / scale;
+    Object.assign(panel.style, {
+      right: 'auto', width: px(Math.min(260, window.innerWidth * 0.42)),
+      maxHeight: px(height), overflowY: 'auto', pointerEvents: 'auto',
+    });
   }
 }

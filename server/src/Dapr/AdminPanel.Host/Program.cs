@@ -2,8 +2,6 @@
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
 using HNMO.AdminPanel.Host;
 using HNMO.Dapr.Common;
 using HNMO.Interfaces;
@@ -16,6 +14,8 @@ using HNMO.Telemetry;
 using HNMO.Web.AdminPanel;
 using HNMO.Web.AdminPanel.Auth;
 using HNMO.Web.AdminPanel.Mcp;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = DaprService.CreateBuilder("AdminPanel", args);
 

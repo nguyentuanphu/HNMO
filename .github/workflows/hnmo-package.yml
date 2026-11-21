@@ -55,6 +55,49 @@ jobs:
           name: HNMO
           path: HNMO.zip
           retention-days: 14
+      # The update files on Cloudflare R2 (owner, 2026-11-21): every file stored once by its SHA-256 (files/<hash>),
+      # only those not there yet are uploaded; the manifest goes to releases/<version>/manifest.json. The HNMO
+      # developer publishes a version in the hub's console and the servers' "Update" downloads what changed.
+      # Skipped while the R2 secrets aren't set.
+      - name: Upload the update files to R2
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          AWS_DEFAULT_REGION: auto
+        run: |
+          if [ -z "$R2_ACCOUNT_ID" ] || [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$R2_BUCKET" ]; then
+            echo "R2 secrets not set: the update files are not uploaded."; exit 0
+          fi
+          endpoint="https://$R2_ACCOUNT_ID.r2.cloudflarestorage.com"
+          aws s3 ls "s3://$R2_BUCKET/files/" --endpoint-url "$endpoint" | awk '{print $4}' | sort -u > have.txt || true
+          python3 - <<'PY' > upload.txt
+          import json
+          m = json.load(open('HNMO/manifest.json'))
+          have = set(open('have.txt').read().split())
+          seen = set()
+          for f in m['files']:
+              if f['sha256'] not in have and f['sha256'] not in seen:
+                  seen.add(f['sha256'])
+                  print(f"{f['sha256']}\t{f['path']}")
+          PY
+          echo "$(wc -l < upload.txt) files to upload"
+          while IFS="$(printf '\t')" read -r hash path; do
+            aws s3 cp "HNMO/$path" "s3://$R2_BUCKET/files/$hash" --endpoint-url "$endpoint" --only-show-errors
+          done < upload.txt
+          version="$(python3 -c "import json;print(json.load(open('HNMO/manifest.json'))['version'])")"
+          # Every build's manifest by its run, for trying it; a version's own manifest only once (a published
+          # version never changes: raise VERSION for the next release).
+          aws s3 cp HNMO/manifest.json "s3://$R2_BUCKET/builds/${{ github.run_number }}/manifest.json" --endpoint-url "$endpoint" --content-type application/json --only-show-errors
+          if aws s3api head-object --bucket "$R2_BUCKET" --key "releases/$version/manifest.json" --endpoint-url "$endpoint" >/dev/null 2>&1; then
+            echo "HNMO $version is already uploaded as a release: kept as it was (raise VERSION for a new one). This build: builds/${{ github.run_number }}"
+          else
+            aws s3 cp HNMO/manifest.json "s3://$R2_BUCKET/releases/$version/manifest.json" --endpoint-url "$endpoint" --content-type application/json --only-show-errors
+            # The whole folder too, for new hosts and the websites' "Download HNMO".
+            aws s3 cp HNMO.zip "s3://$R2_BUCKET/releases/$version/HNMO.zip" --endpoint-url "$endpoint" --only-show-errors
+            echo "Uploaded HNMO $version as a release"
+          fi
 
   # A real Windows computer unzips HNMO.zip, double-clicks "Start HNMO.bat" (cmd) and checks that the
   # game (8080) and the admin panel (8095) answer, so a folder that doesn't start on Windows is noticed.
@@ -73,7 +116,8 @@ jobs:
         shell: pwsh
         run: |
           # A folder with a space and brackets, like a second download ("HNMO (1)"); the start file
-          # runs the same way as a double-click (it opens its own window with cmd /k). /s with the
+          # runs the same way as a double-click (it starts HNMO in the background with its tray icon and ends, so the
+          # wait is for the game and the admin panel, not for the start file). /s with the
           # outer quotes keeps cmd from eating the quotes around the paths.
           $folder = "C:\hnmo test (1)\HNMO"
           $log = "C:\hnmo test (1)\start.log"
@@ -84,9 +128,8 @@ jobs:
             Start-Sleep -Seconds 10
             try { $game = (Invoke-WebRequest -UseBasicParsing -TimeoutSec 5 http://127.0.0.1:8080/index.html).StatusCode -eq 200 } catch { }
             try { $admin = (Invoke-WebRequest -UseBasicParsing -TimeoutSec 5 http://127.0.0.1:8095/ -MaximumRedirection 0 -SkipHttpErrorCheck).StatusCode -lt 500 } catch { }
-            if ($p.HasExited) { break }
-          }
-          Write-Host "game: $game, admin panel: $admin, start window still running: $(-not $p.HasExited)"
+                    }
+          Write-Host "game: $game, admin panel: $admin, start file still running: $(-not $p.HasExited) (it starts HNMO in the background and ends)"
           Get-Content $log -Tail 80 -ErrorAction SilentlyContinue
           if (-not ($game -and $admin)) {
             Get-ChildItem "$folder\save\logs" -File -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "--- $($_.Name)"; Get-Content $_.FullName -Tail 60 }

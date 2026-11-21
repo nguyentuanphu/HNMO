@@ -5,12 +5,12 @@
 namespace HNMO.GameServer.RemoteView.Inventory;
 
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.Views.Inventory;
 using HNMO.Network;
 using HNMO.Network.Packets.ServerToClient;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The default implementation of the <see cref="IUpdateInventoryListPlugIn"/> which is forwarding everything to the game client with specific data packets.

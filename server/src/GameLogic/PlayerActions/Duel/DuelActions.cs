@@ -4,11 +4,11 @@
 
 namespace HNMO.GameLogic.PlayerActions.Duel;
 
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.GuildWar;
 using HNMO.GameLogic.PlugIns.ChatCommands;
 using HNMO.GameLogic.Views.Duel;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Actions regarding duels.
@@ -34,6 +34,14 @@ public class DuelActions
         if (target.DuelRoom is not null)
         {
             await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.OtherPlayerAlreadyInDuel)).ConfigureAwait(false);
+            return;
+        }
+
+        if (PlugIns.Qol.QolPlugIn.AreRequestsBlocked(target))
+        {
+            await player.ShowBlueMessageAsync(player.Culture.TwoLetterISOLanguageName == "vi"
+                ? $"{target.Name} đang tắt nhận lời mời (/requests off)."
+                : $"{target.Name} has disabled incoming requests (/requests off).").ConfigureAwait(false);
             return;
         }
 
@@ -72,6 +80,14 @@ public class DuelActions
         if (duelRoom != target.DuelRoom || duelRoom.Requester != target)
         {
             player.Logger.LogWarning($"Player {player.Name} sent duel response, but the duel contexts didn't match.");
+            return;
+        }
+
+        if (duelRoom.State != DuelState.DuelRequested || duelRoom.Opponent != player)
+        {
+            // Only the requested player answers, and only once: a repeated answer would take the entrance
+            // fees again and start the duel a second time, or cancel the running duel.
+            player.Logger.LogWarning("Player {player} answered a duel which isn't waiting for its answer (state {state}).", player.Name, duelRoom.State);
             return;
         }
 

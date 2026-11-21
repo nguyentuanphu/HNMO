@@ -119,7 +119,7 @@ internal class CrywolfDataTest
 
         var warp = gameConfiguration.WarpList.Single(warp => warp.Index == 26);
         Assert.That(warp.Gate?.Map, Is.SameAs(map));
-        Assert.That(warp.LevelRequirement, Is.EqualTo(190));
+        Assert.That(warp.LevelRequirement, Is.EqualTo(300));
         Assert.That(warp.Name.SourceKey, Is.Not.Null);
 
         Assert.That(map.TerrainVariants.Select(variant => variant.Number), Is.EquivalentTo(new short[] { 0, 1, 2 }));

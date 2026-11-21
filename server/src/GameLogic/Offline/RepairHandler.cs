@@ -28,7 +28,7 @@ internal sealed class RepairHandler
     /// Initializes a new instance of the <see cref="RepairHandler"/> class.
     /// </summary>
     /// <param name="player">The player.</param>
-    /// <param name="config">The MU Helper configuration.</param>
+    /// <param name="config">The auto-play helper configuration.</param>
     public RepairHandler(Player player, IMuHelperSettings? config)
     {
         this._player = player;
@@ -47,7 +47,7 @@ internal sealed class RepairHandler
             if (!this._loggedDisabled)
             {
                 this._loggedDisabled = true;
-                this._player.Logger.LogDebug("Auto-repair is disabled by MU Helper configuration for character {CharacterName}.", this._player.Name);
+                this._player.Logger.LogDebug("Auto-repair is disabled by auto-play helper configuration for character {CharacterName}.", this._player.Name);
             }
 
             return;

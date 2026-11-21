@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="AncientBonusOption" xml:space="preserve"><value>Tùy chọn tiền thưởng cổ xưa</value></data>
+  <data name="AncientOption" xml:space="preserve"><value>Dòng thần</value></data>
+  <data name="BlackFenrirOption" xml:space="preserve"><value>Tùy chọn Fenrir đen</value></data>
+  <data name="BlueFenrirOption" xml:space="preserve"><value>Tùy chọn Fenrir xanh</value></data>
+  <data name="DarkHorseOption" xml:space="preserve"><value>Tùy chọn ngựa đen</value></data>
+  <data name="ExcellentOption" xml:space="preserve"><value>Tùy chọn tuyệt vời</value></data>
+  <data name="GoldFenrirOption" xml:space="preserve"><value>Tùy chọn Fenrir vàng</value></data>
+  <data name="GuardianOption" xml:space="preserve"><value>Dòng Guardian</value></data>
+  <data name="JewelOfHarmonyOption" xml:space="preserve"><value>Tùy chọn Jewel of Harmony</value></data>
+  <data name="LuckCriticalDamageChance5" xml:space="preserve"><value>May mắn (Cơ hội sát thương chí mạng 5%)</value></data>
+  <data name="Option" xml:space="preserve"><value>Tính năng</value></data>
+  <data name="SocketBonusOption" xml:space="preserve"><value>Dòng thưởng socket</value></data>
+  <data name="SocketOption" xml:space="preserve"><value>Dòng socket</value></data>
+  <data name="WingOption" xml:space="preserve"><value>Dòng cánh</value></data>
+</root>

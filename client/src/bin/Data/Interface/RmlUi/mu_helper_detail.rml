@@ -1,7 +1,7 @@
 <rml>
 	<!-- bound-geometry: the three gauges' fill levels -->
 <head>
-	<title>MU Helper Detail</title>
+	<title>Auto Play Detail</title>
 	<link type="text/rcss" href="base.rcss"/>
 	<link type="text/rcss" href="docked_panel_frame.rcss"/>
 	<link type="text/rcss" href="mu_helper_common.rcss"/>

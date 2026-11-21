@@ -162,20 +162,26 @@
   <data name="AwardMoneyFailByFullInventory" xml:space="preserve">
     <value>Couldn't add reward money, inventory is full.</value>
   </data>
+  <data name="TradeMoneyExceedsMaximum" xml:space="preserve">
+    <value>The trade was cancelled: a trader would carry more zen than the inventory can hold.</value>
+  </data>
   <data name="CantEnterEventWithItem" xml:space="preserve">
     <value>Can't enter event with equipped item '{0}'.</value>
   </data>
   <data name="MuHelperAlreadyRunning" xml:space="preserve">
-    <value>MU Helper is already running.</value>
+    <value>Auto play is already running.</value>
   </data>
   <data name="MuHelperMinimumLevel" xml:space="preserve">
-    <value>MU Helper can be used after level {0}.</value>
+    <value>Auto play can be used after level {0}.</value>
+  </data>
+  <data name="GuildOwnsCastleCantDisband" xml:space="preserve">
+    <value>Your guild owns the castle and can't be disbanded.</value>
   </data>
   <data name="MuHelperMaximumLevel" xml:space="preserve">
-    <value>MU Helper cannot be used after level {0}.</value>
+    <value>Auto play cannot be used after level {0}.</value>
   </data>
   <data name="MuHelperRequiresMoney" xml:space="preserve">
-    <value>MU Helper requires {0} zen.</value>
+    <value>Auto play requires {0} zen.</value>
   </data>
   <data name="AlreadyInDuel" xml:space="preserve">
     <value>You are already in a duel.</value>
@@ -540,6 +546,9 @@
   <data name="MiniGameCharacterLevelTooHighFormat" xml:space="preserve">
     <value>Your level is too high. You need to be at most level {0} to enter this event.</value>
   </data>
+  <data name="PlayerKillersCantUseNpcShops" xml:space="preserve">
+    <value>Outlaws of PK level 2 and above can't use NPC shops.</value>
+  </data>
   <data name="MiniGameTicketRequired" xml:space="preserve">
     <value>You need a ticket to enter this event.</value>
   </data>
@@ -652,10 +661,10 @@
     <value>Oops, some error happened during sending the Letter.</value>
   </data>
   <data name="MuHelperIsDisabled" xml:space="preserve">
-    <value>MU Helper is disabled</value>
+    <value>Auto play is disabled</value>
   </data>
   <data name="MuHelperCantHandleStatus" xml:space="preserve">
-    <value>MU Helper can't handle status: {0}</value>
+    <value>Auto play can't handle status: {0}</value>
   </data>
   <data name="PartyNotPossibleDuringEvent" xml:space="preserve">
     <value>A party is not possible during this event.</value>
@@ -811,7 +820,7 @@
     <value>No character is selected.</value>
   </data>
   <data name="OfflineLevelingMuHelperNotRunning" xml:space="preserve">
-    <value>MU Helper must be running to start offline leveling.</value>
+    <value>Auto play must be running to start offline leveling.</value>
   </data>
   <data name="StatResetNotEnabled" xml:space="preserve">
     <value>Stat reset is not enabled.</value>
@@ -1185,5 +1194,10 @@ Inventory Extensions: {18}</value>
   </data>
   <data name="ChatSpamWarning" xml:space="preserve">
     <value>Please don't spam.</value>
+  </data>
+  <data name="VipActiveNotice" xml:space="preserve"><value>VIP {0} is active until {1} (Sydney).</value></data>
+  <data name="VipExpiringNotice" xml:space="preserve"><value>VIP {0} ends within one day, at {1} (Sydney). Renew in the VIP window (Alt+U) or on your account page.</value></data>
+  <data name="AtlansNoRiding" xml:space="preserve">
+    <value>Uniria and Dinorant can't enter Atlans.</value>
   </data>
 </root>

@@ -85,6 +85,21 @@ public sealed class DuelRoom : AsyncDisposable
     }
 
     /// <summary>
+    /// Gets or sets the score which wins the duel (the duel configuration's, or less for HNMO Arena's best of 3).
+    /// </summary>
+    public int MaximumScore
+    {
+        get => this._maximumScore;
+        set => this._maximumScore = Math.Max(1, value);
+    }
+
+    /// <summary>
+    /// Gets or sets what is called with the winner and the loser when the duel is won (HNMO Arena's ranked duels);
+    /// not called for a cancelled duel.
+    /// </summary>
+    public Func<Player, Player, ValueTask>? Finished { get; set; }
+
+    /// <summary>
     /// Gets the area of the duel.
     /// </summary>
     public DuelArea Area { get; }
@@ -199,17 +214,24 @@ public sealed class DuelRoom : AsyncDisposable
     /// <param name="spectator">The spectator which should be removed.</param>
     public async ValueTask RemoveSpectatorAsync(Player spectator)
     {
+        Player[] remainingSpectators;
         using (await this._spectatorLock.LockAsync().ConfigureAwait(false))
         {
             if (!this.Spectators.Remove(spectator))
             {
                 return;
             }
+
+            remainingSpectators = this.Spectators.ToArray();
         }
 
-        for (int j = this.Spectators.Count; j >= 0; --j)
+        if (spectator.DuelRoom == this)
         {
-            var player = this.Spectators[j];
+            spectator.DuelRoom = null;
+        }
+
+        foreach (var player in remainingSpectators)
+        {
             await player.InvokeViewPlugInAsync<IDuelSpectatorRemovedPlugIn>(p => p.SpectatorRemovedAsync(spectator)).ConfigureAwait(false);
         }
 
@@ -331,6 +353,12 @@ public sealed class DuelRoom : AsyncDisposable
             return false;
         }
 
+        if (player.DuelRoom is not null)
+        {
+            // A duelist, or a spectator of another duel, can't watch this one.
+            return false;
+        }
+
         Player[] spectators;
         using (await this._spectatorLock.LockAsync().ConfigureAwait(false))
         {
@@ -342,6 +370,9 @@ public sealed class DuelRoom : AsyncDisposable
             spectators = this.Spectators.ToArray();
             this.Spectators.Add(player);
         }
+
+        // The quit request and leaving the duel map find the room of the spectator by this, to make it visible again.
+        player.DuelRoom = this;
 
         await player.AddInvisibleEffectAsync().ConfigureAwait(false);
         await player.WarpToAsync(spectatorsGate).ConfigureAwait(false);
@@ -415,6 +446,12 @@ public sealed class DuelRoom : AsyncDisposable
             await this.Requester.GameContext.DuelRoomManager.GiveBackDuelRoomAsync(this).ConfigureAwait(false);
         }
 
+        // Spectators which are still in the room get visible again and are told that the duel ended.
+        foreach (var spectator in this.Spectators.ToArray())
+        {
+            await this.RemoveSpectatorAsync(spectator).ConfigureAwait(false);
+        }
+
         this.AllPlayers.ForEach(p => p.DuelRoom = null);
         cts.Dispose();
 
@@ -455,6 +492,17 @@ public sealed class DuelRoom : AsyncDisposable
         var winner = this.ScoreRequester > this.ScoreOpponent ? this.Requester : this.Opponent;
         var loser = this.Requester == winner ? this.Opponent : this.Requester;
         await this.AllPlayers.ForEachAsync(player => player.InvokeViewPlugInAsync<IDuelFinishedPlugIn>(p => p.DuelFinishedAsync(winner, loser))).ConfigureAwait(false);
+        if (this.Finished is { } finished)
+        {
+            try
+            {
+                await finished(winner, loser).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                winner.Logger.LogError(ex, "The duel's result couldn't be recorded.");
+            }
+        }
     }
 
     private async ValueTask SendCurrentStateToAllPlayersAsync()

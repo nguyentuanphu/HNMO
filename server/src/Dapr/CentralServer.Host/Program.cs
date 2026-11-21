@@ -2,7 +2,6 @@
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using Microsoft.Extensions.DependencyInjection;
 using HNMO.CentralServer.Host;
 using HNMO.Dapr.Common;
 using HNMO.Dapr.Common.HealthChecks;
@@ -12,6 +11,7 @@ using HNMO.GuildServer;
 using HNMO.Interfaces;
 using HNMO.PlugIns;
 using HNMO.Telemetry;
+using Microsoft.Extensions.DependencyInjection;
 using ChatServer = HNMO.ChatServer.ChatServer;
 using FriendServer = HNMO.FriendServer.FriendServer;
 using GuildServer = HNMO.GuildServer.GuildServer;

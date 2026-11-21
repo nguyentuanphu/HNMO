@@ -851,4 +851,7 @@
   <data name="IllusionSorcererSpirit" xml:space="preserve">
     <value>Illusion Sorc. Spirit</value>
   </data>
+  <data name="ArenaHerald" xml:space="preserve">
+    <value>Arena Herald</value>
+  </data>
 </root>

@@ -8,9 +8,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
 using System.Threading;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.QuickGrid;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel;
 using HNMO.DataModel.Configuration;
 using HNMO.Persistence;
@@ -20,6 +17,9 @@ using HNMO.Web.Shared;
 using HNMO.Web.Shared.Components.Modal;
 using HNMO.Web.Shared.Components.Toast;
 using HNMO.Web.Shared.Services;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.QuickGrid;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Razor page which shows objects of the specified type in a grid.

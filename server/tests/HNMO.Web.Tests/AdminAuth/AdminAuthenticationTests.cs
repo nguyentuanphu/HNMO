@@ -59,6 +59,63 @@ public class AdminAuthenticationTests
     }
 
     /// <summary>
+    /// From afar (through the website) the 6-digit code is required (owner, 2026-11-21): a user without an authenticator
+    /// is told to set one up on the host computer; a user with one is asked for the code.
+    /// </summary>
+    /// <returns>The task.</returns>
+    [Test]
+    public async Task FromAfarTheSecondFactorIsRequiredAsync()
+    {
+        await this.CreateUserAsync("plain").ConfigureAwait(false);
+        var plain = await this.GetLoginService().CheckPasswordAsync("plain", TestPassword, false, fromAfar: true).ConfigureAwait(false);
+        Assert.That(plain.Status, Is.EqualTo(AdminLoginStatus.TwoFactorSetupRequired));
+        Assert.That(plain.Ticket, Is.Null);
+
+        var (_, key) = await this.CreateUserWithAuthenticatorAsync("secured").ConfigureAwait(false);
+        var loginService = this.GetLoginService();
+        var secured = await loginService.CheckPasswordAsync("secured", TestPassword, false, fromAfar: true).ConfigureAwait(false);
+        Assert.That(secured.Status, Is.EqualTo(AdminLoginStatus.TwoFactorRequired));
+        var code = await loginService.CheckTwoFactorAsync(TestTotpGenerator.Generate(key), false).ConfigureAwait(false);
+        Assert.That(code.Status, Is.EqualTo(AdminLoginStatus.Succeeded));
+    }
+
+    /// <summary>
+    /// A trusted browser (owner, 2026-11-21): after a right code with "trust this browser", the sign-in carries the trust
+    /// cookie, and that browser needs only the password next time, from afar too; another user's trust doesn't count,
+    /// and "forget every trusted browser" asks for the code again.
+    /// </summary>
+    /// <returns>The task.</returns>
+    [Test]
+    public async Task ATrustedBrowserNeedsOnlyThePasswordAsync()
+    {
+        var (user, key) = await this.CreateUserWithAuthenticatorAsync("trusting").ConfigureAwait(false);
+        var tickets = this._serviceProvider.GetRequiredService<SignInTicketService>();
+        var first = this.GetLoginService();
+        await first.CheckPasswordAsync("trusting", TestPassword, false, fromAfar: true).ConfigureAwait(false);
+        var coded = await first.CheckTwoFactorAsync(TestTotpGenerator.Generate(key), false, trustBrowser: true).ConfigureAwait(false);
+        Assert.That(coded.Status, Is.EqualTo(AdminLoginStatus.Succeeded));
+        Assert.That(tickets.TryRedeem(coded.Ticket, out var ticket), Is.True);
+        var trust = ticket!.TrustToken;
+        Assert.That(trust, Is.Not.Null.And.Not.Empty);
+
+        var again = await this.GetLoginService().CheckPasswordAsync("trusting", TestPassword, false, fromAfar: true, trustedBrowser: trust).ConfigureAwait(false);
+        Assert.That(again.Status, Is.EqualTo(AdminLoginStatus.Succeeded), "the password is enough on a trusted browser");
+        Assert.That(again.Claims!.Any(c => c.Type == AdminAuthenticationDefaults.AuthenticationMethodClaimType && c.Value == AdminAuthenticationDefaults.MultiFactorAuthenticationMethod), Is.True, "it counts as the second factor");
+        Assert.That((await this.GetLoginService().CheckPasswordAsync("trusting", "wrong-password-here", false, fromAfar: true, trustedBrowser: trust).ConfigureAwait(false)).Status, Is.EqualTo(AdminLoginStatus.Failed), "the password is always asked");
+
+        await this.CreateUserWithAuthenticatorAsync("other").ConfigureAwait(false);
+        Assert.That((await this.GetLoginService().CheckPasswordAsync("other", TestPassword, false, fromAfar: true, trustedBrowser: trust).ConfigureAwait(false)).Status, Is.EqualTo(AdminLoginStatus.TwoFactorRequired), "another user's trust");
+
+        using (var scope = this._serviceProvider.CreateScope())
+        {
+            var users = scope.ServiceProvider.GetRequiredService<Microsoft.AspNetCore.Identity.UserManager<AdminUser>>();
+            await scope.ServiceProvider.GetRequiredService<AuthenticatorSetupService>().ForgetTrustedBrowsersAsync((await users.FindByIdAsync(user.Id.ToString()).ConfigureAwait(false))!).ConfigureAwait(false);
+        }
+
+        Assert.That((await this.GetLoginService().CheckPasswordAsync("trusting", TestPassword, false, fromAfar: true, trustedBrowser: trust).ConfigureAwait(false)).Status, Is.EqualTo(AdminLoginStatus.TwoFactorRequired), "forgotten");
+    }
+
+    /// <summary>
     /// Tests that a wrong password is rejected.
     /// </summary>
     [Test]
@@ -537,6 +594,7 @@ public class AdminAuthenticationTests
         services.AddSingleton<IPasswordHasher<AdminUser>, BCryptPasswordHasher>();
         services.AddSingleton<BootstrapAdminUserProvider>();
         services.AddSingleton<SignInTicketService>();
+        services.AddSingleton<TrustedBrowserService>();
         services.AddScoped<AdminUserStore>();
         services.AddScoped<IUserStore<AdminUser>>(provider => provider.GetRequiredService<AdminUserStore>());
         services.AddScoped<AdminLoginService>();

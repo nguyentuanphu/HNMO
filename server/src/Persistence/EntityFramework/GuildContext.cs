@@ -4,9 +4,9 @@
 
 namespace HNMO.Persistence.EntityFramework;
 
-using Microsoft.EntityFrameworkCore;
 using HNMO.Persistence.EntityFramework.Extensions;
 using HNMO.Persistence.EntityFramework.Model;
+using Microsoft.EntityFrameworkCore;
 
 /// <summary>
 /// Context for the guild server which just uses <see cref="Guild"/>, <see cref="GuildMember"/> and <see cref="Character"/>.

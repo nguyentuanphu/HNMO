@@ -1,0 +1,130 @@
+@page "/catchup"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.GameLogic.PlugIns.CatchupCap
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @L("Catch-up level cap", "Giới hạn đuổi kịp")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@L("Catch-up level cap", "Giới hạn đuổi kịp")" />
+<div class="d-flex align-items-center gap-2 mb-2">
+    <h1 class="mb-0">@L("Catch-up level & reset cap", "Giới hạn cấp & reset đuổi kịp")</h1>
+    <button type="button" class="btn btn-sm btn-outline-info" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
+</div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextCatchupCap" />
+<p class="text-muted">@L("Prevent early-season runaways: lock the initial level (or daily reset) cap until the first player reaches it, then rise N/day in Sydney time.", "Chống cày vượt cấp đầu mùa: giữ giới hạn cấp (hoặc reset ngày) ban đầu cho đến khi người đầu tiên đạt mốc, sau đó tự tăng N mỗi ngày theo giờ Sydney.")</p>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info" role="region" id="catchup-help">
+        <strong>@L("How to use this page:", "Hướng dẫn:")</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("Feature is OFF by default. Enable the switch to enforce today's level cap and/or daily reset limit across all players.", "Tính năng mặc định TẮT. Bật công tắc để áp dụng giới hạn cấp hôm nay và/hoặc giới hạn reset ngày.")</li>
+            <li>@L("Once the first player hits Initial level cap, every Sydney midnight adds Levels/day up to Hard max level.", "Khi người đầu tiên chạm Giới hạn cấp đầu, mỗi 00:00 giờ Sydney sẽ tăng thêm Mức tăng/ngày cho tới Giới hạn tối đa.")</li>
+            <li>@L("Today's cap and trigger status are published live on the website (#catchup) and in-game.", "Giới hạn hôm nay và trạng thái kích hoạt hiển thị trực tiếp trên website (#catchup) và trong game.")</li>
+        </ul>
+    </div>
+}
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is not { } c)
+{
+    <div class="alert alert-warning" role="status">@L("Catch-up configuration is unavailable.", "Không tải được cấu hình.")</div>
+}
+else
+{
+    @if (this._snapshot is { } s)
+    {
+        <div class="alert @(this._isActive ? "alert-success" : "alert-secondary") mb-3">
+            <strong>@L("Today's live status:", "Trạng thái hiện tại:")</strong>
+            <span>@L($"Level cap: {s.TodayLevelCap} / {s.HardMaxLevelCap}", $"Giới hạn cấp: {s.TodayLevelCap} / {s.HardMaxLevelCap}")</span>
+            @if (s.LevelTriggered)
+            {
+                <span class="ms-2">(@L($"Unlocked by {s.LevelFirstPlayer}", $"Mở khóa bởi {s.LevelFirstPlayer}"))</span>
+            }
+            @if (c.ResetCapEnabled)
+            {
+                <span class="ms-3">@L($"• Daily reset limit: {s.TodayDailyResetCap}", $"• Giới hạn reset ngày: {s.TodayDailyResetCap}")</span>
+            }
+        </div>
+    }
+
+    <section class="card mb-3" id="catchup-settings">
+        <div class="card-body">
+            <div class="form-check form-switch mb-2" title="@L("Enable or disable Catch-up Level Cap.", "Bật/tắt tính năng Giới hạn đuổi kịp.")">
+                <input class="form-check-input" type="checkbox" id="cu-active" @bind="this._isActive" />
+                <label class="form-check-label" for="cu-active">@L("Enable Catch-up Cap", "Bật Giới hạn đuổi kịp")</label>
+            </div>
+            <div class="form-check form-switch mb-3" title="@L("Broadcast an announcement when the first player triggers daily growth.", "Thông báo toàn server khi người đầu tiên mở khóa tăng cấp ngày.")">
+                <input class="form-check-input" type="checkbox" id="cu-announce" @bind="c.AnnounceInGame" />
+                <label class="form-check-label" for="cu-announce">@L("Announce unlock in-game", "Thông báo trong game khi mở khóa")</label>
+            </div>
+
+            <div class="row g-2 mb-3">
+                <div class="col-sm-3">
+                    <label class="form-label" for="cu-tz">@L("Time zone", "Múi giờ")</label>
+                    <input class="form-control" id="cu-tz" @bind="c.TimeZone" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="cu-hour">@L("Day reset hour", "Giờ sang ngày mới")</label>
+                    <input class="form-control" type="number" min="0" max="23" id="cu-hour" @bind="c.DayStartHour" />
+                </div>
+                <div class="col-sm-4">
+                    <label class="form-label" for="cu-file">@L("State key", "Khóa lưu trữ")</label>
+                    <input class="form-control" id="cu-file" @bind="c.FileName" />
+                </div>
+            </div>
+
+            <h2 class="h6">@L("Level cap mode", "Chế độ giới hạn cấp độ")</h2>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="cu-lvl-on" @bind="c.LevelCapEnabled" />
+                <label class="form-check-label" for="cu-lvl-on">@L("Enforce level catch-up cap", "Áp dụng giới hạn cấp")</label>
+            </div>
+            <div class="row g-2 mb-3">
+                <div class="col-sm-2">
+                    <label class="form-label" for="cu-lvl-init">@L("Initial / trigger level", "Cấp khởi đầu / mốc")</label>
+                    <input class="form-control" type="number" min="1" max="1000" id="cu-lvl-init" @bind="c.InitialLevelCap" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="cu-lvl-day">@L("Levels risen / day", "Tăng cấp / ngày")</label>
+                    <input class="form-control" type="number" min="0" max="400" id="cu-lvl-day" @bind="c.LevelsPerDay" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="cu-lvl-max">@L("Hard max level", "Cấp tối đa")</label>
+                    <input class="form-control" type="number" min="1" max="1000" id="cu-lvl-max" @bind="c.HardMaxLevelCap" />
+                </div>
+            </div>
+
+            <h2 class="h6">@L("Daily reset cap mode (for reset servers)", "Chế độ giới hạn reset mỗi ngày")</h2>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="cu-rst-on" @bind="c.ResetCapEnabled" />
+                <label class="form-check-label" for="cu-rst-on">@L("Enforce daily reset catch-up cap", "Áp dụng giới hạn reset ngày")</label>
+            </div>
+            <div class="row g-2 mb-3">
+                <div class="col-sm-2">
+                    <label class="form-label" for="cu-rst-init">@L("Initial daily resets", "Reset/ngày ban đầu")</label>
+                    <input class="form-control" type="number" min="0" max="500" id="cu-rst-init" @bind="c.InitialDailyResets" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="cu-rst-day">@L("+Resets / day", "Tăng thêm / ngày")</label>
+                    <input class="form-control" type="number" min="0" max="100" id="cu-rst-day" @bind="c.DailyResetsPerDay" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="cu-rst-trig">@L("Trigger total resets", "Mốc reset mở khóa")</label>
+                    <input class="form-control" type="number" min="0" max="10000" id="cu-rst-trig" @bind="c.TriggerResets" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="cu-rst-max">@L("Hard max / day", "Tối đa / ngày")</label>
+                    <input class="form-control" type="number" min="0" max="1000" id="cu-rst-max" @bind="c.HardMaxDailyResets" />
+                </div>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-primary" id="cu-save" disabled="@this._isSaving" @onclick="this.SaveAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@Resources.Save</button>
+                <button type="button" class="btn btn-outline-danger" @onclick="this.ResetTriggersAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">@L("Reset trigger history", "Xóa dấu mốc mở khóa")</button>
+            </div>
+        </div>
+    </section>
+}

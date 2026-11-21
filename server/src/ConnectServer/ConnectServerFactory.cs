@@ -4,8 +4,8 @@
 
 namespace HNMO.ConnectServer;
 
-using Microsoft.Extensions.Logging;
 using HNMO.Interfaces;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The connect server factory.

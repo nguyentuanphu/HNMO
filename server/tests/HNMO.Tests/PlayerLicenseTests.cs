@@ -5,9 +5,14 @@
 namespace HNMO.Tests;
 
 using System.IO;
+using System.Net;
+using System.Net.Http;
 using System.Text;
+using System.Text.Json.Nodes;
+using System.Threading;
 using HNMO.GameLogic;
 using HNMO.Integrity;
+using HNMO.Persistence;
 using NUnit.Framework;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
@@ -71,23 +76,168 @@ public class PlayerLicenseTests
         Assert.That(PlayerLicense.Check(Encoding.UTF8.GetBytes("not json"), this._publicKeyPem, "abc", Today).MaximumPlayers, Is.EqualTo(10), "garbage");
     }
 
-    /// <summary>The count is per account and stops at the maximum.</summary>
+    /// <summary>
+    /// The count is per account. Passing the maximum starts a week of grace (owner, 2026-11-20): more may play then, and
+    /// the admin panel asks for a licence; after the week the maximum holds. A new licence ends the grace.
+    /// </summary>
     [Test]
-    public void TheLimitCountsAccounts()
+    [NonParallelizable]
+    public void TheLimitCountsAccountsWithAWeekOfGrace()
     {
         LicensedPlayerLimit.Maximum = 2;
+        var previousFile = DeveloperHub.StateFile;
+        DeveloperHub.StateFile = null;
+        DeveloperHub.ResetMemoryState();
         try
         {
             Assert.That(LicensedPlayerLimit.TryAdmit(null!, "a"), Is.True);
             Assert.That(LicensedPlayerLimit.TryAdmit(null!, "b"), Is.True);
-            Assert.That(LicensedPlayerLimit.TryAdmit(null!, "c"), Is.False, "the third account");
+            Assert.That(DeveloperHub.ReadState().GraceStartedUtc, Is.Null, "within the limit");
+            Assert.That(LicensedPlayerLimit.TryAdmit(null!, "c"), Is.True, "the third account starts the grace week");
+            Assert.That(DeveloperHub.ReadState().GraceStartedUtc, Is.Not.Null);
             Assert.That(LicensedPlayerLimit.TryAdmit(null!, "A"), Is.True, "the same account again");
-            Assert.That(LicensedPlayerLimit.Count, Is.EqualTo(2));
+            Assert.That(LicensedPlayerLimit.Count, Is.EqualTo(3));
+
+            DeveloperHub.ChangeState(s => s.GraceStartedUtc = DateTime.UtcNow.AddDays(-DeveloperHub.GraceDays).AddMinutes(-1));
+            Assert.That(LicensedPlayerLimit.TryAdmit(null!, "d"), Is.False, "after the week, the maximum holds");
+
+            DeveloperHub.ClearGrace();
+            Assert.That(DeveloperHub.ReadState().GraceStartedUtc, Is.Null, "a licence ends it");
         }
         finally
         {
             LicensedPlayerLimit.Maximum = LicensedPlayerLimit.DefaultMaximum;
             LicensedPlayerLimit.Reset();
+            DeveloperHub.ResetMemoryState();
+            DeveloperHub.StateFile = previousFile;
+        }
+    }
+
+    /// <summary>
+    /// The real machine id (owner, 2026-11-21) comes from the system's own id, not the computer's name; renaming the
+    /// computer keeps it. A licence issued for the old id (the name's hash) is still accepted during the change.
+    /// </summary>
+    [Test]
+    public void TheMachineIdComesFromTheSystemAndOldLicencesStillWork()
+    {
+        Assert.That(PlayerLicense.MachineIdOf("1b4e28ba-2fa1-11d2-883f-0016d3cca427"), Is.EqualTo(PlayerLicense.MachineIdOf("1B4E28BA2FA111D2883F0016D3CCA427\n")), "the same id however written");
+        Assert.That(PlayerLicense.MachineIdOf("1b4e28ba-2fa1-11d2-883f-0016d3cca427"), Has.Length.EqualTo(16));
+        Assert.That(PlayerLicense.MachineIdOf("00000000-0000-0000-0000-000000000000"), Is.Null, "no real id");
+        Assert.That(PlayerLicense.MachineIdOf(" "), Is.Null);
+        Assert.That(PlayerLicense.MachineId, Has.Length.EqualTo(16));
+        if (System.IO.File.Exists("/etc/machine-id") && PlayerLicense.MachineIdOf(System.IO.File.ReadAllText("/etc/machine-id")) is { } fromSystem)
+        {
+            Assert.That(PlayerLicense.MachineId, Is.EqualTo(fromSystem), "Linux: /etc/machine-id");
+        }
+
+        var oldLicence = this.File("""{"licensee":"Minh","maxPlayers":50,"expires":null,"machine":"old-name-hash"}""");
+        Assert.That(PlayerLicense.Check(oldLicence, this._publicKeyPem, "new-real-id", Today, "old-name-hash").MaximumPlayers, Is.EqualTo(50), "issued for the old id");
+        Assert.That(PlayerLicense.Check(oldLicence, this._publicKeyPem, "new-real-id", Today, "another-name").MaximumPlayers, Is.EqualTo(10), "another computer");
+        Assert.That(PlayerLicense.Check(oldLicence, this._publicKeyPem, "new-real-id", Today).MaximumPlayers, Is.EqualTo(10), "no old id given");
+    }
+
+    /// <summary>
+    /// The first-setup report goes once to the hub's /api/setup with the system, the game, the host's name and contact
+    /// and both machine ids; a refusal leaves it to be tried again.
+    /// </summary>
+    /// <returns>The task.</returns>
+    [Test]
+    public async Task TheFirstSetupReportIsSentOnceWithTheHostsDetailsAsync()
+    {
+        var previousFile = DeveloperHub.StateFile;
+        var (previousMachine, previousLegacy) = (DeveloperHub.MachineId, DeveloperHub.LegacyMachineId);
+        DeveloperHub.StateFile = null;
+        DeveloperHub.ResetMemoryState();
+        DeveloperHub.MachineId = "aaaaaaaaaaaaaaaa";
+        DeveloperHub.LegacyMachineId = "bbbbbbbbbbbbbbbb";
+        try
+        {
+            // The host's name and contact come silently from a licence request (owner, 2026-11-21).
+            using (var requestClient = new HttpClient(new RecordingHandler(HttpStatusCode.OK, """{"request":"R-1"}""")))
+            {
+                await DeveloperHub.RequestLicenceAsync(" Minh ", "zalo 0900", 20, "hello", requestClient).ConfigureAwait(false);
+            }
+
+            Assert.That((DeveloperHub.ReadState().HostName, DeveloperHub.ReadState().HostContact), Is.EqualTo(("Minh", "zalo 0900")));
+            var refuse = new RecordingHandler(HttpStatusCode.TooManyRequests);
+            using (var client = new HttpClient(refuse))
+            {
+                var (ok, _) = await DeveloperHub.SendSetupAsync(new JsonObject { ["system"] = new JsonObject { ["cores"] = 8 } }, client).ConfigureAwait(false);
+                Assert.That(ok, Is.False);
+            }
+
+            Assert.That(DeveloperHub.ReadState().SetupReportedUtc, Is.Null, "refused: tried again later");
+            Assert.That(DeveloperHub.ReadState().SetupTriedUtc, Is.Not.Null);
+
+            var take = new RecordingHandler(HttpStatusCode.OK);
+            using (var client = new HttpClient(take))
+            {
+                var (ok, _) = await DeveloperHub.SendSetupAsync(new JsonObject { ["system"] = new JsonObject { ["cores"] = 8 } }, client).ConfigureAwait(false);
+                Assert.That(ok, Is.True);
+            }
+
+            Assert.That(DeveloperHub.ReadState().SetupReportedUtc, Is.Not.Null);
+            Assert.That(take.Path, Is.EqualTo("/api/setup"));
+            var sent = JsonNode.Parse(take.Body!)!;
+            Assert.That(sent["machine"]!.GetValue<string>(), Is.EqualTo("aaaaaaaaaaaaaaaa"));
+            Assert.That(sent["legacyMachine"]!.GetValue<string>(), Is.EqualTo("bbbbbbbbbbbbbbbb"));
+            Assert.That(sent["host"]!["name"]!.GetValue<string>(), Is.EqualTo("Minh"));
+            Assert.That(sent["host"]!["contact"]!.GetValue<string>(), Is.EqualTo("zalo 0900"));
+            Assert.That(sent["system"]!["cores"]!.GetValue<int>(), Is.EqualTo(8));
+            Assert.That(sent["test"], Is.Null, "a real host says nothing about tests");
+
+            // One of the developer's test machines says so (HNMO_TEST_HOST=1); the console keeps it apart.
+            Environment.SetEnvironmentVariable("HNMO_TEST_HOST", "1");
+            var weekly = new RecordingHandler(HttpStatusCode.OK);
+            using (var client = new HttpClient(weekly))
+            {
+                await DeveloperHub.SendWeeklyAsync(new JsonObject { ["game"] = new JsonObject { ["name"] = "Mu Rồng Vàng" } }, client).ConfigureAwait(false);
+            }
+
+            Assert.That(JsonNode.Parse(weekly.Body!)!["test"]!.GetValue<bool>(), Is.True);
+        }
+        finally
+        {
+            DeveloperHub.ResetMemoryState();
+            DeveloperHub.StateFile = previousFile;
+            (DeveloperHub.MachineId, DeveloperHub.LegacyMachineId) = (previousMachine, previousLegacy);
+            Environment.SetEnvironmentVariable("HNMO_TEST_HOST", null);
+        }
+    }
+
+    /// <summary>
+    /// One limit for the whole folder (owner, 2026-11-21): accounts playing in another program (Season 9, the Arena)
+    /// take places too, an account playing elsewhere coming here takes none, and this program publishes its accounts.
+    /// </summary>
+    [Test]
+    [NonParallelizable]
+    public void TheLimitCountsEveryProgramTogether()
+    {
+        var previousShared = ArenaShared.Current;
+        var previousFile = DeveloperHub.StateFile;
+        var shared = new LimitShared { Elsewhere = ["s9player", "arenaplayer"] };
+        ArenaShared.Current = shared;
+        DeveloperHub.StateFile = null;
+        DeveloperHub.ResetMemoryState();
+        DeveloperHub.ChangeState(s => s.GraceStartedUtc = DateTime.UtcNow.AddDays(-DeveloperHub.GraceDays - 1));
+        LicensedPlayerLimit.Reset();
+        LicensedPlayerLimit.Maximum = 3;
+        try
+        {
+            Assert.That(LicensedPlayerLimit.TryAdmit(null!, "home"), Is.True, "2 elsewhere + 1 here = 3");
+            Assert.That(LicensedPlayerLimit.TotalCount, Is.EqualTo(3));
+            Assert.That(LicensedPlayerLimit.TryAdmit(null!, "fourth"), Is.False, "the folder is full");
+            Assert.That(LicensedPlayerLimit.TryAdmit(null!, "ARENAPLAYER"), Is.True, "an account playing elsewhere takes no new place");
+            Assert.That(LicensedPlayerLimit.TotalCount, Is.EqualTo(3));
+            Assert.That(() => shared.Published.Any(p => p.Contains("home")), Is.True.After(5000, 20), "this program publishes its accounts");
+        }
+        finally
+        {
+            ArenaShared.Current = previousShared;
+            LicensedPlayerLimit.Maximum = LicensedPlayerLimit.DefaultMaximum;
+            LicensedPlayerLimit.Reset();
+            DeveloperHub.ResetMemoryState();
+            DeveloperHub.StateFile = previousFile;
         }
     }
 
@@ -99,5 +249,46 @@ public class PlayerLicenseTests
         signer.BlockUpdate(payload, 0, payload.Length);
         var signature = signer.GenerateSignature();
         return Encoding.UTF8.GetBytes($$"""{"payload":"{{Convert.ToBase64String(payload)}}","signature":"{{Convert.ToBase64String(signature)}}"}""");
+    }
+
+    private sealed class LimitShared : IArenaShared
+    {
+        public IReadOnlyList<string> Elsewhere { get; init; } = [];
+
+        public System.Collections.Concurrent.ConcurrentBag<string[]> Published { get; } = [];
+
+        public int AddPoints(string login, int points, int dailyCap, string dayKey) => points;
+
+        public bool TrySpendPoints(string login, int points) => false;
+
+        public void RefundPoints(string login, int points)
+        {
+        }
+
+        public int GetPoints(string login) => 0;
+
+        public void SetRating(string login, int rating)
+        {
+        }
+
+        public int? GetRating(string login) => null;
+
+        public IReadOnlyList<string> LicensedElsewhere(string season) => this.Elsewhere;
+
+        public void PublishLicensed(string season, IReadOnlyCollection<string> logins) => this.Published.Add(logins.ToArray());
+    }
+
+    private sealed class RecordingHandler(HttpStatusCode status, string answer = "{\"ok\":true}") : HttpMessageHandler
+    {
+        public string? Path { get; private set; }
+
+        public string? Body { get; private set; }
+
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            this.Path = request.RequestUri?.AbsolutePath;
+            this.Body = request.Content is null ? null : await request.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+            return new HttpResponseMessage(status) { Content = new StringContent(answer) };
+        }
     }
 }

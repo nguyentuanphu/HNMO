@@ -35,6 +35,22 @@ export class AutoPlayBar {
     const scale = uiScale();
     this.doc.setScale(scale);
     Object.assign(this.doc.root.style, { transform: `scale(${scale})`, transformOrigin: 'left top' });
+    requestAnimationFrame(() => this.publishBox());
+  }
+
+  /**
+   * Where the bar is on the screen, as CSS variables of the page: the game's top bar (index.html, .hud) sits on the
+   * same line, right of it, and the guide's button below them.
+   */
+  private publishBox(): void {
+    const panel = this.doc?.$('#panel');
+    if (!panel) return;
+    const box = panel.getBoundingClientRect();
+    if (box.width <= 0) return;
+    const style = document.documentElement.style;
+    style.setProperty('--helper-bar-right', `${Math.round(box.right)}px`);
+    style.setProperty('--helper-bar-middle', `${Math.round(box.top + box.height / 2)}px`);
+    style.setProperty('--helper-bar-bottom', `${Math.round(box.bottom)}px`);
   }
 
   /** The map name and the hero's cell, and whether auto play runs. */

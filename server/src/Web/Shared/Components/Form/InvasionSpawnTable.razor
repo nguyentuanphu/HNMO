@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.Shared.Properties.Resources
 @using HNMO.GameLogic.PlugIns.InvasionEvents
 @using HNMO.DataModel.Configuration
 @using HNMO.Web.Shared.Services
@@ -71,7 +72,7 @@
                            @bind="spawn.AnnounceDeath" />
                 </div>
                 <div class="mt-3 text-end">
-                    <button type="button"
+                    <button title="@HelpResources.PageHelpHintDelete" type="button"
                             class="btn btn-danger"
                             @onclick="@(() => this.OnRemoveClick(spawn))">
                         <span class="oi oi-trash" aria-hidden="true"></span> @Resources.Remove
@@ -80,7 +81,7 @@
             </div>
         }
         <div class="mt-3">
-            <button type="button" class="btn btn-primary" @onclick="@this.OnAddClick">
+            <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-primary" @onclick="@this.OnAddClick">
                 <i class="oi oi-plus"></i> @Resources.AddValue
             </button>
         </div>

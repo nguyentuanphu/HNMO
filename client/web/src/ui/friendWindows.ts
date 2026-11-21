@@ -152,7 +152,12 @@ const LABELS: Record<string, string> = {
   read_label: 'Read', reply_label: 'Reply', delete_label: 'Delete', window_label: 'Window Title', hide_all_label: 'Hide All', close_label: 'Close',
 };
 
+/** HNMO: a friend playing in another HNMO program (friends across seasons) comes with one of these "servers". */
+const OTHER_SEASONS: Record<number, string> = { 0xe0: 'Season 6.3', 0xe1: 'Season 9', 0xe2: 'Arena' };
+
 function serverLabel(server: number): string {
+  const elsewhere = OTHER_SEASONS[server];
+  if (elsewhere) return ` ${elsewhere}`;
   if (server === UNAVAILABLE_SERVER) return 'Cannot Use';
   if (server >= LAST_ONLINE_SERVER) return 'Offline';
   return ` ${String(server + 1).padStart(2, ' ')} Server`;

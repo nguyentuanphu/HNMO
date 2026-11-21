@@ -4,22 +4,64 @@
 // three.js' 'ZYX' Euler order; a bone's matrix is its parent's times its own.
 
 import * as THREE from 'three';
+import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
 import { parseBMD, decodeTGA } from './formats.js';
+import { getTextureQuality } from './ui/settingsWindow.js';
 import type { BMDModel, BMDMesh, BMDBoneFrames } from './formats.js';
+import { onSeasonChange, seasonDataUrl } from './dataRoot.js';
 
 const ALPHA_TEST = 0.25;
 
 const fileCache = new Map<string, Promise<Uint8Array>>();
 const textureCache = new Map<string, Promise<THREE.Texture | null>>();
+let ktx2Loader: KTX2Loader | null = null;
+let dataBasePrefix = '';
+
+/**
+ * Sets an optional URL prefix for `/data/...` asset fetches (used when embedding the
+ * renderer outside the web client's origin/root, such as `/world-editor` in AdminPanel).
+ */
+export function setDataBaseUrl(prefix: string): void {
+  dataBasePrefix = prefix.replace(/\/+$/, '');
+  fileCache.clear();
+  textureCache.clear();
+  modelCache.clear();
+}
+
+/** Resolves a `/data/...` asset URL: the season of the world being played, then the configured base prefix. */
+export function resolveDataUrl(url: string): string {
+  if (!url.startsWith('/data/')) return url;
+  const seasonal = seasonDataUrl(url);
+  return dataBasePrefix ? `${dataBasePrefix}${seasonal}` : seasonal;
+}
+
+// Another season's files have the same names: nothing loaded for one is shown in the other.
+onSeasonChange(() => {
+  fileCache.clear();
+  textureCache.clear();
+  modelCache.clear();
+});
+
+/** Initializes the KTX2 GPU-compressed texture transcoder for the active WebGL renderer. */
+export function setKtx2Renderer(renderer: THREE.WebGLRenderer): void {
+  ktx2Loader?.dispose();
+  ktx2Loader = new KTX2Loader().setTranscoderPath('/vendor/basis/').detectSupport(renderer);
+}
+
+/** Clears the decoded texture cache (for example after changing texture quality). */
+export function clearTextureCache(): void {
+  textureCache.clear();
+}
 
 export async function fetchBytes(url: string): Promise<Uint8Array> {
-  if (!fileCache.has(url)) {
-    fileCache.set(url, fetch(url).then(async (response) => {
-      if (!response.ok) throw new Error(`${response.status} ${url}`);
+  const resolved = resolveDataUrl(url);
+  if (!fileCache.has(resolved)) {
+    fileCache.set(resolved, fetch(resolved).then(async (response) => {
+      if (!response.ok) throw new Error(`${response.status} ${resolved}`);
       return new Uint8Array(await response.arrayBuffer());
     }));
   }
-  return fileCache.get(url)!;
+  return fileCache.get(resolved)!;
 }
 
 // Parsed once per file: every player shares player.bmd (3 MB, ~25 ms to parse), so parsing it for each
@@ -74,19 +116,49 @@ async function decodeTexture(url: string, isTga: boolean): Promise<THREE.Texture
   return texture;
 }
 
+async function tryLoadKtx2(url: string): Promise<THREE.Texture | null> {
+  if (!ktx2Loader) return null;
+  const ktx2Url = url.replace(/\.(ozj|ozt|jpe?g|tga)$/i, '.ktx2');
+  if (ktx2Url === url) return null;
+  try {
+    const response = await fetch(resolveDataUrl(ktx2Url));
+    if (!response.ok) return null;
+    const blobUrl = URL.createObjectURL(await response.blob());
+    try {
+      const texture = await ktx2Loader.loadAsync(blobUrl);
+      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+      texture.flipY = false;
+      texture.needsUpdate = true;
+      return texture;
+    } finally {
+      URL.revokeObjectURL(blobUrl);
+    }
+  } catch {
+    return null;
+  }
+}
+
 function loadTextureFrom(dir: string, name: string): Promise<THREE.Texture | null> {
   const url = `/data/${dir}/${name}`;
-  if (!textureCache.has(url)) {
+  const quality = getTextureQuality();
+  const cacheKey = `${quality}:${url}`;
+  if (!textureCache.has(cacheKey)) {
     const { isTga } = textureKind(name);
-    textureCache.set(url, decodeTexture(url, isTga).then((texture) => {
+    const load = (async (): Promise<THREE.Texture | null> => {
+      if (quality === 'compressed') {
+        const ktx2 = await tryLoadKtx2(url);
+        if (ktx2) return ktx2;
+      }
+      const texture = await decodeTexture(url, isTga);
       texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
       texture.generateMipmaps = true;
       texture.minFilter = THREE.LinearMipmapLinearFilter;
       texture.magFilter = THREE.LinearFilter;
       return texture;
-    }).catch(() => null));
+    })().catch(() => null);
+    textureCache.set(cacheKey, load);
   }
-  return textureCache.get(url)!;
+  return textureCache.get(cacheKey)!;
 }
 
 // A texture comes from the first of the folders that has it (LoadTextureFromFolders).
@@ -144,11 +216,24 @@ function boneKey(frames: BMDBoneFrames, key: number, outPosition: THREE.Vector3,
   outQuaternion.setFromEuler(tmpEuler);
 }
 
+/**
+ * The keys an action loops over. The desktop loops a locked action (the walks and runs) over one key less
+ * (ZzzBMD.cpp, PlayAnimation: NumAnimationKeys - 1), its last key being where the cycle comes back to.
+ */
+export function loopKeyCount(model: BMDModel, actionIndex: number): number {
+  const action = model.actions[actionIndex] ?? model.actions[0];
+  const numKeys = Math.max(1, action?.numKeys || 1);
+  return action?.lockPositions && numKeys > 1 ? numKeys - 1 : numKeys;
+}
+
 // World matrices of every bone for an action at a (fractional, looping) key.
 export function computeBoneMatrices(model: BMDModel, actionIndex: number, time: number, out?: THREE.Matrix4[]): THREE.Matrix4[] {
   const action = model.actions[actionIndex] ? actionIndex : 0;
   const numKeys = Math.max(1, model.actions[action]?.numKeys || 1);
-  const k0 = Math.floor(time) % numKeys;
+  const loopKeys = loopKeyCount(model, action);
+  const locked = model.actions[action]?.lockPositions === true;
+  const k0 = Math.floor(time) % loopKeys;
+  // A locked action blends its key loopKeys - 1 into its last key (key 0's copy); others wrap round to key 0.
   const k1 = (k0 + 1) % numKeys;
   const t = time - Math.floor(time);
   const matrices = out || model.bones.map(() => new THREE.Matrix4());
@@ -162,6 +247,9 @@ export function computeBoneMatrices(model: BMDModel, actionIndex: number, time: 
       boneKey(frames, k1, tmpPosB, tmpQuatB);
       tmpPos.lerp(tmpPosB, t);
       tmpQuatA.slerp(tmpQuatB, t);
+      // A locked root stays on key 0's x and y; only its height moves (ZzzBMD.cpp, Animation: lockedRoot).
+      // Following the keys made the body slide away from where the character stands and snap back each loop.
+      if (index === 0 && locked) tmpPos.set(frames.positions[0], frames.positions[1], tmpPos.z);
       local.compose(tmpPos, tmpQuatA, unitScale);
     }
     if (bone.parent >= 0 && bone.parent < index) local.premultiply(matrices[bone.parent]);

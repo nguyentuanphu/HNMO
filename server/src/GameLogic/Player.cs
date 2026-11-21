@@ -49,13 +49,6 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     };
 
     /// <summary>
-    /// How long an outlaw (player killer) state lasts until it falls back one step. Each player kill
-    /// (re)starts it, and kills which can't escalate the state any further stack on top of it.
-    /// It can be shortened by killing monsters.
-    /// </summary>
-    private static readonly TimeSpan PlayerKillerStateDuration = TimeSpan.FromHours(3);
-
-    /// <summary>
     /// The duration until a hero state falls back one step.
     /// </summary>
     private static readonly TimeSpan HeroStateDuration = TimeSpan.FromHours(1);
@@ -124,6 +117,12 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     private IPetCommandManager? _petCommandManager;
 
     private Lazy<ComboStateMachine>? _comboStateLazy;
+
+    /// <summary>
+    /// The monster which hit this player last, and when. Written by the thread which applies the hit and
+    /// read by the auto-play combat (long range counter attack), so it is replaced as a whole.
+    /// </summary>
+    private volatile MonsterHit? _lastMonsterHit;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Player" /> class.
@@ -454,6 +453,12 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     /// <inheritdoc/>
     public bool IsAlive { get; set; }
 
+    /// <summary>
+    /// Gets or sets how long the player stays dead before coming back (e.g. the Arena's team battles); <c>null</c> for
+    /// the usual three seconds.
+    /// </summary>
+    public TimeSpan? RespawnDelay { get; set; }
+
     /// <inheritdoc/>
     public bool IsTeleporting { get; internal set; }
 
@@ -644,9 +649,19 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     public DateTime PotionCooldownUntil { get; set; } = DateTime.UtcNow;
 
     /// <summary>
+    /// Gets the times when the skills with a delay (<see cref="SkillDelays"/>) were used last, by skill number.
+    /// </summary>
+    internal System.Collections.Concurrent.ConcurrentDictionary<short, DateTime> SkillLastUses { get; } = new();
+
+    /// <summary>
     /// Gets or sets the timestamp of when the shield hiatus was last accrued.
     /// </summary>
     public DateTime LastShieldRecoveryHiatusAccrual { get; set; } = DateTime.UtcNow;
+
+    /// <summary>
+    /// Gets the login name with which this player is currently registered at the login server, if any.
+    /// </summary>
+    internal string? LoginServerRegistration => Volatile.Read(ref this._loginServerRegistration);
 
     /// <summary>
     /// Gets a value indicating whether opening the player store after entering the game is supported by this instance.
@@ -682,11 +697,6 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
 
         Interlocked.Exchange(ref this._lastAliveReportTicks, DateTime.UtcNow.Ticks);
     }
-
-    /// <summary>
-    /// Gets the login name with which this player is currently registered at the login server, if any.
-    /// </summary>
-    internal string? LoginServerRegistration => Volatile.Read(ref this._loginServerRegistration);
 
     /// <summary>
     /// Remembers that the login server accepted the login of this player with the specified login name.
@@ -894,18 +904,33 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     /// <inheritdoc/>
     public ValueTask ReflectDamageAsync(IAttacker reflector, uint damage)
     {
+        if (this.IsLateDamageBlockedBySafezone(reflector))
+        {
+            return ValueTask.CompletedTask;
+        }
+
         return this.HitAsync(this.GetHitInfo(damage, DamageAttributes.Reflected, reflector), reflector, null);
     }
 
     /// <inheritdoc/>
     public ValueTask ApplyPoisonDamageAsync(IAttacker initialAttacker, uint damage)
     {
+        if (this.IsLateDamageBlockedBySafezone(initialAttacker))
+        {
+            return ValueTask.CompletedTask;
+        }
+
         return this.HitAsync(new HitInfo(damage, 0, DamageAttributes.Poison), initialAttacker, null);
     }
 
     /// <inheritdoc/>
     public ValueTask ApplyBleedingDamageAsync(IAttacker initialAttacker, uint damage)
     {
+        if (this.IsLateDamageBlockedBySafezone(initialAttacker))
+        {
+            return ValueTask.CompletedTask;
+        }
+
         return this.HitAsync(this.GetHitInfo(damage, DamageAttributes.Undefined, initialAttacker), initialAttacker, null);
     }
 
@@ -972,8 +997,9 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     /// Adds experience points after killing the target object.
     /// </summary>
     /// <param name="killedObject">The killed object.</param>
+    /// <param name="damageShare">The share of damage dealt (0..1, default 1).</param>
     /// <returns>The gained experience.</returns>
-    public ValueTask<int> AddExpAfterKillAsync(IAttackable killedObject) => this._experience.AddAfterKillAsync(killedObject);
+    public ValueTask<int> AddExpAfterKillAsync(IAttackable killedObject, double damageShare = 1.0) => this._experience.AddAfterKillAsync(killedObject, damageShare);
 
     /// <summary>
     /// Calculates the amount of experience gained after a kill, without applying it to the character.
@@ -995,6 +1021,14 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     /// <param name="experience">The experience that should be added.</param>
     /// <param name="killedObject">The killed object that caused the experience gain.</param>
     public ValueTask AddExperienceAsync(int experience, IAttackable? killedObject) => this._experience.AddExperienceAsync(experience, killedObject);
+
+    /// <summary>
+    /// Adds the experience of an event reward: its amount times the server's experience rate, as master experience
+    /// at the maximum level of a master class.
+    /// </summary>
+    /// <param name="baseExperience">The reward's experience amount.</param>
+    /// <returns>The experience added.</returns>
+    public ValueTask<long> AddRewardExperienceAsync(long baseExperience) => this._experience.AddRewardExperienceAsync(baseExperience);
 
     /// <summary>
     /// Moves the player to the specified coordinate.
@@ -1273,9 +1307,23 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
             return false;
         }
 
+        var now = DateTime.UtcNow;
+        var lastUse = this.SkillLastUses.TryGetValue(skill.Number, out var last) ? last : (DateTime?)null;
+        if (!SkillDelays.HasPassed(skill.Number, lastUse, now))
+        {
+            // The client checks the delay too, so this is a modified client or a macro.
+            this.Logger.LogDebug("Skill {skill} used again before its delay passed by {player}", skill.Number, this);
+            return false;
+        }
+
         foreach (var requirement in skill.ConsumeRequirements)
         {
             this.Attributes![requirement.Attribute] -= this.GetRequiredValue(requirement, skillEntry);
+        }
+
+        if (SkillDelays.GetDelay(skill.Number) > TimeSpan.Zero)
+        {
+            this.SkillLastUses[skill.Number] = now;
         }
 
         return true;
@@ -1461,6 +1509,15 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     public ValueTask RunPersistenceExclusiveAsync(Func<ValueTask> operation, CancellationToken cancellationToken = default)
         => this._persistence.RunExclusiveAsync(operation, cancellationToken);
 
+    /// <summary>Refreshes timed account bonuses after a confirmed account mutation while holding the persistence lock.</summary>
+    public void RefreshAccountAttributeGrants()
+    {
+        if (this.Account is { } account && this.Attributes is { } attributes)
+        {
+            this._accountAttributeGrantPowerUps.Apply(account, attributes);
+        }
+    }
+
     /// <summary>
     /// Is called after the player killed a <see cref="Player"/>.
     /// Increment PK Level.
@@ -1468,8 +1525,13 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     /// <param name="killedPlayer">The player killed.</param>
     internal async ValueTask AfterKilledPlayerAsync(Player killedPlayer)
     {
-        if (this.DuelRoom?.State == DuelState.DuelStarted)
+        if (this.DuelRoom is { State: DuelState.DuelStarted } duelRoom
+            && duelRoom.IsDuelist(this)
+            && duelRoom.IsDuelist(killedPlayer)
+            && !ReferenceEquals(killedPlayer, this))
         {
+            // Only the kill of the opponent in the running duel is free; any other kill by a
+            // duelist (e.g. a third player) counts like everywhere else.
             return;
         }
 
@@ -1507,32 +1569,57 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
             return;
         }
 
-        if (this._selectedCharacter!.State != HeroState.PlayerKiller2ndStage)
-        {
-            if (this._selectedCharacter.State < HeroState.Normal)
-            {
-                this._selectedCharacter.State = HeroState.PlayerKillWarning;
-            }
-            else
-            {
-                this._selectedCharacter.State++;
-            }
-
-            // Stepping up to the next outlaw state restarts the clock for that state. Math.Max, so that
-            // a kill can never shorten an already longer remaining time.
-            this._selectedCharacter.StateRemainingSeconds = Math.Max(
-                this._selectedCharacter.StateRemainingSeconds,
-                (int)PlayerKillerStateDuration.TotalSeconds);
-        }
-        else
-        {
-            // Further kills as a 2nd stage outlaw can't escalate the state anymore, so they stack on
-            // top of the remaining time instead.
-            this._selectedCharacter.StateRemainingSeconds += (int)PlayerKillerStateDuration.TotalSeconds;
-        }
-
-        this._selectedCharacter.PlayerKillCount += 1;
+        // The kill raises the running points total, and the outlaw stage follows the total.
+        var character = this._selectedCharacter!;
+        character.StateRemainingSeconds = OutlawPoints.GetPointsAfterKill(character.State, character.StateRemainingSeconds);
+        character.State = OutlawPoints.GetState(character.StateRemainingSeconds);
+        character.PlayerKillCount += 1;
         await this.ForEachWorldObserverAsync<IUpdateCharacterHeroStatePlugIn>(o => o.UpdateCharacterHeroStateAsync(this), true).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Removes outlaw points, e.g. for a killed monster, and lets the outlaw state follow the new total.
+    /// </summary>
+    /// <param name="points">The points to remove.</param>
+    internal async ValueTask RemoveOutlawPointsAsync(int points)
+    {
+        if (this._selectedCharacter is not { State: > HeroState.Normal } character || points <= 0)
+        {
+            return;
+        }
+
+        character.StateRemainingSeconds -= points;
+        await this.UpdateOutlawStateAsync(character).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Gets the monster which hit this player within the specified time, if it is still alive.
+    /// Used by the MU helper's long range counter attack, which fights back against such a monster
+    /// even outside of the hunting range.
+    /// </summary>
+    /// <param name="maximumAge">How long ago the hit may have been.</param>
+    /// <returns>The monster, or <c>null</c> if no living monster hit this player recently.</returns>
+    internal Monster? GetRecentMonsterAttacker(TimeSpan maximumAge)
+    {
+        return this._lastMonsterHit is { } hit
+               && DateTime.UtcNow - hit.AtUtc <= maximumAge
+               && hit.Monster.IsAlive
+            ? hit.Monster
+            : null;
+    }
+
+    /// <summary>
+    /// Determines whether damage which arrives after the attack itself (poison and bleeding ticks, the
+    /// delayed reflected hit) is void because this player is standing in a safe zone by now. Classic
+    /// MU: no damage in the safe zone - the same rule as the target check of
+    /// <see cref="AttackableExtensions.IsAttackBlockedBySafezone"/>, which only applies when an attack starts.
+    /// Damage this player deals to itself (e.g. the shrinking zone of an arena match) is not affected.
+    /// </summary>
+    /// <param name="attacker">The attacker which caused the damage.</param>
+    /// <returns><c>true</c>, if the damage is blocked; otherwise, <c>false</c>.</returns>
+    internal bool IsLateDamageBlockedBySafezone(IAttacker attacker)
+    {
+        return !ReferenceEquals(attacker, this) && this.IsAtSafezone();
     }
 
     /// <summary>
@@ -1711,45 +1798,60 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
         var elapsedWholeSeconds = Math.Floor(elapsedSeconds);
         this._heroStateSecondsRemainder = elapsedSeconds - elapsedWholeSeconds;
         currentCharacter.StateRemainingSeconds -= (int)elapsedWholeSeconds;
+
+        if (currentCharacter.State > HeroState.Normal)
+        {
+            // Outlaws: one running points total, the stage follows it down.
+            await this.UpdateOutlawStateAsync(currentCharacter).ConfigureAwait(false);
+            return;
+        }
+
         if (currentCharacter.StateRemainingSeconds > 0)
         {
             return;
         }
 
-        // The time is up, so the state falls back one step towards the normal state. Killed monsters may
-        // have pushed the remaining time below zero, so the surplus is carried over to the next step.
+        // The time of the hero state is up, so it falls back one step towards the normal state.
         var surplusSeconds = -currentCharacter.StateRemainingSeconds;
-        if (currentCharacter.State > HeroState.Normal)
-        {
-            currentCharacter.State--;
-        }
-        else
-        {
-            currentCharacter.State++;
-        }
-
-        if (currentCharacter.State == HeroState.Normal)
-        {
-            currentCharacter.StateRemainingSeconds = 0;
-            currentCharacter.PlayerKillCount = 0;
-        }
-        else
-        {
-            var stateDuration = currentCharacter.State > HeroState.Normal ? PlayerKillerStateDuration : HeroStateDuration;
-
-            // May still be below zero, if the surplus exceeds this step as well. Then the next tick steps down again.
-            currentCharacter.StateRemainingSeconds = (int)stateDuration.TotalSeconds - surplusSeconds;
-        }
+        currentCharacter.State++;
+        currentCharacter.StateRemainingSeconds = currentCharacter.State == HeroState.Normal
+            ? 0
+            : (int)HeroStateDuration.TotalSeconds - surplusSeconds;
 
         await this.ForEachWorldObserverAsync<IUpdateCharacterHeroStatePlugIn>(p => p.UpdateCharacterHeroStateAsync(this), true).ConfigureAwait(false);
     }
 
     /// <summary>
-    /// Limits the remaining time of the hero state to the longest time which the current state can
-    /// legitimately have. Characters of servers which ran with the formerly broken countdown can have
-    /// a remaining time which grew by all the time they spent online.
+    /// Sets the outlaw state which the points total of the character gives, and clears the
+    /// kill count when the total is used up.
     /// </summary>
-    private void LimitHeroStateRemainingTime()
+    /// <param name="character">The outlaw character.</param>
+    private async ValueTask UpdateOutlawStateAsync(Character character)
+    {
+        var newState = OutlawPoints.GetState(character.StateRemainingSeconds);
+        if (newState == HeroState.Normal)
+        {
+            character.StateRemainingSeconds = 0;
+            character.PlayerKillCount = 0;
+        }
+
+        if (newState == character.State)
+        {
+            return;
+        }
+
+        character.State = newState;
+        await this.ForEachWorldObserverAsync<IUpdateCharacterHeroStatePlugIn>(p => p.UpdateCharacterHeroStateAsync(this), true).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Brings the saved hero state time into the current form: the remaining time of an outlaw saved before the
+    /// points system (each stage counted down 3 hours on its own) becomes the points total with the same time until
+    /// the character is clear, and the stage follows that total. Also limits the remaining time to the longest
+    /// time which the current state can legitimately have: characters of servers which ran with the formerly
+    /// broken countdown can have a remaining time which grew by all the time they spent online.
+    /// </summary>
+    private async ValueTask LimitHeroStateRemainingTimeAsync()
     {
         if (this._selectedCharacter is not { } character
             || character.State is HeroState.Normal or HeroState.New)
@@ -1757,11 +1859,46 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
             return;
         }
 
+        var savedState = character.State;
+        if (character.State > HeroState.Normal)
+        {
+            var converted = OutlawPoints.ConvertFormerRemainingTime(character.State, character.StateRemainingSeconds);
+            if (converted != character.StateRemainingSeconds)
+            {
+                this.Logger.LogInformation(
+                    "Converted the remaining outlaw time of character {CharacterName} ({HeroState}) from {RemainingSeconds} seconds of the stage to {Points} points.",
+                    character.Name,
+                    character.State,
+                    character.StateRemainingSeconds,
+                    converted);
+                character.StateRemainingSeconds = converted;
+            }
+
+            character.State = OutlawPoints.GetState(character.StateRemainingSeconds);
+            if (character.State == HeroState.Normal)
+            {
+                character.StateRemainingSeconds = 0;
+                character.PlayerKillCount = 0;
+            }
+
+            if (character.State != savedState)
+            {
+                await this.ForEachWorldObserverAsync<IUpdateCharacterHeroStatePlugIn>(p => p.UpdateCharacterHeroStateAsync(this), true).ConfigureAwait(false);
+            }
+
+            if (character.State == HeroState.Normal)
+            {
+                return;
+            }
+        }
+
         var maximumSeconds = character.State switch
         {
-            // Every kill after the one which reached the 2nd stage adds another state duration on top.
-            HeroState.PlayerKiller2ndStage => (int)PlayerKillerStateDuration.TotalSeconds * Math.Max(character.PlayerKillCount - 2, 1),
-            > HeroState.Normal => (int)PlayerKillerStateDuration.TotalSeconds,
+            // The first three kills give at most 86,400 points, every further kill at most 3,600 more.
+            HeroState.PlayerKiller2ndStage => OutlawPoints.PlayerKiller2ndStagePoints
+                + (OutlawPoints.FurtherKillPoints * Math.Max(character.PlayerKillCount - 3, 0)),
+            HeroState.PlayerKiller1stStage => OutlawPoints.PlayerKiller2ndStagePoints - 1,
+            HeroState.PlayerKillWarning => OutlawPoints.PlayerKiller1stStagePoints - 1,
             _ => (int)HeroStateDuration.TotalSeconds,
         };
 
@@ -1780,6 +1917,12 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     private async ValueTask HitAsync(HitInfo hitInfo, IAttacker attacker, Skill? skill, bool? isFinalStreakHit = null)
     {
         this._summon.RegisterHit(attacker);
+        if (attacker is Monster { SummonedBy: null } monsterAttacker
+            && !hitInfo.Attributes.HasFlag(DamageAttributes.Reflected))
+        {
+            this._lastMonsterHit = new MonsterHit(monsterAttacker, DateTime.UtcNow);
+        }
+
         var healthDamage = hitInfo.HealthDamage;
         int oversd = (int)(this.Attributes![Stats.CurrentShield] - hitInfo.ShieldDamage);
         if (oversd < 0)
@@ -1829,6 +1972,12 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
         if (hitInfo.Attributes.HasFlag(DamageAttributes.Poison))
         {
             // Poison Damage does not reflect to the attacker.
+            return;
+        }
+
+        if (hitInfo.Attributes.HasFlag(DamageAttributes.Reflected))
+        {
+            // Classic MU: returned damage only lowers the attacker's life, it is not reflected again.
             return;
         }
 
@@ -1887,7 +2036,9 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
         this._respawnAfterDeathCts = new CancellationTokenSource();
         await this.ForEachWorldObserverAsync<IObjectGotKilledPlugIn>(p => p.ObjectGotKilledAsync(this, killer), true).ConfigureAwait(false);
 
-        if (killer is Player killerAfterKilled
+        // A kill by the dark raven of a dark lord counts as the kill of its owner.
+        if ((killer as Player ?? (killer as IPlayerSurrogate)?.Owner) is { } killerAfterKilled
+            && killerAfterKilled != this
             && !(killerAfterKilled.GuildWarContext?.Score is { } score && score == this.GuildWarContext?.Score)
             && this.CurrentMiniGame?.AllowPlayerKilling is not true)
         {
@@ -1899,7 +2050,7 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
         {
             try
             {
-                await Task.Delay(3000, cancellationToken).ConfigureAwait(false);
+                await Task.Delay(this.RespawnDelay ?? TimeSpan.FromSeconds(3), cancellationToken).ConfigureAwait(false);
 
                 if (cancellationToken.IsCancellationRequested || this.CurrentMap is null)
                 {
@@ -2220,7 +2371,7 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
         }
 
         await this.ClientReadyAfterMapChangeAsync().ConfigureAwait(false);
-        this.LimitHeroStateRemainingTime();
+        await this.LimitHeroStateRemainingTimeAsync().ConfigureAwait(false);
         this._lastRegenerate = DateTime.UtcNow;
         this._heroStateSecondsRemainder = 0;
 
@@ -2622,4 +2773,6 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
             await cancelAction.CancelTradeAsync(this).ConfigureAwait(false);
         }
     }
+
+    private sealed record MonsterHit(Monster Monster, DateTime AtUtc);
 }

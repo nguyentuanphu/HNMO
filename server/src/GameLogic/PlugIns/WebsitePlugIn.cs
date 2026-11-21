@@ -20,9 +20,13 @@ public class WebsitePlugIn : IFeaturePlugIn, ISupportCustomConfiguration<Website
     /// <inheritdoc />
     public WebsiteConfiguration? Configuration { get; set; }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Creates the settings a new save starts with: a random admin path, so a new HNMO folder's admin panel
+    /// isn't at a path anyone can guess. The host sees it on the control page and in these settings.
+    /// </summary>
+    /// <returns>The default settings.</returns>
     public object CreateDefaultConfig()
     {
-        return new WebsiteConfiguration();
+        return new WebsiteConfiguration { AdminPath = WebsiteConfiguration.NewRandomAdminPath() };
     }
 }

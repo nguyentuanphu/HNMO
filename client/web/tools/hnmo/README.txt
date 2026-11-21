@@ -6,13 +6,20 @@ database that keeps your progress. You play in a web browser. The same folder ru
 Windows, Ubuntu/Linux and macOS (runtime/ has what each system needs).
 
 START
-  Windows: double-click "Start HNMO.bat". One window opens; keep it open while you
-           play, close it to stop the game (your progress is saved).
+  Windows: double-click "Start HNMO.bat". No window stays open: HNMO's icon appears
+           next to the clock (right-click it: open the game, the admin panel, the log, or
+           Stop HNMO). Your progress is saved. To see a problem at start in a window,
+           use "Start HNMO (window).bat" instead.
   Ubuntu/Linux: once, install PostgreSQL 16: sudo apt install postgresql-16
-           Then run ./start-hnmo.sh (Ctrl+C stops it).
+           Then run ./start-hnmo.sh: HNMO runs in the background (the Terminal can be
+           closed). Stop it with ./stop-hnmo.sh or "Stop HNMO" in the admin panel.
   macOS:   once, install PostgreSQL 16: brew install postgresql@16 (or Postgres.app),
            and allow the folder: xattr -dr com.apple.quarantine HNMO
-           Then run ./start-hnmo.sh in Terminal (Ctrl+C stops it).
+           Then run ./start-hnmo.sh in Terminal: HNMO runs in the background (the
+           Terminal can be closed). Stop it with ./stop-hnmo.sh or "Stop HNMO" in the
+           admin panel.
+  The log (what the old window showed): the admin panel's "Server log" page, or
+  save/logs (launcher.log, server.log, database.log).
   (Windows needs nothing installed: its database is in the folder.)
 
   The website opens in your browser at http://localhost:8080/ when it's ready: server
@@ -21,7 +28,10 @@ START
   first start sets up the save game and takes up to a few minutes.
 
   Windows may warn "Windows protected your PC" (the files aren't signed):
-  click "More info" and "Run anyway".
+  click "More info" and "Run anyway". (Tiếng Việt: Bấm "More info" -> "Run anyway".)
+  macOS Gatekeeper may say the app is from an unidentified developer:
+  right-click HNMO.app (or HNMO), choose "Open", and click "Open" again. (Tiếng Việt: Chuột phải -> "Open" -> "Open".)
+  Control page: http://localhost:8080/control (this computer only: Start/Stop/Restart, logs, backups, updates).
   Windows 11 "Smart App Control blocked a file": Windows marks everything that came from
   the internet. Before unzipping: right-click HNMO.zip, Properties, tick "Unblock", OK,
   then Extract All again. Already unzipped: open PowerShell in the HNMO folder and run
@@ -52,13 +62,28 @@ IN THE GAME
 
 ADMIN PANEL
   http://localhost:8095/  - on the host computer.
-  Through the website: http://YOUR-ADDRESS:8080/adminpanel (an admin login is always
-  needed there; it stays closed until an admin user exists). Change "adminpanel" to an
-  address that's hard to guess: admin panel, Plugins, "Website (admin address, Google
-  sign-in)". Leave it empty to allow the admin panel only on the host computer.
+  Through the website: a random, hard-to-guess address made for this folder, shown on
+  http://localhost:8080/control (an admin login is always needed there; it stays closed
+  until an admin user exists). Change it in the admin panel, Plugins, "Website (admin
+  address, Google sign-in)". Leave it empty to allow the admin panel only on the host computer.
+  From afar the 6-digit code of an authenticator app is needed: set it up first on the
+  host computer (admin panel, "2FA & Security"). After the code was right once, that
+  browser is trusted for 30 days (only the password then); "Forget every trusted browser"
+  on that page ends it everywhere. The same address opens every panel:
+  Season 9's under ".../s9/", the Arena's under ".../arena/", one sign-in for all.
+  From afar, Host settings shows only the licence (ports and folders: host computer only).
+
+UPDATES
+  Admin panel, "HNMO update": shows this folder's version and the newest one, with its
+  notes. "Update to <version>" downloads only the files that changed, makes a backup of the save
+  game, stops HNMO, puts the new files in and starts it again (a few minutes; players
+  are disconnected meanwhile). The save game stays as it is. If the new version doesn't
+  start, the old files and the save game from before the update come back by themselves.
+  What happened is in save/logs/update.log; the backup is in save/backups.
 
 PLAYERS AT ONCE
-  Up to 10 players can be in the game at once. A license file from the owner
+  Up to 10 players can be in the game at once, Season 6.3, Season 9 and the Arena
+  together (an account playing in two of them counts once). A license file from the owner
   (license.hnmo) raises that: put it next to "Start HNMO" and restart. The server's log
   says what it allows ("HNMO license: ...") and this computer's id, which the owner needs
   for a license tied to this computer.

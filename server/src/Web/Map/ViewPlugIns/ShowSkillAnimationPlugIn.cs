@@ -4,10 +4,10 @@
 
 namespace HNMO.Web.Map.ViewPlugIns;
 
-using Microsoft.JSInterop;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Views.World;
+using Microsoft.JSInterop;
 
 /// <summary>
 /// Implementation of <see cref="IShowSkillAnimationPlugIn"/> which uses the javascript map app.

@@ -5,10 +5,10 @@
 namespace HNMO.Startup;
 
 using System.Threading;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.Persistence;
 using HNMO.Persistence.Initialization;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// A container which takes care of the <see cref="Interfaces.IChatServer"/>.

@@ -4,8 +4,8 @@
 
 namespace HNMO.GameLogic;
 
-using Microsoft.Extensions.ObjectPool;
 using HNMO.Pathfinding;
+using Microsoft.Extensions.ObjectPool;
 
 /// <summary>
 /// The <see cref="PooledObjectPolicy{PathFinder}"/> which implements the creation

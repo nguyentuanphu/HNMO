@@ -4,12 +4,12 @@
 
 namespace HNMO.GameServer.Host;
 
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.Interfaces;
 using HNMO.Network;
 using HNMO.Network.PlugIns;
 using HNMO.Persistence;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Initialization of a <see cref="GameServer"/> which is executed before starting it.

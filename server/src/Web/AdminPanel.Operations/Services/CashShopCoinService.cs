@@ -109,7 +109,11 @@ public class CashShopCoinService
         grant.CreatedAt = DateTime.UtcNow;
         try
         {
-            await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            if (!await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false))
+            {
+                // Never report coins as granted when they weren't saved.
+                throw new InvalidOperationException("The coin grant wasn't saved.");
+            }
         }
         catch when (reference is not null)
         {

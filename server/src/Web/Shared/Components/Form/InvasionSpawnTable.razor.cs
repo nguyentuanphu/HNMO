@@ -6,11 +6,11 @@ namespace HNMO.Web.Shared.Components.Form;
 
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.PlugIns.InvasionEvents;
 using HNMO.Persistence;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 
 /// <summary>
 /// A component which shows a collection of <see cref="InvasionSpawnConfiguration"/> in a table.

@@ -17,6 +17,16 @@ public class WebsiteConfiguration
     public const string DefaultAdminPath = "adminpanel";
 
     /// <summary>
+    /// Makes a hard-to-guess admin path ("admin-" and 16 random letters and digits) for a new HNMO folder.
+    /// </summary>
+    /// <returns>The new path.</returns>
+    public static string NewRandomAdminPath()
+    {
+        const string letters = "abcdefghijkmnpqrstuvwxyz23456789";
+        return "admin-" + System.Security.Cryptography.RandomNumberGenerator.GetString(letters, 16);
+    }
+
+    /// <summary>
     /// Gets or sets the path under which the website opens the admin panel (e.g. "adminpanel" for
     /// https://your-site/adminpanel). Choose something hard to guess; empty turns the website's
     /// admin access off (the admin panel then only opens on the host computer).
@@ -26,10 +36,22 @@ public class WebsiteConfiguration
     [RegularExpression("^$|^[A-Za-z0-9][A-Za-z0-9_-]{2,39}$")]
     public string AdminPath { get; set; } = DefaultAdminPath;
 
+    /// <summary>Gets or sets the public website appearance. Existing installations keep Classic.</summary>
+    [Display(Name = nameof(WebsiteThemeLabels.Caption), Description = nameof(WebsiteThemeLabels.Description), ResourceType = typeof(WebsiteThemeLabels))]
+    [EnumDataType(typeof(WebsiteTheme))]
+    public WebsiteTheme Theme { get; set; } = WebsiteTheme.Classic;
+
     /// <summary>
     /// Gets or sets the OAuth client id of a Google Cloud "Web application" client; empty hides "Sign in with Google".
     /// </summary>
     [Display(Name = nameof(Properties.PlugInResources.WebsiteConfiguration_GoogleClientId_Caption), Description = nameof(Properties.PlugInResources.WebsiteConfiguration_GoogleClientId_Description), ResourceType = typeof(Properties.PlugInResources))]
     [StringLength(200)]
     public string GoogleClientId { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the web game hides its own password form and requires
+    /// players to sign in on the website first.
+    /// </summary>
+    [Display(Name = nameof(Properties.PlugInResources.WebsiteConfiguration_RequireWebsiteLogin_Caption), Description = nameof(Properties.PlugInResources.WebsiteConfiguration_RequireWebsiteLogin_Description), ResourceType = typeof(Properties.PlugInResources))]
+    public bool RequireWebsiteLogin { get; set; }
 }

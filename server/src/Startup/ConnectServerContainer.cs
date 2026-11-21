@@ -6,13 +6,13 @@ namespace HNMO.Startup;
 
 using System.Collections;
 using System.Threading;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using HNMO.ConnectServer;
 using HNMO.DataModel.Configuration;
 using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.Persistence.Initialization;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// A container which keeps all <see cref="Interfaces.IConnectServer"/>s in one <see cref="IHostedService"/>.
@@ -128,6 +128,12 @@ public class ConnectServerContainer : ServerContainerBase, IEnumerable<IConnectS
 
     private IConnectServer InitializeConnectServer(ConnectServerDefinition connectServerDefinition)
     {
+        var hostSettings = HostSettingsStore.TryLoad(HostSettingsStore.ResolveDefaultPath(AppContext.BaseDirectory));
+        if (hostSettings is { ConnectServerPort: > 0 } && hostSettings.ConnectServerPort != 44406 && connectServerDefinition.ClientListenerPort == 44406)
+        {
+            connectServerDefinition.ClientListenerPort = hostSettings.ConnectServerPort;
+        }
+
         var connectServer = this._connectServerFactory.CreateConnectServer(connectServerDefinition);
         this._servers.Add(connectServer);
         this._connectServers.Add(connectServer);

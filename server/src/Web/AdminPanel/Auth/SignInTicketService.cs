@@ -30,11 +30,12 @@ public class SignInTicketService
     /// <param name="claims">The claims of the authenticated user.</param>
     /// <param name="isPersistent">If set to <c>true</c>, the resulting cookie survives a browser restart.</param>
     /// <returns>The ticket value, which has to be posted to the sign in endpoint.</returns>
-    public string Issue(IEnumerable<Claim> claims, bool isPersistent)
+    /// <param name="trustToken">The trusted-browser cookie to set with the sign-in, if any.</param>
+    public string Issue(IEnumerable<Claim> claims, bool isPersistent, string? trustToken = null)
     {
         this.RemoveExpiredTickets();
         var value = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
-        this._tickets[value] = new Ticket(claims.ToList(), isPersistent, DateTime.UtcNow + TicketLifetime);
+        this._tickets[value] = new Ticket(claims.ToList(), isPersistent, DateTime.UtcNow + TicketLifetime, trustToken);
         return value;
     }
 
@@ -76,5 +77,6 @@ public class SignInTicketService
     /// <param name="Claims">The claims of the authenticated user.</param>
     /// <param name="IsPersistent">A value indicating whether the resulting cookie survives a browser restart.</param>
     /// <param name="ExpiresAt">The point in time at which this ticket expires.</param>
-    public record Ticket(IReadOnlyList<Claim> Claims, bool IsPersistent, DateTime ExpiresAt);
+    /// <param name="TrustToken">The trusted-browser cookie to set with the sign-in, if the browser is to be trusted.</param>
+    public record Ticket(IReadOnlyList<Claim> Claims, bool IsPersistent, DateTime ExpiresAt, string? TrustToken = null);
 }

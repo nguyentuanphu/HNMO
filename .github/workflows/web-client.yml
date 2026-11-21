@@ -5,9 +5,9 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['client/web/**', '.github/workflows/web-client.yml']
+    paths: ['client/web/**', 'server/**/*.resx', '.github/workflows/web-client.yml']
   pull_request:
-    paths: ['client/web/**', '.github/workflows/web-client.yml']
+    paths: ['client/web/**', 'server/**/*.resx', '.github/workflows/web-client.yml']
 
 jobs:
   build:
@@ -25,5 +25,9 @@ jobs:
           git diff --exit-code client/web/src/net/packets.generated.ts
       - name: Type-check (game and tests)
         run: npm run typecheck --prefix client/web
+      - name: Check Vietnamese coverage and placeholders
+        run: python3 client/web/tools/lang/check-vi.py
       - name: Build
         run: npm run build --prefix client/web
+      - name: Unit tests (file formats, Season 9 pack script)
+        run: npm run test:unit --prefix client/web

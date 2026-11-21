@@ -86,7 +86,7 @@ public class CaptionsPageTests
         var cut = this._context.Render<Captions>();
 
         cut.WaitForAssertion(() => Assert.That(cut.Markup, Does.Contain(Resources.CaptionsNotLinkedTitle)));
-        Assert.That(cut.FindAll("button").Select(b => b.TextContent.Trim()), Is.EqualTo(new[] { Resources.LinkBuiltInCaptions }));
+        Assert.That(cut.FindAll("button").Select(b => b.TextContent.Trim()), Is.EqualTo(new[] { Resources.PageHelpTitle, Resources.LinkBuiltInCaptions }));
         Assert.That(cut.FindAll("table"), Is.Empty);
         Assert.That(cut.Markup, Does.Not.Contain(Resources.AllLocalizationsInPlace));
     }

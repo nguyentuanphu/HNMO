@@ -4,10 +4,10 @@
 
 namespace HNMO.Web.Shared.Components.Form;
 
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.Persistence;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Selection field for <see cref="GameLogic.PlugIns.PeriodicTasks.PeriodicTaskConfiguration.AllowedServerIds"/>.

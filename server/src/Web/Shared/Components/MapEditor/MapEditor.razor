@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.Shared.Properties.Resources
 @using HNMO.DataModel
 @using HNMO.DataModel.Configuration
 @using HNMO.Persistence
@@ -36,23 +37,23 @@
 
 <div class="btn-toolbar my-2" role="toolbar" aria-label="@Resources.Toolbar">
     <div class="btn-group me-2" role="group" aria-label="@Resources.CreationGroup">
-        <button type="button" class="btn btn-secondary" @onclick="@this.CreateNewSpawnArea" disabled="@this._createMode">
+        <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-secondary" @onclick="@this.CreateNewSpawnArea" disabled="@this._createMode">
             <span class="oi oi-plus"></span> @typeof(MonsterSpawnArea).GetTypeCaption()
         </button>
-        <button type="button" class="btn btn-secondary" @onclick="@this.CreateNewEnterGate" disabled="@this._createMode">
+        <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-secondary" @onclick="@this.CreateNewEnterGate" disabled="@this._createMode">
             <span class="oi oi-plus"></span> @typeof(EnterGate).GetTypeCaption()
         </button>
-        <button type="button" class="btn btn-secondary" @onclick="@this.CreateNewExitGate" disabled="@this._createMode">
+        <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-secondary" @onclick="@this.CreateNewExitGate" disabled="@this._createMode">
             <span class="oi oi-plus"></span> @typeof(ExitGate).GetTypeCaption()
         </button>
     </div>
     <div class="btn-group" role="group" aria-label="@Resources.ControlGroup">
         @if (this._createMode)
         {
-            <button id="applyCreate" type="button" class="btn btn-primary" @onclick="@(_ => this._createMode = false)">
+            <button title="@HelpResources.PageHelpHintCreate" id="applyCreate" type="button" class="btn btn-primary" @onclick="@(_ => this._createMode = false)">
                 <span class="oi oi-circle-check"></span>
             </button>
-            <button id="cancelCreate" type="button" class="btn btn-secondary" @onclick="@this.CancelCreation">
+            <button title="@HelpResources.PageHelpHintCancel" id="cancelCreate" type="button" class="btn btn-secondary" @onclick="@this.CancelCreation">
                 <span class="oi oi-circle-x"></span>
             </button>
         }
@@ -67,10 +68,10 @@
             </button>
             @if (this._focusedObject is not null)
             {
-                <button id="duplicateFocused" type="button" class="btn btn-secondary" @onclick="@this.DuplicateFocusedObject">
+                <button title="@HelpResources.PageHelpHintCopy" id="duplicateFocused" type="button" class="btn btn-secondary" @onclick="@this.DuplicateFocusedObject">
                     <span class="oi oi-layers"></span> @Resources.Duplicate
                 </button>
-                <button id="removeFocused" type="button" class="btn btn-secondary" @onclick="@this.RemoveFocusedObject">
+                <button title="@HelpResources.PageHelpHintDelete" id="removeFocused" type="button" class="btn btn-secondary" @onclick="@this.RemoveFocusedObject">
                     <span class="oi oi-x"></span> @Resources.Remove
                 </button>
             }
@@ -139,15 +140,15 @@
 
         <div class="map-zoom-toolbar btn-toolbar my-2" role="toolbar">
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-secondary"
+                <button title="@HelpResources.PageHelpHintZoomOut" type="button" class="btn btn-secondary"
                         @onclick="@this.ZoomOutAsync"
                         disabled="@(this._zoomManager is null || this._zoomManager.IsAtMinZoom)">
                     <span class="oi oi-minus"></span>
                 </button>
-                <button type="button" class="btn btn-secondary zoom-display" disabled>
+                <button title="@HelpResources.PageHelpHintZoomStatus" type="button" class="btn btn-secondary zoom-display" disabled>
                     @this.ZoomPercentage%
                 </button>
-                <button type="button" class="btn btn-secondary"
+                <button title="@HelpResources.PageHelpHintZoomIn" type="button" class="btn btn-secondary"
                         @onclick="@this.ZoomInAsync"
                         disabled="@(this._zoomManager is null || this._zoomManager.IsAtMaxZoom)">
                     <span class="oi oi-plus"></span>
@@ -178,27 +179,27 @@
         {
             <div class="map-object-filter mb-2">
                 <div class="btn-group w-100 mb-1 flex-wrap" role="group" aria-label="@Resources.TypeFilter">
-                    <button type="button"
+                    <button title="@HelpResources.PageHelpHintSearch" type="button"
                             class="btn btn-sm @(this._filterService.ActiveFilter == ObjectTypeFilter.None ? "btn-primary" : "btn-outline-primary")"
                             @onclick="@this.SetAllFilter">
                         @Resources.All
                     </button>
-                    <button type="button"
+                    <button title="@HelpResources.PageHelpHintExpand" type="button"
                             class="btn btn-sm @(this.IsFilterActive(ObjectTypeFilter.Monsters) ? "btn-primary" : "btn-outline-primary")"
                             @onclick="@(() => this.ToggleFilter(ObjectTypeFilter.Monsters))">
                         @Resources.Monsters
                     </button>
-                    <button type="button"
+                    <button title="@HelpResources.PageHelpHintExpand" type="button"
                             class="btn btn-sm @(this.IsFilterActive(ObjectTypeFilter.Npcs) ? "btn-primary" : "btn-outline-primary")"
                             @onclick="@(() => this.ToggleFilter(ObjectTypeFilter.Npcs))">
                         @Resources.Npcs
                     </button>
-                    <button type="button"
+                    <button title="@HelpResources.PageHelpHintExpand" type="button"
                             class="btn btn-sm @(this.IsFilterActive(ObjectTypeFilter.Gates) ? "btn-primary" : "btn-outline-primary")"
                             @onclick="@(() => this.ToggleFilter(ObjectTypeFilter.Gates))">
                         @Resources.Gates
                     </button>
-                    <button type="button"
+                    <button title="@HelpResources.PageHelpHintExpand" type="button"
                             class="btn btn-sm @(this.IsFilterActive(ObjectTypeFilter.Others) ? "btn-primary" : "btn-outline-primary")"
                             @onclick="@(() => this.ToggleFilter(ObjectTypeFilter.Others))">
                         @Resources.Others

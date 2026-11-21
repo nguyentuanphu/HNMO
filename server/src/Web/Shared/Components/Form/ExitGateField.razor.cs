@@ -6,8 +6,8 @@ namespace HNMO.Web.Shared.Components.Form;
 
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.AspNetCore.Components;
 using HNMO.DataModel.Configuration;
+using Microsoft.AspNetCore.Components;
 
 /// <summary>
 /// Field for an <see cref="ExitGate"/> property.

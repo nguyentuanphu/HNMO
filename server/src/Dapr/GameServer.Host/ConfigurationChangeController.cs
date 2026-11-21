@@ -5,11 +5,11 @@
 namespace HNMO.GameServer.Host;
 
 using global::Dapr;
-using Microsoft.AspNetCore.Mvc;
 using HNMO.Dapr.Common;
 using HNMO.Interfaces;
 using HNMO.Persistence.EntityFramework;
 using HNMO.PlugIns;
+using Microsoft.AspNetCore.Mvc;
 
 /// <summary>
 /// The API controller which handles the calls of the <see cref="ConfigurationChangePublisher"/>

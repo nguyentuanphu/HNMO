@@ -10,12 +10,12 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using global::Discord;
 using global::Discord.WebSocket;
-using Microsoft.Extensions.Logging;
 using HNMO.Discord.ChatBridge;
 using HNMO.Discord.Properties;
 using HNMO.Discord.Provisioning;
 using HNMO.GameLogic.AccountLinking;
 using HNMO.Interfaces;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The Discord bot. It shows the status of the game servers, answers the slash commands,

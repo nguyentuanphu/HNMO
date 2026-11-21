@@ -4,10 +4,10 @@
 
 namespace HNMO.Web.AdminPanel.Pages;
 
-using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using HNMO.Persistence;
 using HNMO.Persistence.Initialization.Updates;
+using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 /// <summary>
 /// The set-up page.

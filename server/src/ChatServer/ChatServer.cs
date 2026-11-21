@@ -10,11 +10,11 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Timers;
-using Microsoft.Extensions.Logging;
 using HNMO.Interfaces;
 using HNMO.Network;
 using HNMO.Network.Analyzer;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 using Timer = System.Timers.Timer;
 
 /// <summary>

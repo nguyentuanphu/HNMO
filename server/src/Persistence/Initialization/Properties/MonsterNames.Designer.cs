@@ -2548,6 +2548,13 @@ namespace HNMO.Persistence.Initialization.Properties {
             }
         }
 
+        /// <summary>Gets ArenaHerald from the configuration name resources.</summary>
+        public static string ArenaHerald {
+            get {
+                return ResourceManager.GetString("ArenaHerald", resourceCulture);
+            }
+        }
+
         /// <summary>Gets ChaosCastle1 from the configuration name resources.</summary>
         public static string ChaosCastle1 {
             get {

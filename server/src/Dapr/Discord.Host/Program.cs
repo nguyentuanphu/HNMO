@@ -2,14 +2,14 @@
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using HNMO.Dapr.Common;
 using HNMO.Discord;
 using HNMO.Interfaces;
 using HNMO.PlugIns;
 using HNMO.ServerClients;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = DaprService.CreateBuilder("Discord", args);
 

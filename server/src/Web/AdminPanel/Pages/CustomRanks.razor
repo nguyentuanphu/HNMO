@@ -1,0 +1,200 @@
+@page "/custom-ranks"
+
+<PageTitle>@L("Custom Ranks & Titles", "Danh Hiệu Tùy Chỉnh")</PageTitle>
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+    <div class="d-flex align-items-center gap-2">
+        <h3 class="mb-0">@L("Custom Ranks & Titles", "Danh Hiệu Tùy Chỉnh")</h3>
+        <button type="button"
+                class="btn btn-sm btn-outline-info"
+                title="@L("Show or hide instructions for this page.", "Hiện hoặc ẩn hướng dẫn sử dụng trang này.")"
+                @onclick="() => this._showHelp = !this._showHelp">
+            ?
+        </button>
+    </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextCustomRanks" />
+    <div class="btn-group btn-group-sm" role="group" aria-label="@L("Language", "Ngôn ngữ")">
+        <button type="button" class="btn @(!this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(false)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintLanguageEn">English</button>
+        <button type="button" class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(true)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintLanguageVi">Tiếng Việt</button>
+    </div>
+</div>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info mb-3" role="note">
+        <strong>@L("How to use this page", "Hướng dẫn sử dụng trang này"):</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("Define rank/title tiers earned by character Level, Master Level, Resets, VIP Level, claimed Achievements/Missions, or special granted keys.", "Thiết lập các cấp danh hiệu mở khóa theo Cấp độ, Cấp Master, Reset, cấp VIP, số Thành tựu/Nhiệm vụ đã nhận hoặc mã đặc biệt.")</li>
+            <li>@L("The highest Priority unlocked tier shows beside the character's name and/or in chat unless the player picks another unlocked title with /title <id|auto>.", "Cấp có Độ ưu tiên cao nhất đã mở khóa sẽ hiển thị cạnh tên và/hoặc trong chat trừ khi người chơi đổi bằng lệnh /title <id|auto>.")</li>
+            <li>@L("CustomRanksPlugIn is OFF by default until you turn it ON and save.", "CustomRanksPlugIn mặc định TẮT cho tới khi bạn bật và lưu ở đây.")</li>
+        </ul>
+    </div>
+}
+
+@if (this._isLoading)
+{
+    <p>@L("Loading custom ranks configuration...", "Đang tải cấu hình danh hiệu tùy chỉnh...")</p>
+}
+else if (this._configuration is { } cfg)
+{
+    <div class="card mb-3">
+        <div class="card-header fw-semibold">@L("General Settings", "Cài Đặt Chung")</div>
+        <div class="card-body">
+            <div class="row g-3 align-items-center">
+                <div class="col-md-3">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="crEnabled"
+                               @bind="this._isActive"
+                               title="@L("Enable or disable CustomRanksPlugIn on this server.", "Bật hoặc tắt hệ thống danh hiệu tùy chỉnh.")" />
+                        <label class="form-check-label" for="crEnabled">@L("Enable Custom Ranks", "Bật Danh Hiệu")</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="crNameplate"
+                               @bind="cfg.ShowByNameplate"
+                               title="@L("Display active rank badges above/beside overhead player names.", "Hiển thị danh hiệu cạnh tên nhân vật trên màn hình game.")" />
+                        <label class="form-check-label" for="crNameplate">@L("Show by Nameplate", "Hiện Cạnh Tên")</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="crChat"
+                               @bind="cfg.ShowInChat"
+                               title="@L("Prefix chat lines with the speaker's active rank badge.", "Hiển thị danh hiệu trước tên trong khung chat.")" />
+                        <label class="form-check-label" for="crChat">@L("Show in Chat", "Hiện Trong Chat")</label>
+                    </div>
+                </div>
+                <div class="col-md-3 text-md-end">
+                    <button type="button" class="btn btn-primary btn-sm"
+                            disabled="@this._isSaving"
+                            title="@L("Save custom rank settings and tiers.", "Lưu cấu hình và danh sách danh hiệu.")"
+                            @onclick="this.SaveAsync">
+                        @L("Save Settings", "Lưu Cài Đặt")
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm ms-1"
+                            title="@L("Restore starter rank tier presets.", "Khôi phục danh hiệu mẫu mặc định.")"
+                            @onclick="this.RestoreDefaults">
+                        @L("Defaults", "Mặc Định")
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header d-flex align-items-center justify-content-between">
+            <span class="fw-semibold">@L("Rank / Title Tiers", "Danh Sách Cấp Danh Hiệu") (@cfg.Tiers.Count)</span>
+            <button type="button" class="btn btn-sm btn-outline-primary"
+                    title="@L("Add a new custom rank tier row.", "Thêm một cấp danh hiệu mới.")"
+                    @onclick="this.AddTier">
+                + @L("Add Tier", "Thêm Danh Hiệu")
+            </button>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-sm table-striped align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th title="@L("Enable tier", "Bật cấp")">@L("On", "Bật")</th>
+                        <th title="@L("Unique identifier used in /title <id>", "Mã cấp dùng với lệnh /title <id>")">@L("Id", "Mã")</th>
+                        <th title="@L("Higher priority wins when qualifying for multiple ranks.", "Ưu tiên cao hơn hiển thị trước nếu đạt nhiều điều kiện.")">@L("Priority", "Ưu tiên")</th>
+                        <th>@L("Title (EN)", "Tên (EN)")</th>
+                        <th>@L("Title (VI)", "Tên (VI)")</th>
+                        <th title="@L("CSS Hex badge color (e.g. #ffd166).", "Mã màu CSS Hex (vd #ffd166).")">@L("Color", "Màu")</th>
+                        <th>@L("Min Lv", "Cấp")</th>
+                        <th>@L("Master Lv", "Master")</th>
+                        <th>@L("Resets", "Reset")</th>
+                        <th>@L("VIP", "VIP")</th>
+                        <th title="@L("Minimum claimed daily/weekly missions or milestones.", "Số nhiệm vụ/mốc đã nhận thưởng tối thiểu.")">@L("Achiev.", "Thành tựu")</th>
+                        <th title="@L("Optional granted achievement key required (e.g. castle_winner).", "Mã thành tựu đặc biệt cần được trao (để trống nếu không yêu cầu).")">@L("Special Key", "Mã Đặc Biệt")</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var i = 0; i < cfg.Tiers.Count; i++)
+                    {
+                        var tier = cfg.Tiers[i];
+                        var idx = i;
+                        <tr>
+                            <td><input type="checkbox" class="form-check-input" @bind="tier.Enabled" /></td>
+                            <td><input type="text" class="form-control form-control-sm" style="min-width:95px" @bind="tier.Id" /></td>
+                            <td><input type="number" class="form-control form-control-sm" style="width:72px" @bind="tier.Priority" /></td>
+                            <td><input type="text" class="form-control form-control-sm" style="min-width:115px" @bind="tier.TitleEn" /></td>
+                            <td><input type="text" class="form-control form-control-sm" style="min-width:115px" @bind="tier.TitleVi" /></td>
+                            <td>
+                                <div class="d-flex align-items-center gap-1">
+                                    <span style="display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid #888;background:@tier.ColorHex"></span>
+                                    <input type="text" class="form-control form-control-sm" style="width:82px" @bind="tier.ColorHex" />
+                                </div>
+                            </td>
+                            <td><input type="number" min="0" class="form-control form-control-sm" style="width:72px" @bind="tier.MinLevel" /></td>
+                            <td><input type="number" min="0" class="form-control form-control-sm" style="width:72px" @bind="tier.MinMasterLevel" /></td>
+                            <td><input type="number" min="0" class="form-control form-control-sm" style="width:70px" @bind="tier.MinResets" /></td>
+                            <td><input type="number" min="0" class="form-control form-control-sm" style="width:65px" @bind="tier.MinVipLevel" /></td>
+                            <td><input type="number" min="0" class="form-control form-control-sm" style="width:72px" @bind="tier.MinMissionsClaimed" /></td>
+                            <td><input type="text" class="form-control form-control-sm" style="min-width:110px" @bind="tier.RequiredAchievementKey" /></td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-outline-danger"
+                                        title="@L("Remove this rank tier.", "Xóa cấp danh hiệu này.")"
+                                        @onclick="() => this.RemoveTier(idx)">×</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header fw-semibold">@L("Special Achievement Key Grants", "Trao Mã Danh Hiệu Đặc Biệt")</div>
+        <div class="card-body">
+            <div class="row g-2 align-items-end mb-3">
+                <div class="col-md-4">
+                    <label class="form-label mb-1">@L("Character Name", "Tên Nhân Vật")</label>
+                    <input type="text" class="form-control form-control-sm" @bind="this._grantCharacter" placeholder="HeroName" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label mb-1">@L("Achievement Key", "Mã Thành Tựu")</label>
+                    <input type="text" class="form-control form-control-sm" @bind="this._grantKey" placeholder="castle_winner" />
+                </div>
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-sm btn-success me-1"
+                            title="@L("Grant the achievement key to this character.", "Trao mã danh hiệu đặc biệt cho nhân vật.")"
+                            @onclick="this.GrantKey">
+                        @L("Grant Key", "Trao Mã")
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-warning"
+                            title="@L("Revoke the achievement key from this character.", "Thu hồi mã danh hiệu đặc biệt khỏi nhân vật.")"
+                            @onclick="this.RevokeKey">
+                        @L("Revoke", "Thu Hồi")
+                    </button>
+                </div>
+            </div>
+
+            @if (this._holders.Count > 0)
+            {
+                <table class="table table-sm mb-0">
+                    <thead>
+                        <tr>
+                            <th>@L("Character", "Nhân vật")</th>
+                            <th>@L("Granted Keys", "Mã đã trao")</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var h in this._holders)
+                        {
+                            <tr>
+                                <td>@h.CharacterName</td>
+                                <td>@string.Join(", ", h.AchievementKeys)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="text-muted small">@L("No special achievement keys granted yet.", "Chưa có nhân vật nào được trao mã đặc biệt.")</div>
+            }
+        </div>
+    </div>
+}

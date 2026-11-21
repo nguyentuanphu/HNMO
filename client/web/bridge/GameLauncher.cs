@@ -6,8 +6,12 @@
 // development the server and database are started separately.
 
 using System.Diagnostics;
+using System.Net.Http;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Text.Json;
+using HNMO.Interfaces;
 
 internal sealed class LauncherOptions
 {
@@ -30,17 +34,103 @@ internal sealed class LauncherOptions
     public int ConnectServerPort { get; set; } = 44406;
 
     public string? OpenBrowserUrl { get; set; } = "http://localhost:8080/";
+
+    public string? SettingsFilePath { get; set; }
+
+    public int WebPort { get; set; } = 8080;
+
+    /// <summary>Gets or sets a value indicating whether a Season 9 game server program runs too (HostSettings.SeasonNineEnabled).</summary>
+    public bool SeasonNineEnabled { get; set; }
+
+    /// <summary>Gets the Season 9 program's connect server port: Season 6.3's plus 100 (HnmoSeasonInstance).</summary>
+    public int SeasonNineConnectServerPort => this.ConnectServerPort + HnmoSeasonInstance.SeasonNinePortOffset;
+
+    /// <summary>Gets the Season 9 program's admin panel: the next port after Season 6.3's.</summary>
+    public string SeasonNineAdminUrl => new UriBuilder(this.AdminUrl) { Port = new Uri(this.AdminUrl).Port + 1 }.Uri.ToString().TrimEnd('/');
+
+    /// <summary>Gets or sets a value indicating whether the HNMO Arena program runs too (HostSettings.ArenaEnabled).</summary>
+    public bool ArenaEnabled { get; set; }
+
+    /// <summary>Gets the Arena program's connect server port: Season 6.3's plus 200 (HnmoSeasonInstance).</summary>
+    public int ArenaConnectServerPort => this.ConnectServerPort + HnmoSeasonInstance.ArenaPortOffset;
+
+    /// <summary>Gets the Arena program's admin panel: two ports after Season 6.3's.</summary>
+    public string ArenaAdminUrl => new UriBuilder(this.AdminUrl) { Port = new Uri(this.AdminUrl).Port + 2 }.Uri.ToString().TrimEnd('/');
 }
 
-internal sealed class GameLauncher(LauncherOptions options, string contentRoot, ILogger<GameLauncher> logger) : IHostedService
+internal sealed class GameLauncher(LauncherOptions options, string contentRoot, IHostApplicationLifetime lifetime, ILogger<GameLauncher> logger) : IHostedService
 {
     private static readonly TimeSpan DatabaseStartTimeout = TimeSpan.FromSeconds(60);
     private static readonly TimeSpan ServerStartTimeout = TimeSpan.FromMinutes(10);
+    private static readonly HttpClient CrashWebhookClient = new() { Timeout = TimeSpan.FromSeconds(10) };
 
+    private readonly SemaphoreSlim _lifecycleLock = new(1, 1);
     private Process? _server;
+    // The programs next to Season 6.3's: Season 9 and the Arena.
+    private readonly SecondaryProgram[] _secondary =
+    [
+        new(HnmoSeasonInstance.SeasonNine, "Season 9", "server-s9.log", () => options.SeasonNineEnabled, () => options.SeasonNineConnectServerPort, () => options.SeasonNineAdminUrl),
+        new(HnmoSeasonInstance.Arena, "Arena", "server-arena.log", () => options.ArenaEnabled, () => options.ArenaConnectServerPort, () => options.ArenaAdminUrl),
+    ];
+    private RollingLogWriter? _serverLogWriter;
     private bool _databaseStarted;
     private int _stopped;
+    private volatile bool _intentionalStop;
     private PosixSignalRegistration? _closeWindow;
+
+    public bool IsLaunching { get; private set; }
+
+    public string? LastError { get; private set; }
+
+    public string SaveFullPath => this.Full(options.SavePath);
+
+    public string PostgresToolPath(string name) => this.PostgresTool(name);
+
+    public string LogFolderPath => this.LogDirectory;
+
+    public async Task EnsureDatabaseRunningAsync(CancellationToken cancellationToken)
+    {
+        await this._lifecycleLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            Directory.CreateDirectory(this.LogDirectory);
+            await this.StartDatabaseAsync(cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            this._lifecycleLock.Release();
+        }
+    }
+
+    public void RotateLogsIfNeeded()
+    {
+        var cfg = MaintenanceSettings.Load(this.SaveFullPath);
+        var maxFileBytes = Math.Max(1L, cfg.MaxLogFileMb) * 1024L * 1024L;
+        var maxTotalBytes = Math.Max(10L, cfg.MaxLogTotalMb) * 1024L * 1024L;
+        if (this._serverLogWriter is { } writer)
+        {
+            writer.MaxFileBytes = maxFileBytes;
+            writer.MaxDays = cfg.MaxLogDays;
+            writer.MaxTotalBytes = maxTotalBytes;
+        }
+
+        RollingLogWriter.RotateExternalLogIfNeeded(Path.Combine(this.LogDirectory, "database.log"), maxFileBytes, cfg.MaxLogDays, maxTotalBytes);
+        RollingLogWriter.EnforceRetention(this.LogDirectory, cfg.MaxLogDays, maxTotalBytes);
+    }
+
+    public async Task RunVacuumAnalyzeAsync(CancellationToken cancellationToken)
+    {
+        var psql = this.PostgresTool("psql");
+        await RunPsqlAsync(psql, options.DatabasePort, options.DatabasePassword, "hnmo", ["-v", "ON_ERROR_STOP=1", "-c", "VACUUM ANALYZE;"], cancellationToken).ConfigureAwait(false);
+    }
+
+    public async Task RestoreDatabaseSqlAsync(string sqlFilePath, CancellationToken cancellationToken)
+    {
+        await this.EnsureDatabaseRunningAsync(cancellationToken).ConfigureAwait(false);
+        var psql = this.PostgresTool("psql");
+        await RunPsqlAsync(psql, options.DatabasePort, options.DatabasePassword, "postgres", ["-v", "ON_ERROR_STOP=1", "-c", "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'hnmo' AND pid <> pg_backend_pid();", "-c", "DROP DATABASE IF EXISTS hnmo;", "-c", "CREATE DATABASE hnmo;"], cancellationToken).ConfigureAwait(false);
+        await RunPsqlAsync(psql, options.DatabasePort, options.DatabasePassword, "hnmo", ["-v", "ON_ERROR_STOP=1", "-f", sqlFilePath], cancellationToken).ConfigureAwait(false);
+    }
 
     // The game server's process of the last start (id and start time), so a server left running by a
     // window that was closed hard can be found and stopped at the next start.
@@ -112,9 +202,48 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
         this._closeWindow = PosixSignalRegistration.Create(PosixSignal.SIGHUP, _ => this.StopNow());
         AppDomain.CurrentDomain.ProcessExit += (_, _) => this.StopNow();
 
-        // Start in the background, so the web part answers right away and shows the game while the server comes up.
-        _ = Task.Run(() => this.LaunchAsync(cancellationToken), CancellationToken.None);
+        // Start in the background, so the web part answers right away and shows the game/control page while the server comes up.
+        _ = Task.Run(() => this.LaunchAsync(cancellationToken, openControlOnFailure: true), CancellationToken.None);
         return Task.CompletedTask;
+    }
+
+    public async Task StartGameAsync(CancellationToken cancellationToken = default)
+    {
+        await this._lifecycleLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            if (this._server is { HasExited: false })
+            {
+                return;
+            }
+
+            Interlocked.Exchange(ref this._stopped, 0);
+            this._intentionalStop = false;
+            await this.LaunchAsync(cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            this._lifecycleLock.Release();
+        }
+    }
+
+    public async Task StopGameAsync(CancellationToken cancellationToken = default)
+    {
+        await this._lifecycleLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            this.StopNow();
+        }
+        finally
+        {
+            this._lifecycleLock.Release();
+        }
+    }
+
+    public async Task RestartGameAsync(CancellationToken cancellationToken = default)
+    {
+        await this.StopGameAsync(cancellationToken).ConfigureAwait(false);
+        await this.StartGameAsync(cancellationToken).ConfigureAwait(false);
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
@@ -127,6 +256,7 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
     // a few seconds).
     private void StopNow()
     {
+        this._intentionalStop = true;
         if (Interlocked.Exchange(ref this._stopped, 1) == 1)
         {
             return;
@@ -147,6 +277,14 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
         {
             logger.LogWarning(ex, "The game server didn't stop cleanly.");
         }
+
+        foreach (var secondary in this._secondary)
+        {
+            this.StopSecondary(secondary);
+        }
+
+        this._serverLogWriter?.Dispose();
+        this._serverLogWriter = null;
 
         if (this._databaseStarted)
         {
@@ -213,29 +351,52 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
         }
     }
 
-    private async Task LaunchAsync(CancellationToken cancellationToken)
+    private async Task LaunchAsync(CancellationToken cancellationToken, bool openControlOnFailure = false)
     {
         try
         {
+            this.IsLaunching = true;
+            this.LastError = null;
             Directory.CreateDirectory(this.LogDirectory);
             await this.StopLeftoverServerAsync(cancellationToken).ConfigureAwait(false);
             if (await IsPortOpenAsync(options.ConnectServerPort, cancellationToken).ConfigureAwait(false))
             {
+                var owner = PortOwner.Describe(options.ConnectServerPort);
                 throw new InvalidOperationException(
-                    $"Another program uses port {options.ConnectServerPort} (another HNMO folder, or a game server started by hand). "
-                    + "Close it (Task Manager: \".NET Host\" / \"dotnet\" / \"HNMO\"), or restart the computer, and start HNMO again.");
+                    $"Another program uses port {options.ConnectServerPort}"
+                    + (owner is null ? " (another HNMO folder, or a game server started by hand)" : $": {owner}")
+                    + ". Close it (Task Manager: \".NET Host\" / \"dotnet\" / \"HNMO\"), or restart the computer, then press Start on the control page. / "
+                    + $"Một chương trình khác đang dùng cổng {options.ConnectServerPort}"
+                    + (owner is null ? string.Empty : $": {owner}")
+                    + ". Hãy tắt nó (Task Manager) hoặc khởi động lại máy, rồi bấm Start trên trang điều khiển.");
             }
 
             await this.StartDatabaseAsync(cancellationToken).ConfigureAwait(false);
             this.StartServer();
             logger.LogInformation("The game server is starting. The first start sets up the save game and takes a few minutes.");
             await WaitForPortAsync(options.ConnectServerPort, ServerStartTimeout, cancellationToken).ConfigureAwait(false);
-            logger.LogInformation("HNMO is ready. Play: {Play}  Admin panel: {Admin} (this computer only)", options.OpenBrowserUrl, options.AdminUrl);
-            OpenBrowser(options.OpenBrowserUrl);
+            foreach (var secondary in this._secondary)
+            {
+                await this.StartSecondaryAsync(secondary, cancellationToken).ConfigureAwait(false);
+            }
+            logger.LogInformation("HNMO is ready. Play: {Play}  Control: http://localhost:{WebPort}/control  Admin panel: {Admin} (this computer only)", options.OpenBrowserUrl, options.WebPort, options.AdminUrl);
+            var controlUrl = $"http://localhost:{options.WebPort}/control";
+            OpenBrowser(File.Exists(Path.Combine(this.SaveFullPath, "setup-complete.json")) ? options.OpenBrowserUrl : controlUrl);
         }
         catch (Exception ex)
         {
+            this.LastError = ex.Message;
             logger.LogError(ex, "HNMO couldn't start. See the logs in {LogDirectory}.", this.LogDirectory);
+            if (openControlOnFailure)
+            {
+                // This window stays and keeps the web port: the control page shows why and has the Start button,
+                // so the host doesn't start the folder again (which only fails on the web port as well).
+                OpenBrowser($"http://localhost:{options.WebPort}/control");
+            }
+        }
+        finally
+        {
+            this.IsLaunching = false;
         }
     }
 
@@ -264,6 +425,13 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
             this._databaseStarted = true;
             return;
         }
+
+        var cfg = MaintenanceSettings.Load(this.SaveFullPath);
+        RollingLogWriter.RotateExternalLogIfNeeded(
+            Path.Combine(this.LogDirectory, "database.log"),
+            Math.Max(1L, cfg.MaxLogFileMb) * 1024L * 1024L,
+            cfg.MaxLogDays,
+            Math.Max(10L, cfg.MaxLogTotalMb) * 1024L * 1024L);
 
         logger.LogInformation("Starting the database on port {Port}...", options.DatabasePort);
         var logFile = Path.Combine(this.LogDirectory, "database.log");
@@ -314,16 +482,263 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
         };
         start.Environment["ASPNETCORE_URLS"] = options.AdminUrl;
         start.Environment["DB_ADMIN_PW"] = options.DatabasePassword;
+        if (!string.IsNullOrWhiteSpace(options.SettingsFilePath))
+        {
+            start.Environment[HostSettingsStore.EnvironmentVariableName] = options.SettingsFilePath;
+        }
 
-        var log = new StreamWriter(Path.Combine(this.LogDirectory, "server.log"), append: true) { AutoFlush = true };
+        this._serverLogWriter?.Dispose();
+        var cfg = MaintenanceSettings.Load(this.SaveFullPath);
+        var logWriter = new RollingLogWriter(
+            this.LogDirectory,
+            "server.log",
+            Math.Max(1L, cfg.MaxLogFileMb) * 1024L * 1024L,
+            cfg.MaxLogDays,
+            Math.Max(10L, cfg.MaxLogTotalMb) * 1024L * 1024L);
+        this._serverLogWriter = logWriter;
         this._server = Process.Start(start) ?? throw new InvalidOperationException("The game server didn't start.");
         File.WriteAllText(this.ServerPidFile, $"{this._server.Id} {this._server.StartTime.ToUniversalTime().Ticks}");
-        this._server.OutputDataReceived += (_, e) => { if (e.Data is not null) { lock (log) { log.WriteLine(e.Data); } } };
-        this._server.ErrorDataReceived += (_, e) => { if (e.Data is not null) { lock (log) { log.WriteLine(e.Data); } } };
+        this._server.OutputDataReceived += (_, e) => { if (e.Data is not null) { logWriter.WriteLine(e.Data); } };
+        this._server.ErrorDataReceived += (_, e) => { if (e.Data is not null) { logWriter.WriteLine(e.Data); } };
         this._server.BeginOutputReadLine();
         this._server.BeginErrorReadLine();
         this._server.EnableRaisingEvents = true;
-        this._server.Exited += (_, _) => logger.LogWarning("The game server stopped. See {Log}.", Path.Combine(this.LogDirectory, "server.log"));
+        var startedProc = this._server;
+        startedProc.Exited += (_, _) =>
+        {
+            var exitCode = startedProc.ExitCode;
+            if (exitCode == HostSettingsStore.RestartExitCode && Volatile.Read(ref this._stopped) == 0)
+            {
+                logger.LogInformation("Restarting HNMO...");
+                this.RestartSelf();
+                return;
+            }
+
+            if (this._intentionalStop || Volatile.Read(ref this._stopped) != 0)
+            {
+                return;
+            }
+
+            logger.LogWarning("The game server crashed/stopped unexpectedly (exit code {ExitCode}). See {Log}.", exitCode, Path.Combine(this.LogDirectory, "server.log"));
+            _ = Task.Run(() => this.HandleUnexpectedServerExitAsync(exitCode));
+        };
+    }
+
+    // A program next to Season 6.3's: Season 9 (HostSettings.SeasonNineEnabled; its own database hnmo_s9, ports 100
+    // higher, admin panel on the next port) or the Arena (HostSettings.ArenaEnabled; hnmo_arena, ports 200 higher, admin
+    // panel two ports up). Logins and coins come from Season 6.3's database. Started after Season 6.3's is up.
+    private async Task StartSecondaryAsync(SecondaryProgram secondary, CancellationToken cancellationToken)
+    {
+        if (!secondary.Enabled() || secondary.Process is { HasExited: false })
+        {
+            return;
+        }
+
+        var port = secondary.ConnectPort();
+        var adminUrl = secondary.AdminUrl();
+        try
+        {
+            if (await IsPortOpenAsync(port, cancellationToken).ConfigureAwait(false))
+            {
+                logger.LogWarning("{Name} isn't started: another program uses port {Port}.", secondary.Name, port);
+                return;
+            }
+
+            var (program, arguments) = this.ServerCommand();
+            var start = new ProcessStartInfo(program, arguments)
+            {
+                WorkingDirectory = this.Full(options.ServerPath),
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true,
+            };
+            start.Environment["ASPNETCORE_URLS"] = adminUrl;
+            start.Environment["DB_ADMIN_PW"] = options.DatabasePassword;
+            start.Environment[HnmoSeasonInstance.EnvironmentVariableName] = secondary.Season;
+            if (!string.IsNullOrWhiteSpace(options.SettingsFilePath))
+            {
+                start.Environment[HostSettingsStore.EnvironmentVariableName] = options.SettingsFilePath;
+            }
+
+            var cfg = MaintenanceSettings.Load(this.SaveFullPath);
+            secondary.Log?.Dispose();
+            var logWriter = new RollingLogWriter(
+                this.LogDirectory,
+                secondary.LogFile,
+                Math.Max(1L, cfg.MaxLogFileMb) * 1024L * 1024L,
+                cfg.MaxLogDays,
+                Math.Max(10L, cfg.MaxLogTotalMb) * 1024L * 1024L);
+            secondary.Log = logWriter;
+            var process = Process.Start(start) ?? throw new InvalidOperationException($"The {secondary.Name} game server didn't start.");
+            secondary.Process = process;
+            process.OutputDataReceived += (_, e) => { if (e.Data is not null) { logWriter.WriteLine(e.Data); } };
+            process.ErrorDataReceived += (_, e) => { if (e.Data is not null) { logWriter.WriteLine(e.Data); } };
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+            process.EnableRaisingEvents = true;
+            process.Exited += (_, _) =>
+            {
+                if (!this._intentionalStop && Volatile.Read(ref this._stopped) == 0)
+                {
+                    logger.LogWarning("The {Name} game server stopped (exit code {ExitCode}). See {Log}.", secondary.Name, process.ExitCode, Path.Combine(this.LogDirectory, secondary.LogFile));
+                }
+            };
+            logger.LogInformation("{Name} is starting (connect server {Port}, admin panel {Admin}). Its first start sets up its save and takes a few minutes.", secondary.Name, port, adminUrl);
+        }
+        catch (Exception ex) when (ex is InvalidOperationException or IOException or System.ComponentModel.Win32Exception)
+        {
+            logger.LogError(ex, "{Name} couldn't start; Season 6.3 runs on.", secondary.Name);
+        }
+    }
+
+    private void StopSecondary(SecondaryProgram secondary)
+    {
+        try
+        {
+            if (secondary.Process is { HasExited: false } process)
+            {
+                logger.LogInformation("Stopping the {Name} game server...", secondary.Name);
+                process.Kill(entireProcessTree: true);
+                process.WaitForExit(5000);
+            }
+        }
+        catch (Exception ex) when (ex is InvalidOperationException or System.ComponentModel.Win32Exception)
+        {
+            logger.LogWarning(ex, "The {Name} game server didn't stop cleanly.", secondary.Name);
+        }
+
+        secondary.Process = null;
+        secondary.Log?.Dispose();
+        secondary.Log = null;
+    }
+
+    private (string Program, string[] Arguments) ServerCommand()
+    {
+        var serverDirectory = this.Full(options.ServerPath);
+        var program = Path.Combine(serverDirectory, OperatingSystem.IsWindows() ? options.ServerProgram + ".exe" : options.ServerProgram);
+        string[] arguments = ["-autostart", "-resolveIP:loopback", "-deamon"];
+        if (!File.Exists(program) && File.Exists(Path.Combine(serverDirectory, options.ServerProgram + ".dll")))
+        {
+            // The folder for every system: the server is a portable .NET program, started with the same
+            // .NET runtime this web server runs on (the folder's runtime for this system).
+            return (Environment.ProcessPath ?? "dotnet", [Path.Combine(serverDirectory, options.ServerProgram + ".dll"), .. arguments]);
+        }
+
+        return (program, arguments);
+    }
+
+    private async Task HandleUnexpectedServerExitAsync(int exitCode)
+    {
+        try
+        {
+            var saveDir = this.SaveFullPath;
+            var settings = MaintenanceSettings.Load(saveDir);
+            var existing = CrashWatchStore.ListIncidents(saveDir);
+            var priorTimes = existing.Select(i => i.OccurredAtUtc).ToList();
+            var now = DateTimeOffset.UtcNow;
+            var decision = CrashWatchPolicy.Evaluate(settings, exitCode, intentionalStop: false, priorTimes, now);
+            if (!decision.IsCrash)
+            {
+                return;
+            }
+
+            var tail = ControlOperations.ReadTailLines(Path.Combine(this.LogDirectory, "server.log"), 12);
+            var incident = new CrashIncident
+            {
+                Id = Guid.NewGuid().ToString("N")[..12],
+                OccurredAtUtc = now,
+                OccurredAtSydney = ControlOperations.FormatSydneyTime(now),
+                ExitCode = exitCode,
+                AutoRestarted = decision.ShouldRestart,
+                DelaySeconds = decision.DelaySeconds,
+                SummaryEn = decision.SummaryEn,
+                SummaryVi = decision.SummaryVi,
+                TailExcerpt = string.Join("\n", tail),
+                Acknowledged = false,
+            };
+            CrashWatchStore.RecordIncident(saveDir, incident);
+            this.LastError = decision.SummaryEn;
+
+            if (!string.IsNullOrWhiteSpace(settings.CrashDiscordWebhookUrl)
+                && Uri.TryCreate(settings.CrashDiscordWebhookUrl.Trim(), UriKind.Absolute, out var webhookUri)
+                && string.Equals(webhookUri.Scheme, "https", StringComparison.OrdinalIgnoreCase))
+            {
+                try
+                {
+                    var text = $"[HNMO Crash Watch · {incident.OccurredAtSydney} Sydney] {decision.SummaryEn}\n{decision.SummaryVi}";
+                    using var content = new StringContent(JsonSerializer.Serialize(new { content = text }), Encoding.UTF8, "application/json");
+                    await CrashWebhookClient.PostAsync(webhookUri, content).ConfigureAwait(false);
+                }
+                catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
+                {
+                    logger.LogWarning("Crash watch Discord alert delivery failed ({Reason}).", ex.GetType().Name);
+                }
+            }
+
+            if (decision.ShouldRestart && !this._intentionalStop && Volatile.Read(ref this._stopped) == 0)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(decision.DelaySeconds)).ConfigureAwait(false);
+                if (!this._intentionalStop && Volatile.Read(ref this._stopped) == 0)
+                {
+                    await this.StartGameAsync(CancellationToken.None).ConfigureAwait(false);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Unhandled exception inside crash watch handler.");
+        }
+    }
+
+    private void RestartSelf()
+    {
+        this.StopNow();
+        var exe = Environment.ProcessPath;
+        if (!string.IsNullOrEmpty(exe))
+        {
+            var rawArgs = Environment.GetCommandLineArgs().Skip(1).ToArray();
+            var psi = new ProcessStartInfo(exe)
+            {
+                WorkingDirectory = contentRoot,
+                UseShellExecute = false,
+            };
+            foreach (var arg in rawArgs)
+            {
+                psi.ArgumentList.Add(arg);
+            }
+
+            Process.Start(psi);
+        }
+
+        lifetime.StopApplication();
+    }
+
+    private static async Task RunPsqlAsync(string psqlPath, int port, string password, string database, string[] args, CancellationToken cancellationToken)
+    {
+        var psi = new ProcessStartInfo(psqlPath) { UseShellExecute = false, RedirectStandardError = true, RedirectStandardOutput = true, CreateNoWindow = true };
+        psi.ArgumentList.Add("-h");
+        psi.ArgumentList.Add("127.0.0.1");
+        psi.ArgumentList.Add("-p");
+        psi.ArgumentList.Add(port.ToString());
+        psi.ArgumentList.Add("-U");
+        psi.ArgumentList.Add("postgres");
+        psi.ArgumentList.Add("-d");
+        psi.ArgumentList.Add(database);
+        foreach (var arg in args)
+        {
+            psi.ArgumentList.Add(arg);
+        }
+
+        psi.Environment["PGPASSWORD"] = password;
+        using var proc = Process.Start(psi) ?? throw new InvalidOperationException("psql could not start.");
+        var output = proc.StandardOutput.ReadToEndAsync(cancellationToken);
+        var error = proc.StandardError.ReadToEndAsync(cancellationToken);
+        await proc.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
+        if (proc.ExitCode != 0)
+        {
+            throw new InvalidOperationException($"psql failed: {await error.ConfigureAwait(false)}{await output.ConfigureAwait(false)}");
+        }
     }
 
     private static async Task RunAsync(string program, string[] arguments, CancellationToken cancellationToken)
@@ -339,7 +754,7 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
         }
     }
 
-    private static async Task<bool> IsPortOpenAsync(int port, CancellationToken cancellationToken)
+    internal static async Task<bool> IsPortOpenAsync(int port, CancellationToken cancellationToken)
     {
         try
         {
@@ -373,7 +788,7 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
         throw new TimeoutException($"The game server didn't open port {port} in time.");
     }
 
-    private static void OpenBrowser(string? url)
+    internal static void OpenBrowser(string? url)
     {
         if (string.IsNullOrEmpty(url))
         {
@@ -400,4 +815,24 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
             // No browser to open (e.g. on a server): the address is in the log.
         }
     }
+}
+
+// A game server program next to Season 6.3's (Season 9 or the Arena) and what the launcher knows of it.
+internal sealed class SecondaryProgram(string season, string name, string logFile, Func<bool> enabled, Func<int> connectPort, Func<string> adminUrl)
+{
+    public string Season { get; } = season;
+
+    public string Name { get; } = name;
+
+    public string LogFile { get; } = logFile;
+
+    public Func<bool> Enabled { get; } = enabled;
+
+    public Func<int> ConnectPort { get; } = connectPort;
+
+    public Func<string> AdminUrl { get; } = adminUrl;
+
+    public Process? Process { get; set; }
+
+    public RollingLogWriter? Log { get; set; }
 }

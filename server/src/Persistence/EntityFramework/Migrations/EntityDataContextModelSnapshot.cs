@@ -1860,6 +1860,11 @@ namespace HNMO.Persistence.EntityFramework.Migrations
                     b.Property<byte>("MinimumMonsterLevelForMasterExperience")
                         .HasColumnType("smallint");
 
+                    b.Property<TimeSpan>("MoneyDropDuration")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("interval")
+                        .HasDefaultValue(new TimeSpan(0, 0, 0, 15, 0));
+
                     b.Property<bool>("PreventExperienceOverflow")
                         .HasColumnType("boolean");
 
@@ -2297,6 +2302,9 @@ namespace HNMO.Persistence.EntityFramework.Migrations
                     b.Property<int>("PetExperience")
                         .HasColumnType("integer");
 
+                    b.Property<Guid?>("Serial")
+                        .HasColumnType("uuid");
+
                     b.Property<int>("SocketCount")
                         .HasColumnType("integer");
 
@@ -2314,6 +2322,8 @@ namespace HNMO.Persistence.EntityFramework.Migrations
                     b.HasIndex("DefinitionId");
 
                     b.HasIndex("ItemStorageId");
+
+                    b.HasIndex("Serial");
 
                     b.HasIndex("StorePriceItemDefinitionId");
 

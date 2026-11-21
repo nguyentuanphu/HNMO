@@ -6,11 +6,11 @@ namespace HNMO.Persistence.Initialization.Captions;
 
 using System.Collections.Concurrent;
 using System.Threading;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.Persistence.Initialization.Updates;
 using HNMO.Persistence.InMemory;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Service to keep the captions of the configuration in sync with their sources,

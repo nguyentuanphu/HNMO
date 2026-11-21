@@ -14,12 +14,12 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging.Abstractions;
 using HNMO.Network.Packets.ClientToServer;
 using HNMO.Network.Packets.ConnectServer;
 using HNMO.Network.Packets.ServerToClient;
 using HNMO.Network.PlugIns;
 using HNMO.Network.Xor;
+using Microsoft.Extensions.Logging.Abstractions;
 using Pipelines.Sockets.Unofficial;
 
 /// <summary>

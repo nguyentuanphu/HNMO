@@ -61,11 +61,29 @@ Outcomes:
 | Valid signature, all files match | `Ok` | starts, logs a confirmation |
 | No manifest / no signature | `Unsigned` | starts, logs a warning (dev build) |
 | Signature present but invalid | `SignatureInvalid` | **refuses to start** |
-| Signature valid, a file changed | `FileMismatch` | warns and starts; refuses if `Integrity:OnMismatch` = `refuse` |
+| Signature valid, a file changed | `FileMismatch` | **refuses to start** (a tampered signed build); warns only if `Integrity:OnMismatch` = `warn` |
 
-`Integrity:OnMismatch` is set in `server/appsettings.json` (default `warn`, so a legit
-unsigned/dev build still runs). A tampered **signed** build can be made to refuse by setting it
-to `refuse`.
+A **shipped** build refuses to start when a signed file was changed: `package-hnmo.sh` sets
+`Integrity:OnMismatch` = `refuse` in the packaged `server/appsettings.json`. The repo's dev
+`appsettings.json` keeps `warn`, so a local unsigned/dev build still runs. A host who knowingly
+swaps a file can set it back to `warn`.
+
+## 3a. Obfuscation of the shipped code
+
+- **Web** — `package-hnmo.sh` bundles the game with esbuild `--minify`, which mangles the local
+  names as well as the whitespace, so the shipped `web/wwwroot/js/main.min.js` is hard to read or
+  change (about 18% smaller than the names-kept bundle). Set `HNMO_KEEP_JS_NAMES=1` to keep the
+  names for a profiling run (the performance report then names the functions). The website,
+  top-up, calculator and item bundles were already fully minified.
+- **Server** — shipped as a single self-contained executable with no PDB, no XML docs and no
+  loose DLLs, so the assemblies are bundled and symbols stripped. Full IL **name** obfuscation
+  (e.g. Obfuscar) is **not** applied: the server maps entity types and properties to database
+  columns through EF Core (and compiled models with fully-qualified names) and discovers plug-ins
+  by type, so renaming types or members would break the database and the plug-ins.
+  - A no-rename obfuscation was looked at (owner, 2026-11-20): on .NET 10 there is no reliable free
+    control-flow obfuscator, and string encryption (Obfuscar) needs the loose dependency DLLs, so
+    it would mean dropping the single-file ship. The owner chose to keep the current protections
+    (single-file, no symbols, the tamper signature, the watermarks) rather than make that trade.
 
 ## 4. The private signing key
 
@@ -107,3 +125,13 @@ prints a clear warning.
   signed manifest means any file they change is detectable by anyone who runs the stock server.
 - The embedded public key lets anyone verify a folder is a genuine, unmodified build; only you,
   holding the private key, can produce a new signed build.
+
+## 5. Next protections (owner's choice, 2026-11-20)
+
+- **Obfuscation of HNMO's own server assemblies** in the package: an open-source .NET obfuscator run by
+  `package-hnmo.sh` on the `HNMO.*` assemblies only; third-party libraries are untouched. Reflection-used types
+  (plug-ins, EF entities, Blazor components, JSON-serialized types) keep their names.
+- **Refuse modified files:** `Integrity:OnMismatch` defaults to `refuse` in a packaged, signed build. Unsigned dev
+  builds still run.
+- **Obfuscation of the web game bundle** (`main.min.js`) beyond minifying, without source maps in the package.
+- Not chosen: requiring a license to host at all (the 10-player default stays).

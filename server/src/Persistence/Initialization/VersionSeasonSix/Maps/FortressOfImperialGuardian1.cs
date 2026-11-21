@@ -75,7 +75,7 @@ internal class FortressOfImperialGuardian1 : BaseMapInitializer
                 { Stats.DefenseRatePvm, 1085 },
                 { Stats.PoisonResistance, 5f / 255 },
                 { Stats.IceResistance, 5f / 255 },
-                { Stats.WaterResistance, 5f / 255 },
+                { Stats.LightningResistance, 5f / 255 },
                 { Stats.FireResistance, 7f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -241,7 +241,7 @@ internal class FortressOfImperialGuardian1 : BaseMapInitializer
                 { Stats.DefenseRatePvm, 585 },
                 { Stats.PoisonResistance, 23f / 255 },
                 { Stats.IceResistance, 23f / 255 },
-                { Stats.WaterResistance, 23f / 255 },
+                { Stats.LightningResistance, 23f / 255 },
                 { Stats.FireResistance, 23f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -272,7 +272,7 @@ internal class FortressOfImperialGuardian1 : BaseMapInitializer
                 { Stats.DefenseRatePvm, 550 },
                 { Stats.PoisonResistance, 29f / 255 },
                 { Stats.IceResistance, 29f / 255 },
-                { Stats.WaterResistance, 29f / 255 },
+                { Stats.LightningResistance, 29f / 255 },
                 { Stats.FireResistance, 29f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -304,7 +304,7 @@ internal class FortressOfImperialGuardian1 : BaseMapInitializer
                 { Stats.WindResistance, 23f / 255 },
                 { Stats.PoisonResistance, 23f / 255 },
                 { Stats.IceResistance, 23f / 255 },
-                { Stats.WaterResistance, 23f / 255 },
+                { Stats.LightningResistance, 23f / 255 },
                 { Stats.FireResistance, 23f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -335,7 +335,7 @@ internal class FortressOfImperialGuardian1 : BaseMapInitializer
                 { Stats.DefenseRatePvm, 665 },
                 { Stats.PoisonResistance, 25f / 255 },
                 { Stats.IceResistance, 25f / 255 },
-                { Stats.WaterResistance, 25f / 255 },
+                { Stats.LightningResistance, 25f / 255 },
                 { Stats.FireResistance, 25f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -366,7 +366,7 @@ internal class FortressOfImperialGuardian1 : BaseMapInitializer
                 { Stats.DefenseRatePvm, 605 },
                 { Stats.PoisonResistance, 29f / 255 },
                 { Stats.IceResistance, 29f / 255 },
-                { Stats.WaterResistance, 29f / 255 },
+                { Stats.LightningResistance, 29f / 255 },
                 { Stats.FireResistance, 29f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -397,7 +397,7 @@ internal class FortressOfImperialGuardian1 : BaseMapInitializer
                 { Stats.DefenseRatePvm, 880 },
                 { Stats.PoisonResistance, 60f / 255 },
                 { Stats.IceResistance, 60f / 255 },
-                { Stats.WaterResistance, 60f / 255 },
+                { Stats.LightningResistance, 60f / 255 },
                 { Stats.FireResistance, 60f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -428,7 +428,7 @@ internal class FortressOfImperialGuardian1 : BaseMapInitializer
                 { Stats.DefenseRatePvm, 505 },
                 { Stats.PoisonResistance, 29f / 255 },
                 { Stats.IceResistance, 29f / 255 },
-                { Stats.WaterResistance, 29f / 255 },
+                { Stats.LightningResistance, 29f / 255 },
                 { Stats.FireResistance, 29f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -459,7 +459,7 @@ internal class FortressOfImperialGuardian1 : BaseMapInitializer
                 { Stats.DefenseRatePvm, 470 },
                 { Stats.PoisonResistance, 50f / 255 },
                 { Stats.IceResistance, 50f / 255 },
-                { Stats.WaterResistance, 50f / 255 },
+                { Stats.LightningResistance, 50f / 255 },
                 { Stats.FireResistance, 50f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -490,7 +490,7 @@ internal class FortressOfImperialGuardian1 : BaseMapInitializer
                 { Stats.DefenseRatePvm, 445 },
                 { Stats.PoisonResistance, 25f / 255 },
                 { Stats.IceResistance, 25f / 255 },
-                { Stats.WaterResistance, 25f / 255 },
+                { Stats.LightningResistance, 25f / 255 },
                 { Stats.FireResistance, 25f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -521,7 +521,7 @@ internal class FortressOfImperialGuardian1 : BaseMapInitializer
                 { Stats.DefenseRatePvm, 540 },
                 { Stats.PoisonResistance, 26f / 255 },
                 { Stats.IceResistance, 26f / 255 },
-                { Stats.WaterResistance, 26f / 255 },
+                { Stats.LightningResistance, 26f / 255 },
                 { Stats.FireResistance, 26f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -553,7 +553,7 @@ internal class FortressOfImperialGuardian1 : BaseMapInitializer
                 { Stats.DefenseRatePvm, 1485 },
                 { Stats.PoisonResistance, 29f / 255 },
                 { Stats.IceResistance, 29f / 255 },
-                { Stats.WaterResistance, 29f / 255 },
+                { Stats.LightningResistance, 29f / 255 },
                 { Stats.FireResistance, 29f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -584,7 +584,7 @@ internal class FortressOfImperialGuardian1 : BaseMapInitializer
                 { Stats.DefenseRatePvm, 1500 },
                 { Stats.PoisonResistance, 150f / 255 },
                 { Stats.IceResistance, 255f / 255 },
-                { Stats.WaterResistance, 150f / 255 },
+                { Stats.LightningResistance, 150f / 255 },
                 { Stats.FireResistance, 150f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -615,7 +615,7 @@ internal class FortressOfImperialGuardian1 : BaseMapInitializer
                 { Stats.DefenseRatePvm, 1800 },
                 { Stats.PoisonResistance, 150f / 255 },
                 { Stats.IceResistance, 255f / 255 },
-                { Stats.WaterResistance, 150f / 255 },
+                { Stats.LightningResistance, 150f / 255 },
                 { Stats.FireResistance, 150f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -646,7 +646,7 @@ internal class FortressOfImperialGuardian1 : BaseMapInitializer
                 { Stats.DefenseRatePvm, 1200 },
                 { Stats.PoisonResistance, 150f / 255 },
                 { Stats.IceResistance, 255f / 255 },
-                { Stats.WaterResistance, 150f / 255 },
+                { Stats.LightningResistance, 150f / 255 },
                 { Stats.FireResistance, 150f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -677,7 +677,7 @@ internal class FortressOfImperialGuardian1 : BaseMapInitializer
                 { Stats.DefenseRatePvm, 1500 },
                 { Stats.PoisonResistance, 150f / 255 },
                 { Stats.IceResistance, 255f / 255 },
-                { Stats.WaterResistance, 150f / 255 },
+                { Stats.LightningResistance, 150f / 255 },
                 { Stats.FireResistance, 150f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -708,7 +708,7 @@ internal class FortressOfImperialGuardian1 : BaseMapInitializer
                 { Stats.DefenseRatePvm, 1300 },
                 { Stats.PoisonResistance, 150f / 255 },
                 { Stats.IceResistance, 255f / 255 },
-                { Stats.WaterResistance, 150f / 255 },
+                { Stats.LightningResistance, 150f / 255 },
                 { Stats.FireResistance, 150f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -739,7 +739,7 @@ internal class FortressOfImperialGuardian1 : BaseMapInitializer
                 { Stats.DefenseRatePvm, 1400 },
                 { Stats.PoisonResistance, 150f / 255 },
                 { Stats.IceResistance, 255f / 255 },
-                { Stats.WaterResistance, 150f / 255 },
+                { Stats.LightningResistance, 150f / 255 },
                 { Stats.FireResistance, 150f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -770,7 +770,7 @@ internal class FortressOfImperialGuardian1 : BaseMapInitializer
                 { Stats.DefenseRatePvm, 1100 },
                 { Stats.PoisonResistance, 150f / 255 },
                 { Stats.IceResistance, 255f / 255 },
-                { Stats.WaterResistance, 150f / 255 },
+                { Stats.LightningResistance, 150f / 255 },
                 { Stats.FireResistance, 150f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);

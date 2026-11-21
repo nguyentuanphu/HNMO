@@ -5,13 +5,13 @@
 namespace HNMO.GameServer.RemoteView;
 
 using System.Buffers;
-using Microsoft.Extensions.Logging;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Views;
 using HNMO.GameServer.MessageHandler;
 using HNMO.Network;
 using HNMO.Network.PlugIns;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// A player that is playing through a remote connection.
@@ -195,6 +195,8 @@ public class RemotePlayer : Player, IClientVersionProvider, IHasIpAddress
                     this.Logger.LogDebug("[C->S] {0}", buffer.ToArray().AsString());
                 }
 
+                // HNMO's stack rules answer for this player while its request is handled (unlocked stack kinds).
+                GameLogic.PlugIns.ItemStacks.ItemStackRules.CurrentPlayer = this;
                 await this.RunPersistenceExclusiveAsync(() => this.MainPacketHandler.HandlePacketAsync(this, buffer)).ConfigureAwait(false);
             }
             finally

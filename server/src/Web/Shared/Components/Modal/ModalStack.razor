@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.Shared.Properties.Resources
 @using HNMO.Web.Shared.Services
 @inject ModalService ModalService
 @implements IDisposable
@@ -24,7 +25,7 @@
                                 <h5 class="modal-title">@state.Title</h5>
                                 @if (state.Options?.HideCloseButton != true)
                                 {
-                                    <button type="button" class="btn-close" @onclick="() => DismissAsync(state.Instance)"></button>
+                                    <button title="@HelpResources.PageHelpHintCancel" type="button" class="btn-close" @onclick="() => DismissAsync(state.Instance)"></button>
                                 }
                             </div>
                         }

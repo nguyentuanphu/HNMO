@@ -5,8 +5,8 @@
 namespace HNMO.Web.AdminPanel.Auth;
 
 using System.Threading;
-using Microsoft.Extensions.Logging;
 using HNMO.Persistence.AdminAuth;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// A fallback <see cref="IAdminUserRepository"/> which is used when the hosting application didn't

@@ -72,6 +72,37 @@ public class PKClearChatCommandPlugInTest
     }
 
     /// <summary>
+    /// Verifies that a player who is still in a PK state without counted kills pays at least one kill's price.
+    /// </summary>
+    /// <param name="moneyBefore">The money of the player before the command.</param>
+    /// <param name="expectedCleared">Whether the PK status is expected to be cleared.</param>
+    /// <param name="expectedMoney">The money after the command.</param>
+    [TestCase(50_000_000, true, 40_000_000)]
+    [TestCase(5_000_000, false, 5_000_000)]
+    public async ValueTask PlayerKillStateWithoutKillsCostsOneKillAsync(int moneyBefore, bool expectedCleared, int expectedMoney)
+    {
+        var player = await PlayerTestHelper.CreatePlayerAsync().ConfigureAwait(false);
+        player.SelectedCharacter!.CharacterStatus = CharacterStatus.Normal;
+        player.SelectedCharacter.PlayerKillCount = 0;
+        player.SelectedCharacter.State = HeroState.PlayerKiller1stStage;
+        player.Money = moneyBefore;
+
+        var plugin = new PkClearChatCommandPlugIn
+        {
+            Configuration = new PkClearChatCommandPlugIn.PKClearConfiguration
+            {
+                AllowRegularPlayers = true,
+                ZenCostPerKill = 10_000_000,
+            },
+        };
+
+        await plugin.HandleCommandAsync(player, "/pkclear").ConfigureAwait(false);
+
+        Assert.That(player.SelectedCharacter.State, Is.EqualTo(expectedCleared ? HeroState.Normal : HeroState.PlayerKiller1stStage));
+        Assert.That(player.Money, Is.EqualTo(expectedMoney));
+    }
+
+    /// <summary>
     /// Verifies that a regular player with insufficient Zen fails to clear their PK status.
     /// </summary>
     [Test]

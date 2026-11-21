@@ -6,9 +6,9 @@ namespace HNMO.Persistence.EntityFramework;
 
 using System.Diagnostics;
 using System.Threading;
+using HNMO.Persistence.EntityFramework.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using HNMO.Persistence.EntityFramework.Model;
 using Nito.Disposables;
 using Npgsql;
 
@@ -18,6 +18,7 @@ using Npgsql;
 public class PersistenceContextProvider : IMigratableDatabaseContextProvider
 {
     private readonly ILoggerFactory _loggerFactory;
+
     private IConfigurationChangeListener? _changeListener;
 
     /// <summary>
@@ -43,6 +44,10 @@ public class PersistenceContextProvider : IMigratableDatabaseContextProvider
     /// </value>
     internal CacheAwareRepositoryProvider RepositoryProvider { get; private set; }
 
+    /// <summary>Gets the PostgreSQL connection string for maintenance operations (if configured).</summary>
+    /// <returns>Connection string or null.</returns>
+    public static string? ResolveConnectionString() => ConnectionConfigurator.GetConnectionString<EntityDataContext>();
+
     /// <inheritdoc />
     public async Task<bool> IsDatabaseUpToDateAsync(CancellationToken cancellationToken = default)
     {
@@ -54,6 +59,19 @@ public class PersistenceContextProvider : IMigratableDatabaseContextProvider
         catch
         {
             return false;
+        }
+    }
+
+    /// <summary>
+    /// Enables PostgreSQL-backed per-account and per-character row persistence for HNMO feature stores.
+    /// </summary>
+    public void EnableHnmoRowPersistence()
+    {
+        var connectionString = ConnectionConfigurator.GetConnectionString<EntityDataContext>();
+        if (!string.IsNullOrWhiteSpace(connectionString))
+        {
+            HnmoPlayerStateRowStoreRegistry.ConfigurePostgresFactory(_ => new PostgresHnmoPlayerStateRowBackend(connectionString));
+            ItemSerials.Configure(new PostgresItemSerialDatabase(connectionString));
         }
     }
 

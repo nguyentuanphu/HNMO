@@ -6,13 +6,13 @@ namespace HNMO.Web.AdminPanel.Pages;
 
 using System.ComponentModel;
 using System.Globalization;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.Web.AdminPanel.Operations;
 using HNMO.Web.AdminPanel.Properties;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The start page of the admin panel, which shows a dashboard with statistics about the server.

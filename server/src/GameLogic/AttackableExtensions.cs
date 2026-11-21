@@ -75,8 +75,7 @@ public static class AttackableExtensions
         Player? attackerPlayer = attacker is AttackerSurrogate surrogate ? surrogate.Owner : (attacker is Player player ? player : null);
         bool isPvp = attackerPlayer is not null && defender is Player;
         bool isClassicPvp = isPvp && defender.Attributes[Stats.MaximumShield] == 0;
-        bool isClassicPvpDuel = isClassicPvp && attackerPlayer!.DuelRoom?.Opponent == defender;
-        var duelDmgDec = isClassicPvpDuel ? 0.6 : 1;
+        var duelDmgDec = GetDuelDamageFactor(attackerPlayer, defender);
 
         DamageAttributes attributes = DamageAttributes.Undefined;
         bool isCriticalHit = Rand.NextRandomBool(attacker.Attributes[Stats.CriticalDamageChance]);
@@ -306,7 +305,23 @@ public static class AttackableExtensions
             }
         }
 
+        dmg = PlugIns.GameplayRules.RateTuningPlugIn.ApplyClassDamageMultiplier(attacker, isPvp, dmg);
+        dmg = PlugIns.GameplayRules.CombatLimitsPlugIn.ApplyDamageLimits(attacker, defender, isPvp, dmg);
         return defender.GetHitInfo((uint)dmg, attributes, attacker, (uint)manaToll, skill, (uint)petDamage);
+    }
+
+    /// <summary>
+    /// Gets the factor of the damage of a hit in a duel: duel hits do 60 % damage, with or without shield
+    /// (Season 6/9 server suites: DamageReduction 60, all damage types).
+    /// </summary>
+    /// <param name="attackerPlayer">The attacking player (the owner of a pet), if any.</param>
+    /// <param name="defender">The defender.</param>
+    /// <returns>0.6 for a hit at the duel opponent; otherwise 1.</returns>
+    internal static double GetDuelDamageFactor(Player? attackerPlayer, IAttackable defender)
+    {
+        var isDuel = attackerPlayer is not null && defender is Player && attackerPlayer.DuelRoom is { } room
+                     && (room.Opponent == defender || room.Requester == defender);
+        return isDuel ? 0.6 : 1;
     }
 
     /// <summary>
@@ -331,8 +346,10 @@ public static class AttackableExtensions
             return new HitInfo(damage, (uint)shieldDamage, attributes, manaToll, petDamage, skill, triggersHitShock);
         }
 
+        // Classic MU Season 6: the shield (SD) only takes hits of players (and their pets); monsters hit the life directly.
+        var attackerIsPlayer = attacker is Player or IPlayerSurrogate;
         var shieldBypass = Rand.NextRandomBool(attacker.Attributes[Stats.ShieldBypassChance]);
-        if (shieldBypass || defender.Attributes[Stats.CurrentShield] < 1)
+        if (!attackerIsPlayer || shieldBypass || defender.Attributes[Stats.CurrentShield] < 1)
         {
             return new HitInfo(damage, 0, attributes, manaToll, petDamage, skill, triggersHitShock);
         }
@@ -738,8 +755,11 @@ public static class AttackableExtensions
         float attackRate;
         if (defender is Player && attacker is Player)
         {
-            defenseRate = defender.Attributes[Stats.DefenseRatePvp];
-            attackRate = attacker.Attributes[Stats.AttackRatePvp];
+            return GetPvpHitChance(
+                attacker.Attributes[Stats.AttackRatePvp],
+                defender.Attributes[Stats.DefenseRatePvp],
+                attacker.Attributes[Stats.TotalLevel],
+                defender.Attributes[Stats.TotalLevel]);
         }
         else
         {
@@ -754,6 +774,44 @@ public static class AttackableExtensions
         }
 
         return hitChance;
+    }
+
+    /// <summary>
+    /// Gets the chance that a player hits another player, as in the Season 6/9 server suites:
+    /// 2 * attackRate / (attackRate + defenseRate) * attackLevel / (attackLevel + defenseLevel),
+    /// minus 5, 10 or 15 percent points when the defender is 100, 200 or 300 levels higher.
+    /// </summary>
+    /// <param name="attackRate">The attacker's PvP attack rate.</param>
+    /// <param name="defenseRate">The defender's PvP defense rate.</param>
+    /// <param name="attackLevel">The attacker's total level (with master level).</param>
+    /// <param name="defenseLevel">The defender's total level (with master level).</param>
+    /// <returns>The hit chance between 0 and 1.</returns>
+    internal static float GetPvpHitChance(float attackRate, float defenseRate, float attackLevel, float defenseLevel)
+    {
+        const float successAttackRateOption = 2.0f;
+        var rateFactor = attackRate + defenseRate > 0 ? attackRate / (attackRate + defenseRate) : 0.5f;
+        var levelFactor = attackLevel + defenseLevel > 0 ? attackLevel / (attackLevel + defenseLevel) : 0.5f;
+        var hitChance = rateFactor * successAttackRateOption * levelFactor;
+
+        var levelGap = defenseLevel - attackLevel;
+        if (levelGap >= 300)
+        {
+            hitChance -= 0.15f;
+        }
+        else if (levelGap >= 200)
+        {
+            hitChance -= 0.10f;
+        }
+        else if (levelGap >= 100)
+        {
+            hitChance -= 0.05f;
+        }
+        else
+        {
+            // No penalty.
+        }
+
+        return Math.Clamp(hitChance, 0f, 1f);
     }
 
     private static AttributeDefinition GetDefenseAttribute(this IAttackable defender, IAttacker attacker)

@@ -177,8 +177,6 @@
   <data name="RegenerationsRefactorPlugInBase_Description" xml:space="preserve"><value>修正并调整生命值、魔力值和技能值的部分恢复属性。</value></data>
   <data name="AddDuelConfigurationPlugIn_Name" xml:space="preserve"><value>添加决斗配置</value></data>
   <data name="AddDuelConfigurationPlugIn_Description" xml:space="preserve"><value>添加决斗配置数据。</value></data>
-  <data name="FixBloodCastleMonsterAttributesUpdatePlugIn_Name" xml:space="preserve"><value>修正血色城堡 7、8 层怪物属性</value></data>
-  <data name="FixBloodCastleMonsterAttributesUpdatePlugIn_Description" xml:space="preserve"><value>交换血色城堡 7 层（怪物 138–143）和 8 层（怪物 428–433）的属性，使强度按 6、7、8 层递增。</value></data>
   <data name="AddDoppelgangerDataUpdatePlugIn_Name" xml:space="preserve"><value>添加镜像世界数据</value></data>
   <data name="AddDoppelgangerDataUpdatePlugIn_Description" xml:space="preserve"><value>添加镜像世界的副本配置。</value></data>
   <data name="FinishSummonerMasterTreePlugIn_Name" xml:space="preserve"><value>补全召唤术师大师技能树</value></data>

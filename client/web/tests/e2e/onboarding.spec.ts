@@ -13,12 +13,13 @@ interface Panel { handle(bytes: Uint8Array): boolean; open(): void; close(): voi
 type Win = Window & {
   __game: {
     connection: { send(group: string, name: string, fields?: Record<string, unknown>): void; dispatch(bytes: Uint8Array): void };
-    onboarding?: { isOpen: boolean };
+    onboarding?: Pick<Panel, 'isOpen' | 'handle'>;
   };
   __sent: Sent[];
   __chat: string[];
   __confirm: string[];
   __panel: Panel;
+  __feedingGuide?: boolean;
 };
 
 const reward = (zen: number, coins = 0, items: { group: number; number: number; level: number; count: number }[] = []) => ({ zen, coins, coinType: 'GoblinPoints', items });
@@ -50,7 +51,10 @@ async function feed(page: Page, value: unknown): Promise<void> {
     const { write } = await import('/js/net/packets.js' as string) as { write(group: string, name: string, values: Record<string, unknown>): Uint8Array };
     const w = window as unknown as Win;
     const bytes = write('ServerToClient', 'HnmoOnboardingState', { Json: json });
-    if (w.__panel) w.__panel.handle(bytes); else w.__game.connection.dispatch(bytes);
+    w.__feedingGuide = true;
+    try {
+      if (w.__panel) w.__panel.handle(bytes); else w.__game.connection.dispatch(bytes);
+    } finally { w.__feedingGuide = false; }
   }, JSON.stringify(value));
 }
 
@@ -166,6 +170,20 @@ test('the guide panel: the step, the arrow, the chat notices and the buttons', a
   await expectNoPageErrors(errors);
 });
 
+// As with the gift-code fixture, recorded states must not be replaced by a live server response.
+async function onlyFedGuideStates(page: Page): Promise<void> {
+  await page.evaluate(() => {
+    const w = window as unknown as Win;
+    const panel = w.__game.onboarding;
+    if (!panel) throw new Error('The game has not created its onboarding window.');
+    const handle = panel.handle.bind(panel);
+    panel.handle = (bytes: Uint8Array) => {
+      if (bytes[0] === 0xc2 && bytes[3] === 0xf5 && bytes[4] === 0x0f && !w.__feedingGuide) return true;
+      return handle(bytes);
+    };
+  });
+}
+
 test('in the game, the guide is asked for, Y opens it, and the (i) guide and the touch menu have it', async ({ page }) => {
   test.skip(!(await gameServerUp()), 'No game server runs on 44406.');
   test.setTimeout(6 * 60_000);
@@ -186,6 +204,7 @@ test('in the game, the guide is asked for, Y opens it, and the (i) guide and the
   });
   await enterWorld(page, 'test8');
   await expect.poll(() => sent(page).then((list) => list.some((s) => s.name === 'HnmoOnboardingRequest')), { timeout: 60_000 }).toBe(true);
+  await onlyFedGuideStates(page);
   const panel = page.locator('.rml-hnmo_onboarding');
   // A server without the guide doesn't answer: the state comes through the game's connection, and the panel opens by itself.
   await feed(page, state('talk-merchant', { where: { map: 0, x: 127, y: 86, name: 'Potion Girl Amy' } }));
@@ -265,4 +284,136 @@ test('the website shows the starter kit and the guide steps with their rewards, 
   await page.locator('#refresh').click();
   await expect(section.locator('#newplayers-notice')).toHaveText('The new-player guide is unavailable: the server didn\'t answer.');
   await expect(section.locator('[data-step]')).toHaveCount(0);
+});
+
+// The panel opens by itself once per character (its first time in the world, remembered in the browser); on later
+// visits the guide waits as a small button with the step, which opens it; a step done while it's closed makes the
+// button glow instead of opening the panel.
+test('the guide opens by itself once per character, then waits as a button', async ({ page }) => {
+  test.setTimeout(2 * 60_000);
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await page.goto('/index.html');
+  const visit = () => page.evaluate(async () => {
+    const { OnboardingWindow } = await import('/js/ui/onboardingWindow.js' as string) as { OnboardingWindow: new (options: unknown) => Panel };
+    const w = window as unknown as Win;
+    w.__sent = [];
+    w.__chat = [];
+    for (const button of document.querySelectorAll('.hnmo-guide-button')) button.remove();
+    w.__panel?.close();
+    w.__panel = new OnboardingWindow({
+      send: (name: string, fields: Record<string, unknown>) => w.__sent.push({ name, fields: { ...fields } }),
+      message: (text: string) => w.__chat.push(text),
+      itemName: () => 'item',
+      characterName: () => 'GuideOnce',
+    });
+    w.__panel.start();
+  });
+  await page.evaluate(() => { try { localStorage.removeItem('hnmo.onboarding.shown.GuideOnce'); } catch { /* none */ } });
+  const panel = page.locator('.rml-hnmo_onboarding');
+  const button = page.locator('.hnmo-guide-button');
+
+  // The first visit: the panel opens by itself, no button while it's open; closed, the button shows the step.
+  await visit();
+  await feed(page, state('talk-merchant'));
+  await expect(panel).toHaveCount(1);
+  await expect(button).toBeHidden();
+  await page.evaluate(() => (window as unknown as Win).__panel.close());
+  await expect(panel).toHaveCount(0);
+  await expect(button).toBeVisible();
+  await expect(button).toHaveText('Guide 1/3');
+
+  // The next visit: no panel, the button; the button opens the panel.
+  await visit();
+  await feed(page, state('talk-merchant'));
+  await expect(button).toBeVisible();
+  await expect(button).toHaveText('Guide 1/3');
+  await expect(panel).toHaveCount(0);
+  await button.click();
+  await expect(panel).toHaveCount(1);
+  await expect(button).toBeHidden();
+
+  // A step done while closed: the panel stays closed, the button moves on and glows.
+  await page.evaluate(() => (window as unknown as Win).__panel.close());
+  await feed(page, state('kill-10', { done: ['talk-merchant'], event: { type: 'step', ids: ['talk-merchant'] } }));
+  await expect(panel).toHaveCount(0);
+  await expect(button).toHaveText('Guide 2/3');
+  await expect(button).toHaveClass(/hnmo-guide-button-flash/);
+  await expectNoPageErrors(errors);
+});
+
+// A phone on its side with the touch HUD: the guide is a compact card on the left that leaves the joystick and the
+// attack button free, its buttons are big enough to tap, and closed it waits as a button clear of the top-right row
+// and the fight buttons. The touch HUD (ui/mobileHud.ts) and the fight buttons (ui/touchControls.ts) are the page's
+// own, so the same check holds for whichever touch layout the branch has.
+test.describe('on a phone', () => {
+  test.use({ viewport: { width: 740, height: 360 }, isMobile: true, hasTouch: true });
+
+  test('the guide card leaves the joystick and the attack button free', async ({ page }) => {
+    test.setTimeout(2 * 60_000);
+    const errors: string[] = [];
+    page.on('pageerror', (error) => errors.push(error.message));
+    await page.goto('/index.html');
+    await page.evaluate(async () => {
+      const { OnboardingWindow } = await import('/js/ui/onboardingWindow.js' as string) as { OnboardingWindow: new (options: unknown) => Panel };
+      const { Chat } = await import('/js/game/chat.js' as string) as { Chat: new () => unknown };
+      const { MobileHud } = await import('/js/ui/mobileHud.js' as string) as { MobileHud: new (actions: unknown) => { setMode(m: string): void; setInWorld(b: boolean): void } };
+      const w = window as unknown as Win;
+      w.__sent = [];
+      w.__chat = [];
+      const login = document.getElementById('login');
+      if (login) login.hidden = true;
+      // The touch HUD as in the world (its actions do nothing here); the fight buttons are on the page already.
+      const noop = () => undefined;
+      const hud = new MobileHud(new Proxy({ chat: new Chat() }, {
+        get: (target, key) => (key in target ? (target as Record<string | symbol, unknown>)[key] : key === 'cycleTarget' ? () => null : noop),
+      }));
+      hud.setMode('modern');
+      hud.setInWorld(true);
+      document.getElementById('touchBar')?.classList.add('shown');
+      document.getElementById('touchFight')?.classList.add('shown');
+      try { localStorage.removeItem('hnmo.onboarding.shown.PhoneGuide'); } catch { /* none */ }
+      w.__panel = new OnboardingWindow({
+        send: (name: string, fields: Record<string, unknown>) => w.__sent.push({ name, fields: { ...fields } }),
+        message: (text: string) => w.__chat.push(text),
+        itemName: () => 'item',
+        characterName: () => 'PhoneGuide',
+      });
+      w.__panel.start();
+    });
+    await expect(page.locator('body')).toHaveClass(/hnmo-modern-hud/);
+    await feed(page, state('talk-merchant', { kit: true }));
+    const card = page.locator('.rml-hnmo_onboarding #panel');
+    await expect(card).toBeVisible();
+
+    type Box = { x: number; y: number; width: number; height: number };
+    const overlaps = (a: Box, b: Box) => a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
+    const box = async (selector: string) => (await page.locator(selector).first().boundingBox())!;
+    await expect.poll(async () => (await card.boundingBox())?.x ?? 999).toBeLessThan(20);
+    const cardBox = (await card.boundingBox())!;
+    expect(cardBox.width).toBeLessThanOrEqual(262);
+    expect(cardBox.height).toBeLessThanOrEqual(360 * 0.45 + 2);
+    expect(overlaps(cardBox, await box('#mobileThumbstick'))).toBe(false);
+    expect(overlaps(cardBox, await box('#touchFight .fight'))).toBe(false);
+    // Nor the chat bubble over the joystick, where the touch HUD has one.
+    const bubble = (await page.locator('#mobileChatToggle').count()) ? await page.locator('#mobileChatToggle').boundingBox() : null;
+    if (bubble) expect(overlaps(cardBox, bubble)).toBe(false);
+    const close = page.locator('.rml-hnmo_onboarding .ob-close');
+    expect((await close.boundingBox())!.height).toBeGreaterThanOrEqual(35.5);
+
+    await page.screenshot({ path: 'test-results/onboarding-phone-open.png' });
+    // Closed: the "Guide n/m" button, 36 px, clear of the top-right row and the fight buttons.
+    await close.click();
+    const button = page.locator('.hnmo-guide-button');
+    await expect(button).toBeVisible();
+    await expect(button).toHaveText('Guide 1/3');
+    const buttonBox = (await button.boundingBox())!;
+    expect(buttonBox.height).toBeGreaterThanOrEqual(35.5);
+    const others = await page.evaluate(() => [...document.querySelectorAll('#touchFight button, #touchBar button, #mobileTopRight button, #mobileMiniMap, #mobileRightTools button')]
+      .map((el) => el.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0).map((r) => ({ x: r.x, y: r.y, width: r.width, height: r.height })));
+    expect(others.length).toBeGreaterThan(0);
+    expect(others.filter((other) => overlaps(buttonBox, other))).toEqual([]);
+    await page.screenshot({ path: 'test-results/onboarding-phone.png' });
+    await expectNoPageErrors(errors);
+  });
 });

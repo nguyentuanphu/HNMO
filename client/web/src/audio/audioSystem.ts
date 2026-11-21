@@ -23,6 +23,8 @@
 // Browsers keep audio off until the page gets a click or key press: the system listens for
 // the first one, resumes its context and starts the music asked for meanwhile.
 
+import { seasonDataUrl } from '../dataRoot.js';
+
 export interface Vec3 {
   x: number;
   y: number;
@@ -112,7 +114,8 @@ export function distanceLevel(distance: number): number {
 export function dataUrl(file: string, dataRoot = '/data'): string {
   const parts = file.replace(/\\/g, '/').split('/').filter((part) => part.length > 0);
   if (parts.length > 0 && parts[0].toLowerCase() === 'data') parts.shift();
-  return `${dataRoot}/${parts.map((part) => encodeURIComponent(part)).join('/')}`;
+  // Sounds and music of the world's season (a Season 9 world has its own; the rest is the base game's).
+  return seasonDataUrl(`${dataRoot}/${parts.map((part) => encodeURIComponent(part)).join('/')}`);
 }
 
 /** A sound or music file's name with its extension changed to .opus (the packaged folder's form). */
@@ -189,6 +192,9 @@ export class AudioSystem {
   private readonly failedMusic = new Set<string>();
   private unlocked = false;
   private readonly unlockHandler = (): void => this.unlock();
+  /** Whether the page is out of sight (another tab, the window minimised, the phone's home screen): all sound pauses. */
+  private hidden = false;
+  private readonly visibilityHandler = (): void => this.setHidden(document.visibilityState === 'hidden');
   /** Whether the sound files are asked for as .opus. */
   private readonly opus: Promise<boolean>;
 
@@ -218,6 +224,12 @@ export class AudioSystem {
       this.effectsGain = null;
     }
     this.applyVolumes();
+    if (typeof document !== 'undefined') {
+      // Owner's report (2026-11-21): on a phone the music went on after leaving for the home screen. Out of sight, the
+      // game stays connected (as the desktop's minimised window does) but its sound pauses until it is seen again.
+      document.addEventListener('visibilitychange', this.visibilityHandler);
+      this.hidden = document.visibilityState === 'hidden';
+    }
     if (typeof window !== 'undefined') {
       for (const type of ['pointerdown', 'keydown', 'touchstart', 'mousedown']) {
         window.addEventListener(type, this.unlockHandler, { capture: true, passive: true });
@@ -230,10 +242,35 @@ export class AudioSystem {
     return this.unlocked || this.context?.state === 'running';
   }
 
+  /** Whether the music is heard now (playing, not paused). */
+  get isMusicPlaying(): boolean {
+    return this.music !== null && !this.music.paused;
+  }
+
+  /** Whether the sound is paused because the page is out of sight. */
+  get isHiddenPaused(): boolean {
+    return this.hidden;
+  }
+
+  /** Pauses all sound while the page is out of sight and plays it again when it is seen (the page calls it). */
+  setHidden(hidden: boolean): void {
+    if (this.hidden === hidden) return;
+    this.hidden = hidden;
+    const context = this.context;
+    if (hidden) {
+      if (context !== null && context.state === 'running') context.suspend().catch(() => undefined);
+      this.music?.pause();
+      return;
+    }
+    if (!this.unlocked) return;
+    if (context !== null && context.state !== 'running') context.resume().catch(() => undefined);
+    if (this.music !== null && this.music.paused && this.music.src !== '') this.music.play().catch(() => undefined);
+  }
+
   /** Resumes audio after a user gesture; the listeners call it, a caller may too (from a click handler). */
   unlock(): void {
     const context = this.context;
-    if (context !== null && context.state !== 'running') {
+    if (!this.hidden && context !== null && context.state !== 'running') {
       context.resume().catch(() => undefined);
     }
     this.unlocked = true;
@@ -242,7 +279,7 @@ export class AudioSystem {
         window.removeEventListener(type, this.unlockHandler, { capture: true });
       }
     }
-    if (this.music !== null && this.music.paused) {
+    if (!this.hidden && this.music !== null && this.music.paused) {
       this.music.play().catch(() => undefined);
     }
   }
@@ -513,8 +550,8 @@ export class AudioSystem {
     void this.opus.then((opus) => {
       if (this.music !== element) return;
       element.src = dataUrl(opus ? opusName(file) : file, this.dataRoot);
-      // Before a user gesture the browser refuses; unlock() starts it then.
-      element.play().catch(() => undefined);
+      // Before a user gesture the browser refuses; unlock() starts it then. Out of sight, setHidden(false) does.
+      if (!this.hidden) element.play().catch(() => undefined);
     });
   }
 

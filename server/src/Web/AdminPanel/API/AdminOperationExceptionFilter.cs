@@ -4,10 +4,10 @@
 
 namespace HNMO.Web.AdminPanel.API;
 
+using HNMO.Web.AdminPanel.Operations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using HNMO.Web.AdminPanel.Operations;
 
 /// <summary>Returns only explicitly safe operational errors through the public HTTP API.</summary>
 public sealed class AdminOperationExceptionFilter : IExceptionFilter

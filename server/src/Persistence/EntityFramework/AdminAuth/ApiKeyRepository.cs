@@ -5,8 +5,8 @@
 namespace HNMO.Persistence.EntityFramework.AdminAuth;
 
 using System.Threading;
-using Microsoft.EntityFrameworkCore;
 using HNMO.Persistence.AdminAuth;
+using Microsoft.EntityFrameworkCore;
 
 /// <summary>
 /// Implementation of the <see cref="IApiKeyRepository"/> which stores the keys

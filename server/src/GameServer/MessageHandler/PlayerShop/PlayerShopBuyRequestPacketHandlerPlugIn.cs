@@ -5,7 +5,6 @@
 namespace HNMO.GameServer.MessageHandler.PlayerShop;
 
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
 using HNMO.GameLogic;
 using HNMO.GameLogic.PlayerActions.PlayerStore;
 using HNMO.GameLogic.Views;
@@ -13,6 +12,7 @@ using HNMO.GameLogic.Views.Inventory;
 using HNMO.Interfaces;
 using HNMO.Network.Packets.ClientToServer;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Packet handler which handles buy requests to a player shop (3F 06).

@@ -6,8 +6,8 @@ namespace HNMO.Discord;
 
 using System.Collections.Concurrent;
 using System.Net.Http;
-using Microsoft.Extensions.Logging;
 using HNMO.Interfaces;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Posts <see cref="GameEvent"/>s as messages to Discord channels, through webhooks or the bot.

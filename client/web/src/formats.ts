@@ -3,7 +3,9 @@
 //   EncTerrainN.map / .att        Render/Terrain/ZzzLodTerrain.cpp (OpenTerrainMapping, OpenTerrainAttribute)
 //   EncTerrainN.obj               Engine/Object/ZzzObject.cpp (OpenObjectsEnc)
 //   TerrainHeight.OZB             Render/Terrain/ZzzLodTerrain.cpp (OpenTerrainHeight)
-//   *.bmd (version 10 and 12)     Render/Models/ZzzBMD.cpp (BMD::Open2)
+//   *.bmd (versions 10, 12, 14)   Render/Models/ZzzBMD.cpp (BMD::Open2)
+
+import { decryptModulusPayload } from './modulusCipher.js';
 
 export const TERRAIN_SIZE = 256;
 export const TERRAIN_SCALE = 100;
@@ -62,9 +64,20 @@ export function buxConvert(buffer: Uint8Array): Uint8Array {
 
 const CELLS = TERRAIN_SIZE * TERRAIN_SIZE;
 
+function isMagic(bytes: Uint8Array, b0: number, b1: number, b2: number, b3: number): boolean {
+  return bytes.length >= 4 && bytes[0] === b0 && bytes[1] === b1 && bytes[2] === b2 && bytes[3] === b3;
+}
+
+// Season 9+ terrain .map/.att files wrap their payload in ModulusCipher behind a 4-byte magic ("MAP\x01" / "ATT\x01").
+function decryptTerrainPayload(encrypted: Uint8Array, m0: number, m1: number, m2: number, m3: number): Uint8Array {
+  return isMagic(encrypted, m0, m1, m2, m3)
+    ? decryptModulusPayload(encrypted.subarray(4))
+    : mapFileDecrypt(encrypted);
+}
+
 // EncTerrainN.map: version, map number, two texture layers and the blend alpha per cell.
 export function parseTerrainMapping(encrypted: Uint8Array): TerrainMapping {
-  const data = mapFileDecrypt(encrypted);
+  const data = decryptTerrainPayload(encrypted, 0x4d, 0x41, 0x50, 0x01); // "MAP\x01"
   let p = 2;
   const layer1 = data.slice(p, p + CELLS); p += CELLS;
   const layer2 = data.slice(p, p + CELLS); p += CELLS;
@@ -74,10 +87,10 @@ export function parseTerrainMapping(encrypted: Uint8Array): TerrainMapping {
 
 // EncTerrainN.att: walkability flags per cell (one byte, or a WORD in the extended format).
 export function parseTerrainAttributes(encrypted: Uint8Array): Uint16Array {
-  const data = buxConvert(mapFileDecrypt(encrypted));
+  const data = buxConvert(decryptTerrainPayload(encrypted, 0x41, 0x54, 0x54, 0x01)); // "ATT\x01"
   const flags = new Uint16Array(CELLS);
   const wide = data.length === CELLS * 2 + 4;
-  const view = new DataView(data.buffer);
+  const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
   for (let i = 0; i < CELLS; i++) flags[i] = wide ? view.getUint16(4 + i * 2, true) : data[4 + i];
   return flags;
 }
@@ -110,15 +123,17 @@ export function parseTerrainHeight(bytes: Uint8Array): Float32Array {
 }
 
 const OBJECT_RECORD_BYTES = 2 + 12 + 12 + 4;
+const OBJECT_RECORD_V1_BYTES = OBJECT_RECORD_BYTES + 2;
 
 // EncTerrainN.obj: the static world objects, each a model type with position, angles (degrees) and scale.
 export function parseWorldObjects(encrypted: Uint8Array): WorldObjects {
   const data = mapFileDecrypt(encrypted);
-  const view = new DataView(data.buffer);
+  const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
+  const recordBytes = data[0] >= 1 ? OBJECT_RECORD_V1_BYTES : OBJECT_RECORD_BYTES;
   const count = view.getInt16(2, true);
   const objects: WorldObject[] = [];
   let p = 4;
-  for (let i = 0; i < count && p + OBJECT_RECORD_BYTES <= data.length; i++, p += OBJECT_RECORD_BYTES) {
+  for (let i = 0; i < count && p + OBJECT_RECORD_BYTES <= data.length; i++, p += recordBytes) {
     objects.push({
       type: view.getInt16(p, true),
       position: [view.getFloat32(p + 2, true), view.getFloat32(p + 6, true), view.getFloat32(p + 10, true)],
@@ -133,6 +148,7 @@ export function parseWorldObjects(encrypted: Uint8Array): WorldObjects {
 
 const BMD_VERSION_PLAIN = 0x0a;
 const BMD_VERSION_ENCRYPTED = 0x0c;
+const BMD_VERSION_MODULUS = 0x0e;
 const NAME_BYTES = 32;
 const VERTEX_BYTES = 16;     // short Node, (pad), vec3 Position
 const NORMAL_BYTES = 20;     // short Node, (pad), vec3 Normal, short BindVertex, (pad)
@@ -159,7 +175,11 @@ export interface BMDMesh {
   triangles: BMDTriangle[];
 }
 
-export interface BMDAction { numKeys: number }
+/**
+ * One animation of a model. A locked action (LockPositions: the walks and runs) is drawn in place: its root bone
+ * stays on key 0's x and y, and it loops over one key less than it has (ZzzBMD.cpp).
+ */
+export interface BMDAction { numKeys: number; lockPositions: boolean }
 
 /** One action's keys of a bone: x, y, z per key. */
 export interface BMDBoneFrames {
@@ -194,9 +214,10 @@ function bmdBody(fileBytes: Uint8Array): Uint8Array {
   if (fileBytes[0] !== 0x42 || fileBytes[1] !== 0x4d || fileBytes[2] !== 0x44) throw new Error('Not a BMD file');
   const version = fileBytes[3];
   if (version === BMD_VERSION_PLAIN) return fileBytes.subarray(4);
-  if (version === BMD_VERSION_ENCRYPTED) {
-    const size = new DataView(fileBytes.buffer, fileBytes.byteOffset).getInt32(4, true);
-    return mapFileDecrypt(fileBytes.subarray(8, 8 + size));
+  if (version === BMD_VERSION_ENCRYPTED || version === BMD_VERSION_MODULUS) {
+    const size = new DataView(fileBytes.buffer, fileBytes.byteOffset, fileBytes.byteLength).getInt32(4, true);
+    const payload = fileBytes.subarray(8, 8 + size);
+    return version === BMD_VERSION_ENCRYPTED ? mapFileDecrypt(payload) : decryptModulusPayload(payload);
   }
   throw new Error(`BMD version ${version} is not supported yet`);
 }
@@ -249,7 +270,7 @@ export function parseBMD(fileBytes: Uint8Array): BMDModel {
     const lockPositions = bytes[p + 2] !== 0;
     p += 3;
     if (lockPositions && numKeys > 0) p += numKeys * 12;
-    actions.push({ numKeys });
+    actions.push({ numKeys, lockPositions });
   }
 
   const bones: BMDBone[] = [];

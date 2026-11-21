@@ -12,9 +12,9 @@ using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using HNMO.Discord;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Json;
-using HNMO.Discord;
 using Nito.AsyncEx;
 
 /// <summary>

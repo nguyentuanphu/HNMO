@@ -5,11 +5,11 @@
 namespace HNMO.GameServer.RemoteView.MiniGames;
 
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
 using HNMO.GameLogic.MiniGames;
 using HNMO.GameLogic.PlayerActions.MiniGames;
 using HNMO.Network.Packets.ServerToClient;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 using MiniGameType = HNMO.DataModel.Configuration.MiniGameType;
 
 /// <summary>

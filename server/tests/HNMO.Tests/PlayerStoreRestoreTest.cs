@@ -25,6 +25,7 @@ public class PlayerStoreRestoreTest
     public async ValueTask RestoredStoreSendsItemListToOwnerAsync()
     {
         var player = await PlayerTestHelper.CreatePlayerAsync().ConfigureAwait(false);
+        player.Attributes![HNMO.GameLogic.Attributes.Stats.Level] = 6; // a store opens from level 6
         await this.AddPricedStoreItemAsync(player).ConfigureAwait(false);
         player.SelectedCharacter!.IsStoreOpened = true;
         player.SelectedCharacter.StoreName = "Test";

@@ -5,10 +5,9 @@
 namespace HNMO.Persistence.SourceGenerator;
 
 using System.Reflection;
+using HNMO.Annotations;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
-
-using HNMO.Annotations;
 
 /// <summary>
 /// A generator for the plain and simple objects for the persistence project.

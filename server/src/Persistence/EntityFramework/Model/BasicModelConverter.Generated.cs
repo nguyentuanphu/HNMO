@@ -1284,6 +1284,7 @@ internal sealed class BasicModelConverter
         target.MaximumPartySize = source.MaximumPartySize;
         target.ShouldDropMoney = source.ShouldDropMoney;
         target.ItemDropDuration = source.ItemDropDuration;
+        target.MoneyDropDuration = source.MoneyDropDuration;
         target.MaximumItemOptionLevelDrop = source.MaximumItemOptionLevelDrop;
         target.DamagePerOneItemDurability = source.DamagePerOneItemDurability;
         target.DamagePerOnePetDurability = source.DamagePerOnePetDurability;
@@ -1826,6 +1827,7 @@ internal sealed class BasicModelConverter
         target.StorePriceItemDefinition = (HNMO.DataModel.Configuration.Items.ItemDefinition)this.ConvertObject(source.StorePriceItemDefinition)!;
         target.StorePriceCoinType = source.StorePriceCoinType;
         target.PetExperience = source.PetExperience;
+        target.Serial = source.Serial;
         return target;
     }
 

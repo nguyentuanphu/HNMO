@@ -5,11 +5,11 @@
 namespace HNMO.GameServer.Host;
 
 using global::Dapr;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 using HNMO.Dapr.Common;
 using HNMO.Interfaces;
 using HNMO.ServerClients;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 
 /// <summary>
 /// The API controller for the game server which handles the calls from other services.

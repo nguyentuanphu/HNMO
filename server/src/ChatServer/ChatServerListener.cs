@@ -6,10 +6,10 @@ namespace HNMO.ChatServer;
 
 using System.ComponentModel;
 using System.IO.Pipelines;
-using Microsoft.Extensions.Logging;
 using HNMO.Network;
 using HNMO.Network.PlugIns;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// A listener which listens to the specified endpoint and provides the initialized <see cref="IConnection"/> by the event <see cref="ClientAccepted"/>.

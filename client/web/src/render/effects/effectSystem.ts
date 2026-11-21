@@ -448,6 +448,11 @@ export class EffectSystem {
           o.angle.x = randInt(90) - 45;
           o.angle.z = randInt(360);
           o.velocity.set(0, -(randInt(8) + 40), 0);
+        } else if (o.subType === 2) { // a smoking lamp's rising, drifting smoke (CreateFire 2)
+          o.lifeTime = 50;
+          o.scale = (randInt(64) + 64) * 0.01;
+          o.rotation = randInt(360);
+          o.gravity = (randInt(32) + 60) * 0.1;
         } else if (o.subType === 3) {
           o.lifeTime = 10;
           o.scale = (randInt(32) + 80) * 0.01;
@@ -629,6 +634,12 @@ export class EffectSystem {
           o.light.set(luminosity * 0.5, luminosity, luminosity * 0.8);
           o.velocity.multiplyScalar(0.4);
           o.scale += 0.05;
+        } else if (o.subType === 2) {
+          o.light.setScalar(o.lifeTime / 50);
+          o.gravity -= 0.1;
+          o.position.x -= o.gravity * 0.2;
+          o.position.z += o.gravity;
+          o.scale -= 0.01;
         } else if (o.subType === 58) {
           o.light.copy(o.startPosition).multiplyScalar(o.lifeTime / 50);
           o.velocity.multiplyScalar(0.4);

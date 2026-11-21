@@ -6,10 +6,10 @@ namespace HNMO.Web.AdminPanel;
 
 using System.Net;
 using System.Text.RegularExpressions;
+using HNMO.Web.AdminPanel.Auth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using HNMO.Web.AdminPanel.Auth;
 
 /// <summary>
 /// The admin panel behind the public website: the website (on the same computer) forwards
@@ -70,6 +70,7 @@ public static partial class WebsitePrefixMiddleware
         });
     }
 
-    [GeneratedRegex("^/[A-Za-z0-9][A-Za-z0-9_-]{2,39}$")]
+    // The website's admin path, and under it Season 9's and the Arena's panels (owner, 2026-11-21).
+    [GeneratedRegex("^/[A-Za-z0-9][A-Za-z0-9_-]{2,39}(/s9|/arena)?$")]
     private static partial Regex PrefixPattern();
 }

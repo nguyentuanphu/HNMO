@@ -8,7 +8,7 @@ if (args.Length != 3)
 }
 
 const string packetDefinition = """
-    <PacketDefinitions xmlns="https://github.com/nguyentuanphu/HNMO/PacketDefinitions">
+    <PacketDefinitions xmlns="urn:hnmo:packet-definitions">
       <Packets>
         <Packet>
           <Name>Probe</Name>

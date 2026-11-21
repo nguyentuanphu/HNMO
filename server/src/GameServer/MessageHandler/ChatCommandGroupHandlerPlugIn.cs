@@ -5,10 +5,11 @@
 namespace HNMO.GameServer.MessageHandler;
 
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
+using HNMO.GameLogic;
 using HNMO.Network.Packets.ClientToServer;
 using HNMO.Network.PlugIns;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Packet handler for the messages about chat commands (0xF5 identifier).
@@ -24,6 +25,9 @@ internal class ChatCommandGroupHandlerPlugIn : GroupPacketHandlerPlugIn
     /// used here directly because it's not a compile time constant.
     /// </summary>
     internal const byte GroupKey = 0xF5;
+
+    /// <summary>Shared by every game server of the process: a player is on one at a time.</summary>
+    private static readonly HnmoPacketRateLimiter RateLimiter = new();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ChatCommandGroupHandlerPlugIn" /> class.
@@ -41,4 +45,35 @@ internal class ChatCommandGroupHandlerPlugIn : GroupPacketHandlerPlugIn
 
     /// <inheritdoc/>
     public override byte Key => GroupKey;
+
+    /// <inheritdoc/>
+    /// <remarks>
+    /// While a trade or a crafting dialog is open, the player's inventory and money have a backup which is put
+    /// back when the trade is cancelled or the connection ends. An HNMO feature which takes items or money in
+    /// that time (market, jewel bank, escrow, mounts, ...) would keep what it gave while the backup returns what
+    /// it took. So none of HNMO's own messages (sub codes 2 and up) are handled until the dialog is closed.
+    /// </remarks>
+    public override async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
+    {
+        const byte firstHnmoSubCode = 2;
+        var subTypeIndex = packet.Span[0] % 2 == 1 ? 3 : 4;
+        var isHnmoPacket = packet.Length > subTypeIndex && packet.Span[subTypeIndex] >= firstHnmoSubCode;
+        if (isHnmoPacket && player.BackupInventory is not null)
+        {
+            return;
+        }
+
+        // The Arena keeps one HNMO window, its own travel window (GameLogic.PlugIns.Arena.ArenaRules).
+        if (isHnmoPacket && !GameLogic.PlugIns.Arena.ArenaRules.AllowsHnmoMessage(packet.Span[subTypeIndex]))
+        {
+            return;
+        }
+
+        if (isHnmoPacket && !RateLimiter.TryTake(player))
+        {
+            return;
+        }
+
+        await base.HandlePacketAsync(player, packet).ConfigureAwait(false);
+    }
 }

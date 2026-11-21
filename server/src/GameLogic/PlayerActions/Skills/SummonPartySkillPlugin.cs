@@ -47,6 +47,48 @@ public class SummonPartySkillPlugin : TargetedSkillPluginBase
         _ = Task.Run(() => this.RunSummonPartyAsync(player, cancellationTokenSource));
     }
 
+    /// <summary>
+    /// Summons the targets next to the summoner, unless the rules of a warp refuse it for a target.
+    /// </summary>
+    /// <param name="player">The summoning Dark Lord.</param>
+    /// <param name="targetPlayers">The party members to summon.</param>
+    /// <returns>The task.</returns>
+    internal async ValueTask SummonTargetsAsync(Player player, IEnumerable<Player> targetPlayers)
+    {
+        foreach (var targetPlayer in targetPlayers)
+        {
+            Point targetPoint = player.Position;
+            bool foundValidPoint = false;
+            int maxAttempts = 10;
+            int attempts = 0;
+
+            while (!foundValidPoint && attempts < maxAttempts)
+            {
+                attempts++;
+
+                var offsetX = Rand.NextInt(-2, 3);
+                var offsetY = Rand.NextInt(-2, 3);
+                Point testPoint = new((byte)(player.Position.X + offsetX), (byte)(player.Position.Y + offsetY));
+
+                if (player.CurrentMap!.Terrain.WalkMap[testPoint.X, testPoint.Y]
+                    && player.Position.EuclideanDistanceTo(targetPoint) < 6)
+                {
+                    targetPoint = testPoint;
+                    foundValidPoint = true;
+                }
+            }
+
+            // The rules of a warp apply (map requirements, and not while duelling, trading or dead).
+            if (PlugIns.HnmoWarpGuard.Refusal(targetPlayer, player.CurrentMap!.Definition) is { } refusal)
+            {
+                await targetPlayer.ShowBlueMessageAsync(PlugIns.HnmoWarpGuard.TextFor(targetPlayer, refusal)).ConfigureAwait(false);
+                continue;
+            }
+
+            await targetPlayer.TeleportToMapAsync(player.CurrentMap!, targetPoint).ConfigureAwait(false);
+        }
+    }
+
     private static async ValueTask SendSummonCanceledMessageAsync(Player player)
     {
         if (player.Party is not { } party)
@@ -59,6 +101,17 @@ public class SummonPartySkillPlugin : TargetedSkillPluginBase
             await member.InvokeViewPlugInAsync<IChatViewPlugIn>(
                 p => p.ChatMessageAsync(member.GetLocalizedMessage(nameof(PlayerMessage.SummonPartyCanceled)), player.Name, ChatMessageType.Party)).ConfigureAwait(false);
         }
+    }
+
+    /// <summary>
+    /// Determines whether the player is an outlaw of PK level 2 or above. As in the Season 6/9 server suites,
+    /// these can't be summoned by a Dark Lord.
+    /// </summary>
+    /// <param name="player">The player.</param>
+    /// <returns><c>true</c> if the player is an outlaw of PK level 2 or above.</returns>
+    private static bool IsPlayerKillerOfSecondLevelOrAbove(Player player)
+    {
+        return player.SelectedCharacter?.State >= HeroState.PlayerKiller1stStage;
     }
 
     private async ValueTask RunSummonPartyAsync(Player player, CancellationTokenSource cancellationTokenSource)
@@ -109,41 +162,6 @@ public class SummonPartySkillPlugin : TargetedSkillPluginBase
         }
     }
 
-    private async ValueTask SummonTargetsAsync(Player player, IEnumerable<Player> targetPlayers)
-    {
-        foreach (var targetPlayer in targetPlayers)
-        {
-            Point targetPoint = player.Position;
-            bool foundValidPoint = false;
-            int maxAttempts = 10;
-            int attempts = 0;
-
-            while (!foundValidPoint && attempts < maxAttempts)
-            {
-                attempts++;
-
-                var offsetX = Rand.NextInt(-2, 3);
-                var offsetY = Rand.NextInt(-2, 3);
-                Point testPoint = new((byte)(player.Position.X + offsetX), (byte)(player.Position.Y + offsetY));
-
-                if (player.CurrentMap!.Terrain.WalkMap[testPoint.X, testPoint.Y]
-                    && player.Position.EuclideanDistanceTo(targetPoint) < 6)
-                {
-                    targetPoint = testPoint;
-                    foundValidPoint = true;
-                }
-            }
-
-            if (player.CurrentMap!.Definition.TryGetRequirementError(targetPlayer, out var errorMessage))
-            {
-                await targetPlayer.ShowBlueMessageAsync(errorMessage).ConfigureAwait(false);
-                continue;
-            }
-
-            await targetPlayer.TeleportToMapAsync(player.CurrentMap!, targetPoint).ConfigureAwait(false);
-        }
-    }
-
     private bool CanPlayerSummon(Player player)
     {
         return player.Party is not null
@@ -164,7 +182,8 @@ public class SummonPartySkillPlugin : TargetedSkillPluginBase
             && target.Party?.Equals(player.Party) is true
             && target.OpenedNpc is null
             && target.TradingPartner is null
-            && target.CurrentMiniGame is null;
+            && target.CurrentMiniGame is null
+            && !IsPlayerKillerOfSecondLevelOrAbove(target);
 
         // todo: not during castle siege for players which are not in the same ally
         if (!allowedByState)

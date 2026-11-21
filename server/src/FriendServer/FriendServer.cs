@@ -6,9 +6,9 @@ namespace HNMO.FriendServer;
 
 using System.Collections.Concurrent;
 using System.Collections.Immutable;
-using Microsoft.Extensions.Logging;
 using HNMO.Interfaces;
 using HNMO.Persistence;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The friend server which manages the friend list with chat and letter system.

@@ -408,9 +408,15 @@ public class MapInitializer : IMapInitializer
     protected virtual GameMap InternalCreateGameMap(GameMapDefinition definition)
     {
         this._logger.LogDebug("Creating GameMap {0}", definition);
-        return definition.BattleZone?.Type == BattleType.Soccer
+        var map = definition.BattleZone?.Type == BattleType.Soccer
             ? new SoccerGameMap(definition, this._configuration.ItemDropDuration, this.ChunkSize)
             : new GameMap(definition, this._configuration.ItemDropDuration, this.ChunkSize);
+        if (this._configuration.MoneyDropDuration > TimeSpan.Zero)
+        {
+            map.MoneyDropDuration = this._configuration.MoneyDropDuration;
+        }
+
+        return map;
     }
 
     private static bool IsAmountMultiplied(MonsterSpawnArea spawnArea)

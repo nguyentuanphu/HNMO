@@ -5,9 +5,9 @@
 namespace HNMO.AdminPanel.Host;
 
 using global::Dapr;
+using HNMO.Dapr.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using HNMO.Dapr.Common;
 
 /// <summary>
 /// Controller which receives server state updates from the pub/sub component.

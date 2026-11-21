@@ -32,12 +32,16 @@ public class OnboardingPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn,
     ISupportCustomConfiguration<OnboardingConfiguration>, ISupportDefaultCustomConfiguration
 {
     private static readonly TimeSpan CheckInterval = TimeSpan.FromSeconds(1);
+
     private static readonly TimeSpan DeliverInterval = TimeSpan.FromSeconds(30);
 
     /// <summary>The players with a running guide and the kind of their current step, so the hooks stay cheap.</summary>
     private readonly ConcurrentDictionary<Player, OnboardingStepKind?> _current = new();
+
     private DateTime _nextCheckUtc = DateTime.UtcNow;
+
     private DateTime _nextDeliverUtc = DateTime.UtcNow + DeliverInterval;
+
     private (OnboardingConfiguration Configuration, OnboardingEngine Engine)? _engine;
 
     /// <inheritdoc />
@@ -375,6 +379,126 @@ public class OnboardingPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn,
             player.IsCashShopOpen);
     }
 
+    /// <summary>
+    /// Gives the zen, items and buff of a reward, all or nothing.
+    /// </summary>
+    private static async ValueTask<bool> GiveGoodsAsync(Player player, OnboardingOwedReward reward)
+    {
+        if (player.Inventory is not { } inventory)
+        {
+            return false;
+        }
+
+        var added = new List<Item>();
+        async ValueTask TakeBackAsync()
+        {
+            foreach (var back in added)
+            {
+                await inventory.RemoveItemAsync(back).ConfigureAwait(false);
+                await player.PersistenceContext.DeleteAsync(back).ConfigureAwait(false);
+            }
+        }
+
+        foreach (var entry in reward.Items.Where(i => i.Count > 0))
+        {
+            var definition = player.GameContext.Configuration.Items.FirstOrDefault(d => d.Group == entry.Group && d.Number == entry.Number);
+            if (definition is null)
+            {
+                player.Logger.LogWarning("Onboarding: the reward item {Group} {Number} doesn't exist; it's left out.", entry.Group, entry.Number);
+                continue;
+            }
+
+            var specification = new ItemSpecification((byte)entry.Group, entry.Number, Math.Min(entry.Level, definition.MaximumItemLevel), entry.Skill, entry.Luck, entry.OptionLevel, entry.ExcellentOptions);
+            if (!GameMasterItemFactory.IsValid(definition, specification))
+            {
+                player.Logger.LogWarning("Onboarding: the options of the item {Group} {Number} don't fit it; it's given without them.", entry.Group, entry.Number);
+                specification = new ItemSpecification((byte)entry.Group, entry.Number, Math.Min(entry.Level, definition.MaximumItemLevel), entry.Skill && definition.Skill is not null);
+            }
+
+            for (var i = 0; i < Math.Min(entry.Count, 50); i++)
+            {
+                var temporary = GameMasterItemFactory.CreateItem(definition, specification);
+                if (temporary.IsStackable())
+                {
+                    temporary.Durability = Math.Clamp(entry.Durability == 0 ? definition.Durability : entry.Durability, 1, Math.Max(1, (int)definition.Durability));
+                }
+                else
+                {
+                    var maximum = temporary.GetMaximumDurabilityOfOnePiece();
+                    temporary.Durability = entry.Durability == 0 ? maximum : Math.Min(entry.Durability, maximum);
+                }
+
+                if (inventory.CheckInvSpace(temporary) is not { } slot)
+                {
+                    await TakeBackAsync().ConfigureAwait(false);
+                    return false;
+                }
+
+                var item = temporary.MakePersistent(player.PersistenceContext);
+                if (!await inventory.AddItemAsync(slot, item).ConfigureAwait(false))
+                {
+                    player.PersistenceContext.Detach(item);
+                    await TakeBackAsync().ConfigureAwait(false);
+                    return false;
+                }
+
+                added.Add(item);
+            }
+        }
+
+        if (reward.Zen > 0 && !player.TryAddMoney(reward.Zen))
+        {
+            await TakeBackAsync().ConfigureAwait(false);
+            return false;
+        }
+
+        foreach (var item in added)
+        {
+            await player.InvokeViewPlugInAsync<IItemAppearPlugIn>(p => p.ItemAppearAsync(item)).ConfigureAwait(false);
+        }
+
+        if (reward.Zen > 0)
+        {
+            await player.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
+        }
+
+        if (reward.BuffMinutes > 0)
+        {
+            await ApplyBuffAsync(player, reward).ConfigureAwait(false);
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Gives the effect of an item of the game's data (e.g. the Seal of Ascension) for some minutes.
+    /// </summary>
+    private static async ValueTask ApplyBuffAsync(Player player, OnboardingOwedReward reward)
+    {
+        var effectDefinition = player.GameContext.Configuration.Items.FirstOrDefault(d => d.Group == reward.BuffItemGroup && d.Number == reward.BuffItemNumber)?.ConsumeEffect;
+        if (effectDefinition is null || player.Attributes is not { } attributes)
+        {
+            player.Logger.LogWarning("Onboarding: the item {Group} {Number} has no effect; the buff is left out.", reward.BuffItemGroup, reward.BuffItemNumber);
+            return;
+        }
+
+        var boosts = effectDefinition.PowerUpDefinitions
+            .Where(def => def.Boost is not null && def.TargetAttribute is not null)
+            .Select(def => new MagicEffect.ElementWithTarget(attributes.CreateElement(def), def.TargetAttribute!))
+            .ToArray();
+        if (boosts.Length == 0)
+        {
+            return;
+        }
+
+        if (player.MagicEffectList.TryGetActiveEffectOfSubType(effectDefinition.SubType) is { } existing)
+        {
+            await existing.DisposeAsync().ConfigureAwait(false);
+        }
+
+        await player.MagicEffectList.AddEffectAsync(new MagicEffect(TimeSpan.FromMinutes(reward.BuffMinutes), effectDefinition, boosts)).ConfigureAwait(false);
+    }
+
     private bool Wants(Player player, OnboardingStepKind kind) => this._current.TryGetValue(player, out var current) && current == kind;
 
     private void Fire(Player player, Func<ValueTask> action) => _ = Task.Run(async () =>
@@ -502,126 +626,6 @@ public class OnboardingPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn,
         engine.ReturnOwed(characterId, keep);
         this.Save();
         return (given, keep.Count);
-    }
-
-    /// <summary>
-    /// Gives the zen, items and buff of a reward, all or nothing.
-    /// </summary>
-    private static async ValueTask<bool> GiveGoodsAsync(Player player, OnboardingOwedReward reward)
-    {
-        if (player.Inventory is not { } inventory)
-        {
-            return false;
-        }
-
-        var added = new List<Item>();
-        async ValueTask TakeBackAsync()
-        {
-            foreach (var back in added)
-            {
-                await inventory.RemoveItemAsync(back).ConfigureAwait(false);
-                await player.PersistenceContext.DeleteAsync(back).ConfigureAwait(false);
-            }
-        }
-
-        foreach (var entry in reward.Items.Where(i => i.Count > 0))
-        {
-            var definition = player.GameContext.Configuration.Items.FirstOrDefault(d => d.Group == entry.Group && d.Number == entry.Number);
-            if (definition is null)
-            {
-                player.Logger.LogWarning("Onboarding: the reward item {Group} {Number} doesn't exist; it's left out.", entry.Group, entry.Number);
-                continue;
-            }
-
-            var specification = new ItemSpecification((byte)entry.Group, entry.Number, Math.Min(entry.Level, definition.MaximumItemLevel), entry.Skill, entry.Luck, entry.OptionLevel, entry.ExcellentOptions);
-            if (!GameMasterItemFactory.IsValid(definition, specification))
-            {
-                player.Logger.LogWarning("Onboarding: the options of the item {Group} {Number} don't fit it; it's given without them.", entry.Group, entry.Number);
-                specification = new ItemSpecification((byte)entry.Group, entry.Number, Math.Min(entry.Level, definition.MaximumItemLevel), entry.Skill && definition.Skill is not null);
-            }
-
-            for (var i = 0; i < Math.Min(entry.Count, 50); i++)
-            {
-                var temporary = GameMasterItemFactory.CreateItem(definition, specification);
-                if (temporary.IsStackable())
-                {
-                    temporary.Durability = Math.Clamp(entry.Durability == 0 ? definition.Durability : entry.Durability, 1, Math.Max(1, (int)definition.Durability));
-                }
-                else
-                {
-                    var maximum = temporary.GetMaximumDurabilityOfOnePiece();
-                    temporary.Durability = entry.Durability == 0 ? maximum : Math.Min(entry.Durability, maximum);
-                }
-
-                if (inventory.CheckInvSpace(temporary) is not { } slot)
-                {
-                    await TakeBackAsync().ConfigureAwait(false);
-                    return false;
-                }
-
-                var item = temporary.MakePersistent(player.PersistenceContext);
-                if (!await inventory.AddItemAsync(slot, item).ConfigureAwait(false))
-                {
-                    player.PersistenceContext.Detach(item);
-                    await TakeBackAsync().ConfigureAwait(false);
-                    return false;
-                }
-
-                added.Add(item);
-            }
-        }
-
-        if (reward.Zen > 0 && !player.TryAddMoney(reward.Zen))
-        {
-            await TakeBackAsync().ConfigureAwait(false);
-            return false;
-        }
-
-        foreach (var item in added)
-        {
-            await player.InvokeViewPlugInAsync<IItemAppearPlugIn>(p => p.ItemAppearAsync(item)).ConfigureAwait(false);
-        }
-
-        if (reward.Zen > 0)
-        {
-            await player.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
-        }
-
-        if (reward.BuffMinutes > 0)
-        {
-            await ApplyBuffAsync(player, reward).ConfigureAwait(false);
-        }
-
-        return true;
-    }
-
-    /// <summary>
-    /// Gives the effect of an item of the game's data (e.g. the Seal of Ascension) for some minutes.
-    /// </summary>
-    private static async ValueTask ApplyBuffAsync(Player player, OnboardingOwedReward reward)
-    {
-        var effectDefinition = player.GameContext.Configuration.Items.FirstOrDefault(d => d.Group == reward.BuffItemGroup && d.Number == reward.BuffItemNumber)?.ConsumeEffect;
-        if (effectDefinition is null || player.Attributes is not { } attributes)
-        {
-            player.Logger.LogWarning("Onboarding: the item {Group} {Number} has no effect; the buff is left out.", reward.BuffItemGroup, reward.BuffItemNumber);
-            return;
-        }
-
-        var boosts = effectDefinition.PowerUpDefinitions
-            .Where(def => def.Boost is not null && def.TargetAttribute is not null)
-            .Select(def => new MagicEffect.ElementWithTarget(attributes.CreateElement(def), def.TargetAttribute!))
-            .ToArray();
-        if (boosts.Length == 0)
-        {
-            return;
-        }
-
-        if (player.MagicEffectList.TryGetActiveEffectOfSubType(effectDefinition.SubType) is { } existing)
-        {
-            await existing.DisposeAsync().ConfigureAwait(false);
-        }
-
-        await player.MagicEffectList.AddEffectAsync(new MagicEffect(TimeSpan.FromMinutes(reward.BuffMinutes), effectDefinition, boosts)).ConfigureAwait(false);
     }
 
     /// <summary>

@@ -6,10 +6,6 @@ namespace HNMO.Dapr.Common;
 
 using System.Text.Json.Serialization;
 using System.Threading;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using HNMO.Dapr.Common.HealthChecks;
 using HNMO.DataModel.Configuration;
 using HNMO.Interfaces;
@@ -17,6 +13,10 @@ using HNMO.Network;
 using HNMO.Persistence;
 using HNMO.Persistence.EntityFramework;
 using HNMO.PlugIns;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Nito.AsyncEx.Synchronous;
 
 /// <summary>

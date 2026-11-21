@@ -4,11 +4,11 @@
 
 namespace HNMO.GameServer;
 
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.Network.Analyzer.Archive;
 using HNMO.Persistence;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Nito.AsyncEx.Synchronous;
 
 /// <summary>

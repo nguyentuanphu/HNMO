@@ -58,7 +58,8 @@ public abstract class GameConfigurationInitializerBase : InitializerBase
         this.GameConfiguration.MaximumPasswordLength = 20;
         this.GameConfiguration.MaximumPartySize = 5;
         this.GameConfiguration.ShouldDropMoney = true;
-        this.GameConfiguration.ItemDropDuration = TimeSpan.FromSeconds(60);
+        this.GameConfiguration.ItemDropDuration = TimeSpan.FromSeconds(20);
+        this.GameConfiguration.MoneyDropDuration = TimeSpan.FromSeconds(15);
         this.GameConfiguration.MaximumItemOptionLevelDrop = 3;
         this.GameConfiguration.DamagePerOneItemDurability = 69;
         this.GameConfiguration.DamagePerOnePetDurability = 100;
@@ -204,7 +205,7 @@ public abstract class GameConfigurationInitializerBase : InitializerBase
         {
             var excellentItemDropItemGroup = this.Context.CreateNew<DropItemGroup>();
             excellentItemDropItemGroup.SetGuid(3);
-            excellentItemDropItemGroup.Chance = 0.0001;
+            excellentItemDropItemGroup.Chance = 0.002;
             excellentItemDropItemGroup.ItemType = SpecialItemType.Excellent;
             excellentItemDropItemGroup.ItemLevel = 0;
             excellentItemDropItemGroup.Description =

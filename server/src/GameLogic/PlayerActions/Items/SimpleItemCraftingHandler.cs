@@ -66,10 +66,10 @@ public class SimpleItemCraftingHandler : BaseItemCraftingHandler
             }
             else
             {
-                rate += (byte)(requiredItem.AddPercentage * (itemCount - requiredItem.MinimumAmount));
+                rate += (int)(requiredItem.AddPercentage * (itemCount - requiredItem.MinimumAmount));
                 if (requiredItem.NpcPriceDivisor > 0)
                 {
-                    rate += (byte)(foundItems.Sum(this._priceCalculator.CalculateFinalBuyingPrice)
+                    rate += (int)Math.Min(byte.MaxValue, foundItems.Sum(this._priceCalculator.CalculateFinalBuyingPrice)
                         / requiredItem.NpcPriceDivisor);
                 }
 
@@ -78,30 +78,30 @@ public class SimpleItemCraftingHandler : BaseItemCraftingHandler
                     if (this._settings.SuccessPercentageAdditionForLuck != default
                         && item.ItemOptions.Any(o => o.ItemOption?.OptionType == ItemOptionTypes.Luck))
                     {
-                        rate = (byte)(rate + this._settings.SuccessPercentageAdditionForLuck);
+                        rate += this._settings.SuccessPercentageAdditionForLuck;
                     }
 
                     if (this._settings.SuccessPercentageAdditionForExcellentItem != default
                         && item.IsExcellent())
                     {
-                        rate = (byte)(rate + this._settings.SuccessPercentageAdditionForExcellentItem);
+                        rate += this._settings.SuccessPercentageAdditionForExcellentItem;
                     }
 
                     if (this._settings.SuccessPercentageAdditionForAncientItem != default
                         && item.IsAncient())
                     {
-                        rate = (byte)(rate + this._settings.SuccessPercentageAdditionForAncientItem);
+                        rate += this._settings.SuccessPercentageAdditionForAncientItem;
                     }
 
                     if (this._settings.SuccessPercentageAdditionForGuardianItem != default
                         && item.IsGuardian())
                     {
-                        rate = (byte)(rate + this._settings.SuccessPercentageAdditionForGuardianItem);
+                        rate += this._settings.SuccessPercentageAdditionForGuardianItem;
                     }
 
                     if (this._settings.SuccessPercentageAdditionForSocketItem != default && item.SocketCount > 0)
                     {
-                        rate = (byte)(rate + this._settings.SuccessPercentageAdditionForSocketItem);
+                        rate += this._settings.SuccessPercentageAdditionForSocketItem;
                     }
                 }
             }
@@ -129,7 +129,9 @@ public class SimpleItemCraftingHandler : BaseItemCraftingHandler
             rate = Math.Min(this._settings.MaximumSuccessPercent, rate);
         }
 
-        successRate = (byte)Math.Min(100, rate);
+        // The additions of an excellent, ancient, guardian or socket item are negative: the rate was a byte, so a
+        // low rate minus them wrapped around to more than 100 (a sure success) instead of 0.
+        successRate = (byte)Math.Clamp(rate, 0, 100);
 
         return default;
     }
@@ -205,8 +207,13 @@ public class SimpleItemCraftingHandler : BaseItemCraftingHandler
                     o.PossibleOptions.Any(p => p.OptionType == ItemOptionTypes.Excellent || p.OptionType == ItemOptionTypes.Wing))
                 is { } optionDefinition)
         {
+            // The crafting may allow fewer options than the option definition, e.g. one for the Golden Cherry
+            // Blossom mix; 0 means no limit of its own.
+            var maximumOptions = this._settings.ResultItemMaxExcOptionCount > 0
+                ? Math.Min(optionDefinition.MaximumOptionsPerItem, this._settings.ResultItemMaxExcOptionCount)
+                : optionDefinition.MaximumOptionsPerItem;
             for (int j = 0;
-                j < optionDefinition.MaximumOptionsPerItem && Rand.NextRandomBool(this._settings.ResultItemExcellentOptionChance);
+                j < maximumOptions && Rand.NextRandomBool(this._settings.ResultItemExcellentOptionChance);
                 j++)
             {
                 var link = player.PersistenceContext.CreateNew<ItemOptionLink>();

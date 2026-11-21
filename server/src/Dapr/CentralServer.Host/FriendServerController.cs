@@ -4,10 +4,10 @@
 
 namespace HNMO.CentralServer.Host;
 
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using HNMO.Interfaces;
 using HNMO.ServerClients;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// API Controller which handles the calls from the <see cref="ServerClients.FriendServer"/>.

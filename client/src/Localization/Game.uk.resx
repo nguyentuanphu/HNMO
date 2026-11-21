@@ -329,7 +329,7 @@
     <value>F11 - Скинути вигляд камери</value>
   </data>
   <data name="Home - Toggle MU Helper" xml:space="preserve">
-    <value>Home - Перемкнути MU Helper</value>
+    <value>Home - Перемкнути Auto Play</value>
   </data>
   <data name="Enter: Chatting Mode" xml:space="preserve">
     <value>Вхід: Режим чату</value>
@@ -8357,10 +8357,10 @@
     <value>Більше 5 мобів</value>
   </data>
   <data name="Official MU Helper Setting" xml:space="preserve">
-    <value>Офіційне налаштування MU Helper</value>
+    <value>Офіційне налаштування Auto Play</value>
   </data>
   <data name="Start Official MU Helper" xml:space="preserve">
-    <value>Запустіть офіційний MU Helper</value>
+    <value>Запустіть офіційний Auto Play</value>
   </data>
   <data name="Stop Official MU Helper" xml:space="preserve">
     <value>Зупиніть офіційний помічник MU</value>
@@ -8393,34 +8393,34 @@
     <value>Немає вибраного елемента</value>
   </data>
   <data name="Any characters under level %d can't run Official MU Helper." xml:space="preserve">
-    <value>Будь-який персонаж нижче рівня %d не може запускати офіційний MU Helper.</value>
+    <value>Будь-який персонаж нижче рівня %d не може запускати офіційний Auto Play.</value>
   </data>
   <data name="Official MU Helper only runs in filed" xml:space="preserve">
-    <value>Офіційний MU Helper працює лише у файлі</value>
+    <value>Офіційний Auto Play працює лише у файлі</value>
   </data>
   <data name="In order to run Official MU Helper, please close Inventory window" xml:space="preserve">
-    <value>Щоб запустити офіційний MU Helper, закрийте вікно інвентаризації</value>
+    <value>Щоб запустити офіційний Auto Play, закрийте вікно інвентаризації</value>
   </data>
   <data name="In order to run Official MU Helper, please close MU Guide window" xml:space="preserve">
-    <value>Щоб запустити офіційний MU Helper, закрийте вікно MU Guide</value>
+    <value>Щоб запустити офіційний Auto Play, закрийте вікно MU Guide</value>
   </data>
   <data name="InOrderToRunOfficialMU" xml:space="preserve">
-    <value>Щоб правильно запустити Official MU Helper, будь ласка, зареєструйте навички (окрім Fairy)</value>
+    <value>Щоб правильно запустити Auto Play, будь ласка, зареєструйте навички (окрім Fairy)</value>
   </data>
   <data name="Official MU Helper is running." xml:space="preserve">
-    <value>Офіційний MU Helper працює.</value>
+    <value>Офіційний Auto Play працює.</value>
   </data>
   <data name="Official MU Helper is closed" xml:space="preserve">
-    <value>Офіційний MU Helper закрито</value>
+    <value>Офіційний Auto Play закрито</value>
   </data>
   <data name="Official MU Helper Setting has been saved." xml:space="preserve">
-    <value>Офіційне налаштування MU Helper збережено.</value>
+    <value>Офіційне налаштування Auto Play збережено.</value>
   </data>
   <data name="Official MU Helper can't be implemented in this region." xml:space="preserve">
-    <value>Офіційний MU Helper не може бути реалізований у цьому регіоні.</value>
+    <value>Офіційний Auto Play не може бути реалізований у цьому регіоні.</value>
   </data>
   <data name="CertainAmountOfZenIsSpent" xml:space="preserve">
-    <value>Певна кількість дзен витрачається кожні 5 хвилин на впровадження офіційного MU Helper</value>
+    <value>Певна кількість дзен витрачається кожні 5 хвилин на впровадження офіційного Auto Play</value>
   </data>
   <data name="Spent Time %d Minute(s)/" xml:space="preserve">
     <value>Витрачений час %d хвилин(и)/</value>
@@ -8432,16 +8432,16 @@
     <value>Витрачений час %d годин(и) %d хвилин(и)/ Витрачений дзен %d Етап/вартість %d дзен(и)</value>
   </data>
   <data name="%d zen(s) have been spent in implementing Official MU Helper" xml:space="preserve">
-    <value>%d zen(s) було витрачено на впровадження офіційного MU Helper</value>
+    <value>%d zen(s) було витрачено на впровадження офіційного Auto Play</value>
   </data>
   <data name="Zen is not sufficient to run Official MU Helper" xml:space="preserve">
-    <value>Zen недостатньо для запуску Official MU Helper</value>
+    <value>Zen недостатньо для запуску Auto Play</value>
   </data>
   <data name="In order to run Official MU Helper, please install Add-on first" xml:space="preserve">
-    <value>Щоб запустити офіційний MU Helper, спочатку встановіть додаток</value>
+    <value>Щоб запустити офіційний Auto Play, спочатку встановіть додаток</value>
   </data>
   <data name="Official MU Helper is closed due to the excess of %d hour(s)" xml:space="preserve">
-    <value>Офіційний MU Helper закрито через перевищення %d годин(и)</value>
+    <value>Офіційний Auto Play закрито через перевищення %d годин(и)</value>
   </data>
   <data name="Other Settings" xml:space="preserve">
     <value>Інші налаштування</value>

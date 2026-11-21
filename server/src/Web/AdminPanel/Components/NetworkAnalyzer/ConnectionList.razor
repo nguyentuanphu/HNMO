@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @using HNMO.Interfaces
 @using HNMO.Network.Analyzer
 @using HNMO.Web.AdminPanel.Properties
@@ -24,7 +25,7 @@
                 var groupId = $"connection-group-{group.Key.ServerType}-{group.Key.ServerId}";
                 <div class="accordion-item">
                     <h2 class="accordion-header">
-                        <button class="accordion-button @(this.IsCollapsed(group.Key) ? "collapsed" : string.Empty) py-2"
+                        <button title="@HelpResources.PageHelpHintExpand" class="accordion-button @(this.IsCollapsed(group.Key) ? "collapsed" : string.Empty) py-2"
                                 type="button" @onclick="() => this.ToggleGroup(group.Key)">
                             @group.First().ServerDescription
                             <span class="badge text-bg-secondary ms-2">@group.Count()</span>
@@ -34,7 +35,7 @@
                         <div class="list-group list-group-flush">
                             @foreach (var connection in group)
                             {
-                                <button type="button"
+                                <button title="@HelpResources.PageHelpHintStop" type="button"
                                         class="list-group-item list-group-item-action py-1 @(this.SelectedConnectionId == connection.Id ? "active" : string.Empty)"
                                         @onclick="() => this.OnSelect.InvokeAsync(connection)">
                                     <div class="d-flex justify-content-between align-items-center">

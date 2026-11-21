@@ -15,17 +15,17 @@ using System.Collections.Generic;
 public sealed record IntegrityResult(IntegrityStatus Status, string Message, IReadOnlyList<string> MismatchedFiles)
 {
     /// <summary>
-    /// Gets a value indicating whether the server should refuse to start for this result.
-    /// A present-but-invalid signature always blocks startup; a file mismatch blocks startup
-    /// only when <paramref name="enforceOnMismatch"/> is set.
+    /// Gets a value indicating whether the server should refuse to start for this result. A present-but-invalid
+    /// signature always blocks startup; a changed file in a validly-signed build (a tampered release) blocks startup
+    /// too, unless the host opted out with <c>Integrity:OnMismatch</c> = <c>warn</c> (<paramref name="allowOnMismatch"/>).
     /// </summary>
-    /// <param name="enforceOnMismatch">Whether a file mismatch should block startup.</param>
+    /// <param name="allowOnMismatch">Whether the host chose to only warn on a changed file instead of refusing.</param>
     /// <returns><c>true</c> if startup should be refused.</returns>
-    public bool ShouldRefuseStartup(bool enforceOnMismatch) => this.Status switch
+    public bool ShouldRefuseStartup(bool allowOnMismatch) => this.Status switch
     {
         IntegrityStatus.SignatureInvalid => true,
         IntegrityStatus.ManifestInvalid => true,
-        IntegrityStatus.FileMismatch => enforceOnMismatch,
+        IntegrityStatus.FileMismatch => !allowOnMismatch,
         _ => false,
     };
 }

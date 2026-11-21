@@ -4,7 +4,6 @@
 
 namespace HNMO.GameLogic.PlugIns.InvasionEvents;
 
-using Microsoft.Extensions.Logging;
 using HNMO.GameLogic.NPC;
 using HNMO.GameLogic.PlugIns.PeriodicTasks;
 using HNMO.GameLogic.Properties;
@@ -12,6 +11,7 @@ using HNMO.GameLogic.Views;
 using HNMO.Interfaces;
 using HNMO.Pathfinding;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Base class for invasion plugins.
@@ -137,7 +137,7 @@ public abstract class BaseInvasionPlugIn<TConfiguration> : PeriodicTaskBasePlugI
 
         foreach (var spawn in spawns)
         {
-            if (gameContext.Configuration.Monsters.FirstOrDefault(m => m.Number == spawn.MonsterId) is { } monsterDefinition)
+            if (this.ResolveMonsterDefinition(gameContext, spawn.MonsterId) is { } monsterDefinition)
             {
                 await this.CreateMonstersAsync(gameContext, logger, gameMap, monsterDefinition, spawn.Count, spawn.AnnounceDeath, spawn.X, spawn.Y).ConfigureAwait(false);
             }
@@ -147,6 +147,15 @@ public abstract class BaseInvasionPlugIn<TConfiguration> : PeriodicTaskBasePlugI
             }
         }
     }
+
+    /// <summary>
+    /// Resolves the <see cref="MonsterDefinition"/> for an invasion spawn.
+    /// </summary>
+    /// <param name="gameContext">The game context.</param>
+    /// <param name="monsterId">The monster number.</param>
+    /// <returns>The resolved monster definition, or <c>null</c>.</returns>
+    protected virtual MonsterDefinition? ResolveMonsterDefinition(IGameContext gameContext, ushort monsterId) =>
+        gameContext.Configuration.Monsters.FirstOrDefault(m => m.Number == monsterId);
 
     /// <inheritdoc />
     protected override async ValueTask OnPrepareEventAsync(InvasionGameServerState state)

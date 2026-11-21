@@ -14,6 +14,7 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 95px;
+  overflow-x: clip;
 }
 body {
   margin: 0;
@@ -22,6 +23,7 @@ body {
   font:
     14px/1.7 "Be Vietnam Pro",
     sans-serif;
+  overflow-x: clip;
 }
 a {
   color: inherit;
@@ -50,7 +52,34 @@ header {
   border-bottom: 1px solid var(--line);
   background: #11140ff2;
   position: relative;
-  z-index: 2;
+  z-index: 10;
+}
+.nav-more {
+  position: relative;
+  display: inline-block;
+}
+.nav-more summary {
+  cursor: pointer;
+  list-style: none;
+  color: var(--gold);
+  font-weight: 600;
+}
+.nav-more-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 8px;
+  min-width: 220px;
+  max-height: 70vh;
+  overflow-y: auto;
+  display: grid;
+  gap: 6px;
+  padding: 10px 12px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+  z-index: 30;
 }
 .brand {
   display: flex;
@@ -71,9 +100,11 @@ header {
 }
 nav {
   display: flex;
-  gap: 28px;
+  flex-wrap: wrap;
+  gap: 8px 18px;
   margin: auto;
   font-size: 12px;
+  max-width: 100%;
 }
 .languages {
   display: flex;
@@ -504,3 +535,43 @@ footer {
 .gift-card h4 { margin: 0 0 4px; font-family: ui-monospace, monospace; letter-spacing: .06em; color: var(--gold); overflow-wrap: anywhere; }
 .gift-card p { margin: 4px 0; font-size: 13px; overflow-wrap: anywhere; }
 #gift-account[hidden] { display: none; }
+
+/* Multi-world grouped overview above server stats. */
+.worlds-group { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-bottom: 18px; }
+.world-card { border: 1px solid var(--line); padding: 14px 16px; background: linear-gradient(135deg, #20241a, #141711); }
+.world-card header { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; height: auto; min-height: 0; padding: 0; border: 0; background: none; margin-bottom: 6px; }
+.world-card strong { color: var(--gold); font-size: 15px; }
+.world-card small { color: var(--muted); display: block; font-size: 12px; }
+.world-card .world-servers { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.world-card button { background: var(--panel); color: var(--text); border: 1px solid var(--line); padding: 4px 10px; font-size: 12px; cursor: pointer; }
+.world-card button[aria-current="true"] { border-color: var(--gold); color: var(--gold); }
+
+/* Safe-area notch padding and small-phone layout polish */
+@supports (padding: env(safe-area-inset-top)) {
+  header {
+    padding-top: max(12px, env(safe-area-inset-top));
+    padding-left: max(5%, env(safe-area-inset-left));
+    padding-right: max(5%, env(safe-area-inset-right));
+  }
+  footer {
+    padding-bottom: max(24px, env(safe-area-inset-bottom));
+    padding-left: max(5%, env(safe-area-inset-left));
+    padding-right: max(5%, env(safe-area-inset-right));
+  }
+}
+
+@media (max-width: 560px) {
+  .stats { grid-template-columns: 1fr; }
+  .mission-list, .boss-list, .race-grid, .worlds-group { grid-template-columns: 1fr; }
+  nav { gap: 6px 10px; font-size: 12px; }
+  .actions { display: grid; gap: 8px; }
+  .actions a { text-align: center; }
+}
+
+/* The season of a world (S6.3 / S9) and the players' season choice above the worlds. */
+.season-badge { display: inline-block; padding: 0 6px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: .02em; vertical-align: middle; }
+.season-badge.season-s6 { background: #3a3324; color: #e3c07a; border: 1px solid #6b5a36; }
+.season-badge.season-s9 { background: #1f3340; color: #8fd3f0; border: 1px solid #3b6d85; }
+.season-picker { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; grid-column: 1 / -1; color: var(--muted); font-size: 13px; }
+.season-picker button { min-height: 32px; padding: 0 12px; }
+.season-picker button[aria-pressed="true"] { border-color: var(--gold); color: var(--gold); }

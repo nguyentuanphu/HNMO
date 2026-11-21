@@ -91,6 +91,33 @@ public class MiniGameRewardServiceTests
         Assert.That(result.BonusScore, Is.EqualTo(1));
     }
 
+    /// <summary>
+    /// A money reward which doesn't fit completely pays up to the maximum inventory money, reports the paid
+    /// amount as the given money (for the score table) and still tells the player that not everything fit.
+    /// </summary>
+    /// <param name="moneyBefore">The money of the player before the reward.</param>
+    /// <param name="expectedPaid">The money which is expected to be paid.</param>
+    [TestCase(0, 1_000)]
+    [TestCase(9_400, 600)]
+    [TestCase(10_000, 0)]
+    public async Task MoneyRewardPaysUpToTheMaximumInventoryMoneyAsync(int moneyBefore, int expectedPaid)
+    {
+        await using var world = await RewardWorld.CreateAsync().ConfigureAwait(false);
+        world.Player.GameContext.Configuration.MaximumInventoryMoney = 10_000;
+        world.Player.Money = moneyBefore;
+        world.Reward.RewardType = MiniGameRewardType.Money;
+        world.Reward.RewardAmount = 1_000;
+
+        var result = await world.Service.GiveRewardsAndGetBonusScoreAsync(world.Player, 1).ConfigureAwait(false);
+
+        Assert.That(result.GivenMoney, Is.EqualTo(expectedPaid));
+        Assert.That(world.Player.Money, Is.EqualTo(moneyBefore + expectedPaid));
+        var messages = Mock.Get(world.Player.ViewPlugIns.GetPlugIn<HNMO.GameLogic.Views.IShowMessagePlugIn>()!);
+        messages.Verify(
+            view => view.ShowMessageAsync(It.IsAny<string>(), It.IsAny<HNMO.Interfaces.MessageType>()),
+            expectedPaid < 1_000 ? Times.AtLeastOnce() : Times.Never());
+    }
+
     /// <summary>Shared reward callers must wait for an independent save before creating or inserting tracked items.</summary>
     [Test]
     public async Task RewardWaitsForIndependentPersistenceOperationAsync()

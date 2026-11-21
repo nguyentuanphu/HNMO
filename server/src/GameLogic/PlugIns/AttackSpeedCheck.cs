@@ -5,8 +5,8 @@
 namespace HNMO.GameLogic.PlugIns;
 
 using System;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Evaluates the attack pace of a player with a token bucket.

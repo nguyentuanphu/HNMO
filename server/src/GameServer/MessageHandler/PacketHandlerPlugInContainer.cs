@@ -7,12 +7,12 @@ namespace HNMO.GameServer.MessageHandler;
 using System.Collections.Concurrent;
 using System.ComponentModel.Design;
 using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using HNMO.GameLogic;
 using HNMO.GameServer.RemoteView;
 using HNMO.Network.Packets;
 using HNMO.PlugIns;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// A plugin container which provides the effective packet handler plugins for the specified version.
@@ -224,7 +224,7 @@ public class PacketHandlerPlugInContainer<THandler> : StrategyPlugInProvider<byt
 
         this.Logger.LogWarning("Client version changed");
 
-        foreach (var knownPlugIn in this.KnownPlugIns)
+        foreach (var knownPlugIn in this.KnownPlugIns.ToList())
         {
             if (!this._clientVersionProvider.ClientVersion.IsPlugInSuitable(knownPlugIn.GetType()))
             {

@@ -217,11 +217,14 @@ public class HnmoSkillsLearningTest
 
     private static (QuestDefinition Quest, CharacterQuestState State) SetUpTrialQuest(Player player, Skill skill, int killCount)
     {
+        var questNpcDef = new MonsterDefinition { Number = 229, Designation = "Marlon" };
         var kills = new QuestMonsterKillRequirement { MinimumNumber = RequiredKills, Monster = new MonsterDefinition { Number = 352 } };
-        var quest = new QuestDefinition { Group = TrialQuestGroup, Number = 1, MinimumCharacterLevel = 250 };
+        var quest = new QuestDefinition { Group = TrialQuestGroup, Number = 1, MinimumCharacterLevel = 250, QuestGiver = questNpcDef };
         quest.RequiredMonsterKills.Add(kills);
         quest.RequiredItems.Add(new QuestItemRequirement { MinimumNumber = RequiredJewels, Item = GetJewelOfChaos(player) });
         quest.Rewards.Add(new QuestReward { RewardType = QuestRewardType.Skill, Value = 1, SkillReward = skill });
+        questNpcDef.Quests.Add(quest);
+        player.OpenedNpc = new HNMO.GameLogic.NPC.NonPlayerCharacter(new HNMO.Persistence.BasicModel.MonsterSpawnArea(), questNpcDef, player.CurrentMap!);
 
         var state = new CharacterQuestState { Group = TrialQuestGroup, ActiveQuest = quest };
         state.RequirementStates.Add(new QuestMonsterKillRequirementState { Requirement = kills, KillCount = killCount });

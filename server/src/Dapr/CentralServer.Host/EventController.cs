@@ -5,10 +5,10 @@
 namespace HNMO.CentralServer.Host;
 
 using global::Dapr;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using HNMO.Interfaces;
 using HNMO.ServerClients;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Handles the events which are published by the game servers.

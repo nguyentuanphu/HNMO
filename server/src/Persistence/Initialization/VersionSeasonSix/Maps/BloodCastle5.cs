@@ -154,17 +154,17 @@ internal class BloodCastle5 : BloodCastleBase
             monster.NumberOfMaximumItemDrops = 1;
             var attributes = new Dictionary<AttributeDefinition, float>
             {
-                { Stats.Level, 85 },
-                { Stats.MaximumHealth, 23000 },
-                { Stats.MinimumPhysBaseDmg, 340 },
-                { Stats.MaximumPhysBaseDmg, 390 },
-                { Stats.DefenseBase, 340 },
-                { Stats.AttackRatePvm, 520 },
-                { Stats.DefenseRatePvm, 190 },
-                { Stats.PoisonResistance, 7f / 255 },
-                { Stats.IceResistance, 7f / 255 },
-                { Stats.FireResistance, 7f / 255 },
-                { Stats.LightningResistance, 7f / 255 },
+                { Stats.Level, 70 },
+                { Stats.MaximumHealth, 12000 },
+                { Stats.MinimumPhysBaseDmg, 210 },
+                { Stats.MaximumPhysBaseDmg, 270 },
+                { Stats.DefenseBase, 185 },
+                { Stats.AttackRatePvm, 380 },
+                { Stats.DefenseRatePvm, 125 },
+                { Stats.PoisonResistance, 5f / 255 },
+                { Stats.IceResistance, 5f / 255 },
+                { Stats.FireResistance, 5f / 255 },
+                { Stats.LightningResistance, 5f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -186,17 +186,17 @@ internal class BloodCastle5 : BloodCastleBase
             monster.NumberOfMaximumItemDrops = 1;
             var attributes = new Dictionary<AttributeDefinition, float>
             {
-                { Stats.Level, 87 },
-                { Stats.MaximumHealth, 26000 },
-                { Stats.MinimumPhysBaseDmg, 390 },
-                { Stats.MaximumPhysBaseDmg, 430 },
-                { Stats.DefenseBase, 380 },
-                { Stats.AttackRatePvm, 590 },
-                { Stats.DefenseRatePvm, 200 },
-                { Stats.PoisonResistance, 7f / 255 },
-                { Stats.IceResistance, 7f / 255 },
-                { Stats.FireResistance, 7f / 255 },
-                { Stats.LightningResistance, 7f / 255 },
+                { Stats.Level, 75 },
+                { Stats.MaximumHealth, 15000 },
+                { Stats.MinimumPhysBaseDmg, 240 },
+                { Stats.MaximumPhysBaseDmg, 300 },
+                { Stats.DefenseBase, 190 },
+                { Stats.AttackRatePvm, 420 },
+                { Stats.DefenseRatePvm, 130 },
+                { Stats.PoisonResistance, 5f / 255 },
+                { Stats.IceResistance, 5f / 255 },
+                { Stats.FireResistance, 5f / 255 },
+                { Stats.LightningResistance, 5f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -218,17 +218,17 @@ internal class BloodCastle5 : BloodCastleBase
             monster.NumberOfMaximumItemDrops = 1;
             var attributes = new Dictionary<AttributeDefinition, float>
             {
-                { Stats.Level, 90 },
-                { Stats.MaximumHealth, 32000 },
-                { Stats.MinimumPhysBaseDmg, 430 },
-                { Stats.MaximumPhysBaseDmg, 480 },
-                { Stats.DefenseBase, 400 },
-                { Stats.AttackRatePvm, 660 },
-                { Stats.DefenseRatePvm, 230 },
-                { Stats.PoisonResistance, 7f / 255 },
-                { Stats.IceResistance, 7f / 255 },
-                { Stats.FireResistance, 7f / 255 },
-                { Stats.LightningResistance, 7f / 255 },
+                { Stats.Level, 80 },
+                { Stats.MaximumHealth, 19000 },
+                { Stats.MinimumPhysBaseDmg, 280 },
+                { Stats.MaximumPhysBaseDmg, 340 },
+                { Stats.DefenseBase, 220 },
+                { Stats.AttackRatePvm, 470 },
+                { Stats.DefenseRatePvm, 175 },
+                { Stats.PoisonResistance, 5f / 255 },
+                { Stats.IceResistance, 5f / 255 },
+                { Stats.FireResistance, 5f / 255 },
+                { Stats.LightningResistance, 5f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -251,17 +251,17 @@ internal class BloodCastle5 : BloodCastleBase
             monster.AttackSkill = this.GameConfiguration.Skills.FirstOrDefault(s => s.Number == (short)SkillNumber.EnergyBall);
             var attributes = new Dictionary<AttributeDefinition, float>
             {
-                { Stats.Level, 93 },
-                { Stats.MaximumHealth, 37000 },
-                { Stats.MinimumPhysBaseDmg, 470 },
-                { Stats.MaximumPhysBaseDmg, 520 },
-                { Stats.DefenseBase, 440 },
-                { Stats.AttackRatePvm, 730 },
-                { Stats.DefenseRatePvm, 250 },
-                { Stats.PoisonResistance, 7f / 255 },
-                { Stats.IceResistance, 7f / 255 },
-                { Stats.FireResistance, 7f / 255 },
-                { Stats.LightningResistance, 7f / 255 },
+                { Stats.Level, 85 },
+                { Stats.MaximumHealth, 23000 },
+                { Stats.MinimumPhysBaseDmg, 340 },
+                { Stats.MaximumPhysBaseDmg, 390 },
+                { Stats.DefenseBase, 300 },
+                { Stats.AttackRatePvm, 520 },
+                { Stats.DefenseRatePvm, 190 },
+                { Stats.PoisonResistance, 5f / 255 },
+                { Stats.IceResistance, 5f / 255 },
+                { Stats.FireResistance, 5f / 255 },
+                { Stats.LightningResistance, 5f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -283,17 +283,17 @@ internal class BloodCastle5 : BloodCastleBase
             monster.NumberOfMaximumItemDrops = 1;
             var attributes = new Dictionary<AttributeDefinition, float>
             {
-                { Stats.Level, 98 },
-                { Stats.MaximumHealth, 45000 },
-                { Stats.MinimumPhysBaseDmg, 510 },
-                { Stats.MaximumPhysBaseDmg, 560 },
-                { Stats.DefenseBase, 490 },
-                { Stats.AttackRatePvm, 800 },
-                { Stats.DefenseRatePvm, 270 },
-                { Stats.PoisonResistance, 7f / 255 },
-                { Stats.IceResistance, 7f / 255 },
-                { Stats.FireResistance, 7f / 255 },
-                { Stats.LightningResistance, 7f / 255 },
+                { Stats.Level, 87 },
+                { Stats.MaximumHealth, 26000 },
+                { Stats.MinimumPhysBaseDmg, 370 },
+                { Stats.MaximumPhysBaseDmg, 410 },
+                { Stats.DefenseBase, 400 },
+                { Stats.AttackRatePvm, 650 },
+                { Stats.DefenseRatePvm, 200 },
+                { Stats.PoisonResistance, 5f / 255 },
+                { Stats.IceResistance, 5f / 255 },
+                { Stats.FireResistance, 5f / 255 },
+                { Stats.LightningResistance, 5f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -316,17 +316,17 @@ internal class BloodCastle5 : BloodCastleBase
             monster.AttackSkill = this.GameConfiguration.Skills.FirstOrDefault(s => s.Number == (short)SkillNumber.MonsterSkill);
             var attributes = new Dictionary<AttributeDefinition, float>
             {
-                { Stats.Level, 102 },
-                { Stats.MaximumHealth, 55000 },
-                { Stats.MinimumPhysBaseDmg, 560 },
-                { Stats.MaximumPhysBaseDmg, 600 },
-                { Stats.DefenseBase, 550 },
-                { Stats.AttackRatePvm, 870 },
-                { Stats.DefenseRatePvm, 310 },
-                { Stats.PoisonResistance, 10f / 255 },
-                { Stats.IceResistance, 10f / 255 },
-                { Stats.FireResistance, 10f / 255 },
-                { Stats.LightningResistance, 10f / 255 },
+                { Stats.Level, 90 },
+                { Stats.MaximumHealth, 32000 },
+                { Stats.MinimumPhysBaseDmg, 400 },
+                { Stats.MaximumPhysBaseDmg, 460 },
+                { Stats.DefenseBase, 450 },
+                { Stats.AttackRatePvm, 720 },
+                { Stats.DefenseRatePvm, 260 },
+                { Stats.PoisonResistance, 8f / 255 },
+                { Stats.IceResistance, 8f / 255 },
+                { Stats.FireResistance, 8f / 255 },
+                { Stats.LightningResistance, 8f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);

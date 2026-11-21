@@ -5,10 +5,10 @@
 namespace HNMO.ConnectServer;
 
 using System.Net;
-using Microsoft.Extensions.Logging;
 using HNMO.ConnectServer.PacketHandler;
 using HNMO.Interfaces;
 using HNMO.Network;
+using Microsoft.Extensions.Logging;
 using Nito.AsyncEx;
 
 /// <summary>

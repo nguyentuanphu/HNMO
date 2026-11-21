@@ -9,10 +9,10 @@ using System.ComponentModel;
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using Microsoft.Extensions.Logging;
 using HNMO.Interfaces;
 using HNMO.Network.Analyzer;
 using HNMO.Network.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The connect server.

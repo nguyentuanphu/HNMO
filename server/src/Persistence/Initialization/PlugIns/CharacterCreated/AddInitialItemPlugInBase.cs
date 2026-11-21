@@ -4,9 +4,9 @@
 
 namespace HNMO.Persistence.Initialization.PlugIns.CharacterCreated;
 
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Base class for a <see cref="ICharacterCreatedPlugIn"/> which adds an item to the inventory

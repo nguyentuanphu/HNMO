@@ -8,7 +8,9 @@ using System.IO;
 using System.Threading;
 using System.Xml;
 using System.Xml.Serialization;
+using HNMO.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 /// <summary>
 /// Implementation of <see cref="IDatabaseConnectionSettingProvider"/> which takes the connection strings out of
@@ -69,6 +71,60 @@ public class ConfigFileDatabaseConnectionStringProvider : IDatabaseConnectionSet
         throw new ArgumentException("DB Configuration not found for type {0}", contextType.FullName);
     }
 
+    private static void ApplyHostSettings(ConnectionSetting setting, HostSettings? hostSettings)
+    {
+        if (hostSettings is null || string.IsNullOrWhiteSpace(setting.ConnectionString))
+        {
+            return;
+        }
+
+        var builder = new NpgsqlConnectionStringBuilder(setting.ConnectionString)
+        {
+            Host = hostSettings.DatabaseHost,
+            Port = hostSettings.DatabasePort,
+            Database = hostSettings.DatabaseName,
+        };
+        if (string.IsNullOrEmpty(builder.Username)
+            || string.Equals(builder.Username, "postgres", StringComparison.OrdinalIgnoreCase))
+        {
+            builder.Username = hostSettings.DatabaseUser;
+            builder.Password = hostSettings.DatabasePassword;
+        }
+
+        setting.ConnectionString = builder.ToString();
+    }
+
+    /// <summary>
+    /// A Season 9 program uses its own database (<see cref="HnmoSeasonInstance.DatabaseNameFor"/>). The admin panel's
+    /// users stay in the configured database: one set of administrators for both seasons.
+    /// </summary>
+    private static void ApplySeason(ConnectionSetting setting, Type contextType)
+    {
+        if (!HnmoSeasonInstance.IsSecondary || string.IsNullOrWhiteSpace(setting.ConnectionString) || contextType.Name == "AdminPanelContext")
+        {
+            return;
+        }
+
+        setting.ConnectionString = SeasonConnectionString(HnmoSeasonInstance.Current, setting.ConnectionString);
+    }
+
+    /// <summary>The connection string of a season's database, built from Season 6.3's.</summary>
+    /// <param name="season">The season key.</param>
+    /// <param name="connectionString">Season 6.3's connection string.</param>
+    /// <returns>The season's connection string.</returns>
+    internal static string SeasonConnectionString(string season, string connectionString)
+    {
+        var builder = new NpgsqlConnectionStringBuilder(connectionString);
+        var database = HnmoSeasonInstance.DatabaseNameFor(season, builder.Database ?? string.Empty);
+        if (database == builder.Database)
+        {
+            return connectionString;
+        }
+
+        builder.Database = database;
+        return builder.ToString();
+    }
+
     private IDictionary<Type, ConnectionSetting> LoadSettings()
     {
         var settings = new XmlReaderSettings
@@ -91,7 +147,13 @@ public class ConfigFileDatabaseConnectionStringProvider : IDatabaseConnectionSet
             ? AppContext.BaseDirectory
             : Path.GetDirectoryName(new Uri(assemblyLocation).LocalPath)!;
         var configurationFilePath = Path.Combine(baseDirectory, this._fileName);
-        using var xmlReader = XmlReader.Create(File.OpenRead(configurationFilePath), settings);
+        var hostSettings = HostSettingsStore.TryLoad(HostSettingsStore.ResolveDefaultPath(baseDirectory));
+        // A file from an earlier HNMO folder names its settings with the earlier namespace: read it the same way.
+        var text = System.Text.RegularExpressions.Regex.Replace(
+            File.ReadAllText(configurationFilePath),
+            "xmlns=\"https?://[^\"]+/ConnectionSettings\"",
+            $"xmlns=\"{ConnectionSettings.XmlNamespace}\"");
+        using var xmlReader = XmlReader.Create(new StringReader(text), settings);
         var serializer = new XmlSerializer(typeof(ConnectionSettings));
         if (serializer.CanDeserialize(xmlReader))
         {
@@ -111,12 +173,16 @@ public class ConfigFileDatabaseConnectionStringProvider : IDatabaseConnectionSet
 
                     if (Type.GetType(setting.ContextTypeName, false, true) is { } contextType)
                     {
+                        ApplyHostSettings(setting, hostSettings);
                         this.ApplyEnvironmentVariables(setting);
+                        ApplySeason(setting, contextType);
                         result.Add(contextType, setting);
                     }
                     else if (setting.ContextTypeName.EndsWith($".{nameof(TypedContext)}") || setting.ContextTypeName.EndsWith($".{nameof(TypedContext)}^1"))
                     {
+                        ApplyHostSettings(setting, hostSettings);
                         this.ApplyEnvironmentVariables(setting);
+                        ApplySeason(setting, typeof(TypedContext));
                         result.Add(typeof(TypedContext), setting);
                     }
                     else

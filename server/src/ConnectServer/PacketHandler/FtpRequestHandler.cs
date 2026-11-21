@@ -4,10 +4,10 @@
 
 namespace HNMO.ConnectServer.PacketHandler;
 
-using Microsoft.Extensions.Logging;
 using HNMO.Interfaces;
 using HNMO.Network;
 using HNMO.Network.Packets.ConnectServer;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Handles the ftp related request. The client is sending its version, and the server answers

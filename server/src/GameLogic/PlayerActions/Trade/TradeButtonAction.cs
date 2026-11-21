@@ -4,6 +4,8 @@
 
 namespace HNMO.GameLogic.PlayerActions.Trade;
 
+using System.Runtime.CompilerServices;
+using System.Threading;
 using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.Views.Trade;
 using HNMO.Persistence;
@@ -13,6 +15,13 @@ using HNMO.Persistence;
 /// </summary>
 public class TradeButtonAction : BaseTradeAction
 {
+    /// <summary>
+    /// A number per trader which gives every pair of traders the same order to lock their state machines in.
+    /// </summary>
+    private static readonly ConditionalWeakTable<ITrader, StrongBox<long>> LockOrder = new();
+
+    private static long _lockOrderCounter;
+
     /// <summary>
     /// Tries to change the trade button change to the new <paramref name="tradeButtonState"/>.
     /// </summary>
@@ -34,7 +43,16 @@ public class TradeButtonAction : BaseTradeAction
             && tradingPartner is not null
             && tradingPartner.PlayerState.CurrentState == PlayerState.TradeButtonPressed)
         {
-            TradeResult result = await this.InternalFinishTradeAsync(trader, tradingPartner).ConfigureAwait(false);
+            // Both traders may press the button at the same time, on two connections: then both
+            // see the other as pressed and both get here. The two state machines are locked in the
+            // same order for both, so the second waits instead of deadlocking (each holding its own
+            // lock and waiting for the other's), and then finds the trade finished.
+            var (first, second) = InLockOrder(trader, tradingPartner);
+            if (await this.InternalFinishTradeAsync(first, second).ConfigureAwait(false) is not { } result)
+            {
+                return;
+            }
+
             if (result != TradeResult.Success)
             {
                 await this.CancelTradeAsync(tradingPartner, false).ConfigureAwait(false);
@@ -55,6 +73,27 @@ public class TradeButtonAction : BaseTradeAction
         }
     }
 
+    private static (ITrader First, ITrader Second) InLockOrder(ITrader trader, ITrader partner)
+    {
+        return LockOrder.GetValue(trader, _ => new StrongBox<long>(Interlocked.Increment(ref _lockOrderCounter))).Value
+               < LockOrder.GetValue(partner, _ => new StrongBox<long>(Interlocked.Increment(ref _lockOrderCounter))).Value
+            ? (trader, partner)
+            : (partner, trader);
+    }
+
+    private static bool ExceedsMaximumMoney(ITrader receiver, int receivedMoney)
+    {
+        // A trader who receives no zen keeps their money, so an item-only trade is never refused,
+        // even if the money is already above a limit which was lowered afterwards.
+        if (receivedMoney <= 0)
+        {
+            return false;
+        }
+
+        var maximumMoney = receiver.GameContext?.Configuration?.MaximumInventoryMoney ?? int.MaxValue;
+        return (long)receiver.Money + receivedMoney > maximumMoney;
+    }
+
     private static async ValueTask<bool> TryAddItemsOfTradingPartnerAsync(ITrader trader)
     {
         if (trader.TradingPartner?.TemporaryStorage?.Items.Any() ?? false)
@@ -65,10 +104,24 @@ public class TradeButtonAction : BaseTradeAction
         return true;
     }
 
-    private async ValueTask<TradeResult> InternalFinishTradeAsync(ITrader trader, ITrader tradingPartner)
+    /// <summary>
+    /// Finishes the trade: checks it, moves the items and the zen and saves it.
+    /// </summary>
+    /// <param name="trader">The trader whose state machine is locked first.</param>
+    /// <param name="tradingPartner">The other trader.</param>
+    /// <returns>The result, or <c>null</c> if the other trader finished the trade in the meantime.</returns>
+    private async ValueTask<TradeResult?> InternalFinishTradeAsync(ITrader trader, ITrader tradingPartner)
     {
         await using var context = await trader.PlayerState.TryBeginAdvanceToAsync(PlayerState.EnteredWorld).ConfigureAwait(false);
         await using var partnerContext = await tradingPartner.PlayerState.TryBeginAdvanceToAsync(PlayerState.EnteredWorld).ConfigureAwait(false);
+        if (!ReferenceEquals(trader.TradingPartner, tradingPartner) || !ReferenceEquals(tradingPartner.TradingPartner, trader))
+        {
+            // The other trader's press finished (or cancelled) this trade while we waited for the locks.
+            context.Allowed = false;
+            partnerContext.Allowed = false;
+            return null;
+        }
+
         if (!context.Allowed || !partnerContext.Allowed)
         {
             context.Allowed = false;
@@ -90,6 +143,16 @@ public class TradeButtonAction : BaseTradeAction
         var partnerItemsAreTradable = await this.CheckItemsAreTradableAsync(tradingPartner, tradePartnerItems).ConfigureAwait(false);
         if (!traderItemsAreTradable || !partnerItemsAreTradable)
         {
+            return TradeResult.Cancelled;
+        }
+
+        // The escrowed zen is added to the inventory money of the partner below. Like in classic MU,
+        // the trade fails when that would exceed the maximum inventory money - otherwise the money
+        // grows past the configured limit, or even wraps around to a negative amount.
+        if (ExceedsMaximumMoney(trader, partnerMoney) || ExceedsMaximumMoney(tradingPartner, traderMoney))
+        {
+            await this.SendMessageAsync(trader, nameof(PlayerMessage.TradeMoneyExceedsMaximum)).ConfigureAwait(false);
+            await this.SendMessageAsync(tradingPartner, nameof(PlayerMessage.TradeMoneyExceedsMaximum)).ConfigureAwait(false);
             return TradeResult.Cancelled;
         }
 
@@ -131,6 +194,7 @@ public class TradeButtonAction : BaseTradeAction
             this.CallPlugIn(traderItems, trader, tradingPartner);
             this.CallPlugIn(tradePartnerItems, tradingPartner, trader);
             PlugIns.AccountSafety.AccountSafetyPlugIn.Get(trader.GameContext)?.RecordTrade(trader, tradingPartner, traderItems, tradePartnerItems, traderMoney, partnerMoney);
+            PlugIns.ActivityLog.ActivityLogPlugIn.Get(trader.GameContext)?.RecordTrade(trader, tradingPartner, traderItems, tradePartnerItems, traderMoney, partnerMoney);
             FinishedTrades.Add(1);
             return TradeResult.Success;
         }
@@ -170,6 +234,21 @@ public class TradeButtonAction : BaseTradeAction
             foreach (var item in items)
             {
                 if (await safety.RefuseLockedItemAsync(player, item).ConfigureAwait(false))
+                {
+                    return false;
+                }
+
+                if (await PlugIns.Escrow.EscrowContractsPlugIn.RefuseCooldownItemAsync(player, item).ConfigureAwait(false))
+                {
+                    return false;
+                }
+            }
+        }
+        else if (trader is Player escrowPlayer)
+        {
+            foreach (var item in items)
+            {
+                if (await PlugIns.Escrow.EscrowContractsPlugIn.RefuseCooldownItemAsync(escrowPlayer, item).ConfigureAwait(false))
                 {
                     return false;
                 }

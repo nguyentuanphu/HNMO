@@ -76,6 +76,13 @@ internal sealed class PlayerMovement : IDisposable
     private long _lastCorrectionTimestamp = TimeProvider.System.GetTimestamp();
 
     /// <summary>
+    /// 1 when a walk arrived while the player was between two maps (after a warp, before the client said it is
+    /// ready on the new map). The client already moved its hero for that walk, so it is put back to the server
+    /// position once the player is on the map, see <see cref="ResynchronizeAfterMapChangeAsync"/>.
+    /// </summary>
+    private int _walkDroppedWhileChangingMap;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="PlayerMovement"/> class.
     /// </summary>
     /// <param name="player">The player.</param>
@@ -121,26 +128,41 @@ internal sealed class PlayerMovement : IDisposable
     /// </summary>
     /// <param name="target">The target.</param>
     /// <param name="steps">The steps.</param>
+    /// <remarks>
+    /// The client moves its hero as soon as it sends a walk. So whenever the walk is not applied here, the client is
+    /// put back to the server position; a walk dropped without a word left the hero standing elsewhere on its own
+    /// screen for good, while everybody else saw it where the server has it.
+    /// </remarks>
     public async ValueTask WalkToAsync(Point target, Memory<WalkingStep> steps)
     {
         var currentMap = this._player.CurrentMap;
         if (currentMap is null)
         {
+            // Between two maps: the player has no position on a map to send yet. It is sent once the client is ready
+            // on the new map and the player was added there.
+            this._player.Logger.LogInformation("WalkToAsync: Player {0} requested to walk to {1} while changing maps. The client is put back once it is on the map.", this._player, target);
+            Interlocked.Exchange(ref this._walkDroppedWhileChangingMap, 1);
             return;
         }
 
         if (this._player.Attributes is not { } attributes)
         {
+            this._player.Logger.LogDebug("WalkToAsync: Player requested to walk to {0} before its attributes are set. Keeping the server position.", target);
+            await this.RejectWalkAndResynchronizeClientAsync().ConfigureAwait(false);
             return;
         }
 
         if (attributes[Stats.IsFrozen] > 0 || attributes[Stats.IsStunned] > 0 || attributes[Stats.IsAsleep] > 0)
         {
+            this._player.Logger.LogDebug("WalkToAsync: Player requested to walk to {0} while it can't move (frozen, stunned or asleep). Keeping the server position.", target);
+            await this.RejectWalkAndResynchronizeClientAsync().ConfigureAwait(false);
             return;
         }
 
         if (steps.IsEmpty)
         {
+            this._player.Logger.LogDebug("WalkToAsync: Player requested to walk to {0} without steps. Keeping the server position.", target);
+            await this.RejectWalkAndResynchronizeClientAsync().ConfigureAwait(false);
             return;
         }
 
@@ -185,6 +207,21 @@ internal sealed class PlayerMovement : IDisposable
         await this._walker.StartWalkAsync(token).ConfigureAwait(false);
 
         this._player.Logger.LogDebug("WalkToAsync: Observer Count: {0}", this._player.Observers.Count);
+    }
+
+    /// <summary>
+    /// Puts the client back to the server position when it walked while the player was between two maps.
+    /// Called once the client is ready on the new map and the player was added there.
+    /// </summary>
+    public async ValueTask ResynchronizeAfterMapChangeAsync()
+    {
+        if (this._player.CurrentMap is null || Interlocked.Exchange(ref this._walkDroppedWhileChangingMap, 0) == 0)
+        {
+            return;
+        }
+
+        this._player.Logger.LogInformation("Player {0} walked while changing maps; putting the client back to {1}.", this._player, this._player.Position);
+        await this.ResynchronizeClientAsync().ConfigureAwait(false);
     }
 
     /// <summary>

@@ -6,10 +6,10 @@ namespace HNMO.Discord;
 
 using System.Globalization;
 using System.Text;
-using Microsoft.Extensions.Logging;
 using HNMO.Discord.Properties;
 using HNMO.Discord.Provisioning;
 using HNMO.Interfaces;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The slash commands of the Discord bot. They only show information and don't change anything in the game.

@@ -82,7 +82,9 @@ public sealed class CommunityEngine
     public const int HighlightsKept = 100;
 
     private const string CodeAlphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
     private static readonly string[] LocalFormats = ["yyyy-MM-dd HH:mm", "yyyy-MM-ddTHH:mm", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-ddTHH:mm:ss", "yyyy-MM-dd"];
+
     private readonly ConcurrentDictionary<string, DateTime> _lastDropPost = new(StringComparer.Ordinal);
 
     /// <summary>
@@ -142,6 +144,19 @@ public sealed class CommunityEngine
         }
 
         return builder.ToString().Trim();
+    }
+
+    /// <summary>Parses an item of the drop filter: "group number".</summary>
+    /// <param name="text">The text.</param>
+    /// <returns>The item; <c>null</c> when it isn't one.</returns>
+    public static (int Group, int Number)? ParseItem(string? text)
+    {
+        var parts = (text ?? string.Empty).Split([' ', ',', '/', ':'], StringSplitOptions.RemoveEmptyEntries);
+        return parts.Length == 2
+            && int.TryParse(parts[0], NumberStyles.None, CultureInfo.InvariantCulture, out var group) && group is >= 0 and <= 15
+            && int.TryParse(parts[1], NumberStyles.None, CultureInfo.InvariantCulture, out var number) && number is >= 0 and <= 511
+            ? (group, number)
+            : null;
     }
 
     /// <summary>
@@ -690,19 +705,6 @@ public sealed class CommunityEngine
 
             return removed;
         }
-    }
-
-    /// <summary>Parses an item of the drop filter: "group number".</summary>
-    /// <param name="text">The text.</param>
-    /// <returns>The item; <c>null</c> when it isn't one.</returns>
-    public static (int Group, int Number)? ParseItem(string? text)
-    {
-        var parts = (text ?? string.Empty).Split([' ', ',', '/', ':'], StringSplitOptions.RemoveEmptyEntries);
-        return parts.Length == 2
-            && int.TryParse(parts[0], NumberStyles.None, CultureInfo.InvariantCulture, out var group) && group is >= 0 and <= 15
-            && int.TryParse(parts[1], NumberStyles.None, CultureInfo.InvariantCulture, out var number) && number is >= 0 and <= 511
-            ? (group, number)
-            : null;
     }
 
     private static string Key(string text) => (text ?? string.Empty).Trim().ToLowerInvariant();

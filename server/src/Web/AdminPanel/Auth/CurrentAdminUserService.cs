@@ -5,9 +5,9 @@
 namespace HNMO.Web.AdminPanel.Auth;
 
 using System.Security.Claims;
+using HNMO.Persistence.AdminAuth;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
-using HNMO.Persistence.AdminAuth;
 
 /// <summary>
 /// Resolves the <see cref="AdminUser"/> which belongs to the currently authenticated principal.

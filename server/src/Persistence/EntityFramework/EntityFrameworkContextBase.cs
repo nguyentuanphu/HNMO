@@ -9,13 +9,13 @@ using System.Collections.Concurrent;
 using System.Data;
 using System.Reflection;
 using System.Threading;
+using HNMO.DataModel.Composition;
+using HNMO.DataModel.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
-using HNMO.DataModel.Composition;
-using HNMO.DataModel.Configuration;
 using Nito.AsyncEx;
 using Nito.Disposables;
 
@@ -43,11 +43,17 @@ internal class EntityFrameworkContextBase : IContext, IConfigurationEditContext
     private static readonly ConcurrentDictionary<Type, PropertyInfo[]> AggregatePropertiesByType = new();
 
     private readonly bool _isOwner;
+
     private readonly IConfigurationChangeListener? _changeListener;
+
     private readonly AsyncLock _lock = new();
+
     private readonly ILogger _logger;
+
     private IDbContextTransaction? _configurationEditTransaction;
+
     private bool _isDisposed;
+
     private int _notificationSuspensions;
 
     /// <summary>
@@ -420,6 +426,30 @@ internal class EntityFrameworkContextBase : IContext, IConfigurationEditContext
         return false;
     }
 
+    private static Type? GetCollectionInterface(Type type)
+    {
+        if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ICollection<>))
+        {
+            return type;
+        }
+
+        return type.GetInterfaces()
+            .FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ICollection<>));
+    }
+
+    private static bool IsSharedConfiguration(object member)
+    {
+        for (Type? type = member.GetType(); type is not null; type = type.BaseType)
+        {
+            if (SharedConfigurationTypes.Contains(type))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private async ValueTask<bool> SaveChangesCoreAsync(CancellationToken cancellationToken)
     {
         using var l = await this._lock.LockAsync(cancellationToken).ConfigureAwait(false);
@@ -623,30 +653,6 @@ internal class EntityFrameworkContextBase : IContext, IConfigurationEditContext
 
         action(member);
         this.ForEachAggregate(member, action, stopAtSharedConfiguration, false, handledMembers);
-    }
-
-    private static Type? GetCollectionInterface(Type type)
-    {
-        if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ICollection<>))
-        {
-            return type;
-        }
-
-        return type.GetInterfaces()
-            .FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ICollection<>));
-    }
-
-    private static bool IsSharedConfiguration(object member)
-    {
-        for (Type? type = member.GetType(); type is not null; type = type.BaseType)
-        {
-            if (SharedConfigurationTypes.Contains(type))
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD100:Avoid async void methods", Justification = "Catching all Exceptions.")]

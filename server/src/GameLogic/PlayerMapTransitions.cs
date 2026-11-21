@@ -283,6 +283,8 @@ internal sealed class PlayerMapTransitions
             return;
         }
 
+        // A walk which arrived between the two maps was dropped, but the client moved its hero for it already.
+        await this._movement.ResynchronizeAfterMapChangeAsync().ConfigureAwait(false);
         await this._summon.AddToMapAsync(player.CurrentMap).ConfigureAwait(false);
     }
 

@@ -7,33 +7,6 @@ namespace HNMO.GameLogic.PlugIns.Onboarding;
 using HNMO.GameLogic.PlugIns.Missions;
 
 /// <summary>
-/// What the server knows of a character in the game, for the steps it checks by looking (not by an event).
-/// </summary>
-/// <param name="Level">The level.</param>
-/// <param name="Map">The map number.</param>
-/// <param name="X">The x coordinate.</param>
-/// <param name="Y">The y coordinate.</param>
-/// <param name="InParty">Whether it's in a party.</param>
-/// <param name="StatPoints">The sum of the base stats (strength, agility, vitality, energy, command).</param>
-/// <param name="LearnedSkills">The number of learned skills.</param>
-/// <param name="CashShopOpen">Whether the cash shop is open.</param>
-public sealed record OnboardingFacts(int Level, int Map, int X, int Y, bool InParty, int StatPoints, int LearnedSkills, bool CashShopOpen);
-
-/// <summary>
-/// The steps which were done by a change, and whether the guide was finished by it.
-/// </summary>
-/// <param name="Completed">The steps done.</param>
-/// <param name="Finished">Whether the last step was done (the final reward waits).</param>
-public sealed record OnboardingAdvance(IReadOnlyList<OnboardingStep> Completed, bool Finished)
-{
-    /// <summary>Gets nothing done.</summary>
-    public static OnboardingAdvance None { get; } = new([], false);
-
-    /// <summary>Gets a value indicating whether anything happened.</summary>
-    public bool Any => this.Completed.Count > 0 || this.Finished;
-}
-
-/// <summary>
 /// The rules of the new-player guide and the starter kit, without the game around them (unit-tested): which character is
 /// new, the current step and its count, the steps the server checks by looking, the rewards (kept as waiting rewards with
 /// unique references until they're handed over), skipping, and who gets the starter kit.
@@ -69,6 +42,15 @@ public sealed class OnboardingEngine
     /// <returns><c>true</c>, for counted kinds.</returns>
     public static bool IsCounted(OnboardingStepKind kind) =>
         kind is OnboardingStepKind.TalkToNpc or OnboardingStepKind.KillMonsters or OnboardingStepKind.UseItem or OnboardingStepKind.UseSkill or OnboardingStepKind.OpenMissions;
+
+    /// <summary>
+    /// Gets the items of the kit for a class.
+    /// </summary>
+    /// <param name="kit">The kit.</param>
+    /// <param name="classNumber">The class number.</param>
+    /// <returns>Copies of the items.</returns>
+    public static List<StarterKitItem> KitItemsOf(StarterKitConfiguration kit, int classNumber) =>
+        kit.Items.Where(i => i.Count > 0 && (i.ClassNumber < 0 || i.ClassNumber == classNumber)).Select(Copy).ToList();
 
     /// <summary>
     /// Notes a character created while the plug-in runs: it's new, it may reserve the starter kit, and the kit's stat
@@ -335,6 +317,9 @@ public sealed class OnboardingEngine
                 return null;
             }
 
+            // Zen and coins once per account: not when another character of the account got its kit already.
+            var money = !kit.MoneyPerAccount || kit.PerAccount
+                || !this.Store.Data.Characters.Any(c => c.Key != characterId && c.Value.KitGiven && string.Equals(c.Value.Account, login, StringComparison.OrdinalIgnoreCase));
             state.KitGiven = true;
             var reward = new OnboardingOwedReward
             {
@@ -344,8 +329,8 @@ public sealed class OnboardingEngine
                 TitleVi = "Quà tân thủ",
                 Reason = "Starter kit",
                 Login = login,
-                Zen = kit.ZenEnabled ? Math.Max(0, kit.Zen) : 0,
-                Coins = kit.CoinsEnabled ? Math.Max(0, kit.Coins) : 0,
+                Zen = money && kit.ZenEnabled ? Math.Max(0, kit.Zen) : 0,
+                Coins = money && kit.CoinsEnabled ? Math.Max(0, kit.Coins) : 0,
                 CoinType = kit.CoinType,
                 Items = kit.ItemsEnabled ? KitItemsOf(kit, classNumber) : new List<StarterKitItem>(),
                 BuffMinutes = kit.ExperienceBuff.Enabled ? Math.Max(0, kit.ExperienceBuff.Minutes) : 0,
@@ -383,15 +368,6 @@ public sealed class OnboardingEngine
             return true;
         }
     }
-
-    /// <summary>
-    /// Gets the items of the kit for a class.
-    /// </summary>
-    /// <param name="kit">The kit.</param>
-    /// <param name="classNumber">The class number.</param>
-    /// <returns>Copies of the items.</returns>
-    public static List<StarterKitItem> KitItemsOf(StarterKitConfiguration kit, int classNumber) =>
-        kit.Items.Where(i => i.Count > 0 && (i.ClassNumber < 0 || i.ClassNumber == classNumber)).Select(Copy).ToList();
 
     /// <summary>
     /// Gets the waiting rewards of a character.

@@ -5,11 +5,11 @@
 namespace HNMO.Persistence.EntityFramework;
 
 using System.Collections.Concurrent;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using HNMO.DataModel.Composition;
 using HNMO.DataModel.Configuration;
 using HNMO.Persistence.EntityFramework.TypedContexts;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 /// <summary>
 /// A context which is used to show and edit instances of a specific type.

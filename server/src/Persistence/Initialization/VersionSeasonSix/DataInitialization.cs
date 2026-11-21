@@ -5,11 +5,11 @@
 namespace HNMO.Persistence.Initialization.VersionSeasonSix;
 
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.Network.PlugIns;
 using HNMO.Persistence.Initialization.VersionSeasonSix.TestAccounts;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Provides initial data for Season 6 Episode 3.

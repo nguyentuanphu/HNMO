@@ -117,22 +117,23 @@ internal class SkillsInitializer : SkillsInitializerBase
         this.CreateSkill(SkillNumber.FireBall, LocalizedString.FromResource(() => SkillNames.FireBall), CharacterClasses.AllMagicians | CharacterClasses.AllSummoners, DamageType.Wizardry, 8, 6, manaConsumption: 3, energyRequirement: 40, elementalModifier: ElementalType.Fire);
         this.CreateSkill(SkillNumber.Flame, LocalizedString.FromResource(() => SkillNames.Flame), CharacterClasses.AllMagicians, DamageType.Wizardry, 25, 6, manaConsumption: 50, energyRequirement: 160, elementalModifier: ElementalType.Fire, skillType: SkillType.AreaSkillAutomaticHits);
         this.AddAreaSkillSettings(SkillNumber.Flame, false, default, default, default, true, TimeSpan.Zero, TimeSpan.FromMilliseconds(500), 1, 2, default, default, 0.5f, targetAreaDiameter: 2, useTargetAreaFilter: true);
-        this.CreateSkill(SkillNumber.Teleport, LocalizedString.FromResource(() => SkillNames.Teleport), CharacterClasses.SoulMasterAndGrandMaster, DamageType.Wizardry, distance: 6, manaConsumption: 30, energyRequirement: 88, skillType: SkillType.Other);
+        this.CreateSkill(SkillNumber.Teleport, LocalizedString.FromResource(() => SkillNames.Teleport), CharacterClasses.AllWizards, DamageType.Wizardry, distance: 6, manaConsumption: 30, energyRequirement: 88, skillType: SkillType.Other);
         this.CreateSkill(SkillNumber.Ice, LocalizedString.FromResource(() => SkillNames.Ice), CharacterClasses.AllMagicians | CharacterClasses.AllSummoners, DamageType.Wizardry, 10, 6, manaConsumption: 38, energyRequirement: 120, elementalModifier: ElementalType.Ice);
         this.CreateSkill(SkillNumber.Twister, LocalizedString.FromResource(() => SkillNames.Twister), CharacterClasses.AllMagicians, DamageType.Wizardry, 35, 6, manaConsumption: 60, energyRequirement: 180, elementalModifier: ElementalType.Wind, skillType: SkillType.AreaSkillAutomaticHits);
         this.AddAreaSkillSettings(SkillNumber.Twister, true, 1.5f, 1.5f, 6f, true, TimeSpan.FromMilliseconds(300), TimeSpan.FromMilliseconds(1000), 1, 2, default, default, 0.7f);
-        this.CreateSkill(SkillNumber.EvilSpirit, LocalizedString.FromResource(() => SkillNames.EvilSpirit), CharacterClasses.AllMagicians, DamageType.Wizardry, 45, 7, manaConsumption: 90, energyRequirement: 220, skillType: SkillType.AreaSkillAutomaticHits);
+        this.CreateSkill(SkillNumber.EvilSpirit, LocalizedString.FromResource(() => SkillNames.EvilSpirit), CharacterClasses.AllMagicians, DamageType.Wizardry, 45, 6, manaConsumption: 90, energyRequirement: 220, skillType: SkillType.AreaSkillAutomaticHits);
         this.AddAreaSkillSettings(SkillNumber.EvilSpirit, false, default, default, default, true, TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(1000), 1, 2, default, default, 0.7f);
-        this.CreateSkill(SkillNumber.Hellfire, LocalizedString.FromResource(() => SkillNames.Hellfire), CharacterClasses.AllMagicians, DamageType.Wizardry, 120, 4, manaConsumption: 160, energyRequirement: 260, elementalModifier: ElementalType.Fire, skillType: SkillType.AreaSkillAutomaticHits);
+        this.CreateSkill(SkillNumber.Hellfire, LocalizedString.FromResource(() => SkillNames.Hellfire), CharacterClasses.AllMagicians, DamageType.Wizardry, 120, 0, manaConsumption: 160, energyRequirement: 260, elementalModifier: ElementalType.Fire, skillType: SkillType.AreaSkillAutomaticHits);
         this.AddAreaSkillSettings(SkillNumber.Hellfire, false, 0, 0, 0, effectRange: 2);
         this.CreateSkill(SkillNumber.PowerWave, LocalizedString.FromResource(() => SkillNames.PowerWave), CharacterClasses.AllMagicians | CharacterClasses.AllSummoners, DamageType.Wizardry, 14, 6, manaConsumption: 5, energyRequirement: 56);
         this.CreateSkill(SkillNumber.AquaBeam, LocalizedString.FromResource(() => SkillNames.AquaBeam), CharacterClasses.AllMagicians, DamageType.Wizardry, 80, 6, manaConsumption: 140, energyRequirement: 345, elementalModifier: ElementalType.Water, skillType: SkillType.AreaSkillAutomaticHits);
         this.AddAreaSkillSettings(SkillNumber.AquaBeam, true, 1.5f, 1.5f, 8f);
-        this.CreateSkill(SkillNumber.Cometfall, LocalizedString.FromResource(() => SkillNames.Cometfall), CharacterClasses.AllMagicians, DamageType.Wizardry, 70, 3, manaConsumption: 150, energyRequirement: 436, skillType: SkillType.AreaSkillAutomaticHits);
+        this.CreateSkill(SkillNumber.Cometfall, LocalizedString.FromResource(() => SkillNames.Cometfall), CharacterClasses.AllMagicians, DamageType.Wizardry, 70, 6, manaConsumption: 150, energyRequirement: 436, skillType: SkillType.AreaSkillAutomaticHits);
         this.AddAreaSkillSettings(SkillNumber.Cometfall, false, default, default, default, targetAreaDiameter: 2, useTargetAreaFilter: true);
-        this.CreateSkill(SkillNumber.Inferno, LocalizedString.FromResource(() => SkillNames.Inferno), CharacterClasses.AllMagicians, DamageType.Wizardry, 100, 4, manaConsumption: 200, energyRequirement: 578, elementalModifier: ElementalType.Fire, skillType: SkillType.AreaSkillAutomaticHits);
+        this.CreateSkill(SkillNumber.Inferno, LocalizedString.FromResource(() => SkillNames.Inferno), CharacterClasses.AllMagicians, DamageType.Wizardry, 100, 0, manaConsumption: 200, energyRequirement: 578, elementalModifier: ElementalType.Fire, skillType: SkillType.AreaSkillAutomaticHits);
+        this.AddAreaSkillSettings(SkillNumber.Inferno, false, 0, 0, 0, effectRange: 4);
         this.CreateSkill(SkillNumber.TeleportAlly, LocalizedString.FromResource(() => SkillNames.TeleportAlly), CharacterClasses.SoulMasterAndGrandMaster, distance: 6, abilityConsumption: 25, manaConsumption: 90, energyRequirement: 644, skillType: SkillType.Other);
-        this.CreateSkill(SkillNumber.SoulBarrier, LocalizedString.FromResource(() => SkillNames.SoulBarrier), CharacterClasses.SoulMasterAndGrandMaster, distance: 6, abilityConsumption: 22, manaConsumption: 70, energyRequirement: 408, skillType: SkillType.Buff, implicitTargetRange: 0, targetRestriction: SkillTargetRestriction.Party);
+        this.CreateSkill(SkillNumber.SoulBarrier, LocalizedString.FromResource(() => SkillNames.SoulBarrier), CharacterClasses.AllWizards, distance: 6, abilityConsumption: 22, manaConsumption: 70, energyRequirement: 408, skillType: SkillType.Buff, implicitTargetRange: 0, targetRestriction: SkillTargetRestriction.Party);
         this.CreateSkill(SkillNumber.EnergyBall, LocalizedString.FromResource(() => SkillNames.EnergyBall), CharacterClasses.AllMagicians, DamageType.Wizardry, 3, 6, manaConsumption: 1);
         this.CreateSkill(SkillNumber.Defense, LocalizedString.FromResource(() => SkillNames.Defense), CharacterClasses.AllKnightsLordsAndMGs, manaConsumption: 30, skillType: SkillType.Buff, implicitTargetRange: 0, targetRestriction: SkillTargetRestriction.Self);
         this.CreateSkill(SkillNumber.FallingSlash, LocalizedString.FromResource(() => SkillNames.FallingSlash), CharacterClasses.AllKnightsLordsAndMGs | CharacterClasses.AllFighters, DamageType.Physical, distance: 3, manaConsumption: 9, movesToTarget: true, movesTarget: true);
@@ -156,8 +157,8 @@ internal class SkillsInitializer : SkillsInitializerBase
         this.AddAreaSkillSettings(SkillNumber.Decay, false, 0, 0, 0, effectRange: 2);
         this.CreateSkill(SkillNumber.IceStorm, LocalizedString.FromResource(() => SkillNames.IceStorm), CharacterClasses.SoulMasterAndGrandMaster, DamageType.Wizardry, 80, 6, 5, 100, energyRequirement: 849, elementalModifier: ElementalType.Ice, skillType: SkillType.AreaSkillAutomaticHits);
         this.AddAreaSkillSettings(SkillNumber.IceStorm, false, default, default, default, true, TimeSpan.Zero, TimeSpan.Zero, targetAreaDiameter: 3, useTargetAreaFilter: true);
-        this.CreateSkill(SkillNumber.Nova, LocalizedString.FromResource(() => SkillNames.Nova), CharacterClasses.SoulMasterAndGrandMaster, DamageType.Wizardry, distance: 6, manaConsumption: 180 / 12 /* mana per stage */, levelRequirement: 100, energyRequirement: 1052, elementalModifier: ElementalType.Fire);
-        this.CreateSkill(SkillNumber.NovaStart, LocalizedString.FromResource(() => SkillNames.NovaStart), CharacterClasses.SoulMasterAndGrandMaster, DamageType.None, abilityConsumption: 45, levelRequirement: 100, energyRequirement: 1052, skillType: SkillType.Other);
+        this.CreateSkill(SkillNumber.Nova, LocalizedString.FromResource(() => SkillNames.Nova), CharacterClasses.SoulMasterAndGrandMaster, DamageType.Wizardry, distance: 6, abilityConsumption: 45, manaConsumption: 180 / 12 /* mana per stage */, levelRequirement: 100, energyRequirement: 1052, elementalModifier: ElementalType.Fire);
+        this.CreateSkill(SkillNumber.NovaStart, LocalizedString.FromResource(() => SkillNames.NovaStart), CharacterClasses.SoulMasterAndGrandMaster, DamageType.None, levelRequirement: 100, energyRequirement: 1052, skillType: SkillType.Other);
         this.CreateSkill(SkillNumber.TwistingSlash, LocalizedString.FromResource(() => SkillNames.TwistingSlash), CharacterClasses.AllKnights | CharacterClasses.AllMGs, DamageType.Physical, distance: 2, abilityConsumption: 10, manaConsumption: 10, elementalModifier: ElementalType.Wind, skillType: SkillType.AreaSkillAutomaticHits);
         this.CreateSkill(SkillNumber.RagefulBlow, LocalizedString.FromResource(() => SkillNames.RagefulBlow), CharacterClasses.BladeKnightAndBladeMaster, DamageType.Physical, 60, 3, 20, 25, 170, elementalModifier: ElementalType.Earth, skillType: SkillType.AreaSkillAutomaticHits);
         this.CreateSkill(SkillNumber.DeathStab, LocalizedString.FromResource(() => SkillNames.DeathStab), CharacterClasses.BladeKnightAndBladeMaster, DamageType.Physical, 70, 2, 12, 15, 160, elementalModifier: ElementalType.Wind, skillType: SkillType.DirectHit, skillTarget: SkillTarget.ExplicitWithImplicitInRange, implicitTargetRange: 1);
@@ -192,7 +193,7 @@ internal class SkillsInitializer : SkillsInitializerBase
         this.CreateSkill(SkillNumber.SwellMana, LocalizedString.FromResource(() => SkillNames.SwellMana), CharacterClasses.All, abilityConsumption: 30, manaConsumption: 35, cooldownMinutes: 4);
         this.CreateSkill(SkillNumber.Invisibility, LocalizedString.FromResource(() => SkillNames.Invisibility), CharacterClasses.All, abilityConsumption: 60, manaConsumption: 80, cooldownMinutes: 5);
         this.CreateSkill(SkillNumber.CancelInvisibility, LocalizedString.FromResource(() => SkillNames.CancelInvisibility), CharacterClasses.All, abilityConsumption: 30, manaConsumption: 40, cooldownMinutes: 2);
-        this.CreateSkill(SkillNumber.AbolishMagic, LocalizedString.FromResource(() => SkillNames.AbolishMagic), CharacterClasses.AllLords, abilityConsumption: 70, manaConsumption: 90, cooldownMinutes: 8);
+        this.CreateSkill(SkillNumber.AbolishMagic, LocalizedString.FromResource(() => SkillNames.AbolishMagic), CharacterClasses.AllLords, abilityConsumption: 70, manaConsumption: 90, skillType: SkillType.Other, cooldownMinutes: 8);
         this.CreateSkill(SkillNumber.ManaRays, LocalizedString.FromResource(() => SkillNames.ManaRays), CharacterClasses.AllMGs, DamageType.Wizardry, 85, 6, 7, 130);
         this.CreateSkill(SkillNumber.FireBlast, LocalizedString.FromResource(() => SkillNames.FireBlast), CharacterClasses.AllLords, DamageType.Physical, 150, 6, 10, 30);
         this.CreateSkill(SkillNumber.PlasmaStorm, LocalizedString.FromResource(() => SkillNames.PlasmaStorm), CharacterClasses.AllMastersAndSecondClass, DamageType.Fenrir, damage: 60, distance: 6, abilityConsumption: 20, manaConsumption: 50, levelRequirement: 110, skillType: SkillType.AreaSkillAutomaticHits);
@@ -312,14 +313,14 @@ internal class SkillsInitializer : SkillsInitializerBase
         this.CreateSkill(SkillNumber.LightningStrengthener, LocalizedString.FromResource(() => SkillNames.LightningStrengthener), CharacterClasses.GrandMaster, DamageType.Wizardry, 3, 6, manaConsumption: 20, levelRequirement: 13, energyRequirement: 100, elementalModifier: ElementalType.Lightning);
         this.CreateSkill(SkillNumber.ExpansionofWizStreng, LocalizedString.FromResource(() => SkillNames.ExpansionOfWizStreng), CharacterClasses.GrandMaster, DamageType.Wizardry, 1, 6, 55, 220, 220, 118);
         this.CreateSkill(SkillNumber.InfernoStrengthener, LocalizedString.FromResource(() => SkillNames.InfernoStrengthener), CharacterClasses.GrandMaster, DamageType.Wizardry, 22, manaConsumption: 220, levelRequirement: 88, energyRequirement: 200, elementalModifier: ElementalType.Fire);
-        this.CreateSkill(SkillNumber.BlastStrengthener, LocalizedString.FromResource(() => SkillNames.BlastStrengthener), CharacterClasses.GrandMaster, DamageType.Wizardry, 22, 3, manaConsumption: 165, levelRequirement: 80, energyRequirement: 150, elementalModifier: ElementalType.Lightning);
+        this.CreateSkill(SkillNumber.BlastStrengthener, LocalizedString.FromResource(() => SkillNames.BlastStrengthener), CharacterClasses.GrandMaster, DamageType.Wizardry, 22, 6, manaConsumption: 165, levelRequirement: 80, energyRequirement: 150, elementalModifier: ElementalType.Lightning);
         this.CreateSkill(SkillNumber.ExpansionofWizMas, LocalizedString.FromResource(() => SkillNames.ExpansionOfWizMas), CharacterClasses.GrandMaster, DamageType.Wizardry, 1, 6, 55, 220, 220, 118);
         this.CreateSkill(SkillNumber.PoisonStrengthener, LocalizedString.FromResource(() => SkillNames.PoisonStrengthener), CharacterClasses.GrandMaster, DamageType.Wizardry, 3, 6, manaConsumption: 46, levelRequirement: 30, energyRequirement: 100, elementalModifier: ElementalType.Poison);
         this.CreateSkill(SkillNumber.EvilSpiritStreng, LocalizedString.FromResource(() => SkillNames.EvilSpiritStreng), CharacterClasses.GrandMaster, DamageType.Wizardry, 22, 6, manaConsumption: 108, levelRequirement: 50, energyRequirement: 100);
         this.CreateSkill(SkillNumber.MagicMasteryGrandMaster, LocalizedString.FromResource(() => SkillNames.MagicMastery), CharacterClasses.GrandMaster, damage: 22, levelRequirement: 50, skillType: SkillType.PassiveBoost);
         this.CreateSkill(SkillNumber.DecayStrengthener, LocalizedString.FromResource(() => SkillNames.DecayStrengthener), CharacterClasses.GrandMaster, DamageType.Wizardry, 22, 6, 10, 120, 96, 243, elementalModifier: ElementalType.Poison, skillType: SkillType.AreaSkillAutomaticHits);
         this.AddAreaSkillSettings(SkillNumber.DecayStrengthener, false, 0, 0, 0, effectRange: 2);
-        this.CreateSkill(SkillNumber.HellfireStrengthener, LocalizedString.FromResource(() => SkillNames.HellfireStrengthener), CharacterClasses.GrandMaster, DamageType.Wizardry, 3, 4, manaConsumption: 176, levelRequirement: 60, energyRequirement: 100, elementalModifier: ElementalType.Fire, skillType: SkillType.AreaSkillAutomaticHits);
+        this.CreateSkill(SkillNumber.HellfireStrengthener, LocalizedString.FromResource(() => SkillNames.HellfireStrengthener), CharacterClasses.GrandMaster, DamageType.Wizardry, 3, 0, manaConsumption: 176, levelRequirement: 60, energyRequirement: 100, elementalModifier: ElementalType.Fire, skillType: SkillType.AreaSkillAutomaticHits);
         this.AddAreaSkillSettings(SkillNumber.HellfireStrengthener, false, 0, 0, 0, effectRange: 2);
         this.CreateSkill(SkillNumber.IceStrengthener, LocalizedString.FromResource(() => SkillNames.IceStrengthener), CharacterClasses.GrandMaster, DamageType.Wizardry, 3, 6, manaConsumption: 42, levelRequirement: 25, energyRequirement: 100, elementalModifier: ElementalType.Ice);
         this.CreateSkill(SkillNumber.OneHandedStaffStrengthener, LocalizedString.FromResource(() => SkillNames.OneHandedStaffStren), CharacterClasses.GrandMaster | CharacterClasses.DuelMaster, DamageType.Wizardry, 22, skillType: SkillType.PassiveBoost);
@@ -380,7 +381,7 @@ internal class SkillsInitializer : SkillsInitializerBase
         this.CreateSkill(SkillNumber.TwistingSlashStrengthenerDuelMaster, LocalizedString.FromResource(() => SkillNames.TwistingSlashStren), CharacterClasses.DuelMaster, DamageType.Physical, 3, 2, 10, 10);
         this.CreateSkill(SkillNumber.PowerSlashStreng, LocalizedString.FromResource(() => SkillNames.PowerSlashStreng), CharacterClasses.DuelMaster, damage: 3, distance: 5, manaConsumption: 15);
         this.CreateSkill(SkillNumber.FlameStrengthenerDuelMaster, LocalizedString.FromResource(() => SkillNames.FlameStrengthener), CharacterClasses.DuelMaster, DamageType.Physical, 3, 6, manaConsumption: 55, levelRequirement: 35, energyRequirement: 100, elementalModifier: ElementalType.Fire);
-        this.CreateSkill(SkillNumber.BlastStrengthenerDuelMaster, LocalizedString.FromResource(() => SkillNames.BlastStrengthener), CharacterClasses.DuelMaster, DamageType.Physical, 22, 3, manaConsumption: 165, levelRequirement: 80, energyRequirement: 150, elementalModifier: ElementalType.Lightning);
+        this.CreateSkill(SkillNumber.BlastStrengthenerDuelMaster, LocalizedString.FromResource(() => SkillNames.BlastStrengthener), CharacterClasses.DuelMaster, DamageType.Physical, 22, 6, manaConsumption: 165, levelRequirement: 80, energyRequirement: 150, elementalModifier: ElementalType.Lightning);
         this.CreateSkill(SkillNumber.WeaponMasteryDuelMaster, LocalizedString.FromResource(() => SkillNames.WeaponMastery), CharacterClasses.DuelMaster, damage: 22, skillType: SkillType.PassiveBoost);
         this.CreateSkill(SkillNumber.InfernoStrengthenerDuelMaster, LocalizedString.FromResource(() => SkillNames.InfernoStrengthener), CharacterClasses.DuelMaster, DamageType.Physical, 22, manaConsumption: 220, levelRequirement: 88, energyRequirement: 200, elementalModifier: ElementalType.Fire);
         this.CreateSkill(SkillNumber.EvilSpiritStrengthenerDuelMaster, LocalizedString.FromResource(() => SkillNames.EvilSpiritStrengthen), CharacterClasses.DuelMaster, DamageType.Physical, 22, 6, manaConsumption: 108, levelRequirement: 50, energyRequirement: 100);
@@ -417,7 +418,7 @@ internal class SkillsInitializer : SkillsInitializerBase
         this.CreateSkill(SkillNumber.KillingBlowMastery, LocalizedString.FromResource(() => SkillNames.KillingBlowMastery), CharacterClasses.FistMaster, DamageType.Physical, 1, 2, manaConsumption: 10, elementalModifier: ElementalType.Earth, hitsPerAttack: 4);
         this.CreateSkill(SkillNumber.BeastUppercutMastery, LocalizedString.FromResource(() => SkillNames.BeastUppercutMastery), CharacterClasses.FistMaster, DamageType.Physical, 1, 2, manaConsumption: 10, elementalModifier: ElementalType.Fire, hitsPerAttack: 2);
         this.CreateSkill(SkillNumber.WeaponMasteryFistMaster, LocalizedString.FromResource(() => SkillNames.WeaponMastery), CharacterClasses.FistMaster, damage: 22, skillType: SkillType.PassiveBoost);
-        this.CreateSkill(SkillNumber.ChainDriveStrengthener, LocalizedString.FromResource(() => SkillNames.ChainDriveStrengthener), CharacterClasses.FistMaster, DamageType.Physical, 22, 4, 22, 22, 150, elementalModifier: ElementalType.Ice, hitsPerAttack: 4);
+        this.CreateSkill(SkillNumber.ChainDriveStrengthener, LocalizedString.FromResource(() => SkillNames.ChainDriveStrengthener), CharacterClasses.FistMaster, DamageType.Physical, 22, 4, 20, 22, 150, elementalModifier: ElementalType.Ice, hitsPerAttack: 4);
         this.CreateSkill(SkillNumber.DarkSideStrengthener, LocalizedString.FromResource(() => SkillNames.DarkSideStrengthener), CharacterClasses.FistMaster, DamageType.Physical, 22, 4, manaConsumption: 84, levelRequirement: 180, elementalModifier: ElementalType.Wind);
         this.CreateSkill(SkillNumber.DragonRoarStrengthener, LocalizedString.FromResource(() => SkillNames.DragonRoarStrengthener), CharacterClasses.FistMaster, DamageType.Physical, 22, 3, 33, 60, 150, elementalModifier: ElementalType.Earth, skillType: SkillType.AreaSkillExplicitTarget, hitsPerAttack: 4);
         this.CreateSkill(SkillNumber.EquippedWeaponStrengthener, LocalizedString.FromResource(() => SkillNames.EquippedWeaponStrengthener), CharacterClasses.FistMaster, damage: 22, skillType: SkillType.PassiveBoost);
@@ -797,10 +798,10 @@ internal class SkillsInitializer : SkillsInitializerBase
         this.AddPassiveMasterSkillDefinition(SkillNumber.DurabilityReduction2, Stats.JewelryAndWingsDurationIncrease, AggregateType.AddRaw, $"{Formula1204} / 100", 3, 1, SkillNumber.DurabilityReduction1);
         this.AddPassiveMasterSkillDefinition(SkillNumber.SdRecoverySpeedInc, Stats.ShieldRecoveryMultiplier, AggregateType.Multiplicate, $"1 + {FormulaRecoveryIncrease120}", Formula120, 3, 1, SkillNumber.MaximumSDincrease, SkillNumber.Undefined, 20);
         this.AddPassiveMasterSkillDefinition(SkillNumber.AutomaticHpRecInc, Stats.HealthRecoveryMultiplier, AggregateType.AddRaw, FormulaRecoveryIncrease120, Formula120, 3, 1, SkillNumber.AutomaticManaRecInc, SkillNumber.Undefined, 20);
-        this.AddPassiveMasterSkillDefinition(SkillNumber.LightningResistanceInc, Stats.LightningResistance, AggregateType.AddRaw, Formula120, Formula120, 2, 1, requiredSkill1: SkillNumber.PoisonResistanceInc);
+        this.AddPassiveMasterSkillDefinition(SkillNumber.LightningResistanceInc, Stats.LightningResistance, AggregateType.AddRaw, Formula120, Formula120, 3, 1, requiredSkill1: SkillNumber.PoisonResistanceInc);
         this.AddPassiveMasterSkillDefinition(SkillNumber.DefenseIncrease, Stats.DefenseBase, AggregateType.AddFinal, Formula6020, 4, 1);
         this.AddPassiveMasterSkillDefinition(SkillNumber.AutomaticAgRecInc, Stats.AbilityRecoveryMultiplier, AggregateType.AddRaw, FormulaRecoveryIncrease120, Formula120, 4, 1, SkillNumber.AutomaticHpRecInc, SkillNumber.Undefined, 20);
-        this.AddPassiveMasterSkillDefinition(SkillNumber.IceResistanceIncrease, Stats.IceResistance, AggregateType.AddRaw, Formula120, Formula120, 2, 1, requiredSkill1: SkillNumber.LightningResistanceInc);
+        this.AddPassiveMasterSkillDefinition(SkillNumber.IceResistanceIncrease, Stats.IceResistance, AggregateType.AddRaw, Formula120, Formula120, 4, 1, requiredSkill1: SkillNumber.LightningResistanceInc);
         this.AddPassiveMasterSkillDefinition(SkillNumber.DurabilityReduction3, Stats.PetDurationIncrease, AggregateType.AddRaw, Formula1204, 5, 1, SkillNumber.DurabilityReduction2);
         this.AddPassiveMasterSkillDefinition(SkillNumber.DefenseSuccessRateInc, Stats.DefenseRatePvm, AggregateType.Multiplicate, $"1 + {Formula120} / 100", 5, 1, SkillNumber.DefenseIncrease);
 
@@ -866,7 +867,7 @@ internal class SkillsInitializer : SkillsInitializerBase
         this.AddMasterSkillDefinition(SkillNumber.PenetrationStrengthener, SkillNumber.Penetration, SkillNumber.Undefined, 2, 3, SkillNumber.Penetration, 20, Formula502);
         this.AddMasterSkillDefinition(SkillNumber.DefenseIncreaseStr, SkillNumber.GreaterDefense, SkillNumber.Undefined, 2, 3, SkillNumber.GreaterDefense, 20, $"{Formula502} / 100", Formula502, Stats.GreaterDefenseBonus, AggregateType.Multiplicate);
         this.AddMasterSkillDefinition(SkillNumber.TripleShotMastery, SkillNumber.TripleShotStrengthener, SkillNumber.Undefined, 2, 3, SkillNumber.TripleShotStrengthener, 10, Formula1WhenComplete, Formula1WhenComplete, Stats.TripleShotExtraProjectiles, AggregateType.AddRaw);
-        this.AddPassiveMasterSkillDefinition(SkillNumber.SummonedMonsterStr2, Stats.SummonedMonsterDefenseIncrease, AggregateType.AddRaw, Formula6020Value, 3, 2, SkillNumber.SummonGoblin);
+        this.AddPassiveMasterSkillDefinition(SkillNumber.SummonedMonsterStr2, Stats.SummonedMonsterDefenseIncrease, AggregateType.AddRaw, Formula6020Value, 3, 2, SkillNumber.SummonedMonsterStr1);
         this.AddMasterSkillDefinition(SkillNumber.AttackIncreaseStr, SkillNumber.GreaterDamage, SkillNumber.Undefined, 2, 4, SkillNumber.GreaterDamage, 20, $"{Formula502} / 100", Formula502, Stats.GreaterDamageBonus, AggregateType.Multiplicate);
         this.AddPassiveMasterSkillDefinition(SkillNumber.WeaponMasteryHighElf, Stats.MasterSkillPhysBonusDmg, AggregateType.AddRaw, Formula502, 4, 2);
         this.AddMasterSkillDefinition(SkillNumber.AttackIncreaseMastery, SkillNumber.AttackIncreaseStr, SkillNumber.Undefined, 2, 5, SkillNumber.AttackIncreaseStr, 20, $"{Formula502} / 100", Formula502, Stats.GreaterDamageBonus, AggregateType.Multiplicate, true);
@@ -934,7 +935,7 @@ internal class SkillsInitializer : SkillsInitializerBase
         this.AddPassiveMasterSkillDefinition(SkillNumber.DarkSpiritStr2, Stats.RavenCriticalDamageChance, AggregateType.AddRaw, $"{Formula181} / 100", Formula181, 3, 3, SkillNumber.DarkSpiritStr);
         this.AddPassiveMasterSkillDefinition(SkillNumber.ScepterMastery, Stats.ScepterMasteryBonusDamage, AggregateType.AddRaw, Formula1154, 3, 3, SkillNumber.ScepterStrengthener);
         this.AddPassiveMasterSkillDefinition(SkillNumber.ShieldMastery, Stats.BonusDefenseRateWithShield, AggregateType.AddRaw, Formula1204, 3, 3, SkillNumber.ShieldStrengthenerLordEmperor);
-        this.AddPassiveMasterSkillDefinition(SkillNumber.CommandAttackInc, Stats.BonusDamageWithScepterCmdDiv, AggregateType.AddRaw, $"1 / ({Formula3822})", Formula3822, 3, 3);
+        this.AddPassiveMasterSkillDefinition(SkillNumber.CommandAttackInc, Stats.BonusDamageWithScepterCmdDiv, AggregateType.AddRaw, $"1 / ({Formula3822})", Formula3822, 3, 3, SkillNumber.UseScepterPetStr);
         this.AddPassiveMasterSkillDefinition(SkillNumber.DarkSpiritStr3, Stats.RavenExcDamageChance, AggregateType.AddRaw, $"{Formula120} / 100", Formula120, 5, 3, SkillNumber.DarkSpiritStr2);
         this.AddPassiveMasterSkillDefinition(SkillNumber.PetDurabilityStr, Stats.TrainablePetDurationIncrease, AggregateType.AddRaw, Formula1204, 5, 3);
 
@@ -943,14 +944,14 @@ internal class SkillsInitializer : SkillsInitializerBase
         this.AddPassiveMasterSkillDefinition(SkillNumber.IncreasePvPDefenseRate, Stats.DefenseRatePvp, AggregateType.AddRaw, Formula25587, 1, 1);
         this.AddPassiveMasterSkillDefinition(SkillNumber.IncreaseMaximumSd, Stats.MaximumShield, AggregateType.AddRaw, Formula30704, 2, 1);
         this.AddPassiveMasterSkillDefinition(SkillNumber.IncreaseManaRecoveryRate, Stats.ManaRecoveryMultiplier, AggregateType.AddRaw, FormulaRecoveryIncrease181, Formula181, 2, 1, SkillNumber.Undefined, SkillNumber.Undefined, 20);
-        this.AddPassiveMasterSkillDefinition(SkillNumber.IncreasePoisonResistance, Stats.PoisonResistance, AggregateType.AddRaw, Formula120Value, Formula120, 2, 1);
+        this.AddPassiveMasterSkillDefinition(SkillNumber.IncreasePoisonResistance, Stats.PoisonResistance, AggregateType.AddRaw, Formula120, Formula120, 2, 1);
         this.AddPassiveMasterSkillDefinition(SkillNumber.DurabilityReduction2FistMaster, Stats.JewelryAndWingsDurationIncrease, AggregateType.AddRaw, $"{Formula1204} / 100", 3, 1, SkillNumber.DurabilityReduction1FistMaster);
         this.AddPassiveMasterSkillDefinition(SkillNumber.IncreaseSdRecoveryRate, Stats.ShieldRecoveryMultiplier, AggregateType.Multiplicate, $"1 + {FormulaRecoveryIncrease120}", Formula120, 3, 1, SkillNumber.IncreaseMaximumSd, SkillNumber.Undefined, 20);
         this.AddPassiveMasterSkillDefinition(SkillNumber.IncreaseHpRecoveryRate, Stats.HealthRecoveryMultiplier, AggregateType.AddRaw, FormulaRecoveryIncrease120, Formula120, 3, 1, SkillNumber.IncreaseManaRecoveryRate, SkillNumber.Undefined, 20);
-        this.AddPassiveMasterSkillDefinition(SkillNumber.IncreaseLightningResistance, Stats.LightningResistance, AggregateType.AddRaw, Formula120Value, Formula120, 3, 1, requiredSkill1: SkillNumber.IncreasePoisonResistance);
+        this.AddPassiveMasterSkillDefinition(SkillNumber.IncreaseLightningResistance, Stats.LightningResistance, AggregateType.AddRaw, Formula120, Formula120, 3, 1, requiredSkill1: SkillNumber.IncreasePoisonResistance);
         this.AddPassiveMasterSkillDefinition(SkillNumber.IncreasesDefense, Stats.DefenseBase, AggregateType.AddFinal, Formula3371, 4, 1);
         this.AddPassiveMasterSkillDefinition(SkillNumber.IncreasesAgRecoveryRate, Stats.AbilityRecoveryMultiplier, AggregateType.AddRaw, FormulaRecoveryIncrease120, Formula120, 4, 1, SkillNumber.IncreaseHpRecoveryRate, SkillNumber.Undefined, 20);
-        this.AddPassiveMasterSkillDefinition(SkillNumber.IncreaseIceResistance, Stats.IceResistance, AggregateType.AddRaw, Formula120Value, Formula120, 4, 1, requiredSkill1: SkillNumber.IncreaseLightningResistance);
+        this.AddPassiveMasterSkillDefinition(SkillNumber.IncreaseIceResistance, Stats.IceResistance, AggregateType.AddRaw, Formula120, Formula120, 4, 1, requiredSkill1: SkillNumber.IncreaseLightningResistance);
         this.AddPassiveMasterSkillDefinition(SkillNumber.DurabilityReduction3FistMaster, Stats.PetDurationIncrease, AggregateType.AddRaw, Formula1204, 5, 1, SkillNumber.DurabilityReduction2FistMaster);
         this.AddPassiveMasterSkillDefinition(SkillNumber.IncreaseDefenseSuccessRate, Stats.DefenseRatePvm, AggregateType.Multiplicate, FormulaIncreaseMultiplicator120, Formula120, 5, 1, SkillNumber.IncreasesDefense, SkillNumber.Undefined, 20);
         this.AddPassiveMasterSkillDefinition(SkillNumber.IncreaseAttackSuccessRate, Stats.AttackRatePvm, AggregateType.AddRaw, Formula20469, 1, 2);
@@ -1081,7 +1082,7 @@ internal class SkillsInitializer : SkillsInitializerBase
                 { Stats.DefenseRatePvm, 75 },
                 { Stats.PoisonResistance, 6f / 255 },
                 { Stats.IceResistance, 6f / 255 },
-                { Stats.WaterResistance, 6f / 255 },
+                { Stats.LightningResistance, 6f / 255 },
                 { Stats.FireResistance, 6f / 255 },
             };
 
@@ -1113,7 +1114,7 @@ internal class SkillsInitializer : SkillsInitializerBase
                 { Stats.DefenseRatePvm, 86 },
                 { Stats.PoisonResistance, 6f / 255 },
                 { Stats.IceResistance, 6f / 255 },
-                { Stats.WaterResistance, 6f / 255 },
+                { Stats.LightningResistance, 6f / 255 },
                 { Stats.FireResistance, 6f / 255 },
             };
 

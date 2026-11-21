@@ -4,8 +4,8 @@
 
 namespace HNMO.Persistence.EntityFramework;
 
-using Microsoft.Extensions.Logging;
 using HNMO.Interfaces;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// A repository provider that does not use caching.

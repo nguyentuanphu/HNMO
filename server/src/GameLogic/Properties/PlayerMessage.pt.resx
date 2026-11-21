@@ -166,16 +166,19 @@
     <value>Não é possível entrar no evento com o item '{0}' equipado.</value>
   </data>
   <data name="MuHelperAlreadyRunning" xml:space="preserve">
-    <value>O MU Helper já está em execução.</value>
+    <value>O assistente de jogo automático já está em execução.</value>
   </data>
   <data name="MuHelperMinimumLevel" xml:space="preserve">
-    <value>O MU Helper pode ser usado a partir do nível {0}.</value>
+    <value>O assistente de jogo automático pode ser usado a partir do nível {0}.</value>
+  </data>
+  <data name="GuildOwnsCastleCantDisband" xml:space="preserve">
+    <value>Sua guilda é dona do castelo e não pode ser dissolvida.</value>
   </data>
   <data name="MuHelperMaximumLevel" xml:space="preserve">
-    <value>O MU Helper não pode ser usado depois do nível {0}.</value>
+    <value>O assistente de jogo automático não pode ser usado depois do nível {0}.</value>
   </data>
   <data name="MuHelperRequiresMoney" xml:space="preserve">
-    <value>O MU Helper requer {0} zen.</value>
+    <value>O assistente de jogo automático requer {0} zen.</value>
   </data>
   <data name="AlreadyInDuel" xml:space="preserve">
     <value>Você já está em um duelo.</value>
@@ -610,10 +613,10 @@
     <value>Ops, ocorreu um erro ao enviar a carta.</value>
   </data>
   <data name="MuHelperIsDisabled" xml:space="preserve">
-    <value>O MU Helper está desativado</value>
+    <value>O assistente de jogo automático está desativado</value>
   </data>
   <data name="MuHelperCantHandleStatus" xml:space="preserve">
-    <value>O MU Helper não consegue lidar com o status: {0}</value>
+    <value>O assistente de jogo automático não consegue lidar com o status: {0}</value>
   </data>
   <data name="PartyNotPossibleDuringEvent" xml:space="preserve">
     <value>Não é possível formar party durante este evento.</value>
@@ -769,7 +772,7 @@
     <value>Nenhum personagem selecionado.</value>
   </data>
   <data name="OfflineLevelingMuHelperNotRunning" xml:space="preserve">
-    <value>O MU Helper precisa estar em execução para iniciar o upar offline.</value>
+    <value>O assistente de jogo automático precisa estar em execução para iniciar o upar offline.</value>
   </data>
   <data name="StatResetNotEnabled" xml:space="preserve">
     <value>O reset de atributos não está ativado.</value>
@@ -1185,5 +1188,16 @@ Extensões de inventário: {18}</value>
   </data>
   <data name="ChatSpamWarning" xml:space="preserve">
     <value>Por favor, não faça spam.</value>
+  </data>
+  <data name="VipActiveNotice" xml:space="preserve"><value>VIP {0} está ativo até {1} (horário de Sydney).</value></data>
+  <data name="VipExpiringNotice" xml:space="preserve"><value>VIP {0} termina dentro de um dia, em {1} (horário de Sydney). Renove na janela VIP (Alt+U) ou na página da sua conta.</value></data>
+  <data name="TradeMoneyExceedsMaximum" xml:space="preserve">
+    <value>A troca foi cancelada: um dos jogadores levaria mais zen do que o inventário comporta.</value>
+  </data>
+  <data name="AtlansNoRiding" xml:space="preserve">
+    <value>Uniria e Dinorant não podem entrar em Atlans.</value>
+  </data>
+  <data name="PlayerKillersCantUseNpcShops" xml:space="preserve">
+    <value>Fora da lei de nível PK 2 ou superior não podem usar lojas de NPC.</value>
   </data>
 </root>

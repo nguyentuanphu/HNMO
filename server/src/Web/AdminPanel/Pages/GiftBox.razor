@@ -1,0 +1,212 @@
+@page "/gift-box"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.DataModel.Configuration
+@using HNMO.DataModel.Configuration.Items
+@using HNMO.GameLogic.PlugIns.GiftBox
+@using HNMO.Web.AdminPanel.Auth
+@using HNMO.Web.AdminPanel.Operations
+@using HNMO.Web.Shared.Components.ItemPicker
+@using Resources = HNMO.Web.AdminPanel.Properties.Resources
+
+<PageTitle>HNMO: @Resources.GiftBoxPageTitle</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@Resources.GiftBoxPageTitle" />
+
+<div class="gift-box-admin">
+    <h1>@Resources.GiftBoxPageTitle</h1>
+    <PageHelp Text="@Resources.GiftBoxPageHelp" />
+
+    @if (!string.IsNullOrWhiteSpace(this._statusMessage))
+    {
+        <div id="gift-box-status" class="alert @(this._statusError ? "alert-danger" : "alert-success") py-2" role="status">
+            @this._statusMessage
+        </div>
+    }
+
+    <div class="row g-3">
+        <div class="col-lg-7">
+            <div class="card mb-3">
+                <div class="card-header py-2"><strong>@L("Audience & Expiry", "Người nhận & Thời hạn")</strong></div>
+                <div class="card-body">
+                    <div class="row g-2 mb-2">
+                        <div class="col-md-6">
+                            <label class="form-label form-label-sm" for="gb-audience" title="@L("Choose how recipients are selected", "Chọn nhóm tài khoản nhận quà")">@L("Target audience", "Đối tượng nhận")</label>
+                            <select id="gb-audience" class="form-select form-select-sm" @bind="this._audience" disabled="@(this._review is not null)">
+                                <option value="@GiftBoxAudienceKind.Account">@L("Single account login", "Một tài khoản cụ thể")</option>
+                                <option value="@GiftBoxAudienceKind.List">@L("Pasted account list (one per line)", "Danh sách tài khoản (mỗi dòng một tên)")</option>
+                                <option value="@GiftBoxAudienceKind.Everyone">@L("All active/existing accounts", "Tất cả tài khoản")</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check mt-4">
+                                <input id="gb-use-active-days" class="form-check-input" type="checkbox" @bind="this._useActiveDays" disabled="@(this._review is not null)" title="@L("Filter recipients to accounts observed playing within the last N days", "Chỉ gửi cho tài khoản có đăng nhập trong N ngày gần đây")" />
+                                <label class="form-check-label small" for="gb-use-active-days">@L("Filter: active in last N days", "Lọc: hoạt động trong N ngày")</label>
+                            </div>
+                            @if (this._useActiveDays)
+                            {
+                                <input id="gb-active-days" type="number" class="form-control form-control-sm mt-1" min="1" max="3650" @bind="this._activeDays" disabled="@(this._review is not null)" />
+                            }
+                        </div>
+                    </div>
+
+                    @if (this._audience != GiftBoxAudienceKind.Everyone)
+                    {
+                        <div class="mb-2">
+                            <label class="form-label form-label-sm" for="gb-logins" title="@L("Enter exact login name(s); unknown logins fail the whole batch", "Nhập chính xác tên đăng nhập; nếu có tên không tồn tại, cả lượt gửi sẽ bị từ chối")">@L("Account login(s)", "Tên đăng nhập")</label>
+                            @if (this._audience == GiftBoxAudienceKind.Account)
+                            {
+                                <input id="gb-logins" class="form-control form-control-sm" maxlength="10" @bind="this._logins" disabled="@(this._review is not null)" />
+                            }
+                            else
+                            {
+                                <textarea id="gb-logins" class="form-control form-control-sm" rows="3" @bind="this._logins" disabled="@(this._review is not null)"></textarea>
+                            }
+                        </div>
+                    }
+
+                    <div class="row g-2 align-items-center">
+                        <div class="col-auto">
+                            <div class="form-check">
+                                <input id="gb-has-expiry" class="form-check-input" type="checkbox" @bind="this._hasExpiry" disabled="@(this._review is not null)" title="@L("Optional claim deadline in Sydney time", "Tùy chọn thời hạn nhận quà theo giờ Sydney")" />
+                                <label class="form-check-label small" for="gb-has-expiry">@L("Set collection deadline (Sydney time)", "Đặt hạn chót nhận quà (giờ Sydney)")</label>
+                            </div>
+                        </div>
+                        @if (this._hasExpiry)
+                        {
+                            <div class="col-md-5">
+                                <input id="gb-expiry-sydney" class="form-control form-control-sm" type="datetime-local" @bind="this._expiresSydneyLocal" disabled="@(this._review is not null)" title="@L("Sydney local time (Australia/Sydney)", "Thời gian theo múi giờ Sydney")" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header py-2"><strong>@L("Bilingual Letter (EN + VI)", "Nội dung thư song ngữ (Anh + Việt)")</strong></div>
+                <div class="card-body">
+                    <div class="row g-2 mb-2">
+                        <div class="col-md-6">
+                            <label class="form-label form-label-sm" for="gb-title-en" title="@L("English subject shown to EN players", "Tiêu đề tiếng Anh")">@L("Title (English)", "Tiêu đề (Tiếng Anh)")</label>
+                            <input id="gb-title-en" class="form-control form-control-sm" maxlength="100" @bind="this._titleEn" disabled="@(this._review is not null)" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label form-label-sm" for="gb-title-vi" title="@L("Vietnamese subject shown to VI players", "Tiêu đề tiếng Việt")">@L("Title (Vietnamese)", "Tiêu đề (Tiếng Việt)")</label>
+                            <input id="gb-title-vi" class="form-control form-control-sm" maxlength="100" @bind="this._titleVi" disabled="@(this._review is not null)" />
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <label class="form-label form-label-sm" for="gb-msg-en">@L("Message (English)", "Lời nhắn (Tiếng Anh)")</label>
+                            <textarea id="gb-msg-en" class="form-control form-control-sm" rows="3" maxlength="2000" @bind="this._messageEn" disabled="@(this._review is not null)"></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label form-label-sm" for="gb-msg-vi">@L("Message (Vietnamese)", "Lời nhắn (Tiếng Việt)")</label>
+                            <textarea id="gb-msg-vi" class="form-control form-control-sm" rows="3" maxlength="2000" @bind="this._messageVi" disabled="@(this._review is not null)"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header py-2"><strong>@L("Rewards & Review", "Phần thưởng & Xác nhận gửi")</strong></div>
+                <div class="card-body">
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label form-label-sm" for="gb-coins" title="@L("Cash shop coins added to the account", "Số xu tặng vào tài khoản")">@L("Coins", "Số xu")</label>
+                            <input id="gb-coins" type="number" min="0" max="1000000" class="form-control form-control-sm" @bind="this._coins" disabled="@(this._review is not null)" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label form-label-sm" for="gb-coin-type">@L("Coin type", "Loại xu")</label>
+                            <select id="gb-coin-type" class="form-select form-select-sm" @bind="this._coinType" disabled="@(this._review is not null)">
+                                @foreach (var coin in Enum.GetValues<CashShopCoinType>())
+                                {
+                                    <option value="@coin">@coin</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label form-label-sm" for="gb-zen" title="@L("Zen added to the collecting character", "Số Zen giao cho nhân vật nhận quà")">Zen</label>
+                            <input id="gb-zen" type="number" min="0" max="2000000000" class="form-control form-control-sm" @bind="this._zen" disabled="@(this._review is not null)" />
+                        </div>
+                    </div>
+
+                    @if (this._items.Count > 0)
+                    {
+                        <div class="mb-3">
+                            <div class="small fw-semibold mb-1">@L("Attached items (up to 50 total pieces; must fit an empty base bag):", "Vật phẩm đính kèm (tối đa 50 món):")</div>
+                            @for (var i = 0; i < this._items.Count; i++)
+                            {
+                                var index = i;
+                                var entry = this._items[index];
+                                <div class="border rounded p-2 mb-1 small">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <strong>@entry.Label (@($"{entry.Item.Group}:{entry.Item.Number}"))</strong>
+                                        <button type="button" class="btn btn-xs btn-outline-danger py-0 px-1" title="@L("Remove item", "Xóa vật phẩm")" disabled="@(this._review is not null)" @onclick="() => this._items.RemoveAt(index)">×</button>
+                                    </div>
+                                    <div class="row g-1 align-items-center">
+                                        <div class="col-2"><label class="form-label mb-0">@L("Qty", "SL")</label><input type="number" min="1" max="50" class="form-control form-control-sm" title="@L("Quantity", "Số lượng")" @bind="entry.Item.Count" disabled="@(this._review is not null)" /></div>
+                                        <div class="col-2"><label class="form-label mb-0">+Lv</label><input type="number" min="0" max="15" class="form-control form-control-sm" title="@L("Item level (+0..+15)", "Cấp độ (+0..+15)")" @bind="entry.Item.Level" disabled="@(this._review is not null)" /></div>
+                                        <div class="col-2"><label class="form-label mb-0">Opt</label><input type="number" min="0" max="7" class="form-control form-control-sm" title="@L("Life option level (0..7)", "Dòng Option (0..7)")" @bind="entry.Item.OptionLevel" disabled="@(this._review is not null)" /></div>
+                                        <div class="col-2"><label class="form-label mb-0">Exc</label><input type="number" min="0" max="63" class="form-control form-control-sm" title="@L("Excellent bitmask (0..63)", "Dòng hoàn hảo (0..63)")" @bind="entry.Item.ExcellentOptions" disabled="@(this._review is not null)" /></div>
+                                        <div class="col-2"><label class="form-check-label mt-3"><input type="checkbox" class="form-check-input me-1" title="@L("Add Luck option", "Thêm dòng May Mắn")" @bind="entry.Item.Luck" disabled="@(this._review is not null)" />Luck</label></div>
+                                        <div class="col-2"><label class="form-check-label mt-3"><input type="checkbox" class="form-check-input me-1" title="@L("Add Skill option", "Thêm Tuyệt Chiêu")" @bind="entry.Item.Skill" disabled="@(this._review is not null)" />Skill</label></div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    <div class="mb-2">
+                        <label class="form-label form-label-sm" for="gb-reason" title="@L("Private internal audit reason (never shown to players)", "Lý do nội bộ bắt buộc (không hiển thị cho người chơi)")">@L("Internal operational reason (required)", "Lý do gửi quà (bắt buộc)")</label>
+                        <input id="gb-reason" class="form-control form-control-sm" maxlength="500" @bind="this._reason" disabled="@(this._review is not null)" />
+                    </div>
+
+                    @if (this._review is null)
+                    {
+                        <button type="button"
+                                id="gift-box-review-btn"
+                                class="btn btn-primary btn-sm"
+                                disabled="@this._busy"
+                                title="@L("Resolve exact recipients and generate confirmation token before queueing", "Kiểm tra danh sách nhận và tạo mã xác nhận trước khi gửi")"
+                                @onclick="this.PreviewAsync">
+                            @L("Review & Preview", "Kiểm tra & Xem trước")
+                        </button>
+                    }
+                    else
+                    {
+                        <div id="gift-box-review" class="alert alert-warning py-2 mt-2">
+                            <div><strong>@L("Frozen review snapshot:", "Bản xem trước đã khóa:")</strong> @L("Recipients", "Số người nhận"): <strong>@this._review.Count</strong></div>
+                            <div class="small font-monospace">SendId: @this._sendId | Digest: @this._review.Digest</div>
+                            <div class="mt-2 d-flex gap-2">
+                                @if (!string.IsNullOrEmpty(this._confirmationToken))
+                                {
+                                    <button type="button" id="gift-box-confirm-btn" class="btn btn-success btn-sm" title="@L("Confirm and send gifts", "Xác nhận gửi quà")" disabled="@this._busy" @onclick="this.ConfirmAsync">
+                                        @L("Confirm & Send Gifts", "Xác nhận & Gửi quà")
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" id="gift-box-retry-btn" class="btn btn-warning btn-sm" title="@L("Retry the same pending batch without duplicating deliveries", "Thử lại cùng mã gửi để không phát trùng")" disabled="@this._busy" @onclick="this.ConfirmAsync">
+                                        @L("Retry Same Send ID", "Thử lại cùng mã gửi")
+                                    </button>
+                                }
+                                <button type="button" id="gift-box-cancel-btn" class="btn btn-secondary btn-sm" title="@L("Cancel review and edit draft", "Hủy xem trước để sửa lại")" disabled="@this._busy" @onclick="this.CancelReview">
+                                    @L("Cancel", "Hủy")
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card">
+                <div class="card-header py-2"><strong>@L("Attach Items (Item Catalogue)", "Chọn vật phẩm đính kèm")</strong></div>
+                <div class="card-body">
+                    <ItemPicker ShopMode="false" Definitions="this._itemDefinitions" Add="this.AddItemFromPicker" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

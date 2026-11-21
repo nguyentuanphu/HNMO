@@ -4,8 +4,8 @@
 
 namespace HNMO.Startup;
 
-using Microsoft.Extensions.Logging;
 using HNMO.Interfaces;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// An <see cref="IEventPublisher"/> which publishes directly to the available started servers in this application.
@@ -38,7 +38,16 @@ public class InMemoryEventPublisher : IEventPublisher
     /// <inheritdoc />
     public async ValueTask PlayerEnteredGameAsync(byte serverId, Guid characterId, string characterName)
     {
-        await this._guildServer.PlayerEnteredGameAsync(characterId, characterName, serverId).ConfigureAwait(false);
+        // Each server on its own, as the central server does (EventController): an error of the guild server
+        // left the friend server without the player, so its friends saw it offline while it played.
+        try
+        {
+            await this._guildServer.PlayerEnteredGameAsync(characterId, characterName, serverId).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            this._logger.LogError(ex, "Error when notifying the guild server that player {CharacterName} entered the game.", characterName);
+        }
 
         await this._friendServer.PlayerEnteredGameAsync(serverId, characterId, characterName).ConfigureAwait(false);
     }
@@ -48,7 +57,14 @@ public class InMemoryEventPublisher : IEventPublisher
     {
         if (guildId > 0)
         {
-            await this._guildServer.GuildMemberLeftGameAsync(guildId, characterId, serverId).ConfigureAwait(false);
+            try
+            {
+                await this._guildServer.GuildMemberLeftGameAsync(guildId, characterId, serverId).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Error when notifying the guild server that player {CharacterName} left the game.", characterName);
+            }
         }
 
         await this._friendServer.PlayerLeftGameAsync(characterId, characterName).ConfigureAwait(false);

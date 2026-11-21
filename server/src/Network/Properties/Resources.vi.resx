@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="IpResolverType_Auto_Name" xml:space="preserve"><value>Tự động</value></data>
+  <data name="IpResolverType_Auto_Description" xml:space="preserve"><value>IP được phát hiện tự động bằng cách xem xét môi trường. Không cần tham số.</value></data>
+  <data name="IpResolverType_Public_Name" xml:space="preserve"><value>Công khai</value></data>
+  <data name="IpResolverType_Public_Description" xml:space="preserve"><value>IP được phát hiện bằng cách hỏi một dịch vụ bên ngoài (https://www.ipify.org/) về IP riêng. Không yêu cầu tham số. Sử dụng thông số này khi máy chủ đang chạy trên một máy chủ và có thể truy cập được từ internet. Cần phải mở tường lửa cho các cổng của trò chơi, máy chủ kết nối và trò chuyện.</value></data>
+  <data name="IpResolverType_Local_Name" xml:space="preserve"><value>Địa phương</value></data>
+  <data name="IpResolverType_Local_Description" xml:space="preserve"><value>IP được phát hiện bằng cách hỏi DNS về IP của tên máy chủ. IP đầu tiên được sử dụng. Không cần tham số. Sử dụng cái này nếu bạn muốn sử dụng máy chủ trong mạng LAN cục bộ, ví dụ: ở nhà.</value></data>
+  <data name="IpResolverType_Loopback_Name" xml:space="preserve"><value>Quay lại</value></data>
+  <data name="IpResolverType_Loopback_Description" xml:space="preserve"><value>IP được phân giải là '127.127.127.127'. Không cần tham số. Hãy sử dụng cái này nếu bạn muốn sử dụng máy chủ và máy khách ngay trong máy tính của mình, ví dụ: trong quá trình phát triển.</value></data>
+  <data name="IpResolverType_Custom_Name" xml:space="preserve"><value>tùy chỉnh</value></data>
+  <data name="IpResolverType_Custom_Description" xml:space="preserve"><value>IP hoặc tên máy chủ có thể được đặt thủ công. Hãy sử dụng tùy chọn này nếu các tùy chọn khác không phù hợp với bạn.</value></data>
+</root>

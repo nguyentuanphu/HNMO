@@ -1,17 +1,29 @@
 @echo off
 rem Starts HNMO: the save game database, the game server with its admin panel,
-rem and the game, which opens in your browser. Close this window to stop everything.
-rem The window stays open whatever happens, so a problem can be read (and reported).
+rem and the game, which opens in your browser.
+rem Without a console window (owner's choice, 2026-11-21): HNMO runs hidden with its icon next to the
+rem clock (Open the game, Open the admin panel, Show the log, Stop HNMO). "Start HNMO.bat /window" (or
+rem "Start HNMO (window).bat") starts it the old way, in a window that stays open, for troubleshooting.
 rem No blocks in brackets: a folder like "HNMO (1)" would end them early.
+cd /d "%~dp0"
+rem A problem at start (still in the zip, no game data) is shown in the window, which stays open.
+if not exist "web\HNMO.dll" if not exist "web\HNMO.exe" goto :window
+if not exist "Data\Monsters" if not exist "Data\packs" goto :window
+if /i "%~1"=="/window" goto :window
+if defined HNMO_WINDOW goto :window
+if not exist "launcher\start-hidden.vbs" goto :window
+start "" wscript.exe //nologo "%~dp0launcher\start-hidden.vbs"
+exit /b
+:window
 if defined HNMO_WINDOW goto :start
 set "HNMO_WINDOW=1"
-cmd /k call "%~f0" %*
+cmd /k call "%~f0" /window
 exit /b
 :start
 title HNMO - close this window to stop the game
 cd /d "%~dp0"
 if not exist "web\HNMO.dll" if not exist "web\HNMO.exe" goto :notunzipped
-if not exist "Data\Monsters" goto :nodata
+if not exist "Data\Monsters" if not exist "Data\packs" goto :nodata
 cd web
 if exist "..\runtime\win-x64\dotnet.exe" goto :portable
 HNMO.exe

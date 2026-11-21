@@ -5,11 +5,6 @@
 namespace HNMO.Web.AdminPanel.Pages;
 
 using System.Threading;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components.Routing;
-using Microsoft.Extensions.Logging;
-using Microsoft.JSInterop;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Configuration.Items;
 using HNMO.GameLogic.Attributes;
@@ -21,6 +16,11 @@ using HNMO.Web.Shared;
 using HNMO.Web.Shared.Components.Modal;
 using HNMO.Web.Shared.Components.Toast;
 using HNMO.Web.Shared.Services;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.Extensions.Logging;
+using Microsoft.JSInterop;
 
 /// <summary>
 /// Page which allows to configure all item drops of the game configuration on one page.

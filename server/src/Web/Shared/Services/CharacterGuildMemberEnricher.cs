@@ -4,12 +4,12 @@
 
 namespace HNMO.Web.Shared.Services;
 
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.Attributes;
 using HNMO.Persistence;
 using HNMO.Web.Shared.Models;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Enriches guild members with character and account data by resolving them through a player context.
