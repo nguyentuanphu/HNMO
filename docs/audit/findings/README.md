@@ -21,4 +21,6 @@ The suite files themselves are not in the repo; they are on the owner's PC. Task
 | [status-player-actions.md](status-player-actions.md) | Player-action answers: done (#221 #229 #231 #236), not finished, not started |
 | [kundun-refill-texts.json](kundun-refill-texts.json) | Ready translations (4 languages) of the Kundun refill plug-in's settings, for the resource files |
 
-The game data agent is still finishing; its final status follows in a later update.
+| [status-game-data.md](status-game-data.md) | Game data answers: done (#233 #234 #237 #240 #242 #250-#253), drafts #257 (fixes 4 failing base tests) and #258, not done with reasons |
+
+All local agents have stopped (owner's instruction, 21 Nov evening).
