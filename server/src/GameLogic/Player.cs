@@ -904,18 +904,33 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     /// <inheritdoc/>
     public ValueTask ReflectDamageAsync(IAttacker reflector, uint damage)
     {
+        if (this.IsLateDamageBlockedBySafezone(reflector))
+        {
+            return ValueTask.CompletedTask;
+        }
+
         return this.HitAsync(this.GetHitInfo(damage, DamageAttributes.Reflected, reflector), reflector, null);
     }
 
     /// <inheritdoc/>
     public ValueTask ApplyPoisonDamageAsync(IAttacker initialAttacker, uint damage)
     {
+        if (this.IsLateDamageBlockedBySafezone(initialAttacker))
+        {
+            return ValueTask.CompletedTask;
+        }
+
         return this.HitAsync(new HitInfo(damage, 0, DamageAttributes.Poison), initialAttacker, null);
     }
 
     /// <inheritdoc/>
     public ValueTask ApplyBleedingDamageAsync(IAttacker initialAttacker, uint damage)
     {
+        if (this.IsLateDamageBlockedBySafezone(initialAttacker))
+        {
+            return ValueTask.CompletedTask;
+        }
+
         return this.HitAsync(this.GetHitInfo(damage, DamageAttributes.Undefined, initialAttacker), initialAttacker, null);
     }
 
@@ -1585,6 +1600,20 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
                && hit.Monster.IsAlive
             ? hit.Monster
             : null;
+    }
+
+    /// <summary>
+    /// Determines whether damage which arrives after the attack itself (poison and bleeding ticks, the
+    /// delayed reflected hit) is void because this player is standing in a safe zone by now. Classic
+    /// MU: no damage in the safe zone - the same rule as the target check of
+    /// <see cref="AttackableExtensions.IsAttackBlockedBySafezone"/>, which only applies when an attack starts.
+    /// Damage this player deals to itself (e.g. the shrinking zone of an arena match) is not affected.
+    /// </summary>
+    /// <param name="attacker">The attacker which caused the damage.</param>
+    /// <returns><c>true</c>, if the damage is blocked; otherwise, <c>false</c>.</returns>
+    internal bool IsLateDamageBlockedBySafezone(IAttacker attacker)
+    {
+        return !ReferenceEquals(attacker, this) && this.IsAtSafezone();
     }
 
     /// <summary>
