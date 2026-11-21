@@ -1825,4 +1825,10 @@
   <data name="CashShopCoinGrantsAdminOperationPlugIn_Description" xml:space="preserve">
     <value>允许管理面板立即为在线账号发放已授予的商城币，而不必等到玩家下次打开商城。</value>
   </data>
+  <data name="GuildLimitsConfiguration_MinimumCreateLevel_Caption" xml:space="preserve">
+    <value>创建公会所需等级</value>
+  </data>
+  <data name="GuildLimitsConfiguration_MinimumCreateLevel_Description" xml:space="preserve">
+    <value>角色创建公会所需的等级（0：不限等级）。与 Season 6/9 服务端套件一样为 150。</value>
+  </data>
 </root>

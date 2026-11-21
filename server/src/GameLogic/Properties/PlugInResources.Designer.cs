@@ -5417,6 +5417,23 @@ namespace HNMO.GameLogic.Properties {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to GuildLimitsConfiguration_MinimumCreateLevel_Caption.
+        /// </summary>
+        public static string GuildLimitsConfiguration_MinimumCreateLevel_Caption {
+            get {
+                return ResourceManager.GetString("GuildLimitsConfiguration_MinimumCreateLevel_Caption", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to GuildLimitsConfiguration_MinimumCreateLevel_Description.
+        /// </summary>
+        public static string GuildLimitsConfiguration_MinimumCreateLevel_Description {
+            get {
+                return ResourceManager.GetString("GuildLimitsConfiguration_MinimumCreateLevel_Description", resourceCulture);
+            }
+        }
+        /// <summary>
         ///   Looks up a localized string similar to BankTopUpConfiguration_VndPerCoin_Caption.
         /// </summary>
         public static string BankTopUpConfiguration_VndPerCoin_Caption {
