@@ -6,6 +6,7 @@ namespace HNMO.Persistence.Initialization.VersionSeasonSix.Items;
 
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Configuration.Items;
+using HNMO.GameLogic.Attributes;
 using HNMO.Interfaces;
 using HNMO.Persistence.Initialization.Items;
 using HNMO.Persistence.Initialization.Properties;
@@ -57,10 +58,10 @@ public class Armors : ArmorInitializerBase
         this.CreateShield(14, 1, 0, 2, 3, LocalizedString.FromResource(() => ItemNames.LegendaryShield), 48, 7, 48, 50, 0, 90, 25, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0);
         this.CreateShield(15, 1, 0, 2, 3, LocalizedString.FromResource(() => ItemNames.GrandSoulShield), 74, 12, 55, 55, 0, 70, 23, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0);
         this.CreateShield(16, 1, 0, 2, 2, LocalizedString.FromResource(() => ItemNames.ElementalShield), 66, 11, 28, 51, 0, 30, 60, 30, 0, 0, 0, 0, 2, 0, 0, 0, 0);
-        this.CreateShield(17, 1, 18, 2, 2, LocalizedString.FromResource(() => ItemNames.CrimsonGlory), 104, 19, 90, 51, 0, 95, 48, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0);
-        this.CreateShield(18, 1, 18, 2, 2, LocalizedString.FromResource(() => ItemNames.SalamanderShield), 102, 20, 96, 51, 0, 80, 61, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0);
-        this.CreateShield(19, 1, 0, 2, 2, LocalizedString.FromResource(() => ItemNames.FrostBarrier), 99, 14, 58, 51, 0, 26, 53, 26, 0, 0, 0, 0, 2, 0, 0, 0, 0);
-        this.CreateShield(20, 1, 0, 2, 2, LocalizedString.FromResource(() => ItemNames.GuardianShield), 106, 12, 30, 51, 0, 54, 18, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0);
+        this.CreateShield(17, 1, 18, 2, 2, LocalizedString.FromResource(() => ItemNames.CrimsonGlory), 104, 19, 90, 51, 380, 95, 48, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0);
+        this.CreateShield(18, 1, 18, 2, 2, LocalizedString.FromResource(() => ItemNames.SalamanderShield), 102, 20, 96, 51, 380, 80, 61, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0);
+        this.CreateShield(19, 1, 0, 2, 2, LocalizedString.FromResource(() => ItemNames.FrostBarrier), 99, 14, 58, 51, 380, 26, 53, 26, 0, 0, 0, 0, 2, 0, 0, 0, 0);
+        this.CreateShield(20, 1, 0, 2, 2, LocalizedString.FromResource(() => ItemNames.GuardianShield), 106, 12, 30, 51, 380, 54, 18, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0);
         this.CreateShield(21, 1, 18, 2, 2, LocalizedString.FromResource(() => ItemNames.CrossShield), 70, 16, 75, 65, 0, 140, 55, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0);
 
         // Helmets:
@@ -104,16 +105,16 @@ public class Armors : ArmorInitializerBase
         this.CreateArmor(42, 2, 2, 2, LocalizedString.FromResource(() => ItemNames.BlackRoseHelm), 81, 32, 67, 0, 60, 20, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0);
         this.CreateArmor(43, 2, 2, 2, LocalizedString.FromResource(() => ItemNames.AuraHelm), 110, 43, 75, 380, 56, 20, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0);
         this.CreateArmor(44, 2, 2, 2, LocalizedString.FromResource(() => ItemNames.LiliumHelm), 110, 50, 80, 0, 80, 50, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0);
-        this.CreateArmor(45, 2, 2, 2, LocalizedString.FromResource(() => ItemNames.TitanHelm), 111, 63, 86, 0, 222, 32, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0);
-        this.CreateArmor(46, 2, 2, 2, LocalizedString.FromResource(() => ItemNames.BraveHelm), 107, 51, 86, 0, 74, 162, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0);
-        this.CreateArmor(49, 2, 2, 2, LocalizedString.FromResource(() => ItemNames.SeraphimHelm), 111, 50, 86, 0, 55, 197, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0);
-        this.CreateArmor(50, 2, 2, 2, LocalizedString.FromResource(() => ItemNames.FaithHelm), 104, 44, 86, 0, 32, 29, 138, 0, 0, 0, 0, 1, 0, 0, 0, 0);
-        this.CreateArmor(51, 2, 2, 2, LocalizedString.FromResource(() => ItemNames.PaewangMask), 111, 44, 86, 0, 105, 38, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0);
-        this.CreateArmor(52, 2, 2, 2, LocalizedString.FromResource(() => ItemNames.HadesHelm), 109, 41, 86, 0, 60, 15, 181, 0, 0, 1, 0, 0, 0, 0, 0, 0);
+        this.CreateArmor(45, 2, 2, 2, LocalizedString.FromResource(() => ItemNames.TitanHelm), 111, 63, 86, 380, 222, 32, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0);
+        this.CreateArmor(46, 2, 2, 2, LocalizedString.FromResource(() => ItemNames.BraveHelm), 107, 51, 86, 380, 74, 162, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0);
+        this.CreateArmor(49, 2, 2, 2, LocalizedString.FromResource(() => ItemNames.SeraphimHelm), 111, 50, 86, 380, 55, 197, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0);
+        this.CreateArmor(50, 2, 2, 2, LocalizedString.FromResource(() => ItemNames.FaithHelm), 104, 44, 86, 380, 32, 29, 138, 0, 0, 0, 0, 1, 0, 0, 0, 0);
+        this.CreateArmor(51, 2, 2, 2, LocalizedString.FromResource(() => ItemNames.PaewangMask), 111, 44, 86, 380, 105, 38, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0);
+        this.CreateArmor(52, 2, 2, 2, LocalizedString.FromResource(() => ItemNames.HadesHelm), 109, 41, 86, 380, 60, 15, 181, 0, 0, 1, 0, 0, 0, 0, 0, 0);
         this.CreateArmor(59, 2, 2, 2, LocalizedString.FromResource(() => ItemNames.SacredHelm), 54, 24, 52, 1, 85, 0, 0, 75, 0, 0, 0, 0, 0, 0, 0, 1);
         this.CreateArmor(60, 2, 2, 2, LocalizedString.FromResource(() => ItemNames.StormHardHelm), 70, 32, 68, 1, 100, 0, 0, 90, 0, 0, 0, 0, 0, 0, 0, 1);
         this.CreateArmor(61, 2, 2, 2, LocalizedString.FromResource(() => ItemNames.PiercingHelm), 90, 45, 82, 1, 115, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 1);
-        this.CreateArmor(73, 2, 2, 2, LocalizedString.FromResource(() => ItemNames.PhoenixSoulHelmet), 128, 60, 88, 380, 97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+        this.CreateArmor(73, 2, 2, 2, LocalizedString.FromResource(() => ItemNames.PhoenixSoulHelmet), 128, 60, 88, 380, 97, 0, 0, 85, 0, 0, 0, 0, 0, 0, 0, 1);
 
         // Armors:
         this.CreateArmor(0, 3, 2, 2, LocalizedString.FromResource(() => ItemNames.BronzeArmor), 18, 14, 34, 0, 80, 20, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0);
@@ -161,18 +162,18 @@ public class Armors : ArmorInitializerBase
         this.CreateArmor(42, 3, 2, 2, LocalizedString.FromResource(() => ItemNames.BlackRoseArmor), 91, 45, 67, 0, 60, 20, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0);
         this.CreateArmor(43, 3, 2, 2, LocalizedString.FromResource(() => ItemNames.AuraArmor), 122, 56, 75, 380, 57, 19, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0);
         this.CreateArmor(44, 3, 2, 2, LocalizedString.FromResource(() => ItemNames.LiliumArmor), 113, 71, 84, 0, 110, 50, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0);
-        this.CreateArmor(45, 3, 2, 3, LocalizedString.FromResource(() => ItemNames.TitanArmor), 132, 81, 86, 0, 222, 32, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0);
-        this.CreateArmor(46, 3, 2, 3, LocalizedString.FromResource(() => ItemNames.BraveArmor), 128, 62, 86, 0, 74, 162, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0);
-        this.CreateArmor(47, 3, 2, 3, LocalizedString.FromResource(() => ItemNames.PhantomArmor), 131, 80, 86, 0, 212, 57, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0);
-        this.CreateArmor(48, 3, 2, 3, LocalizedString.FromResource(() => ItemNames.DestroyArmor), 125, 66, 86, 0, 62, 19, 165, 0, 0, 0, 0, 0, 1, 0, 0, 0);
-        this.CreateArmor(49, 3, 2, 2, LocalizedString.FromResource(() => ItemNames.SeraphimArmor), 129, 60, 86, 0, 55, 197, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0);
-        this.CreateArmor(50, 3, 2, 2, LocalizedString.FromResource(() => ItemNames.FaithArmor), 122, 52, 86, 0, 32, 29, 138, 0, 0, 0, 0, 1, 0, 0, 0, 0);
-        this.CreateArmor(51, 3, 2, 3, LocalizedString.FromResource(() => ItemNames.PaewangArmor), 132, 58, 86, 0, 105, 38, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0);
-        this.CreateArmor(52, 3, 2, 3, LocalizedString.FromResource(() => ItemNames.HadesArmor), 129, 50, 86, 0, 60, 15, 181, 0, 0, 1, 0, 0, 0, 0, 0, 0);
+        this.CreateArmor(45, 3, 2, 3, LocalizedString.FromResource(() => ItemNames.TitanArmor), 132, 81, 86, 380, 222, 32, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0);
+        this.CreateArmor(46, 3, 2, 3, LocalizedString.FromResource(() => ItemNames.BraveArmor), 128, 62, 86, 380, 74, 162, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0);
+        this.CreateArmor(47, 3, 2, 3, LocalizedString.FromResource(() => ItemNames.PhantomArmor), 131, 80, 86, 380, 212, 57, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0);
+        this.CreateArmor(48, 3, 2, 3, LocalizedString.FromResource(() => ItemNames.DestroyArmor), 125, 66, 86, 380, 62, 19, 165, 0, 0, 0, 0, 0, 1, 0, 0, 0);
+        this.CreateArmor(49, 3, 2, 2, LocalizedString.FromResource(() => ItemNames.SeraphimArmor), 129, 60, 86, 380, 55, 197, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0);
+        this.CreateArmor(50, 3, 2, 2, LocalizedString.FromResource(() => ItemNames.FaithArmor), 122, 52, 86, 380, 32, 29, 138, 0, 0, 0, 0, 1, 0, 0, 0, 0);
+        this.CreateArmor(51, 3, 2, 3, LocalizedString.FromResource(() => ItemNames.PaewangArmor), 132, 58, 86, 380, 105, 38, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0);
+        this.CreateArmor(52, 3, 2, 3, LocalizedString.FromResource(() => ItemNames.HadesArmor), 129, 50, 86, 380, 60, 15, 181, 0, 0, 1, 0, 0, 0, 0, 0, 0);
         this.CreateArmor(59, 3, 2, 3, LocalizedString.FromResource(() => ItemNames.SacredArmor), 66, 43, 52, 1, 85, 0, 0, 75, 0, 0, 0, 0, 0, 0, 0, 1);
         this.CreateArmor(60, 3, 2, 3, LocalizedString.FromResource(() => ItemNames.StormHardArmor), 82, 51, 68, 1, 100, 0, 0, 90, 0, 0, 0, 0, 0, 0, 0, 1);
         this.CreateArmor(61, 3, 2, 3, LocalizedString.FromResource(() => ItemNames.PiercingArmor), 101, 59, 82, 1, 115, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 1);
-        this.CreateArmor(73, 3, 2, 3, LocalizedString.FromResource(() => ItemNames.PhoenixSoulArmor), 143, 78, 88, 380, 97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+        this.CreateArmor(73, 3, 2, 3, LocalizedString.FromResource(() => ItemNames.PhoenixSoulArmor), 143, 78, 88, 380, 97, 0, 0, 85, 0, 0, 0, 0, 0, 0, 0, 1);
 
         // Pants:
         this.CreateArmor(0, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.BronzePants), 15, 10, 34, 0, 80, 20, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0);
@@ -220,18 +221,18 @@ public class Armors : ArmorInitializerBase
         this.CreateArmor(42, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.BlackRosePants), 86, 37, 67, 0, 60, 20, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0);
         this.CreateArmor(43, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.AuraPants), 117, 49, 75, 380, 57, 19, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0);
         this.CreateArmor(44, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.LiliumPants), 102, 52, 82, 0, 75, 30, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0);
-        this.CreateArmor(45, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.TitanPants), 116, 74, 86, 0, 222, 32, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0);
-        this.CreateArmor(46, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.BravePants), 112, 58, 86, 0, 74, 162, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0);
-        this.CreateArmor(47, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.PhantomPants), 115, 66, 86, 0, 212, 57, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0);
-        this.CreateArmor(48, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.DestroyPants), 113, 51, 86, 0, 62, 19, 165, 0, 0, 0, 0, 0, 1, 0, 0, 0);
-        this.CreateArmor(49, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.SeraphimPants), 116, 53, 86, 0, 55, 197, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0);
-        this.CreateArmor(50, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.FaithPants), 109, 46, 86, 0, 32, 29, 138, 0, 0, 0, 0, 1, 0, 0, 0, 0);
-        this.CreateArmor(51, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.PaewangPants), 116, 46, 86, 0, 105, 38, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0);
-        this.CreateArmor(52, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.HadesPants), 114, 44, 86, 0, 60, 15, 181, 0, 0, 1, 0, 0, 0, 0, 0, 0);
+        this.CreateArmor(45, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.TitanPants), 116, 74, 86, 380, 222, 32, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0);
+        this.CreateArmor(46, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.BravePants), 112, 58, 86, 380, 74, 162, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0);
+        this.CreateArmor(47, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.PhantomPants), 115, 66, 86, 380, 212, 57, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0);
+        this.CreateArmor(48, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.DestroyPants), 113, 51, 86, 380, 62, 19, 165, 0, 0, 0, 0, 0, 1, 0, 0, 0);
+        this.CreateArmor(49, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.SeraphimPants), 116, 53, 86, 380, 55, 197, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0);
+        this.CreateArmor(50, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.FaithPants), 109, 46, 86, 380, 32, 29, 138, 0, 0, 0, 0, 1, 0, 0, 0, 0);
+        this.CreateArmor(51, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.PaewangPants), 116, 46, 86, 380, 105, 38, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0);
+        this.CreateArmor(52, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.HadesPants), 114, 44, 86, 380, 60, 15, 181, 0, 0, 1, 0, 0, 0, 0, 0, 0);
         this.CreateArmor(59, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.SacredPants), 62, 33, 52, 1, 85, 0, 0, 75, 0, 0, 0, 0, 0, 0, 0, 1);
         this.CreateArmor(60, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.StormHardPants), 78, 41, 68, 1, 100, 0, 0, 90, 0, 0, 0, 0, 0, 0, 0, 1);
         this.CreateArmor(61, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.PiercingPants), 95, 49, 82, 1, 115, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 1);
-        this.CreateArmor(73, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.PhoenixSoulPants), 134, 68, 88, 380, 97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+        this.CreateArmor(73, 4, 2, 2, LocalizedString.FromResource(() => ItemNames.PhoenixSoulPants), 134, 68, 88, 380, 97, 0, 0, 85, 0, 0, 0, 0, 0, 0, 0, 1);
 
         // Gloves:
         this.CreateGloves(0, LocalizedString.FromResource(() => ItemNames.BronzeGloves), 13, 4, 4, 34, 0, 80, 20, 0, 1, 0, 1, 1, 0);
@@ -279,14 +280,14 @@ public class Armors : ArmorInitializerBase
         this.CreateGloves(42, LocalizedString.FromResource(() => ItemNames.BlackRoseGloves), 70, 26, 6, 67, 0, 50, 10, 0, 0, 0, 0, 0, 2);
         this.CreateGloves(43, LocalizedString.FromResource(() => ItemNames.AuraGloves), 87, 34, 6, 75, 380, 56, 20, 0, 0, 0, 0, 0, 2);
         this.CreateGloves(44, LocalizedString.FromResource(() => ItemNames.LiliumGloves), 82, 45, 6, 80, 0, 75, 20, 0, 0, 0, 0, 0, 2);
-        this.CreateGloves(45, LocalizedString.FromResource(() => ItemNames.TitanGloves), 100, 56, 7, 86, 0, 222, 32, 0, 1, 0, 0, 0, 0);
-        this.CreateGloves(46, LocalizedString.FromResource(() => ItemNames.BraveGloves), 97, 42, 7, 86, 0, 74, 162, 0, 1, 0, 0, 0, 0);
-        this.CreateGloves(47, LocalizedString.FromResource(() => ItemNames.PhantomGloves), 101, 49, 7, 86, 0, 212, 57, 0, 0, 0, 1, 0, 0);
-        this.CreateGloves(48, LocalizedString.FromResource(() => ItemNames.DestroyGloves), 99, 40, 7, 86, 0, 62, 19, 0, 0, 0, 1, 0, 0);
-        this.CreateGloves(49, LocalizedString.FromResource(() => ItemNames.SeraphimGloves), 100, 43, 7, 86, 0, 55, 197, 0, 0, 1, 0, 0, 0);
-        this.CreateGloves(50, LocalizedString.FromResource(() => ItemNames.FaithGloves), 95, 36, 7, 86, 0, 32, 29, 0, 0, 1, 0, 0, 0);
-        this.CreateGloves(51, LocalizedString.FromResource(() => ItemNames.PaewangGloves), 101, 34, 7, 86, 0, 105, 38, 0, 0, 0, 0, 1, 0);
-        this.CreateGloves(52, LocalizedString.FromResource(() => ItemNames.HadesGloves), 100, 31, 7, 86, 0, 60, 15, 1, 0, 0, 0, 0, 0);
+        this.CreateGloves(45, LocalizedString.FromResource(() => ItemNames.TitanGloves), 100, 56, 7, 86, 380, 222, 32, 0, 1, 0, 0, 0, 0);
+        this.CreateGloves(46, LocalizedString.FromResource(() => ItemNames.BraveGloves), 97, 42, 7, 86, 380, 74, 162, 0, 1, 0, 0, 0, 0);
+        this.CreateGloves(47, LocalizedString.FromResource(() => ItemNames.PhantomGloves), 101, 49, 7, 86, 380, 212, 57, 0, 0, 0, 1, 0, 0);
+        this.CreateItemRequirementIfNeeded(this.CreateGloves(48, LocalizedString.FromResource(() => ItemNames.DestroyGloves), 99, 40, 7, 86, 380, 62, 19, 0, 0, 0, 1, 0, 0), Stats.TotalEnergyRequirementValue, 165);
+        this.CreateGloves(49, LocalizedString.FromResource(() => ItemNames.SeraphimGloves), 100, 43, 7, 86, 380, 55, 197, 0, 0, 1, 0, 0, 0);
+        this.CreateItemRequirementIfNeeded(this.CreateGloves(50, LocalizedString.FromResource(() => ItemNames.FaithGloves), 95, 36, 7, 86, 380, 32, 29, 0, 0, 1, 0, 0, 0), Stats.TotalEnergyRequirementValue, 138);
+        this.CreateGloves(51, LocalizedString.FromResource(() => ItemNames.PaewangGloves), 101, 34, 7, 86, 380, 105, 38, 0, 0, 0, 0, 1, 0);
+        this.CreateItemRequirementIfNeeded(this.CreateGloves(52, LocalizedString.FromResource(() => ItemNames.HadesGloves), 100, 31, 7, 86, 380, 60, 15, 1, 0, 0, 0, 0, 0), Stats.TotalEnergyRequirementValue, 181);
 
         // Boots:
         this.CreateBoots(0, LocalizedString.FromResource(() => ItemNames.BronzeBoots), 12, 4, 10, 34, 0, 80, 20, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0);
@@ -334,18 +335,18 @@ public class Armors : ArmorInitializerBase
         this.CreateBoots(42, LocalizedString.FromResource(() => ItemNames.BlackRoseBoots), 76, 28, 0, 67, 0, 60, 10, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0);
         this.CreateBoots(43, LocalizedString.FromResource(() => ItemNames.AuraBoots), 95, 38, 0, 75, 380, 57, 20, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0);
         this.CreateBoots(44, LocalizedString.FromResource(() => ItemNames.LiliumBoots), 90, 50, 0, 85, 0, 150, 30, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0);
-        this.CreateBoots(45, LocalizedString.FromResource(() => ItemNames.TitanBoots), 96, 57, 0, 86, 0, 222, 32, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0);
-        this.CreateBoots(46, LocalizedString.FromResource(() => ItemNames.BraveBoots), 93, 45, 0, 86, 0, 74, 162, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0);
-        this.CreateBoots(47, LocalizedString.FromResource(() => ItemNames.PhantomBoots), 97, 54, 0, 86, 0, 212, 57, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0);
-        this.CreateBoots(48, LocalizedString.FromResource(() => ItemNames.DestroyBoots), 94, 44, 0, 86, 0, 62, 19, 165, 0, 0, 0, 0, 0, 1, 0, 0, 0);
-        this.CreateBoots(49, LocalizedString.FromResource(() => ItemNames.SeraphimBoots), 97, 42, 0, 86, 0, 55, 197, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0);
-        this.CreateBoots(50, LocalizedString.FromResource(() => ItemNames.FaithBoots), 92, 35, 0, 86, 0, 32, 29, 138, 0, 0, 0, 0, 1, 0, 0, 0, 0);
-        this.CreateBoots(51, LocalizedString.FromResource(() => ItemNames.PhaewangBoots), 98, 38, 0, 86, 0, 105, 38, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0);
-        this.CreateBoots(52, LocalizedString.FromResource(() => ItemNames.HadesBoots), 94, 34, 0, 86, 0, 60, 15, 181, 0, 0, 1, 0, 0, 0, 0, 0, 0);
+        this.CreateBoots(45, LocalizedString.FromResource(() => ItemNames.TitanBoots), 96, 57, 0, 86, 380, 222, 32, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0);
+        this.CreateBoots(46, LocalizedString.FromResource(() => ItemNames.BraveBoots), 93, 45, 0, 86, 380, 74, 162, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0);
+        this.CreateBoots(47, LocalizedString.FromResource(() => ItemNames.PhantomBoots), 97, 54, 0, 86, 380, 212, 57, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0);
+        this.CreateBoots(48, LocalizedString.FromResource(() => ItemNames.DestroyBoots), 94, 44, 0, 86, 380, 62, 19, 165, 0, 0, 0, 0, 0, 1, 0, 0, 0);
+        this.CreateBoots(49, LocalizedString.FromResource(() => ItemNames.SeraphimBoots), 97, 42, 0, 86, 380, 55, 197, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0);
+        this.CreateBoots(50, LocalizedString.FromResource(() => ItemNames.FaithBoots), 92, 35, 0, 86, 380, 32, 29, 138, 0, 0, 0, 0, 1, 0, 0, 0, 0);
+        this.CreateBoots(51, LocalizedString.FromResource(() => ItemNames.PhaewangBoots), 98, 38, 0, 86, 380, 105, 38, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0);
+        this.CreateBoots(52, LocalizedString.FromResource(() => ItemNames.HadesBoots), 94, 34, 0, 86, 380, 60, 15, 181, 0, 0, 1, 0, 0, 0, 0, 0, 0);
         this.CreateBoots(59, LocalizedString.FromResource(() => ItemNames.SacredBoots), 50, 20, 0, 52, 1, 85, 0, 0, 75, 0, 0, 0, 0, 0, 0, 0, 1);
         this.CreateBoots(60, LocalizedString.FromResource(() => ItemNames.StormHardBoots), 62, 28, 0, 68, 1, 100, 0, 0, 90, 0, 0, 0, 0, 0, 0, 0, 1);
         this.CreateBoots(61, LocalizedString.FromResource(() => ItemNames.PiercingBoots), 82, 36, 0, 82, 1, 115, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 1);
-        this.CreateBoots(73, LocalizedString.FromResource(() => ItemNames.PhoenixSoulBoots), 119, 57, 0, 88, 380, 97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+        this.CreateBoots(73, LocalizedString.FromResource(() => ItemNames.PhoenixSoulBoots), 119, 57, 0, 88, 380, 97, 0, 0, 85, 0, 0, 0, 0, 0, 0, 0, 1);
 
         this.BuildSets();
         this.AddGuardianOptionsToSets();

@@ -196,8 +196,8 @@ internal class Weapons : InitializerBase
         this.CreateWeapon(2, 13, 0, 66, 1, 4, false, LocalizedString.FromResource(() => ItemNames.DivineScepterOfArchangel), 150, 200, 223, 45, 90, 138, 0, 75, 16, 0, 0, 0, 0, 0, 0, 1, 0, 0);
         this.CreateWeapon(2, 14, 0, 66, 1, 4, true, LocalizedString.FromResource(() => ItemNames.SoleilScepter), 146, 130, 153, 40, 95, 84, 380, 80, 15, 0, 0, 0, 0, 0, 0, 1, 0, 0);
         this.CreateWeapon(2, 15, 0, 66, 1, 4, true, LocalizedString.FromResource(() => ItemNames.ShiningScepter), 110, 99, 111, 40, 78, 60, 0, 108, 22, 0, 0, 0, 0, 0, 0, 1, 0, 0);
-        this.CreateWeapon(2, 16, 0, 0, 1, 3, true, LocalizedString.FromResource(() => ItemNames.FrostMace), 121, 106, 146, 50, 80, 0, 0, 27, 19, 0, 0, 0, 0, 2, 0, 0, 0, 0);
-        this.CreateWeapon(2, 17, 0, 66, 1, 4, true, LocalizedString.FromResource(() => ItemNames.AbsoluteScepter), 135, 114, 132, 40, 90, 72, 0, 119, 24, 0, 0, 0, 0, 0, 0, 1, 0, 0);
+        this.CreateWeapon(2, 16, 0, 0, 1, 3, true, LocalizedString.FromResource(() => ItemNames.FrostMace), 121, 106, 146, 50, 80, 0, 380, 27, 19, 0, 0, 0, 0, 2, 0, 0, 0, 0);
+        this.CreateWeapon(2, 17, 0, 66, 1, 4, true, LocalizedString.FromResource(() => ItemNames.AbsoluteScepter), 135, 114, 132, 40, 90, 72, 380, 119, 24, 0, 0, 0, 0, 0, 0, 1, 0, 0);
         this.CreateWeapon(2, 18, 0, 66, 1, 4, false, LocalizedString.FromResource(() => ItemNames.StrykerScepter), 147, 112, 124, 40, 86, 70, 0, 87, 20, 0, 0, 0, 0, 0, 0, 1, 0, 0);
 
         // this.CreateWeapon(2, 22, 0, 0, 1, 3, true, "Mace of The king", 54, 132, 153, 45, 40, 3, 0, 80, 17, 0, 0, 0, 1, 1, 1, 1, 0, 0);
@@ -237,7 +237,7 @@ internal class Weapons : InitializerBase
         this.CreateWeapon(4, 20, 1, 24, 2, 4, true, LocalizedString.FromResource(() => ItemNames.ArrowViperBow), 135, 166, 190, 45, 86, 0, 0, 52, 245, 0, 0, 0, 0, 2, 0, 0, 0, 0);
         this.CreateWeapon(4, 21, 1, 24, 2, 4, true, LocalizedString.FromResource(() => ItemNames.SylphWindBow), 147, 177, 200, 45, 93, 0, 380, 46, 210, 0, 0, 0, 0, 2, 0, 0, 0, 0);
         this.CreateWeapon(4, 22, 1, 24, 2, 4, true, LocalizedString.FromResource(() => ItemNames.AlbatrossBow), 110, 155, 177, 45, 70, 0, 0, 60, 265, 0, 0, 0, 0, 2, 0, 0, 0, 0);
-        this.CreateWeapon(4, 23, 1, 24, 2, 4, true, LocalizedString.FromResource(() => ItemNames.StingerBow), 134, 162, 184, 45, 80, 0, 0, 32, 209, 0, 0, 0, 0, 2, 0, 0, 0, 0);
+        this.CreateWeapon(4, 23, 1, 24, 2, 4, true, LocalizedString.FromResource(() => ItemNames.StingerBow), 134, 162, 184, 45, 80, 0, 380, 32, 209, 0, 0, 0, 0, 2, 0, 0, 0, 0);
         this.CreateWeapon(4, 24, 1, 24, 2, 4, false, LocalizedString.FromResource(() => ItemNames.AirLynBow), 147, 170, 194, 45, 88, 0, 0, 49, 226, 0, 0, 0, 0, 2, 0, 0, 0, 0);
 
         this.CreateWeapon(5, 0, 0, 0, 1, 3, true, LocalizedString.FromResource(() => ItemNames.SkullStaff), 6, 3, 4, 20, 20, 6, 0, 40, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0);
