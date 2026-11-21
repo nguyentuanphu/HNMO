@@ -465,5 +465,14 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>CashShopPackageNames.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Update="Properties\SeasonNineItemNames.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SeasonNineItemNames.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Properties\SeasonNineItemNames.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SeasonNineItemNames.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

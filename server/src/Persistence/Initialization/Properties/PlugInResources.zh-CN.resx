@@ -491,4 +491,6 @@
   <data name="StrongerHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
     <value>将 28 个 HNMO 技能增强 20%（伤害、增益和减益效果；消耗和冷却时间不变），并将精灵士兵的试炼任务改为击杀 200 个怪物并上交五颗玛雅之石。</value>
   </data>
+  <data name="SeasonNineOnlyItemsUpdatePlugIn_Name" xml:space="preserve"><value>第 9 赛季：添加第 9 赛季专属物品</value></data>
+  <data name="SeasonNineOnlyItemsUpdatePlugIn_Description" xml:space="preserve"><value>在以第 9 赛季运行时添加 279 项第 9 赛季专属物品定义（镶嵌武器、盾牌、防具套装、翅膀、五芒星、饰品、萌宠与合成材料）；已存在的物品保持不变。</value></data>
 </root>

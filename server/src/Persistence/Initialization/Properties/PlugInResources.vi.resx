@@ -868,4 +868,6 @@
   <data name="AddArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Thêm Sứ giả Đấu trường HNMO, NPC ở Lorencia, Devias, Noria và Elbeland, mở cửa sổ Đấu trường.</value></data>
   <data name="RenumberArenaHeraldUpdatePlugIn_Name" xml:space="preserve"><value>Sứ giả Đấu trường: số NPC riêng</value></data>
   <data name="RenumberArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Chuyển Sứ giả Đấu trường của bản lưu cũ từ NPC 595 sang 900 để web game hiện lại.</value></data>
+  <data name="SeasonNineOnlyItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: thêm vật phẩm riêng Season 9</value></data>
+  <data name="SeasonNineOnlyItemsUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 279 vật phẩm riêng của Season 9 (vũ khí, khiên, bộ giáp socket, cánh, Ngũ Hành, nhẫn/dây chuyền, thú Muun và nguyên liệu) khi chạy Season 9; giữ nguyên vật phẩm đã có.</value></data>
 </root>

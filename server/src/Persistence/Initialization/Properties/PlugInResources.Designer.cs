@@ -1114,5 +1114,11 @@ namespace HNMO.Persistence.Initialization.Properties {
 
         /// <summary>Gets the localized StrongerHnmoSkillsUpdatePlugIn_Description text.</summary>
         public static string StrongerHnmoSkillsUpdatePlugIn_Description => ResourceManager.GetString("StrongerHnmoSkillsUpdatePlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized SeasonNineOnlyItemsUpdatePlugIn_Name text.</summary>
+        public static string SeasonNineOnlyItemsUpdatePlugIn_Name => ResourceManager.GetString("SeasonNineOnlyItemsUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized SeasonNineOnlyItemsUpdatePlugIn_Description text.</summary>
+        public static string SeasonNineOnlyItemsUpdatePlugIn_Description => ResourceManager.GetString("SeasonNineOnlyItemsUpdatePlugIn_Description", resourceCulture)!;
     }
 }

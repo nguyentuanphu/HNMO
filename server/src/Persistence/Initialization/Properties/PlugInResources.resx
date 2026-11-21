@@ -466,4 +466,6 @@
   <data name="AddArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Adds the HNMO Arena Herald, an NPC in Lorencia, Devias, Noria and Elbeland which opens the Arena window.</value></data>
   <data name="RenumberArenaHeraldUpdatePlugIn_Name" xml:space="preserve"><value>Arena Herald: its own NPC number</value></data>
   <data name="RenumberArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Moves the Arena Herald of an older save from NPC 595 to 900, so the web game shows it again.</value></data>
+  <data name="SeasonNineOnlyItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: add Season 9 items</value></data>
+  <data name="SeasonNineOnlyItemsUpdatePlugIn_Description" xml:space="preserve"><value>Adds the 279 unique Season 9 item definitions (socket weapons, shields, armor sets, wings, pentagrams, accessories, Muun companions, and crafting materials) when running as Season 9, leaving existing items unchanged.</value></data>
 </root>

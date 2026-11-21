@@ -964,4 +964,6 @@
   <data name="StrongerHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
     <value>Dieses Update macht die 28 HNMO-Fertigkeiten um 20 % stärker (Schaden, Buffs und Debuffs; Kosten und Abklingzeiten bleiben) und lässt die Prüfungsquests des Elfensoldaten 200 Tötungen und fünf Juwelen des Chaos verlangen.</value>
   </data>
+  <data name="SeasonNineOnlyItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Season-9-Gegenstände hinzufügen</value></data>
+  <data name="SeasonNineOnlyItemsUpdatePlugIn_Description" xml:space="preserve"><value>Fügt im Season-9-Betrieb die 279 einzigartigen Season-9-Gegenstandsdefinitionen hinzu (Sockelwaffen, Schilde, Rüstungssets, Flügel, Pentagramme, Zubehör, Muun-Begleiter und Herstellungsmaterialien); vorhandene Gegenstände bleiben unverändert.</value></data>
 </root>
