@@ -94,6 +94,9 @@ public class Wings : WingsInitializerBase
         capeOfLord.Group = 13;
         capeOfLord.SetGuid(capeOfLord.Group, capeOfLord.Number);
 
+        // The 2nd wings' maximum AG and attack speed options (Season 6/9 server suites); the Cape of Fighter keeps three.
+        Updates.SecondWingOptionsUpdatePlugIn.Apply(this.Context, this.GameConfiguration);
+
         this.CreateSmallWings();
 
         this.CreateFeather();
