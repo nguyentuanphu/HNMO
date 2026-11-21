@@ -209,7 +209,7 @@ internal class BloodCastleInitializer : InitializerBase
         bloodCastle.Name = MiniGameNames.ResourceManager.GetLocalizedString($"BloodCastle{level}");
         bloodCastle.Description = MiniGameDescriptions.ResourceManager.GetLocalizedString($"EventDefinitionForBloodCastleEventLevel{level}");
         bloodCastle.EnterDuration = MiniGameConstants.EnterDuration;
-        bloodCastle.GameDuration = TimeSpan.FromMinutes(20);
+        bloodCastle.GameDuration = TimeSpan.FromMinutes(15); // the Season 6/9 server suites: open 5, play 15, close 1
         bloodCastle.ExitDuration = TimeSpan.FromMinutes(1);
         bloodCastle.MaximumPlayerCount = 10;
         bloodCastle.Entrance = this.GameConfiguration.Maps.First(m => m.Number == mapNumber).ExitGates.Single();
