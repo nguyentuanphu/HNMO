@@ -174,7 +174,7 @@ internal class ChaosCastle7 : BaseMapInitializer
                 { Stats.MaximumPhysBaseDmg, 345 },
                 { Stats.DefenseBase, 245 },
                 { Stats.AttackRatePvm, 480 },
-                { Stats.DefenseRatePvm, 1900 },
+                { Stats.DefenseRatePvm, 190 },
                 { Stats.PoisonResistance, 7f / 255 },
                 { Stats.IceResistance, 7f / 255 },
                 { Stats.FireResistance, 7f / 255 },
