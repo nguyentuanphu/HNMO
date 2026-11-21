@@ -90,7 +90,9 @@ export const NEW_SKILL_LOOKS: Record<number, NewSkillLook> = {
     effect: [stones('caster', 10), ring('smoke', EARTH, 220, 16), ring('spark', ICE, 180, 10)] },
   // Three quick red slashes across the target (the hit flashes of Dark Side's and Chain Drive's strikes, BITMAP_DAMAGE2
   // and BITMAP_DAMAGE1, in red), each with blood and sparks, and a red glow on it while they land.
-  701: { action: A.ATTACK_SKILL_SWORD5, packet: 'targeted', needsTarget: true, friendly: false, icon: { from: 23, hue: -30 }, sound: 'SOUND_SKILL_SWORD2',
+  // An AreaSkill with the target as its ExtraTargetId: the server has it as an explicit-target area skill (three hits,
+  // BloodSlashSkillPlugIn heals the knight); as a TargetedSkill it hit nothing.
+  701: { action: A.ATTACK_SKILL_SWORD5, packet: 'area', areaAt: 'target', needsTarget: true, friendly: false, icon: { from: 23, hue: -30 }, sound: 'SOUND_SKILL_SWORD2',
     effect: [...slash(2), ...slash(6), ...slash(10), glow('flareRed', RED, 2.2, 'target', 14)] },
   702: { action: A.SKILL_VITALITY, packet: 'targeted', needsTarget: false, friendly: true, icon: { from: 27, hue: 40 }, sound: 'SOUND_SOULBARRIER',
     effect: [circle(GOLD), glow('shiny2', GOLD, 2.5, 'caster', 20), ring('spark', GOLD, 90, 12)] },
@@ -139,7 +141,8 @@ export const NEW_SKILL_LOOKS: Record<number, NewSkillLook> = {
     effect: [circle(RED), ring('fire', RED, 100, 10), glow('light', RED, 2.5, 'caster', 12)] },
   722: { action: 'magic', packet: 'targeted', needsTarget: true, friendly: false, icon: { from: 221, hue: 140 }, sound: 'SOUND_EVIL',
     effect: [beam(DARK), ring('smoke', DARK, 70, 8, 'target', 20)] },
-  723: { action: 'magic', packet: 'targeted', needsTarget: true, friendly: false, icon: { from: 214, hue: 180 }, sound: 'SOUND_SKILL_DRAIN_LIFE',
+  // Like Blood Slash: an explicit-target area skill on the server (SoulDrainSkillPlugIn).
+  723: { action: 'magic', packet: 'area', areaAt: 'target', needsTarget: true, friendly: false, icon: { from: 214, hue: 180 }, sound: 'SOUND_SKILL_DRAIN_LIFE',
     effect: [beam(ICE), { make: { particle: 'energy' }, at: 'target', shape: 'line', count: 8, height: 110, color: ICE, ticks: 10 }] },
   // Rage Fighter
   724: { action: A.SKILL_DRAGONLORE, packet: 'area', areaAt: 'target', needsTarget: false, friendly: false, icon: { from: 264, hue: 40 }, sound: 'SOUND_CRITICAL',
