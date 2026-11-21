@@ -396,6 +396,88 @@ public class TradeTest
         Assert.That(trader2.Money, Is.EqualTo(1000));
     }
 
+    /// <summary>
+    /// Both traders press the trade button at the same time, on their own connections: both see the
+    /// other as pressed and both finish the trade. Each locked its own state machine and then waited for
+    /// the other's, so the two waited for each other forever. Now the trade finishes exactly once.
+    /// </summary>
+    [Test]
+    public async ValueTask SimultaneousTradeButtonPressesFinishTheTradeOnceAsync()
+    {
+        var trader1 = this.CreateTrader(PlayerState.TradeOpened);
+        var trader2 = this.CreateTrader(PlayerState.TradeOpened);
+        trader1.TradingPartner = trader2;
+        trader2.TradingPartner = trader1;
+        trader1.Money = 1000;
+        trader2.Money = 1000;
+        trader1.TradingMoney = 100;
+        trader2.TradingMoney = 0;
+
+        var tradeContext = new Mock<IContext>();
+        tradeContext.Setup(c => c.SaveChangesAsync(It.IsAny<CancellationToken>())).Returns(new ValueTask<bool>(true));
+        var provider = new Mock<IPersistenceContextProvider>();
+        provider.Setup(p => p.CreateNewTradeContext()).Returns(tradeContext.Object);
+        var gameContext = new Mock<IGameContext>();
+        gameContext.Setup(c => c.PersistenceContextProvider).Returns(provider.Object);
+        gameContext.Setup(c => c.PlugInManager).Returns(new PlugInManager(null, new NullLoggerFactory(), null, null));
+        Mock.Get(trader1).Setup(t => t.GameContext).Returns(gameContext.Object);
+        Mock.Get(trader2).Setup(t => t.GameContext).Returns(gameContext.Object);
+
+        // Both presses happen before either looks at the other's button ...
+        var pressed = 0;
+        var bothPressed = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        async ValueTask WaitForBothPressesAsync(StateMachine.StateChangedEventArgs args)
+        {
+            if (args.CurrentStateState == PlayerState.TradeButtonPressed)
+            {
+                if (Interlocked.Increment(ref pressed) == 2)
+                {
+                    bothPressed.TrySetResult();
+                }
+
+                await Task.WhenAny(bothPressed.Task, Task.Delay(1000)).ConfigureAwait(false);
+            }
+        }
+
+        // ... and both finishing presses hold their first lock at the same time, if they can.
+        var locked = 0;
+        var bothLocked = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        async ValueTask WaitForBothLocksAsync(StateMachine.StateChangeEventArgs args)
+        {
+            if (args.NextState == PlayerState.EnteredWorld)
+            {
+                if (Interlocked.Increment(ref locked) == 2)
+                {
+                    bothLocked.TrySetResult();
+                }
+
+                await Task.WhenAny(bothLocked.Task, Task.Delay(1000)).ConfigureAwait(false);
+            }
+        }
+
+        foreach (var trader in new[] { trader1, trader2 })
+        {
+            trader.PlayerState.StateChanged += WaitForBothPressesAsync;
+            trader.PlayerState.StateChanges += WaitForBothLocksAsync;
+        }
+
+        var action = new TradeButtonAction();
+        var presses = Task.WhenAll(
+            Task.Run(async () => await action.TradeButtonChangedAsync(trader1, TradeButtonState.Checked).ConfigureAwait(false)),
+            Task.Run(async () => await action.TradeButtonChangedAsync(trader2, TradeButtonState.Checked).ConfigureAwait(false)));
+        var finished = await Task.WhenAny(presses, Task.Delay(TimeSpan.FromSeconds(10))).ConfigureAwait(false);
+
+        Assert.That(finished, Is.SameAs(presses), "the two presses waited for each other");
+        tradeContext.Verify(c => c.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+        Mock.Get(trader1.ViewPlugIns.GetPlugIn<ITradeFinishedPlugIn>()!)
+            .Verify(v => v!.TradeFinishedAsync(It.IsAny<TradeResult>()), Times.Once);
+        Mock.Get(trader2.ViewPlugIns.GetPlugIn<ITradeFinishedPlugIn>()!)
+            .Verify(v => v!.TradeFinishedAsync(TradeResult.Success), Times.Once);
+        Assert.That(trader1.Money, Is.EqualTo(1000));
+        Assert.That(trader2.Money, Is.EqualTo(1100));
+        Assert.That(trader1.PlayerState.CurrentState, Is.EqualTo(PlayerState.EnteredWorld));
+    }
+
     private Item GetItem()
     {
         var item = new Mock<Item>();
