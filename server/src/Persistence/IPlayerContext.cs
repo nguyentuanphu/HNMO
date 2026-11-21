@@ -35,6 +35,14 @@ public interface IPlayerContext : IContext
     ValueTask<bool> CanSaveLetterAsync(LetterHeader letterHeader, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Gets the number of letters in the mailbox of a character, to refuse a letter to a full mailbox.
+    /// </summary>
+    /// <param name="receiverName">The name of the character.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The number of letters; 0 if the context can't tell.</returns>
+    ValueTask<int> GetLetterCountAsync(string receiverName, CancellationToken cancellationToken = default) => ValueTask.FromResult(0);
+
+    /// <summary>
     /// Authenticates the account by login name and password, returning minimal account state.
     /// This is a lightweight alternative to <see cref="GetAccountByLoginNameAsync(string, string, CancellationToken)"/>
     /// that avoids loading the full account data.
