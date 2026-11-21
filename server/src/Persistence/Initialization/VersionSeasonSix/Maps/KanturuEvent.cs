@@ -200,26 +200,26 @@ internal class KanturuEvent : BaseMapInitializer
             monster.Number = MayaBodyNumber;
             monster.Designation = LocalizedString.FromResource(() => MonsterNames.Maya);
             monster.MoveRange = 3;
-            monster.AttackRange = 6;
-            monster.ViewRange = 9;
-            monster.MoveDelay = new TimeSpan(400 * TimeSpan.TicksPerMillisecond);
-            monster.AttackDelay = new TimeSpan(2000 * TimeSpan.TicksPerMillisecond);
-            monster.RespawnDelay = new TimeSpan(0);
+            monster.AttackRange = 1;
+            monster.ViewRange = 7;
+            monster.MoveDelay = new TimeSpan(500 * TimeSpan.TicksPerMillisecond);
+            monster.AttackDelay = new TimeSpan(1500 * TimeSpan.TicksPerMillisecond);
+            monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 7;
             var attributes = new Dictionary<AttributeDefinition, float>
             {
-                { Stats.Level, 140 },
-                { Stats.MaximumHealth, 5_000_000 },
-                { Stats.MinimumPhysBaseDmg, 2500 },
-                { Stats.MaximumPhysBaseDmg, 3000 },
-                { Stats.DefenseBase, 6500 },
-                { Stats.AttackRatePvm, 2800 },
-                { Stats.DefenseRatePvm, 2200 },
-                { Stats.PoisonResistance, 50f / 255 },
-                { Stats.IceResistance, 50f / 255 },
-                { Stats.LightningResistance, 50f / 255 },
-                { Stats.FireResistance, 50f / 255 },
+                { Stats.Level, 111 },
+                { Stats.MaximumHealth, 300 },
+                { Stats.MinimumPhysBaseDmg, 712 },
+                { Stats.MaximumPhysBaseDmg, 752 },
+                { Stats.DefenseBase, 584 },
+                { Stats.AttackRatePvm, 850 },
+                { Stats.DefenseRatePvm, 315 },
+                { Stats.PoisonResistance, 100f / 255 },
+                { Stats.IceResistance, 100f / 255 },
+                { Stats.LightningResistance, 100f / 255 },
+                { Stats.FireResistance, 100f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
             monster.SetGuid(monster.Number);
@@ -231,12 +231,12 @@ internal class KanturuEvent : BaseMapInitializer
             this.GameConfiguration.Monsters.Add(monster);
             monster.Number = NightmareNumber;
             monster.Designation = LocalizedString.FromResource(() => MonsterNames.Nightmare);
-            monster.MoveRange = 3;
-            monster.AttackRange = 5;
-            monster.ViewRange = 9;
-            monster.MoveDelay = new TimeSpan(400 * TimeSpan.TicksPerMillisecond);
-            monster.AttackDelay = new TimeSpan(1600 * TimeSpan.TicksPerMillisecond);
-            monster.RespawnDelay = new TimeSpan(0);
+            monster.MoveRange = 6;
+            monster.AttackRange = 2;
+            monster.ViewRange = 7;
+            monster.MoveDelay = new TimeSpan(700 * TimeSpan.TicksPerMillisecond);
+            monster.AttackDelay = new TimeSpan(1700 * TimeSpan.TicksPerMillisecond);
+            monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 5;
 
@@ -244,17 +244,17 @@ internal class KanturuEvent : BaseMapInitializer
             monster.AttackSkill = this.GameConfiguration.Skills.FirstOrDefault(s => s.Number == (short)SkillNumber.Decay);
             var attributes = new Dictionary<AttributeDefinition, float>
             {
-                { Stats.Level, 145 },
+                { Stats.Level, 135 },
                 { Stats.MaximumHealth, 1_500_000 },
-                { Stats.MinimumPhysBaseDmg, 3000 },
-                { Stats.MaximumPhysBaseDmg, 3500 },
-                { Stats.DefenseBase, 7500 },
-                { Stats.AttackRatePvm, 3000 },
-                { Stats.DefenseRatePvm, 2500 },
-                { Stats.PoisonResistance, 50f / 255 },
-                { Stats.IceResistance, 50f / 255 },
-                { Stats.LightningResistance, 50f / 255 },
-                { Stats.FireResistance, 50f / 255 },
+                { Stats.MinimumPhysBaseDmg, 1225 },
+                { Stats.MaximumPhysBaseDmg, 1468 },
+                { Stats.DefenseBase, 1000 },
+                { Stats.AttackRatePvm, 2000 },
+                { Stats.DefenseRatePvm, 420 },
+                { Stats.PoisonResistance, 255f / 255 },
+                { Stats.IceResistance, 150f / 255 },
+                { Stats.LightningResistance, 150f / 255 },
+                { Stats.FireResistance, 150f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
             monster.SetGuid(monster.Number);
@@ -266,12 +266,12 @@ internal class KanturuEvent : BaseMapInitializer
             this.GameConfiguration.Monsters.Add(monster);
             monster.Number = MayaLeftHandNumber;
             monster.Designation = LocalizedString.FromResource(() => MonsterNames.MayaHandLeft);
-            monster.MoveRange = 3;
-            monster.AttackRange = 5;
-            monster.ViewRange = 8;
-            monster.MoveDelay = new TimeSpan(400 * TimeSpan.TicksPerMillisecond);
-            monster.AttackDelay = new TimeSpan(1600 * TimeSpan.TicksPerMillisecond);
-            monster.RespawnDelay = new TimeSpan(0);
+            monster.MoveRange = 6;
+            monster.AttackRange = 3;
+            monster.ViewRange = 7;
+            monster.MoveDelay = new TimeSpan(700 * TimeSpan.TicksPerMillisecond);
+            monster.AttackDelay = new TimeSpan(1700 * TimeSpan.TicksPerMillisecond);
+            monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 3;
 
@@ -279,17 +279,17 @@ internal class KanturuEvent : BaseMapInitializer
             monster.AttackSkill = this.GameConfiguration.Skills.FirstOrDefault(s => s.Number == (short)SkillNumber.IceStorm);
             var attributes = new Dictionary<AttributeDefinition, float>
             {
-                { Stats.Level, 130 },
+                { Stats.Level, 135 },
                 { Stats.MaximumHealth, 400_000 },
-                { Stats.MinimumPhysBaseDmg, 2000 },
-                { Stats.MaximumPhysBaseDmg, 2500 },
-                { Stats.DefenseBase, 5000 },
+                { Stats.MinimumPhysBaseDmg, 732 },
+                { Stats.MaximumPhysBaseDmg, 932 },
+                { Stats.DefenseBase, 315 },
                 { Stats.AttackRatePvm, 2000 },
-                { Stats.DefenseRatePvm, 1500 },
-                { Stats.PoisonResistance, 40f / 255 },
-                { Stats.IceResistance, 40f / 255 },
-                { Stats.LightningResistance, 40f / 255 },
-                { Stats.FireResistance, 40f / 255 },
+                { Stats.DefenseRatePvm, 1445 },
+                { Stats.PoisonResistance, 100f / 255 },
+                { Stats.IceResistance, 100f / 255 },
+                { Stats.LightningResistance, 100f / 255 },
+                { Stats.FireResistance, 100f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
             monster.SetGuid(monster.Number);
@@ -301,12 +301,12 @@ internal class KanturuEvent : BaseMapInitializer
             this.GameConfiguration.Monsters.Add(monster);
             monster.Number = MayaRightHandNumber;
             monster.Designation = LocalizedString.FromResource(() => MonsterNames.MayaHandRight);
-            monster.MoveRange = 3;
-            monster.AttackRange = 5;
-            monster.ViewRange = 8;
-            monster.MoveDelay = new TimeSpan(400 * TimeSpan.TicksPerMillisecond);
-            monster.AttackDelay = new TimeSpan(1600 * TimeSpan.TicksPerMillisecond);
-            monster.RespawnDelay = new TimeSpan(0);
+            monster.MoveRange = 6;
+            monster.AttackRange = 3;
+            monster.ViewRange = 7;
+            monster.MoveDelay = new TimeSpan(700 * TimeSpan.TicksPerMillisecond);
+            monster.AttackDelay = new TimeSpan(1700 * TimeSpan.TicksPerMillisecond);
+            monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
             monster.NumberOfMaximumItemDrops = 3;
 
@@ -314,17 +314,17 @@ internal class KanturuEvent : BaseMapInitializer
             monster.AttackSkill = this.GameConfiguration.Skills.FirstOrDefault(s => s.Number == (short)SkillNumber.IceStorm);
             var attributes = new Dictionary<AttributeDefinition, float>
             {
-                { Stats.Level, 130 },
+                { Stats.Level, 135 },
                 { Stats.MaximumHealth, 350_000 },
-                { Stats.MinimumPhysBaseDmg, 2000 },
-                { Stats.MaximumPhysBaseDmg, 2500 },
-                { Stats.DefenseBase, 5000 },
-                { Stats.AttackRatePvm, 2100 },
-                { Stats.DefenseRatePvm, 1600 },
-                { Stats.PoisonResistance, 40f / 255 },
-                { Stats.IceResistance, 40f / 255 },
-                { Stats.LightningResistance, 40f / 255 },
-                { Stats.FireResistance, 40f / 255 },
+                { Stats.MinimumPhysBaseDmg, 732 },
+                { Stats.MaximumPhysBaseDmg, 932 },
+                { Stats.DefenseBase, 800 },
+                { Stats.AttackRatePvm, 2000 },
+                { Stats.DefenseRatePvm, 550 },
+                { Stats.PoisonResistance, 100f / 255 },
+                { Stats.IceResistance, 100f / 255 },
+                { Stats.LightningResistance, 100f / 255 },
+                { Stats.FireResistance, 100f / 255 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
             monster.SetGuid(monster.Number);

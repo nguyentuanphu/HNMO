@@ -135,6 +135,15 @@ public class GameMap
     }
 
     /// <summary>
+    /// Gets the attackable non-player characters (e.g. monsters) which are currently on this map.
+    /// </summary>
+    /// <returns>The attackable non-player characters which are currently on this map.</returns>
+    public IList<AttackableNpcBase> GetAttackableNpcs()
+    {
+        return this._objectsInMap.Values.OfType<AttackableNpcBase>().ToList();
+    }
+
+    /// <summary>
     /// Gets the attackables in range of the specified coordinates.
     /// </summary>
     /// <param name="point">The coordinates.</param>

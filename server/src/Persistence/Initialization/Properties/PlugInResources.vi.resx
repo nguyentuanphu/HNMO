@@ -174,12 +174,6 @@
   <data name="AddDuelConfigurationPlugIn_Description" xml:space="preserve">
     <value>Bản cập nhật này thêm dữ liệu cho cấu hình đấu tay đôi</value>
   </data>
-  <data name="FixBloodCastleMonsterAttributesUpdatePlugIn_Name" xml:space="preserve">
-    <value>Sửa thuộc tính quái Huyết Lâu 7/8</value>
-  </data>
-  <data name="FixBloodCastleMonsterAttributesUpdatePlugIn_Description" xml:space="preserve">
-    <value>Đổi giá trị thuộc tính giữa BC7 (quái 138-143) và BC8 (quái 428-433) để độ khó tăng đúng: BC6 → BC7 → BC8.</value>
-  </data>
   <data name="AddDoppelgangerDataUpdatePlugIn_Name" xml:space="preserve">
     <value>Thêm dữ liệu Doppelganger</value>
   </data>

@@ -332,6 +332,7 @@ internal class Vulcanus : BaseMapInitializer
                 { Stats.PoisonResistance, 200f / 255 },
                 { Stats.IceResistance, 200f / 255 },
                 { Stats.FireResistance, 250f / 255 },
+                { Stats.LightningResistance, 200f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -354,7 +355,7 @@ internal class Vulcanus : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 120 },
-                { Stats.MaximumHealth, 5000000 },
+                { Stats.MaximumHealth, 500000 },
                 { Stats.MinimumPhysBaseDmg, 850 },
                 { Stats.MaximumPhysBaseDmg, 950 },
                 { Stats.DefenseBase, 210 },
@@ -362,7 +363,8 @@ internal class Vulcanus : BaseMapInitializer
                 { Stats.DefenseRatePvm, 820 },
                 { Stats.PoisonResistance, 200f / 255 },
                 { Stats.IceResistance, 200f / 255 },
-                { Stats.FireResistance, 200f / 255 },
+                { Stats.FireResistance, 250f / 255 },
+                { Stats.LightningResistance, 200f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -394,6 +396,7 @@ internal class Vulcanus : BaseMapInitializer
                 { Stats.PoisonResistance, 200f / 255 },
                 { Stats.IceResistance, 200f / 255 },
                 { Stats.FireResistance, 250f / 255 },
+                { Stats.LightningResistance, 200f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -425,6 +428,7 @@ internal class Vulcanus : BaseMapInitializer
                 { Stats.PoisonResistance, 200f / 255 },
                 { Stats.IceResistance, 200f / 255 },
                 { Stats.FireResistance, 250f / 255 },
+                { Stats.LightningResistance, 200f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -456,6 +460,7 @@ internal class Vulcanus : BaseMapInitializer
                 { Stats.PoisonResistance, 200f / 255 },
                 { Stats.IceResistance, 200f / 255 },
                 { Stats.FireResistance, 250f / 255 },
+                { Stats.LightningResistance, 200f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -487,6 +492,7 @@ internal class Vulcanus : BaseMapInitializer
                 { Stats.PoisonResistance, 200f / 255 },
                 { Stats.IceResistance, 200f / 255 },
                 { Stats.FireResistance, 250f / 255 },
+                { Stats.LightningResistance, 200f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -518,6 +524,7 @@ internal class Vulcanus : BaseMapInitializer
                 { Stats.PoisonResistance, 200f / 255 },
                 { Stats.IceResistance, 200f / 255 },
                 { Stats.FireResistance, 250f / 255 },
+                { Stats.LightningResistance, 200f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -549,6 +556,7 @@ internal class Vulcanus : BaseMapInitializer
                 { Stats.PoisonResistance, 200f / 255 },
                 { Stats.IceResistance, 200f / 255 },
                 { Stats.FireResistance, 250f / 255 },
+                { Stats.LightningResistance, 200f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -580,6 +588,7 @@ internal class Vulcanus : BaseMapInitializer
                 { Stats.PoisonResistance, 200f / 255 },
                 { Stats.IceResistance, 200f / 255 },
                 { Stats.FireResistance, 250f / 255 },
+                { Stats.LightningResistance, 200f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -611,6 +620,7 @@ internal class Vulcanus : BaseMapInitializer
                 { Stats.PoisonResistance, 200f / 255 },
                 { Stats.IceResistance, 200f / 255 },
                 { Stats.FireResistance, 250f / 255 },
+                { Stats.LightningResistance, 200f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -642,6 +652,7 @@ internal class Vulcanus : BaseMapInitializer
                 { Stats.PoisonResistance, 200f / 255 },
                 { Stats.IceResistance, 200f / 255 },
                 { Stats.FireResistance, 250f / 255 },
+                { Stats.LightningResistance, 200f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -673,6 +684,7 @@ internal class Vulcanus : BaseMapInitializer
                 { Stats.PoisonResistance, 200f / 255 },
                 { Stats.IceResistance, 200f / 255 },
                 { Stats.FireResistance, 250f / 255 },
+                { Stats.LightningResistance, 200f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);

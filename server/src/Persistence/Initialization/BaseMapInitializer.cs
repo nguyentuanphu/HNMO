@@ -24,6 +24,8 @@ internal abstract class BaseMapInitializer : IMapInitializer
 {
     private static readonly IList<DropItemGroup> DefaultDropItemGroups = new List<DropItemGroup>();
 
+    private readonly HashSet<MonsterSpawnArea> _leftOutSpawns = new(ReferenceEqualityComparer.Instance);
+
     private GameMapDefinition? _mapDefinition;
 
     private Dictionary<short, MonsterDefinition>? _npcDictionary;
@@ -91,6 +93,14 @@ internal abstract class BaseMapInitializer : IMapInitializer
     /// </summary>
     protected virtual byte SafezoneMapNumber => (byte)(this._mapDefinition?.ExitGates.Any(g => g.IsSpawnGate) ?? false ? this._mapDefinition.Number : Version075.Maps.Lorencia.Number);
 
+    /// <summary>
+    /// Gets the numbers of the monster spawns of an older version which a newer version leaves out. Such a spawn
+    /// isn't created in the context and isn't added to the map.
+    /// </summary>
+    protected virtual IReadOnlySet<short> LeftOutSpawnNumbers => NoSpawnNumbers;
+
+    private static IReadOnlySet<short> NoSpawnNumbers { get; } = new HashSet<short>();
+
     private short MapId
     {
         get
@@ -120,6 +130,11 @@ internal abstract class BaseMapInitializer : IMapInitializer
         this._mapDefinition.ExpMultiplier = 1;
         foreach (var spawn in this.CreateNpcSpawns().Concat(this.CreateMonsterSpawns()))
         {
+            if (this._leftOutSpawns.Contains(spawn))
+            {
+                continue;
+            }
+
             this._mapDefinition.MonsterSpawns.Add(spawn);
         }
 
@@ -240,6 +255,13 @@ internal abstract class BaseMapInitializer : IMapInitializer
     /// </returns>
     protected MonsterSpawnArea CreateMonsterSpawn(short number, MonsterDefinition monsterDefinition, byte x1, byte x2, byte y1, byte y2, short quantity = 1, Direction direction = Direction.Undefined, SpawnTrigger spawnTrigger = SpawnTrigger.Automatic, byte waveNumber = 0)
     {
+        if (this.LeftOutSpawnNumbers.Contains(number))
+        {
+            var leftOut = new MonsterSpawnArea { MonsterDefinition = monsterDefinition, X1 = x1, X2 = x2, Y1 = y1, Y2 = y2 };
+            this._leftOutSpawns.Add(leftOut);
+            return leftOut;
+        }
+
         var area = this.Context.CreateNew<MonsterSpawnArea>();
         area.SetGuid(this.MapId, number);
         area.GameMap = this._mapDefinition;

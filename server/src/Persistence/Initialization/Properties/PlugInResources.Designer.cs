@@ -413,12 +413,6 @@ namespace HNMO.Persistence.Initialization.Properties {
         /// <summary>Gets the localized AddDuelConfigurationPlugIn_Description text.</summary>
         public static string AddDuelConfigurationPlugIn_Description => ResourceManager.GetString("AddDuelConfigurationPlugIn_Description", resourceCulture)!;
 
-        /// <summary>Gets the localized FixBloodCastleMonsterAttributesUpdatePlugIn_Name text.</summary>
-        public static string FixBloodCastleMonsterAttributesUpdatePlugIn_Name => ResourceManager.GetString("FixBloodCastleMonsterAttributesUpdatePlugIn_Name", resourceCulture)!;
-
-        /// <summary>Gets the localized FixBloodCastleMonsterAttributesUpdatePlugIn_Description text.</summary>
-        public static string FixBloodCastleMonsterAttributesUpdatePlugIn_Description => ResourceManager.GetString("FixBloodCastleMonsterAttributesUpdatePlugIn_Description", resourceCulture)!;
-
         /// <summary>Gets the localized AddDoppelgangerDataUpdatePlugIn_Name text.</summary>
         public static string AddDoppelgangerDataUpdatePlugIn_Name => ResourceManager.GetString("AddDoppelgangerDataUpdatePlugIn_Name", resourceCulture)!;
 

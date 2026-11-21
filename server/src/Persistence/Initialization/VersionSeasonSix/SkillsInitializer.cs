@@ -1081,7 +1081,7 @@ internal class SkillsInitializer : SkillsInitializerBase
                 { Stats.DefenseRatePvm, 75 },
                 { Stats.PoisonResistance, 6f / 255 },
                 { Stats.IceResistance, 6f / 255 },
-                { Stats.WaterResistance, 6f / 255 },
+                { Stats.LightningResistance, 6f / 255 },
                 { Stats.FireResistance, 6f / 255 },
             };
 
@@ -1113,7 +1113,7 @@ internal class SkillsInitializer : SkillsInitializerBase
                 { Stats.DefenseRatePvm, 86 },
                 { Stats.PoisonResistance, 6f / 255 },
                 { Stats.IceResistance, 6f / 255 },
-                { Stats.WaterResistance, 6f / 255 },
+                { Stats.LightningResistance, 6f / 255 },
                 { Stats.FireResistance, 6f / 255 },
             };
 

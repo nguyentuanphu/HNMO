@@ -206,12 +206,12 @@ internal class ChaosCastle7 : BaseMapInitializer
                 { Stats.MinimumPhysBaseDmg, 330 },
                 { Stats.MaximumPhysBaseDmg, 380 },
                 { Stats.DefenseBase, 280 },
-                { Stats.AttackRatePvm, 480 },
-                { Stats.DefenseRatePvm, 190 },
-                { Stats.PoisonResistance, 6f / 255 },
-                { Stats.IceResistance, 6f / 255 },
-                { Stats.FireResistance, 6f / 255 },
-                { Stats.LightningResistance, 6f / 255 },
+                { Stats.AttackRatePvm, 520 },
+                { Stats.DefenseRatePvm, 200 },
+                { Stats.PoisonResistance, 7f / 255 },
+                { Stats.IceResistance, 7f / 255 },
+                { Stats.FireResistance, 7f / 255 },
+                { Stats.LightningResistance, 7f / 255 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
