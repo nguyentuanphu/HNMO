@@ -181,7 +181,7 @@
     <value>Berserker-Proficiency-Multiplikator (MST)</value>
   </data>
   <data name="Description_BerserkerProficiencyMultiplierMST" xml:space="preserve">
-    <value>Der Schadensmultiplikator von Berserker Proficiency, der zum magischen Multiplikator addiert, aber auch selbst mit dem magischen/Fluch-Endschaden multipliziert und dazu addiert wird.</value>
+    <value>Der Schadensmultiplikator von Berserker Proficiency, der zum Magiemultiplikator addiert wird.</value>
   </data>
   <data name="Name_BerserkerWizardryMultiplier" xml:space="preserve">
     <value>Berserker-Magiemultiplikator</value>
