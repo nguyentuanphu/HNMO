@@ -36,6 +36,17 @@ type Tab = 'survival' | 'combat' | 'stats';
 
 export class UltimateAutoPlayWindow {
   private hud: HTMLElement | null = null;
+  private hudRefs: {
+    dot: HTMLElement;
+    statusText: Text;
+    vipTag: HTMLElement;
+    killsLabel: Text;
+    killsVal: HTMLElement;
+    expVal: HTMLElement;
+    toggleBtn: HTMLButtonElement;
+    townBtn: HTMLButtonElement;
+    openBtn: HTMLButtonElement;
+  } | null = null;
   private panel: HTMLElement | null = null;
   private tab: Tab = 'survival';
   private openState = false;
@@ -102,43 +113,79 @@ export class UltimateAutoPlayWindow {
       boxShadow: '0 4px 16px rgba(0,0,0,0.45)', pointerEvents: 'auto',
     });
     hud.addEventListener('pointerdown', (e) => e.stopPropagation());
+    hud.innerHTML = `
+      <span style="display:inline-flex;align-items:center;gap:5px;font-weight:600;color:#e7c873">
+        <span data-uap-ref="dot" style="width:8px;height:8px;border-radius:50%;background:#94a3b8;display:inline-block"></span>
+        <span data-uap-ref="status"></span>
+        <span data-uap-ref="vip" style="display:none;padding:1px 5px;border-radius:4px;background:#78350f;color:#fde68a;font-size:10px;font-weight:700">VIP</span>
+      </span>
+      <span style="color:#cbd5e1"><span data-uap-ref="killsLabel"></span>: <b data-uap-ref="kills">0</b></span>
+      <span style="color:#cbd5e1">EXP/h: <b data-uap-ref="exp">0</b></span>
+      <button type="button" data-uap-hud="toggle" style="${btnStyle('#166534')}"></button>
+      <button type="button" data-uap-hud="town" style="${btnStyle('#334155')}"></button>
+      <button type="button" data-uap-hud="open" style="${btnStyle('#78350f')}"></button>
+    `;
+    const dot = hud.querySelector<HTMLElement>('[data-uap-ref="dot"]')!;
+    const statusHost = hud.querySelector<HTMLElement>('[data-uap-ref="status"]')!;
+    const statusText = document.createTextNode('');
+    statusHost.appendChild(statusText);
+    const vipTag = hud.querySelector<HTMLElement>('[data-uap-ref="vip"]')!;
+    const killsHost = hud.querySelector<HTMLElement>('[data-uap-ref="killsLabel"]')!;
+    const killsLabel = document.createTextNode('');
+    killsHost.appendChild(killsLabel);
+    const killsVal = hud.querySelector<HTMLElement>('[data-uap-ref="kills"]')!;
+    const expVal = hud.querySelector<HTMLElement>('[data-uap-ref="exp"]')!;
+    const toggleBtn = hud.querySelector<HTMLButtonElement>('[data-uap-hud="toggle"]')!;
+    const townBtn = hud.querySelector<HTMLButtonElement>('[data-uap-hud="town"]')!;
+    const openBtn = hud.querySelector<HTMLButtonElement>('[data-uap-hud="open"]')!;
+
+    toggleBtn.addEventListener('click', () => this.opts.toggleActive());
+    townBtn.addEventListener('click', () => {
+      if (this.opts.extras.onTrip) {
+        this.opts.message(tx('Ultimate Auto play: already heading to town.', 'Autoplay: đang trên đường về thành.'));
+        return;
+      }
+      this.opts.extras.goToTown();
+      this.opts.message(tx('Ultimate Auto play: returning to Lorencia.', 'Autoplay: đang quay về Lorencia.'));
+    });
+    openBtn.addEventListener('click', () => this.toggle());
+
     document.body.appendChild(hud);
     this.hud = hud;
+    this.hudRefs = { dot, statusText, vipTag, killsLabel, killsVal, expVal, toggleBtn, townBtn, openBtn };
     this.updateHudContent();
   }
 
   private updateHudContent(): void {
-    if (!this.hud) return;
+    const refs = this.hudRefs;
+    if (!this.hud || !refs) return;
     const active = this.opts.isActive();
     const onTrip = this.opts.extras.onTrip;
     const stats = this.opts.extras.stats;
     const dotColor = onTrip ? '#f59e0b' : active ? '#22c55e' : '#94a3b8';
     const statusText = onTrip
-      ? tx(`Trip: ${this.opts.extras.tripStepLabel}`, `Về thành: ${this.opts.extras.tripStepLabel}`)
-      : active ? tx('ON', 'BẬT') : tx('OFF', 'TẮT');
-    const vipTag = this.opts.extras.policy.isVip
-      ? `<span style="padding:1px 5px;border-radius:4px;background:#78350f;color:#fde68a;font-size:10px;font-weight:700">VIP</span>`
-      : '';
+      ? tx(`Ultimate: Trip: ${this.opts.extras.tripStepLabel}`, `Ultimate: Về thành: ${this.opts.extras.tripStepLabel}`)
+      : active ? 'Ultimate: ' + tx('ON', 'BẬT') : 'Ultimate: ' + tx('OFF', 'TẮT');
     const expHr = perHour(stats.expGained, stats.elapsedMs).toLocaleString();
 
-    this.hud.innerHTML = `
-      <span style="display:inline-flex;align-items:center;gap:5px;font-weight:600;color:#e7c873">
-        <span style="width:8px;height:8px;border-radius:50%;background:${dotColor};display:inline-block"></span>
-        Ultimate: ${statusText} ${vipTag}
-      </span>
-      <span style="color:#cbd5e1">${tx('Kills', 'Quái')}: <b>${stats.kills}</b></span>
-      <span style="color:#cbd5e1">EXP/h: <b>${expHr}</b></span>
-      <button type="button" data-uap-hud="toggle" style="${btnStyle(active ? '#991b1b' : '#166534')}">${active ? tx('Stop', 'Dừng') : tx('Start', 'Chạy')}</button>
-      <button type="button" data-uap-hud="town" style="${btnStyle('#334155')}">${tx('Town', 'Về thành')}</button>
-      <button type="button" data-uap-hud="open" style="${btnStyle('#78350f')}">${tx('Ultimate (Alt+Z)', 'Cài đặt (Alt+Z)')}</button>
-    `;
+    if (refs.dot.style.background !== dotColor) refs.dot.style.background = dotColor;
+    if (refs.statusText.data !== statusText) refs.statusText.data = statusText;
+    const vipDisplay = this.opts.extras.policy.isVip ? 'inline-block' : 'none';
+    if (refs.vipTag.style.display !== vipDisplay) refs.vipTag.style.display = vipDisplay;
+    const killsTitle = tx('Kills', 'Quái');
+    if (refs.killsLabel.data !== killsTitle) refs.killsLabel.data = killsTitle;
+    const killsStr = String(stats.kills);
+    if (refs.killsVal.textContent !== killsStr) refs.killsVal.textContent = killsStr;
+    if (refs.expVal.textContent !== expHr) refs.expVal.textContent = expHr;
 
-    this.hud.querySelector('[data-uap-hud="toggle"]')?.addEventListener('click', () => this.opts.toggleActive());
-    this.hud.querySelector('[data-uap-hud="town"]')?.addEventListener('click', () => {
-      this.opts.extras.goToTown();
-      this.opts.message(tx('Ultimate Auto play: returning to Lorencia.', 'Autoplay: đang quay về Lorencia.'));
-    });
-    this.hud.querySelector('[data-uap-hud="open"]')?.addEventListener('click', () => this.toggle());
+    const toggleBg = active ? '#991b1b' : '#166534';
+    if (refs.toggleBtn.style.background !== toggleBg) refs.toggleBtn.style.background = toggleBg;
+    const toggleLabel = active ? tx('Stop', 'Dừng') : tx('Start', 'Chạy');
+    if (refs.toggleBtn.textContent !== toggleLabel) refs.toggleBtn.textContent = toggleLabel;
+    const townLabel = tx('Town', 'Về thành');
+    if (refs.townBtn.textContent !== townLabel) refs.townBtn.textContent = townLabel;
+    const openLabel = tx('Ultimate (Alt+Z)', 'Cài đặt (Alt+Z)');
+    if (refs.openBtn.textContent !== openLabel) refs.openBtn.textContent = openLabel;
   }
 
   private badge(key: UltimateFeatureKey): { disabled: boolean; tag: string } {
