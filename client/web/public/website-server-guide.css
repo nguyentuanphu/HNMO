@@ -1,0 +1,19 @@
+#server-guide {min-width:0}
+.server-guide-grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:20px}
+.server-guide-card {min-width:0;padding:20px;border:1px solid var(--line);background:var(--panel);border-radius:10px;overflow-wrap:anywhere}
+.server-guide-card h3 {font-size:1.3rem;color:var(--gold);margin:0 0 16px}
+.server-guide-card h4 {font-size:1rem;margin:16px 0 8px}
+.server-guide-card p,.server-guide-card li {font-size:1rem;line-height:1.6}
+.server-guide-scroll {max-width:100%;overflow-x:auto}
+.server-guide-scroll table {width:100%;min-width:420px;border-collapse:collapse;font-size:.9rem}
+.server-guide-scroll th,.server-guide-scroll td {min-width:7rem;text-align:left;padding:10px;border-bottom:1px solid var(--line)}
+.server-guide-offer {padding-bottom:16px;border-bottom:1px solid var(--line)}
+#server-guide button {min-height:48px;padding:12px 18px;font:inherit;cursor:pointer}
+@media(max-width:600px){#server-guide .section-head{display:grid;gap:12px}#server-guide .section-head button{width:100%}.server-guide-card{padding:16px}}
+
+#upcoming .slot time {font:600 1rem/1.6 system-ui;overflow-wrap:anywhere}
+
+.server-hero-brand {display:flex;align-items:center;flex-wrap:wrap;gap:12px;font:600 1.15rem/1.5 system-ui;color:var(--gold)}
+#server-guide-season:empty {display:none}
+
+.server-guide-scroll th:first-child,.server-guide-scroll td:first-child {min-width:10rem}
