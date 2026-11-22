@@ -362,7 +362,7 @@ public class BotFeaturePlugIn : IFeaturePlugIn, IPeriodicTaskPlugIn, ISupportCus
             {
                 try
                 {
-                    if (await state.Manager.SpawnBotAsync(gameContext, loginName).ConfigureAwait(false))
+                    if (await state.Manager.SpawnBotAsync(gameContext, loginName, allowNonBotAccount: true).ConfigureAwait(false))
                     {
                         started++;
                     }

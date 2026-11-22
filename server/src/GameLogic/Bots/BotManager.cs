@@ -41,8 +41,14 @@ public sealed class BotManager
     /// <param name="gameContext">The game context.</param>
     /// <param name="loginName">The login name of an existing account.</param>
     /// <param name="characterSlot">The character slot to drive; <c>null</c> drives the first character by slot.</param>
+    /// <param name="allowNonBotAccount">
+    /// Whether an account without <see cref="DataModel.Entities.Account.IsBot"/> set may be driven
+    /// (reserved exclusively for explicit proof-of-concept accounts). Generated bot slots leave this
+    /// <c>false</c> so a real player account whose login name collides with a generated name is never
+    /// taken over.
+    /// </param>
     /// <returns><c>true</c> if a bot was started; <c>false</c> if it could not be started or was already active.</returns>
-    public async ValueTask<bool> SpawnBotAsync(IGameContext gameContext, string loginName, byte? characterSlot = null)
+    public async ValueTask<bool> SpawnBotAsync(IGameContext gameContext, string loginName, byte? characterSlot = null, bool allowNonBotAccount = false)
     {
         if (string.IsNullOrWhiteSpace(loginName))
         {
@@ -56,6 +62,13 @@ public sealed class BotManager
         {
             // Load the account through the bot's OWN persistence context (no cross-context attach).
             var account = await bot.PersistenceContext.GetAccountByLoginNameAsync(loginName).ConfigureAwait(false);
+            if (account is { IsBot: false } && !allowNonBotAccount)
+            {
+                bot.Logger.LogWarning("Refusing to spawn generated bot on non-bot account '{LoginName}'.", loginName);
+                await bot.DisposeAsync().ConfigureAwait(false);
+                return false;
+            }
+
             var character = characterSlot is { } slot
                 ? account?.Characters.FirstOrDefault(c => c.CharacterSlot == slot)
                 : account?.Characters.OrderBy(c => c.CharacterSlot).FirstOrDefault();
@@ -182,6 +195,7 @@ public sealed class BotManager
     {
         // Captured before the stop - the disposed bot loses its account and character.
         var loginName = bot.Account?.LoginName;
+        var allowNonBotAccount = bot.Account is { IsBot: false };
         var characterSlot = bot.SelectedCharacter?.CharacterSlot;
         if (loginName is null
             || characterSlot is not { } slot
@@ -194,7 +208,7 @@ public sealed class BotManager
         {
             // Already torn down concurrently (e.g. by the server shutdown disconnecting it) - no
             // stop or dispose left to do, just bring the character back online.
-            return await this.SpawnBotAsync(gameContext, loginName, slot).ConfigureAwait(false);
+            return await this.SpawnBotAsync(gameContext, loginName, slot, allowNonBotAccount).ConfigureAwait(false);
         }
 
         if (removed.Party is { } party)
@@ -236,7 +250,7 @@ public sealed class BotManager
             removed.Logger.LogWarning(ex, "Error while disposing bot '{Login}/{Slot}' for a restart; spawning a fresh instance anyway.", loginName, slot);
         }
 
-        return await this.SpawnBotAsync(gameContext, loginName, slot).ConfigureAwait(false);
+        return await this.SpawnBotAsync(gameContext, loginName, slot, allowNonBotAccount).ConfigureAwait(false);
     }
 
     /// <summary>
