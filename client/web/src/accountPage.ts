@@ -1,3 +1,4 @@
+import { enterGame, hasWebsiteSession, installSessionTransport, signInWebsite, signOutWebsite } from './websiteSession.js';
 import { communityLinks, gameName, loadGameName } from './gameName.js';
 import { accountSections, onAccountSectionsChanged, registerAccountSection, type AccountSectionContext } from './accountSections.js';
 import { accountPageTexts, type AccountTextKey } from './accountPageTexts.js';
@@ -22,11 +23,14 @@ interface AccountSnapshot {
 
 let language: 'en' | 'vi' = navigator.language.toLowerCase().startsWith('vi') ? 'vi' : 'en';
 try { const saved = localStorage.getItem('hnmo.language'); if (saved === 'en' || saved === 'vi') language = saved; } catch { /* Storage is optional. */ }
+// Non-secret adapter identity for existing widgets; the bridge cookie supplies actual credentials.
 let credentials: Credentials | null = null;
+installSessionTransport();
 let snapshot: AccountSnapshot | null = null;
 let active = 'overview';
 let generation = 0;
 let loading = false;
+let authEpoch = 0;
 const loadedLegacy = new Set<string>();
 const integrations = new AccountIntegrations({ getCredentials: () => credentials, getLanguage: () => language }, logOut);
 const missions = new AccountMissions({ language: () => language, request, error: showError });
@@ -146,7 +150,7 @@ function renderOverview(): void {
     node('p', t(snapshot.accountOnline ? 'accountOnline' : 'accountOffline')), balances());
   const quick = node('div'); quick.className = 'account-actions';
   // The existing ticket feature owns #play and #playNowButton; this link leads to it.
-  const play = link('play', 'playHint', '#play'); play.id = 'accountPlaySlot';
+  const play = link('play', 'playHint', '/account.html?play=1'); play.dataset.enterGame = ''; play.id = 'accountPlaySlot';
   quick.append(play, link('topup', 'topupHint', '/topup.html'));
   root.append(quick, node('h3', t('characters')));
   root.append(snapshot.characters.length ? table([t('character'), t('className'), t('level'), t('resetCount'), t('map'), t('status')],
@@ -236,19 +240,20 @@ function renderNavigation(): void {
     item.setAttribute('aria-current', String(section.id === active));
     item.addEventListener('click', () => { void openSection(section.id); }); nav.append(item);
     const option = node('option', section.label[language]); option.value = section.id; select.append(option);
-    section.element.hidden = snapshot ? section.id !== active : !['rewards', 'resets', 'security'].includes(section.id);
+    section.element.hidden = !snapshot || section.id !== active;
   }
   select.value = active;
 }
 
 function loadLegacy(id: string): void {
+  if (id === 'overview') return;
   const prefix = { overview: 'play', rewards: 'gift', resets: 'resets', security: 'safety' }[id];
   if (!prefix || !credentials || !snapshot || loadedLegacy.has(prefix)) return;
   const form = element<HTMLFormElement>(`${prefix}Login`);
   if (form.hidden) return;
   element<HTMLInputElement>(`${prefix}Account`).value = credentials.loginName;
   element<HTMLInputElement>(`${prefix}Password`).value = credentials.password;
-  form.requestSubmit();
+  form.requestSubmit(); form.hidden = true;
   loadedLegacy.add(prefix);
 }
 
@@ -279,6 +284,24 @@ async function refresh(page = 0): Promise<boolean> {
   finally { if (current === generation) { loading = false; renderCoins(); } }
 }
 
+async function showSignedIn(): Promise<void> {
+  element('accountLoginPanel').hidden = true; element('accountRegistration').hidden = true;
+  element('accountDashboard').hidden = false; element('accountPanels').hidden = false; element('accountToolbar').hidden = false;
+  element('accountDashboard').classList.add('authenticated');
+  element('registerForm').hidden = true; element('setupPanel').hidden = true;
+  element('playLogin').hidden = true; element('playSignedIn').hidden = false; element('playSignedName').textContent = snapshot?.loginName ?? '';
+  if (new URLSearchParams(location.search).get('play') === '1') { await enterGame().catch(() => showMessage('serverError')); return; }
+  const requested = location.hash.slice(1);
+  await openSection(accountSections().some(s => s.id === requested) ? requested : 'overview');
+}
+
+async function restoreSession(): Promise<void> {
+  const epoch = authEpoch;
+  if (!await hasWebsiteSession() || epoch !== authEpoch) return;
+  credentials = { loginName: '', password: 'session' };
+  if (await refresh()) { credentials.loginName = snapshot!.loginName; await showSignedIn(); } else credentials = null;
+}
+
 function mount(): void {
   panel('overview', 'overview').append(integrations.play); panel('coins', 'coins');
   panel('vip', 'vip').append(vip.root);
@@ -296,6 +319,7 @@ function mount(): void {
   });
   element('accountRefresh').addEventListener('click', () => { void refresh(snapshot?.page ?? 0); });
   element('accountLogout').addEventListener('click', logOut);
+  element('playNowButton').addEventListener('click', event => { event.stopImmediatePropagation(); void enterGame().catch(() => showMessage('serverError')); }, { capture: true });
   for (const entry of document.querySelectorAll<HTMLElement>('[data-account-language]')) entry.addEventListener('click', () => {
     language = entry.dataset.accountLanguage === 'vi' ? 'vi' : 'en';
     try { localStorage.setItem('hnmo.language', language); } catch { /* Storage is optional. */ }
@@ -304,17 +328,19 @@ function mount(): void {
   });
   element<HTMLFormElement>('accountSignIn').addEventListener('submit', async event => {
     event.preventDefault(); if (loading) return;
-    credentials = { loginName: element<HTMLInputElement>('accountUser').value, password: element<HTMLInputElement>('accountSecret').value };
+    const epoch = ++authEpoch;
     element<HTMLButtonElement>('accountSignInButton').disabled = true;
-    const success = await refresh();
-    element<HTMLButtonElement>('accountSignInButton').disabled = false;
-    if (!success) { credentials = null; snapshot = null; renderNavigation(); return; }
-    element<HTMLFormElement>('accountSignIn').reset();
-    element('accountLoginPanel').hidden = true; element('accountToolbar').hidden = false;
-    element('accountDashboard').classList.add('authenticated');
-    element('registerForm').hidden = true; element('setupPanel').hidden = true;
-    const requested = location.hash.slice(1);
-    void openSection(accountSections().some(s => s.id === requested) ? requested : 'overview');
+    try {
+      const response = await signInWebsite(element<HTMLInputElement>('accountUser').value, element<HTMLInputElement>('accountSecret').value);
+      if (epoch !== authEpoch) return;
+      if (!response.ok) { showMessage(response.status === 401 ? 'loginError' : 'serverError'); return; }
+      credentials = { loginName: element<HTMLInputElement>('accountUser').value, password: 'session' };
+      if (!await refresh()) { credentials = null; snapshot = null; renderNavigation(); return; }
+      element<HTMLFormElement>('accountSignIn').reset();
+      translate(); await showSignedIn();
+    } catch { showMessage('serverError'); }
+    finally { element<HTMLButtonElement>('accountSignInButton').disabled = false; }
+
   });
   translate();
   try {
@@ -325,12 +351,15 @@ function mount(): void {
 }
 
 function logOut(): void {
+  void signOutWebsite().then(() => location.reload()).catch(() => showMessage('serverError'));
+  authEpoch++;
+  element('accountDashboard').hidden = true; element('accountPanels').hidden = true; element('accountLoginPanel').hidden = false;
   vip.reset();
   giftBox.reset();
   credentials = null; snapshot = null; generation++; element<HTMLFormElement>('accountSignIn').reset();
   // Reload clears credentials retained by the existing gift/reset/safety modules as well.
-  location.reload();
 }
+
 
 function passwordChanged(): void {
   // Only the translated notice key survives the reload, never credentials or account data.
@@ -339,4 +368,7 @@ function passwordChanged(): void {
 }
 
 mount();
+window.addEventListener('hnmo-account-ready', () => { void restoreSession().catch(() => showMessage('serverError')); });
+window.addEventListener('hnmo-session-expired', () => { credentials = null; snapshot = null; generation++; element('accountDashboard').hidden = true; element('accountPanels').hidden = true; element('accountLoginPanel').hidden = false; showMessage('loginError'); });
+void restoreSession().catch(() => showMessage('serverError'));
 void loadGameName().then(() => translate());

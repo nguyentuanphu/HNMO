@@ -8,13 +8,21 @@ const labels = {
 async function mockAccount(page: Page, language: 'en' | 'vi'): Promise<void> {
   await page.addInitScript(lang => localStorage.setItem('hnmo.language', lang), language);
   await page.route('**/game-name.json', route => route.fulfill({ json: { name: 'HNMO account fixture', links: { discord: 'https://discord.com/invite/hnmo', zalo: 'https://zalo.me/12345' } } }));
+  await page.route('**/portal/session', async route => {
+    if (route.request().method() === 'POST') {
+      expect(route.request().postDataJSON()).toMatchObject({ loginName: 'ann', password: 'account-secret' });
+      expect(route.request().headers()['x-hnmo-session']).toBe('1');
+      return route.fulfill({ json: { authenticated: true } });
+    }
+    return route.fulfill({ json: { authenticated: false } });
+  });
   await page.route('**/portal/status', route => route.fulfill({ json: { ready: true } }));
   await page.route('**/website/settings', route => route.fulfill({ json: {} }));
   await page.route('**/portal/account/missions/state', route => route.fulfill({ json: { status: 'off', boardJson: null, characterOnline: false } }));
   await page.route('**/portal/account/vip/state', route => route.fulfill({ json: { enabled: false, active: null, offers: [], pending: null, daily: { available: false, claimed: false } } }));
   await page.route('**/portal/account/email/state', route => route.fulfill({ json: { enabled: false, email: 'old@example.test' } }));
   await page.route('**/portal/login-ticket', async route => {
-    expect(route.request().postDataJSON()).toEqual({ loginName: 'ann', password: 'account-secret' });
+    expect(route.request().postDataJSON()).toEqual({}); expect(route.request().headers()['x-hnmo-session']).toBe('1');
     await route.fulfill({ json: { loginName: 'ann', ticket: 'account-ticket-fixture', expiresInSeconds: 60 } });
   });
   await page.route('**/website/event-alerts', route => route.fulfill({ json: { off: false, leadTimeMinutes: 5, categories: ['blood_castle'], vapidPublicKey: 'fixture-key' } }));
@@ -23,11 +31,11 @@ async function mockAccount(page: Page, language: 'en' | 'vi'): Promise<void> {
     steps: [{ id: 'first', thresholdVnd: 100_000, titleEn: 'First reward', titleVi: 'Quà đầu tiên', coinType: 'WCoinC', coins: 10, zen: 0, items: [], reached: true, claimed: false, claimable: true }],
   };
   await page.route('**/portal/topup-milestones/account', async route => {
-    expect(route.request().postDataJSON()).toEqual({ loginName: 'ann', password: 'account-secret' });
+    expect(route.request().postDataJSON()).toEqual({}); expect(route.request().headers()['x-hnmo-session']).toBe('1');
     await route.fulfill({ json: milestones });
   });
   await page.route('**/portal/topup-milestones/claim', async route => {
-    expect(route.request().postDataJSON()).toEqual({ loginName: 'ann', password: 'account-secret', stepId: 'first' });
+    expect(route.request().postDataJSON()).toEqual({ stepId: 'first' }); expect(route.request().headers()['x-hnmo-session']).toBe('1');
     await route.fulfill({ json: { ...milestones, steps: [{ ...milestones.steps[0], claimed: true, claimable: false }] } });
   });
   for (const feature of ['gift-codes', 'resets', 'account-safety']) {
@@ -35,7 +43,7 @@ async function mockAccount(page: Page, language: 'en' | 'vi'): Promise<void> {
   }
   await page.route('**/portal/account/overview', async route => {
     const body = route.request().postDataJSON() as { loginName: string; password: string; page: number };
-    expect(body.loginName).toBe('ann'); expect(body.password).toBe('account-secret');
+    expect(body).not.toHaveProperty('loginName'); expect(body).not.toHaveProperty('password'); expect(route.request().headers()['x-hnmo-session']).toBe('1');
     await route.fulfill({ json: {
       loginName: 'ann', accountOnline: true, balances: { wCoinC: 150, wCoinP: 20, goblinPoints: 30 }, vipLevel: 0,
       characters: [
@@ -86,7 +94,7 @@ async function checkPasswordChange(page: Page, width: number, language: 'en' | '
   let passwordRequests = 0;
   await page.route('**/portal/account/password', async route => {
     const body = route.request().postDataJSON() as { loginName: string; password: string; newPassword: string };
-    expect(body).toEqual({ loginName: 'ann', password: 'account-secret', newPassword: 'replacement-123' });
+    expect(body).toEqual({ newPassword: 'replacement-123' });
     passwordRequests++;
     await route.fulfill(passwordRequests === 1 ? { status: 409, json: { error: 'online' } } : { json: { changed: true } });
   });
@@ -130,7 +138,7 @@ for (const width of [375, 820, 1280]) {
       for (const status of language === 'vi' ? ['Đang trong game', 'Đã thoát game', 'Chưa kiểm tra được'] : ['Online', 'Offline', 'Unavailable']) {
         await expect(page.locator('#account-overview table')).toContainText(status);
       }
-      await expect(page.locator('#accountPlaySlot')).toHaveAttribute('href', '#play');
+      await expect(page.locator('#accountPlaySlot')).toHaveAttribute('href', '/account.html?play=1');
       await expect(page.locator('#playSignedIn')).toBeVisible();
       await expect(page.locator('#playSignedName')).toHaveText('ann');
       await expect(page.locator('#playPassword')).toHaveValue('');
@@ -191,7 +199,8 @@ test('a rejected login exposes no account data', async ({ page }) => {
   let arrived: () => void = () => {};
   const pending = new Promise<void>(resolve => { release = resolve; });
   const received = new Promise<void>(resolve => { arrived = resolve; });
-  await page.route('**/portal/account/overview', async route => {
+  await page.route('**/portal/session', async route => {
+    if (route.request().method() !== 'POST') return route.fulfill({ json: { authenticated: false } });
     arrived(); await pending;
     await route.fulfill({ status: 401, json: { error: 'login' } });
   });
@@ -228,12 +237,12 @@ for (const language of ['en', 'vi'] as const) {
     await mockAccount(page, language);
     let currentEmail = 'old@example.test';
     await page.route('**/portal/account/email/state', async route => {
-      expect(route.request().postDataJSON()).toEqual({ loginName: 'ann', password: 'account-secret' });
+      expect(route.request().postDataJSON()).toEqual({}); expect(route.request().headers()['x-hnmo-session']).toBe('1');
       await route.fulfill({ json: { enabled: true, email: currentEmail } });
     });
     let requests = 0;
     await page.route('**/portal/account/email/request', async route => {
-      expect(route.request().postDataJSON()).toEqual({ loginName: 'ann', password: 'account-secret', newEmail: 'new@example.test', language });
+      expect(route.request().postDataJSON()).toEqual({ newEmail: 'new@example.test', language });
       requests++;
       await route.fulfill(requests === 1 ? { status: 409, json: { error: 'online' } } : { json: { sent: true, expiresAt: '2026-11-17T00:15:00Z' } });
     });
@@ -241,7 +250,7 @@ for (const language of ['en', 'vi'] as const) {
     const mailedCode = 'ABCDEF0123456789ABCDEF01';
     await page.route('**/portal/account/email/confirm', async route => {
       const body = route.request().postDataJSON() as { loginName: string; password: string; code: string };
-      expect(body).toEqual({ loginName: 'ann', password: 'account-secret', code: confirmations === 0 ? '0'.repeat(24) : mailedCode });
+      expect(body).toEqual({ code: confirmations === 0 ? '0'.repeat(24) : mailedCode });
       confirmations++;
       if (confirmations === 1) { await route.fulfill({ status: 400, json: { error: 'code' } }); return; }
       currentEmail = 'new@example.test';
@@ -293,7 +302,7 @@ for (const language of ['en', 'vi'] as const) {
     const claims: string[] = [];
     await page.route('**/portal/account/missions/*', async route => {
       const body = route.request().postDataJSON() as { loginName: string; password: string; characterName: string; action?: string; argument?: string };
-      expect(body.loginName).toBe('ann'); expect(body.password).toBe('account-secret');
+      expect(body).not.toHaveProperty('loginName'); expect(body).not.toHaveProperty('password'); expect(route.request().headers()['x-hnmo-session']).toBe('1');
       expect(['<AnnKnight>', 'AnnMage']).toContain(body.characterName);
       const online = body.characterName === '<AnnKnight>';
       if (route.request().url().endsWith('/claim')) {
@@ -354,19 +363,19 @@ for (const language of ['en', 'vi'] as const) {
     const offer = { levelId: 1, nameEn: 'Bronze', nameVi: 'Đồng', days: 7, price: 100, coinType: 'WCoinC', offerToken: 'a'.repeat(64), experiencePercent: 5, zenPercent: 5, dailyCoins: 10, dailyCoinType: 'GoblinPoints' };
     const state = () => ({ enabled: true, active: bought ? { ...offer, untilUtc: '2026-11-17T14:30:00Z' } : null, offers: [offer], pending: null, daily: { available: bought, claimed: false } });
     await page.route('**/portal/account/overview', async route => {
-      expect(route.request().postDataJSON()).toMatchObject({ loginName: 'ann', password: 'account-secret' });
+      expect(route.request().postDataJSON()).not.toHaveProperty('password'); expect(route.request().headers()['x-hnmo-session']).toBe('1');
       await route.fulfill({ json: {
         loginName: 'ann', accountOnline: false, balances: { wCoinC: bought ? 50 : 150, wCoinP: 20, goblinPoints: 30 }, vipLevel: bought ? 1 : 0,
         characters: [], history: bought ? [{ id: 'vip', coinType: 'WCoinC', amount: -100, reason: null, vipPurchase: { nameEn: 'Bronze', nameVi: 'Đồng', days: 7 }, createdAt: '2026-11-15T14:30:00Z', pending: false }] : [], page: 0, hasMore: false,
       } });
     });
     await page.route('**/portal/account/vip/state', async route => {
-      expect(route.request().postDataJSON()).toMatchObject({ loginName: 'ann', password: 'account-secret' });
+      expect(route.request().postDataJSON()).not.toHaveProperty('password'); expect(route.request().headers()['x-hnmo-session']).toBe('1');
       await route.fulfill({ json: state() });
     });
     await page.route('**/portal/account/vip/purchase', async route => {
       const body = route.request().postDataJSON() as { loginName: string; password: string; operationId: string; levelId: number; days: number; offerToken: string };
-      expect(body).toMatchObject({ loginName: 'ann', password: 'account-secret', levelId: 1, days: 7, offerToken: offer.offerToken });
+      expect(body).toMatchObject({ levelId: 1, days: 7, offerToken: offer.offerToken });
       expect(body.operationId).toMatch(/^[a-f0-9-]{36}$/i);
       expect(bought).toBe(false); bought = true;
       await route.fulfill({ json: { ...state(), status: 'Applied' } });

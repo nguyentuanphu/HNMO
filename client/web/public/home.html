@@ -10,7 +10,9 @@
     <title>{game}</title>
     <link rel="stylesheet" href="/home.css" />
     <link rel="stylesheet" href="/website-themes.css" />
-  </head>
+  <link rel="stylesheet" href="/website-shell.css">
+<script type="module" src="/js/websiteShellEntry.js"></script>
+</head>
   <body>
     <header>
       <a class="brand" href="#"
@@ -24,7 +26,7 @@
         ><a href="#missions" data-t="missionsNav"></a
         ><a href="#bosses" data-t="bossesNav"></a
         ><a href="#rankings" data-t="rankingsNav"></a
-        ><a href="#account" data-t="accountNav"></a
+        ><a href="/account.html" data-t="accountNav"></a
         ><a href="#start" data-t="start"></a
         ><details class="nav-more">
           <summary data-t="explore"></summary>
@@ -52,7 +54,7 @@
         <button id="en" lang="en">EN</button
         ><button id="vi" lang="vi">VI</button>
       </div>
-      <a class="small-button" href="/account.html" data-t="account"></a>
+
     </header>
     <main>
       <section class="hero">
@@ -62,7 +64,7 @@
           <h1 data-t="hero"></h1>
           <p class="intro" data-t="intro"></p>
           <div class="actions">
-            <a class="primary" href="/index.html" data-t="play"></a
+            <a class="primary" href="/account.html?play=1" data-enter-game data-t="play"></a
             ><a class="secondary" href="#realm" data-t="explore"></a>
           </div>
           <p class="caption" data-t="browser"></p>
@@ -489,44 +491,6 @@
           </article>
         </div>
       </section>
-      <section id="account" class="account">
-        <div class="section-head">
-          <div>
-            <p class="eyebrow">03 / <span data-t="accountNav"></span></p>
-            <h2 data-t="accountTitle"></h2>
-          </div>
-        </div>
-        <div class="world-grid">
-          <article class="panel">
-            <h3 data-t="registerTitle"></h3>
-            <form id="register" class="form" autocomplete="on">
-              <label><span data-t="loginName"></span><input name="loginName" required minlength="3" maxlength="10" pattern="[A-Za-z0-9]+" autocomplete="username" /></label>
-              <label><span data-t="password"></span><input name="password" type="password" required minlength="3" maxlength="20" autocomplete="new-password" /></label>
-              <p class="muted" data-t="email"></p>
-              <button class="primary" type="submit" data-t="registerButton"></button>
-              <p class="form-message" id="register-message" role="status"></p>
-            </form>
-          </article>
-          <article class="panel">
-            <h3 data-t="googleTitle"></h3>
-            <p class="muted" id="google-off" data-t="googleOff"></p>
-            <div id="google-button" hidden></div>
-            <form id="google-account" class="form" hidden>
-              <p class="muted" data-t="googleNew"></p>
-              <label><span data-t="loginName"></span><input name="loginName" required minlength="3" maxlength="10" pattern="[A-Za-z0-9]+" /></label>
-              <label><span data-t="password"></span><input name="password" type="password" required minlength="3" maxlength="20" autocomplete="new-password" /></label>
-              <button class="primary" type="submit" data-t="registerButton"></button>
-            </form>
-            <form id="google-linked" class="form" hidden>
-              <p><span data-t="googleLinked"></span> <strong id="google-login"></strong></p>
-              <label><span data-t="newPassword"></span><input name="newPassword" type="password" minlength="3" maxlength="20" autocomplete="new-password" /></label>
-              <button type="submit" data-t="setPassword"></button>
-              <a class="primary" href="/index.html" id="google-play" data-t="play"></a>
-            </form>
-            <p class="form-message" id="google-message" role="status"></p>
-          </article>
-        </div>
-      </section>
       <section id="phone" class="start">
         <p class="eyebrow" data-t="phoneNav"></p>
         <h2 data-t="phoneTitle"></h2>
@@ -536,7 +500,7 @@
             <b>01</b>
             <h3 data-t="phoneOpen"></h3>
             <p data-t="phoneOpenText"></p>
-            <a href="/index.html" data-t="play"></a>
+            <a href="/account.html?play=1" data-enter-game data-t="play"></a>
           </article>
           <article>
             <b>02</b>
@@ -558,13 +522,13 @@
             <b>01</b>
             <h3 data-t="create"></h3>
             <p data-t="createText"></p>
-            <a href="/account.html" data-t="account"></a>
+            <a href="/account.html" data-t="accountNav"></a>
           </article>
           <article>
             <b>02</b>
             <h3 data-t="choose"></h3>
             <p data-t="chooseText"></p>
-            <a href="/index.html" data-t="play"></a>
+            <a href="/account.html?play=1" data-enter-game data-t="play"></a>
           </article>
           <article>
             <b>03</b>
