@@ -2261,6 +2261,12 @@
   <data name="ArenaScheduleNoticesPlugIn_Description" xml:space="preserve"><value>On the home servers: announces the Arena's battle royale and guild war in the game 10 minutes before and at the start, from the schedule the Arena publishes.</value></data>
   <data name="CrossSeasonFriendsPlugIn_Name" xml:space="preserve"><value>HNMO friends across seasons</value></data>
   <data name="CrossSeasonFriendsPlugIn_Description" xml:space="preserve"><value>Friends playing in another HNMO program (Season 6.3, Season 9, the Arena) show where they play in the friend list, and whispers reach them there. No trading between seasons.</value></data>
+  <data name="GuildLimitsConfiguration_MinimumCreateLevel_Caption" xml:space="preserve">
+    <value>Level to create a guild</value>
+  </data>
+  <data name="GuildLimitsConfiguration_MinimumCreateLevel_Description" xml:space="preserve">
+    <value>The level a character needs to create a guild (0: any level). 150 like the Season 6/9 server suites.</value>
+  </data>
   <data name="MonsterAiPlugIn_Name" xml:space="preserve"><value>Monster AI Rules</value></data>
   <data name="MonsterAiPlugIn_Description" xml:space="preserve"><value>Configures monster attacker chasing, spawn-area leashing, and heal-on-leash behavior.</value></data>
 </root>
