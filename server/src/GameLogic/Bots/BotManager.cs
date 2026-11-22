@@ -79,6 +79,13 @@ public sealed class BotManager
                 return false;
             }
 
+            if (!account.IsBot
+                && !await this.TryClaimNonBotSessionAsync(gameContext, bot, account.LoginName).ConfigureAwait(false))
+            {
+                await bot.DisposeAsync().ConfigureAwait(false);
+                return false;
+            }
+
             key = GetKey(loginName, character.CharacterSlot);
             if (!this._bots.TryAdd(key, bot))
             {
@@ -354,6 +361,43 @@ public sealed class BotManager
         {
             buffer.Logger.LogDebug("Buffer '{Name}' found no party and hunts solo.", buffer.Name);
         }
+    }
+
+    private async ValueTask<bool> TryClaimNonBotSessionAsync(IGameContext gameContext, BotPlayer bot, string loginName)
+    {
+        if (gameContext.OfflinePlayerManager.IsActive(loginName))
+        {
+            bot.Logger.LogInformation("Skipping PoC bot for '{LoginName}': an offline player session is already active.", loginName);
+            return false;
+        }
+
+        if (this._bots.Keys.Any(k => k.StartsWith($"{loginName}/", StringComparison.OrdinalIgnoreCase)))
+        {
+            bot.Logger.LogInformation("Skipping PoC bot for '{LoginName}': already animated by a bot.", loginName);
+            return false;
+        }
+
+        var players = await gameContext.GetPlayersAsync().ConfigureAwait(false);
+        if (players.Any(p =>
+            string.Equals(p.Account?.LoginName, loginName, StringComparison.OrdinalIgnoreCase)
+            || string.Equals(p.LoginServerRegistration, loginName, StringComparison.OrdinalIgnoreCase)))
+        {
+            bot.Logger.LogInformation("Skipping PoC bot for '{LoginName}': a session is already online.", loginName);
+            return false;
+        }
+
+        if (gameContext is IGameServerContext gameServerContext)
+        {
+            if (!await gameServerContext.LoginServer.TryLoginAsync(loginName, gameServerContext.Id).ConfigureAwait(false))
+            {
+                bot.Logger.LogInformation("Skipping PoC bot for '{LoginName}': login server reports the account is already connected.", loginName);
+                return false;
+            }
+
+            bot.SetLoginServerRegistration(loginName);
+        }
+
+        return true;
     }
 
     /// <summary>
