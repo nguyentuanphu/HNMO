@@ -224,6 +224,11 @@ public class MiniGameContext : AsyncDisposable, IEventStateProvider
     /// <returns>A value indicating whether entering had success.</returns>
     public async ValueTask<EnterResult> TryEnterAsync(Player player)
     {
+        if (player.Account?.IsBot == true)
+        {
+            return EnterResult.Failed;
+        }
+
         var result = await this._players.TryEnterAsync(player, this.AreEquippedItemsAllowedAsync, () => this.AllowEnterWhilePlaying).ConfigureAwait(false);
         if (result != EnterResult.Success)
         {

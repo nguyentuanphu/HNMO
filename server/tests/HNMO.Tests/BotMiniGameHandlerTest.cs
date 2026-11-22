@@ -9,117 +9,54 @@ using HNMO.DataModel.Entities;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.Bots;
+using HNMO.GameLogic.MiniGames;
 using HNMO.GameLogic.Offline;
+using HNMO.GameLogic.PlayerActions.MiniGames;
+using Moq;
 
 /// <summary>
-/// Tests the entry decisions of <see cref="BotMiniGameHandler"/> - which party bots may follow
-/// their human leader into a mini game event, and who is taken along at all. The actual entry
-/// goes through the regular <see cref="HNMO.GameLogic.MiniGames.MiniGameContext"/>.
+/// Verifies that bots never enter mini game events (Blood Castle, Devil Square, Chaos Castle)
+/// (owner decision, 21 Nov 2026): neither via <see cref="BotMiniGameHandler"/> party following nor
+/// via direct <see cref="MiniGameContext.TryEnterAsync"/>.
 /// </summary>
 [TestFixture]
 public class BotMiniGameHandlerTest
 {
     /// <summary>
-    /// The event's character level bracket is enforced in both directions.
+    /// Bots are never eligible to enter Blood Castle, Devil Square, or Chaos Castle regardless of level or state.
     /// </summary>
-    /// <param name="level">The bot's character level.</param>
-    /// <param name="expected">Whether the bot qualifies.</param>
-    [TestCase(200, false)]
-    [TestCase(281, true)]
-    [TestCase(330, true)]
-    [TestCase(331, false)]
-    public async ValueTask EnforcesLevelBracketAsync(int level, bool expected)
+    /// <param name="type">The event type.</param>
+    [TestCase(MiniGameType.BloodCastle)]
+    [TestCase(MiniGameType.DevilSquare)]
+    [TestCase(MiniGameType.ChaosCastle)]
+    public async ValueTask IsEligible_AlwaysRefusesBotsForEventsAsync(MiniGameType type)
     {
         var gameContext = GameContextTestHelper.CreateGameContext();
         var bot = await CreateBotAsync(gameContext).ConfigureAwait(false);
-        bot.Attributes![Stats.Level] = level;
-        var definition = new MiniGameDefinition { MinimumCharacterLevel = 281, MaximumCharacterLevel = 330 };
+        bot.Attributes![Stats.Level] = 300;
+        var definition = new MiniGameDefinition
+        {
+            Type = type,
+            MinimumCharacterLevel = 1,
+            MaximumCharacterLevel = 400,
+            ArePlayerKillersAllowedToEnter = true,
+        };
 
         var eligible = BotMiniGameHandler.IsEligible(bot, definition, out var reason);
 
-        Assert.That(eligible, Is.EqualTo(expected));
-        Assert.That(reason, expected ? Is.Empty : Is.Not.Empty);
-    }
-
-    /// <summary>
-    /// The special characters (Magic Gladiator, Dark Lord, Rage Fighter, Summoner) enter in their own
-    /// level bracket, exactly like they do for a player: a qualified Magic Gladiator must not be judged
-    /// - and kicked out of its leader's party - by the bracket of the regular classes.
-    /// </summary>
-    /// <param name="level">The bot's character level.</param>
-    /// <param name="expected">Whether the bot qualifies.</param>
-    [TestCase(200, false)]
-    [TestCase(221, true)]
-    [TestCase(280, true)]
-    [TestCase(281, false)]
-    public async ValueTask EnforcesSpecialCharacterLevelBracketAsync(int level, bool expected)
-    {
-        var gameContext = GameContextTestHelper.CreateGameContext();
-        var bot = await CreateBotAsync(gameContext).ConfigureAwait(false);
-        bot.Attributes![Stats.Level] = level;
-
-        // That is what makes a character "special" for the entry rules (see CharacterExtensions).
-        bot.SelectedCharacter!.CharacterClass!.LevelWarpRequirementReductionPercent = 50;
-        var definition = new MiniGameDefinition
+        Assert.Multiple(() =>
         {
-            MinimumCharacterLevel = 281,
-            MaximumCharacterLevel = 330,
-            MinimumSpecialCharacterLevel = 221,
-            MaximumSpecialCharacterLevel = 280,
-        };
-
-        var eligible = BotMiniGameHandler.IsEligible(bot, definition, out _);
-
-        Assert.That(eligible, Is.EqualTo(expected));
+            Assert.That(eligible, Is.False);
+            Assert.That(reason, Is.Not.Empty);
+        });
     }
 
     /// <summary>
-    /// An event for master classes only is not entered before the bot's master evolution.
-    /// </summary>
-    /// <param name="isMasterClass">Whether the bot evolved into its master class.</param>
-    /// <param name="expected">Whether the bot qualifies.</param>
-    [TestCase(false, false)]
-    [TestCase(true, true)]
-    public async ValueTask EnforcesMasterClassRequirementAsync(bool isMasterClass, bool expected)
-    {
-        var gameContext = GameContextTestHelper.CreateGameContext();
-        var bot = await CreateBotAsync(gameContext).ConfigureAwait(false);
-        bot.Attributes![Stats.Level] = 400;
-        bot.SelectedCharacter!.CharacterClass!.IsMasterClass = isMasterClass;
-        var definition = new MiniGameDefinition { MinimumCharacterLevel = 0, MaximumCharacterLevel = 400, RequiresMasterClass = true };
-
-        var eligible = BotMiniGameHandler.IsEligible(bot, definition, out _);
-
-        Assert.That(eligible, Is.EqualTo(expected));
-    }
-
-    /// <summary>
-    /// A player killer bot (should never happen, but the rule is mirrored from the player entry)
-    /// cannot enter events which disallow player killers.
-    /// </summary>
-    /// <param name="killersAllowed">Whether the event allows player killers.</param>
-    /// <param name="expected">Whether the bot qualifies.</param>
-    [TestCase(false, false)]
-    [TestCase(true, true)]
-    public async ValueTask EnforcesPlayerKillerRestrictionAsync(bool killersAllowed, bool expected)
-    {
-        var gameContext = GameContextTestHelper.CreateGameContext();
-        var bot = await CreateBotAsync(gameContext).ConfigureAwait(false);
-        bot.Attributes![Stats.Level] = 100;
-        bot.SelectedCharacter!.State = HeroState.PlayerKiller1stStage;
-        var definition = new MiniGameDefinition { MinimumCharacterLevel = 0, MaximumCharacterLevel = 400, ArePlayerKillersAllowedToEnter = killersAllowed };
-
-        var eligible = BotMiniGameHandler.IsEligible(bot, definition, out _);
-
-        Assert.That(eligible, Is.EqualTo(expected));
-    }
-
-    /// <summary>
-    /// Only the bots of the party whose MASTER enters are taken along - and only the bots, not the
-    /// human members.
+    /// Even when a human party master carries bots in their party, <see cref="BotMiniGameHandler.SnapshotPartyBots"/>
+    /// returns an empty list so bots never follow into events.
     /// </summary>
     [Test]
-    public async ValueTask SnapshotTakesOnlyBotsOfTheEnteringMasterAsync()
+    public async ValueTask SnapshotReturnsEmptyWhenMasterEntersEventAsync()
     {
         var gameContext = GameContextTestHelper.CreateGameContext();
         var leader = await CreateHumanAsync(gameContext, "Leader").ConfigureAwait(false);
@@ -133,25 +70,58 @@ public class BotMiniGameHandlerTest
         await party.AddAsync(bot1).ConfigureAwait(false);
         await party.AddAsync(bot2).ConfigureAwait(false);
 
-        var fromLeader = BotMiniGameHandler.SnapshotPartyBots(leader);
-        var fromMember = BotMiniGameHandler.SnapshotPartyBots(member);
-
-        Assert.That(fromLeader, Is.EquivalentTo(new[] { bot1, bot2 }));
-        Assert.That(fromMember, Is.Empty);
+        Assert.That(BotMiniGameHandler.SnapshotPartyBots(leader), Is.Empty);
+        Assert.That(BotMiniGameHandler.SnapshotPartyBots(member), Is.Empty);
     }
 
     /// <summary>
-    /// A player without a party (or a bot, however it would get here) takes nobody along.
+    /// <see cref="MiniGameContext.TryEnterAsync"/> rejects bot accounts while allowing human players.
     /// </summary>
-    [Test]
-    public async ValueTask SnapshotIsEmptyWithoutPartyAsync()
+    [TestCase(MiniGameType.BloodCastle)]
+    [TestCase(MiniGameType.DevilSquare)]
+    [TestCase(MiniGameType.ChaosCastle)]
+    public async ValueTask MiniGameContext_RefusesBotEntryAsync(MiniGameType type)
     {
         var gameContext = GameContextTestHelper.CreateGameContext();
-        var solo = await CreateHumanAsync(gameContext, "Solo").ConfigureAwait(false);
-        var bot = await CreateBotAsync(gameContext, "Bot").ConfigureAwait(false);
+        var bot = await CreateBotAsync(gameContext, "BotOne").ConfigureAwait(false);
+        var human = await CreateHumanAsync(gameContext, "Human").ConfigureAwait(false);
+        var definition = CreateMiniGameDefinition(gameContext, type);
 
-        Assert.That(BotMiniGameHandler.SnapshotPartyBots(solo), Is.Empty);
-        Assert.That(BotMiniGameHandler.SnapshotPartyBots(bot), Is.Empty);
+        var miniGame = await gameContext.MiniGames.GetOrCreateAsync(definition, human).ConfigureAwait(false);
+        try
+        {
+            var botResult = await miniGame.TryEnterAsync(bot).ConfigureAwait(false);
+            var humanResult = await miniGame.TryEnterAsync(human).ConfigureAwait(false);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(botResult, Is.EqualTo(EnterResult.Failed));
+                Assert.That(bot.CurrentMiniGame, Is.Null);
+                Assert.That(humanResult, Is.EqualTo(EnterResult.Success));
+                Assert.That(human.CurrentMiniGame, Is.SameAs(miniGame));
+            });
+        }
+        finally
+        {
+            await miniGame.DisposeAsync().ConfigureAwait(false);
+        }
+    }
+
+    private static MiniGameDefinition CreateMiniGameDefinition(IGameContext gameContext, MiniGameType type)
+    {
+        var definitionMock = new Mock<MiniGameDefinition>();
+        definitionMock.SetupGet(d => d.Rewards).Returns(new List<MiniGameReward>());
+        definitionMock.SetupGet(d => d.SpawnWaves).Returns(new List<MiniGameSpawnWave>());
+        definitionMock.SetupGet(d => d.ChangeEvents).Returns(new List<MiniGameChangeEvent>());
+        definitionMock.SetupGet(d => d.Entrance).Returns(new ExitGate { Map = gameContext.Configuration.Maps.Single() });
+        var definition = definitionMock.Object;
+        definition.Type = type;
+        definition.MapCreationPolicy = MiniGameMapCreationPolicy.Shared;
+        definition.EnterDuration = TimeSpan.FromMinutes(1);
+        definition.GameDuration = TimeSpan.FromMinutes(5);
+        definition.ExitDuration = TimeSpan.FromMinutes(1);
+        definition.MaximumPlayerCount = 10;
+        return definition;
     }
 
     private static async ValueTask<OfflinePlayer> CreateBotAsync(IGameContext gameContext, string name = "Bot")
