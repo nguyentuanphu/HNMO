@@ -1588,6 +1588,11 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     },
     onHeroDied: () => chat.add('You died.', 'system'),
     onRespawn: async (map, x, y) => {
+      deaths.revived(online.hero);
+      online.goal = null;
+      online.followId = null;
+      online.clearCharacters();
+      state.ground?.clear();
       if (map !== state.mapNumber) { await loadMap(map); online.world = state.world!; }
       state.hero!.placeAt(x, y);
     },

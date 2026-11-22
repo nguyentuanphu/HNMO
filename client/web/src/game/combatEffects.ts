@@ -589,12 +589,31 @@ export class DeathEffects {
       .catch((error: unknown) => console.warn('Monster data for death effects not loaded', (error as Error).message));
   }
 
+  /** Restores a character that respawned (the hero's group stays in the scene across deaths). */
+  revived(character: Character): void {
+    const record = this.dying.get(character);
+    if (!record) return;
+    if (record.materials) {
+      for (const fading of record.materials) {
+        fading.material.transparent = fading.transparent;
+        fading.material.opacity = fading.opacity;
+      }
+    }
+    if (record.appliedZ !== null) character.group.position.z = record.baseZ;
+    character.group.visible = true;
+    this.dying.delete(character);
+  }
+
   update(dt: number): void {
     const frames = dt * ANIMATION_FRAMES_PER_SECOND;
     for (const record of this.dying.values()) {
       // The server removed it (out of view): nothing more to do.
       if (!record.character.group.parent) {
         this.dying.delete(record.character);
+        continue;
+      }
+      if (!record.character.dead) {
+        this.revived(record.character);
         continue;
       }
       this.rot(record, frames);
