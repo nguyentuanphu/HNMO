@@ -392,15 +392,20 @@ public class GameContext : AsyncDisposable, IGameContext
     {
         lock (this._loginStateLock)
         {
+            // Bots count in LoggedInPlayerCount so they show in online totals, but they never consume
+            // login capacity or prevent real players from entering.
+            var nonBotLoggedInCount = this._loggedInPlayers.Count(static player => player.Account?.IsBot != true);
+
             // The place of the replaced player is taken over while it's logged in, unless another login
             // takes it over already.
             var takesOver = replacedPlayer is not null
+                && replacedPlayer.Account?.IsBot != true
                 && this._loggedInPlayers.Contains(replacedPlayer)
                 && !this._takeovers.ContainsKey(replacedPlayer);
 
             // A login adds itself to the logged in players before it releases its reservation, and the
             // logged in players only get fewer otherwise. So, this sum never misses a login which passed.
-            var occupiedPlaces = this._loggedInPlayerCount + this._reservedLoginPlaces - (takesOver ? 1 : 0);
+            var occupiedPlaces = nonBotLoggedInCount + this._reservedLoginPlaces - (takesOver ? 1 : 0);
             if (occupiedPlaces >= maximumPlayers)
             {
                 return (null, occupiedPlaces);

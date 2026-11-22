@@ -21,7 +21,7 @@ public static class LicensedPlayerLimit
     /// <summary>The players at once without a license.</summary>
     public const int DefaultMaximum = 10;
 
-    private static readonly Dictionary<string, Player> Admitted = new(StringComparer.OrdinalIgnoreCase);
+    private static readonly Dictionary<string, Player?> Admitted = new(StringComparer.OrdinalIgnoreCase);
     private static readonly Lock Sync = new();
     private static int _maximum = DefaultMaximum;
     private static IReadOnlyCollection<string> _elsewhere = [];
@@ -103,8 +103,13 @@ public static class LicensedPlayerLimit
     /// <param name="player">The player which logs in.</param>
     /// <param name="loginName">The account's login name.</param>
     /// <returns><c>true</c>, if the player may log in.</returns>
-    public static bool TryAdmit(Player player, string loginName)
+    public static bool TryAdmit(Player? player, string loginName)
     {
+        if (player?.Account?.IsBot == true)
+        {
+            return true;
+        }
+
         var elsewhere = Elsewhere();
         lock (Sync)
         {

@@ -582,6 +582,35 @@ public class GameServerFullTests
     }
 
     /// <summary>
+    /// Bots are counted in <see cref="IGameContext.LoggedInPlayerCount"/>, yet never consume
+    /// real players' login capacity (<see cref="IGameContext.TryReserveLoginPlace"/>).
+    /// </summary>
+    [Test]
+    public async ValueTask BotsCountInOnlineCountButNeverMakeServerFullForRealPlayersAsync()
+    {
+        var gameContext = this.CreateGameServerContext(maximumPlayers: 2);
+        await AddBotSessionAsync(gameContext, "bot1").ConfigureAwait(false);
+        await AddBotSessionAsync(gameContext, "bot2").ConfigureAwait(false);
+        await AddBotSessionAsync(gameContext, "bot3").ConfigureAwait(false);
+
+        Assert.That(gameContext.LoggedInPlayerCount, Is.EqualTo(3));
+
+        var firstHuman = await this.CreatePlayerAtLoginScreenAsync(gameContext).ConfigureAwait(false);
+        var secondHuman = await this.CreatePlayerAtLoginScreenAsync(gameContext).ConfigureAwait(false);
+        var thirdHuman = await this.CreatePlayerAtLoginScreenAsync(gameContext).ConfigureAwait(false);
+
+        await new LoginAction().LoginAsync(firstHuman, "a", Password).ConfigureAwait(false);
+        VerifyLoginResult(firstHuman, LoginResult.Ok);
+
+        await new LoginAction().LoginAsync(secondHuman, "b", Password).ConfigureAwait(false);
+        VerifyLoginResult(secondHuman, LoginResult.Ok);
+        Assert.That(gameContext.LoggedInPlayerCount, Is.EqualTo(5));
+
+        await new LoginAction().LoginAsync(thirdHuman, "c", Password).ConfigureAwait(false);
+        VerifyLoginResult(thirdHuman, LoginResult.ServerIsFull);
+    }
+
+    /// <summary>
     /// Adds an offline session of the account to the offline player manager.
     /// </summary>
     /// <remarks>
@@ -600,6 +629,18 @@ public class GameServerFullTests
 
         Assert.That(gameContext.OfflinePlayerManager.TryAdd(loginName, offlinePlayer), Is.True);
         return offlinePlayer;
+    }
+
+    private static async ValueTask<OfflinePlayer> AddBotSessionAsync(GameServerContext gameContext, string loginName)
+    {
+        var bot = new OfflinePlayer(gameContext)
+        {
+            Account = new Persistence.BasicModel.Account { LoginName = loginName, IsBot = true },
+        };
+        await gameContext.AddPlayerAsync(bot).ConfigureAwait(false);
+        await bot.PlayerState.TryAdvanceToAsync(PlayerState.LoginScreen).ConfigureAwait(false);
+        await bot.PlayerState.TryAdvanceToAsync(PlayerState.Authenticated).ConfigureAwait(false);
+        return bot;
     }
 
     private static DefaultTcpGameServerListener CreateListener(GameServerContext gameContext, int port, IGameServerStateObserver? observer = null, ILoggerFactory? loggerFactory = null)

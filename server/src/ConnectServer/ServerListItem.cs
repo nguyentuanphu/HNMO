@@ -101,7 +101,9 @@ internal class ServerListItem : IGameServerEntry
         set
         {
             this._currentConnections = value;
-            this.ServerLoadPercentage = (byte)(this._currentConnections * 100f / this.MaximumConnections);
+            this.ServerLoadPercentage = this.MaximumConnections > 0
+                ? (byte)Math.Clamp(this._currentConnections * 100f / this.MaximumConnections, 0f, 100f)
+                : (byte)0;
         }
     }
 
