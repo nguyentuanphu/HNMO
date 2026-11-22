@@ -20,6 +20,9 @@ when you learn something new about how they work (see the `hnmo` skill).
   without a reason, no `@ts-ignore`.
 - **Small steps:** build features one at a time, test each in the real game
   (headless Chromium + the packaged HNMO folder), then commit.
+- **Light tests (owner, 2026-11-23):** agents run only the tests of what they touched and group related fixes in one
+  draft PR per area (each fix still with its test); GitHub runs every suite on the PR; main merges only on green checks
+  and runs the full suites once per merge batch. Details: `docs/handover-2026-11-21.md` rule 4.
 - **Report:** say what was verified and what wasn't; give download links for builds.
 
 ## Layout

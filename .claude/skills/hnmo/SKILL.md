@@ -35,8 +35,8 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
 ## How to work
 
 1. Read `CLAUDE.md`, then `client/web/PARITY.md` for what's done and what's next.
-2. Make the change; build (`dotnet build server/src/HNMO.sln -c Release`) and run the
-   tests that cover it.
+2. Make the change; build and run only the tests that cover it (owner, 23 Nov 2026: GitHub runs the
+   full suites on the PR, main runs them once per merge batch).
 3. Test in the real game: package with `client/web/tools/package-hnmo.sh`, run it as a
    non-root user, drive the browser with Playwright (headless Chromium with
    `--use-gl=angle --use-angle=swiftshader`), take screenshots of what changed.
