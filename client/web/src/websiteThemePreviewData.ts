@@ -1,3 +1,5 @@
+import type { ServerGuideFacts, ServerGuideView } from './websiteServerGuideModels.js';
+
 /** Fictional API replies for the private design Site only. Never imported by production entry points. */
 const reward = { zen: 1000, coins: 5, coinType: 'WCoinC', items: [] };
 const missions = [
@@ -21,7 +23,28 @@ const milestones = { enabled: true, totalVnd: 100000, nextThresholdVnd: 200000, 
 const letter = { id: 'sample-letter', title: 'Quà mẫu / Example gift', sentAtUtc: '2026-11-21T09:00:00Z', expiresAtUtc: '2026-11-25T09:00:00Z', collected: false, expired: false, pieces: 0, coins: 20, zen: 1000, coinType: 'WCoinC' };
 
 /** Unknown routes deliberately stay unavailable; the Site does not invent feature rules or forward credentials. */
+const serverGuideFacts: ServerGuideFacts = {
+  maximumInventoryMoney: 2000000000, maximumVaultMoney: 2000000000,
+  classes: [{ id: 0, nameEn: 'Wizard', nameVi: 'Pháp sư', requiredLevel: 0, shieldConfigured: true, maximumMasterTier: 8 }, { id: 16, nameEn: 'Knight', nameVi: 'Kiếm sĩ', requiredLevel: 0, shieldConfigured: true, maximumMasterTier: 8 }],
+  helper: { minLevel: 80, vipMinLevel: 50, maxLevel: 400, payIntervalSeconds: 300, costPerStage: [20, 50] },
+  inventory: { maximumExtensions: 4 }, vault: { defaultVaultCount: 2, maxVaultsPerAccount: 5, vipExtraVaults: 1, purchaseExtraVaultCost: 200, purchaseCoinType: 'WCoinC' },
+  partyExperience: [{ size: 2, percent: 120, differentClassesPercent: 0 }, { size: 3, percent: 180, differentClassesPercent: 230 }],
+  vip: [{ id: 1, nameEn: 'Silver example', nameVi: 'Bạc mẫu', experiencePercent: 5, zenPercent: 10, dailyCoins: 10, dailyCoinType: 'GoblinPoints', offers: [{ days: 7, price: 100, coinType: 'WCoinC' }] }],
+  catalog: { products: [{ nameEn: 'Mana potion example', nameVi: 'Bình Mana mẫu', itemLevel: 0, quantity: 10, durationSeconds: 0, price: 30, coinType: 'WCoinC', bundle: false }], truncated: false },
+};
+const serverGuidePreview: ServerGuideView = {
+  updatedAt: '2026-11-22T00:00:00Z',
+  clientRules: { en: 'Example policy: protect your account password.', vi: 'Quy định mẫu: bảo vệ mật khẩu tài khoản.' },
+  notForSale: { en: 'Example list: host decisions appear here.', vi: 'Danh sách mẫu: host công bố nội dung tại đây.' },
+  servers: [0, 1].map(id => ({ id, facts: serverGuideFacts, extras: {
+    systems: { antiCheatEnabled: true, activityLogEnabled: true, onlyValuableDrops: true },
+    quests: [{ nameEn: 'Example promotion', nameVi: 'Nhiệm vụ thăng lớp mẫu', npcEn: 'Guide', npcVi: 'Hướng đạo', minimumLevel: 150, maximumLevel: 400, requiredStartMoney: 1000, classEn: '', classVi: '' }], questsTruncated: false,
+    crafts: [{ nameEn: 'Example wing recipe', nameVi: 'Công thức cánh mẫu', npcEn: 'Crafter', npcVi: 'Thợ chế tạo', itemEn: 'Wings', itemVi: 'Cánh', randomMinimumLevel: 0, randomMaximumLevel: 3, addLevel: 0, upgrade: false, basePercent: null, maximumPercent: 80, fixedZen: 1000, zenPerFinalPercentage: 20, excellentChance: null, maximumExcellentOptions: 0 }], craftsTruncated: false,
+  } })),
+};
+
 export function websitePreviewReply(path: string): unknown | undefined {
+  if (path === '/website/server-guide') return serverGuidePreview;
   if (path === '/portal/status') return { ready: true };
   if (path === '/topup/info') return { enabled: false };
   if (path === '/portal/account/overview') return {
@@ -37,7 +60,7 @@ export function websitePreviewReply(path: string): unknown | undefined {
   if (path === '/portal/topup-milestones/account' || path === '/website/topup-milestones') return milestones;
   if (path === '/portal/gift-box/state') return { accountKey: 'EXPLORER', offset: 0, hasMore: false, letters: [letter], detail: { ...letter, message: 'Dữ liệu mẫu, không gửi hay nhận tài sản thật. / Sample data; no real assets are sent or collected.', collectedBy: null, items: [] }, characters: [{ id: 'sample-character', name: 'ExplorerKnight' }], status: null };
   if (path === '/portal/login-ticket') return { loginName: 'Explorer', ticket: 'sample-ticket-no-server', expiresInSeconds: 60 };
-  if (path === '/website/data') return { updatedAt: '2026-11-22T00:00:00Z', servers: [0, 1].map(id => ({ id, description: id === 0 ? 'Atlas · Season 6.3' : 'Aurora · Season 9', players: id === 0 ? 24 : 12, capacity: 100, experienceRate: 5, masterExperienceRate: 2, maximumLevel: 400, maximumMasterLevel: 200, maximumCharactersPerAccount: 5, maximumPartySize: 5, classes: [{ id: 0, name: 'Wizard||vi=Pháp sư', requiredLevel: 0 }], maps: [{ id: 0, name: 'Lorencia', expMultiplier: 1 }], events: [] })) };
+  if (path === '/website/data') return { updatedAt: '2026-11-22T00:00:00Z', worlds: [0, 1].map(id => ({ worldId: String(id), season: id === 0 ? 's6' : 's9', seasonBadge: id === 0 ? 'S6.3' : 'S9', nameEn: id === 0 ? 'Atlas example' : 'Aurora example', nameVi: id === 0 ? 'Atlas mẫu' : 'Aurora mẫu', isRunning: true, isOpen: true, openingDateUtc: null, openingDateSydney: '', experienceMultiplier: 5, dropMultiplier: 1, zenMultiplier: 1, eventPresetEn: 'Example', eventPresetVi: 'Mẫu', totalPlayers: id === 0 ? 24 : 12, totalCapacity: 100, servers: [{ id, players: id === 0 ? 24 : 12, capacity: 100, isRunning: true }] })), servers: [0, 1].map(id => ({ id, description: id === 0 ? 'Atlas · Season 6.3' : 'Aurora · Season 9', players: id === 0 ? 24 : 12, capacity: 100, experienceRate: 5, masterExperienceRate: 2, maximumLevel: 400, maximumMasterLevel: 200, maximumCharactersPerAccount: 5, maximumPartySize: 5, classes: [{ id: 0, name: 'Wizard||vi=Pháp sư', requiredLevel: 0 }], maps: [{ id: 0, name: 'Lorencia', expMultiplier: 1 }], events: [] })) };
   if (path === '/website/details') return { updatedAt: '2026-11-22T00:00:00Z', characters: [{ rank: 1, name: 'ExplorerKnight', className: 'Knight', level: 300, masterLevel: 0, resets: 12 }], eventRankings: [], upcoming: [{ serverId: 0, events: [{ name: 'Blood Castle', nameVi: 'Huyết Lâu', startsAt: '2026-11-23T09:00:00Z' }] }], drops: [{ name: 'Example jewel||vi=Ngọc mẫu', chancePercent: 0.5, minimumMonsterLevel: 10, maximumMonsterLevel: null, monster: null, itemCount: 1 }] };
   if (path === '/website/missions') return { missions, nextDaily: board.nextDaily, earnedDailyCap: 300 };
   if (path === '/website/news') return { enabled: true, allowWebsite: true, posts: [{ id: 'sample-news', titleEn: 'Example continent news', titleVi: 'Tin lục địa mẫu', bodyEn: 'The original website sections and feature modules are retained. These records are fictional.', bodyVi: 'Giữ nguyên các mục và mô-đun tính năng website hiện có. Các bản ghi ở đây là dữ liệu mẫu.', publishAtUtc: Date.parse('2026-11-22T00:00:00Z'), publishSydney: '22/11/2026 11:00', pinned: true }] };
