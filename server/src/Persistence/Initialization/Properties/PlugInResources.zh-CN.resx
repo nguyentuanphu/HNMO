@@ -285,6 +285,8 @@
   <data name="SystemConfigurationAddedPlugInBase_Description" xml:space="preserve"><value>添加新的系统配置。</value></data>
   <data name="AddKanturuDataUpdatePlugIn_Name" xml:space="preserve"><value>添加坎特鲁副本数据</value></data>
   <data name="AddKanturuDataUpdatePlugIn_Description" xml:space="preserve"><value>添加坎特鲁提炼之塔副本配置。</value></data>
+  <data name="MayaBodyNonAttackableUpdatePlugIn_Name" xml:space="preserve"><value>使玛雅本体无法被攻击</value></data>
+  <data name="MayaBodyNonAttackableUpdatePlugIn_Description" xml:space="preserve"><value>将坎特鲁副本中玛雅本体（#364）设为 PassiveNpc 且掉落数量为 0，使其遵循经典设定无法被击中，并保留已自定义的值。</value></data>
   <data name="StandardizeEventEnterDurationPlugInBase_Name" xml:space="preserve"><value>统一活动入口持续时间</value></data>
   <data name="StandardizeEventEnterDurationPlugInBase_Description" xml:space="preserve"><value>此更新将共用入口的活动（如血色城堡、恶魔广场和坎特鲁）的入口持续时间统一为所有活动入口公告的五分钟。</value></data>
   <data name="FixDrainLifeSkillUpdate_Name" xml:space="preserve"><value>修正摄魂咒</value></data>

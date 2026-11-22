@@ -199,6 +199,7 @@ internal class KanturuEvent : BaseMapInitializer
             this.GameConfiguration.Monsters.Add(monster);
             monster.Number = MayaBodyNumber;
             monster.Designation = LocalizedString.FromResource(() => MonsterNames.Maya);
+            monster.ObjectKind = NpcObjectKind.PassiveNpc;
             monster.MoveRange = 3;
             monster.AttackRange = 1;
             monster.ViewRange = 7;
@@ -206,7 +207,7 @@ internal class KanturuEvent : BaseMapInitializer
             monster.AttackDelay = new TimeSpan(1500 * TimeSpan.TicksPerMillisecond);
             monster.RespawnDelay = new TimeSpan(10 * TimeSpan.TicksPerSecond);
             monster.Attribute = 2;
-            monster.NumberOfMaximumItemDrops = 7;
+            monster.NumberOfMaximumItemDrops = 0;
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 111 },

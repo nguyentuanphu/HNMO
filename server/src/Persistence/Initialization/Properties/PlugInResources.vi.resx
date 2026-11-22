@@ -516,6 +516,12 @@
   <data name="AddKanturuDataUpdatePlugIn_Description" xml:space="preserve">
     <value>Bản cập nhật này thêm cấu hình sự kiện Tháp Tinh Luyện Kanturu.</value>
   </data>
+  <data name="MayaBodyNonAttackableUpdatePlugIn_Name" xml:space="preserve">
+    <value>Không thể tấn công thân Maya (#364)</value>
+  </data>
+  <data name="MayaBodyNonAttackableUpdatePlugIn_Description" xml:space="preserve">
+    <value>Chuyển thân Maya (#364) trong sự kiện Kanturu sang PassiveNpc với 0 lần rơi vật phẩm để không bị đánh trúng như bản cổ điển, giữ nguyên giá trị đã tùy chỉnh.</value>
+  </data>
   <data name="StandardizeEventEnterDurationPlugInBase_Name" xml:space="preserve">
     <value>Thống nhất thời gian vào sự kiện</value>
   </data>
