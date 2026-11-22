@@ -491,4 +491,6 @@
   <data name="StrongerHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
     <value>将 28 个 HNMO 技能增强 20%（伤害、增益和减益效果；消耗和冷却时间不变），并将精灵士兵的试炼任务改为击杀 200 个怪物并上交五颗玛雅之石。</value>
   </data>
+  <data name="SkillEnergyRequirementsUpdatePlugIn_Name" xml:space="preserve"><value>修复 Recovery 与 Power Slash 的智力要求</value></data>
+  <data name="SkillEnergyRequirementsUpdatePlugIn_Description" xml:space="preserve"><value>将 Recovery 的智力要求设为 168（与 Season 6 / Season 9 服务端套件及 Crystal of Recovery 一致），并将 Power Slash 的智力要求设为 100。</value></data>
 </root>
