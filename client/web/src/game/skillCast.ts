@@ -108,6 +108,9 @@ export const SkillId = {
   ALICE_BLIND: 220,
   ALICE_WEAKNESS: 221,
   ALICE_ENERVATION: 222,
+  SUMMON_EXPLOSION: 223,
+  SUMMON_REQUIEM: 224,
+  SUMMON_POLLUTION: 225,
   LIGHTNING_SHOCK: 230,
   STRIKE_OF_DESTRUCTION: 232,
   EXPANSION_OF_WIZARDRY: 233,
@@ -931,6 +934,10 @@ function wizardPlan(
     case S.ALICE_WEAKNESS:
     case S.ALICE_ENERVATION:
       return plan({ packet: 'area', areaExtraTarget: false, heroAction: summonerAction(ctx, A.SKILL_SLEEP), source: 'UseSkillSummon AT_SKILL_ALICE_WEAKNESS / AT_SKILL_ALICE_ENERVATION' });
+    case S.SUMMON_EXPLOSION:
+    case S.SUMMON_REQUIEM:
+    case S.SUMMON_POLLUTION:
+      return plan({ packet: 'area', areaAt: 'target', heroAction: summonerAction(ctx, A.SKILL_SUMMON), source: 'CSummonSystem::SendRequestSummonSkill AT_SKILL_SUMMON_EXPLOSION / _REQUIEM / _POLLUTION' });
     case S.LIGHTNING_SHOCK:
       return plan({ packet: 'area', heroAction: A.SKILL_LIGHTNING_SHOCK, rotationScale: 255, turnFirst: true, source: 'AttackWizard AT_SKILL_LIGHTNING_SHOCK' });
     default:
@@ -1083,10 +1090,10 @@ function areaAnimationAction(skill: number, classIndex: number, ctx: SkillAnimat
     case S.ALICE_WEAKNESS:
     case S.ALICE_ENERVATION:
       return summonerAction(ctx, A.SKILL_SLEEP);
-    case 223: // AT_SKILL_SUMMON_EXPLOSION, _REQUIEM, _POLLUTION: the summon system's own animation.
-    case 224:
-    case 225:
-      return null;
+    case S.SUMMON_EXPLOSION:
+    case S.SUMMON_REQUIEM:
+    case S.SUMMON_POLLUTION:
+      return summonerAction(ctx, A.SKILL_SUMMON); // ReceiveMagicContinue -> CastSummonSkill -> SetPlayerSummon.
     case S.FLAME_STRIKE:
       return A.SKILL_FLAMESTRIKE;
     case S.GIGANTIC_STORM:
