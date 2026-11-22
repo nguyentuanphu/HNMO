@@ -168,6 +168,8 @@
   </script>
   <link rel="stylesheet" href="/website-themes.css">
   <script type="module">import "/js/websiteThemeEntry.js";</script>
+<link rel="stylesheet" href="/website-shell.css">
+<script type="module">import "/js/websiteShellEntry.js";</script>
 </head>
 <body data-website-page="game">
   <div id="stage"><canvas id="view"></canvas></div>
@@ -190,7 +192,7 @@
   <div id="login">
     <form class="panel" id="loginForm" autocomplete="on">
       <img data-brand-logo alt="" width="48" height="48" hidden><h1 data-game-name>HenryN Mu Online</h1>
-      <a class="website-login" id="websiteLoginButton" href="/account.html#play">Log in on the website</a>
+      <a class="website-login" id="websiteLoginButton" href="/account.html?play=1" data-enter-game>Log in on the website</a>
       <fieldset>
         <div class="row"><label for="username">Account</label><input id="username" name="username" required maxlength="10" autocomplete="username"></div>
         <div class="row"><label for="password">Password</label><input id="password" name="password" type="password" required maxlength="20" autocomplete="current-password"></div>
