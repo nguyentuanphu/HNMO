@@ -57,9 +57,29 @@ export class AutoPlaySparkles {
     this.pointGeom.setAttribute('position', new THREE.BufferAttribute(this.positions, 3));
     this.pointMat = new THREE.PointsMaterial({
       color: COLORS.autoplay,
-      size: 26,
+      size: 56,
+      map: (() => {
+        const size = 32;
+        const pixels = new Uint8Array(size * size * 4);
+        const half = (size - 1) / 2;
+        for (let y = 0; y < size; y++) {
+          for (let x = 0; x < size; x++) {
+            const dist = Math.min(1, Math.hypot(x - half, y - half) / half);
+            const alpha = Math.round(Math.pow(1 - dist, 2) * 255);
+            const idx = (y * size + x) * 4;
+            pixels[idx] = 255;
+            pixels[idx + 1] = 255;
+            pixels[idx + 2] = 255;
+            pixels[idx + 3] = alpha;
+          }
+        }
+        const tex = new THREE.DataTexture(pixels, size, size, THREE.RGBAFormat);
+        tex.needsUpdate = true;
+        return tex;
+      })(),
+      alphaTest: 0.02,
       transparent: true,
-      opacity: 0.92,
+      opacity: 0.95,
       depthWrite: false,
       blending: THREE.AdditiveBlending,
     });

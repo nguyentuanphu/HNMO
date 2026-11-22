@@ -73,6 +73,19 @@ export class UltimateAutoPlayWindow {
     this.panel = null;
   }
 
+  /** Refreshes HUD badge and re-renders an open Ultimate Autoplay panel immediately after a live policy change. */
+  refreshPolicy(): void {
+    const showHud = this.opts.extras.policy.enabled && this.opts.extras.settings.showUltimateHud;
+    if (this.hud) {
+      this.hud.style.display = showHud ? 'flex' : 'none';
+      if (showHud) this.updateHudContent();
+    }
+    if (this.openState) {
+      if (this.panel) this.captureDraftInputs(this.panel);
+      this.renderPanel();
+    }
+  }
+
   /** Refreshes the compact floating HUD pill (throttled to ~2 Hz) and Stats tab when open. */
   refresh(now = performance.now()): void {
     if (now - this.lastHudTick < 500) return;

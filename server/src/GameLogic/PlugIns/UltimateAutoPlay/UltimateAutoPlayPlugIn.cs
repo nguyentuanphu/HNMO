@@ -4,6 +4,7 @@
 
 namespace HNMO.GameLogic.PlugIns.UltimateAutoPlay;
 
+using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
 using System.Threading;
 using HNMO.GameLogic.Attributes;
@@ -18,10 +19,14 @@ using HNMO.PlugIns;
 [Guid("C4E7B1A2-8D3F-4E91-9A2B-7F5C1E3D8904")]
 public sealed class UltimateAutoPlayPlugIn :
     IPlayerStateChangedPlugIn,
+    IPeriodicTaskPlugIn,
     ISupportCustomConfiguration<UltimateAutoPlayConfiguration>,
     ISupportDefaultCustomConfiguration
 {
+    private static readonly TimeSpan VipCheckInterval = TimeSpan.FromSeconds(5);
+    private readonly ConcurrentDictionary<Player, bool> _lastSentVip = new();
     private IGameContext? _gameContext;
+    private long _nextVipCheckTicks;
 
     /// <inheritdoc />
     public UltimateAutoPlayConfiguration? Configuration { get; set; }
@@ -32,13 +37,20 @@ public sealed class UltimateAutoPlayPlugIn :
     public static UltimateAutoPlayPlugIn? Get(IGameContext gameContext) =>
         gameContext.PlugInManager.GetActivePlugInsOf<IPlayerStateChangedPlugIn>().OfType<UltimateAutoPlayPlugIn>().FirstOrDefault();
 
+    /// <summary>Determines whether <paramref name="player"/> currently has an active VIP grant or attribute.</summary>
+    /// <param name="player">The player.</param>
+    /// <returns><c>true</c> if VIP is active; otherwise, <c>false</c>.</returns>
+    public static bool IsVip(Player player) =>
+        (player.Attributes?[Stats.IsVip] ?? 0) > 0
+        || (player.Account is { } account && account.GetAccountAttributeValue(Stats.IsVip, DateTime.UtcNow) > 0);
+
     /// <summary>Sends the resolved Ultimate Autoplay policy JSON to <paramref name="player"/>.</summary>
     /// <param name="player">The player.</param>
     /// <returns>The task.</returns>
     public static ValueTask SendPolicyAsync(Player player)
     {
         var plugin = Get(player.GameContext);
-        return SendPolicyAsync(player, plugin is null ? null : plugin.Configuration ??= new UltimateAutoPlayConfiguration());
+        return SendPolicyAsync(player, plugin, plugin is null ? null : plugin.Configuration ??= new UltimateAutoPlayConfiguration());
     }
 
     /// <inheritdoc />
@@ -50,17 +62,59 @@ public sealed class UltimateAutoPlayPlugIn :
         if (currentState == PlayerState.EnteredWorld && player.SelectedCharacter is not null)
         {
             this.WatchSettings(player.GameContext);
-            return SendPolicyAsync(player);
+            return SendPolicyAsync(player, this, this.Configuration ??= new UltimateAutoPlayConfiguration());
+        }
+
+        if (currentState != PlayerState.EnteredWorld)
+        {
+            this._lastSentVip.TryRemove(player, out _);
         }
 
         return ValueTask.CompletedTask;
     }
 
-    private static ValueTask SendPolicyAsync(Player player, UltimateAutoPlayConfiguration? configuration)
+    /// <inheritdoc />
+    public async ValueTask ExecuteTaskAsync(GameContext gameContext)
+    {
+        var now = DateTime.UtcNow;
+        if (now.Ticks < Interlocked.Read(ref this._nextVipCheckTicks))
+        {
+            return;
+        }
+
+        Interlocked.Exchange(ref this._nextVipCheckTicks, now.Add(VipCheckInterval).Ticks);
+        var configuration = this.Configuration ??= new UltimateAutoPlayConfiguration();
+        foreach (var player in await gameContext.GetPlayersAsync().ConfigureAwait(false))
+        {
+            if (player.SelectedCharacter is null
+                || player.CurrentMap is null
+                || player.PlayerState.CurrentState != PlayerState.EnteredWorld)
+            {
+                this._lastSentVip.TryRemove(player, out _);
+                continue;
+            }
+
+            var isVip = IsVip(player);
+            if (!this._lastSentVip.TryGetValue(player, out var lastVip) || lastVip != isVip)
+            {
+                this._lastSentVip[player] = isVip;
+                await SendPolicyAsync(player, this, configuration, isVip).ConfigureAwait(false);
+            }
+        }
+    }
+
+    /// <inheritdoc />
+    public void ForceStart() => Interlocked.Exchange(ref this._nextVipCheckTicks, 0);
+
+    private static ValueTask SendPolicyAsync(Player player, UltimateAutoPlayPlugIn? plugin, UltimateAutoPlayConfiguration? configuration, bool? knownVip = null)
     {
         // VIP on the character or on the account (VIP days), as the other VIP checks of HNMO read it.
-        var isVip = (player.Attributes?[Stats.IsVip] ?? 0) > 0
-            || (player.Account is { } account && account.GetAccountAttributeValue(Stats.IsVip, DateTime.UtcNow) > 0);
+        var isVip = knownVip ?? IsVip(player);
+        if (plugin is not null)
+        {
+            plugin._lastSentVip[player] = isVip;
+        }
+
         var json = configuration is null
             ? UltimateAutoPlayPolicyWriter.DisabledPolicyJson
             : UltimateAutoPlayPolicyWriter.Write(configuration, plugInActive: true, isVip);
@@ -114,7 +168,7 @@ public sealed class UltimateAutoPlayPlugIn :
                 {
                     if (player.SelectedCharacter is not null && player.CurrentMap is not null)
                     {
-                        await SendPolicyAsync(player, configuration).ConfigureAwait(false);
+                        await SendPolicyAsync(player, this, configuration).ConfigureAwait(false);
                     }
                 }).ConfigureAwait(false);
             }

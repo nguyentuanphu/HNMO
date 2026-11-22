@@ -41,6 +41,7 @@ import { AutoPlayBar } from './ui/autoPlayBar.js';
 import { TopUpMilestonesWindow } from './ui/topUpMilestonesWindow.js';
 import { AutoPlayExtras } from './game/autoPlayExtras.js';
 import { AutoPlaySparkles } from './game/autoPlaySparkles.js';
+import { resolveSparkleGoal } from './game/sparkleGoal.js';
 import { AutoPlayExtrasPanel } from './ui/autoPlayExtrasPanel.js';
 import { UltimateAutoPlayWindow } from './ui/ultimateAutoPlayWindow.js';
 import { MissionsWindow } from './ui/missionsWindow.js';
@@ -471,14 +472,15 @@ async function loadMapNow(mapNumber: number): Promise<void> {
     autoPlayActive: () => state.autoPlay?.active ?? false,
     enabled: () => Boolean(state.autoPlayExtras?.settings.sparkleGuide && state.autoPlayExtras.isFeatureAllowed('sparkleGuide')),
     goal: () => {
-      const target = state.autoPlay?.getTargetCell();
-      if (target) return { kind: 'autoplay', cell: target };
       const extras = state.autoPlayExtras;
-      if (extras?.settings.bossFocus && extras.isFeatureAllowed('bossFocus')) {
-        const boss = [...(state.online?.characters.values() ?? [])].find((c) => !c.dead && c.kind === 'monster' && /boss|kundun|selupan|erochim|medusa|hell maine|golden/i.test(c.name));
-        if (boss) return { kind: 'boss', cell: { ...boss.cell } };
-      }
-      return null;
+      const boss = extras?.settings.bossFocus && extras.isFeatureAllowed('bossFocus')
+        ? [...(state.online?.characters.values() ?? [])].find((c) => !c.dead && c.kind === 'monster' && /boss|kundun|selupan|erochim|medusa|hell maine|golden/i.test(c.name))
+        : undefined;
+      return resolveSparkleGoal({
+        autoPlayTarget: state.autoPlay?.getTargetCell(),
+        bossCell: boss ? { ...boss.cell } : null,
+        questCell: state.onboarding?.getTargetCell(state.mapNumber ?? null),
+      });
     },
   });
   state.worldGroup = world.group;
@@ -1914,7 +1916,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     if (bytes.length < 5 || bytes[0] !== 0xc2 || bytes[3] !== 0xf5 || bytes[4] !== 0x57) return;
     const pkt = read('ServerToClient', 'HnmoUltimateAutoPlayPolicy', bytes);
     autoPlayExtras.setPolicy(String(pkt.Json ?? ''));
-    ultimateAutoPlay.refresh(0);
+    ultimateAutoPlay.refreshPolicy();
   };
   connection.onPacket(applyUltimatePolicy);
   earlyPackets.forEach(applyUltimatePolicy);

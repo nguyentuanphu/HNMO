@@ -12,6 +12,7 @@ using HNMO.DataModel.Entities;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.PlugIns.UltimateAutoPlay;
 using HNMO.GameLogic.PlugIns.Vip;
 using HNMO.GameLogic.Views;
 using HNMO.GameServer;
@@ -251,6 +252,62 @@ public class VipGameActionsTests
         using var unmarkedOutput = second.Output;
         await new ChatViewPlugIn(other).ChatMessageAsync("private", "Hero", ChatMessageType.Whisper).ConfigureAwait(false);
         Assert.That(new ChatMessageRef(unmarkedOutput.ToArray()).Message, Is.EqualTo("private"));
+    }
+
+    /// <summary>Live VIP purchases and grant expiry immediately update the client's Ultimate Autoplay policy.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task PurchaseAndExpiryPushLiveUltimateAutoPlayPolicyAsync()
+    {
+        var game = this._player.GameContext;
+        await game.AddPlayerAsync(this._player).ConfigureAwait(false);
+        game.PlugInManager.RegisterPlugIn<IPlayerStateChangedPlugIn, UltimateAutoPlayPlugIn>();
+        game.PlugInManager.RegisterPlugIn<IPeriodicTaskPlugIn, UltimateAutoPlayPlugIn>();
+        game.PlugInManager.ActivatePlugIn<UltimateAutoPlayPlugIn>();
+        var uapPlugIn = UltimateAutoPlayPlugIn.Get(game)!;
+        uapPlugIn.Configuration = new UltimateAutoPlayConfiguration();
+
+        var sentPolicies = new List<string>();
+        var uapView = this._player.ViewPlugIns.GetPlugIn<IHnmoUltimateAutoPlayViewPlugIn>()!;
+        Mock.Get(uapView)
+            .Setup(v => v.ShowUltimateAutoPlayPolicyAsync(It.IsAny<string>()))
+            .Callback<string>(sentPolicies.Add)
+            .Returns(ValueTask.CompletedTask);
+
+        // Initial world entry sends isVip: false.
+        await uapPlugIn.PlayerStateChangedAsync(this._player, PlayerState.CharacterSelection, PlayerState.EnteredWorld).ConfigureAwait(false);
+        var countAfterEntry = sentPolicies.Count;
+        Assert.That(countAfterEntry, Is.GreaterThanOrEqualTo(1));
+        using (var initialDoc = JsonDocument.Parse(sentPolicies[^1]))
+        {
+            Assert.That(initialDoc.RootElement.GetProperty("isVip").GetBoolean(), Is.False);
+        }
+
+        // Buying VIP in-game pushes isVip: true immediately without re-logging or opening Alt+Z.
+        var purchase = await this._actions.HandleAsync(this._player, await this.SelectionAsync().ConfigureAwait(false)).ConfigureAwait(false);
+        Assert.That(purchase, Is.Not.Null);
+        var countAfterPurchase = sentPolicies.Count;
+        Assert.That(countAfterPurchase, Is.GreaterThan(countAfterEntry));
+        using (var vipDoc = JsonDocument.Parse(sentPolicies[^1]))
+        {
+            Assert.That(vipDoc.RootElement.GetProperty("isVip").GetBoolean(), Is.True);
+        }
+
+        // Removing/expiring VIP and running periodic VIP sync pushes isVip: false, and subsequent no-change ticks don't re-send.
+        this._player.Account!.AttributeGrants.Clear();
+        this._player.RefreshAccountAttributeGrants();
+        uapPlugIn.ForceStart();
+        await uapPlugIn.ExecuteTaskAsync((GameContext)game).ConfigureAwait(false);
+        var countAfterExpiry = sentPolicies.Count;
+        Assert.That(countAfterExpiry, Is.GreaterThan(countAfterPurchase));
+        using (var expiredDoc = JsonDocument.Parse(sentPolicies[^1]))
+        {
+            Assert.That(expiredDoc.RootElement.GetProperty("isVip").GetBoolean(), Is.False);
+        }
+
+        uapPlugIn.ForceStart();
+        await uapPlugIn.ExecuteTaskAsync((GameContext)game).ConfigureAwait(false);
+        Assert.That(sentPolicies, Has.Count.EqualTo(countAfterExpiry));
     }
 
     private async ValueTask<VipGameRequest> SelectionAsync()
