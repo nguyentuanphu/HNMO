@@ -33,7 +33,7 @@ public static class WebsiteServerGuideProjection
             configuration.MaximumInventoryMoney,
             configuration.MaximumVaultMoney,
             classes = Classes(configuration),
-            helper = helper is null ? null : new { helper.MinLevel, helper.VipMinLevel, helper.MaxLevel, payIntervalSeconds = helper.PayInterval.TotalSeconds, helper.CostPerStage },
+            helper = helper is null ? null : new { helper.MinLevel, vipMinLevel = helper.GetMinimumLevel(true), helper.MaxLevel, payIntervalSeconds = helper.PayInterval.TotalSeconds, helper.CostPerStage },
             inventory = inventory is null ? null : new { maximumExtensions = Math.Min(inventory.MaximumExtensions, HNMO.DataModel.InventoryConstants.MaximumNumberOfExtensions) },
             vault = vault is { Enabled: true } ? new { vault.DefaultVaultCount, vault.MaxVaultsPerAccount, vault.VipExtraVaults, vault.PurchaseExtraVaultCost, purchaseCoinType = vault.PurchaseCoinType.ToString() } : null,
             partyExperience = PartyBonuses(configuration.MaximumPartySize, rates),
@@ -68,13 +68,12 @@ public static class WebsiteServerGuideProjection
     private static object[] PartyBonuses(byte maximumPartySize, RateTuningConfiguration? rates)
     {
         var overrides = rates is { Enabled: true } ? rates.PartyExpBonuses : [];
-        return RateTuningPlugIn.DefaultPartyExpBonuses.Concat(overrides).Select(entry => entry.PartySize)
-            .Distinct().Where(size => size > 1 && size <= maximumPartySize).OrderBy(size => size).Select(size =>
-            {
-                var entry = overrides.FirstOrDefault(value => value.PartySize == size)
-                    ?? RateTuningPlugIn.DefaultPartyExpBonuses.First(value => value.PartySize == size);
-                return (object)new { size, percent = Math.Max(0, entry.ExpPercent), differentClassesPercent = Math.Max(0, entry.DifferentClassesExpPercent) };
-            }).ToArray();
+        return Enumerable.Range(1, maximumPartySize).Skip(1).Select(size =>
+        {
+            var entry = overrides.FirstOrDefault(value => value.PartySize == size)
+                ?? RateTuningPlugIn.DefaultPartyExpBonuses.Where(value => value.PartySize <= size).MaxBy(value => value.PartySize);
+            return (object)new { size, percent = Math.Max(0, entry?.ExpPercent ?? 100), differentClassesPercent = size >= 3 ? Math.Max(0, entry?.DifferentClassesExpPercent ?? 0) : 0 };
+        }).ToArray();
     }
 
     private static object[] VipOffers(VipConfiguration? configuration)

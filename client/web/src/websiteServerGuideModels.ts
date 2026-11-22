@@ -56,7 +56,7 @@ function facts(value: unknown): ServerGuideFacts {
     helper: optional(row.helper, item => ({ minLevel: number(item.minLevel), vipMinLevel: number(item.vipMinLevel), maxLevel: number(item.maxLevel), payIntervalSeconds: number(item.payIntervalSeconds), costPerStage: array(item.costPerStage, number) })),
     inventory: optional(row.inventory, item => ({ maximumExtensions: number(item.maximumExtensions) })),
     vault: optional(row.vault, item => ({ defaultVaultCount: number(item.defaultVaultCount), maxVaultsPerAccount: number(item.maxVaultsPerAccount), vipExtraVaults: number(item.vipExtraVaults), purchaseExtraVaultCost: number(item.purchaseExtraVaultCost), purchaseCoinType: text(item.purchaseCoinType) })),
-    partyExperience: array(row.partyExperience, value => { const item = object(value); return { size: number(item.size), percent: number(item.percent), differentClassesPercent: number(item.differentClassesPercent) }; }),
+    partyExperience: array(row.partyExperience, value => { const item = object(value); return { size: number(item.size), percent: number(item.percent), differentClassesPercent: number(item.differentClassesPercent) }; }, 255),
     vip: array(row.vip, vip, MAX_SERVERS), catalog: { products: catalog.products === null ? null : array(catalog.products, product), truncated: flag(catalog.truncated) },
   };
 }

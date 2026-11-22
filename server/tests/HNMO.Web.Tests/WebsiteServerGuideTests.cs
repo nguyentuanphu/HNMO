@@ -55,8 +55,9 @@ public sealed class WebsiteServerGuideTests
         Assert.That(first["classes"]![0]!["maximumMasterTier"]!.GetValue<int>(), Is.EqualTo(8));
         Assert.That(first["classes"]![0]!["shieldConfigured"]!.GetValue<bool>(), Is.True);
         Assert.That(first["maximumInventoryMoney"]!.GetValue<int>(), Is.EqualTo(1234));
-        helper.MinLevel = 120;
+        helper.MinLevel = 120; helper.VipMinLevel = 999;
         Assert.That(Project(configuration, helper)["helper"]!["minLevel"]!.GetValue<int>(), Is.EqualTo(120));
+        Assert.That(Project(configuration, helper)["helper"]!["vipMinLevel"]!.GetValue<int>(), Is.EqualTo(120));
     }
 
     /// <summary>Checks exact enabled party overrides and unchanged fallback table entries.</summary>
@@ -70,6 +71,10 @@ public sealed class WebsiteServerGuideTests
         Assert.That(data, Has.Count.EqualTo(2));
         Assert.That(data[0]!["percent"]!.GetValue<int>(), Is.EqualTo(175));
         Assert.That(data[1]!["percent"]!.GetValue<int>(), Is.EqualTo(RateTuningPlugIn.DefaultPartyExpBonuses.Single(value => value.PartySize == 3).ExpPercent));
+        rates.PartyExpBonuses[0].DifferentClassesExpPercent = 999;
+        Assert.That(Project(configuration, rates: rates)["partyExperience"]![0]!["differentClassesPercent"]!.GetValue<int>(), Is.Zero);
+        configuration.MaximumPartySize = 6;
+        Assert.That(Project(configuration, rates: rates)["partyExperience"]!.AsArray(), Has.Count.EqualTo(5));
         rates.Enabled = false;
         Assert.That(Project(configuration, rates: rates)["partyExperience"]![0]!["percent"]!.GetValue<int>(), Is.EqualTo(160));
     }
