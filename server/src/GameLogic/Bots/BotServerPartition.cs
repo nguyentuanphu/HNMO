@@ -64,7 +64,7 @@ internal sealed class BotServerPartition
     public static async ValueTask<BotServerPartition> CreateAsync(IGameContext gameContext, BotConfiguration configuration, ILogger logger)
     {
         var requestedAccounts = Math.Max(configuration.NumberOfAccounts, 0);
-        var charactersPerAccount = configuration.GetEffectiveCharactersPerAccount();
+        var charactersPerAccount = configuration.GetEffectiveCharactersPerAccount(gameContext.Configuration.MaximumCharactersPerAccount);
         var capacities = await GetAccountCapacitiesAsync(gameContext, configuration, charactersPerAccount, logger).ConfigureAwait(false);
         if (gameContext is not IGameServerContext serverContext || capacities.Count == 0)
         {

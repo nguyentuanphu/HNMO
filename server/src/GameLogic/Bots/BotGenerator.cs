@@ -106,10 +106,9 @@ internal sealed class BotGenerator
             return 0;
         }
 
-        var perAccount = Math.Clamp(
-            Math.Min(charactersPerAccount, this._gameContext.Configuration.MaximumCharactersPerAccount),
-            1,
-            BotConfiguration.MaxCharactersPerAccountLimit);
+        var perAccount = BotConfiguration.ClampCharactersPerAccount(
+            charactersPerAccount,
+            this._gameContext.Configuration.MaximumCharactersPerAccount);
 
         var experienceTable = this._gameContext.ExperienceTable;
         var maxLevel = Math.Min(profile.MaxLevel, experienceTable.Length - 1);

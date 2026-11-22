@@ -90,7 +90,7 @@ public sealed class BotsController
                     "Bots switched {State} ({Accounts} account(s), up to {Characters} character(s) each).",
                     enabled ? "on" : "off",
                     configuration.NumberOfAccounts,
-                    configuration.MaxCharactersPerAccount);
+                    configuration.GetEffectiveCharactersPerAccount(context.Configuration.MaximumCharactersPerAccount));
                 return await this.StatusAsync(contexts).ConfigureAwait(false);
 
             case "status":
@@ -169,7 +169,7 @@ public sealed class BotsController
         return ActorCommandResult.Success(
             new ActorEventField("enabled", configuration?.Enabled ?? false),
             new ActorEventField("accounts", configuration?.NumberOfAccounts ?? 0),
-            new ActorEventField("characters_per_account", configuration?.MaxCharactersPerAccount ?? 0),
+            new ActorEventField("characters_per_account", configuration?.GetEffectiveCharactersPerAccount(contexts[0].Context.Configuration.MaximumCharactersPerAccount) ?? 0),
             new ActorEventField("presence_rotation", configuration?.PresenceRotation ?? false),
             new ActorEventField("servers", perServer),
             new ActorEventField("animated", total));

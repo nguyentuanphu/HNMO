@@ -301,6 +301,8 @@ public class BotFeaturePlugIn : IFeaturePlugIn, IPeriodicTaskPlugIn, ISupportCus
             }
         }
 
+        var charactersPerAccount = configuration.GetEffectiveCharactersPerAccount(gameContext.Configuration.MaximumCharactersPerAccount);
+
         if (partition.IsGenerator)
         {
             try
@@ -309,7 +311,7 @@ public class BotFeaturePlugIn : IFeaturePlugIn, IPeriodicTaskPlugIn, ISupportCus
                 // server does it - see BotServerPartition.IsGenerator; the others find the accounts once
                 // they exist and retry the spawns of their own share meanwhile.
                 var profile = BotStartupProfile.For(configuration.StartAsFreshCharacters);
-                var created = await generator.EnsureBotsAsync(configuration.NumberOfAccounts, configuration.MaxCharactersPerAccount, profile).ConfigureAwait(false);
+                var created = await generator.EnsureBotsAsync(configuration.NumberOfAccounts, charactersPerAccount, profile).ConfigureAwait(false);
                 if (created > 0)
                 {
                     logger.LogInformation("Generated {Created} new bot account(s).", created);
@@ -320,11 +322,6 @@ public class BotFeaturePlugIn : IFeaturePlugIn, IPeriodicTaskPlugIn, ISupportCus
                 logger.LogError(ex, "Failed to generate the bot population.");
             }
         }
-
-        var charactersPerAccount = Math.Clamp(
-            Math.Min(configuration.MaxCharactersPerAccount, gameContext.Configuration.MaximumCharactersPerAccount),
-            1,
-            BotConfiguration.MaxCharactersPerAccountLimit);
 
         var started = 0;
         var total = 0;
@@ -607,7 +604,7 @@ public class BotFeaturePlugIn : IFeaturePlugIn, IPeriodicTaskPlugIn, ISupportCus
             return;
         }
 
-        var charactersPerAccount = configuration.GetEffectiveCharactersPerAccount();
+        var charactersPerAccount = configuration.GetEffectiveCharactersPerAccount(gameContext.Configuration.MaximumCharactersPerAccount);
         var totalPopulation = partition.AccountCount * charactersPerAccount;
         if (totalPopulation <= 0)
         {

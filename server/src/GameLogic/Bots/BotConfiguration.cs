@@ -142,6 +142,22 @@ public class BotConfiguration
     public string ProofOfConceptAccounts { get; set; } = string.Empty;
 
     /// <summary>
+    /// Clamps a requested characters-per-account count to <c>[1..MaxCharactersPerAccountLimit]</c> and,
+    /// when a positive <see cref="DataModel.Configuration.GameConfiguration.MaximumCharactersPerAccount"/>
+    /// is supplied, never above that game configuration limit.
+    /// </summary>
+    /// <param name="requested">The requested number of characters per account.</param>
+    /// <param name="gameConfigurationLimit">Optional limit from the game configuration.</param>
+    /// <returns>The effective characters per account.</returns>
+    public static int ClampCharactersPerAccount(int requested, int? gameConfigurationLimit = null)
+    {
+        var limit = gameConfigurationLimit is > 0
+            ? Math.Min(MaxCharactersPerAccountLimit, gameConfigurationLimit.Value)
+            : MaxCharactersPerAccountLimit;
+        return Math.Clamp(requested, 1, limit);
+    }
+
+    /// <summary>
     /// Whether bots may not warp to the map. Compared by map number: the definitions of the running maps
     /// and the ones referenced by this configuration aren't always the same instances.
     /// </summary>
@@ -154,10 +170,14 @@ public class BotConfiguration
     /// <summary>
     /// Gets the effective, clamped number of characters per account.
     /// </summary>
+    /// <param name="gameConfigurationLimit">
+    /// Optional <see cref="DataModel.Configuration.GameConfiguration.MaximumCharactersPerAccount"/> limit;
+    /// when positive, the returned count never exceeds it.
+    /// </param>
     /// <returns>A value between 1 and <see cref="MaxCharactersPerAccountLimit"/>.</returns>
     /// <remarks>Deliberately a method: a get-only property would end up in the serialized plugin configuration JSON.</remarks>
-    public int GetEffectiveCharactersPerAccount()
-        => Math.Clamp(this.MaxCharactersPerAccount, 1, MaxCharactersPerAccountLimit);
+    public int GetEffectiveCharactersPerAccount(int? gameConfigurationLimit = null)
+        => ClampCharactersPerAccount(this.MaxCharactersPerAccount, gameConfigurationLimit);
 
     /// <summary>
     /// Gets the effective, clamped share of a server's player capacity which its bots may occupy.
