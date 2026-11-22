@@ -54,4 +54,24 @@ public class WebsiteConfiguration
     /// </summary>
     [Display(Name = nameof(Properties.PlugInResources.WebsiteConfiguration_RequireWebsiteLogin_Caption), Description = nameof(Properties.PlugInResources.WebsiteConfiguration_RequireWebsiteLogin_Description), ResourceType = typeof(Properties.PlugInResources))]
     public bool RequireWebsiteLogin { get; set; }
+
+    /// <summary>Gets or sets the public ClientRulesEn lines; an empty value publishes no claim.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.ClientRulesEn), Description = nameof(WebsiteServerPageLabels.Description), ResourceType = typeof(WebsiteServerPageLabels))]
+    [StringLength(4000, ErrorMessageResourceType = typeof(WebsiteServerPageLabels), ErrorMessageResourceName = nameof(WebsiteServerPageLabels.MaximumLength))]
+    public string ServerClientRulesEn { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets the public ClientRulesVi lines; an empty value publishes no claim.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.ClientRulesVi), Description = nameof(WebsiteServerPageLabels.Description), ResourceType = typeof(WebsiteServerPageLabels))]
+    [StringLength(4000, ErrorMessageResourceType = typeof(WebsiteServerPageLabels), ErrorMessageResourceName = nameof(WebsiteServerPageLabels.MaximumLength))]
+    public string ServerClientRulesVi { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets the public NotForSaleEn lines; an empty value publishes no claim.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.NotForSaleEn), Description = nameof(WebsiteServerPageLabels.Description), ResourceType = typeof(WebsiteServerPageLabels))]
+    [StringLength(4000, ErrorMessageResourceType = typeof(WebsiteServerPageLabels), ErrorMessageResourceName = nameof(WebsiteServerPageLabels.MaximumLength))]
+    public string ServerNotForSaleEn { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets the public NotForSaleVi lines; an empty value publishes no claim.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.NotForSaleVi), Description = nameof(WebsiteServerPageLabels.Description), ResourceType = typeof(WebsiteServerPageLabels))]
+    [StringLength(4000, ErrorMessageResourceType = typeof(WebsiteServerPageLabels), ErrorMessageResourceName = nameof(WebsiteServerPageLabels.MaximumLength))]
+    public string ServerNotForSaleVi { get; set; } = string.Empty;
 }
