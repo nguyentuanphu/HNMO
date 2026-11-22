@@ -1,3 +1,4 @@
+import { mountWebsiteThemeLayout } from './websiteThemeLayout.js';
 import { loadWebsiteSettings } from './websiteTheme.js';
 
 /** Wraps the existing links without replacing their elements, destinations or handlers. */
@@ -50,5 +51,6 @@ function mountScrollableTables(): void {
 
 void loadWebsiteSettings();
 mountWebsiteNavigation();
+mountWebsiteThemeLayout();
 mountWebsiteCredit();
 mountScrollableTables();
