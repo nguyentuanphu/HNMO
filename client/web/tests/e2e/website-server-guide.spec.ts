@@ -41,7 +41,7 @@ for (const width of [390, 1440]) for (const language of ['en', 'vi'] as const) {
     await expect(guide.locator('img')).toHaveCount(0);
     await expect(guide).not.toContainText(language === 'vi' ? 'Zen rơi thêm' : 'Dropped zen +');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    await page.screenshot({ path: `docs/screenshots/server-guide/home-${language}-${width}.png`, fullPage: true });
+    await guide.screenshot({ path: `docs/screenshots/server-guide/home-${language}-${width}.png` });
     await page.locator('#server').selectOption('8'); await expect(page.locator('#server-guide-season')).toHaveText('S9'); await expect(guide).not.toContainText('111 WCoinC');
     await expect(guide).toContainText(language === 'vi' ? 'chưa công bố gói VIP' : 'No paid VIP offer');
     await page.locator('#server').selectOption('7'); await expect(guide).toContainText('111 WCoinC');

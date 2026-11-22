@@ -70,7 +70,8 @@ public sealed class WebsiteServerGuideController(IDictionary<int, IGameServer> s
         return WebsiteServerGuideExtrasProjection.Build(
             npcs,
             context.FeaturePlugIns.GetPlugIn<AntiCheatPlugIn>()?.Configuration?.Enabled == true,
-            activity is not null && activityConfiguration.Enabled, activityConfiguration.OnlyValuableDropsAndPickups);
+            activity is not null && activityConfiguration.Enabled,
+            activityConfiguration.OnlyValuableDropsAndPickups);
     }
 
     private static object Build(IGameContext context)
