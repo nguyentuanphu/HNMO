@@ -2340,6 +2340,21 @@
   <data name="InvitationToSantaVillage" xml:space="preserve">
     <value>Invitation to Santa Village</value>
   </data>
+  <data name="GambleSwordMaceSpear" xml:space="preserve">
+    <value>Sword/Mace/Spear</value>
+  </data>
+  <data name="GambleStaff" xml:space="preserve">
+    <value>Staff</value>
+  </data>
+  <data name="GambleBowCrossbow" xml:space="preserve">
+    <value>Bow/Crossbow</value>
+  </data>
+  <data name="GambleScepter" xml:space="preserve">
+    <value>Scepter</value>
+  </data>
+  <data name="GambleStick" xml:space="preserve">
+    <value>Stick</value>
+  </data>
   <data name="TalismanOfGuardian" xml:space="preserve">
     <value>Talisman of Guardian</value>
   </data>

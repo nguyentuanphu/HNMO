@@ -6239,6 +6239,24 @@ namespace HNMO.GameLogic.Properties {
         /// <summary>Gets the localized HNMO bug reports text.</summary>
         public static string BugReportsPlugIn_Description => ResourceManager.GetString("BugReportsPlugIn_Description", resourceCulture)!;
 
+        /// <summary>Gets the localized Moss gamble plug-in name.</summary>
+        public static string MossGamblePlugIn_Name => ResourceManager.GetString("MossGamblePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Moss gamble plug-in description.</summary>
+        public static string MossGamblePlugIn_Description => ResourceManager.GetString("MossGamblePlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized Moss gamble enabled option name.</summary>
+        public static string MossGambleConfiguration_Enabled_Name => ResourceManager.GetString("MossGambleConfiguration_Enabled_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Moss gamble enabled option description.</summary>
+        public static string MossGambleConfiguration_Enabled_Description => ResourceManager.GetString("MossGambleConfiguration_Enabled_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized Moss gamble price option name.</summary>
+        public static string MossGambleConfiguration_PriceZen_Name => ResourceManager.GetString("MossGambleConfiguration_PriceZen_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Moss gamble price option description.</summary>
+        public static string MossGambleConfiguration_PriceZen_Description => ResourceManager.GetString("MossGambleConfiguration_PriceZen_Description", resourceCulture)!;
+
         /// <summary>Gets the localized Monster AI Rules plug-in name.</summary>
         public static string MonsterAiPlugIn_Name => ResourceManager.GetString("MonsterAiPlugIn_Name", resourceCulture)!;
 

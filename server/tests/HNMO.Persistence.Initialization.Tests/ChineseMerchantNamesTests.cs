@@ -49,7 +49,7 @@ internal class ChineseMerchantNamesTests
     /// <param name="merchantCount">The number of merchants in that version.</param>
     [TestCase("075", 11)]
     [TestCase("095d", 11)]
-    [TestCase("Season6", 24)] // Natasha (379) since #250; Arena Guard (239) potion/ammo shop added
+    [TestCase("Season6", 25)] // Natasha (379) (#250), Arena Guard (239) potion/ammo shop, Moss the Merchant (492)
     public async Task InitializationIncludesChineseNamesAsync(string version, int merchantCount)
     {
         var provider = new InMemoryPersistenceContextProvider();

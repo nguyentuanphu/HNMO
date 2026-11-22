@@ -778,6 +778,11 @@
   <data name="TalismanOfLuck" xml:space="preserve"><value>Bùa may mắn</value></data>
   <data name="TalismanOfChaosAssembly" xml:space="preserve"><value>Bùa hộ mệnh hỗn loạn</value></data>
   <data name="InvitationToSantaVillage" xml:space="preserve"><value>Lời mời đến làng ông già Noel</value></data>
+  <data name="GambleSwordMaceSpear" xml:space="preserve"><value>Kiếm/Chùy/Thương</value></data>
+  <data name="GambleStaff" xml:space="preserve"><value>Gậy phép</value></data>
+  <data name="GambleBowCrossbow" xml:space="preserve"><value>Cung/Nỏ</value></data>
+  <data name="GambleScepter" xml:space="preserve"><value>Quyền trượng</value></data>
+  <data name="GambleStick" xml:space="preserve"><value>Trượng</value></data>
   <data name="TalismanOfGuardian" xml:space="preserve"><value>Bùa hộ mệnh</value></data>
   <data name="TalismanOfItemProtection" xml:space="preserve"><value>Bùa bảo vệ vật phẩm</value></data>
 </root>

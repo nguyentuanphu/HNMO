@@ -2279,4 +2279,10 @@
   </data>
   <data name="MonsterAiPlugIn_Name" xml:space="preserve"><value>Monster AI Rules</value></data>
   <data name="MonsterAiPlugIn_Description" xml:space="preserve"><value>Configures monster attacker chasing, spawn-area leashing, and heal-on-leash behavior.</value></data>
+  <data name="MossGamblePlugIn_Name" xml:space="preserve"><value>Moss the Merchant gamble shop</value></data>
+  <data name="MossGamblePlugIn_Description" xml:space="preserve"><value>Replaces Moss the Merchant (492) gamble vouchers (13-71..75) with randomly rolled weapons or talismans and configures the Zen fee.</value></data>
+  <data name="MossGambleConfiguration_Enabled_Name" xml:space="preserve"><value>Enable Moss gambling</value></data>
+  <data name="MossGambleConfiguration_Enabled_Description" xml:space="preserve"><value>When turned off, buying gamble vouchers at Moss (492) is refused without charging Zen.</value></data>
+  <data name="MossGambleConfiguration_PriceZen_Name" xml:space="preserve"><value>Gamble price (Zen)</value></data>
+  <data name="MossGambleConfiguration_PriceZen_Description" xml:space="preserve"><value>Zen charged per gamble roll at Moss the Merchant (default 2,000,000 Zen).</value></data>
 </root>

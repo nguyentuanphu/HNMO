@@ -5481,6 +5481,41 @@ namespace HNMO.Persistence.Initialization.Properties {
             }
         }
 
+        /// <summary>Gets GambleSwordMaceSpear from the configuration name resources.</summary>
+        public static string GambleSwordMaceSpear {
+            get {
+                return ResourceManager.GetString("GambleSwordMaceSpear", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets GambleStaff from the configuration name resources.</summary>
+        public static string GambleStaff {
+            get {
+                return ResourceManager.GetString("GambleStaff", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets GambleBowCrossbow from the configuration name resources.</summary>
+        public static string GambleBowCrossbow {
+            get {
+                return ResourceManager.GetString("GambleBowCrossbow", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets GambleScepter from the configuration name resources.</summary>
+        public static string GambleScepter {
+            get {
+                return ResourceManager.GetString("GambleScepter", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets GambleStick from the configuration name resources.</summary>
+        public static string GambleStick {
+            get {
+                return ResourceManager.GetString("GambleStick", resourceCulture);
+            }
+        }
+
         /// <summary>Gets TalismanOfGuardian from the configuration name resources.</summary>
         public static string TalismanOfGuardian {
             get {

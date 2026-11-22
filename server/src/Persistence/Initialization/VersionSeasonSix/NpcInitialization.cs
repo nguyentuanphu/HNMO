@@ -11,6 +11,7 @@ using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.MiniGames;
 using HNMO.Interfaces;
 using HNMO.Persistence.Initialization.Skills;
+using HNMO.Persistence.Initialization.VersionSeasonSix.Items;
 
 /// <summary>
 /// The initialization of all NPCs, which are no monsters.
@@ -747,6 +748,7 @@ internal partial class NpcInitialization : Version095d.NpcInitialization
             def.Designation = LocalizedString.FromResource(() => MonsterNames.MossTheMerchant);
             def.NpcWindow = NpcWindow.Merchant;
             def.ObjectKind = NpcObjectKind.PassiveNpc;
+            def.MerchantStore = MossGambleItemCatalog.CreateMerchantStore(this.Context, this.GameConfiguration);
             this.GameConfiguration.Monsters.Add(def);
             def.SetGuid(def.Number);
         }

@@ -93,6 +93,7 @@ internal class ItemPriceDefinitions : InitializerBase
         new(nameof(ItemPriceDefinitionNames.ImperialGuardianItems), "30000", Scaling: ItemPriceQuantityScaling.PerPiece, Items: [(14, 101), (14, 102), (14, 103), (14, 104), (14, 105), (14, 106), (14, 107), (14, 108), (14, 109)]),
         new(nameof(ItemPriceDefinitionNames.ChristmasStarAndFirecracker), "200000", Items: [(14, 51), (14, 63)]),
         new(nameof(ItemPriceDefinitionNames.CherryBlossomItems), "300", Scaling: ItemPriceQuantityScaling.PerPiece, Items: [(14, 85), (14, 86), (14, 87), (14, 90)]),
+        new(nameof(ItemPriceDefinitionNames.MossGambleVoucher), "2000000", Items: [(13, 71), (13, 72), (13, 73), (13, 74), (13, 75)]),
     ];
 
     private static readonly IReadOnlyList<SpecialPrice> GeneralPrices =

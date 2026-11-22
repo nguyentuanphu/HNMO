@@ -441,6 +441,13 @@ namespace HNMO.Persistence.Initialization.Properties {
             }
         }
 
+        /// <summary>Gets MossGambleVoucher from the configuration name resources.</summary>
+        public static string MossGambleVoucher {
+            get {
+                return ResourceManager.GetString("MossGambleVoucher", resourceCulture);
+            }
+        }
+
         /// <summary>Gets FixedValue from the configuration name resources.</summary>
         public static string FixedValue {
             get {

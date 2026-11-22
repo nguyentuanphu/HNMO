@@ -32,6 +32,7 @@ public class Misc : InitializerBase
         this.CreateSymbolOfKundun();
         this.CreateRena();
         this.CreateStardust();
+        MossGambleItemCatalog.CreateItems(this.Context, this.GameConfiguration, ensurePriceDefinition: false);
     }
 
     /// <summary>

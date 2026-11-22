@@ -994,4 +994,6 @@
   <data name="SeasonNineJinShopsUpdatePlugIn_Description" xml:space="preserve"><value>Stattet die Jin-Händler in Acheron (583) und Acheron Arca War (604) im Season-9-Betrieb mit dem 32-teiligen Trank- und Munitionsladen aus.</value></data>
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Karten und Tore</value></data>
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>Fügt die 10 Season-9-Karten, Terraindateien, Tore (417-461, 474-482) und Season-9-Spawns im Season-9-Betrieb hinzu.</value></data>
+  <data name="MossMerchantShopUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: Glücksspiel-Laden von Moss dem Händler</value></data>
+  <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>Fügt die 5 Moss-Glücksspielgutscheine (13-71..75) für 2.000.000 Zen hinzu und stattet Moss den Händler (492) mit seinem Laden aus, sofern leer.</value></data>
 </root>

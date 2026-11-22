@@ -3218,6 +3218,24 @@ namespace HNMO.GameLogic.Properties {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Moss the Merchant is currently closed..
+        /// </summary>
+        public static string MossGambleDisabled {
+            get {
+                return ResourceManager.GetString("MossGambleDisabled", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Moss handed over: {0}..
+        /// </summary>
+        public static string MossGambleWon {
+            get {
+                return ResourceManager.GetString("MossGambleWon", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to You have learned {0}..
         /// </summary>
         public static string SkillLearned {

@@ -15,6 +15,12 @@
   <data name="MiniGamePlayerKillersCantEnter" xml:space="preserve"><value>红名玩家无法进入！</value></data>
   <data name="MiniGameTicketRequired" xml:space="preserve"><value>参加此活动需要入场券。</value></data>
   <data name="NoKalimaGateInKalima" xml:space="preserve"><value>无法在卡利玛创建卡利玛之门。</value></data>
+  <data name="MossGambleDisabled" xml:space="preserve">
+    <value>商人莫斯目前已关闭。</value>
+  </data>
+  <data name="MossGambleWon" xml:space="preserve">
+    <value>莫斯交给了你：{0}。</value>
+  </data>
   <data name="SkillLearned" xml:space="preserve">
     <value>你学会了 {0}。</value>
   </data>

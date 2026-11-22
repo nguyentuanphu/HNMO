@@ -492,4 +492,6 @@
   <data name="SeasonNineJinShopsUpdatePlugIn_Description" xml:space="preserve"><value>Equips the Jin merchants on Acheron (583) and Acheron Arca War (604) with their 32-item potion and ammunition shop when running as Season 9.</value></data>
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: maps and gates</value></data>
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>Adds the 10 Season 9 maps, terrain files, gates (417-461, 474-482), and Season 9 field spawns when running as Season 9.</value></data>
+  <data name="MossMerchantShopUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: Moss the Merchant gamble shop</value></data>
+  <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>Adds the 5 Moss gamble vouchers (13-71..75) at 2,000,000 Zen and equips Moss the Merchant (492) with his gamble shop when empty.</value></data>
 </root>
