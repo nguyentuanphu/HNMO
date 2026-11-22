@@ -52,6 +52,8 @@ export interface CommandWindowOptions {
   /** Opening it closes the other docked windows (HideAllGroupA). */
   onOpen?: () => void;
   onToggle?: (open: boolean) => void;
+  /** Clicking "Special" closes Command window and opens the Chat Command list. */
+  onSpecial?: () => void;
   click?: () => void;
   parent?: HTMLElement;
 }
@@ -125,7 +127,11 @@ export class CommandWindow {
   // PressCommandButton: Special Commands would open the command list (not on the web yet); the others arm.
   private press(index: number): void {
     this.options.click?.();
-    if (index === Command.SPECIAL) return;
+    if (index === Command.SPECIAL) {
+      this.close();
+      this.options.onSpecial?.();
+      return;
+    }
     this.selected = index;
     this.refresh();
   }

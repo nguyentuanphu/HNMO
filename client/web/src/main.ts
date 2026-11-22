@@ -87,6 +87,7 @@ import { PartyList } from './ui/partyList.js';
 import { PartyWindow } from './ui/partyWindow.js';
 import { PartyOptionsWindow } from './ui/partyOptionsWindow.js';
 import { CommandWindow } from './ui/commandWindow.js';
+import { ChatCommandWindow } from './ui/chatCommandWindow.js';
 import { hideLoadingScreen, showLoadingScreen } from './ui/loadingScreen.js';
 import { setupSocial, decorateLabel, setCustomRankLookup, type Social } from './game/social.js';
 import { createCustomRanks, type CustomRanksManager } from './game/customRanks.js';
@@ -2458,8 +2459,9 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     hero: () => online.hero,
     playerAt: (event) => pickCharacter(event, ['player']),
     allowed: () => eventOfMap(state.mapNumber ?? null) !== 'chaosCastle',
-    onOpen: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); },
+    onOpen: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); chatCommandWindow.close(); },
     onToggle: (open) => { itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); state.hud?.setOpenStates({ command: open }); },
+    onSpecial: () => { void chatCommandWindow.open(); },
     actions: {
       trade: (player) => state.trade?.requestTrade(player.id),
       purchase: (player) => state.personalShop?.requestList(player.id),
@@ -2485,9 +2487,24 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
       duel: (player) => state.duelAndGens?.duel.challenge(player),
     },
   });
+  const chatCommandWindow = new ChatCommandWindow({
+    connection,
+    earlyPackets,
+    heroName: character.name,
+    heroCell: () => online.hero.cell,
+    mapNumber: () => state.mapNumber,
+    click: () => sounds.click(),
+    onExecute: (line) => online.say(line),
+    message: (text) => chat.add(text, 'system'),
+    onOpen: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); state.commandWindow?.close(); },
+    onToggle: (open) => { itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); },
+  });
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
+    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
     if (event.key.toLowerCase() === 'd' && !event.ctrlKey && !event.altKey && !event.metaKey && !event.repeat) { event.preventDefault(); void state.commandWindow?.toggle(); }
+    else if (event.key.toLowerCase() === 'j' && !event.ctrlKey && !event.altKey && !event.metaKey && !event.repeat) {
+      if (chatCommandWindow.commandCount > 0 || chatCommandWindow.isOpen) { event.preventDefault(); void chatCommandWindow.toggle(); }
+    }
   });
   // NPC dialogues and quests (npc_dialogue, quest_progress, my_quest_info on T, npc_quest; ui/questWindows.ts).
   const quests = new QuestWindows({ connection, message: (text) => chat.add(text, 'system'), sound: (name) => sounds.audio.play(name),
