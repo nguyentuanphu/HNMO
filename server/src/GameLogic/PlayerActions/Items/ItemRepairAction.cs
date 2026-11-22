@@ -83,12 +83,7 @@ public class ItemRepairAction
     /// </remarks>
     public async ValueTask RepairAllItemsAsync(Player player)
     {
-        if (player.OpenedNpc is null)
-        {
-            // probably cheater
-            player.Logger.LogWarning("Cheater Warning: Player tried to repair all items, without opened NPC. Character: [{0}], Account: [{1}]", player.SelectedCharacter?.Name, player.Account?.LoginName);
-        }
-        else if (await OutlawNpcShopRule.RefuseAsync(player).ConfigureAwait(false))
+        if (player.OpenedNpc is not null && await OutlawNpcShopRule.RefuseAsync(player).ConfigureAwait(false))
         {
             return;
         }
