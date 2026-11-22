@@ -10,7 +10,7 @@ export const portalCopy = {
   preview: ['Preview · fictional game data', 'Bản xem thử · dữ liệu game mẫu'],
   home: ['Overview', 'Tổng quan'], characters: ['Characters', 'Nhân vật'], items: ['Items & vaults', 'Tài sản & rương'],
   activity: ['Item event log', 'Nhật ký vật phẩm'], journal: ['Adventure journal', 'Nhật ký hành trình'], compare: ['Compare equipment', 'So sánh trang bị'], wallet: ['Wallet & VIP', 'Ví & VIP'], security: ['Security', 'Bảo mật'], rewards: ['Rewards & mail', 'Thưởng & thư'], support: ['Support', 'Hỗ trợ'],
-  mobileHome: ['Home', 'Trang chủ'], mobileCharacters: ['Characters', 'Nhân vật'], mobileItems: ['Items', 'Tài sản'], mobileWallet: ['Wallet', 'Ví'], more: ['More', 'Thêm'], close: ['Close menu', 'Đóng menu'], menu: ['Account menu', 'Menu tài khoản'],
+  mobileHome: ['Home', 'Trang chủ'], mobileCharacters: ['Heroes', 'Nhân vật'], mobileItems: ['Items', 'Tài sản'], mobileWallet: ['Wallet', 'Ví'], more: ['More', 'Thêm'], close: ['Close menu', 'Đóng menu'], menu: ['Account menu', 'Menu tài khoản'],
   play: ['Enter game', 'Vào game'], account: ['My account', 'Tài khoản'], portal: ['Game home', 'Trang game'], logout: ['Sign out', 'Đăng xuất'],
   signIn: ['Sign in once', 'Đăng nhập một lần'], loginNote: ['Use the same session for the game and account profile.', 'Dùng chung phiên đăng nhập cho game và hồ sơ tài khoản.'],
   loginName: ['Account name', 'Tên tài khoản'], password: ['Password', 'Mật khẩu'], sampleLogin: ['Enter with the example account', 'Đăng nhập tài khoản mẫu'], sampleHint: ['No real credentials are accepted in this preview.', 'Bản xem thử không nhận mật khẩu thật.'],

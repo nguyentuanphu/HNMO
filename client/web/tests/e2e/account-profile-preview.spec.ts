@@ -68,11 +68,13 @@ test('every section works in both languages with five equal mobile targets and n
         await page.goto(`/account-profile-preview.html?view=profile&lang=${lang}&theme=${theme}`);
         await expect(page.locator('html')).toHaveAttribute('lang', lang);
         await expect(page.locator('body')).toHaveAttribute('data-preview-theme', theme);
+        await page.evaluate(async () => { await document.fonts.ready; });
         if (width < 760) {
-          const targets = await page.locator('.mobile-account-nav button').evaluateAll(nodes => nodes.map(node => ({ width: node.getBoundingClientRect().width, height: node.getBoundingClientRect().height })));
+          const targets = await page.locator('.mobile-account-nav button').evaluateAll(nodes => nodes.map(node => ({ width: node.getBoundingClientRect().width, height: node.getBoundingClientRect().height, labelFits: node.lastElementChild!.scrollWidth <= node.lastElementChild!.clientWidth })));
           expect(targets).toHaveLength(5);
           expect(Math.max(...targets.map(t => t.width)) - Math.min(...targets.map(t => t.width))).toBeLessThan(1);
           expect(targets.every(t => t.height >= 44)).toBe(true);
+          expect(targets.every(t => t.labelFits)).toBe(true);
           await page.locator('.mobile-account-nav button').last().click();
           await expect(page.getByRole('dialog')).toBeVisible();
           await page.keyboard.press('Escape');

@@ -39,9 +39,9 @@ There is one entry form, followed by game and account actions in the same sessio
 
 Chỉ có một nơi đăng nhập, sau đó chuyển giữa game và hồ sơ trong cùng phiên. Bản mẫu chỉ lưu cờ phiên giả lập trong thẻ trình duyệt, không nhận mật khẩu thật. Bản chính thức phải dùng lại phiên xác thực và vé vào game hiện có; chưa coi mô phỏng này là đã hoàn thành đăng nhập dùng chung thật.
 
-Mobile account navigation has five equal bottom targets, each at least 44px tall: Home, Characters, Items, Wallet and More. Secondary sections appear in a two-column modal menu with Escape, close button and focus return. Header actions use an equal two-column grid.
+Body text uses 16px, regular control labels use at least 14px, and metadata uses 12px. Mobile account navigation has five equal bottom targets, each at least 44px tall: Home, Characters, Items, Wallet and More. Secondary sections appear in a two-column modal menu with Escape, close button and focus return. Header actions use an equal two-column grid.
 
-Điện thoại có năm nút đều nhau: Trang chủ, Nhân vật, Tài sản, Ví, Thêm. Các mục phụ nằm trong menu hai cột, có nút đóng, hỗ trợ bàn phím và đưa tiêu điểm trở lại nút mở.
+Chữ nội dung 16px, nhãn điều khiển ít nhất 14px, thông tin phụ 12px. Điện thoại có năm nút đều nhau: Trang chủ, Nhân vật, Tài sản, Ví, Thêm. Các mục phụ nằm trong menu hai cột, có nút đóng, hỗ trợ bàn phím và đưa tiêu điểm trở lại nút mở.
 
 ## Data audit and gaps / Dữ liệu hiện có và phần còn thiếu
 
