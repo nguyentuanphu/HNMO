@@ -638,6 +638,12 @@
   <data name="AddKanturuDataUpdatePlugIn_Description" xml:space="preserve">
     <value>Diese Aktualisierung fügt die Konfiguration des Events im Raffinerieturm von Kanturu hinzu.</value>
   </data>
+  <data name="MayaBodyNonAttackableUpdatePlugIn_Name" xml:space="preserve">
+    <value>Mayas Körper nicht angreifbar machen</value>
+  </data>
+  <data name="MayaBodyNonAttackableUpdatePlugIn_Description" xml:space="preserve">
+    <value>Setzt Mayas Körper (#364) im Kanturu-Event auf PassiveNpc mit null Drops, sodass er klassisch nicht getroffen werden kann; angepasste Werte bleiben unverändert.</value>
+  </data>
   <data name="StandardizeEventEnterDurationPlugInBase_Name" xml:space="preserve">
     <value>Eingangsdauer der Events vereinheitlichen</value>
   </data>

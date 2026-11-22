@@ -330,6 +330,8 @@
   <data name="SystemConfigurationAddedPlugInBase_Description" xml:space="preserve"><value>This update adds the new system configuration.</value></data>
   <data name="AddKanturuDataUpdatePlugIn_Name" xml:space="preserve"><value>Add Kanturu data</value></data>
   <data name="AddKanturuDataUpdatePlugIn_Description" xml:space="preserve"><value>This update adds the Kanturu Refinery Tower event configuration.</value></data>
+  <data name="MayaBodyNonAttackableUpdatePlugIn_Name" xml:space="preserve"><value>Make Maya's body non-attackable</value></data>
+  <data name="MayaBodyNonAttackableUpdatePlugIn_Description" xml:space="preserve"><value>Sets Maya's body (#364) in Kanturu Event to PassiveNpc with zero item drops so it cannot be hit, matching the classic behavior while leaving customized values unchanged.</value></data>
   <data name="StandardizeEventEnterDurationPlugInBase_Name" xml:space="preserve"><value>Standardize event entrance duration</value></data>
   <data name="StandardizeEventEnterDurationPlugInBase_Description" xml:space="preserve"><value>This update raises the entrance duration of the events with a shared entrance, like Blood Castle, Devil Square and Kanturu, to the five minutes which every event entrance announces.</value></data>
   <data name="FixDrainLifeSkillUpdate_Name" xml:space="preserve"><value>Fix Drain Life Skill</value></data>
