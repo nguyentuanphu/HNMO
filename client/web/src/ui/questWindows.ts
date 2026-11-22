@@ -475,13 +475,25 @@ class MyQuestWindow {
         if (item) this.quests.showItem(item, this.view.box('#reward_popup_anchor')); else this.quests.hideItem();
       },
       myquest_click_open: () => {
-        if (!this.view.model.open_enabled) return;
         this.quests.click();
+        if (!this.view.model.open_enabled) {
+          this.quests.message(
+            this.log.current.length === 0
+              ? 'No active quest to open.'
+              : (this.selected ? 'This quest is managed through its quest NPC.' : 'Select a quest from the list first.'),
+          );
+          return;
+        }
         void this.quests.showProgress(this.selected, true);
       },
       myquest_click_giveup: () => {
-        if (!this.view.model.giveup_enabled) return;
         this.quests.click();
+        if (!this.view.model.giveup_enabled) {
+          this.quests.message(
+            this.log.current.length === 0 ? 'No active quest to give up.' : 'Select a quest from the list first.',
+          );
+          return;
+        }
         const index = this.selected;
         void confirmInGame(T.GiveUp).then((yes) => { if (yes) this.log.sendQuest('QuestCancelRequest', index); });
       },
@@ -754,6 +766,12 @@ export class QuestWindows implements QuestEvents {
     this.placeAll();
   }
 
+  /** Closes every quest document currently open. */
+  closeAll(): void {
+    for (const window of this.windows()) if (window.view.isOpen) window.view.close();
+    this.hideItem();
+  }
+
   /** HideAllGroupA: the other windows close without their closing process; the inventory and the character window close. */
   private hideGroupA(except?: QuestWindow): void {
     this.options.closeOthers?.();
@@ -774,7 +792,11 @@ export class QuestWindows implements QuestEvents {
   toggleMyQuest(): void {
     if (!this.log) return;
     if (this.myQuest.view.isOpen) this.hide(this.myQuest);
-    else { this.click(); void this.myQuest.opening().then(() => this.placeAll()); }
+    else {
+      this.hideGroupA(this.myQuest);
+      this.click();
+      void this.myQuest.opening().then(() => this.placeAll());
+    }
   }
 
   // ---- QuestEvents ----
