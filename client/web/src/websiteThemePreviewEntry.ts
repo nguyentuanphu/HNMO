@@ -1,6 +1,8 @@
 import { websitePreviewReply } from './websiteThemePreviewData.js';
 
 // Loaded only by the owner-private Site, never by the production HTML pages.
+// Static hosting may redirect page.html to /page; keep both forms equivalent.
+const previewPage = location.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/index';
 const hostSetting = 'hnmo.preview.owner.websiteTheme';
 const skins = ['classic', 'ember', 'azure', 'jade', 'violet', 'parchment'] as const;
 function selectedSkin(): string {
@@ -21,7 +23,7 @@ window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Res
   return originalFetch(input, init);
 };
 // The approved profile design is retained; its review-only layout follows the same host choice.
-if (location.pathname === '/account-profile-preview.html') {
+if (previewPage === '/account-profile-preview') {
   const url = new URL(location.href);
   const skin = selectedSkin();
   const layout = skin === 'classic' ? 'ember' : skin;
@@ -29,7 +31,18 @@ if (location.pathname === '/account-profile-preview.html') {
     url.searchParams.set('view', 'profile'); url.searchParams.set('theme', layout); location.replace(url);
   }
 }
-if (location.pathname === '/index.html' && location.hash.startsWith('#ticket=')) location.replace('/game.html' + location.hash);
+if (previewPage === '/index' && location.hash.startsWith('#ticket=')) location.replace('/game.html' + location.hash);
+
+async function initializeGamePreview(): Promise<void> {
+  const [{ loadGameName }, i18n] = await Promise.all([import('./gameName.js'), import('./i18n.js')]);
+  await loadGameName();
+  await i18n.initLanguage();
+  const update = (): void => {
+    for (const button of document.querySelectorAll<HTMLButtonElement>('[data-lang]')) button.setAttribute('aria-pressed', String(button.dataset.lang === i18n.currentLanguage()));
+  };
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-lang]')) button.addEventListener('click', () => { void i18n.setLanguage(button.dataset.lang ?? 'en').then(update); });
+  update();
+}
 
 function banner(): void {
   const note = document.createElement('aside');
@@ -41,14 +54,15 @@ function banner(): void {
   // The existing form and account modules do the rendering and navigation; no replacement dashboard.
   const user = document.getElementById('accountUser'); const secret = document.getElementById('accountSecret');
   if (user instanceof HTMLInputElement && secret instanceof HTMLInputElement) { user.value = 'Explorer'; secret.value = 'example-only'; user.readOnly = true; secret.readOnly = true; }
-  if (location.pathname === '/game.html') {
+  if (previewPage === '/game') {
     const login = document.getElementById('login');
     if (login) { const explanation = document.createElement('p'); explanation.textContent = 'Chỉ xem giao diện đăng nhập; không có máy chủ gameplay ở bản xem. / Login appearance only; no gameplay server is connected.'; explanation.style.cssText = 'padding:16px;background:#10151ef0;color:#eee;position:absolute;top:0;left:0;right:0;margin:0;font:14px/1.5 system-ui'; login.prepend(explanation); }
     document.querySelector('form')?.addEventListener('submit', event => event.preventDefault());
+    void initializeGamePreview();
   }
 }
 // Review controls go to the real page layouts, not the old reduced portal demo.
-if (location.pathname === '/account-profile-preview.html') {
+if (previewPage === '/account-profile-preview') {
   document.addEventListener('click', event => {
     const target = event.target instanceof Element ? event.target.closest('button, a') : null;
     if (!target) return;

@@ -15,10 +15,12 @@ const host = root;
 function node(tag: string, text = ''): HTMLElement { const el = document.createElement(tag); el.textContent = text; return el; }
 function render(): void {
   document.documentElement.lang = language;
-  const vi = language === 'vi'; const selected = localStorage.getItem(setting) ?? 'classic';
+  const vi = language === 'vi';
+  let selected = 'classic';
+  try { selected = localStorage.getItem(setting) ?? 'classic'; } catch { /* Review storage is optional. */ }
   const title = node('h1', vi ? 'Một giao diện cho toàn website' : 'One theme for the entire website');
   const brand = node('p', gameName()); brand.dataset.gameName = '{game}';
-  const note = node('p', vi ? 'Bản xem dành cho chủ website. Lựa chọn ở đây mô phỏng cài đặt của host, không sửa máy chủ thật. Mọi trang và thế giới cùng dùng một theme; tính năng không đổi theo theme.' : 'Owner preview of the host setting; changes here do not configure a live server. Every page and game world shares one theme. Features never change with the skin.');
+  const note = node('p', vi ? 'Đây là bảng xem giao diện dành riêng cho chủ website. Lựa chọn chỉ lưu trong trình duyệt này, không sửa cài đặt máy chủ. Ở bản chạy thật, host chọn một theme trong admin và mọi người đều thấy cùng theme đó. Giữ nguyên tính năng trên mọi trang.' : 'Private visual review for the website owner. This choice is saved only in this browser and does not configure a live server. In production, the host saves one theme in the admin panel and everyone sees that theme. Every page keeps its features.');
   const languageButton = document.createElement('button'); languageButton.type = 'button'; languageButton.textContent = vi ? 'English' : 'Tiếng Việt'; languageButton.title = vi ? 'Đọc bản xem bằng tiếng Anh.' : 'Read this preview in Vietnamese.';
   languageButton.onclick = () => { language = vi ? 'en' : 'vi'; localStorage.setItem('hnmo.language', language); render(); };
   const form = document.createElement('form'); const grid = node('div'); grid.className = 'owner-themes';
@@ -27,7 +29,7 @@ function render(): void {
     const art = document.createElement('img'); art.src = `/images/portal-themes/${id === 'classic' ? 'ember' : id}.webp`; art.alt = ''; art.width = 600; art.height = 260;
     label.append(input, node('strong', vi ? viet : en), art); grid.append(label);
   }
-  const save = document.createElement('button'); save.type = 'submit'; save.textContent = vi ? 'Áp dụng cho toàn website xem thử' : 'Apply to the entire preview website'; save.title = vi ? 'Tất cả trang sẽ dùng cùng lựa chọn của host.' : 'All pages will use this single host choice.';
+  const save = document.createElement('button'); save.type = 'submit'; save.textContent = vi ? 'Xem website với giao diện này' : 'Preview the website with this theme'; save.title = vi ? 'Tất cả trang sẽ dùng cùng lựa chọn của host.' : 'All pages will use this single host choice.';
   form.append(grid, save); form.onsubmit = event => { event.preventDefault(); const value = new FormData(form).get('theme'); if (typeof value === 'string' && labels.some(row => row[0] === value)) { localStorage.setItem(setting, value); location.reload(); } };
   const links = node('nav');
   for (const [path, en, viet] of [['/home.html', 'Website with existing features', 'Website giữ các tính năng hiện có'], ['/account.html', 'Working account components', 'Các mục tài khoản hiện có'], ['/account-profile-preview.html?view=profile', 'Approved profile design (sample)', 'Thiết kế profile đã duyệt (mẫu)'], ['/game.html', 'Game login appearance', 'Giao diện đăng nhập game'], ['/topup.html', 'Existing top-up page', 'Trang nạp hiện có']] as const) {

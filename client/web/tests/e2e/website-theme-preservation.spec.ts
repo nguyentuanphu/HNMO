@@ -49,6 +49,10 @@ for (const theme of themes) {
       await page.locator('#accountSecret').fill('fixture-secret');
       await page.locator('#accountSignInButton').click();
       await expect(page.locator('#accountLoginPanel')).toBeHidden();
+      await expect(page.locator('[data-account-language]:visible')).toHaveCount(2);
+      await page.locator('header [data-account-language=vi]').click();
+      await expect(page.locator('#accountSectionSelect')).toContainText('Tổng quan');
+      await page.locator('header [data-account-language=en]').click();
       for (const section of accountSections) {
         await expect(page.locator(`#account-${section}`)).toHaveCount(1);
         if (width <= 600) await page.locator('#accountSectionSelect').selectOption(section);

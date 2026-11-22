@@ -56,6 +56,16 @@ public class WebsiteThemeSettingsTests
     public async Task OldSettingsKeepClassicAndNoBrandOverridesAsync()
     {
         var provider = new InMemoryPersistenceContextProvider();
+        using var context = provider.CreateNewContext();
+        var website = context.CreateNew<PlugInConfiguration>();
+        website.TypeId = typeof(WebsitePlugIn).GUID;
+        website.IsActive = true;
+        website.CustomConfiguration = "{\"GoogleClientId\":\"\"}";
+        var brand = context.CreateNew<PlugInConfiguration>();
+        brand.TypeId = typeof(GameNamePlugIn).GUID;
+        brand.IsActive = true;
+        brand.CustomConfiguration = "{\"Name\":\"HNMO\"}";
+        await context.SaveChangesAsync().ConfigureAwait(false);
         var controller = new WebsiteSettingsController(provider)
         {
             ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() },
