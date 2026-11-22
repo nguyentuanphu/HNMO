@@ -52,6 +52,7 @@ async function initializeGamePreview(): Promise<void> {
   await loadGameName(); await i18n.initLanguage();
   const form = document.getElementById('loginForm');
   const fieldset = form?.querySelector('fieldset'); if (fieldset) fieldset.hidden = true;
+  const language = document.getElementById('loginLanguage'); if (language && form) form.prepend(language);
   const guide = document.getElementById('loginGuide'); if (guide instanceof HTMLAnchorElement) guide.href = '/guide.html';
   const website = document.getElementById('websiteLoginButton');
   const choices = document.getElementById('characters');
@@ -78,6 +79,7 @@ async function initializeGamePreview(): Promise<void> {
     exit.textContent = vi ? 'Đăng xuất tài khoản mẫu' : 'Sign out of the sample account';
     exit.title = vi ? 'Kết thúc phiên xem tài khoản mẫu trên website.' : 'End the sample account session on this website.';
   };
+  if (form instanceof HTMLElement) { form.style.boxSizing = 'border-box'; form.style.maxWidth = '100%'; }
   if (signedIn && choices) { panel.append(title, detail, actions, exit); choices.replaceChildren(panel); choices.hidden = false; }
   for (const button of document.querySelectorAll<HTMLButtonElement>('[data-lang]')) button.addEventListener('click', () => { void i18n.setLanguage(button.dataset.lang ?? 'en').then(update); });
   update();
@@ -95,7 +97,7 @@ function banner(): void {
   if (user instanceof HTMLInputElement && secret instanceof HTMLInputElement) { user.value = 'Explorer'; secret.value = 'example-only'; user.readOnly = true; secret.readOnly = true; }
   if (previewPage === '/game') {
     const login = document.getElementById('login');
-    if (login) { const explanation = document.createElement('p'); explanation.textContent = 'Chỉ xem giao diện đăng nhập; không có máy chủ gameplay ở bản xem. / Login appearance only; no gameplay server is connected.'; explanation.style.cssText = 'padding:16px;background:#10151ef0;color:#eee;position:absolute;top:0;left:0;right:0;margin:0;font:14px/1.5 system-ui'; login.prepend(explanation); }
+    if (login) { login.style.cssText = 'position:relative;inset:auto;min-height:calc(100svh - 100px);box-sizing:border-box;padding:20px 16px;display:flex;flex-direction:column;gap:16px'; const explanation = document.createElement('p'); explanation.textContent = 'Chỉ xem giao diện đăng nhập; không có máy chủ gameplay ở bản xem. / Login appearance only; no gameplay server is connected.'; explanation.style.cssText = 'padding:16px;background:#10151ef0;color:#eee;margin:0;font:14px/1.5 system-ui;max-width:600px;box-sizing:border-box'; login.prepend(explanation); }
     document.querySelector('form')?.addEventListener('submit', event => event.preventDefault());
     void initializeGamePreview();
   }

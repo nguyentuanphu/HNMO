@@ -1,10 +1,12 @@
 import { expect, test, type Page } from '@playwright/test';
+import { websiteAccountFixture } from './fixtures/websiteAccount.js';
 
 const themes = ['classic', 'ember', 'azure', 'jade', 'violet', 'parchment'] as const;
-const publicSections = ['realm', 'news', 'events', 'schedule', 'newplayers', 'missions', 'bosses', 'lucky-number', 'marriage', 'guilds', 'social', 'races', 'gifts', 'resets', 'market', 'arena', 'jewel-bank', 'catchup', 'season-plan', 'leftovers', 'mounts', 'party-spots', 'rankings', 'drops', 'world', 'account', 'phone', 'start', 'topup-milestones-section'];
+const publicSections = ['realm', 'news', 'events', 'schedule', 'newplayers', 'missions', 'bosses', 'lucky-number', 'marriage', 'guilds', 'social', 'races', 'gifts', 'resets', 'market', 'arena', 'jewel-bank', 'catchup', 'season-plan', 'leftovers', 'mounts', 'party-spots', 'rankings', 'drops', 'world', 'phone', 'start', 'topup-milestones-section'];
 const accountSections = ['overview', 'coins', 'vip', 'rewards', 'resets', 'security', 'community'];
 
 async function fixture(page: Page, theme: string): Promise<void> {
+  await websiteAccountFixture(page, 'Explorer', 'fixture-secret');
   await page.route('**/website/**', route => route.fulfill({ status: 503 }));
   await page.route('**/website/settings', route => route.fulfill({ json: { theme, googleClientId: '' } }));
   await page.route('**/game-name.json', route => route.fulfill({ json: { name: 'HNMO host skin fixture' } }));
@@ -43,11 +45,15 @@ for (const theme of themes) {
       await page.locator('#vi').click();
       await page.locator('#en').click();
       expect(await page.locator('main section[id]').evaluateAll(nodes => nodes.map(node => node.id))).toEqual(before);
+      const restore = page.waitForResponse(response => response.url().endsWith('/portal/session') && response.request().method() === 'GET');
       await page.goto('/account.html?theme=parchment');
+      const session = await (await restore).json() as { authenticated: boolean };
       await expect(page.locator('html')).toHaveAttribute('data-website-theme', theme);
-      await page.locator('#accountUser').fill('Explorer');
-      await page.locator('#accountSecret').fill('fixture-secret');
-      await page.locator('#accountSignInButton').click();
+      if (!session.authenticated) {
+        await page.locator('#accountUser').fill('Explorer');
+        await page.locator('#accountSecret').fill('fixture-secret');
+        await page.locator('#accountSignInButton').click();
+      }
       await expect(page.locator('#accountLoginPanel')).toBeHidden();
       await expect(page.locator('[data-account-language]:visible')).toHaveCount(2);
       await page.locator('header [data-account-language=vi]').click();
@@ -58,6 +64,12 @@ for (const theme of themes) {
         if (width <= 600) await page.locator('#accountSectionSelect').selectOption(section);
         else await page.locator(`#accountNav button`).filter({ hasText: new RegExp(`^${section === 'overview' ? 'Overview' : section === 'coins' ? 'Coins' : section === 'vip' ? 'VIP' : section[0].toUpperCase() + section.slice(1)}$`) }).click();
         await expect(page.locator(`#account-${section}`)).toBeVisible();
+        if (section === 'rewards' && theme === 'violet' && width > 600) {
+          const panel = await page.locator('#account-rewards').boundingBox(); const navigation = await page.locator('#accountNav').boundingBox();
+          expect(panel!.x + panel!.width).toBeLessThanOrEqual(navigation!.x);
+          const mailbox = await page.locator('.hnmo-gb-status').boundingBox();
+          expect(mailbox!.x + mailbox!.width).toBeLessThanOrEqual(navigation!.x);
+        }
       }
       for (const selector of ['#play', '#playNowButton', '#topup-milestones-section', '#accountVip', '#accountPasswordChange', '#gift', '#resets', '#safety']) await expect(page.locator(selector)).toHaveCount(1);
       await expect(page.locator('#registerForm')).toHaveCount(1);

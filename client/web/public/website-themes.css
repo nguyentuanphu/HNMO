@@ -78,15 +78,14 @@ body[data-website-page="home"] nav {flex-wrap:wrap;min-width:0;justify-content:c
 }
 /* Different account compositions retain the same registered panels and actions. */
 @media(min-width:601px){
-  :root[data-website-theme] #accountDashboard.authenticated {grid-template-areas:'toolbar toolbar' 'status status' 'nav panels';grid-template-columns:190px minmax(0,1fr)}
+  :root[data-website-theme] #accountDashboard.authenticated {grid-template-areas:'toolbar toolbar' 'nav panels';grid-template-columns:190px minmax(0,1fr)}
   :root[data-website-theme] #accountToolbar {grid-area:toolbar}
-  :root[data-website-theme] #accountMessage {grid-area:status}
   :root[data-website-theme] #accountNav {grid-area:nav}
   :root[data-website-theme] #accountPanels {grid-area:panels}
-  :root[data-website-theme="azure"] #accountDashboard.authenticated,:root[data-website-theme="parchment"] #accountDashboard.authenticated {grid-template-columns:minmax(0,1fr);grid-template-areas:'toolbar' 'status' 'nav' 'panels'}
+  :root[data-website-theme="azure"] #accountDashboard.authenticated,:root[data-website-theme="parchment"] #accountDashboard.authenticated {grid-template-columns:minmax(0,1fr);grid-template-areas:'toolbar' 'nav' 'panels'}
   :root:is([data-website-theme="azure"],[data-website-theme="parchment"]) #accountNav {grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
   :root[data-website-theme="jade"] #accountDashboard.authenticated {grid-template-columns:210px minmax(0,1fr)}
-  :root[data-website-theme="violet"] #accountDashboard.authenticated {grid-template-columns:minmax(0,1fr)190px;grid-template-areas:'toolbar toolbar' 'status status' 'panels nav'}
+  :root[data-website-theme="violet"] #accountDashboard.authenticated {grid-template-columns:minmax(0,1fr)190px;grid-template-areas:'toolbar toolbar' 'panels nav'}
 }
 @media(max-width:600px){
   :root[data-website-theme] #accountToolbar {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
@@ -238,3 +237,9 @@ body[data-website-page="account"] #accountMessage:empty {display:none}
  :root[data-website-theme] body[data-website-page="home"][data-website-layout] .theme-book-pages .stats {grid-template-columns:repeat(2,minmax(0,1fr))}
  :root[data-website-theme] body[data-website-page="home"][data-website-layout] .theme-book-pages h2 {font-size:30px}
 }
+
+/* Account status lives outside the dashboard; never create an implicit named grid on main. */
+body[data-website-page="account"] #accountPanels {container-type:inline-size}
+body[data-website-page="account"] .hnmo-gb-wrap {grid-template-columns:repeat(2,minmax(0,1fr))}
+@container(max-width:600px){body[data-website-page="account"] .hnmo-gb-wrap{grid-template-columns:minmax(0,1fr)}}
+body[data-website-page="account"] .hnmo-gb-wrap>* {min-width:0;overflow-wrap:anywhere}
