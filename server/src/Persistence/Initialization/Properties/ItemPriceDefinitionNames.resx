@@ -180,6 +180,9 @@
   <data name="CherryBlossomItems" xml:space="preserve">
     <value>Cherry Blossom items</value>
   </data>
+  <data name="MossGambleVoucher" xml:space="preserve">
+    <value>Moss gamble voucher</value>
+  </data>
   <data name="FixedValue" xml:space="preserve">
     <value>Fixed value</value>
   </data>

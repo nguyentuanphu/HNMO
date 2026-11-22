@@ -1180,6 +1180,12 @@ Inventory Extensions: {18}</value>
   <data name="MapIsNotActive" xml:space="preserve">
     <value>This map is not available.</value>
   </data>
+  <data name="MossGambleDisabled" xml:space="preserve">
+    <value>Moss the Merchant is currently closed.</value>
+  </data>
+  <data name="MossGambleWon" xml:space="preserve">
+    <value>Moss handed over: {0}.</value>
+  </data>
   <data name="SkillLearned" xml:space="preserve">
     <value>You have learned {0}.</value>
   </data>

@@ -218,6 +218,11 @@ internal class LegacyItemPriceCalculator
         { (int)SpecialItems.CherryBlossomRiceCake, item => 300 * item.Durability() },
         { (int)SpecialItems.CherryBlossomFlowerPetal, item => 300 * item.Durability() },
         { (int)SpecialItems.GoldenCherryBlossomBranch, item => 300 * item.Durability() },
+        { (int)SpecialItems.GambleSwordMaceSpear, _ => 2_000_000 },
+        { (int)SpecialItems.GambleStaff, _ => 2_000_000 },
+        { (int)SpecialItems.GambleBowCrossbow, _ => 2_000_000 },
+        { (int)SpecialItems.GambleScepter, _ => 2_000_000 },
+        { (int)SpecialItems.GambleStick, _ => 2_000_000 },
     };
 
     private enum SpecialItems
@@ -305,6 +310,11 @@ internal class LegacyItemPriceCalculator
         CherryBlossomRiceCake = 0x560E,
         CherryBlossomFlowerPetal = 0x570E,
         GoldenCherryBlossomBranch = 0x5A0E,
+        GambleSwordMaceSpear = 0x470D,
+        GambleStaff = 0x480D,
+        GambleBowCrossbow = 0x490D,
+        GambleScepter = 0x4A0D,
+        GambleStick = 0x4B0D,
     }
 
     /// <summary>

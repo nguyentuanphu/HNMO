@@ -2253,6 +2253,21 @@
   <data name="ScrollOfHealing" xml:space="preserve">
     <value>Schriftrolle der Heilung</value>
   </data>
+  <data name="GambleSwordMaceSpear" xml:space="preserve">
+    <value>Schwert/Streitkolben/Speer</value>
+  </data>
+  <data name="GambleStaff" xml:space="preserve">
+    <value>Zauberstab</value>
+  </data>
+  <data name="GambleBowCrossbow" xml:space="preserve">
+    <value>Bogen/Armbrust</value>
+  </data>
+  <data name="GambleScepter" xml:space="preserve">
+    <value>Zepter</value>
+  </data>
+  <data name="GambleStick" xml:space="preserve">
+    <value>Stab</value>
+  </data>
   <data name="TalismanOfGuardian" xml:space="preserve">
     <value>Talisman des Wächters</value>
   </data>

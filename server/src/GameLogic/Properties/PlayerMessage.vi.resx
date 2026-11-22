@@ -1069,6 +1069,12 @@ Mở rộng hành trang: {18}</value>
   <data name="MapIsNotActive" xml:space="preserve">
     <value>Bản đồ này hiện không mở.</value>
   </data>
+  <data name="MossGambleDisabled" xml:space="preserve">
+    <value>Thương nhân Moss hiện đang đóng cửa.</value>
+  </data>
+  <data name="MossGambleWon" xml:space="preserve">
+    <value>Moss đã trao cho bạn: {0}.</value>
+  </data>
   <data name="SkillLearned" xml:space="preserve">
     <value>Bạn đã học {0}.</value>
   </data>

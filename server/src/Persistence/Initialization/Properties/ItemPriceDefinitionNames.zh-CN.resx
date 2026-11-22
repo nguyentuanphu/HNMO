@@ -180,6 +180,9 @@
   <data name="CherryBlossomItems" xml:space="preserve">
     <value>樱花物品</value>
   </data>
+  <data name="MossGambleVoucher" xml:space="preserve">
+    <value>莫斯抽奖券</value>
+  </data>
   <data name="FixedValue" xml:space="preserve">
     <value>固定价值</value>
   </data>

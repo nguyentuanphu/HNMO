@@ -204,7 +204,7 @@ internal class ItemStatProfilesDataTest
         {
             "armor: 327",
             "book: 3",
-            "default: 243", // with Stardust (14:153)
+            "default: 248", // with Stardust (14:153) and Moss gamble vouchers (13:71..75)
             "firstTierWing: 4",
             "helper: 27",
             "orb: 12",

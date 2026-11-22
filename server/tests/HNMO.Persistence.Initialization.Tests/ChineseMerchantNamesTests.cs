@@ -49,7 +49,7 @@ internal class ChineseMerchantNamesTests
     /// <param name="merchantCount">The number of merchants in that version.</param>
     [TestCase("075", 11)]
     [TestCase("095d", 11)]
-    [TestCase("Season6", 23)] // Natasha (379) sells the Season 6 suite's Summoner gear since #250
+    [TestCase("Season6", 24)] // Natasha (379) (#250) and Moss the Merchant (492) sell Season 6 items
     public async Task InitializationIncludesChineseNamesAsync(string version, int merchantCount)
     {
         var provider = new InMemoryPersistenceContextProvider();

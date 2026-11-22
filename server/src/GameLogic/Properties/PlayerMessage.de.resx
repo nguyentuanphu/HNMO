@@ -1021,6 +1021,12 @@ Inventarerweiterungen: {18}</value>
   <data name="MapIsNotActive" xml:space="preserve">
     <value>Diese Karte ist nicht verfügbar.</value>
   </data>
+  <data name="MossGambleDisabled" xml:space="preserve">
+    <value>Moss der Händler ist derzeit geschlossen.</value>
+  </data>
+  <data name="MossGambleWon" xml:space="preserve">
+    <value>Moss hat dir übergeben: {0}.</value>
+  </data>
   <data name="SkillLearned" xml:space="preserve">
     <value>Du hast {0} gelernt.</value>
   </data>

@@ -58,6 +58,7 @@
   <data name="ImperialGuardianItems" xml:space="preserve"><value>Vật phẩm bảo vệ hoàng gia</value></data>
   <data name="ChristmasStarAndFirecracker" xml:space="preserve"><value>Ngôi sao Giáng sinh và Pháo</value></data>
   <data name="CherryBlossomItems" xml:space="preserve"><value>Mặt hàng hoa anh đào</value></data>
+  <data name="MossGambleVoucher" xml:space="preserve"><value>Phiếu thử vận may của Moss</value></data>
   <data name="FixedValue" xml:space="preserve"><value>Giá trị cố định</value></data>
   <data name="Potions" xml:space="preserve"><value>Thuốc độc</value></data>
   <data name="ValueBased" xml:space="preserve"><value>Dựa trên giá trị</value></data>

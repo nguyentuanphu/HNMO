@@ -882,6 +882,8 @@
   <data name="SeasonNineSocketOptionsUpdatePlugIn_Description" xml:space="preserve"><value>Đặt dòng Nước tăng bảo vệ khiên cấp 5 lên 30 %, Gió AG tối đa lên 50/70/90/110/130 và Gió hồi AG lên 5/7/9/11/13 khi chạy Season 9; giữ nguyên giá trị đã tùy chỉnh.</value></data>
   <data name="SeasonNineMonstersUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: quái vật và NPC</value></data>
   <data name="SeasonNineMonstersUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 111 quái vật và NPC Season 9 còn thiếu so với danh mục Season 6 và cập nhật thời gian hồi sinh của lính tập sự Dark Elf thành 10800 giây khi chạy Season 9.</value></data>
+  <data name="MossMerchantShopUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: cửa hàng thử vận may của Moss</value></data>
+  <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 5 phiếu thử vận may của Moss (13-71..75) giá 2.000.000 Zen và trang bị cửa hàng cho Thương nhân Moss (492) nếu đang trống.</value></data>
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: bản đồ và cổng</value></data>
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 10 bản đồ Season 9, tệp địa hình, cổng dịch chuyển (417-461, 474-482) và điểm xuất hiện quái/NPC Season 9 khi chạy Season 9.</value></data>
 </root>
