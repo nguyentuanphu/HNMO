@@ -35,6 +35,8 @@ export class CharacterStats implements StatValues {
   resets = 0;
   /** The stat fruits: points added and removed, and their maxima (AddPoint, MaxAddPoint, wMinusPoint, wMaxMinusPoint). */
   usedFruitPoints = 0; maxFruitPoints = 0; usedNegativeFruitPoints = 0; maxNegativeFruitPoints = 0;
+  /** Unlocked inventory extension boxes (0..4), sent in CharacterInformation. */
+  inventoryExtensions = 0;
   private readonly listeners = new Set<(change: StatsChange, detail?: PacketValues) => void>();
   private readonly stop: () => void;
 
@@ -55,6 +57,7 @@ export class CharacterStats implements StatValues {
     this.usedFruitPoints = num(info, 'UsedFruitPoints'); this.maxFruitPoints = num(info, 'MaxFruitPoints');
     this.usedNegativeFruitPoints = num(info, 'UsedNegativeFruitPoints');
     this.maxNegativeFruitPoints = num(info, 'MaxNegativeFruitPoints');
+    this.inventoryExtensions = num(info, 'InventoryExtensions');
     this.stop = connection.onPacket((bytes) => this.handle(bytes));
   }
 

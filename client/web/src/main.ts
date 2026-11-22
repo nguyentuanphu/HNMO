@@ -1332,6 +1332,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   state.itemWindows = new ItemWindows({
     inventory,
     groundCell: (event) => (event.target === ui.canvas ? pickCell(event) : null),
+    extensions: () => stats.inventoryExtensions,
     character: () => ({
       classIndex: character.classIndex, level: stats.level, strength: stats.strength, agility: stats.agility,
       vitality: stats.vitality, energy: stats.energy, leadership: stats.leadership, maxLife: stats.maxLife, maxMana: stats.maxMana,
@@ -1616,12 +1617,14 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     const { x, y } = online.hero.cell;
     return state.world ? (state.world.flags[y * TERRAIN_SIZE + x] & TerrainFlag.SAFEZONE) !== 0 : false;
   };
-  itemWindows.bag.onRightClick = (slot, item) => rightClickBagItem(slot, item, {
+  const onBagRightClick = (slot: number, item: Parameters<typeof rightClickBagItem>[1]) => rightClickBagItem(slot, item, {
     inventory, user: itemUser, classIndex: character.classIndex, level: stats.level, strength: stats.strength, energy: stats.energy,
     safeZone: inSafeZone(), message: (text) => chat.add(text, 'system'),
     heroCell: () => (online.hero.dead ? null : { ...online.hero.cell }),
     sell: (slot, item) => itemWindows.sell(slot, item),
   });
+  itemWindows.bag.onRightClick = onBagRightClick;
+  itemWindows.extension.onRightClick = onBagRightClick;
   itemWindows.message = (text) => chat.add(text, 'system');
   // Trading with other players (CTrade): requests, the trade window, its packets.
   state.trade = new Trade({
@@ -1651,7 +1654,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   state.cashShop = new CashShop({ connection, heroName: character.name, safeZone: inSafeZone, walking: () => online.hero.isWalking, closeOthers: () => closeGroupA('cashShop'), onToggle: (open) => state.hud?.setCashShopOpen(open), click: () => sounds.click() });
   earlyPackets.forEach((bytes) => state.cashShop?.handle(bytes));
   // Jewels: a jewel dropped on an item is used on it (ConsumeItemRequest with the target slot).
-  itemWindows.bag.onDropOnItem = (from, slot, target) => {
+  const onBagDropOnItem: typeof itemWindows.bag.onDropOnItem = (from, slot, target) => {
     if (from.storage !== 0 || from.slot < 12) return false;
     const applies = jewelApplies(from.item, target);
     if (!applies) return false;
@@ -1659,6 +1662,8 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     itemUser.use(from.slot, slot);
     return true;
   };
+  itemWindows.bag.onDropOnItem = onBagDropOnItem;
+  itemWindows.extension.onDropOnItem = onBagDropOnItem;
   // What repairing everything costs at a repair shop (RepairAllGold, the NPC's price).
   void loadItemValueData().then(() => { itemWindows.shop.repairAllCost = () => repairAllCost(inventory.items, false); itemWindows.refresh(); })
     .catch((error: unknown) => console.warn('Item prices', error));
@@ -1672,7 +1677,8 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     event.preventDefault();
     if (event.ctrlKey) {
       // Ctrl + Q/W/E/R over a bag item binds the key to it (CMyInventory::UpdateKeyEvent).
-      const hovered = itemWindows.bag.isOpen ? itemWindows.bag.hoverSlot : null;
+      const hovered = (itemWindows.bag.isOpen ? itemWindows.bag.hoverSlot : null)
+        ?? (itemWindows.extension.isOpen ? itemWindows.extension.hoverSlot : null);
       const item = hovered !== null && hovered >= 12 ? inventory.items.get(hovered) : undefined;
       if (item) hotkeys.bind(slot, item);
       return;
@@ -2091,7 +2097,9 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   setStackCountRule((item) => item.group === 14 || itemStacks.isStackKind(item));
   itemStacks.onChange = () => itemWindows.refresh();
   const splittable = (item: Parameters<typeof itemStacks.isStackKind>[0]): boolean => item.durability > 1 && (item.group === 14 || itemStacks.isStackKind(item));
-  itemWindows.bag.onShiftClick = (slot, item) => { if (!splittable(item)) return false; void itemStacks.split(0, slot, item); return true; };
+  const onBagShiftClick: typeof itemWindows.bag.onShiftClick = (slot, item) => { if (!splittable(item)) return false; void itemStacks.split(0, slot, item); return true; };
+  itemWindows.bag.onShiftClick = onBagShiftClick;
+  itemWindows.extension.onShiftClick = onBagShiftClick;
   itemWindows.vault.onShiftClick = (slot, item) => { if (!splittable(item)) return false; void itemStacks.split(1, slot, item); return true; };
   itemStacks.request();
   // HNMO's vault pages: page buttons above the open vault window (F5 4E / 4F).
@@ -2315,7 +2323,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     else takeZen();
   };
   itemWindows.extraTooltipLines = (storage, slot) => accountSafety.tooltipLines(storage, slot);
-  for (const window of [itemWindows.bag, itemWindows.vault]) {
+  for (const window of [itemWindows.bag, itemWindows.extension, itemWindows.vault]) {
     window.onAltRightClick = (slot) => { void accountSafety.toggleLock(window.storageKind, slot); return true; };
   }
   connection.onPacket((bytes) => { accountSafety.handle(bytes); });
