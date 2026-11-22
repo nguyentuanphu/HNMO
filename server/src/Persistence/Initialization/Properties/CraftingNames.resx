@@ -114,6 +114,9 @@
   <data name="MountSeedSphere" xml:space="preserve">
     <value>Mount Seed Sphere</value>
   </data>
+  <data name="SocketWeapon" xml:space="preserve">
+    <value>Socket Weapon</value>
+  </data>
   <data name="SeedSphereCreation" xml:space="preserve">
     <value>Seed Sphere Creation</value>
   </data>

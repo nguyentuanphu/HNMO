@@ -204,18 +204,18 @@ internal class ItemStatProfilesDataTest
         {
             "armor: 327",
             "book: 3",
-            "default: 243", // with Stardust (14:153)
+            "default: 256", // with Stardust (14:153) and Combination Notes (14:191..203)
             "firstTierWing: 4",
             "helper: 27",
             "orb: 12",
-            "sceptre: 10",
+            "sceptre: 11",
             "scroll: 36",
             "secondTierCape: 2",
             "secondTierWing: 5",
             "shield: 22",
             "smallWing: 6",
             "thirdTierWing: 7",
-            "weapon: 113",
+            "weapon: 125",
         }));
     }
 

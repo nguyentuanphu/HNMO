@@ -31,7 +31,7 @@ internal class SeasonNineOnlyItemsDataTest
 
         await plugin.ApplyUpdateAsync(context, config).ConfigureAwait(false);
 
-        Assert.That(config.Items.Count, Is.EqualTo(beforeCount + 279));
+        Assert.That(config.Items.Count, Is.EqualTo(beforeCount + 264));
 
         var chinese = CultureInfo.GetCultureInfo("zh-CN");
         var vietnamese = CultureInfo.GetCultureInfo("vi");
@@ -70,7 +70,7 @@ internal class SeasonNineOnlyItemsDataTest
 
             // Verify every added item resolves a SeasonNineItemNames caption in en, vi, de, zh-CN.
             var added = config.Items.Where(i => i.Name.SourceKey?.StartsWith("SeasonNineItemNames/", StringComparison.Ordinal) == true).ToList();
-            Assert.That(added, Has.Count.EqualTo(279));
+            Assert.That(added, Has.Count.EqualTo(290));
             foreach (var item in added)
             {
                 Assert.That(item.Name.GetOwnTranslation(chinese), Is.Not.Null.And.Not.Empty, item.Name.SourceKey);

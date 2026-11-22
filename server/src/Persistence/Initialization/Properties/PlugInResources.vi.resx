@@ -878,6 +878,8 @@
   <data name="SeasonNineSharedItemsUpdatePlugIn_Description" xml:space="preserve"><value>Áp dụng thông số Season 9 cho các vật phẩm dùng chung (cấp rơi Cape of Fighter 150, cấp yêu cầu Cape of Lord 150, gộp tối đa 255 bình thuốc) khi chạy Season 9; giữ nguyên giá trị đã tùy chỉnh.</value></data>
   <data name="SeasonNineOnlyItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: thêm vật phẩm riêng Season 9</value></data>
   <data name="SeasonNineOnlyItemsUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 279 vật phẩm riêng của Season 9 (vũ khí, khiên, bộ giáp socket, cánh, Ngũ Hành, nhẫn/dây chuyền, thú Muun và nguyên liệu) khi chạy Season 9; giữ nguyên vật phẩm đã có.</value></data>
+  <data name="SocketWeaponMixUpdatePlugIn_Name" xml:space="preserve"><value>Thêm công thức ép vũ khí socket tại Máy Hỗn Nguyên</value></data>
+  <data name="SocketWeaponMixUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 13 Ghi chú kết hợp (14-191..203), 13 vũ khí 5 socket tương ứng và công thức ép vũ khí socket (40 %, 1.000.000 zen) cho Season 6 và Season 9 nếu chưa có.</value></data>
   <data name="SeasonNineSocketOptionsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: chỉ số ngọc socket</value></data>
   <data name="SeasonNineSocketOptionsUpdatePlugIn_Description" xml:space="preserve"><value>Đặt dòng Nước tăng bảo vệ khiên cấp 5 lên 30 %, Gió AG tối đa lên 50/70/90/110/130 và Gió hồi AG lên 5/7/9/11/13 khi chạy Season 9; giữ nguyên giá trị đã tùy chỉnh.</value></data>
   <data name="SeasonNineMonstersUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: quái vật và NPC</value></data>

@@ -57,6 +57,45 @@ public class SeasonNineOnlyItemsUpdatePlugIn : SeasonNineUpdatePlugInBase
     /// <inheritdoc />
     public override DateTime CreatedAt => new(2026, 11, 21, 23, 20, 0, DateTimeKind.Utc);
 
+    /// <summary>
+    /// Ensures the 13 Combination Notes (14-191..203) and their matching level-400 5-socket weapons
+    /// exist in <paramref name="config"/> without duplicating items already present.
+    /// </summary>
+    /// <param name="context">The persistence context.</param>
+    /// <param name="config">The game configuration.</param>
+    /// <returns>The item definitions created during this call.</returns>
+    internal static IReadOnlyList<ItemDefinition> EnsureSocketWeaponMixItems(IContext context, GameConfiguration config)
+    {
+        var addedItems = new List<ItemDefinition>();
+        var addedSocketWeapons = new List<ItemDefinition>();
+        var weaponsByKey = SeasonNineOnlyItemsCatalog.Weapons.ToDictionary(w => (w.Group, w.Number));
+        var notesByNumber = SeasonNineOnlyItemsCatalog.MiscItems
+            .Where(m => m.Group == 14 && m.Number is >= 191 and <= 203)
+            .ToDictionary(m => m.Number);
+
+        foreach (var (noteNumber, weaponGroup, weaponNumber) in SeasonNineOnlyItemsCatalog.SocketWeaponRecipes)
+        {
+            if (notesByNumber.TryGetValue(noteNumber, out var noteSpec)
+                && CreateMiscItem(context, config, noteSpec) is { } note)
+            {
+                addedItems.Add(note);
+            }
+
+            if (weaponsByKey.TryGetValue((weaponGroup, weaponNumber), out var weaponSpec)
+                && CreateWeapon(context, config, weaponSpec) is { } weapon)
+            {
+                addedItems.Add(weapon);
+                if (weapon.MaximumSockets > 0)
+                {
+                    addedSocketWeapons.Add(weapon);
+                }
+            }
+        }
+
+        LinkSocketCraftings(config, addedSocketWeapons);
+        return addedItems;
+    }
+
     /// <inheritdoc />
     protected override ValueTask ApplySeasonNineAsync(IContext context, GameConfiguration gameConfiguration)
     {
@@ -495,14 +534,14 @@ public class SeasonNineOnlyItemsUpdatePlugIn : SeasonNineUpdatePlugInBase
         AddOptionIfFound(config, wing, FindLuck(config));
     }
 
-    private static void CreateMiscItem(
+    private static ItemDefinition? CreateMiscItem(
         IContext context,
         GameConfiguration config,
         SeasonNineOnlyItemsCatalog.MiscSpec spec)
     {
         if (ItemExists(config, spec.Group, spec.Number))
         {
-            return;
+            return null;
         }
 
         var item = CreateBaseItem(
@@ -552,6 +591,7 @@ public class SeasonNineOnlyItemsUpdatePlugIn : SeasonNineUpdatePlugInBase
         }
 
         AddQualifiedClasses(config, item, spec.DarkWizardClass, spec.DarkKnightClass, spec.ElfClass, spec.MagicGladiatorClass, spec.DarkLordClass, spec.SummonerClass, spec.RageFighterClass);
+        return item;
     }
 
     private static ItemDefinition CreateBaseItem(

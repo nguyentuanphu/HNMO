@@ -111,6 +111,9 @@
   <data name="MountSeedSphere" xml:space="preserve">
     <value>Samensphäre einsetzen</value>
   </data>
+  <data name="SocketWeapon" xml:space="preserve">
+    <value>Sockelwaffe herstellen</value>
+  </data>
   <data name="SeedSphereCreation" xml:space="preserve">
     <value>Samensphären-Herstellung</value>
   </data>

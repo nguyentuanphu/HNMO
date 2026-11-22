@@ -41,6 +41,7 @@
   <data name="AngelicBow" xml:space="preserve"><value>Angelic Bow</value></data>
   <data name="DevilCrossbow" xml:space="preserve"><value>Devil Crossbow</value></data>
   <data name="MiracleStaff" xml:space="preserve"><value>Miracle Staff</value></data>
+  <data name="SummonSpiritStick" xml:space="preserve"><value>Summon Spirit Stick</value></data>
   <data name="SpiteStaff" xml:space="preserve"><value>Spite Staff</value></data>
   <data name="LazyWindShield" xml:space="preserve"><value>Lazy Wind Shield</value></data>
   <data name="LightLordShield" xml:space="preserve"><value>Light Lord Shield</value></data>
@@ -275,6 +276,16 @@
   <data name="SonicCombinationNote" xml:space="preserve"><value>Sonic Combination Note</value></data>
   <data name="CycloneCombinationNote" xml:space="preserve"><value>Cyclone Combination Note</value></data>
   <data name="BlastCombinationNote" xml:space="preserve"><value>Blast Combination Note</value></data>
+  <data name="MagmaCombinationNote" xml:space="preserve"><value>Magma Combination Note</value></data>
+  <data name="HornCombinationNote" xml:space="preserve"><value>Horn Combination Note</value></data>
+  <data name="AngelicCombinationNote" xml:space="preserve"><value>Angelic Combination Note</value></data>
+  <data name="DevilCrossCombinationNote" xml:space="preserve"><value>Devil Cross Combination Note</value></data>
+  <data name="MiracleCombinationNote" xml:space="preserve"><value>Miracle Combination Note</value></data>
+  <data name="SpiteCombinationNote" xml:space="preserve"><value>Spite Combination Note</value></data>
+  <data name="AsuraCombinationNote" xml:space="preserve"><value>Asura Combination Note</value></data>
+  <data name="ThunderCombinationNote" xml:space="preserve"><value>Thunder Combination Note</value></data>
+  <data name="SoulCombinationNote" xml:space="preserve"><value>Soul Combination Note</value></data>
+  <data name="GreaterCombinationNote" xml:space="preserve"><value>Greater Combination Note</value></data>
   <data name="ScrollOfSwiftnessMaster" xml:space="preserve"><value>Scroll of Swiftness Master</value></data>
   <data name="RewardJar" xml:space="preserve"><value>Reward Jar</value></data>
   <data name="ValuableRewardJar" xml:space="preserve"><value>Valuable Reward Jar</value></data>

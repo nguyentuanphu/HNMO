@@ -114,6 +114,9 @@
   <data name="MountSeedSphere" xml:space="preserve">
     <value>镶嵌荧光宝石</value>
   </data>
+  <data name="SocketWeapon" xml:space="preserve">
+    <value>镶嵌武器合成</value>
+  </data>
   <data name="SeedSphereCreation" xml:space="preserve">
     <value>荧光宝石合成</value>
   </data>

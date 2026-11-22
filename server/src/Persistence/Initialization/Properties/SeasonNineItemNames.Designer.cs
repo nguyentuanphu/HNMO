@@ -89,6 +89,9 @@ namespace HNMO.Persistence.Initialization.Properties {
         /// <summary>Gets the localized SpiteStaff item name.</summary>
         public static string SpiteStaff => ResourceManager.GetString("SpiteStaff", resourceCulture)!;
 
+        /// <summary>Gets the localized SummonSpiritStick item name.</summary>
+        public static string SummonSpiritStick => ResourceManager.GetString("SummonSpiritStick", resourceCulture)!;
+
         /// <summary>Gets the localized LazyWindShield item name.</summary>
         public static string LazyWindShield => ResourceManager.GetString("LazyWindShield", resourceCulture)!;
 
@@ -787,6 +790,36 @@ namespace HNMO.Persistence.Initialization.Properties {
 
         /// <summary>Gets the localized BlastCombinationNote item name.</summary>
         public static string BlastCombinationNote => ResourceManager.GetString("BlastCombinationNote", resourceCulture)!;
+
+        /// <summary>Gets the localized MagmaCombinationNote item name.</summary>
+        public static string MagmaCombinationNote => ResourceManager.GetString("MagmaCombinationNote", resourceCulture)!;
+
+        /// <summary>Gets the localized HornCombinationNote item name.</summary>
+        public static string HornCombinationNote => ResourceManager.GetString("HornCombinationNote", resourceCulture)!;
+
+        /// <summary>Gets the localized AngelicCombinationNote item name.</summary>
+        public static string AngelicCombinationNote => ResourceManager.GetString("AngelicCombinationNote", resourceCulture)!;
+
+        /// <summary>Gets the localized DevilCrossCombinationNote item name.</summary>
+        public static string DevilCrossCombinationNote => ResourceManager.GetString("DevilCrossCombinationNote", resourceCulture)!;
+
+        /// <summary>Gets the localized MiracleCombinationNote item name.</summary>
+        public static string MiracleCombinationNote => ResourceManager.GetString("MiracleCombinationNote", resourceCulture)!;
+
+        /// <summary>Gets the localized SpiteCombinationNote item name.</summary>
+        public static string SpiteCombinationNote => ResourceManager.GetString("SpiteCombinationNote", resourceCulture)!;
+
+        /// <summary>Gets the localized AsuraCombinationNote item name.</summary>
+        public static string AsuraCombinationNote => ResourceManager.GetString("AsuraCombinationNote", resourceCulture)!;
+
+        /// <summary>Gets the localized ThunderCombinationNote item name.</summary>
+        public static string ThunderCombinationNote => ResourceManager.GetString("ThunderCombinationNote", resourceCulture)!;
+
+        /// <summary>Gets the localized SoulCombinationNote item name.</summary>
+        public static string SoulCombinationNote => ResourceManager.GetString("SoulCombinationNote", resourceCulture)!;
+
+        /// <summary>Gets the localized GreaterCombinationNote item name.</summary>
+        public static string GreaterCombinationNote => ResourceManager.GetString("GreaterCombinationNote", resourceCulture)!;
 
         /// <summary>Gets the localized ScrollOfSwiftnessMaster item name.</summary>
         public static string ScrollOfSwiftnessMaster => ResourceManager.GetString("ScrollOfSwiftnessMaster", resourceCulture)!;

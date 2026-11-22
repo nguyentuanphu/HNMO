@@ -36,6 +36,7 @@
   <data name="Fruits" xml:space="preserve"><value>trái cây</value></data>
   <data name="RemoveSeedSphere" xml:space="preserve"><value>Loại bỏ hạt giống</value></data>
   <data name="MountSeedSphere" xml:space="preserve"><value>Gắn kết quả cầu hạt giống</value></data>
+  <data name="SocketWeapon" xml:space="preserve"><value>Chế tạo vũ khí socket</value></data>
   <data name="SeedSphereCreation" xml:space="preserve"><value>Tạo quả cầu hạt giống</value></data>
   <data name="SeedCreation" xml:space="preserve"><value>Tạo hạt giống</value></data>
   <data name="DarkRaven" xml:space="preserve"><value>Quạ Tinh</value></data>
