@@ -4,7 +4,6 @@
 
 namespace HNMO.GameLogic.PlayerActions.Skills;
 
-using HNMO.DataModel;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.PlugIns;

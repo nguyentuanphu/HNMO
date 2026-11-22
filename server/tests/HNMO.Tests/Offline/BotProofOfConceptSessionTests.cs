@@ -65,8 +65,8 @@ public class BotProofOfConceptSessionTests
         var manager = new BotManager();
         try
         {
-            var spawned = await manager.SpawnBotAsync(gameContext, "alice").ConfigureAwait(false);
-            var secondSlotSpawned = await manager.SpawnBotAsync(gameContext, "alice", 1).ConfigureAwait(false);
+            var spawned = await manager.SpawnBotAsync(gameContext, "alice", allowNonBotAccount: true).ConfigureAwait(false);
+            var secondSlotSpawned = await manager.SpawnBotAsync(gameContext, "alice", 1, allowNonBotAccount: true).ConfigureAwait(false);
             var concurrentLoginAllowed = await loginServer.TryLoginAsync("alice", 2).ConfigureAwait(false);
 
             Assert.Multiple(() =>
