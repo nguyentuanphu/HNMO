@@ -10,7 +10,6 @@ using HNMO.GameLogic.MuHelper;
 using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.PlugIns.GameplayRules;
 using HNMO.GameLogic.PlugIns.Vip;
-using HNMO.GameServer;
 using HNMO.Interfaces;
 using HNMO.Persistence;
 using Microsoft.AspNetCore.Authorization;
@@ -35,7 +34,7 @@ public sealed class WebsiteServerGuideController(IDictionary<int, IGameServer> s
     [HttpGet]
     public async ValueTask<IActionResult> GetAsync()
     {
-        var running = servers.Values.OfType<GameServer>().OrderBy(server => server.Context.Id).Take(MaximumServers).ToArray();
+        var running = servers.Values.OfType<IGameServerContextProvider>().OrderBy(server => server.Context.Id).Take(MaximumServers).ToArray();
         if (running.Length == 0)
         {
             this.Response.Headers.CacheControl = "no-store";

@@ -11,6 +11,7 @@ using System.Text.Json.Nodes;
 using HNMO.AttributeSystem;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Configuration.Items;
+using HNMO.GameLogic;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.CashShop;
 using HNMO.GameLogic.MuHelper;
@@ -19,10 +20,12 @@ using HNMO.GameLogic.PlugIns.GameplayRules;
 using HNMO.GameLogic.PlugIns.Vip;
 using HNMO.Persistence;
 using HNMO.Persistence.InMemory;
+using HNMO.PlugIns;
 using HNMO.Web.AdminPanel.API;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 
 /// <summary>Public configuration projection, response bounds, locale metadata and offline privacy checks.</summary>
@@ -38,7 +41,7 @@ public sealed class WebsiteServerGuideTests
         configuration.MaximumInventoryMoney = 1234;
         var baseClass = context.CreateNew<CharacterClass>();
         baseClass.Name = new("Wizard"); baseClass.CanGetCreated = true; baseClass.LevelRequirementByCreation = 90;
-        baseClass.BaseAttributeValues.Add(new ConstValueAttribute(100, Stats.MaximumShield));
+        baseClass.BaseAttributeValues.Add(context.CreateNew<ConstValueAttribute>(100f, Stats.MaximumShield, AggregateType.AddRaw));
         var masterClass = context.CreateNew<CharacterClass>();
         baseClass.NextGenerationClass = masterClass; masterClass.NextGenerationClass = baseClass;
         var skill = context.CreateNew<Skill>(); skill.MasterDefinition = context.CreateNew<MasterSkillDefinition>();
@@ -152,6 +155,44 @@ public sealed class WebsiteServerGuideTests
         Assert.That(((StatusCodeResult)result).StatusCode, Is.EqualTo(503));
         Assert.That(controller.Response.Headers.CacheControl.ToString(), Is.EqualTo("no-store"));
         persistence.VerifyNoOtherCalls();
+    }
+
+    /// <summary>Checks successful allowlisting, brief caching and fresh values after invalidation without sleeps.</summary>
+    [Test]
+    public async Task PublicResponseCachesFactsAndExcludesHostSecretsAsync()
+    {
+        var provider = new InMemoryPersistenceContextProvider();
+        using var storage = provider.CreateNewContext();
+        var configuration = storage.CreateNew<GameConfiguration>(); configuration.MaximumInventoryMoney = 4321;
+        var plugin = storage.CreateNew<PlugInConfiguration>(); plugin.TypeId = typeof(WebsitePlugIn).GUID; plugin.IsActive = true;
+        plugin.SetConfiguration(new WebsiteConfiguration { AdminPath = "do-not-publish-this", ServerClientRulesEn = "One client." }, null);
+        await storage.SaveChangesAsync().ConfigureAwait(false);
+        var manager = new PlugInManager(null, NullLoggerFactory.Instance, null, null);
+        var game = new Mock<IGameServerContext>();
+        game.SetupGet(value => value.Id).Returns((byte)7); game.SetupGet(value => value.Configuration).Returns(configuration);
+        game.SetupGet(value => value.PlugInManager).Returns(manager);
+        game.SetupGet(value => value.FeaturePlugIns).Returns(new FeaturePlugInContainer(manager));
+        var server = new Mock<HNMO.Interfaces.IGameServer>();
+        server.As<IGameServerContextProvider>().SetupGet(value => value.Context).Returns(game.Object);
+        var servers = new Dictionary<int, HNMO.Interfaces.IGameServer> { [7] = server.Object };
+        using var cache = new MemoryCache(new MemoryCacheOptions());
+        var controller = new WebsiteServerGuideController(servers, provider, cache)
+        {
+            ControllerContext = new() { HttpContext = new DefaultHttpContext() },
+        };
+        var first = (OkObjectResult)await controller.GetAsync().ConfigureAwait(false);
+        var serialized = JsonSerializer.SerializeToNode(first.Value, new JsonSerializerOptions(JsonSerializerDefaults.Web))!;
+        Assert.That(serialized["clientRules"]!["en"]!.GetValue<string>(), Is.EqualTo("One client."));
+        Assert.That(serialized.ToJsonString(), Does.Not.Contain("do-not-publish-this"));
+        configuration.MaximumInventoryMoney = 9999;
+        Assert.That(((OkObjectResult)await controller.GetAsync().ConfigureAwait(false)).Value, Is.SameAs(first.Value));
+        cache.Compact(1);
+        var next = (OkObjectResult)await controller.GetAsync().ConfigureAwait(false);
+        var fresh = JsonSerializer.SerializeToNode(next.Value, new JsonSerializerOptions(JsonSerializerDefaults.Web))!;
+        Assert.That(fresh["servers"]![0]!["facts"]!["maximumInventoryMoney"]!.GetValue<int>(), Is.EqualTo(9999));
+        servers.Clear();
+        Assert.That(await controller.GetAsync().ConfigureAwait(false), Is.TypeOf<StatusCodeResult>());
+        Assert.That(controller.Response.Headers.CacheControl.ToString(), Is.EqualTo("no-store"));
     }
 
     private static JsonNode Project(GameConfiguration configuration, MuHelperConfiguration? helper = null, VipConfiguration? vip = null, RateTuningConfiguration? rates = null)
