@@ -1336,7 +1336,7 @@
     <value>Số ngọc dự trữ mỗi loại</value>
   </data>
   <data name="BotConfiguration_JewelStockPerKind_Description" xml:space="preserve">
-    <value>Số ngọc Ước Nguyện/Tâm Linh/Sinh Mệnh bot giữ cho mỗi loại; vượt quá thì bot ngừng nhặt và bán phần dư.</value>
+    <value>Số ngọc Ước Nguyện/Tâm Linh/Sinh Mệnh/Hỗn Nguyên bot giữ cho mỗi loại; vượt quá thì bot ngừng nhặt và bán phần dư.</value>
   </data>
   <data name="BotConfiguration_PotionStockCharges_Name" xml:space="preserve">
     <value>Số bình thuốc dự trữ</value>
