@@ -1114,5 +1114,53 @@ namespace HNMO.Persistence.Initialization.Properties {
 
         /// <summary>Gets the localized StrongerHnmoSkillsUpdatePlugIn_Description text.</summary>
         public static string StrongerHnmoSkillsUpdatePlugIn_Description => ResourceManager.GetString("StrongerHnmoSkillsUpdatePlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized SkillEnergyRequirementsUpdatePlugIn_Name text.</summary>
+        public static string SkillEnergyRequirementsUpdatePlugIn_Name => ResourceManager.GetString("SkillEnergyRequirementsUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized SkillEnergyRequirementsUpdatePlugIn_Description text.</summary>
+        public static string SkillEnergyRequirementsUpdatePlugIn_Description => ResourceManager.GetString("SkillEnergyRequirementsUpdatePlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized SwellLifeDurationUpdatePlugIn_Name text.</summary>
+        public static string SwellLifeDurationUpdatePlugIn_Name => ResourceManager.GetString("SwellLifeDurationUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized SwellLifeDurationUpdatePlugIn_Description text.</summary>
+        public static string SwellLifeDurationUpdatePlugIn_Description => ResourceManager.GetString("SwellLifeDurationUpdatePlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized IncreaseBlockMasterFlatUpdatePlugIn_Name text.</summary>
+        public static string IncreaseBlockMasterFlatUpdatePlugIn_Name => ResourceManager.GetString("IncreaseBlockMasterFlatUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized IncreaseBlockMasterFlatUpdatePlugIn_Description text.</summary>
+        public static string IncreaseBlockMasterFlatUpdatePlugIn_Description => ResourceManager.GetString("IncreaseBlockMasterFlatUpdatePlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized SeasonNineSharedItemsUpdatePlugIn_Name text.</summary>
+        public static string SeasonNineSharedItemsUpdatePlugIn_Name => ResourceManager.GetString("SeasonNineSharedItemsUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized SeasonNineSharedItemsUpdatePlugIn_Description text.</summary>
+        public static string SeasonNineSharedItemsUpdatePlugIn_Description => ResourceManager.GetString("SeasonNineSharedItemsUpdatePlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized SeasonNineOnlyItemsUpdatePlugIn_Name text.</summary>
+        public static string SeasonNineOnlyItemsUpdatePlugIn_Name => ResourceManager.GetString("SeasonNineOnlyItemsUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized SeasonNineOnlyItemsUpdatePlugIn_Description text.</summary>
+        public static string SeasonNineOnlyItemsUpdatePlugIn_Description => ResourceManager.GetString("SeasonNineOnlyItemsUpdatePlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized SeasonNineSocketOptionsUpdatePlugIn_Name text.</summary>
+        public static string SeasonNineSocketOptionsUpdatePlugIn_Name => ResourceManager.GetString("SeasonNineSocketOptionsUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized SeasonNineSocketOptionsUpdatePlugIn_Description text.</summary>
+        public static string SeasonNineSocketOptionsUpdatePlugIn_Description => ResourceManager.GetString("SeasonNineSocketOptionsUpdatePlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized SeasonNineMonstersUpdatePlugIn_Name text.</summary>
+        public static string SeasonNineMonstersUpdatePlugIn_Name => ResourceManager.GetString("SeasonNineMonstersUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized SeasonNineMonstersUpdatePlugIn_Description text.</summary>
+        public static string SeasonNineMonstersUpdatePlugIn_Description => ResourceManager.GetString("SeasonNineMonstersUpdatePlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized SeasonNineMapsAndGatesUpdatePlugIn_Name text.</summary>
+        public static string SeasonNineMapsAndGatesUpdatePlugIn_Name => ResourceManager.GetString("SeasonNineMapsAndGatesUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized SeasonNineMapsAndGatesUpdatePlugIn_Description text.</summary>
+        public static string SeasonNineMapsAndGatesUpdatePlugIn_Description => ResourceManager.GetString("SeasonNineMapsAndGatesUpdatePlugIn_Description", resourceCulture)!;
     }
 }

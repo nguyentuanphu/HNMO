@@ -1,0 +1,1564 @@
+{
+ "who": {
+  "name": "testgmElf",
+  "map": 3,
+  "classIndex": 2,
+  "season": null
+ },
+ "rows": [
+  {
+   "n": 24,
+   "name": "Triple Shot",
+   "castable": true,
+   "cast": true,
+   "target": "Budge Dragon",
+   "targetId": 655,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 185,
+    "y": 175
+   },
+   "targetCell": {
+    "x": 186,
+    "y": 174
+   },
+   "heroMid": {
+    "x": 185,
+    "y": 175
+   },
+   "heroAfter": {
+    "x": 185,
+    "y": 175
+   },
+   "targetAfter": {
+    "x": 186,
+    "y": 174,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    1424
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 1,
+   "onSkill": [
+    24
+   ],
+   "area": [
+    {
+     "s": 24,
+     "x": 185,
+     "y": 175,
+     "rot": 32,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 10,
+   "made": {
+    "particle:blood2": 10
+   },
+   "p95": 17,
+   "max": 83,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Triple Shot",
+     "mana": 5,
+     "ag": 0,
+     "distance": 6,
+     "damage": 0
+    },
+    "mana": 786,
+    "ag": 434
+   }
+  },
+  {
+   "n": 26,
+   "name": "Heal",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 616,
+   "dist": 1,
+   "near": 2,
+   "heroCell": {
+    "x": 191,
+    "y": 179
+   },
+   "targetCell": {
+    "x": 191,
+    "y": 180
+   },
+   "heroMid": {
+    "x": 191,
+    "y": 179
+   },
+   "heroAfter": {
+    "x": 191,
+    "y": 179
+   },
+   "targetAfter": {
+    "x": 191,
+    "y": 180,
+    "dead": false
+   },
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 3,
+   "onSkill": [
+    26
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 131,
+   "made": {
+    "particle:blood2": 10,
+    "effect:magicGround2": 1,
+    "joint:jointHealing": 60,
+    "sprite:shiny2": 60
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Heal",
+     "mana": 20,
+     "ag": 0,
+     "distance": 6,
+     "damage": 0
+    },
+    "mana": 786,
+    "ag": 434
+   }
+  },
+  {
+   "n": 27,
+   "name": "Greater Defense",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 616,
+   "dist": 1,
+   "near": 2,
+   "heroCell": {
+    "x": 191,
+    "y": 179
+   },
+   "targetCell": {
+    "x": 191,
+    "y": 180
+   },
+   "heroMid": {
+    "x": 191,
+    "y": 179
+   },
+   "heroAfter": {
+    "x": 191,
+    "y": 179
+   },
+   "targetAfter": {
+    "x": 191,
+    "y": 180,
+    "dead": false
+   },
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 4,
+   "onSkill": [
+    27
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 136,
+   "made": {
+    "particle:blood2": 10,
+    "effect:magicGround2": 1,
+    "joint:spearSkill": 5,
+    "joint:jointHealing": 60,
+    "sprite:shiny2": 60
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Greater Defense",
+     "mana": 30,
+     "ag": 0,
+     "distance": 6,
+     "damage": 0
+    },
+    "mana": 786,
+    "ag": 434
+   }
+  },
+  {
+   "n": 28,
+   "name": "Greater Damage",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 616,
+   "dist": 1,
+   "near": 3,
+   "heroCell": {
+    "x": 191,
+    "y": 179
+   },
+   "targetCell": {
+    "x": 191,
+    "y": 180
+   },
+   "heroMid": {
+    "x": 191,
+    "y": 179
+   },
+   "heroAfter": {
+    "x": 191,
+    "y": 179
+   },
+   "targetAfter": {
+    "x": 191,
+    "y": 180,
+    "dead": false
+   },
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 6,
+   "onSkill": [
+    28
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 131,
+   "made": {
+    "particle:blood2": 10,
+    "effect:magicGround2": 1,
+    "joint:jointHealing": 60,
+    "sprite:shiny2": 60
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Greater Damage",
+     "mana": 40,
+     "ag": 0,
+     "distance": 6,
+     "damage": 0
+    },
+    "mana": 786,
+    "ag": 434
+   }
+  },
+  {
+   "n": 30,
+   "name": "Summon Goblin",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 616,
+   "dist": 1,
+   "near": 3,
+   "heroCell": {
+    "x": 191,
+    "y": 179
+   },
+   "targetCell": {
+    "x": 191,
+    "y": 180
+   },
+   "heroMid": {
+    "x": 191,
+    "y": 179
+   },
+   "heroAfter": {
+    "x": 191,
+    "y": 179
+   },
+   "targetAfter": {
+    "x": 191,
+    "y": 180,
+    "dead": false
+   },
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 6,
+   "onSkill": [
+    30
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 131,
+   "made": {
+    "effect:magicGround2": 1,
+    "particle:blood2": 10,
+    "joint:jointHealing": 60,
+    "sprite:shiny2": 60
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Summon Goblin",
+     "mana": 40,
+     "ag": 0,
+     "distance": 0,
+     "damage": 0
+    },
+    "mana": 786,
+    "ag": 434
+   }
+  },
+  {
+   "n": 31,
+   "name": "Summon Stone Golem",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 616,
+   "dist": 1,
+   "near": 3,
+   "heroCell": {
+    "x": 191,
+    "y": 179
+   },
+   "targetCell": {
+    "x": 191,
+    "y": 180
+   },
+   "heroMid": {
+    "x": 191,
+    "y": 179
+   },
+   "heroAfter": {
+    "x": 191,
+    "y": 179
+   },
+   "targetAfter": {
+    "x": 191,
+    "y": 180,
+    "dead": false
+   },
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 6,
+   "onSkill": [
+    31
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 131,
+   "made": {
+    "effect:magicGround2": 1,
+    "particle:blood2": 10,
+    "joint:jointHealing": 60,
+    "sprite:shiny2": 60
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Summon Stone Golem",
+     "mana": 70,
+     "ag": 0,
+     "distance": 0,
+     "damage": 0
+    },
+    "mana": 786,
+    "ag": 434
+   }
+  },
+  {
+   "n": 32,
+   "name": "Summon Assassin",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 616,
+   "dist": 1,
+   "near": 3,
+   "heroCell": {
+    "x": 191,
+    "y": 179
+   },
+   "targetCell": {
+    "x": 191,
+    "y": 180
+   },
+   "heroMid": {
+    "x": 191,
+    "y": 179
+   },
+   "heroAfter": {
+    "x": 191,
+    "y": 179
+   },
+   "targetAfter": {
+    "x": 191,
+    "y": 180,
+    "dead": false
+   },
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 5,
+   "onSkill": [
+    32
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 131,
+   "made": {
+    "effect:magicGround2": 1,
+    "particle:blood2": 10,
+    "joint:jointHealing": 60,
+    "sprite:shiny2": 60
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Summon Assassin",
+     "mana": 110,
+     "ag": 0,
+     "distance": 0,
+     "damage": 0
+    },
+    "mana": 786,
+    "ag": 434
+   }
+  },
+  {
+   "n": 33,
+   "name": "Summon Elite Yeti",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 616,
+   "dist": 1,
+   "near": 3,
+   "heroCell": {
+    "x": 191,
+    "y": 179
+   },
+   "targetCell": {
+    "x": 191,
+    "y": 180
+   },
+   "heroMid": {
+    "x": 191,
+    "y": 179
+   },
+   "heroAfter": {
+    "x": 191,
+    "y": 179
+   },
+   "targetAfter": {
+    "x": 191,
+    "y": 180,
+    "dead": false
+   },
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 6,
+   "onSkill": [
+    33
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 131,
+   "made": {
+    "effect:magicGround2": 1,
+    "particle:blood2": 10,
+    "joint:jointHealing": 60,
+    "sprite:shiny2": 60
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Summon Elite Yeti",
+     "mana": 160,
+     "ag": 0,
+     "distance": 0,
+     "damage": 0
+    },
+    "mana": 786,
+    "ag": 434
+   }
+  },
+  {
+   "n": 34,
+   "name": "Summon Dark Knight",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 616,
+   "dist": 1,
+   "near": 3,
+   "heroCell": {
+    "x": 191,
+    "y": 179
+   },
+   "targetCell": {
+    "x": 191,
+    "y": 180
+   },
+   "heroMid": {
+    "x": 191,
+    "y": 179
+   },
+   "heroAfter": {
+    "x": 191,
+    "y": 179
+   },
+   "targetAfter": {
+    "x": 191,
+    "y": 180,
+    "dead": false
+   },
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 6,
+   "onSkill": [
+    34
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 131,
+   "made": {
+    "effect:magicGround2": 1,
+    "particle:blood2": 10,
+    "joint:jointHealing": 60,
+    "sprite:shiny2": 60
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Summon Dark Knight",
+     "mana": 200,
+     "ag": 0,
+     "distance": 0,
+     "damage": 0
+    },
+    "mana": 786,
+    "ag": 434
+   }
+  },
+  {
+   "n": 35,
+   "name": "Summon Bali",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 616,
+   "dist": 1,
+   "near": 3,
+   "heroCell": {
+    "x": 191,
+    "y": 179
+   },
+   "targetCell": {
+    "x": 191,
+    "y": 180
+   },
+   "heroMid": {
+    "x": 191,
+    "y": 179
+   },
+   "heroAfter": {
+    "x": 191,
+    "y": 179
+   },
+   "targetAfter": {
+    "x": 191,
+    "y": 180,
+    "dead": false
+   },
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 6,
+   "onSkill": [
+    35
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 131,
+   "made": {
+    "effect:magicGround2": 1,
+    "particle:blood2": 10,
+    "joint:jointHealing": 60,
+    "sprite:shiny2": 60
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Summon Bali",
+     "mana": 250,
+     "ag": 0,
+     "distance": 0,
+     "damage": 0
+    },
+    "mana": 786,
+    "ag": 434
+   }
+  },
+  {
+   "n": 36,
+   "name": "Summon Soldier",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 616,
+   "dist": 1,
+   "near": 3,
+   "heroCell": {
+    "x": 191,
+    "y": 179
+   },
+   "targetCell": {
+    "x": 191,
+    "y": 180
+   },
+   "heroMid": {
+    "x": 191,
+    "y": 179
+   },
+   "heroAfter": {
+    "x": 191,
+    "y": 179
+   },
+   "targetAfter": {
+    "x": 191,
+    "y": 180,
+    "dead": false
+   },
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 7,
+   "onSkill": [
+    36
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 131,
+   "made": {
+    "effect:magicGround2": 1,
+    "particle:blood2": 10,
+    "joint:jointHealing": 60,
+    "sprite:shiny2": 60
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Summon Soldier",
+     "mana": 350,
+     "ag": 0,
+     "distance": 0,
+     "damage": 0
+    },
+    "mana": 786,
+    "ag": 434
+   }
+  },
+  {
+   "n": 46,
+   "name": "Starfall",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 616,
+   "dist": 1,
+   "near": 4,
+   "heroCell": {
+    "x": 191,
+    "y": 179
+   },
+   "targetCell": {
+    "x": 191,
+    "y": 180
+   },
+   "heroMid": {
+    "x": 191,
+    "y": 179
+   },
+   "heroAfter": {
+    "x": 191,
+    "y": 179
+   },
+   "targetAfter": {
+    "x": 191,
+    "y": 180,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    3054
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 5,
+   "onSkill": [
+    46
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 98,
+   "made": {
+    "particle:blood2": 10,
+    "effect:arrowImpact": 1,
+    "joint:flash": 3,
+    "sprite:shiny3": 82,
+    "effect:shockWave": 2
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Starfall",
+     "mana": 20,
+     "ag": 15,
+     "distance": 8,
+     "damage": 120
+    },
+    "mana": 786,
+    "ag": 434
+   }
+  },
+  {
+   "n": 51,
+   "name": "Ice Arrow",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 620,
+   "dist": 1,
+   "near": 3,
+   "heroCell": {
+    "x": 191,
+    "y": 179
+   },
+   "targetCell": {
+    "x": 190,
+    "y": 179
+   },
+   "heroMid": {
+    "x": 191,
+    "y": 179
+   },
+   "heroAfter": {
+    "x": 191,
+    "y": 179
+   },
+   "targetAfter": {
+    "x": 190,
+    "y": 179,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    2156
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 3,
+   "onSkill": [
+    51
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 10,
+   "made": {
+    "particle:blood2": 10
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Ice Arrow",
+     "mana": 10,
+     "ag": 12,
+     "distance": 8,
+     "damage": 105
+    },
+    "mana": 786,
+    "ag": 434
+   }
+  },
+  {
+   "n": 52,
+   "name": "Penetration",
+   "castable": true,
+   "cast": true,
+   "target": "Budge Dragon",
+   "targetId": 646,
+   "dist": 1,
+   "near": 2,
+   "heroCell": {
+    "x": 191,
+    "y": 179
+   },
+   "targetCell": {
+    "x": 191,
+    "y": 180
+   },
+   "heroMid": {
+    "x": 191,
+    "y": 179
+   },
+   "heroAfter": {
+    "x": 191,
+    "y": 179
+   },
+   "targetAfter": {
+    "x": 191,
+    "y": 180,
+    "dead": true
+   },
+   "hits": 2,
+   "targetsHit": 2,
+   "hp": [
+    2314,
+    2734
+   ],
+   "sd": [
+    0,
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    52
+   ],
+   "area": [
+    {
+     "s": 52,
+     "x": 191,
+     "y": 179,
+     "rot": 128,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 71,
+   "made": {
+    "effect:gathering": 1,
+    "sprite:shiny2": 30,
+    "particle:spark3": 30,
+    "particle:blood2": 10
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Penetration",
+     "mana": 7,
+     "ag": 9,
+     "distance": 6,
+     "damage": 70
+    },
+    "mana": 786,
+    "ag": 434
+   }
+  },
+  {
+   "n": 76,
+   "name": "Plasma Storm",
+   "castable": true,
+   "cast": true,
+   "target": "Budge Dragon",
+   "targetId": 654,
+   "dist": 1,
+   "near": 2,
+   "heroCell": {
+    "x": 189,
+    "y": 165
+   },
+   "targetCell": {
+    "x": 188,
+    "y": 164
+   },
+   "heroMid": {
+    "x": 189,
+    "y": 165
+   },
+   "heroAfter": {
+    "x": 189,
+    "y": 165
+   },
+   "targetAfter": {
+    "x": 188,
+    "y": 164,
+    "dead": true
+   },
+   "hits": 3,
+   "targetsHit": 3,
+   "hp": [
+    2512,
+    2481,
+    2530
+   ],
+   "sd": [
+    0,
+    0,
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    76
+   ],
+   "area": [
+    {
+     "s": 76,
+     "x": 189,
+     "y": 165,
+     "rot": 224,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 20,
+   "made": {
+    "particle:blood2": 10,
+    "joint:fenrirSkillThunder": 4,
+    "joint:flareForceJoint": 6
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Plasma Storm",
+     "mana": 50,
+     "ag": 20,
+     "distance": 6,
+     "damage": 60
+    },
+    "mana": 786,
+    "ag": 434
+   }
+  },
+  {
+   "n": 77,
+   "name": "Infinity Arrow",
+   "castable": true,
+   "cast": true,
+   "target": "Budge Dragon",
+   "targetId": 665,
+   "dist": 1,
+   "near": 2,
+   "heroCell": {
+    "x": 181,
+    "y": 163
+   },
+   "targetCell": {
+    "x": 181,
+    "y": 164
+   },
+   "heroMid": {
+    "x": 181,
+    "y": 163
+   },
+   "heroAfter": {
+    "x": 181,
+    "y": 163
+   },
+   "targetAfter": {
+    "x": 181,
+    "y": 164,
+    "dead": false
+   },
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 2,
+   "onSkill": [
+    77
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 6,
+   "made": {
+    "effect:infinityArrow": 2,
+    "effect:infinityArrow1": 1,
+    "effect:infinityArrow2": 1,
+    "effect:infinityArrow3": 1,
+    "effect:infinityArrow4": 1
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Infinity Arrow",
+     "mana": 50,
+     "ag": 10,
+     "distance": 6,
+     "damage": 0
+    },
+    "mana": 786,
+    "ag": 434
+   }
+  },
+  {
+   "n": 234,
+   "name": "Recovery",
+   "castable": true,
+   "cast": true,
+   "target": "Budge Dragon",
+   "targetId": 665,
+   "dist": 1,
+   "near": 2,
+   "heroCell": {
+    "x": 181,
+    "y": 163
+   },
+   "targetCell": {
+    "x": 181,
+    "y": 164
+   },
+   "heroMid": {
+    "x": 181,
+    "y": 163
+   },
+   "heroAfter": {
+    "x": 181,
+    "y": 163
+   },
+   "targetAfter": {
+    "x": 181,
+    "y": 164,
+    "dead": false
+   },
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 3,
+   "onSkill": [
+    234
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 145,
+   "made": {
+    "joint:flare": 19,
+    "effect:summon": 1,
+    "effect:twlight": 3,
+    "effect:flare": 2,
+    "particle:light": 120
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Recovery",
+     "mana": 40,
+     "ag": 10,
+     "distance": 6,
+     "damage": 0
+    },
+    "mana": 786,
+    "ag": 434
+   }
+  },
+  {
+   "n": 235,
+   "name": "Multi-Shot",
+   "castable": true,
+   "cast": true,
+   "target": "Budge Dragon",
+   "targetId": 665,
+   "dist": 1,
+   "near": 2,
+   "heroCell": {
+    "x": 181,
+    "y": 163
+   },
+   "targetCell": {
+    "x": 181,
+    "y": 164
+   },
+   "heroMid": {
+    "x": 181,
+    "y": 163
+   },
+   "heroAfter": {
+    "x": 181,
+    "y": 163
+   },
+   "targetAfter": {
+    "x": 181,
+    "y": 164,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    1267
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 2,
+   "onSkill": [
+    235
+   ],
+   "area": [
+    {
+     "s": 235,
+     "x": 181,
+     "y": 163,
+     "rot": 127,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 44,
+   "made": {
+    "effect:multiShot3": 2,
+    "effect:multiShot1": 3,
+    "effect:multiShot2": 2,
+    "effect:bladeSkill": 1,
+    "sprite:shiny2": 36
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Multi-Shot",
+     "mana": 10,
+     "ag": 7,
+     "distance": 6,
+     "damage": 40
+    },
+    "mana": 786,
+    "ag": 434
+   }
+  },
+  {
+   "n": 708,
+   "name": "Phoenix Arrow",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 610,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 181,
+    "y": 163
+   },
+   "targetCell": {
+    "x": 182,
+    "y": 162
+   },
+   "heroMid": {
+    "x": 181,
+    "y": 163
+   },
+   "heroAfter": {
+    "x": 181,
+    "y": 163
+   },
+   "targetAfter": {
+    "x": 182,
+    "y": 162,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    1149
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    708
+   ],
+   "area": [
+    {
+     "s": 708,
+     "x": 182,
+     "y": 162,
+     "rot": 32,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 89,
+   "made": {
+    "effect:fireModel": 1,
+    "particle:fire": 81,
+    "effect:stone2": 5,
+    "effect:stone1": 1,
+    "particle:explosion": 1
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "target"
+    },
+    "info": {
+     "name": "Phoenix Arrow",
+     "mana": 30,
+     "ag": 8,
+     "distance": 7,
+     "damage": 84
+    },
+    "mana": 786,
+    "ag": 434
+   }
+  },
+  {
+   "n": 709,
+   "name": "Frost Arrow Rain",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 613,
+   "dist": 4,
+   "near": 1,
+   "heroCell": {
+    "x": 195,
+    "y": 166
+   },
+   "targetCell": {
+    "x": 192,
+    "y": 164
+   },
+   "heroMid": {
+    "x": 195,
+    "y": 166
+   },
+   "heroAfter": {
+    "x": 195,
+    "y": 166
+   },
+   "targetAfter": {
+    "x": 192,
+    "y": 164,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    1245
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    709
+   ],
+   "area": [
+    {
+     "s": 709,
+     "x": 192,
+     "y": 164,
+     "rot": 215,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 126,
+   "made": {
+    "particle:energy": 75,
+    "particle:spark": 48,
+    "particle:fire": 3
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "target"
+    },
+    "info": {
+     "name": "Frost Arrow Rain",
+     "mana": 60,
+     "ag": 12,
+     "distance": 6,
+     "damage": 66
+    },
+    "mana": 786,
+    "ag": 434
+   }
+  },
+  {
+   "n": 710,
+   "name": "Forest Blessing",
+   "castable": true,
+   "cast": true,
+   "target": "Budge Dragon",
+   "targetId": 627,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 176,
+    "y": 126
+   },
+   "targetCell": {
+    "x": 175,
+    "y": 127
+   },
+   "heroMid": {
+    "x": 176,
+    "y": 126
+   },
+   "heroAfter": {
+    "x": 176,
+    "y": 126
+   },
+   "targetAfter": {
+    "x": 175,
+    "y": 127,
+    "dead": false
+   },
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 2,
+   "onSkill": [
+    710
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 271,
+   "made": {
+    "effect:magicGround2": 1,
+    "particle:energy": 240,
+    "sprite:shiny2": 30
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Forest Blessing",
+     "mana": 80,
+     "ag": 20,
+     "distance": 0,
+     "damage": 0
+    },
+    "mana": 786,
+    "ag": 434
+   }
+  }
+ ],
+ "errors": []
+}

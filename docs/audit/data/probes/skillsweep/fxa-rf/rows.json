@@ -1,0 +1,177 @@
+{
+ "rows": [
+  {
+   "n": 262,
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "dist": 6,
+   "onSkill": [
+    262
+   ],
+   "effects": 63,
+   "made": {
+    "effect:swordEffect": 1,
+    "joint:swordEff": 18,
+    "effect:shockWave1": 1,
+    "effect:wolfHeadEffect2": 8,
+    "effect:damage1": 1,
+    "particle:damage1": 4,
+    "particle:blood2": 10,
+    "effect:shockWave2": 1,
+    "effect:shockWaveSpin1": 2,
+    "effect:ring": 1,
+    "particle:shiny4": 16
+   },
+   "damage": 1,
+   "p95": 17,
+   "max": 17,
+   "casting": false,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": "rageAttack",
+     "equipmentOk": true,
+     "needsTarget": true,
+     "heroAction": 249
+    },
+    "info": {
+     "mana": 15,
+     "ag": 20,
+     "distance": 4,
+     "delay": 700
+    },
+    "mana": 3252,
+    "ag": 2487,
+    "safe": false
+   }
+  },
+  {
+   "n": 265,
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "dist": 3,
+   "onSkill": [
+    265
+   ],
+   "effects": 225,
+   "made": {
+    "effect:dragonKickDummy": 1,
+    "effect:multiShot3": 2,
+    "effect:multiShot1": 3,
+    "effect:multiShot2": 2,
+    "particle:lightningMega": 7,
+    "joint:groundWind": 32,
+    "particle:energy": 48,
+    "particle:spark3": 96,
+    "particle:spark": 24,
+    "particle:blood2": 10
+   },
+   "damage": 1,
+   "p95": 17,
+   "max": 17,
+   "casting": false,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": "rageAttack",
+     "equipmentOk": true,
+     "needsTarget": true,
+     "heroAction": 252
+    },
+    "info": {
+     "mana": 100,
+     "ag": 100,
+     "distance": 4,
+     "delay": 3000
+    },
+    "mana": 3252,
+    "ag": 2770,
+    "safe": false
+   }
+  },
+  {
+   "n": 269,
+   "castable": true,
+   "cast": true,
+   "target": "Budge Dragon",
+   "dist": 1,
+   "onSkill": [
+    269
+   ],
+   "effects": 37,
+   "made": {
+    "effect:multiShot3": 2,
+    "effect:multiShot1": 3,
+    "effect:multiShot2": 2,
+    "joint:jointSpark": 20,
+    "particle:blood2": 10
+   },
+   "damage": 1,
+   "p95": 17,
+   "max": 17,
+   "casting": false,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "heroAction": null
+    },
+    "info": {
+     "mana": 20,
+     "ag": 15,
+     "distance": 4,
+     "delay": 0
+    },
+    "mana": 3252,
+    "ag": 2972,
+    "safe": false
+   }
+  },
+  {
+   "n": 270,
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "dist": 0,
+   "onSkill": [
+    270
+   ],
+   "effects": 263,
+   "made": {
+    "effect:phoenixShot": 1,
+    "sprite:flareRed": 23,
+    "particle:fireHik1": 204,
+    "particle:fireCursedLich": 23,
+    "particle:blood2": 10,
+    "particle:explosion": 2
+   },
+   "damage": 2,
+   "p95": 17,
+   "max": 17,
+   "casting": false,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "heroAction": 254
+    },
+    "info": {
+     "mana": 30,
+     "ag": 0,
+     "distance": 4,
+     "delay": 1200
+    },
+    "mana": 3252,
+    "ag": 3058,
+    "safe": false
+   }
+  }
+ ],
+ "errors": []
+}

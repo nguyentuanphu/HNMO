@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+  <data name="SonicBlade" xml:space="preserve"><value>Schallklinge</value></data>
+  <data name="Asura" xml:space="preserve"><value>Asura</value></data>
+  <data name="CycloneSword" xml:space="preserve"><value>Zyklonschwert</value></data>
+  <data name="BlastBreak" xml:space="preserve"><value>Explosionsbrecher</value></data>
+  <data name="FrickLargeGlove" xml:space="preserve"><value>Großer Frick-Handschuh</value></data>
+  <data name="PandoraPickTwoHanded" xml:space="preserve"><value>Pandora-Spitzhacke (Zweihand)</value></data>
+  <data name="Thunderbolt" xml:space="preserve"><value>Donnerkeil</value></data>
+  <data name="HornOfSteal" xml:space="preserve"><value>Stahlhorn</value></data>
+  <data name="MagmusPeer" xml:space="preserve"><value>Magmus-Speer</value></data>
+  <data name="AngelicBow" xml:space="preserve"><value>Engelsbogen</value></data>
+  <data name="DevilCrossbow" xml:space="preserve"><value>Teufelsarmbrust</value></data>
+  <data name="MiracleStaff" xml:space="preserve"><value>Wunderstab</value></data>
+  <data name="SpiteStaff" xml:space="preserve"><value>Trotzstab</value></data>
+  <data name="LazyWindShield" xml:space="preserve"><value>Träger-Wind-Schild</value></data>
+  <data name="LightLordShield" xml:space="preserve"><value>Lichtlord-Schild</value></data>
+  <data name="DarkDevilShield" xml:space="preserve"><value>Dunkelteufel-Schild</value></data>
+  <data name="MagicKnightShield" xml:space="preserve"><value>Magieritter-Schild</value></data>
+  <data name="AmbitionShield" xml:space="preserve"><value>Ehrgeiz-Schild</value></data>
+  <data name="LazyWindHelm" xml:space="preserve"><value>Träger Wind-Helm</value></data>
+  <data name="DarkDevilHelm" xml:space="preserve"><value>Dunkelteufel-Helm</value></data>
+  <data name="StickyHelm" xml:space="preserve"><value>Klebrige-Helm</value></data>
+  <data name="AmbitionMask" xml:space="preserve"><value>Ehrgeiz-Maske</value></data>
+  <data name="StormwingHelm" xml:space="preserve"><value>Sturmflügel-Helm</value></data>
+  <data name="LightLordHelmet" xml:space="preserve"><value>Lichtlord-Helm</value></data>
+  <data name="BloodyDragonHelm" xml:space="preserve"><value>Blutiger Drache-Helm</value></data>
+  <data name="LazyWindArmor" xml:space="preserve"><value>Träger Wind-Rüstung</value></data>
+  <data name="DarkDevilArmor" xml:space="preserve"><value>Dunkelteufel-Rüstung</value></data>
+  <data name="StickyArmor" xml:space="preserve"><value>Klebrige-Rüstung</value></data>
+  <data name="HellNightArmor" xml:space="preserve"><value>Höllennacht-Rüstung</value></data>
+  <data name="AmbitionArmor" xml:space="preserve"><value>Ehrgeiz-Rüstung</value></data>
+  <data name="StormwingArmor" xml:space="preserve"><value>Sturmflügel-Rüstung</value></data>
+  <data name="LightLordArmor" xml:space="preserve"><value>Lichtlord-Rüstung</value></data>
+  <data name="MagicKnightArmor" xml:space="preserve"><value>Magieritter-Rüstung</value></data>
+  <data name="BloodyDragonArmor" xml:space="preserve"><value>Blutiger Drache-Rüstung</value></data>
+  <data name="LazyWindPants" xml:space="preserve"><value>Träger Wind-Hose</value></data>
+  <data name="DarkDevilPants" xml:space="preserve"><value>Dunkelteufel-Hose</value></data>
+  <data name="StickyPants" xml:space="preserve"><value>Klebrige-Hose</value></data>
+  <data name="HellNightPants" xml:space="preserve"><value>Höllennacht-Hose</value></data>
+  <data name="AmbitionPants" xml:space="preserve"><value>Ehrgeiz-Hose</value></data>
+  <data name="StormwingPants" xml:space="preserve"><value>Sturmflügel-Hose</value></data>
+  <data name="LightLordPants" xml:space="preserve"><value>Lichtlord-Hose</value></data>
+  <data name="MagicKnightPants" xml:space="preserve"><value>Magieritter-Hose</value></data>
+  <data name="BloodyDragonPants" xml:space="preserve"><value>Blutiger Drache-Hose</value></data>
+  <data name="LazyWindGloves" xml:space="preserve"><value>Träger Wind-Handschuhe</value></data>
+  <data name="DarkDevilGloves" xml:space="preserve"><value>Dunkelteufel-Handschuhe</value></data>
+  <data name="StickyGloves" xml:space="preserve"><value>Klebrige-Handschuhe</value></data>
+  <data name="HellNightGloves" xml:space="preserve"><value>Höllennacht-Handschuhe</value></data>
+  <data name="AmbitionGloves" xml:space="preserve"><value>Ehrgeiz-Handschuhe</value></data>
+  <data name="StormwingGloves" xml:space="preserve"><value>Sturmflügel-Handschuhe</value></data>
+  <data name="LightLordGloves" xml:space="preserve"><value>Lichtlord-Handschuhe</value></data>
+  <data name="MagicKnightGloves" xml:space="preserve"><value>Magieritter-Handschuhe</value></data>
+  <data name="BloodyDragonGloves" xml:space="preserve"><value>Blutiger Drache-Handschuhe</value></data>
+  <data name="LazyWindBoots" xml:space="preserve"><value>Träger Wind-Stiefel</value></data>
+  <data name="DarkDevilBoots" xml:space="preserve"><value>Dunkelteufel-Stiefel</value></data>
+  <data name="StickyBoots" xml:space="preserve"><value>Klebrige-Stiefel</value></data>
+  <data name="HellNightBoots" xml:space="preserve"><value>Höllennacht-Stiefel</value></data>
+  <data name="AmbitionBoots" xml:space="preserve"><value>Ehrgeiz-Stiefel</value></data>
+  <data name="StormwingBoots" xml:space="preserve"><value>Sturmflügel-Stiefel</value></data>
+  <data name="LightLordBoots" xml:space="preserve"><value>Lichtlord-Stiefel</value></data>
+  <data name="MagicKnightBoots" xml:space="preserve"><value>Magieritter-Stiefel</value></data>
+  <data name="BloodyDragonBoots" xml:space="preserve"><value>Blutiger Drache-Stiefel</value></data>
+  <data name="GemOfSecret" xml:space="preserve"><value>Juwel des Geheimnisses</value></data>
+  <data name="MithrilFragment" xml:space="preserve"><value>Mithril-Fragment</value></data>
+  <data name="Mithril" xml:space="preserve"><value>Mithril</value></data>
+  <data name="ElixirFragment" xml:space="preserve"><value>Elixier-Fragment</value></data>
+  <data name="Elixir" xml:space="preserve"><value>Elixier</value></data>
+  <data name="MithrilFragmentBunch" xml:space="preserve"><value>Mithril-Fragment-Bündel</value></data>
+  <data name="ElixirFragmentBunch" xml:space="preserve"><value>Elixier-Fragment-Bündel</value></data>
+  <data name="JewelCombinationFrame" xml:space="preserve"><value>Juwelen-Kombinationsrahmen</value></data>
+  <data name="SpiritPowder" xml:space="preserve"><value>Geisterstaub</value></data>
+  <data name="MurensBookOfMagic" xml:space="preserve"><value>Murens Buch der Magie</value></data>
+  <data name="ScrollOfEtramu" xml:space="preserve"><value>Schriftrolle von Etramu</value></data>
+  <data name="LorenciaKnightsIronShield" xml:space="preserve"><value>Eisenschild der Ritter von Lorencia</value></data>
+  <data name="IronShieldOfTheMagic" xml:space="preserve"><value>Eisenschild der Magie</value></data>
+  <data name="HeroElixir" xml:space="preserve"><value>Heldenelixier</value></data>
+  <data name="BraveHeroElixir" xml:space="preserve"><value>Tapferes Heldenelixier</value></data>
+  <data name="GladiatorsDagger" xml:space="preserve"><value>Dolch des Gladiators</value></data>
+  <data name="MercilessGladiatorsDagger" xml:space="preserve"><value>Dolch des gnadenlosen Gladiators</value></data>
+  <data name="KundunsMadnessBlade" xml:space="preserve"><value>Kunduns Wahnsinnsklinge</value></data>
+  <data name="KundunsMagicSpellScroll" xml:space="preserve"><value>Kunduns Magiezauberrolle</value></data>
+  <data name="EmpireGuardiansStronghold" xml:space="preserve"><value>Festung der Reichswächter</value></data>
+  <data name="AncientIcarusScroll" xml:space="preserve"><value>Antike Icarus-Schriftrolle</value></data>
+  <data name="ArcasProphecy" xml:space="preserve"><value>Arcas Prophezeiung</value></data>
+  <data name="AntoniasSword" xml:space="preserve"><value>Antonias Schwert</value></data>
+  <data name="KundunsSealScroll" xml:space="preserve"><value>Kunduns Siegelrolle</value></data>
+  <data name="ErrtelOfAnger" xml:space="preserve"><value>Errtel des Zorns</value></data>
+  <data name="ErrtelOfBlessing" xml:space="preserve"><value>Errtel des Segens</value></data>
+  <data name="ErrtelOfIntegrity" xml:space="preserve"><value>Errtel der Integrität</value></data>
+  <data name="ErrtelOfDivinity" xml:space="preserve"><value>Errtel der Göttlichkeit</value></data>
+  <data name="ErrtelOfGale" xml:space="preserve"><value>Errtel des Sturms</value></data>
+  <data name="CloakOfDeath" xml:space="preserve"><value>Umhang des Todes</value></data>
+  <data name="WingsOfChaos" xml:space="preserve"><value>Flügel des Chaos</value></data>
+  <data name="WingsOfMagic" xml:space="preserve"><value>Flügel der Magie</value></data>
+  <data name="WingsOfLife" xml:space="preserve"><value>Flügel des Lebens</value></data>
+  <data name="WingsOfConqueror" xml:space="preserve"><value>Flügel des Eroberers</value></data>
+  <data name="WingsOfAngelAndDevil" xml:space="preserve"><value>Flügel von Engel und Teufel</value></data>
+  <data name="BrownPandaRing" xml:space="preserve"><value>Brauner Panda-Ring</value></data>
+  <data name="PinkPandaRing" xml:space="preserve"><value>Rosa Panda-Ring</value></data>
+  <data name="SpiritMapFragment" xml:space="preserve"><value>Geisterkarten-Fragment</value></data>
+  <data name="SpiritMap" xml:space="preserve"><value>Geisterkarte</value></data>
+  <data name="TrophiesOfBattle" xml:space="preserve"><value>Kriegstrophäen</value></data>
+  <data name="GreenInk" xml:space="preserve"><value>Grüne Tinte</value></data>
+  <data name="BlueInk" xml:space="preserve"><value>Blaue Tinte</value></data>
+  <data name="RedInk" xml:space="preserve"><value>Rote Tinte</value></data>
+  <data name="ParchmentOfSoul" xml:space="preserve"><value>Pergament der Seele</value></data>
+  <data name="ScrollOfGreenOblivion" xml:space="preserve"><value>Schriftrolle der grünen Vergessenheit</value></data>
+  <data name="ScrollOfBlueOblivion" xml:space="preserve"><value>Schriftrolle der blauen Vergessenheit</value></data>
+  <data name="ScrollOfRedOblivion" xml:space="preserve"><value>Schriftrolle der roten Vergessenheit</value></data>
+  <data name="ScrollOfGrayOblivion" xml:space="preserve"><value>Schriftrolle der grauen Vergessenheit</value></data>
+  <data name="SealedGreenOblivionScroll" xml:space="preserve"><value>Versiegelte grüne Vergessenheitsrolle</value></data>
+  <data name="SealedBlueOblivionScroll" xml:space="preserve"><value>Versiegelte blaue Vergessenheitsrolle</value></data>
+  <data name="SealedRedOblivionScroll" xml:space="preserve"><value>Versiegelte rote Vergessenheitsrolle</value></data>
+  <data name="SealedGrayOblivionScroll" xml:space="preserve"><value>Versiegelte graue Vergessenheitsrolle</value></data>
+  <data name="ProtectionTalisman" xml:space="preserve"><value>Schutztalisman</value></data>
+  <data name="CooperationTalisman" xml:space="preserve"><value>Kooperationstalisman</value></data>
+  <data name="FighterAmulet" xml:space="preserve"><value>Kämpfer-Amulett</value></data>
+  <data name="RobotKnightRing" xml:space="preserve"><value>Roboterritter-Ring</value></data>
+  <data name="MiniRobotRing" xml:space="preserve"><value>Mini-Roboter-Ring</value></data>
+  <data name="GreatHeavenlyMageRing" xml:space="preserve"><value>Großer Himmlischer Magierring</value></data>
+  <data name="BrownPandaTransformationRing" xml:space="preserve"><value>Brauner Panda-Verwandlungsring</value></data>
+  <data name="GoldCharacterCard" xml:space="preserve"><value>Goldene Charakterkarte</value></data>
+  <data name="DecorationRing" xml:space="preserve"><value>Dekorationsring</value></data>
+  <data name="BlessedDecorationRing" xml:space="preserve"><value>Gesegneter Dekorationsring</value></data>
+  <data name="NecklaceOfAgony" xml:space="preserve"><value>Halskette der Qual</value></data>
+  <data name="SolidSymbol" xml:space="preserve"><value>Festes Symbol</value></data>
+  <data name="RingOfUltimatum" xml:space="preserve"><value>Ring des Ultimatums</value></data>
+  <data name="RingOfBlock" xml:space="preserve"><value>Ring des Blockens</value></data>
+  <data name="ProtectorProtectionRing" xml:space="preserve"><value>Beschützer-Schutzring</value></data>
+  <data name="ProtectionRing" xml:space="preserve"><value>Schutzring</value></data>
+  <data name="TalismanOfAscension1" xml:space="preserve"><value>Talisman des Aufstiegs I</value></data>
+  <data name="TalismanOfAscension2" xml:space="preserve"><value>Talisman des Aufstiegs II</value></data>
+  <data name="TalismanOfAscension3" xml:space="preserve"><value>Talisman des Aufstiegs III</value></data>
+  <data name="SealOfAscension2" xml:space="preserve"><value>Siegel des Aufstiegs II</value></data>
+  <data name="MasterSealOfAscension2" xml:space="preserve"><value>Meistersiegel des Aufstiegs II</value></data>
+  <data name="WereRabbitEgg" xml:space="preserve"><value>Werkaninchen-Ei</value></data>
+  <data name="EvolutionStone" xml:space="preserve"><value>Entwicklungsstein</value></data>
+  <data name="Luki" xml:space="preserve"><value>Luki</value></data>
+  <data name="LukiEvolved" xml:space="preserve"><value>Luki (Entwickelt)</value></data>
+  <data name="Tony" xml:space="preserve"><value>Tony</value></data>
+  <data name="TonyEvolved" xml:space="preserve"><value>Tony (Entwickelt)</value></data>
+  <data name="Nymph" xml:space="preserve"><value>Nymphe</value></data>
+  <data name="NymphEvolved" xml:space="preserve"><value>Nymphe (Entwickelt)</value></data>
+  <data name="Safi" xml:space="preserve"><value>Safi</value></data>
+  <data name="SafiEvolved" xml:space="preserve"><value>Safi (Entwickelt)</value></data>
+  <data name="LuckyBagEgg" xml:space="preserve"><value>Glücksbeutel-Ei</value></data>
+  <data name="FireFlameGhostEgg" xml:space="preserve"><value>Flammengeister-Ei</value></data>
+  <data name="GoldenGoblinEgg" xml:space="preserve"><value>Goldenes Goblin-Ei</value></data>
+  <data name="William" xml:space="preserve"><value>William</value></data>
+  <data name="WilliamEvolved" xml:space="preserve"><value>William (Entwickelt)</value></data>
+  <data name="Paul" xml:space="preserve"><value>Paul</value></data>
+  <data name="PaulEvolved" xml:space="preserve"><value>Paul (Entwickelt)</value></data>
+  <data name="Chiron" xml:space="preserve"><value>Chiron</value></data>
+  <data name="ChironEvolved" xml:space="preserve"><value>Chiron (Entwickelt)</value></data>
+  <data name="Wooparoo" xml:space="preserve"><value>Wooparoo</value></data>
+  <data name="WooparooEvolved" xml:space="preserve"><value>Wooparoo (Entwickelt)</value></data>
+  <data name="Tibetton" xml:space="preserve"><value>Tibetton</value></data>
+  <data name="TibettonEvolved" xml:space="preserve"><value>Tibetton (Entwickelt)</value></data>
+  <data name="Witch" xml:space="preserve"><value>Hexe</value></data>
+  <data name="WitchEvolved" xml:space="preserve"><value>Hexe (Entwickelt)</value></data>
+  <data name="Skull" xml:space="preserve"><value>Schädel</value></data>
+  <data name="SkullEvolved" xml:space="preserve"><value>Schädel (Entwickelt)</value></data>
+  <data name="Pumpy" xml:space="preserve"><value>Pumpy</value></data>
+  <data name="PumpyEvolved" xml:space="preserve"><value>Pumpy (Entwickelt)</value></data>
+  <data name="MuunEnergyConverter" xml:space="preserve"><value>Muun-Energiewandler</value></data>
+  <data name="WizardryStone" xml:space="preserve"><value>Zauberstein</value></data>
+  <data name="Savath" xml:space="preserve"><value>Savath</value></data>
+  <data name="SavathEvolved" xml:space="preserve"><value>Savath (Entwickelt)</value></data>
+  <data name="Lycan" xml:space="preserve"><value>Lykan</value></data>
+  <data name="LycanEvolved" xml:space="preserve"><value>Lykan (Entwickelt)</value></data>
+  <data name="Torby" xml:space="preserve"><value>Torby</value></data>
+  <data name="TorbyEvolved" xml:space="preserve"><value>Torby (Entwickelt)</value></data>
+  <data name="Seiren" xml:space="preserve"><value>Sirene</value></data>
+  <data name="SeirenEvolved" xml:space="preserve"><value>Sirene (Entwickelt)</value></data>
+  <data name="Behemoth" xml:space="preserve"><value>Behemoth</value></data>
+  <data name="BehemothEvolved" xml:space="preserve"><value>Behemoth (Entwickelt)</value></data>
+  <data name="Loggle" xml:space="preserve"><value>Loggle</value></data>
+  <data name="LoggleEvolved" xml:space="preserve"><value>Loggle (Entwickelt)</value></data>
+  <data name="Mino" xml:space="preserve"><value>Mino</value></data>
+  <data name="MinoEvolved" xml:space="preserve"><value>Mino (Entwickelt)</value></data>
+  <data name="Hound" xml:space="preserve"><value>Jagdhund</value></data>
+  <data name="HoundEvolved" xml:space="preserve"><value>Jagdhund (Entwickelt)</value></data>
+  <data name="Trive" xml:space="preserve"><value>Trive</value></data>
+  <data name="TriveEvolved" xml:space="preserve"><value>Trive (Entwickelt)</value></data>
+  <data name="Vogan" xml:space="preserve"><value>Vogan</value></data>
+  <data name="VoganEvolved" xml:space="preserve"><value>Vogan (Entwickelt)</value></data>
+  <data name="Cyclop" xml:space="preserve"><value>Zyklop</value></data>
+  <data name="CyclopEvolved" xml:space="preserve"><value>Zyklop (Entwickelt)</value></data>
+  <data name="DarkTransformationRing" xml:space="preserve"><value>Dunkler Verwandlungsring</value></data>
+  <data name="Bonf" xml:space="preserve"><value>Bonf</value></data>
+  <data name="BonfEvolved" xml:space="preserve"><value>Bonf (Entwickelt)</value></data>
+  <data name="Hawk" xml:space="preserve"><value>Falke</value></data>
+  <data name="HawkEvolved" xml:space="preserve"><value>Falke (Entwickelt)</value></data>
+  <data name="Muty" xml:space="preserve"><value>Muty</value></data>
+  <data name="MutyEvolved" xml:space="preserve"><value>Muty (Entwickelt)</value></data>
+  <data name="ConquerorsBadge" xml:space="preserve"><value>Abzeichen des Eroberers</value></data>
+  <data name="BadgeOfHardships" xml:space="preserve"><value>Abzeichen der Mühen</value></data>
+  <data name="Mantis" xml:space="preserve"><value>Gottesanbeterin</value></data>
+  <data name="MantisEvolved" xml:space="preserve"><value>Gottesanbeterin (Entwickelt)</value></data>
+  <data name="Scolpy" xml:space="preserve"><value>Skorpy</value></data>
+  <data name="ScolpyEvolved" xml:space="preserve"><value>Skorpy (Entwickelt)</value></data>
+  <data name="Chafer" xml:space="preserve"><value>Käfer</value></data>
+  <data name="ChaferEvolved" xml:space="preserve"><value>Käfer (Entwickelt)</value></data>
+  <data name="CosplayGirl" xml:space="preserve"><value>Cosplay-Mädchen</value></data>
+  <data name="CosplayGirlEvolved" xml:space="preserve"><value>Cosplay-Mädchen (Entwickelt)</value></data>
+  <data name="CheerGirl" xml:space="preserve"><value>Cheer-Mädchen</value></data>
+  <data name="CheerGirlEvolved" xml:space="preserve"><value>Cheer-Mädchen (Entwickelt)</value></data>
+  <data name="SportyGirl" xml:space="preserve"><value>Sport-Mädchen</value></data>
+  <data name="SportyGirlEvolved" xml:space="preserve"><value>Sport-Mädchen (Entwickelt)</value></data>
+  <data name="Baal" xml:space="preserve"><value>Baal</value></data>
+  <data name="BaalEvolved" xml:space="preserve"><value>Baal (Entwickelt)</value></data>
+  <data name="Gaap" xml:space="preserve"><value>Gaap</value></data>
+  <data name="GaapEvolved" xml:space="preserve"><value>Gaap (Entwickelt)</value></data>
+  <data name="Taaf" xml:space="preserve"><value>Taaf</value></data>
+  <data name="TaafEvolved" xml:space="preserve"><value>Taaf (Entwickelt)</value></data>
+  <data name="Frozen" xml:space="preserve"><value>Gefroren</value></data>
+  <data name="FrozenEvolved" xml:space="preserve"><value>Gefroren (Entwickelt)</value></data>
+  <data name="Loor" xml:space="preserve"><value>Loor</value></data>
+  <data name="LoorEvolved" xml:space="preserve"><value>Loor (Entwickelt)</value></data>
+  <data name="Purssil" xml:space="preserve"><value>Purssil</value></data>
+  <data name="PurssilEvolved" xml:space="preserve"><value>Purssil (Entwickelt)</value></data>
+  <data name="RoomyEgg" xml:space="preserve"><value>Geräumiges Ei</value></data>
+  <data name="AncientMetal" xml:space="preserve"><value>Antikes Metall</value></data>
+  <data name="Lv2LetterOfRequest" xml:space="preserve"><value>Anfragebrief Stufe 2</value></data>
+  <data name="Lv2CompletionCertificate" xml:space="preserve"><value>Abschlusszertifikat Stufe 2</value></data>
+  <data name="MagicBackpack1" xml:space="preserve"><value>Magischer Rucksack 1</value></data>
+  <data name="MagicBackpack2" xml:space="preserve"><value>Magischer Rucksack 2</value></data>
+  <data name="MagicBackpack3" xml:space="preserve"><value>Magischer Rucksack 3</value></data>
+  <data name="MagicBackpack4" xml:space="preserve"><value>Magischer Rucksack 4</value></data>
+  <data name="DeathKingsBone" xml:space="preserve"><value>Knochen des Todeskönigs</value></data>
+  <data name="HellMainesLeather" xml:space="preserve"><value>Leder von Hell Maine</value></data>
+  <data name="DarkPhoenixFlame" xml:space="preserve"><value>Flamme des Dunklen Phönix</value></data>
+  <data name="DeathBeamKnightSoul" xml:space="preserve"><value>Seele des Todesstrahl-Ritters</value></data>
+  <data name="IceWalkersMane" xml:space="preserve"><value>Mähne des Eiswandlers</value></data>
+  <data name="MammothsBundleOfFur" xml:space="preserve"><value>Fellbündel des Mammuts</value></data>
+  <data name="GiantsIcicle" xml:space="preserve"><value>Eiszapfen des Riesen</value></data>
+  <data name="CoolutinsPoison" xml:space="preserve"><value>Gift von Coolutin</value></data>
+  <data name="IronKnightsHeart" xml:space="preserve"><value>Herz des Eisenritters</value></data>
+  <data name="DarkMammothsHorn" xml:space="preserve"><value>Horn des Dunklen Mammuts</value></data>
+  <data name="DarkGiantsAxe" xml:space="preserve"><value>Axt des Dunklen Riesen</value></data>
+  <data name="DarkCoolutinsBlood" xml:space="preserve"><value>Blut von Dunkel-Coolutin</value></data>
+  <data name="DarkIronKnightsSword" xml:space="preserve"><value>Schwert des Dunklen Eisenritters</value></data>
+  <data name="ElementalTalismanOfLuck" xml:space="preserve"><value>Elementartalisman des Glücks</value></data>
+  <data name="ElementalTalismanOfChaos" xml:space="preserve"><value>Elementartalisman des Chaos</value></data>
+  <data name="SonicCombinationNote" xml:space="preserve"><value>Sonic-Kombinationsnotiz</value></data>
+  <data name="CycloneCombinationNote" xml:space="preserve"><value>Zyklon-Kombinationsnotiz</value></data>
+  <data name="BlastCombinationNote" xml:space="preserve"><value>Explosions-Kombinationsnotiz</value></data>
+  <data name="ScrollOfSwiftnessMaster" xml:space="preserve"><value>Schriftrolle des Schnelligkeitsmeisters</value></data>
+  <data name="RewardJar" xml:space="preserve"><value>Belohnungskrug</value></data>
+  <data name="ValuableRewardJar" xml:space="preserve"><value>Wertvoller Belohnungskrug</value></data>
+  <data name="GoldenApple" xml:space="preserve"><value>Goldener Apfel</value></data>
+  <data name="GoldenApple2" xml:space="preserve"><value>Goldener Apfel (2)</value></data>
+  <data name="EvomonSummoningScroll" xml:space="preserve"><value>Evomon-Beschwörungsrolle</value></data>
+  <data name="TetraCrystalGreater" xml:space="preserve"><value>Tetra-Kristall (Groß)</value></data>
+  <data name="TetraCrystalStandard" xml:space="preserve"><value>Tetra-Kristall (Normal)</value></data>
+  <data name="TetraCrystalMinor" xml:space="preserve"><value>Tetra-Kristall (Klein)</value></data>
+  <data name="MinorEvomonBox" xml:space="preserve"><value>Kleine Evomon-Kiste</value></data>
+  <data name="StandardEvomonBox" xml:space="preserve"><value>Normale Evomon-Kiste</value></data>
+  <data name="GreaterEvomonBox" xml:space="preserve"><value>Große Evomon-Kiste</value></data>
+  <data name="LuxuriousEvomonBox" xml:space="preserve"><value>Luxuriöse Evomon-Kiste</value></data>
+  <data name="MagnificentEvomonBox" xml:space="preserve"><value>Prächtige Evomon-Kiste</value></data>
+  <data name="LegendaryEvomonBox" xml:space="preserve"><value>Legendäre Evomon-Kiste</value></data>
+  <data name="GiftOfHenchmen" xml:space="preserve"><value>Geschenk der Handlanger</value></data>
+  <data name="GiftOfKnights" xml:space="preserve"><value>Geschenk der Ritter</value></data>
+  <data name="GiftOfHighKnights" xml:space="preserve"><value>Geschenk der Hohen Ritter</value></data>
+  <data name="MinorDevilsBox" xml:space="preserve"><value>Kleine Teufelskiste</value></data>
+  <data name="DevilsBox" xml:space="preserve"><value>Teufelskiste</value></data>
+  <data name="HighDevilsBox" xml:space="preserve"><value>Große Teufelskiste</value></data>
+  <data name="GuardsmansBox" xml:space="preserve"><value>Kiste des Wachmanns</value></data>
+  <data name="GuardmanCaptainsBox" xml:space="preserve"><value>Kiste des Wachhauptmanns</value></data>
+  <data name="BlessOfLightLowGrade" xml:space="preserve"><value>Segen des Lichts (Niedrig)</value></data>
+  <data name="BlessOfLightMiddleGrade" xml:space="preserve"><value>Segen des Lichts (Mittel)</value></data>
+  <data name="SpecialCard" xml:space="preserve"><value>Spezialkarte</value></data>
+  <data name="SummoningScrollFragment" xml:space="preserve"><value>Beschwörungsrollen-Fragment</value></data>
+  <data name="BlindParchment" xml:space="preserve"><value>Blindheits-Pergament</value></data>
+</root>

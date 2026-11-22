@@ -24426,14 +24426,22 @@ function worldModelFiles(worldNumber) {
 var SHARED_FOLDERS = [
   { maps: [11, 12, 13, 14, 15, 16, 17, 52], folder: 12 },
   // Blood Castle
-  { maps: [18, 19, 20, 21, 22, 23, 53], folder: 19 },
-  // Chaos Castle
+  { maps: [18, 19, 20, 21, 22, 23, 53, 97], folder: 19 },
+  // Chaos Castle & Chaos Castle Survival
   { maps: [24, 25, 26, 27, 28, 29, 36], folder: 25 },
   // Kalima
   { maps: [45, 46, 47, 48, 49, 50], folder: 47 },
   // Illusion Temple
-  { maps: [9, 32], folder: 10 }
+  { maps: [9, 32], folder: 10 },
   // Devil Square (32 is the second one, GetLoadedWorld)
+  { maps: [91, 92], folder: 92 },
+  // Acheron & Acheron (Arca War)
+  { maps: [95, 96], folder: 96 },
+  // Debenter & Debenter (Arca War)
+  { maps: [98, 99], folder: 99 },
+  // Illusion Temple League 1 & 2
+  { maps: [100, 101], folder: 101 }
+  // Uruk Mountain & Uruk Mountain (Arca War)
 ];
 function filesFolder(mapNumber) {
   return SHARED_FOLDERS.find((entry) => entry.maps.includes(mapNumber))?.folder ?? mapNumber + 1;
@@ -24475,7 +24483,12 @@ var MAP_NAMES = {
   69: "Imperial Guardian",
   79: "Loren Market",
   80: "Karutan 1",
-  81: "Karutan 2"
+  81: "Karutan 2",
+  91: "Acheron",
+  95: "Debenter",
+  98: "Illusion Temple League",
+  100: "Uruk Mountain",
+  102: "Tormented Square"
 };
 var KNOWN_MAPS = Object.keys(MAP_NAMES).map(Number);
 async function loadWorldData(mapNumber) {

@@ -993,8 +993,8 @@ public class Stats
     /// <summary>
     /// Gets the berserker proficiency buff damage multiplier MST attribute definition.
     /// </summary>
-    /// <remarks>Increases with MST berserker proficiency. Applies on <see cref="DamageType.Curse"/> (once) and <see cref="DamageType.Wizardry"/> (twice) skills.</remarks>
-    public static AttributeDefinition BerserkerProficiencyMultiplier { get; } = new(new Guid("55124C97-6EF3-4C46-AEC9-D01C11BE18A4"), "Berserker Proficiency Multiplier (MST)", "The berserker proficiency damage multiplier which is added to the wizardry multiplier but also by itself is multiplied by the wizardry/curse final damage and added to it.");
+    /// <remarks>Increases with MST berserker proficiency. Added once to <see cref="BerserkerWizardryMultiplier"/> for <see cref="DamageType.Wizardry"/> skills.</remarks>
+    public static AttributeDefinition BerserkerProficiencyMultiplier { get; } = new(new Guid("55124C97-6EF3-4C46-AEC9-D01C11BE18A4"), "Berserker Proficiency Multiplier (MST)", "The berserker proficiency damage multiplier added to the wizardry multiplier.");
 
     /// <summary>
     /// Gets the berserker buff minimum physical DMG bonus attribute definition.

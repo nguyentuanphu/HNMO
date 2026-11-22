@@ -181,7 +181,7 @@
     <value>狂暴术精通伤害倍率（大师技能）</value>
   </data>
   <data name="Description_BerserkerProficiencyMultiplierMST" xml:space="preserve">
-    <value>狂暴术精通伤害倍率：叠加到魔法伤害倍率，同时独立与魔法、诅咒最终伤害相乘后叠加。</value>
+    <value>狂暴术精通伤害倍率：叠加到魔法伤害倍率。</value>
   </data>
   <data name="Name_BerserkerWizardryMultiplier" xml:space="preserve">
     <value>狂暴术魔法伤害倍率</value>

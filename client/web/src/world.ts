@@ -166,10 +166,14 @@ export function worldModelFiles(worldNumber: number): Map<number, string> {
 // several maps share one folder.
 const SHARED_FOLDERS = [
   { maps: [11, 12, 13, 14, 15, 16, 17, 52], folder: 12 }, // Blood Castle
-  { maps: [18, 19, 20, 21, 22, 23, 53], folder: 19 },     // Chaos Castle
+  { maps: [18, 19, 20, 21, 22, 23, 53, 97], folder: 19 }, // Chaos Castle & Chaos Castle Survival
   { maps: [24, 25, 26, 27, 28, 29, 36], folder: 25 },     // Kalima
   { maps: [45, 46, 47, 48, 49, 50], folder: 47 },         // Illusion Temple
   { maps: [9, 32], folder: 10 },                          // Devil Square (32 is the second one, GetLoadedWorld)
+  { maps: [91, 92], folder: 92 },                         // Acheron & Acheron (Arca War)
+  { maps: [95, 96], folder: 96 },                         // Debenter & Debenter (Arca War)
+  { maps: [98, 99], folder: 99 },                         // Illusion Temple League 1 & 2
+  { maps: [100, 101], folder: 101 },                      // Uruk Mountain & Uruk Mountain (Arca War)
 ];
 
 export function filesFolder(mapNumber: number): number {
@@ -183,6 +187,7 @@ const MAP_NAMES: Record<number, string> = {
   40: 'Silent Map', 41: 'Barracks of Balgass', 42: 'Balgass Refuge', 45: 'Illusion Temple', 51: 'Elveland',
   56: 'Swamp of Calmness', 57: 'Raklion', 58: 'Raklion Hatchery', 62: 'Santa Village', 63: 'Vulcanus', 64: 'Duel Arena',
   65: 'Doppelganger', 69: 'Imperial Guardian', 79: 'Loren Market', 80: 'Karutan 1', 81: 'Karutan 2',
+  91: 'Acheron', 95: 'Debenter', 98: 'Illusion Temple League', 100: 'Uruk Mountain', 102: 'Tormented Square',
 };
 
 export const KNOWN_MAPS = Object.keys(MAP_NAMES).map(Number);
@@ -192,6 +197,8 @@ const EVENT_MAP_NAMES = [
   { maps: [12, 13, 14, 15, 16, 17, 52], name: 'Blood Castle' }, { maps: [19, 20, 21, 22, 23, 53], name: 'Chaos Castle' }, { maps: [32], name: 'Devil Square' },
   { maps: [45, 46, 47, 48, 49, 50], name: 'Illusion Temple' }, { maps: [65, 66, 67, 68], name: 'Doppelganger' },
   { maps: [69, 70, 71, 72], name: 'Varka' }, { maps: [25, 26, 27, 28, 29], name: 'Kalima' },
+  { maps: [92], name: 'Acheron' }, { maps: [96], name: 'Debenter' }, { maps: [97], name: 'Chaos Castle Survival' },
+  { maps: [99], name: 'Illusion Temple League' }, { maps: [101], name: 'Uruk Mountain' },
 ];
 
 export function mapName(mapNumber: number): string {

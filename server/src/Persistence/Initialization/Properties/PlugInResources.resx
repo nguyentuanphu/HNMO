@@ -466,4 +466,20 @@
   <data name="AddArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Adds the HNMO Arena Herald, an NPC in Lorencia, Devias, Noria and Elbeland which opens the Arena window.</value></data>
   <data name="RenumberArenaHeraldUpdatePlugIn_Name" xml:space="preserve"><value>Arena Herald: its own NPC number</value></data>
   <data name="RenumberArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Moves the Arena Herald of an older save from NPC 595 to 900, so the web game shows it again.</value></data>
+  <data name="SkillEnergyRequirementsUpdatePlugIn_Name" xml:space="preserve"><value>Fix Recovery and Power Slash energy requirements</value></data>
+  <data name="SkillEnergyRequirementsUpdatePlugIn_Description" xml:space="preserve"><value>Sets the energy requirement of Recovery to 168 (matching the Season 6 and Season 9 server suites and the Crystal of Recovery) and of Power Slash to 100.</value></data>
+  <data name="SwellLifeDurationUpdatePlugIn_Name" xml:space="preserve"><value>Align Swell Life duration with the Season 6 suite</value></data>
+  <data name="SwellLifeDurationUpdatePlugIn_Description" xml:space="preserve"><value>Updates Swell Life and Swell Life Proficiency duration from 60 + Energy / 180 s (180 s cap) to 60 + Energy / 10 s without a cap, matching the Season 6 server suite.</value></data>
+  <data name="IncreaseBlockMasterFlatUpdatePlugIn_Name" xml:space="preserve"><value>Make Increase Block Power Up flat</value></data>
+  <data name="IncreaseBlockMasterFlatUpdatePlugIn_Description" xml:space="preserve"><value>Changes Rage Fighter's Increase Block Power Up master skill from a percentage of PvM defense rate to a flat defense rate bonus, matching the Season 6 server suite.</value></data>
+  <data name="SeasonNineSharedItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: shared item rules</value></data>
+  <data name="SeasonNineSharedItemsUpdatePlugIn_Description" xml:space="preserve"><value>Applies the Season 9 values on shared items (Cape of Fighter drop level 150, Cape of Lord level requirement 150, native 255 potion stacks) when running as Season 9, leaving customized values unchanged.</value></data>
+  <data name="SeasonNineOnlyItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: add Season 9 items</value></data>
+  <data name="SeasonNineOnlyItemsUpdatePlugIn_Description" xml:space="preserve"><value>Adds the 279 unique Season 9 item definitions (socket weapons, shields, armor sets, wings, pentagrams, accessories, Muun companions, and crafting materials) when running as Season 9, leaving existing items unchanged.</value></data>
+  <data name="SeasonNineSocketOptionsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: socket option values</value></data>
+  <data name="SeasonNineSocketOptionsUpdatePlugIn_Description" xml:space="preserve"><value>Sets Water socket shield protection level 5 to 30 %, Wind Maximum AG to 50/70/90/110/130, and Wind AG value to 5/7/9/11/13 when running as Season 9, leaving customized values unchanged.</value></data>
+  <data name="SeasonNineMonstersUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: monsters and NPCs</value></data>
+  <data name="SeasonNineMonstersUpdatePlugIn_Description" xml:space="preserve"><value>Adds the 111 Season 9 monster and NPC definitions missing from the Season 6 catalog and updates Dark Elf trainee soldier respawn delay to 10800 seconds when running as Season 9.</value></data>
+  <data name="SeasonNineMapsAndGatesUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: maps and gates</value></data>
+  <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>Adds the 10 Season 9 maps, terrain files, gates (417-461, 474-482), and Season 9 field spawns when running as Season 9.</value></data>
 </root>

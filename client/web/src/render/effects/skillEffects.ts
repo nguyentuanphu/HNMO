@@ -747,7 +747,9 @@ export function playChainLightning(system: EffectSystem, caster: EffectOwner, ta
   let from: EffectOwner = caster;
   const angle = new THREE.Vector3(-60, 0, caster.angle.z);
   targets.forEach((target, i) => {
-    if (from !== target && (target.isLive?.() ?? true)) system.createEffect('chainLightning', caster.position, angle, caster.light ?? WHITE, i, from, 0, { target });
+    if (from !== target && (target.isPresent?.() ?? target.isLive?.() ?? true)) {
+      system.createEffect('chainLightning', caster.position, angle, caster.light ?? WHITE, i, from, 0, { target });
+    }
     from = target;
   });
 }

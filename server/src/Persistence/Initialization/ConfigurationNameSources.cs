@@ -23,9 +23,12 @@ public static class ConfigurationNameSources
         RegisterIfNeeded(nameof(CashShopPackageNames), CashShopPackageNames.ResourceManager);
         RegisterIfNeeded(nameof(CharacterClassNames), CharacterClassNames.ResourceManager);
         RegisterIfNeeded(nameof(MapNames), MapNames.ResourceManager);
+        RegisterIfNeeded(nameof(SeasonNineMapNames), SeasonNineMapNames.ResourceManager);
         RegisterIfNeeded(nameof(MerchantNames), MerchantNames.ResourceManager);
         RegisterIfNeeded(nameof(MonsterNames), MonsterNames.ResourceManager);
+        RegisterIfNeeded(nameof(SeasonNineMonsterNames), SeasonNineMonsterNames.ResourceManager);
         RegisterIfNeeded(nameof(ItemNames), ItemNames.ResourceManager);
+        RegisterIfNeeded(nameof(SeasonNineItemNames), SeasonNineItemNames.ResourceManager);
         RegisterIfNeeded(nameof(MiniGameNames), MiniGameNames.ResourceManager);
         RegisterIfNeeded(nameof(MiniGameDescriptions), MiniGameDescriptions.ResourceManager);
         RegisterIfNeeded(nameof(SkillNames), SkillNames.ResourceManager);

@@ -34,12 +34,5 @@ public class IncreaseBlockPowerUpEffectInitializer : InitializerBase
         magicEffect.Name = LocalizedString.FromResource(() => MagicEffectNames.IncreaseBlockPowerUpSkillEffect);
 
         this.CopyMagicEffectValues(magicEffect, (short)MagicEffectNumber.IncreaseBlock);
-
-        var increaseBlockPowerUp = this.Context.CreateNew<PowerUpDefinition>();
-        magicEffect.PowerUpDefinitions.Add(increaseBlockPowerUp);
-        increaseBlockPowerUp.TargetAttribute = Stats.IncreaseBlockBonus.GetPersistent(this.GameConfiguration);
-        increaseBlockPowerUp.Boost = this.Context.CreateNew<PowerUpDefinitionValue>();
-        increaseBlockPowerUp.Boost.ConstantValue.Value = 0f;
-        increaseBlockPowerUp.Boost.ConstantValue.AggregateType = AggregateType.AddRaw;
     }
 }

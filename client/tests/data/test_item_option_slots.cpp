@@ -1174,3 +1174,53 @@ TEST_CASE("An item is excellent when its excellent byte turns on an option it li
     CHECK(durability(ITEM_WINGS_OF_SPIRITS, 0x01) == durability(ITEM_WINGS_OF_SPIRITS, 0));
 }
 
+// The jewels and their bundles are priced as the server prices them (Bless 3 M, Soul 6 M, Chaos 810 k, Life 16 M,
+// Creation 15 M, Guardian 15 M; a bundle of 10, 20 or 30 jewels costs 10, 20 or 30 times one jewel).
+TEST_CASE("The jewels and their bundles are priced like the server [data][items]")
+{
+    ClientDataScope client(ClientDirectory);
+    I18N::SetLocale("en");
+    std::string errorMessage;
+    REQUIRE(g_ItemDataHandler.Load(errorMessage));
+    HeroScope hero;
+
+    const auto price = [](int type, int level)
+    {
+        ItemCreationParams params{};
+        params.Group = type / MAX_ITEM_INDEX;
+        params.Number = type % MAX_ITEM_INDEX;
+        params.Level = static_cast<BYTE>(level);
+        params.Durability = 1;
+        ITEM item;
+        FillItemFromParameters(item, params);
+        return ItemValue(&item, 0);
+    };
+
+    struct JewelPriceRow
+    {
+        int singleType;
+        int bundleType;
+        int64_t unitPrice;
+    };
+    const std::array<JewelPriceRow, 6> rows{{
+        {ITEM_JEWEL_OF_BLESS, ITEM_PACKED_JEWEL_OF_BLESS, 3000000},
+        {ITEM_JEWEL_OF_SOUL, ITEM_PACKED_JEWEL_OF_SOUL, 6000000},
+        {ITEM_JEWEL_OF_CHAOS, ITEM_PACKED_JEWEL_OF_CHAOS, 810000},
+        {ITEM_JEWEL_OF_LIFE, ITEM_PACKED_JEWEL_OF_LIFE, 16000000},
+        {ITEM_JEWEL_OF_CREATION, ITEM_PACKED_JEWEL_OF_CREATION, 15000000},
+        {ITEM_JEWEL_OF_GUARDIAN, ITEM_PACKED_JEWEL_OF_GUARDIAN, 15000000},
+    }};
+
+    for (const auto& row : rows)
+    {
+        CAPTURE(row.singleType);
+        CHECK(price(row.singleType, 0) == row.unitPrice);
+        for (int level = 0; level <= 2; ++level)
+        {
+            CAPTURE(level);
+            CHECK(price(row.bundleType, level) == row.unitPrice * (level + 1) * 10);
+        }
+    }
+}
+
+

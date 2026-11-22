@@ -1,0 +1,431 @@
+{
+ "rows": [
+  {
+   "n": 1,
+   "name": "Poison",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 7,
+   "kinds": [
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 659
+  },
+  {
+   "n": 2,
+   "name": "Meteorite",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 0,
+   "kinds": [],
+   "p95": 17,
+   "max": 17,
+   "mana": 659
+  },
+  {
+   "n": 3,
+   "name": "Lightning",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 0,
+   "kinds": [],
+   "p95": 17,
+   "max": 17,
+   "mana": 659
+  },
+  {
+   "n": 4,
+   "name": "Fire Ball",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 6,
+   "kinds": [
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 659
+  },
+  {
+   "n": 5,
+   "name": "Flame",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 189,
+   "kinds": [
+    "effect:flame",
+    "effect:stone2",
+    "effect:stone1",
+    "particle:flame",
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 659
+  },
+  {
+   "n": 7,
+   "name": "Ice",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 13,
+   "kinds": [
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 659
+  },
+  {
+   "n": 8,
+   "name": "Twister",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 22,
+   "kinds": [
+    "particle:fire",
+    "effect:storm",
+    "joint:jointThunder",
+    "particle:smoke",
+    "effect:stone2",
+    "effect:stone1"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 659
+  },
+  {
+   "n": 9,
+   "name": "Evil Spirit",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 12,
+   "kinds": [
+    "effect:laser",
+    "joint:jointSpirit"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 659
+  },
+  {
+   "n": 10,
+   "name": "Hellfire",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 11,
+   "kinds": [
+    "particle:fire",
+    "effect:circle",
+    "effect:circleLight",
+    "effect:stone2",
+    "effect:stone1"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 659
+  },
+  {
+   "n": 11,
+   "name": "Power Wave",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 1,
+   "kinds": [
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 659
+  },
+  {
+   "n": 12,
+   "name": "Aqua Beam",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 21,
+   "kinds": [
+    "effect:bossLaser",
+    "sprite:spark3"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 659
+  },
+  {
+   "n": 13,
+   "name": "Cometfall",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 5,
+   "kinds": [
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 659
+  },
+  {
+   "n": 14,
+   "name": "Inferno",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 194,
+   "kinds": [
+    "particle:fire",
+    "effect:stone1",
+    "effect:stone2",
+    "effect:skillInferno",
+    "particle:spark",
+    "particle:explosion"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 659
+  },
+  {
+   "n": 17,
+   "name": "Energy Ball",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 0,
+   "kinds": [],
+   "p95": 17,
+   "max": 17,
+   "mana": 659
+  },
+  {
+   "n": 41,
+   "name": "Twisting Slash",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 390,
+   "kinds": [
+    "effect:skillWheel1",
+    "effect:skillWheel2",
+    "joint:jointSpark",
+    "particle:smoke",
+    "particle:spark",
+    "sprite:light"
+   ],
+   "p95": 17,
+   "max": 67,
+   "mana": 659
+  },
+  {
+   "n": 47,
+   "name": "Impale",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 0,
+   "kinds": [],
+   "p95": 17,
+   "max": 17,
+   "mana": 659
+  },
+  {
+   "n": 55,
+   "name": "Fire Slash",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 103,
+   "kinds": [
+    "effect:gathering",
+    "joint:jointThunder",
+    "particle:spark3",
+    "sprite:shiny2",
+    "effect:swordForce",
+    "joint:jointForce"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 659
+  },
+  {
+   "n": 56,
+   "name": "Power Slash",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 281,
+   "kinds": [
+    "effect:magic2",
+    "particle:smoke",
+    "sprite:light",
+    "sprite:shiny2",
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 659
+  },
+  {
+   "n": 57,
+   "name": "Spiral Slash",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 1,
+   "kinds": [
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 659
+  },
+  {
+   "n": 73,
+   "name": "Mana Rays",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 0,
+   "kinds": [],
+   "p95": 17,
+   "max": 17,
+   "mana": 659
+  },
+  {
+   "n": 76,
+   "name": "Plasma Storm",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 12,
+   "kinds": [
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 659
+  },
+  {
+   "n": 236,
+   "name": "Flame Strike",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 2,
+   "kinds": [
+    "effect:flameStrike",
+    "blur:object",
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 659
+  },
+  {
+   "n": 237,
+   "name": "Gigantic Storm",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 92,
+   "kinds": [
+    "effect:jointThunderEffect",
+    "effect:magicGround2",
+    "effect:chromeEnergy2",
+    "effect:stone1",
+    "joint:jointThunder",
+    "particle:smoke"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 659
+  },
+  {
+   "n": 712,
+   "name": "Chain Lightning Blade",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 4,
+   "kinds": [
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 659
+  },
+  {
+   "n": 713,
+   "name": "Flame Whirl",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 152,
+   "kinds": [
+    "effect:magic2",
+    "particle:fire",
+    "particle:smoke",
+    "sprite:light",
+    "sprite:shiny2"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 633
+  },
+  {
+   "n": 714,
+   "name": "Twin Power",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 17,
+   "kinds": [
+    "particle:spark",
+    "sprite:shiny2"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 623
+  }
+ ],
+ "errors": []
+}

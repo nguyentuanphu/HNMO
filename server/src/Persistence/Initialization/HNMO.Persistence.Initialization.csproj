@@ -93,6 +93,14 @@
     <None Remove="Resources\Terrain81.att" />
     <None Remove="Resources\Terrain82.att" />
     <None Remove="Resources\Terrain9.att" />
+    <None Remove="Resources\Terrain92.att" />
+    <None Remove="Resources\Terrain96.att" />
+    <None Remove="Resources\Terrain97.att" />
+    <None Remove="Resources\Terrain98.att" />
+    <None Remove="Resources\Terrain99.att" />
+    <None Remove="Resources\Terrain100.att" />
+    <None Remove="Resources\Terrain101.att" />
+    <None Remove="Resources\Terrain103.att" />
   </ItemGroup>
 
   <ItemGroup>
@@ -172,6 +180,14 @@
     <EmbeddedResource Include="Resources\Terrain81.att" />
     <EmbeddedResource Include="Resources\Terrain82.att" />
     <EmbeddedResource Include="Resources\Terrain9.att" />
+    <EmbeddedResource Include="Resources\Terrain92.att" />
+    <EmbeddedResource Include="Resources\Terrain96.att" />
+    <EmbeddedResource Include="Resources\Terrain97.att" />
+    <EmbeddedResource Include="Resources\Terrain98.att" />
+    <EmbeddedResource Include="Resources\Terrain99.att" />
+    <EmbeddedResource Include="Resources\Terrain100.att" />
+    <EmbeddedResource Include="Resources\Terrain101.att" />
+    <EmbeddedResource Include="Resources\Terrain103.att" />
   </ItemGroup>
 
   <ItemGroup>
@@ -464,6 +480,33 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>CashShopPackageNames.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Properties\SeasonNineItemNames.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SeasonNineItemNames.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Properties\SeasonNineItemNames.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SeasonNineItemNames.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Properties\SeasonNineMonsterNames.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SeasonNineMonsterNames.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Properties\SeasonNineMonsterNames.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SeasonNineMonsterNames.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Properties\SeasonNineMapNames.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SeasonNineMapNames.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Properties\SeasonNineMapNames.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SeasonNineMapNames.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

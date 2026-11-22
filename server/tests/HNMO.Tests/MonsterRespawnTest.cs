@@ -76,6 +76,124 @@ public class MonsterRespawnTest
         Assert.That(map.GetObject(monsterId), Is.Not.SameAs(monster));
     }
 
+    /// <summary>
+    /// Tests that hunting monsters in one part of a large multi-spawn field (such as Lorencia's 180..226 x 90..244
+    /// area) does not drain that field by re-rolling each killed monster across the whole map quarter while the
+    /// unobserved monsters at the far edge never move or die. Each monster respawns within its move range around
+    /// its own initial spawn spot.
+    /// </summary>
+    [Test]
+    public async Task KilledMonsterInLargeFieldRespawnsNearItsInitialSpotAsync()
+    {
+        var gameContext = GameContextTestHelper.CreateGameContext();
+        var killer = await PlayerTestHelper.CreatePlayerAsync(gameContext).ConfigureAwait(false);
+        var map = (await gameContext.GetMapAsync(0).ConfigureAwait(false))!;
+        var monsterDefinition = new MonsterDefinition
+        {
+            Id = Guid.NewGuid(),
+            ObjectKind = NpcObjectKind.Monster,
+            MoveRange = 3,
+            RespawnDelay = TimeSpan.FromMilliseconds(20),
+        };
+        monsterDefinition.Attributes.Add(new MonsterAttribute { AttributeDefinition = Stats.MaximumHealth, Value = 100 });
+
+        var spawnArea = new MonsterSpawnArea
+        {
+            MonsterDefinition = monsterDefinition,
+            GameMap = map.Definition,
+            SpawnTrigger = SpawnTrigger.Automatic,
+            X1 = 180,
+            X2 = 226,
+            Y1 = 90,
+            Y2 = 244,
+            Quantity = 1,
+        };
+
+        var monster = new Monster(
+            spawnArea,
+            monsterDefinition,
+            map,
+            NullDropGenerator.Instance,
+            new Mock<INpcIntelligence>().Object,
+            gameContext.PlugInManager,
+            gameContext.PathFinderPool);
+        monster.Initialize();
+        await map.AddAsync(monster).ConfigureAwait(false);
+        var initialSpot = monster.Position;
+
+        for (var i = 0; i < 10; i++)
+        {
+            await monster.ReflectDamageAsync(killer, 1_000_000).ConfigureAwait(false);
+            var deadline = DateTime.UtcNow.AddSeconds(5);
+            while (!monster.IsAlive && DateTime.UtcNow < deadline)
+            {
+                await Task.Delay(10).ConfigureAwait(false);
+            }
+
+            Assert.That(monster.IsAlive, Is.True);
+            var dx = Math.Abs(monster.Position.X - initialSpot.X);
+            var dy = Math.Abs(monster.Position.Y - initialSpot.Y);
+            Assert.That(
+                Math.Max(dx, dy),
+                Is.LessThanOrEqualTo(monsterDefinition.MoveRange),
+                $"Respawn #{i + 1} moved the monster from its initial field spot {initialSpot} to {monster.Position}.");
+        }
+    }
+
+    /// <summary>
+    /// Tests that idle random wandering of a field monster stays anchored within the monster definition's move range
+    /// of its initial <see cref="NonPlayerCharacter.SpawnPoint"/> instead of drifting away from the hunting ground.
+    /// </summary>
+    [Test]
+    public async Task RandomMoveStaysAnchoredToInitialSpawnPointAsync()
+    {
+        var gameContext = GameContextTestHelper.CreateGameContext();
+        var map = (await gameContext.GetMapAsync(0).ConfigureAwait(false))!;
+        var monsterDefinition = new MonsterDefinition
+        {
+            Id = Guid.NewGuid(),
+            ObjectKind = NpcObjectKind.Monster,
+            MoveRange = 3,
+            MoveDelay = TimeSpan.FromMilliseconds(10),
+        };
+        monsterDefinition.Attributes.Add(new MonsterAttribute { AttributeDefinition = Stats.MaximumHealth, Value = 100 });
+
+        var spawnArea = new MonsterSpawnArea
+        {
+            MonsterDefinition = monsterDefinition,
+            GameMap = map.Definition,
+            SpawnTrigger = SpawnTrigger.Automatic,
+            X1 = 180,
+            X2 = 226,
+            Y1 = 90,
+            Y2 = 244,
+            Quantity = 1,
+        };
+
+        var monster = new Monster(
+            spawnArea,
+            monsterDefinition,
+            map,
+            NullDropGenerator.Instance,
+            new BasicMonsterIntelligence(),
+            gameContext.PlugInManager,
+            gameContext.PathFinderPool);
+        monster.Initialize();
+        monster.OnSpawn();
+        await map.AddAsync(monster).ConfigureAwait(false);
+        var homeSpot = monster.SpawnPoint;
+
+        // Place the monster 20 tiles away from its home spot within the same large spawn area and trigger a random move.
+        monster.Position = new Point((byte)Math.Min(225, homeSpot.X + 10), (byte)Math.Min(240, homeSpot.Y + 20));
+        await monster.RandomMoveAsync().ConfigureAwait(false);
+        if (monster.IsWalking)
+        {
+            var dx = Math.Abs(monster.WalkTarget.X - homeSpot.X);
+            var dy = Math.Abs(monster.WalkTarget.Y - homeSpot.Y);
+            Assert.That(Math.Max(dx, dy), Is.LessThanOrEqualTo(monsterDefinition.MoveRange));
+        }
+    }
+
     private static async ValueTask<Monster> CreateMonsterAsync(IGameContext gameContext)
     {
         // A unique id, because the attributes of monster definitions are cached by their id.

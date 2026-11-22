@@ -181,7 +181,7 @@
     <value>Hệ số thành thạo Berserker (MST)</value>
   </data>
   <data name="Description_BerserkerProficiencyMultiplierMST" xml:space="preserve">
-    <value>Hệ số sát thương thành thạo của Berserker, được cộng vào hệ số phép nhưng chính nó cũng được nhân với sát thương cuối phép/nguyền và cộng vào đó.</value>
+    <value>Hệ số sát thương thành thạo của Berserker, được cộng vào hệ số sát thương phép.</value>
   </data>
   <data name="Name_BerserkerWizardryMultiplier" xml:space="preserve">
     <value>Hệ số phép Berserker</value>

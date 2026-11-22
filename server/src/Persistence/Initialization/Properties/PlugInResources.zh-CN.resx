@@ -491,4 +491,20 @@
   <data name="StrongerHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
     <value>将 28 个 HNMO 技能增强 20%（伤害、增益和减益效果；消耗和冷却时间不变），并将精灵士兵的试炼任务改为击杀 200 个怪物并上交五颗玛雅之石。</value>
   </data>
+  <data name="SkillEnergyRequirementsUpdatePlugIn_Name" xml:space="preserve"><value>修复 Recovery 与 Power Slash 的智力要求</value></data>
+  <data name="SkillEnergyRequirementsUpdatePlugIn_Description" xml:space="preserve"><value>将 Recovery 的智力要求设为 168（与 Season 6 / Season 9 服务端套件及 Crystal of Recovery 一致），并将 Power Slash 的智力要求设为 100。</value></data>
+  <data name="SwellLifeDurationUpdatePlugIn_Name" xml:space="preserve"><value>按 Season 6 套件调整生命之光持续时间</value></data>
+  <data name="SwellLifeDurationUpdatePlugIn_Description" xml:space="preserve"><value>将生命之光与生命之光熟练的持续时间从 60 + 智力 / 180 秒（上限 180 秒）更新为无上限的 60 + 智力 / 10 秒，与 Season 6 服务端套件一致。</value></data>
+  <data name="IncreaseBlockMasterFlatUpdatePlugIn_Name" xml:space="preserve"><value>将斗神-御强化大师加成设为固定值</value></data>
+  <data name="IncreaseBlockMasterFlatUpdatePlugIn_Description" xml:space="preserve"><value>将格斗家的斗神-御强化大师技能从按 PvM 防御成功率百分比加成改为固定防御成功率加成，与 Season 6 服务端套件一致。</value></data>
+  <data name="SeasonNineSharedItemsUpdatePlugIn_Name" xml:space="preserve"><value>第 9 赛季：共享物品规则</value></data>
+  <data name="SeasonNineSharedItemsUpdatePlugIn_Description" xml:space="preserve"><value>在以第 9 赛季运行时应用共享物品的第 9 赛季数值（斗士披风掉落等级 150、领主披风需求等级 150、药水原生叠加 255）；已自定义的值保持不变。</value></data>
+  <data name="SeasonNineOnlyItemsUpdatePlugIn_Name" xml:space="preserve"><value>第 9 赛季：添加第 9 赛季专属物品</value></data>
+  <data name="SeasonNineOnlyItemsUpdatePlugIn_Description" xml:space="preserve"><value>在以第 9 赛季运行时添加 279 项第 9 赛季专属物品定义（镶嵌武器、盾牌、防具套装、翅膀、五芒星、饰品、萌宠与合成材料）；已存在的物品保持不变。</value></data>
+  <data name="SeasonNineSocketOptionsUpdatePlugIn_Name" xml:space="preserve"><value>第 9 赛季：镶嵌属性数值</value></data>
+  <data name="SeasonNineSocketOptionsUpdatePlugIn_Description" xml:space="preserve"><value>在以第 9 赛季运行时将水属性盾牌防御保护 5 级设为 30 %、风属性最大 AG 设为 50/70/90/110/130、风属性 AG 恢复设为 5/7/9/11/13；已自定义的值保持不变。</value></data>
+  <data name="SeasonNineMonstersUpdatePlugIn_Name" xml:space="preserve"><value>第 9 赛季：怪物与 NPC</value></data>
+  <data name="SeasonNineMonstersUpdatePlugIn_Description" xml:space="preserve"><value>在以第 9 赛季运行时添加第 6 赛季目录中缺少的 111 个第 9 赛季怪物和 NPC 定义，并将暗黑精灵见习士兵的重生时间更新为 10800 秒。</value></data>
+  <data name="SeasonNineMapsAndGatesUpdatePlugIn_Name" xml:space="preserve"><value>第 9 赛季：地图与传送门</value></data>
+  <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>在以第 9 赛季运行时添加 10 张第 9 赛季地图、地形文件、传送门（417-461、474-482）以及第 9 赛季刷怪/NPC 点位。</value></data>
 </root>

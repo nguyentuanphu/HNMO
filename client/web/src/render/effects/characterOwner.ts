@@ -43,6 +43,7 @@ export function ownerFromCharacter(character: Character, options: CharacterOwner
       return light.set(character.light.r, character.light.g, character.light.b);
     },
     isLive: () => !character.dead && character.group.visible && character.group.parent !== null,
+    isPresent: () => character.group.visible && character.group.parent !== null,
     weaponPosition: (hand) => bonePosition(character, bones[hand]),
     bonePosition: (bone) => bonePosition(character, bone),
     bonePositionAt: (bone, frame) => {

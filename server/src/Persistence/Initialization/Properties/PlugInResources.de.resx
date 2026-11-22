@@ -964,4 +964,20 @@
   <data name="StrongerHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
     <value>Dieses Update macht die 28 HNMO-Fertigkeiten um 20 % stärker (Schaden, Buffs und Debuffs; Kosten und Abklingzeiten bleiben) und lässt die Prüfungsquests des Elfensoldaten 200 Tötungen und fünf Juwelen des Chaos verlangen.</value>
   </data>
+  <data name="SkillEnergyRequirementsUpdatePlugIn_Name" xml:space="preserve"><value>Energieanforderungen von Recovery und Power Slash korrigieren</value></data>
+  <data name="SkillEnergyRequirementsUpdatePlugIn_Description" xml:space="preserve"><value>Setzt die Energieanforderung von Recovery auf 168 (passend zu den Season-6-/Season-9-Serverpaketen und dem Crystal of Recovery) und die von Power Slash auf 100.</value></data>
+  <data name="SwellLifeDurationUpdatePlugIn_Name" xml:space="preserve"><value>Swell-Life-Dauer an das Season-6-Serverpaket anpassen</value></data>
+  <data name="SwellLifeDurationUpdatePlugIn_Description" xml:space="preserve"><value>Aktualisiert die Dauer von Swell Life und Swell Life Proficiency von 60 + Energie / 180 s (Obergrenze 180 s) auf 60 + Energie / 10 s ohne Obergrenze, passend zum Season-6-Serverpaket.</value></data>
+  <data name="IncreaseBlockMasterFlatUpdatePlugIn_Name" xml:space="preserve"><value>Increase Block Power Up als festen Bonus festlegen</value></data>
+  <data name="IncreaseBlockMasterFlatUpdatePlugIn_Description" xml:space="preserve"><value>Ändert die Master-Fertigkeit Increase Block Power Up des Rage Fighters von einem Prozentsatz der PvM-Verteidigungsrate auf einen festen Verteidigungsratenbonus, passend zum Season-6-Serverpaket.</value></data>
+  <data name="SeasonNineSharedItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Regeln gemeinsamer Gegenstände</value></data>
+  <data name="SeasonNineSharedItemsUpdatePlugIn_Description" xml:space="preserve"><value>Wendet im Season-9-Betrieb die Season-9-Werte auf gemeinsame Gegenstände an (Cape of Fighter Drop-Stufe 150, Cape of Lord Stufenanforderung 150, native 255er-Trankstapel); angepasste Werte bleiben erhalten.</value></data>
+  <data name="SeasonNineOnlyItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Season-9-Gegenstände hinzufügen</value></data>
+  <data name="SeasonNineOnlyItemsUpdatePlugIn_Description" xml:space="preserve"><value>Fügt im Season-9-Betrieb die 279 einzigartigen Season-9-Gegenstandsdefinitionen hinzu (Sockelwaffen, Schilde, Rüstungssets, Flügel, Pentagramme, Zubehör, Muun-Begleiter und Herstellungsmaterialien); vorhandene Gegenstände bleiben unverändert.</value></data>
+  <data name="SeasonNineSocketOptionsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Sockeloptionswerte</value></data>
+  <data name="SeasonNineSocketOptionsUpdatePlugIn_Description" xml:space="preserve"><value>Setzt im Season-9-Betrieb Wasser-Schildschutz Stufe 5 auf 30 %, Wind-Max-AG auf 50/70/90/110/130 und Wind-AG-Erholung auf 5/7/9/11/13; angepasste Werte bleiben erhalten.</value></data>
+  <data name="SeasonNineMonstersUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Monster und NPCs</value></data>
+  <data name="SeasonNineMonstersUpdatePlugIn_Description" xml:space="preserve"><value>Fügt die 111 im Season-6-Katalog fehlenden Monster- und NPC-Definitionen von Season 9 hinzu und setzt die Wiederbelebungszeit des Dunkelelfen-Rekruten im Season-9-Betrieb auf 10800 Sekunden.</value></data>
+  <data name="SeasonNineMapsAndGatesUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Karten und Tore</value></data>
+  <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>Fügt die 10 Season-9-Karten, Terraindateien, Tore (417-461, 474-482) und Season-9-Spawns im Season-9-Betrieb hinzu.</value></data>
 </root>

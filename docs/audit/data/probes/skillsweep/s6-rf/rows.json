@@ -1,0 +1,218 @@
+{
+ "rows": [
+  {
+   "n": 76,
+   "name": "Plasma Storm",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 0,
+   "kinds": [],
+   "p95": 17,
+   "max": 17,
+   "mana": 3452
+  },
+  {
+   "n": 262,
+   "name": "Chain Drive",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 0,
+   "kinds": [],
+   "p95": 17,
+   "max": 17,
+   "mana": 3452
+  },
+  {
+   "n": 263,
+   "name": "Dark Side",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 8,
+   "kinds": [
+    "effect:eventCloud",
+    "effect:magic",
+    "effect:windForce",
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3452
+  },
+  {
+   "n": 264,
+   "name": "Dragon Roar",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 6,
+   "kinds": [
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3452
+  },
+  {
+   "n": 265,
+   "name": "Dragon Slasher",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 0,
+   "kinds": [],
+   "p95": 17,
+   "max": 17,
+   "mana": 3452
+  },
+  {
+   "n": 266,
+   "name": "Ignore Defense",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 46,
+   "kinds": [
+    "effect:swordEffectMono",
+    "effect:shockWaveGround1",
+    "effect:eventCloud",
+    "effect:windForce",
+    "effect:magic",
+    "effect:lightRed"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3452
+  },
+  {
+   "n": 267,
+   "name": "Increase Health",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 38,
+   "kinds": [
+    "effect:lightRed",
+    "effect:swordEffectMono",
+    "effect:shockWaveGround1",
+    "effect:eventCloud",
+    "effect:windForce",
+    "effect:magic"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3452
+  },
+  {
+   "n": 268,
+   "name": "Increase Block",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 23,
+   "kinds": [
+    "effect:lightRed",
+    "effect:swordEffectMono",
+    "effect:shockWaveGround1",
+    "effect:eventCloud",
+    "effect:windForce",
+    "effect:magic"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3452
+  },
+  {
+   "n": 269,
+   "name": "Charge",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 0,
+   "kinds": [],
+   "p95": 17,
+   "max": 17,
+   "mana": 3452
+  },
+  {
+   "n": 270,
+   "name": "Phoenix Shot",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 1,
+   "kinds": [
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3452
+  },
+  {
+   "n": 724,
+   "name": "Dragon Fist",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 28,
+   "kinds": [
+    "effect:fireModel",
+    "particle:fire",
+    "sprite:light",
+    "effect:stone1",
+    "particle:explosion"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3452
+  },
+  {
+   "n": 725,
+   "name": "Whirl Kicks",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 48,
+   "kinds": [
+    "particle:spark",
+    "particle:smoke",
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3452
+  },
+  {
+   "n": 726,
+   "name": "Iron Body",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 14,
+   "kinds": [
+    "particle:spark",
+    "sprite:shiny2",
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3452
+  }
+ ],
+ "errors": []
+}

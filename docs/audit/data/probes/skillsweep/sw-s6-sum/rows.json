@@ -1,0 +1,1425 @@
+{
+ "who": {
+  "name": "testgm2Sum",
+  "map": 0,
+  "classIndex": 5,
+  "season": null
+ },
+ "rows": [
+  {
+   "n": 2,
+   "name": "Meteorite",
+   "castable": true,
+   "cast": true,
+   "target": "Skeleton",
+   "targetId": 709,
+   "dist": 3,
+   "near": 1,
+   "heroCell": {
+    "x": 165,
+    "y": 193
+   },
+   "targetCell": {
+    "x": 164,
+    "y": 190
+   },
+   "heroMid": {
+    "x": 165,
+    "y": 193
+   },
+   "heroAfter": {
+    "x": 165,
+    "y": 193
+   },
+   "targetAfter": {
+    "x": 164,
+    "y": 190,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    1570
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    2
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 90,
+   "made": {
+    "effect:bone1": 1,
+    "effect:bone2": 10,
+    "particle:fire": 61,
+    "particle:blood2": 10,
+    "effect:fireModel": 1,
+    "effect:stone2": 4,
+    "effect:stone1": 2,
+    "particle:explosion": 1
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Meteorite",
+     "mana": 12,
+     "ag": 0,
+     "distance": 6,
+     "damage": 21
+    },
+    "mana": 4564,
+    "ag": 1818
+   }
+  },
+  {
+   "n": 4,
+   "name": "Fire Ball",
+   "castable": true,
+   "cast": true,
+   "target": "Skeleton",
+   "targetId": 715,
+   "dist": 2,
+   "near": 1,
+   "heroCell": {
+    "x": 157,
+    "y": 193
+   },
+   "targetCell": {
+    "x": 159,
+    "y": 192
+   },
+   "heroMid": {
+    "x": 157,
+    "y": 193
+   },
+   "heroAfter": {
+    "x": 157,
+    "y": 193
+   },
+   "targetAfter": {
+    "x": 159,
+    "y": 192,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    1850
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    4
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 31,
+   "made": {
+    "particle:fire": 9,
+    "effect:bone1": 1,
+    "effect:bone2": 10,
+    "particle:blood2": 10,
+    "effect:fireModel": 1
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Fire Ball",
+     "mana": 3,
+     "ag": 0,
+     "distance": 6,
+     "damage": 8
+    },
+    "mana": 4564,
+    "ag": 1818
+   }
+  },
+  {
+   "n": 7,
+   "name": "Ice",
+   "castable": true,
+   "cast": true,
+   "target": "LIch",
+   "targetId": 705,
+   "dist": 4,
+   "near": 1,
+   "heroCell": {
+    "x": 147,
+    "y": 196
+   },
+   "targetCell": {
+    "x": 144,
+    "y": 194
+   },
+   "heroMid": {
+    "x": 147,
+    "y": 196
+   },
+   "heroAfter": {
+    "x": 147,
+    "y": 196
+   },
+   "targetAfter": {
+    "x": 144,
+    "y": 194,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    6552
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 2,
+   "onSkill": [
+    7
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 25,
+   "made": {
+    "effect:ice": 1,
+    "effect:iceSmall": 5,
+    "particle:smoke": 19
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Ice",
+     "mana": 38,
+     "ag": 0,
+     "distance": 6,
+     "damage": 10
+    },
+    "mana": 4564,
+    "ag": 1818
+   }
+  },
+  {
+   "n": 11,
+   "name": "Power Wave",
+   "castable": true,
+   "cast": true,
+   "target": "Skeleton",
+   "targetId": 708,
+   "dist": 1,
+   "near": 2,
+   "heroCell": {
+    "x": 147,
+    "y": 196
+   },
+   "targetCell": {
+    "x": 146,
+    "y": 197
+   },
+   "heroMid": {
+    "x": 147,
+    "y": 196
+   },
+   "heroAfter": {
+    "x": 147,
+    "y": 196
+   },
+   "targetAfter": {
+    "x": 146,
+    "y": 197,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    3260
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 2,
+   "onSkill": [
+    11
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 106,
+   "made": {
+    "effect:bone1": 1,
+    "effect:bone2": 10,
+    "effect:stone1": 10,
+    "effect:stone2": 2,
+    "particle:explosion": 2,
+    "effect:magic2": 1,
+    "particle:smoke": 80
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Power Wave",
+     "mana": 5,
+     "ag": 0,
+     "distance": 6,
+     "damage": 14
+    },
+    "mana": 4564,
+    "ag": 1818
+   }
+  },
+  {
+   "n": 45,
+   "name": "Lance",
+   "castable": true,
+   "cast": true,
+   "target": "LIch",
+   "targetId": 693,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 147,
+    "y": 198
+   },
+   "targetCell": {
+    "x": 146,
+    "y": 199
+   },
+   "heroMid": {
+    "x": 147,
+    "y": 198
+   },
+   "heroAfter": {
+    "x": 147,
+    "y": 198
+   },
+   "targetAfter": {
+    "x": 146,
+    "y": 199,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    3822
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    45
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 42,
+   "made": {
+    "effect:stone2": 2,
+    "effect:stone1": 4,
+    "particle:explosion": 1,
+    "effect:skillJavelin": 3,
+    "particle:poundingBall": 32
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Lance",
+     "mana": 150,
+     "ag": 10,
+     "distance": 6,
+     "damage": 90
+    },
+    "mana": 4564,
+    "ag": 1818
+   }
+  },
+  {
+   "n": 76,
+   "name": "Plasma Storm",
+   "castable": true,
+   "cast": true,
+   "target": "LIch",
+   "targetId": 693,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 146,
+    "y": 195
+   },
+   "targetCell": {
+    "x": 145,
+    "y": 194
+   },
+   "heroMid": {
+    "x": 146,
+    "y": 195
+   },
+   "heroAfter": {
+    "x": 146,
+    "y": 195
+   },
+   "targetAfter": {
+    "x": 145,
+    "y": 194,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    13916
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    76
+   ],
+   "area": [
+    {
+     "s": 76,
+     "x": 146,
+     "y": 195,
+     "rot": 224,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 17,
+   "made": {
+    "effect:stone1": 3,
+    "effect:stone2": 3,
+    "particle:explosion": 1,
+    "joint:fenrirSkillThunder": 4,
+    "joint:flareForceJoint": 6
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Plasma Storm",
+     "mana": 50,
+     "ag": 20,
+     "distance": 6,
+     "damage": 60
+    },
+    "mana": 4564,
+    "ag": 1818
+   }
+  },
+  {
+   "n": 214,
+   "name": "Drain Life",
+   "castable": true,
+   "cast": true,
+   "target": "LIch",
+   "targetId": 700,
+   "dist": 3,
+   "near": 1,
+   "heroCell": {
+    "x": 158,
+    "y": 186
+   },
+   "targetCell": {
+    "x": 161,
+    "y": 185
+   },
+   "heroMid": {
+    "x": 158,
+    "y": 186
+   },
+   "heroAfter": {
+    "x": 158,
+    "y": 186
+   },
+   "targetAfter": {
+    "x": 161,
+    "y": 185,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    2854
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    214
+   ],
+   "area": [
+    {
+     "s": 214,
+     "x": 161,
+     "y": 185,
+     "rot": 50,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 1,
+   "made": {
+    "effect:aliceDrainLife": 1
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": "target"
+    },
+    "info": {
+     "name": "Drain Life",
+     "mana": 50,
+     "ag": 0,
+     "distance": 6,
+     "damage": 35
+    },
+    "mana": 4564,
+    "ag": 1818
+   }
+  },
+  {
+   "n": 215,
+   "name": "Chain Lightning",
+   "castable": true,
+   "cast": true,
+   "target": "Golden Budge Dragon",
+   "targetId": 830,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 158,
+    "y": 186
+   },
+   "targetCell": {
+    "x": 157,
+    "y": 185
+   },
+   "heroMid": {
+    "x": 158,
+    "y": 186
+   },
+   "heroAfter": {
+    "x": 158,
+    "y": 186
+   },
+   "targetAfter": {
+    "x": 157,
+    "y": 185,
+    "dead": true
+   },
+   "hits": 2,
+   "targetsHit": 1,
+   "hp": [
+    2376,
+    3614
+   ],
+   "sd": [
+    0,
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    215,
+    215
+   ],
+   "area": [
+    {
+     "s": 215,
+     "x": 157,
+     "y": 185,
+     "rot": 224,
+     "player": 512
+    },
+    {
+     "s": 215,
+     "x": 157,
+     "y": 185,
+     "rot": 224,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 190,
+   "made": {
+    "effect:chainLightning": 1,
+    "joint:jointThunder": 56,
+    "particle:energy": 84,
+    "particle:smoke": 10,
+    "particle:light": 39
+   },
+   "p95": 17,
+   "max": 83,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": "target"
+    },
+    "info": {
+     "name": "Chain Lightning",
+     "mana": 85,
+     "ag": 0,
+     "distance": 6,
+     "damage": 70
+    },
+    "mana": 4564,
+    "ag": 1818
+   }
+  },
+  {
+   "n": 217,
+   "name": "Damage Reflection",
+   "castable": true,
+   "cast": true,
+   "target": "LIch",
+   "targetId": 700,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 152,
+    "y": 200
+   },
+   "targetCell": {
+    "x": 153,
+    "y": 199
+   },
+   "heroMid": {
+    "x": 152,
+    "y": 200
+   },
+   "heroAfter": {
+    "x": 152,
+    "y": 200
+   },
+   "targetAfter": {
+    "x": 153,
+    "y": 199,
+    "dead": false
+   },
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 2,
+   "onSkill": [
+    217
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 3178,
+   "made": {
+    "joint:flare": 31,
+    "sprite:pinLight": 864,
+    "effect:magicGround2": 1,
+    "effect:aliceBuffSkillEffect": 1,
+    "effect:aliceBuffSkillEffect2": 1,
+    "sprite:shiny5": 120,
+    "joint:jointHealing": 180,
+    "sprite:shiny2": 1980
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Damage Reflection",
+     "mana": 40,
+     "ag": 10,
+     "distance": 5,
+     "damage": 0
+    },
+    "mana": 4564,
+    "ag": 1818
+   }
+  },
+  {
+   "n": 218,
+   "name": "Berserker",
+   "castable": true,
+   "cast": true,
+   "target": "LIch",
+   "targetId": 700,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 152,
+    "y": 200
+   },
+   "targetCell": {
+    "x": 153,
+    "y": 199
+   },
+   "heroMid": {
+    "x": 152,
+    "y": 200
+   },
+   "heroAfter": {
+    "x": 152,
+    "y": 200
+   },
+   "targetAfter": {
+    "x": 153,
+    "y": 199,
+    "dead": false
+   },
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 2,
+   "onSkill": [
+    218
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 3224,
+   "made": {
+    "effect:orora": 12,
+    "particle:orora": 12,
+    "effect:sparks": 2,
+    "effect:lightMarks": 1,
+    "sprite:lightMarks": 896,
+    "effect:stone1": 6,
+    "effect:stone2": 6,
+    "particle:explosion": 2,
+    "effect:magicGround2": 1,
+    "effect:aliceBuffSkillEffect": 1,
+    "effect:aliceBuffSkillEffect2": 1,
+    "sprite:shiny5": 120,
+    "joint:jointHealing": 180,
+    "sprite:shiny2": 1980,
+    "particle:sparks": 4
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Berserker",
+     "mana": 100,
+     "ag": 50,
+     "distance": 5,
+     "damage": 0
+    },
+    "mana": 4564,
+    "ag": 1818
+   }
+  },
+  {
+   "n": 219,
+   "name": "Sleep",
+   "castable": true,
+   "cast": true,
+   "target": "LIch",
+   "targetId": 700,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 152,
+    "y": 200
+   },
+   "targetCell": {
+    "x": 153,
+    "y": 199
+   },
+   "heroMid": {
+    "x": 152,
+    "y": 200
+   },
+   "heroAfter": {
+    "x": 152,
+    "y": 200
+   },
+   "targetAfter": {
+    "x": 153,
+    "y": 199,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    2925
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    219
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 26,
+   "made": {
+    "effect:aliceBuffSkillEffect": 2,
+    "particle:twintailWater": 1,
+    "particle:blood2": 20,
+    "effect:fireModel": 1,
+    "effect:magicGround2": 1,
+    "effect:aliceBuffSkillEffect2": 1
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Sleep",
+     "mana": 20,
+     "ag": 3,
+     "distance": 6,
+     "damage": 0
+    },
+    "mana": 5020,
+    "ag": 1818
+   }
+  },
+  {
+   "n": 221,
+   "name": "Weakness",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 583,
+   "dist": 0,
+   "near": 1,
+   "heroCell": {
+    "x": 182,
+    "y": 129
+   },
+   "targetCell": {
+    "x": 182,
+    "y": 129
+   },
+   "heroMid": {
+    "x": 182,
+    "y": 129
+   },
+   "heroAfter": {
+    "x": 182,
+    "y": 129
+   },
+   "targetAfter": {
+    "x": 182,
+    "y": 129,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    5026
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 1,
+   "onSkill": [
+    221
+   ],
+   "area": [
+    {
+     "s": 221,
+     "x": 182,
+     "y": 129,
+     "rot": 160,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 107,
+   "made": {
+    "effect:shiny5": 2,
+    "effect:pinLight": 2,
+    "particle:shiny5Particle": 33,
+    "particle:pinLightParticle": 50,
+    "effect:magicZin": 5,
+    "effect:summonerCastingEffect2": 1,
+    "effect:summonerCastingEffect22": 1,
+    "effect:summonerCastingEffect222": 1,
+    "particle:blood2": 10,
+    "particle:sparks": 2
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Weakness",
+     "mana": 50,
+     "ag": 15,
+     "distance": 6,
+     "damage": 0
+    },
+    "mana": 7531,
+    "ag": 1818
+   }
+  },
+  {
+   "n": 222,
+   "name": "Innovation",
+   "castable": true,
+   "cast": true,
+   "target": "Budge Dragon",
+   "targetId": 640,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 191,
+    "y": 161
+   },
+   "targetCell": {
+    "x": 192,
+    "y": 161
+   },
+   "heroMid": {
+    "x": 191,
+    "y": 161
+   },
+   "heroAfter": {
+    "x": 191,
+    "y": 161
+   },
+   "targetAfter": {
+    "x": 192,
+    "y": 161,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    5222
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    222
+   ],
+   "area": [
+    {
+     "s": 222,
+     "x": 191,
+     "y": 161,
+     "rot": 64,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 105,
+   "made": {
+    "effect:shiny5": 2,
+    "effect:pinLight": 2,
+    "particle:pinLightParticle": 49,
+    "particle:shiny5Particle": 34,
+    "effect:magicZin": 5,
+    "effect:summonerCastingEffect2": 1,
+    "effect:summonerCastingEffect22": 1,
+    "effect:summonerCastingEffect222": 1,
+    "particle:blood2": 10
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Innovation",
+     "mana": 70,
+     "ag": 15,
+     "distance": 6,
+     "damage": 0
+    },
+    "mana": 4564,
+    "ag": 1818
+   }
+  },
+  {
+   "n": 225,
+   "name": "Pollution",
+   "castable": false,
+   "cast": false,
+   "target": "Budge Dragon",
+   "targetId": 640,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 193,
+    "y": 158
+   },
+   "targetCell": {
+    "x": 194,
+    "y": 157
+   },
+   "heroMid": {
+    "x": 193,
+    "y": 158
+   },
+   "heroAfter": {
+    "x": 193,
+    "y": 158
+   },
+   "targetAfter": {
+    "x": 194,
+    "y": 157,
+    "dead": false
+   },
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 2,
+   "onSkill": [],
+   "area": [],
+   "msgs": [],
+   "effects": 0,
+   "made": {},
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": null,
+    "info": {
+     "name": "Pollution",
+     "mana": 120,
+     "ag": 15,
+     "distance": 6,
+     "damage": 80
+    },
+    "mana": 4564,
+    "ag": 1818
+   }
+  },
+  {
+   "n": 230,
+   "name": "Lightning Shock",
+   "castable": true,
+   "cast": true,
+   "target": "Budge Dragon",
+   "targetId": 640,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 193,
+    "y": 158
+   },
+   "targetCell": {
+    "x": 194,
+    "y": 157
+   },
+   "heroMid": {
+    "x": 193,
+    "y": 158
+   },
+   "heroAfter": {
+    "x": 193,
+    "y": 158
+   },
+   "targetAfter": {
+    "x": 194,
+    "y": 157,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    1985
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    230
+   ],
+   "area": [
+    {
+     "s": 230,
+     "x": 193,
+     "y": 158,
+     "rot": 31,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 303,
+   "made": {
+    "particle:lightningMega": 187,
+    "effect:lightningShock": 2,
+    "particle:blood2": 10,
+    "sprite:shiny2": 22,
+    "sprite:pinLight": 22,
+    "particle:magicParticle": 11,
+    "effect:damage01Mono": 2,
+    "effect:magic": 5,
+    "particle:smoke": 30,
+    "effect:stone2": 8,
+    "effect:stone1": 4
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Lightning Shock",
+     "mana": 115,
+     "ag": 7,
+     "distance": 6,
+     "damage": 95
+    },
+    "mana": 4564,
+    "ag": 1818
+   }
+  },
+  {
+   "n": 720,
+   "name": "Poison Soul",
+   "castable": true,
+   "cast": true,
+   "target": "Budge Dragon",
+   "targetId": 640,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 202,
+    "y": 130
+   },
+   "targetCell": {
+    "x": 202,
+    "y": 131
+   },
+   "heroMid": {
+    "x": 202,
+    "y": 130
+   },
+   "heroAfter": {
+    "x": 202,
+    "y": 130
+   },
+   "targetAfter": {
+    "x": 202,
+    "y": 131,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    3288
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    720
+   ],
+   "area": [
+    {
+     "s": 720,
+     "x": 202,
+     "y": 131,
+     "rot": 128,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 360,
+   "made": {
+    "particle:smoke": 320,
+    "sprite:energy": 40
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "target"
+    },
+    "info": {
+     "name": "Poison Soul",
+     "mana": 70,
+     "ag": 10,
+     "distance": 6,
+     "damage": 60
+    },
+    "mana": 4564,
+    "ag": 1818
+   }
+  },
+  {
+   "n": 721,
+   "name": "Little Demon",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 624,
+   "dist": 1,
+   "near": 2,
+   "heroCell": {
+    "x": 206,
+    "y": 115
+   },
+   "targetCell": {
+    "x": 207,
+    "y": 115
+   },
+   "heroMid": {
+    "x": 206,
+    "y": 115
+   },
+   "heroAfter": {
+    "x": 206,
+    "y": 115
+   },
+   "targetAfter": {
+    "x": 207,
+    "y": 115,
+    "dead": false
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    191
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 3,
+   "onSkill": [
+    721
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 108,
+   "made": {
+    "effect:magicGround2": 1,
+    "particle:fire": 10,
+    "joint:jointThunder": 28,
+    "particle:energy": 56,
+    "particle:smoke": 3,
+    "particle:blood2": 10
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": true,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Little Demon",
+     "mana": 120,
+     "ag": 25,
+     "distance": 0,
+     "damage": 0
+    },
+    "mana": 4564,
+    "ag": 1818
+   }
+  },
+  {
+   "n": 722,
+   "name": "Weakening Curse",
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "targetId": 593,
+   "dist": 2,
+   "near": 1,
+   "heroCell": {
+    "x": 206,
+    "y": 115
+   },
+   "targetCell": {
+    "x": 208,
+    "y": 115
+   },
+   "heroMid": {
+    "x": 206,
+    "y": 115
+   },
+   "heroAfter": {
+    "x": 206,
+    "y": 115
+   },
+   "targetAfter": {
+    "x": 208,
+    "y": 115,
+    "dead": true
+   },
+   "hits": 2,
+   "targetsHit": 2,
+   "hp": [
+    0,
+    180
+   ],
+   "sd": [
+    0,
+    0
+   ],
+   "misses": 1,
+   "heroHits": 0,
+   "onSkill": [
+    722
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 155,
+   "made": {
+    "joint:jointHealing": 8,
+    "particle:smoke": 147
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Weakening Curse",
+     "mana": 50,
+     "ag": 15,
+     "distance": 6,
+     "damage": 0
+    },
+    "mana": 4564,
+    "ag": 1818
+   }
+  }
+ ],
+ "errors": []
+}

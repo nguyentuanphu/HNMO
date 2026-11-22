@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="CaptainSlough" xml:space="preserve"><value>Hauptmann Slough</value></data>
+  <data name="Deruvish" xml:space="preserve"><value>Deruvish</value></data>
+  <data name="Adniel" xml:space="preserve"><value>Elementarmeister Adniel</value></data>
+  <data name="Jin583" xml:space="preserve"><value>Jin</value></data>
+  <data name="SirLesnar" xml:space="preserve"><value>Sir Lesnar</value></data>
+  <data name="Scarecrow" xml:space="preserve"><value>Vogelscheuche</value></data>
+  <data name="DevilFairy" xml:space="preserve"><value>Teufelsfee</value></data>
+  <data name="ElementalBeast" xml:space="preserve"><value>Elementarbestie</value></data>
+  <data name="ElementalKnight" xml:space="preserve"><value>Elementarritter</value></data>
+  <data name="UbaidDevilFairy" xml:space="preserve"><value>Ubaid-Teufelsfee</value></data>
+  <data name="UbaidElementalBeast" xml:space="preserve"><value>Ubaid-Elementarbestie</value></data>
+  <data name="UbaidElementalKnight" xml:space="preserve"><value>Ubaid-Elementarritter</value></data>
+  <data name="Undine" xml:space="preserve"><value>Undine</value></data>
+  <data name="Salamander" xml:space="preserve"><value>Salamander</value></data>
+  <data name="Sylphid" xml:space="preserve"><value>Sylphide</value></data>
+  <data name="Gnome" xml:space="preserve"><value>Gnom</value></data>
+  <data name="Hellraiser" xml:space="preserve"><value>Höllenerwecker</value></data>
+  <data name="SummonedSatyros" xml:space="preserve"><value>Beschworener Satyros</value></data>
+  <data name="FireTower" xml:space="preserve"><value>Feuerturm</value></data>
+  <data name="WaterTower" xml:space="preserve"><value>Wasserturm</value></data>
+  <data name="EarthTower" xml:space="preserve"><value>Erdturm</value></data>
+  <data name="WindTower" xml:space="preserve"><value>Windturm</value></data>
+  <data name="DarknessTower" xml:space="preserve"><value>Dunkelheitsturm</value></data>
+  <data name="ArcaBarrier" xml:space="preserve"><value>Arca-Barriere</value></data>
+  <data name="Jin604" xml:space="preserve"><value>Jin</value></data>
+  <data name="MiningAreaSmall" xml:space="preserve"><value>Abbaugebiet (Klein)</value></data>
+  <data name="MiningAreaMedium" xml:space="preserve"><value>Abbaugebiet (Mittel)</value></data>
+  <data name="MiningAreaLarge" xml:space="preserve"><value>Abbaugebiet (Groß)</value></data>
+  <data name="DebenterDevilFairy" xml:space="preserve"><value>Debenter-Teufelsfee</value></data>
+  <data name="DebenterElementalBeast" xml:space="preserve"><value>Debenter-Elementarbestie</value></data>
+  <data name="DebenterElementalKnight" xml:space="preserve"><value>Debenter-Elementarritter</value></data>
+  <data name="Sellihoden" xml:space="preserve"><value>Sellihoden</value></data>
+  <data name="Ukanva" xml:space="preserve"><value>Ukanva</value></data>
+  <data name="Silla" xml:space="preserve"><value>Silla</value></data>
+  <data name="Normus" xml:space="preserve"><value>Normus</value></data>
+  <data name="Muff" xml:space="preserve"><value>Muff</value></data>
+  <data name="BrownPandaTransformationRing616" xml:space="preserve"><value>Brauner Panda-Verwandlungsring</value></data>
+  <data name="PinkPandaTransformationRing" xml:space="preserve"><value>Rosa Panda-Verwandlungsring</value></data>
+  <data name="GmRomeu" xml:space="preserve"><value>[GM] Romeu</value></data>
+  <data name="VmNox" xml:space="preserve"><value>[VM] Nox</value></data>
+  <data name="VmRedd" xml:space="preserve"><value>[VM] Redd</value></data>
+  <data name="EvmIza" xml:space="preserve"><value>[EVM] Iza</value></data>
+  <data name="VmHail" xml:space="preserve"><value>[VM] Hail</value></data>
+  <data name="VmFast" xml:space="preserve"><value>[VM] Fast</value></data>
+  <data name="GmCeth" xml:space="preserve"><value>[GM] Ceth</value></data>
+  <data name="RobotKnightTransformationRing" xml:space="preserve"><value>Roboter-Ritter-Verwandlungsring</value></data>
+  <data name="MiniRobotTransformationRing" xml:space="preserve"><value>Mini-Roboter-Verwandlungsring</value></data>
+  <data name="CursedFireTower" xml:space="preserve"><value>Verfluchter Feuerturm</value></data>
+  <data name="CursedWaterTower" xml:space="preserve"><value>Verfluchter Wasserturm</value></data>
+  <data name="CursedEarthTower" xml:space="preserve"><value>Verfluchter Erdturm</value></data>
+  <data name="CursedWindTower" xml:space="preserve"><value>Verfluchter Windturm</value></data>
+  <data name="CursedDarknessTower" xml:space="preserve"><value>Verfluchter Dunkelheitsturm</value></data>
+  <data name="CursedUndine" xml:space="preserve"><value>Verfluchte Undine</value></data>
+  <data name="CursedSalamander" xml:space="preserve"><value>Verfluchter Salamander</value></data>
+  <data name="CursedSylphid" xml:space="preserve"><value>Verfluchte Sylphide</value></data>
+  <data name="CursedGnome" xml:space="preserve"><value>Verfluchter Gnom</value></data>
+  <data name="CursedHellraiser" xml:space="preserve"><value>Verfluchter Höllenerwecker</value></data>
+  <data name="CursedSellihoden" xml:space="preserve"><value>Verfluchter Sellihoden</value></data>
+  <data name="CursedUkanva" xml:space="preserve"><value>Verfluchter Ukanva</value></data>
+  <data name="CursedSilla" xml:space="preserve"><value>Verfluchte Silla</value></data>
+  <data name="CursedNormus" xml:space="preserve"><value>Verfluchter Normus</value></data>
+  <data name="CursedMuff" xml:space="preserve"><value>Verfluchter Muff</value></data>
+  <data name="GreatHeavenlyMageTransformationRing" xml:space="preserve"><value>Großer Himmelsmagier-Verwandlungsring</value></data>
+  <data name="Mait" xml:space="preserve"><value>Mait</value></data>
+  <data name="ChaosCastle8Warrior" xml:space="preserve"><value>Chaosburg 8</value></data>
+  <data name="ChaosCastle8Ranger" xml:space="preserve"><value>Chaosburg 8</value></data>
+  <data name="BrownPandaTransformationRing646" xml:space="preserve"><value>Brauner Panda-Verwandlungsring</value></data>
+  <data name="GreenSnake" xml:space="preserve"><value>Grüne Schlange</value></data>
+  <data name="YellowSnake" xml:space="preserve"><value>Gelbe Schlange</value></data>
+  <data name="PurpleSnake" xml:space="preserve"><value>Violette Schlange</value></data>
+  <data name="RedSnake" xml:space="preserve"><value>Rote Schlange</value></data>
+  <data name="PrivateStoreBulletinBoard" xml:space="preserve"><value>Privatladen-Anschlagtafel</value></data>
+  <data name="GoldenGoblin652" xml:space="preserve"><value>Goldener Goblin</value></data>
+  <data name="GoldenTitan" xml:space="preserve"><value>Goldener Titan</value></data>
+  <data name="GoldenTantalos" xml:space="preserve"><value>Goldener Tantalos</value></data>
+  <data name="GoldenErohim" xml:space="preserve"><value>Goldener Erohim</value></data>
+  <data name="GoldenHellMaine" xml:space="preserve"><value>Goldener Hell Maine</value></data>
+  <data name="GoldenKundun" xml:space="preserve"><value>Goldener Kundun</value></data>
+  <data name="Ellin" xml:space="preserve"><value>Ellin</value></data>
+  <data name="UrukDevilFairy" xml:space="preserve"><value>Uruk-Teufelsfee</value></data>
+  <data name="UrukElementalBeast" xml:space="preserve"><value>Uruk-Elementarbestie</value></data>
+  <data name="UrukElementalKnight" xml:space="preserve"><value>Uruk-Elementarritter</value></data>
+  <data name="LordSilvester" xml:space="preserve"><value>Fürst Silvester</value></data>
+  <data name="MoonRabbit" xml:space="preserve"><value>Mondhase</value></data>
+  <data name="PouchOfBlessing" xml:space="preserve"><value>Segensbeutel</value></data>
+  <data name="FireFlameGhost" xml:space="preserve"><value>Flammengeist</value></data>
+  <data name="GoldenGoblin677" xml:space="preserve"><value>Goldener Goblin</value></data>
+  <data name="LordDevilFairy" xml:space="preserve"><value>Fürsten-Teufelsfee</value></data>
+  <data name="LordElementalBeast" xml:space="preserve"><value>Fürsten-Elementarbestie</value></data>
+  <data name="LordElementalKnight" xml:space="preserve"><value>Fürsten-Elementarritter</value></data>
+  <data name="Evomon" xml:space="preserve"><value>Evomon</value></data>
+  <data name="Monica" xml:space="preserve"><value>Monica</value></data>
+  <data name="Marce" xml:space="preserve"><value>Marce</value></data>
+  <data name="Silvia" xml:space="preserve"><value>Silvia</value></data>
+  <data name="Izabel" xml:space="preserve"><value>Izabel</value></data>
+  <data name="SophiaRepair" xml:space="preserve"><value>Sophia (Reparatur)</value></data>
+  <data name="BoloRepair" xml:space="preserve"><value>Bolo (Reparatur)</value></data>
+  <data name="Christine" xml:space="preserve"><value>Christine</value></data>
+  <data name="FlameTrap" xml:space="preserve"><value>Flammenfalle</value></data>
+  <data name="SpecialEvomon" xml:space="preserve"><value>Besonderer Evomon</value></data>
+  <data name="NewYearHorseGreen" xml:space="preserve"><value>Neujahrspferd (Grün)</value></data>
+  <data name="NewYearHorseYellow" xml:space="preserve"><value>Neujahrspferd (Gelb)</value></data>
+  <data name="NewYearHorseBrown" xml:space="preserve"><value>Neujahrspferd (Braun)</value></data>
+  <data name="NewYearHorseBlue" xml:space="preserve"><value>Neujahrspferd (Blau)</value></data>
+  <data name="EvolutionSucceeded" xml:space="preserve"><value>Entwicklung gelungen</value></data>
+  <data name="EvolutionFailed" xml:space="preserve"><value>Entwicklung fehlgeschlagen</value></data>
+  <data name="DarknessTransformationRing" xml:space="preserve"><value>Dunkelheits-Verwandlungsring</value></data>
+  <data name="GreenGoat" xml:space="preserve"><value>Grüne Ziege</value></data>
+  <data name="WhiteGoat" xml:space="preserve"><value>Weiße Ziege</value></data>
+  <data name="PurpleGoat" xml:space="preserve"><value>Violette Ziege</value></data>
+  <data name="RedGoat" xml:space="preserve"><value>Rote Ziege</value></data>
+</root>

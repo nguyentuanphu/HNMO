@@ -185,18 +185,10 @@ public static class AttackableExtensions
 
         /*Scroll of Wrath/Wizardry and Remedy of Love go here (but for now they don't exist)*/
 
-        if (damageType == DamageType.Wizardry || damageType == DamageType.Curse)
-        {
-            dmg += (int)(dmg * attacker.Attributes[Stats.BerserkerProficiencyMultiplier]);
-        }
-        else if (damageType == DamageType.Physical)
+        if (damageType == DamageType.Physical)
         {
             dmg -= (int)(dmg * attacker.Attributes[Stats.WeaknessPhysDmgDecrement]);
             dmg += GetMasterSkillTreePhysicalPassiveDamageBonus(attacker, false);
-        }
-        else
-        {
-            // nothing to do
         }
 
         /*Scroll of Battle (crit dmg)/Strengthener (exc dmg) go here (but for now they don't exist)*/
