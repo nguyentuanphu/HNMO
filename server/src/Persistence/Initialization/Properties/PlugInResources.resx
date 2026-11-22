@@ -472,4 +472,6 @@
   <data name="SwellLifeDurationUpdatePlugIn_Description" xml:space="preserve"><value>Updates Swell Life and Swell Life Proficiency duration from 60 + Energy / 180 s (180 s cap) to 60 + Energy / 10 s without a cap, matching the Season 6 server suite.</value></data>
   <data name="IncreaseBlockMasterFlatUpdatePlugIn_Name" xml:space="preserve"><value>Make Increase Block Power Up flat</value></data>
   <data name="IncreaseBlockMasterFlatUpdatePlugIn_Description" xml:space="preserve"><value>Changes Rage Fighter's Increase Block Power Up master skill from a percentage of PvM defense rate to a flat defense rate bonus, matching the Season 6 server suite.</value></data>
+  <data name="SeasonNineSharedItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: shared item rules</value></data>
+  <data name="SeasonNineSharedItemsUpdatePlugIn_Description" xml:space="preserve"><value>Applies the Season 9 values on shared items (Cape of Fighter drop level 150, Cape of Lord level requirement 150, native 255 potion stacks) when running as Season 9, leaving customized values unchanged.</value></data>
 </root>

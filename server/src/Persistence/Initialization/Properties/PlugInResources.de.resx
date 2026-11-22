@@ -970,4 +970,6 @@
   <data name="SwellLifeDurationUpdatePlugIn_Description" xml:space="preserve"><value>Aktualisiert die Dauer von Swell Life und Swell Life Proficiency von 60 + Energie / 180 s (Obergrenze 180 s) auf 60 + Energie / 10 s ohne Obergrenze, passend zum Season-6-Serverpaket.</value></data>
   <data name="IncreaseBlockMasterFlatUpdatePlugIn_Name" xml:space="preserve"><value>Increase Block Power Up als festen Bonus festlegen</value></data>
   <data name="IncreaseBlockMasterFlatUpdatePlugIn_Description" xml:space="preserve"><value>Ändert die Master-Fertigkeit Increase Block Power Up des Rage Fighters von einem Prozentsatz der PvM-Verteidigungsrate auf einen festen Verteidigungsratenbonus, passend zum Season-6-Serverpaket.</value></data>
+  <data name="SeasonNineSharedItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Regeln gemeinsamer Gegenstände</value></data>
+  <data name="SeasonNineSharedItemsUpdatePlugIn_Description" xml:space="preserve"><value>Wendet im Season-9-Betrieb die Season-9-Werte auf gemeinsame Gegenstände an (Cape of Fighter Drop-Stufe 150, Cape of Lord Stufenanforderung 150, native 255er-Trankstapel); angepasste Werte bleiben erhalten.</value></data>
 </root>

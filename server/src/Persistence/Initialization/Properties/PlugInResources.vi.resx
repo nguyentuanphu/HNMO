@@ -874,4 +874,6 @@
   <data name="SwellLifeDurationUpdatePlugIn_Description" xml:space="preserve"><value>Cập nhật thời gian duy trì của Swell Life và Swell Life Proficiency từ 60 + Energy / 180 giây (tối đa 180 giây) thành 60 + Energy / 10 giây không giới hạn trần, khớp bộ máy chủ Season 6.</value></data>
   <data name="IncreaseBlockMasterFlatUpdatePlugIn_Name" xml:space="preserve"><value>Đặt thưởng master Increase Block thành giá trị cộng thẳng</value></data>
   <data name="IncreaseBlockMasterFlatUpdatePlugIn_Description" xml:space="preserve"><value>Đổi kỹ năng master Increase Block Power Up của Rage Fighter từ phần trăm tỷ lệ né tránh PvM thành giá trị cộng thẳng, khớp bộ máy chủ Season 6.</value></data>
+  <data name="SeasonNineSharedItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: quy tắc vật phẩm dùng chung</value></data>
+  <data name="SeasonNineSharedItemsUpdatePlugIn_Description" xml:space="preserve"><value>Áp dụng thông số Season 9 cho các vật phẩm dùng chung (cấp rơi Cape of Fighter 150, cấp yêu cầu Cape of Lord 150, gộp tối đa 255 bình thuốc) khi chạy Season 9; giữ nguyên giá trị đã tùy chỉnh.</value></data>
 </root>
