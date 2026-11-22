@@ -1637,8 +1637,18 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   // The personal store: the own store (S, /personalshop), others' stores (/purchase), the titles over the heads.
   state.personalShop = new PersonalShop({ connection, inventory, itemWindows, message: (text) => chat.add(text, 'system'), confirm: confirmInGame, level: () => stats.level, heroName: character.name, heroId: () => online.playerId, characters: () => online.characters, hero: () => online.hero, mapNumber: () => state.mapNumber ?? 0, camera, canvas: ui.canvas, root, tooltipCharacter: () => ({ classIndex: character.classIndex, level: stats.level, strength: stats.strength, agility: stats.agility, vitality: stats.vitality, energy: stats.energy, leadership: stats.leadership, maxLife: stats.maxLife, maxMana: stats.maxMana }) });
   earlyPackets.forEach((bytes) => state.personalShop?.handle(bytes));
+  const closeGroupA = (except?: 'cashShop' | 'quests') => {
+    itemWindows.closeAll();
+    characterWindow?.close();
+    partyWindow?.close();
+    state.commandWindow?.close();
+    state.social?.guildWindow.close();
+    state.duelAndGens?.gensWindow.close();
+    if (except !== 'quests') quests?.closeAll();
+    if (except !== 'cashShop') state.cashShop?.close();
+  };
   // The cash shop (X or the HUD's shop button), with HNMO's free coins.
-  state.cashShop = new CashShop({ connection, heroName: character.name, safeZone: inSafeZone, walking: () => online.hero.isWalking, closeOthers: () => itemWindows.closeAll(), onToggle: (open) => state.hud?.setCashShopOpen(open), click: () => sounds.click() });
+  state.cashShop = new CashShop({ connection, heroName: character.name, safeZone: inSafeZone, walking: () => online.hero.isWalking, closeOthers: () => closeGroupA('cashShop'), onToggle: (open) => state.hud?.setCashShopOpen(open), click: () => sounds.click() });
   earlyPackets.forEach((bytes) => state.cashShop?.handle(bytes));
   // Jewels: a jewel dropped on an item is used on it (ConsumeItemRequest with the target slot).
   itemWindows.bag.onDropOnItem = (from, slot, target) => {
@@ -2531,7 +2541,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   // NPC dialogues and quests (npc_dialogue, quest_progress, my_quest_info on T, npc_quest; ui/questWindows.ts).
   const quests = new QuestWindows({ connection, message: (text) => chat.add(text, 'system'), sound: (name) => sounds.audio.play(name),
     hero: { name: character.name, baseClass: character.classIndex, level: () => stats.level, money: () => inventory.money, bagItems: () => [...inventory.items].filter(([slot]) => slot >= 12).map(([, item]) => item) },
-    closeOthers: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); }, showItem: (item, box) => void itemWindows.tooltip.show(item, box), hideItem: () => itemWindows.tooltip.hide() });
+    closeOthers: () => closeGroupA('quests'), showItem: (item, box) => void itemWindows.tooltip.show(item, box), hideItem: () => itemWindows.tooltip.hide() });
   earlyPackets.forEach((bytes) => quests.handle(bytes));
   // Blood Castle, Devil Square, Chaos Castle: entry windows, tickets, time, countdowns, results (ui/eventWindows.ts).
   state.events = setUpEvents({ connection, heroName: character.name, hero: () => ({ level: stats.level, classIndex: character.classIndex, master: character.master ?? false }),
