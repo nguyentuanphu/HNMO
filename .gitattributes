@@ -1,3 +1,5 @@
 # Windows reads batch files reliably only with Windows line endings.
 *.bat text eol=crlf
 *.cmd text eol=crlf
+# Shell scripts must keep LF endings so Linux/macOS/CI can run them directly.
+*.sh text eol=lf
