@@ -31,3 +31,11 @@ Google still uses the existing admin Plug-ins → Website → Google client ID s
 Google dùng cấu hình Google client ID hiện có trong admin. Không thêm nhà cung cấp thanh toán hay cài đặt host mới. Văn bản mới có EN/VI; các trang công khai có nút nổi về trang chủ. Giữ bản profile đã duyệt và các chức năng tài khoản; thay đổi theme/bố cục được review riêng.
 
 Screenshots in `screenshots/account-flow` show the sign-in, registration and authenticated profile states in EN/VI at390px and1440px. They use fictional fixture accounts and are not live financial/gameplay proof.
+
+## Verified checks and limits
+
+22 November 2026: bridge Release build passed (one inherited VisitorLimits warning); all26 launcher tests passed, including real cookie round trips, account substitution, CSRF, proxy trust, expiry and stale-response/sign-in races. Client build/typecheck and35 unit tests passed, with one existing optional data-pack skip. The affected browser suite passed55 cases; three existing game-server-dependent cases were skipped because no live game server was running (account safety, gift codes and reset/relife). Two ticket cases exercised the actual game bootstrap with a fixture ticket response. Twelve screenshots cover EN/VI sign-in, registration and profile at390/1440px.
+
+No live account database, payment, SMTP delivery or real game-server ticket consumption was certified. Fixtures contain fictional accounts; no real credentials are recorded. The bridge intentionally retains the existing server credential adapter in bounded process memory; a process restart expires these sessions. Cross-tab logout revokes website sessions without disconnecting an already connected game character.
+
+Đã kiểm tra build, kiểu dữ liệu,26 kiểm thử bridge,35 kiểm thử đơn vị và55 tình huống trình duyệt. Ba tình huống cũ cần máy chủ game thật không chạy trong môi trường này. Chưa chứng nhận thanh toán, gửi email, dữ liệu tài khoản thật hoặc vé vào máy chủ game thật.
