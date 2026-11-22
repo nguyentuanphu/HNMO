@@ -581,6 +581,13 @@ public class BotFeaturePlugIn : IFeaturePlugIn, IPeriodicTaskPlugIn, ISupportCus
     /// </summary>
     private async ValueTask RespawnPendingAsync(GameContext gameContext, ServerState state)
     {
+        var failedDisconnected = new List<(string Login, byte Slot)>();
+        await state.Manager.RespawnDisconnectedAsync(gameContext, failedDisconnected).ConfigureAwait(false);
+        foreach (var entry in failedDisconnected)
+        {
+            state.PendingRespawns.Enqueue(entry);
+        }
+
         var count = state.PendingRespawns.Count;
         for (var i = 0; i < count && state.PendingRespawns.TryDequeue(out var entry); i++)
         {
