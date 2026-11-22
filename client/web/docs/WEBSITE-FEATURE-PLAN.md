@@ -10,7 +10,7 @@ Target every draft PR at the latest `claude/hnmo-main-handover-54co2m`. Never pu
 
 | PR slice | Scope / Phạm vi | Status / Trạng thái |
 |---|---|---|
-| 1 | One host theme, shared navigation/credit/language, Brand logo/colors; retain all current features. / Theme chung, điều hướng, credit, ngôn ngữ, logo/màu Brand; giữ tính năng hiện có. | Global skins and Brand foundation validated for draft review; new feature-route navigation remains with its pages. / Nền tảng theme/Brand đã kiểm thử để review; liên kết chức năng mới đi cùng trang tương ứng. |
+| 1 | One host theme, shared navigation/credit/language, Brand logo/colors; retain all current features. / Theme chung, điều hướng, credit, ngôn ngữ, logo/màu Brand; giữ tính năng hiện có. | Global skins/Brand foundation, five distinct structures and shared account-entry dependency validated; feature-route navigation remains with its pages. / Nền tảng theme/Brand đã kiểm thử để review; liên kết chức năng mới đi cùng trang tương ứng. |
 | 2 | Home cards from live configuration, enabled systems, VIP and catalog. / Thẻ trang chủ từ cấu hình thật, hệ thống bật, VIP và danh mục cửa hàng. | Audit and extend existing APIs; not yet complete. / Cần kiểm kê và bổ sung API hiện có. |
 | 3 | Missing activity events and bounded batching/retention/performance proof. / Sự kiện nhật ký còn thiếu, ghi theo lô, lưu giữ và kiểm thử hiệu năng. | Pending / Chưa làm |
 | 4 | Tracker API with host visibility/retention and player name hiding. Reuse ActivityLog and serials. / API truy vết, quyền công khai, thời hạn và ẩn tên; dùng lại nhật ký/mã vật phẩm. | Pending / Chưa làm |

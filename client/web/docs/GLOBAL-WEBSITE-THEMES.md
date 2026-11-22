@@ -79,3 +79,15 @@ Frontend build/typecheck pass; full unit34passed,1 existing optional Season9 dat
 Đã qua build/typecheck, toàn bộ1438 ca Web,34 ca unit (một ca gói dữ liệu tùy chọn bỏ qua theo điều kiện có sẵn),37 ca trình duyệt công khai/đường dẫn xem riêng và84 ca tài khoản cho cả sáu theme. Có ảnh/kiểm tra bảy trang trên điện thoại và desktop. Không tắt hoặc giảm kiểm thử, không thêm chờ cố định.
 
 Not checked: live host save against PostgreSQL, real SMTP, game login/gameplay or financial side effects, and the full solution-wide test matrix. Existing feature handlers are preserved; these browser cases use explicit fixtures. / Chưa kiểm tra cấu hình trên PostgreSQL thật, gửi mail thật, đăng nhập/chơi game hoặc giao dịch tiền thật và toàn bộ test của solution. Bản xem không có các dịch vụ đó.
+
+## Owner correction: different structures and one account entry
+
+22 November: five skins now move the original feature nodes into different structures, without cloning them or replacing their handlers: Ember has a left navigation rail and campaign sections; Azure places the hero beside a server/news board; Jade groups live content into three task columns; Violet has a right rail and event/news command deck; Parchment uses a cover/index beside independently scrolling pages. Classic remains the additional original direction. Mobile layouts keep the menu reachable and use uniform-sized action targets. Late async sections and their click handlers survive layout changes.
+
+Auth/navigation is inherited from draft318: Account opens the dedicated sign-in page; create-account/Google stay inside it; private rewards/mail/reset/security/VIP/history are gated; Enter game reuses a server-verified cookie through the existing ticket. The owner explicitly requested removal of the duplicate home registration section:28 home sections remain, with signup relocated, not removed. Every public page has a floating Home action. This dependency is a local branch merge only, not a remotely merged PR.
+
+Five-layout screenshots plus Classic at390/1440px are in screenshots/website-structures. The private Site preserves the original approved profile and all its sample tools, and uses a clearly fictional shared sample sign-in for account→game character selection. This sample flag never replaces the production HttpOnly implementation. Unsupported writes, real payments and live gameplay remain blocked.
+
+Năm bố cục khác nhau nhưng dùng nguyên các mục/nút/chức năng đang có. Đăng ký chuyển vào màn hình tài khoản theo yêu cầu, không còn form trùng trên trang chủ. Host vẫn chọn duy nhất một theme cho toàn website, không chọn riêng theo thế giới hay tài khoản. Dữ liệu và phiên đăng nhập trên Site là mẫu để xem; bản chạy thật dùng API/cookie bridge đã kiểm thử.
+
+An observed Violet mailbox-over-navigation overflow was fixed by removing the obsolete status grid area (the status now lives outside the dashboard) and sizing mailbox columns to their container. The regression checks actual panel/navigation boundaries and normal button clicks; it does not force clicks past overlays.
