@@ -45,3 +45,6 @@ export function websitePreviewReply(path: string): unknown | undefined {
   if (['/website/gift-codes', '/website/resets', '/website/account-safety'].includes(path)) return { enabled: false };
   return undefined;
 }
+
+/** Read-only fictional character cards for the private game-entry review. */
+export function websitePreviewCharacters(): readonly (typeof characters)[number][] { return characters; }
