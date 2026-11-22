@@ -23,6 +23,8 @@ using HNMO.GameLogic.Offline;
 public sealed class BotManager
 {
     private readonly ConcurrentDictionary<string, BotPlayer> _bots = new(StringComparer.OrdinalIgnoreCase);
+    private readonly ConcurrentQueue<BotPlayer> _disconnectedToDispose = new();
+    private readonly ConcurrentQueue<(string Login, byte Slot)> _disconnectedRespawns = new();
 
     /// <summary>
     /// Gets a snapshot of the currently active bots.
@@ -75,6 +77,21 @@ public sealed class BotManager
             }
 
             added = true;
+            var capturedKey = key;
+            var capturedSlot = character.CharacterSlot;
+            bot.PlayerDisconnected += _ =>
+            {
+                // Intentional stops (StopAllAsync, StopRandomBotAsync, RestartBotAsync) remove the key
+                // from _bots before disconnecting. An unexpected external disconnect finds it still present
+                // and queues delayed disposal plus a respawn on the next maintenance pass.
+                if (this._bots.TryRemove(capturedKey, out var current) && ReferenceEquals(current, bot))
+                {
+                    this._disconnectedToDispose.Enqueue(bot);
+                    this._disconnectedRespawns.Enqueue((loginName, capturedSlot));
+                }
+
+                return ValueTask.CompletedTask;
+            };
 
             // Provide AI settings so the bot actually hunts (a missing config means a single-tile range).
             bot.MuHelperSettings = new BotMuHelperSettings();
@@ -117,6 +134,22 @@ public sealed class BotManager
             if (this._bots.TryRemove(key, out var bot))
             {
                 await StopAndDisposeAsync(bot, key, "shutdown").ConfigureAwait(false);
+            }
+        }
+
+        while (this._disconnectedRespawns.TryDequeue(out _))
+        {
+        }
+
+        while (this._disconnectedToDispose.TryDequeue(out var disconnectedBot))
+        {
+            try
+            {
+                await disconnectedBot.DisposeAsync().ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                disconnectedBot.Logger.LogWarning(ex, "Error while disposing disconnected bot '{Name}'.", disconnectedBot.Name);
             }
         }
     }
@@ -237,6 +270,48 @@ public sealed class BotManager
         }
 
         return await this.SpawnBotAsync(gameContext, loginName, slot).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Disposes bots that disconnected unexpectedly and brings them back online.
+    /// </summary>
+    /// <param name="gameContext">The game context.</param>
+    /// <param name="failedRespawns">Optional collection receiving any bots that could not be spawned yet.</param>
+    /// <returns>The number of disconnected bots brought back online.</returns>
+    public async ValueTask<int> RespawnDisconnectedAsync(IGameContext gameContext, ICollection<(string Login, byte Slot)>? failedRespawns = null)
+    {
+        while (this._disconnectedToDispose.TryDequeue(out var disconnectedBot))
+        {
+            try
+            {
+                await disconnectedBot.DisposeAsync().ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                disconnectedBot.Logger.LogWarning(ex, "Error while disposing disconnected bot '{Name}'.", disconnectedBot.Name);
+            }
+        }
+
+        var respawned = 0;
+        var count = this._disconnectedRespawns.Count;
+        for (var i = 0; i < count && this._disconnectedRespawns.TryDequeue(out var entry); i++)
+        {
+            if (this.IsActive(entry.Login, entry.Slot))
+            {
+                continue;
+            }
+
+            if (await this.SpawnBotAsync(gameContext, entry.Login, entry.Slot).ConfigureAwait(false))
+            {
+                respawned++;
+            }
+            else
+            {
+                failedRespawns?.Add(entry);
+            }
+        }
+
+        return respawned;
     }
 
     /// <summary>
