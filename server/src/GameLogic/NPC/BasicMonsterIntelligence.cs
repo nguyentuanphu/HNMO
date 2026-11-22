@@ -388,6 +388,13 @@ public class BasicMonsterIntelligence : INpcIntelligence, IDisposable
 
     private int DistanceFromSpawnArea(Point position)
     {
+        if (this.Monster.SpawnPoint != default)
+        {
+            return Math.Max(
+                Math.Abs(position.X - this.Monster.SpawnPoint.X),
+                Math.Abs(position.Y - this.Monster.SpawnPoint.Y));
+        }
+
         var area = this.Monster.SpawnArea;
         var minX = Math.Min(area.X1, area.X2);
         var maxX = Math.Max(area.X1, area.X2);
@@ -400,6 +407,11 @@ public class BasicMonsterIntelligence : INpcIntelligence, IDisposable
 
     private Point GetSpawnHomePoint()
     {
+        if (this.Monster.SpawnPoint != default)
+        {
+            return this.Monster.SpawnPoint;
+        }
+
         var area = this.Monster.SpawnArea;
         var cx = (byte)((Math.Min(area.X1, area.X2) + Math.Max(area.X1, area.X2)) / 2);
         var cy = (byte)((Math.Min(area.Y1, area.Y2) + Math.Max(area.Y1, area.Y2)) / 2);

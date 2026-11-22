@@ -271,8 +271,9 @@ public sealed class Monster : AttackableNpcBase, IAttackable, IAttacker, ISuppor
         var moveByX = Rand.NextInt(-this.Definition.MoveRange, this.Definition.MoveRange + 1);
         var moveByY = Rand.NextInt(-this.Definition.MoveRange, this.Definition.MoveRange + 1);
 
-        var newX = this.Position.X + moveByX;
-        var newY = this.Position.Y + moveByY;
+        var origin = this.SummonedBy is null && this.SpawnPoint != default ? this.SpawnPoint : this.Position;
+        var newX = origin.X + moveByX;
+        var newY = origin.Y + moveByY;
         byte randx = (byte)Math.Min(0xFF, Math.Max(0, newX));
         byte randy = (byte)Math.Min(0xFF, Math.Max(0, newY));
 

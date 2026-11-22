@@ -21,6 +21,8 @@ public class NonPlayerCharacter : AsyncDisposable, IObservable, IRotatable, ILoc
 
     private bool _registrationsReleased;
 
+    private (byte X1, byte Y1, byte X2, byte Y2)? _spawnAreaBounds;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="NonPlayerCharacter"/> class.
     /// </summary>
@@ -44,6 +46,13 @@ public class NonPlayerCharacter : AsyncDisposable, IObservable, IRotatable, ILoc
 
     /// <inheritdoc/>
     public virtual Point Position { get; set; }
+
+    /// <summary>
+    /// Gets the initial spawn coordinate chosen for this instance within <see cref="SpawnArea"/>.
+    /// Subsequent respawns stay within <see cref="MonsterDefinition.MoveRange"/> of this spot so hunting in one
+    /// part of a large multi-spawn area does not drain monsters to the unobserved edges of the area.
+    /// </summary>
+    public Point SpawnPoint { get; private set; }
 
     /// <inheritdoc/>
     public Direction Rotation { get; set; }
@@ -92,22 +101,38 @@ public class NonPlayerCharacter : AsyncDisposable, IObservable, IRotatable, ILoc
     public virtual void Initialize()
     {
         const int maxRetryForAreas = 100;
-        var maxRetry = this.SpawnArea.IsPoint() ? 1 : maxRetryForAreas;
+        var currentBounds = (this.SpawnArea.X1, this.SpawnArea.Y1, this.SpawnArea.X2, this.SpawnArea.Y2);
+        var hasValidHomeSpot = this._spawnAreaBounds == currentBounds && this.IsValidSpawnPoint(this.SpawnPoint);
 
         Point? spawnPoint = null;
-
-        for (var retry = 0; retry < maxRetry && spawnPoint is null; retry++)
+        if (!hasValidHomeSpot)
         {
-            spawnPoint = this.GetNewSpawnPoint(this.SpawnArea);
-            if (spawnPoint is not null)
+            var maxRetry = this.SpawnArea.IsPoint() ? 1 : maxRetryForAreas;
+            for (var retry = 0; retry < maxRetry && spawnPoint is null; retry++)
             {
-                break;
+                spawnPoint = this.GetNewSpawnPoint(this.SpawnArea);
             }
-        }
 
-        if (spawnPoint == null)
+            if (spawnPoint == null)
+            {
+                throw new InvalidOperationException("No valid spawn point found. Spawn area might not contain valid points.");
+            }
+
+            this.SpawnPoint = spawnPoint.Value;
+            this._spawnAreaBounds = currentBounds;
+        }
+        else if (this.SpawnArea.IsPoint() || this.Definition.MoveRange <= 0)
         {
-            throw new InvalidOperationException("No valid spawn point found. Spawn area might not contain valid points.");
+            spawnPoint = this.SpawnPoint;
+        }
+        else
+        {
+            for (var retry = 0; retry < maxRetryForAreas && spawnPoint is null; retry++)
+            {
+                spawnPoint = this.GetRespawnPointNearHome();
+            }
+
+            spawnPoint ??= this.SpawnPoint;
         }
 
         this.Position = spawnPoint.Value;
@@ -276,6 +301,25 @@ public class NonPlayerCharacter : AsyncDisposable, IObservable, IRotatable, ILoc
         }
 
         return null;
+    }
+
+    private Point? GetRespawnPointNearHome()
+    {
+        var range = Math.Max(0, (int)this.Definition.MoveRange);
+        var areaMinX = Math.Min(this.SpawnArea.X1, this.SpawnArea.X2);
+        var areaMaxX = Math.Max(this.SpawnArea.X1, this.SpawnArea.X2);
+        var areaMinY = Math.Min(this.SpawnArea.Y1, this.SpawnArea.Y2);
+        var areaMaxY = Math.Max(this.SpawnArea.Y1, this.SpawnArea.Y2);
+
+        var minX = Math.Max(areaMinX, this.SpawnPoint.X - range);
+        var maxX = Math.Min(areaMaxX, this.SpawnPoint.X + range);
+        var minY = Math.Max(areaMinY, this.SpawnPoint.Y - range);
+        var maxY = Math.Min(areaMaxY, this.SpawnPoint.Y + range);
+
+        var x = Rand.NextInt(minX, maxX + 1);
+        var y = Rand.NextInt(minY, maxY + 1);
+        var point = new Point((byte)x, (byte)y);
+        return this.IsValidSpawnPoint(point) ? point : null;
     }
 
     private bool IsValidSpawnPoint(Point spawnPoint)
