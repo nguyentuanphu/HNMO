@@ -768,7 +768,7 @@ int64_t ItemValue(const ITEM* ip, int goldType)
     }
     else if (ip->Type == ITEM_JEWEL_OF_BLESS)
     {
-        Gold = 9000000;
+        Gold = 3000000;
     }
     else if (ip->Type == ITEM_JEWEL_OF_SOUL)
     {
@@ -780,11 +780,11 @@ int64_t ItemValue(const ITEM* ip, int goldType)
     }
     else if (ip->Type == ITEM_JEWEL_OF_LIFE)
     {
-        Gold = 45000000;
+        Gold = 16000000;
     }
     else if (ip->Type == ITEM_JEWEL_OF_CREATION)
     {
-        Gold = 36000000;
+        Gold = 15000000;
     }
     else if (ip->Type == ITEM_POTION + 141)
     {
@@ -961,7 +961,7 @@ int64_t ItemValue(const ITEM* ip, int goldType)
     }
     else if (ip->Type == ITEM_JEWEL_OF_GUARDIAN)
     {
-        Gold = 60000000;
+        Gold = 15000000;
     }
     else if (ip->Type == ITEM_SIEGE_POTION)
     {
