@@ -1200,4 +1200,10 @@ Extensões de inventário: {18}</value>
   <data name="PlayerKillersCantUseNpcShops" xml:space="preserve">
     <value>Fora da lei de nível PK 2 ou superior não podem usar lojas de NPC.</value>
   </data>
+  <data name="MossGambleDisabled" xml:space="preserve">
+    <value>Moss, o Mercador, está fechado no momento.</value>
+  </data>
+  <data name="MossGambleWon" xml:space="preserve">
+    <value>Moss entregou: {0}.</value>
+  </data>
 </root>
