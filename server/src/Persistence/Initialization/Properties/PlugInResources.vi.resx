@@ -880,4 +880,6 @@
   <data name="SeasonNineOnlyItemsUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 279 vật phẩm riêng của Season 9 (vũ khí, khiên, bộ giáp socket, cánh, Ngũ Hành, nhẫn/dây chuyền, thú Muun và nguyên liệu) khi chạy Season 9; giữ nguyên vật phẩm đã có.</value></data>
   <data name="SeasonNineSocketOptionsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: chỉ số ngọc socket</value></data>
   <data name="SeasonNineSocketOptionsUpdatePlugIn_Description" xml:space="preserve"><value>Đặt dòng Nước tăng bảo vệ khiên cấp 5 lên 30 %, Gió AG tối đa lên 50/70/90/110/130 và Gió hồi AG lên 5/7/9/11/13 khi chạy Season 9; giữ nguyên giá trị đã tùy chỉnh.</value></data>
+  <data name="SeasonNineMonstersUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: quái vật và NPC</value></data>
+  <data name="SeasonNineMonstersUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 111 quái vật và NPC Season 9 còn thiếu so với danh mục Season 6 và cập nhật thời gian hồi sinh của lính tập sự Dark Elf thành 10800 giây khi chạy Season 9.</value></data>
 </root>

@@ -503,4 +503,6 @@
   <data name="SeasonNineOnlyItemsUpdatePlugIn_Description" xml:space="preserve"><value>在以第 9 赛季运行时添加 279 项第 9 赛季专属物品定义（镶嵌武器、盾牌、防具套装、翅膀、五芒星、饰品、萌宠与合成材料）；已存在的物品保持不变。</value></data>
   <data name="SeasonNineSocketOptionsUpdatePlugIn_Name" xml:space="preserve"><value>第 9 赛季：镶嵌属性数值</value></data>
   <data name="SeasonNineSocketOptionsUpdatePlugIn_Description" xml:space="preserve"><value>在以第 9 赛季运行时将水属性盾牌防御保护 5 级设为 30 %、风属性最大 AG 设为 50/70/90/110/130、风属性 AG 恢复设为 5/7/9/11/13；已自定义的值保持不变。</value></data>
+  <data name="SeasonNineMonstersUpdatePlugIn_Name" xml:space="preserve"><value>第 9 赛季：怪物与 NPC</value></data>
+  <data name="SeasonNineMonstersUpdatePlugIn_Description" xml:space="preserve"><value>在以第 9 赛季运行时添加第 6 赛季目录中缺少的 111 个第 9 赛季怪物和 NPC 定义，并将暗黑精灵见习士兵的重生时间更新为 10800 秒。</value></data>
 </root>
