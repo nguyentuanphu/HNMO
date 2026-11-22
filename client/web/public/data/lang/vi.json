@@ -9,7 +9,6 @@
 "An expensive item. Check the item, please. Are you sure you want to sell it?": "Vật phẩm này có giá trị cao. Hãy kiểm tra kỹ. Bạn có chắc muốn bán không?",
 "How much zen to deposit?": "Bạn muốn gửi bao nhiêu Zen?",
 "How much zen to withdraw?": "Bạn muốn rút bao nhiêu Zen?",
-
 "Second password": "Mật khẩu cấp 2",
 "Locked (account safety)": "Đã khóa (bảo vệ tài khoản)",
 "Unlocks at %s (Sydney time)": "Mở khóa lúc %s (giờ Sydney)",
@@ -8073,6 +8072,16 @@
 "Hide other players (Alt+O)": "Ẩn người chơi khác (Alt+O)",
 "Hide wings and pets (Alt+W)": "Ẩn cánh và thú cưng (Alt+W)",
 "Fewer skill and item effects (Alt+E)": "Giảm hiệu ứng kỹ năng và vật phẩm (Alt+E)",
-"Hides other players, wings, pets, and heavy effects for crowded events (Alt+P)": "Ẩn người chơi khác, cánh, thú cưng và giảm hiệu ứng khi sự kiện đông người (Alt+P)"
+"Hides other players, wings, pets, and heavy effects for crowded events (Alt+P)": "Ẩn người chơi khác, cánh, thú cưng và giảm hiệu ứng khi sự kiện đông người (Alt+P)",
+"Join a guild from level 6; create a guild at the Guild Master in Devias (level 150 by default)": "Gia nhập bang hội từ cấp 6; lập bang hội tại Hội trưởng ở Devias (mặc định cấp 150)",
+"From level 6 (outside trades and NPC dialogs); buyers must be in view range": "Từ cấp 6 (khi không giao dịch hoặc mở hộp thoại NPC); người mua phải đứng trong tầm nhìn",
+"Field monsters and EXP:": "Quái bản đồ và kinh nghiệm:",
+"Monsters keep their spawn spot: when lured too far away they return home and heal. Experience in a shared fight splits by damage dealt, and jewels drop by monster level band.": "Quái giữ đúng bãi xuất hiện: bị kéo đi quá xa sẽ quay về chỗ cũ và hồi máu. Kinh nghiệm trong trận đánh chung được chia theo sát thương gây ra, và ngọc rơi theo nhóm cấp quái.",
+"Events and maps:": "Sự kiện và bản đồ:",
+"Blood Castle runs for 15 minutes and warping to Crywolf requires level 300. Mini games refuse entry while dead, trading, duelling, or inside another NPC dialog. In Kanturu, strike Maya's hands — her body stays invulnerable.": "Huyết Lâu kéo dài 15 phút và dịch chuyển tới Crywolf yêu cầu cấp 300. Không thể vào phó bản khi đang chết, giao dịch, quyết đấu hoặc mở hộp thoại NPC khác. Tại Kanturu, hãy đánh tay của Maya — thân chính miễn nhiễm sát thương.",
+"Quests can only be accepted and finished at the quest NPC.": "Nhiệm vụ chỉ có thể nhận và trả trực tiếp tại NPC giao nhiệm vụ.",
+"Riding the Horn of Fenrir requires the second class or higher.": "Cưỡi Sói Tinh (Horn of Fenrir) yêu cầu cấp chuyển chức lần 2 trở lên.",
+"Happy Hour & bonus events": "Giờ vàng & sự kiện nhân tỉ lệ",
+"Scheduled rate multipliers in Sydney time announced in chat and on the timetable. When Happy Hour and another bonus event overlap, only the larger multiplier applies (zen rate bonuses apply separately).": "Hệ số nhân theo lịch giờ Sydney, thông báo trong chat và lịch sự kiện. Khi Giờ vàng trùng với sự kiện tăng tỉ lệ khác, chỉ áp dụng mức nhân cao hơn (tỉ lệ Zen tính riêng)."
 }
 }
