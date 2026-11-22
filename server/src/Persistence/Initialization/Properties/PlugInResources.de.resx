@@ -972,6 +972,8 @@
   </data>
   <data name="SkillEnergyRequirementsUpdatePlugIn_Name" xml:space="preserve"><value>Energieanforderungen von Recovery und Power Slash korrigieren</value></data>
   <data name="SkillEnergyRequirementsUpdatePlugIn_Description" xml:space="preserve"><value>Setzt die Energieanforderung von Recovery auf 168 (passend zu den Season-6-/Season-9-Serverpaketen und dem Crystal of Recovery) und die von Power Slash auf 100.</value></data>
+  <data name="FenrirSecondClassUpdatePlugIn_Name" xml:space="preserve"><value>Horn of Fenrir: ab der zweiten Klasse</value></data>
+  <data name="FenrirSecondClassUpdatePlugIn_Description" xml:space="preserve"><value>Beschränkt Horn of Fenrir (13, 37) auf die zweite Klasse und höher (entfernt Dark Wizard, Dark Knight, Fairy Elf und Summoner, solange alle vier noch zugewiesen sind), passend zu den Season-6- und Season-9-Serverpaketen.</value></data>
   <data name="SwellLifeDurationUpdatePlugIn_Name" xml:space="preserve"><value>Swell-Life-Dauer an das Season-6-Serverpaket anpassen</value></data>
   <data name="SwellLifeDurationUpdatePlugIn_Description" xml:space="preserve"><value>Aktualisiert die Dauer von Swell Life und Swell Life Proficiency von 60 + Energie / 180 s (Obergrenze 180 s) auf 60 + Energie / 10 s ohne Obergrenze, passend zum Season-6-Serverpaket.</value></data>
   <data name="IncreaseBlockMasterFlatUpdatePlugIn_Name" xml:space="preserve"><value>Increase Block Power Up als festen Bonus festlegen</value></data>

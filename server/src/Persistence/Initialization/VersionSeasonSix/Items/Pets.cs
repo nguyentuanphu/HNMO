@@ -82,10 +82,11 @@ public class Pets : InitializerBase
         darkRaven.MaximumItemLevel = 50;
         this.GameConfiguration.DetermineCharacterClasses(CharacterClasses.AllLords).ForEach(darkRaven.QualifiedCharacters.Add);
 
-        var fenrir = this.CreatePet(37, SkillNumber.PlasmaStorm, 2, 2, LocalizedString.FromResource(() => ItemNames.HornOfFenrir), 300, false, true,
+        var fenrir = this.CreatePet(37, SkillNumber.PlasmaStorm, 2, 2, LocalizedString.FromResource(() => ItemNames.HornOfFenrir), 300, false, false,
             (Stats.CanFly, 1.0f, AggregateType.AddRaw),
             (Stats.MovementSpeed, MovementSpeedConstants.HorseOrFenrirMovementSpeed, AggregateType.Maximum),
             (Stats.MovementSpeedUnderwater, MovementSpeedConstants.HorseOrFenrirMovementSpeed, AggregateType.Maximum));
+        this.GameConfiguration.DetermineCharacterClasses(CharacterClasses.AllMastersAndSecondClass).ForEach(fenrir.QualifiedCharacters.Add);
         this.AddFenrirOptions(fenrir);
 
         this.CreatePet(64, 0, 1, 1, LocalizedString.FromResource(() => ItemNames.Demon), 1, false, true,

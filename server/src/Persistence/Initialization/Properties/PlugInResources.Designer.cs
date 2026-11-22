@@ -1127,6 +1127,12 @@ namespace HNMO.Persistence.Initialization.Properties {
         /// <summary>Gets the localized SkillEnergyRequirementsUpdatePlugIn_Description text.</summary>
         public static string SkillEnergyRequirementsUpdatePlugIn_Description => ResourceManager.GetString("SkillEnergyRequirementsUpdatePlugIn_Description", resourceCulture)!;
 
+        /// <summary>Gets the localized FenrirSecondClassUpdatePlugIn_Name text.</summary>
+        public static string FenrirSecondClassUpdatePlugIn_Name => ResourceManager.GetString("FenrirSecondClassUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized FenrirSecondClassUpdatePlugIn_Description text.</summary>
+        public static string FenrirSecondClassUpdatePlugIn_Description => ResourceManager.GetString("FenrirSecondClassUpdatePlugIn_Description", resourceCulture)!;
+
         /// <summary>Gets the localized SwellLifeDurationUpdatePlugIn_Name text.</summary>
         public static string SwellLifeDurationUpdatePlugIn_Name => ResourceManager.GetString("SwellLifeDurationUpdatePlugIn_Name", resourceCulture)!;
 

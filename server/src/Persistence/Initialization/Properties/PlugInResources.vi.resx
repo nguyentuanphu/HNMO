@@ -876,6 +876,8 @@
   <data name="RenumberArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Chuyển Sứ giả Đấu trường của bản lưu cũ từ NPC 595 sang 900 để web game hiện lại.</value></data>
   <data name="SkillEnergyRequirementsUpdatePlugIn_Name" xml:space="preserve"><value>Sửa yêu cầu năng lượng của Recovery và Power Slash</value></data>
   <data name="SkillEnergyRequirementsUpdatePlugIn_Description" xml:space="preserve"><value>Đặt yêu cầu năng lượng của Recovery thành 168 (khớp bộ máy chủ Season 6/9 và Crystal of Recovery) và của Power Slash thành 100.</value></data>
+  <data name="FenrirSecondClassUpdatePlugIn_Name" xml:space="preserve"><value>Sừng Fenrir: từ lớp nhân vật cấp 2 trở lên</value></data>
+  <data name="FenrirSecondClassUpdatePlugIn_Description" xml:space="preserve"><value>Giới hạn Sừng Fenrir (13, 37) cho nhân vật từ cấp 2 trở lên (gỡ Dark Wizard, Dark Knight, Fairy Elf và Summoner nếu cả bốn còn được gán), khớp bộ máy chủ Season 6 và Season 9.</value></data>
   <data name="SwellLifeDurationUpdatePlugIn_Name" xml:space="preserve"><value>Chỉnh thời gian Swell Life theo bộ máy chủ Season 6</value></data>
   <data name="SwellLifeDurationUpdatePlugIn_Description" xml:space="preserve"><value>Cập nhật thời gian duy trì của Swell Life và Swell Life Proficiency từ 60 + Energy / 180 giây (tối đa 180 giây) thành 60 + Energy / 10 giây không giới hạn trần, khớp bộ máy chủ Season 6.</value></data>
   <data name="IncreaseBlockMasterFlatUpdatePlugIn_Name" xml:space="preserve"><value>Đặt thưởng master Increase Block thành giá trị cộng thẳng</value></data>
