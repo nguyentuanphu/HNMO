@@ -262,7 +262,7 @@ test('the website: the reset ranking on the home page and resets, stats and the 
   await expect(card.getByRole('button', { name: /Clear stats/ })).toBeDisabled();
 
   // Vietnamese.
-  await panel.locator('[data-reset-lang="vi"]').click();
+  await page.locator('header [data-account-language="vi"]').click();
   await expect(panel.locator('h2')).toHaveText('Reset và điểm');
   await expect(page.locator('#resetsMessage')).toHaveText('Tài khoản đang trong game hoặc treo máy: hãy thoát game trước.');
   await expect(card.locator('.facts')).toContainText('Reset: 13');

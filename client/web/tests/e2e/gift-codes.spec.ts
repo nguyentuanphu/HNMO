@@ -237,7 +237,7 @@ test('the website: the public codes on the home page and a code entered on the a
   await gift.scrollIntoViewIfNeeded();
   await page.screenshot({ path: 'test-results/gift-codes-account.png' });
 
-  await gift.locator('[data-gift-lang="vi"]').click();
+  await page.locator('header [data-account-language="vi"]').click();
   await expect(page.locator('#giftMessage')).toHaveText('Đã nhận gift code WELCOME2026 cho test7Elf: 100 Goblin Points + 20.000 zen + Jewel of Bless x1.');
   await expect(gift.locator('#giftForm button')).toHaveText('Dùng mã');
   await expect(page.locator('#giftCharacter option').first()).toHaveText('test7Dk (cấp 60, reset 1)');

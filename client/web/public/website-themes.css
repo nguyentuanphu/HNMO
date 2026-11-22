@@ -243,3 +243,6 @@ body[data-website-page="account"] #accountPanels {container-type:inline-size}
 body[data-website-page="account"] .hnmo-gb-wrap {grid-template-columns:repeat(2,minmax(0,1fr))}
 @container(max-width:600px){body[data-website-page="account"] .hnmo-gb-wrap{grid-template-columns:minmax(0,1fr)}}
 body[data-website-page="account"] .hnmo-gb-wrap>* {min-width:0;overflow-wrap:anywhere}
+
+/* The header language pair also updates every retained legacy widget. */
+body[data-website-page="account"] :is(#play,#gift,#resets,#safety) .langs {display:none}

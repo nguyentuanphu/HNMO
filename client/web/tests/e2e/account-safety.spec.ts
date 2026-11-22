@@ -286,7 +286,7 @@ test('the account page: second password, item lock, logins and trades', async ({
   await page.screenshot({ path: 'test-results/account-safety-page.png', fullPage: true });
 
   // Vietnamese.
-  await panel.locator('[data-safety-lang="vi"]').click();
+  await page.locator('header [data-account-language="vi"]').click();
   await expect(panel.locator('h2')).toHaveText('Bảo vệ tài khoản');
   await expect(page.locator('#safetyPinState')).toContainText('Tài khoản của bạn đã có mật khẩu cấp 2');
   await expect(logins.nth(1).locator('td.fail')).toHaveText('sai mật khẩu');
