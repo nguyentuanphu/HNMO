@@ -40,6 +40,20 @@ public class LocalizedUpdatePlugInNameTest
         AssertLocalized(new FixSeedSphereMaximumItemLevelUpdatePlugIn(), culture, expectedName);
     }
 
+    /// <summary>
+    /// Tests the name and description of the update which restricts Horn of Fenrir to second class and up.
+    /// </summary>
+    /// <param name="culture">The culture of the user interface.</param>
+    /// <param name="expectedName">The expected name.</param>
+    [TestCase("en", "Horn of Fenrir: second class and up")]
+    [TestCase("vi", "Sừng Fenrir: từ lớp nhân vật cấp 2 trở lên")]
+    [TestCase("de", "Horn of Fenrir: ab der zweiten Klasse")]
+    [TestCase("zh-CN", "炎狼兽之角：二转及以上职业可用")]
+    public void FenrirSecondClassUpdateIsLocalized(string culture, string expectedName)
+    {
+        AssertLocalized(new FenrirSecondClassUpdatePlugIn(), culture, expectedName);
+    }
+
     private static void AssertLocalized(UpdatePlugInBase updatePlugIn, string culture, string expectedName)
     {
         var previousCulture = CultureInfo.CurrentUICulture;
