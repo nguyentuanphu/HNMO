@@ -8,7 +8,7 @@
         <FieldLabel Text="@Label" ValueExpression="@this.ValueExpression" />
         @if (this.IsMultiline)
         {
-            <textarea @bind="CurrentValue" id="@this.FieldIdentifier.FieldName" class="form-control @CssClass" rows="5"></textarea>
+            <textarea @bind="this.CurrentValue" id="@this.FieldIdentifier.FieldName" class="form-control @this.CssClass" rows="5" title="@this.MultilineHint"></textarea>
         }
         else
         {
@@ -31,6 +31,9 @@
     public string? Label { get; set; }
 
     private bool IsSecret => this.FieldIdentifier.Model.GetType().GetProperty(this.FieldIdentifier.FieldName)?.IsDefined(typeof(SecretAttribute), true) is true;
+
+    private string? MultilineHint => this.FieldIdentifier.Model.GetType().GetProperty(this.FieldIdentifier.FieldName)
+        ?.GetCustomAttributes(typeof(DisplayAttribute), true).OfType<DisplayAttribute>().FirstOrDefault()?.GetDescription();
 
     private bool IsMultiline => !this.IsSecret && this.FieldIdentifier.Model.GetType().GetProperty(this.FieldIdentifier.FieldName)
         ?.GetCustomAttributes(typeof(DataTypeAttribute), true).OfType<DataTypeAttribute>().Any(attribute => attribute.DataType == DataType.MultilineText) is true;

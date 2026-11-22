@@ -88,9 +88,9 @@ function systems(extras: ServerGuideExtras): HTMLElement {
 function quests(extras: ServerGuideExtras): HTMLElement {
   const result = card('quests');
   if (!extras.quests.length) { line(result, 'questEmpty'); return result; }
-  result.append(table(['quests', 'npc', 'class', 'levels'], extras.quests.map(quest => [name(quest),
+  result.append(table(['quests', 'npc', 'class', 'levels', 'cost'], extras.quests.map(quest => [name(quest),
     vi() ? quest.npcVi : quest.npcEn, (vi() ? quest.classVi : quest.classEn) || t('allClasses'),
-    `${quest.minimumLevel}–${quest.maximumLevel > 0 ? quest.maximumLevel : '∞'}`])));
+    `${quest.minimumLevel}–${quest.maximumLevel > 0 ? quest.maximumLevel : '∞'}`, quest.requiredStartMoney])));
   if (extras.questsTruncated) line(result, 'moreRows'); return result;
 }
 function crafting(extras: ServerGuideExtras): HTMLElement {
@@ -98,7 +98,7 @@ function crafting(extras: ServerGuideExtras): HTMLElement {
   if (!extras.crafts.length) { line(result, 'craftEmpty'); return result; }
   result.append(table(['result', 'npc', 'chance', 'cost'], extras.crafts.map(recipe => {
     const item = recipe.upgrade ? t('upgrade', recipe.addLevel) : `${vi() ? recipe.itemVi : recipe.itemEn} +${recipe.randomMinimumLevel}–${recipe.randomMaximumLevel}`;
-    const excellent = recipe.excellentChance > 0 ? ` ${t('excellentResult', recipe.excellentChance, recipe.maximumExcellentOptions)}` : '';
+    const excellent = recipe.excellentChance !== null && recipe.excellentChance > 0 ? ` ${t('excellentResult', recipe.excellentChance, recipe.maximumExcellentOptions)}` : '';
     const chance = recipe.basePercent === null ? t('dynamicRate') : `${recipe.basePercent}%`;
     const price = recipe.zenPerFinalPercentage > 0 ? t('costFormula', recipe.fixedZen, recipe.zenPerFinalPercentage) : String(recipe.fixedZen);
     return [`${name(recipe)}: ${item}${excellent}`, vi() ? recipe.npcVi : recipe.npcEn, `${chance} / ${recipe.maximumPercent}%`, price];

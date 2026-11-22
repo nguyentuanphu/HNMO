@@ -39,8 +39,12 @@ public sealed class WebsitePolicyFieldsTests
                     .Add(value => value.Value, settings.ServerClientRulesEn)
                     .Add(value => value.ValueExpression, () => settings.ServerClientRulesEn)
                     .Add(value => value.ValueChanged, value => settings.ServerClientRulesEn = value)));
-            Assert.That(component.Find("label").TextContent.Trim(), Is.EqualTo(WebsiteServerPageLabels.ClientRulesEn));
+            var label = component.Find("label");
+            var caption = label.ChildNodes.First(node => node.NodeType == AngleSharp.Dom.NodeType.Text && !string.IsNullOrWhiteSpace(node.TextContent)).TextContent.Trim();
+            Assert.That(caption, Is.EqualTo(WebsiteServerPageLabels.ClientRulesEn));
+            Assert.That(component.Find("label .alert").TextContent.Trim(), Is.EqualTo(WebsiteServerPageLabels.Description));
             Assert.That(component.FindAll("input"), Is.Empty);
+            Assert.That(component.Find("textarea").GetAttribute("title"), Is.EqualTo(WebsiteServerPageLabels.Description));
             component.Find("textarea").Change("First rule.\nSecond rule.");
             Assert.That(settings.ServerClientRulesEn, Is.EqualTo("First rule.\nSecond rule."));
         }

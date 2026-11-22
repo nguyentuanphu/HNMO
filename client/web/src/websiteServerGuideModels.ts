@@ -18,7 +18,7 @@ export interface ServerGuideView {
 }
 
 export interface GuideQuest { nameEn: string; nameVi: string; npcEn: string; npcVi: string; minimumLevel: number; maximumLevel: number; requiredStartMoney: number; classEn: string; classVi: string }
-export interface GuideCraft { nameEn: string; nameVi: string; npcEn: string; npcVi: string; itemEn: string; itemVi: string; randomMinimumLevel: number; randomMaximumLevel: number; addLevel: number; upgrade: boolean; basePercent: number | null; maximumPercent: number; fixedZen: number; zenPerFinalPercentage: number; excellentChance: number; maximumExcellentOptions: number }
+export interface GuideCraft { nameEn: string; nameVi: string; npcEn: string; npcVi: string; itemEn: string; itemVi: string; randomMinimumLevel: number; randomMaximumLevel: number; addLevel: number; upgrade: boolean; basePercent: number | null; maximumPercent: number; fixedZen: number; zenPerFinalPercentage: number; excellentChance: number | null; maximumExcellentOptions: number }
 export interface ServerGuideExtras {
   systems: { antiCheatEnabled: boolean; activityLogEnabled: boolean; onlyValuableDrops: boolean };
   quests: GuideQuest[]; questsTruncated: boolean; crafts: GuideCraft[]; craftsTruncated: boolean;
@@ -78,7 +78,7 @@ function quest(value: unknown): GuideQuest {
 }
 function craft(value: unknown): GuideCraft {
   const row = object(value);
-  return { ...names(row), npcEn: text(row.npcEn), npcVi: text(row.npcVi), itemEn: nullableText(row.itemEn), itemVi: nullableText(row.itemVi), randomMinimumLevel: number(row.randomMinimumLevel), randomMaximumLevel: number(row.randomMaximumLevel), addLevel: number(row.addLevel), upgrade: flag(row.upgrade), basePercent: row.basePercent === null ? null : number(row.basePercent), maximumPercent: number(row.maximumPercent), fixedZen: number(row.fixedZen), zenPerFinalPercentage: number(row.zenPerFinalPercentage), excellentChance: number(row.excellentChance), maximumExcellentOptions: number(row.maximumExcellentOptions) };
+  return { ...names(row), npcEn: text(row.npcEn), npcVi: text(row.npcVi), itemEn: nullableText(row.itemEn), itemVi: nullableText(row.itemVi), randomMinimumLevel: number(row.randomMinimumLevel), randomMaximumLevel: number(row.randomMaximumLevel), addLevel: number(row.addLevel), upgrade: flag(row.upgrade), basePercent: row.basePercent === null ? null : number(row.basePercent), maximumPercent: number(row.maximumPercent), fixedZen: number(row.fixedZen), zenPerFinalPercentage: number(row.zenPerFinalPercentage), excellentChance: row.excellentChance === null ? null : number(row.excellentChance), maximumExcellentOptions: number(row.maximumExcellentOptions) };
 }
 function extras(value: unknown): ServerGuideExtras {
   const row = object(value); const systems = object(row.systems);

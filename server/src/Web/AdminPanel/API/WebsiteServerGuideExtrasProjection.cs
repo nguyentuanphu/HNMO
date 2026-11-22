@@ -34,7 +34,7 @@ public static class WebsiteServerGuideExtrasProjection
             classEn = quest.QualifiedCharacter?.Name.GetTranslation(CultureInfo.GetCultureInfo("en")),
             classVi = quest.QualifiedCharacter?.Name.GetTranslation(CultureInfo.GetCultureInfo("vi")),
         })).Take(MaximumRows + 1).ToArray();
-        var crafts = npcs.SelectMany(npc => npc.ItemCraftings.Where(recipe => recipe.SimpleCraftingSettings is not null && string.IsNullOrWhiteSpace(recipe.ItemCraftingHandlerClassName))
+        var crafts = npcs.SelectMany(npc => npc.ItemCraftings.Where(WebsiteCraftingQuote.UsesSettings)
             .SelectMany(recipe => recipe.SimpleCraftingSettings!.ResultItems.Where(result => result.ItemDefinition is { IsActive: true } || result.Reference != 0).Select(result => Craft(npc, recipe, result))))
             .Take(MaximumRows + 1).ToArray();
         return new
@@ -66,7 +66,7 @@ public static class WebsiteServerGuideExtrasProjection
             maximumPercent = settings.MaximumSuccessPercent > 0 ? Math.Min((int)settings.MaximumSuccessPercent, FullPercentage) : FullPercentage,
             fixedZen = settings.Money,
             zenPerFinalPercentage = settings.MoneyPerFinalSuccessPercentage,
-            excellentChance = settings.ResultItemExcellentOptionChance,
+            excellentChance = WebsiteCraftingQuote.UsesSettingsExcellentRoll(recipe) ? (int?)settings.ResultItemExcellentOptionChance : null,
             maximumExcellentOptions = settings.ResultItemMaxExcOptionCount,
         };
     }
