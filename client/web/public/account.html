@@ -66,12 +66,12 @@
 <link rel="stylesheet" href="/website-shell.css">
 <script type="module" src="/js/websiteShellEntry.js"></script>
 </head>
-<body data-page-label="Account">
+<body data-website-page="account" data-page-label="Account">
   <main>
     <header>
       <h1 data-game-name></h1>
       <a href="/">Play the game →</a>
-      <span role="group" aria-label="Page language" style="display:inline-flex;gap:6px"><button type="button" data-site-language="en">English</button><button type="button" data-site-language="vi">Tiếng Việt</button></span>
+      <span role="group" aria-label="Page language" style="display:inline-flex;gap:6px"><button type="button" data-site-language="en" data-account-language="en">English</button><button type="button" data-site-language="vi" data-account-language="vi">Tiếng Việt</button></span>
     </header>
 
     <section class="panel" id="accountLoginPanel" data-no-i18n>
@@ -137,10 +137,9 @@
     </section>
 
     <section id="accountRegistration" hidden>
-      <header><h2 data-auth-text="register">Create an account</h2><button type="button" id="accountReturnSignIn" data-auth-text="backSignIn">Back to sign in</button></header>
+      <header><h2 id="accountRegisterTitle" data-auth-text="register">Create an account</h2><button type="button" id="accountReturnSignIn" data-auth-text="backSignIn">Back to sign in</button></header>
       <div class="grid">
-      <form class="panel" id="registerForm">
-        <h2>Create an account</h2>
+      <form class="panel" id="registerForm" aria-labelledby="accountRegisterTitle">
         <p id="welcomeCoins">New accounts get free cash shop coins.</p>
         <label>Account name <input id="loginName" name="loginName" required minlength="3" maxlength="10" pattern="[!-~]{3,10}" autocomplete="username"></label>
         <label>Password <input id="password" name="password" type="password" required minlength="3" maxlength="20" autocomplete="new-password"></label>

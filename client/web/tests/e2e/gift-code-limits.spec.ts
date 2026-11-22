@@ -1,3 +1,4 @@
+import { websiteAccountFixture, signInWebsiteFixture } from './fixtures/websiteAccount.js';
 import { test, expect } from '@playwright/test';
 import { fileURLToPath } from 'node:url';
 
@@ -19,10 +20,9 @@ for (const language of ['en', 'vi'] as const) {
       calls.push(route.request().postDataJSON() as Record<string, string>);
       return route.fulfill({ json: { result, character: 'Ann' } });
     });
+    await websiteAccountFixture(page, 'ann', 'secret');
     await page.goto('/account.html#gift');
-    await page.fill('#giftAccount', 'ann');
-    await page.fill('#giftPassword', 'secret');
-    await page.locator('#giftLogin button').click();
+    await signInWebsiteFixture(page, 'ann', 'secret');
     await expect(page.locator('#giftForm')).toBeVisible();
     await page.fill('#giftCode', 'GIFT');
     await page.locator('#giftForm button').click();

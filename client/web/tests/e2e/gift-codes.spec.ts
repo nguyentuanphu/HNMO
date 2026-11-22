@@ -1,3 +1,4 @@
+import { websiteAccountFixture, signInWebsiteFixture } from './fixtures/websiteAccount.js';
 // HNMO's gift codes in the web game and on the website. The gift code window (the community window's button, the touch
 // "more" menu, /code without a code) sends the code (HnmoGiftCodesAction) and shows the state the server sends
 // (HnmoGiftCodesState, C2 F5 1B): the result of the code, the rewards waiting for room in the bag with Take, and the
@@ -205,7 +206,7 @@ test('the website: the public codes on the home page and a code entered on the a
   await page.route('**/portal/gift-codes/characters', async (route) => {
     const body = route.request().postDataJSON() as Record<string, string>;
     calls.push({ url: 'characters', body });
-    if (body.password !== 'test7') return route.fulfill({ status: 401, json: { error: 'login' } });
+    expect(route.request().headers()['x-hnmo-session']).toBe('1'); expect(body).not.toHaveProperty('password');
     return route.fulfill({ json: { loginName: 'test7', characters: [{ name: 'test7Dk', level: 60, resets: 1, cls: 4, className: 'Dark Knight' }, { name: 'test7Elf', level: 12, resets: 0, cls: 8, className: 'Fairy Elf' }] } });
   });
   await page.route('**/portal/gift-codes/redeem', async (route) => {
@@ -215,16 +216,14 @@ test('the website: the public codes on the home page and a code entered on the a
     return route.fulfill({ json: { v: 1, result: 'Invalid', character: body.character, triesLeft: 4 } });
   });
   await page.evaluate(() => { try { localStorage.setItem('hnmo.language', 'en'); } catch { /* none */ } });
+  await websiteAccountFixture(page, 'test7', 'test7');
   await page.goto('/account.html#gift');
   const gift = page.locator('#gift');
   await expect(gift.locator('h2')).toHaveText('Gift code');
-  await page.fill('#giftAccount', 'test7');
-  await page.fill('#giftPassword', 'wrong');
-  await gift.locator('#giftLogin button').click();
-  await expect(page.locator('#giftMessage')).toHaveText('Wrong account name or password.');
-  await expect(page.locator('#giftForm')).toBeHidden();
-  await page.fill('#giftPassword', 'test7');
-  await gift.locator('#giftLogin button').click();
+  await page.fill('#accountUser', 'test7'); await page.fill('#accountSecret', 'wrong');
+  await page.locator('#accountSignInButton').click();
+  await expect(page.locator('#accountMessage')).toContainText('incorrect');
+  await signInWebsiteFixture(page, 'test7', 'test7');
   await expect(page.locator('#giftForm')).toBeVisible();
   await expect(page.locator('#giftCharacter option')).toHaveText(['test7Dk (level 60, resets 1)', 'test7Elf (level 12, resets 0)']);
   await page.selectOption('#giftCharacter', 'test7Elf');
@@ -234,7 +233,7 @@ test('the website: the public codes on the home page and a code entered on the a
   await page.fill('#giftCode', 'welcome2026');
   await gift.locator('#giftForm button').click();
   await expect(page.locator('#giftMessage')).toHaveText('Gift code WELCOME2026 accepted for test7Elf: 100 Goblin Points + 20,000 zen + Jewel of Bless x1.');
-  expect(calls.at(-1)).toEqual({ url: 'redeem', body: { loginName: 'test7', password: 'test7', character: 'test7Elf', code: 'welcome2026', deviceId: expect.any(String) } });
+  expect(calls.at(-1)).toEqual({ url: 'redeem', body: { character: 'test7Elf', code: 'welcome2026', deviceId: expect.any(String) } });
   await gift.scrollIntoViewIfNeeded();
   await page.screenshot({ path: 'test-results/gift-codes-account.png' });
 

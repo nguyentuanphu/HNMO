@@ -291,7 +291,8 @@ async function showSignedIn(): Promise<void> {
   element('registerForm').hidden = true; element('setupPanel').hidden = true;
   element('playLogin').hidden = true; element('playSignedIn').hidden = false; element('playSignedName').textContent = snapshot?.loginName ?? '';
   if (new URLSearchParams(location.search).get('play') === '1') { await enterGame().catch(() => showMessage('serverError')); return; }
-  const requested = location.hash.slice(1);
+  const hash = location.hash.slice(1);
+  const requested = ({ gift: 'rewards', safety: 'security', play: 'overview' } as Readonly<Record<string, string>>)[hash] ?? hash;
   await openSection(accountSections().some(s => s.id === requested) ? requested : 'overview');
 }
 
@@ -333,7 +334,7 @@ function mount(): void {
     try {
       const response = await signInWebsite(element<HTMLInputElement>('accountUser').value, element<HTMLInputElement>('accountSecret').value);
       if (epoch !== authEpoch) return;
-      if (!response.ok) { showMessage(response.status === 401 ? 'loginError' : 'serverError'); return; }
+      if (!response.ok) { showMessage(response.status === 401 ? 'loginError' : response.status === 503 ? 'setupError' : response.status === 429 ? 'rateError' : 'serverError'); return; }
       credentials = { loginName: element<HTMLInputElement>('accountUser').value, password: 'session' };
       if (!await refresh()) { credentials = null; snapshot = null; renderNavigation(); return; }
       element<HTMLFormElement>('accountSignIn').reset();
@@ -370,5 +371,16 @@ function passwordChanged(): void {
 mount();
 window.addEventListener('hnmo-account-ready', () => { void restoreSession().catch(() => showMessage('serverError')); });
 window.addEventListener('hnmo-session-expired', () => { credentials = null; snapshot = null; generation++; element('accountDashboard').hidden = true; element('accountPanels').hidden = true; element('accountLoginPanel').hidden = false; showMessage('loginError'); });
+window.addEventListener('hnmo-website-session-changed', () => {
+  authEpoch++; generation++; snapshot = null; credentials = null;
+  element('accountDashboard').hidden = true; element('accountPanels').hidden = true;
+  location.reload();
+});
+window.addEventListener('pageshow', event => {
+  if (!event.persisted) return;
+  authEpoch++; generation++; snapshot = null; credentials = null; loadedLegacy.clear();
+  element('accountDashboard').hidden = true; element('accountPanels').hidden = true; element('accountLoginPanel').hidden = false;
+  void restoreSession().catch(() => showMessage('serverError'));
+});
 void restoreSession().catch(() => showMessage('serverError'));
 void loadGameName().then(() => translate());

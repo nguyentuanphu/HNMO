@@ -1,3 +1,4 @@
+import { websiteAccountFixture } from './fixtures/websiteAccount.js';
 import { expect, test, type Page } from '@playwright/test';
 
 function makeState(language: 'en' | 'vi', status: string | null = null, collected = false) {
@@ -58,6 +59,7 @@ async function mockAccountRewards(page: Page, language: 'en' | 'vi'): Promise<vo
   await page.route('**/portal/login-ticket', route => route.fulfill({ json: { loginName: 'ann', ticket: 't', expiresInSeconds: 60 } }));
   await page.route('**/portal/topup-milestones/account', route => route.fulfill({ json: { enabled: false, totalVnd: 0, nextThresholdVnd: null, steps: [] } }));
   await page.route('**/website/event-alerts', route => route.fulfill({ json: { off: true, leadTimeMinutes: 5, categories: [], vapidPublicKey: '' } }));
+  await websiteAccountFixture(page, 'ann', 'secret');
   await page.route('**/portal/account/overview', route => route.fulfill({
     json: {
       loginName: 'ann',

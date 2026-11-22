@@ -24,7 +24,7 @@ export class AccountIntegrations {
     const hints: Readonly<Record<string, readonly [string, string]>> = {
       playNowButton: ['Create a one-time ticket and enter the game.', 'Tạo vé đăng nhập dùng một lần rồi vào game.'],
       playSignInButton: ['Connect your signed-in account to the game.', 'Kết nối tài khoản đã đăng nhập với game.'],
-      playSignOutButton: ['Sign out of the account page and clear this tab’s credentials.', 'Đăng xuất khỏi trang tài khoản và xóa thông tin đăng nhập trong thẻ này.'],
+      playSignOutButton: ['Sign out of this website in this browser.', 'Đăng xuất khỏi website trong trình duyệt này.'],
       playAccount: ['Your game account name.', 'Tên tài khoản game của bạn.'],
       playPassword: ['Your current game password.', 'Mật khẩu tài khoản game hiện tại.'],
     };

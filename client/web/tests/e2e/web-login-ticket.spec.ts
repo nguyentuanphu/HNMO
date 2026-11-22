@@ -1,3 +1,4 @@
+import { websiteAccountFixture } from './fixtures/websiteAccount.js';
 import { test, expect } from '@playwright/test';
 import { expectNoPageErrors } from './helpers.js';
 
@@ -6,7 +7,7 @@ test('website sign-in -> Play now opens the game with a ticket in fragment and c
   page.on('pageerror', (error) => errors.push(error.message));
 
   await page.route('**/portal/login-ticket', async (route) => {
-    expect(route.request().postDataJSON()).toEqual({ loginName: 'test8', password: 'test8' });
+    expect(route.request().postDataJSON()).not.toHaveProperty('password'); expect(route.request().headers()['x-hnmo-session']).toBe('1');
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -19,6 +20,7 @@ test('website sign-in -> Play now opens the game with a ticket in fragment and c
     vipLevel: 0, characters: [], history: [], page: 0, hasMore: false,
   } }));
 
+  await websiteAccountFixture(page, 'test8', 'test8');
   await page.goto('/account.html#play');
   await page.fill('#accountUser', 'test8');
   await page.fill('#accountSecret', 'test8');

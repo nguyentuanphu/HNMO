@@ -226,7 +226,7 @@ test('another feature can register a bilingual account section without editing t
   }, '/js/accountSections.js');
   await page.locator('#accountNav').getByRole('button', { name: 'Extra rewards' }).click();
   await expect(page.locator('#extension-fixture')).toBeVisible();
-  await page.locator('#accountToolbar [data-account-language="vi"]').click();
+  await page.locator('header [data-account-language="vi"]').click();
   await expect(page.locator('#accountNav').getByRole('button', { name: 'Quà bổ sung' })).toHaveAttribute('aria-current', 'true');
 });
 

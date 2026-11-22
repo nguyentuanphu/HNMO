@@ -2,17 +2,17 @@ import { expect, test, type Page } from '@playwright/test';
 
 async function sessionFixture(page: Page, signedIn: boolean): Promise<{ calls: string[] }> {
   const calls: string[] = [];
-  await page.route('**/game-name.json', route => route.fulfill({ json: { name: 'HNMO' } }));
-  await page.route('**/website/**', route => route.fulfill({ status: 503 }));
-  await page.route('**/website/settings', route => route.fulfill({ json: {} }));
-  await page.route('**/portal/status', route => route.fulfill({ json: { ready: true } }));
-  await page.route('**/portal/session', async route => {
+  await page.context().route('**/game-name.json', route => route.fulfill({ json: { name: 'HNMO' } }));
+  await page.context().route('**/website/**', route => route.fulfill({ status: 503 }));
+  await page.context().route('**/website/settings', route => route.fulfill({ json: {} }));
+  await page.context().route('**/portal/status', route => route.fulfill({ json: { ready: true } }));
+  await page.context().route('**/portal/session', async route => {
     const method = route.request().method(); calls.push(method);
     if (method === 'POST') { expect(route.request().postDataJSON()).toEqual({ loginName: 'ann', password: 'secret' }); signedIn = true; }
     if (method === 'DELETE') signedIn = false;
     await route.fulfill({ json: { authenticated: signedIn } });
   });
-  await page.route('**/portal/account/**', async route => {
+  await page.context().route('**/portal/account/**', async route => {
     expect(route.request().headers()['x-hnmo-session']).toBe('1');
     expect(route.request().postDataJSON()).not.toHaveProperty('password');
     expect(route.request().postDataJSON()).not.toHaveProperty('loginName');
@@ -20,13 +20,13 @@ async function sessionFixture(page: Page, signedIn: boolean): Promise<{ calls: s
     if (route.request().url().endsWith('/overview')) return route.fulfill({ json: { loginName: 'ann', accountOnline: false, balances: { wCoinC: 250, wCoinP: 0, goblinPoints: 20 }, vipLevel: 0, characters: [], history: [], page: 0, hasMore: false } });
     return route.fulfill({ json: { enabled: false } });
   });
-  await page.route('**/portal/login-ticket', async route => {
+  await page.context().route('**/portal/login-ticket', async route => {
     expect(route.request().headers()['x-hnmo-session']).toBe('1');
     expect(route.request().postDataJSON()).not.toHaveProperty('password');
     expect(signedIn).toBe(true); calls.push('ticket');
     return route.fulfill({ json: { loginName: 'ann', ticket: 'single-use-fixture' } });
   });
-  await page.route(url => url.pathname === '/index.html', route => route.fulfill({ contentType: 'text/html', body: '<main id="game-arrival">Game ticket arrival</main>' }));
+  await page.context().route(url => url.pathname === '/index.html', route => route.fulfill({ contentType: 'text/html', body: '<main id="game-arrival">Game ticket arrival</main>' }));
   return { calls };
 }
 
@@ -39,11 +39,14 @@ for (const width of [390, 1440]) for (const language of ['en', 'vi'] as const) {
     await expect(page.locator('#accountLoginPanel')).toBeVisible();
     for (const id of ['accountDashboard', 'accountPanels', 'accountRegistration', 'gift', 'resets', 'safety', 'play']) await expect(page.locator('#' + id)).toBeHidden();
     await expect(page.getByRole('button', { name: /Apple/i })).toHaveCount(0);
+    await page.screenshot({ path: `docs/screenshots/account-flow/sign-in-${language}-${width}.png` });
     await page.locator('#accountCreateButton').click(); await expect(page.locator('#registerForm')).toBeVisible();
+    await page.screenshot({ path: `docs/screenshots/account-flow/register-${language}-${width}.png` });
     await expect(page.locator('#accountPanels')).toBeHidden();
     await page.locator('#accountReturnSignIn').click();
     await page.locator('#accountUser').fill('ann'); await page.locator('#accountSecret').fill('secret');
     await page.locator('#accountSignInButton').click(); await expect(page.locator('#account-overview')).toBeVisible();
+    await page.screenshot({ path: `docs/screenshots/account-flow/profile-${language}-${width}.png` });
     await expect(page.locator('#playLogin')).toBeHidden(); await expect(page.locator('#playNowButton')).toBeVisible();
     expect(fixture.calls.filter(x => x === 'POST')).toHaveLength(1);
     await page.goto('/home.html');
@@ -91,4 +94,51 @@ test('Google creation and existing Google password recovery both lead to the sam
   await page.locator('#google-fixture').click(); await expect(page.locator('#google-linked')).toBeVisible();
   await page.locator('#google-linked input').fill('secret'); await page.locator('#google-linked button').click();
   await expect(page.locator('#account-overview')).toBeVisible(); expect(recovered).toBe(true);
+});
+
+
+test('signed-out Enter game asks once then consumes a server ticket without a second login', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const fixture = await sessionFixture(page, false);
+  await page.goto('/home.html'); await page.locator('.hero a[data-enter-game]').click();
+  await expect(page).toHaveURL(/account\.html\?play=1/);
+  await expect(page.locator('#accountDashboard')).toBeHidden();
+  await page.locator('#accountUser').fill('ann'); await page.locator('#accountSecret').fill('secret');
+  await page.locator('#accountSignInButton').click(); await expect(page.locator('#game-arrival')).toBeVisible();
+  expect(fixture.calls.filter(value => value === 'POST')).toHaveLength(1);
+  expect(fixture.calls.filter(value => value === 'ticket')).toHaveLength(1);
+});
+
+test('an unavailable session check asks to retry rather than forcing another login', async ({ page }) => {
+  const fixture = await sessionFixture(page, true); let unavailable = true;
+  await page.route('**/portal/session', route => unavailable && route.request().method() === 'GET' ? route.fulfill({ status: 503 }) : route.fallback());
+  await page.goto('/home.html'); await page.locator('.hero a[data-enter-game]').click();
+  await expect(page.locator('.website-entry-status')).toContainText('Try again');
+  await expect(page).toHaveURL(/home\.html$/);
+  unavailable = false; await page.locator('.hero a[data-enter-game]').click();
+  await expect(page.locator('#game-arrival')).toBeVisible(); expect(fixture.calls).not.toContain('POST'); expect(fixture.calls).not.toContain('DELETE');
+});
+
+test('each existing public page has a floating route to the home top', async ({ page }) => {
+  await sessionFixture(page, false);
+  await page.route('**/js/main.js', route => route.fulfill({ body: '', contentType: 'text/javascript' }));
+  for (const route of ['/home.html', '/account.html', '/topup.html', '/guide.html', '/calculator.html']) {
+    await page.goto(route); const home = page.locator('.website-back-home');
+    await expect(home).toBeVisible(); await expect(home).toHaveAttribute('href', '/home.html');
+    await home.click(); await expect(page).toHaveURL(/home\.html$/);
+  }
+});
+
+
+test('signing in and out updates other open account tabs without another password', async ({ page, context }) => {
+  const fixture = await sessionFixture(page, false);
+  await page.goto('/account.html');
+  const other = await context.newPage();
+  const ready = other.waitForResponse(response => response.url().endsWith('/portal/session') && response.request().method() === 'GET');
+  await other.goto('/account.html'); await ready;
+  await page.locator('#accountUser').fill('ann'); await page.locator('#accountSecret').fill('secret'); await page.locator('#accountSignInButton').click();
+  await expect(page.locator('#account-overview')).toBeVisible(); await expect(other.locator('#account-overview')).toBeVisible();
+  expect(fixture.calls.filter(call => call === 'POST')).toHaveLength(1);
+  await page.locator('#accountLogout').click(); await expect(other.locator('#accountLoginPanel')).toBeVisible();
+  await expect(other.locator('#accountDashboard')).toBeHidden(); await expect(other.locator('#accountPanels')).not.toContainText('250');
 });

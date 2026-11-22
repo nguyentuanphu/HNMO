@@ -2,6 +2,7 @@ import { loadWebsiteSettings } from './websiteTheme.js';
 import { signInWebsite } from './websiteSession.js';
 
 const copy = {
+  registerHint: ['Choose a new account name and password.', 'Chọn tên tài khoản và mật khẩu mới.'], backHint: ['Return to the account sign-in screen.', 'Về màn hình đăng nhập tài khoản.'], passwordHint: ['Set the game password for your verified Google account.', 'Đặt mật khẩu game cho tài khoản Google đã xác minh.'],
   register: ['Create an account', 'Tạo tài khoản'], backSignIn: ['Back to sign in', 'Về đăng nhập'], newHere: ['No account yet?', 'Bạn chưa có tài khoản?'],
   emailLater: ['Add a verified email in your profile after registration.', 'Thêm email đã xác minh trong hồ sơ sau khi đăng ký.'],
   error: ['Check the account name and password, then try again.', 'Kiểm tra tên tài khoản và mật khẩu rồi thử lại.'],
@@ -16,6 +17,7 @@ const copy = {
   setupSaved: ['Saved. Registration is ready.', 'Đã lưu. Có thể đăng ký tài khoản.'],
 } as const;
 let googleCredential = '';
+let renderGoogle: (() => void) | null = null;
 function vi(): boolean { return document.documentElement.lang === 'vi'; }
 function t(key: keyof typeof copy): string { return copy[key][vi() ? 1 : 0]; }
 function el<T extends HTMLElement>(id: string): T { return document.getElementById(id) as T; }
@@ -26,11 +28,14 @@ function view(register: boolean): void {
   if (register) el<HTMLInputElement>('loginName').focus(); else el<HTMLInputElement>('accountUser').focus();
 }
 function translate(): void {
+  renderGoogle?.();
+  for (const node of document.querySelectorAll<HTMLElement>('[data-auth-title]')) { const key = node.dataset.authTitle as keyof typeof copy; if (key in copy) node.title = t(key); }
   for (const node of document.querySelectorAll<HTMLElement>('[data-auth-text]')) {
     const key = node.dataset.authText as keyof typeof copy;
     if (key in copy) node.textContent = t(key);
   }
 }
+el('accountCreateButton').dataset.authTitle = 'registerHint'; el('accountReturnSignIn').dataset.authTitle = 'backHint';
 translate(); new MutationObserver(translate).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
 el('accountCreateButton').onclick = () => { googleCredential = ''; view(true); };
 el('accountReturnSignIn').onclick = () => view(false);
@@ -77,14 +82,16 @@ async function setupGoogle(): Promise<void> {
       }).catch(() => { el('google-message').textContent = t('error'); });
     } });
     const root = el('google-button'); root.hidden = false;
-    google.accounts.id.renderButton(root, { theme: 'filled_black', size: 'large', text: 'signup_with', locale: vi() ? 'vi' : 'en' });
+    let previousLocale = '';
+    renderGoogle = () => { const locale = vi() ? 'vi' : 'en'; if (previousLocale === locale) return; previousLocale = locale; root.replaceChildren(); google.accounts.id.renderButton(root, { theme: 'filled_black', size: 'large', text: 'signup_with', locale }); };
+    renderGoogle();
   };
   document.head.append(script);
 }
 const reset = document.createElement('form'); reset.id = 'google-linked'; reset.hidden = true;
 const label = document.createElement('label'); const text = document.createElement('span'); text.dataset.authText = 'newPassword';
 const password = document.createElement('input'); password.type = 'password'; password.minLength = 3; password.maxLength = 20; password.required = true; password.autocomplete = 'new-password';
-const save = document.createElement('button'); save.type = 'submit'; save.dataset.authText = 'setPassword'; label.append(text, password); reset.append(label, save); el('accountGoogle').append(reset); translate();
+const save = document.createElement('button'); save.type = 'submit'; save.dataset.authText = 'setPassword'; save.dataset.authTitle = 'passwordHint'; password.dataset.authTitle = 'passwordHint'; label.append(text, password); reset.append(label, save); el('accountGoogle').append(reset); translate();
 reset.onsubmit = event => { event.preventDefault(); save.disabled = true; const next = password.value; void post('/portal/google', { credential: googleCredential, newPassword: next }).then(answer => {
   if (typeof answer.loginName !== 'string') throw new Error(t('error')); return finish(answer.loginName, next);
 }).catch(() => { el('google-message').textContent = t('error'); }).finally(() => { password.value = ''; save.disabled = false; }); };
