@@ -974,4 +974,6 @@
   <data name="SeasonNineSharedItemsUpdatePlugIn_Description" xml:space="preserve"><value>Wendet im Season-9-Betrieb die Season-9-Werte auf gemeinsame Gegenstände an (Cape of Fighter Drop-Stufe 150, Cape of Lord Stufenanforderung 150, native 255er-Trankstapel); angepasste Werte bleiben erhalten.</value></data>
   <data name="SeasonNineOnlyItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Season-9-Gegenstände hinzufügen</value></data>
   <data name="SeasonNineOnlyItemsUpdatePlugIn_Description" xml:space="preserve"><value>Fügt im Season-9-Betrieb die 279 einzigartigen Season-9-Gegenstandsdefinitionen hinzu (Sockelwaffen, Schilde, Rüstungssets, Flügel, Pentagramme, Zubehör, Muun-Begleiter und Herstellungsmaterialien); vorhandene Gegenstände bleiben unverändert.</value></data>
+  <data name="SeasonNineSocketOptionsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Sockeloptionswerte</value></data>
+  <data name="SeasonNineSocketOptionsUpdatePlugIn_Description" xml:space="preserve"><value>Setzt im Season-9-Betrieb Wasser-Schildschutz Stufe 5 auf 30 %, Wind-Max-AG auf 50/70/90/110/130 und Wind-AG-Erholung auf 5/7/9/11/13; angepasste Werte bleiben erhalten.</value></data>
 </root>

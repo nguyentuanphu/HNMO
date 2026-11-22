@@ -476,4 +476,6 @@
   <data name="SeasonNineSharedItemsUpdatePlugIn_Description" xml:space="preserve"><value>Applies the Season 9 values on shared items (Cape of Fighter drop level 150, Cape of Lord level requirement 150, native 255 potion stacks) when running as Season 9, leaving customized values unchanged.</value></data>
   <data name="SeasonNineOnlyItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: add Season 9 items</value></data>
   <data name="SeasonNineOnlyItemsUpdatePlugIn_Description" xml:space="preserve"><value>Adds the 279 unique Season 9 item definitions (socket weapons, shields, armor sets, wings, pentagrams, accessories, Muun companions, and crafting materials) when running as Season 9, leaving existing items unchanged.</value></data>
+  <data name="SeasonNineSocketOptionsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: socket option values</value></data>
+  <data name="SeasonNineSocketOptionsUpdatePlugIn_Description" xml:space="preserve"><value>Sets Water socket shield protection level 5 to 30 %, Wind Maximum AG to 50/70/90/110/130, and Wind AG value to 5/7/9/11/13 when running as Season 9, leaving customized values unchanged.</value></data>
 </root>
