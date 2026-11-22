@@ -181,7 +181,7 @@
     <value>Berserker Proficiency Multiplier (MST)</value>
   </data>
   <data name="Description_BerserkerProficiencyMultiplierMST" xml:space="preserve">
-    <value>The berserker proficiency damage multiplier which is added to the wizardry multiplier but also by itself is multiplied by the wizardry/curse final damage and added to it.</value>
+    <value>The berserker proficiency damage multiplier added to the wizardry multiplier.</value>
   </data>
   <data name="Name_BerserkerWizardryMultiplier" xml:space="preserve">
     <value>Berserker Wizardry Multiplier</value>
