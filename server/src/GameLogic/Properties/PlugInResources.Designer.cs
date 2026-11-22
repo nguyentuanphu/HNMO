@@ -4684,6 +4684,36 @@ namespace HNMO.GameLogic.Properties {
         /// <summary>Gets the localized SymbolOfKundunStackedPlugIn_Description text.</summary>
         public static string SymbolOfKundunStackedPlugIn_Description => ResourceManager.GetString("SymbolOfKundunStackedPlugIn_Description", resourceCulture)!;
 
+        /// <summary>Gets the localized KundunHealthRefillPlugIn_Name text.</summary>
+        public static string KundunHealthRefillPlugIn_Name => ResourceManager.GetString("KundunHealthRefillPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized KundunHealthRefillPlugIn_Description text.</summary>
+        public static string KundunHealthRefillPlugIn_Description => ResourceManager.GetString("KundunHealthRefillPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized KundunHealthRefillConfiguration_MonsterNumber_Caption text.</summary>
+        public static string KundunHealthRefillConfiguration_MonsterNumber_Caption => ResourceManager.GetString("KundunHealthRefillConfiguration_MonsterNumber_Caption", resourceCulture)!;
+
+        /// <summary>Gets the localized KundunHealthRefillConfiguration_MonsterNumber_Description text.</summary>
+        public static string KundunHealthRefillConfiguration_MonsterNumber_Description => ResourceManager.GetString("KundunHealthRefillConfiguration_MonsterNumber_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized KundunHealthRefillConfiguration_HealthPerSecond_Caption text.</summary>
+        public static string KundunHealthRefillConfiguration_HealthPerSecond_Caption => ResourceManager.GetString("KundunHealthRefillConfiguration_HealthPerSecond_Caption", resourceCulture)!;
+
+        /// <summary>Gets the localized KundunHealthRefillConfiguration_HealthPerSecond_Description text.</summary>
+        public static string KundunHealthRefillConfiguration_HealthPerSecond_Description => ResourceManager.GetString("KundunHealthRefillConfiguration_HealthPerSecond_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized KundunHealthRefillConfiguration_HealthPerInterval_Caption text.</summary>
+        public static string KundunHealthRefillConfiguration_HealthPerInterval_Caption => ResourceManager.GetString("KundunHealthRefillConfiguration_HealthPerInterval_Caption", resourceCulture)!;
+
+        /// <summary>Gets the localized KundunHealthRefillConfiguration_HealthPerInterval_Description text.</summary>
+        public static string KundunHealthRefillConfiguration_HealthPerInterval_Description => ResourceManager.GetString("KundunHealthRefillConfiguration_HealthPerInterval_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized KundunHealthRefillConfiguration_Interval_Caption text.</summary>
+        public static string KundunHealthRefillConfiguration_Interval_Caption => ResourceManager.GetString("KundunHealthRefillConfiguration_Interval_Caption", resourceCulture)!;
+
+        /// <summary>Gets the localized KundunHealthRefillConfiguration_Interval_Description text.</summary>
+        public static string KundunHealthRefillConfiguration_Interval_Description => ResourceManager.GetString("KundunHealthRefillConfiguration_Interval_Description", resourceCulture)!;
+
         /// <summary>Gets the localized DuelSpawnGatePlugIn_Name text.</summary>
         public static string DuelSpawnGatePlugIn_Name => ResourceManager.GetString("DuelSpawnGatePlugIn_Name", resourceCulture)!;
 

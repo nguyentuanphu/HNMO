@@ -1404,6 +1404,36 @@
   <data name="SymbolOfKundunStackedPlugIn_Description" xml:space="preserve">
     <value>Plugin này biến một chồng Symbol of Kundun thành Lost Map.</value>
   </data>
+  <data name="KundunHealthRefillPlugIn_Name" xml:space="preserve">
+    <value>Kundun hồi máu</value>
+  </data>
+  <data name="KundunHealthRefillPlugIn_Description" xml:space="preserve">
+    <value>Kundun (Kalima 7) hồi máu: 400 mỗi giây và 15.000 mỗi 10 phút, như trong bộ máy chủ Season 6/9.</value>
+  </data>
+  <data name="KundunHealthRefillConfiguration_MonsterNumber_Caption" xml:space="preserve">
+    <value>Số quái</value>
+  </data>
+  <data name="KundunHealthRefillConfiguration_MonsterNumber_Description" xml:space="preserve">
+    <value>Quái được hồi máu; 275 là Kundun ở Kalima 7.</value>
+  </data>
+  <data name="KundunHealthRefillConfiguration_HealthPerSecond_Caption" xml:space="preserve">
+    <value>Máu mỗi giây</value>
+  </data>
+  <data name="KundunHealthRefillConfiguration_HealthPerSecond_Description" xml:space="preserve">
+    <value>Lượng máu Kundun hồi mỗi giây (KundunRefillHPSec: 400).</value>
+  </data>
+  <data name="KundunHealthRefillConfiguration_HealthPerInterval_Caption" xml:space="preserve">
+    <value>Máu mỗi chu kỳ</value>
+  </data>
+  <data name="KundunHealthRefillConfiguration_HealthPerInterval_Description" xml:space="preserve">
+    <value>Lượng máu Kundun hồi mỗi chu kỳ (KundunRefillHP: 15.000).</value>
+  </data>
+  <data name="KundunHealthRefillConfiguration_Interval_Caption" xml:space="preserve">
+    <value>Chu kỳ</value>
+  </data>
+  <data name="KundunHealthRefillConfiguration_Interval_Description" xml:space="preserve">
+    <value>Bao lâu Kundun nhận lượng máu mỗi chu kỳ (KundunRefillHPTime: 600 giây). 0 là tắt.</value>
+  </data>
   <data name="DuelSpawnGatePlugIn_Name" xml:space="preserve">
     <value>Cổng xuất hiện khi đấu tay đôi</value>
   </data>
