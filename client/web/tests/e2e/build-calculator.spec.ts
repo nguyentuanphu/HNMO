@@ -30,7 +30,21 @@ test.describe('Website Stats / Build Calculator (ROADMAP 14.21)', () => {
       }
     });
 
-    const loaded = await page.evaluate(() => ({ hasDom: typeof document !== 'undefined' }));
-    expect(loaded.hasDom).toBe(true);
+    await page.route('**/website/settings', route => route.fulfill({ json: { theme: 'classic' } }));
+    await page.route('**/game-name.json', route => route.fulfill({ json: { name: 'HNMO calculator fixture' } }));
+    await page.goto('/calculator.html');
+    await expect(page.locator('#calc-class')).toHaveValue('16');
+    await page.locator('#calc-run').click();
+    await expect(page.locator('#calc-stats-grid')).toContainText('195');
+    await expect(page.locator('#calc-stats-grid')).toContainText(/2[,.]400/);
+    for (const width of [1280, 375]) {
+      await page.setViewportSize({ width, height: 900 });
+      await expect(page.locator('#calc-run')).toBeVisible();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    }
+    await page.locator('#calc-lang-vi').click();
+    await expect(page.locator('#calc-run')).toHaveText('Tính ngay');
+    await page.locator('#calc-run').click();
+    await expect(page.locator('#calc-stats-grid')).toContainText('195');
   });
 });

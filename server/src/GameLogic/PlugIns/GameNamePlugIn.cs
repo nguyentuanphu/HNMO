@@ -14,7 +14,7 @@ using HNMO.PlugIns;
 /// admin panel's public endpoint <c>api/game-name</c>.
 /// </summary>
 [PlugIn]
-[Display(Name = nameof(Properties.PlugInResources.GameNamePlugIn_Name), Description = nameof(Properties.PlugInResources.GameNamePlugIn_Description), ResourceType = typeof(Properties.PlugInResources))]
+[Display(Name = nameof(WebsiteBrandLabels.Caption), Description = nameof(WebsiteBrandLabels.Description), ResourceType = typeof(WebsiteBrandLabels))]
 [Guid("5B7E2C1A-9D43-4F6E-8A21-3C0F7D9B4E62")]
 public class GameNamePlugIn : IFeaturePlugIn, ISupportCustomConfiguration<GameNameConfiguration>, ISupportDefaultCustomConfiguration
 {

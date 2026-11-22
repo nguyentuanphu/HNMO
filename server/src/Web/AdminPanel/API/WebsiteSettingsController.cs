@@ -38,7 +38,8 @@ public class WebsiteSettingsController : Controller
     {
         this.Response.Headers.CacheControl = "no-cache";
         var config = await this.ReadAsync().ConfigureAwait(false);
-        return this.Json(new { googleClientId = config.GoogleClientId.Trim(), theme = config.Theme.ToString().ToLowerInvariant(), requireWebsiteLogin = config.RequireWebsiteLogin });
+        var brand = await PlugInSettings.ReadActiveAsync<GameNameConfiguration>(this._contextProvider, typeof(GameNamePlugIn), this.HttpContext.RequestAborted).ConfigureAwait(false) ?? new GameNameConfiguration();
+        return this.Json(new { googleClientId = config.GoogleClientId.Trim(), theme = config.Theme.ToString().ToLowerInvariant(), requireWebsiteLogin = config.RequireWebsiteLogin, brand = WebsiteBrand.FromConfiguration(brand) });
     }
 
     /// <summary>

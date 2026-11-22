@@ -301,18 +301,19 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
     // What the website's pages may know (the Google client id and whether website login is required); the admin path never leaves the server.
     private async Task<IResult> WebsiteSettingsAsync(HttpContext context)
     {
-        var (clientId, requireWebsiteLogin, theme) = await this.PublicSettingsAsync(context.RequestAborted).ConfigureAwait(false);
+        var (clientId, requireWebsiteLogin, theme, brand) = await this.PublicSettingsAsync(context.RequestAborted).ConfigureAwait(false);
         context.Response.Headers.CacheControl = "no-cache";
         return Results.Json(new
         {
             googleClientId = clientId ?? string.Empty,
             requireWebsiteLogin,
             theme,
+            brand,
             connectServerPort = options.ConnectServerPort > 0 ? options.ConnectServerPort : 44406,
         });
     }
 
-    private async Task<(string? GoogleClientId, bool RequireWebsiteLogin, string Theme)> PublicSettingsAsync(CancellationToken cancellationToken)
+    private async Task<(string? GoogleClientId, bool RequireWebsiteLogin, string Theme, IReadOnlyDictionary<string, string> Brand)> PublicSettingsAsync(CancellationToken cancellationToken)
     {
         try
         {
@@ -321,7 +322,7 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
             using var response = await http.GetAsync(new Uri(new Uri(options.ApiBaseUrl), "api/website/settings/public"), timeoutCts.Token).ConfigureAwait(false);
             if (!response.IsSuccessStatusCode)
             {
-                return (null, false, "classic");
+                return (null, false, "classic", new Dictionary<string, string>());
             }
 
             using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync(timeoutCts.Token).ConfigureAwait(false));
@@ -329,12 +330,31 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
             var googleClientId = root.TryGetProperty("googleClientId", out var value) && value.GetString() is { Length: > 0 } id ? id : null;
             var requireWebsiteLogin = root.TryGetProperty("requireWebsiteLogin", out var req) && req.ValueKind == JsonValueKind.True;
             var theme = root.TryGetProperty("theme", out var appearance) && appearance.ValueKind == JsonValueKind.String ? appearance.GetString() : null;
-            return (googleClientId, requireWebsiteLogin, theme ?? "classic");
+            return (googleClientId, requireWebsiteLogin, theme ?? "classic", ReadPublicBrand(root));
         }
         catch (Exception error) when (error is HttpRequestException or TaskCanceledException or JsonException || (error is OperationCanceledException && !cancellationToken.IsCancellationRequested))
         {
-            return (null, false, "classic");
+            return (null, false, "classic", new Dictionary<string, string>());
         }
+    }
+
+    // Only the documented public brand fields cross the bridge, never arbitrary settings JSON.
+    private static IReadOnlyDictionary<string, string> ReadPublicBrand(JsonElement root)
+    {
+        const int MaximumBrandValueLength = 500;
+        var result = new Dictionary<string, string>();
+        if (root.TryGetProperty("brand", out var brand) && brand.ValueKind == JsonValueKind.Object)
+        {
+            foreach (var key in new[] { "logoUrl", "accentColor", "backgroundColor", "panelColor", "textColor" })
+            {
+                if (brand.TryGetProperty(key, out var value) && value.ValueKind == JsonValueKind.String && value.GetString() is { } text && text.Length <= MaximumBrandValueLength)
+                {
+                    result[key] = text;
+                }
+            }
+        }
+
+        return result;
     }
 
     private Task<string?> GoogleClientIdAsync(CancellationToken cancellationToken) =>

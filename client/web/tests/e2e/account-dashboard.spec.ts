@@ -18,7 +18,7 @@ async function mockAccount(page: Page, language: 'en' | 'vi'): Promise<void> {
     return route.fulfill({ json: { authenticated: false } });
   });
   await page.route('**/portal/status', route => route.fulfill({ json: { ready: true } }));
-  await page.route('**/website/settings', route => route.fulfill({ json: {} }));
+  await page.route('**/website/settings', route => route.fulfill({ json: { theme: process.env.HNMO_TEST_WEBSITE_THEME ?? 'classic' } }));
   await page.route('**/portal/account/missions/state', route => route.fulfill({ json: { status: 'off', boardJson: null, characterOnline: false } }));
   await page.route('**/portal/account/vip/state', route => route.fulfill({ json: { enabled: false, active: null, offers: [], pending: null, daily: { available: false, claimed: false } } }));
   await page.route('**/portal/account/email/state', route => route.fulfill({ json: { enabled: false, email: 'old@example.test' } }));

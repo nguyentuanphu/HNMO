@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="Caption" xml:space="preserve"><value>Thương hiệu</value></data>
+  <data name="Description" xml:space="preserve"><value>Tên, logo và màu sắc website của bạn. Để trống màu để dùng màu của theme. Cấu hình áp dụng cho toàn website.</value></data>
+  <data name="LogoCaption" xml:space="preserve"><value>Logo website</value></data>
+  <data name="LogoDescription" xml:space="preserve"><value>Đường dẫn ảnh HTTPS hoặc đường dẫn trên website, ví dụ /images/logo.png. Để trống để chỉ hiện tên game.</value></data>
+  <data name="AccentCaption" xml:space="preserve"><value>Màu nhấn</value></data>
+  <data name="AccentDescription" xml:space="preserve"><value>Mã màu như #D9B773 cho điểm nhấn và nút; để trống để dùng màu của theme.</value></data>
+  <data name="BackgroundCaption" xml:space="preserve"><value>Màu nền</value></data>
+  <data name="BackgroundDescription" xml:space="preserve"><value>Màu nền website dạng #RRGGBB; để trống để dùng màu của theme.</value></data>
+  <data name="PanelCaption" xml:space="preserve"><value>Màu khung nội dung</value></data>
+  <data name="PanelDescription" xml:space="preserve"><value>Màu nền khung nội dung dạng #RRGGBB; để trống để dùng màu của theme.</value></data>
+  <data name="TextCaption" xml:space="preserve"><value>Màu chữ</value></data>
+  <data name="TextDescription" xml:space="preserve"><value>Màu chữ chính dạng #RRGGBB. Chọn màu dễ đọc trên nền khung nội dung; để trống để dùng màu của theme.</value></data>
+  <data name="ColorValidation" xml:space="preserve"><value>Nhập màu dạng #RRGGBB, ví dụ #D9B773, hoặc để trống.</value></data>
+  <data name="LogoLengthValidation" xml:space="preserve"><value>Địa chỉ logo không được dài quá {1} ký tự.</value></data>
+  <data name="LogoFormatValidation" xml:space="preserve"><value>Dùng địa chỉ ảnh HTTPS hoặc đường dẫn trên website này, hoặc để trống.</value></data>
+</root>

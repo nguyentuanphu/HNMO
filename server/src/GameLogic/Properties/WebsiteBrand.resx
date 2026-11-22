@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="Caption" xml:space="preserve"><value>Brand</value></data>
+  <data name="Description" xml:space="preserve"><value>The name, logo and colors of your website. Empty colors use the selected theme. These settings apply to the whole website.</value></data>
+  <data name="LogoCaption" xml:space="preserve"><value>Website logo</value></data>
+  <data name="LogoDescription" xml:space="preserve"><value>An HTTPS image URL or a path on this website, such as /images/logo.png. Empty keeps the text brand.</value></data>
+  <data name="AccentCaption" xml:space="preserve"><value>Accent color</value></data>
+  <data name="AccentDescription" xml:space="preserve"><value>Hex color such as #D9B773 for highlights and buttons; empty uses the theme.</value></data>
+  <data name="BackgroundCaption" xml:space="preserve"><value>Background color</value></data>
+  <data name="BackgroundDescription" xml:space="preserve"><value>Website background as #RRGGBB; empty uses the theme.</value></data>
+  <data name="PanelCaption" xml:space="preserve"><value>Panel color</value></data>
+  <data name="PanelDescription" xml:space="preserve"><value>Content card background as #RRGGBB; empty uses the theme.</value></data>
+  <data name="TextCaption" xml:space="preserve"><value>Text color</value></data>
+  <data name="TextDescription" xml:space="preserve"><value>Main text color as #RRGGBB. Choose a color clearly readable against your panels; empty uses the theme.</value></data>
+  <data name="ColorValidation" xml:space="preserve"><value>Enter a color as #RRGGBB, such as #D9B773, or leave it empty.</value></data>
+  <data name="LogoLengthValidation" xml:space="preserve"><value>The logo address must contain at most {1} characters.</value></data>
+  <data name="LogoFormatValidation" xml:space="preserve"><value>Use an HTTPS image address or a path on this website, or leave it empty.</value></data>
+</root>

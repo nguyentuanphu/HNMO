@@ -63,13 +63,15 @@
     .safety-scroll { overflow-x: auto; }
     .safety-facts { font-size: 13px; color: var(--muted); margin: 0; padding-left: 18px; }
   </style>
+  <link rel="stylesheet" href="/website-themes.css">
+  <script type="module" src="/js/websiteThemeEntry.js"></script>
 <link rel="stylesheet" href="/website-shell.css">
 <script type="module" src="/js/websiteShellEntry.js"></script>
 </head>
-<body data-website-page="account" data-page-label="Account">
+<body data-page-label="Account" data-website-page="account">
   <main>
     <header>
-      <h1 data-game-name></h1>
+      <h1><img data-brand-logo alt="" width="48" height="48" hidden><span data-game-name></span></h1>
       <a href="/account.html?play=1" data-enter-game>Play the game →</a>
       <span role="group" aria-label="Page language" style="display:inline-flex;gap:6px"><button type="button" data-site-language="en" data-account-language="en">English</button><button type="button" data-site-language="vi" data-account-language="vi">Tiếng Việt</button></span>
     </header>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="Caption" xml:space="preserve"><value>网站主题</value></data>
+  <data name="Description" xml:space="preserve"><value>为整个网站（包括账户和充值页面）选择同一主题。切换游戏世界不会改变主题。保存后重新加载网站。</value></data>
+  <data name="Classic" xml:space="preserve"><value>经典</value></data>
+  <data name="Azure" xml:space="preserve"><value>冰霜</value></data>
+  <data name="Ember" xml:space="preserve"><value>烈焰</value></data>
+  <data name="Jade" xml:space="preserve"><value>翡翠</value></data>
+  <data name="Violet" xml:space="preserve"><value>紫辉</value></data>
+  <data name="Parchment" xml:space="preserve"><value>古卷</value></data>
+  <data name="GlobalDescription" xml:space="preserve"><value>为整个网站（包括账户和充值页面）选择同一主题。切换游戏世界不会改变主题。保存后重新加载网站。</value></data>
+</root>

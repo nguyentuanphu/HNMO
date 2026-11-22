@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="Caption" xml:space="preserve"><value>Website-Design</value></data>
+  <data name="Description" xml:space="preserve"><value>Wählen Sie ein Design für die gesamte Website einschließlich Konto und Zahlung. Die Spielwelt ändert das Design nicht. Speichern und neu laden.</value></data>
+  <data name="Classic" xml:space="preserve"><value>Klassisch</value></data>
+  <data name="Azure" xml:space="preserve"><value>Azur</value></data>
+  <data name="Ember" xml:space="preserve"><value>Glut</value></data>
+  <data name="Jade" xml:space="preserve"><value>Jade</value></data>
+  <data name="Violet" xml:space="preserve"><value>Violett</value></data>
+  <data name="Parchment" xml:space="preserve"><value>Pergament</value></data>
+  <data name="GlobalDescription" xml:space="preserve"><value>Wählen Sie ein Design für die gesamte Website einschließlich Konto und Zahlung. Die Spielwelt ändert das Design nicht. Speichern und neu laden.</value></data>
+</root>
