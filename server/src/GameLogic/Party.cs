@@ -159,6 +159,11 @@ public sealed class Party : AsyncDisposable
     /// <param name="index">The party list index of the member to kick.</param>
     public async ValueTask KickPlayerAsync(byte index)
     {
+        if (index >= this._partyMembers.Length)
+        {
+            return;
+        }
+
         var toKick = this._partyMembers[index];
         await this.ExitPartyAsync(toKick, index).ConfigureAwait(false);
     }
