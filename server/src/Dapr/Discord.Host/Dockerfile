@@ -15,10 +15,10 @@ COPY ["Dapr/Discord.Host/HNMO.Discord.Host.csproj", "Dapr/Discord.Host/"]
 RUN dotnet restore "Dapr/Discord.Host/HNMO.Discord.Host.csproj"
 COPY . .
 WORKDIR "/src/Dapr/Discord.Host"
-RUN dotnet build "HNMO.Discord.Host.csproj" -c Release -o /app/build -p:ci=true
+RUN dotnet build "HNMO.Discord.Host.csproj" -c Release -o /app/build -p:SkipTypeScript=true
 
 FROM build AS publish
-RUN dotnet publish "HNMO.Discord.Host.csproj" -c Release -o /app/publish -p:ci=true
+RUN dotnet publish "HNMO.Discord.Host.csproj" -c Release -o /app/publish -p:SkipTypeScript=true
 
 FROM base AS final
 WORKDIR /app

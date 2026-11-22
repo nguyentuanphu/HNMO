@@ -16,10 +16,10 @@ COPY ["Dapr/GameServer.Host/HNMO.GameServer.Host.csproj", "Dapr/GameServer.Host/
 RUN dotnet restore "Dapr/GameServer.Host/HNMO.GameServer.Host.csproj"
 COPY . .
 WORKDIR "/src/Dapr/GameServer.Host"
-RUN dotnet build "HNMO.GameServer.Host.csproj" -c Release -o /app/build  -p:ci=true
+RUN dotnet build "HNMO.GameServer.Host.csproj" -c Release -o /app/build  -p:SkipTypeScript=true
 
 FROM build AS publish
-RUN dotnet publish "HNMO.GameServer.Host.csproj" -c Release -o /app/publish  -p:ci=true
+RUN dotnet publish "HNMO.GameServer.Host.csproj" -c Release -o /app/publish  -p:SkipTypeScript=true
 
 FROM base AS final
 

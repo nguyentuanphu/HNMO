@@ -33,13 +33,13 @@ WORKDIR /src/Startup
 RUN dotnet build "HNMO.Startup.csproj" \
     -c Release \
     -o /app/build \
-    -p:ci=true
+    -p:SkipTypeScript=true
 
 FROM build AS publish
 RUN dotnet publish "HNMO.Startup.csproj" \
     -c Release \
     -o /app/publish \
-    -p:ci=true
+    -p:SkipTypeScript=true
 
 FROM base AS final
 WORKDIR /app

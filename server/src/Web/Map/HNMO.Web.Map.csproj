@@ -21,10 +21,10 @@
     <PackageReference Include="Nito.AsyncEx" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(ci)'!='true'">
-    <!-- We only run the transformation locally on our dev environment with visual studio.
-        The CI environment is identified by the parameter 'ci'. It's set in the azure pipelines and Dockerfile.
-        If you run into errors here under Linux/Mac OS, it might help to add this parameter, too. -->
+  <ItemGroup Condition="'$(SkipTypeScript)'!='true'">
+    <!-- Builds wwwroot/js/HNMO.Web.Map.js from the TypeScript (it isn't in git). Needs node on the PATH.
+        GitHub sets the environment variable CI=true, so this must not depend on 'ci': without the script the
+        admin panel's live map is a 404. Only the Docker images (no node) pass -p:SkipTypeScript=true. -->
     <PackageReference Include="Microsoft.TypeScript.MSBuild">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

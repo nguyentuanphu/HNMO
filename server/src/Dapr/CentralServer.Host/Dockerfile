@@ -18,10 +18,10 @@ COPY ["Dapr/CentralServer.Host/HNMO.CentralServer.Host.csproj", "Dapr/CentralSer
 RUN dotnet restore "Dapr/CentralServer.Host/HNMO.CentralServer.Host.csproj"
 COPY . .
 WORKDIR "/src/Dapr/CentralServer.Host"
-RUN dotnet build "HNMO.CentralServer.Host.csproj" -c Release -o /app/build -p:ci=true
+RUN dotnet build "HNMO.CentralServer.Host.csproj" -c Release -o /app/build -p:SkipTypeScript=true
 
 FROM build AS publish
-RUN dotnet publish "HNMO.CentralServer.Host.csproj" -c Release -o /app/publish -p:ci=true
+RUN dotnet publish "HNMO.CentralServer.Host.csproj" -c Release -o /app/publish -p:SkipTypeScript=true
 
 FROM base AS final
 WORKDIR /app
