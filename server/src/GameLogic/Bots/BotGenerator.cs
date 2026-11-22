@@ -553,6 +553,14 @@ internal sealed class BotGenerator
         character.Name = name;
         character.CharacterSlot = slot;
         context.InitializeNewCharacter(character, characterClass);
+        var botConfiguration = BotFeaturePlugIn.GetConfiguration(this._gameContext);
+        if (botConfiguration?.IsMapForbidden(character.CurrentMap) == true
+            && BotConfiguration.FindAllowedSpawnGate(this._gameContext.Configuration, botConfiguration) is { Map: { } allowedMap } fallbackGate)
+        {
+            character.CurrentMap = allowedMap;
+            character.PositionX = (byte)((fallbackGate.X1 + fallbackGate.X2) / 2);
+            character.PositionY = (byte)((fallbackGate.Y1 + fallbackGate.Y2) / 2);
+        }
 
         var levelAttribute = character.Attributes.First(a => a.Definition == Stats.Level);
         levelAttribute.Value = level;

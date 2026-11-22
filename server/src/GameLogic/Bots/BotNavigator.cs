@@ -470,9 +470,10 @@ internal sealed class BotNavigator : AsyncDisposable
 
         ExitGate? warpListGate = null;
         if (leader.CurrentMap is { } targetMap
-            && (this.TryGetLegalWarp(targetMap.Definition, out var leaderWarp)
-                ? (warpListGate = leaderWarp.Gate) is null
-                : targetMap.Definition.Number != this._player.SelectedCharacter?.CharacterClass?.HomeMap?.Number))
+            && (BotFeaturePlugIn.GetConfiguration(this._player.GameContext)?.IsMapForbidden(targetMap.Definition) == true
+                || (this.TryGetLegalWarp(targetMap.Definition, out var leaderWarp)
+                    ? (warpListGate = leaderWarp.Gate) is null
+                    : targetMap.Definition.Number != this._player.SelectedCharacter?.CharacterClass?.HomeMap?.Number)))
         {
             // The leader moved to a map the bot's plain character level cannot legally enter
             // (level gates map access, the same rule as everywhere else). Rather than trail
@@ -731,6 +732,8 @@ internal sealed class BotNavigator : AsyncDisposable
         this._isHopInProgress = false;
         return true;
     }
+
+    internal ValueTask<bool> TryEscapeOrWarpAsync() => this.TryWarpToBetterMapAsync();
 
     /// <summary>
     /// Hunts around the party leader on the same map: monsters within hunting range
@@ -1796,10 +1799,12 @@ internal sealed class BotNavigator : AsyncDisposable
         // level is off-limits regardless of its strength - a real character of that level cannot be
         // there, so neither may the bot (e.g. a veteran stranded on a high map after its reset).
         var currentMap = this._player.CurrentMap?.Definition;
+        var isCurrentMapForbidden = BotFeaturePlugIn.GetConfiguration(this._player.GameContext)?.IsMapForbidden(currentMap) == true;
         var mapIsHostile = currentMap is not null && this.BestSafeLevel(currentMap) == 0;
         var mapIsIllegal = currentMap is not null
-                           && !this.TryGetLegalWarp(currentMap, out _)
-                           && currentMap.Number != this._player.SelectedCharacter?.CharacterClass?.HomeMap?.Number;
+                           && (isCurrentMapForbidden
+                               || (!this.TryGetLegalWarp(currentMap, out _)
+                                   && currentMap.Number != this._player.SelectedCharacter?.CharacterClass?.HomeMap?.Number));
         var mustEscape = mapIsHostile || mapIsIllegal;
 
         // A map can pass every check above and still pay the bot nothing: the safe monsters are a rare
