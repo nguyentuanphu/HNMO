@@ -1,0 +1,170 @@
+# Maps, Gates, and Warps Differences: HNMO vs Season 6 & Season 9 Suites
+
+## Season 9-only Maps (absent from Season 6)
+Map 35 (): HNMO=false, S6=true, S9=true
+Map 43 (): HNMO=false, S6=true, S9=true
+Map 44 (): HNMO=false, S6=true, S9=true
+Map 54 (): HNMO=false, S6=true, S9=true
+Map 55 (): HNMO=false, S6=true, S9=true
+Map 59 (): HNMO=false, S6=true, S9=true
+Map 60 (): HNMO=false, S6=true, S9=true
+Map 61 (): HNMO=false, S6=true, S9=true
+Map 73 (): HNMO=false, S6=true, S9=true
+Map 74 (): HNMO=false, S6=true, S9=true
+Map 75 (): HNMO=false, S6=true, S9=true
+Map 76 (): HNMO=false, S6=true, S9=true
+Map 77 (): HNMO=false, S6=true, S9=true
+Map 78 (): HNMO=false, S6=true, S9=true
+Map 82 (): HNMO=false, S6=true, S9=true
+Map 83 (): HNMO=false, S6=true, S9=true
+Map 84 (): HNMO=false, S6=true, S9=true
+Map 85 (): HNMO=false, S6=true, S9=true
+Map 86 (): HNMO=false, S6=true, S9=true
+Map 87 (): HNMO=false, S6=true, S9=true
+Map 88 (): HNMO=false, S6=true, S9=true
+Map 89 (): HNMO=false, S6=true, S9=true
+Map 90 (): HNMO=false, S6=true, S9=true
+Map 91 (): HNMO=false, S6=true, S9=true
+Map 92 (): HNMO=false, S6=true, S9=true
+Map 93 (): HNMO=false, S6=true, S9=true
+Map 94 (): HNMO=false, S6=true, S9=true
+Map 95 (): HNMO=false, S6=true, S9=true
+Map 96 (): HNMO=false, S6=true, S9=true
+Map 97 (): HNMO=false, S6=true, S9=true
+Map 98 (): HNMO=false, S6=true, S9=true
+Map 99 (): HNMO=false, S6=true, S9=true
+Map 100 (): HNMO=false, S6=true, S9=true
+Map 101 (): HNMO=false, S6=true, S9=true
+Map 102 (): HNMO=false, S6=true, S9=true
+
+## Gates differing or Season 9-only
+Gate 345: S6=(Map=6,Target=0,MinLv=0) vs S9=(Map=82,Target=0,MinLv=0)
+S9-only Gate 346: Flag=0 Map=82 (69,195)-(72,198) Target=0 MinLv=0 
+S9-only Gate 347: Flag=0 Map=82 (196,187)-(199,190) Target=0 MinLv=0 
+S9-only Gate 348: Flag=0 Map=82 (187,61)-(190,64) Target=0 MinLv=0 
+S9-only Gate 349: Flag=0 Map=83 (60,66)-(63,69) Target=0 MinLv=0 
+S9-only Gate 350: Flag=0 Map=83 (69,195)-(72,198) Target=0 MinLv=0 
+S9-only Gate 351: Flag=0 Map=83 (196,187)-(199,190) Target=0 MinLv=0 
+S9-only Gate 352: Flag=0 Map=83 (187,61)-(190,64) Target=0 MinLv=0 
+S9-only Gate 353: Flag=0 Map=84 (60,66)-(63,69) Target=0 MinLv=0 
+S9-only Gate 354: Flag=0 Map=84 (69,195)-(72,198) Target=0 MinLv=0 
+S9-only Gate 355: Flag=0 Map=84 (196,187)-(199,190) Target=0 MinLv=0 
+S9-only Gate 356: Flag=0 Map=84 (187,61)-(190,64) Target=0 MinLv=0 
+S9-only Gate 357: Flag=0 Map=85 (60,66)-(63,69) Target=0 MinLv=0 
+S9-only Gate 358: Flag=0 Map=85 (69,195)-(72,198) Target=0 MinLv=0 
+S9-only Gate 359: Flag=0 Map=85 (196,187)-(199,190) Target=0 MinLv=0 
+S9-only Gate 360: Flag=0 Map=85 (187,61)-(190,64) Target=0 MinLv=0 
+S9-only Gate 361: Flag=0 Map=86 (60,66)-(63,69) Target=0 MinLv=0 
+S9-only Gate 362: Flag=0 Map=86 (69,195)-(72,198) Target=0 MinLv=0 
+S9-only Gate 363: Flag=0 Map=86 (196,187)-(199,190) Target=0 MinLv=0 
+S9-only Gate 364: Flag=0 Map=86 (187,61)-(190,64) Target=0 MinLv=0 
+S9-only Gate 365: Flag=0 Map=87 (60,66)-(63,69) Target=0 MinLv=0 
+S9-only Gate 366: Flag=0 Map=87 (69,195)-(72,198) Target=0 MinLv=0 
+S9-only Gate 367: Flag=0 Map=87 (196,187)-(199,190) Target=0 MinLv=0 
+S9-only Gate 368: Flag=0 Map=87 (187,61)-(190,64) Target=0 MinLv=0 
+S9-only Gate 369: Flag=0 Map=88 (60,66)-(63,69) Target=0 MinLv=0 
+S9-only Gate 370: Flag=0 Map=88 (69,195)-(72,198) Target=0 MinLv=0 
+S9-only Gate 371: Flag=0 Map=88 (196,187)-(199,190) Target=0 MinLv=0 
+S9-only Gate 372: Flag=0 Map=88 (187,61)-(190,64) Target=0 MinLv=0 
+S9-only Gate 373: Flag=0 Map=89 (60,66)-(63,69) Target=0 MinLv=0 
+S9-only Gate 374: Flag=0 Map=89 (69,195)-(72,198) Target=0 MinLv=0 
+S9-only Gate 375: Flag=0 Map=89 (196,187)-(199,190) Target=0 MinLv=0 
+S9-only Gate 376: Flag=0 Map=89 (187,61)-(190,64) Target=0 MinLv=0 
+S9-only Gate 377: Flag=0 Map=90 (60,66)-(63,69) Target=0 MinLv=0 
+S9-only Gate 378: Flag=0 Map=90 (69,195)-(72,198) Target=0 MinLv=0 
+S9-only Gate 379: Flag=0 Map=90 (196,187)-(199,190) Target=0 MinLv=0 
+S9-only Gate 380: Flag=0 Map=90 (187,61)-(190,64) Target=0 MinLv=0 
+S9-only Gate 381: Flag=0 Map=82 (123,120)-(129,134) Target=0 MinLv=0 
+S9-only Gate 382: Flag=0 Map=82 (123,126)-(134,132) Target=0 MinLv=0 
+S9-only Gate 383: Flag=0 Map=82 (127,121)-(133,133) Target=0 MinLv=0 
+S9-only Gate 384: Flag=0 Map=82 (123,121)-(133,128) Target=0 MinLv=0 
+S9-only Gate 385: Flag=0 Map=83 (123,120)-(129,134) Target=0 MinLv=0 
+S9-only Gate 386: Flag=0 Map=83 (123,126)-(134,132) Target=0 MinLv=0 
+S9-only Gate 387: Flag=0 Map=83 (127,121)-(133,133) Target=0 MinLv=0 
+S9-only Gate 388: Flag=0 Map=83 (123,121)-(133,128) Target=0 MinLv=0 
+S9-only Gate 389: Flag=0 Map=84 (123,120)-(129,134) Target=0 MinLv=0 
+S9-only Gate 390: Flag=0 Map=84 (123,126)-(134,132) Target=0 MinLv=0 
+S9-only Gate 391: Flag=0 Map=84 (127,121)-(133,133) Target=0 MinLv=0 
+S9-only Gate 392: Flag=0 Map=84 (123,121)-(133,128) Target=0 MinLv=0 
+S9-only Gate 393: Flag=0 Map=85 (123,120)-(129,134) Target=0 MinLv=0 
+S9-only Gate 394: Flag=0 Map=85 (123,126)-(134,132) Target=0 MinLv=0 
+S9-only Gate 395: Flag=0 Map=85 (127,121)-(133,133) Target=0 MinLv=0 
+S9-only Gate 396: Flag=0 Map=85 (123,121)-(133,128) Target=0 MinLv=0 
+S9-only Gate 397: Flag=0 Map=86 (123,120)-(129,134) Target=0 MinLv=0 
+S9-only Gate 398: Flag=0 Map=86 (123,126)-(134,132) Target=0 MinLv=0 
+S9-only Gate 399: Flag=0 Map=86 (127,121)-(133,133) Target=0 MinLv=0 
+S9-only Gate 400: Flag=0 Map=86 (123,121)-(133,128) Target=0 MinLv=0 
+S9-only Gate 401: Flag=0 Map=87 (123,120)-(129,134) Target=0 MinLv=0 
+S9-only Gate 402: Flag=0 Map=87 (123,126)-(134,132) Target=0 MinLv=0 
+S9-only Gate 403: Flag=0 Map=87 (127,121)-(133,133) Target=0 MinLv=0 
+S9-only Gate 404: Flag=0 Map=87 (123,121)-(133,128) Target=0 MinLv=0 
+S9-only Gate 405: Flag=0 Map=88 (123,120)-(129,134) Target=0 MinLv=0 
+S9-only Gate 406: Flag=0 Map=88 (123,126)-(134,132) Target=0 MinLv=0 
+S9-only Gate 407: Flag=0 Map=88 (127,121)-(133,133) Target=0 MinLv=0 
+S9-only Gate 408: Flag=0 Map=88 (123,121)-(133,128) Target=0 MinLv=0 
+S9-only Gate 409: Flag=0 Map=89 (123,120)-(129,134) Target=0 MinLv=0 
+S9-only Gate 410: Flag=0 Map=89 (123,126)-(134,132) Target=0 MinLv=0 
+S9-only Gate 411: Flag=0 Map=89 (127,121)-(133,133) Target=0 MinLv=0 
+S9-only Gate 412: Flag=0 Map=89 (123,121)-(133,128) Target=0 MinLv=0 
+S9-only Gate 413: Flag=0 Map=90 (123,120)-(129,134) Target=0 MinLv=0 
+S9-only Gate 414: Flag=0 Map=90 (123,126)-(134,132) Target=0 MinLv=0 
+S9-only Gate 415: Flag=0 Map=90 (127,121)-(133,133) Target=0 MinLv=0 
+S9-only Gate 416: Flag=0 Map=90 (123,121)-(133,128) Target=0 MinLv=0 
+S9-only Gate 417: Flag=0 Map=91 (51,190)-(60,197) Target=0 MinLv=0 
+S9-only Gate 418: Flag=1 Map=91 (26,168)-(28,172) Target=419 MinLv=0 
+S9-only Gate 419: Flag=2 Map=91 (112,161)-(114,166) Target=0 MinLv=0 
+S9-only Gate 420: Flag=1 Map=91 (115,168)-(118,170) Target=421 MinLv=0 
+S9-only Gate 421: Flag=2 Map=91 (33,167)-(37,170) Target=0 MinLv=0 
+S9-only Gate 422: Flag=1 Map=91 (82,204)-(86,205) Target=423 MinLv=0 
+S9-only Gate 423: Flag=2 Map=91 (151,198)-(156,200) Target=0 MinLv=0 
+S9-only Gate 424: Flag=1 Map=91 (147,202)-(148,206) Target=425 MinLv=0 
+S9-only Gate 425: Flag=2 Map=91 (81,197)-(83,199) Target=0 MinLv=0 
+S9-only Gate 426: Flag=0 Map=92 (51,190)-(60,197) Target=0 MinLv=0 
+S9-only Gate 427: Flag=1 Map=92 (26,168)-(28,172) Target=428 MinLv=0 
+S9-only Gate 428: Flag=2 Map=92 (112,161)-(114,166) Target=0 MinLv=0 
+S9-only Gate 429: Flag=1 Map=92 (115,168)-(118,170) Target=430 MinLv=0 
+S9-only Gate 430: Flag=2 Map=92 (33,167)-(37,170) Target=0 MinLv=0 
+S9-only Gate 431: Flag=1 Map=92 (82,204)-(86,205) Target=432 MinLv=0 
+S9-only Gate 432: Flag=2 Map=92 (151,198)-(156,200) Target=0 MinLv=0 
+S9-only Gate 433: Flag=1 Map=92 (147,202)-(148,206) Target=434 MinLv=0 
+S9-only Gate 434: Flag=2 Map=92 (81,197)-(83,199) Target=0 MinLv=0 
+S9-only Gate 435: Flag=1 Map=91 (52,161)-(53,163) Target=436 MinLv=0 
+S9-only Gate 436: Flag=2 Map=95 (19,104)-(20,105) Target=0 MinLv=0 
+S9-only Gate 437: Flag=1 Map=95 (17,106)-(18,107) Target=438 MinLv=0 
+S9-only Gate 438: Flag=2 Map=91 (54,163)-(55,164) Target=0 MinLv=0 
+S9-only Gate 439: Flag=1 Map=92 (52,161)-(53,163) Target=440 MinLv=0 
+S9-only Gate 440: Flag=2 Map=96 (19,104)-(20,105) Target=0 MinLv=0 
+S9-only Gate 441: Flag=1 Map=96 (17,106)-(18,107) Target=442 MinLv=0 
+S9-only Gate 442: Flag=2 Map=92 (54,163)-(55,164) Target=0 MinLv=0 
+S9-only Gate 443: Flag=0 Map=97 (31,88)-(36,95) Target=0 MinLv=0 
+S9-only Gate 444: Flag=0 Map=98 (98,128)-(108,137) Target=0 MinLv=0 
+S9-only Gate 445: Flag=0 Map=99 (98,128)-(108,137) Target=0 MinLv=0 
+S9-only Gate 446: Flag=0 Map=98 (141,41)-(146,45) Target=0 MinLv=0 
+S9-only Gate 447: Flag=0 Map=99 (141,41)-(146,45) Target=0 MinLv=0 
+S9-only Gate 448: Flag=0 Map=98 (194,124)-(198,127) Target=0 MinLv=0 
+S9-only Gate 449: Flag=0 Map=99 (194,124)-(198,127) Target=0 MinLv=0 
+S9-only Gate 450: Flag=1 Map=91 (65,218)-(67,219) Target=451 MinLv=0 
+S9-only Gate 451: Flag=2 Map=100 (24,90)-(25,86) Target=0 MinLv=0 
+S9-only Gate 452: Flag=1 Map=100 (19,87)-(20,88) Target=453 MinLv=0 
+S9-only Gate 453: Flag=2 Map=91 (62,213)-(64,214) Target=0 MinLv=0 
+S9-only Gate 454: Flag=1 Map=100 (42,80)-(44,81) Target=455 MinLv=0 
+S9-only Gate 455: Flag=2 Map=100 (212,31)-(213,32) Target=0 MinLv=0 
+S9-only Gate 456: Flag=1 Map=100 (215,33)-(217,34) Target=457 MinLv=0 
+S9-only Gate 457: Flag=2 Map=100 (40,82)-(41,84) Target=0 MinLv=0 
+S9-only Gate 458: Flag=1 Map=100 (40,97)-(42,98) Target=459 MinLv=0 
+S9-only Gate 459: Flag=2 Map=100 (107,225)-(109,226) Target=0 MinLv=0 
+S9-only Gate 460: Flag=1 Map=100 (108,229)-(110,230) Target=461 MinLv=0 
+S9-only Gate 461: Flag=2 Map=100 (39,94)-(40,95) Target=0 MinLv=0 
+S9-only Gate 474: Flag=0 Map=102 (125,126)-(130,130) Target=0 MinLv=10 
+S9-only Gate 475: Flag=1 Map=1 (115,231)-(117,233) Target=476 MinLv=0 
+S9-only Gate 476: Flag=2 Map=1 (45,152)-(48,155) Target=0 MinLv=0 
+S9-only Gate 477: Flag=1 Map=1 (45,148)-(47,150) Target=478 MinLv=0 
+S9-only Gate 478: Flag=2 Map=1 (112,232)-(113,234) Target=0 MinLv=0 
+S9-only Gate 479: Flag=1 Map=1 (233,106)-(237,108) Target=480 MinLv=0 
+S9-only Gate 480: Flag=2 Map=1 (241,85)-(242,89) Target=0 MinLv=0 
+S9-only Gate 481: Flag=1 Map=1 (244,86)-(245,89) Target=482 MinLv=0 
+S9-only Gate 482: Flag=2 Map=1 (229,108)-(231,110) Target=0 MinLv=0 
+
+## Warps
+Warp 49 (Stadium): HNMO=missing vs S6=(Lv=50,Zen=2000,Gate=345)
+Warp 48 (Crywolf): HNMO=Lv=280,Zen=15000 vs S6=(Lv=300,Zen=15000,Gate=118)

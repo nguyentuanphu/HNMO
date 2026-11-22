@@ -1,0 +1,59 @@
+# Chaos Machine Mix Differences: HNMO vs Season 6 & Season 9 Suites
+
+## ChaosBox.ini rates (S6 vs S9)
+[Common] IsChaosMachine: S6=1, S9=1
+[Common] PlusItemMix15ResultNotice_Normal: S6=0, S9=0
+[Common] PlusItemMix15ResultNotice_Enhanced: S6=0, S9=0
+[Common] PlusItemMix15ResultNotice_Socket: S6=0, S9=0
+[Common] PlusItemMix15ResultNotice_Pentagram: S6=0, S9=0
+[PlusItemLevel] Mix10Rate_Normal: S6=60, S9=60
+[PlusItemLevel] Mix11Rate_Normal: S6=60, S9=60
+[PlusItemLevel] Mix12Rate_Normal: S6=60, S9=60
+[PlusItemLevel] Mix13Rate_Normal: S6=55, S9=55
+[PlusItemLevel] Mix14Rate_Normal: S6=55, S9=55
+[PlusItemLevel] Mix15Rate_Normal: S6=50, S9=50
+[PlusItemLevel] MixAddLuckRate_Normal: S6=25, S9=25
+[PlusItemLevel] Mix10Rate_Enhanced: S6=50, S9=50
+[PlusItemLevel] Mix11Rate_Enhanced: S6=50, S9=50
+[PlusItemLevel] Mix12Rate_Enhanced: S6=50, S9=50
+[PlusItemLevel] Mix13Rate_Enhanced: S6=45, S9=45
+[PlusItemLevel] Mix14Rate_Enhanced: S6=45, S9=45
+[PlusItemLevel] Mix15Rate_Enhanced: S6=40, S9=40
+[PlusItemLevel] MixAddLuckRate_Enhanced: S6=25, S9=25
+[PlusItemLevel] Mix10Rate_Socket: S6=40, S9=40
+[PlusItemLevel] Mix11Rate_Socket: S6=40, S9=40
+[PlusItemLevel] Mix12Rate_Socket: S6=40, S9=40
+[PlusItemLevel] Mix13Rate_Socket: S6=35, S9=35
+[PlusItemLevel] Mix14Rate_Socket: S6=35, S9=35
+[PlusItemLevel] Mix15Rate_Socket: S6=30, S9=30
+[PlusItemLevel] MixAddLuckRate_Socket: S6=25, S9=25
+[PlusItemLevel] Mix10Rate_Pentagram: S6=40, S9=40
+[PlusItemLevel] Mix11Rate_Pentagram: S6=40, S9=40
+[PlusItemLevel] Mix12Rate_Pentagram: S6=40, S9=40
+[PlusItemLevel] Mix13Rate_Pentagram: S6=35, S9=35
+[PlusItemLevel] Mix14Rate_Pentagram: S6=35, S9=35
+[PlusItemLevel] Mix15Rate_Pentagram: S6=30, S9=30
+[PlusItemLevel] MixAddLuckRate_Pentagram: S6=25, S9=25
+[EventMixes] DQChaosSuccessRateLevel1: S6=80, S9=80
+[EventMixes] DQChaosSuccessRateLevel2: S6=80, S9=80
+[EventMixes] DQChaosSuccessRateLevel3: S6=80, S9=80
+[EventMixes] DQChaosSuccessRateLevel4: S6=80, S9=80
+[EventMixes] DQChaosSuccessRateLevel5: S6=70, S9=70
+[EventMixes] DQChaosSuccessRateLevel6: S6=70, S9=70
+[EventMixes] DQChaosSuccessRateLevel7: S6=70, S9=70
+[Wings] FeatherOfCondorMaxRate: S6=60, S9=60
+[Wings] Wing2MixMaxRate: S6=90, S9=90
+[Wings] Wing25MixMaxRate: S6=60, S9=60
+[Wings] Wing3MixMaxRate: S6=40, S9=40
+[Wings] Wing3ExcOptionRate: S6=10, S9=n/a
+[Wings] Wing3LuckRate: S6=10, S9=n/a
+[Wings] CapeOfLordMixMaxRate: S6=90, S9=90
+[SocketWeapon] SocketWeaponMixMaxRate: S6=40, S9=40
+[SocketWeapon] SocketWeaponMixRequireMoney: S6=1000000, S9=1000000
+[CherryBlossom] CherryBlossomWhiteNeedItem: S6=10, S9=10
+[CherryBlossom] CherryBlossomRedNeedItem: S6=30, S9=30
+[CherryBlossom] CherryBlossomGoldNeedItem: S6=255, S9=255
+
+## SocketWeaponMix (from suite SocketItem.xml)
+
+## HNMO recipes count: 42

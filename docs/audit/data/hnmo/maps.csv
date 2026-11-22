@@ -1,0 +1,74 @@
+﻿Number,Discriminator,Name,ExpMultiplier,IsActive,SafezoneCount,EnterGates,ExitGates,Spawns
+0,0,Lorencia,1,1,0,4,5,318
+1,0,Dungeon,1,1,0,7,7,313
+2,0,Devias,1,1,2,4,8,304
+3,0,Noria,1,1,3,3,4,413
+4,0,Lost Tower,1,1,4,8,9,592
+5,0,Exile,1,1,0,0,0,0
+6,0,Arena,1,1,6,0,3,3
+7,0,Atlans,1,1,7,3,6,339
+8,0,Tarkan,1,1,8,2,4,217
+9,1,Devil Square 1,1,1,3,0,1,215
+9,2,Devil Square 2,1,1,3,0,1,215
+9,3,Devil Square 3,1,1,3,0,1,215
+9,4,Devil Square 4,1,1,3,0,1,215
+10,0,Icarus,1,1,2,1,1,80
+11,0,Blood Castle 1,1,1,2,0,1,97
+12,0,Blood Castle 2,1,1,2,0,1,97
+13,0,Blood Castle 3,1,1,2,0,1,97
+14,0,Blood Castle 4,1,1,2,0,1,97
+15,0,Blood Castle 5,1,1,2,0,1,97
+16,0,Blood Castle 6,1,1,2,0,1,97
+17,0,Blood Castle 7,1,1,2,0,1,97
+18,0,Chaos Castle 1,1,1,2,0,1,99
+19,0,Chaos Castle 2,1,1,2,0,1,99
+20,0,Chaos Castle 3,1,1,2,0,1,99
+21,0,Chaos Castle 4,1,1,2,0,1,99
+22,0,Chaos Castle 5,1,1,2,0,1,99
+23,0,Chaos Castle 6,1,1,2,0,1,99
+24,0,Kalima 1,1,1,0,0,1,62
+25,0,Kalima 2,1,1,0,0,1,62
+26,0,Kalima 3,1,1,0,0,1,62
+27,0,Kalima 4,1,1,0,0,1,62
+28,0,Kalima 5,1,1,0,0,1,62
+29,0,Kalima 6,1,1,0,0,1,68
+30,0,Valley of Loren,1,1,30,4,11,10
+31,0,Land_of_Trials,1,1,0,1,1,203
+32,5,Devil Square 5,1,1,3,0,1,215
+32,6,Devil Square 6,1,1,3,0,1,215
+32,7,Devil Square 7,1,1,3,0,1,215
+33,0,Aida,1,1,33,2,4,253
+34,0,Crywolf Fortress,1,1,34,1,3,264
+36,0,Kalima 7,1,1,0,0,1,68
+37,0,Kanturu_I,1,1,37,2,5,210
+38,0,Kanturu_III,1,1,38,1,4,90
+39,0,Kanturu Event,1,1,38,0,3,211
+40,0,Silent Map?,1,1,0,0,0,0
+41,0,Barracks of Balgass,1,1,41,0,1,29
+42,0,Balgass Refuge,1,1,0,0,1,9
+45,0,Illusion Temple 1,1,1,2,8,11,38
+46,0,Illusion Temple 2,1,1,2,8,11,38
+47,0,Illusion Temple 3,1,1,2,8,11,38
+48,0,Illusion Temple 4,1,1,2,8,11,38
+49,0,Illusion Temple 5,1,1,2,8,11,38
+50,0,Illusion Temple 6,1,1,2,8,11,6
+51,0,Elvenland,1,1,51,2,5,259
+52,0,Blood Castle 8,1,1,2,0,1,97
+53,0,Chaos Castle 7,1,1,2,0,1,99
+56,0,Swamp Of Calmness,1,1,56,8,5,282
+57,0,LaCleon,1,1,57,2,2,120
+58,0,LaCleon Boss,1,1,57,1,1,26
+62,0,Santa Village,1,1,2,0,1,9
+63,0,Vulcanus,1,1,63,0,1,266
+64,0,Duel Arena,1,1,0,0,12,0
+65,0,Doppelgaenger 1,1,1,51,0,1,0
+66,0,Doppelgaenger 2,1,1,51,0,1,0
+67,0,Doppelgaenger 3,1,1,51,0,1,0
+68,0,Doppelgaenger 4,1,1,51,0,1,0
+69,0,Fortress of Imperial Guardian 1,1,1,2,2,3,110
+70,0,Fortress of Imperial Guardian 2,1,1,2,2,3,106
+71,0,Fortress of Imperial Guardian 3,1,1,2,2,3,108
+72,0,Fortress of Imperial Guardian 4,1,1,2,3,4,92
+79,0,LorenMarket,1,1,79,0,1,3
+80,0,Karutan 1,1,1,80,2,3,128
+81,0,Karutan 2,1,1,80,1,2,133
