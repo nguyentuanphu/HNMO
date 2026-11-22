@@ -90,6 +90,11 @@ internal static class AttackActionValidator
             return false;
         }
 
+        if (!SkillEquipmentValidator.HasRequiredEquipment(player, skill))
+        {
+            return false;
+        }
+
         return !IsAttackSkill(skill) || await player.IsAttackAllowedAsync(skill).ConfigureAwait(false);
     }
 }

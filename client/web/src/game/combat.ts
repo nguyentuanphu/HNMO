@@ -199,7 +199,7 @@ export class Combat {
   castable(skill: number): boolean {
     if (this.skills?.requirementsMet && !this.skills.requirementsMet(skill)) return false;
     const plan = skillCastPlan(skill, this.classIndex, this.castContext());
-    return plan !== null && plan.packet !== 'none';
+    return plan !== null && plan.packet !== 'none' && plan.equipmentOk;
   }
 
   /** Whether a skill is about to be cast (walking into its range or waiting for the last swing). */
@@ -263,6 +263,16 @@ export class Combat {
     if (this.hero.dead || (target && (target.dead || (target !== this.hero && !this.online.characters.has(target.id))))) { this.pendingSkill = null; return; }
     if (this.inSafeZone()) { this.pendingSkill = null; return; } // CanExecuteSkill: no skills in a safe zone
     if (this.skills?.requirementsMet && !this.skills.requirementsMet(skill)) { this.pendingSkill = null; return; } // CanExecuteSkill
+    const rage = this.classIndex === CharacterClass.RAGE_FIGHTER;
+    const currentPlan = skillCastPlan(skill, this.classIndex, this.castContext()) ?? plan;
+    if (!currentPlan.equipmentOk) {
+      if (rage) {
+        const why = rageRefusal(skill, this.castContext());
+        if (why) this.events.onMessage?.(why === 'riding' ? 'This skill cannot be used while riding.' : 'This skill needs sword-form gloves.');
+      }
+      this.pendingSkill = null;
+      return;
+    }
     const data = skillInfo(skill);
     const range = skillRange(skill, data?.distance ?? 0);
     const aim = target && target !== this.hero ? target.cell : pending.cell;
@@ -280,17 +290,9 @@ export class Combat {
     // CheckMana: mana and AG first (out of mana the desktop drinks a mana potion instead).
     if (this.skills && data && data.mana > this.skills.mana()) { this.skills.outOfMana?.(); this.pendingSkill = null; return; }
     if (this.skills && data && data.ability > this.skills.ability()) { this.pendingSkill = null; return; }
-    const rage = this.classIndex === CharacterClass.RAGE_FIGHTER;
     // CheckSkillDelay: not while the skill cools down; casting starts its delay. AttackRagefighter leaves the check out
     // (only its Plasma Storm calls it).
     if (data && (!rage || skill === SkillId.PLASMA_STORM_FENRIR) && !skillCooldowns.tryStart(skill, data.delay)) { this.pendingSkill = null; return; }
-    if (rage && !plan.equipmentOk) {
-      // UseSkillRagefighter's ring, mount and glove checks: the desktop drops the cast without a word; the web says why.
-      const why = rageRefusal(skill, this.castContext());
-      if (why) this.events.onMessage?.(why === 'riding' ? 'This skill cannot be used while riding.' : 'This skill needs sword-form gloves.');
-      this.pendingSkill = null;
-      return;
-    }
     if (aim) this.hero.faceTo(aim);
     if (plan.heroAction !== null) this.hero.playOnce(plan.heroAction);
     const degrees = ((this.hero.angle * 180) / Math.PI + 360) % 360;
