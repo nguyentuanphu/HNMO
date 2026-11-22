@@ -130,6 +130,38 @@ public sealed class ArenaTeamsTest
         Assert.That(teams.SideOf(players[2]), Is.EqualTo(side));
     }
 
+    /// <summary>One dead player in the queue doesn't stall matchmaking for the other queued players.</summary>
+    [Test]
+    public async Task DeadQueuedPlayerDoesNotBlockOtherQueuedPlayersAsync()
+    {
+        var (teams, context, players) = await CreateAsync(7).ConfigureAwait(false);
+        players.ForEach(p => teams.Join(p));
+        players[6].IsAlive = false;
+
+        await teams.TickAsync(context, new ArenaDuels(null), NullLogger.Instance).ConfigureAwait(false);
+
+        Assert.That(teams.BattleRunning, Is.True);
+        Assert.That(teams.SideOf(players[6]), Is.Zero);
+        Assert.That(teams.IsQueued(players[6]), Is.True);
+    }
+
+    /// <summary>A party whose member is currently in a duel can't queue for a team battle.</summary>
+    [Test]
+    public async Task PartyWithMemberInDuelCannotQueueAsync()
+    {
+        var (teams, context, players) = await CreateAsync(3).ConfigureAwait(false);
+        var party = new Party(new PartyManager(5, new NullLogger<Party>()), 5, new NullLogger<Party>());
+        await party.AddAsync(players[0]).ConfigureAwait(false);
+        await party.AddAsync(players[1]).ConfigureAwait(false);
+        players[1].DuelRoom = new DuelRoom(new HNMO.DataModel.Configuration.DuelArea { Index = 0 }, players[1], players[2]);
+
+        var (en, _) = teams.Join(players[0]);
+
+        Assert.That(en, Does.Contain("duel"));
+        Assert.That(teams.IsQueued(players[0]), Is.False);
+        Assert.That(teams.IsQueued(players[1]), Is.False);
+    }
+
     /// <summary>Reads the team part of the state back (the anonymous object's values).</summary>
     private static (int ScoreA, int ScoreB, bool Ended, int Winner) State(ArenaTeams teams, Player player)
     {

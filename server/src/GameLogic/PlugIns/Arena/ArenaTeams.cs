@@ -110,6 +110,11 @@ public sealed class ArenaTeams
             }
 
             group = party.PartyList.OfType<Player>().Where(p => p.PlayerState.CurrentState == PlayerState.EnteredWorld).ToList();
+            if (group.Any(p => p.DuelRoom is not null))
+            {
+                return ("Everyone in the party must finish their duel first.", "Mọi thành viên trong nhóm cần đấu xong trận tay đôi trước.");
+            }
+
             if (group.Count > this._configuration.TeamSize)
             {
                 return ($"A party may have at most {this._configuration.TeamSize} players.", $"Một nhóm tối đa {this._configuration.TeamSize} người.");
@@ -309,13 +314,14 @@ public sealed class ArenaTeams
                         close = battle;
                     }
                 }
-                else if (this.MapBusy?.Invoke() != true && this._queue.SelectMany(e => e.Players).All(p => p.PlayerState.CurrentState == PlayerState.EnteredWorld && p.IsAlive))
+                else if (this.MapBusy?.Invoke() != true)
                 {
-                    var groups = this._queue.Select(e => new ArenaTeamEngine.Group(e.Players.Select(p => p.Account?.LoginName ?? p.Name).ToList(), e.Order, 0)).ToList();
-                    var frontWaitedLong = this._queue.Count > 0 && now - this._queue.Min(e => e.JoinedUtc) >= SmallerBattleWait;
+                    var readyEntries = this._queue.Where(e => e.Players.All(p => p.PlayerState.CurrentState == PlayerState.EnteredWorld && p.IsAlive && p.DuelRoom is null)).ToList();
+                    var groups = readyEntries.Select(e => new ArenaTeamEngine.Group(e.Players.Select(p => p.Account?.LoginName ?? p.Name).ToList(), e.Order, 0)).ToList();
+                    var frontWaitedLong = readyEntries.Count > 0 && now - readyEntries.Min(e => e.JoinedUtc) >= SmallerBattleWait;
                     if (ArenaTeamEngine.FormTeams(groups, this._configuration.TeamSize, this._configuration.TeamMinSize, frontWaitedLong) is { } match)
                     {
-                        var byLogin = this._queue.SelectMany(e => e.Players).GroupBy(p => p.Account?.LoginName ?? p.Name).ToDictionary(g => g.Key, g => g.First());
+                        var byLogin = readyEntries.SelectMany(e => e.Players).GroupBy(p => p.Account?.LoginName ?? p.Name).ToDictionary(g => g.Key, g => g.First());
                         start = new Battle(now + TimeSpan.FromMinutes(this._configuration.TeamMinutes));
                         foreach (var login in match.TeamA)
                         {
