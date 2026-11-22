@@ -95,6 +95,12 @@ public sealed class ArenaPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn, IPe
     /// <returns>The plug-in, or <c>null</c>.</returns>
     public static ArenaPlugIn? Get(IGameContext? gameContext) => gameContext?.FeaturePlugIns.GetPlugIn<ArenaPlugIn>();
 
+    /// <summary>Gets a value indicating whether the player is currently taking part in an active Arena team battle, battle royale, or guild war.</summary>
+    /// <param name="player">The player.</param>
+    /// <returns><c>true</c>, if fighting in one of the Arena's multi-player battles.</returns>
+    public bool IsInBattle(Player player) =>
+        this.Teams.SideOf(player) != 0 || this.Royale.IsFighter(player) || this.GuildWar.SideOf(player) != 0;
+
     /// <inheritdoc />
     public object CreateDefaultConfig() => new ArenaConfiguration();
 

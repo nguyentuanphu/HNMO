@@ -300,6 +300,16 @@ public class DuelActions
             return false;
         }
 
+        if (PlugIns.Arena.ArenaPlugIn.Get(player.GameContext) is { } arena
+            && (arena.IsInBattle(player) || arena.IsInBattle(target)))
+        {
+            var vi = string.Equals(player.Culture.TwoLetterISOLanguageName, "vi", StringComparison.OrdinalIgnoreCase);
+            await player.ShowBlueMessageAsync(vi
+                ? "Không thể đấu tay đôi khi đang trong trận Đấu trường."
+                : "Duels are not allowed during an active Arena battle.").ConfigureAwait(false);
+            return false;
+        }
+
         if (player.IsAnySelfDefenseActive()
             || target.IsAnySelfDefenseActive())
         {

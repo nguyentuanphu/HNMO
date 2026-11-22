@@ -163,4 +163,93 @@ public sealed class ArenaGuildWarTest
         await teams.TickAsync(context, new ArenaDuels(null), NullLogger.Instance).ConfigureAwait(false);
         Assert.That(teams.BattleRunning, Is.True);
     }
+
+    /// <summary>Fighters currently in a 1v1 duel aren't pulled into guild war planning or start.</summary>
+    [Test]
+    public async Task DuelistsAreNotPulledIntoGuildWarAsync()
+    {
+        var context = GameContextTestHelper.CreateGameContext();
+        var war = new ArenaGuildWar(new ArenaConfiguration { GuildWarMinMembers = 2 }, ArenaStore.Open(null));
+        var red = Guid.NewGuid();
+        var blue = Guid.NewGuid();
+        var players = new List<Player>();
+        for (var i = 0; i < 4; i++)
+        {
+            var player = await PlayerTestHelper.CreatePlayerAsync(context).ConfigureAwait(false);
+            player.Account = new HNMO.Persistence.BasicModel.Account { LoginName = $"gwd{i}", VaultPassword = string.Empty };
+            player.SelectedCharacter!.Name = $"WarDuel{i}";
+            await player.PlayerState.TryAdvanceToAsync(PlayerState.EnteredWorld).ConfigureAwait(false);
+            player.IsAlive = true;
+            players.Add(player);
+        }
+
+        war.GuildOf = login => login is "gwd0" or "gwd1" ? (red, "Red") : (blue, "Blue");
+        war.ForceStart(TimeSpan.FromMinutes(1), DateTime.UtcNow);
+        players.ForEach(p => war.Join(p));
+        players[0].DuelRoom = new DuelRoom(new HNMO.DataModel.Configuration.DuelArea { Index = 0 }, players[0], players[3]);
+        war.ForceStart(TimeSpan.FromSeconds(-1), DateTime.UtcNow);
+
+        await war.TickAsync(context, new ArenaTeams(), new ArenaRoyale(), new ArenaDuels(null), NullLogger.Instance).ConfigureAwait(false);
+        Assert.That(war.Busy, Is.False, "dueling member shouldn't count toward minimum guild war roster during planning");
+
+        // Now plan without duel, then put gwd0 + gwd1 in a duel before the pending match starts.
+        players[0].DuelRoom = null;
+        war.ForceStart(TimeSpan.FromMinutes(1), DateTime.UtcNow);
+        players.ForEach(p => war.Join(p));
+        war.ForceStart(TimeSpan.FromSeconds(-1), DateTime.UtcNow);
+        await war.TickAsync(context, new ArenaTeams(), new ArenaRoyale(), new ArenaDuels(null), NullLogger.Instance).ConfigureAwait(false);
+        Assert.That(war.Busy, Is.True);
+
+        var room = new DuelRoom(new HNMO.DataModel.Configuration.DuelArea { Index = 0 }, players[0], players[1]);
+        players[0].DuelRoom = room;
+        players[1].DuelRoom = room;
+        await war.TickAsync(context, new ArenaTeams(), new ArenaRoyale(), new ArenaDuels(null), NullLogger.Instance).ConfigureAwait(false);
+
+        Assert.That(war.SideOf(players[0]), Is.Zero, "duelist must not be pulled into guild war");
+        Assert.That(war.Running, Is.False, "an empty side doesn't start a guild war match");
+    }
+
+    /// <summary>A player actively fighting in an Arena team battle cannot start a regular /duel.</summary>
+    [Test]
+    public async Task RegularDuelIsRefusedDuringActiveArenaBattleAsync()
+    {
+        var context = GameContextTestHelper.CreateGameContext();
+        var arena = context.FeaturePlugIns.GetPlugIn<ArenaPlugIn>();
+        if (arena is null)
+        {
+            arena = new ArenaPlugIn();
+            context.FeaturePlugIns.AddPlugIn(arena, true);
+        }
+
+        arena.Configuration = new ArenaConfiguration { TeamSize = 2, TeamMinSize = 2 };
+        var players = new List<Player>();
+        for (var i = 0; i < 6; i++)
+        {
+            var player = await PlayerTestHelper.CreatePlayerAsync(context).ConfigureAwait(false);
+            player.Account = new HNMO.Persistence.BasicModel.Account { LoginName = $"duelguard{i}", VaultPassword = string.Empty };
+            player.SelectedCharacter!.Name = $"Guard{i}";
+            player.Money = 100000;
+            await player.PlayerState.TryAdvanceToAsync(PlayerState.EnteredWorld).ConfigureAwait(false);
+            player.IsAlive = true;
+            players.Add(player);
+        }
+
+        var duels = new ArenaDuels(null);
+        players.Take(4).ToList().ForEach(p => arena.Teams.Join(p));
+        await arena.Teams.TickAsync(context, duels, NullLogger.Instance).ConfigureAwait(false);
+        Assert.That(arena.Teams.BattleRunning, Is.True);
+
+        var configuration = new HNMO.Persistence.BasicModel.DuelConfiguration { EntranceFee = 0, MinimumCharacterLevel = 0 };
+        configuration.DuelAreas.Add(new HNMO.Persistence.BasicModel.DuelArea { Index = 0 });
+        context.Configuration.DuelConfiguration = configuration;
+        ((GameContext)context).DuelRoomManager = new DuelRoomManager(configuration);
+
+        var duelActions = new HNMO.GameLogic.PlayerActions.Duel.DuelActions();
+        await duelActions.HandleDuelRequestAsync(players[0], players[4]).ConfigureAwait(false);
+        Assert.That(players[0].DuelRoom, Is.Null, "fighter in active Arena battle must not enter a regular duel");
+
+        // Control: two outsiders on the same context can request a duel.
+        await duelActions.HandleDuelRequestAsync(players[4], players[5]).ConfigureAwait(false);
+        Assert.That(players[4].DuelRoom, Is.Not.Null, "control outsiders should be allowed to request a duel");
+    }
 }
