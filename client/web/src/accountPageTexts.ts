@@ -44,7 +44,7 @@ export const accountPageTexts = {
   presenceUnknown: ['Unavailable', 'Chưa kiểm tra được'],
   lastSeenNote: ['Character status is checked when you refresh. If the live server cannot answer, it is shown as unavailable. Per-character last-seen times are not recorded yet; see account login history under Security.', 'Trạng thái nhân vật được kiểm tra khi bạn làm mới. Nếu không liên lạc được với máy chủ game, trạng thái sẽ là chưa kiểm tra được. Chưa có lịch sử lần xuất hiện gần nhất của từng nhân vật; hãy xem lịch sử đăng nhập tài khoản trong mục Bảo mật.'],
   play: ['Play the game', 'Vào game'],
-  playHint: ['Open the game login page.', 'Mở trang đăng nhập game.'],
+  playHint: ['Enter the game using your current account session.', 'Vào game bằng phiên tài khoản đang đăng nhập.'],
   topup: ['Top up', 'Nạp coin'],
   topupHint: ['Open payment instructions on the top-up page.', 'Mở hướng dẫn thanh toán trên trang nạp coin.'],
   history: ['Coin history', 'Lịch sử coin'],
