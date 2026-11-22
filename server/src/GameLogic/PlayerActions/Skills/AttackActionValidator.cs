@@ -4,6 +4,7 @@
 
 namespace HNMO.GameLogic.PlayerActions.Skills;
 
+using HNMO.DataModel;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.PlugIns;
@@ -86,6 +87,12 @@ internal static class AttackActionValidator
         }
 
         if (attributes[Stats.AmmunitionConsumptionRate] > attributes[Stats.AmmunitionAmount])
+        {
+            return false;
+        }
+
+        // Mana Rays (73 / AT_SKILL_DEATH_CANNON): matches desktop UseSkillWizard requiring a staff or book in the right hand.
+        if (skill.Number == 73 && player.Inventory?.GetItem(InventoryConstants.RightHandSlot)?.Definition?.Group != 5)
         {
             return false;
         }
