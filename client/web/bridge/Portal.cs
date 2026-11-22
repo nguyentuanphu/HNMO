@@ -34,6 +34,7 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
 {
     private static readonly TimeSpan RateWindow = TimeSpan.FromHours(1);
     private readonly ConcurrentDictionary<IPAddress, List<DateTime>> _registrations = new();
+    private readonly WebsiteSessions _sessions = new(TimeProvider.System);
 
     private string KeyFile => Path.GetFullPath(Path.Combine(contentRoot, options.ApiKeyFile));
 
@@ -43,6 +44,20 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
     {
         // Handlers that take only the HttpContext are cast to Func<..., Task<IResult>>, so their answer is sent:
         // as a plain RequestDelegate the result would be dropped (ASP0016).
+        app.Use((context, next) => portal._sessions.InvokeAsync(context, next));
+        app.MapPost("/portal/session", (Func<HttpContext, Task<IResult>>)portal.SignInSessionAsync).RequireRateLimiting("per-visitor");
+        app.MapGet("/portal/session", (HttpContext context) =>
+        {
+            context.Response.Headers.CacheControl = "no-store";
+            return Results.Json(new { authenticated = portal._sessions.TryGet(context.Request.Cookies[WebsiteSessions.CookieName], out _) });
+        }).RequireRateLimiting("per-visitor");
+        app.MapDelete("/portal/session", (HttpContext context) =>
+        {
+            if (!WebsiteSessions.IsSameOrigin(context)) return Results.StatusCode(403);
+            portal._sessions.Remove(context.Request.Cookies[WebsiteSessions.CookieName]);
+            context.Response.Headers.CacheControl = "no-store";
+            return Results.Json(new { authenticated = false });
+        }).RequireRateLimiting("per-visitor");
         app.MapGet("/portal/status", (Func<HttpContext, Task<IResult>>)portal.StatusAsync);
         app.MapPost("/portal/account/overview", (Func<HttpContext, Task<IResult>>)(context => portal.AccountAsync(context, "overview"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/account/password", (Func<HttpContext, Task<IResult>>)(context => portal.AccountAsync(context, "password"))).RequireRateLimiting("per-visitor");
@@ -125,6 +140,37 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         {
             return Results.Json(new { error = "server" }, statusCode: 502);
         }
+    }
+
+    private async Task<IResult> SignInSessionAsync(HttpContext context)
+    {
+        context.Response.Headers.CacheControl = "no-store";
+        if (!WebsiteSessions.IsSameOrigin(context)) return Results.StatusCode(403);
+        if (context.Request.Cookies[WebsiteSessions.CookieName] is { } previous)
+        {
+            this._sessions.Remove(previous);
+        }
+        if (string.IsNullOrEmpty(this.ApiKey)) return Results.Json(new { error = "setup" }, statusCode: 503);
+        RegisterRequest? request;
+        try { request = await context.Request.ReadFromJsonAsync<RegisterRequest>(context.RequestAborted).ConfigureAwait(false); }
+        catch (Exception error) when (error is JsonException or InvalidOperationException) { return Results.StatusCode(400); }
+        if (request is null || request.LoginName is not { Length: > 0 and <= 10 } || request.Password is not { Length: > 0 and <= 20 }) return Results.StatusCode(400);
+        try
+        {
+            using var response = await http.SendAsync(this.ApiRequest(HttpMethod.Post, "api/website/account/overview", new { request.LoginName, request.Password, page = 0 }), context.RequestAborted).ConfigureAwait(false);
+            if (response.StatusCode == HttpStatusCode.Unauthorized) return Results.StatusCode(401);
+            if (!response.IsSuccessStatusCode) return Results.Json(new { error = "server" }, statusCode: 502);
+            var text = await response.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false);
+            using var parsed = JsonDocument.Parse(text);
+            if (parsed.RootElement.ValueKind != JsonValueKind.Object || !parsed.RootElement.TryGetProperty("loginName", out var identity)
+                || !string.Equals(identity.GetString(), request.LoginName, StringComparison.OrdinalIgnoreCase)) return Results.StatusCode(502);
+            var token = this._sessions.Create(request.LoginName, request.Password);
+            if (token is null) return Results.StatusCode(503);
+            this._sessions.Remove(context.Request.Cookies[WebsiteSessions.CookieName]);
+            WebsiteSessions.SetCookie(context, token);
+            return Results.Content(text, "application/json");
+        }
+        catch (Exception error) when (error is HttpRequestException or JsonException) { return Results.Json(new { error = "server" }, statusCode: 502); }
     }
 
     private HttpRequestMessage ApiRequest(HttpMethod method, string path, object? body = null, string? apiKey = null)

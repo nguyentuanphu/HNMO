@@ -63,16 +63,18 @@
     .safety-scroll { overflow-x: auto; }
     .safety-facts { font-size: 13px; color: var(--muted); margin: 0; padding-left: 18px; }
   </style>
+<link rel="stylesheet" href="/website-shell.css">
+<script type="module" src="/js/websiteShellEntry.js"></script>
 </head>
-<body data-page-label="Account">
+<body data-website-page="account" data-page-label="Account">
   <main>
     <header>
       <h1 data-game-name></h1>
       <a href="/">Play the game →</a>
-      <span role="group" aria-label="Page language" style="display:inline-flex;gap:6px"><button type="button" data-site-language="en">English</button><button type="button" data-site-language="vi">Tiếng Việt</button></span>
+      <span role="group" aria-label="Page language" style="display:inline-flex;gap:6px"><button type="button" data-site-language="en" data-account-language="en">English</button><button type="button" data-site-language="vi" data-account-language="vi">Tiếng Việt</button></span>
     </header>
 
-    <section class="panel" id="accountLoginPanel" data-no-i18n>
+    <section class="panel" id="accountLoginPanel" hidden data-no-i18n>
       <h2 data-at="signIn">Sign in to my account</h2>
       <div class="account-actions" role="group" aria-label="English / Tiếng Việt">
         <button type="button" data-account-language="en" title="Read in English / Đọc bằng tiếng Anh">English</button>
@@ -84,8 +86,13 @@
         <label><span data-at="password">Password</span><input id="accountSecret" type="password" required maxlength="20" autocomplete="current-password"></label>
         <button id="accountSignInButton" type="submit" data-at="signIn" data-at-title="signInHint">Sign in to my account</button>
       </form>
+      <div id="accountAuthLinks"><p data-auth-text="newHere">No account yet?</p><button type="button" id="accountCreateButton" data-auth-text="register">Create an account</button></div>
+      <div id="accountGoogle"><div id="google-button" hidden></div><p id="google-message" role="status"></p></div>
     </section>
-    <div id="accountDashboard" data-no-i18n>
+    <p id="accountMessage" role="status" aria-live="polite"></p>
+    <button type="button" id="accountRetrySession" hidden>Refresh</button>
+    <button type="button" id="accountRetryLogout" hidden>Log out</button>
+    <div id="accountDashboard" data-no-i18n hidden>
       <div id="accountToolbar" hidden>
         <button type="button" data-account-language="en" title="Read in English / Đọc bằng tiếng Anh">English</button>
         <button type="button" data-account-language="vi" title="Read in Vietnamese / Đọc bằng tiếng Việt">Tiếng Việt</button>
@@ -94,10 +101,9 @@
         <button type="button" id="accountLogout" data-at="logout" data-at-title="logoutHint">Log out</button>
         <div id="accountHelp" role="note" data-at="help" hidden></div>
       </div>
-      <p id="accountMessage" role="status" aria-live="polite"></p>
       <nav id="accountNav" aria-label="Account sections / Các mục tài khoản" hidden></nav>
       <select id="accountSectionSelect" aria-label="Account sections / Các mục tài khoản"></select>
-      <div id="accountPanels"></div>
+      <div id="accountPanels" hidden></div>
     </div>
 
     <section class="panel notice" id="setupPanel" hidden>
@@ -113,7 +119,7 @@
       </form>
     </section>
 
-    <section class="panel" id="play" aria-labelledby="playTitle">
+    <section class="panel" id="play" hidden aria-labelledby="playTitle">
       <div class="gift-head">
         <h2 id="playTitle" data-pt="title">Play in browser</h2>
         <div class="langs" role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-play-lang="en">EN</button> <button type="button" data-play-lang="vi">VI</button></div>
@@ -132,20 +138,22 @@
       <p class="message" id="playMessage" role="status" aria-live="polite"></p>
     </section>
 
-    <div class="grid">
-      <form class="panel" id="registerForm">
-        <h2>Create an account</h2>
+    <section id="accountRegistration" hidden>
+      <header><h2 id="accountRegisterTitle" data-auth-text="register">Create an account</h2><button type="button" id="accountReturnSignIn" data-auth-text="backSignIn">Back to sign in</button></header>
+      <div class="grid">
+      <form class="panel" id="registerForm" aria-labelledby="accountRegisterTitle">
         <p id="welcomeCoins">New accounts get free cash shop coins.</p>
         <label>Account name <input id="loginName" name="loginName" required minlength="3" maxlength="10" pattern="[!-~]{3,10}" autocomplete="username"></label>
         <label>Password <input id="password" name="password" type="password" required minlength="3" maxlength="20" autocomplete="new-password"></label>
-        <label>E-mail (optional) <input id="email" name="eMail" type="email" autocomplete="email"></label>
+        <p data-auth-text="emailLater">Add a verified email in your profile after registration.</p>
         <button type="submit">Create account</button>
         <p class="message" id="registerMessage" role="status"></p>
       </form>
 
     </div>
+    </section>
 
-    <section class="panel" id="gift" data-no-i18n aria-labelledby="giftTitle">
+    <section class="panel" id="gift" hidden data-no-i18n aria-labelledby="giftTitle">
       <div class="gift-head">
         <h2 id="giftTitle" data-gt="title">Gift code</h2>
         <div class="langs" role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-gift-lang="en">EN</button> <button type="button" data-gift-lang="vi">VI</button></div>
@@ -165,7 +173,7 @@
       <p class="message" id="giftMessage" role="status" aria-live="polite"></p>
     </section>
 
-    <section class="panel" id="resets" data-no-i18n aria-labelledby="resetsTitle">
+    <section class="panel" id="resets" hidden data-no-i18n aria-labelledby="resetsTitle">
       <div class="gift-head">
         <h2 id="resetsTitle" data-rt="title">Resets and stats</h2>
         <div class="langs" role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-reset-lang="en">EN</button> <button type="button" data-reset-lang="vi">VI</button></div>
@@ -180,7 +188,7 @@
       <p class="message" id="resetsMessage" role="status" aria-live="polite"></p>
       <div class="reset-cards" id="resetCards"></div>
     </section>
-    <section class="panel" id="safety" data-no-i18n aria-labelledby="safetyTitle">
+    <section class="panel" id="safety" hidden data-no-i18n aria-labelledby="safetyTitle">
       <div class="gift-head">
         <h2 id="safetyTitle" data-st="title">Account safety</h2>
         <div class="langs" role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-safety-lang="en">EN</button> <button type="button" data-safety-lang="vi">VI</button></div>
@@ -223,42 +231,7 @@
       </div>
     </section>
   </main>
-  <script type="module">
-    const $ = (id) => document.getElementById(id);
-    const show = (element, text, ok) => { element.textContent = text; element.className = `message ${ok ? 'ok' : 'error'}`; };
-
-    async function call(url, options) {
-      const response = await fetch(url, options);
-      const body = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(body.error || `The server answered ${response.status}.`);
-      return body;
-    }
-
-    const status = await call('/portal/status').catch(() => ({ ready: false }));
-    if (status.startingCoins) $('welcomeCoins').textContent = `New accounts get ${status.startingCoins} free to spend in the cash shop.`;
-    const onHost = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
-    $('setupPanel').hidden = status.ready || !onHost;
-
-    $('setupForm').addEventListener('submit', async (event) => {
-      event.preventDefault();
-      try {
-        await call('/portal/setup', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ apiKey: $('apiKey').value }) });
-        show($('setupMessage'), 'Saved. Friends can register now.', true);
-        $('apiKey').value = '';
-      } catch (error) { show($('setupMessage'), error.message, false); }
-    });
-
-    $('registerForm').addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const form = Object.fromEntries(new FormData(event.target));
-      try {
-        const result = await call('/portal/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ loginName: form.loginName, password: form.password, eMail: form.eMail || null }) });
-        show($('registerMessage'), `Account ${form.loginName} created${result.coins ? ` with ${result.coins}` : ''}. You can log in to the game now.`, true);
-        event.target.reset();
-      } catch (error) { show($('registerMessage'), error.message, false); }
-    });
-
-  </script>
+  <script type="module" src="/js/accountRegistration.js"></script>
   <script type="module">
     import { deviceId } from '/js/deviceId.js';
     import { giftCodeIdentityText } from '/js/giftCodeIdentity.js';

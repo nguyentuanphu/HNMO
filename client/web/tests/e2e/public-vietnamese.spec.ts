@@ -5,22 +5,24 @@ for (const width of [375, 820, 1280]) {
     await page.setViewportSize({ width, height: 900 });
     await page.route('**/game-name.json', (route) => route.fulfill({ json: { name: 'Close' } }));
     await page.route('**/portal/**', (route) => route.fulfill({ status: 503, json: { error: 'Server unavailable' } }));
+    await page.route('**/portal/session', route => route.fulfill({ json: { authenticated: false } }));
     await page.goto('/account.html');
     await page.locator('[data-site-language="vi"]').click();
     await expect(page.locator('html')).toHaveAttribute('lang', 'vi');
-    await expect(page.locator('#registerForm h2')).toHaveText('Tạo tài khoản');
+    await expect(page.locator('#accountRegisterTitle')).toHaveText('Tạo tài khoản');
     await expect(page.locator('#registerForm')).toContainText('Tên tài khoản');
     await expect(page.locator('#registerForm')).toContainText('Mật khẩu');
     await expect(page.locator('#resetsTitle')).toHaveText('Reset và điểm');
     await expect(page.locator('[data-game-name]')).toHaveText('Close');
+    await page.locator('#accountCreateButton').click();
     await page.locator('#loginName').fill('Password');
     await expect(page.locator('#loginName')).toHaveValue('Password');
     await expect(page.locator('[data-gift-lang="vi"]')).toHaveAttribute('aria-pressed', 'true');
     await expect(page.locator('[data-reset-lang="vi"]')).toHaveAttribute('aria-pressed', 'true');
     await expect(page.locator('[data-safety-lang="vi"]')).toHaveAttribute('aria-pressed', 'true');
-    await page.locator('[data-safety-lang="en"]').click();
+    await page.locator('[data-site-language="en"]').click();
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
-    await expect(page.locator('#registerForm h2')).toHaveText('Create an account');
+    await expect(page.locator('#accountRegisterTitle')).toHaveText('Create an account');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   });
 

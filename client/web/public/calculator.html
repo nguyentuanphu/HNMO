@@ -31,8 +31,10 @@
     .stat-val { font-size: 18px; font-weight: 700; color: var(--ok); }
     .lang { display: flex; gap: 6px; align-items: center; }
   </style>
+<link rel="stylesheet" href="/website-shell.css">
+<script type="module" src="/js/websiteShellEntry.js"></script>
 </head>
-<body>
+<body data-website-page="calculator">
   <main>
     <header>
       <h1><span data-game-name>HNMO</span> · <span id="calc-title">Stats &amp; Build Calculator</span></h1>
@@ -41,7 +43,7 @@
         <button type="button" id="calc-lang-vi" data-lang="vi">VN</button>
         <button type="button" id="calc-help-btn" title="How to use this calculator">?</button>
         <a href="/home.html" id="calc-home">Home</a>
-        <a href="/index.html" id="calc-play">Play →</a>
+        <a href="/account.html?play=1" data-enter-game id="calc-play">Play →</a>
       </div>
     </header>
 
