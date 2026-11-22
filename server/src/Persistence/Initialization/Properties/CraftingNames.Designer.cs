@@ -287,6 +287,13 @@ namespace HNMO.Persistence.Initialization.Properties {
             }
         }
 
+        /// <summary>Gets SocketWeapon from the configuration name resources.</summary>
+        public static string SocketWeapon {
+            get {
+                return ResourceManager.GetString("SocketWeapon", resourceCulture);
+            }
+        }
+
         /// <summary>Gets SeedSphereCreation from the configuration name resources.</summary>
         public static string SeedSphereCreation {
             get {

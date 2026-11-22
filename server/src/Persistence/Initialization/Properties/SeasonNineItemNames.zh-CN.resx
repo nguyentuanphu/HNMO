@@ -17,6 +17,7 @@
   <data name="DevilCrossbow" xml:space="preserve"><value>恶魔之弩</value></data>
   <data name="MiracleStaff" xml:space="preserve"><value>奇迹法杖</value></data>
   <data name="SpiteStaff" xml:space="preserve"><value>怨恨法杖</value></data>
+  <data name="SummonSpiritStick" xml:space="preserve"><value>招魂魔杖</value></data>
   <data name="LazyWindShield" xml:space="preserve"><value>慵懒之风盾</value></data>
   <data name="LightLordShield" xml:space="preserve"><value>光之领主盾</value></data>
   <data name="DarkDevilShield" xml:space="preserve"><value>暗黑恶魔盾</value></data>
@@ -250,6 +251,16 @@
   <data name="SonicCombinationNote" xml:space="preserve"><value>音速合成笔记</value></data>
   <data name="CycloneCombinationNote" xml:space="preserve"><value>旋风合成笔记</value></data>
   <data name="BlastCombinationNote" xml:space="preserve"><value>爆裂合成笔记</value></data>
+  <data name="MagmaCombinationNote" xml:space="preserve"><value>岩浆合成笔记</value></data>
+  <data name="HornCombinationNote" xml:space="preserve"><value>角之合成笔记</value></data>
+  <data name="AngelicCombinationNote" xml:space="preserve"><value>天使合成笔记</value></data>
+  <data name="DevilCrossCombinationNote" xml:space="preserve"><value>恶魔十字弩合成笔记</value></data>
+  <data name="MiracleCombinationNote" xml:space="preserve"><value>奇迹合成笔记</value></data>
+  <data name="SpiteCombinationNote" xml:space="preserve"><value>怨恨合成笔记</value></data>
+  <data name="AsuraCombinationNote" xml:space="preserve"><value>阿修罗合成笔记</value></data>
+  <data name="ThunderCombinationNote" xml:space="preserve"><value>雷霆合成笔记</value></data>
+  <data name="SoulCombinationNote" xml:space="preserve"><value>灵魂合成笔记</value></data>
+  <data name="GreaterCombinationNote" xml:space="preserve"><value>高级合成笔记</value></data>
   <data name="ScrollOfSwiftnessMaster" xml:space="preserve"><value>敏捷大师卷轴</value></data>
   <data name="RewardJar" xml:space="preserve"><value>奖励罐</value></data>
   <data name="ValuableRewardJar" xml:space="preserve"><value>珍贵奖励罐</value></data>

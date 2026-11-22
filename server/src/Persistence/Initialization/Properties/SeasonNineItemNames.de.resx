@@ -17,6 +17,7 @@
   <data name="DevilCrossbow" xml:space="preserve"><value>Teufelsarmbrust</value></data>
   <data name="MiracleStaff" xml:space="preserve"><value>Wunderstab</value></data>
   <data name="SpiteStaff" xml:space="preserve"><value>Trotzstab</value></data>
+  <data name="SummonSpiritStick" xml:space="preserve"><value>Beschwörungs-Geisterstab</value></data>
   <data name="LazyWindShield" xml:space="preserve"><value>Träger-Wind-Schild</value></data>
   <data name="LightLordShield" xml:space="preserve"><value>Lichtlord-Schild</value></data>
   <data name="DarkDevilShield" xml:space="preserve"><value>Dunkelteufel-Schild</value></data>
@@ -250,6 +251,16 @@
   <data name="SonicCombinationNote" xml:space="preserve"><value>Sonic-Kombinationsnotiz</value></data>
   <data name="CycloneCombinationNote" xml:space="preserve"><value>Zyklon-Kombinationsnotiz</value></data>
   <data name="BlastCombinationNote" xml:space="preserve"><value>Explosions-Kombinationsnotiz</value></data>
+  <data name="MagmaCombinationNote" xml:space="preserve"><value>Magma-Kombinationsnotiz</value></data>
+  <data name="HornCombinationNote" xml:space="preserve"><value>Horn-Kombinationsnotiz</value></data>
+  <data name="AngelicCombinationNote" xml:space="preserve"><value>Engel-Kombinationsnotiz</value></data>
+  <data name="DevilCrossCombinationNote" xml:space="preserve"><value>Teufelsarmbrust-Kombinationsnotiz</value></data>
+  <data name="MiracleCombinationNote" xml:space="preserve"><value>Wunder-Kombinationsnotiz</value></data>
+  <data name="SpiteCombinationNote" xml:space="preserve"><value>Groll-Kombinationsnotiz</value></data>
+  <data name="AsuraCombinationNote" xml:space="preserve"><value>Asura-Kombinationsnotiz</value></data>
+  <data name="ThunderCombinationNote" xml:space="preserve"><value>Donner-Kombinationsnotiz</value></data>
+  <data name="SoulCombinationNote" xml:space="preserve"><value>Seelen-Kombinationsnotiz</value></data>
+  <data name="GreaterCombinationNote" xml:space="preserve"><value>Große Kombinationsnotiz</value></data>
   <data name="ScrollOfSwiftnessMaster" xml:space="preserve"><value>Schriftrolle des Schnelligkeitsmeisters</value></data>
   <data name="RewardJar" xml:space="preserve"><value>Belohnungskrug</value></data>
   <data name="ValuableRewardJar" xml:space="preserve"><value>Wertvoller Belohnungskrug</value></data>

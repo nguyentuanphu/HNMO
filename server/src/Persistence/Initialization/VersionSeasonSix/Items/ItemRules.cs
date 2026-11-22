@@ -326,6 +326,19 @@ public class ItemRules : InitializerBase
         Rule(14, 140, Blocked.Trade, Blocked.Drop, Blocked.SellToNpc, Blocked.PersonalStore, Blocked.Repair), // Scroll of Healing
         Rule(14, 160, Blocked.Drop, Blocked.SellToNpc, Blocked.PersonalStore, Blocked.Repair), // Jewel of Extension
         Rule(14, 161, Blocked.Drop, Blocked.SellToNpc, Blocked.PersonalStore, Blocked.Repair), // Jewel of Elevation
+        Rule(14, 191, Blocked.SellToNpc, Blocked.Repair), // Sonic Combination Note
+        Rule(14, 192, Blocked.SellToNpc, Blocked.Repair), // Cyclone Combination Note
+        Rule(14, 193, Blocked.SellToNpc, Blocked.Repair), // Blast Combination Note
+        Rule(14, 194, Blocked.SellToNpc, Blocked.Repair), // Magma Combination Note
+        Rule(14, 195, Blocked.SellToNpc, Blocked.Repair), // Horn Combination Note
+        Rule(14, 196, Blocked.SellToNpc, Blocked.Repair), // Angelic Combination Note
+        Rule(14, 197, Blocked.SellToNpc, Blocked.Repair), // Devil Cross Combination Note
+        Rule(14, 198, Blocked.SellToNpc, Blocked.Repair), // Miracle Combination Note
+        Rule(14, 199, Blocked.SellToNpc, Blocked.Repair), // Spite Combination Note
+        Rule(14, 200, Blocked.SellToNpc, Blocked.Repair), // Asura Combination Note
+        Rule(14, 201, Blocked.SellToNpc, Blocked.Repair), // Thunder Combination Note
+        Rule(14, 202, Blocked.SellToNpc, Blocked.Repair), // Soul Combination Note
+        Rule(14, 203, Blocked.SellToNpc, Blocked.Repair), // Greater Combination Note
         Rule(15, 0, Blocked.Repair), // Scroll of Poison
         Rule(15, 1, Blocked.Repair), // Scroll of Meteorite
         Rule(15, 2, Blocked.Repair), // Scroll of Lighting

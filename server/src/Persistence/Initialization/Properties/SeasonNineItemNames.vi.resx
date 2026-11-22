@@ -17,6 +17,7 @@
   <data name="DevilCrossbow" xml:space="preserve"><value>Nỏ Ác Quỷ</value></data>
   <data name="MiracleStaff" xml:space="preserve"><value>Gậy Phép Màu</value></data>
   <data name="SpiteStaff" xml:space="preserve"><value>Gậy Oán Hận</value></data>
+  <data name="SummonSpiritStick" xml:space="preserve"><value>Gậy Triệu Hồn</value></data>
   <data name="LazyWindShield" xml:space="preserve"><value>Khiên Gió Lười</value></data>
   <data name="LightLordShield" xml:space="preserve"><value>Khiên Chúa Tể Ánh Sáng</value></data>
   <data name="DarkDevilShield" xml:space="preserve"><value>Khiên Ác Quỷ Bóng Tối</value></data>
@@ -250,6 +251,16 @@
   <data name="SonicCombinationNote" xml:space="preserve"><value>Ghi Chú Kết Hợp Sonic</value></data>
   <data name="CycloneCombinationNote" xml:space="preserve"><value>Ghi Chú Kết Hợp Cyclone</value></data>
   <data name="BlastCombinationNote" xml:space="preserve"><value>Ghi Chú Kết Hợp Blast</value></data>
+  <data name="MagmaCombinationNote" xml:space="preserve"><value>Ghi Chú Kết Hợp Magma</value></data>
+  <data name="HornCombinationNote" xml:space="preserve"><value>Ghi Chú Kết Hợp Sừng</value></data>
+  <data name="AngelicCombinationNote" xml:space="preserve"><value>Ghi Chú Kết Hợp Thiên Thần</value></data>
+  <data name="DevilCrossCombinationNote" xml:space="preserve"><value>Ghi Chú Kết Hợp Nỏ Quỷ</value></data>
+  <data name="MiracleCombinationNote" xml:space="preserve"><value>Ghi Chú Kết Hợp Kỳ Tích</value></data>
+  <data name="SpiteCombinationNote" xml:space="preserve"><value>Ghi Chú Kết Hợp Oán Hận</value></data>
+  <data name="AsuraCombinationNote" xml:space="preserve"><value>Ghi Chú Kết Hợp Asura</value></data>
+  <data name="ThunderCombinationNote" xml:space="preserve"><value>Ghi Chú Kết Hợp Sấm Sét</value></data>
+  <data name="SoulCombinationNote" xml:space="preserve"><value>Ghi Chú Kết Hợp Linh Hồn</value></data>
+  <data name="GreaterCombinationNote" xml:space="preserve"><value>Ghi Chú Kết Hợp Cao Cấp</value></data>
   <data name="ScrollOfSwiftnessMaster" xml:space="preserve"><value>Cuộn Bậc Thầy Nhanh Nhẹn</value></data>
   <data name="RewardJar" xml:space="preserve"><value>Hũ Phần Thưởng</value></data>
   <data name="ValuableRewardJar" xml:space="preserve"><value>Hũ Phần Thưởng Giá Trị</value></data>

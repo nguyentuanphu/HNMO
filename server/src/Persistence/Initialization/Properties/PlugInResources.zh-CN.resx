@@ -501,6 +501,8 @@
   <data name="SeasonNineSharedItemsUpdatePlugIn_Description" xml:space="preserve"><value>在以第 9 赛季运行时应用共享物品的第 9 赛季数值（斗士披风掉落等级 150、领主披风需求等级 150、药水原生叠加 255）；已自定义的值保持不变。</value></data>
   <data name="SeasonNineOnlyItemsUpdatePlugIn_Name" xml:space="preserve"><value>第 9 赛季：添加第 9 赛季专属物品</value></data>
   <data name="SeasonNineOnlyItemsUpdatePlugIn_Description" xml:space="preserve"><value>在以第 9 赛季运行时添加 279 项第 9 赛季专属物品定义（镶嵌武器、盾牌、防具套装、翅膀、五芒星、饰品、萌宠与合成材料）；已存在的物品保持不变。</value></data>
+  <data name="SocketWeaponMixUpdatePlugIn_Name" xml:space="preserve"><value>添加玛雅哥布林镶嵌武器合成公式</value></data>
+  <data name="SocketWeaponMixUpdatePlugIn_Description" xml:space="preserve"><value>为第 6 和第 9 赛季补充 13 张合成笔记（14-191..203）、对应的 5 孔镶嵌武器及玛雅哥布林镶嵌武器合成公式（40 %，1,000,000 金币）。</value></data>
   <data name="SeasonNineSocketOptionsUpdatePlugIn_Name" xml:space="preserve"><value>第 9 赛季：镶嵌属性数值</value></data>
   <data name="SeasonNineSocketOptionsUpdatePlugIn_Description" xml:space="preserve"><value>在以第 9 赛季运行时将水属性盾牌防御保护 5 级设为 30 %、风属性最大 AG 设为 50/70/90/110/130、风属性 AG 恢复设为 5/7/9/11/13；已自定义的值保持不变。</value></data>
   <data name="SeasonNineMonstersUpdatePlugIn_Name" xml:space="preserve"><value>第 9 赛季：怪物与 NPC</value></data>

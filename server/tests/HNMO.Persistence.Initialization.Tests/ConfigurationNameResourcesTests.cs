@@ -113,7 +113,9 @@ internal class ConfigurationNameResourcesTests
             using var context = provider.CreateNewContext();
             var configuration = (await context.GetAsync<GameConfiguration>().ConfigureAwait(false)).Single();
             var names = LocalizedCaption.FindAll(configuration).Select(caption => caption.Value)
-                .Where(name => name.SourceKey is not null && !name.SourceKey.StartsWith("ItemNames/", StringComparison.Ordinal));
+                .Where(name => name.SourceKey is not null
+                               && !name.SourceKey.StartsWith("ItemNames/", StringComparison.Ordinal)
+                               && !name.SourceKey.StartsWith("SeasonNineItemNames/", StringComparison.Ordinal));
             foreach (var name in names.Where(n => n.SourceKey is not null))
             {
                 usedSourceKeys.Add(name.SourceKey!);

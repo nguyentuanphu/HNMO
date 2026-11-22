@@ -26,8 +26,30 @@ internal static class SeasonNineOnlyItemsCatalog
         new(3, 12, 0, 20, 2, 4, false, nameof(SeasonNineItemNames.MagmusPeer), 149, 135, 236, 35, 85, 0, 400, 49, 162, 0, 0, 5, 0, 3, 0, 0, 0, 0, 0),
         new(4, 25, 1, 24, 2, 4, false, nameof(SeasonNineItemNames.AngelicBow), 149, 179, 202, 45, 70, 0, 400, 30, 193, 0, 0, 5, 0, 0, 3, 0, 0, 0, 0),
         new(4, 26, 0, 24, 2, 3, false, nameof(SeasonNineItemNames.DevilCrossbow), 149, 167, 218, 40, 90, 0, 400, 30, 193, 0, 0, 5, 0, 0, 3, 0, 0, 0, 0),
+        new(5, 32, 0, 0, 1, 4, false, nameof(SeasonNineItemNames.SummonSpiritStick), 149, 59, 61, 30, 130, 110, 400, 56, 14, 0, 0, 5, 0, 0, 0, 0, 0, 3, 0),
         new(5, 35, 0, 0, 1, 4, false, nameof(SeasonNineItemNames.MiracleStaff), 149, 67, 69, 30, 80, 130, 400, 46, 13, 0, 0, 5, 3, 0, 0, 3, 0, 0, 0),
         new(5, 37, 0, 0, 2, 4, false, nameof(SeasonNineItemNames.SpiteStaff), 149, 69, 71, 25, 110, 136, 400, 48, 11, 0, 0, 5, 3, 0, 0, 3, 0, 0, 0),
+    ];
+
+    /// <summary>
+    /// Creation note (group 14, number 191..203) to level-400 5-socket weapon mappings
+    /// for the Chaos Machine socket weapon mix, reusing the shared definitions above.
+    /// </summary>
+    internal static readonly (short NoteNumber, byte WeaponGroup, short WeaponNumber)[] SocketWeaponRecipes =
+    [
+        (191, 0, 29), // Sonic Combination Note -> Sonic Blade
+        (192, 0, 36), // Cyclone Combination Note -> Cyclone Sword
+        (193, 0, 37), // Blast Combination Note -> Blast Break
+        (194, 3, 12), // Magma Combination Note -> Magmus Peer
+        (195, 2, 20), // Horn Combination Note -> Horn of Steal
+        (196, 4, 25), // Angelic Combination Note -> Angelic Bow
+        (197, 4, 26), // Devil Cross Combination Note -> Devil Crossbow
+        (198, 5, 35), // Miracle Combination Note -> Miracle Staff
+        (199, 5, 37), // Spite Combination Note -> Spite Staff
+        (200, 0, 30), // Asura Combination Note -> Asura
+        (201, 2, 19), // Thunder Combination Note -> Thunderbolt
+        (202, 5, 32), // Soul Combination Note -> Summon Spirit Stick
+        (203, 0, 38), // Greater Combination Note -> Frick Large Glove
     ];
 
     /// <summary>Season 9-only shields.</summary>
@@ -282,6 +304,16 @@ internal static class SeasonNineOnlyItemsCatalog
         new(14, 191, -1, 1, 1, nameof(SeasonNineItemNames.SonicCombinationNote), false, 0, 1, 0, 0, 0, true, true, true, false, true, false, 0, 0, 0, 0, 0, 0, 0),
         new(14, 192, -1, 1, 1, nameof(SeasonNineItemNames.CycloneCombinationNote), false, 0, 1, 0, 0, 0, true, true, true, false, true, false, 0, 0, 0, 0, 0, 0, 0),
         new(14, 193, -1, 1, 1, nameof(SeasonNineItemNames.BlastCombinationNote), false, 0, 1, 0, 0, 0, true, true, true, false, true, false, 0, 0, 0, 0, 0, 0, 0),
+        new(14, 194, -1, 1, 1, nameof(SeasonNineItemNames.MagmaCombinationNote), false, 0, 1, 0, 0, 0, true, true, true, false, true, false, 0, 0, 0, 0, 0, 0, 0),
+        new(14, 195, -1, 1, 1, nameof(SeasonNineItemNames.HornCombinationNote), false, 0, 1, 0, 0, 0, true, true, true, false, true, false, 0, 0, 0, 0, 0, 0, 0),
+        new(14, 196, -1, 1, 1, nameof(SeasonNineItemNames.AngelicCombinationNote), false, 0, 1, 0, 0, 0, true, true, true, false, true, false, 0, 0, 0, 0, 0, 0, 0),
+        new(14, 197, -1, 1, 1, nameof(SeasonNineItemNames.DevilCrossCombinationNote), false, 0, 1, 0, 0, 0, true, true, true, false, true, false, 0, 0, 0, 0, 0, 0, 0),
+        new(14, 198, -1, 1, 1, nameof(SeasonNineItemNames.MiracleCombinationNote), false, 0, 1, 0, 0, 0, true, true, true, false, true, false, 0, 0, 0, 0, 0, 0, 0),
+        new(14, 199, -1, 1, 1, nameof(SeasonNineItemNames.SpiteCombinationNote), false, 0, 1, 0, 0, 0, true, true, true, false, true, false, 0, 0, 0, 0, 0, 0, 0),
+        new(14, 200, -1, 1, 1, nameof(SeasonNineItemNames.AsuraCombinationNote), false, 0, 1, 0, 0, 0, true, true, true, false, true, false, 0, 0, 0, 0, 0, 0, 0),
+        new(14, 201, -1, 1, 1, nameof(SeasonNineItemNames.ThunderCombinationNote), false, 0, 1, 0, 0, 0, true, true, true, false, true, false, 0, 0, 0, 0, 0, 0, 0),
+        new(14, 202, -1, 1, 1, nameof(SeasonNineItemNames.SoulCombinationNote), false, 0, 1, 0, 0, 0, true, true, true, false, true, false, 0, 0, 0, 0, 0, 0, 0),
+        new(14, 203, -1, 1, 1, nameof(SeasonNineItemNames.GreaterCombinationNote), false, 0, 1, 0, 0, 0, true, true, true, false, true, false, 0, 0, 0, 0, 0, 0, 0),
         new(14, 235, -1, 2, 2, nameof(SeasonNineItemNames.ScrollOfSwiftnessMaster), false, 0, 1, 0, 0, 0, false, false, false, false, false, false, 0, 0, 0, 0, 0, 0, 0),
         new(14, 236, -1, 1, 1, nameof(SeasonNineItemNames.RewardJar), false, 0, 1, 0, 0, 0, false, true, true, false, false, false, 0, 0, 0, 0, 0, 0, 0),
         new(14, 237, -1, 1, 1, nameof(SeasonNineItemNames.RewardJar), false, 0, 1, 0, 0, 0, false, true, true, false, false, false, 0, 0, 0, 0, 0, 0, 0),
