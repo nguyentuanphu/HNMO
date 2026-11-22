@@ -64,6 +64,9 @@ export interface HudActions {
   menu?: () => void;
   friends?: () => void;
   cashShop?: () => void;
+  party?: () => void;
+  guild?: () => void;
+  command?: () => void;
 }
 
 const clamp = (value: number, max: number) => Math.min(Math.max(0, value), Math.max(1, max));
@@ -90,9 +93,11 @@ export class Hud {
       hp_tooltip: '', mp_tooltip: '', sd_tooltip: '', ag_tooltip: '', exp_tooltip: '', exp_digit: '0', poisoned: false,
       // Buttons and slots (the skill and potion parts are filled by the skills step)
       chainfo_open: false, myinven_open: false, friend_open: false, window_open: false, cshop_open: false,
+      party_open: false, guild_open: false, command_open: false,
       chainfo_alert: false, friend_alert: false, skill_grid_open: false, skill_list_up: false,
       chainfo_tooltip: 'Character (C)', myinven_tooltip: 'Inventory (I, V)', friend_tooltip: 'Friends (F)',
       window_tooltip: 'Menu (U)', cshop_tooltip: 'Cash shop (X)',
+      party_tooltip: 'Party (P)', guild_tooltip: 'Guild (G)', command_tooltip: 'Command (D)',
       skill_grid_cells: [], pet_skill_cells: [], current_skill_icon: '', current_skill_hotkey: '', current_skill_cooldown: 0,
       item_slot_0_count: '', item_slot_1_count: '', item_slot_2_count: '', item_slot_3_count: '',
       item_slot_0_hovered: false, item_slot_1_hovered: false, item_slot_2_hovered: false, item_slot_3_hovered: false,
@@ -104,6 +109,9 @@ export class Hud {
       mainframe_window_click: actions.menu ?? noop,
       mainframe_friend_click: actions.friends ?? noop,
       mainframe_cshop_click: actions.cashShop ?? noop,
+      mainframe_party_click: actions.party ?? noop,
+      mainframe_guild_click: actions.guild ?? noop,
+      mainframe_command_click: actions.command ?? noop,
       // The hovered slot's item turns (RenderItem3DWithHover); a right click uses it (OnHotkeySlotRightClick).
       item_hotkey_hover: (slot: number) => this.hoverSlot(slot),
       item_hotkey_unhover: () => this.hoverSlot(-1),
@@ -164,7 +172,30 @@ export class Hud {
   }
 
   /** Lights the cash shop button while the shop is open (MAINFRAME_BTN_PARTCHARGE). */
-  setCashShopOpen(open: boolean): void { this.model.cshop_open = open; this.doc?.update(); }
+  setCashShopOpen(open: boolean): void { this.setOpenStates({ cashShop: open }); }
+
+  /** Updates bottom HUD frame button highlight states (`open` class). */
+  setOpenStates(states: Partial<{
+    character: boolean;
+    inventory: boolean;
+    friends: boolean;
+    menu: boolean;
+    cashShop: boolean;
+    party: boolean;
+    guild: boolean;
+    command: boolean;
+  }>): void {
+    const m = this.model;
+    if (states.character !== undefined) m.chainfo_open = states.character;
+    if (states.inventory !== undefined) m.myinven_open = states.inventory;
+    if (states.friends !== undefined) m.friend_open = states.friends;
+    if (states.menu !== undefined) m.window_open = states.menu;
+    if (states.cashShop !== undefined) m.cshop_open = states.cashShop;
+    if (states.party !== undefined) m.party_open = states.party;
+    if (states.guild !== undefined) m.guild_open = states.guild;
+    if (states.command !== undefined) m.command_open = states.command;
+    this.doc?.update();
+  }
 
   refresh(): void {
     if (!this.doc) return;

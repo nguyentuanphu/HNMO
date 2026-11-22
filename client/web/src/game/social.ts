@@ -41,6 +41,8 @@ export interface SocialOptions {
   dockedChanged: (open: boolean) => void;
   /** The guild window opened or closed (HNMO's guild levels panel goes with it). */
   guildWindowToggled?: (open: boolean) => void;
+  /** The friend window opened or closed/minimized. */
+  friendWindowToggled?: (open: boolean) => void;
 }
 
 export interface Social { guild: Guild; messenger: Messenger; guildWindow: GuildInfoWindow; guildMakeWindow: GuildMakeWindow; friendWindow: FriendWindow; whisperTo(name: string): void }
@@ -99,7 +101,7 @@ export function setupSocial(options: SocialOptions): Social {
     chat.openInput();
   };
 
-  const friendWindow = new FriendWindow({ messenger, heroName, click: options.click, chatWith: whisperTo });
+  const friendWindow = new FriendWindow({ messenger, heroName, click: options.click, chatWith: whisperTo, onToggle: options.friendWindowToggled });
 
   const whispers = (bytes: Uint8Array) => {
     if (bytes[0] !== 0xc1) return;
