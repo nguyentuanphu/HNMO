@@ -511,6 +511,10 @@
   <data name="SeasonNineSocketOptionsUpdatePlugIn_Description" xml:space="preserve"><value>在以第 9 赛季运行时将水属性盾牌防御保护 5 级设为 30 %、风属性最大 AG 设为 50/70/90/110/130、风属性 AG 恢复设为 5/7/9/11/13；已自定义的值保持不变。</value></data>
   <data name="SeasonNineMonstersUpdatePlugIn_Name" xml:space="preserve"><value>第 9 赛季：怪物与 NPC</value></data>
   <data name="SeasonNineMonstersUpdatePlugIn_Description" xml:space="preserve"><value>在以第 9 赛季运行时添加第 6 赛季目录中缺少的 111 个第 9 赛季怪物和 NPC 定义，并将暗黑精灵见习士兵的重生时间更新为 10800 秒。</value></data>
+  <data name="ArenaGuardShopUpdatePlugIn_Name" xml:space="preserve"><value>竞技场守卫（239）商店</value></data>
+  <data name="ArenaGuardShopUpdatePlugIn_Description" xml:space="preserve"><value>在竞技场为竞技场守卫（239）启用包含 32 件药水、弓箭弹药、回城卷轴及卫兵护甲的商店。</value></data>
+  <data name="SeasonNineJinShopsUpdatePlugIn_Name" xml:space="preserve"><value>第 9 赛季：Jin 商店（583、604）</value></data>
+  <data name="SeasonNineJinShopsUpdatePlugIn_Description" xml:space="preserve"><value>在以第 9 赛季运行时为阿卡伦（583）及阿卡伦阿卡战争（604）的 Jin 商人添加 32 件药水与箭矢商店。</value></data>
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Name" xml:space="preserve"><value>第 9 赛季：地图与传送门</value></data>
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>在以第 9 赛季运行时添加 10 张第 9 赛季地图、地形文件、传送门（417-461、474-482）以及第 9 赛季刷怪/NPC 点位。</value></data>
 </root>

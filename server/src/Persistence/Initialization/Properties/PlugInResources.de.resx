@@ -988,6 +988,10 @@
   <data name="SeasonNineSocketOptionsUpdatePlugIn_Description" xml:space="preserve"><value>Setzt im Season-9-Betrieb Wasser-Schildschutz Stufe 5 auf 30 %, Wind-Max-AG auf 50/70/90/110/130 und Wind-AG-Erholung auf 5/7/9/11/13; angepasste Werte bleiben erhalten.</value></data>
   <data name="SeasonNineMonstersUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Monster und NPCs</value></data>
   <data name="SeasonNineMonstersUpdatePlugIn_Description" xml:space="preserve"><value>Fügt die 111 im Season-6-Katalog fehlenden Monster- und NPC-Definitionen von Season 9 hinzu und setzt die Wiederbelebungszeit des Dunkelelfen-Rekruten im Season-9-Betrieb auf 10800 Sekunden.</value></data>
+  <data name="ArenaGuardShopUpdatePlugIn_Name" xml:space="preserve"><value>Händlerladen des Arena-Wächters (239)</value></data>
+  <data name="ArenaGuardShopUpdatePlugIn_Description" xml:space="preserve"><value>Stattet den Arena-Wächter (239) in Arena mit dem 32-teiligen Trank-, Bolzen/Pfeil-, Stadtportalrollen- und Wachrüstung-Laden aus.</value></data>
+  <data name="SeasonNineJinShopsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Jin-Händlerläden (583, 604)</value></data>
+  <data name="SeasonNineJinShopsUpdatePlugIn_Description" xml:space="preserve"><value>Stattet die Jin-Händler in Acheron (583) und Acheron Arca War (604) im Season-9-Betrieb mit dem 32-teiligen Trank- und Munitionsladen aus.</value></data>
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Karten und Tore</value></data>
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>Fügt die 10 Season-9-Karten, Terraindateien, Tore (417-461, 474-482) und Season-9-Spawns im Season-9-Betrieb hinzu.</value></data>
 </root>

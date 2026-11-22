@@ -892,6 +892,10 @@
   <data name="SeasonNineSocketOptionsUpdatePlugIn_Description" xml:space="preserve"><value>Đặt dòng Nước tăng bảo vệ khiên cấp 5 lên 30 %, Gió AG tối đa lên 50/70/90/110/130 và Gió hồi AG lên 5/7/9/11/13 khi chạy Season 9; giữ nguyên giá trị đã tùy chỉnh.</value></data>
   <data name="SeasonNineMonstersUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: quái vật và NPC</value></data>
   <data name="SeasonNineMonstersUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 111 quái vật và NPC Season 9 còn thiếu so với danh mục Season 6 và cập nhật thời gian hồi sinh của lính tập sự Dark Elf thành 10800 giây khi chạy Season 9.</value></data>
+  <data name="ArenaGuardShopUpdatePlugIn_Name" xml:space="preserve"><value>Cửa hàng Arena Guard (239)</value></data>
+  <data name="ArenaGuardShopUpdatePlugIn_Description" xml:space="preserve"><value>Mở cửa hàng 32 vật phẩm (bình thuốc, tên/nỏ, cuộn về thành, Giáp Vệ Sĩ) cho NPC Arena Guard (239) tại Arena.</value></data>
+  <data name="SeasonNineJinShopsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: cửa hàng Jin (583, 604)</value></data>
+  <data name="SeasonNineJinShopsUpdatePlugIn_Description" xml:space="preserve"><value>Trang bị cửa hàng 32 bình thuốc và đạn tên cho thương nhân Jin tại Acheron (583) và Acheron Arca War (604) khi chạy Season 9.</value></data>
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: bản đồ và cổng</value></data>
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 10 bản đồ Season 9, tệp địa hình, cổng dịch chuyển (417-461, 474-482) và điểm xuất hiện quái/NPC Season 9 khi chạy Season 9.</value></data>
 </root>

@@ -1175,6 +1175,18 @@ namespace HNMO.Persistence.Initialization.Properties {
         /// <summary>Gets the localized SeasonNineMonstersUpdatePlugIn_Description text.</summary>
         public static string SeasonNineMonstersUpdatePlugIn_Description => ResourceManager.GetString("SeasonNineMonstersUpdatePlugIn_Description", resourceCulture)!;
 
+        /// <summary>Gets the localized ArenaGuardShopUpdatePlugIn_Name text.</summary>
+        public static string ArenaGuardShopUpdatePlugIn_Name => ResourceManager.GetString("ArenaGuardShopUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized ArenaGuardShopUpdatePlugIn_Description text.</summary>
+        public static string ArenaGuardShopUpdatePlugIn_Description => ResourceManager.GetString("ArenaGuardShopUpdatePlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized SeasonNineJinShopsUpdatePlugIn_Name text.</summary>
+        public static string SeasonNineJinShopsUpdatePlugIn_Name => ResourceManager.GetString("SeasonNineJinShopsUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized SeasonNineJinShopsUpdatePlugIn_Description text.</summary>
+        public static string SeasonNineJinShopsUpdatePlugIn_Description => ResourceManager.GetString("SeasonNineJinShopsUpdatePlugIn_Description", resourceCulture)!;
+
         /// <summary>Gets the localized SeasonNineMapsAndGatesUpdatePlugIn_Name text.</summary>
         public static string SeasonNineMapsAndGatesUpdatePlugIn_Name => ResourceManager.GetString("SeasonNineMapsAndGatesUpdatePlugIn_Name", resourceCulture)!;
 
