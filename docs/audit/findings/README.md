@@ -22,5 +22,6 @@ The suite files themselves are not in the repo; they are on the owner's PC. Task
 | [kundun-refill-texts.json](kundun-refill-texts.json) | Ready translations (4 languages) of the Kundun refill plug-in's settings, for the resource files |
 
 | [status-game-data.md](status-game-data.md) | Game data answers: done (#233 #234 #237 #240 #242 #250-#253), drafts #257 (fixes 4 failing base tests) and #258, not done with reasons |
+| [open-points-2026-11-22.md](open-points-2026-11-22.md) | Open points: Arena map (6) layout (client and server), five Season 9 monsters without a model (580, 581, 584, 643, 689), and legacy reward bags of events HNMO lacks |
 
 All local agents have stopped (owner's instruction, 21 Nov evening).
