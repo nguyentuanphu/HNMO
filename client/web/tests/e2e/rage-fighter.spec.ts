@@ -220,7 +220,14 @@ test('Dark Side dashes through a fed target list with its afterimages', async ({
   await enterAsFighter(page);
   await page.waitForFunction(() => (window as unknown as Win).__game.combat !== undefined, null, { timeout: 120_000 });
   await page.evaluate(() => (window as unknown as Win).__game.online.say('/move lorencia'));
-  await expect.poll(() => page.evaluate(() => [...(window as unknown as Win).__game.online.characters.values()].filter((c) => c.kind !== 'player').length), { timeout: 60_000 }).toBeGreaterThan(1);
+  await expect.poll(() => page.evaluate(() => {
+    const g = (window as unknown as Win).__game;
+    const count = [...g.online.characters.values()].filter((c) => c.kind !== 'player').length;
+    if (count === 1 && !g.online.hero.isWalking) {
+      g.online.walkTo({ x: 138, y: 128 });
+    }
+    return count;
+  }), { timeout: 60_000 }).toBeGreaterThan(1);
   // The ids of two monsters or NPCs near the hero, and the fed packets of a Dark Side from the hero at them.
   const feed = () => page.evaluate(() => {
     const g = (window as unknown as Win).__game;
