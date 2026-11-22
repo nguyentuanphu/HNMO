@@ -262,6 +262,20 @@ export class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
     this.doc.update();
   }
 
+  protected activeGrids(): { grid: ItemGrid; origin: Point; cells: GridCell[] }[] {
+    return [{ grid: this.grid, origin: this.gridOrigin, cells: this.model.grid_cells }];
+  }
+
+  protected regionOfSlot(slot: number): { grid: ItemGrid; origin: Point; cells: GridCell[] } | null {
+    return this.activeGrids().find((r) => slot >= r.grid.firstSlot && slot < r.grid.firstSlot + r.grid.columns * r.grid.rows) ?? null;
+  }
+
+  protected prepareGrids(): void {}
+
+  protected setRegionCells(_grid: ItemGrid, cells: GridCell[]): void {
+    this.model.grid_cells = cells;
+  }
+
   layout(): void {
     const gridElement = this.doc!.$('#item_grid')!;
     this.gridOrigin = { x: gridElement.offsetLeft, y: gridElement.offsetTop };
@@ -275,18 +289,25 @@ export class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
   }
 
   gridSlotAt(point: Point): number | null {
-    const col = Math.floor((point.x - this.gridOrigin.x) / CELL);
-    const row = Math.floor((point.y - this.gridOrigin.y) / CELL);
-    if (col < 0 || row < 0 || col >= this.grid.columns || row >= this.grid.rows) return null;
-    return this.grid.firstSlot + row * this.grid.columns + col;
+    for (const region of this.activeGrids()) {
+      const col = Math.floor((point.x - region.origin.x) / CELL);
+      const row = Math.floor((point.y - region.origin.y) / CELL);
+      if (col >= 0 && row >= 0 && col < region.grid.columns && row < region.grid.rows) {
+        return region.grid.firstSlot + row * region.grid.columns + col;
+      }
+    }
+    return null;
   }
 
   // The item under a grid slot: the item whose cells cover it.
   itemAtGridSlot(slot: number | null): number | null {
     if (slot === null) return null;
+    const region = this.regionOfSlot(slot);
+    if (!region) return null;
+    const end = region.grid.firstSlot + region.grid.columns * region.grid.rows;
     for (const [s, item] of this.items) {
-      if (s < this.grid.firstSlot) continue;
-      if (Inventory.cellsOf(this.grid, s, item)?.includes(slot)) return s;
+      if (s < region.grid.firstSlot || s >= end) continue;
+      if (Inventory.cellsOf(region.grid, s, item)?.includes(slot)) return s;
     }
     return null;
   }
@@ -297,10 +318,18 @@ export class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
   dropSlotFor(point: Point, item: Item): { slot: number; equipment: boolean } | null {
     const equipment = this.equipmentSlotAt(point);
     if (equipment !== null) return { slot: equipment, equipment: true };
-    const col = Math.round((point.x - this.gridOrigin.x) / CELL - item.width / 2);
-    const row = Math.round((point.y - this.gridOrigin.y) / CELL - item.height / 2);
-    if (col < 0 || row < 0 || col + item.width > this.grid.columns || row + item.height > this.grid.rows) return null;
-    return { slot: this.grid.firstSlot + row * this.grid.columns + col, equipment: false };
+    const regions = this.activeGrids();
+    for (const region of regions) {
+      if (regions.length > 1) {
+        const px = point.x - region.origin.x, py = point.y - region.origin.y;
+        if (px < 0 || py < 0 || px >= region.grid.columns * CELL || py >= region.grid.rows * CELL) continue;
+      }
+      const col = Math.round((point.x - region.origin.x) / CELL - item.width / 2);
+      const row = Math.round((point.y - region.origin.y) / CELL - item.height / 2);
+      if (col < 0 || row < 0 || col + item.width > region.grid.columns || row + item.height > region.grid.rows) continue;
+      return { slot: region.grid.firstSlot + row * region.grid.columns + col, equipment: false };
+    }
+    return null;
   }
 
   click(event: MouseEvent): void {
@@ -322,8 +351,9 @@ export class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
       if (!target) return;
       const from = this.picked.source;
       const sameStorage = from.storage === this.storageKind;
+      const targetGrid = target.equipment ? this.grid : (this.regionOfSlot(target.slot)?.grid ?? this.grid);
       const fits = target.equipment ? !this.items.has(target.slot) || (sameStorage && from.slot === target.slot)
-        : this.inventory.fits(this.items, this.grid, target.slot, item, sameStorage ? from.slot : null);
+        : this.inventory.fits(this.items, targetGrid, target.slot, item, sameStorage ? from.slot : null);
       if (!fits) return;
       this.picked.drop();
       if (!(sameStorage && from.slot === target.slot)) this.inventory.move(from.storage, from.slot, this.storageKind, target.slot);
@@ -366,14 +396,16 @@ export class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
 
   // The cells under the picked item: blue where it fits, red where it doesn't (drop-free / drop-blocked).
   updateDropPreview(point: Point | null): void {
-    const cells = this.model.grid_cells;
-    for (const cell of cells) cell.drop = '';
+    for (const region of this.activeGrids()) {
+      for (const cell of region.cells) cell.drop = '';
+    }
     const picked = this.picked.source;
     if (picked && point) {
       const target = this.dropSlotFor(point, picked.item);
-      if (target && !target.equipment) {
-        const fits = this.inventory.fits(this.items, this.grid, target.slot, picked.item, picked.storage === this.storageKind ? picked.slot : null);
-        for (const slot of Inventory.cellsOf(this.grid, target.slot, picked.item) ?? []) cells[slot - this.grid.firstSlot].drop = fits ? 'drop-free' : 'drop-blocked';
+      const region = target && !target.equipment ? this.regionOfSlot(target.slot) : null;
+      if (target && region) {
+        const fits = this.inventory.fits(this.items, region.grid, target.slot, picked.item, picked.storage === this.storageKind ? picked.slot : null);
+        for (const slot of Inventory.cellsOf(region.grid, target.slot, picked.item) ?? []) region.cells[slot - region.grid.firstSlot].drop = fits ? 'drop-free' : 'drop-blocked';
       }
     }
     this.doc?.update();
@@ -381,10 +413,12 @@ export class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
 
   // The item's box in panel reference px.
   boxOf(slot: number, item: Item): Box | null {
-    const index = slot - this.grid.firstSlot;
+    const region = this.regionOfSlot(slot);
+    if (!region) return null;
+    const index = slot - region.grid.firstSlot;
     return {
-      x: this.gridOrigin.x + (index % this.grid.columns) * CELL,
-      y: this.gridOrigin.y + Math.floor(index / this.grid.columns) * CELL,
+      x: region.origin.x + (index % region.grid.columns) * CELL,
+      y: region.origin.y + Math.floor(index / region.grid.columns) * CELL,
       w: item.width * CELL,
       h: item.height * CELL,
     };
@@ -392,15 +426,19 @@ export class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
 
   refresh(): void {
     if (!this.doc) return;
+    this.prepareGrids();
     // Cells: tinted under every item, as CInventoryCtrl::Render() does.
-    const cells = emptyCells(this.grid.columns * this.grid.rows);
-    for (const [slot, item] of this.items) {
-      if (slot < this.grid.firstSlot) continue;
-      const hidden = this.picked.source?.storage === this.storageKind && this.picked.source.slot === slot;
-      for (const cell of Inventory.cellsOf(this.grid, slot, item) ?? []) cells[cell - this.grid.firstSlot].tint = hidden ? '' : 'tint-normal';
-      if (stackCountRule(item) && item.durability > 1 && !hidden) cells[slot - this.grid.firstSlot].count = String(item.durability);
+    for (const region of this.activeGrids()) {
+      const cells = emptyCells(region.grid.columns * region.grid.rows);
+      const end = region.grid.firstSlot + region.grid.columns * region.grid.rows;
+      for (const [slot, item] of this.items) {
+        if (slot < region.grid.firstSlot || slot >= end) continue;
+        const hidden = this.picked.source?.storage === this.storageKind && this.picked.source.slot === slot;
+        for (const cell of Inventory.cellsOf(region.grid, slot, item) ?? []) cells[cell - region.grid.firstSlot].tint = hidden ? '' : 'tint-normal';
+        if (stackCountRule(item) && item.durability > 1 && !hidden) cells[slot - region.grid.firstSlot].count = String(item.durability);
+      }
+      this.setRegionCells(region.grid, cells);
     }
-    this.model.grid_cells = cells;
     this.updateModel();
     this.doc.update();
     this.drawItems();
@@ -445,15 +483,18 @@ export class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
 export class InventoryWindow extends ItemWindow<InventoryModel> {
   slotBoxes!: Map<number, Box>; // set by layout()
 
-  constructor({ inventory, picked, onClose }: { inventory: Inventory; picked: PickedItem; onClose: () => void }) {
+  constructor({ inventory, picked, onClose, onExpand }: {
+    inventory: Inventory; picked: PickedItem; onClose: () => void; onExpand?: () => void;
+  }) {
     const model: InventoryModel = {
       text_px: 12, title: 'Inventory', gold_text: '0', gold_tier: 'base',
       slot_states: Array(12).fill(''), grid_cells: emptyCells(64),
       repair_visible: false, myshop_visible: false, myshop_mode_open: true, myshop_locked: false,
-      exit_tooltip: 'Close (I, V)', repair_tooltip: 'Repair', myshop_tooltip: 'Personal store', expand_tooltip: 'Inventory expansion',
+      exit_tooltip: 'Close (I, V)', repair_tooltip: 'Repair', myshop_tooltip: 'Personal store',
+      expand_tooltip: translate('Open Expanded Inventory (K)') ?? 'Open Expanded Inventory (K)',
       set_option_label: '', socket_option_label: '', set_option_active: false, socket_option_active: false,
       window_close: () => onClose(), my_inventory_exit_click: () => onClose(),
-      my_inventory_repair_click() {}, my_inventory_myshop_click() {}, my_inventory_expand_click() {},
+      my_inventory_repair_click() {}, my_inventory_myshop_click() {}, my_inventory_expand_click: () => onExpand?.(),
       my_inventory_set_option_hover() {}, my_inventory_set_option_unhover() {},
       my_inventory_socket_option_hover() {}, my_inventory_socket_option_unhover() {},
     };
@@ -478,7 +519,7 @@ export class InventoryWindow extends ItemWindow<InventoryModel> {
 
   override boxOf(slot: number, item: Item): Box | null {
     if (slot < BAG.firstSlot) return this.slotBoxes.get(slot) ?? null;
-    if (slot >= BAG.firstSlot + BAG.columns * BAG.rows) return null; // the extensions aren't shown yet
+    if (slot >= BAG.firstSlot + BAG.columns * BAG.rows) return null; // extension slots are drawn by InventoryExtensionWindow
     return super.boxOf(slot, item);
   }
 
@@ -486,6 +527,106 @@ export class InventoryWindow extends ItemWindow<InventoryModel> {
     this.model.gold_text = formatGold(this.inventory.money);
     this.model.gold_tier = goldTier(this.inventory.money);
     this.model.slot_states = Array.from({ length: 12 }, (_, slot) => (this.items.has(slot) ? '' : ''));
+  }
+}
+
+const BAG_EXTENSION_COUNT = 4;
+export const BAG_EXTENSIONS: readonly ItemGrid[] = Array.from(
+  { length: BAG_EXTENSION_COUNT },
+  (_, page) => ({ firstSlot: BAG.firstSlot + BAG.columns * BAG.rows + page * 32, columns: 8, rows: 4 }),
+);
+const EXTENSION_DEFAULT_ORIGINS: readonly Point[] = [0, 1, 2, 3].map((page) => ({ x: 15, y: 45 + page * 87 }));
+
+type RmlCells = GridCell[] & { size: number };
+const withRmlSize = (cells: GridCell[]): RmlCells => Object.assign(cells, { size: cells.length });
+
+export interface InventoryExtensionModel extends ItemWindowModel {
+  title: string;
+  exit_tooltip: string;
+  grid_cells_1: RmlCells;
+  grid_cells_2: RmlCells;
+  grid_cells_3: RmlCells;
+  grid_cells_4: RmlCells;
+  locked_pages: { number: number }[];
+  inventory_extension_exit_click: () => void;
+}
+
+const EXTENSION_CELL_KEYS = ['grid_cells_1', 'grid_cells_2', 'grid_cells_3', 'grid_cells_4'] as const;
+
+export class InventoryExtensionWindow extends ItemWindow<InventoryExtensionModel> {
+  private readonly extensions: () => number;
+  private pageOrigins: Point[] = EXTENSION_DEFAULT_ORIGINS.map((p) => ({ ...p }));
+
+  constructor({ inventory, picked, extensions, onClose }: {
+    inventory: Inventory; picked: PickedItem; extensions: () => number; onClose: () => void;
+  }) {
+    const model: InventoryExtensionModel = {
+      text_px: 12,
+      grid_cells: [],
+      title: translate('Expanded Inventory') ?? 'Expanded Inventory',
+      exit_tooltip: translate('Close') ?? 'Close',
+      grid_cells_1: withRmlSize([]),
+      grid_cells_2: withRmlSize([]),
+      grid_cells_3: withRmlSize([]),
+      grid_cells_4: withRmlSize([]),
+      locked_pages: [],
+      window_close: () => onClose(),
+      inventory_extension_exit_click: () => onClose(),
+    };
+    super({ inventory, picked, documentName: 'inventory_extension', grid: BAG_EXTENSIONS[0], storage: Storage.INVENTORY, model });
+    this.extensions = extensions;
+    this.prepareGrids();
+  }
+
+  private unlockedCount(): number {
+    return Math.max(0, Math.min(BAG_EXTENSION_COUNT, this.extensions()));
+  }
+
+  protected override prepareGrids(): void {
+    const unlocked = this.unlockedCount();
+    const locked: { number: number }[] = [];
+    for (let i = 0; i < BAG_EXTENSION_COUNT; i++) {
+      const key = EXTENSION_CELL_KEYS[i];
+      if (i < unlocked) {
+        if (this.model[key].length !== 32) this.model[key] = withRmlSize(emptyCells(32));
+      } else {
+        if (this.model[key].length !== 0) this.model[key] = withRmlSize([]);
+        locked.push({ number: i + 1 });
+      }
+    }
+    this.model.locked_pages = locked;
+    this.model.title = translate('Expanded Inventory') ?? 'Expanded Inventory';
+    this.model.exit_tooltip = translate('Close') ?? 'Close';
+    if (this.doc) {
+      this.doc.update();
+      this.measurePageOrigins();
+    }
+  }
+
+  private measurePageOrigins(): void {
+    if (!this.doc) return;
+    for (let i = 0; i < BAG_EXTENSION_COUNT; i++) {
+      const el = this.doc.$(`#item_grid_${i + 1}`);
+      if (el && el.offsetWidth > 0) this.pageOrigins[i] = { x: el.offsetLeft, y: el.offsetTop };
+    }
+  }
+
+  override layout(): void {
+    this.prepareGrids();
+  }
+
+  protected override activeGrids(): { grid: ItemGrid; origin: Point; cells: GridCell[] }[] {
+    const unlocked = this.unlockedCount();
+    const regions: { grid: ItemGrid; origin: Point; cells: GridCell[] }[] = [];
+    for (let i = 0; i < unlocked; i++) {
+      regions.push({ grid: BAG_EXTENSIONS[i], origin: this.pageOrigins[i], cells: this.model[EXTENSION_CELL_KEYS[i]] });
+    }
+    return regions;
+  }
+
+  protected override setRegionCells(grid: ItemGrid, cells: GridCell[]): void {
+    const page = BAG_EXTENSIONS.indexOf(grid);
+    if (page >= 0) this.model[EXTENSION_CELL_KEYS[page]] = withRmlSize(cells);
   }
 }
 
@@ -803,6 +944,7 @@ export class ItemWindows {
   parent: HTMLElement;
   picked: PickedItem;
   bag: InventoryWindow;
+  extension: InventoryExtensionWindow;
   vault: VaultWindow;
   shop: ShopWindow;
   /** The trade window; the trade itself (src/ui/tradeWindow.ts) fills it and sets its handlers. */
@@ -821,18 +963,20 @@ export class ItemWindows {
   /** The windows were placed again (a resize, a docked panel). */
   onPlaced: () => void = () => undefined;
 
-  constructor({ inventory, parent = document.body as HTMLElement, character = () => null, groundCell = () => null }: {
+  constructor({ inventory, parent = document.body as HTMLElement, character = () => null, groundCell = () => null, extensions = () => 0 }: {
     inventory: Inventory; parent?: HTMLElement; character?: () => TooltipCharacter | null;
     /** The ground cell under the mouse, where a picked inventory item is dropped (null: not on the ground). */
     groundCell?: (event: MouseEvent) => { x: number; y: number } | null;
+    extensions?: () => number;
   }) {
     this.inventory = inventory;
     this.parent = parent;
     this.picked = new PickedItem(parent);
     this.tooltip = new ItemTooltipView(parent, character);
     // Get the windows ready in the background, so they open at once.
-    prepareDocument('my_inventory').then(() => prepareDocument('storage')).then(() => prepareDocument('trade')).catch((error) => console.warn('Interface', error));
-    this.bag = new InventoryWindow({ inventory, picked: this.picked, onClose: () => this.closeAll() });
+    prepareDocument('my_inventory').then(() => prepareDocument('inventory_extension')).then(() => prepareDocument('storage')).then(() => prepareDocument('trade')).catch((error) => console.warn('Interface', error));
+    this.bag = new InventoryWindow({ inventory, picked: this.picked, onClose: () => this.closeAll(), onExpand: () => { void this.toggleExtension(); } });
+    this.extension = new InventoryExtensionWindow({ inventory, picked: this.picked, extensions, onClose: () => { this.extension.close(); this.placeAll(); } });
     this.vault = new VaultWindow({ inventory, picked: this.picked, onClose: () => this.closeAll(), onMoney: (toVault) => this.askMoney(toVault) });
     this.shop = new ShopWindow({
       inventory, picked: this.picked, onClose: () => this.closeAll(),
@@ -844,19 +988,21 @@ export class ItemWindows {
       inventory, picked: this.picked,
       onClose: () => this.tradeHandlers.close(), onZen: () => this.tradeHandlers.zen(), onConfirm: () => this.tradeHandlers.confirm(),
     });
-    // While trading, a right click on a bag item puts it into the trade (CTrade::ProcessMyInvenItemAutoMove).
-    this.bag.interceptRightClick = (slot, item) => {
-      if (!this.trade.isOpen) return false;
-      this.tradeHandlers.bagRightClick(slot, item);
-      return true;
-    };
-    // In a repair shop's repair mode a click on an item repairs it (RepairItemAtMousePoint).
-    this.bag.onItemClick = (slot) => {
-      if (!this.repairMode || !this.shop.isOpen) return false;
-      this.inventory.repair(slot, false);
-      return true;
-    };
-    for (const itemWindow of [this.bag, this.vault, this.shop, this.trade]) this.hook(itemWindow);
+    for (const bagWindow of [this.bag, this.extension]) {
+      // While trading, a right click on a bag item puts it into the trade (CTrade::ProcessMyInvenItemAutoMove).
+      bagWindow.interceptRightClick = (slot, item) => {
+        if (!this.trade.isOpen) return false;
+        this.tradeHandlers.bagRightClick(slot, item);
+        return true;
+      };
+      // In a repair shop's repair mode a click on an item repairs it (RepairItemAtMousePoint).
+      bagWindow.onItemClick = (slot) => {
+        if (!this.repairMode || !this.shop.isOpen) return false;
+        this.inventory.repair(slot, false);
+        return true;
+      };
+    }
+    for (const itemWindow of [this.bag, this.extension, this.vault, this.shop, this.trade]) this.hook(itemWindow);
     inventory.onChange((what) => {
       if (what === 'window') this.syncVault();
       this.refresh();
@@ -865,7 +1011,8 @@ export class ItemWindows {
       if (event.target instanceof Element && event.target.closest('input, textarea')) return;
       const key = event.key.toLowerCase();
       if (key === 'i' || key === 'v') { event.preventDefault(); this.toggle(); }
-      if (key === 'escape' && (this.bag.isOpen || this.vault.isOpen || this.shop.isOpen || this.trade.isOpen || this.docked.some((d) => d.window.isOpen))) this.closeAll();
+      if (key === 'k' && this.bag.isOpen && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void this.toggleExtension(); }
+      if (key === 'escape' && (this.bag.isOpen || this.extension.isOpen || this.vault.isOpen || this.shop.isOpen || this.trade.isOpen || this.docked.some((d) => d.window.isOpen))) this.closeAll();
       // L: the repair mode of a repair shop; Shift + L repairs everything (CNPCShop::UpdateKeyEvent).
       if (key === 'l' && this.shop.isOpen && this.shop.repairShop) {
         if (event.shiftKey) this.inventory.repair(0xff, false);
@@ -910,6 +1057,12 @@ export class ItemWindows {
     else { await this.bag.open(this.parent); this.placeAll(); }
   }
 
+  async toggleExtension(): Promise<void> {
+    if (!this.bag.isOpen) return;
+    if (this.extension.isOpen) { this.extension.close(); this.placeAll(); }
+    else { await this.extension.open(this.parent); this.placeAll(); }
+  }
+
   async syncVault(): Promise<void> {
     const open = this.inventory.openWindow;
     if (open === NpcWindow.MERCHANT || open === NpcWindow.MERCHANT1) {
@@ -940,6 +1093,7 @@ export class ItemWindows {
     if (this.shop.isOpen) { this.shop.close(); this.repairMode = false; this.inventory.closeShop(); }
     // Closing the inventory (or Escape) while trading cancels the trade (CSystem's HideAllGroupA, CTrade::UpdateKeyEvent).
     if (this.trade.isOpen) { this.trade.close(); this.onTradeClosed(); }
+    if (this.extension.isOpen) this.extension.close();
     this.bag.close();
   }
 
@@ -963,6 +1117,7 @@ export class ItemWindows {
   closeTrade(): void {
     this.tooltip.hide();
     if (this.picked.source) this.picked.drop();
+    if (this.extension.isOpen) this.extension.close();
     if (this.trade.isOpen) { this.trade.close(); this.bag.close(); }
     this.refresh();
   }
@@ -972,12 +1127,15 @@ export class ItemWindows {
 
   placeAll(): void {
     const right = this.dockedRight * PANEL.width;
+    const extWidth = this.extension.isOpen ? PANEL.width : 0;
     this.bag.place(right);
-    this.vault.place(right + PANEL.width);
-    this.shop.place(right + PANEL.width);
-    this.trade.place(right + PANEL.width);
-    for (const d of this.docked) { d.window.place(right + PANEL.width); d.window.refresh(); }
+    this.extension.place(right + PANEL.width);
+    this.vault.place(right + PANEL.width + extWidth);
+    this.shop.place(right + PANEL.width + extWidth);
+    this.trade.place(right + PANEL.width + extWidth);
+    for (const d of this.docked) { d.window.place(right + PANEL.width + extWidth); d.window.refresh(); }
     this.bag.refresh();
+    this.extension.refresh();
     this.vault.refresh();
     this.shop.refresh();
     this.trade.refresh();
@@ -986,6 +1144,7 @@ export class ItemWindows {
 
   refresh(): void {
     this.bag.refresh();
+    this.extension.refresh();
     this.vault.refresh();
     this.shop.refresh();
     this.trade.refresh();
