@@ -24,8 +24,14 @@ public class PartyKickAction
             return;
         }
 
-        if (!Equals(player, party.PartyList[0]) &&
-            !Equals(player, party.PartyList[index]))
+        var members = party.PartyList;
+        if (index >= members.Count)
+        {
+            return;
+        }
+
+        if (!Equals(player, members[0]) &&
+            !Equals(player, members[index]))
         {
             player.Logger.LogWarning("Suspicious party kick request of {0}, could be hack attempt.", player);
             return;

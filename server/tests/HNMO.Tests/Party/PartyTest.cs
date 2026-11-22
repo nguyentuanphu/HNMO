@@ -162,6 +162,44 @@ public class PartyTest
     }
 
     /// <summary>
+    /// Tests that kicking with an out-of-range index by the party master is quietly ignored.
+    /// </summary>
+    [Test]
+    public async ValueTask PartyKickOutOfRangeIndexByMasterRefusesQuietlyAsync()
+    {
+        var party = await this.CreatePartyWithMembersAsync(2).ConfigureAwait(false);
+        var partyMaster = (Player)party.PartyList[0];
+
+        Assert.DoesNotThrowAsync(async () => await this._kickAction.KickPlayerAsync(partyMaster, 5).ConfigureAwait(false));
+        Assert.That(party.PartyList, Has.Count.EqualTo(2));
+    }
+
+    /// <summary>
+    /// Tests that kicking with an out-of-range index by a non-master member is quietly ignored.
+    /// </summary>
+    [Test]
+    public async ValueTask PartyKickOutOfRangeIndexByMemberRefusesQuietlyAsync()
+    {
+        var party = await this.CreatePartyWithMembersAsync(2).ConfigureAwait(false);
+        var member = (Player)party.PartyList[1];
+
+        Assert.DoesNotThrowAsync(async () => await this._kickAction.KickPlayerAsync(member, 5).ConfigureAwait(false));
+        Assert.That(party.PartyList, Has.Count.EqualTo(2));
+    }
+
+    /// <summary>
+    /// Tests that <see cref="Party.KickPlayerAsync"/> ignores an out-of-range index quietly.
+    /// </summary>
+    [Test]
+    public async ValueTask PartyKickPlayerDirectOutOfRangeIndexRefusesQuietlyAsync()
+    {
+        var party = await this.CreatePartyWithMembersAsync(2).ConfigureAwait(false);
+
+        Assert.DoesNotThrowAsync(async () => await party.KickPlayerAsync(5).ConfigureAwait(false));
+        Assert.That(party.PartyList, Has.Count.EqualTo(2));
+    }
+
+    /// <summary>
     /// Tests the adding of party members.
     /// </summary>
     [Test]
