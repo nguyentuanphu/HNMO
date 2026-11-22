@@ -55,9 +55,9 @@ public class RavenCommandManager : Disposable, IPetCommandManager
         this._attackCts?.Dispose();
         this._attackCts = null;
 
-        if (this._pet.Durability == 0.0)
+        if (this._pet.Durability <= 0.0)
         {
-            this._currentBehaviour = PetBehaviour.Idle;
+            newBehaviour = PetBehaviour.Idle;
         }
 
         this._currentBehaviour = newBehaviour;
