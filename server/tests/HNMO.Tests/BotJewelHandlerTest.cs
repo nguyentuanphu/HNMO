@@ -4,12 +4,14 @@
 
 namespace HNMO.Tests;
 
+using System.Globalization;
 using Moq;
 using HNMO.DataModel;
 using HNMO.DataModel.Configuration.Items;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Bots;
+using HNMO.GameLogic.Properties;
 
 /// <summary>
 /// Tests the jewel usage policy of <see cref="BotJewelHandler"/> - which jewel a bot picks for which
@@ -164,6 +166,26 @@ public class BotJewelHandlerTest
         var plan = BotJewelHandler.PlanNextUse(player, 2, 1, 1);
 
         Assert.That(plan, Is.Null);
+    }
+
+    /// <summary>
+    /// Verifies that <see cref="PlugInResources.BotConfiguration_JewelStockPerKind_Description"/>
+    /// mentions Jewel of Chaos alongside Bless, Soul and Life in every supported language.
+    /// </summary>
+    /// <param name="cultureName">The resource culture.</param>
+    /// <param name="expectedChaosToken">The localized token for Jewel of Chaos.</param>
+    [TestCase("en", "Chaos")]
+    [TestCase("vi", "Hỗn Nguyên")]
+    [TestCase("de", "Chaos")]
+    [TestCase("zh-CN", "混沌")]
+    public void JewelStockDescriptionMentionsChaosInAllLanguages(string cultureName, string expectedChaosToken)
+    {
+        var culture = CultureInfo.GetCultureInfo(cultureName);
+        var description = PlugInResources.ResourceManager.GetString(
+            nameof(PlugInResources.BotConfiguration_JewelStockPerKind_Description),
+            culture);
+
+        Assert.That(description, Does.Contain(expectedChaosToken));
     }
 
     private static async ValueTask<Item> AddEquippedItemAsync(Player player, byte slot, byte level, bool withLuck = false)
