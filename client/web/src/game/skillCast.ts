@@ -639,7 +639,7 @@ const RAGE_TARGET_SKILLS: readonly number[] = [
 /** CMonkSystem::IsRideNotUseSkill: not while a horn mount (Uniria, Dinorant, Fenrir) is worn. */
 const RAGE_NOT_RIDING: readonly number[] = [...KILLING_BLOWS, ...BEAST_UPPERCUTS, ...CHAIN_DRIVES, S.DRAGON_KICK, S.OCCUPY];
 /** CMonkSystem::IsSwordformGlovesUseSkill: only with sword-form gloves in either hand. */
-const RAGE_GLOVE_SKILLS: readonly number[] = [S.CHAIN_DRIVE, ...DRAGON_ROARS, S.DRAGON_KICK];
+const RAGE_GLOVE_SKILLS: readonly number[] = [...CHAIN_DRIVES, ...DRAGON_ROARS, S.DRAGON_KICK];
 
 /** The skills whose 4A (ReceiveStraightAttack) plays the action half way (CMonkSystem::IsRageHalfwaySkillAni). */
 export function isRageHalfwaySkill(skill: number): boolean {
@@ -661,9 +661,9 @@ export function rageSkillAction(skill: number): number | null {
   return null;
 }
 
-/** CMonkSystem::IsSwordformGlovesItemType: Sacred Glove, Storm Hard Glove, Piercing Blade Glove, Phoenix Soul Star. */
+/** CMonkSystem::IsSwordformGlovesItemType: Sacred Glove, Storm Hard Glove, Piercing Blade Glove, Phoenix Soul Star, Frick Large Glove. */
 export function isSwordformGloves(item: Pick<HandItem, 'group' | 'number'> | null | undefined): boolean {
-  return !!item && item.group === 0 && item.number >= 32 && item.number <= 35;
+  return !!item && item.group === 0 && ((item.number >= 32 && item.number <= 35) || item.number === 38);
 }
 
 /**
@@ -673,7 +673,9 @@ export function isSwordformGloves(item: Pick<HandItem, 'group' | 'number'> | nul
 export function rageRefusal(skill: number, ctx: SkillCastContext): 'riding' | 'gloves' | null {
   const mount = gearOf(ctx).mount;
   if ((mount === 'uniria' || mount === 'dinorant' || mount === 'fenrir') && RAGE_NOT_RIDING.includes(skill)) return 'riding';
-  if (RAGE_GLOVE_SKILLS.includes(skill) && !isSwordformGloves(ctx.rightHand) && !isSwordformGloves(ctx.leftHand)) return 'gloves';
+  const hasGloves = isSwordformGloves(ctx.rightHand) || ctx.rightHandKind === 'glove'
+    || isSwordformGloves(ctx.leftHand) || ctx.leftHandKind === 'glove';
+  if (RAGE_GLOVE_SKILLS.includes(skill) && !hasGloves) return 'gloves';
   return null;
 }
 
