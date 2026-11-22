@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using HNMO.GameLogic.PlugIns.BannedWords;
+using HNMO.GameLogic.PlugIns.Chat;
 using HNMO.GameLogic.Views;
 using HNMO.PlugIns;
 
@@ -82,6 +83,7 @@ public class PostChatCommandPlugIn : IChatCommandPlugIn, ISupportCustomConfigura
         this._lastPosts.AddOrUpdate(player, new StrongBox<DateTime>(nowUtc));
         message = $"{player.SelectedCharacter?.Name}: {filteredMessage}";
         await player.GameContext.SendGlobalChatMessageAsync("[POST]", message, ChatMessageType.Gens).ConfigureAwait(false);
+        ChatLogPlugIn.Record(player, ChatMessageType.Gens, "[POST]", filteredMessage);
     }
 
     /// <inheritdoc />

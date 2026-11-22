@@ -4,6 +4,8 @@
 
 namespace HNMO.Tests;
 
+using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.PlugIns.Chat;
 using HNMO.GameLogic.PlugIns.ChatCommands;
 using HNMO.GameLogic.Views;
 using HNMO.Interfaces;
@@ -51,5 +53,28 @@ public class PostCommandMuteTest
 
         Mock.Get(observer.ViewPlugIns.GetPlugIn<IChatViewPlugIn>()!)
             .Verify(v => v.ChatMessageAsync("Hero: hello all", "[POST]", ChatMessageType.Gens), Times.Once);
+    }
+
+    /// <summary>A /post line is recorded in the admin panel's chat log when ChatLogPlugIn is active.</summary>
+    /// <returns>The task.</returns>
+    [Test]
+    public async ValueTask PostIsRecordedInChatLogAsync()
+    {
+        var context = GameContextTestHelper.CreateGameContext([]);
+        if (!context.PlugInManager.GetActivePlugInsOf<IChatMessageSentPlugIn>().OfType<ChatLogPlugIn>().Any())
+        {
+            context.PlugInManager.RegisterPlugInAtPlugInPoint<IChatMessageSentPlugIn>(new ChatLogPlugIn());
+        }
+
+        var sender = await PlayerTestHelper.CreatePlayerAsync(context).ConfigureAwait(false);
+        sender.SelectedCharacter!.Name = "PostHero";
+        sender.Money = 5_000;
+        var token = $"post-log-{Guid.NewGuid():N}";
+
+        await new PostChatCommandPlugIn().HandleCommandAsync(sender, $"/post {token}").ConfigureAwait(false);
+
+        var logged = ChatLog.Shared.Find(token);
+        Assert.That(logged, Has.Count.EqualTo(1));
+        Assert.That(logged[0].Sender, Is.EqualTo("PostHero"));
     }
 }
