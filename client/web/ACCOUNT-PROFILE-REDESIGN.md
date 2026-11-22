@@ -6,9 +6,9 @@ Yêu cầu ngày 22/11/2026: thiết kế lại màn hình đăng nhập game, �
 
 ## Reviewable design / Bản thiết kế có thể xem thử
 
-Build the web client and open `/account-profile-preview.html`. The screen selector previews both login layouts and the account hub. All account names, balances, characters, events and item references are fictional. The preview performs no sign-in, account request, collection or payment. Inputs and financial controls cannot submit credentials or charges. Game branding still comes from `gameName()`.
+Build the web client and open `/account-profile-preview.html`. The default owner review gallery offers five complete fantasy portal/profile kits. `?view=portal&theme=ember` previews the shared game/website entrance; `?view=profile&theme=ember` opens fictional account data. Repeat with `azure`, `jade`, `violet`, or `parchment`. `?view=admin` is a clearly labelled host-setting simulation, not a production admin route. Default language is Vietnamese; `lang=en` switches to English. Branding comes from `gameName()`.
 
-Biên dịch web client rồi mở `/account-profile-preview.html`. Chọn màn hình để xem hai bố cục đăng nhập và trung tâm tài khoản. Tên tài khoản, số dư, nhân vật, sự kiện và mã vật phẩm đều là dữ liệu giả lập. Bản xem thử không đăng nhập, gọi API tài khoản, nhận quà hay thanh toán. Tên game vẫn lấy từ `gameName()`.
+Mở `/account-profile-preview.html` để xem năm bộ giao diện fantasy. Mỗi bộ có trang vào game và hồ sơ riêng. Chỉ chủ server chọn theme; hồ sơ người chơi không có mục chọn giao diện. `view=admin` chỉ mô phỏng thao tác quản trị trong bản mẫu, không ghi cấu hình máy chủ thật. Mặc định tiếng Việt, có tiếng Anh. Dữ liệu tài khoản đều là giả lập.
 
 This is a design prototype, not a replacement for production `index.html` or `account.html`. It must not be described as a completed live profile.
 
@@ -31,15 +31,17 @@ Reviewed main `c9d67fdc`, `docs/HANDOVER-2026-11-19.md`, the workboard, recent P
 | Wallet & VIP / Ví & VIP | Existing coin top-up and VIP flows, clear offers/expiry/benefits, receipts and pending/failed states. Trade credit, its held funds and withdrawals remain separate from earned coins. / Dùng luồng nạp xu/mua VIP hiện có; ghi rõ giá, hạn, quyền lợi, biên nhận và trạng thái chờ/lỗi. Tín dụng giao dịch, khoản giữ và rút tiền tách riêng xu kiếm trong game. |
 | Security / Bảo mật | Supported email status, secondary PIN, item locks, masked login history and restrictions; session/device actions only after real support exists. / Trạng thái email có dữ liệu, mật khẩu cấp hai, khóa vật phẩm, lịch sử đăng nhập đã che và hạn chế tài khoản; chỉ thêm quản lý phiên/thiết bị khi có hỗ trợ thật. |
 | Rewards & mail / Phần thưởng & thư | Daily missions/calendar, referral progress, gift box, codes, milestone rewards and expiry reminders in one place. / Nhiệm vụ/lịch điểm danh, tiến độ giới thiệu, hộp quà, mã quà, thưởng mốc và nhắc hết hạn trong một mục. |
-| Appearance / Giao diện | Account-owned theme preference, compact/comfortable density, language and accessibility preferences; follow account across devices once stored server-side. / Lưu giao diện, độ gọn, ngôn ngữ và tùy chọn hỗ trợ theo tài khoản để đồng bộ nhiều thiết bị. |
+| Host theme / Giao diện do host chọn | One host-selected kit styles both portal and profile. No player theme picker. Density remains an individual browser display preference. / Host chọn một bộ cho trang game và hồ sơ; người chơi chỉ có tùy chọn độ gọn khi xem. |
 
-## Login screens / Hai màn hình đăng nhập
+## One sign-in journey / Một lần đăng nhập
 
-- Game login: immediate play action, configured world/season choices, real availability, published news/events and account/guide links. Connection-host/relay fields stay under advanced settings. No private account information before authentication.
-- Website login: one sign-in entry point, clear recovery/registration links and a short explanation of account features. After authentication, reuse the existing ticket play action and section registry; remove repeated feature-specific password forms from the normal signed-in flow.
+There is one entry form, followed by game and account actions in the same session. The prototype uses only a tab-local example-session flag and disabled credential fields. It demonstrates navigation, not real authentication. Production must reuse the existing authenticated session and login-ticket exchange; never send a password in a URL or add separate per-feature sign-ins.
 
-- Đăng nhập game: vào chơi nhanh, chọn thế giới/mùa theo cấu hình, tình trạng thật, tin/sự kiện đã đăng và liên kết tài khoản/hướng dẫn. Thông số máy chủ/relay nằm trong nâng cao. Không hiện thông tin tài khoản trước khi xác thực.
-- Đăng nhập website: một nơi đăng nhập, liên kết khôi phục/đăng ký rõ ràng và giới thiệu ngắn các mục tài khoản. Sau xác thực, dùng vé vào game và cơ chế đăng ký mục hiện có; không bắt nhập lại mật khẩu cho từng mục trong luồng thông thường.
+Chỉ có một nơi đăng nhập, sau đó chuyển giữa game và hồ sơ trong cùng phiên. Bản mẫu chỉ lưu cờ phiên giả lập trong thẻ trình duyệt, không nhận mật khẩu thật. Bản chính thức phải dùng lại phiên xác thực và vé vào game hiện có; chưa coi mô phỏng này là đã hoàn thành đăng nhập dùng chung thật.
+
+Mobile account navigation has five equal bottom targets, each at least 44px tall: Home, Characters, Items, Wallet and More. Secondary sections appear in a two-column modal menu with Escape, close button and focus return. Header actions use an equal two-column grid.
+
+Điện thoại có năm nút đều nhau: Trang chủ, Nhân vật, Tài sản, Ví, Thêm. Các mục phụ nằm trong menu hai cột, có nút đóng, hỗ trợ bàn phím và đưa tiêu điểm trở lại nút mở.
 
 ## Data audit and gaps / Dữ liệu hiện có và phần còn thiếu
 
@@ -49,7 +51,7 @@ Reviewed main `c9d67fdc`, `docs/HANDOVER-2026-11-19.md`, the workboard, recent P
 - `ActivityLogEntry`: event time, both parties, item GUIDs where available, amounts and extra context. Current logging defaults to valuable drops/pickups and30-day active retention. An item GUID does not prove lifetime logging. Mix lineage also needs explicit input/output links before claiming complete item transformations.
 - `ActivityLogStore.Query`: account search currently uses substring matching for admin search. Do not reuse that as player authorization. Player projections need exact account/world ownership and pagination; never return raw admin notes, private partner logins or arbitrary Details JSON.
 - VIP, gift box, account missions, escrow, top-up milestones and the section registry already exist. Mount their tested flows; do not rebuild financial rules or add a second wallet.
-- Existing website themes are host-selected. A player's account preference needs its own validated persistence and a defined fallback to the host theme. The preview's theme selection is deliberately temporary.
+- Existing WebsiteConfiguration.Theme already provides host-selected themes with persisted enum IDs. The preview uses Ember/Azure/Jade/Violet/Parchment IDs without renumbering. Its admin simulation stores hnmo.preview.hostTheme locally; production configuration is not modified.
 - A nonempty email is not evidence of verified ownership. A four-digit secondary PIN is not MFA. Unknown/off/unsupported states must remain distinct from verified/enabled states.
 
 - API tài khoản có dữ liệu nhân vật cơ bản, trạng thái trực tuyến và lịch sử xu; chưa đủ chi tiết nhân vật và chưa phải dịch vụ định danh thống nhất nhiều thế giới. Không ghép hai tài khoản khác nhau chỉ vì trùng tên đăng nhập.
@@ -58,7 +60,7 @@ Reviewed main `c9d67fdc`, `docs/HANDOVER-2026-11-19.md`, the workboard, recent P
 - Nhật ký hiện mặc định chỉ ghi nhặt/rơi vật phẩm giá trị và giữ bản ghi hoạt động30ngày. Không thể suy ra lịch sử trọn đời từ một mã GUID; ép/chuyển hóa cần liên kết đầu vào/đầu ra.
 - Tìm kiếm quản trị đang khớp một phần tên tài khoản. API người chơi phải kiểm tra sở hữu chính xác theo tài khoản/thế giới và phân trang, không trả ghi chú riêng hoặc JSON nội bộ.
 - Dùng lại VIP, thư quà, nhiệm vụ, ký quỹ và các luồng thanh toán đã có; không tạo ví/quy tắc tài chính thứ hai.
-- Giao diện hiện do chủ máy chủ chọn; lựa chọn cá nhân cần lưu riêng trên máy chủ. Bản xem thử chưa lưu lựa chọn theo tài khoản.
+- Giao diện do chủ server chọn trong cấu hình hiện có. Bản mẫu chỉ lưu lựa chọn mô phỏng của host trong trình duyệt; không có bộ chọn theme của người chơi.
 - Có email không đồng nghĩa đã xác minh; mã PIN không phải MFA. Phân biệt rõ chưa biết, tắt và chưa hỗ trợ.
 
 ## Item passport / Hồ sơ vật phẩm
@@ -67,15 +69,17 @@ Display actual persistent ID, definition/options, location, lock/expiry and auth
 
 Hiển thị mã bền vững thật, định nghĩa/tùy chọn, vị trí, khóa/hạn và sự kiện còn lưu mà tài khoản có quyền xem. Cho sao chép mã để gửi hỗ trợ. Với vật phẩm thay thế sau ép/nâng cấp, cần sự kiện liên kết mã đầu vào/đầu ra. Không dựng lịch sử cũ hoặc tiết lộ hoạt động riêng của chủ sau. Mặc định chỉ xem; chuyển/bán/ép phải qua cơ chế bảo vệ gameplay riêng.
 
-## Five distinct themes / Năm phong cách khác biệt
+## Five fantasy kits / Năm bộ fantasy
 
-- Obsidian: dark command centre, left navigation, dense account overview.
-- Chronicle: light parchment, serif journal, horizontal navigation and open sections.
-- Jade: light spacious workspace, rounded surfaces and quiet hierarchy.
-- Terminal: monospace, compact rectangular panels and narrow navigation.
-- Royal: violet gallery, centered headings and horizontal navigation.
+- Ember / Lorencia: armored fortress, gold/black, full-width battle entrance and left account rail. / Thành trì giáp trụ, vàng/đen, đại cảnh chiến trận, menu hồ sơ trái.
+- Azure / Devias: ice mage/citadel, split entrance, silver/crystal panels and horizontal account navigation. / Pháp sư và thành băng, lối vào chia đôi, bảng pha lê, menu hồ sơ ngang.
+- Jade / Noria: elven forest, centered sanctuary gate, portrait banner and leaf-shaped panels. / Rừng tinh linh, cổng cân giữa, khung chân dung và bảng hình lá.
+- Violet / Icarus: winged warrior/sky fortress, reversed asymmetric entrance and narrow account rail. / Chiến binh có cánh, pháo đài thiên không, bố cục đảo bất đối xứng, menu hẹp.
+- Parchment / Ancient continent: fantasy atlas, parchment sign-in scroll and double-bordered account ledger. / Bản đồ lục địa, khung giấy da, hồ sơ kiểu sổ hành trình viền kép.
 
-Năm bản khác nhau cả bố cục, chữ, hình khối và màu sắc, không chỉ đổi màu nhấn. Khi làm bản chính thức cần kiểm tra tương phản, bàn phím, màn hình nhỏ và tùy chọn giảm chuyển động.
+Five original generated fantasy illustrations are optimized to WebP under `public/images/portal-themes`. No external game's logos, screenshots or assets are included. These are portal and account-design previews, not a running gameplay server. Theme differences include composition, navigation, shapes and artwork, not just accent colors.
+
+Năm tranh fantasy được tạo mới và tối ưu WebP. Không sử dụng logo, ảnh chụp hoặc tài nguyên từ trò chơi khác. Bản xem là thiết kế cổng game và hồ sơ; không phải máy chủ gameplay đang chạy.
 
 ## Suggested additions / Đề xuất bổ sung
 
@@ -90,17 +94,17 @@ Tìm xuyên suốt nhân vật/vật phẩm/biên nhận; tóm tắt khi quay l�
 
 ## Delivery gates / Điều kiện hoàn thành
 
-This preview is only the first reviewable design increment. Production completion requires authenticated world/account-scoped read models, ownership/privacy tests, a real persisted appearance setting, mounting existing payment/reward flows, retention/lineage instrumentation where missing, bilingual accessibility/mobile checks, and live testing against the packaged game. Keep release work and schedules untouched.
+This preview is only the first reviewable design increment. Production completion requires authenticated world/account-scoped read models, ownership/privacy tests, production host-theme styling, mounting existing payment/reward flows, retention/lineage instrumentation where missing, bilingual accessibility/mobile checks, and live testing against the packaged game. Keep release work and schedules untouched.
 
-Bản xem thử chỉ là bước thiết kế đầu tiên. Muốn hoàn thành cần API đọc xác thực đúng tài khoản/thế giới, kiểm thử riêng tư/sở hữu, lưu giao diện thật, kết nối luồng thanh toán/thưởng hiện có, ghi lịch sử còn thiếu, kiểm tra song ngữ/truy cập/điện thoại và chạy thử với game đóng gói. Không thay đổi công việc phát hành hoặc lịch tự động.
+Bản xem thử chỉ là bước thiết kế đầu tiên. Muốn hoàn thành cần API đọc xác thực đúng tài khoản/thế giới, kiểm thử riêng tư/sở hữu, áp dụng giao diện theo cấu hình host, kết nối luồng thanh toán/thưởng hiện có, ghi lịch sử còn thiếu, kiểm tra song ngữ/truy cập/điện thoại và chạy thử với game đóng gói. Không thay đổi công việc phát hành hoặc lịch tự động.
 
 ## Interactive preview expansion / Mở rộng bản xem thử tương tác
 
-The owner approved the additional ideas and requested a hosted private preview. The browser-local implementation now includes11sections: both login views; global owned-fixture search; item passports and watched items; event kind/character/Sydney-date filters and pagination; filtered CSV exports; before/after upgrades, consumed crafting inputs and exact storage slots; a return-player summary and expiry reminders; an adventure journal; equipment comparison with calculated deltas; safe support JSON export; locally simulated session ending; and saved preview theme/language/density preferences. All records are explicitly fictional. Payment and credential submission remain disabled. No game database is connected. Watch state is tab-local; browser preferences are not account-synced.
+The owner approved additional tools. The preview includes 10 account sections: overview, characters, items/vaults, wallet/VIP, item event log, adventure journal, equipment comparison, security, rewards/mail and support. Interactive fixture search, watched-item passports, Sydney-date/event/character filters, pagination, filtered CSV, crafting input lineage, calculated stat comparisons and safe JSON support exports remain available. Watch state is tab-local; density is browser-local. Payment and credential submission are disabled; there is no game database connection.
+
+Bản mẫu có 10 mục tài khoản và các công cụ tương tác với dữ liệu mẫu: tìm kiếm, hồ sơ vật phẩm, theo dõi, lọc nhật ký, xuất CSV, nguyên liệu chế tạo, so sánh chỉ số và báo cáo hỗ trợ. Không có thanh toán hoặc dữ liệu tài khoản thật. Không có mục Appearance của người chơi.
 
 The supplied tracker page was inaccessible behind a browser challenge. Publicly indexed guide descriptions supported serial-based lifecycle tracking and detailed crafting outcomes. Only those general capabilities informed this implementation; no third-party code, branding, assets, item rates or rules were copied. The exact blocked tracker interface was not inspected.
-
-Người dùng đã đồng ý các đề xuất và yêu cầu bản xem thử riêng tư có liên kết. Bản tương tác hiện có11mục, tìm kiếm dữ liệu mẫu, hồ sơ/theo dõi vật phẩm, lọc sự kiện theo loại/nhân vật/ngày Sydney, phân trang, xuất CSV theo bộ lọc, lịch sử nâng cấp/nguyên liệu/ô kho, tóm tắt khi quay lại, nhắc hết hạn, nhật ký hành trình, so sánh chỉ số, xuất báo cáo JSON an toàn, mô phỏng kết thúc phiên và lưu giao diện/ngôn ngữ/độ gọn trong trình duyệt. Mọi bản ghi là giả lập; chưa kết nối cơ sở dữ liệu hoặc thanh toán thật. Danh sách theo dõi chỉ tồn tại trong thẻ hiện tại; tùy chọn chưa đồng bộ theo tài khoản.
 
 Trang tham khảo bị chặn bởi cơ chế kiểm tra trình duyệt. Chỉ đọc được mô tả đã lập chỉ mục từ hướng dẫn công khai; không sao chép mã, thương hiệu, tài nguyên, tỷ lệ vật phẩm hoặc quy tắc của bên khác.
 
