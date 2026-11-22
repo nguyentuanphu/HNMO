@@ -194,3 +194,14 @@ test('profile restore retries a network failure using its existing session', asy
   await page.goto('/account.html'); await expect(page.locator('#accountRetrySession')).toBeVisible(); await expect(page.locator('#accountLoginPanel')).toBeHidden();
   fail = false; await page.locator('#accountRetrySession').click(); await expect(page.locator('#account-overview')).toBeVisible(); expect(fixture.calls).not.toContain('POST');
 });
+
+for (const path of ['/account.html', '/topup.html']) {
+  test(`the ${path} header enters the game with its existing session`, async ({ page }) => {
+    const fixture = await sessionFixture(page, true);
+    await page.goto(path);
+    await page.locator('header a[data-enter-game]').click();
+    await expect(page.locator('#game-arrival')).toBeVisible();
+    expect(fixture.calls.filter(call => call === 'ticket')).toHaveLength(1);
+    expect(fixture.calls).not.toContain('POST');
+  });
+}
