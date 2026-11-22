@@ -54,7 +54,7 @@ export function mountWebsiteThemeLayout(): void {
       const ribbon = node('div', 'theme-sanctuary-ribbon'); ribbon.append(navigation);
       const columns = node('div', 'theme-sanctuary-columns');
       const groups = [
-        ['world', ['realm', 'world', 'rankings', 'drops', 'resets', 'jewel-bank']],
+        ['world', ['realm', 'server-guide', 'world', 'rankings', 'drops', 'resets', 'jewel-bank']],
         ['adventure', ['newplayers', 'missions', 'events', 'schedule', 'bosses', 'races', 'catchup', 'season-plan', 'mounts', 'start', 'phone']],
         ['community', ['news', 'guilds', 'social', 'gifts', 'market', 'marriage', 'party-spots', 'lucky-number', 'leftovers', 'topup-milestones-section']],
       ] as const;
