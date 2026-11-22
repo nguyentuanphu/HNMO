@@ -23,6 +23,7 @@ public static class ConfigurationNameSources
         RegisterIfNeeded(nameof(CashShopPackageNames), CashShopPackageNames.ResourceManager);
         RegisterIfNeeded(nameof(CharacterClassNames), CharacterClassNames.ResourceManager);
         RegisterIfNeeded(nameof(MapNames), MapNames.ResourceManager);
+        RegisterIfNeeded(nameof(SeasonNineMapNames), SeasonNineMapNames.ResourceManager);
         RegisterIfNeeded(nameof(MerchantNames), MerchantNames.ResourceManager);
         RegisterIfNeeded(nameof(MonsterNames), MonsterNames.ResourceManager);
         RegisterIfNeeded(nameof(ItemNames), ItemNames.ResourceManager);

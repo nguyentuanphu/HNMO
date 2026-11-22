@@ -964,4 +964,6 @@
   <data name="StrongerHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
     <value>Dieses Update macht die 28 HNMO-Fertigkeiten um 20 % stärker (Schaden, Buffs und Debuffs; Kosten und Abklingzeiten bleiben) und lässt die Prüfungsquests des Elfensoldaten 200 Tötungen und fünf Juwelen des Chaos verlangen.</value>
   </data>
+  <data name="SeasonNineMapsAndGatesUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Karten und Tore</value></data>
+  <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>Fügt die 10 Season-9-Karten, Terraindateien, Tore (417-461, 474-482) und Season-9-Spawns im Season-9-Betrieb hinzu.</value></data>
 </root>

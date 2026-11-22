@@ -491,4 +491,6 @@
   <data name="StrongerHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
     <value>将 28 个 HNMO 技能增强 20%（伤害、增益和减益效果；消耗和冷却时间不变），并将精灵士兵的试炼任务改为击杀 200 个怪物并上交五颗玛雅之石。</value>
   </data>
+  <data name="SeasonNineMapsAndGatesUpdatePlugIn_Name" xml:space="preserve"><value>第 9 赛季：地图与传送门</value></data>
+  <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>在以第 9 赛季运行时添加 10 张第 9 赛季地图、地形文件、传送门（417-461、474-482）以及第 9 赛季刷怪/NPC 点位。</value></data>
 </root>
