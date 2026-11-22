@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-const themes = ['ember', 'azure', 'jade', 'violet', 'parchment'] as const;
+const themes = ['classic', 'ember', 'azure', 'jade', 'violet', 'parchment'] as const;
 const publicSections = ['realm', 'news', 'events', 'schedule', 'newplayers', 'missions', 'bosses', 'lucky-number', 'marriage', 'guilds', 'social', 'races', 'gifts', 'resets', 'market', 'arena', 'jewel-bank', 'catchup', 'season-plan', 'leftovers', 'mounts', 'party-spots', 'rankings', 'drops', 'world', 'account', 'phone', 'start', 'topup-milestones-section'];
 const accountSections = ['overview', 'coins', 'vip', 'rewards', 'resets', 'security', 'community'];
 
@@ -65,6 +65,14 @@ for (const theme of themes) {
       await expect(page.locator('#loginGuide')).toHaveCount(1);
       await expect(page.locator('#login form')).toHaveCount(1);
       await expect(page.locator('.hud')).toHaveCSS('--gold', '#c9a24a');
+      await page.goto('/guide.html');
+      await expect(page.locator('html')).toHaveAttribute('data-website-theme', theme);
+      expect(await page.locator('table').count()).toBeGreaterThan(0);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      await page.goto('/calculator.html');
+      await expect(page.locator('html')).toHaveAttribute('data-website-theme', theme);
+      for (const control of ['calc-class', 'calc-level', 'calc-run', 'calc-share']) await expect(page.locator(`#${control}`)).toBeVisible();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     }
   });
 }
@@ -81,4 +89,30 @@ test('changing a game server leaves the website skin unchanged and shares one se
   await page.locator('#server').selectOption('0');
   await expect(page.locator('html')).toHaveAttribute('data-website-theme', 'ember');
   expect(settingsRequests).toBe(1);
+});
+
+test('host Brand logo and colors apply everywhere without tinting the gameplay HUD', async ({ page }) => {
+  await fixture(page, 'azure');
+  await page.route('**/website/settings', route => route.fulfill({ json: { theme: 'azure', googleClientId: '', brand: { logoUrl: '/images/host-mark.svg', accentColor: '#22aa88', backgroundColor: '#040608', panelColor: '#18212b', textColor: '#f0f1f2' } } }));
+  await page.route('**/images/host-mark.svg', route => route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><path fill="#22aa88" d="M0 0h48v48H0z"/></svg>' }));
+  for (const path of ['/home.html', '/account.html', '/topup.html', '/index.html', '/guide.html', '/calculator.html']) {
+    await page.goto(path);
+    await expect(page.locator('html')).toHaveCSS('--gold', '#22aa88');
+    await expect(page.locator('img[data-brand-logo]')).toBeVisible();
+    await expect(page.locator('img[data-brand-logo]')).toHaveAttribute('src', '/images/host-mark.svg');
+    await expect(page.locator('.website-powered-by')).toContainText('HNMO');
+  }
+  await page.goto('/index.html');
+  await expect(page.locator('#login')).toHaveCSS('--gold', '#22aa88');
+  await expect(page.locator('.hud')).toHaveCSS('--gold', '#c9a24a');
+});
+
+test('unsafe Brand fields are rejected and the original game warm-up entry remains discoverable', async ({ page }) => {
+  await fixture(page, 'azure');
+  await page.route('**/website/settings', route => route.fulfill({ json: { theme: 'azure', brand: { logoUrl: 'javascript:alert(1)', accentColor: '#000000;display:none' } } }));
+  await page.goto('/home.html');
+  await expect(page.locator('html')).toHaveCSS('--gold', '#7bd8fa');
+  await expect(page.locator('img[data-brand-logo]')).toBeHidden();
+  const html = await (await page.request.get('/index.html')).text();
+  expect(/<script[^>]+type="module"[^>]+src="([^"]+)"/.exec(html)?.[1]).toBe('/js/main.js');
 });

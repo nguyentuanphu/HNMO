@@ -31,11 +31,13 @@
     .stat-val { font-size: 18px; font-weight: 700; color: var(--ok); }
     .lang { display: flex; gap: 6px; align-items: center; }
   </style>
+  <link rel="stylesheet" href="/website-themes.css">
+  <script type="module" src="/js/websiteThemeEntry.js"></script>
 </head>
-<body>
+<body data-website-page="calculator">
   <main>
     <header>
-      <h1><span data-game-name>HNMO</span> · <span id="calc-title">Stats &amp; Build Calculator</span></h1>
+      <h1><img data-brand-logo alt="" width="48" height="48" hidden><span data-game-name>HNMO</span> · <span id="calc-title">Stats &amp; Build Calculator</span></h1>
       <div class="lang">
         <button type="button" id="calc-lang-en" data-lang="en">EN</button>
         <button type="button" id="calc-lang-vi" data-lang="vi">VN</button>

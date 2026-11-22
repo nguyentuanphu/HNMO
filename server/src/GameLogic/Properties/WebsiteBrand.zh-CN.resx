@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="Caption" xml:space="preserve"><value>品牌</value></data>
+  <data name="Description" xml:space="preserve"><value>设置网站名称、标志和颜色。颜色留空时使用所选主题，设置对整个网站生效。</value></data>
+  <data name="LogoCaption" xml:space="preserve"><value>网站标志</value></data>
+  <data name="LogoDescription" xml:space="preserve"><value>填写 HTTPS 图片地址或本站路径，例如 /images/logo.png。留空时仅显示名称。</value></data>
+  <data name="AccentCaption" xml:space="preserve"><value>强调色</value></data>
+  <data name="AccentDescription" xml:space="preserve"><value>高亮和按钮的十六进制颜色，例如 #D9B773；留空时使用主题颜色。</value></data>
+  <data name="BackgroundCaption" xml:space="preserve"><value>背景色</value></data>
+  <data name="BackgroundDescription" xml:space="preserve"><value>网站背景颜色，格式为 #RRGGBB；留空时使用主题颜色。</value></data>
+  <data name="PanelCaption" xml:space="preserve"><value>面板颜色</value></data>
+  <data name="PanelDescription" xml:space="preserve"><value>内容卡片背景颜色，格式为 #RRGGBB；留空时使用主题颜色。</value></data>
+  <data name="TextCaption" xml:space="preserve"><value>文字颜色</value></data>
+  <data name="TextDescription" xml:space="preserve"><value>主要文字颜色，格式为 #RRGGBB。请确保与面板背景对比清晰；留空时使用主题颜色。</value></data>
+  <data name="ColorValidation" xml:space="preserve"><value>请输入 #RRGGBB 格式的颜色，例如 #D9B773，或留空。</value></data>
+  <data name="LogoLengthValidation" xml:space="preserve"><value>标志地址最多可包含 {1} 个字符。</value></data>
+  <data name="LogoFormatValidation" xml:space="preserve"><value>请使用 HTTPS 图片地址或本站路径，或留空。</value></data>
+</root>

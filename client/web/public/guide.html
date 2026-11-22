@@ -32,10 +32,12 @@
     .muted { color: var(--muted); }
     @media (max-width: 560px) { th:nth-child(3), td:nth-child(3) { display: none; } }
   </style>
+  <link rel="stylesheet" href="/website-themes.css">
+  <script type="module" src="/js/websiteThemeEntry.js"></script>
 </head>
-<body data-page-label="Guide">
+<body data-page-label="Guide" data-website-page="guide">
 <main>
-  <h1><span data-game-name></span> Guide</h1>
+  <h1><img data-brand-logo alt="" width="48" height="48" hidden><span data-game-name></span> Guide</h1>
   <span role="group" aria-label="Page language" style="display:inline-flex;gap:6px"><button type="button" data-site-language="en">English</button><button type="button" data-site-language="vi">Tiếng Việt</button></span>
   <p class="lead">What to play, how to play it, and what each part of the game does. Features marked <span class="tag ok">works</span> are in the game now; <span class="tag soon">coming</span> ones are being built.</p>
   <nav>

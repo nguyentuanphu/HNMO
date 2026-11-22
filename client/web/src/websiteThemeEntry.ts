@@ -21,5 +21,34 @@ function mountWebsiteNavigation(): void {
   translate(); resize();
 }
 
+function mountWebsiteCredit(): void {
+  let footer = document.body.dataset.websitePage === 'game' ? document.querySelector('#login .panel') : document.querySelector('body > footer');
+  if (!footer) { footer = document.createElement('footer'); document.body.append(footer); }
+  const credit = document.createElement('small');
+  credit.className = 'website-powered-by';
+  const translate = (): void => {
+    credit.textContent = document.documentElement.lang === 'vi' ? 'Vận hành bởi HNMO' : 'Powered by HNMO';
+  };
+  new MutationObserver(translate).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+  translate(); footer.append(credit);
+}
+
+/** Scroll wide tables inside their card without replacing table nodes or event handlers. */
+function mountScrollableTables(): void {
+  if (document.body.dataset.websitePage === 'game') return;
+  const wrap = (): void => {
+    for (const table of document.querySelectorAll('table')) {
+      if (table.closest('.website-table-scroll, .account-scroll, .safety-scroll, .preview-scroll')) continue;
+      const scroll = document.createElement('div');
+      scroll.className = 'website-table-scroll';
+      table.before(scroll); scroll.append(table);
+    }
+  };
+  wrap();
+  new MutationObserver(wrap).observe(document.body, { childList: true, subtree: true });
+}
+
 void loadWebsiteSettings();
 mountWebsiteNavigation();
+mountWebsiteCredit();
+mountScrollableTables();

@@ -1,3 +1,5 @@
+import { applyWebsiteBrand } from './websiteBrand.js';
+
 // One host setting controls the entire public website, independent of world/account selection.
 const WEBSITE_THEMES = ['classic', 'azure', 'ember', 'jade', 'violet', 'parchment'] as const;
 let settingsRequest: Promise<string> | undefined;
@@ -18,8 +20,9 @@ async function readWebsiteSettings(): Promise<string> {
   try {
     const response = await fetch('/website/settings', { cache: 'no-cache' });
     if (!response.ok) { applyWebsiteTheme('classic'); return ''; }
-    const settings = (await response.json()) as { googleClientId?: unknown; theme?: unknown };
+    const settings = (await response.json()) as { googleClientId?: unknown; theme?: unknown; brand?: unknown };
     applyWebsiteTheme(settings.theme);
+    applyWebsiteBrand(settings.brand);
     return typeof settings.googleClientId === 'string' ? settings.googleClientId : '';
   } catch {
     applyWebsiteTheme('classic');

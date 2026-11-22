@@ -10,4 +10,5 @@
   <data name="Jade" xml:space="preserve"><value>Ngọc bích</value></data>
   <data name="Violet" xml:space="preserve"><value>Tím huyền</value></data>
   <data name="Parchment" xml:space="preserve"><value>Giấy cổ</value></data>
+  <data name="GlobalDescription" xml:space="preserve"><value>Chọn một giao diện cho toàn website, gồm tài khoản và trang nạp. Đổi thế giới game không đổi giao diện. Lưu rồi tải lại website.</value></data>
 </root>

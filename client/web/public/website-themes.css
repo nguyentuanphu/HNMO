@@ -1,18 +1,19 @@
+:root[data-website-theme="classic"] {--bg:#10120f;--panel:#191c17;--gold:#d9b773;--text:#ece9dd;--muted:#9b9f92;--line:#35392d;--theme-radius:4px;--theme-art:url('/images/portal-themes/ember.webp')}
 /* One host-selected skin. All existing sections, controls, forms and feature modules stay intact. */
 :root[data-website-theme="azure"] { --bg:#091626;--panel:#10253b;--gold:#7bd8fa;--text:#edf6ff;--muted:#afc5db;--line:#345570;--theme-radius:18px 4px;--theme-art:url('/images/portal-themes/azure.webp'); }
 :root[data-website-theme="ember"] { --bg:#21100d;--panel:#321b16;--gold:#ffb17a;--text:#fff0e6;--muted:#d4b0a2;--line:#754439;--theme-radius:3px;--theme-art:url('/images/portal-themes/ember.webp'); }
 :root[data-website-theme="jade"] { --bg:#081d18;--panel:#103329;--gold:#d6c48b;--text:#e9fff2;--muted:#a9ccbb;--line:#356650;--theme-radius:30px 4px;--theme-art:url('/images/portal-themes/jade.webp'); }
 :root[data-website-theme="violet"] { --bg:#170f27;--panel:#291c40;--gold:#d8b0ff;--text:#f7efff;--muted:#c8b5de;--line:#644880;--theme-radius:3px 22px;--theme-art:url('/images/portal-themes/violet.webp'); }
 :root[data-website-theme="parchment"] { color-scheme:light;--bg:#f3ebd8;--panel:#fff8e9;--gold:#795015;--text:#302819;--muted:#655844;--line:#b8a782;--theme-radius:2px;--theme-art:url('/images/portal-themes/parchment.webp'); }
-:root[data-website-theme]:not([data-website-theme="classic"]) body:not([data-website-page="game"]) { background:var(--bg);color:var(--text);font-size:1rem; }
-:root[data-website-theme]:not([data-website-theme="classic"]) body:not([data-website-page="game"]) :is(h1,h2,h3) { font-family:'Noto Serif',Georgia,serif; }
-:root[data-website-theme]:not([data-website-theme="classic"]) body:not([data-website-page="game"]) :is(.panel,.event,.mission,.boss,.slot,.stats,.grid>article) { background:var(--panel);border-color:var(--line);border-radius:var(--theme-radius); }
-:root[data-website-theme]:not([data-website-theme="classic"]) body:not([data-website-page="game"]) :is(button,input,select,.primary,.secondary,.small-button) { border-radius:var(--theme-radius); }
-:root[data-website-theme]:not([data-website-theme="classic"]) body:not([data-website-page="game"]) :is(input,select) { background:var(--bg);color:var(--text);border-color:var(--line); }
-:root[data-website-theme]:not([data-website-theme="classic"]) body:not([data-website-page="game"]) :is(header,.secondary) { background:var(--panel); }
-:root[data-website-theme]:not([data-website-theme="classic"]) body[data-website-page="home"] .intro {color:var(--text)}
-:root[data-website-theme]:not([data-website-theme="classic"]) body[data-website-page="home"] .hero-art { opacity:1;background:linear-gradient(90deg,var(--bg),transparent 90%),linear-gradient(0deg,var(--bg),transparent 80%),var(--theme-art) center/cover; }
-:root[data-website-theme]:not([data-website-theme="classic"]) body[data-website-page="home"] .hero-footer {border-color:var(--line)}
+:root[data-website-theme] body:not([data-website-page="game"]) { background:var(--bg);color:var(--text);font-size:1rem; }
+:root[data-website-theme] body:not([data-website-page="game"]) :is(h1,h2,h3) { font-family:'Noto Serif',Georgia,serif; }
+:root[data-website-theme] body:not([data-website-page="game"]) :is(.panel,.event,.mission,.boss,.slot,.stats,.grid>article) { background:var(--panel);border-color:var(--line);border-radius:var(--theme-radius); }
+:root[data-website-theme] body:not([data-website-page="game"]) :is(button,input,select,.primary,.secondary,.small-button) { border-radius:var(--theme-radius); }
+:root[data-website-theme] body:not([data-website-page="game"]) :is(input,select) { background:var(--bg);color:var(--text);border-color:var(--line); }
+:root[data-website-theme] body:not([data-website-page="game"]) :is(header,.secondary) { background:var(--panel); }
+:root[data-website-theme] body[data-website-page="home"] .intro {color:var(--text)}
+:root[data-website-theme] body[data-website-page="home"] .hero-art { opacity:1;background:linear-gradient(90deg,var(--bg),transparent 90%),linear-gradient(0deg,var(--bg),transparent 80%),var(--theme-art) center/cover; }
+:root[data-website-theme] body[data-website-page="home"] .hero-footer {border-color:var(--line)}
 :root[data-website-theme="ember"] body[data-website-page="home"] .hero {min-height:760px}
 :root[data-website-theme="ember"] body[data-website-page="home"] .hero-content {max-width:950px;padding-top:100px}
 :root[data-website-theme="ember"] body[data-website-page="home"] h1 {font-size:clamp(40px,6vw,90px);text-transform:uppercase}
@@ -32,11 +33,11 @@
 :root[data-website-theme="parchment"] body[data-website-page="home"] .hero-art {background:linear-gradient(90deg,#f3ebd8f0,#f3ebd855),var(--theme-art) center/cover}
 :root[data-website-theme="parchment"] body[data-website-page="home"] :is(h1,h2) {font-style:italic}
 /* Account and payment pages use their existing DOM and native integrations. */
-:root[data-website-theme]:not([data-website-theme="classic"]) body:is([data-website-page="account"],[data-website-page="topup"]) {background:linear-gradient(180deg,transparent,var(--bg) 650px),var(--theme-art) center top/100% auto no-repeat,var(--bg);font-size:1rem}
-:root[data-website-theme]:not([data-website-theme="classic"]) body:is([data-website-page="account"],[data-website-page="topup"]) main>header {padding:22px;border:1px solid var(--line);border-radius:var(--theme-radius)}
-:root[data-website-theme]:not([data-website-theme="classic"]) body:is([data-website-page="account"],[data-website-page="topup"]) :is(button,input,select) {min-height:44px;box-sizing:border-box;font-size:.875rem}
-:root[data-website-theme]:not([data-website-theme="classic"]) body:is([data-website-page="account"],[data-website-page="topup"]) :is(label,.panel p) {font-size:.875rem}
-:root[data-website-theme]:not([data-website-theme="classic"]) #accountToolbar {padding:14px;background:var(--panel);border:1px solid var(--line);border-radius:var(--theme-radius)}
+:root[data-website-theme] body:is([data-website-page="account"],[data-website-page="topup"]) {background:linear-gradient(180deg,transparent,var(--bg) 650px),var(--theme-art) center top/100% auto no-repeat,var(--bg);font-size:1rem}
+:root[data-website-theme] body:is([data-website-page="account"],[data-website-page="topup"]) main>header {padding:22px;border:1px solid var(--line);border-radius:var(--theme-radius)}
+:root[data-website-theme] body:is([data-website-page="account"],[data-website-page="topup"]) :is(button,input,select) {min-height:44px;box-sizing:border-box;font-size:.875rem}
+:root[data-website-theme] body:is([data-website-page="account"],[data-website-page="topup"]) :is(label,.panel p) {font-size:.875rem}
+:root[data-website-theme] #accountToolbar {padding:14px;background:var(--panel);border:1px solid var(--line);border-radius:var(--theme-radius)}
 :root[data-website-theme="azure"] #accountNav {padding:12px;border:1px solid var(--line);border-radius:20px 4px;background:var(--panel)}
 :root[data-website-theme="ember"] #accountNav {border-left:3px solid var(--gold);padding-left:10px}
 :root[data-website-theme="jade"] #accountDashboard.authenticated {gap:28px}
@@ -46,8 +47,8 @@
 :root[data-website-theme="parchment"] #accountNav {border-block:4px double var(--line);padding:12px 0}
 /* Isolate website styling from gameplay: only the existing login overlay is themed. */
 body[data-website-page="game"] {--panel:rgba(10,12,20,.86);--line:rgba(255,255,255,.14);--gold:#c9a24a;--text:#e6e8ef;--muted:#9aa0b2;--error:#ef7a6c}
-:root[data-website-theme]:not([data-website-theme="classic"]) #login {background:linear-gradient(90deg,#05080beb,#05080b33),var(--theme-art) center/cover;}
-:root[data-website-theme]:not([data-website-theme="classic"]) #login .panel {border:1px solid #c9a24a;border-radius:var(--theme-radius);background:#0a0c14ed;color:#e6e8ef}
+:root[data-website-theme] #login {background:linear-gradient(90deg,#05080beb,#05080b33),var(--theme-art) center/cover;}
+:root[data-website-theme] #login .panel {border:1px solid #c9a24a;border-radius:var(--theme-radius);background:#0a0c14ed;color:#e6e8ef}
 :root[data-website-theme="ember"] #login {place-items:center end;padding-right:8%}
 :root[data-website-theme="azure"] #login {place-items:center start;padding-left:8%}
 :root[data-website-theme="jade"] #login .panel {border-radius:50px 4px}
@@ -67,28 +68,51 @@ body[data-website-page="home"] nav {flex-wrap:wrap;min-width:0;justify-content:c
   .website-navigation>nav>a,.website-navigation .nav-more>summary {min-height:44px;padding:12px;text-align:center;border:1px solid var(--line);border-radius:8px;font-size:14px;overflow-wrap:anywhere}
   .website-navigation .nav-more {grid-column:1/-1;width:100%}
   .website-navigation .nav-more-menu {position:static;grid-template-columns:repeat(2,minmax(0,1fr));min-width:0;width:100%;box-sizing:border-box}
-  :root[data-website-theme]:not([data-website-theme="classic"]) body[data-website-page="home"] .hero {margin:16px;min-height:620px;border-radius:var(--theme-radius)}
-  :root[data-website-theme]:not([data-website-theme="classic"]) body[data-website-page="home"] .hero-content {max-width:100%;padding:45px 24px 130px;width:auto;text-align:left}
-  :root[data-website-theme]:not([data-website-theme="classic"]) body[data-website-page="home"] h1 {font-size:clamp(34px,9vw,58px)}
-  :root[data-website-theme]:not([data-website-theme="classic"]) body[data-website-page="home"] section:not(.hero) {margin:0;padding:32px 16px;border-radius:0}
-  :root[data-website-theme]:not([data-website-theme="classic"]) body:is([data-website-page="account"],[data-website-page="topup"]) {padding:16px}
-  :root[data-website-theme]:not([data-website-theme="classic"]) body:is([data-website-page="account"],[data-website-page="topup"]) main>header {padding:16px}
-  :root[data-website-theme]:not([data-website-theme="classic"]) #login {place-items:start center;padding:20px 12px}
+  :root[data-website-theme] body[data-website-page="home"] .hero {margin:16px;min-height:620px;border-radius:var(--theme-radius)}
+  :root[data-website-theme] body[data-website-page="home"] .hero-content {max-width:100%;padding:45px 24px 130px;width:auto;text-align:left}
+  :root[data-website-theme] body[data-website-page="home"] h1 {font-size:clamp(34px,9vw,58px)}
+  :root[data-website-theme] body[data-website-page="home"] section:not(.hero) {margin:0;padding:32px 16px;border-radius:0}
+  :root[data-website-theme] body:is([data-website-page="account"],[data-website-page="topup"]) {padding:16px}
+  :root[data-website-theme] body:is([data-website-page="account"],[data-website-page="topup"]) main>header {padding:16px}
+  :root[data-website-theme] #login {place-items:start center;padding:20px 12px}
 }
 /* Different account compositions retain the same registered panels and actions. */
 @media(min-width:601px){
-  :root[data-website-theme]:not([data-website-theme="classic"]) #accountDashboard.authenticated {grid-template-areas:'toolbar toolbar' 'status status' 'nav panels';grid-template-columns:190px minmax(0,1fr)}
-  :root[data-website-theme]:not([data-website-theme="classic"]) #accountToolbar {grid-area:toolbar}
-  :root[data-website-theme]:not([data-website-theme="classic"]) #accountMessage {grid-area:status}
-  :root[data-website-theme]:not([data-website-theme="classic"]) #accountNav {grid-area:nav}
-  :root[data-website-theme]:not([data-website-theme="classic"]) #accountPanels {grid-area:panels}
+  :root[data-website-theme] #accountDashboard.authenticated {grid-template-areas:'toolbar toolbar' 'status status' 'nav panels';grid-template-columns:190px minmax(0,1fr)}
+  :root[data-website-theme] #accountToolbar {grid-area:toolbar}
+  :root[data-website-theme] #accountMessage {grid-area:status}
+  :root[data-website-theme] #accountNav {grid-area:nav}
+  :root[data-website-theme] #accountPanels {grid-area:panels}
   :root[data-website-theme="azure"] #accountDashboard.authenticated,:root[data-website-theme="parchment"] #accountDashboard.authenticated {grid-template-columns:minmax(0,1fr);grid-template-areas:'toolbar' 'status' 'nav' 'panels'}
   :root:is([data-website-theme="azure"],[data-website-theme="parchment"]) #accountNav {grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
   :root[data-website-theme="jade"] #accountDashboard.authenticated {grid-template-columns:210px minmax(0,1fr)}
   :root[data-website-theme="violet"] #accountDashboard.authenticated {grid-template-columns:minmax(0,1fr)190px;grid-template-areas:'toolbar toolbar' 'status status' 'panels nav'}
 }
 @media(max-width:600px){
-  :root[data-website-theme]:not([data-website-theme="classic"]) #accountToolbar {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-  :root[data-website-theme]:not([data-website-theme="classic"]) #accountToolbar button {min-width:0;width:100%}
-  :root[data-website-theme]:not([data-website-theme="classic"]) #accountHelp {grid-column:1/-1}
+  :root[data-website-theme] #accountToolbar {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  :root[data-website-theme] #accountToolbar button {min-width:0;width:100%}
+  :root[data-website-theme] #accountHelp {grid-column:1/-1}
 }
+:root[data-website-theme] {--website-theme-accent:var(--gold)}
+[data-brand-logo][hidden] {display:none!important}
+[data-brand-logo] {max-width:64px;max-height:64px;object-fit:contain;vertical-align:middle;margin-right:12px}
+.brand:has([data-brand-logo]:not([hidden])) .crest {display:none}
+.website-powered-by {display:block;text-align:center;margin:24px auto;padding:8px 16px;font:12px/1.5 system-ui;color:var(--muted)}
+body[data-website-page="game"]>footer {position:fixed;bottom:0;left:0;right:0;pointer-events:none;z-index:1}
+body[data-website-page="game"] .website-powered-by {margin:4px auto}
+#login {--gold:var(--website-theme-accent,#c9a24a)}
+
+:root[data-website-theme] body[data-website-page="account"] button {background:var(--gold);color:var(--bg);border-color:var(--line)}
+:root[data-website-theme] body[data-website-page="account"] #accountNav button:not([aria-current="true"]) {background:transparent;color:var(--gold)}
+/* Classic keeps the original dark/gold palette as the additional classic-fantasy direction. */
+:root[data-website-theme="classic"] body[data-website-page="home"] .hero-art {opacity:.5}
+:root[data-website-theme] {--website-public-bg:var(--bg);--website-public-panel:var(--panel);--website-public-ink:var(--text);--website-public-accent:var(--gold);--website-public-muted:var(--muted);--website-public-line:var(--line)}
+:root[data-website-theme] body[data-website-page="profile-design"] {--bg:var(--website-public-bg);--surface:var(--website-public-panel);--ink:var(--website-public-ink);--gold:var(--website-public-accent);--muted:var(--website-public-muted);--line:var(--website-public-line)}
+/* Brand values stay local to login; in-game HUD colors above remain unchanged. */
+#login {--panel:var(--website-public-panel,rgba(10,12,20,.86));--text:var(--website-public-ink,#e6e8ef);--line:var(--website-public-line,rgba(255,255,255,.14));--muted:var(--website-public-muted,#9aa0b2)}
+:root[data-website-theme] #login .panel {background:var(--panel);color:var(--text);border-color:var(--gold)}
+:root[data-website-theme] #login :is(input,select) {background:var(--bg);color:var(--text);border-color:var(--line)}
+:root[data-website-theme] #login button[type="submit"] {background:var(--gold);color:var(--bg)}
+.website-table-scroll {min-width:0;max-width:100%;overflow-x:auto}
+body:is([data-website-page="guide"],[data-website-page="calculator"]) {font-size:1rem}
+body:is([data-website-page="guide"],[data-website-page="calculator"]) :is(main,.panel,.row,.grid) {min-width:0;max-width:100%;box-sizing:border-box}

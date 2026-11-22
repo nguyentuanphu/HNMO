@@ -18,6 +18,9 @@ public static class WebsiteThemeLabels
     /// <summary>Gets the localized description caption.</summary>
     public static string Description => Resources.GetString(nameof(Description), CultureInfo.CurrentUICulture) ?? nameof(Description);
 
+    /// <summary>Gets the description of the single website-wide appearance setting.</summary>
+    public static string GlobalDescription => Resources.GetString(nameof(GlobalDescription), CultureInfo.CurrentUICulture) ?? Description;
+
     /// <summary>Gets the localized classic caption.</summary>
     public static string Classic => Resources.GetString(nameof(Classic), CultureInfo.CurrentUICulture) ?? nameof(Classic);
 

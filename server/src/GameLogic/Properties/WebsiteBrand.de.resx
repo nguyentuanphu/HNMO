@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="Caption" xml:space="preserve"><value>Marke</value></data>
+  <data name="Description" xml:space="preserve"><value>Name, Logo und Farben Ihrer Website. Leere Farben verwenden das gewählte Design. Die Einstellungen gelten für die gesamte Website.</value></data>
+  <data name="LogoCaption" xml:space="preserve"><value>Website-Logo</value></data>
+  <data name="LogoDescription" xml:space="preserve"><value>HTTPS-Bildadresse oder ein Pfad dieser Website, etwa /images/logo.png. Leer zeigt nur den Namen.</value></data>
+  <data name="AccentCaption" xml:space="preserve"><value>Akzentfarbe</value></data>
+  <data name="AccentDescription" xml:space="preserve"><value>Hex-Farbe wie #D9B773 für Hervorhebungen und Schaltflächen; leer verwendet das Design.</value></data>
+  <data name="BackgroundCaption" xml:space="preserve"><value>Hintergrundfarbe</value></data>
+  <data name="BackgroundDescription" xml:space="preserve"><value>Website-Hintergrund als #RRGGBB; leer verwendet das Design.</value></data>
+  <data name="PanelCaption" xml:space="preserve"><value>Bereichsfarbe</value></data>
+  <data name="PanelDescription" xml:space="preserve"><value>Hintergrund der Inhaltsbereiche als #RRGGBB; leer verwendet das Design.</value></data>
+  <data name="TextCaption" xml:space="preserve"><value>Textfarbe</value></data>
+  <data name="TextDescription" xml:space="preserve"><value>Haupttextfarbe als #RRGGBB. Wählen Sie einen gut lesbaren Kontrast zum Hintergrund; leer verwendet das Design.</value></data>
+  <data name="ColorValidation" xml:space="preserve"><value>Geben Sie eine Farbe als #RRGGBB ein, etwa #D9B773, oder lassen Sie das Feld leer.</value></data>
+  <data name="LogoLengthValidation" xml:space="preserve"><value>Die Logo-Adresse darf höchstens {1} Zeichen enthalten.</value></data>
+  <data name="LogoFormatValidation" xml:space="preserve"><value>Verwenden Sie eine HTTPS-Bildadresse oder einen Pfad dieser Website, oder lassen Sie das Feld leer.</value></data>
+</root>
