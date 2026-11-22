@@ -202,3 +202,21 @@ Left from #181 for the owner: (1) the web and desktop clients read option values
 12. Atlans while riding Uniria/Dinorant: refused.
 13. Spouse warp: needs the target map's warp level.
 14. Personal shop buy race: fix with a concurrency test.
+
+### Done from the owner's answers (21 Nov)
+
+| Answer | PR |
+|---|---|
+| 1. Jewel NPC prices (server + web client; desktop client keeps the old table until rebuilt) | [#192](https://github.com/nguyentuanphu/HNMO/pull/192) |
+| 2. Jewel of Life +28 on the clients (web tested; desktop C++ changed but not built here) | [#202](https://github.com/nguyentuanphu/HNMO/pull/202) (server part #181) |
+| 3. Happy hour excellent +5/10000 | second commit of [#178](https://github.com/nguyentuanphu/HNMO/pull/178) |
+| 4. Alliance needs 10 members per guild | [#196](https://github.com/nguyentuanphu/HNMO/pull/196) |
+| 5. /post 1,000 zen, 5 s | [#194](https://github.com/nguyentuanphu/HNMO/pull/194) |
+| 6. PK time in points (one running total, about 24 h for a murderer) | [#189](https://github.com/nguyentuanphu/HNMO/pull/189) |
+| 7. Zen loss from the bag only | [#191](https://github.com/nguyentuanphu/HNMO/pull/191) |
+| 8. EXP loss rows of the suites | [#193](https://github.com/nguyentuanphu/HNMO/pull/193) |
+| 9. Murderers: M-menu warp x50 from PK2; no summon of PK2+; no NPC shops from PK2 | [#195](https://github.com/nguyentuanphu/HNMO/pull/195), [#197](https://github.com/nguyentuanphu/HNMO/pull/197), [#201](https://github.com/nguyentuanphu/HNMO/pull/201) |
+| 10. Outlaws can't enter events | [#199](https://github.com/nguyentuanphu/HNMO/pull/199) |
+| 12. No Atlans while riding Uniria/Dinorant | [#198](https://github.com/nguyentuanphu/HNMO/pull/198) |
+| 13. Spouse warp needs the map's warp level | [#200](https://github.com/nguyentuanphu/HNMO/pull/200) |
+| 14. Personal store buy race | [#190](https://github.com/nguyentuanphu/HNMO/pull/190) |
