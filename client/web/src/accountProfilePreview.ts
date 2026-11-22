@@ -28,8 +28,9 @@ function go(next: Section): void { section = next; view = 'profile'; render(); d
 function changeView(next: View): void { view = next; render(); window.scrollTo({ top: 0 }); }
 function card(title: PortalWord, ...children: HTMLElement[]): HTMLElement { const el = node('section', '', 'preview-card'); el.append(node('h3', t(title)), ...children); return el; }
 function image(value: PortalTheme, decorative = false): HTMLImageElement { const el = document.createElement('img'); el.src = `/images/portal-themes/${value.id}.webp`; el.alt = decorative ? '' : pair(value.subtitle); el.width = 1440; el.height = 960; return el; }
+function branded<T extends HTMLElement>(el: T): T { el.dataset.gameName = '{game}'; if (el instanceof HTMLButtonElement) el.title = t('portal'); return el; }
 function header(): HTMLElement {
-  const el = node('header', '', 'portal-header'); el.append(button(gameName(), () => changeView('portal'), 'preview-brand'));
+  const el = node('header', '', 'portal-header'); el.append(branded(button(gameName(), () => changeView('portal'), 'preview-brand')));
   const nav = node('nav', '', 'portal-actions'); nav.setAttribute('aria-label', t('portal')); nav.append(button(t('play'), () => changeView(signedIn ? 'game' : 'portal'), 'primary'), button(t('account'), () => changeView(signedIn || view === 'profile' ? 'profile' : 'portal')));
   const languages = node('div', '', 'portal-languages');
   for (const lang of ['vi', 'en'] as const) { const control = button(lang === 'vi' ? 'VI' : 'EN', () => { language = lang; render(); }); control.setAttribute('aria-label', lang === 'vi' ? 'Tiếng Việt' : 'English'); control.setAttribute('aria-pressed', String(language === lang)); languages.append(control); }
@@ -37,7 +38,7 @@ function header(): HTMLElement {
 }
 function footer(): HTMLElement { const el = node('footer', '', 'portal-footer'); el.append(node('span', t('preview')), link(t('gallery'), 'gallery'), node('span', t('sydney'))); return el; }
 function gallery(admin = false): HTMLElement {
-  const el = node('div', '', 'theme-gallery'); const title = node('header', '', 'gallery-heading'); title.append(node('p', gameName(), 'preview-brand'), node('p', t('preview'), 'eyebrow'), node('h1', t(admin ? 'admin' : 'galleryTitle')), node('p', t(admin ? 'adminNote' : 'galleryNote'))); el.append(title);
+  const el = node('div', '', 'theme-gallery'); const title = node('header', '', 'gallery-heading'); title.append(branded(node('p', gameName(), 'preview-brand')), node('p', t('preview'), 'eyebrow'), node('h1', t(admin ? 'admin' : 'galleryTitle')), node('p', t(admin ? 'adminNote' : 'galleryNote'))); el.append(title);
   const cards = node('div', '', 'theme-collection');
   for (const value of portalThemes) { const item = node('article', '', 'theme-tile'); item.dataset.theme = value.id; item.append(image(value)); const body = node('div', '', 'theme-tile-body'); body.append(node('p', pair(value.subtitle), 'eyebrow'), node('h2', pair(value.title)), node('p', pair(value.detail)));
     if (admin) { const choose = button(pair(value.title), () => { theme = value; render(); }, 'theme-select'); choose.setAttribute('aria-pressed', String(theme.id === value.id)); body.append(choose); }
@@ -47,7 +48,7 @@ function gallery(admin = false): HTMLElement {
   else el.append(link(t('chooseHost'), 'admin')); return el;
 }
 function gate(): HTMLElement {
-  const el = node('section', '', 'login-gate'); el.append(node('p', gameName(), 'eyebrow'), node('h2', t(signedIn ? 'signedIn' : 'signIn')), node('p', t(signedIn ? 'sessionReady' : 'loginNote')));
+  const el = node('section', '', 'login-gate'); el.append(branded(node('p', gameName(), 'eyebrow')), node('h2', t(signedIn ? 'signedIn' : 'signIn')), node('p', t(signedIn ? 'sessionReady' : 'loginNote')));
   if (signedIn) el.append(button(t('continueGame'), () => changeView('game'), 'primary'), button(t('account'), () => changeView('profile')), button(t('logout'), () => { signedIn = false; try { sessionStorage.removeItem('hnmo.preview.session'); } catch { /* No credentials. */ } render(); }));
   else { for (const key of ['loginName', 'password'] as const) { const label = document.createElement('label'); label.append(node('span', t(key))); const input = document.createElement('input'); input.disabled = true; input.type = key === 'password' ? 'password' : 'text'; input.placeholder = key === 'password' ? '••••••••' : 'Explorer'; label.append(input); el.append(label); }
     el.append(button(t('sampleLogin'), () => { signedIn = true; try { sessionStorage.setItem('hnmo.preview.session', 'example'); } catch { /* No real credentials. */ } changeView('profile'); }, 'primary'), node('small', t('sampleHint'))); } return el;
@@ -67,4 +68,5 @@ function moreMenu(opener: HTMLButtonElement): void { const dialog = document.cre
 function profile(): HTMLElement { const el = node('div', '', 'preview-shell'); const nav = node('nav', '', 'preview-sidebar'); nav.setAttribute('aria-label', t('menu')); const identity = node('div', '', 'sidebar-identity'); identity.append(node('span', '⚔', 'identity-sigil'), node('strong', 'Explorer'), node('small', pair(theme.title))); nav.append(identity); for (const key of sections) nav.append(navButton(key)); const main = node('div', '', 'preview-main'); main.tabIndex = -1; main.append(node('p', t('preview'), 'profile-status'), globalSearch(language, go), content()); const mobile = node('nav', '', 'mobile-account-nav'); mobile.setAttribute('aria-label', t('menu')); for (const key of ['home', 'characters', 'items', 'wallet'] as const) mobile.append(navButton(key, true)); const more = button('', () => moreMenu(more)); more.setAttribute('aria-label', t('more')); more.title = t('more'); more.append(node('span', '☰', 'nav-icon'), node('span', t('more'))); mobile.append(more); el.append(nav, main, mobile); return el; }
 function game(): HTMLElement { const el = node('div', '', 'game-selection'); const banner = node('section', '', 'profile-banner'); banner.append(image(theme, true), node('h1', t('selectCharacter'))); el.append(banner, node('p', t('gameSample')), characters(), button(t('backProfile'), () => go('home'), 'primary')); return el; }
 function render(): void { document.documentElement.lang = language; document.body.dataset.previewTheme = theme.id; document.body.dataset.view = view; host.replaceChildren(header(), view === 'gallery' || view === 'admin' ? gallery(view === 'admin') : view === 'portal' ? portal() : view === 'game' ? game() : profile(), footer()); }
-render(); void loadGameName().then(() => { document.title = gameName(); render(); });
+// The shared loader updates data-game-name nodes in place, preserving dialogs and user input.
+render(); void loadGameName();

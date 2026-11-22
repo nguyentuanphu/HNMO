@@ -199,3 +199,20 @@ test('all five fantasy entrances load their artwork and fit phone, tablet and de
   }
   expect(errors).toEqual([]);
 });
+
+test('late server-brand loading preserves the open mobile menu and selected account section', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  let release!: () => void;
+  const pending = new Promise<void>(resolve => { release = resolve; });
+  await page.route('**/game-name.json', async route => { await pending; await route.fulfill({ json: { name: 'Delayed server brand' } }); });
+  try {
+    await page.goto('/account-profile-preview.html?view=profile&lang=en');
+    await page.locator('.mobile-account-nav button').last().click();
+    await expect(page.getByRole('dialog')).toBeVisible();
+    release();
+    await expect(page.locator('.portal-header .preview-brand')).toHaveText('Delayed server brand');
+    await expect(page.getByRole('dialog')).toBeVisible({ timeout: 2000 });
+    await page.locator('dialog [data-section=items]').click();
+    await expect(page.getByRole('heading', { name: 'Item passport', exact: true, level: 2 })).toBeVisible();
+  } finally { release(); }
+});
