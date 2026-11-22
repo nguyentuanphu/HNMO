@@ -263,15 +263,15 @@ int COMGEM::CalcItemValue(const ITEM* p)
     case NOGEM:
         return 0;
     case eBLESS_C:
-        return 9000000 * (Level + 1) * FIRST;
+        return 3000000 * (Level + 1) * FIRST;
     case eSOUL_C:
         return 6000000 * (Level + 1) * FIRST;
     case eLIFE_C:
-        return 45000000 * (Level + 1) * FIRST;
+        return 16000000 * (Level + 1) * FIRST;
     case eCREATE_C:
-        return 36000000 * (Level + 1) * FIRST;
+        return 15000000 * (Level + 1) * FIRST;
     case ePROTECT_C:
-        return 60000000 * (Level + 1) * FIRST;
+        return 15000000 * (Level + 1) * FIRST;
     case eCHAOS_C:
         return 810000 * (Level + 1) * FIRST;
     case eGEMSTONE_C:
