@@ -1,0 +1,505 @@
+{
+ "rows": [
+  {
+   "n": 1,
+   "name": "Poison",
+   "cast": true,
+   "target": "Skeleton",
+   "dist": 1,
+   "damage": 1,
+   "effectPeak": 58,
+   "kinds": [
+    "effect:bone1",
+    "effect:bone2",
+    "particle:fire",
+    "effect:poison",
+    "particle:blood2",
+    "particle:smoke"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3260
+  },
+  {
+   "n": 2,
+   "name": "Meteorite",
+   "cast": true,
+   "target": "Skeleton",
+   "dist": 1,
+   "damage": 1,
+   "effectPeak": 67,
+   "kinds": [
+    "effect:bone1",
+    "effect:bone2",
+    "particle:fire",
+    "effect:fireModel",
+    "particle:blood2",
+    "effect:stone1"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3260
+  },
+  {
+   "n": 3,
+   "name": "Lightning",
+   "cast": true,
+   "target": "Spider",
+   "dist": 1,
+   "damage": 2,
+   "effectPeak": 16,
+   "kinds": [
+    "joint:jointThunder",
+    "particle:energy",
+    "particle:smoke",
+    "particle:blood2"
+   ],
+   "p95": 17,
+   "max": 50,
+   "mana": 3260
+  },
+  {
+   "n": 4,
+   "name": "Fire Ball",
+   "cast": true,
+   "target": "Skeleton",
+   "dist": 1,
+   "damage": 1,
+   "effectPeak": 58,
+   "kinds": [
+    "effect:bone1",
+    "effect:bone2",
+    "particle:fire",
+    "effect:fireModel",
+    "particle:blood2"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3260
+  },
+  {
+   "n": 5,
+   "name": "Flame",
+   "cast": true,
+   "target": "Skeleton",
+   "dist": 1,
+   "damage": 1,
+   "effectPeak": 203,
+   "kinds": [
+    "effect:bone1",
+    "effect:bone2",
+    "particle:fire",
+    "effect:flame",
+    "effect:stone2",
+    "effect:stone1"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3260
+  },
+  {
+   "n": 6,
+   "name": "Teleport",
+   "cast": false,
+   "target": "Budge Dragon",
+   "dist": 4,
+   "damage": 3,
+   "effectPeak": 0,
+   "kinds": [],
+   "p95": 17,
+   "max": 17,
+   "mana": 3260
+  },
+  {
+   "n": 7,
+   "name": "Ice",
+   "cast": true,
+   "target": "Spider",
+   "dist": 0,
+   "damage": 3,
+   "effectPeak": 22,
+   "kinds": [
+    "effect:ice",
+    "effect:iceSmall",
+    "particle:blood2",
+    "particle:smoke"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3260
+  },
+  {
+   "n": 8,
+   "name": "Twister",
+   "cast": true,
+   "target": "Budge Dragon",
+   "dist": 1,
+   "damage": 1,
+   "effectPeak": 24,
+   "kinds": [
+    "effect:storm",
+    "joint:jointThunder",
+    "particle:blood2",
+    "particle:smoke",
+    "effect:stone1",
+    "effect:stone2"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3260
+  },
+  {
+   "n": 9,
+   "name": "Evil Spirit",
+   "cast": true,
+   "target": "Spider",
+   "dist": 4,
+   "damage": 1,
+   "effectPeak": 22,
+   "kinds": [
+    "effect:laser",
+    "joint:jointSpirit",
+    "particle:blood2"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3260
+  },
+  {
+   "n": 10,
+   "name": "Hellfire",
+   "cast": true,
+   "target": "Spider",
+   "dist": 1,
+   "damage": 1,
+   "effectPeak": 21,
+   "kinds": [
+    "particle:fire",
+    "effect:circle",
+    "effect:circleLight",
+    "effect:stone1",
+    "particle:blood2",
+    "effect:stone2"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3260
+  },
+  {
+   "n": 11,
+   "name": "Power Wave",
+   "cast": true,
+   "target": "LIch",
+   "dist": 1,
+   "damage": 1,
+   "effectPeak": 61,
+   "kinds": [
+    "particle:fire",
+    "effect:stone1",
+    "effect:stone2",
+    "particle:explosion",
+    "effect:magic2",
+    "particle:smoke"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3260
+  },
+  {
+   "n": 12,
+   "name": "Aqua Beam",
+   "cast": true,
+   "target": "Skeleton",
+   "dist": 4,
+   "damage": 1,
+   "effectPeak": 82,
+   "kinds": [
+    "effect:bone1",
+    "effect:bone2",
+    "particle:fire",
+    "effect:bossLaser",
+    "particle:blood2",
+    "sprite:spark3"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3240
+  },
+  {
+   "n": 13,
+   "name": "Cometfall",
+   "cast": true,
+   "target": "Skeleton",
+   "dist": 2,
+   "damage": 2,
+   "effectPeak": 77,
+   "kinds": [
+    "effect:bone1",
+    "effect:bone2",
+    "particle:fire",
+    "effect:skillBlast",
+    "joint:jointEnergy",
+    "particle:blood2"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3230
+  },
+  {
+   "n": 14,
+   "name": "Inferno",
+   "cast": true,
+   "target": "Skeleton",
+   "dist": 1,
+   "damage": 2,
+   "effectPeak": 253,
+   "kinds": [
+    "effect:bone1",
+    "effect:bone2",
+    "particle:fire",
+    "effect:fireModel",
+    "particle:blood2",
+    "effect:stone1"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3150
+  },
+  {
+   "n": 15,
+   "name": "Teleport Ally",
+   "cast": false,
+   "target": "LIch",
+   "dist": 4,
+   "damage": 3,
+   "effectPeak": 38,
+   "kinds": [
+    "particle:fire",
+    "effect:fireModel",
+    "particle:blood2",
+    "effect:stone1",
+    "effect:stone2",
+    "particle:explosion"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3260
+  },
+  {
+   "n": 16,
+   "name": "Soul Barrier",
+   "cast": true,
+   "target": "LIch",
+   "dist": 0,
+   "damage": 5,
+   "effectPeak": 58,
+   "kinds": [
+    "joint:spearSkill",
+    "particle:fire",
+    "sprite:flareBlue",
+    "effect:fireModel",
+    "particle:blood2",
+    "effect:stone1"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3245
+  },
+  {
+   "n": 17,
+   "name": "Energy Ball",
+   "cast": true,
+   "target": "LIch",
+   "dist": 0,
+   "damage": 5,
+   "effectPeak": 0,
+   "kinds": [
+    "effect:fireModel",
+    "particle:blood2",
+    "particle:fire",
+    "effect:energy",
+    "particle:energy",
+    "particle:spark3"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3260
+  },
+  {
+   "n": 38,
+   "name": "Decay",
+   "cast": true,
+   "target": "LIch",
+   "dist": 1,
+   "damage": 4,
+   "effectPeak": 89,
+   "kinds": [
+    "particle:fire",
+    "effect:stone2",
+    "effect:stone1",
+    "effect:fireModel",
+    "joint:smokeTrail",
+    "sprite:light"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3260
+  },
+  {
+   "n": 39,
+   "name": "Ice Storm",
+   "cast": true,
+   "target": "LIch",
+   "dist": 1,
+   "damage": 1,
+   "effectPeak": 228,
+   "kinds": [
+    "particle:fire",
+    "effect:blizzardModel",
+    "particle:blood2",
+    "particle:smoke",
+    "particle:energy",
+    "particle:fire3"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3260
+  },
+  {
+   "n": 40,
+   "name": "Nova",
+   "cast": true,
+   "target": "Skeleton",
+   "dist": 1,
+   "damage": 3,
+   "effectPeak": 128,
+   "kinds": [
+    "effect:circle",
+    "joint:jointSpirit",
+    "particle:blood2",
+    "sprite:light",
+    "effect:bone1",
+    "effect:bone2"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3260
+  },
+  {
+   "n": 45,
+   "name": "Lance",
+   "cast": true,
+   "target": "LIch",
+   "dist": 1,
+   "damage": 2,
+   "effectPeak": 18,
+   "kinds": [
+    "particle:fire",
+    "effect:stone1",
+    "effect:stone2",
+    "particle:explosion",
+    "effect:skillJavelin",
+    "particle:poundingBall"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3230
+  },
+  {
+   "n": 76,
+   "name": "Plasma Storm",
+   "cast": true,
+   "target": "LIch",
+   "dist": 2,
+   "damage": 1,
+   "effectPeak": 13,
+   "kinds": [
+    "particle:fire",
+    "joint:fenrirSkillThunder",
+    "particle:blood2"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3260
+  },
+  {
+   "n": 233,
+   "name": "Expansion of Wizardry",
+   "cast": true,
+   "target": "Spider",
+   "dist": 2,
+   "damage": 2,
+   "effectPeak": 171,
+   "kinds": [
+    "effect:swellOfMagicPower",
+    "effect:swellOfMagicPowerBuffEffect",
+    "effect:shockWave",
+    "effect:twlight",
+    "effect:arrowsre6",
+    "joint:twoLineGhost"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3180
+  },
+  {
+   "n": 704,
+   "name": "Ice Dragon",
+   "cast": true,
+   "target": "Spider",
+   "dist": 1,
+   "damage": 1,
+   "effectPeak": 12,
+   "kinds": [
+    "sprite:flareBlue",
+    "particle:fire",
+    "effect:arrowsre6",
+    "sprite:light"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3260
+  },
+  {
+   "n": 705,
+   "name": "Meteor Rain",
+   "cast": true,
+   "target": "Skeleton",
+   "dist": 1,
+   "damage": 2,
+   "effectPeak": 227,
+   "kinds": [
+    "effect:bone1",
+    "effect:bone2",
+    "particle:fire",
+    "particle:smoke",
+    "effect:arrowsre6",
+    "sprite:light"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3260
+  },
+  {
+   "n": 706,
+   "name": "Thunder Cage",
+   "cast": true,
+   "target": "LIch",
+   "dist": 6,
+   "damage": 2,
+   "effectPeak": 39,
+   "kinds": [
+    "particle:fire",
+    "joint:jointThunder",
+    "particle:energy",
+    "sprite:energy",
+    "effect:fireModel",
+    "particle:blood2"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3180
+  }
+ ],
+ "errors": []
+}

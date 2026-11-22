@@ -1,0 +1,268 @@
+[
+ {
+  "map": 9,
+  "name": "Devil Square",
+  "folder": "World10",
+  "objects": 596,
+  "meshes": 18,
+  "untextured": {},
+  "http": [],
+  "warnings": []
+ },
+ {
+  "map": 32,
+  "name": "Devil Square",
+  "folder": "World10",
+  "objects": 596,
+  "meshes": 18,
+  "untextured": {},
+  "http": [],
+  "warnings": []
+ },
+ {
+  "map": 39,
+  "name": "Kanturu Refinery Tower",
+  "folder": "World40",
+  "objects": 1608,
+  "meshes": 150,
+  "untextured": {},
+  "http": [
+   "/data/s9/World40/TileGround02.jpg",
+   "/data/s9/World40/TileWood01.jpg",
+   "/data/s9/World40/TileWater01.jpg",
+   "/data/s9/World40/TileRock05.jpg"
+  ],
+  "warnings": []
+ },
+ {
+  "map": 40,
+  "name": "Silent Map",
+  "folder": "World41",
+  "objects": 673,
+  "meshes": 55,
+  "untextured": {},
+  "http": [
+   "/data/s9/World41/TileWood01.jpg",
+   "/data/s9/World41/TileRock04.jpg",
+   "/data/s9/Object41/Object53.bmd",
+   "/data/s9/Object41/Object16.bmd",
+   "/data/s9/Object41/Object34.bmd",
+   "/data/s9/Object41/Object75.bmd"
+  ],
+  "warnings": [
+   "Model missing: Object41/Object53.bmd 404 /data/s9/Object41/Object53.bmd",
+   "Model missing: Object41/Object16.bmd 404 /data/s9/Object41/Object16.bmd",
+   "Model missing: Object41/Object34.bmd 404 /data/s9/Object41/Object34.bmd",
+   "Model missing: Object41/Object75.bmd 404 /data/s9/Object41/Object75.bmd"
+  ]
+ },
+ {
+  "map": 58,
+  "name": "Raklion Hatchery",
+  "folder": "World59",
+  "objects": 161,
+  "meshes": 36,
+  "untextured": {},
+  "http": [
+   "/data/s9/Object59/Object84.bmd"
+  ],
+  "warnings": [
+   "Model missing: Object59/Object84.bmd 404 /data/s9/Object59/Object84.bmd"
+  ]
+ },
+ {
+  "map": 64,
+  "name": "Duel Arena",
+  "folder": "World65",
+  "objects": 1351,
+  "meshes": 57,
+  "untextured": {},
+  "http": [
+   "/data/s9/Object65/Object40.bmd"
+  ],
+  "warnings": [
+   "Model missing: Object65/Object40.bmd 404 /data/s9/Object65/Object40.bmd"
+  ]
+ },
+ {
+  "map": 65,
+  "name": "Doppelganger",
+  "folder": "World66",
+  "objects": 421,
+  "meshes": 45,
+  "untextured": {},
+  "http": [
+   "/data/s9/Object66/Object07.bmd",
+   "/data/s9/Object66/Object97.bmd",
+   "/data/s9/Object66/Object33.bmd"
+  ],
+  "warnings": [
+   "Model missing: Object66/Object07.bmd 404 /data/s9/Object66/Object07.bmd",
+   "Model missing: Object66/Object97.bmd 404 /data/s9/Object66/Object97.bmd",
+   "Model missing: Object66/Object33.bmd 404 /data/s9/Object66/Object33.bmd"
+  ]
+ },
+ {
+  "map": 69,
+  "name": "Varka",
+  "folder": "World70",
+  "objects": 835,
+  "meshes": 119,
+  "untextured": {},
+  "http": [
+   "/data/s9/Object70/Object127.bmd",
+   "/data/s9/Object70/Object96.bmd"
+  ],
+  "warnings": [
+   "Model missing: Object70/Object127.bmd 404 /data/s9/Object70/Object127.bmd",
+   "Model missing: Object70/Object96.bmd 404 /data/s9/Object70/Object96.bmd"
+  ]
+ },
+ {
+  "map": 82,
+  "name": "Map 82",
+  "folder": "World83",
+  "objects": 804,
+  "meshes": 36,
+  "untextured": {},
+  "http": [
+   "/data/s9/World83/TileRock05.jpg",
+   "/data/s9/Object83/Object77.bmd",
+   "/data/s9/Object83/Object69.bmd"
+  ],
+  "warnings": [
+   "Model missing: Object83/Object77.bmd 404 /data/s9/Object83/Object77.bmd",
+   "Model missing: Object83/Object69.bmd 404 /data/s9/Object83/Object69.bmd"
+  ]
+ },
+ {
+  "map": 91,
+  "name": "Map 91",
+  "folder": "World92",
+  "objects": 5844,
+  "meshes": 193,
+  "untextured": {},
+  "http": [
+   "/data/s9/World92/TileRock06.jpg"
+  ],
+  "warnings": []
+ },
+ {
+  "map": 93,
+  "name": "Map 93",
+  "folder": "World94",
+  "objects": 234,
+  "meshes": 45,
+  "untextured": {},
+  "http": [
+   "/data/s9/World94/TileRock06.jpg",
+   "/data/s9/Object94/Object64.bmd"
+  ],
+  "warnings": [
+   "Model missing: Object94/Object64.bmd 404 /data/s9/Object94/Object64.bmd"
+  ]
+ },
+ {
+  "map": 94,
+  "name": "Map 94",
+  "folder": "World95",
+  "objects": 47,
+  "meshes": 94,
+  "untextured": {},
+  "http": [
+   "/data/s9/Object95/Object64.bmd",
+   "/data/s9/Object95/Object01.bmd",
+   "/data/s9/Object95/Object16.bmd"
+  ],
+  "warnings": [
+   "Model missing: Object95/Object64.bmd 404 /data/s9/Object95/Object64.bmd",
+   "Model missing: Object95/Object01.bmd 404 /data/s9/Object95/Object01.bmd",
+   "Model missing: Object95/Object16.bmd 404 /data/s9/Object95/Object16.bmd"
+  ]
+ },
+ {
+  "map": 95,
+  "name": "Map 95",
+  "folder": "World96",
+  "objects": 2182,
+  "meshes": 104,
+  "untextured": {},
+  "http": [
+   "/data/s9/World96/ExtTile07.jpg"
+  ],
+  "warnings": []
+ },
+ {
+  "map": 98,
+  "name": "Map 98",
+  "folder": "World99",
+  "objects": 1956,
+  "meshes": 104,
+  "untextured": {},
+  "http": [
+   "/data/s9/World99/TileWood01.jpg",
+   "/data/s9/Object99/Object82.bmd"
+  ],
+  "warnings": [
+   "Model missing: Object99/Object82.bmd 404 /data/s9/Object99/Object82.bmd"
+  ]
+ },
+ {
+  "map": 100,
+  "name": "Map 100",
+  "folder": "World101",
+  "objects": 3482,
+  "meshes": 143,
+  "untextured": {
+   "Object22.bmd": 1
+  },
+  "http": [
+   "/data/s9/World101/ExtTile01.jpg",
+   "/data/s9/Object101/Object29.bmd",
+   "/data/s9/Object101/Object100.bmd",
+   "/data/s9/Object101/Object101.bmd",
+   "/data/s9/Object101/Object99.bmd",
+   "/data/s9/Object101/bons.jpg",
+   "/data/s9/Item/bons.jpg"
+  ],
+  "warnings": [
+   "Model missing: Object101/Object29.bmd 404 /data/s9/Object101/Object29.bmd",
+   "Model missing: Object101/Object100.bmd 404 /data/s9/Object101/Object100.bmd",
+   "Model missing: Object101/Object101.bmd 404 /data/s9/Object101/Object101.bmd",
+   "Model missing: Object101/Object99.bmd 404 /data/s9/Object101/Object99.bmd",
+   "Texture missing: bons.jpg in Object101, Item"
+  ]
+ },
+ {
+  "map": 102,
+  "name": "Map 102",
+  "folder": "World103",
+  "objects": 294,
+  "meshes": 18,
+  "untextured": {
+   "Object04.bmd": 6
+  },
+  "http": [
+   "/data/s9/Object103/guard_hair.tga",
+   "/data/s9/Object103/upper_11.jpg",
+   "/data/s9/Object103/head_11.jpg",
+   "/data/s9/Object103/boots_11.jpg",
+   "/data/s9/Object103/lower_11.jpg",
+   "/data/s9/Object103/gloves_11.jpg",
+   "/data/s9/Item/upper_11.jpg",
+   "/data/s9/Item/guard_hair.tga",
+   "/data/s9/Item/head_11.jpg",
+   "/data/s9/Item/boots_11.jpg",
+   "/data/s9/Item/lower_11.jpg",
+   "/data/s9/Item/gloves_11.jpg"
+  ],
+  "warnings": [
+   "Texture missing: upper_11.jpg in Object103, Item",
+   "Texture missing: guard_hair.tga in Object103, Item",
+   "Texture missing: head_11.jpg in Object103, Item",
+   "Texture missing: boots_11.jpg in Object103, Item",
+   "Texture missing: lower_11.jpg in Object103, Item",
+   "Texture missing: gloves_11.jpg in Object103, Item"
+  ]
+ }
+]

@@ -1,0 +1,241 @@
+{
+ "rows": [
+  {
+   "n": 60,
+   "name": "Force",
+   "cast": true,
+   "target": "Golden Budge Dragon",
+   "dist": 7,
+   "damage": 1,
+   "effectPeak": 22,
+   "kinds": [
+    "particle:smoke",
+    "effect:waves",
+    "effect:piercing2",
+    "joint:piercing",
+    "particle:blood2"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3588
+  },
+  {
+   "n": 61,
+   "name": "Fire Burst",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 20,
+   "kinds": [
+    "particle:smoke",
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3598
+  },
+  {
+   "n": 62,
+   "name": "Earthshake",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 174,
+   "kinds": [
+    "effect:darkHorseSkill",
+    "effect:shockWave",
+    "particle:fire",
+    "effect:skillFuryStrike",
+    "effect:groundStone",
+    "effect:groundStone2"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3598
+  },
+  {
+   "n": 63,
+   "name": "Summon",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 49,
+   "kinds": [
+    "effect:circle",
+    "effect:circleLight",
+    "joint:flareBlueJoint",
+    "particle:flareBlue",
+    "particle:smoke"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3598
+  },
+  {
+   "n": 64,
+   "name": "Increase Critical Damage",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 25,
+   "kinds": [
+    "joint:flareForceJoint",
+    "particle:fire",
+    "particle:smoke",
+    "sprite:flare",
+    "effect:darkLordSkill"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3598
+  },
+  {
+   "n": 65,
+   "name": "Electric Spike",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 5,
+   "kinds": [
+    "sprite:flare",
+    "joint:flareForceJoint",
+    "particle:fire",
+    "particle:smoke"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3598
+  },
+  {
+   "n": 72,
+   "name": "Abolish Magic",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 1,
+   "kinds": [
+    "particle:smoke"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3598
+  },
+  {
+   "n": 74,
+   "name": "Fire Blast",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 16,
+   "kinds": [
+    "particle:fire",
+    "particle:smoke"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3598
+  },
+  {
+   "n": 78,
+   "name": "Fire Scream",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 84,
+   "kinds": [
+    "particle:fire",
+    "particle:smoke",
+    "effect:darkScream",
+    "effect:darkScreamFire",
+    "joint:jointForce",
+    "particle:blueBlur"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3598
+  },
+  {
+   "n": 238,
+   "name": "Chaotic Diseier",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 379,
+   "kinds": [
+    "effect:shiny5",
+    "effect:desair",
+    "effect:feather",
+    "joint:twoLineGhost",
+    "particle:smoke",
+    "sprite:shiny5"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3598
+  },
+  {
+   "n": 716,
+   "name": "Shadow Ravens",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 9,
+   "kinds": [
+    "particle:fire",
+    "particle:smoke"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3598
+  },
+  {
+   "n": 717,
+   "name": "War Command",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 21,
+   "kinds": [
+    "particle:spark",
+    "sprite:shiny2",
+    "particle:smoke",
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3598
+  },
+  {
+   "n": 718,
+   "name": "Earth Stomp",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 100,
+   "kinds": [
+    "effect:stone1",
+    "effect:magic2",
+    "particle:smoke",
+    "particle:fire",
+    "sprite:light",
+    "sprite:shiny2"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 3598
+  }
+ ],
+ "errors": []
+}

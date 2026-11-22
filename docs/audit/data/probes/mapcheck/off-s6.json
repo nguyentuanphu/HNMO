@@ -1,0 +1,121 @@
+[
+ {
+  "map": 9,
+  "name": "Devil Square",
+  "folder": "World10",
+  "objects": 564,
+  "meshes": 18,
+  "untextured": {},
+  "http": [],
+  "warnings": []
+ },
+ {
+  "map": 32,
+  "name": "Devil Square",
+  "folder": "World10",
+  "objects": 564,
+  "meshes": 18,
+  "untextured": {},
+  "http": [],
+  "warnings": []
+ },
+ {
+  "map": 39,
+  "name": "Kanturu Refinery Tower",
+  "folder": "World40",
+  "objects": 1459,
+  "meshes": 150,
+  "untextured": {},
+  "http": [
+   "/data/World40/TileWater01.jpg",
+   "/data/World40/TileWood01.jpg",
+   "/data/World40/TileGround02.jpg",
+   "/data/World40/TileRock05.jpg"
+  ],
+  "warnings": []
+ },
+ {
+  "map": 40,
+  "name": "Silent Map",
+  "folder": "World41",
+  "objects": 670,
+  "meshes": 55,
+  "untextured": {},
+  "http": [
+   "/data/World41/TileWood01.jpg",
+   "/data/World41/TileRock04.jpg",
+   "/data/Object41/Object53.bmd",
+   "/data/Object41/Object16.bmd",
+   "/data/Object41/Object75.bmd",
+   "/data/Object41/Object34.bmd"
+  ],
+  "warnings": [
+   "Model missing: Object41/Object53.bmd 404 /data/Object41/Object53.bmd",
+   "Model missing: Object41/Object16.bmd 404 /data/Object41/Object16.bmd",
+   "Model missing: Object41/Object75.bmd 404 /data/Object41/Object75.bmd",
+   "Model missing: Object41/Object34.bmd 404 /data/Object41/Object34.bmd"
+  ]
+ },
+ {
+  "map": 58,
+  "name": "Raklion Hatchery",
+  "folder": "World59",
+  "objects": 162,
+  "meshes": 36,
+  "untextured": {},
+  "http": [
+   "/data/Object59/Object84.bmd"
+  ],
+  "warnings": [
+   "Model missing: Object59/Object84.bmd 404 /data/Object59/Object84.bmd"
+  ]
+ },
+ {
+  "map": 64,
+  "name": "Duel Arena",
+  "folder": "World65",
+  "objects": 1347,
+  "meshes": 57,
+  "untextured": {},
+  "http": [
+   "/data/Object65/Object40.bmd"
+  ],
+  "warnings": [
+   "Model missing: Object65/Object40.bmd 404 /data/Object65/Object40.bmd"
+  ]
+ },
+ {
+  "map": 65,
+  "name": "Doppelganger",
+  "folder": "World66",
+  "objects": 421,
+  "meshes": 45,
+  "untextured": {},
+  "http": [
+   "/data/Object66/Object97.bmd",
+   "/data/Object66/Object07.bmd",
+   "/data/Object66/Object33.bmd"
+  ],
+  "warnings": [
+   "Model missing: Object66/Object97.bmd 404 /data/Object66/Object97.bmd",
+   "Model missing: Object66/Object07.bmd 404 /data/Object66/Object07.bmd",
+   "Model missing: Object66/Object33.bmd 404 /data/Object66/Object33.bmd"
+  ]
+ },
+ {
+  "map": 69,
+  "name": "Varka",
+  "folder": "World70",
+  "objects": 836,
+  "meshes": 119,
+  "untextured": {},
+  "http": [
+   "/data/Object70/Object127.bmd",
+   "/data/Object70/Object96.bmd"
+  ],
+  "warnings": [
+   "Model missing: Object70/Object127.bmd 404 /data/Object70/Object127.bmd",
+   "Model missing: Object70/Object96.bmd 404 /data/Object70/Object96.bmd"
+  ]
+ }
+]

@@ -1,0 +1,298 @@
+{
+ "rows": [
+  {
+   "n": 2,
+   "name": "Meteorite",
+   "cast": true,
+   "target": "Dragon",
+   "dist": 5,
+   "damage": 5,
+   "effectPeak": 115,
+   "kinds": [
+    "particle:fire",
+    "effect:fireModel",
+    "particle:blood2",
+    "effect:stone1",
+    "effect:stone2",
+    "particle:explosion"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 4564
+  },
+  {
+   "n": 4,
+   "name": "Fire Ball",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 0,
+   "kinds": [],
+   "p95": 17,
+   "max": 17,
+   "mana": 4564
+  },
+  {
+   "n": 7,
+   "name": "Ice",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 11,
+   "kinds": [
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 4564
+  },
+  {
+   "n": 11,
+   "name": "Power Wave",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 2,
+   "kinds": [
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 4564
+  },
+  {
+   "n": 45,
+   "name": "Lance",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 0,
+   "kinds": [],
+   "p95": 17,
+   "max": 17,
+   "mana": 4564
+  },
+  {
+   "n": 76,
+   "name": "Plasma Storm",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 10,
+   "kinds": [
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 4564
+  },
+  {
+   "n": 214,
+   "name": "Drain Life",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 2,
+   "kinds": [
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 4564
+  },
+  {
+   "n": 215,
+   "name": "Chain Lightning",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 0,
+   "kinds": [],
+   "p95": 17,
+   "max": 17,
+   "mana": 4564
+  },
+  {
+   "n": 217,
+   "name": "Damage Reflection",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 29,
+   "kinds": [
+    "joint:flare",
+    "particle:fire",
+    "sprite:pinLight"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 4564
+  },
+  {
+   "n": 218,
+   "name": "Berserker",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 162,
+   "kinds": [
+    "effect:orora",
+    "effect:sparks",
+    "effect:lightMarks",
+    "particle:orora",
+    "particle:sparks",
+    "sprite:lightMarks"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 4741
+  },
+  {
+   "n": 219,
+   "name": "Sleep",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 4,
+   "kinds": [
+    "particle:orora",
+    "particle:sparks"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 7531
+  },
+  {
+   "n": 221,
+   "name": "Weakness",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 72,
+   "kinds": [
+    "particle:fire",
+    "effect:magicZin",
+    "effect:summonerCastingEffect2",
+    "effect:summonerCastingEffect22",
+    "effect:summonerCastingEffect222",
+    "effect:shiny5"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 4564
+  },
+  {
+   "n": 222,
+   "name": "Innovation",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 59,
+   "kinds": [
+    "particle:fire",
+    "effect:magicZin",
+    "effect:summonerCastingEffect2",
+    "effect:summonerCastingEffect22",
+    "effect:summonerCastingEffect222",
+    "effect:shiny5"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 4564
+  },
+  {
+   "n": 225,
+   "name": "Pollution",
+   "cast": false,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 0,
+   "kinds": [],
+   "p95": 17,
+   "max": 17,
+   "mana": 4564
+  },
+  {
+   "n": 230,
+   "name": "Lightning Shock",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 120,
+   "kinds": [
+    "effect:lightningShock",
+    "particle:fire",
+    "particle:lightningMega",
+    "particle:magicParticle",
+    "sprite:light",
+    "sprite:magicGround1"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 4564
+  },
+  {
+   "n": 720,
+   "name": "Poison Soul",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 124,
+   "kinds": [
+    "particle:smoke",
+    "sprite:energy",
+    "particle:fire"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 4564
+  },
+  {
+   "n": 721,
+   "name": "Little Demon",
+   "cast": true,
+   "target": null,
+   "dist": null,
+   "damage": 0,
+   "effectPeak": 11,
+   "kinds": [
+    "particle:fire",
+    "sprite:light"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 4564
+  },
+  {
+   "n": 722,
+   "name": "Weakening Curse",
+   "cast": true,
+   "target": "Devil of testgm2Sum",
+   "dist": 1,
+   "damage": 0,
+   "effectPeak": 120,
+   "kinds": [
+    "particle:smoke"
+   ],
+   "p95": 17,
+   "max": 17,
+   "mana": 4564
+  }
+ ],
+ "errors": []
+}

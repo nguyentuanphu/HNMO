@@ -1,0 +1,31 @@
+{
+ "rows": [
+  {
+   "n": 57,
+   "castable": false,
+   "cast": false,
+   "target": "Spider",
+   "dist": 1,
+   "onSkill": [],
+   "effects": 0,
+   "made": {},
+   "damage": 0,
+   "p95": 17,
+   "max": 17,
+   "casting": false,
+   "dbg": {
+    "plan": null,
+    "info": {
+     "mana": 20,
+     "ag": 15,
+     "distance": 5,
+     "delay": 0
+    },
+    "mana": 659,
+    "ag": 296,
+    "safe": false
+   }
+  }
+ ],
+ "errors": []
+}

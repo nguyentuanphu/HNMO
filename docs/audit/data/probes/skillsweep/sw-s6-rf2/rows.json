@@ -1,0 +1,437 @@
+{
+ "who": {
+  "name": "testgm2Rf",
+  "map": 0,
+  "classIndex": 6,
+  "season": null
+ },
+ "rows": [
+  {
+   "n": 263,
+   "name": "Dark Side",
+   "castable": true,
+   "cast": true,
+   "target": null,
+   "targetId": null,
+   "dist": null,
+   "near": 0,
+   "heroCell": {
+    "x": 165,
+    "y": 185
+   },
+   "targetCell": null,
+   "heroMid": {
+    "x": 165,
+    "y": 185
+   },
+   "heroAfter": {
+    "x": 165,
+    "y": 185
+   },
+   "targetAfter": null,
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    263
+   ],
+   "area": [],
+   "msgs": [],
+   "effects": 5,
+   "made": {
+    "effect:eventCloud": 1,
+    "effect:magic": 1,
+    "effect:windForce": 3
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": "darkSide",
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Dark Side",
+     "mana": 70,
+     "ag": 0,
+     "distance": 4,
+     "damage": 0
+    },
+    "mana": 3252,
+    "ag": 3300
+   }
+  },
+  {
+   "n": 264,
+   "name": "Dragon Roar",
+   "castable": true,
+   "cast": false,
+   "target": null,
+   "targetId": null,
+   "dist": null,
+   "near": 0,
+   "heroCell": {
+    "x": 205,
+    "y": 140
+   },
+   "targetCell": null,
+   "heroMid": {
+    "x": 205,
+    "y": 140
+   },
+   "heroAfter": {
+    "x": 205,
+    "y": 140
+   },
+   "targetAfter": null,
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [],
+   "area": [],
+   "msgs": [],
+   "effects": 0,
+   "made": {},
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Dragon Roar",
+     "mana": 50,
+     "ag": 30,
+     "distance": 3,
+     "damage": 0
+    },
+    "mana": 3252,
+    "ag": 3300
+   }
+  },
+  {
+   "n": 265,
+   "name": "Dragon Slasher",
+   "castable": true,
+   "cast": false,
+   "target": null,
+   "targetId": null,
+   "dist": null,
+   "near": 0,
+   "heroCell": {
+    "x": 150,
+    "y": 200
+   },
+   "targetCell": null,
+   "heroMid": {
+    "x": 150,
+    "y": 200
+   },
+   "heroAfter": {
+    "x": 150,
+    "y": 200
+   },
+   "targetAfter": null,
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [],
+   "area": [],
+   "msgs": [],
+   "effects": 0,
+   "made": {},
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": "rageAttack",
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Dragon Slasher",
+     "mana": 100,
+     "ag": 100,
+     "distance": 4,
+     "damage": 0
+    },
+    "mana": 3252,
+    "ag": 3300
+   }
+  },
+  {
+   "n": 269,
+   "name": "Charge",
+   "castable": true,
+   "cast": false,
+   "target": null,
+   "targetId": null,
+   "dist": null,
+   "near": 0,
+   "heroCell": {
+    "x": 165,
+    "y": 185
+   },
+   "targetCell": null,
+   "heroMid": {
+    "x": 165,
+    "y": 185
+   },
+   "heroAfter": {
+    "x": 165,
+    "y": 185
+   },
+   "targetAfter": null,
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [],
+   "area": [],
+   "msgs": [],
+   "effects": 0,
+   "made": {},
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": null
+    },
+    "info": {
+     "name": "Charge",
+     "mana": 20,
+     "ag": 15,
+     "distance": 4,
+     "damage": 90
+    },
+    "mana": 3252,
+    "ag": 3300
+   }
+  },
+  {
+   "n": 270,
+   "name": "Phoenix Shot",
+   "castable": true,
+   "cast": false,
+   "target": null,
+   "targetId": null,
+   "dist": null,
+   "near": 0,
+   "heroCell": {
+    "x": 205,
+    "y": 140
+   },
+   "targetCell": null,
+   "heroMid": {
+    "x": 205,
+    "y": 140
+   },
+   "heroAfter": {
+    "x": 205,
+    "y": 140
+   },
+   "targetAfter": null,
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [],
+   "area": [],
+   "msgs": [],
+   "effects": 0,
+   "made": {},
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Phoenix Shot",
+     "mana": 30,
+     "ag": 0,
+     "distance": 4,
+     "damage": 0
+    },
+    "mana": 3252,
+    "ag": 3300
+   }
+  },
+  {
+   "n": 724,
+   "name": "Dragon Fist",
+   "castable": true,
+   "cast": true,
+   "target": null,
+   "targetId": null,
+   "dist": null,
+   "near": 0,
+   "heroCell": {
+    "x": 150,
+    "y": 200
+   },
+   "targetCell": null,
+   "heroMid": {
+    "x": 150,
+    "y": 200
+   },
+   "heroAfter": {
+    "x": 150,
+    "y": 200
+   },
+   "targetAfter": null,
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    724
+   ],
+   "area": [
+    {
+     "s": 724,
+     "x": 150,
+     "y": 200,
+     "rot": 160,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 8,
+   "made": {
+    "effect:fireModel": 1,
+    "effect:stone2": 2,
+    "effect:stone1": 4,
+    "particle:explosion": 1
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "target"
+    },
+    "info": {
+     "name": "Dragon Fist",
+     "mana": 30,
+     "ag": 10,
+     "distance": 5,
+     "damage": 108
+    },
+    "mana": 3252,
+    "ag": 3300
+   }
+  },
+  {
+   "n": 725,
+   "name": "Whirl Kicks",
+   "castable": true,
+   "cast": true,
+   "target": null,
+   "targetId": null,
+   "dist": null,
+   "near": 0,
+   "heroCell": {
+    "x": 165,
+    "y": 185
+   },
+   "targetCell": null,
+   "heroMid": {
+    "x": 165,
+    "y": 185
+   },
+   "heroAfter": {
+    "x": 165,
+    "y": 185
+   },
+   "targetAfter": null,
+   "hits": 0,
+   "targetsHit": 0,
+   "hp": [],
+   "sd": [],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    725
+   ],
+   "area": [
+    {
+     "s": 725,
+     "x": 165,
+     "y": 185,
+     "rot": 160,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 48,
+   "made": {
+    "particle:spark": 40,
+    "particle:smoke": 8
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Whirl Kicks",
+     "mana": 40,
+     "ag": 15,
+     "distance": 2,
+     "damage": 36
+    },
+    "mana": 3252,
+    "ag": 3300
+   }
+  }
+ ],
+ "errors": []
+}

@@ -1,0 +1,43 @@
+{
+ "rows": [
+  {
+   "n": 57,
+   "castable": true,
+   "cast": true,
+   "target": "Spider",
+   "dist": 1,
+   "onSkill": [
+    57
+   ],
+   "effects": 130,
+   "made": {
+    "joint:flare": 5,
+    "sprite:flame": 115,
+    "particle:blood2": 10
+   },
+   "damage": 1,
+   "p95": 17,
+   "max": 50,
+   "casting": false,
+   "dbg": {
+    "plan": {
+     "packet": "targeted",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "heroAction": 136
+    },
+    "info": {
+     "mana": 20,
+     "ag": 15,
+     "distance": 5,
+     "delay": 0
+    },
+    "mana": 659,
+    "ag": 286,
+    "safe": false
+   }
+  }
+ ],
+ "errors": []
+}

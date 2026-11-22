@@ -1,0 +1,341 @@
+{
+ "who": {
+  "name": "testgmDk",
+  "map": 3,
+  "classIndex": 1,
+  "season": null
+ },
+ "rows": [
+  {
+   "n": 701,
+   "name": "Blood Slash",
+   "castable": true,
+   "cast": true,
+   "target": "Chain Scorpion",
+   "targetId": 662,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 154,
+    "y": 154
+   },
+   "targetCell": {
+    "x": 153,
+    "y": 153
+   },
+   "heroMid": {
+    "x": 154,
+    "y": 154
+   },
+   "heroAfter": {
+    "x": 154,
+    "y": 154
+   },
+   "targetAfter": {
+    "x": 153,
+    "y": 153,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    2409
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    701
+   ],
+   "area": [
+    {
+     "s": 701,
+     "x": 153,
+     "y": 153,
+     "rot": 224,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 39,
+   "made": {
+    "particle:damage2": 3,
+    "particle:damage1": 3,
+    "particle:blood2": 15,
+    "particle:spark": 18
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": "target"
+    },
+    "info": {
+     "name": "Blood Slash",
+     "mana": 25,
+     "ag": 12,
+     "distance": 2,
+     "damage": 72
+    },
+    "mana": 420,
+    "ag": 285
+   }
+  },
+  {
+   "n": 701,
+   "name": "Blood Slash",
+   "castable": true,
+   "cast": true,
+   "target": "Goblin",
+   "targetId": 594,
+   "dist": 6,
+   "near": 1,
+   "heroCell": {
+    "x": 147,
+    "y": 162
+   },
+   "targetCell": {
+    "x": 151,
+    "y": 158
+   },
+   "heroMid": {
+    "x": 150,
+    "y": 162
+   },
+   "heroAfter": {
+    "x": 151,
+    "y": 160
+   },
+   "targetAfter": {
+    "x": 152,
+    "y": 161,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    2675
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    701
+   ],
+   "area": [
+    {
+     "s": 701,
+     "x": 152,
+     "y": 161,
+     "rot": 96,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 39,
+   "made": {
+    "particle:damage2": 3,
+    "particle:damage1": 3,
+    "particle:blood2": 15,
+    "particle:spark": 18
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": "target"
+    },
+    "info": {
+     "name": "Blood Slash",
+     "mana": 25,
+     "ag": 12,
+     "distance": 2,
+     "damage": 72
+    },
+    "mana": 420,
+    "ag": 285
+   }
+  },
+  {
+   "n": 701,
+   "name": "Blood Slash",
+   "castable": true,
+   "cast": true,
+   "target": "Goblin",
+   "targetId": 600,
+   "dist": 1,
+   "near": 1,
+   "heroCell": {
+    "x": 158,
+    "y": 170
+   },
+   "targetCell": {
+    "x": 159,
+    "y": 170
+   },
+   "heroMid": {
+    "x": 158,
+    "y": 170
+   },
+   "heroAfter": {
+    "x": 158,
+    "y": 170
+   },
+   "targetAfter": {
+    "x": 159,
+    "y": 170,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    2397
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 0,
+   "onSkill": [
+    701
+   ],
+   "area": [
+    {
+     "s": 701,
+     "x": 159,
+     "y": 170,
+     "rot": 64,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 39,
+   "made": {
+    "particle:damage2": 3,
+    "particle:damage1": 3,
+    "particle:blood2": 15,
+    "particle:spark": 18
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": true,
+     "friendly": false,
+     "areaAt": "target"
+    },
+    "info": {
+     "name": "Blood Slash",
+     "mana": 25,
+     "ag": 12,
+     "distance": 2,
+     "damage": 72
+    },
+    "mana": 420,
+    "ag": 285
+   }
+  },
+  {
+   "n": 41,
+   "name": "Twisting Slash",
+   "castable": true,
+   "cast": true,
+   "target": "Chain Scorpion",
+   "targetId": 664,
+   "dist": 4,
+   "near": 1,
+   "heroCell": {
+    "x": 163,
+    "y": 164
+   },
+   "targetCell": {
+    "x": 160,
+    "y": 167
+   },
+   "heroMid": {
+    "x": 161,
+    "y": 166
+   },
+   "heroAfter": {
+    "x": 161,
+    "y": 166
+   },
+   "targetAfter": {
+    "x": 160,
+    "y": 167,
+    "dead": true
+   },
+   "hits": 1,
+   "targetsHit": 1,
+   "hp": [
+    2838
+   ],
+   "sd": [
+    0
+   ],
+   "misses": 0,
+   "heroHits": 1,
+   "onSkill": [
+    41
+   ],
+   "area": [
+    {
+     "s": 41,
+     "x": 161,
+     "y": 166,
+     "rot": 160,
+     "player": 512
+    }
+   ],
+   "msgs": [],
+   "effects": 761,
+   "made": {
+    "effect:skillWheel1": 1,
+    "particle:blood2": 10,
+    "effect:skillWheel2": 5,
+    "particle:smoke": 125,
+    "joint:jointSpark": 500,
+    "particle:spark": 120
+   },
+   "p95": 17,
+   "max": 17,
+   "dbg": {
+    "plan": {
+     "packet": "area",
+     "special": null,
+     "equipmentOk": true,
+     "needsTarget": false,
+     "friendly": false,
+     "areaAt": "self"
+    },
+    "info": {
+     "name": "Twisting Slash",
+     "mana": 10,
+     "ag": 10,
+     "distance": 2,
+     "damage": 0
+    },
+    "mana": 420,
+    "ag": 285
+   }
+  }
+ ],
+ "errors": []
+}

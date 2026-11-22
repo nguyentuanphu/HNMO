@@ -1,0 +1,585 @@
+{
+ "s9Numbers": 658,
+ "ours": 547,
+ "missing": 112,
+ "spawnedMissing": 32,
+ "spawnedMissingList": [
+  {
+   "n": 580,
+   "name": "Captain Slough",
+   "maps": {
+    "3": [
+     196,
+     113
+    ]
+   }
+  },
+  {
+   "n": 581,
+   "name": "Deruvish",
+   "maps": {
+    "91": [
+     29,
+     210
+    ]
+   }
+  },
+  {
+   "n": 582,
+   "name": "Adniel",
+   "maps": {
+    "91": [
+     38,
+     216
+    ]
+   }
+  },
+  {
+   "n": 584,
+   "name": "Sir Lesnar",
+   "maps": {
+    "0": [
+     114,
+     132
+    ],
+    "2": [
+     240,
+     53
+    ],
+    "3": [
+     183,
+     126
+    ]
+   }
+  },
+  {
+   "n": 586,
+   "name": "Devilfairy",
+   "maps": {
+    "91": [
+     152,
+     137
+    ]
+   }
+  },
+  {
+   "n": 587,
+   "name": "Elemental Beast",
+   "maps": {
+    "91": [
+     37,
+     112
+    ]
+   }
+  },
+  {
+   "n": 588,
+   "name": "Elemental Knight",
+   "maps": {
+    "91": [
+     11,
+     19
+    ]
+   }
+  },
+  {
+   "n": 589,
+   "name": "Ubaid Devilfairy",
+   "maps": {
+    "91": [
+     183,
+     145
+    ]
+   }
+  },
+  {
+   "n": 590,
+   "name": "Ubaid Elemental Beast",
+   "maps": {
+    "91": [
+     239,
+     197
+    ]
+   }
+  },
+  {
+   "n": 591,
+   "name": "Ubaid Elemental Knight",
+   "maps": {
+    "91": [
+     227,
+     87
+    ]
+   }
+  },
+  {
+   "n": 592,
+   "name": "Undine",
+   "maps": {
+    "91": [
+     14,
+     6
+    ]
+   }
+  },
+  {
+   "n": 593,
+   "name": "Salamander",
+   "maps": {
+    "91": [
+     79,
+     5
+    ]
+   }
+  },
+  {
+   "n": 594,
+   "name": "Sylphid",
+   "maps": {
+    "91": [
+     99,
+     10
+    ]
+   }
+  },
+  {
+   "n": 595,
+   "name": "Gnome",
+   "maps": {
+    "91": [
+     56,
+     14
+    ]
+   }
+  },
+  {
+   "n": 596,
+   "name": "Hellraiser",
+   "maps": {
+    "91": [
+     93,
+     7
+    ]
+   }
+  },
+  {
+   "n": 608,
+   "name": "Debenter Devilfairy",
+   "maps": {
+    "95": [
+     27,
+     52
+    ]
+   }
+  },
+  {
+   "n": 609,
+   "name": "Deventer Elemental Beast",
+   "maps": {
+    "95": [
+     34,
+     21
+    ]
+   }
+  },
+  {
+   "n": 610,
+   "name": "Debenter Elemental Knight",
+   "maps": {
+    "95": [
+     48,
+     48
+    ]
+   }
+  },
+  {
+   "n": 611,
+   "name": "Sellihoden",
+   "maps": {
+    "95": [
+     33,
+     2
+    ]
+   }
+  },
+  {
+   "n": 612,
+   "name": "Ukanva",
+   "maps": {
+    "95": [
+     39,
+     3
+    ]
+   }
+  },
+  {
+   "n": 613,
+   "name": "Silla",
+   "maps": {
+    "95": [
+     46,
+     3
+    ]
+   }
+  },
+  {
+   "n": 614,
+   "name": "Normus",
+   "maps": {
+    "95": [
+     51,
+     2
+    ]
+   }
+  },
+  {
+   "n": 615,
+   "name": "Muff",
+   "maps": {
+    "95": [
+     42,
+     5
+    ]
+   }
+  },
+  {
+   "n": 643,
+   "name": "Mait",
+   "maps": {
+    "79": [
+     113,
+     127
+    ]
+   }
+  },
+  {
+   "n": 651,
+   "name": "Private Store Bulletin Board",
+   "maps": {
+    "79": [
+     108,
+     134
+    ]
+   }
+  },
+  {
+   "n": 669,
+   "name": "Ellin",
+   "maps": {
+    "79": [
+     113,
+     132
+    ]
+   }
+  },
+  {
+   "n": 670,
+   "name": "Uruk Devil Fairy",
+   "maps": {
+    "100": [
+     31,
+     38
+    ]
+   }
+  },
+  {
+   "n": 671,
+   "name": "Uruk Elemental Beast",
+   "maps": {
+    "100": [
+     33,
+     42
+    ]
+   }
+  },
+  {
+   "n": 672,
+   "name": "Uruk Elemental Knight",
+   "maps": {
+    "100": [
+     36,
+     39
+    ]
+   }
+  },
+  {
+   "n": 673,
+   "name": "Lord Silvester",
+   "maps": {
+    "100": [
+     126,
+     108
+    ]
+   }
+  },
+  {
+   "n": 682,
+   "name": "Monica",
+   "maps": {
+    "51": [
+     24,
+     229
+    ]
+   }
+  },
+  {
+   "n": 689,
+   "name": "Flame Trap",
+   "maps": {
+    "100": [
+     125,
+     128
+    ]
+   }
+  }
+ ],
+ "missingNotSpawned": [
+  "284 Monster 284",
+  "583 Jin",
+  "597 Summoned Satyros",
+  "598 Fire Tower",
+  "599 Water Tower",
+  "600 Earth Tower",
+  "601 Wind Tower",
+  "602 Darkness Tower",
+  "603 Arca Barrier",
+  "604 Jin",
+  "605 Mining Area (Small)",
+  "606 Mining Area (Medium)",
+  "607 Mining Area (Large)",
+  "618 [GM] Romeu",
+  "619 [VM] Nox",
+  "620 [VM] Redd",
+  "621 [EVM] Iza ",
+  "622 [VM] Hail",
+  "623 [VM] Fast",
+  "624 [GM] Ceth",
+  "625 Robot Knight Transformation Ring",
+  "626 Mini Robot Transformation Ring",
+  "627 Cursed Fire Tower",
+  "628 Cursed Water Tower",
+  "629 Cursed Earth Tower",
+  "630 Cursed Wind Tower",
+  "631 Cursed Darkness Tower",
+  "632 Cursed Undine",
+  "633 Cursed Salamander",
+  "634 Cursed Sylphid",
+  "635 Cursed Gnome",
+  "636 Cursed Hellraiser",
+  "637 Cursed Sellihoden",
+  "638 Cursed Ukanva",
+  "639 Cursed Silla",
+  "640 Cursed Normus",
+  "641 Cursed Muff",
+  "642 Great Heavenly Mage Transformation Ring",
+  "644 Chaos Castle 8",
+  "645 Chaos Castle 8",
+  "646 Brown Panda Transformation Ring",
+  "647 Green Snake (green)",
+  "648 Yellow Snake (yellow)",
+  "649 Purple Snake (purple)",
+  "650 Red Snake (red)",
+  "652 Golden Goblin",
+  "653 Golden Titan",
+  "654 Golden Tantalos",
+  "655 Golden Erohim",
+  "656 Golden Hell Maine",
+  "657 Golden Kundun",
+  "674 Moon Rabbit",
+  "675 Pouch of Blessing",
+  "676 Fire Flame Ghost",
+  "677 Golden Goblin",
+  "678 Lord Devil Fairy",
+  "679 Lord Elemental Beast",
+  "680 Lord Elemental Knight",
+  "681 Evomon",
+  "683 Marce",
+  "684 Silvia",
+  "685 Izabel",
+  "686 Sophia (repair)",
+  "687 Bolo (repair)",
+  "688 Christine",
+  "690 Special Evomon",
+  "691 New Year Horse (Green)",
+  "692 New Year Horse (Yellow)",
+  "693 New Year Horse (Brown)",
+  "694 New Year Horse (Blue)",
+  "704 Evolution Succeeded",
+  "705 Evolution Failed",
+  "706 Darkness Transformation Ring",
+  "726 Green Goat",
+  "727 White Goat",
+  "728 Purple Goat",
+  "729 Red Goat",
+  "319 Chrome Dragon",
+  "616 Brown Panda Transformation Ring",
+  "617 Pink Panda Transformation Ring"
+ ],
+ "nameDiffer": [
+  "84: S9 \"Chief Skeleton Warrior1\" / ours \"Chief Skeleton Warrior\"",
+  "85: S9 \"Chief Skeleton Archer1\" / ours \"Chief Skeleton Archer\"",
+  "86: S9 \"Dark Skull Soldier1\" / ours \"Dark Skull Soldier\"",
+  "87: S9 \"Giant Ogre1\" / ours \"Giant Ogre\"",
+  "88: S9 \"Red Skeleton Knight1\" / ours \"Red Skeleton Knight\"",
+  "89: S9 \"Magic Skeleton1\" / ours \"Magic Skeleton\"",
+  "90: S9 \"Chief Skeleton Warrior2\" / ours \"Chief Skeleton Warrior\"",
+  "91: S9 \"Chief Skeleton Archer2\" / ours \"Chief Skeleton Archer\"",
+  "92: S9 \"Dark Skull Soldier2\" / ours \"Dark Skull Soldier\"",
+  "93: S9 \"Giant Ogre2\" / ours \"Giant Ogre\"",
+  "94: S9 \"Red Skeleton Knight2\" / ours \"Red Skeleton Knight\"",
+  "95: S9 \"Magic Skeleton2\" / ours \"Magic Skeleton\"",
+  "96: S9 \"Chief Skeleton Warrior3\" / ours \"Chief Skeleton Warrior\"",
+  "97: S9 \"Chief Skeleton Archer3\" / ours \"Chief Skeleton Archer\"",
+  "98: S9 \"Dark Skull Soldier3\" / ours \"Dark Skull Soldier\"",
+  "99: S9 \"Giant Ogre3\" / ours \"Giant Ogre\"",
+  "111: S9 \"Red Skeleton Knight3\" / ours \"Red Skeleton Knight\"",
+  "112: S9 \"Magic Skeleton3\" / ours \"Magic Skeleton\"",
+  "113: S9 \"Chief Skeleton Warrior4\" / ours \"Chief Skeleton Warrior\"",
+  "114: S9 \"Chief Skeleton Archer4\" / ours \"Chief Skeleton Archer\"",
+  "115: S9 \"Dark Skull Soldier4\" / ours \"Dark Skull Soldier\"",
+  "116: S9 \"Giant Ogre4\" / ours \"Giant Ogre\"",
+  "117: S9 \"Red Skeleton Knight4\" / ours \"Red Skeleton Knight\"",
+  "118: S9 \"Magic Skeleton4\" / ours \"Magic Skeleton\"",
+  "119: S9 \"Chief Skeleton Warrior5\" / ours \"Chief Skeleton Warrior\"",
+  "120: S9 \"Chief Skeleton Archer5\" / ours \"Chief Skeleton Archer\"",
+  "121: S9 \"Dark Skull Soldier5\" / ours \"Dark Skull Soldier\"",
+  "122: S9 \"Giant Ogre5\" / ours \"Giant Ogre\"",
+  "123: S9 \"Red Skeleton Knight5\" / ours \"Red Skeleton Knight\"",
+  "124: S9 \"Magic Skeleton5\" / ours \"Magic Skeleton\"",
+  "125: S9 \"Chief Skeleton Warrior6\" / ours \"Chief Skeleton Warrior\"",
+  "126: S9 \"Chief Skeleton Archer6\" / ours \"Chief Skeleton Archer\"",
+  "127: S9 \"Dark Skull Soldier6\" / ours \"Dark Skull Soldier\"",
+  "128: S9 \"Giant Ogre6\" / ours \"Giant Ogre\"",
+  "129: S9 \"Red Skeleton Knight6\" / ours \"Red Skeleton Knight\"",
+  "130: S9 \"Magic Skeleton6\" / ours \"Magic Skeleton\"",
+  "138: S9 \"Chief Skeleton Warrior7\" / ours \"Chief Skeleton Warrior\"",
+  "139: S9 \"Chief Skeleton Archer7\" / ours \"Chief Skeleton Archer\"",
+  "140: S9 \"Dark Skull Soldier7\" / ours \"Dark Skull Soldier\"",
+  "141: S9 \"Giant Ogre7\" / ours \"Giant Ogre\"",
+  "142: S9 \"Red Skeleton Knight7\" / ours \"Red Skeleton Knight\"",
+  "143: S9 \"Magic Skeleton7\" / ours \"Magic Skeleton\"",
+  "144: S9 \"Death Angel1\" / ours \"Death Angel\"",
+  "145: S9 \"Death Centurion1\" / ours \"Death Centurion\"",
+  "146: S9 \"Blood Soldier1\" / ours \"Blood Soldier\"",
+  "147: S9 \"Aegis1\" / ours \"Aegis\"",
+  "148: S9 \"Rogue Centurion1\" / ours \"Rogue Centurion\"",
+  "149: S9 \"Necron1\" / ours \"Necron\"",
+  "152: S9 \"Magic stone of 1\" / ours \"Gate to Kalima 1\"",
+  "153: S9 \"Magic stone of 2\" / ours \"Gate to Kalima 2\"",
+  "154: S9 \"Magic stone of 3\" / ours \"Gate to Kalima 3\"",
+  "155: S9 \"Magic stone of 4\" / ours \"Gate to Kalima 4\"",
+  "156: S9 \"Magic stone of 5\" / ours \"Gate to Kalima 5\"",
+  "157: S9 \"Magic stone of 6\" / ours \"Gate to Kalima 6\"",
+  "158: S9 \"Magic stone of 7\" / ours \"Gate to Kalima 7\"",
+  "160: S9 \"Schriker1\" / ours \"Schriker\"",
+  "161: S9 \"Illusion of Kundun1\" / ours \"Illusion of Kundun\"",
+  "163: S9 \"Chaos Castle 1\" / ours \"Chaos Castle 2\"",
+  "164: S9 \"Chaos Castle 2\" / ours \"Chaos Castle 3\"",
+  "165: S9 \"Chaos Castle 2\" / ours \"Chaos Castle 4\"",
+  "166: S9 \"Chaos Castle 3\" / ours \"Chaos Castle 5\"",
+  "167: S9 \"Chaos Castle 3\" / ours \"Chaos Castle 6\"",
+  "168: S9 \"Chaos Castle 4\" / ours \"Chaos Castle 7\"",
+  "169: S9 \"Chaos Castle 4\" / ours \"Chaos Castle 8\"",
+  "170: S9 \"Chaos Castle 5\" / ours \"Chaos Castle 9\"",
+  "171: S9 \"Chaos Castle 5\" / ours \"Chaos Castle 10\"",
+  "172: S9 \"Chaos Castle 6\" / ours \"Chaos Castle 11\"",
+  "173: S9 \"Chaos Castle 6\" / ours \"Chaos Castle 12\"",
+  "174: S9 \"Death Angel2\" / ours \"Death Angel\"",
+  "175: S9 \"Death Centurion2\" / ours \"Death Centurion\"",
+  "176: S9 \"Blood Soldier2\" / ours \"Blood Soldier\"",
+  "177: S9 \"Aegis2\" / ours \"Aegis\"",
+  "178: S9 \"Rogue Centurion2\" / ours \"Rogue Centurion\"",
+  "179: S9 \"Necron2\" / ours \"Necron\"",
+  "180: S9 \"Schriker2\" / ours \"Schriker\"",
+  "181: S9 \"Illusion of Kundun2\" / ours \"Illusion of Kundun\"",
+  "182: S9 \"Death Angel3\" / ours \"Death Angel\"",
+  "183: S9 \"Death Centurion3\" / ours \"Death Centurion\"",
+  "184: S9 \"Blood Soldier3\" / ours \"Blood Soldier\"",
+  "185: S9 \"Aegis3\" / ours \"Aegis\"",
+  "186: S9 \"Rogue Centurion3\" / ours \"Rogue Centurion\"",
+  "187: S9 \"Necron3\" / ours \"Necron\"",
+  "188: S9 \"Schriker3\" / ours \"Schriker\"",
+  "189: S9 \"Illusion of Kundun3\" / ours \"Illusion of Kundun\"",
+  "190: S9 \"Death Angel4\" / ours \"Death Angel\"",
+  "191: S9 \"Death Centurion4\" / ours \"Death Centurion\"",
+  "192: S9 \"Blood Soldier4\" / ours \"Blood Soldier\"",
+  "193: S9 \"Aegis4\" / ours \"Aegis\"",
+  "194: S9 \"Rogue Centurion4\" / ours \"Rogue Centurion\"",
+  "195: S9 \"Necron4\" / ours \"Necron\"",
+  "196: S9 \"Schriker4\" / ours \"Schriker\"",
+  "197: S9 \"Illusion of Kundun4\" / ours \"Illusion of Kundun\"",
+  "260: S9 \"Death Angel5\" / ours \"Death Angel\"",
+  "261: S9 \"Death Centurion5\" / ours \"Death Centurion\"",
+  "262: S9 \"Blood Soldier5\" / ours \"Blood Soldier\"",
+  "263: S9 \"Aegis5\" / ours \"Aegis\"",
+  "264: S9 \"Rogue Centurion5\" / ours \"Rogue Centurion\"",
+  "265: S9 \"Necron5\" / ours \"Necron\"",
+  "266: S9 \"Schriker5\" / ours \"Schriker\"",
+  "267: S9 \"Illusion of Kundun5\" / ours \"Illusion of Kundun\"",
+  "268: S9 \"Death Angel6\" / ours \"Death Angel\"",
+  "269: S9 \"Death Centurion6\" / ours \"Death Centurion\"",
+  "270: S9 \"Blood Soldier6\" / ours \"Blood Soldier\"",
+  "271: S9 \"Aegis6\" / ours \"Aegis\"",
+  "272: S9 \"Rogue Centurion6\" / ours \"Rogue Centurion\"",
+  "273: S9 \"Necron6\" / ours \"Necron\"",
+  "274: S9 \"Schriker6\" / ours \"Schriker\"",
+  "275: S9 \"Kundun7\" / ours \"Kundun\"",
+  "277: S9 \"Castle Gate1\" / ours \"Castle Gate\"",
+  "296: S9 \"NPC 296\" / ours \"Monster7\"",
+  "331: S9 \"Aegis7\" / ours \"Aegis\"",
+  "332: S9 \"Rogue Centurion7\" / ours \"Rogue Centurion\"",
+  "333: S9 \"Blood Soldier7\" / ours \"Blood Soldier\"",
+  "334: S9 \"Death Angel7\" / ours \"Death Angel\"",
+  "335: S9 \"Necron7\" / ours \"Necron\"",
+  "336: S9 \"Death Centurion7\" / ours \"Death Centurion\"",
+  "337: S9 \"Schriker7\" / ours \"Schriker\"",
+  "338: S9 \"Illusion of Kundun6\" / ours \"Illusion of Kundun\"",
+  "379: S9 \"Natasha Firecracker Merchant\" / ours \"Natasha the Firecracker Merchant\"",
+  "386: S9 \"Illusion Sorcerer Spirit A\" / ours \"Illusion Sorcerer Spirit\"",
+  "387: S9 \"Illusion Sorcerer Spirit B\" / ours \"Illusion Sorcerer Spirit\"",
+  "388: S9 \"Illusion Sorcerer Spirit C\" / ours \"Illusion Sorcerer Spirit\"",
+  "389: S9 \"Illusion Sorcerer Spirit A\" / ours \"Illusion Sorcerer Spirit\"",
+  "390: S9 \"Illusion Sorcerer Spirit B\" / ours \"Illusion Sorcerer Spirit\"",
+  "391: S9 \"Illusion Sorcerer Spirit C\" / ours \"Illusion Sorcerer Spirit\"",
+  "392: S9 \"Illusion Sorcerer Spirit A\" / ours \"Illusion Sorcerer Spirit\"",
+  "393: S9 \"Illusion Sorcerer Spirit B\" / ours \"Illusion Sorcerer Spirit\"",
+  "394: S9 \"Illusion Sorcerer Spirit C\" / ours \"Illusion Sorcerer Spirit\"",
+  "395: S9 \"Illusion Sorcerer Spirit A\" / ours \"Illusion Sorcerer Spirit\"",
+  "396: S9 \"Illusion Sorcerer Spirit B\" / ours \"Illusion Sorcerer Spirit\"",
+  "397: S9 \"Illusion Sorcerer Spirit C\" / ours \"Illusion Sorcerer Spirit\"",
+  "398: S9 \"Illusion Sorcerer Spirit A\" / ours \"Illusion Sorcerer Spirit\"",
+  "399: S9 \"Illusion Sorcerer Spirit B\" / ours \"Illusion Sorcerer Spirit\"",
+  "400: S9 \"Illusion Sorcerer Spirit C\" / ours \"Illusion Sorcerer Spirit\"",
+  "401: S9 \"Illusion Sorcerer Spirit A\" / ours \"Illusion Sorcerer Spirit\"",
+  "402: S9 \"Illusion Sorcerer Spirit B\" / ours \"Illusion Sorcerer Spirit\"",
+  "403: S9 \"Illusion Sorcerer Spirit C\" / ours \"Illusion Sorcerer Spirit\"",
+  "413: S9 \"Gold Rabbit\" / ours \"Lunar Rabbit\"",
+  "426: S9 \"Chaos Castle7\" / ours \"Chaos Castle13\"",
+  "427: S9 \"Chaos Castle7\" / ours \"Chaos Castle14\"",
+  "428: S9 \"Chief Skeleton Warrior8\" / ours \"Chief Skeleton Warrior\"",
+  "429: S9 \"Chief Skeleton Archer8\" / ours \"Chief Skeleton Archer\"",
+  "430: S9 \"Dark Skull Soldier8\" / ours \"Dark Skull Soldier\"",
+  "431: S9 \"Giant Ogre8\" / ours \"Giant Ogre\"",
+  "432: S9 \"Red Skeleton Knight8\" / ours \"Red Skeleton Knight\"",
+  "433: S9 \"Magic Skeleton8\" / ours \"Magic Skeleton\"",
+  "460: S9 \"Spider Eggs1\" / ours \"Spider Eggs\"",
+  "461: S9 \"Spider Eggs2\" / ours \"Spider Eggs\"",
+  "462: S9 \"Spider Eggs3\" / ours \"Spider Eggs\"",
+  "464: S9 \"Re-Initialization Helper\" / ours \"Reset Helper\"",
+  "470: S9 \"Dancer\" / ours \"Little Santa\"",
+  "545: S9 \"Christine the Merchant\" / ours \"Christine the General Goods Merchant\"",
+  "546: S9 \"Jeweller Raul\" / ours \"Jeweler Raul\"",
+  "577: S9 \"Leina the Merchant\" / ours \"Leina the General Goods Merchant\"",
+  "659: S9 \"Captured Stone Statue\" / ours \"Captured Stone Statue (1)\"",
+  "660: S9 \"Captured Stone Statue\" / ours \"Captured Stone Statue (2)\"",
+  "661: S9 \"Captured Stone Statue\" / ours \"Captured Stone Statue (3)\"",
+  "662: S9 \"Captured Stone Statue\" / ours \"Captured Stone Statue (4)\"",
+  "663: S9 \"Captured Stone Statue\" / ours \"Captured Stone Statue (5)\"",
+  "664: S9 \"Captured Stone Statue\" / ours \"Captured Stone Statue (6)\"",
+  "665: S9 \"Captured Stone Statue\" / ours \"Captured Stone Statue (7)\"",
+  "666: S9 \"Captured Stone Statue\" / ours \"Captured Stone Statue (8)\"",
+  "667: S9 \"Captured Stone Statue\" / ours \"Captured Stone Statue (9)\"",
+  "668: S9 \"Captured Stone Statue\" / ours \"Captured Stone Statue (10)\"",
+  "318: S9 \"Beam Knight (Hero)\" / ours \"Scout\""
+ ]
+}
