@@ -554,6 +554,22 @@ public class MoveItemActionTests
         Assert.That(player.Inventory.GetItem(InventoryConstants.WingsSlot), Is.Null);
     }
 
+    /// <summary>
+    /// Verifies that moving an item to a slot before a storage's start index fails gracefully without throwing.
+    /// </summary>
+    [Test]
+    public async ValueTask MoveToSlotBelowStorageStartIndexFailsWithoutThrowingAsync()
+    {
+        var player = await CreateTestPlayerAsync().ConfigureAwait(false);
+        var item = CreateItem(CreateDefinition(), 1);
+        await player.Inventory!.AddItemAsync(20, item).ConfigureAwait(false);
+
+        await new MoveItemAction().MoveItemAsync(player, 20, Storages.Inventory, 0, Storages.PersonalStore).ConfigureAwait(false);
+
+        Assert.That(player.Inventory.GetItem(20), Is.SameAs(item));
+        Assert.That(player.ShopStorage!.GetItem(0), Is.Null);
+    }
+
     private static Storage CreateVaultStorage()
     {
         var itemStorage = new Mock<ItemStorage>();

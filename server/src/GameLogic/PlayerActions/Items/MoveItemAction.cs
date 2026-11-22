@@ -441,6 +441,11 @@ public class MoveItemAction
 
     private bool IsTargetSlotBlocked(Item item, byte toSlot, StorageInfo toStorage, bool[,] usedSlots)
     {
+        if (toSlot < toStorage.StartIndex || toSlot >= toStorage.EndIndex)
+        {
+            return true;
+        }
+
         int rowIndex = (toSlot - toStorage.StartIndex) / RowSize;
         int columnIndex = (toSlot - toStorage.StartIndex) % RowSize;
 
