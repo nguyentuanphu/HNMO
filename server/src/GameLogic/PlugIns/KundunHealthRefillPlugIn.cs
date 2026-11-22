@@ -6,6 +6,7 @@ namespace HNMO.GameLogic.PlugIns;
 
 using System.Runtime.InteropServices;
 using HNMO.GameLogic.NPC;
+using HNMO.GameLogic.Properties;
 using HNMO.PlugIns;
 
 /// <summary>
@@ -13,7 +14,7 @@ using HNMO.PlugIns;
 /// KundunRefillHPTime of their common server settings): an amount every second and a bigger amount at an interval.
 /// </summary>
 [PlugIn]
-[Display(Name = "Kundun health refill", Description = "Kundun (Kalima 7) gets health back: 400 every second and 15,000 every 10 minutes, as in the Season 6/9 server suites.")]
+[Display(Name = nameof(PlugInResources.KundunHealthRefillPlugIn_Name), Description = nameof(PlugInResources.KundunHealthRefillPlugIn_Description), ResourceType = typeof(PlugInResources))]
 [Guid("C0A28D0E-E3A3-4A7C-AF10-500F46982379")]
 public class KundunHealthRefillPlugIn : IPeriodicTaskPlugIn, ISupportCustomConfiguration<KundunHealthRefillConfiguration>, ISupportDefaultCustomConfiguration
 {

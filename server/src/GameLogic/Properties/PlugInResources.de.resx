@@ -1494,6 +1494,36 @@
   <data name="SymbolOfKundunStackedPlugIn_Description" xml:space="preserve">
     <value>Dieses Plugin wandelt einen Stapel von Symbol of Kundun in eine verlorene Karte um.</value>
   </data>
+  <data name="KundunHealthRefillPlugIn_Name" xml:space="preserve">
+    <value>Kundun-Lebensauffüllung</value>
+  </data>
+  <data name="KundunHealthRefillPlugIn_Description" xml:space="preserve">
+    <value>Kundun (Kalima 7) erhält Leben zurück: 400 pro Sekunde und 15.000 alle 10 Minuten, wie in den Season-6/9-Serverpaketen.</value>
+  </data>
+  <data name="KundunHealthRefillConfiguration_MonsterNumber_Caption" xml:space="preserve">
+    <value>Monsternummer</value>
+  </data>
+  <data name="KundunHealthRefillConfiguration_MonsterNumber_Description" xml:space="preserve">
+    <value>Das Monster, das Leben zurückerhält; 275 ist Kundun in Kalima 7.</value>
+  </data>
+  <data name="KundunHealthRefillConfiguration_HealthPerSecond_Caption" xml:space="preserve">
+    <value>Leben pro Sekunde</value>
+  </data>
+  <data name="KundunHealthRefillConfiguration_HealthPerSecond_Description" xml:space="preserve">
+    <value>Das Leben, das Kundun jede Sekunde zurückerhält (KundunRefillHPSec: 400).</value>
+  </data>
+  <data name="KundunHealthRefillConfiguration_HealthPerInterval_Caption" xml:space="preserve">
+    <value>Leben pro Intervall</value>
+  </data>
+  <data name="KundunHealthRefillConfiguration_HealthPerInterval_Description" xml:space="preserve">
+    <value>Das Leben, das Kundun in jedem Intervall zurückerhält (KundunRefillHP: 15.000).</value>
+  </data>
+  <data name="KundunHealthRefillConfiguration_Interval_Caption" xml:space="preserve">
+    <value>Intervall</value>
+  </data>
+  <data name="KundunHealthRefillConfiguration_Interval_Description" xml:space="preserve">
+    <value>Wie oft Kundun das Leben pro Intervall erhält (KundunRefillHPTime: 600 Sekunden). Null schaltet es aus.</value>
+  </data>
   <data name="DuelSpawnGatePlugIn_Name" xml:space="preserve">
     <value>Spawn-Tor für Duelle</value>
   </data>

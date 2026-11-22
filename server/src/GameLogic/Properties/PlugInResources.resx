@@ -1421,6 +1421,16 @@
   <data name="KanturuGatewayPlugIn_Description" xml:space="preserve"><value>Handles the Kanturu Gateway Machine NPC for event entry.</value></data>
   <data name="SymbolOfKundunStackedPlugIn_Name" xml:space="preserve"><value>SymbolOfKundunStackedPlugIn</value></data>
   <data name="SymbolOfKundunStackedPlugIn_Description" xml:space="preserve"><value>This plugin transforms a stack of symbol of kundun into a lost map.</value></data>
+  <data name="KundunHealthRefillPlugIn_Name" xml:space="preserve"><value>Kundun health refill</value></data>
+  <data name="KundunHealthRefillPlugIn_Description" xml:space="preserve"><value>Kundun (Kalima 7) gets health back: 400 every second and 15,000 every 10 minutes, as in the Season 6/9 server suites.</value></data>
+  <data name="KundunHealthRefillConfiguration_MonsterNumber_Caption" xml:space="preserve"><value>Monster number</value></data>
+  <data name="KundunHealthRefillConfiguration_MonsterNumber_Description" xml:space="preserve"><value>The monster which gets health back; 275 is Kundun of Kalima 7.</value></data>
+  <data name="KundunHealthRefillConfiguration_HealthPerSecond_Caption" xml:space="preserve"><value>Health per second</value></data>
+  <data name="KundunHealthRefillConfiguration_HealthPerSecond_Description" xml:space="preserve"><value>The health Kundun gets back every second (KundunRefillHPSec: 400).</value></data>
+  <data name="KundunHealthRefillConfiguration_HealthPerInterval_Caption" xml:space="preserve"><value>Health per interval</value></data>
+  <data name="KundunHealthRefillConfiguration_HealthPerInterval_Description" xml:space="preserve"><value>The health Kundun gets back at each interval (KundunRefillHP: 15,000).</value></data>
+  <data name="KundunHealthRefillConfiguration_Interval_Caption" xml:space="preserve"><value>Interval</value></data>
+  <data name="KundunHealthRefillConfiguration_Interval_Description" xml:space="preserve"><value>How often Kundun gets the health per interval (KundunRefillHPTime: 600 seconds). Zero turns it off.</value></data>
   <data name="DuelSpawnGatePlugIn_Name" xml:space="preserve"><value>DuelSpawnGatePlugIn</value></data>
   <data name="DuelSpawnGatePlugIn_Description" xml:space="preserve"><value>Spawns a player which is in a duel at its side of the duel area.</value></data>
   <data name="SoccerSpawnGatePlugIn_Name" xml:space="preserve"><value>SoccerSpawnGatePlugIn</value></data>

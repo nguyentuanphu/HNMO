@@ -4,11 +4,15 @@
 
 namespace HNMO.Tests;
 
+using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+using System.Reflection;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.NPC;
 using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.Properties;
 using HNMO.Pathfinding;
 using MonsterAttribute = HNMO.Persistence.BasicModel.MonsterAttribute;
 using MonsterDefinition = HNMO.Persistence.BasicModel.MonsterDefinition;
@@ -74,6 +78,47 @@ public class KundunHealthRefillPlugInTest
         await new KundunHealthRefillPlugIn().ExecuteTaskAsync((GameContext)gameContext).ConfigureAwait(false);
 
         Assert.That(kundun.Health, Is.EqualTo(1400));
+    }
+
+    /// <summary>
+    /// All display captions and descriptions of the Kundun refill plug-in and its configuration
+    /// resolve through <see cref="PlugInResources"/> in en, de, vi and zh-CN.
+    /// </summary>
+    [Test]
+    public void DisplayTextsAreLocalizedInAllFourLanguages()
+    {
+        var plugInDisplay = typeof(KundunHealthRefillPlugIn).GetCustomAttribute<DisplayAttribute>();
+        Assert.That(plugInDisplay, Is.Not.Null);
+        Assert.That(plugInDisplay!.ResourceType, Is.EqualTo(typeof(PlugInResources)));
+
+        var displays = new List<(string Member, DisplayAttribute Attribute)>
+        {
+            (nameof(KundunHealthRefillPlugIn), plugInDisplay),
+        };
+        foreach (var property in typeof(KundunHealthRefillConfiguration).GetProperties())
+        {
+            var propertyDisplay = property.GetCustomAttribute<DisplayAttribute>();
+            Assert.That(propertyDisplay, Is.Not.Null, property.Name);
+            Assert.That(propertyDisplay!.ResourceType, Is.EqualTo(typeof(PlugInResources)), property.Name);
+            displays.Add((property.Name, propertyDisplay));
+        }
+
+        foreach (var cultureName in new[] { "en", "de", "vi", "zh-CN" })
+        {
+            var culture = CultureInfo.GetCultureInfo(cultureName);
+            foreach (var (member, display) in displays)
+            {
+                var name = PlugInResources.ResourceManager.GetString(display.Name!, culture);
+                var description = PlugInResources.ResourceManager.GetString(display.Description!, culture);
+                Assert.That(name, Is.Not.Null.And.Not.Empty, $"{member}.Name ({cultureName})");
+                Assert.That(description, Is.Not.Null.And.Not.Empty, $"{member}.Description ({cultureName})");
+                if (cultureName != "en")
+                {
+                    var englishName = PlugInResources.ResourceManager.GetString(display.Name!, CultureInfo.GetCultureInfo("en"));
+                    Assert.That(name, Is.Not.EqualTo(englishName), $"{member}.Name ({cultureName})");
+                }
+            }
+        }
     }
 
     private static async ValueTask<(GameMap Map, Monster Monster)> CreateMonsterAsync(IGameContext gameContext, short number, Point? position = null)

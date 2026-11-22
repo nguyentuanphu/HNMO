@@ -1429,6 +1429,36 @@
   <data name="SymbolOfKundunStackedPlugIn_Description" xml:space="preserve">
     <value>将叠满的昆顿印记转换为失落的地图。</value>
   </data>
+  <data name="KundunHealthRefillPlugIn_Name" xml:space="preserve">
+    <value>昆顿生命恢复</value>
+  </data>
+  <data name="KundunHealthRefillPlugIn_Description" xml:space="preserve">
+    <value>昆顿（卡利玛 7）恢复生命：每秒 400，每 10 分钟 15,000，与 Season 6/9 服务器套件相同。</value>
+  </data>
+  <data name="KundunHealthRefillConfiguration_MonsterNumber_Caption" xml:space="preserve">
+    <value>怪物编号</value>
+  </data>
+  <data name="KundunHealthRefillConfiguration_MonsterNumber_Description" xml:space="preserve">
+    <value>恢复生命的怪物；275 是卡利玛 7 的昆顿。</value>
+  </data>
+  <data name="KundunHealthRefillConfiguration_HealthPerSecond_Caption" xml:space="preserve">
+    <value>每秒生命</value>
+  </data>
+  <data name="KundunHealthRefillConfiguration_HealthPerSecond_Description" xml:space="preserve">
+    <value>昆顿每秒恢复的生命（KundunRefillHPSec：400）。</value>
+  </data>
+  <data name="KundunHealthRefillConfiguration_HealthPerInterval_Caption" xml:space="preserve">
+    <value>每周期生命</value>
+  </data>
+  <data name="KundunHealthRefillConfiguration_HealthPerInterval_Description" xml:space="preserve">
+    <value>昆顿每个周期恢复的生命（KundunRefillHP：15,000）。</value>
+  </data>
+  <data name="KundunHealthRefillConfiguration_Interval_Caption" xml:space="preserve">
+    <value>周期</value>
+  </data>
+  <data name="KundunHealthRefillConfiguration_Interval_Description" xml:space="preserve">
+    <value>昆顿多久获得一次每周期生命（KundunRefillHPTime：600 秒）。0 表示关闭。</value>
+  </data>
   <data name="DuelSpawnGatePlugIn_Name" xml:space="preserve">
     <value>决斗出生点选择</value>
   </data>
