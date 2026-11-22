@@ -466,4 +466,6 @@
   <data name="AddArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Adds the HNMO Arena Herald, an NPC in Lorencia, Devias, Noria and Elbeland which opens the Arena window.</value></data>
   <data name="RenumberArenaHeraldUpdatePlugIn_Name" xml:space="preserve"><value>Arena Herald: its own NPC number</value></data>
   <data name="RenumberArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Moves the Arena Herald of an older save from NPC 595 to 900, so the web game shows it again.</value></data>
+  <data name="SeasonNineSocketOptionsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: socket option values</value></data>
+  <data name="SeasonNineSocketOptionsUpdatePlugIn_Description" xml:space="preserve"><value>Sets Water socket shield protection level 5 to 30 %, Wind Maximum AG to 50/70/90/110/130, and Wind AG value to 5/7/9/11/13 when running as Season 9, leaving customized values unchanged.</value></data>
 </root>

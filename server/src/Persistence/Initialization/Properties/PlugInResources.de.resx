@@ -964,4 +964,6 @@
   <data name="StrongerHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
     <value>Dieses Update macht die 28 HNMO-Fertigkeiten um 20 % stärker (Schaden, Buffs und Debuffs; Kosten und Abklingzeiten bleiben) und lässt die Prüfungsquests des Elfensoldaten 200 Tötungen und fünf Juwelen des Chaos verlangen.</value>
   </data>
+  <data name="SeasonNineSocketOptionsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Sockeloptionswerte</value></data>
+  <data name="SeasonNineSocketOptionsUpdatePlugIn_Description" xml:space="preserve"><value>Setzt im Season-9-Betrieb Wasser-Schildschutz Stufe 5 auf 30 %, Wind-Max-AG auf 50/70/90/110/130 und Wind-AG-Erholung auf 5/7/9/11/13; angepasste Werte bleiben erhalten.</value></data>
 </root>

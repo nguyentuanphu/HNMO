@@ -868,4 +868,6 @@
   <data name="AddArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Thêm Sứ giả Đấu trường HNMO, NPC ở Lorencia, Devias, Noria và Elbeland, mở cửa sổ Đấu trường.</value></data>
   <data name="RenumberArenaHeraldUpdatePlugIn_Name" xml:space="preserve"><value>Sứ giả Đấu trường: số NPC riêng</value></data>
   <data name="RenumberArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Chuyển Sứ giả Đấu trường của bản lưu cũ từ NPC 595 sang 900 để web game hiện lại.</value></data>
+  <data name="SeasonNineSocketOptionsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: chỉ số ngọc socket</value></data>
+  <data name="SeasonNineSocketOptionsUpdatePlugIn_Description" xml:space="preserve"><value>Đặt dòng Nước tăng bảo vệ khiên cấp 5 lên 30 %, Gió AG tối đa lên 50/70/90/110/130 và Gió hồi AG lên 5/7/9/11/13 khi chạy Season 9; giữ nguyên giá trị đã tùy chỉnh.</value></data>
 </root>
