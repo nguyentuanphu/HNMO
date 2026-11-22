@@ -1,3 +1,4 @@
+import { websiteAccountFixture, signInWebsiteFixture } from './fixtures/websiteAccount.js';
 // HNMO's reset options in the web game and on the website. In the game the server answers /reset, /relife and /autoreset
 // in the chat; the reset state it sends (HnmoResetsState, C2 F5 1E) keeps the character window's reset count right and
 // adds a notice with today's count after a reset, a relife or the delegated resets done while offline leveling. The
@@ -192,7 +193,7 @@ test('the website: the reset ranking on the home page and resets, stats and the 
   await page.route('**/portal/resets/account', async (route) => {
     const body = route.request().postDataJSON() as Record<string, unknown>;
     calls.push({ url: 'account', body });
-    if (body.password !== 'test8') return route.fulfill({ status: 401, json: { error: 'login' } });
+    expect(route.request().headers()['x-hnmo-session']).toBe('1'); expect(body).not.toHaveProperty('password');
     return route.fulfill({ json: { v: 1, loginName: 'test8', busy, options, characters: [{ ...character, busy }] } });
   });
   await page.route('**/portal/resets/action', async (route) => {
@@ -216,15 +217,14 @@ test('the website: the reset ranking on the home page and resets, stats and the 
   });
   page.on('dialog', (dialog) => void dialog.accept());
   await page.evaluate(() => { try { localStorage.setItem('hnmo.language', 'en'); } catch { /* none */ } });
+  await websiteAccountFixture(page, 'test8', 'test8');
   await page.goto('/account.html#resets');
   const panel = page.locator('#resets');
   await expect(panel.locator('h2')).toHaveText('Resets and stats');
-  await page.fill('#resetsAccount', 'test8');
-  await page.fill('#resetsPassword', 'wrong');
-  await panel.locator('#resetsLogin button').click();
-  await expect(page.locator('#resetsMessage')).toHaveText('Wrong account name or password.');
-  await page.fill('#resetsPassword', 'test8');
-  await panel.locator('#resetsLogin button').click();
+  await page.fill('#accountUser', 'test8'); await page.fill('#accountSecret', 'wrong');
+  await page.locator('#accountSignInButton').click();
+  await expect(page.locator('#accountMessage')).toContainText('incorrect');
+  await signInWebsiteFixture(page, 'test8', 'test8');
   const card = panel.locator('.reset-card[data-character="test8Dw"]');
   await expect(card.locator('.facts')).toContainText('Resets: 12');
   await expect(card.locator('.facts')).toContainText('Relifes: 1');
@@ -239,7 +239,7 @@ test('the website: the reset ranking on the home page and resets, stats and the 
   await expect(card.locator('.facts')).toContainText('Resets: 13');
   await expect(card.locator('.facts')).toContainText('Free points: 6,500');
   await expect(card.getByRole('button', { name: 'Reset', exact: true })).toBeDisabled();
-  expect(calls.at(-1)).toEqual({ url: 'action', body: { loginName: 'test8', password: 'test8', character: 'test8Dw', action: 'reset' } });
+  expect(calls.at(-1)).toEqual({ url: 'action', body: { character: 'test8Dw', action: 'reset' } });
 
   // Free points to energy.
   await card.locator('input[data-stat="ene"]').fill('6000');

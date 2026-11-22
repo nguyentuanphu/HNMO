@@ -59,52 +59,25 @@ test('without the server nothing old is shown and the page says so', async ({ pa
   await expect(page.locator('#ranking')).not.toContainText('HeroOne');
 });
 
-test('registration on the website', async ({ page }) => {
+test('registration is reached from the account sign-in page, not a second home form', async ({ page }) => {
   await serve(page, DETAILS);
+  await page.route('**/portal/status', route => route.fulfill({ json: { ready: true } }));
+  await page.route('**/portal/session', route => route.fulfill({ json: { authenticated: false } }));
   let sent: Record<string, unknown> | null = null;
-  await page.route('**/portal/register', async (route) => { sent = route.request().postDataJSON() as Record<string, unknown>; await route.fulfill({ json: { created: true } }); });
+  await page.route('**/portal/register', async route => { sent = route.request().postDataJSON() as Record<string, unknown>; await route.fulfill({ json: { created: true } }); });
   await page.goto('/home.html');
   await page.locator('#en').click();
-  // Google sign-in is hidden while the host hasn't set a client id.
-  await expect(page.locator('#google-button')).toBeHidden();
-  await expect(page.locator('#google-off')).toBeVisible();
-  const form = page.locator('#register');
+  await expect(page.locator('nav a[href="/account.html"]')).toBeVisible();
+  await expect(page.locator('#register')).toHaveCount(0);
+  await expect(page.locator('nav a[href="#account"]')).toHaveCount(0);
+  await page.locator('nav a[href="/account.html"]').click();
+  await expect(page.locator('#accountLoginPanel')).toBeVisible();
+  await expect(page.locator('#registerForm')).toBeHidden();
+  await page.locator('#accountCreateButton').click();
+  const form = page.locator('#registerForm');
+  await expect(form).toBeVisible();
   await form.locator('input[name=loginName]').fill('newhero');
   await form.locator('input[name=password]').fill('secret1');
   await form.getByRole('button').click();
-  await expect(page.locator('#register-message')).toContainText('Account created');
-  expect(sent).toMatchObject({ loginName: 'newhero', password: 'secret1' });
-});
-
-test('Sign in with Google: a new player chooses a name, a known one may set a new password', async ({ page }) => {
-  await serve(page, DETAILS, 'test-client.apps.googleusercontent.com');
-  // A stand-in for Google's script: the button "signs in" with a fixed credential.
-  await page.route('https://accounts.google.com/gsi/client', (route) => route.fulfill({
-    contentType: 'text/javascript',
-    body: `window.google = { accounts: { id: {
-      initialize(o) { window.__googleCallback = o.callback; },
-      renderButton(el) { const b = document.createElement('button'); b.id = 'fake-google'; b.textContent = 'Google'; b.onclick = () => window.__googleCallback({ credential: 'credential-1' }); el.append(b); }
-    } } };`,
-  }));
-  const calls: Record<string, unknown>[] = [];
-  let created = false;
-  await page.route('**/portal/google', async (route) => {
-    const body = route.request().postDataJSON() as Record<string, unknown>;
-    calls.push(body);
-    if (body.loginName) { created = true; return route.fulfill({ json: { created: true } }); }
-    if (body.newPassword) return route.fulfill({ json: { loginName: 'gnew', passwordChanged: true } });
-    return route.fulfill({ json: created ? { loginName: 'gnew' } : { needsAccount: true, email: 'p@example.com' } });
-  });
-  await page.goto('/home.html');
-  await page.locator('#en').click();
-  await page.locator('#fake-google').click();
-  await expect(page.locator('#google-account')).toBeVisible();
-  await page.locator('#google-account input[name=loginName]').fill('gnew');
-  await page.locator('#google-account input[name=password]').fill('pass123');
-  await page.locator('#google-account').getByRole('button').click();
-  await expect(page.locator('#google-login')).toHaveText('gnew');
-  await page.locator('#google-linked input[name=newPassword]').fill('newpass9');
-  await page.locator('#google-linked').getByRole('button').click();
-  await expect(page.locator('#google-message')).toContainText('new game password');
-  expect(calls.every((call) => call.credential === 'credential-1')).toBe(true);
+  await expect.poll(() => sent).toMatchObject({ loginName: 'newhero', password: 'secret1' });
 });

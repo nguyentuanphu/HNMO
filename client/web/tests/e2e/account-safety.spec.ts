@@ -1,3 +1,4 @@
+import { websiteAccountFixture, signInWebsiteFixture } from './fixtures/websiteAccount.js';
 // HNMO's account safety in the web game and on the account page.
 // In the game: the account safety state (HnmoAccountSafetyState, C2 F5 21) is fed through the game's connection (the
 // test server may run without account safety), so what's checked is the second password box when the server asks for
@@ -214,7 +215,7 @@ test('the account page: second password, item lock, logins and trades', async ({
   await page.route('**/portal/safety/account', async (route) => {
     const body = route.request().postDataJSON() as Record<string, unknown>;
     calls.push({ url: 'account', body });
-    if (body.password !== 'test5') return route.fulfill({ status: 401, json: { error: 'login' } });
+    expect(route.request().headers()['x-hnmo-session']).toBe('1'); expect(body).not.toHaveProperty('password');
     return route.fulfill({ json: state() });
   });
   await page.route('**/portal/safety/pin', async (route) => {
@@ -235,15 +236,14 @@ test('the account page: second password, item lock, logins and trades', async ({
   });
   page.on('dialog', (dialog) => void dialog.accept());
   await page.addInitScript(() => { try { localStorage.setItem('hnmo.language', 'en'); } catch { /* none */ } });
+  await websiteAccountFixture(page, 'test5', 'test5');
   await page.goto('/account.html#safety');
   const panel = page.locator('#safety');
   await expect(panel.locator('h2')).toHaveText('Account safety');
-  await page.fill('#safetyAccount', 'test5');
-  await page.fill('#safetyPassword', 'wrong');
-  await panel.locator('#safetyLogin button').click();
-  await expect(page.locator('#safetyMessage')).toHaveText('The account name or password is wrong.');
-  await page.fill('#safetyPassword', 'test5');
-  await panel.locator('#safetyLogin button').click();
+  await page.fill('#accountUser', 'test5'); await page.fill('#accountSecret', 'wrong');
+  await page.locator('#accountSignInButton').click();
+  await expect(page.locator('#accountMessage')).toContainText('incorrect');
+  await signInWebsiteFixture(page, 'test5', 'test5');
   await expect(page.locator('#safetyPinState')).toHaveText('Your account has no second password yet.');
   await expect(page.locator('#safetyRules')).toContainText('Needed to trade.');
   await expect(page.locator('#safetyOldLabel')).toBeHidden();
@@ -267,7 +267,7 @@ test('the account page: second password, item lock, logins and trades', async ({
   await expect(page.locator('#safetyMessage')).toHaveText('Saved.');
   await expect(page.locator('#safetyPinState')).toContainText('Your account has a second password');
   await expect(page.locator('#safetyOldLabel')).toBeVisible();
-  expect(calls.at(-1)).toEqual({ url: 'pin', body: { loginName: 'test5', password: 'test5', oldPin: '', newPin: '1234' } });
+  expect(calls.at(-1)).toEqual({ url: 'pin', body: { oldPin: '', newPin: '1234' } });
 
   // The items: lock one, unlock the other with the second password (it waits).
   const rows = page.locator('#safetyItems .safety-item');
@@ -282,7 +282,7 @@ test('the account page: second password, item lock, logins and trades', async ({
   await rows.nth(1).locator('button[data-action="unlock"]').click();
   await expect(page.locator('#safetyMessage')).toContainText('Excellent Shield unlocks at');
   await expect(rows.nth(1)).toContainText('unlocks');
-  expect(calls.at(-1)?.body).toEqual({ loginName: 'test5', password: 'test5', itemId: 'a2', unlock: true, pin: '1234' });
+  expect(calls.at(-1)?.body).toEqual({ itemId: 'a2', unlock: true, pin: '1234' });
   await page.screenshot({ path: 'test-results/account-safety-page.png', fullPage: true });
 
   // Vietnamese.
