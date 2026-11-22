@@ -124,7 +124,6 @@ body[data-website-page="account"] #accountMessage:empty {display:none}
 @media(max-width:600px){body[data-website-page="account"] #accountLogout {grid-column:1/-1}}
 
 /* Five different page structures, retaining the same existing feature elements. */
-:root[data-website-theme] body[data-website-page="home"][data-website-layout] {overflow-x:clip}
 :root[data-website-theme] body[data-website-page="home"][data-website-layout] main {min-width:0}
 :root[data-website-theme] body[data-website-page="home"][data-website-layout] .theme-frame {display:grid;min-width:0;max-width:1720px;margin:0 auto;gap:24px;padding:24px}
 :root[data-website-theme] body[data-website-page="home"][data-website-layout] .theme-frame-ember {grid-template-columns:210px minmax(0,1fr)}
@@ -141,8 +140,8 @@ body[data-website-page="account"] #accountMessage:empty {display:none}
 :root[data-website-theme] body[data-website-page="home"][data-website-layout] .theme-frame-ember .hero-content {padding:70px 44px 120px;max-width:100%}
 :root[data-website-theme] body[data-website-page="home"][data-website-layout] .theme-frame-ember h1 {font-size:clamp(38px,4vw,70px);max-width:750px}
 :root[data-website-theme] body[data-website-page="home"][data-website-layout] .theme-frame-ember section:not(.hero) {margin:0;padding:40px 28px;border:1px solid var(--line);border-top:0}
-:root[data-website-theme] body[data-website-page="home"][data-website-layout] .theme-bento-intro {display:grid;grid-template-columns:minmax(0,1.1fr)minmax(0,1fr);gap:20px;padding:28px;align-items:stretch}
-:root[data-website-theme] body[data-website-page="home"][data-website-layout] .theme-bento-intro .hero {margin:0;min-height:800px;border:1px solid var(--line);border-radius:28px 4px}
+:root[data-website-theme] body[data-website-page="home"][data-website-layout] .theme-bento-intro {display:grid;grid-template-columns:minmax(0,1.1fr)minmax(0,1fr);gap:20px;padding:28px;align-items:start}
+:root[data-website-theme] body[data-website-page="home"][data-website-layout] .theme-bento-intro .hero {position:sticky;top:24px;margin:0;min-height:780px;border:1px solid var(--line);border-radius:28px 4px}
 :root[data-website-theme] body[data-website-page="home"][data-website-layout] .theme-bento-intro .hero-content {max-width:100%;padding:44px 32px 150px}
 :root[data-website-theme] body[data-website-page="home"][data-website-layout] .theme-bento-intro h1 {font-size:clamp(34px,3.5vw,56px)}
 :root[data-website-theme] body[data-website-page="home"][data-website-layout] .theme-bento-intro .hero-art {background-position:58% center;opacity:.65}
@@ -210,7 +209,7 @@ body[data-website-page="account"] #accountMessage:empty {display:none}
  :root[data-website-theme] body[data-website-page="home"][data-website-layout] .theme-frame-ember .hero-content {padding:48px 24px 150px}
  :root[data-website-theme] body[data-website-page="home"][data-website-layout] .theme-frame-ember h1 {font-size:44px}
  :root[data-website-theme] body[data-website-page="home"][data-website-layout] .theme-bento-intro {display:flex;flex-direction:column;gap:16px;padding:16px}
- :root[data-website-theme] body[data-website-page="home"][data-website-layout] .theme-bento-intro .hero {min-height:440px;margin:0}
+ :root[data-website-theme] body[data-website-page="home"][data-website-layout] .theme-bento-intro .hero {position:relative;top:auto;min-height:440px;margin:0}
  :root[data-website-theme] body[data-website-page="home"][data-website-layout] .theme-bento-intro .hero-content {padding:32px 24px 110px}
  :root[data-website-theme] body[data-website-page="home"][data-website-layout] .theme-bento-intro h1 {font-size:32px}
  :root[data-website-theme] body[data-website-page="home"][data-website-layout] .theme-server-board section {padding:24px 16px}
