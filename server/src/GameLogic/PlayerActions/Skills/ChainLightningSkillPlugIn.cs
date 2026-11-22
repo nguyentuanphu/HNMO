@@ -62,7 +62,7 @@ public class ChainLightningSkillPlugIn : IAreaSkillPlugIn
             return false;
         }
 
-        var secondTarget = target.CurrentMap?.GetAttackablesInRange(target.Position, 2).FirstOrDefault(FilterTarget) ?? target;
+        var secondTarget = target.CurrentMap?.GetAttackablesInRange(target.Position, 2).Where(FilterTarget).FirstOrDefault(t => t != target) ?? target;
         var thirdTarget = secondTarget.CurrentMap?.GetAttackablesInRange(secondTarget.Position, 2).Where(FilterTarget).FirstOrDefault(t => t != secondTarget && t != target) ?? secondTarget;
 
         var observable = attacker as IObservable;

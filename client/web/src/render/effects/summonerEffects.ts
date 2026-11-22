@@ -33,6 +33,10 @@ function live(owner: EffectOwner | null): owner is EffectOwner {
   return owner !== null && (owner.isLive?.() ?? true);
 }
 
+function present(owner: EffectOwner | null): owner is EffectOwner {
+  return owner !== null && (owner.isPresent?.() ?? owner.isLive?.() ?? true);
+}
+
 /** The world positions of all of an owner's bones (TransformPosition of each BoneTransform). */
 function bonePositions(owner: EffectOwner): THREE.Vector3[] {
   const count = owner.boneCount?.() ?? 0;
@@ -218,7 +222,7 @@ EXTRA_EFFECTS.chainLightning = {
   create: (o) => o.subType <= 2 && o.owner !== null && o.target !== null,
   move: (o, system) => {
     const source = o.owner, target = o.target;
-    if (!live(source) || !live(target)) {
+    if (!source || !(o.subType === 0 ? live(source) : present(source)) || !present(target)) {
       o.live = false;
       return false;
     }

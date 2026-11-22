@@ -21,6 +21,8 @@ export interface EffectOwner {
   readonly light?: THREE.Vector3;
   /** Whether it is alive and shown (o->Live && o->Visible). Effects that track it end when it isn't. */
   isLive?(): boolean;
+  /** Whether it is still visible and mounted in the scene (o->Live), including during a death animation. */
+  isPresent?(): boolean;
   /**
    * The world position of the bone a weapon hangs on (c->Weapon[hand].LinkBone, 33 and 42 on the
    * player model). Lightning starts there; without it the start is 130 units over the feet.
