@@ -103,18 +103,18 @@ public class ItemStackAction
             return;
         }
 
-        if (!player.TryRemoveMoney(DismantleFee))
-        {
-            await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.NotEnoughMoney)).ConfigureAwait(false);
-            return;
-        }
-
         byte pieces = (byte)((stacked.Level + 1) * 10);
 
         var freeSlots = player.Inventory!.FreeSlots.Take(pieces).ToList();
         if (freeSlots.Count < pieces)
         {
             await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.InventoryNotEnoughSpace)).ConfigureAwait(false);
+            return;
+        }
+
+        if (!player.TryRemoveMoney(DismantleFee))
+        {
+            await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.NotEnoughMoney)).ConfigureAwait(false);
             return;
         }
 
