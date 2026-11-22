@@ -1,6 +1,8 @@
 import { expect, test } from '@playwright/test';
 import type { ServerGuideFacts, ServerGuideView } from '../../src/websiteServerGuideModels.js';
 
+test.use({ timezoneId: 'America/New_York' });
+
 const facts: ServerGuideFacts = {
   maximumInventoryMoney: 123456, maximumVaultMoney: 987654,
   classes: [{ id: 0, nameEn: 'Wizard', nameVi: 'Pháp sư', requiredLevel: 0, shieldConfigured: true, maximumMasterTier: 8 }],
@@ -18,12 +20,17 @@ for (const width of [390, 1440]) for (const language of ['en', 'vi'] as const) {
     await page.route('**/website/**', route => route.fulfill({ status: 503 }));
     await page.route('**/game-name.json', route => route.fulfill({ json: { name: 'HNMO' } }));
     await page.route('**/website/data', route => route.fulfill({ json: { updatedAt: '2026-11-22T00:00:00Z', servers: [7, 8].map(id => ({ id, players: 1, capacity: 100, experienceRate: 5, masterExperienceRate: 2, maximumLevel: 400, maximumMasterLevel: 200, maximumPartySize: 5, maximumCharactersPerAccount: 5, classes: [], maps: [], events: [] })) } }));
+    await page.route('**/website/details', route => route.fulfill({ json: { updatedAt: '2026-11-22T00:00:00Z', characters: [], eventRankings: [], drops: [], upcoming: [{ serverId: 7, events: [{ name: 'Blood Castle', nameVi: 'Huyết Lâu', startsAt: '2026-11-22T00:00:00Z' }, { name: 'Invalid example', nameVi: 'Giờ mẫu không hợp lệ', startsAt: 'invalid' }] }] } }));
     let available = true;
     const view: ServerGuideView = { updatedAt: '2026-11-22T00:00:00Z', clientRules: { en: '<img src=x onerror=alert(1)>One client.', vi: 'Một client.' }, notForSale: { en: '', vi: '' }, servers: [{ id: 7, facts }, { id: 8, facts: { ...facts, helper: null, vip: [], catalog: { products: null, truncated: false } } }] };
     await page.route('**/website/server-guide', route => route.fulfill(available ? { json: view } : { status: 503 }));
     await page.goto('/home.html');
     const guide = page.locator('#server-guide');
     await expect(guide).toContainText(language === 'vi' ? 'Thông tin máy chủ' : 'Server rules at a glance');
+    await expect(page.locator('#upcoming time')).toHaveCount(1);
+    await expect(page.locator('#upcoming time')).toContainText('11:00');
+    await expect(page.locator('#upcoming time')).toContainText('19:00');
+    await expect(page.locator('#upcoming time')).toContainText('Sydney');
     await expect(guide).toContainText('123456'); await expect(guide).toContainText('111 WCoinC');
     await expect(guide).toContainText('230%'); await expect(guide).toContainText(language === 'vi' ? 'Bình Mana' : 'Mana potion');
     await expect(guide.locator('img')).toHaveCount(0);
