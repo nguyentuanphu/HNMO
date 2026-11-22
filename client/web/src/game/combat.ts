@@ -185,6 +185,8 @@ export class Combat {
     if (skill === null || this.hero.dead) return false;
     const plan = skillCastPlan(skill, this.classIndex, this.castContext());
     if (!plan || plan.packet === 'none') return false;
+    // CanExecuteSkill: nothing happens (not even a plain attack at the target) without the skill's requirements.
+    if (this.skills?.requirementsMet && !this.skills.requirementsMet(skill)) return false;
     if (target && target.dead) target = null;
     if (plan.needsTarget && !target) return false;
     this.pendingSkill = { skill, plan, target, cell: cell ?? (target ? { ...target.cell } : null) };

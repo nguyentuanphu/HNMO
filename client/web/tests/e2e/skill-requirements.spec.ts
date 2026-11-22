@@ -81,10 +81,12 @@ test('a spell the hero lacks the energy for is not cast', async ({ page }) => {
 
   const poison = await cast(POISON);
   await page.waitForTimeout(1_500);
-  const afterPoison = await page.evaluate(() => { const w = window as unknown as Win; return { sent: w.__sent.filter((n) => /Skill/.test(n)), skills: w.__skills }; });
+  const afterPoison = await page.evaluate(() => { const w = window as unknown as Win; return { sent: w.__sent.filter((n) => /Skill|HitRequest/.test(n)), skills: w.__skills }; });
   expect(afterPoison.sent).toEqual([]);
   expect(afterPoison.skills).toEqual([]);
   expect(poison.castable).toBe(false);
+  // Refused at once, as CanExecuteSkill does: the hero doesn't keep the monster as a target for plain attacks.
+  expect(poison.cast).toBe(false);
 
   await page.evaluate(() => (window as unknown as Win).__game.combat.cancel());
   const ball = await cast(ENERGY_BALL);
