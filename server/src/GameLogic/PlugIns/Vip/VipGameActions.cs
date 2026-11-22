@@ -4,6 +4,8 @@
 
 namespace HNMO.GameLogic.PlugIns.Vip;
 
+using HNMO.GameLogic.PlugIns.UltimateAutoPlay;
+
 /// <summary>Connects authenticated live players to the same wallet as the website, under their persistence lock.</summary>
 /// <param name="configuration">The active host configuration; disabled by default.</param>
 /// <param name="store">The shared VIP section.</param>
@@ -58,6 +60,7 @@ public sealed class VipGameActions(VipConfiguration configuration, VipStateStore
             if (!VipWallet.HasUnconfirmed(context))
             {
                 player.RefreshAccountAttributeGrants();
+                await UltimateAutoPlayPlugIn.SendPolicyAsync(player).ConfigureAwait(false);
                 if (notices is not null)
                 {
                     await notices.ShowOwnedAsync(player, configuration, store).ConfigureAwait(false);

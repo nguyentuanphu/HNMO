@@ -7,6 +7,7 @@ namespace HNMO.GameLogic.PlugIns.Vip;
 using System.Runtime.InteropServices;
 using System.Threading;
 using HNMO.GameLogic.Attributes;
+using HNMO.GameLogic.PlugIns.UltimateAutoPlay;
 using HNMO.PlugIns;
 
 /// <summary>Opt-in VIP configuration and live account bonus refresh; entering the world never purchases a plan.</summary>
@@ -74,6 +75,7 @@ public sealed class VipPlugIn : IPlayerStateChangedPlugIn, IPeriodicTaskPlugIn, 
             }
 
             player.RefreshAccountAttributeGrants();
+            await UltimateAutoPlayPlugIn.SendPolicyAsync(player).ConfigureAwait(false);
             await this._notices.ShowOwnedAsync(player, this.Configuration ?? new(), VipStateStore.OpenHost()).ConfigureAwait(false);
         });
 }

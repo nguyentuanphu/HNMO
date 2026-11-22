@@ -8,6 +8,7 @@
 // chat. The buttons send HnmoOnboardingAction (F5 10).
 
 import { currentLanguage, onLanguageChange } from '../i18n.js';
+import { onboardingTargetCell } from '../game/sparkleGoal.js';
 import { read, type PacketValues } from '../net/packets.js';
 import { openDocument, type RmlDocument, type RmlModel } from './rml.js';
 import { typographyScale } from './nativeText.js';
@@ -173,6 +174,11 @@ export class OnboardingWindow {
       this.place();
       this.fill();
     }).catch((error: unknown) => console.warn('Interface', error)).finally(() => { this.opening = null; });
+  }
+
+  /** Current active guide objective cell on the given map, for the cyan quest sparkle trail. */
+  getTargetCell(mapNumber: number | null | undefined): { x: number; y: number } | null {
+    return onboardingTargetCell(this.state, mapNumber);
   }
 
   /** A packet from the server: the guide's state (C2 F5 0F). Returns whether it was one. */
