@@ -1,5 +1,5 @@
 {
-  "generatedAt": "477b9466",
+  "generatedAt": "2822da15",
   "maxLines": 6000,
   "units": [
     {
@@ -105,7 +105,7 @@
         "server/src/GameLogic/ItemStorageAdapter.cs"
       ],
       "files": 53,
-      "lines": 5988,
+      "lines": 5993,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -144,7 +144,7 @@
         "server/src/GameLogic/PathFinderPoolingPolicy.cs"
       ],
       "files": 25,
-      "lines": 4123,
+      "lines": 4133,
       "status": "Changed since check",
       "checkedAt": "e977aa40",
       "checkedOn": "2026-11-21",
@@ -152,6 +152,7 @@
       "evidence": "ExpSplitByDamageAndDropTest, ExperienceRateSplitTest",
       "prs": "",
       "changedFiles": [
+        "server/src/GameLogic/LicensedPlayerLimit.cs",
         "server/src/GameLogic/Party.cs"
       ]
     },
@@ -287,7 +288,7 @@
         "server/src/GameLogic/Bots/BotNameGenerator.cs"
       ],
       "files": 15,
-      "lines": 4939,
+      "lines": 5007,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -317,7 +318,7 @@
         "server/src/GameLogic/Bots/BotStartupProfile.cs"
       ],
       "files": 16,
-      "lines": 5835,
+      "lines": 5852,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -501,11 +502,11 @@
       ],
       "files": 5,
       "lines": 237,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "477b9466",
+      "checkedOn": "2026-11-22",
+      "references": "Classic MU guild war & battle soccer rules",
+      "evidence": "All 5 files read (237 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
       "prs": ""
     },
     {
@@ -516,11 +517,11 @@
       ],
       "files": 3,
       "lines": 895,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "477b9466",
+      "checkedOn": "2026-11-22",
+      "references": "Client item JSON metadata & GlowColors.json",
+      "evidence": "All 3 files read (895 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
       "prs": ""
     },
     {
@@ -531,11 +532,11 @@
       ],
       "files": 2,
       "lines": 188,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "477b9466",
+      "checkedOn": "2026-11-22",
+      "references": "Classic MU / suite item option formulas",
+      "evidence": "All 2 files read (188 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
       "prs": ""
     },
     {
@@ -581,7 +582,7 @@
         "server/src/GameLogic/MiniGames/SkippableDelay.cs"
       ],
       "files": 37,
-      "lines": 5477,
+      "lines": 5482,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -597,11 +598,11 @@
       ],
       "files": 12,
       "lines": 1862,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "477b9466",
+      "checkedOn": "2026-11-22",
+      "references": "Season 6/9 Doppelganger path, scaling & Ice Walker rules",
+      "evidence": "All 12 files read (1862 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
       "prs": ""
     },
     {
@@ -612,11 +613,11 @@
       ],
       "files": 14,
       "lines": 1351,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "477b9466",
+      "checkedOn": "2026-11-22",
+      "references": "Season 6/9 Imperial Guardian day/zone/gate & fragment rules",
+      "evidence": "All 14 files read (1351 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
       "prs": ""
     },
     {
@@ -687,12 +688,15 @@
       ],
       "files": 6,
       "lines": 579,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
-      "prs": ""
+      "status": "Changed since check",
+      "checkedAt": "477b9466",
+      "checkedOn": "2026-11-22",
+      "references": "Season 6/9 Dark Raven / Dark Horse durability & behaviour",
+      "evidence": "All 6 files read (579 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
+      "prs": "#308",
+      "changedFiles": [
+        "server/src/GameLogic/Pet/RavenCommandManager.cs"
+      ]
     },
     {
       "id": "server/src/GameLogic/PlayerActions (files 1)",
@@ -762,12 +766,12 @@
       ],
       "files": 12,
       "lines": 583,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
-      "prs": ""
+      "status": "Checked",
+      "checkedAt": "477b9466",
+      "checkedOn": "2026-11-22",
+      "references": "Classic MU chat channel routing & ban checks",
+      "evidence": "All 12 files read (583 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
+      "prs": "#307"
     },
     {
       "id": "server/src/GameLogic/PlayerActions/Craftings",
@@ -775,14 +779,17 @@
       "paths": [
         "server/src/GameLogic/PlayerActions/Craftings"
       ],
-      "files": 19,
-      "lines": 1616,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
-      "prs": ""
+      "files": 20,
+      "lines": 1739,
+      "status": "Changed since check",
+      "checkedAt": "477b9466",
+      "checkedOn": "2026-11-22",
+      "references": "Season 6/9 ChaosMix & crafting rules",
+      "evidence": "All 19 files read (1616 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
+      "prs": "",
+      "changedFiles": [
+        "server/src/GameLogic/PlayerActions/Craftings/SocketWeaponCrafting.cs"
+      ]
     },
     {
       "id": "server/src/GameLogic/PlayerActions/Discord",
@@ -806,13 +813,16 @@
         "server/src/GameLogic/PlayerActions/Duel"
       ],
       "files": 3,
-      "lines": 451,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
-      "prs": ""
+      "lines": 461,
+      "status": "Changed since check",
+      "checkedAt": "477b9466",
+      "checkedOn": "2026-11-22",
+      "references": "Season 6/9 DuelSystem & Arena exclusion",
+      "evidence": "All 3 files read (451 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
+      "prs": "#305, #307",
+      "changedFiles": [
+        "server/src/GameLogic/PlayerActions/Duel/DuelActions.cs"
+      ]
     },
     {
       "id": "server/src/GameLogic/PlayerActions/Gens",
@@ -867,12 +877,17 @@
       ],
       "files": 25,
       "lines": 3209,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
-      "prs": ""
+      "status": "Changed since check",
+      "checkedAt": "477b9466",
+      "checkedOn": "2026-11-22",
+      "references": "Season 6/9 JewelMix, MoveItem, NPC buy/sell, Chaos mix",
+      "evidence": "All 25 files read (3209 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
+      "prs": "#310, #311",
+      "changedFiles": [
+        "server/src/GameLogic/PlayerActions/Items/ItemRepairAction.cs",
+        "server/src/GameLogic/PlayerActions/Items/ItemStackAction.cs",
+        "server/src/GameLogic/PlayerActions/Items/MoveItemAction.cs"
+      ]
     },
     {
       "id": "server/src/GameLogic/PlayerActions/Messenger",
@@ -896,13 +911,16 @@
         "server/src/GameLogic/PlayerActions/MiniGames"
       ],
       "files": 7,
-      "lines": 792,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
-      "prs": ""
+      "lines": 784,
+      "status": "Changed since check",
+      "checkedAt": "477b9466",
+      "checkedOn": "2026-11-22",
+      "references": "Season 6/9 event ticket & entry rules",
+      "evidence": "All 7 files read (792 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
+      "prs": "",
+      "changedFiles": [
+        "server/src/GameLogic/PlayerActions/MiniGames/EnterMiniGameAction.cs"
+      ]
     },
     {
       "id": "server/src/GameLogic/PlayerActions/MuHelper",
@@ -926,7 +944,7 @@
         "server/src/GameLogic/PlayerActions/Party"
       ],
       "files": 4,
-      "lines": 264,
+      "lines": 270,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -970,14 +988,19 @@
       "paths": [
         "server/src/GameLogic/PlayerActions/Skills"
       ],
-      "files": 28,
-      "lines": 3345,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
-      "prs": ""
+      "files": 29,
+      "lines": 3495,
+      "status": "Changed since check",
+      "checkedAt": "477b9466",
+      "checkedOn": "2026-11-22",
+      "references": "Season 6/9 SkillInfo & area/frustum/nova combat rules",
+      "evidence": "All 28 files read (3321 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
+      "prs": "#309",
+      "changedFiles": [
+        "server/src/GameLogic/PlayerActions/Skills/AttackActionValidator.cs",
+        "server/src/GameLogic/PlayerActions/Skills/NovaSkillStartPlugin.cs",
+        "server/src/GameLogic/PlayerActions/Skills/SkillEquipmentValidator.cs"
+      ]
     },
     {
       "id": "server/src/GameLogic/PlayerActions/Trade",
@@ -1153,7 +1176,7 @@
         "server/src/GameLogic/PlugIns/QuestMonsterKillCountPlugInConfiguration.cs"
       ],
       "files": 123,
-      "lines": 5901,
+      "lines": 5930,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -1190,13 +1213,16 @@
         "server/src/GameLogic/PlugIns/WalkSpeedWindow.cs",
         "server/src/GameLogic/PlugIns/WarpGateRules.cs",
         "server/src/GameLogic/PlugIns/WeatherUpdatePlugIn.cs",
+        "server/src/GameLogic/PlugIns/WebsiteBrand.cs",
+        "server/src/GameLogic/PlugIns/WebsiteBrandLabels.cs",
         "server/src/GameLogic/PlugIns/WebsiteConfiguration.cs",
         "server/src/GameLogic/PlugIns/WebsitePlugIn.cs",
+        "server/src/GameLogic/PlugIns/WebsiteServerPageLabels.cs",
         "server/src/GameLogic/PlugIns/WebsiteTheme.cs",
         "server/src/GameLogic/PlugIns/WebsiteThemeLabels.cs"
       ],
-      "files": 29,
-      "lines": 2272,
+      "files": 32,
+      "lines": 2445,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -1271,13 +1297,18 @@
         "server/src/GameLogic/PlugIns/Arena"
       ],
       "files": 25,
-      "lines": 4273,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
-      "prs": ""
+      "lines": 4305,
+      "status": "Changed since check",
+      "checkedAt": "477b9466",
+      "checkedOn": "2026-11-22",
+      "references": "HNMO Arena Teams/Royale/GuildWar/Duels/Ranking",
+      "evidence": "All 25 files read (4273 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
+      "prs": "#304, #305, #307",
+      "changedFiles": [
+        "server/src/GameLogic/PlugIns/Arena/ArenaGuildWar.cs",
+        "server/src/GameLogic/PlugIns/Arena/ArenaPlugIn.cs",
+        "server/src/GameLogic/PlugIns/Arena/ArenaTeams.cs"
+      ]
     },
     {
       "id": "server/src/GameLogic/PlugIns/BannedWords",
@@ -1362,12 +1393,12 @@
       ],
       "files": 14,
       "lines": 1184,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
-      "prs": ""
+      "status": "Checked",
+      "checkedAt": "477b9466",
+      "checkedOn": "2026-11-22",
+      "references": "HNMO cross-season friends, offline whisper, spam guard & chat log",
+      "evidence": "All 14 files read (1184 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
+      "prs": "#306, #307"
     },
     {
       "id": "server/src/GameLogic/PlugIns/ChatCommands (files 1)",
@@ -1472,7 +1503,7 @@
         "server/src/GameLogic/PlugIns/ChatCommands/UnBanAccChatCommandPlugIn.cs"
       ],
       "files": 97,
-      "lines": 5969,
+      "lines": 5971,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -1571,11 +1602,11 @@
       ],
       "files": 7,
       "lines": 462,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "477b9466",
+      "checkedOn": "2026-11-22",
+      "references": "Owner decision (2026-11-20): serial scan & frozen items",
+      "evidence": "All 7 files read (462 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
       "prs": ""
     },
     {
@@ -1660,7 +1691,7 @@
         "server/src/GameLogic/PlugIns/GameplayRules"
       ],
       "files": 25,
-      "lines": 2081,
+      "lines": 2082,
       "status": "Changed since check",
       "checkedAt": "e977aa40",
       "checkedOn": "2026-11-21",
@@ -1668,6 +1699,7 @@
       "evidence": "MonsterChaseLeashHealTest, ExpSplitByDamageAndDropTest",
       "prs": "#235",
       "changedFiles": [
+        "server/src/GameLogic/PlugIns/GameplayRules/GuildLimitsPlugIn.cs",
         "server/src/GameLogic/PlugIns/GameplayRules/MonsterAiConfiguration.cs",
         "server/src/GameLogic/PlugIns/GameplayRules/MonsterAiPlugIn.cs"
       ]
@@ -2190,11 +2222,11 @@
       ],
       "files": 9,
       "lines": 1820,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "477b9466",
+      "checkedOn": "2026-11-22",
+      "references": "Season 6/9 Raklion Hatchery & Selupan 7-pattern battle",
+      "evidence": "All 9 files read (1820 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
       "prs": ""
     },
     {
@@ -3382,11 +3414,11 @@
       ],
       "files": 7,
       "lines": 815,
-      "status": "No game rules",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-21",
-      "references": "ledger-game-data.md",
-      "evidence": "Names and captions only, no game rules.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3575,6 +3607,7 @@
         "server/src/Persistence/Initialization/Updates/EternalWingSetUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/ExcellentDropChanceUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/ExperienceLossRowsUpdatePlugIn.cs",
+        "server/src/Persistence/Initialization/Updates/FenrirSecondClassUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/FieldMonsterSpawnsUpdatePlugIn075.cs",
         "server/src/Persistence/Initialization/Updates/FieldMonsterSpawnsUpdatePlugIn095d.cs",
         "server/src/Persistence/Initialization/Updates/FieldMonsterSpawnsUpdatePlugInBase.cs",
@@ -3598,11 +3631,10 @@
         "server/src/Persistence/Initialization/Updates/FixCharStatsForceWavePlugIn075.cs",
         "server/src/Persistence/Initialization/Updates/FixCharStatsForceWavePlugIn095d.cs",
         "server/src/Persistence/Initialization/Updates/FixCharStatsForceWavePlugInBase.cs",
-        "server/src/Persistence/Initialization/Updates/FixCharStatsForceWavePlugInSeason6.cs",
-        "server/src/Persistence/Initialization/Updates/FixDamageAbsorbItemsUpdatePlugIn.cs"
+        "server/src/Persistence/Initialization/Updates/FixCharStatsForceWavePlugInSeason6.cs"
       ],
       "files": 47,
-      "lines": 6000,
+      "lines": 5674,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -3614,6 +3646,7 @@
       "id": "server/src/Persistence/Initialization/Updates (files 3)",
       "kind": "Game data (Season 6/9)",
       "paths": [
+        "server/src/Persistence/Initialization/Updates/FixDamageAbsorbItemsUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/FixDamageCalcsPlugIn075.cs",
         "server/src/Persistence/Initialization/Updates/FixDamageCalcsPlugIn095d.cs",
         "server/src/Persistence/Initialization/Updates/FixDamageCalcsPlugInBase.cs",
@@ -3661,17 +3694,10 @@
         "server/src/Persistence/Initialization/Updates/FixSeedSphereMaximumItemLevelUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/FixSetBonusesPlugIn.cs",
         "server/src/Persistence/Initialization/Updates/FixSkillMultipliersPlugIn.cs",
-        "server/src/Persistence/Initialization/Updates/FixSocketSeedCraftingUpdatePlugIn.cs",
-        "server/src/Persistence/Initialization/Updates/FixSummonerCurseSkillsPlugIn.cs",
-        "server/src/Persistence/Initialization/Updates/FixTransformationRingRulesUpdatePlugIn075.cs",
-        "server/src/Persistence/Initialization/Updates/FixTransformationRingRulesUpdatePlugIn095d.cs",
-        "server/src/Persistence/Initialization/Updates/FixTransformationRingRulesUpdatePlugInBase.cs",
-        "server/src/Persistence/Initialization/Updates/FixTransformationRingRulesUpdatePlugInSeasonSix.cs",
-        "server/src/Persistence/Initialization/Updates/FixVulcanusWarpIndexUpdatePlugIn.cs",
-        "server/src/Persistence/Initialization/Updates/FixWarpLevelUpdatePlugIn.cs"
+        "server/src/Persistence/Initialization/Updates/FixSocketSeedCraftingUpdatePlugIn.cs"
       ],
-      "files": 55,
-      "lines": 5980,
+      "files": 49,
+      "lines": 5891,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -3683,6 +3709,13 @@
       "id": "server/src/Persistence/Initialization/Updates (files 4)",
       "kind": "Game data (Season 6/9)",
       "paths": [
+        "server/src/Persistence/Initialization/Updates/FixSummonerCurseSkillsPlugIn.cs",
+        "server/src/Persistence/Initialization/Updates/FixTransformationRingRulesUpdatePlugIn075.cs",
+        "server/src/Persistence/Initialization/Updates/FixTransformationRingRulesUpdatePlugIn095d.cs",
+        "server/src/Persistence/Initialization/Updates/FixTransformationRingRulesUpdatePlugInBase.cs",
+        "server/src/Persistence/Initialization/Updates/FixTransformationRingRulesUpdatePlugInSeasonSix.cs",
+        "server/src/Persistence/Initialization/Updates/FixVulcanusWarpIndexUpdatePlugIn.cs",
+        "server/src/Persistence/Initialization/Updates/FixWarpLevelUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/FixWarriorMorningStarPlugIn.cs",
         "server/src/Persistence/Initialization/Updates/FixWeaponRisePercentagePlugIn075.cs",
         "server/src/Persistence/Initialization/Updates/FixWeaponRisePercentagePlugIn095d.cs",
@@ -3715,6 +3748,7 @@
         "server/src/Persistence/Initialization/Updates/LuckyItemSpeedsUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/MagicGladiatorDefenseUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/MasterTreeRanksAndLinksUpdatePlugIn.cs",
+        "server/src/Persistence/Initialization/Updates/MayaBodyNonAttackableUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/MissingUpdateDependencyException.cs",
         "server/src/Persistence/Initialization/Updates/MonsterResistancesFromSuitesUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/MonsterRespawnFromSuitesUpdatePlugIn.cs",
@@ -3729,16 +3763,10 @@
         "server/src/Persistence/Initialization/Updates/MuHelperLevelUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/NewDatabaseUpdates.cs",
         "server/src/Persistence/Initialization/Updates/PhoenixShotPvpBlockUpdatePlugIn.cs",
-        "server/src/Persistence/Initialization/Updates/PkClearCostUpdatePlugIn.cs",
-        "server/src/Persistence/Initialization/Updates/RageFighterResistanceMasterSkillsUpdatePlugIn.cs",
-        "server/src/Persistence/Initialization/Updates/RaklionSwampGateLevelsUpdatePlugIn.cs",
-        "server/src/Persistence/Initialization/Updates/RegenerationsRefactorPlugIn075.cs",
-        "server/src/Persistence/Initialization/Updates/RegenerationsRefactorPlugIn095d.cs",
-        "server/src/Persistence/Initialization/Updates/RegenerationsRefactorPlugInBase.cs",
-        "server/src/Persistence/Initialization/Updates/RegenerationsRefactorPlugInSeason6.cs"
+        "server/src/Persistence/Initialization/Updates/PkClearCostUpdatePlugIn.cs"
       ],
-      "files": 53,
-      "lines": 5996,
+      "files": 55,
+      "lines": 5975,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -3750,6 +3778,12 @@
       "id": "server/src/Persistence/Initialization/Updates (files 5)",
       "kind": "Game data (Season 6/9)",
       "paths": [
+        "server/src/Persistence/Initialization/Updates/RageFighterResistanceMasterSkillsUpdatePlugIn.cs",
+        "server/src/Persistence/Initialization/Updates/RaklionSwampGateLevelsUpdatePlugIn.cs",
+        "server/src/Persistence/Initialization/Updates/RegenerationsRefactorPlugIn075.cs",
+        "server/src/Persistence/Initialization/Updates/RegenerationsRefactorPlugIn095d.cs",
+        "server/src/Persistence/Initialization/Updates/RegenerationsRefactorPlugInBase.cs",
+        "server/src/Persistence/Initialization/Updates/RegenerationsRefactorPlugInSeason6.cs",
         "server/src/Persistence/Initialization/Updates/RemoveDuplicateStatAttributesPlugIn075.cs",
         "server/src/Persistence/Initialization/Updates/RemoveDuplicateStatAttributesPlugIn095d.cs",
         "server/src/Persistence/Initialization/Updates/RemoveDuplicateStatAttributesPlugInBase.cs",
@@ -3771,6 +3805,7 @@
         "server/src/Persistence/Initialization/Updates/SkillRangesAndNovaAgUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/SocketCriticalDamageUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/SocketShieldProtectionUpdatePlugIn.cs",
+        "server/src/Persistence/Initialization/Updates/SocketWeaponMixUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/SpawnFixesUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/StandardizeEventEnterDurationPlugIn095d.cs",
         "server/src/Persistence/Initialization/Updates/StandardizeEventEnterDurationPlugInBase.cs",
@@ -3788,8 +3823,8 @@
         "server/src/Persistence/Initialization/Updates/WizEnhanceAndRagefighterSkillsUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/ZenLossBagOnlyUpdatePlugIn.cs"
       ],
-      "files": 37,
-      "lines": 2352,
+      "files": 44,
+      "lines": 2955,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -3804,7 +3839,7 @@
         "server/src/Persistence/Initialization/Updates/SeasonNine"
       ],
       "files": 9,
-      "lines": 2597,
+      "lines": 2669,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -3873,11 +3908,11 @@
       ],
       "files": 3,
       "lines": 658,
-      "status": "No game rules",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-21",
-      "references": "ledger-game-data.md",
-      "evidence": "Test characters only, no game rules.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3927,13 +3962,16 @@
         "server/src/Persistence/Initialization/VersionSeasonSix/NpcInitialization.cs"
       ],
       "files": 11,
-      "lines": 5478,
-      "status": "Checked",
+      "lines": 5479,
+      "status": "Changed since check",
       "checkedAt": "477b9466",
       "checkedOn": "2026-11-22",
       "references": "S6/S9 ChaosBox.ini, GateSettings.xml, MoveReq.xml, MoveLevel.xml, ShopList.xml, Shops/*.xml, PriceSettings.ini",
       "evidence": "Read in full via data dump (ledger-game-data.md + ZzDataDump at 477b9466): 42 mixes, gates/warps (#223, #240), 27 shops (#250), jewel prices (#192).",
-      "prs": "#192, #223, #240, #250"
+      "prs": "#192, #223, #240, #250",
+      "changedFiles": [
+        "server/src/Persistence/Initialization/VersionSeasonSix/ChaosMixes.cs"
+      ]
     },
     {
       "id": "server/src/Persistence/Initialization/VersionSeasonSix (files 2)",
@@ -3990,13 +4028,16 @@
         "server/src/Persistence/Initialization/VersionSeasonSix/Items/PackedJewels.cs"
       ],
       "files": 18,
-      "lines": 5817,
-      "status": "Checked",
+      "lines": 5830,
+      "status": "Changed since check",
       "checkedAt": "477b9466",
       "checkedOn": "2026-11-22",
       "references": "S6/S9 ItemList.xml, ExcellentOptions.xml, HarmonyItemOption.ini, ItemSetOption.xml",
       "evidence": "Read in full via data dump (ledger-game-data.md + ZzDataDump at 477b9466): 817 items, 380/Phoenix Soul (#218), Eternal Wing set 44 (#258), lucky speeds (#242), harmony +14/+15 (#252).",
-      "prs": "#218, #242, #252, #258"
+      "prs": "#218, #242, #252, #258",
+      "changedFiles": [
+        "server/src/Persistence/Initialization/VersionSeasonSix/Items/ItemRules.cs"
+      ]
     },
     {
       "id": "server/src/Persistence/Initialization/VersionSeasonSix/Items (files 2)",
@@ -4007,17 +4048,22 @@
         "server/src/Persistence/Initialization/VersionSeasonSix/Items/Quest.cs",
         "server/src/Persistence/Initialization/VersionSeasonSix/Items/Scrolls.cs",
         "server/src/Persistence/Initialization/VersionSeasonSix/Items/SocketSystem.cs",
+        "server/src/Persistence/Initialization/VersionSeasonSix/Items/SocketWeaponMixItems.cs",
         "server/src/Persistence/Initialization/VersionSeasonSix/Items/Weapons.cs",
         "server/src/Persistence/Initialization/VersionSeasonSix/Items/Wings.cs"
       ],
-      "files": 7,
-      "lines": 2986,
-      "status": "Checked",
+      "files": 8,
+      "lines": 3135,
+      "status": "Changed since check",
       "checkedAt": "477b9466",
       "checkedOn": "2026-11-22",
       "references": "S6 SocketOptionSettings.ini, S9 SocketOption.xml, ItemList.xml",
       "evidence": "Read in full via data dump (ledger-game-data.md + ZzDataDump at 477b9466): socket options (#220, #233), 2nd wing AG/speed (#251), 3rd wings (#234).",
-      "prs": "#220, #233, #234, #251"
+      "prs": "#220, #233, #234, #251",
+      "changedFiles": [
+        "server/src/Persistence/Initialization/VersionSeasonSix/Items/Pets.cs",
+        "server/src/Persistence/Initialization/VersionSeasonSix/Items/SocketWeaponMixItems.cs"
+      ]
     },
     {
       "id": "server/src/Persistence/Initialization/VersionSeasonSix/Maps (files 1)",
@@ -4122,7 +4168,7 @@
         "server/src/Persistence/Initialization/VersionSeasonSix/Maps/Vulcanus.cs"
       ],
       "files": 17,
-      "lines": 4921,
+      "lines": 4922,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4138,11 +4184,11 @@
       ],
       "files": 14,
       "lines": 2079,
-      "status": "No game rules",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-21",
-      "references": "ledger-game-data.md",
-      "evidence": "Test characters only, no game rules.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4380,6 +4426,7 @@
         "client/web/src/accountPage.ts",
         "client/web/src/accountPageTexts.ts",
         "client/web/src/accountPassword.ts",
+        "client/web/src/accountRegistration.ts",
         "client/web/src/accountSections.ts",
         "client/web/src/accountVip.ts",
         "client/web/src/bmd.ts",
@@ -4394,8 +4441,8 @@
         "client/web/src/giftCodeIdentity.ts",
         "client/web/src/i18n.ts"
       ],
-      "files": 20,
-      "lines": 3418,
+      "files": 21,
+      "lines": 3599,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4417,7 +4464,7 @@
         "client/web/src/vipTexts.ts"
       ],
       "files": 8,
-      "lines": 4795,
+      "lines": 4953,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4430,12 +4477,25 @@
       "kind": "Web client",
       "paths": [
         "client/web/src/website.ts",
+        "client/web/src/websiteBrand.ts",
+        "client/web/src/websiteEventTime.ts",
+        "client/web/src/websiteServerGuide.ts",
+        "client/web/src/websiteServerGuideCopy.ts",
+        "client/web/src/websiteServerGuideModels.ts",
+        "client/web/src/websiteSession.ts",
+        "client/web/src/websiteSessionRequest.ts",
+        "client/web/src/websiteShellEntry.ts",
         "client/web/src/websiteTheme.ts",
+        "client/web/src/websiteThemeEntry.ts",
+        "client/web/src/websiteThemeHostPreview.ts",
+        "client/web/src/websiteThemeLayout.ts",
+        "client/web/src/websiteThemePreviewData.ts",
+        "client/web/src/websiteThemePreviewEntry.ts",
         "client/web/src/world.ts",
         "client/web/src/worldEditor.ts"
       ],
-      "files": 4,
-      "lines": 4569,
+      "files": 17,
+      "lines": 5217,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4518,7 +4578,7 @@
         "client/web/src/game/guild.ts"
       ],
       "files": 13,
-      "lines": 5958,
+      "lines": 5968,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4595,7 +4655,7 @@
         "client/web/src/game/warps.ts"
       ],
       "files": 11,
-      "lines": 3135,
+      "lines": 3149,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4701,16 +4761,15 @@
         "client/web/src/ui/castleSiegeWindows.ts",
         "client/web/src/ui/catchupBanner.ts",
         "client/web/src/ui/characterWindow.ts",
+        "client/web/src/ui/chatCommandWindow.ts",
         "client/web/src/ui/combatOverlay.ts",
         "client/web/src/ui/commandWindow.ts",
         "client/web/src/ui/communityWindow.ts",
         "client/web/src/ui/confirmDialog.ts",
-        "client/web/src/ui/duelAndGens.ts",
-        "client/web/src/ui/duelWindows.ts",
-        "client/web/src/ui/escapeHtml.ts"
+        "client/web/src/ui/duelAndGens.ts"
       ],
-      "files": 18,
-      "lines": 5746,
+      "files": 17,
+      "lines": 5970,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4722,6 +4781,8 @@
       "id": "client/web/src/ui (files 2)",
       "kind": "Web client",
       "paths": [
+        "client/web/src/ui/duelWindows.ts",
+        "client/web/src/ui/escapeHtml.ts",
         "client/web/src/ui/escrowWindow.ts",
         "client/web/src/ui/eventAlertsWidget.ts",
         "client/web/src/ui/eventWindows.ts",
@@ -4735,11 +4796,10 @@
         "client/web/src/ui/guide.ts",
         "client/web/src/ui/guildLevelsWindow.ts",
         "client/web/src/ui/guildWindows.ts",
-        "client/web/src/ui/hnmoPanel.ts",
-        "client/web/src/ui/hud.ts"
+        "client/web/src/ui/hnmoPanel.ts"
       ],
-      "files": 15,
-      "lines": 5609,
+      "files": 16,
+      "lines": 5728,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4751,6 +4811,7 @@
       "id": "client/web/src/ui (files 3)",
       "kind": "Web client",
       "paths": [
+        "client/web/src/ui/hud.ts",
         "client/web/src/ui/instanceEventWindows.ts",
         "client/web/src/ui/itemIcons.ts",
         "client/web/src/ui/itemStacks.ts",
@@ -4768,12 +4829,11 @@
         "client/web/src/ui/marketWindow.ts",
         "client/web/src/ui/marriageWindow.ts",
         "client/web/src/ui/masterLevelWindow.ts",
-        "client/web/src/ui/miniMap.ts",
-        "client/web/src/ui/missionsWindow.ts",
-        "client/web/src/ui/mixWindow.ts"
+        "client/web/src/ui/menuWindows.ts",
+        "client/web/src/ui/miniMap.ts"
       ],
       "files": 20,
-      "lines": 5935,
+      "lines": 5966,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4785,6 +4845,8 @@
       "id": "client/web/src/ui (files 4)",
       "kind": "Web client",
       "paths": [
+        "client/web/src/ui/missionsWindow.ts",
+        "client/web/src/ui/mixWindow.ts",
         "client/web/src/ui/mobileHud.ts",
         "client/web/src/ui/mountChainWindow.ts",
         "client/web/src/ui/mountWidget.ts",
@@ -4797,11 +4859,10 @@
         "client/web/src/ui/partyWindow.ts",
         "client/web/src/ui/perfReportWindow.ts",
         "client/web/src/ui/personalShop.ts",
-        "client/web/src/ui/questWindows.ts",
-        "client/web/src/ui/rankingWindow.ts"
+        "client/web/src/ui/petInfoWindow.ts"
       ],
-      "files": 14,
-      "lines": 5930,
+      "files": 15,
+      "lines": 5723,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4813,6 +4874,8 @@
       "id": "client/web/src/ui (files 5)",
       "kind": "Web client",
       "paths": [
+        "client/web/src/ui/questWindows.ts",
+        "client/web/src/ui/rankingWindow.ts",
         "client/web/src/ui/rml.ts",
         "client/web/src/ui/screenshot.ts",
         "client/web/src/ui/seasonColumns.ts",
@@ -4831,8 +4894,8 @@
         "client/web/src/ui/vipWindow.ts",
         "client/web/src/ui/worldBossWindow.ts"
       ],
-      "files": 17,
-      "lines": 4612,
+      "files": 19,
+      "lines": 5920,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -7934,8 +7997,8 @@
       "paths": [
         "server/src/Web"
       ],
-      "files": 816,
-      "lines": 95388,
+      "files": 820,
+      "lines": 95718,
       "status": "No game rules",
       "checkedAt": "",
       "checkedOn": "",
