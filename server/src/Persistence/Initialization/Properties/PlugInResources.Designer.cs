@@ -1156,5 +1156,11 @@ namespace HNMO.Persistence.Initialization.Properties {
 
         /// <summary>Gets the localized SeasonNineMonstersUpdatePlugIn_Description text.</summary>
         public static string SeasonNineMonstersUpdatePlugIn_Description => ResourceManager.GetString("SeasonNineMonstersUpdatePlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized SeasonNineMapsAndGatesUpdatePlugIn_Name text.</summary>
+        public static string SeasonNineMapsAndGatesUpdatePlugIn_Name => ResourceManager.GetString("SeasonNineMapsAndGatesUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized SeasonNineMapsAndGatesUpdatePlugIn_Description text.</summary>
+        public static string SeasonNineMapsAndGatesUpdatePlugIn_Description => ResourceManager.GetString("SeasonNineMapsAndGatesUpdatePlugIn_Description", resourceCulture)!;
     }
 }
