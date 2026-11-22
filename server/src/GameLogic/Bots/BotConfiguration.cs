@@ -193,4 +193,37 @@ public class BotConfiguration
             .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
+
+    /// <summary>
+    /// Picks a spawn gate on an allowed map when a class's home map is forbidden for bots.
+    /// Prefers the lowest-level allowed warp destination, then any allowed class home map, and
+    /// finally any active allowed map with a spawn gate.
+    /// </summary>
+    /// <param name="configuration">The game configuration.</param>
+    /// <param name="botConfiguration">The bot configuration.</param>
+    /// <returns>An allowed spawn gate, or <c>null</c> if none exists.</returns>
+    internal static ExitGate? FindAllowedSpawnGate(GameConfiguration configuration, BotConfiguration? botConfiguration)
+    {
+        if (configuration.WarpList
+            .Where(w => w.Gate?.Map is { } map && botConfiguration?.IsMapForbidden(map) != true)
+            .OrderBy(w => w.LevelRequirement)
+            .Select(w => w.Gate!.Map!.ExitGates.FirstOrDefault(g => g.IsSpawnGate) ?? w.Gate)
+            .FirstOrDefault() is { } warpMapGate)
+        {
+            return warpMapGate;
+        }
+
+        if (configuration.CharacterClasses
+            .Where(c => c.HomeMap is { IsActive: true } map && botConfiguration?.IsMapForbidden(map) != true)
+            .Select(c => c.HomeMap!.ExitGates.FirstOrDefault(g => g.IsSpawnGate))
+            .FirstOrDefault(g => g is not null) is { } homeMapGate)
+        {
+            return homeMapGate;
+        }
+
+        return configuration.Maps
+            .Where(m => m.IsActive && botConfiguration?.IsMapForbidden(m) != true)
+            .Select(m => m.ExitGates.FirstOrDefault(g => g.IsSpawnGate))
+            .FirstOrDefault(g => g is not null);
+    }
 }

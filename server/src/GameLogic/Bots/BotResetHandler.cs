@@ -205,10 +205,22 @@ internal static class BotResetHandler
     /// </summary>
     private static async ValueTask MoveHomeAsync(OfflinePlayer player)
     {
+        var botConfiguration = BotFeaturePlugIn.GetConfiguration(player.GameContext);
         var homeMapDefinition = player.SelectedCharacter?.CharacterClass?.HomeMap;
-        if (homeMapDefinition is null
-            || await player.GameContext.GetMapAsync((ushort)homeMapDefinition.Number).ConfigureAwait(false) is not { } homeMap
-            || homeMap.Definition.ExitGates.Where(g => g.IsSpawnGate).SelectRandom() is not { } spawnGate)
+        ExitGate? spawnGate = null;
+        if (homeMapDefinition is not null
+            && botConfiguration?.IsMapForbidden(homeMapDefinition) != true
+            && await player.GameContext.GetMapAsync((ushort)homeMapDefinition.Number).ConfigureAwait(false) is { } homeMap)
+        {
+            spawnGate = homeMap.Definition.ExitGates.Where(g => g.IsSpawnGate).SelectRandom();
+        }
+        else if (botConfiguration?.IsMapForbidden(homeMapDefinition) == true
+                 && BotConfiguration.FindAllowedSpawnGate(player.GameContext.Configuration, botConfiguration) is { } allowedGate)
+        {
+            spawnGate = allowedGate;
+        }
+
+        if (spawnGate is null)
         {
             return;
         }
