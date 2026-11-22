@@ -287,6 +287,25 @@ input {
   font-size: 10px;
   margin-top: 16px;
 }
+.realm-rules {
+  margin-top: 20px;
+  padding: 18px 22px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+}
+.realm-rules-title {
+  margin: 0 0 10px;
+  font-size: 15px;
+  color: var(--gold);
+}
+.realm-rules-list {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 13px;
+}
 .realm-bottom p {
   margin: 0;
 }
