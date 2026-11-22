@@ -35,6 +35,7 @@ import { loadSkillData, masterSkillToBaseSkill, skillCooldowns, SkillList, skill
 import { skillTooltipLines } from './game/skillTooltip.js';
 import { loadItemValueData, repairAllCost } from './game/itemValue.js';
 import { CharacterWindow } from './ui/characterWindow.js';
+import { PetInfoWindow } from './ui/petInfoWindow.js';
 import { setupMasterLevel } from './ui/masterLevelWindow.js';
 import { AutoPlay, helperBuffOf } from './game/autoPlay.js';
 import { AutoPlayBar } from './ui/autoPlayBar.js';
@@ -1669,12 +1670,33 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     if (!event.repeat) useHotkey(slot);
   });
   // The character window (C): the rightmost docked window; the inventory moves left of it while it's open.
+  const petInfoWindow = new PetInfoWindow({
+    connection,
+    earlyPackets,
+    inventory,
+    stats,
+    click: () => sounds.click(),
+    onOpen: () => {
+      itemWindows.closeAll();
+      state.partyWindow?.close();
+      state.commandWindow?.close();
+      state.social?.guildWindow.close();
+      if (!characterWindow.isOpen) void characterWindow.open();
+    },
+  });
+  const prevPlaced = itemWindows.onPlaced;
+  itemWindows.onPlaced = () => {
+    prevPlaced();
+    if (itemWindows.bag.isOpen) petInfoWindow.close();
+  };
   const characterWindow = new CharacterWindow({
     connection, stats, inventory, classIndex: character.classIndex, name: character.name,
     currentSkill: () => skills.skillAt(skills.current),
     onQuest: () => quests.toggleMyQuest(),
+    onPet: () => { void petInfoWindow.toggle(); },
     onToggle: (open) => {
       if (open) state.partyWindow?.close();
+      else petInfoWindow.close();
       state.addStats?.setCharacterWindowOpen(open);
       state.hud?.setOpenStates({ character: open });
       itemWindows.dockedRight = open ? 1 : 0;
