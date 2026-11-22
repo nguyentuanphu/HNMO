@@ -1,0 +1,594 @@
+﻿NpcNumber,NpcName,Slot,Group,Number,ItemName,Level,Durability,HasSkill,HasLuck,OptionLevel,ExcellentOptions
+230,Alex,0,3,5,Double Poleaxe,3,38,0,1,1,0
+230,Alex,2,3,1,Spear,3,42,0,1,1,0
+230,Alex,4,3,3,Giant Trident,3,44,0,1,1,0
+230,Alex,6,3,7,Berdysh,3,54,1,1,1,0
+230,Alex,32,3,4,Serpent Spear,3,58,1,1,1,0
+230,Alex,34,3,0,Light Spear,3,56,1,1,1,0
+230,Alex,36,0,10,Light Saber,3,50,1,1,1,0
+230,Alex,38,2,3,Great Hammer,3,50,1,1,1,0
+231,Thompson the Merchant,0,14,0,Apple,0,1,0,0,0,0
+231,Thompson the Merchant,1,14,1,Small Healing Potion,0,1,0,0,0,0
+231,Thompson the Merchant,2,14,2,Medium Healing Potion,0,1,0,0,0,0
+231,Thompson the Merchant,3,14,3,Large Healing Potion,0,1,0,0,0,0
+231,Thompson the Merchant,4,14,4,Small Mana Potion,0,1,0,0,0,0
+231,Thompson the Merchant,5,14,5,Medium Mana Potion,0,1,0,0,0,0
+231,Thompson the Merchant,6,14,6,Large Mana Potion,0,1,0,0,0,0
+231,Thompson the Merchant,7,14,8,Antidote,0,1,0,0,0,0
+231,Thompson the Merchant,8,14,0,Apple,0,3,0,0,0,0
+231,Thompson the Merchant,9,14,1,Small Healing Potion,0,3,0,0,0,0
+231,Thompson the Merchant,10,14,2,Medium Healing Potion,0,3,0,0,0,0
+231,Thompson the Merchant,11,14,3,Large Healing Potion,0,3,0,0,0,0
+231,Thompson the Merchant,12,14,4,Small Mana Potion,0,3,0,0,0,0
+231,Thompson the Merchant,13,14,5,Medium Mana Potion,0,3,0,0,0,0
+231,Thompson the Merchant,14,14,6,Large Mana Potion,0,3,0,0,0,0
+231,Thompson the Merchant,15,14,8,Antidote,0,3,0,0,0,0
+231,Thompson the Merchant,16,14,0,Apple,1,1,0,0,0,0
+231,Thompson the Merchant,17,14,1,Small Healing Potion,1,1,0,0,0,0
+231,Thompson the Merchant,18,14,2,Medium Healing Potion,1,1,0,0,0,0
+231,Thompson the Merchant,19,14,3,Large Healing Potion,1,1,0,0,0,0
+231,Thompson the Merchant,20,14,0,Apple,1,3,0,0,0,0
+231,Thompson the Merchant,21,14,1,Small Healing Potion,1,3,0,0,0,0
+231,Thompson the Merchant,22,14,2,Medium Healing Potion,1,3,0,0,0,0
+231,Thompson the Merchant,23,14,3,Large Healing Potion,1,3,0,0,0,0
+231,Thompson the Merchant,24,4,7,Bolt,0,255,0,0,0,0
+231,Thompson the Merchant,25,4,7,Bolt,1,255,0,0,0,0
+231,Thompson the Merchant,26,4,7,Bolt,2,255,0,0,0,0
+231,Thompson the Merchant,27,4,15,Arrows,0,255,0,0,0,0
+231,Thompson the Merchant,28,4,15,Arrows,1,255,0,0,0,0
+231,Thompson the Merchant,29,4,15,Arrows,2,255,0,0,0,0
+231,Thompson the Merchant,32,14,10,Town Portal Scroll,0,1,0,0,0,0
+231,Thompson the Merchant,33,13,29,Armor of Guardsman,0,1,0,0,0,0
+242,Elf Lala,0,14,0,Apple,0,1,0,0,0,0
+242,Elf Lala,1,14,1,Small Healing Potion,0,1,0,0,0,0
+242,Elf Lala,2,14,2,Medium Healing Potion,0,1,0,0,0,0
+242,Elf Lala,3,14,3,Large Healing Potion,0,1,0,0,0,0
+242,Elf Lala,4,14,4,Small Mana Potion,0,1,0,0,0,0
+242,Elf Lala,5,14,5,Medium Mana Potion,0,1,0,0,0,0
+242,Elf Lala,6,14,6,Large Mana Potion,0,1,0,0,0,0
+242,Elf Lala,7,14,8,Antidote,0,1,0,0,0,0
+242,Elf Lala,8,14,0,Apple,0,3,0,0,0,0
+242,Elf Lala,9,14,1,Small Healing Potion,0,3,0,0,0,0
+242,Elf Lala,10,14,2,Medium Healing Potion,0,3,0,0,0,0
+242,Elf Lala,11,14,3,Large Healing Potion,0,3,0,0,0,0
+242,Elf Lala,12,14,4,Small Mana Potion,0,3,0,0,0,0
+242,Elf Lala,13,14,5,Medium Mana Potion,0,3,0,0,0,0
+242,Elf Lala,14,14,6,Large Mana Potion,0,3,0,0,0,0
+242,Elf Lala,15,14,8,Antidote,0,3,0,0,0,0
+242,Elf Lala,16,14,0,Apple,1,1,0,0,0,0
+242,Elf Lala,17,14,1,Small Healing Potion,1,1,0,0,0,0
+242,Elf Lala,18,14,2,Medium Healing Potion,1,1,0,0,0,0
+242,Elf Lala,19,14,3,Large Healing Potion,1,1,0,0,0,0
+242,Elf Lala,20,14,0,Apple,1,3,0,0,0,0
+242,Elf Lala,21,14,1,Small Healing Potion,1,3,0,0,0,0
+242,Elf Lala,22,14,2,Medium Healing Potion,1,3,0,0,0,0
+242,Elf Lala,23,14,3,Large Healing Potion,1,3,0,0,0,0
+242,Elf Lala,24,12,8,Orb of Healing,0,1,0,0,0,0
+242,Elf Lala,25,12,9,Orb of Greater Defense,0,1,0,0,0,0
+242,Elf Lala,26,12,10,Orb of Greater Damage,0,1,0,0,0,0
+242,Elf Lala,27,12,11,Orb of Summoning,0,1,0,0,0,0
+242,Elf Lala,28,12,11,Orb of Summoning,1,1,0,0,0,0
+242,Elf Lala,29,12,11,Orb of Summoning,2,1,0,0,0,0
+242,Elf Lala,30,12,11,Orb of Summoning,3,1,0,0,0,0
+242,Elf Lala,31,12,11,Orb of Summoning,4,1,0,0,0,0
+242,Elf Lala,32,7,10,Vine Helm,0,22,0,1,1,0
+242,Elf Lala,34,8,10,Vine Armor,0,22,0,1,1,0
+242,Elf Lala,36,9,10,Vine Pants,0,22,0,1,1,0
+242,Elf Lala,38,10,10,Vine Gloves,3,22,0,1,1,0
+242,Elf Lala,48,11,10,Vine Boots,3,22,0,1,1,0
+242,Elf Lala,50,7,11,Silk Helm,2,26,0,1,1,0
+242,Elf Lala,52,8,11,Silk Armor,2,26,0,1,1,0
+242,Elf Lala,54,9,11,Silk Pants,2,26,0,1,1,0
+242,Elf Lala,64,10,11,Silk Gloves,2,26,0,1,1,0
+242,Elf Lala,66,11,11,Silk Boots,2,26,0,1,1,0
+242,Elf Lala,68,7,12,Wind Helm,3,32,0,1,1,0
+242,Elf Lala,70,8,12,Wind Armor,3,32,0,1,1,0
+242,Elf Lala,80,9,12,Wind Pants,3,32,0,1,1,0
+242,Elf Lala,82,10,12,Wind Gloves,3,32,0,1,1,0
+242,Elf Lala,84,11,12,Wind Boots,3,32,0,1,1,0
+242,Elf Lala,86,13,29,Armor of Guardsman,0,1,0,0,0,0
+242,Elf Lala,96,14,10,Town Portal Scroll,0,1,0,0,0,0
+242,Elf Lala,97,4,7,Bolt,0,255,0,0,0,0
+242,Elf Lala,98,4,7,Bolt,1,255,0,0,0,0
+242,Elf Lala,99,4,7,Bolt,2,255,0,0,0,0
+242,Elf Lala,100,4,15,Arrows,0,255,0,0,0,0
+242,Elf Lala,101,4,15,Arrows,1,255,0,0,0,0
+242,Elf Lala,102,4,15,Arrows,2,255,0,0,0,0
+243,Eo the Craftsman,0,7,13,Spirit Helm,3,38,0,1,1,0
+243,Eo the Craftsman,2,8,13,Spirit Armor,3,38,0,1,1,0
+243,Eo the Craftsman,4,9,13,Spirit Pants,3,38,0,1,1,0
+243,Eo the Craftsman,6,10,13,Spirit Gloves,3,38,0,1,1,0
+243,Eo the Craftsman,16,11,13,Spirit Boots,3,38,0,1,1,0
+243,Eo the Craftsman,18,7,14,Guardian Helm,3,45,0,1,1,0
+243,Eo the Craftsman,20,8,14,Guardian Armor,3,45,0,1,1,0
+243,Eo the Craftsman,22,9,14,Guardian Pants,3,45,0,1,1,0
+243,Eo the Craftsman,32,10,14,Guardian Gloves,3,45,0,1,1,0
+243,Eo the Craftsman,34,11,14,Guardian Boots,3,45,0,1,1,0
+243,Eo the Craftsman,36,4,8,Crossbow,1,22,1,1,1,0
+243,Eo the Craftsman,38,4,9,Golden Crossbow,3,26,1,1,1,0
+243,Eo the Craftsman,48,4,0,Short Bow,0,20,1,1,1,0
+243,Eo the Craftsman,50,4,1,Bow,0,24,1,1,1,0
+243,Eo the Craftsman,52,4,2,Elven Bow,2,28,1,1,1,0
+243,Eo the Craftsman,54,4,3,Battle Bow,3,36,1,1,1,0
+243,Eo the Craftsman,72,4,11,Light Crossbow,3,40,1,1,1,0
+243,Eo the Craftsman,74,4,4,Tiger Bow,3,43,1,1,1,0
+243,Eo the Craftsman,76,4,10,Arquebus,3,31,1,1,1,0
+243,Eo the Craftsman,78,6,3,Elven Shield,3,36,0,1,2,0
+244,Caren the Barmaid,0,14,9,Ale,0,1,0,0,0,0
+244,Caren the Barmaid,1,14,10,Town Portal Scroll,0,1,0,0,0,0
+244,Caren the Barmaid,2,13,16,Scroll of Archangel,1,1,0,0,0,0
+244,Caren the Barmaid,3,13,16,Scroll of Archangel,2,1,0,0,0,0
+244,Caren the Barmaid,4,13,17,Blood Bone,1,1,0,0,0,0
+244,Caren the Barmaid,5,13,17,Blood Bone,2,1,0,0,0,0
+244,Caren the Barmaid,6,14,17,Devil's Eye,1,1,0,0,0,0
+244,Caren the Barmaid,7,14,17,Devil's Eye,2,1,0,0,0,0
+244,Caren the Barmaid,14,14,18,Devil's Key,1,1,0,0,0,0
+244,Caren the Barmaid,15,14,18,Devil's Key,2,1,0,0,0,0
+244,Caren the Barmaid,16,13,29,Armor of Guardsman,0,1,0,0,0,0
+245,Izabel The Wizard,0,14,0,Apple,0,1,0,0,0,0
+245,Izabel The Wizard,1,14,1,Small Healing Potion,0,1,0,0,0,0
+245,Izabel The Wizard,2,14,2,Medium Healing Potion,0,1,0,0,0,0
+245,Izabel The Wizard,3,14,3,Large Healing Potion,0,1,0,0,0,0
+245,Izabel The Wizard,4,14,4,Small Mana Potion,0,1,0,0,0,0
+245,Izabel The Wizard,5,14,5,Medium Mana Potion,0,1,0,0,0,0
+245,Izabel The Wizard,6,14,6,Large Mana Potion,0,1,0,0,0,0
+245,Izabel The Wizard,7,14,8,Antidote,0,1,0,0,0,0
+245,Izabel The Wizard,8,14,0,Apple,0,3,0,0,0,0
+245,Izabel The Wizard,9,14,1,Small Healing Potion,0,3,0,0,0,0
+245,Izabel The Wizard,10,14,2,Medium Healing Potion,0,3,0,0,0,0
+245,Izabel The Wizard,11,14,3,Large Healing Potion,0,3,0,0,0,0
+245,Izabel The Wizard,12,14,4,Small Mana Potion,0,3,0,0,0,0
+245,Izabel The Wizard,13,14,5,Medium Mana Potion,0,3,0,0,0,0
+245,Izabel The Wizard,14,14,6,Large Mana Potion,0,3,0,0,0,0
+245,Izabel The Wizard,15,14,8,Antidote,0,3,0,0,0,0
+245,Izabel The Wizard,16,14,0,Apple,1,1,0,0,0,0
+245,Izabel The Wizard,17,14,1,Small Healing Potion,1,1,0,0,0,0
+245,Izabel The Wizard,18,14,2,Medium Healing Potion,1,1,0,0,0,0
+245,Izabel The Wizard,19,14,3,Large Healing Potion,1,1,0,0,0,0
+245,Izabel The Wizard,20,14,0,Apple,1,3,0,0,0,0
+245,Izabel The Wizard,21,14,1,Small Healing Potion,1,3,0,0,0,0
+245,Izabel The Wizard,22,14,2,Medium Healing Potion,1,3,0,0,0,0
+245,Izabel The Wizard,23,14,3,Large Healing Potion,1,3,0,0,0,0
+245,Izabel The Wizard,24,7,3,Legendary Helm,3,42,0,1,1,0
+245,Izabel The Wizard,26,8,3,Legendary Armor,3,42,0,1,1,0
+245,Izabel The Wizard,28,9,3,Legendary Pants,3,42,0,1,1,0
+245,Izabel The Wizard,30,10,3,Legendary Gloves,3,42,0,1,1,0
+245,Izabel The Wizard,40,11,3,Legendary Boots,3,42,0,1,1,0
+245,Izabel The Wizard,42,13,29,Armor of Guardsman,0,1,0,0,0,0
+245,Izabel The Wizard,44,14,10,Town Portal Scroll,0,1,0,0,0,0
+245,Izabel The Wizard,45,4,7,Bolt,0,255,0,0,0,0
+245,Izabel The Wizard,46,4,7,Bolt,1,255,0,0,0,0
+245,Izabel The Wizard,47,4,7,Bolt,2,255,0,0,0,0
+245,Izabel The Wizard,53,4,15,Arrows,0,255,0,0,0,0
+245,Izabel The Wizard,54,4,15,Arrows,1,255,0,0,0,0
+245,Izabel The Wizard,55,4,15,Arrows,2,255,0,0,0,0
+245,Izabel The Wizard,56,5,4,Gorgon Staff,3,65,0,1,1,0
+245,Izabel The Wizard,58,5,5,Legendary Staff,3,66,0,1,1,0
+245,Izabel The Wizard,59,6,14,Legendary Shield,3,50,0,1,2,0
+245,Izabel The Wizard,61,15,4,Scroll of Flame,0,1,0,0,0,0
+245,Izabel The Wizard,62,15,7,Scroll of Twister,0,1,0,0,0,0
+246,Zienna The Weapons Merchant,0,7,1,Dragon Helm,3,68,0,1,1,0
+246,Zienna The Weapons Merchant,2,8,1,Dragon Armor,3,68,0,1,1,0
+246,Zienna The Weapons Merchant,4,9,1,Dragon Pants,3,68,0,1,1,0
+246,Zienna The Weapons Merchant,6,10,1,Dragon Gloves,3,68,0,1,1,0
+246,Zienna The Weapons Merchant,16,11,1,Dragon Boots,3,68,0,1,1,0
+246,Zienna The Weapons Merchant,20,0,9,Sword of Salamander,3,40,1,1,1,0
+246,Zienna The Weapons Merchant,22,0,11,Legendary Sword,3,54,1,1,1,0
+246,Zienna The Weapons Merchant,26,0,15,Giant Sword,3,60,1,1,1,0
+246,Zienna The Weapons Merchant,32,0,13,Double Blade,3,43,1,1,1,0
+246,Zienna The Weapons Merchant,33,0,14,Lighting Sword,3,50,1,1,1,0
+246,Zienna The Weapons Merchant,44,0,12,Heliacal Sword,3,66,1,1,1,0
+246,Zienna The Weapons Merchant,46,4,12,Serpent Crossbow,3,45,1,1,1,0
+246,Zienna The Weapons Merchant,50,3,8,Great Scythe,3,68,1,1,1,0
+246,Zienna The Weapons Merchant,56,3,9,Bill of Balrog,3,74,1,1,1,0
+246,Zienna The Weapons Merchant,68,4,5,Silver Bow,3,48,1,1,1,0
+246,Zienna The Weapons Merchant,70,4,13,Bluewing Crossbow,3,56,1,1,1,0
+248,Wandering Merchant Martin,0,7,5,Leather Helm,0,30,0,1,1,0
+248,Wandering Merchant Martin,2,7,0,Bronze Helm,2,34,0,1,1,0
+248,Wandering Merchant Martin,4,7,6,Scale Helm,3,40,0,1,1,0
+248,Wandering Merchant Martin,6,7,8,Brass Helm,3,44,0,1,1,0
+248,Wandering Merchant Martin,16,8,5,Leather Armor,0,30,0,1,1,0
+248,Wandering Merchant Martin,18,8,0,Bronze Armor,2,34,0,1,1,0
+248,Wandering Merchant Martin,20,8,6,Scale Armor,3,40,0,1,1,0
+248,Wandering Merchant Martin,22,8,8,Brass Armor,3,44,0,1,1,0
+248,Wandering Merchant Martin,34,9,0,Bronze Pants,2,34,0,1,1,0
+248,Wandering Merchant Martin,36,9,6,Scale Pants,3,40,0,1,1,0
+248,Wandering Merchant Martin,38,9,8,Brass Pants,3,44,0,1,1,0
+248,Wandering Merchant Martin,40,9,5,Leather Pants,0,30,0,1,1,0
+248,Wandering Merchant Martin,50,11,0,Bronze Boots,2,34,0,1,1,0
+248,Wandering Merchant Martin,52,11,6,Scale Boots,3,40,0,1,1,0
+248,Wandering Merchant Martin,54,11,8,Brass Boots,3,44,0,1,1,0
+248,Wandering Merchant Martin,56,11,5,Leather Boots,0,30,0,1,1,0
+248,Wandering Merchant Martin,66,10,0,Bronze Gloves,2,34,0,1,1,0
+248,Wandering Merchant Martin,68,10,6,Scale Gloves,3,40,0,1,1,0
+248,Wandering Merchant Martin,70,10,8,Brass Gloves,3,44,0,1,1,0
+248,Wandering Merchant Martin,72,10,5,Leather Gloves,0,30,0,1,1,0
+248,Wandering Merchant Martin,82,9,9,Plate Pants,3,50,0,1,1,0
+248,Wandering Merchant Martin,84,10,9,Plate Gloves,3,50,0,1,1,0
+248,Wandering Merchant Martin,88,7,9,Plate Helm,3,50,0,1,1,0
+248,Wandering Merchant Martin,98,11,9,Plate Boots,3,50,0,1,1,0
+248,Wandering Merchant Martin,104,8,9,Plate Armor,3,50,0,1,1,0
+250,Wandering Merchant Harold,0,7,5,Leather Helm,0,30,0,1,1,0
+250,Wandering Merchant Harold,2,7,0,Bronze Helm,2,34,0,1,1,0
+250,Wandering Merchant Harold,4,7,6,Scale Helm,3,40,0,1,1,0
+250,Wandering Merchant Harold,6,7,8,Brass Helm,3,44,0,1,1,0
+250,Wandering Merchant Harold,16,8,5,Leather Armor,0,30,0,1,1,0
+250,Wandering Merchant Harold,18,8,0,Bronze Armor,2,34,0,1,1,0
+250,Wandering Merchant Harold,20,8,6,Scale Armor,3,40,0,1,1,0
+250,Wandering Merchant Harold,22,8,8,Brass Armor,3,44,0,1,1,0
+250,Wandering Merchant Harold,34,9,0,Bronze Pants,2,34,0,1,1,0
+250,Wandering Merchant Harold,36,9,6,Scale Pants,3,40,0,1,1,0
+250,Wandering Merchant Harold,38,9,8,Brass Pants,3,44,0,1,1,0
+250,Wandering Merchant Harold,40,9,5,Leather Pants,0,30,0,1,1,0
+250,Wandering Merchant Harold,50,11,0,Bronze Boots,2,34,0,1,1,0
+250,Wandering Merchant Harold,52,11,6,Scale Boots,3,40,0,1,1,0
+250,Wandering Merchant Harold,54,11,8,Brass Boots,3,44,0,1,1,0
+250,Wandering Merchant Harold,56,11,5,Leather Boots,0,30,0,1,1,0
+250,Wandering Merchant Harold,66,10,0,Bronze Gloves,2,34,0,1,1,0
+250,Wandering Merchant Harold,68,10,6,Scale Gloves,3,40,0,1,1,0
+250,Wandering Merchant Harold,70,10,8,Brass Gloves,3,44,0,1,1,0
+250,Wandering Merchant Harold,72,10,5,Leather Gloves,0,30,0,1,1,0
+250,Wandering Merchant Harold,82,9,9,Plate Pants,3,50,0,1,1,0
+250,Wandering Merchant Harold,84,10,9,Plate Gloves,3,50,0,1,1,0
+250,Wandering Merchant Harold,88,7,9,Plate Helm,3,50,0,1,1,0
+250,Wandering Merchant Harold,98,11,9,Plate Boots,3,50,0,1,1,0
+250,Wandering Merchant Harold,104,8,9,Plate Armor,3,50,0,1,1,0
+251,Hanzo The Blacksmith,0,6,0,Small Shield,0,22,0,1,1,0
+251,Hanzo The Blacksmith,2,6,4,Buckler,1,24,1,1,1,0
+251,Hanzo The Blacksmith,4,6,1,Horn Shield,2,28,0,1,1,0
+251,Hanzo The Blacksmith,6,6,2,Kite Shield,3,32,0,1,1,0
+251,Hanzo The Blacksmith,16,6,6,Skull Shield,3,34,1,1,1,0
+251,Hanzo The Blacksmith,18,6,10,Big Round Shield,3,35,1,1,1,0
+251,Hanzo The Blacksmith,20,6,9,Plate Shield,3,38,1,1,1,0
+251,Hanzo The Blacksmith,22,6,7,Spiked Shield,3,40,1,1,1,0
+251,Hanzo The Blacksmith,32,6,5,Dragon Slayer Shield,3,44,1,1,1,0
+251,Hanzo The Blacksmith,34,6,8,Tower Shield,3,46,1,1,1,0
+251,Hanzo The Blacksmith,36,6,11,Serpent Shield,3,48,1,1,1,0
+251,Hanzo The Blacksmith,38,6,12,Bronze Shield,3,52,1,1,1,0
+251,Hanzo The Blacksmith,48,0,1,Short Sword,0,22,0,1,1,0
+251,Hanzo The Blacksmith,49,1,1,Hand Axe,1,20,0,1,1,0
+251,Hanzo The Blacksmith,50,2,1,Morning Star,2,25,0,1,1,0
+251,Hanzo The Blacksmith,51,0,2,Rapier,2,23,0,1,1,0
+251,Hanzo The Blacksmith,52,1,2,Double Axe,2,26,0,1,1,0
+251,Hanzo The Blacksmith,53,0,4,Sword of Assassin,3,24,1,1,1,0
+251,Hanzo The Blacksmith,54,2,1,Morning Star,3,25,1,1,1,0
+251,Hanzo The Blacksmith,55,1,3,Tomahawk,3,28,1,1,1,0
+251,Hanzo The Blacksmith,72,0,0,Kris,2,20,0,1,1,0
+251,Hanzo The Blacksmith,73,0,6,Gladius,3,30,1,1,1,0
+251,Hanzo The Blacksmith,73,0,7,Falchion,3,34,1,1,1,0
+251,Hanzo The Blacksmith,74,0,8,Serpent Sword,3,36,0,1,1,0
+251,Hanzo The Blacksmith,75,0,5,Blade,3,39,1,1,1,0
+253,Potion Girl Amy,0,14,0,Apple,0,1,0,0,0,0
+253,Potion Girl Amy,1,14,1,Small Healing Potion,0,1,0,0,0,0
+253,Potion Girl Amy,2,14,2,Medium Healing Potion,0,1,0,0,0,0
+253,Potion Girl Amy,3,14,3,Large Healing Potion,0,1,0,0,0,0
+253,Potion Girl Amy,4,14,4,Small Mana Potion,0,1,0,0,0,0
+253,Potion Girl Amy,5,14,5,Medium Mana Potion,0,1,0,0,0,0
+253,Potion Girl Amy,6,14,6,Large Mana Potion,0,1,0,0,0,0
+253,Potion Girl Amy,7,14,8,Antidote,0,1,0,0,0,0
+253,Potion Girl Amy,8,14,0,Apple,0,3,0,0,0,0
+253,Potion Girl Amy,9,14,1,Small Healing Potion,0,3,0,0,0,0
+253,Potion Girl Amy,10,14,2,Medium Healing Potion,0,3,0,0,0,0
+253,Potion Girl Amy,11,14,3,Large Healing Potion,0,3,0,0,0,0
+253,Potion Girl Amy,12,14,4,Small Mana Potion,0,3,0,0,0,0
+253,Potion Girl Amy,13,14,5,Medium Mana Potion,0,3,0,0,0,0
+253,Potion Girl Amy,14,14,6,Large Mana Potion,0,3,0,0,0,0
+253,Potion Girl Amy,15,14,8,Antidote,0,3,0,0,0,0
+253,Potion Girl Amy,16,14,0,Apple,1,1,0,0,0,0
+253,Potion Girl Amy,17,14,1,Small Healing Potion,1,1,0,0,0,0
+253,Potion Girl Amy,18,14,2,Medium Healing Potion,1,1,0,0,0,0
+253,Potion Girl Amy,19,14,3,Large Healing Potion,1,1,0,0,0,0
+253,Potion Girl Amy,20,14,0,Apple,1,3,0,0,0,0
+253,Potion Girl Amy,21,14,1,Small Healing Potion,1,3,0,0,0,0
+253,Potion Girl Amy,22,14,2,Medium Healing Potion,1,3,0,0,0,0
+253,Potion Girl Amy,23,14,3,Large Healing Potion,1,3,0,0,0,0
+253,Potion Girl Amy,24,4,7,Bolt,0,255,0,0,0,0
+253,Potion Girl Amy,25,4,7,Bolt,1,255,0,0,0,0
+253,Potion Girl Amy,26,4,7,Bolt,2,255,0,0,0,0
+253,Potion Girl Amy,27,4,15,Arrows,0,255,0,0,0,0
+253,Potion Girl Amy,28,4,15,Arrows,1,255,0,0,0,0
+253,Potion Girl Amy,29,4,15,Arrows,2,255,0,0,0,0
+253,Potion Girl Amy,32,14,10,Town Portal Scroll,0,1,0,0,0,0
+253,Potion Girl Amy,33,13,29,Armor of Guardsman,0,1,0,0,0,0
+254,Pasi The Mage,0,15,3,Scroll of Fire Ball,0,1,0,0,0,0
+254,Pasi The Mage,1,15,10,Scroll of Power Wave,0,1,0,0,0,0
+254,Pasi The Mage,2,15,2,Scroll of Lighting,0,1,0,0,0,0
+254,Pasi The Mage,3,15,1,Scroll of Meteorite,0,1,0,0,0,0
+254,Pasi The Mage,4,15,5,Scroll of Teleport,0,1,0,0,0,0
+254,Pasi The Mage,5,15,6,Scroll of Ice,0,1,0,0,0,0
+254,Pasi The Mage,6,15,0,Scroll of Poison,0,1,0,0,0,0
+254,Pasi The Mage,7,12,13,Orb of Impale,0,1,0,0,0,0
+254,Pasi The Mage,15,12,7,Orb of Twisting Slash,0,1,0,0,0,0
+254,Pasi The Mage,16,7,2,Pad Helm,0,28,0,1,1,0
+254,Pasi The Mage,18,7,4,Bone Helm,2,30,0,1,1,0
+254,Pasi The Mage,20,7,7,Sphinx Mask,3,36,0,1,1,0
+254,Pasi The Mage,22,5,0,Skull Staff,0,20,0,1,1,0
+254,Pasi The Mage,32,8,2,Pad Armor,0,28,0,1,1,0
+254,Pasi The Mage,34,8,4,Bone Armor,2,30,0,1,1,0
+254,Pasi The Mage,36,8,7,Sphinx Armor,3,36,0,1,1,0
+254,Pasi The Mage,46,5,1,Angelic Staff,2,38,0,1,1,0
+254,Pasi The Mage,48,9,2,Pad Pants,0,28,0,1,1,0
+254,Pasi The Mage,50,9,4,Bone Pants,2,30,0,1,1,0
+254,Pasi The Mage,60,9,7,Sphinx Pants,3,36,0,1,1,0
+254,Pasi The Mage,64,11,2,Pad Boots,0,28,0,1,1,0
+254,Pasi The Mage,66,11,4,Bone Boots,2,30,0,1,1,0
+254,Pasi The Mage,70,5,2,Serpent Staff,3,50,0,1,1,0
+254,Pasi The Mage,76,11,7,Sphinx Boots,3,36,0,1,1,0
+254,Pasi The Mage,80,10,2,Pad Gloves,0,28,0,1,1,0
+254,Pasi The Mage,82,10,4,Bone Gloves,2,30,0,1,1,0
+254,Pasi The Mage,92,10,7,Sphinx Gloves,3,36,0,1,1,0
+254,Pasi The Mage,94,5,3,Thunder Staff,3,60,0,1,1,0
+255,Lumen the Barmaid,0,13,17,Blood Bone,1,1,0,0,0,0
+255,Lumen the Barmaid,1,13,17,Blood Bone,2,1,0,0,0,0
+255,Lumen the Barmaid,2,13,17,Blood Bone,3,1,0,0,0,0
+255,Lumen the Barmaid,3,13,17,Blood Bone,4,1,0,0,0,0
+255,Lumen the Barmaid,4,13,17,Blood Bone,5,1,0,0,0,0
+255,Lumen the Barmaid,5,13,17,Blood Bone,6,1,0,0,0,0
+255,Lumen the Barmaid,6,13,17,Blood Bone,7,1,0,0,0,0
+255,Lumen the Barmaid,7,13,17,Blood Bone,8,1,0,0,0,0
+255,Lumen the Barmaid,16,13,16,Scroll of Archangel,1,1,0,0,0,0
+255,Lumen the Barmaid,17,13,16,Scroll of Archangel,2,1,0,0,0,0
+255,Lumen the Barmaid,18,13,16,Scroll of Archangel,3,1,0,0,0,0
+255,Lumen the Barmaid,19,13,16,Scroll of Archangel,4,1,0,0,0,0
+255,Lumen the Barmaid,20,13,16,Scroll of Archangel,5,1,0,0,0,0
+255,Lumen the Barmaid,21,13,16,Scroll of Archangel,6,1,0,0,0,0
+255,Lumen the Barmaid,22,13,16,Scroll of Archangel,7,1,0,0,0,0
+255,Lumen the Barmaid,23,13,16,Scroll of Archangel,8,1,0,0,0,0
+255,Lumen the Barmaid,32,14,17,Devil's Eye,1,1,0,0,0,0
+255,Lumen the Barmaid,33,14,17,Devil's Eye,2,1,0,0,0,0
+255,Lumen the Barmaid,34,14,17,Devil's Eye,3,1,0,0,0,0
+255,Lumen the Barmaid,35,14,17,Devil's Eye,4,1,0,0,0,0
+255,Lumen the Barmaid,36,14,17,Devil's Eye,5,1,0,0,0,0
+255,Lumen the Barmaid,37,14,17,Devil's Eye,6,1,0,0,0,0
+255,Lumen the Barmaid,38,14,17,Devil's Eye,7,1,0,0,0,0
+255,Lumen the Barmaid,39,14,10,Town Portal Scroll,0,1,0,0,0,0
+255,Lumen the Barmaid,40,14,18,Devil's Key,1,1,0,0,0,0
+255,Lumen the Barmaid,41,14,18,Devil's Key,2,1,0,0,0,0
+255,Lumen the Barmaid,42,14,18,Devil's Key,3,1,0,0,0,0
+255,Lumen the Barmaid,43,14,18,Devil's Key,4,1,0,0,0,0
+255,Lumen the Barmaid,44,14,18,Devil's Key,5,1,0,0,0,0
+255,Lumen the Barmaid,45,14,18,Devil's Key,6,1,0,0,0,0
+255,Lumen the Barmaid,46,14,18,Devil's Key,7,1,0,0,0,0
+255,Lumen the Barmaid,48,13,50,Scroll of Blood,1,1,0,0,0,0
+255,Lumen the Barmaid,49,13,50,Scroll of Blood,2,1,0,0,0,0
+255,Lumen the Barmaid,50,13,50,Scroll of Blood,3,1,0,0,0,0
+255,Lumen the Barmaid,51,13,50,Scroll of Blood,4,1,0,0,0,0
+255,Lumen the Barmaid,52,13,50,Scroll of Blood,5,1,0,0,0,0
+255,Lumen the Barmaid,53,13,49,Old Scroll,1,1,0,0,0,0
+255,Lumen the Barmaid,54,13,49,Old Scroll,2,1,0,0,0,0
+255,Lumen the Barmaid,55,13,49,Old Scroll,3,1,0,0,0,0
+255,Lumen the Barmaid,58,13,50,Scroll of Blood,6,1,0,0,0,0
+255,Lumen the Barmaid,61,13,49,Old Scroll,4,1,0,0,0,0
+255,Lumen the Barmaid,62,13,49,Old Scroll,5,1,0,0,0,0
+255,Lumen the Barmaid,63,13,49,Old Scroll,6,1,0,0,0,0
+255,Lumen the Barmaid,64,14,9,Ale,0,1,0,0,0,0
+255,Lumen the Barmaid,65,13,29,Armor of Guardsman,0,1,0,0,0,0
+259,Oracle Layla,0,14,0,Apple,0,1,0,0,0,0
+259,Oracle Layla,1,14,1,Small Healing Potion,0,1,0,0,0,0
+259,Oracle Layla,2,14,2,Medium Healing Potion,0,1,0,0,0,0
+259,Oracle Layla,3,14,3,Large Healing Potion,0,1,0,0,0,0
+259,Oracle Layla,4,14,4,Small Mana Potion,0,1,0,0,0,0
+259,Oracle Layla,5,14,5,Medium Mana Potion,0,1,0,0,0,0
+259,Oracle Layla,6,14,6,Large Mana Potion,0,1,0,0,0,0
+259,Oracle Layla,7,14,8,Antidote,0,1,0,0,0,0
+259,Oracle Layla,8,14,0,Apple,0,3,0,0,0,0
+259,Oracle Layla,9,14,1,Small Healing Potion,0,3,0,0,0,0
+259,Oracle Layla,10,14,2,Medium Healing Potion,0,3,0,0,0,0
+259,Oracle Layla,11,14,3,Large Healing Potion,0,3,0,0,0,0
+259,Oracle Layla,12,14,4,Small Mana Potion,0,3,0,0,0,0
+259,Oracle Layla,13,14,5,Medium Mana Potion,0,3,0,0,0,0
+259,Oracle Layla,14,14,6,Large Mana Potion,0,3,0,0,0,0
+259,Oracle Layla,15,14,8,Antidote,0,3,0,0,0,0
+259,Oracle Layla,16,14,0,Apple,1,1,0,0,0,0
+259,Oracle Layla,17,14,1,Small Healing Potion,1,1,0,0,0,0
+259,Oracle Layla,18,14,2,Medium Healing Potion,1,1,0,0,0,0
+259,Oracle Layla,19,14,3,Large Healing Potion,1,1,0,0,0,0
+259,Oracle Layla,20,14,0,Apple,1,3,0,0,0,0
+259,Oracle Layla,21,14,1,Small Healing Potion,1,3,0,0,0,0
+259,Oracle Layla,22,14,2,Medium Healing Potion,1,3,0,0,0,0
+259,Oracle Layla,23,14,3,Large Healing Potion,1,3,0,0,0,0
+259,Oracle Layla,24,4,7,Bolt,0,255,0,0,0,0
+259,Oracle Layla,25,4,7,Bolt,1,255,0,0,0,0
+259,Oracle Layla,26,4,7,Bolt,2,255,0,0,0,0
+259,Oracle Layla,27,4,15,Arrows,0,255,0,0,0,0
+259,Oracle Layla,28,4,15,Arrows,1,255,0,0,0,0
+259,Oracle Layla,29,4,15,Arrows,2,255,0,0,0,0
+259,Oracle Layla,32,14,10,Town Portal Scroll,0,1,0,0,0,0
+259,Oracle Layla,33,13,29,Armor of Guardsman,0,1,0,0,0,0
+376,Pamela the Supplier,0,14,0,Apple,0,1,0,0,0,0
+376,Pamela the Supplier,1,14,1,Small Healing Potion,0,1,0,0,0,0
+376,Pamela the Supplier,2,14,2,Medium Healing Potion,0,1,0,0,0,0
+376,Pamela the Supplier,3,14,3,Large Healing Potion,0,1,0,0,0,0
+376,Pamela the Supplier,4,14,4,Small Mana Potion,0,1,0,0,0,0
+376,Pamela the Supplier,5,14,5,Medium Mana Potion,0,1,0,0,0,0
+376,Pamela the Supplier,6,14,6,Large Mana Potion,0,1,0,0,0,0
+376,Pamela the Supplier,7,14,8,Antidote,0,1,0,0,0,0
+376,Pamela the Supplier,8,14,0,Apple,0,3,0,0,0,0
+376,Pamela the Supplier,9,14,1,Small Healing Potion,0,3,0,0,0,0
+376,Pamela the Supplier,10,14,2,Medium Healing Potion,0,3,0,0,0,0
+376,Pamela the Supplier,11,14,3,Large Healing Potion,0,3,0,0,0,0
+376,Pamela the Supplier,12,14,4,Small Mana Potion,0,3,0,0,0,0
+376,Pamela the Supplier,13,14,5,Medium Mana Potion,0,3,0,0,0,0
+376,Pamela the Supplier,14,14,6,Large Mana Potion,0,3,0,0,0,0
+376,Pamela the Supplier,15,14,8,Antidote,0,3,0,0,0,0
+376,Pamela the Supplier,16,14,0,Apple,1,1,0,0,0,0
+376,Pamela the Supplier,17,14,1,Small Healing Potion,1,1,0,0,0,0
+376,Pamela the Supplier,18,14,2,Medium Healing Potion,1,1,0,0,0,0
+376,Pamela the Supplier,19,14,3,Large Healing Potion,1,1,0,0,0,0
+376,Pamela the Supplier,20,14,0,Apple,1,3,0,0,0,0
+376,Pamela the Supplier,21,14,1,Small Healing Potion,1,3,0,0,0,0
+376,Pamela the Supplier,22,14,2,Medium Healing Potion,1,3,0,0,0,0
+376,Pamela the Supplier,23,14,3,Large Healing Potion,1,3,0,0,0,0
+376,Pamela the Supplier,24,4,7,Bolt,0,255,0,0,0,0
+376,Pamela the Supplier,25,4,7,Bolt,1,255,0,0,0,0
+376,Pamela the Supplier,26,4,7,Bolt,2,255,0,0,0,0
+376,Pamela the Supplier,27,4,15,Arrows,0,255,0,0,0,0
+376,Pamela the Supplier,28,4,15,Arrows,1,255,0,0,0,0
+376,Pamela the Supplier,29,4,15,Arrows,2,255,0,0,0,0
+376,Pamela the Supplier,32,14,10,Town Portal Scroll,0,1,0,0,0,0
+376,Pamela the Supplier,33,13,29,Armor of Guardsman,0,1,0,0,0,0
+377,Angela the Supplier,0,14,0,Apple,0,1,0,0,0,0
+377,Angela the Supplier,1,14,1,Small Healing Potion,0,1,0,0,0,0
+377,Angela the Supplier,2,14,2,Medium Healing Potion,0,1,0,0,0,0
+377,Angela the Supplier,3,14,3,Large Healing Potion,0,1,0,0,0,0
+377,Angela the Supplier,4,14,4,Small Mana Potion,0,1,0,0,0,0
+377,Angela the Supplier,5,14,5,Medium Mana Potion,0,1,0,0,0,0
+377,Angela the Supplier,6,14,6,Large Mana Potion,0,1,0,0,0,0
+377,Angela the Supplier,7,14,8,Antidote,0,1,0,0,0,0
+377,Angela the Supplier,8,14,0,Apple,0,3,0,0,0,0
+377,Angela the Supplier,9,14,1,Small Healing Potion,0,3,0,0,0,0
+377,Angela the Supplier,10,14,2,Medium Healing Potion,0,3,0,0,0,0
+377,Angela the Supplier,11,14,3,Large Healing Potion,0,3,0,0,0,0
+377,Angela the Supplier,12,14,4,Small Mana Potion,0,3,0,0,0,0
+377,Angela the Supplier,13,14,5,Medium Mana Potion,0,3,0,0,0,0
+377,Angela the Supplier,14,14,6,Large Mana Potion,0,3,0,0,0,0
+377,Angela the Supplier,15,14,8,Antidote,0,3,0,0,0,0
+377,Angela the Supplier,16,14,0,Apple,1,1,0,0,0,0
+377,Angela the Supplier,17,14,1,Small Healing Potion,1,1,0,0,0,0
+377,Angela the Supplier,18,14,2,Medium Healing Potion,1,1,0,0,0,0
+377,Angela the Supplier,19,14,3,Large Healing Potion,1,1,0,0,0,0
+377,Angela the Supplier,20,14,0,Apple,1,3,0,0,0,0
+377,Angela the Supplier,21,14,1,Small Healing Potion,1,3,0,0,0,0
+377,Angela the Supplier,22,14,2,Medium Healing Potion,1,3,0,0,0,0
+377,Angela the Supplier,23,14,3,Large Healing Potion,1,3,0,0,0,0
+377,Angela the Supplier,24,4,7,Bolt,0,255,0,0,0,0
+377,Angela the Supplier,25,4,7,Bolt,1,255,0,0,0,0
+377,Angela the Supplier,26,4,7,Bolt,2,255,0,0,0,0
+377,Angela the Supplier,27,4,15,Arrows,0,255,0,0,0,0
+377,Angela the Supplier,28,4,15,Arrows,1,255,0,0,0,0
+377,Angela the Supplier,29,4,15,Arrows,2,255,0,0,0,0
+377,Angela the Supplier,32,14,10,Town Portal Scroll,0,1,0,0,0,0
+377,Angela the Supplier,33,13,29,Armor of Guardsman,0,1,0,0,0,0
+379,Fireworks Girl,0,7,39,Mistery Helm,2,36,0,1,1,0
+379,Fireworks Girl,2,8,39,Mistery Armor,2,36,0,1,1,0
+379,Fireworks Girl,4,9,39,Mistery Pants,2,36,0,1,1,0
+379,Fireworks Girl,6,10,39,Mistery Gloves,2,36,0,1,1,0
+379,Fireworks Girl,16,11,39,Mistery Boots,2,36,0,1,1,0
+379,Fireworks Girl,18,7,40,Red Wing Helm,3,42,0,1,1,0
+379,Fireworks Girl,20,8,40,Red Wing Armor,3,42,0,1,1,0
+379,Fireworks Girl,22,9,40,Red Wing Pants,3,42,0,1,1,0
+379,Fireworks Girl,32,10,40,Red Wing Gloves,3,42,0,1,1,0
+379,Fireworks Girl,34,11,40,Red Wing Boots,3,42,0,1,1,0
+379,Fireworks Girl,36,1,0,Small Axe,1,18,0,1,1,0
+379,Fireworks Girl,37,0,1,Short Sword,0,22,0,1,1,0
+379,Fireworks Girl,38,1,1,Hand Axe,1,20,0,1,1,0
+379,Fireworks Girl,39,0,2,Rapier,2,23,0,1,1,0
+379,Fireworks Girl,48,1,4,Elven Axe,1,32,0,1,1,0
+379,Fireworks Girl,49,0,0,Kris,1,20,0,1,1,0
+379,Fireworks Girl,50,5,0,Skull Staff,1,20,0,1,1,0
+379,Fireworks Girl,51,5,14,Mistery Stick,1,50,0,1,1,0
+379,Fireworks Girl,60,5,15,Violent Wind Stick,2,60,0,1,1,0
+379,Fireworks Girl,61,5,16,Red Wing Stick,3,65,0,1,1,0
+415,Silvia,0,15,3,Scroll of Fire Ball,0,1,0,0,0,0
+415,Silvia,1,15,10,Scroll of Power Wave,0,1,0,0,0,0
+415,Silvia,2,15,1,Scroll of Meteorite,0,1,0,0,0,0
+415,Silvia,3,15,6,Scroll of Ice,0,1,0,0,0,0
+415,Silvia,4,15,20,Drain Life Parchment,0,1,0,0,0,0
+416,Rhea,0,14,0,Apple,0,1,0,0,0,0
+416,Rhea,1,14,1,Small Healing Potion,0,1,0,0,0,0
+416,Rhea,2,14,2,Medium Healing Potion,0,1,0,0,0,0
+416,Rhea,3,14,3,Large Healing Potion,0,1,0,0,0,0
+416,Rhea,4,14,4,Small Mana Potion,0,1,0,0,0,0
+416,Rhea,5,14,5,Medium Mana Potion,0,1,0,0,0,0
+416,Rhea,6,14,6,Large Mana Potion,0,1,0,0,0,0
+416,Rhea,7,14,8,Antidote,0,1,0,0,0,0
+416,Rhea,8,14,0,Apple,0,3,0,0,0,0
+416,Rhea,9,14,1,Small Healing Potion,0,3,0,0,0,0
+416,Rhea,10,14,2,Medium Healing Potion,0,3,0,0,0,0
+416,Rhea,11,14,3,Large Healing Potion,0,3,0,0,0,0
+416,Rhea,12,14,4,Small Mana Potion,0,3,0,0,0,0
+416,Rhea,13,14,5,Medium Mana Potion,0,3,0,0,0,0
+416,Rhea,14,14,6,Large Mana Potion,0,3,0,0,0,0
+416,Rhea,15,14,8,Antidote,0,3,0,0,0,0
+416,Rhea,16,14,0,Apple,1,1,0,0,0,0
+416,Rhea,17,14,1,Small Healing Potion,1,1,0,0,0,0
+416,Rhea,18,14,2,Medium Healing Potion,1,1,0,0,0,0
+416,Rhea,19,14,3,Large Healing Potion,1,1,0,0,0,0
+416,Rhea,20,14,0,Apple,1,3,0,0,0,0
+416,Rhea,21,14,1,Small Healing Potion,1,3,0,0,0,0
+416,Rhea,22,14,2,Medium Healing Potion,1,3,0,0,0,0
+416,Rhea,23,14,3,Large Healing Potion,1,3,0,0,0,0
+416,Rhea,24,4,7,Bolt,0,255,0,0,0,0
+416,Rhea,25,4,7,Bolt,1,255,0,0,0,0
+416,Rhea,26,4,7,Bolt,2,255,0,0,0,0
+416,Rhea,27,4,15,Arrows,0,255,0,0,0,0
+416,Rhea,28,4,15,Arrows,1,255,0,0,0,0
+416,Rhea,29,4,15,Arrows,2,255,0,0,0,0
+416,Rhea,32,14,10,Town Portal Scroll,0,1,0,0,0,0
+416,Rhea,33,13,29,Armor of Guardsman,0,1,0,0,0,0
+417,Marce,0,0,16,Sword of Destruction,3,84,0,1,3,0
+417,Marce,1,2,8,Battle Scepter,3,40,1,1,3,0
+417,Marce,2,2,9,Master Scepter,3,45,1,1,3,0
+417,Marce,3,4,14,Aquagold Crossbow,3,60,1,1,3,0
+417,Marce,5,4,16,Saint Crossbow,3,72,1,1,3,0
+417,Marce,7,5,6,Staff of Resurrection,3,70,0,1,3,0
+545,Christine the General Goods Merchant,0,14,0,Apple,0,1,0,0,0,0
+545,Christine the General Goods Merchant,1,14,1,Small Healing Potion,0,1,0,0,0,0
+545,Christine the General Goods Merchant,2,14,2,Medium Healing Potion,0,1,0,0,0,0
+545,Christine the General Goods Merchant,3,14,3,Large Healing Potion,0,1,0,0,0,0
+545,Christine the General Goods Merchant,4,14,4,Small Mana Potion,0,1,0,0,0,0
+545,Christine the General Goods Merchant,5,14,5,Medium Mana Potion,0,1,0,0,0,0
+545,Christine the General Goods Merchant,6,14,6,Large Mana Potion,0,1,0,0,0,0
+545,Christine the General Goods Merchant,7,14,8,Antidote,0,1,0,0,0,0
+545,Christine the General Goods Merchant,8,14,0,Apple,0,3,0,0,0,0
+545,Christine the General Goods Merchant,9,14,1,Small Healing Potion,0,3,0,0,0,0
+545,Christine the General Goods Merchant,10,14,2,Medium Healing Potion,0,3,0,0,0,0
+545,Christine the General Goods Merchant,11,14,3,Large Healing Potion,0,3,0,0,0,0
+545,Christine the General Goods Merchant,12,14,4,Small Mana Potion,0,3,0,0,0,0
+545,Christine the General Goods Merchant,13,14,5,Medium Mana Potion,0,3,0,0,0,0
+545,Christine the General Goods Merchant,14,14,6,Large Mana Potion,0,3,0,0,0,0
+545,Christine the General Goods Merchant,15,14,8,Antidote,0,3,0,0,0,0
+545,Christine the General Goods Merchant,16,14,0,Apple,1,1,0,0,0,0
+545,Christine the General Goods Merchant,17,14,1,Small Healing Potion,1,1,0,0,0,0
+545,Christine the General Goods Merchant,18,14,2,Medium Healing Potion,1,1,0,0,0,0
+545,Christine the General Goods Merchant,19,14,3,Large Healing Potion,1,1,0,0,0,0
+545,Christine the General Goods Merchant,20,14,0,Apple,1,3,0,0,0,0
+545,Christine the General Goods Merchant,21,14,1,Small Healing Potion,1,3,0,0,0,0
+545,Christine the General Goods Merchant,22,14,2,Medium Healing Potion,1,3,0,0,0,0
+545,Christine the General Goods Merchant,23,14,3,Large Healing Potion,1,3,0,0,0,0
+545,Christine the General Goods Merchant,24,4,7,Bolt,0,255,0,0,0,0
+545,Christine the General Goods Merchant,25,4,7,Bolt,1,255,0,0,0,0
+545,Christine the General Goods Merchant,26,4,7,Bolt,2,255,0,0,0,0
+545,Christine the General Goods Merchant,27,4,15,Arrows,0,255,0,0,0,0
+545,Christine the General Goods Merchant,28,4,15,Arrows,1,255,0,0,0,0
+545,Christine the General Goods Merchant,29,4,15,Arrows,2,255,0,0,0,0
+545,Christine the General Goods Merchant,32,14,10,Town Portal Scroll,0,1,0,0,0,0
+545,Christine the General Goods Merchant,33,13,29,Armor of Guardsman,0,1,0,0,0,0
+577,Leina the General Goods Merchant,0,14,0,Apple,0,1,0,0,0,0
+577,Leina the General Goods Merchant,1,14,1,Small Healing Potion,0,1,0,0,0,0
+577,Leina the General Goods Merchant,2,14,2,Medium Healing Potion,0,1,0,0,0,0
+577,Leina the General Goods Merchant,3,14,3,Large Healing Potion,0,1,0,0,0,0
+577,Leina the General Goods Merchant,4,14,4,Small Mana Potion,0,1,0,0,0,0
+577,Leina the General Goods Merchant,5,14,5,Medium Mana Potion,0,1,0,0,0,0
+577,Leina the General Goods Merchant,6,14,6,Large Mana Potion,0,1,0,0,0,0
+577,Leina the General Goods Merchant,7,14,8,Antidote,0,1,0,0,0,0
+577,Leina the General Goods Merchant,8,14,0,Apple,0,3,0,0,0,0
+577,Leina the General Goods Merchant,9,14,1,Small Healing Potion,0,3,0,0,0,0
+577,Leina the General Goods Merchant,10,14,2,Medium Healing Potion,0,3,0,0,0,0
+577,Leina the General Goods Merchant,11,14,3,Large Healing Potion,0,3,0,0,0,0
+577,Leina the General Goods Merchant,12,14,4,Small Mana Potion,0,3,0,0,0,0
+577,Leina the General Goods Merchant,13,14,5,Medium Mana Potion,0,3,0,0,0,0
+577,Leina the General Goods Merchant,14,14,6,Large Mana Potion,0,3,0,0,0,0
+577,Leina the General Goods Merchant,15,14,8,Antidote,0,3,0,0,0,0
+577,Leina the General Goods Merchant,16,14,0,Apple,1,1,0,0,0,0
+577,Leina the General Goods Merchant,17,14,1,Small Healing Potion,1,1,0,0,0,0
+577,Leina the General Goods Merchant,18,14,2,Medium Healing Potion,1,1,0,0,0,0
+577,Leina the General Goods Merchant,19,14,3,Large Healing Potion,1,1,0,0,0,0
+577,Leina the General Goods Merchant,20,14,0,Apple,1,3,0,0,0,0
+577,Leina the General Goods Merchant,21,14,1,Small Healing Potion,1,3,0,0,0,0
+577,Leina the General Goods Merchant,22,14,2,Medium Healing Potion,1,3,0,0,0,0
+577,Leina the General Goods Merchant,23,14,3,Large Healing Potion,1,3,0,0,0,0
+577,Leina the General Goods Merchant,24,4,7,Bolt,0,255,0,0,0,0
+577,Leina the General Goods Merchant,25,4,7,Bolt,1,255,0,0,0,0
+577,Leina the General Goods Merchant,26,4,7,Bolt,2,255,0,0,0,0
+577,Leina the General Goods Merchant,27,4,15,Arrows,0,255,0,0,0,0
+577,Leina the General Goods Merchant,28,4,15,Arrows,1,255,0,0,0,0
+577,Leina the General Goods Merchant,29,4,15,Arrows,2,255,0,0,0,0
+577,Leina the General Goods Merchant,32,14,10,Town Portal Scroll,0,1,0,0,0,0
+577,Leina the General Goods Merchant,33,13,29,Armor of Guardsman,0,1,0,0,0,0
+578,Weapons Merchant Bolo,0,0,16,Sword of Destruction,3,84,0,1,3,0
+578,Weapons Merchant Bolo,1,2,8,Battle Scepter,3,40,1,1,3,0
+578,Weapons Merchant Bolo,2,2,9,Master Scepter,3,45,1,1,3,0
+578,Weapons Merchant Bolo,3,4,14,Aquagold Crossbow,3,60,1,1,3,0
+578,Weapons Merchant Bolo,5,4,16,Saint Crossbow,3,72,1,1,3,0
+578,Weapons Merchant Bolo,7,5,6,Staff of Resurrection,3,70,0,1,3,0
