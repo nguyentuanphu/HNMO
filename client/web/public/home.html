@@ -9,6 +9,8 @@
     <link rel="apple-touch-icon" href="/images/icon-192.png" />
     <title>{game}</title>
     <link rel="stylesheet" href="/home.css" />
+    <link rel="stylesheet" href="/website-server-guide.css" />
+    <script type="module" src="/js/websiteServerGuide.js"></script>
     <link rel="stylesheet" href="/website-themes.css" />
   </head>
   <body>
@@ -59,6 +61,7 @@
         <div class="hero-art" aria-hidden="true"></div>
         <div class="hero-content">
           <p class="eyebrow" data-t="eyebrow"></p>
+          <p class="server-hero-brand"><span data-game-name></span><span id="server-guide-season"></span></p>
           <h1 data-t="hero"></h1>
           <p class="intro" data-t="intro"></p>
           <div class="actions">
@@ -91,6 +94,7 @@
           <span id="updated"></span>
         </div>
       </section>
+      <section id="server-guide"></section>
       <section id="news">
         <div class="section-head">
           <div>

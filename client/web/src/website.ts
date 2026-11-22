@@ -1,3 +1,4 @@
+import { websiteEventTime } from "./websiteEventTime.js";
 import { loadWebsiteSettings } from "./websiteTheme.js";
 import { loadGameName, showCommunityLinks } from "./gameName.js";
 
@@ -287,6 +288,7 @@ const copy = {
     partUnavailable: "Unavailable right now.",
     detailsOffline: "Rankings, schedule and drops are unavailable: the server didn't answer. Nothing below is shown from memory.",
     yourTime: "Your local time",
+    eventTimes: "%s Sydney (%s your time)",
     accountNav: "Account",
     accountTitle: "Your game account.",
     registerTitle: "Create an account",
@@ -753,6 +755,7 @@ const copy = {
     partUnavailable: "Tạm thời chưa có.",
     detailsOffline: "Chưa lấy được xếp hạng, lịch và rơi đồ: máy chủ không trả lời. Không hiển thị số liệu cũ.",
     yourTime: "Giờ địa phương của bạn",
+    eventTimes: "%s giờ Sydney (%s giờ của bạn)",
     accountNav: "Tài khoản",
     accountTitle: "Tài khoản trò chơi của bạn.",
     registerTitle: "Tạo tài khoản",
@@ -1162,6 +1165,11 @@ function renderMaps(): void {
   }
   if (!maps.length) empty("maps");
 }
+function renderHeroSeason(world: WorldGroup | undefined): void {
+  const badge = document.getElementById("server-guide-season");
+  if (badge) { badge.textContent = world?.seasonBadge ?? ""; badge.hidden = !world?.seasonBadge; }
+}
+
 function render(): void {
   document.documentElement.lang = language;
   element("community").dataset.communityLinks = t("contact");
@@ -1255,6 +1263,7 @@ function render(): void {
   }
   select.value = selected;
   const matchedWorld = worlds.find((w) => w.servers.some((s) => String(s.id) === selected));
+  renderHeroSeason(matchedWorld);
   if (matchedWorld && !matchedWorld.isOpen) {
     element("notice").textContent = t("worldLockedNotice").replace("%s", matchedWorld.openingDateSydney || matchedWorld.openingDateUtc || "");
   }
@@ -1534,6 +1543,16 @@ function table(id: string, headers: [string, boolean][], rows: (string | number)
   }
 }
 
+function renderUpcomingEvent(event: UpcomingEvent): HTMLElement {
+  const slot = node("div", "", "slot");
+  const times = websiteEventTime(event.startsAt, language);
+  if (!times) { slot.append(node("p", t("partUnavailable"), "muted")); return slot; }
+  const time = node("time", fill(t("eventTimes"), times.sydney, times.visitor));
+  time.setAttribute("datetime", event.startsAt);
+  slot.append(time, node("span", language === "vi" ? event.nameVi : event.name));
+  return slot;
+}
+
 function renderDetails(): void {
   element("details-notice").textContent = details ? "" : t("detailsOffline");
   const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -1543,13 +1562,7 @@ function renderDetails(): void {
   const events = details?.upcoming?.find((entry) => String(entry.serverId) === selected)?.events ?? (details?.upcoming ? [] : null);
   if (events === null) upcomingTarget.append(node("p", details ? t("partUnavailable") : "", "muted"));
   else if (!events.length) upcomingTarget.append(node("p", t("noUpcoming"), "muted"));
-  for (const event of events ?? []) {
-    const slot = node("div", "", "slot");
-    const time = node("time", new Date(event.startsAt).toLocaleTimeString(language, { hour: "2-digit", minute: "2-digit" }));
-    time.setAttribute("datetime", event.startsAt);
-    slot.append(time, node("span", language === "vi" ? event.nameVi : event.name), node("small", new Date(event.startsAt).toLocaleDateString(language, { weekday: "short", day: "numeric", month: "short" })));
-    upcomingTarget.append(slot);
-  }
+  for (const event of events ?? []) upcomingTarget.append(renderUpcomingEvent(event));
   // Character ranking.
   const characters = details?.characters;
   if (characters === null || characters === undefined) table("ranking", [], [], details ? t("partUnavailable") : "");
