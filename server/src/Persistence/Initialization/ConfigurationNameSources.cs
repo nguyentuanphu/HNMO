@@ -26,6 +26,7 @@ public static class ConfigurationNameSources
         RegisterIfNeeded(nameof(MerchantNames), MerchantNames.ResourceManager);
         RegisterIfNeeded(nameof(MonsterNames), MonsterNames.ResourceManager);
         RegisterIfNeeded(nameof(ItemNames), ItemNames.ResourceManager);
+        RegisterIfNeeded(nameof(SeasonNineItemNames), SeasonNineItemNames.ResourceManager);
         RegisterIfNeeded(nameof(MiniGameNames), MiniGameNames.ResourceManager);
         RegisterIfNeeded(nameof(MiniGameDescriptions), MiniGameDescriptions.ResourceManager);
         RegisterIfNeeded(nameof(SkillNames), SkillNames.ResourceManager);

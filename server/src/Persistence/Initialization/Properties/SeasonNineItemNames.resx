@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="SonicBlade" xml:space="preserve"><value>Sonic Blade</value></data>
+  <data name="Asura" xml:space="preserve"><value>Asura</value></data>
+  <data name="CycloneSword" xml:space="preserve"><value>Cyclone Sword</value></data>
+  <data name="BlastBreak" xml:space="preserve"><value>Blast Break</value></data>
+  <data name="FrickLargeGlove" xml:space="preserve"><value>Frick Large Glove</value></data>
+  <data name="PandoraPickTwoHanded" xml:space="preserve"><value>Pandora Pick (two-handed)</value></data>
+  <data name="Thunderbolt" xml:space="preserve"><value>Thunderbolt</value></data>
+  <data name="HornOfSteal" xml:space="preserve"><value>Horn of Steal</value></data>
+  <data name="MagmusPeer" xml:space="preserve"><value>Magmus Peer</value></data>
+  <data name="AngelicBow" xml:space="preserve"><value>Angelic Bow</value></data>
+  <data name="DevilCrossbow" xml:space="preserve"><value>Devil Crossbow</value></data>
+  <data name="MiracleStaff" xml:space="preserve"><value>Miracle Staff</value></data>
+  <data name="SpiteStaff" xml:space="preserve"><value>Spite Staff</value></data>
+  <data name="LazyWindShield" xml:space="preserve"><value>Lazy Wind Shield</value></data>
+  <data name="LightLordShield" xml:space="preserve"><value>Light Lord Shield</value></data>
+  <data name="DarkDevilShield" xml:space="preserve"><value>Dark Devil Shield</value></data>
+  <data name="MagicKnightShield" xml:space="preserve"><value>Magic Knight Shield</value></data>
+  <data name="AmbitionShield" xml:space="preserve"><value>Ambition Shield</value></data>
+  <data name="LazyWindHelm" xml:space="preserve"><value>Lazy Wind Helm</value></data>
+  <data name="DarkDevilHelm" xml:space="preserve"><value>Dark Devil Helm</value></data>
+  <data name="StickyHelm" xml:space="preserve"><value>Sticky Helm</value></data>
+  <data name="AmbitionMask" xml:space="preserve"><value>Ambition Mask</value></data>
+  <data name="StormwingHelm" xml:space="preserve"><value>Stormwing Helm</value></data>
+  <data name="LightLordHelmet" xml:space="preserve"><value>Light Lord Helmet</value></data>
+  <data name="BloodyDragonHelm" xml:space="preserve"><value>Bloody Dragon Helm</value></data>
+  <data name="LazyWindArmor" xml:space="preserve"><value>Lazy Wind Armor</value></data>
+  <data name="DarkDevilArmor" xml:space="preserve"><value>Dark Devil Armor</value></data>
+  <data name="StickyArmor" xml:space="preserve"><value>Sticky Armor</value></data>
+  <data name="HellNightArmor" xml:space="preserve"><value>Hell Night Armor</value></data>
+  <data name="AmbitionArmor" xml:space="preserve"><value>Ambition Armor</value></data>
+  <data name="StormwingArmor" xml:space="preserve"><value>Stormwing Armor</value></data>
+  <data name="LightLordArmor" xml:space="preserve"><value>Light Lord Armor</value></data>
+  <data name="MagicKnightArmor" xml:space="preserve"><value>Magic Knight Armor</value></data>
+  <data name="BloodyDragonArmor" xml:space="preserve"><value>Bloody Dragon Armor</value></data>
+  <data name="LazyWindPants" xml:space="preserve"><value>Lazy Wind Pants</value></data>
+  <data name="DarkDevilPants" xml:space="preserve"><value>Dark Devil Pants</value></data>
+  <data name="StickyPants" xml:space="preserve"><value>Sticky Pants</value></data>
+  <data name="HellNightPants" xml:space="preserve"><value>Hell Night Pants</value></data>
+  <data name="AmbitionPants" xml:space="preserve"><value>Ambition Pants</value></data>
+  <data name="StormwingPants" xml:space="preserve"><value>Stormwing Pants</value></data>
+  <data name="LightLordPants" xml:space="preserve"><value>Light Lord Pants</value></data>
+  <data name="MagicKnightPants" xml:space="preserve"><value>Magic Knight Pants</value></data>
+  <data name="BloodyDragonPants" xml:space="preserve"><value>Bloody Dragon Pants</value></data>
+  <data name="LazyWindGloves" xml:space="preserve"><value>Lazy Wind Gloves</value></data>
+  <data name="DarkDevilGloves" xml:space="preserve"><value>Dark Devil Gloves</value></data>
+  <data name="StickyGloves" xml:space="preserve"><value>Sticky Gloves</value></data>
+  <data name="HellNightGloves" xml:space="preserve"><value>Hell Night Gloves</value></data>
+  <data name="AmbitionGloves" xml:space="preserve"><value>Ambition Gloves</value></data>
+  <data name="StormwingGloves" xml:space="preserve"><value>Stormwing Gloves</value></data>
+  <data name="LightLordGloves" xml:space="preserve"><value>Light Lord Gloves</value></data>
+  <data name="MagicKnightGloves" xml:space="preserve"><value>Magic Knight Gloves</value></data>
+  <data name="BloodyDragonGloves" xml:space="preserve"><value>Bloody Dragon Gloves</value></data>
+  <data name="LazyWindBoots" xml:space="preserve"><value>Lazy Wind Boots</value></data>
+  <data name="DarkDevilBoots" xml:space="preserve"><value>Dark Devil Boots</value></data>
+  <data name="StickyBoots" xml:space="preserve"><value>Sticky Boots</value></data>
+  <data name="HellNightBoots" xml:space="preserve"><value>Hell Night Boots</value></data>
+  <data name="AmbitionBoots" xml:space="preserve"><value>Ambition Boots</value></data>
+  <data name="StormwingBoots" xml:space="preserve"><value>Stormwing Boots</value></data>
+  <data name="LightLordBoots" xml:space="preserve"><value>Light Lord Boots</value></data>
+  <data name="MagicKnightBoots" xml:space="preserve"><value>Magic Knight Boots</value></data>
+  <data name="BloodyDragonBoots" xml:space="preserve"><value>Bloody Dragon Boots</value></data>
+  <data name="GemOfSecret" xml:space="preserve"><value>Gem of Secret</value></data>
+  <data name="MithrilFragment" xml:space="preserve"><value>Mithril Fragment</value></data>
+  <data name="Mithril" xml:space="preserve"><value>Mithril</value></data>
+  <data name="ElixirFragment" xml:space="preserve"><value>Elixir Fragment</value></data>
+  <data name="Elixir" xml:space="preserve"><value>Elixir</value></data>
+  <data name="MithrilFragmentBunch" xml:space="preserve"><value>Mithril Fragment Bunch</value></data>
+  <data name="ElixirFragmentBunch" xml:space="preserve"><value>Elixir Fragment Bunch</value></data>
+  <data name="JewelCombinationFrame" xml:space="preserve"><value>Jewel Combination Frame</value></data>
+  <data name="SpiritPowder" xml:space="preserve"><value>Spirit Powder</value></data>
+  <data name="MurensBookOfMagic" xml:space="preserve"><value>Muren's Book of Magic</value></data>
+  <data name="ScrollOfEtramu" xml:space="preserve"><value>Scroll of Etramu</value></data>
+  <data name="LorenciaKnightsIronShield" xml:space="preserve"><value>Lorencia Knights' Iron Shield</value></data>
+  <data name="IronShieldOfTheMagic" xml:space="preserve"><value>Iron Shield of the Magic</value></data>
+  <data name="HeroElixir" xml:space="preserve"><value>Hero Elixir</value></data>
+  <data name="BraveHeroElixir" xml:space="preserve"><value>Brave Hero Elixir</value></data>
+  <data name="GladiatorsDagger" xml:space="preserve"><value>Gladiator's Dagger</value></data>
+  <data name="MercilessGladiatorsDagger" xml:space="preserve"><value>Merciless Gladiator's Dagger</value></data>
+  <data name="KundunsMadnessBlade" xml:space="preserve"><value>Kundun's Madness Blade</value></data>
+  <data name="KundunsMagicSpellScroll" xml:space="preserve"><value>Kundun's Magic Spell Scroll</value></data>
+  <data name="EmpireGuardiansStronghold" xml:space="preserve"><value>Empire Guardians' Stronghold</value></data>
+  <data name="AncientIcarusScroll" xml:space="preserve"><value>Ancient Icarus Scroll</value></data>
+  <data name="ArcasProphecy" xml:space="preserve"><value>Arca's Prophecy</value></data>
+  <data name="AntoniasSword" xml:space="preserve"><value>Antonia's Sword</value></data>
+  <data name="KundunsSealScroll" xml:space="preserve"><value>Kundun's Seal Scroll</value></data>
+  <data name="ErrtelOfAnger" xml:space="preserve"><value>Errtel of Anger</value></data>
+  <data name="ErrtelOfBlessing" xml:space="preserve"><value>Errtel of Blessing</value></data>
+  <data name="ErrtelOfIntegrity" xml:space="preserve"><value>Errtel of Integrity</value></data>
+  <data name="ErrtelOfDivinity" xml:space="preserve"><value>Errtel of Divinity</value></data>
+  <data name="ErrtelOfGale" xml:space="preserve"><value>Errtel of Gale</value></data>
+  <data name="CloakOfDeath" xml:space="preserve"><value>Cloak of Death</value></data>
+  <data name="WingsOfChaos" xml:space="preserve"><value>Wings of Chaos</value></data>
+  <data name="WingsOfMagic" xml:space="preserve"><value>Wings of Magic</value></data>
+  <data name="WingsOfLife" xml:space="preserve"><value>Wings of Life</value></data>
+  <data name="WingsOfConqueror" xml:space="preserve"><value>Wings of Conqueror</value></data>
+  <data name="WingsOfAngelAndDevil" xml:space="preserve"><value>Wings of Angel and Devil</value></data>
+  <data name="BrownPandaRing" xml:space="preserve"><value>Brown Panda Ring</value></data>
+  <data name="PinkPandaRing" xml:space="preserve"><value>Pink Panda Ring</value></data>
+  <data name="SpiritMapFragment" xml:space="preserve"><value>Spirit Map Fragment</value></data>
+  <data name="SpiritMap" xml:space="preserve"><value>Spirit Map</value></data>
+  <data name="TrophiesOfBattle" xml:space="preserve"><value>Trophies of Battle</value></data>
+  <data name="GreenInk" xml:space="preserve"><value>Green Ink</value></data>
+  <data name="BlueInk" xml:space="preserve"><value>Blue Ink</value></data>
+  <data name="RedInk" xml:space="preserve"><value>Red Ink</value></data>
+  <data name="ParchmentOfSoul" xml:space="preserve"><value>Parchment of Soul</value></data>
+  <data name="ScrollOfGreenOblivion" xml:space="preserve"><value>Scroll of Green Oblivion</value></data>
+  <data name="ScrollOfBlueOblivion" xml:space="preserve"><value>Scroll of Blue Oblivion</value></data>
+  <data name="ScrollOfRedOblivion" xml:space="preserve"><value>Scroll of Red Oblivion</value></data>
+  <data name="ScrollOfGrayOblivion" xml:space="preserve"><value>Scroll of Gray Oblivion</value></data>
+  <data name="SealedGreenOblivionScroll" xml:space="preserve"><value>Sealed Green Oblivion Scroll</value></data>
+  <data name="SealedBlueOblivionScroll" xml:space="preserve"><value>Sealed Blue Oblivion Scroll</value></data>
+  <data name="SealedRedOblivionScroll" xml:space="preserve"><value>Sealed Red Oblivion Scroll</value></data>
+  <data name="SealedGrayOblivionScroll" xml:space="preserve"><value>Sealed Gray Oblivion Scroll</value></data>
+  <data name="ProtectionTalisman" xml:space="preserve"><value>Protection Talisman</value></data>
+  <data name="CooperationTalisman" xml:space="preserve"><value>Cooperation Talisman</value></data>
+  <data name="FighterAmulet" xml:space="preserve"><value>Fighter Amulet</value></data>
+  <data name="RobotKnightRing" xml:space="preserve"><value>Robot Knight Ring</value></data>
+  <data name="MiniRobotRing" xml:space="preserve"><value>Mini Robot Ring</value></data>
+  <data name="GreatHeavenlyMageRing" xml:space="preserve"><value>Great Heavenly Mage Ring</value></data>
+  <data name="BrownPandaTransformationRing" xml:space="preserve"><value>Brown Panda Transformation Ring</value></data>
+  <data name="GoldCharacterCard" xml:space="preserve"><value>Gold Character Card</value></data>
+  <data name="DecorationRing" xml:space="preserve"><value>Decoration Ring</value></data>
+  <data name="BlessedDecorationRing" xml:space="preserve"><value>Blessed Decoration Ring</value></data>
+  <data name="NecklaceOfAgony" xml:space="preserve"><value>Necklace of Agony</value></data>
+  <data name="SolidSymbol" xml:space="preserve"><value>Solid Symbol</value></data>
+  <data name="RingOfUltimatum" xml:space="preserve"><value>Ring of Ultimatum</value></data>
+  <data name="RingOfBlock" xml:space="preserve"><value>Ring of Block</value></data>
+  <data name="ProtectorProtectionRing" xml:space="preserve"><value>Protector Protection Ring</value></data>
+  <data name="ProtectionRing" xml:space="preserve"><value>Protection Ring</value></data>
+  <data name="TalismanOfAscension1" xml:space="preserve"><value>Talisman of Ascension I</value></data>
+  <data name="TalismanOfAscension2" xml:space="preserve"><value>Talisman of Ascension II</value></data>
+  <data name="TalismanOfAscension3" xml:space="preserve"><value>Talisman of Ascension III</value></data>
+  <data name="SealOfAscension2" xml:space="preserve"><value>Seal of Ascension II</value></data>
+  <data name="MasterSealOfAscension2" xml:space="preserve"><value>Master Seal of Ascension II</value></data>
+  <data name="WereRabbitEgg" xml:space="preserve"><value>WereRabbit Egg</value></data>
+  <data name="EvolutionStone" xml:space="preserve"><value>Evolution Stone</value></data>
+  <data name="Luki" xml:space="preserve"><value>Luki</value></data>
+  <data name="LukiEvolved" xml:space="preserve"><value>Luki (Evolved)</value></data>
+  <data name="Tony" xml:space="preserve"><value>Tony</value></data>
+  <data name="TonyEvolved" xml:space="preserve"><value>Tony (Evolved)</value></data>
+  <data name="Nymph" xml:space="preserve"><value>Nymph</value></data>
+  <data name="NymphEvolved" xml:space="preserve"><value>Nymph (Evolved)</value></data>
+  <data name="Safi" xml:space="preserve"><value>Safi</value></data>
+  <data name="SafiEvolved" xml:space="preserve"><value>Safi (Evolved)</value></data>
+  <data name="LuckyBagEgg" xml:space="preserve"><value>Lucky Bag Egg</value></data>
+  <data name="FireFlameGhostEgg" xml:space="preserve"><value>Fire Flame Ghost Egg</value></data>
+  <data name="GoldenGoblinEgg" xml:space="preserve"><value>Golden Goblin Egg</value></data>
+  <data name="William" xml:space="preserve"><value>William</value></data>
+  <data name="WilliamEvolved" xml:space="preserve"><value>William (Evolved)</value></data>
+  <data name="Paul" xml:space="preserve"><value>Paul</value></data>
+  <data name="PaulEvolved" xml:space="preserve"><value>Paul (Evolved)</value></data>
+  <data name="Chiron" xml:space="preserve"><value>Chiron</value></data>
+  <data name="ChironEvolved" xml:space="preserve"><value>Chiron (Evolved)</value></data>
+  <data name="Wooparoo" xml:space="preserve"><value>Wooparoo</value></data>
+  <data name="WooparooEvolved" xml:space="preserve"><value>Wooparoo (Evolved)</value></data>
+  <data name="Tibetton" xml:space="preserve"><value>Tibetton</value></data>
+  <data name="TibettonEvolved" xml:space="preserve"><value>Tibetton (Evolved)</value></data>
+  <data name="Witch" xml:space="preserve"><value>Witch</value></data>
+  <data name="WitchEvolved" xml:space="preserve"><value>Witch (evolved)</value></data>
+  <data name="Skull" xml:space="preserve"><value>Skull</value></data>
+  <data name="SkullEvolved" xml:space="preserve"><value>Skull (evolved)</value></data>
+  <data name="Pumpy" xml:space="preserve"><value>Pumpy</value></data>
+  <data name="PumpyEvolved" xml:space="preserve"><value>Pumpy (evolved)</value></data>
+  <data name="MuunEnergyConverter" xml:space="preserve"><value>Muun Energy Converter</value></data>
+  <data name="WizardryStone" xml:space="preserve"><value>Wizardry Stone</value></data>
+  <data name="Savath" xml:space="preserve"><value>Savath</value></data>
+  <data name="SavathEvolved" xml:space="preserve"><value>Savath (Evolved)</value></data>
+  <data name="Lycan" xml:space="preserve"><value>Lycan</value></data>
+  <data name="LycanEvolved" xml:space="preserve"><value>Lycan (Evolved)</value></data>
+  <data name="Torby" xml:space="preserve"><value>Torby</value></data>
+  <data name="TorbyEvolved" xml:space="preserve"><value>Torby (Evolved)</value></data>
+  <data name="Seiren" xml:space="preserve"><value>Seiren</value></data>
+  <data name="SeirenEvolved" xml:space="preserve"><value>Seiren (Evolved)</value></data>
+  <data name="Behemoth" xml:space="preserve"><value>Behemoth</value></data>
+  <data name="BehemothEvolved" xml:space="preserve"><value>Behemoth (Evolved)</value></data>
+  <data name="Loggle" xml:space="preserve"><value>Loggle</value></data>
+  <data name="LoggleEvolved" xml:space="preserve"><value>Loggle (Evolved)</value></data>
+  <data name="Mino" xml:space="preserve"><value>Mino</value></data>
+  <data name="MinoEvolved" xml:space="preserve"><value>Mino (Evolved)</value></data>
+  <data name="Hound" xml:space="preserve"><value>Hound</value></data>
+  <data name="HoundEvolved" xml:space="preserve"><value>Hound (Evolved)</value></data>
+  <data name="Trive" xml:space="preserve"><value>Trive</value></data>
+  <data name="TriveEvolved" xml:space="preserve"><value>Trive (Evolved)</value></data>
+  <data name="Vogan" xml:space="preserve"><value>Vogan</value></data>
+  <data name="VoganEvolved" xml:space="preserve"><value>Vogan (Evolved)</value></data>
+  <data name="Cyclop" xml:space="preserve"><value>Cyclop</value></data>
+  <data name="CyclopEvolved" xml:space="preserve"><value>Cyclop (Evolved)</value></data>
+  <data name="DarkTransformationRing" xml:space="preserve"><value>Dark Transformation Ring</value></data>
+  <data name="Bonf" xml:space="preserve"><value>Bonf</value></data>
+  <data name="BonfEvolved" xml:space="preserve"><value>Bonf (Evolved)</value></data>
+  <data name="Hawk" xml:space="preserve"><value>Hawk</value></data>
+  <data name="HawkEvolved" xml:space="preserve"><value>Hawk (Evolved)</value></data>
+  <data name="Muty" xml:space="preserve"><value>Muty</value></data>
+  <data name="MutyEvolved" xml:space="preserve"><value>Muty (Evolved)</value></data>
+  <data name="ConquerorsBadge" xml:space="preserve"><value>Conqueror's Badge</value></data>
+  <data name="BadgeOfHardships" xml:space="preserve"><value>Badge of Hardships</value></data>
+  <data name="Mantis" xml:space="preserve"><value>Mantis</value></data>
+  <data name="MantisEvolved" xml:space="preserve"><value>Mantis (Evolved)</value></data>
+  <data name="Scolpy" xml:space="preserve"><value>Scolpy</value></data>
+  <data name="ScolpyEvolved" xml:space="preserve"><value>Scolpy (Evolved)</value></data>
+  <data name="Chafer" xml:space="preserve"><value>Chafer</value></data>
+  <data name="ChaferEvolved" xml:space="preserve"><value>Chafer (Evolved)</value></data>
+  <data name="CosplayGirl" xml:space="preserve"><value>Cosplay Girl</value></data>
+  <data name="CosplayGirlEvolved" xml:space="preserve"><value>Cosplay Girl (Evolved)</value></data>
+  <data name="CheerGirl" xml:space="preserve"><value>Cheer Girl</value></data>
+  <data name="CheerGirlEvolved" xml:space="preserve"><value>Cheer Girl (Evolved)</value></data>
+  <data name="SportyGirl" xml:space="preserve"><value>Sporty Girl</value></data>
+  <data name="SportyGirlEvolved" xml:space="preserve"><value>Sporty Girl (Evolved)</value></data>
+  <data name="Baal" xml:space="preserve"><value>Baal</value></data>
+  <data name="BaalEvolved" xml:space="preserve"><value>Baal (Evolved)</value></data>
+  <data name="Gaap" xml:space="preserve"><value>Gaap</value></data>
+  <data name="GaapEvolved" xml:space="preserve"><value>Gaap (Evolved)</value></data>
+  <data name="Taaf" xml:space="preserve"><value>Taaf</value></data>
+  <data name="TaafEvolved" xml:space="preserve"><value>Taaf (Evolved)</value></data>
+  <data name="Frozen" xml:space="preserve"><value>Frozen</value></data>
+  <data name="FrozenEvolved" xml:space="preserve"><value>Frozen(Evolved)</value></data>
+  <data name="Loor" xml:space="preserve"><value>Loor</value></data>
+  <data name="LoorEvolved" xml:space="preserve"><value>Loor(Evolved)</value></data>
+  <data name="Purssil" xml:space="preserve"><value>Purssil</value></data>
+  <data name="PurssilEvolved" xml:space="preserve"><value>Purssil(Evolved)</value></data>
+  <data name="RoomyEgg" xml:space="preserve"><value>Roomy Egg</value></data>
+  <data name="AncientMetal" xml:space="preserve"><value>Ancient Metal</value></data>
+  <data name="Lv2LetterOfRequest" xml:space="preserve"><value>Lv. 2 letter of Request</value></data>
+  <data name="Lv2CompletionCertificate" xml:space="preserve"><value>Lv. 2 Completion Certificate</value></data>
+  <data name="MagicBackpack1" xml:space="preserve"><value>Magic Backpack1</value></data>
+  <data name="MagicBackpack2" xml:space="preserve"><value>Magic Backpack2</value></data>
+  <data name="MagicBackpack3" xml:space="preserve"><value>Magic Backpack3</value></data>
+  <data name="MagicBackpack4" xml:space="preserve"><value>Magic Backpack4</value></data>
+  <data name="DeathKingsBone" xml:space="preserve"><value>Death King's Bone</value></data>
+  <data name="HellMainesLeather" xml:space="preserve"><value>Hell Maine's Leather</value></data>
+  <data name="DarkPhoenixFlame" xml:space="preserve"><value>Dark Phoenix Flame</value></data>
+  <data name="DeathBeamKnightSoul" xml:space="preserve"><value>Death Beam Knight Soul</value></data>
+  <data name="IceWalkersMane" xml:space="preserve"><value>Ice Walker's Mane</value></data>
+  <data name="MammothsBundleOfFur" xml:space="preserve"><value>Mammoth's Bundle of Fur</value></data>
+  <data name="GiantsIcicle" xml:space="preserve"><value>Giant's Icicle</value></data>
+  <data name="CoolutinsPoison" xml:space="preserve"><value>Coolutin's Poison</value></data>
+  <data name="IronKnightsHeart" xml:space="preserve"><value>Iron Knight's Heart</value></data>
+  <data name="DarkMammothsHorn" xml:space="preserve"><value>Dark Mammoth's Horn</value></data>
+  <data name="DarkGiantsAxe" xml:space="preserve"><value>Dark Giant's Axe</value></data>
+  <data name="DarkCoolutinsBlood" xml:space="preserve"><value>Dark Coolutin's Blood</value></data>
+  <data name="DarkIronKnightsSword" xml:space="preserve"><value>Dark Iron Knight's Sword</value></data>
+  <data name="ElementalTalismanOfLuck" xml:space="preserve"><value>Elemental Talisman of Luck</value></data>
+  <data name="ElementalTalismanOfChaos" xml:space="preserve"><value>Elemental Talisman of Chaos</value></data>
+  <data name="SonicCombinationNote" xml:space="preserve"><value>Sonic Combination Note</value></data>
+  <data name="CycloneCombinationNote" xml:space="preserve"><value>Cyclone Combination Note</value></data>
+  <data name="BlastCombinationNote" xml:space="preserve"><value>Blast Combination Note</value></data>
+  <data name="ScrollOfSwiftnessMaster" xml:space="preserve"><value>Scroll of Swiftness Master</value></data>
+  <data name="RewardJar" xml:space="preserve"><value>Reward Jar</value></data>
+  <data name="ValuableRewardJar" xml:space="preserve"><value>Valuable Reward Jar</value></data>
+  <data name="GoldenApple" xml:space="preserve"><value>Golden Apple</value></data>
+  <data name="GoldenApple2" xml:space="preserve"><value>Golden Apple(2)</value></data>
+  <data name="EvomonSummoningScroll" xml:space="preserve"><value>Evomon Summoning Scroll</value></data>
+  <data name="TetraCrystalGreater" xml:space="preserve"><value>Tetra Crystal (Greater)</value></data>
+  <data name="TetraCrystalStandard" xml:space="preserve"><value>Tetra Crystal (Standard)</value></data>
+  <data name="TetraCrystalMinor" xml:space="preserve"><value>Tetra Crystal (Minor)</value></data>
+  <data name="MinorEvomonBox" xml:space="preserve"><value>Minor Evomon Box</value></data>
+  <data name="StandardEvomonBox" xml:space="preserve"><value>Standard Evomon Box</value></data>
+  <data name="GreaterEvomonBox" xml:space="preserve"><value>Greater Evomon Box</value></data>
+  <data name="LuxuriousEvomonBox" xml:space="preserve"><value>Luxurious Evomon Box</value></data>
+  <data name="MagnificentEvomonBox" xml:space="preserve"><value>Magnificent Evomon Box</value></data>
+  <data name="LegendaryEvomonBox" xml:space="preserve"><value>Legendary Evomon Box</value></data>
+  <data name="GiftOfHenchmen" xml:space="preserve"><value>Gift of Henchmen</value></data>
+  <data name="GiftOfKnights" xml:space="preserve"><value>Gift of Knights</value></data>
+  <data name="GiftOfHighKnights" xml:space="preserve"><value>Gift of High Knights</value></data>
+  <data name="MinorDevilsBox" xml:space="preserve"><value>Minor Devil's Box</value></data>
+  <data name="DevilsBox" xml:space="preserve"><value>Devil's Box</value></data>
+  <data name="HighDevilsBox" xml:space="preserve"><value>High Devil's Box</value></data>
+  <data name="GuardsmansBox" xml:space="preserve"><value>Guardsman's Box</value></data>
+  <data name="GuardmanCaptainsBox" xml:space="preserve"><value>Guardman Captain's Box</value></data>
+  <data name="BlessOfLightLowGrade" xml:space="preserve"><value>Bless of Light (Low Grade)</value></data>
+  <data name="BlessOfLightMiddleGrade" xml:space="preserve"><value>Bless of Light (Middle Grade)</value></data>
+  <data name="SpecialCard" xml:space="preserve"><value>Special Card</value></data>
+  <data name="SummoningScrollFragment" xml:space="preserve"><value>Summoning Scroll Fragment</value></data>
+  <data name="BlindParchment" xml:space="preserve"><value>Blind Parchment</value></data>
+</root>

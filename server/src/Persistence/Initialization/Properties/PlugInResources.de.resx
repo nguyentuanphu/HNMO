@@ -972,4 +972,6 @@
   <data name="IncreaseBlockMasterFlatUpdatePlugIn_Description" xml:space="preserve"><value>Ändert die Master-Fertigkeit Increase Block Power Up des Rage Fighters von einem Prozentsatz der PvM-Verteidigungsrate auf einen festen Verteidigungsratenbonus, passend zum Season-6-Serverpaket.</value></data>
   <data name="SeasonNineSharedItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Regeln gemeinsamer Gegenstände</value></data>
   <data name="SeasonNineSharedItemsUpdatePlugIn_Description" xml:space="preserve"><value>Wendet im Season-9-Betrieb die Season-9-Werte auf gemeinsame Gegenstände an (Cape of Fighter Drop-Stufe 150, Cape of Lord Stufenanforderung 150, native 255er-Trankstapel); angepasste Werte bleiben erhalten.</value></data>
+  <data name="SeasonNineOnlyItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Season-9-Gegenstände hinzufügen</value></data>
+  <data name="SeasonNineOnlyItemsUpdatePlugIn_Description" xml:space="preserve"><value>Fügt im Season-9-Betrieb die 279 einzigartigen Season-9-Gegenstandsdefinitionen hinzu (Sockelwaffen, Schilde, Rüstungssets, Flügel, Pentagramme, Zubehör, Muun-Begleiter und Herstellungsmaterialien); vorhandene Gegenstände bleiben unverändert.</value></data>
 </root>
