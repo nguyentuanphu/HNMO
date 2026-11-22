@@ -155,6 +155,21 @@ internal class ServerListTest
             Throws.TypeOf<KeyNotFoundException>());
     }
 
+    /// <summary>
+    /// Tests that connection counts exceeding maximumConnections clamp load at 100 instead of overflowing byte.
+    /// </summary>
+    [Test]
+    public void CurrentConnectionsAboveMaximumClampsLoadPercentageAtHundred()
+    {
+        var serverList = CreateServerList(season: 1);
+        var server = AddServer(serverList, serverId: 10, maximumConnections: 100);
+
+        server.CurrentConnections = 260;
+
+        var packet = serverList.Serialize();
+        AssertLoadPercentage(packet, 10, 100);
+    }
+
     private static ServerList CreateServerList(byte season)
     {
         return new ServerList(new ClientVersion(season, season == 0 ? (byte)97 : (byte)6, ClientLanguage.Invariant));
