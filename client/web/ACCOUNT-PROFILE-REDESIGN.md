@@ -93,3 +93,19 @@ Tìm xuyên suốt nhân vật/vật phẩm/biên nhận; tóm tắt khi quay l�
 This preview is only the first reviewable design increment. Production completion requires authenticated world/account-scoped read models, ownership/privacy tests, a real persisted appearance setting, mounting existing payment/reward flows, retention/lineage instrumentation where missing, bilingual accessibility/mobile checks, and live testing against the packaged game. Keep release work and schedules untouched.
 
 Bản xem thử chỉ là bước thiết kế đầu tiên. Muốn hoàn thành cần API đọc xác thực đúng tài khoản/thế giới, kiểm thử riêng tư/sở hữu, lưu giao diện thật, kết nối luồng thanh toán/thưởng hiện có, ghi lịch sử còn thiếu, kiểm tra song ngữ/truy cập/điện thoại và chạy thử với game đóng gói. Không thay đổi công việc phát hành hoặc lịch tự động.
+
+## Interactive preview expansion / Mở rộng bản xem thử tương tác
+
+The owner approved the additional ideas and requested a hosted private preview. The browser-local implementation now includes11sections: both login views; global owned-fixture search; item passports and watched items; event kind/character/Sydney-date filters and pagination; filtered CSV exports; before/after upgrades, consumed crafting inputs and exact storage slots; a return-player summary and expiry reminders; an adventure journal; equipment comparison with calculated deltas; safe support JSON export; locally simulated session ending; and saved preview theme/language/density preferences. All records are explicitly fictional. Payment and credential submission remain disabled. No game database is connected. Watch state is tab-local; browser preferences are not account-synced.
+
+The supplied tracker page was inaccessible behind a browser challenge. Publicly indexed guide descriptions supported serial-based lifecycle tracking and detailed crafting outcomes. Only those general capabilities informed this implementation; no third-party code, branding, assets, item rates or rules were copied. The exact blocked tracker interface was not inspected.
+
+Người dùng đã đồng ý các đề xuất và yêu cầu bản xem thử riêng tư có liên kết. Bản tương tác hiện có11mục, tìm kiếm dữ liệu mẫu, hồ sơ/theo dõi vật phẩm, lọc sự kiện theo loại/nhân vật/ngày Sydney, phân trang, xuất CSV theo bộ lọc, lịch sử nâng cấp/nguyên liệu/ô kho, tóm tắt khi quay lại, nhắc hết hạn, nhật ký hành trình, so sánh chỉ số, xuất báo cáo JSON an toàn, mô phỏng kết thúc phiên và lưu giao diện/ngôn ngữ/độ gọn trong trình duyệt. Mọi bản ghi là giả lập; chưa kết nối cơ sở dữ liệu hoặc thanh toán thật. Danh sách theo dõi chỉ tồn tại trong thẻ hiện tại; tùy chọn chưa đồng bộ theo tài khoản.
+
+Trang tham khảo bị chặn bởi cơ chế kiểm tra trình duyệt. Chỉ đọc được mô tả đã lập chỉ mục từ hướng dẫn công khai; không sao chép mã, thương hiệu, tài nguyên, tỷ lệ vật phẩm hoặc quy tắc của bên khác.
+
+Hosted private preview: https://hnmo-account-hub-preview.beautifulclock2.chatgpt.site
+
+The preview is owner-private and uses no production account data. Its source/hosting manifest is maintained separately from the HNMO game repository. The game branch contains the editable TypeScript, styles, fixtures and browser tests. Do not change the Site audience or enable automated schedules as part of an update.
+
+Bản xem thử chỉ chủ sở hữu được truy cập, không dùng dữ liệu tài khoản thật. Không tự thay đổi quyền truy cập hoặc bật lịch tự động khi cập nhật.

@@ -1,4 +1,5 @@
 import { gameName, loadGameName } from './gameName.js';
+import { itemExplorer, eventLog, equipmentComparison, adventureJournal, supportReport, returnSummary, expiryReminders, globalSearch, sessionPreview, densityControl } from './accountHubTools.js';
 
 // An isolated design preview. All account examples below are fictional; no account API or payment is called.
 const text = {
@@ -6,6 +7,7 @@ const text = {
   game: ['Game login', 'Đăng nhập game'], website: ['Website sign-in', 'Đăng nhập website'], profile: ['Account hub', 'Trung tâm tài khoản'],
   home: ['Overview', 'Tổng quan'], characters: ['Characters', 'Nhân vật'], items: ['Items & vaults', 'Vật phẩm & rương'],
   activity: ['Activity & trades', 'Hoạt động & giao dịch'], wallet: ['Wallet & VIP', 'Ví & VIP'], security: ['Account security', 'Bảo mật tài khoản'],
+  journal: ['Adventure journal', 'Nhật ký hành trình'], compare: ['Compare equipment', 'So sánh trang bị'], support: ['Support', 'Hỗ trợ'],
   rewards: ['Rewards & mail', 'Phần thưởng & thư'], appearance: ['Appearance', 'Giao diện'],
   welcome: ['Your next adventure starts here.', 'Hành trình tiếp theo bắt đầu tại đây.'],
   welcomeSub: ['Choose your world. Your characters, rewards and account stay within reach.', 'Chọn thế giới. Theo dõi nhân vật, phần thưởng và tài khoản ngay tại đây.'],
@@ -53,18 +55,19 @@ const text = {
   themeNote: ['Five distinct layouts, typography and surfaces. Production preferences should follow your account across devices.', 'Năm phong cách khác nhau về bố cục, chữ và bề mặt. Bản chính thức cần lưu lựa chọn theo tài khoản để dùng trên nhiều thiết bị.'],
   obsidian: ['Obsidian · command centre', 'Obsidian · trung tâm điều hành'], parchment: ['Chronicle · illuminated journal', 'Chronicle · nhật ký cổ'],
   jade: ['Jade · calm, open workspace', 'Jade · không gian thoáng'], cyber: ['Terminal · precise and compact', 'Terminal · gọn và rõ'], royal: ['Royal · gallery and glass', 'Royal · trưng bày và kính'],
-  support: ['Need help with a transaction?', 'Cần hỗ trợ giao dịch?'], supportNote: ['A support reference can include the receipt or trace ID, without your password or PIN.', 'Mã hỗ trợ có thể kèm biên nhận hoặc mã truy vết, không kèm mật khẩu hay mã PIN.'],
+  supportHelp: ['Need help with a transaction?', 'Cần hỗ trợ giao dịch?'], supportNote: ['A support reference can include the receipt or trace ID, without your password or PIN.', 'Mã hỗ trợ có thể kèm biên nhận hoặc mã truy vết, không kèm mật khẩu hay mã PIN.'],
 } as const;
 type Key = keyof typeof text;
 type Language = 'en' | 'vi';
 type Mode = 'game' | 'website' | 'profile';
 type Theme = 'obsidian' | 'parchment' | 'jade' | 'cyber' | 'royal';
-const sections: readonly Key[] = ['home', 'characters', 'items', 'activity', 'wallet', 'security', 'rewards', 'appearance'];
+const sections: readonly Key[] = ['home', 'characters', 'items', 'activity', 'journal', 'compare', 'wallet', 'security', 'rewards', 'appearance', 'support'];
 const themes: readonly Theme[] = ['obsidian', 'parchment', 'jade', 'cyber', 'royal'];
 let language: Language = 'en';
 let mode: Mode = 'profile';
 let theme: Theme = 'obsidian';
 let section: Key = 'home';
+try { const saved = localStorage.getItem('hnmo.preview.theme'); if (themes.some(value => value === saved)) theme = saved as Theme; const lang = localStorage.getItem('hnmo.preview.language'); if (lang === 'en' || lang === 'vi') language = lang; } catch { /* Optional preview preferences, never credentials. */ }
 const root = document.getElementById('profilePreview');
 if (!(root instanceof HTMLElement)) throw new Error('Missing profile preview root');
 const host: HTMLElement = root;
@@ -79,7 +82,7 @@ function panel(title: Key, ...children: HTMLElement[]): HTMLElement {
   const result = node('section', '', 'preview-card'); result.append(node('h3', t(title)), ...children); return result;
 }
 function go(next: Key): void { section = next; mode = 'profile'; render(); }
-function selectTheme(next: Theme): void { theme = next; render(); }
+function selectTheme(next: Theme): void { theme = next; try { localStorage.setItem('hnmo.preview.theme', next); } catch { /* Optional browser preferences. */ } render(); }
 function controls(): HTMLElement {
   const bar = node('div', '', 'preview-controls'); bar.append(node('p', t('preview')));
   const modes = node('div', '', 'preview-mode');
@@ -88,7 +91,7 @@ function controls(): HTMLElement {
   }
   bar.append(modes);
   const langs = node('div', '', 'preview-mode');
-  for (const next of ['en', 'vi'] as const) { const control = button(next === 'en' ? 'English' : 'Tiếng Việt', () => { language = next; render(); }); control.setAttribute('aria-pressed', String(language === next)); langs.append(control); }
+  for (const next of ['en', 'vi'] as const) { const control = button(next === 'en' ? 'English' : 'Tiếng Việt', () => { language = next; try { localStorage.setItem('hnmo.preview.language', next); } catch { /* Optional browser preferences. */ } render(); }); control.setAttribute('aria-pressed', String(language === next)); langs.append(control); }
   bar.append(langs); return bar;
 }
 function heading(title: Key, subtitle: Key): HTMLElement { const header = node('header', '', 'preview-page-heading'); header.append(node('p', t('sampleOnly'), 'eyebrow'), node('h2', t(title)), node('p', t(subtitle), 'muted')); return header; }
@@ -98,7 +101,7 @@ function overview(): HTMLElement {
   cards.append(panel('attention', button(t('vipExpiring'), () => go('wallet')), button(t('mailWaiting'), () => go('rewards'))),
     panel('protection', node('p', '✓ ' + t('pin')), node('p', '○ ' + t('email')), node('p', t('securityNote'), 'muted')));
   const money = panel('balances', node('div', '2,400 WCoinC', 'preview-big'), node('p', '120 WCoinP · 650 GoblinPoints'), button(t('topup'), () => go('wallet')));
-  cards.append(money); result.append(cards, characterTable());
+  cards.append(money); result.append(cards, returnSummary(language), expiryReminders(language, go), characterTable());
   result.append(panel('events', node('p', '21/11/2026 20:30 · ' + t('tradeExample')), node('p', '21/11/2026 19:10 · ' + t('rewardExample')), button(t('activity'), () => go('activity')))); return result;
 }
 function table(headings: readonly string[], rows: readonly (readonly (string | HTMLElement)[])[]): HTMLElement {
@@ -108,33 +111,25 @@ function table(headings: readonly string[], rows: readonly (readonly (string | H
   result.append(head, body); wrap.append(result); return wrap;
 }
 function characterTable(): HTMLElement { return panel('yourCharacters', node('p', t('characterNote'), 'muted'), table([t('name'), t('world'), t('level'), t('location')], [['Explorer · ' + t('knight'), 'S6.3 · Atlas', '300 / 12', t('offline')], ['Starlight · ' + t('mage'), 'S9 · Aurora', '210 / 3', t('offline')]])); }
-function items(): HTMLElement {
-  const result = node('div', '', 'preview-content'); result.append(heading('gear', 'itemNote'));
-  const search = document.createElement('input'); search.type = 'search'; search.placeholder = t('search'); search.setAttribute('aria-label', t('search')); search.title = t('itemNote');
-  const list = node('div'); const detail = node('div'); detail.setAttribute('aria-live', 'polite');
-  const samples: readonly { name: Key; place: Key; id: string }[] = [{ name: 'sword', place: 'bag', id: 'DEMO-ITEM-0001' }, { name: 'jewel', place: 'vault', id: 'DEMO-ITEM-0002' }, { name: 'ring', place: 'equipped', id: 'DEMO-ITEM-0003' }];
-  function show(id: string): void { detail.replaceChildren(panel('traceTitle', node('code', id), node('p', '20/11/2026 19:20 · ' + t('acquired')), node('p', '21/11/2026 20:30 · ' + t('stored')), node('p', t('missing'), 'muted'))); }
-  function update(): void {
-    const filtered = samples.filter(value => `${t(value.name)} ${value.id}`.toLocaleLowerCase().includes(search.value.toLocaleLowerCase()));
-    list.replaceChildren(filtered.length ? table([t('item'), t('where'), t('trace')], filtered.map(value => [t(value.name), t(value.place), button(value.id, () => show(value.id), t('traceTitle'))])) : node('p', t('empty')));
-  }
-  search.addEventListener('input', update); update(); show(samples[0].id); result.append(search, list, detail); return result;
-}
 function wallet(): HTMLElement {
   const result = node('div', '', 'preview-content'); result.append(heading('wallet', 'noPayments'));
   const cards = node('div', '', 'preview-grid'); const pay = button(t('topup'), () => {} , t('noPayments')); pay.disabled = true;
   const renew = button(t('renew'), () => {}, t('noPayments')); renew.disabled = true;
   cards.append(panel('balances', node('div', '2,400 WCoinC', 'preview-big'), node('p', '120 WCoinP · 650 GoblinPoints'), pay), panel('vipPlan', node('p', t('sampleVip')), renew));
-  result.append(cards, panel('ledger', node('p', t('ledgerExample')), node('p', t('separateCredit'), 'muted')), panel('support', node('p', t('supportNote')))); return result;
+  result.append(cards, panel('ledger', node('p', t('ledgerExample')), node('p', t('separateCredit'), 'muted')), panel('supportHelp', node('p', t('supportNote')))); return result;
 }
-function appearance(): HTMLElement { const result = node('div', '', 'preview-content'); result.append(heading('themeTitle', 'themeNote')); const choices = node('div', '', 'preview-grid'); for (const next of themes) { const control = button(t(next), () => selectTheme(next), t('themeNote')); control.className = 'preview-theme-choice'; control.setAttribute('aria-pressed', String(next === theme)); choices.append(control); } result.append(choices); return result; }
+function appearance(): HTMLElement { const result = node('div', '', 'preview-content'); result.append(heading('themeTitle', 'themeNote')); const choices = node('div', '', 'preview-grid'); for (const next of themes) { const control = button(t(next), () => selectTheme(next), t('themeNote')); control.className = 'preview-theme-choice'; control.setAttribute('aria-pressed', String(next === theme)); choices.append(control); } result.append(choices, densityControl(language)); return result; }
 function content(): HTMLElement {
   if (section === 'home') return overview();
   if (section === 'characters') return characterTable();
-  if (section === 'items') return items();
+  if (section === 'items') return itemExplorer(language);
+  if (section === 'activity') return eventLog(language);
+  if (section === 'journal') return adventureJournal(language);
+  if (section === 'compare') return equipmentComparison(language);
+  if (section === 'support') return supportReport(language);
   if (section === 'wallet') return wallet();
   if (section === 'appearance') return appearance();
-  if (section === 'security') return panel('accountSafety', node('p', t('safetyDetail')), node('h3', t('lastLogin')), node('p', '21/11/2026 20:30 · ***.***.12.34 · Sydney'), node('p', t('securityNote'), 'muted'));
+  if (section === 'security') return panel('accountSafety', sessionPreview(language), node('p', t('safetyDetail')), node('h3', t('lastLogin')), node('p', '21/11/2026 20:30 · ***.***.12.34 · Sydney'), node('p', t('securityNote'), 'muted'));
   if (section === 'rewards') return panel('rewards', node('p', t('rewardDetail')), node('p', t('mailWaiting')));
   return panel('events', node('p', t('eventNote')), node('p', '21/11/2026 20:30 · ' + t('tradeExample')), node('p', '21/11/2026 19:10 · ' + t('rewardExample')), node('p', t('missing'), 'muted'));
 }
@@ -142,7 +137,7 @@ function profile(): HTMLElement {
   const shell = node('div', '', 'preview-shell'); const nav = node('nav', '', 'preview-sidebar'); nav.setAttribute('aria-label', t('profile'));
   nav.append(node('div', gameName(), 'preview-brand'), node('p', 'Explorer', 'preview-identity'), node('p', 'S6.3 / S9', 'muted'));
   for (const key of sections) { const control = button(t(key), () => go(key)); if (section === key) control.setAttribute('aria-current', 'page'); nav.append(control); }
-  const main = node('div', '', 'preview-main'); main.append(content()); shell.append(nav, main); return shell;
+  const main = node('div', '', 'preview-main'); main.append(globalSearch(language, go), content()); shell.append(nav, main); return shell;
 }
 function login(): HTMLElement {
   const result = node('div', '', 'preview-login'); const hero = node('section', '', 'preview-hero'); hero.append(node('p', gameName(), 'preview-brand'), node('h1', t(mode === 'game' ? 'welcome' : 'private')), node('p', t(mode === 'game' ? 'welcomeSub' : 'privateSub')));
@@ -156,8 +151,9 @@ function login(): HTMLElement {
 }
 function render(): void {
   document.documentElement.lang = language; document.body.dataset.previewTheme = theme;
+  try { document.body.dataset.density = localStorage.getItem('hnmo.preview.density') === 'compact' ? 'compact' : 'comfortable'; } catch { document.body.dataset.density = 'comfortable'; }
   const themeLabel = document.createElement('label'); themeLabel.className = 'preview-theme-control'; themeLabel.append(node('span', t('appearance')));
-  const select = document.createElement('select'); select.title = t('themeNote'); for (const next of themes) { const option = document.createElement('option'); option.value = next; option.textContent = t(next); option.selected = theme === next; select.append(option); }
+  const select = document.createElement('select'); select.title = t('themeNote'); select.setAttribute('aria-label', t('appearance')); for (const next of themes) { const option = document.createElement('option'); option.value = next; option.textContent = t(next); option.selected = theme === next; select.append(option); }
   select.addEventListener('change', () => { const next = themes.find(value => value === select.value); if (next) selectTheme(next); }); themeLabel.append(select);
   const bar = controls(); bar.append(themeLabel); host.replaceChildren(bar, mode === 'profile' ? profile() : login());
 }

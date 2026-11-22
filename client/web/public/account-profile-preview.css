@@ -48,3 +48,23 @@ body[data-preview-theme=royal] .preview-shell { grid-template-columns:1fr; max-w
  .preview-sidebar>button { font-size:12px; padding:8px; }.preview-main,body[data-preview-theme=cyber] .preview-main { padding:20px 16px; }.preview-grid { grid-template-columns:1fr; }.preview-card { padding:18px; }
  .preview-login { grid-template-columns:1fr; padding:30px 16px; }.preview-hero { padding:5px; }h1 { max-width:16ch; }.preview-theme-control { flex-wrap:wrap; }.preview-theme-control select { max-width:100%; }
 }
+/* Account tools keep touch targets and data readable in every theme. */
+body { font-size:16px; }
+.account-hub-controls { display:flex; flex-wrap:wrap; gap:12px; align-items:end; }
+.account-hub-controls label { display:grid; gap:5px; font-size:14px; flex:1 1 180px; min-width:0; }
+.account-hub-controls input,.account-hub-controls select { max-width:100%; min-width:0; }
+.account-hub-controls>input[type=search] { flex:1 1 260px; }
+.account-hub-event { border-left:2px solid var(--line); padding:0 0 14px 18px; display:grid; gap:5px; }
+.account-hub-search { display:grid; gap:10px; margin-bottom:26px; }
+.account-hub-search input { width:100%; }
+.account-hub-search-results { display:grid; gap:7px; }
+.preview-sidebar { align-self:start; }
+.preview-sidebar>button { font-size:14px; }
+.preview-theme-control,.preview-login label { font-size:14px; }
+.preview-scroll table { font-size:14px; }
+body[data-density=compact] .preview-card { padding:14px; gap:9px; }
+body[data-density=compact] th,body[data-density=compact] td { padding:8px; }
+@media(max-width:760px) { .account-hub-controls>* { max-width:100%; } .preview-sidebar>button { min-height:44px; } }
+.preview-card label { display:grid; gap:5px; min-width:0; }
+.preview-card select { max-width:100%; min-width:0; width:100%; }
+select { appearance:none; padding-right:34px; background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%); background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%; background-size:5px 5px; background-repeat:no-repeat; }
