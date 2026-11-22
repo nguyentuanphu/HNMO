@@ -69,12 +69,22 @@ public class NovaSkillStartPlugin : TargetedSkillPluginBase
         _ = Task.Run(() => this.RunNovaAsync(player, skillEntry, cancellationTokenSource));
     }
 
+    private static void ClearCancelToken(Player player, SkillCancellationTokenSource cancellationTokenSource)
+    {
+        if (ReferenceEquals(player.SkillCancelTokenSource, cancellationTokenSource))
+        {
+            player.SkillCancelTokenSource.Dispose();
+            player.SkillCancelTokenSource = null;
+        }
+    }
+
     private async ValueTask RunNovaAsync(Player player, SkillEntry skillEntry, SkillCancellationTokenSource cancellationTokenSource)
     {
         var cancellationToken = cancellationTokenSource.Token;
         if (player.Attributes is not { } playerAttributes
             || skillEntry.Skill is null)
         {
+            ClearCancelToken(player, cancellationTokenSource);
             return;
         }
 
@@ -112,12 +122,11 @@ public class NovaSkillStartPlugin : TargetedSkillPluginBase
         catch (Exception ex)
         {
             player.Logger.LogError(ex, "Unexpected error during performing nova skill");
-            player.SkillCancelTokenSource?.Dispose();
-            player.SkillCancelTokenSource = null;
         }
         finally
         {
             player.Attributes?.RemoveElement(stepDamageElement, Stats.NovaStageDamage);
+            ClearCancelToken(player, cancellationTokenSource);
         }
     }
 
