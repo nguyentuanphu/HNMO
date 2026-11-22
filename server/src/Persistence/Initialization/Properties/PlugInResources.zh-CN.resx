@@ -493,4 +493,6 @@
   </data>
   <data name="SkillEnergyRequirementsUpdatePlugIn_Name" xml:space="preserve"><value>修复 Recovery 与 Power Slash 的智力要求</value></data>
   <data name="SkillEnergyRequirementsUpdatePlugIn_Description" xml:space="preserve"><value>将 Recovery 的智力要求设为 168（与 Season 6 / Season 9 服务端套件及 Crystal of Recovery 一致），并将 Power Slash 的智力要求设为 100。</value></data>
+  <data name="SwellLifeDurationUpdatePlugIn_Name" xml:space="preserve"><value>按 Season 6 套件调整生命之光持续时间</value></data>
+  <data name="SwellLifeDurationUpdatePlugIn_Description" xml:space="preserve"><value>将生命之光与生命之光熟练的持续时间从 60 + 智力 / 180 秒（上限 180 秒）更新为无上限的 60 + 智力 / 10 秒，与 Season 6 服务端套件一致。</value></data>
 </root>
