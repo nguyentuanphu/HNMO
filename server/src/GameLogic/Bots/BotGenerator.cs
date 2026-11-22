@@ -151,7 +151,10 @@ internal sealed class BotGenerator
             var existing = await context.GetAccountByLoginNameAsync(loginName, cancellationToken).ConfigureAwait(false);
             if (existing is not null)
             {
-                buffersAssigned += existing.Characters.Count(c => BotBuild.IsSupportElf(c.CharacterClass, c.Name));
+                if (existing.IsBot)
+                {
+                    buffersAssigned += existing.Characters.Count(c => BotBuild.IsSupportElf(c.CharacterClass, c.Name));
+                }
 
                 // Skip the slots this account drew when it was created, so new
                 // accounts continue the queue instead of redrawing its head.
