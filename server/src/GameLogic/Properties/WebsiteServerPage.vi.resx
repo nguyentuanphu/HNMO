@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="ClientRulesEn" xml:space="preserve"><value>Quy định dùng client (tiếng Anh)</value></data>
+  <data name="ClientRulesVi" xml:space="preserve"><value>Quy định dùng client (tiếng Việt)</value></data>
+  <data name="NotForSaleEn" xml:space="preserve"><value>Không bán (tiếng Anh)</value></data>
+  <data name="NotForSaleVi" xml:space="preserve"><value>Không bán (tiếng Việt)</value></data>
+  <data name="Description" xml:space="preserve"><value>Nội dung công khai cho người chơi, mỗi quy định một dòng. Để trống nếu chưa công bố. Không nhập mật khẩu hoặc thông tin tài khoản riêng tư vào đây.</value></data>
+  <data name="MaximumLength" xml:space="preserve"><value>Chỉ nhập tối đa {1} ký tự.</value></data>
+</root>

@@ -23,6 +23,7 @@ internal static class Website
             app.MapGet("/website/market/s9", () => Results.NotFound());
         }
 
+        Forward(app, "/website/server-guide", "api/website/server-guide", options, clients, rateLimited: true);
         Forward(app, "/website/data", "api/website", options, clients);
         Forward(app, "/website/details", "api/website/details", options, clients);
         Forward(app, "/website/missions", "api/website/missions", options, clients);
@@ -109,9 +110,9 @@ internal static class Website
         });
     }
 
-    private static void Forward(WebApplication app, string route, string apiPath, PortalOptions options, IHttpClientFactory clients, string? apiBaseUrl = null)
+    private static void Forward(WebApplication app, string route, string apiPath, PortalOptions options, IHttpClientFactory clients, string? apiBaseUrl = null, bool rateLimited = false)
     {
-        app.MapGet(route, async (HttpContext context) =>
+        var endpoint = app.MapGet(route, async (HttpContext context) =>
         {
             context.Response.Headers.CacheControl = "no-store";
             using var timeout = CancellationTokenSource.CreateLinkedTokenSource(context.RequestAborted);
@@ -132,5 +133,9 @@ internal static class Website
                 return Results.StatusCode(StatusCodes.Status503ServiceUnavailable);
             }
         });
+        if (rateLimited)
+        {
+            endpoint.RequireRateLimiting("per-visitor");
+        }
     }
 }
