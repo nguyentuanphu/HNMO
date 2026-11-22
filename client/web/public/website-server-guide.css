@@ -12,3 +12,6 @@
 @media(max-width:600px){#server-guide .section-head{display:grid;gap:12px}#server-guide .section-head button{width:100%}.server-guide-card{padding:16px}}
 
 #upcoming .slot time {font:600 1rem/1.6 system-ui;overflow-wrap:anywhere}
+
+.server-hero-brand {display:flex;align-items:center;flex-wrap:wrap;gap:12px;font:600 1.15rem/1.5 system-ui;color:var(--gold)}
+#server-guide-season:empty {display:none}

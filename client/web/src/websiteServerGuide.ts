@@ -1,4 +1,4 @@
-import { parseServerGuide, type ServerGuideFacts, type ServerGuideView, type GuideVip } from './websiteServerGuideModels.js';
+import { parseServerGuide, type ServerGuideFacts, type ServerGuideView, type GuideVip, type ServerGuideExtras } from './websiteServerGuideModels.js';
 import { serverGuideCopy, type ServerGuideText } from './websiteServerGuideCopy.js';
 
 const root = document.getElementById('server-guide');
@@ -78,6 +78,33 @@ function policies(view: ServerGuideView): HTMLElement {
   }
   return result;
 }
+function systems(extras: ServerGuideExtras): HTMLElement {
+  const result = card('systems');
+  line(result, 'antiCheat', t(extras.systems.antiCheatEnabled ? 'yes' : 'no'));
+  line(result, 'activityLog', t(extras.systems.activityLogEnabled ? 'yes' : 'no'));
+  if (extras.systems.activityLogEnabled && extras.systems.onlyValuableDrops) line(result, 'valuableOnly');
+  line(result, 'recordingNote'); return result;
+}
+function quests(extras: ServerGuideExtras): HTMLElement {
+  const result = card('quests');
+  if (!extras.quests.length) { line(result, 'questEmpty'); return result; }
+  result.append(table(['quests', 'npc', 'class', 'levels'], extras.quests.map(quest => [name(quest),
+    vi() ? quest.npcVi : quest.npcEn, (vi() ? quest.classVi : quest.classEn) || t('allClasses'),
+    `${quest.minimumLevel}–${quest.maximumLevel > 0 ? quest.maximumLevel : '∞'}`])));
+  if (extras.questsTruncated) line(result, 'moreRows'); return result;
+}
+function crafting(extras: ServerGuideExtras): HTMLElement {
+  const result = card('crafting'); line(result, 'craftingNote');
+  if (!extras.crafts.length) { line(result, 'craftEmpty'); return result; }
+  result.append(table(['result', 'npc', 'chance', 'cost'], extras.crafts.map(recipe => {
+    const item = recipe.upgrade ? t('upgrade', recipe.addLevel) : `${vi() ? recipe.itemVi : recipe.itemEn} +${recipe.randomMinimumLevel}–${recipe.randomMaximumLevel}`;
+    const excellent = recipe.excellentChance > 0 ? ` ${t('excellentResult', recipe.excellentChance, recipe.maximumExcellentOptions)}` : '';
+    const chance = recipe.basePercent === null ? t('dynamicRate') : `${recipe.basePercent}%`;
+    const price = recipe.zenPerFinalPercentage > 0 ? t('costFormula', recipe.fixedZen, recipe.zenPerFinalPercentage) : String(recipe.fixedZen);
+    return [`${name(recipe)}: ${item}${excellent}`, vi() ? recipe.npcVi : recipe.npcEn, `${chance} / ${recipe.maximumPercent}%`, price];
+  })));
+  if (extras.craftsTruncated) line(result, 'moreRows'); return result;
+}
 function render(): void {
   if (!root) return;
   const heading = node('div'); heading.className = 'section-head'; const title = node('div'); title.append(node('h2', t('title')), node('p', t('source')));
@@ -88,6 +115,7 @@ function render(): void {
   if (!server || !snapshot) { const error = node('p', t('unavailable')); error.setAttribute('role', 'status'); root.append(error); return; }
   const grid = node('div'); grid.className = 'server-guide-grid';
   grid.append(progression(server.facts), helper(server.facts), storage(server.facts), party(server.facts), vip(server.facts), catalog(server.facts), policies(snapshot));
+  if (server.extras) grid.append(systems(server.extras), quests(server.extras), crafting(server.extras));
   const time = new Intl.DateTimeFormat(vi() ? 'vi-VN' : 'en-AU', { timeZone: 'Australia/Sydney', dateStyle: 'medium', timeStyle: 'short' }).format(new Date(snapshot.updatedAt));
   root.append(grid, node('p', t('updated', time)));
 }

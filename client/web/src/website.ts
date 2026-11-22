@@ -1165,6 +1165,11 @@ function renderMaps(): void {
   }
   if (!maps.length) empty("maps");
 }
+function renderHeroSeason(world: WorldGroup | undefined): void {
+  const badge = document.getElementById("server-guide-season");
+  if (badge) { badge.textContent = world?.seasonBadge ?? ""; badge.hidden = !world?.seasonBadge; }
+}
+
 function render(): void {
   document.documentElement.lang = language;
   element("community").dataset.communityLinks = t("contact");
@@ -1258,6 +1263,7 @@ function render(): void {
   }
   select.value = selected;
   const matchedWorld = worlds.find((w) => w.servers.some((s) => String(s.id) === selected));
+  renderHeroSeason(matchedWorld);
   if (matchedWorld && !matchedWorld.isOpen) {
     element("notice").textContent = t("worldLockedNotice").replace("%s", matchedWorld.openingDateSydney || matchedWorld.openingDateUtc || "");
   }

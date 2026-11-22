@@ -8,6 +8,8 @@ using HNMO.GameLogic;
 using HNMO.GameLogic.CashShop;
 using HNMO.GameLogic.MuHelper;
 using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.PlugIns.ActivityLog;
+using HNMO.GameLogic.PlugIns.AntiCheat;
 using HNMO.GameLogic.PlugIns.GameplayRules;
 using HNMO.GameLogic.PlugIns.Vip;
 using HNMO.Interfaces;
@@ -50,11 +52,25 @@ public sealed class WebsiteServerGuideController(IDictionary<int, IGameServer> s
                 updatedAt = DateTimeOffset.UtcNow,
                 clientRules = new { en = settings.ServerClientRulesEn, vi = settings.ServerClientRulesVi },
                 notForSale = new { en = settings.ServerNotForSaleEn, vi = settings.ServerNotForSaleVi },
-                servers = running.Select(server => new { id = server.Context.Id, facts = Build(server.Context) }).ToArray(),
+                servers = running.Select(server => new { id = server.Context.Id, facts = Build(server.Context), extras = Extras(server.Context) }).ToArray(),
             };
         }).ConfigureAwait(false);
         this.Response.Headers.CacheControl = "public,max-age=15";
         return this.Ok(snapshot);
+    }
+
+    private static object Extras(IGameServerContext context)
+    {
+        var npcs = context.ServerConfiguration.Maps.Where(map => map.IsActive)
+            .SelectMany(map => map.MonsterSpawns).Where(spawn => spawn.Quantity > 0)
+            .Select(spawn => spawn.MonsterDefinition).OfType<HNMO.DataModel.Configuration.MonsterDefinition>()
+            .Where(npc => npc.IsActive && (npc.Quests.Count > 0 || npc.ItemCraftings.Count > 0)).Distinct().ToArray();
+        var activity = ActivityLogPlugIn.Get(context);
+        var activityConfiguration = activity?.Configuration ?? new ActivityLogConfiguration();
+        return WebsiteServerGuideExtrasProjection.Build(
+            npcs,
+            context.FeaturePlugIns.GetPlugIn<AntiCheatPlugIn>()?.Configuration?.Enabled == true,
+            activity is not null && activityConfiguration.Enabled, activityConfiguration.OnlyValuableDropsAndPickups);
     }
 
     private static object Build(IGameContext context)

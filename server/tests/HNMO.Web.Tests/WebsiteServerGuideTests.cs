@@ -11,6 +11,8 @@ using System.Text.Json.Nodes;
 using HNMO.AttributeSystem;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Configuration.Items;
+using HNMO.DataModel.Configuration.ItemCrafting;
+using HNMO.DataModel.Configuration.Quests;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.CashShop;
@@ -176,6 +178,7 @@ public sealed class WebsiteServerGuideTests
         var game = new Mock<IGameServerContext>();
         game.SetupGet(value => value.Id).Returns((byte)7); game.SetupGet(value => value.Configuration).Returns(configuration);
         game.SetupGet(value => value.PlugInManager).Returns(manager);
+        game.SetupGet(value => value.ServerConfiguration).Returns(storage.CreateNew<GameServerConfiguration>());
         game.SetupGet(value => value.FeaturePlugIns).Returns(new FeaturePlugInContainer(manager));
         var server = new Mock<HNMO.Interfaces.IGameServer>();
         server.As<IGameServerContextProvider>().SetupGet(value => value.Context).Returns(game.Object);
@@ -198,6 +201,54 @@ public sealed class WebsiteServerGuideTests
         servers.Clear();
         Assert.That(await controller.GetAsync().ConfigureAwait(false), Is.TypeOf<StatusCodeResult>());
         Assert.That(controller.Response.Headers.CacheControl.ToString(), Is.EqualTo("no-store"));
+    }
+
+    /// <summary>Checks configured quests and simple results use real rates and do not invent a value-derived rate.</summary>
+    [Test]
+    public void ExtrasUseConfiguredQuestAndIngredientSensitiveRecipeValues()
+    {
+        using var context = new InMemoryPersistenceContextProvider().CreateNewContext();
+        var npc = context.CreateNew<MonsterDefinition>(); npc.Designation = new("Crafter");
+        var quest = context.CreateNew<QuestDefinition>(); quest.Name = new("Promotion"); quest.MinimumCharacterLevel = 150;
+        npc.Quests.Add(quest);
+        var recipe = context.CreateNew<ItemCrafting>(); recipe.Name = new("Recipe");
+        recipe.SimpleCraftingSettings = context.CreateNew<SimpleCraftingSettings>();
+        recipe.SimpleCraftingSettings.NpcPriceDivisor = 1000; recipe.SimpleCraftingSettings.MaximumSuccessPercent = 80;
+        recipe.SimpleCraftingSettings.Money = 1234;
+        var output = context.CreateNew<ItemCraftingResultItem>(); output.ItemDefinition = context.CreateNew<ItemDefinition>();
+        output.ItemDefinition.Name = new("Wings"); output.RandomMaximumLevel = 3;
+        recipe.SimpleCraftingSettings.ResultItems.Add(output); npc.ItemCraftings.Add(recipe);
+        var data = JsonSerializer.SerializeToNode(WebsiteServerGuideExtrasProjection.Build([npc], true, true, true), new JsonSerializerOptions(JsonSerializerDefaults.Web))!;
+        Assert.That(data["quests"]![0]!["minimumLevel"]!.GetValue<int>(), Is.EqualTo(150));
+        Assert.That(data["crafts"]![0]!["basePercent"], Is.Null);
+        Assert.That(data["crafts"]![0]!["maximumPercent"]!.GetValue<int>(), Is.EqualTo(80));
+        Assert.That(data["crafts"]![0]!["fixedZen"]!.GetValue<int>(), Is.EqualTo(1234));
+        Assert.That(data["systems"]!["onlyValuableDrops"]!.GetValue<bool>(), Is.True);
+        recipe.ItemCraftingHandlerClassName = "CustomHandler";
+        var specialized = JsonSerializer.SerializeToNode(WebsiteServerGuideExtrasProjection.Build([npc], false, false, false), new JsonSerializerOptions(JsonSerializerDefaults.Web))!;
+        Assert.That(specialized["crafts"]!.AsArray(), Is.Empty);
+    }
+
+    /// <summary>Checks larger quest lists are explicitly bounded and marked incomplete.</summary>
+    [Test]
+    public void ExtrasBoundPublicQuestRowsAndPreserveUpgradeReferences()
+    {
+        using var context = new InMemoryPersistenceContextProvider().CreateNewContext();
+        var npc = context.CreateNew<MonsterDefinition>(); npc.Designation = new("Crafter");
+        for (var index = 0; index < 33; index++)
+        {
+            var quest = context.CreateNew<QuestDefinition>(); quest.Name = new("Quest"); npc.Quests.Add(quest);
+        }
+
+        var recipe = context.CreateNew<ItemCrafting>(); recipe.Name = new("Upgrade");
+        recipe.SimpleCraftingSettings = context.CreateNew<SimpleCraftingSettings>();
+        var output = context.CreateNew<ItemCraftingResultItem>(); output.Reference = 1; output.AddLevel = 1;
+        recipe.SimpleCraftingSettings.ResultItems.Add(output); npc.ItemCraftings.Add(recipe);
+        var data = JsonSerializer.SerializeToNode(WebsiteServerGuideExtrasProjection.Build([npc], false, false, false), new JsonSerializerOptions(JsonSerializerDefaults.Web))!;
+        Assert.That(data["quests"]!.AsArray(), Has.Count.EqualTo(32)); Assert.That(data["questsTruncated"]!.GetValue<bool>(), Is.True);
+        Assert.That(data["crafts"]![0]!["upgrade"]!.GetValue<bool>(), Is.True);
+        Assert.That(data["crafts"]![0]!["itemEn"], Is.Null);
+        Assert.That(data["crafts"]![0]!["maximumPercent"]!.GetValue<int>(), Is.EqualTo(100));
     }
 
     private static JsonNode Project(GameConfiguration configuration, MuHelperConfiguration? helper = null, VipConfiguration? vip = null, RateTuningConfiguration? rates = null)

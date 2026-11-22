@@ -19,6 +19,10 @@ public static class WebsiteServerGuideProjection
     private const int MaximumCatalogProducts = 100;
     private const int MaximumClasses = 32;
 
+    // The runtime only treats groups of at least three different classes as a set party.
+    private const int MinimumSetPartySize = 3;
+    private const int FullPercentage = 100;
+
     /// <summary>Projects current progression, helper, storage and paid offers without account or state-store data.</summary>
     /// <param name="configuration">The running server's configuration.</param>
     /// <param name="helper">The active helper configuration, if any.</param>
@@ -72,7 +76,7 @@ public static class WebsiteServerGuideProjection
         {
             var entry = overrides.FirstOrDefault(value => value.PartySize == size)
                 ?? RateTuningPlugIn.DefaultPartyExpBonuses.Where(value => value.PartySize <= size).MaxBy(value => value.PartySize);
-            return (object)new { size, percent = Math.Max(0, entry?.ExpPercent ?? 100), differentClassesPercent = size >= 3 ? Math.Max(0, entry?.DifferentClassesExpPercent ?? 0) : 0 };
+            return (object)new { size, percent = Math.Max(0, entry?.ExpPercent ?? FullPercentage), differentClassesPercent = size >= MinimumSetPartySize ? Math.Max(0, entry?.DifferentClassesExpPercent ?? 0) : 0 };
         }).ToArray();
     }
 

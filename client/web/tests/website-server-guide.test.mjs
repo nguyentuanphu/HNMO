@@ -35,3 +35,19 @@ test('only the selected public model survives parsing and untrusted policy remai
   assert.equal(parsed.clientRules.en, '<img src=x onerror=alert(1)>');
   value.updatedAt = 'not-a-time'; assert.throws(() => parseServerGuide(value));
 });
+
+
+test('the complete byte-sized party setting is supported without accepting unbounded arrays', () => {
+  const value = reply(); value.servers[0].facts.partyExperience = Array.from({ length: 254 }, (_, index) => ({ size: index + 2, percent: 220, differentClassesPercent: 300 }));
+  assert.equal(parseServerGuide(value).servers[0].facts.partyExperience.length, 254);
+  value.servers[0].facts.partyExperience.push({}, {});
+  assert.throws(() => parseServerGuide(value));
+});
+
+test('extra system metadata stays allowlisted and absent extras remain compatible', () => {
+  const value = reply();
+  value.servers[0].extras = { systems: { antiCheatEnabled: false, activityLogEnabled: true, onlyValuableDrops: true, fileName: 'private-state' }, quests: [], questsTruncated: false, crafts: [], craftsTruncated: false };
+  const parsed = parseServerGuide(value);
+  assert.equal(parsed.servers[0].extras.systems.onlyValuableDrops, true);
+  assert.equal(JSON.stringify(parsed).includes('private-state'), false);
+});
