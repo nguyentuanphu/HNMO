@@ -1126,5 +1126,11 @@ namespace HNMO.Persistence.Initialization.Properties {
 
         /// <summary>Gets the localized SwellLifeDurationUpdatePlugIn_Description text.</summary>
         public static string SwellLifeDurationUpdatePlugIn_Description => ResourceManager.GetString("SwellLifeDurationUpdatePlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized IncreaseBlockMasterFlatUpdatePlugIn_Name text.</summary>
+        public static string IncreaseBlockMasterFlatUpdatePlugIn_Name => ResourceManager.GetString("IncreaseBlockMasterFlatUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized IncreaseBlockMasterFlatUpdatePlugIn_Description text.</summary>
+        public static string IncreaseBlockMasterFlatUpdatePlugIn_Description => ResourceManager.GetString("IncreaseBlockMasterFlatUpdatePlugIn_Description", resourceCulture)!;
     }
 }
