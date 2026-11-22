@@ -5,6 +5,7 @@ for (const width of [375, 820, 1280]) {
     await page.setViewportSize({ width, height: 900 });
     await page.route('**/game-name.json', (route) => route.fulfill({ json: { name: 'Close' } }));
     await page.route('**/portal/**', (route) => route.fulfill({ status: 503, json: { error: 'Server unavailable' } }));
+    await page.route('**/portal/session', route => route.fulfill({ json: { authenticated: false } }));
     await page.goto('/account.html');
     await page.locator('[data-site-language="vi"]').click();
     await expect(page.locator('html')).toHaveAttribute('lang', 'vi');

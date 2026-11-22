@@ -16,6 +16,7 @@ const copy = {
   startingCoins: ['New accounts receive {0} for the cash shop.', 'Tài khoản mới nhận {0} để dùng trong cửa hàng coin.'],
   setupSaved: ['Saved. Registration is ready.', 'Đã lưu. Có thể đăng ký tài khoản.'],
 } as const;
+class RegistrationError extends Error { constructor(readonly key: 'error' | 'unavailable' | 'busy' | 'taken') { super(key); } }
 let googleCredential = '';
 let renderGoogle: (() => void) | null = null;
 function vi(): boolean { return document.documentElement.lang === 'vi'; }
@@ -43,9 +44,9 @@ el('accountReturnSignIn').onclick = () => view(false);
 async function post(path: string, body: unknown): Promise<Record<string, unknown>> {
   const response = await fetch(path, { method: 'POST', cache: 'no-store', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
   const result: unknown = await response.json().catch(() => null);
-  if (!response.ok) throw new Error(t(response.status === 409 ? 'taken' : response.status === 429 ? 'busy' : response.status === 503 ? 'unavailable' : 'error'));
-  if (!result || typeof result !== 'object' || Array.isArray(result)) throw new Error(t('unavailable'));
-  if ('error' in result && result.error) throw new Error(t('error'));
+  if (!response.ok) throw new RegistrationError(response.status === 409 ? 'taken' : response.status === 429 ? 'busy' : response.status === 503 ? 'unavailable' : 'error');
+  if (!result || typeof result !== 'object' || Array.isArray(result)) throw new RegistrationError('unavailable');
+  if ('error' in result && result.error) throw new RegistrationError('error');
   return result as Record<string, unknown>;
 }
 async function finish(loginName: string, password: string): Promise<void> {
@@ -62,7 +63,7 @@ el('registerForm').addEventListener('submit', event => {
   if (button.disabled) return;
   button.disabled = true;
   void post(googleCredential ? '/portal/google' : '/portal/register', { loginName, password, ...(googleCredential ? { credential: googleCredential } : {}) })
-    .then(() => finish(loginName, password)).catch(error => message(error instanceof Error ? error.message : t('unavailable'))).finally(() => { button.disabled = false; });
+    .then(() => finish(loginName, password)).catch(error => message(error instanceof RegistrationError ? t(error.key) : t('unavailable'))).finally(() => { button.disabled = false; });
 });
 
 interface GoogleIdentity { accounts: { id: { initialize(options: { client_id: string; callback: (response: { credential: string }) => void }): void; renderButton(parent: HTMLElement, options: Record<string, string | number>): void } } }
@@ -93,7 +94,7 @@ const label = document.createElement('label'); const text = document.createEleme
 const password = document.createElement('input'); password.type = 'password'; password.minLength = 3; password.maxLength = 20; password.required = true; password.autocomplete = 'new-password';
 const save = document.createElement('button'); save.type = 'submit'; save.dataset.authText = 'setPassword'; save.dataset.authTitle = 'passwordHint'; password.dataset.authTitle = 'passwordHint'; label.append(text, password); reset.append(label, save); el('accountGoogle').append(reset); translate();
 reset.onsubmit = event => { event.preventDefault(); save.disabled = true; const next = password.value; void post('/portal/google', { credential: googleCredential, newPassword: next }).then(answer => {
-  if (typeof answer.loginName !== 'string') throw new Error(t('error')); return finish(answer.loginName, next);
+  if (typeof answer.loginName !== 'string') throw new RegistrationError('error'); return finish(answer.loginName, next);
 }).catch(() => { el('google-message').textContent = t('error'); }).finally(() => { password.value = ''; save.disabled = false; }); };
 void setupGoogle();
 void fetch('/portal/status').then(response => response.json()).then((status: { ready?: boolean; startingCoins?: string }) => {

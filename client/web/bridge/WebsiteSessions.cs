@@ -1,3 +1,4 @@
+using System.Net;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 using System.Text.Json;
@@ -55,7 +56,8 @@ internal sealed class WebsiteSessions(TimeProvider clock, int capacity = 10000)
         if (site.Length > 0 && site != "same-origin" && site != "none") return false;
         var origin = context.Request.Headers.Origin.ToString();
         return origin.Length == 0 || (Uri.TryCreate(origin, UriKind.Absolute, out var uri)
-            && string.Equals(uri.GetLeftPart(UriPartial.Authority), $"{context.Request.Scheme}://{context.Request.Host}", StringComparison.OrdinalIgnoreCase));
+            && Uri.TryCreate(Origin(context), UriKind.Absolute, out var requestUri)
+            && string.Equals(uri.GetLeftPart(UriPartial.Authority), requestUri.GetLeftPart(UriPartial.Authority), StringComparison.OrdinalIgnoreCase));
     }
 
     internal static bool IsAccountPath(PathString path) => path.StartsWithSegments("/portal/account") || path.StartsWithSegments("/portal/gift-box")
@@ -97,7 +99,7 @@ internal sealed class WebsiteSessions(TimeProvider clock, int capacity = 10000)
         context.Request.ContentLength = injected.Length;
         context.Response.OnStarting(() =>
         {
-            if (context.Response.StatusCode == 401) { this.Remove(token); DeleteCookie(context); }
+            if (context.Response.StatusCode == 401) this.Remove(token);
             return Task.CompletedTask;
         });
         try { await next().ConfigureAwait(false); }
@@ -105,10 +107,25 @@ internal sealed class WebsiteSessions(TimeProvider clock, int capacity = 10000)
     }
 
     internal static void SetCookie(HttpContext context, string token) => context.Response.Cookies.Append(CookieName, token,
-        new CookieOptions { HttpOnly = true, Secure = context.Request.IsHttps, SameSite = SameSiteMode.Strict, Path = "/", MaxAge = TimeSpan.FromHours(8), IsEssential = true });
+        new CookieOptions { HttpOnly = true, Secure = IsSecure(context), SameSite = SameSiteMode.Strict, Path = "/", MaxAge = TimeSpan.FromHours(8), IsEssential = true });
 
-    internal static void DeleteCookie(HttpContext context) => context.Response.Cookies.Delete(CookieName,
-        new CookieOptions { HttpOnly = true, Secure = context.Request.IsHttps, SameSite = SameSiteMode.Strict, Path = "/" });
+    // Revocation is server-side. A late response for an old token must not erase a newer browser cookie.
+
+    // Only a local reverse proxy may supply origin metadata. Internet-supplied forwarding headers are ignored.
+    private static bool IsLocalProxy(HttpContext context) => context.Connection.RemoteIpAddress is { } address
+        && IPAddress.IsLoopback(address.IsIPv4MappedToIPv6 ? address.MapToIPv4() : address);
+
+    private static bool IsSecure(HttpContext context) => context.Request.IsHttps || (IsLocalProxy(context)
+        && context.Request.Headers["X-Forwarded-Proto"].Count == 1 && context.Request.Headers["X-Forwarded-Proto"] == "https");
+
+    private static string Origin(HttpContext context)
+    {
+        var host = context.Request.Host.Value;
+        if (IsLocalProxy(context) && context.Request.Headers["X-Forwarded-Host"].Count == 1
+            && context.Request.Headers["X-Forwarded-Host"].ToString() is { Length: > 0 and <= 300 } forwarded
+            && !forwarded.Any(character => char.IsWhiteSpace(character) || character is '/' or '\\' or '@' or ',' or '?' or '#')) host = forwarded;
+        return $"{(IsSecure(context) ? "https" : context.Request.Scheme)}://{host}";
+    }
 
     private static string Hash(string token) => Convert.ToHexString(SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(token)));
 

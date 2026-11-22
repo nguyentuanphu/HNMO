@@ -2,6 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 
 async function sessionFixture(page: Page, signedIn: boolean): Promise<{ calls: string[] }> {
   const calls: string[] = [];
+  await page.context().route('**/portal/**', route => route.fulfill({ status: 503, json: { error: 'fixture-unavailable' } }));
   await page.context().route('**/game-name.json', route => route.fulfill({ json: { name: 'HNMO' } }));
   await page.context().route('**/website/**', route => route.fulfill({ status: 503 }));
   await page.context().route('**/website/settings', route => route.fulfill({ json: {} }));
@@ -141,4 +142,55 @@ test('signing in and out updates other open account tabs without another passwor
   expect(fixture.calls.filter(call => call === 'POST')).toHaveLength(1);
   await page.locator('#accountLogout').click(); await expect(other.locator('#accountLoginPanel')).toBeVisible();
   await expect(other.locator('#accountDashboard')).toBeHidden(); await expect(other.locator('#accountPanels')).not.toContainText('250');
+});
+
+
+test('private feature forms never flash before the account module is ready', async ({ page }) => {
+  await sessionFixture(page, false);
+  let release: () => void = () => {}; let arrived: () => void = () => {};
+  const pending = new Promise<void>(resolve => { release = resolve; }); const requested = new Promise<void>(resolve => { arrived = resolve; });
+  await page.route('**/js/accountPage.js', async route => { arrived(); await pending; await route.continue(); });
+  await page.goto('/account.html', { waitUntil: 'commit' }); await requested;
+  for (const id of ['play', 'gift', 'resets', 'safety']) { await expect(page.locator('#'+id)).toHaveCount(1); await expect(page.locator('#'+id)).toBeHidden(); }
+  await expect(page.locator('#accountLoginPanel')).toBeHidden(); release();
+  await page.waitForLoadState('domcontentloaded'); await expect(page.locator('#accountDashboard')).toBeHidden();
+});
+
+test('failed logout hides private data and offers a real retry without claiming success', async ({ page }) => {
+  await sessionFixture(page, true); let fail = true;
+  await page.route('**/portal/session', route => route.request().method() === 'DELETE' && fail ? route.fulfill({ status: 503 }) : route.fallback());
+  await page.goto('/account.html'); await expect(page.locator('#account-overview')).toBeVisible();
+  await page.locator('#accountLogout').click(); await expect(page.locator('#accountMessage')).toContainText('not confirmed');
+  await expect(page.locator('#accountDashboard')).toBeHidden(); await expect(page.locator('#accountLoginPanel')).toBeHidden();
+  await page.locator('header [data-account-language=vi]').click();
+  await expect(page.locator('#accountMessage')).toContainText('Chưa xác nhận');
+  fail = false; await page.locator('#accountRetryLogout').click(); await expect(page.locator('#accountLoginPanel')).toBeVisible();
+  await expect(page.locator('#accountDashboard')).toBeHidden();
+});
+
+
+test('registration network errors remain Vietnamese and keep private panels closed', async ({ page }) => {
+  await sessionFixture(page, false); await page.addInitScript(() => localStorage.setItem('hnmo.language', 'vi'));
+  await page.route('**/portal/register', route => route.abort());
+  await page.goto('/account.html'); await page.locator('#accountCreateButton').click();
+  await page.locator('#loginName').fill('ann'); await page.locator('#password').fill('secret'); await page.locator('#registerForm button').click();
+  await expect(page.locator('#registerMessage')).toContainText('Hiện chưa dùng được');
+  await expect(page.locator('#accountDashboard')).toBeHidden();
+});
+
+
+test('a delayed session restore never asks an already signed-in player for a password', async ({ page }) => {
+  const fixture = await sessionFixture(page, true); let release: () => void = () => {}; let arrived: () => void = () => {};
+  const pending = new Promise<void>(resolve => { release = resolve; }); const requested = new Promise<void>(resolve => { arrived = resolve; });
+  await page.route('**/portal/session', async route => { if (route.request().method() === 'GET') { arrived(); await pending; } await route.fallback(); });
+  await page.goto('/account.html'); await requested;
+  await expect(page.locator('#accountLoginPanel')).toBeHidden(); await expect(page.locator('#accountDashboard')).toBeHidden();
+  release(); await expect(page.locator('#account-overview')).toBeVisible(); expect(fixture.calls).not.toContain('POST');
+});
+
+test('profile restore retries a network failure using its existing session', async ({ page }) => {
+  const fixture = await sessionFixture(page, true); let fail = true;
+  await page.route('**/portal/session', route => fail && route.request().method() === 'GET' ? route.fulfill({ status: 503 }) : route.fallback());
+  await page.goto('/account.html'); await expect(page.locator('#accountRetrySession')).toBeVisible(); await expect(page.locator('#accountLoginPanel')).toBeHidden();
+  fail = false; await page.locator('#accountRetrySession').click(); await expect(page.locator('#account-overview')).toBeVisible(); expect(fixture.calls).not.toContain('POST');
 });

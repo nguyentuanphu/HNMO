@@ -55,7 +55,6 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         {
             if (!WebsiteSessions.IsSameOrigin(context)) return Results.StatusCode(403);
             portal._sessions.Remove(context.Request.Cookies[WebsiteSessions.CookieName]);
-            WebsiteSessions.DeleteCookie(context);
             context.Response.Headers.CacheControl = "no-store";
             return Results.Json(new { authenticated = false });
         }).RequireRateLimiting("per-visitor");
@@ -150,7 +149,6 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         if (context.Request.Cookies[WebsiteSessions.CookieName] is { } previous)
         {
             this._sessions.Remove(previous);
-            WebsiteSessions.DeleteCookie(context);
         }
         if (string.IsNullOrEmpty(this.ApiKey)) return Results.Json(new { error = "setup" }, statusCode: 503);
         RegisterRequest? request;

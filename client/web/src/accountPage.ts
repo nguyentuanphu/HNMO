@@ -31,6 +31,7 @@ let active = 'overview';
 let generation = 0;
 let loading = false;
 let authEpoch = 0;
+let signInNotice: AccountTextKey | null = null;
 const loadedLegacy = new Set<string>();
 const integrations = new AccountIntegrations({ getCredentials: () => credentials, getLanguage: () => language }, logOut);
 const missions = new AccountMissions({ language: () => language, request, error: showError });
@@ -202,6 +203,10 @@ function renderCommunity(): void {
 }
 
 function translate(): void {
+  const statusKey = element('accountMessage').dataset.at as AccountTextKey | undefined;
+  if (statusKey && statusKey in accountPageTexts) element('accountMessage').textContent = t(statusKey);
+  element('accountRetrySession').textContent = t('refresh'); element('accountRetrySession').title = t('refreshHint');
+  element('accountRetryLogout').textContent = t('logout'); element('accountRetryLogout').title = t('logoutHint');
   element('accountDashboard').lang = language;
   element('accountLoginPanel').lang = language;
   for (const root of [element('accountDashboard'), element('accountLoginPanel')]) {
@@ -278,7 +283,7 @@ async function refresh(page = 0): Promise<boolean> {
   try {
     const data = await request<AccountSnapshot>('/portal/account/overview', { page });
     if (current !== generation) return false;
-    snapshot = data; element('accountMessage').textContent = ''; delete element('accountMessage').dataset.at;
+    snapshot = data; signInNotice = null; element('accountMessage').textContent = ''; delete element('accountMessage').dataset.at;
     translate(); return true;
   } catch (error) { if (current === generation) showError(error); return false; }
   finally { if (current === generation) { loading = false; renderCoins(); } }
@@ -286,6 +291,7 @@ async function refresh(page = 0): Promise<boolean> {
 
 async function showSignedIn(): Promise<void> {
   element('accountLoginPanel').hidden = true; element('accountRegistration').hidden = true;
+  for (const id of ['play', 'gift', 'resets', 'safety']) element(id).hidden = false;
   element('accountDashboard').hidden = false; element('accountPanels').hidden = false; element('accountToolbar').hidden = false;
   element('accountDashboard').classList.add('authenticated');
   element('registerForm').hidden = true; element('setupPanel').hidden = true;
@@ -298,9 +304,23 @@ async function showSignedIn(): Promise<void> {
 
 async function restoreSession(): Promise<void> {
   const epoch = authEpoch;
-  if (!await hasWebsiteSession() || epoch !== authEpoch) return;
-  credentials = { loginName: '', password: 'session' };
-  if (await refresh()) { credentials.loginName = snapshot!.loginName; await showSignedIn(); } else credentials = null;
+  element('accountLoginPanel').hidden = true; element('accountRetrySession').hidden = true; element('accountRetryLogout').hidden = true;
+  showMessage(signInNotice ?? 'checkingSession');
+  try {
+    const authenticated = await hasWebsiteSession();
+    if (epoch !== authEpoch) return;
+    if (!authenticated) {
+      element('accountLoginPanel').hidden = false;
+      if (signInNotice) showMessage(signInNotice); else { element('accountMessage').textContent = ''; delete element('accountMessage').dataset.at; }
+      return;
+    }
+    credentials = { loginName: '', password: 'session' };
+    if (await refresh()) { credentials.loginName = snapshot!.loginName; await showSignedIn(); }
+    else { credentials = null; element('accountRetrySession').hidden = !element('accountLoginPanel').hidden; }
+  } catch {
+    if (epoch !== authEpoch) return;
+    showMessage('serverError'); element('accountRetrySession').hidden = false;
+  }
 }
 
 function mount(): void {
@@ -320,6 +340,8 @@ function mount(): void {
   });
   element('accountRefresh').addEventListener('click', () => { void refresh(snapshot?.page ?? 0); });
   element('accountLogout').addEventListener('click', logOut);
+  element('accountRetryLogout').addEventListener('click', logOut);
+  element('accountRetrySession').addEventListener('click', () => { void restoreSession(); });
   element('playNowButton').addEventListener('click', event => { event.stopImmediatePropagation(); void enterGame().catch(() => showMessage('serverError')); }, { capture: true });
   for (const entry of document.querySelectorAll<HTMLElement>('[data-account-language]')) entry.addEventListener('click', () => {
     language = entry.dataset.accountLanguage === 'vi' ? 'vi' : 'en';
@@ -336,7 +358,8 @@ function mount(): void {
       if (epoch !== authEpoch) return;
       if (!response.ok) { showMessage(response.status === 401 ? 'loginError' : response.status === 503 ? 'setupError' : response.status === 429 ? 'rateError' : 'serverError'); return; }
       credentials = { loginName: element<HTMLInputElement>('accountUser').value, password: 'session' };
-      if (!await refresh()) { credentials = null; snapshot = null; renderNavigation(); return; }
+      element('accountLoginPanel').hidden = true;
+      if (!await refresh()) { credentials = null; snapshot = null; renderNavigation(); element('accountRetrySession').hidden = !element('accountLoginPanel').hidden; return; }
       element<HTMLFormElement>('accountSignIn').reset();
       translate(); await showSignedIn();
     } catch { showMessage('serverError'); }
@@ -347,14 +370,19 @@ function mount(): void {
   try {
     const notice = sessionStorage.getItem('hnmo.account.notice');
     sessionStorage.removeItem('hnmo.account.notice');
-    if (notice === 'passwordChanged') showMessage('passwordChanged');
+    if (notice === 'passwordChanged') { signInNotice = 'passwordChanged'; showMessage('passwordChanged'); }
   } catch { /* The sign-in form still works when storage is unavailable. */ }
 }
 
 function logOut(): void {
-  void signOutWebsite().then(() => location.reload()).catch(() => showMessage('serverError'));
+  element('accountRetryLogout').hidden = true; element('accountRetrySession').hidden = true;
+  showMessage('loggingOut');
+  void signOutWebsite().then(() => location.replace('/account.html')).catch(() => {
+    showMessage('logoutFailed');
+    element('accountRetryLogout').hidden = false;
+  });
   authEpoch++;
-  element('accountDashboard').hidden = true; element('accountPanels').hidden = true; element('accountLoginPanel').hidden = false;
+  element('accountDashboard').hidden = true; element('accountPanels').hidden = true; element('accountLoginPanel').hidden = true;
   vip.reset();
   giftBox.reset();
   credentials = null; snapshot = null; generation++; element<HTMLFormElement>('accountSignIn').reset();

@@ -41,7 +41,7 @@ export async function signInWebsite(loginName: string, password: string): Promis
 }
 
 export async function signOutWebsite(): Promise<void> {
-  const response = await originalFetch('/portal/session', { method: 'DELETE', credentials: 'same-origin', headers: { 'X-HNMO-Session': '1' }, cache: 'no-store' });
+  const response = await originalFetch('/portal/session', { method: 'DELETE', keepalive: true, credentials: 'same-origin', headers: { 'X-HNMO-Session': '1' }, cache: 'no-store' });
   if (!response.ok) throw new Error('Sign-out was not confirmed.');
   sessionEvents?.postMessage('changed');
 }

@@ -17,3 +17,5 @@ body[data-website-page=profile-design]>.website-back-home {bottom:calc(84px + en
 
 body[data-website-page=account] :is(#accountLoginPanel,#accountToolbar) [data-account-language] {display:none}
 @media(max-width:600px){#accountToolbar {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}#accountLogout,#accountHelp {grid-column:1/-1}}
+
+#accountRetrySession,#accountRetryLogout {min-height:48px;padding:12px 20px;background:var(--panel,#171b24);color:var(--gold,#d9b773);border:1px solid var(--gold,#d9b773);border-radius:8px}

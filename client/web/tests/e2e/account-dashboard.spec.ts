@@ -6,6 +6,7 @@ const labels = {
 };
 
 async function mockAccount(page: Page, language: 'en' | 'vi'): Promise<void> {
+  await page.route('**/portal/**', route => route.fulfill({ status: 503, json: { error: 'fixture-unavailable' } }));
   await page.addInitScript(lang => localStorage.setItem('hnmo.language', lang), language);
   await page.route('**/game-name.json', route => route.fulfill({ json: { name: 'HNMO account fixture', links: { discord: 'https://discord.com/invite/hnmo', zalo: 'https://zalo.me/12345' } } }));
   await page.route('**/portal/session', async route => {

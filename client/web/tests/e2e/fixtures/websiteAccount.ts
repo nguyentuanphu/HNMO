@@ -3,6 +3,7 @@ import { expect, type Page } from '@playwright/test';
 /** A cookie-authenticated account boundary for existing feature fixtures; never supplies passwords to feature routes. */
 export async function websiteAccountFixture(page: Page, loginName: string, password: string): Promise<void> {
   let authenticated = false;
+  await page.context().route('**/portal/**', route => route.fulfill({ status: 503, json: { error: 'fixture-unavailable' } }));
   await page.route('**/portal/status', route => route.fulfill({ json: { ready: true } }));
   await page.route('**/portal/session', route => {
     const method = route.request().method();

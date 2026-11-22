@@ -130,6 +130,17 @@ public sealed class WebsiteSessionTests
             Assert.That(await browser.GetStringAsync("/portal/session"), Does.Contain("true"));
             var restored = await browser.PostAsJsonAsync("/portal/account/overview", new { loginName = "victim", password = "forged", page = 0 });
             Assert.That(restored.IsSuccessStatusCode, Is.True); Assert.That(backend.LastLogin, Is.EqualTo("ann")); Assert.That(backend.LastPassword, Is.EqualTo("secret"));
+            // An old in-flight request may finish after the user signs in again. Its rejection cannot clear the new cookie.
+            backend.DelayNext = true;
+            var stale = browser.PostAsJsonAsync("/portal/account/overview", new { });
+            await backend.Arrived.Task.WaitAsync(TimeSpan.FromSeconds(10));
+            var rotated = await browser.PostAsJsonAsync("/portal/session", new { loginName = "ann", password = "secret" });
+            Assert.That(rotated.IsSuccessStatusCode, Is.True);
+            backend.Release.SetResult();
+            var rejected = await stale;
+            Assert.That(rejected.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized));
+            Assert.That(rejected.Headers.Contains("Set-Cookie"), Is.False);
+            Assert.That(await browser.GetStringAsync("/portal/session"), Does.Contain("true"));
             browser.DefaultRequestHeaders.Remove("Origin"); browser.DefaultRequestHeaders.Add("Origin", "https://attacker.test");
             Assert.That((await browser.PostAsJsonAsync("/portal/account/overview", new { })).StatusCode, Is.EqualTo(HttpStatusCode.Forbidden));
             browser.DefaultRequestHeaders.Remove("Origin"); browser.DefaultRequestHeaders.Add("Origin", address);
@@ -143,6 +154,23 @@ public sealed class WebsiteSessionTests
         finally { await app.StopAsync(); Directory.Delete(folder, true); }
     }
 
+    /// <summary>HTTPS termination works through a local proxy without trusting internet-supplied forwarding headers.</summary>
+    [Test]
+    public void LocalProxyOriginAndSecureCookieDoNotTrustRemoteHeaders()
+    {
+        var context = new DefaultHttpContext(); context.Request.Scheme = "http"; context.Request.Host = new HostString("localhost", 8117);
+        context.Connection.RemoteIpAddress = IPAddress.Loopback;
+        context.Request.Headers["X-HNMO-Session"] = "1"; context.Request.Headers.Origin = "https://public.test";
+        context.Request.Headers["X-Forwarded-Proto"] = "https"; context.Request.Headers["X-Forwarded-Host"] = "public.test";
+        Assert.That(WebsiteSessions.IsSameOrigin(context), Is.True);
+        WebsiteSessions.SetCookie(context, new string('A', 64));
+        Assert.That(context.Response.Headers.SetCookie.ToString(), Does.Contain("secure"));
+        context.Connection.RemoteIpAddress = IPAddress.Parse("203.0.113.10");
+        Assert.That(WebsiteSessions.IsSameOrigin(context), Is.False);
+        context.Connection.RemoteIpAddress = IPAddress.Loopback; context.Request.Headers["X-Forwarded-Host"] = "public.test,attacker.test";
+        Assert.That(WebsiteSessions.IsSameOrigin(context), Is.False);
+    }
+
     private static DefaultHttpContext Context(string token, string body)
     {
         var context = new DefaultHttpContext(); context.Request.Path = "/portal/gift-codes/redeem"; context.Request.Headers["X-HNMO-Session"] = "1";
@@ -153,6 +181,7 @@ public sealed class WebsiteSessionTests
     private sealed class Clock : TimeProvider
     {
         private DateTimeOffset _now = new(2026, 11, 22, 0, 0, 0, TimeSpan.Zero);
+        /// <inheritdoc/>
         public override DateTimeOffset GetUtcNow() => this._now;
         internal void Advance(TimeSpan value) => this._now += value;
     }
@@ -160,13 +189,19 @@ public sealed class WebsiteSessionTests
     private sealed class Backend : HttpMessageHandler
     {
         internal bool Valid { get; set; } = true;
+        internal bool DelayNext { get; set; }
+        internal TaskCompletionSource Arrived { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        internal TaskCompletionSource Release { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
         internal string? LastLogin { get; private set; }
         internal string? LastPassword { get; private set; }
+        /// <inheritdoc/>
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+            var rejectDelayed = this.DelayNext;
+            if (rejectDelayed) { this.DelayNext = false; this.Arrived.SetResult(); await this.Release.Task.WaitAsync(cancellationToken); }
             using var doc = JsonDocument.Parse(await request.Content!.ReadAsStringAsync(cancellationToken));
             this.LastLogin = doc.RootElement.GetProperty("loginName").GetString(); this.LastPassword = doc.RootElement.GetProperty("password").GetString();
-            return new HttpResponseMessage(this.Valid && this.LastLogin == "ann" && this.LastPassword == "secret" ? HttpStatusCode.OK : HttpStatusCode.Unauthorized)
+            return new HttpResponseMessage(!rejectDelayed && this.Valid && this.LastLogin == "ann" && this.LastPassword == "secret" ? HttpStatusCode.OK : HttpStatusCode.Unauthorized)
             { Content = JsonContent.Create(new { loginName = "ann", page = 0 }) };
         }
     }
