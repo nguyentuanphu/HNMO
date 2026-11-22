@@ -409,7 +409,7 @@ public sealed class ArenaGuildWar
 
             if (next is not null)
             {
-                await this.StartAsync(gameContext, next, teams, duels, logger).ConfigureAwait(false);
+                await this.StartAsync(gameContext, next, teams, royale, duels, logger).ConfigureAwait(false);
             }
 
             if (running is not null)
@@ -523,7 +523,7 @@ public sealed class ArenaGuildWar
         var cfg = this._configuration;
         var ids = signups.ToDictionary(e => e.Value.Name, e => e.Key);
         var ready = signups.Values
-            .Select(s => (s.Name, Players: s.Players.Where(p => p.IsConnected && p.PlayerState.CurrentState == PlayerState.EnteredWorld && teams.SideOf(p) == 0 && !royale.IsFighter(p)).Take(cfg.GuildWarMaxMembers).ToList(), All: s.Players))
+            .Select(s => (s.Name, Players: s.Players.Where(p => IsAvailableForMatch(p, teams, royale)).Take(cfg.GuildWarMaxMembers).ToList(), All: s.Players))
             .ToList();
         var enough = ready.Where(r => r.Players.Count >= cfg.GuildWarMinMembers).ToList();
         var records = this._store.Read(d => enough.Select(r => (r.Name, d.Guilds.TryGetValue(r.Name, out var g) ? g.Wins : 0, d.Guilds.TryGetValue(r.Name, out var h) ? h.Losses : 0)).ToList());
@@ -557,9 +557,29 @@ public sealed class ArenaGuildWar
         logger.LogInformation("Arena: guild war planned: {Pairs} (no opponent: {Left}).", string.Join(", ", pairs.Select(p => $"{p.A} vs {p.B}")), left ?? "-");
     }
 
-    private async ValueTask StartAsync(IGameContext gameContext, PendingMatch pending, ArenaTeams teams, ArenaDuels duels, ILogger logger)
+    private static bool IsAvailableForMatch(Player p, ArenaTeams teams, ArenaRoyale royale) =>
+        p.IsConnected && p.PlayerState.CurrentState == PlayerState.EnteredWorld && p.IsAlive
+        && p.DuelRoom is null && teams.SideOf(p) == 0 && !royale.IsFighter(p);
+
+    private async ValueTask StartAsync(IGameContext gameContext, PendingMatch pending, ArenaTeams teams, ArenaRoyale royale, ArenaDuels duels, ILogger logger)
     {
         var cfg = this._configuration;
+        var playersA = pending.PlayersA.Where(p => IsAvailableForMatch(p, teams, royale)).ToList();
+        var playersB = pending.PlayersB.Where(p => IsAvailableForMatch(p, teams, royale)).ToList();
+        if (playersA.Count == 0 || playersB.Count == 0)
+        {
+            foreach (var p in playersA.Concat(playersB))
+            {
+                await TellAsync(
+                    p,
+                    "The guild war match was cancelled because one guild had no available fighters.",
+                    "Trận bang chiến bị huỷ vì một bang không còn thành viên sẵn sàng.").ConfigureAwait(false);
+            }
+
+            logger.LogInformation("Arena: guild war {A} against {B} cancelled before start (available {CountA}:{CountB}).", pending.GuildA, pending.GuildB, playersA.Count, playersB.Count);
+            return;
+        }
+
         ArenaGuildWarEngine.TryParseFlags(cfg.GuildWarFlags, out var flagTiles);
         var match = new Match(pending.GuildA, pending.GuildB, DateTime.UtcNow + TimeSpan.FromMinutes(cfg.GuildWarMinutes))
         {
@@ -568,12 +588,12 @@ public sealed class ArenaGuildWar
             StartUtc = DateTime.UtcNow,
             Flags = flagTiles.Select(f => new ArenaGuildWarEngine.Flag(f.X, f.Y)).ToList(),
         };
-        foreach (var p in pending.PlayersA.Where(p => p.IsConnected))
+        foreach (var p in playersA)
         {
             match.Sides[p] = 1;
         }
 
-        foreach (var p in pending.PlayersB.Where(p => p.IsConnected))
+        foreach (var p in playersB)
         {
             match.Sides[p] = 2;
         }
