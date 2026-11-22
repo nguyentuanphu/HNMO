@@ -187,6 +187,12 @@ export class Combat {
     if (!plan || plan.packet === 'none') return false;
     if (target && target.dead) target = null;
     if (plan.needsTarget && !target) return false;
+    // Self buffs (and party buffs when no allied player is targeted) cast on the hero without walking to a monster.
+    const atMember = Boolean(target && target !== this.hero && target.kind === 'player' && plan.friendly && isPartyMemberSkill(this.classIndex, skill));
+    if (plan.targetSelf && plan.friendly && !atMember) {
+      target = null;
+      cell = null;
+    }
     this.pendingSkill = { skill, plan, target, cell: cell ?? (target ? { ...target.cell } : null) };
     this.repeatSkill = null;
     if (target && !plan.friendly) { this.target = target; this.events.onTargetChanged?.(target); }
