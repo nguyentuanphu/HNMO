@@ -77,6 +77,7 @@ internal static class SkillEquipmentValidator
             62 => IsActiveMount(pet, ItemConstants.DarkHorse), // Earthshake
             43 => HasNonStaffRightWeapon(right), // Death Stab
             57 => right?.Definition?.Group == SwordOrGloveGroup, // Spiral Slash
+            73 => IsStaffOrBook(right), // Mana Rays: a staff or book in the right hand
             42 or 55 or 232 or 236 => HasMeleeWeapon(right, left), // Rageful Blow, Fire Slash, Destruction, Flame Strike
             56 => HasMeleeWeapon(right, left) && !IsRideableMount(pet), // Power Slash
             24 or 46 or 51 or 52 or 54 or 235 or 427 => HasBowOrCrossbow(right, left), // Elf bow/crossbow skills
