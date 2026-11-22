@@ -69,3 +69,13 @@ API đã có nhiều dữ liệu máy chủ và tính năng tài khoản. Phần
 | LogoFormatValidation | Use an HTTPS image address or a path on this website, or leave it empty. | Dùng địa chỉ ảnh HTTPS hoặc đường dẫn trên website này, hoặc để trống. |
 
 See [WEBSITE-FEATURE-PLAN.md](WEBSITE-FEATURE-PLAN.md) for all14 requested slices and remaining implementation. Navigation for new feature routes will ship with those functional pages. This first foundation does not claim the live tracker, all guides, editable legal pages or the complete profile data APIs are finished. / Xem bảng14 phần; liên kết mới đi cùng trang chức năng thật. Chưa coi toàn bộ yêu cầu mới là hoàn tất.
+
+## Validation and limits / Kiểm thử và giới hạn
+
+.NET10.0.404: Release Web-test-project build0errors (173 inherited warnings), full Web1438passed including12 new configuration/privacy/localization cases; bridge0errors and1 existing warning. The unchanged WebsiteConfiguration.AdminPath property still has its pre-existing member-order warning, verified against477b9466. The runner prints the existing conditional PostgreSQL check as skipped; no live database certification.
+
+Frontend build/typecheck pass; full unit34passed,1 existing optional Season9 data-pack skip (HNMO_S9_DATA_DIR unset). Public fixture browser34passed; private hosted-path regressions3passed; complete account fixture suite14per skin ×6skins =84passed (EN/VI,375/820/1280).84 additional layout/screenshots checks and the owner-private hosted smoke passed with0 JavaScript errors.
+
+Đã qua build/typecheck, toàn bộ1438 ca Web,34 ca unit (một ca gói dữ liệu tùy chọn bỏ qua theo điều kiện có sẵn),37 ca trình duyệt công khai/đường dẫn xem riêng và84 ca tài khoản cho cả sáu theme. Có ảnh/kiểm tra bảy trang trên điện thoại và desktop. Không tắt hoặc giảm kiểm thử, không thêm chờ cố định.
+
+Not checked: live host save against PostgreSQL, real SMTP, game login/gameplay or financial side effects, and the full solution-wide test matrix. Existing feature handlers are preserved; these browser cases use explicit fixtures. / Chưa kiểm tra cấu hình trên PostgreSQL thật, gửi mail thật, đăng nhập/chơi game hoặc giao dịch tiền thật và toàn bộ test của solution. Bản xem không có các dịch vụ đó.
