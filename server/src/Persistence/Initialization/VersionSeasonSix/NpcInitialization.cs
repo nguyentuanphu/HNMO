@@ -39,6 +39,12 @@ internal partial class NpcInitialization : Version095d.NpcInitialization
     public override void Initialize()
     {
         base.Initialize();
+        if (this.GameConfiguration.Monsters.FirstOrDefault(m => m.Number == 239) is { } arenaGuard)
+        {
+            arenaGuard.NpcWindow = NpcWindow.Merchant;
+            arenaGuard.MerchantStore = this.CreatePotionGirlItemStorage(arenaGuard.Number);
+        }
+
         {
             var def = this.Context.CreateNew<MonsterDefinition>();
             def.Number = 226;
