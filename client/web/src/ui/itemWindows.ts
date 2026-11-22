@@ -818,6 +818,9 @@ export class ItemWindows {
   extraTooltipLines: (storage: number, slot: number) => TooltipLine[] = () => [];
   /** The vault window was shown or hidden (HNMO's vault pages follow it). */
   onVaultShown: (shown: boolean) => void = () => undefined;
+  /** The bag opened or closed. */
+  onBagToggle: (open: boolean) => void = () => undefined;
+  private lastBagOpen = false;
   /** The windows were placed again (a resize, a docked panel). */
   onPlaced: () => void = () => undefined;
 
@@ -907,7 +910,7 @@ export class ItemWindows {
 
   async toggle(): Promise<void> {
     if (this.bag.isOpen) this.closeAll();
-    else { await this.bag.open(this.parent); this.placeAll(); }
+    else { await this.bag.open(this.parent); this.placeAll(); this.syncBagToggle(); }
   }
 
   async syncVault(): Promise<void> {
@@ -916,6 +919,7 @@ export class ItemWindows {
       await this.bag.open(this.parent);
       await this.shop.open(this.parent);
       this.placeAll();
+      this.syncBagToggle();
       return;
     }
     if (this.shop.isOpen) { this.shop.close(); this.repairMode = false; this.placeAll(); }
@@ -924,6 +928,7 @@ export class ItemWindows {
       await this.bag.open(this.parent);
       await this.vault.open(this.parent);
       this.placeAll();
+      this.syncBagToggle();
       if (!wasOpen) this.onVaultShown(true);
     } else if (this.vault.isOpen) {
       this.vault.close();
@@ -941,6 +946,15 @@ export class ItemWindows {
     // Closing the inventory (or Escape) while trading cancels the trade (CSystem's HideAllGroupA, CTrade::UpdateKeyEvent).
     if (this.trade.isOpen) { this.trade.close(); this.onTradeClosed(); }
     this.bag.close();
+    this.syncBagToggle();
+  }
+
+  private syncBagToggle(): void {
+    const open = this.bag.isOpen;
+    if (open !== this.lastBagOpen) {
+      this.lastBagOpen = open;
+      this.onBagToggle(open);
+    }
   }
 
   /** What the trade window's buttons and a right click on a bag item do while trading: set by the trade. */
@@ -957,6 +971,7 @@ export class ItemWindows {
     await this.bag.open(this.parent);
     await this.trade.open(this.parent);
     this.placeAll();
+    this.syncBagToggle();
   }
 
   /** Closes the trade window and the inventory with it, as the server ended the trade. */
@@ -965,6 +980,7 @@ export class ItemWindows {
     if (this.picked.source) this.picked.drop();
     if (this.trade.isOpen) { this.trade.close(); this.bag.close(); }
     this.refresh();
+    this.syncBagToggle();
   }
 
   /** Panels docked at the right edge before these windows (the character window): the bag moves left of them. */

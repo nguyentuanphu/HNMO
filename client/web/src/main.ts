@@ -97,6 +97,7 @@ import { setUpInstanceEvents, type InstanceEventSystem } from './ui/instanceEven
 import { setUpDuelAndGens, type DuelAndGens } from './ui/duelAndGens.js';
 import { setUpFieldEvents, type FieldEvents } from './ui/fieldEventWindows.js';
 import { MiniMap } from './ui/miniMap.js';
+import { SysMenu, WindowMenu } from './ui/menuWindows.js';
 import { isNewSkill, playNewSkillEffect } from './game/newSkills.js';
 import { PlayerActions } from './game/combatLook.js';
 import { installTouchControls } from './ui/touchControls.js';
@@ -253,6 +254,8 @@ export interface GameState {
   personalShop?: PersonalShop;
   cashShop?: CashShop;
   miniMap?: MiniMap;
+  windowMenu?: WindowMenu;
+  sysMenu?: SysMenu;
   mobileHud?: MobileHud;
   connection?: Connection;
   cooldowns?: typeof skillCooldowns;
@@ -1672,6 +1675,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     onToggle: (open) => {
       if (open) state.partyWindow?.close();
       state.addStats?.setCharacterWindowOpen(open);
+      state.hud?.setOpenStates({ character: open });
       itemWindows.dockedRight = open ? 1 : 0;
       itemWindows.placeAll();
     },
@@ -1680,7 +1684,26 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
     if (event.key.toLowerCase() === 'c' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void characterWindow.toggle(); }
   });
-  state.hud = new Hud(stats, { inventory: () => { void itemWindows.toggle(); }, character: () => { void characterWindow.toggle(); }, cashShop: () => { void state.cashShop?.toggle(); } }, {
+  const toggleFriends = () => {
+    if (eventOfMap(state.mapNumber ?? null) === 'chaosCastle') return;
+    if (stats.level < 6) {
+      chat.add("You must be at least level 6 to use the 'My Friend' function.", 'system');
+      sounds.click();
+      return;
+    }
+    void state.social?.friendWindow.toggle();
+  };
+  itemWindows.onBagToggle = (open) => { state.hud?.setOpenStates({ inventory: open }); };
+  state.hud = new Hud(stats, {
+    inventory: () => { void itemWindows.toggle(); },
+    character: () => { void characterWindow.toggle(); },
+    menu: () => { void state.windowMenu?.toggle(); },
+    friends: toggleFriends,
+    cashShop: () => { void state.cashShop?.toggle(); },
+    party: () => { void state.partyWindow?.toggle(); },
+    guild: () => { void state.social?.guildWindow.toggle(); },
+    command: () => { void state.commandWindow?.toggle(); },
+  }, {
     item: (slot) => { const bagSlot = hotkeys.slotOf(slot, inventory.items); return bagSlot === null ? null : inventory.items.get(bagSlot) ?? null; },
     count: (slot) => hotkeys.count(slot, inventory.items),
     use: useHotkey,
@@ -2414,7 +2437,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     connection, party, heroName: character.name, mapName,
     click: () => sounds.click(),
     onOpen: () => { itemWindows.closeAll(); characterWindow.close(); },
-    onToggle: (open) => { itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); partyOptions.setPartyWindowOpen(open); },
+    onToggle: (open) => { itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); partyOptions.setPartyWindowOpen(open); state.hud?.setOpenStates({ party: open }); },
   });
   state.partyWindow = partyWindow;
   window.addEventListener('keydown', (event) => {
@@ -2436,7 +2459,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     playerAt: (event) => pickCharacter(event, ['player']),
     allowed: () => eventOfMap(state.mapNumber ?? null) !== 'chaosCastle',
     onOpen: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); },
-    onToggle: (open) => { itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); },
+    onToggle: (open) => { itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); state.hud?.setOpenStates({ command: open }); },
     actions: {
       trade: (player) => state.trade?.requestTrade(player.id),
       purchase: (player) => state.personalShop?.requestList(player.id),
@@ -2497,9 +2520,87 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     online.say(text);
   });
   // Guild, friends, letters and whispers (game/social.ts): G, F, /guild, the guild master NPC.
-  state.social = setupSocial({ connection, chat, heroName: character.name, earlyPackets, click: () => sounds.click(), heroCharacter: () => online.hero, players: () => online.characters.values(), hero: () => ({ level: stats.level, leadership: stats.leadership, classIndex: character.classIndex }), closeDocked: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); }, dockedChanged: (open) => { itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); }, guildWindowToggled: (open) => { if (open) state.guildLevels?.open(); else state.guildLevels?.close(); } });
+  state.social = setupSocial({ connection, chat, heroName: character.name, earlyPackets, click: () => sounds.click(), heroCharacter: () => online.hero, players: () => online.characters.values(), hero: () => ({ level: stats.level, leadership: stats.leadership, classIndex: character.classIndex }), closeDocked: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); }, dockedChanged: (open) => { itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); }, guildWindowToggled: (open) => { state.hud?.setOpenStates({ guild: open }); if (open) state.guildLevels?.open(); else state.guildLevels?.close(); }, friendWindowToggled: (open) => { state.hud?.setOpenStates({ friends: open }); } });
   // Duels (/DuelChallenge, the score window, Doorkeeper Titus) and Gens (the stewards, B); ui/duelAndGens.ts.
   state.duelAndGens = setUpDuelAndGens({ connection, heroName: character.name, hero: () => online.hero, players: () => online.characters.values(), level: () => stats.level, mapNumber: () => state.mapNumber, chat, buffs, quests, camera, canvas: ui.canvas, click: () => sounds.click(), sound: (id) => sounds.audio.play(id), duelBlocked: () => !!state.chaosMachine?.isOpen || itemWindows.vault.isOpen, closeOthers: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); }, earlyPackets });
+  const toggleGuide = () => {
+    sounds.click();
+    document.getElementById('guideButton')?.click();
+  };
+  const leaveWorld = (logOutType: number, question: string) => {
+    void confirmInGame(question).then((yes) => {
+      if (!yes) return;
+      try { connection.send('ClientToServer', 'LogOut', { Type: logOutType }); } catch { /* closing */ }
+      window.setTimeout(() => window.location.reload(), 120);
+    });
+  };
+  const sysMenu = new SysMenu({
+    click: () => sounds.click(),
+    onExitGame: () => leaveWorld(0, 'Are you sure you want to exit the game?'),
+    onSelectServer: () => leaveWorld(2, 'Return to the server selection screen?'),
+    onOptions: () => { void gameOptionsWindow?.open(); },
+  });
+  state.sysMenu = sysMenu;
+  const windowMenu = new WindowMenu({
+    click: () => sounds.click(),
+    onToggle: (open) => { state.hud?.setOpenStates({ menu: open }); },
+    onSystem: () => { void sysMenu.open(); },
+    onHelp: toggleGuide,
+    onGuild: () => { void state.social?.guildWindow.toggle(); },
+    onMove: () => { void moveWindow.toggle(); },
+    onMap: () => { void miniMap.toggle(); },
+    onGens: () => { void state.duelAndGens?.gensWindow.toggle(); },
+  });
+  state.windowMenu = windowMenu;
+  const PERSISTENT_HUD_DOCS = new Set([
+    'rml-main_frame', 'rml-mu_helper_bar', 'rml-system_log', 'rml-chat_log', 'rml-chat_input',
+    'rml-buff_strip', 'rml-party_list', 'rml-map_name', 'rml-tooltip', 'rml-loading',
+    'rml-hud_status', 'rml-duel_watch_frame', 'rml-duel_watch_spectators', 'rml-empire_guardian_timer',
+  ]);
+  const hasOtherOverlayOpen = (): boolean => {
+    if (chat.isOpen || ultimateAutoPlay.isOpen || windowMenu.isOpen) return true;
+    const guideEl = document.getElementById('guide');
+    if (guideEl && !guideEl.hidden) return true;
+    if (document.querySelector('.confirm-dialog, .game-dialog')) return true;
+    for (const el of document.querySelectorAll<HTMLElement>('.hnmo-panel-backdrop')) {
+      if (getComputedStyle(el).display !== 'none') return true;
+    }
+    for (const el of document.querySelectorAll<HTMLElement>('.rml-document')) {
+      if (el.classList.contains('rml-sys_menu')) continue;
+      if ([...el.classList].some((cls) => PERSISTENT_HUD_DOCS.has(cls))) continue;
+      if (!el.hidden && getComputedStyle(el).display !== 'none' && getComputedStyle(el).visibility !== 'hidden') return true;
+    }
+    return false;
+  };
+  const escapeHandledByOther = new WeakSet<KeyboardEvent>();
+  window.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    if (sysMenu.isOpen) {
+      sysMenu.close();
+      sounds.click();
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      return;
+    }
+    if (hasOtherOverlayOpen() || document.activeElement?.matches('input, textarea, select')) {
+      escapeHandledByOther.add(event);
+    }
+  }, true);
+  window.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !escapeHandledByOther.has(event) && !event.defaultPrevented && !event.ctrlKey && !event.altKey && !event.metaKey) {
+      event.preventDefault();
+      void sysMenu.open();
+      return;
+    }
+    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+    if (event.key === 'F1' && !event.ctrlKey && !event.altKey && !event.metaKey) {
+      event.preventDefault();
+      toggleGuide();
+    } else if (event.key.toLowerCase() === 'u' && !event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey && !event.repeat) {
+      event.preventDefault();
+      void windowMenu.toggle();
+    }
+  });
   // Kalima's gates, Crywolf's HUD and altars, the castle siege's windows (ui/fieldEventWindows.ts).
   state.fieldEvents = setUpFieldEvents({ connection, online, hero: () => ({ level: stats.level, classIndex: character.classIndex }), inventory, mapNumber: () => state.mapNumber, world: () => state.world, worldGroup: () => state.worldGroup ?? null, camera, canvas: ui.canvas, audio: sounds.audio, music: sounds.musicStates, message: (text) => chat.add(text, 'system'), safeZone: inSafeZone, closeOthers: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); }, bag: itemWindows.bag, guild: () => state.social?.guild ?? null, openMix: (type) => { void state.chaosMachine?.open(type); } });
   chat.add(`Welcome to ${mapName(info.MapId)}. Try /move devias or /move noria.`, 'system');

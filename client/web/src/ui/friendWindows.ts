@@ -54,6 +54,7 @@ abstract class ShellWindow<M extends ShellModel> {
   protected abstract initialPlace(width: number, height: number): { x: number; y: number };
   protected refresh(): void { this.doc?.update(); }
   protected onClosed(): void { /* the owner forgets it */ }
+  protected onVisibilityChanged(_open: boolean): void { /* subclasses may notify listeners */ }
 
   private async load(): Promise<void> {
     const doc = await openDocument(this.documentName, this.model);
@@ -85,6 +86,7 @@ abstract class ShellWindow<M extends ShellModel> {
     this.model.root_x = Math.max(0, at.x);
     this.model.root_y = Math.max(0, at.y);
     this.refresh();
+    this.onVisibilityChanged(true);
   }
 
   private makeDraggable(grip: HTMLElement): void {
@@ -112,6 +114,7 @@ abstract class ShellWindow<M extends ShellModel> {
     if (!this.doc) return;
     this.hidden = true;
     this.doc.host.style.display = 'none';
+    this.onVisibilityChanged(false);
   }
 
   show(): void {
@@ -119,6 +122,7 @@ abstract class ShellWindow<M extends ShellModel> {
     this.hidden = false;
     this.doc.host.style.display = '';
     this.toFront();
+    this.onVisibilityChanged(true);
   }
 
   close(): void {
@@ -126,6 +130,7 @@ abstract class ShellWindow<M extends ShellModel> {
     this.doc.close();
     this.doc = null;
     this.hidden = false;
+    this.onVisibilityChanged(false);
     this.onClosed();
   }
 }
@@ -169,6 +174,7 @@ export interface FriendWindowOptions {
   click?: () => void;
   /** "Chat" with a friend: the desktop opens a chat room on the chat server; the web whispers. */
   chatWith?: (name: string) => void;
+  onToggle?: (open: boolean) => void;
 }
 
 export class FriendWindow extends ShellWindow<FriendShellModel> {
@@ -207,6 +213,10 @@ export class FriendWindow extends ShellWindow<FriendShellModel> {
   get tab(): number { return this.model.active_tab; }
   get openLetters(): LetterReadWindow[] { return [...this.letterWindows.values()]; }
   get openWriters(): LetterWriteWindow[] { return [...this.writeWindows.values()]; }
+
+  protected override onVisibilityChanged(open: boolean): void {
+    this.options.onToggle?.(open);
+  }
 
   /** F (CHotKey): opens it, or hides it again. On opening with new mail, the letter box shows. */
   async toggle(): Promise<void> {
