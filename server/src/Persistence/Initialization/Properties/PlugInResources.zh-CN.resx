@@ -491,4 +491,6 @@
   <data name="StrongerHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
     <value>将 28 个 HNMO 技能增强 20%（伤害、增益和减益效果；消耗和冷却时间不变），并将精灵士兵的试炼任务改为击杀 200 个怪物并上交五颗玛雅之石。</value>
   </data>
+  <data name="SeasonNineMonstersUpdatePlugIn_Name" xml:space="preserve"><value>第 9 赛季：怪物与 NPC</value></data>
+  <data name="SeasonNineMonstersUpdatePlugIn_Description" xml:space="preserve"><value>在以第 9 赛季运行时添加第 6 赛季目录中缺少的 111 个第 9 赛季怪物和 NPC 定义，并将暗黑精灵见习士兵的重生时间更新为 10800 秒。</value></data>
 </root>

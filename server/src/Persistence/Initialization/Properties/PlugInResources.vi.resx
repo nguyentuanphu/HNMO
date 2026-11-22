@@ -868,4 +868,6 @@
   <data name="AddArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Thêm Sứ giả Đấu trường HNMO, NPC ở Lorencia, Devias, Noria và Elbeland, mở cửa sổ Đấu trường.</value></data>
   <data name="RenumberArenaHeraldUpdatePlugIn_Name" xml:space="preserve"><value>Sứ giả Đấu trường: số NPC riêng</value></data>
   <data name="RenumberArenaHeraldUpdatePlugIn_Description" xml:space="preserve"><value>Chuyển Sứ giả Đấu trường của bản lưu cũ từ NPC 595 sang 900 để web game hiện lại.</value></data>
+  <data name="SeasonNineMonstersUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: quái vật và NPC</value></data>
+  <data name="SeasonNineMonstersUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 111 quái vật và NPC Season 9 còn thiếu so với danh mục Season 6 và cập nhật thời gian hồi sinh của lính tập sự Dark Elf thành 10800 giây khi chạy Season 9.</value></data>
 </root>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="CaptainSlough" xml:space="preserve"><value>Đội trưởng Slough</value></data>
+  <data name="Deruvish" xml:space="preserve"><value>Deruvish</value></data>
+  <data name="Adniel" xml:space="preserve"><value>Bậc thầy Nguyên tố Adniel</value></data>
+  <data name="Jin583" xml:space="preserve"><value>Jin</value></data>
+  <data name="SirLesnar" xml:space="preserve"><value>Ngài Lesnar</value></data>
+  <data name="Scarecrow" xml:space="preserve"><value>Bù nhìn</value></data>
+  <data name="DevilFairy" xml:space="preserve"><value>Tiểu Quỷ Tiên</value></data>
+  <data name="ElementalBeast" xml:space="preserve"><value>Quái thú Nguyên tố</value></data>
+  <data name="ElementalKnight" xml:space="preserve"><value>Hiệp sĩ Nguyên tố</value></data>
+  <data name="UbaidDevilFairy" xml:space="preserve"><value>Tiểu Quỷ Tiên Ubaid</value></data>
+  <data name="UbaidElementalBeast" xml:space="preserve"><value>Quái thú Nguyên tố Ubaid</value></data>
+  <data name="UbaidElementalKnight" xml:space="preserve"><value>Hiệp sĩ Nguyên tố Ubaid</value></data>
+  <data name="Undine" xml:space="preserve"><value>Undine</value></data>
+  <data name="Salamander" xml:space="preserve"><value>Salamander</value></data>
+  <data name="Sylphid" xml:space="preserve"><value>Sylphid</value></data>
+  <data name="Gnome" xml:space="preserve"><value>Gnome</value></data>
+  <data name="Hellraiser" xml:space="preserve"><value>Hellraiser</value></data>
+  <data name="SummonedSatyros" xml:space="preserve"><value>Satyros được triệu hồi</value></data>
+  <data name="FireTower" xml:space="preserve"><value>Tháp Lửa</value></data>
+  <data name="WaterTower" xml:space="preserve"><value>Tháp Nước</value></data>
+  <data name="EarthTower" xml:space="preserve"><value>Tháp Đất</value></data>
+  <data name="WindTower" xml:space="preserve"><value>Tháp Gió</value></data>
+  <data name="DarknessTower" xml:space="preserve"><value>Tháp Bóng tối</value></data>
+  <data name="ArcaBarrier" xml:space="preserve"><value>Rào chắn Arca</value></data>
+  <data name="Jin604" xml:space="preserve"><value>Jin</value></data>
+  <data name="MiningAreaSmall" xml:space="preserve"><value>Khu mỏ (Nhỏ)</value></data>
+  <data name="MiningAreaMedium" xml:space="preserve"><value>Khu mỏ (Trung)</value></data>
+  <data name="MiningAreaLarge" xml:space="preserve"><value>Khu mỏ (Lớn)</value></data>
+  <data name="DebenterDevilFairy" xml:space="preserve"><value>Tiểu Quỷ Tiên Debenter</value></data>
+  <data name="DebenterElementalBeast" xml:space="preserve"><value>Quái thú Nguyên tố Debenter</value></data>
+  <data name="DebenterElementalKnight" xml:space="preserve"><value>Hiệp sĩ Nguyên tố Debenter</value></data>
+  <data name="Sellihoden" xml:space="preserve"><value>Sellihoden</value></data>
+  <data name="Ukanva" xml:space="preserve"><value>Ukanva</value></data>
+  <data name="Silla" xml:space="preserve"><value>Silla</value></data>
+  <data name="Normus" xml:space="preserve"><value>Normus</value></data>
+  <data name="Muff" xml:space="preserve"><value>Muff</value></data>
+  <data name="BrownPandaTransformationRing616" xml:space="preserve"><value>Nhẫn Biến Hình Gấu Trúc Nâu</value></data>
+  <data name="PinkPandaTransformationRing" xml:space="preserve"><value>Nhẫn Biến Hình Gấu Trúc Hồng</value></data>
+  <data name="GmRomeu" xml:space="preserve"><value>[GM] Romeu</value></data>
+  <data name="VmNox" xml:space="preserve"><value>[VM] Nox</value></data>
+  <data name="VmRedd" xml:space="preserve"><value>[VM] Redd</value></data>
+  <data name="EvmIza" xml:space="preserve"><value>[EVM] Iza</value></data>
+  <data name="VmHail" xml:space="preserve"><value>[VM] Hail</value></data>
+  <data name="VmFast" xml:space="preserve"><value>[VM] Fast</value></data>
+  <data name="GmCeth" xml:space="preserve"><value>[GM] Ceth</value></data>
+  <data name="RobotKnightTransformationRing" xml:space="preserve"><value>Nhẫn Biến Hình Hiệp Sĩ Robot</value></data>
+  <data name="MiniRobotTransformationRing" xml:space="preserve"><value>Nhẫn Biến Hình Robot Nhỏ</value></data>
+  <data name="CursedFireTower" xml:space="preserve"><value>Tháp Lửa Bị Nguyền Rủa</value></data>
+  <data name="CursedWaterTower" xml:space="preserve"><value>Tháp Nước Bị Nguyền Rủa</value></data>
+  <data name="CursedEarthTower" xml:space="preserve"><value>Tháp Đất Bị Nguyền Rủa</value></data>
+  <data name="CursedWindTower" xml:space="preserve"><value>Tháp Gió Bị Nguyền Rủa</value></data>
+  <data name="CursedDarknessTower" xml:space="preserve"><value>Tháp Bóng Tối Bị Nguyền Rủa</value></data>
+  <data name="CursedUndine" xml:space="preserve"><value>Undine Bị Nguyền Rủa</value></data>
+  <data name="CursedSalamander" xml:space="preserve"><value>Salamander Bị Nguyền Rủa</value></data>
+  <data name="CursedSylphid" xml:space="preserve"><value>Sylphid Bị Nguyền Rủa</value></data>
+  <data name="CursedGnome" xml:space="preserve"><value>Gnome Bị Nguyền Rủa</value></data>
+  <data name="CursedHellraiser" xml:space="preserve"><value>Hellraiser Bị Nguyền Rủa</value></data>
+  <data name="CursedSellihoden" xml:space="preserve"><value>Sellihoden Bị Nguyền Rủa</value></data>
+  <data name="CursedUkanva" xml:space="preserve"><value>Ukanva Bị Nguyền Rủa</value></data>
+  <data name="CursedSilla" xml:space="preserve"><value>Silla Bị Nguyền Rủa</value></data>
+  <data name="CursedNormus" xml:space="preserve"><value>Normus Bị Nguyền Rủa</value></data>
+  <data name="CursedMuff" xml:space="preserve"><value>Muff Bị Nguyền Rủa</value></data>
+  <data name="GreatHeavenlyMageTransformationRing" xml:space="preserve"><value>Nhẫn Biến Hình Đại Thiên Sư</value></data>
+  <data name="Mait" xml:space="preserve"><value>Mait</value></data>
+  <data name="ChaosCastle8Warrior" xml:space="preserve"><value>Hỗn Nguyên Lâu 8</value></data>
+  <data name="ChaosCastle8Ranger" xml:space="preserve"><value>Hỗn Nguyên Lâu 8</value></data>
+  <data name="BrownPandaTransformationRing646" xml:space="preserve"><value>Nhẫn Biến Hình Gấu Trúc Nâu</value></data>
+  <data name="GreenSnake" xml:space="preserve"><value>Rắn Xanh Lá</value></data>
+  <data name="YellowSnake" xml:space="preserve"><value>Rắn Vàng</value></data>
+  <data name="PurpleSnake" xml:space="preserve"><value>Rắn Tím</value></data>
+  <data name="RedSnake" xml:space="preserve"><value>Rắn Đỏ</value></data>
+  <data name="PrivateStoreBulletinBoard" xml:space="preserve"><value>Bảng Tin Cửa Hàng Cá Nhân</value></data>
+  <data name="GoldenGoblin652" xml:space="preserve"><value>Yêu Tinh Vàng</value></data>
+  <data name="GoldenTitan" xml:space="preserve"><value>Titan Vàng</value></data>
+  <data name="GoldenTantalos" xml:space="preserve"><value>Tantalos Vàng</value></data>
+  <data name="GoldenErohim" xml:space="preserve"><value>Erohim Vàng</value></data>
+  <data name="GoldenHellMaine" xml:space="preserve"><value>Hell Maine Vàng</value></data>
+  <data name="GoldenKundun" xml:space="preserve"><value>Kundun Vàng</value></data>
+  <data name="Ellin" xml:space="preserve"><value>Ellin</value></data>
+  <data name="UrukDevilFairy" xml:space="preserve"><value>Tiểu Quỷ Tiên Uruk</value></data>
+  <data name="UrukElementalBeast" xml:space="preserve"><value>Quái thú Nguyên tố Uruk</value></data>
+  <data name="UrukElementalKnight" xml:space="preserve"><value>Hiệp sĩ Nguyên tố Uruk</value></data>
+  <data name="LordSilvester" xml:space="preserve"><value>Chúa tể Silvester</value></data>
+  <data name="MoonRabbit" xml:space="preserve"><value>Thỏ Mặt Trăng</value></data>
+  <data name="PouchOfBlessing" xml:space="preserve"><value>Túi May Mắn</value></data>
+  <data name="FireFlameGhost" xml:space="preserve"><value>Bóng Ma Lửa</value></data>
+  <data name="GoldenGoblin677" xml:space="preserve"><value>Yêu Tinh Vàng</value></data>
+  <data name="LordDevilFairy" xml:space="preserve"><value>Chúa tể Tiểu Quỷ Tiên</value></data>
+  <data name="LordElementalBeast" xml:space="preserve"><value>Chúa tể Quái thú Nguyên tố</value></data>
+  <data name="LordElementalKnight" xml:space="preserve"><value>Chúa tể Hiệp sĩ Nguyên tố</value></data>
+  <data name="Evomon" xml:space="preserve"><value>Evomon</value></data>
+  <data name="Monica" xml:space="preserve"><value>Monica</value></data>
+  <data name="Marce" xml:space="preserve"><value>Marce</value></data>
+  <data name="Silvia" xml:space="preserve"><value>Silvia</value></data>
+  <data name="Izabel" xml:space="preserve"><value>Izabel</value></data>
+  <data name="SophiaRepair" xml:space="preserve"><value>Sophia (Sửa chữa)</value></data>
+  <data name="BoloRepair" xml:space="preserve"><value>Bolo (Sửa chữa)</value></data>
+  <data name="Christine" xml:space="preserve"><value>Christine</value></data>
+  <data name="FlameTrap" xml:space="preserve"><value>Bẫy Lửa</value></data>
+  <data name="SpecialEvomon" xml:space="preserve"><value>Evomon Đặc biệt</value></data>
+  <data name="NewYearHorseGreen" xml:space="preserve"><value>Ngựa Năm Mới (Xanh Lá)</value></data>
+  <data name="NewYearHorseYellow" xml:space="preserve"><value>Ngựa Năm Mới (Vàng)</value></data>
+  <data name="NewYearHorseBrown" xml:space="preserve"><value>Ngựa Năm Mới (Nâu)</value></data>
+  <data name="NewYearHorseBlue" xml:space="preserve"><value>Ngựa Năm Mới (Xanh Dương)</value></data>
+  <data name="EvolutionSucceeded" xml:space="preserve"><value>Tiến hóa Thành công</value></data>
+  <data name="EvolutionFailed" xml:space="preserve"><value>Tiến hóa Thất bại</value></data>
+  <data name="DarknessTransformationRing" xml:space="preserve"><value>Nhẫn Biến Hình Bóng Tối</value></data>
+  <data name="GreenGoat" xml:space="preserve"><value>Dê Xanh Lá</value></data>
+  <data name="WhiteGoat" xml:space="preserve"><value>Dê Trắng</value></data>
+  <data name="PurpleGoat" xml:space="preserve"><value>Dê Tím</value></data>
+  <data name="RedGoat" xml:space="preserve"><value>Dê Đỏ</value></data>
+</root>

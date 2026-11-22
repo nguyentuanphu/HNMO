@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="CaptainSlough" xml:space="preserve"><value>斯劳队长</value></data>
+  <data name="Deruvish" xml:space="preserve"><value>德鲁维什</value></data>
+  <data name="Adniel" xml:space="preserve"><value>元素大师阿德尼尔</value></data>
+  <data name="Jin583" xml:space="preserve"><value>金</value></data>
+  <data name="SirLesnar" xml:space="preserve"><value>莱斯纳爵士</value></data>
+  <data name="Scarecrow" xml:space="preserve"><value>稻草人</value></data>
+  <data name="DevilFairy" xml:space="preserve"><value>恶魔妖精</value></data>
+  <data name="ElementalBeast" xml:space="preserve"><value>元素兽</value></data>
+  <data name="ElementalKnight" xml:space="preserve"><value>元素骑士</value></data>
+  <data name="UbaidDevilFairy" xml:space="preserve"><value>乌拜德恶魔妖精</value></data>
+  <data name="UbaidElementalBeast" xml:space="preserve"><value>乌拜德元素兽</value></data>
+  <data name="UbaidElementalKnight" xml:space="preserve"><value>乌拜德元素骑士</value></data>
+  <data name="Undine" xml:space="preserve"><value>温蒂妮</value></data>
+  <data name="Salamander" xml:space="preserve"><value>火蜥蜴</value></data>
+  <data name="Sylphid" xml:space="preserve"><value>风精灵</value></data>
+  <data name="Gnome" xml:space="preserve"><value>地精</value></data>
+  <data name="Hellraiser" xml:space="preserve"><value>地狱使者</value></data>
+  <data name="SummonedSatyros" xml:space="preserve"><value>被召唤的萨堤罗斯</value></data>
+  <data name="FireTower" xml:space="preserve"><value>火焰之塔</value></data>
+  <data name="WaterTower" xml:space="preserve"><value>水之塔</value></data>
+  <data name="EarthTower" xml:space="preserve"><value>大地之塔</value></data>
+  <data name="WindTower" xml:space="preserve"><value>风之塔</value></data>
+  <data name="DarknessTower" xml:space="preserve"><value>黑暗之塔</value></data>
+  <data name="ArcaBarrier" xml:space="preserve"><value>阿尔卡屏障</value></data>
+  <data name="Jin604" xml:space="preserve"><value>金</value></data>
+  <data name="MiningAreaSmall" xml:space="preserve"><value>矿区（小）</value></data>
+  <data name="MiningAreaMedium" xml:space="preserve"><value>矿区（中）</value></data>
+  <data name="MiningAreaLarge" xml:space="preserve"><value>矿区（大）</value></data>
+  <data name="DebenterDevilFairy" xml:space="preserve"><value>德本特恶魔妖精</value></data>
+  <data name="DebenterElementalBeast" xml:space="preserve"><value>德本特元素兽</value></data>
+  <data name="DebenterElementalKnight" xml:space="preserve"><value>德本特元素骑士</value></data>
+  <data name="Sellihoden" xml:space="preserve"><value>塞利霍登</value></data>
+  <data name="Ukanva" xml:space="preserve"><value>乌坎瓦</value></data>
+  <data name="Silla" xml:space="preserve"><value>希拉</value></data>
+  <data name="Normus" xml:space="preserve"><value>诺穆斯</value></data>
+  <data name="Muff" xml:space="preserve"><value>穆夫</value></data>
+  <data name="BrownPandaTransformationRing616" xml:space="preserve"><value>棕熊猫变身指环</value></data>
+  <data name="PinkPandaTransformationRing" xml:space="preserve"><value>粉熊猫变身指环</value></data>
+  <data name="GmRomeu" xml:space="preserve"><value>[GM] 罗梅乌</value></data>
+  <data name="VmNox" xml:space="preserve"><value>[VM] 诺克斯</value></data>
+  <data name="VmRedd" xml:space="preserve"><value>[VM] 雷德</value></data>
+  <data name="EvmIza" xml:space="preserve"><value>[EVM] 伊莎</value></data>
+  <data name="VmHail" xml:space="preserve"><value>[VM] 黑尔</value></data>
+  <data name="VmFast" xml:space="preserve"><value>[VM] 法斯特</value></data>
+  <data name="GmCeth" xml:space="preserve"><value>[GM] 塞斯</value></data>
+  <data name="RobotKnightTransformationRing" xml:space="preserve"><value>机械骑士变身指环</value></data>
+  <data name="MiniRobotTransformationRing" xml:space="preserve"><value>迷你机器人变身指环</value></data>
+  <data name="CursedFireTower" xml:space="preserve"><value>被诅咒的火焰之塔</value></data>
+  <data name="CursedWaterTower" xml:space="preserve"><value>被诅咒的水之塔</value></data>
+  <data name="CursedEarthTower" xml:space="preserve"><value>被诅咒的大地之塔</value></data>
+  <data name="CursedWindTower" xml:space="preserve"><value>被诅咒的风之塔</value></data>
+  <data name="CursedDarknessTower" xml:space="preserve"><value>被诅咒的黑暗之塔</value></data>
+  <data name="CursedUndine" xml:space="preserve"><value>被诅咒的温蒂妮</value></data>
+  <data name="CursedSalamander" xml:space="preserve"><value>被诅咒的火蜥蜴</value></data>
+  <data name="CursedSylphid" xml:space="preserve"><value>被诅咒的风精灵</value></data>
+  <data name="CursedGnome" xml:space="preserve"><value>被诅咒的地精</value></data>
+  <data name="CursedHellraiser" xml:space="preserve"><value>被诅咒的地狱使者</value></data>
+  <data name="CursedSellihoden" xml:space="preserve"><value>被诅咒的塞利霍登</value></data>
+  <data name="CursedUkanva" xml:space="preserve"><value>被诅咒的乌坎瓦</value></data>
+  <data name="CursedSilla" xml:space="preserve"><value>被诅咒的希拉</value></data>
+  <data name="CursedNormus" xml:space="preserve"><value>被诅咒的诺穆斯</value></data>
+  <data name="CursedMuff" xml:space="preserve"><value>被诅咒的穆夫</value></data>
+  <data name="GreatHeavenlyMageTransformationRing" xml:space="preserve"><value>大天师变身指环</value></data>
+  <data name="Mait" xml:space="preserve"><value>迈特</value></data>
+  <data name="ChaosCastle8Warrior" xml:space="preserve"><value>赤色要塞 8</value></data>
+  <data name="ChaosCastle8Ranger" xml:space="preserve"><value>赤色要塞 8</value></data>
+  <data name="BrownPandaTransformationRing646" xml:space="preserve"><value>棕熊猫变身指环</value></data>
+  <data name="GreenSnake" xml:space="preserve"><value>绿蛇</value></data>
+  <data name="YellowSnake" xml:space="preserve"><value>黄蛇</value></data>
+  <data name="PurpleSnake" xml:space="preserve"><value>紫蛇</value></data>
+  <data name="RedSnake" xml:space="preserve"><value>红蛇</value></data>
+  <data name="PrivateStoreBulletinBoard" xml:space="preserve"><value>个人商店公告栏</value></data>
+  <data name="GoldenGoblin652" xml:space="preserve"><value>黄金哥布林</value></data>
+  <data name="GoldenTitan" xml:space="preserve"><value>黄金泰坦</value></data>
+  <data name="GoldenTantalos" xml:space="preserve"><value>黄金坦塔洛斯</value></data>
+  <data name="GoldenErohim" xml:space="preserve"><value>黄金埃罗希姆</value></data>
+  <data name="GoldenHellMaine" xml:space="preserve"><value>黄金地狱魔王</value></data>
+  <data name="GoldenKundun" xml:space="preserve"><value>黄金昆顿</value></data>
+  <data name="Ellin" xml:space="preserve"><value>艾琳</value></data>
+  <data name="UrukDevilFairy" xml:space="preserve"><value>乌鲁克恶魔妖精</value></data>
+  <data name="UrukElementalBeast" xml:space="preserve"><value>乌鲁克元素兽</value></data>
+  <data name="UrukElementalKnight" xml:space="preserve"><value>乌鲁克元素骑士</value></data>
+  <data name="LordSilvester" xml:space="preserve"><value>领主西尔维斯特</value></data>
+  <data name="MoonRabbit" xml:space="preserve"><value>月兔</value></data>
+  <data name="PouchOfBlessing" xml:space="preserve"><value>祝福袋</value></data>
+  <data name="FireFlameGhost" xml:space="preserve"><value>烈焰鬼魂</value></data>
+  <data name="GoldenGoblin677" xml:space="preserve"><value>黄金哥布林</value></data>
+  <data name="LordDevilFairy" xml:space="preserve"><value>领主恶魔妖精</value></data>
+  <data name="LordElementalBeast" xml:space="preserve"><value>领主元素兽</value></data>
+  <data name="LordElementalKnight" xml:space="preserve"><value>领主元素骑士</value></data>
+  <data name="Evomon" xml:space="preserve"><value>进化魔兽</value></data>
+  <data name="Monica" xml:space="preserve"><value>莫妮卡</value></data>
+  <data name="Marce" xml:space="preserve"><value>马斯</value></data>
+  <data name="Silvia" xml:space="preserve"><value>希尔维亚</value></data>
+  <data name="Izabel" xml:space="preserve"><value>伊莎贝尔</value></data>
+  <data name="SophiaRepair" xml:space="preserve"><value>索菲亚（修理）</value></data>
+  <data name="BoloRepair" xml:space="preserve"><value>波洛（修理）</value></data>
+  <data name="Christine" xml:space="preserve"><value>克里斯蒂娜</value></data>
+  <data name="FlameTrap" xml:space="preserve"><value>火焰陷阱</value></data>
+  <data name="SpecialEvomon" xml:space="preserve"><value>特殊进化魔兽</value></data>
+  <data name="NewYearHorseGreen" xml:space="preserve"><value>新年骏马（绿）</value></data>
+  <data name="NewYearHorseYellow" xml:space="preserve"><value>新年骏马（黄）</value></data>
+  <data name="NewYearHorseBrown" xml:space="preserve"><value>新年骏马（棕）</value></data>
+  <data name="NewYearHorseBlue" xml:space="preserve"><value>新年骏马（蓝）</value></data>
+  <data name="EvolutionSucceeded" xml:space="preserve"><value>进化成功</value></data>
+  <data name="EvolutionFailed" xml:space="preserve"><value>进化失败</value></data>
+  <data name="DarknessTransformationRing" xml:space="preserve"><value>黑暗变身指环</value></data>
+  <data name="GreenGoat" xml:space="preserve"><value>绿山羊</value></data>
+  <data name="WhiteGoat" xml:space="preserve"><value>白山羊</value></data>
+  <data name="PurpleGoat" xml:space="preserve"><value>紫山羊</value></data>
+  <data name="RedGoat" xml:space="preserve"><value>红山羊</value></data>
+</root>

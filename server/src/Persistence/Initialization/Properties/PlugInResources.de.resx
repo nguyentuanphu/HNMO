@@ -964,4 +964,6 @@
   <data name="StrongerHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
     <value>Dieses Update macht die 28 HNMO-Fertigkeiten um 20 % stärker (Schaden, Buffs und Debuffs; Kosten und Abklingzeiten bleiben) und lässt die Prüfungsquests des Elfensoldaten 200 Tötungen und fünf Juwelen des Chaos verlangen.</value>
   </data>
+  <data name="SeasonNineMonstersUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Monster und NPCs</value></data>
+  <data name="SeasonNineMonstersUpdatePlugIn_Description" xml:space="preserve"><value>Fügt die 111 im Season-6-Katalog fehlenden Monster- und NPC-Definitionen von Season 9 hinzu und setzt die Wiederbelebungszeit des Dunkelelfen-Rekruten im Season-9-Betrieb auf 10800 Sekunden.</value></data>
 </root>
