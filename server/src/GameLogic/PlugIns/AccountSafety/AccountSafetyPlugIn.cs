@@ -88,7 +88,7 @@ public class AccountSafetyPlugIn : IPlayerStateChangedPlugIn, IItemDropPlugIn, I
             text += " +Skill";
         }
 
-        if (item.ItemOptions.Any(o => o.ItemOption?.OptionType == DataModel.Configuration.Items.ItemOptionTypes.Luck))
+        if (item.ItemOptions?.Any(o => o.ItemOption?.OptionType == DataModel.Configuration.Items.ItemOptionTypes.Luck) == true)
         {
             text += " +Luck";
         }
