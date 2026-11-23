@@ -2,6 +2,8 @@
 <root>
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
+  <data name="CombatGuide" xml:space="preserve"><value>Live PvP and loot guide</value></data>
+  <data name="CombatGuideDescription" xml:space="preserve"><value>Publish PvP formulas, monster experience and loot rules, and world boss reward rules.</value></data>
   <data name="ClientRulesEn" xml:space="preserve"><value>Client rules (English)</value></data>
   <data name="ClientRulesVi" xml:space="preserve"><value>Client rules (Vietnamese)</value></data>
   <data name="NotForSaleEn" xml:space="preserve"><value>Not for sale (English)</value></data>

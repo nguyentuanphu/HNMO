@@ -2,6 +2,8 @@
 <root>
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
+  <data name="CombatGuide" xml:space="preserve"><value>Aktueller PvP- und Beuteleitfaden</value></data>
+  <data name="CombatGuideDescription" xml:space="preserve"><value>Veröffentlicht PvP-Formeln, Erfahrungs- und Beuteregeln für Monster sowie Belohnungsregeln für Weltbosse.</value></data>
   <data name="ClientRulesEn" xml:space="preserve"><value>Clientregeln (Englisch)</value></data>
   <data name="ClientRulesVi" xml:space="preserve"><value>Clientregeln (Vietnamesisch)</value></data>
   <data name="NotForSaleEn" xml:space="preserve"><value>Nicht im Verkauf (Englisch)</value></data>

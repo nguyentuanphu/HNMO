@@ -55,6 +55,10 @@ public class WebsiteConfiguration
     [Display(Name = nameof(Properties.PlugInResources.WebsiteConfiguration_RequireWebsiteLogin_Caption), Description = nameof(Properties.PlugInResources.WebsiteConfiguration_RequireWebsiteLogin_Description), ResourceType = typeof(Properties.PlugInResources))]
     public bool RequireWebsiteLogin { get; set; }
 
+    /// <summary>Gets or sets whether the site publishes the live combat and loot guide.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.CombatGuide), Description = nameof(WebsiteServerPageLabels.CombatGuideDescription), ResourceType = typeof(WebsiteServerPageLabels))]
+    public bool CombatGuideEnabled { get; set; } = true;
+
     /// <summary>Gets or sets the public ClientRulesEn lines; an empty value publishes no claim.</summary>
     [Display(Name = nameof(WebsiteServerPageLabels.ClientRulesEn), Description = nameof(WebsiteServerPageLabels.Description), ResourceType = typeof(WebsiteServerPageLabels))]
     [StringLength(4000, ErrorMessageResourceType = typeof(WebsiteServerPageLabels), ErrorMessageResourceName = nameof(WebsiteServerPageLabels.MaximumLength))]

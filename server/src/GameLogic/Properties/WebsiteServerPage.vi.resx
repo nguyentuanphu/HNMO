@@ -2,6 +2,8 @@
 <root>
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
+  <data name="CombatGuide" xml:space="preserve"><value>Hướng dẫn PvP và chiến lợi phẩm trực tiếp</value></data>
+  <data name="CombatGuideDescription" xml:space="preserve"><value>Công bố công thức PvP, quy tắc chia kinh nghiệm và đồ rơi từ quái, cùng quy tắc thưởng boss thế giới.</value></data>
   <data name="ClientRulesEn" xml:space="preserve"><value>Quy định dùng client (tiếng Anh)</value></data>
   <data name="ClientRulesVi" xml:space="preserve"><value>Quy định dùng client (tiếng Việt)</value></data>
   <data name="NotForSaleEn" xml:space="preserve"><value>Không bán (tiếng Anh)</value></data>

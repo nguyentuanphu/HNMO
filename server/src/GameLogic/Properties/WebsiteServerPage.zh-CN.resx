@@ -2,6 +2,8 @@
 <root>
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
+  <data name="CombatGuide" xml:space="preserve"><value>实时 PvP 与战利品指南</value></data>
+  <data name="CombatGuideDescription" xml:space="preserve"><value>发布 PvP 公式、怪物经验与掉落分配规则，以及世界首领奖励规则。</value></data>
   <data name="ClientRulesEn" xml:space="preserve"><value>客户端规则（英语）</value></data>
   <data name="ClientRulesVi" xml:space="preserve"><value>客户端规则（越南语）</value></data>
   <data name="NotForSaleEn" xml:space="preserve"><value>不出售的内容（英语）</value></data>

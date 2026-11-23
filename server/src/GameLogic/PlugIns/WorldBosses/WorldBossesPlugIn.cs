@@ -118,6 +118,12 @@ public class WorldBossesPlugIn : IPeriodicTaskPlugIn, IAttackableGotHitPlugIn, I
         return engine;
     }
 
+    /// <summary>Gets the enabled boss definitions using the same host selection as the scheduler.</summary>
+    /// <param name="serverId">The hosting game server.</param>
+    /// <returns>The definitions without player or encounter data.</returns>
+    public IEnumerable<WorldBossDefinition> GetHostedBosses(byte serverId)
+        => this.GetHostedBosses(this.Configuration ?? new WorldBossesConfiguration(), serverId);
+
     /// <summary>
     /// Sends the state to the player.
     /// </summary>
@@ -165,7 +171,7 @@ public class WorldBossesPlugIn : IPeriodicTaskPlugIn, IAttackableGotHitPlugIn, I
             var engine = this.GetEngine();
             await this.CheckMonstersAsync(gameContext, serverId, now).ConfigureAwait(false);
 
-            var hosted = engine.Configuration.EnabledBosses().Where(b => this.HostOf(b) == serverId).ToList();
+            var hosted = this.GetHostedBosses(engine.Configuration, serverId).ToList();
             foreach (var action in engine.Plan(hosted, serverId, now))
             {
                 try
@@ -481,6 +487,9 @@ public class WorldBossesPlugIn : IPeriodicTaskPlugIn, IAttackableGotHitPlugIn, I
             await context.ForEachPlayerAsync(action).ConfigureAwait(false);
         }
     }
+
+    private IEnumerable<WorldBossDefinition> GetHostedBosses(WorldBossesConfiguration configuration, byte serverId)
+        => configuration.EnabledBosses().Where(boss => this.HostOf(boss) == serverId);
 
     private byte HostOf(WorldBossDefinition boss) =>
         boss.GameServerId >= 0 ? (byte)boss.GameServerId : (Contexts.IsEmpty ? (byte)0 : Contexts.Keys.Min());
