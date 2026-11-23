@@ -172,6 +172,7 @@ public sealed class GiftBoxCollection(GiftBoxDispatch dispatch, GameConfiguratio
                     var item = context.CreateNew<Item>();
                     items.Add(item);
                     item.AssignValues(planned);
+                    item.EnsureSerial();
                     item.ItemSlot = planned.ItemSlot;
                 }
 

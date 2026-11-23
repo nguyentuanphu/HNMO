@@ -19,6 +19,9 @@ public sealed class ActivityLogStore
     /// <summary>Feature key stored in <c>hnmo.player_feature_state</c>.</summary>
     public const string FeatureKey = "activityLog.entry";
 
+    internal const int BatchSize = 256;
+    internal const int QueueCapacity = 4096;
+
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -33,8 +36,12 @@ public sealed class ActivityLogStore
 
     private readonly object _gate = new();
     private readonly string _resolvedStatePath;
-    private readonly List<ActivityLogEntry> _entries = [];
+    private readonly Dictionary<string, ActivityLogEntry> _entries = new(StringComparer.Ordinal);
+    private readonly ConcurrentQueue<(ActivityLogEntry Entry, int RetentionDays)> _pending = new();
+    private readonly List<(ActivityLogEntry Entry, int RetentionDays)> _retry = new(BatchSize);
     private IHnmoPlayerStateRowBackend? _loadedBackend;
+    private int _pendingCount;
+    private int _rejected;
 
     private ActivityLogStore(string resolvedStatePath)
     {
@@ -63,38 +70,95 @@ public sealed class ActivityLogStore
     /// <param name="retentionDays">Active retention window in days before automated archival.</param>
     public void Append(ActivityLogEntry entry, int retentionDays = 30)
     {
-        ArgumentNullException.ThrowIfNull(entry);
-        var utc = entry.TimestampUtc == default
-            ? DateTime.UtcNow
-            : DateTime.SpecifyKind(entry.TimestampUtc, DateTimeKind.Utc);
-        var days = Math.Clamp(retentionDays, 1, 3650);
-        var id = string.IsNullOrWhiteSpace(entry.Id)
-            ? $"{utc:yyyyMMddHHmmssfff}_{Interlocked.Increment(ref _sequence):D8}_{Guid.NewGuid():N}"[..40]
-            : entry.Id;
-
-        var normalized = new ActivityLogEntry
-        {
-            Id = id,
-            TimestampUtc = utc,
-            Kind = entry.Kind,
-            Account = entry.Account ?? string.Empty,
-            Character = entry.Character ?? string.Empty,
-            PartnerAccount = entry.PartnerAccount ?? string.Empty,
-            PartnerCharacter = entry.PartnerCharacter ?? string.Empty,
-            ItemSummary = entry.ItemSummary ?? string.Empty,
-            ItemIds = entry.ItemIds ?? string.Empty,
-            ZenDelta = entry.ZenDelta,
-            Details = entry.Details ?? string.Empty,
-        };
-
-        var json = JsonSerializer.Serialize(normalized, JsonOptions);
-        var row = new HnmoFeatureRow(FeatureKey, id, json, utc, utc.AddDays(days));
-
+        var pending = (Normalize(entry), retentionDays);
         lock (this._gate)
         {
-            var backend = this.EnsureLoadedLocked();
-            backend.UpsertBatch([row], []);
-            this._entries.Add(normalized);
+            this.WriteBatchLocked([pending]);
+        }
+    }
+
+    /// <summary>Queues a gameplay event without calling the persistence backend.</summary>
+    /// <param name="entry">The activity snapshot.</param>
+    /// <param name="retentionDays">Active retention in days at the time of the event.</param>
+    /// <returns>Whether the bounded queue accepted the event.</returns>
+    public bool Enqueue(ActivityLogEntry entry, int retentionDays)
+    {
+        ArgumentNullException.ThrowIfNull(entry);
+        if (Interlocked.Increment(ref this._pendingCount) > QueueCapacity)
+        {
+            Interlocked.Decrement(ref this._pendingCount);
+            Interlocked.Increment(ref this._rejected);
+            return false;
+        }
+
+        this._pending.Enqueue((Normalize(entry), retentionDays));
+        return true;
+    }
+
+    internal static void FlushAllPending(ILogger logger)
+    {
+        foreach (var instance in Stores.Values)
+        {
+            if (!instance.IsValueCreated)
+            {
+                continue;
+            }
+
+            var store = instance.Value;
+            var rejected = Interlocked.Exchange(ref store._rejected, 0);
+            if (rejected > 0)
+            {
+                logger.LogWarning("Activity log queue was full and discarded {Count} gameplay events.", rejected);
+            }
+
+            try
+            {
+                store.FlushPending();
+            }
+            catch (Exception ex)
+            {
+                logger.LogWarning(ex, "Activity log batch could not be stored. Queued records will be retried.");
+            }
+        }
+    }
+
+    internal int FlushPending()
+    {
+        if (Volatile.Read(ref this._pendingCount) == 0 || !Monitor.TryEnter(this._gate))
+        {
+            return 0;
+        }
+
+        try
+        {
+            var written = 0;
+            while (written < QueueCapacity)
+            {
+                if (this._retry.Count == 0)
+                {
+                    while (this._retry.Count < BatchSize && this._pending.TryDequeue(out var pending))
+                    {
+                        this._retry.Add(pending);
+                    }
+                }
+
+                if (this._retry.Count == 0)
+                {
+                    break;
+                }
+
+                // Keep the same row IDs if the database fails or acknowledgement is lost.
+                this.WriteBatchLocked(this._retry);
+                written += this._retry.Count;
+                Interlocked.Add(ref this._pendingCount, -this._retry.Count);
+                this._retry.Clear();
+            }
+
+            return written;
+        }
+        finally
+        {
+            Monitor.Exit(this._gate);
         }
     }
 
@@ -114,7 +178,8 @@ public sealed class ActivityLogStore
         lock (this._gate)
         {
             this.EnsureLoadedLocked();
-            IEnumerable<ActivityLogEntry> seq = this._entries;
+            var pending = this._retry.Concat(this._pending).Select(entry => entry.Entry);
+            IEnumerable<ActivityLogEntry> seq = pending.Concat(this._entries.Values).DistinctBy(entry => entry.Id);
 
             if (query.Kind is { } kind)
             {
@@ -152,6 +217,7 @@ public sealed class ActivityLogStore
                 seq = seq.Where(e =>
                     e.ItemSummary.Contains(item, StringComparison.OrdinalIgnoreCase) ||
                     e.ItemIds.Contains(item, StringComparison.OrdinalIgnoreCase) ||
+                    e.ItemSerials.Contains(item, StringComparison.OrdinalIgnoreCase) ||
                     e.Details.Contains(item, StringComparison.OrdinalIgnoreCase));
             }
 
@@ -184,6 +250,39 @@ public sealed class ActivityLogStore
         }
     }
 
+    private static ActivityLogEntry Normalize(ActivityLogEntry entry)
+    {
+        ArgumentNullException.ThrowIfNull(entry);
+        var utc = entry.TimestampUtc == default
+            ? DateTime.UtcNow
+            : DateTime.SpecifyKind(entry.TimestampUtc, DateTimeKind.Utc);
+        var id = string.IsNullOrWhiteSpace(entry.Id)
+            ? $"{utc:yyyyMMddHHmmssfff}_{Interlocked.Increment(ref _sequence):D8}_{Guid.NewGuid():N}"[..40]
+            : entry.Id;
+
+        return new ActivityLogEntry
+        {
+            Id = id,
+            TimestampUtc = utc,
+            Kind = entry.Kind,
+            Account = entry.Account ?? string.Empty,
+            Character = entry.Character ?? string.Empty,
+            PartnerAccount = entry.PartnerAccount ?? string.Empty,
+            PartnerCharacter = entry.PartnerCharacter ?? string.Empty,
+            ItemSummary = entry.ItemSummary ?? string.Empty,
+            ItemIds = entry.ItemIds ?? string.Empty,
+            ItemSerials = entry.ItemSerials ?? string.Empty,
+            BeforeItems = entry.BeforeItems,
+            AfterItems = entry.AfterItems,
+            ServerId = entry.ServerId,
+            MapNumber = entry.MapNumber,
+            PvpMode = entry.PvpMode,
+            PickupQuantity = entry.PickupQuantity,
+            ZenDelta = entry.ZenDelta,
+            Details = entry.Details ?? string.Empty,
+        };
+    }
+
     private IHnmoPlayerStateRowBackend EnsureLoadedLocked()
     {
         var backend = HnmoPlayerStateRowStoreRegistry.GetBackend(this._resolvedStatePath);
@@ -201,7 +300,7 @@ public sealed class ActivityLogStore
                 var parsed = JsonSerializer.Deserialize<ActivityLogEntry>(row.PayloadJson, JsonOptions);
                 if (parsed is not null)
                 {
-                    this._entries.Add(parsed);
+                    this._entries[parsed.Id] = parsed;
                 }
             }
             catch (JsonException)
@@ -212,5 +311,20 @@ public sealed class ActivityLogStore
 
         this._loadedBackend = backend;
         return backend;
+    }
+
+    private void WriteBatchLocked(IReadOnlyCollection<(ActivityLogEntry Entry, int RetentionDays)> batch)
+    {
+        var rows = batch.Select(pending =>
+        {
+            var (entry, retentionDays) = pending;
+            var expires = entry.TimestampUtc.AddDays(Math.Clamp(retentionDays, 1, 3650));
+            return new HnmoFeatureRow(FeatureKey, entry.Id, JsonSerializer.Serialize(entry, JsonOptions), entry.TimestampUtc, expires);
+        }).ToArray();
+        this.EnsureLoadedLocked().UpsertBatch(rows, []);
+        foreach (var (entry, _) in batch)
+        {
+            this._entries[entry.Id] = entry;
+        }
     }
 }

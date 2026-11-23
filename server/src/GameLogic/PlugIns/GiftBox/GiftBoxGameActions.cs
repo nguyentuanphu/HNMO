@@ -92,6 +92,7 @@ public sealed class GiftBoxGameActions(
             {
                 var bagStorage = player.Inventory as Storage;
                 var invItems = character.Inventory?.Items;
+                var activityLog = status == "Applied" ? ActivityLogPlugIn.Get(player.GameContext) : null;
                 if (invItems is not null)
                 {
                     foreach (var itemId in confirmedReceipt.ItemIds)
@@ -103,6 +104,7 @@ public sealed class GiftBoxGameActions(
                         }
 
                         bagStorage?.TryIncludeStoredBagItem(item);
+                        activityLog?.RecordGrant(player, item, "GiftBox");
                         await player.InvokeViewPlugInAsync<IItemAppearPlugIn>(view => view.ItemAppearAsync(item)).ConfigureAwait(false);
                     }
                 }

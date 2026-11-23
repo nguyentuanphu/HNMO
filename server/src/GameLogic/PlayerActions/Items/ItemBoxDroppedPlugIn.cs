@@ -47,8 +47,15 @@ public sealed class ItemBoxDroppedPlugIn : IItemDropPlugIn
 
         if (item is not null)
         {
+            var activity = PlugIns.ActivityLog.ActivityLogPlugIn.Get(player.GameContext);
+            if (activity?.ShouldRecordFloorItem(item) == true)
+            {
+                item.EnsureSerial();
+            }
+
             var droppedItem = new DroppedItem(item, player.Position, player.CurrentMap!, player);
             await player.CurrentMap!.AddAsync(droppedItem).ConfigureAwait(false);
+            activity?.RecordLoot(player, item, $"Box={sourceItem.Definition.Name.ValueInNeutralLanguage}");
         }
 
         if (dropEffect is not ItemDropEffect.Undefined)

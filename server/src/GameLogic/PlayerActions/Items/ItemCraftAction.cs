@@ -7,6 +7,7 @@ namespace HNMO.GameLogic.PlayerActions.Items;
 using System.Collections.Concurrent;
 using HNMO.DataModel.Configuration.ItemCrafting;
 using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.PlugIns.ActivityLog;
 using HNMO.GameLogic.PlugIns.SeasonPlan;
 using HNMO.GameLogic.Views.NPC;
 
@@ -58,6 +59,8 @@ public class ItemCraftAction
             return;
         }
 
+        var activity = ActivityLogPlugIn.Get(player.GameContext);
+        var before = activity?.IsEnabled == true ? ActivityLogPlugIn.CaptureItems(player.TemporaryStorage?.Items) : null;
         (CraftingResult, Item?) result;
         try
         {
@@ -73,7 +76,16 @@ public class ItemCraftAction
             await craftedPlugIns.ItemCraftedAsync(player, result.Item1).ConfigureAwait(false);
         }
 
-        PlugIns.ActivityLog.ActivityLogPlugIn.Get(player.GameContext)?.RecordChaosMix(player, result.Item1, result.Item2, player.OpenedNpc?.Definition?.Designation ?? string.Empty);
+        if (activity is not null && before is not null)
+        {
+            var finished = player.TemporaryStorage?.Items.AsEnumerable() ?? [];
+            if (result.Item2 is { } item && !finished.Contains(item))
+            {
+                finished = finished.Append(item);
+            }
+
+            activity.RecordCraft(player, result.Item1, crafting.Name.ValueInNeutralLanguage ?? string.Empty, before, finished);
+        }
 
         if (result.Item1 == CraftingResult.Success)
         {

@@ -223,11 +223,18 @@ internal sealed class MiniGameRewardService
                 return;
             }
 
+            var activity = PlugIns.ActivityLog.ActivityLogPlugIn.Get(player.GameContext);
+            if (activity?.IsEnabled == true)
+            {
+                item.EnsureSerial();
+            }
+
             if (!drop && player.Inventory is { } inventory
                 && inventory.CheckInvSpace(item) is { } slot
                 && await inventory.AddItemAsync(slot, item).ConfigureAwait(false))
             {
                 var inventoryItem = inventory.GetItem(slot)!;
+                activity?.RecordGrant(player, inventoryItem, "MiniGame");
                 await player.InvokeViewPlugInAsync<IItemAppearPlugIn>(view => view.ItemAppearAsync(inventoryItem)).ConfigureAwait(false);
                 continue;
             }
@@ -235,6 +242,7 @@ internal sealed class MiniGameRewardService
             var droppedItem = new DroppedItem(item, player.RandomPosition, this._map, player, player.GetAsEnumerable());
             this._logger.LogDebug("{context}: Reward {item} for {player} has been dropped by players coordinates {position}.", this._owner, item, player, player.Position);
             await this._map.AddAsync(droppedItem).ConfigureAwait(false);
+            activity?.RecordGrant(player, item, "MiniGame");
         }
     }
 

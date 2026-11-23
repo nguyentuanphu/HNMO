@@ -599,6 +599,7 @@ public class GameContext : AsyncDisposable, IGameContext
         this._configChangeHandlerRegistration.Dispose();
         await this._recoverTimer.DisposeAsync().ConfigureAwait(false);
         await this._tasksTimer.DisposeAsync().ConfigureAwait(false);
+        PlugIns.ActivityLog.ActivityLogStore.FlushAllPending(this._logger);
         await base.DisposeAsyncCore().ConfigureAwait(false);
     }
 

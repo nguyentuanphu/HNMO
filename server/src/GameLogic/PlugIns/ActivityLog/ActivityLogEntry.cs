@@ -33,8 +33,29 @@ public sealed class ActivityLogEntry
     /// <summary>Gets or sets human-readable summary of involved items.</summary>
     public string ItemSummary { get; set; } = string.Empty;
 
-    /// <summary>Gets or sets comma-separated item GUIDs when available.</summary>
+    /// <summary>Gets or sets legacy entity identifiers for older rows.</summary>
     public string ItemIds { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets comma-separated origin serials, assigned to item instances.</summary>
+    public string ItemSerials { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets snapshots before the action.</summary>
+    public ActivityItemState[]? BeforeItems { get; set; }
+
+    /// <summary>Gets or sets snapshots after the action.</summary>
+    public ActivityItemState[]? AfterItems { get; set; }
+
+    /// <summary>Gets or sets the sub-server where the event happened.</summary>
+    public byte? ServerId { get; set; }
+
+    /// <summary>Gets or sets the map number when known.</summary>
+    public short? MapNumber { get; set; }
+
+    /// <summary>Gets or sets the rules in effect when a player kill occurred.</summary>
+    public ActivityPvpMode? PvpMode { get; set; }
+
+    /// <summary>Gets or sets the item units transferred by a pickup, including a partial stack.</summary>
+    public double? PickupQuantity { get; set; }
 
     /// <summary>Gets or sets zen delta associated with the action.</summary>
     public long ZenDelta { get; set; }

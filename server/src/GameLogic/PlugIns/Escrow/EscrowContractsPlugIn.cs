@@ -111,15 +111,17 @@ public sealed class EscrowContractsPlugIn :
         var origin = string.Empty;
         try
         {
-            var idStr = HNMO.Persistence.ObjectExtensions.GetId(item).ToString();
-            var matches = ActivityLogStore.Open(activityLogFileName).Query(new ActivityLogQuery
+            var store = ActivityLogStore.Open(activityLogFileName);
+            var serial = item.Serial?.ToString("N");
+            var id = HNMO.Persistence.ObjectExtensions.GetId(item).ToString("N");
+            var matched = serial is null ? null : store.Query(new ActivityLogQuery
             {
                 Account = ownerLogin,
-                Item = en,
+                Item = serial,
                 MaxResults = 3,
-            });
-            var matched = matches.FirstOrDefault(m => m.ItemIds.Contains(idStr, StringComparison.OrdinalIgnoreCase))
-                ?? matches.FirstOrDefault();
+            }).FirstOrDefault(entry => entry.ItemSerials.Contains(serial, StringComparison.OrdinalIgnoreCase));
+            matched ??= store.Query(new ActivityLogQuery { Account = ownerLogin, Item = id, MaxResults = 3 })
+                .FirstOrDefault(entry => entry.ItemIds.Contains(id, StringComparison.OrdinalIgnoreCase));
             if (matched is not null)
             {
                 origin = $"{matched.Kind} ({EscrowEngine.ToSydneyText(matched.TimestampUtc)}): {matched.Details}";

@@ -133,13 +133,19 @@ public class QuestCompletionAction
             case QuestRewardType.Item:
                 var item = player.PersistenceContext.CreateNew<Item>();
                 item.AssignValues(reward.ItemReward ?? throw new InvalidOperationException($"Reward {reward.GetId()} is defined as item reward, but has no item assigned"));
+                // The definition is a reusable template. Each reward delivery is a separate item.
+                item.Serial = null;
+                item.EnsureSerial();
+                var activity = PlugIns.ActivityLog.ActivityLogPlugIn.Get(player.GameContext);
                 if (await player.Inventory!.AddItemAsync(item).ConfigureAwait(false))
                 {
+                    activity?.RecordGrant(player, item, $"Quest={quest.Name.ValueInNeutralLanguage}");
                     await player.InvokeViewPlugInAsync<IItemAppearPlugIn>(p => p.ItemAppearAsync(item)).ConfigureAwait(false);
                 }
                 else if (player.CurrentMap is { } currentMap)
                 {
                     await currentMap.AddAsync(new DroppedItem(item, player.Position, currentMap, player, player.GetAsEnumerable())).ConfigureAwait(false);
+                    activity?.RecordGrant(player, item, $"Quest={quest.Name.ValueInNeutralLanguage}");
                 }
                 else
                 {
