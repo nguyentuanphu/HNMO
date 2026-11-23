@@ -1,0 +1,406 @@
+﻿Definition,AddChance,MaxPerItem,OptionNumber,SubOptionType,OptionType,LevelType,TargetAttribute,AggregateType,BaseValue,LevelValues
+2nd Wing Options,0.100000001,1,1,0,Wing Option,ItemLevel,Maximum Health,AddRaw,50,1:55;2:60;3:65;4:70;5:75;6:80;7:85;8:90;9:95;10:100;11:105;12:110;13:115;14:120;15:125
+2nd Wing Options,0.100000001,1,2,0,Wing Option,ItemLevel,Maximum Mana,AddRaw,50,1:55;2:60;3:65;4:70;5:75;6:80;7:85;8:90;9:95;10:100;11:105;12:110;13:115;14:120;15:125
+2nd Wing Options,0.100000001,1,3,0,Wing Option,OptionLevel,Defense Ignore Chance,AddRaw,0.0299999993,
+2nd Wing Options,0.100000001,1,4,0,Wing Option,OptionLevel,Maximum Ability,AddRaw,50,
+2nd Wing Options,0.100000001,1,5,0,Wing Option,OptionLevel,Attack Speed Any,AddRaw,5,
+3rd Wing Options,0.100000001,1,1,0,Wing Option,OptionLevel,Defense Ignore Chance,AddRaw,0.0500000007,
+3rd Wing Options,0.100000001,1,2,0,Wing Option,OptionLevel,Chance to fully reflect damage when getting hit,AddRaw,0.0500000007,
+3rd Wing Options,0.100000001,1,3,0,Wing Option,OptionLevel,Chance to fully recover health when getting hit,AddRaw,0.0500000007,
+3rd Wing Options,0.100000001,1,4,0,Wing Option,OptionLevel,Chance to fully recover mana when getting hit,AddRaw,0.0500000007,
+Agnis (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Double Damage Chance,AddRaw,0.100000001,
+Agnis (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Base Defense,AddFinal,40,
+Agnis (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,20,
+Agnis (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Critical Damage Chance,AddRaw,0.150000006,
+Agnis (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Excellent Damage Chance,AddRaw,0.150000006,
+Agnis (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Critical Damage Bonus,AddRaw,20,
+Agnis (Ancient Set),0,0,7,0,Ancient Option,OptionLevel,Excellent Damage Bonus,AddRaw,20,
+Ancient Bonus of Total Agility,0,1,0,0,Ancient Bonus Option,OptionLevel,Total Agility,AddRaw,0,1:5;2:10
+Ancient Bonus of Total Energy,0,1,0,0,Ancient Bonus Option,OptionLevel,Total Energy,AddRaw,0,1:5;2:10
+Ancient Bonus of Total Strength,0,1,0,0,Ancient Bonus Option,OptionLevel,Total Strength,AddRaw,0,1:5;2:10
+Ancient Bonus of Total Vitality,0,1,0,0,Ancient Bonus Option,OptionLevel,Total Vitality,AddRaw,0,1:5;2:10
+Anonymous (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Maximum Health,AddRaw,50,
+Anonymous (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Total Agility,AddRaw,50,
+Anonymous (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Defense Increase Multiplier With Equipped Shield,AddRaw,0.25,
+Anonymous (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Late Damage Bonus (any type),AddRaw,30,
+Anubis (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Double Damage Chance,AddRaw,0.100000001,
+Anubis (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Maximum Mana,AddRaw,50,
+Anubis (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Wizardry Base Damage Increase,Multiplicate,1.10000002,
+Anubis (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Critical Damage Chance,AddRaw,0.150000006,
+Anubis (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Excellent Damage Chance,AddRaw,0.150000006,
+Anubis (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Critical Damage Bonus,AddRaw,20,
+Anubis (Ancient Set),0,0,7,0,Ancient Option,OptionLevel,Excellent Damage Bonus,AddRaw,20,
+Apollo (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Total Energy,AddRaw,10,
+Apollo (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Wizardry Base Damage Increase,Multiplicate,1.04999995,
+Apollo (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,10,
+Apollo (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Maximum Mana,AddRaw,30,
+Apollo (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Maximum Health,AddRaw,30,
+Apollo (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Maximum Ability,AddRaw,20,
+Apollo (Ancient Set),0,0,7,0,Ancient Option,OptionLevel,Critical Damage Chance,AddRaw,0.100000001,
+Apollo (Ancient Set),0,0,8,0,Ancient Option,OptionLevel,Excellent Damage Chance,AddRaw,0.100000001,
+Apollo (Ancient Set),0,0,9,0,Ancient Option,OptionLevel,Total Energy,AddRaw,30,
+Argo (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Maximum Physical Base Damage,AddRaw,20,
+Argo (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,25,
+Argo (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Maximum Ability,AddRaw,50,
+Argo (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Double Damage Chance,AddRaw,0.0500000007,
+Aruan (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Late Damage Bonus (any type),AddRaw,10,
+Aruan (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Double Damage Chance,AddRaw,0.100000001,
+Aruan (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,20,
+Aruan (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Critical Damage Chance,AddRaw,0.150000006,
+Aruan (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Excellent Damage Chance,AddRaw,0.150000006,
+Aruan (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Defense Ignore Chance,AddRaw,0.0500000007,
+Barnake (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Wizardry Base Damage Increase,Multiplicate,1.10000002,
+Barnake (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Total Energy,AddRaw,20,
+Barnake (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,30,
+Barnake (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Maximum Mana,AddRaw,100,
+"Base Damage Bonus (physical and wizardry, min and max) Option",0.25,1,0,0,Option,OptionLevel,"Base Damage Bonus (physical and wizardry, min and max)",AddRaw,4,2:8;3:12;4:16;5:20;6:24;7:28
+Base Defense Option,0.25,1,0,0,Option,OptionLevel,Base Defense,AddRaw,4,2:8;3:12;4:16;5:20;6:24;7:28
+Berserker (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Maximum Physical Base Damage,AddRaw,10,
+Berserker (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Maximum Physical Base Damage,AddRaw,20,
+Berserker (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Maximum Physical Base Damage,AddRaw,30,
+Berserker (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Maximum Physical Base Damage,AddRaw,40,
+Berserker (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,50,
+Berserker (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Total Strength,AddRaw,40,
+Broy (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Late Damage Bonus (any type),AddRaw,20,
+Broy (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,20,
+Broy (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Total Energy,AddRaw,30,
+Broy (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Critical Damage Chance,AddRaw,0.150000006,
+Broy (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Excellent Damage Chance,AddRaw,0.150000006,
+Broy (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Defense Ignore Chance,AddRaw,0.0500000007,
+Broy (Ancient Set),0,0,7,0,Ancient Option,OptionLevel,Total Leadership,AddRaw,30,
+Cape of Emperor Options,0.25,1,0,0,Option,OptionLevel,Health Recovery Multiplier,AddRaw,0,1:0.00999999978;2:0.0199999996;3:0.0299999993;4:0.0399999991;5:0.049999997;6:0.0599999987;7:0.0700000003
+Cape of Emperor Options,0.25,1,2,0,Option,OptionLevel,Base Defense,AddRaw,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Cape of Emperor Options,0.25,1,3,0,Option,OptionLevel,Physical Base Damage (min and max),AddFinal,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Cape of Fighter Options,0.25,1,0,0,Option,OptionLevel,Health Recovery Multiplier,AddRaw,0,1:0.00999999978;2:0.0199999996;3:0.0299999993;4:0.0399999991;5:0.049999997;6:0.0599999987;7:0.0700000003
+Cape of Fighter Options,0.25,1,2,0,Option,OptionLevel,Physical Base Damage (min and max),AddFinal,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Cape of Fighter Options,0.100000001,1,1,0,Wing Option,ItemLevel,Maximum Health,AddRaw,50,1:55;2:60;3:65;4:70;5:75;6:80;7:85;8:90;9:95;10:100;11:105;12:110;13:115;14:120;15:125
+Cape of Fighter Options,0.100000001,1,2,0,Wing Option,ItemLevel,Maximum Mana,AddRaw,50,1:55;2:60;3:65;4:70;5:75;6:80;7:85;8:90;9:95;10:100;11:105;12:110;13:115;14:120;15:125
+Cape of Fighter Options,0.100000001,1,3,0,Wing Option,OptionLevel,Defense Ignore Chance,AddRaw,0.0299999993,
+Cape of Lord Options,0.100000001,1,1,0,Wing Option,ItemLevel,Maximum Health,AddRaw,50,1:55;2:60;3:65;4:70;5:75;6:80;7:85;8:90;9:95;10:100;11:105;12:110;13:115;14:120;15:125
+Cape of Lord Options,0.100000001,1,2,0,Wing Option,ItemLevel,Maximum Mana,AddRaw,50,1:55;2:60;3:65;4:70;5:75;6:80;7:85;8:90;9:95;10:100;11:105;12:110;13:115;14:120;15:125
+Cape of Lord Options,0.100000001,1,3,0,Wing Option,OptionLevel,Defense Ignore Chance,AddRaw,0.0299999993,
+Cape of Lord Options,0.100000001,1,4,0,Wing Option,ItemLevel,Total Leadership,AddRaw,10,1:15;2:20;3:25;4:30;5:35;6:40;7:45;8:50;9:55;10:60;11:65;12:70;13:75;14:80;15:85
+Cape of Lord Options,0.100000001,1,1,0,Wing Option,ItemLevel,Maximum Health,AddRaw,50,1:55;2:60;3:65;4:70;5:75;6:80;7:85;8:90;9:95;10:100;11:105;12:110;13:115;14:120;15:125
+Cape of Lord Options,0.100000001,1,2,0,Wing Option,ItemLevel,Maximum Mana,AddRaw,50,1:55;2:60;3:65;4:70;5:75;6:80;7:85;8:90;9:95;10:100;11:105;12:110;13:115;14:120;15:125
+Cape of Lord Options,0.100000001,1,3,0,Wing Option,OptionLevel,Defense Ignore Chance,AddRaw,0.0299999993,
+Cape of Lord Options,0.100000001,1,4,0,Wing Option,ItemLevel,Total Leadership,AddRaw,10,1:15;2:20;3:25;4:30;5:35;6:40;7:45;8:50;9:55;10:60;11:65;12:70;13:75;14:80;15:85
+Cape of Lord Options,0.25,1,0,0,Option,OptionLevel,Physical Base Damage (min and max),AddFinal,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Cape of Overrule Options,0.25,1,0,0,Option,OptionLevel,Health Recovery Multiplier,AddRaw,0,1:0.00999999978;2:0.0199999996;3:0.0299999993;4:0.0399999991;5:0.049999997;6:0.0599999987;7:0.0700000003
+Cape of Overrule Options,0.25,1,2,0,Option,OptionLevel,Base Defense,AddRaw,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Cape of Overrule Options,0.25,1,3,0,Option,OptionLevel,Physical Base Damage (min and max),AddFinal,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Ceto (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Total Agility,AddRaw,10,
+Ceto (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Maximum Health,AddRaw,50,
+Ceto (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Base Defense,AddFinal,20,
+Ceto (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Defense Increase Multiplier With Equipped Shield,AddRaw,0.0500000007,
+Ceto (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Total Energy,AddRaw,10,
+Ceto (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Maximum Health,AddRaw,50,
+Ceto (Ancient Set),0,0,7,0,Ancient Option,OptionLevel,Total Strength,AddRaw,20,
+Chamer (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Base Defense,AddFinal,50,
+Chamer (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Double Damage Chance,AddRaw,0.0500000007,
+Chamer (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Late Damage Bonus (any type),AddRaw,30,
+Chamer (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Critical Damage Bonus,AddRaw,30,
+Chamer (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Excellent Damage Chance,AddRaw,0.150000006,
+Chamer (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,30,
+Chamer (Ancient Set),0,0,7,0,Ancient Option,OptionLevel,Excellent Damage Bonus,AddRaw,20,
+Chrono (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Double Damage Chance,AddRaw,0.200000003,
+Chrono (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Base Defense,AddFinal,60,
+Chrono (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,30,
+Chrono (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Critical Damage Chance,AddRaw,0.150000006,
+Chrono (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Excellent Damage Chance,AddRaw,0.150000006,
+Chrono (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Critical Damage Bonus,AddRaw,20,
+Chrono (Ancient Set),0,0,7,0,Ancient Option,OptionLevel,Excellent Damage Bonus,AddRaw,20,
+Cloud (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Critical Damage Chance,AddRaw,0.200000003,
+Cloud (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Critical Damage Bonus,AddRaw,50,
+Complete Set Bonus (any level),0,0,0,0,,OptionLevel,Defense Rate (PvM),Multiplicate,1.10000002,
+Complete Set Bonus (Level 10),0,0,0,0,,OptionLevel,Base Defense,Multiplicate,1.04999995,
+Complete Set Bonus (Level 11),0,0,0,0,,OptionLevel,Base Defense,Multiplicate,1.10000002,
+Complete Set Bonus (Level 12),0,0,0,0,,OptionLevel,Base Defense,Multiplicate,1.14999998,
+Complete Set Bonus (Level 13),0,0,0,0,,OptionLevel,Base Defense,Multiplicate,1.20000005,
+Complete Set Bonus (Level 14),0,0,0,0,,OptionLevel,Base Defense,Multiplicate,1.25,
+Complete Set Bonus (Level 15),0,0,0,0,,OptionLevel,Base Defense,Multiplicate,1.29999995,
+Curse Base Damage (min and max) Option,0.25,1,0,0,Option,OptionLevel,Curse Base Damage (min and max),AddRaw,4,2:8;3:12;4:16;5:20;6:24;7:28
+Dark Horse Options,0,0,1,0,Dark Horse Option,OptionLevel,Damage Receive From Dark Horse Multiplier,AddRaw,-0.150000006,
+Dark Horse Options,0,0,2,0,Dark Horse Option,OptionLevel,Base Defense,AddRaw,5,
+Defense Rate (PvM) Option,0.25,1,0,0,Option,OptionLevel,Defense Rate (PvM),AddRaw,5,2:10;3:15;4:20;5:25;6:30;7:35
+Dinorant Options,0.300000012,1,1,0,Option,OptionLevel,Damage Receive Multiplier,Multiplicate,0.949999988,
+Dinorant Options,0.300000012,1,2,0,Option,OptionLevel,Maximum Ability,AddFinal,50,
+Dinorant Options,0.300000012,1,4,0,Option,OptionLevel,Attack Speed Any,AddFinal,5,
+Drake (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Total Agility,AddRaw,20,
+Drake (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Late Damage Bonus (any type),AddRaw,25,
+Drake (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Double Damage Chance,AddRaw,0.200000003,
+Drake (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Base Defense,AddFinal,40,
+Drake (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Critical Damage Chance,AddRaw,0.100000001,
+Elite Skeleton Transformation Ring,1,1,0,0,,OptionLevel,Maximum Health,AddRaw,0,
+Elvian (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Total Agility,AddRaw,30,
+Elvian (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Defense Ignore Chance,AddRaw,0.0500000007,
+Enis (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,10,
+Enis (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Double Damage Chance,AddRaw,0.100000001,
+Enis (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Total Energy,AddRaw,30,
+Enis (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Wizardry Base Damage Increase,Multiplicate,1.10000002,
+Enis (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Defense Ignore Chance,AddRaw,0.0500000007,
+Eplete (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,15,
+Eplete (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Attack Rate (PvM),AddRaw,50,
+Eplete (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Wizardry Base Damage Increase,Multiplicate,1.04999995,
+Eplete (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Maximum Health,AddRaw,50,
+Eplete (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Maximum Ability,AddRaw,30,
+Eplete (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Critical Damage Chance,AddRaw,0.100000001,
+Eplete (Ancient Set),0,0,7,0,Ancient Option,OptionLevel,Excellent Damage Chance,AddRaw,0.100000001,
+Evis (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,15,
+Evis (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Total Vitality,AddRaw,20,
+Evis (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Wizardry Base Damage Increase,Multiplicate,1.10000002,
+Evis (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Double Damage Chance,AddRaw,0.0500000007,
+Evis (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Attack Rate (PvM),AddRaw,50,
+Evis (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Ability Recovery Absolute Increase,AddRaw,5,
+Excellent Defense Options,0.00100000005,2,1,0,Excellent Option,OptionLevel,Money Drop Amount Rate,Multiplicate,1.39999998,
+Excellent Defense Options,0.00100000005,2,2,0,Excellent Option,OptionLevel,Defense Rate (PvM),Multiplicate,1.10000002,
+Excellent Defense Options,0.00100000005,2,3,0,Excellent Option,OptionLevel,Damage Reflection,AddRaw,0.0500000007,
+Excellent Defense Options,0.00100000005,2,4,0,Excellent Option,OptionLevel,Armor Damage Decrease,AddRaw,0.0399999991,
+Excellent Defense Options,0.00100000005,2,5,0,Excellent Option,OptionLevel,Maximum Mana,Multiplicate,1.03999996,
+Excellent Defense Options,0.00100000005,2,6,0,Excellent Option,OptionLevel,Maximum Health,Multiplicate,1.03999996,
+Excellent Physical Attack Options,0.00100000005,2,1,0,Excellent Option,OptionLevel,"Mana recover after Monster kill, multiplier of max mana",AddRaw,0.125,
+Excellent Physical Attack Options,0.00100000005,2,2,0,Excellent Option,OptionLevel,"Health recover after Monster kill, multiplier of max health",AddRaw,0.125,
+Excellent Physical Attack Options,0.00100000005,2,3,0,Excellent Option,OptionLevel,Attack Speed Any,AddRaw,7,
+Excellent Physical Attack Options,0.00100000005,2,4,0,Excellent Option,OptionLevel,Physical Base Damage Increase,Multiplicate,1.01999998,
+Excellent Physical Attack Options,0.00100000005,2,5,0,Excellent Option,OptionLevel,Physical Base Damage (min and max),AddRaw,0,
+Excellent Physical Attack Options,0.00100000005,2,6,0,Excellent Option,OptionLevel,Excellent Damage Chance,AddRaw,0.100000001,
+Excellent Wizardry Attack Options,0.00100000005,2,1,0,Excellent Option,OptionLevel,"Mana recover after Monster kill, multiplier of max mana",AddRaw,0.125,
+Excellent Wizardry Attack Options,0.00100000005,2,2,0,Excellent Option,OptionLevel,"Health recover after Monster kill, multiplier of max health",AddRaw,0.125,
+Excellent Wizardry Attack Options,0.00100000005,2,3,0,Excellent Option,OptionLevel,Attack Speed Any,AddRaw,7,
+Excellent Wizardry Attack Options,0.00100000005,2,4,0,Excellent Option,OptionLevel,Wizardry Base Damage Increase,Multiplicate,1.01999998,
+Excellent Wizardry Attack Options,0.00100000005,2,5,0,Excellent Option,OptionLevel,Wizardry Base Damage (min and max),AddRaw,0,
+Excellent Wizardry Attack Options,0.00100000005,2,6,0,Excellent Option,OptionLevel,Excellent Damage Chance,AddRaw,0.100000001,
+Fase (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Maximum Health,AddRaw,100,
+Fase (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Maximum Mana,AddRaw,100,
+Fase (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Base Defense,AddFinal,100,
+Fenrir Options,0,0,1,0,Black Fenrir Option,OptionLevel,Attack Damage Increase Multiplier,Multiplicate,1.10000002,
+Fenrir Options,0,0,2,0,Blue Fenrir Option,OptionLevel,Damage Receive Multiplier,Multiplicate,0.899999976,
+Fenrir Options,0,0,4,0,Gold Fenrir Option,OptionLevel,Maximum Health,AddFinal,0,
+Fenrir Options,0,0,4,0,Gold Fenrir Option,OptionLevel,Maximum Mana,AddFinal,0,
+Fenrir Options,0,0,4,0,Gold Fenrir Option,OptionLevel,Physical Base Damage (min and max),AddFinal,0,
+Fenrir Options,0,0,4,0,Gold Fenrir Option,OptionLevel,Wizardry Base Damage (min and max),AddRaw,0,
+Gaia (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,10,
+Gaia (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Maximum Mana,AddRaw,25,
+Gaia (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Total Strength,AddRaw,10,
+Gaia (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Double Damage Chance,AddRaw,0.0500000007,
+Gaia (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Total Agility,AddRaw,30,
+Gaia (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Excellent Damage Chance,AddRaw,0.100000001,
+Gaia (Ancient Set),0,0,7,0,Ancient Option,OptionLevel,Excellent Damage Bonus,AddRaw,10,
+Gaion (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Defense Ignore Chance,AddRaw,0.0500000007,
+Gaion (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Double Damage Chance,AddRaw,0.150000006,
+Gaion (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,15,
+Gaion (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Excellent Damage Chance,AddRaw,0.150000006,
+Gaion (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Excellent Damage Bonus,AddRaw,30,
+Gaion (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Wizardry Base Damage Increase,Multiplicate,1.10000002,
+Gaion (Ancient Set),0,0,7,0,Ancient Option,OptionLevel,Total Strength,AddRaw,30,
+Garuda (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Maximum Ability,AddRaw,30,
+Garuda (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Double Damage Chance,AddRaw,0.0500000007,
+Garuda (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Total Energy,AddRaw,15,
+Garuda (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Maximum Health,AddRaw,50,
+Garuda (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,25,
+Garuda (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Wizardry Base Damage Increase,Multiplicate,1.14999998,
+Guardian Option (Armor),0,0,8,0,Guardian Option,OptionLevel,Defense Rate (PvP),AddRaw,10,
+Guardian Option (Armor),0,0,8,0,Guardian Option,OptionLevel,Shield Recovery Active Everywhere,AddRaw,1,
+Guardian Option (Boots),0,0,11,0,Guardian Option,OptionLevel,Defense Rate (PvP),AddRaw,10,
+Guardian Option (Boots),0,0,11,0,Guardian Option,OptionLevel,Maximum Shield,AddFinal,200,
+Guardian Option (Gloves),0,0,10,0,Guardian Option,OptionLevel,Defense Rate (PvP),AddRaw,10,
+Guardian Option (Gloves),0,0,10,0,Guardian Option,OptionLevel,Maximum Health,AddFinal,200,
+Guardian Option (Helm),0,0,7,0,Guardian Option,OptionLevel,Defense Rate (PvP),AddRaw,10,
+Guardian Option (Helm),0,0,7,0,Guardian Option,OptionLevel,Shield Recovery Multiplier,AddRaw,20,
+Guardian Option (Pants),0,0,9,0,Guardian Option,OptionLevel,Defense Rate (PvP),AddRaw,10,
+Guardian Option (Pants),0,0,9,0,Guardian Option,OptionLevel,Defense (PvP),AddRaw,100,
+Guardian Option (Weapon),0,0,240,0,Guardian Option,OptionLevel,Attack Rate (PvP),AddRaw,10,
+Guardian Option (Weapon),0,0,240,0,Guardian Option,OptionLevel,Final Damage Increase (PvP),AddRaw,200,
+Gywen (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Total Agility,AddRaw,30,
+Gywen (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Minimum Physical Base Damage,AddRaw,20,
+Gywen (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Base Defense,AddFinal,20,
+Gywen (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Maximum Physical Base Damage,AddRaw,20,
+Gywen (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Critical Damage Chance,AddRaw,0.150000006,
+Gywen (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Excellent Damage Chance,AddRaw,0.150000006,
+Gywen (Ancient Set),0,0,7,0,Ancient Option,OptionLevel,Critical Damage Bonus,AddRaw,20,
+Gywen (Ancient Set),0,0,8,0,Ancient Option,OptionLevel,Excellent Damage Bonus,AddRaw,20,
+Harmony Defense Options,0,1,1,0,Jewel of Harmony Option,OptionLevel,Base Defense,AddFinal,0,0:3;1:4;2:5;3:6;4:7;5:8;6:10;7:12;8:14;9:16;10:18;11:20;12:22;13:25;14:28;15:31
+Harmony Defense Options,0,1,2,0,Jewel of Harmony Option,OptionLevel,Maximum Ability,AddRaw,0,3:4;4:6;5:8;6:10;7:12;8:14;9:16;10:18;11:20;12:22;13:25;14:28;15:31
+Harmony Defense Options,0,1,3,0,Jewel of Harmony Option,OptionLevel,Maximum Health,AddRaw,0,3:7;4:9;5:11;6:13;7:15;8:17;9:19;10:21;11:23;12:25;13:30;14:32;15:34
+Harmony Defense Options,0,1,4,0,Jewel of Harmony Option,OptionLevel,Health Recovery Absolute Increase,AddRaw,0,6:1;7:2;8:3;9:4;10:5;11:6;12:7;13:8;14:9;15:10
+Harmony Defense Options,0,1,5,0,Jewel of Harmony Option,OptionLevel,Mana Recovery Absolute Increase,AddRaw,0,9:1;10:2;11:3;12:4;13:5;14:6;15:7
+Harmony Defense Options,0,1,6,0,Jewel of Harmony Option,OptionLevel,Defense Rate (PvP),AddRaw,0,9:3;10:4;11:5;12:6;13:8;14:10;15:12
+Harmony Defense Options,0,1,7,0,Jewel of Harmony Option,OptionLevel,Armor Damage Decrease,AddRaw,0,9:0.0299999993;10:0.0399999991;11:0.0500000007;12:0.0599999987;13:0.0700000003;14:0.0799999982;15:0.0900000036
+Harmony Defense Options,0,1,8,0,Jewel of Harmony Option,OptionLevel,SD Rate Increase,AddRaw,0,13:0.0500000007;14:0.0599999987;15:0.0700000003
+Harmony Physical Attack Options,0,1,1,0,Jewel of Harmony Option,OptionLevel,Minimum Physical Base Damage,AddRaw,0,0:2;1:3;2:4;3:5;4:6;5:7;6:9;7:11;8:12;9:14;10:15;11:16;12:17;13:20;14:23;15:26
+Harmony Physical Attack Options,0,1,2,0,Jewel of Harmony Option,OptionLevel,Maximum Physical Base Damage,AddRaw,0,0:3;1:4;2:5;3:6;4:7;5:8;6:10;7:12;8:14;9:17;10:20;11:23;12:26;13:29;14:32;15:35
+Harmony Physical Attack Options,0,1,3,0,Jewel of Harmony Option,OptionLevel,Strength Requirement reduction,AddRaw,0,0:6;1:8;2:10;3:12;4:14;5:16;6:20;7:23;8:26;9:29;10:32;11:35;12:37;13:40;14:43;15:46
+Harmony Physical Attack Options,0,1,4,0,Jewel of Harmony Option,OptionLevel,Agility Requirement reduction,AddRaw,0,0:6;1:8;2:10;3:12;4:14;5:16;6:20;7:23;8:26;9:29;10:32;11:35;12:37;13:40;14:43;15:46
+Harmony Physical Attack Options,0,1,5,0,Jewel of Harmony Option,OptionLevel,Physical Base Damage (min and max),AddFinal,0,6:7;7:8;8:9;9:11;10:12;11:14;12:16;13:19;14:22;15:25
+Harmony Physical Attack Options,0,1,6,0,Jewel of Harmony Option,OptionLevel,Critical Damage Bonus,AddRaw,0,6:12;7:14;8:16;9:18;10:20;11:22;12:24;13:30;14:33;15:36
+Harmony Physical Attack Options,0,1,7,0,Jewel of Harmony Option,OptionLevel,Skill Damage Bonus,AddRaw,0,9:12;10:14;11:16;12:18;13:22;14:24;15:26
+Harmony Physical Attack Options,0,1,8,0,Jewel of Harmony Option,OptionLevel,Attack Rate (PvP),AddRaw,0,9:5;10:7;11:9;12:11;13:14;14:16;15:18
+Harmony Physical Attack Options,0,1,9,0,Jewel of Harmony Option,OptionLevel,SD decrease rate increase,AddRaw,0,9:3;10:5;11:7;12:9;13:10;14:11;15:12
+Harmony Physical Attack Options,0,1,10,0,Jewel of Harmony Option,OptionLevel,Shield Bypass Chance,AddRaw,0,13:0.100000001;14:0.119999997;15:0.140000001
+Harmony Wizardry Attack Options,0,1,1,0,Jewel of Harmony Option,OptionLevel,Wizardry Base Damage (min and max),AddRaw,0,0:6;1:8;2:10;3:12;4:14;5:16;6:17;7:18;8:19;9:21;10:23;11:25;12:27;13:31;14:33;15:35
+Harmony Wizardry Attack Options,0,1,2,0,Jewel of Harmony Option,OptionLevel,Strength Requirement reduction,AddRaw,0,0:6;1:8;2:10;3:12;4:14;5:16;6:20;7:23;8:26;9:29;10:32;11:35;12:37;13:40;14:43;15:46
+Harmony Wizardry Attack Options,0,1,3,0,Jewel of Harmony Option,OptionLevel,Agility Requirement reduction,AddRaw,0,0:6;1:8;2:10;3:12;4:14;5:16;6:20;7:23;8:26;9:29;10:32;11:35;12:37;13:40;14:43;15:46
+Harmony Wizardry Attack Options,0,1,4,0,Jewel of Harmony Option,OptionLevel,Skill Damage Bonus,AddRaw,0,6:7;7:10;8:13;9:16;10:19;11:22;12:25;13:30;14:33;15:36
+Harmony Wizardry Attack Options,0,1,5,0,Jewel of Harmony Option,OptionLevel,Critical Damage Bonus,AddRaw,0,6:10;7:12;8:14;9:16;10:18;11:20;12:22;13:28;14:30;15:32
+Harmony Wizardry Attack Options,0,1,6,0,Jewel of Harmony Option,OptionLevel,SD decrease rate increase,AddRaw,0,9:4;10:6;11:8;12:10;13:13;14:15;15:17
+Harmony Wizardry Attack Options,0,1,7,0,Jewel of Harmony Option,OptionLevel,Attack Rate (PvP),AddRaw,0,9:5;10:7;11:9;12:11;13:14;14:15;15:16
+Harmony Wizardry Attack Options,0,1,8,0,Jewel of Harmony Option,OptionLevel,Shield Bypass Chance,AddRaw,0,13:0.150000006;14:0.170000002;15:0.189999998
+Health recover for jewelery,0.25,1,0,0,Option,OptionLevel,Health Recovery Multiplier,AddRaw,0,1:0.00999999978;2:0.0199999996;3:0.0299999993
+Heras (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Total Strength,AddRaw,15,
+Heras (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Wizardry Base Damage Increase,Multiplicate,1.10000002,
+Heras (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Defense Increase Multiplier With Equipped Shield,AddRaw,0.0500000007,
+Heras (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Total Energy,AddRaw,15,
+Heras (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Attack Rate (PvM),AddRaw,50,
+Heras (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Critical Damage Chance,AddRaw,0.100000001,
+Heras (Ancient Set),0,0,7,0,Ancient Option,OptionLevel,Excellent Damage Chance,AddRaw,0.100000001,
+Heras (Ancient Set),0,0,8,0,Ancient Option,OptionLevel,Maximum Health,AddRaw,50,
+Heras (Ancient Set),0,0,9,0,Ancient Option,OptionLevel,Maximum Mana,AddRaw,50,
+Hyon (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Base Defense,AddFinal,25,
+Hyon (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Double Damage Chance,AddRaw,0.100000001,
+Hyon (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,20,
+Hyon (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Critical Damage Chance,AddRaw,0.150000006,
+Hyon (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Excellent Damage Chance,AddRaw,0.150000006,
+Hyon (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Critical Damage Bonus,AddRaw,20,
+Hyon (Ancient Set),0,0,7,0,Ancient Option,OptionLevel,Excellent Damage Bonus,AddRaw,20,
+Hyperion (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Total Energy,AddRaw,15,
+Hyperion (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Total Agility,AddRaw,15,
+Hyperion (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,20,
+Hyperion (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Maximum Mana,AddRaw,30,
+Jewelery option Maximum Ability,0.25,1,0,0,Option,OptionLevel,Maximum Ability,Multiplicate,0,1:1.00999999;2:1.01999998;3:1.02999997
+Jewelery option Maximum Mana,0.25,1,0,0,Option,OptionLevel,Maximum Mana,Multiplicate,0,1:1.00999999;2:1.01999998;3:1.02999997
+Kantata (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Total Energy,AddRaw,15,
+Kantata (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Total Vitality,AddRaw,30,
+Kantata (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Wizardry Base Damage Increase,Multiplicate,1.10000002,
+Kantata (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Total Strength,AddRaw,15,
+Kantata (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,25,
+Kantata (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Excellent Damage Chance,AddRaw,10,
+Kantata (Ancient Set),0,0,7,0,Ancient Option,OptionLevel,Excellent Damage Bonus,AddRaw,20,
+Karis (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,15,
+Karis (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Double Damage Chance,AddRaw,0.100000001,
+Karis (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Critical Damage Chance,AddRaw,0.100000001,
+Karis (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Total Agility,AddRaw,40,
+Luck,0.25,1,0,0,Luck (Critical Damage Chance 5%),OptionLevel,Critical Damage Chance,AddRaw,0.0500000007,
+Minet (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Total Energy,AddRaw,30,
+Minet (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Base Defense,AddFinal,30,
+Minet (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Maximum Mana,AddRaw,100,
+Minet (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,15,
+Mist (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Total Vitality,AddRaw,20,
+Mist (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,30,
+Mist (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Double Damage Chance,AddRaw,0.100000001,
+Mist (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Total Agility,AddRaw,20,
+Muren (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,10,
+Muren (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Wizardry Base Damage Increase,Multiplicate,1.10000002,
+Muren (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Double Damage Chance,AddRaw,0.100000001,
+Muren (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Critical Damage Chance,AddRaw,0.150000006,
+Muren (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Excellent Damage Chance,AddRaw,0.150000006,
+Muren (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Base Defense,AddFinal,25,
+Muren (Ancient Set),0,0,7,0,Ancient Option,OptionLevel,Two-Handed Weapon Physical Damage Increase (Ancient Option),AddRaw,0.200000003,
+Odin (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Total Energy,AddRaw,15,
+Odin (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Maximum Health,AddRaw,50,
+Odin (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Attack Rate (PvM),AddRaw,50,
+Odin (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Total Agility,AddRaw,30,
+Odin (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Maximum Mana,AddRaw,50,
+Odin (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Defense Ignore Chance,AddRaw,0.0500000007,
+Odin (Ancient Set),0,0,7,0,Ancient Option,OptionLevel,Maximum Ability,AddRaw,50,
+Physical Base Damage (min and max) Option,0.25,1,0,0,Option,OptionLevel,Physical Base Damage (min and max),AddRaw,4,2:8;3:12;4:16;5:20;6:24;7:28
+Rave (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,20,
+Rave (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Double Damage Chance,AddRaw,0.100000001,
+Rave (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Two-Handed Weapon Physical Damage Increase (Ancient Option),AddRaw,0.300000012,
+Rave (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Defense Ignore Chance,AddRaw,0.0500000007,
+Semeden (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Wizardry Base Damage Increase,Multiplicate,1.14999998,
+Semeden (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,25,
+Semeden (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Total Energy,AddRaw,30,
+Semeden (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Critical Damage Chance,AddRaw,0.150000006,
+Semeden (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Excellent Damage Chance,AddRaw,0.150000006,
+Semeden (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Defense Ignore Chance,AddRaw,0.0500000007,
+Skeleton Transformation Ring,1,1,0,0,,OptionLevel,Bonus Experience Rate,AddRaw,0,
+Socket Bonus Options (Armors),0.300000012,1,4,0,Socket Bonus Option,OptionLevel,Final Defense,AddRaw,24,
+Socket Bonus Options (Armors),0.300000012,1,5,0,Socket Bonus Option,OptionLevel,Maximum Health,AddRaw,29,
+Socket Bonus Options (Physical),0.300000012,1,0,0,Socket Bonus Option,OptionLevel,"Base Damage Bonus (physical and wizardry, min and max)",AddRaw,11,
+Socket Bonus Options (Physical),0.300000012,1,1,0,Socket Bonus Option,OptionLevel,Skill Damage Bonus,AddRaw,11,
+Socket Bonus Options (Wizardry),0.300000012,1,2,0,Socket Bonus Option,OptionLevel,"Base Damage Bonus (physical and wizardry, min and max)",AddRaw,5,
+Socket Bonus Options (Wizardry),0.300000012,1,3,0,Socket Bonus Option,OptionLevel,Skill Damage Bonus,AddRaw,11,
+Socket Options (Earth),0,1,0,5,Socket Option,OptionLevel,Maximum Health,AddRaw,30,1:30;2:32;3:34;4:36;5:38
+Socket Options (Fire),0,1,0,0,Socket Option,OptionLevel,"Base Damage Bonus (physical and wizardry, min and max)",AddRaw,0,1:0;2:0;3:0;4:0;5:0
+Socket Options (Fire),0,1,1,0,Socket Option,OptionLevel,Attack Speed Any,AddRaw,7,1:7;2:8;3:9;4:10;5:11
+Socket Options (Fire),0,1,2,0,Socket Option,OptionLevel,Base Max Damage Bonus (physical and wizardry),AddRaw,30,1:30;2:32;3:35;4:40;5:50
+Socket Options (Fire),0,1,3,0,Socket Option,OptionLevel,Base Min Damage Bonus (physical and wizardry),AddRaw,20,1:20;2:22;3:25;4:30;5:35
+Socket Options (Fire),0,1,4,0,Socket Option,OptionLevel,"Base Damage Bonus (physical and wizardry, min and max)",AddRaw,20,1:20;2:22;3:25;4:30;5:35
+Socket Options (Fire),0,1,5,0,Socket Option,OptionLevel,Ability Usage Reduction,AddRaw,0.400000006,1:0.400000006;2:0.409999996;3:0.419999987;4:0.430000007;5:0.439999998
+Socket Options (Ice),0,1,0,2,Socket Option,OptionLevel,"Health recover after Monster kill, multiplier of max health",AddRaw,0.125,1:0.125;2:0.142857149;3:0.166666672;4:0.200000003;5:0.25
+Socket Options (Ice),0,1,1,2,Socket Option,OptionLevel,"Mana recover after Monster kill, multiplier of max mana",AddRaw,0.125,1:0.125;2:0.142857149;3:0.166666672;4:0.200000003;5:0.25
+Socket Options (Ice),0,1,2,2,Socket Option,OptionLevel,Skill Damage Bonus,AddRaw,37,1:37;2:40;3:45;4:50;5:60
+Socket Options (Ice),0,1,3,2,Socket Option,OptionLevel,Attack Rate (PvM),AddRaw,25,1:25;2:27;3:30;4:35;5:40
+Socket Options (Ice),0,1,4,2,Socket Option,OptionLevel,Weapon Duration Increase,AddRaw,0.300000012,1:0.300000012;2:0.319999993;3:0.340000004;4:0.360000014;5:0.379999995
+Socket Options (Lightning),0,1,0,4,Socket Option,OptionLevel,Excellent Damage Bonus,AddRaw,15,1:15;2:20;3:25;4:30;5:40
+Socket Options (Lightning),0,1,1,4,Socket Option,OptionLevel,Excellent Damage Chance,AddRaw,0.100000001,1:0.100000001;2:0.109999999;3:0.119999997;4:0.129999995;5:0.140000001
+Socket Options (Lightning),0,1,2,4,Socket Option,OptionLevel,Critical Damage Bonus,AddRaw,30,1:30;2:32;3:35;4:40;5:50
+Socket Options (Lightning),0,1,3,4,Socket Option,OptionLevel,Critical Damage Chance,AddRaw,0.0799999982,1:0.0799999982;2:0.0900000036;3:0.100000001;4:0.109999999;5:0.119999997
+Socket Options (Water),0,1,0,1,Socket Option,OptionLevel,Defense Rate (PvM),Multiplicate,1.10000002,1:1.10000002;2:1.11000001;3:1.12;4:1.13;5:1.13999999
+Socket Options (Water),0,1,1,1,Socket Option,OptionLevel,Final Defense,AddRaw,30,1:30;2:33;3:36;4:39;5:42
+Socket Options (Water),0,1,2,1,Socket Option,OptionLevel,Shield Item Defense Increase Multiplier,AddRaw,0.0700000003,1:0.0700000003;2:0.100000001;3:0.150000006;4:0.200000003;5:0.300000012
+Socket Options (Water),0,1,3,1,Socket Option,OptionLevel,Armor Damage Decrease,AddRaw,0.0399999991,1:0.0399999991;2:0.0500000007;3:0.0599999987;4:0.0700000003;5:0.0799999982
+Socket Options (Water),0,1,4,1,Socket Option,OptionLevel,Damage Reflection,AddRaw,0.0500000007,1:0.0500000007;2:0.0599999987;3:0.0700000003;4:0.0799999982;5:0.0900000036
+Socket Options (Wind),0,1,0,3,Socket Option,OptionLevel,Health Recovery Absolute Increase,AddRaw,8,1:8;2:10;3:13;4:16;5:20
+Socket Options (Wind),0,1,1,3,Socket Option,OptionLevel,Maximum Health,Multiplicate,1.03999996,1:1.03999996;2:1.04999995;3:1.05999994;4:1.07000005;5:1.08000004
+Socket Options (Wind),0,1,2,3,Socket Option,OptionLevel,Maximum Mana,Multiplicate,1.03999996,1:1.03999996;2:1.04999995;3:1.05999994;4:1.07000005;5:1.08000004
+Socket Options (Wind),0,1,3,3,Socket Option,OptionLevel,Mana Recovery Absolute Increase,AddRaw,7,1:7;2:14;3:21;4:28;5:35
+Socket Options (Wind),0,1,4,3,Socket Option,OptionLevel,Maximum Ability,AddRaw,50,1:50;2:70;3:90;4:110;5:130
+Socket Options (Wind),0,1,5,3,Socket Option,OptionLevel,Ability Recovery Absolute Increase,AddRaw,5,1:5;2:7;3:9;4:11;5:13
+Sylion (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Double Damage Chance,AddRaw,0.0500000007,
+Sylion (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Critical Damage Chance,AddRaw,0.0500000007,
+Sylion (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Base Defense,AddFinal,20,
+Sylion (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Total Strength,AddRaw,50,
+Sylion (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Total Agility,AddRaw,50,
+Sylion (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Total Vitality,AddRaw,50,
+Sylion (Ancient Set),0,0,7,0,Ancient Option,OptionLevel,Total Energy,AddRaw,50,
+Vega (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Attack Rate (PvM),AddRaw,50,
+Vega (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Total Vitality,AddRaw,50,
+Vega (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Maximum Physical Base Damage,AddRaw,30,
+Vega (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Excellent Damage Chance,AddRaw,0.150000006,
+Vega (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Double Damage Chance,AddRaw,0.0500000007,
+Vega (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Defense Ignore Chance,AddRaw,0.0500000007,
+Vicious (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,15,
+Vicious (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Late Damage Bonus (any type),AddRaw,15,
+Vicious (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Double Damage Chance,AddRaw,0.100000001,
+Vicious (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Minimum Physical Base Damage,AddRaw,20,
+Vicious (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Maximum Physical Base Damage,AddRaw,30,
+Vicious (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Defense Ignore Chance,AddRaw,0.0500000007,
+Warrior (Ancient Set),0,0,1,0,Ancient Option,OptionLevel,Total Strength,AddRaw,10,
+Warrior (Ancient Set),0,0,2,0,Ancient Option,OptionLevel,Skill Damage Bonus,AddRaw,10,
+Warrior (Ancient Set),0,0,3,0,Ancient Option,OptionLevel,Maximum Ability,AddRaw,20,
+Warrior (Ancient Set),0,0,4,0,Ancient Option,OptionLevel,Ability Recovery Absolute Increase,AddRaw,5,
+Warrior (Ancient Set),0,0,5,0,Ancient Option,OptionLevel,Base Defense,AddFinal,20,
+Warrior (Ancient Set),0,0,6,0,Ancient Option,OptionLevel,Total Agility,AddRaw,10,
+Warrior (Ancient Set),0,0,7,0,Ancient Option,OptionLevel,Critical Damage Chance,AddRaw,0.0500000007,
+Warrior (Ancient Set),0,0,8,0,Ancient Option,OptionLevel,Excellent Damage Chance,AddRaw,0.0500000007,
+Warrior (Ancient Set),0,0,9,0,Ancient Option,OptionLevel,Total Strength,AddRaw,25,
+Wing of Dimension Options,0.25,1,0,0,Option,OptionLevel,Health Recovery Multiplier,AddRaw,0,1:0.00999999978;2:0.0199999996;3:0.0299999993;4:0.0399999991;5:0.049999997;6:0.0599999987;7:0.0700000003
+Wing of Dimension Options,0.25,1,2,0,Option,OptionLevel,Curse Base Damage (min and max),AddRaw,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Wing of Dimension Options,0.25,1,3,0,Option,OptionLevel,Wizardry Base Damage (min and max),AddRaw,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Wing of Eternal Options,0.25,1,0,0,Option,OptionLevel,Health Recovery Multiplier,AddRaw,0,1:0.00999999978;2:0.0199999996;3:0.0299999993;4:0.0399999991;5:0.049999997;6:0.0599999987;7:0.0700000003
+Wing of Eternal Options,0.25,1,2,0,Option,OptionLevel,Base Defense,AddRaw,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Wing of Eternal Options,0.25,1,3,0,Option,OptionLevel,Wizardry Base Damage (min and max),AddRaw,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Wing of Illusion Options,0.25,1,0,0,Option,OptionLevel,Health Recovery Multiplier,AddRaw,0,1:0.00999999978;2:0.0199999996;3:0.0299999993;4:0.0399999991;5:0.049999997;6:0.0599999987;7:0.0700000003
+Wing of Illusion Options,0.25,1,2,0,Option,OptionLevel,Base Defense,AddRaw,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Wing of Illusion Options,0.25,1,3,0,Option,OptionLevel,Physical Base Damage (min and max),AddFinal,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Wing of Ruin Options,0.25,1,0,0,Option,OptionLevel,Health Recovery Multiplier,AddRaw,0,1:0.00999999978;2:0.0199999996;3:0.0299999993;4:0.0399999991;5:0.049999997;6:0.0599999987;7:0.0700000003
+Wing of Ruin Options,0.25,1,2,0,Option,OptionLevel,Wizardry Base Damage (min and max),AddRaw,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Wing of Ruin Options,0.25,1,3,0,Option,OptionLevel,Physical Base Damage (min and max),AddFinal,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Wing of Storm Options,0.25,1,0,0,Option,OptionLevel,Health Recovery Multiplier,AddRaw,0,1:0.00999999978;2:0.0199999996;3:0.0299999993;4:0.0399999991;5:0.049999997;6:0.0599999987;7:0.0700000003
+Wing of Storm Options,0.25,1,2,0,Option,OptionLevel,Base Defense,AddRaw,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Wing of Storm Options,0.25,1,3,0,Option,OptionLevel,Physical Base Damage (min and max),AddFinal,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Wings of Curse Options,0.25,1,0,0,Option,OptionLevel,Wizardry Base Damage (min and max),AddRaw,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Wings of Darkness Options,0.25,1,0,0,Option,OptionLevel,Wizardry Base Damage (min and max),AddRaw,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Wings of Darkness Options,0.25,1,2,0,Option,OptionLevel,Physical Base Damage (min and max),AddFinal,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Wings of Despair Options,0.25,1,0,0,Option,OptionLevel,Curse Base Damage (min and max),AddRaw,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Wings of Despair Options,0.25,1,2,0,Option,OptionLevel,Wizardry Base Damage (min and max),AddRaw,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Wings of Dragon Options,0.25,1,0,0,Option,OptionLevel,Health Recovery Multiplier,AddRaw,0,1:0.00999999978;2:0.0199999996;3:0.0299999993;4:0.0399999991;5:0.049999997;6:0.0599999987;7:0.0700000003
+Wings of Dragon Options,0.25,1,2,0,Option,OptionLevel,Physical Base Damage (min and max),AddFinal,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Wings of Elf Options,0.25,1,0,0,Option,OptionLevel,Health Recovery Multiplier,AddRaw,0,1:0.00999999978;2:0.0199999996;3:0.0299999993;4:0.0399999991;5:0.049999997;6:0.0599999987;7:0.0700000003
+Wings of Heaven Options,0.25,1,0,0,Option,OptionLevel,Wizardry Base Damage (min and max),AddRaw,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Wings of Satan Options,0.25,1,0,0,Option,OptionLevel,Physical Base Damage (min and max),AddFinal,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Wings of Soul Options,0.25,1,0,0,Option,OptionLevel,Health Recovery Multiplier,AddRaw,0,1:0.00999999978;2:0.0199999996;3:0.0299999993;4:0.0399999991;5:0.049999997;6:0.0599999987;7:0.0700000003
+Wings of Soul Options,0.25,1,2,0,Option,OptionLevel,Wizardry Base Damage (min and max),AddRaw,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Wings of Spirits Options,0.25,1,0,0,Option,OptionLevel,Physical Base Damage (min and max),AddFinal,0,1:4;2:8;3:12;4:16;5:20;6:24;7:28
+Wings of Spirits Options,0.25,1,2,0,Option,OptionLevel,Health Recovery Multiplier,AddRaw,0,1:0.00999999978;2:0.0199999996;3:0.0299999993;4:0.0399999991;5:0.049999997;6:0.0599999987;7:0.0700000003
+Wizardry Base Damage (min and max) Option,0.25,1,0,0,Option,OptionLevel,Wizardry Base Damage (min and max),AddRaw,4,2:8;3:12;4:16;5:20;6:24;7:28

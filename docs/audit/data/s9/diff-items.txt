@@ -1,0 +1,1303 @@
+# Item Table Differences: HNMO vs Season 6 & Season 9 Server Suites
+# Counts: HNMO=1112, S6=1003, S9=1260
+
+## Shared items where HNMO differs from Season 6 suite
+0-19 (Divine Sword of Archangel): Drop:0->1
+0-35 (Phoenix Soul Star): Drop:0->1
+2-18 (Stryker Scepter): Drop:0->1
+3-11 (Beuroba): Drop:0->1
+4-6 (Chaos Nature Bow): Drop:0->1
+4-18 (Divine Crossbow of Archangel): Drop:0->1
+4-24 (Air Lyn Bow): Drop:0->1
+5-0 (Skull Staff): Dur:20->0
+5-1 (Angelic Staff): Dur:38->0
+5-2 (Serpent Staff): Dur:50->0
+5-3 (Thunder Staff): Dur:60->0
+5-4 (Gorgon Staff): Dur:65->0
+5-5 (Legendary Staff): Dur:66->0
+5-6 (Staff of Resurrection): Dur:70->0
+5-7 (Chaos Lightning Staff): Dur:70->0, Drop:0->1
+5-8 (Staff of Destruction): Dur:85->0
+5-9 (Dragon Soul Staff): Dur:91->0
+5-10 (Divine Staff of Archangel): Dur:182->0, Drop:0->1
+5-11 (Staff of Kundun): Dur:95->0
+5-12 (Grand Viper Staff): Dur:100->0
+5-13 (Platina Staff): Dur:78->0
+5-14 (Mistery Stick): Dur:50->0
+5-15 (Violent Wind Stick): Dur:60->0
+5-16 (Red Wing Stick): Dur:65->0
+5-17 (Ancient Stick): Dur:81->0
+5-18 (Demonic Stick): Dur:91->0
+5-19 (Storm Blitz Stick): Dur:95->0
+5-20 (Eternal Wing Stick): Dur:100->0
+5-21 (Book of Sahamutt): Dur:60->0
+5-22 (Book of Neil): Dur:65->0
+5-23 (Book of Lagle): Dur:50->0
+5-30 (Deadly Staff): Dur:91->0
+5-31 (Imperial Staff): Dur:182->0
+5-32 (Summon Spirit Stick): DropLevel:149->130, Dur:130->0, Drop:0->1
+5-33 (Chromatic Staff): Dur:78->0, Drop:0->1
+5-34 (Raven Stick): Dur:98->0, Drop:0->1
+5-36 (Divine Stick of Archangel): Dur:182->0, Drop:0->1
+12-7 (Orb of Twisting Slash): Dur:1->0
+12-8 (Orb of Healing): Dur:1->0
+12-9 (Orb of Greater Defense): Dur:1->0
+12-10 (Orb of Greater Damage): Dur:1->0
+12-11 (Orb of Summoning): Dur:1->0
+12-12 (Orb of Rageful Blow): Dur:1->0
+12-13 (Orb of Impale): Dur:1->0
+12-14 (Orb of Greater Fortitude): Dur:1->0
+12-15 (Jewel of Chaos): Dur:1->0, Drop:0->1
+12-16 (Orb of Fire Slash): Dur:1->0
+12-17 (Orb of Penetration): Dur:1->0
+12-18 (Orb of Ice Arrow): Dur:1->0
+12-19 (Orb of Death Stab): Dur:1->0
+12-21 (Scroll of FireBurst): Dur:1->0
+12-22 (Scroll of Summon): Dur:1->0
+12-23 (Scroll of Critical Damage): Dur:1->0
+12-24 (Scroll of Electric Spark): Dur:1->0
+12-30 (Packed Jewel of Bless): DropLevel:0->25, Dur:1->0
+12-31 (Packed Jewel of Soul): DropLevel:0->30, Dur:1->0
+12-32 (Red Ribbon Box): Dur:1->0
+12-33 (Green Ribbon Box): Dur:1->0
+12-34 (Blue Ribbon Box): Dur:1->0
+12-35 (Scroll of Fire Scream): Dur:1->0
+12-44 (Crystal of Destruction): Dur:1->0
+12-45 (Crystal of Multi-Shot): Dur:1->0
+12-46 (Crystal of Recovery): Dur:1->0
+12-47 (Crystal of Flame Strike): Dur:1->0
+12-48 (Scroll of Chaotic Diseier): Dur:1->0
+12-49 (Cape of Fighter): DropLevel:150->180
+12-60 (Seed (Fire)): Dur:1->0
+12-61 (Seed (Water)): Dur:1->0
+12-62 (Seed (Ice)): Dur:1->0
+12-63 (Seed (Wind)): Dur:1->0
+12-64 (Seed (Lightning)): Dur:1->0
+12-65 (Seed (Earth)): Dur:1->0
+12-70 (Sphere (Mono)): Dur:1->0, Drop:1->0
+12-71 (Sphere (Di)): Dur:1->0, Drop:1->0
+12-72 (Sphere (Tri)): Dur:1->0, Drop:1->0
+12-73 (Sphere (4)): DropLevel:0->142, Dur:1->0
+12-74 (Sphere (5)): DropLevel:0->152, Dur:1->0
+12-100 (Seed Sphere (Fire) (1)): DropLevel:0->1, Dur:1->0
+12-101 (Seed Sphere (Water) (1)): DropLevel:0->1, Dur:1->0
+12-102 (Seed Sphere (Ice) (1)): DropLevel:0->1, Dur:1->0
+12-103 (Seed Sphere (Wind) (1)): DropLevel:0->1, Dur:1->0
+12-104 (Seed Sphere (Lightning) (1)): DropLevel:0->1, Dur:1->0
+12-105 (Seed Sphere (Earth) (1)): DropLevel:0->1, Dur:1->0
+12-106 (Seed Sphere (Fire) (2)): DropLevel:1->2, Dur:1->0
+12-107 (Seed Sphere (Water) (2)): DropLevel:1->2, Dur:1->0
+12-108 (Seed Sphere (Ice) (2)): DropLevel:1->2, Dur:1->0
+12-109 (Seed Sphere (Wind) (2)): DropLevel:1->2, Dur:1->0
+12-110 (Seed Sphere (Lightning) (2)): DropLevel:1->2, Dur:1->0
+12-111 (Seed Sphere (Earth) (2)): DropLevel:1->2, Dur:1->0
+12-112 (Seed Sphere (Fire) (3)): DropLevel:2->3, Dur:1->0
+12-113 (Seed Sphere (Water) (3)): DropLevel:2->3, Dur:1->0
+12-114 (Seed Sphere (Ice) (3)): DropLevel:2->3, Dur:1->0
+12-115 (Seed Sphere (Wind) (3)): DropLevel:2->3, Dur:1->0
+12-116 (Seed Sphere (Lightning) (3)): DropLevel:2->3, Dur:1->0
+12-117 (Seed Sphere (Earth) (3)): DropLevel:2->3, Dur:1->0
+12-118 (Seed Sphere (Fire) (4)): DropLevel:3->4, Dur:1->0
+12-119 (Seed Sphere (Water) (4)): DropLevel:3->4, Dur:1->0
+12-120 (Seed Sphere (Ice) (4)): DropLevel:3->4, Dur:1->0
+12-121 (Seed Sphere (Wind) (4)): DropLevel:3->4, Dur:1->0
+12-122 (Seed Sphere (Lightning) (4)): DropLevel:3->4, Dur:1->0
+12-123 (Seed Sphere (Earth) (4)): DropLevel:3->4, Dur:1->0
+12-124 (Seed Sphere (Fire) (5)): DropLevel:4->5, Dur:1->0
+12-125 (Seed Sphere (Water) (5)): DropLevel:4->5, Dur:1->0
+12-126 (Seed Sphere (Ice) (5)): DropLevel:4->5, Dur:1->0
+12-127 (Seed Sphere (Wind) (5)): DropLevel:4->5, Dur:1->0
+12-128 (Seed Sphere (Lightning) (5)): DropLevel:4->5, Dur:1->0
+12-129 (Seed Sphere (Earth) (5)): DropLevel:4->5, Dur:1->0
+12-136 (Packed Jewel of Life): DropLevel:0->72, Dur:1->0
+12-137 (Packed Jewel of Creation): DropLevel:0->78, Dur:1->0
+12-138 (Packed Jewel of Guardian): DropLevel:0->75, Dur:1->0
+12-139 (Packed Gemstone): DropLevel:0->25, Dur:1->0
+12-140 (Packed Jewel of Harmony): DropLevel:0->25, Dur:1->0
+12-141 (Packed Jewel of Chaos): DropLevel:0->12, Dur:1->0
+12-142 (Packed Lower refine stone): DropLevel:0->25, Dur:1->0
+12-143 (Packed Higher refine stone): DropLevel:0->25, Dur:1->0
+13-0 (Guardian Angel): DropLevel:23->0
+13-1 (Imp): DropLevel:28->0
+13-2 (Horn of Uniria): DropLevel:25->0
+13-3 (Horn of Dinorant): DropLevel:110->0
+13-4 (Dark Horse): DropLevel:218->0
+13-8 (Ring of Ice): DropLevel:20->0
+13-9 (Ring of Poison): DropLevel:17->0
+13-11 (Life Stone): DropLevel:75->0, Dur:1->255
+13-12 (Pendant of Lighting): DropLevel:21->0
+13-13 (Pendant of Fire): DropLevel:13->0
+13-14 (Loch's Feather): DropLevel:78->0, Dur:1->0, ReqLvl:->78, Drop:0->1
+13-15 (Fruits): Dur:1->0
+13-16 (Scroll of Archangel): Dur:1->128
+13-17 (Blood Bone): Dur:1->128
+13-18 (Invisibility Cloak): Dur:1->255
+13-19 (Weapon of Archangel): Dur:1->255
+13-21 (Ring of Fire): DropLevel:30->0
+13-22 (Ring of Earth): DropLevel:38->0
+13-23 (Ring of Wind): DropLevel:44->0
+13-24 (Ring of Magic): DropLevel:47->0
+13-25 (Pendant of Ice): DropLevel:34->0
+13-26 (Pendant of Wind): DropLevel:42->0
+13-27 (Pendant of Water): DropLevel:46->0
+13-28 (Pendant of Ability): DropLevel:50->0
+13-29 (Armor of Guardsman): Dur:1->0
+13-30 (Cape of Lord): DropLevel:180->0, ReqLvl:150->180
+13-31 (Spirit): Dur:1->0
+13-32 (Splinter of Armor): Dur:20->1
+13-33 (Bless of Guardian): Dur:20->1
+13-34 (Claw of Beast): Dur:10->1
+13-37 (Horn of Fenrir): DropLevel:255->0
+13-38 (Moonstone Pendant): DropLevel:21->0
+13-39 (Elite Skeleton Transformation Ring): DropLevel:10->0
+13-40 (Jack O'lantern Transformation Ring): DropLevel:10->0
+13-41 (Christmas Transformation Ring): DropLevel:1->0, ReqLvl:->1
+13-43 (Seal of Ascension): Dur:1->0
+13-44 (Seal of Wealth): Dur:1->0
+13-45 (Seal of Sustenance): Dur:1->0
+13-49 (Old Scroll): Dur:1->0
+13-50 (Scroll of Blood): Dur:1->0, Size:2x2->1x2
+13-51 (Illusion Sorcerer Covenant): Size:1x2->2x2
+13-52 (Flame of Condor): DropLevel:120->0, Dur:1->0
+13-53 (Feather of Condor): DropLevel:120->0, Dur:1->0
+13-54 (Reset Fruit (Strength)): Dur:100->0
+13-62 (Seal of Healing): Dur:1->0
+13-63 (Seal of Divinity): Dur:1->0
+13-64 (Demon): DropLevel:1->0
+13-65 (Spirit of Guardian): DropLevel:1->0
+13-67 (Pet Rudolf): DropLevel:28->0
+13-68 (Snowman Transformation Ring): DropLevel:10->0
+13-76 (Panda Transformation Ring): DropLevel:28->0, ReqLvl:->1
+13-80 (Pet Panda): DropLevel:1->0
+13-81 (Talisman of Guardian): Dur:1->0
+13-82 (Talisman of Item Protection): Dur:1->0
+13-93 (Master Seal of Ascension): Dur:1->0
+13-94 (Master Seal of Wealth): Dur:1->0
+13-104 (Max AG Boost Aura): Dur:1->0
+13-105 (Max SD Boost Aura): Dur:1->0
+13-106 (Pet Unicorn): DropLevel:28->0
+13-109 (Sapphire Ring): Dur:255->0
+13-110 (Ruby Ring): Dur:255->0
+13-111 (Topaz Ring): Dur:255->0
+13-112 (Amethyst Ring): Dur:255->0
+13-113 (Ruby Necklace): Dur:255->0
+13-114 (Emerald Necklace): Dur:255->0
+13-115 (Sapphire Necklace): Dur:255->0
+13-121 (Open Access Ticket to Chaos Castle): Dur:10->0
+13-122 (Skeleton Transformation Ring): DropLevel:1->0, ReqLvl:->1
+13-123 (Pet Skeleton): DropLevel:1->0
+13-125 (Doppelganger Free Ticket): Dur:1->10
+13-135 (1st Lucky Armor Ticket): Dur:1->255
+13-136 (1st Lucky Pants Ticket): Dur:1->255
+13-137 (1st Lucky Helm Ticket): Dur:1->255
+13-138 (1st Lucky Gloves Ticket): Dur:1->255
+13-139 (1st Lucky Boots Ticket): Dur:1->255
+13-140 (2nd Lucky Armor Ticket): Dur:1->255
+13-141 (2nd Lucky Pants Ticket): Dur:1->255
+13-142 (2nd Lucky Helm Ticket): Dur:1->255
+13-143 (2nd Lucky Gloves Ticket): Dur:1->255
+13-144 (2nd Lucky Boots Ticket): Dur:1->255
+14-0 (Apple): Dur:255->0
+14-1 (Small Healing Potion): Dur:255->0
+14-2 (Medium Healing Potion): Dur:255->0
+14-3 (Large Healing Potion): Dur:255->0
+14-4 (Small Mana Potion): Dur:255->0
+14-5 (Medium Mana Potion): Dur:255->0
+14-6 (Large Mana Potion): Dur:255->0
+14-7 (Potion of Bless;Potion of Soul): Dur:10->0
+14-8 (Antidote): Dur:3->0
+14-9 (Ale): Dur:1->0
+14-10 (Town Portal Scroll): Dur:1->0
+14-11 (Box of Luck): Dur:1->0
+14-13 (Jewel of Bless): Dur:1->0, Drop:0->1
+14-14 (Jewel of Soul): Dur:1->0, Drop:0->1
+14-16 (Jewel of Life): Dur:1->0, Drop:0->1
+14-17 (Devil's Eye): DropLevel:0->1, Dur:1->0
+14-18 (Devil's Key): DropLevel:0->1, Dur:1->0
+14-19 (Devil's Invitation): Dur:1->0
+14-21 (Rena): Dur:1->0
+14-22 (Jewel of Creation): DropLevel:72->78, Dur:1->0, Drop:0->1
+14-23 (Scroll of Emperor;Ring of Honor): Dur:1->0, Drop:0->1
+14-24 (Broken Sword;Dark Stone): Dur:1->0
+14-25 (Tear of Elf): Dur:1->0
+14-26 (Soul Shard of Wizard): Dur:1->0
+14-28 (Lost Map): Dur:1->0
+14-29 (Symbol of Kundun): Dur:5->0
+14-31 (Jewel of Guardian): DropLevel:75->0, Dur:1->0
+14-32 (Pink Chocolate Box): Dur:1->0
+14-33 (Red Chocolate Box): Dur:1->0
+14-34 (Blue Chocolate Box): Dur:1->0
+14-35 (Small Shield Potion): DropLevel:50->0, Dur:3->0, Drop:1->0
+14-36 (Medium Shield Potion): DropLevel:80->0, Dur:3->0
+14-37 (Large Shield Potion): DropLevel:100->0, Dur:3->0
+14-38 (Small Complex Potion): Dur:3->0, Drop:1->0
+14-39 (Medium Complex Potion): Dur:3->0, Drop:1->0
+14-40 (Large Complex Potion): Dur:3->0, Drop:1->0
+14-41 (Gemstone): DropLevel:150->25, Dur:1->0
+14-42 (Jewel of Harmony): DropLevel:150->25, Dur:1->0
+14-43 (Lower refine stone): DropLevel:150->25, Dur:1->0
+14-44 (Higher refine stone): DropLevel:150->25, Dur:1->0
+14-45 (Pumpkin of Luck): DropLevel:0->1, Dur:1->0
+14-46 (Jack O'Lantern Blessings): Dur:10->0
+14-47 (Jack O'Lantern Wrath): Dur:10->0
+14-48 (Jack O'Lantern Cry): Dur:10->0
+14-49 (Jack O'Lantern Food): Dur:10->0
+14-50 (Jack O'Lantern Drink): Dur:10->0
+14-51 (Christmas Star): Dur:1->0
+14-52 (GM Gift): Dur:1->0
+14-53 (Talisman of Luck): Dur:10->0
+14-63 (Firecracker): Dur:1->0
+14-64 (Cursed Castle Water): Dur:1->0
+14-65 (Flame of Death Beam Knight): Dur:1->0
+14-66 (Horn of Hell Maine): Dur:1->0
+14-67 (Feather of Dark Phoenix): Dur:1->0
+14-68 (Eye of Abyssal): Dur:1->0
+14-70 (Elite Healing Potion): Dur:50->0
+14-71 (Elite Mana Potion): Dur:50->0
+14-72 (Scroll of Quickness): Dur:1->0
+14-73 (Scroll of Defense): Dur:1->0
+14-74 (Scroll of Wrath): Dur:1->0
+14-75 (Scroll of Wizardry): Dur:1->0
+14-76 (Scroll of Health): Dur:1->0
+14-77 (Scroll of Mana): Dur:1->0
+14-78 (Elixir of Strength): Dur:1->0
+14-79 (Elixir of Agility): Dur:1->0
+14-80 (Elixir of Health): Dur:1->0
+14-81 (Elixir of Energy): Dur:1->0
+14-82 (Elixir of Control): Dur:1->0
+14-84 (Cherry Blossom Play-Box): Dur:1->0
+14-85 (Cherry Blossom Wine): Dur:10->0
+14-86 (Cherry Blossom Rice Cake): Dur:10->0
+14-87 (Cherry Blossom Flower Petal): Dur:10->0
+14-90 (Golden Cherry Blossom Branch): Dur:255->0
+14-91 (Summoner Character Card): Dur:1->0
+14-94 (Medium Elite Healing Potion): Dur:50->0
+14-96 (Talisman of Chaos Assembly): Dur:1->0
+14-97 (Scroll of Battle): Dur:1->0
+14-98 (Scroll of Strength): Dur:1->0
+14-99 (Christmas Firecracker): Dur:1->0
+14-101 (Suspicious Scrap of Paper): Dur:5->0
+14-102 (Gaion's Order): Dur:1->0
+14-103 (First Secromicon Fragment): Dur:1->0
+14-104 (Second Secromicon Fragment): Dur:1->0
+14-105 (Third Secromicon Fragment): Dur:1->0
+14-106 (Fourth Secromicon Fragment): Dur:1->0
+14-107 (Fifth Secromicon Fragment): Dur:1->0
+14-108 (Sixth Secromicon Fragment): Dur:1->0
+14-109 (Complete Secromicon): Dur:1->0
+14-110 (Sign of Dimensions): DropLevel:0->32, Dur:5->0, Drop:1->0
+14-111 (Mirror of Dimensions): Dur:1->0
+14-112 (Silver Key): Dur:1->0
+14-113 (Gold Key): Dur:1->0
+14-121 (Sealed Golden Box): Dur:1->0
+14-122 (Sealed Silver Box): Dur:1->0
+14-123 (Golden Box): Dur:1->0
+14-124 (Silver Box): Dur:1->0
+14-133 (Elite SD Potion): Dur:50->0
+14-140 (Scroll of Healing): Dur:1->0
+14-141 (Shining Jewellery Case): Dur:1->0
+14-142 (Elegant Jewellery Case): Dur:1->0
+14-143 (Steel Jewellery Case): Dur:1->0
+14-144 (Old Jewellery Case): Dur:1->0
+14-153 (Stardust): Dur:1->0
+14-160 (Jewel of Extension): Dur:1->0
+14-161 (Jewel of Elevation): Dur:1->0
+14-162 (Magic Backpack): Dur:1->0
+14-163 (Vault Expansion Certificate): Dur:1->0
+14-169 (Rage Fighter Character Card): Dur:1->0
+14-194 (Magma Combination Note): DropLevel:0->25, Dur:1->0, Drop:0->1
+14-195 (Horn Combination Note): DropLevel:0->25, Dur:1->0, Drop:0->1
+14-196 (Angelic Combination Note): DropLevel:0->25, Dur:1->0, Drop:0->1
+14-197 (Devil Cross Combination Note): DropLevel:0->25, Dur:1->0, Drop:0->1
+14-198 (Miracle Combination Note): DropLevel:0->25, Dur:1->0, Drop:0->1
+14-199 (Spite Combination Note): DropLevel:0->25, Dur:1->0, Drop:0->1
+14-200 (Asura Combination Note): DropLevel:0->25, Dur:1->0, Drop:0->1
+14-201 (Thunder Combination Note): DropLevel:0->25, Dur:1->0, Drop:0->1
+14-202 (Soul Combination Note): DropLevel:0->25, Dur:1->0, Drop:0->1
+14-203 (Greater Combination Note): DropLevel:0->25, Dur:1->0, Drop:0->1
+15-0 (Scroll of Poison): Dur:1->0
+15-1 (Scroll of Meteorite): Dur:1->0
+15-2 (Scroll of Lighting): Dur:1->0
+15-3 (Scroll of Fire Ball): Dur:1->0
+15-4 (Scroll of Flame): Dur:1->0
+15-5 (Scroll of Teleport): Dur:1->0
+15-6 (Scroll of Ice): Dur:1->0
+15-7 (Scroll of Twister): Dur:1->0
+15-8 (Scroll of Evil Spirit): Dur:1->0
+15-9 (Scroll of Hellfire): Dur:1->0
+15-10 (Scroll of Power Wave): Dur:1->0
+15-11 (Scroll of Aqua Beam): Dur:1->0
+15-12 (Scroll of Cometfall): Dur:1->0
+15-13 (Scroll of Inferno): Dur:1->0
+15-14 (Scroll of Teleport Ally): Dur:1->0
+15-15 (Scroll of Soul Barrier): Dur:1->0
+15-16 (Scroll of Decay): Dur:1->0
+15-17 (Scroll of Ice Storm): Dur:1->0
+15-18 (Scroll of Nova): Dur:1->0
+15-19 (Chain Lightning Parchment): Dur:1->0
+15-20 (Drain Life Parchment): Dur:1->0
+15-21 (Lightning Shock Parchment): Dur:1->0
+15-22 (Damage Reflection Parchment): Dur:1->0
+15-23 (Berserker Parchment): Dur:1->0
+15-24 (Sleep Parchment): Dur:1->0
+15-26 (Weakness Parchment): Dur:1->0
+15-27 (Innovation Parchment): Dur:1->0
+15-28 (Scroll of Wizardry Enhance): Dur:1->0
+15-29 (Scroll of Gigantic Storm): Dur:1->0
+15-30 (Chain Drive Parchment): DropLevel:80->70, Dur:1->0
+15-31 (Dark Side Parchment): DropLevel:100->80, Dur:1->0
+15-32 (Dragon Roar Parchment): DropLevel:90->70, Dur:1->0
+15-33 (Dragon Slasher Parchment): DropLevel:100->90, Dur:1->0
+15-34 (Ignore Defense Parchment): DropLevel:100->80, Dur:1->0
+15-35 (Increase Health Parchment): DropLevel:90->50, Dur:1->0
+15-36 (Increase Block Parchment): DropLevel:70->40, Dur:1->0
+
+## Shared items where HNMO differs from Season 9 suite
+0-35 (Phoenix Soul Star): Drop:0->1
+5-0 (Skull Staff): Dur:20->0
+5-1 (Angelic Staff): Dur:38->0
+5-2 (Serpent Staff): Dur:50->0
+5-3 (Thunder Staff): Dur:60->0
+5-4 (Gorgon Staff): Dur:65->0
+5-5 (Legendary Staff): Dur:66->0
+5-6 (Staff of Resurrection): Dur:70->0
+5-7 (Chaos Lightning Staff): Dur:70->0
+5-8 (Staff of Destruction): Dur:85->0
+5-9 (Dragon Soul Staff): Dur:91->0
+5-10 (Divine Staff of Archangel): Dur:182->0
+5-11 (Staff of Kundun): Dur:95->0
+5-12 (Grand Viper Staff): Dur:100->0
+5-13 (Platina Staff): Dur:78->0
+5-14 (Mistery Stick): Dur:50->0
+5-15 (Violent Wind Stick): Dur:60->0
+5-16 (Red Wing Stick): Dur:65->0
+5-17 (Ancient Stick): Dur:81->0
+5-18 (Demonic Stick): Dur:91->0
+5-19 (Storm Blitz Stick): Dur:95->0
+5-20 (Eternal Wing Stick): Dur:100->0
+5-21 (Book of Sahamutt): Dur:60->0
+5-22 (Book of Neil): Dur:65->0
+5-23 (Book of Lagle): Dur:50->0
+5-30 (Deadly Staff): Dur:91->0
+5-31 (Imperial Staff): Dur:182->0
+5-32 (Summon Spirit Stick): Dur:130->0
+5-33 (Chromatic Staff): Dur:78->0
+5-34 (Raven Stick): Dur:98->0
+5-35 (Miracle Staff): Dur:80->0
+5-36 (Divine Stick of Archangel): Dur:182->0
+5-37 (Spite Staff): Dur:110->0
+12-7 (Orb of Twisting Slash): Dur:1->0
+12-8 (Orb of Healing): Dur:1->0
+12-9 (Orb of Greater Defense): Dur:1->0
+12-10 (Orb of Greater Damage): Dur:1->0
+12-11 (Orb of Summoning): Dur:1->0
+12-12 (Orb of Rageful Blow): Dur:1->0
+12-13 (Orb of Impale): Dur:1->0
+12-14 (Orb of Greater Fortitude): Dur:1->0
+12-15 (Jewel of Chaos): Dur:1->0, Drop:0->1
+12-16 (Orb of Fire Slash): Dur:1->0
+12-17 (Orb of Penetration): Dur:1->0
+12-18 (Orb of Ice Arrow): Dur:1->0
+12-19 (Orb of Death Stab): Dur:1->0
+12-21 (Scroll of FireBurst): Dur:1->0
+12-22 (Scroll of Summon): Dur:1->0
+12-23 (Scroll of Critical Damage): Dur:1->0
+12-24 (Scroll of Electric Spark): Dur:1->0
+12-30 (Packed Jewel of Bless): DropLevel:0->25, Dur:1->0
+12-31 (Packed Jewel of Soul): DropLevel:0->30, Dur:1->0
+12-32 (Red Ribbon Box): Dur:1->0
+12-33 (Green Ribbon Box): Dur:1->0
+12-34 (Blue Ribbon Box): Dur:1->0
+12-35 (Scroll of Fire Scream): Dur:1->0
+12-44 (Crystal of Destruction): Dur:1->0
+12-45 (Crystal of Multi-Shot): Dur:1->0
+12-46 (Crystal of Recovery): Dur:1->0
+12-47 (Crystal of Flame Strike): Dur:1->0
+12-48 (Scroll of Chaotic Diseier): Dur:1->0
+12-60 (Seed (Fire)): Dur:1->0
+12-61 (Seed (Water)): Dur:1->0
+12-62 (Seed (Ice)): Dur:1->0
+12-63 (Seed (Wind)): Dur:1->0
+12-64 (Seed (Lightning)): Dur:1->0
+12-65 (Seed (Earth)): Dur:1->0
+12-70 (Sphere (Mono)): Dur:1->0, Drop:1->0
+12-71 (Sphere (Di)): Dur:1->0, Drop:1->0
+12-72 (Sphere (Tri)): Dur:1->0, Drop:1->0
+12-73 (Sphere (4)): DropLevel:0->132, Dur:1->0
+12-74 (Sphere (5)): DropLevel:0->152, Dur:1->0
+12-100 (Seed Sphere (Fire) (1)): DropLevel:0->1, Dur:1->0
+12-101 (Seed Sphere (Water) (1)): DropLevel:0->1, Dur:1->0
+12-102 (Seed Sphere (Ice) (1)): DropLevel:0->1, Dur:1->0
+12-103 (Seed Sphere (Wind) (1)): DropLevel:0->1, Dur:1->0
+12-104 (Seed Sphere (Lightning) (1)): DropLevel:0->1, Dur:1->0
+12-105 (Seed Sphere (Earth) (1)): DropLevel:0->1, Dur:1->0
+12-106 (Seed Sphere (Fire) (2)): DropLevel:1->2, Dur:1->0
+12-107 (Seed Sphere (Water) (2)): DropLevel:1->2, Dur:1->0
+12-108 (Seed Sphere (Ice) (2)): DropLevel:1->2, Dur:1->0
+12-109 (Seed Sphere (Wind) (2)): DropLevel:1->2, Dur:1->0
+12-110 (Seed Sphere (Lightning) (2)): DropLevel:1->2, Dur:1->0
+12-111 (Seed Sphere (Earth) (2)): DropLevel:1->2, Dur:1->0
+12-112 (Seed Sphere (Fire) (3)): DropLevel:2->3, Dur:1->0
+12-113 (Seed Sphere (Water) (3)): DropLevel:2->3, Dur:1->0
+12-114 (Seed Sphere (Ice) (3)): DropLevel:2->3, Dur:1->0
+12-115 (Seed Sphere (Wind) (3)): DropLevel:2->3, Dur:1->0
+12-116 (Seed Sphere (Lightning) (3)): DropLevel:2->3, Dur:1->0
+12-117 (Seed Sphere (Earth) (3)): DropLevel:2->3, Dur:1->0
+12-118 (Seed Sphere (Fire) (4)): DropLevel:3->4, Dur:1->0
+12-119 (Seed Sphere (Water) (4)): DropLevel:3->4, Dur:1->0
+12-120 (Seed Sphere (Ice) (4)): DropLevel:3->4, Dur:1->0
+12-121 (Seed Sphere (Wind) (4)): DropLevel:3->4, Dur:1->0
+12-122 (Seed Sphere (Lightning) (4)): DropLevel:3->4, Dur:1->0
+12-123 (Seed Sphere (Earth) (4)): DropLevel:3->4, Dur:1->0
+12-124 (Seed Sphere (Fire) (5)): DropLevel:4->5, Dur:1->0
+12-125 (Seed Sphere (Water) (5)): DropLevel:4->5, Dur:1->0
+12-126 (Seed Sphere (Ice) (5)): DropLevel:4->5, Dur:1->0
+12-127 (Seed Sphere (Wind) (5)): DropLevel:4->5, Dur:1->0
+12-128 (Seed Sphere (Lightning) (5)): DropLevel:4->5, Dur:1->0
+12-129 (Seed Sphere (Earth) (5)): DropLevel:4->5, Dur:1->0
+12-136 (Packed Jewel of Life): DropLevel:0->72, Dur:1->0
+12-137 (Packed Jewel of Creation): DropLevel:0->78, Dur:1->0
+12-138 (Packed Jewel of Guardian): DropLevel:0->75, Dur:1->0
+12-139 (Packed Gemstone): DropLevel:0->25, Dur:1->0
+12-140 (Packed Jewel of Harmony): DropLevel:0->25, Dur:1->0
+12-141 (Packed Jewel of Chaos): DropLevel:0->12, Dur:1->0
+12-142 (Packed Lower refine stone): DropLevel:0->25, Dur:1->0
+12-143 (Packed Higher refine stone): DropLevel:0->25, Dur:1->0
+12-144 (Mithril Fragment): Dur:5->1
+12-145 (Mithril): Dur:1->0
+12-146 (Elixir Fragment): Dur:5->1
+12-147 (Elixir): Dur:1->0
+12-148 (Mithril Fragment Bunch): Dur:1->0
+12-149 (Elixir Fragment Bunch): Dur:1->0
+12-150 (Jewel Combination Frame): Dur:1->0
+12-151 (Spirit Powder): Dur:1->0
+12-202 (Lorencia Knights' Iron Shield): DropLevel:255->300
+12-203 (Iron Shield of the Magic): DropLevel:255->300
+12-204 (Hero Elixir): DropLevel:255->300
+12-205 (Brave Hero Elixir): DropLevel:255->300
+12-206 (Gladiator's Dagger): DropLevel:255->300
+12-207 (Merciless Gladiator's Dagger): DropLevel:255->300
+12-208 (Kundun's Madness Blade): DropLevel:255->300
+12-209 (Kundun's Magic Spell Scroll): DropLevel:255->300
+12-210 (Empire Guardians' Stronghold): DropLevel:255->300
+12-211 (Ancient Icarus Scroll): DropLevel:255->300
+12-212 (Arca's Prophecy): DropLevel:255->300
+12-213 (Antonia's Sword): DropLevel:255->300
+12-214 (Kundun's Seal Scroll): DropLevel:255->300
+12-221 (Errtel of Anger): Dur:1->0
+12-231 (Errtel of Blessing): Dur:1->0
+12-241 (Errtel of Integrity): Dur:1->0
+12-251 (Errtel of Divinity): Dur:1->0
+12-261 (Errtel of Gale): Dur:1->0
+12-267 (Wings of Angel and Devil): DropLevel:255->350
+13-0 (Guardian Angel): DropLevel:23->0
+13-1 (Imp): DropLevel:28->0
+13-2 (Horn of Uniria): DropLevel:25->0
+13-3 (Horn of Dinorant): DropLevel:110->0
+13-4 (Dark Horse): DropLevel:218->0
+13-8 (Ring of Ice): DropLevel:20->0
+13-9 (Ring of Poison): DropLevel:17->0
+13-11 (Life Stone): DropLevel:75->0, Dur:1->255
+13-12 (Pendant of Lighting): DropLevel:21->0
+13-13 (Pendant of Fire): DropLevel:13->0
+13-14 (Loch's Feather): DropLevel:78->0, Dur:1->0, ReqLvl:->78, Drop:0->1
+13-15 (Fruits): Dur:1->0
+13-16 (Scroll of Archangel): Dur:1->128
+13-17 (Blood Bone): Dur:1->128
+13-18 (Invisibility Cloak): Dur:1->255
+13-19 (Weapon of Archangel): Dur:1->255
+13-21 (Ring of Fire): DropLevel:30->0
+13-22 (Ring of Earth): DropLevel:38->0
+13-23 (Ring of Wind): DropLevel:44->0
+13-24 (Ring of Magic): DropLevel:47->0
+13-25 (Pendant of Ice): DropLevel:34->0
+13-26 (Pendant of Wind): DropLevel:42->0
+13-27 (Pendant of Water): DropLevel:46->0
+13-28 (Pendant of Ability): DropLevel:50->0
+13-29 (Armor of Guardsman): Dur:1->0
+13-30 (Cape of Lord): DropLevel:180->0
+13-31 (Spirit): Dur:1->0
+13-32 (Splinter of Armor): Dur:20->1
+13-33 (Bless of Guardian): Dur:20->1
+13-34 (Claw of Beast): Dur:10->1
+13-37 (Horn of Fenrir): DropLevel:255->0
+13-38 (Moonstone Pendant): DropLevel:21->0
+13-39 (Elite Skeleton Transformation Ring): DropLevel:10->0
+13-40 (Jack O'lantern Transformation Ring): DropLevel:10->0
+13-41 (Christmas Transformation Ring): DropLevel:1->0, ReqLvl:->1
+13-43 (Seal of Ascension): Dur:1->0
+13-44 (Seal of Wealth): Dur:1->0
+13-45 (Seal of Sustenance): Dur:1->0
+13-49 (Old Scroll): Dur:1->0
+13-50 (Scroll of Blood): Dur:1->0, Size:2x2->1x2
+13-51 (Illusion Sorcerer Covenant): Size:1x2->2x2
+13-52 (Flame of Condor): DropLevel:120->0, Dur:1->0
+13-53 (Feather of Condor): DropLevel:120->0, Dur:1->0
+13-54 (Reset Fruit (Strength)): Dur:100->10
+13-55 (Reset Fruit (Agility)): Dur:100->10
+13-56 (Reset Fruit (Vitality)): Dur:100->10
+13-57 (Reset Fruit (Energy)): Dur:100->10
+13-58 (Reset Fruit (Command)): Dur:100->10
+13-62 (Seal of Healing): Dur:1->0
+13-63 (Seal of Divinity): Dur:1->0
+13-64 (Demon): DropLevel:1->0
+13-65 (Spirit of Guardian): DropLevel:1->0
+13-67 (Pet Rudolf): DropLevel:28->0
+13-68 (Snowman Transformation Ring): DropLevel:10->0
+13-76 (Panda Transformation Ring): DropLevel:28->0, ReqLvl:->1
+13-80 (Pet Panda): DropLevel:1->0
+13-81 (Talisman of Guardian): Dur:1->0
+13-82 (Talisman of Item Protection): Dur:1->0
+13-93 (Master Seal of Ascension): Dur:1->0
+13-94 (Master Seal of Wealth): Dur:1->0
+13-104 (Max AG Boost Aura): Dur:1->0
+13-105 (Max SD Boost Aura): Dur:1->0
+13-106 (Pet Unicorn): DropLevel:28->0
+13-109 (Sapphire Ring): Dur:255->0
+13-110 (Ruby Ring): Dur:255->0
+13-111 (Topaz Ring): Dur:255->0
+13-112 (Amethyst Ring): Dur:255->0
+13-113 (Ruby Necklace): Dur:255->0
+13-114 (Emerald Necklace): Dur:255->0
+13-115 (Sapphire Necklace): Dur:255->0
+13-122 (Skeleton Transformation Ring): DropLevel:1->0, ReqLvl:->1
+13-123 (Pet Skeleton): DropLevel:1->0
+13-125 (Doppelganger Free Ticket): Dur:1->10
+13-135 (1st Lucky Armor Ticket): Dur:1->255
+13-136 (1st Lucky Pants Ticket): Dur:1->255
+13-137 (1st Lucky Helm Ticket): Dur:1->255
+13-138 (1st Lucky Gloves Ticket): Dur:1->255
+13-139 (1st Lucky Boots Ticket): Dur:1->255
+13-140 (2nd Lucky Armor Ticket): Dur:1->255
+13-141 (2nd Lucky Pants Ticket): Dur:1->255
+13-142 (2nd Lucky Helm Ticket): Dur:1->255
+13-143 (2nd Lucky Gloves Ticket): Dur:1->255
+13-144 (2nd Lucky Boots Ticket): Dur:1->255
+13-145 (Spirit Map Fragment): Dur:5->1
+13-147 (Trophies of Battle): Dur:10->1
+13-148 (Green Ink): Dur:5->0
+13-149 (Blue Ink): Dur:5->0
+13-150 (Red Ink): Dur:5->0
+13-151 (Parchment of Soul): Dur:5->0
+13-152 (Scroll of Green Oblivion): Dur:1->0
+13-153 (Scroll of Blue Oblivion): Dur:1->0
+13-154 (Scroll of Red Oblivion): Dur:1->0
+13-155 (Scroll of Gray Oblivion): Dur:1->0
+13-156 (Sealed Green Oblivion Scroll): Dur:1->0
+13-157 (Sealed Blue Oblivion Scroll): Dur:1->0
+13-158 (Sealed Red Oblivion Scroll): Dur:1->0
+13-159 (Sealed Gray Oblivion Scroll): Dur:1->0
+13-160 (Protection Talisman): Dur:1->0
+13-161 (Cooperation Talisman): Dur:1->0
+13-180 (Seal of Ascension II): Dur:1->0
+13-181 (Master Seal of Ascension II): Dur:1->0
+13-239 (Muun Energy Converter): Dur:1->0
+13-276 (Conqueror's Badge): Dur:1->0
+13-277 (Badge of Hardships): Dur:1->0
+14-0 (Apple): Dur:255->0
+14-1 (Small Healing Potion): Dur:255->0
+14-2 (Medium Healing Potion): Dur:255->0
+14-3 (Large Healing Potion): Dur:255->0
+14-4 (Small Mana Potion): Dur:255->0
+14-5 (Medium Mana Potion): Dur:255->0
+14-6 (Large Mana Potion): Dur:255->0
+14-7 (Potion of Bless;Potion of Soul): Dur:10->0
+14-8 (Antidote): Dur:3->0
+14-9 (Ale): Dur:1->0
+14-10 (Town Portal Scroll): Dur:1->0
+14-11 (Box of Luck): Dur:1->0
+14-13 (Jewel of Bless): Dur:1->0, Drop:0->1
+14-14 (Jewel of Soul): Dur:1->0, Drop:0->1
+14-16 (Jewel of Life): Dur:1->0, Drop:0->1
+14-17 (Devil's Eye): DropLevel:0->1, Dur:1->0
+14-18 (Devil's Key): DropLevel:0->1, Dur:1->0
+14-19 (Devil's Invitation): Dur:1->0
+14-21 (Rena): Dur:1->0, Drop:0->1
+14-22 (Jewel of Creation): DropLevel:72->78, Dur:1->0, Drop:0->1
+14-23 (Scroll of Emperor;Ring of Honor): Dur:1->0
+14-24 (Broken Sword;Dark Stone): Dur:1->0
+14-25 (Tear of Elf): Dur:1->0
+14-26 (Soul Shard of Wizard): Dur:1->0
+14-28 (Lost Map): Dur:1->0
+14-29 (Symbol of Kundun): Dur:5->0
+14-31 (Jewel of Guardian): DropLevel:75->0, Dur:1->0
+14-32 (Pink Chocolate Box): Dur:1->0
+14-33 (Red Chocolate Box): Dur:1->0
+14-34 (Blue Chocolate Box): Dur:1->0
+14-35 (Small Shield Potion): DropLevel:50->0, Dur:3->0, Drop:1->0
+14-36 (Medium Shield Potion): DropLevel:80->0, Dur:3->0
+14-37 (Large Shield Potion): DropLevel:100->0, Dur:3->0
+14-38 (Small Complex Potion): Dur:3->0, Drop:1->0
+14-39 (Medium Complex Potion): Dur:3->0, Drop:1->0
+14-40 (Large Complex Potion): Dur:3->0, Drop:1->0
+14-41 (Gemstone): DropLevel:150->25, Dur:1->0
+14-42 (Jewel of Harmony): DropLevel:150->25, Dur:1->0
+14-43 (Lower refine stone): DropLevel:150->25, Dur:1->0
+14-44 (Higher refine stone): DropLevel:150->25, Dur:1->0
+14-45 (Pumpkin of Luck): DropLevel:0->1, Dur:1->0
+14-46 (Jack O'Lantern Blessings): Dur:10->0
+14-47 (Jack O'Lantern Wrath): Dur:10->0
+14-48 (Jack O'Lantern Cry): Dur:10->0
+14-49 (Jack O'Lantern Food): Dur:10->0
+14-50 (Jack O'Lantern Drink): Dur:10->0
+14-51 (Christmas Star): Dur:1->0
+14-52 (GM Gift): Dur:1->0
+14-53 (Talisman of Luck): Dur:10->0
+14-63 (Firecracker): Dur:1->0
+14-64 (Cursed Castle Water): Dur:1->0
+14-65 (Flame of Death Beam Knight): Dur:1->0
+14-66 (Horn of Hell Maine): Dur:1->0
+14-67 (Feather of Dark Phoenix): Dur:1->0
+14-68 (Eye of Abyssal): Dur:1->0
+14-70 (Elite Healing Potion): Dur:50->0
+14-71 (Elite Mana Potion): Dur:50->0
+14-72 (Scroll of Quickness): Dur:1->0
+14-73 (Scroll of Defense): Dur:1->0
+14-74 (Scroll of Wrath): Dur:1->0
+14-75 (Scroll of Wizardry): Dur:1->0
+14-76 (Scroll of Health): Dur:1->0
+14-77 (Scroll of Mana): Dur:1->0
+14-78 (Elixir of Strength): Dur:1->0
+14-79 (Elixir of Agility): Dur:1->0
+14-80 (Elixir of Health): Dur:1->0
+14-81 (Elixir of Energy): Dur:1->0
+14-82 (Elixir of Control): Dur:1->0
+14-84 (Cherry Blossom Play-Box): Dur:1->0
+14-85 (Cherry Blossom Wine): Dur:10->0
+14-86 (Cherry Blossom Rice Cake): Dur:10->0
+14-87 (Cherry Blossom Flower Petal): Dur:10->0
+14-90 (Golden Cherry Blossom Branch): Dur:255->0
+14-91 (Summoner Character Card): Dur:1->0
+14-94 (Medium Elite Healing Potion): Dur:50->0
+14-96 (Talisman of Chaos Assembly): Dur:1->0
+14-97 (Scroll of Battle): Dur:1->0
+14-98 (Scroll of Strength): Dur:1->0
+14-99 (Christmas Firecracker): Dur:1->0
+14-101 (Suspicious Scrap of Paper): Dur:5->0
+14-102 (Gaion's Order): Dur:1->0
+14-103 (First Secromicon Fragment): Dur:1->0
+14-104 (Second Secromicon Fragment): Dur:1->0
+14-105 (Third Secromicon Fragment): Dur:1->0
+14-106 (Fourth Secromicon Fragment): Dur:1->0
+14-107 (Fifth Secromicon Fragment): Dur:1->0
+14-108 (Sixth Secromicon Fragment): Dur:1->0
+14-109 (Complete Secromicon): Dur:1->0
+14-110 (Sign of Dimensions): DropLevel:0->32, Dur:5->0, Drop:1->0
+14-111 (Mirror of Dimensions): Dur:1->0
+14-112 (Silver Key): Dur:1->0
+14-113 (Gold Key): Dur:1->0
+14-121 (Sealed Golden Box): Dur:1->0
+14-122 (Sealed Silver Box): Dur:1->0
+14-123 (Golden Box): Dur:1->0
+14-124 (Silver Box): Dur:1->0
+14-133 (Elite SD Potion): Dur:50->0
+14-140 (Scroll of Healing): Dur:1->0
+14-141 (Shining Jewellery Case): Dur:1->0
+14-142 (Elegant Jewellery Case): Dur:1->0
+14-143 (Steel Jewellery Case): Dur:1->0
+14-144 (Old Jewellery Case): Dur:1->0
+14-153 (Stardust): Dur:1->0
+14-160 (Jewel of Extension): Dur:1->0
+14-161 (Jewel of Elevation): Dur:1->0
+14-162 (Magic Backpack): Dur:1->0
+14-163 (Vault Expansion Certificate): Dur:1->0
+14-169 (Rage Fighter Character Card): Dur:1->0
+14-170 (Lv. 2 letter of Request): Dur:1->0
+14-171 (Lv. 2 Completion Certificate): Dur:1->0
+14-176 (Death King's Bone): Dur:1->0
+14-177 (Hell Maine's Leather): Dur:1->0
+14-178 (Dark Phoenix Flame): Dur:1->0
+14-179 (Death Beam Knight Soul): Dur:1->0
+14-180 (Ice Walker's Mane): Dur:1->0
+14-181 (Mammoth's Bundle of Fur): Dur:1->0
+14-182 (Giant's Icicle): Dur:1->0
+14-183 (Coolutin's Poison): Dur:1->0
+14-184 (Iron Knight's Heart): Dur:1->0
+14-185 (Dark Mammoth's Horn): Dur:1->0
+14-186 (Dark Giant's Axe): Dur:1->0
+14-187 (Dark Coolutin's Blood): Dur:1->0
+14-188 (Dark Iron Knight's Sword): Dur:1->0
+14-189 (Elemental Talisman of Luck): Dur:1->0
+14-190 (Elemental Talisman of Chaos): Dur:1->0
+14-191 (Sonic Combination Note): Dur:1->0
+14-192 (Cyclone Combination Note): Dur:1->0
+14-193 (Blast Combination Note): Dur:1->0
+14-194 (Magma Combination Note): Dur:1->0
+14-195 (Horn Combination Note): Dur:1->0
+14-196 (Angelic Combination Note): Dur:1->0
+14-197 (Devil Cross Combination Note): Dur:1->0
+14-198 (Miracle Combination Note): Dur:1->0
+14-199 (Spite Combination Note): Dur:1->0
+14-200 (Asura Combination Note): Dur:1->0
+14-201 (Thunder Combination Note): Dur:1->0
+14-202 (Soul Combination Note): Dur:1->0
+14-235 (Scroll of Swiftness Master): Dur:1->0
+14-236 (Reward Jar): Dur:1->0
+14-237 (Reward Jar): Dur:1->0
+14-238 (Reward Jar): Dur:1->0
+14-239 (Reward Jar): Dur:1->0
+14-240 (Reward Jar): Dur:1->0
+14-241 (Valuable Reward Jar): Dur:1->0
+14-242 (Golden Apple): Dur:255->0
+14-243 (Golden Apple(2)): Dur:255->0
+14-244 (Evomon Summoning Scroll): Dur:1->0
+14-245 (Tetra Crystal (Greater)): Dur:1->0
+14-246 (Tetra Crystal (Standard)): Dur:1->0
+14-247 (Tetra Crystal (Minor)): Dur:1->0
+14-248 (Minor Evomon Box): Dur:1->0
+14-249 (Standard Evomon Box): Dur:1->0
+14-250 (Greater Evomon Box): Dur:1->0
+14-251 (Luxurious Evomon Box): Dur:1->0
+14-252 (Magnificent Evomon Box): Dur:1->0
+14-253 (Legendary Evomon Box): Dur:1->0
+14-254 (Gift of Henchmen): Dur:1->0
+14-256 (Gift of Knights): Dur:1->0
+14-257 (Gift of High Knights): Dur:1->0
+14-258 (Minor Devil's Box): Dur:1->0
+14-259 (Devil's Box): Dur:1->0
+14-260 (High Devil's Box): Dur:1->0
+14-261 (Guardsman's Box): Dur:1->0
+14-262 (Guardman Captain's Box): Dur:1->0
+14-263 (Bless of Light (Low Grade)): Dur:1->0
+14-264 (Bless of Light (Middle Grade)): Dur:1->0
+14-277 (Special Card): Dur:100->0
+14-278 (Summoning Scroll Fragment): Dur:24->0
+15-0 (Scroll of Poison): Dur:1->0
+15-1 (Scroll of Meteorite): Dur:1->0
+15-2 (Scroll of Lighting): Dur:1->0
+15-3 (Scroll of Fire Ball): Dur:1->0
+15-4 (Scroll of Flame): Dur:1->0
+15-5 (Scroll of Teleport): Dur:1->0
+15-6 (Scroll of Ice): Dur:1->0
+15-7 (Scroll of Twister): Dur:1->0
+15-8 (Scroll of Evil Spirit): Dur:1->0
+15-9 (Scroll of Hellfire): Dur:1->0
+15-10 (Scroll of Power Wave): Dur:1->0
+15-11 (Scroll of Aqua Beam): Dur:1->0
+15-12 (Scroll of Cometfall): Dur:1->0
+15-13 (Scroll of Inferno): Dur:1->0
+15-14 (Scroll of Teleport Ally): Dur:1->0
+15-15 (Scroll of Soul Barrier): Dur:1->0
+15-16 (Scroll of Decay): Dur:1->0
+15-17 (Scroll of Ice Storm): Dur:1->0
+15-18 (Scroll of Nova): Dur:1->0
+15-19 (Chain Lightning Parchment): Dur:1->0
+15-20 (Drain Life Parchment): Dur:1->0
+15-21 (Lightning Shock Parchment): Dur:1->0
+15-22 (Damage Reflection Parchment): Dur:1->0
+15-23 (Berserker Parchment): Dur:1->0
+15-24 (Sleep Parchment): Dur:1->0
+15-26 (Weakness Parchment): Dur:1->0
+15-27 (Innovation Parchment): Dur:1->0
+15-28 (Scroll of Wizardry Enhance): Dur:1->0
+15-29 (Scroll of Gigantic Storm): Dur:1->0
+15-30 (Chain Drive Parchment): DropLevel:80->70, Dur:1->0
+15-31 (Dark Side Parchment): DropLevel:100->80, Dur:1->0
+15-32 (Dragon Roar Parchment): DropLevel:90->70, Dur:1->0
+15-33 (Dragon Slasher Parchment): DropLevel:100->90, Dur:1->0
+15-34 (Ignore Defense Parchment): DropLevel:100->80, Dur:1->0
+15-35 (Increase Health Parchment): DropLevel:90->50, Dur:1->0
+15-36 (Increase Block Parchment): DropLevel:70->40, Dur:1->0
+
+## Shared items where Season 9 suite differs from Season 6 suite
+0-19 (Divine Sword of Archangel): dmgMin:120->220, dmgMax:130->230
+0-39 (Lighting Sword-J): attackSpeed:30->35
+0-40 (Sacred Glove-J): attackSpeed:25->30, reqStr:0->85, reqDex:0->35
+2-13 (Divine Scepter of Archangel): dmgMin:120->200, dmgMax:143->223
+2-21 (Master Scepter-J): attackSpeed:45->50
+4-18 (Divine Crossbow of Archangel): dmgMin:144->224, dmgMax:166->246
+4-27 (Silver Bow-J): attackSpeed:40->45
+5-10 (Divine Staff of Archangel): dmgMin:53->153, dmgMax:55->165
+5-32 (Summon Spirit Stick): dropLevel:130->149, dmgMax:64->61, reqLevel:0->400, reqStr:45->56, reqDex:15->14
+5-38 (Legendary Staff-J): attackSpeed:25->30
+5-39 (Red Wing Stick-J): attackSpeed:25->30
+5-40 (Book of Neil-J): attackSpeed:25->30
+7-53 (Succubus Helm): dropLevel:118->143, durability:86->90, reqLevel:0->400, reqStr:41->56, reqEne:0->157
+8-53 (Succubus Armor): dropLevel:134->148, durability:86->90, reqLevel:0->400, reqStr:41->56, reqEne:0->157
+9-53 (Succubus Pants): dropLevel:126->145, durability:86->90, reqLevel:0->400, reqStr:41->56, reqEne:0->157
+10-53 (Succubus Gloves): dropLevel:99->142, durability:86->90, attackSpeed:7->6, reqLevel:0->400, reqStr:41->56, reqEne:0->157
+11-53 (Succubus Boots): dropLevel:107->140, durability:86->90, reqLevel:0->400, reqStr:41->56, reqEne:0->157
+12-49 (Cape of Fighter): dropLevel:180->150
+12-73 (Sphere (Tetra)): dropLevel:142->132
+13-30 (Cape of Lord): reqLevel:180->150
+13-54 (Reset Fruit Strength): durability:0->10
+13-55 (Reset Fruit Quickness): durability:100->10
+13-56 (Reset Fruit Health): durability:100->10
+13-57 (Reset Fruit Energy): durability:100->10
+13-58 (Reset Fruit Control): durability:100->10
+13-106 (Pet Unicorn): sellNpc:1->0
+13-121 (Access Ticket to Chaos Castle): durability:0->10
+14-194 (Magma Combination Note): dropLevel:25->0
+14-195 (Horn Combination Note): dropLevel:25->0
+14-196 (Angelic Combination Note): dropLevel:25->0
+14-197 (Devil Cross Combination Note): dropLevel:25->0
+14-198 (Miracle Combination Note): dropLevel:25->0
+14-199 (Spite Combination Note): dropLevel:25->0
+14-200 (Asura Combination Note): dropLevel:25->0
+14-201 (Thunder Combination Note): dropLevel:25->0
+14-202 (Soul Combination Note): dropLevel:25->0
+14-206 (Lackluster Box): dropLevel:25->0, sellNpc:2->0, storable:1->0
+14-207 (Luxurious Box): dropLevel:25->0, sellNpc:2->0, storable:1->0
+14-208 (Exciting Box): dropLevel:25->0, sellNpc:2->0, storable:1->0
+14-209 (Tradeable Seal): dropLevel:25->0
+14-210 (Summon Scroll (Lv1)): dropLevel:25->32
+14-211 (Summon Scroll (Lv2)): dropLevel:25->32
+14-212 (Summon Scroll (Lv3)): dropLevel:25->32
+14-213 (Summon Scroll (Lv4)): dropLevel:25->32
+14-215 (Card Piece): dropLevel:25->0, tradable:1->0
+14-216 (Card Deck): dropLevel:25->0, tradable:1->0
+14-217 (Titan's Anger): dropLevel:25->0
+14-218 (Tantalose's Punishment): dropLevel:25->0
+14-219 (Erohim's Nightmare): dropLevel:25->0
+14-220 (Hell Maine's Insanity): dropLevel:25->0
+14-221 (Kundun's Greed): dropLevel:25->0
+14-222 (Unique Accessory Box): dropLevel:25->0
+14-223 (Cursed Castle Water): dropLevel:25->0
+14-224 (Bless of Light (Greater)): dropLevel:25->0
+14-225 (Scroll Master of Defense): dropLevel:25->0, width:1->2, height:1->2
+14-226 (Scroll Master of Wizardry): dropLevel:25->0, width:1->2, height:1->2
+14-227 (Scroll Master of Health): dropLevel:25->0, width:1->2, height:1->2
+14-228 (Scroll Master of Mana): dropLevel:25->0, width:1->2, height:1->2
+14-229 (Scroll Master of Wrath): dropLevel:25->0, width:1->2, height:1->2
+14-230 (Scroll Master of Recovery): dropLevel:25->0, width:1->2, height:1->2
+14-231 (Scroll Master of Battle): dropLevel:25->0, width:1->2, height:1->2
+14-232 (Scroll Master of Strenghener): dropLevel:25->0, width:1->2, height:1->2
+14-233 (Unique Weapon Box): dropLevel:25->0
+14-234 (Monster Summoning Scroll): dropLevel:25->0
+
+## Items present in Season 9 suite but absent from Season 6 suite (Season 9-only)
+0-29 | Sonic Blade | Slot=0 Size=1x4 DropLv=149 Dur=80 Dmg=109-116 Speed=35 ReqLv=400
+0-30 | Asura | Slot=0 Size=1x4 DropLv=149 Dur=90 Dmg=115-140 Speed=45 ReqLv=400
+0-36 | Cyclone Sword | Slot=0 Size=1x4 DropLv=149 Dur=90 Dmg=129-144 Speed=40 ReqLv=400
+0-37 | Blast Break | Slot=0 Size=2x4 DropLv=149 Dur=130 Dmg=163-216 Speed=30 ReqLv=400
+0-41 | Pandora Pick (two-handed) | Slot=0 Size=2x2 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+2-19 | Thunderbolt | Slot=0 Size=1x4 DropLv=149 Dur=78 Dmg=127-154 Speed=40 ReqLv=400
+2-20 | Horn of Steal | Slot=0 Size=2x4 DropLv=149 Dur=120 Dmg=177-206 Speed=25 ReqLv=400
+3-12 | Magmus Peer | Slot=0 Size=2x4 DropLv=149 Dur=85 Dmg=135-236 Speed=35 ReqLv=400
+4-25 | Angelic Bow | Slot=1 Size=2x4 DropLv=149 Dur=70 Dmg=179-202 Speed=45 ReqLv=400
+4-26 | Devil Crossbow | Slot=0 Size=2x3 DropLv=149 Dur=90 Dmg=167-218 Speed=40 ReqLv=400
+5-35 | Miracle Staff | Slot=0 Size=1x4 DropLv=149 Dur=0 Dmg=67-69 Speed=30 ReqLv=400
+5-37 | Spite Staff | Slot=0 Size=2x4 DropLv=149 Dur=0 Dmg=69-71 Speed=25 ReqLv=400
+6-22 | Lazy Wind Shield | Slot=1 Size=2x2 DropLv=129 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+6-23 | Light Lord Shield | Slot=1 Size=2x2 DropLv=124 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+6-24 | Dark Devil Shield | Slot=1 Size=2x2 DropLv=122 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+6-25 | Magic Knight Shield | Slot=1 Size=2x2 DropLv=128 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+6-26 | Ambition Shield | Slot=1 Size=2x2 DropLv=131 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+7-54 | Lazy Wind Helm | Slot=2 Size=2x2 DropLv=143 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+7-55 | Dark Devil Helm | Slot=2 Size=2x2 DropLv=143 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+7-56 | Sticky Helm | Slot=2 Size=2x2 DropLv=143 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+7-58 | Ambition Mask | Slot=2 Size=2x2 DropLv=143 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+7-74 | Stormwing Helm | Slot=2 Size=2x2 DropLv=143 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+7-75 | Light Lord Helmet | Slot=2 Size=2x2 DropLv=143 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+8-54 | Lazy Wind Armor | Slot=3 Size=2x3 DropLv=148 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+8-55 | Dark Devil Armor | Slot=3 Size=2x3 DropLv=148 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+8-56 | Sticky Armor | Slot=3 Size=2x2 DropLv=148 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+8-57 | Hell Night Armor | Slot=3 Size=2x3 DropLv=148 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+8-58 | Ambition Armor | Slot=3 Size=2x3 DropLv=148 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+8-74 | Stormwing Armor | Slot=3 Size=2x3 DropLv=148 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+8-75 | Light Lord Armor | Slot=3 Size=2x2 DropLv=148 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+8-76 | Magic Knight Armor | Slot=3 Size=2x3 DropLv=148 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+9-54 | Lazy Wind Pants | Slot=4 Size=2x2 DropLv=145 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+9-55 | Dark Devil Pants | Slot=4 Size=2x2 DropLv=145 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+9-56 | Sticky Pants | Slot=4 Size=2x2 DropLv=145 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+9-57 | Hell Night Pants | Slot=4 Size=2x2 DropLv=145 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+9-58 | Ambition Pants | Slot=4 Size=2x2 DropLv=145 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+9-74 | Stormwing Pants | Slot=4 Size=2x2 DropLv=145 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+9-75 | Light Lord Pants | Slot=4 Size=2x2 DropLv=145 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+9-76 | Magic Knight Pants | Slot=4 Size=2x2 DropLv=145 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+10-54 | Lazy Wind Gloves | Slot=5 Size=2x2 DropLv=142 Dur=90 Dmg=0-0 Speed=7 ReqLv=400
+10-55 | Dark Devil Gloves | Slot=5 Size=2x2 DropLv=142 Dur=90 Dmg=0-0 Speed=7 ReqLv=400
+10-56 | Sticky Gloves | Slot=5 Size=2x2 DropLv=142 Dur=90 Dmg=0-0 Speed=7 ReqLv=400
+10-57 | Hell Night Gloves | Slot=5 Size=2x2 DropLv=142 Dur=90 Dmg=0-0 Speed=7 ReqLv=400
+10-58 | Ambition Gloves | Slot=5 Size=2x2 DropLv=142 Dur=90 Dmg=0-0 Speed=7 ReqLv=400
+10-74 | Stormwing Gloves | Slot=5 Size=2x2 DropLv=142 Dur=90 Dmg=0-0 Speed=7 ReqLv=400
+10-75 | Light Lord Gloves | Slot=5 Size=2x2 DropLv=142 Dur=90 Dmg=0-0 Speed=7 ReqLv=400
+10-76 | Magic Knight Gloves | Slot=5 Size=2x2 DropLv=142 Dur=90 Dmg=0-0 Speed=7 ReqLv=400
+11-54 | Lazy Wind Boots | Slot=6 Size=2x2 DropLv=140 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+11-55 | Dark Devil Boots | Slot=6 Size=2x2 DropLv=140 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+11-56 | Sticky Boots | Slot=6 Size=2x2 DropLv=140 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+11-57 | Hell Night Boots | Slot=6 Size=2x2 DropLv=140 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+11-58 | Ambition Boots | Slot=6 Size=2x2 DropLv=140 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+11-74 | Stormwing Boots | Slot=6 Size=2x2 DropLv=140 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+11-75 | Light Lord Boots | Slot=6 Size=2x2 DropLv=140 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+11-76 | Magic Knight Boots | Slot=6 Size=2x2 DropLv=140 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+12-144 | Mithril Fragment | Slot=-1 Size=1x1 DropLv=1 Dur=1 Dmg=0-0 Speed=0 ReqLv=0
+12-145 | Mithril | Slot=-1 Size=1x1 DropLv=1 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-146 | Elixir Fragment | Slot=-1 Size=1x1 DropLv=1 Dur=1 Dmg=0-0 Speed=0 ReqLv=0
+12-147 | Elixir | Slot=-1 Size=1x1 DropLv=1 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-148 | Mithril Fragment Bunch | Slot=-1 Size=1x1 DropLv=1 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-149 | Elixir Fragment Bunch | Slot=-1 Size=1x1 DropLv=1 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-150 | Jewel Combination Frame | Slot=-1 Size=2x1 DropLv=1 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-151 | Spirit Powder | Slot=-1 Size=1x2 DropLv=1 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-200 | Muren's Book of Magic | Slot=236 Size=3x3 DropLv=100 Dur=5 Dmg=0-0 Speed=0 ReqLv=30
+12-201 | Scroll of Etramu | Slot=236 Size=3x3 DropLv=200 Dur=5 Dmg=0-0 Speed=0 ReqLv=50
+12-202 | Lorencia Knights' Iron Shield | Slot=236 Size=3x3 DropLv=300 Dur=5 Dmg=0-0 Speed=0 ReqLv=96
+12-203 | Iron Shield of the Magic | Slot=236 Size=3x3 DropLv=300 Dur=5 Dmg=0-0 Speed=0 ReqLv=96
+12-204 | Hero Elixir | Slot=236 Size=3x3 DropLv=300 Dur=5 Dmg=0-0 Speed=0 ReqLv=134
+12-205 | Brave Hero Elixir | Slot=236 Size=3x3 DropLv=300 Dur=5 Dmg=0-0 Speed=0 ReqLv=134
+12-206 | Gladiator's Dagger | Slot=236 Size=3x3 DropLv=300 Dur=5 Dmg=0-0 Speed=0 ReqLv=168
+12-207 | Merciless Gladiator's Dagger | Slot=236 Size=3x3 DropLv=300 Dur=5 Dmg=0-0 Speed=0 ReqLv=168
+12-208 | Kundun's Madness Blade | Slot=236 Size=3x3 DropLv=300 Dur=1 Dmg=0-0 Speed=0 ReqLv=181
+12-209 | Kundun's Magic Spell Scroll | Slot=236 Size=3x3 DropLv=300 Dur=1 Dmg=0-0 Speed=0 ReqLv=181
+12-210 | Empire Guardians' Stronghold | Slot=236 Size=3x3 DropLv=300 Dur=1 Dmg=0-0 Speed=0 ReqLv=181
+12-211 | Ancient Icarus Scroll | Slot=236 Size=3x3 DropLv=300 Dur=1 Dmg=0-0 Speed=0 ReqLv=181
+12-212 | Arca's Prophecy | Slot=236 Size=3x3 DropLv=300 Dur=1 Dmg=0-0 Speed=0 ReqLv=209
+12-213 | Antonia's Sword | Slot=236 Size=3x3 DropLv=300 Dur=1 Dmg=0-0 Speed=0 ReqLv=209
+12-214 | Kundun's Seal Scroll | Slot=236 Size=3x3 DropLv=300 Dur=1 Dmg=0-0 Speed=0 ReqLv=209
+12-221 | Errtel of Anger | Slot=-1 Size=2x2 DropLv=110 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-231 | Errtel of Blessing | Slot=-1 Size=2x2 DropLv=115 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-241 | Errtel of Integrity | Slot=-1 Size=2x2 DropLv=120 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-251 | Errtel of Divinity | Slot=-1 Size=2x2 DropLv=125 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-261 | Errtel of Gale | Slot=-1 Size=2x2 DropLv=130 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-262 | Cloak of Death | Slot=7 Size=2x3 DropLv=150 Dur=210 Dmg=0-0 Speed=0 ReqLv=290
+12-263 | Wings of Chaos | Slot=7 Size=4x3 DropLv=150 Dur=210 Dmg=0-0 Speed=0 ReqLv=290
+12-264 | Wings of Magic | Slot=7 Size=4x3 DropLv=150 Dur=210 Dmg=0-0 Speed=0 ReqLv=290
+12-265 | Wings of Life | Slot=7 Size=4x3 DropLv=150 Dur=210 Dmg=0-0 Speed=0 ReqLv=290
+12-266 | Wings of Conqueror | Slot=7 Size=4x3 DropLv=150 Dur=220 Dmg=0-0 Speed=0 ReqLv=280
+12-267 | Wings of Angel and Devil | Slot=7 Size=4x3 DropLv=350 Dur=220 Dmg=0-0 Speed=0 ReqLv=350
+12-268 | Wings of Conqueror | Slot=7 Size=4x3 DropLv=150 Dur=220 Dmg=0-0 Speed=0 ReqLv=400
+13-77 | Brown Panda Ring | Slot=10 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-78 | Pink Panda Ring | Slot=10 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-145 | Spirit Map Fragment | Slot=-1 Size=1x1 DropLv=0 Dur=1 Dmg=0-0 Speed=0 ReqLv=0
+13-146 | Spirit Map | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-147 | Trophies of Battle | Slot=-1 Size=1x1 DropLv=0 Dur=1 Dmg=0-0 Speed=0 ReqLv=0
+13-148 | Green Ink | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-149 | Blue Ink | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-150 | Red Ink | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-151 | Parchment of Soul | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-152 | Scroll of Green Oblivion | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-153 | Scroll of Blue Oblivion | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-154 | Scroll of Red Oblivion | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-155 | Scroll of Gray Oblivion | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-156 | Sealed Green Oblivion Scroll | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-157 | Sealed Blue Oblivion Scroll | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-158 | Sealed Red Oblivion  Scroll | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-159 | Sealed Gray Oblivion Scroll | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-160 | Protection Talisman | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-161 | Cooperation Talisman | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-163 | Robot Knight Ring | Slot=10 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-164 | Mini Robot Ring | Slot=10 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-165 | Great Heavenly Mage Ring | Slot=10 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-169 | Decoration Ring | Slot=10 Size=1x1 DropLv=0 Dur=30 Dmg=0-0 Speed=0 ReqLv=0
+13-170 | Blessed Decoration Ring | Slot=10 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-171 | Necklace of Agony | Slot=9 Size=1x1 DropLv=0 Dur=60 Dmg=0-0 Speed=0 ReqLv=122
+13-172 | Solid Symbol | Slot=9 Size=1x1 DropLv=0 Dur=60 Dmg=0-0 Speed=0 ReqLv=110
+13-173 | Ring of Ultimatum | Slot=10 Size=1x1 DropLv=0 Dur=60 Dmg=0-0 Speed=0 ReqLv=98
+13-174 | Ring of Block | Slot=10 Size=1x1 DropLv=0 Dur=60 Dmg=0-0 Speed=0 ReqLv=86
+13-175 | Protector Protection Ring | Slot=10 Size=1x1 DropLv=0 Dur=60 Dmg=0-0 Speed=0 ReqLv=74
+13-176 | Protection Ring | Slot=10 Size=1x1 DropLv=0 Dur=60 Dmg=0-0 Speed=0 ReqLv=62
+13-177 | Talisman of Ascension I | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-178 | Talisman of Ascension II | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-179 | Talisman of Ascension III | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-180 | Seal of Ascension II | Slot=10 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-181 | Master Seal of Ascension II | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-210 | WereRabbit Egg | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-211 | Evolution Stone | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-212 | Luki | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-213 | Luki (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-214 | Tony | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-215 | Tony (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-216 | Nymph | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-217 | Nymph (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-218 | Safi | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-219 | Safi (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-220 | Lucky Bag Egg | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-221 | Fire Flame Ghost Egg | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-222 | Golden Goblin Egg | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-223 | William | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-224 | William (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-225 | Paul | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-226 | Paul (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-227 | Chiron | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-228 | Chiron (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-229 | Wooparoo | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-230 | Wooparoo (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-231 | Tibetton | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-232 | Tibetton (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-233 | Witch | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-234 | Witch (evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-235 | Skull | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-236 | Skull (evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-237 | Pumpy | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-238 | Pumpy (evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-239 | Muun Energy Converter | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-240 | Wizardry Stone | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-241 | Savath | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-242 | Savath (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-243 | Lycan | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-244 | Lycan (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-245 | Torby | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-246 | Torby (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-252 | Seiren | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-253 | Seiren (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-254 | Behemoth | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-255 | Behemoth (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-256 | Loggle | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-257 | Loggle (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-258 | Mino | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-259 | Mino (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-260 | Hound | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-261 | Hound (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-262 | Trive | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-263 | Trive (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-264 | Vogan | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-265 | Vogan (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-266 | Cyclop | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-267 | Cyclop (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-268 | Dark Transformation Ring | Slot=10 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=400
+13-270 | Bonf | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-271 | Bonf (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-272 | Hawk | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-273 | Hawk (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-274 | Muty | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-275 | Muty (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-276 | Conqueror’s Badge | Slot=-1 Size=3x3 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-277 | Badge of Hardships | Slot=-1 Size=3x3 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-278 | Mantis | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-279 | Mantis (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-280 | Scolpy | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-281 | Scolpy (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-282 | Chafer | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-283 | Chafer (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-290 | Cosplay Girl | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-291 | Cosplay Girl (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-292 | Cheer Girl | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-293 | Cheer Girl (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-294 | Sporty Girl | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-295 | Sporty Girl (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-296 | Baal | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-297 | Baal (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-298 | Gaap | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-299 | Gaap (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-300 | Taaf | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-301 | Taaf (Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-302 | Frozen | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-303 | Frozen(Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-304 | Loor | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-305 | Loor(Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-306 | Purssil | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-307 | Purssil(Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-350 | Roomy Egg | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+14-170 | Lv. 2 letter of Request | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-171 | Lv. 2 Completion Certificate | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-176 | Death King's Bone | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-177 | Hell Maine's Leather | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-178 | Dark Phoenix Flame | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-179 | Death Beam Knight Soul | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-180 | Ice Walker's Mane | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-181 | Mammoth's Bundle of Fur | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-182 | Giant's Icicle | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-183 | Coolutin's Poison | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-184 | Iron Knight's Heart | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-185 | Dark Mammoth's Horn | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-186 | Dark Giant's Axe | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-187 | Dark Coolutin's Blood | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-188 | Dark Iron Knight's Sword | Slot=-1 Size=1x4 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-189 | Elemental Talisman of Luck | Slot=-1 Size=1x1 DropLv=10 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-190 | Elemental Talisman of Chaos | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-191 | Sonic Combination Note | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-192 | Cyclone Combination Note | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-193 | Blast Combination Note | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-235 | Scroll of Swiftness Master | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-236 | Reward Jar | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-237 | Reward Jar | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-238 | Reward Jar | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-239 | Reward Jar | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-240 | Reward Jar | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-241 | Valuable Reward Jar | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-242 | Golden Apple | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-243 | Golden Apple(2) | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-244 | Evomon Summoning Scroll | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-245 | Tetra Crystal (Greater) | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-246 | Tetra Crystal (Standard) | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-247 | Tetra Crystal (Minor) | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-248 | Minor Evomon Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-249 | Standard Evomon Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-250 | Greater Evomon Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-251 | Luxurious Evomon Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-252 | Magnificent Evomon Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-253 | Legendary Evomon Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-254 | Gift of Henchmen | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-256 | Gift of Knights | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-257 | Gift of High Knights | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-258 | Minor Devil’s Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-259 | Devil’s Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-260 | High Devil’s Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-261 | Guardsman’s Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-262 | Guardman Captain’s Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-263 | Bless of Light (Low Grade) | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-264 | Bless of Light (Middle Grade) | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-277 | Special Card | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-278 | Summoning Scroll Fragment | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+
+## Items present in Season 6 suite but absent from HNMO Season 6 dump
+0-39 | Lighting Sword-J
+0-40 | Sacred Glove-J
+2-21 | Master Scepter-J
+4-27 | Silver Bow-J
+5-38 | Legendary Staff-J
+5-39 | Red Wing Stick-J
+5-40 | Book of Neil-J
+6-27 | Legendary Shield-J
+6-28 | Serpent Shield-J
+7-53 | Pearl Helm
+7-78 | Dragon Helm-J
+7-79 | Legendary Helm-J
+7-80 | Guardian Helm-J
+7-81 | Light Plate Mask-J
+7-82 | Red Wing Helm-J
+7-83 | Sacred Helm-J
+8-53 | Pearl Armor
+8-78 | Dragon Armor-J
+8-79 | Legendary Armor-J
+8-80 | Guardian Armor-J
+8-81 | Light Plate Armor-J
+8-82 | Red Wing Armor-J
+8-83 | Sacred Armor-J
+9-53 | Pearl Pants
+9-78 | Dragon Pants-J
+9-79 | Legendary Pants-J
+9-80 | Guardian Pants-J
+9-81 | Light Plate Pants-J
+9-82 | Red Wing Pants-J
+9-83 | Sacred Pants-J
+10-53 | Pearl Gloves
+10-78 | Dragon Gloves-J
+10-79 | Legendary Gloves-J
+10-80 | Guardian Gloves-J
+10-81 | Light Plate Gloves-J
+10-82 | Red Wing Gloves-J
+11-53 | Pearl Boots
+11-78 | Dragon Boots-J
+11-79 | Legendary Boots-J
+11-80 | Guardian Boots-J
+11-81 | Light Plate Boots-J
+11-82 | Red Wing Boots-J
+11-83 | Sacred Boots-J
+12-26 | Gem of Secret
+13-7 | Contract (Summon)
+13-59 | Seal of Mobility
+13-60 | Indulgence
+13-69 | Talisman of Resurrection
+13-70 | Talisman of Mobility
+13-83 | Talisman of Wings of Satan
+13-84 | Talisman of Wings of Heaven
+13-85 | Talisman of Wings of Elf
+13-86 | Talisman of Wing of Curse
+13-87 | Talisman of Cape of Emperor
+13-88 | Talisman of Wings of Dragon
+13-89 | Talisman of Wings of Soul
+13-90 | Talisman of Wings of Spirits
+13-91 | Talisman of Wing of Despair
+13-92 | Talisman of Wings of Darkness
+13-95 | Gladiator's Honor
+13-96 | Seal of Strength
+13-97 | Magic Gladiator Char Card
+13-98 | Dark Lord Character Card
+13-99 | Character Slot Key
+13-103 | Party EXP Scroll
+13-116 | Seal of Wealth
+13-117 | Minimum Vitality Potion
+13-118 | Low Vitality Potion
+13-119 | Medium Vitality Potion
+13-120 | High Vitality Potion
+13-124 | Paid Channel Access Ticket
+13-126 | Access Ticket to Varka
+13-127 | Access Ticket to Varka Map 7
+13-128 | Hawk Figurine
+13-129 | Goat Figurine
+13-130 | Oak Charm
+13-131 | Maple Charm
+13-132 | Golden Oak Charm
+13-133 | Golden Maple Charm
+13-134 | Worn Horseshoe
+14-12 | Heart
+14-15 | Zen
+14-20 | Remedy of Love
+14-54 | Chaos Card
+14-55 | Green Chaos Box
+14-56 | Red Chaos Box
+14-57 | Purple Chaos Box
+14-58 | Rare Item Ticket1
+14-59 | Rare Item Ticket2
+14-60 | Rare Item Ticket3
+14-61 | Rare Item Ticket4
+14-62 | Rare Item Ticket5
+14-83 | Rare Item Ticket
+14-88 | White Cherry Blossom Branch
+14-89 | Red Cherry Blossom Branch
+14-92 | Chaos Card Gold
+14-93 | Chaos Card Rare
+14-95 | Chaos Card  Mini
+14-100 | Lucky Coin
+14-114 | Master Skill Reset
+14-115 | Stat Adjustment
+14-116 | Character Relocation Service
+14-117 | Character Rename Service
+14-118 | Server Relocation Service
+14-119 | Premium Package
+14-120 | Goblin Gold Coin
+14-125 | Package Box
+14-126 | 30-Day Pass
+14-127 | 90-Day Pass
+14-128 | 30-Day Pass - Points
+14-129 | 90-Day Pass - Points
+14-130 | 3-Hour Pass
+14-131 | 5-Hour Pass
+14-132 | 10-Hour Pass
+14-134 | Package Box A
+14-135 | Package Box B
+14-136 | Package Box C
+14-137 | Package Box D
+14-138 | Package Box E
+14-139 | Package Box F
+14-145 | Rare Item Ticket 7
+14-146 | Rare Item Ticket 8
+14-147 | Rare Item Ticket 9
+14-148 | Rare Item Ticket 10
+14-149 | Rare Item Ticket 11
+14-150 | Rare Item Ticket 12
+14-151 | Lv. 1 Letter of Request
+14-152 | Lv. 1 Completion Certificate
+14-154 | Kalt Stone
+14-155 | Tantalos's Armor
+14-156 | Burnt Murderer's Club
+14-157 | Green Box
+14-158 | Red Box
+14-159 | Purple Box
+14-164 | Ancient Statue
+14-165 | Magic Cloth
+14-166 | Space Cloth
+14-167 | Phase Cloth
+14-168 | Dimension Cloth
+14-204 | Jewel of Kondar
+14-205 | Jewel of Kundun
+14-206 | Jewel of Love
+14-207 | Left Piece of Love Jewel
+14-208 | Right Piece of Love Jewel
+14-209 | Jewel of Venom
+14-210 | Jewel of Wisdom
+14-211 | Jewel of Maya
+14-212 | Jewel of Tarkan
+14-213 | Jewel of Disorder
+14-214 | Ancient Gem
+14-215 | Socket Gem
+14-216 | Jawel of Luck
+14-217 | Gem of God
+14-218 | Gem of Death
+14-219 | Jewel of Dispense
+14-220 | Jewel of Dream
+14-221 | Jewel of Nightmare
+14-222 | Jewel of Sincerity
+14-223 | Jewel of Destruction
+14-224 | Jewel of Sea
+14-225 | Gem of Speed
+14-226 | Gem of Accuracy
+14-227 | Gem of Blow
+14-228 | Gem of Impact
+14-229 | Gem of Dodges
+14-230 | Gem of Fortune
+14-231 | Gem of Weakness
+14-232 | Gem of Reflect
+14-233 | Gem of Vitality
+14-234 | Gem of Energy

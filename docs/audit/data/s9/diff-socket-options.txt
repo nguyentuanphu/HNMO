@@ -1,0 +1,7 @@
+# Socket Options Differences: HNMO vs Season 6 (SocketOptionSettings.ini) & Season 9 (SocketOption.xml)
+
+Option 12 (Shield protection Increase, Elem=2): S6=7/10/15/20/20 vs S9=7/10/15/20/30
+Option 25 (Maximum AG Increase, Elem=4): S6=25/30/35/40/50 vs S9=50/70/90/110/130
+Option 26 (AG value Increase, Elem=4): S6=3/5/7/10/15 vs S9=5/7/9/11/13
+
+## HNMO dumped socket rows: 35

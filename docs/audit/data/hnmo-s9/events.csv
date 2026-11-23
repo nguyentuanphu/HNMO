@@ -1,0 +1,41 @@
+﻿Type,GameLevel,Name,EnterDurationSec,GameDurationSec,ExitDurationSec,MaxPlayers,ArePlayerKillersAllowedToEnter,AllowParty
+DevilSquare,1,Devil Square 1,300,1200,180,15,0,1
+DevilSquare,2,Devil Square 2,300,1200,180,15,0,1
+DevilSquare,3,Devil Square 3,300,1200,180,15,0,1
+DevilSquare,4,Devil Square 4,300,1200,180,15,0,1
+DevilSquare,5,Devil Square 5,300,1200,180,15,0,1
+DevilSquare,6,Devil Square 6,300,1200,180,15,0,1
+DevilSquare,7,Devil Square 7,300,1200,180,15,0,1
+BloodCastle,1,Blood Castle 1,300,900,60,10,0,1
+BloodCastle,2,Blood Castle 2,300,900,60,10,0,1
+BloodCastle,3,Blood Castle 3,300,900,60,10,0,1
+BloodCastle,4,Blood Castle 4,300,900,60,10,0,1
+BloodCastle,5,Blood Castle 5,300,900,60,10,0,1
+BloodCastle,6,Blood Castle 6,300,900,60,10,0,1
+BloodCastle,7,Blood Castle 7,300,900,60,10,0,1
+BloodCastle,8,Blood Castle 8,300,900,60,10,0,1
+ChaosCastle,1,Chaos Castle 1,300,600,60,70,0,0
+ChaosCastle,2,Chaos Castle 2,300,600,60,70,0,0
+ChaosCastle,3,Chaos Castle 3,300,600,60,70,0,0
+ChaosCastle,4,Chaos Castle 4,300,600,60,70,0,0
+ChaosCastle,5,Chaos Castle 5,300,600,60,70,0,0
+ChaosCastle,6,Chaos Castle 6,300,600,60,70,0,0
+ChaosCastle,7,Chaos Castle 7,300,600,60,70,0,0
+IllusionTemple,1,Illusion Temple 1,300,900,60,10,0,0
+IllusionTemple,2,Illusion Temple 2,300,900,60,10,0,0
+IllusionTemple,3,Illusion Temple 3,300,900,60,10,0,0
+IllusionTemple,4,Illusion Temple 4,300,900,60,10,0,0
+IllusionTemple,5,Illusion Temple 5,300,900,60,10,0,0
+IllusionTemple,6,Illusion Temple 6,300,900,60,10,0,0
+Doppelganger,1,Doppelganger 1,30,600,60,5,0,1
+Doppelganger,2,Doppelganger 2,30,600,60,5,0,1
+Doppelganger,3,Doppelganger 3,30,600,60,5,0,1
+Doppelganger,4,Doppelganger 4,30,600,60,5,0,1
+Kanturu,1,Kanturu Refinery Tower,300,8100,60,15,0,1
+ImperialGuardian,1,Imperial Guardian Monday,60,3000,60,5,0,1
+ImperialGuardian,2,Imperial Guardian Tuesday,60,3000,60,5,0,1
+ImperialGuardian,3,Imperial Guardian Wednesday,60,3000,60,5,0,1
+ImperialGuardian,4,Imperial Guardian Thursday,60,3000,60,5,0,1
+ImperialGuardian,5,Imperial Guardian Friday,60,3000,60,5,0,1
+ImperialGuardian,6,Imperial Guardian Saturday,60,3000,60,5,0,1
+ImperialGuardian,7,Imperial Guardian Sunday,60,3000,60,5,0,1
