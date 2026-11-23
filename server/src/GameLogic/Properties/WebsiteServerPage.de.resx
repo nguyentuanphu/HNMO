@@ -8,4 +8,13 @@
   <data name="NotForSaleVi" xml:space="preserve"><value>Nicht im Verkauf (Vietnamesisch)</value></data>
   <data name="Description" xml:space="preserve"><value>Öffentliche Informationen für Spieler, eine Regel pro Zeile. Bis zur Veröffentlichung leer lassen. Keine Passwörter oder privaten Kontodaten eintragen.</value></data>
   <data name="MaximumLength" xml:space="preserve"><value>Höchstens {1} Zeichen eingeben.</value></data>
+  <data name="ContentRoadmapEn" xml:space="preserve"><value>Fahrplan der Website (Englisch)</value></data>
+  <data name="ContentRoadmapVi" xml:space="preserve"><value>Fahrplan der Website (Vietnamesisch)</value></data>
+  <data name="ContentAboutEn" xml:space="preserve"><value>Über uns (Englisch)</value></data>
+  <data name="ContentAboutVi" xml:space="preserve"><value>Über uns (Vietnamesisch)</value></data>
+  <data name="ContentTermsEn" xml:space="preserve"><value>Nutzungsbedingungen (Englisch)</value></data>
+  <data name="ContentTermsVi" xml:space="preserve"><value>Nutzungsbedingungen (Vietnamesisch)</value></data>
+  <data name="ContentPrivacyEn" xml:space="preserve"><value>Datenschutzerklärung (Englisch)</value></data>
+  <data name="ContentPrivacyVi" xml:space="preserve"><value>Datenschutzerklärung (Vietnamesisch)</value></data>
+  <data name="ContentDescription" xml:space="preserve"><value>Wird als Klartext veröffentlicht. Leerzeilen trennen Absätze. Leer lassen, um diese Sprache unveröffentlicht zu lassen.</value></data>
 </root>

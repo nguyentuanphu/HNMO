@@ -8,4 +8,13 @@
   <data name="NotForSaleVi" xml:space="preserve"><value>Not for sale (Vietnamese)</value></data>
   <data name="Description" xml:space="preserve"><value>Public player information, one line per rule. Leave empty until you have published your policy. Do not put passwords or private account details here.</value></data>
   <data name="MaximumLength" xml:space="preserve"><value>Use at most {1} characters.</value></data>
+  <data name="ContentRoadmapEn" xml:space="preserve"><value>Public roadmap (English)</value></data>
+  <data name="ContentRoadmapVi" xml:space="preserve"><value>Public roadmap (Vietnamese)</value></data>
+  <data name="ContentAboutEn" xml:space="preserve"><value>Public about page (English)</value></data>
+  <data name="ContentAboutVi" xml:space="preserve"><value>Public about page (Vietnamese)</value></data>
+  <data name="ContentTermsEn" xml:space="preserve"><value>Public terms of use (English)</value></data>
+  <data name="ContentTermsVi" xml:space="preserve"><value>Public terms of use (Vietnamese)</value></data>
+  <data name="ContentPrivacyEn" xml:space="preserve"><value>Public privacy policy (English)</value></data>
+  <data name="ContentPrivacyVi" xml:space="preserve"><value>Public privacy policy (Vietnamese)</value></data>
+  <data name="ContentDescription" xml:space="preserve"><value>Published as plain text. Use a blank line between paragraphs. Leave blank to keep this language unpublished.</value></data>
 </root>

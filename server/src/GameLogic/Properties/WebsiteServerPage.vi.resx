@@ -8,4 +8,13 @@
   <data name="NotForSaleVi" xml:space="preserve"><value>Không bán (tiếng Việt)</value></data>
   <data name="Description" xml:space="preserve"><value>Nội dung công khai cho người chơi, mỗi quy định một dòng. Để trống nếu chưa công bố. Không nhập mật khẩu hoặc thông tin tài khoản riêng tư vào đây.</value></data>
   <data name="MaximumLength" xml:space="preserve"><value>Chỉ nhập tối đa {1} ký tự.</value></data>
+  <data name="ContentRoadmapEn" xml:space="preserve"><value>Nội dung lộ trình công khai (tiếng Anh)</value></data>
+  <data name="ContentRoadmapVi" xml:space="preserve"><value>Nội dung lộ trình công khai (tiếng Việt)</value></data>
+  <data name="ContentAboutEn" xml:space="preserve"><value>Nội dung giới thiệu công khai (tiếng Anh)</value></data>
+  <data name="ContentAboutVi" xml:space="preserve"><value>Nội dung giới thiệu công khai (tiếng Việt)</value></data>
+  <data name="ContentTermsEn" xml:space="preserve"><value>Nội dung điều khoản sử dụng công khai (tiếng Anh)</value></data>
+  <data name="ContentTermsVi" xml:space="preserve"><value>Nội dung điều khoản sử dụng công khai (tiếng Việt)</value></data>
+  <data name="ContentPrivacyEn" xml:space="preserve"><value>Nội dung chính sách quyền riêng tư công khai (tiếng Anh)</value></data>
+  <data name="ContentPrivacyVi" xml:space="preserve"><value>Nội dung chính sách quyền riêng tư công khai (tiếng Việt)</value></data>
+  <data name="ContentDescription" xml:space="preserve"><value>Hiển thị dưới dạng văn bản. Dùng dòng trống giữa các đoạn. Để trống nếu chưa công bố ngôn ngữ này.</value></data>
 </root>

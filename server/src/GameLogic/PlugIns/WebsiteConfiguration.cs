@@ -78,4 +78,55 @@ public class WebsiteConfiguration
     [StringLength(4000, ErrorMessageResourceType = typeof(WebsiteServerPageLabels), ErrorMessageResourceName = nameof(WebsiteServerPageLabels.MaximumLength))]
     [DataType(DataType.MultilineText)]
     public string ServerNotForSaleVi { get; set; } = string.Empty;
+
+    /// <summary>The maximum length of a public content field in one language.</summary>
+    public const int MaximumPublicContentLength = 6000;
+
+    /// <summary>Gets or sets the host's public roadmap in English.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.ContentRoadmapEn), Description = nameof(WebsiteServerPageLabels.ContentDescription), ResourceType = typeof(WebsiteServerPageLabels))]
+    [StringLength(MaximumPublicContentLength, ErrorMessageResourceType = typeof(WebsiteServerPageLabels), ErrorMessageResourceName = nameof(WebsiteServerPageLabels.MaximumLength))]
+    [DataType(DataType.MultilineText)]
+    public string ContentRoadmapEn { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets the host's public roadmap in Vietnamese.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.ContentRoadmapVi), Description = nameof(WebsiteServerPageLabels.ContentDescription), ResourceType = typeof(WebsiteServerPageLabels))]
+    [StringLength(MaximumPublicContentLength, ErrorMessageResourceType = typeof(WebsiteServerPageLabels), ErrorMessageResourceName = nameof(WebsiteServerPageLabels.MaximumLength))]
+    [DataType(DataType.MultilineText)]
+    public string ContentRoadmapVi { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets the host's public about page in English.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.ContentAboutEn), Description = nameof(WebsiteServerPageLabels.ContentDescription), ResourceType = typeof(WebsiteServerPageLabels))]
+    [StringLength(MaximumPublicContentLength, ErrorMessageResourceType = typeof(WebsiteServerPageLabels), ErrorMessageResourceName = nameof(WebsiteServerPageLabels.MaximumLength))]
+    [DataType(DataType.MultilineText)]
+    public string ContentAboutEn { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets the host's public about page in Vietnamese.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.ContentAboutVi), Description = nameof(WebsiteServerPageLabels.ContentDescription), ResourceType = typeof(WebsiteServerPageLabels))]
+    [StringLength(MaximumPublicContentLength, ErrorMessageResourceType = typeof(WebsiteServerPageLabels), ErrorMessageResourceName = nameof(WebsiteServerPageLabels.MaximumLength))]
+    [DataType(DataType.MultilineText)]
+    public string ContentAboutVi { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets the host's public terms of use in English.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.ContentTermsEn), Description = nameof(WebsiteServerPageLabels.ContentDescription), ResourceType = typeof(WebsiteServerPageLabels))]
+    [StringLength(MaximumPublicContentLength, ErrorMessageResourceType = typeof(WebsiteServerPageLabels), ErrorMessageResourceName = nameof(WebsiteServerPageLabels.MaximumLength))]
+    [DataType(DataType.MultilineText)]
+    public string ContentTermsEn { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets the host's public terms of use in Vietnamese.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.ContentTermsVi), Description = nameof(WebsiteServerPageLabels.ContentDescription), ResourceType = typeof(WebsiteServerPageLabels))]
+    [StringLength(MaximumPublicContentLength, ErrorMessageResourceType = typeof(WebsiteServerPageLabels), ErrorMessageResourceName = nameof(WebsiteServerPageLabels.MaximumLength))]
+    [DataType(DataType.MultilineText)]
+    public string ContentTermsVi { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets the host's public privacy policy in English.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.ContentPrivacyEn), Description = nameof(WebsiteServerPageLabels.ContentDescription), ResourceType = typeof(WebsiteServerPageLabels))]
+    [StringLength(MaximumPublicContentLength, ErrorMessageResourceType = typeof(WebsiteServerPageLabels), ErrorMessageResourceName = nameof(WebsiteServerPageLabels.MaximumLength))]
+    [DataType(DataType.MultilineText)]
+    public string ContentPrivacyEn { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets the host's public privacy policy in Vietnamese.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.ContentPrivacyVi), Description = nameof(WebsiteServerPageLabels.ContentDescription), ResourceType = typeof(WebsiteServerPageLabels))]
+    [StringLength(MaximumPublicContentLength, ErrorMessageResourceType = typeof(WebsiteServerPageLabels), ErrorMessageResourceName = nameof(WebsiteServerPageLabels.MaximumLength))]
+    [DataType(DataType.MultilineText)]
+    public string ContentPrivacyVi { get; set; } = string.Empty;
 }
