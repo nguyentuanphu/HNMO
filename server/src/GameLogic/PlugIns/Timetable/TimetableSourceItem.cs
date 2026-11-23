@@ -5,6 +5,8 @@
 namespace HNMO.GameLogic.PlugIns.Timetable;
 
 using System.Globalization;
+using System.Text.Json.Serialization;
+using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.PlugIns.InvasionEvents;
 using HNMO.GameLogic.PlugIns.PeriodicTasks;
 using HNMO.GameLogic.PlugIns.WorldBosses;
@@ -55,4 +57,20 @@ public sealed class TimetableSourceItem
 
     /// <summary>Gets or sets a value indicating whether the source is currently live on a server.</summary>
     public bool IsLiveNow { get; set; }
+
+    /// <summary>Gets or sets the effective invasion spawn rules for a configured invasion.</summary>
+    [JsonIgnore]
+    public PeriodicInvasionConfiguration? InvasionConfiguration { get; set; }
+
+    /// <summary>Gets or sets the active spawn rules of a running invasion plug-in.</summary>
+    [JsonIgnore]
+    public IReadOnlyList<InvasionSpawnConfiguration>? ActiveInvasionSpawns { get; set; }
+
+    /// <summary>Gets or sets the effective boss definition for a configured boss.</summary>
+    [JsonIgnore]
+    public WorldBossDefinition? BossConfiguration { get; set; }
+
+    /// <summary>Gets or sets the configured prize for an event with one winner.</summary>
+    [JsonIgnore]
+    public (int Coins, CashShopCoinType CoinType, long Zen)? WinnerReward { get; set; }
 }

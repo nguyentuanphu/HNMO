@@ -33,6 +33,7 @@
     @media (max-width: 560px) { th:nth-child(3), td:nth-child(3) { display: none; } }
   </style>
   <link rel="stylesheet" href="/website-themes.css">
+  <link rel="stylesheet" href="/website-event-guide.css">
   <script type="module" src="/js/websiteThemeEntry.js"></script>
 <link rel="stylesheet" href="/website-shell.css">
 <script type="module" src="/js/websiteShellEntry.js"></script>
@@ -44,7 +45,7 @@
   <p class="lead">What to play, how to play it, and what each part of the game does. Features marked <span class="tag ok">works</span> are in the game now; <span class="tag soon">coming</span> ones are being built.</p>
   <nav>
     <a href="#start">Getting started</a><a href="#controls">Controls</a><a href="#classes">Classes</a>
-    <a href="#where">Where to level</a><a href="#items">Items and potions</a><a href="#features">All features</a><a href="#friends">Playing with friends</a>
+    <a href="#where">Where to level</a><a href="#event-guide" data-event-guide-title data-no-i18n>Events and quests</a><a href="#items">Items and potions</a><a href="#features">All features</a><a href="#friends">Playing with friends</a>
   </nav>
 
   <h2 id="start">Getting started</h2>
@@ -137,6 +138,12 @@
     <li>When a monster takes many hits and hurts you a lot, it's too strong: go back to weaker ones. When everything dies in one or two hits, move on.</li>
     <li><b>Field monsters and EXP:</b> <span>Monsters keep their spawn spot: when lured too far away they return home and heal. Experience in a shared fight splits by damage dealt, and jewels drop by monster level band.</span></li>
   </ul>
+
+  <section id="event-guide" data-no-i18n>
+    <h2 data-event-guide-title>Events and quests</h2>
+    <div id="eventGuide" class="event-guide"></div>
+    <script type="module" src="/js/websiteEventGuide.js"></script>
+  </section>
 
   <h2 id="items">Items and potions</h2>
   <ul>

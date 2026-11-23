@@ -18,7 +18,7 @@ Target every draft PR at the latest `claude/hnmo-main-handover-54co2m`. Never pu
 | 6 | Jewel totals including bundles, banned-account filters and hunters. / Tổng ngọc tính cả bó, lọc tài khoản bị khóa, xếp hạng săn vật phẩm. | Pending / Chưa làm |
 | 7 | PvP log with field/duel/Arena/siege distinctions. / Nhật ký PvP phân biệt ngoài map/đấu tay đôi/Arena/công thành. | Pending / Chưa làm |
 | 8 | Class guides from actual attributes, formulas and skills. / Hướng dẫn lớp nhân vật từ chỉ số, công thức và kỹ năng thật. | Pending / Chưa làm |
-| 9 | Event, invasion and quest guides from current schedules/rewards. / Hướng dẫn sự kiện, xâm lăng, nhiệm vụ từ lịch/phần thưởng thật. | Pending / Chưa làm |
+| 9 | Event, invasion and quest guides from current schedules/rewards. / Hướng dẫn sự kiện, xâm lăng, nhiệm vụ từ lịch/phần thưởng thật. | In review. The guide reads live schedules, configured event rewards and NPC quest requirements by server. / Đang chờ duyệt. Hướng dẫn đọc lịch thật, phần thưởng đã cấu hình và yêu cầu nhiệm vụ NPC theo máy chủ. |
 | 10 | Drop, item, requirement, box and mix guides from live data. / Hướng dẫn rơi đồ, vật phẩm, yêu cầu, hộp và ép đồ từ dữ liệu thật. | Pending / Chưa làm |
 | 11 | PvP formulas and MVP/loot examples using authoritative rules. / Công thức PvP, ví dụ chia EXP/vật phẩm theo quy tắc máy chủ. | Pending / Chưa làm |
 | 12 | Existing rankings plus opt-in public banned-character records. / Dùng lại xếp hạng; danh sách nhân vật bị khóa chỉ công khai khi host bật. | Pending / Chưa làm |

@@ -29,4 +29,10 @@ public static class WebsiteServerPageLabels
 
     /// <summary>Gets the localized MaximumLength label.</summary>
     public static string MaximumLength => Resources.GetString(nameof(MaximumLength), CultureInfo.CurrentUICulture) ?? nameof(MaximumLength);
+
+    /// <summary>Gets the localized event and quest guide setting.</summary>
+    public static string EventGuide => Resources.GetString(nameof(EventGuide), CultureInfo.CurrentUICulture) ?? nameof(EventGuide);
+
+    /// <summary>Gets the localized event and quest guide setting description.</summary>
+    public static string EventGuideDescription => Resources.GetString(nameof(EventGuideDescription), CultureInfo.CurrentUICulture) ?? nameof(EventGuideDescription);
 }

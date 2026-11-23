@@ -78,4 +78,8 @@ public class WebsiteConfiguration
     [StringLength(4000, ErrorMessageResourceType = typeof(WebsiteServerPageLabels), ErrorMessageResourceName = nameof(WebsiteServerPageLabels.MaximumLength))]
     [DataType(DataType.MultilineText)]
     public string ServerNotForSaleVi { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets a value indicating whether the public website shows the live event and quest guide.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.EventGuide), Description = nameof(WebsiteServerPageLabels.EventGuideDescription), ResourceType = typeof(WebsiteServerPageLabels))]
+    public bool EventGuideEnabled { get; set; } = true;
 }
