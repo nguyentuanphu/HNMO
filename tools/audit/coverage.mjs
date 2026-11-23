@@ -28,7 +28,15 @@ const RULE_AREAS = [
   { root: 'server/src/GameServer', ext: ['.cs'], kind: 'Server packet handlers' },
   { root: 'server/src/Persistence/Initialization', ext: ['.cs'], kind: 'Game data (Season 6/9)' },
   { root: 'server/src/DataModel', ext: ['.cs'], kind: 'Data model' },
+  { root: 'server/src/AttributeSystem', ext: ['.cs'], kind: 'Server rules' },
+  { root: 'server/src/GuildServer', ext: ['.cs'], kind: 'Server rules' },
+  { root: 'server/src/FriendServer', ext: ['.cs'], kind: 'Server rules' },
+  { root: 'server/src/PlugIns', ext: ['.cs'], kind: 'Server rules' },
+  { root: 'server/src/Interfaces', ext: ['.cs'], kind: 'Server rules' },
   { root: 'client/web/src', ext: ['.ts'], kind: 'Web client' },
+  { root: 'client/web/bridge', ext: ['.cs'], kind: 'Web client' },
+  // Owner, 24 Nov: the desktop client after the server, its rule parts only (stats, skills, items, trade ...);
+  // drawing, sound and network units are marked "No game rules" with one line why.
   { root: 'client/src/source', ext: ['.cpp', '.h'], kind: 'Desktop client' },
 ];
 
@@ -41,6 +49,10 @@ const OTHER_AREAS = [
   { root: 'server/src/Dapr', ext: ['.cs'], kind: 'Hosting' },
   { root: 'server/src/ChatServer', ext: ['.cs'], kind: 'Chat server' },
   { root: 'server/src/Startup', ext: ['.cs'], kind: 'Hosting' },
+  { root: 'server/src/ConnectServer', ext: ['.cs'], kind: 'Server list' },
+  { root: 'server/src/LoginServer', ext: ['.cs'], kind: 'Login registry' },
+  { root: 'server/src/Pathfinding', ext: ['.cs'], kind: 'Path finding' },
+  { root: 'client/ClientLibrary', ext: ['.cs'], kind: 'Client library' },
 ];
 
 const SKIP_DIRS = new Set(['bin', 'obj', 'node_modules', 'Migrations', 'CompiledModels', 'Properties']);

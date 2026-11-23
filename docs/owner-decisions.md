@@ -12,6 +12,8 @@ decision. Add new decisions here as they are made; never turn an agent's habit i
 | 23 Nov | Which group first when usage is back | "Sửa test đỏ trước" |
 | 23 Nov | How far the audit reads | "Hết, theo thứ tự ưu tiên" |
 | 23 Nov | Old PRs #26-#85, #257, #277 | "Kiểm tra rồi đóng" |
+| 24 Nov | Audit: the HNMO folders left out (AttributeSystem, GuildServer, FriendServer, PlugIns, Interfaces, web bridge) and the Season 6 / 9 clients' encoded data tables (items, skills, quests, gates ...) | "Đưa cả hai vào" |
+| 24 Nov | Audit of the HNMO desktop client (446,000 lines) | "Sau server, chỉ phần có luật" (after the server, its rule parts only) |
 | 23 Nov | Release 1.0.1 | "Hiện tại chưa có host nào hết. Với cả luôn cần updated full folder và cả phần cần update" |
 
 Earlier decisions (Maya's body, Fenrir, `/move` in events, the skill sweep points, the socket weapon mix in

@@ -25,7 +25,7 @@ the owner when you switch.
 2. Run only the tests of what you touched; GitHub runs everything on the PR. Builds through
    `powershell -File D:\WorkSpace\meshy\tools\heavy.ps1 <command>` if it exists; otherwise one at a time.
 3. **Never write "done", "all", "checked" or "100 %" for something you did not finish in full in this session.**
-   Every report gives real numbers (units checked of 390, lines read of the total from `docs/audit/coverage.md`,
+   Every report gives real numbers (units checked of 400, lines read of the total from `docs/audit/coverage.md`,
    suite files read of the total). If unsure, write "not checked".
 4. **Never commit a local path or a third-party name** (the original game, its publisher, the suites' or clients'
    vendor names) in any file, commit message or PR text; say "the Season 6 suite", "the Season 9 client". Before every
@@ -60,9 +60,12 @@ Check the latest "Web game tests" run on `claude/hnmo-main-handover-54co2m` (mai
 
 ## Part 3 [High]: the code audit, unit by unit (Step 4)
 
-Order: the units "Changed since check", then the rule-heavy units (combat and damage, skills, items and options,
-Chaos Machine mixes, drops, events and mini games, quests, monsters and AI, trade and shops, party, guild, PK, Gens,
-Castle Siege), then the rest. Start over with `server/src/GameLogic (files 1)`: the VS Code findings for it are not
+`docs/audit/coverage.json` has 400 units since 24 Nov (the owner added AttributeSystem, GuildServer, FriendServer,
+PlugIns, Interfaces and the web bridge). Order: the units "Changed since check", then the rule-heavy server and data
+units (combat and damage, the attribute system, skills, items and options, Chaos Machine mixes, drops, events and
+mini games, quests, monsters and AI, trade and shops, party, guild, PK, Gens, Castle Siege), then the other server
+units, then the web client. **The desktop client comes last, its rule parts only** (owner, 24 Nov: stats, skills,
+items, trade, inventory ...); mark its drawing, sound and network units "No game rules" with one line why. Start over with `server/src/GameLogic (files 1)`: the VS Code findings for it are not
 valid (they call `AttackableExtensions.cs`, the damage formulas, "no rules").
 
 For each unit:
@@ -79,6 +82,12 @@ For each unit:
 From the inventory, every Season 6 / Season 9 suite file with rules that `tools/audit/suite-parsers` does not read:
 quests, all events and invasions, reward bags, master skill tree, Castle Siege, Gens, PK / party / guild limits, then
 the rest. For each: a parser, HNMO's matching values, a diff, the file marked read in the inventory.
+
+Also the Season 6 and Season 9 **clients' encoded data tables** (owner, 24 Nov): the files in their data folders that
+hold items, skills, quests, gates, maps, NPC texts and similar tables (not only the .xml / .ini files). Mark them
+"has rules" in the client inventory, decode them with the tools in `client/tools` or `client/web/tools` where one
+exists (write one where not), and compare their values with HNMO's data and with the suites. Never commit the
+decoded files; only values and differences.
 
 ## Part 5 [Medium]: when the owner says so
 

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2822da15",
+  "generatedAt": "1b2c4a0b",
   "maxLines": 6000,
   "units": [
     {
@@ -989,7 +989,7 @@
         "server/src/GameLogic/PlayerActions/Skills"
       ],
       "files": 29,
-      "lines": 3495,
+      "lines": 3494,
       "status": "Changed since check",
       "checkedAt": "477b9466",
       "checkedOn": "2026-11-22",
@@ -1900,6 +1900,21 @@
       "prs": ""
     },
     {
+      "id": "server/src/GameLogic/PlugIns/MossMerchant",
+      "kind": "Server rules",
+      "paths": [
+        "server/src/GameLogic/PlugIns/MossMerchant"
+      ],
+      "files": 3,
+      "lines": 316,
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
+      "prs": ""
+    },
+    {
       "id": "server/src/GameLogic/PlugIns/MountChain",
       "kind": "Server rules",
       "paths": [
@@ -2146,7 +2161,7 @@
         "server/src/GameLogic/PlugIns/UltimateAutoPlay"
       ],
       "files": 3,
-      "lines": 240,
+      "lines": 294,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -2176,7 +2191,7 @@
         "server/src/GameLogic/PlugIns/Vip"
       ],
       "files": 33,
-      "lines": 2266,
+      "lines": 2271,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -3443,13 +3458,16 @@
         "server/src/Persistence/Initialization/Items"
       ],
       "files": 10,
-      "lines": 2124,
-      "status": "Checked",
+      "lines": 2125,
+      "status": "Changed since check",
       "checkedAt": "477b9466",
       "checkedOn": "2026-11-21",
       "references": "S6/S9 Data/Items/ItemList.xml",
       "evidence": "Read in full (ledger-game-data.md at cbf4593e, unchanged through 477b9466): item base classes & DetermineCharacterClasses; Gloves energy overload (#218) and rank-2 classes (#237) fixed.",
-      "prs": "#218, #237"
+      "prs": "#218, #237",
+      "changedFiles": [
+        "server/src/Persistence/Initialization/Items/ItemPriceDefinitions.cs"
+      ]
     },
     {
       "id": "server/src/Persistence/Initialization/PlugIns",
@@ -3589,6 +3607,7 @@
         "server/src/Persistence/Initialization/Updates/AddSummonerBuffSkillsPlugIn.cs",
         "server/src/Persistence/Initialization/Updates/AddWhiteWizardInvasionMobsUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/AdjustIceArrowFreezeDurationUpdatePlugIn.cs",
+        "server/src/Persistence/Initialization/Updates/ArenaGuardShopUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/ArenaTitlesUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/BloodCastleDurationUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/ChainLightningUpdatePlugIn.cs",
@@ -3633,8 +3652,8 @@
         "server/src/Persistence/Initialization/Updates/FixCharStatsForceWavePlugInBase.cs",
         "server/src/Persistence/Initialization/Updates/FixCharStatsForceWavePlugInSeason6.cs"
       ],
-      "files": 47,
-      "lines": 5674,
+      "files": 48,
+      "lines": 5724,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -3756,17 +3775,17 @@
         "server/src/Persistence/Initialization/Updates/MonsterStatsFromSuitesUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/MonsterValueChange.cs",
         "server/src/Persistence/Initialization/Updates/MonsterValuesUpdatePlugInBase.cs",
+        "server/src/Persistence/Initialization/Updates/MossMerchantShopUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/MoveServerPortsOutOfDynamicRangePlugIn075.cs",
         "server/src/Persistence/Initialization/Updates/MoveServerPortsOutOfDynamicRangePlugIn095d.cs",
         "server/src/Persistence/Initialization/Updates/MoveServerPortsOutOfDynamicRangePlugInBase.cs",
         "server/src/Persistence/Initialization/Updates/MoveServerPortsOutOfDynamicRangePlugInSeason6.cs",
         "server/src/Persistence/Initialization/Updates/MuHelperLevelUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/NewDatabaseUpdates.cs",
-        "server/src/Persistence/Initialization/Updates/PhoenixShotPvpBlockUpdatePlugIn.cs",
-        "server/src/Persistence/Initialization/Updates/PkClearCostUpdatePlugIn.cs"
+        "server/src/Persistence/Initialization/Updates/PhoenixShotPvpBlockUpdatePlugIn.cs"
       ],
       "files": 55,
-      "lines": 5975,
+      "lines": 5917,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -3778,6 +3797,8 @@
       "id": "server/src/Persistence/Initialization/Updates (files 5)",
       "kind": "Game data (Season 6/9)",
       "paths": [
+        "server/src/Persistence/Initialization/Updates/PkClearCostUpdatePlugIn.cs",
+        "server/src/Persistence/Initialization/Updates/PotionShopStorageBuilder.cs",
         "server/src/Persistence/Initialization/Updates/RageFighterResistanceMasterSkillsUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/RaklionSwampGateLevelsUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/RegenerationsRefactorPlugIn075.cs",
@@ -3823,8 +3844,8 @@
         "server/src/Persistence/Initialization/Updates/WizEnhanceAndRagefighterSkillsUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/ZenLossBagOnlyUpdatePlugIn.cs"
       ],
-      "files": 44,
-      "lines": 2955,
+      "files": 46,
+      "lines": 3141,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -3838,8 +3859,8 @@
       "paths": [
         "server/src/Persistence/Initialization/Updates/SeasonNine"
       ],
-      "files": 9,
-      "lines": 2669,
+      "files": 10,
+      "lines": 2759,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -3962,7 +3983,7 @@
         "server/src/Persistence/Initialization/VersionSeasonSix/NpcInitialization.cs"
       ],
       "files": 11,
-      "lines": 5479,
+      "lines": 5487,
       "status": "Changed since check",
       "checkedAt": "477b9466",
       "checkedOn": "2026-11-22",
@@ -3970,7 +3991,8 @@
       "evidence": "Read in full via data dump (ledger-game-data.md + ZzDataDump at 477b9466): 42 mixes, gates/warps (#223, #240), 27 shops (#250), jewel prices (#192).",
       "prs": "#192, #223, #240, #250",
       "changedFiles": [
-        "server/src/Persistence/Initialization/VersionSeasonSix/ChaosMixes.cs"
+        "server/src/Persistence/Initialization/VersionSeasonSix/ChaosMixes.cs",
+        "server/src/Persistence/Initialization/VersionSeasonSix/NpcInitialization.cs"
       ]
     },
     {
@@ -4024,11 +4046,12 @@
         "server/src/Persistence/Initialization/VersionSeasonSix/Items/Jewels.cs",
         "server/src/Persistence/Initialization/VersionSeasonSix/Items/LuckyItems.cs",
         "server/src/Persistence/Initialization/VersionSeasonSix/Items/Misc.cs",
+        "server/src/Persistence/Initialization/VersionSeasonSix/Items/MossGambleItemCatalog.cs",
         "server/src/Persistence/Initialization/VersionSeasonSix/Items/Orbs.cs",
         "server/src/Persistence/Initialization/VersionSeasonSix/Items/PackedJewels.cs"
       ],
-      "files": 18,
-      "lines": 5830,
+      "files": 19,
+      "lines": 5964,
       "status": "Changed since check",
       "checkedAt": "477b9466",
       "checkedOn": "2026-11-22",
@@ -4036,7 +4059,9 @@
       "evidence": "Read in full via data dump (ledger-game-data.md + ZzDataDump at 477b9466): 817 items, 380/Phoenix Soul (#218), Eternal Wing set 44 (#258), lucky speeds (#242), harmony +14/+15 (#252).",
       "prs": "#218, #242, #252, #258",
       "changedFiles": [
-        "server/src/Persistence/Initialization/VersionSeasonSix/Items/ItemRules.cs"
+        "server/src/Persistence/Initialization/VersionSeasonSix/Items/ItemRules.cs",
+        "server/src/Persistence/Initialization/VersionSeasonSix/Items/Misc.cs",
+        "server/src/Persistence/Initialization/VersionSeasonSix/Items/MossGambleItemCatalog.cs"
       ]
     },
     {
@@ -4416,6 +4441,81 @@
       "prs": ""
     },
     {
+      "id": "server/src/AttributeSystem",
+      "kind": "Server rules",
+      "paths": [
+        "server/src/AttributeSystem"
+      ],
+      "files": 20,
+      "lines": 1743,
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
+      "prs": ""
+    },
+    {
+      "id": "server/src/GuildServer",
+      "kind": "Server rules",
+      "paths": [
+        "server/src/GuildServer"
+      ],
+      "files": 4,
+      "lines": 1412,
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
+      "prs": ""
+    },
+    {
+      "id": "server/src/FriendServer",
+      "kind": "Server rules",
+      "paths": [
+        "server/src/FriendServer"
+      ],
+      "files": 4,
+      "lines": 690,
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
+      "prs": ""
+    },
+    {
+      "id": "server/src/PlugIns",
+      "kind": "Server rules",
+      "paths": [
+        "server/src/PlugIns"
+      ],
+      "files": 31,
+      "lines": 2854,
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
+      "prs": ""
+    },
+    {
+      "id": "server/src/Interfaces",
+      "kind": "Server rules",
+      "paths": [
+        "server/src/Interfaces"
+      ],
+      "files": 86,
+      "lines": 5667,
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
+      "prs": ""
+    },
+    {
       "id": "client/web/src (files 1)",
       "kind": "Web client",
       "paths": [
@@ -4464,7 +4564,7 @@
         "client/web/src/vipTexts.ts"
       ],
       "files": 8,
-      "lines": 4953,
+      "lines": 4955,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4495,7 +4595,7 @@
         "client/web/src/worldEditor.ts"
       ],
       "files": 17,
-      "lines": 5217,
+      "lines": 5244,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4551,7 +4651,7 @@
         "client/web/src/game/chatExtras.ts"
       ],
       "files": 12,
-      "lines": 5472,
+      "lines": 5492,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4649,13 +4749,14 @@
         "client/web/src/game/skillTooltip.ts",
         "client/web/src/game/skills.ts",
         "client/web/src/game/social.ts",
+        "client/web/src/game/sparkleGoal.ts",
         "client/web/src/game/spawnEffects.ts",
         "client/web/src/game/stats.ts",
         "client/web/src/game/textFormat.ts",
         "client/web/src/game/warps.ts"
       ],
-      "files": 11,
-      "lines": 3149,
+      "files": 12,
+      "lines": 3201,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4862,7 +4963,7 @@
         "client/web/src/ui/petInfoWindow.ts"
       ],
       "files": 15,
-      "lines": 5723,
+      "lines": 5729,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -4895,7 +4996,22 @@
         "client/web/src/ui/worldBossWindow.ts"
       ],
       "files": 19,
-      "lines": 5920,
+      "lines": 5933,
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
+      "prs": ""
+    },
+    {
+      "id": "client/web/bridge",
+      "kind": "Web client",
+      "paths": [
+        "client/web/bridge"
+      ],
+      "files": 18,
+      "lines": 5889,
       "status": "Not checked",
       "checkedAt": "",
       "checkedOn": "",
@@ -8074,6 +8190,66 @@
       ],
       "files": 16,
       "lines": 2803,
+      "status": "No game rules",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
+      "prs": ""
+    },
+    {
+      "id": "server/src/ConnectServer",
+      "kind": "Server list",
+      "paths": [
+        "server/src/ConnectServer"
+      ],
+      "files": 21,
+      "lines": 1759,
+      "status": "No game rules",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
+      "prs": ""
+    },
+    {
+      "id": "server/src/LoginServer",
+      "kind": "Login registry",
+      "paths": [
+        "server/src/LoginServer"
+      ],
+      "files": 1,
+      "lines": 101,
+      "status": "No game rules",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
+      "prs": ""
+    },
+    {
+      "id": "server/src/Pathfinding",
+      "kind": "Path finding",
+      "paths": [
+        "server/src/Pathfinding"
+      ],
+      "files": 28,
+      "lines": 1626,
+      "status": "No game rules",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
+      "prs": ""
+    },
+    {
+      "id": "client/ClientLibrary",
+      "kind": "Client library",
+      "paths": [
+        "client/ClientLibrary"
+      ],
+      "files": 13,
+      "lines": 9013,
       "status": "No game rules",
       "checkedAt": "",
       "checkedOn": "",
