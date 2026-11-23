@@ -8,4 +8,6 @@
   <data name="NotForSaleVi" xml:space="preserve"><value>Nicht im Verkauf (Vietnamesisch)</value></data>
   <data name="Description" xml:space="preserve"><value>Öffentliche Informationen für Spieler, eine Regel pro Zeile. Bis zur Veröffentlichung leer lassen. Keine Passwörter oder privaten Kontodaten eintragen.</value></data>
   <data name="MaximumLength" xml:space="preserve"><value>Höchstens {1} Zeichen eingeben.</value></data>
+  <data name="ClassGuide" xml:space="preserve"><value>Klassenleitfaden mit aktuellen Serverdaten</value></data>
+  <data name="ClassGuideDescription" xml:space="preserve"><value>Zeigt Attribute, Formeln und Fertigkeiten des ausgewählten Servers im Website-Leitfaden an.</value></data>
 </root>

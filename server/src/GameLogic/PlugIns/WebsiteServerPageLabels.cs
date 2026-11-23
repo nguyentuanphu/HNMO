@@ -12,6 +12,12 @@ public static class WebsiteServerPageLabels
 {
     private static readonly ResourceManager Resources = new("HNMO.GameLogic.Properties.WebsiteServerPage", typeof(WebsiteServerPageLabels).Assembly);
 
+    /// <summary>Gets the localized class guide setting.</summary>
+    public static string ClassGuide => Resources.GetString(nameof(ClassGuide), CultureInfo.CurrentUICulture) ?? nameof(ClassGuide);
+
+    /// <summary>Gets the localized class guide setting description.</summary>
+    public static string ClassGuideDescription => Resources.GetString(nameof(ClassGuideDescription), CultureInfo.CurrentUICulture) ?? nameof(ClassGuideDescription);
+
     /// <summary>Gets the localized ClientRulesEn label.</summary>
     public static string ClientRulesEn => Resources.GetString(nameof(ClientRulesEn), CultureInfo.CurrentUICulture) ?? nameof(ClientRulesEn);
 

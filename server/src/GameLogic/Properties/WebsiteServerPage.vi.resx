@@ -8,4 +8,6 @@
   <data name="NotForSaleVi" xml:space="preserve"><value>Không bán (tiếng Việt)</value></data>
   <data name="Description" xml:space="preserve"><value>Nội dung công khai cho người chơi, mỗi quy định một dòng. Để trống nếu chưa công bố. Không nhập mật khẩu hoặc thông tin tài khoản riêng tư vào đây.</value></data>
   <data name="MaximumLength" xml:space="preserve"><value>Chỉ nhập tối đa {1} ký tự.</value></data>
+  <data name="ClassGuide" xml:space="preserve"><value>Hướng dẫn lớp nhân vật từ máy chủ</value></data>
+  <data name="ClassGuideDescription" xml:space="preserve"><value>Hiển thị chỉ số, công thức và kỹ năng của máy chủ đang chọn trong phần hướng dẫn website.</value></data>
 </root>

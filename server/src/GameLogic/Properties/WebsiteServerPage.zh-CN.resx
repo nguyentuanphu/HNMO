@@ -8,4 +8,6 @@
   <data name="NotForSaleVi" xml:space="preserve"><value>不出售的内容（越南语）</value></data>
   <data name="Description" xml:space="preserve"><value>向玩家公开的信息，每行一条规则。尚未公布时请留空。请勿填写密码或私人账户资料。</value></data>
   <data name="MaximumLength" xml:space="preserve"><value>最多输入 {1} 个字符。</value></data>
+  <data name="ClassGuide" xml:space="preserve"><value>实时职业指南</value></data>
+  <data name="ClassGuideDescription" xml:space="preserve"><value>在网站指南中显示所选服务器的职业属性、公式和技能。</value></data>
 </root>

@@ -8,4 +8,6 @@
   <data name="NotForSaleVi" xml:space="preserve"><value>Not for sale (Vietnamese)</value></data>
   <data name="Description" xml:space="preserve"><value>Public player information, one line per rule. Leave empty until you have published your policy. Do not put passwords or private account details here.</value></data>
   <data name="MaximumLength" xml:space="preserve"><value>Use at most {1} characters.</value></data>
+  <data name="ClassGuide" xml:space="preserve"><value>Live class guide</value></data>
+  <data name="ClassGuideDescription" xml:space="preserve"><value>Show class attributes, formulas and skills from the selected server in the website guide.</value></data>
 </root>
