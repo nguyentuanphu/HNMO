@@ -1,7 +1,7 @@
 // Quest window (my_quest_info.rml, T): CashShop / docked exclusion so bottom buttons (#btn_exit,
 // #btn_quest_open, #btn_quest_giveup) are never covered, and locked buttons give clear feedback.
 import { test, expect, type Page } from '@playwright/test';
-import { chatText, clickAt, dismissOnboarding, enterWorld, expectNoPageErrors } from './helpers.js';
+import { chatText, clickAt, dismissOnboarding, ensureLorenciaSafeZone, enterWorld, expectNoPageErrors } from './helpers.js';
 
 const OPEN = { timeout: 60_000 };
 
@@ -29,6 +29,7 @@ test('Quest Window closes CashShop overlay and all tabs + bottom buttons respond
   page.on('pageerror', (error) => errors.push(error.message));
 
   await enterWorld(page, 'test400');
+  await ensureLorenciaSafeZone(page);
   await dismissOnboarding(page);
 
   // Open CashShop (X) first — previously zIndex 45 CashShop stayed open behind/over Quest Window (T).

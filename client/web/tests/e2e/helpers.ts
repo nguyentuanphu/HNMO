@@ -41,6 +41,25 @@ export async function dismissOnboarding(page: Page): Promise<void> {
   await expect(guide).toHaveCount(0);
 }
 
+/** Ensures the hero is standing in Lorencia's safe zone (earlier tests on shared accounts may leave them outside town). */
+export async function ensureLorenciaSafeZone(page: Page): Promise<void> {
+  const isSafe = () => page.evaluate(() => {
+    const g = (window as unknown as {
+      __game: {
+        mapNumber: number | null;
+        world?: { flags: Uint8Array } | null;
+        online?: { hero: { cell: { x: number; y: number }; isWalking: boolean } };
+      };
+    }).__game;
+    const cell = g.online?.hero.cell;
+    if (!g.world || !cell || g.online?.hero.isWalking) return false;
+    return g.mapNumber === 0 && (g.world.flags[cell.y * 256 + cell.x] & 0x01) !== 0;
+  });
+  if (await isSafe()) return;
+  await page.evaluate(() => (window as unknown as { __game: GameView }).__game.online.say('/move lorencia'));
+  await expect.poll(isSafe, { timeout: 90_000 }).toBe(true);
+}
+
 export async function openInventory(page: Page): Promise<void> {
   await page.keyboard.press('i');
   await page.waitForFunction(() => document.querySelector('.rml-my_inventory'), null, { timeout: 90_000 });
