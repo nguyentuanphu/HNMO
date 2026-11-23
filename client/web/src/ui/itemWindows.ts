@@ -5,6 +5,7 @@
 import { translate } from '../i18n.js';
 import { openDocument, prepareDocument } from './rml.js';
 import type { RmlDocument, RmlModel } from './rml.js';
+import { showConfirm } from './gameDialogs.js';
 import { drawItem } from './itemIcons.js';
 import { BAG, VAULT, SHOP, SHOP_STORAGE, TRADE, Equipment, Inventory, NpcWindow, Storage } from '../game/inventory.js';
 import type { Item, ItemGrid } from '../game/inventory.js';
@@ -1176,10 +1177,17 @@ export class ItemWindows {
     this.inventory.sell(slot);
   }
 
-  askMoney(toVault: boolean): void {
+  async askMoney(toVault: boolean): Promise<void> {
     const question = toVault ? 'How much zen to deposit?' : 'How much zen to withdraw?';
-    const text = window.prompt(translate(question) ?? question, '0');
-    const amount = Math.floor(Number(text));
+    const answer = await showConfirm({
+      title: translate('Vault') ?? 'Vault',
+      lines: [translate(question) ?? question],
+      input: { numericOnly: true, maxLength: 10, initialText: '0' },
+      showCancel: true,
+      tag: 'vault-zen-dialog',
+    });
+    if (answer.button !== 'primary') return;
+    const amount = Math.floor(Number(answer.text));
     if (amount > 0) this.inventory.moveMoney(toVault, amount);
   }
 }

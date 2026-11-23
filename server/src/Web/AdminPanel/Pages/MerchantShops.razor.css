@@ -1,6 +1,6 @@
 .shop-list ::deep table { width: 100%; }
 .shop-list ::deep th, .shop-list ::deep td { padding: .65rem; border-bottom: 1px solid var(--bs-border-color, #ddd); vertical-align: middle; }
-.shop-preview { width: 74px; height: 110px; overflow: hidden; pointer-events: none; border-radius: 3px; background: #1d2733; }
-.shop-preview ::deep .mu-item-storage { transform: scale(.17); transform-origin: top left; margin: 0; }
+.shop-preview { width: 118px; height: 220px; overflow: hidden; pointer-events: none; border-radius: 3px; background: #1d2733; }
+.shop-preview ::deep .mu-item-storage { transform: scale(.35); transform-origin: top left; margin: 0; }
 .shop-save-bar { background: var(--bs-tertiary-bg, #f6f8fb); position: sticky; bottom: 0; z-index: 5; }
 .shop-copy { max-width: 700px; }
