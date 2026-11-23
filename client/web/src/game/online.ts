@@ -24,12 +24,13 @@ const RESUME_WINDOW_MS = 2000;   // a correction this soon after the next part o
 const RESUME_WINDOW_UPDATES = 3; // or this few updates (frames) after it, on a machine whose frames take long
 const PING_INTERVAL_MS = 20000;
 
-const Code = { CHAT: 0x00, SERVER_MESSAGE: 0x0d, ADD_PLAYERS: 0x12, ADD_NPCS: 0x13, OUT_OF_SCOPE: 0x14, MOVED: 0x15, MAP_CHANGED: 0x1c, WALKED: 0xd4, PING_REQUEST: 0x71 };
+const Code = { CHAT: 0x00, OBJECT_MESSAGE: 0x01, SERVER_MESSAGE: 0x0d, ADD_PLAYERS: 0x12, ADD_NPCS: 0x13, OUT_OF_SCOPE: 0x14, MOVED: 0x15, MAP_CHANGED: 0x1c, WALKED: 0xd4, PING_REQUEST: 0x71 };
 const MAP_CHANGED_SUB_CODE = 0x0f;
 
 // The fields this file reads of the server's packets (server/src/Network/Packets).
 interface MapChangedPacket { IsMapChange: boolean; MapNumber: number; PositionX: number; PositionY: number; Rotation: number }
 interface ChatMessagePacket { Sender: string; Message: string }
+interface ObjectMessagePacket { ObjectId: number; Message: string }
 interface SlideNoticePacket { Message: string }
 interface NpcData {
   Id: number; TypeNumber: number; CurrentPositionX: number; CurrentPositionY: number;
@@ -120,6 +121,8 @@ export class OnlineWorld {
   private talkWalksLeft = 0;
   /** Told when the hero talks to an NPC (TalkToNpcRequest sent), e.g. which merchant the shop is. */
   onTalk?: (npc: Character) => void;
+  /** Shown as an overhead speech bubble when the server sends ObjectMessage (C1 01). */
+  onObjectMessage?: (character: Character | null, message: string, objectId: number) => void;
   /** Asked before talking to an NPC: true when it handled the talk itself (an event's own NPCs). */
   interceptTalk?: (npc: Character) => boolean;
   /** A character came into view and was added to the map (its spawn effects). */
@@ -149,6 +152,12 @@ export class OnlineWorld {
     try {
       if (code === Code.MAP_CHANGED && bytes[0] === 0xc3 && subCode === MAP_CHANGED_SUB_CODE) return this.mapChanged(read<MapChangedPacket>('ServerToClient', 'MapChanged', bytes));
       if (code === Code.CHAT && bytes[0] === 0xc1) { const m = read<ChatMessagePacket>('ServerToClient', 'ChatMessage', bytes); const [kind, text] = chatKind(m.Message); return this.onMessage?.(text, kind, m.Sender); }
+      if (code === Code.OBJECT_MESSAGE && bytes[0] === 0xc1) {
+        const m = read<ObjectMessagePacket>('ServerToClient', 'ObjectMessage', bytes);
+        const id = m.ObjectId & ID_MASK;
+        const character = id === this.playerId ? this.hero : this.characters.get(id) ?? null;
+        return this.onObjectMessage?.(character, m.Message, id);
+      }
       // The client reads every notice with the layout of PRECEIVE_NOTICE: type, count, delay, color, speed, text (ReceiveNotice).
       if (code === Code.SERVER_MESSAGE && bytes[0] === 0xc1 && bytes.length > 13) return this.onMessage?.(read<SlideNoticePacket>('ServerToClient', 'SlideNotice', bytes).Message, 'system');
       if (code === Code.ADD_NPCS && bytes[0] === 0xc2) this.addNpcs(read<AddNpcsPacket>('ServerToClient', 'AddNpcsToScope', bytes));

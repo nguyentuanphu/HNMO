@@ -754,15 +754,28 @@ function stepThumbstickWalk(): void {
 // As the desktop's name window (CNameWindow::RefreshNameTags): only the player or NPC under the pointer
 // has its name over its head (not in Chaos Castle); the pointer is looked at once a frame.
 const labelElements = new Map<Character, HTMLSpanElement>();
+const speechBubbles = new Map<Character, { until: number; element: HTMLSpanElement }>();
 let labelPointer: MouseEvent | null = null;
 ui.canvas.addEventListener('pointermove', (event) => { labelPointer = event; }, { passive: true });
 ui.canvas.addEventListener('pointerleave', () => { labelPointer = null; });
+
+function showSpeechBubble(character: Character, message: string, durationMs = 5000): void {
+  const existing = speechBubbles.get(character);
+  const element = existing?.element ?? document.createElement('span');
+  if (!existing) {
+    element.className = 'label speech-bubble';
+    ui.labels.append(element);
+  }
+  element.textContent = message;
+  speechBubbles.set(character, { until: performance.now() + durationMs, element });
+}
 
 const labelsShown = new Set<Character>();
 function updateLabels(): void {
   const visible = labelsShown;
   visible.clear();
   const hero = state.hero, world = state.world;
+  const now = performance.now();
   const pointed = labelPointer && eventOfMap(state.mapNumber ?? null) !== 'chaosCastle' ? pickCharacter(labelPointer, ['npc']) : null;
   if (state.online && hero && world) {
     const rect = canvasRect();
@@ -784,6 +797,20 @@ function updateLabels(): void {
       decorateLabel(character, element);
       element.style.transform = `translate(${(point.x + 1) / 2 * rect.width}px, ${(1 - point.y) / 2 * rect.height}px) translate(-50%, -100%)`;
       visible.add(character);
+    }
+    for (const [character, bubble] of speechBubbles) {
+      const inWorld = character === hero || state.online.characters.has(character.id);
+      if (now >= bubble.until || !inWorld) {
+        bubble.element.remove();
+        speechBubbles.delete(character);
+        continue;
+      }
+      const dx = character.cell.x - hero.cell.x, dy = character.cell.y - hero.cell.y;
+      if (Math.hypot(dx, dy) > LABEL_RANGE_CELLS) { bubble.element.style.display = 'none'; continue; }
+      const point = toScene(character.position.x, character.position.y, sampleHeight(world.heights, character.position.x, character.position.y) + 245).project(camera);
+      if (point.z > 1) { bubble.element.style.display = 'none'; continue; }
+      bubble.element.style.display = '';
+      bubble.element.style.transform = `translate(${(point.x + 1) / 2 * rect.width}px, ${(1 - point.y) / 2 * rect.height}px) translate(-50%, -100%)`;
     }
   }
   for (const [character, element] of labelElements) {
@@ -1367,6 +1394,11 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   if (state.mapNumber !== null) { const map = state.mapNumber; void prewarmMapMonsters(warmer, map, () => state.mapNumber === map); }
   // Players coming into view bring their buffs; leaving it forgets them.
   online.onEffects = (id, effects) => { if (effects) buffs.replace(id, effects); else buffs.forget(id); };
+  online.onObjectMessage = (character, message) => {
+    if (!message) return;
+    if (character) showSpeechBubble(character, message);
+    else chat.add(message, 'system');
+  };
   const itemWindows = state.itemWindows;
   const num = (name: string) => (typeof info[name] === 'number' ? info[name] as number : 0);
   setPlayerAnimationSpeeds(num('AttackSpeed'), num('MagicSpeed'));
