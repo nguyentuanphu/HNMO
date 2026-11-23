@@ -1639,6 +1639,22 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   // The chaos machine and the other mix NPCs (CMixInventory).
   state.chaosMachine = new ChaosMachine({ connection, inventory, itemWindows, message: (text) => chat.add(text, 'system'),
     confirm: (text) => confirmInGame(text), level: () => stats.level, play: (id) => sounds.audio.play(id) });
+  // Golden Archer (NPC 236): EventChipRegistrationResult (C1 94).
+  let goldenArcherOpen = false;
+  connection.onPacket((bytes) => {
+    if (bytes[0] !== 0xc1 || bytes[2] !== 0x94 || goldenArcherOpen) return;
+    const p = read<{ Result: number; RegisteredCount: number; RemainingInventoryCount: number }>('ServerToClient', 'EventChipRegistrationResult', bytes);
+    goldenArcherOpen = true;
+    void confirmInGame(`Golden Archer\nRegistered: ${p.RegisteredCount} | In inventory: ${p.RemainingInventoryCount}\n\nRegister an item?`).then((ok) => {
+      goldenArcherOpen = false;
+      if (ok) {
+        connection.send('ClientToServer', 'EventChipRegistrationRequest', { Type: 0, ItemIndex: 0 });
+      } else {
+        connection.send('ClientToServer', 'EventChipExitDialog', {});
+        connection.send('ClientToServer', 'CloseNpcRequest', {});
+      }
+    });
+  });
   // The personal store: the own store (S, /personalshop), others' stores (/purchase), the titles over the heads.
   state.personalShop = new PersonalShop({ connection, inventory, itemWindows, message: (text) => chat.add(text, 'system'), confirm: confirmInGame, level: () => stats.level, heroName: character.name, heroId: () => online.playerId, characters: () => online.characters, hero: () => online.hero, mapNumber: () => state.mapNumber ?? 0, camera, canvas: ui.canvas, root, tooltipCharacter: () => ({ classIndex: character.classIndex, level: stats.level, strength: stats.strength, agility: stats.agility, vitality: stats.vitality, energy: stats.energy, leadership: stats.leadership, maxLife: stats.maxLife, maxMana: stats.maxMana }) });
   earlyPackets.forEach((bytes) => state.personalShop?.handle(bytes));

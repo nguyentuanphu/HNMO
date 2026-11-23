@@ -15,6 +15,7 @@ import type { Connection } from '../net/connection.js';
 import { ItemWindow, emptyCells, formatGold } from './itemWindows.js';
 import { prepareDocument } from './rml.js';
 import { showMenu } from './gameDialogs.js';
+import { confirmInGame, messageInGame } from './confirmDialog.js';
 import type { ItemWindowModel, ItemWindows, PickedItem } from './itemWindows.js';
 
 /** CMixInventory::MIX_STATE. */
@@ -64,10 +65,23 @@ const SHOWS_SUCCESS: MixType[] = [...GOBLIN, MixType.OSBOURNE, MixType.ELPIS, Mi
 const SHOWS_ZEN: MixType[] = [...GOBLIN, MixType.CASTLE_SENIOR, MixType.TRAINER, MixType.JERRIDON, MixType.EXTRACT_SEED, MixType.SEED_SPHERE,
   MixType.ATTACH_SOCKET, MixType.DETACH_SOCKET];
 
-/** The NPC windows (NpcWindowResponse) that open the mix window the same way (ReceiveTalk) and their mix types. */
+/** The NPC windows (NpcWindowResponse) that open the mix window directly (ReceiveTalk) and their mix types. */
 const MIX_NPC_WINDOWS: Partial<Record<number, MixType>> = {
-  [NpcWindow.CHAOS_MACHINE]: MixType.GOBLIN_NORMAL, 0x12: MixType.OSBOURNE, 0x13: MixType.JERRIDON, 0x15: MixType.CHAOS_CARD, 0x16: MixType.CHERRYBLOSSOM,
+  [NpcWindow.CHAOS_MACHINE]: MixType.GOBLIN_NORMAL,
+  0x07: MixType.TRAINER,
+  0x11: MixType.ELPIS,
+  0x12: MixType.OSBOURNE,
+  0x13: MixType.JERRIDON,
+  0x15: MixType.CHAOS_CARD,
+  0x16: MixType.CHERRYBLOSSOM,
 };
+
+const NPC_WINDOW_LAHAP = 0x09;
+const NPC_WINDOW_SEED_MASTER = 0x17;
+const NPC_WINDOW_SEED_RESEARCHER = 0x18;
+const NPC_WINDOW_STAT_REINIT = 0x19;
+const NPC_WINDOW_JULIA = 0x25;
+const NPC_WINDOW_LUCKY_ITEM = 0x26;
 
 // A line of the window's lists (MixInventoryRmlModel::MixLine).
 interface MixLine { text: string; kind: string; row: number; align_left: boolean; fit: number }
@@ -299,9 +313,13 @@ export class ChaosMachine {
       return true;
     };
     inventory.onChange((what) => {
-      if (what !== 'window') return;
-      const type = inventory.openWindow === null ? undefined : MIX_NPC_WINDOWS[inventory.openWindow];
-      if (type !== undefined && !this.window.isOpen) void this.talk(inventory.openWindow!, type);
+      if (what !== 'window' || inventory.openWindow === null) return;
+      const win = inventory.openWindow;
+      const type = MIX_NPC_WINDOWS[win];
+      if (type !== undefined && !this.window.isOpen) { void this.talk(win, type); return; }
+      if (win === NPC_WINDOW_SEED_MASTER || win === NPC_WINDOW_SEED_RESEARCHER || win === NPC_WINDOW_LAHAP || win === NPC_WINDOW_JULIA || win === NPC_WINDOW_STAT_REINIT || win === NPC_WINDOW_LUCKY_ITEM) {
+        void this.talkExtraNpcWindow(win);
+      }
     });
     connection.onPacket((bytes) => this.handle(bytes));
   }
@@ -310,8 +328,66 @@ export class ChaosMachine {
 
   // ReceiveTalk: the refinery asks first; the Chaos Goblin's window opens with the method menu.
   private async talk(npcWindow: number, type: MixType): Promise<void> {
-    if (npcWindow === 0x12 && !(await this.options.confirm(`${TEXT.warning}\n\n${TEXT.refinery}`))) return;
+    if (npcWindow === 0x12 && !(await this.options.confirm(`${TEXT.warning}\n\n${TEXT.refinery}`))) {
+      this.closeNpcDialog();
+      return;
+    }
     await this.open(type);
+  }
+
+  private closeNpcDialog(): void {
+    this.options.connection.send('ClientToServer', 'CloseNpcRequest', {});
+    this.options.inventory.openWindow = null;
+  }
+
+  private async talkExtraNpcWindow(npcWindow: number): Promise<void> {
+    const { connection } = this.options;
+    if (npcWindow === NPC_WINDOW_SEED_MASTER) {
+      const choice = await chooseInGame('Seed Master', [
+        { label: TEXT.extraction, lines: ['Extract a seed from an item'] },
+        { label: TEXT.assembly, lines: ['Combine a seed and a sphere'] },
+      ], TEXT.close);
+      if (choice === null) { this.closeNpcDialog(); return; }
+      await this.open(choice === 0 ? MixType.EXTRACT_SEED : MixType.SEED_SPHERE);
+      return;
+    }
+    if (npcWindow === NPC_WINDOW_SEED_RESEARCHER) {
+      const choice = await chooseInGame('Seed Researcher', [
+        { label: TEXT.application, lines: ['Mount a seed sphere onto a socket'] },
+        { label: TEXT.destruction, lines: ['Destroy a mounted seed sphere'] },
+      ], TEXT.close);
+      if (choice === null) { this.closeNpcDialog(); return; }
+      await this.open(choice === 0 ? MixType.ATTACH_SOCKET : MixType.DETACH_SOCKET);
+      return;
+    }
+    if (npcWindow === NPC_WINDOW_LAHAP) {
+      const choice = await chooseInGame('Lahap', [
+        { label: 'Compress Jewel of Bless (x10)', lines: [] },
+        { label: 'Compress Jewel of Bless (x20)', lines: [] },
+        { label: 'Compress Jewel of Bless (x30)', lines: [] },
+        { label: 'Compress Jewel of Soul (x10)', lines: [] },
+        { label: 'Compress Jewel of Soul (x20)', lines: [] },
+        { label: 'Compress Jewel of Soul (x30)', lines: [] },
+      ], TEXT.close);
+      if (choice !== null) {
+        const item = choice < 3 ? 0 : 1;
+        const size = choice % 3;
+        connection.send('ClientToServer', 'LahapJewelMixRequest', { Operation: 0, Item: item, MixingStackSize: size, UnmixingSourceSlot: 0 });
+      }
+      this.closeNpcDialog();
+      return;
+    }
+    if (npcWindow === NPC_WINDOW_JULIA) {
+      const warp = await confirmInGame('Market Union Member Julia\n\nWarp between Lorencia and Loren Market?');
+      if (warp) connection.send('ClientToServer', 'EnterMarketPlaceRequest', {});
+      this.closeNpcDialog();
+      return;
+    }
+    if (npcWindow === NPC_WINDOW_STAT_REINIT || npcWindow === NPC_WINDOW_LUCKY_ITEM) {
+      const title = npcWindow === NPC_WINDOW_STAT_REINIT ? 'Stat Re-Initializer' : 'Lucky Item Combination';
+      this.closeNpcDialog();
+      await messageInGame(`${title} is not available in the web client yet.`);
+    }
   }
 
   /** Shows the mix window of a mix type next to the inventory (OpeningProcess). */
