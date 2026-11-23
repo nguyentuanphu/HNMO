@@ -316,7 +316,11 @@ public class DefaultDropGenerator : IDropGenerator
         return character.GetQuestDropItemGroups();
     }
 
-    private static bool IsGroupRelevant(MonsterDefinition monsterDefinition, DropItemGroup group)
+    /// <summary>Checks a configured drop group's monster and monster-level restrictions.</summary>
+    /// <param name="monsterDefinition">The monster definition.</param>
+    /// <param name="group">The candidate group.</param>
+    /// <returns>Whether the configured group can apply.</returns>
+    public static bool IsGroupRelevant(MonsterDefinition monsterDefinition, DropItemGroup group)
     {
         if (group.MinimumMonsterLevel.HasValue && monsterDefinition[Stats.Level] < group.MinimumMonsterLevel)
         {
@@ -339,7 +343,11 @@ public class DefaultDropGenerator : IDropGenerator
     private static bool IsValidOptionLevelDrop(byte value)
         => value is >= MinItemOptionLevelDrop and <= MaxItemOptionLevelDrop;
 
-    private static bool CanDropAtMonsterLevel(ItemDefinition itemDefinition, int monsterLevel)
+    /// <summary>Checks a configured item's eligible monster level interval.</summary>
+    /// <param name="itemDefinition">The configured item.</param>
+    /// <param name="monsterLevel">The monster's level.</param>
+    /// <returns>Whether the level is inside the configured item interval.</returns>
+    public static bool CanDropAtMonsterLevel(ItemDefinition itemDefinition, int monsterLevel)
     {
         if (itemDefinition.DropLevel > monsterLevel)
         {
