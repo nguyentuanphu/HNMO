@@ -40,8 +40,12 @@ test('a Panda picks up zen next to the hero', async ({ page }) => {
     }
     // A Panda from the game master's command, picked up and put in the helper slot (8).
     await game(page, (g) => g.online.say('/item 13 80'));
-    await expect.poll(() => game(page, (g) => [...g.ground.drops.values()].some((d) => d.item?.group === 13 && d.item.number === 80)), OPEN).toBe(true);
-    await game(page, (g) => g.ground.pickUp([...g.ground.drops.values()].find((d) => d.item?.group === 13 && d.item.number === 80)));
+    await expect.poll(() => game(page, (g) => {
+      const drop = [...g.ground.drops.values()].find((d) => d.item?.group === 13 && d.item.number === 80);
+      if (!drop) return false;
+      g.ground.pickUp(drop);
+      return true;
+    }), OPEN).toBe(true);
     await expect.poll(() => game(page, (g) => [...g.inventory.items].some(([slot, it]) => slot >= 12 && it.group === 13 && it.number === 80)), OPEN).toBe(true);
     await game(page, (g) => { const slot = [...g.inventory.items].find(([s, it]) => s >= 12 && it.group === 13 && it.number === 80)![0]; g.inventory.move(0, slot, 0, 8); });
     await expect.poll(() => game(page, isPanda), OPEN).toBe(true);
