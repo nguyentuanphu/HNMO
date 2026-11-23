@@ -123,18 +123,24 @@ test.describe('monster looks', () => {
       const rows = await page.evaluate(`(async () => {
         (await import('/js/dataRoot.js')).setSeason(${JSON.stringify(season)});
         const viewer = await import('/js/dev/monsterViewer.js');
+        const { describeMonster } = await import('/js/game/monsterData.js');
         await viewer.ready();
         const rows = [];
-        for (const number of ${JSON.stringify(numbers)}) { const { row, character } = await viewer.auditOne(number); character?.release(); rows.push(row); }
+        for (const number of ${JSON.stringify(numbers)}) {
+          const { row, character } = await viewer.auditOne(number);
+          character?.release();
+          rows.push({ ...row, catalogModel: describeMonster(number).model });
+        }
         return rows;
-      })()`) as AuditRow[];
+      })()`) as (AuditRow & { catalogModel: string })[];
       for (const row of rows) {
         // Every number has an entry and a model (no "noEntry" or "noModel" ghost in either season).
         expect(row.unknown === null || row.unknown === 'missingFile', `${season} ${row.number} ${row.name}: ${row.unknown}`).toBe(true);
-        expect(row.model, `${row.number}`).toMatch(/^(MONSTER_)?MODEL_S9_/);
+        expect(row.catalogModel, `${row.number}`).toMatch(/^(MONSTER_)?MODEL_S9_/);
         expect(row.error, `${row.number}`).toBeNull();
         if (!seasons.s9) continue; // without the Season 9 pack the files are missing: the ghost, for a reason
         // With the pack (both seasons: the files are Season 9's own, whichever season plays): its body, textured.
+        expect(row.model, `${row.number}`).toMatch(/^(MONSTER_)?MODEL_S9_/);
         expect(row.unknown, `${season} ${row.number} ${row.name}`).toBeNull();
         expect(row.playerShaped, `${row.number}`).toBe(false);
         expect(row.visibleMeshes, `${season} ${row.number} ${row.name}`).toBeGreaterThan(0);
