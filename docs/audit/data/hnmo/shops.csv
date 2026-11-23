@@ -39,6 +39,38 @@
 231,Thompson the Merchant,29,4,15,Arrows,2,255,0,0,0,0
 231,Thompson the Merchant,32,14,10,Town Portal Scroll,0,1,0,0,0,0
 231,Thompson the Merchant,33,13,29,Armor of Guardsman,0,1,0,0,0,0
+239,Arena Guard,0,14,0,Apple,0,1,0,0,0,0
+239,Arena Guard,1,14,1,Small Healing Potion,0,1,0,0,0,0
+239,Arena Guard,2,14,2,Medium Healing Potion,0,1,0,0,0,0
+239,Arena Guard,3,14,3,Large Healing Potion,0,1,0,0,0,0
+239,Arena Guard,4,14,4,Small Mana Potion,0,1,0,0,0,0
+239,Arena Guard,5,14,5,Medium Mana Potion,0,1,0,0,0,0
+239,Arena Guard,6,14,6,Large Mana Potion,0,1,0,0,0,0
+239,Arena Guard,7,14,8,Antidote,0,1,0,0,0,0
+239,Arena Guard,8,14,0,Apple,0,3,0,0,0,0
+239,Arena Guard,9,14,1,Small Healing Potion,0,3,0,0,0,0
+239,Arena Guard,10,14,2,Medium Healing Potion,0,3,0,0,0,0
+239,Arena Guard,11,14,3,Large Healing Potion,0,3,0,0,0,0
+239,Arena Guard,12,14,4,Small Mana Potion,0,3,0,0,0,0
+239,Arena Guard,13,14,5,Medium Mana Potion,0,3,0,0,0,0
+239,Arena Guard,14,14,6,Large Mana Potion,0,3,0,0,0,0
+239,Arena Guard,15,14,8,Antidote,0,3,0,0,0,0
+239,Arena Guard,16,14,0,Apple,1,1,0,0,0,0
+239,Arena Guard,17,14,1,Small Healing Potion,1,1,0,0,0,0
+239,Arena Guard,18,14,2,Medium Healing Potion,1,1,0,0,0,0
+239,Arena Guard,19,14,3,Large Healing Potion,1,1,0,0,0,0
+239,Arena Guard,20,14,0,Apple,1,3,0,0,0,0
+239,Arena Guard,21,14,1,Small Healing Potion,1,3,0,0,0,0
+239,Arena Guard,22,14,2,Medium Healing Potion,1,3,0,0,0,0
+239,Arena Guard,23,14,3,Large Healing Potion,1,3,0,0,0,0
+239,Arena Guard,24,4,7,Bolt,0,255,0,0,0,0
+239,Arena Guard,25,4,7,Bolt,1,255,0,0,0,0
+239,Arena Guard,26,4,7,Bolt,2,255,0,0,0,0
+239,Arena Guard,27,4,15,Arrows,0,255,0,0,0,0
+239,Arena Guard,28,4,15,Arrows,1,255,0,0,0,0
+239,Arena Guard,29,4,15,Arrows,2,255,0,0,0,0
+239,Arena Guard,32,14,10,Town Portal Scroll,0,1,0,0,0,0
+239,Arena Guard,33,13,29,Armor of Guardsman,0,1,0,0,0,0
 242,Elf Lala,0,14,0,Apple,0,1,0,0,0,0
 242,Elf Lala,1,14,1,Small Healing Potion,0,1,0,0,0,0
 242,Elf Lala,2,14,2,Medium Healing Potion,0,1,0,0,0,0
@@ -522,6 +554,11 @@
 417,Marce,3,4,14,Aquagold Crossbow,3,60,1,1,3,0
 417,Marce,5,4,16,Saint Crossbow,3,72,1,1,3,0
 417,Marce,7,5,6,Staff of Resurrection,3,70,0,1,3,0
+492,Moss The Merchant,0,13,71,Sword/Mace/Spear,0,255,0,0,0,0
+492,Moss The Merchant,2,13,72,Staff,0,255,0,0,0,0
+492,Moss The Merchant,4,13,73,Bow/Crossbow,0,255,0,0,0,0
+492,Moss The Merchant,6,13,74,Scepter,0,255,0,0,0,0
+492,Moss The Merchant,24,13,75,Stick,0,255,0,0,0,0
 545,Christine the General Goods Merchant,0,14,0,Apple,0,1,0,0,0,0
 545,Christine the General Goods Merchant,1,14,1,Small Healing Potion,0,1,0,0,0,0
 545,Christine the General Goods Merchant,2,14,2,Medium Healing Potion,0,1,0,0,0,0

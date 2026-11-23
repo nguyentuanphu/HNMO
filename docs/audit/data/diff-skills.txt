@@ -1,7 +1,15 @@
 # Skill Differences: HNMO vs Season 6 & Season 9 SkillList.xml
 # Counts: HNMO=316, S6=403, S9=403
 
-## Shared Skills with Differing Rules/Stats
+## Shared Skills where HNMO differs from Season 6 suite
+13 (Cometfall): ReqEne:436->raw=150(folded=500)
+14 (Inferno): ReqEne:578->raw=200(folded=724)
+40 (Nova): Mana:15->180
+382 (Blast Strengthener): Dist:6->3
+482 (Power Slash Streng): ReqEne:->raw=100(folded=20)
+484 (Blast Strengthener): Dist:6->3
+
+## Shared Skills where HNMO differs from Season 9 suite
 13 (Cometfall): ReqEne:436->raw=150(folded=500)
 14 (Inferno): ReqEne:578->raw=200(folded=724)
 40 (Nova): Mana:15->180

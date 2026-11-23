@@ -1,14 +1,10 @@
 # Item Table Differences: HNMO vs Season 6 & Season 9 Server Suites
-# Counts: HNMO=817, S6=1003, S9=1260
+# Counts: HNMO=848, S6=0, S9=1260
 
 ## Shared items where HNMO differs from Season 6 suite
-0-19 (Divine Sword of Archangel): Drop:0->1
+
+## Shared items where HNMO differs from Season 9 suite
 0-35 (Phoenix Soul Star): Drop:0->1
-2-18 (Stryker Scepter): Drop:0->1
-3-11 (Beuroba): Drop:0->1
-4-6 (Chaos Nature Bow): Drop:0->1
-4-18 (Divine Crossbow of Archangel): Drop:0->1
-4-24 (Air Lyn Bow): Drop:0->1
 5-0 (Skull Staff): Dur:20->0
 5-1 (Angelic Staff): Dur:38->0
 5-2 (Serpent Staff): Dur:50->0
@@ -16,10 +12,10 @@
 5-4 (Gorgon Staff): Dur:65->0
 5-5 (Legendary Staff): Dur:66->0
 5-6 (Staff of Resurrection): Dur:70->0
-5-7 (Chaos Lightning Staff): Dur:70->0, Drop:0->1
+5-7 (Chaos Lightning Staff): Dur:70->0
 5-8 (Staff of Destruction): Dur:85->0
 5-9 (Dragon Soul Staff): Dur:91->0
-5-10 (Divine Staff of Archangel): Dur:182->0, Drop:0->1
+5-10 (Divine Staff of Archangel): Dur:182->0
 5-11 (Staff of Kundun): Dur:95->0
 5-12 (Grand Viper Staff): Dur:100->0
 5-13 (Platina Staff): Dur:78->0
@@ -35,9 +31,12 @@
 5-23 (Book of Lagle): Dur:50->0
 5-30 (Deadly Staff): Dur:91->0
 5-31 (Imperial Staff): Dur:182->0
-5-33 (Chromatic Staff): Dur:78->0, Drop:0->1
-5-34 (Raven Stick): Dur:98->0, Drop:0->1
-5-36 (Divine Stick of Archangel): Dur:182->0, Drop:0->1
+5-32 (Summon Spirit Stick): Dur:130->0
+5-33 (Chromatic Staff): Dur:78->0
+5-34 (Raven Stick): Dur:98->0
+5-35 (Miracle Staff): Dur:80->0
+5-36 (Divine Stick of Archangel): Dur:182->0
+5-37 (Spite Staff): Dur:110->0
 12-7 (Orb of Twisting Slash): Dur:1->0
 12-8 (Orb of Healing): Dur:1->0
 12-9 (Orb of Greater Defense): Dur:1->0
@@ -66,6 +65,7 @@
 12-46 (Crystal of Recovery): Dur:1->0
 12-47 (Crystal of Flame Strike): Dur:1->0
 12-48 (Scroll of Chaotic Diseier): Dur:1->0
+12-49 (Cape of Fighter): DropLevel:180->150
 12-60 (Seed (Fire)): Dur:1->0
 12-61 (Seed (Water)): Dur:1->0
 12-62 (Seed (Ice)): Dur:1->0
@@ -75,7 +75,7 @@
 12-70 (Sphere (Mono)): Dur:1->0, Drop:1->0
 12-71 (Sphere (Di)): Dur:1->0, Drop:1->0
 12-72 (Sphere (Tri)): Dur:1->0, Drop:1->0
-12-73 (Sphere (4)): DropLevel:0->142, Dur:1->0
+12-73 (Sphere (4)): DropLevel:0->132, Dur:1->0
 12-74 (Sphere (5)): DropLevel:0->152, Dur:1->0
 12-100 (Seed Sphere (Fire) (1)): DropLevel:0->1, Dur:1->0
 12-101 (Seed Sphere (Water) (1)): DropLevel:0->1, Dur:1->0
@@ -140,7 +140,7 @@
 13-27 (Pendant of Water): DropLevel:46->0
 13-28 (Pendant of Ability): DropLevel:50->0
 13-29 (Armor of Guardsman): Dur:1->0
-13-30 (Cape of Lord): DropLevel:180->0
+13-30 (Cape of Lord): DropLevel:180->0, ReqLvl:180->150
 13-31 (Spirit): Dur:1->0
 13-32 (Splinter of Armor): Dur:20->1
 13-33 (Bless of Guardian): Dur:20->1
@@ -158,7 +158,11 @@
 13-51 (Illusion Sorcerer Covenant): Size:1x2->2x2
 13-52 (Flame of Condor): DropLevel:120->0, Dur:1->0
 13-53 (Feather of Condor): DropLevel:120->0, Dur:1->0
-13-54 (Reset Fruit (Strength)): Dur:100->0
+13-54 (Reset Fruit (Strength)): Dur:100->10
+13-55 (Reset Fruit (Agility)): Dur:100->10
+13-56 (Reset Fruit (Vitality)): Dur:100->10
+13-57 (Reset Fruit (Energy)): Dur:100->10
+13-58 (Reset Fruit (Command)): Dur:100->10
 13-62 (Seal of Healing): Dur:1->0
 13-63 (Seal of Divinity): Dur:1->0
 13-64 (Demon): DropLevel:1->0
@@ -181,7 +185,6 @@
 13-113 (Ruby Necklace): Dur:255->0
 13-114 (Emerald Necklace): Dur:255->0
 13-115 (Sapphire Necklace): Dur:255->0
-13-121 (Open Access Ticket to Chaos Castle): Dur:10->0
 13-122 (Skeleton Transformation Ring): DropLevel:1->0, ReqLvl:->1
 13-123 (Pet Skeleton): DropLevel:1->0
 13-125 (Doppelganger Free Ticket): Dur:1->10
@@ -213,9 +216,9 @@
 14-17 (Devil's Eye): DropLevel:0->1, Dur:1->0
 14-18 (Devil's Key): DropLevel:0->1, Dur:1->0
 14-19 (Devil's Invitation): Dur:1->0
-14-21 (Rena): Dur:1->0
+14-21 (Rena): Dur:1->0, Drop:0->1
 14-22 (Jewel of Creation): DropLevel:72->78, Dur:1->0, Drop:0->1
-14-23 (Scroll of Emperor;Ring of Honor): Dur:1->0, Drop:0->1
+14-23 (Scroll of Emperor;Ring of Honor): Dur:1->0
 14-24 (Broken Sword;Dark Stone): Dur:1->0
 14-25 (Tear of Elf): Dur:1->0
 14-26 (Soul Shard of Wizard): Dur:1->0
@@ -303,6 +306,18 @@
 14-162 (Magic Backpack): Dur:1->0
 14-163 (Vault Expansion Certificate): Dur:1->0
 14-169 (Rage Fighter Character Card): Dur:1->0
+14-191 (Sonic Combination Note): Dur:1->0
+14-192 (Cyclone Combination Note): Dur:1->0
+14-193 (Blast Combination Note): Dur:1->0
+14-194 (Magma Combination Note): Dur:1->0
+14-195 (Horn Combination Note): Dur:1->0
+14-196 (Angelic Combination Note): Dur:1->0
+14-197 (Devil Cross Combination Note): Dur:1->0
+14-198 (Miracle Combination Note): Dur:1->0
+14-199 (Spite Combination Note): Dur:1->0
+14-200 (Asura Combination Note): Dur:1->0
+14-201 (Thunder Combination Note): Dur:1->0
+14-202 (Soul Combination Note): Dur:1->0
 15-0 (Scroll of Poison): Dur:1->0
 15-1 (Scroll of Meteorite): Dur:1->0
 15-2 (Scroll of Lighting): Dur:1->0
@@ -341,127 +356,685 @@
 15-36 (Increase Block Parchment): DropLevel:70->40, Dur:1->0
 
 ## Shared items where Season 9 suite differs from Season 6 suite
-0-19 (Divine Sword of Archangel): dmgMin:120->220, dmgMax:130->230
-0-39 (Lighting Sword-J): attackSpeed:30->35
-0-40 (Sacred Glove-J): attackSpeed:25->30, reqStr:0->85, reqDex:0->35
-2-13 (Divine Scepter of Archangel): dmgMin:120->200, dmgMax:143->223
-2-21 (Master Scepter-J): attackSpeed:45->50
-4-18 (Divine Crossbow of Archangel): dmgMin:144->224, dmgMax:166->246
-4-27 (Silver Bow-J): attackSpeed:40->45
-5-10 (Divine Staff of Archangel): dmgMin:53->153, dmgMax:55->165
-5-32 (Summon Spirit Stick): dropLevel:130->149, dmgMax:64->61, reqLevel:0->400, reqStr:45->56, reqDex:15->14
-5-38 (Legendary Staff-J): attackSpeed:25->30
-5-39 (Red Wing Stick-J): attackSpeed:25->30
-5-40 (Book of Neil-J): attackSpeed:25->30
-7-53 (Succubus Helm): dropLevel:118->143, durability:86->90, reqLevel:0->400, reqStr:41->56, reqEne:0->157
-8-53 (Succubus Armor): dropLevel:134->148, durability:86->90, reqLevel:0->400, reqStr:41->56, reqEne:0->157
-9-53 (Succubus Pants): dropLevel:126->145, durability:86->90, reqLevel:0->400, reqStr:41->56, reqEne:0->157
-10-53 (Succubus Gloves): dropLevel:99->142, durability:86->90, attackSpeed:7->6, reqLevel:0->400, reqStr:41->56, reqEne:0->157
-11-53 (Succubus Boots): dropLevel:107->140, durability:86->90, reqLevel:0->400, reqStr:41->56, reqEne:0->157
-12-49 (Cape of Fighter): dropLevel:180->150
-12-73 (Sphere (Tetra)): dropLevel:142->132
-13-30 (Cape of Lord): reqLevel:180->150
-13-54 (Reset Fruit Strength): durability:0->10
-13-55 (Reset Fruit Quickness): durability:100->10
-13-56 (Reset Fruit Health): durability:100->10
-13-57 (Reset Fruit Energy): durability:100->10
-13-58 (Reset Fruit Control): durability:100->10
-13-106 (Pet Unicorn): sellNpc:1->0
-13-121 (Access Ticket to Chaos Castle): durability:0->10
-14-194 (Magma Combination Note): dropLevel:25->0
-14-195 (Horn Combination Note): dropLevel:25->0
-14-196 (Angelic Combination Note): dropLevel:25->0
-14-197 (Devil Cross Combination Note): dropLevel:25->0
-14-198 (Miracle Combination Note): dropLevel:25->0
-14-199 (Spite Combination Note): dropLevel:25->0
-14-200 (Asura Combination Note): dropLevel:25->0
-14-201 (Thunder Combination Note): dropLevel:25->0
-14-202 (Soul Combination Note): dropLevel:25->0
-14-206 (Lackluster Box): dropLevel:25->0, sellNpc:2->0, storable:1->0
-14-207 (Luxurious Box): dropLevel:25->0, sellNpc:2->0, storable:1->0
-14-208 (Exciting Box): dropLevel:25->0, sellNpc:2->0, storable:1->0
-14-209 (Tradeable Seal): dropLevel:25->0
-14-210 (Summon Scroll (Lv1)): dropLevel:25->32
-14-211 (Summon Scroll (Lv2)): dropLevel:25->32
-14-212 (Summon Scroll (Lv3)): dropLevel:25->32
-14-213 (Summon Scroll (Lv4)): dropLevel:25->32
-14-215 (Card Piece): dropLevel:25->0, tradable:1->0
-14-216 (Card Deck): dropLevel:25->0, tradable:1->0
-14-217 (Titan's Anger): dropLevel:25->0
-14-218 (Tantalose's Punishment): dropLevel:25->0
-14-219 (Erohim's Nightmare): dropLevel:25->0
-14-220 (Hell Maine's Insanity): dropLevel:25->0
-14-221 (Kundun's Greed): dropLevel:25->0
-14-222 (Unique Accessory Box): dropLevel:25->0
-14-223 (Cursed Castle Water): dropLevel:25->0
-14-224 (Bless of Light (Greater)): dropLevel:25->0
-14-225 (Scroll Master of Defense): dropLevel:25->0, width:1->2, height:1->2
-14-226 (Scroll Master of Wizardry): dropLevel:25->0, width:1->2, height:1->2
-14-227 (Scroll Master of Health): dropLevel:25->0, width:1->2, height:1->2
-14-228 (Scroll Master of Mana): dropLevel:25->0, width:1->2, height:1->2
-14-229 (Scroll Master of Wrath): dropLevel:25->0, width:1->2, height:1->2
-14-230 (Scroll Master of Recovery): dropLevel:25->0, width:1->2, height:1->2
-14-231 (Scroll Master of Battle): dropLevel:25->0, width:1->2, height:1->2
-14-232 (Scroll Master of Strenghener): dropLevel:25->0, width:1->2, height:1->2
-14-233 (Unique Weapon Box): dropLevel:25->0
-14-234 (Monster Summoning Scroll): dropLevel:25->0
 
 ## Items present in Season 9 suite but absent from Season 6 suite (Season 9-only)
+0-0 | Kris | Slot=0 Size=1x2 DropLv=6 Dur=20 Dmg=6-11 Speed=50 ReqLv=0
+0-1 | Short Sword | Slot=0 Size=1x3 DropLv=3 Dur=22 Dmg=3-7 Speed=20 ReqLv=0
+0-2 | Rapier | Slot=0 Size=1x3 DropLv=9 Dur=23 Dmg=9-15 Speed=40 ReqLv=0
+0-3 | Katana | Slot=0 Size=1x3 DropLv=16 Dur=27 Dmg=16-26 Speed=35 ReqLv=0
+0-4 | Sword of Assassin | Slot=0 Size=1x3 DropLv=12 Dur=24 Dmg=12-18 Speed=30 ReqLv=0
+0-5 | Blade | Slot=0 Size=1x3 DropLv=36 Dur=39 Dmg=36-47 Speed=30 ReqLv=0
+0-6 | Gladius | Slot=0 Size=1x3 DropLv=20 Dur=30 Dmg=20-30 Speed=20 ReqLv=0
+0-7 | Falcon | Slot=0 Size=1x3 DropLv=24 Dur=34 Dmg=24-34 Speed=25 ReqLv=0
+0-8 | Serpent Sword | Slot=0 Size=1x3 DropLv=30 Dur=36 Dmg=30-40 Speed=20 ReqLv=0
+0-9 | Sword of Salamander | Slot=0 Size=2x3 DropLv=32 Dur=40 Dmg=32-46 Speed=30 ReqLv=0
+0-10 | Light Saber | Slot=0 Size=2x4 DropLv=40 Dur=50 Dmg=47-61 Speed=25 ReqLv=0
+0-11 | Legendary Sword | Slot=0 Size=2x3 DropLv=44 Dur=54 Dmg=56-72 Speed=20 ReqLv=0
+0-12 | Helical Sword | Slot=0 Size=2x3 DropLv=56 Dur=66 Dmg=73-98 Speed=25 ReqLv=0
+0-13 | Double Blade | Slot=0 Size=1x3 DropLv=48 Dur=43 Dmg=48-56 Speed=30 ReqLv=0
+0-14 | Lighting Sword | Slot=0 Size=1x3 DropLv=59 Dur=50 Dmg=59-67 Speed=30 ReqLv=0
+0-15 | Giant Sword | Slot=0 Size=2x3 DropLv=52 Dur=60 Dmg=60-85 Speed=20 ReqLv=0
+0-16 | Sword of Destruction | Slot=0 Size=1x4 DropLv=82 Dur=84 Dmg=82-90 Speed=35 ReqLv=0
+0-17 | Dark Breaker | Slot=0 Size=2x4 DropLv=104 Dur=89 Dmg=128-153 Speed=40 ReqLv=0
+0-18 | Thunder Blade | Slot=0 Size=2x3 DropLv=105 Dur=86 Dmg=140-168 Speed=40 ReqLv=0
+0-19 | Divine Sword of Archangel | Slot=0 Size=1x4 DropLv=86 Dur=168 Dmg=220-230 Speed=45 ReqLv=0
+0-20 | Knight Blade | Slot=0 Size=1x4 DropLv=140 Dur=90 Dmg=107-115 Speed=35 ReqLv=0
+0-21 | Dark Reign Blade | Slot=0 Size=2x4 DropLv=140 Dur=100 Dmg=115-142 Speed=40 ReqLv=0
+0-22 | Bone Blade | Slot=0 Size=1x4 DropLv=147 Dur=95 Dmg=122-135 Speed=40 ReqLv=380
+0-23 | Explosion Blade | Slot=0 Size=2x4 DropLv=147 Dur=110 Dmg=127-155 Speed=45 ReqLv=380
+0-24 | Daybreak | Slot=0 Size=2x4 DropLv=115 Dur=90 Dmg=182-218 Speed=40 ReqLv=0
+0-25 | Sword Dancer | Slot=0 Size=2x4 DropLv=115 Dur=90 Dmg=109-136 Speed=40 ReqLv=0
+0-26 | Flameberge | Slot=0 Size=1x4 DropLv=137 Dur=90 Dmg=115-126 Speed=40 ReqLv=380
+0-27 | Sword Breaker | Slot=0 Size=1x4 DropLv=133 Dur=90 Dmg=91-99 Speed=35 ReqLv=380
+0-28 | Rune Bastard Sword | Slot=0 Size=1x4 DropLv=139 Dur=90 Dmg=98-122 Speed=45 ReqLv=380
 0-29 | Sonic Blade | Slot=0 Size=1x4 DropLv=149 Dur=80 Dmg=109-116 Speed=35 ReqLv=400
 0-30 | Asura | Slot=0 Size=1x4 DropLv=149 Dur=90 Dmg=115-140 Speed=45 ReqLv=400
+0-31 | Rune Blade | Slot=0 Size=2x4 DropLv=100 Dur=93 Dmg=104-130 Speed=35 ReqLv=0
+0-32 | Sacred Glove | Slot=0 Size=1x2 DropLv=52 Dur=65 Dmg=52-58 Speed=25 ReqLv=0
+0-33 | Holy Storm Claw | Slot=0 Size=1x2 DropLv=82 Dur=77 Dmg=82-88 Speed=30 ReqLv=0
+0-34 | Piercing Blade Glove | Slot=0 Size=1x2 DropLv=105 Dur=86 Dmg=95-101 Speed=35 ReqLv=0
+0-35 | Phoenix Soul Star | Slot=0 Size=1x2 DropLv=147 Dur=98 Dmg=122-128 Speed=40 ReqLv=380
 0-36 | Cyclone Sword | Slot=0 Size=1x4 DropLv=149 Dur=90 Dmg=129-144 Speed=40 ReqLv=400
 0-37 | Blast Break | Slot=0 Size=2x4 DropLv=149 Dur=130 Dmg=163-216 Speed=30 ReqLv=400
+0-39 | Lighting Sword-J | Slot=0 Size=1x3 DropLv=59 Dur=50 Dmg=59-67 Speed=35 ReqLv=0
+0-40 | Sacred Glove-J | Slot=0 Size=1x2 DropLv=52 Dur=65 Dmg=52-58 Speed=30 ReqLv=0
 0-41 | Pandora Pick (two-handed) | Slot=0 Size=2x2 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+1-0 | Small Axe | Slot=0 Size=1x3 DropLv=1 Dur=18 Dmg=1-6 Speed=20 ReqLv=0
+1-1 | Hand Axe | Slot=0 Size=1x3 DropLv=4 Dur=20 Dmg=4-9 Speed=30 ReqLv=0
+1-2 | Double Axe | Slot=0 Size=1x3 DropLv=14 Dur=26 Dmg=14-24 Speed=20 ReqLv=0
+1-3 | Tomahawk | Slot=0 Size=1x3 DropLv=18 Dur=28 Dmg=18-28 Speed=30 ReqLv=0
+1-4 | Elven Axe | Slot=0 Size=1x3 DropLv=26 Dur=32 Dmg=26-38 Speed=40 ReqLv=0
+1-5 | Battle Axe | Slot=0 Size=2x3 DropLv=30 Dur=36 Dmg=36-44 Speed=20 ReqLv=0
+1-6 | Nikea Axe | Slot=0 Size=2x3 DropLv=34 Dur=44 Dmg=38-50 Speed=30 ReqLv=0
+1-7 | Larkan Axe | Slot=0 Size=2x3 DropLv=46 Dur=55 Dmg=54-67 Speed=25 ReqLv=0
+1-8 | Crescent Axe | Slot=0 Size=2x3 DropLv=54 Dur=65 Dmg=69-89 Speed=30 ReqLv=0
+2-0 | Mace | Slot=0 Size=1x3 DropLv=7 Dur=21 Dmg=7-13 Speed=15 ReqLv=0
+2-1 | Morning Star | Slot=0 Size=1x3 DropLv=13 Dur=25 Dmg=13-22 Speed=15 ReqLv=0
+2-2 | Flail | Slot=0 Size=1x3 DropLv=22 Dur=32 Dmg=22-32 Speed=15 ReqLv=0
+2-3 | Great Hammer | Slot=0 Size=2x3 DropLv=38 Dur=50 Dmg=45-56 Speed=15 ReqLv=0
+2-4 | Crystal Morning Star | Slot=0 Size=2x3 DropLv=66 Dur=72 Dmg=78-107 Speed=30 ReqLv=0
+2-5 | Crystal Sword | Slot=0 Size=2x4 DropLv=72 Dur=76 Dmg=89-120 Speed=40 ReqLv=0
+2-6 | Chaos Dragon Axe | Slot=0 Size=2x4 DropLv=75 Dur=80 Dmg=102-130 Speed=35 ReqLv=0
+2-7 | Elemental Mace | Slot=0 Size=1x3 DropLv=90 Dur=50 Dmg=62-80 Speed=50 ReqLv=0
+2-8 | Battle Scepter | Slot=0 Size=1x3 DropLv=54 Dur=40 Dmg=41-52 Speed=45 ReqLv=0
+2-9 | Master Scepter | Slot=0 Size=1x3 DropLv=72 Dur=45 Dmg=57-68 Speed=45 ReqLv=0
+2-10 | Great Scepter | Slot=0 Size=1x4 DropLv=82 Dur=65 Dmg=74-85 Speed=45 ReqLv=0
+2-11 | Lord Scepter | Slot=0 Size=1x4 DropLv=98 Dur=72 Dmg=91-102 Speed=40 ReqLv=0
+2-12 | Great Lord Scepter | Slot=0 Size=1x4 DropLv=140 Dur=84 Dmg=108-120 Speed=40 ReqLv=0
+2-13 | Divine Scepter of Archangel | Slot=0 Size=1x4 DropLv=150 Dur=90 Dmg=200-223 Speed=45 ReqLv=0
+2-14 | Soleil Scepter | Slot=0 Size=1x4 DropLv=146 Dur=95 Dmg=130-153 Speed=40 ReqLv=380
+2-15 | Shining Scepter | Slot=0 Size=1x4 DropLv=110 Dur=78 Dmg=99-111 Speed=40 ReqLv=0
+2-16 | Frost Mace | Slot=0 Size=1x3 DropLv=121 Dur=80 Dmg=106-146 Speed=50 ReqLv=380
+2-17 | Absolute Scepter | Slot=0 Size=1x4 DropLv=135 Dur=90 Dmg=114-132 Speed=40 ReqLv=380
+2-18 | Striker Scepter | Slot=0 Size=1x4 DropLv=147 Dur=86 Dmg=112-124 Speed=40 ReqLv=0
 2-19 | Thunderbolt | Slot=0 Size=1x4 DropLv=149 Dur=78 Dmg=127-154 Speed=40 ReqLv=400
 2-20 | Horn of Steal | Slot=0 Size=2x4 DropLv=149 Dur=120 Dmg=177-206 Speed=25 ReqLv=400
+2-21 | Master Scepter-J | Slot=0 Size=1x3 DropLv=72 Dur=45 Dmg=57-68 Speed=50 ReqLv=0
+3-0 | Light Spear | Slot=0 Size=2x4 DropLv=42 Dur=56 Dmg=50-63 Speed=25 ReqLv=0
+3-1 | Spear | Slot=0 Size=2x4 DropLv=23 Dur=42 Dmg=30-41 Speed=30 ReqLv=0
+3-2 | Dragon Lance | Slot=0 Size=2x4 DropLv=15 Dur=34 Dmg=21-33 Speed=30 ReqLv=0
+3-3 | Giant Trident | Slot=0 Size=2x4 DropLv=29 Dur=44 Dmg=35-43 Speed=25 ReqLv=0
+3-4 | Serpent Spear | Slot=0 Size=2x4 DropLv=46 Dur=58 Dmg=58-80 Speed=20 ReqLv=0
+3-5 | Double Poleaxe | Slot=0 Size=2x4 DropLv=13 Dur=38 Dmg=19-31 Speed=30 ReqLv=0
+3-6 | Halberd | Slot=0 Size=2x4 DropLv=19 Dur=40 Dmg=25-35 Speed=30 ReqLv=0
+3-7 | Berdysh | Slot=0 Size=2x4 DropLv=37 Dur=54 Dmg=42-54 Speed=30 ReqLv=0
+3-8 | Great Scythe | Slot=0 Size=2x4 DropLv=54 Dur=68 Dmg=71-92 Speed=25 ReqLv=0
+3-9 | Bill of Balrog | Slot=0 Size=2x4 DropLv=63 Dur=74 Dmg=76-102 Speed=25 ReqLv=0
+3-10 | Dragon Spear | Slot=0 Size=2x4 DropLv=92 Dur=85 Dmg=112-140 Speed=35 ReqLv=0
+3-11 | Brova | Slot=0 Size=2x4 DropLv=147 Dur=90 Dmg=190-226 Speed=40 ReqLv=0
 3-12 | Magmus Peer | Slot=0 Size=2x4 DropLv=149 Dur=85 Dmg=135-236 Speed=35 ReqLv=400
+4-0 | Short Bow | Slot=1 Size=2x3 DropLv=2 Dur=20 Dmg=3-5 Speed=30 ReqLv=0
+4-1 | Bow | Slot=1 Size=2x3 DropLv=8 Dur=24 Dmg=9-13 Speed=30 ReqLv=0
+4-2 | Elven Bow | Slot=1 Size=2x3 DropLv=16 Dur=28 Dmg=17-24 Speed=30 ReqLv=0
+4-3 | Battle Bow | Slot=1 Size=2x3 DropLv=26 Dur=36 Dmg=28-37 Speed=30 ReqLv=0
+4-4 | Tiger Bow | Slot=1 Size=2x4 DropLv=40 Dur=43 Dmg=42-52 Speed=30 ReqLv=0
+4-5 | Silver Bow | Slot=1 Size=2x4 DropLv=56 Dur=48 Dmg=59-71 Speed=40 ReqLv=0
+4-6 | Chaos Nature Bow | Slot=1 Size=2x4 DropLv=75 Dur=68 Dmg=88-106 Speed=35 ReqLv=0
+4-7 | Bolt | Slot=1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+4-8 | Crossbow | Slot=0 Size=2x2 DropLv=4 Dur=22 Dmg=5-8 Speed=40 ReqLv=0
+4-9 | Golden Crossbow | Slot=0 Size=2x2 DropLv=12 Dur=26 Dmg=13-19 Speed=40 ReqLv=0
+4-10 | Arquebus | Slot=0 Size=2x2 DropLv=20 Dur=31 Dmg=22-30 Speed=40 ReqLv=0
+4-11 | Light Crossbow | Slot=0 Size=2x3 DropLv=32 Dur=40 Dmg=35-44 Speed=40 ReqLv=0
+4-12 | Serpent Crossbow | Slot=0 Size=2x3 DropLv=48 Dur=45 Dmg=50-61 Speed=40 ReqLv=0
+4-13 | Bluewing Crossbow | Slot=0 Size=2x3 DropLv=68 Dur=56 Dmg=68-82 Speed=40 ReqLv=0
+4-14 | Aquagold Crossbow | Slot=0 Size=2x3 DropLv=72 Dur=60 Dmg=78-92 Speed=30 ReqLv=0
+4-15 | Arrow | Slot=0 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+4-16 | Saint Crossbow | Slot=0 Size=2x4 DropLv=84 Dur=72 Dmg=102-127 Speed=35 ReqLv=0
+4-17 | Celestial Bow | Slot=1 Size=2x4 DropLv=92 Dur=76 Dmg=127-155 Speed=35 ReqLv=0
+4-18 | Divine Crossbow of Archangel | Slot=0 Size=2x3 DropLv=100 Dur=200 Dmg=224-246 Speed=45 ReqLv=0
+4-19 | Great Reign Crossbow | Slot=0 Size=2x3 DropLv=100 Dur=80 Dmg=150-172 Speed=40 ReqLv=0
+4-20 | Arrow Viper Bow | Slot=1 Size=2x4 DropLv=135 Dur=86 Dmg=166-190 Speed=45 ReqLv=0
+4-21 | Sylph Wind Bow | Slot=1 Size=2x4 DropLv=147 Dur=93 Dmg=177-200 Speed=45 ReqLv=380
+4-22 | Albatross Bow | Slot=1 Size=2x4 DropLv=110 Dur=70 Dmg=155-177 Speed=45 ReqLv=0
+4-23 | Dark Stinger | Slot=1 Size=2x4 DropLv=134 Dur=80 Dmg=162-184 Speed=45 ReqLv=380
+4-24 | Aileen Bow | Slot=1 Size=2x4 DropLv=147 Dur=88 Dmg=170-194 Speed=45 ReqLv=0
 4-25 | Angelic Bow | Slot=1 Size=2x4 DropLv=149 Dur=70 Dmg=179-202 Speed=45 ReqLv=400
 4-26 | Devil Crossbow | Slot=0 Size=2x3 DropLv=149 Dur=90 Dmg=167-218 Speed=40 ReqLv=400
+4-27 | Silver Bow-J | Slot=1 Size=2x4 DropLv=56 Dur=48 Dmg=59-71 Speed=45 ReqLv=0
+5-0 | Skull Staff | Slot=0 Size=1x3 DropLv=6 Dur=0 Dmg=3-4 Speed=20 ReqLv=0
+5-1 | Angelic Staff | Slot=0 Size=2x3 DropLv=18 Dur=0 Dmg=10-12 Speed=25 ReqLv=0
+5-2 | Serpent Staff | Slot=0 Size=2x3 DropLv=30 Dur=0 Dmg=17-18 Speed=25 ReqLv=0
+5-3 | Thunder Staff | Slot=0 Size=2x4 DropLv=42 Dur=0 Dmg=23-25 Speed=25 ReqLv=0
+5-4 | Gorgon Staff | Slot=0 Size=2x4 DropLv=52 Dur=0 Dmg=29-32 Speed=25 ReqLv=0
+5-5 | Legendary Staff | Slot=0 Size=1x4 DropLv=59 Dur=0 Dmg=29-31 Speed=25 ReqLv=0
+5-6 | Staff of Resurrection | Slot=0 Size=1x4 DropLv=70 Dur=0 Dmg=35-39 Speed=25 ReqLv=0
+5-7 | Chaos Lighting Staff | Slot=0 Size=2x4 DropLv=75 Dur=0 Dmg=47-48 Speed=30 ReqLv=0
+5-8 | Staff of Destruction | Slot=0 Size=2x4 DropLv=90 Dur=0 Dmg=50-54 Speed=30 ReqLv=0
+5-9 | Dragon Soul Staff | Slot=0 Size=1x4 DropLv=100 Dur=0 Dmg=46-48 Speed=30 ReqLv=0
+5-10 | Divine Staff of Archangel | Slot=0 Size=1x4 DropLv=104 Dur=0 Dmg=153-165 Speed=30 ReqLv=0
+5-11 | Staff of Kundun | Slot=0 Size=1x4 DropLv=140 Dur=0 Dmg=55-61 Speed=30 ReqLv=0
+5-12 | Grand Viper Staff | Slot=0 Size=1x4 DropLv=147 Dur=0 Dmg=66-74 Speed=30 ReqLv=380
+5-13 | Platina Staff | Slot=0 Size=1x4 DropLv=110 Dur=0 Dmg=51-53 Speed=30 ReqLv=0
+5-14 | Mystery Stick | Slot=0 Size=1x4 DropLv=28 Dur=0 Dmg=17-18 Speed=25 ReqLv=0
+5-15 | Violent Wind Stick | Slot=0 Size=1x4 DropLv=42 Dur=0 Dmg=23-25 Speed=25 ReqLv=0
+5-16 | Red Wing Stick | Slot=0 Size=1x4 DropLv=59 Dur=0 Dmg=29-31 Speed=25 ReqLv=0
+5-17 | Ancient Stick | Slot=0 Size=1x4 DropLv=78 Dur=0 Dmg=38-40 Speed=25 ReqLv=0
+5-18 | Demonic Stick | Slot=0 Size=1x4 DropLv=100 Dur=0 Dmg=46-48 Speed=30 ReqLv=0
+5-19 | Storm Blitz Stick | Slot=0 Size=1x4 DropLv=110 Dur=0 Dmg=51-53 Speed=30 ReqLv=380
+5-20 | Eternal Wing Stick | Slot=0 Size=1x4 DropLv=147 Dur=0 Dmg=66-74 Speed=30 ReqLv=380
+5-21 | Book of Shamut | Slot=1 Size=1x2 DropLv=52 Dur=0 Dmg=0-0 Speed=25 ReqLv=0
+5-22 | Book of Neil | Slot=1 Size=1x2 DropLv=59 Dur=0 Dmg=0-0 Speed=25 ReqLv=0
+5-23 | Book of Lagle | Slot=1 Size=1x2 DropLv=65 Dur=0 Dmg=0-0 Speed=25 ReqLv=0
+5-30 | Deadly Staff | Slot=0 Size=1x4 DropLv=138 Dur=0 Dmg=57-59 Speed=30 ReqLv=380
+5-31 | Inberial Staff | Slot=0 Size=1x4 DropLv=137 Dur=0 Dmg=57-61 Speed=30 ReqLv=380
+5-32 | Summon Spirit Stick | Slot=0 Size=1x4 DropLv=149 Dur=0 Dmg=59-61 Speed=30 ReqLv=400
+5-33 | Chrome Staff | Slot=0 Size=1x4 DropLv=147 Dur=0 Dmg=55-57 Speed=30 ReqLv=0
+5-34 | Raven Stick | Slot=0 Size=1x4 DropLv=147 Dur=0 Dmg=70-78 Speed=30 ReqLv=0
 5-35 | Miracle Staff | Slot=0 Size=1x4 DropLv=149 Dur=0 Dmg=67-69 Speed=30 ReqLv=400
+5-36 | Divine Stick of the Archangel | Slot=0 Size=1x4 DropLv=104 Dur=0 Dmg=153-165 Speed=30 ReqLv=0
 5-37 | Spite Staff | Slot=0 Size=2x4 DropLv=149 Dur=0 Dmg=69-71 Speed=25 ReqLv=400
+5-38 | Legendary Staff-J | Slot=0 Size=1x4 DropLv=59 Dur=0 Dmg=29-31 Speed=30 ReqLv=0
+5-39 | Red Wing Stick-J | Slot=0 Size=1x4 DropLv=59 Dur=0 Dmg=29-31 Speed=30 ReqLv=0
+5-40 | Book of Neil-J | Slot=1 Size=1x2 DropLv=59 Dur=0 Dmg=0-0 Speed=30 ReqLv=0
+6-0 | Small Shield | Slot=1 Size=2x2 DropLv=3 Dur=22 Dmg=0-0 Speed=0 ReqLv=0
+6-1 | Horn Shield | Slot=1 Size=2x2 DropLv=9 Dur=28 Dmg=0-0 Speed=0 ReqLv=0
+6-2 | Kite Shield | Slot=1 Size=2x2 DropLv=12 Dur=32 Dmg=0-0 Speed=0 ReqLv=0
+6-3 | Elven Shield | Slot=1 Size=2x2 DropLv=21 Dur=36 Dmg=0-0 Speed=0 ReqLv=0
+6-4 | Buckler | Slot=1 Size=2x2 DropLv=6 Dur=24 Dmg=0-0 Speed=0 ReqLv=0
+6-5 | Dragon Slayer Shield | Slot=1 Size=2x2 DropLv=35 Dur=44 Dmg=0-0 Speed=0 ReqLv=0
+6-6 | Skull Shield | Slot=1 Size=2x2 DropLv=15 Dur=34 Dmg=0-0 Speed=0 ReqLv=0
+6-7 | Spiked Shield | Slot=1 Size=2x2 DropLv=30 Dur=40 Dmg=0-0 Speed=0 ReqLv=0
+6-8 | Tower Shield | Slot=1 Size=2x2 DropLv=40 Dur=46 Dmg=0-0 Speed=0 ReqLv=0
+6-9 | Plate Shield | Slot=1 Size=2x2 DropLv=25 Dur=38 Dmg=0-0 Speed=0 ReqLv=0
+6-10 | Large Round Shield | Slot=1 Size=2x2 DropLv=18 Dur=35 Dmg=0-0 Speed=0 ReqLv=0
+6-11 | Serpent Shield | Slot=1 Size=2x2 DropLv=45 Dur=48 Dmg=0-0 Speed=0 ReqLv=0
+6-12 | Bronze Shield | Slot=1 Size=2x2 DropLv=54 Dur=52 Dmg=0-0 Speed=0 ReqLv=0
+6-13 | Dragon Shield | Slot=1 Size=2x2 DropLv=60 Dur=60 Dmg=0-0 Speed=0 ReqLv=0
+6-14 | Legendary Shield | Slot=1 Size=2x3 DropLv=48 Dur=50 Dmg=0-0 Speed=0 ReqLv=0
+6-15 | Grand Soul Shield | Slot=1 Size=2x3 DropLv=74 Dur=55 Dmg=0-0 Speed=0 ReqLv=0
+6-16 | Elemental Shield | Slot=1 Size=2x2 DropLv=66 Dur=51 Dmg=0-0 Speed=0 ReqLv=0
+6-17 | Crimson Glory | Slot=1 Size=2x2 DropLv=104 Dur=51 Dmg=0-0 Speed=0 ReqLv=380
+6-18 | Salamander Shield | Slot=1 Size=2x2 DropLv=102 Dur=51 Dmg=0-0 Speed=0 ReqLv=380
+6-19 | Frost Barrier | Slot=1 Size=2x2 DropLv=99 Dur=51 Dmg=0-0 Speed=0 ReqLv=380
+6-20 | Guardian Shield | Slot=1 Size=2x2 DropLv=106 Dur=51 Dmg=0-0 Speed=0 ReqLv=380
+6-21 | Cross Shield | Slot=1 Size=2x2 DropLv=70 Dur=65 Dmg=0-0 Speed=0 ReqLv=0
 6-22 | Lazy Wind Shield | Slot=1 Size=2x2 DropLv=129 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 6-23 | Light Lord Shield | Slot=1 Size=2x2 DropLv=124 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 6-24 | Dark Devil Shield | Slot=1 Size=2x2 DropLv=122 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 6-25 | Magic Knight Shield | Slot=1 Size=2x2 DropLv=128 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 6-26 | Ambition Shield | Slot=1 Size=2x2 DropLv=131 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+6-27 | Legendary Shield-J | Slot=1 Size=2x3 DropLv=48 Dur=50 Dmg=0-0 Speed=0 ReqLv=0
+6-28 | Serpent Shield-J | Slot=1 Size=2x2 DropLv=45 Dur=48 Dmg=0-0 Speed=0 ReqLv=0
+7-0 | Bronze Helm | Slot=2 Size=2x2 DropLv=16 Dur=34 Dmg=0-0 Speed=0 ReqLv=0
+7-1 | Dragon Helm | Slot=2 Size=2x2 DropLv=57 Dur=68 Dmg=0-0 Speed=0 ReqLv=0
+7-2 | Pad Helm | Slot=2 Size=2x2 DropLv=5 Dur=28 Dmg=0-0 Speed=0 ReqLv=0
+7-3 | Legendary Helm | Slot=2 Size=2x2 DropLv=50 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+7-4 | Bone Helm | Slot=2 Size=2x2 DropLv=18 Dur=30 Dmg=0-0 Speed=0 ReqLv=0
+7-5 | Leather Helm | Slot=2 Size=2x2 DropLv=6 Dur=30 Dmg=0-0 Speed=0 ReqLv=0
+7-6 | Scale Helm | Slot=2 Size=2x2 DropLv=26 Dur=40 Dmg=0-0 Speed=0 ReqLv=0
+7-7 | Sphinx Mask | Slot=2 Size=2x2 DropLv=32 Dur=36 Dmg=0-0 Speed=0 ReqLv=0
+7-8 | Brass Helm | Slot=2 Size=2x2 DropLv=36 Dur=44 Dmg=0-0 Speed=0 ReqLv=0
+7-9 | Plate Helm | Slot=2 Size=2x2 DropLv=46 Dur=50 Dmg=0-0 Speed=0 ReqLv=0
+7-10 | Vine Helm | Slot=2 Size=2x2 DropLv=6 Dur=22 Dmg=0-0 Speed=0 ReqLv=0
+7-11 | Silk Helm | Slot=2 Size=2x2 DropLv=16 Dur=26 Dmg=0-0 Speed=0 ReqLv=0
+7-12 | Wind Helm | Slot=2 Size=2x2 DropLv=28 Dur=32 Dmg=0-0 Speed=0 ReqLv=0
+7-13 | Spirit Helm | Slot=2 Size=2x2 DropLv=40 Dur=38 Dmg=0-0 Speed=0 ReqLv=0
+7-14 | Guardian Helm | Slot=2 Size=2x2 DropLv=53 Dur=45 Dmg=0-0 Speed=0 ReqLv=0
+7-16 | Black Dragon Helm | Slot=2 Size=2x2 DropLv=82 Dur=74 Dmg=0-0 Speed=0 ReqLv=0
+7-17 | Dark Phoenix Helm | Slot=2 Size=2x2 DropLv=92 Dur=80 Dmg=0-0 Speed=0 ReqLv=0
+7-18 | Grand Soul Helm | Slot=2 Size=2x2 DropLv=81 Dur=67 Dmg=0-0 Speed=0 ReqLv=0
+7-19 | Holy Spirit Helm | Slot=2 Size=2x2 DropLv=85 Dur=74 Dmg=0-0 Speed=0 ReqLv=0
+7-21 | Great Dragon Helm | Slot=2 Size=2x2 DropLv=104 Dur=86 Dmg=0-0 Speed=0 ReqLv=0
+7-22 | Dark Soul Helm | Slot=2 Size=2x2 DropLv=110 Dur=75 Dmg=0-0 Speed=0 ReqLv=0
+7-24 | Red Spirit Helm | Slot=2 Size=2x2 DropLv=93 Dur=80 Dmg=0-0 Speed=0 ReqLv=0
+7-25 | Light Plate Mask | Slot=2 Size=2x2 DropLv=46 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+7-26 | Adamantine Mask | Slot=2 Size=2x2 DropLv=66 Dur=56 Dmg=0-0 Speed=0 ReqLv=0
+7-27 | Dark Steel Mask | Slot=2 Size=2x2 DropLv=86 Dur=70 Dmg=0-0 Speed=0 ReqLv=0
+7-28 | Dark Master Mask | Slot=2 Size=2x2 DropLv=106 Dur=78 Dmg=0-0 Speed=0 ReqLv=0
+7-29 | Dragon Knight Helm | Slot=2 Size=2x2 DropLv=130 Dur=90 Dmg=0-0 Speed=0 ReqLv=380
+7-30 | Venom Mist Helm | Slot=2 Size=2x2 DropLv=126 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+7-31 | Sylphid Ray Helm | Slot=2 Size=2x2 DropLv=126 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+7-33 | Sunlight Mask | Slot=2 Size=2x2 DropLv=130 Dur=82 Dmg=0-0 Speed=0 ReqLv=380
+7-34 | Ashcrow Helm | Slot=2 Size=2x2 DropLv=67 Dur=72 Dmg=0-0 Speed=0 ReqLv=0
+7-35 | Eclipse Helm | Slot=2 Size=2x2 DropLv=67 Dur=54 Dmg=0-0 Speed=0 ReqLv=0
+7-36 | Iris Helm | Slot=2 Size=2x2 DropLv=67 Dur=59 Dmg=0-0 Speed=0 ReqLv=0
+7-38 | Glorious Mask | Slot=2 Size=2x2 DropLv=97 Dur=74 Dmg=0-0 Speed=0 ReqLv=0
+7-39 | Violent Wind Helm | Slot=2 Size=2x2 DropLv=28 Dur=36 Dmg=0-0 Speed=0 ReqLv=0
+7-40 | Red Wing Helm | Slot=2 Size=2x2 DropLv=50 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+7-41 | Ancient Helm | Slot=2 Size=2x2 DropLv=68 Dur=54 Dmg=0-0 Speed=0 ReqLv=0
+7-42 | Demonic Helm | Slot=2 Size=2x2 DropLv=81 Dur=67 Dmg=0-0 Speed=0 ReqLv=0
+7-43 | Storm Blitz Helm | Slot=2 Size=2x2 DropLv=110 Dur=75 Dmg=0-0 Speed=0 ReqLv=380
+7-44 | Eternal Wing Helm | Slot=2 Size=2x2 DropLv=116 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+7-45 | Titan  Helm | Slot=2 Size=2x2 DropLv=111 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+7-46 | Brave Helm | Slot=2 Size=2x2 DropLv=107 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+7-49 | Seraphim Helm | Slot=2 Size=2x2 DropLv=111 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+7-50 | Divine Helm | Slot=2 Size=2x2 DropLv=104 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+7-51 | Royal Mask | Slot=2 Size=2x2 DropLv=111 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+7-52 | Hades Helm | Slot=2 Size=2x2 DropLv=109 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+7-53 | Succubus Helm | Slot=2 Size=2x2 DropLv=143 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 7-54 | Lazy Wind Helm | Slot=2 Size=2x2 DropLv=143 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 7-55 | Dark Devil Helm | Slot=2 Size=2x2 DropLv=143 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 7-56 | Sticky Helm | Slot=2 Size=2x2 DropLv=143 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 7-58 | Ambition Mask | Slot=2 Size=2x2 DropLv=143 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+7-59 | Sacred Fire Helm | Slot=2 Size=2x2 DropLv=54 Dur=52 Dmg=0-0 Speed=0 ReqLv=0
+7-60 | Storm Jahad Helm | Slot=2 Size=2x2 DropLv=70 Dur=68 Dmg=0-0 Speed=0 ReqLv=0
+7-61 | Piercing Groove Helm | Slot=2 Size=2x2 DropLv=90 Dur=82 Dmg=0-0 Speed=0 ReqLv=0
+7-62 | Scale Helm | Slot=2 Size=2x2 DropLv=26 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+7-63 | Silk Helm | Slot=2 Size=2x2 DropLv=16 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+7-64 | Sphinx Helm | Slot=2 Size=2x2 DropLv=32 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+7-65 | Violent Wind Helm | Slot=2 Size=2x2 DropLv=28 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+7-66 | Dark Soul Helm | Slot=2 Size=2x2 DropLv=66 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+7-67 | Dragon Helm | Slot=2 Size=2x2 DropLv=57 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+7-68 | Guardian Helm | Slot=2 Size=2x2 DropLv=53 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+7-69 | Legendary Helm | Slot=2 Size=2x2 DropLv=50 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+7-70 | Red Wing Helm | Slot=2 Size=2x2 DropLv=50 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+7-72 | Storm Jahad Helm | Slot=2 Size=2x2 DropLv=70 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+7-73 | Phoenix Soul Helmet | Slot=2 Size=2x2 DropLv=128 Dur=88 Dmg=0-0 Speed=0 ReqLv=380
 7-74 | Stormwing Helm | Slot=2 Size=2x2 DropLv=143 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 7-75 | Light Lord Helmet | Slot=2 Size=2x2 DropLv=143 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+7-78 | Dragon Helm-J | Slot=2 Size=2x2 DropLv=57 Dur=68 Dmg=0-0 Speed=0 ReqLv=0
+7-79 | Legendary Helm-J | Slot=2 Size=2x2 DropLv=50 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+7-80 | Guardian Helm-J | Slot=2 Size=2x2 DropLv=53 Dur=45 Dmg=0-0 Speed=0 ReqLv=0
+7-81 | Light Plate Mask-J | Slot=2 Size=2x2 DropLv=46 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+7-82 | Red Wing Helm-J | Slot=2 Size=2x2 DropLv=50 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+7-83 | Sacred Fire Helm-J | Slot=2 Size=2x2 DropLv=54 Dur=52 Dmg=0-0 Speed=0 ReqLv=0
+8-0 | Bronze Armor | Slot=3 Size=2x2 DropLv=18 Dur=34 Dmg=0-0 Speed=0 ReqLv=0
+8-1 | Dragon Armor | Slot=3 Size=2x3 DropLv=59 Dur=68 Dmg=0-0 Speed=0 ReqLv=0
+8-2 | Pad Armor | Slot=3 Size=2x2 DropLv=10 Dur=28 Dmg=0-0 Speed=0 ReqLv=0
+8-3 | Legendary Armor | Slot=3 Size=2x2 DropLv=56 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+8-4 | Bone Armor | Slot=3 Size=2x2 DropLv=22 Dur=30 Dmg=0-0 Speed=0 ReqLv=0
+8-5 | Leather Armor | Slot=3 Size=2x3 DropLv=10 Dur=30 Dmg=0-0 Speed=0 ReqLv=0
+8-6 | Scale Armor | Slot=3 Size=2x2 DropLv=28 Dur=40 Dmg=0-0 Speed=0 ReqLv=0
+8-7 | Sphinx Armor | Slot=3 Size=2x3 DropLv=38 Dur=36 Dmg=0-0 Speed=0 ReqLv=0
+8-8 | Brass Armor | Slot=3 Size=2x2 DropLv=38 Dur=44 Dmg=0-0 Speed=0 ReqLv=0
+8-9 | Plate Armor | Slot=3 Size=2x2 DropLv=48 Dur=50 Dmg=0-0 Speed=0 ReqLv=0
+8-10 | Vine Armor | Slot=3 Size=2x2 DropLv=10 Dur=22 Dmg=0-0 Speed=0 ReqLv=0
+8-11 | Silk Armor | Slot=3 Size=2x2 DropLv=20 Dur=26 Dmg=0-0 Speed=0 ReqLv=0
+8-12 | Wind Armor | Slot=3 Size=2x2 DropLv=32 Dur=32 Dmg=0-0 Speed=0 ReqLv=0
+8-13 | Spirit Armor | Slot=3 Size=2x2 DropLv=44 Dur=38 Dmg=0-0 Speed=0 ReqLv=0
+8-14 | Guardian Armor | Slot=3 Size=2x2 DropLv=57 Dur=45 Dmg=0-0 Speed=0 ReqLv=0
+8-15 | Storm Crow Armor | Slot=3 Size=2x3 DropLv=80 Dur=80 Dmg=0-0 Speed=0 ReqLv=0
+8-16 | Black Dragon Armor | Slot=3 Size=2x3 DropLv=90 Dur=74 Dmg=0-0 Speed=0 ReqLv=0
+8-17 | Dark Phoenix Armor | Slot=3 Size=2x3 DropLv=100 Dur=80 Dmg=0-0 Speed=0 ReqLv=0
+8-18 | Grand Soul Armor | Slot=3 Size=2x3 DropLv=91 Dur=67 Dmg=0-0 Speed=0 ReqLv=0
+8-19 | Holy Spirit Armor | Slot=3 Size=2x2 DropLv=92 Dur=74 Dmg=0-0 Speed=0 ReqLv=0
+8-20 | Thunder Hawk Armor | Slot=3 Size=2x3 DropLv=107 Dur=82 Dmg=0-0 Speed=0 ReqLv=0
+8-21 | Great Dragon Armor | Slot=3 Size=2x3 DropLv=126 Dur=86 Dmg=0-0 Speed=0 ReqLv=0
+8-22 | Dark Soul Armor | Slot=3 Size=2x3 DropLv=122 Dur=75 Dmg=0-0 Speed=0 ReqLv=0
+8-23 | Hurricane Armor | Slot=3 Size=2x3 DropLv=128 Dur=90 Dmg=0-0 Speed=0 ReqLv=0
+8-24 | Red Spirit Armor | Slot=3 Size=2x2 DropLv=109 Dur=80 Dmg=0-0 Speed=0 ReqLv=0
+8-25 | Light Plate Armor | Slot=3 Size=2x3 DropLv=62 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+8-26 | Adamantine Armor | Slot=3 Size=2x3 DropLv=78 Dur=56 Dmg=0-0 Speed=0 ReqLv=0
+8-27 | Dark Steel Armor | Slot=3 Size=2x3 DropLv=96 Dur=70 Dmg=0-0 Speed=0 ReqLv=0
+8-28 | Dark Master Armor | Slot=3 Size=2x3 DropLv=117 Dur=78 Dmg=0-0 Speed=0 ReqLv=0
+8-29 | Dragon Knight Armor | Slot=3 Size=2x3 DropLv=140 Dur=90 Dmg=0-0 Speed=0 ReqLv=380
+8-30 | Venom Mist Armor | Slot=3 Size=2x3 DropLv=146 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+8-31 | Sylphid Ray Armor | Slot=3 Size=2x3 DropLv=146 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+8-32 | Volcano Armor | Slot=3 Size=2x3 DropLv=147 Dur=95 Dmg=0-0 Speed=0 ReqLv=380
+8-33 | Sunlight Armor | Slot=3 Size=2x3 DropLv=147 Dur=82 Dmg=0-0 Speed=0 ReqLv=380
+8-34 | Ashcrow Armor | Slot=3 Size=2x3 DropLv=75 Dur=72 Dmg=0-0 Speed=0 ReqLv=0
+8-35 | Eclipse Armor | Slot=3 Size=2x3 DropLv=75 Dur=54 Dmg=0-0 Speed=0 ReqLv=0
+8-36 | Iris Armor | Slot=3 Size=2x3 DropLv=75 Dur=59 Dmg=0-0 Speed=0 ReqLv=0
+8-37 | Valiant Armor | Slot=3 Size=2x3 DropLv=105 Dur=81 Dmg=0-0 Speed=0 ReqLv=0
+8-38 | Glorious Armor | Slot=3 Size=2x3 DropLv=105 Dur=74 Dmg=0-0 Speed=0 ReqLv=0
+8-39 | Violent Wind Armor | Slot=3 Size=2x2 DropLv=34 Dur=36 Dmg=0-0 Speed=0 ReqLv=0
+8-40 | Red Wing Armor | Slot=3 Size=2x2 DropLv=56 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+8-41 | Ancient Armor | Slot=3 Size=2x2 DropLv=75 Dur=54 Dmg=0-0 Speed=0 ReqLv=0
+8-42 | Demonic Armor | Slot=3 Size=2x2 DropLv=91 Dur=67 Dmg=0-0 Speed=0 ReqLv=0
+8-43 | Storm Blitz Armor | Slot=3 Size=2x2 DropLv=122 Dur=75 Dmg=0-0 Speed=0 ReqLv=380
+8-44 | Eternal Wing Armor | Slot=3 Size=2x2 DropLv=131 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+8-45 | Titan  Armor | Slot=3 Size=2x3 DropLv=132 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+8-46 | Brave Armor | Slot=3 Size=2x3 DropLv=128 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+8-47 | Phantom  Armor | Slot=3 Size=2x3 DropLv=131 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+8-48 | Destroy Armor | Slot=3 Size=2x3 DropLv=125 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+8-49 | Seraphim Armor | Slot=3 Size=2x2 DropLv=129 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+8-50 | Divine Armor | Slot=3 Size=2x2 DropLv=122 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+8-51 | Royal Armor | Slot=3 Size=2x3 DropLv=132 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+8-52 | Hades Armor | Slot=3 Size=2x3 DropLv=129 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+8-53 | Succubus Armor | Slot=3 Size=2x2 DropLv=148 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 8-54 | Lazy Wind Armor | Slot=3 Size=2x3 DropLv=148 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 8-55 | Dark Devil Armor | Slot=3 Size=2x3 DropLv=148 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 8-56 | Sticky Armor | Slot=3 Size=2x2 DropLv=148 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 8-57 | Hell Night Armor | Slot=3 Size=2x3 DropLv=148 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 8-58 | Ambition Armor | Slot=3 Size=2x3 DropLv=148 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+8-59 | Sacred Fire Armor | Slot=3 Size=2x3 DropLv=66 Dur=52 Dmg=0-0 Speed=0 ReqLv=0
+8-60 | Storm Jahad Armor | Slot=3 Size=2x3 DropLv=82 Dur=68 Dmg=0-0 Speed=0 ReqLv=0
+8-61 | Piercing Groove Armor | Slot=3 Size=2x3 DropLv=101 Dur=82 Dmg=0-0 Speed=0 ReqLv=0
+8-62 | Scale Armor | Slot=3 Size=2x2 DropLv=28 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+8-63 | Silk Armor | Slot=3 Size=2x2 DropLv=20 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+8-64 | Sphinx Armor | Slot=3 Size=2x3 DropLv=38 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+8-65 | Violent Wind Armor | Slot=3 Size=2x2 DropLv=34 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+8-66 | Dark Soul Armor | Slot=3 Size=2x3 DropLv=78 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+8-67 | Dragon Armor | Slot=3 Size=2x3 DropLv=59 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+8-68 | Guardian Armor | Slot=3 Size=2x2 DropLv=57 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+8-69 | Legendary Armor | Slot=3 Size=2x2 DropLv=56 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+8-70 | Red Wing Armor | Slot=3 Size=2x2 DropLv=56 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+8-71 | Atlans Armor | Slot=3 Size=2x3 DropLv=80 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+8-72 | Storm Jahad Armor | Slot=3 Size=2x3 DropLv=82 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+8-73 | Phoenix Soul Armor | Slot=3 Size=2x3 DropLv=143 Dur=88 Dmg=0-0 Speed=0 ReqLv=380
 8-74 | Stormwing Armor | Slot=3 Size=2x3 DropLv=148 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 8-75 | Light Lord Armor | Slot=3 Size=2x2 DropLv=148 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 8-76 | Magic Knight Armor | Slot=3 Size=2x3 DropLv=148 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+8-78 | Dragon Armor-J | Slot=3 Size=2x3 DropLv=59 Dur=68 Dmg=0-0 Speed=0 ReqLv=0
+8-79 | Legendary Armor-J | Slot=3 Size=2x2 DropLv=56 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+8-80 | Guardian Armor-J | Slot=3 Size=2x2 DropLv=57 Dur=45 Dmg=0-0 Speed=0 ReqLv=0
+8-81 | Light Plate Armor-J | Slot=3 Size=2x3 DropLv=62 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+8-82 | Red Wing Armor-J | Slot=3 Size=2x2 DropLv=56 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+8-83 | Sacred Fire Armor-J | Slot=3 Size=2x3 DropLv=66 Dur=52 Dmg=0-0 Speed=0 ReqLv=0
+9-0 | Bronze Pants | Slot=4 Size=2x2 DropLv=15 Dur=34 Dmg=0-0 Speed=0 ReqLv=0
+9-1 | Dragon Pants | Slot=4 Size=2x2 DropLv=55 Dur=68 Dmg=0-0 Speed=0 ReqLv=0
+9-2 | Pad Pants | Slot=4 Size=2x2 DropLv=8 Dur=28 Dmg=0-0 Speed=0 ReqLv=0
+9-3 | Legendary Pants | Slot=4 Size=2x2 DropLv=53 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+9-4 | Bone Pants | Slot=4 Size=2x2 DropLv=20 Dur=30 Dmg=0-0 Speed=0 ReqLv=0
+9-5 | Leather Pants | Slot=4 Size=2x2 DropLv=8 Dur=30 Dmg=0-0 Speed=0 ReqLv=0
+9-6 | Scale Pants | Slot=4 Size=2x2 DropLv=25 Dur=40 Dmg=0-0 Speed=0 ReqLv=0
+9-7 | Sphinx Pants | Slot=4 Size=2x2 DropLv=34 Dur=36 Dmg=0-0 Speed=0 ReqLv=0
+9-8 | Brass Pants | Slot=4 Size=2x2 DropLv=35 Dur=44 Dmg=0-0 Speed=0 ReqLv=0
+9-9 | Plate Pants | Slot=4 Size=2x2 DropLv=45 Dur=50 Dmg=0-0 Speed=0 ReqLv=0
+9-10 | Vine Pants | Slot=4 Size=2x2 DropLv=8 Dur=22 Dmg=0-0 Speed=0 ReqLv=0
+9-11 | Silk Pants | Slot=4 Size=2x2 DropLv=18 Dur=26 Dmg=0-0 Speed=0 ReqLv=0
+9-12 | Wind Pants | Slot=4 Size=2x2 DropLv=30 Dur=32 Dmg=0-0 Speed=0 ReqLv=0
+9-13 | Spirit Pants | Slot=4 Size=2x2 DropLv=42 Dur=38 Dmg=0-0 Speed=0 ReqLv=0
+9-14 | Guardian Pants | Slot=4 Size=2x2 DropLv=54 Dur=45 Dmg=0-0 Speed=0 ReqLv=0
+9-15 | Storm Crow Pants | Slot=4 Size=2x2 DropLv=74 Dur=80 Dmg=0-0 Speed=0 ReqLv=0
+9-16 | Black Dragon Pants | Slot=4 Size=2x2 DropLv=84 Dur=74 Dmg=0-0 Speed=0 ReqLv=0
+9-17 | Dark Phoenix Pants | Slot=4 Size=2x2 DropLv=96 Dur=80 Dmg=0-0 Speed=0 ReqLv=0
+9-18 | Grand Soul Pants | Slot=4 Size=2x2 DropLv=86 Dur=67 Dmg=0-0 Speed=0 ReqLv=0
+9-19 | Holy Spirit Pants | Slot=4 Size=2x2 DropLv=88 Dur=74 Dmg=0-0 Speed=0 ReqLv=0
+9-20 | Thunder Hawk Pants | Slot=4 Size=2x2 DropLv=99 Dur=82 Dmg=0-0 Speed=0 ReqLv=0
+9-21 | Great Dragon Pants | Slot=4 Size=2x2 DropLv=113 Dur=86 Dmg=0-0 Speed=0 ReqLv=0
+9-22 | Dark Soul Pants | Slot=4 Size=2x2 DropLv=117 Dur=75 Dmg=0-0 Speed=0 ReqLv=0
+9-23 | Hurricane Pants | Slot=4 Size=2x2 DropLv=122 Dur=90 Dmg=0-0 Speed=0 ReqLv=0
+9-24 | Red Spirit Pants | Slot=4 Size=2x2 DropLv=100 Dur=80 Dmg=0-0 Speed=0 ReqLv=0
+9-25 | Light Plate Pants | Slot=4 Size=2x2 DropLv=50 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+9-26 | Adamantine Pants | Slot=4 Size=2x2 DropLv=70 Dur=56 Dmg=0-0 Speed=0 ReqLv=0
+9-27 | Dark Steel Pants | Slot=4 Size=2x2 DropLv=92 Dur=70 Dmg=0-0 Speed=0 ReqLv=0
+9-28 | Dark Master Pants | Slot=4 Size=2x2 DropLv=110 Dur=78 Dmg=0-0 Speed=0 ReqLv=0
+9-29 | Dragon Knight Pants | Slot=4 Size=2x2 DropLv=134 Dur=90 Dmg=0-0 Speed=0 ReqLv=380
+9-30 | Venom Mist Pants | Slot=4 Size=2x2 DropLv=135 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+9-31 | Sylphid Ray Pants | Slot=4 Size=2x2 DropLv=135 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+9-32 | Volcano Pants | Slot=4 Size=2x2 DropLv=135 Dur=95 Dmg=0-0 Speed=0 ReqLv=380
+9-33 | Sunlight Pants | Slot=4 Size=2x2 DropLv=140 Dur=82 Dmg=0-0 Speed=0 ReqLv=380
+9-34 | Ashcrow Pants | Slot=4 Size=2x2 DropLv=69 Dur=72 Dmg=0-0 Speed=0 ReqLv=0
+9-35 | Eclipse Pants | Slot=4 Size=2x2 DropLv=69 Dur=54 Dmg=0-0 Speed=0 ReqLv=0
+9-36 | Iris Pants | Slot=4 Size=2x2 DropLv=69 Dur=59 Dmg=0-0 Speed=0 ReqLv=0
+9-37 | Valiant Pants | Slot=4 Size=2x2 DropLv=101 Dur=81 Dmg=0-0 Speed=0 ReqLv=0
+9-38 | Glorious Pants | Slot=4 Size=2x2 DropLv=101 Dur=74 Dmg=0-0 Speed=0 ReqLv=0
+9-39 | Violent Wind Pants | Slot=4 Size=2x2 DropLv=30 Dur=36 Dmg=0-0 Speed=0 ReqLv=0
+9-40 | Red Wing Pants | Slot=4 Size=2x2 DropLv=53 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+9-41 | Ancient Pants | Slot=4 Size=2x2 DropLv=72 Dur=54 Dmg=0-0 Speed=0 ReqLv=0
+9-42 | Demonic Pants | Slot=4 Size=2x2 DropLv=86 Dur=67 Dmg=0-0 Speed=0 ReqLv=0
+9-43 | Storm Blitz Pants | Slot=4 Size=2x2 DropLv=117 Dur=75 Dmg=0-0 Speed=0 ReqLv=380
+9-44 | Eternal Wing Pants | Slot=4 Size=2x2 DropLv=122 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+9-45 | Titan  Pants | Slot=4 Size=2x2 DropLv=116 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+9-46 | Brave Pants | Slot=4 Size=2x2 DropLv=112 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+9-47 | Phantom  Pants | Slot=4 Size=2x2 DropLv=115 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+9-48 | Destroy Pants | Slot=4 Size=2x2 DropLv=113 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+9-49 | Seraphim Pants | Slot=4 Size=2x2 DropLv=116 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+9-50 | Divine Pants | Slot=4 Size=2x2 DropLv=109 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+9-51 | Royal Pants | Slot=4 Size=2x2 DropLv=116 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+9-52 | Hades Pants | Slot=4 Size=2x2 DropLv=114 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+9-53 | Succubus Pants | Slot=4 Size=2x2 DropLv=145 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 9-54 | Lazy Wind Pants | Slot=4 Size=2x2 DropLv=145 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 9-55 | Dark Devil Pants | Slot=4 Size=2x2 DropLv=145 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 9-56 | Sticky Pants | Slot=4 Size=2x2 DropLv=145 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 9-57 | Hell Night Pants | Slot=4 Size=2x2 DropLv=145 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 9-58 | Ambition Pants | Slot=4 Size=2x2 DropLv=145 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+9-59 | Sacred Fire Pants | Slot=4 Size=2x2 DropLv=62 Dur=52 Dmg=0-0 Speed=0 ReqLv=0
+9-60 | Storm Jahad Pants | Slot=4 Size=2x2 DropLv=78 Dur=68 Dmg=0-0 Speed=0 ReqLv=0
+9-61 | Piercing Groove Pants | Slot=4 Size=2x2 DropLv=95 Dur=82 Dmg=0-0 Speed=0 ReqLv=0
+9-62 | Scale Pants | Slot=4 Size=2x2 DropLv=25 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+9-63 | Silk Pants | Slot=4 Size=2x2 DropLv=18 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+9-64 | Sphinx Pants | Slot=4 Size=2x2 DropLv=34 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+9-65 | Violent Wind Pants | Slot=4 Size=2x2 DropLv=30 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+9-66 | Dark Soul Pants | Slot=4 Size=2x2 DropLv=70 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+9-67 | Dragon Pants | Slot=4 Size=2x2 DropLv=55 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+9-68 | Guardian Pants | Slot=4 Size=2x2 DropLv=54 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+9-69 | Legendary Pants | Slot=4 Size=2x2 DropLv=53 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+9-70 | Red Wing Pants | Slot=4 Size=2x2 DropLv=53 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+9-71 | Atlans Pants | Slot=4 Size=2x2 DropLv=74 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+9-72 | Storm Jahad Pants | Slot=4 Size=2x2 DropLv=78 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+9-73 | Phoenix Soul Pants | Slot=4 Size=2x2 DropLv=134 Dur=88 Dmg=0-0 Speed=0 ReqLv=380
 9-74 | Stormwing Pants | Slot=4 Size=2x2 DropLv=145 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 9-75 | Light Lord Pants | Slot=4 Size=2x2 DropLv=145 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 9-76 | Magic Knight Pants | Slot=4 Size=2x2 DropLv=145 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+9-78 | Dragon Pants-J | Slot=4 Size=2x2 DropLv=55 Dur=68 Dmg=0-0 Speed=0 ReqLv=0
+9-79 | Legendary Pants-J | Slot=4 Size=2x2 DropLv=53 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+9-80 | Guardian Pants-J | Slot=4 Size=2x2 DropLv=54 Dur=45 Dmg=0-0 Speed=0 ReqLv=0
+9-81 | Light Plate Pants-J | Slot=4 Size=2x2 DropLv=50 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+9-82 | Red Wing Pants-J | Slot=4 Size=2x2 DropLv=53 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+9-83 | Sacred Fire Pants-J | Slot=4 Size=2x2 DropLv=62 Dur=52 Dmg=0-0 Speed=0 ReqLv=0
+10-0 | Bronze Gloves | Slot=5 Size=2x2 DropLv=13 Dur=34 Dmg=0-0 Speed=4 ReqLv=0
+10-1 | Dragon Gloves | Slot=5 Size=2x2 DropLv=52 Dur=68 Dmg=0-0 Speed=6 ReqLv=0
+10-2 | Pad Gloves | Slot=5 Size=2x2 DropLv=3 Dur=28 Dmg=0-0 Speed=0 ReqLv=0
+10-3 | Legendary Gloves | Slot=5 Size=2x2 DropLv=44 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+10-4 | Bone Gloves | Slot=5 Size=2x2 DropLv=14 Dur=30 Dmg=0-0 Speed=0 ReqLv=0
+10-5 | Leather Gloves | Slot=5 Size=2x2 DropLv=4 Dur=30 Dmg=0-0 Speed=8 ReqLv=0
+10-6 | Scale Gloves | Slot=5 Size=2x2 DropLv=22 Dur=40 Dmg=0-0 Speed=10 ReqLv=0
+10-7 | Sphinx Gloves | Slot=5 Size=2x2 DropLv=28 Dur=36 Dmg=0-0 Speed=0 ReqLv=0
+10-8 | Brass Gloves | Slot=5 Size=2x2 DropLv=32 Dur=44 Dmg=0-0 Speed=8 ReqLv=0
+10-9 | Plate Gloves | Slot=5 Size=2x2 DropLv=42 Dur=50 Dmg=0-0 Speed=4 ReqLv=0
+10-10 | Vine Gloves | Slot=5 Size=2x2 DropLv=4 Dur=22 Dmg=0-0 Speed=4 ReqLv=0
+10-11 | Silk Gloves | Slot=5 Size=2x2 DropLv=14 Dur=26 Dmg=0-0 Speed=8 ReqLv=0
+10-12 | Wind Gloves | Slot=5 Size=2x2 DropLv=26 Dur=32 Dmg=0-0 Speed=10 ReqLv=0
+10-13 | Spirit Gloves | Slot=5 Size=2x2 DropLv=38 Dur=38 Dmg=0-0 Speed=4 ReqLv=0
+10-14 | Guardian Gloves | Slot=5 Size=2x2 DropLv=50 Dur=45 Dmg=0-0 Speed=6 ReqLv=0
+10-15 | Storm Crow Gloves | Slot=5 Size=2x2 DropLv=70 Dur=80 Dmg=0-0 Speed=6 ReqLv=0
+10-16 | Black Dragon Gloves | Slot=5 Size=2x2 DropLv=76 Dur=74 Dmg=0-0 Speed=6 ReqLv=0
+10-17 | Dark Phoenix Gloves | Slot=5 Size=2x2 DropLv=86 Dur=80 Dmg=0-0 Speed=6 ReqLv=0
+10-18 | Grand Soul Gloves | Slot=5 Size=2x2 DropLv=70 Dur=67 Dmg=0-0 Speed=5 ReqLv=0
+10-19 | Holy Spirit Gloves | Slot=5 Size=2x2 DropLv=72 Dur=74 Dmg=0-0 Speed=6 ReqLv=0
+10-20 | Thunder Hawk Gloves | Slot=5 Size=2x2 DropLv=88 Dur=82 Dmg=0-0 Speed=7 ReqLv=0
+10-21 | Great Dragon Gloves | Slot=5 Size=2x2 DropLv=94 Dur=86 Dmg=0-0 Speed=6 ReqLv=0
+10-22 | Dark Soul Gloves | Slot=5 Size=2x2 DropLv=87 Dur=75 Dmg=0-0 Speed=6 ReqLv=0
+10-23 | Hurricane Gloves | Slot=5 Size=2x2 DropLv=102 Dur=90 Dmg=0-0 Speed=7 ReqLv=0
+10-24 | Red Spirit Gloves | Slot=5 Size=2x2 DropLv=84 Dur=80 Dmg=0-0 Speed=6 ReqLv=0
+10-25 | Light Plate Gloves | Slot=5 Size=2x2 DropLv=42 Dur=42 Dmg=0-0 Speed=7 ReqLv=0
+10-26 | Adamantine Gloves | Slot=5 Size=2x2 DropLv=57 Dur=56 Dmg=0-0 Speed=6 ReqLv=0
+10-27 | Dark Steel Gloves | Slot=5 Size=2x2 DropLv=75 Dur=70 Dmg=0-0 Speed=5 ReqLv=0
+10-28 | Dark Master Gloves | Slot=5 Size=2x2 DropLv=89 Dur=78 Dmg=0-0 Speed=4 ReqLv=0
+10-29 | Dragon Knight Gloves | Slot=5 Size=2x2 DropLv=114 Dur=90 Dmg=0-0 Speed=7 ReqLv=380
+10-30 | Venom Mist Gloves | Slot=5 Size=2x2 DropLv=111 Dur=86 Dmg=0-0 Speed=7 ReqLv=380
+10-31 | Sylphid Ray Gloves | Slot=5 Size=2x2 DropLv=111 Dur=86 Dmg=0-0 Speed=7 ReqLv=380
+10-32 | Volcano Gloves | Slot=5 Size=2x2 DropLv=127 Dur=95 Dmg=0-0 Speed=7 ReqLv=380
+10-33 | Sunlight Gloves | Slot=5 Size=2x2 DropLv=110 Dur=82 Dmg=0-0 Speed=5 ReqLv=380
+10-34 | Ashcrow Gloves | Slot=5 Size=2x2 DropLv=61 Dur=72 Dmg=0-0 Speed=6 ReqLv=0
+10-35 | Eclipse Gloves | Slot=5 Size=2x2 DropLv=61 Dur=54 Dmg=0-0 Speed=6 ReqLv=0
+10-36 | Iris Gloves | Slot=5 Size=2x2 DropLv=61 Dur=59 Dmg=0-0 Speed=6 ReqLv=0
+10-37 | Valiant Gloves | Slot=5 Size=2x2 DropLv=91 Dur=81 Dmg=0-0 Speed=7 ReqLv=0
+10-38 | Glorious Gloves | Slot=5 Size=2x2 DropLv=91 Dur=74 Dmg=0-0 Speed=5 ReqLv=0
+10-39 | Violent Wind Gloves | Slot=5 Size=2x2 DropLv=24 Dur=36 Dmg=0-0 Speed=6 ReqLv=0
+10-40 | Red Wing Gloves | Slot=5 Size=2x2 DropLv=44 Dur=42 Dmg=0-0 Speed=8 ReqLv=0
+10-41 | Ancient Gloves | Slot=5 Size=2x2 DropLv=61 Dur=54 Dmg=0-0 Speed=7 ReqLv=0
+10-42 | Demonic Gloves | Slot=5 Size=2x2 DropLv=70 Dur=67 Dmg=0-0 Speed=6 ReqLv=0
+10-43 | Storm Blitz Gloves | Slot=5 Size=2x2 DropLv=87 Dur=75 Dmg=0-0 Speed=6 ReqLv=380
+10-44 | Eternal Wing Gloves | Slot=5 Size=2x2 DropLv=102 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+10-45 | Titan  Gloves | Slot=5 Size=2x2 DropLv=100 Dur=86 Dmg=0-0 Speed=7 ReqLv=380
+10-46 | Brave Gloves | Slot=5 Size=2x2 DropLv=97 Dur=86 Dmg=0-0 Speed=7 ReqLv=380
+10-47 | Phantom  Gloves | Slot=5 Size=2x2 DropLv=101 Dur=86 Dmg=0-0 Speed=7 ReqLv=380
+10-48 | Destroy Gloves | Slot=5 Size=2x2 DropLv=99 Dur=86 Dmg=0-0 Speed=7 ReqLv=380
+10-49 | Seraphim Gloves | Slot=5 Size=2x2 DropLv=100 Dur=86 Dmg=0-0 Speed=7 ReqLv=380
+10-50 | Divine Gloves | Slot=5 Size=2x2 DropLv=95 Dur=86 Dmg=0-0 Speed=7 ReqLv=380
+10-51 | Royal Gloves | Slot=5 Size=2x2 DropLv=101 Dur=86 Dmg=0-0 Speed=7 ReqLv=380
+10-52 | Hades Gloves | Slot=5 Size=2x2 DropLv=100 Dur=86 Dmg=0-0 Speed=7 ReqLv=380
+10-53 | Succubus Gloves | Slot=5 Size=2x2 DropLv=142 Dur=90 Dmg=0-0 Speed=6 ReqLv=400
 10-54 | Lazy Wind Gloves | Slot=5 Size=2x2 DropLv=142 Dur=90 Dmg=0-0 Speed=7 ReqLv=400
 10-55 | Dark Devil Gloves | Slot=5 Size=2x2 DropLv=142 Dur=90 Dmg=0-0 Speed=7 ReqLv=400
 10-56 | Sticky Gloves | Slot=5 Size=2x2 DropLv=142 Dur=90 Dmg=0-0 Speed=7 ReqLv=400
 10-57 | Hell Night Gloves | Slot=5 Size=2x2 DropLv=142 Dur=90 Dmg=0-0 Speed=7 ReqLv=400
 10-58 | Ambition Gloves | Slot=5 Size=2x2 DropLv=142 Dur=90 Dmg=0-0 Speed=7 ReqLv=400
+10-62 | Scale Gloves | Slot=5 Size=2x2 DropLv=22 Dur=255 Dmg=0-0 Speed=10 ReqLv=1
+10-63 | Silk Gloves | Slot=5 Size=2x2 DropLv=14 Dur=255 Dmg=0-0 Speed=8 ReqLv=1
+10-64 | Sphinx Gloves | Slot=5 Size=2x2 DropLv=28 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+10-65 | Violent Wind Gloves | Slot=5 Size=2x2 DropLv=24 Dur=255 Dmg=0-0 Speed=6 ReqLv=1
+10-66 | Dark Soul Gloves | Slot=5 Size=2x2 DropLv=57 Dur=255 Dmg=0-0 Speed=6 ReqLv=150
+10-67 | Dragon Gloves | Slot=5 Size=2x2 DropLv=52 Dur=255 Dmg=0-0 Speed=6 ReqLv=150
+10-68 | Guardian Gloves | Slot=5 Size=2x2 DropLv=50 Dur=255 Dmg=0-0 Speed=6 ReqLv=150
+10-69 | Legendary Gloves | Slot=5 Size=2x2 DropLv=44 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+10-70 | Red Wing Gloves | Slot=5 Size=2x2 DropLv=44 Dur=255 Dmg=0-0 Speed=8 ReqLv=150
+10-71 | Atlans Gloves | Slot=5 Size=2x2 DropLv=70 Dur=255 Dmg=0-0 Speed=6 ReqLv=150
 10-74 | Stormwing Gloves | Slot=5 Size=2x2 DropLv=142 Dur=90 Dmg=0-0 Speed=7 ReqLv=400
 10-75 | Light Lord Gloves | Slot=5 Size=2x2 DropLv=142 Dur=90 Dmg=0-0 Speed=7 ReqLv=400
 10-76 | Magic Knight Gloves | Slot=5 Size=2x2 DropLv=142 Dur=90 Dmg=0-0 Speed=7 ReqLv=400
+10-78 | Dragon Gloves-J | Slot=5 Size=2x2 DropLv=52 Dur=68 Dmg=0-0 Speed=6 ReqLv=0
+10-79 | Legendary Gloves-J | Slot=5 Size=2x2 DropLv=44 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+10-80 | Guardian Gloves-J | Slot=5 Size=2x2 DropLv=50 Dur=45 Dmg=0-0 Speed=6 ReqLv=0
+10-81 | Light Plate Gloves-J | Slot=5 Size=2x2 DropLv=42 Dur=42 Dmg=0-0 Speed=7 ReqLv=0
+10-82 | Red Wing Gloves-J | Slot=5 Size=2x2 DropLv=44 Dur=42 Dmg=0-0 Speed=8 ReqLv=0
+11-0 | Bronze Boots | Slot=6 Size=2x2 DropLv=12 Dur=34 Dmg=0-0 Speed=0 ReqLv=0
+11-1 | Dragon Boots | Slot=6 Size=2x2 DropLv=54 Dur=68 Dmg=0-0 Speed=0 ReqLv=0
+11-2 | Pad Boots | Slot=6 Size=2x2 DropLv=4 Dur=28 Dmg=0-0 Speed=0 ReqLv=0
+11-3 | Legendary Boots | Slot=6 Size=2x2 DropLv=46 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+11-4 | Bone Boots | Slot=6 Size=2x2 DropLv=16 Dur=30 Dmg=0-0 Speed=0 ReqLv=0
+11-5 | Leather Boots | Slot=6 Size=2x2 DropLv=5 Dur=30 Dmg=0-0 Speed=0 ReqLv=0
+11-6 | Scale Boots | Slot=6 Size=2x2 DropLv=22 Dur=40 Dmg=0-0 Speed=0 ReqLv=0
+11-7 | Sphinx Boots | Slot=6 Size=2x2 DropLv=30 Dur=36 Dmg=0-0 Speed=0 ReqLv=0
+11-8 | Brass Boots | Slot=6 Size=2x2 DropLv=32 Dur=44 Dmg=0-0 Speed=0 ReqLv=0
+11-9 | Plate Boots | Slot=6 Size=2x2 DropLv=42 Dur=50 Dmg=0-0 Speed=0 ReqLv=0
+11-10 | Vine Boots | Slot=6 Size=2x2 DropLv=5 Dur=22 Dmg=0-0 Speed=0 ReqLv=0
+11-11 | Silk Boots | Slot=6 Size=2x2 DropLv=15 Dur=26 Dmg=0-0 Speed=0 ReqLv=0
+11-12 | Wind Boots | Slot=6 Size=2x2 DropLv=27 Dur=32 Dmg=0-0 Speed=0 ReqLv=0
+11-13 | Spirit Boots | Slot=6 Size=2x2 DropLv=40 Dur=38 Dmg=0-0 Speed=0 ReqLv=0
+11-14 | Guardian Boots | Slot=6 Size=2x2 DropLv=52 Dur=45 Dmg=0-0 Speed=0 ReqLv=0
+11-15 | Storm Crow Boots | Slot=6 Size=2x2 DropLv=72 Dur=80 Dmg=0-0 Speed=0 ReqLv=0
+11-16 | Black Dragon Boots | Slot=6 Size=2x2 DropLv=78 Dur=74 Dmg=0-0 Speed=0 ReqLv=0
+11-17 | Dark Phoenix Boots | Slot=6 Size=2x2 DropLv=93 Dur=80 Dmg=0-0 Speed=0 ReqLv=0
+11-18 | Grand Soul Boots | Slot=6 Size=2x2 DropLv=76 Dur=67 Dmg=0-0 Speed=0 ReqLv=0
+11-19 | Holy Spirit Boots | Slot=6 Size=2x2 DropLv=81 Dur=74 Dmg=0-0 Speed=0 ReqLv=0
+11-20 | Thunder Hawk Boots | Slot=6 Size=2x2 DropLv=92 Dur=82 Dmg=0-0 Speed=0 ReqLv=0
+11-21 | Great Dragon Boots | Slot=6 Size=2x2 DropLv=98 Dur=86 Dmg=0-0 Speed=0 ReqLv=0
+11-22 | Dark Soul Boots | Slot=6 Size=2x2 DropLv=95 Dur=75 Dmg=0-0 Speed=0 ReqLv=0
+11-23 | Hurricane Boots | Slot=6 Size=2x2 DropLv=110 Dur=90 Dmg=0-0 Speed=0 ReqLv=0
+11-24 | Red Spirit Boots | Slot=6 Size=2x2 DropLv=87 Dur=80 Dmg=0-0 Speed=0 ReqLv=0
+11-25 | Light Plate Boots | Slot=6 Size=2x2 DropLv=45 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+11-26 | Adamantine Boots | Slot=6 Size=2x2 DropLv=60 Dur=56 Dmg=0-0 Speed=0 ReqLv=0
+11-27 | Dark Steel Boots | Slot=6 Size=2x2 DropLv=83 Dur=70 Dmg=0-0 Speed=0 ReqLv=0
+11-28 | Dark Master Boots | Slot=6 Size=2x2 DropLv=95 Dur=78 Dmg=0-0 Speed=0 ReqLv=0
+11-29 | Dragon Knight Boots | Slot=6 Size=2x2 DropLv=119 Dur=90 Dmg=0-0 Speed=0 ReqLv=380
+11-30 | Venom Mist Boots | Slot=6 Size=2x2 DropLv=119 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+11-31 | Sylphid Ray Boots | Slot=6 Size=2x2 DropLv=119 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+11-32 | Volcano Boots | Slot=6 Size=2x2 DropLv=131 Dur=95 Dmg=0-0 Speed=0 ReqLv=380
+11-33 | Sunlight Boots | Slot=6 Size=2x2 DropLv=121 Dur=82 Dmg=0-0 Speed=0 ReqLv=380
+11-34 | Ashcrow Boots | Slot=6 Size=2x2 DropLv=68 Dur=72 Dmg=0-0 Speed=0 ReqLv=0
+11-35 | Eclipse Boots | Slot=6 Size=2x2 DropLv=68 Dur=54 Dmg=0-0 Speed=0 ReqLv=0
+11-36 | Iris Boots | Slot=6 Size=2x2 DropLv=68 Dur=59 Dmg=0-0 Speed=0 ReqLv=0
+11-37 | Valiant Boots | Slot=6 Size=2x2 DropLv=98 Dur=81 Dmg=0-0 Speed=0 ReqLv=0
+11-38 | Glorious Boots | Slot=6 Size=2x2 DropLv=98 Dur=74 Dmg=0-0 Speed=0 ReqLv=0
+11-39 | Violent Wind Boots | Slot=6 Size=2x2 DropLv=26 Dur=36 Dmg=0-0 Speed=0 ReqLv=0
+11-40 | Red Wing Boots | Slot=6 Size=2x2 DropLv=46 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+11-41 | Ancient Boots | Slot=6 Size=2x2 DropLv=65 Dur=54 Dmg=0-0 Speed=0 ReqLv=0
+11-42 | Demonic Boots | Slot=6 Size=2x2 DropLv=76 Dur=67 Dmg=0-0 Speed=0 ReqLv=0
+11-43 | Storm Blitz Boots | Slot=6 Size=2x2 DropLv=95 Dur=75 Dmg=0-0 Speed=0 ReqLv=380
+11-44 | Eternal Wing Boots | Slot=6 Size=2x2 DropLv=99 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+11-45 | Titan Boots | Slot=6 Size=2x2 DropLv=96 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+11-46 | Brave Boots | Slot=6 Size=2x2 DropLv=93 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+11-47 | Phantom Boots | Slot=6 Size=2x2 DropLv=97 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+11-48 | Destroy Boots | Slot=6 Size=2x2 DropLv=94 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+11-49 | Seraphim Boots | Slot=6 Size=2x2 DropLv=97 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+11-50 | Divine Boots | Slot=6 Size=2x2 DropLv=92 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+11-51 | Royal Boots | Slot=6 Size=2x2 DropLv=98 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+11-52 | Hades Boots | Slot=6 Size=2x2 DropLv=94 Dur=86 Dmg=0-0 Speed=0 ReqLv=380
+11-53 | Succubus Boots | Slot=6 Size=2x2 DropLv=140 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 11-54 | Lazy Wind Boots | Slot=6 Size=2x2 DropLv=140 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 11-55 | Dark Devil Boots | Slot=6 Size=2x2 DropLv=140 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 11-56 | Sticky Boots | Slot=6 Size=2x2 DropLv=140 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 11-57 | Hell Night Boots | Slot=6 Size=2x2 DropLv=140 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 11-58 | Ambition Boots | Slot=6 Size=2x2 DropLv=140 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+11-59 | Sacred Fire Boots | Slot=6 Size=2x2 DropLv=50 Dur=52 Dmg=0-0 Speed=0 ReqLv=0
+11-60 | Storm Jahad Boots | Slot=6 Size=2x2 DropLv=62 Dur=68 Dmg=0-0 Speed=0 ReqLv=0
+11-61 | Piercing Groove Boots | Slot=6 Size=2x2 DropLv=82 Dur=82 Dmg=0-0 Speed=0 ReqLv=0
+11-62 | Scale Boots | Slot=6 Size=2x2 DropLv=22 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+11-63 | Silk Boots | Slot=6 Size=2x2 DropLv=15 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+11-64 | Sphinx Boots | Slot=6 Size=2x2 DropLv=30 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+11-65 | Violent Wind Boots | Slot=6 Size=2x2 DropLv=26 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+11-66 | Dark Soul Boots | Slot=6 Size=2x2 DropLv=60 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+11-67 | Dragon Boots | Slot=6 Size=2x2 DropLv=54 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+11-68 | Guardian Boots | Slot=6 Size=2x2 DropLv=52 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+11-69 | Legendary Boots | Slot=6 Size=2x2 DropLv=46 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+11-70 | Red Wing Boots | Slot=6 Size=2x2 DropLv=46 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+11-71 | Atlans Boots | Slot=6 Size=2x2 DropLv=72 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+11-72 | Storm Jahad Boots | Slot=6 Size=2x2 DropLv=62 Dur=255 Dmg=0-0 Speed=0 ReqLv=150
+11-73 | Phoenix Soul Boots | Slot=6 Size=2x2 DropLv=119 Dur=88 Dmg=0-0 Speed=0 ReqLv=380
 11-74 | Stormwing Boots | Slot=6 Size=2x2 DropLv=140 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 11-75 | Light Lord Boots | Slot=6 Size=2x2 DropLv=140 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
 11-76 | Magic Knight Boots | Slot=6 Size=2x2 DropLv=140 Dur=90 Dmg=0-0 Speed=0 ReqLv=400
+11-78 | Dragon Boots-J | Slot=6 Size=2x2 DropLv=54 Dur=68 Dmg=0-0 Speed=0 ReqLv=0
+11-79 | Legendary Boots-J | Slot=6 Size=2x2 DropLv=46 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+11-80 | Guardian Boots-J | Slot=6 Size=2x2 DropLv=52 Dur=45 Dmg=0-0 Speed=0 ReqLv=0
+11-81 | Light Plate Boots-J | Slot=6 Size=2x2 DropLv=45 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+11-82 | Red Wing Boots-J | Slot=6 Size=2x2 DropLv=46 Dur=42 Dmg=0-0 Speed=0 ReqLv=0
+11-83 | Sacred Fire Boots-J | Slot=6 Size=2x2 DropLv=50 Dur=52 Dmg=0-0 Speed=0 ReqLv=0
+12-0 | Wings of Elf | Slot=7 Size=3x2 DropLv=100 Dur=200 Dmg=0-0 Speed=0 ReqLv=180
+12-1 | Wings of Heaven | Slot=7 Size=5x3 DropLv=100 Dur=200 Dmg=0-0 Speed=0 ReqLv=180
+12-2 | Wings of Satan | Slot=7 Size=5x2 DropLv=100 Dur=200 Dmg=0-0 Speed=0 ReqLv=180
+12-3 | Wings of Spirits | Slot=7 Size=5x3 DropLv=150 Dur=200 Dmg=0-0 Speed=0 ReqLv=215
+12-4 | Wings of Soul | Slot=7 Size=5x3 DropLv=150 Dur=200 Dmg=0-0 Speed=0 ReqLv=215
+12-5 | Wings of Dragon | Slot=7 Size=3x3 DropLv=150 Dur=200 Dmg=0-0 Speed=0 ReqLv=215
+12-6 | Wings of Darkness | Slot=7 Size=4x2 DropLv=150 Dur=200 Dmg=0-0 Speed=0 ReqLv=215
+12-7 | Orb of Twisting Slash | Slot=-1 Size=1x1 DropLv=47 Dur=0 Dmg=0-0 Speed=0 ReqLv=80
+12-8 | Healing Orb | Slot=-1 Size=1x1 DropLv=8 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-9 | Orb of Greater Fortitude | Slot=-1 Size=1x1 DropLv=13 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-10 | Orb of Greater Damage | Slot=-1 Size=1x1 DropLv=18 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-11 | Orb of Summoning | Slot=-1 Size=1x1 DropLv=3 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-12 | Orb of Rageful Blow | Slot=-1 Size=1x1 DropLv=78 Dur=0 Dmg=0-0 Speed=0 ReqLv=170
+12-13 | Orb of Impale | Slot=-1 Size=1x1 DropLv=20 Dur=0 Dmg=0-0 Speed=0 ReqLv=28
+12-14 | Orb of Greater Fortitude | Slot=-1 Size=1x1 DropLv=60 Dur=0 Dmg=0-0 Speed=0 ReqLv=120
+12-15 | Jewel of Chaos | Slot=-1 Size=1x1 DropLv=12 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-16 | Orb of Fire Slash | Slot=-1 Size=1x1 DropLv=60 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-17 | Orb of Penetration | Slot=-1 Size=1x1 DropLv=64 Dur=0 Dmg=0-0 Speed=0 ReqLv=130
+12-18 | Orb of Ice Arrow | Slot=-1 Size=1x1 DropLv=81 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-19 | Orb of Death Stab | Slot=-1 Size=1x1 DropLv=72 Dur=0 Dmg=0-0 Speed=0 ReqLv=160
+12-21 | Scroll of FireBurst | Slot=-1 Size=1x2 DropLv=74 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-22 | Scroll of Summon | Slot=-1 Size=1x2 DropLv=98 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-23 | Scroll of Critical Damage | Slot=-1 Size=1x2 DropLv=82 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-24 | Scroll of Electric Spark | Slot=-1 Size=1x2 DropLv=92 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-26 | Gem of Secret | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-30 | Bundle of Jewel of Bless | Slot=-1 Size=1x1 DropLv=25 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-31 | Bundle of Jewel of Soul | Slot=-1 Size=1x1 DropLv=30 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-32 | Box of Red Ribbon | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-33 | Box of Green Ribbon | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-34 | Box of Blue Ribbon | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-35 | Scroll of Fire Scream | Slot=-1 Size=1x2 DropLv=102 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-36 | Wing of Storm | Slot=7 Size=4x3 DropLv=150 Dur=220 Dmg=0-0 Speed=0 ReqLv=400
+12-37 | Wing of Eternal | Slot=7 Size=4x3 DropLv=150 Dur=220 Dmg=0-0 Speed=0 ReqLv=400
+12-38 | Wing of Illusion | Slot=7 Size=4x3 DropLv=150 Dur=220 Dmg=0-0 Speed=0 ReqLv=400
+12-39 | Wing of Ruin | Slot=7 Size=4x3 DropLv=150 Dur=220 Dmg=0-0 Speed=0 ReqLv=400
+12-40 | Cape of Emperor | Slot=7 Size=2x3 DropLv=150 Dur=220 Dmg=0-0 Speed=0 ReqLv=400
+12-41 | Wing of Curse | Slot=7 Size=4x2 DropLv=100 Dur=200 Dmg=0-0 Speed=0 ReqLv=180
+12-42 | Wind of Despair | Slot=7 Size=4x3 DropLv=150 Dur=200 Dmg=0-0 Speed=0 ReqLv=215
+12-43 | Wing of Dimension | Slot=7 Size=4x3 DropLv=150 Dur=220 Dmg=0-0 Speed=0 ReqLv=400
+12-44 | Crystal of Destruction | Slot=-1 Size=1x1 DropLv=100 Dur=0 Dmg=0-0 Speed=0 ReqLv=220
+12-45 | Crystal of Multi-Shot | Slot=-1 Size=1x1 DropLv=100 Dur=0 Dmg=0-0 Speed=0 ReqLv=220
+12-46 | Crystal of Recovery | Slot=-1 Size=1x1 DropLv=100 Dur=0 Dmg=0-0 Speed=0 ReqLv=220
+12-47 | Crystal of Flame Strike | Slot=-1 Size=1x1 DropLv=100 Dur=0 Dmg=0-0 Speed=0 ReqLv=220
+12-48 | Scroll of Chaotic Diseier | Slot=-1 Size=1x2 DropLv=100 Dur=0 Dmg=0-0 Speed=0 ReqLv=220
+12-49 | Cape of Fighter | Slot=7 Size=2x3 DropLv=150 Dur=200 Dmg=0-0 Speed=0 ReqLv=180
+12-50 | Cape of Overrule | Slot=7 Size=2x3 DropLv=150 Dur=220 Dmg=0-0 Speed=0 ReqLv=400
+12-60 | Seed (Fire) | Slot=-1 Size=1x1 DropLv=150 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-61 | Seed (Water) | Slot=-1 Size=1x1 DropLv=150 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-62 | Seed (Ice) | Slot=-1 Size=1x1 DropLv=150 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-63 | Seed (Wind) | Slot=-1 Size=1x1 DropLv=150 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-64 | Seed (Lightning) | Slot=-1 Size=1x1 DropLv=150 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-65 | Seed (Earth) | Slot=-1 Size=1x1 DropLv=150 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-70 | Sphere (Mono) | Slot=-1 Size=1x1 DropLv=102 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-71 | Sphere (Di) | Slot=-1 Size=1x1 DropLv=122 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-72 | Sphere (Tri) | Slot=-1 Size=1x1 DropLv=132 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-73 | Sphere (Tetra) | Slot=-1 Size=1x1 DropLv=132 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-74 | Sphere (Penta) | Slot=-1 Size=1x1 DropLv=152 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-100 | Seed Sphere (Fire) | Slot=-1 Size=1x1 DropLv=1 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-101 | Seed Sphere (Water) | Slot=-1 Size=1x1 DropLv=1 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-102 | Seed Sphere (Ice) | Slot=-1 Size=1x1 DropLv=1 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-103 | Seed Sphere (Wind) | Slot=-1 Size=1x1 DropLv=1 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-104 | Seed Sphere (Lightning) | Slot=-1 Size=1x1 DropLv=1 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-105 | Seed Sphere (Earth) | Slot=-1 Size=1x1 DropLv=1 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-106 | Seed Sphere (Fire) | Slot=-1 Size=1x1 DropLv=2 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-107 | Seed Sphere (Water) | Slot=-1 Size=1x1 DropLv=2 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-108 | Seed Sphere (Ice) | Slot=-1 Size=1x1 DropLv=2 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-109 | Seed Sphere (Wind) | Slot=-1 Size=1x1 DropLv=2 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-110 | Seed Sphere (Lightning) | Slot=-1 Size=1x1 DropLv=2 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-111 | Seed Sphere (Earth) | Slot=-1 Size=1x1 DropLv=2 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-112 | Seed Sphere (Fire) | Slot=-1 Size=1x1 DropLv=3 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-113 | Seed Sphere (Water) | Slot=-1 Size=1x1 DropLv=3 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-114 | Seed Sphere (Ice) | Slot=-1 Size=1x1 DropLv=3 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-115 | Seed Sphere (Wind) | Slot=-1 Size=1x1 DropLv=3 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-116 | Seed Sphere (Lightning) | Slot=-1 Size=1x1 DropLv=3 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-117 | Seed Sphere (Earth) | Slot=-1 Size=1x1 DropLv=3 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-118 | Seed Sphere (Fire) | Slot=-1 Size=1x1 DropLv=4 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-119 | Seed Sphere (Water) | Slot=-1 Size=1x1 DropLv=4 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-120 | Seed Sphere (Ice) | Slot=-1 Size=1x1 DropLv=4 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-121 | Seed Sphere (Wind) | Slot=-1 Size=1x1 DropLv=4 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-122 | Seed Sphere (Lightning) | Slot=-1 Size=1x1 DropLv=4 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-123 | Seed Sphere (Earth) | Slot=-1 Size=1x1 DropLv=4 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-124 | Seed Sphere (Fire) | Slot=-1 Size=1x1 DropLv=5 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-125 | Seed Sphere (Water) | Slot=-1 Size=1x1 DropLv=5 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-126 | Seed Sphere (Ice) | Slot=-1 Size=1x1 DropLv=5 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-127 | Seed Sphere (Wind) | Slot=-1 Size=1x1 DropLv=5 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-128 | Seed Sphere (Lightning) | Slot=-1 Size=1x1 DropLv=5 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-129 | Seed Sphere (Earth) | Slot=-1 Size=1x1 DropLv=5 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-130 | Small Cape of Lord | Slot=7 Size=2x2 DropLv=1 Dur=200 Dmg=0-0 Speed=0 ReqLv=1
+12-131 | Small Wing of Curse | Slot=7 Size=3x2 DropLv=1 Dur=200 Dmg=0-0 Speed=0 ReqLv=1
+12-132 | Small Wings of Elf | Slot=7 Size=3x2 DropLv=1 Dur=200 Dmg=0-0 Speed=0 ReqLv=1
+12-133 | Small Wings of Heaven | Slot=7 Size=3x2 DropLv=1 Dur=200 Dmg=0-0 Speed=0 ReqLv=1
+12-134 | Small Wings of Satan | Slot=7 Size=3x2 DropLv=1 Dur=200 Dmg=0-0 Speed=0 ReqLv=1
+12-135 | Little Warrior's Cloak | Slot=7 Size=2x2 DropLv=1 Dur=200 Dmg=0-0 Speed=0 ReqLv=1
+12-136 | Jewel of Life Bundle | Slot=-1 Size=1x1 DropLv=72 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-137 | Jewel of Creation Bundle | Slot=-1 Size=1x1 DropLv=78 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-138 | Jewel of Guardian Bundle | Slot=-1 Size=1x1 DropLv=75 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-139 | Gemstone Bundle | Slot=-1 Size=1x1 DropLv=25 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-140 | Jewel of Harmony Bundle | Slot=-1 Size=1x1 DropLv=25 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-141 | Jewel of Chaos Bundle | Slot=-1 Size=1x1 DropLv=12 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-142 | Lower Refining Stone Bundle | Slot=-1 Size=1x1 DropLv=25 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+12-143 | Higher Refining Stone Bundle | Slot=-1 Size=1x1 DropLv=25 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
 12-144 | Mithril Fragment | Slot=-1 Size=1x1 DropLv=1 Dur=1 Dmg=0-0 Speed=0 ReqLv=0
 12-145 | Mithril | Slot=-1 Size=1x1 DropLv=1 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
 12-146 | Elixir Fragment | Slot=-1 Size=1x1 DropLv=1 Dur=1 Dmg=0-0 Speed=0 ReqLv=0
@@ -497,8 +1070,143 @@
 12-266 | Wings of Conqueror | Slot=7 Size=4x3 DropLv=150 Dur=220 Dmg=0-0 Speed=0 ReqLv=280
 12-267 | Wings of Angel and Devil | Slot=7 Size=4x3 DropLv=350 Dur=220 Dmg=0-0 Speed=0 ReqLv=350
 12-268 | Wings of Conqueror | Slot=7 Size=4x3 DropLv=150 Dur=220 Dmg=0-0 Speed=0 ReqLv=400
+13-0 | Guardian Angel | Slot=8 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=23
+13-1 | Imp | Slot=8 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=28
+13-2 | Horn of Uniria | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=25
+13-3 | Horn of Dinorant | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=110
+13-4 | Dark Horse | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=218
+13-5 | Dark Raven | Slot=1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-7 | Contract (Summon) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-8 | Ring of Ice | Slot=10 Size=1x1 DropLv=0 Dur=50 Dmg=0-0 Speed=0 ReqLv=20
+13-9 | Ring of Poison | Slot=10 Size=1x1 DropLv=0 Dur=50 Dmg=0-0 Speed=0 ReqLv=17
+13-10 | Transformation Ring | Slot=10 Size=1x1 DropLv=0 Dur=200 Dmg=0-0 Speed=0 ReqLv=0
+13-11 | Order (Guardian/Life Stone) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-12 | Pendant of Lighting | Slot=9 Size=1x1 DropLv=0 Dur=50 Dmg=0-0 Speed=0 ReqLv=21
+13-13 | Pendant of Fire | Slot=9 Size=1x1 DropLv=0 Dur=50 Dmg=0-0 Speed=0 ReqLv=13
+13-14 | Loch's Feather | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=78
+13-15 | Fruits | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-16 | Scroll of Archangel | Slot=-1 Size=1x2 DropLv=0 Dur=128 Dmg=0-0 Speed=0 ReqLv=0
+13-17 | Blood Bone | Slot=-1 Size=1x2 DropLv=0 Dur=128 Dmg=0-0 Speed=0 ReqLv=0
+13-18 | Invisibility Cloak | Slot=-1 Size=2x2 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-19 | Absolute Weapon of Archangel | Slot=-1 Size=1x2 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-20 | Wizards Ring | Slot=10 Size=1x1 DropLv=0 Dur=30 Dmg=0-0 Speed=0 ReqLv=0
+13-21 | Ring of Fire | Slot=10 Size=1x1 DropLv=0 Dur=50 Dmg=0-0 Speed=0 ReqLv=30
+13-22 | Ring of Earth | Slot=10 Size=1x1 DropLv=0 Dur=50 Dmg=0-0 Speed=0 ReqLv=38
+13-23 | Ring of Wind | Slot=10 Size=1x1 DropLv=0 Dur=50 Dmg=0-0 Speed=0 ReqLv=44
+13-24 | Ring of Magic | Slot=10 Size=1x1 DropLv=0 Dur=50 Dmg=0-0 Speed=0 ReqLv=47
+13-25 | Pendant of Ice | Slot=9 Size=1x1 DropLv=0 Dur=50 Dmg=0-0 Speed=0 ReqLv=34
+13-26 | Pendant of Wind | Slot=9 Size=1x1 DropLv=0 Dur=50 Dmg=0-0 Speed=0 ReqLv=42
+13-27 | Pendant of Water | Slot=9 Size=1x1 DropLv=0 Dur=50 Dmg=0-0 Speed=0 ReqLv=46
+13-28 | Pendant of Ability | Slot=9 Size=1x1 DropLv=0 Dur=50 Dmg=0-0 Speed=0 ReqLv=50
+13-29 | Armor of Guardsman | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-30 | Cape of Lord | Slot=7 Size=2x3 DropLv=0 Dur=200 Dmg=0-0 Speed=0 ReqLv=150
+13-31 | Spirit | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-32 | Splinter of Armor | Slot=-1 Size=1x1 DropLv=0 Dur=1 Dmg=0-0 Speed=0 ReqLv=0
+13-33 | Bless of Guardian | Slot=-1 Size=1x1 DropLv=0 Dur=1 Dmg=0-0 Speed=0 ReqLv=0
+13-34 | Claw of Beast | Slot=-1 Size=1x1 DropLv=0 Dur=1 Dmg=0-0 Speed=0 ReqLv=0
+13-35 | Fragment of Horn | Slot=-1 Size=1x1 DropLv=0 Dur=1 Dmg=0-0 Speed=0 ReqLv=0
+13-36 | Broken Horn | Slot=-1 Size=2x2 DropLv=0 Dur=1 Dmg=0-0 Speed=0 ReqLv=0
+13-37 | Horn of Fenrir | Slot=-1 Size=2x2 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=300
+13-38 | Moonstone Pendant | Slot=10 Size=1x1 DropLv=0 Dur=120 Dmg=0-0 Speed=0 ReqLv=21
+13-39 | Elite Transfer Skeleton Ring | Slot=10 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=10
+13-40 | Jack Olantern Ring | Slot=10 Size=1x1 DropLv=0 Dur=100 Dmg=0-0 Speed=0 ReqLv=10
+13-41 | Transfer Christmas Ring | Slot=10 Size=1x1 DropLv=0 Dur=100 Dmg=0-0 Speed=0 ReqLv=1
+13-42 | Ring of GM | Slot=10 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-43 | Seal of Ascension | Slot=10 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-44 | Seal of Wealth | Slot=10 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-45 | Seal of Sustenance | Slot=10 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-46 | Devil Square Ticket | Slot=-1 Size=1x1 DropLv=0 Dur=10 Dmg=0-0 Speed=0 ReqLv=0
+13-47 | Blood Castle Ticket | Slot=-1 Size=1x1 DropLv=0 Dur=10 Dmg=0-0 Speed=0 ReqLv=0
+13-48 | Kalima Ticket | Slot=-1 Size=1x1 DropLv=0 Dur=10 Dmg=0-0 Speed=0 ReqLv=0
+13-49 | Old Scroll | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-50 | Illusion Sorcerer Covenant | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-51 | Scroll of Blood | Slot=-1 Size=2x2 DropLv=0 Dur=1 Dmg=0-0 Speed=0 ReqLv=0
+13-52 | Condor Flame | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-53 | Condor Feather | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-54 | Reset Fruit Strength | Slot=-1 Size=1x1 DropLv=0 Dur=10 Dmg=0-0 Speed=0 ReqLv=0
+13-55 | Reset Fruit Quickness | Slot=-1 Size=1x1 DropLv=0 Dur=10 Dmg=0-0 Speed=0 ReqLv=0
+13-56 | Reset Fruit Health | Slot=-1 Size=1x1 DropLv=0 Dur=10 Dmg=0-0 Speed=0 ReqLv=0
+13-57 | Reset Fruit Energy | Slot=-1 Size=1x1 DropLv=0 Dur=10 Dmg=0-0 Speed=0 ReqLv=0
+13-58 | Reset Fruit Control | Slot=-1 Size=1x1 DropLv=0 Dur=10 Dmg=0-0 Speed=0 ReqLv=0
+13-59 | Seal of Mobility | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-60 | Indulgence | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-61 | Illusion Temple Ticket | Slot=-1 Size=1x1 DropLv=0 Dur=10 Dmg=0-0 Speed=0 ReqLv=0
+13-62 | Seal of Healing | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-63 | Seal of Divinity | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-64 | Demon | Slot=8 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-65 | Spirit of Guardian | Slot=8 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-66 | Invitation to Santa Village | Slot=-1 Size=1x1 DropLv=0 Dur=10 Dmg=0-0 Speed=0 ReqLv=0
+13-67 | Pet Rudolph | Slot=8 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=28
+13-68 | Snowman Transformation Ring | Slot=10 Size=1x1 DropLv=0 Dur=100 Dmg=0-0 Speed=0 ReqLv=10
+13-69 | Talisman of Resurrection | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-70 | Talisman of Mobility | Slot=-1 Size=1x1 DropLv=0 Dur=2 Dmg=0-0 Speed=0 ReqLv=0
+13-71 | Sword/Mace/Spear | Slot=8 Size=2x3 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-72 | Staff | Slot=8 Size=2x3 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-73 | Bow/Crossbow | Slot=8 Size=2x3 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-74 | Scepter | Slot=8 Size=2x3 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-75 | Stick | Slot=8 Size=2x3 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-76 | Panda Ring | Slot=10 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
 13-77 | Brown Panda Ring | Slot=10 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
 13-78 | Pink Panda Ring | Slot=10 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-80 | Pet Panda | Slot=8 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-81 | Talisman of Guardian | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-82 | Talisman of Item Protection | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-83 | Talisman of Wings of Satan | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-84 | Talisman of Wings of Heaven | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-85 | Talisman of Wings of Elf | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-86 | Talisman of Wing of Curse | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-87 | Talisman of Cape of Emperor | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-88 | Talisman of Wings of Dragon | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-89 | Talisman of Wings of Soul | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-90 | Talisman of Wings of Spirits | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-91 | Talisman of Wing of Despair | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-92 | Talisman of Wings of Darkness | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-93 | Master Seal of Ascension | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-94 | Master Seal of Wealth | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-95 | Gladiator's Honor | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-96 | Seal of Strength | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-99 | Character Slot Unlock Key | Slot=10 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-103 | Party EXP Scroll | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-104 | Max AG Boost Aura | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-105 | Max SD Boost Aura | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-106 | Pet Unicorn | Slot=8 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=28
+13-107 | Lethal Wizard's Ring | Slot=10 Size=1x1 DropLv=0 Dur=100 Dmg=0-0 Speed=0 ReqLv=0
+13-109 | Sapphire Ring | Slot=10 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-110 | Ruby Ring | Slot=10 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-111 | Topaz Ring | Slot=10 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-112 | Amethyst Ring | Slot=10 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-113 | Ruby Necklace | Slot=9 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-114 | Emerald Necklace | Slot=9 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-115 | Sapphire Necklace | Slot=9 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-116 | Seal of Wealth | Slot=10 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-117 | Minimum Vitality Potion | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-118 | Low Vitality Potion | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-119 | Medium Vitality Potion | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-120 | High Vitality Potion | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-121 | Access Ticket to Chaos Castle | Slot=-1 Size=1x1 DropLv=0 Dur=10 Dmg=0-0 Speed=0 ReqLv=0
+13-122 | Skeleton Transformation Ring | Slot=10 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-123 | Pet Skeleton | Slot=8 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
+13-124 | Paid Channel Access Ticket | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+13-125 | Doppelganger | Slot=-1 Size=1x1 DropLv=0 Dur=10 Dmg=0-0 Speed=0 ReqLv=0
+13-126 | Access Ticket to Varka | Slot=-1 Size=1x1 DropLv=0 Dur=10 Dmg=0-0 Speed=0 ReqLv=0
+13-127 | Access Ticket to Varka Map 7 | Slot=-1 Size=1x1 DropLv=0 Dur=3 Dmg=0-0 Speed=0 ReqLv=0
+13-128 | Hawk Figurine | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-129 | Goat Figurine | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-130 | Oak Charm | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-131 | Maple Charm | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-132 | Golden Oak Charm | Slot=-1 Size=1x2 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-133 | Golden Maple Charm | Slot=-1 Size=1x2 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-134 | Worn Horseshoe | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-135 | 1st Lucky Armor Ticket | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-136 | 1st Lucky Pants Ticket | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-137 | 1st Lucky Helm Ticket | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-138 | 1st Lucky Gloves Ticket | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-139 | 1st Lucky Boots Ticket | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-140 | 2nd Lucky Armor Ticket | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-141 | 2nd Lucky Pants Ticket | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-142 | 2nd Lucky Helm Ticket | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-143 | 2nd Lucky Gloves Ticket | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+13-144 | 2nd Lucky Boots Ticket | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
 13-145 | Spirit Map Fragment | Slot=-1 Size=1x1 DropLv=0 Dur=1 Dmg=0-0 Speed=0 ReqLv=0
 13-146 | Spirit Map | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
 13-147 | Trophies of Battle | Slot=-1 Size=1x1 DropLv=0 Dur=1 Dmg=0-0 Speed=0 ReqLv=0
@@ -619,6 +1327,173 @@
 13-306 | Purssil | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=1
 13-307 | Purssil(Evolved) | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
 13-350 | Roomy Egg | Slot=-1 Size=1x1 DropLv=0 Dur=255 Dmg=0-0 Speed=0 ReqLv=0
+14-0 | Apple | Slot=-1 Size=1x1 DropLv=1 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-1 | Small Healing Potion | Slot=-1 Size=1x1 DropLv=10 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-2 | Healing Potion | Slot=-1 Size=1x1 DropLv=25 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-3 | Large Healing Potion | Slot=-1 Size=1x1 DropLv=40 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-4 | Small Mana Potion | Slot=-1 Size=1x1 DropLv=10 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-5 | Mana Potion | Slot=-1 Size=1x1 DropLv=25 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-6 | Large Mana Potion | Slot=-1 Size=1x1 DropLv=40 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-7 | Siege Potion | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-8 | Antidote | Slot=-1 Size=1x1 DropLv=10 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-9 | Ale | Slot=-1 Size=1x2 DropLv=15 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-10 | Town Portal Scroll | Slot=-1 Size=1x2 DropLv=30 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-11 | Box of Luck | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-12 | Heart | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-13 | Jewel of Bless | Slot=-1 Size=1x1 DropLv=25 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-14 | Jewel of Soul | Slot=-1 Size=1x1 DropLv=30 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-15 | Zen | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-16 | Jewel of Life | Slot=-1 Size=1x1 DropLv=72 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-17 | Devil's Eye | Slot=-1 Size=1x1 DropLv=1 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-18 | Devil's Key | Slot=-1 Size=1x1 DropLv=1 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-19 | Devil's Invitation | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-20 | Remedy of Love | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-21 | Rena | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-22 | Jewel of Creation | Slot=-1 Size=1x1 DropLv=78 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-23 | Scroll of the Emperor | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-24 | Broken Sword | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-25 | Tear of Elf | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-26 | Soul Shard of Wizard | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-28 | Lost Map | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-29 | Symbol of Kundun | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-31 | Jewel of Guardian | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-32 | Pink Chocolate Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-33 | Red Chocolate Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-34 | Blue Chocolate Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-35 | Small SD Potion | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-36 | SD Potion | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-37 | Large SD Potion | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-38 | Small Complex Potion | Slot=-1 Size=1x1 DropLv=68 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-39 | Complex Potion | Slot=-1 Size=1x1 DropLv=96 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-40 | Large Complex Potion | Slot=-1 Size=1x1 DropLv=118 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-41 | Gemstone | Slot=-1 Size=1x1 DropLv=25 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-42 | Jewel of Harmony | Slot=-1 Size=1x1 DropLv=25 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-43 | Lower refining stone | Slot=-1 Size=1x1 DropLv=25 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-44 | Higher refining stone | Slot=-1 Size=1x1 DropLv=25 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-45 | Pumpkin of Luck | Slot=-1 Size=1x1 DropLv=1 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-46 | Jack O'Lantern Blessings | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-47 | Jack O'Lantern Wrath | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-48 | Jack O'Lantern Cry | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-49 | Jack O'Lantern Food | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-50 | Jack O'Lantern Drink | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-51 | Chistmas Star | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-52 | GM Gift | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-53 | Talisman of Luck | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-54 | Chaos Card | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-55 | Green Chaos Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-56 | Red Chaos Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-57 | Purple Chaos Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-58 | Rare Item Ticket1 | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-59 | Rare Item Ticket2 | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-60 | Rare Item Ticket3 | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-61 | Rare Item Ticket4 | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-62 | Rare Item Ticket5 | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-63 | Firecracker | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-64 | Cursed Castle Water | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-65 | Death-beam Knight Flame | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-66 | Hell-Miner Horn | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-67 | Dark Phoenix Feather | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-68 | Abyssal Eye | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-70 | Elite Healing Potion | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-71 | Elite Mana Potion | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-72 | Scroll of Quickness | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-73 | Scroll of Defense | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-74 | Scroll of Wrath | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-75 | Scroll of Wizardry | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-76 | Scroll of Health | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-77 | Scroll of Mana | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-78 | Elixir of Strength | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-79 | Elixir of Agility | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-80 | Elixir of Health | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-81 | Elixir of Energy | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-82 | Elixir of Control | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-83 | Rare Item Ticket6 | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-84 | Cherry Blossom Play-Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-85 | Cherry Blossom Wine | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-86 | Cherry Blossom Rice Cake | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-87 | Cherry Blossom Flower Petal | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-88 | White Cherry Blossom Branch | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-89 | Red Cherry Blossom Branch | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-90 | Golden Cherry Blossom Branch | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-91 | Summoner Character Card | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-92 | Chaos Card Gold | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-93 | Chaos Card Rare | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-94 | Medium Elite Healing Potion | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-95 | Chaos Card  Mini | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-96 | Talisman of Chaos Assembly | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-97 | Scroll of Battle | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-98 | Scroll of Strength | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-99 | Christmas Firecracker | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-100 | Lucky Coin | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-101 | Suspicious Scrap of Paper | Slot=-1 Size=1x1 DropLv=32 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-102 | Gaion's Order | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-103 | First Secromicon Fragment | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-104 | Second Secromicon Fragment | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-105 | Third Secromicon Fragment | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-106 | Fourth Secromicon Fragment | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-107 | Fifth Secromicon Fragment | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-108 | Sixth Secromicon Fragment | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-109 | Complete Secromicon | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-110 | Sign of Dimensions | Slot=-1 Size=1x1 DropLv=32 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-111 | Mirror of Dimensions | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-112 | Silver Key | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-113 | Gold Key | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-114 | Master Skill Reset | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-115 | Stat Adjustment | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-116 | Character Relocation Service | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-117 | Character Rename Service | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-118 | Server Relocation Service | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-119 | Premium Package | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-120 | Goblin Gold Coin | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-121 | Sealed Golden Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-122 | Sealed Silver Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-123 | Golden Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-124 | Silver Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-125 | Package Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-126 | 30-Day Pass | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-127 | 90-Day Pass | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-128 | 30-Day Pass - Points | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-129 | 90-Day Pass - Points | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-130 | 3-Hour Pass | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-131 | 5-Hour Pass | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-132 | 10-Hour Pass | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-133 | Elite SD Potion | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-134 | Package Box A | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-135 | Package Box B | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-136 | Package Box C | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-137 | Package Box D | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-138 | Package Box E | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-139 | Package Box F | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-140 | Scroll of Healing | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-141 | Shining Jewellery Case | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-142 | Elegant Jewellery Case | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-143 | Steel Jewellery Case | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-144 | Old Jewellery Case | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-145 | Rare Item Ticket 7 | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-146 | Rare Item Ticket 8 | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-147 | Rare Item Ticket 9 | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-148 | Rare Item Ticket 10 | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-149 | Rare Item Ticket 11 | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-150 | Rare Item Ticket 12 | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-151 | Lv. 1 Letter of Request | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-152 | Lv. 1 Completion Certificate | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-153 | Stardust | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-154 | Kalt Stone | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-155 | Tantalos's Armor | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-156 | Burnt Murderer's Club | Slot=-1 Size=1x3 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-157 | Green Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-158 | Red Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-159 | Purple Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-160 | Jewel of Extension | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-161 | Jewel of Elevation | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-162 | Magic Backpack | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-163 | Vault Expansion Certificate | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-164 | Ancient Statue | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-165 | Magic Cloth | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-166 | Space Cloth | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-167 | Phase Cloth | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-168 | Dimension Cloth | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-169 | RageFighter Character Card | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
 14-170 | Lv. 2 letter of Request | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
 14-171 | Lv. 2 Completion Certificate | Slot=-1 Size=1x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
 14-176 | Death King's Bone | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
@@ -639,6 +1514,43 @@
 14-191 | Sonic Combination Note | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
 14-192 | Cyclone Combination Note | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
 14-193 | Blast Combination Note | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-194 | Magma Combination Note | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-195 | Horn Combination Note | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-196 | Angelic Combination Note | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-197 | Devil Cross Combination Note | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-198 | Miracle Combination Note | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-199 | Spite Combination Note | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-200 | Asura Combination Note | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-201 | Thunder Combination Note | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-202 | Soul Combination Note | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-206 | Lackluster Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-207 | Luxurious Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-208 | Exciting Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-209 | Tradeable Seal | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-210 | Summon Scroll (Lv1) | Slot=-1 Size=1x1 DropLv=32 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-211 | Summon Scroll (Lv2) | Slot=-1 Size=1x1 DropLv=32 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-212 | Summon Scroll (Lv3) | Slot=-1 Size=1x1 DropLv=32 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-213 | Summon Scroll (Lv4) | Slot=-1 Size=1x1 DropLv=32 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-215 | Card Piece | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-216 | Card Deck | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-217 | Titan's Anger | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-218 | Tantalose's Punishment | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-219 | Erohim's Nightmare | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-220 | Hell Maine's Insanity | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-221 | Kundun's Greed | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-222 | Unique Accessory Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-223 | Cursed Castle Water | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-224 | Bless of Light (Greater) | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-225 | Scroll Master of Defense | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-226 | Scroll Master of Wizardry | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-227 | Scroll Master of Health | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-228 | Scroll Master of Mana | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-229 | Scroll Master of Wrath | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-230 | Scroll Master of Recovery | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-231 | Scroll Master of Battle | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-232 | Scroll Master of Strenghener | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-233 | Unique Weapon Box | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+14-234 | Monster Summoning Scroll | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
 14-235 | Scroll of Swiftness Master | Slot=-1 Size=2x2 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
 14-236 | Reward Jar | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
 14-237 | Reward Jar | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
@@ -670,191 +1582,41 @@
 14-264 | Bless of Light (Middle Grade) | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
 14-277 | Special Card | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
 14-278 | Summoning Scroll Fragment | Slot=-1 Size=1x1 DropLv=0 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-0 | Scroll of Poison | Slot=-1 Size=1x2 DropLv=30 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-1 | Scroll of Meteorite | Slot=-1 Size=1x2 DropLv=21 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-2 | Scroll of Lighting | Slot=-1 Size=1x2 DropLv=13 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-3 | Scroll of Fire Ball | Slot=-1 Size=1x2 DropLv=5 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-4 | Scroll of Flame | Slot=-1 Size=1x2 DropLv=35 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-5 | Scroll of Teleport | Slot=-1 Size=1x2 DropLv=17 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-6 | Scroll of Ice | Slot=-1 Size=1x2 DropLv=25 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-7 | Scroll of Twister | Slot=-1 Size=1x2 DropLv=40 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-8 | Scroll of Evil Spirit | Slot=-1 Size=1x2 DropLv=50 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-9 | Scroll of Hellfire | Slot=-1 Size=1x2 DropLv=60 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-10 | Scroll of Power Wave | Slot=-1 Size=1x2 DropLv=9 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-11 | Scroll of Aqua Beam | Slot=-1 Size=1x2 DropLv=74 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-12 | Scroll of Cometfall | Slot=-1 Size=1x2 DropLv=80 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-13 | Scroll of Inferno | Slot=-1 Size=1x2 DropLv=88 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-14 | Scroll of Teleport Ally | Slot=-1 Size=1x2 DropLv=83 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-15 | Scroll of Soul Barrier | Slot=-1 Size=1x2 DropLv=77 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-16 | Scroll of Decay | Slot=-1 Size=1x2 DropLv=96 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-17 | Scroll of Ice Storm | Slot=-1 Size=1x2 DropLv=93 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-18 | Scroll of Nova | Slot=-1 Size=1x2 DropLv=100 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-19 | Chain Lightning Parchment | Slot=-1 Size=1x2 DropLv=75 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-20 | Drain Life Parchment | Slot=-1 Size=1x2 DropLv=35 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-21 | Lightning Shock Parchment | Slot=-1 Size=1x2 DropLv=93 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-22 | Damage Reflection Parchment | Slot=-1 Size=1x2 DropLv=80 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-23 | Berserker Parchment | Slot=-1 Size=1x2 DropLv=83 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-24 | Sleep Parchment | Slot=-1 Size=1x2 DropLv=40 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-26 | Weakness Parchment | Slot=-1 Size=1x2 DropLv=93 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-27 | Innovation Parchment | Slot=-1 Size=1x2 DropLv=111 Dur=0 Dmg=0-0 Speed=0 ReqLv=0
+15-28 | Scroll of Wizardry Enhance | Slot=-1 Size=1x2 DropLv=100 Dur=0 Dmg=0-0 Speed=0 ReqLv=220
+15-29 | Scroll of Gigantic Storm | Slot=-1 Size=1x2 DropLv=100 Dur=0 Dmg=0-0 Speed=0 ReqLv=220
+15-30 | Chain Drive Parchment | Slot=-1 Size=1x2 DropLv=70 Dur=0 Dmg=0-0 Speed=0 ReqLv=150
+15-31 | Dark Side Parchment | Slot=-1 Size=1x2 DropLv=80 Dur=0 Dmg=0-0 Speed=0 ReqLv=180
+15-32 | Dragon Roar Parchment | Slot=-1 Size=1x2 DropLv=70 Dur=0 Dmg=0-0 Speed=0 ReqLv=150
+15-33 | Dragon Slasher Parchment | Slot=-1 Size=1x2 DropLv=90 Dur=0 Dmg=0-0 Speed=0 ReqLv=200
+15-34 | Ignore Defense Parchment | Slot=-1 Size=1x2 DropLv=80 Dur=0 Dmg=0-0 Speed=0 ReqLv=120
+15-35 | Increase Health Parchment | Slot=-1 Size=1x2 DropLv=50 Dur=0 Dmg=0-0 Speed=0 ReqLv=80
+15-36 | Increase Block Parchment | Slot=-1 Size=1x2 DropLv=40 Dur=0 Dmg=0-0 Speed=0 ReqLv=50
 
 ## Items present in Season 6 suite but absent from HNMO Season 6 dump
-0-39 | Lighting Sword-J
-0-40 | Sacred Glove-J
-2-21 | Master Scepter-J
-4-27 | Silver Bow-J
-5-32 | Guardian Staff
-5-38 | Legendary Staff-J
-5-39 | Red Wing Stick-J
-5-40 | Book of Neil-J
-6-27 | Legendary Shield-J
-6-28 | Serpent Shield-J
-7-53 | Pearl Helm
-7-78 | Dragon Helm-J
-7-79 | Legendary Helm-J
-7-80 | Guardian Helm-J
-7-81 | Light Plate Mask-J
-7-82 | Red Wing Helm-J
-7-83 | Sacred Helm-J
-8-53 | Pearl Armor
-8-78 | Dragon Armor-J
-8-79 | Legendary Armor-J
-8-80 | Guardian Armor-J
-8-81 | Light Plate Armor-J
-8-82 | Red Wing Armor-J
-8-83 | Sacred Armor-J
-9-53 | Pearl Pants
-9-78 | Dragon Pants-J
-9-79 | Legendary Pants-J
-9-80 | Guardian Pants-J
-9-81 | Light Plate Pants-J
-9-82 | Red Wing Pants-J
-9-83 | Sacred Pants-J
-10-53 | Pearl Gloves
-10-78 | Dragon Gloves-J
-10-79 | Legendary Gloves-J
-10-80 | Guardian Gloves-J
-10-81 | Light Plate Gloves-J
-10-82 | Red Wing Gloves-J
-11-53 | Pearl Boots
-11-78 | Dragon Boots-J
-11-79 | Legendary Boots-J
-11-80 | Guardian Boots-J
-11-81 | Light Plate Boots-J
-11-82 | Red Wing Boots-J
-11-83 | Sacred Boots-J
-12-26 | Gem of Secret
-13-7 | Contract (Summon)
-13-59 | Seal of Mobility
-13-60 | Indulgence
-13-69 | Talisman of Resurrection
-13-70 | Talisman of Mobility
-13-71 | Sword/Mace/Spear
-13-72 | Staff
-13-73 | Bow/Crossbow
-13-74 | Scepter
-13-75 | Stick
-13-83 | Talisman of Wings of Satan
-13-84 | Talisman of Wings of Heaven
-13-85 | Talisman of Wings of Elf
-13-86 | Talisman of Wing of Curse
-13-87 | Talisman of Cape of Emperor
-13-88 | Talisman of Wings of Dragon
-13-89 | Talisman of Wings of Soul
-13-90 | Talisman of Wings of Spirits
-13-91 | Talisman of Wing of Despair
-13-92 | Talisman of Wings of Darkness
-13-95 | Gladiator's Honor
-13-96 | Seal of Strength
-13-97 | Magic Gladiator Char Card
-13-98 | Dark Lord Character Card
-13-99 | Character Slot Key
-13-103 | Party EXP Scroll
-13-116 | Seal of Wealth
-13-117 | Minimum Vitality Potion
-13-118 | Low Vitality Potion
-13-119 | Medium Vitality Potion
-13-120 | High Vitality Potion
-13-124 | Paid Channel Access Ticket
-13-126 | Access Ticket to Varka
-13-127 | Access Ticket to Varka Map 7
-13-128 | Hawk Figurine
-13-129 | Goat Figurine
-13-130 | Oak Charm
-13-131 | Maple Charm
-13-132 | Golden Oak Charm
-13-133 | Golden Maple Charm
-13-134 | Worn Horseshoe
-14-12 | Heart
-14-15 | Zen
-14-20 | Remedy of Love
-14-54 | Chaos Card
-14-55 | Green Chaos Box
-14-56 | Red Chaos Box
-14-57 | Purple Chaos Box
-14-58 | Rare Item Ticket1
-14-59 | Rare Item Ticket2
-14-60 | Rare Item Ticket3
-14-61 | Rare Item Ticket4
-14-62 | Rare Item Ticket5
-14-83 | Rare Item Ticket
-14-88 | White Cherry Blossom Branch
-14-89 | Red Cherry Blossom Branch
-14-92 | Chaos Card Gold
-14-93 | Chaos Card Rare
-14-95 | Chaos Card  Mini
-14-100 | Lucky Coin
-14-114 | Master Skill Reset
-14-115 | Stat Adjustment
-14-116 | Character Relocation Service
-14-117 | Character Rename Service
-14-118 | Server Relocation Service
-14-119 | Premium Package
-14-120 | Goblin Gold Coin
-14-125 | Package Box
-14-126 | 30-Day Pass
-14-127 | 90-Day Pass
-14-128 | 30-Day Pass - Points
-14-129 | 90-Day Pass - Points
-14-130 | 3-Hour Pass
-14-131 | 5-Hour Pass
-14-132 | 10-Hour Pass
-14-134 | Package Box A
-14-135 | Package Box B
-14-136 | Package Box C
-14-137 | Package Box D
-14-138 | Package Box E
-14-139 | Package Box F
-14-145 | Rare Item Ticket 7
-14-146 | Rare Item Ticket 8
-14-147 | Rare Item Ticket 9
-14-148 | Rare Item Ticket 10
-14-149 | Rare Item Ticket 11
-14-150 | Rare Item Ticket 12
-14-151 | Lv. 1 Letter of Request
-14-152 | Lv. 1 Completion Certificate
-14-154 | Kalt Stone
-14-155 | Tantalos's Armor
-14-156 | Burnt Murderer's Club
-14-157 | Green Box
-14-158 | Red Box
-14-159 | Purple Box
-14-164 | Ancient Statue
-14-165 | Magic Cloth
-14-166 | Space Cloth
-14-167 | Phase Cloth
-14-168 | Dimension Cloth
-14-194 | Jewel of Blood
-14-195 | Jewel of Curse
-14-196 | Jewel of Excess
-14-197 | Jewel of Balance
-14-198 | Jewel of Science
-14-199 | Jewel of Madness
-14-200 | Jewel of Black Chaos
-14-201 | Jewel of Dark Bless
-14-202 | Jewel of Dark Life
-14-203 | Jewel of Dark Soul
-14-204 | Jewel of Kondar
-14-205 | Jewel of Kundun
-14-206 | Jewel of Love
-14-207 | Left Piece of Love Jewel
-14-208 | Right Piece of Love Jewel
-14-209 | Jewel of Venom
-14-210 | Jewel of Wisdom
-14-211 | Jewel of Maya
-14-212 | Jewel of Tarkan
-14-213 | Jewel of Disorder
-14-214 | Ancient Gem
-14-215 | Socket Gem
-14-216 | Jawel of Luck
-14-217 | Gem of God
-14-218 | Gem of Death
-14-219 | Jewel of Dispense
-14-220 | Jewel of Dream
-14-221 | Jewel of Nightmare
-14-222 | Jewel of Sincerity
-14-223 | Jewel of Destruction
-14-224 | Jewel of Sea
-14-225 | Gem of Speed
-14-226 | Gem of Accuracy
-14-227 | Gem of Blow
-14-228 | Gem of Impact
-14-229 | Gem of Dodges
-14-230 | Gem of Fortune
-14-231 | Gem of Weakness
-14-232 | Gem of Reflect
-14-233 | Gem of Vitality
-14-234 | Gem of Energy

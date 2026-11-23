@@ -1,7 +1,31 @@
 # Socket Options Differences: HNMO vs Season 6 (SocketOptionSettings.ini) & Season 9 (SocketOption.xml)
 
-Option 12 (Shield protection Increase, Elem=2): S6=7/10/15/20/20 vs S9=7/10/15/20/30
-Option 25 (Maximum AG Increase, Elem=4): S6=25/30/35/40/50 vs S9=50/70/90/110/130
-Option 26 (AG value Increase, Elem=4): S6=3/5/7/10/15 vs S9=5/7/9/11/13
+Option 0 ((Level type)Attack/Wizardry Increase, Elem=1): S6=missing vs S9=20/19/18/17/14
+Option 1 (Attack speed Increase, Elem=1): S6=missing vs S9=7/8/9/10/11
+Option 2 (Maximum Attack/Wizardry Increase, Elem=1): S6=missing vs S9=30/32/35/40/50
+Option 3 (Minimum Attack/Wizardry Increase, Elem=1): S6=missing vs S9=20/22/25/30/35
+Option 4 (Attack/Wizardry Increase, Elem=1): S6=missing vs S9=20/22/25/30/35
+Option 5 (AG cost decrease, Elem=1): S6=missing vs S9=40/41/42/43/44
+Option 10 (Block rating Increase, Elem=2): S6=missing vs S9=10/11/12/13/14
+Option 11 (Defense Increase, Elem=2): S6=missing vs S9=30/33/36/39/42
+Option 12 (Shield protection Increase, Elem=2): S6=missing vs S9=7/10/15/20/30
+Option 13 (Damage reduction, Elem=2): S6=missing vs S9=4/5/6/7/8
+Option 14 (Damage reflection, Elem=2): S6=missing vs S9=5/6/7/8/9
+Option 16 (Monster destruction for the Life Increase, Elem=3): S6=missing vs S9=8/7/6/5/4
+Option 17 (Monster destruction for the Mana Increase, Elem=3): S6=missing vs S9=8/7/6/5/4
+Option 18 (Skill Attack Increase, Elem=3): S6=missing vs S9=37/40/45/50/60
+Option 19 (Attack rating Increase, Elem=3): S6=missing vs S9=25/27/30/35/40
+Option 20 (Item durability Increase, Elem=3): S6=missing vs S9=30/32/34/36/38
+Option 21 (Automatic Life recovery Increase, Elem=4): S6=missing vs S9=8/10/13/16/20
+Option 22 (Maximum Life Increase, Elem=4): S6=missing vs S9=4/5/6/7/8
+Option 23 (Maximum Mana Increase, Elem=4): S6=missing vs S9=4/5/6/7/8
+Option 24 (Automatic Mana recovery Increase, Elem=4): S6=missing vs S9=7/14/21/28/35
+Option 25 (Maximum AG Increase, Elem=4): S6=missing vs S9=50/70/90/110/130
+Option 26 (AG value Increase, Elem=4): S6=missing vs S9=5/7/9/11/13
+Option 29 (Excellent damage Increase, Elem=5): S6=missing vs S9=15/20/25/30/40
+Option 30 (Excellent damage rate Increase, Elem=5): S6=missing vs S9=10/11/12/13/14
+Option 31 (Critical damage Increase, Elem=5): S6=missing vs S9=30/32/35/40/50
+Option 32 (Critical damage rate Increase, Elem=5): S6=missing vs S9=8/9/10/11/12
+Option 36 (Health Increase, Elem=6): S6=missing vs S9=30/32/34/36/38
 
 ## HNMO dumped socket rows: 35

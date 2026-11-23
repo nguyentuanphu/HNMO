@@ -1,7 +1,7 @@
 # NPC Shop Differences: HNMO vs Season 6 & Season 9 Suites
 
 Shop NPC 231: count differs HNMO=32 vs S6=0
-Shop NPC 239 (Map 6, NPC(239)_Arena_Guard.xml): missing in HNMO (34 items in S6)
+Shop NPC 239: count differs HNMO=32 vs S6=34
 Shop NPC 248: count differs HNMO=25 vs S6=32
 Shop NPC 253: count differs HNMO=32 vs S6=34
 Shop NPC 259: count differs HNMO=32 vs S6=34
@@ -15,7 +15,6 @@ Shop NPC 376: count differs HNMO=32 vs S6=34
 Shop NPC 377: count differs HNMO=32 vs S6=34
 Shop NPC 416: count differs HNMO=32 vs S6=34
 Shop NPC 417: count differs HNMO=6 vs S6=7
-Shop NPC 492 (Map 51, NPC(492)_Moss.xml): missing in HNMO (5 items in S6)
 Shop NPC 545: count differs HNMO=32 vs S6=34
 Shop NPC 577: count differs HNMO=32 vs S6=34
 Shop NPC 578: count differs HNMO=6 vs S6=7

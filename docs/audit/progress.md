@@ -6,10 +6,10 @@
 
 ## Folder Paths (environment variables only)
 
-- `LEGACY_S6_DIR` = D:\WorkSpace\MuOnline\IGCN\IGCN x6\Evi.Network.IGC.Server Suite.x6.0.0.1
-- `LEGACY_S9_DIR` = D:\WorkSpace\MuOnline\IGCN\IGCN x9\Evi.Network.IGC.Server Suite.x9
-- `LEGACY_S6_CLIENT_DIR` = D:\WorkSpace\MuOnline\IGCN\IGCN x6\IGC.Evi.Network x6.3 6.0.0.1 Full Client
-- `LEGACY_S9_CLIENT_DIR` = D:\WorkSpace\MuOnline\IGCN\IGCN x9\IGC.Evi.Network x9 Full Client
+- `LEGACY_S6_DIR` = (Season 6 suite folder)
+- `LEGACY_S9_DIR` = (Season 9 suite folder)
+- `LEGACY_S6_CLIENT_DIR` = (Season 6 client folder)
+- `LEGACY_S9_CLIENT_DIR` = (Season 9 client folder)
 
 ## Totals (to be filled after inventory)
 

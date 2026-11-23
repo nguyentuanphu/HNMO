@@ -62,6 +62,19 @@ function writeDiff(fileName, lines) {
     if (diffs.length) lines.push(`${key} (${h.Name}): ${diffs.join(', ')}`);
   }
 
+  lines.push('', '## Shared items where HNMO differs from Season 9 suite');
+  for (const [key, h] of hnmo) {
+    const o = s9.get(key);
+    if (!o) continue;
+    const diffs = [];
+    if (num(h.DropLevel) !== o.dropLevel) diffs.push(`DropLevel:${h.DropLevel}->${o.dropLevel}`);
+    if (num(h.Durability) !== o.durability) diffs.push(`Dur:${h.Durability}->${o.durability}`);
+    if (num(h.Width) !== o.width || num(h.Height) !== o.height) diffs.push(`Size:${h.Width}x${h.Height}->${o.width}x${o.height}`);
+    if (num(h.ReqLvl) !== o.reqLevel && o.reqLevel > 0) diffs.push(`ReqLvl:${h.ReqLvl}->${o.reqLevel}`);
+    if (num(h.DropsFromMonsters) !== o.drop) diffs.push(`Drop:${h.DropsFromMonsters}->${o.drop}`);
+    if (diffs.length) lines.push(`${key} (${h.Name}): ${diffs.join(', ')}`);
+  }
+
   lines.push('', '## Shared items where Season 9 suite differs from Season 6 suite');
   for (const [key, r9] of s9) {
     const r6 = s6.get(key);
@@ -128,7 +141,7 @@ function writeDiff(fileName, lines) {
     '# Skill Differences: HNMO vs Season 6 & Season 9 SkillList.xml',
     `# Counts: HNMO=${hSkills.size}, S6=${s6.size}, S9=${s9.size}`,
     '',
-    '## Shared Skills with Differing Rules/Stats',
+    '## Shared Skills where HNMO differs from Season 6 suite',
   ];
   for (const [id, h] of [...hSkills.entries()].sort((a, b) => a[0] - b[0])) {
     const o6 = s6.get(id);
@@ -145,6 +158,24 @@ function writeDiff(fileName, lines) {
     if (num(h.ReqLeadership) !== o6.reqCommand) diffs.push(`ReqCmd:${h.ReqLeadership}->${o6.reqCommand}`);
     if (diffs.length) lines.push(`${id} (${h.Name}): ${diffs.join(', ')}`);
   }
+
+  lines.push('', '## Shared Skills where HNMO differs from Season 9 suite');
+  for (const [id, h] of [...hSkills.entries()].sort((a, b) => a[0] - b[0])) {
+    const o9 = s9.get(id);
+    if (!o9) continue;
+    const diffs = [];
+    if (num(h.Range) !== o9.distance) diffs.push(`Dist:${h.Range}->${o9.distance}`);
+    if (num(h.ManaCost) !== o9.mana) diffs.push(`Mana:${h.ManaCost}->${o9.mana}`);
+    if (num(h.AbilityCost) !== o9.bp) diffs.push(`AG:${h.AbilityCost}->${o9.bp}`);
+    const foldedEne = o9.reqEnergy > 0 ? Math.floor((o9.reqEnergy * o9.reqLevel * 4) / 100 + 20) : 0;
+    if (num(h.ReqEnergy) !== o9.reqEnergy && num(h.ReqEnergy) !== foldedEne) {
+      diffs.push(`ReqEne:${h.ReqEnergy}->raw=${o9.reqEnergy}(folded=${foldedEne})`);
+    }
+    if (num(h.ReqStrength) !== o9.reqStrength) diffs.push(`ReqStr:${h.ReqStrength}->${o9.reqStrength}`);
+    if (num(h.ReqLeadership) !== o9.reqCommand) diffs.push(`ReqCmd:${h.ReqLeadership}->${o9.reqCommand}`);
+    if (diffs.length) lines.push(`${id} (${h.Name}): ${diffs.join(', ')}`);
+  }
+
   lines.push('', '## Skills where Season 9 suite differs from Season 6 suite');
   for (const [id, r9] of [...s9.entries()].sort((a, b) => a[0] - b[0])) {
     const r6 = s6.get(id);
@@ -170,7 +201,7 @@ function writeDiff(fileName, lines) {
     '# Monster Differences: HNMO vs Season 6 & Season 9 MonsterList.xml',
     `# Counts: HNMO=${hMobs.size}, S6=${m6.size}, S9=${m9.size}`,
     '',
-    '## Shared Monsters Differing from Season 6 Suite',
+    '## Shared Monsters where HNMO differs from Season 6 suite',
   ];
   for (const [id, h] of [...hMobs.entries()].sort((a, b) => a[0] - b[0])) {
     const o = m6.get(id);
@@ -190,6 +221,27 @@ function writeDiff(fileName, lines) {
     if (num(h.RespawnDelaySec) !== o.regenTime) d.push(`Respawn:${h.RespawnDelaySec}->${o.regenTime}`);
     if (d.length) lines.push(`${id} (${h.Designation}): ${d.join(', ')}`);
   }
+
+  lines.push('', '## Shared Monsters where HNMO differs from Season 9 suite');
+  for (const [id, h] of [...hMobs.entries()].sort((a, b) => a[0] - b[0])) {
+    const o = m9.get(id);
+    if (!o) continue;
+    const d = [];
+    if (num(h.Level) !== o.level) d.push(`Lv:${h.Level}->${o.level}`);
+    if (num(h.MaxHp) !== o.hp) d.push(`HP:${h.MaxHp}->${o.hp}`);
+    if (num(h.MinDmg) !== o.dmgMin || num(h.MaxDmg) !== o.dmgMax) d.push(`Dmg:${h.MinDmg}-${h.MaxDmg}->${o.dmgMin}-${o.dmgMax}`);
+    if (num(h.Defense) !== o.defense) d.push(`Def:${h.Defense}->${o.defense}`);
+    if (num(h.AttackRatePvm) !== o.attackRate) d.push(`AR:${h.AttackRatePvm}->${o.attackRate}`);
+    if (num(h.DefenseRatePvm) !== o.blockRate) d.push(`DR:${h.DefenseRatePvm}->${o.blockRate}`);
+    if (num(h.AttackRange) !== o.attackRange) d.push(`AtkRng:${h.AttackRange}->${o.attackRange}`);
+    if (num(h.ViewRange) !== o.viewRange) d.push(`ViewRng:${h.ViewRange}->${o.viewRange}`);
+    if (num(h.MoveRange) !== o.moveRange) d.push(`MoveRng:${h.MoveRange}->${o.moveRange}`);
+    if (num(h.MoveDelayMs) !== o.moveSpeed) d.push(`MoveMs:${h.MoveDelayMs}->${o.moveSpeed}`);
+    if (num(h.AttackDelayMs) !== o.attackSpeed) d.push(`AtkMs:${h.AttackDelayMs}->${o.attackSpeed}`);
+    if (num(h.RespawnDelaySec) !== o.regenTime) d.push(`Respawn:${h.RespawnDelaySec}->${o.regenTime}`);
+    if (d.length) lines.push(`${id} (${h.Designation}): ${d.join(', ')}`);
+  }
+
   lines.push('', '## Shared Monsters where Season 9 suite differs from Season 6 suite');
   for (const [id, r9] of [...m9.entries()].sort((a, b) => a[0] - b[0])) {
     const r6 = m6.get(id);
