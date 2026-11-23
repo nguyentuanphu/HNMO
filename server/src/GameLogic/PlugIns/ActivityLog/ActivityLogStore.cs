@@ -43,7 +43,7 @@ public sealed class ActivityLogStore
     private int _pendingCount;
     private int _rejected;
 
-    private ActivityLogStore(string resolvedStatePath)
+    internal ActivityLogStore(string resolvedStatePath)
     {
         this._resolvedStatePath = resolvedStatePath;
     }

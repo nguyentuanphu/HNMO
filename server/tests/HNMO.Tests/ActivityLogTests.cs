@@ -16,6 +16,7 @@ using HNMO.GameLogic;
 using HNMO.GameLogic.PlayerActions.Items;
 using HNMO.GameLogic.PlayerActions.PlayerStore;
 using HNMO.GameLogic.PlayerActions.Trade;
+using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.PlugIns.ActivityLog;
 using HNMO.GameLogic.Views.NPC;
 using HNMO.GameLogic.Views.Trade;
@@ -138,9 +139,8 @@ public sealed class ActivityLogTests
     }
 
     /// <summary>Gameplay can fill the bounded buffer while persistence is blocked, and the full burst uses batched writes.</summary>
-    /// <returns>The asynchronous performance check.</returns>
     [Test]
-    public async Task QueuedBurstUsesOneBackendCallPerBatchAndDoesNotBlockProducersAsync()
+    public void QueuedBurstUsesOneBackendCallPerBatchAndDoesNotBlockProducers()
     {
         var backend = new InMemoryHnmoPlayerStateRowBackend();
         var mock = new Mock<IHnmoPlayerStateRowBackend>();
@@ -160,8 +160,10 @@ public sealed class ActivityLogTests
 
                 backend.UpsertBatch(rows, deletes);
             });
-        HnmoPlayerStateRowStoreRegistry.RegisterBackend(this._file, mock.Object);
-        var store = ActivityLogStore.Open(this._file);
+        var path = HnmoStateStore.ResolveStateFilePath(this._file)!;
+        HnmoPlayerStateRowStoreRegistry.RegisterBackend(path, mock.Object);
+        // Keep this isolated writer out of unrelated game contexts' periodic flushes.
+        var store = new ActivityLogStore(path);
         var utc = new DateTime(2026, 11, 23, 0, 0, 0, DateTimeKind.Utc);
         var entry = new ActivityLogEntry { TimestampUtc = utc, Kind = ActivityKind.Loot };
         for (var index = 0; index < ActivityLogStore.BatchSize; index++)
@@ -170,11 +172,11 @@ public sealed class ActivityLogTests
         }
 
         Assert.That(batches, Is.Zero);
-        var writer = Task.Run(store.FlushPending);
+        var writer = Task.Factory.StartNew(store.FlushPending, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         try
         {
-            await started.Task.WaitAsync(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
-            await Task.Run(() =>
+            Assert.That(Task.WaitAny([started.Task, writer], TimeSpan.FromSeconds(10)), Is.EqualTo(0), "The writer must reach the blocked backend.");
+            var producer = Task.Factory.StartNew(() =>
             {
                 for (var index = ActivityLogStore.BatchSize; index < ActivityLogStore.QueueCapacity; index++)
                 {
@@ -182,14 +184,16 @@ public sealed class ActivityLogTests
                 }
 
                 Assert.That(store.Enqueue(entry, retentionDays: 9), Is.False);
-            }).WaitAsync(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
+            }, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+            Assert.That(producer.Wait(TimeSpan.FromSeconds(10)), Is.True, "The producer must finish while the backend is blocked.");
         }
         finally
         {
             allowWrite.Set();
         }
 
-        Assert.That(await writer.WaitAsync(TimeSpan.FromSeconds(15)).ConfigureAwait(false), Is.EqualTo(ActivityLogStore.QueueCapacity));
+        Assert.That(writer.Wait(TimeSpan.FromSeconds(15)), Is.True);
+        Assert.That(writer.Result, Is.EqualTo(ActivityLogStore.QueueCapacity));
         Assert.That(batches, Is.EqualTo(ActivityLogStore.QueueCapacity / ActivityLogStore.BatchSize));
         var saved = backend.LoadAll(ActivityLogStore.FeatureKey);
         Assert.That(saved, Has.Count.EqualTo(ActivityLogStore.QueueCapacity));
@@ -213,8 +217,9 @@ public sealed class ActivityLogTests
                     throw new IOException("Test acknowledgement failure.");
                 }
             });
-        HnmoPlayerStateRowStoreRegistry.RegisterBackend(this._file, mock.Object);
-        var store = ActivityLogStore.Open(this._file);
+        var path = HnmoStateStore.ResolveStateFilePath(this._file)!;
+        HnmoPlayerStateRowStoreRegistry.RegisterBackend(path, mock.Object);
+        var store = new ActivityLogStore(path);
         Assert.That(store.Enqueue(new() { Kind = ActivityKind.Grant }, retentionDays: 10), Is.True);
         Assert.That(() => store.FlushPending(), Throws.TypeOf<IOException>());
         var persisted = backend.LoadAll(ActivityLogStore.FeatureKey).Single().ScopeId;
