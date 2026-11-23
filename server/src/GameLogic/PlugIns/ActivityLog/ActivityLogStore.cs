@@ -163,6 +163,44 @@ public sealed class ActivityLogStore
         }
     }
 
+    /// <summary>Reads the newest active rows using a bounded feature page on the production backend.</summary>
+    /// <param name="fromUtc">The beginning of the current retention window.</param>
+    /// <param name="limit">The maximum number of rows, between 1 and 101.</param>
+    /// <returns>The recent activity entries.</returns>
+    public IReadOnlyList<ActivityLogEntry> QueryRecent(DateTime fromUtc, int limit)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThan(limit, 1);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(limit, 101);
+        var backend = HnmoPlayerStateRowStoreRegistry.GetBackend(this._resolvedStatePath);
+        if (backend is not IHnmoPlayerStateRowQueryBackend indexed)
+        {
+            return this.Query(new ActivityLogQuery { FromUtc = fromUtc, MaxResults = limit });
+        }
+
+        var entries = new List<ActivityLogEntry>(limit);
+        foreach (var row in indexed.LoadScopePage(FeatureKey, string.Empty, 0, limit))
+        {
+            if (row.UpdatedAtUtc < fromUtc)
+            {
+                break;
+            }
+
+            try
+            {
+                if (JsonSerializer.Deserialize<ActivityLogEntry>(row.PayloadJson, JsonOptions) is { } entry)
+                {
+                    entries.Add(entry);
+                }
+            }
+            catch (JsonException)
+            {
+                // A corrupt row does not prevent the remaining results from being read.
+            }
+        }
+
+        return entries;
+    }
+
     /// <summary>
     /// Archives expired activity rows older than <paramref name="cutoffUtc"/> and reloads the cache.
     /// </summary>

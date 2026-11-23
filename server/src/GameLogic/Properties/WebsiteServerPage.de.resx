@@ -8,4 +8,8 @@
   <data name="NotForSaleVi" xml:space="preserve"><value>Nicht im Verkauf (Vietnamesisch)</value></data>
   <data name="Description" xml:space="preserve"><value>Öffentliche Informationen für Spieler, eine Regel pro Zeile. Bis zur Veröffentlichung leer lassen. Keine Passwörter oder privaten Kontodaten eintragen.</value></data>
   <data name="MaximumLength" xml:space="preserve"><value>Höchstens {1} Zeichen eingeben.</value></data>
+  <data name="TrackerEnabled" xml:space="preserve"><value>Öffentliche Aktivitätsübersicht</value></data>
+  <data name="TrackerEnabledDescription" xml:space="preserve"><value>Eine begrenzte Aktivitätsliste veröffentlichen. Jedes Konto kann widersprechen.</value></data>
+  <data name="TrackerNames" xml:space="preserve"><value>Charakternamen in der Aktivitätsübersicht zeigen</value></data>
+  <data name="TrackerNamesDescription" xml:space="preserve"><value>Berechtigte Charakternamen öffentlich anzeigen. Widersprüche der Spieler gelten weiterhin.</value></data>
 </root>

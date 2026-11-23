@@ -8,6 +8,7 @@ import { AccountMissions } from './accountMissions.js';
 import { AccountEmail } from './accountEmail.js';
 import { AccountVip } from './accountVip.js';
 import { AccountGiftBox } from './accountGiftBox.js';
+import { AccountTrackerPrivacy } from './accountTrackerPrivacy.js';
 
 interface Credentials { loginName: string; password: string }
 interface AccountSnapshot {
@@ -38,6 +39,7 @@ const missions = new AccountMissions({ language: () => language, request, error:
 const email = new AccountEmail({ text: t, language: () => language, request, message: showMessage, error: showError });
 const vip = new AccountVip({ language: () => language, accountKey: () => snapshot?.loginName ?? '', request, changed: () => { void refresh(snapshot?.page ?? 0); }, error: showError });
 const giftBox = new AccountGiftBox({ language: () => language, request, changed: () => { void refresh(snapshot?.page ?? 0); }, error: () => showMessage('serverError') });
+const trackerPrivacy = new AccountTrackerPrivacy(request, () => language);
 
 function element<T extends HTMLElement>(id: string): T {
   const found = document.getElementById(id);
@@ -223,6 +225,7 @@ function translate(): void {
   for (const prefix of ['gift', 'reset', 'safety', 'play']) document.querySelector<HTMLButtonElement>(`[data-${prefix}-lang="${language}"]`)?.click();
   integrations.refreshLanguage();
   email.refreshLanguage(snapshot !== null);
+  trackerPrivacy.refreshLanguage(snapshot !== null);
   vip.refreshLanguage(snapshot !== null);
   giftBox.refreshLanguage(snapshot !== null && active === 'rewards');
   missions.updateCharacters(snapshot?.characters.map(c => c.name) ?? []);
@@ -267,7 +270,10 @@ async function openSection(id: string): Promise<void> {
   if (credentials && snapshot) {
     try { await integrations.refresh(id); } catch (error) { showError(error); }
     await missions.open(id);
-    if (id === 'security') { try { await email.open(); } catch (error) { showError(error); } }
+    if (id === 'security') {
+      void trackerPrivacy.open();
+      try { await email.open(); } catch (error) { showError(error); }
+    }
     if (id === 'vip') await vip.open();
     if (id === 'rewards') await giftBox.open();
   }
@@ -330,7 +336,7 @@ function mount(): void {
   panel('resets', 'resets').append(element('resets'));
   const security = panel('security', 'security', 'securityNote'); security.append(element('safety'));
   mountAccountPasswordForm(security, { text: t, request, message: showMessage, error: showError, changed: passwordChanged });
-  security.append(email.root);
+  security.append(email.root, trackerPrivacy.root);
   panel('community', 'community');
   onAccountSectionsChanged(() => { renderNavigation(); });
   element<HTMLSelectElement>('accountSectionSelect').addEventListener('change', event => { void openSection((event.target as HTMLSelectElement).value); });
@@ -385,7 +391,7 @@ function logOut(): void {
   element('accountDashboard').hidden = true; element('accountPanels').hidden = true; element('accountLoginPanel').hidden = true;
   vip.reset();
   giftBox.reset();
-  credentials = null; snapshot = null; generation++; element<HTMLFormElement>('accountSignIn').reset();
+  credentials = null; snapshot = null; trackerPrivacy.reset(); generation++; element<HTMLFormElement>('accountSignIn').reset();
   // Reload clears credentials retained by the existing gift/reset/safety modules as well.
 }
 
@@ -398,15 +404,15 @@ function passwordChanged(): void {
 
 mount();
 window.addEventListener('hnmo-account-ready', () => { void restoreSession().catch(() => showMessage('serverError')); });
-window.addEventListener('hnmo-session-expired', () => { credentials = null; snapshot = null; generation++; element('accountDashboard').hidden = true; element('accountPanels').hidden = true; element('accountLoginPanel').hidden = false; showMessage('loginError'); });
+window.addEventListener('hnmo-session-expired', () => { credentials = null; snapshot = null; trackerPrivacy.reset(); generation++; element('accountDashboard').hidden = true; element('accountPanels').hidden = true; element('accountLoginPanel').hidden = false; showMessage('loginError'); });
 window.addEventListener('hnmo-website-session-changed', () => {
-  authEpoch++; generation++; snapshot = null; credentials = null;
+  authEpoch++; generation++; snapshot = null; credentials = null; trackerPrivacy.reset();
   element('accountDashboard').hidden = true; element('accountPanels').hidden = true;
   location.reload();
 });
 window.addEventListener('pageshow', event => {
   if (!event.persisted) return;
-  authEpoch++; generation++; snapshot = null; credentials = null; loadedLegacy.clear();
+  authEpoch++; generation++; snapshot = null; credentials = null; trackerPrivacy.reset(); loadedLegacy.clear();
   element('accountDashboard').hidden = true; element('accountPanels').hidden = true; element('accountLoginPanel').hidden = false;
   void restoreSession().catch(() => showMessage('serverError'));
 });

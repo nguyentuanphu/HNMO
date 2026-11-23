@@ -8,4 +8,8 @@
   <data name="NotForSaleVi" xml:space="preserve"><value>不出售的内容（越南语）</value></data>
   <data name="Description" xml:space="preserve"><value>向玩家公开的信息，每行一条规则。尚未公布时请留空。请勿填写密码或私人账户资料。</value></data>
   <data name="MaximumLength" xml:space="preserve"><value>最多输入 {1} 个字符。</value></data>
+  <data name="TrackerEnabled" xml:space="preserve"><value>公开活动追踪</value></data>
+  <data name="TrackerEnabledDescription" xml:space="preserve"><value>发布有条数限制的活动列表。每个账号都可以选择退出。</value></data>
+  <data name="TrackerNames" xml:space="preserve"><value>显示追踪中的角色名称</value></data>
+  <data name="TrackerNamesDescription" xml:space="preserve"><value>允许在公开列表中显示符合条件的角色名称。仍遵守玩家的退出设置。</value></data>
 </root>

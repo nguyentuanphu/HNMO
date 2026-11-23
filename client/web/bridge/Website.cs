@@ -24,6 +24,7 @@ internal static class Website
         }
 
         Forward(app, "/website/server-guide", "api/website/server-guide", options, clients, rateLimited: true);
+        Forward(app, "/website/tracker", "api/website/tracker", options, clients, rateLimited: true);
         Forward(app, "/website/data", "api/website", options, clients);
         Forward(app, "/website/details", "api/website/details", options, clients);
         Forward(app, "/website/missions", "api/website/missions", options, clients);

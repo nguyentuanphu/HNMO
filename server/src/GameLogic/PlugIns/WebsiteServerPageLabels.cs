@@ -29,4 +29,18 @@ public static class WebsiteServerPageLabels
 
     /// <summary>Gets the localized MaximumLength label.</summary>
     public static string MaximumLength => Resources.GetString(nameof(MaximumLength), CultureInfo.CurrentUICulture) ?? nameof(MaximumLength);
+
+    /// <summary>Gets the public tracker switch caption.</summary>
+    public static string TrackerEnabled => Get(nameof(TrackerEnabled));
+
+    /// <summary>Gets the public tracker switch description.</summary>
+    public static string TrackerEnabledDescription => Get(nameof(TrackerEnabledDescription));
+
+    /// <summary>Gets the tracker character-name switch caption.</summary>
+    public static string TrackerNames => Get(nameof(TrackerNames));
+
+    /// <summary>Gets the tracker character-name switch description.</summary>
+    public static string TrackerNamesDescription => Get(nameof(TrackerNamesDescription));
+
+    private static string Get(string key) => Resources.GetString(key, CultureInfo.CurrentUICulture) ?? key;
 }

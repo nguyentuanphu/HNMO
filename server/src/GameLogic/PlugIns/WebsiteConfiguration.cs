@@ -55,6 +55,14 @@ public class WebsiteConfiguration
     [Display(Name = nameof(Properties.PlugInResources.WebsiteConfiguration_RequireWebsiteLogin_Caption), Description = nameof(Properties.PlugInResources.WebsiteConfiguration_RequireWebsiteLogin_Description), ResourceType = typeof(Properties.PlugInResources))]
     public bool RequireWebsiteLogin { get; set; }
 
+    /// <summary>Gets or sets whether the host publishes a public tracker feed.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.TrackerEnabled), Description = nameof(WebsiteServerPageLabels.TrackerEnabledDescription), ResourceType = typeof(WebsiteServerPageLabels))]
+    public bool TrackerEnabled { get; set; }
+
+    /// <summary>Gets or sets whether the tracker may display eligible character names.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.TrackerNames), Description = nameof(WebsiteServerPageLabels.TrackerNamesDescription), ResourceType = typeof(WebsiteServerPageLabels))]
+    public bool TrackerShowCharacterNames { get; set; }
+
     /// <summary>Gets or sets the public ClientRulesEn lines; an empty value publishes no claim.</summary>
     [Display(Name = nameof(WebsiteServerPageLabels.ClientRulesEn), Description = nameof(WebsiteServerPageLabels.Description), ResourceType = typeof(WebsiteServerPageLabels))]
     [StringLength(4000, ErrorMessageResourceType = typeof(WebsiteServerPageLabels), ErrorMessageResourceName = nameof(WebsiteServerPageLabels.MaximumLength))]
