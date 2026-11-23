@@ -410,18 +410,21 @@ test('effect light reaches the characters in it', async ({ page }) => {
   const before = await page.evaluate(() => { const l = (window as unknown as { __game: LightGame }).__game.online.hero.light; return { r: l.r, g: l.g, b: l.b }; });
   await page.evaluate(() => {
     const g = (window as unknown as { __game: LightGame }).__game;
-    const w = window as unknown as { __lightTicks: number };
+    const w = window as unknown as { __lightTicks: number; __lightDone: boolean };
     w.__lightTicks = 0;
-    g.effects.schedule(() => { g.effects.groundLight(g.online.hero.position, 1, -1, -1, 3); return ++w.__lightTicks < 150; });
+    w.__lightDone = false;
+    g.effects.schedule(() => {
+      if (w.__lightDone) return false;
+      g.effects.groundLight(g.online.hero.position, 1, -1, -1, 3);
+      return ++w.__lightTicks < 2000;
+    });
   });
   // The light is laid by the effect ticks, which run with the frames: on a machine drawing a frame or two a second
-  // the first ones come late. Wait until the light has been laid a few times, then for the hero's colour.
+  // the first ones come late. Keep laying the light until the hero's colour has been checked, then stop it.
   await expect.poll(() => page.evaluate(() => (window as unknown as { __lightTicks: number }).__lightTicks), { timeout: 120_000 }).toBeGreaterThanOrEqual(10);
-  await expect.poll(() => page.evaluate(() => { const l = (window as unknown as { __game: LightGame }).__game.online.hero.light; return l.r - l.g; }), { timeout: 20_000 })
+  await expect.poll(() => page.evaluate(() => { const l = (window as unknown as { __game: LightGame }).__game.online.hero.light; return l.r - l.g; }), { timeout: 60_000 })
     .toBeGreaterThan(before.r - before.g + 0.3);
-  // When the light ends the body takes the ground's own light again. Its 150 ticks take longer when the machine
-  // draws few frames (at most 10 ticks run per frame), so wait for them to be over first.
-  await expect.poll(() => page.evaluate(() => (window as unknown as { __lightTicks: number }).__lightTicks), { timeout: 120_000 }).toBeGreaterThanOrEqual(150);
-  await expect.poll(() => page.evaluate(() => { const l = (window as unknown as { __game: LightGame }).__game.online.hero.light; return Math.abs(l.r - l.g); }), { timeout: 20_000 })
+  await page.evaluate(() => { (window as unknown as { __lightDone: boolean }).__lightDone = true; });
+  await expect.poll(() => page.evaluate(() => { const l = (window as unknown as { __game: LightGame }).__game.online.hero.light; return Math.abs(l.r - l.g); }), { timeout: 60_000 })
     .toBeLessThan(Math.abs(before.r - before.g) + 0.05);
 });
