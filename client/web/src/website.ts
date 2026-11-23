@@ -943,24 +943,6 @@ const copy = {
   },
 };
 type CopyKey = keyof typeof copy.en;
-const REALM_RULE_LINES: Record<Language, readonly string[]> = {
-  en: [
-    "Guilds: join from level 6; create at Devias Guild Master from level 150 (configurable per realm).",
-    "Personal stores: open from level 6 when not trading or in an NPC dialog; buyers must be within view range.",
-    "Events & maps: Blood Castle runs for 15 minutes; Crywolf warp requires level 300. Mini games cannot be entered while dead, trading, duelling, or in another NPC dialog.",
-    "Quests & mounts: quests are accepted and completed only at the quest NPC. Riding the Horn of Fenrir requires second class or higher.",
-    "Monsters & drops: field monsters return home and heal when lured too far; EXP splits by damage dealt; jewels drop by monster level band; in Kanturu strike Maya's hands (her body stays invulnerable).",
-    "Rate events: when Happy Hour overlaps another bonus event, only the larger multiplier applies (zen rate bonuses apply separately).",
-  ],
-  vi: [
-    "Bang hội: gia nhập từ cấp 6; lập bang hội tại Hội trưởng Devias từ cấp 150 (máy chủ có thể tùy chỉnh).",
-    "Cửa hàng cá nhân: mở từ cấp 6 khi không giao dịch hoặc mở hộp thoại NPC; người mua phải ở trong tầm nhìn.",
-    "Sự kiện & bản đồ: Huyết Lâu kéo dài 15 phút; dịch chuyển Crywolf yêu cầu cấp 300. Không thể vào phó bản khi đang chết, giao dịch, quyết đấu hoặc mở NPC khác.",
-    "Nhiệm vụ & thú cưỡi: nhiệm vụ chỉ nhận và trả trực tiếp tại NPC. Cưỡi Sói Tinh (Horn of Fenrir) yêu cầu chuyển chức lần 2 trở lên.",
-    "Quái & rơi đồ: quái bãi quay về chỗ cũ và hồi máu khi bị kéo quá xa; EXP chia theo sát thương gây ra; ngọc rơi theo nhóm cấp quái; tại Kanturu đánh tay của Maya (thân chính miễn nhiễm).",
-    "Sự kiện nhân tỉ lệ: khi Giờ vàng trùng sự kiện khác, chỉ áp dụng mức nhân cao hơn (tỉ lệ Zen tính riêng).",
-  ],
-};
 interface Named {
   name: string | null;
 }
@@ -1191,12 +1173,6 @@ function renderHeroSeason(world: WorldGroup | undefined): void {
   if (badge) { badge.textContent = world?.seasonBadge ?? ""; badge.hidden = !world?.seasonBadge; }
 }
 
-function renderRealmRules(): void {
-  const list = document.getElementById("realm-rules");
-  if (!list) return;
-  list.replaceChildren(...REALM_RULE_LINES[language].map((line) => node("li", line)));
-}
-
 function render(): void {
   document.documentElement.lang = language;
   element("community").dataset.communityLinks = t("contact");
@@ -1294,7 +1270,6 @@ function render(): void {
   if (matchedWorld && !matchedWorld.isOpen) {
     element("notice").textContent = t("worldLockedNotice").replace("%s", matchedWorld.openingDateSydney || matchedWorld.openingDateUtc || "");
   }
-  renderRealmRules();
   const realm = current();
   if (!realm) {
     for (const id of ["stats", "event-list", "classes", "maps"]) empty(id);

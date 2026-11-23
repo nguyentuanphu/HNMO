@@ -57,7 +57,7 @@ async function initializeGamePreview(): Promise<void> {
   const website = document.getElementById('websiteLoginButton');
   const choices = document.getElementById('characters');
   const signedIn = sampleSession(); if (website) website.hidden = signedIn;
-  if (location.hash.includes('ticket=')) history.replaceState(null, '', location.pathname + location.search);
+  // The private preview does not redeem tickets. Keep the review link intact.
   const panel = document.createElement('div'); panel.dataset.noI18n = '';
   const title = document.createElement('h2'); const detail = document.createElement('p'); const actions = document.createElement('div');
   actions.style.cssText = 'display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))';

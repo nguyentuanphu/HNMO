@@ -4,7 +4,8 @@ import { expect, test } from '@playwright/test';
 const shell = `<!doctype html><html lang="en"><head><meta charset="utf-8">
 <script type="module" src="/js/websiteThemePreviewEntry.js"></script>
 <script type="module" src="/js/websiteThemeEntry.js"></script></head><body>
-<div id="login"><form><h1 data-game-name></h1><span id="loginLanguage"><button type="button" data-lang="en">EN</button><button type="button" data-lang="vi">VI</button></span></form></div>
+<div id="login"><form id="loginForm"><h1 data-game-name></h1><span id="loginLanguage"><button type="button" data-lang="en">EN</button><button type="button" data-lang="vi">VI</button></span></form>
+<button id="websiteLoginButton" type="button">Sign in</button><div id="characters" hidden></div></div>
 </body></html>`;
 
 test('private game preview initializes branding and language on an extensionless host URL', async ({ page }) => {
@@ -27,8 +28,12 @@ test('private approved profile follows the owner choice on an extensionless URL'
 });
 
 test('private ticket review at the site root reaches the game appearance without a second sign-in', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('hnmo.preview.sample.session', 'sample'));
   await page.route(url => url.pathname === '/' || url.pathname === '/game.html', route => route.fulfill({ contentType: 'text/html', body: shell }));
   await page.goto('/#ticket=fictional-example');
-  await expect(page).toHaveURL(/\/game\.html#ticket=fictional-example$/);
   await expect(page.locator('#login h1')).toHaveText('HNMO');
+  await expect(page.locator('.website-preview-notice')).toContainText('fictional records');
+  await expect(page.locator('#characters')).toContainText('Choose a character');
+  await expect(page.locator('#websiteLoginButton')).toBeHidden();
+  await expect(page).toHaveURL(/\/game\.html#ticket=fictional-example$/);
 });

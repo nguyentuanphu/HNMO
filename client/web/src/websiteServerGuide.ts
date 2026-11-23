@@ -1,9 +1,11 @@
-import { parseServerGuide, type ServerGuideFacts, type ServerGuideView, type GuideVip, type ServerGuideExtras } from './websiteServerGuideModels.js';
+import { parseServerGuide, type ServerGuideFacts, type ServerGuideView, type GuideRealmRules, type GuideVip, type ServerGuideExtras } from './websiteServerGuideModels.js';
 import { serverGuideCopy, type ServerGuideText } from './websiteServerGuideCopy.js';
 
 const root = document.getElementById('server-guide');
 const selector = document.getElementById('server');
+const realmRuleList = document.getElementById('realm-rules');
 const REFRESH_INTERVAL_MS = 30_000;
+const SECONDS_PER_MINUTE = 60;
 let snapshot: ServerGuideView | null = null;
 let pending = false;
 function vi(): boolean { return document.documentElement.lang === 'vi'; }
@@ -105,6 +107,32 @@ function crafting(extras: ServerGuideExtras): HTMLElement {
   })));
   if (extras.craftsTruncated) line(result, 'moreRows'); return result;
 }
+
+function formatDuration(seconds: number): string {
+  const wholeMinutes = seconds % SECONDS_PER_MINUTE === 0;
+  return new Intl.NumberFormat(vi() ? 'vi-VN' : 'en-AU', {
+    style: 'unit', unit: wholeMinutes ? 'minute' : 'second', unitDisplay: 'long',
+  }).format(wholeMinutes ? seconds / SECONDS_PER_MINUTE : seconds);
+}
+
+function renderRealmRules(rules: GuideRealmRules | undefined): void {
+  if (!realmRuleList) return;
+  const lines: string[] = [];
+  if (rules) {
+    lines.push(rules.guildCreationMinimumLevel === 0
+      ? t('guildCreationAnyLevel')
+      : t('guildCreationLevel', rules.guildCreationMinimumLevel));
+    if (rules.bloodCastle) {
+      const { minimumSeconds, maximumSeconds } = rules.bloodCastle;
+      lines.push(minimumSeconds === maximumSeconds
+        ? t('bloodCastleDuration', formatDuration(minimumSeconds))
+        : t('bloodCastleDurationRange', formatDuration(minimumSeconds), formatDuration(maximumSeconds)));
+    }
+  }
+  lines.push(t('miniGameEntry'), t('questNpc'), t('fieldMonsters'), t('rateEvents'));
+  realmRuleList.replaceChildren(...lines.map(text => node('li', text)));
+}
+
 function render(): void {
   if (!root) return;
   const heading = node('div'); heading.className = 'section-head'; const title = node('div'); title.append(node('h2', t('title')), node('p', t('source')));
@@ -112,6 +140,7 @@ function render(): void {
   heading.append(title, refresh); root.replaceChildren(heading);
   const id = selector instanceof HTMLSelectElement ? selector.value : '';
   const server = id ? snapshot?.servers.find(item => String(item.id) === id) : snapshot?.servers[0];
+  renderRealmRules(id ? server?.realmRules : undefined);
   if (!server || !snapshot) { const error = node('p', t('unavailable')); error.setAttribute('role', 'status'); root.append(error); return; }
   const grid = node('div'); grid.className = 'server-guide-grid';
   grid.append(progression(server.facts), helper(server.facts), storage(server.facts), party(server.facts), vip(server.facts), catalog(server.facts), policies(snapshot));

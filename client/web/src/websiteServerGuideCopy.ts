@@ -1,5 +1,13 @@
 export const serverGuideCopy = {
   title: ['Server rules at a glance', 'Thông tin máy chủ'],
+  guildCreationLevel: ['Guild creation requires level {0}.', 'Lập bang hội yêu cầu cấp {0}.'],
+  guildCreationAnyLevel: ['Guild creation has no minimum level.', 'Lập bang hội không yêu cầu cấp tối thiểu.'],
+  bloodCastleDuration: ['Blood Castle duration: {0}.', 'Thời lượng Huyết Lâu: {0}.'],
+  bloodCastleDurationRange: ['Blood Castle duration varies by tier, from {0} to {1}.', 'Thời lượng Huyết Lâu tùy tầng, từ {0} đến {1}.'],
+  miniGameEntry: ['Mini games refuse entry while dead, trading, duelling, or in another NPC dialog.', 'Không thể vào phó bản khi đang chết, giao dịch, quyết đấu hoặc đang mở hộp thoại NPC khác.'],
+  questNpc: ['Accept and complete quests at the quest NPC.', 'Nhận và trả nhiệm vụ tại NPC giao nhiệm vụ.'],
+  fieldMonsters: ["Field monsters return home and heal when lured too far. EXP splits by damage dealt. Jewels drop by monster level band. In Kanturu, strike Maya’s hands while her body is invulnerable.", 'Quái bãi quay về chỗ cũ và hồi máu khi bị kéo quá xa. EXP chia theo sát thương gây ra. Ngọc rơi theo nhóm cấp quái. Tại Kanturu, hãy đánh tay Maya khi thân chính miễn nhiễm.'],
+  rateEvents: ['When Happy Hour overlaps another bonus event, only the larger multiplier applies. Zen rate bonuses apply separately.', 'Khi Giờ vàng trùng sự kiện khác, chỉ áp dụng mức nhân cao hơn. Tỉ lệ Zen tính riêng.'],
   source: ['Read from the running server and the host’s published settings.', 'Đọc từ máy chủ đang chạy và nội dung host đã công bố.'],
   unavailable: ['Current server information is unavailable. Old rules and prices have been cleared; try again shortly.', 'Chưa đọc được thông tin máy chủ. Đã xóa quy định và giá cũ; hãy thử lại sau.'],
   refresh: ['Refresh information', 'Cập nhật thông tin'], refreshHint: ['Read the latest public server information; no account changes are made.', 'Đọc lại thông tin công khai mới nhất; không thay đổi tài khoản.'],

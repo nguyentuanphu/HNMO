@@ -28,7 +28,7 @@ function mountWebsiteCredit(): void {
   const credit = document.createElement('small');
   credit.className = 'website-powered-by';
   const translate = (): void => {
-    credit.textContent = document.documentElement.lang === 'vi' ? 'Vận hành bởi HNMO' : 'Powered by HNMO';
+    credit.textContent = document.documentElement.lang === 'vi' ? 'Vận hành bởi HNMO, phát triển bởi HenryN' : 'Powered by HNMO, made by HenryN';
   };
   new MutationObserver(translate).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
   translate(); footer.append(credit);

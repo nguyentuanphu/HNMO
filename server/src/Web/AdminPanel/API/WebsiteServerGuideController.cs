@@ -52,7 +52,13 @@ public sealed class WebsiteServerGuideController(IDictionary<int, IGameServer> s
                 updatedAt = DateTimeOffset.UtcNow,
                 clientRules = new { en = settings.ServerClientRulesEn, vi = settings.ServerClientRulesVi },
                 notForSale = new { en = settings.ServerNotForSaleEn, vi = settings.ServerNotForSaleVi },
-                servers = running.Select(server => new { id = server.Context.Id, facts = Build(server.Context), extras = Extras(server.Context) }).ToArray(),
+                servers = running.Select(server => new
+                {
+                    id = server.Context.Id,
+                    facts = Build(server.Context),
+                    extras = Extras(server.Context),
+                    realmRules = RealmRules(server.Context),
+                }).ToArray(),
             };
         }).ConfigureAwait(false);
         this.Response.Headers.CacheControl = "public,max-age=15";
@@ -82,4 +88,18 @@ public sealed class WebsiteServerGuideController(IDictionary<int, IGameServer> s
             context.FeaturePlugIns.GetPlugIn<MultiVaultPlugIn>()?.Configuration,
             context.FeaturePlugIns.GetPlugIn<RateTuningPlugIn>()?.Configuration,
             context.PlugInManager.GetActivePlugInsOf<ICashShopProductDeliveryPlugIn>().OfType<InventoryExtensionDeliveryPlugIn>().FirstOrDefault()?.Configuration);
+
+    private static object RealmRules(IGameContext context)
+    {
+        var durations = context.Configuration.MiniGameDefinitions
+            .Where(definition => definition is { IsActive: true, Type: HNMO.DataModel.Configuration.MiniGameType.BloodCastle }
+                && definition.GameDuration > TimeSpan.Zero)
+            .Select(definition => definition.GameDuration.TotalSeconds)
+            .ToArray();
+        return new
+        {
+            guildCreationMinimumLevel = GuildLimitsPlugIn.GetMinimumCreateLevel(context),
+            bloodCastle = durations.Length == 0 ? null : new { minimumSeconds = durations.Min(), maximumSeconds = durations.Max() },
+        };
+    }
 }
