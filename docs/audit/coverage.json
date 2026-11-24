@@ -1,5 +1,5 @@
 {
-  "generatedAt": "ecaa7c08",
+  "generatedAt": "0b4249a7",
   "maxLines": 6000,
   "units": [
     {
@@ -4226,11 +4226,16 @@
       ],
       "files": 14,
       "lines": 2079,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "0b4249a7",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "the Season 6/9 suites' item list files",
+        "the Season 6/9 suites' ancient set type files",
+        "the Season 6/9 suites' class quest config files",
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-VersionSeasonSix-TestAccounts.md"
+      ],
+      "evidence": "Read all 14 files (2079 lines) in VersionSeasonSix/TestAccounts; found GameMaster PendantSlot collision and verified item/set/quest IDs: docs/audit/findings/unit-server-src-Persistence-Initialization-VersionSeasonSix-TestAccounts.md",
       "prs": ""
     },
     {
