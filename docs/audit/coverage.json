@@ -1,5 +1,5 @@
 {
-  "generatedAt": "98e6f5a9",
+  "generatedAt": "079cf474",
   "maxLines": 6000,
   "units": [
     {
@@ -2866,11 +2866,14 @@
       ],
       "files": 96,
       "lines": 4924,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "079cf474",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "AreaSkillAttackHandlerPlugIn.cs:26,54-68",
+        "docs/audit/findings/unit-server-src-GameServer-MessageHandler-files-1.md"
+      ],
+      "evidence": "96f/4924L: mostly packet framing delegating to GameLogic; AreaSkillAttackHandlerPlugIn schedules 5 follow-up Pollution (#225) ticks at 1000ms intervals.",
       "prs": ""
     },
     {
