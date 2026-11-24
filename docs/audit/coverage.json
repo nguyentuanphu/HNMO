@@ -1,5 +1,5 @@
 {
-  "generatedAt": "361981f6",
+  "generatedAt": "a55b68e8",
   "maxLines": 6000,
   "units": [
     {
@@ -5721,11 +5721,13 @@
       ],
       "files": 14,
       "lines": 1622,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -5736,11 +5738,13 @@
       ],
       "files": 2,
       "lines": 191,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -5751,11 +5755,13 @@
       ],
       "files": 4,
       "lines": 127,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -5766,11 +5772,13 @@
       ],
       "files": 19,
       "lines": 4363,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -5781,11 +5789,13 @@
       ],
       "files": 2,
       "lines": 109,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -5796,11 +5806,13 @@
       ],
       "files": 2,
       "lines": 158,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -5811,11 +5823,13 @@
       ],
       "files": 2,
       "lines": 179,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -5826,11 +5840,13 @@
       ],
       "files": 10,
       "lines": 1843,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -5841,11 +5857,13 @@
       ],
       "files": 11,
       "lines": 648,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -5856,11 +5874,13 @@
       ],
       "files": 6,
       "lines": 376,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -5871,11 +5891,13 @@
       ],
       "files": 7,
       "lines": 1792,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -5886,11 +5908,13 @@
       ],
       "files": 5,
       "lines": 672,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -5901,11 +5925,13 @@
       ],
       "files": 3,
       "lines": 702,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -5916,11 +5942,13 @@
       ],
       "files": 6,
       "lines": 377,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -5931,11 +5959,13 @@
       ],
       "files": 17,
       "lines": 3059,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -5966,11 +5996,13 @@
       ],
       "files": 21,
       "lines": 5417,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -6017,11 +6049,13 @@
       ],
       "files": 37,
       "lines": 5893,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -6063,11 +6097,13 @@
       ],
       "files": 32,
       "lines": 4389,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -6078,11 +6114,13 @@
       ],
       "files": 9,
       "lines": 2665,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -6093,11 +6131,13 @@
       ],
       "files": 11,
       "lines": 1604,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -6108,11 +6148,13 @@
       ],
       "files": 4,
       "lines": 835,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -6154,11 +6196,13 @@
       ],
       "files": 32,
       "lines": 5974,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -6187,11 +6231,13 @@
       ],
       "files": 19,
       "lines": 3600,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -6202,11 +6248,13 @@
       ],
       "files": 27,
       "lines": 2495,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -6217,11 +6265,13 @@
       ],
       "files": 3,
       "lines": 211,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -6232,11 +6282,13 @@
       ],
       "files": 11,
       "lines": 1256,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -6247,11 +6299,13 @@
       ],
       "files": 8,
       "lines": 1162,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -6921,11 +6975,13 @@
       ],
       "files": 7,
       "lines": 679,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -6936,11 +6992,13 @@
       ],
       "files": 7,
       "lines": 1211,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -6975,11 +7033,13 @@
       ],
       "files": 25,
       "lines": 2569,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -6990,11 +7050,13 @@
       ],
       "files": 1,
       "lines": 15727,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -7005,11 +7067,13 @@
       ],
       "files": 1,
       "lines": 3696,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -8201,11 +8265,13 @@
       ],
       "files": 8,
       "lines": 5853,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -8227,11 +8293,13 @@
       ],
       "files": 12,
       "lines": 5516,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -8250,11 +8318,13 @@
       ],
       "files": 9,
       "lines": 5883,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -8276,11 +8346,13 @@
       ],
       "files": 12,
       "lines": 4843,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -8298,11 +8370,13 @@
       ],
       "files": 8,
       "lines": 5635,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -8316,11 +8390,13 @@
       ],
       "files": 4,
       "lines": 2806,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
@@ -8331,11 +8407,13 @@
       ],
       "files": 10,
       "lines": 2978,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a55b68e8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-Data-Network-World.md"
+      ],
+      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
       "prs": ""
     },
     {
