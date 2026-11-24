@@ -142,4 +142,27 @@ Do, in this order, one commit per file or unit:
 4. After each step, report from `docs/audit/coverage.md` and the diff headers: units checked of 400, lines read of the
    total, rule files read of the total; never "complete" for a part with an empty or all-zero section.
 
+## Part 8: the other big items (after Parts 7 and 6; the owner, 24 Nov: "còn việc nào lớn nhờ antigravity làm luôn")
+
+For each item, first check on the latest branch whether it is already done (some may be); if so, show where and skip
+it. Otherwise one draft PR per item, with tests, EN/VI texts and screenshots.
+1. [Medium] One quest window (owner's 22 Nov feedback: two quest windows open for the same thing;
+   `client/web/src/ui/questWindows.ts`): one window, as the desktop client's, keeping every function.
+2. [Medium] Launchers (owner's 22 Nov feedback): one Windows start file instead of two `.bat` (a setting or an argument
+   for the visible console), a macOS start file, the Linux script checked; "silent" mode really stops when asked
+   (`client/web/tools/hnmo/`, `client/web/tools/package-hnmo.sh`). Test on Windows; say what could not be tested on macOS.
+3. [Medium] Seasons in the admin panel: Season 6 / Season 9 / Arena enabling clear and on one settings page, every
+   text in EN / VI / DE / zh-CN.
+4. [Medium] Chat, whisper and messenger windows resizable (owner's 22 Nov feedback), size kept per browser.
+5. [High] Monsters drawn with missing body parts (owner's 22 Nov feedback) and skill effects that lag: find which
+   models and effects, compare with the desktop client's drawing, fix; include the five Season 9 monsters without a
+   model (580, 581, 584, 643, 689) and the Arena map (6) layout.
+6. [High] HUD reference sweep: the web game's HUD against the Season 6 and Season 9 clients (positions, buttons,
+   gauges, menus), a findings list, then the fixes.
+7. [Medium] Season 9 checks in a Season 9 world: the browser suites, the skill sweeps of every class, a play test
+   (Arena walk after a warp and after a respawn).
+8. [Medium] Desktop client: build it, run its tests, check its data against the rules changed since 21 Nov (rank-2
+   class items, Horn of Fenrir from second class, level 380 items, second wing options, harmony +14/+15, the Eternal Wing
+   set, jewel prices).
+
 After each part, tell the owner in Vietnamese: the PR, what was done, test results, the real audit numbers, what is left.
