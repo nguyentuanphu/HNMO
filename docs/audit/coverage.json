@@ -1,5 +1,5 @@
 {
-  "generatedAt": "78a24ae3",
+  "generatedAt": "f0d05fda",
   "maxLines": 6000,
   "units": [
     {
@@ -3592,11 +3592,15 @@
       ],
       "files": 52,
       "lines": 4090,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "f0d05fda",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "CrywolfEventViewPlugIn.cs:29,52",
+        "EffectNumbers.cs:15-40",
+        "docs/audit/findings/unit-server-src-GameServer-RemoteView-World.md"
+      ],
+      "evidence": "52f/4090L: Mostly packet views; CrywolfEventViewPlugIn maps 5 altars from FirstAltarKey=317 & clamps statue shield 0..100%; EffectNumbers holds legacy 0.75 effect IDs.",
       "prs": ""
     },
     {
