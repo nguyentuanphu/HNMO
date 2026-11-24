@@ -1,5 +1,5 @@
 {
-  "generatedAt": "1ac8aaad",
+  "generatedAt": "8dbcc0a2",
   "maxLines": 6000,
   "units": [
     {
@@ -2584,11 +2584,14 @@
       ],
       "files": 8,
       "lines": 240,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "8dbcc0a2",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Views/NPC",
+        "docs/audit/findings/unit-server-src-GameLogic-Views-NPC.md"
+      ],
+      "evidence": "8f/240L: No game rules (CraftingResult.cs:10-60 (enum) + view interfaces).",
       "prs": ""
     },
     {
