@@ -1,5 +1,5 @@
 {
-  "generatedAt": "4e8e848d",
+  "generatedAt": "7ef9c36b",
   "maxLines": 6000,
   "units": [
     {
@@ -8401,11 +8401,15 @@
       ],
       "files": 8,
       "lines": 1126,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "7ef9c36b",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "MasterSkillTreeLayout.cpp:14-44",
+        "SkillTooltipModel.cpp:365-390",
+        "docs/audit/findings/unit-client-src-source-UI-HUD-Skills.md"
+      ],
+      "evidence": "8f/1126L: MasterSkillTreeLayout uses NormalMaxLevel=400, SecondCurve=255, FirstMasterExp=3892250000 polynomial & percent-scaled master tooltips matching server & Web masterLevel.ts.",
       "prs": ""
     },
     {
