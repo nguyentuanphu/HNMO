@@ -1,5 +1,5 @@
 {
-  "generatedAt": "ba3dd37f",
+  "generatedAt": "22bd0099",
   "maxLines": 6000,
   "units": [
     {
@@ -8133,11 +8133,16 @@
       ],
       "files": 18,
       "lines": 5926,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "22bd0099",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Dialogs/ChatCommandRmlModel.h",
+        "Dialogs/ChatCommandWindow.cpp",
+        "Dialogs/ChatCommandWindow.h",
+        "docs/audit/findings/unit-client-src-source-UI-Dialogs-files-1.md"
+      ],
+      "evidence": "18f/5926L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
       "prs": ""
     },
     {
