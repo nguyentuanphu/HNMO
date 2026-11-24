@@ -144,7 +144,7 @@ test('the texts fit their boxes', async ({ page }) => {
   // The auto play window's other tabs.
   await page.keyboard.press('z');
   if (await page.locator('.rml-mu_helper_config').first().waitFor({ state: 'attached', timeout: 20_000 }).then(() => true, () => false)) {
-    for (const tab of [1, 2]) {
+    for (const tab of [1, 2, 3, 4]) {
       await page.locator(`.rml-mu_helper_config #tab_${tab}`).click({ force: true });
       await check(page, `mu_helper_config-tab${tab}`);
     }

@@ -15,10 +15,11 @@ import type { RmlDocument, RmlModel } from './rml.js';
 import { loadSkillData, skillIconSprite, skillInfo, SkillNumber, SkillUseType } from '../game/skills.js';
 import type { SkillList } from '../game/skills.js';
 import { BaseClass } from '../game/characterCalc.js';
-import {
-  cloneAutoPlayConfig, initialAutoPlayConfig, normalizeExtraItems, PetAttackMode, SkillActivation,
-} from '../game/autoPlayConfig.js';
+import { cloneAutoPlayConfig, initialAutoPlayConfig, normalizeExtraItems, PetAttackMode, SkillActivation } from '../game/autoPlayConfig.js';
 import type { AutoPlayConfig } from '../game/autoPlayConfig.js';
+import type { AutoPlayExtras } from '../game/autoPlayExtras.js';
+import { onLanguageChange } from '../i18n.js';
+import { AutoPlayHnmoTabs } from './autoPlayHnmoTabs.js';
 import { nativeTextPx, uiScale, dockTop } from './nativeText.js';
 
 const PANEL_WIDTH = 190; // the docked panels' width in reference px
@@ -260,6 +261,12 @@ export interface AutoPlaySettingsOptions {
   onMessage?: (text: string) => void;
   /** Reference px of panels docked at the right edge before the settings window. */
   dockRight?: () => number;
+  /** HNMO Extras & Ultimate state shown in tabs 3 and 4. */
+  extras?: AutoPlayExtras;
+  mapName?: (map: number) => string;
+  onRequestPolicy?: () => void;
+  onAutoPickSkills?: () => boolean;
+  onExtrasSaved?: () => void;
 }
 
 export class AutoPlaySettingsWindow {
@@ -297,6 +304,8 @@ export class AutoPlaySettingsWindow {
   private pickerDoc: RmlDocument | null = null;
   private opening: Promise<void> | null = null;
   private readonly stops: (() => void)[] = [];
+  private hnmoTabs: AutoPlayHnmoTabs | null = null;
+  private lastStatsTick = 0;
 
   constructor(options: AutoPlaySettingsOptions) {
     this.options = options;
@@ -341,8 +350,44 @@ export class AutoPlaySettingsWindow {
       origin_x: 0, origin_y: 0, scale: 1, attack: false, entries: [],
       mhsp_pick: (index) => this.pick(index),
     };
+    if (options.extras) {
+      this.hnmoTabs = new AutoPlayHnmoTabs({
+        extras: options.extras,
+        mapName: options.mapName ?? ((m) => `Map ${m}`),
+        onSelectTab: (tab) => { this.selectTab(tab); this.refresh(); },
+        onAutoPickSkills: options.onAutoPickSkills,
+        onGoToTown: () => this.close(),
+        onMessage: options.onMessage,
+      });
+    }
     for (const name of ['mu_helper_config', 'mu_helper_detail', 'mu_helper_skill_picker']) {
       prepareDocument(name).catch((error: unknown) => console.warn('Interface', error));
+    }
+  }
+
+  attachExtras(extrasOptions: {
+    extras: AutoPlayExtras;
+    mapName?: (map: number) => string;
+    onRequestPolicy?: () => void;
+    onAutoPickSkills?: () => boolean;
+    onExtrasSaved?: () => void;
+  }): void {
+    this.options.extras = extrasOptions.extras;
+    this.options.mapName = extrasOptions.mapName;
+    this.options.onRequestPolicy = extrasOptions.onRequestPolicy;
+    this.options.onAutoPickSkills = extrasOptions.onAutoPickSkills;
+    this.options.onExtrasSaved = extrasOptions.onExtrasSaved;
+    this.hnmoTabs = new AutoPlayHnmoTabs({
+      extras: extrasOptions.extras,
+      mapName: extrasOptions.mapName ?? ((m) => `Map ${m}`),
+      onSelectTab: (tab) => { this.selectTab(tab); this.refresh(); },
+      onAutoPickSkills: extrasOptions.onAutoPickSkills,
+      onGoToTown: () => this.close(),
+      onMessage: this.options.onMessage,
+    });
+    if (this.configDoc) {
+      this.hnmoTabs.mount(this.configDoc.root);
+      this.refresh();
     }
   }
 
@@ -352,13 +397,49 @@ export class AutoPlaySettingsWindow {
 
   async toggle(): Promise<void> {
     if (this.isOpen) this.close();
-    else await this.open();
+    else await this.open(0);
   }
 
-  open(): Promise<void> {
-    if (this.configDoc) return Promise.resolve();
+  async toggleTab(tab: number): Promise<void> {
+    if (!Number.isInteger(tab) || tab < 0 || tab > 4) return;
+    if (!this.isOpen) {
+      await this.open(tab);
+      return;
+    }
+    if (this.activeTab !== tab) {
+      this.selectTab(tab);
+      this.refresh();
+      return;
+    }
+    this.close();
+  }
+
+  open(tab?: number): Promise<void> {
+    if (tab !== undefined && Number.isInteger(tab) && tab >= 0 && tab <= 4) {
+      this.activeTab = tab;
+    }
+    if (this.configDoc) {
+      this.hnmoTabs?.refreshContent(this.activeTab);
+      this.refresh();
+      return Promise.resolve();
+    }
+    this.hnmoTabs?.resetDraft();
+    this.options.onRequestPolicy?.();
     this.opening ??= this.openDocuments().finally(() => { this.opening = null; });
     return this.opening;
+  }
+
+  refreshPolicy(): void {
+    if (!this.configDoc) return;
+    this.hnmoTabs?.refreshContent(this.activeTab);
+    this.refresh();
+  }
+
+  refreshStats(now = performance.now()): void {
+    if (!this.configDoc || this.activeTab !== 4) return;
+    if (now - this.lastStatsTick < 500) return;
+    this.lastStatsTick = now;
+    this.hnmoTabs?.refreshStatsOnly();
   }
 
   /** The settings the server sent (CMuHelperConfigWindow::LoadSavedConfig): replaces the staged copy. */
@@ -374,6 +455,7 @@ export class AutoPlaySettingsWindow {
     if (!this.configDoc) return;
     this.blurField();
     for (const stop of this.stops.splice(0)) stop();
+    this.hnmoTabs?.unmount();
     this.configDoc.close();
     this.detailDoc?.close();
     this.pickerDoc?.close();
@@ -409,6 +491,7 @@ export class AutoPlaySettingsWindow {
     this.bindGauges(detailDoc);
 
     const configRoot = configDoc.root;
+    this.hnmoTabs?.mount(configRoot);
     configRoot.addEventListener('mouseup', (event) => { this.lastMouseButton = event.button; }, true);
     configRoot.querySelector('#extra_list')?.addEventListener('wheel', (event) => event.stopPropagation());
     for (const id of ['distance_time', 'skill2_delay', 'skill3_delay']) configDoc.$(`#${id}`)?.setAttribute('maxlength', String(MAX_NUMBER_DIGITS));
@@ -417,9 +500,13 @@ export class AutoPlaySettingsWindow {
 
     const keydown = (event: KeyboardEvent) => { if (event.key === 'Escape') this.escape(); };
     const resize = () => this.place();
+    const stopLang = onLanguageChange(() => {
+      this.hnmoTabs?.refreshContent(this.activeTab);
+      this.hnmoTabs?.syncVisibility(this.activeTab);
+    });
     window.addEventListener('keydown', keydown);
     window.addEventListener('resize', resize);
-    this.stops.push(() => window.removeEventListener('keydown', keydown), () => window.removeEventListener('resize', resize));
+    this.stops.push(() => window.removeEventListener('keydown', keydown), () => window.removeEventListener('resize', resize), stopLang);
 
     this.place();
   }
@@ -443,7 +530,7 @@ export class AutoPlaySettingsWindow {
     // Escape still closes the window.
     for (const type of ['keydown', 'keyup', 'keypress'] as const) {
       doc.root.addEventListener(type, (event) => {
-        if (!(event.target instanceof HTMLInputElement)) return;
+        if (!(event.target instanceof HTMLInputElement) && !(event.target instanceof HTMLSelectElement)) return;
         event.stopPropagation();
         if (type === 'keydown' && event.key === 'Escape') this.escape();
       });
@@ -533,9 +620,16 @@ export class AutoPlaySettingsWindow {
   }
 
   private selectTab(tab: number): void {
-    if (!Number.isInteger(tab) || tab < 0 || tab > 2 || tab === this.activeTab) return;
+    const maxTab = this.hnmoTabs ? 4 : 2;
+    if (!Number.isInteger(tab) || tab < 0 || tab > maxTab || tab === this.activeTab) return;
     this.blurField();
+    if (this.activeTab > 2) this.hnmoTabs?.captureInputs();
+    if (tab > 2) {
+      this.hideDetail();
+      this.pickerVisible = false;
+    }
     this.activeTab = tab;
+    if (tab > 2) this.hnmoTabs?.refreshContent(tab);
   }
 
   private toggleCheck(key: string): void {
@@ -696,6 +790,10 @@ export class AutoPlaySettingsWindow {
     for (let i = 0; i < 3; i++) {
       c.skills[i] = Math.max(this.selectedSkills[i], 0);
       c.buffs[i] = Math.max(this.selectedSkills[3 + i], 0);
+    }
+    if (this.options.extras && this.hnmoTabs) {
+      this.options.extras.save(this.hnmoTabs.currentDraft());
+      this.options.onExtrasSaved?.();
     }
     this.options.onSave(cloneAutoPlayConfig(c));
   }
@@ -877,6 +975,7 @@ export class AutoPlaySettingsWindow {
     configDoc.update();
     detailDoc.update();
     pickerDoc.update();
+    this.hnmoTabs?.syncVisibility(this.activeTab);
     this.nameSkills(configDoc, pickerDoc);
   }
 
