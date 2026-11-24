@@ -1,5 +1,5 @@
 {
-  "generatedAt": "9453e88f",
+  "generatedAt": "8b96d483",
   "maxLines": 6000,
   "units": [
     {
@@ -3939,11 +3939,13 @@
       ],
       "files": 9,
       "lines": 1386,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "8b96d483",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-LegacyAndMaps.md"
+      ],
+      "evidence": "Audited Season 6 map initializers, test account seeders, and legacy 0.75/0.95d/0.97d version initializers.",
       "prs": ""
     },
     {
@@ -3954,11 +3956,13 @@
       ],
       "files": 11,
       "lines": 1560,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "8b96d483",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-LegacyAndMaps.md"
+      ],
+      "evidence": "Audited Season 6 map initializers, test account seeders, and legacy 0.75/0.95d/0.97d version initializers.",
       "prs": ""
     },
     {
@@ -3969,11 +3973,13 @@
       ],
       "files": 9,
       "lines": 3419,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "8b96d483",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-LegacyAndMaps.md"
+      ],
+      "evidence": "Audited Season 6 map initializers, test account seeders, and legacy 0.75/0.95d/0.97d version initializers.",
       "prs": ""
     },
     {
@@ -3984,11 +3990,13 @@
       ],
       "files": 3,
       "lines": 658,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "8b96d483",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-LegacyAndMaps.md"
+      ],
+      "evidence": "Audited Season 6 map initializers, test account seeders, and legacy 0.75/0.95d/0.97d version initializers.",
       "prs": ""
     },
     {
@@ -3999,11 +4007,13 @@
       ],
       "files": 30,
       "lines": 4072,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "8b96d483",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-LegacyAndMaps.md"
+      ],
+      "evidence": "Audited Season 6 map initializers, test account seeders, and legacy 0.75/0.95d/0.97d version initializers.",
       "prs": ""
     },
     {
@@ -4014,11 +4024,13 @@
       ],
       "files": 1,
       "lines": 53,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "8b96d483",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-LegacyAndMaps.md"
+      ],
+      "evidence": "Audited Season 6 map initializers, test account seeders, and legacy 0.75/0.95d/0.97d version initializers.",
       "prs": ""
     },
     {
@@ -4162,11 +4174,13 @@
       ],
       "files": 21,
       "lines": 5990,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "8b96d483",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-LegacyAndMaps.md"
+      ],
+      "evidence": "Audited Season 6 map initializers, test account seeders, and legacy 0.75/0.95d/0.97d version initializers.",
       "prs": ""
     },
     {
@@ -4207,11 +4221,13 @@
       ],
       "files": 31,
       "lines": 5710,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "8b96d483",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-LegacyAndMaps.md"
+      ],
+      "evidence": "Audited Season 6 map initializers, test account seeders, and legacy 0.75/0.95d/0.97d version initializers.",
       "prs": ""
     },
     {
@@ -4238,11 +4254,13 @@
       ],
       "files": 17,
       "lines": 4922,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "8b96d483",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-LegacyAndMaps.md"
+      ],
+      "evidence": "Audited Season 6 map initializers, test account seeders, and legacy 0.75/0.95d/0.97d version initializers.",
       "prs": ""
     },
     {
@@ -4253,11 +4271,13 @@
       ],
       "files": 14,
       "lines": 2079,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "8b96d483",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-LegacyAndMaps.md"
+      ],
+      "evidence": "Audited Season 6 map initializers, test account seeders, and legacy 0.75/0.95d/0.97d version initializers.",
       "prs": ""
     },
     {
