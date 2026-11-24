@@ -1,5 +1,5 @@
 {
-  "generatedAt": "37705c61",
+  "generatedAt": "582a47f8",
   "maxLines": 6000,
   "units": [
     {
@@ -4625,11 +4625,14 @@
       ],
       "files": 1,
       "lines": 46,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "582a47f8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "MiniGameRankingEntry.cs:1-46",
+        "docs/audit/findings/unit-server-src-DataModel-Statistics.md"
+      ],
+      "evidence": "1f/46L: No game rules (MiniGameRankingEntry entity POCO only).",
       "prs": ""
     },
     {
