@@ -1,5 +1,5 @@
 {
-  "generatedAt": "cd0e6896",
+  "generatedAt": "8495f4d7",
   "maxLines": 6000,
   "units": [
     {
@@ -6652,11 +6652,16 @@
       ],
       "files": 14,
       "lines": 5895,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "8495f4d7",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Dotnet/Connection.cpp",
+        "Dotnet/Connection.h",
+        "Dotnet/DotNetMessageFormat.cpp",
+        "docs/audit/findings/unit-client-src-source-Dotnet-files-1.md"
+      ],
+      "evidence": "14f/5895L: No game rules (native C++ <-> .NET AOT interop packet binding declarations (no game rules).)",
       "prs": ""
     },
     {
