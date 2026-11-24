@@ -38,7 +38,7 @@
     <header>
       <h1>
         <span data-i18n="title">HNMO Control</span>
-        <button type="button" id="helpBtn" title="How to use this page">?</button>
+        <button type="button" id="helpBtn" data-copy-title="helpTitle" title="How to use this page">?</button>
       </h1>
       <div class="lang-btns row">
         <button type="button" id="langEn">EN</button>
@@ -71,10 +71,10 @@
         <div><label data-i18n="gameNameLabel">Game name</label><input id="wizName" type="text" value="HNMO" /></div>
         <div><label data-i18n="pubAddrLabel">Public address</label><input id="wizAddr" type="text" value="localhost" /></div>
         <div><label data-i18n="langLabel">Language</label><select id="wizLang"><option value="en">English</option><option value="vi">Tiếng Việt</option></select></div>
-        <div><label>Web port</label><input id="wizWeb" type="number" value="8080" /></div>
-        <div><label>Admin port</label><input id="wizAdmin" type="number" value="8095" /></div>
-        <div><label>Connect server port</label><input id="wizConn" type="number" value="44406" /></div>
-        <div><label>Database port</label><input id="wizDb" type="number" value="55432" /></div>
+        <div><label data-copy="webPort">Web port</label><input id="wizWeb" type="number" value="8080" /></div>
+        <div><label data-copy="adminPort">Admin port</label><input id="wizAdmin" type="number" value="8095" /></div>
+        <div><label data-copy="connectPort">Connect server port</label><input id="wizConn" type="number" value="44406" /></div>
+        <div><label data-copy="databasePort">Database port</label><input id="wizDb" type="number" value="55432" /></div>
       </div>
       <div class="row" style="margin-top:12px">
         <button type="button" id="wizSubmit" class="primary" data-i18n="wizSaveStart">Save and start HNMO</button>
@@ -102,8 +102,8 @@
     <section class="card">
       <h2 data-i18n="systemTitle">Startup &amp; Service (VPS)</h2>
       <div class="row">
-        <button type="button" id="btnAutoStart" data-i18n="btnAutoStart">Start HNMO when this computer starts: OFF</button>
-        <button type="button" id="btnService" data-i18n="btnService">Install as a service</button>
+        <button type="button" id="btnAutoStart">Start HNMO when this computer starts: OFF</button>
+        <button type="button" id="btnService">Install as a service</button>
       </div>
     </section>
 
@@ -132,18 +132,18 @@
     <section class="card" id="retentionCard">
       <h2 data-i18n="retentionTitle">Log &amp; Backup Retention Settings</h2>
       <div class="grid2">
-        <div><label data-i18n="lblMaxLogDays" title="Days to keep rotated .log.gz files">Log retention (days)</label><input id="cfgMaxLogDays" type="number" min="1" max="3650" value="14" /></div>
-        <div><label data-i18n="lblMaxLogMb" title="Maximum total size of save/logs folder">Max logs folder (MB)</label><input id="cfgMaxLogMb" type="number" min="10" max="100000" value="200" /></div>
-        <div><label data-i18n="lblDbDays" title="Days before DB chat/audit logs are exported & purged">DB log retention (days)</label><input id="cfgDbDays" type="number" min="1" max="3650" value="90" /></div>
-        <div><label data-i18n="lblLowDiskMb" title="Warn when free disk space drops below MB">Low disk warning (MB)</label><input id="cfgLowDiskMb" type="number" min="64" max="1000000" value="2048" /></div>
+        <div><label data-i18n="lblMaxLogDays" data-copy-title="keepLogDays" title="Days to keep rotated .log.gz files">Log retention (days)</label><input id="cfgMaxLogDays" type="number" min="1" max="3650" value="14" /></div>
+        <div><label data-i18n="lblMaxLogMb" data-copy-title="maxLogSize" title="Maximum total size of save/logs folder">Max logs folder (MB)</label><input id="cfgMaxLogMb" type="number" min="10" max="100000" value="200" /></div>
+        <div><label data-i18n="lblDbDays" data-copy-title="keepDbLogs" title="Days before DB chat/audit logs are exported & purged">DB log retention (days)</label><input id="cfgDbDays" type="number" min="1" max="3650" value="90" /></div>
+        <div><label data-i18n="lblLowDiskMb" data-copy-title="diskLimit" title="Warn when free disk space drops below MB">Low disk warning (MB)</label><input id="cfgLowDiskMb" type="number" min="64" max="1000000" value="2048" /></div>
         <div><label data-i18n="lblKeepDaily">Daily backups kept</label><input id="cfgKeepDaily" type="number" min="1" max="365" value="7" /></div>
         <div><label data-i18n="lblKeepWeekly">Weekly backups kept</label><input id="cfgKeepWeekly" type="number" min="0" max="104" value="4" /></div>
         <div><label data-i18n="lblKeepMonthly">Monthly backups kept</label><input id="cfgKeepMonthly" type="number" min="0" max="120" value="3" /></div>
         <div><label data-i18n="lblVacuumHours">Vacuum interval (hours)</label><input id="cfgVacuumHours" type="number" min="1" max="720" value="24" /></div>
-        <div><label data-i18n="lblAutoRestartCrash" title="Automatically restart the game server if it crashes unexpectedly">Auto-restart on crash</label><select id="cfgAutoRestart"><option value="true">ON</option><option value="false">OFF</option></select></div>
-        <div><label data-i18n="lblMaxRestartsHour" title="Maximum auto-restarts in a 60-minute window">Max crash restarts/hour</label><input id="cfgMaxRestarts" type="number" min="1" max="60" value="5" /></div>
-        <div><label data-i18n="lblCrashDelay" title="Base backoff delay before auto-restarting">Crash restart delay (sec)</label><input id="cfgCrashDelay" type="number" min="1" max="300" value="3" /></div>
-        <div><label data-i18n="lblCrashDiscord" title="Optional secret Discord webhook URL alerted when a crash happens">Crash Discord webhook (optional)</label><input id="cfgCrashDiscord" type="password" autocomplete="off" placeholder="https://discord.com/api/webhooks/..." /></div>
+        <div><label data-i18n="lblAutoRestartCrash" data-copy-title="autoRestartHelp" title="Automatically restart the game server if it crashes unexpectedly">Auto-restart on crash</label><select id="cfgAutoRestart"><option value="true">ON</option><option value="false">OFF</option></select></div>
+        <div><label data-i18n="lblMaxRestartsHour" data-copy-title="restartLimit" title="Maximum auto-restarts in a 60-minute window">Max crash restarts/hour</label><input id="cfgMaxRestarts" type="number" min="1" max="60" value="5" /></div>
+        <div><label data-i18n="lblCrashDelay" data-copy-title="restartDelay" title="Base backoff delay before auto-restarting">Crash restart delay (sec)</label><input id="cfgCrashDelay" type="number" min="1" max="300" value="3" /></div>
+        <div><label data-i18n="lblCrashDiscord" data-copy-title="webhookHelp" title="Optional secret Discord webhook URL alerted when a crash happens">Crash Discord webhook (optional)</label><input id="cfgCrashDiscord" type="password" autocomplete="off" placeholder="https://discord.com/api/webhooks/..." /></div>
       </div>
       <div class="row" style="margin-top:12px">
         <button type="button" id="btnSaveMaint" class="primary" data-i18n="btnSaveMaint">Save retention settings</button>
@@ -189,7 +189,6 @@
         helpBody: 'This local control page manages the database, game server, web game, backups, auto-start, and updates. It is only reachable from this computer.',
         wizardTitle: 'First-start setup wizard',
         wizardHint: 'After starting HNMO, open Admin panel (/users) to create your first admin user (password >= 12 characters), then create an Administrator API key on /api-keys for Website Portal registration.',
-        adminPwLabel: 'Admin password',
         gameNameLabel: 'Game name',
         pubAddrLabel: 'Public address',
         langLabel: 'Language',
@@ -251,7 +250,6 @@
         helpBody: 'Trang điều khiển cục bộ này quản lý cơ sở dữ liệu, máy chủ trò chơi, trò chơi web, sao lưu, tự khởi động và cập nhật. Chỉ truy cập được từ máy tính này.',
         wizardTitle: 'Trình hướng dẫn cài đặt lần đầu',
         wizardHint: 'Sau khi khởi động HNMO, mở Trang quản trị (/users) để tạo tài khoản quản trị đầu tiên (mật khẩu >= 12 ký tự), rồi tạo khóa API quyền Administrator tại /api-keys cho Website Portal.',
-        adminPwLabel: 'Mật khẩu quản trị',
         gameNameLabel: 'Tên trò chơi',
         pubAddrLabel: 'Địa chỉ công khai',
         langLabel: 'Ngôn ngữ',
@@ -405,7 +403,78 @@
       de: ['Update installieren', 'Startprogramm stoppen', 'Ports prüfen', 'Fortfahren? Spieler können getrennt werden.', 'Aktiv', 'Frei'],
       zh: ['安装更新', '停止启动器', '检查端口', '继续？玩家可能会断开连接。', '监听中', '空闲'],
     };
+    // Each message supplies English, Vietnamese, German and Simplified Chinese in that order.
+    const dynamicCopy = {
+      databasePort: ["Database port", "Cổng cơ sở dữ liệu", "Datenbank-Port", "数据库端口"],
+      connectPort: ["Connect server port", "Cổng máy chủ kết nối", "Verbindungsserver-Port", "连接服务器端口"],
+      adminPort: ["Admin port", "Cổng quản trị", "Admin-Port", "管理端口"],
+      webPort: ["Web port", "Cổng web", "Web-Port", "网页端口"],
+      adminOff: ["off (the admin panel opens only on this computer)", "tắt (trang quản trị chỉ mở trên máy này)", "aus (das Adminpanel ist nur auf diesem Computer erreichbar)", "关闭（管理面板仅可在此计算机上访问）"],
+      autoStart: ["Start the server when this computer starts: {setting}", "Tự khởi động máy chủ cùng máy tính: {setting}", "Server beim Start dieses Computers starten: {setting}", "随此计算机启动服务器：{setting}"],
+      on: ["ON", "Bật", "Ein", "开启"],
+      off: ["OFF", "Tắt", "Aus", "关闭"],
+      removeService: ["Remove system service", "Gỡ bỏ dịch vụ hệ thống", "Systemdienst entfernen", "移除系统服务"],
+      installService: ["Install as a service", "Cài làm dịch vụ hệ thống", "Als Systemdienst installieren", "安装为系统服务"],
+      diskSummary: ["Drive ({root}): Free {free} / {total} | save/: {save} (logs: {logs}, backups: {backups}, DB: {db})", "Ổ đĩa ({root}): Trống {free} / {total} | save/: {save} (nhật ký: {logs}, sao lưu: {backups}, CSDL: {db})", "Laufwerk ({root}): Frei {free} / {total} | save/: {save} (Protokolle: {logs}, Sicherungen: {backups}, DB: {db})", "磁盘（{root}）：可用 {free} / {total} | save/：{save}（日志：{logs}，备份：{backups}，数据库：{db}）"],
+      lowDisk: ["Warning: Low free disk space (< {limit} MB)!", "Cảnh báo: Dung lượng ổ đĩa trống thấp (< {limit} MB)!", "Warnung: Wenig freier Speicherplatz (< {limit} MB)!", "警告：磁盘可用空间不足（< {limit} MB）！"],
+      lastBackup: ["Last auto backup: {time}", "Sao lưu tự động gần nhất: {time}", "Letzte automatische Sicherung: {time}", "上次自动备份：{time}"],
+      savedWebhook: ["(saved — enter new URL to replace)", "(đã lưu, nhập URL mới để thay thế)", "(gespeichert, zum Ersetzen neue URL eingeben)", "（已保存，输入新 URL 以替换）"],
+      crashAlert: ["Crash Watch Alert ({count} unacknowledged) — {time} Sydney", "Cảnh báo sự cố ({count} chưa xác nhận) — {time} giờ Sydney", "Absturzwarnung ({count} unbestätigt) – {time} Sydney", "崩溃警报（{count} 条未确认）— {time} 悉尼时间"],
+      noCrashes: ["No unexpected server crashes recorded.", "Chưa ghi nhận sự cố sập máy chủ nào.", "Keine unerwarteten Serverabstürze erfasst.", "未记录到意外的服务器崩溃。"],
+      crashRestart: ["Server exited unexpectedly (code {code}). Restart in {seconds} s.", "Máy chủ thoát bất ngờ (mã {code}). Khởi động lại sau {seconds} giây.", "Server unerwartet beendet (Code {code}). Neustart in {seconds} s.", "服务器意外退出（代码 {code}）。{seconds} 秒后重启。"],
+      crashStopped: ["Server exited unexpectedly (code {code}). Automatic restart was not scheduled.", "Máy chủ thoát bất ngờ (mã {code}). Không có lịch tự khởi động lại.", "Server unerwartet beendet (Code {code}). Kein automatischer Neustart geplant.", "服务器意外退出（代码 {code}）。未安排自动重启。"],
+      archives: ["{count} archives · {size}", "{count} bản sao lưu · {size}", "{count} Archive · {size}", "{count} 个备份 · {size}"],
+      retention: ["{daily} daily / {weekly} weekly / {monthly} monthly", "{daily} theo ngày / {weekly} theo tuần / {monthly} theo tháng", "{daily} täglich / {weekly} wöchentlich / {monthly} monatlich", "每日 {daily} / 每周 {weekly} / 每月 {monthly}"],
+      restore: ["Restore", "Khôi phục", "Wiederherstellen", "恢复"],
+      restoredDatabase: ["Backup and database restored. Start the server to play.", "Đã khôi phục bản sao lưu và cơ sở dữ liệu. Hãy khởi động máy chủ để chơi.", "Sicherung und Datenbank wiederhergestellt. Starten Sie den Server, um zu spielen.", "备份和数据库已恢复。启动服务器后即可游玩。"],
+      restoredFiles: ["Save files restored. Start the server to use the restored save.", "Đã khôi phục tệp lưu. Hãy khởi động máy chủ để dùng bản đã khôi phục.", "Speicherdateien wiederhergestellt. Starten Sie den Server, um sie zu verwenden.", "存档文件已恢复。请启动服务器以使用恢复的存档。"],
+      allLogs: ["All logs", "Tất cả nhật ký", "Alle Protokolle", "所有日志"],
+      searchLogs: ["Search logs...", "Tìm trong nhật ký...", "Protokolle durchsuchen…", "搜索日志…"],
+      vacuumComplete: ["VACUUM ANALYZE complete.", "Đã chạy xong VACUUM ANALYZE.", "VACUUM ANALYZE abgeschlossen.", "VACUUM ANALYZE 已完成。"],
+      retentionSaved: ["Retention settings saved.", "Đã lưu cài đặt lưu trữ.", "Aufbewahrungseinstellungen gespeichert.", "保留设置已保存。"],
+      crashesAcknowledged: ["Crash notices acknowledged.", "Đã xác nhận cảnh báo sự cố.", "Absturzwarnungen bestätigt.", "已确认崩溃通知。"],
+      starting: ["Starting...", "Đang khởi động...", "Wird gestartet…", "正在启动…"],
+      stopped: ["Stopped.", "Đã dừng.", "Gestoppt.", "已停止。"],
+      restarting: ["Restarting...", "Đang khởi động lại...", "Wird neu gestartet…", "正在重启…"],
+      backupCreated: ["Backup created: {file}", "Đã tạo bản sao lưu: {file}", "Sicherung erstellt: {file}", "已创建备份：{file}"],
+      updateStarted: ["Update started.", "Đã bắt đầu cập nhật.", "Update gestartet.", "更新已开始。"],
+      shutdownRequested: ["Launcher shutdown requested.", "Đã yêu cầu dừng trình khởi chạy.", "Herunterfahren des Startprogramms angefordert.", "已请求关闭启动器。"],
+      updateAvailable: ["Update available!", "Có bản cập nhật!", "Update verfügbar!", "有可用更新！"],
+      upToDate: ["Up to date", "Đã cập nhật", "Auf dem neuesten Stand", "已是最新版本"],
+      download: ["Download", "Tải xuống", "Herunterladen", "下载"],
+      setupSaved: ["Setup saved. Starting the server...", "Đã lưu thiết lập. Đang khởi động máy chủ...", "Einrichtung gespeichert. Server wird gestartet…", "设置已保存。正在启动服务器…"],
+      autoStartFailed: ["Could not update auto-start. See the launcher log.", "Không cập nhật được tự khởi động. Xem nhật ký trình khởi chạy.", "Autostart konnte nicht geändert werden. Siehe Startprogrammprotokoll.", "无法更新自动启动。请查看启动器日志。"],
+      serviceFailed: ["Could not configure the system service. See the launcher log.", "Không cấu hình được dịch vụ hệ thống. Xem nhật ký trình khởi chạy.", "Systemdienst konnte nicht konfiguriert werden. Siehe Startprogrammprotokoll.", "无法配置系统服务。请查看启动器日志。"],
+      backupFailed: ["Could not create a backup. See the launcher log.", "Không tạo được bản sao lưu. Xem nhật ký trình khởi chạy.", "Sicherung konnte nicht erstellt werden. Siehe Startprogrammprotokoll.", "无法创建备份。请查看启动器日志。"],
+      restoreFailed: ["Could not restore the backup. See the launcher log.", "Không khôi phục được bản sao lưu. Xem nhật ký trình khởi chạy.", "Sicherung konnte nicht wiederhergestellt werden. Siehe Startprogrammprotokoll.", "无法恢复备份。请查看启动器日志。"],
+      releaseCheckFailed: ["Could not check for a new release. See the launcher log.", "Không kiểm tra được bản phát hành mới. Xem nhật ký trình khởi chạy.", "Suche nach einer neuen Version fehlgeschlagen. Siehe Startprogrammprotokoll.", "无法检查新版本。请查看启动器日志。"],
+      updateFailed: ["Could not start the update. See the launcher log.", "Không bắt đầu được bản cập nhật. Xem nhật ký trình khởi chạy.", "Update konnte nicht gestartet werden. Siehe Startprogrammprotokoll.", "无法启动更新。请查看启动器日志。"],
+      requestFailed: ["The operation failed (HTTP {status}).", "Thao tác thất bại (HTTP {status}).", "Vorgang fehlgeschlagen (HTTP {status}).", "操作失败（HTTP {status}）。"],
+      networkFailed: ["Could not reach the control service.", "Không kết nối được dịch vụ điều khiển.", "Steuerdienst nicht erreichbar.", "无法连接控制服务。"],
+      launcherDisabled: ["Launcher is disabled.", "Trình khởi chạy đang tắt.", "Das Startprogramm ist deaktiviert.", "启动器已禁用。"],
+      invalidLog: ["Invalid log file name.", "Tên tệp nhật ký không hợp lệ.", "Ungültiger Protokolldateiname.", "日志文件名无效。"],
+      logMissing: ["Log file not found.", "Không tìm thấy tệp nhật ký.", "Protokolldatei nicht gefunden.", "找不到日志文件。"],
+      maintenanceUnavailable: ["Maintenance service is unavailable.", "Dịch vụ bảo trì không khả dụng.", "Der Wartungsdienst ist nicht verfügbar.", "维护服务不可用。"],
+      updateDisabled: ["Update checks are off on this server.", "Máy chủ này đã tắt kiểm tra cập nhật.", "Updateprüfungen sind auf diesem Server deaktiviert.", "此服务器已关闭更新检查。"],
+      noRelease: ["No release published yet.", "Chưa có bản phát hành.", "Noch keine Version veröffentlicht.", "尚未发布版本。"],
+      invalidPorts: ["Ports must be unique numbers between 1 and 65535.", "Mỗi cổng phải là số riêng từ 1 đến 65535.", "Ports müssen eindeutige Zahlen zwischen 1 und 65535 sein.", "端口必须是 1 至 65535 间互不重复的数字。"],
+      helpTitle: ["How to use this page", "Cách dùng trang này", "Hilfe zu dieser Seite", "如何使用此页"],
+      keepLogDays: ["Days to keep rotated .log.gz files", "Số ngày giữ tệp .log.gz đã xoay vòng", "Aufbewahrungstage für rotierte .log.gz-Dateien", "轮转 .log.gz 文件的保留天数"],
+      maxLogSize: ["Maximum total size of save/logs folder", "Dung lượng tối đa của thư mục save/logs", "Maximale Gesamtgröße des Ordners save/logs", "save/logs 文件夹的最大总大小"],
+      keepDbLogs: ["Days before database chat and audit logs are exported and purged", "Số ngày giữ nhật ký chat và kiểm tra trước khi xuất và xoá", "Tage bis zum Export und Löschen der Chat- und Auditprotokolle", "导出并清除数据库聊天和审计日志前的保留天数"],
+      diskLimit: ["Warn when free disk space drops below this amount in MB", "Cảnh báo khi dung lượng trống thấp hơn số MB này", "Warnen, wenn der freie Speicherplatz unter diesen MB-Wert fällt", "可用磁盘空间低于此 MB 数值时发出警告"],
+      autoRestartHelp: ["Automatically restart the game server if it crashes unexpectedly", "Tự khởi động lại máy chủ game khi gặp sự cố bất ngờ", "Spiele-Server nach einem unerwarteten Absturz automatisch neu starten", "游戏服务器意外崩溃后自动重启"],
+      restartLimit: ["Maximum auto-restarts in a 60-minute window", "Số lần tự khởi động lại tối đa trong 60 phút", "Maximale automatische Neustarts innerhalb von 60 Minuten", "60 分钟内的最大自动重启次数"],
+      restartDelay: ["Base backoff delay before auto-restarting", "Thời gian chờ cơ bản trước khi tự khởi động lại", "Basiswartezeit vor einem automatischen Neustart", "自动重启前的基础等待时间"],
+      webhookHelp: ["Optional secret Discord webhook URL alerted when a crash happens", "URL webhook Discord bí mật để gửi cảnh báo khi có sự cố (không bắt buộc)", "Optionale geheime Discord-Webhook-URL für Absturzwarnungen", "用于发送崩溃通知的可选 Discord Webhook 私密 URL"],
+    };
+    const locales = ['en', 'vi', 'de', 'zh'];
+    function copy(key, values = {}) {
+      return dynamicCopy[key][locales.indexOf(lang)].replace(/\{(\w+)\}/g, (_, name) => String(values[name] ?? ''));
+    }
+
     let lang = new URLSearchParams(location.search).get('lang') || localStorage.getItem('hnmo_lang') || 'en';
+    if (lang === 'zh-CN') lang = 'zh';
     if (!Object.hasOwn(consoleCopy, lang)) lang = 'en';
     function applyLang() {
       ['btnApplyUpdate', 'btnShutdown', 'btnCheckPorts'].forEach((id, index) => {
@@ -413,6 +482,17 @@
       });
       document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
       const dict = i18n[lang] || i18n.en;
+      document.title = i18n[lang].title;
+      document.querySelectorAll('[data-copy]').forEach((el) => { el.textContent = copy(el.dataset.copy); });
+      document.querySelectorAll('[data-copy-title]').forEach((el) => { el.title = copy(el.dataset.copyTitle); });
+      document.getElementById('btnAutoStart').textContent = copy('autoStart', {
+        setting: copy(currentStatus?.autoStartEnabled ? 'on' : 'off'),
+      });
+      document.getElementById('btnService').textContent = copy(currentStatus?.serviceInstalled ? 'removeService' : 'installService');
+      document.getElementById('logSearch').placeholder = copy('searchLogs');
+      document.querySelector('#cfgAutoRestart [value="true"]').textContent = copy('on');
+      document.querySelector('#cfgAutoRestart [value="false"]').textContent = copy('off');
+      document.querySelector('#logFileSelect [value="all"]').textContent = copy('allLogs');
       document.querySelectorAll('[data-i18n]').forEach((el) => {
         const key = el.getAttribute('data-i18n');
         if (dict[key]) el.textContent = dict[key];
@@ -446,10 +526,23 @@
         method,
         headers: body ? { 'Content-Type': 'application/json' } : undefined,
         body: body ? JSON.stringify(body) : undefined,
-      });
+      }).catch(() => { throw new Error(copy('networkFailed')); });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.message || `HTTP ${res.status}`);
+      if (!res.ok) {
+        const key = /^\w+$/.test(data.messageKey ?? '') && Object.hasOwn(dynamicCopy, data.messageKey)
+          ? data.messageKey : 'requestFailed';
+        const message = copy(key, { status: res.status });
+        throw new Error(message);
+      }
       return data;
+    }
+
+    function crashSummary(incident) {
+      if (lang === 'en' && incident.summaryEn) return incident.summaryEn;
+      if (lang === 'vi' && incident.summaryVi) return incident.summaryVi;
+      return copy(incident.autoRestarted ? 'crashRestart' : 'crashStopped', {
+        code: incident.exitCode, seconds: incident.delaySeconds,
+      });
     }
 
     let currentStatus = null;
@@ -465,28 +558,26 @@
         document.getElementById('openAdmin').href = s.adminUrl;
         document.getElementById('adminPath').textContent = s.websiteAdminPath
           ? `${location.protocol}//${location.host}${s.websiteAdminPath}/`
-          : (lang === 'vi' ? 'tắt (trang quản trị chỉ mở trên máy này)' : 'off (the admin panel opens only on this computer)');
+          : copy('adminOff');
         document.getElementById('wizardCard').style.display = s.setupNeeded ? 'block' : 'none';
-        document.getElementById('btnAutoStart').textContent = (lang === 'vi' ? 'Tự khởi động cùng máy tính: ' : 'Start HNMO when this computer starts: ') + (s.autoStartEnabled ? 'ON' : 'OFF');
-        document.getElementById('btnService').textContent = s.serviceInstalled
-          ? (lang === 'vi' ? 'Gỡ bỏ dịch vụ hệ thống' : 'Remove system service')
-          : (lang === 'vi' ? 'Cài làm dịch vụ hệ thống' : 'Install as a service');
+        document.getElementById('btnAutoStart').textContent = copy('autoStart', { setting: copy(s.autoStartEnabled ? 'on' : 'off') });
+        document.getElementById('btnService').textContent = copy(s.serviceInstalled ? 'removeService' : 'installService');
 
         const fmtMb = (b) => `${(Number(b || 0) / (1024 * 1024)).toFixed(1)} MB`;
         const fmtGb = (b) => `${(Number(b || 0) / (1024 * 1024 * 1024)).toFixed(1)} GB`;
         if (s.disk) {
-          document.getElementById('diskSummary').textContent = lang === 'vi'
-            ? `Ổ đĩa (${s.disk.driveRoot}): Trống ${fmtGb(s.disk.freeDriveBytes)} / ${fmtGb(s.disk.totalDriveBytes)} | save/: ${fmtMb(s.disk.saveBytes)} (logs: ${fmtMb(s.disk.logsBytes)}, backups: ${fmtMb(s.disk.backupsBytes)}, db: ${fmtMb(s.disk.databaseBytes)})`
-            : `Drive (${s.disk.driveRoot}): Free ${fmtGb(s.disk.freeDriveBytes)} / ${fmtGb(s.disk.totalDriveBytes)} | save/: ${fmtMb(s.disk.saveBytes)} (logs: ${fmtMb(s.disk.logsBytes)}, backups: ${fmtMb(s.disk.backupsBytes)}, db: ${fmtMb(s.disk.databaseBytes)})`;
+          document.getElementById('diskSummary').textContent = copy('diskSummary', {
+            root: s.disk.driveRoot, free: fmtGb(s.disk.freeDriveBytes), total: fmtGb(s.disk.totalDriveBytes),
+            save: fmtMb(s.disk.saveBytes), logs: fmtMb(s.disk.logsBytes),
+            backups: fmtMb(s.disk.backupsBytes), db: fmtMb(s.disk.databaseBytes),
+          });
           const warn = document.getElementById('diskWarning');
           warn.style.display = s.disk.isLowDisk ? 'block' : 'none';
-          warn.textContent = lang === 'vi'
-            ? `Cảnh báo: Dung lượng ổ đĩa trống thấp (< ${s.disk.lowDiskWarningMb} MB)!`
-            : `Warning: Low free disk space (< ${s.disk.lowDiskWarningMb} MB)!`;
+          warn.textContent = copy('lowDisk', { limit: s.disk.lowDiskWarningMb });
         }
 
         document.getElementById('maintStatus').textContent = [
-          s.lastAutoBackupSydney ? `${lang === 'vi' ? 'Sao lưu tự động gần nhất' : 'Last auto backup'}: ${s.lastAutoBackupSydney}` : null,
+          s.lastAutoBackupSydney ? copy('lastBackup', { time: s.lastAutoBackupSydney }) : null,
           s.lastVacuumSydney ? `VACUUM: ${s.lastVacuumSydney}` : null,
         ].filter(Boolean).join(' · ');
 
@@ -504,7 +595,7 @@
           document.getElementById('cfgMaxRestarts').value = ms.maxCrashRestartsPerHour || 5;
           document.getElementById('cfgCrashDelay').value = ms.crashRestartDelaySeconds || 3;
           const whEl = document.getElementById('cfgCrashDiscord');
-          whEl.placeholder = s.crashWatch?.hasDiscordWebhook ? '(saved — enter new URL to replace)' : 'https://discord.com/api/webhooks/...';
+          whEl.placeholder = s.crashWatch?.hasDiscordWebhook ? copy('savedWebhook') : 'https://discord.com/api/webhooks/...';
         }
 
         const cw = s.crashWatch || { unacknowledgedCount: 0, incidents: [] };
@@ -512,10 +603,10 @@
         if (cw.unacknowledgedCount > 0 && cw.incidents?.length) {
           const latest = cw.incidents.find((i) => !i.acknowledged) || cw.incidents[0];
           crashBanner.style.display = 'block';
-          document.getElementById('crashBannerTitle').textContent = lang === 'vi'
-            ? `Cảnh báo sự cố (${cw.unacknowledgedCount} chưa xác nhận) — ${latest.occurredAtSydney} giờ Sydney`
-            : `Crash Watch Alert (${cw.unacknowledgedCount} unacknowledged) — ${latest.occurredAtSydney} Sydney`;
-          document.getElementById('crashBannerDetail').textContent = lang === 'vi' ? latest.summaryVi : latest.summaryEn;
+          document.getElementById('crashBannerTitle').textContent = copy('crashAlert', {
+            count: cw.unacknowledgedCount, time: latest.occurredAtSydney,
+          });
+          document.getElementById('crashBannerDetail').textContent = crashSummary(latest);
         } else {
           crashBanner.style.display = 'none';
         }
@@ -527,7 +618,7 @@
           const td = document.createElement('td');
           td.colSpan = 3;
           td.style.color = 'var(--muted)';
-          td.textContent = lang === 'vi' ? 'Chưa ghi nhận sự cố sập máy chủ nào.' : 'No unexpected server crashes recorded.';
+          td.textContent = copy('noCrashes');
           tr.appendChild(td);
           crashRows.appendChild(tr);
         } else {
@@ -535,28 +626,31 @@
             const tr = document.createElement('tr');
             const td1 = document.createElement('td'); td1.textContent = inc.occurredAtSydney || '';
             const td2 = document.createElement('td'); td2.textContent = String(inc.exitCode);
-            const td3 = document.createElement('td'); td3.textContent = lang === 'vi' ? inc.summaryVi : inc.summaryEn;
+            const td3 = document.createElement('td'); td3.textContent = crashSummary(inc);
             tr.append(td1, td2, td3);
             crashRows.appendChild(tr);
           }
         }
 
-        document.getElementById('backupTotals').textContent =
-          `${(s.backups || []).length} archives · ${fmtMb(s.backupTotalBytes)} (7 daily / 4 weekly / 3 monthly)`;
+        const retention = s.maintenanceSettings;
+        const archiveSummary = copy('archives', { count: (s.backups || []).length, size: fmtMb(s.backupTotalBytes) });
+        document.getElementById('backupTotals').textContent = retention
+          ? `${archiveSummary} (${copy('retention', { daily: retention.backupKeepDaily, weekly: retention.backupKeepWeekly, monthly: retention.backupKeepMonthly })})`
+          : archiveSummary;
 
         const tbody = document.getElementById('backupRows');
         tbody.innerHTML = '';
         for (const b of s.backups || []) {
           const tr = document.createElement('tr');
           const kb = Math.max(1, Math.round(b.sizeBytes / 1024));
-          tr.innerHTML = `<td>${esc(b.fileName)}</td><td>${esc(b.createdSydney)}</td><td>${kb} KB</td><td><button type="button" data-restore="${esc(b.fileName)}">${lang === 'vi' ? 'Khôi phục' : 'Restore'}</button></td>`;
+          tr.innerHTML = `<td>${esc(b.fileName)}</td><td>${esc(b.createdSydney)}</td><td>${kb} KB</td><td><button type="button" data-restore="${esc(b.fileName)}">${copy('restore')}</button></td>`;
           tbody.appendChild(tr);
         }
         tbody.querySelectorAll('button[data-restore]').forEach((btn) => {
           btn.onclick = async () => {
             try {
               const r = await api('/api/control/restore', 'POST', { fileName: btn.getAttribute('data-restore') });
-              showMsg(r.message || 'Restored.');
+              showMsg(copy(r.dbRestored ? 'restoredDatabase' : 'restoredFiles'));
               refresh();
             } catch (e) { showMsg(e.message, true); }
           };
@@ -575,7 +669,7 @@
       const logs = await api(`/api/control/logs?file=${encodeURIComponent(file)}&q=${encodeURIComponent(q)}&lines=200`);
       if (logs.files) {
         const current = sel.value || 'all';
-        sel.innerHTML = `<option value="all">${lang === 'vi' ? 'Tất cả nhật ký' : 'All logs'}</option>` +
+        sel.innerHTML = `<option value="all">${copy('allLogs')}</option>` +
           logs.files.map((f) => `<option value="${esc(f.fileName)}">${esc(f.fileName)} (${Math.max(1, Math.round(f.sizeBytes / 1024))} KB)</option>`).join('');
         sel.value = [...sel.options].some((o) => o.value === current) ? current : 'all';
       }
@@ -589,7 +683,7 @@
       const target = (!file || file === 'all') ? 'server.log' : file;
       window.location.href = `/api/control/logs/download?file=${encodeURIComponent(target)}`;
     };
-    document.getElementById('btnVacuum').onclick = () => api('/api/control/vacuum', 'POST').then(() => { showMsg('VACUUM ANALYZE complete.'); refresh(); }).catch((e) => showMsg(e.message, true));
+    document.getElementById('btnVacuum').onclick = () => api('/api/control/vacuum', 'POST').then(() => { showMsg(copy('vacuumComplete')); refresh(); }).catch((e) => showMsg(e.message, true));
     document.getElementById('btnSaveMaint').onclick = () => api('/api/control/maintenance-settings', 'POST', {
       maxLogDays: Number(document.getElementById('cfgMaxLogDays').value),
       maxLogTotalMb: Number(document.getElementById('cfgMaxLogMb').value),
@@ -603,25 +697,26 @@
       maxCrashRestartsPerHour: Number(document.getElementById('cfgMaxRestarts').value),
       crashRestartDelaySeconds: Number(document.getElementById('cfgCrashDelay').value),
       crashDiscordWebhookUrl: document.getElementById('cfgCrashDiscord').value.trim() || (currentStatus?.crashWatch?.hasDiscordWebhook ? '__KEEP__' : ''),
-    }).then(() => { document.getElementById('cfgCrashDiscord').value = ''; showMsg(lang === 'vi' ? 'Đã lưu cài đặt lưu trữ.' : 'Retention settings saved.'); refresh(); }).catch((e) => showMsg(e.message, true));
-    document.getElementById('btnAckCrash').onclick = () => api('/api/control/crash-watch/ack', 'POST').then(() => { showMsg(lang === 'vi' ? 'Đã xác nhận cảnh báo sự cố.' : 'Crash notices acknowledged.'); refresh(); }).catch((e) => showMsg(e.message, true));
-    document.getElementById('btnStart').onclick = () => api('/api/control/start', 'POST').then(() => { showMsg('Starting...'); refresh(); }).catch((e) => showMsg(e.message, true));
+    }).then(() => { document.getElementById('cfgCrashDiscord').value = ''; showMsg(copy('retentionSaved')); refresh(); }).catch((e) => showMsg(e.message, true));
+    document.getElementById('btnAckCrash').onclick = () => api('/api/control/crash-watch/ack', 'POST').then(() => { showMsg(copy('crashesAcknowledged')); refresh(); }).catch((e) => showMsg(e.message, true));
+    document.getElementById('btnStart').onclick = () => api('/api/control/start', 'POST').then(() => { showMsg(copy('starting')); refresh(); }).catch((e) => showMsg(e.message, true));
     document.getElementById('btnStop').onclick = () => {
       if (!window.confirm(consoleCopy[lang][3])) return;
-      return api('/api/control/stop', 'POST').then(() => { showMsg('Stopped.'); refresh(); }).catch((e) => showMsg(e.message, true));
+      return api('/api/control/stop', 'POST').then(() => { showMsg(copy('stopped')); refresh(); }).catch((e) => showMsg(e.message, true));
     };
     document.getElementById('btnRestart').onclick = () => {
       if (!window.confirm(consoleCopy[lang][3])) return;
-      return api('/api/control/restart', 'POST').then(() => { showMsg('Restarting...'); refresh(); }).catch((e) => showMsg(e.message, true));
+      return api('/api/control/restart', 'POST').then(() => { showMsg(copy('restarting')); refresh(); }).catch((e) => showMsg(e.message, true));
     };
     document.getElementById('btnAutoStart').onclick = () => api('/api/control/autostart', 'POST', { enabled: !(currentStatus && currentStatus.autoStartEnabled) }).then(refresh).catch((e) => showMsg(e.message, true));
     document.getElementById('btnService').onclick = () => api('/api/control/service', 'POST', { action: (currentStatus && currentStatus.serviceInstalled) ? 'remove' : 'install' }).then(refresh).catch((e) => showMsg(e.message, true));
-    document.getElementById('btnBackup').onclick = () => api('/api/control/backup', 'POST').then((res) => { const b = res.backup || res; showMsg(`Backup created: ${b.fileName}`); refresh(); }).catch((e) => showMsg(e.message, true));
+    document.getElementById('btnBackup').onclick = () => api('/api/control/backup', 'POST').then((res) => { const b = res.backup || res; showMsg(copy('backupCreated', { file: b.fileName })); refresh(); }).catch((e) => showMsg(e.message, true));
     document.getElementById('btnCheckPorts').onclick = async () => {
       try {
         const ports = await api('/api/control/ports');
+        const portLabels = { web: 'svcWeb', admin: 'svcAdmin', game: 'svcServer', database: 'svcDb' };
         document.getElementById('portInfo').textContent = ports.map(p =>
-          `${p.service} · ${p.port} · ${consoleCopy[lang][p.listening ? 4 : 5]}${p.owner ? ' · ' + p.owner : ''}`).join('\n');
+          `${i18n[lang][portLabels[p.service]] ?? p.service} · ${p.port} · ${consoleCopy[lang][p.listening ? 4 : 5]}${p.owner ? ' · ' + p.owner : ''}`).join('\n');
       } catch (error) {
         showMsg(error.message, true);
       }
@@ -630,8 +725,8 @@
       document.getElementById(id).onclick = async () => {
         if (!window.confirm(consoleCopy[lang][3])) return;
         try {
-          const result = await api(`/api/control/${action}`, 'POST');
-          showMsg(result.message || 'OK');
+          await api(`/api/control/${action}`, 'POST');
+          showMsg(copy(action === 'update' ? 'updateStarted' : 'shutdownRequested'));
         } catch (error) {
           showMsg(error.message, true);
         }
@@ -644,7 +739,7 @@
         document.getElementById('btnApplyUpdate').hidden = !install.available;
         const info = document.getElementById('updateInfo');
         const link = /^https:\/\/[^\s]+$/.test(String(u.downloadUrl || '')) ? esc(u.downloadUrl) : '#';
-        info.innerHTML = `<strong>${esc(u.latestTag)}</strong> (${esc(u.publishedAtSydney)}) — ${u.isUpdateAvailable ? 'Update available!' : 'Up to date'} — <a href="${link}" target="_blank" rel="noopener">Download</a><pre style="margin-top:8px">${esc(u.releaseNotes || '')}</pre>`;
+        info.innerHTML = `<strong>${esc(u.latestTag)}</strong> (${esc(u.publishedAtSydney)}) — ${copy(u.isUpdateAvailable ? 'updateAvailable' : 'upToDate')} — <a href="${link}" target="_blank" rel="noopener">${copy('download')}</a><pre style="margin-top:8px">${esc(u.releaseNotes || '')}</pre>`;
       } catch (e) { showMsg(e.message, true); }
     };
     document.getElementById('wizSubmit').onclick = async () => {
@@ -658,7 +753,7 @@
           databasePort: Number(document.getElementById('wizDb').value),
           language: document.getElementById('wizLang').value,
         });
-        showMsg('Setup saved. Starting HNMO...');
+        showMsg(copy('setupSaved'));
         refresh();
       } catch (e) { showMsg(e.message, true); }
     };
