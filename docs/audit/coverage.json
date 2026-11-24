@@ -1,5 +1,5 @@
 {
-  "generatedAt": "ad4cce4c",
+  "generatedAt": "5004ab69",
   "maxLines": 6000,
   "units": [
     {
@@ -950,11 +950,11 @@
       ],
       "files": 8,
       "lines": 620,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "5004ab69",
+      "checkedOn": "2026-11-24",
+      "references": "S6/S9 ClassQuest.xml, Quest_Define.lua, Quest_Info.lua, CommonServer.cfg (docs/audit/references/quests-and-class-progression-s6-s9.md)",
+      "evidence": "Read all 8 files in full; see docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Quests.md (GensAttribution not implemented; no prerequisite-quest check beyond LastFinishedQuest).",
       "prs": ""
     },
     {
