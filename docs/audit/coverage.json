@@ -1,5 +1,5 @@
 {
-  "generatedAt": "cd55db4a",
+  "generatedAt": "256cac5e",
   "maxLines": 6000,
   "units": [
     {
@@ -7354,11 +7354,15 @@
       ],
       "files": 4,
       "lines": 1653,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "256cac5e",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "MuHelper.cpp:30-35,70-76",
+        "MuHelperData.cpp:97-192",
+        "docs/audit/findings/unit-client-src-source-MUHelper.md"
+      ],
+      "evidence": "4f/1653L: MUHelper runtime constants (MaxActionable=10, Durability=50%, PickupRetry=1s/3s max 3, TargetRetry=2s) & 257-byte SerDe matching Web autoPlay.ts/autoPlayConfig.ts.",
       "prs": ""
     },
     {
