@@ -1,5 +1,5 @@
 {
-  "generatedAt": "e992f842",
+  "generatedAt": "652ed94a",
   "maxLines": 6000,
   "units": [
     {
@@ -8158,11 +8158,13 @@
       ],
       "files": 251,
       "lines": 30984,
-      "status": "No game rules",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "652ed94a",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-Persistence-EntityFramework.md"
+      ],
+      "evidence": "Audited Postgres stores, EF Core contexts, repositories, JSON object loaders, DatabaseSnapshotService, and AdminAuth; also verified HnmoFeatureRowSync<T> dirty-tracking fallback.",
       "prs": ""
     },
     {
