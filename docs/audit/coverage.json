@@ -1,5 +1,5 @@
 {
-  "generatedAt": "fc934e63",
+  "generatedAt": "a793f71c",
   "maxLines": 6000,
   "units": [
     {
@@ -2458,11 +2458,14 @@
       ],
       "files": 12,
       "lines": 234,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "a793f71c",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Views/Duel",
+        "docs/audit/findings/unit-server-src-GameLogic-Views-Duel.md"
+      ],
+      "evidence": "12f/234L: No game rules (pure C# view plugin interfaces and result enums).",
       "prs": ""
     },
     {
