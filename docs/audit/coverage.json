@@ -1,5 +1,5 @@
 {
-  "generatedAt": "90ac3b94",
+  "generatedAt": "5474d05b",
   "maxLines": 6000,
   "units": [
     {
@@ -7163,11 +7163,14 @@
       ],
       "files": 23,
       "lines": 4608,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "5474d05b",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "GameLogic/Pets",
+        "docs/audit/findings/unit-client-src-source-GameLogic-Pets.md"
+      ],
+      "evidence": "23f/4608L: No game rules (client FX/sound/buff-visuals/command-dispatch/party-pet animation & social helpers (no gameplay balance rules).)",
       "prs": ""
     },
     {
