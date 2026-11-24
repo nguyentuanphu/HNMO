@@ -1,5 +1,5 @@
 {
-  "generatedAt": "a037f0ce",
+  "generatedAt": "a33e7979",
   "maxLines": 6000,
   "units": [
     {
@@ -4030,11 +4030,15 @@
       ],
       "files": 2,
       "lines": 3453,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a33e7979",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "the Season 6/9 suites' class quest XML & episode quest Lua files",
+        "the Season 6/9 suites' SkillList XML, MasterSkillTree .dat/.xml & MasterSkillPoint.lua",
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-VersionSeasonSix-files-2.md"
+      ],
+      "evidence": "Audited Quests.cs and SkillsInitializer.cs (3453 lines) against diff-quests.txt, diff-skills.txt, and diff-master-skills.txt: docs/audit/findings/unit-server-src-Persistence-Initialization-VersionSeasonSix-files-2.md",
       "prs": ""
     },
     {
