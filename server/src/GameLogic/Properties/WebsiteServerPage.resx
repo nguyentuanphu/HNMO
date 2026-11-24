@@ -7,6 +7,8 @@
   <data name="ClientRulesEn" xml:space="preserve"><value>Client rules (English)</value></data>
   <data name="ClientRulesVi" xml:space="preserve"><value>Client rules (Vietnamese)</value></data>
   <data name="NotForSaleEn" xml:space="preserve"><value>Not for sale (English)</value></data>
+  <data name="ItemGuide" xml:space="preserve"><value>Live item and mix guide</value></data>
+  <data name="ItemGuideDescription" xml:space="preserve"><value>Show configured items, requirements, drop sources, boxes and mixes in the website guide.</value></data>
   <data name="NotForSaleVi" xml:space="preserve"><value>Not for sale (Vietnamese)</value></data>
   <data name="Description" xml:space="preserve"><value>Public player information, one line per rule. Leave empty until you have published your policy. Do not put passwords or private account details here.</value></data>
   <data name="MaximumLength" xml:space="preserve"><value>Use at most {1} characters.</value></data>

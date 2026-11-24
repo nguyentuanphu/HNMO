@@ -7,6 +7,8 @@
   <data name="ClientRulesEn" xml:space="preserve"><value>Quy định dùng client (tiếng Anh)</value></data>
   <data name="ClientRulesVi" xml:space="preserve"><value>Quy định dùng client (tiếng Việt)</value></data>
   <data name="NotForSaleEn" xml:space="preserve"><value>Không bán (tiếng Anh)</value></data>
+  <data name="ItemGuide" xml:space="preserve"><value>Hướng dẫn vật phẩm và ép đồ từ máy chủ</value></data>
+  <data name="ItemGuideDescription" xml:space="preserve"><value>Hiển thị vật phẩm, yêu cầu, nguồn rơi, hộp và công thức ép đã cấu hình trong hướng dẫn website.</value></data>
   <data name="NotForSaleVi" xml:space="preserve"><value>Không bán (tiếng Việt)</value></data>
   <data name="Description" xml:space="preserve"><value>Nội dung công khai cho người chơi, mỗi quy định một dòng. Để trống nếu chưa công bố. Không nhập mật khẩu hoặc thông tin tài khoản riêng tư vào đây.</value></data>
   <data name="MaximumLength" xml:space="preserve"><value>Chỉ nhập tối đa {1} ký tự.</value></data>

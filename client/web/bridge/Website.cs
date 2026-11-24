@@ -33,6 +33,7 @@ internal static class Website
         Forward(app, "/website/event-guide", "api/website/event-guide", options, clients, rateLimited: true, integerQueryKeys: ["serverId"]);
         Forward(app, "/website/world-bosses", "api/website/world-bosses", options, clients);
         Forward(app, "/website/onboarding", "api/website/onboarding", options, clients);
+        Forward(app, "/website/item-guide", "api/website/item-guide", options, clients, rateLimited: true, integerQueryKeys: ["serverId", "group", "page", "number", "mixPage", "mixIndex"]);
         Forward(app, "/website/guilds", "api/website/guilds", options, clients);
         Forward(app, "/website/community", "api/website/community", options, clients);
         Forward(app, "/website/top-races", "api/website/top-races", options, clients);

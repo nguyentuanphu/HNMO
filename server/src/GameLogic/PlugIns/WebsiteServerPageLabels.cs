@@ -30,6 +30,12 @@ public static class WebsiteServerPageLabels
     /// <summary>Gets the localized NotForSaleVi label.</summary>
     public static string NotForSaleVi => Resources.GetString(nameof(NotForSaleVi), CultureInfo.CurrentUICulture) ?? nameof(NotForSaleVi);
 
+    /// <summary>Gets the localized item and mix guide setting.</summary>
+    public static string ItemGuide => Resources.GetString(nameof(ItemGuide), CultureInfo.CurrentUICulture) ?? nameof(ItemGuide);
+
+    /// <summary>Gets the localized item and mix guide setting description.</summary>
+    public static string ItemGuideDescription => Resources.GetString(nameof(ItemGuideDescription), CultureInfo.CurrentUICulture) ?? nameof(ItemGuideDescription);
+
     /// <summary>Gets the localized Description label.</summary>
     public static string Description => Resources.GetString(nameof(Description), CultureInfo.CurrentUICulture) ?? nameof(Description);
 

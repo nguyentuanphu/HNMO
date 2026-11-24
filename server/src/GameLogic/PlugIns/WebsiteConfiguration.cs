@@ -48,6 +48,10 @@ public class WebsiteConfiguration
     [StringLength(200)]
     public string GoogleClientId { get; set; } = string.Empty;
 
+    /// <summary>Gets or sets a value indicating whether the website publishes the live item and mix guide.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.ItemGuide), Description = nameof(WebsiteServerPageLabels.ItemGuideDescription), ResourceType = typeof(WebsiteServerPageLabels))]
+    public bool ItemGuideEnabled { get; set; } = true;
+
     /// <summary>
     /// Gets or sets a value indicating whether the web game hides its own password form and requires
     /// players to sign in on the website first.

@@ -1,0 +1,13 @@
+.item-guide-field:not([hidden]) { display: grid; grid-template-columns: minmax(0, 1fr); gap: 4px; min-width: 0; margin: 6px 0; }
+.item-guide > .item-guide-field { max-width: 24rem; }
+.item-guide select, .item-guide button { font: inherit; color: inherit; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 6px 9px; max-width: 100%; }
+.item-guide select { width: 100%; min-width: 0; }
+.item-guide button, .item-guide summary { cursor: pointer; }
+.item-guide button:disabled { opacity: .55; cursor: default; }
+.item-guide-panels:not([hidden]) { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(19rem, 100%), 1fr)); gap: 16px; }
+.item-guide-panels > section { min-width: 0; }
+.item-guide article { margin-top: 10px; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); overflow-wrap: anywhere; }
+.item-guide article h4 { margin: 10px 0 4px; }
+.item-guide article h4:first-child { margin-top: 0; }
+.item-guide-pages:not([hidden]) { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.item-guide summary { color: var(--gold); }

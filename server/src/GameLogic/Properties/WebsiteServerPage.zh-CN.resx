@@ -7,6 +7,8 @@
   <data name="ClientRulesEn" xml:space="preserve"><value>客户端规则（英语）</value></data>
   <data name="ClientRulesVi" xml:space="preserve"><value>客户端规则（越南语）</value></data>
   <data name="NotForSaleEn" xml:space="preserve"><value>不出售的内容（英语）</value></data>
+  <data name="ItemGuide" xml:space="preserve"><value>实时物品与合成指南</value></data>
+  <data name="ItemGuideDescription" xml:space="preserve"><value>在网站指南中显示已配置的物品、条件、掉落来源、宝箱及合成。</value></data>
   <data name="NotForSaleVi" xml:space="preserve"><value>不出售的内容（越南语）</value></data>
   <data name="Description" xml:space="preserve"><value>向玩家公开的信息，每行一条规则。尚未公布时请留空。请勿填写密码或私人账户资料。</value></data>
   <data name="MaximumLength" xml:space="preserve"><value>最多输入 {1} 个字符。</value></data>

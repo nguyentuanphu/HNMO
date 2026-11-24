@@ -47,6 +47,7 @@
   <script type="module" src="/js/websiteThemeEntry.js"></script>
 <link rel="stylesheet" href="/website-shell.css">
 <script type="module" src="/js/websiteShellEntry.js"></script>
+<link rel="stylesheet" href="/website-item-guide.css">
 </head>
 <body data-page-label="Guide" data-website-page="guide">
 <main>
@@ -147,6 +148,7 @@
   </section>
 
   <h2 id="items">Items and potions</h2>
+  <p><a href="#item-guide" data-item-guide-title data-no-i18n>Items, drops and mixes</a></p>
   <ul>
     <li><b>Potions:</b> healing potions go on <kbd>Q</kbd> and mana potions on <kbd>W</kbd> by default. A slot always drinks the best potion of its kind in your bag and shows how many are left.</li>
     <li><b>Wearing items:</b> drag an item onto its slot in the inventory, or right-click it. Item names show their level (+7 …) and extras (+Skill, +Luck, +Option); hover an item for its full tooltip.</li>
@@ -158,6 +160,12 @@
     <li><b>Cash shop:</b> <kbd>X</kbd> in town. Pick a tab and a category, press Buy under an item; it goes to the storage list on the right. Select it and press Use: it moves to your inventory (seals and scrolls work at once). The coins are free: ask the host for them on the account page.</li>
     <li><b>Chaos machine:</b> the Chaos Goblin in Noria mixes items: pick the kind of mix, put the items in (click or right-click), check the recipe, success rate and zen, press the mix button. A failed mix can lose the items. Take everything out before closing.</li>
   </ul>
+
+  <section id="item-guide" data-no-i18n>
+    <h2 data-item-guide-title>Items, drops and mixes</h2>
+    <div id="itemGuide" class="item-guide"></div>
+    <script type="module" src="/js/websiteItemGuide.js"></script>
+  </section>
 
   <h2 id="features">All features</h2>
   <table>
