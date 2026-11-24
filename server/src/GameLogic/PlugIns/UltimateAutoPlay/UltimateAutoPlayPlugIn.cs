@@ -24,7 +24,7 @@ public sealed class UltimateAutoPlayPlugIn :
     ISupportDefaultCustomConfiguration
 {
     private static readonly TimeSpan VipCheckInterval = TimeSpan.FromSeconds(5);
-    private readonly ConcurrentDictionary<Player, bool> _lastSentVip = new();
+    private readonly ConcurrentDictionary<Player, int> _lastSentVipLevel = new();
     private IGameContext? _gameContext;
     private long _nextVipCheckTicks;
 
@@ -37,12 +37,22 @@ public sealed class UltimateAutoPlayPlugIn :
     public static UltimateAutoPlayPlugIn? Get(IGameContext gameContext) =>
         gameContext.PlugInManager.GetActivePlugInsOf<IPlayerStateChangedPlugIn>().OfType<UltimateAutoPlayPlugIn>().FirstOrDefault();
 
+    /// <summary>Reads <paramref name="player"/>'s effective VIP level (0 = Free, 1 = Bronze, 2+ = Silver/Gold).</summary>
+    /// <param name="player">The player.</param>
+    /// <returns>The highest VIP level granted on the character or account.</returns>
+    public static int GetVipLevel(Player player)
+    {
+        var characterLevel = (int)Math.Floor(player.Attributes?[Stats.IsVip] ?? 0);
+        var accountLevel = player.Account is { } account
+            ? (int)Math.Floor(account.GetAccountAttributeValue(Stats.IsVip, DateTime.UtcNow))
+            : 0;
+        return Math.Max(0, Math.Max(characterLevel, accountLevel));
+    }
+
     /// <summary>Determines whether <paramref name="player"/> currently has an active VIP grant or attribute.</summary>
     /// <param name="player">The player.</param>
-    /// <returns><c>true</c> if VIP is active; otherwise, <c>false</c>.</returns>
-    public static bool IsVip(Player player) =>
-        (player.Attributes?[Stats.IsVip] ?? 0) > 0
-        || (player.Account is { } account && account.GetAccountAttributeValue(Stats.IsVip, DateTime.UtcNow) > 0);
+    /// <returns><c>true</c> if VIP level &gt; 0; otherwise, <c>false</c>.</returns>
+    public static bool IsVip(Player player) => GetVipLevel(player) > 0;
 
     /// <summary>Sends the resolved Ultimate Autoplay policy JSON to <paramref name="player"/>.</summary>
     /// <param name="player">The player.</param>
@@ -67,7 +77,7 @@ public sealed class UltimateAutoPlayPlugIn :
 
         if (currentState != PlayerState.EnteredWorld)
         {
-            this._lastSentVip.TryRemove(player, out _);
+            this._lastSentVipLevel.TryRemove(player, out _);
         }
 
         return ValueTask.CompletedTask;
@@ -90,15 +100,15 @@ public sealed class UltimateAutoPlayPlugIn :
                 || player.CurrentMap is null
                 || player.PlayerState.CurrentState != PlayerState.EnteredWorld)
             {
-                this._lastSentVip.TryRemove(player, out _);
+                this._lastSentVipLevel.TryRemove(player, out _);
                 continue;
             }
 
-            var isVip = IsVip(player);
-            if (!this._lastSentVip.TryGetValue(player, out var lastVip) || lastVip != isVip)
+            var vipLevel = GetVipLevel(player);
+            if (!this._lastSentVipLevel.TryGetValue(player, out var lastVipLevel) || lastVipLevel != vipLevel)
             {
-                this._lastSentVip[player] = isVip;
-                await SendPolicyAsync(player, this, configuration, isVip).ConfigureAwait(false);
+                this._lastSentVipLevel[player] = vipLevel;
+                await SendPolicyAsync(player, this, configuration, vipLevel).ConfigureAwait(false);
             }
         }
     }
@@ -106,18 +116,18 @@ public sealed class UltimateAutoPlayPlugIn :
     /// <inheritdoc />
     public void ForceStart() => Interlocked.Exchange(ref this._nextVipCheckTicks, 0);
 
-    private static ValueTask SendPolicyAsync(Player player, UltimateAutoPlayPlugIn? plugin, UltimateAutoPlayConfiguration? configuration, bool? knownVip = null)
+    private static ValueTask SendPolicyAsync(Player player, UltimateAutoPlayPlugIn? plugin, UltimateAutoPlayConfiguration? configuration, int? knownVipLevel = null)
     {
-        // VIP on the character or on the account (VIP days), as the other VIP checks of HNMO read it.
-        var isVip = knownVip ?? IsVip(player);
+        // VIP level on the character or on the account (0 = Free, 1 = Bronze VIP, 2+ = Higher VIP).
+        var vipLevel = knownVipLevel ?? GetVipLevel(player);
         if (plugin is not null)
         {
-            plugin._lastSentVip[player] = isVip;
+            plugin._lastSentVipLevel[player] = vipLevel;
         }
 
         var json = configuration is null
             ? UltimateAutoPlayPolicyWriter.DisabledPolicyJson
-            : UltimateAutoPlayPolicyWriter.Write(configuration, plugInActive: true, isVip);
+            : UltimateAutoPlayPolicyWriter.Write(configuration, plugInActive: true, vipLevel);
         return player.InvokeViewPlugInAsync<IHnmoUltimateAutoPlayViewPlugIn>(p => p.ShowUltimateAutoPlayPolicyAsync(json));
     }
 

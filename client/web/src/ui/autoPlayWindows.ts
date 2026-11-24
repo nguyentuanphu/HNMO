@@ -267,6 +267,7 @@ export interface AutoPlaySettingsOptions {
   onRequestPolicy?: () => void;
   onAutoPickSkills?: () => boolean;
   onExtrasSaved?: () => void;
+  onBeforeOpen?: () => void;
 }
 
 export class AutoPlaySettingsWindow {
@@ -467,6 +468,7 @@ export class AutoPlaySettingsWindow {
   private async openDocuments(): Promise<void> {
     await loadSkillData();
     const current = this.options.config();
+    this.options.onBeforeOpen?.();
     if (current !== this.loadedFrom) this.load(current);
     const scale = uiScale();
     const parent = this.parent;

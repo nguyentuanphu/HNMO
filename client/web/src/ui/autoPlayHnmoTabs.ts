@@ -78,7 +78,7 @@ const HNMO_TABS_CSS = `
   gap: 4px; width: 100%; min-width: 0; pointer-events: auto;
 }
 .hnmo-row.clickable { cursor: pointer; }
-.hnmo-row.disabled { opacity: 0.55; cursor: not-allowed; }
+.hnmo-row.disabled { opacity: 0.78; cursor: not-allowed; }
 .hnmo-label { flex: 1 1 auto; min-width: 0; white-space: normal; word-break: break-word; color: #ece4d0; }
 .hnmo-page .checkbox-box { width: 13px; height: 13px; flex: 0 0 auto; pointer-events: auto; cursor: pointer; }
 .hnmo-num {
@@ -115,6 +115,7 @@ const HNMO_TABS_CSS = `
   font-size: 8px; font-weight: 700; vertical-align: middle;
 }
 .hnmo-badge-vip { background: #78350f; color: #fde68a; }
+.hnmo-badge-hvip { background: #581c87; color: #f3e8ff; border: 1px solid rgba(212, 175, 55, 0.55); }
 .hnmo-badge-off { background: #334155; color: #cbd5e1; }
 .hnmo-btn {
   width: 100%; box-sizing: border-box; padding: 3px 6px; font-size: 9.5px; font-weight: 600;
@@ -315,6 +316,10 @@ export class AutoPlayHnmoTabs {
     }
     if (this.host.extras.isFeatureAllowed(key)) return { disabled: false, tag: '' };
     if (this.host.extras.isFeatureVipLocked(key)) {
+      const req = this.host.extras.featureRequiredVipLevel(key);
+      if (req >= 2) {
+        return { disabled: true, tag: `<span class="hnmo-badge hnmo-badge-hvip">${tx('VIP 2+', 'VIP CAO')}</span>` };
+      }
       return { disabled: true, tag: `<span class="hnmo-badge hnmo-badge-vip">${tx('VIP ONLY', 'CHỈ VIP')}</span>` };
     }
     return { disabled: true, tag: `<span class="hnmo-badge hnmo-badge-off">${tx('ADMIN OFF', 'ĐÃ TẮT')}</span>` };
@@ -324,32 +329,37 @@ export class AutoPlayHnmoTabs {
     const root = this.extrasPage;
     if (!root) return;
     const s = this.draft;
-    const boolRow = (key: keyof AutoPlayExtrasSettings, label: string) => {
+    const town = this.badge('extrasTown');
+    const boolRow = (key: keyof AutoPlayExtrasSettings, label: string, disabled: boolean) => {
       const checked = Boolean(s[key]);
-      return `<div class="hnmo-row clickable" data-extras-toggle="${key}">
+      return `<div class="hnmo-row${disabled ? ' disabled' : ' clickable'}" data-extras-toggle="${key}">
         <span class="hnmo-label">${label}</span>
         <div class="checkbox-box${checked ? ' checked' : ''}"></div>
       </div>`;
     };
-    const numRow = (key: keyof AutoPlayExtrasSettings, label: string, min: number, max: number) =>
-      `<label class="hnmo-row">
+    const numRow = (key: keyof AutoPlayExtrasSettings, label: string, min: number, max: number, disabled: boolean) =>
+      `<label class="hnmo-row${disabled ? ' disabled' : ''}">
         <span class="hnmo-label">${label}</span>
-        <input type="text" class="hnmo-num" data-extras-num="${key}" data-min="${min}" data-max="${max}" value="${Number(s[key])}" maxlength="${String(max).length}"/>
+        <input type="text" class="hnmo-num" data-extras-num="${key}" data-min="${min}" data-max="${max}" value="${Number(s[key])}" maxlength="${String(max).length}"${disabled ? ' disabled' : ''}/>
       </label>`;
 
     root.innerHTML = `<div class="hnmo-col">
-      ${boolRow('returnWhenBagFull', tx('Back to town when the bag is full', 'Về thành khi túi đồ đầy'))}
-      ${boolRow('returnWhenOutOfPotions', tx('Back to town when the healing potions run out', 'Về thành khi hết bình máu'))}
-      ${numRow('potionsToBuy', tx('Healing potions to buy', 'Số bình máu cần mua'), 0, 255)}
-      ${boolRow('sellJunk', tx('Sell junk (plain weapons and armour) in town', 'Bán đồ rác (vũ khí/giáp thường) ở thành'))}
-      ${numRow('stopAfterMinutes', tx('Stop after (minutes, 0 = never)', 'Tự dừng sau (phút, 0 = tắt)'), 0, 1440)}
-      ${boolRow('alertOnDeath', tx('Alert when the character dies', 'Cảnh báo khi nhân vật chết'))}
-      ${boolRow('alertOnBagFull', tx('Alert when the bag is full', 'Cảnh báo khi túi đồ đầy'))}
+      ${boolRow('returnWhenBagFull', tx('Back to town when the bag is full', 'Về thành khi túi đồ đầy') + town.tag, town.disabled)}
+      ${boolRow('returnWhenOutOfPotions', tx('Back to town when the healing potions run out', 'Về thành khi hết bình máu') + town.tag, town.disabled)}
+      ${numRow('potionsToBuy', tx('Healing potions to buy', 'Số bình máu cần mua'), 0, 255, town.disabled)}
+      ${boolRow('sellJunk', tx('Sell junk (plain weapons and armour) in town', 'Bán đồ rác (vũ khí/giáp thường) ở thành') + town.tag, town.disabled)}
+      <button type="button" id="uap-extras-go-town" class="hnmo-btn" style="background:#334155"${town.disabled ? ' disabled' : ''}>${tx('Trip to Town Now', 'Về thành ngay')}${town.tag}</button>
+      <div class="hnmo-col" style="gap:5px;padding-top:4px;border-top:1px solid rgba(255,255,255,0.1)">
+        ${numRow('stopAfterMinutes', tx('Stop after (minutes, 0 = never)', 'Tự dừng sau (phút, 0 = tắt)'), 0, 1440, false)}
+        ${boolRow('alertOnDeath', tx('Alert when the character dies', 'Cảnh báo khi nhân vật chết'), false)}
+        ${boolRow('alertOnBagFull', tx('Alert when the bag is full', 'Cảnh báo khi túi đồ đầy'), false)}
+      </div>
       <div class="hnmo-hint">${tx('Trips go to the potion seller in Lorencia and back to the spot where auto play was hunting.', 'Chuyến về thành sẽ gặp NPC bán máu ở Lorencia rồi tự quay lại bãi đánh.')}</div>
     </div>`;
 
     for (const row of root.querySelectorAll<HTMLElement>('[data-extras-toggle]')) {
       row.addEventListener('click', () => {
+        if (row.classList.contains('disabled')) return;
         this.captureInputs();
         const key = row.dataset.extrasToggle as keyof AutoPlayExtrasSettings;
         (this.draft as unknown as Record<string, unknown>)[key] = !this.draft[key];
@@ -358,6 +368,11 @@ export class AutoPlayHnmoTabs {
         this.host.onDraftChange?.();
       });
     }
+    root.querySelector('#uap-extras-go-town')?.addEventListener('click', () => {
+      if (this.badge('extrasTown').disabled) return;
+      this.host.extras.goToTown();
+      this.host.onGoToTown?.();
+    });
     for (const input of root.querySelectorAll<HTMLInputElement>('input[data-extras-num]')) {
       input.addEventListener('input', () => { input.value = input.value.replace(/\D/g, ''); });
       input.addEventListener('change', () => { this.captureInputs(); this.draft.preset = 'custom'; this.host.onDraftChange?.(); });
@@ -367,9 +382,16 @@ export class AutoPlayHnmoTabs {
   private renderUltimate(): void {
     const root = this.ultimatePage;
     if (!root) return;
-    const tierLabel = this.host.extras.policy.enabled
-      ? (this.host.extras.policy.isVip ? tx('Tier: VIP Active', 'Hạng: VIP Đang bật') : tx('Tier: Free (VIP locks shown)', 'Hạng: Miễn phí (hiện khóa VIP)'))
-      : tx('Disabled by server administrator', 'Đã tắt bởi quản trị viên máy chủ');
+    const p = this.host.extras.policy;
+    const vipLevel = p.vipLevel ?? (p.isVip ? 1 : 0);
+    const town = this.badge('extrasTown');
+    const tierLabel = !p.enabled
+      ? tx('Disabled by server administrator', 'Đã tắt bởi quản trị viên máy chủ')
+      : vipLevel >= 2
+        ? tx(`Tier: Higher VIP (Lv ${vipLevel} — All Unlocked)`, `Hạng: VIP Cao cấp (Cấp ${vipLevel} — Mở toàn bộ)`)
+        : vipLevel >= 1
+          ? tx('Tier: VIP (Extras open · Ultimate needs VIP 2+)', 'Hạng: VIP (Mở Extras · Ultimate cần VIP 2+)')
+          : tx('Tier: Free (Standard only · Extras=VIP, Ultimate=VIP 2+)', 'Hạng: Miễn phí (Cơ bản · Extras=VIP, Ultimate=VIP 2+)');
 
     const swBtn = (id: UltimateSection, label: string) =>
       `<button type="button" class="hnmo-sw-btn${this.section === id ? ' active' : ''}" data-uap-tab="${id}">${label}</button>`;
@@ -391,7 +413,7 @@ export class AutoPlayHnmoTabs {
       <div id="hnmo-uap-section" class="hnmo-col">${bodyHtml}</div>
       <div class="hnmo-actions">
         <button type="button" id="uap-autopick-skills" class="hnmo-btn" style="background:#1d4ed8">${tx('Auto-Pick Best Skills', 'Tự chọn Skill tối ưu')}</button>
-        <button type="button" id="uap-go-town" class="hnmo-btn" style="background:#334155">${tx('Trip to Town Now', 'Về thành ngay')}</button>
+        <button type="button" id="uap-go-town" class="hnmo-btn" style="background:#334155"${town.disabled ? ' disabled' : ''}>${tx('Trip to Town Now', 'Về thành ngay')}${town.tag}</button>
       </div>
     </div>`;
 
@@ -533,6 +555,7 @@ export class AutoPlayHnmoTabs {
       this.renderUltimate();
     });
     root.querySelector('#uap-go-town')?.addEventListener('click', () => {
+      if (this.badge('extrasTown').disabled) return;
       this.host.extras.goToTown();
       this.host.onGoToTown?.();
     });

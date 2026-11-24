@@ -51,8 +51,15 @@ test('vault and trade zen in-game dialogs, Alt ground-names toggle, and Ultimate
   await page.keyboard.press('Alt');
   expect(await page.evaluate(() => (window as unknown as { __game: UiFeedbackGame }).__game.ground.namesShown)).toBe(false);
 
-  // 11. Ultimate HUD can be minimized and expanded
+  // 11. Floating Ultimate HUD is hidden by default and, once opted in, can be minimized and expanded.
   const hud = page.locator('#hnmo-ultimate-hud');
+  await expect(hud).toBeHidden({ timeout: 30_000 });
+  await page.keyboard.press('Alt+z');
+  const helperCfg = page.locator('.rml-mu_helper_config');
+  await expect(helperCfg.locator('#panel')).toBeVisible({ timeout: 30_000 });
+  await helperCfg.locator('#hnmo_page_ultimate input[data-uap-key="showUltimateHud"]').click();
+  await helperCfg.locator('#btn_save').click();
+  await expect(helperCfg).toHaveCount(0);
   await expect(hud).toBeVisible({ timeout: 30_000 });
   const minBtn = hud.locator('[data-uap-hud="minimize"]');
   await minBtn.click();

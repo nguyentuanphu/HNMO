@@ -1,6 +1,6 @@
 // Exhaustive button sweep across every HUD bar, menu, and openable game window.
 import { test, expect, type Page } from '@playwright/test';
-import { chatText, clickAt, dismissOnboarding, enterWorld, expectNoPageErrors } from './helpers.js';
+import { chatText, clickAt, dismissOnboarding, enterWorld, expandHudTools, expectNoPageErrors } from './helpers.js';
 
 const OPEN = { timeout: 60_000 };
 
@@ -35,7 +35,8 @@ test('all HUD, menu, and window buttons open, act, or close as on the desktop cl
   await page.waitForTimeout(3_000);
   await expect(page.locator('.rml-main_frame #hud_layout')).toBeVisible(OPEN);
 
-  // 1. Top utility buttons: Sound, Guide (i), Options (cog).
+  // 1. Top utility buttons (inside touch-expandable #hudTools): Sound, Guide (i), Options (cog).
+  await expandHudTools(page);
   const mutedBefore = await page.locator('#soundButton').getAttribute('aria-pressed');
   await page.locator('#soundButton').click();
   expect(await page.locator('#soundButton').getAttribute('aria-pressed')).not.toBe(mutedBefore);
@@ -46,6 +47,7 @@ test('all HUD, menu, and window buttons open, act, or close as on the desktop cl
   await page.locator('#guide .close').click();
   await expect(page.locator('#guide')).toBeHidden();
 
+  await expandHudTools(page);
   await page.locator('#settingsButton').click();
   const optWin = page.locator('.rml-option_window');
   await expect(optWin.locator('#panel')).toBeVisible(OPEN);
@@ -228,13 +230,9 @@ test('all HUD, menu, and window buttons open, act, or close as on the desktop cl
   await page.locator('.rml-mu_helper_bar #btn_stop').click();
   await expect(page.locator('.rml-mu_helper_bar #btn_start')).toBeVisible(OPEN);
 
-  await page.locator('#hnmo-ultimate-hud [data-uap-hud="toggle"]').click();
-  await expect(page.locator('#hnmo-ultimate-hud [data-uap-hud="toggle"]')).toHaveText(/Stop|Dừng/, OPEN);
-  await page.locator('#hnmo-ultimate-hud [data-uap-hud="toggle"]').click();
-  await expect(page.locator('#hnmo-ultimate-hud [data-uap-hud="toggle"]')).toHaveText(/Start|Bắt đầu/, OPEN);
-  await page.locator('#hnmo-ultimate-hud [data-uap-hud="town"]').click();
-  await expect.poll(() => chatText(page)).toMatch(/town|Lorencia|Auto|thành/i);
-  await page.locator('#hnmo-ultimate-hud [data-uap-hud="open"]').click();
+  // Floating Ultimate HUD bar is hidden by default because all Ultimate Autoplay controls live in Window 1 Tab 4.
+  await expect(page.locator('#hnmo-ultimate-hud')).toBeHidden();
+  await page.keyboard.press('Alt+z');
   await expect(helperCfg.locator('#panel')).toBeVisible(OPEN);
   await expect(helperCfg.locator('#tab_4')).toHaveClass(/\bactive\b/);
   await helperCfg.locator('#hnmo_page_ultimate [data-uap-tab="combat"]').click();
