@@ -1,5 +1,5 @@
 {
-  "generatedAt": "8323e4e4",
+  "generatedAt": "eb9f922e",
   "maxLines": 6000,
   "units": [
     {
@@ -6151,11 +6151,14 @@
       ],
       "files": 11,
       "lines": 648,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "eb9f922e",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "DataHandler/SkillData",
+        "docs/audit/findings/unit-client-src-source-Data-DataHandler-SkillData.md"
+      ],
+      "evidence": "11f/648L: No game rules (binary/JSON file loaders, checksum & IO helpers (no game balance rules).)",
       "prs": ""
     },
     {
