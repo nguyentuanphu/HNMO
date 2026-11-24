@@ -1,5 +1,5 @@
 {
-  "generatedAt": "9b838966",
+  "generatedAt": "37705c61",
   "maxLines": 6000,
   "units": [
     {
@@ -4605,11 +4605,16 @@
       ],
       "files": 30,
       "lines": 2062,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "37705c61",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Character.cs:14-71",
+        "Item.cs:17-100",
+        "SkillEntry.cs:14-105",
+        "docs/audit/findings/unit-server-src-DataModel-Entities.md"
+      ],
+      "evidence": "30f/2062L: Character defines HeroState & CharacterStatus (Normal=0, Banned=1, GM=32); Item adds HNMO multi-currency store fields & anti-dupe Guid Serial.",
       "prs": ""
     },
     {
