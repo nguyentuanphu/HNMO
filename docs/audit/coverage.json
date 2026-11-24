@@ -1,5 +1,5 @@
 {
-  "generatedAt": "8b3240ce",
+  "generatedAt": "49a5970d",
   "maxLines": 6000,
   "units": [
     {
@@ -4005,17 +4005,12 @@
       ],
       "files": 19,
       "lines": 5964,
-      "status": "Changed since check",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-22",
+      "status": "Checked",
+      "checkedAt": "49a5970d",
+      "checkedOn": "2026-11-24",
       "references": "S6/S9 ItemList.xml, ExcellentOptions.xml, HarmonyItemOption.ini, ItemSetOption.xml",
-      "evidence": "Read in full via data dump (ledger-game-data.md + ZzDataDump at 477b9466): 817 items, 380/Phoenix Soul (#218), Eternal Wing set 44 (#258), lucky speeds (#242), harmony +14/+15 (#252).",
-      "prs": "#218, #242, #252, #258",
-      "changedFiles": [
-        "server/src/Persistence/Initialization/VersionSeasonSix/Items/ItemRules.cs",
-        "server/src/Persistence/Initialization/VersionSeasonSix/Items/Misc.cs",
-        "server/src/Persistence/Initialization/VersionSeasonSix/Items/MossGambleItemCatalog.cs"
-      ]
+      "evidence": "All 19 files read (5964 lines): docs/audit/findings/unit-server-src-Persistence-Initialization-VersionSeasonSix-Items-files-1.md; ref: docs/audit/references/item-options-380-harmony-cashshop.md",
+      "prs": "#218, #242, #252, #258"
     },
     {
       "id": "server/src/Persistence/Initialization/VersionSeasonSix/Items (files 2)",
