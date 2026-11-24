@@ -94,6 +94,7 @@ import { hideLoadingScreen, showLoadingScreen } from './ui/loadingScreen.js';
 import { setupSocial, decorateLabel, setCustomRankLookup, type Social } from './game/social.js';
 import { createCustomRanks, type CustomRanksManager } from './game/customRanks.js';
 import { confirmInGame } from './ui/confirmDialog.js';
+import { installExtraNpcWindows } from './ui/npcWindows.js';
 import { QuestWindows } from './ui/questWindows.js';
 import { setUpEvents, type EventSystem } from './ui/eventWindows.js';
 import { setUpInstanceEvents, type InstanceEventSystem } from './ui/instanceEventWindows.js';
@@ -1667,6 +1668,12 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   // The chaos machine and the other mix NPCs (CMixInventory).
   state.chaosMachine = new ChaosMachine({ connection, inventory, itemWindows, message: (text) => chat.add(text, 'system'),
     confirm: (text) => confirmInGame(text), level: () => stats.level, play: (id) => sounds.audio.play(id) });
+  installExtraNpcWindows({
+    inventory,
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    onPacket: (listener) => connection.onPacket(listener),
+    message: (text) => chat.add(text, 'system'),
+  });
   // The personal store: the own store (S, /personalshop), others' stores (/purchase), the titles over the heads.
   state.personalShop = new PersonalShop({ connection, inventory, itemWindows, message: (text) => chat.add(text, 'system'), confirm: confirmInGame, level: () => stats.level, heroName: character.name, heroId: () => online.playerId, characters: () => online.characters, hero: () => online.hero, mapNumber: () => state.mapNumber ?? 0, camera, canvas: ui.canvas, root, tooltipCharacter: () => ({ classIndex: character.classIndex, level: stats.level, strength: stats.strength, agility: stats.agility, vitality: stats.vitality, energy: stats.energy, leadership: stats.leadership, maxLife: stats.maxLife, maxMana: stats.maxMana }) });
   earlyPackets.forEach((bytes) => state.personalShop?.handle(bytes));
