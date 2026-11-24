@@ -1,5 +1,5 @@
 {
-  "generatedAt": "8915af23",
+  "generatedAt": "926f0ac9",
   "maxLines": 6000,
   "units": [
     {
@@ -8008,11 +8008,14 @@
       ],
       "files": 28,
       "lines": 5304,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "926f0ac9",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "source/Scenes",
+        "docs/audit/findings/unit-client-src-source-Scenes.md"
+      ],
+      "evidence": "28f/5304L: No game rules (login/character-select/main scene loop, frame timing, camera & lighting setup (no game rules).)",
       "prs": ""
     },
     {
