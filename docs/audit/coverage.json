@@ -1,5 +1,5 @@
 {
-  "generatedAt": "8e7357b4",
+  "generatedAt": "154b40db",
   "maxLines": 6000,
   "units": [
     {
@@ -7007,11 +7007,15 @@
       ],
       "files": 26,
       "lines": 5654,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "154b40db",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "CSEventMatch.cpp:27,168-175",
+        "NewBloodCastleSystem.cpp:140",
+        "docs/audit/findings/unit-client-src-source-GameLogic-Events.md"
+      ],
+      "evidence": "26f/5654L: CSEventMatch enforces 30s event pre-start countdown & Blood Castle / Chaos Castle / Devil Square client match rules matching Web events.ts.",
       "prs": ""
     },
     {
