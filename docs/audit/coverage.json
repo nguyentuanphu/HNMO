@@ -1,5 +1,5 @@
 {
-  "generatedAt": "65a3631f",
+  "generatedAt": "699465b5",
   "maxLines": 6000,
   "units": [
     {
@@ -3984,11 +3984,16 @@
       ],
       "files": 30,
       "lines": 4072,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "699465b5",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "the Season 6 suite's MonsterList.xml, DevilSquare.ini, SkillList.xml & ItemCalc.lua",
+        "docs/audit/data/diff-events-all.txt",
+        "docs/audit/data/diff-client-tables.txt",
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-Version095d.md"
+      ],
+      "evidence": "Audited all 30 files (4072 lines): docs/audit/findings/unit-server-src-Persistence-Initialization-Version095d.md",
       "prs": ""
     },
     {
