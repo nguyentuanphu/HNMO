@@ -12,4 +12,6 @@
   <data name="TrackerEnabledDescription" xml:space="preserve"><value>Công bố danh sách hoạt động có giới hạn. Mỗi tài khoản có thể từ chối tham gia.</value></data>
   <data name="TrackerNames" xml:space="preserve"><value>Hiện tên nhân vật trong theo dõi</value></data>
   <data name="TrackerNamesDescription" xml:space="preserve"><value>Cho phép hiện tên nhân vật đủ điều kiện. Quyền từ chối của người chơi vẫn được áp dụng.</value></data>
+  <data name="ClassGuide" xml:space="preserve"><value>Hướng dẫn lớp nhân vật từ máy chủ</value></data>
+  <data name="ClassGuideDescription" xml:space="preserve"><value>Hiển thị chỉ số, công thức và kỹ năng của máy chủ đang chọn trong phần hướng dẫn website.</value></data>
 </root>

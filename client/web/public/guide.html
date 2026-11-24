@@ -30,6 +30,16 @@
     ul { margin: 6px 0; padding-left: 20px; }
     li { margin: 3px 0; }
     .muted { color: var(--muted); }
+    .class-guide-fields:not([hidden]) { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+    .class-guide-fields > div { display: grid; gap: 4px; min-width: 0; }
+    .class-guide select, .class-guide button { font: inherit; color: inherit; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 6px 9px; max-width: 100%; }
+    .class-guide button, .class-guide summary { cursor: pointer; }
+    .class-guide dl { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4px 12px; margin: 8px 0; }
+    .class-guide dd { margin: 0; overflow-wrap: anywhere; }
+    .class-guide details { padding: 10px; border: 1px solid var(--line); border-radius: 8px; margin: 10px 0; }
+    .class-guide h4, .class-guide h5 { margin: 12px 0 4px; }
+    .class-guide-skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 10px; }
+    .class-guide-skills article { border-top: 1px solid var(--line); padding: 4px 6px; min-width: 0; }
     @media (max-width: 560px) { th:nth-child(3), td:nth-child(3) { display: none; } }
   </style>
   <link rel="stylesheet" href="/website-themes.css">
@@ -117,17 +127,8 @@
     <tr><td><kbd>O</kbd> or the ⚙ button</td><td>Settings: volume, text size, FPS limit, low-spec mode</td><td><kbd>Esc</kbd> closes it; kept in your browser</td></tr>
   </table>
 
-  <h2 id="classes">Classes: what to play</h2>
-  <div class="cards">
-    <div class="card"><h3>Dark Knight</h3><p>Close combat with swords, axes and maces; lots of life. The easiest class to start with: walk up and hit. Put points in strength and agility.</p></div>
-    <div class="card"><h3>Dark Wizard</h3><p>Spells from a distance with staffs; little life, much mana. Strong against groups once the skills are in. Put points in energy.</p></div>
-    <div class="card"><h3>Fairy Elf</h3><p>Bows and crossbows from 6 cells away, and support magic (heal, defence, attack buffs) for the party. Put points in agility.</p></div>
-    <div class="card"><h3>Magic Gladiator</h3><p>Fights with a sword and casts spells at the same time; strength and energy both count.</p></div>
-    <div class="card"><h3>Dark Lord</h3><p>Sceptres, a horse and a raven; leads parties with command (leadership).</p></div>
-    <div class="card"><h3>Summoner</h3><p>Books and sticks, summons and curses; weakens monsters for the party.</p></div>
-    <div class="card"><h3>Rage Fighter</h3><p>Gloves and fists, fast close combat. Its strikes walk you up to the monster; Chain Drive, Dragon Roar and Dragon Slasher need sword-form gloves, and the close strikes don't work while riding a horn mount. Dark Side dashes through up to five monsters around the target.</p></div>
-  </div>
-  <p class="muted">Some classes become available on an account only after another character reaches a certain level, as on the original servers.</p>
+  <h2 id="classes" data-no-i18n>Classes</h2>
+  <div id="classGuide" class="class-guide" data-no-i18n></div>
 
   <h2 id="where">Where to level</h2>
   <ul>
@@ -236,5 +237,6 @@
   <p>Open the game's address in Chrome (Android) or Safari (iPhone). To install it like an app: Android, Chrome's menu ⋮ then <i>Add to Home screen</i> or <i>Install app</i>; iPhone, the share button then <i>Add to Home Screen</i>. Play sideways: tap to walk, ⚔ fights the nearest monster, 1–5 and Q W E R are the skills and potions, ⋯ opens the other windows (missions too), ⛶ goes full screen.</p>
 </main>
   <script type="module" src="/js/siteLanguage.js"></script>
+  <script type="module" src="/js/websiteClassGuide.js"></script>
 </body>
 </html>

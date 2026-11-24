@@ -12,4 +12,6 @@
   <data name="TrackerEnabledDescription" xml:space="preserve"><value>发布有条数限制的活动列表。每个账号都可以选择退出。</value></data>
   <data name="TrackerNames" xml:space="preserve"><value>显示追踪中的角色名称</value></data>
   <data name="TrackerNamesDescription" xml:space="preserve"><value>允许在公开列表中显示符合条件的角色名称。仍遵守玩家的退出设置。</value></data>
+  <data name="ClassGuide" xml:space="preserve"><value>实时职业指南</value></data>
+  <data name="ClassGuideDescription" xml:space="preserve"><value>在网站指南中显示所选服务器的职业属性、公式和技能。</value></data>
 </root>
