@@ -1,5 +1,5 @@
 {
-  "generatedAt": "817e0296",
+  "generatedAt": "ff6717e1",
   "maxLines": 6000,
   "units": [
     {
@@ -6778,11 +6778,14 @@
       ],
       "files": 3,
       "lines": 3064,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "ff6717e1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "ZzzInfomation.cpp:320-415",
+        "docs/audit/findings/unit-client-src-source-Engine-Object-files-3.md"
+      ],
+      "evidence": "3f/3064L: 2nd wings (50+Lv*5 HP/MP, 3% Ignore, 50 AG, +5 Spd), 3rd wings (5% Ignore/Reflect/FullHP/FullMP), Wizard Ring (10%/10 Spd) & Lethal Ring (15%/10 Spd) match S6/S9.",
       "prs": ""
     },
     {
