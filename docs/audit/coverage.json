@@ -1,5 +1,5 @@
 {
-  "generatedAt": "668a5588",
+  "generatedAt": "28ceb59c",
   "maxLines": 6000,
   "units": [
     {
@@ -1492,11 +1492,13 @@
       ],
       "files": 9,
       "lines": 404,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "28ceb59c",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "None (HNMO chat commands)"
+      ],
+      "evidence": "All 9 files in ChatCommands (files 2) read in full. Verified GM role checks, /world ban/spam/filter guards, /unlock+/unlockitem delegation, and /vault 1-based page conversion. See docs/audit/findings/unit-server-src-GameLogic-PlugIns-ChatCommands-files-2.md.",
       "prs": ""
     },
     {
