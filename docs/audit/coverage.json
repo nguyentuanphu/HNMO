@@ -1,5 +1,5 @@
 {
-  "generatedAt": "8f8fd347",
+  "generatedAt": "634c8aaf",
   "maxLines": 6000,
   "units": [
     {
@@ -906,15 +906,12 @@
       ],
       "files": 7,
       "lines": 784,
-      "status": "Changed since check",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-22",
-      "references": "Season 6/9 event ticket & entry rules",
-      "evidence": "All 7 files read (792 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
-      "prs": "",
-      "changedFiles": [
-        "server/src/GameLogic/PlayerActions/MiniGames/EnterMiniGameAction.cs"
-      ]
+      "status": "Checked",
+      "checkedAt": "634c8aaf",
+      "checkedOn": "2026-11-24",
+      "references": "S6/S9 IGCData/Events/{IGC_BloodCastle.ini,DoppelGanger/IGC_DoppelGanger_Config.ini,ImperialGuardian/IGC_ImperialGuardian.ini}",
+      "evidence": "All 7 files read (784 lines): docs/audit/findings/unit-server-src-GameLogic-PlayerActions-MiniGames.md",
+      "prs": ""
     },
     {
       "id": "server/src/GameLogic/PlayerActions/MuHelper",
