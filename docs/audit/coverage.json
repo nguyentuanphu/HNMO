@@ -1,5 +1,5 @@
 {
-  "generatedAt": "e1dd7b5c",
+  "generatedAt": "66c4096f",
   "maxLines": 6000,
   "units": [
     {
@@ -6969,11 +6969,16 @@
       ],
       "files": 16,
       "lines": 4587,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "66c4096f",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "SkillExecution.cpp:250-310",
+        "ClassAttack.cpp:129-130",
+        "CriticalDamageRate.cpp:93",
+        "docs/audit/findings/unit-client-src-source-GameLogic-Combat.md"
+      ],
+      "evidence": "16f/4587L: SkillExecution enforces per-class auto-attack stop rules for buff/aura skills (DK Swell, DL Crit, WZ Nova, Elf buffs, Sum/RF buffs) matching Web skillCast.ts.",
       "prs": ""
     },
     {
