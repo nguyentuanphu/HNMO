@@ -1,5 +1,5 @@
 {
-  "generatedAt": "ba32c431",
+  "generatedAt": "5fb4939d",
   "maxLines": 6000,
   "units": [
     {
@@ -8354,11 +8354,16 @@
       ],
       "files": 27,
       "lines": 5418,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "5fb4939d",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "HUD/MainFrameWindow.cpp",
+        "HUD/MainFrameWindow.h",
+        "HUD/MapNameOrnament.cpp",
+        "docs/audit/findings/unit-client-src-source-UI-HUD-files-2.md"
+      ],
+      "evidence": "27f/5418L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
       "prs": ""
     },
     {
