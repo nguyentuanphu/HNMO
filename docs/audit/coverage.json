@@ -1,5 +1,5 @@
 {
-  "generatedAt": "116c618d",
+  "generatedAt": "608a89fe",
   "maxLines": 6000,
   "units": [
     {
@@ -6042,11 +6042,14 @@
       ],
       "files": 4,
       "lines": 127,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "608a89fe",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "DataHandler/EffectData",
+        "docs/audit/findings/unit-client-src-source-Data-DataHandler-EffectData.md"
+      ],
+      "evidence": "4f/127L: No game rules (binary/JSON file loaders, checksum & IO helpers (no game balance rules).)",
       "prs": ""
     },
     {
