@@ -1,5 +1,5 @@
 {
-  "generatedAt": "f32db03f",
+  "generatedAt": "6130ab89",
   "maxLines": 6000,
   "units": [
     {
@@ -8269,11 +8269,16 @@
       ],
       "files": 32,
       "lines": 4058,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "6130ab89",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Events/EnterDevilSquare.cpp",
+        "Events/EnterDevilSquare.h",
+        "Events/EventEntryRmlModel.h",
+        "docs/audit/findings/unit-client-src-source-UI-Events-files-2.md"
+      ],
+      "evidence": "32f/4058L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
       "prs": ""
     },
     {
