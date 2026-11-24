@@ -35,25 +35,100 @@ function parseKeyValCfg(filePath) {
 export function parseSuiteQuests(rootDir) {
   const classQuestPath = findSuiteFile(rootDir, 'ClassQuest.xml');
   const questIniPath = findSuiteFile(rootDir, 'QuestSystem.ini');
-  const quests = parseXmlTags(classQuestPath, 'QuestInfo').map((q) => ({
-    index: num(q.Index),
-    type: num(q.Type),
-    subType: num(q.SubType),
-    name: q.Name ?? '',
-  }));
-  const jobs = parseXmlTags(classQuestPath, 'Job').map((j) => ({
-    type: num(j.Type),
-    reqItemCat: num(j.ReqItemCat),
-    reqItemIndex: num(j.ReqItemIndex),
-    itemCount: num(j.ItemCount),
-    minLevel: num(j.MonsterMinLevel),
-    maxLevel: num(j.MonsterMaxLevel),
-    dropRate: num(j.DropRate),
-    rewardType: num(j.RewardType),
-    rewardCount: num(j.RewardCount),
-  }));
+
+  const quests = [];
+  if (classQuestPath && fs.existsSync(classQuestPath)) {
+    const raw = fs.readFileSync(classQuestPath, 'utf8').replace(/<!--[\s\S]*?-->/g, '');
+    const qiRe = /<QuestInfo\s+([^>]*)>([\s\S]*?)<\/QuestInfo>/gi;
+    let qm;
+    while ((qm = qiRe.exec(raw)) !== null) {
+      const head = parseXmlTagsInText(`<QuestInfo ${qm[1]}>`, 'QuestInfo')[0] ?? {};
+      const body = qm[2];
+      const jobs = parseXmlTagsInText(body, 'Job').map((j) => ({
+        type: num(j.Type),
+        reqItemCat: num(j.ReqItemCat),
+        reqItemIndex: num(j.ReqItemIndex),
+        itemLevel: num(j.ItemLevel),
+        itemCount: num(j.ItemCount),
+        minLevel: num(j.MonsterMinLevel, -1),
+        maxLevel: num(j.MonsterMaxLevel, -1),
+        dropRate: num(j.DropRate),
+        rewardType: num(j.RewardType),
+        rewardCount: num(j.RewardCount),
+      }));
+      const conditions = parseXmlTagsInText(body, 'Condition').map((c) => ({
+        type: num(c.Type, -1),
+        index: num(c.Index, -1),
+        minLevel: num(c.MinLevel),
+        maxLevel: num(c.MaxLevel),
+        reqMoney: num(c.ReqMoney),
+      }));
+      const minLevel = Math.max(0, ...conditions.filter((c) => c.minLevel > 0 && c.minLevel < 9999).map((c) => c.minLevel));
+      const reqMoney = Math.max(0, ...conditions.map((c) => c.reqMoney));
+      const rewardPts = jobs.reduce((s, j) => (j.rewardType === 200 || j.rewardType === 201 ? Math.max(s, j.rewardCount) : j.rewardType === 204 ? Math.max(s, j.rewardCount) : s), 0);
+      quests.push({
+        index: num(head.Index),
+        type: num(head.Type),
+        subType: num(head.SubType),
+        name: head.Name ?? '',
+        minLevel,
+        reqMoney,
+        rewardPts,
+        jobs,
+        conditions,
+      });
+    }
+  }
+
+  const jobs = quests.flatMap((q) => q.jobs);
   const ini = parseIni(questIniPath);
-  return { quests, jobs, ini };
+  const iniRows = [];
+  if (questIniPath && fs.existsSync(questIniPath)) {
+    for (const raw of fs.readFileSync(questIniPath, 'utf8').split(/\r?\n/)) {
+      const line = raw.replace(/\/\/.*$/, '').trim();
+      if (!line || line === '0' || line.toLowerCase() === 'end') continue;
+      const m = /^(\d+)\s+"([^"]+)"\s+"([^"]+)"\s+(.*)$/.exec(line);
+      if (m) iniRows.push({ id: num(m[1]), title: m[2], desc: m[3], rest: m[4].trim().split(/\s+/).map(Number) });
+    }
+  }
+
+  // Parse Episode quest Lua scripts (Scripts/Quests/Quest_Ep*.lua & Quest_Reward_Ep*.lua)
+  const epQuests = new Map();
+  const luaFiles = findSuiteFilesInDir(rootDir, 'Quests', '.lua');
+  const getEp = (ep, qs) => {
+    const k = `${ep}:${qs}`;
+    if (!epQuests.has(k)) {
+      epQuests.set(k, { ep: num(ep), qs: num(qs), kills: [], items: [], rewardExp: 0, rewardZen: 0, rewardContrib: 0, rewardItems: 0 });
+    }
+    return epQuests.get(k);
+  };
+  for (const f of luaFiles) {
+    const raw = fs.readFileSync(f, 'utf8');
+    for (const rawLine of raw.split(/\r?\n/)) {
+      const line = rawLine.replace(/--.*$/, '');
+      let m;
+      if ((m = /SetQuestMonsterKill\([^,]+,\s*Ep(\d+),\s*(\d+),\s*(\d+),\s*(\d+)/.exec(line))) {
+        getEp(m[1], m[2]).kills.push({ monster: num(m[3]), count: num(m[4]) });
+      }
+      if ((m = /SetQuestRewardExp\(\s*Ep(\d+),\s*(\d+),\s*(\d+)/.exec(line))) {
+        getEp(m[1], m[2]).rewardExp += num(m[3]);
+      }
+      if ((m = /SetQuestRewardZen\(\s*Ep(\d+),\s*(\d+),\s*(\d+)/.exec(line))) {
+        getEp(m[1], m[2]).rewardZen += num(m[3]);
+      }
+      if ((m = /SetQuestRewardContribute\(\s*Ep(\d+),\s*(\d+),\s*(\d+)/.exec(line))) {
+        getEp(m[1], m[2]).rewardContrib += num(m[3]);
+      }
+      if ((m = /SetQuestRewardItem\(\s*Ep(\d+),\s*(\d+),/.exec(line))) {
+        getEp(m[1], m[2]).rewardItems += 1;
+      }
+      if ((m = /SetQuestGetItem\([^,]+,\s*Ep(\d+),\s*(\d+),\s*(\d+),\s*(\d+),\s*\d+,\s*\d+,\s*(\d+)/.exec(line))) {
+        getEp(m[1], m[2]).items.push({ cat: num(m[3]), idx: num(m[4]), count: num(m[5]) });
+      }
+    }
+  }
+
+  return { quests, jobs, ini, iniRows, epQuests };
 }
 
 export function parseSuiteEventsAndInvasions(rootDir) {

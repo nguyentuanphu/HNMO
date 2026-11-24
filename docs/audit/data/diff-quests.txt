@@ -1,6 +1,474 @@
-# Quests Differences: Season 6 vs Season 9 Suites
-# ClassQuest counts: S6=7 (22 jobs), S9=7 (22 jobs)
+# Quests Differences: Season 6 vs Season 9 vs HNMO Quests.cs
+# ClassQuests: S6=7 (22 jobs), S9=7 (22 jobs), HNMO=7
+# QuestSystem.ini custom rows: S6=1, S9=0 | Episode Lua quests: S6=456, S9=456, HNMO_CreateQuest=247
 
-## QuestInfo differences
+## Class Quests (0..6): Requirements & Rewards (S6 vs S9 vs HNMO Quests.cs)
+ClassQuest 0 (Find the 'Scroll of Emperor'!, NPC 235): S6/S9=identical(MinLv=150,Zen=1000000,Pts=10,Req=[14:23x1(rate=10/10000),14:23x1(rate=10/10000)]) | HNMO=(NPC=235,MinLv=150,Zen=1000000,Pts=10,Req=14:23 Lv0 (45-60, 10/10000) @ Quests.cs:293-314) -> same
+ClassQuest 1 (Four Treasures of Mu, NPC 235): S6/S9=identical(MinLv=0,Zen=2000000,Pts=10,Req=[14:24x1(rate=10/10000),14:25x1(rate=10/10000),14:26x1(rate=10/10000),14:68x1(rate=10/10000)]) | HNMO=(NPC=235,MinLv=150,Zen=2000000,Pts=10,Req=14:24/25/26/68 Lv0 (62-76, 10/10000)+Evo1->2 @ Quests.cs:267-290) -> differs (check details)
+ClassQuest 2 (Gain 'Hero status', NPC 229): S6/S9=identical(MinLv=220,Zen=3000000,Pts=0,Req=[14:23x1(rate=10/10000),14:23x1(rate=10/10000)]) | HNMO=(NPC=229,MinLv=220,Zen=3000000,Pts=0,Req=14:23 Lv1 (72-108, 10/10000)+1pt/lv+InfArrow(ME) @ Quests.cs:226-264) -> same
+ClassQuest 3 (Secret of 'Dark Stone', NPC 229): S6/S9=identical(MinLv=220,Zen=2000000,Pts=0,Req=[14:24x1(rate=10/10000)]) | HNMO=(NPC=229,MinLv=220,Zen=2000000,Pts=0,Req=14:24 Lv1 (72-108, 10/10000)+Combo(BK) @ Quests.cs:200-223) -> same
+ClassQuest 4 (Certificate of 'Strength!', NPC 406): S6/S9=identical(MinLv=380,Zen=5000000,Pts=10,Req=[14:65x1(rate=1000/10000),14:66x1(rate=1000/10000),14:67x1(rate=1000/10000),14:65x1(rate=1000/10000)]) | HNMO=(NPC=406,MinLv=380,Zen=5000000,Pts=20,Req=14:65@mob63(3%),14:66@mob309(4%),14:67@mob77(5%) @ Quests.cs:175-197) -> differs (DropRate 10%->3/4/5% & RewardPts 10->20)
+ClassQuest 5 (Infiltration of 'Barrack', NPC 406): S6/S9=identical(MinLv=400,Zen=7000000,Pts=20,Req=[kill=409x20,kill=410x20,kill=411x20]) | HNMO=(NPC=406,MinLv=400,Zen=7000000,Pts=10,Req=20x409,20x410,20x411 @ Quests.cs:96-133) -> differs (RewardPts 20->10)
+ClassQuest 6 (Infiltration of 'Refuge', NPC 406): S6/S9=identical(MinLv=400,Zen=10000000,Pts=30,Req=[kill=412x1]) | HNMO=(NPC=406,MinLv=400,Zen=10000000,Pts=30,Req=1x412+Evo2->3 @ Quests.cs:136-164) -> same
 
-## QuestSystem.ini sections (S6): none
+## QuestSystem.ini (Season 6 only vs HNMO)
+INI #1 "The Mighty Spider" (Kill 10 Spiders) -> S6 present, S9=absent, HNMO=missing in Quests.cs
+
+## Episode Quests (Scripts/Quests Lua vs HNMO Quests.cs CreateNewQuests)
+Summary: same=101, differs=146, missing_in_HNMO=209
+Ep1:4: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=2) | HNMO=missing -> missing in HNMO
+Ep1:9: S6/S9=(kills=[none],items=0,Exp=50,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep1:15: S6/S9=(kills=[none],items=0,Exp=50,Zen=500,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep1:20: S6/S9=(kills=[none],items=0,Exp=100,Zen=1000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep1:23: S6/S9=(kills=[27x3],items=0,Exp=250,Zen=1000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep1:24: S6/S9=(kills=[2x3],items=0,Exp=250,Zen=1000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep1:25: S6/S9=(kills=[418x3],items=0,Exp=250,Zen=1000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep1:29: S6/S9=(kills=[none],items=0,Exp=200,Zen=3000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep1:31: S6/S9=(kills=[none],items=0,Exp=100,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep1:33: S6/S9=(kills=[28x30],items=0,Exp=5000,Zen=3000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep1:34: S6/S9=(kills=[1x30],items=0,Exp=5000,Zen=3000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep1:35: S6/S9=(kills=[421x30],items=0,Exp=5000,Zen=3000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep1:40: S6/S9=(kills=[none],items=0,Exp=0,Zen=5000,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep1:41: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep1:42: S6/S9=(kills=[none],items=0,Exp=300,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep1:43: S6/S9=(kills=[none],items=0,Exp=300,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep1:49: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep1:50: S6/S9=(kills=[none],items=0,Exp=300,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep1:54: S6/S9=(kills=[none],items=0,Exp=0,Zen=10000,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep1:55: S6/S9=(kills=[none],items=0,Exp=300,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep1:62: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep1:67: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep1:69: S6/S9=(kills=[none],items=0,Exp=0,Zen=10000,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep1:71: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep1:74: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep1:77: S6/S9=(kills=[none],items=0,Exp=0,Zen=30000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep1:80: S6/S9=(kills=[none],items=0,Exp=3000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep1:83: S6/S9=(kills=[none],items=0,Exp=0,Zen=10000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep1:90: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=2) | HNMO=missing -> missing in HNMO
+Ep2:8: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep2:11: S6/S9=(kills=[12x40],items=0,Exp=0,Zen=0,Contrib=0,RewItems=3) | HNMO=missing -> missing in HNMO
+Ep2:14: S6/S9=(kills=[none],items=0,Exp=0,Zen=100000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep2:17: S6/S9=(kills=[none],items=0,Exp=100000,Zen=200000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep2:26: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep2:29: S6/S9=(kills=[13x60],items=0,Exp=0,Zen=0,Contrib=0,RewItems=3) | HNMO=missing -> missing in HNMO
+Ep2:32: S6/S9=(kills=[none],items=0,Exp=0,Zen=200000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep2:35: S6/S9=(kills=[none],items=0,Exp=400000,Zen=300000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep2:39: S6/S9=(kills=[10x80],items=0,Exp=0,Zen=0,Contrib=0,RewItems=3) | HNMO=missing -> missing in HNMO
+Ep2:42: S6/S9=(kills=[none],items=0,Exp=800000,Zen=500000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep2:45: S6/S9=(kills=[none],items=0,Exp=1000000,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep2:48: S6/S9=(kills=[37x100],items=0,Exp=0,Zen=0,Contrib=0,RewItems=2) | HNMO=missing -> missing in HNMO
+Ep2:51: S6/S9=(kills=[none],items=0,Exp=0,Zen=300000,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep2:54: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep2:57: S6/S9=(kills=[70x100],items=0,Exp=0,Zen=0,Contrib=0,RewItems=2) | HNMO=missing -> missing in HNMO
+Ep2:60: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep2:63: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep2:66: S6/S9=(kills=[59x30],items=0,Exp=0,Zen=0,Contrib=0,RewItems=2) | HNMO=missing -> missing in HNMO
+Ep2:69: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep2:72: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep2:75: S6/S9=(kills=[444x100],items=0,Exp=0,Zen=0,Contrib=0,RewItems=2) | HNMO=missing -> missing in HNMO
+Ep2:78: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep2:81: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep3:8: S6/S9=(kills=[none],items=0,Exp=10000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep3:11: S6/S9=(kills=[5x40],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep3:14: S6/S9=(kills=[none],items=0,Exp=0,Zen=100000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep3:17: S6/S9=(kills=[none],items=0,Exp=100000,Zen=200000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep3:26: S6/S9=(kills=[none],items=0,Exp=20000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep3:29: S6/S9=(kills=[18x60],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep3:32: S6/S9=(kills=[none],items=0,Exp=0,Zen=200000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep3:35: S6/S9=(kills=[none],items=0,Exp=400000,Zen=300000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep3:39: S6/S9=(kills=[40x80],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep3:42: S6/S9=(kills=[none],items=0,Exp=800000,Zen=500000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep3:45: S6/S9=(kills=[none],items=0,Exp=1000000,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep3:48: S6/S9=(kills=[71x80],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep3:51: S6/S9=(kills=[none],items=0,Exp=0,Zen=500000,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep3:54: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep3:57: S6/S9=(kills=[58x100],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep3:60: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep3:63: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep3:66: S6/S9=(kills=[72x100],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep3:69: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep3:72: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep3:75: S6/S9=(kills=[359x100],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep3:78: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep3:81: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep3:84: S6/S9=(kills=[360x100],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep3:87: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep3:90: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep4:8: S6/S9=(kills=[none],items=0,Exp=10000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep4:11: S6/S9=(kills=[422x40],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep4:14: S6/S9=(kills=[none],items=0,Exp=0,Zen=100000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep4:17: S6/S9=(kills=[none],items=0,Exp=100000,Zen=200000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep4:26: S6/S9=(kills=[none],items=0,Exp=20000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep4:29: S6/S9=(kills=[41x60],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep4:32: S6/S9=(kills=[none],items=0,Exp=0,Zen=200000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep4:35: S6/S9=(kills=[none],items=0,Exp=400000,Zen=300000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep4:39: S6/S9=(kills=[69x80],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep4:42: S6/S9=(kills=[none],items=0,Exp=800000,Zen=500000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep4:45: S6/S9=(kills=[none],items=0,Exp=1000000,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep4:48: S6/S9=(kills=[57x100],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep4:51: S6/S9=(kills=[none],items=0,Exp=0,Zen=500000,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep4:54: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep4:57: S6/S9=(kills=[61x100],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep4:60: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep4:63: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep4:66: S6/S9=(kills=[454x120],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep4:69: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep4:72: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep4:75: S6/S9=(kills=[445x140],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep4:78: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep4:81: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep5:8: S6/S9=(kills=[none],items=0,Exp=10000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep5:11: S6/S9=(kills=[60x50],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep5:14: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep5:23: S6/S9=(kills=[none],items=0,Exp=20000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep5:26: S6/S9=(kills=[57x70],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep5:29: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep5:33: S6/S9=(kills=[73x90],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep5:36: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep5:39: S6/S9=(kills=[63x30],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep5:42: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=2) | HNMO=missing -> missing in HNMO
+Ep5:45: S6/S9=(kills=[75x130],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep5:48: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=2) | HNMO=missing -> missing in HNMO
+Ep5:51: S6/S9=(kills=[446x150],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep5:54: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=2) | HNMO=missing -> missing in HNMO
+Ep6:4: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=3) | HNMO=missing -> missing in HNMO
+Ep6:7: S6/S9=(kills=[none],items=0,Exp=800000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep6:10: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=4) | HNMO=missing -> missing in HNMO
+Ep6:13: S6/S9=(kills=[none],items=0,Exp=3000000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep6:16: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=4) | HNMO=missing -> missing in HNMO
+Ep6:19: S6/S9=(kills=[none],items=0,Exp=5000000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep6:22: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=4) | HNMO=missing -> missing in HNMO
+Ep6:25: S6/S9=(kills=[none],items=0,Exp=8000000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep6:28: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=4) | HNMO=missing -> missing in HNMO
+Ep6:31: S6/S9=(kills=[none],items=0,Exp=8000000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep6:34: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=3) | HNMO=missing -> missing in HNMO
+Ep6:37: S6/S9=(kills=[none],items=0,Exp=5000000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep7:4: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep7:9: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep7:14: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep7:19: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep8:5: S6/S9=(kills=[none],items=0,Exp=100000,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep8:10: S6/S9=(kills=[586x20],items=0,Exp=100000,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep8:16: S6/S9=(kills=[none],items=0,Exp=100000,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep8:19: S6/S9=(kills=[none],items=0,Exp=100000,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep8:26: S6/S9=(kills=[587x20],items=0,Exp=100000,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep8:29: S6/S9=(kills=[586x30],items=0,Exp=100000,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep8:32: S6/S9=(kills=[587x30],items=0,Exp=100000,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep8:35: S6/S9=(kills=[588x30],items=0,Exp=100000,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep8:38: S6/S9=(kills=[589x30],items=0,Exp=100000,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep8:41: S6/S9=(kills=[590x30],items=0,Exp=100000,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep8:44: S6/S9=(kills=[591x30],items=0,Exp=100000,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep8:47: S6/S9=(kills=[586x50],items=0,Exp=200000,Zen=100000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep8:50: S6/S9=(kills=[587x50],items=0,Exp=200000,Zen=100000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep8:53: S6/S9=(kills=[588x50],items=0,Exp=200000,Zen=100000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep8:56: S6/S9=(kills=[589x50],items=0,Exp=300000,Zen=100000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep8:59: S6/S9=(kills=[590x50],items=0,Exp=300000,Zen=100000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep8:62: S6/S9=(kills=[591x50],items=0,Exp=300000,Zen=100000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep9:1: S6/S9=(kills=[none],items=0,Exp=0,Zen=1000000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep9:4: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep10:1: S6/S9=(kills=[none],items=0,Exp=0,Zen=1000000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep10:4: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep11:1: S6/S9=(kills=[none],items=0,Exp=0,Zen=1000000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep11:4: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep12:1: S6/S9=(kills=[none],items=0,Exp=0,Zen=1000000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep12:4: S6/S9=(kills=[none],items=0,Exp=0,Zen=1000000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep12:7: S6/S9=(kills=[none],items=0,Exp=0,Zen=1000000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep12:10: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep15:3: S6/S9=(kills=[20x50,423x50],Exp=60000,Zen=1500000) | HNMO=(Lv=80-90,kills=[422x50,19x50],Exp=60000,Zen=1500000) -> differs
+Ep15:4: S6/S9=(kills=[19x50,422x50],Exp=60000,Zen=1500000) | HNMO=(Lv=80-90,kills=[423x50,20x50],Exp=60000,Zen=1500000) -> differs
+Ep15:6: S6/S9=(kills=[15x50,5x30],Exp=0,Zen=0) | HNMO=(Lv=91-100,kills=[15x50,5x30],Exp=0,Zen=0) -> same
+Ep15:7: S6/S9=(kills=[17x50,11x30],Exp=0,Zen=0) | HNMO=(Lv=91-100,kills=[17x50,11x30],Exp=0,Zen=0) -> same
+Ep15:8: S6/S9=(kills=[15x50,5x30],Exp=0,Zen=0) | HNMO=(Lv=91-100,kills=[15x50,5x30],Exp=0,Zen=0) -> same
+Ep15:9: S6/S9=(kills=[17x50,11x30],Exp=0,Zen=0) | HNMO=(Lv=91-100,kills=[17x50,11x30],Exp=0,Zen=0) -> same
+Ep15:12: S6/S9=(kills=[5x50,13x30],Exp=0,Zen=0) | HNMO=(Lv=101-110,kills=[5x50,13x30],Exp=0,Zen=0) -> same
+Ep15:13: S6/S9=(kills=[15x50,5x30],Exp=0,Zen=0) | HNMO=(Lv=101-110,kills=[15x50,5x30],Exp=0,Zen=0) -> same
+Ep15:14: S6/S9=(kills=[5x50,13x30],Exp=0,Zen=0) | HNMO=(Lv=101-110,kills=[5x50,13x30],Exp=0,Zen=0) -> same
+Ep15:15: S6/S9=(kills=[15x50,5x30],Exp=0,Zen=0) | HNMO=(Lv=101-110,kills=[15x50,5x30],Exp=0,Zen=0) -> same
+Ep15:18: S6/S9=(kills=[16x50,9x30],Exp=0,Zen=0) | HNMO=(Lv=111-120,kills=[16x50,9x30],Exp=0,Zen=0) -> same
+Ep15:19: S6/S9=(kills=[5x50,13x30],Exp=0,Zen=0) | HNMO=(Lv=111-120,kills=[5x50,13x30],Exp=0,Zen=0) -> same
+Ep15:20: S6/S9=(kills=[16x50,9x30],Exp=0,Zen=0) | HNMO=(Lv=111-120,kills=[16x50,9x30],Exp=0,Zen=0) -> same
+Ep15:21: S6/S9=(kills=[5x50,13x30],Exp=0,Zen=0) | HNMO=(Lv=111-120,kills=[5x50,13x30],Exp=0,Zen=0) -> same
+Ep15:24: S6/S9=(kills=[8x50,10x30],Exp=0,Zen=0) | HNMO=(Lv=121-170,kills=[8x50,10x30],Exp=0,Zen=0) -> same
+Ep15:25: S6/S9=(kills=[13x50,16x30],Exp=0,Zen=0) | HNMO=(Lv=121-170,kills=[13x50,16x30],Exp=0,Zen=0) -> same
+Ep15:26: S6/S9=(kills=[8x50,10x30],Exp=0,Zen=0) | HNMO=(Lv=121-170,kills=[8x50,10x30],Exp=0,Zen=0) -> same
+Ep15:27: S6/S9=(kills=[13x50,16x30],Exp=0,Zen=0) | HNMO=(Lv=121-170,kills=[13x50,16x30],Exp=0,Zen=0) -> same
+Ep15:30: S6/S9=(kills=[10x50,18x10],Exp=0,Zen=0) | HNMO=(Lv=131-190,kills=[10x50,18x10],Exp=0,Zen=0) -> same
+Ep15:31: S6/S9=(kills=[16x50,9x30],Exp=0,Zen=0) | HNMO=(Lv=131-190,kills=[16x50,9x30],Exp=0,Zen=0) -> same
+Ep15:32: S6/S9=(kills=[10x50,18x10],Exp=0,Zen=0) | HNMO=(Lv=131-190,kills=[10x50,18x10],Exp=0,Zen=0) -> same
+Ep15:33: S6/S9=(kills=[16x50,9x30],Exp=0,Zen=0) | HNMO=(Lv=131-190,kills=[16x50,9x30],Exp=0,Zen=0) -> same
+Ep15:36: S6/S9=(kills=[8x50,10x50,18x30],Exp=0,Zen=0) | HNMO=(Lv=141-160,kills=[10x50,18x30],Exp=0,Zen=0) -> differs
+Ep15:37: S6/S9=(kills=[8x50,10x5,18x1],Exp=0,Zen=0) | HNMO=(Lv=141-160,kills=[8x50,10x5,18x1],Exp=0,Zen=0) -> same
+Ep15:38: S6/S9=(kills=[8x50,10x50,18x30],Exp=0,Zen=0) | HNMO=(Lv=141-160,kills=[10x50,18x30],Exp=0,Zen=0) -> differs
+Ep15:39: S6/S9=(kills=[8x50,10x5,18x1],Exp=0,Zen=0) | HNMO=(Lv=141-160,kills=[8x50,10x5,18x1],Exp=0,Zen=0) -> same
+Ep15:42: S6/S9=(kills=[36x50,39x50],Exp=0,Zen=0) | HNMO=(Lv=161-165,kills=[36x50,39x50],Exp=0,Zen=0) -> same
+Ep15:43: S6/S9=(kills=[25x5],Exp=0,Zen=0) | HNMO=(Lv=161-165,kills=[25x5],Exp=0,Zen=0) -> same
+Ep15:44: S6/S9=(kills=[36x50,39x50],Exp=0,Zen=0) | HNMO=(Lv=161-165,kills=[36x50,39x50],Exp=0,Zen=0) -> same
+Ep15:45: S6/S9=(kills=[25x5],Exp=0,Zen=0) | HNMO=(Lv=161-165,kills=[25x5],Exp=0,Zen=0) -> same
+Ep15:48: S6/S9=(kills=[39x50,34x30],Exp=0,Zen=0) | HNMO=(Lv=166-170,kills=[39x50,34x30],Exp=0,Zen=0) -> same
+Ep15:49: S6/S9=(kills=[424x100],Exp=0,Zen=0) | HNMO=(Lv=166-170,kills=[424x100],Exp=0,Zen=0) -> same
+Ep15:50: S6/S9=(kills=[39x50,34x30],Exp=0,Zen=0) | HNMO=(Lv=166-170,kills=[39x50,34x30],Exp=0,Zen=0) -> same
+Ep15:51: S6/S9=(kills=[424x100],Exp=0,Zen=0) | HNMO=(Lv=166-170,kills=[424x100],Exp=0,Zen=0) -> same
+Ep15:54: S6/S9=(kills=[34x50,41x50],Exp=0,Zen=0) | HNMO=(Lv=171-179,kills=[34x50,41x50],Exp=0,Zen=0) -> same
+Ep15:55: S6/S9=(kills=[425x100],Exp=0,Zen=0) | HNMO=(Lv=171-179,kills=[425x100],Exp=0,Zen=0) -> same
+Ep15:56: S6/S9=(kills=[34x50,41x50],Exp=0,Zen=0) | HNMO=(Lv=171-179,kills=[34x50,41x50],Exp=0,Zen=0) -> same
+Ep15:57: S6/S9=(kills=[425x100],Exp=0,Zen=0) | HNMO=(Lv=171-179,kills=[425x100],Exp=0,Zen=0) -> same
+Ep15:60: S6/S9=(kills=[41x100],Exp=0,Zen=0) | HNMO=(Lv=180-185,kills=[41x100],Exp=0,Zen=0) -> same
+Ep15:61: S6/S9=(kills=[36x100],Exp=0,Zen=0) | HNMO=(Lv=180-185,kills=[36x100],Exp=0,Zen=0) -> same
+Ep15:62: S6/S9=(kills=[41x100],Exp=0,Zen=0) | HNMO=(Lv=180-185,kills=[41x100],Exp=0,Zen=0) -> same
+Ep15:63: S6/S9=(kills=[36x100],Exp=0,Zen=0) | HNMO=(Lv=180-185,kills=[36x100],Exp=0,Zen=0) -> same
+Ep15:66: S6/S9=(kills=[41x50,37x30],Exp=0,Zen=0) | HNMO=(Lv=186-189,kills=[41x50,37x30],Exp=0,Zen=0) -> same
+Ep15:67: S6/S9=(kills=[36x50,39x30],Exp=0,Zen=0) | HNMO=(Lv=186-189,kills=[36x50,39x30],Exp=0,Zen=0) -> same
+Ep15:68: S6/S9=(kills=[41x50,37x30],Exp=0,Zen=0) | HNMO=(Lv=186-189,kills=[41x50,37x30],Exp=0,Zen=0) -> same
+Ep15:69: S6/S9=(kills=[36x50,39x30],Exp=0,Zen=0) | HNMO=(Lv=186-189,kills=[36x50,39x30],Exp=0,Zen=0) -> same
+Ep15:72: S6/S9=(kills=[37x100],Exp=0,Zen=0) | HNMO=(Lv=190-193,kills=[37x100],Exp=0,Zen=0) -> same
+Ep15:73: S6/S9=(kills=[39x50,34x30],Exp=0,Zen=0) | HNMO=(Lv=190-193,kills=[39x50,34x30],Exp=0,Zen=0) -> same
+Ep15:74: S6/S9=(kills=[37x100],Exp=0,Zen=0) | HNMO=(Lv=190-193,kills=[37x100],Exp=0,Zen=0) -> same
+Ep15:75: S6/S9=(kills=[39x50,34x30],Exp=0,Zen=0) | HNMO=(Lv=190-193,kills=[39x50,34x30],Exp=0,Zen=0) -> same
+Ep15:78: S6/S9=(kills=[40x100],Exp=0,Zen=0) | HNMO=(Lv=194-197,kills=[40x100],Exp=0,Zen=0) -> same
+Ep15:79: S6/S9=(kills=[34x50,41x50],Exp=0,Zen=0) | HNMO=(Lv=194-197,kills=[34x50,41x50],Exp=0,Zen=0) -> same
+Ep15:80: S6/S9=(kills=[40x100],Exp=0,Zen=0) | HNMO=(Lv=194-197,kills=[40x100],Exp=0,Zen=0) -> same
+Ep15:81: S6/S9=(kills=[34x50,41x50],Exp=0,Zen=0) | HNMO=(Lv=194-197,kills=[34x50,41x50],Exp=0,Zen=0) -> same
+Ep15:84: S6/S9=(kills=[40x50,35x30],Exp=0,Zen=0) | HNMO=(Lv=198-201,kills=[40x50,35x30],Exp=0,Zen=0) -> same
+Ep15:85: S6/S9=(kills=[41x100],Exp=0,Zen=0) | HNMO=(Lv=198-201,kills=[41x100],Exp=0,Zen=0) -> same
+Ep15:86: S6/S9=(kills=[40x50,35x30],Exp=0,Zen=0) | HNMO=(Lv=198-201,kills=[40x50,35x30],Exp=0,Zen=0) -> same
+Ep15:87: S6/S9=(kills=[41x100],Exp=0,Zen=0) | HNMO=(Lv=198-201,kills=[41x100],Exp=0,Zen=0) -> same
+Ep15:90: S6/S9=(kills=[35x50,38x10],Exp=0,Zen=0) | HNMO=(Lv=202-205,kills=[35x50,38x10],Exp=0,Zen=0) -> same
+Ep15:91: S6/S9=(kills=[37x100],Exp=0,Zen=0) | HNMO=(Lv=202-205,kills=[37x100],Exp=0,Zen=0) -> same
+Ep15:92: S6/S9=(kills=[35x50,38x10],Exp=0,Zen=0) | HNMO=(Lv=202-205,kills=[35x50,38x10],Exp=0,Zen=0) -> same
+Ep15:93: S6/S9=(kills=[37x100],Exp=0,Zen=0) | HNMO=(Lv=202-205,kills=[37x100],Exp=0,Zen=0) -> same
+Ep15:96: S6/S9=(kills=[40x50,35x30,38x20],Exp=0,Zen=0) | HNMO=(Lv=206-209,kills=[35x30,38x20],Exp=0,Zen=0) -> differs
+Ep15:97: S6/S9=(kills=[40x100],Exp=0,Zen=0) | HNMO=(Lv=206-209,kills=[40x100],Exp=0,Zen=0) -> same
+Ep15:98: S6/S9=(kills=[40x50,35x30,38x20],Exp=0,Zen=0) | HNMO=(Lv=206-209,kills=[35x30,38x20],Exp=0,Zen=0) -> differs
+Ep15:99: S6/S9=(kills=[40x100],Exp=0,Zen=0) | HNMO=(Lv=206-209,kills=[40x100],Exp=0,Zen=0) -> same
+Ep16:2: S6/S9=(kills=[46x50],items=0,Exp=100000,Zen=0,Contrib=5,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep16:5: S6/S9=(kills=[308x50],items=0,Exp=200000,Zen=0,Contrib=5,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep16:8: S6/S9=(kills=[351x50],items=0,Exp=300000,Zen=0,Contrib=5,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep16:11: S6/S9=(kills=[486x50],items=0,Exp=400000,Zen=0,Contrib=5,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep16:14: S6/S9=(kills=[442x50],items=0,Exp=450000,Zen=0,Contrib=5,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep17:2: S6/S9=(kills=[52x50],items=0,Exp=150000,Zen=0,Contrib=5,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep17:5: S6/S9=(kills=[306x50],items=0,Exp=250000,Zen=0,Contrib=5,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep17:8: S6/S9=(kills=[352x50],items=0,Exp=350000,Zen=0,Contrib=5,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep17:11: S6/S9=(kills=[489x50],items=0,Exp=450000,Zen=0,Contrib=5,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep17:14: S6/S9=(kills=[448x50],items=0,Exp=500000,Zen=0,Contrib=5,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep18:1: S6/S9=(kills=[3x10],Exp=2000,Zen=0) | HNMO=(Lv=1-14,kills=[3x10],Exp=2000,Zen=0) -> same
+Ep18:4: S6/S9=(kills=[7x15],Exp=6000,Zen=0) | HNMO=(Lv=15-25,kills=[7x15],Exp=6000,Zen=0) -> same
+Ep18:5: S6/S9=(kills=[6x15],Exp=6000,Zen=0) | HNMO=(Lv=15-25,kills=[6x15],Exp=6000,Zen=0) -> same
+Ep18:6: S6/S9=(kills=[31x15],Exp=6000,Zen=0) | HNMO=(Lv=15-25,kills=[31x15],Exp=6000,Zen=0) -> same
+Ep18:7: S6/S9=(kills=[421x15],Exp=6000,Zen=0) | HNMO=(Lv=15-25,kills=[419x15],Exp=6000,Zen=0) -> differs
+Ep18:10: S6/S9=(kills=[14x20],Exp=10000,Zen=0) | HNMO=(Lv=26-35,kills=[14x20],Exp=10000,Zen=0) -> same
+Ep18:11: S6/S9=(kills=[7x20],Exp=10000,Zen=0) | HNMO=(Lv=26-35,kills=[7x20],Exp=10000,Zen=0) -> same
+Ep18:12: S6/S9=(kills=[32x20],Exp=10000,Zen=0) | HNMO=(Lv=26-35,kills=[32x20],Exp=10000,Zen=0) -> same
+Ep18:13: S6/S9=(kills=[419x20],Exp=10000,Zen=0) | HNMO=(Lv=26-35,kills=[419x20],Exp=10000,Zen=0) -> same
+Ep18:16: S6/S9=(kills=[22x25],Exp=14000,Zen=0) | HNMO=(Lv=36-45,kills=[22x25],Exp=14000,Zen=0) -> same
+Ep18:17: S6/S9=(kills=[24x25],Exp=14000,Zen=0) | HNMO=(Lv=36-45,kills=[24x25],Exp=14000,Zen=0) -> same
+Ep18:20: S6/S9=(kills=[21x30],Exp=21000,Zen=0) | HNMO=(Lv=46-55,kills=[21x30],Exp=21000,Zen=0) -> same
+Ep18:21: S6/S9=(kills=[22x30],Exp=21000,Zen=0) | HNMO=(Lv=46-55,kills=[22x30],Exp=21000,Zen=0) -> same
+Ep18:24: S6/S9=(kills=[19x30],Exp=28000,Zen=0) | HNMO=(Lv=56-65,kills=[19x30],Exp=28000,Zen=0) -> same
+Ep18:25: S6/S9=(kills=[23x30],Exp=28000,Zen=0) | HNMO=(Lv=56-65,kills=[23x30],Exp=28000,Zen=0) -> same
+Ep18:28: S6/S9=(kills=[17x40],Exp=36000,Zen=0) | HNMO=(Lv=66-79,kills=[17x40],Exp=36000,Zen=0) -> same
+Ep18:29: S6/S9=(kills=[12x40],Exp=36000,Zen=0) | HNMO=(Lv=66-79,kills=[12x40],Exp=36000,Zen=0) -> same
+Ep18:32: S6/S9=(kills=[423x50],Exp=38000,Zen=0) | HNMO=(Lv=80-90,kills=[423x50],Exp=38000,Zen=0) -> same
+Ep18:33: S6/S9=(kills=[422x50],Exp=38000,Zen=0) | HNMO=(Lv=80-90,kills=[422x50],Exp=38000,Zen=0) -> same
+Ep18:36: S6/S9=(kills=[5x50],Exp=43000,Zen=0) | HNMO=(Lv=91-100,kills=[5x50],Exp=43000,Zen=0) -> same
+Ep18:37: S6/S9=(kills=[17x50],Exp=43000,Zen=0) | HNMO=(Lv=91-100,kills=[9x50],Exp=43000,Zen=0) -> differs
+Ep18:40: S6/S9=(kills=[13x50],Exp=50000,Zen=0) | HNMO=(Lv=101-110,kills=[13x50],Exp=50000,Zen=0) -> same
+Ep18:41: S6/S9=(kills=[15x50],Exp=50000,Zen=0) | HNMO=(Lv=101-110,kills=[15x50],Exp=50000,Zen=0) -> same
+Ep18:44: S6/S9=(kills=[9x50],Exp=54000,Zen=0) | HNMO=(Lv=111-120,kills=[9x50],Exp=54000,Zen=0) -> same
+Ep18:45: S6/S9=(kills=[5x50],Exp=54000,Zen=0) | HNMO=(Lv=111-120,kills=[5x50],Exp=54000,Zen=0) -> same
+Ep18:48: S6/S9=(kills=[8x50],Exp=60000,Zen=0) | HNMO=(Lv=121-130,kills=[8x50],Exp=60000,Zen=0) -> same
+Ep18:49: S6/S9=(kills=[13x50],Exp=60000,Zen=0) | HNMO=(Lv=121-130,kills=[13x50],Exp=60000,Zen=0) -> same
+Ep18:52: S6/S9=(kills=[10x50],Exp=66000,Zen=0) | HNMO=(Lv=131-140,kills=[10x50],Exp=66000,Zen=0) -> same
+Ep18:53: S6/S9=(kills=[9x50],Exp=66000,Zen=0) | HNMO=(Lv=131-140,kills=[9x50],Exp=66000,Zen=0) -> same
+Ep18:56: S6/S9=(kills=[18x15],Exp=72000,Zen=0) | HNMO=(Lv=141-160,kills=[18x50],Exp=72000,Zen=0) -> differs
+Ep18:57: S6/S9=(kills=[8x50],Exp=72000,Zen=0) | HNMO=(Lv=141-160,kills=[8x15],Exp=72000,Zen=0) -> differs
+Ep18:60: S6/S9=(kills=[36x50],Exp=80000,Zen=0) | HNMO=(Lv=161-165,kills=[36x50],Exp=80000,Zen=0) -> same
+Ep18:61: S6/S9=(kills=[25x3],Exp=80000,Zen=0) | HNMO=(Lv=161-165,kills=[25x3],Exp=80000,Zen=0) -> same
+Ep18:64: S6/S9=(kills=[39x50],Exp=82000,Zen=0) | HNMO=(Lv=166-170,kills=[39x50],Exp=82000,Zen=0) -> same
+Ep18:65: S6/S9=(kills=[424x50],Exp=82000,Zen=0) | HNMO=(Lv=166-170,kills=[424x50],Exp=82000,Zen=0) -> same
+Ep18:68: S6/S9=(kills=[34x50],Exp=84000,Zen=0) | HNMO=(Lv=171-179,kills=[34x50],Exp=84000,Zen=0) -> same
+Ep18:69: S6/S9=(kills=[425x50],Exp=84000,Zen=0) | HNMO=(Lv=171-179,kills=[425x50],Exp=84000,Zen=0) -> same
+Ep18:72: S6/S9=(kills=[41x50],Exp=95000,Zen=0) | HNMO=(Lv=180-189,kills=[41x50],Exp=95000,Zen=0) -> same
+Ep18:73: S6/S9=(kills=[36x50],Exp=95000,Zen=0) | HNMO=(Lv=180-189,kills=[36x50],Exp=95000,Zen=0) -> same
+Ep18:76: S6/S9=(kills=[37x50],Exp=110000,Zen=0) | HNMO=(Lv=190-199,kills=[37x50],Exp=100000,Zen=0) -> differs
+Ep18:77: S6/S9=(kills=[34x50],Exp=110000,Zen=0) | HNMO=(Lv=190-199,kills=[34x50],Exp=100000,Zen=0) -> differs
+Ep18:80: S6/S9=(kills=[40x50],Exp=120000,Zen=0) | HNMO=(Lv=200-209,kills=[40x50],Exp=115000,Zen=0) -> differs
+Ep18:81: S6/S9=(kills=[41x50],Exp=120000,Zen=0) | HNMO=(Lv=200-209,kills=[41x50],Exp=115000,Zen=0) -> differs
+Ep18:84: S6/S9=(kills=[35x60],Exp=130000,Zen=0) | HNMO=(Lv=210-219,kills=[35x60],Exp=130000,Zen=0) -> same
+Ep18:85: S6/S9=(kills=[37x60],Exp=130000,Zen=0) | HNMO=(Lv=210-219,kills=[37x60],Exp=130000,Zen=0) -> same
+Ep18:88: S6/S9=(kills=[38x15],Exp=160000,Zen=0) | HNMO=(Lv=220-229,kills=[38x15],Exp=140000,Zen=0) -> differs
+Ep18:89: S6/S9=(kills=[40x60],Exp=160000,Zen=0) | HNMO=(Lv=220-229,kills=[40x60],Exp=140000,Zen=0) -> differs
+Ep18:92: S6/S9=(kills=[38x15],Exp=140000,Zen=0) | HNMO=(Lv=220-229,kills=[38x15],Exp=0,Zen=0) -> differs
+Ep18:93: S6/S9=(kills=[40x60],Exp=140000,Zen=0) | HNMO=(Lv=220-229,kills=[40x60],Exp=0,Zen=0) -> differs
+Ep18:96: S6/S9=(kills=[62x60],Exp=170000,Zen=0) | HNMO=(Lv=230-234,kills=[62x60],Exp=150000,Zen=0) -> differs
+Ep18:99: S6/S9=(kills=[62x60],Exp=150000,Zen=0) | HNMO=(Lv=230-234,kills=[62x60],Exp=150000,Zen=0) -> same
+Ep18:102: S6/S9=(kills=[60x60],Exp=180000,Zen=0) | HNMO=(Lv=235-239,kills=[60x60],Exp=0,Zen=0) -> differs
+Ep18:105: S6/S9=(kills=[60x60],Exp=160000,Zen=0) | HNMO=(Lv=235-239,kills=[60x60],Exp=0,Zen=0) -> differs
+Ep18:108: S6/S9=(kills=[57x60],Exp=190000,Zen=0) | HNMO=(Lv=240-244,kills=[57x60],Exp=0,Zen=0) -> differs
+Ep18:111: S6/S9=(kills=[57x60],Exp=170000,Zen=0) | HNMO=(Lv=240-244,kills=[57x60],Exp=170000,Zen=0) -> same
+Ep18:114: S6/S9=(kills=[69x80],Exp=200000,Zen=0) | HNMO=(Lv=245-249,kills=[69x80],Exp=200000,Zen=0) -> same
+Ep18:117: S6/S9=(kills=[69x80],Exp=180000,Zen=0) | HNMO=(Lv=245-249,kills=[69x80],Exp=0,Zen=0) -> differs
+Ep18:120: S6/S9=(kills=[71x80],Exp=210000,Zen=0) | HNMO=(Lv=250-254,kills=[71x80],Exp=190000,Zen=0) -> differs
+Ep18:123: S6/S9=(kills=[71x80],Exp=190000,Zen=0) | HNMO=(Lv=250-254,kills=[71x80],Exp=190000,Zen=0) -> same
+Ep18:126: S6/S9=(kills=[70x80],Exp=220000,Zen=0) | HNMO=(Lv=255-259,kills=[70x80],Exp=0,Zen=0) -> differs
+Ep18:129: S6/S9=(kills=[70x80],Exp=200000,Zen=0) | HNMO=(Lv=255-259,kills=[70x80],Exp=0,Zen=0) -> differs
+Ep19:5: S6/S9=(kills=[57x30],Exp=70000,Zen=0) | HNMO=(Lv=260-289,kills=[57x30],Exp=50000,Zen=0) -> differs
+Ep19:6: S6/S9=(kills=[57x30],Exp=80000,Zen=0) | HNMO=(Lv=260-289,kills=[57x30],Exp=0,Zen=100000) -> differs
+Ep19:7: S6/S9=(kills=[57x30],Exp=90000,Zen=200000) | HNMO=(Lv=260-289,kills=[57x30],Exp=0,Zen=0) -> differs
+Ep19:8: S6/S9=(kills=[57x30],Exp=100000,Zen=0) | HNMO=(Lv=260-289,kills=[57x30],Exp=0,Zen=0) -> differs
+Ep19:9: S6/S9=(kills=[57x30],Exp=110000,Zen=0) | HNMO=(Lv=260-289,kills=[57x30],Exp=0,Zen=0) -> differs
+Ep19:10: S6/S9=(kills=[57x30],Exp=120000,Zen=0) | HNMO=(Lv=260-289,kills=[57x30],Exp=0,Zen=0) -> differs
+Ep19:11: S6/S9=(kills=[57x30],Exp=60000,Zen=0) | HNMO=(Lv=260-289,kills=[57x30],Exp=0,Zen=0) -> differs
+Ep19:12: S6/S9=(kills=[57x30],Exp=50000,Zen=0) | HNMO=(Lv=260-289,kills=[57x30],Exp=0,Zen=200000) -> differs
+Ep19:13: S6/S9=(kills=[62x20,58x20],Exp=50000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20,58x20],Exp=0,Zen=0) -> differs
+Ep19:14: S6/S9=(kills=[62x20,58x20],Exp=60000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20,58x20],Exp=0,Zen=0) -> differs
+Ep19:15: S6/S9=(kills=[62x20,58x20],Exp=70000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20,58x20],Exp=0,Zen=0) -> differs
+Ep19:16: S6/S9=(kills=[62x20,58x20],Exp=80000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20,58x20],Exp=120000,Zen=0) -> differs
+Ep19:17: S6/S9=(kills=[62x20,58x20],Exp=90000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20,58x20],Exp=0,Zen=0) -> differs
+Ep19:18: S6/S9=(kills=[62x20,58x20],Exp=100000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20,58x20],Exp=0,Zen=0) -> differs
+Ep19:19: S6/S9=(kills=[62x20,58x20],Exp=110000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20,58x20],Exp=0,Zen=0) -> differs
+Ep19:20: S6/S9=(kills=[62x20,58x20],Exp=120000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20,58x20],Exp=0,Zen=0) -> differs
+Ep19:21: S6/S9=(kills=[62x20,61x10],Exp=90000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20,61x10],Exp=0,Zen=0) -> differs
+Ep19:22: S6/S9=(kills=[62x20,61x10],Exp=100000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20,61x10],Exp=0,Zen=0) -> differs
+Ep19:23: S6/S9=(kills=[62x20,61x10],Exp=110000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20,61x10],Exp=0,Zen=0) -> differs
+Ep19:24: S6/S9=(kills=[62x20,61x10],Exp=120000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20,61x10],Exp=0,Zen=0) -> differs
+Ep19:25: S6/S9=(kills=[62x20,61x10],Exp=50000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20,61x10],Exp=0,Zen=0) -> differs
+Ep19:26: S6/S9=(kills=[62x20,61x10],Exp=60000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20,61x10],Exp=0,Zen=0) -> differs
+Ep19:27: S6/S9=(kills=[62x20,61x10],Exp=70000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20,61x10],Exp=50000,Zen=0) -> differs
+Ep19:28: S6/S9=(kills=[62x20,61x10],Exp=80000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20,61x10],Exp=0,Zen=0) -> differs
+Ep19:29: S6/S9=(kills=[62x20],Exp=120000,Zen=100000) | HNMO=(Lv=260-289,kills=[62x20],Exp=0,Zen=0) -> differs
+Ep19:30: S6/S9=(kills=[62x20],Exp=110000,Zen=200000) | HNMO=(Lv=260-289,kills=[62x20],Exp=0,Zen=0) -> differs
+Ep19:31: S6/S9=(kills=[62x20],Exp=100000,Zen=200000) | HNMO=(Lv=260-289,kills=[62x20],Exp=0,Zen=0) -> differs
+Ep19:32: S6/S9=(kills=[62x20],Exp=90000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20],Exp=0,Zen=0) -> differs
+Ep19:33: S6/S9=(kills=[62x20],Exp=80000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20],Exp=0,Zen=0) -> differs
+Ep19:34: S6/S9=(kills=[62x20],Exp=70000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20],Exp=0,Zen=0) -> differs
+Ep19:35: S6/S9=(kills=[62x20],Exp=60000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20],Exp=0,Zen=0) -> differs
+Ep19:36: S6/S9=(kills=[62x20],Exp=50000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20],Exp=0,Zen=0) -> differs
+Ep19:37: S6/S9=(kills=[62x20],Exp=110000,Zen=100000) | HNMO=(Lv=260-289,kills=[62x20],Exp=0,Zen=0) -> differs
+Ep19:38: S6/S9=(kills=[62x20],Exp=120000,Zen=200000) | HNMO=(Lv=260-289,kills=[62x20],Exp=0,Zen=0) -> differs
+Ep19:39: S6/S9=(kills=[62x20],Exp=50000,Zen=200000) | HNMO=(Lv=260-289,kills=[62x20],Exp=50000,Zen=0) -> differs
+Ep19:40: S6/S9=(kills=[62x20],Exp=60000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20],Exp=0,Zen=0) -> differs
+Ep19:41: S6/S9=(kills=[62x20],Exp=70000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20],Exp=0,Zen=0) -> differs
+Ep19:42: S6/S9=(kills=[62x20],Exp=80000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20],Exp=0,Zen=0) -> differs
+Ep19:43: S6/S9=(kills=[62x20],Exp=90000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20],Exp=0,Zen=0) -> differs
+Ep19:44: S6/S9=(kills=[62x20],Exp=100000,Zen=0) | HNMO=(Lv=260-289,kills=[62x20],Exp=0,Zen=0) -> differs
+Ep19:50: S6/S9=(kills=[70x30],Exp=70000,Zen=200000) | HNMO=(Lv=290-319,kills=[70x30],Exp=0,Zen=0) -> differs
+Ep19:51: S6/S9=(kills=[70x30],Exp=80000,Zen=100000) | HNMO=(Lv=290-319,kills=[70x30],Exp=0,Zen=0) -> differs
+Ep19:52: S6/S9=(kills=[70x30],Exp=90000,Zen=0) | HNMO=(Lv=290-319,kills=[70x30],Exp=0,Zen=0) -> differs
+Ep19:53: S6/S9=(kills=[70x30],Exp=100000,Zen=0) | HNMO=(Lv=290-319,kills=[70x30],Exp=140000,Zen=0) -> differs
+Ep19:54: S6/S9=(kills=[70x30],Exp=110000,Zen=0) | HNMO=(Lv=290-319,kills=[70x30],Exp=0,Zen=200000) -> differs
+Ep19:55: S6/S9=(kills=[70x30],Exp=120000,Zen=0) | HNMO=(Lv=290-319,kills=[70x30],Exp=0,Zen=0) -> differs
+Ep19:56: S6/S9=(kills=[70x30],Exp=130000,Zen=0) | HNMO=(Lv=290-319,kills=[70x30],Exp=70000,Zen=0) -> differs
+Ep19:57: S6/S9=(kills=[70x30],Exp=140000,Zen=0) | HNMO=(Lv=290-319,kills=[70x30],Exp=0,Zen=0) -> differs
+Ep19:58: S6/S9=(kills=[69x20,73x20],Exp=110000,Zen=200000) | HNMO=(Lv=290-319,kills=[69x20,73x20],Exp=0,Zen=0) -> differs
+Ep19:59: S6/S9=(kills=[69x20,73x20],Exp=120000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20,73x20],Exp=0,Zen=0) -> differs
+Ep19:60: S6/S9=(kills=[69x20,73x20],Exp=130000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20,73x20],Exp=0,Zen=0) -> differs
+Ep19:61: S6/S9=(kills=[69x20,73x20],Exp=140000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20,73x20],Exp=0,Zen=0) -> differs
+Ep19:62: S6/S9=(kills=[69x20,73x20],Exp=70000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20,73x20],Exp=0,Zen=0) -> differs
+Ep19:63: S6/S9=(kills=[69x20,73x20],Exp=80000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20,73x20],Exp=0,Zen=0) -> differs
+Ep19:64: S6/S9=(kills=[69x20,73x20],Exp=90000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20,73x20],Exp=140000,Zen=0) -> differs
+Ep19:65: S6/S9=(kills=[69x20,73x20],Exp=100000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20,73x20],Exp=0,Zen=0) -> differs
+Ep19:66: S6/S9=(kills=[69x20,74x10],Exp=140000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20,74x10],Exp=0,Zen=0) -> differs
+Ep19:67: S6/S9=(kills=[69x20,74x10],Exp=130000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20,74x10],Exp=0,Zen=0) -> differs
+Ep19:68: S6/S9=(kills=[69x20,74x10],Exp=120000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20,74x10],Exp=70000,Zen=0) -> differs
+Ep19:69: S6/S9=(kills=[69x20,74x10],Exp=110000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20,74x10],Exp=0,Zen=200000) -> differs
+Ep19:70: S6/S9=(kills=[69x20,74x10],Exp=100000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20,74x10],Exp=0,Zen=0) -> differs
+Ep19:71: S6/S9=(kills=[69x20,74x10],Exp=90000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20,74x10],Exp=0,Zen=0) -> differs
+Ep19:72: S6/S9=(kills=[69x20,74x10],Exp=80000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20,74x10],Exp=0,Zen=0) -> differs
+Ep19:73: S6/S9=(kills=[69x20,74x10],Exp=70000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20,74x10],Exp=0,Zen=0) -> differs
+Ep19:74: S6/S9=(kills=[69x20],Exp=90000,Zen=200000) | HNMO=(Lv=290-319,kills=[69x20],Exp=0,Zen=0) -> differs
+Ep19:75: S6/S9=(kills=[69x20],Exp=100000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20],Exp=0,Zen=0) -> differs
+Ep19:76: S6/S9=(kills=[69x20],Exp=110000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20],Exp=0,Zen=0) -> differs
+Ep19:77: S6/S9=(kills=[69x20],Exp=120000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20],Exp=0,Zen=0) -> differs
+Ep19:78: S6/S9=(kills=[69x20],Exp=130000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20],Exp=0,Zen=0) -> differs
+Ep19:79: S6/S9=(kills=[69x20],Exp=140000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20],Exp=0,Zen=0) -> differs
+Ep19:80: S6/S9=(kills=[69x20],Exp=70000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20],Exp=140000,Zen=0) -> differs
+Ep19:81: S6/S9=(kills=[69x20],Exp=80000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20],Exp=0,Zen=0) -> differs
+Ep19:82: S6/S9=(kills=[69x20],Exp=130000,Zen=100000) | HNMO=(Lv=290-319,kills=[69x20],Exp=0,Zen=0) -> differs
+Ep19:83: S6/S9=(kills=[69x20],Exp=140000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20],Exp=0,Zen=0) -> differs
+Ep19:84: S6/S9=(kills=[69x20],Exp=70000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20],Exp=0,Zen=200000) -> differs
+Ep19:85: S6/S9=(kills=[69x20],Exp=80000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20],Exp=0,Zen=0) -> differs
+Ep19:86: S6/S9=(kills=[69x20],Exp=90000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20],Exp=0,Zen=0) -> differs
+Ep19:87: S6/S9=(kills=[69x20],Exp=100000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20],Exp=0,Zen=0) -> differs
+Ep19:88: S6/S9=(kills=[69x20],Exp=110000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20],Exp=0,Zen=0) -> differs
+Ep19:89: S6/S9=(kills=[69x20],Exp=120000,Zen=0) | HNMO=(Lv=290-319,kills=[69x20],Exp=0,Zen=0) -> differs
+Ep19:95: S6/S9=(kills=[351x20,353x20],Exp=90000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20,353x20],Exp=0,Zen=0) -> differs
+Ep19:96: S6/S9=(kills=[351x20,353x20],Exp=100000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20,353x20],Exp=0,Zen=0) -> differs
+Ep19:97: S6/S9=(kills=[351x20,353x20],Exp=110000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20,353x20],Exp=90000,Zen=0) -> differs
+Ep19:98: S6/S9=(kills=[351x20,353x20],Exp=120000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20,353x20],Exp=160000,Zen=0) -> differs
+Ep19:99: S6/S9=(kills=[351x20,353x20],Exp=130000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20,353x20],Exp=0,Zen=0) -> differs
+Ep19:100: S6/S9=(kills=[351x20,353x20],Exp=140000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20,353x20],Exp=0,Zen=0) -> differs
+Ep19:101: S6/S9=(kills=[351x20,353x20],Exp=150000,Zen=200000) | HNMO=(Lv=320-349,kills=[351x20,353x20],Exp=0,Zen=0) -> differs
+Ep19:102: S6/S9=(kills=[351x20,353x20],Exp=160000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20,353x20],Exp=0,Zen=0) -> differs
+Ep19:103: S6/S9=(kills=[351x20,354x10],Exp=110000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20,354x10],Exp=0,Zen=0) -> differs
+Ep19:104: S6/S9=(kills=[351x20,354x10],Exp=120000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20,354x10],Exp=0,Zen=0) -> differs
+Ep19:105: S6/S9=(kills=[351x20,354x10],Exp=130000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20,354x10],Exp=0,Zen=0) -> differs
+Ep19:106: S6/S9=(kills=[351x20,354x10],Exp=140000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20,354x10],Exp=0,Zen=0) -> differs
+Ep19:107: S6/S9=(kills=[351x20,354x10],Exp=150000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20,354x10],Exp=0,Zen=0) -> differs
+Ep19:108: S6/S9=(kills=[351x20,354x10],Exp=160000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20,354x10],Exp=0,Zen=0) -> differs
+Ep19:109: S6/S9=(kills=[351x20,354x10],Exp=90000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20,354x10],Exp=0,Zen=0) -> differs
+Ep19:110: S6/S9=(kills=[351x20,354x10],Exp=100000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20,354x10],Exp=0,Zen=0) -> differs
+Ep19:111: S6/S9=(kills=[351x20,355x5],Exp=160000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20,355x5],Exp=0,Zen=0) -> differs
+Ep19:112: S6/S9=(kills=[351x20,355x5],Exp=150000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20,355x5],Exp=0,Zen=0) -> differs
+Ep19:113: S6/S9=(kills=[351x20,355x5],Exp=140000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20,355x5],Exp=160000,Zen=0) -> differs
+Ep19:114: S6/S9=(kills=[351x20,355x5],Exp=130000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20,355x5],Exp=0,Zen=0) -> differs
+Ep19:115: S6/S9=(kills=[351x20,355x5],Exp=120000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20,355x5],Exp=90000,Zen=0) -> differs
+Ep19:116: S6/S9=(kills=[351x20,355x5],Exp=110000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20,355x5],Exp=0,Zen=0) -> differs
+Ep19:117: S6/S9=(kills=[351x20,355x5],Exp=100000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20,355x5],Exp=0,Zen=0) -> differs
+Ep19:118: S6/S9=(kills=[351x20,355x5],Exp=90000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20,355x5],Exp=0,Zen=0) -> differs
+Ep19:119: S6/S9=(kills=[352x30],Exp=100000,Zen=0) | HNMO=(Lv=320-349,kills=[352x30],Exp=0,Zen=0) -> differs
+Ep19:120: S6/S9=(kills=[352x30],Exp=110000,Zen=0) | HNMO=(Lv=320-349,kills=[352x30],Exp=0,Zen=0) -> differs
+Ep19:121: S6/S9=(kills=[352x30],Exp=120000,Zen=0) | HNMO=(Lv=320-349,kills=[352x30],Exp=0,Zen=0) -> differs
+Ep19:122: S6/S9=(kills=[352x30],Exp=130000,Zen=0) | HNMO=(Lv=320-349,kills=[352x30],Exp=0,Zen=0) -> differs
+Ep19:123: S6/S9=(kills=[352x30],Exp=140000,Zen=0) | HNMO=(Lv=320-349,kills=[352x30],Exp=0,Zen=0) -> differs
+Ep19:124: S6/S9=(kills=[352x30],Exp=150000,Zen=0) | HNMO=(Lv=320-349,kills=[352x30],Exp=0,Zen=0) -> differs
+Ep19:125: S6/S9=(kills=[352x30],Exp=160000,Zen=0) | HNMO=(Lv=320-349,kills=[352x30],Exp=0,Zen=0) -> differs
+Ep19:126: S6/S9=(kills=[352x30],Exp=90000,Zen=0) | HNMO=(Lv=320-349,kills=[352x30],Exp=0,Zen=0) -> differs
+Ep19:127: S6/S9=(kills=[351x20],Exp=140000,Zen=200000) | HNMO=(Lv=320-349,kills=[351x20],Exp=0,Zen=0) -> differs
+Ep19:128: S6/S9=(kills=[351x20],Exp=150000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20],Exp=160000,Zen=0) -> differs
+Ep19:129: S6/S9=(kills=[351x20],Exp=160000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20],Exp=90000,Zen=0) -> differs
+Ep19:130: S6/S9=(kills=[351x20],Exp=90000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20],Exp=0,Zen=0) -> differs
+Ep19:131: S6/S9=(kills=[351x20],Exp=100000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20],Exp=0,Zen=0) -> differs
+Ep19:132: S6/S9=(kills=[351x20],Exp=110000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20],Exp=0,Zen=0) -> differs
+Ep19:133: S6/S9=(kills=[351x20],Exp=120000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20],Exp=0,Zen=0) -> differs
+Ep19:134: S6/S9=(kills=[351x20],Exp=130000,Zen=0) | HNMO=(Lv=320-349,kills=[351x20],Exp=0,Zen=0) -> differs
+Ep20:7: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep20:9: S6/S9=(kills=[none],items=0,Exp=5000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep20:12: S6/S9=(kills=[271x30,272x20],items=0,Exp=500000,Zen=0,Contrib=0,RewItems=2) | HNMO=missing -> missing in HNMO
+Ep20:15: S6/S9=(kills=[270x30,268x20],items=0,Exp=500000,Zen=0,Contrib=0,RewItems=4) | HNMO=missing -> missing in HNMO
+Ep20:16: S6/S9=(kills=[none],items=0,Exp=5000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep20:19: S6/S9=(kills=[none],items=0,Exp=0,Zen=1000000,Contrib=0,RewItems=2) | HNMO=missing -> missing in HNMO
+Ep20:22: S6/S9=(kills=[none],items=0,Exp=0,Zen=1000000,Contrib=0,RewItems=4) | HNMO=missing -> missing in HNMO
+Ep20:23: S6/S9=(kills=[none],items=0,Exp=5000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep20:26: S6/S9=(kills=[486x20,487x10],items=0,Exp=0,Zen=0,Contrib=500,RewItems=2) | HNMO=missing -> missing in HNMO
+Ep20:29: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=500,RewItems=4) | HNMO=missing -> missing in HNMO
+Ep20:30: S6/S9=(kills=[none],items=0,Exp=5000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep20:33: S6/S9=(kills=[273x30,269x20],items=0,Exp=500000,Zen=0,Contrib=0,RewItems=2) | HNMO=missing -> missing in HNMO
+Ep20:36: S6/S9=(kills=[274x10,338x1],items=0,Exp=500000,Zen=0,Contrib=0,RewItems=4) | HNMO=missing -> missing in HNMO
+Ep20:37: S6/S9=(kills=[none],items=0,Exp=5000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep20:40: S6/S9=(kills=[none],items=0,Exp=0,Zen=1000000,Contrib=0,RewItems=2) | HNMO=missing -> missing in HNMO
+Ep20:43: S6/S9=(kills=[none],items=0,Exp=0,Zen=1000000,Contrib=0,RewItems=4) | HNMO=missing -> missing in HNMO
+Ep20:44: S6/S9=(kills=[none],items=0,Exp=5000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep20:47: S6/S9=(kills=[481x1,483x1],items=0,Exp=0,Zen=0,Contrib=500,RewItems=2) | HNMO=missing -> missing in HNMO
+Ep20:50: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=500,RewItems=4) | HNMO=missing -> missing in HNMO
+Ep20:51: S6/S9=(kills=[none],items=0,Exp=5000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep20:55: S6/S9=(kills=[506x1,507x1],items=0,Exp=1000000,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep20:58: S6/S9=(kills=[505x1,504x1],items=0,Exp=1000000,Zen=500000,Contrib=0,RewItems=3) | HNMO=missing -> missing in HNMO
+Ep20:60: S6/S9=(kills=[none],items=0,Exp=0,Zen=500000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep20:64: S6/S9=(kills=[none],items=0,Exp=0,Zen=500000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep20:72: S6/S9=(kills=[none],items=0,Exp=0,Zen=0,Contrib=0,RewItems=1) | HNMO=missing -> missing in HNMO
+Ep20:74: S6/S9=(kills=[none],items=0,Exp=5000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep20:77: S6/S9=(kills=[593x30],items=0,Exp=500000,Zen=0,Contrib=0,RewItems=2) | HNMO=missing -> missing in HNMO
+Ep20:78: S6/S9=(kills=[none],items=0,Exp=5000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep20:81: S6/S9=(kills=[592x30],items=0,Exp=500000,Zen=0,Contrib=0,RewItems=2) | HNMO=missing -> missing in HNMO
+Ep20:82: S6/S9=(kills=[none],items=0,Exp=5000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep20:85: S6/S9=(kills=[594x30],items=0,Exp=500000,Zen=0,Contrib=0,RewItems=2) | HNMO=missing -> missing in HNMO
+Ep20:86: S6/S9=(kills=[none],items=0,Exp=5000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep20:89: S6/S9=(kills=[595x30],items=0,Exp=500000,Zen=0,Contrib=0,RewItems=2) | HNMO=missing -> missing in HNMO
+Ep20:90: S6/S9=(kills=[none],items=0,Exp=5000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep20:93: S6/S9=(kills=[596x30],items=0,Exp=500000,Zen=0,Contrib=0,RewItems=2) | HNMO=missing -> missing in HNMO
+Ep20:94: S6/S9=(kills=[none],items=0,Exp=5000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep20:97: S6/S9=(kills=[593x10,594x10,596x10],items=0,Exp=500000,Zen=0,Contrib=0,RewItems=2) | HNMO=missing -> missing in HNMO
+Ep20:98: S6/S9=(kills=[none],items=0,Exp=5000,Zen=0,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep20:101: S6/S9=(kills=[592x10,595x10,596x10],items=0,Exp=500000,Zen=0,Contrib=0,RewItems=2) | HNMO=missing -> missing in HNMO
+Ep20:103: S6/S9=(kills=[none],items=0,Exp=0,Zen=500000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO
+Ep20:107: S6/S9=(kills=[none],items=0,Exp=0,Zen=500000,Contrib=0,RewItems=0) | HNMO=missing -> missing in HNMO

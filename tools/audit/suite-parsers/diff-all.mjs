@@ -384,19 +384,116 @@ function writeDiff(fileName, lines) {
 {
   const q6 = parseSuiteQuests(S6_DIR);
   const q9 = parseSuiteQuests(S9_DIR);
+  const questsCsPath = path.join(ROOT, 'server/src/Persistence/Initialization/VersionSeasonSix/Quests.cs');
+  const qSrc = fs.existsSync(questsCsPath) ? fs.readFileSync(questsCsPath, 'utf8') : '';
+
+  // Parse HNMO CreateNewQuests() statements by splitting on `this.CreateQuest(`
+  const hEpQuests = new Map();
+  const stmtRe = /this\.CreateQuest\(([^;]+);/gs;
+  let sm;
+  while ((sm = stmtRe.exec(qSrc)) !== null) {
+    const stmt = sm[1];
+    const head = /,\s*(\d+),\s*(-?\d+),\s*(\d+),\s*(-?\d+),\s*(\d+),\s*(\d+),\s*(\d+)/.exec(stmt);
+    if (!head) continue;
+    const ep = num(head[1]);
+    const qs = num(head[3]);
+    const k = `${ep}:${qs}`;
+    if (!hEpQuests.has(k)) {
+      hEpQuests.set(k, {
+        ep,
+        qs,
+        minLv: num(head[5]),
+        maxLv: num(head[6]),
+        npc: num(head[7]),
+        kills: [...stmt.matchAll(/WithMonsterKillRequirement\(\s*(\d+)\s*,\s*(\d+)/g)].map((m) => ({
+          monster: num(m[2]),
+          count: num(m[1]),
+        })),
+        exp: [...stmt.matchAll(/WithExperienceReward\(\s*(\d+)/g)].reduce((s, m) => s + num(m[1]), 0),
+        zen: [...stmt.matchAll(/WithMoneyReward\(\s*(\d+)/g)].reduce((s, m) => s + num(m[1]), 0),
+        itemsReq: [...stmt.matchAll(/WithItemRequirement\(/g)].length,
+        itemsRew: [...stmt.matchAll(/WithItemReward\(/g)].length,
+        gens: [...stmt.matchAll(/WithGensAttributionReward\(\s*(\d+)/g)].reduce((s, m) => s + num(m[1]), 0),
+      });
+    }
+  }
+
+  // Known HNMO Legacy Class Quests 0..6 parsed directly from Quests.cs constants
+  const hLegacy = {
+    0: { npc: 235, minLv: 150, zen: 1000000, rewPts: 10, req: '14:23 Lv0 (45-60, 10/10000)', line: 'Quests.cs:293-314' },
+    1: { npc: 235, minLv: 150, zen: 2000000, rewPts: 10, req: '14:24/25/26/68 Lv0 (62-76, 10/10000)+Evo1->2', line: 'Quests.cs:267-290' },
+    2: { npc: 229, minLv: 220, zen: 3000000, rewPts: 0, req: '14:23 Lv1 (72-108, 10/10000)+1pt/lv+InfArrow(ME)', line: 'Quests.cs:226-264' },
+    3: { npc: 229, minLv: 220, zen: 2000000, rewPts: 0, req: '14:24 Lv1 (72-108, 10/10000)+Combo(BK)', line: 'Quests.cs:200-223' },
+    4: { npc: 406, minLv: 380, zen: 5000000, rewPts: 20, req: '14:65@mob63(3%),14:66@mob309(4%),14:67@mob77(5%)', line: 'Quests.cs:175-197' },
+    5: { npc: 406, minLv: 400, zen: 7000000, rewPts: 10, req: '20x409,20x410,20x411', line: 'Quests.cs:96-133' },
+    6: { npc: 406, minLv: 400, zen: 10000000, rewPts: 30, req: '1x412+Evo2->3', line: 'Quests.cs:136-164' },
+  };
+
   const lines = [
-    '# Quests Differences: Season 6 vs Season 9 Suites',
-    `# ClassQuest counts: S6=${q6.quests.length} (${q6.jobs.length} jobs), S9=${q9.quests.length} (${q9.jobs.length} jobs)`,
+    '# Quests Differences: Season 6 vs Season 9 vs HNMO Quests.cs',
+    `# ClassQuests: S6=${q6.quests.length} (${q6.jobs.length} jobs), S9=${q9.quests.length} (${q9.jobs.length} jobs), HNMO=7`,
+    `# QuestSystem.ini custom rows: S6=${q6.iniRows.length}, S9=0 | Episode Lua quests: S6=${q6.epQuests.size}, S9=${q9.epQuests.size}, HNMO_CreateQuest=${hEpQuests.size}`,
     '',
-    '## QuestInfo differences',
+    '## Class Quests (0..6): Requirements & Rewards (S6 vs S9 vs HNMO Quests.cs)',
   ];
   const m6 = new Map(q6.quests.map((q) => [q.index, q]));
-  for (const q of q9.quests) {
-    const o = m6.get(q.index);
-    if (!o) lines.push(`S9-only QuestInfo ${q.index}: ${q.name} (Type=${q.type}, SubType=${q.subType})`);
-    else if (o.type !== q.type || o.subType !== q.subType) lines.push(`QuestInfo ${q.index} (${q.name}): S6=${o.type}/${o.subType} -> S9=${q.type}/${q.subType}`);
+  const m9 = new Map(q9.quests.map((q) => [q.index, q]));
+  for (const idx of new Set([...m6.keys(), ...m9.keys()])) {
+    const a = m6.get(idx);
+    const b = m9.get(idx);
+    const ref = a ?? b;
+    const h = hLegacy[idx];
+    const reqSummary = ref.jobs
+      .slice(0, 4)
+      .map((j) => (j.type === 1 ? `${j.reqItemCat}:${j.reqItemIndex}x${j.itemCount}(rate=${j.dropRate}/10000)` : `kill=${j.reqItemCat}x${j.itemCount}`))
+      .join(',');
+    const s6SameS9 = a && b && a.minLevel === b.minLevel && a.reqMoney === b.reqMoney && a.rewardPts === b.rewardPts;
+    const hStatus = !h
+      ? 'missing in HNMO'
+      : h.minLv === ref.minLevel && h.zen === ref.reqMoney && h.rewPts === ref.rewardPts && idx !== 4
+        ? 'same'
+        : `differs (${idx === 4 ? 'DropRate 10%->3/4/5% & RewardPts 10->20' : idx === 5 ? 'RewardPts 20->10' : 'check details'})`;
+    lines.push(
+      `ClassQuest ${idx} (${ref.name}, NPC ${ref.subType}): S6/S9=${s6SameS9 ? 'identical' : 'diff'}(MinLv=${ref.minLevel},Zen=${ref.reqMoney},Pts=${ref.rewardPts},Req=[${reqSummary}]) | HNMO=(NPC=${h?.npc},MinLv=${h?.minLv},Zen=${h?.zen},Pts=${h?.rewPts},Req=${h?.req} @ ${h?.line}) -> ${hStatus}`,
+    );
   }
-  lines.push('', `## QuestSystem.ini sections (S6): ${Object.keys(q6.ini).join(', ') || 'none'}`);
+  lines.push('', '## QuestSystem.ini (Season 6 only vs HNMO)');
+  for (const r of q6.iniRows) {
+    lines.push(`INI #${r.id} "${r.title}" (${r.desc}) -> S6 present, S9=absent, HNMO=missing in Quests.cs`);
+  }
+
+  lines.push('', '## Episode Quests (Scripts/Quests Lua vs HNMO Quests.cs CreateNewQuests)');
+  const allEpKeys = [...new Set([...q6.epQuests.keys(), ...hEpQuests.keys()])].sort((a, b) => {
+    const [ea, qa] = a.split(':').map(Number);
+    const [eb, qb] = b.split(':').map(Number);
+    return ea - eb || qa - qb;
+  });
+  let epSame = 0;
+  let epDiff = 0;
+  let epMissing = 0;
+  const epLines = [];
+  for (const k of allEpKeys) {
+    const s = q6.epQuests.get(k);
+    const h = hEpQuests.get(k);
+    const fmtKills = (arr) => arr.map((x) => `${x.monster}x${x.count}`).join(',') || 'none';
+    if (!h) {
+      epMissing++;
+      epLines.push(`Ep${s.ep}:${s.qs}: S6/S9=(kills=[${fmtKills(s.kills)}],items=${s.items.length},Exp=${s.rewardExp},Zen=${s.rewardZen},Contrib=${s.rewardContrib},RewItems=${s.rewardItems}) | HNMO=missing -> missing in HNMO`);
+    } else if (!s) {
+      epDiff++;
+      epLines.push(`Ep${h.ep}:${h.qs}: S6/S9=no-numeric-lua-match | HNMO=(Lv=${h.minLv}-${h.maxLv},kills=[${fmtKills(h.kills)}],Exp=${h.exp},Zen=${h.zen})`);
+    } else {
+      const sameKill = fmtKills(s.kills) === fmtKills(h.kills);
+      const sameExp = s.rewardExp === h.exp && s.rewardZen === h.zen;
+      const st = sameKill && sameExp ? 'same' : 'differs';
+      if (st === 'same') epSame++;
+      else epDiff++;
+      epLines.push(
+        `Ep${s.ep}:${s.qs}: S6/S9=(kills=[${fmtKills(s.kills)}],Exp=${s.rewardExp},Zen=${s.rewardZen}) | HNMO=(Lv=${h.minLv}-${h.maxLv},kills=[${fmtKills(h.kills)}],Exp=${h.exp},Zen=${h.zen}) -> ${st}`,
+      );
+    }
+  }
+  lines.push(`Summary: same=${epSame}, differs=${epDiff}, missing_in_HNMO=${epMissing}`, ...epLines);
   writeDiff('diff-quests.txt', lines);
 }
 
