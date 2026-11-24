@@ -1,5 +1,5 @@
 {
-  "generatedAt": "a23981a3",
+  "generatedAt": "e7d4a55b",
   "maxLines": 6000,
   "units": [
     {
@@ -5054,11 +5054,16 @@
       ],
       "files": 13,
       "lines": 5968,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "e7d4a55b",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "crywolf.ts:19-61",
+        "combat.ts:28-30",
+        "duel.ts:276",
+        "docs/audit/findings/unit-client-web-src-game-files-2.md"
+      ],
+      "evidence": "13f/5968L: Crywolf map 34, >350 Elf altar contract, 10% monster reduction & 5% mix reduction match desktop GMCrywolf1st; combat/duel packet flags match.",
       "prs": ""
     },
     {
