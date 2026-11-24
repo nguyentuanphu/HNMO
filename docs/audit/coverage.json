@@ -1,5 +1,5 @@
 {
-  "generatedAt": "96a69cae",
+  "generatedAt": "99ed4835",
   "maxLines": 6000,
   "units": [
     {
@@ -39,11 +39,11 @@
       ],
       "files": 30,
       "lines": 5412,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "99ed4835",
+      "checkedOn": "2026-11-24",
+      "references": "docs/audit/references/combat-drops-exp-s6-s9.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-files-1.md",
       "prs": ""
     },
     {
