@@ -83,6 +83,12 @@ export class WeaponTrails implements EffectLayer {
 
   constructor(private readonly characters: () => Iterable<Character>) {}
 
+  private readonly scratchP1 = new THREE.Vector3();
+  private readonly scratchP2 = new THREE.Vector3();
+  private readonly scratchLight = new THREE.Vector3();
+  private readonly scratchCorners = [new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()];
+  private readonly scratchUs = [0, 0, 0, 0];
+
   /** MoveBlurs: once per tick the samples age. */
   tick(): void {
     for (const blur of this.blurs) {
@@ -90,8 +96,8 @@ export class WeaponTrails implements EffectLayer {
       blur.lifeTime--;
       blur.number = Math.max(blur.number - 1, 0);
       for (let i = blur.number - 1; i >= 0; i--) {
-        blur.p1[i + 1] = blur.p1[i].clone();
-        blur.p2[i + 1] = blur.p2[i].clone();
+        (blur.p1[i + 1] ??= new THREE.Vector3()).copy(blur.p1[i]);
+        (blur.p2[i + 1] ??= new THREE.Vector3()).copy(blur.p2[i]);
       }
       if (blur.lifeTime <= 0) blur.number = Math.max(blur.number - 1, 0);
     }
@@ -122,9 +128,9 @@ export class WeaponTrails implements EffectLayer {
         computeBoneMatrices(skeleton, action, Math.max(0, frame), matrices);
         const m = matrices[bone];
         if (m) {
-          const p1 = this.p1Offset.clone().applyMatrix4(m).applyMatrix4(character.group.matrix);
-          const p2 = this.p2Offset.clone().applyMatrix4(m).applyMatrix4(character.group.matrix);
-          this.add(character, p1, p2, light, mapping);
+          this.scratchP1.copy(this.p1Offset).applyMatrix4(m).applyMatrix4(character.group.matrix);
+          this.scratchP2.copy(this.p2Offset).applyMatrix4(m).applyMatrix4(character.group.matrix);
+          this.add(character, this.scratchP1, this.scratchP2, light, mapping);
         }
         frame += slice / SAMPLES;
       }
@@ -143,19 +149,19 @@ export class WeaponTrails implements EffectLayer {
     if (blur.frame !== this.frameCount) {
       const replaced = blur.frameSamples;
       for (let i = 0; i + replaced < blur.number; i++) {
-        blur.p1[i] = blur.p1[i + replaced];
-        blur.p2[i] = blur.p2[i + replaced];
+        (blur.p1[i] ??= new THREE.Vector3()).copy(blur.p1[i + replaced]);
+        (blur.p2[i] ??= new THREE.Vector3()).copy(blur.p2[i + replaced]);
       }
       blur.number -= replaced;
       blur.frame = this.frameCount;
       blur.frameSamples = 0;
     }
     for (let i = blur.number - 1; i >= 0; i--) {
-      blur.p1[i + 1] = blur.p1[i];
-      blur.p2[i + 1] = blur.p2[i];
+      (blur.p1[i + 1] ??= new THREE.Vector3()).copy(blur.p1[i]);
+      (blur.p2[i + 1] ??= new THREE.Vector3()).copy(blur.p2[i]);
     }
-    blur.p1[0] = p1;
-    blur.p2[0] = p2;
+    (blur.p1[0] ??= new THREE.Vector3()).copy(p1);
+    (blur.p2[0] ??= new THREE.Vector3()).copy(p2);
     blur.number = Math.min(blur.number + 1, MAX_TAILS - 1);
     blur.frameSamples = Math.min(blur.frameSamples + 1, blur.number);
   }
@@ -169,8 +175,13 @@ export class WeaponTrails implements EffectLayer {
         const l1 = (blur.number - j) / blur.number, l2 = (blur.number - (j + 1)) / blur.number;
         const u1 = j / blur.number, u2 = (j + 1) / blur.number;
         // The two samples' lights differ; the quad takes their mean (the batches colour per quad).
-        const light = blur.light.clone().multiplyScalar((l1 + l2) / 2);
-        quads.quad(texture, 'glow', [blur.p1[j], blur.p2[j], blur.p2[j + 1], blur.p1[j + 1]], [u1, u1, u2, u2], [1, 0, 0, 1], light);
+        this.scratchLight.copy(blur.light).multiplyScalar((l1 + l2) / 2);
+        this.scratchCorners[0].copy(blur.p1[j]);
+        this.scratchCorners[1].copy(blur.p2[j]);
+        this.scratchCorners[2].copy(blur.p2[j + 1]);
+        this.scratchCorners[3].copy(blur.p1[j + 1]);
+        this.scratchUs[0] = u1; this.scratchUs[1] = u1; this.scratchUs[2] = u2; this.scratchUs[3] = u2;
+        quads.quad(texture, 'glow', this.scratchCorners, this.scratchUs, [1, 0, 0, 1], this.scratchLight);
       }
     }
   }

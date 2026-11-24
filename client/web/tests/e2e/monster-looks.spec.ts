@@ -17,8 +17,8 @@ interface AuditRow {
 const SHOTS_DIR = process.env.SHOTS_DIR ?? 'test-results/monster-looks';
 /** The entries the data gives no model (docs/monster-data.md, Unknown monsters) and Molt, whose file is missing. */
 const UNKNOWN_LOOKS: Record<number, string> = { 76: 'noModel', 252: 'noModel', 296: 'noModel', 585: 'noModel', 68: 'missingFile' };
-/** Models whose data names textures their folders lack (the same files on the desktop): Life Stone, Selupan, Jeweler Raul. */
-const KNOWN_UNTEXTURED = [278, 459, 546];
+/** Previously untextured base models now resolve all textures across their configured textureFolders. */
+const KNOWN_UNTEXTURED: number[] = [];
 /** Player-shaped transformation looks: their skin is drawn for a (transformed) player only, so as monsters they show no body. */
 const PLAYER_ONLY_LOOKS = [372, 373, 374, 378, 404, 405, 503, 548];
 /**

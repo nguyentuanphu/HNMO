@@ -162,7 +162,9 @@ async function buildEffectModel(dir: string, file: string, blendMesh: number, re
     material.transparent = true;
     return material;
   }));
-  return new AnimatedModel(model, parts, materials);
+  const modelInstance = new AnimatedModel(model, parts, materials);
+  modelInstance.group.userData.lastPoseFrame = 0;
+  return modelInstance;
 }
 
 /** An effect is done with its model: it goes back to the pool (or is freed when the pool is full). */
@@ -1509,13 +1511,16 @@ export class EffectSystem {
     await preloadEffectTextures(Object.keys(BITMAPS) as BitmapName[]);
     const batches = new THREE.Group();
     for (const name of Object.keys(BITMAPS) as BitmapName[]) {
-      for (const blend of (name === 'advSmoke2' ? ['blend3'] : ['glow', 'alpha', 'subtract']) as Blend[]) {
+      const blends: Blend[] = name === 'advSmoke2' ? ['blend3'] : ['glow', 'alpha', 'subtract', 'blend2'];
+      for (const blend of blends) {
         const mesh = this.quads.prepare(name, blend);
         if (mesh) batches.add(new THREE.Mesh(PREWARM_QUAD, mesh.material));
       }
     }
     if (!stillWanted()) return 0;
     await warm(batches);
+    // Also warm the dark-subtractive laser variant so first Monster/Rageful dark-beam doesn't recompile mid-frame.
+    files.set(modelPoolKey('Effect', 'laser01.bmd', 0, 'dark'), ['Effect', 'laser01.bmd', 0, 'dark', undefined]);
     let count = 0;
     for (const [key, [dir, file, blend, renderType, skin]] of files) {
       if (!stillWanted()) break;
@@ -1525,6 +1530,8 @@ export class EffectSystem {
       await warm(animated.group);
       releaseEffectModel(key, animated);
       count++;
+      // Yield every 4 warmed models so background prewarming never starves frame rendering.
+      if (count % 4 === 0) await new Promise((resolve) => setTimeout(resolve, 0));
     }
     return count;
   }
@@ -1532,7 +1539,14 @@ export class EffectSystem {
   private destroyEffect(o: Effect): void {
     o.live = false;
     if (o.extra) {
-      o.extra.removeFromParent();
+      if (typeof o.extra.userData.release === 'function') {
+        (o.extra.userData.release as () => void)();
+      } else {
+        o.extra.removeFromParent();
+        o.extra.traverse((node) => {
+          if (node instanceof THREE.Mesh && node.material instanceof THREE.Material) node.material.dispose();
+        });
+      }
       o.extra = null;
     }
     const model = o.model;
@@ -1982,7 +1996,12 @@ export class EffectSystem {
     model.group.position.copy(o.position);
     angleEuler(o.angle, model.group.rotation);
     model.group.scale.setScalar(o.scale);
-    model.pose(0, o.animationFrame);
+    const numKeys = model.skeleton.actions[0]?.numKeys ?? 0;
+    const poseFrame = numKeys <= 1 ? 0 : o.animationFrame;
+    if (model.group.userData.lastPoseFrame !== poseFrame) {
+      model.pose(0, poseFrame);
+      model.group.userData.lastPoseFrame = poseFrame;
+    }
     const paint = EXTRA_EFFECTS[o.type]?.paint;
     for (const part of model.parts) {
       const material = part.mesh.material;

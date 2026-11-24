@@ -32,10 +32,16 @@
     { "name": { "en": "White Goat" }, "kind": "monster", "model": "MONSTER_MODEL_S9_GOAT_WHITE", "numbers": [{ "number": 727 }] },
     { "name": { "en": "Purple Goat" }, "kind": "monster", "model": "MONSTER_MODEL_S9_GOAT_PURPLE", "numbers": [{ "number": 728 }] },
     { "name": { "en": "Red Goat" }, "kind": "monster", "model": "MONSTER_MODEL_S9_GOAT_RED", "numbers": [{ "number": 729 }] },
+    { "name": { "en": "Captain Slough" }, "kind": "npc", "model": "MODEL_S9_CAPTAIN_SLOUGH", "numbers": [{ "number": 580, "maps": [3] }] },
+    { "name": { "en": "Deruvish" }, "kind": "npc", "model": "MODEL_S9_DERUVISH", "numbers": [{ "number": 581, "maps": [91] }] },
     { "name": { "en": "Element Master Adniel" }, "kind": "npc", "model": "MODEL_S9_ADNIEL", "numbers": [{ "number": 582, "maps": [91] }] },
+    { "name": { "en": "Jin" }, "kind": "npc", "model": "MODEL_S9_JIN", "numbers": [{ "number": 583, "maps": [91] }, { "number": 604, "maps": [91] }] },
+    { "name": { "en": "Sir Lesnar" }, "kind": "npc", "model": "MODEL_S9_SIR_LESNAR", "numbers": [{ "number": 584, "maps": [0, 2, 3] }] },
+    { "name": { "en": "Mait" }, "kind": "npc", "model": "MODEL_S9_MAIT", "numbers": [{ "number": 643, "maps": [79] }] },
     { "name": { "en": "Private Store Bulletin Board" }, "kind": "npc", "model": "MODEL_S9_PERSONAL_SHOP_BOARD", "numbers": [{ "number": 651, "maps": [79] }] },
     { "name": { "en": "Ellin" }, "kind": "npc", "model": "MODEL_S9_ELLIN", "numbers": [{ "number": 669, "maps": [79] }] },
-    { "name": { "en": "Monica" }, "kind": "npc", "model": "MODEL_S9_MONICA", "numbers": [{ "number": 682, "maps": [51] }] }
+    { "name": { "en": "Monica" }, "kind": "npc", "model": "MODEL_S9_MONICA", "numbers": [{ "number": 682, "maps": [51] }] },
+    { "name": { "en": "Flame Trap" }, "kind": "monster", "model": "MONSTER_MODEL_S9_FLAME_TRAP", "numbers": [{ "number": 689, "maps": [100] }] }
   ],
   "models": [
     { "slot": "MONSTER_MODEL_S9_DEVIL_FAIRY", "file": "Data/s9/Monster/Monster218.bmd", "textureFolders": ["s9/Monster"] },
@@ -69,9 +75,15 @@
     { "slot": "MONSTER_MODEL_S9_GOAT_WHITE", "file": "Data/s9/Monster/Monster279.bmd", "textureFolders": ["s9/Monster"] },
     { "slot": "MONSTER_MODEL_S9_GOAT_PURPLE", "file": "Data/s9/Monster/Monster280.bmd", "textureFolders": ["s9/Monster"] },
     { "slot": "MONSTER_MODEL_S9_GOAT_RED", "file": "Data/s9/Monster/Monster281.bmd", "textureFolders": ["s9/Monster"] },
+    { "slot": "MODEL_S9_CAPTAIN_SLOUGH", "file": "Data/s9/NPC/Akeron/slope.bmd", "textureFolders": ["s9/NPC/Akeron"] },
+    { "slot": "MODEL_S9_DERUVISH", "file": "Data/s9/NPC/Akeron/deruvish.bmd", "textureFolders": ["s9/NPC/Akeron"] },
     { "slot": "MODEL_S9_ADNIEL", "file": "Data/s9/NPC/adniel.bmd", "textureFolders": ["s9/NPC"] },
+    { "slot": "MODEL_S9_JIN", "file": "Data/s9/NPC/Akeron/jinn.bmd", "textureFolders": ["s9/NPC/Akeron"] },
+    { "slot": "MODEL_S9_SIR_LESNAR", "file": "Data/s9/NPC/Akeron/lesnar.bmd", "textureFolders": ["s9/NPC/Akeron"] },
+    { "slot": "MODEL_S9_MAIT", "file": "Data/s9/NPC/chaos_npc.bmd", "textureFolders": ["s9/NPC"] },
     { "slot": "MODEL_S9_PERSONAL_SHOP_BOARD", "file": "Data/s9/NPC/so_pershop.bmd", "textureFolders": ["s9/NPC"] },
     { "slot": "MODEL_S9_ELLIN", "file": "Data/s9/NPC/NpcElin.bmd", "textureFolders": ["s9/NPC"] },
-    { "slot": "MODEL_S9_MONICA", "file": "Data/s9/NPC/monicaNPC.bmd", "textureFolders": ["s9/NPC"] }
+    { "slot": "MODEL_S9_MONICA", "file": "Data/s9/NPC/monicaNPC.bmd", "textureFolders": ["s9/NPC"] },
+    { "slot": "MONSTER_MODEL_S9_FLAME_TRAP", "file": "Data/s9/NPC/c_mon.bmd", "textureFolders": ["s9/NPC"] }
   ]
 }

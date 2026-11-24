@@ -89,15 +89,40 @@ interface TextureKind {
   hidden: boolean;
 }
 
-function textureKind(name: string): TextureKind {
+// TextureScriptParsing::parsingTScriptA: reads up to 4 flag characters after '_' up to '.' ([RHSN] or DC/DT),
+// aborting (clearing all flags) if any unexpected character appears.
+export function textureKind(name: string): TextureKind {
   const lower = name.toLowerCase();
+  const isTga = lower.endsWith('.tga');
   const underscore = name.indexOf('_');
-  const script = underscore < 0 ? '' : name.slice(underscore + 1, underscore + 5).split('.')[0];
+  if (underscore < 0) return { isTga, additive: false, hidden: false };
+  const after = name.slice(underscore + 1);
+  const dot = after.indexOf('.');
+  const script = dot >= 0 ? after.slice(0, dot) : after;
+  const len = Math.min(script.length, 4);
+  if (len === 0) return { isTga, additive: false, hidden: false };
+  let bright = false;
+  let hidden = false;
+  let noneBlend = false;
+  for (let i = 0; i < len; i++) {
+    const ch = script[i];
+    if (ch === 'R') {
+      bright = true;
+    } else if (ch === 'H') {
+      hidden = true;
+    } else if (ch === 'S' || ch === 'N') {
+      if (ch === 'N') noneBlend = true;
+    } else if (ch === 'D' && i + 1 < len && (script[i + 1] === 'C' || script[i + 1] === 'T')) {
+      i++;
+    } else {
+      return { isTga, additive: false, hidden: false };
+    }
+  }
   const isHair = lower.startsWith('hair');
   return {
-    isTga: lower.endsWith('.tga'),
-    additive: script.includes('R') && !script.includes('N') && !isHair,
-    hidden: script.includes('H'),
+    isTga,
+    additive: bright && !noneBlend && !isHair,
+    hidden,
   };
 }
 
@@ -237,6 +262,7 @@ export function computeBoneMatrices(model: BMDModel, actionIndex: number, time: 
   const k1 = (k0 + 1) % numKeys;
   const t = time - Math.floor(time);
   const matrices = out || model.bones.map(() => new THREE.Matrix4());
+  const resolved = new Uint8Array(model.bones.length);
   model.bones.forEach((bone, index) => {
     const local = matrices[index];
     if (bone.dummy || !bone.frames[action] || bone.frames[action].positions.length === 0) {
@@ -252,8 +278,18 @@ export function computeBoneMatrices(model: BMDModel, actionIndex: number, time: 
       if (index === 0 && locked) tmpPos.set(frames.positions[0], frames.positions[1], tmpPos.z);
       local.compose(tmpPos, tmpQuatA, unitScale);
     }
-    if (bone.parent >= 0 && bone.parent < index) local.premultiply(matrices[bone.parent]);
   });
+  const resolveBone = (index: number): void => {
+    if (resolved[index] !== 0) return;
+    resolved[index] = 1; // guard against cyclic parent chains
+    const parent = model.bones[index].parent;
+    if (parent >= 0 && parent < model.bones.length && parent !== index) {
+      if (resolved[parent] === 0) resolveBone(parent);
+      if (resolved[parent] === 2) matrices[index].premultiply(matrices[parent]);
+    }
+    resolved[index] = 2;
+  };
+  for (let i = 0; i < model.bones.length; i++) resolveBone(i);
   return matrices;
 }
 

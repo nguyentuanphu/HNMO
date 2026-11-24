@@ -43,6 +43,11 @@ interface Batch {
 const INITIAL_QUADS = 64;
 const DECAL_LIFT = 1;
 const TERRAIN_SCALE = 100;
+const c0 = new THREE.Vector3();
+const c1 = new THREE.Vector3();
+const c2 = new THREE.Vector3();
+const c3 = new THREE.Vector3();
+const quadCorners = [c0, c1, c2, c3];
 
 /** The ground height under a point. */
 export type HeightAt = (x: number, y: number) => number;
@@ -53,7 +58,6 @@ export class QuadBatches {
   /** The camera's right and up axes in the effect root's (world units) space, set by beginFrame. */
   private readonly right = new THREE.Vector3(1, 0, 0);
   private readonly up = new THREE.Vector3(0, 0, 1);
-  private readonly corner = new THREE.Vector3();
 
   constructor(root: THREE.Object3D) {
     this.root = root;
@@ -122,12 +126,11 @@ export class QuadBatches {
     // Corners as in RenderSprite: p[0] bottom left ... p[3] top left; v grows downwards.
     const dx = [-w, w, w, -w], dy = [-h, -h, h, h];
     const cu = [u, u + uWidth, u + uWidth, u], cv = [v + vHeight, v + vHeight, v, v];
-    const points: THREE.Vector3[] = [];
     for (let i = 0; i < 4; i++) {
       const x = dx[i] * cos - dy[i] * sin, y = dx[i] * sin + dy[i] * cos;
-      points.push(this.corner.copy(position).addScaledVector(this.right, x).addScaledVector(this.up, y).clone());
+      quadCorners[i].copy(position).addScaledVector(this.right, x).addScaledVector(this.up, y);
     }
-    this.pushQuad(batch, points, cu, cv, light);
+    this.pushQuad(batch, quadCorners, cu, cv, light);
   }
 
   /** One textured quad with its four corners and texture coordinates (a joint face). */
@@ -147,15 +150,24 @@ export class QuadBatches {
     const radians = rotation * Math.PI / 180;
     const cos = Math.cos(radians), sin = Math.sin(radians);
     const world = size * TERRAIN_SCALE;
-    const at = (i: number, j: number): THREE.Vector3 => {
+    const setCorner = (out: THREE.Vector3, i: number, j: number): void => {
       const a = (i / grid - 0.5) * world, b = (j / grid - 0.5) * world;
       const px = x + a * cos - b * sin, py = y + a * sin + b * cos;
-      return new THREE.Vector3(px, py, (heightAt ? heightAt(px, py) : groundZ) + DECAL_LIFT);
+      out.set(px, py, (heightAt ? heightAt(px, py) : groundZ) + DECAL_LIFT);
     };
+    const us = [0, 0, 0, 0];
+    const vs = [0, 0, 0, 0];
     for (let j = 0; j < grid; j++) {
+      const v0 = j / grid, v1 = (j + 1) / grid;
+      vs[0] = v0; vs[1] = v0; vs[2] = v1; vs[3] = v1;
       for (let i = 0; i < grid; i++) {
-        this.pushQuad(batch, [at(i, j), at(i + 1, j), at(i + 1, j + 1), at(i, j + 1)],
-          [i / grid, (i + 1) / grid, (i + 1) / grid, i / grid], [j / grid, j / grid, (j + 1) / grid, (j + 1) / grid], light);
+        const u0 = i / grid, u1 = (i + 1) / grid;
+        us[0] = u0; us[1] = u1; us[2] = u1; us[3] = u0;
+        setCorner(c0, i, j);
+        setCorner(c1, i + 1, j);
+        setCorner(c2, i + 1, j + 1);
+        setCorner(c3, i, j + 1);
+        this.pushQuad(batch, quadCorners, us, vs, light);
       }
     }
   }
