@@ -32,6 +32,18 @@ public static class WebsiteServerGuideProjection
     /// <param name="inventory">The active inventory extension delivery configuration, if any.</param>
     /// <returns>An allowlisted public view.</returns>
     public static object Build(GameConfiguration configuration, MuHelperConfiguration? helper, VipConfiguration? vip, MultiVaultConfiguration? vault, RateTuningConfiguration? rates, InventoryExtensionDeliveryConfiguration? inventory)
+        => Build(configuration, helper, vip, vault, rates, null, inventory);
+
+    /// <summary>Projects public server facts with the running shop's delivery check.</summary>
+    /// <param name="configuration">The running server configuration.</param>
+    /// <param name="helper">The active helper configuration, if any.</param>
+    /// <param name="vip">The active VIP configuration, if any.</param>
+    /// <param name="vault">The active multi-vault configuration, if any.</param>
+    /// <param name="rates">The active rate tuning configuration, if any.</param>
+    /// <param name="canDeliverShopProduct">The running shop's delivery check when available.</param>
+    /// <param name="inventory">The active inventory extension delivery configuration, if any.</param>
+    /// <returns>An allowlisted public view.</returns>
+    public static object Build(GameConfiguration configuration, MuHelperConfiguration? helper, VipConfiguration? vip, MultiVaultConfiguration? vault, RateTuningConfiguration? rates, Func<CashShopProduct, bool>? canDeliverShopProduct, InventoryExtensionDeliveryConfiguration? inventory)
         => new
         {
             configuration.MaximumInventoryMoney,
@@ -42,8 +54,40 @@ public static class WebsiteServerGuideProjection
             vault = vault is { Enabled: true } ? new { vault.DefaultVaultCount, vault.MaxVaultsPerAccount, vault.VipExtraVaults, vault.PurchaseExtraVaultCost, purchaseCoinType = vault.PurchaseCoinType.ToString() } : null,
             partyExperience = PartyBonuses(configuration.MaximumPartySize, rates),
             vip = VipOffers(vip),
-            catalog = Catalog(configuration),
+            catalog = Catalog(configuration, canDeliverShopProduct),
         };
+
+    internal static IEnumerable<(CashShopPackage Package, CashShopProduct Product)> ShopProducts(GameConfiguration configuration, Func<CashShopProduct, bool>? canDeliver)
+    {
+        foreach (var package in configuration.CashShopConfiguration?.Packages ?? [])
+        {
+            if (!package.IsForSale || !Enum.IsDefined(package.CoinType))
+            {
+                continue;
+            }
+
+            var eligible = package.Products.Where(product => product.ItemDefinition is { IsActive: true }
+                && (canDeliver?.Invoke(product) ?? true));
+            if (package.IsBundle)
+            {
+                var bundle = eligible.ToArray();
+                if (package.Price >= 0 && bundle.Length == package.Products.Count)
+                {
+                    foreach (var product in bundle)
+                    {
+                        yield return (package, product);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var product in eligible.Where(product => product.Price >= 0))
+                {
+                    yield return (package, product);
+                }
+            }
+        }
+    }
 
     private static object[] Classes(GameConfiguration configuration)
         => configuration.CharacterClasses.Where(item => item.IsActive && item.CanGetCreated).OrderBy(item => item.Number).Take(MaximumClasses)
@@ -81,7 +125,7 @@ public static class WebsiteServerGuideProjection
     }
 
     private static object[] VipOffers(VipConfiguration? configuration)
-        => configuration is not { Enabled: true } ? [] : configuration.Levels.Take(MaximumClasses).Select(level => (object)new
+        => configuration is not { Enabled: true } || !VipRules.ValidConfiguration(configuration) ? [] : configuration.Levels.Where(level => level.Offers.Count > 0).Take(MaximumClasses).Select(level => (object)new
         {
             level.Id,
             level.NameEn,
@@ -93,21 +137,23 @@ public static class WebsiteServerGuideProjection
             offers = level.Offers.Take(MaximumClasses).Select(offer => new { offer.Days, offer.Price, coinType = offer.CoinType.ToString() }).ToArray(),
         }).ToArray();
 
-    private static object Catalog(GameConfiguration configuration)
+    private static object Catalog(GameConfiguration configuration, Func<CashShopProduct, bool>? canDeliver)
     {
-        var products = configuration.CashShopConfiguration?.Packages.Where(package => package.IsForSale)
-            .SelectMany(package => package.Products.Where(product => product.ItemDefinition is { IsActive: true })
-                .Select(product => new
-                {
-                    nameEn = product.ItemDefinition!.Name.GetTranslation(CultureInfo.GetCultureInfo("en")),
-                    nameVi = product.ItemDefinition!.Name.GetTranslation(CultureInfo.GetCultureInfo("vi")),
-                    product.ItemLevel,
-                    product.Quantity,
-                    durationSeconds = product.Duration.TotalSeconds,
-                    price = package.IsBundle ? package.Price : product.Price,
-                    coinType = package.CoinType.ToString(),
-                    bundle = package.IsBundle,
-                })).Take(MaximumCatalogProducts + 1).ToArray();
-        return new { products = products?.Take(MaximumCatalogProducts).ToArray(), truncated = products?.Length > MaximumCatalogProducts };
+        var products = ShopProducts(configuration, canDeliver).Take(MaximumCatalogProducts + 1).ToArray();
+        return new
+        {
+            products = configuration.CashShopConfiguration is null ? null : products.Take(MaximumCatalogProducts).Select(offer => new
+            {
+                nameEn = offer.Product.ItemDefinition!.Name.GetTranslation(CultureInfo.GetCultureInfo("en")),
+                nameVi = offer.Product.ItemDefinition!.Name.GetTranslation(CultureInfo.GetCultureInfo("vi")),
+                offer.Product.ItemLevel,
+                offer.Product.Quantity,
+                durationSeconds = offer.Product.Duration.TotalSeconds,
+                price = offer.Package.IsBundle ? offer.Package.Price : offer.Product.Price,
+                coinType = offer.Package.CoinType.ToString(),
+                bundle = offer.Package.IsBundle,
+            }).ToArray(),
+            truncated = products.Length > MaximumCatalogProducts,
+        };
     }
 }

@@ -65,6 +65,11 @@ public sealed class WebsiteServerGuideController(IDictionary<int, IGameServer> s
         return this.Ok(snapshot);
     }
 
+    private static Func<HNMO.DataModel.Configuration.CashShopProduct, bool> ShopEligibility(IGameContext context)
+        => CashShopFeaturePlugIn.GetSettings(context) is null
+            ? static _ => false
+            : product => CashShopProductDelivery.CanDeliver(context, product);
+
     private static object Extras(IGameServerContext context)
     {
         var npcs = context.ServerConfiguration.Maps.Where(map => map.IsActive)
@@ -77,7 +82,18 @@ public sealed class WebsiteServerGuideController(IDictionary<int, IGameServer> s
             npcs,
             context.FeaturePlugIns.GetPlugIn<AntiCheatPlugIn>()?.Configuration?.Enabled == true,
             activity is not null && activityConfiguration.Enabled,
-            activityConfiguration.OnlyValuableDropsAndPickups);
+            activityConfiguration.OnlyValuableDropsAndPickups,
+            WebsiteHomeLootProjection.Build(
+                context.Configuration,
+                context.ServerConfiguration.Maps,
+                WebsiteServerGuideProjection.ShopProducts(context.Configuration, ShopEligibility(context)).Select(offer => offer.Product)),
+            new
+            {
+                helper = context.FeaturePlugIns.GetPlugIn<MuHelperFeaturePlugIn>()?.Configuration is not null,
+                vip = VipPlugIn.Get(context)?.Configuration is { Enabled: true },
+                multiVault = context.FeaturePlugIns.GetPlugIn<MultiVaultPlugIn>()?.Configuration is { Enabled: true },
+                shop = CashShopFeaturePlugIn.GetSettings(context) is not null,
+            });
     }
 
     private static object Build(IGameContext context)
@@ -87,6 +103,7 @@ public sealed class WebsiteServerGuideController(IDictionary<int, IGameServer> s
             VipPlugIn.Get(context)?.Configuration,
             context.FeaturePlugIns.GetPlugIn<MultiVaultPlugIn>()?.Configuration,
             context.FeaturePlugIns.GetPlugIn<RateTuningPlugIn>()?.Configuration,
+            ShopEligibility(context),
             context.PlugInManager.GetActivePlugInsOf<ICashShopProductDeliveryPlugIn>().OfType<InventoryExtensionDeliveryPlugIn>().FirstOrDefault()?.Configuration);
 
     private static object RealmRules(IGameContext context)

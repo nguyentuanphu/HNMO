@@ -12,7 +12,7 @@ using Nito.AsyncEx;
 /// <summary>
 /// The default drop generator.
 /// </summary>
-public class DefaultDropGenerator : IDropGenerator
+public partial class DefaultDropGenerator : IDropGenerator
 {
     /// <summary>
     /// The amount of money which is dropped at least, and added to the gained experience.
