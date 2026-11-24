@@ -1,0 +1,205 @@
+# Client Encoded Data Tables Comparison (Season 6 vs Season 9 vs HNMO)
+
+## MasterSkillTreeData.bmd: S6=293 nodes, S9=472 nodes
+  S9-only node: class=1 skill=315 max=20
+  S9-only node: class=1 skill=316 max=20
+  S9-only node: class=1 skill=317 max=20
+  S9-only node: class=1 skill=318 max=20
+  S9-only node: class=1 skill=319 max=20
+  S9-only node: class=1 skill=320 max=20
+  S9-only node: class=1 skill=322 max=20
+  S9-only node: class=1 skill=324 max=20
+  S9-only node: class=1 skill=339 max=20
+  S9-only node: class=1 skill=340 max=20
+  S9-only node: class=1 skill=341 max=20
+  S9-only node: class=1 skill=342 max=20
+  S9-only node: class=1 skill=343 max=20
+  S9-only node: class=1 skill=345 max=20
+  S9-only node: class=1 skill=344 max=10
+  S9-only node: class=1 skill=346 max=20
+  S9-only node: class=1 skill=363 max=20
+  S9-only node: class=1 skill=364 max=20
+  S9-only node: class=1 skill=366 max=20
+  S9-only node: class=1 skill=367 max=20
+  S9-only node: class=1 skill=368 max=20
+  S9-only node: class=1 skill=369 max=20
+  S9-only node: class=1 skill=370 max=20
+  S9-only node: class=1 skill=372 max=20
+  S9-only node: class=1 skill=371 max=20
+  S9-only node: class=2 skill=315 max=20
+  S9-only node: class=2 skill=316 max=20
+  S9-only node: class=2 skill=317 max=20
+  S9-only node: class=2 skill=318 max=20
+  S9-only node: class=2 skill=319 max=20
+  S9-only node: class=2 skill=320 max=20
+  S9-only node: class=2 skill=375 max=20
+  S9-only node: class=2 skill=377 max=20
+  S9-only node: class=2 skill=390 max=20
+  S9-only node: class=2 skill=341 max=20
+  S9-only node: class=2 skill=391 max=20
+  S9-only node: class=2 skill=392 max=20
+  S9-only node: class=2 skill=393 max=20
+  S9-only node: class=2 skill=394 max=20
+  S9-only node: class=2 skill=495 max=10
+  S9-only node: class=2 skill=497 max=20
+  S9-only node: class=2 skill=406 max=20
+  S9-only node: class=2 skill=407 max=20
+  S9-only node: class=2 skill=366 max=20
+  S9-only node: class=2 skill=367 max=20
+  S9-only node: class=2 skill=368 max=20
+  S9-only node: class=2 skill=369 max=20
+  S9-only node: class=2 skill=370 max=20
+  S9-only node: class=2 skill=372 max=20
+  S9-only node: class=2 skill=371 max=20
+  S9-only node: class=4 skill=315 max=20
+  S9-only node: class=4 skill=316 max=20
+  S9-only node: class=4 skill=317 max=20
+  S9-only node: class=4 skill=318 max=20
+  S9-only node: class=4 skill=319 max=20
+  S9-only node: class=4 skill=320 max=20
+  S9-only node: class=4 skill=410 max=20
+  S9-only node: class=4 skill=412 max=20
+  S9-only node: class=4 skill=425 max=10
+  S9-only node: class=4 skill=411 max=20
+  S9-only node: class=4 skill=341 max=20
+  S9-only node: class=4 skill=426 max=10
+  S9-only node: class=4 skill=431 max=20
+  S9-only node: class=4 skill=428 max=20
+  S9-only node: class=4 skill=429 max=20
+  S9-only node: class=4 skill=430 max=10
+  S9-only node: class=4 skill=427 max=10
+  S9-only node: class=4 skill=432 max=10
+  S9-only node: class=4 skill=433 max=20
+  S9-only node: class=4 skill=434 max=20
+  S9-only node: class=4 skill=443 max=20
+  S9-only node: class=4 skill=366 max=20
+  S9-only node: class=4 skill=367 max=20
+  S9-only node: class=4 skill=368 max=20
+  S9-only node: class=4 skill=369 max=20
+  S9-only node: class=4 skill=370 max=20
+  S9-only node: class=4 skill=372 max=20
+  S9-only node: class=4 skill=371 max=20
+  S9-only node: class=8 skill=315 max=20
+  S9-only node: class=8 skill=316 max=20
+  S9-only node: class=8 skill=317 max=20
+  S9-only node: class=8 skill=318 max=20
+  S9-only node: class=8 skill=319 max=20
+  S9-only node: class=8 skill=320 max=20
+  S9-only node: class=8 skill=446 max=20
+  S9-only node: class=8 skill=447 max=20
+  S9-only node: class=8 skill=460 max=20
+  S9-only node: class=8 skill=341 max=20
+  S9-only node: class=8 skill=459 max=20
+  S9-only node: class=8 skill=462 max=20
+  S9-only node: class=8 skill=461 max=10
+  S9-only node: class=8 skill=463 max=20
+  S9-only node: class=8 skill=472 max=20
+  S9-only node: class=8 skill=473 max=20
+  S9-only node: class=8 skill=366 max=20
+  S9-only node: class=8 skill=367 max=20
+  S9-only node: class=8 skill=368 max=20
+  S9-only node: class=8 skill=369 max=20
+  S9-only node: class=8 skill=370 max=20
+  S9-only node: class=8 skill=372 max=20
+  S9-only node: class=8 skill=371 max=20
+  S9-only node: class=16 skill=315 max=20
+  S9-only node: class=16 skill=316 max=20
+  S9-only node: class=16 skill=317 max=20
+  S9-only node: class=16 skill=318 max=20
+  S9-only node: class=16 skill=319 max=20
+  S9-only node: class=16 skill=320 max=20
+  S9-only node: class=16 skill=476 max=20
+  S9-only node: class=16 skill=478 max=20
+  S9-only node: class=16 skill=492 max=20
+  S9-only node: class=16 skill=491 max=20
+  S9-only node: class=16 skill=341 max=20
+  S9-only node: class=16 skill=494 max=20
+  S9-only node: class=16 skill=493 max=20
+  S9-only node: class=16 skill=496 max=20
+  S9-only node: class=16 skill=344 max=10
+  S9-only node: class=16 skill=495 max=10
+  S9-only node: class=16 skill=346 max=20
+  S9-only node: class=16 skill=497 max=20
+  S9-only node: class=16 skill=407 max=20
+  S9-only node: class=16 skill=364 max=20
+  S9-only node: class=16 skill=366 max=20
+  S9-only node: class=16 skill=367 max=20
+  S9-only node: class=16 skill=368 max=20
+  S9-only node: class=16 skill=369 max=20
+  S9-only node: class=16 skill=370 max=20
+  S9-only node: class=16 skill=372 max=20
+  S9-only node: class=16 skill=371 max=20
+  S9-only node: class=32 skill=315 max=20
+  S9-only node: class=32 skill=316 max=20
+  S9-only node: class=32 skill=317 max=20
+  S9-only node: class=32 skill=318 max=20
+  S9-only node: class=32 skill=319 max=20
+  S9-only node: class=32 skill=320 max=20
+  S9-only node: class=32 skill=505 max=20
+  S9-only node: class=32 skill=506 max=20
+  S9-only node: class=32 skill=507 max=20
+  S9-only node: class=32 skill=519 max=20
+  S9-only node: class=32 skill=520 max=20
+  S9-only node: class=32 skill=341 max=20
+  S9-only node: class=32 skill=522 max=20
+  S9-only node: class=32 skill=523 max=20
+  S9-only node: class=32 skill=521 max=10
+  S9-only node: class=32 skill=524 max=20
+  S9-only node: class=32 skill=536 max=20
+  S9-only node: class=32 skill=366 max=20
+  S9-only node: class=32 skill=364 max=20
+  S9-only node: class=32 skill=538 max=20
+  S9-only node: class=32 skill=369 max=20
+  S9-only node: class=32 skill=367 max=20
+  S9-only node: class=32 skill=368 max=20
+  S9-only node: class=32 skill=539 max=20
+  S9-only node: class=32 skill=370 max=20
+  S9-only node: class=32 skill=372 max=20
+  S9-only node: class=32 skill=371 max=20
+  S9-only node: class=64 skill=593 max=20
+  S9-only node: class=64 skill=594 max=20
+  S9-only node: class=64 skill=595 max=20
+  S9-only node: class=64 skill=596 max=20
+  S9-only node: class=64 skill=597 max=20
+  S9-only node: class=64 skill=598 max=20
+  S9-only node: class=64 skill=549 max=20
+  S9-only node: class=64 skill=550 max=20
+  S9-only node: class=64 skill=602 max=20
+  S9-only node: class=64 skill=561 max=20
+  S9-only node: class=64 skill=562 max=20
+  S9-only node: class=64 skill=563 max=10
+  S9-only node: class=64 skill=564 max=20
+  S9-only node: class=64 skill=565 max=10
+  S9-only node: class=64 skill=566 max=20
+  S9-only node: class=64 skill=567 max=20
+  S9-only node: class=64 skill=609 max=20
+  S9-only node: class=64 skill=610 max=20
+  S9-only node: class=64 skill=611 max=20
+  S9-only node: class=64 skill=612 max=20
+  S9-only node: class=64 skill=613 max=20
+  S9-only node: class=64 skill=614 max=20
+  S9-only node: class=64 skill=616 max=20
+  S9-only node: class=64 skill=615 max=20
+
+## mix.bmd: S6=101 recipes, S9=159 recipes (S9 uses an expanded Mix.bmd record layout)
+
+## movereq_eng.bmd: S6=39 warps, S9=37 warps, HNMO warps.csv=40
+  Diff warp #28 (KanturuRuins1): S6(Lv=350,Zen=200) -> S9(Lv=350,Zen=160)
+  Diff warp #29 (KanturuRuins2): S6(Lv=350,Zen=220) -> S9(Lv=350,Zen=160)
+  Diff warp #45 (KanturuRuins3): S6(Lv=400,Zen=250) -> S9(Lv=400,Zen=160)
+  Diff warp #30 (KanturuRelics): S6(Lv=400,Zen=300) -> S9(Lv=400,Zen=230)
+  Diff warp #42 (Vulcanus): S6(Lv=400,Zen=250) -> S9(Lv=400,Zen=30)
+
+## Encoded .bmd table presence & byte sizes (S6 vs S9)
+  Item_eng.bmd: S6=688132 bytes | S9=786264 bytes
+  Skill_eng.bmd: S6=57204 bytes | S9=72804 bytes
+  BuffEffect_eng.bmd: S6=24972 bytes | S9=31924 bytes
+  Quest_eng.bmd: S6=148800 bytes | S9=148800 bytes
+  QuestProgress.bmd: S6=37515 bytes | S9=42886 bytes
+  NPCDialogue.bmd: S6=5104 bytes | S9=7392 bytes
+  SocketItem_eng.bmd: S6=15600 bytes | S9=16200 bytes
+  JewelOfHarmonyOption_eng.bmd: S6=5400 bytes | S9=135000 bytes
+  ItemSetOption_eng.bmd: S6=7044 bytes | S9=28054 bytes
+  ItemSetType.bmd: S6=32772 bytes | S9=49156 bytes
+  ItemAddOption.bmd: S6=131072 bytes | S9=131072 bytes
+  MonsterSkill.bmd: S6=2692 bytes | S9=3652 bytes
