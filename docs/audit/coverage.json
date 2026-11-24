@@ -1,5 +1,5 @@
 {
-  "generatedAt": "95afe256",
+  "generatedAt": "a72d1779",
   "maxLines": 6000,
   "units": [
     {
@@ -2620,11 +2620,14 @@
       ],
       "files": 4,
       "lines": 84,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "a72d1779",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Views/Pet",
+        "docs/audit/findings/unit-server-src-GameLogic-Views-Pet.md"
+      ],
+      "evidence": "4f/84L: No game rules (pure C# view plugin interfaces and result enums).",
       "prs": ""
     },
     {
