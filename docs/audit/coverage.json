@@ -1,5 +1,5 @@
 {
-  "generatedAt": "384aa0f5",
+  "generatedAt": "02816851",
   "maxLines": 6000,
   "units": [
     {
@@ -2941,11 +2941,14 @@
       ],
       "files": 6,
       "lines": 278,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "02816851",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "MessageHandler/Duel",
+        "docs/audit/findings/unit-server-src-GameServer-MessageHandler-Duel.md"
+      ],
+      "evidence": "6f/278L: No game rules (pure C->S packet deserialization handlers forwarding validated inputs to GameLogic actions; no embedded gameplay constants.)",
       "prs": ""
     },
     {
