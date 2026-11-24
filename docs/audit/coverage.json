@@ -1,5 +1,5 @@
 {
-  "generatedAt": "c12fd43a",
+  "generatedAt": "e83322a1",
   "maxLines": 6000,
   "units": [
     {
@@ -6565,11 +6565,16 @@
       ],
       "files": 27,
       "lines": 2495,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "e83322a1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "LoadState.h:8-9",
+        "LoadState.cpp:7-13",
+        "LoadBar.cpp",
+        "docs/audit/findings/unit-client-src-source-Data-GameData-ServerListData.md"
+      ],
+      "evidence": "27f/2495L: Server load state thresholds FullLoadPercent=100, OverloadedLoadPercent=128.",
       "prs": ""
     },
     {
