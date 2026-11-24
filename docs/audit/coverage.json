@@ -1,5 +1,5 @@
 {
-  "generatedAt": "9e1e8ffd",
+  "generatedAt": "60ed6b41",
   "maxLines": 6000,
   "units": [
     {
@@ -8875,11 +8875,16 @@
       ],
       "files": 12,
       "lines": 5516,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "60ed6b41",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "GameMaps/GMDoppelGanger1.cpp",
+        "GameMaps/GMDoppelGanger1.h",
+        "GameMaps/GMDoppelGanger2.cpp",
+        "docs/audit/findings/unit-client-src-source-World-GameMaps-files-2.md"
+      ],
+      "evidence": "12f/5516L: No game rules (3D map visual objects, shaders, fog, weather & terrain loaders (MapManager, GMAida, etc.; no game rules).)",
       "prs": ""
     },
     {
