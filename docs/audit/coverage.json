@@ -1,5 +1,5 @@
 {
-  "generatedAt": "c8f89ed5",
+  "generatedAt": "f32db03f",
   "maxLines": 6000,
   "units": [
     {
@@ -8219,11 +8219,15 @@
       ],
       "files": 37,
       "lines": 5983,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "f32db03f",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "CursedTempleEnter.cpp:43-45,106",
+        "CryWolf.cpp",
+        "docs/audit/findings/unit-client-src-source-UI-Events-files-1.md"
+      ],
+      "evidence": "37f/5983L: CursedTempleEnter defines 5 Illusion Temple level brackets [220..270, 271..320, 321..350, 351..380, 381..400].",
       "prs": ""
     },
     {
