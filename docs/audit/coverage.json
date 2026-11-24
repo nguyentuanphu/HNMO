@@ -1,5 +1,5 @@
 {
-  "generatedAt": "22bd0099",
+  "generatedAt": "c8f89ed5",
   "maxLines": 6000,
   "units": [
     {
@@ -8163,11 +8163,16 @@
       ],
       "files": 11,
       "lines": 1694,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "c8f89ed5",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Dialogs/MessageBox.cpp",
+        "Dialogs/MessageBox.h",
+        "Dialogs/MessageBoxView.cpp",
+        "docs/audit/findings/unit-client-src-source-UI-Dialogs-files-2.md"
+      ],
+      "evidence": "11f/1694L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
       "prs": ""
     },
     {
