@@ -1,5 +1,5 @@
 {
-  "generatedAt": "c5764626",
+  "generatedAt": "f501f313",
   "maxLines": 6000,
   "units": [
     {
@@ -6878,11 +6878,14 @@
       ],
       "files": 2,
       "lines": 450,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "f501f313",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Engine/Pathing",
+        "docs/audit/findings/unit-client-src-source-Engine-Pathing.md"
+      ],
+      "evidence": "2f/450L: No game rules (2D grid pathfinding algorithm (no game rules).)",
       "prs": ""
     },
     {
