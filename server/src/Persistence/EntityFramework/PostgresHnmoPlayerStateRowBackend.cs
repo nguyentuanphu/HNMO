@@ -60,6 +60,9 @@ public sealed class PostgresHnmoPlayerStateRowBackend : IHnmoPlayerStateRowQuery
                     WHERE expires_at_utc IS NOT NULL;
                 CREATE INDEX IF NOT EXISTS ix_hnmo_pfs_feature_recent
                     ON hnmo.player_feature_state (feature, updated_at_utc DESC, scope_id);
+                CREATE INDEX IF NOT EXISTS ix_hnmo_pfs_activity_item_serials
+                    ON hnmo.player_feature_state USING GIN (string_to_array(payload_json ->> 'itemSerials', ','))
+                    WHERE feature = 'activityLog.entry';
                 CREATE TABLE IF NOT EXISTS hnmo.archived_feature_state (
                     feature TEXT NOT NULL,
                     scope_id TEXT NOT NULL,
@@ -250,6 +253,39 @@ public sealed class PostgresHnmoPlayerStateRowBackend : IHnmoPlayerStateRowQuery
 
     /// <inheritdoc />
     public int CountArchivedRows(string? feature = null) => this.CountFromTable("hnmo.archived_feature_state", feature);
+
+    /// <inheritdoc />
+    public IReadOnlyList<HnmoFeatureRow> LoadActivityItemPage(Guid serial, DateTime fromUtc, int limit)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThan(limit, 1);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(limit, 101);
+        const string feature = "activityLog.entry";
+        this.EnsureSchema();
+        using var conn = new NpgsqlConnection(this._connectionString);
+        conn.Open();
+        using var cmd = conn.CreateCommand();
+        cmd.CommandTimeout = 3;
+        cmd.CommandText = """
+            SELECT scope_id, payload_json::text, updated_at_utc, expires_at_utc
+            FROM hnmo.player_feature_state
+            WHERE feature = 'activityLog.entry'
+                AND updated_at_utc >= @from
+                AND string_to_array(payload_json ->> 'itemSerials', ',') @> ARRAY[@serial]::text[]
+            ORDER BY updated_at_utc DESC, scope_id DESC
+            LIMIT @limit
+            """;
+        cmd.Parameters.AddWithValue("serial", serial.ToString("N"));
+        cmd.Parameters.AddWithValue("from", DateTime.SpecifyKind(fromUtc, DateTimeKind.Utc));
+        cmd.Parameters.AddWithValue("limit", limit);
+        using var reader = cmd.ExecuteReader();
+        var rows = new List<HnmoFeatureRow>(limit);
+        while (reader.Read())
+        {
+            rows.Add(ReadRow(reader, feature));
+        }
+
+        return rows;
+    }
 
     private static HnmoFeatureRow ReadRow(NpgsqlDataReader reader, string feature) => new(
         feature,

@@ -42,6 +42,7 @@ public sealed class WebsiteAccountController(
     ILogger<WebsiteAccountController> logger) : ControllerBase
 {
     private const int PageSize = 20;
+    private const int StoragePreviewSize = 48;
 
     /// <summary>Reads a password-authenticated account overview without secrets or other accounts' grants.</summary>
     /// <param name="request">The player's credentials and history page.</param>
@@ -80,6 +81,7 @@ public sealed class WebsiteAccountController(
             accountOnline = online.ContainsKey(account.LoginName),
             balances = new { account.WCoinC, account.WCoinP, account.GoblinPoints },
             vipLevel = (int)account.GetAccountAttributeValue(Stats.IsVip, DateTime.UtcNow),
+            storedItems = StoredItemRows(account),
             characters = account.Characters.OrderBy(c => c.CharacterSlot).Select(c => new
             {
                 c.Name,
@@ -183,4 +185,34 @@ public sealed class WebsiteAccountController(
         logger.LogInformation("The account {LoginName} changed its password on the website.", account.LoginName);
         return this.Ok(new { changed = true });
     }
+    internal static object StoredItemRows(Account account)
+    {
+        var vietnamese = CultureInfo.GetCultureInfo("vi");
+        var bagItems = account.Characters.OrderBy(character => character.CharacterSlot)
+            .SelectMany(character => (character.Inventory?.Items ?? []).OrderBy(item => item.ItemSlot)
+                .Select(item => (Character: (string?)character.Name, Item: item)));
+        var vaultItems = (account.Vault?.Items ?? []).OrderBy(item => item.ItemSlot)
+            .Select(item => (Character: (string?)null, Item: item));
+
+        object Storage(IEnumerable<(string? Character, Item Item)> source)
+        {
+            var rows = source.Where(row => row.Item.Definition is not null).Take(StoragePreviewSize + 1).ToArray();
+            return new
+            {
+                truncated = rows.Length > StoragePreviewSize,
+                items = rows.Take(StoragePreviewSize).Select(row => new
+                {
+                    row.Character,
+                    slot = row.Item.ItemSlot,
+                    level = row.Item.Level,
+                    name = row.Item.Definition!.Name.ValueInNeutralLanguage,
+                    nameVi = row.Item.Definition!.Name.GetTranslation(vietnamese),
+                    serial = row.Item.Serial is { } serial && serial != Guid.Empty ? serial.ToString("N") : null,
+                }).ToArray(),
+            };
+        }
+
+        return new { inventory = Storage(bagItems), vault = Storage(vaultItems) };
+    }
+
 }

@@ -52,6 +52,10 @@ async function mockAccount(page: Page, language: 'en' | 'vi'): Promise<void> {
         { name: 'AnnMage', className: 'Mage', classNameVi: 'Pháp sư', level: 200, resets: 0, map: 0, online: false },
         { name: 'AnnArcher', className: 'Archer', classNameVi: 'Cung thủ', level: 100, resets: 0, map: 0, online: null },
       ],
+      storedItems: {
+        inventory: { truncated: false, items: [{ character: 'AnnKnight', slot: 1, level: 1, name: 'Fixture sword', nameVi: 'Kiếm mẫu', serial: '0123456789abcdef0123456789abcdef' }] },
+        vault: { truncated: false, items: [{ character: null, slot: 0, level: 0, name: 'Legacy fixture', nameVi: 'Vật phẩm cũ mẫu', serial: null }] },
+      },
       history: [
         { id: 'one', coinType: 'WCoinC', amount: body.page === 0 ? 50 : 25, reason: body.page === 0 ? 'Quest reward' : 'Earlier reward', createdAt: '2026-11-15T14:30:00Z', pending: false },
         { id: 'purchase', coinType: 'WCoinC', amount: -10, reason: 'structured receipt', purchase: { nameEn: 'Test package', nameVi: 'Gói thử nghiệm', giftRecipient: null }, createdAt: '2026-11-15T14:30:00Z', pending: false },
@@ -395,5 +399,60 @@ for (const language of ['en', 'vi'] as const) {
     const storage = await page.evaluate(() => JSON.stringify({ local: { ...localStorage }, session: { ...sessionStorage } }));
     expect(storage).not.toContain('account-secret');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  });
+}
+
+for (const [language, width] of [['en', 1440], ['vi', 390]] as const) {
+  test(`private saved storage supports search and links only existing serials (${language}, ${width}px)`, async ({ page }) => {
+    const isVi = language === 'vi';
+    const sectionName = isVi ? 'Vật phẩm và kho' : 'Items and vault';
+    const swordName = isVi ? 'Kiếm mẫu +1' : 'Fixture sword +1';
+    const legacyName = isVi ? 'Vật phẩm cũ mẫu' : 'Legacy fixture';
+    await page.setViewportSize({ width, height: 900 });
+    await mockAccount(page, language);
+    await signIn(page);
+    const storage = page.locator('#account-items');
+    await expect(storage).toBeHidden();
+    if (width === 390) await page.locator('#accountSectionSelect').selectOption({ label: sectionName });
+    else await page.locator('#accountNav').getByRole('button', { name: sectionName, exact: true }).click();
+    const sword = storage.getByRole('link', { name: swordName });
+    await expect(sword).toHaveAttribute('href', '/tracker.html?serial=0123456789abcdef0123456789abcdef');
+    await expect(storage.getByText(legacyName)).toBeVisible();
+    await expect(storage.getByRole('link', { name: legacyName })).toHaveCount(0);
+    await page.screenshot({ path: `docs/screenshots/item-history/account-items-${language}-${width}.png`, fullPage: true });
+
+    const detailsLabel = isVi ? 'Chi tiết vật phẩm' : 'Item details';
+    const openDetails = storage.getByRole('button', { name: `${detailsLabel} · ${swordName}` });
+    await openDetails.click();
+    const details = page.getByRole('dialog', { name: swordName });
+    await expect(details.getByText('0123456789abcdef0123456789abcdef')).toBeVisible();
+    await expect(details.getByText('AnnKnight')).toBeVisible();
+    await expect(details.getByRole('link', { name: isVi ? 'Lịch sử vật phẩm' : 'Item history' }))
+      .toHaveAttribute('href', '/tracker.html?serial=0123456789abcdef0123456789abcdef');
+    await page.screenshot({ path: `docs/screenshots/item-history/account-item-details-${language}-${width}.png` });
+    await page.keyboard.press('Escape');
+    await expect(details).toBeHidden();
+    await expect(openDetails).toBeFocused();
+
+    const search = storage.getByRole('searchbox', { name: isVi
+      ? 'Tìm vật phẩm đã lưu theo tên, nhân vật hoặc số sê-ri'
+      : 'Find saved items by name, character or serial' });
+    await search.fill('ANNKNIGHT');
+    await expect(sword).toBeVisible();
+    await expect(storage.getByText(legacyName)).toHaveCount(0);
+    await search.fill('0123456789abcdef0123456789abcdef');
+    await expect(sword).toBeVisible();
+    await search.fill(legacyName);
+    await expect(sword).toHaveCount(0);
+    await expect(storage.getByText(legacyName)).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+    await storage.getByRole('button', { name: `${detailsLabel} · ${legacyName}` }).click();
+    const legacyDetails = page.getByRole('dialog', { name: legacyName });
+    await expect(legacyDetails.getByRole('link')).toHaveCount(0);
+    await page.evaluate(() => window.dispatchEvent(new Event('hnmo-session-expired')));
+    await expect(legacyDetails).toHaveCount(0);
+    await expect(storage).toBeHidden();
+    await expect(storage.getByText(legacyName)).toHaveCount(0);
   });
 }

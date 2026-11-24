@@ -51,6 +51,38 @@ public sealed class WebsiteTrackerTests
         Assert.That(Projection(rows, false, privacy), Has.Count.EqualTo(1));
     }
 
+    /// <summary>The history includes only the requested item's state and respects either player's opt-out.</summary>
+    [Test]
+    public void ItemHistoryFiltersOptOutsAndOtherItems()
+    {
+        var privacy = new WebsiteTrackerPrivacyStore(new InMemoryHnmoPlayerStateRowBackend());
+        var now = new DateTime(2026, 11, 23, 0, 0, 0, DateTimeKind.Utc);
+        var serial = Guid.NewGuid();
+        var before = new ActivityItemState(serial, 1, 2, 6, 1, 7, 0, false, "private-options", "private-description");
+        var after = before with { Level = 7 };
+        var other = before with { Serial = Guid.NewGuid(), Level = 15 };
+        var row = new ActivityLogEntry
+        {
+            TimestampUtc = now,
+            Kind = ActivityKind.Upgrade,
+            Account = "secretAccount",
+            PartnerAccount = "secondSecret",
+            Character = "Knight",
+            ItemSerials = $"{serial:N},{other.Serial:N}",
+            BeforeItems = [other, before],
+            AfterItems = [after],
+        };
+        var output = WebsiteTrackerController.ProjectItemHistory([row], serial, false, privacy);
+        var json = JsonSerializer.SerializeToNode(output, new JsonSerializerOptions(JsonSerializerDefaults.Web))!.AsArray().Single()!;
+        Assert.That(json["kind"]!.GetValue<string>(), Is.EqualTo("upgrade"));
+        Assert.That(json["before"]!["level"]!.GetValue<int>(), Is.EqualTo(6));
+        Assert.That(json["after"]!["level"]!.GetValue<int>(), Is.EqualTo(7));
+        Assert.That(json["character"], Is.Null);
+        Assert.That(json.ToJsonString(), Does.Not.Contain("private").And.Not.Contain("secret"));
+        privacy.Write("secondSecret", true, now);
+        Assert.That(WebsiteTrackerController.ProjectItemHistory([row], serial, true, privacy), Is.Empty);
+    }
+
     /// <summary>Even an oversized raw snapshot cannot create a large public response.</summary>
     [Test]
     public void PublicPageIsBoundedAndNeverUsesTheLoginAsTheName()

@@ -212,6 +212,12 @@ public sealed class ActivityLogStore
                     e.PartnerCharacter.Contains(character, StringComparison.OrdinalIgnoreCase));
             }
 
+            if (query.ItemSerial is { } origin)
+            {
+                var serial = origin.ToString("N");
+                seq = seq.Where(entry => HasSerial(entry, serial));
+            }
+
             if (!string.IsNullOrEmpty(item))
             {
                 seq = seq.Where(e =>
@@ -265,6 +271,54 @@ public sealed class ActivityLogStore
         }
 
         return entries;
+    }
+
+    /// <summary>Gets matching activity rows for one real serial within the current retention window.</summary>
+    /// <param name="serial">The origin item serial.</param>
+    /// <param name="fromUtc">The inclusive UTC retention cutoff.</param>
+    /// <param name="limit">The maximum number of records, between 1 and 101.</param>
+    /// <returns>The matching active rows, newest first.</returns>
+    public IReadOnlyList<ActivityLogEntry> QueryItemHistory(Guid serial, DateTime fromUtc, int limit)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThan(limit, 1);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(limit, 101);
+        if (serial == Guid.Empty)
+        {
+            return [];
+        }
+
+        var backend = HnmoPlayerStateRowStoreRegistry.GetBackend(this._resolvedStatePath);
+        if (backend is not IHnmoPlayerStateRowQueryBackend indexed || indexed.LoadActivityItemPage(serial, fromUtc, limit) is not { } rows)
+        {
+            return this.Query(new ActivityLogQuery { FromUtc = fromUtc, ItemSerial = serial, MaxResults = limit });
+        }
+
+        return ParseItemRows(rows, serial.ToString("N"), fromUtc);
+    }
+
+    private static bool HasSerial(ActivityLogEntry entry, string serial)
+        => entry.ItemSerials?.Split(',').Contains(serial, StringComparer.Ordinal) is true;
+
+    private static IReadOnlyList<ActivityLogEntry> ParseItemRows(IEnumerable<HnmoFeatureRow> rows, string serial, DateTime fromUtc)
+    {
+        var result = new List<ActivityLogEntry>();
+        foreach (var row in rows)
+        {
+            try
+            {
+                if (JsonSerializer.Deserialize<ActivityLogEntry>(row.PayloadJson, JsonOptions) is { } entry
+                    && entry.TimestampUtc >= fromUtc && HasSerial(entry, serial))
+                {
+                    result.Add(entry);
+                }
+            }
+            catch (JsonException)
+            {
+                // A corrupt historical row does not prevent other exact matches.
+            }
+        }
+
+        return result;
     }
 
     /// <summary>

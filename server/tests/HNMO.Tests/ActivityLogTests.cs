@@ -125,6 +125,26 @@ public sealed class ActivityLogTests
         Assert.That(reloaded.Query().Count, Is.EqualTo(2));
     }
 
+    /// <summary>Only matching origin tokens within retention contribute to item history.</summary>
+    [Test]
+    public void ItemHistoryUsesExactOriginSerialWithinRetention()
+    {
+        var store = ActivityLogStore.Open(this._file);
+        var today = new DateTime(2026, 11, 23, 0, 0, 0, DateTimeKind.Utc);
+        var serial = Guid.NewGuid();
+        var serialText = serial.ToString("N");
+        store.Append(new() { TimestampUtc = today, Kind = ActivityKind.Trade, ItemIds = serialText });
+        store.Append(new() { TimestampUtc = today, Kind = ActivityKind.Grant, ItemSerials = serialText + "0" });
+        store.Append(new() { TimestampUtc = today.AddMinutes(-1), Kind = ActivityKind.Pickup, ItemSerials = serialText });
+        store.Append(new() { TimestampUtc = today.AddMinutes(-2), Kind = ActivityKind.ChaosMix, ItemSerials = $"{Guid.NewGuid():N},{serialText}" });
+        store.Append(new() { TimestampUtc = today.AddDays(-11), Kind = ActivityKind.Loot, ItemSerials = serialText });
+
+        var result = store.QueryItemHistory(serial, today.AddDays(-10), 2);
+        Assert.That(result.Select(entry => entry.Kind), Is.EqualTo(new[] { ActivityKind.Pickup, ActivityKind.ChaosMix }));
+        Assert.That(store.QueryItemHistory(serial, today.AddDays(-10), 1).Single().Kind, Is.EqualTo(ActivityKind.Pickup));
+        Assert.That(store.QueryItemHistory(Guid.Empty, today.AddDays(-10), 2), Is.Empty);
+    }
+
     /// <summary>Verifies valuable-item classification for drop/pickup filtering.</summary>
     [Test]
     public void ValuableItemFilterMatchesExpectedTiers()
