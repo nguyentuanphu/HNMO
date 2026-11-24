@@ -19,6 +19,7 @@ import {
   parseSuiteSpawns,
 } from './parsers.mjs';
 import {
+  evalMasterFormula,
   parseSuiteCastleSiege,
   parseSuiteCommonAndLimits,
   parseSuiteEventsAndInvasions,
@@ -447,19 +448,59 @@ function writeDiff(fileName, lines) {
 {
   const m6 = parseSuiteMasterSkillTree(S6_DIR);
   const m9 = parseSuiteMasterSkillTree(S9_DIR);
+  const hSkillsRows = parseCsv(path.join(HNMO_DIR, 'skills.csv')).filter((r) => num(r.Number) >= 300);
+  const hByNum = new Map(hSkillsRows.map((r) => [num(r.Number), r]));
+  const allKeys = [...new Set([...m6.skills.keys(), ...m9.skills.keys()])].sort((a, b) => {
+    const [ca, ma] = a.split(':').map(Number);
+    const [cb, mb] = b.split(':').map(Number);
+    return ca - cb || ma - mb;
+  });
+
   const lines = [
-    '# Master Skill Tree Differences (S6 vs S9)',
-    `# Counts: S6=${m6.skillCount} (${m6.format}), S9=${m9.skillCount} (${m9.format})`,
+    '# Master Skill Tree Differences (Season 6 .dat + Lua vs Season 9 .xml + Lua vs HNMO skills.csv)',
+    `# Counts: S6=${m6.skillCount} (${m6.format}), S9=${m9.skillCount} (${m9.format}), HNMO_master_skills=${hByNum.size}`,
     '',
+    '## Summary Counters',
   ];
-  for (const [k, s9] of m9.skills) {
+  let sameCount = 0;
+  let differCount = 0;
+  let missingHnmo = 0;
+  const rowsOut = [];
+
+  for (const k of allKeys) {
     const s6 = m6.skills.get(k);
-    if (!s6) {
-      lines.push(`S9-only: ${k} (Rank=${s9.rank}, Max=${s9.maxPoint})`);
-    } else if (s6.maxPoint !== s9.maxPoint || s6.reqMinPoint !== s9.reqMinPoint || s6.rank !== s9.rank) {
-      lines.push(`${k}: S6(rank=${s6.rank},max=${s6.maxPoint},req=${s6.reqMinPoint}) -> S9(rank=${s9.rank},max=${s9.maxPoint},req=${s9.reqMinPoint})`);
+    const s9 = m9.skills.get(k);
+    const ref = s9 ?? s6;
+    const h = hByNum.get(ref.magicNumber);
+    const s6Str = s6
+      ? `rank=${s6.rank},max=${s6.maxPoint},req=${s6.reqMinPoint},p=${s6.parent1}/${s6.parent2},stid=${s6.stid}(${s6.v1}/${s6.v10}/${s6.v20})`
+      : 'absent';
+    const s9Str = s9
+      ? `rank=${s9.rank},max=${s9.maxPoint},req=${s9.reqMinPoint},p=${s9.parent1}/${s9.parent2},stid=${s9.stid}(${s9.v1}/${s9.v10}/${s9.v20})`
+      : 'absent';
+    if (!h) {
+      missingHnmo++;
+      rowsOut.push(`${k} (${ref.name || ref.skillName}): S6=[${s6Str}] | S9=[${s9Str}] | HNMO=missing (SkillsInitializer.cs) -> missing in HNMO`);
+      continue;
     }
+    const hRank = num(h.MasterRank);
+    const hMax = num(h.MasterMaxLevel);
+    const hv1 = evalMasterFormula(h.MasterFormula, 1);
+    const hv10 = evalMasterFormula(h.MasterFormula, 10);
+    const hv20 = evalMasterFormula(h.MasterFormula, 20);
+    const hStr = `rank=${hRank},max=${hMax},vals=${hv1}/${hv10}/${hv20},formula=${h.MasterFormula || 'none'}`;
+    const suiteRef = s6 ?? s9;
+    const sameMeta = hRank === suiteRef.rank && hMax === suiteRef.maxPoint;
+    const sameVal =
+      (hv20 === null && suiteRef.v20 === null) ||
+      (hv20 !== null && suiteRef.v20 !== null && Math.abs(hv20 - suiteRef.v20) <= 0.05) ||
+      (hv20 !== null && suiteRef.v20 !== null && Math.abs(hv20 * 100 - suiteRef.v20) <= 0.5);
+    const status = s6 && s9 && sameMeta && sameVal ? 'same' : 'differs';
+    if (status === 'same') sameCount++;
+    else differCount++;
+    rowsOut.push(`${k} (${h.Name}): S6=[${s6Str}] | S9=[${s9Str}] | HNMO=[${hStr}] -> ${status}`);
   }
+  lines.push(`same=${sameCount}, differs=${differCount}, missing_in_HNMO=${missingHnmo}`, '', '## Per-Skill Entries (ClassBit:SkillId)', ...rowsOut);
   writeDiff('diff-master-skills.txt', lines);
 }
 

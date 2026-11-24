@@ -142,50 +142,136 @@ export function parseSuiteItemBags(rootDir) {
   return bags;
 }
 
+function parseMasterSkillLua(rootDir) {
+  const luaPath = findSuiteFile(rootDir, 'MasterSkillPoint.lua');
+  const stidToFunc = new Map();
+  const formulas = new Map();
+  if (!luaPath || !fs.existsSync(luaPath)) return { stidToFunc, formulas };
+  const raw = fs.readFileSync(luaPath, 'utf8');
+  for (const m of raw.matchAll(/AddToMLSTable\(\s*(\d+)\s*,\s*'([^']+)'/g)) {
+    stidToFunc.set(Number(m[1]), m[2]);
+  }
+  const fnRe = /function\s+(FN_Lua\w+)\s*\(\s*nPoint\s*\)([\s\S]*?)^\s*end\b/gm;
+  let fm;
+  while ((fm = fnRe.exec(raw)) !== null) {
+    const fnName = fm[1];
+    const body = fm[2];
+    const ret = /local\s+nReturn\s*=\s*([^\r\n]+)/.exec(body);
+    if (!ret) continue;
+    const expr = ret[1].replace(/--.*$/, '').trim().replace(/\^/g, '**');
+    formulas.set(fnName, expr);
+  }
+  return { stidToFunc, formulas };
+}
+
+export function evalMasterFormula(expr, level) {
+  if (!expr) return null;
+  try {
+    const clean = expr.replace(/\bnPoint\b/g, String(level)).replace(/\blevel\b/g, String(level)).replace(/\^/g, '**');
+    if (!/^[\d+\-*/().\s*eE]+$/.test(clean)) return null;
+    const val = Function(`"use strict"; return (${clean});`)();
+    return Number.isFinite(val) ? Number(val.toFixed(2)) : null;
+  } catch {
+    return null;
+  }
+}
+
 export function parseSuiteMasterSkillTree(rootDir) {
+  const skillListXml = parseXmlTags(findSuiteFile(rootDir, 'SkillList.xml'), 'Skill');
+  const skillMeta = new Map();
+  for (const s of skillListXml) {
+    skillMeta.set(num(s.Index), {
+      rank: num(s.Rank),
+      stid: num(s.STID),
+      reqMlPoint: num(s.ReqMLPoint),
+      name: s.Name ?? '',
+    });
+  }
+  const { stidToFunc, formulas } = parseMasterSkillLua(rootDir);
+  const attachLua = (magicNumber) => {
+    const meta = skillMeta.get(magicNumber) ?? { rank: 0, stid: 0, reqMlPoint: 0, name: '' };
+    const fnName = stidToFunc.get(meta.stid) ?? '';
+    const expr = formulas.get(fnName) ?? '';
+    return {
+      rank: meta.rank,
+      stid: meta.stid,
+      reqMlPoint: meta.reqMlPoint,
+      skillName: meta.name,
+      luaFn: fnName,
+      expr,
+      v1: evalMasterFormula(expr, 1),
+      v10: evalMasterFormula(expr, 10),
+      v20: evalMasterFormula(expr, 20),
+    };
+  };
+
   const xmlPath = findSuiteFile(rootDir, 'MasterSkillTree.xml');
   if (xmlPath) {
-    const classes = parseXmlSections(xmlPath, 'Class', 'ID', 'Skill');
+    const rows = [];
+    const raw = fs.readFileSync(xmlPath, 'utf8').replace(/<!--[\s\S]*?-->/g, '');
+    const clsRe = /<Class\s+ID="(\d+)"[^>]*>([\s\S]*?)<\/Class>/gi;
+    let cm;
+    while ((cm = clsRe.exec(raw)) !== null) {
+      const classId = num(cm[1]);
+      const treeRe = /<Tree\s+Type="(\d+)"[^>]*>([\s\S]*?)<\/Tree>/gi;
+      let tm;
+      while ((tm = treeRe.exec(cm[2])) !== null) {
+        const treeType = num(tm[1]);
+        for (const attrs of parseXmlTagsInText(tm[2], 'Skill')) {
+          const magicNumber = num(attrs.MagicNumber ?? attrs.Index);
+          rows.push({
+            key: `${classId}:${magicNumber}`,
+            classId,
+            tree: treeType,
+            index: num(attrs.Index),
+            magicNumber,
+            maxPoint: num(attrs.MaxPoint),
+            reqMinPoint: num(attrs.ReqMinPoint),
+            parent1: num(attrs.ParentSkill1),
+            parent2: num(attrs.ParentSkill2),
+            name: attrs.Name ?? '',
+            ...attachLua(magicNumber),
+          });
+        }
+      }
+    }
     return {
       format: 'xml',
-      skillCount: classes.length,
-      skills: new Map(
-        classes.map((c) => [
-          `${c.section}:${c.attrs.MagicNumber ?? c.attrs.Index}`,
-          {
-            classId: num(c.section),
-            index: num(c.attrs.Index),
-            magicNumber: num(c.attrs.MagicNumber),
-            maxPoint: num(c.attrs.MaxPoint),
-            reqMinPoint: num(c.attrs.ReqMinPoint),
-            rank: num(c.attrs.Rank),
-            parent1: num(c.attrs.ParentSkill1),
-            parent2: num(c.attrs.ParentSkill2),
-          },
-        ]),
-      ),
+      skillCount: rows.length,
+      skills: new Map(rows.map((r) => [r.key, r])),
     };
   }
+
   const datPath = findSuiteFile(rootDir, 'MasterSkillTree.dat');
   if (datPath) {
     const lines = fs.readFileSync(datPath, 'utf8').split(/\r?\n/);
     const skills = new Map();
     for (const raw of lines) {
       const line = raw.replace(/\/\/.*$/, '').trim();
-      if (!line || line.toLowerCase() === 'end') continue;
+      if (!line || line.toLowerCase() === 'end' || line === '0') continue;
       const cols = line.split(/\s+/);
-      if (cols.length < 10 || !/^\d+$/.test(cols[0])) continue;
+      if (cols.length < 8 || !/^\d+$/.test(cols[0])) continue;
+      const index = num(cols[0]);
       const classId = num(cols[1]);
-      const magicNumber = num(cols[9]);
-      skills.set(`${classId}:${magicNumber}`, {
+      const tree = num(cols[2]);
+      const reqMinPoint = num(cols[3]);
+      const maxPoint = num(cols[4]);
+      const parent1 = num(cols[5]);
+      const parent2 = num(cols[6]);
+      const magicNumber = num(cols[7]);
+      const key = `${classId}:${magicNumber}`;
+      skills.set(key, {
+        key,
         classId,
-        index: num(cols[0]),
+        tree,
+        index,
         magicNumber,
-        maxPoint: num(cols[4]),
-        reqMinPoint: num(cols[3]),
-        rank: num(cols[2]),
-        parent1: num(cols[7]),
-        parent2: num(cols[8]),
+        maxPoint,
+        reqMinPoint,
+        parent1,
+        parent2,
+        name: skillMeta.get(magicNumber)?.name ?? '',
+        ...attachLua(magicNumber),
       });
     }
     return { format: 'dat', skillCount: skills.size, skills };
