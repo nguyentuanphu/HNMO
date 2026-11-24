@@ -8,16 +8,21 @@ Windows, Ubuntu/Linux and macOS (runtime/ has what each system needs).
 START
   Windows: double-click "Start HNMO.bat". No window stays open: HNMO's icon appears
            next to the clock (right-click it: open the game, the admin panel, the log, or
-           Stop HNMO). Your progress is saved. To see a problem at start in a window,
-           use "Start HNMO (window).bat" instead.
+           Stop HNMO). Your progress is saved.
+           Visible console window (troubleshooting): run `Start HNMO.bat /window` (or
+           `--window`), set `HNMO_WINDOW=1`, or set `"ConsoleWindow": true` in
+           `save/hnmo-settings.json`.
+           (Tiếng Việt: Bấm đúp "Start HNMO.bat" để chạy ngầm có biểu tượng khay hệ thống;
+           muốn hiện cửa sổ console hãy chạy `Start HNMO.bat /window` hoặc đặt `"ConsoleWindow": true`.)
   Ubuntu/Linux: once, install PostgreSQL 16: sudo apt install postgresql-16
            Then run ./start-hnmo.sh: HNMO runs in the background (the Terminal can be
-           closed). Stop it with ./stop-hnmo.sh or "Stop HNMO" in the admin panel.
+           closed; use `./start-hnmo.sh --window` for a foreground console). Stop it with
+           ./stop-hnmo.sh or "Stop HNMO" in the admin panel / control page.
   macOS:   once, install PostgreSQL 16: brew install postgresql@16 (or Postgres.app),
            and allow the folder: xattr -dr com.apple.quarantine HNMO
-           Then run ./start-hnmo.sh in Terminal: HNMO runs in the background (the
-           Terminal can be closed). Stop it with ./stop-hnmo.sh or "Stop HNMO" in the
-           admin panel.
+           Then double-click "Start HNMO.command" (or run ./start-hnmo.sh in Terminal):
+           HNMO runs in the background (the Terminal can be closed). Stop it with
+           ./stop-hnmo.sh or "Stop HNMO" in the admin panel / control page.
   The log (what the old window showed): the admin panel's "Server log" page, or
   save/logs (launcher.log, server.log, database.log).
   (Windows needs nothing installed: its database is in the folder.)

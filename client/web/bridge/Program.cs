@@ -175,7 +175,7 @@ builder.Services.AddSingleton(services => new GameLauncher(
 builder.Services.AddHostedService(services => services.GetRequiredService<GameLauncher>());
 builder.Services.AddSingleton(services => new ControlMaintenanceService(services.GetRequiredService<GameLauncher>(), launcherOptions, builder.Environment.ContentRootPath, services.GetRequiredService<ILogger<ControlMaintenanceService>>()));
 builder.Services.AddHostedService(services => services.GetRequiredService<ControlMaintenanceService>());
-builder.Host.ConfigureHostOptions(host => host.ShutdownTimeout = TimeSpan.FromSeconds(30));
+builder.Host.ConfigureHostOptions(host => host.ShutdownTimeout = TimeSpan.FromSeconds(5));
 builder.Services.AddHttpClient();
 builder.Services.AddHttpForwarder();
 // Request rates per visitor address for the account and payment endpoints (VisitorLimits.cs covers the game connections).

@@ -1,6 +1,5 @@
-﻿# HNMO without a console window (owner's choice, 2026-11-21): starts HNMO hidden and puts its icon next to the
-# Windows clock, with "Open the game", "Open the admin panel", "Show the log" and "Stop HNMO". If HNMO stops by
-# itself, a message box says so and where the log is (save\logs\launcher.log). Uses only what Windows has.
+﻿# Runs HNMO without a console window and keeps its icon next to the clock.
+# Double-click: open the game. Right-click: Open the game / Open the admin panel / Show the log / Stop HNMO.
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
@@ -14,16 +13,54 @@ function Fail([string]$en, [string]$viText) {
   exit 1
 }
 
-# The ports from the host settings (save\hnmo-settings.json), else the defaults.
-$webPort = 8080; $adminPort = 8095
-$settingsFile = Join-Path $root 'save\hnmo-settings.json'
-if (Test-Path $settingsFile) {
-  try {
-    $settings = Get-Content $settingsFile -Raw | ConvertFrom-Json
-    if ($settings.WebPort) { $webPort = [int]$settings.WebPort }
-    if ($settings.AdminPort) { $adminPort = [int]$settings.AdminPort }
-  } catch { }
+function Get-Ports {
+  $wp = 8080; $ap = 8095
+  $sf = Join-Path $root 'save\hnmo-settings.json'
+  if (Test-Path $sf) {
+    try {
+      $s = Get-Content $sf -Raw | ConvertFrom-Json
+      if ($s.WebPort) { $wp = [int]$s.WebPort }
+      if ($s.AdminPort) { $ap = [int]$s.AdminPort }
+    } catch { }
+  }
+  return @{ Web = $wp; Admin = $ap }
 }
+
+function Stop-HnmoTree([System.Diagnostics.Process]$proc, [int]$wp) {
+  $uri = "http://127.0.0.1:$wp/api/control/shutdown"
+  try {
+    Invoke-RestMethod -Method Post -Uri $uri -TimeoutSec 6 | Out-Null
+    $null = $proc.WaitForExit(8000)
+  } catch { }
+
+  if (-not $proc.HasExited) {
+    try { & taskkill.exe /F /T /PID $proc.Id 2>$null | Out-Null } catch { }
+    try { if (-not $proc.HasExited) { $proc.Kill() } } catch { }
+  }
+
+  # Clean up any child game server or PostgreSQL instance left behind if killed mid-startup.
+  $serverPidFile = Join-Path $root 'save\server.pid'
+  if (Test-Path $serverPidFile) {
+    try {
+      $parts = (Get-Content $serverPidFile -Raw).Trim() -split '\s+'
+      if ($parts.Length -ge 1 -and ($parts[0] -as [int])) {
+        Stop-Process -Id ([int]$parts[0]) -Force -ErrorAction SilentlyContinue
+      }
+      Remove-Item $serverPidFile -Force -ErrorAction SilentlyContinue
+    } catch { }
+  }
+  $pgPidFile = Join-Path $root 'save\db\postmaster.pid'
+  if (Test-Path $pgPidFile) {
+    $pgCtl = Join-Path $root 'postgres\bin\pg_ctl.exe'
+    if (Test-Path $pgCtl) {
+      try { & $pgCtl stop -D (Join-Path $root 'save\db') -m fast -w -t 8 2>$null | Out-Null } catch { }
+    }
+  }
+}
+
+$ports = Get-Ports
+$webPort = $ports.Web
+$adminPort = $ports.Admin
 
 # The launcher: the folder's own HNMO.exe, else the portable runtime with HNMO.dll.
 $web = Join-Path $root 'web'
@@ -49,20 +86,20 @@ $icon.Text = 'HNMO'
 $menu = New-Object System.Windows.Forms.ContextMenuStrip
 $script:stopping = $false
 function Open-Url([string]$url) { Start-Process $url }
-[void]$menu.Items.Add((T 'Open the game' 'Mở game'), $null, { Open-Url "http://localhost:$webPort/" })
-[void]$menu.Items.Add((T 'Open the admin panel' 'Mở admin panel'), $null, { Open-Url "http://localhost:$adminPort/" })
-[void]$menu.Items.Add((T 'Show the log' 'Xem nhật ký'), $null, { Open-Url "http://localhost:$adminPort/server-log" })
+[void]$menu.Items.Add((T 'Open the game' 'Mở game'), $null, { $p = (Get-Ports).Web; Open-Url "http://localhost:$p/" })
+[void]$menu.Items.Add((T 'Open the admin panel' 'Mở admin panel'), $null, { $p = (Get-Ports).Admin; Open-Url "http://localhost:$p/" })
+[void]$menu.Items.Add((T 'Show the log' 'Xem nhật ký'), $null, { $p = (Get-Ports).Admin; Open-Url "http://localhost:$p/server-log" })
 [void]$menu.Items.Add((New-Object System.Windows.Forms.ToolStripSeparator))
 [void]$menu.Items.Add((T 'Stop HNMO' 'Tắt HNMO'), $null, {
   $answer = [System.Windows.Forms.MessageBox]::Show((T 'Stop the game for everyone?' 'Tắt game cho mọi người?'), 'HNMO', 'YesNo', 'Question')
   if ($answer -ne 'Yes') { return }
   $script:stopping = $true
   $icon.Text = (T 'HNMO is stopping...' 'HNMO đang tắt...')
-  try { Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:$webPort/api/control/shutdown" -TimeoutSec 10 | Out-Null }
-  catch { try { $process.Kill() } catch { } }
+  $p = (Get-Ports).Web
+  Stop-HnmoTree $process $p
 })
 $icon.ContextMenuStrip = $menu
-$icon.add_DoubleClick({ Open-Url "http://localhost:$webPort/" })
+$icon.add_DoubleClick({ $p = (Get-Ports).Web; Open-Url "http://localhost:$p/" })
 $icon.Visible = $true
 $icon.ShowBalloonTip(5000, 'HNMO', (T 'HNMO is starting. The game opens in your browser; right-click this icon for the admin panel, the log or to stop.' 'HNMO đang khởi động. Game sẽ mở trong trình duyệt; bấm chuột phải vào biểu tượng này để mở admin, xem nhật ký hoặc tắt.'), 'Info')
 

@@ -177,7 +177,8 @@ internal static class ControlEndpoints
             logger.LogInformation("Stopping HNMO (asked from {Page}).", ctx.Request.Headers.Referer.ToString());
             _ = Task.Run(async () =>
             {
-                await Task.Delay(500).ConfigureAwait(false); // the answer goes out first
+                await Task.Delay(250).ConfigureAwait(false); // let the HTTP response go out first
+                launcher?.RequestShutdownStop();
                 app.Services.GetRequiredService<IHostApplicationLifetime>().StopApplication();
             });
             return Results.Ok(new { ok = true });
