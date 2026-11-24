@@ -251,6 +251,7 @@ export interface GameState {
   accountSafety?: AccountSafety;
   screenshots?: Screenshots;
   onboarding?: OnboardingWindow;
+  quests?: QuestWindows;
   buffs?: BuffTracker;
   party?: Party;
   trade?: Trade;
@@ -2587,7 +2588,8 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   // NPC dialogues and quests (npc_dialogue, quest_progress, my_quest_info on T, npc_quest; ui/questWindows.ts).
   const quests = new QuestWindows({ connection, message: (text) => chat.add(text, 'system'), sound: (name) => sounds.audio.play(name),
     hero: { name: character.name, baseClass: character.classIndex, level: () => stats.level, money: () => inventory.money, bagItems: () => [...inventory.items].filter(([slot]) => slot >= 12).map(([, item]) => item) },
-    closeOthers: () => closeGroupA('quests'), showItem: (item, box) => void itemWindows.tooltip.show(item, box), hideItem: () => itemWindows.tooltip.hide() });
+    closeOthers: () => { closeGroupA('quests'); if (state.onboarding?.isOpen) state.onboarding.close(); }, showItem: (item, box) => void itemWindows.tooltip.show(item, box), hideItem: () => itemWindows.tooltip.hide() });
+  state.quests = quests;
   earlyPackets.forEach((bytes) => quests.handle(bytes));
   // Blood Castle, Devil Square, Chaos Castle: entry windows, tickets, time, countdowns, results (ui/eventWindows.ts).
   state.events = setUpEvents({ connection, heroName: character.name, hero: () => ({ level: stats.level, classIndex: character.classIndex, master: character.master ?? false }),
