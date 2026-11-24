@@ -1,5 +1,5 @@
 {
-  "generatedAt": "a0f3c0dc",
+  "generatedAt": "3f0f29fd",
   "maxLines": 6000,
   "units": [
     {
@@ -2384,11 +2384,16 @@
       ],
       "files": 40,
       "lines": 834,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "3f0f29fd",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Views/ChatMessageType.cs",
+        "Views/IChatCommandListViewPlugIn.cs",
+        "Views/IChatViewPlugIn.cs",
+        "docs/audit/findings/unit-server-src-GameLogic-Views-files-1.md"
+      ],
+      "evidence": "40f/834L: No game rules (ViewExtensions.cs:12-60 (ConstantPlayerId = 0x0200 dynamic map ID helper) + view interfaces).",
       "prs": ""
     },
     {
