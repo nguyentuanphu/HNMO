@@ -1,5 +1,5 @@
 {
-  "generatedAt": "33ab82c2",
+  "generatedAt": "3436e785",
   "maxLines": 6000,
   "units": [
     {
@@ -710,11 +710,11 @@
       ],
       "files": 16,
       "lines": 1949,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "3436e785",
+      "checkedOn": "2026-11-24",
+      "references": "S6/S9 IGC_MoveReq.xml & IGC_MoveLevel.xml (docs/audit/references/warps-and-npc-dialogs-s6-s9.md)",
+      "evidence": "Read all 16 files in full; see docs/audit/findings/unit-server-src-GameLogic-PlayerActions-files-1.md.",
       "prs": ""
     },
     {
