@@ -1,5 +1,5 @@
 {
-  "generatedAt": "1b5c2b92",
+  "generatedAt": "116c618d",
   "maxLines": 6000,
   "units": [
     {
@@ -6024,11 +6024,14 @@
       ],
       "files": 2,
       "lines": 191,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "116c618d",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "DataHandler/BuffData",
+        "docs/audit/findings/unit-client-src-source-Data-DataHandler-BuffData.md"
+      ],
+      "evidence": "2f/191L: No game rules (binary/JSON file loaders, checksum & IO helpers (no game balance rules).)",
       "prs": ""
     },
     {
