@@ -1,5 +1,5 @@
 {
-  "generatedAt": "88880dad",
+  "generatedAt": "45fe041c",
   "maxLines": 6000,
   "units": [
     {
@@ -2286,11 +2286,11 @@
       ],
       "files": 32,
       "lines": 4941,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "45fe041c",
+      "checkedOn": "2026-11-24",
+      "references": [],
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-ServerImporter.md",
       "prs": ""
     },
     {
