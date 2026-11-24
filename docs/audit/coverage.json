@@ -1,5 +1,5 @@
 {
-  "generatedAt": "0163b076",
+  "generatedAt": "efe99b4c",
   "maxLines": 6000,
   "units": [
     {
@@ -6403,11 +6403,15 @@
       ],
       "files": 32,
       "lines": 4389,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "efe99b4c",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "ItemStatsJson.cpp:42-81,526-704",
+        "ItemStatTerms.h",
+        "docs/audit/findings/unit-client-src-source-Data-GameData-ItemData-files-3.md"
+      ],
+      "evidence": "32f/4389L: Reads/validates ItemStatProfile JSON percent/formula terms matching server DataModel/Configuration/Items.",
       "prs": ""
     },
     {
