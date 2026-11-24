@@ -1,5 +1,5 @@
 {
-  "generatedAt": "0d875c3e",
+  "generatedAt": "44014d75",
   "maxLines": 6000,
   "units": [
     {
@@ -449,11 +449,11 @@
       ],
       "files": 23,
       "lines": 3913,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "44014d75",
+      "checkedOn": "2026-11-24",
+      "references": "docs/audit/references/crywolf-s6-s9.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-Crywolf.md",
       "prs": ""
     },
     {
