@@ -1,5 +1,5 @@
 {
-  "generatedAt": "b1c3077a",
+  "generatedAt": "cd55db4a",
   "maxLines": 6000,
   "units": [
     {
@@ -7319,11 +7319,14 @@
       ],
       "files": 16,
       "lines": 2443,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "cd55db4a",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "source/Guild",
+        "docs/audit/findings/unit-client-src-source-Guild.md"
+      ],
+      "evidence": "16f/2443L: No game rules (Guild info/relationship UI windows & I18N result formatters (server owns guild rules).)",
       "prs": ""
     },
     {
