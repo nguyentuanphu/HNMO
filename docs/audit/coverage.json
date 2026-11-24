@@ -1,5 +1,5 @@
 {
-  "generatedAt": "f9b96fc8",
+  "generatedAt": "512795cc",
   "maxLines": 6000,
   "units": [
     {
@@ -1224,7 +1224,7 @@
       "files": 6,
       "lines": 678,
       "status": "Checked",
-      "checkedAt": "f9b96fc8",
+      "checkedAt": "512795cc",
       "checkedOn": "2026-11-24",
       "references": [
         "None (custom HNMO feature)"
@@ -1286,7 +1286,7 @@
       "files": 5,
       "lines": 649,
       "status": "Checked",
-      "checkedAt": "f9b96fc8",
+      "checkedAt": "512795cc",
       "checkedOn": "2026-11-24",
       "references": [
         "None (custom HNMO feature)"
@@ -1333,7 +1333,7 @@
       "files": 4,
       "lines": 378,
       "status": "Checked",
-      "checkedAt": "f9b96fc8",
+      "checkedAt": "512795cc",
       "checkedOn": "2026-11-24",
       "references": [
         "None (custom HNMO feature)"
@@ -1560,11 +1560,13 @@
       ],
       "files": 8,
       "lines": 979,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "512795cc",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "None (custom HNMO feature)"
+      ],
+      "evidence": "All 8 CustomRanks files read in full. Verified tier qualification, selection enforcement, and row-sync persistence. See docs/audit/findings/unit-server-src-GameLogic-PlugIns-CustomRanks.md.",
       "prs": ""
     },
     {
@@ -1711,7 +1713,7 @@
       "files": 5,
       "lines": 502,
       "status": "Checked",
-      "checkedAt": "f9b96fc8",
+      "checkedAt": "512795cc",
       "checkedOn": "2026-11-24",
       "references": [
         "None (custom HNMO feature)"
@@ -1773,7 +1775,7 @@
       "files": 3,
       "lines": 121,
       "status": "Checked",
-      "checkedAt": "f9b96fc8",
+      "checkedAt": "512795cc",
       "checkedOn": "2026-11-24",
       "references": [
         "None (server feature config)"
@@ -1910,7 +1912,7 @@
       "files": 5,
       "lines": 553,
       "status": "Checked",
-      "checkedAt": "f9b96fc8",
+      "checkedAt": "512795cc",
       "checkedOn": "2026-11-24",
       "references": [
         "None (custom HNMO feature)"
@@ -2156,7 +2158,7 @@
       "files": 5,
       "lines": 161,
       "status": "Checked",
-      "checkedAt": "f9b96fc8",
+      "checkedAt": "512795cc",
       "checkedOn": "2026-11-24",
       "references": [
         "docs/audit/references/common-server-and-character-rules-s6-s9.md"
