@@ -2,12 +2,24 @@
 <root>
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
+  <data name="EventGuide" xml:space="preserve"><value>Live event and quest guide</value></data>
+  <data name="EventGuideDescription" xml:space="preserve"><value>Show current event and invasion schedules, configured rewards and quests in the website guide.</value></data>
+  <data name="CombatGuide" xml:space="preserve"><value>Live PvP and loot guide</value></data>
+  <data name="CombatGuideDescription" xml:space="preserve"><value>Publish PvP formulas, monster experience and loot rules, and world boss reward rules.</value></data>
   <data name="ClientRulesEn" xml:space="preserve"><value>Client rules (English)</value></data>
   <data name="ClientRulesVi" xml:space="preserve"><value>Client rules (Vietnamese)</value></data>
   <data name="NotForSaleEn" xml:space="preserve"><value>Not for sale (English)</value></data>
+  <data name="ItemGuide" xml:space="preserve"><value>Live item and mix guide</value></data>
+  <data name="ItemGuideDescription" xml:space="preserve"><value>Show configured items, requirements, drop sources, boxes and mixes in the website guide.</value></data>
   <data name="NotForSaleVi" xml:space="preserve"><value>Not for sale (Vietnamese)</value></data>
   <data name="Description" xml:space="preserve"><value>Public player information, one line per rule. Leave empty until you have published your policy. Do not put passwords or private account details here.</value></data>
   <data name="MaximumLength" xml:space="preserve"><value>Use at most {1} characters.</value></data>
+  <data name="TrackerEnabled" xml:space="preserve"><value>Public activity tracker</value></data>
+  <data name="TrackerEnabledDescription" xml:space="preserve"><value>Publish a bounded activity feed. Each account can opt out.</value></data>
+  <data name="TrackerNames" xml:space="preserve"><value>Show tracker character names</value></data>
+  <data name="TrackerNamesDescription" xml:space="preserve"><value>Allow eligible character names in the public feed. Player opt-outs still apply.</value></data>
+  <data name="ClassGuide" xml:space="preserve"><value>Live class guide</value></data>
+  <data name="ClassGuideDescription" xml:space="preserve"><value>Show class attributes, formulas and skills from the selected server in the website guide.</value></data>
   <data name="ContentRoadmapEn" xml:space="preserve"><value>Public roadmap (English)</value></data>
   <data name="ContentRoadmapVi" xml:space="preserve"><value>Public roadmap (Vietnamese)</value></data>
   <data name="ContentAboutEn" xml:space="preserve"><value>Public about page (English)</value></data>

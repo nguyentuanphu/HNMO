@@ -24,12 +24,16 @@ internal static class Website
         }
 
         Forward(app, "/website/server-guide", "api/website/server-guide", options, clients, rateLimited: true);
+        Forward(app, "/website/tracker", "api/website/tracker", options, clients, rateLimited: true);
+        Forward(app, "/website/class-guide", "api/website/class-guide", options, clients, rateLimited: true, integerQueryKeys: ["serverId", "classId"]);
         Forward(app, "/website/data", "api/website", options, clients);
         Forward(app, "/website/details", "api/website/details", options, clients);
         Forward(app, "/website/missions", "api/website/missions", options, clients);
         Forward(app, "/website/timetable", "api/website/timetable", options, clients);
+        Forward(app, "/website/event-guide", "api/website/event-guide", options, clients, rateLimited: true, integerQueryKeys: ["serverId"]);
         Forward(app, "/website/world-bosses", "api/website/world-bosses", options, clients);
         Forward(app, "/website/onboarding", "api/website/onboarding", options, clients);
+        Forward(app, "/website/item-guide", "api/website/item-guide", options, clients, rateLimited: true, integerQueryKeys: ["serverId", "group", "page", "number", "mixPage", "mixIndex"]);
         Forward(app, "/website/guilds", "api/website/guilds", options, clients);
         Forward(app, "/website/community", "api/website/community", options, clients);
         Forward(app, "/website/top-races", "api/website/top-races", options, clients);
@@ -40,6 +44,7 @@ internal static class Website
         Forward(app, "/website/topup-milestones", "api/website/topup-milestones", options, clients);
         Forward(app, "/website/market", "api/website/market", options, clients);
         Forward(app, "/website/escrow", "api/website/escrow", options, clients);
+        Forward(app, "/website/combat-guide", "api/website/combat-guide", options, clients, rateLimited: true);
         Forward(app, "/website/build-calculator", "api/website/build-calculator", options, clients);
         ForwardPost(app, "/website/build-calculator", "api/website/build-calculator", options, clients);
         app.MapPost("/website/escrow/direct/webhook/{contractId}", async (string contractId, HttpContext context) =>
@@ -111,7 +116,7 @@ internal static class Website
         });
     }
 
-    private static void Forward(WebApplication app, string route, string apiPath, PortalOptions options, IHttpClientFactory clients, string? apiBaseUrl = null, bool rateLimited = false)
+    private static void Forward(WebApplication app, string route, string apiPath, PortalOptions options, IHttpClientFactory clients, string? apiBaseUrl = null, bool rateLimited = false, string[]? integerQueryKeys = null)
     {
         var endpoint = app.MapGet(route, async (HttpContext context) =>
         {
@@ -120,7 +125,21 @@ internal static class Website
             timeout.CancelAfter(TimeSpan.FromSeconds(10));
             try
             {
-                var source = new Uri(new Uri(apiBaseUrl ?? options.ApiBaseUrl), apiPath);
+                var query = QueryString.Empty;
+                foreach (var key in integerQueryKeys ?? [])
+                {
+                    if (context.Request.Query.TryGetValue(key, out var input))
+                    {
+                        if (input.Count != 1 || !int.TryParse(input[0], out var value))
+                        {
+                            return Results.BadRequest();
+                        }
+
+                        query = query.Add(key, value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                    }
+                }
+
+                var source = new Uri(new Uri(apiBaseUrl ?? options.ApiBaseUrl), apiPath + query);
                 using var response = await clients.CreateClient().GetAsync(source, timeout.Token).ConfigureAwait(false);
                 if (!response.IsSuccessStatusCode)
                 {

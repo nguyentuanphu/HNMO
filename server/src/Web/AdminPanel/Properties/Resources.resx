@@ -5215,4 +5215,31 @@ On your account page, open Security and paste this code to confirm your new emai
   <data name="HnmoUpdatePage" xml:space="preserve">
     <value>HNMO update</value>
   </data>
+  <data name="ActivityLogKindLoot" xml:space="preserve">
+    <value>Loot</value>
+  </data>
+  <data name="ActivityLogKindUpgrade" xml:space="preserve">
+    <value>Upgrade</value>
+  </data>
+  <data name="ActivityLogKindConsume" xml:space="preserve">
+    <value>Item use</value>
+  </data>
+  <data name="ActivityLogKindGrant" xml:space="preserve">
+    <value>Item grant</value>
+  </data>
+  <data name="ActivityLogKindPvpKill" xml:space="preserve">
+    <value>PvP defeat</value>
+  </data>
+  <data name="ActivityLogSerials" xml:space="preserve">
+    <value>Item serials</value>
+  </data>
+  <data name="ActivityLogLegacyIds" xml:space="preserve">
+    <value>Legacy item IDs</value>
+  </data>
+  <data name="ActivityLogBefore" xml:space="preserve">
+    <value>Before</value>
+  </data>
+  <data name="ActivityLogAfter" xml:space="preserve">
+    <value>After</value>
+  </data>
 </root>

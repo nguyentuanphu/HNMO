@@ -1,0 +1,10 @@
+.event-guide-fields:not([hidden]) { display: grid; gap: 4px; max-width: 24rem; }
+.event-guide-time { display: flex; align-items: center; gap: 6px; }
+.event-guide-fields select, .event-guide button { font: inherit; color: inherit; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 6px 9px; max-width: 100%; }
+.event-guide button, .event-guide summary { cursor: pointer; }
+.event-guide-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr)); gap: 10px; align-items: start; }
+.event-guide-cards > article, .event-guide-cards > details { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px; min-width: 0; overflow-wrap: anywhere; }
+.event-guide-cards article article { border-top: 1px solid var(--line); padding-top: 6px; margin-top: 8px; }
+.event-guide h4, .event-guide h5 { margin: 8px 0 4px; }
+.event-guide summary { color: var(--gold); }
+.event-guide-cards > details summary { font-weight: 600; }

@@ -12,22 +12,42 @@ export interface ServerGuideFacts {
   vip: GuideVip[];
   catalog: { products: GuideProduct[] | null; truncated: boolean };
 }
+export interface GuideRealmRules {
+  guildCreationMinimumLevel: number;
+  bloodCastle: { minimumSeconds: number; maximumSeconds: number } | null;
+}
 export interface ServerGuideView {
   updatedAt: string; clientRules: { en: string; vi: string }; notForSale: { en: string; vi: string };
-  servers: { id: number; facts: ServerGuideFacts; extras?: ServerGuideExtras }[];
+  servers: { id: number; facts: ServerGuideFacts; extras?: ServerGuideExtras; realmRules?: GuideRealmRules }[];
 }
 
 export interface GuideQuest { nameEn: string; nameVi: string; npcEn: string; npcVi: string; minimumLevel: number; maximumLevel: number; requiredStartMoney: number; classEn: string; classVi: string }
-export interface GuideCraft { nameEn: string; nameVi: string; npcEn: string; npcVi: string; itemEn: string; itemVi: string; randomMinimumLevel: number; randomMaximumLevel: number; addLevel: number; upgrade: boolean; basePercent: number | null; maximumPercent: number; fixedZen: number; zenPerFinalPercentage: number; excellentChance: number | null; maximumExcellentOptions: number }
+export interface GuideCraft { nameEn: string; nameVi: string; npcEn: string; npcVi: string; itemEn: string; itemVi: string; randomMinimumLevel: number; randomMaximumLevel: number; addLevel: number; upgrade: boolean; basePercent: number | null; maximumPercent: number; fixedZen: number; zenPerFinalPercentage: number; excellentChance: number | null; maximumExcellentOptions: number; ingredients?: GuideIngredient[]; ingredientsTruncated?: boolean }
+interface BilingualName { nameEn: string; nameVi: string }
+interface GuideIngredient {
+  minimumAmount: number; maximumAmount: number; minimumItemLevel: number; maximumItemLevel: number;
+  anyItem: boolean; choicesTruncated: boolean; items: BilingualName[]; options: BilingualName[];
+}
+interface GuideGear extends BilingualName {
+  slotEn: string; slotVi: string; sourceEn: string; sourceVi: string; mapEn: string; mapVi: string;
+  source: 'field' | 'merchant' | 'catalog'; maximumLevel: number;
+}
+export interface GuideLoot {
+  gear: GuideGear[]; gearTruncated: boolean;
+  groups: (BilingualName & { minimumChance: number; maximumChance: number })[]; groupsTruncated: boolean;
+}
 export interface ServerGuideExtras {
   systems: { antiCheatEnabled: boolean; activityLogEnabled: boolean; onlyValuableDrops: boolean };
   quests: GuideQuest[]; questsTruncated: boolean; crafts: GuideCraft[]; craftsTruncated: boolean;
+  loot?: GuideLoot;
+  availability?: { helper: boolean; vip: boolean; multiVault: boolean; shop: boolean };
 }
 
 const MAX_PUBLIC_ROWS = 32;
 const MAX_PARTY_MEMBERS = 255;
 const MAX_CATALOG_ROWS = 100;
 const MAX_POLICY_CHARACTERS = 4000;
+const MAX_INGREDIENT_ROWS = 12;
 function object(value: unknown): Record<string, unknown> {
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('server-guide-shape');
   return value as Record<string, unknown>;
@@ -78,16 +98,90 @@ function quest(value: unknown): GuideQuest {
 }
 function craft(value: unknown): GuideCraft {
   const row = object(value);
-  return { ...names(row), npcEn: text(row.npcEn), npcVi: text(row.npcVi), itemEn: nullableText(row.itemEn), itemVi: nullableText(row.itemVi), randomMinimumLevel: number(row.randomMinimumLevel), randomMaximumLevel: number(row.randomMaximumLevel), addLevel: number(row.addLevel), upgrade: flag(row.upgrade), basePercent: row.basePercent === null ? null : number(row.basePercent), maximumPercent: number(row.maximumPercent), fixedZen: number(row.fixedZen), zenPerFinalPercentage: number(row.zenPerFinalPercentage), excellentChance: row.excellentChance === null ? null : number(row.excellentChance), maximumExcellentOptions: number(row.maximumExcellentOptions) };
+  return { ...names(row), npcEn: text(row.npcEn), npcVi: text(row.npcVi), itemEn: nullableText(row.itemEn), itemVi: nullableText(row.itemVi), randomMinimumLevel: number(row.randomMinimumLevel), randomMaximumLevel: number(row.randomMaximumLevel), addLevel: number(row.addLevel), upgrade: flag(row.upgrade), basePercent: row.basePercent === null ? null : number(row.basePercent), maximumPercent: number(row.maximumPercent), fixedZen: number(row.fixedZen), zenPerFinalPercentage: number(row.zenPerFinalPercentage), excellentChance: row.excellentChance === null ? null : number(row.excellentChance), maximumExcellentOptions: number(row.maximumExcellentOptions),
+    ...(row.ingredients === undefined ? {} : { ingredients: array(row.ingredients, ingredient, MAX_INGREDIENT_ROWS), ingredientsTruncated: flag(row.ingredientsTruncated) }),
+  };
+}
+
+function nameWithFallback(value: unknown): BilingualName {
+  const row = object(value);
+  return { nameEn: nullableText(row.nameEn), nameVi: nullableText(row.nameVi) };
+}
+
+function ingredient(value: unknown): GuideIngredient {
+  const row = object(value);
+  return {
+    minimumAmount: number(row.minimumAmount), maximumAmount: number(row.maximumAmount),
+    minimumItemLevel: number(row.minimumItemLevel), maximumItemLevel: number(row.maximumItemLevel),
+    anyItem: flag(row.anyItem), choicesTruncated: flag(row.choicesTruncated),
+    items: array(row.items, nameWithFallback, MAX_INGREDIENT_ROWS),
+    options: array(row.options, nameWithFallback, MAX_INGREDIENT_ROWS),
+  };
+}
+
+function gear(value: unknown): GuideGear {
+  const row = object(value);
+  const source = row.source;
+  if (source !== 'field' && source !== 'merchant' && source !== 'catalog') throw new Error('server-guide-gear-source');
+  return {
+    ...nameWithFallback(row), source, maximumLevel: number(row.maximumLevel),
+    slotEn: nullableText(row.slotEn), slotVi: nullableText(row.slotVi),
+    sourceEn: nullableText(row.sourceEn), sourceVi: nullableText(row.sourceVi),
+    mapEn: nullableText(row.mapEn), mapVi: nullableText(row.mapVi),
+  };
+}
+
+function loot(value: unknown): GuideLoot {
+  const row = object(value);
+  return {
+    gear: array(row.gear, gear, MAX_PUBLIC_ROWS), gearTruncated: flag(row.gearTruncated),
+    groups: array(row.groups, value => {
+      const group = object(value);
+      const minimumChance = number(group.minimumChance);
+      const maximumChance = number(group.maximumChance);
+      if (minimumChance < 0 || maximumChance > 1 || minimumChance > maximumChance) throw new Error('server-guide-drop-chance');
+      return { ...nameWithFallback(group), minimumChance, maximumChance };
+    }, MAX_PUBLIC_ROWS),
+    groupsTruncated: flag(row.groupsTruncated),
+  };
+}
+
+function availability(value: unknown): NonNullable<ServerGuideExtras['availability']> {
+  const row = object(value);
+  return { helper: flag(row.helper), vip: flag(row.vip), multiVault: flag(row.multiVault), shop: flag(row.shop) };
 }
 function extras(value: unknown): ServerGuideExtras {
   const row = object(value); const systems = object(row.systems);
-  return { systems: { antiCheatEnabled: flag(systems.antiCheatEnabled), activityLogEnabled: flag(systems.activityLogEnabled), onlyValuableDrops: flag(systems.onlyValuableDrops) }, quests: array(row.quests, quest, MAX_PUBLIC_ROWS), questsTruncated: flag(row.questsTruncated), crafts: array(row.crafts, craft, MAX_PUBLIC_ROWS), craftsTruncated: flag(row.craftsTruncated) };
+  return { systems: { antiCheatEnabled: flag(systems.antiCheatEnabled), activityLogEnabled: flag(systems.activityLogEnabled), onlyValuableDrops: flag(systems.onlyValuableDrops) }, quests: array(row.quests, quest, MAX_PUBLIC_ROWS), questsTruncated: flag(row.questsTruncated), crafts: array(row.crafts, craft, MAX_PUBLIC_ROWS), craftsTruncated: flag(row.craftsTruncated),
+    ...(row.loot == null ? {} : { loot: loot(row.loot) }),
+    ...(row.availability == null ? {} : { availability: availability(row.availability) }),
+  };
+}
+
+function realmRules(value: unknown): GuideRealmRules {
+  const row = object(value);
+  return {
+    guildCreationMinimumLevel: number(row.guildCreationMinimumLevel),
+    bloodCastle: optional(row.bloodCastle, item => ({
+      minimumSeconds: number(item.minimumSeconds),
+      maximumSeconds: number(item.maximumSeconds),
+    })),
+  };
+}
+
+function server(value: unknown): ServerGuideView['servers'][number] {
+  const row = object(value);
+  return {
+    id: number(row.id),
+    facts: facts(row.facts),
+    ...(row.extras === undefined ? {} : { extras: extras(row.extras) }),
+    ...(row.realmRules === undefined ? {} : { realmRules: realmRules(row.realmRules) }),
+  };
 }
 
 /** Reject incompatible replies rather than rendering invented fallback rates or old offers. */
 export function parseServerGuide(value: unknown): ServerGuideView {
   const row = object(value); const updatedAt = text(row.updatedAt);
   if (Number.isNaN(Date.parse(updatedAt))) throw new Error('server-guide-time');
-  return { updatedAt, clientRules: bilingual(row.clientRules), notForSale: bilingual(row.notForSale), servers: array(row.servers, value => { const server = object(value); return { id: number(server.id), facts: facts(server.facts), ...(server.extras === undefined ? {} : { extras: extras(server.extras) }) }; }, MAX_PUBLIC_ROWS) };
+  return { updatedAt, clientRules: bilingual(row.clientRules), notForSale: bilingual(row.notForSale), servers: array(row.servers, server, MAX_PUBLIC_ROWS) };
 }

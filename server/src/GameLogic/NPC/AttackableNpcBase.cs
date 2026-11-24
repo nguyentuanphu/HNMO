@@ -403,12 +403,12 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
             IReadOnlyList<ExperienceShare> experienceShares;
             if (aiConfig.SplitExpByDamage && damagers.Count > 1)
             {
-                var totalDamage = Math.Max(1L, damagers.Sum(kv => kv.Value));
+                var totalDamage = damagers.Sum(kv => kv.Value);
                 var shares = new List<ExperienceShare>(damagers.Count);
                 foreach (var group in damagers.GroupBy(kv => (object?)kv.Key.Party ?? kv.Key))
                 {
                     var groupDamage = group.Sum(kv => kv.Value);
-                    var share = groupDamage / (double)totalDamage;
+                    var share = GetDamageExperienceShare(groupDamage, totalDamage);
                     if (group.Key is Party party)
                     {
                         var rep = group.OrderByDescending(kv => kv.Value).First().Key;
@@ -452,6 +452,13 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
             }
         }
     }
+
+    /// <summary>Gets the proportion of a monster kill's experience assigned to one damage group.</summary>
+    /// <param name="groupDamage">The damage accumulated by a player or party.</param>
+    /// <param name="totalDamage">The damage accumulated by all players and parties.</param>
+    /// <returns>The share before eligibility, server rates, and party modifiers.</returns>
+    public static double GetDamageExperienceShare(long groupDamage, long totalDamage)
+        => groupDamage / (double)Math.Max(1L, totalDamage);
 
     private async ValueTask RemoveFromMapAndDisposeAsync()
     {
@@ -583,6 +590,7 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
 
         var firstItem = !droppedMoney.HasValue;
         var plugInPoint = killer.GameContext.PlugInManager.GetPlugInPoint<IMonsterItemDropPlugIn>();
+        var activity = PlugIns.ActivityLog.ActivityLogPlugIn.Get(killer.GameContext);
         foreach (var item in generatedItems)
         {
             if (plugInPoint is not null)
@@ -607,8 +615,14 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
             }
 
             var owners = killer.Party?.PartyList.AsEnumerable() ?? killer.GetAsEnumerable();
+            if (activity?.ShouldRecordFloorItem(item) == true)
+            {
+                item.EnsureSerial();
+            }
+
             var droppedItem = new DroppedItem(item, dropCoordinates, this.CurrentMap, null, owners);
             await this.CurrentMap.AddAsync(droppedItem).ConfigureAwait(false);
+            activity?.RecordLoot(killer, item, $"Monster={this.Definition.Designation.ValueInNeutralLanguage}");
             await killer.GameContext.PlugInManager.NotifyPlugInsAsync<IMonsterItemDroppedPlugIn>(
                 p => p.MonsterItemDroppedAsync(this, killer, droppedItem),
                 killer.Logger).ConfigureAwait(false);

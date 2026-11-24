@@ -12,6 +12,17 @@ public static class WebsiteServerPageLabels
 {
     private static readonly ResourceManager Resources = new("HNMO.GameLogic.Properties.WebsiteServerPage", typeof(WebsiteServerPageLabels).Assembly);
 
+    /// <summary>Gets the localized class guide setting.</summary>
+    public static string ClassGuide => Resources.GetString(nameof(ClassGuide), CultureInfo.CurrentUICulture) ?? nameof(ClassGuide);
+
+    /// <summary>Gets the localized class guide setting description.</summary>
+    public static string ClassGuideDescription => Resources.GetString(nameof(ClassGuideDescription), CultureInfo.CurrentUICulture) ?? nameof(ClassGuideDescription);
+    /// <summary>Gets the localized combat guide switch label.</summary>
+    public static string CombatGuide => Resources.GetString(nameof(CombatGuide), CultureInfo.CurrentUICulture) ?? nameof(CombatGuide);
+
+    /// <summary>Gets the localized combat guide switch description.</summary>
+    public static string CombatGuideDescription => Resources.GetString(nameof(CombatGuideDescription), CultureInfo.CurrentUICulture) ?? nameof(CombatGuideDescription);
+
     /// <summary>Gets the localized ClientRulesEn label.</summary>
     public static string ClientRulesEn => Resources.GetString(nameof(ClientRulesEn), CultureInfo.CurrentUICulture) ?? nameof(ClientRulesEn);
 
@@ -24,11 +35,37 @@ public static class WebsiteServerPageLabels
     /// <summary>Gets the localized NotForSaleVi label.</summary>
     public static string NotForSaleVi => Resources.GetString(nameof(NotForSaleVi), CultureInfo.CurrentUICulture) ?? nameof(NotForSaleVi);
 
+    /// <summary>Gets the localized item and mix guide setting.</summary>
+    public static string ItemGuide => Resources.GetString(nameof(ItemGuide), CultureInfo.CurrentUICulture) ?? nameof(ItemGuide);
+
+    /// <summary>Gets the localized item and mix guide setting description.</summary>
+    public static string ItemGuideDescription => Resources.GetString(nameof(ItemGuideDescription), CultureInfo.CurrentUICulture) ?? nameof(ItemGuideDescription);
+
     /// <summary>Gets the localized Description label.</summary>
     public static string Description => Resources.GetString(nameof(Description), CultureInfo.CurrentUICulture) ?? nameof(Description);
 
     /// <summary>Gets the localized MaximumLength label.</summary>
     public static string MaximumLength => Resources.GetString(nameof(MaximumLength), CultureInfo.CurrentUICulture) ?? nameof(MaximumLength);
+
+    /// <summary>Gets the public tracker switch caption.</summary>
+    public static string TrackerEnabled => Get(nameof(TrackerEnabled));
+
+    /// <summary>Gets the public tracker switch description.</summary>
+    public static string TrackerEnabledDescription => Get(nameof(TrackerEnabledDescription));
+
+    /// <summary>Gets the tracker character-name switch caption.</summary>
+    public static string TrackerNames => Get(nameof(TrackerNames));
+
+    /// <summary>Gets the tracker character-name switch description.</summary>
+    public static string TrackerNamesDescription => Get(nameof(TrackerNamesDescription));
+
+    private static string Get(string key) => Resources.GetString(key, CultureInfo.CurrentUICulture) ?? key;
+    /// <summary>Gets the localized event and quest guide setting.</summary>
+    public static string EventGuide => Resources.GetString(nameof(EventGuide), CultureInfo.CurrentUICulture) ?? nameof(EventGuide);
+
+    /// <summary>Gets the localized event and quest guide setting description.</summary>
+    public static string EventGuideDescription => Resources.GetString(nameof(EventGuideDescription), CultureInfo.CurrentUICulture) ?? nameof(EventGuideDescription);
+
 
     /// <summary>Gets the localized caption for the English roadmap field.</summary>
     public static string ContentRoadmapEn => Resources.GetString(nameof(ContentRoadmapEn), CultureInfo.CurrentUICulture) ?? nameof(ContentRoadmapEn);

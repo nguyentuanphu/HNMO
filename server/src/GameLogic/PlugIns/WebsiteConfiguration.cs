@@ -48,12 +48,30 @@ public class WebsiteConfiguration
     [StringLength(200)]
     public string GoogleClientId { get; set; } = string.Empty;
 
+    /// <summary>Gets or sets a value indicating whether the website publishes the live item and mix guide.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.ItemGuide), Description = nameof(WebsiteServerPageLabels.ItemGuideDescription), ResourceType = typeof(WebsiteServerPageLabels))]
+    public bool ItemGuideEnabled { get; set; } = true;
+
     /// <summary>
     /// Gets or sets a value indicating whether the web game hides its own password form and requires
     /// players to sign in on the website first.
     /// </summary>
     [Display(Name = nameof(Properties.PlugInResources.WebsiteConfiguration_RequireWebsiteLogin_Caption), Description = nameof(Properties.PlugInResources.WebsiteConfiguration_RequireWebsiteLogin_Description), ResourceType = typeof(Properties.PlugInResources))]
     public bool RequireWebsiteLogin { get; set; }
+
+    /// <summary>Gets or sets whether the host publishes a public tracker feed.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.TrackerEnabled), Description = nameof(WebsiteServerPageLabels.TrackerEnabledDescription), ResourceType = typeof(WebsiteServerPageLabels))]
+    public bool TrackerEnabled { get; set; }
+
+    /// <summary>Gets or sets whether the tracker may display eligible character names.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.TrackerNames), Description = nameof(WebsiteServerPageLabels.TrackerNamesDescription), ResourceType = typeof(WebsiteServerPageLabels))]
+    public bool TrackerShowCharacterNames { get; set; }
+    /// <summary>Gets or sets a value indicating whether the public guide shows live class configuration.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.ClassGuide), Description = nameof(WebsiteServerPageLabels.ClassGuideDescription), ResourceType = typeof(WebsiteServerPageLabels))]
+    public bool ClassGuideEnabled { get; set; } = true;
+    /// <summary>Gets or sets whether the site publishes the live combat and loot guide.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.CombatGuide), Description = nameof(WebsiteServerPageLabels.CombatGuideDescription), ResourceType = typeof(WebsiteServerPageLabels))]
+    public bool CombatGuideEnabled { get; set; } = true;
 
     /// <summary>Gets or sets the public ClientRulesEn lines; an empty value publishes no claim.</summary>
     [Display(Name = nameof(WebsiteServerPageLabels.ClientRulesEn), Description = nameof(WebsiteServerPageLabels.Description), ResourceType = typeof(WebsiteServerPageLabels))]
@@ -79,6 +97,9 @@ public class WebsiteConfiguration
     [DataType(DataType.MultilineText)]
     public string ServerNotForSaleVi { get; set; } = string.Empty;
 
+    /// <summary>Gets or sets a value indicating whether the public website shows the live event and quest guide.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.EventGuide), Description = nameof(WebsiteServerPageLabels.EventGuideDescription), ResourceType = typeof(WebsiteServerPageLabels))]
+    public bool EventGuideEnabled { get; set; } = true;
     /// <summary>The maximum length of a public content field in one language.</summary>
     public const int MaximumPublicContentLength = 6000;
 

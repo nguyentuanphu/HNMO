@@ -2037,7 +2037,13 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
         await this.ForEachWorldObserverAsync<IObjectGotKilledPlugIn>(p => p.ObjectGotKilledAsync(this, killer), true).ConfigureAwait(false);
 
         // A kill by the dark raven of a dark lord counts as the kill of its owner.
-        if ((killer as Player ?? (killer as IPlayerSurrogate)?.Owner) is { } killerAfterKilled
+        var killerPlayer = killer as Player ?? (killer as IPlayerSurrogate)?.Owner;
+        if (killerPlayer is not null && killerPlayer != this)
+        {
+            PlugIns.ActivityLog.ActivityLogPlugIn.Get(this.GameContext)?.RecordPvpKill(killerPlayer, this);
+        }
+
+        if (killerPlayer is { } killerAfterKilled
             && killerAfterKilled != this
             && !(killerAfterKilled.GuildWarContext?.Score is { } score && score == this.GuildWarContext?.Score)
             && this.CurrentMiniGame?.AllowPlayerKilling is not true)

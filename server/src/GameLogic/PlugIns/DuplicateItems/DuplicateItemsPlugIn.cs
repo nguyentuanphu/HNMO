@@ -187,7 +187,7 @@ public sealed class DuplicateItemsPlugIn : IPeriodicTaskPlugIn, IPlayerStateChan
         {
             if (item.Serial is null)
             {
-                item.Serial = Guid.NewGuid();
+                item.EnsureSerial();
                 count++;
             }
         }

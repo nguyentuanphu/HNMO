@@ -50,6 +50,8 @@ public static class TimetableSourceCollector
             DailyTimes = configuration.Timetable.ToList(),
             Duration = configuration.TaskDuration > TimeSpan.Zero ? configuration.TaskDuration : TimeSpan.FromMinutes(20),
             IsLiveNow = isActiveNow,
+            InvasionConfiguration = configuration,
+            WinnerReward = configuration is FindTheGmConfiguration find ? (find.RewardCoins, find.RewardCoinType, find.RewardZen) : null,
         };
     }
 
@@ -57,23 +59,29 @@ public static class TimetableSourceCollector
     /// <param name="gameContext">The game context.</param>
     /// <param name="timetableConfiguration">The timetable configuration.</param>
     /// <param name="utcNow">Current UTC timestamp.</param>
+    /// <param name="serverId">An optional game server whose schedules should be included.</param>
+    /// <param name="defaultBossServerId">The server where the host starts bosses without an explicit server.</param>
     /// <returns>The source items.</returns>
     public static List<TimetableSourceItem> CollectFromContext(
         IGameContext gameContext,
         TimetableConfiguration timetableConfiguration,
-        DateTime utcNow)
+        DateTime utcNow,
+        byte? serverId = null,
+        byte? defaultBossServerId = null)
     {
         var items = new List<TimetableSourceItem>();
         var gameConfig = gameContext.Configuration;
+        var scheduleTimeZone = serverId.HasValue ? gameContext.ServerTimeZone : TimeZoneInfo.Utc;
 
         if (timetableConfiguration.ShowMiniGames)
         {
             foreach (var plugIn in gameContext.PlugInManager.GetActivePlugInsOf<IPeriodicTaskPlugIn>().OfType<IPeriodicMiniGameStartPlugIn>())
             {
-                if (plugIn is IScheduledPlugIn scheduled && TryReadTaskConfiguration(plugIn) is { } taskConfig)
+                if (plugIn is IScheduledPlugIn scheduled && TryReadTaskConfiguration(plugIn) is { } taskConfig
+                    && (serverId is not { } miniGameServer || taskConfig.IsEnabledOnServer(miniGameServer)))
                 {
                     var isLive = plugIn is IPeriodicMiniGameStartPlugIn mg && mg.IsEventActive(gameContext);
-                    items.Add(FromMiniGame(plugIn.Key, taskConfig, gameConfig, scheduled.GetNextStartUtc(utcNow, TimeZoneInfo.Utc), isLive));
+                    items.Add(FromMiniGame(plugIn.Key, taskConfig, gameConfig, scheduled.GetNextStartUtc(utcNow, scheduleTimeZone), isLive));
                 }
             }
         }
@@ -83,9 +91,20 @@ public static class TimetableSourceCollector
             foreach (var plugIn in gameContext.PlugInManager.GetActivePlugInsOf<IPeriodicTaskPlugIn>())
             {
                 var config = TryReadInvasionConfiguration(plugIn);
-                if (config is not null)
+                if (config is not null && (serverId is not { } invasionServer || config.IsEnabledOnServer(invasionServer)))
                 {
-                    items.Add(FromInvasion(plugIn.GetType(), config, gameConfig));
+                    var invasion = FromInvasion(plugIn.GetType(), config, gameConfig);
+                    if (serverId.HasValue && plugIn is IScheduledPlugIn scheduled)
+                    {
+                        invasion.ExplicitNextStartUtc = scheduled.GetNextStartUtc(utcNow, scheduleTimeZone);
+                    }
+
+                    if (serverId.HasValue && plugIn is IInvasionScheduleSpawns spawning)
+                    {
+                        invasion.ActiveInvasionSpawns = spawning.ActiveSpawns(gameContext);
+                    }
+
+                    items.Add(invasion);
                 }
             }
         }
@@ -115,6 +134,7 @@ public static class TimetableSourceCollector
                 DailyTimes = dailyTimes,
                 Duration = TimeSpan.FromMinutes(Math.Max(1, s6Cfg.LmsRegistrationMinutes + s6Cfg.LmsDurationMinutes)),
                 IsLiveNow = s6Events.IsLmsActive,
+                WinnerReward = (s6Cfg.LmsRewardCoins, s6Cfg.LmsRewardCoinType, s6Cfg.LmsRewardZen),
             });
         }
 
@@ -125,7 +145,8 @@ public static class TimetableSourceCollector
             var timeZone = TimetableEngine.ResolveTimeZone(bossConfig.TimeZone);
             var engine = new WorldBossEngine(bossConfig, WorldBossStore.Open(bossConfig.FileName));
             var activeFights = engine.AllAlive().ToDictionary(a => a.BossId, a => a, StringComparer.OrdinalIgnoreCase);
-            foreach (var boss in bossConfig.Bosses.Where(b => b.Enabled))
+            foreach (var boss in bossConfig.Bosses.Where(b => b.Enabled
+                         && (serverId is not { } bossServer || (b.GameServerId >= 0 ? b.GameServerId : defaultBossServerId ?? bossServer) == bossServer)))
             {
                 activeFights.TryGetValue(boss.Id, out var alive);
                 items.Add(FromWorldBoss(boss, timeZone, utcNow, gameConfig, alive));
@@ -234,6 +255,7 @@ public static class TimetableSourceCollector
             ExplicitNextStartUtc = WorldBossSchedule.Next(boss, timeZone, utcNow),
             ExplicitEndsAtUtc = aliveFight?.DespawnAtUtc,
             IsLiveNow = aliveFight is not null,
+            BossConfiguration = boss,
         };
     }
 

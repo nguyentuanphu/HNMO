@@ -135,7 +135,22 @@ else if (this._configuration is { } c)
                                     <td>@FormatActor(entry.PartnerAccount, entry.PartnerCharacter)</td>
                                     <td>@entry.ItemSummary</td>
                                     <td class="text-end text-nowrap">@(entry.ZenDelta == 0 ? "-" : entry.ZenDelta.ToString("N0", CultureInfo.InvariantCulture))</td>
-                                    <td class="small text-muted">@HNMO.Web.AdminPanel.Services.VipActivityText.Format(entry) @(string.IsNullOrEmpty(entry.ItemIds) ? string.Empty : $"[{entry.ItemIds}]")</td>
+                                    <td class="small text-muted">
+                                        @HNMO.Web.AdminPanel.Services.VipActivityText.Format(entry)
+                                        @if (!string.IsNullOrEmpty(entry.ItemSerials))
+                                        {
+                                            <div>@ActivityLabel("ActivityLogSerials") @entry.ItemSerials</div>
+                                        }
+                                        @if (!string.IsNullOrEmpty(entry.ItemIds))
+                                        {
+                                            <div>@ActivityLabel("ActivityLogLegacyIds") @entry.ItemIds</div>
+                                        }
+                                        @if (entry.Kind == ActivityKind.Upgrade && entry.BeforeItems is { } before && entry.AfterItems is { } after)
+                                        {
+                                            <div>@ActivityLabel("ActivityLogBefore") @string.Join(", ", before.Select(item => item.Description))</div>
+                                            <div>@ActivityLabel("ActivityLogAfter") @(after.Length == 0 ? "—" : string.Join(", ", after.Select(item => item.Description)))</div>
+                                        }
+                                    </td>
                                 </tr>
                             }
                         </tbody>

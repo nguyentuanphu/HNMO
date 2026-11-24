@@ -98,6 +98,7 @@ public static class GameMasterActions
         }
 
         var temporary = GameMasterItemFactory.CreateItem(definition, specification);
+        temporary.EnsureSerial();
         if (inventory.CheckInvSpace(temporary) is not { } slot)
         {
             return new(false, "The live inventory has no free rectangle for this item. Free space first.");
@@ -112,6 +113,7 @@ public static class GameMasterActions
         }
 
         await player.InvokeViewPlugInAsync<IItemAppearPlugIn>(p => p.ItemAppearAsync(item)).ConfigureAwait(false);
+        PlugIns.ActivityLog.ActivityLogPlugIn.Get(player.GameContext)?.RecordGrant(player, item, "GameMaster");
         return GameServerAdminResult.Success;
     }
 

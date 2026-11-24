@@ -12,6 +12,8 @@ using HNMO.DataModel.Configuration.ItemCrafting;
 public static class WebsiteServerGuideExtrasProjection
 {
     private const int MaximumRows = 32;
+    private const int MaximumIngredientRows = 12;
+    private const int MaximumIngredientChoices = 12;
     private const int FullPercentage = 100;
 
     /// <summary>Builds public possibilities, keeping private logs and enforcement settings out of the response.</summary>
@@ -19,8 +21,10 @@ public static class WebsiteServerGuideExtrasProjection
     /// <param name="antiCheatEnabled">Whether the active anti-cheat feature is enabled.</param>
     /// <param name="activityLogEnabled">Whether the active activity recorder is enabled.</param>
     /// <param name="onlyValuableDrops">Whether drop/pickup recording excludes ordinary items.</param>
+    /// <param name="loot">The server's projected gear and drop pools.</param>
+    /// <param name="availability">The running server's other feature switches.</param>
     /// <returns>The public configuration summary.</returns>
-    public static object Build(IReadOnlyList<MonsterDefinition> npcs, bool antiCheatEnabled, bool activityLogEnabled, bool onlyValuableDrops)
+    public static object Build(IReadOnlyList<MonsterDefinition> npcs, bool antiCheatEnabled, bool activityLogEnabled, bool onlyValuableDrops, object? loot = null, object? availability = null)
     {
         var quests = npcs.SelectMany(npc => npc.Quests.Select(quest => new
         {
@@ -44,6 +48,8 @@ public static class WebsiteServerGuideExtrasProjection
             questsTruncated = quests.Length > MaximumRows,
             crafts = crafts.Take(MaximumRows).ToArray(),
             craftsTruncated = crafts.Length > MaximumRows,
+            loot,
+            availability,
         };
     }
 
@@ -68,6 +74,34 @@ public static class WebsiteServerGuideExtrasProjection
             zenPerFinalPercentage = settings.MoneyPerFinalSuccessPercentage,
             excellentChance = WebsiteCraftingQuote.UsesSettingsExcellentRoll(recipe) ? (int?)settings.ResultItemExcellentOptionChance : null,
             maximumExcellentOptions = settings.ResultItemMaxExcOptionCount,
+            ingredients = settings.RequiredItems.Take(MaximumIngredientRows).Select(Ingredient).ToArray(),
+            ingredientsTruncated = settings.RequiredItems.Count > MaximumIngredientRows,
+        };
+    }
+
+    private static object Ingredient(ItemCraftingRequiredItem required)
+    {
+        var english = CultureInfo.GetCultureInfo("en");
+        var vietnamese = CultureInfo.GetCultureInfo("vi");
+        var activeItems = required.PossibleItems.Where(item => item.IsActive).Take(MaximumIngredientChoices + 1).ToArray();
+        return new
+        {
+            required.MinimumAmount,
+            required.MaximumAmount,
+            required.MinimumItemLevel,
+            required.MaximumItemLevel,
+            anyItem = required.PossibleItems.Count == 0,
+            choicesTruncated = activeItems.Length > MaximumIngredientChoices || required.RequiredItemOptions.Count > MaximumIngredientChoices,
+            items = activeItems.Take(MaximumIngredientChoices).Select(item => new
+            {
+                nameEn = item.Name.GetTranslation(english),
+                nameVi = item.Name.GetTranslation(vietnamese),
+            }).ToArray(),
+            options = required.RequiredItemOptions.Take(MaximumIngredientChoices).Select(option => new
+            {
+                nameEn = option.Name.GetTranslation(english),
+                nameVi = option.Name.GetTranslation(vietnamese),
+            }).ToArray(),
         };
     }
 }

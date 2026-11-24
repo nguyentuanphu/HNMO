@@ -22,7 +22,7 @@ for (const width of [390, 1440]) for (const language of ['en', 'vi'] as const) {
     await page.route('**/website/data', route => route.fulfill({ json: { updatedAt: '2026-11-22T00:00:00Z', worlds: [7, 8].map((id, index) => ({ worldId: String(id), season: index === 0 ? 's6' : 's9', seasonBadge: index === 0 ? 'S6.3' : 'S9', nameEn: 'World', nameVi: 'Thế giới', isRunning: true, isOpen: true, openingDateUtc: null, openingDateSydney: '', experienceMultiplier: 5, dropMultiplier: 1, zenMultiplier: 1, eventPresetEn: 'Standard', eventPresetVi: 'Tiêu chuẩn', totalPlayers: 1, totalCapacity: 100, servers: [{ id, players: 1, capacity: 100, isRunning: true }] })), servers: [7, 8].map(id => ({ id, players: 1, capacity: 100, experienceRate: 5, masterExperienceRate: 2, maximumLevel: 400, maximumMasterLevel: 200, maximumPartySize: 5, maximumCharactersPerAccount: 5, classes: [], maps: [], events: [] })) } }));
     await page.route('**/website/details', route => route.fulfill({ json: { updatedAt: '2026-11-22T00:00:00Z', characters: [], eventRankings: [], drops: [], upcoming: [{ serverId: 7, events: [{ name: 'Blood Castle', nameVi: 'Huyết Lâu', startsAt: '2026-11-22T00:00:00Z' }, { name: 'Invalid example', nameVi: 'Giờ mẫu không hợp lệ', startsAt: 'invalid' }] }] } }));
     let available = true;
-    const view: ServerGuideView = { updatedAt: '2026-11-22T00:00:00Z', clientRules: { en: '<img src=x onerror=alert(1)>One client.', vi: 'Một client.' }, notForSale: { en: '', vi: '' }, servers: [{ id: 7, facts, extras: { systems: { antiCheatEnabled: true, activityLogEnabled: true, onlyValuableDrops: true }, quests: [{ nameEn: 'Promotion', nameVi: 'Thăng lớp', npcEn: 'Guide', npcVi: 'Hướng đạo', minimumLevel: 150, maximumLevel: 400, requiredStartMoney: 1000, classEn: '', classVi: '' }], questsTruncated: false, crafts: [{ nameEn: 'Example recipe', nameVi: 'Công thức mẫu', npcEn: 'Crafter', npcVi: 'Thợ chế tạo', itemEn: 'Wings', itemVi: 'Cánh', randomMinimumLevel: 0, randomMaximumLevel: 3, addLevel: 0, upgrade: false, basePercent: null, maximumPercent: 80, fixedZen: 1234, zenPerFinalPercentage: 20, excellentChance: 25, maximumExcellentOptions: 2 }], craftsTruncated: false } }, { id: 8, facts: { ...facts, helper: null, vip: [], catalog: { products: null, truncated: false } } }] };
+    const view: ServerGuideView = { updatedAt: '2026-11-22T00:00:00Z', clientRules: { en: '<img src=x onerror=alert(1)>One client.', vi: 'Một client.' }, notForSale: { en: '', vi: '' }, servers: [{ id: 7, facts, realmRules: { guildCreationMinimumLevel: 117, bloodCastle: { minimumSeconds: 540, maximumSeconds: 720 } }, extras: { systems: { antiCheatEnabled: true, activityLogEnabled: true, onlyValuableDrops: true }, quests: [{ nameEn: 'Promotion', nameVi: 'Thăng lớp', npcEn: 'Guide', npcVi: 'Hướng đạo', minimumLevel: 150, maximumLevel: 400, requiredStartMoney: 1000, classEn: '', classVi: '' }], questsTruncated: false, crafts: [{ nameEn: 'Example recipe', nameVi: 'Công thức mẫu', npcEn: 'Crafter', npcVi: 'Thợ chế tạo', itemEn: 'Wings', itemVi: 'Cánh', randomMinimumLevel: 0, randomMaximumLevel: 3, addLevel: 0, upgrade: false, basePercent: null, maximumPercent: 80, fixedZen: 1234, zenPerFinalPercentage: 20, excellentChance: 25, maximumExcellentOptions: 2 }], craftsTruncated: false } }, { id: 8, realmRules: { guildCreationMinimumLevel: 0, bloodCastle: null }, facts: { ...facts, helper: null, vip: [], catalog: { products: null, truncated: false } } }] };
     await page.route('**/website/server-guide', route => route.fulfill(available ? { json: view } : { status: 503 }));
     await page.goto('/home.html');
     const guide = page.locator('#server-guide');
@@ -33,6 +33,10 @@ for (const width of [390, 1440]) for (const language of ['en', 'vi'] as const) {
     await expect(page.locator('#upcoming time')).toContainText('Sydney');
     await expect(page.locator('.server-hero-brand [data-game-name]')).toHaveText('HNMO guide fixture');
     await expect(page.locator('#server-guide-season')).toHaveText('S6.3');
+    const rules = page.locator('#realm-rules');
+    await expect(rules).toContainText(language === 'vi' ? 'Lập bang hội yêu cầu cấp 117.' : 'Guild creation requires level 117.');
+    await expect(rules).toContainText(language === 'vi' ? 'từ 9 phút đến 12 phút' : 'from 9 minutes to 12 minutes');
+    await page.locator('#realm-rules-box').screenshot({ path: `docs/screenshots/realm-rules/home-${language}-${width}.png` });
     await expect(guide).toContainText(language === 'vi' ? 'Tùy nguyên liệu' : 'Depends on ingredients');
     await expect(guide).toContainText(language === 'vi' ? 'Thăng lớp' : 'Promotion');
     await expect(guide).toContainText('80%');
@@ -44,9 +48,12 @@ for (const width of [390, 1440]) for (const language of ['en', 'vi'] as const) {
     await guide.screenshot({ path: `docs/screenshots/server-guide/home-${language}-${width}.png` });
     await page.locator('#server').selectOption('8'); await expect(page.locator('#server-guide-season')).toHaveText('S9'); await expect(guide).not.toContainText('111 WCoinC');
     await expect(guide).toContainText(language === 'vi' ? 'chưa công bố gói VIP' : 'No paid VIP offer');
+    await expect(rules).toContainText(language === 'vi' ? 'Lập bang hội không yêu cầu cấp tối thiểu.' : 'Guild creation has no minimum level.');
+    await expect(rules).not.toContainText(language === 'vi' ? 'Huyết Lâu' : 'Blood Castle');
     await page.locator('#server').selectOption('7'); await expect(guide).toContainText('111 WCoinC');
     available = false; await guide.getByRole('button').click();
     await expect(guide).toContainText(language === 'vi' ? 'Đã xóa quy định và giá cũ' : 'Old rules and prices have been cleared');
     await expect(guide).not.toContainText('111 WCoinC'); await expect(guide.locator('table')).toHaveCount(0);
+    await expect(rules).not.toContainText(/\d/);
   });
 }

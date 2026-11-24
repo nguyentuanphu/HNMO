@@ -2,12 +2,24 @@
 <root>
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
+  <data name="EventGuide" xml:space="preserve"><value>Aktueller Ereignis- und Questleitfaden</value></data>
+  <data name="EventGuideDescription" xml:space="preserve"><value>Zeigt aktuelle Ereignis- und Invasionszeiten, konfigurierte Belohnungen und Quests im Website-Leitfaden an.</value></data>
+  <data name="CombatGuide" xml:space="preserve"><value>Aktueller PvP- und Beuteleitfaden</value></data>
+  <data name="CombatGuideDescription" xml:space="preserve"><value>Veröffentlicht PvP-Formeln, Erfahrungs- und Beuteregeln für Monster sowie Belohnungsregeln für Weltbosse.</value></data>
   <data name="ClientRulesEn" xml:space="preserve"><value>Clientregeln (Englisch)</value></data>
   <data name="ClientRulesVi" xml:space="preserve"><value>Clientregeln (Vietnamesisch)</value></data>
   <data name="NotForSaleEn" xml:space="preserve"><value>Nicht im Verkauf (Englisch)</value></data>
+  <data name="ItemGuide" xml:space="preserve"><value>Aktueller Gegenstands- und Mischungsleitfaden</value></data>
+  <data name="ItemGuideDescription" xml:space="preserve"><value>Zeigt konfigurierte Gegenstände, Anforderungen, Beutequellen, Boxen und Mischungen im Website-Leitfaden an.</value></data>
   <data name="NotForSaleVi" xml:space="preserve"><value>Nicht im Verkauf (Vietnamesisch)</value></data>
   <data name="Description" xml:space="preserve"><value>Öffentliche Informationen für Spieler, eine Regel pro Zeile. Bis zur Veröffentlichung leer lassen. Keine Passwörter oder privaten Kontodaten eintragen.</value></data>
   <data name="MaximumLength" xml:space="preserve"><value>Höchstens {1} Zeichen eingeben.</value></data>
+  <data name="TrackerEnabled" xml:space="preserve"><value>Öffentliche Aktivitätsübersicht</value></data>
+  <data name="TrackerEnabledDescription" xml:space="preserve"><value>Eine begrenzte Aktivitätsliste veröffentlichen. Jedes Konto kann widersprechen.</value></data>
+  <data name="TrackerNames" xml:space="preserve"><value>Charakternamen in der Aktivitätsübersicht zeigen</value></data>
+  <data name="TrackerNamesDescription" xml:space="preserve"><value>Berechtigte Charakternamen öffentlich anzeigen. Widersprüche der Spieler gelten weiterhin.</value></data>
+  <data name="ClassGuide" xml:space="preserve"><value>Klassenleitfaden mit aktuellen Serverdaten</value></data>
+  <data name="ClassGuideDescription" xml:space="preserve"><value>Zeigt Attribute, Formeln und Fertigkeiten des ausgewählten Servers im Website-Leitfaden an.</value></data>
   <data name="ContentRoadmapEn" xml:space="preserve"><value>Fahrplan der Website (Englisch)</value></data>
   <data name="ContentRoadmapVi" xml:space="preserve"><value>Fahrplan der Website (Vietnamesisch)</value></data>
   <data name="ContentAboutEn" xml:space="preserve"><value>Über uns (Englisch)</value></data>

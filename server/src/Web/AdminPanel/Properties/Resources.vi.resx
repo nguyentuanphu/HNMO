@@ -5255,4 +5255,31 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   <data name="HnmoUpdatePage" xml:space="preserve">
     <value>Cập nhật HNMO</value>
   </data>
+  <data name="ActivityLogKindLoot" xml:space="preserve">
+    <value>Chiến lợi phẩm</value>
+  </data>
+  <data name="ActivityLogKindUpgrade" xml:space="preserve">
+    <value>Nâng cấp</value>
+  </data>
+  <data name="ActivityLogKindConsume" xml:space="preserve">
+    <value>Dùng vật phẩm</value>
+  </data>
+  <data name="ActivityLogKindGrant" xml:space="preserve">
+    <value>Cấp vật phẩm</value>
+  </data>
+  <data name="ActivityLogKindPvpKill" xml:space="preserve">
+    <value>Hạ gục PvP</value>
+  </data>
+  <data name="ActivityLogSerials" xml:space="preserve">
+    <value>Số sê-ri vật phẩm</value>
+  </data>
+  <data name="ActivityLogLegacyIds" xml:space="preserve">
+    <value>ID vật phẩm cũ</value>
+  </data>
+  <data name="ActivityLogBefore" xml:space="preserve">
+    <value>Trước</value>
+  </data>
+  <data name="ActivityLogAfter" xml:space="preserve">
+    <value>Sau</value>
+  </data>
 </root>

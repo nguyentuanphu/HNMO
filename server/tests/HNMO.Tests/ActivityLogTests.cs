@@ -6,6 +6,7 @@ namespace HNMO.Tests;
 
 using System.IO;
 using System.Text.Json;
+using System.Threading;
 using Moq;
 using HNMO.DataModel;
 using HNMO.DataModel.Configuration;
@@ -15,7 +16,9 @@ using HNMO.GameLogic;
 using HNMO.GameLogic.PlayerActions.Items;
 using HNMO.GameLogic.PlayerActions.PlayerStore;
 using HNMO.GameLogic.PlayerActions.Trade;
+using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.PlugIns.ActivityLog;
+using HNMO.GameLogic.Views.NPC;
 using HNMO.GameLogic.Views.Trade;
 using HNMO.Pathfinding;
 using HNMO.Persistence;
@@ -135,6 +138,97 @@ public sealed class ActivityLogTests
         Assert.That(ActivityLogPlugIn.IsValuableItem(jewel, minLevel: 7), Is.True);
     }
 
+    /// <summary>Gameplay can fill the bounded buffer while persistence is blocked, and the full burst uses batched writes.</summary>
+    [Test]
+    public void QueuedBurstUsesOneBackendCallPerBatchAndDoesNotBlockProducers()
+    {
+        var backend = new InMemoryHnmoPlayerStateRowBackend();
+        var mock = new Mock<IHnmoPlayerStateRowBackend>();
+        using var allowWrite = new ManualResetEventSlim();
+        var started = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var batches = 0;
+        mock.Setup(value => value.LoadAll(ActivityLogStore.FeatureKey)).Returns(() => backend.LoadAll(ActivityLogStore.FeatureKey));
+        mock.Setup(value => value.UpsertBatch(It.IsAny<IReadOnlyList<HnmoFeatureRow>>(), It.IsAny<IReadOnlyList<(string, string)>>()))
+            .Callback<IReadOnlyList<HnmoFeatureRow>, IReadOnlyList<(string, string)>>((rows, deletes) =>
+            {
+                Assert.That(rows, Has.Count.EqualTo(ActivityLogStore.BatchSize));
+                if (Interlocked.Increment(ref batches) == 1)
+                {
+                    started.SetResult();
+                    Assert.That(allowWrite.Wait(TimeSpan.FromSeconds(15)), Is.True);
+                }
+
+                backend.UpsertBatch(rows, deletes);
+            });
+        var path = HnmoStateStore.ResolveStateFilePath(this._file)!;
+        HnmoPlayerStateRowStoreRegistry.RegisterBackend(path, mock.Object);
+        // Keep this isolated writer out of unrelated game contexts' periodic flushes.
+        var store = new ActivityLogStore(path);
+        var utc = new DateTime(2026, 11, 23, 0, 0, 0, DateTimeKind.Utc);
+        var entry = new ActivityLogEntry { TimestampUtc = utc, Kind = ActivityKind.Loot };
+        for (var index = 0; index < ActivityLogStore.BatchSize; index++)
+        {
+            Assert.That(store.Enqueue(entry, retentionDays: 9), Is.True);
+        }
+
+        Assert.That(batches, Is.Zero);
+        var writer = Task.Factory.StartNew(store.FlushPending, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+        try
+        {
+            Assert.That(Task.WaitAny([started.Task, writer], TimeSpan.FromSeconds(10)), Is.EqualTo(0), "The writer must reach the blocked backend.");
+            var producer = Task.Factory.StartNew(() =>
+            {
+                for (var index = ActivityLogStore.BatchSize; index < ActivityLogStore.QueueCapacity; index++)
+                {
+                    Assert.That(store.Enqueue(entry, retentionDays: 9), Is.True);
+                }
+
+                Assert.That(store.Enqueue(entry, retentionDays: 9), Is.False);
+            }, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+            Assert.That(producer.Wait(TimeSpan.FromSeconds(10)), Is.True, "The producer must finish while the backend is blocked.");
+        }
+        finally
+        {
+            allowWrite.Set();
+        }
+
+        Assert.That(writer.Wait(TimeSpan.FromSeconds(15)), Is.True);
+        Assert.That(writer.Result, Is.EqualTo(ActivityLogStore.QueueCapacity));
+        Assert.That(batches, Is.EqualTo(ActivityLogStore.QueueCapacity / ActivityLogStore.BatchSize));
+        var saved = backend.LoadAll(ActivityLogStore.FeatureKey);
+        Assert.That(saved, Has.Count.EqualTo(ActivityLogStore.QueueCapacity));
+        Assert.That(saved.Select(row => row.ExpiresAtUtc).Distinct().Single(), Is.EqualTo(utc.AddDays(9)));
+    }
+
+    /// <summary>Retries after an uncertain upsert keep the same durable event identifiers.</summary>
+    [Test]
+    public void RetryingAnUnacknowledgedBatchDoesNotDuplicateRows()
+    {
+        var backend = new InMemoryHnmoPlayerStateRowBackend();
+        var mock = new Mock<IHnmoPlayerStateRowBackend>();
+        var attempts = 0;
+        mock.Setup(value => value.LoadAll(ActivityLogStore.FeatureKey)).Returns(() => backend.LoadAll(ActivityLogStore.FeatureKey));
+        mock.Setup(value => value.UpsertBatch(It.IsAny<IReadOnlyList<HnmoFeatureRow>>(), It.IsAny<IReadOnlyList<(string, string)>>()))
+            .Callback<IReadOnlyList<HnmoFeatureRow>, IReadOnlyList<(string, string)>>((rows, deletes) =>
+            {
+                backend.UpsertBatch(rows, deletes);
+                if (++attempts == 1)
+                {
+                    throw new IOException("Test acknowledgement failure.");
+                }
+            });
+        var path = HnmoStateStore.ResolveStateFilePath(this._file)!;
+        HnmoPlayerStateRowStoreRegistry.RegisterBackend(path, mock.Object);
+        var store = new ActivityLogStore(path);
+        Assert.That(store.Enqueue(new() { Kind = ActivityKind.Grant }, retentionDays: 10), Is.True);
+        Assert.That(() => store.FlushPending(), Throws.TypeOf<IOException>());
+        var persisted = backend.LoadAll(ActivityLogStore.FeatureKey).Single().ScopeId;
+        Assert.That(store.Query().Single().Id, Is.EqualTo(persisted));
+        Assert.That(store.FlushPending(), Is.EqualTo(1));
+        Assert.That(backend.LoadAll(ActivityLogStore.FeatureKey).Single().ScopeId, Is.EqualTo(persisted));
+        Assert.That(store.Query(), Has.Count.EqualTo(1));
+    }
+
     /// <summary>Verifies live trade, drop, pickup, and personal store actions record into the activity log.</summary>
     /// <returns>The task.</returns>
     [Test]
@@ -205,6 +299,58 @@ public sealed class ActivityLogTests
         Assert.That(entries.Any(e => e.Kind == ActivityKind.Drop && e.ItemSummary.Contains("Jewel of Bless", StringComparison.Ordinal)), Is.True, diag);
         Assert.That(entries.Any(e => e.Kind == ActivityKind.Pickup && e.ItemSummary.Contains("Jewel of Bless", StringComparison.Ordinal)), Is.True, diag);
         Assert.That(entries.Any(e => e.Kind == ActivityKind.PersonalStore && e.ZenDelta == 1500), Is.True, diag);
+        Assert.That(bless.Serial, Is.Not.Null.And.Not.EqualTo(bless.Id));
+        var serial = bless.Serial!.Value.ToString("N");
+        Assert.That(entries.Single(e => e.Kind == ActivityKind.Drop).ItemSerials, Is.EqualTo(serial));
+        var pickup = entries.Single(e => e.Kind == ActivityKind.Pickup);
+        Assert.That(pickup.ItemSerials, Is.EqualTo(serial));
+        Assert.That(pickup.PickupQuantity, Is.EqualTo(1));
+        Assert.That(pickup.ItemIds, Is.Empty);
+    }
+
+    /// <summary>Craft, grant, consume, PvP and upgrade events use stable serials and immutable before and after values.</summary>
+    /// <returns>The task.</returns>
+    [Test]
+    public async ValueTask NewGameplayEventsPreserveSerialsAndUpgradeSnapshotsAsync()
+    {
+        var context = GameContextTestHelper.CreateGameContext([]);
+        var player = await CreatePlayerAsync(context, "crafter").ConfigureAwait(false);
+        var other = await CreatePlayerAsync(context, "opponent").ConfigureAwait(false);
+        var activity = new ActivityLogPlugIn
+        {
+            Configuration = new() { FileName = this._file, OnlyValuableDropsAndPickups = false },
+        };
+        var material = CreateItem("Test material", 0, false);
+        var equipment = CreateItem("Test equipment", 4, false);
+        activity.RecordLoot(player, material, "Fixture monster");
+        activity.RecordGrant(player, equipment, "Fixture reward");
+        var target = ActivityItemState.Capture(equipment);
+        var consumed = ActivityItemState.Capture(material)!;
+        equipment.Level = 5;
+        activity.RecordConsumption(player, consumed, null, target, equipment);
+        var mixInput = ActivityLogPlugIn.CaptureItems([equipment]);
+        equipment.Level = 6;
+        activity.RecordCraft(player, CraftingResult.Success, "Fixture mix", mixInput, [equipment]);
+        activity.RecordPvpKill(player, other);
+
+        var store = ActivityLogStore.Open(this._file);
+        Assert.That(store.FlushPending(), Is.EqualTo(7));
+        ActivityLogStore.ResetForTests();
+        var events = ActivityLogStore.Open(this._file).Query();
+        Assert.That(events.Select(entry => entry.Kind), Is.EquivalentTo(new[]
+        {
+            ActivityKind.Loot, ActivityKind.Grant, ActivityKind.Consume, ActivityKind.Upgrade,
+            ActivityKind.ChaosMix, ActivityKind.Upgrade, ActivityKind.PvpKill,
+        }));
+        Assert.That(events.Single(entry => entry.Kind == ActivityKind.Grant).AfterItems!.Single().Level, Is.EqualTo(4));
+        Assert.That(events.Single(entry => entry.Kind == ActivityKind.Loot).AfterItems!.Single().Serial, Is.EqualTo(material.Serial));
+        Assert.That(events.Single(entry => entry.Kind == ActivityKind.PvpKill).PvpMode, Is.EqualTo(ActivityPvpMode.Field));
+        Assert.That(events.Single(entry => entry.Kind == ActivityKind.Consume).AfterItems, Is.Empty);
+        var upgrades = events.Where(entry => entry.Kind == ActivityKind.Upgrade).OrderBy(entry => entry.BeforeItems![0].Level).ToArray();
+        Assert.That(upgrades.Select(entry => entry.BeforeItems![0].Level), Is.EqualTo(new byte[] { 4, 5 }));
+        Assert.That(upgrades.Select(entry => entry.AfterItems![0].Level), Is.EqualTo(new byte[] { 5, 6 }));
+        Assert.That(upgrades.Select(entry => entry.ItemSerials).Distinct().Single(), Is.EqualTo(equipment.Serial!.Value.ToString("N")));
+        Assert.That(equipment.Serial, Is.Not.EqualTo(equipment.Id));
     }
 
     private static HNMO.Persistence.BasicModel.Item CreateItem(string name, byte level, bool isExcellent)

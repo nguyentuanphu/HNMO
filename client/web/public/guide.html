@@ -24,18 +24,33 @@
     .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
     .card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; }
     .card h3 { margin-top: 0; }
+    #combat-guide select { display: block; width: min(100%, 24rem); min-height: 40px; margin: 4px 0 14px; padding-inline: 8px; color: var(--text); background: var(--panel); border: 1px solid var(--muted); border-radius: 4px; }
+    #combat-guide article { min-width: 0; overflow-wrap: anywhere; }
+    #combat-guide h4 { margin: 0 0 6px; }
     .tag { display: inline-block; font-size: 11px; border-radius: 4px; padding: 1px 6px; margin-left: 6px; vertical-align: 1px; }
     .tag.ok { color: #0b0e16; background: var(--ok); }
     .tag.soon { color: var(--text); background: #2a3042; }
     ul { margin: 6px 0; padding-left: 20px; }
     li { margin: 3px 0; }
     .muted { color: var(--muted); }
+    .class-guide-fields:not([hidden]) { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+    .class-guide-fields > div { display: grid; gap: 4px; min-width: 0; }
+    .class-guide select, .class-guide button { font: inherit; color: inherit; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 6px 9px; max-width: 100%; }
+    .class-guide button, .class-guide summary { cursor: pointer; }
+    .class-guide dl { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4px 12px; margin: 8px 0; }
+    .class-guide dd { margin: 0; overflow-wrap: anywhere; }
+    .class-guide details { padding: 10px; border: 1px solid var(--line); border-radius: 8px; margin: 10px 0; }
+    .class-guide h4, .class-guide h5 { margin: 12px 0 4px; }
+    .class-guide-skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 10px; }
+    .class-guide-skills article { border-top: 1px solid var(--line); padding: 4px 6px; min-width: 0; }
     @media (max-width: 560px) { th:nth-child(3), td:nth-child(3) { display: none; } }
   </style>
   <link rel="stylesheet" href="/website-themes.css">
+  <link rel="stylesheet" href="/website-event-guide.css">
   <script type="module" src="/js/websiteThemeEntry.js"></script>
 <link rel="stylesheet" href="/website-shell.css">
 <script type="module" src="/js/websiteShellEntry.js"></script>
+<link rel="stylesheet" href="/website-item-guide.css">
 </head>
 <body data-page-label="Guide" data-website-page="guide">
 <main>
@@ -44,7 +59,8 @@
   <p class="lead">What to play, how to play it, and what each part of the game does. Features marked <span class="tag ok">works</span> are in the game now; <span class="tag soon">coming</span> ones are being built.</p>
   <nav>
     <a href="#start">Getting started</a><a href="#controls">Controls</a><a href="#classes">Classes</a>
-    <a href="#where">Where to level</a><a href="#items">Items and potions</a><a href="#features">All features</a><a href="#friends">Playing with friends</a>
+    <a href="#where">Where to level</a><a href="#event-guide" data-event-guide-title data-no-i18n>Events and quests</a><a href="#items">Items and potions</a><a href="#features">All features</a><a href="#friends">Playing with friends</a>
+    <a href="#combat-guide" data-combat-guide-link data-no-i18n hidden>PvP and loot rules</a>
   </nav>
 
   <h2 id="start">Getting started</h2>
@@ -117,17 +133,8 @@
     <tr><td><kbd>O</kbd> or the ⚙ button</td><td>Settings: volume, text size, FPS limit, low-spec mode</td><td><kbd>Esc</kbd> closes it; kept in your browser</td></tr>
   </table>
 
-  <h2 id="classes">Classes: what to play</h2>
-  <div class="cards">
-    <div class="card"><h3>Dark Knight</h3><p>Close combat with swords, axes and maces; lots of life. The easiest class to start with: walk up and hit. Put points in strength and agility.</p></div>
-    <div class="card"><h3>Dark Wizard</h3><p>Spells from a distance with staffs; little life, much mana. Strong against groups once the skills are in. Put points in energy.</p></div>
-    <div class="card"><h3>Fairy Elf</h3><p>Bows and crossbows from 6 cells away, and support magic (heal, defence, attack buffs) for the party. Put points in agility.</p></div>
-    <div class="card"><h3>Magic Gladiator</h3><p>Fights with a sword and casts spells at the same time; strength and energy both count.</p></div>
-    <div class="card"><h3>Dark Lord</h3><p>Sceptres, a horse and a raven; leads parties with command (leadership).</p></div>
-    <div class="card"><h3>Summoner</h3><p>Books and sticks, summons and curses; weakens monsters for the party.</p></div>
-    <div class="card"><h3>Rage Fighter</h3><p>Gloves and fists, fast close combat. Its strikes walk you up to the monster; Chain Drive, Dragon Roar and Dragon Slasher need sword-form gloves, and the close strikes don't work while riding a horn mount. Dark Side dashes through up to five monsters around the target.</p></div>
-  </div>
-  <p class="muted">Some classes become available on an account only after another character reaches a certain level, as on the original servers.</p>
+  <h2 id="classes" data-no-i18n>Classes</h2>
+  <div id="classGuide" class="class-guide" data-no-i18n></div>
 
   <h2 id="where">Where to level</h2>
   <ul>
@@ -138,7 +145,14 @@
     <li><b>Field monsters and EXP:</b> <span>Monsters keep their spawn spot: when lured too far away they return home and heal. Experience in a shared fight splits by damage dealt, and jewels drop by monster level band.</span></li>
   </ul>
 
+  <section id="event-guide" data-no-i18n>
+    <h2 data-event-guide-title>Events and quests</h2>
+    <div id="eventGuide" class="event-guide"></div>
+    <script type="module" src="/js/websiteEventGuide.js"></script>
+  </section>
+
   <h2 id="items">Items and potions</h2>
+  <p><a href="#item-guide" data-item-guide-title data-no-i18n>Items, drops and mixes</a></p>
   <ul>
     <li><b>Potions:</b> healing potions go on <kbd>Q</kbd> and mana potions on <kbd>W</kbd> by default. A slot always drinks the best potion of its kind in your bag and shows how many are left.</li>
     <li><b>Wearing items:</b> drag an item onto its slot in the inventory, or right-click it. Item names show their level (+7 …) and extras (+Skill, +Luck, +Option); hover an item for its full tooltip.</li>
@@ -150,6 +164,12 @@
     <li><b>Cash shop:</b> <kbd>X</kbd> in town. Pick a tab and a category, press Buy under an item; it goes to the storage list on the right. Select it and press Use: it moves to your inventory (seals and scrolls work at once). The coins are free: ask the host for them on the account page.</li>
     <li><b>Chaos machine:</b> the Chaos Goblin in Noria mixes items: pick the kind of mix, put the items in (click or right-click), check the recipe, success rate and zen, press the mix button. A failed mix can lose the items. Take everything out before closing.</li>
   </ul>
+
+  <section id="item-guide" data-no-i18n>
+    <h2 data-item-guide-title>Items, drops and mixes</h2>
+    <div id="itemGuide" class="item-guide"></div>
+    <script type="module" src="/js/websiteItemGuide.js"></script>
+  </section>
 
   <h2 id="features">All features</h2>
   <table>
@@ -232,9 +252,12 @@
   <h2 id="friends">Playing with friends</h2>
   <p>Open the game's address shared by the host in any modern browser. Your progress is saved securely on the server.</p>
   <p data-community-links="Talk to us: " hidden></p>
+  <section id="combat-guide" data-no-i18n hidden></section>
   <h2 id="phone">Play on your phone</h2>
   <p>Open the game's address in Chrome (Android) or Safari (iPhone). To install it like an app: Android, Chrome's menu ⋮ then <i>Add to Home screen</i> or <i>Install app</i>; iPhone, the share button then <i>Add to Home Screen</i>. Play sideways: tap to walk, ⚔ fights the nearest monster, 1–5 and Q W E R are the skills and potions, ⋯ opens the other windows (missions too), ⛶ goes full screen.</p>
 </main>
   <script type="module" src="/js/siteLanguage.js"></script>
+  <script type="module" src="/js/websiteClassGuide.js"></script>
+  <script type="module" src="/js/websiteCombatGuide.js"></script>
 </body>
 </html>

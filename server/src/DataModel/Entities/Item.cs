@@ -87,6 +87,20 @@ public partial class Item
     /// </summary>
     public Guid? Serial { get; set; }
 
+    /// <summary>Assigns the origin serial if the item has none, while the caller owns the item.</summary>
+    /// <returns>The serial retained across changes of ownership and persistence.</returns>
+    public Guid EnsureSerial()
+    {
+        if (this.Serial is { } serial && serial != Guid.Empty)
+        {
+            return serial;
+        }
+
+        var assigned = Guid.NewGuid();
+        this.Serial = assigned;
+        return assigned;
+    }
+
     /// <summary>
     /// Assigns the values of another item to this item.
     /// </summary>

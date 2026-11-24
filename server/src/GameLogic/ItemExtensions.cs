@@ -91,7 +91,7 @@ public static class ItemExtensions
     /// </returns>
     public static bool IsAncient(this Item item)
     {
-        return item.ItemSetGroups.Any(itemSet => itemSet.AncientSetDiscriminator > 0);
+        return item.ItemSetGroups?.Any(itemSet => itemSet.AncientSetDiscriminator > 0) == true;
     }
 
     /// <summary>
@@ -103,7 +103,7 @@ public static class ItemExtensions
     /// </returns>
     public static bool IsExcellent(this Item item)
     {
-        return item.ItemOptions.Any(link => link.ItemOption?.OptionType == ItemOptionTypes.Excellent);
+        return item.ItemOptions?.Any(link => link.ItemOption?.OptionType == ItemOptionTypes.Excellent) == true;
     }
 
     /// <summary>

@@ -106,7 +106,7 @@ public sealed class GuildLimitsPlugIn :
     /// </summary>
     /// <param name="gameContext">The game context.</param>
     /// <returns>The level; 0 when any level may create a guild.</returns>
-    internal static int GetMinimumCreateLevel(IGameContext gameContext)
+    public static int GetMinimumCreateLevel(IGameContext gameContext)
     {
         var configuration = gameContext.PlugInManager.GetActivePlugInsOf<IGuildCreatingPlugIn>()
             .OfType<GuildLimitsPlugIn>()

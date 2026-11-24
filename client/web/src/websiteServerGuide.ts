@@ -1,9 +1,12 @@
-import { parseServerGuide, type ServerGuideFacts, type ServerGuideView, type GuideVip, type ServerGuideExtras } from './websiteServerGuideModels.js';
+import { parseServerGuide, type ServerGuideFacts, type ServerGuideView, type GuideRealmRules, type GuideVip, type ServerGuideExtras } from './websiteServerGuideModels.js';
 import { serverGuideCopy, type ServerGuideText } from './websiteServerGuideCopy.js';
+import type { GuideCraft, GuideLoot } from './websiteServerGuideModels.js';
 
 const root = document.getElementById('server-guide');
 const selector = document.getElementById('server');
+const realmRuleList = document.getElementById('realm-rules');
 const REFRESH_INTERVAL_MS = 30_000;
+const SECONDS_PER_MINUTE = 60;
 let snapshot: ServerGuideView | null = null;
 let pending = false;
 function vi(): boolean { return document.documentElement.lang === 'vi'; }
@@ -14,11 +17,19 @@ function node<K extends keyof HTMLElementTagNameMap>(tag: K, text = ''): HTMLEle
 function card(key: ServerGuideText): HTMLElement { const result = node('article'); result.className = 'server-guide-card'; result.append(node('h3', t(key))); return result; }
 function line(parent: HTMLElement, key: ServerGuideText, ...values: (string | number)[]): void { parent.append(node('p', t(key, ...values))); }
 function name(value: { nameEn: string; nameVi: string }): string { return (vi() ? value.nameVi : value.nameEn) || t('unknown'); }
-function table(labels: ServerGuideText[], rows: (string | number)[][]): HTMLElement {
+function table(labels: ServerGuideText[], rows: (string | number | HTMLElement)[][]): HTMLElement {
   const scroll = node('div'); scroll.className = 'server-guide-scroll'; const table = node('table'); const head = node('tr');
   for (const label of labels) { const cell = node('th', t(label)); cell.scope = 'col'; head.append(cell); }
   table.append(head);
-  for (const values of rows) { const row = node('tr'); for (const value of values) row.append(node('td', String(value))); table.append(row); }
+  for (const values of rows) {
+    const row = node('tr');
+    for (const value of values) {
+      const cell = node('td');
+      cell.append(value instanceof HTMLElement ? value : String(value));
+      row.append(cell);
+    }
+    table.append(row);
+  }
   scroll.append(table); return scroll;
 }
 function progression(facts: ServerGuideFacts): HTMLElement {
@@ -66,8 +77,14 @@ function catalog(facts: ServerGuideFacts): HTMLElement {
   const result = card('catalog');
   const products = facts.catalog.products;
   if (!products?.length) { line(result, 'catalogOff'); return result; }
-  result.append(table(['item', 'quantity', 'price'], products.map(item => [`${name(item)} +${item.itemLevel}`, item.quantity, `${item.price} ${item.coinType}${item.bundle ? ` (${t('bundle')})` : ''}`])));
+  result.append(table(['item', 'quantity', 'price', 'duration'], products.map(item => [`${name(item)} +${item.itemLevel}`, item.quantity, `${item.price} ${item.coinType}${item.bundle ? ` (${t('bundle')})` : ''}`, catalogDuration(item.durationSeconds)])));
   line(result, 'bundleNote'); if (facts.catalog.truncated) line(result, 'catalogBound'); return result;
+}
+function catalogDuration(seconds: number): string {
+  if (seconds === 0) return t('permanent');
+  const units = [['day', 86400], ['hour', 3600], ['minute', 60], ['second', 1]] as const;
+  const [unit, divisor] = units.find(([, size]) => seconds % size === 0) ?? units[3];
+  return new Intl.NumberFormat(vi() ? 'vi-VN' : 'en-AU', { style: 'unit', unit, unitDisplay: 'long' }).format(seconds / divisor);
 }
 function policies(view: ServerGuideView): HTMLElement {
   const result = card('policies');
@@ -83,7 +100,14 @@ function systems(extras: ServerGuideExtras): HTMLElement {
   line(result, 'antiCheat', t(extras.systems.antiCheatEnabled ? 'yes' : 'no'));
   line(result, 'activityLog', t(extras.systems.activityLogEnabled ? 'yes' : 'no'));
   if (extras.systems.activityLogEnabled && extras.systems.onlyValuableDrops) line(result, 'valuableOnly');
-  line(result, 'recordingNote'); return result;
+  line(result, 'recordingNote');
+  if (extras.availability) {
+    line(result, 'systemHelper', t(extras.availability.helper ? 'yes' : 'no'));
+    line(result, 'systemVip', t(extras.availability.vip ? 'yes' : 'no'));
+    line(result, 'systemVault', t(extras.availability.multiVault ? 'yes' : 'no'));
+    line(result, 'systemShop', t(extras.availability.shop ? 'yes' : 'no'));
+  }
+  return result;
 }
 function quests(extras: ServerGuideExtras): HTMLElement {
   const result = card('quests');
@@ -93,18 +117,92 @@ function quests(extras: ServerGuideExtras): HTMLElement {
     `${quest.minimumLevel}–${quest.maximumLevel > 0 ? quest.maximumLevel : '∞'}`, quest.requiredStartMoney])));
   if (extras.questsTruncated) line(result, 'moreRows'); return result;
 }
+function ingredients(recipe: GuideCraft): HTMLElement {
+  if (!recipe.ingredients) return node('span', t('unknown'));
+  if (!recipe.ingredients.length) return node('span', t('noIngredients'));
+  const list = node('ul');
+  for (const ingredient of recipe.ingredients) {
+    const count = ingredient.maximumAmount === 0 ? t('ingredientCountUnlimited', ingredient.minimumAmount)
+      : ingredient.minimumAmount === ingredient.maximumAmount ? String(ingredient.minimumAmount)
+        : `${ingredient.minimumAmount}–${ingredient.maximumAmount}`;
+    const choices = ingredient.anyItem ? t('anyIngredient')
+      : ingredient.items.length ? ingredient.items.map(name).join(', ') : t('inactiveIngredients');
+    const row = node('li', t('ingredientRow', count, choices, ingredient.minimumItemLevel, ingredient.maximumItemLevel));
+    if (ingredient.options.length) row.append(node('p', t('ingredientOptions', ingredient.options.map(name).join(', '))));
+    if (ingredient.choicesTruncated) row.append(node('p', t('ingredientMore')));
+    list.append(row);
+  }
+  if (recipe.ingredientsTruncated) list.append(node('li', t('ingredientsMore')));
+  return list;
+}
+
+function highestGear(loot: GuideLoot): HTMLElement {
+  const result = card('highestGear');
+  line(result, 'highestGearNote');
+  if (!loot.gear.length) { line(result, 'gearEmpty'); return result; }
+  result.append(table(['item', 'slot', 'acquisition'], loot.gear.map(item => {
+    const source = (vi() ? item.sourceVi : item.sourceEn) || t('unknown');
+    const map = (vi() ? item.mapVi : item.mapEn) || t('unknown');
+    const location = item.source === 'catalog' ? t('catalogSource')
+      : t(item.source === 'field' ? 'fieldSource' : 'merchantSource', source, map);
+    return [`${name(item)} +${item.maximumLevel}`, (vi() ? item.slotVi : item.slotEn) || t('unknown'), location];
+  })));
+  if (loot.gearTruncated) line(result, 'moreRows');
+  return result;
+}
+
+function dropAnalysis(loot: GuideLoot): HTMLElement {
+  const result = card('dropAnalysis');
+  line(result, 'dropAnalysisNote');
+  if (!loot.groups.length) { line(result, 'dropAnalysisEmpty'); return result; }
+  const percent = new Intl.NumberFormat(vi() ? 'vi-VN' : 'en-AU', { style: 'percent', maximumSignificantDigits: 8 });
+  result.append(table(['dropGroup', 'groupChance'], loot.groups.map(group => [
+    name(group),
+    group.minimumChance === group.maximumChance
+      ? percent.format(group.minimumChance)
+      : `${percent.format(group.minimumChance)}–${percent.format(group.maximumChance)}`,
+  ])));
+  if (loot.groupsTruncated) line(result, 'moreRows');
+  return result;
+}
 function crafting(extras: ServerGuideExtras): HTMLElement {
   const result = card('crafting'); line(result, 'craftingNote');
   if (!extras.crafts.length) { line(result, 'craftEmpty'); return result; }
-  result.append(table(['result', 'npc', 'chance', 'cost'], extras.crafts.map(recipe => {
+  result.append(table(['result', 'npc', 'chance', 'cost', 'ingredients'], extras.crafts.map(recipe => {
     const item = recipe.upgrade ? t('upgrade', recipe.addLevel) : `${vi() ? recipe.itemVi : recipe.itemEn} +${recipe.randomMinimumLevel}–${recipe.randomMaximumLevel}`;
     const excellent = recipe.excellentChance !== null && recipe.excellentChance > 0 ? ` ${t('excellentResult', recipe.excellentChance, recipe.maximumExcellentOptions)}` : '';
     const chance = recipe.basePercent === null ? t('dynamicRate') : `${recipe.basePercent}%`;
     const price = recipe.zenPerFinalPercentage > 0 ? t('costFormula', recipe.fixedZen, recipe.zenPerFinalPercentage) : String(recipe.fixedZen);
-    return [`${name(recipe)}: ${item}${excellent}`, vi() ? recipe.npcVi : recipe.npcEn, `${chance} / ${recipe.maximumPercent}%`, price];
+    return [`${name(recipe)}: ${item}${excellent}`, vi() ? recipe.npcVi : recipe.npcEn, `${chance} / ${recipe.maximumPercent}%`, price, ingredients(recipe)];
   })));
   if (extras.craftsTruncated) line(result, 'moreRows'); return result;
 }
+
+function formatDuration(seconds: number): string {
+  const wholeMinutes = seconds % SECONDS_PER_MINUTE === 0;
+  return new Intl.NumberFormat(vi() ? 'vi-VN' : 'en-AU', {
+    style: 'unit', unit: wholeMinutes ? 'minute' : 'second', unitDisplay: 'long',
+  }).format(wholeMinutes ? seconds / SECONDS_PER_MINUTE : seconds);
+}
+
+function renderRealmRules(rules: GuideRealmRules | undefined): void {
+  if (!realmRuleList) return;
+  const lines: string[] = [];
+  if (rules) {
+    lines.push(rules.guildCreationMinimumLevel === 0
+      ? t('guildCreationAnyLevel')
+      : t('guildCreationLevel', rules.guildCreationMinimumLevel));
+    if (rules.bloodCastle) {
+      const { minimumSeconds, maximumSeconds } = rules.bloodCastle;
+      lines.push(minimumSeconds === maximumSeconds
+        ? t('bloodCastleDuration', formatDuration(minimumSeconds))
+        : t('bloodCastleDurationRange', formatDuration(minimumSeconds), formatDuration(maximumSeconds)));
+    }
+  }
+  lines.push(t('miniGameEntry'), t('questNpc'), t('fieldMonsters'), t('rateEvents'));
+  realmRuleList.replaceChildren(...lines.map(text => node('li', text)));
+}
+
 function render(): void {
   if (!root) return;
   const heading = node('div'); heading.className = 'section-head'; const title = node('div'); title.append(node('h2', t('title')), node('p', t('source')));
@@ -112,10 +210,14 @@ function render(): void {
   heading.append(title, refresh); root.replaceChildren(heading);
   const id = selector instanceof HTMLSelectElement ? selector.value : '';
   const server = id ? snapshot?.servers.find(item => String(item.id) === id) : snapshot?.servers[0];
+  renderRealmRules(id ? server?.realmRules : undefined);
   if (!server || !snapshot) { const error = node('p', t('unavailable')); error.setAttribute('role', 'status'); root.append(error); return; }
   const grid = node('div'); grid.className = 'server-guide-grid';
   grid.append(progression(server.facts), helper(server.facts), storage(server.facts), party(server.facts), vip(server.facts), catalog(server.facts), policies(snapshot));
-  if (server.extras) grid.append(systems(server.extras), quests(server.extras), crafting(server.extras));
+  if (server.extras) {
+    grid.append(systems(server.extras), quests(server.extras), crafting(server.extras));
+    if (server.extras.loot) grid.append(highestGear(server.extras.loot), dropAnalysis(server.extras.loot));
+  }
   const time = new Intl.DateTimeFormat(vi() ? 'vi-VN' : 'en-AU', { timeZone: 'Australia/Sydney', dateStyle: 'medium', timeStyle: 'short' }).format(new Date(snapshot.updatedAt));
   root.append(grid, node('p', t('updated', time)));
 }
