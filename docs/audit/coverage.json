@@ -1,5 +1,5 @@
 {
-  "generatedAt": "c8c840ac",
+  "generatedAt": "1915e6e0",
   "maxLines": 6000,
   "units": [
     {
@@ -3464,11 +3464,14 @@
       ],
       "files": 7,
       "lines": 456,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "1915e6e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "RemoteView/NPC",
+        "docs/audit/findings/unit-server-src-GameServer-RemoteView-NPC.md"
+      ],
+      "evidence": "7f/456L: No game rules (pure S->C packet serializers implementing GameLogic.Views interfaces; no embedded gameplay rules.)",
       "prs": ""
     },
     {
