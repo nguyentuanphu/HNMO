@@ -1,5 +1,5 @@
 {
-  "generatedAt": "e83322a1",
+  "generatedAt": "446a83b7",
   "maxLines": 6000,
   "units": [
     {
@@ -6585,11 +6585,14 @@
       ],
       "files": 3,
       "lines": 211,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "446a83b7",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "GameData/SkillData",
+        "docs/audit/findings/unit-client-src-source-Data-GameData-SkillData.md"
+      ],
+      "evidence": "3f/211L: No game rules (data schemas, color folders, effect/model/sound/translation assets & validators (no game rules).)",
       "prs": ""
     },
     {
