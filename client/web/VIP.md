@@ -29,3 +29,16 @@ Ba quyền lợi `IsVip`, `BonusExperienceRate` và `MoneyAmountRate` dùng chun
 Trạng thái nằm trong mục `vip` của `save/hnmo-state.json` dùng chung; số dư, biên nhận và quyền lợi vẫn nằm trong cơ sở dữ liệu tài khoản. Không xóa hoặc sửa tay bằng chứng thanh toán để xử lý giao dịch chờ. Công cụ MCP `vip_list` chỉ đọc; thay đổi cần quy trình xác nhận trực tiếp của quản trị viên.
 
 Đã kiểm thử lưu chưa rõ kết quả, thử lại, quyền sở hữu, hết hạn, giới hạn ngày, quyền quản trị, xác nhận, ngoại tuyến, lỗi nhật ký, giao diện hai ngôn ngữ và gói tin. Chưa chứng nhận PostgreSQL khi gặp sự cố, nhiều tiến trình máy chủ dùng chung trạng thái, gửi SMTP thực tế hoặc triển khai thanh toán/game trực tiếp. Khôi phục lạnh giới hạn 20.000 biên nhận; tài khoản vượt mức cần được kiểm tra. Cần nền tích hợp #51 và trang tài khoản #29. Thời điểm hoạt động gần nhất theo từng nhân vật vẫn là hạn chế riêng của trang tài khoản.
+
+## Test-only payments
+
+Use a demo server. In **Top-up milestones**, save the coin packages and Sydney-day order limit. Package prices are whole VND.
+Enable the simulated bank transfer, Stripe test cards, or both. The simulated QR uses fictional bank information. Compare its
+reference and amount with the displayed order before simulating confirmation. This uses the existing cash-shop balance.
+Players can then review the existing VIP offers from the account page.
+
+For Stripe, set the website's exact HTTPS origin, a Stripe test API key, and the test signing secret. In Stripe test
+mode, point the webhook at `/test-topup/stripe/webhook` on that origin. Select the Checkout completion, async payment success,
+charge refund, and charge dispute creation events. Test using Stripe test cards. A browser returning from Checkout does not
+confirm payment. A verified event must match the order session and total before crediting. Review flagged refunds and disputes
+from the test order list. Live checkout remains locked.

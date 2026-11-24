@@ -76,6 +76,15 @@
       </section>
     </div>
 
+    <section class="panel" id="testPackages" hidden>
+      <h2></h2>
+      <p data-hint></p>
+      <a href="/account.html" data-test-vip></a>
+      <div class="choices" data-packages></div>
+      <p role="status"></p>
+      <div class="qr"><img alt="" hidden></div>
+    </section>
+
     <section class="panel" id="milestones" hidden>
       <h2 data-t="milestonesHead">Top-up milestone rewards</h2>
       <p data-t="milestonesNote">Claimed once per step when cumulative confirmed top-ups pass each threshold (open U in the game or the account page).</p>
@@ -87,6 +96,7 @@
     </p>
   </main>
   <script type="module" src="/js/topupPage.js"></script>
+  <script type="module" src="/js/topupTestPackages.js"></script>
   <script type="module" src="/js/websiteInformation.js"></script>
 </body>
 </html>

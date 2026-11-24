@@ -44,6 +44,8 @@ internal static class Website
         Forward(app, "/website/lucky-number", "api/website/lucky-number", options, clients);
         Forward(app, "/website/marriage", "api/website/marriage", options, clients);
         Forward(app, "/website/resets", "api/website/resets", options, clients);
+        MapStripeTestWebhook(app, options, clients);
+        Forward(app, "/website/test-topup", "api/website/test-topup/catalogue", options, clients, rateLimited: true);
         Forward(app, "/website/topup-milestones", "api/website/topup-milestones", options, clients);
         Forward(app, "/website/market", "api/website/market", options, clients);
         Forward(app, "/website/escrow", "api/website/escrow", options, clients);
@@ -111,6 +113,49 @@ internal static class Website
                 using var response = await clients.CreateClient().PostAsync(target, content, timeout.Token).ConfigureAwait(false);
                 var reply = await response.Content.ReadAsStringAsync(timeout.Token).ConfigureAwait(false);
                 return Results.Content(reply, "application/json", statusCode: (int)response.StatusCode);
+            }
+            catch (Exception error) when (error is HttpRequestException or OperationCanceledException)
+            {
+                return Results.StatusCode(StatusCodes.Status503ServiceUnavailable);
+            }
+        });
+    }
+
+    private static void MapStripeTestWebhook(WebApplication app, PortalOptions options, IHttpClientFactory clients)
+    {
+        app.MapPost("/test-topup/stripe/webhook", async (HttpContext context) =>
+        {
+            const int MaximumBodyLength = 128 * 1024;
+            var signature = context.Request.Headers["Stripe-Signature"].ToString();
+            if (signature.Length is 0 or > 4096 || context.Request.ContentLength > MaximumBodyLength)
+            {
+                return Results.BadRequest();
+            }
+
+            using var timeout = CancellationTokenSource.CreateLinkedTokenSource(context.RequestAborted);
+            timeout.CancelAfter(TimeSpan.FromSeconds(20));
+            try
+            {
+                using var raw = new MemoryStream();
+                var chunk = new byte[4096];
+                int read;
+                while ((read = await context.Request.Body.ReadAsync(chunk, timeout.Token).ConfigureAwait(false)) > 0)
+                {
+                    if (raw.Length + read > MaximumBodyLength)
+                    {
+                        return Results.BadRequest();
+                    }
+
+                    await raw.WriteAsync(chunk.AsMemory(0, read), timeout.Token).ConfigureAwait(false);
+                }
+
+                var target = new Uri(new Uri(options.ApiBaseUrl), "api/website/test-topup/stripe/webhook");
+                using var request = new HttpRequestMessage(HttpMethod.Post, target) { Content = new ByteArrayContent(raw.ToArray()) };
+                request.Headers.TryAddWithoutValidation("Stripe-Signature", signature);
+                request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                using var client = clients.CreateClient();
+                using var response = await client.SendAsync(request, timeout.Token).ConfigureAwait(false);
+                return Results.StatusCode((int)response.StatusCode);
             }
             catch (Exception error) when (error is HttpRequestException or OperationCanceledException)
             {

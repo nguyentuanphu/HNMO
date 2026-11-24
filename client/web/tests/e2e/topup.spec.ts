@@ -64,3 +64,46 @@ test('the webhooks refuse calls without the key', async ({ request }) => {
   expect((await request.post('/topup/casso', { data: { data: [] } })).status()).toBe(401);
   expect((await request.post('/topup/sepay', { data: {}, headers: { Authorization: 'Apikey wrong' } })).status()).toBe(401);
 });
+
+test('signed-in test order displays a fictional VietQR destination and keeps the same retry ID', async ({ page }) => {
+  const operations: string[] = [];
+  await page.route('**/topup/info', (route) => route.fulfill({ json: { enabled: false } }));
+  await page.route('**/website/topup-milestones', (route) => route.fulfill({ json: { enabled: false } }));
+  await page.route('**/website/test-topup', (route) => route.fulfill({ json: {
+    enabled: true, bank: true, stripe: false, packages: [{ id: 'test', englishName: 'Fictional package', vietnameseName: 'Gói hư cấu', priceVnd: 25000, coins: 15 }],
+  } }));
+  await page.route('**/portal/account/test-topup/orders', (route) => {
+    const fields = route.request().postDataJSON() as { operationId: string; packageId: string; provider: string };
+    expect(route.request().headers()['x-hnmo-session']).toBe('1');
+    expect(Object.keys(fields).sort()).toEqual(['operationId', 'packageId', 'provider']);
+    expect(fields.packageId).toBe('test');
+    expect(fields.provider).toBe('bank');
+    operations.push(fields.operationId);
+    return route.fulfill({ json: { amount: 25000, reference: 'TEST-ORDER-fictional', credited: operations.length > 1 } });
+  });
+  await page.goto('/topup.html');
+  const panel = page.locator('#testPackages');
+  await expect(panel).toContainText('Đừng chuyển tiền');
+  const buy = panel.getByRole('button', { name: /Gói hư cấu/ });
+  await buy.click();
+  await expect(panel.getByRole('status')).toContainText('TEST-ORDER-fictional');
+  await expect(panel.locator('img')).toHaveAttribute('src', /^data:image\/svg\+xml/);
+  await buy.click();
+  await expect(panel.getByRole('status')).toContainText('đã xác nhận coin thử');
+  await expect(panel.locator('img')).toBeHidden();
+  expect(operations).toHaveLength(2);
+  expect(operations[0]).toBe(operations[1]);
+});
+
+test('returning from Stripe test checkout does not claim the payment is confirmed', async ({ page }) => {
+  await page.route('**/topup/info', (route) => route.fulfill({ json: { enabled: false } }));
+  await page.route('**/website/test-topup', (route) => route.fulfill({ json: {
+    enabled: true, bank: false, stripe: true,
+    packages: [{ id: 'test', englishName: 'Fictional package', vietnameseName: 'Gói hư cấu', priceVnd: 25000, coins: 15 }],
+  } }));
+  await page.goto('/topup.html?stripe-test=returned');
+  const panel = page.locator('#testPackages');
+  await expect(panel.getByRole('status')).toContainText('Cần xác nhận thanh toán có chữ ký');
+  await expect(panel.getByRole('button', { name: /Thẻ Stripe thử nghiệm/ })).toBeVisible();
+  await expect(panel.getByRole('button', { name: /Mô phỏng ngân hàng/ })).toHaveCount(0);
+});

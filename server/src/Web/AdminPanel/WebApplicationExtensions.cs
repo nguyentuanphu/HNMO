@@ -8,6 +8,7 @@ using System.IO;
 using HNMO.DataModel;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
+using HNMO.GameLogic.PlugIns;
 using HNMO.Interfaces;
 using HNMO.Network.Analyzer;
 using HNMO.Persistence;
@@ -24,6 +25,7 @@ using HNMO.Web.Shared.Components.Modal;
 using HNMO.Web.Shared.Models;
 using HNMO.Web.Shared.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -192,6 +194,22 @@ public static class WebApplicationExtensions
     internal static IMvcBuilder AddAdminPanelControllers(this IServiceCollection services)
     {
         services.AddWebsiteAccountMail();
+        services.AddHttpClient();
+        services.TryAddSingleton(provider => new WebsiteStripeTestSettings(
+            HnmoStateStore.Open(Path.Combine(AppContext.BaseDirectory, "save", HnmoStateStore.StateFileName))!,
+            provider.GetRequiredService<IDataProtectionProvider>()));
+        services.TryAddSingleton<WebsiteStripeTestCheckout>();
+        services.TryAddSingleton(provider => new WebsiteTestTopUpStore(
+            HnmoStateStore.Open(Path.Combine(AppContext.BaseDirectory, "save", HnmoStateStore.StateFileName))!,
+            provider.GetService<AdminAuditSettings>(),
+            provider.GetRequiredService<TimeProvider>()));
+        services.TryAddSingleton(provider =>
+        {
+            var persistence = provider.GetRequiredService<IPersistenceContextProvider>();
+            var configurations = provider.GetRequiredService<IDataSource<GameConfiguration>>();
+            return new WebsiteTestBankConfirmation(provider.GetRequiredService<WebsiteTestTopUpStore>(),
+                persistence, configurations, new CashShopCoinService(persistence, configurations));
+        });
         return services.AddControllers(options =>
             {
                 options.Filters.Add<HNMO.Web.AdminPanel.API.AdminOperationExceptionFilter>();
