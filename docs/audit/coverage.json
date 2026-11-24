@@ -1,5 +1,5 @@
 {
-  "generatedAt": "512795cc",
+  "generatedAt": "2d33e254",
   "maxLines": 6000,
   "units": [
     {
@@ -2003,11 +2003,13 @@
       ],
       "files": 8,
       "lines": 604,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "2d33e254",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "None (custom HNMO feature)"
+      ],
+      "evidence": "All 8 Qol files read in full. Verified /requests, /srvinfo, /mine rules, QolStore locking, and noted partial-reward bug if custom entry has both item and Zen when Zen is full. See docs/audit/findings/unit-server-src-GameLogic-PlugIns-Qol.md.",
       "prs": ""
     },
     {
