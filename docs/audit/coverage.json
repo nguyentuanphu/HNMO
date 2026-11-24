@@ -1,5 +1,5 @@
 {
-  "generatedAt": "f613c11e",
+  "generatedAt": "2ed5f768",
   "maxLines": 6000,
   "units": [
     {
@@ -7399,11 +7399,14 @@
       ],
       "files": 7,
       "lines": 1211,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "2ed5f768",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Network/Reconnect",
+        "docs/audit/findings/unit-client-src-source-Network-Reconnect.md"
+      ],
+      "evidence": "7f/1211L: No game rules (TCP/packet queue, auto-reconnect & S->C/C->S packet dispatch plumbing in WSclient (server validates actions).)",
       "prs": ""
     },
     {
