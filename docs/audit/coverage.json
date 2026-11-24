@@ -1,5 +1,5 @@
 {
-  "generatedAt": "6f9809ce",
+  "generatedAt": "22378225",
   "maxLines": 6000,
   "units": [
     {
@@ -5313,11 +5313,16 @@
       ],
       "files": 16,
       "lines": 5728,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "22378225",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "escrowWindow.ts:100",
+        "fieldEventDocs.ts",
+        "guildWindows.ts",
+        "docs/audit/findings/unit-client-web-src-ui-files-2.md"
+      ],
+      "evidence": "16f/5728L: No game rules (UI dialogs displaying server-computed escrow/event/guild DTOs).",
       "prs": ""
     },
     {
