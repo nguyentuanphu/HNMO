@@ -1,5 +1,5 @@
 {
-  "generatedAt": "9bd23b34",
+  "generatedAt": "57064b64",
   "maxLines": 6000,
   "units": [
     {
@@ -1169,11 +1169,18 @@
       ],
       "files": 123,
       "lines": 5930,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "57064b64",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "KundunHealthRefillConfiguration.cs:19-37",
+        "KalimaConstants.cs:17-33",
+        "PetExperiencePlugIn.cs:28-87",
+        "PlayerLosesExperienceAfterDeathPlugIn.cs:90-102",
+        "SpeedHackDetectConfiguration.cs:50-223",
+        "docs/audit/findings/unit-server-src-GameLogic-PlugIns-files-1.md"
+      ],
+      "evidence": "123f/5930L: Kundun refill, ticket merges, 20% PetShare, GuildWar 2/1 score, 1m SelfDefense & death EXP/Zen tiers match S6/S9; custom skills 700..727, anti-cheat & ops caps are HNMO custom.",
       "prs": ""
     },
     {
