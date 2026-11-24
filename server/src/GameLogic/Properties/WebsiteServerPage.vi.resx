@@ -2,6 +2,8 @@
 <root>
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
+  <data name="EventGuide" xml:space="preserve"><value>Hướng dẫn sự kiện và nhiệm vụ từ máy chủ</value></data>
+  <data name="EventGuideDescription" xml:space="preserve"><value>Hiển thị lịch sự kiện và xâm lăng, phần thưởng đã cấu hình và nhiệm vụ trong hướng dẫn website.</value></data>
   <data name="ClientRulesEn" xml:space="preserve"><value>Quy định dùng client (tiếng Anh)</value></data>
   <data name="ClientRulesVi" xml:space="preserve"><value>Quy định dùng client (tiếng Việt)</value></data>
   <data name="NotForSaleEn" xml:space="preserve"><value>Không bán (tiếng Anh)</value></data>

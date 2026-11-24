@@ -17,7 +17,7 @@ using Microsoft.Extensions.Logging;
 /// Base class for invasion plugins.
 /// </summary>
 /// <typeparam name="TConfiguration">The concrete configuration type.</typeparam>
-public abstract class BaseInvasionPlugIn<TConfiguration> : PeriodicTaskBasePlugIn<TConfiguration, InvasionGameServerState>, IPeriodicTaskPlugIn, IObjectAddedToMapPlugIn, ISupportCustomConfiguration<TConfiguration>
+public abstract class BaseInvasionPlugIn<TConfiguration> : PeriodicTaskBasePlugIn<TConfiguration, InvasionGameServerState>, IPeriodicTaskPlugIn, IObjectAddedToMapPlugIn, ISupportCustomConfiguration<TConfiguration>, IInvasionScheduleSpawns
     where TConfiguration : PeriodicInvasionConfiguration
 {
     /// <summary>
@@ -383,10 +383,7 @@ public abstract class BaseInvasionPlugIn<TConfiguration> : PeriodicTaskBasePlugI
     /// <param name="mobs">The mob spawn configurations.</param>
     private void SelectSingleMap(InvasionGameServerState state, IList<InvasionSpawnConfiguration> mobs)
     {
-        var source = this.AnnouncedMonsterId is { } announcedId
-            ? mobs.FirstOrDefault(m => m.MonsterId == announcedId)
-            : null;
-        source ??= mobs[0];
+        var source = this.SingleMapSource(mobs);
 
         if (source.MapIds.Count == 0)
         {
@@ -404,6 +401,21 @@ public abstract class BaseInvasionPlugIn<TConfiguration> : PeriodicTaskBasePlugI
 
         state.SetAnnouncedMaps([chosenMap]);
     }
+
+    IReadOnlyList<InvasionSpawnConfiguration> IInvasionScheduleSpawns.ActiveSpawns(IGameContext context)
+    {
+        var mobs = this.GetActiveMobs(context);
+        if (mobs.Count == 0 || this.Configuration?.ForceSingleMap is not true)
+        {
+            return mobs.ToArray();
+        }
+
+        var maps = this.SingleMapSource(mobs).MapIds;
+        return mobs.Select(mob => new InvasionSpawnConfiguration(mob.MonsterId, mob.Count, maps, SpawnMapStrategy.RandomMap)).ToArray();
+    }
+
+    private InvasionSpawnConfiguration SingleMapSource(IList<InvasionSpawnConfiguration> mobs)
+        => (this.AnnouncedMonsterId is { } announcedId ? mobs.FirstOrDefault(mob => mob.MonsterId == announcedId) : null) ?? mobs[0];
 
     /// <summary>
     /// Iterates the mob configurations and registers the selected spawn maps into the state.

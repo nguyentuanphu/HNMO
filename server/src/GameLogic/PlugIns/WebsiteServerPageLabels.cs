@@ -48,5 +48,11 @@ public static class WebsiteServerPageLabels
     /// <summary>Gets the tracker character-name switch description.</summary>
     public static string TrackerNamesDescription => Get(nameof(TrackerNamesDescription));
 
+    /// <summary>Gets the localized event and quest guide setting.</summary>
+    public static string EventGuide => Resources.GetString(nameof(EventGuide), CultureInfo.CurrentUICulture) ?? nameof(EventGuide);
+
+    /// <summary>Gets the localized event and quest guide setting description.</summary>
+    public static string EventGuideDescription => Resources.GetString(nameof(EventGuideDescription), CultureInfo.CurrentUICulture) ?? nameof(EventGuideDescription);
+
     private static string Get(string key) => Resources.GetString(key, CultureInfo.CurrentUICulture) ?? key;
 }

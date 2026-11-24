@@ -2,6 +2,8 @@
 <root>
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
+  <data name="EventGuide" xml:space="preserve"><value>Aktueller Ereignis- und Questleitfaden</value></data>
+  <data name="EventGuideDescription" xml:space="preserve"><value>Zeigt aktuelle Ereignis- und Invasionszeiten, konfigurierte Belohnungen und Quests im Website-Leitfaden an.</value></data>
   <data name="ClientRulesEn" xml:space="preserve"><value>Clientregeln (Englisch)</value></data>
   <data name="ClientRulesVi" xml:space="preserve"><value>Clientregeln (Vietnamesisch)</value></data>
   <data name="NotForSaleEn" xml:space="preserve"><value>Nicht im Verkauf (Englisch)</value></data>
