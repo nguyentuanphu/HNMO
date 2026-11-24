@@ -1,5 +1,5 @@
 {
-  "generatedAt": "f0d05fda",
+  "generatedAt": "ddb470bb",
   "maxLines": 6000,
   "units": [
     {
@@ -4893,11 +4893,16 @@
       ],
       "files": 21,
       "lines": 3599,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "ddb470bb",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "accountEmail.ts",
+        "calculator.ts:1-60",
+        "i18n.ts",
+        "docs/audit/findings/unit-client-web-src-files-1.md"
+      ],
+      "evidence": "21f/3599L: No game rules (account email/password/vip portal forms, formats, i18n, and server build-calculator API UI client).",
       "prs": ""
     },
     {
