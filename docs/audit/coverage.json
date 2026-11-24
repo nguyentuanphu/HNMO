@@ -1,5 +1,5 @@
 {
-  "generatedAt": "608a89fe",
+  "generatedAt": "0f87744a",
   "maxLines": 6000,
   "units": [
     {
@@ -6060,11 +6060,15 @@
       ],
       "files": 19,
       "lines": 4363,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "0f87744a",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "ItemBmdImport.cpp:342-360",
+        "ItemDataHandler.cpp",
+        "docs/audit/findings/unit-client-src-source-Data-DataHandler-ItemData.md"
+      ],
+      "evidence": "19f/4363L: ItemBmdImport preserves original requirement weight growth: 20 + weight * basis * 3%/4% (energy scrolls use level req basis) matching server Initialization.",
       "prs": ""
     },
     {
