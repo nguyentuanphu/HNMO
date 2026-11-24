@@ -1,5 +1,5 @@
 {
-  "generatedAt": "aec902d3",
+  "generatedAt": "1a4c2756",
   "maxLines": 6000,
   "units": [
     {
@@ -5629,11 +5629,15 @@
       ],
       "files": 13,
       "lines": 2955,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "1a4c2756",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "CharacterManager.cpp:312-390",
+        "CharSelMainWin.cpp",
+        "docs/audit/findings/unit-client-src-source-Character.md"
+      ],
+      "evidence": "13f/2955L: GetEquipedBowType_Skill checks Arrows/Bolt ammo; GetMagicSkillDamage/GetCurseSkillDamage implement staff/book/Summoner curse skill scaling matching web characterCalc.",
       "prs": ""
     },
     {
