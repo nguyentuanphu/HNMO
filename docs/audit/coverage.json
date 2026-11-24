@@ -1,5 +1,5 @@
 {
-  "generatedAt": "699465b5",
+  "generatedAt": "46a8c113",
   "maxLines": 6000,
   "units": [
     {
@@ -3616,11 +3616,15 @@
       ],
       "files": 86,
       "lines": 5979,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "46a8c113",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "the Season 6 suite's RegularSkillCalc.lua, CommonServer.cfg, SkillList.xml & Kanturu settings",
+        "docs/audit/data/diff-common-rules.txt",
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-Updates-files-1.md"
+      ],
+      "evidence": "Audited all 86 files (5979 lines): docs/audit/findings/unit-server-src-Persistence-Initialization-Updates-files-1.md",
       "prs": ""
     },
     {
