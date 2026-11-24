@@ -1,5 +1,5 @@
 {
-  "generatedAt": "ff6717e1",
+  "generatedAt": "3c1aaf68",
   "maxLines": 6000,
   "units": [
     {
@@ -6797,11 +6797,14 @@
       ],
       "files": 2,
       "lines": 4368,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "3c1aaf68",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "ZzzInterface.cpp:191,3545,3929-3936",
+        "docs/audit/findings/unit-client-src-source-Engine-Object-files-4.md"
+      ],
+      "evidence": "2f/4368L: Enforces MacroCooldownMs=4000 (4s) cooldown between macro chat/command broadcasts.",
       "prs": ""
     },
     {
