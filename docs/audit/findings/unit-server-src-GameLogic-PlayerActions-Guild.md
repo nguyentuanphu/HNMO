@@ -2,7 +2,7 @@
 
 - **Unit**: `server/src/GameLogic/PlayerActions/Guild` (11 files, 1,160 lines)
 - **Status**: `Checked` on 2026-11-24
-- **Reference saved**: [guild-and-alliance-s6-s9.md](file:///D:/WorkSpace/HNMO-ag/docs/audit/references/guild-and-alliance-s6-s9.md)
+- **Reference saved**: [guild-and-alliance-s6-s9.md](../references/guild-and-alliance-s6-s9.md)
 
 ## Files Reviewed (in full)
 1. `GuildCreateAction.cs` (1–97)

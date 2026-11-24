@@ -2,7 +2,7 @@
 
 - **Unit**: `server/src/GameLogic/PlayerActions/CashShop` (1 file, 474 lines)
 - **Status**: `Checked` on 2026-11-24
-- **Reference**: Cross-checked with `server/src/GameLogic/CashShop` and [item-options-380-harmony-cashshop.md](file:///D:/WorkSpace/HNMO-ag/docs/audit/references/item-options-380-harmony-cashshop.md)
+- **Reference**: Cross-checked with `server/src/GameLogic/CashShop` and [item-options-380-harmony-cashshop.md](../references/item-options-380-harmony-cashshop.md)
 
 ## Files Reviewed (in full)
 1. `CashShopActions.cs` (1–474)

@@ -2,7 +2,7 @@
 
 - **Unit**: `server/src/GameLogic/PlayerActions/ItemConsumeActions` (63 files, 3,128 lines)
 - **Status**: `Checked` on 2026-11-24
-- **Reference saved**: [jewels-potions-fruits-s6-s9.md](file:///D:/WorkSpace/HNMO-ag/docs/audit/references/jewels-potions-fruits-s6-s9.md)
+- **Reference saved**: [jewels-potions-fruits-s6-s9.md](../references/jewels-potions-fruits-s6-s9.md)
 
 ## Files Reviewed (in full — all 63 files)
 - Core & Base handlers: `IItemConsumeHandlerPlugIn.cs`, `ItemConsumeAction.cs`, `BaseConsumeHandlerPlugIn.cs`, `ItemModifyConsumeHandlerPlugIn.cs`, `ApplyMagicEffectConsumeHandlerPlugIn.cs`.

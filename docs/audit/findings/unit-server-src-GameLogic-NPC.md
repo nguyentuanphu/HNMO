@@ -1,6 +1,6 @@
 # Unit: server/src/GameLogic/NPC
 
-Checked against: Season 6 suite (`IGCData\IGC_Commands.ini`, `Data\CommonServer.cfg`, monster/spawn/AI roles) and Season 9 suite (`IGCData\IGC_Commands.ini`).
+Checked against: Season 6 suite (commands settings file, `CommonServer.cfg`, monster/spawn/AI roles) and Season 9 suite (commands settings file).
 
 Scope: `server/src/GameLogic/NPC` (`22` files, `2986` lines).
 

@@ -2,7 +2,7 @@
 
 - **Unit**: `server/src/GameLogic/PlayerActions/Party` (4 files, 270 lines)
 - **Status**: `Checked` on 2026-11-24
-- **Reference saved**: [party-exp-and-pk.md](file:///D:/WorkSpace/HNMO-ag/docs/audit/references/party-exp-and-pk.md)
+- **Reference saved**: [party-exp-and-pk.md](../references/party-exp-and-pk.md)
 
 ## Files Reviewed (in full)
 1. `PartyKickAction.cs` (1–42)

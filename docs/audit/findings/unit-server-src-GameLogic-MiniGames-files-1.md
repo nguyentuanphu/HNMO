@@ -2,7 +2,7 @@
 
 - **Unit**: `server/src/GameLogic/MiniGames (files 1)` (37 files, 5,482 lines)
 - **Status**: `Checked` on 2026-11-24
-- **Reference saved**: [minigames-bc-cc-ds-it-s6-s9.md](file:///D:/WorkSpace/HNMO-ag/docs/audit/references/minigames-bc-cc-ds-it-s6-s9.md)
+- **Reference saved**: [minigames-bc-cc-ds-it-s6-s9.md](../references/minigames-bc-cc-ds-it-s6-s9.md)
 
 ## Files Reviewed (in full — all 37 files)
 - Contexts & Core: `BloodCastleContext.cs` (1–392), `ChaosCastleContext.cs` (1–707), `ChaosCastleDropGenerator.cs` (1–102), `ChaosCastleStatus.cs` (1–41), `DevilSquareContext.cs` (1–138), `IllusionTempleContext.cs` (1–1157), `IllusionTempleScore.cs` (1–86), `IllusionTempleTeam.cs` (1–21), `MiniGameContext.cs` (1–948), `MiniGameManager.cs` (1–180), `MiniGamePlayerRegistry.cs` (1–175), `MiniGameRewardService.cs` (1–300), `MiniGameChangeEventProcessor.cs` (1–240), `MiniGameSpawnWaveRunner.cs` (1–147), `ChangeEventContext.cs` (1–63), `BloodCastleItemExtensions.cs` (1–52), `MiniGameMapKey.cs` (1–46), `MiniGameState.cs` (1–41), `SkippableDelay.cs` (1–126), `IMiniGameManager.cs` (1–66).

@@ -14,12 +14,12 @@
 
 ## Hand-Verified Sample Values
 
-1. **ExpSystem (`IGC_ExpSystem.xml`)**:
+1. **ExpSystem (the suite's experience system XML)**:
    - Hand check in both suites' `ExpSystem.xml`: `<StaticExp Normal="1000.0" Master="1000.0" Event="0.0" Quest="1.0" />` + `36` `<Range>` rows (`MinReset`, `MaxReset`, `MinLevel`, `MaxLevel`, `NormalExp`, `MasterExp`).
    - HNMO `exp_and_globals.csv` & `GameConfigurationInitializer.cs`: `ExperienceRate=1`, polynomial `ExperienceFormula` and `MasterExperienceFormula` (**differs** — static/flat polynomial formulas vs suite's 1000x static multiplier + 36 reset/level dynamic ranges).
-2. **ZenDrop (`IGC_ZenDrop.xml`)**:
+2. **ZenDrop (the suite's zen drop XML)**:
    - Hand check in the Season 6 suite's XML: `<ZenDropSystem Enable="0" MultiplyByMonsterLevel="0" MultiplyChanceRate="4000" />` (`77` maps); Season 9 suite XML: `<ZenDropSystem Enable="1" MultiplyByMonsterLevel="1" ... />` (`79` maps).
    - HNMO `GameConfigurationInitializer.cs`: `1.0` default formula drops everywhere (**differs**).
-3. **VIP Tiers (`IGC_VipSettings.xml`)**:
+3. **VIP Tiers (the suite's VIP settings XML)**:
    - Hand check in both suites' XML: `4` `<Vip>` entries (`Bronze`, `Silver`, `Gold`, `Platinum`).
    - HNMO `GameConfigurationInitializer.cs`: no VIP tier table (**missing in HNMO**).

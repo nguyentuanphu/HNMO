@@ -2,7 +2,7 @@
 
 - **Unit**: `server/src/GameLogic/PlayerActions/Quests` (8 files, 620 lines)
 - **Status**: `Checked` on 2026-11-24
-- **Reference saved**: [quests-and-class-progression-s6-s9.md](file:///D:/WorkSpace/HNMO-ag/docs/audit/references/quests-and-class-progression-s6-s9.md)
+- **Reference saved**: [quests-and-class-progression-s6-s9.md](../references/quests-and-class-progression-s6-s9.md)
 
 ## Files Reviewed (in full)
 1. `NpcBuffRequestAction.cs` (1–97)

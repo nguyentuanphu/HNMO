@@ -2,7 +2,7 @@
 
 - **Unit**: `server/src/GameLogic/PlugIns/Guilds` (18 files, 2,202 lines)
 - **Status**: `Checked` on 2026-11-24
-- **Reference**: HNMO custom feature (`GuildsPlugIn`, no direct S6/S9 suite equivalent). Also cross-checked against [guild-and-alliance-s6-s9.md](file:///D:/WorkSpace/HNMO-ag/docs/audit/references/guild-and-alliance-s6-s9.md).
+- **Reference**: HNMO custom feature (`GuildsPlugIn`, no direct S6/S9 suite equivalent). Also cross-checked against [guild-and-alliance-s6-s9.md](../references/guild-and-alliance-s6-s9.md).
 
 ## Files Reviewed (in full)
 1. `GuildEngine.cs` (1–548)

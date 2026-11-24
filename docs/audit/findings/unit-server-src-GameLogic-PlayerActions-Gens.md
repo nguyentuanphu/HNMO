@@ -2,7 +2,7 @@
 
 - **Unit**: `server/src/GameLogic/PlayerActions/Gens` (1 file, 333 lines)
 - **Status**: `Checked` on 2026-11-24
-- **Reference saved**: [gens-system-s6-s9.md](file:///D:/WorkSpace/HNMO-ag/docs/audit/references/gens-system-s6-s9.md)
+- **Reference saved**: [gens-system-s6-s9.md](../references/gens-system-s6-s9.md)
 
 ## Files Reviewed (in full)
 1. `GensActions.cs` (1–333)

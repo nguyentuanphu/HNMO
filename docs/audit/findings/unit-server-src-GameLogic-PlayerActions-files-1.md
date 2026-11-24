@@ -2,7 +2,7 @@
 
 - **Unit**: `server/src/GameLogic/PlayerActions (files 1)` (16 files, 1,949 lines)
 - **Status**: `Checked` on 2026-11-24
-- **Reference saved**: [warps-and-npc-dialogs-s6-s9.md](file:///D:/WorkSpace/HNMO-ag/docs/audit/references/warps-and-npc-dialogs-s6-s9.md)
+- **Reference saved**: [warps-and-npc-dialogs-s6-s9.md](../references/warps-and-npc-dialogs-s6-s9.md)
 
 ## Files Reviewed (in full — all 16 files)
 1. `CloseNpcDialogAction.cs` (1–59)

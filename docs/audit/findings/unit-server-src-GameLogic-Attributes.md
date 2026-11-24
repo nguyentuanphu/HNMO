@@ -2,7 +2,7 @@
 
 - **Unit**: `server/src/GameLogic/Attributes` (9 files, 2,871 lines)
 - **Status**: `Checked` on 2026-11-24
-- **Reference saved**: [attributes-and-stats-s6-s9.md](file:///D:/WorkSpace/HNMO-ag/docs/audit/references/attributes-and-stats-s6-s9.md)
+- **Reference saved**: [attributes-and-stats-s6-s9.md](../references/attributes-and-stats-s6-s9.md)
 
 ## Files Reviewed (in full)
 1. `AccountAttributeGrantPowerUps.cs` (1–147)

@@ -2,7 +2,7 @@
 
 - **Unit**: `server/src/GameLogic/PlugIns/InvasionEvents` (16 files, 1,664 lines)
 - **Checked on**: 2026-11-24
-- **Reference**: [invasions-and-s6-events-s6-s9.md](file:///D:/WorkSpace/HNMO-ag/docs/audit/references/invasions-and-s6-events-s6-s9.md)
+- **Reference**: [invasions-and-s6-events-s6-s9.md](../references/invasions-and-s6-events-s6-s9.md)
 
 ## Scope Covered
 

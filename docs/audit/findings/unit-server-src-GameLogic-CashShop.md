@@ -2,7 +2,7 @@
 
 - **Unit**: `server/src/GameLogic/CashShop` (20 files, 1,073 lines)
 - **Status**: `Checked` on 2026-11-24
-- **Reference**: [item-options-380-harmony-cashshop.md](file:///D:/WorkSpace/HNMO-ag/docs/audit/references/item-options-380-harmony-cashshop.md)
+- **Reference**: [item-options-380-harmony-cashshop.md](../references/item-options-380-harmony-cashshop.md)
 
 ## Files Reviewed (in full — all 20 files)
 1. `CashShopBalanceDetails.cs` (1–11)
