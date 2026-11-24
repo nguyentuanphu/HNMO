@@ -1,5 +1,5 @@
 {
-  "generatedAt": "71006c09",
+  "generatedAt": "29b743a5",
   "maxLines": 6000,
   "units": [
     {
@@ -6297,11 +6297,15 @@
       ],
       "files": 21,
       "lines": 5417,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "29b743a5",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "ItemDefinition.h:124-211",
+        "ItemDataValidation.cpp",
+        "docs/audit/findings/unit-client-src-source-Data-GameData-ItemData-files-1.md"
+      ],
+      "evidence": "21f/5417L: ItemDefinition validates level ranges [0..ItemLevelCount-1] & tooltip level bounds for JSON item data.",
       "prs": ""
     },
     {
