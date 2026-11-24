@@ -1,5 +1,5 @@
 {
-  "generatedAt": "6130ab89",
+  "generatedAt": "ba32c431",
   "maxLines": 6000,
   "units": [
     {
@@ -8309,11 +8309,15 @@
       ],
       "files": 21,
       "lines": 5772,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "ba32c431",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "ChatInputBox.h:67",
+        "ChatInputBox.cpp:329",
+        "docs/audit/findings/unit-client-src-source-UI-HUD-files-1.md"
+      ],
+      "evidence": "21f/5772L: ChatInputBox enforces ChatCooldownMs=1000ms (1s) chat send throttle.",
       "prs": ""
     },
     {
