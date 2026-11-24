@@ -31,4 +31,11 @@ public interface IHnmoPlayerStateRowQueryBackend : IHnmoPlayerStateRowBackend
     /// <summary>Reads only the latest stored economy jewel projection.</summary>
     /// <returns>The bounded projection, or null when none is available.</returns>
     HnmoFeatureRow? LoadLatestEconomyJewels() => null;
+    /// <summary>Reads a bounded active activity page for a recorded kind and combat mode.</summary>
+    /// <param name="kind">The persisted numeric activity kind.</param>
+    /// <param name="mode">The persisted numeric PvP mode.</param>
+    /// <param name="fromUtc">The inclusive retention cutoff.</param>
+    /// <param name="limit">The maximum number of matches, between 1 and 101.</param>
+    /// <returns>The bounded results, or null if this backend has no mode query.</returns>
+    IReadOnlyList<HnmoFeatureRow>? LoadActivityCombatPage(int kind, int mode, DateTime fromUtc, int limit) => null;
 }

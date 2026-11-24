@@ -28,6 +28,7 @@ for (const [width, language] of [[390, 'vi'], [1440, 'en']] as const) {
     await region.screenshot({ path: `docs/screenshots/tracker/privacy-${language}-${width}.png` });
     await page.locator('#accountLogout').click();
     await expect(region).toBeHidden();
+    await expect(page.locator('#accountLoginPanel')).toBeVisible();
     expect(await page.evaluate(() => JSON.stringify(localStorage))).not.toContain('fixture-secret');
   });
 }

@@ -63,6 +63,9 @@ public sealed class PostgresHnmoPlayerStateRowBackend : IHnmoPlayerStateRowQuery
                 CREATE INDEX IF NOT EXISTS ix_hnmo_pfs_activity_item_serials
                     ON hnmo.player_feature_state USING GIN (string_to_array(payload_json ->> 'itemSerials', ','))
                     WHERE feature = 'activityLog.entry';
+                CREATE INDEX IF NOT EXISTS ix_hnmo_pfs_activity_combat
+                    ON hnmo.player_feature_state ((payload_json ->> 'kind'), (payload_json ->> 'pvpMode'), updated_at_utc DESC, scope_id DESC)
+                    WHERE feature = 'activityLog.entry';
                 CREATE TABLE IF NOT EXISTS hnmo.archived_feature_state (
                     feature TEXT NOT NULL,
                     scope_id TEXT NOT NULL,
@@ -310,6 +313,41 @@ public sealed class PostgresHnmoPlayerStateRowBackend : IHnmoPlayerStateRowQuery
         cmd.Parameters.AddWithValue("feature", feature);
         using var reader = cmd.ExecuteReader();
         return reader.Read() ? ReadRow(reader, feature) : null;
+    }
+
+    /// <inheritdoc />
+    public IReadOnlyList<HnmoFeatureRow> LoadActivityCombatPage(int kind, int mode, DateTime fromUtc, int limit)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThan(limit, 1);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(limit, 101);
+        const string feature = "activityLog.entry";
+        this.EnsureSchema();
+        using var conn = new NpgsqlConnection(this._connectionString);
+        conn.Open();
+        using var cmd = conn.CreateCommand();
+        cmd.CommandTimeout = 3;
+        cmd.CommandText = """
+            SELECT scope_id, payload_json::text, updated_at_utc, expires_at_utc
+            FROM hnmo.player_feature_state
+            WHERE feature = 'activityLog.entry'
+                AND payload_json ->> 'kind' = @kind
+                AND payload_json ->> 'pvpMode' = @mode
+                AND updated_at_utc >= @from
+            ORDER BY updated_at_utc DESC, scope_id DESC
+            LIMIT @limit
+            """;
+        cmd.Parameters.AddWithValue("kind", kind.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        cmd.Parameters.AddWithValue("mode", mode.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        cmd.Parameters.AddWithValue("from", DateTime.SpecifyKind(fromUtc, DateTimeKind.Utc));
+        cmd.Parameters.AddWithValue("limit", limit);
+        using var reader = cmd.ExecuteReader();
+        var rows = new List<HnmoFeatureRow>(limit);
+        while (reader.Read())
+        {
+            rows.Add(ReadRow(reader, feature));
+        }
+
+        return rows;
     }
 
     private static HnmoFeatureRow ReadRow(NpgsqlDataReader reader, string feature) => new(

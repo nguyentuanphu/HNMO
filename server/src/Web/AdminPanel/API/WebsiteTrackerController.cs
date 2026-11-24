@@ -153,6 +153,70 @@ public sealed class WebsiteTrackerController(IPersistenceContextProvider persist
         });
     }
 
+    /// <summary>Reads recorded PvP defeats by mode under the current host and player settings.</summary>
+    /// <returns>A bounded set of combat groups and the active retention.</returns>
+    [HttpGet("pvp")]
+    public async ValueTask<IActionResult> GetPvpAsync()
+    {
+        this.Response.Headers.CacheControl = "no-store";
+        if (await this.ReadActiveTrackerAsync().ConfigureAwait(false) is not { } tracker)
+        {
+            return this.Ok(new { enabled = false });
+        }
+
+        var (settings, config) = tracker;
+        var retentionDays = Math.Clamp(config.RetentionDays, 1, 3650);
+        var from = clock.GetUtcNow().UtcDateTime.AddDays(-retentionDays);
+        var window = cache.GetOrCreate("website-tracker-pvp", options =>
+        {
+            options.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(15);
+            return ReadPvpWindow(config.FileName, retentionDays, from);
+        });
+
+        if (window is null || window.FileName != config.FileName || window.RetentionDays != retentionDays)
+        {
+            window = ReadPvpWindow(config.FileName, retentionDays, from);
+            cache.Set("website-tracker-pvp", window, TimeSpan.FromSeconds(15));
+        }
+
+        var privacy = WebsiteTrackerPrivacyStore.Open();
+        var groups = window.Groups.Select(group => new
+        {
+            mode = group.Mode,
+            events = ProjectPvp(group.Rows, from, settings.TrackerShowCharacterNames, privacy),
+        }).ToArray();
+        return this.Ok(new { enabled = true, retentionDays, timeZone = Sydney.Id, groups });
+    }
+
+    /// <summary>Projects recent combat rows; either player's choice can remove a row.</summary>
+    /// <param name="rows">The recorded defeats.</param>
+    /// <param name="from">The live retention cutoff.</param>
+    /// <param name="showNames">Whether character names may be shown.</param>
+    /// <param name="privacy">Account-level privacy choices.</param>
+    /// <returns>The bounded set of safe defeat records.</returns>
+    internal static object[] ProjectPvp(IEnumerable<ActivityLogEntry> rows, DateTime from, bool showNames, WebsiteTrackerPrivacyStore privacy)
+        => AllowedEvents(rows.Where(row => row.Kind == ActivityKind.PvpKill && row.TimestampUtc >= from && !string.IsNullOrWhiteSpace(row.PartnerAccount)), privacy, isPvp: true)
+            .Select(entry => (object)new
+            {
+                time = Time(entry),
+                winner = showNames ? CharacterName(entry.Character, entry) : null,
+                defeated = showNames ? CharacterName(entry.PartnerCharacter, entry) : null,
+                entry.ServerId,
+                entry.MapNumber,
+            }).ToArray();
+
+    private static PvpWindow ReadPvpWindow(string? fileName, int retentionDays, DateTime from)
+    {
+        var store = ActivityLogStore.Open(fileName);
+        return new(fileName, retentionDays,
+        [
+            ("field", store.QueryPvpKills(ActivityPvpMode.Field, from, MaximumEvents * 2)),
+            ("duel", store.QueryPvpKills(ActivityPvpMode.Duel, from, MaximumEvents * 2)),
+            ("arena", store.QueryPvpKills(ActivityPvpMode.Arena, from, MaximumEvents * 2)),
+            ("siege", store.QueryPvpKills(ActivityPvpMode.Siege, from, MaximumEvents * 2)),
+        ]);
+    }
+
     /// <summary>Projects recent rows with live privacy preferences, without returning raw activity records.</summary>
     /// <param name="rows">The recent raw activity rows.</param>
     /// <param name="showNames">Whether the host permits character names.</param>
@@ -197,9 +261,9 @@ public sealed class WebsiteTrackerController(IPersistenceContextProvider persist
     private static DateTimeOffset Time(ActivityLogEntry entry)
         => TimeZoneInfo.ConvertTime(new DateTimeOffset(DateTime.SpecifyKind(entry.TimestampUtc, DateTimeKind.Utc)), Sydney);
 
-    private static IEnumerable<ActivityLogEntry> AllowedEvents(IEnumerable<ActivityLogEntry> rows, WebsiteTrackerPrivacyStore privacy)
+    private static IEnumerable<ActivityLogEntry> AllowedEvents(IEnumerable<ActivityLogEntry> rows, WebsiteTrackerPrivacyStore privacy, bool isPvp = false)
     {
-        var candidates = rows.Where(row => !string.IsNullOrWhiteSpace(row.Account) && PublicKind(row.Kind) is not null)
+        var candidates = rows.Where(row => !string.IsNullOrWhiteSpace(row.Account) && (isPvp || PublicKind(row.Kind) is not null))
             .Take(MaximumEvents * 2).ToArray();
         var optedOut = privacy.ReadOptOuts(candidates.SelectMany(entry => new[] { entry.Account, entry.PartnerAccount }).Where(login => !string.IsNullOrWhiteSpace(login)));
         return candidates.Where(entry => !optedOut.Contains(WebsiteTrackerPrivacyStore.Key(entry.Account))
@@ -248,4 +312,5 @@ public sealed class WebsiteTrackerController(IPersistenceContextProvider persist
 
     private sealed record RawWindow(string FileName, int RetentionDays, IReadOnlyList<ActivityLogEntry> Rows);
     private sealed record JewelCache(string FileName, EconomyDailySnapshot? Snapshot);
+    private sealed record PvpWindow(string? FileName, int RetentionDays, (string Mode, IReadOnlyList<ActivityLogEntry> Rows)[] Groups);
 }

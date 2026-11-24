@@ -26,6 +26,7 @@ function render(): void {
   const date = new Intl.DateTimeFormat(vi ? 'vi-VN' : 'en-AU', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Australia/Sydney' });
   document.querySelector('#item-history-heading')!.textContent = copy('Item history', 'Lịch sử vật phẩm');
   document.querySelector('#item-jewel-link')!.textContent = copy('Jewel totals and hunters', 'Tổng ngọc và thợ săn');
+  document.querySelector('#item-pvp-link')!.textContent = copy('PvP log', 'Nhật ký PvP');
   form.querySelector('label')!.textContent = copy('Item serial', 'Số sê-ri vật phẩm');
   document.querySelector('#item-search-button')!.textContent = copy('Search', 'Tìm kiếm');
   document.querySelector('#item-history-limits')!.textContent = history?.enabled
