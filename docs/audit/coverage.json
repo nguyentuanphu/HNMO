@@ -1,5 +1,5 @@
 {
-  "generatedAt": "d2db3a29",
+  "generatedAt": "2de2a9d2",
   "maxLines": 6000,
   "units": [
     {
@@ -575,11 +575,11 @@
       ],
       "files": 37,
       "lines": 5482,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "2de2a9d2",
+      "checkedOn": "2026-11-24",
+      "references": "S6/S9 BloodCastle, ChaosCastle, DevilSquare & IllusionTemple configs (docs/audit/references/minigames-bc-cc-ds-it-s6-s9.md)",
+      "evidence": "Read all 37 files in full; see docs/audit/findings/unit-server-src-GameLogic-MiniGames-files-1.md.",
       "prs": ""
     },
     {
