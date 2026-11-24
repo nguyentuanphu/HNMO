@@ -481,6 +481,7 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
             CreateNoWindow = true,
         };
         start.Environment["ASPNETCORE_URLS"] = options.AdminUrl;
+        start.Environment[HostSettingsStore.LauncherWebPortVariableName] = options.WebPort.ToString(System.Globalization.CultureInfo.InvariantCulture);
         start.Environment["DB_ADMIN_PW"] = options.DatabasePassword;
         if (!string.IsNullOrWhiteSpace(options.SettingsFilePath))
         {

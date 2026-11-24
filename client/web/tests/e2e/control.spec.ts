@@ -89,3 +89,26 @@ test.describe('/control page logs, retention, backups, and disk usage', () => {
     }
   });
 });
+
+test('launcher serves the full console only inside its primary local admin origin', async ({ request }) => {
+  const consolePage = '/control/console';
+  expect((await request.get(consolePage)).status()).toBe(403);
+  expect((await request.get('/control.html')).status()).toBe(404);
+  expect((await request.get('/control-recovery.html')).status()).toBe(404);
+
+  const frame = { 'Sec-Fetch-Dest': 'iframe', Referer: 'http://127.0.0.1:8095/' };
+  const accepted = await request.get(consolePage, { headers: frame });
+  expect(accepted.status()).toBe(200);
+  expect(accepted.headers()['content-security-policy']).toContain('frame-ancestors http://127.0.0.1:8095');
+  expect(await accepted.text()).toContain('btnCheckPorts');
+  expect((await request.get(consolePage, {
+    headers: { ...frame, Referer: 'http://127.0.0.1:8096/' },
+  })).status()).toBe(403);
+  expect((await request.get(consolePage, {
+    headers: { ...frame, 'X-Forwarded-For': '192.0.2.1' },
+  })).status()).toBe(403);
+
+  const ports = await request.get('/api/control/ports');
+  expect(ports.status()).toBe(200);
+  expect((await ports.json() as { service: string }[]).map(row => row.service)).toEqual(['web', 'admin', 'game', 'database']);
+});

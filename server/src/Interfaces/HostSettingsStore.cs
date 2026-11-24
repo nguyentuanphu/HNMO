@@ -30,6 +30,9 @@ public static class HostSettingsStore
     /// </summary>
     public const string EnvironmentVariableName = "HNMO_SETTINGS_FILE";
 
+    /// <summary>The loopback port of the launcher owning the primary admin process.</summary>
+    public const string LauncherWebPortVariableName = "HNMO_LAUNCHER_WEB_PORT";
+
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         WriteIndented = true,

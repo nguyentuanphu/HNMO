@@ -94,6 +94,7 @@
                     @* Which season this panel sets up: each season has its own admin panel (seasons plan, step 2). *@
                     <a href="/" class="hn-season-badge hn-season-@HNMO.Interfaces.HnmoSeasonInstance.Current me-3" id="season-badge"
                        title="@string.Format(Resources.SeasonBadgeTitle, this.SeasonName)">@this.SeasonName</a>
+                    <AdminWebsiteBrand />
                     <div class="header-search flex-grow-1">
                         <ConfigurationSearch />
                     </div>
@@ -175,6 +176,7 @@
                 </aside>
             }
         </article>
+        <footer class="small text-body-secondary px-4 pb-3">Powered by HNMO, made by HenryN</footer>
     </main>
     <CreationPanel />
 </div>

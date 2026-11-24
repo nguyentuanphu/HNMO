@@ -96,6 +96,7 @@ public static class AdminNavHints
         ["users"] = ("Who can use this panel", "Ai được vào trang quản trị"),
         ["api-keys"] = ("Keys for website, tools", "Khóa cho website, công cụ"),
         ["discord"] = ("Connect Discord", "Kết nối Discord"),
+        ["server-control"] = ("Services, ports, backups", "Dịch vụ, cổng, sao lưu"),
         ["host-settings"] = ("Ports, database, email", "Cổng, cơ sở dữ liệu, email"),
         ["crash-watch"] = ("Crashes and restarts", "Sự cố và khởi động lại"),
         ["import-server"] = ("Bring in another server", "Nhập dữ liệu server khác"),

@@ -1,0 +1,28 @@
+@page "/server-control"
+@using HNMO.Interfaces
+@using HNMO.Web.AdminPanel.Services
+@inject NavigationManager Navigation
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+<PageTitle>@ServerControlText.Title</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@ServerControlText.Title" />
+<h1>@ServerControlText.Title</h1>
+<PageHelp Text="@ServerControlText.Help" />
+@if (new Uri(this.Navigation.Uri) is { IsLoopback: true, Scheme: "http" }
+    && int.TryParse(Environment.GetEnvironmentVariable(HostSettingsStore.LauncherWebPortVariableName), out var port)
+    && port is >= 1 and <= 65535)
+{
+    <AuthorizeView Roles="Administrator">
+        <Authorized>
+            <iframe src="server-control/console-frame" title="@ServerControlText.Title" referrerpolicy="origin"
+                    class="w-100 border-0" style="min-height: 78vh"></iframe>
+        </Authorized>
+        <NotAuthorized>
+            <p role="status">@ServerControlText.Unavailable</p>
+        </NotAuthorized>
+    </AuthorizeView>
+}
+else
+{
+    <p role="status">@ServerControlText.Unavailable</p>
+}
