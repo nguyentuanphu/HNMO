@@ -1,5 +1,5 @@
 {
-  "generatedAt": "97c6da45",
+  "generatedAt": "d33b5f7c",
   "maxLines": 6000,
   "units": [
     {
@@ -8747,11 +8747,16 @@
       ],
       "files": 4,
       "lines": 1943,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "d33b5f7c",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Social/SocialWindowManager.cpp",
+        "Social/SocialWindowManager.h",
+        "Social/SocialWorkspace.cpp",
+        "docs/audit/findings/unit-client-src-source-UI-Social-files-2.md"
+      ],
+      "evidence": "4f/1943L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
       "prs": ""
     },
     {
