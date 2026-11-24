@@ -1,5 +1,5 @@
 {
-  "generatedAt": "ce3607e6",
+  "generatedAt": "fc934e63",
   "maxLines": 6000,
   "units": [
     {
@@ -2440,11 +2440,14 @@
       ],
       "files": 24,
       "lines": 568,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "fc934e63",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Views/Character",
+        "docs/audit/findings/unit-server-src-GameLogic-Views-Character.md"
+      ],
+      "evidence": "24f/568L: No game rules (FruitConsumptionResult.cs:10-60 (enum) + view interfaces).",
       "prs": ""
     },
     {
