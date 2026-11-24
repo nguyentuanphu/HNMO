@@ -66,9 +66,14 @@ public class WebsiteConfiguration
     /// <summary>Gets or sets whether the tracker may display eligible character names.</summary>
     [Display(Name = nameof(WebsiteServerPageLabels.TrackerNames), Description = nameof(WebsiteServerPageLabels.TrackerNamesDescription), ResourceType = typeof(WebsiteServerPageLabels))]
     public bool TrackerShowCharacterNames { get; set; }
+
     /// <summary>Gets or sets a value indicating whether the public guide shows live class configuration.</summary>
     [Display(Name = nameof(WebsiteServerPageLabels.ClassGuide), Description = nameof(WebsiteServerPageLabels.ClassGuideDescription), ResourceType = typeof(WebsiteServerPageLabels))]
     public bool ClassGuideEnabled { get; set; } = true;
+
+    /// <summary>Gets or sets whether the site publishes the live combat and loot guide.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.CombatGuide), Description = nameof(WebsiteServerPageLabels.CombatGuideDescription), ResourceType = typeof(WebsiteServerPageLabels))]
+    public bool CombatGuideEnabled { get; set; } = true;
 
     /// <summary>Gets or sets the public ClientRulesEn lines; an empty value publishes no claim.</summary>
     [Display(Name = nameof(WebsiteServerPageLabels.ClientRulesEn), Description = nameof(WebsiteServerPageLabels.Description), ResourceType = typeof(WebsiteServerPageLabels))]

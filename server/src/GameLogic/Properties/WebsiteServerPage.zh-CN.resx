@@ -18,4 +18,6 @@
   <data name="TrackerNamesDescription" xml:space="preserve"><value>允许在公开列表中显示符合条件的角色名称。仍遵守玩家的退出设置。</value></data>
   <data name="ClassGuide" xml:space="preserve"><value>实时职业指南</value></data>
   <data name="ClassGuideDescription" xml:space="preserve"><value>在网站指南中显示所选服务器的职业属性、公式和技能。</value></data>
+  <data name="CombatGuide" xml:space="preserve"><value>实时 PvP 与战利品指南</value></data>
+  <data name="CombatGuideDescription" xml:space="preserve"><value>发布 PvP 公式、怪物经验与掉落分配规则，以及世界首领奖励规则。</value></data>
 </root>

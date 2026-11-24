@@ -19,6 +19,17 @@ using HNMO.Pathfinding;
 /// </summary>
 public static class AttackableExtensions
 {
+    /// <summary>The factor applied to damage dealt to a duel opponent.</summary>
+    public const double DuelDamageFactor = 0.6;
+
+    /// <summary>The multiplier applied to the two shares in the PvP hit formula.</summary>
+    public const float PvpHitMultiplier = 2f;
+
+    /// <summary>The share used when the two rates or levels sum to zero.</summary>
+    public const float PvpHitEmptyShare = 0.5f;
+
+    private static readonly (int LevelGap, float Penalty)[] HitPenalties = [(300, 0.15f), (200, 0.10f), (100, 0.05f)];
+
     private const short ExplosionMagicEffectNumber = 75;   // 0x4B
     private const short StunnedMagicEffectNumber = 61;     // 0x3D
 
@@ -313,7 +324,7 @@ public static class AttackableExtensions
     {
         var isDuel = attackerPlayer is not null && defender is Player && attackerPlayer.DuelRoom is { } room
                      && (room.Opponent == defender || room.Requester == defender);
-        return isDuel ? 0.6 : 1;
+        return isDuel ? DuelDamageFactor : 1;
     }
 
     /// <summary>
@@ -768,39 +779,30 @@ public static class AttackableExtensions
         return hitChance;
     }
 
-    /// <summary>
-    /// Gets the chance that a player hits another player, as in the Season 6/9 server suites:
-    /// 2 * attackRate / (attackRate + defenseRate) * attackLevel / (attackLevel + defenseLevel),
-    /// minus 5, 10 or 15 percent points when the defender is 100, 200 or 300 levels higher.
-    /// </summary>
+    /// <summary>Gets defender level gaps and their absolute hit chance penalties in descending order.</summary>
+    /// <returns>The active thresholds used in the hit calculation.</returns>
+    public static ReadOnlySpan<(int LevelGap, float Penalty)> GetPvpHitPenalties() => HitPenalties;
+
+    /// <summary>Gets the chance that a player hits another player.</summary>
     /// <param name="attackRate">The attacker's PvP attack rate.</param>
     /// <param name="defenseRate">The defender's PvP defense rate.</param>
     /// <param name="attackLevel">The attacker's total level (with master level).</param>
     /// <param name="defenseLevel">The defender's total level (with master level).</param>
     /// <returns>The hit chance between 0 and 1.</returns>
-    internal static float GetPvpHitChance(float attackRate, float defenseRate, float attackLevel, float defenseLevel)
+    public static float GetPvpHitChance(float attackRate, float defenseRate, float attackLevel, float defenseLevel)
     {
-        const float successAttackRateOption = 2.0f;
-        var rateFactor = attackRate + defenseRate > 0 ? attackRate / (attackRate + defenseRate) : 0.5f;
-        var levelFactor = attackLevel + defenseLevel > 0 ? attackLevel / (attackLevel + defenseLevel) : 0.5f;
-        var hitChance = rateFactor * successAttackRateOption * levelFactor;
+        var rateFactor = attackRate + defenseRate > 0 ? attackRate / (attackRate + defenseRate) : PvpHitEmptyShare;
+        var levelFactor = attackLevel + defenseLevel > 0 ? attackLevel / (attackLevel + defenseLevel) : PvpHitEmptyShare;
+        var hitChance = rateFactor * PvpHitMultiplier * levelFactor;
 
         var levelGap = defenseLevel - attackLevel;
-        if (levelGap >= 300)
+        foreach (var (minimumGap, penalty) in HitPenalties)
         {
-            hitChance -= 0.15f;
-        }
-        else if (levelGap >= 200)
-        {
-            hitChance -= 0.10f;
-        }
-        else if (levelGap >= 100)
-        {
-            hitChance -= 0.05f;
-        }
-        else
-        {
-            // No penalty.
+            if (levelGap >= minimumGap)
+            {
+                hitChance -= penalty;
+                break;
+            }
         }
 
         return Math.Clamp(hitChance, 0f, 1f);

@@ -18,4 +18,6 @@
   <data name="TrackerNamesDescription" xml:space="preserve"><value>Berechtigte Charakternamen öffentlich anzeigen. Widersprüche der Spieler gelten weiterhin.</value></data>
   <data name="ClassGuide" xml:space="preserve"><value>Klassenleitfaden mit aktuellen Serverdaten</value></data>
   <data name="ClassGuideDescription" xml:space="preserve"><value>Zeigt Attribute, Formeln und Fertigkeiten des ausgewählten Servers im Website-Leitfaden an.</value></data>
+  <data name="CombatGuide" xml:space="preserve"><value>Aktueller PvP- und Beuteleitfaden</value></data>
+  <data name="CombatGuideDescription" xml:space="preserve"><value>Veröffentlicht PvP-Formeln, Erfahrungs- und Beuteregeln für Monster sowie Belohnungsregeln für Weltbosse.</value></data>
 </root>

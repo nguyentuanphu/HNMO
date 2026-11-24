@@ -18,6 +18,12 @@ public static class WebsiteServerPageLabels
     /// <summary>Gets the localized class guide setting description.</summary>
     public static string ClassGuideDescription => Resources.GetString(nameof(ClassGuideDescription), CultureInfo.CurrentUICulture) ?? nameof(ClassGuideDescription);
 
+    /// <summary>Gets the localized combat guide switch label.</summary>
+    public static string CombatGuide => Resources.GetString(nameof(CombatGuide), CultureInfo.CurrentUICulture) ?? nameof(CombatGuide);
+
+    /// <summary>Gets the localized combat guide switch description.</summary>
+    public static string CombatGuideDescription => Resources.GetString(nameof(CombatGuideDescription), CultureInfo.CurrentUICulture) ?? nameof(CombatGuideDescription);
+
     /// <summary>Gets the localized ClientRulesEn label.</summary>
     public static string ClientRulesEn => Resources.GetString(nameof(ClientRulesEn), CultureInfo.CurrentUICulture) ?? nameof(ClientRulesEn);
 

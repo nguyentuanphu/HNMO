@@ -24,6 +24,9 @@
     .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
     .card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; }
     .card h3 { margin-top: 0; }
+    #combat-guide select { display: block; width: min(100%, 24rem); min-height: 40px; margin: 4px 0 14px; padding-inline: 8px; color: var(--text); background: var(--panel); border: 1px solid var(--muted); border-radius: 4px; }
+    #combat-guide article { min-width: 0; overflow-wrap: anywhere; }
+    #combat-guide h4 { margin: 0 0 6px; }
     .tag { display: inline-block; font-size: 11px; border-radius: 4px; padding: 1px 6px; margin-left: 6px; vertical-align: 1px; }
     .tag.ok { color: #0b0e16; background: var(--ok); }
     .tag.soon { color: var(--text); background: #2a3042; }
@@ -56,7 +59,7 @@
   <p class="lead">What to play, how to play it, and what each part of the game does. Features marked <span class="tag ok">works</span> are in the game now; <span class="tag soon">coming</span> ones are being built.</p>
   <nav>
     <a href="#start">Getting started</a><a href="#controls">Controls</a><a href="#classes">Classes</a>
-    <a href="#where">Where to level</a><a href="#event-guide" data-event-guide-title data-no-i18n>Events and quests</a><a href="#items">Items and potions</a><a href="#features">All features</a><a href="#friends">Playing with friends</a>
+    <a href="#where">Where to level</a><a href="#event-guide" data-event-guide-title data-no-i18n>Events and quests</a><a href="#items">Items and potions</a><a href="#features">All features</a><a href="#friends">Playing with friends</a><a href="#combat-guide" data-combat-guide-link data-no-i18n hidden>PvP and loot rules</a>
   </nav>
 
   <h2 id="start">Getting started</h2>
@@ -248,10 +251,12 @@
   <h2 id="friends">Playing with friends</h2>
   <p>Open the game's address shared by the host in any modern browser. Your progress is saved securely on the server.</p>
   <p data-community-links="Talk to us: " hidden></p>
+  <section id="combat-guide" data-no-i18n hidden></section>
   <h2 id="phone">Play on your phone</h2>
   <p>Open the game's address in Chrome (Android) or Safari (iPhone). To install it like an app: Android, Chrome's menu ⋮ then <i>Add to Home screen</i> or <i>Install app</i>; iPhone, the share button then <i>Add to Home Screen</i>. Play sideways: tap to walk, ⚔ fights the nearest monster, 1–5 and Q W E R are the skills and potions, ⋯ opens the other windows (missions too), ⛶ goes full screen.</p>
 </main>
   <script type="module" src="/js/siteLanguage.js"></script>
   <script type="module" src="/js/websiteClassGuide.js"></script>
+  <script type="module" src="/js/websiteCombatGuide.js"></script>
 </body>
 </html>

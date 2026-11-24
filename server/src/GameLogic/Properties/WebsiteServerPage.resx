@@ -18,4 +18,6 @@
   <data name="TrackerNamesDescription" xml:space="preserve"><value>Allow eligible character names in the public feed. Player opt-outs still apply.</value></data>
   <data name="ClassGuide" xml:space="preserve"><value>Live class guide</value></data>
   <data name="ClassGuideDescription" xml:space="preserve"><value>Show class attributes, formulas and skills from the selected server in the website guide.</value></data>
+  <data name="CombatGuide" xml:space="preserve"><value>Live PvP and loot guide</value></data>
+  <data name="CombatGuideDescription" xml:space="preserve"><value>Publish PvP formulas, monster experience and loot rules, and world boss reward rules.</value></data>
 </root>

@@ -18,4 +18,6 @@
   <data name="TrackerNamesDescription" xml:space="preserve"><value>Cho phép hiện tên nhân vật đủ điều kiện. Quyền từ chối của người chơi vẫn được áp dụng.</value></data>
   <data name="ClassGuide" xml:space="preserve"><value>Hướng dẫn lớp nhân vật từ máy chủ</value></data>
   <data name="ClassGuideDescription" xml:space="preserve"><value>Hiển thị chỉ số, công thức và kỹ năng của máy chủ đang chọn trong phần hướng dẫn website.</value></data>
+  <data name="CombatGuide" xml:space="preserve"><value>Hướng dẫn PvP và chiến lợi phẩm trực tiếp</value></data>
+  <data name="CombatGuideDescription" xml:space="preserve"><value>Công bố công thức PvP, quy tắc chia kinh nghiệm và đồ rơi từ quái, cùng quy tắc thưởng boss thế giới.</value></data>
 </root>
