@@ -1,5 +1,5 @@
 {
-  "generatedAt": "ddb470bb",
+  "generatedAt": "802af498",
   "maxLines": 6000,
   "units": [
     {
@@ -4920,11 +4920,16 @@
       ],
       "files": 8,
       "lines": 4955,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "802af498",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "main.ts:264-428,882-938",
+        "terrain.ts",
+        "vietqr.ts",
+        "docs/audit/findings/unit-client-web-src-files-2.md"
+      ],
+      "evidence": "8f/4955L: No game rules (main.ts entry bootstrap, EXP progress ratio display, DPR cap 2, terrain/cipher/VietQR utilities).",
       "prs": ""
     },
     {
