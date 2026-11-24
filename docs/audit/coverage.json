@@ -1,5 +1,5 @@
 {
-  "generatedAt": "92489ee6",
+  "generatedAt": "a23981a3",
   "maxLines": 6000,
   "units": [
     {
@@ -5021,11 +5021,17 @@
       ],
       "files": 12,
       "lines": 5492,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a23981a3",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "autoPlay.ts:16-23,588-713",
+        "autoPlayConfig.ts:70-77",
+        "autoPlayExtras.ts:51-67",
+        "characterCalc.ts:95-247",
+        "docs/audit/findings/unit-client-web-src-game-files-1.md"
+      ],
+      "evidence": "12f/5492L: MUHelper defaults (hunting 6, obtain 8, away 10s, heal 60%, potion 40%, durability repair 50%) & characterCalc damage/durability/equip rules match desktop; autoPlayExtras Free/VIP gating is HNMO custom.",
       "prs": ""
     },
     {
