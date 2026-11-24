@@ -1,5 +1,5 @@
 {
-  "generatedAt": "ba8c04f4",
+  "generatedAt": "34e08378",
   "maxLines": 6000,
   "units": [
     {
@@ -2062,11 +2062,11 @@
       ],
       "files": 6,
       "lines": 653,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
+      "status": "Checked",
+      "checkedAt": "34e08378",
+      "checkedOn": "2026-11-24",
       "references": "",
-      "evidence": "",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-TeleportNpc.md",
       "prs": ""
     },
     {
@@ -2122,11 +2122,11 @@
       ],
       "files": 3,
       "lines": 294,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
+      "status": "Checked",
+      "checkedAt": "34e08378",
+      "checkedOn": "2026-11-24",
       "references": "",
-      "evidence": "",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-UltimateAutoPlay.md",
       "prs": ""
     },
     {
@@ -2167,11 +2167,11 @@
       ],
       "files": 4,
       "lines": 245,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "34e08378",
+      "checkedOn": "2026-11-24",
+      "references": "docs/audit/references/common-server-and-character-rules-s6-s9.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-WanderingMerchants.md",
       "prs": ""
     },
     {
