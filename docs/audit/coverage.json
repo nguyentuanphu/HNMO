@@ -1,5 +1,5 @@
 {
-  "generatedAt": "079cf474",
+  "generatedAt": "6d7d4985",
   "maxLines": 6000,
   "units": [
     {
@@ -2884,11 +2884,15 @@
       ],
       "files": 8,
       "lines": 326,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "6d7d4985",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "CashShopCoinTypeExtensions.cs:15-30",
+        "CashShopStorageListRequestHandlerPlugIn.cs:26",
+        "docs/audit/findings/unit-server-src-GameServer-MessageHandler-CashShop.md"
+      ],
+      "evidence": "8f/326L: Maps client shop script currency codes (508=WCoinC, 509=WCoinP, 0=GoblinPoints) & G storage type; packet handlers delegate to CashShop actions.",
       "prs": ""
     },
     {
