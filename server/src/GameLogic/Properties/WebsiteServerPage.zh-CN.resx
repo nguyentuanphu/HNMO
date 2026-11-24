@@ -20,4 +20,13 @@
   <data name="ClassGuideDescription" xml:space="preserve"><value>在网站指南中显示所选服务器的职业属性、公式和技能。</value></data>
   <data name="CombatGuide" xml:space="preserve"><value>实时 PvP 与战利品指南</value></data>
   <data name="CombatGuideDescription" xml:space="preserve"><value>发布 PvP 公式、怪物经验与掉落分配规则，以及世界首领奖励规则。</value></data>
+  <data name="ContentRoadmapEn" xml:space="preserve"><value>公开路线图（英语）</value></data>
+  <data name="ContentRoadmapVi" xml:space="preserve"><value>公开路线图（越南语）</value></data>
+  <data name="ContentAboutEn" xml:space="preserve"><value>公开介绍（英语）</value></data>
+  <data name="ContentAboutVi" xml:space="preserve"><value>公开介绍（越南语）</value></data>
+  <data name="ContentTermsEn" xml:space="preserve"><value>公开使用条款（英语）</value></data>
+  <data name="ContentTermsVi" xml:space="preserve"><value>公开使用条款（越南语）</value></data>
+  <data name="ContentPrivacyEn" xml:space="preserve"><value>公开隐私政策（英语）</value></data>
+  <data name="ContentPrivacyVi" xml:space="preserve"><value>公开隐私政策（越南语）</value></data>
+  <data name="ContentDescription" xml:space="preserve"><value>以纯文本发布。用空行分隔段落。留空则不发布此语言版本。</value></data>
 </root>

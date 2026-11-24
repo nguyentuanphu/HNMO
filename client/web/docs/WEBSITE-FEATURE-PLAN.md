@@ -22,7 +22,7 @@ Target every draft PR at the latest `claude/hnmo-main-handover-54co2m`. Never pu
 | 10 | Drop, item, requirement, box and mix guides from live data. / Hướng dẫn rơi đồ, vật phẩm, yêu cầu, hộp và ép đồ từ dữ liệu thật. | In review. The guide reads live item requirements, configured drop sources, boxes and mix recipes by server. / Đang chờ duyệt. Hướng dẫn đọc yêu cầu vật phẩm, nguồn rơi đã cấu hình, hộp và công thức ép theo máy chủ. |
 | 11 | PvP formulas and MVP/loot examples using authoritative rules. / Công thức PvP, ví dụ chia EXP/vật phẩm theo quy tắc máy chủ. | Draft implementation / Đã triển khai bản nháp |
 | 12 | Existing rankings plus opt-in public banned-character records. / Dùng lại xếp hạng; danh sách nhân vật bị khóa chỉ công khai khi host bật. | Pending / Chưa làm |
-| 13 | Editable roadmap/content/legal pages and existing shop/payment flows. / Lộ trình, nội dung, trang pháp lý do host sửa; dùng lại luồng cửa hàng/thanh toán. | Pending / Chưa làm |
+| 13 | Editable roadmap/content/legal pages and existing shop/payment flows. / Lộ trình, nội dung, trang pháp lý do host sửa; dùng lại luồng cửa hàng/thanh toán. | Draft implementation / Đã triển khai bản nháp |
 | 14 | Audit/admin integration of every new setting, in EN/VI/DE/zh-CN. Settings ship with their feature, not only at the end. / Kiểm tra tích hợp admin và bốn ngôn ngữ; tính năng có cấu hình ngay khi giao. | Pending / Chưa làm |
 
 ## Mandatory boundaries / Giới hạn bắt buộc

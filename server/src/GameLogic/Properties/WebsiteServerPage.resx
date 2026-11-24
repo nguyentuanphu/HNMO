@@ -20,4 +20,13 @@
   <data name="ClassGuideDescription" xml:space="preserve"><value>Show class attributes, formulas and skills from the selected server in the website guide.</value></data>
   <data name="CombatGuide" xml:space="preserve"><value>Live PvP and loot guide</value></data>
   <data name="CombatGuideDescription" xml:space="preserve"><value>Publish PvP formulas, monster experience and loot rules, and world boss reward rules.</value></data>
+  <data name="ContentRoadmapEn" xml:space="preserve"><value>Public roadmap (English)</value></data>
+  <data name="ContentRoadmapVi" xml:space="preserve"><value>Public roadmap (Vietnamese)</value></data>
+  <data name="ContentAboutEn" xml:space="preserve"><value>Public about page (English)</value></data>
+  <data name="ContentAboutVi" xml:space="preserve"><value>Public about page (Vietnamese)</value></data>
+  <data name="ContentTermsEn" xml:space="preserve"><value>Public terms of use (English)</value></data>
+  <data name="ContentTermsVi" xml:space="preserve"><value>Public terms of use (Vietnamese)</value></data>
+  <data name="ContentPrivacyEn" xml:space="preserve"><value>Public privacy policy (English)</value></data>
+  <data name="ContentPrivacyVi" xml:space="preserve"><value>Public privacy policy (Vietnamese)</value></data>
+  <data name="ContentDescription" xml:space="preserve"><value>Published as plain text. Use a blank line between paragraphs. Leave blank to keep this language unpublished.</value></data>
 </root>

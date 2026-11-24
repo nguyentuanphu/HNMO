@@ -20,4 +20,13 @@
   <data name="ClassGuideDescription" xml:space="preserve"><value>Hiển thị chỉ số, công thức và kỹ năng của máy chủ đang chọn trong phần hướng dẫn website.</value></data>
   <data name="CombatGuide" xml:space="preserve"><value>Hướng dẫn PvP và chiến lợi phẩm trực tiếp</value></data>
   <data name="CombatGuideDescription" xml:space="preserve"><value>Công bố công thức PvP, quy tắc chia kinh nghiệm và đồ rơi từ quái, cùng quy tắc thưởng boss thế giới.</value></data>
+  <data name="ContentRoadmapEn" xml:space="preserve"><value>Nội dung lộ trình công khai (tiếng Anh)</value></data>
+  <data name="ContentRoadmapVi" xml:space="preserve"><value>Nội dung lộ trình công khai (tiếng Việt)</value></data>
+  <data name="ContentAboutEn" xml:space="preserve"><value>Nội dung giới thiệu công khai (tiếng Anh)</value></data>
+  <data name="ContentAboutVi" xml:space="preserve"><value>Nội dung giới thiệu công khai (tiếng Việt)</value></data>
+  <data name="ContentTermsEn" xml:space="preserve"><value>Nội dung điều khoản sử dụng công khai (tiếng Anh)</value></data>
+  <data name="ContentTermsVi" xml:space="preserve"><value>Nội dung điều khoản sử dụng công khai (tiếng Việt)</value></data>
+  <data name="ContentPrivacyEn" xml:space="preserve"><value>Nội dung chính sách quyền riêng tư công khai (tiếng Anh)</value></data>
+  <data name="ContentPrivacyVi" xml:space="preserve"><value>Nội dung chính sách quyền riêng tư công khai (tiếng Việt)</value></data>
+  <data name="ContentDescription" xml:space="preserve"><value>Hiển thị dưới dạng văn bản. Dùng dòng trống giữa các đoạn. Để trống nếu chưa công bố ngôn ngữ này.</value></data>
 </root>

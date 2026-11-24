@@ -67,4 +67,31 @@ public static class WebsiteServerPageLabels
     public static string EventGuideDescription => Resources.GetString(nameof(EventGuideDescription), CultureInfo.CurrentUICulture) ?? nameof(EventGuideDescription);
 
     private static string Get(string key) => Resources.GetString(key, CultureInfo.CurrentUICulture) ?? key;
+
+    /// <summary>Gets the localized caption for the English roadmap field.</summary>
+    public static string ContentRoadmapEn => Resources.GetString(nameof(ContentRoadmapEn), CultureInfo.CurrentUICulture) ?? nameof(ContentRoadmapEn);
+
+    /// <summary>Gets the localized caption for the Vietnamese roadmap field.</summary>
+    public static string ContentRoadmapVi => Resources.GetString(nameof(ContentRoadmapVi), CultureInfo.CurrentUICulture) ?? nameof(ContentRoadmapVi);
+
+    /// <summary>Gets the localized caption for the English about page field.</summary>
+    public static string ContentAboutEn => Resources.GetString(nameof(ContentAboutEn), CultureInfo.CurrentUICulture) ?? nameof(ContentAboutEn);
+
+    /// <summary>Gets the localized caption for the Vietnamese about page field.</summary>
+    public static string ContentAboutVi => Resources.GetString(nameof(ContentAboutVi), CultureInfo.CurrentUICulture) ?? nameof(ContentAboutVi);
+
+    /// <summary>Gets the localized caption for the English terms of use field.</summary>
+    public static string ContentTermsEn => Resources.GetString(nameof(ContentTermsEn), CultureInfo.CurrentUICulture) ?? nameof(ContentTermsEn);
+
+    /// <summary>Gets the localized caption for the Vietnamese terms of use field.</summary>
+    public static string ContentTermsVi => Resources.GetString(nameof(ContentTermsVi), CultureInfo.CurrentUICulture) ?? nameof(ContentTermsVi);
+
+    /// <summary>Gets the localized caption for the English privacy policy field.</summary>
+    public static string ContentPrivacyEn => Resources.GetString(nameof(ContentPrivacyEn), CultureInfo.CurrentUICulture) ?? nameof(ContentPrivacyEn);
+
+    /// <summary>Gets the localized caption for the Vietnamese privacy policy field.</summary>
+    public static string ContentPrivacyVi => Resources.GetString(nameof(ContentPrivacyVi), CultureInfo.CurrentUICulture) ?? nameof(ContentPrivacyVi);
+
+    /// <summary>Gets the localized public content editing instructions.</summary>
+    public static string ContentDescription => Resources.GetString(nameof(ContentDescription), CultureInfo.CurrentUICulture) ?? nameof(ContentDescription);
 }

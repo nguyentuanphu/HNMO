@@ -20,4 +20,13 @@
   <data name="ClassGuideDescription" xml:space="preserve"><value>Zeigt Attribute, Formeln und Fertigkeiten des ausgewählten Servers im Website-Leitfaden an.</value></data>
   <data name="CombatGuide" xml:space="preserve"><value>Aktueller PvP- und Beuteleitfaden</value></data>
   <data name="CombatGuideDescription" xml:space="preserve"><value>Veröffentlicht PvP-Formeln, Erfahrungs- und Beuteregeln für Monster sowie Belohnungsregeln für Weltbosse.</value></data>
+  <data name="ContentRoadmapEn" xml:space="preserve"><value>Fahrplan der Website (Englisch)</value></data>
+  <data name="ContentRoadmapVi" xml:space="preserve"><value>Fahrplan der Website (Vietnamesisch)</value></data>
+  <data name="ContentAboutEn" xml:space="preserve"><value>Über uns (Englisch)</value></data>
+  <data name="ContentAboutVi" xml:space="preserve"><value>Über uns (Vietnamesisch)</value></data>
+  <data name="ContentTermsEn" xml:space="preserve"><value>Nutzungsbedingungen (Englisch)</value></data>
+  <data name="ContentTermsVi" xml:space="preserve"><value>Nutzungsbedingungen (Vietnamesisch)</value></data>
+  <data name="ContentPrivacyEn" xml:space="preserve"><value>Datenschutzerklärung (Englisch)</value></data>
+  <data name="ContentPrivacyVi" xml:space="preserve"><value>Datenschutzerklärung (Vietnamesisch)</value></data>
+  <data name="ContentDescription" xml:space="preserve"><value>Wird als Klartext veröffentlicht. Leerzeilen trennen Absätze. Leer lassen, um diese Sprache unveröffentlicht zu lassen.</value></data>
 </root>

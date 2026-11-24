@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{game}</title>
+  <link rel="stylesheet" href="/website-information.css">
+  <link rel="stylesheet" href="/website-themes.css">
+  <link rel="stylesheet" href="/website-shell.css">
+  <script type="module" src="/js/websiteThemeEntry.js"></script>
+  <script type="module" src="/js/websiteShellEntry.js"></script>
+</head>
+<body data-website-page="information">
+  <main id="website-information" data-no-i18n>
+    <header>
+      <a class="information-brand" href="/home.html"><img data-brand-logo alt="" width="48" height="48" hidden><span data-game-name></span></a>
+      <div class="information-languages" role="group" aria-label="Language / Ngôn ngữ">
+        <button type="button" data-site-language="en">English</button>
+        <button type="button" data-site-language="vi">Tiếng Việt</button>
+      </div>
+    </header>
+    <nav class="information-nav" data-information-nav>
+      <a href="/information.html?page=roadmap" data-information-label="roadmap">Roadmap</a>
+      <a href="/information.html?page=about" data-information-label="about">About</a>
+      <a href="/information.html?page=terms" data-information-label="terms">Terms of use</a>
+      <a href="/information.html?page=privacy" data-information-label="privacy">Privacy policy</a>
+    </nav>
+    <article class="information-content">
+      <h1 id="information-heading"></h1>
+      <p id="information-status" role="status"></p>
+      <div id="information-body"></div>
+    </article>
+    <nav class="information-nav" data-information-resources>
+      <a href="/home.html#news" data-information-label="news">News</a>
+      <a href="/home.html#server-guide" data-information-label="shop">Shop catalogue</a>
+      <a href="/topup.html" data-information-label="topup">Top up coins</a>
+    </nav>
+  </main>
+  <script type="module" src="/js/siteLanguage.js"></script>
+  <script type="module" src="/js/websiteInformation.js"></script>
+</body>
+</html>
