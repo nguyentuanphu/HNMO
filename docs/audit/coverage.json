@@ -1,5 +1,5 @@
 {
-  "generatedAt": "99ad8462",
+  "generatedAt": "e53e51d2",
   "maxLines": 6000,
   "units": [
     {
@@ -222,11 +222,11 @@
       ],
       "files": 4,
       "lines": 388,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "e53e51d2",
+      "checkedOn": "2026-11-24",
+      "references": [],
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-AccountLinking.md",
       "prs": ""
     },
     {
@@ -237,11 +237,11 @@
       ],
       "files": 8,
       "lines": 961,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "e53e51d2",
+      "checkedOn": "2026-11-24",
+      "references": [],
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-Administration.md",
       "prs": ""
     },
     {
@@ -464,11 +464,11 @@
       ],
       "files": 6,
       "lines": 198,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "e53e51d2",
+      "checkedOn": "2026-11-24",
+      "references": [],
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-Discord.md",
       "prs": ""
     },
     {
@@ -785,11 +785,11 @@
       ],
       "files": 1,
       "lines": 197,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "e53e51d2",
+      "checkedOn": "2026-11-24",
+      "references": [],
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Discord.md",
       "prs": ""
     },
     {
@@ -875,11 +875,11 @@
       ],
       "files": 8,
       "lines": 376,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "e53e51d2",
+      "checkedOn": "2026-11-24",
+      "references": [],
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Messenger.md",
       "prs": ""
     },
     {
