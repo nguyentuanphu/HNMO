@@ -18,10 +18,14 @@ test('website omits unavailable realm values and the guide remains bilingual', a
 
   await page.goto('/guide.html');
   await page.locator('[data-site-language="en"]').click();
-  await expect(page.locator('body')).toContainText('create a guild at the Guild Master in Devias (level 150 by default)');
+  await expect(page.getByRole('link', { name: 'See the server guide for the guild creation requirement.' }))
+    .toHaveAttribute('href', '/home.html#realm-rules');
+  await expect(page.locator('body')).not.toContainText('level 150 by default');
   await expect(page.locator('body')).toContainText('Riding the Horn of Fenrir requires the second class or higher.');
 
   await page.locator('[data-site-language="vi"]').click();
-  await expect(page.locator('body')).toContainText('Gia nhập bang hội từ cấp 6; lập bang hội tại Hội trưởng ở Devias (mặc định cấp 150)');
+  await expect(page.getByRole('link', { name: 'Xem hướng dẫn máy chủ để biết yêu cầu lập bang hội.' }))
+    .toHaveAttribute('href', '/home.html#realm-rules');
+  await expect(page.locator('body')).not.toContainText('mặc định cấp 150');
   await expect(page.locator('body')).toContainText('Cưỡi Sói Tinh (Horn of Fenrir) yêu cầu cấp chuyển chức lần 2 trở lên.');
 });
