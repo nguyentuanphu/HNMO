@@ -1,5 +1,5 @@
 {
-  "generatedAt": "8e98a00d",
+  "generatedAt": "8b9574d1",
   "maxLines": 6000,
   "units": [
     {
@@ -1253,11 +1253,11 @@
       ],
       "files": 5,
       "lines": 572,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "8b9574d1",
+      "checkedOn": "2026-11-24",
+      "references": "docs/audit/references/common-server-and-character-rules-s6-s9.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-AntiCheat.md",
       "prs": ""
     },
     {
@@ -1343,11 +1343,11 @@
       ],
       "files": 7,
       "lines": 613,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
+      "status": "Checked",
+      "checkedAt": "8b9574d1",
+      "checkedOn": "2026-11-24",
       "references": "",
-      "evidence": "",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-CatchupCap.md",
       "prs": ""
     },
     {
@@ -1852,11 +1852,11 @@
       ],
       "files": 2,
       "lines": 583,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
+      "status": "Checked",
+      "checkedAt": "8b9574d1",
+      "checkedOn": "2026-11-24",
       "references": "",
-      "evidence": "",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-Moderation.md",
       "prs": ""
     },
     {
@@ -2032,11 +2032,11 @@
       ],
       "files": 7,
       "lines": 789,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
+      "status": "Checked",
+      "checkedAt": "8b9574d1",
+      "checkedOn": "2026-11-24",
       "references": "",
-      "evidence": "",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-SeasonPlan.md",
       "prs": ""
     },
     {
