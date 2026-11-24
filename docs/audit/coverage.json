@@ -1,5 +1,5 @@
 {
-  "generatedAt": "fc3d34bb",
+  "generatedAt": "3352e3c5",
   "maxLines": 6000,
   "units": [
     {
@@ -3905,11 +3905,15 @@
       ],
       "files": 10,
       "lines": 2759,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "3352e3c5",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "the Season 9 suite's MonsterList.xml, ItemList.xml, SocketSystem.xml & MoveReq_eng.bmd",
+        "docs/audit/data/diff-client-tables.txt",
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-Updates-SeasonNine.md"
+      ],
+      "evidence": "Audited all 10 files (2759 lines): docs/audit/findings/unit-server-src-Persistence-Initialization-Updates-SeasonNine.md",
       "prs": ""
     },
     {
