@@ -97,4 +97,21 @@ NpcWindowResponse kinds 0x07, 0x09, 0x11, 0x17, 0x18, 0x19, 0x25, 0x26; Golden A
 (vault and trade zen in an in-game dialog instead of `window.prompt`, Alt name toggle, Ultimate HUD minimize, bigger
 admin shop icons).
 
+## Part 6 [Medium]: one auto play window (owner, 24 Nov)
+
+The owner: "Gộp 3 thành một autoplay", "Gom vào cửa sổ 1, thêm tab", and Antigravity does it. Today there are three
+windows: the desktop helper settings window (`client/web/src/ui/autoPlayWindows.ts`, RML `mu_helper_config`, Z), the
+HNMO extras (`autoPlayExtrasPanel.ts`, `hnmo_auto_play_extras.rml`, Shift+Z) and Ultimate Autoplay
+(`ultimateAutoPlayWindow.ts`, an HTML panel, Alt+Z, with the small HUD bar). Wiring in `client/web/src/main.ts`.
+- Window 1 keeps its three desktop tabs exactly; add two tabs, "Extras" / "Tuỳ chọn thêm" and "Ultimate". Do not edit
+  the shared desktop files in `client/src/bin/Data/Interface/RmlUi/` (the C++ client reads them): add the tabs from
+  the web side.
+- An HNMO tab shows its content in the window body, fitted to the window's width (Ultimate re-laid out in one column;
+  its survival / combat / stats sections as a small switcher). Free/VIP locks stay.
+- Save saves the desktop settings and the extras / Ultimate settings. Z opens the window; Shift+Z opens it on Extras,
+  Alt+Z on Ultimate; the HUD bar's open button opens Ultimate. The old two windows no longer open on their own. The
+  small Ultimate HUD bar stays.
+- EN / VI texts; update the browser specs that used the old windows without weakening them; add a spec for the five
+  tabs, the shortcuts and Save; screenshots of the five tabs in the PR.
+
 After each part, tell the owner in Vietnamese: the PR, what was done, test results, the real audit numbers, what is left.
