@@ -1,5 +1,5 @@
 {
-  "generatedAt": "0f1856f3",
+  "generatedAt": "a7d9c134",
   "maxLines": 6000,
   "units": [
     {
@@ -1519,11 +1519,11 @@
       ],
       "files": 28,
       "lines": 693,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a7d9c134",
+      "checkedOn": "2026-11-24",
+      "references": [],
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-ChatCommands-Arguments.md",
       "prs": ""
     },
     {
