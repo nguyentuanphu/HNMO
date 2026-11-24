@@ -55,6 +55,6 @@ Every Fire, Ice, Lightning, Water, Wind, Earth option (levels 1–5), Socket Bon
 - Cash shop pets (`Durability = 255`, `Repair = 0`): `13:64` Demon (`+40%` dmg, `+10` spd), `13:65` Spirit of Guardian (`-30%` dmg, `+50` HP), `13:67` Rudolf, `13:80` Panda (`+50%` EXP, `+50` DefFinal), `13:106` Unicorn (`1.5x` Zen, `+50` DefFinal, non-tradable), `13:123` Skeleton (`+20%` dmg, `+10` spd, `+30%` EXP, `+30%` w/ Skeleton Ring).
 
 ## 3. Potions, Weapons & Wings Notes
-- **Halloween Buff Scrolls (`14:46..50`)**: S6 `IGC_ItemOptionManager.xml` specifies `Time="1800"` (30 minutes) for all 5; `Potions.cs:485` sets `JackOLanternBlessings` (`14:46`) to `32` minutes (`47..50` are `30` min).
+- **Halloween Buff Scrolls (`14:46..50`)**: S6 `the suite's item option manager file` specifies `Time="1800"` (30 minutes) for all 5; `Potions.cs:485` sets `JackOLanternBlessings` (`14:46`) to `32` minutes (`47..50` are `30` min).
 - **Lv380 Weapons (`Weapons.cs:536-555`)**: Bone Blade (`0:22`), Explosion Blade (`0:23`), Phoenix Soul Star (`0:35`), Soleil Scepter (`2:14`), Sylph Wind Bow (`4:21`), Grand Viper Staff (`5:12`), Storm Blitz Stick (`5:19`) — matches S6/S9 `(Group, Number)` pairs.
 - **Wings (`Wings.cs`)**: Small wings `12:130..135`, 1st `12:0..2,41`, 2nd `12:3..6,42,49` & `13:30`, 3rd `12:36..40,43,50`, `SecondWingOptionsUpdatePlugIn` adds Max AG & Attack Speed on 2nd wings (except Cape of Fighter).

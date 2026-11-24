@@ -14,7 +14,7 @@
 - `BloodCastleContext` / `ChaosCastleContext` / `DevilSquareContext` / `IllusionTempleContext`: Event-specific scoring, statue/gate/relic flows, CC island shrinking & explosion knockback, IT random shuffled balanced teams with temporary parties & special skills (`210..213`).
 
 ## Discrepancies & Observations
-1. **Illusion Temple PvP kill SP (`IllusionTempleContext.cs:89`)**: `SkillPointsPerPlayerKill = 1` vs `OpponentKill = 5` in S6 `IGC_IllusionTemple_Classic.xml`.
+1. **Illusion Temple PvP kill SP (`IllusionTempleContext.cs:89`)**: `SkillPointsPerPlayerKill = 1` vs `OpponentKill = 5` in S6 `the suite's Illusion Temple Classic config file`.
 2. **Dark Horse not excluded in `ChaosCastleContext.IsItemAllowedToEquip` (`ChaosCastleContext.cs:111-118`)**: Blocks `Uniria`, `Dinorant`, `Fenrir`, and transformation rings, but does not exclude Dark Horse (`13:4`). Also intentionally omits explosion damage on knockback (noted in class remarks).
 3. **`BloodCastleContext.cs:232` score table EXP display**: Reports only `MiniGameRewardType.Experience` (fixed bonus) in `ShowScoreTableAsync`, excluding `ExperiencePerRemainingSeconds` even though `MiniGameRewardService` awards both.
 4. **Hardcoded CC jewel drop table (`ChaosCastleDropGenerator.cs:18-28`)**: Bless/Soul drop counts per CC level (`0/2, 1/1, 1/2, 1/2, 2/1, 2/2, 2/3`) are static rather than data-driven (`TODO`).

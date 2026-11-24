@@ -17,9 +17,9 @@
 1. **Socket Options (`SocketSystem.cs`) vs S6 & S9 Suites**:
    - Every Fire, Ice, Lightning, Water, Wind, Earth value (levels 1–5), Socket Bonus option (`30%`), and Package Bonus (`DoubleDamageChance +3%`, `DefenseIgnoreChance +1%`) matches S6 `SocketOptionSettings.ini` 1:1.
    - Minor code note: `CreateRelatedSocketOption` (`SocketSystem.cs:501-529`, used for Fire `(Level) Attack/Wizardry Increase`) populates `LevelDependentOptions` without assigning a fallback `itemOption.PowerUpDefinition` at level 1 (unlike `CreateSocketOption`).
-   - Recorded S9 differences (`IGC_SocketOption.xml`) in the reference doc for Season 9 reconciliation: Water Lv5 Shield Defense (`30%` vs `20%`), Wind Max AG (`50..130` vs `25..50`), Wind AG Value (`5..13` vs `3..15`), and Seed Lv4 Bonus Options (`22/22/10/22/27/31`).
+   - Recorded S9 differences (`the suite's socket option file`) in the reference doc for Season 9 reconciliation: Water Lv5 Shield Defense (`30%` vs `20%`), Wind Max AG (`50..130` vs `25..50`), Wind AG Value (`5..13` vs `3..15`), and Seed Lv4 Bonus Options (`22/22/10/22/27/31`).
 2. **Jack O'Lantern Blessings Duration (`Potions.cs:485`) — Minor Discrepancy**:
-   - `CreateJackOLanternBlessings()` (`14:46`) sets `TimeSpan.FromMinutes(32)` (`1920s`), whereas S6 `IGC_ItemOptionManager.xml` specifies `Time="1800"` (30 minutes, matching `14:47..50` which all use `TimeSpan.FromMinutes(30)`).
+   - `CreateJackOLanternBlessings()` (`14:46`) sets `TimeSpan.FromMinutes(32)` (`1920s`), whereas S6 `the suite's item option manager file` specifies `Time="1800"` (30 minutes, matching `14:47..50` which all use `TimeSpan.FromMinutes(30)`).
 3. **Lv380 Guardian Weapon Mapping (`Weapons.cs:536-555`)**:
    - All seven Lv380 weapons (`0:22`, `0:23`, `0:35`, `2:14`, `4:21`, `5:12`, `5:19`) match S6/S9 `(Group, Number)` Lv380 weapon sets.
 4. **Socket Weapon Mix (`SocketWeaponMixItems.cs`)**:

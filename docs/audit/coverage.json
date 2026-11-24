@@ -1,5 +1,5 @@
 {
-  "generatedAt": "521de4b4",
+  "generatedAt": "6e9b526c",
   "maxLines": 6000,
   "units": [
     {
@@ -482,7 +482,7 @@
       "status": "Checked",
       "checkedAt": "2492a534",
       "checkedOn": "2026-11-24",
-      "references": "S6 IGC_GensSystem.ini, IGC_GensRanking.dat & S9 IGC_GensSystem.xml (docs/audit/references/gens-system-s6-s9.md)",
+      "references": "S6 the suite's Gens system config file, the suite's Gens ranking table & S9 the suite's Gens system config file (docs/audit/references/gens-system-s6-s9.md)",
       "evidence": "Read all 11 files in full; see docs/audit/findings/unit-server-src-GameLogic-Gens.md.",
       "prs": ""
     },
@@ -650,11 +650,11 @@
       ],
       "files": 22,
       "lines": 2986,
-      "status": "Checked",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-22",
-      "references": "S6 MonsterList.xml, CommonServer.cfg; S9 MonsterList.xml, MonsterSpawn.xml",
-      "evidence": "Read all 22 NPC/AI files in full (ledger-monster-ai.md Unit 3 at 4b75b2c5), plus merged audit/fix PRs through 477b9466 (aggro, ViewRange, speeds, summons, guards, traps, spawn anchoring, leash/heal, exp/drop split).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": "#212, #214, #224-#228, #274"
     },
     {
@@ -683,7 +683,7 @@
       "status": "Checked",
       "checkedAt": "8f8fd347",
       "checkedOn": "2026-11-24",
-      "references": "S6/S9 IGCData/IGC_PetSettings.ini, Scripts/Character/CalcCharacter.lua",
+      "references": "S6/S9 the suite's pet settings file, Scripts/Character/CalcCharacter.lua",
       "evidence": "All 6 files read (579 lines): docs/audit/findings/unit-server-src-GameLogic-Pet.md",
       "prs": "#308"
     },
@@ -713,7 +713,7 @@
       "status": "Checked",
       "checkedAt": "3436e785",
       "checkedOn": "2026-11-24",
-      "references": "S6/S9 IGC_MoveReq.xml & IGC_MoveLevel.xml (docs/audit/references/warps-and-npc-dialogs-s6-s9.md)",
+      "references": "S6/S9 the suite's warp table file & the suite's warp level restriction file (docs/audit/references/warps-and-npc-dialogs-s6-s9.md)",
       "evidence": "Read all 16 files in full; see docs/audit/findings/unit-server-src-GameLogic-PlayerActions-files-1.md.",
       "prs": ""
     },
@@ -773,7 +773,7 @@
       "status": "Checked",
       "checkedAt": "a17e827d",
       "checkedOn": "2026-11-24",
-      "references": "S6/S9 IGCData/IGC_ChaosBox.ini, docs/audit/findings/socket-weapon-mix.md, docs/audit/data/diff-mixes.txt, docs/audit/data/s9/diff-mixes.txt",
+      "references": "S6/S9 the suite's chaos box config file, docs/audit/findings/socket-weapon-mix.md, docs/audit/data/diff-mixes.txt, docs/audit/data/s9/diff-mixes.txt",
       "evidence": "All 20 files read (1739 lines): docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Craftings.md",
       "prs": ""
     },
@@ -803,7 +803,7 @@
       "status": "Checked",
       "checkedAt": "1a845fb0",
       "checkedOn": "2026-11-24",
-      "references": "S6/S9 IGCData/IGC_Common.ini [DuelSystem], MapTerrains/64_DuelArena.att",
+      "references": "S6/S9 the suite's common settings file [DuelSystem], MapTerrains/64_DuelArena.att",
       "evidence": "All 3 files read (461 lines): docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Duel.md",
       "prs": "#305, #307"
     },
@@ -833,7 +833,7 @@
       "status": "Checked",
       "checkedAt": "d9f71980",
       "checkedOn": "2026-11-24",
-      "references": "S6/S9 IGC_Common.ini & CommonServer.cfg (docs/audit/references/guild-and-alliance-s6-s9.md)",
+      "references": "S6/S9 the suite's common settings file & CommonServer.cfg (docs/audit/references/guild-and-alliance-s6-s9.md)",
       "evidence": "Read all 11 files in full; see docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Guild.md (missing AllianceMinGuildMember=10 check; no MaxGuildMember check before Accepted).",
       "prs": ""
     },
@@ -848,7 +848,7 @@
       "status": "Checked",
       "checkedAt": "33ab82c2",
       "checkedOn": "2026-11-24",
-      "references": "S6/S9 IGC_Common.ini & CommonServer.cfg (docs/audit/references/jewels-potions-fruits-s6-s9.md)",
+      "references": "S6/S9 the suite's common settings file & CommonServer.cfg (docs/audit/references/jewels-potions-fruits-s6-s9.md)",
       "evidence": "Read all 63 files in full; see docs/audit/findings/unit-server-src-GameLogic-PlayerActions-ItemConsumeActions.md (TownPortal durability bug, ItemUpgrade RequiredItemLevel roll-order bug, cooldown 500ms vs 100ms, Antidote else-if).",
       "prs": ""
     },
@@ -863,7 +863,7 @@
       "status": "Checked",
       "checkedAt": "75b508e4",
       "checkedOn": "2026-11-24",
-      "references": "S6/S9 IGCData/IGC_Common.ini (shop, Lahap, Kalima, pickup/move/crafting rules)",
+      "references": "S6/S9 the suite's common settings file (shop, Lahap, Kalima, pickup/move/crafting rules)",
       "evidence": "All 25 files read: docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Items.md",
       "prs": "#310, #311"
     },
@@ -893,7 +893,7 @@
       "status": "Checked",
       "checkedAt": "634c8aaf",
       "checkedOn": "2026-11-24",
-      "references": "S6/S9 IGCData/Events/{IGC_BloodCastle.ini,DoppelGanger/IGC_DoppelGanger_Config.ini,ImperialGuardian/IGC_ImperialGuardian.ini}",
+      "references": "S6/S9 the suite's event config files (Blood Castle, Doppelganger, Imperial Guardian)",
       "evidence": "All 7 files read (784 lines): docs/audit/findings/unit-server-src-GameLogic-PlayerActions-MiniGames.md",
       "prs": ""
     },
@@ -923,7 +923,7 @@
       "status": "Checked",
       "checkedAt": "310902ef",
       "checkedOn": "2026-11-24",
-      "references": "S6/S9 CommonServer.cfg & IGC_Common.ini (docs/audit/references/party-exp-and-pk.md)",
+      "references": "S6/S9 CommonServer.cfg & the suite's common settings file (docs/audit/references/party-exp-and-pk.md)",
       "evidence": "Read all 4 files in full; see docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Party.md.",
       "prs": ""
     },
@@ -935,11 +935,11 @@
       ],
       "files": 5,
       "lines": 598,
-      "status": "Checked",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-21",
-      "references": "Classic MU personal store rules",
-      "evidence": "Read all 5 PlayerStore action files in full (ledger-player-actions.md at cbf4593e + #236 & view-range fix merged in 477b9466): level 6 open #236, trade lock #216, view-range buy.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": "#190, #216, #236"
     },
     {
@@ -968,7 +968,7 @@
       "status": "Checked",
       "checkedAt": "8b903567",
       "checkedOn": "2026-11-24",
-      "references": "S6/S9 RegularSkillCalc.lua, MasterSkillCalc.lua, IGC_SkillList.xml",
+      "references": "S6/S9 RegularSkillCalc.lua, MasterSkillCalc.lua, the suite's skill list file",
       "evidence": "All 29 files read: docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Skills.md",
       "prs": "#309"
     },
@@ -980,11 +980,11 @@
       ],
       "files": 6,
       "lines": 681,
-      "status": "Checked",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-21",
-      "references": "Classic MU trade rules",
-      "evidence": "Read all 6 Trade action files in full (ledger-player-actions.md at cbf4593e + #215/#216 merged in 477b9466): dual press deadlock fixed #215, inventory backup/rollback safe #216.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": "#215, #216"
     },
     {
@@ -995,11 +995,11 @@
       ],
       "files": 3,
       "lines": 116,
-      "status": "Checked",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-21",
-      "references": "Account safety / vault rules",
-      "evidence": "Read all 3 Vault action files in full (ledger-player-actions.md at cbf4593e, unchanged through 477b9466): PIN set/remove with account password, unlock through account safety PIN.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -1147,13 +1147,11 @@
       ],
       "files": 123,
       "lines": 5930,
-      "status": "Checked",
-      "checkedAt": "5d7bf7da",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameLogic-PlugIns-files-1.md"
-      ],
-      "evidence": "Read all 123 files in full; verified death XP/zen loss defaults against S6/S9 suites, pet XP split, ping validation, and all 64 plugin interface contracts.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -1680,7 +1678,7 @@
       "status": "Checked",
       "checkedAt": "05c53e5d",
       "checkedOn": "2026-11-24",
-      "references": "S6/S9 IGCData/IGC_Common.ini, IGC_ZenDrop.xml; docs/audit/findings/owner-answers-monsters-2026-11-21.md",
+      "references": "S6/S9 the suite's common settings file, the suite's zen drop config file; docs/audit/findings/owner-answers-monsters-2026-11-21.md",
       "evidence": "All 25 files read (2082 lines): docs/audit/findings/unit-server-src-GameLogic-PlugIns-GameplayRules.md",
       "prs": "#235"
     },
@@ -2357,13 +2355,11 @@
       ],
       "files": 40,
       "lines": 834,
-      "status": "Checked",
-      "checkedAt": "e992f842",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameLogic-Views.md"
-      ],
-      "evidence": "Read all view interface, enum, and DTO files in full; verified pure view-plugin contracts with no game-rule defects.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2374,13 +2370,11 @@
       ],
       "files": 4,
       "lines": 228,
-      "status": "Checked",
-      "checkedAt": "e992f842",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameLogic-Views.md"
-      ],
-      "evidence": "Read all view interface, enum, and DTO files in full; verified pure view-plugin contracts with no game-rule defects.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2391,13 +2385,11 @@
       ],
       "files": 39,
       "lines": 1039,
-      "status": "Checked",
-      "checkedAt": "e992f842",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameLogic-Views.md"
-      ],
-      "evidence": "Read all view interface, enum, and DTO files in full; verified pure view-plugin contracts with no game-rule defects.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2408,13 +2400,11 @@
       ],
       "files": 24,
       "lines": 568,
-      "status": "Checked",
-      "checkedAt": "e992f842",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameLogic-Views.md"
-      ],
-      "evidence": "Read all view interface, enum, and DTO files in full; verified pure view-plugin contracts with no game-rule defects.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2425,13 +2415,11 @@
       ],
       "files": 12,
       "lines": 234,
-      "status": "Checked",
-      "checkedAt": "e992f842",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameLogic-Views.md"
-      ],
-      "evidence": "Read all view interface, enum, and DTO files in full; verified pure view-plugin contracts with no game-rule defects.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2442,13 +2430,11 @@
       ],
       "files": 5,
       "lines": 183,
-      "status": "Checked",
-      "checkedAt": "e992f842",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameLogic-Views.md"
-      ],
-      "evidence": "Read all view interface, enum, and DTO files in full; verified pure view-plugin contracts with no game-rule defects.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2459,13 +2445,11 @@
       ],
       "files": 24,
       "lines": 725,
-      "status": "Checked",
-      "checkedAt": "e992f842",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameLogic-Views.md"
-      ],
-      "evidence": "Read all view interface, enum, and DTO files in full; verified pure view-plugin contracts with no game-rule defects.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2476,13 +2460,11 @@
       ],
       "files": 18,
       "lines": 392,
-      "status": "Checked",
-      "checkedAt": "e992f842",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameLogic-Views.md"
-      ],
-      "evidence": "Read all view interface, enum, and DTO files in full; verified pure view-plugin contracts with no game-rule defects.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2493,13 +2475,11 @@
       ],
       "files": 6,
       "lines": 178,
-      "status": "Checked",
-      "checkedAt": "e992f842",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameLogic-Views.md"
-      ],
-      "evidence": "Read all view interface, enum, and DTO files in full; verified pure view-plugin contracts with no game-rule defects.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2510,13 +2490,11 @@
       ],
       "files": 12,
       "lines": 242,
-      "status": "Checked",
-      "checkedAt": "e992f842",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameLogic-Views.md"
-      ],
-      "evidence": "Read all view interface, enum, and DTO files in full; verified pure view-plugin contracts with no game-rule defects.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2527,13 +2505,11 @@
       ],
       "files": 2,
       "lines": 44,
-      "status": "Checked",
-      "checkedAt": "e992f842",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameLogic-Views.md"
-      ],
-      "evidence": "Read all view interface, enum, and DTO files in full; verified pure view-plugin contracts with no game-rule defects.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2544,13 +2520,11 @@
       ],
       "files": 8,
       "lines": 240,
-      "status": "Checked",
-      "checkedAt": "e992f842",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameLogic-Views.md"
-      ],
-      "evidence": "Read all view interface, enum, and DTO files in full; verified pure view-plugin contracts with no game-rule defects.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2561,13 +2535,11 @@
       ],
       "files": 4,
       "lines": 72,
-      "status": "Checked",
-      "checkedAt": "e992f842",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameLogic-Views.md"
-      ],
-      "evidence": "Read all view interface, enum, and DTO files in full; verified pure view-plugin contracts with no game-rule defects.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2578,13 +2550,11 @@
       ],
       "files": 4,
       "lines": 84,
-      "status": "Checked",
-      "checkedAt": "e992f842",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameLogic-Views.md"
-      ],
-      "evidence": "Read all view interface, enum, and DTO files in full; verified pure view-plugin contracts with no game-rule defects.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2595,13 +2565,11 @@
       ],
       "files": 6,
       "lines": 142,
-      "status": "Checked",
-      "checkedAt": "e992f842",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameLogic-Views.md"
-      ],
-      "evidence": "Read all view interface, enum, and DTO files in full; verified pure view-plugin contracts with no game-rule defects.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2612,13 +2580,11 @@
       ],
       "files": 11,
       "lines": 237,
-      "status": "Checked",
-      "checkedAt": "e992f842",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameLogic-Views.md"
-      ],
-      "evidence": "Read all view interface, enum, and DTO files in full; verified pure view-plugin contracts with no game-rule defects.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2629,13 +2595,11 @@
       ],
       "files": 10,
       "lines": 210,
-      "status": "Checked",
-      "checkedAt": "e992f842",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameLogic-Views.md"
-      ],
-      "evidence": "Read all view interface, enum, and DTO files in full; verified pure view-plugin contracts with no game-rule defects.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2646,13 +2610,11 @@
       ],
       "files": 6,
       "lines": 113,
-      "status": "Checked",
-      "checkedAt": "e992f842",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameLogic-Views.md"
-      ],
-      "evidence": "Read all view interface, enum, and DTO files in full; verified pure view-plugin contracts with no game-rule defects.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2663,13 +2625,11 @@
       ],
       "files": 25,
       "lines": 522,
-      "status": "Checked",
-      "checkedAt": "e992f842",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameLogic-Views.md"
-      ],
-      "evidence": "Read all view interface, enum, and DTO files in full; verified pure view-plugin contracts with no game-rule defects.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2703,13 +2663,11 @@
       ],
       "files": 24,
       "lines": 2867,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2815,13 +2773,11 @@
       ],
       "files": 96,
       "lines": 4924,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2832,13 +2788,11 @@
       ],
       "files": 8,
       "lines": 326,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2849,13 +2803,11 @@
       ],
       "files": 28,
       "lines": 1232,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2866,13 +2818,11 @@
       ],
       "files": 10,
       "lines": 358,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2883,13 +2833,11 @@
       ],
       "files": 6,
       "lines": 278,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2900,13 +2848,11 @@
       ],
       "files": 6,
       "lines": 237,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2917,13 +2863,11 @@
       ],
       "files": 16,
       "lines": 635,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2934,13 +2878,11 @@
       ],
       "files": 14,
       "lines": 593,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2951,13 +2893,11 @@
       ],
       "files": 4,
       "lines": 197,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2968,13 +2908,11 @@
       ],
       "files": 9,
       "lines": 339,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -2985,13 +2923,11 @@
       ],
       "files": 18,
       "lines": 911,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3002,13 +2938,11 @@
       ],
       "files": 3,
       "lines": 126,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3019,13 +2953,11 @@
       ],
       "files": 4,
       "lines": 145,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3036,13 +2968,11 @@
       ],
       "files": 2,
       "lines": 115,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3053,13 +2983,11 @@
       ],
       "files": 7,
       "lines": 328,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3070,13 +2998,11 @@
       ],
       "files": 14,
       "lines": 540,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3087,13 +3013,11 @@
       ],
       "files": 5,
       "lines": 190,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3104,13 +3028,11 @@
       ],
       "files": 6,
       "lines": 244,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3174,13 +3096,11 @@
       ],
       "files": 54,
       "lines": 5223,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3191,13 +3111,11 @@
       ],
       "files": 1,
       "lines": 161,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3208,13 +3126,11 @@
       ],
       "files": 25,
       "lines": 1227,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3225,13 +3141,11 @@
       ],
       "files": 37,
       "lines": 2528,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3242,13 +3156,11 @@
       ],
       "files": 11,
       "lines": 499,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3259,13 +3171,11 @@
       ],
       "files": 3,
       "lines": 239,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3276,13 +3186,11 @@
       ],
       "files": 22,
       "lines": 1399,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3293,13 +3201,11 @@
       ],
       "files": 20,
       "lines": 1027,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3310,13 +3216,11 @@
       ],
       "files": 4,
       "lines": 198,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3327,13 +3231,11 @@
       ],
       "files": 12,
       "lines": 542,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3344,13 +3246,11 @@
       ],
       "files": 21,
       "lines": 1538,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3361,13 +3261,11 @@
       ],
       "files": 5,
       "lines": 603,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3378,13 +3276,11 @@
       ],
       "files": 7,
       "lines": 456,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3395,13 +3291,11 @@
       ],
       "files": 5,
       "lines": 315,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3412,13 +3306,11 @@
       ],
       "files": 3,
       "lines": 181,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3429,13 +3321,11 @@
       ],
       "files": 7,
       "lines": 491,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3446,13 +3336,11 @@
       ],
       "files": 17,
       "lines": 1179,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3463,13 +3351,11 @@
       ],
       "files": 8,
       "lines": 332,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3480,13 +3366,11 @@
       ],
       "files": 5,
       "lines": 201,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3497,13 +3381,11 @@
       ],
       "files": 52,
       "lines": 4090,
-      "status": "Checked",
-      "checkedAt": "a57561f1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-GameServer.md"
-      ],
-      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3536,11 +3418,11 @@
       ],
       "files": 23,
       "lines": 3279,
-      "status": "Checked",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-22",
-      "references": "S6/S9 Scripts/Misc/ExpCalc.lua, ExpSystem.xml",
-      "evidence": "Read in full via data dump (ledger-game-data.md at cbf4593e + verified by ZzDataDump at 477b9466): normal/master EXP formulas match S6/S9, max level 400/master 200, MiniGameConstants open 5 min.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": "#267-#272"
     },
     {
@@ -3551,13 +3433,11 @@
       ],
       "files": 7,
       "lines": 815,
-      "status": "Checked",
-      "checkedAt": "8d4e6bb1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-Persistence-Init-S6-S9.md"
-      ],
-      "evidence": "Read files in full; verified quest/skill initializers, Season 9 update plugins, and caption linking service.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3568,11 +3448,11 @@
       ],
       "files": 11,
       "lines": 1715,
-      "status": "Checked",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-21",
-      "references": "S6/S9 CalcCharacter.lua, DefaultClassType",
-      "evidence": "Read in full (ledger-game-data.md at cbf4593e + rank-2 update in #237 merged in 477b9466): base stats & combat formulas match CalcCharacter.lua; MG def (#165) & DL AR (#166) fixed; base HP/mana kept per owner.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": "#165, #166, #237"
     },
     {
@@ -3598,11 +3478,11 @@
       ],
       "files": 20,
       "lines": 651,
-      "status": "Checked",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-21",
-      "references": "Default plug-in configurations vs feature-audit-2026-11-20",
-      "evidence": "Read in full (ledger-game-data.md at cbf4593e, unchanged through 477b9466): Happy Hour, PK, and party EXP defaults verified via earlier PRs (#169-#181).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": "#169, #174, #178"
     },
     {
@@ -3613,11 +3493,11 @@
       ],
       "files": 42,
       "lines": 4109,
-      "status": "Checked",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-22",
-      "references": "S6/S9 Data/Skills/SkillList.xml (403 rows), Skill.ini, MasterSkillTree.xml",
-      "evidence": "Read in full (ledger-game-data.md + feature-audit-2026-11-20 #6 + #246/#248/#249/#261/#263/#264/#265 merged in 477b9466): normal skills, energy reqs, Swell Life, Increase Block, Master tree ranks/links.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": "#222, #246, #248, #249, #261, #263, #264, #265"
     },
     {
@@ -3713,13 +3593,11 @@
       ],
       "files": 86,
       "lines": 5979,
-      "status": "Checked",
-      "checkedAt": "9453e88f",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-Persistence-Initialization-Updates.md"
-      ],
-      "evidence": "Audited DataUpdateService, NewDatabaseUpdates, UpdatePlugInBase, HNMO custom updates, and suite-aligned updates.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3777,13 +3655,11 @@
       ],
       "files": 48,
       "lines": 5724,
-      "status": "Checked",
-      "checkedAt": "9453e88f",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-Persistence-Initialization-Updates.md"
-      ],
-      "evidence": "Audited DataUpdateService, NewDatabaseUpdates, UpdatePlugInBase, HNMO custom updates, and suite-aligned updates.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3842,13 +3718,11 @@
       ],
       "files": 49,
       "lines": 5891,
-      "status": "Checked",
-      "checkedAt": "9453e88f",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-Persistence-Initialization-Updates.md"
-      ],
-      "evidence": "Audited DataUpdateService, NewDatabaseUpdates, UpdatePlugInBase, HNMO custom updates, and suite-aligned updates.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3913,13 +3787,11 @@
       ],
       "files": 55,
       "lines": 5917,
-      "status": "Checked",
-      "checkedAt": "9453e88f",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-Persistence-Initialization-Updates.md"
-      ],
-      "evidence": "Audited DataUpdateService, NewDatabaseUpdates, UpdatePlugInBase, HNMO custom updates, and suite-aligned updates.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3975,13 +3847,11 @@
       ],
       "files": 46,
       "lines": 3141,
-      "status": "Checked",
-      "checkedAt": "9453e88f",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-Persistence-Initialization-Updates.md"
-      ],
-      "evidence": "Audited DataUpdateService, NewDatabaseUpdates, UpdatePlugInBase, HNMO custom updates, and suite-aligned updates.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -3992,13 +3862,11 @@
       ],
       "files": 10,
       "lines": 2759,
-      "status": "Checked",
-      "checkedAt": "8d4e6bb1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-Persistence-Init-S6-S9.md"
-      ],
-      "evidence": "Read files in full; verified quest/skill initializers, Season 9 update plugins, and caption linking service.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4017,13 +3885,11 @@
       ],
       "files": 9,
       "lines": 1386,
-      "status": "Checked",
-      "checkedAt": "8b96d483",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-Persistence-Initialization-LegacyAndMaps.md"
-      ],
-      "evidence": "Audited Season 6 map initializers, test account seeders, and legacy 0.75/0.95d/0.97d version initializers.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4034,13 +3900,11 @@
       ],
       "files": 11,
       "lines": 1560,
-      "status": "Checked",
-      "checkedAt": "8b96d483",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-Persistence-Initialization-LegacyAndMaps.md"
-      ],
-      "evidence": "Audited Season 6 map initializers, test account seeders, and legacy 0.75/0.95d/0.97d version initializers.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4051,13 +3915,11 @@
       ],
       "files": 9,
       "lines": 3419,
-      "status": "Checked",
-      "checkedAt": "8b96d483",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-Persistence-Initialization-LegacyAndMaps.md"
-      ],
-      "evidence": "Audited Season 6 map initializers, test account seeders, and legacy 0.75/0.95d/0.97d version initializers.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4068,13 +3930,11 @@
       ],
       "files": 3,
       "lines": 658,
-      "status": "Checked",
-      "checkedAt": "8b96d483",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-Persistence-Initialization-LegacyAndMaps.md"
-      ],
-      "evidence": "Audited Season 6 map initializers, test account seeders, and legacy 0.75/0.95d/0.97d version initializers.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4085,13 +3945,11 @@
       ],
       "files": 30,
       "lines": 4072,
-      "status": "Checked",
-      "checkedAt": "8b96d483",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-Persistence-Initialization-LegacyAndMaps.md"
-      ],
-      "evidence": "Audited Season 6 map initializers, test account seeders, and legacy 0.75/0.95d/0.97d version initializers.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4102,13 +3960,11 @@
       ],
       "files": 1,
       "lines": 53,
-      "status": "Checked",
-      "checkedAt": "8b96d483",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-Persistence-Initialization-LegacyAndMaps.md"
-      ],
-      "evidence": "Audited Season 6 map initializers, test account seeders, and legacy 0.75/0.95d/0.97d version initializers.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4145,13 +4001,11 @@
       ],
       "files": 2,
       "lines": 3453,
-      "status": "Checked",
-      "checkedAt": "8d4e6bb1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-Persistence-Init-S6-S9.md"
-      ],
-      "evidence": "Read files in full; verified quest/skill initializers, Season 9 update plugins, and caption linking service.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4162,11 +4016,11 @@
       ],
       "files": 15,
       "lines": 2453,
-      "status": "Checked",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-22",
-      "references": "S6 Data/Events/*.dat/*.xml, S9 Events/*/*.xml",
-      "evidence": "Read in full for timings & capacities (ledger-game-data.md + #230 & ZzDataDump at 477b9466): BC 5/15/1 (#230), DS 15 players (#173), CC min 2 (#171), IT 5/15.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": "#171, #173, #230"
     },
     {
@@ -4252,13 +4106,11 @@
       ],
       "files": 21,
       "lines": 5990,
-      "status": "Checked",
-      "checkedAt": "8b96d483",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-Persistence-Initialization-LegacyAndMaps.md"
-      ],
-      "evidence": "Audited Season 6 map initializers, test account seeders, and legacy 0.75/0.95d/0.97d version initializers.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4299,13 +4151,11 @@
       ],
       "files": 31,
       "lines": 5710,
-      "status": "Checked",
-      "checkedAt": "8b96d483",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-Persistence-Initialization-LegacyAndMaps.md"
-      ],
-      "evidence": "Audited Season 6 map initializers, test account seeders, and legacy 0.75/0.95d/0.97d version initializers.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4332,13 +4182,11 @@
       ],
       "files": 17,
       "lines": 4922,
-      "status": "Checked",
-      "checkedAt": "8b96d483",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-Persistence-Initialization-LegacyAndMaps.md"
-      ],
-      "evidence": "Audited Season 6 map initializers, test account seeders, and legacy 0.75/0.95d/0.97d version initializers.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4349,13 +4197,11 @@
       ],
       "files": 14,
       "lines": 2079,
-      "status": "Checked",
-      "checkedAt": "8b96d483",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-Persistence-Initialization-LegacyAndMaps.md"
-      ],
-      "evidence": "Audited Season 6 map initializers, test account seeders, and legacy 0.75/0.95d/0.97d version initializers.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4375,13 +4221,11 @@
       ],
       "files": 10,
       "lines": 1073,
-      "status": "Checked",
-      "checkedAt": "9d33e265",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-DataModel.md"
-      ],
-      "evidence": "Audited InventoryConstants, ItemExtensions, GameConfigurationHelper, Configuration/* (ItemCrafting, Items, Quests), Entities, Attributes, Composition, Statistics, and Validation.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4392,13 +4236,11 @@
       ],
       "files": 2,
       "lines": 111,
-      "status": "Checked",
-      "checkedAt": "9d33e265",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-DataModel.md"
-      ],
-      "evidence": "Audited InventoryConstants, ItemExtensions, GameConfigurationHelper, Configuration/* (ItemCrafting, Items, Quests), Entities, Attributes, Composition, Statistics, and Validation.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4409,13 +4251,11 @@
       ],
       "files": 4,
       "lines": 58,
-      "status": "Checked",
-      "checkedAt": "9d33e265",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-DataModel.md"
-      ],
-      "evidence": "Audited InventoryConstants, ItemExtensions, GameConfigurationHelper, Configuration/* (ItemCrafting, Items, Quests), Entities, Attributes, Composition, Statistics, and Validation.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4491,13 +4331,11 @@
       ],
       "files": 66,
       "lines": 5251,
-      "status": "Checked",
-      "checkedAt": "9d33e265",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-DataModel.md"
-      ],
-      "evidence": "Audited InventoryConstants, ItemExtensions, GameConfigurationHelper, Configuration/* (ItemCrafting, Items, Quests), Entities, Attributes, Composition, Statistics, and Validation.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4508,13 +4346,11 @@
       ],
       "files": 6,
       "lines": 406,
-      "status": "Checked",
-      "checkedAt": "9d33e265",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-DataModel.md"
-      ],
-      "evidence": "Audited InventoryConstants, ItemExtensions, GameConfigurationHelper, Configuration/* (ItemCrafting, Items, Quests), Entities, Attributes, Composition, Statistics, and Validation.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4525,13 +4361,11 @@
       ],
       "files": 25,
       "lines": 1638,
-      "status": "Checked",
-      "checkedAt": "9d33e265",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-DataModel.md"
-      ],
-      "evidence": "Audited InventoryConstants, ItemExtensions, GameConfigurationHelper, Configuration/* (ItemCrafting, Items, Quests), Entities, Attributes, Composition, Statistics, and Validation.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4542,13 +4376,11 @@
       ],
       "files": 5,
       "lines": 315,
-      "status": "Checked",
-      "checkedAt": "9d33e265",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-DataModel.md"
-      ],
-      "evidence": "Audited InventoryConstants, ItemExtensions, GameConfigurationHelper, Configuration/* (ItemCrafting, Items, Quests), Entities, Attributes, Composition, Statistics, and Validation.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4559,13 +4391,11 @@
       ],
       "files": 30,
       "lines": 2062,
-      "status": "Checked",
-      "checkedAt": "9d33e265",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-DataModel.md"
-      ],
-      "evidence": "Audited InventoryConstants, ItemExtensions, GameConfigurationHelper, Configuration/* (ItemCrafting, Items, Quests), Entities, Attributes, Composition, Statistics, and Validation.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4576,13 +4406,11 @@
       ],
       "files": 1,
       "lines": 46,
-      "status": "Checked",
-      "checkedAt": "9d33e265",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-DataModel.md"
-      ],
-      "evidence": "Audited InventoryConstants, ItemExtensions, GameConfigurationHelper, Configuration/* (ItemCrafting, Items, Quests), Entities, Attributes, Composition, Statistics, and Validation.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4593,13 +4421,11 @@
       ],
       "files": 1,
       "lines": 55,
-      "status": "Checked",
-      "checkedAt": "9d33e265",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-DataModel.md"
-      ],
-      "evidence": "Audited InventoryConstants, ItemExtensions, GameConfigurationHelper, Configuration/* (ItemCrafting, Items, Quests), Entities, Attributes, Composition, Statistics, and Validation.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4655,13 +4481,11 @@
       ],
       "files": 31,
       "lines": 2854,
-      "status": "Checked",
-      "checkedAt": "9d33e265",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-Interfaces-and-PlugIns.md"
-      ],
-      "evidence": "Audited PlugInManager, PlugInConfiguration, PlugInConfigurationChangeApplier, StrategyPlugInProvider, and PlugInProxyTypeGenerator.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4672,13 +4496,11 @@
       ],
       "files": 86,
       "lines": 5667,
-      "status": "Checked",
-      "checkedAt": "9d33e265",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-Interfaces-and-PlugIns.md"
-      ],
-      "evidence": "Audited GuildRoleLimits, HnmoSeasonInstance, HostSettings/Validator, ControlOperations, CrashWatch, RollingLogWriter, and inter-server contracts (IGameServer, IGuildServer, IFriendServer, ILoginServer, IConnectServer).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4709,13 +4531,11 @@
       ],
       "files": 21,
       "lines": 3599,
-      "status": "Checked",
-      "checkedAt": "99ff9b18",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-web.md"
-      ],
-      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4733,13 +4553,11 @@
       ],
       "files": 8,
       "lines": 4955,
-      "status": "Checked",
-      "checkedAt": "99ff9b18",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-web.md"
-      ],
-      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4766,13 +4584,11 @@
       ],
       "files": 17,
       "lines": 5244,
-      "status": "Checked",
-      "checkedAt": "99ff9b18",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-web.md"
-      ],
-      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4828,13 +4644,11 @@
       ],
       "files": 12,
       "lines": 5492,
-      "status": "Checked",
-      "checkedAt": "99ff9b18",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-web.md"
-      ],
-      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4857,13 +4671,11 @@
       ],
       "files": 13,
       "lines": 5968,
-      "status": "Checked",
-      "checkedAt": "99ff9b18",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-web.md"
-      ],
-      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4882,13 +4694,11 @@
       ],
       "files": 9,
       "lines": 5120,
-      "status": "Checked",
-      "checkedAt": "99ff9b18",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-web.md"
-      ],
-      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4913,13 +4723,11 @@
       ],
       "files": 15,
       "lines": 5819,
-      "status": "Checked",
-      "checkedAt": "99ff9b18",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-web.md"
-      ],
-      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4941,13 +4749,11 @@
       ],
       "files": 12,
       "lines": 3201,
-      "status": "Checked",
-      "checkedAt": "99ff9b18",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-web.md"
-      ],
-      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -4958,13 +4764,11 @@
       ],
       "files": 4,
       "lines": 638,
-      "status": "Checked",
-      "checkedAt": "99ff9b18",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-web.md"
-      ],
-      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -5065,13 +4869,11 @@
       ],
       "files": 17,
       "lines": 5970,
-      "status": "Checked",
-      "checkedAt": "99ff9b18",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-web.md"
-      ],
-      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -5097,13 +4899,11 @@
       ],
       "files": 16,
       "lines": 5728,
-      "status": "Checked",
-      "checkedAt": "99ff9b18",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-web.md"
-      ],
-      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -5133,13 +4933,11 @@
       ],
       "files": 20,
       "lines": 5966,
-      "status": "Checked",
-      "checkedAt": "99ff9b18",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-web.md"
-      ],
-      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -5164,13 +4962,11 @@
       ],
       "files": 15,
       "lines": 5729,
-      "status": "Checked",
-      "checkedAt": "99ff9b18",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-web.md"
-      ],
-      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -5199,13 +4995,11 @@
       ],
       "files": 19,
       "lines": 5933,
-      "status": "Checked",
-      "checkedAt": "99ff9b18",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-web.md"
-      ],
-      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -5216,13 +5010,11 @@
       ],
       "files": 18,
       "lines": 5889,
-      "status": "Checked",
-      "checkedAt": "99ff9b18",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-web.md"
-      ],
-      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -5398,13 +5190,11 @@
       ],
       "files": 13,
       "lines": 2955,
-      "status": "Checked",
-      "checkedAt": "361981f6",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-GameLogic.md"
-      ],
-      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -5436,13 +5226,11 @@
       ],
       "files": 5,
       "lines": 1503,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -5455,13 +5243,11 @@
       ],
       "files": 3,
       "lines": 5977,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -5765,13 +5551,11 @@
       ],
       "files": 14,
       "lines": 1622,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -5782,13 +5566,11 @@
       ],
       "files": 2,
       "lines": 191,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -5799,13 +5581,11 @@
       ],
       "files": 4,
       "lines": 127,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -5816,13 +5596,11 @@
       ],
       "files": 19,
       "lines": 4363,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -5833,13 +5611,11 @@
       ],
       "files": 2,
       "lines": 109,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -5850,13 +5626,11 @@
       ],
       "files": 2,
       "lines": 158,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -5867,13 +5641,11 @@
       ],
       "files": 2,
       "lines": 179,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -5884,13 +5656,11 @@
       ],
       "files": 10,
       "lines": 1843,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -5901,13 +5671,11 @@
       ],
       "files": 11,
       "lines": 648,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -5918,13 +5686,11 @@
       ],
       "files": 6,
       "lines": 376,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -5935,13 +5701,11 @@
       ],
       "files": 7,
       "lines": 1792,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -5952,13 +5716,11 @@
       ],
       "files": 5,
       "lines": 672,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -5969,13 +5731,11 @@
       ],
       "files": 3,
       "lines": 702,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -5986,13 +5746,11 @@
       ],
       "files": 6,
       "lines": 377,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6003,13 +5761,11 @@
       ],
       "files": 17,
       "lines": 3059,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6040,13 +5796,11 @@
       ],
       "files": 21,
       "lines": 5417,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6093,13 +5847,11 @@
       ],
       "files": 37,
       "lines": 5893,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6141,13 +5893,11 @@
       ],
       "files": 32,
       "lines": 4389,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6158,13 +5908,11 @@
       ],
       "files": 9,
       "lines": 2665,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6175,13 +5923,11 @@
       ],
       "files": 11,
       "lines": 1604,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6192,13 +5938,11 @@
       ],
       "files": 4,
       "lines": 835,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6240,13 +5984,11 @@
       ],
       "files": 32,
       "lines": 5974,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6275,13 +6017,11 @@
       ],
       "files": 19,
       "lines": 3600,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6292,13 +6032,11 @@
       ],
       "files": 27,
       "lines": 2495,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6309,13 +6047,11 @@
       ],
       "files": 3,
       "lines": 211,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6326,13 +6062,11 @@
       ],
       "files": 11,
       "lines": 1256,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6343,13 +6077,11 @@
       ],
       "files": 8,
       "lines": 1162,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6373,13 +6105,11 @@
       ],
       "files": 14,
       "lines": 5895,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6395,13 +6125,11 @@
       ],
       "files": 6,
       "lines": 543,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6412,13 +6140,11 @@
       ],
       "files": 9,
       "lines": 3057,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6452,13 +6178,11 @@
       ],
       "files": 24,
       "lines": 3002,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6469,13 +6193,11 @@
       ],
       "files": 1,
       "lines": 14284,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6488,13 +6210,11 @@
       ],
       "files": 3,
       "lines": 3064,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6506,13 +6226,11 @@
       ],
       "files": 2,
       "lines": 4368,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6524,13 +6242,11 @@
       ],
       "files": 2,
       "lines": 4231,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6541,13 +6257,11 @@
       ],
       "files": 1,
       "lines": 8311,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6564,13 +6278,11 @@
       ],
       "files": 7,
       "lines": 3450,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6581,13 +6293,11 @@
       ],
       "files": 2,
       "lines": 450,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6632,13 +6342,11 @@
       ],
       "files": 12,
       "lines": 1114,
-      "status": "Checked",
-      "checkedAt": "361981f6",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-GameLogic.md"
-      ],
-      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6649,13 +6357,11 @@
       ],
       "files": 10,
       "lines": 1006,
-      "status": "Checked",
-      "checkedAt": "361981f6",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-GameLogic.md"
-      ],
-      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6666,13 +6372,11 @@
       ],
       "files": 16,
       "lines": 4587,
-      "status": "Checked",
-      "checkedAt": "361981f6",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-GameLogic.md"
-      ],
-      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6683,13 +6387,11 @@
       ],
       "files": 9,
       "lines": 926,
-      "status": "Checked",
-      "checkedAt": "361981f6",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-GameLogic.md"
-      ],
-      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6700,13 +6402,11 @@
       ],
       "files": 26,
       "lines": 5654,
-      "status": "Checked",
-      "checkedAt": "361981f6",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-GameLogic.md"
-      ],
-      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6750,13 +6450,11 @@
       ],
       "files": 34,
       "lines": 5925,
-      "status": "Checked",
-      "checkedAt": "361981f6",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-GameLogic.md"
-      ],
-      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6777,13 +6475,11 @@
       ],
       "files": 11,
       "lines": 1409,
-      "status": "Checked",
-      "checkedAt": "361981f6",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-GameLogic.md"
-      ],
-      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6794,13 +6490,11 @@
       ],
       "files": 16,
       "lines": 2477,
-      "status": "Checked",
-      "checkedAt": "361981f6",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-GameLogic.md"
-      ],
-      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6811,13 +6505,11 @@
       ],
       "files": 8,
       "lines": 374,
-      "status": "Checked",
-      "checkedAt": "361981f6",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-GameLogic.md"
-      ],
-      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6828,13 +6520,11 @@
       ],
       "files": 2,
       "lines": 46,
-      "status": "Checked",
-      "checkedAt": "361981f6",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-GameLogic.md"
-      ],
-      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6845,13 +6535,11 @@
       ],
       "files": 23,
       "lines": 4608,
-      "status": "Checked",
-      "checkedAt": "361981f6",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-GameLogic.md"
-      ],
-      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6862,13 +6550,11 @@
       ],
       "files": 8,
       "lines": 3267,
-      "status": "Checked",
-      "checkedAt": "361981f6",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-GameLogic.md"
-      ],
-      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6879,13 +6565,11 @@
       ],
       "files": 7,
       "lines": 1225,
-      "status": "Checked",
-      "checkedAt": "361981f6",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-GameLogic.md"
-      ],
-      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6896,13 +6580,11 @@
       ],
       "files": 6,
       "lines": 2189,
-      "status": "Checked",
-      "checkedAt": "361981f6",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-GameLogic.md"
-      ],
-      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6939,13 +6621,11 @@
       ],
       "files": 27,
       "lines": 3983,
-      "status": "Checked",
-      "checkedAt": "361981f6",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-GameLogic.md"
-      ],
-      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6956,13 +6636,11 @@
       ],
       "files": 9,
       "lines": 835,
-      "status": "Checked",
-      "checkedAt": "361981f6",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-GameLogic.md"
-      ],
-      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6973,13 +6651,11 @@
       ],
       "files": 43,
       "lines": 3116,
-      "status": "Checked",
-      "checkedAt": "361981f6",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-GameLogic.md"
-      ],
-      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -6990,13 +6666,11 @@
       ],
       "files": 16,
       "lines": 2443,
-      "status": "Checked",
-      "checkedAt": "361981f6",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-GameLogic.md"
-      ],
-      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -7024,13 +6698,11 @@
       ],
       "files": 4,
       "lines": 1653,
-      "status": "Checked",
-      "checkedAt": "361981f6",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-GameLogic.md"
-      ],
-      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -7047,13 +6719,11 @@
       ],
       "files": 7,
       "lines": 679,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -7064,13 +6734,11 @@
       ],
       "files": 7,
       "lines": 1211,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -7105,13 +6773,11 @@
       ],
       "files": 25,
       "lines": 2569,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -7122,13 +6788,11 @@
       ],
       "files": 1,
       "lines": 15727,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -7139,13 +6803,11 @@
       ],
       "files": 1,
       "lines": 3696,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -7667,13 +7329,11 @@
       ],
       "files": 28,
       "lines": 5304,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -7684,13 +7344,11 @@
       ],
       "files": 15,
       "lines": 3444,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -7701,13 +7359,11 @@
       ],
       "files": 9,
       "lines": 1100,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -7718,13 +7374,11 @@
       ],
       "files": 35,
       "lines": 5507,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -7735,13 +7389,11 @@
       ],
       "files": 15,
       "lines": 4669,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -7752,13 +7404,11 @@
       ],
       "files": 3,
       "lines": 339,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -7786,13 +7436,11 @@
       ],
       "files": 18,
       "lines": 5926,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -7813,13 +7461,11 @@
       ],
       "files": 11,
       "lines": 1694,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -7866,13 +7512,11 @@
       ],
       "files": 37,
       "lines": 5983,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -7914,13 +7558,11 @@
       ],
       "files": 32,
       "lines": 4058,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -7951,13 +7593,11 @@
       ],
       "files": 21,
       "lines": 5772,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -7994,13 +7634,11 @@
       ],
       "files": 27,
       "lines": 5418,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8018,13 +7656,11 @@
       ],
       "files": 8,
       "lines": 2324,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8035,13 +7671,11 @@
       ],
       "files": 8,
       "lines": 1126,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8081,13 +7715,11 @@
       ],
       "files": 30,
       "lines": 5861,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8110,13 +7742,11 @@
       ],
       "files": 13,
       "lines": 5946,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8149,13 +7779,11 @@
       ],
       "files": 23,
       "lines": 4699,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8166,13 +7794,11 @@
       ],
       "files": 10,
       "lines": 2162,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8183,13 +7809,11 @@
       ],
       "files": 16,
       "lines": 2897,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8200,13 +7824,11 @@
       ],
       "files": 6,
       "lines": 2893,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8217,13 +7839,11 @@
       ],
       "files": 7,
       "lines": 941,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8234,13 +7854,11 @@
       ],
       "files": 3,
       "lines": 706,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8251,13 +7869,11 @@
       ],
       "files": 14,
       "lines": 2684,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8268,13 +7884,11 @@
       ],
       "files": 59,
       "lines": 5654,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8285,13 +7899,11 @@
       ],
       "files": 2,
       "lines": 618,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8339,13 +7951,11 @@
       ],
       "files": 38,
       "lines": 5928,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8359,13 +7969,11 @@
       ],
       "files": 4,
       "lines": 1943,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8376,13 +7984,11 @@
       ],
       "files": 2,
       "lines": 41,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8393,13 +7999,11 @@
       ],
       "files": 2,
       "lines": 113,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8410,13 +8014,11 @@
       ],
       "files": 7,
       "lines": 404,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8427,13 +8029,11 @@
       ],
       "files": 21,
       "lines": 4070,
-      "status": "Checked",
-      "checkedAt": "471f64e0",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
-      ],
-      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8451,13 +8051,11 @@
       ],
       "files": 8,
       "lines": 5853,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8479,13 +8077,11 @@
       ],
       "files": 12,
       "lines": 5516,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8504,13 +8100,11 @@
       ],
       "files": 9,
       "lines": 5883,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8532,13 +8126,11 @@
       ],
       "files": 12,
       "lines": 4843,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8556,13 +8148,11 @@
       ],
       "files": 8,
       "lines": 5635,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8576,13 +8166,11 @@
       ],
       "files": 4,
       "lines": 2806,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8593,13 +8181,11 @@
       ],
       "files": 10,
       "lines": 2978,
-      "status": "Checked",
-      "checkedAt": "a55b68e8",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-client-src-Data-Network-World.md"
-      ],
-      "evidence": "Audited client Data/* (ItemDatabase, GameConfig, DataHandler, GameData), Network/* (SocketSystem, Reconnect, Server handlers), and World/* (MapManager, GameMaps).",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {
@@ -8640,13 +8226,11 @@
       ],
       "files": 251,
       "lines": 30984,
-      "status": "Checked",
-      "checkedAt": "652ed94a",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "docs/audit/findings/unit-server-src-Persistence-EntityFramework.md"
-      ],
-      "evidence": "Audited Postgres stores, EF Core contexts, repositories, JSON object loaders, DatabaseSnapshotService, and AdminAuth; also verified HnmoFeatureRowSync<T> dirty-tracking fallback.",
+      "status": "Not checked",
+      "checkedAt": "",
+      "checkedOn": "",
+      "references": "",
+      "evidence": "",
       "prs": ""
     },
     {

@@ -2,7 +2,7 @@
 
 > Sanitized reference captured during the `server/src/GameLogic/Gens` and `PlayerActions/Gens` audit (2026-11-24) so future checks do not need to re-read these suite files.
 
-## 1. Core Settings (S6 `IGC_GensSystem.ini` & S9 `IGC_GensSystem.xml`)
+## 1. Core Settings (S6 `the suite's Gens system config file` & S9 `the suite's Gens system config file`)
 - **Families & NPCs**: Duprian (`543`), Vanert (`544`); Rank values `1` (Grand Duke) to `14` (Private); initial contribution on join = `10`.
 - **Chat & Social Restrictions** (S6 & S9 defaults):
   - `CanSeeOppositeGensChat = 0`
@@ -21,7 +21,7 @@
   - `AbusingResetTime = 60` minutes
 - **Reward Window**: `StartDay = 1`, `EndDay = 7`, `MinRankToGainReward = 300`.
 
-## 2. Ranking Thresholds & Monthly Rewards (`IGC_GensRanking.dat` / S9 XML vs HNMO)
+## 2. Ranking Thresholds & Monthly Rewards (`the suite's Gens ranking table` / S9 XML vs HNMO)
 | Rank | Title | S6/S9 `ReqContributePoint` | S6/S9 `RankingPosition` | HNMO `MinimumContribution` | Monthly Reward Item (`14:141..144`) | Count |
 |---|---|---|---|---|---|---|
 | `1` | Grand Duke | `0` | `1` | `10,000` | Shinning Jewellery Case (`14:141`) | `30` |

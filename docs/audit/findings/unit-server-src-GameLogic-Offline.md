@@ -9,7 +9,7 @@
 
 ## Comparison Against Legacy Baseline
 
-- Legacy `IGC_OffLevelling.xml` configures offline hunt timer (`HitInterval = 1000ms`), periodic fee (`ChargeInterval = 3600s`), auto-repair, per-map restrictions, and class priority skills; HNMO adapts this onto the MU Helper settings model (`500ms` tick, `5 min` / `200 min` escalating stage cost, auto-repair at `<= 50%` durability, per-character combat/buff/loot intelligence).
+- Legacy `the suite's offline leveling config file` configures offline hunt timer (`HitInterval = 1000ms`), periodic fee (`ChargeInterval = 3600s`), auto-repair, per-map restrictions, and class priority skills; HNMO adapts this onto the MU Helper settings model (`500ms` tick, `5 min` / `200 min` escalating stage cost, auto-repair at `<= 50%` durability, per-character combat/buff/loot intelligence).
 
 ## Findings & Bugs
 

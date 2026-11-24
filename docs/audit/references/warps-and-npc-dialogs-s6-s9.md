@@ -2,7 +2,7 @@
 
 > Sanitized reference captured during the `server/src/GameLogic/PlayerActions (files 1)` audit (2026-11-24) so future checks do not need to re-read these suite files.
 
-## 1. Warp Table (`IGC_MoveReq.xml` — S6 & S9)
+## 1. Warp Table (`the suite's warp table file` — S6 & S9)
 Standard warp gates share the same base `MinLevel`, `MaxLevel`, `ReqMoney`, and `GateNumber` across S6 and S9 (`S6` includes `Arena=50`, `Stadium=49`, `Crywolf=48`; `S9` omits `Stadium` and `Crywolf` from `MoveReq.xml`):
 
 | Warp | `MinLevel` | `MaxLevel` | `ReqMoney` | `GateNumber` |
@@ -27,7 +27,7 @@ Standard warp gates share the same base `MinLevel`, `MaxLevel`, `ReqMoney`, and 
 | Swamp of Calmness (33) | `400` | `400` | `15,000` | `273` |
 | Vulcanus (42) | `30` | `400` | `15,000` | `294` |
 
-## 2. Teleport / Summon Zone Restrictions (`IGC_MoveLevel.xml`) & Quest Maps
+## 2. Teleport / Summon Zone Restrictions (`the suite's warp level restriction file`) & Quest Maps
 - **`Teleport Ally` (`Skill 15`) / Summon**: Same-map party ally summon with `Range + 1`; prevents caster from being in safezone (`0x39` Stone, `0x3D` Stun, `0x48` Sleep, `0x92` Freeze2, `0x93` Earth Binds prevent teleport).
 - **Barracks of Balgass (`Map 41`)**: NPC `407` Werewolf Quarrel, `3,000,000` Zen fee, requires active quest `5` or `6` (`LegacyQuestGroup 0`); warps nearby party members within range `10`.
 - **Refuge of Balgass (`Map 42`)**: NPC `408` Gatekeeper, `0` Zen, requires active quest `6`; warps nearby party members within range `10`.

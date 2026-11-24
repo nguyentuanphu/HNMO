@@ -5,7 +5,7 @@
   - `BaseItemCraftingHandler.cs` (262), `BuyNpcItemAction.cs` (137), `CraftingRequiredItemLink.cs` (34), `DropItemAction.cs` (128), `IItemCraftingHandler.cs` (33), `ItemBoxDroppedPlugIn.cs` (71), `ItemCraftAction.cs` (248), `ItemCraftingHandlerFactory.cs` (23), `ItemRepairAction.cs` (136), `ItemStackAction.cs` (160), `KalimaGate.cs` (97), `LostMapDroppedPlugIn.cs` (58), `MoveItemAction.cs` (533), `OutlawNpcShopRule.cs` (38), `PetInfoRequestAction.cs` (66), `PetStorageLocation.cs` (77), `PickupItemAction.cs` (274), `SellItemToNpcAction.cs` (105), `SetPetBehaviourRequestAction.cs` (35), `SimpleItemCraftingHandler.cs` (305)
   - `ItemRegistration/`: `BaseItemRegistrationStrategy.cs` (187), `GoldenArcherRegistrationStrategy.cs` (50), `IItemRegistrationStrategy.cs` (46), `ItemRegistrationAction.cs` (50), `ItemRegistrationNpcTalkPlugIn.cs` (49)
 - **Suite references**:
-  - Season 6 & Season 9 `IGCData/IGC_Common.ini` (PK shop restriction, Lahap combine/dismantle fees, Kalima gate, pickup range)
+  - Season 6 & Season 9 `the suite's common settings file` (PK shop restriction, Lahap combine/dismantle fees, Kalima gate, pickup range)
 
 ## Rules & Comparison
 

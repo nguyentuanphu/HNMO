@@ -2,7 +2,7 @@
 
 > Sanitized reference captured during the `server/src/GameLogic/PlayerActions/Guild` audit (2026-11-24) so future checks do not need to re-read these suite files.
 
-## 1. Guild & Alliance Settings (`IGC_Common.ini` & `CommonServer.cfg` — S6 & S9)
+## 1. Guild & Alliance Settings (`the suite's common settings file` & `CommonServer.cfg` — S6 & S9)
 Both Season 6 and Season 9 legacy suite configurations share identical guild settings:
 - `GuildCreate = 1`, `GuildDestroy = 1`
 - `GuildCreateLevel = 150`
@@ -12,7 +12,7 @@ Both Season 6 and Season 9 legacy suite configurations share identical guild set
 - `AllianceMaxGuilds = 3` (maximum guilds in one alliance; note HNMO checks `Stats.MaximumAllianceSize`)
 - `EnableBattleSoccer = 1`
 - `ServerGroupGuildChatting = 1`, `ServerGroupUnionChatting = 1`
-- Chat RGB colors (S9 `IGC_Common.ini`): Guild `(0xFF, 0xCC, 0x99)`, Alliance `(0xC8, 0xC8, 0x00)`.
+- Chat RGB colors (S9 `the suite's common settings file`): Guild `(0xFF, 0xCC, 0x99)`, Alliance `(0xC8, 0xC8, 0x00)`.
 
 ## 2. HNMO `PlayerActions/Guild` Implemented Thresholds
 - **Join Guild**: Requester must be Level `>= 6` (`MinimumLevel6`), not already in a guild, and allowed by `IGuildJoinRequestingPlugIn`.

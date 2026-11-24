@@ -3,7 +3,7 @@
 > Sanitized reference captured during the `server/src/Persistence/Initialization/VersionSeasonSix/Items (files 1)` audit (2026-11-24) so future checks do not need to re-read these files.
 
 ## 1. Level 380 Guardian Options (`S6` & `S9` Legacy Suites vs `GuardianOptions.cs`)
-Both Season 6 and Season 9 legacy suite configurations (`IGC_ItemOptionManager.xml` Section 0 / `IGC_Item380Option.xml`) define the exact same values:
+Both Season 6 and Season 9 legacy suite configurations (`the suite's item option manager file` Section 0 / `the suite's 380 item option file`) define the exact same values:
 - **Weapons** (`0:22`, `0:23`, `2:14`, `4:21`, `5:12`, `5:19`, `0:35`):
   - `Option1 = 2` (Additional Damage PvP `+200`), `Option2 = 1` (Attack Success Rate PvP `+10`) — matches `GuardianOptions.cs` (`FinalDamageIncreasePvp +200`, `AttackRatePvp +10`).
 - **Helms** (`7:29..31,33,43,73`):
@@ -18,7 +18,7 @@ Both Season 6 and Season 9 legacy suite configurations (`IGC_ItemOptionManager.x
   - `Option1 = 6` (**Max SD `+700`**), `Option2 = 3` (`+10` Def Rate PvP).
   - **Mismatch in `GuardianOptions.cs:106`**: sets `Stats.MaximumShield, 200` instead of `700`.
 
-## 2. Buff Items (`S6` `IGC_ItemOptionManager.xml` vs `BuffItems.cs`)
+## 2. Buff Items (`S6` `the suite's item option manager file` vs `BuffItems.cs`)
 - **Halloween Scrolls (`14:46..50`)** (`1800s`): Blessing (Atk Speed `+10`), Wrath (Dmg/Wiz `+25`), Cry (Def `+100`), Food (Max HP `+500`), Drink (Max Mana `+500`).
 - **Seals (`13:43,44,45,62,63,93,94`)**:
   - `13:43` Seal of Ascension: Exp `+50%` (matching `ExperienceRate * 1.5f`).
@@ -34,10 +34,10 @@ Both Season 6 and Season 9 legacy suite configurations (`IGC_ItemOptionManager.x
 - **Elixirs (`14:78..82`)** (`864000s` = 10 days): `+50` Str / Agi / Vit / Ene / Cmd — all match `BuffItems.cs`.
 
 ## 3. Cash Shop Rings & Necklaces (`13:109..115`)
-- **Legacy S6 suite (`IGC_ItemOptionManager.xml` Sections 24–30)**: all have Auto HP Rec `+8%`, plus Sapphire Ring `+6%` dmg/wiz, Ruby Ring `+6` Max HP, Topaz Ring `+60%` zen, Amethyst Ring `6%` dmg absorb, Ruby Necklace `+15%` exc dmg, Emerald Necklace `+10` atk speed, Sapphire Necklace none.
+- **Legacy S6 suite (`the suite's item option manager file` Sections 24–30)**: all have Auto HP Rec `+8%`, plus Sapphire Ring `+6%` dmg/wiz, Ruby Ring `+6` Max HP, Topaz Ring `+60%` zen, Amethyst Ring `6%` dmg absorb, Ruby Necklace `+15%` exc dmg, Emerald Necklace `+10` atk speed, Sapphire Necklace none.
 - **HNMO `Jewelery.cs`**: intentionally follows client `Group13_Helper.json` values (`+3%` Auto HP Rec + `+4%` Mana / `+4%` HP / `+30%` Zen / `4%` DmgDec / `10%` ExcChance / `+7` AtkSpd / `+Mana/8` on kill).
 
-## 4. Ancient Sets (`AncientSets.cs` vs `S6`/`S9` `IGC_ItemSetOption.xml`)
+## 4. Ancient Sets (`AncientSets.cs` vs `S6`/`S9` `the suite's ancient set option file`)
 - **Kantata (`Set Index 9`)**: `FullOptIdx2 = 17, FullOptVal2 = 10` (`+10%` Excellent Damage Chance) and `FullOptIdx3 = 18, FullOptVal3 = 20` (`+20` Excellent Damage).
   - **`AncientSets.cs:199`** erroneously sets `(Stats.ExcellentDamageChance, 10.0f)` (`+1000%`) instead of `0.10f` (`+10%`). Every other set in `AncientSets.cs` correctly uses `0.05f` / `0.10f` / `0.15f` for `CriticalDamageChance` and `ExcellentDamageChance`.
 

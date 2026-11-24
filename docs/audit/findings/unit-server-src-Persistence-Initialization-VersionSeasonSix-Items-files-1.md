@@ -26,17 +26,17 @@
 
 ## Discrepancies & Findings
 1. **Kantata Ancient Set Excellent Damage Chance = `1000%` (`AncientSets.cs:199`) — Bug**:
-   - Line 199 sets `(Stats.ExcellentDamageChance, 10.0f, AggregateType.AddRaw)`. Everywhere else in `AncientSets.cs`, percentage chances use `0..1` fractions (`0.05f`, `0.10f`, `0.15f`), and S6/S9 `IGC_ItemSetOption.xml` both specify `FullOptIdx2="17" FullOptVal2="10"` (`10%`). With `10.0f`, wearing full Kantata guarantees 100% Excellent hits.
+   - Line 199 sets `(Stats.ExcellentDamageChance, 10.0f, AggregateType.AddRaw)`. Everywhere else in `AncientSets.cs`, percentage chances use `0..1` fractions (`0.05f`, `0.10f`, `0.15f`), and S6/S9 `the suite's ancient set option file` both specify `FullOptIdx2="17" FullOptVal2="10"` (`10%`). With `10.0f`, wearing full Kantata guarantees 100% Excellent hits.
 2. **Blue Chocolate Box & Deep Blue Candy Box Normal Item/Jewel Pools Dropped (`BoxOfLuck.cs:924-1052`) — Bug**:
    - In `CreateBlueChocolateBox()` (`14:34`), `blueBox` (`SourceItemLevel = 0`, `Chance = 0.4`, lines 927–957) and `deepBlueBox` (`SourceItemLevel = 1`, `Chance = 0.4`, lines 990–1020) are constructed and populated, but **`box.DropItems.Add(blueBox)` and `box.DropItems.Add(deepBlueBox)` are never called**.
    - As a result, dropping `14:34` (+0 or +1) only registers `blueBoxExc` / `deepBlueBoxExc` (`0.1` chance) and the money fallback (`1.0` chance), never dropping any of the normal items or jewels (`12:15`, `14:13..16,22,42`) defined in `blueBox` / `deepBlueBox`.
 3. **Guardian Lv380 Boots Option Max SD `+200` vs `+700` (`GuardianOptions.cs:106`) — Bug**:
-   - Line 106 configures Boots (`GuardianOptionBoots`) with `Stats.MaximumShield, 200`, whereas both S6 (`IGC_ItemOptionManager.xml`) and S9 (`IGC_Item380Option.xml`) define `Option1="6" Value1="700"` (`Max SD increase +700`).
+   - Line 106 configures Boots (`GuardianOptionBoots`) with `Stats.MaximumShield, 200`, whereas both S6 (`the suite's item option manager file`) and S9 (`the suite's 380 item option file`) define `Option1="6" Value1="700"` (`Max SD increase +700`).
 4. **Seals missing `+150%` Drop Rate (`BuffItems.cs:106, 109, 111`) — Rule Difference**:
-   - S6/S9 `IGC_ItemOptionManager.xml` gives `Seal of Wealth` (`13:44`), `Master Seal of Wealth` (`13:94`), and `Seal of Divinity` (`13:63`) `Option = 7, Value = 150` (`Drop Rate Increase +150%`), which is absent in `BuffItems.cs` (`ExperienceRate`/`MasterExperienceRate` and `ManaRecoveryMultiplier` only).
+   - S6/S9 `the suite's item option manager file` gives `Seal of Wealth` (`13:44`), `Master Seal of Wealth` (`13:94`), and `Seal of Divinity` (`13:63`) `Option = 7, Value = 150` (`Drop Rate Increase +150%`), which is absent in `BuffItems.cs` (`ExperienceRate`/`MasterExperienceRate` and `ManaRecoveryMultiplier` only).
 5. **Item Rules missing `13:71..75` & `14:153` (`ItemRules.cs`, `Misc.cs`, `MossGambleItemCatalog.cs`) — Rule Difference**:
    - S9 suite item list blocks `Trade`, `Drop`, `Store`, `PersonalStore`, `SellToNPC`, `Repair` on Moss gamble vouchers (`13:71..75`) and blocks `Trade`, `Drop`, `Store`, `PersonalStore`, `Repair` on `Stardust` (`14:153`, `Overlap="20"`), while `ItemRules.cs` has no entries for either yet (`Misc.cs` also sets `Durability = 1` for Stardust).
 6. **Cash Shop Jewelry (`Jewelery.cs:73-137`)**:
-   - `13:109..115` intentionally match client tooltip stats rather than legacy suite `IGC_ItemOptionManager.xml` values (`+3%` vs `+8%` HP rec, etc.).
+   - `13:109..115` intentionally match client tooltip stats rather than legacy suite `the suite's item option manager file` values (`+3%` vs `+8%` HP rec, etc.).
 7. **Other verified items in unit**:
-   - `Armors.cs`, `CashShopItems.cs`, `CraftingTalismans.cs`, `EventTicketItems.cs`, `GensRewardItems.cs`, `GoblinBoxItems.cs`, `HarmonyOptions.cs` (level 0..13 match S9 `IGC_HarmonyItem_Option.xml`; +14/+15 handled via `HarmonyLevels14And15UpdatePlugIn`), `Jewels.cs`, `LuckyItems.cs` (`Lucky Atlans` skips Helm 71, `Lucky Storm Jahad` skips Gloves 72, matching `ItemRules.cs`), `Orbs.cs`, `PackedJewels.cs` are internally consistent.
+   - `Armors.cs`, `CashShopItems.cs`, `CraftingTalismans.cs`, `EventTicketItems.cs`, `GensRewardItems.cs`, `GoblinBoxItems.cs`, `HarmonyOptions.cs` (level 0..13 match S9 `the suite's Harmony item option file`; +14/+15 handled via `HarmonyLevels14And15UpdatePlugIn`), `Jewels.cs`, `LuckyItems.cs` (`Lucky Atlans` skips Helm 71, `Lucky Storm Jahad` skips Gloves 72, matching `ItemRules.cs`), `Orbs.cs`, `PackedJewels.cs` are internally consistent.

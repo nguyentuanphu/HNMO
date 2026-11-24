@@ -4,7 +4,7 @@
 - **Files read in full**: 29 of 29 (3,350+ lines total)
   - `AreaSkillAttackAction.cs` (339), `AreaSkillHitAction.cs` (42), `AreaSkillTargetSelector.cs` (214), `AttackActionValidator.cs` (100), `BloodSlashSkillPlugIn.cs` (49), `ChainLightningSkillPlugIn.cs` (91), `DeferredHitScheduler.cs` (455), `DragonRoarSkillPlugIn.cs` (94), `DrainLifeSkillPlugIn.cs` (51), `EarthShakeSkillPlugIn.cs` (57), `FireScreamSkillPlugIn.cs` (98), `ForceSkillAction.cs` (94), `ForceWaveStrengSkillAction.cs` (34), `FrustumBasedTargetFilter.cs` (275), `NovaSkillStartPlugin.cs` (235), `NovaSkillStopPlugin.cs` (26), `PhoenixShotSkillPlugIn.cs` (23), `PollutionSkillPlugIn.cs` (59), `RageSkillAttackAction.cs` (152), `RequiemSkillPlugIn.cs` (55), `SkillCancellationTokenSource.cs` (29), `SkillEquipmentValidator.cs` (134), `SoulBarrierProficieSkillAction.cs` (20), `SoulBarrierStrengSkillAction.cs` (95), `SoulDrainSkillPlugIn.cs` (53), `SummonPartySkillPlugin.cs` (207), `TargetedSkillDefaultPlugin.cs` (324), `TargetedSkillPluginBase.cs` (23), `TwistingSlashMasterySkillPlugIn.cs` (59)
 - **Suite references**:
-  - Season 6 & Season 9 `IGCData/Scripts/Skills/RegularSkillCalc.lua`, `MasterSkillCalc.lua`, `IGCData/IGC_SkillList.xml`
+  - Season 6 & Season 9 `the suite's regular skill calc script`, `MasterSkillCalc.lua`, `the suite's skill list file`
 
 ## Rules & Comparison
 

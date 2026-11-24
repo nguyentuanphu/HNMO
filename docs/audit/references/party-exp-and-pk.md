@@ -13,7 +13,7 @@ Both Season 6 and Season 9 legacy suite configurations share the exact same part
   - 3 members: `230` (230%)
   - 4 members: `270` (270%)
   - 5 members: `300` (300%)
-- S9 suite `IGC_Common.ini` additionally defines `AutoParty = 1` and party chat RGB `0x66, 0xCC, 0xFF`.
+- S9 suite `the suite's common settings file` additionally defines `AutoParty = 1` and party chat RGB `0x66, 0xCC, 0xFF`.
 
 ## 2. Normal & Master Experience Table Formulas (S6 & S9 Suite `ExpCalc.lua`)
 Both Season 6 and Season 9 legacy suite scripts use the same formulas:
@@ -33,7 +33,7 @@ Both Season 6 and Season 9 legacy suite scripts use the same formulas:
   - `PKItemDrop = 0`
   - `PkClearSwitch = 1`, `PkClearCost = 1_000_000`, `PkClearKillMultipler = 1` (`Price = PkClearCost * PK_Count`)
   - `PKLevelIncreaseOff = 0`
-- **S9 `IGC_Common.ini`**: `CanEnterEventWithPK = 0`
+- **S9 `the suite's common settings file`**: `CanEnterEventWithPK = 0`
 - **HNMO `OutlawPoints.cs`**:
   - Thresholds: `WarningPoints = 21_600` (6h), `PlayerKiller1stStagePoints = 43_200` (12h), `PlayerKiller2ndStagePoints = 86_400` (24h), `FurtherKillPoints = 3_600` (1h per kill while already 2nd stage murderer).
   - Monster kill reduction: `MonsterLevel / 2` (`MonsterLevelDivisor = 2`).

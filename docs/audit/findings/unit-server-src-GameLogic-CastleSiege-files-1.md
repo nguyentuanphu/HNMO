@@ -10,7 +10,7 @@ Audited all 31 core files (5,522 lines) implementing Castle Siege state machine,
 
 1. **Missing `FriendlyFire` & Siege PvP Damage Reduction (`CastleSiegePlugIn.cs:147-154`)**:
    - `CheckAttack` unconditionally cancels all attacks between players on the same `CastleSiegeJoinSide`.
-   - S6/S9 `IGC_CastleSiege.xml` configures `FriendlyFire="1"` with `DamageReduction OppositeTeam="40"` and `SelfTeam="20"`; neither the `FriendlyFire` toggle nor siege team damage reduction exists here.
+   - S6/S9 `the suite's Castle Siege config file` configures `FriendlyFire="1"` with `DamageReduction OppositeTeam="40"` and `SelfTeam="20"`; neither the `FriendlyFire` toggle nor siege team damage reduction exists here.
 
 2. **Crown Seal Accumulation & Seal Eligibility (`CastleSiegeCrownMechanics.cs:61-84, 265-274`)**:
    - `CapAccumulatedTime` intentionally preserves shared `CrownAccumulatedTime` (capped to `CrownHoldTimeSeconds - 1`) across failed attempts and across different attacking sides; S6/S9 `ResetAccumulatedTimeAfterKill` is not modeled.
@@ -18,7 +18,7 @@ Audited all 31 core files (5,522 lines) implementing Castle Siege state machine,
 
 3. **Weekly Schedule Model (`CastleSiegeSchedule.cs:20, 91-108`)**:
    - Models a **7-day (`WeekDuration`)** wall-clock schedule in `ServerTimeZone` (handling DST transitions cleanly via `IsInvalidTime`) with immediate transition from `EndCycle` into `RegisterGuild`.
-   - S6/S9 `IGC_CastleSiege.xml` uses a **14-day** default cycle (`Days="14"`), so cycle cadence differs by configuration (data/init unit will confirm HNMO defaults).
+   - S6/S9 `the suite's Castle Siege config file` uses a **14-day** default cycle (`Days="14"`), so cycle cadence differs by configuration (data/init unit will confirm HNMO defaults).
 
 4. **Guild Selection Formula (`CastleSiegeGuildSelector.cs:17-30, 97-135`)**:
    - Score = `(marks * 5) + memberCount + (guildMasterCombinedLevel / 4)` (using `Level + MasterLevel`, tie-breaking by `RegistrationOrder`).

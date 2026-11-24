@@ -8,7 +8,7 @@ Audited all 23 files (3,913 lines) covering the Crywolf Fortress defense state m
 
 ## Rule & Parity Findings vs S6/S9
 
-1. **Exact Core Numerics Match S6/S9 `IGC_CryWolf.xml` (`CrywolfEventDefinition.cs`)**:
+1. **Exact Core Numerics Match S6/S9 `the suite's Crywolf config file` (`CrywolfEventDefinition.cs`)**:
    - State durations: `Notify1 = 10m`, `Notify2 = 5m`, `Ready = 150s`, `Start = 15m`, `End = 15s`, `EndCycle = 10s`.
    - Battle triggers: `StatueAttackDelay = 5m`, `BalgassAppearanceDelay = 10m`, Balgass wave `5`, army waves `1..4, 6..13` + 6 ballistas + `CrywolfMovePath` waypoints.
    - Scores (`7000 / 6000 / 3000 / 1000 / 700 / 600 / 600`), rank thresholds (`0 / 1001 / 3001 / 5001 / 10001`), and rank EXP (`0 / 200k / 800k / 1.2M / 1.8M`) match S6/S9 verbatim.

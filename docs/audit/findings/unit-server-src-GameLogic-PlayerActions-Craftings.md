@@ -4,7 +4,7 @@
 - **Files read in full**: 20 of 20 (1,739 lines total)
   - `BaseEventTicketCrafting.cs` (129), `BloodCastleTicketCrafting.cs` (46), `ChaosWeaponAndFirstWingsCrafting.cs` (67), `DarkHorseCrafting.cs` (40), `DevilSquareTicketCrafting.cs` (40), `DinorantCrafting.cs` (71), `FenrirUpgradeCrafting.cs` (122), `FenrirUpgradeCraftingGold.cs` (193), `GuardianOptionCrafting.cs` (74), `IllusionTempleTicketCrafting.cs` (44), `LuckyItemTicketExchangeCrafting.cs` (97), `MountSeedSphereCrafting.cs` (179), `RefineStoneCrafting.cs` (174), `RemoveSeedSphereCrafting.cs` (54), `RestoreItemCrafting.cs` (45), `SecondWingsCrafting.cs` (55), `SeedSphereCrafting.cs` (78), `SocketWeaponCrafting.cs` (122), `ThirdWingsCrafting.cs` (83), `TransientItemCraftingRequiredItem.cs` (24)
 - **Suite references**:
-  - Season 6 & Season 9 `IGCData/IGC_ChaosBox.ini`, `docs/audit/findings/socket-weapon-mix.md` (S9 `Mix.bmd` ID 57, `ItemList.xml`, `AppointItemDrop.xml`)
+  - Season 6 & Season 9 `the suite's chaos box config file`, `docs/audit/findings/socket-weapon-mix.md` (S9 `Mix.bmd` ID 57, `ItemList.xml`, `AppointItemDrop.xml`)
   - `docs/audit/data/diff-mixes.txt`, `docs/audit/data/s9/diff-mixes.txt`
 
 ## Rules & Comparison

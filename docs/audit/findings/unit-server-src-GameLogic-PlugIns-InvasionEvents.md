@@ -20,7 +20,7 @@
      1. None of `DestructiveOgreSoldier`, `DestructiveOgreArcher`, `HideousRabbit`, or `CursedSanta` are ever spawned in `SpawnMobsOnMapsAsync`!
      2. In `SelectSingleMap` (`lines 386-389`), `AnnouncedMonsterId` (`HideousRabbit` / `CursedSanta`) is absent from `mobs`, forcing fallback to `mobs[0]`, and `InvasionSpawnConfiguration.MapIds` also fails its `[MinLength(1)]` data annotation if validated in UI.
 2. **White Wizard archer count & S6 Golden Invasion differences (`InvasionConfigurationDefaults.cs:17-36, 65-71`)**:
-   - Legacy `IGC_WhiteWizardAttack.xml` spawns `15` `DestructiveOgreArcher` (`137`), whereas HNMO `WhiteWizard` configures `10`.
+   - Legacy `the suite's White Wizard invasion config file` spawns `15` `DestructiveOgreArcher` (`137`), whereas HNMO `WhiteWizard` configures `10`.
    - Legacy S6/S9 Golden Invasion includes Golden `493..502` (Dungeon, LostTower, Aida, Icarus, Kanturu, Raklion, Swamp, Elbeland) and spawns 1–2 per monster (Golden Dragon on LostTower `4` as well as `0, 2, 3`); HNMO's default spawns only classic Golden `43, 53, 54, 78, 79, 80, 81, 82, 83` at higher counts (`10..20`).
 3. **`BaseInvasionPlugIn` / `FindTheGmInvasionPlugIn` / `SnowmanInvasionPlugIn` (OK)**:
    - `FindTheGmInvasionPlugIn` properly guards concurrent winner claims with `lock (run.Gate)`, records unique `runId:rank:accountKey` coin grant references via `MissionCoinGranter`, and disposes NPCs cleanly on finish or timeout.

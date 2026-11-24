@@ -1,6 +1,6 @@
 # Kanturu (Maya / Nightmare / Tower of Refinement) S6 vs S9 Reference
 
-Derived from legacy Season 6 event configuration (`Kanturu.dat`, `KanturuMonsterSetBase.txt`) and Season 9 event configuration (`IGC_KanturuEvent.xml`).
+Derived from legacy Season 6 event configuration (`Kanturu.dat`, `KanturuMonsterSetBase.txt`) and Season 9 event configuration (`the suite's Kanturu event config file`).
 
 ## 1. Event Enabling, Entry & Drop Rules
 | Setting | Season 6 | Season 9 |

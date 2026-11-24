@@ -10,8 +10,8 @@
   - `server/src/GameLogic/PlayerActions/MiniGames/MiniGameDefinitionExtensions.cs` (66 lines)
   - `server/src/GameLogic/PlayerActions/MiniGames/MiniGameOpeningStateRequestAction.cs` (57 lines)
 - **Suite references**:
-  - Season 6 suite: `IGCData/Events/IGC_BloodCastle.ini`, `IGCData/Events/DoppelGanger/IGC_DoppelGanger_Config.ini`, `IGCData/Events/ImperialGuardian/IGC_ImperialGuardian.ini`
-  - Season 9 suite: `IGCData/Events/ImperialGuardian/IGC_ImperialGuardian.ini`
+  - Season 6 suite: `the suite's Blood Castle config file`, `the suite's Doppelganger config file`, `the suite's Imperial Guardian config file`
+  - Season 9 suite: `the suite's Imperial Guardian config file`
 
 ## Rules & Comparison
 

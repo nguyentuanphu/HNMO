@@ -9,8 +9,8 @@
   - `server/src/GameLogic/Pet/RavenCommandManager.cs` (300 lines)
   - `server/src/GameLogic/Pet/UpdatePetCommandManagerOnItemMovePlugIn.cs` (44 lines)
 - **Suite references**:
-  - Season 6 suite: `IGCData/IGC_PetSettings.ini` (passive/ring pets), `IGCData/Scripts/Character/CalcCharacter.lua` (Dark Raven behavior itself is in the GameServer binary)
-  - Season 9 suite: `IGCData/IGC_PetSettings.ini`, `IGCData/Scripts/Character/CalcCharacter.lua`
+  - Season 6 suite: `the suite's pet settings file` (passive/ring pets), `the suite's character calc script` (Dark Raven behavior itself is in the GameServer binary)
+  - Season 9 suite: `the suite's pet settings file`, `the suite's character calc script`
 
 ## Rules & Comparison
 

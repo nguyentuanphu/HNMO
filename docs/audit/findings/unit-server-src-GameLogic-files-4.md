@@ -28,7 +28,7 @@
 
 ## Comparison & Findings
 1. **Skill cooldowns (`SkillDelays.cs`) vs S6 & S9 suites**:
-   - Checked all 51 skills with non-zero `Delay` in both S6 and S9 skill lists (`IGC_SkillList.xml`).
+   - Checked all 51 skills with non-zero `Delay` in both S6 and S9 skill lists (`the suite's skill list file`).
    - All 48 skills in `SkillDelays.cs` match S6/S9 millisecond values 1:1.
    - The remaining 3 (`262` Chain Drive, `558` Chain Drive Strengthener, `562` Chain Drive Mastery, all `700 ms`) are intentionally excluded with a clear comment because the client emits two hits per cast.
    - `ToleranceFactor = 0.8` permits network jitter without allowing macro bypasses.

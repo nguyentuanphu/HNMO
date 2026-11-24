@@ -1,6 +1,6 @@
 # Crywolf S6 vs S9 Reference
 
-Derived from legacy Season 6 and Season 9 `IGC_CryWolf.xml`. Both seasons define identical mechanics, cycle timings, monster scores, ranks, benefits, and penalties.
+Derived from legacy Season 6 and Season 9 `the suite's Crywolf config file`. Both seasons define identical mechanics, cycle timings, monster scores, ranks, benefits, and penalties.
 
 ## 1. Cycle State Timings (`CycleSettings`)
 | State ID | Name | Duration |

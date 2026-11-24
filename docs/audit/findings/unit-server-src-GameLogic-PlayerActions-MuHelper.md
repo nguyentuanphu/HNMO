@@ -8,7 +8,7 @@
 ## Rules & Cross-Check
 | Rule | HNMO Implementation | Season 6 / 9 Suite Reference | Status |
 | --- | --- | --- | --- |
-| Helper toggle & config check | `ChangeMuHelperStateAction.cs:21-40`: requires active `MuHelperFeaturePlugIn`, delegates `Enabled`/`Disabled` to `player.MuHelper.TryStartAsync()` / `StopAsync()` | `IGC_Common.ini` `[MuBot]`: `Enable = 1`, `MinLevel = 80`, `Cost = 20000` (all validated inside `GameLogic/MuHelper/MuHelper.cs`) | Same |
+| Helper toggle & config check | `ChangeMuHelperStateAction.cs:21-40`: requires active `MuHelperFeaturePlugIn`, delegates `Enabled`/`Disabled` to `player.MuHelper.TryStartAsync()` / `StopAsync()` | `the suite's common settings file` `[MuBot]`: `Enable = 1`, `MinLevel = 80`, `Cost = 20000` (all validated inside `GameLogic/MuHelper/MuHelper.cs`) | Same |
 | Client helper settings persistence | `UpdateMuHelperConfigurationAction.cs:19-35`: stores raw byte array on `character.MuHelperConfiguration` and notifies `IMuHelperConfigurationUpdatePlugIn` | Client binary config blob persisted per character | Same |
 
 ## Findings

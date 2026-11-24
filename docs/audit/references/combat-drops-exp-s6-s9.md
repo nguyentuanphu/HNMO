@@ -1,6 +1,6 @@
 # Combat, Drops & Experience Core Formulas Reference (HNMO / S6 & S9 Parity Notes)
 
-Derived from reading `AttackableExtensions.cs`, `DefaultDropGenerator.cs`, `CharacterExtensions.cs`, `ComboStateMachine.cs`, and comparing against S6/S9 suite behavior (`IGC_CastleSiege.xml` Duel/CS damage reductions, CalcCharacter).
+Derived from reading `AttackableExtensions.cs`, `DefaultDropGenerator.cs`, `CharacterExtensions.cs`, `ComboStateMachine.cs`, and comparing against S6/S9 suite behavior (`the suite's Castle Siege config file` Duel/CS damage reductions, CalcCharacter).
 
 ## 1. Hit Chance Formulas
 - **PvM**:

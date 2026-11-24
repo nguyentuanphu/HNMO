@@ -1,6 +1,6 @@
 # Castle Siege & Land of Trials S6 vs S9 Reference
 
-Derived from legacy Season 6/Season 9 `IGC_CastleSiege.xml`, `CommonServer.cfg` (Hunt Zone drops & Mark of the Lord), and `IGC_Common.ini` (`CastleOwnerGuildDestroyLimit`). Note that S6 and S9 share identical structure, upgrade tables, and rules in `IGC_CastleSiege.xml` (only the battle hour in the sample timetable differs: S6 `20:00-22:00` vs S9 `08:00-10:00`).
+Derived from legacy Season 6/Season 9 `the suite's Castle Siege config file`, `CommonServer.cfg` (Hunt Zone drops & Mark of the Lord), and `the suite's common settings file` (`CastleOwnerGuildDestroyLimit`). Note that S6 and S9 share identical structure, upgrade tables, and rules in `the suite's Castle Siege config file` (only the battle hour in the sample timetable differs: S6 `20:00-22:00` vs S9 `08:00-10:00`).
 
 ## 1. General Flags & Combat Rules
 | Setting | S6 / S9 Default | Description |
@@ -12,7 +12,7 @@ Derived from legacy Season 6/Season 9 `IGC_CastleSiege.xml`, `CommonServer.cfg` 
 | `TowerEntryWithoutAlliance` | `0` | Allow Senior / Tower entry without alliance for castle winner |
 | `DamageReduction OppositeTeam` | `40` | 40% PvP damage reduction vs opposite side during siege |
 | `DamageReduction SelfTeam` | `20` | 20% PvP damage reduction vs self side during siege |
-| `CastleOwnerGuildDestroyLimit` | `1` | Disallow disbanding guild while owning castle or during siege (`IGC_Common.ini`) |
+| `CastleOwnerGuildDestroyLimit` | `1` | Disallow disbanding guild while owning castle or during siege (`the suite's common settings file`) |
 
 ## 2. Land of Trials Drops & Mark of the Lord (`CommonServer.cfg`)
 - `IsDropSetItemInCastleHuntZone = 1`
