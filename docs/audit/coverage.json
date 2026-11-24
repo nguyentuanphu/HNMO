@@ -1,5 +1,5 @@
 {
-  "generatedAt": "21de6137",
+  "generatedAt": "01e15a98",
   "maxLines": 6000,
   "units": [
     {
@@ -4269,11 +4269,14 @@
       ],
       "files": 17,
       "lines": 4922,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "01e15a98",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "the Season 6 suite's MonsterList.xml & MonsterSetBase.txt",
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-VersionSeasonSix-Maps-files-3.md"
+      ],
+      "evidence": "Audited all 17 files (4922 lines): docs/audit/findings/unit-server-src-Persistence-Initialization-VersionSeasonSix-Maps-files-3.md",
       "prs": ""
     },
     {
