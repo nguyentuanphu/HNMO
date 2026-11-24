@@ -1,5 +1,5 @@
 {
-  "generatedAt": "a17e827d",
+  "generatedAt": "8ef6758f",
   "maxLines": 6000,
   "units": [
     {
@@ -3964,16 +3964,12 @@
       ],
       "files": 11,
       "lines": 5487,
-      "status": "Changed since check",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-22",
-      "references": "S6/S9 ChaosBox.ini, GateSettings.xml, MoveReq.xml, MoveLevel.xml, ShopList.xml, Shops/*.xml, PriceSettings.ini",
-      "evidence": "Read in full via data dump (ledger-game-data.md + ZzDataDump at 477b9466): 42 mixes, gates/warps (#223, #240), 27 shops (#250), jewel prices (#192).",
-      "prs": "#192, #223, #240, #250",
-      "changedFiles": [
-        "server/src/Persistence/Initialization/VersionSeasonSix/ChaosMixes.cs",
-        "server/src/Persistence/Initialization/VersionSeasonSix/NpcInitialization.cs"
-      ]
+      "status": "Checked",
+      "checkedAt": "8ef6758f",
+      "checkedOn": "2026-11-24",
+      "references": "S6/S9 ChaosBox.ini, GateSettings.xml, MoveReq.xml, ShopList.xml, Shops/*.xml, diff-{mixes,gates,shops,monsters}.txt",
+      "evidence": "All 11 files read (5487 lines): docs/audit/findings/unit-server-src-Persistence-Initialization-VersionSeasonSix-files-1.md",
+      "prs": "#192, #223, #240, #250"
     },
     {
       "id": "server/src/Persistence/Initialization/VersionSeasonSix (files 2)",
