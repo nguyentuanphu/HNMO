@@ -1,5 +1,5 @@
 {
-  "generatedAt": "60ed6b41",
+  "generatedAt": "a196e276",
   "maxLines": 6000,
   "units": [
     {
@@ -8903,11 +8903,14 @@
       ],
       "files": 9,
       "lines": 5883,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a196e276",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "GMHellas.cpp:181-265",
+        "docs/audit/findings/unit-client-src-source-World-GameMaps-files-3.md"
+      ],
+      "evidence": "9f/5883L: GMHellas enforces Kalima level tiers, MG/DL/RF class offset, 5 Symbols of Kundun -> Lost Map & safezone block matching Web kalima.ts.",
       "prs": ""
     },
     {
