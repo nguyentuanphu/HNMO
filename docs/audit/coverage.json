@@ -1,5 +1,5 @@
 {
-  "generatedAt": "337a678c",
+  "generatedAt": "817e0296",
   "maxLines": 6000,
   "units": [
     {
@@ -6758,11 +6758,14 @@
       ],
       "files": 1,
       "lines": 14284,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "817e0296",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Object/ZzzCharacter.cpp",
+        "docs/audit/findings/unit-client-src-source-Engine-Object-files-2.md"
+      ],
+      "evidence": "1f/14284L: No game rules (3D object/character/world animation, bone transforms, FX, item tooltips & open-data loaders (rendering/UI layer).)",
       "prs": ""
     },
     {
