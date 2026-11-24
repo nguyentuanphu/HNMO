@@ -112,14 +112,6 @@ function decodeMoveReq(filePath) {
   return entries;
 }
 
-function decodeQuestProgress(filePath) {
-  if (!filePath) return 0;
-  const buf = fs.readFileSync(filePath);
-  // 4-byte index + SQuestProgress
-  const REC = 76;
-  return Math.floor(buf.length / REC);
-}
-
 function decodeGateBmd(filePath) {
   if (!filePath) return [];
   const buf = fs.readFileSync(filePath);
@@ -162,8 +154,9 @@ function decodeItemSetOptions(filePath) {
   if (!filePath) return [];
   const buf = fs.readFileSync(filePath);
   const REC = 110;
+  const maxSlots = Math.floor(buf.length / REC);
   const out = [];
-  for (let i = 0; i < 64 && (i + 1) * REC <= buf.length; i++) {
+  for (let i = 0; i < maxSlots && (i + 1) * REC <= buf.length; i++) {
     const r = unbux(buf, i * REC, REC);
     const name = readCString(r, 0, 64);
     if (name) out.push({ index: i, name, optionCount: r.readUInt8(92) });
@@ -175,8 +168,9 @@ function decodeSocketOptions(filePath) {
   if (!filePath) return [];
   const buf = fs.readFileSync(filePath);
   const REC = 104;
+  const maxSlots = Math.floor(buf.length / REC);
   const out = [];
-  for (let i = 0; i < 150 && (i + 1) * REC <= buf.length; i++) {
+  for (let i = 0; i < maxSlots && (i + 1) * REC <= buf.length; i++) {
     const r = unbux(buf, i * REC, REC);
     const id = r.readInt32LE(0);
     const name = readCString(r, 8, 64);
@@ -189,32 +183,149 @@ function decodeHarmonyOptions(filePath) {
   if (!filePath) return [];
   const buf = fs.readFileSync(filePath);
   const REC = 180;
+  const maxSlots = Math.floor(buf.length / REC);
   const out = [];
-  for (let i = 0; i < 30 && (i + 1) * REC <= buf.length; i++) {
+  for (let i = 0; i < maxSlots && (i + 1) * REC <= buf.length; i++) {
     const r = unbux(buf, i * REC, REC);
+    const id = r.readInt32LE(0);
     const name = readCString(r, 4, 60);
-    if (name) out.push({ index: i, name });
+    if (id > 0 && name) out.push({ slot: i, id, name });
   }
   return out;
 }
 
-function decodeItemBmdCount(filePath) {
-  if (!filePath) return { count: 0, format: 'none' };
+function decodeItemSetType(filePath) {
+  if (!filePath) return new Map();
+  const buf = fs.readFileSync(filePath);
+  const recSize = buf.length >= 8192 * 6 ? 6 : 4;
+  const out = new Map();
+  for (let i = 0; i < 8192 && (i + 1) * recSize <= buf.length; i++) {
+    const r = unbux(buf, i * recSize, recSize);
+    const sets = recSize === 6 ? [r.readUInt8(0), r.readUInt8(1), r.readUInt8(2)] : [r.readUInt8(0), r.readUInt8(1)];
+    const mixLvl = recSize === 6 ? [r.readUInt8(3), r.readUInt8(4), r.readUInt8(5)] : [r.readUInt8(2), r.readUInt8(3)];
+    if (sets.some((v) => v > 0)) {
+      const grp = Math.floor(i / 512);
+      const num = i % 512;
+      out.set(`${grp}-${num}`, { sets: sets.filter((v) => v > 0), mixLvl });
+    }
+  }
+  return out;
+}
+
+function decodeItemAddOption(filePath) {
+  if (!filePath) return new Map();
+  const buf = fs.readFileSync(filePath);
+  const dec = unbux(buf, 0, buf.length);
+  const out = new Map();
+  for (let i = 0; i < 8192 && (i + 1) * 16 <= dec.length; i++) {
+    const o = i * 16;
+    const op1 = dec.readUInt8(o);
+    const val1 = dec.readUInt16LE(o + 2);
+    const op2 = dec.readUInt8(o + 4);
+    const val2 = dec.readUInt16LE(o + 6);
+    const type = dec.readUInt8(o + 8);
+    const time = dec.readUInt32LE(o + 12);
+    if (op1 || op2 || time) {
+      out.set(`${Math.floor(i / 512)}-${i % 512}`, { op1, val1, op2, val2, type, time });
+    }
+  }
+  return out;
+}
+
+function decodeMonsterSkill(filePath) {
+  if (!filePath) return new Map();
+  const buf = fs.readFileSync(filePath);
+  const n = buf.readUInt32LE(0);
+  const out = new Map();
+  for (let i = 0; i < n && 4 + (i + 1) * 48 <= buf.length; i++) {
+    const r = unbux(buf, 4 + i * 48, 48);
+    const monster = r.readInt32LE(0);
+    const skills = [];
+    for (let j = 1; j <= 10; j++) {
+      const s = r.readInt32LE(j * 4);
+      if (s >= 0) skills.push(s);
+    }
+    out.set(monster, skills);
+  }
+  return out;
+}
+
+function decodeQuestEng(filePath) {
+  if (!filePath) return [];
+  const buf = fs.readFileSync(filePath);
+  const REC = 744;
+  const out = [];
+  for (let i = 0; (i + 1) * REC <= buf.length; i++) {
+    const r = unbux(buf, i * REC, REC);
+    const subQuests = r.readInt16LE(0);
+    const reqCount = r.readInt16LE(2);
+    const npcType = r.readInt16LE(4);
+    const name = readCString(r, 6, 32);
+    if (name || subQuests > 0) out.push({ index: i, subQuests, reqCount, npcType, name });
+  }
+  return out;
+}
+
+function decodeQuestProgress(filePath) {
+  if (!filePath) return [];
+  const buf = fs.readFileSync(filePath);
+  const REC = 41;
+  const out = [];
+  for (let i = 0; (i + 1) * REC <= buf.length; i++) {
+    const r = unbux(buf, i * REC, REC);
+    out.push({
+      key: r.readUInt32LE(0),
+      uiType: r.readUInt8(4),
+      npcWords: r.readInt32LE(5),
+      playerWords: r.readInt32LE(9),
+      subject: r.readInt32LE(33),
+      summary: r.readInt32LE(37),
+    });
+  }
+  return out;
+}
+
+function decodeNpcDialogue(filePath) {
+  if (!filePath) return [];
+  const buf = fs.readFileSync(filePath);
+  const REC = 88;
+  const out = [];
+  for (let i = 0; (i + 1) * REC <= buf.length; i++) {
+    const r = unbux(buf, i * REC, REC);
+    const answers = [];
+    for (let j = 0; j < 20; j++) {
+      const a = r.readInt32LE(8 + j * 4);
+      if (a > 0) answers.push(a);
+    }
+    out.push({ key: r.readUInt32LE(0), npcWords: r.readInt32LE(4), answerCount: answers.length });
+  }
+  return out;
+}
+
+function decodeItemBmdNames(filePath) {
+  const items = new Map();
+  if (!filePath) return { items, format: 'none' };
   const buf = fs.readFileSync(filePath);
   if (buf.length === 8192 * 84 + 4) {
-    let populated = 0;
     for (let i = 0; i < 8192; i++) {
       const r = unbux(buf, i * 84, 84);
-      if (readCString(r, 0, 30)) populated++;
+      const name = readCString(r, 0, 30);
+      if (name) items.set(`${Math.floor(i / 512)}-${i % 512}`, name);
     }
-    return { count: populated, format: '8192x84' };
+    return { items, format: '8192x84' };
   }
   const u32 = buf.length >= 4 ? buf.readUInt32LE(0) : 0;
-  if (u32 > 0 && u32 < 10000 && ((buf.length - 4) % u32 === 0 || (buf.length - 8) % u32 === 0)) {
-    const stride = (buf.length - 4) % u32 === 0 ? (buf.length - 4) / u32 : (buf.length - 8) / u32;
-    return { count: u32, format: `${u32}x${stride}` };
+  if (u32 > 0 && u32 < 10000 && buf.length === 4 + u32 * 628 + 4) {
+    for (let i = 0; i < u32; i++) {
+      const r = unbux(buf, 4 + i * 628, 628);
+      const grp = r.readUInt16LE(4);
+      const num = r.readUInt16LE(6);
+      const name = readCString(r, 528, 64);
+      if (name) items.set(`${grp}-${num}`, name);
+    }
+    return { items, format: `${u32}x628` };
   }
-  return { count: 0, format: `${buf.length}b` };
+  return { items, format: `${buf.length}b` };
 }
 
 function decodeSkillBmdNames(filePath) {
@@ -337,21 +448,90 @@ const lines = [
 
 // 7. Item_eng.bmd & skill_eng.bmd
 {
-  const it6 = decodeItemBmdCount(findClientFile(S6_CLIENT, ['Data/Local/Eng/item_eng.bmd']));
-  const it9 = decodeItemBmdCount(findClientFile(S9_CLIENT, ['Data/Local/Eng/Item_eng.bmd']));
+  const it6 = decodeItemBmdNames(findClientFile(S6_CLIENT, ['Data/Local/Eng/item_eng.bmd']));
+  const it9 = decodeItemBmdNames(findClientFile(S9_CLIENT, ['Data/Local/Eng/Item_eng.bmd']));
   const sk6 = decodeSkillBmdNames(findClientFile(S6_CLIENT, ['Data/Local/Eng/skill_eng.bmd']));
   const sk9 = decodeSkillBmdNames(findClientFile(S9_CLIENT, ['Data/Local/Eng/skill_eng.bmd']));
+  const s9OnlyItems = [...it9.items.entries()].filter(([k]) => !it6.items.has(k));
   const s9OnlySkills = [...sk9.entries()].filter(([id]) => !sk6.has(id));
   lines.push(
     '',
-    `## Item_eng.bmd: S6=${it6.count} items (${it6.format}), S9=${it9.count} items (${it9.format})`,
+    `## Item_eng.bmd: S6=${it6.items.size} items (${it6.format}), S9=${it9.items.size} items (${it9.format}) (+${s9OnlyItems.length} S9-only)`,
+  );
+  for (const [k, name] of s9OnlyItems.slice(0, 20)) lines.push(`  S9-only item ${k}: ${name}`);
+  if (s9OnlyItems.length > 20) lines.push(`  ... (${s9OnlyItems.length - 20} more)`);
+  lines.push(
     `## skill_eng.bmd: S6=${sk6.size} skills, S9=${sk9.size} skills (+${s9OnlySkills.length} S9-only)`,
   );
   for (const [id, name] of s9OnlySkills.slice(0, 20)) lines.push(`  S9-only skill #${id}: ${name}`);
   if (s9OnlySkills.length > 20) lines.push(`  ... (${s9OnlySkills.length - 20} more)`);
 }
 
-// 8. Remaining encoded .bmd table byte sizes (S6 vs S9)
+// 8. itemsettype.bmd, ItemAddOption.bmd, MonsterSkill.bmd, Quest_eng.bmd, QuestProgress.bmd, NPCDialogue.bmd
+{
+  const st6 = decodeItemSetType(findClientFile(S6_CLIENT, ['Data/Local/itemsettype.bmd']));
+  const st9 = decodeItemSetType(findClientFile(S9_CLIENT, ['Data/Local/itemsettype.bmd']));
+  const s9OnlySetItems = [...st9.entries()].filter(([k]) => !st6.has(k));
+  lines.push('', `## itemsettype.bmd: S6=${st6.size} ancient items, S9=${st9.size} ancient items (+${s9OnlySetItems.length} S9-only)`);
+  for (const [k, v] of s9OnlySetItems.slice(0, 15)) lines.push(`  S9-only ancient item ${k}: sets=[${v.sets.join(',')}]`);
+  if (s9OnlySetItems.length > 15) lines.push(`  ... (${s9OnlySetItems.length - 15} more)`);
+
+  const add6 = decodeItemAddOption(findClientFile(S6_CLIENT, ['Data/Local/ItemAddOption.bmd']));
+  const add9 = decodeItemAddOption(findClientFile(S9_CLIENT, ['Data/Local/ItemAddOption.bmd']));
+  const s9OnlyAdd = [...add9.entries()].filter(([k]) => !add6.has(k));
+  const diffAdd = [...add9.entries()].filter(([k, v]) => {
+    const o = add6.get(k);
+    return o && (o.op1 !== v.op1 || o.val1 !== v.val1 || o.op2 !== v.op2 || o.val2 !== v.val2 || o.time !== v.time);
+  });
+  lines.push('', `## ItemAddOption.bmd: S6=${add6.size} items, S9=${add9.size} items (+${s9OnlyAdd.length} S9-only, ${diffAdd.length} differing)`);
+  for (const [k, v] of s9OnlyAdd.slice(0, 10)) lines.push(`  S9-only add-option ${k}: op1=${v.op1}:${v.val1} op2=${v.op2}:${v.val2} time=${v.time}`);
+
+  const ms6 = decodeMonsterSkill(findClientFile(S6_CLIENT, ['Data/Local/MonsterSkill.bmd']));
+  const ms9 = decodeMonsterSkill(findClientFile(S9_CLIENT, ['Data/Local/MonsterSkill.bmd']));
+  const s9OnlyMs = [...ms9.entries()].filter(([k]) => !ms6.has(k));
+  lines.push('', `## MonsterSkill.bmd: S6=${ms6.size} monsters, S9=${ms9.size} monsters (+${s9OnlyMs.length} S9-only)`);
+  for (const [m, sk] of s9OnlyMs) lines.push(`  S9-only monster #${m}: skills=[${sk.join(',')}]`);
+
+  const q6 = decodeQuestEng(findClientFile(S6_CLIENT, ['Data/Local/Eng/Quest_eng.bmd']));
+  const q9 = decodeQuestEng(findClientFile(S9_CLIENT, ['Data/Local/Eng/Quest_eng.bmd']));
+  lines.push('', `## Quest_eng.bmd: S6=${q6.length} quests, S9=${q9.length} quests`);
+
+  const qp6 = decodeQuestProgress(findClientFile(S6_CLIENT, ['Data/Local/QuestProgress.bmd']));
+  const qp9 = decodeQuestProgress(findClientFile(S9_CLIENT, ['Data/Local/QuestProgress.bmd']));
+  lines.push(`## QuestProgress.bmd: S6=${qp6.length} steps, S9=${qp9.length} steps (+${qp9.length - qp6.length} S9)`);
+
+  const nd6 = decodeNpcDialogue(findClientFile(S6_CLIENT, ['Data/Local/NPCDialogue.bmd']));
+  const nd9 = decodeNpcDialogue(findClientFile(S9_CLIENT, ['Data/Local/NPCDialogue.bmd']));
+  lines.push(`## NPCDialogue.bmd: S6=${nd6.length} entries, S9=${nd9.length} entries (+${nd9.length - nd6.length} S9)`);
+}
+
+// 9. Client text rule tables (InGameShop & Npcname)
+{
+  const parseIbs = (rel) => {
+    const p6 = findClientFile(S6_CLIENT, [rel]);
+    const p9 = findClientFile(S9_CLIENT, [rel]);
+    const c6 = p6 ? fs.readFileSync(p6, 'utf8').trim().split(/\r?\n/).filter(Boolean).length : 0;
+    const c9 = p9 ? fs.readFileSync(p9, 'utf8').trim().split(/\r?\n/).filter(Boolean).length : 0;
+    return { c6, c9 };
+  };
+  lines.push('', '## Client Text Rule Tables (S6 vs S9)');
+  for (const [label, rel] of [
+    ['IBSCategory.txt', 'Data/InGameShopScript/512.2014.124/IBSCategory.txt'],
+    ['IBSPackage.txt', 'Data/InGameShopScript/512.2014.124/IBSPackage.txt'],
+    ['IBSProduct.txt', 'Data/InGameShopScript/512.2014.124/IBSProduct.txt'],
+    ['IBSBanner.txt', 'Data/InGameShopBanner/583.2014.001/IBSBanner.txt'],
+  ]) {
+    const { c6, c9 } = parseIbs(rel);
+    lines.push(`  ${label}: S6=${c6} rows | S9=${c9} rows`);
+  }
+  const npc6 = findClientFile(S6_CLIENT, ['Data/Local/Eng/Npcname(eng).txt']);
+  const npc9 = findClientFile(S9_CLIENT, ['Data/Local/Eng/Npcname_eng.bmd']);
+  const npc6Count = npc6 ? fs.readFileSync(npc6, 'utf8').trim().split(/\r?\n/).filter((l) => l.trim() && !l.trim().startsWith('//')).length : 0;
+  const npc9Bytes = npc9 ? fs.statSync(npc9).size : 0;
+  lines.push(`  Npcname(eng): S6 txt=${npc6Count} rows | S9 Npcname_eng.bmd=${npc9Bytes} bytes`);
+}
+
+// 10. Remaining encoded .bmd table byte sizes (S6 vs S9)
 lines.push('', '## Encoded .bmd table presence & byte sizes (S6 vs S9)');
 const tables = [
   ['Item_eng.bmd', ['Data/Local/Eng/item_eng.bmd', 'Data/Local/Item.bmd'], ['Data/Local/Eng/Item_eng.bmd']],

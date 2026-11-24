@@ -27,6 +27,7 @@ import {
   parseSuiteMasterSkillTree,
   parseSuiteQuests,
 } from './parsers-extra.mjs';
+import { parseRemainingSuiteRules } from './parsers-all-rules.mjs';
 
 const ROOT = process.cwd();
 const HNMO_DIR = process.env.HNMO_CSV_DIR ?? path.join(ROOT, 'docs', 'audit', 'data', 'hnmo');
@@ -42,8 +43,12 @@ if (!S6_DIR || !S9_DIR) {
 fs.mkdirSync(OUT_DIR, { recursive: true });
 const num = (v, d = 0) => (v === undefined || v === '' ? d : Number(v));
 
+function sanitizeText(s) {
+  return String(s).replace(/\b[A-Z]{3}Data\b/g, 'suite_data').replace(/\b[A-Z]{3}_/g, 'suite_');
+}
+
 function writeDiff(fileName, lines) {
-  fs.writeFileSync(path.join(OUT_DIR, fileName), lines.join('\n') + '\n', 'utf8');
+  fs.writeFileSync(path.join(OUT_DIR, fileName), lines.map(sanitizeText).join('\n') + '\n', 'utf8');
   console.log(`Wrote ${fileName} (${lines.length} lines)`);
 }
 
@@ -507,4 +512,57 @@ function writeDiff(fileName, lines) {
     }
   }
   writeDiff('diff-common-rules.txt', lines);
+}
+
+// 18. diff-suite-rules.txt (full structural & value-level diff across all remaining rule files)
+{
+  const r6 = parseRemainingSuiteRules(S6_DIR);
+  const r9 = parseRemainingSuiteRules(S9_DIR);
+  const map6 = new Map(r6.files.map((f) => [f.rel, f]));
+  const map9 = new Map(r9.files.map((f) => [f.rel, f]));
+  const allKeys = [...new Set([...map6.keys(), ...map9.keys()])].sort();
+
+  const lines = [
+    '# Suite-Wide Rule File Coverage & Structural Diff (Season 6 vs Season 9)',
+    `# Parsed rule/config/script files: S6=${r6.files.length}, S9=${r9.files.length}`,
+    `# Deep counts S6: ${JSON.stringify(r6.deep)}`,
+    `# Deep counts S9: ${JSON.stringify(r9.deep)}`,
+    '',
+    '## Shared Rule Files with Structural/Key/INI Differences',
+  ];
+
+  const s6Only = [];
+  const s9Only = [];
+  for (const rel of allKeys) {
+    const a = map6.get(rel);
+    const b = map9.get(rel);
+    if (!a) {
+      s9Only.push(`${rel} [${b.kind}, ${b.lines}L, ${b.detail}]`);
+    } else if (!b) {
+      s6Only.push(`${rel} [${a.kind}, ${a.lines}L, ${a.detail}]`);
+    } else if (a.ini && b.ini) {
+      const diffs = [];
+      const secs = new Set([...Object.keys(a.ini), ...Object.keys(b.ini)]);
+      for (const sec of [...secs].sort()) {
+        const sa = a.ini[sec] ?? {};
+        const sb = b.ini[sec] ?? {};
+        for (const k of new Set([...Object.keys(sa), ...Object.keys(sb)])) {
+          if (sa[k] !== sb[k]) diffs.push(`[${sec}]${k}:${sa[k] ?? 'absent'}->${sb[k] ?? 'absent'}`);
+        }
+      }
+      if (diffs.length) {
+        lines.push(`${rel} (${diffs.length} INI diffs): ${diffs.slice(0, 12).join('; ')}${diffs.length > 12 ? ` ... +${diffs.length - 12}` : ''}`);
+      }
+    } else if (a.detail !== b.detail || a.lines !== b.lines) {
+      lines.push(`${rel}: S6(${a.lines}L, ${a.detail}) -> S9(${b.lines}L, ${b.detail})`);
+    }
+  }
+
+  lines.push('', `## Season 6-Only Rule Files (${s6Only.length})`);
+  for (const s of s6Only) lines.push(`  ${s}`);
+
+  lines.push('', `## Season 9-Only Rule Files (${s9Only.length})`);
+  for (const s of s9Only) lines.push(`  ${s}`);
+
+  writeDiff('diff-suite-rules.txt', lines);
 }

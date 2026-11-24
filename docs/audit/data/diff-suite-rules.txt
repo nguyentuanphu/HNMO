@@ -1,0 +1,262 @@
+# Suite-Wide Rule File Coverage & Structural Diff (Season 6 vs Season 9)
+# Parsed rule/config/script files: S6=190, S9=219
+# Deep counts S6: {"dropMgrCount":0,"appointDropCount":0,"setDropCount":0,"monsterDropRateCount":255,"zenDropCount":0,"itemOptMgrCount":0,"cashItemsCount":373,"cashPackagesCount":129,"monsterAiUnitsCount":0,"monsterSkillsCount":0}
+# Deep counts S9: {"dropMgrCount":0,"appointDropCount":0,"setDropCount":0,"monsterDropRateCount":255,"zenDropCount":0,"itemOptMgrCount":0,"cashItemsCount":230,"cashPackagesCount":92,"monsterAiUnitsCount":49,"monsterSkillsCount":78}
+
+## Shared Rule Files with Structural/Key/INI Differences
+Files/1. DataServer/suiteDS.ini (11 INI diffs): [GensSystem]GensRankingPath:"..\\suite_data\\Gens\\suite_GensRanking.dat"->"..\\suite_data\\suite_GensSystem.xml"; [SETTINGS]suite_SERVER:10->100; [SETTINGS]ChatServerIP:YOUR IP->absent; [SETTINGS]ChatServerPort:56980->absent; [SETTINGS]MachineIDConnectionLimitPerGroup:3->30; [SETTINGS]WanIP:absent->127.0.0.1; [SETTINGS]GrowLancerCreateMinLevel:absent->200; [SQL]MuOnlineDB:s6->MuOnline; [SQL]MeMuOnlineDB:s6->MuOnline; [SQL]User:server->logsql; [SQL]Pass:server->pass
+Files/1. DataServer/suite_AllowedIPList.xml: S6(23L, tags(AllowedIPList:1,IP:1)) -> S9(24L, tags(AllowedIPList:1,IP:1))
+Files/2. ConnectServer/suite_ServerList.xml: S6(27L, tags(ServerList:1,Server:2)) -> S9(33L, tags(ServerList:1,Server:5))
+Files/3. GameServer_Regular/GameServer.ini (11 INI diffs): [GameServerInfo]ServerName:RegularSrv->Regular; [GameServerInfo]PkLimitFree:0->absent; [GameServerInfo]DataServer1Port:56960->absent; [GameServerInfo]DataServer1IP:"127.0.0.1"->absent; [GameServerInfo]MachineIDConnectionLimitCount:3->100; [GameServerInfo]LogCreate:1->0; [GameServerInfo]PlayerCount:200->50; [GameServerInfo]SummonMonsterCount:500->400; [GameServerInfo]MapItemCount:400->300; [GameServerInfo]DataServerPort:absent->56960; [GameServerInfo]DataServerIP:absent->"127.0.0.1"
+Files/3. GameServer_Regular/suite_VipSettings.xml: S6(83L, tags(VipSystem:1,Message:1,VipTypes:1,Vip:4,Day:4,Night:4)) -> S9(158L, tags(VipSystem:1,Message:1,VipTypes:1,Vip:4,Day:4,Night:4))
+Files/Data/CommonServer.cfg: S6(497L, entries=260) -> S9(378L, entries=196)
+Files/suiteData/CashShop/512.2014.124/suite_CashItem_Info.xml: S6(784L, tags(CashItemInfo:1,Item:711)) -> S9(790L, tags(CashItemInfo:1,Item:717))
+Files/suiteData/CashShop/512.2014.124/suite_CashItem_List.xml: S6(410L, tags(CashItemList:1,Item:373)) -> S9(266L, tags(CashItemList:1,Item:230))
+Files/suiteData/CashShop/512.2014.124/suite_CashItem_Package.xml: S6(151L, tags(CashItemPackage:1,Package:129)) -> S9(114L, tags(CashItemPackage:1,Package:92))
+Files/suiteData/CashShop/512.2014.124/suite_MonsterGP_Info.xml: S6(27L, tags(MonsterGPInfo:1,Monster:1)) -> S9(26L, tags(MonsterGPInfo:1,Monster:1))
+Files/suiteData/Events/ImperialGuardian/suite_ImperialGuardian.ini (11 INI diffs): [ImperialGuardian]IGEventOn:1->absent; [ImperialGuardian]WaitPlayerTime:180->absent; [ImperialGuardian]TimeAttackTime:600->absent; [ImperialGuardian]MixNeedZen:1000000->absent; [ImperialGuardian]IGPromotionOn:1->absent; [ImperialGuardian]Enable:absent->1; [ImperialGuardian]StandByTime:absent->180; [ImperialGuardian]RoundDurationTime:absent->600; [ImperialGuardian]CompleteSecromiconMixReqMoney:absent->1000000; [ImperialGuardian]SuspiciousScrapOfPaperDropRate:absent->10; [ImperialGuardian]SuspiciousScrapOfPaperMonsterMinLevelDrop:absent->32
+Files/suiteData/Events/suite_BonusEvent.xml: S6(33L, tags(BonusEvent:1,Event:4)) -> S9(41L, tags(BonusEvent:1,Event:4))
+Files/suiteData/Events/suite_CastleSiege.xml: S6(218L, tags(CastleSiegeEvent:1,DamageReduction:1,CycleSettings:1,Cycle:9,CycleCorrection:1,NPCSettings:1)) -> S9(217L, tags(CastleSiegeEvent:1,DamageReduction:1,CycleSettings:1,Cycle:9,CycleCorrection:1,NPCSettings:1))
+Files/suiteData/Events/suite_CryWolf.xml: S6(123L, tags(CryWolf:1,Schedule:1,Start:2,CycleSettings:1,Cycle:6,MonsterGroupSettings:1)) -> S9(125L, tags(CryWolf:1,Schedule:1,Start:2,CycleSettings:1,Cycle:6,MonsterGroupSettings:1))
+Files/suiteData/Events/suite_GamblingLottery.xml: S6(255L, tags(GamblingSystem:1,ItemRewardRateSettings:1,Rate:31,ItemOptionChance:1,RareItemRewardChance:1,ExcOptionCountChance:1)) -> S9(254L, tags(GamblingSystem:1,ItemRewardRateSettings:1,Rate:31,ItemOptionChance:1,RareItemRewardChance:1,ExcOptionCountChance:1))
+Files/suiteData/Events/suite_LorenDeep.xml: S6(137L, tags(LorenDeepEvent:1,Schedule:1,Start:1,AssaultTypeSettings:1,Assault:69,AssaultGroupSettings:1)) -> S9(136L, tags(LorenDeepEvent:1,Schedule:1,Start:1,AssaultTypeSettings:1,Assault:69,AssaultGroupSettings:1))
+Files/suiteData/Items/suite_ExcellentOptions.xml: S6(109L, tags(ExcellentOptions:1,Common:2,Option:37,Wings:1,OptionDropRate:1)) -> S9(108L, tags(ExcellentOptions:1,Common:2,Option:37,Wings:1,OptionDropRate:1))
+Files/suiteData/Items/suite_ItemOptionManager.xml: S6(393L, tags(ItemOptionManager:1,Section:48,Item:108)) -> S9(361L, tags(ItemOptionManager:1,Section:53,Item:74))
+Files/suiteData/Items/suite_ItemSetOption.xml: S6(114L, tags(SetItemOption:1,SetItem:49)) -> S9(127L, tags(SetItemOption:1,SetItem:63))
+Files/suiteData/Items/suite_ItemSetType.xml: S6(257L, tags(SetItemType:1,DropRate:1,Section:32,Item:169)) -> S9(297L, tags(SetItemType:1,DropRate:1,Section:32,Item:210))
+Files/suiteData/Langs/English.xml: S6(740L, tags(Language:1,Message:1,Msg:720,Map:1)) -> S9(772L, tags(Language:1,Message:1,Msg:739,Map:1))
+Files/suiteData/Plugins/suite_OffLevelling.xml: S6(203L, tags(OffLevellingSystem:1,General:1,PickItems:1,Item:2,PerMapAdjustments:1,Map:77)) -> S9(202L, tags(OffLevellingSystem:1,General:1,PickItems:1,Item:2,PerMapAdjustments:1,Map:77))
+Files/suiteData/Scripts/Character/CalcCharacter.lua: S6(521L, funcs=[WizardDamageCalc,KnightDamageCalc,ElfWithoutBowDamageCalc,ElfWithBowDamageCalc,GladiatorDamageCalc,LordDamageCalc,..+27] consts=7) -> S9(575L, funcs=[WizardDamageCalc,KnightDamageCalc,ElfWithoutBowDamageCalc,ElfWithBowDamageCalc,GladiatorDamageCalc,LordDamageCalc,..+30] consts=8)
+Files/suiteData/Scripts/Events/DoppelGanger.lua: S6(405L, funcs=[FN_LuaDopplegangerInit,FN_LuaDoppelgangerCallback,FN_LuaAddHerdMonster,FN_LuaAddMiddleBossMonster,FN_LuaAddLastBossMonster,FN_LuaAddIceWorkerMonster,..+3] consts=0) -> S9(404L, funcs=[FN_LuaDopplegangerInit,FN_LuaDoppelgangerCallback,FN_LuaAddHerdMonster,FN_LuaAddMiddleBossMonster,FN_LuaAddLastBossMonster,FN_LuaAddIceWorkerMonster,..+3] consts=0)
+Files/suiteData/Scripts/Misc/ExpCalc.lua: S6(37L, funcs=[SetExpTable_Normal,SetExpTable_Master] consts=0) -> S9(36L, funcs=[SetExpTable_Normal,SetExpTable_Master] consts=0)
+Files/suiteData/Scripts/Quests/Quest_Info.lua: S6(213L, funcs=[SetQuestItemInfo,SetQuestNPCTeleportPos,SetQuestInfo] consts=7) -> S9(212L, funcs=[SetQuestItemInfo,SetQuestNPCTeleportPos,SetQuestInfo] consts=7)
+Files/suiteData/Scripts/Quests/Quest_Main.lua: S6(409L, funcs=[ChkProgQuest,Make_QuestIndexIDToEP,ItemAndEvent,ItemUseQuest,ChkProgress,CGReqQuestSwitch,..+3] consts=0) -> S9(408L, funcs=[ChkProgQuest,Make_QuestIndexIDToEP,ItemAndEvent,ItemUseQuest,ChkProgress,CGReqQuestSwitch,..+3] consts=0)
+Files/suiteData/Scripts/Skills/MasterSkillCalc.lua: S6(741L, funcs=[WizardMagicDefense_Level1,WizardMagicDefense_Level2,WizardMagicDefense_Level3,CycloneCalc_Master_Knight,CycloneCalc_Master_Gladiator,SlashCalc_Master_Knight,..+71] consts=7) -> S9(740L, funcs=[WizardMagicDefense_Level1,WizardMagicDefense_Level2,WizardMagicDefense_Level3,CycloneCalc_Master_Knight,CycloneCalc_Master_Gladiator,SlashCalc_Master_Knight,..+71] consts=7)
+Files/suiteData/Scripts/Skills/MasterSkillPoint.lua: S6(540L, funcs=[suite_ValueInit,FN_LuaGetPercent,FN_LuaGetPercent2,FN_LuaGetSkillDamageMin,FN_LuaGetSkillDamageMiddle,FN_LuaGetSkillDamageMax,..+34] consts=3) -> S9(539L, funcs=[suite_ValueInit,FN_LuaGetPercent,FN_LuaGetPercent2,FN_LuaGetSkillDamageMin,FN_LuaGetSkillDamageMiddle,FN_LuaGetSkillDamageMax,..+34] consts=3)
+Files/suiteData/Scripts/Skills/RegularSkillCalc.lua: S6(494L, funcs=[WizardMagicDefense,Knight_Gladiator_CalcSkillBonus,KnightSkillAddLife,StrikeOfDestructionCalc,Elf_CalcSkillBonus,ElfHeal,..+38] consts=7) -> S9(493L, funcs=[WizardMagicDefense,Knight_Gladiator_CalcSkillBonus,KnightSkillAddLife,StrikeOfDestructionCalc,Elf_CalcSkillBonus,ElfHeal,..+38] consts=7)
+Files/suiteData/Skills/suite_SkillCategory.xml: S6(55L, tags(SkillCategory:1,Skill:32)) -> S9(54L, tags(SkillCategory:1,Skill:32))
+Files/suiteData/Skills/suite_SkillList.xml: S6(458L, tags(SkillList:1,Skill:403)) -> S9(472L, tags(SkillList:1,Skill:403))
+Files/suiteData/Skills/suite_SkillSettings.ini (1 INI diffs): [SkillInfo]CanDarkWizardUseSkillsWhileTeleport:absent->0
+Files/suiteData/Skills/suite_Skill_UseArea.xml: S6(777L, tags(SkillUseArea:1,Skill:17,Area:714)) -> S9(776L, tags(SkillUseArea:1,Skill:17,Area:714))
+Files/suiteData/Warps/suite_GateSettings.xml: S6(381L, tags(GateSettings:1,Gate:341)) -> S9(410L, tags(GateSettings:1,Gate:370))
+Files/suiteData/Warps/suite_MoveLevel.xml: S6(69L, tags(MoveSettings:1,Move:41)) -> S9(68L, tags(MoveSettings:1,Move:41))
+Files/suiteData/Warps/suite_MoveReq.xml: S6(69L, tags(WarpSettings:1,Warp:39)) -> S9(66L, tags(WarpSettings:1,Warp:37))
+Files/suiteData/suite_AppointItemDrop.xml: S6(338L, tags(AppointItemDrop:1,MonsterList:1,Monster:54,ItemDrop:1,DropGroup:24,Item:171)) -> S9(337L, tags(AppointItemDrop:1,MonsterList:1,Monster:54,ItemDrop:1,DropGroup:24,Item:171))
+Files/suiteData/suite_BuffEffectManager.xml: S6(239L, tags(BuffEffectManager:1,General:1,Buff:200,Period:1)) -> S9(246L, tags(BuffEffectManager:1,General:1,Buff:208,Period:1))
+Files/suiteData/suite_ChaosBox.ini (2 INI diffs): [Wings]Wing3ExcOptionRate:10->absent; [Wings]Wing3LuckRate:10->absent
+Files/suiteData/suite_Commands.ini (1 INI diffs): [commands]GremoryGiftCMD:absent->/addgift
+Files/suiteData/suite_Common.ini (70 INI diffs): [AntiHack]EnableAgilityCheck:0->1; [AntiHack]MainExeCRC:0->F502C056; [AntiHack]DLLCRC:0->36C0CB2E; [AntiHack]PlayerBmdCRC:0->D25ED173; [AntiHack]SkillCRC:0->76B51749; [AntiHack]AntiHackBreachDisconnectUser:0->1; [AntiHack]EnableHitHackDetection:absent->0; [AntiHack]HitHackMaxAgility:absent->23000; [CancelItemSale]IsCancelItemSale:absent->1; [CancelItemSale]PriceMultipler:absent->110.0; [CancelItemSale]ItemExpiryTime:absent->86400; [ChatColors]InfoMessageRed:absent->0x64 ... +58
+Files/suiteData/suite_DropManager.xml: S6(82L, tags(DropManager:1)) -> S9(85L, tags(DropManager:1))
+Files/suiteData/suite_ExpSystem.xml: S6(92L, tags(ExpSystem:1,StaticExp:1,DynamicExpRangeList:1,Range:36)) -> S9(91L, tags(ExpSystem:1,StaticExp:1,DynamicExpRangeList:1,Range:36))
+Files/suiteData/suite_LangBase.xml: S6(23L, tags(LanguageSystem:1,Lang:7)) -> S9(32L, tags(LanguageSystem:1,Lang:7))
+Files/suiteData/suite_MapAttribute.xml: S6(115L, tags(MapAttribute:1,Config:1,Map:76)) -> S9(117L, tags(MapAttribute:1,Config:1,Map:79))
+Files/suiteData/suite_MapList.xml: S6(146L, tags(MapList:1,DefaultMaps:1,Map:108,CrywolfEventAttr:1,KanturuEventAttr:1)) -> S9(145L, tags(MapList:1,DefaultMaps:1,Map:108,CrywolfEventAttr:1,KanturuEventAttr:1))
+Files/suiteData/suite_MapServerInfo.xml: S6(71L, tags(MapServer:1,ServerInfo:1,ServerList:1,Server:14,ServerMapping:1)) -> S9(94L, tags(MapServer:1,ServerInfo:1,ServerList:1,Server:45,ServerMapping:1))
+Files/suiteData/suite_MiniMap.xml: S6(347L, tags(MiniMapObjects:1,TypeOne:1,Tag:248,TypeTwo:1)) -> S9(361L, tags(MiniMapObjects:1,TypeOne:1,Tag:256,TypeTwo:1))
+Files/suiteData/suite_MiningSystem.xml: S6(177L, tags(MiningSystem:1,SuccessInfo:1,Twinkle:24,RewardInfo:1,Reward:30,PandoraSuccessInfo:1)) -> S9(238L, tags(MiningSystem:1,SuccessInfo:1,Twinkle:24,RewardInfo:1,Reward:30,PandoraSuccessInfo:1))
+Files/suiteData/suite_MonsterGroupRegen.xml: S6(85L, tags(MonsterGroupRegenSystem:1,GroupSettings:1,Group:4,SpotSettings:1,Area:4,MonsterSettings:1)) -> S9(84L, tags(MonsterGroupRegenSystem:1,GroupSettings:1,Group:4,SpotSettings:1,Area:4,MonsterSettings:1))
+Files/suiteData/suite_MonsterItemDropRate.xml: S6(290L, tags(DropRate:1,Monster:255)) -> S9(289L, tags(DropRate:1,Monster:255))
+Files/suiteData/suite_MuRummy.ini (1 INI diffs): [MuRummy]RewardScore_First:250->100
+Files/suiteData/suite_PetSettings.ini (6 INI diffs): [Ring]BrownPandaRingAddDamageValue:absent->30; [Ring]PinkPandaRingAddDamageValue:absent->30; [Ring]DarkTransformRingAddDamageValue:absent->70; [Ring]DarkTransformRingAddAttackSpeed:absent->10; [Ring]DarkTransformRingAddDefenseValue:absent->50; [Ring]DarkTransformRingAddLifeValue:absent->50
+Files/suiteData/suite_ProhibitedSymbols.xml: S6(77L, tags(ProhibitedSymbols:1,Symbols:1,Restrict:26,Regex:1,Type:3)) -> S9(76L, tags(ProhibitedSymbols:1,Symbols:1,Restrict:26,Regex:1,Type:3))
+Files/suiteData/suite_ProhibitedWords.xml: S6(22L, tags(ProhibitedWords:1,Restrict:1)) -> S9(22L, tags(ProhibitedWords:1,Restrict:2))
+Files/suiteData/suite_SetItemDropManager.xml: S6(69L, tags(SetItemDropManager:1,Rule:1,ItemDrop:1)) -> S9(68L, tags(SetItemDropManager:1))
+Files/suiteData/suite_ShopList.xml: S6(81L, tags(ShopList:1,Shop:34)) -> S9(90L, tags(ShopList:1,Shop:41))
+Files/suiteData/suite_ZenDrop.xml: S6(110L, tags(ZenDropSystem:1,Map:77)) -> S9(113L, tags(ZenDropSystem:1,Map:79))
+
+## Season 6-Only Rule Files (82)
+  Database/1. Scripts/Me_MuOnline/Me_MuOnline.sql [sql, 360L, tables=5 procs=4]
+  Database/1. Scripts/MuOnline/MuOnline.sql [sql, 10822L, tables=63 procs=165]
+  Database/1. Scripts/Ranking and Events/Events.sql [sql, 748L, tables=0 procs=0]
+  Database/1. Scripts/Ranking and Events/Ranking.sql [sql, 1176L, tables=0 procs=0]
+  Database/2. Extras/Triggers/Summoner_RagrFighter_Creation.sql [sql, 180L, tables=0 procs=0]
+  Files/4. GameServer_Siege/GameServer.ini [ini, 78L, sections=1 keys=22]
+  Files/4. GameServer_Siege/suite_VipSettings.xml [xml, 83L, tags(VipSystem:1,Message:1,VipTypes:1,Vip:4,Day:4,Night:4)]
+  Files/5. GameServer_Normal+CS/GameServer.ini [ini, 78L, sections=1 keys=22]
+  Files/5. GameServer_Normal+CS/suite_VipSettings.xml [xml, 83L, tags(VipSystem:1,Message:1,VipTypes:1,Vip:4,Day:4,Night:4)]
+  Files/Configuration Files Editor.txt [cfg/txt, 5L, entries=3]
+  Files/Data/ChaosCard.txt [dat/txt, 378L, sections=20 rows=225]
+  Files/Data/ChaosCardGold.txt [dat/txt, 378L, sections=20 rows=225]
+  Files/Data/ChaosCardMini.txt [dat/txt, 378L, sections=20 rows=225]
+  Files/Data/ChaosCardRare.txt [dat/txt, 378L, sections=20 rows=225]
+  Files/Data/ConnectMember.txt [cfg/txt, 13L, entries=1]
+  Files/Data/Dec2.dat [cfg/txt, 5L, entries=5]
+  Files/Data/Enc1.dat [cfg/txt, 5L, entries=5]
+  Files/Data/Events/BloodCastle.dat [dat/txt, 83L, sections=5 rows=30]
+  Files/Data/Events/ChaosCastle.dat [dat/txt, 66L, sections=4 rows=21]
+  Files/Data/Events/DevilSquare.dat [dat/txt, 224L, sections=6 rows=125]
+  Files/Data/Events/Kanturu.dat [dat/txt, 157L, sections=11 rows=54]
+  Files/Data/Events/Raklion.dat [dat/txt, 51L, sections=4 rows=4]
+  Files/Data/Events/RingAttackEvent.dat [dat/txt, 83L, sections=4 rows=37]
+  Files/Data/Events/XMasAttack.dat [dat/txt, 70L, sections=4 rows=25]
+  Files/Data/EventsManager.dat [dat/txt, 72L, sections=1 rows=19]
+  Files/Data/IpList.dat [cfg/txt, 11L, entries=1]
+  Files/Data/Items/HarmonyItemOption.ini [ini, 46L, sections=0 keys=0]
+  Files/Data/Items/HarmonyItemSmelt.ini [ini, 133L, sections=0 keys=0]
+  Files/Data/Items/ItemList.xml [xml, 1130L, tags(ItemList:1,Section:16,Item:1003)]
+  Files/Data/Items/LuckyItemInfo_First.dat [dat/txt, 215L, sections=10 rows=70]
+  Files/Data/Items/LuckyItemInfo_Second.dat [dat/txt, 214L, sections=10 rows=70]
+  Files/Data/Items/SocketOptionSettings.ini [ini, 121L, sections=0 keys=0]
+  Files/Data/Monster/Settings/MonsterAIElement.txt [dat/txt, 120L, sections=1 rows=64]
+  Files/Data/Monster/Settings/MonsterAIGroup.txt [dat/txt, 111L, sections=1 rows=81]
+  Files/Data/Monster/Settings/MonsterAIRule.txt [dat/txt, 19L, sections=1 rows=0]
+  Files/Data/Monster/Settings/MonsterAIUnit.txt [dat/txt, 76L, sections=1 rows=49]
+  Files/Data/Monster/Settings/MonsterAutomata.txt [dat/txt, 302L, sections=1 rows=192]
+  Files/Data/Monster/Settings/MonsterList.xml [xml, 653L, tags(MonsterList:1,Monster:625)]
+  Files/Data/Monster/Settings/MonsterSkill.txt [dat/txt, 152L, sections=1 rows=77]
+  Files/Data/Monster/Settings/MonsterSkillElement.txt [dat/txt, 118L, sections=1 rows=88]
+  Files/Data/Monster/Settings/MonsterSkillUnit.txt [dat/txt, 111L, sections=1 rows=95]
+  Files/Data/Monster/Settings/MovePathCryWolf.dat [dat/txt, 235L, sections=1 rows=221]
+  Files/Data/Monster/Settings/MovePathDG1.dat [dat/txt, 28L, sections=1 rows=14]
+  Files/Data/Monster/Settings/MovePathDG2.dat [dat/txt, 33L, sections=1 rows=19]
+  Files/Data/Monster/Settings/MovePathDG3.dat [dat/txt, 28L, sections=1 rows=14]
+  Files/Data/Monster/Settings/MovePathDG4.dat [dat/txt, 32L, sections=1 rows=18]
+  Files/Data/Monster/Spawns/KanturuMonsterSetBase.txt [dat/txt, 142L, sections=1 rows=87]
+  Files/Data/Monster/Spawns/MonsterSetBase.txt [dat/txt, 7115L, sections=6 rows=5974]
+  Files/Data/Monster/Spawns/MonsterSetBase_CS.txt [dat/txt, 7737L, sections=6 rows=6413]
+  Files/Reedme and GameServer_Types.txt [cfg/txt, 10L, entries=8]
+  Files/suiteData/Bots/suite_BufferBot.dat [dat/txt, 167L, sections=3 rows=73]
+  Files/suiteData/Events/DoppelGanger/suite_DoppelGanger_Config.ini [ini, 19L, sections=1 keys=2]
+  Files/suiteData/Events/DoppelGanger/suite_DoppelGanger_DropInfo.dat [dat/txt, 502L, sections=30 rows=209]
+  Files/suiteData/Events/DoppelGanger/suite_DoppelGanger_EventInfo.dat [dat/txt, 146L, sections=1 rows=79]
+  Files/suiteData/Events/DoppelGanger/suite_DoppelGanger_PosInfo.dat [dat/txt, 151L, sections=5 rows=96]
+  Files/suiteData/Events/IllusionTemple_Classic/suite_IllusionTemple_Classic.ini [ini, 20L, sections=1 keys=2]
+  Files/suiteData/Events/IllusionTemple_Classic/suite_IllusionTemple_Classic.xml [xml, 66L, tags(IllusionTempleClassic:1,Time:1,KillPoint:1,Reward:1,Fenrir:1,EventSchedule:1)]
+  Files/suiteData/Events/ImperialGuardian/suite_ImperialGuardian_ExpReward.dat [dat/txt, 97L, sections=1 rows=80]
+  Files/suiteData/Events/ImperialGuardian/suite_ImperialGuardian_GaionDrop.dat [dat/txt, 881L, sections=5 rows=696]
+  Files/suiteData/Events/ImperialGuardian/suite_ImperialGuardian_GeneralDrop.dat [dat/txt, 879L, sections=5 rows=696]
+  Files/suiteData/Events/ImperialGuardian/suite_ImperialGuardian_MonsterStats.dat [dat/txt, 123L, sections=1 rows=80]
+  Files/suiteData/Events/ImperialGuardian/suite_ImperialGuardian_StatueDrop.dat [dat/txt, 161L, sections=5 rows=56]
+  Files/suiteData/Events/LastManStanding/suite_LastManStanding_Config.ini [ini, 34L, sections=1 keys=22]
+  Files/suiteData/Events/LastManStanding/suite_LastManStanding_EventInfo.dat [dat/txt, 42L, sections=2 rows=15]
+  Files/suiteData/Events/suite_BloodCastle.ini [ini, 36L, sections=1 keys=5]
+  Files/suiteData/Events/suite_ChaosCastle.ini [ini, 13L, sections=1 keys=1]
+  Files/suiteData/Events/suite_DevilSquare.ini [ini, 30L, sections=1 keys=4]
+  Files/suiteData/Events/suite_XMasEvent.ini [ini, 30L, sections=1 keys=4]
+  Files/suiteData/Gens/suite_GensRanking.dat [dat/txt, 32L, sections=1 rows=13]
+  Files/suiteData/Gens/suite_GensSystem.ini [ini, 85L, sections=1 keys=13]
+  Files/suiteData/Items/suite_SocketItem.xml [xml, 36L, tags(CustomSocket:1,Item:1)]
+  Files/suiteData/Scripts/README.txt [cfg/txt, 5L, entries=3]
+  Files/suiteData/SocketSystem/suite_SocketSlotRate.xml [xml, 45L, tags(SocketRateSettings:1,Socket:12,TwoHandWeapons:1)]
+  Files/suiteData/SocketSystem/suite_SocketSystem.ini [ini, 44L, sections=1 keys=15]
+  Files/suiteData/suite_CryWolf.xml [xml, 124L, tags(CryWolf:1,Schedule:1,Start:2,CycleSettings:1,Cycle:6,MonsterGroupSettings:1)]
+  Files/suiteData/suite_GoldenInvasion.ini [ini, 97L, sections=2 keys=16]
+  Files/suiteData/suite_MapServerInfo example when use GameServer_U.xml [xml, 60L, tags(MapServer:1,ServerInfo:1,ServerList:1,Server:1,ServerMapping:1)]
+  Files/suiteData/suite_MasterSkillTree.dat [dat/txt, 1387L, sections=1 rows=474]
+  Files/suiteData/suite_MonsterKillCount.dat [dat/txt, 22L, sections=1 rows=0]
+  Files/suiteData/suite_NewsSystem.dat [dat/txt, 29L, sections=2 rows=3]
+  Files/suiteData/suite_OffTrade.ini [ini, 117L, sections=2 keys=102]
+  Files/suiteData/suite_QuestSystem.ini [ini, 23L, sections=0 keys=0]
+
+## Season 9-Only Rule Files (111)
+  Files/1. DataServer_BattleCore/suiteDS.ini [ini, 133L, sections=3 keys=25]
+  Files/1. DataServer_BattleCore/suite_AllowedIPList.xml [xml, 23L, tags(AllowedIPList:1,IP:1)]
+  Files/3. GameServer_Regular/suite_ConnectMember.xml [xml, 23L, tags(ConnectMember:1,Account:1)]
+  Files/4. GameServer_Arca/GameServer.ini [ini, 75L, sections=1 keys=21]
+  Files/4. GameServer_Arca/suite_ConnectMember.xml [xml, 23L, tags(ConnectMember:1,Account:1)]
+  Files/4. GameServer_Arca/suite_VipSettings.xml [xml, 158L, tags(VipSystem:1,Message:1,VipTypes:1,Vip:4,Day:4,Night:4)]
+  Files/5. GameServer_Siege/GameServer.ini [ini, 75L, sections=1 keys=21]
+  Files/5. GameServer_Siege/suite_ConnectMember.xml [xml, 23L, tags(ConnectMember:1,Account:1)]
+  Files/5. GameServer_Siege/suite_VipSettings.xml [xml, 158L, tags(VipSystem:1,Message:1,VipTypes:1,Vip:4,Day:4,Night:4)]
+  Files/6. GameServer_Market/GameServer.ini [ini, 75L, sections=1 keys=21]
+  Files/6. GameServer_Market/suite_ConnectMember.xml [xml, 23L, tags(ConnectMember:1,Account:1)]
+  Files/6. GameServer_Market/suite_VipSettings.xml [xml, 158L, tags(VipSystem:1,Message:1,VipTypes:1,Vip:4,Day:4,Night:4)]
+  Files/9. GameServer_BattleCore/GameServer.ini [ini, 75L, sections=1 keys=21]
+  Files/9. GameServer_BattleCore/suite_ConnectMember.xml [xml, 23L, tags(ConnectMember:1,Account:1)]
+  Files/9. GameServer_BattleCore/suite_VipSettings.xml [xml, 158L, tags(VipSystem:1,Message:1,VipTypes:1,Vip:4,Day:4,Night:4)]
+  Files/Database/BattleCore.sql [sql, 2588L, tables=28 procs=40]
+  Files/Database/Events.sql [sql, 748L, tables=0 procs=0]
+  Files/Database/MuOnline(MD5).sql [sql, 12300L, tables=63 procs=185]
+  Files/Database/MuOnline(Without_MD5).sql [sql, 12298L, tables=63 procs=185]
+  Files/Database/Ranking.sql [sql, 1176L, tables=0 procs=0]
+  Files/Database/Summoner_RagrFighter_Creation.sql [sql, 180L, tables=0 procs=0]
+  Files/GameServer_Types.txt [cfg/txt, 9L, entries=8]
+  Files/suiteData/Bots/BK_Helper.xml [xml, 77L, tags(BuffList:1,Buff:2)]
+  Files/suiteData/Bots/SM_Helper.xml [xml, 76L, tags(BuffList:1,Buff:1)]
+  Files/suiteData/ChaosCards/suite_ChaosCard.xml [xml, 353L, tags(ChaosCard:1,GeneralRateSettings:1,Section:40,OptionDrawSettings:1,Option:14,ExcOptionDrawRate:1)]
+  Files/suiteData/ChaosCards/suite_ChaosCard_Gold.xml [xml, 353L, tags(ChaosCard:1,GeneralRateSettings:1,Section:40,OptionDrawSettings:1,Option:14,ExcOptionDrawRate:1)]
+  Files/suiteData/ChaosCards/suite_ChaosCard_Mini.xml [xml, 353L, tags(ChaosCard:1,GeneralRateSettings:1,Section:40,OptionDrawSettings:1,Option:14,ExcOptionDrawRate:1)]
+  Files/suiteData/ChaosCards/suite_ChaosCard_Rare.xml [xml, 353L, tags(ChaosCard:1,GeneralRateSettings:1,Section:40,OptionDrawSettings:1,Option:14,ExcOptionDrawRate:1)]
+  Files/suiteData/Events/ArcaBattle/suite_ArcaBattle.xml [xml, 183L, tags(ArcaBattleEvent:1,ActiveDay:1,Schedule:1,Start:1,ObeliskInformation:1,Obelisk:3)]
+  Files/suiteData/Events/ArcaBattle/suite_ArcaBattle_BootyMix.xml [xml, 164L, tags(ArcaBattle:1,RewardSettings:1,Reward:10,TrophyOfBattleMix:1,Combination:10,Item:78)]
+  Files/suiteData/Events/BloodCastle/suite_BloodCastle.xml [xml, 78L, tags(BloodCastle:1,Time:1,Schedule:1,Start:12,EventSettings:1,Castle:16)]
+  Files/suiteData/Events/BloodCastle/suite_BloodCastle_Monster.xml [xml, 922L, tags(BloodCastle:1,Castle:8,Archangel:8,Gate:8,Statue:8,Bosses:8)]
+  Files/suiteData/Events/ChaosCastle/suite_ChaosCastle.xml [xml, 70L, tags(ChaosCastle:1,Time:1,EventSchedule:1,Start:24,RewardExpSettings:1,Castle:7)]
+  Files/suiteData/Events/ChaosCastle/suite_ChaosCastle_Monster.xml [xml, 747L, tags(ChaosCastle:1,Castle:7,Monster:693)]
+  Files/suiteData/Events/ChaosCastle_Survival/suite_ChaosCastle_Survival.xml [xml, 109L, tags(ChaosCastleSurvival:1,Time:1,TournamentCycleDay:1,RewardRate:1,Gift:1,FinalAward:1)]
+  Files/suiteData/Events/ChaosCastle_Survival/suite_ChaosCastle_Survival_Monster.xml [xml, 132L, tags(ChaosCastleSurvival:1,Monster:99)]
+  Files/suiteData/Events/DevilSquare/suite_DevilSquare_Classic.xml [xml, 212L, tags(DevilSquare_Classic:1,Time:1,Schedule:1,Start:6,MonsterAppearanceSettings:1,Square:112)]
+  Files/suiteData/Events/DevilSquare/suite_DevilSquare_Classic_Monsters.xml [xml, 66L, tags(DevilSquare_Classic:1,Monster:7,Spawn:14)]
+  Files/suiteData/Events/DoppelGanger/suite_DoppelGanger.ini [ini, 33L, sections=1 keys=5]
+  Files/suiteData/Events/DoppelGanger/suite_DoppelGanger_DropInfo.xml [xml, 358L, tags(DoppelGanger:1,SectionRateSettings:1,Section:52,ItemOptionDrawSettings:1,ExcOptionCountDrawSettings:1,ExcOptionTypeDrawSettings:1)]
+  Files/suiteData/Events/DoppelGanger/suite_DoppelGanger_EventInfo.xml [xml, 3500L, tags(DoppelGanger:1,Range:80,MonsterLevel:80,Player:1600,MonsterHP:80,MonsterDamage:80)]
+  Files/suiteData/Events/DoppelGanger/suite_DoppelGanger_PositionInfo.xml [xml, 148L, tags(DoppelGanger:1,PositionInfo:1,Map:8,Pos:92,WaitingZones:1)]
+  Files/suiteData/Events/IllusionTemple_Renewal/README.txt [cfg/txt, 1L, entries=1]
+  Files/suiteData/Events/IllusionTemple_Renewal/suite_IllusionTemple_Renewal.xml [xml, 56L, tags(IllusionTempleRenewal:1,Time:1,EventSchedule:1,Start:23)]
+  Files/suiteData/Events/IllusionTemple_Renewal/suite_IllusionTemple_Renewal_NPC.xml [xml, 106L, tags(IllusionTempleRenewal:1,NPC:66)]
+  Files/suiteData/Events/ImperialGuardian/suite_ImperialGuardian_Drop_Gaion.xml [xml, 857L, tags(ImperialGuardian:1,LevelRangeSettings:1,Section:20,MoneyDropSettings:1,ExcItemDropSettings:1,Item:680)]
+  Files/suiteData/Events/ImperialGuardian/suite_ImperialGuardian_Drop_General.xml [xml, 857L, tags(ImperialGuardian:1,LevelRangeSettings:1,Section:20,MoneyDropSettings:1,ExcItemDropSettings:1,Item:680)]
+  Files/suiteData/Events/ImperialGuardian/suite_ImperialGuardian_Drop_Statue.xml [xml, 140L, tags(ImperialGuardian:1,LevelRangeSettings:1,Section:20,MoneyDropSettings:1,ExcItemDropSettings:1,Item:40)]
+  Files/suiteData/Events/ImperialGuardian/suite_ImperialGuardian_Monster_Info.xml [xml, 123L, tags(ImperialGuardian:1,Monster:80)]
+  Files/suiteData/Events/ImperialGuardian/suite_ImperialGuardian_Monster_Spawn.xml [xml, 497L, tags(ImperialGuardian:1,Map:7,Spawn:416)]
+  Files/suiteData/Events/ImperialGuardian/suite_ImperialGuardian_Reward_Exp.xml [xml, 100L, tags(ImperialGuardian:1,Range:80)]
+  Files/suiteData/Events/Kanturu/suite_KanturuEvent.xml [xml, 158L, tags(KanturuEvent:1,Item:1,GeneralStates:1,Event:6,BattleStandBy:1,State:4)]
+  Files/suiteData/Events/Kanturu/suite_KanturuEvent_Monster.xml [xml, 140L, tags(KanturuEvent:1,Monster:87)]
+  Files/suiteData/Events/Raklion/suite_RaklionHatchery.xml [xml, 22L, tags(RaklionEvent:1,Time:1,EggCount:1,SkillPatterns:1)]
+  Files/suiteData/Events/Raklion/suite_RaklionHatchery_Monsters.xml [xml, 65L, tags(RaklionEvent:1,Monster:26)]
+  Files/suiteData/Events/Tormented Square/suite_TormentedSquare.xml [xml, 132L, tags(TormentedSquare:1,Time:1,TournamentCycleDay:1,RewardDayRange:1,RewardMonsterRate:1,EventSchedule:1)]
+  Files/suiteData/Events/Tormented Square/suite_TormentedSquare_Monsters.xml [xml, 211L, tags(TormentedSquare:1,MonsterRoundSettings:1,Round:30,MonsterSpawnSettings:1,Spawn:130,EventMonsterSettings:1)]
+  Files/suiteData/Events/suite_AcheronGuardian.xml [xml, 148L, tags(AcheronGuardianEvent:1,ActiveDay:1,Schedule:1,Start:1,ObeliskInformation:1,Obelisk:3)]
+  Files/suiteData/Events/suite_AttackEvent.xml [xml, 52L, tags(AttackEvent:1,Spawn:4)]
+  Files/suiteData/Events/suite_DragonEvent.xml [xml, 52L, tags(DragonEvent:1,Monster:1,Map:3,Spawn:7)]
+  Files/suiteData/Events/suite_GoldenInvasion.xml [xml, 71L, tags(GoldenInvasion:1,Spot:1,Spawn:18)]
+  Files/suiteData/Events/suite_InvasionManager.xml [xml, 73L, tags(InvasionManager:1,Invasion:5,Start:19)]
+  Files/suiteData/Events/suite_LastManStanding.xml [xml, 92L, tags(LastManStanding:1,Event:1,Registration:1,Schedule:1,Start:5,RoomSettings:1)]
+  Files/suiteData/Events/suite_WhiteWizardAttack.xml [xml, 61L, tags(WhiteWizard:1,Time:1,Move:1,Schedule:1,Start:4,SpawnSettings:1)]
+  Files/suiteData/Events/suite_XMasAttack.xml [xml, 75L, tags(XMasAttack:1,Time:1,Move:1,Reward:1,Schedule:1,Start:12)]
+  Files/suiteData/Items/suite_AccessoryItem.xml [xml, 48L, tags(AccessoryItems:1,Item:6)]
+  Files/suiteData/Items/suite_HarmonyItem_Option.xml [xml, 491L, tags(HarmonySystem:1,Type:3,Option:26,Effect:416)]
+  Files/suiteData/Items/suite_HarmonyItem_Smelt.xml [xml, 135L, tags(HarmonySystem:1,Section:12,Item:85)]
+  Files/suiteData/Items/suite_Item380Option.xml [xml, 87L, tags(Item380Option:1,Mix:1,SuccessRate:1,ItemOption:1,Item:40)]
+  Files/suiteData/Items/suite_ItemList.xml [xml, 1429L, tags(ItemList:1,Section:16,Item:1260)]
+  Files/suiteData/Items/suite_LuckyItemInfo_First.xml [xml, 363L, tags(LuckyItem:1,TicketSettings:1,Item:118,TicketItemList:1,List:25,ItemLevelDrawSettings:1)]
+  Files/suiteData/Items/suite_LuckyItemInfo_Second.xml [xml, 362L, tags(LuckyItem:1,TicketSettings:1,Item:118,TicketItemList:1,List:25,ItemLevelDrawSettings:1)]
+  Files/suiteData/Items/suite_PentagramItemDropRate.xml [xml, 119L, tags(PentagramItemDrop:1,ServerElementRate:1,Server:4,SocketRate:1,Socket:13,ItemDropRate:1)]
+  Files/suiteData/Items/suite_PentagramJewelOptionValue.xml [xml, 108L, tags(PentagramSystem:1,Errtel:60)]
+  Files/suiteData/Items/suite_PentagramJewelOutRate.xml [xml, 76L, tags(PentagramSystem:1,Errtel:55)]
+  Files/suiteData/Items/suite_PentagramMixNeedSource.xml [xml, 186L, tags(PentagramSystem:1,CombinationMaterials:1,Combination:18,CombinationResult:1,Result:18,LevelUpgradeSettings:1)]
+  Files/suiteData/Items/suite_PentagramOption.xml [xml, 87L, tags(PentagramSystem:1,OptionList:1,Pentagram:15,OptionSetting:1,Errtel:7,SocketProbabilityRate:1)]
+  Files/suiteData/Items/suite_ResetItem.xml [xml, 26L, tags(Reset:1,Item:1)]
+  Files/suiteData/Monsters/AI/suite_Monster_AI_Automata.xml [xml, 247L, tags(MonsterAI:1,Automata:192)]
+  Files/suiteData/Monsters/AI/suite_Monster_AI_Element.xml [xml, 121L, tags(MonsterAI:1,Element:64)]
+  Files/suiteData/Monsters/AI/suite_Monster_AI_Group.xml [xml, 113L, tags(MonsterAI:1,Group:81)]
+  Files/suiteData/Monsters/AI/suite_Monster_AI_MovePath.xml [xml, 239L, tags(AIMovePath:1,CryWolf:1,Spot:221)]
+  Files/suiteData/Monsters/AI/suite_Monster_AI_Rule.xml [xml, 21L, tags(MonsterAI:1)]
+  Files/suiteData/Monsters/AI/suite_Monster_AI_Unit.xml [xml, 65L, tags(MonsterAI:1,Unit:49)]
+  Files/suiteData/Monsters/Skills/suite_Monster_Skill.xml [xml, 144L, tags(MonsterSkill:1,Skill:78)]
+  Files/suiteData/Monsters/Skills/suite_Monster_Skill_Element.xml [xml, 119L, tags(MonsterSkill:1,Element:103)]
+  Files/suiteData/Monsters/Skills/suite_Monster_Skill_Unit.xml [xml, 117L, tags(MonsterSkill:1,Unit:99)]
+  Files/suiteData/Monsters/suite_MonsterList.xml [xml, 673L, tags(MonsterList:1,Monster:654)]
+  Files/suiteData/Monsters/suite_MonsterSpawn.xml [xml, 5234L, tags(MonsterSpawn:1,Map:40,Spot:71,Spawn:4790)]
+  Files/suiteData/Monsters/suite_MonsterSpawn_Event.xml [xml, 187L, tags(MonsterSpawnEvent:1,Spot:9,Spawn:53)]
+  Files/suiteData/MuunSystem/suite_MuunExchange.xml [xml, 75L, tags(MuunSystem:1,EnergyConvertSettings:1,Muun:8,RequiredItemsExchange:1,Item:3,BagListSettings:1)]
+  Files/suiteData/MuunSystem/suite_MuunInfo.xml [xml, 115L, tags(MuunSystem:1,Muun:76)]
+  Files/suiteData/MuunSystem/suite_MuunOption.xml [xml, 83L, tags(MuunSystem:1,Option:37)]
+  Files/suiteData/Plugins/README.txt [cfg/txt, 1L, entries=1]
+  Files/suiteData/Scripts/Misc/ItemCalc.lua [lua, 187L, funcs=[MakeItemID,Wings_CalcAbsorb,Wings_CalcIncAttack,Wings_DecreaseHP,DarkSpirit_CalcValues,GoldHellMaine_DropWing,..+1] consts=8]
+  Files/suiteData/Scripts/Specialization/SkillSpec.lua [lua, 608L, funcs=[SkillSpec_GetBonusValue,SkillSpec_WeaponSkill_Knight,SkillSpec_TwistingSlash_Knight,SkillSpec_Impale_Knight,SkillSpec_DeathStab_Knight,SkillSpec_RagefulBlow_Knight,..+66] consts=7]
+  Files/suiteData/Scripts/Specialization/StatSpec.lua [lua, 331L, funcs=[StatSpec_GetPercent,StatSpec_AtkPowerInc_Knight,StatSpec_DefenseInc_Knight,StatSpec_MagicPowerInc_Wizard,StatSpec_AtkRatePvMInc_Wizard,StatSpec_AtkRatePvPInc_Wizard,..+12] consts=20]
+  Files/suiteData/SocketSystem/suite_SocketOption.xml [xml, 147L, tags(SocketSystem:1,SocketItemOptionSettings:1,Option:41,SocketBonusSettings:1,SpecialOptionSettings:1)]
+  Files/suiteData/SocketSystem/suite_SocketSystem.xml [xml, 104L, tags(SocketSystem:1,SphereDrop:1,Rate:1,Level:1,TetraDrop:1,Bronze:1)]
+  Files/suiteData/suite_BattleCore.ini [ini, 26L, sections=1 keys=3]
+  Files/suiteData/suite_BotList.xml [xml, 142L, tags(BotSystem:1,List:1,Bot:7,BotGear:7,Gear:47)]
+  Files/suiteData/suite_GensSystem.xml [xml, 153L, tags(GensSystem:1,General:1,RewardSettings:1,RankingSettings:1,Gens:14,BattleZoneSettings:1)]
+  Files/suiteData/suite_HarmonySystem.ini [ini, 75L, sections=2 keys=13]
+  Files/suiteData/suite_MarriageSystem.xml [xml, 74L, tags(MarrySystem:1,Location:1,WeddingSettings:1,Item:5,WeddingGift:1,DivorceSettings:1)]
+  Files/suiteData/suite_MasterSkillTree.xml [xml, 581L, tags(MasterSkillTree:1,Class:7,Tree:21,Skill:480)]
+  Files/suiteData/suite_MiniMap_BattleCore.xml [xml, 44L, tags(MiniMapObjects:1,TypeOne:1,Tag:7)]
+  Files/suiteData/suite_MonsterKillCount.xml [xml, 26L, tags(MonsterKillCount:1,Monster:1)]
+  Files/suiteData/suite_NewsSystem.xml [xml, 42L, tags(NewsSystem:1,News:2,Line:6)]
+  Files/suiteData/suite_OffTrade.xml [xml, 113L, tags(OffTrade:1,Map:79)]
+  Files/suiteData/suite_PlayerKillSystem.xml [xml, 92L, tags(PlayerKillSystem:1,PKClearCommand:1,General:1,PK:8,ExpDeduction:1,LevelRange:12)]
+  Files/suiteData/suite_StatSpecialize.xml [xml, 53L, tags(StatSpecialize:1,Option:12)]

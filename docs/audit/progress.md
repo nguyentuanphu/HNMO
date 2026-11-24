@@ -1,7 +1,7 @@
 # HNMO Full Season 6 / Season 9 Audit Progress
 
 **Branch:** `audit-2026-11-24` from `origin/claude/hnmo-main-handover-54co2m`
-**Updated:** 2026-11-24 11:51 (Australia/Sydney)
+**Updated:** 2026-11-24 17:19 (Australia/Sydney)
 
 ## Folder Variables (environment variables only — never commit local paths)
 
@@ -36,7 +36,7 @@
 ## Step 3: Suite Diffs & Remaining Rule Parsers
 - [x] Run `diff-all.mjs` for Season 6 (`HNMO=848, S6=1003, S9=1260`; `HNMO=504, S6=625, S9=654`; `HNMO=316, S6=403, S9=403`)
 - [x] Run `diff-all.mjs` for Season 9 (`HNMO=1112, S6=1003, S9=1260`; `HNMO=615, S6=625, S9=654`; `HNMO=316, S6=403, S9=403`)
-- [ ] Step 3.2: Parse remaining suite rule files (quests, events/invasions, reward bags, master skill tree, Castle Siege, Gens, PK/party/guild limits) and encoded client data tables
+- [x] Step 3.2: Parse remaining suite rule files (quests, events/invasions, reward bags, master skill tree, Castle Siege, Gens, PK/party/guild limits, Lua scripts, AI/monster skills, drops/cashshop/server configs -> `diff-suite-rules.txt`) and encoded client data tables (`diff-client-tables.txt`: decoded all S6/S9 `.bmd` rule tables + client InGameShop/NPC text tables)
 
 ## Step 4: Code Audit (400 units in `docs/audit/coverage.json`)
 - [ ] Audit units in order: `Changed since check` → rule-heavy server & data units → other server units → web client → desktop client rule parts

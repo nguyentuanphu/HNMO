@@ -190,7 +190,7 @@
   Diff warp #30 (KanturuRelics): S6(Lv=400,Zen=300) -> S9(Lv=400,Zen=230)
   Diff warp #42 (Vulcanus): S6(Lv=400,Zen=250) -> S9(Lv=400,Zen=30)
 
-## Gate.bmd: S6=339 non-zero gates, S9=438 non-zero gates, HNMO enter=116 exit=225
+## Gate.bmd: S6=339 non-zero gates, S9=438 non-zero gates, HNMO enter=138 exit=257
   S9-only gate #345: map=82 flag=0 (60,66)-(63,69) target=0 lvl=0
   S9-only gate #346: map=82 flag=0 (69,195)-(72,198) target=0 lvl=0
   S9-only gate #347: map=82 flag=0 (196,187)-(199,190) target=0 lvl=0
@@ -320,15 +320,99 @@
   ... (19 more)
 
 ## Ancient Sets (itemsetoption_eng.bmd): S6=49, S9=63, HNMO ancient_sets.csv=437
-## Socket Options (socketitem_eng.bmd): S6=35, S9=108
-## Harmony Options (JewelOfHarmonyOption_eng.bmd): S6=26, S9=10
+## Socket Options (socketitem_eng.bmd): S6=35, S9=111
+## Harmony Options (JewelOfHarmonyOption_eng.bmd): S6=26, S9=26
 
-## Item_eng.bmd: S6=967 items (8192x84), S9=1252 items (1252x628)
+## Item_eng.bmd: S6=967 items (8192x84), S9=1252 items (1252x628) (+300 S9-only)
+  S9-only item 0-29: Sonic Blade
+  S9-only item 0-30: Asura
+  S9-only item 0-36: Cyclone Sword
+  S9-only item 0-37: Blast Break
+  S9-only item 0-39: Lighting Sword-J
+  S9-only item 0-40: Sacred Glove-J
+  S9-only item 0-41: Pandora Pick (two-handed)
+  S9-only item 2-19: Thunderbolt
+  S9-only item 2-20: Horn of Steal
+  S9-only item 2-21: Master Scepter-J
+  S9-only item 3-12: Magmus Peer
+  S9-only item 4-25: Angelic Bow
+  S9-only item 4-26: Devil Crossbow
+  S9-only item 4-27: Silver Bow-J
+  S9-only item 5-35: Miracle Staff
+  S9-only item 5-37: Spite Staff
+  S9-only item 5-38: Legendary Staff-J
+  S9-only item 5-39: Red Wing Stick-J
+  S9-only item 5-40: Book of Neil-J
+  S9-only item 6-22: Lazy Wind Shield
+  ... (280 more)
 ## skill_eng.bmd: S6=399 skills, S9=403 skills (+4 S9-only)
   S9-only skill #618: Spell of Protection
   S9-only skill #619: Spell of Restriction
   S9-only skill #620: Spell of Pursuit
   S9-only skill #621: Shied-Burn
+
+## itemsettype.bmd: S6=168 ancient items, S9=210 ancient items (+42 S9-only)
+  S9-only ancient item 0-17: sets=[57]
+  S9-only ancient item 0-31: sets=[60]
+  S9-only ancient item 0-33: sets=[56]
+  S9-only ancient item 0-34: sets=[63]
+  S9-only ancient item 2-11: sets=[61]
+  S9-only ancient item 4-17: sets=[59]
+  S9-only ancient item 5-8: sets=[51]
+  S9-only ancient item 5-9: sets=[58]
+  S9-only ancient item 5-18: sets=[62]
+  S9-only ancient item 6-12: sets=[50]
+  S9-only ancient item 7-17: sets=[57]
+  S9-only ancient item 7-36: sets=[52]
+  S9-only ancient item 7-38: sets=[61]
+  S9-only ancient item 7-61: sets=[63]
+  S9-only ancient item 8-17: sets=[57]
+  ... (27 more)
+
+## ItemAddOption.bmd: S6=101 items, S9=121 items (+21 S9-only, 20 differing)
+  S9-only add-option 13-2: op1=0:0 op2=0:0 time=4294967286
+  S9-only add-option 13-3: op1=0:0 op2=0:0 time=4294967286
+  S9-only add-option 13-4: op1=0:0 op2=0:0 time=4294967286
+  S9-only add-option 13-37: op1=0:0 op2=0:0 time=4294967286
+  S9-only add-option 13-177: op1=87:50 op2=0:0 time=4294967286
+  S9-only add-option 13-178: op1=87:100 op2=0:0 time=4294967286
+  S9-only add-option 13-179: op1=87:200 op2=0:0 time=4294967286
+  S9-only add-option 13-180: op1=6:100 op2=0:0 time=0
+  S9-only add-option 13-181: op1=6:100 op2=0:0 time=0
+  S9-only add-option 14-224: op1=88:200 op2=0:0 time=1800
+
+## MonsterSkill.bmd: S6=56 monsters, S9=76 monsters (+20 S9-only)
+  S9-only monster #592: skills=[85,86,87]
+  S9-only monster #593: skills=[82,83,84]
+  S9-only monster #594: skills=[91,92,93]
+  S9-only monster #595: skills=[88,89,90]
+  S9-only monster #596: skills=[94,95,96]
+  S9-only monster #611: skills=[82,83,84]
+  S9-only monster #612: skills=[85,86,87]
+  S9-only monster #613: skills=[91,92,93]
+  S9-only monster #614: skills=[88,89,90]
+  S9-only monster #615: skills=[94,95,96]
+  S9-only monster #632: skills=[85,86,87]
+  S9-only monster #633: skills=[82,83,84]
+  S9-only monster #634: skills=[91,92,93]
+  S9-only monster #635: skills=[88,89,90]
+  S9-only monster #636: skills=[94,95,96]
+  S9-only monster #637: skills=[82,83,84]
+  S9-only monster #638: skills=[85,86,87]
+  S9-only monster #639: skills=[91,92,93]
+  S9-only monster #640: skills=[88,89,90]
+  S9-only monster #641: skills=[94,95,96]
+
+## Quest_eng.bmd: S6=7 quests, S9=7 quests
+## QuestProgress.bmd: S6=915 steps, S9=1046 steps (+131 S9)
+## NPCDialogue.bmd: S6=58 entries, S9=84 entries (+26 S9)
+
+## Client Text Rule Tables (S6 vs S9)
+  IBSCategory.txt: S6=22 rows | S9=14 rows
+  IBSPackage.txt: S6=235 rows | S9=161 rows
+  IBSProduct.txt: S6=2189 rows | S9=715 rows
+  IBSBanner.txt: S6=1 rows | S9=1 rows
+  Npcname(eng): S6 txt=532 rows | S9 Npcname_eng.bmd=169520 bytes
 
 ## Encoded .bmd table presence & byte sizes (S6 vs S9)
   Item_eng.bmd: S6=688132 bytes | S9=786264 bytes
