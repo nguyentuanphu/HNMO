@@ -1,5 +1,5 @@
 {
-  "generatedAt": "1ec73532",
+  "generatedAt": "bdbc1034",
   "maxLines": 6000,
   "units": [
     {
@@ -942,11 +942,16 @@
       ],
       "files": 5,
       "lines": 598,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "bdbc1034",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "OpenStoreAction.cs:19,41,59,65",
+        "SetItemPriceAction.cs:57,68-78",
+        "BuyRequestAction.cs:36-49,76,88-115",
+        "docs/audit/findings/unit-server-src-GameLogic-PlayerActions-PlayerStore.md"
+      ],
+      "evidence": "5f/598L: MinLevel 6 & Harmony block match S6/S9 common settings; HNMO adds view-range/backup guard, AccountSafety locks, Arena block & multi-currency ShopPrices.",
       "prs": "#190, #216, #236"
     },
     {
