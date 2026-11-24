@@ -1,5 +1,5 @@
 {
-  "generatedAt": "f4ed31a7",
+  "generatedAt": "c12fd43a",
   "maxLines": 6000,
   "units": [
     {
@@ -6545,11 +6545,16 @@
       ],
       "files": 19,
       "lines": 3600,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "c12fd43a",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "MonsterData/MonsterSetupJson.h",
+        "MonsterData/MonsterSoundIds.cpp",
+        "MonsterData/MonsterSoundIds.h",
+        "docs/audit/findings/unit-client-src-source-Data-GameData-MonsterData-files-2.md"
+      ],
+      "evidence": "19f/3600L: No game rules (data schemas, color folders, effect/model/sound/translation assets & validators (no game rules).)",
       "prs": ""
     },
     {
