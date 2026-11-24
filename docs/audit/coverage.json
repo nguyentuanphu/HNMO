@@ -1,5 +1,5 @@
 {
-  "generatedAt": "f1e56a23",
+  "generatedAt": "ad4cce4c",
   "maxLines": 6000,
   "units": [
     {
@@ -252,11 +252,11 @@
       ],
       "files": 9,
       "lines": 2871,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "ad4cce4c",
+      "checkedOn": "2026-11-24",
+      "references": "S6/S9 CalcCharacter scripts, CalcCharacter.ini, CommonServer.cfg (docs/audit/references/attributes-and-stats-s6-s9.md)",
+      "evidence": "Read all 9 files in full; see docs/audit/findings/unit-server-src-GameLogic-Attributes.md (potential ManaRegeneration IntervalResting=5s vs Interval=3s discrepancy).",
       "prs": ""
     },
     {
