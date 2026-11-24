@@ -83,6 +83,36 @@ public sealed class WebsiteTrackerTests
         Assert.That(WebsiteTrackerController.ProjectItemHistory([row], serial, true, privacy), Is.Empty);
     }
 
+    /// <summary>Combat participants follow host visibility and either participant may hide the event.</summary>
+    [Test]
+    public void PvpProjectionNeverPublishesAccountFields()
+    {
+        var now = new DateTime(2026, 11, 23, 0, 0, 0, DateTimeKind.Utc);
+        var privacy = new WebsiteTrackerPrivacyStore(new InMemoryHnmoPlayerStateRowBackend());
+        var fight = new ActivityLogEntry
+        {
+            Kind = ActivityKind.PvpKill,
+            PvpMode = ActivityPvpMode.Duel,
+            TimestampUtc = now,
+            Account = "privateFirst",
+            PartnerAccount = "privateSecond",
+            Character = "TestKnight",
+            PartnerCharacter = "TestMage",
+            MapNumber = 10,
+            ServerId = 3,
+            Details = "private@example.test",
+        };
+        var output = WebsiteTrackerController.ProjectPvp([fight], now.AddDays(-1), false, privacy);
+        var anonymous = JsonSerializer.SerializeToNode(output, new JsonSerializerOptions(JsonSerializerDefaults.Web))!.AsArray().Single()!;
+        Assert.That(anonymous["winner"], Is.Null);
+        Assert.That(anonymous["defeated"], Is.Null);
+        Assert.That(anonymous["mapNumber"]!.GetValue<short>(), Is.EqualTo(10));
+        Assert.That(anonymous.ToJsonString(), Does.Not.Contain("private"));
+        Assert.That(WebsiteTrackerController.ProjectPvp([fight], now.AddTicks(1), true, privacy), Is.Empty);
+        privacy.Write("privateSecond", true, now);
+        Assert.That(WebsiteTrackerController.ProjectPvp([fight], now.AddDays(-1), true, privacy), Is.Empty);
+    }
+
     /// <summary>Even an oversized raw snapshot cannot create a large public response.</summary>
     [Test]
     public void PublicPageIsBoundedAndNeverUsesTheLoginAsTheName()

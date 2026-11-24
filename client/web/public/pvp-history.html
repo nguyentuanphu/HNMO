@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{game}</title>
+  <link rel="stylesheet" href="/website-tracker.css">
+  <link rel="stylesheet" href="/website-themes.css">
+  <link rel="stylesheet" href="/website-shell.css">
+  <script type="module" src="/js/websiteThemeEntry.js"></script>
+  <script type="module" src="/js/websiteShellEntry.js"></script>
+</head>
+<body data-website-page="tracker">
+  <main id="pvp-history" data-no-i18n>
+    <a href="/home.html"><img data-brand-logo alt="" width="48" height="48" hidden><span data-game-name></span></a>
+    <span class="tracker-languages" role="group" aria-label="Language / Ngôn ngữ">
+      <button type="button" data-site-language="en">English</button>
+      <button type="button" data-site-language="vi">Tiếng Việt</button>
+    </span>
+    <h1 id="pvp-heading">PvP log</h1>
+    <p><a href="/tracker.html" id="pvp-item-link">Item history</a></p>
+    <div id="pvp-modes" role="group" hidden></div>
+    <p id="pvp-retention"></p>
+    <p id="pvp-status" role="status"></p>
+    <ol id="pvp-results"></ol>
+  </main>
+  <script type="module" src="/js/siteLanguage.js"></script>
+  <script type="module" src="/js/websitePvpHistory.js"></script>
+</body>
+</html>

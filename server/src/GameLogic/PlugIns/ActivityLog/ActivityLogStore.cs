@@ -186,6 +186,11 @@ public sealed class ActivityLogStore
                 seq = seq.Where(e => e.Kind == kind);
             }
 
+            if (query.PvpMode is { } mode)
+            {
+                seq = seq.Where(entry => entry.PvpMode == mode);
+            }
+
             if (query.FromUtc is { } fromUtc)
             {
                 var from = DateTime.SpecifyKind(fromUtc, DateTimeKind.Utc);
@@ -293,13 +298,33 @@ public sealed class ActivityLogStore
             return this.Query(new ActivityLogQuery { FromUtc = fromUtc, ItemSerial = serial, MaxResults = limit });
         }
 
-        return ParseItemRows(rows, serial.ToString("N"), fromUtc);
+        var token = serial.ToString("N");
+        return ParseRows(rows, fromUtc, entry => HasSerial(entry, token));
+    }
+
+    /// <summary>Reads recorded player defeats for one exact combat mode during retention.</summary>
+    /// <param name="mode">The mode recorded by combat at the time of the defeat.</param>
+    /// <param name="fromUtc">The inclusive UTC retention cutoff.</param>
+    /// <param name="limit">The maximum number of records, between 1 and 101.</param>
+    /// <returns>Matching defeats, newest first.</returns>
+    public IReadOnlyList<ActivityLogEntry> QueryPvpKills(ActivityPvpMode mode, DateTime fromUtc, int limit)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThan(limit, 1);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(limit, 101);
+        const ActivityKind kind = ActivityKind.PvpKill;
+        var backend = HnmoPlayerStateRowStoreRegistry.GetBackend(this._resolvedStatePath);
+        if (backend is not IHnmoPlayerStateRowQueryBackend indexed || indexed.LoadActivityCombatPage((int)kind, (int)mode, fromUtc, limit) is not { } rows)
+        {
+            return this.Query(new ActivityLogQuery { FromUtc = fromUtc, Kind = kind, PvpMode = mode, MaxResults = limit });
+        }
+
+        return ParseRows(rows, fromUtc, entry => entry.Kind == kind && entry.PvpMode == mode);
     }
 
     private static bool HasSerial(ActivityLogEntry entry, string serial)
         => entry.ItemSerials?.Split(',').Contains(serial, StringComparer.Ordinal) is true;
 
-    private static IReadOnlyList<ActivityLogEntry> ParseItemRows(IEnumerable<HnmoFeatureRow> rows, string serial, DateTime fromUtc)
+    private static IReadOnlyList<ActivityLogEntry> ParseRows(IEnumerable<HnmoFeatureRow> rows, DateTime fromUtc, Func<ActivityLogEntry, bool> include)
     {
         var result = new List<ActivityLogEntry>();
         foreach (var row in rows)
@@ -307,7 +332,7 @@ public sealed class ActivityLogStore
             try
             {
                 if (JsonSerializer.Deserialize<ActivityLogEntry>(row.PayloadJson, JsonOptions) is { } entry
-                    && entry.TimestampUtc >= fromUtc && HasSerial(entry, serial))
+                    && entry.TimestampUtc >= fromUtc && include(entry))
                 {
                     result.Add(entry);
                 }

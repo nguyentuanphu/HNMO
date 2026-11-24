@@ -21,3 +21,12 @@ body[data-website-page="tracker"] { margin: 0; background: var(--bg); color: var
 #item-history-results li { padding: 10px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); overflow-wrap: anywhere; }
 #item-history-results h2 { margin: 0; font-size: 1.05rem; }
 #item-history-results p { margin: 4px 0; }
+#pvp-history { width: min(100% - 32px, 760px); margin: 32px auto 80px; }
+#pvp-history a, #pvp-history h1 { color: var(--gold); }
+#pvp-modes:not([hidden]) { display: flex; flex-wrap: wrap; gap: 8px; }
+#pvp-history button { min-height: 40px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 6px; color: inherit; background: var(--panel); font: inherit; cursor: pointer; }
+#pvp-history button[aria-pressed="true"] { border-color: var(--gold); }
+#pvp-retention, #pvp-status, #pvp-results time { color: var(--muted); }
+#pvp-results { display: grid; gap: 8px; padding-left: 20px; }
+#pvp-results li { padding: 10px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); overflow-wrap: anywhere; }
+#pvp-results p { margin: 4px 0; }

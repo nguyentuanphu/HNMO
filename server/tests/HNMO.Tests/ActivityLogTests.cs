@@ -145,6 +145,22 @@ public sealed class ActivityLogTests
         Assert.That(store.QueryItemHistory(Guid.Empty, today.AddDays(-10), 2), Is.Empty);
     }
 
+    /// <summary>Retained fights are selected by the mode recorded at defeat.</summary>
+    [Test]
+    public void PvpHistoryReadsOnlyTheExactCombatMode()
+    {
+        var store = ActivityLogStore.Open(this._file);
+        var now = new DateTime(2026, 11, 23, 0, 0, 0, DateTimeKind.Utc);
+        store.Append(new() { TimestampUtc = now, Kind = ActivityKind.PvpKill, PvpMode = ActivityPvpMode.Field });
+        store.Append(new() { TimestampUtc = now, Kind = ActivityKind.PvpKill, PvpMode = ActivityPvpMode.Arena });
+        store.Append(new() { TimestampUtc = now.AddDays(-11), Kind = ActivityKind.PvpKill, PvpMode = ActivityPvpMode.Arena });
+        store.Append(new() { TimestampUtc = now, Kind = ActivityKind.PvpKill });
+        store.Append(new() { TimestampUtc = now, Kind = ActivityKind.Administration, PvpMode = ActivityPvpMode.Arena });
+
+        Assert.That(store.QueryPvpKills(ActivityPvpMode.Arena, now.AddDays(-10), 4).Single().TimestampUtc, Is.EqualTo(now));
+        Assert.That(store.QueryPvpKills(ActivityPvpMode.Siege, now.AddDays(-10), 4), Is.Empty);
+    }
+
     /// <summary>Verifies valuable-item classification for drop/pickup filtering.</summary>
     [Test]
     public void ValuableItemFilterMatchesExpectedTiers()

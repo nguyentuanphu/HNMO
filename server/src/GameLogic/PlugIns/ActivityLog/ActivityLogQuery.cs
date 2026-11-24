@@ -24,6 +24,9 @@ public sealed class ActivityLogQuery
     /// <summary>Gets or sets optional activity type filter.</summary>
     public ActivityKind? Kind { get; set; }
 
+    /// <summary>Gets or sets an exact combat mode filter.</summary>
+    public ActivityPvpMode? PvpMode { get; set; }
+
     /// <summary>Gets or sets optional inclusive lower bound (UTC).</summary>
     public DateTime? FromUtc { get; set; }
 
