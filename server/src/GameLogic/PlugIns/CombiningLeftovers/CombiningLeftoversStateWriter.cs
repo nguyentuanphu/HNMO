@@ -41,7 +41,8 @@ public static class CombiningLeftoversStateWriter
                 item.Definition!.Group,
                 item.Definition.Number,
                 item.Level,
-                isLocked is not null && isLocked(item)))
+                isLocked is not null && isLocked(item),
+                Math.Max(1, (int)item.Durability)))
             .ToList();
     }
 
@@ -94,7 +95,7 @@ public static class CombiningLeftoversStateWriter
                 nameVi = ing.NameVi,
                 have = bag is null
                     ? 0
-                    : bag.Count(b => !b.Locked && b.Group == ing.Group && b.Number == ing.Number && (ing.ExactLevel < 0 || b.Level == ing.ExactLevel)),
+                    : bag.Where(b => !b.Locked && b.Group == ing.Group && b.Number == ing.Number && (ing.ExactLevel < 0 || b.Level == ing.ExactLevel)).Sum(b => b.Quantity),
             }).ToList();
 
             return new
@@ -119,7 +120,7 @@ public static class CombiningLeftoversStateWriter
         {
             var have = bag is null
                 ? 0
-                : bag.Count(b => !b.Locked && b.Group == o.InputGroup && b.Number == o.InputNumber && (o.InputLevel < 0 || b.Level == o.InputLevel));
+                : bag.Where(b => !b.Locked && b.Group == o.InputGroup && b.Number == o.InputNumber && (o.InputLevel < 0 || b.Level == o.InputLevel)).Sum(b => b.Quantity);
             var canExchange = bag is not null && engine.PlanExchange(o.Id, bag, out _) == LeftoversCheckResult.Ok;
 
             return new
