@@ -13,10 +13,10 @@ const allowed = (page: Page, key: string) => page.evaluate((k) => (window as unk
 const vipLocked = (page: Page, key: string) => page.evaluate((k) => (window as unknown as Win).__game.autoPlayExtras?.isFeatureVipLocked(k) ?? null, key);
 
 /** Sets the potions function on the admin page and saves; the page answers once its live connection is up. */
-async function setPotions(admin: Page, mode: 'Free' | 'VipOnly'): Promise<void> {
+async function setPotions(admin: Page, mode: 'Free' | 'VipOnly' | 'HigherVip'): Promise<void> {
   await admin.goto(`${adminUrl}/ultimate-autoplay`, { waitUntil: 'networkidle' });
   await expect(admin.locator('#uap-mode-potions')).toBeVisible({ timeout: 60_000 });
-  await admin.selectOption('#uap-mode-potions', mode === 'Free' ? '1' : '2');
+  await admin.selectOption('#uap-mode-potions', mode === 'Free' ? '1' : mode === 'VipOnly' ? '2' : '3');
   await admin.click('#uap-admin-save');
   await expect(admin.locator('.blazored-toast, .toast, [role=alert]').filter({ hasText: /Saved|Đã lưu/ }).first()).toBeVisible({ timeout: 30_000 });
 }
@@ -26,7 +26,7 @@ test('the admin page sets Free or VIP, and a player in the game gets it at once'
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   const admin = await (await browser.newContext()).newPage();
-  await setPotions(admin, 'VipOnly');
+  await setPotions(admin, 'HigherVip');
   await admin.screenshot({ path: 'test-results/ultimate-autoplay-admin.png', fullPage: true });
 
   await enterWorld(page, 'test9');
@@ -39,7 +39,7 @@ test('the admin page sets Free or VIP, and a player in the game gets it at once'
   const helperCfg = page.locator('.rml-mu_helper_config');
   await expect(helperCfg.locator('#panel')).toBeVisible();
   await expect(helperCfg.locator('#tab_4')).toHaveClass(/\bactive\b/);
-  await expect(helperCfg.locator('#hnmo_page_ultimate')).toContainText(/VIP ONLY|CHỈ VIP/);
+  await expect(helperCfg.locator('#hnmo_page_ultimate')).toContainText(/VIP 2\+|VIP CAO/);
   await page.screenshot({ path: 'test-results/ultimate-autoplay-locked.png' });
   await page.keyboard.press('Alt+z');
   await expect(helperCfg).toHaveCount(0);
@@ -49,7 +49,10 @@ test('the admin page sets Free or VIP, and a player in the game gets it at once'
   await expect.poll(() => allowed(page, 'manaSdPotions'), { timeout: 30_000 }).toBe(true);
   expect(await vipLocked(page, 'manaSdPotions')).toBe(false);
 
-  await setPotions(admin, 'VipOnly');
+  // Restore recommended 3-tier split (Higher VIP for Ultimate potions) so shared demo server stays clean.
+  await admin.click('#uap-preset-split');
+  await admin.click('#uap-admin-save');
+  await expect(admin.locator('.blazored-toast, .toast, [role=alert]').filter({ hasText: /Saved|Đã lưu/ }).first()).toBeVisible({ timeout: 30_000 });
   await expect.poll(() => allowed(page, 'manaSdPotions'), { timeout: 30_000 }).toBe(false);
   await admin.context().close();
   await expectNoPageErrors(errors);

@@ -14,18 +14,24 @@ using HNMO.GameLogic.PlugIns.UltimateAutoPlay;
 [TestFixture]
 public class UltimateAutoPlayPolicyTest
 {
-    /// <summary>The defaults: sparkles and presets free, the rest for VIP players only.</summary>
-    /// <param name="isVip">Whether the player has VIP.</param>
-    /// <param name="potionsAllowed">Whether the VIP-only potions are allowed.</param>
-    [TestCase(false, false)]
-    [TestCase(true, true)]
-    public void TheDefaultsSplitFreeAndVip(bool isVip, bool potionsAllowed)
+    /// <summary>The 3-tier defaults: sparkles free, Extras town trips at VIP 1+, and Ultimate features at Higher VIP 2+.</summary>
+    /// <param name="vipLevel">Player VIP level (0 = Free, 1 = Bronze VIP, 2 = Silver+ Higher VIP).</param>
+    /// <param name="extrasAllowed">Whether VIP Extras town automation is unlocked.</param>
+    /// <param name="ultimateAllowed">Whether Higher VIP Ultimate features are unlocked.</param>
+    [TestCase(0, false, false)]
+    [TestCase(1, true, false)]
+    [TestCase(2, true, true)]
+    public void TheDefaultsSplitFreeVipAndHigherVip(int vipLevel, bool extrasAllowed, bool ultimateAllowed)
     {
-        var features = Features(UltimateAutoPlayPolicyWriter.Write(new UltimateAutoPlayConfiguration(), plugInActive: true, isVip));
+        var features = Features(UltimateAutoPlayPolicyWriter.Write(new UltimateAutoPlayConfiguration(), plugInActive: true, vipLevel));
         Assert.That(features.GetProperty("sparkleGuide").GetProperty("allowed").GetBoolean(), Is.True);
-        Assert.That(features.GetProperty("presetsStats").GetProperty("allowed").GetBoolean(), Is.True);
-        Assert.That(features.GetProperty("manaSdPotions").GetProperty("allowed").GetBoolean(), Is.EqualTo(potionsAllowed));
-        Assert.That(features.GetProperty("manaSdPotions").GetProperty("vipRequired").GetBoolean(), Is.EqualTo(!isVip));
+        Assert.That(features.GetProperty("extrasTown").GetProperty("allowed").GetBoolean(), Is.EqualTo(extrasAllowed));
+        Assert.That(features.GetProperty("extrasTown").GetProperty("vipRequired").GetBoolean(), Is.EqualTo(!extrasAllowed));
+        Assert.That(features.GetProperty("extrasTown").GetProperty("requiredVipLevel").GetInt32(), Is.EqualTo(1));
+        Assert.That(features.GetProperty("manaSdPotions").GetProperty("allowed").GetBoolean(), Is.EqualTo(ultimateAllowed));
+        Assert.That(features.GetProperty("manaSdPotions").GetProperty("vipRequired").GetBoolean(), Is.EqualTo(!ultimateAllowed));
+        Assert.That(features.GetProperty("manaSdPotions").GetProperty("requiredVipLevel").GetInt32(), Is.EqualTo(2));
+        Assert.That(features.GetProperty("presetsStats").GetProperty("allowed").GetBoolean(), Is.EqualTo(ultimateAllowed));
     }
 
     /// <summary>A function switched off is off for VIP players too.</summary>

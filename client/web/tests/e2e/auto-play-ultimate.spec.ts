@@ -130,43 +130,70 @@ function makeExtrasHarness(policyJson?: string) {
   };
 }
 
-test('Free vs VIP policy gates Mana/SD potions and Jewel Bank deposit cleanly', () => {
+test('Free vs VIP vs Higher VIP policy gates Extras town trips and Ultimate automation cleanly', () => {
   const freePolicy = JSON.stringify({
-    v: 1, enabled: true, isVip: false,
+    v: 2, enabled: true, isVip: false, vipLevel: 0,
     features: {
-      sparkleGuide: { mode: 1, allowed: true, vipRequired: false },
-      presetsStats: { mode: 1, allowed: true, vipRequired: false },
-      manaSdPotions: { mode: 2, allowed: false, vipRequired: true },
-      jewelDeposit: { mode: 2, allowed: false, vipRequired: true },
+      sparkleGuide: { mode: 1, allowed: true, vipRequired: false, requiredVipLevel: 0 },
+      extrasTown: { mode: 2, allowed: false, vipRequired: true, requiredVipLevel: 1 },
+      presetsStats: { mode: 3, allowed: false, vipRequired: true, requiredVipLevel: 2 },
+      manaSdPotions: { mode: 3, allowed: false, vipRequired: true, requiredVipLevel: 2 },
+      jewelDeposit: { mode: 3, allowed: false, vipRequired: true, requiredVipLevel: 2 },
     },
   });
   const free = makeExtrasHarness(freePolicy);
+  expect(free.extras.settings.showUltimateHud).toBe(false);
   expect(free.extras.isFeatureAllowed('sparkleGuide')).toBe(true);
+  expect(free.extras.isFeatureVipLocked('extrasTown')).toBe(true);
   expect(free.extras.isFeatureVipLocked('manaSdPotions')).toBe(true);
+  expect(free.extras.featureRequiredVipLevel('extrasTown')).toBe(1);
+  expect(free.extras.featureRequiredVipLevel('manaSdPotions')).toBe(2);
   free.setState({ mana: 10, shield: 10, full: true, hasJewels: true });
   free.extras.update(10_000);
   expect(free.counts().manaDrinks).toBe(0);
   expect(free.counts().jewelDeposits).toBe(0);
-  expect(free.extras.onTrip).toBe(true);
+  expect(free.extras.onTrip).toBe(false);
 
-  const vipPolicy = JSON.stringify({
-    v: 1, enabled: true, isVip: true,
+  // Bronze VIP (Lv 1): Extras town trips unlocked, Higher VIP Ultimate features still locked.
+  const bronzePolicy = JSON.stringify({
+    v: 2, enabled: true, isVip: true, vipLevel: 1,
     features: {
-      sparkleGuide: { mode: 1, allowed: true, vipRequired: false },
-      presetsStats: { mode: 1, allowed: true, vipRequired: false },
-      manaSdPotions: { mode: 2, allowed: true, vipRequired: false },
-      jewelDeposit: { mode: 2, allowed: true, vipRequired: false },
+      sparkleGuide: { mode: 1, allowed: true, vipRequired: false, requiredVipLevel: 0 },
+      extrasTown: { mode: 2, allowed: true, vipRequired: false, requiredVipLevel: 1 },
+      presetsStats: { mode: 3, allowed: false, vipRequired: true, requiredVipLevel: 2 },
+      manaSdPotions: { mode: 3, allowed: false, vipRequired: true, requiredVipLevel: 2 },
+      jewelDeposit: { mode: 3, allowed: false, vipRequired: true, requiredVipLevel: 2 },
     },
   });
-  const vip = makeExtrasHarness(vipPolicy);
-  vip.extras.applyPreset('afkFarm');
-  vip.setState({ mana: 10, shield: 10, full: true, hasJewels: true });
-  vip.extras.update(15_000);
-  expect(vip.counts().manaDrinks).toBe(1);
-  expect(vip.counts().sdDrinks).toBe(1);
-  expect(vip.counts().jewelDeposits).toBe(1);
+  const bronze = makeExtrasHarness(bronzePolicy);
+  expect(bronze.extras.isFeatureAllowed('extrasTown')).toBe(true);
+  expect(bronze.extras.isFeatureVipLocked('manaSdPotions')).toBe(true);
+  bronze.setState({ mana: 10, shield: 10, full: true, hasJewels: true });
+  bronze.extras.update(10_000);
+  expect(bronze.counts().manaDrinks).toBe(0);
+  expect(bronze.counts().jewelDeposits).toBe(0);
+  expect(bronze.extras.onTrip).toBe(true);
+
+  // Higher VIP (Silver+ / Lv 2): Extras + Ultimate automation unlocked.
+  const higherVipPolicy = JSON.stringify({
+    v: 2, enabled: true, isVip: true, vipLevel: 2,
+    features: {
+      sparkleGuide: { mode: 1, allowed: true, vipRequired: false, requiredVipLevel: 0 },
+      extrasTown: { mode: 2, allowed: true, vipRequired: false, requiredVipLevel: 1 },
+      presetsStats: { mode: 3, allowed: true, vipRequired: false, requiredVipLevel: 2 },
+      manaSdPotions: { mode: 3, allowed: true, vipRequired: false, requiredVipLevel: 2 },
+      jewelDeposit: { mode: 3, allowed: true, vipRequired: false, requiredVipLevel: 2 },
+    },
+  });
+  const higherVip = makeExtrasHarness(higherVipPolicy);
+  higherVip.extras.applyPreset('afkFarm');
+  higherVip.setState({ mana: 10, shield: 10, full: true, hasJewels: true });
+  higherVip.extras.update(15_000);
+  expect(higherVip.counts().manaDrinks).toBe(1);
+  expect(higherVip.counts().sdDrinks).toBe(1);
+  expect(higherVip.counts().jewelDeposits).toBe(1);
   // Bag was freed by jewel deposit, so no town trip needed!
-  expect(vip.extras.onTrip).toBe(false);
+  expect(higherVip.extras.onTrip).toBe(false);
 });
 
 test('Target priority (aggroFirst / lowestHp) and rare-drop priority work', () => {

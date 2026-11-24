@@ -158,6 +158,7 @@ test('in the game: the community window with K, the Discord and Zalo coins, an e
   await page.screenshot({ path: 'test-results/community-window.png' });
 
   // Vietnamese.
+  if (await page.locator('#hudToolsToggle').isVisible()) await page.locator('#hudToolsToggle').click();
   await page.locator('.language-picker button[data-lang="vi"]:visible').first().click();
   await expect(panel).toContainText('Tiệc mùa hè');
   await expect(panel.locator('.cm-discord-text')).toHaveText('Đã liên kết Discord: bạn đã nhận 50 Goblin Points.');

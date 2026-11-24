@@ -37,6 +37,7 @@ export async function enterWorld(page: Page, account: string): Promise<void> {
 /** Closes the new-player guide before testing a window which shares its screen position. */
 export async function dismissOnboarding(page: Page): Promise<void> {
   const guide = page.locator('.rml-hnmo_onboarding');
+  await guide.waitFor({ state: 'attached', timeout: 3_000 }).catch(() => undefined);
   if (await guide.count() > 0) await guide.locator('.ob-close').click();
   await expect(guide).toHaveCount(0);
 }
@@ -124,4 +125,20 @@ export function screenPointOf(page: Page, name: string): Promise<{ x: number; y:
     const r = document.querySelector('#view')!.getBoundingClientRect();
     return { x: r.left + (s.x + 1) / 2 * r.width, y: r.top + (1 - s.y) / 2 * r.height };
   }, name);
+}
+
+/** Expands the touch-expandable top tools bar (#hudTools) if currently collapsed to the cog icon. */
+export async function expandHudTools(page: Page): Promise<void> {
+  const toggle = page.locator('#hudToolsToggle');
+  await expect(toggle).toBeVisible({ timeout: 30_000 });
+  if ((await toggle.getAttribute('aria-expanded')) !== 'true') {
+    await toggle.click();
+    await expect(page.locator('#hudToolsDrawer')).toBeVisible();
+  }
+}
+
+/** Switches UI language via the top expandable tools bar in-world. */
+export async function pickHudLanguage(page: Page, lang: 'en' | 'vi'): Promise<void> {
+  await expandHudTools(page);
+  await page.locator(`#hudToolsDrawer .language-picker button[data-lang="${lang}"]`).click();
 }

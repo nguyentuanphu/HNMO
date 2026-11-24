@@ -218,7 +218,8 @@ test('in the game, the guide is asked for, Y opens it, and the (i) guide and the
   await expect(panel).toHaveCount(1, { timeout: 90_000 });
   await page.keyboard.press('y');
   await expect(panel).toHaveCount(0);
-  // The (i) guide's button.
+  // The (i) guide's button (inside the expandable top tools bar).
+  await page.locator('#hudToolsToggle').click();
   await page.locator('#guideButton').click();
   await expect(page.locator('#guide')).toBeVisible();
   await page.locator('#guideOnboarding').click();

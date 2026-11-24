@@ -111,7 +111,8 @@ test('in the game: H key and (i) guide open the timetable with Sydney time, maps
   await page.keyboard.press('Escape');
   await expect(modal).toBeHidden();
 
-  // Open via the (i) guide button.
+  // Open via the (i) guide button (inside the expandable top tools bar).
+  await page.locator('#hudToolsToggle').click();
   await page.locator('#guideButton').click();
   await page.locator('#guideTimetable').click();
   await feed(page, payload);

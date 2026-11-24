@@ -1867,6 +1867,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     },
     onApply: (config) => autoPlay.setConfig(config),
     onMessage: (text) => chat.add(text, 'system'),
+    onBeforeOpen: () => { if (state.onboarding?.isOpen) state.onboarding.close(); },
   });
   state.settingsWindow = settingsWindow;
   const applyServerConfig = (bytes: Uint8Array) => {
@@ -3024,5 +3025,31 @@ if (soundButton) {
   const show = () => soundButton.setAttribute('aria-pressed', String(sounds.audio.getSettings().muted));
   soundButton.addEventListener('click', () => { sounds.audio.setMuted(!sounds.audio.getSettings().muted); show(); });
   show();
+}
+// Touch-expandable top utility bar next to Autoplay (starts collapsed to the cog icon).
+const hudTools = document.getElementById('hudTools');
+const hudToolsToggle = document.getElementById('hudToolsToggle');
+if (hudTools && hudToolsToggle) {
+  const setToolsExpanded = (open: boolean) => {
+    hudTools.classList.toggle('expanded', open);
+    hudToolsToggle.setAttribute('aria-expanded', String(open));
+  };
+  for (const ev of ['pointerdown', 'touchstart', 'mousedown'] as const) {
+    hudTools.addEventListener(ev, (e) => e.stopPropagation(), { passive: ev === 'touchstart' });
+  }
+  hudToolsToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    setToolsExpanded(!hudTools.classList.contains('expanded'));
+  });
+  document.getElementById('guideButton')?.addEventListener('click', () => setToolsExpanded(false));
+  document.getElementById('settingsButton')?.addEventListener('click', () => setToolsExpanded(false));
+  document.addEventListener('pointerdown', (e) => {
+    if (hudTools.classList.contains('expanded') && !hudTools.contains(e.target as Node)) {
+      setToolsExpanded(false);
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && hudTools.classList.contains('expanded')) setToolsExpanded(false);
+  });
 }
 requestAnimationFrame(frame);
