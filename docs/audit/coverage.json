@@ -1,5 +1,5 @@
 {
-  "generatedAt": "44014d75",
+  "generatedAt": "96a69cae",
   "maxLines": 6000,
   "units": [
     {
@@ -207,11 +207,11 @@
       ],
       "files": 13,
       "lines": 2372,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "96a69cae",
+      "checkedOn": "2026-11-24",
+      "references": "Core game logic rules (Storage, SkillList, SkillHitValidator, SoccerGameMap, Walker)",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-files-5.md",
       "prs": ""
     },
     {
@@ -2212,11 +2212,11 @@
       ],
       "files": 16,
       "lines": 1123,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "96a69cae",
+      "checkedOn": "2026-11-24",
+      "references": "Custom reset/stat-reset/relife rules; Gatekeeper NPC 408",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-Resets.md",
       "prs": ""
     },
     {
