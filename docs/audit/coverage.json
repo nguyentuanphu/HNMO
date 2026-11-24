@@ -1,5 +1,5 @@
 {
-  "generatedAt": "0ed49eb6",
+  "generatedAt": "e45189bd",
   "maxLines": 6000,
   "units": [
     {
@@ -8044,11 +8044,14 @@
       ],
       "files": 9,
       "lines": 1100,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "e45189bd",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "UI/Chat",
+        "docs/audit/findings/unit-client-src-source-UI-Chat.md"
+      ],
+      "evidence": "9f/1100L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
       "prs": ""
     },
     {
