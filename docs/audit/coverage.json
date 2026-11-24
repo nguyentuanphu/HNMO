@@ -1,5 +1,5 @@
 {
-  "generatedAt": "6e9b526c",
+  "generatedAt": "2520096f",
   "maxLines": 6000,
   "units": [
     {
@@ -3960,11 +3960,15 @@
       ],
       "files": 1,
       "lines": 53,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "2520096f",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "the Season 6 suite's item list file",
+        "the Season 9 suite's item list file",
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-Version097d.md"
+      ],
+      "evidence": "Read Jewels.cs (53 lines) in full; compared Jewel of Creation (14:22) against S6/S9 suite item lists: docs/audit/findings/unit-server-src-Persistence-Initialization-Version097d.md",
       "prs": ""
     },
     {
