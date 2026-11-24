@@ -1,5 +1,5 @@
 {
-  "generatedAt": "791a0bb1",
+  "generatedAt": "3ad91882",
   "maxLines": 6000,
   "units": [
     {
@@ -3518,11 +3518,15 @@
       ],
       "files": 7,
       "lines": 491,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "3ad91882",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "PlayerShopPriceEncoding.cs:24-97",
+        "ShowShopCurrenciesExtendedPlugIn.cs:28",
+        "docs/audit/findings/unit-server-src-GameServer-RemoteView-PlayerShop.md"
+      ],
+      "evidence": "7f/491L: Encodes HNMO custom shop currency/item prices via 0xFFF0 sentinel & (group<<12)|number; caps allowed currencies at (255-5)/2 = 125.",
       "prs": ""
     },
     {
