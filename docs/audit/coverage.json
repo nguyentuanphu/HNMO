@@ -1,5 +1,5 @@
 {
-  "generatedAt": "4c299903",
+  "generatedAt": "3ffe9c5b",
   "maxLines": 6000,
   "units": [
     {
@@ -1010,11 +1010,11 @@
       ],
       "files": 13,
       "lines": 1015,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
+      "status": "Checked",
+      "checkedAt": "3ffe9c5b",
+      "checkedOn": "2026-11-24",
       "references": "",
-      "evidence": "",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlayerShopCurrencies.md",
       "prs": ""
     },
     {
@@ -4392,11 +4392,11 @@
       ],
       "files": 20,
       "lines": 1743,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
+      "status": "Checked",
+      "checkedAt": "3ffe9c5b",
+      "checkedOn": "2026-11-24",
       "references": "",
-      "evidence": "",
+      "evidence": "docs/audit/findings/unit-server-src-AttributeSystem.md",
       "prs": ""
     },
     {
@@ -4407,11 +4407,11 @@
       ],
       "files": 4,
       "lines": 1412,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "3ffe9c5b",
+      "checkedOn": "2026-11-24",
+      "references": "docs/audit/references/common-server-and-character-rules-s6-s9.md",
+      "evidence": "docs/audit/findings/unit-server-src-GuildServer.md",
       "prs": ""
     },
     {
@@ -4422,11 +4422,11 @@
       ],
       "files": 4,
       "lines": 690,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
+      "status": "Checked",
+      "checkedAt": "3ffe9c5b",
+      "checkedOn": "2026-11-24",
       "references": "",
-      "evidence": "",
+      "evidence": "docs/audit/findings/unit-server-src-FriendServer.md",
       "prs": ""
     },
     {
