@@ -785,7 +785,7 @@ export function parseSuiteCommonAndLimits(rootDir) {
   const priceIni = parseIni(findSuiteFile(rootDir, 'PriceSettings.ini'));
   const socketIni = parseIni(findSuiteFile(rootDir, 'SocketOptionSettings.ini'));
   const vipXml = findSuiteFile(rootDir, 'VipSettings.xml');
-  const vipTypes = parseXmlTags(vipXml, 'VipType');
+  const vipTypes = parseXmlTags(vipXml, 'Vip');
   return {
     commonCfg,
     commonIni,

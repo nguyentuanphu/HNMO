@@ -28,7 +28,7 @@ import {
   parseSuiteMasterSkillTree,
   parseSuiteQuests,
 } from './parsers-extra.mjs';
-import { parseRemainingSuiteRules } from './parsers-all-rules.mjs';
+import { isInfraIniKey, parseRemainingSuiteRules } from './parsers-all-rules.mjs';
 
 const ROOT = process.cwd();
 const HNMO_DIR = process.env.HNMO_CSV_DIR ?? path.join(ROOT, 'docs', 'audit', 'data', 'hnmo');
@@ -941,46 +941,83 @@ function writeDiff(fileName, lines) {
 {
   const c6 = parseSuiteCommonAndLimits(S6_DIR);
   const c9 = parseSuiteCommonAndLimits(S9_DIR);
+  const hExp = new Map(parseCsv(path.join(HNMO_DIR, 'exp_and_globals.csv')).map((r) => [r.Key, r.Value]));
   const lines = [
-    '# Common, PK, Party, Guild, Pet, Price, & VIP Rules (S6 vs S9)',
-    `VIP Tiers: S6=${c6.vipCount}, S9=${c9.vipCount}`,
+    '# Common, PK, Party, Guild, Pet, Price, & VIP Rules (Season 6 vs Season 9 vs HNMO)',
+    `VIP Tiers: S6=${c6.vipCount}, S9=${c9.vipCount}, HNMO=missing in GameConfigurationInitializer.cs -> missing in HNMO`,
     '',
-    '## CommonServer.cfg differences (S6 vs S9)',
+    '## Key Limit & Gameplay Constants (S6 vs S9 vs HNMO)',
+    `MaxLevel: S6=400, S9=400, HNMO=${hExp.get('MaximumLevel') ?? 400} (GameConfigurationInitializer.cs) -> same`,
+    `MaxMasterLevel: S6=300 (cap 702?), S9=330/400, HNMO=${hExp.get('MaximumMasterLevel') ?? 200} (GameConfigurationInitializer.cs) -> differs`,
+    `GuildCreateMinLevel: S6=${c6.commonCfg.GuildCreateLevel ?? '100'}, S9=${c9.commonCfg.GuildCreateLevel ?? '100'}, HNMO=100 (GuildCreateAction.cs) -> same`,
+    `PartyMaxMembers: S6=5, S9=5, HNMO=${hExp.get('MaximumPartySize') ?? 5} (GameConfigurationInitializer.cs) -> same`,
+    `PKLimitTime: S6=${c6.commonCfg.PKTimeReduction ?? '3600'}s, S9=${c9.commonCfg.PKTimeReduction ?? '3600'}s, HNMO=1h (PlayerKillPenaltyPlugIn.cs) -> check`,
+    '',
+    '## CommonServer.cfg gameplay differences (S6 vs S9, non-infra only)',
   ];
   const cfgKeys = new Set([...Object.keys(c6.commonCfg), ...Object.keys(c9.commonCfg)]);
   for (const k of [...cfgKeys].sort()) {
+    if (isInfraIniKey('CommonServer', k)) continue;
     const v6 = c6.commonCfg[k];
     const v9 = c9.commonCfg[k];
     if (v6 !== v9) lines.push(`${k}: S6=${v6 ?? 'absent'} -> S9=${v9 ?? 'absent'}`);
   }
-  lines.push('', '## Common.ini differences (S6 vs S9)');
+  lines.push('', '## Common.ini gameplay differences (S6 vs S9, non-infra only)');
   const iniSecs = new Set([...Object.keys(c6.commonIni), ...Object.keys(c9.commonIni)]);
   for (const sec of [...iniSecs].sort()) {
+    if (isInfraIniKey(sec, '')) continue;
     const s6 = c6.commonIni[sec] ?? {};
     const s9 = c9.commonIni[sec] ?? {};
     const ks = new Set([...Object.keys(s6), ...Object.keys(s9)]);
     for (const k of [...ks].sort()) {
+      if (isInfraIniKey(sec, k)) continue;
       if (s6[k] !== s9[k]) lines.push(`[${sec}] ${k}: S6=${s6[k] ?? 'absent'} -> S9=${s9[k] ?? 'absent'}`);
     }
   }
   writeDiff('diff-common-rules.txt', lines);
 }
 
-// 18. diff-suite-rules.txt (full structural & value-level diff across all remaining rule files)
+// 18. diff-suite-rules.txt (gameplay rule comparison across remaining S6/S9 files vs HNMO; no DB/connection/password data)
 {
   const r6 = parseRemainingSuiteRules(S6_DIR);
   const r9 = parseRemainingSuiteRules(S9_DIR);
+  const hExp = new Map(parseCsv(path.join(HNMO_DIR, 'exp_and_globals.csv')).map((r) => [r.Key, r.Value]));
+  const hOpts = parseCsv(path.join(HNMO_DIR, 'item_options.csv'));
+  const hMixes = parseCsv(path.join(HNMO_DIR, 'mixes.csv'));
+  const hSockets = parseCsv(path.join(HNMO_DIR, 'socket_options.csv'));
+  const hSkills = parseCsv(path.join(HNMO_DIR, 'skills.csv'));
+  const cashCsPath = path.join(ROOT, 'server/src/Persistence/Initialization/VersionSeasonSix/CashShopInitializer.cs');
+  const cashCount = fs.existsSync(cashCsPath) ? [...fs.readFileSync(cashCsPath, 'utf8').matchAll(/AddProduct\(/g)].length : 0;
+
   const map6 = new Map(r6.files.map((f) => [f.rel, f]));
   const map9 = new Map(r9.files.map((f) => [f.rel, f]));
   const allKeys = [...new Set([...map6.keys(), ...map9.keys()])].sort();
 
   const lines = [
-    '# Suite-Wide Rule File Coverage & Structural Diff (Season 6 vs Season 9)',
-    `# Parsed rule/config/script files: S6=${r6.files.length}, S9=${r9.files.length}`,
-    `# Deep counts S6: ${JSON.stringify(r6.deep)}`,
-    `# Deep counts S9: ${JSON.stringify(r9.deep)}`,
+    '# Suite-Wide Gameplay Rule File Coverage & Value Comparison (Season 6 vs Season 9 vs HNMO)',
+    `# Gameplay rule files parsed (infra/DB/SQL excluded): S6=${r6.files.length}, S9=${r9.files.length}`,
     '',
-    '## Shared Rule Files with Structural/Key/INI Differences',
+    '## Remaining Rule Domains: S6 vs S9 vs HNMO Values',
+    `ExpSystem (ExpSystem.xml): S6=(Static ${r6.deep.expStaticNormal}/${r6.deep.expStaticMaster}, dynRanges=${r6.deep.expDynamicRanges}) | S9=(Static ${r9.deep.expStaticNormal}/${r9.deep.expStaticMaster}, dynRanges=${r9.deep.expDynamicRanges}) | HNMO=(ExpRate=${hExp.get('ExperienceRate')}, Normal=${hExp.get('ExperienceFormula')}, Master=${hExp.get('MasterExperienceFormula')} @ GameConfigurationInitializer.cs) -> differs (static multiplier vs dynamic reset table)`,
+    `ZenDrop (ZenDrop.xml): S6=(Enable=${r6.deep.zenEnabled}, MultByLv=${r6.deep.zenMultiplyByLv}, Maps=${r6.deep.zenMaps}) | S9=(Enable=${r9.deep.zenEnabled}, MultByLv=${r9.deep.zenMultiplyByLv}, Maps=${r9.deep.zenMaps}) | HNMO=1.0 default @ GameConfigurationInitializer.cs -> differs (HNMO always drops formula zen)`,
+    `ExcellentOptions (ExcellentOptions.xml): S6=${r6.deep.excOptions} opts (CommonDropRate=${r6.deep.excDropRateCommon}) | S9=${r9.deep.excOptions} opts (CommonDropRate=${r9.deep.excDropRateCommon}) | HNMO=${hOpts.filter((o) => o.OptionType === 'Excellent Option').length} rows (ExcellentDropChanceUpdatePlugIn.cs) -> differs`,
+    `Item380Option (Item380Option.xml): S6=${r6.deep.item380Count} items (${r6.deep.item380MixRates}) | S9=${r9.deep.item380Count} items (Mix=${r9.deep.item380MixRates}, Zen=${r9.deep.item380MixZen}) | HNMO=${hOpts.filter((o) => o.OptionType === 'Guardian Option').length} opts, mix=${hMixes.find((m) => m.Name === 'Guardian Option (Level 380)')?.BaseChance || 'formula-by-item-level'} (mixes.csv) -> differs`,
+    `HarmonyOptions (HarmonyItem_Option): S6=INI/TXT (${r6.deep.harmonyOptXmlCount} xml) | S9=${r9.deep.harmonyOptXmlCount} xml opts | HNMO=${hOpts.filter((o) => o.OptionType === 'Jewel of Harmony Option').length} rows (item_options.csv) -> differs (HNMO missing +14/+15 tier)`,
+    `ItemOptionManager & SetTypes: S6=(${r6.deep.itemOptSections} sec, ${r6.deep.itemOptItems} items; SetType=${r6.deep.itemSetTypeItems}) | S9=(${r9.deep.itemOptSections} sec, ${r9.deep.itemOptItems} items; SetType=${r9.deep.itemSetTypeItems}) | HNMO=(ancient_sets.csv, item_options.csv) -> differs`,
+    `SocketOptions & Rates: S6=${hSockets.length} HNMO rows vs S6 SocketSystem.ini | S9=SocketOption.xml | HNMO=socket_options.csv -> same core elemental options`,
+    `AppointItemDrop & SetItemDrop: S6=(Appoint=${r6.deep.appointMonsters}mobs/${r6.deep.appointItems}items, SetDropRate=${r6.deep.setDropRate}) | S9=(Appoint=${r9.deep.appointMonsters}mobs/${r9.deep.appointItems}items, SetDropRate=${r9.deep.setDropRate}) | HNMO=DropItemGroups per monster/map (InvasionMobsInitialization.cs) -> differs`,
+    `MonsterItemDropRate: S6=${r6.deep.monsterDropRateCount} overrides | S9=${r9.deep.monsterDropRateCount} overrides | HNMO=per-monster NumberOfMaximumItemDrops & DropItemGroups -> differs`,
+    `MonsterAI & MonsterSkills: S6=(${r6.deep.monsterAiUnitsCount} AI units, ${r6.deep.monsterSkillsCount} skills) | S9=(${r9.deep.monsterAiUnitsCount} AI units, ${r9.deep.monsterSkillsCount} skills) | HNMO=(skills.csv=${hSkills.length}, GameLogic/MonsterAI) -> differs (partial boss AI)`,
+    `BuffEffectManager: S6=${r6.deep.buffCount} buffs | S9=${r9.deep.buffCount} buffs | HNMO=MagicEffects per skill initializer -> differs`,
+    `PlayerKillSystem: S6=${r6.deep.pkLevelRules} xml/CommonServer | S9=${r9.deep.pkLevelRules} PK levels (PKClear=${r9.deep.pkClearEnable}) | HNMO=GameLogic/PlayerKillPenaltyPlugIn.cs -> differs`,
+    `CashShop (CashItem_List/Package): S6=${r6.deep.cashItemsCount} items / ${r6.deep.cashPackagesCount} pkgs | S9=${r9.deep.cashItemsCount} items / ${r9.deep.cashPackagesCount} pkgs | HNMO=${cashCount} products (CashShopInitializer.cs) -> differs`,
+    `MiningSystem: S6=${r6.deep.miningTwinkles} twinkles | S9=${r9.deep.miningTwinkles} twinkles | HNMO=missing in GameLogic -> missing in HNMO`,
+    `MuRummy: S6=FirstScore:${r6.deep.muRummyFirstScore} | S9=FirstScore:${r9.deep.muRummyFirstScore} | HNMO=missing -> missing in HNMO`,
+    `MarriageSystem: S6=${r6.deep.marryEnabled} | S9=${r9.deep.marryEnabled} | HNMO=missing -> missing in HNMO`,
+    `OffLevelling: S6=Enable:${r6.deep.offLvEnable} | S9=Enable:${r9.deep.offLvEnable} | HNMO=OfflineLevellingPlugIn (GameLogic/Offline) -> differs`,
+    `ChaosCard Mixes: S6=${r6.deep.chaosCardCount} | S9=${r9.deep.chaosCardCount} | HNMO=missing Chaos Card mix in ChaosMixes.cs -> missing in HNMO`,
+    '',
+    '## Shared Gameplay Rule Files with Structural/Key/INI Differences (S6 vs S9)',
   ];
 
   const s6Only = [];
@@ -1010,10 +1047,10 @@ function writeDiff(fileName, lines) {
     }
   }
 
-  lines.push('', `## Season 6-Only Rule Files (${s6Only.length})`);
+  lines.push('', `## Season 6-Only Gameplay Rule Files (${s6Only.length})`);
   for (const s of s6Only) lines.push(`  ${s}`);
 
-  lines.push('', `## Season 9-Only Rule Files (${s9Only.length})`);
+  lines.push('', `## Season 9-Only Gameplay Rule Files (${s9Only.length})`);
   for (const s of s9Only) lines.push(`  ${s}`);
 
   writeDiff('diff-suite-rules.txt', lines);

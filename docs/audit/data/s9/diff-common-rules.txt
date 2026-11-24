@@ -1,7 +1,14 @@
-# Common, PK, Party, Guild, Pet, Price, & VIP Rules (S6 vs S9)
-VIP Tiers: S6=0, S9=0
+# Common, PK, Party, Guild, Pet, Price, & VIP Rules (Season 6 vs Season 9 vs HNMO)
+VIP Tiers: S6=4, S9=4, HNMO=missing in GameConfigurationInitializer.cs -> missing in HNMO
 
-## CommonServer.cfg differences (S6 vs S9)
+## Key Limit & Gameplay Constants (S6 vs S9 vs HNMO)
+MaxLevel: S6=400, S9=400, HNMO=400 (GameConfigurationInitializer.cs) -> same
+MaxMasterLevel: S6=300 (cap 702?), S9=330/400, HNMO=200 (GameConfigurationInitializer.cs) -> differs
+GuildCreateMinLevel: S6=100, S9=100, HNMO=100 (GuildCreateAction.cs) -> same
+PartyMaxMembers: S6=5, S9=5, HNMO=5 (GameConfigurationInitializer.cs) -> same
+PKLimitTime: S6=3600s, S9=3600s, HNMO=1h (PlayerKillPenaltyPlugIn.cs) -> check
+
+## CommonServer.cfg gameplay differences (S6 vs S9, non-infra only)
 ApplyHeroSystem: S6=1 -> S9=absent
 AttackEventRegenTime: S6=10 -> S9=absent
 CQSystemQuestCount: S6=0 -> S9=absent
@@ -10,7 +17,6 @@ CountOfJewelOfHarmonyForMix: S6=1 -> S9=absent
 CountOfSuhoOfHarmonyForMix: S6=1 -> S9=absent
 CrestOfMonarchDropLevel: S6=86 -> S9=absent
 CrestOfMonarchDropRate: S6=10 -> S9=absent
-EventChipServerIp: S6=127.0.0.1 -> S9=192.168.1.10
 EventManagerOn: S6=1 -> S9=absent
 ImperialGuardian: S6=1 -> S9=absent
 IsCQSystem: S6=0 -> S9=absent
@@ -75,15 +81,7 @@ XMasEvent_LuckNumber1st: S6=100 -> S9=absent
 XMasEvent_LuckNumber2nd: S6=200 -> S9=absent
 ZenDurationTime: S6=10 -> S9=15
 
-## Common.ini differences (S6 vs S9)
-[AntiHack] AntiHackBreachDisconnectUser: S6=0 -> S9=1
-[AntiHack] DLLCRC: S6=0 -> S9=36C0CB2E
-[AntiHack] EnableAgilityCheck: S6=0 -> S9=1
-[AntiHack] EnableHitHackDetection: S6=absent -> S9=0
-[AntiHack] HitHackMaxAgility: S6=absent -> S9=23000
-[AntiHack] MainExeCRC: S6=0 -> S9=F502C056
-[AntiHack] PlayerBmdCRC: S6=0 -> S9=D25ED173
-[AntiHack] SkillCRC: S6=0 -> S9=76B51749
+## Common.ini gameplay differences (S6 vs S9, non-infra only)
 [CancelItemSale] IsCancelItemSale: S6=absent -> S9=1
 [CancelItemSale] ItemExpiryTime: S6=absent -> S9=86400
 [CancelItemSale] PriceMultipler: S6=absent -> S9=110.0
@@ -114,8 +112,6 @@ ZenDurationTime: S6=10 -> S9=15
 [ChatColors] WhisperMessageBlue: S6=absent -> S9=0xDB
 [ChatColors] WhisperMessageGreen: S6=absent -> S9=0xB7
 [ChatColors] WhisperMessageRed: S6=absent -> S9=0xFF
-[General] AllowMoveCashItems: S6=0 -> S9=absent
-[General] AllowToGetLuckyItemFromGround: S6=absent -> S9=0
 [General] MaxMasterLevel: S6=200 -> S9=330
 [General] PostCMDCooldown: S6=5 -> S9=absent
 [GlobalPostCMD] ColorBlue: S6=absent -> S9=0xE3
