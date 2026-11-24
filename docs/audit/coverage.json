@@ -1,5 +1,5 @@
 {
-  "generatedAt": "05c53e5d",
+  "generatedAt": "3dc3d06a",
   "maxLines": 6000,
   "units": [
     {
@@ -3445,15 +3445,12 @@
       ],
       "files": 10,
       "lines": 2125,
-      "status": "Changed since check",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-21",
-      "references": "S6/S9 Data/Items/ItemList.xml",
-      "evidence": "Read in full (ledger-game-data.md at cbf4593e, unchanged through 477b9466): item base classes & DetermineCharacterClasses; Gloves energy overload (#218) and rank-2 classes (#237) fixed.",
-      "prs": "#218, #237",
-      "changedFiles": [
-        "server/src/Persistence/Initialization/Items/ItemPriceDefinitions.cs"
-      ]
+      "status": "Checked",
+      "checkedAt": "3dc3d06a",
+      "checkedOn": "2026-11-24",
+      "references": "S6/S9 Data/Items/ItemList.xml, docs/audit/data/diff-items.txt, docs/audit/data/s9/diff-items.txt",
+      "evidence": "All 10 files read (2125 lines): docs/audit/findings/unit-server-src-Persistence-Initialization-Items.md",
+      "prs": "#218, #237"
     },
     {
       "id": "server/src/Persistence/Initialization/PlugIns",
