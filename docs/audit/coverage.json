@@ -1,5 +1,5 @@
 {
-  "generatedAt": "eb92fc96",
+  "generatedAt": "a0f3c0dc",
   "maxLines": 6000,
   "units": [
     {
@@ -4625,11 +4625,16 @@
       ],
       "files": 86,
       "lines": 5667,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a0f3c0dc",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "GuildRoleLimits.cs:16-31",
+        "GuildPositionComparer.cs:63-73",
+        "IGuildServer.cs:1-60",
+        "docs/audit/findings/unit-server-src-Interfaces.md"
+      ],
+      "evidence": "86f/5667L: mostly service/host contracts & localization; GuildRoleLimits enforces 1 + masterTotalLevel/200 battle masters (1 assistant master) matching classic MU role hierarchy.",
       "prs": ""
     },
     {
