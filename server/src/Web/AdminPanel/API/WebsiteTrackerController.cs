@@ -7,6 +7,7 @@ namespace HNMO.Web.AdminPanel.API;
 using HNMO.GameLogic;
 using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.PlugIns.ActivityLog;
+using HNMO.GameLogic.PlugIns.Economy;
 using HNMO.Interfaces;
 using HNMO.Persistence;
 using Microsoft.AspNetCore.Authorization;
@@ -84,6 +85,74 @@ public sealed class WebsiteTrackerController(IPersistenceContextProvider persist
         return this.Ok(new { enabled = true, retentionDays, timeZone = Sydney.Id, events = result });
     }
 
+    /// <summary>Reads the most recent verified jewel snapshot under the current tracker policy.</summary>
+    /// <returns>The snapshot and visible hunters, or a disabled or unavailable result.</returns>
+    [HttpGet("jewels")]
+    public async ValueTask<IActionResult> GetJewelsAsync()
+    {
+        this.Response.Headers.CacheControl = "no-store";
+        if (await this.ReadActiveTrackerAsync().ConfigureAwait(false) is not { } tracker)
+        {
+            return this.Ok(new { enabled = false });
+        }
+
+        var cancellationToken = this.HttpContext.RequestAborted;
+        var economy = await PlugInSettings.ReadActiveAsync<EconomyConfiguration>(persistence, typeof(EconomyDashboardPlugIn), cancellationToken).ConfigureAwait(false);
+        if (economy is not { Enabled: true })
+        {
+            return this.Ok(new { enabled = false });
+        }
+
+        var cached = cache.GetOrCreate("website-tracker-jewels", options =>
+        {
+            options.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(15);
+            return new JewelCache(economy.FileName, EconomyStore.Open(economy.FileName).ReadLatestJewelSnapshot());
+        });
+        if (cached is null || cached.FileName != economy.FileName)
+        {
+            cached = new JewelCache(economy.FileName, EconomyStore.Open(economy.FileName).ReadLatestJewelSnapshot());
+            cache.Set("website-tracker-jewels", cached, TimeSpan.FromSeconds(15));
+        }
+
+        if (cached.Snapshot is not { JewelActivity: { } info } snapshot)
+        {
+            return this.Ok(new { enabled = true, available = false });
+        }
+
+        var capturedUtc = DateTime.SpecifyKind(snapshot.CapturedAtUtc, DateTimeKind.Utc);
+        var capturedAt = TimeZoneInfo.ConvertTime(new DateTimeOffset(capturedUtc), Sydney);
+        var dayStartUtc = TimeZoneInfo.ConvertTimeToUtc(capturedAt.Date, Sydney);
+        var hunterWindowAvailable = dayStartUtc >= clock.GetUtcNow().UtcDateTime.AddDays(-Math.Clamp(tracker.Config.RetentionDays, 1, 3650));
+        var hunters = Array.Empty<object>();
+        if (hunterWindowAvailable && tracker.Settings.TrackerShowCharacterNames && info.Hunters.Count > 0
+            && servers.Values.OfType<IGameServerContextProvider>().OrderBy(server => server.Context.Id).FirstOrDefault() is { } server)
+        {
+            var candidates = info.Hunters.Take(50).ToArray();
+            var logins = candidates.Select(row => row.AccountKey);
+            using var playerContext = persistence.CreateNewPlayerContext(server.Context.Configuration);
+            var eligible = await playerContext.ReadEligibleAccountKeysAsync(logins, cancellationToken).ConfigureAwait(false);
+            var hidden = WebsiteTrackerPrivacyStore.Open().ReadOptOuts(logins);
+            hunters = candidates.Where(row => eligible.Contains(row.AccountKey)
+                    && !hidden.Contains(WebsiteTrackerPrivacyStore.Key(row.AccountKey))
+                    && IsCharacterName(row.Character) && !string.Equals(row.AccountKey, row.Character, StringComparison.OrdinalIgnoreCase))
+                .Take(10).Select(row => (object)new { row.Character, row.Pieces }).ToArray();
+        }
+
+        return this.Ok(new
+        {
+            enabled = true,
+            available = true,
+            snapshot.DateSydney,
+            capturedAt,
+            info.InventoryAndVaultPieces,
+            info.BankPieces,
+            info.LogWindowCapped,
+            showHunters = tracker.Settings.TrackerShowCharacterNames,
+            hunterWindowAvailable,
+            hunters,
+        });
+    }
+
     /// <summary>Projects recent rows with live privacy preferences, without returning raw activity records.</summary>
     /// <param name="rows">The recent raw activity rows.</param>
     /// <param name="showNames">Whether the host permits character names.</param>
@@ -151,9 +220,11 @@ public sealed class WebsiteTrackerController(IPersistenceContextProvider persist
         return activity is not null ? (settings, activity.Configuration ?? new()) : null;
     }
 
+    private static bool IsCharacterName(string? name)
+        => name is { Length: > 0 and <= 10 } && name.All(character => char.IsLetterOrDigit(character) || character is '_' or '-');
+
     private static string? CharacterName(string? name, ActivityLogEntry entry)
-        => name is { Length: > 0 and <= 10 }
-            && name.All(character => char.IsLetterOrDigit(character) || character is '_' or '-')
+        => IsCharacterName(name)
             && !string.Equals(entry.Account, name, StringComparison.OrdinalIgnoreCase)
             && !string.Equals(entry.PartnerAccount, name, StringComparison.OrdinalIgnoreCase)
             ? name : null;
@@ -176,4 +247,5 @@ public sealed class WebsiteTrackerController(IPersistenceContextProvider persist
     };
 
     private sealed record RawWindow(string FileName, int RetentionDays, IReadOnlyList<ActivityLogEntry> Rows);
+    private sealed record JewelCache(string FileName, EconomyDailySnapshot? Snapshot);
 }

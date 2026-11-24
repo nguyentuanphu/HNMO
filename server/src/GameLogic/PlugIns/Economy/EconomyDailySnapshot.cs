@@ -27,6 +27,9 @@ public sealed class EconomyDailySnapshot
     /// <summary>Gets or sets total jewel pieces across inventories, vaults, and external banks.</summary>
     public int TotalJewels { get; set; }
 
+    /// <summary>Gets or sets the verified jewel activity, when included in this capture.</summary>
+    public EconomyJewelActivity? JewelActivity { get; set; }
+
     /// <summary>Gets or sets total non-jewel valuable items.</summary>
     public int TotalValuableItems { get; set; }
 

@@ -22,7 +22,7 @@ public sealed class ItemShopCurrencyExchange : IShopCurrencyExchange
     /// <summary>
     /// The number of pieces of a bundle per bundle level, which matches the jewel mix (<c>ItemStackAction</c>).
     /// </summary>
-    private const int PiecesPerBundleLevel = 10;
+    internal const int PiecesPerBundleLevel = 10;
 
     /// <summary>
     /// The highest level of a bundle which the jewel mix creates: bundles of 10, 20 or 30 pieces have the levels 0 to 2.
@@ -31,7 +31,7 @@ public sealed class ItemShopCurrencyExchange : IShopCurrencyExchange
     /// Bundles with a higher level can't be created by players, and unstacking them doesn't give their pieces back,
     /// so they're not accepted as payment.
     /// </remarks>
-    private const byte MaximumBundleLevel = 2;
+    internal const byte MaximumBundleLevel = 2;
 
     /// <inheritdoc />
     public ShopPaymentResult CheckFunds(Player buyer, ShopPrice price)

@@ -12,6 +12,7 @@ using HNMO.DataModel.Configuration.Items;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.PlugIns.ActivityLog;
 using HNMO.GameLogic.PlugIns.Economy;
+using HNMO.GameLogic.PlugIns.JewelBank;
 using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.Persistence.InMemory;
@@ -169,6 +170,40 @@ public sealed class EconomyDashboardTests
         public override DateTimeOffset GetUtcNow() => this._now;
 
         public void SetUtcNow(DateTimeOffset next) => this._now = next;
+    }
+
+    /// <summary>Captures settled bank balances without counting banned accounts or pending deliveries.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task CapturesOnlyEligibleBankBalancesAsync()
+    {
+        using var context = this._provider.CreateNewPlayerContext(this._config);
+        var banned = context.CreateNew<Account>();
+        banned.LoginName = "banned";
+        banned.State = AccountState.Banned;
+        await context.SaveChangesAsync().ConfigureAwait(false);
+
+        var bank = new JewelBankConfiguration { FileName = this._file, AllowWebsite = false };
+        JewelBankStore.Open(bank.FileName).Mutate(data =>
+        {
+            data.Accounts["ALICE"] = new() { ["bless"] = 7, ["soul"] = 4 };
+            data.Accounts["banned"] = new() { ["bless"] = 90 };
+            data.Accounts["unknown"] = new() { ["bless"] = 100 };
+            data.PendingWithdrawals.Add(new() { LoginName = "alice", JewelKey = "bless", Quantity = 15 });
+            return (true, true);
+        });
+
+        var source = new Mock<IDataSource<GameConfiguration>>();
+        source.Setup(s => s.GetOwnerAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync(this._config);
+        var ops = new EconomyDashboardOperations(this._provider, source.Object, AdminOperationTestServices.CreateExecutor(), this._clock);
+        var cfg = new EconomyConfiguration { FileName = this._file };
+
+        var withoutBank = await ops.CaptureNowAsync(cfg, default).ConfigureAwait(false);
+        Assert.That(withoutBank.JewelActivity?.BankPieces, Is.Null);
+
+        var captured = await ops.CaptureNowAsync(cfg, default, bank).ConfigureAwait(false);
+        Assert.That(captured.JewelActivity?.BankPieces, Is.EqualTo(11));
+        Assert.That(EconomyStore.Open(cfg.FileName).ReadLatestJewelSnapshot()?.JewelActivity?.BankPieces, Is.EqualTo(11));
     }
 
     private sealed class StubExternalProvider(IReadOnlyList<EconomyAccountTotals> totals) : IEconomyExternalAssetProvider

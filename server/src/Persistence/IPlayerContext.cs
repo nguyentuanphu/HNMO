@@ -100,6 +100,25 @@ public interface IPlayerContext : IContext
     /// </returns>
     ValueTask<IEnumerable<Account>> SearchAccountsAsync(string searchTerm, int skip, int count, CancellationToken cancellationToken = default);
 
+    /// <summary>Finds currently eligible accounts among a bounded set of canonical login keys.</summary>
+    /// <param name="loginNames">Canonical logins from private records.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The input logins that are neither banned, bots, nor templates.</returns>
+    async ValueTask<IReadOnlySet<string>> ReadEligibleAccountKeysAsync(IEnumerable<string> loginNames, CancellationToken cancellationToken = default)
+    {
+        var result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var login in loginNames.Distinct(StringComparer.OrdinalIgnoreCase).Take(100))
+        {
+            if (await this.GetAccountByLoginNameAsync(login, cancellationToken).ConfigureAwait(false) is
+                { IsBot: false, IsTemplate: false, State: not (AccountState.Banned or AccountState.TemporarilyBanned) })
+            {
+                result.Add(login);
+            }
+        }
+
+        return result;
+    }
+
     /// <summary>Searches login names, e-mail addresses and character names with an optional state filter.</summary>
     /// <param name="text">The case-insensitive search term.</param>
     /// <param name="state">The optional account state.</param>

@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Text.Json;
 using HNMO.GameLogic.PlugIns.Economy;
 using HNMO.GameLogic.PlugIns.Escrow;
+using HNMO.GameLogic.PlugIns.JewelBank;
 using HNMO.Persistence;
 using HNMO.PlugIns;
 using HNMO.Web.AdminPanel.API;
@@ -104,7 +105,10 @@ public partial class EconomyDashboard : ComponentBase
         this._isSaving = true;
         try
         {
-            await this.EconomyOperations.CaptureNowAsync(cfg, default).ConfigureAwait(true);
+            var (_, bankIsActive, bankSettings) = await PlugInSettings.ReadStoredAsync<JewelBankConfiguration>(
+                this.PersistenceContextProvider, typeof(JewelBankPlugIn), default).ConfigureAwait(true);
+            var bank = bankIsActive ? bankSettings ?? new JewelBankConfiguration() : null;
+            await this.EconomyOperations.CaptureNowAsync(cfg, default, bank).ConfigureAwait(true);
             this._snapshots = await this.EconomyOperations.LoadHistoryAsync(cfg.FileName, 30, default).ConfigureAwait(true);
             this.ToastService.ShowSuccess(L("Captured economy snapshot.", "Đã cập nhật thống kê kinh tế."));
         }

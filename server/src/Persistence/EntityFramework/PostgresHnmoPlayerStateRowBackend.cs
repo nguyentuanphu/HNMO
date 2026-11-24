@@ -287,6 +287,31 @@ public sealed class PostgresHnmoPlayerStateRowBackend : IHnmoPlayerStateRowQuery
         return rows;
     }
 
+    /// <inheritdoc />
+    public HnmoFeatureRow? LoadLatestEconomyJewels()
+    {
+        const string feature = "economy.dailySnapshot";
+        this.EnsureSchema();
+        using var conn = new NpgsqlConnection(this._connectionString);
+        conn.Open();
+        using var cmd = conn.CreateCommand();
+        cmd.CommandTimeout = 3;
+        cmd.CommandText = """
+            SELECT scope_id, jsonb_build_object(
+                'dateSydney', payload_json -> 'dateSydney',
+                'capturedAtUtc', payload_json -> 'capturedAtUtc',
+                'jewelActivity', payload_json -> 'jewelActivity')::text,
+                updated_at_utc, expires_at_utc
+            FROM hnmo.player_feature_state
+            WHERE feature = @feature
+            ORDER BY scope_id DESC
+            LIMIT 1
+            """;
+        cmd.Parameters.AddWithValue("feature", feature);
+        using var reader = cmd.ExecuteReader();
+        return reader.Read() ? ReadRow(reader, feature) : null;
+    }
+
     private static HnmoFeatureRow ReadRow(NpgsqlDataReader reader, string feature) => new(
         feature,
         reader.GetString(0),
