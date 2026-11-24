@@ -1,5 +1,5 @@
 {
-  "generatedAt": "8e90b726",
+  "generatedAt": "369415d3",
   "maxLines": 6000,
   "units": [
     {
@@ -3320,11 +3320,14 @@
       ],
       "files": 11,
       "lines": 499,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "369415d3",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "RemoteView/Duel",
+        "docs/audit/findings/unit-server-src-GameServer-RemoteView-Duel.md"
+      ],
+      "evidence": "11f/499L: No game rules (pure S->C packet serializers implementing GameLogic.Views interfaces; no embedded gameplay rules.)",
       "prs": ""
     },
     {
