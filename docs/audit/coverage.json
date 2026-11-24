@@ -1,5 +1,5 @@
 {
-  "generatedAt": "7ef9c36b",
+  "generatedAt": "bcdb85c5",
   "maxLines": 6000,
   "units": [
     {
@@ -8449,11 +8449,16 @@
       ],
       "files": 30,
       "lines": 5861,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "bcdb85c5",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Inventory/CursorItemLayer.cpp",
+        "Inventory/CursorItemLayer.h",
+        "Inventory/HeldItemPlacement.cpp",
+        "docs/audit/findings/unit-client-src-source-UI-Inventory-files-1.md"
+      ],
+      "evidence": "30f/5861L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
       "prs": ""
     },
     {
