@@ -1,5 +1,5 @@
 {
-  "generatedAt": "dd76795e",
+  "generatedAt": "cd0e6896",
   "maxLines": 6000,
   "units": [
     {
@@ -6621,11 +6621,14 @@
       ],
       "files": 8,
       "lines": 1162,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "cd0e6896",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Data/Translation",
+        "docs/audit/findings/unit-client-src-source-Data-Translation.md"
+      ],
+      "evidence": "8f/1162L: No game rules (localization string & font encoding helpers (no game rules).)",
       "prs": ""
     },
     {
