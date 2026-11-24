@@ -20,6 +20,8 @@
   <data name="TrackerNamesDescription" xml:space="preserve"><value>Allow eligible character names in the public feed. Player opt-outs still apply.</value></data>
   <data name="ClassGuide" xml:space="preserve"><value>Live class guide</value></data>
   <data name="ClassGuideDescription" xml:space="preserve"><value>Show class attributes, formulas and skills from the selected server in the website guide.</value></data>
+  <data name="BannedCharacters" xml:space="preserve"><value>Publish character bans</value></data>
+  <data name="BannedCharactersDescription" xml:space="preserve"><value>Show only active character bans when character names are permitted. Player visibility choices still apply.</value></data>
   <data name="ContentRoadmapEn" xml:space="preserve"><value>Public roadmap (English)</value></data>
   <data name="ContentRoadmapVi" xml:space="preserve"><value>Public roadmap (Vietnamese)</value></data>
   <data name="ContentAboutEn" xml:space="preserve"><value>Public about page (English)</value></data>

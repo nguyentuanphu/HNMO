@@ -100,6 +100,9 @@ public class WebsiteConfiguration
     /// <summary>Gets or sets a value indicating whether the public website shows the live event and quest guide.</summary>
     [Display(Name = nameof(WebsiteServerPageLabels.EventGuide), Description = nameof(WebsiteServerPageLabels.EventGuideDescription), ResourceType = typeof(WebsiteServerPageLabels))]
     public bool EventGuideEnabled { get; set; } = true;
+    /// <summary>Gets or sets whether enforced individual character bans may appear on the website.</summary>
+    [Display(Name = nameof(WebsiteServerPageLabels.BannedCharacters), Description = nameof(WebsiteServerPageLabels.BannedCharactersDescription), ResourceType = typeof(WebsiteServerPageLabels))]
+    public bool PublishBannedCharacters { get; set; }
     /// <summary>The maximum length of a public content field in one language.</summary>
     public const int MaximumPublicContentLength = 6000;
 

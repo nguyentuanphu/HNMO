@@ -66,7 +66,11 @@ public static class WebsiteServerPageLabels
     /// <summary>Gets the localized event and quest guide setting description.</summary>
     public static string EventGuideDescription => Resources.GetString(nameof(EventGuideDescription), CultureInfo.CurrentUICulture) ?? nameof(EventGuideDescription);
 
+    /// <summary>Gets the public character bans caption.</summary>
+    public static string BannedCharacters => Resources.GetString(nameof(BannedCharacters), CultureInfo.CurrentUICulture) ?? nameof(BannedCharacters);
 
+    /// <summary>Gets the public character bans description.</summary>
+    public static string BannedCharactersDescription => Resources.GetString(nameof(BannedCharactersDescription), CultureInfo.CurrentUICulture) ?? nameof(BannedCharactersDescription);
     /// <summary>Gets the localized caption for the English roadmap field.</summary>
     public static string ContentRoadmapEn => Resources.GetString(nameof(ContentRoadmapEn), CultureInfo.CurrentUICulture) ?? nameof(ContentRoadmapEn);
 

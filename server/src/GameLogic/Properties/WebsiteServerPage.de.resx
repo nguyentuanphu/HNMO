@@ -20,6 +20,8 @@
   <data name="TrackerNamesDescription" xml:space="preserve"><value>Berechtigte Charakternamen öffentlich anzeigen. Widersprüche der Spieler gelten weiterhin.</value></data>
   <data name="ClassGuide" xml:space="preserve"><value>Klassenleitfaden mit aktuellen Serverdaten</value></data>
   <data name="ClassGuideDescription" xml:space="preserve"><value>Zeigt Attribute, Formeln und Fertigkeiten des ausgewählten Servers im Website-Leitfaden an.</value></data>
+  <data name="BannedCharacters" xml:space="preserve"><value>Charaktersperren veröffentlichen</value></data>
+  <data name="BannedCharactersDescription" xml:space="preserve"><value>Zeigt aktive Charaktersperren, wenn Charakternamen freigegeben sind. Die Datenschutzeinstellungen der Spieler gelten weiterhin.</value></data>
   <data name="ContentRoadmapEn" xml:space="preserve"><value>Fahrplan der Website (Englisch)</value></data>
   <data name="ContentRoadmapVi" xml:space="preserve"><value>Fahrplan der Website (Vietnamesisch)</value></data>
   <data name="ContentAboutEn" xml:space="preserve"><value>Über uns (Englisch)</value></data>

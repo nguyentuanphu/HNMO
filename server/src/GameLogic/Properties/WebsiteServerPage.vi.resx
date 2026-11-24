@@ -20,6 +20,8 @@
   <data name="TrackerNamesDescription" xml:space="preserve"><value>Cho phép hiện tên nhân vật đủ điều kiện. Quyền từ chối của người chơi vẫn được áp dụng.</value></data>
   <data name="ClassGuide" xml:space="preserve"><value>Hướng dẫn lớp nhân vật từ máy chủ</value></data>
   <data name="ClassGuideDescription" xml:space="preserve"><value>Hiển thị chỉ số, công thức và kỹ năng của máy chủ đang chọn trong phần hướng dẫn website.</value></data>
+  <data name="BannedCharacters" xml:space="preserve"><value>Công bố nhân vật bị khóa</value></data>
+  <data name="BannedCharactersDescription" xml:space="preserve"><value>Chỉ hiển thị nhân vật đang bị khóa khi cho phép công bố tên. Vẫn áp dụng lựa chọn ẩn tên của người chơi.</value></data>
   <data name="ContentRoadmapEn" xml:space="preserve"><value>Nội dung lộ trình công khai (tiếng Anh)</value></data>
   <data name="ContentRoadmapVi" xml:space="preserve"><value>Nội dung lộ trình công khai (tiếng Việt)</value></data>
   <data name="ContentAboutEn" xml:space="preserve"><value>Nội dung giới thiệu công khai (tiếng Anh)</value></data>
