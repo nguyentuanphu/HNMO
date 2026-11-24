@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2520096f",
+  "generatedAt": "d52ea7ae",
   "maxLines": 6000,
   "units": [
     {
@@ -3478,11 +3478,15 @@
       ],
       "files": 20,
       "lines": 651,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "d52ea7ae",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "the Season 6/9 suites' item list files",
+        "the Season 6/9 suites' skill list files",
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-PlugIns.md"
+      ],
+      "evidence": "Checked all 20 starter item/skill character-creation plugins (651 lines) against S6/S9 suite item & skill lists: docs/audit/findings/unit-server-src-Persistence-Initialization-PlugIns.md",
       "prs": "#169, #174, #178"
     },
     {
