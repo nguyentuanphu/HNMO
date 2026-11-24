@@ -1,5 +1,5 @@
 {
-  "generatedAt": "3a83e4a4",
+  "generatedAt": "b1c3077a",
   "maxLines": 6000,
   "units": [
     {
@@ -7301,11 +7301,14 @@
       ],
       "files": 43,
       "lines": 3116,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "b1c3077a",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "GameShop/ShopListManager",
+        "docs/audit/findings/unit-client-src-source-GameShop-ShopListManager.md"
+      ],
+      "evidence": "43f/3116L: No game rules (CashShop RmlUi presentation, CDN script downloader & UI message boxes (server validates prices/purchases).)",
       "prs": ""
     },
     {
