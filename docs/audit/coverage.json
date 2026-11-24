@@ -1,5 +1,5 @@
 {
-  "generatedAt": "d2acf288",
+  "generatedAt": "a36dbabd",
   "maxLines": 6000,
   "units": [
     {
@@ -3822,11 +3822,16 @@
       ],
       "files": 55,
       "lines": 5917,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a36dbabd",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "the Season 6 suite's RegularSkillCalc.lua, MonsterList.xml & IllusionTemple_Classic.xml",
+        "the Season 9 suite's MoveReq_eng.bmd & CommonServer.cfg",
+        "docs/audit/data/diff-client-tables.txt",
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-Updates-files-4.md"
+      ],
+      "evidence": "Audited all 55 files (5917 lines): docs/audit/findings/unit-server-src-Persistence-Initialization-Updates-files-4.md",
       "prs": ""
     },
     {
