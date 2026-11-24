@@ -1,5 +1,5 @@
 {
-  "generatedAt": "a55b68e8",
+  "generatedAt": "471f64e0",
   "maxLines": 6000,
   "units": [
     {
@@ -5234,11 +5234,13 @@
       ],
       "files": 2,
       "lines": 254,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -5264,11 +5266,13 @@
       ],
       "files": 16,
       "lines": 5859,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -5286,11 +5290,13 @@
       ],
       "files": 8,
       "lines": 1828,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -5301,11 +5307,13 @@
       ],
       "files": 12,
       "lines": 2873,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -5316,11 +5324,13 @@
       ],
       "files": 21,
       "lines": 3949,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -5354,11 +5364,13 @@
       ],
       "files": 24,
       "lines": 5880,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -5369,11 +5381,13 @@
       ],
       "files": 1,
       "lines": 140,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -5401,11 +5415,13 @@
       ],
       "files": 4,
       "lines": 215,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -5420,11 +5436,13 @@
       ],
       "files": 5,
       "lines": 1503,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -5437,11 +5455,13 @@
       ],
       "files": 3,
       "lines": 5977,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -5452,11 +5472,13 @@
       ],
       "files": 10,
       "lines": 1716,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -5467,11 +5489,13 @@
       ],
       "files": 2,
       "lines": 555,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -5524,11 +5548,13 @@
       ],
       "files": 43,
       "lines": 5554,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -5539,11 +5565,13 @@
       ],
       "files": 4,
       "lines": 1100,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -5554,11 +5582,13 @@
       ],
       "files": 3,
       "lines": 315,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -5569,11 +5599,13 @@
       ],
       "files": 2,
       "lines": 54,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -5584,11 +5616,13 @@
       ],
       "files": 1,
       "lines": 94,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -5599,11 +5633,13 @@
       ],
       "files": 10,
       "lines": 692,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -5614,11 +5650,13 @@
       ],
       "files": 8,
       "lines": 489,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -5663,11 +5701,13 @@
       ],
       "files": 35,
       "lines": 3729,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -5678,11 +5718,13 @@
       ],
       "files": 18,
       "lines": 2880,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -5693,11 +5735,13 @@
       ],
       "files": 12,
       "lines": 1893,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -6329,11 +6373,13 @@
       ],
       "files": 14,
       "lines": 5895,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -6349,11 +6395,13 @@
       ],
       "files": 6,
       "lines": 543,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -6364,11 +6412,13 @@
       ],
       "files": 9,
       "lines": 3057,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -6402,11 +6452,13 @@
       ],
       "files": 24,
       "lines": 3002,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -6417,11 +6469,13 @@
       ],
       "files": 1,
       "lines": 14284,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -6434,11 +6488,13 @@
       ],
       "files": 3,
       "lines": 3064,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -6450,11 +6506,13 @@
       ],
       "files": 2,
       "lines": 4368,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -6466,11 +6524,13 @@
       ],
       "files": 2,
       "lines": 4231,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -6481,11 +6541,13 @@
       ],
       "files": 1,
       "lines": 8311,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -6502,11 +6564,13 @@
       ],
       "files": 7,
       "lines": 3450,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -6517,11 +6581,13 @@
       ],
       "files": 2,
       "lines": 450,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -6532,11 +6598,13 @@
       ],
       "files": 2,
       "lines": 1718,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -6547,11 +6615,13 @@
       ],
       "files": 2,
       "lines": 230,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -6937,11 +7007,13 @@
       ],
       "files": 2,
       "lines": 469,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7084,11 +7156,13 @@
       ],
       "files": 6,
       "lines": 1010,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7107,11 +7181,13 @@
       ],
       "files": 9,
       "lines": 1126,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7122,11 +7198,13 @@
       ],
       "files": 1,
       "lines": 9420,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7139,11 +7217,13 @@
       ],
       "files": 3,
       "lines": 1417,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7154,11 +7234,13 @@
       ],
       "files": 1,
       "lines": 7445,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7169,11 +7251,13 @@
       ],
       "files": 1,
       "lines": 374,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7184,11 +7268,13 @@
       ],
       "files": 1,
       "lines": 9410,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7201,11 +7287,13 @@
       ],
       "files": 3,
       "lines": 517,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7217,11 +7305,13 @@
       ],
       "files": 2,
       "lines": 204,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7232,11 +7322,13 @@
       ],
       "files": 1,
       "lines": 10625,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7247,11 +7339,13 @@
       ],
       "files": 1,
       "lines": 221,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7262,11 +7356,13 @@
       ],
       "files": 12,
       "lines": 2755,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7277,11 +7373,13 @@
       ],
       "files": 23,
       "lines": 2199,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7292,11 +7390,13 @@
       ],
       "files": 21,
       "lines": 3412,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7327,11 +7427,13 @@
       ],
       "files": 21,
       "lines": 2408,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7343,11 +7445,13 @@
       ],
       "files": 2,
       "lines": 4559,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7358,11 +7462,13 @@
       ],
       "files": 7,
       "lines": 2202,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7373,11 +7479,13 @@
       ],
       "files": 12,
       "lines": 466,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7400,11 +7508,13 @@
       ],
       "files": 13,
       "lines": 2646,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7415,11 +7525,13 @@
       ],
       "files": 1,
       "lines": 8432,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7453,11 +7565,13 @@
       ],
       "files": 24,
       "lines": 2454,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7468,11 +7582,13 @@
       ],
       "files": 12,
       "lines": 1106,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7483,11 +7599,13 @@
       ],
       "files": 14,
       "lines": 3116,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7498,11 +7616,13 @@
       ],
       "files": 7,
       "lines": 4754,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7513,11 +7633,13 @@
       ],
       "files": 12,
       "lines": 1127,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7528,11 +7650,13 @@
       ],
       "files": 22,
       "lines": 3274,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
       "prs": ""
     },
     {
@@ -7543,11 +7667,13 @@
       ],
       "files": 28,
       "lines": 5304,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -7558,11 +7684,13 @@
       ],
       "files": 15,
       "lines": 3444,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -7573,11 +7701,13 @@
       ],
       "files": 9,
       "lines": 1100,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -7588,11 +7718,13 @@
       ],
       "files": 35,
       "lines": 5507,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -7603,11 +7735,13 @@
       ],
       "files": 15,
       "lines": 4669,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -7618,11 +7752,13 @@
       ],
       "files": 3,
       "lines": 339,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -7650,11 +7786,13 @@
       ],
       "files": 18,
       "lines": 5926,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -7675,11 +7813,13 @@
       ],
       "files": 11,
       "lines": 1694,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -7726,11 +7866,13 @@
       ],
       "files": 37,
       "lines": 5983,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -7772,11 +7914,13 @@
       ],
       "files": 32,
       "lines": 4058,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -7807,11 +7951,13 @@
       ],
       "files": 21,
       "lines": 5772,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -7848,11 +7994,13 @@
       ],
       "files": 27,
       "lines": 5418,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -7870,11 +8018,13 @@
       ],
       "files": 8,
       "lines": 2324,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -7885,11 +8035,13 @@
       ],
       "files": 8,
       "lines": 1126,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -7929,11 +8081,13 @@
       ],
       "files": 30,
       "lines": 5861,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -7956,11 +8110,13 @@
       ],
       "files": 13,
       "lines": 5946,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -7993,11 +8149,13 @@
       ],
       "files": 23,
       "lines": 4699,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -8008,11 +8166,13 @@
       ],
       "files": 10,
       "lines": 2162,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -8023,11 +8183,13 @@
       ],
       "files": 16,
       "lines": 2897,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -8038,11 +8200,13 @@
       ],
       "files": 6,
       "lines": 2893,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -8053,11 +8217,13 @@
       ],
       "files": 7,
       "lines": 941,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -8068,11 +8234,13 @@
       ],
       "files": 3,
       "lines": 706,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -8083,11 +8251,13 @@
       ],
       "files": 14,
       "lines": 2684,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -8098,11 +8268,13 @@
       ],
       "files": 59,
       "lines": 5654,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -8113,11 +8285,13 @@
       ],
       "files": 2,
       "lines": 618,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -8165,11 +8339,13 @@
       ],
       "files": 38,
       "lines": 5928,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -8183,11 +8359,13 @@
       ],
       "files": 4,
       "lines": 1943,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -8198,11 +8376,13 @@
       ],
       "files": 2,
       "lines": 41,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -8213,11 +8393,13 @@
       ],
       "files": 2,
       "lines": 113,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -8228,11 +8410,13 @@
       ],
       "files": 7,
       "lines": 404,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
@@ -8243,11 +8427,13 @@
       ],
       "files": 21,
       "lines": 4070,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "471f64e0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
+      ],
+      "evidence": "Audited desktop client Core/Globals, Dotnet interop, Engine/Object/AI/Pathing, Scenes, and UI/* against server/web parity.",
       "prs": ""
     },
     {
