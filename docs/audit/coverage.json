@@ -1,5 +1,5 @@
 {
-  "generatedAt": "ba63bf52",
+  "generatedAt": "a5d3e52d",
   "maxLines": 6000,
   "units": [
     {
@@ -8982,11 +8982,16 @@
       ],
       "files": 4,
       "lines": 2806,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "a5d3e52d",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "GameMaps/GM_Raklion.cpp",
+        "GameMaps/GM_Raklion.h",
+        "GameMaps/MonsterSpawnWorld.cpp",
+        "docs/audit/findings/unit-client-src-source-World-GameMaps-files-6.md"
+      ],
+      "evidence": "4f/2806L: No game rules (3D map visual objects, shaders, fog, weather & terrain loaders (MapManager, GMAida, etc.; no game rules).)",
       "prs": ""
     },
     {
