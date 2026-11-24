@@ -1,5 +1,5 @@
 {
-  "generatedAt": "8b96d483",
+  "generatedAt": "3a413fc6",
   "maxLines": 6000,
   "units": [
     {
@@ -4557,12 +4557,17 @@
       ],
       "files": 31,
       "lines": 2854,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
-      "prs": ""
+      "status": "Changed since check",
+      "checkedAt": "2026-11-24T04:04:38.660Z",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-Interfaces-and-PlugIns.md"
+      ],
+      "evidence": "Audited PlugInManager, PlugInConfiguration, PlugInConfigurationChangeApplier, StrategyPlugInProvider, and PlugInProxyTypeGenerator.",
+      "prs": "",
+      "changedFiles": [
+        "(commit not found)"
+      ]
     },
     {
       "id": "server/src/Interfaces",
@@ -4572,12 +4577,17 @@
       ],
       "files": 86,
       "lines": 5667,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
-      "prs": ""
+      "status": "Changed since check",
+      "checkedAt": "2026-11-24T04:04:38.660Z",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-Interfaces-and-PlugIns.md"
+      ],
+      "evidence": "Audited GuildRoleLimits, HnmoSeasonInstance, HostSettings/Validator, ControlOperations, CrashWatch, RollingLogWriter, and inter-server contracts (IGameServer, IGuildServer, IFriendServer, ILoginServer, IConnectServer).",
+      "prs": "",
+      "changedFiles": [
+        "(commit not found)"
+      ]
     },
     {
       "id": "client/web/src (files 1)",
