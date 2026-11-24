@@ -1,5 +1,5 @@
 {
-  "generatedAt": "e81c3ceb",
+  "generatedAt": "9e1e8ffd",
   "maxLines": 6000,
   "units": [
     {
@@ -8846,11 +8846,14 @@
       ],
       "files": 8,
       "lines": 5853,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "9e1e8ffd",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "GMCrywolf1st.cpp:33-75",
+        "docs/audit/findings/unit-client-src-source-World-GameMaps-files-1.md"
+      ],
+      "evidence": "8f/5853L: Crywolf notice board & rewards (10% monster strength decrease, 5% chaos/arena rate decrease) and NPC-delete failure text match Web crywolf.ts.",
       "prs": ""
     },
     {
