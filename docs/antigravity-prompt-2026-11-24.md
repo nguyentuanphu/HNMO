@@ -165,4 +165,29 @@ it. Otherwise one draft PR per item, with tests, EN/VI texts and screenshots.
    class items, Horn of Fenrir from second class, level 380 items, second wing options, harmony +14/+15, the Eternal Wing
    set, jewel prices).
 
+## Part 9: after main's review of #348, #359, #362-#364 (24 Nov evening)
+
+Merged by main: #348 (audit), #362 (one auto play window), #363 (one quest window), #364 (launchers). Not merged:
+#359 (it repeats #347, already merged, on an old base and conflicts in four files).
+
+1. [Medium] #359: on a fresh branch from the latest `claude/hnmo-main-handover-54co2m`, keep only what #347 did not
+   already do (the ground items' Alt toggle, the trade window's in-game zen prompt, anything else new), one PR; close #359.
+2. [High] Audit gaps main found in #348:
+   - 141 units were moved to "No game rules" to reach 0 "Not checked". Some hold rules: `client/web/src (files 2)`
+     (it contains `main.ts`, with party, guild, trade and chat checks), desktop `GameLogic/Buffs` and the other desktop
+     GameLogic units. Re-check every unit moved to "No game rules" on 24 Nov: keep it only with a one-line reason that
+     names what the files do; otherwise audit it.
+   - 11 server units are "Checked" without their own findings file (Bots files 1 and 3, GuildWar, ItemDefinitions,
+     ItemFormulas, MiniGames/Doppelganger, MiniGames/ImperialGuardian, PlayerActions/Chat, PlugIns/Chat,
+     PlugIns/DuplicateItems, Raklion): write them.
+   - The desktop and web client findings are about ten lines for a thousand lines of code: compare each rule the files
+     hold (with file:line), not only a summary.
+3. [High] From findings to fixes: write `docs/audit/findings/differences-summary.md`, every "differs" and "missing in
+   HNMO" from all diff files and unit findings, grouped (master skills: 187 missing, 34 differ; Castle Siege 7 vs 14
+   days and friendly fire; episode quests 247 vs 456; event reward bags; and so on), each with a recommendation: a bug to
+   fix, a choice for the owner (into `questions-for-owner.md`), or HNMO's own rule to keep. Then one draft PR per area
+   for the clear bugs, each with a test that fails before; start with the three in `unit-server-src-GameLogic-files-1.md`
+   (Summoner's Fenrir skill damage, the spawn gate random point, the dropped item stack check).
+4. Part 8 items 3 to 8 (seasons page, resizable chat, models and effects, HUD sweep, Season 9 checks, desktop client).
+
 After each part, tell the owner in Vietnamese: the PR, what was done, test results, the real audit numbers, what is left.
