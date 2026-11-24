@@ -1,5 +1,5 @@
 {
-  "generatedAt": "eb9f922e",
+  "generatedAt": "c19c1c35",
   "maxLines": 6000,
   "units": [
     {
@@ -6169,11 +6169,14 @@
       ],
       "files": 6,
       "lines": 376,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "c19c1c35",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "DataHandler/SoundData",
+        "docs/audit/findings/unit-client-src-source-Data-DataHandler-SoundData.md"
+      ],
+      "evidence": "6f/376L: No game rules (binary/JSON file loaders, checksum & IO helpers (no game balance rules).)",
       "prs": ""
     },
     {
