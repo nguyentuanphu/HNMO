@@ -1,5 +1,5 @@
 {
-  "generatedAt": "236277b0",
+  "generatedAt": "337a678c",
   "maxLines": 6000,
   "units": [
     {
@@ -6738,11 +6738,16 @@
       ],
       "files": 24,
       "lines": 3002,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "337a678c",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Object/AnimationTaskPool.cpp",
+        "Object/AnimationTaskPool.h",
+        "Object/CharacterAttachments.cpp",
+        "docs/audit/findings/unit-client-src-source-Engine-Object-files-1.md"
+      ],
+      "evidence": "24f/3002L: No game rules (3D object/character/world animation, bone transforms, FX, item tooltips & open-data loaders (rendering/UI layer).)",
       "prs": ""
     },
     {
