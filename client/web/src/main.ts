@@ -759,16 +759,33 @@ ui.canvas.addEventListener('pointermove', (event) => { labelPointer = event; }, 
 ui.canvas.addEventListener('pointerleave', () => { labelPointer = null; });
 
 const labelsShown = new Set<Character>();
+const speechBalloons = new Map<Character, { lines: string[]; expiresAt: number }>();
+function showSpeechBalloon(speaker: Character | null, message: string): void {
+  const text = message.trim();
+  if (!speaker || !text) return;
+  const prev = speechBalloons.get(speaker);
+  const now = performance.now();
+  const lines = prev && prev.expiresAt > now ? [...prev.lines, text].slice(-2) : [text];
+  // Matches desktop AddChat lifetime: 160 + length * 2 ticks at 25 FPS (ms).
+  speechBalloons.set(speaker, { lines, expiresAt: now + 6400 + text.length * 80 });
+}
 function updateLabels(): void {
   const visible = labelsShown;
   visible.clear();
   const hero = state.hero, world = state.world;
+  const now = performance.now();
+  for (const [who, balloon] of speechBalloons) {
+    if (balloon.expiresAt <= now) speechBalloons.delete(who);
+  }
   const pointed = labelPointer && eventOfMap(state.mapNumber ?? null) !== 'chaosCastle' ? pickCharacter(labelPointer, ['npc']) : null;
   if (state.online && hero && world) {
     const rect = canvasRect();
-    for (const character of state.online.characters.values()) {
+    const candidates: Character[] = [...state.online.characters.values()];
+    if (speechBalloons.has(hero)) candidates.push(hero);
+    for (const character of candidates) {
+      const balloon = speechBalloons.get(character);
       // A pointed player's name box (with its Gens mark and guild line) is the Gens marks' (ui/gensWindow.ts).
-      if ((character !== pointed || character.kind === 'player') && character.kind !== 'kalimaGate') continue; // a Kalima gate keeps its name box
+      if (!balloon && (character !== pointed || character.kind === 'player') && character.kind !== 'kalimaGate') continue; // a Kalima gate keeps its name box
       const dx = character.cell.x - hero.cell.x, dy = character.cell.y - hero.cell.y;
       if (Math.hypot(dx, dy) > LABEL_RANGE_CELLS) continue;
       const point = toScene(character.position.x, character.position.y, sampleHeight(world.heights, character.position.x, character.position.y) + 220).project(camera);
@@ -782,6 +799,17 @@ function updateLabels(): void {
         labelElements.set(character, element);
       }
       decorateLabel(character, element);
+      if (balloon) {
+        let speech = element.querySelector('.label-speech') as HTMLSpanElement | null;
+        if (!speech) {
+          speech = document.createElement('span');
+          speech.className = 'label-speech';
+          element.prepend(speech);
+        }
+        speech.textContent = balloon.lines.join('\n');
+      } else {
+        element.querySelector('.label-speech')?.remove();
+      }
       element.style.transform = `translate(${(point.x + 1) / 2 * rect.width}px, ${(1 - point.y) / 2 * rect.height}px) translate(-50%, -100%)`;
       visible.add(character);
     }
@@ -1670,6 +1698,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   void loadItemValueData().then(() => { itemWindows.shop.repairAllCost = () => repairAllCost(inventory.items, false); itemWindows.refresh(); })
     .catch((error: unknown) => console.warn('Item prices', error));
   // The smiths and weapon merchants also repair (SetRepairShop: Eo, Zienna, Hanzo, Rhea, Bolo).
+  online.onObjectMessage = (speaker, _id, message) => showSpeechBalloon(speaker, message);
   online.onTalk = (npc) => { itemWindows.shop.repairShop = [243, 246, 251, 416, 578].includes(npc.monsterNumber ?? -1); };
   inventory.onChange((what) => { if (what === 'buyFailed') chat.add('You cannot buy this item.', 'system'); });
   window.addEventListener('keydown', (event) => {
