@@ -1,5 +1,5 @@
 {
-  "generatedAt": "99ff9b18",
+  "generatedAt": "361981f6",
   "maxLines": 6000,
   "units": [
     {
@@ -5384,11 +5384,13 @@
       ],
       "files": 13,
       "lines": 2955,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "361981f6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-GameLogic.md"
+      ],
+      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
       "prs": ""
     },
     {
@@ -6506,11 +6508,13 @@
       ],
       "files": 12,
       "lines": 1114,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "361981f6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-GameLogic.md"
+      ],
+      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
       "prs": ""
     },
     {
@@ -6521,11 +6525,13 @@
       ],
       "files": 10,
       "lines": 1006,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "361981f6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-GameLogic.md"
+      ],
+      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
       "prs": ""
     },
     {
@@ -6536,11 +6542,13 @@
       ],
       "files": 16,
       "lines": 4587,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "361981f6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-GameLogic.md"
+      ],
+      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
       "prs": ""
     },
     {
@@ -6551,11 +6559,13 @@
       ],
       "files": 9,
       "lines": 926,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "361981f6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-GameLogic.md"
+      ],
+      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
       "prs": ""
     },
     {
@@ -6566,11 +6576,13 @@
       ],
       "files": 26,
       "lines": 5654,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "361981f6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-GameLogic.md"
+      ],
+      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
       "prs": ""
     },
     {
@@ -6614,11 +6626,13 @@
       ],
       "files": 34,
       "lines": 5925,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "361981f6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-GameLogic.md"
+      ],
+      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
       "prs": ""
     },
     {
@@ -6639,11 +6653,13 @@
       ],
       "files": 11,
       "lines": 1409,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "361981f6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-GameLogic.md"
+      ],
+      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
       "prs": ""
     },
     {
@@ -6654,11 +6670,13 @@
       ],
       "files": 16,
       "lines": 2477,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "361981f6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-GameLogic.md"
+      ],
+      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
       "prs": ""
     },
     {
@@ -6669,11 +6687,13 @@
       ],
       "files": 8,
       "lines": 374,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "361981f6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-GameLogic.md"
+      ],
+      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
       "prs": ""
     },
     {
@@ -6684,11 +6704,13 @@
       ],
       "files": 2,
       "lines": 46,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "361981f6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-GameLogic.md"
+      ],
+      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
       "prs": ""
     },
     {
@@ -6699,11 +6721,13 @@
       ],
       "files": 23,
       "lines": 4608,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "361981f6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-GameLogic.md"
+      ],
+      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
       "prs": ""
     },
     {
@@ -6714,11 +6738,13 @@
       ],
       "files": 8,
       "lines": 3267,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "361981f6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-GameLogic.md"
+      ],
+      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
       "prs": ""
     },
     {
@@ -6729,11 +6755,13 @@
       ],
       "files": 7,
       "lines": 1225,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "361981f6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-GameLogic.md"
+      ],
+      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
       "prs": ""
     },
     {
@@ -6744,11 +6772,13 @@
       ],
       "files": 6,
       "lines": 2189,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "361981f6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-GameLogic.md"
+      ],
+      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
       "prs": ""
     },
     {
@@ -6785,11 +6815,13 @@
       ],
       "files": 27,
       "lines": 3983,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "361981f6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-GameLogic.md"
+      ],
+      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
       "prs": ""
     },
     {
@@ -6800,11 +6832,13 @@
       ],
       "files": 9,
       "lines": 835,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "361981f6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-GameLogic.md"
+      ],
+      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
       "prs": ""
     },
     {
@@ -6815,11 +6849,13 @@
       ],
       "files": 43,
       "lines": 3116,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "361981f6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-GameLogic.md"
+      ],
+      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
       "prs": ""
     },
     {
@@ -6830,11 +6866,13 @@
       ],
       "files": 16,
       "lines": 2443,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "361981f6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-GameLogic.md"
+      ],
+      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
       "prs": ""
     },
     {
@@ -6860,11 +6898,13 @@
       ],
       "files": 4,
       "lines": 1653,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "361981f6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-src-GameLogic.md"
+      ],
+      "evidence": "Audited desktop client GameLogic/* (MixMgr, EquipmentRestrictions, TradeRestrictions, ShopRestrictions, SkillExecution, QuestMng), MUHelper, GameShop, Guild, and Character.",
       "prs": ""
     },
     {
