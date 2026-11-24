@@ -1,5 +1,5 @@
 {
-  "generatedAt": "1aa6cabe",
+  "generatedAt": "d260790c",
   "maxLines": 6000,
   "units": [
     {
@@ -4526,11 +4526,17 @@
       ],
       "files": 66,
       "lines": 5251,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "d260790c",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "GameConfiguration.cs:25-218",
+        "DuelConfiguration.cs:13-45",
+        "GameVersion.cs:24-100",
+        "SystemConfiguration.cs:17-95",
+        "docs/audit/findings/unit-server-src-DataModel-Configuration-files-1.md"
+      ],
+      "evidence": "66f/5251L: GameConfiguration defaults/docs (MasterExperienceRate=1.0, ExcellentDropLevelBonus=25, AncientDropLevelBonus=30, MaxLv=400, MaxParty=5, Recv=3000ms) match S6/S9 client formulas.",
       "prs": ""
     },
     {
