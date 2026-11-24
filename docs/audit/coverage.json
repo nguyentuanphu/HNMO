@@ -1,5 +1,5 @@
 {
-  "generatedAt": "d9dc426f",
+  "generatedAt": "06c2e174",
   "maxLines": 6000,
   "units": [
     {
@@ -2656,11 +2656,14 @@
       ],
       "files": 11,
       "lines": 237,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "06c2e174",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Views/Quest",
+        "docs/audit/findings/unit-server-src-GameLogic-Views-Quest.md"
+      ],
+      "evidence": "11f/237L: No game rules (pure C# view plugin interfaces and result enums).",
       "prs": ""
     },
     {
