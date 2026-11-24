@@ -44,3 +44,20 @@ Both Season 6 and Season 9 legacy suite configurations (`IGC_ItemOptionManager.x
 ## 5. S9 Suite Metadata for `MossGambleItemCatalog` & `Stardust`
 - **`13:71..75` Moss Gamble Vouchers**: S9 suite item list has `Slot="8"`, `Width="2" Height="3"`, `Durability="255"`, `Dump="0" Transaction="0" PersonalStore="0" StoreWarehouse="0" SellToNPC="0" Repair="0"`. HNMO `ItemRules.cs` currently has no entries blocking `13:71..75`.
 - **`14:153` Stardust**: S9 suite item list has `Width="1" Height="1"`, `Drop="0"`, `Money="60"`, `Overlap="20"`, `Dump="0" Transaction="0" PersonalStore="0" StoreWarehouse="0" Repair="0"`, `SellToNPC="1"`. HNMO `Misc.cs` sets `Durability = 1`, `Value = 60`; `ItemRules.cs` has no rule entry for `14:153`.
+
+## 6. Item Pricing, Durability & Requirement Formulas (`ItemPriceCalculator`, `ItemExtensions`, `ItemPowerUpFactory`)
+- **Zen Cap**: `MaximumPrice = 3_000_000_000`.
+- **Base Buy Price**:
+  - Wings: `((dl + 40) * dl^2 * 11) + 40_000_000`
+  - Standard equipment: `((dl + 40) * dl^2 / 8) + 100`
+  - Effective drop level (`dl`) additions: item levels `+5..+15` add `[4, 10, 25, 45, 65, 95, 135, 185, 245, 305, 365]`; Excellent adds `+25`.
+  - Price multipliers: Skill `* 2.5`, Luck `+25%`, Option L1 `+60%` / Ln `+70% * 2^(n-1)`, Wing `+25%` per option, Excellent `* 2` per exc option, Guardian 380 `+16%`.
+- **Sell & Repair**:
+  - Sell price: `base / 3` scaled down for durability loss (`0.6` factor).
+  - Repair cost: `3 * base^0.75 * (1 - dur / maxDur) + 1`, multiplied by `2.0x` (destroyed pet), `1.4x` (destroyed item), and `2.5x` (self-repair away from NPC).
+- **Durability Scaling & Degradation**:
+  - Max durability level bonuses `+0..+15`: `[0, 1, 2, 3, 4, 6, 8, 10, 12, 14, 17, 21, 26, 32, 39, 47]`; Ancient `+20`; Excellent `+15`.
+  - Stat effectiveness degradation breakpoints: `< 50%` (`0.5`), `< 30%` (`0.7`), `< 20%` (`0.8`).
+- **Right-Hand Staff & Dual-Wield Option Rules**:
+  - Right-hand staff skips `Stats.WizardryBaseDmg` option (`InventoryStorage.cs:278-284`).
+  - `ItemPowerUpFactory` remaps `Minimum/MaximumPhysBaseDmgByWeapon` -> `*ByRightWeapon` for `RightHandSlot`, and applies `-1` adjustment when averaging dual-wield right-hand `PhysicalBaseDmgIncrease` excellent options.

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "99ed4835",
+  "generatedAt": "fc84e7ee",
   "maxLines": 6000,
   "units": [
     {
@@ -106,11 +106,11 @@
       ],
       "files": 53,
       "lines": 5993,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "fc84e7ee",
+      "checkedOn": "2026-11-24",
+      "references": "docs/audit/references/item-options-380-harmony-cashshop.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-files-2.md",
       "prs": ""
     },
     {
