@@ -1,5 +1,5 @@
 {
-  "generatedAt": "d1877032",
+  "generatedAt": "c5ed472b",
   "maxLines": 6000,
   "units": [
     {
@@ -6205,11 +6205,14 @@
       ],
       "files": 5,
       "lines": 672,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "c5ed472b",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "GameData/BuffData",
+        "docs/audit/findings/unit-client-src-source-Data-GameData-BuffData.md"
+      ],
+      "evidence": "5f/672L: No game rules (data schemas, color folders, effect/model/sound/translation assets & validators (no game rules).)",
       "prs": ""
     },
     {
