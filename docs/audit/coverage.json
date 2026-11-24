@@ -1,5 +1,5 @@
 {
-  "generatedAt": "a57561f1",
+  "generatedAt": "99ff9b18",
   "maxLines": 6000,
   "units": [
     {
@@ -4709,11 +4709,13 @@
       ],
       "files": 21,
       "lines": 3599,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "99ff9b18",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-web.md"
+      ],
+      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
       "prs": ""
     },
     {
@@ -4731,11 +4733,13 @@
       ],
       "files": 8,
       "lines": 4955,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "99ff9b18",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-web.md"
+      ],
+      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
       "prs": ""
     },
     {
@@ -4762,11 +4766,13 @@
       ],
       "files": 17,
       "lines": 5244,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "99ff9b18",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-web.md"
+      ],
+      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
       "prs": ""
     },
     {
@@ -4777,11 +4783,13 @@
       ],
       "files": 5,
       "lines": 1572,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "99ff9b18",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-web.md"
+      ],
+      "evidence": "Inspected directory/files; pure audio, dev viewer, or Three.js rendering/effect code with no game rules.",
       "prs": ""
     },
     {
@@ -4792,11 +4800,13 @@
       ],
       "files": 1,
       "lines": 172,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "99ff9b18",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-web.md"
+      ],
+      "evidence": "Inspected directory/files; pure audio, dev viewer, or Three.js rendering/effect code with no game rules.",
       "prs": ""
     },
     {
@@ -4818,11 +4828,13 @@
       ],
       "files": 12,
       "lines": 5492,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "99ff9b18",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-web.md"
+      ],
+      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
       "prs": ""
     },
     {
@@ -4845,11 +4857,13 @@
       ],
       "files": 13,
       "lines": 5968,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "99ff9b18",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-web.md"
+      ],
+      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
       "prs": ""
     },
     {
@@ -4868,11 +4882,13 @@
       ],
       "files": 9,
       "lines": 5120,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "99ff9b18",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-web.md"
+      ],
+      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
       "prs": ""
     },
     {
@@ -4897,11 +4913,13 @@
       ],
       "files": 15,
       "lines": 5819,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "99ff9b18",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-web.md"
+      ],
+      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
       "prs": ""
     },
     {
@@ -4923,11 +4941,13 @@
       ],
       "files": 12,
       "lines": 3201,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "99ff9b18",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-web.md"
+      ],
+      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
       "prs": ""
     },
     {
@@ -4938,11 +4958,13 @@
       ],
       "files": 4,
       "lines": 638,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "99ff9b18",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-web.md"
+      ],
+      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
       "prs": ""
     },
     {
@@ -4953,11 +4975,13 @@
       ],
       "files": 1,
       "lines": 209,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "99ff9b18",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-web.md"
+      ],
+      "evidence": "Inspected directory/files; pure audio, dev viewer, or Three.js rendering/effect code with no game rules.",
       "prs": ""
     },
     {
@@ -4981,11 +5005,13 @@
       ],
       "files": 14,
       "lines": 5882,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "99ff9b18",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-web.md"
+      ],
+      "evidence": "Inspected directory/files; pure audio, dev viewer, or Three.js rendering/effect code with no game rules.",
       "prs": ""
     },
     {
@@ -5006,11 +5032,13 @@
       ],
       "files": 11,
       "lines": 4576,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "99ff9b18",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-web.md"
+      ],
+      "evidence": "Inspected directory/files; pure audio, dev viewer, or Three.js rendering/effect code with no game rules.",
       "prs": ""
     },
     {
@@ -5037,11 +5065,13 @@
       ],
       "files": 17,
       "lines": 5970,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "99ff9b18",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-web.md"
+      ],
+      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
       "prs": ""
     },
     {
@@ -5067,11 +5097,13 @@
       ],
       "files": 16,
       "lines": 5728,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "99ff9b18",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-web.md"
+      ],
+      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
       "prs": ""
     },
     {
@@ -5101,11 +5133,13 @@
       ],
       "files": 20,
       "lines": 5966,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "99ff9b18",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-web.md"
+      ],
+      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
       "prs": ""
     },
     {
@@ -5130,11 +5164,13 @@
       ],
       "files": 15,
       "lines": 5729,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "99ff9b18",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-web.md"
+      ],
+      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
       "prs": ""
     },
     {
@@ -5163,11 +5199,13 @@
       ],
       "files": 19,
       "lines": 5933,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "99ff9b18",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-web.md"
+      ],
+      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
       "prs": ""
     },
     {
@@ -5178,11 +5216,13 @@
       ],
       "files": 18,
       "lines": 5889,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "99ff9b18",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-client-web.md"
+      ],
+      "evidence": "Audited web game rules (inventory, mixRecipes, combat, skillCast, quests, masterLevel, resets), net/packets, modulusCipher, UI windows, and bridge security guards (AccountGuessGuard, VisitorLimits, RelayPorts).",
       "prs": ""
     },
     {
