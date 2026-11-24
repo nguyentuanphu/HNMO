@@ -1,5 +1,5 @@
 {
-  "generatedAt": "10513cb5",
+  "generatedAt": "9f72bccd",
   "maxLines": 6000,
   "units": [
     {
@@ -3511,11 +3511,16 @@
       ],
       "files": 42,
       "lines": 4109,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "9f72bccd",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "the Season 6 suite's RegularSkillCalc.lua, MasterSkillCalc.lua, SkillList.xml & BuffEffectManager.xml",
+        "the Season 9 suite's RegularSkillCalc.lua",
+        "docs/audit/data/diff-client-tables.txt",
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-Skills.md"
+      ],
+      "evidence": "Audited all 42 files (4109 lines): docs/audit/findings/unit-server-src-Persistence-Initialization-Skills.md",
       "prs": "#222, #246, #248, #249, #261, #263, #264, #265"
     },
     {
