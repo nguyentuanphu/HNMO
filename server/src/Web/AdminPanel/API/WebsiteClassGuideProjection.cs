@@ -94,6 +94,13 @@ public static class WebsiteClassGuideProjection
         skill.Range,
         skill.AttackDamage,
         masterRank = skill.MasterDefinition?.Rank,
+        masterDetail = skill.MasterDefinition is { } master ? new
+        {
+            master.MinimumLevel,
+            master.MaximumLevel,
+            valueFormula = master.ValueFormula is { Length: > 0 and <= 400 } ? master.ValueFormula : null,
+            prerequisites = master.RequiredMasterSkills.Take(MaximumAttributes).Select(required => Name(required.Name)).ToArray(),
+        } : null,
         requirements = AttrValues(skill.Requirements),
         costs = AttrValues(skill.ConsumeRequirements),
     };

@@ -16,11 +16,14 @@ type Boss = {
 };
 type EventRow = {
   name: Name; id: string; category: string; nextStartUtc: string | null; endsAtUtc: string | null; isActive: boolean;
+  scheduledEndUtc?: string | null;
   tiers: Tier[]; invasion: Invasion | null; boss: Boss | null; winner: Currency | null;
 };
 type Quest = {
   name: Name; group: number; number: number; npc: Name; maps: Name[]; minimumLevel: number; maximumLevel: number; requiredStartMoney: number; repeatable: boolean; qualifiedClass: Name | null;
-  kills: { name: Name; count: number }[]; items: { name: Name; count: number }[];
+  kills: { name: Name; count: number }[]; items: { name: Name; count: number; dropGroup?: {
+    chance: number | null; monster: Name | null; minimumMonsterLevel: number | null; maximumMonsterLevel: number | null;
+  } | null }[];
   rewards: { kind: string; value: number | null; name: Name | null; level: number | null; attribute: string | null }[];
 };
 type Guide = { events: EventRow[]; eventsTruncated: boolean; quests: Quest[]; questsTruncated: boolean };
@@ -47,6 +50,9 @@ const copy = {
   oneOfMaps: ['One of', 'Một trong các bản đồ'], allMaps: ['All listed maps', 'Tất cả bản đồ được liệt kê'],
   npcs: ['Quest giver', 'NPC giao nhiệm vụ'], repeatable: ['Repeatable', 'Có thể làm lại'], class: ['Class', 'Lớp nhân vật'],
   kills: ['Defeat', 'Tiêu diệt'], items: ['Collect', 'Thu thập'], limited: ['The guide shows the first entries in this list.', 'Hướng dẫn hiển thị các mục đầu của danh sách.'],
+  groupChance: ['Configured drop group chance', 'Tỷ lệ nhóm rơi theo cấu hình'],
+  monsterLevels: ['Monster level', 'Cấp quái'],
+  scheduledEnd: ['Scheduled end', 'Giờ kết thúc dự kiến'],
   winner: ['Winner', 'Người thắng'], contribution: ['Participation threshold', 'Ngưỡng tham gia'], damage: ['damage', 'sát thương'],
   topAlso: ['Top ranks can also earn participation rewards.', 'Các hạng cao cũng có thể nhận thưởng tham gia.'],
 } as const;
@@ -165,6 +171,8 @@ function renderEvent(row: EventRow, showVisitor: boolean): HTMLElement {
     card.append(node('p', `${text(row.isActive ? 'ends' : 'next')} · ${times.sydney} (${text('sydney')})`));
     if (showVisitor && times.visitor !== times.sydney) fact(card, 'visitor', times.visitor);
   } else if (!row.isActive) card.append(node('p', text('noStart')));
+  const scheduledEnd = row.scheduledEndUtc ? websiteEventTime(row.scheduledEndUtc, locale()) : null;
+  if (scheduledEnd) fact(card, 'scheduledEnd', `${scheduledEnd.sydney} (${text('sydney')})`);
   const details = summary(text('details'));
   details.append(...row.tiers.map(renderTier));
   if (row.invasion) details.append(...renderInvasion(row.invasion));
@@ -183,7 +191,17 @@ function renderQuest(quest: Quest): HTMLElement {
   if (quest.requiredStartMoney > 0) fact(card, 'startMoney', `${number(quest.requiredStartMoney)} Zen`);
   if (quest.repeatable) card.append(node('p', text('repeatable')));
   list(card, text('kills'), quest.kills.map(entry => `${number(entry.count)} × ${name(entry.name)}`));
-  list(card, text('items'), quest.items.map(entry => `${number(entry.count)} × ${name(entry.name)}`));
+  list(card, text('items'), quest.items.map(entry => {
+    const group = entry.dropGroup;
+    const levelRange = group ? levels(group.minimumMonsterLevel ?? 0, group.maximumMonsterLevel ?? 0) : '';
+    const info = [
+      `${number(entry.count)} × ${name(entry.name)}`,
+      group ? name(group.monster) : '',
+      levelRange ? `${text('monsterLevels')} ${levelRange}` : '',
+      typeof group?.chance === 'number' ? `${text('groupChance')} ${number(group.chance * 100)}%` : '',
+    ];
+    return info.filter(Boolean).join(' · ');
+  }));
   list(card, text('rewards'), quest.rewards.map(reward => {
     const kind = label(rewardNames, reward.kind);
     if (!kind) return '';
