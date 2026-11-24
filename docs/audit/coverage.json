@@ -1,5 +1,5 @@
 {
-  "generatedAt": "57064b64",
+  "generatedAt": "eb92fc96",
   "maxLines": 6000,
   "units": [
     {
@@ -4605,11 +4605,16 @@
       ],
       "files": 31,
       "lines": 2854,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "eb92fc96",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "PlugInManager.cs:1-50",
+        "PlugInProxyTypeGenerator.cs",
+        "StrategyPlugInProvider.cs",
+        "docs/audit/findings/unit-server-src-PlugIns.md"
+      ],
+      "evidence": "31f/2854L: generic plugin DI, Roslyn proxy generation and configuration infrastructure only; no game rules.",
       "prs": ""
     },
     {
