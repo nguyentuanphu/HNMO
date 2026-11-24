@@ -13,6 +13,7 @@ import { ItemTooltipView, type ScreenBox } from './itemTooltipView.js';
 import type { TooltipCharacter, TooltipLine } from '../game/itemTooltip.js';
 import { isHighValue, isSellingBan } from '../game/itemUse.js';
 import { nativeTextPx, uiScale, dockTop } from './nativeText.js';
+import { promptInGame } from './confirmDialog.js';
 
 const CELL = 20; // the grid's cell pitch in reference pixels (item_grid.rcss --item-cell)
 const PANEL = { width: 190, height: 429 };
@@ -1176,9 +1177,10 @@ export class ItemWindows {
     this.inventory.sell(slot);
   }
 
-  askMoney(toVault: boolean): void {
+  async askMoney(toVault: boolean): Promise<void> {
     const question = toVault ? 'How much zen to deposit?' : 'How much zen to withdraw?';
-    const text = window.prompt(translate(question) ?? question, '0');
+    const text = await promptInGame(translate(question) ?? question, { numericOnly: true, maxLength: 10, initialText: '0' });
+    if (text === null) return;
     const amount = Math.floor(Number(text));
     if (amount > 0) this.inventory.moveMoney(toVault, amount);
   }

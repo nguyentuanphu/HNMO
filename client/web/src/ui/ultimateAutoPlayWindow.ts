@@ -36,16 +36,19 @@ type Tab = 'survival' | 'combat' | 'stats';
 
 export class UltimateAutoPlayWindow {
   private hud: HTMLElement | null = null;
+  private hudMinimized = false;
   private hudRefs: {
     dot: HTMLElement;
     statusText: Text;
     vipTag: HTMLElement;
+    body: HTMLElement;
     killsLabel: Text;
     killsVal: HTMLElement;
     expVal: HTMLElement;
     toggleBtn: HTMLButtonElement;
     townBtn: HTMLButtonElement;
     openBtn: HTMLButtonElement;
+    minimizeBtn: HTMLButtonElement;
   } | null = null;
   private panel: HTMLElement | null = null;
   private tab: Tab = 'survival';
@@ -132,17 +135,21 @@ export class UltimateAutoPlayWindow {
         <span data-uap-ref="status"></span>
         <span data-uap-ref="vip" style="display:none;padding:1px 5px;border-radius:4px;background:#78350f;color:#fde68a;font-size:10px;font-weight:700">VIP</span>
       </span>
-      <span style="color:#cbd5e1"><span data-uap-ref="killsLabel"></span>: <b data-uap-ref="kills">0</b></span>
-      <span style="color:#cbd5e1">EXP/h: <b data-uap-ref="exp">0</b></span>
-      <button type="button" data-uap-hud="toggle" style="${btnStyle('#166534')}"></button>
-      <button type="button" data-uap-hud="town" style="${btnStyle('#334155')}"></button>
-      <button type="button" data-uap-hud="open" style="${btnStyle('#78350f')}"></button>
+      <span data-uap-hud="body" style="display:inline-flex;align-items:center;gap:8px">
+        <span style="color:#cbd5e1"><span data-uap-ref="killsLabel"></span>: <b data-uap-ref="kills">0</b></span>
+        <span style="color:#cbd5e1">EXP/h: <b data-uap-ref="exp">0</b></span>
+        <button type="button" data-uap-hud="toggle" style="${btnStyle('#166534')}"></button>
+        <button type="button" data-uap-hud="town" style="${btnStyle('#334155')}"></button>
+        <button type="button" data-uap-hud="open" style="${btnStyle('#78350f')}"></button>
+      </span>
+      <button type="button" data-uap-hud="minimize" style="${btnStyle('#1e293b')}" title="Minimize / Restore">-</button>
     `;
     const dot = hud.querySelector<HTMLElement>('[data-uap-ref="dot"]')!;
     const statusHost = hud.querySelector<HTMLElement>('[data-uap-ref="status"]')!;
     const statusText = document.createTextNode('');
     statusHost.appendChild(statusText);
     const vipTag = hud.querySelector<HTMLElement>('[data-uap-ref="vip"]')!;
+    const body = hud.querySelector<HTMLElement>('[data-uap-hud="body"]')!;
     const killsHost = hud.querySelector<HTMLElement>('[data-uap-ref="killsLabel"]')!;
     const killsLabel = document.createTextNode('');
     killsHost.appendChild(killsLabel);
@@ -151,6 +158,7 @@ export class UltimateAutoPlayWindow {
     const toggleBtn = hud.querySelector<HTMLButtonElement>('[data-uap-hud="toggle"]')!;
     const townBtn = hud.querySelector<HTMLButtonElement>('[data-uap-hud="town"]')!;
     const openBtn = hud.querySelector<HTMLButtonElement>('[data-uap-hud="open"]')!;
+    const minimizeBtn = hud.querySelector<HTMLButtonElement>('[data-uap-hud="minimize"]')!;
 
     toggleBtn.addEventListener('click', () => this.opts.toggleActive());
     townBtn.addEventListener('click', () => {
@@ -162,10 +170,14 @@ export class UltimateAutoPlayWindow {
       this.opts.message(tx('Ultimate Auto play: returning to Lorencia.', 'Autoplay: đang quay về Lorencia.'));
     });
     openBtn.addEventListener('click', () => this.toggle());
+    minimizeBtn.addEventListener('click', () => {
+      this.hudMinimized = !this.hudMinimized;
+      this.updateHudContent();
+    });
 
     document.body.appendChild(hud);
     this.hud = hud;
-    this.hudRefs = { dot, statusText, vipTag, killsLabel, killsVal, expVal, toggleBtn, townBtn, openBtn };
+    this.hudRefs = { dot, statusText, vipTag, body, killsLabel, killsVal, expVal, toggleBtn, townBtn, openBtn, minimizeBtn };
     this.updateHudContent();
   }
 
@@ -199,6 +211,10 @@ export class UltimateAutoPlayWindow {
     if (refs.townBtn.textContent !== townLabel) refs.townBtn.textContent = townLabel;
     const openLabel = tx('Ultimate (Alt+Z)', 'Cài đặt (Alt+Z)');
     if (refs.openBtn.textContent !== openLabel) refs.openBtn.textContent = openLabel;
+    const bodyDisplay = this.hudMinimized ? 'none' : 'inline-flex';
+    if (refs.body.style.display !== bodyDisplay) refs.body.style.display = bodyDisplay;
+    const minLabel = this.hudMinimized ? '+' : '-';
+    if (refs.minimizeBtn.textContent !== minLabel) refs.minimizeBtn.textContent = minLabel;
   }
 
   private badge(key: UltimateFeatureKey): { disabled: boolean; tag: string } {

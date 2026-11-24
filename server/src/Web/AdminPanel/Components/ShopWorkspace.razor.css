@@ -1,6 +1,8 @@
 .shop-workspace { min-width: 0; }
 .shop-panes { display: grid; grid-template-columns: minmax(300px, 420px) minmax(400px, 1fr); gap: 1.5rem; align-items: start; }
 .shop-catalogue { padding: 1rem; border: 1px solid var(--bs-border-color, #ddd); border-radius: .5rem; background: var(--bs-body-bg, white); }
+.shop-catalogue ::deep .picker-entry { min-height: 82px; height: auto; }
+.shop-catalogue ::deep .picker-add img { width: 64px; height: 64px; }
 .shop-grid-pane { min-width: 0; }
 .grid-and-details { display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: flex-start; }
 .shop-grid-scroll { overflow-x: auto; max-width: 100%; }
