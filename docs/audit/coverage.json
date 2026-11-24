@@ -1,5 +1,5 @@
 {
-  "generatedAt": "d51a4088",
+  "generatedAt": "3e3728a1",
   "maxLines": 6000,
   "units": [
     {
@@ -2182,11 +2182,11 @@
       ],
       "files": 24,
       "lines": 3139,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
+      "status": "Checked",
+      "checkedAt": "3e3728a1",
+      "checkedOn": "2026-11-24",
       "references": "",
-      "evidence": "",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-WorldBosses.md",
       "prs": ""
     },
     {
