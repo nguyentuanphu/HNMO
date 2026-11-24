@@ -1,5 +1,5 @@
 {
-  "generatedAt": "3dc3d06a",
+  "generatedAt": "a17e827d",
   "maxLines": 6000,
   "units": [
     {
@@ -778,15 +778,12 @@
       ],
       "files": 20,
       "lines": 1739,
-      "status": "Changed since check",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-22",
-      "references": "Season 6/9 ChaosMix & crafting rules",
-      "evidence": "All 19 files read (1616 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
-      "prs": "",
-      "changedFiles": [
-        "server/src/GameLogic/PlayerActions/Craftings/SocketWeaponCrafting.cs"
-      ]
+      "status": "Checked",
+      "checkedAt": "a17e827d",
+      "checkedOn": "2026-11-24",
+      "references": "S6/S9 IGCData/IGC_ChaosBox.ini, docs/audit/findings/socket-weapon-mix.md, docs/audit/data/diff-mixes.txt, docs/audit/data/s9/diff-mixes.txt",
+      "evidence": "All 20 files read (1739 lines): docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Craftings.md",
+      "prs": ""
     },
     {
       "id": "server/src/GameLogic/PlayerActions/Discord",
