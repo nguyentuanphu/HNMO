@@ -1,5 +1,5 @@
 {
-  "generatedAt": "a5d3e52d",
+  "generatedAt": "b4a73715",
   "maxLines": 6000,
   "units": [
     {
@@ -9002,11 +9002,14 @@
       ],
       "files": 10,
       "lines": 2978,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "b4a73715",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "World/MapInfra",
+        "docs/audit/findings/unit-client-src-source-World-MapInfra.md"
+      ],
+      "evidence": "10f/2978L: No game rules (3D map visual objects, shaders, fog, weather & terrain loaders (MapManager, GMAida, etc.; no game rules).)",
       "prs": ""
     },
     {
