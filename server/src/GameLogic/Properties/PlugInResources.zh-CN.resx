@@ -1869,4 +1869,52 @@
   <data name="MossGambleConfiguration_Enabled_Description" xml:space="preserve"><value>关闭后，在摩斯（492）处购买抽奖券将被拒绝且不扣除金币。</value></data>
   <data name="MossGambleConfiguration_PriceZen_Name" xml:space="preserve"><value>抽奖价格（金币）</value></data>
   <data name="MossGambleConfiguration_PriceZen_Description" xml:space="preserve"><value>在摩斯商人处每次抽奖消耗的金币（默认 2,000,000 金币）。</value></data>
+  <data name="GameNameConfiguration_Name_Caption" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="GameNameConfiguration_Name_Description" xml:space="preserve">
+    <value>此名称将替换玩家看到的默认名称（1 至 60 个字符）。网页版游戏会在一分钟内更新。</value>
+  </data>
+  <data name="GameNameConfiguration_ZaloLink_Caption" xml:space="preserve">
+    <value>Zalo</value>
+  </data>
+  <data name="GameNameConfiguration_ZaloLink_Description" xml:space="preserve">
+    <value>填写 Zalo 群组或联系人链接，方便玩家与您联系。留空则不显示。</value>
+  </data>
+  <data name="GameNameConfiguration_DiscordLink_Caption" xml:space="preserve">
+    <value>Discord</value>
+  </data>
+  <data name="GameNameConfiguration_DiscordLink_Description" xml:space="preserve">
+    <value>填写 Discord 邀请链接。留空则不显示。</value>
+  </data>
+  <data name="GameNameConfiguration_FacebookLink_Caption" xml:space="preserve">
+    <value>Facebook</value>
+  </data>
+  <data name="GameNameConfiguration_FacebookLink_Description" xml:space="preserve">
+    <value>填写 Facebook 主页或群组链接。留空则不显示。</value>
+  </data>
+  <data name="WebsitePlugIn_Name" xml:space="preserve">
+    <value>网站（管理面板地址、Google 登录）</value>
+  </data>
+  <data name="WebsitePlugIn_Description" xml:space="preserve">
+    <value>公共网站设置，包括管理面板的私有访问路径以及使用 Google 登录所需的客户端 ID。</value>
+  </data>
+  <data name="WebsiteConfiguration_AdminPath_Caption" xml:space="preserve">
+    <value>管理面板地址</value>
+  </data>
+  <data name="WebsiteConfiguration_AdminPath_Description" xml:space="preserve">
+    <value>网站通过此路径打开管理面板。请使用 3 至 40 个难以猜测的字母、数字、连字符或下划线。留空时，只能从主机访问管理面板。更改会在 30 秒内生效。通过网站访问时需要管理员账号。</value>
+  </data>
+  <data name="WebsiteConfiguration_GoogleClientId_Caption" xml:space="preserve">
+    <value>Google 客户端 ID</value>
+  </data>
+  <data name="WebsiteConfiguration_GoogleClientId_Description" xml:space="preserve">
+    <value>填写 Google Cloud 中类型为“Web 应用”的 OAuth 客户端 ID，并将网站地址添加为已获授权的 JavaScript 来源。留空则停用 Google 登录。</value>
+  </data>
+  <data name="WebsiteConfiguration_RequireWebsiteLogin_Caption" xml:space="preserve">
+    <value>网页版游戏：要求先登录网站</value>
+  </data>
+  <data name="WebsiteConfiguration_RequireWebsiteLogin_Description" xml:space="preserve">
+    <value>启用后，网页版游戏会隐藏密码表单。玩家需先登录网站，再点击“立即开始”。</value>
+  </data>
 </root>
