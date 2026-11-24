@@ -1,5 +1,5 @@
 {
-  "generatedAt": "72489586",
+  "generatedAt": "eb42cbb2",
   "maxLines": 6000,
   "units": [
     {
@@ -4424,11 +4424,15 @@
       ],
       "files": 2,
       "lines": 111,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "eb42cbb2",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "PowerUpDefinitionValue.cs:15-48",
+        "PowerUpDefinition.cs",
+        "docs/audit/findings/unit-server-src-DataModel-Attributes.md"
+      ],
+      "evidence": "2f/111L: No game rules (PowerUpDefinition / PowerUpDefinitionValue schema & durability factor element builder).",
       "prs": ""
     },
     {
