@@ -15,6 +15,7 @@ decision. Add new decisions here as they are made; never turn an agent's habit i
 | 24 Nov | Audit: the HNMO folders left out (AttributeSystem, GuildServer, FriendServer, PlugIns, Interfaces, web bridge) and the Season 6 / 9 clients' encoded data tables (items, skills, quests, gates ...) | "Đưa cả hai vào" |
 | 24 Nov | Audit of the HNMO desktop client (446,000 lines) | "Sau server, chỉ phần có luật" (after the server, its rule parts only) |
 | 24 Nov | Give ChatGPT: one admin (control page into the admin panel), VIP and coin top-up in test mode, licence packages on the hub in test mode | "Ok em cho chatgpt lamf 3 viec do di" |
+| 24 Nov | Auto play: one window instead of three | "Gộp 3 thành một autoplay"; how: "Gom vào cửa sổ 1, thêm tab" (the desktop helper window keeps its three tabs; HNMO extras and Ultimate become two more tabs; Z opens it, Shift+Z / Alt+Z open their tab; the small Ultimate HUD bar stays); who: "Main (em) làm" |
 | 23 Nov | Release 1.0.1 | "Hiện tại chưa có host nào hết. Với cả luôn cần updated full folder và cả phần cần update" |
 
 Earlier decisions (Maya's body, Fenrir, `/move` in events, the skill sweep points, the socket weapon mix in
