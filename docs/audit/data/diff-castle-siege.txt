@@ -1,3 +1,58 @@
-# Castle Siege Rules (S6 vs S9)
-S6: {"enable":1,"friendlyFire":1,"lordMixDailyLimit":1,"towerWithoutAlliance":0,"cycleDays":[0,0,0,0,0,0,0,0,0],"stateCount":0,"npcCount":24}
-S9: {"enable":1,"friendlyFire":1,"lordMixDailyLimit":1,"towerWithoutAlliance":0,"cycleDays":[0,0,0,0,0,0,0,0,0],"stateCount":0,"npcCount":24}
+# Castle Siege Rules (Season 6 vs Season 9 vs HNMO)
+# S6 cycles=9, cycleDays=14, npcs=24
+# S9 cycles=9, cycleDays=14, npcs=24
+# HNMO cycles=10, cycleDays=7 (CastleSiegeSchedule.cs:20 WeekDuration=7d), npcs=23
+
+## General Flags & PvP Rules
+Enable: S6=1, S9=1, HNMO=true (CastleSiegeInitializer.cs:59) -> same
+FriendlyFire: S6=1, S9=1, HNMO=unsupported (CheckAttack cancels same-side at CastleSiegePlugIn.cs:147-154) -> differs
+ResetAccumulatedTimeAfterKill: S6=0, S9=0, HNMO=not reset on kill (CastleSiegeCrownMechanics.cs:55-63) -> same default
+DamageReduction Opposite/Self (%): S6=40/20, S9=40/20, HNMO=missing (CastleSiegePlugIn.cs:147-154) -> missing in HNMO
+LordMixDailyLimit: S6=1, S9=1, HNMO=missing in CastleSiegeConfiguration -> missing in HNMO
+TowerEntryWithoutAlliance: S6=0, S9=0, HNMO=alliance required -> same
+MaxAttackingGuilds: S6=3, S9=3, HNMO=3 (CastleSiegeInitializer.cs:65) -> same
+CrownHoldTimeSeconds: S6=30, S9=30, HNMO=30 (CastleSiegeInitializer.cs:60) -> same
+OwnerGuildDestroyLimit: S6=1, S9=1, HNMO=enforced via siege check -> same
+MarkOfTheLordDropRate (/10000): S6=100, S9=100, HNMO=100 (CastleSiegeInitializer.cs vs Drops -> verify per-unit) -> same rate
+LandOfTrialsAncientDrop (Enable/Rate/MinLv): S6=1/8/75, S9=1/8/75
+
+## Cycle Schedule (S6 14-day vs S9 14-day vs HNMO 7-day)
+Cycle[0]: S6=Stage 1@Day0 00:00 | S9=Stage 1@Day0 00:00 | HNMO=Idle1@Sunday 00:00 -> differs (14d suite cycle vs 7d HNMO schedule; S9 battle 08:00-10:00 vs S6/HNMO 20:00-22:00)
+Cycle[1]: S6=Stage 2@Day1 23:59 | S9=Stage 2@Day1 23:59 | HNMO=RegisterGuild@Monday 00:00 -> differs (14d suite cycle vs 7d HNMO schedule; S9 battle 08:00-10:00 vs S6/HNMO 20:00-22:00)
+Cycle[2]: S6=Stage 3@Day2 00:00 | S9=Stage 3@Day2 00:00 | HNMO=Idle2@Tuesday 00:00 -> differs (14d suite cycle vs 7d HNMO schedule; S9 battle 08:00-10:00 vs S6/HNMO 20:00-22:00)
+Cycle[3]: S6=Stage 4@Day4 00:00 | S9=Stage 4@Day4 00:00 | HNMO=RegisterMark@Wednesday 00:00 -> differs (14d suite cycle vs 7d HNMO schedule; S9 battle 08:00-10:00 vs S6/HNMO 20:00-22:00)
+Cycle[4]: S6=Stage 5@Day4 12:00 | S9=Stage 5@Day4 12:00 | HNMO=Idle3@Thursday 00:00 -> differs (14d suite cycle vs 7d HNMO schedule; S9 battle 08:00-10:00 vs S6/HNMO 20:00-22:00)
+Cycle[5]: S6=Stage 6@Day4 19:00 | S9=Stage 6@Day4 19:00 | HNMO=Notify@Friday 00:00 -> differs (14d suite cycle vs 7d HNMO schedule; S9 battle 08:00-10:00 vs S6/HNMO 20:00-22:00)
+Cycle[6]: S6=Stage 7@Day7 20:00 | S9=Stage 7@Day7 08:00 | HNMO=Ready@Saturday 18:00 -> differs (14d suite cycle vs 7d HNMO schedule; S9 battle 08:00-10:00 vs S6/HNMO 20:00-22:00)
+Cycle[7]: S6=Stage 8@Day7 22:00 | S9=Stage 8@Day7 10:00 | HNMO=Start@Saturday 20:00 -> differs (14d suite cycle vs 7d HNMO schedule; S9 battle 08:00-10:00 vs S6/HNMO 20:00-22:00)
+Cycle[8]: S6=Stage 9@Day14 00:00 | S9=Stage 9@Day14 00:00 | HNMO=End@Saturday 22:00 -> differs (14d suite cycle vs 7d HNMO schedule; S9 battle 08:00-10:00 vs S6/HNMO 20:00-22:00)
+Cycle[9]: S6=none | S9=none | HNMO=EndCycle@Saturday 22:05 -> differs (14d suite cycle vs 7d HNMO schedule; S9 battle 08:00-10:00 vs S6/HNMO 20:00-22:00)
+
+## NPCs (S6 vs S9 vs HNMO CastleSiegeInitializer.cs:214-243)
+NPC 215: S6=1, S9=1, HNMO=0 -> missing in HNMO
+NPC 221: S6=2, S9=2, HNMO=2 -> same
+NPC 222: S6=2, S9=2, HNMO=2 -> same
+NPC 277: S6=6, S9=6, HNMO=6 -> same
+NPC 283: S6=4, S9=4, HNMO=4 -> same
+NPC 288: S6=9, S9=9, HNMO=0 -> missing in HNMO
+NPC 216: S6=0, S9=0, HNMO=1 -> differs
+NPC 217: S6=0, S9=0, HNMO=1 -> differs
+NPC 218: S6=0, S9=0, HNMO=1 -> differs
+NPC 219: S6=0, S9=0, HNMO=6 -> differs
+
+## Upgrades (Defense, HP, Recovery: S6 vs S9 vs HNMO CastleSiegeInitializer.cs:245-271)
+GateDefense Lv1: S6/S9=(val=180,JoG=2,Zen=3000000), HNMO=(val=180,JoG=2,Zen=3000000) -> same
+StatueDefense Lv1: S6/S9=(val=180,JoG=3,Zen=3000000), HNMO=(val=180,JoG=3,Zen=3000000) -> same
+GateHP Lv1: S6/S9=(val=2500000,JoG=2,Zen=1000000), HNMO=(val=2500000,JoG=2,Zen=1000000) -> same
+StatueHP Lv1: S6/S9=(val=2200000,JoG=3,Zen=1000000), HNMO=(val=2200000,JoG=3,Zen=1000000) -> same
+StatueRegen Lv1: S6/S9=(val=1,JoG=3,Zen=5000000), HNMO=(val=1,JoG=3,Zen=5000000) -> same
+GateDefense Lv2: S6/S9=(val=300,JoG=3,Zen=3000000), HNMO=(val=300,JoG=3,Zen=3000000) -> same
+StatueDefense Lv2: S6/S9=(val=340,JoG=5,Zen=3000000), HNMO=(val=340,JoG=5,Zen=3000000) -> same
+GateHP Lv2: S6/S9=(val=3500000,JoG=3,Zen=1000000), HNMO=(val=3500000,JoG=3,Zen=1000000) -> same
+StatueHP Lv2: S6/S9=(val=3400000,JoG=5,Zen=1000000), HNMO=(val=3400000,JoG=5,Zen=1000000) -> same
+StatueRegen Lv2: S6/S9=(val=2,JoG=5,Zen=5000000), HNMO=(val=2,JoG=5,Zen=5000000) -> same
+GateDefense Lv3: S6/S9=(val=520,JoG=4,Zen=3000000), HNMO=(val=520,JoG=4,Zen=3000000) -> same
+StatueDefense Lv3: S6/S9=(val=550,JoG=7,Zen=3000000), HNMO=(val=550,JoG=7,Zen=3000000) -> same
+GateHP Lv3: S6/S9=(val=5200000,JoG=4,Zen=1000000), HNMO=(val=5200000,JoG=4,Zen=1000000) -> same
+StatueHP Lv3: S6/S9=(val=5000000,JoG=7,Zen=1000000), HNMO=(val=5000000,JoG=7,Zen=1000000) -> same
+StatueRegen Lv3: S6/S9=(val=3,JoG=7,Zen=5000000), HNMO=(val=3,JoG=7,Zen=5000000) -> same

@@ -193,22 +193,133 @@ export function parseSuiteMasterSkillTree(rootDir) {
   return { format: 'none', skillCount: 0, skills: new Map() };
 }
 
+function extractXmlBlock(filePath, tag) {
+  if (!filePath || !fs.existsSync(filePath)) return '';
+  const raw = fs.readFileSync(filePath, 'utf8').replace(/<!--[\s\S]*?-->/g, '');
+  const m = new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i').exec(raw);
+  return m ? m[1] : '';
+}
+
+function parseXmlTagsInText(xmlText, tagName) {
+  const out = [];
+  if (!xmlText) return out;
+  const re = new RegExp(`<${tagName}\\b([^>]*)>`, 'gi');
+  const attrRe = /([A-Za-z0-9_:-]+)="([^"]*)"/g;
+  let m;
+  while ((m = re.exec(xmlText)) !== null) {
+    const attrs = {};
+    let am;
+    while ((am = attrRe.exec(m[1])) !== null) attrs[am[1]] = am[2];
+    out.push(attrs);
+  }
+  return out;
+}
+
 export function parseSuiteCastleSiege(rootDir) {
   const csPath = findSuiteFile(rootDir, 'CastleSiege.xml');
   if (!csPath) return null;
+  const commonCfg = parseKeyValCfg(findSuiteFile(rootDir, 'CommonServer.cfg'));
+  const commonIni = parseIni(findSuiteFile(rootDir, 'Common.ini'));
   const event = parseXmlTags(csPath, 'CastleSiegeEvent')[0] ?? {};
-  const cycles = parseXmlTags(csPath, 'Cycle');
-  const states = parseXmlTags(csPath, 'State');
-  const npcs = parseXmlTags(csPath, 'NPC');
+  const dmg = parseXmlTags(csPath, 'DamageReduction')[0] ?? {};
+  const cycleSettings = parseXmlTags(csPath, 'CycleSettings')[0] ?? {};
+  const cycles = parseXmlTags(csPath, 'Cycle').map((c) => ({
+    stage: num(c.Stage),
+    day: num(c.Day),
+    hour: num(c.Hour),
+    minute: num(c.Minute),
+  }));
+  const npcs = parseXmlTags(csPath, 'NPC').map((n) => ({
+    index: num(n.Index),
+    number: num(n.Number),
+    dbSave: num(n.DBSave),
+    side: num(n.Side),
+    maxHp: num(n.MaxHP),
+    x: num(n.StartX),
+    y: num(n.StartY),
+    dir: num(n.Dir),
+    name: n.Name ?? '',
+  }));
+
+  const defUpBlock = extractXmlBlock(csPath, 'DefenseUpgrade');
+  const hpUpBlock = extractXmlBlock(csPath, 'HealthUpgrade');
+  const recUpBlock = extractXmlBlock(csPath, 'StatueHealthRecoveryUpgrade');
+  const defSetBlock = extractXmlBlock(csPath, 'DefenseSettings');
+
+  const gateDefCosts = parseXmlTagsInText(extractXmlBlockFromText(defUpBlock, 'Gates'), 'Defense').map((d) => ({
+    level: num(d.Level),
+    jog: num(d.ReqJewelOfGuardian),
+    zen: num(d.ReqZen),
+  }));
+  const statueDefCosts = parseXmlTagsInText(extractXmlBlockFromText(defUpBlock, 'Statues'), 'Defense').map((d) => ({
+    level: num(d.Level),
+    jog: num(d.ReqJewelOfGuardian),
+    zen: num(d.ReqZen),
+  }));
+  const gateHpUpgrades = parseXmlTagsInText(extractXmlBlockFromText(hpUpBlock, 'Gates'), 'Health').map((h, i) => ({
+    level: i + 1,
+    value: num(h.Value),
+    jog: num(h.ReqJewelOfGuardian),
+    zen: num(h.ReqZen),
+  }));
+  const statueHpUpgrades = parseXmlTagsInText(extractXmlBlockFromText(hpUpBlock, 'Statues'), 'Health').map((h, i) => ({
+    level: i + 1,
+    value: num(h.Value),
+    jog: num(h.ReqJewelOfGuardian),
+    zen: num(h.ReqZen),
+  }));
+  const statueRegenUpgrades = parseXmlTagsInText(recUpBlock, 'Recovery').map((r) => ({
+    level: num(r.Level),
+    jog: num(r.ReqJewelOfGuardian),
+    zen: num(r.ReqZen),
+  }));
+  const gateDefenseValues = parseXmlTagsInText(extractXmlBlockFromText(defSetBlock, 'Gates'), 'Defense').map((d) => ({
+    level: num(d.Level),
+    value: num(d.Value),
+  }));
+  const statueDefenseValues = parseXmlTagsInText(extractXmlBlockFromText(defSetBlock, 'Statues'), 'Defense').map((d) => ({
+    level: num(d.Level),
+    value: num(d.Value),
+  }));
+
+  const huntZoneSetDrop = num(commonCfg.IsDropSetItemInCastleHuntZone);
+  const huntZoneSetDropRate = num(commonCfg.SetItemInCastleHuntZoneDropRate);
+  const huntZoneSetDropMinLevel = num(commonCfg.SetItemInCastleHuntZoneDropLevel);
+  const markOfLordDropRate = num(commonCfg.MarkOfTheLord);
+  const ownerGuildDestroyLimit = num(
+    commonIni.CastleSiege?.CastleOwnerGuildDestroyLimit ?? commonCfg.CastleOwnerGuildDestroyLimit ?? '1',
+  );
+
   return {
     enable: num(event.Enable),
     friendlyFire: num(event.FriendlyFire),
+    resetAccumulatedTimeAfterKill: num(event.ResetAccumulatedTimeAfterKill),
     lordMixDailyLimit: num(event.LordMixDailyLimit),
     towerWithoutAlliance: num(event.TowerEntryWithoutAlliance),
-    cycleDays: cycles.map((c) => num(c.Days)),
-    stateCount: states.length,
-    npcCount: npcs.length,
+    damageReductionOpposite: num(dmg.OppositeTeam),
+    damageReductionSelf: num(dmg.SelfTeam),
+    cycleDays: num(cycleSettings.Days),
+    cycles,
+    npcs,
+    gateDefCosts,
+    statueDefCosts,
+    gateHpUpgrades,
+    statueHpUpgrades,
+    statueRegenUpgrades,
+    gateDefenseValues,
+    statueDefenseValues,
+    huntZoneSetDrop,
+    huntZoneSetDropRate,
+    huntZoneSetDropMinLevel,
+    markOfLordDropRate,
+    ownerGuildDestroyLimit,
   };
+}
+
+function extractXmlBlockFromText(xmlText, tag) {
+  if (!xmlText) return '';
+  const m = new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i').exec(xmlText);
+  return m ? m[1] : '';
 }
 
 export function parseSuiteGens(rootDir) {

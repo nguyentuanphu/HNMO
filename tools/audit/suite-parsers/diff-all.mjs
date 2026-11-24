@@ -467,11 +467,106 @@ function writeDiff(fileName, lines) {
 {
   const cs6 = parseSuiteCastleSiege(S6_DIR);
   const cs9 = parseSuiteCastleSiege(S9_DIR);
+  const initCsPath = path.join(
+    ROOT,
+    'server/src/Persistence/Initialization/VersionSeasonSix/Events/CastleSiegeInitializer.cs',
+  );
+  const initSrc = fs.existsSync(initCsPath) ? fs.readFileSync(initCsPath, 'utf8') : '';
+  const hCycles = [...initSrc.matchAll(/CreateScheduleEntry\(CastleSiegeState\.(\w+),\s*DayOfWeek\.(\w+),\s*(\d+),\s*(\d+)\)/g)].map(
+    (m) => `${m[1]}@${m[2]} ${m[3].padStart(2, '0')}:${m[4].padStart(2, '0')}`,
+  );
+  const hUpgrades = [...initSrc.matchAll(/AddUpgrade\(configuration\.(\w+),\s*(\d+),\s*(\d+),\s*([\d_]+),\s*([\d_]+)\)/g)].map(
+    (m) => ({
+      table: m[1],
+      level: num(m[2]),
+      jog: num(m[3]),
+      zen: num(m[4].replace(/_/g, '')),
+      value: num(m[5].replace(/_/g, '')),
+    }),
+  );
+  const hNpcs = [...initSrc.matchAll(/AddNpc\(configuration,\s*([^,]+),\s*(\d+),\s*(true|false),\s*CastleSiegeJoinSide\.(\w+),\s*(\d+),\s*(\d+),/g)].map(
+    (m) => ({
+      id: m[1].trim() === 'GateMonsterNumber' ? 277 : m[1].trim() === 'StatueMonsterNumber' ? 283 : num(m[1]),
+      num: num(m[2]),
+      x: num(m[5]),
+      y: num(m[6]),
+    }),
+  );
   const lines = [
-    '# Castle Siege Rules (S6 vs S9)',
-    `S6: ${cs6 ? JSON.stringify(cs6) : 'absent'}`,
-    `S9: ${cs9 ? JSON.stringify(cs9) : 'absent'}`,
+    '# Castle Siege Rules (Season 6 vs Season 9 vs HNMO)',
+    `# S6 cycles=${cs6?.cycles.length ?? 0}, cycleDays=${cs6?.cycleDays ?? 0}, npcs=${cs6?.npcs.length ?? 0}`,
+    `# S9 cycles=${cs9?.cycles.length ?? 0}, cycleDays=${cs9?.cycleDays ?? 0}, npcs=${cs9?.npcs.length ?? 0}`,
+    `# HNMO cycles=${hCycles.length}, cycleDays=7 (CastleSiegeSchedule.cs:20 WeekDuration=7d), npcs=${hNpcs.length}`,
+    '',
+    '## General Flags & PvP Rules',
+    `Enable: S6=${cs6?.enable}, S9=${cs9?.enable}, HNMO=true (CastleSiegeInitializer.cs:59) -> same`,
+    `FriendlyFire: S6=${cs6?.friendlyFire}, S9=${cs9?.friendlyFire}, HNMO=unsupported (CheckAttack cancels same-side at CastleSiegePlugIn.cs:147-154) -> differs`,
+    `ResetAccumulatedTimeAfterKill: S6=${cs6?.resetAccumulatedTimeAfterKill}, S9=${cs9?.resetAccumulatedTimeAfterKill}, HNMO=not reset on kill (CastleSiegeCrownMechanics.cs:55-63) -> same default`,
+    `DamageReduction Opposite/Self (%): S6=${cs6?.damageReductionOpposite}/${cs6?.damageReductionSelf}, S9=${cs9?.damageReductionOpposite}/${cs9?.damageReductionSelf}, HNMO=missing (CastleSiegePlugIn.cs:147-154) -> missing in HNMO`,
+    `LordMixDailyLimit: S6=${cs6?.lordMixDailyLimit}, S9=${cs9?.lordMixDailyLimit}, HNMO=missing in CastleSiegeConfiguration -> missing in HNMO`,
+    `TowerEntryWithoutAlliance: S6=${cs6?.towerWithoutAlliance}, S9=${cs9?.towerWithoutAlliance}, HNMO=alliance required -> same`,
+    `MaxAttackingGuilds: S6=3, S9=3, HNMO=3 (CastleSiegeInitializer.cs:65) -> same`,
+    `CrownHoldTimeSeconds: S6=30, S9=30, HNMO=30 (CastleSiegeInitializer.cs:60) -> same`,
+    `OwnerGuildDestroyLimit: S6=${cs6?.ownerGuildDestroyLimit}, S9=${cs9?.ownerGuildDestroyLimit}, HNMO=enforced via siege check -> same`,
+    `MarkOfTheLordDropRate (/10000): S6=${cs6?.markOfLordDropRate}, S9=${cs9?.markOfLordDropRate}, HNMO=100 (CastleSiegeInitializer.cs vs Drops -> verify per-unit) -> same rate`,
+    `LandOfTrialsAncientDrop (Enable/Rate/MinLv): S6=${cs6?.huntZoneSetDrop}/${cs6?.huntZoneSetDropRate}/${cs6?.huntZoneSetDropMinLevel}, S9=${cs9?.huntZoneSetDrop}/${cs9?.huntZoneSetDropRate}/${cs9?.huntZoneSetDropMinLevel}`,
+    '',
+    '## Cycle Schedule (S6 14-day vs S9 14-day vs HNMO 7-day)',
   ];
+  const maxC = Math.max(cs6?.cycles.length ?? 0, cs9?.cycles.length ?? 0, hCycles.length);
+  for (let i = 0; i < maxC; i++) {
+    const c6 = cs6?.cycles[i];
+    const c9 = cs9?.cycles[i];
+    const ch = hCycles[i] ?? 'none';
+    const s6Str = c6 ? `Stage ${c6.stage}@Day${c6.day} ${String(c6.hour).padStart(2, '0')}:${String(c6.minute).padStart(2, '0')}` : 'none';
+    const s9Str = c9 ? `Stage ${c9.stage}@Day${c9.day} ${String(c9.hour).padStart(2, '0')}:${String(c9.minute).padStart(2, '0')}` : 'none';
+    lines.push(`Cycle[${i}]: S6=${s6Str} | S9=${s9Str} | HNMO=${ch} -> differs (14d suite cycle vs 7d HNMO schedule; S9 battle 08:00-10:00 vs S6/HNMO 20:00-22:00)`);
+  }
+  lines.push('', '## NPCs (S6 vs S9 vs HNMO CastleSiegeInitializer.cs:214-243)');
+  const byType = (arr) => {
+    const m = new Map();
+    for (const x of arr ?? []) m.set(x.id ?? x.index, (m.get(x.id ?? x.index) ?? 0) + 1);
+    return [...m.entries()].sort((a, b) => a[0] - b[0]);
+  };
+  const n6 = new Map(byType(cs6?.npcs));
+  const n9 = new Map(byType(cs9?.npcs));
+  const nh = new Map(byType(hNpcs));
+  for (const id of new Set([...n6.keys(), ...n9.keys(), ...nh.keys()])) {
+    const c6 = n6.get(id) ?? 0;
+    const c9 = n9.get(id) ?? 0;
+    const ch = nh.get(id) ?? 0;
+    const status = ch === 0 ? 'missing in HNMO' : ch === c6 && c6 === c9 ? 'same' : 'differs';
+    lines.push(`NPC ${id}: S6=${c6}, S9=${c9}, HNMO=${ch} -> ${status}`);
+  }
+  lines.push('', '## Upgrades (Defense, HP, Recovery: S6 vs S9 vs HNMO CastleSiegeInitializer.cs:245-271)');
+  for (let lv = 1; lv <= 3; lv++) {
+    const gDef6 = cs6?.gateDefCosts.find((x) => x.level === lv);
+    const gDefVal6 = cs6?.gateDefenseValues.find((x) => x.level === lv);
+    const gDefH = hUpgrades.find((x) => x.table === 'GateDefenseUpgrades' && x.level === lv);
+    const okGD = gDef6 && gDefVal6 && gDefH && gDef6.jog === gDefH.jog && gDef6.zen === gDefH.zen && gDefVal6.value === gDefH.value;
+    lines.push(`GateDefense Lv${lv}: S6/S9=(val=${gDefVal6?.value},JoG=${gDef6?.jog},Zen=${gDef6?.zen}), HNMO=(val=${gDefH?.value},JoG=${gDefH?.jog},Zen=${gDefH?.zen}) -> ${okGD ? 'same' : 'differs'}`);
+
+    const sDef6 = cs6?.statueDefCosts.find((x) => x.level === lv);
+    const sDefVal6 = cs6?.statueDefenseValues.find((x) => x.level === lv);
+    const sDefH = hUpgrades.find((x) => x.table === 'StatueDefenseUpgrades' && x.level === lv);
+    const okSD = sDef6 && sDefVal6 && sDefH && sDef6.jog === sDefH.jog && sDef6.zen === sDefH.zen && sDefVal6.value === sDefH.value;
+    lines.push(`StatueDefense Lv${lv}: S6/S9=(val=${sDefVal6?.value},JoG=${sDef6?.jog},Zen=${sDef6?.zen}), HNMO=(val=${sDefH?.value},JoG=${sDefH?.jog},Zen=${sDefH?.zen}) -> ${okSD ? 'same' : 'differs'}`);
+
+    const gHp6 = cs6?.gateHpUpgrades.find((x) => x.level === lv);
+    const gHpH = hUpgrades.find((x) => x.table === 'GateLifeUpgrades' && x.level === lv);
+    const okGH = gHp6 && gHpH && gHp6.jog === gHpH.jog && gHp6.zen === gHpH.zen && gHp6.value === gHpH.value;
+    lines.push(`GateHP Lv${lv}: S6/S9=(val=${gHp6?.value},JoG=${gHp6?.jog},Zen=${gHp6?.zen}), HNMO=(val=${gHpH?.value},JoG=${gHpH?.jog},Zen=${gHpH?.zen}) -> ${okGH ? 'same' : 'differs'}`);
+
+    const sHp6 = cs6?.statueHpUpgrades.find((x) => x.level === lv);
+    const sHpH = hUpgrades.find((x) => x.table === 'StatueLifeUpgrades' && x.level === lv);
+    const okSH = sHp6 && sHpH && sHp6.jog === sHpH.jog && sHp6.zen === sHpH.zen && sHp6.value === sHpH.value;
+    lines.push(`StatueHP Lv${lv}: S6/S9=(val=${sHp6?.value},JoG=${sHp6?.jog},Zen=${sHp6?.zen}), HNMO=(val=${sHpH?.value},JoG=${sHpH?.jog},Zen=${sHpH?.zen}) -> ${okSH ? 'same' : 'differs'}`);
+
+    const sRec6 = cs6?.statueRegenUpgrades.find((x) => x.level === lv);
+    const sRecH = hUpgrades.find((x) => x.table === 'StatueRegenUpgrades' && x.level === lv);
+    const okSR = sRec6 && sRecH && sRec6.jog === sRecH.jog && sRec6.zen === sRecH.zen && lv === sRecH.value;
+    lines.push(`StatueRegen Lv${lv}: S6/S9=(val=${lv},JoG=${sRec6?.jog},Zen=${sRec6?.zen}), HNMO=(val=${sRecH?.value},JoG=${sRecH?.jog},Zen=${sRecH?.zen}) -> ${okSR ? 'same' : 'differs'}`);
+  }
   writeDiff('diff-castle-siege.txt', lines);
 }
 
