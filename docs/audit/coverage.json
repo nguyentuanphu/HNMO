@@ -1,5 +1,5 @@
 {
-  "generatedAt": "a7257dae",
+  "generatedAt": "1a772697",
   "maxLines": 6000,
   "units": [
     {
@@ -1582,11 +1582,11 @@
       ],
       "files": 7,
       "lines": 595,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
+      "status": "Checked",
+      "checkedAt": "1a772697",
+      "checkedOn": "2026-11-24",
       "references": "",
-      "evidence": "",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-Economy.md",
       "prs": ""
     },
     {
@@ -1972,11 +1972,11 @@
       ],
       "files": 4,
       "lines": 567,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
+      "status": "Checked",
+      "checkedAt": "1a772697",
+      "checkedOn": "2026-11-24",
       "references": "",
-      "evidence": "",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-PlayerRanking.md",
       "prs": ""
     },
     {
