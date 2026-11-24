@@ -1,5 +1,5 @@
 {
-  "generatedAt": "9d33e265",
+  "generatedAt": "a57561f1",
   "maxLines": 6000,
   "units": [
     {
@@ -2703,11 +2703,13 @@
       ],
       "files": 24,
       "lines": 2867,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -2813,11 +2815,13 @@
       ],
       "files": 96,
       "lines": 4924,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -2828,11 +2832,13 @@
       ],
       "files": 8,
       "lines": 326,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -2843,11 +2849,13 @@
       ],
       "files": 28,
       "lines": 1232,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -2858,11 +2866,13 @@
       ],
       "files": 10,
       "lines": 358,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -2873,11 +2883,13 @@
       ],
       "files": 6,
       "lines": 278,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -2888,11 +2900,13 @@
       ],
       "files": 6,
       "lines": 237,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -2903,11 +2917,13 @@
       ],
       "files": 16,
       "lines": 635,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -2918,11 +2934,13 @@
       ],
       "files": 14,
       "lines": 593,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -2933,11 +2951,13 @@
       ],
       "files": 4,
       "lines": 197,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -2948,11 +2968,13 @@
       ],
       "files": 9,
       "lines": 339,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -2963,11 +2985,13 @@
       ],
       "files": 18,
       "lines": 911,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -2978,11 +3002,13 @@
       ],
       "files": 3,
       "lines": 126,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -2993,11 +3019,13 @@
       ],
       "files": 4,
       "lines": 145,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3008,11 +3036,13 @@
       ],
       "files": 2,
       "lines": 115,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3023,11 +3053,13 @@
       ],
       "files": 7,
       "lines": 328,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3038,11 +3070,13 @@
       ],
       "files": 14,
       "lines": 540,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3053,11 +3087,13 @@
       ],
       "files": 5,
       "lines": 190,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3068,11 +3104,13 @@
       ],
       "files": 6,
       "lines": 244,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3136,11 +3174,13 @@
       ],
       "files": 54,
       "lines": 5223,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3151,11 +3191,13 @@
       ],
       "files": 1,
       "lines": 161,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3166,11 +3208,13 @@
       ],
       "files": 25,
       "lines": 1227,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3181,11 +3225,13 @@
       ],
       "files": 37,
       "lines": 2528,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3196,11 +3242,13 @@
       ],
       "files": 11,
       "lines": 499,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3211,11 +3259,13 @@
       ],
       "files": 3,
       "lines": 239,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3226,11 +3276,13 @@
       ],
       "files": 22,
       "lines": 1399,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3241,11 +3293,13 @@
       ],
       "files": 20,
       "lines": 1027,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3256,11 +3310,13 @@
       ],
       "files": 4,
       "lines": 198,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3271,11 +3327,13 @@
       ],
       "files": 12,
       "lines": 542,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3286,11 +3344,13 @@
       ],
       "files": 21,
       "lines": 1538,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3301,11 +3361,13 @@
       ],
       "files": 5,
       "lines": 603,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3316,11 +3378,13 @@
       ],
       "files": 7,
       "lines": 456,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3331,11 +3395,13 @@
       ],
       "files": 5,
       "lines": 315,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3346,11 +3412,13 @@
       ],
       "files": 3,
       "lines": 181,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3361,11 +3429,13 @@
       ],
       "files": 7,
       "lines": 491,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3376,11 +3446,13 @@
       ],
       "files": 17,
       "lines": 1179,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3391,11 +3463,13 @@
       ],
       "files": 8,
       "lines": 332,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3406,11 +3480,13 @@
       ],
       "files": 5,
       "lines": 201,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
@@ -3421,11 +3497,13 @@
       ],
       "files": 52,
       "lines": 4090,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a57561f1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameServer.md"
+      ],
+      "evidence": "Audited GameServer core, MessageHandler/* (rate limiting, bounds checks, packet-to-action adapters), and RemoteView/* (ItemSerializer, AppearanceSerializer, ShowMessagePlugIn, packet serializers).",
       "prs": ""
     },
     {
