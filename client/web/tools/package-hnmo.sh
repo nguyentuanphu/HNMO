@@ -291,14 +291,15 @@ notice() { printf '=============================================================
   fi
 } > "$OUT/licenses/THIRD-PARTY-NOTICES.txt"
 cp "$WEB/tools/hnmo/README.txt" "$OUT/README.txt"
-cp "$WEB/tools/hnmo/start-hnmo.sh" "$WEB/tools/hnmo/stop-hnmo.sh" "$WEB/tools/hnmo/Start HNMO.bat" "$WEB/tools/hnmo/Start HNMO (window).bat" "$OUT/"
+cp "$WEB/tools/hnmo/start-hnmo.sh" "$WEB/tools/hnmo/stop-hnmo.sh" "$WEB/tools/hnmo/Start HNMO.command" "$WEB/tools/hnmo/Start HNMO.bat" "$OUT/"
 # Windows: HNMO without a console window, its icon next to the clock (launcher/hnmo-tray.ps1, started hidden by
-# launcher/start-hidden.vbs from "Start HNMO.bat").
+# launcher/start-hidden.vbs from "Start HNMO.bat"). Passing /window or setting ConsoleWindow=true shows the console.
 mkdir -p "$OUT/launcher"
 cp "$WEB/tools/hnmo/launcher/hnmo-tray.ps1" "$WEB/tools/hnmo/launcher/start-hidden.vbs" "$OUT/launcher/"
-# Windows reads batch files reliably only with Windows line endings (CRLF), whatever the checkout has.
-sed -i 's/\r*$/\r/' "$OUT/Start HNMO.bat" "$OUT/Start HNMO (window).bat" "$OUT/launcher/start-hidden.vbs" "$OUT/launcher/hnmo-tray.ps1"
-chmod +x "$OUT/start-hnmo.sh" "$OUT/stop-hnmo.sh"
+# Windows reads batch files reliably only with Windows line endings (CRLF), whereas Unix/macOS scripts require LF.
+sed -i 's/\r*$/\r/' "$OUT/Start HNMO.bat" "$OUT/launcher/start-hidden.vbs" "$OUT/launcher/hnmo-tray.ps1"
+sed -i 's/\r$//' "$OUT/start-hnmo.sh" "$OUT/stop-hnmo.sh" "$OUT/Start HNMO.command"
+chmod +x "$OUT/start-hnmo.sh" "$OUT/stop-hnmo.sh" "$OUT/Start HNMO.command"
 
 # HNMO ownership watermark. The marker locations are documented in the (unshipped)
 # note client/web/tools/hnmo/WATERMARKS.private.md. See also PROTECTION.md.

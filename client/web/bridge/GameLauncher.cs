@@ -77,6 +77,7 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
     private int _stopped;
     private volatile bool _intentionalStop;
     private PosixSignalRegistration? _closeWindow;
+    private CancellationTokenSource _shutdownCts = new();
 
     public bool IsLaunching { get; private set; }
 
@@ -203,7 +204,9 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
         AppDomain.CurrentDomain.ProcessExit += (_, _) => this.StopNow();
 
         // Start in the background, so the web part answers right away and shows the game/control page while the server comes up.
-        _ = Task.Run(() => this.LaunchAsync(cancellationToken, openControlOnFailure: true), CancellationToken.None);
+        this._shutdownCts = new CancellationTokenSource();
+        var stopToken = this._shutdownCts.Token;
+        _ = Task.Run(() => this.LaunchAsync(stopToken, openControlOnFailure: true), CancellationToken.None);
         return Task.CompletedTask;
     }
 
@@ -219,7 +222,10 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
 
             Interlocked.Exchange(ref this._stopped, 0);
             this._intentionalStop = false;
-            await this.LaunchAsync(cancellationToken).ConfigureAwait(false);
+            this._shutdownCts.Dispose();
+            this._shutdownCts = new CancellationTokenSource();
+            using var linked = CancellationTokenSource.CreateLinkedTokenSource(this._shutdownCts.Token, cancellationToken);
+            await this.LaunchAsync(linked.Token).ConfigureAwait(false);
         }
         finally
         {
@@ -252,11 +258,20 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
         return Task.CompletedTask;
     }
 
+    public void RequestShutdownStop() => this.StopNow();
+
     // Stops the game server and the database (once; also from the window-close handler, which has only
     // a few seconds).
     private void StopNow()
     {
         this._intentionalStop = true;
+        try
+        {
+            this._shutdownCts.Cancel();
+        }
+        catch (ObjectDisposedException)
+        {
+        }
         if (Interlocked.Exchange(ref this._stopped, 1) == 1)
         {
             return;
@@ -372,16 +387,33 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
             }
 
             await this.StartDatabaseAsync(cancellationToken).ConfigureAwait(false);
+            if (cancellationToken.IsCancellationRequested || Volatile.Read(ref this._stopped) != 0)
+            {
+                this.StopNow();
+                return;
+            }
+
             this.StartServer();
             logger.LogInformation("The game server is starting. The first start sets up the save game and takes a few minutes.");
             await WaitForPortAsync(options.ConnectServerPort, ServerStartTimeout, cancellationToken).ConfigureAwait(false);
             foreach (var secondary in this._secondary)
             {
+                if (cancellationToken.IsCancellationRequested || Volatile.Read(ref this._stopped) != 0)
+                {
+                    this.StopNow();
+                    return;
+                }
+
                 await this.StartSecondaryAsync(secondary, cancellationToken).ConfigureAwait(false);
             }
             logger.LogInformation("HNMO is ready. Play: {Play}  Control: http://localhost:{WebPort}/control  Admin panel: {Admin} (this computer only)", options.OpenBrowserUrl, options.WebPort, options.AdminUrl);
             var controlUrl = $"http://localhost:{options.WebPort}/control";
             OpenBrowser(File.Exists(Path.Combine(this.SaveFullPath, "setup-complete.json")) ? options.OpenBrowserUrl : controlUrl);
+        }
+        catch (OperationCanceledException) when (this._intentionalStop || cancellationToken.IsCancellationRequested)
+        {
+            logger.LogInformation("HNMO launch cancelled because a stop was requested.");
+            this.StopNow();
         }
         catch (Exception ex)
         {
