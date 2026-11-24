@@ -1,5 +1,5 @@
 {
-  "generatedAt": "926f0ac9",
+  "generatedAt": "0ed49eb6",
   "maxLines": 6000,
   "units": [
     {
@@ -8026,11 +8026,14 @@
       ],
       "files": 15,
       "lines": 3444,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "0ed49eb6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "CharacterInfoWindow.cpp:1421-1524",
+        "docs/audit/findings/unit-client-src-source-UI-Character.md"
+      ],
+      "evidence": "15f/3444L: Computes Wizardry/Curse staff/book percent bonus scaled by CalcDurabilityPercent matching CharacterCalc formulas.",
       "prs": ""
     },
     {
