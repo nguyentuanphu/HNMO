@@ -1,5 +1,5 @@
 {
-  "generatedAt": "f17c78d7",
+  "generatedAt": "25c09fd7",
   "maxLines": 6000,
   "units": [
     {
@@ -281,11 +281,11 @@
       ],
       "files": 15,
       "lines": 5007,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
+      "status": "Checked",
+      "checkedAt": "25c09fd7",
+      "checkedOn": "2026-11-24",
       "references": "",
-      "evidence": "",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-Bots-files-1-3.md",
       "prs": ""
     },
     {
@@ -329,11 +329,11 @@
       ],
       "files": 4,
       "lines": 408,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
+      "status": "Checked",
+      "checkedAt": "25c09fd7",
+      "checkedOn": "2026-11-24",
       "references": "",
-      "evidence": "",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-Bots-files-1-3.md",
       "prs": ""
     },
     {
