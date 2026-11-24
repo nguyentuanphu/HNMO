@@ -1,5 +1,5 @@
 {
-  "generatedAt": "e7d4a55b",
+  "generatedAt": "d9b5b32b",
   "maxLines": 6000,
   "units": [
     {
@@ -5082,11 +5082,17 @@
       ],
       "files": 9,
       "lines": 5120,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "d9b5b32b",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "kalima.ts:16-85",
+        "itemTooltip.ts:49-100",
+        "itemValue.ts:213-250",
+        "instanceEvents.ts:24-78",
+        "docs/audit/findings/unit-client-web-src-game-files-3.md"
+      ],
+      "evidence": "9f/5120L: Kalima levels [40,131,181,231,281,331,350] / MG-DL-RF [20..350] & 5 Symbols match desktop GMHellas; itemValue/tooltip match ZzzInfomation/ZzzInventory.",
       "prs": ""
     },
     {
