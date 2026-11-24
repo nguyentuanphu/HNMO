@@ -1,5 +1,5 @@
 {
-  "generatedAt": "6df27858",
+  "generatedAt": "ecaa7c08",
   "maxLines": 6000,
   "units": [
     {
@@ -3917,11 +3917,15 @@
       ],
       "files": 11,
       "lines": 1560,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "ecaa7c08",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "the Season 6/9 suites' item list files",
+        "docs/audit/data/diff-items.txt",
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-Version075-Items.md"
+      ],
+      "evidence": "Read all 11 files (1560 lines) in Version075/Items; compared jewels, pets, wings, scrolls, potions, armors, and weapons against S6/S9 suite item lists: docs/audit/findings/unit-server-src-Persistence-Initialization-Version075-Items.md",
       "prs": ""
     },
     {
