@@ -1,5 +1,5 @@
 {
-  "generatedAt": "7a90d54a",
+  "generatedAt": "e0a11281",
   "maxLines": 6000,
   "units": [
     {
@@ -7127,11 +7127,14 @@
       ],
       "files": 8,
       "lines": 374,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "e0a11281",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "GameLogic/NPCs",
+        "docs/audit/findings/unit-client-src-source-GameLogic-NPCs.md"
+      ],
+      "evidence": "8f/374L: No game rules (client FX/sound/buff-visuals/command-dispatch/party-pet animation & social helpers (no gameplay balance rules).)",
       "prs": ""
     },
     {
