@@ -1,5 +1,5 @@
 {
-  "generatedAt": "75b508e4",
+  "generatedAt": "8b903567",
   "maxLines": 6000,
   "units": [
     {
@@ -973,17 +973,12 @@
       ],
       "files": 29,
       "lines": 3494,
-      "status": "Changed since check",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-22",
-      "references": "Season 6/9 SkillInfo & area/frustum/nova combat rules",
-      "evidence": "All 28 files read (3321 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
-      "prs": "#309",
-      "changedFiles": [
-        "server/src/GameLogic/PlayerActions/Skills/AttackActionValidator.cs",
-        "server/src/GameLogic/PlayerActions/Skills/NovaSkillStartPlugin.cs",
-        "server/src/GameLogic/PlayerActions/Skills/SkillEquipmentValidator.cs"
-      ]
+      "status": "Checked",
+      "checkedAt": "8b903567",
+      "checkedOn": "2026-11-24",
+      "references": "S6/S9 RegularSkillCalc.lua, MasterSkillCalc.lua, IGC_SkillList.xml",
+      "evidence": "All 29 files read: docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Skills.md",
+      "prs": "#309"
     },
     {
       "id": "server/src/GameLogic/PlayerActions/Trade",
