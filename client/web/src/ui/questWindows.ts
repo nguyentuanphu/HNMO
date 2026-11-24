@@ -717,6 +717,7 @@ export class QuestWindows implements QuestEvents {
   private readonly myQuest: MyQuestWindow;
   private readonly npcQuest: NpcQuestWindow;
   private readonly pending: Uint8Array[] = [];
+  private openEpoch = 0;
   readonly hero: QuestHero;
 
   constructor(private readonly options: QuestWindowsOptions) {
@@ -761,6 +762,7 @@ export class QuestWindows implements QuestEvents {
   /** Hide(window): closes it with its closing process (CloseNpcRequest …). */
   hide(window: QuestWindow): void {
     if (!window.view.isOpen) return;
+    this.openEpoch++;
     window.view.close();
     window.closing();
     this.placeAll();
@@ -768,20 +770,22 @@ export class QuestWindows implements QuestEvents {
 
   /** Closes every quest document currently open. */
   closeAll(): void {
+    this.openEpoch++;
     for (const window of this.windows()) if (window.view.isOpen) window.view.close();
     this.hideItem();
   }
 
-  /** HideAllGroupA: the other windows close without their closing process; the inventory and the character window close. */
-  private hideGroupA(except?: QuestWindow): void {
+  /** HideAllGroupA: the other windows close without their closing process; only one quest window stays open. */
+  private hideGroupA(except?: QuestWindow): number {
+    const epoch = ++this.openEpoch;
     this.options.closeOthers?.();
     for (const window of this.windows()) if (window !== except && window.view.isOpen) window.view.close();
     this.hideItem();
+    return epoch;
   }
 
   private placeAll(): void {
-    // The quest-by-other-means window opens beside the quest info window (it doesn't close it).
-    this.progressEtc.view.column = this.myQuest.view.isOpen ? 1 : 0;
+    this.progressEtc.view.column = 0;
     this.progressEtc.view.place();
   }
 
@@ -793,18 +797,23 @@ export class QuestWindows implements QuestEvents {
     if (!this.log) return;
     if (this.myQuest.view.isOpen) this.hide(this.myQuest);
     else {
-      this.hideGroupA(this.myQuest);
+      const epoch = this.hideGroupA(this.myQuest);
       this.click();
-      void this.myQuest.opening().then(() => this.placeAll());
+      void this.myQuest.opening().then(() => {
+        if (epoch !== this.openEpoch) { this.myQuest.view.close(); return; }
+        this.placeAll();
+      });
     }
   }
 
   // ---- QuestEvents ----
   openDialogue(contribution: number): void {
     if (this.dialogue.view.isOpen) return;
-    this.hideGroupA(this.dialogue);
+    const epoch = this.hideGroupA(this.dialogue);
     this.dialogue.contribution = contribution;
-    void this.dialogue.opening();
+    void this.dialogue.opening().then(() => {
+      if (epoch !== this.openEpoch) this.dialogue.view.close();
+    });
   }
 
   questList(indices: number[]): void { this.dialogue.questList(indices); }
@@ -816,11 +825,15 @@ export class QuestWindows implements QuestEvents {
 
   showProgress(index: number, byEtc: boolean): Promise<void> {
     const window = byEtc ? this.progressEtc : this.progress;
-    if (window.view.isOpen) { window.setContents(index); return Promise.resolve(); }
-    if (!byEtc) this.hideGroupA(window);
+    const epoch = this.hideGroupA(window);
+    if (window.view.isOpen) { window.setContents(index); this.placeAll(); return Promise.resolve(); }
     this.sound('SOUND_INTERFACE01');
     window.index = index;
-    return window.view.open().then(() => { window.setContents(index); this.placeAll(); });
+    return window.view.open().then(() => {
+      if (epoch !== this.openEpoch) { window.view.close(); return; }
+      window.setContents(index);
+      this.placeAll();
+    });
   }
 
   hideProgress(): void {
@@ -841,8 +854,10 @@ export class QuestWindows implements QuestEvents {
 
   showLegacyQuest(): void {
     // HideAll, then the NPC quest window.
-    this.hideGroupA(this.npcQuest);
-    void this.npcQuest.opening();
+    const epoch = this.hideGroupA(this.npcQuest);
+    void this.npcQuest.opening().then(() => {
+      if (epoch !== this.openEpoch) this.npcQuest.view.close();
+    });
   }
 
   legacyChanged(): void { this.npcQuest.sync(); }
