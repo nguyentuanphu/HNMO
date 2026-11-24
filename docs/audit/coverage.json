@@ -1,5 +1,5 @@
 {
-  "generatedAt": "d65d39b1",
+  "generatedAt": "ba3dd37f",
   "maxLines": 6000,
   "units": [
     {
@@ -8098,11 +8098,14 @@
       ],
       "files": 3,
       "lines": 339,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "ba3dd37f",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "UI/Diagnostics",
+        "docs/audit/findings/unit-client-src-source-UI-Diagnostics.md"
+      ],
+      "evidence": "3f/339L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
       "prs": ""
     },
     {
