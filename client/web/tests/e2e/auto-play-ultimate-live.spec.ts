@@ -36,10 +36,13 @@ test('the admin page sets Free or VIP, and a player in the game gets it at once'
   expect(await allowed(page, 'manaSdPotions')).toBe(false);
   expect(await vipLocked(page, 'manaSdPotions')).toBe(true);
   await page.keyboard.press('Alt+z');
-  await expect(page.locator('#hnmo-ultimate-autoplay-panel')).toBeVisible();
-  await expect(page.locator('#hnmo-ultimate-autoplay-panel')).toContainText(/VIP ONLY|CHỈ VIP/);
+  const helperCfg = page.locator('.rml-mu_helper_config');
+  await expect(helperCfg.locator('#panel')).toBeVisible();
+  await expect(helperCfg.locator('#tab_4')).toHaveClass(/\bactive\b/);
+  await expect(helperCfg.locator('#hnmo_page_ultimate')).toContainText(/VIP ONLY|CHỈ VIP/);
   await page.screenshot({ path: 'test-results/ultimate-autoplay-locked.png' });
   await page.keyboard.press('Alt+z');
+  await expect(helperCfg).toHaveCount(0);
 
   // The admin makes the potions free: the player gets it without entering the world again or opening the panel.
   await setPotions(admin, 'Free');

@@ -70,13 +70,15 @@ test('the dialogs are the desktop documents and answer like them', async ({ page
   await expect(page.locator('.mix-method-dialog')).toHaveCount(0);
   await expect.poll(() => answers(page).then((a) => a.slice(6))).toEqual([1, null, null]);
 
-  // The auto play extras: the game's frame, a checkbox and Close.
+  // The auto play extras tab inside Window 1: five checkboxes and Exit.
   await page.keyboard.press('Shift+Z');
-  const extras = page.locator('.auto-play-extras #panel');
-  await expect(extras).toBeVisible({ timeout: 30_000 });
-  await expect(page.locator('.auto-play-extras .checkbox-box:visible')).toHaveCount(5);
+  const helperCfg = page.locator('.rml-mu_helper_config');
+  await expect(helperCfg.locator('#panel')).toBeVisible({ timeout: 30_000 });
+  await expect(helperCfg.locator('#tab_3')).toHaveClass(/\bactive\b/);
+  await expect(helperCfg.locator('#hnmo_page_extras')).toBeVisible();
+  await expect(helperCfg.locator('#hnmo_page_extras .checkbox-box:visible')).toHaveCount(5);
   await page.screenshot({ path: 'test-results/dialogs-extras.png' });
-  await page.click('.auto-play-extras .ape-close');
-  await expect(page.locator('.auto-play-extras')).toHaveCount(0);
+  await helperCfg.locator('#btn_exit').click();
+  await expect(helperCfg).toHaveCount(0);
   await expectNoPageErrors(errors);
 });

@@ -235,11 +235,12 @@ test('all HUD, menu, and window buttons open, act, or close as on the desktop cl
   await page.locator('#hnmo-ultimate-hud [data-uap-hud="town"]').click();
   await expect.poll(() => chatText(page)).toMatch(/town|Lorencia|Auto|thành/i);
   await page.locator('#hnmo-ultimate-hud [data-uap-hud="open"]').click();
-  await expect(page.locator('#hnmo-ultimate-autoplay-panel')).toBeVisible(OPEN);
-  await page.locator('#hnmo-ultimate-autoplay-panel [data-uap-tab="combat"]').click();
-  await expect(page.locator('#hnmo-ultimate-autoplay-panel #uap-combat-body, #hnmo-ultimate-autoplay-panel #uap-add-spot')).toBeVisible(OPEN);
-  await page.locator('#uap-close').click();
-  await expect(page.locator('#hnmo-ultimate-autoplay-panel')).toHaveCount(0);
+  await expect(helperCfg.locator('#panel')).toBeVisible(OPEN);
+  await expect(helperCfg.locator('#tab_4')).toHaveClass(/\bactive\b/);
+  await helperCfg.locator('#hnmo_page_ultimate [data-uap-tab="combat"]').click();
+  await expect(helperCfg.locator('#hnmo_page_ultimate #uap-add-spot')).toBeVisible(OPEN);
+  await helperCfg.locator('#btn_exit').click();
+  await expect(helperCfg).toHaveCount(0);
 
   // Return hero cleanly to Lorencia safe zone so shared accounts stay town-ready.
   await page.evaluate(() => (window as unknown as { __game: { online: { say(t: string): void } } }).__game.online.say('/move lorencia'));

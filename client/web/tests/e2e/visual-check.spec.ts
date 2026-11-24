@@ -45,7 +45,7 @@ test('the windows', async ({ page }) => {
   // The auto-play window's other tabs, its detail page.
   await page.keyboard.press('z');
   await expect(page.locator('.rml-mu_helper_config')).toHaveCount(1, OPEN);
-  for (const tab of [1, 2]) {
+  for (const tab of [1, 2, 3, 4]) {
     await page.locator(`.rml-mu_helper_config #tab_${tab}`).click({ force: true });
     await page.waitForTimeout(2_000);
     await shoot(page, `mu_helper_config-tab${tab}`);

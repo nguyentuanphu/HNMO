@@ -35,13 +35,16 @@ test('Ultimate HUD bar buttons (Start, Town, Ultimate) respond reliably across r
   });
   expect(sameNodes, 'Ultimate HUD buttons detached during refresh tick').toBe(true);
 
-  // Ultimate (Alt+Z) opens and closes the Ultimate Autoplay configuration panel.
+  // Ultimate button opens Window 1 directly on the Ultimate tab, and Close dismisses it.
   const openBox = (await openBtn.boundingBox())!;
   await clickAt(page, { x: openBox.x + openBox.width / 2, y: openBox.y + openBox.height / 2 });
-  const panel = page.locator('#hnmo-ultimate-autoplay-panel');
-  await expect(panel).toBeVisible();
-  await panel.locator('#uap-close').click();
-  await expect(panel).toHaveCount(0);
+  const helperCfg = page.locator('.rml-mu_helper_config');
+  await expect(helperCfg.locator('#panel')).toBeVisible();
+  await expect(helperCfg.locator('#tab_4')).toHaveClass(/\bactive\b/);
+  await expect(helperCfg.locator('#hnmo_page_ultimate')).toBeVisible();
+  await expect(page.locator('#hnmo-ultimate-autoplay-panel')).toHaveCount(0);
+  await helperCfg.locator('#btn_exit').click();
+  await expect(helperCfg).toHaveCount(0);
 
   // Town starts the town trip and notifies in chat.
   const townBox = (await townBtn.boundingBox())!;

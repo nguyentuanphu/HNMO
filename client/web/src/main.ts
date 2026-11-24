@@ -43,7 +43,6 @@ import { TopUpMilestonesWindow } from './ui/topUpMilestonesWindow.js';
 import { AutoPlayExtras } from './game/autoPlayExtras.js';
 import { AutoPlaySparkles } from './game/autoPlaySparkles.js';
 import { resolveSparkleGoal } from './game/sparkleGoal.js';
-import { AutoPlayExtrasPanel } from './ui/autoPlayExtrasPanel.js';
 import { UltimateAutoPlayWindow } from './ui/ultimateAutoPlayWindow.js';
 import { MissionsWindow } from './ui/missionsWindow.js';
 import { WorldBossWindow } from './ui/worldBossWindow.js';
@@ -219,6 +218,7 @@ export interface GameState {
   autoPlay?: AutoPlay;
   autoPlayBar?: AutoPlayBar;
   autoPlayExtras?: AutoPlayExtras;
+  settingsWindow?: AutoPlaySettingsWindow;
   ultimateAutoPlay?: UltimateAutoPlayWindow;
   autoPlaySparkles?: AutoPlaySparkles;
   missions?: MissionsWindow;
@@ -903,6 +903,7 @@ function step(dt: number, rec: PerfRecorder | null): void {
     }
     state.autoPlayExtras?.update();
     state.ultimateAutoPlay?.refresh();
+    state.settingsWindow?.refreshStats();
     state.autoPlaySparkles?.update();
     if (state.autoPlayBar && state.hero && state.mapNumber !== null) state.autoPlayBar.set(mapName(state.mapNumber), state.hero.cell, state.autoPlay?.active ?? false);
     state.overlay?.update(dt);
@@ -1867,6 +1868,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     onApply: (config) => autoPlay.setConfig(config),
     onMessage: (text) => chat.add(text, 'system'),
   });
+  state.settingsWindow = settingsWindow;
   const applyServerConfig = (bytes: Uint8Array) => {
     if (bytes[0] !== 0xc2 || bytes[3] !== 0xae || bytes.length < 4 + AUTO_PLAY_DATA_LENGTH) return;
     autoPlayConfig = decodeAutoPlayConfig(bytes.subarray(4, 4 + AUTO_PLAY_DATA_LENGTH));
@@ -1979,7 +1981,25 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     applyUltimateHooks: (hooks) => autoPlay.setUltimateHooks(hooks),
   });
   state.autoPlayExtras = autoPlayExtras;
-  const extrasPanel = new AutoPlayExtrasPanel(autoPlayExtras);
+  const onAutoPickSkills = () => {
+    const learned = [...skills.skills.values()];
+    if (learned.length === 0) { chat.add('No learned skills to auto-pick yet.', 'system'); return false; }
+    const next = { ...autoPlayConfig, skills: [...autoPlayConfig.skills] as [number, number, number], buffs: [...autoPlayConfig.buffs] as [number, number, number] };
+    const buffList = learned.filter((s) => helperBuffOf(s) !== null);
+    const attackList = learned.filter((s) => helperBuffOf(s) === null);
+    if (next.skills[0] <= 0 && attackList.length > 0) next.skills[0] = attackList[0];
+    if (next.skills[1] <= 0 && attackList.length > 1) next.skills[1] = attackList[1];
+    let bi = 0;
+    for (let i = 0; i < 3 && bi < buffList.length; i++) {
+      if (next.buffs[i] <= 0) next.buffs[i] = buffList[bi++];
+    }
+    autoPlayConfig = next;
+    autoPlay.setConfig(next);
+    settingsWindow.load(next);
+    connection.send('ClientToServer', 'MuHelperSaveDataRequest', { HelperData: encodeAutoPlayConfig(next) });
+    chat.add(currentLanguage() === 'vi' ? 'Autoplay: đã tự chọn skill và buff đã học.' : 'Autoplay: picked the learned skills and buffs.', 'system');
+    return true;
+  };
   const ultimateAutoPlay = new UltimateAutoPlayWindow({
     extras: autoPlayExtras,
     isActive: () => autoPlay.active,
@@ -1988,25 +2008,15 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     currentMap: () => state.mapNumber,
     message: (text) => chat.add(text, 'system'),
     onRequestPolicy: () => connection.send('ClientToServer', 'HnmoUltimateAutoPlayRequest', {}),
-    onAutoPickSkills: () => {
-      const learned = [...skills.skills.values()];
-      if (learned.length === 0) { chat.add('No learned skills to auto-pick yet.', 'system'); return false; }
-      const next = { ...autoPlayConfig, skills: [...autoPlayConfig.skills] as [number, number, number], buffs: [...autoPlayConfig.buffs] as [number, number, number] };
-      const buffList = learned.filter((s) => helperBuffOf(s) !== null);
-      const attackList = learned.filter((s) => helperBuffOf(s) === null);
-      if (next.skills[0] <= 0 && attackList.length > 0) next.skills[0] = attackList[0];
-      if (next.skills[1] <= 0 && attackList.length > 1) next.skills[1] = attackList[1];
-      let bi = 0;
-      for (let i = 0; i < 3 && bi < buffList.length; i++) {
-        if (next.buffs[i] <= 0) next.buffs[i] = buffList[bi++];
-      }
-      autoPlayConfig = next;
-      autoPlay.setConfig(next);
-      settingsWindow.load(next);
-      connection.send('ClientToServer', 'MuHelperSaveDataRequest', { HelperData: encodeAutoPlayConfig(next) });
-      chat.add(currentLanguage() === 'vi' ? 'Autoplay: đã tự chọn skill và buff đã học.' : 'Autoplay: picked the learned skills and buffs.', 'system');
-      return true;
-    },
+    onAutoPickSkills,
+    onOpenSettings: () => { void settingsWindow.toggleTab(4); },
+  });
+  settingsWindow.attachExtras({
+    extras: autoPlayExtras,
+    mapName,
+    onRequestPolicy: () => connection.send('ClientToServer', 'HnmoUltimateAutoPlayRequest', {}),
+    onAutoPickSkills,
+    onExtrasSaved: () => { ultimateAutoPlay.refreshPolicy(); },
   });
   state.ultimateAutoPlay = ultimateAutoPlay;
   const applyUltimatePolicy = (bytes: Uint8Array) => {
@@ -2015,6 +2025,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     const pkt = read('ServerToClient', 'HnmoUltimateAutoPlayPolicy', bytes);
     autoPlayExtras.setPolicy(String(pkt.Json ?? ''));
     ultimateAutoPlay.refreshPolicy();
+    settingsWindow.refreshPolicy();
   };
   connection.onPacket(applyUltimatePolicy);
   earlyPackets.forEach(applyUltimatePolicy);
@@ -2403,8 +2414,8 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   window.addEventListener('keydown', (event) => {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
     if (event.key === 'Home') { event.preventDefault(); autoPlay.toggle(); }
-    if (event.key.toLowerCase() === 'z' && event.altKey) { event.preventDefault(); ultimateAutoPlay.toggle(); }
-    else if (event.key.toLowerCase() === 'z' && event.shiftKey) { event.preventDefault(); extrasPanel.toggle(); }
+    if (event.key.toLowerCase() === 'z' && event.altKey) { event.preventDefault(); void settingsWindow.toggleTab(4); }
+    else if (event.key.toLowerCase() === 'z' && event.shiftKey) { event.preventDefault(); void settingsWindow.toggleTab(3); }
     else if (event.key.toLowerCase() === 'z' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void settingsWindow.toggle(); }
   });
   hud.setSkills({
@@ -2653,7 +2664,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     'rml-hud_status', 'rml-duel_watch_frame', 'rml-duel_watch_spectators', 'rml-empire_guardian_timer',
   ]);
   const hasOtherOverlayOpen = (): boolean => {
-    if (chat.isOpen || ultimateAutoPlay.isOpen || windowMenu.isOpen) return true;
+    if (chat.isOpen || windowMenu.isOpen) return true;
     const guideEl = document.getElementById('guide');
     if (guideEl && !guideEl.hidden) return true;
     if (document.querySelector('.confirm-dialog, .game-dialog')) return true;
