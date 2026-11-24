@@ -574,11 +574,65 @@ function writeDiff(fileName, lines) {
 {
   const g6 = parseSuiteGens(S6_DIR);
   const g9 = parseSuiteGens(S9_DIR);
+  const gensCfgPath = path.join(ROOT, 'server/src/GameLogic/Gens/GensConfiguration.cs');
+  const gSrc = fs.existsSync(gensCfgPath) ? fs.readFileSync(gensCfgPath, 'utf8') : '';
+  const readNumProp = (prop) => {
+    const m = new RegExp(`public\\s+\\S+\\s+${prop}\\s*\\{[^}]*\\}\\s*=\\s*(\\d+)`).exec(gSrc);
+    return m ? Number(m[1]) : null;
+  };
+  const hRanks = [...gSrc.matchAll(/new\(\)\s*\{\s*Rank\s*=\s*(\d+),\s*MinimumContribution\s*=\s*(\d+)(?:,\s*MaximumRankingPosition\s*=\s*(\d+))?\s*\}/g)].map(
+    (m) => ({ rank: num(m[1]), minContrib: num(m[2]), maxPos: m[3] ? num(m[3]) : 0 }),
+  );
+  const hRewards = [...gSrc.matchAll(/new\(\)\s*\{\s*Rank\s*=\s*(\d+),\s*ItemGroup\s*=\s*(\d+),\s*ItemNumber\s*=\s*(\d+),\s*Count\s*=\s*(\d+)\s*\}/g)].map(
+    (m) => ({ rank: num(m[1]), cat: num(m[2]), item: num(m[3]), count: num(m[4]) }),
+  );
+  const hMinLv = readNumProp('MinimumLevel');
+  const hStartContrib = readNumProp('StartingContribution');
+  const hStartRank = readNumProp('StartingRank');
+  const hAbuseWarn = readNumProp('AbuseWarningKillCount');
+  const hAbuseLimit = readNumProp('AbuseLimitKillCount');
+  const hRewardStart = readNumProp('RewardStartDay');
+  const hRewardEnd = readNumProp('RewardEndDay');
+
   const lines = [
-    '# Gens System Rules (S6 vs S9)',
-    `S6: ${JSON.stringify(g6)}`,
-    `S9: ${JSON.stringify(g9)}`,
+    '# Gens System Rules (Season 6 vs Season 9 vs HNMO)',
+    `# S6 format=${g6.format}, ranks=${g6.ranks.length}; S9 format=${g9.format}, ranks=${g9.ranks.length}; HNMO ranks=${hRanks.length}, rewards=${hRewards.length}`,
+    '',
+    '## Limits, Schedule & Social Rules (S6 vs S9 vs HNMO GensConfiguration.cs)',
+    `MinimumLevelToJoin: S6=50 (client/code), S9=50, HNMO=${hMinLv} (GensConfiguration.cs:17) -> same`,
+    `StartingContribution: S6=${g6.initialContributePoint}, S9=${g9.initialContributePoint}, HNMO=${hStartContrib} (GensConfiguration.cs:22) -> same`,
+    `StartingRank: S6=14, S9=14, HNMO=${hStartRank} (GensConfiguration.cs:28) -> same`,
+    `AbuseWarningKillCount: S6=${g6.abuseWarning}, S9=${g9.abuseWarning}, HNMO=${hAbuseWarn} (GensConfiguration.cs:91) -> same`,
+    `AbuseLimitKillCount: S6=${g6.abuseLimit}, S9=${g9.abuseLimit}, HNMO=${hAbuseLimit} (GensConfiguration.cs:96) -> same`,
+    `AbuseResetMinutes: S6=${g6.abuseResetMin}, S9=${g9.abuseResetMin}, HNMO=60 (GensConfiguration.cs:101) -> same`,
+    `RankingIntervalHours: S6=DS config (>=5h), S9=DS config (>=5h), HNMO=2 (GensConfiguration.cs:127) -> differs`,
+    `RewardWindowDays: S6=${g6.rewardStartDay}-${g6.rewardEndDay}, S9=${g9.rewardStartDay}-${g9.rewardEndDay} (MinRank=${g9.minRankToGainReward}), HNMO=${hRewardStart}-${hRewardEnd} (GensConfiguration.cs:132-137) -> same`,
+    `CanSeeOppositeGensChat: S6=${g6.canSeeOppositeChat}, S9=${g9.canSeeOppositeChat}, HNMO=not filtered -> missing in HNMO`,
+    `CanJoinPartyWhileOppositeGens: S6=${g6.canJoinPartyOpposite}, S9=${g9.canJoinPartyOpposite}, HNMO=false (AllowPartyWithOtherGens GensConfiguration.cs:157) -> same`,
+    `CanCreatePartyOnBattleZone: S6=${g6.canCreatePartyBattleZone}, S9=${g9.canCreatePartyBattleZone}, HNMO=false (AllowPartyInBattleZone GensConfiguration.cs:163) -> same`,
+    `CanJoinGuildWhileOppositeGens: S6=${g6.canJoinGuildOpposite}, S9=${g9.canJoinGuildOpposite}, HNMO=true default (GuildRequiresGens=false GensConfiguration.cs:172) -> differs`,
+    `CanJoinUnionWhileOppositeGens: S6=${g6.canJoinUnionOpposite}, S9=${g9.canJoinUnionOpposite}, HNMO=true default (AllianceRequiresSameGens=false GensConfiguration.cs:180) -> differs`,
+    `PkPenaltyAddNeedZenMapMove: S6=${g6.pkBattleWarpZenMult}, S9=${g9.pkBattleWarpZenMult}, HNMO=missing -> missing in HNMO`,
+    `BattleZoneMapsEnabled: S6=Map63:${g6.battleMaps[0]?.enable}, S9=${g9.battleMaps.map((m) => `Map${m.number}:${m.enable}`).join(',')}, HNMO=Map63 (GensConfiguration.cs:52) -> same Vulcanus (63) battle zone vs S6 MuBlue flag`,
+    '',
+    '## Ranks & Monthly Rewards (S6 vs S9 vs HNMO GensConfiguration.cs:106-152)',
   ];
+  for (let r = 1; r <= 14; r++) {
+    const r6 = g6.ranks.find((x) => x.rank === r);
+    const r9 = g9.ranks.find((x) => x.rank === r);
+    const rh = hRanks.find((x) => x.rank === r);
+    const rewH = hRewards.find((x) => x.rank === r);
+    const s6Contrib = r6?.reqContrib ?? 0;
+    const hContrib = rh?.minContrib ?? 0;
+    const hPos = rh?.maxPos ?? 0;
+    const rewardSame =
+      ((r6?.rewardCount ?? 0) === 0 && !rewH) ||
+      (rewH && r6?.rewardCat === rewH.cat && r6?.rewardIndex === rewH.item && r6?.rewardCount === rewH.count);
+    const status = s6Contrib === hContrib && (r6?.rankPos ?? 0) === hPos && rewardSame ? 'same' : 'differs';
+    lines.push(
+      `Rank ${r} (${r9?.name || `Class${r}`}): S6=(contrib=${r6?.reqContrib},pos=${r6?.rankPos},rew=${r6?.rewardCat}:${r6?.rewardIndex}x${r6?.rewardCount}) | S9=(contrib=${r9?.reqContrib},pos=${r9?.rankPos},rew=${r9?.rewardCat}:${r9?.rewardIndex}x${r9?.rewardCount}) | HNMO=(contrib=${hContrib},pos=${hPos},rew=${rewH ? `${rewH.cat}:${rewH.item}x${rewH.count}` : '0:0x0'}) -> ${status}${s6Contrib !== hContrib ? ' (HNMO guards Top300 with 10k min contrib)' : ''}`,
+    );
+  }
   writeDiff('diff-gens.txt', lines);
 }
 

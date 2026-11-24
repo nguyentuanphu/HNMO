@@ -326,28 +326,87 @@ export function parseSuiteGens(rootDir) {
   const xmlPath = findSuiteFile(rootDir, 'GensSystem.xml');
   if (xmlPath) {
     const main = parseXmlTags(xmlPath, 'GensSystem')[0] ?? {};
-    const ranks = parseXmlTags(xmlPath, 'Rank');
-    const rewards = parseXmlTags(xmlPath, 'Reward');
+    const general = parseXmlTags(xmlPath, 'General')[0] ?? {};
+    const rewardCfg = parseXmlTags(xmlPath, 'RewardSettings')[0] ?? {};
+    const ranks = parseXmlTags(xmlPath, 'Gens').map((g) => ({
+      rank: num(g.Class),
+      reqContrib: num(g.ReqContributePoint),
+      rankPos: num(g.RankingPosition),
+      rewardCat: num(g.RewardItemCat),
+      rewardIndex: num(g.RewardItemIndex),
+      rewardCount: num(g.RewardItemCount),
+      name: g.Name ?? '',
+    }));
+    const battleMaps = parseXmlTags(xmlPath, 'Map').map((m) => ({
+      number: num(m.Number),
+      enable: num(m.Enable),
+      familyAccessType: num(m.FamilyAccessType),
+    }));
     return {
       format: 'xml',
-      blueMuMode: num(main.BlueMuMode),
-      minLevel: num(main.MinLevel),
-      minReset: num(main.MinReset),
-      rankCount: ranks.length,
-      rewardCount: rewards.length,
+      initialContributePoint: num(main.InitialContributePoint),
+      abuseWarning: num(main.AbusingPenaltyWarning),
+      abuseLimit: num(main.AbusingPenaltyLimit),
+      abuseResetMin: num(main.AbusingResetTime),
+      pkBattleWarpZenMult: num(main.PkPenaltyAddNeedZenMapMove),
+      battleZoneAddExp: Number(main.BattleZoneAddExperience ?? 1),
+      mlBattleZoneAddExp: Number(main.ML_BattleZoneAddExperience ?? 1),
+      damageReduction: num(main.DamageReduction),
+      canSeeOppositeChat: num(general.CanSeeOppositeGensChat),
+      canJoinPartyOpposite: num(general.CanJoinPartyWhileOppositeGens),
+      canJoinGuildOpposite: num(general.CanJoinGuildWhileOppositeGens),
+      canJoinUnionOpposite: num(general.CanJoinUnionWhileOppositeGens),
+      canCreatePartyBattleZone: num(general.CanCreatePartyOnBattleZone),
+      rewardStartDay: num(rewardCfg.StartDay),
+      rewardEndDay: num(rewardCfg.EndDay),
+      minRankToGainReward: num(rewardCfg.MinRankToGainReward),
+      ranks,
+      battleMaps,
     };
   }
   const iniPath = findSuiteFile(rootDir, 'GensSystem.ini');
   const rankPath = findSuiteFile(rootDir, 'GensRanking.dat');
   const ini = parseIni(iniPath);
-  const rankSecs = parseSectionedTxt(rankPath);
-  let rankCount = 0;
-  for (const rows of rankSecs.values()) rankCount += rows.length;
+  const g = ini.Gens ?? ini.GensSystem ?? ini.General ?? {};
+  const ranks = [];
+  if (rankPath && fs.existsSync(rankPath)) {
+    for (const raw of fs.readFileSync(rankPath, 'utf8').split(/\r?\n/)) {
+      const line = raw.replace(/\/\/.*$/, '').trim();
+      if (!line || line.toLowerCase() === 'end') continue;
+      const cols = line.split(/\s+/);
+      if (cols.length >= 6 && /^\d+$/.test(cols[0])) {
+        ranks.push({
+          rank: num(cols[0]),
+          reqContrib: num(cols[1]),
+          rankPos: num(cols[2]),
+          rewardCat: num(cols[3]),
+          rewardIndex: num(cols[4]),
+          rewardCount: num(cols[5]),
+          name: '',
+        });
+      }
+    }
+  }
   return {
     format: 'ini+dat',
-    sections: Object.keys(ini).length,
-    rankCount,
-    general: ini.GensSystem ?? ini.General ?? {},
+    initialContributePoint: num(g.GensInitialContributePoint),
+    abuseWarning: num(g.GensAbusingPenaltyWarning),
+    abuseLimit: num(g.GensAbusingPenaltyLimit),
+    abuseResetMin: num(g.GensAbusingResetTime),
+    pkBattleWarpZenMult: num(g.GensPkPenaltyAddNeedZenMapMove),
+    battleZoneAddExp: 1,
+    mlBattleZoneAddExp: 1,
+    damageReduction: 100,
+    canSeeOppositeChat: num(g.GensCanSeeOppositeGensChat),
+    canJoinPartyOpposite: num(g.GensCanJoinPartyWhileOppositeGens),
+    canJoinGuildOpposite: num(g.GensCanJoinGuildWhileOppositeGens),
+    canJoinUnionOpposite: num(g.GensCanJoinUnionWhileOppositeGens),
+    canCreatePartyBattleZone: num(g.GensCanCreatePartyOnBattleZone),
+    rewardStartDay: 1,
+    rewardEndDay: 7,
+    minRankToGainReward: ranks.filter((r) => r.rewardCount > 0).reduce((m, r) => Math.max(m, r.rankPos), 0),
+    ranks,
+    battleMaps: [{ number: 63, enable: num(g.GensBattlezonesFromMuBlue, 0), familyAccessType: 0 }],
   };
 }
 

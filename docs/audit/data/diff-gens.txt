@@ -1,3 +1,35 @@
-# Gens System Rules (S6 vs S9)
-S6: {"format":"ini+dat","sections":1,"rankCount":13,"general":{}}
-S9: {"format":"xml","blueMuMode":0,"minLevel":0,"minReset":0,"rankCount":0,"rewardCount":0}
+# Gens System Rules (Season 6 vs Season 9 vs HNMO)
+# S6 format=ini+dat, ranks=14; S9 format=xml, ranks=14; HNMO ranks=14, rewards=8
+
+## Limits, Schedule & Social Rules (S6 vs S9 vs HNMO GensConfiguration.cs)
+MinimumLevelToJoin: S6=50 (client/code), S9=50, HNMO=50 (GensConfiguration.cs:17) -> same
+StartingContribution: S6=10, S9=10, HNMO=10 (GensConfiguration.cs:22) -> same
+StartingRank: S6=14, S9=14, HNMO=14 (GensConfiguration.cs:28) -> same
+AbuseWarningKillCount: S6=3, S9=3, HNMO=3 (GensConfiguration.cs:91) -> same
+AbuseLimitKillCount: S6=6, S9=6, HNMO=6 (GensConfiguration.cs:96) -> same
+AbuseResetMinutes: S6=60, S9=60, HNMO=60 (GensConfiguration.cs:101) -> same
+RankingIntervalHours: S6=DS config (>=5h), S9=DS config (>=5h), HNMO=2 (GensConfiguration.cs:127) -> differs
+RewardWindowDays: S6=1-7, S9=1-7 (MinRank=300), HNMO=1-7 (GensConfiguration.cs:132-137) -> same
+CanSeeOppositeGensChat: S6=0, S9=0, HNMO=not filtered -> missing in HNMO
+CanJoinPartyWhileOppositeGens: S6=0, S9=0, HNMO=false (AllowPartyWithOtherGens GensConfiguration.cs:157) -> same
+CanCreatePartyOnBattleZone: S6=0, S9=0, HNMO=false (AllowPartyInBattleZone GensConfiguration.cs:163) -> same
+CanJoinGuildWhileOppositeGens: S6=0, S9=0, HNMO=true default (GuildRequiresGens=false GensConfiguration.cs:172) -> differs
+CanJoinUnionWhileOppositeGens: S6=0, S9=0, HNMO=true default (AllianceRequiresSameGens=false GensConfiguration.cs:180) -> differs
+PkPenaltyAddNeedZenMapMove: S6=2, S9=2, HNMO=missing -> missing in HNMO
+BattleZoneMapsEnabled: S6=Map63:0, S9=Map7:0,Map33:0,Map37:0,Map56:0,Map63:1, HNMO=Map63 (GensConfiguration.cs:52) -> same Vulcanus (63) battle zone vs S6 MuBlue flag
+
+## Ranks & Monthly Rewards (S6 vs S9 vs HNMO GensConfiguration.cs:106-152)
+Rank 1 (Grand Duke): S6=(contrib=0,pos=1,rew=14:141x30) | S9=(contrib=0,pos=1,rew=14:141x30) | HNMO=(contrib=10000,pos=1,rew=14:141x30) -> differs (HNMO guards Top300 with 10k min contrib)
+Rank 2 (Duke): S6=(contrib=0,pos=5,rew=14:141x20) | S9=(contrib=0,pos=5,rew=14:141x20) | HNMO=(contrib=10000,pos=5,rew=14:141x20) -> differs (HNMO guards Top300 with 10k min contrib)
+Rank 3 (Marquis): S6=(contrib=0,pos=10,rew=14:142x20) | S9=(contrib=0,pos=10,rew=14:142x20) | HNMO=(contrib=10000,pos=10,rew=14:142x20) -> differs (HNMO guards Top300 with 10k min contrib)
+Rank 4 (Count): S6=(contrib=0,pos=30,rew=14:142x10) | S9=(contrib=0,pos=30,rew=14:142x10) | HNMO=(contrib=10000,pos=30,rew=14:142x10) -> differs (HNMO guards Top300 with 10k min contrib)
+Rank 5 (Viscount): S6=(contrib=0,pos=50,rew=14:143x10) | S9=(contrib=0,pos=50,rew=14:143x10) | HNMO=(contrib=10000,pos=50,rew=14:143x10) -> differs (HNMO guards Top300 with 10k min contrib)
+Rank 6 (Baron): S6=(contrib=0,pos=100,rew=14:143x5) | S9=(contrib=0,pos=100,rew=14:143x5) | HNMO=(contrib=10000,pos=100,rew=14:143x5) -> differs (HNMO guards Top300 with 10k min contrib)
+Rank 7 (Knight Commander): S6=(contrib=0,pos=200,rew=14:144x5) | S9=(contrib=0,pos=200,rew=14:144x5) | HNMO=(contrib=10000,pos=200,rew=14:144x5) -> differs (HNMO guards Top300 with 10k min contrib)
+Rank 8 (Superior Knight): S6=(contrib=0,pos=300,rew=14:144x3) | S9=(contrib=0,pos=300,rew=14:144x3) | HNMO=(contrib=10000,pos=300,rew=14:144x3) -> differs (HNMO guards Top300 with 10k min contrib)
+Rank 9 (Knight): S6=(contrib=10000,pos=0,rew=0:0x0) | S9=(contrib=10000,pos=0,rew=0:0x0) | HNMO=(contrib=10000,pos=0,rew=0:0x0) -> same
+Rank 10 (Guard Perfect): S6=(contrib=6000,pos=0,rew=0:0x0) | S9=(contrib=6000,pos=0,rew=0:0x0) | HNMO=(contrib=6000,pos=0,rew=0:0x0) -> same
+Rank 11 (Officer): S6=(contrib=3000,pos=0,rew=0:0x0) | S9=(contrib=3000,pos=0,rew=0:0x0) | HNMO=(contrib=3000,pos=0,rew=0:0x0) -> same
+Rank 12 (Lieutenant): S6=(contrib=1500,pos=0,rew=0:0x0) | S9=(contrib=1500,pos=0,rew=0:0x0) | HNMO=(contrib=1500,pos=0,rew=0:0x0) -> same
+Rank 13 (Sergeant): S6=(contrib=500,pos=0,rew=0:0x0) | S9=(contrib=500,pos=0,rew=0:0x0) | HNMO=(contrib=500,pos=0,rew=0:0x0) -> same
+Rank 14 (Private): S6=(contrib=0,pos=0,rew=0:0x0) | S9=(contrib=0,pos=0,rew=0:0x0) | HNMO=(contrib=0,pos=0,rew=0:0x0) -> same

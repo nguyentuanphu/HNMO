@@ -2,7 +2,7 @@
 
 - **Unit**: `server/src/GameLogic/Gens` (11 files, 1,065 lines)
 - **Status**: `Checked` on 2026-11-24
-- **Reference saved**: [gens-system-s6-s9.md](file:///D:/WorkSpace/HNMO-ag/docs/audit/references/gens-system-s6-s9.md)
+- **Reference saved**: [gens-system-s6-s9.md](../references/gens-system-s6-s9.md)
 
 ## Files Reviewed (in full)
 1. `GensBattleZonePlugIn.cs` (1–162)
