@@ -114,4 +114,32 @@ HNMO extras (`autoPlayExtrasPanel.ts`, `hnmo_auto_play_extras.rml`, Shift+Z) and
 - EN / VI texts; update the browser specs that used the old windows without weakening them; add a spec for the five
   tabs, the shortcuts and Save; screenshots of the five tabs in the PR.
 
+## Part 7 [High]: finish the audit for real (main's review, 24 Nov afternoon)
+
+Main checked `audit-2026-11-24` at `20de6828`. Good: the 217 stamped units are back to "Not checked", the vendor file
+prefix is gone, the numbers are honest (127 units checked, about 213,000 lines; 209 units, about 563,000 lines, left).
+Part 4 is **not** done: most outputs only count things and compare Season 6 with Season 9, never with HNMO, and several
+parsers read nothing:
+- `diff-castle-siege.txt`: the schedule is all zeros (`cycleDays` [0,...], `stateCount` 0): the parser did not read it.
+- `diff-gens.txt`: Season 6 `{}`, Season 9 all zeros: nothing read.
+- `diff-quests.txt`: "QuestInfo differences" empty; only counts.
+- `diff-master-skills.txt`: Season 6 = 0 (the .dat was not read).
+- `diff-events-all.txt`: only which file exists in which season; no values.
+- `diff-itembags.txt`: only item counts per bag; not the items, levels, options and rates.
+- `diff-suite-rules.txt`: copies database names and default connection settings of the suites (one is a third-party
+  name): remove connection, database and password settings from all diffs; they are not game rules.
+
+Do, in this order, one commit per file or unit:
+1. Fix each parser above so it reads the real values (check one value by hand against the file and write that check in
+   the findings). For every rule file: Season 6 value, Season 9 value **and HNMO's value** (from the HNMO dumps of both
+   seasons or HNMO's code, with file:line), marked same / differs / missing in HNMO. Events: entry levels, times,
+   durations, player limits, rewards. Item bags: each item, level, option and rate against HNMO's drop groups and boxes.
+   Quests: each quest's requirements and rewards. Castle Siege and Gens: schedule, ranks, rewards, limits. Master skill
+   tree: each skill's rank, max level, requirements and value per level.
+2. The clients' tables (`diff-client-tables.txt`): the same, against HNMO's data and the web client's data files.
+3. Part 3, the 209 units left: game data first, then GameServer, DataModel, the web client, then the desktop client's
+   rule parts. One findings file per unit with file:line, the suite file's role and value, same / differs.
+4. After each step, report from `docs/audit/coverage.md` and the diff headers: units checked of 400, lines read of the
+   total, rule files read of the total; never "complete" for a part with an empty or all-zero section.
+
 After each part, tell the owner in Vietnamese: the PR, what was done, test results, the real audit numbers, what is left.
