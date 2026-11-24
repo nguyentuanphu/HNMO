@@ -427,6 +427,14 @@ for (const [language, width] of [['en', 1440], ['vi', 390]] as const) {
     const details = page.getByRole('dialog', { name: swordName });
     await expect(details.getByText('0123456789abcdef0123456789abcdef')).toBeVisible();
     await expect(details.getByText('AnnKnight')).toBeVisible();
+    expect(await details.evaluate(element => {
+      const probe = document.createElement('div');
+      probe.style.backgroundColor = 'var(--panel)';
+      element.append(probe);
+      const panelColor = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      return getComputedStyle(element).backgroundColor === panelColor;
+    })).toBe(true);
     await expect(details.getByRole('link', { name: isVi ? 'Lịch sử vật phẩm' : 'Item history' }))
       .toHaveAttribute('href', '/tracker.html?serial=0123456789abcdef0123456789abcdef');
     await page.screenshot({ path: `docs/screenshots/item-history/account-item-details-${language}-${width}.png` });

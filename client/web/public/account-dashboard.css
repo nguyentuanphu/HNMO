@@ -37,10 +37,10 @@ body:has(#accountDashboard.authenticated) main { max-width: 1100px; }
   box-sizing: border-box;
   width: min(32rem, calc(100% - 2rem));
   padding: 1rem;
-  background: var(--card, #171c25);
-  color: var(--text, #f3ead9);
+  background: var(--panel);
+  color: var(--text);
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--theme-radius, 8px);
   overflow-wrap: anywhere;
 }
 .account-item-details::backdrop { background: rgb(0 0 0 / 65%); }
