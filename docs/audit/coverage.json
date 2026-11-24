@@ -1,5 +1,5 @@
 {
-  "generatedAt": "3f0f29fd",
+  "generatedAt": "da9484ad",
   "maxLines": 6000,
   "units": [
     {
@@ -2404,11 +2404,14 @@
       ],
       "files": 4,
       "lines": 228,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "da9484ad",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Views/CashShop",
+        "docs/audit/findings/unit-server-src-GameLogic-Views-CashShop.md"
+      ],
+      "evidence": "4f/228L: No game rules (pure C# view plugin interfaces and result enums).",
       "prs": ""
     },
     {
