@@ -1,0 +1,83 @@
+@using System.Globalization
+@using HNMO.Web.AdminPanel.Services
+@inject IServiceProvider Services
+
+@if (this._settings is not null)
+{
+    <h3 class="h6 mt-4">Stripe Checkout</h3>
+    <form @onsubmit="this.Save" @onsubmit:preventDefault>
+        <div class="form-check mb-2">
+            <input id="test-stripe-on" type="checkbox" class="form-check-input" title="@EnabledLabel" @bind="this._enabled" />
+            <label class="form-check-label" for="test-stripe-on">@EnabledLabel</label>
+        </div>
+        <label for="test-stripe-origin">@OriginLabel</label>
+        <input id="test-stripe-origin" type="url" class="form-control mb-2" maxlength="240" title="@OriginLabel" @bind="this._origin" />
+        <label for="test-stripe-key">@KeyLabel</label>
+        <input id="test-stripe-key" type="password" autocomplete="new-password" class="form-control mb-2" maxlength="300" title="@KeyLabel" @bind="this._key" />
+        <label for="test-stripe-signature">@SignatureLabel</label>
+        <input id="test-stripe-signature" type="password" autocomplete="new-password" class="form-control mb-2" maxlength="300" title="@SignatureLabel" @bind="this._signature" />
+        <p class="form-text">
+            @Text("Leave a key blank to keep it. Set the HTTPS site origin without a path and register the test webhook at /test-topup/stripe/webhook.",
+                "Để trống khóa để giữ khóa đã lưu. Nhập origin HTTPS của site không kèm đường dẫn và đăng ký webhook thử nghiệm tại /test-topup/stripe/webhook.",
+                "Leere Schlüsselfelder behalten vorhandene Schlüssel. Geben Sie die HTTPS-Origin ohne Pfad an und registrieren Sie den Test-Webhook unter /test-topup/stripe/webhook.",
+                "留空可保留已保存的密钥。输入不含路径的 HTTPS 网站源，并将测试 Webhook 注册到 /test-topup/stripe/webhook。")
+        </p>
+        <button type="submit" class="btn btn-primary" title="@SaveLabel">@SaveLabel</button>
+    </form>
+    @if (this._status is { } status)
+    {
+        <p role="status">@status</p>
+    }
+}
+
+@code {
+    private static string EnabledLabel => Text("Enable Stripe test cards", "Bật thẻ Stripe thử nghiệm", "Stripe-Testkarten aktivieren", "启用 Stripe 测试卡");
+    private static string OriginLabel => Text("HTTPS website origin", "Origin HTTPS của website", "HTTPS-Origin der Website", "网站 HTTPS 源");
+    private static string KeyLabel => Text("Stripe test API key", "Khóa API Stripe thử nghiệm", "Stripe-Test-API-Schlüssel", "Stripe 测试 API 密钥");
+    private static string SignatureLabel => Text("Stripe test webhook signing secret", "Khóa ký webhook Stripe thử nghiệm", "Stripe-Test-Webhook-Signaturgeheimnis", "Stripe 测试 Webhook 签名密钥");
+    private static string SaveLabel => Text("Save Stripe test settings", "Lưu cài đặt Stripe thử nghiệm", "Stripe-Testeinstellungen speichern", "保存 Stripe 测试设置");
+
+    private WebsiteStripeTestSettings? _settings;
+    private bool _enabled;
+    private string _origin = string.Empty;
+    private string _key = string.Empty;
+    private string _signature = string.Empty;
+    private string? _status;
+
+    protected override void OnInitialized()
+    {
+        this._settings = this.Services.GetService(typeof(WebsiteStripeTestSettings)) as WebsiteStripeTestSettings;
+        if (this._settings?.Read() is { } saved)
+        {
+            this._enabled = saved.Enabled;
+            this._origin = saved.Origin;
+        }
+    }
+
+    private static string Text(string en, string vi, string de, string zh) => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName switch
+    {
+        "vi" => vi,
+        "de" => de,
+        "zh" => zh,
+        _ => en,
+    };
+
+    private void Save()
+    {
+        try
+        {
+            this._settings!.Save(this._enabled, this._origin, this._key, this._signature);
+            this._status = Text("Saved.", "Đã lưu.", "Gespeichert.", "已保存。");
+        }
+        catch (Exception error) when (error is ArgumentException or System.IO.IOException or UnauthorizedAccessException or System.Security.Cryptography.CryptographicException)
+        {
+            this._status = Text("Could not save. Check the HTTPS origin and test keys.", "Không lưu được. Kiểm tra origin HTTPS và khóa test.",
+                "Speichern fehlgeschlagen. Prüfen Sie die HTTPS-Origin und die Testschlüssel.", "无法保存。请检查 HTTPS 源和测试密钥。");
+        }
+        finally
+        {
+            this._key = string.Empty;
+            this._signature = string.Empty;
+        }
+    }
+}

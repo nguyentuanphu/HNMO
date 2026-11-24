@@ -1,0 +1,147 @@
+@using System.Globalization
+@using System.Text.Json
+@using System.Text.Json.Serialization
+@using HNMO.Web.AdminPanel.Services
+@inject IServiceProvider Services
+
+<section class="card p-3 mb-3" id="test-topup-settings">
+    <h2 class="h5">@Text("Test coin packages", "Gói coin thử nghiệm", "Test-Münzpakete", "测试代币礼包")</h2>
+    <div class="alert alert-warning">
+        @Text("Live payments are locked. This bank simulator can issue demo coins only on a demo server.",
+            "Thanh toán thật đang khóa. Mô phỏng ngân hàng chỉ cấp coin thử trên máy chủ demo.",
+            "Echte Zahlungen sind gesperrt. Die Banksimulation kann nur auf einem Demoserver Testmünzen gutschreiben.",
+            "真实付款已锁定。银行模拟器仅能在演示服务器上发放测试代币。")
+    </div>
+    <div class="form-check mb-2">
+        <input id="live-topup-locked" type="checkbox" class="form-check-input" disabled />
+        <label class="form-check-label" for="live-topup-locked">
+            @Text("Live payment requires owner approval", "Thanh toán thật cần chủ máy chủ phê duyệt", "Echte Zahlungen benötigen die Freigabe des Eigentümers", "真实付款需要所有者批准")
+        </label>
+    </div>
+    @if (this._store is not null)
+    {
+        <form @onsubmit="this.Save" @onsubmit:preventDefault>
+            <div class="form-check mb-2">
+                <input id="test-bank-on" type="checkbox" class="form-check-input" title="@BankLabel" @bind="this._enabled" />
+                <label class="form-check-label" for="test-bank-on">@BankLabel</label>
+            </div>
+            <label for="test-order-limit" class="form-label">@LimitLabel</label>
+            <input id="test-order-limit" type="number" class="form-control mb-2" min="1" max="10" title="@LimitLabel" @bind="this._limit" />
+            <label for="test-coin-packages" class="form-label">@PackageLabel</label>
+            <textarea id="test-coin-packages" class="form-control mb-2 font-monospace" rows="7" title="@PackageLabel" @bind="this._packages"></textarea>
+            <p class="form-text">
+                @Text("Enter a JSON array with id, englishName, vietnameseName, priceVnd (whole đồng), coins and coinType (WCoinC, WCoinP or GoblinPoints). Use [] for no packages.",
+                    "Nhập mảng JSON gồm id, englishName, vietnameseName, priceVnd (số đồng), coins và coinType (WCoinC, WCoinP hoặc GoblinPoints). Nhập [] để bỏ hết gói.",
+                    "Geben Sie ein JSON-Array mit id, englishName, vietnameseName, priceVnd (ganze Đồng), coins und coinType (WCoinC, WCoinP oder GoblinPoints) ein. [] entfernt alle Pakete.",
+                    "输入 JSON 数组，包含 id、englishName、vietnameseName、priceVnd（整数越南盾）、coins 和 coinType（WCoinC、WCoinP 或 GoblinPoint）。输入 [] 可清空礼包。")
+            </p>
+            <button type="submit" class="btn btn-primary" title="@SaveLabel">@SaveLabel</button>
+        </form>
+        @if (this._status is { } status)
+        {
+            <p role="status">@status</p>
+        }
+        <TestStripeSettingsPanel />
+        @if (this._store.CanRun)
+        {
+            <h3 class="h6 mt-3">@Text("Recent test orders", "Đơn thử nghiệm gần đây", "Letzte Testbestellungen", "近期测试订单")</h3>
+            <ul class="list-group">
+                @{ var flags = this._store.StripeFlags(); }
+                @foreach (var order in this._store.Recent())
+                {
+                    <li class="list-group-item">
+                        <span>@order.Reference · @order.Package.PriceVnd.ToString("N0", CultureInfo.CurrentCulture) VND</span>
+                        @if (order.PaymentIntent is { } intent && flags.ContainsKey(intent))
+                        {
+                            <span class="badge text-bg-warning">@Text("Refund or dispute: review", "Hoàn tiền hoặc tranh chấp, cần kiểm tra", "Erstattung oder Anfechtung prüfen", "需审核退款或争议")</span>
+                        }
+                        else if (order.CreditedAt.HasValue)
+                        {
+                            <span class="badge text-bg-success">@Text("Credited", "Đã cộng", "Gutgeschrieben", "已到账")</span>
+                        }
+                        else if (order.Provider == "bank")
+                        {
+                            <button type="button" class="btn btn-sm btn-outline-primary ms-2" title="@ConfirmLabel"
+                                    @onclick="() => this.ConfirmAsync(order)" disabled="@this._confirming">@ConfirmLabel</button>
+                        }
+                    </li>
+                }
+            </ul>
+        }
+    }
+</section>
+
+@code {
+    private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
+    {
+        WriteIndented = true,
+        Converters = { new JsonStringEnumConverter(allowIntegerValues: false) },
+    };
+
+    private static string BankLabel => Text("Enable simulated bank transfers", "Bật chuyển khoản mô phỏng", "Simulierte Überweisungen aktivieren", "启用模拟银行转账");
+    private static string LimitLabel => Text("Orders per player per Sydney day", "Số đơn mỗi người chơi trong một ngày Sydney", "Bestellungen pro Spieler und Tag (Sydney)", "每位玩家每日订单数（悉尼时间）");
+    private static string PackageLabel => Text("Packages and prices", "Gói và giá", "Pakete und Preise", "礼包与价格");
+    private static string SaveLabel => Text("Save test settings", "Lưu cài đặt thử nghiệm", "Testeinstellungen speichern", "保存测试设置");
+    private static string ConfirmLabel => Text("Simulate bank confirmation", "Mô phỏng ngân hàng xác nhận", "Bankbestätigung simulieren", "模拟银行确认");
+
+    private WebsiteTestTopUpStore? _store;
+    private bool _enabled;
+    private int _limit;
+    private string _packages = "[]";
+    private string? _status;
+    private bool _confirming;
+
+    protected override void OnInitialized()
+    {
+        this._store = this.Services.GetService(typeof(WebsiteTestTopUpStore)) as WebsiteTestTopUpStore;
+        if (this._store is { } store)
+        {
+            var settings = store.Settings;
+            this._enabled = settings.BankSimulationEnabled;
+            this._limit = settings.OrdersPerPlayerPerDay;
+            this._packages = JsonSerializer.Serialize(settings.Packages, JsonOptions);
+        }
+    }
+
+    private static string Text(string en, string vi, string de, string zh)
+        => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName switch
+        {
+            "vi" => vi,
+            "de" => de,
+            "zh" => zh,
+            _ => en,
+        };
+
+    private void Save()
+    {
+        try
+        {
+            var packages = this._packages.Length <= 24_000
+                ? JsonSerializer.Deserialize<TestCoinPackage[]>(this._packages, JsonOptions)
+                : null;
+            this._store!.SaveSettings(new TestTopUpSettings(this._enabled, this._limit, packages ?? throw new JsonException()));
+            this._status = Text("Saved.", "Đã lưu.", "Gespeichert.", "已保存。");
+        }
+        catch (Exception error) when (error is ArgumentException or JsonException or System.IO.IOException or UnauthorizedAccessException)
+        {
+            this._status = Text("Could not save. Check the package fields and order limit.", "Không lưu được. Kiểm tra các trường và giới hạn đơn.",
+                "Speichern fehlgeschlagen. Prüfen Sie die Paketfelder und das Bestelllimit.", "无法保存。请检查礼包字段和订单限制。");
+        }
+    }
+
+    private async Task ConfirmAsync(TestTopUpOrder order)
+    {
+        var confirmer = (WebsiteTestBankConfirmation)this.Services.GetService(typeof(WebsiteTestBankConfirmation))!;
+        this._confirming = true;
+        try
+        {
+            this._status = await confirmer.ConfirmAsync(order.Id, order.Reference, order.Package.PriceVnd)
+                ? Text("Demo credit confirmed.", "Đã xác nhận coin thử.", "Testgutschrift bestätigt.", "已确认测试代币到账。")
+                : Text("The order cannot be credited.", "Đơn này không thể cộng coin.", "Die Bestellung kann nicht gutgeschrieben werden.", "此订单无法发放代币。");
+        }
+        finally
+        {
+            this._confirming = false;
+        }
+    }
+}
