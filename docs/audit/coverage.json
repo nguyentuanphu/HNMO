@@ -1,5 +1,5 @@
 {
-  "generatedAt": "94d47a15",
+  "generatedAt": "6ec9f6ab",
   "maxLines": 6000,
   "units": [
     {
@@ -3451,11 +3451,16 @@
       ],
       "files": 11,
       "lines": 1715,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "6ec9f6ab",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "the Season 6/9 suites' character calculation script",
+        "the Season 6/9 suites' default class database seeds",
+        "docs/audit/references/attributes-and-stats-s6-s9.md",
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-CharacterClasses.md"
+      ],
+      "evidence": "Read all 11 files (1715 lines) in CharacterClasses; compared base stats, growth, and combat formulas against S6/S9 calc scripts and DB seeds: docs/audit/findings/unit-server-src-Persistence-Initialization-CharacterClasses.md",
       "prs": "#165, #166, #237"
     },
     {
