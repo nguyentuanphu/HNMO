@@ -1,5 +1,5 @@
 {
-  "generatedAt": "d9b5b32b",
+  "generatedAt": "ce0bc3d2",
   "maxLines": 6000,
   "units": [
     {
@@ -5117,11 +5117,16 @@
       ],
       "files": 15,
       "lines": 5819,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "ce0bc3d2",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "masterLevel.ts:18-24,103-127,180-182",
+        "mixRecipes.ts:13-44,64-89",
+        "newSkills.ts:13-22",
+        "docs/audit/findings/unit-client-web-src-game-files-4.md"
+      ],
+      "evidence": "15f/5819L: Master level unlock 400 & EXP curve polynomial match desktop MasterLevel & server; 14 Chaos mix categories match MixMgr; new skills 700..727 are HNMO custom.",
       "prs": ""
     },
     {
