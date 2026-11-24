@@ -1,5 +1,5 @@
 {
-  "generatedAt": "29b743a5",
+  "generatedAt": "0163b076",
   "maxLines": 6000,
   "units": [
     {
@@ -6352,11 +6352,16 @@
       ],
       "files": 37,
       "lines": 5893,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "0163b076",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "ItemOptionEffects.cpp:26-35",
+        "ItemModelGlowJson.h:31",
+        "ItemOptionDefinition.h",
+        "docs/audit/findings/unit-client-src-source-Data-GameData-ItemData-files-2.md"
+      ],
+      "evidence": "37f/5893L: Maps JSON item options (Luck crit%, LifeRegen, MaxMana%, MaxAG%) to AT_* slots; MaxLevel=31 glow indexing.",
       "prs": ""
     },
     {
