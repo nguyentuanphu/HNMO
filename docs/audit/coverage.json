@@ -1,5 +1,5 @@
 {
-  "generatedAt": "8df854f2",
+  "generatedAt": "35fe28a7",
   "maxLines": 6000,
   "units": [
     {
@@ -2710,11 +2710,14 @@
       ],
       "files": 25,
       "lines": 522,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "35fe28a7",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Views/World",
+        "docs/audit/findings/unit-server-src-GameLogic-Views-World.md"
+      ],
+      "evidence": "25f/522L: No game rules (pure C# view plugin interfaces and result enums).",
       "prs": ""
     },
     {
