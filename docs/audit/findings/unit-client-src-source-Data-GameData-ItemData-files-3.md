@@ -1,11 +1,14 @@
-# Unit: client/src/source/Data/GameData/ItemData (files 3)
+# Unit Audit: `client/src/source/Data/GameData/ItemData (files 3)`
 
-Checked against: Server `DataModel/Configuration/Items/ItemStatProfile`.
+- **Unit**: `client/src/source/Data/GameData/ItemData (files 3)`
+- **Checked at**: `8cb8539b` (`2026-11-25`)
+- **Files in unit**: `32` (`4,389` lines) including `ItemStatsJson.cpp`, `ItemStatProfiles.cpp`, `ItemTooltipConditions.cpp`, `ItemTooltipLayouts.cpp`, `OptionRule.cpp`, `StatProfileRule.cpp`
+- **Status**: `Checked`
 
-Scope: `client/src/source/Data/GameData/ItemData (files 3)` (`32` files, `4389` lines).
+## Rules & Behavior Checked (`file:line`)
 
-## Findings
-
-| File & Line | Rule / Constant | Parity Reference | Result |
-|---|---|---|---|
-| `ItemStatsJson.cpp:42-81,526-704` | Reads/writes item stat formula fields (`add, levelWeight, percent, basis`) matching server `ItemStatProfile` schema | Server `ItemStatProfile.cs` | Same |
+| Rule / Behaviour | Location | Client Value / Formula | Server / Suite Reference | Match |
+|---|---|---|---|---|
+| Stat ceiling & requirement JSON bounds | `ItemStatsJson.cpp:40-82` | Enforces `MaxValue = 65535`, `MaxPerLevelAfterHalving = 255`, `MaxStrengthPerOptionLevel = 255`, `MaxDropLevelBonus = 1000`; parses requirement stats (`strength`, `dexterity`, `energy`, `vitality`, `leadership`), `LevelPerItemLevel`, `ExcellentLevelAdd`, and `StrengthPerOptionLevel` | Server `ItemDefinitions` & `common-server-and-character-rules-s6-s9.md` (`65535` stat ceiling) | Same |
+| Stat profile inheritance & per-level growth terms | `ItemStatProfiles.cpp`, `ItemStatTerms.h`, `StatProfileRule.cpp` | Defines `Table`/`Values`/`PerLevel`, `ExcellentTerm` (`Times`, `Add`, `DropLevelDivisor`), `AncientTerm` (`AfterLevelBonus`), and requirement formulas (`Add + LevelWeight * Percent / Basis`) | `ItemBmdImport.cpp:342-360` & server `ItemStat` scaling | Same |
+| Tooltip condition & layout evaluator | `ItemTooltipConditions.cpp:259`, `ItemTooltipLayouts.cpp`, `OptionRulesJson.cpp` | Evaluates tooltip visibility rules (`Kind::Class`, level/stat thresholds) and localized option texts | Client tooltip presentation | Same |

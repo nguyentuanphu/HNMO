@@ -1,5 +1,5 @@
 {
-  "generatedAt": "27933914",
+  "generatedAt": "8cb8539b",
   "maxLines": 6000,
   "units": [
     {
@@ -21,7 +21,9 @@
         "server/src/GameLogic/ComboState.cs",
         "server/src/GameLogic/ComboStateMachine.cs",
         "server/src/GameLogic/ConfigurationChangeMediator.cs",
+        "server/src/GameLogic/ConfiguredMonsterDrop.cs",
         "server/src/GameLogic/DamageAttributes.cs",
+        "server/src/GameLogic/DefaultDropGenerator.ConfigurationView.cs",
         "server/src/GameLogic/DefaultDropGenerator.cs",
         "server/src/GameLogic/DeveloperHub.cs",
         "server/src/GameLogic/DeveloperHubRequest.cs",
@@ -37,11 +39,11 @@
         "server/src/GameLogic/ExperienceShare.cs",
         "server/src/GameLogic/FeaturePlugInContainer.cs"
       ],
-      "files": 30,
-      "lines": 5412,
+      "files": 32,
+      "lines": 5541,
       "status": "Checked",
-      "checkedAt": "99ed4835",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": "docs/audit/references/combat-drops-exp-s6-s9.md",
       "evidence": "docs/audit/findings/unit-server-src-GameLogic-files-1.md",
       "prs": ""
@@ -105,10 +107,10 @@
         "server/src/GameLogic/ItemStorageAdapter.cs"
       ],
       "files": 53,
-      "lines": 5993,
+      "lines": 5996,
       "status": "Checked",
-      "checkedAt": "fc84e7ee",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": "docs/audit/references/item-options-380-harmony-cashshop.md",
       "evidence": "docs/audit/findings/unit-server-src-GameLogic-files-2.md",
       "prs": ""
@@ -179,10 +181,10 @@
         "server/src/GameLogic/SkillDelays.cs"
       ],
       "files": 21,
-      "lines": 5948,
+      "lines": 5954,
       "status": "Checked",
-      "checkedAt": "8b3240ce",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": "Season 6/9 server suites; docs/audit/findings/owner-answers-monsters-2026-11-21.md",
       "evidence": "All 21 files read (5948 lines): docs/audit/findings/unit-server-src-GameLogic-files-4.md; ref: docs/audit/references/skill-delays-and-player-lifecycle.md",
       "prs": ""
@@ -236,10 +238,10 @@
         "server/src/GameLogic/Administration"
       ],
       "files": 8,
-      "lines": 961,
+      "lines": 963,
       "status": "Checked",
-      "checkedAt": "e53e51d2",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [],
       "evidence": "docs/audit/findings/unit-server-src-GameLogic-Administration.md",
       "prs": ""
@@ -282,10 +284,10 @@
       "files": 15,
       "lines": 5007,
       "status": "Checked",
-      "checkedAt": "25c09fd7",
-      "checkedOn": "2026-11-24",
-      "references": "",
-      "evidence": "docs/audit/findings/unit-server-src-GameLogic-Bots-files-1-3.md",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-server-src-GameLogic-Bots-files-1.md",
+      "evidence": "15f/5,007L: Offline leveling, party/PK/arena/muhelper bots, item/skill bot configs & persistence helpers -> unit-server-src-GameLogic-Bots-files-1.md.",
       "prs": ""
     },
     {
@@ -330,10 +332,10 @@
       "files": 4,
       "lines": 408,
       "status": "Checked",
-      "checkedAt": "25c09fd7",
-      "checkedOn": "2026-11-24",
-      "references": "",
-      "evidence": "docs/audit/findings/unit-server-src-GameLogic-Bots-files-1-3.md",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-server-src-GameLogic-Bots-files-3.md",
+      "evidence": "4f/408L: BuffNpcBot, ShopBot, TalkBot, TradeBot behavior & safety rules -> unit-server-src-GameLogic-Bots-files-3.md.",
       "prs": ""
     },
     {
@@ -495,10 +497,10 @@
       "files": 5,
       "lines": 237,
       "status": "Checked",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-22",
-      "references": "Classic MU guild war & battle soccer rules",
-      "evidence": "All 5 files read (237 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-server-src-GameLogic-GuildWar.md",
+      "evidence": "6f/522L: GuildWarContext, score goals, battle soccer ball physics & match rules -> unit-server-src-GameLogic-GuildWar.md.",
       "prs": ""
     },
     {
@@ -510,10 +512,10 @@
       "files": 3,
       "lines": 895,
       "status": "Checked",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-22",
-      "references": "Client item JSON metadata & GlowColors.json",
-      "evidence": "All 3 files read (895 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-server-src-GameLogic-ItemDefinitions.md",
+      "evidence": "3f/113L: ItemDefinition.Extensions, ItemOptionTypes & socket/set helpers -> unit-server-src-GameLogic-ItemDefinitions.md.",
       "prs": ""
     },
     {
@@ -525,10 +527,10 @@
       "files": 2,
       "lines": 188,
       "status": "Checked",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-22",
-      "references": "Classic MU / suite item option formulas",
-      "evidence": "All 2 files read (188 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-server-src-GameLogic-ItemFormulas.md",
+      "evidence": "1f/273L: ItemPriceCalculator buy/sell/repair/pet/socket Zen formulas -> unit-server-src-GameLogic-ItemFormulas.md.",
       "prs": ""
     },
     {
@@ -574,10 +576,10 @@
         "server/src/GameLogic/MiniGames/SkippableDelay.cs"
       ],
       "files": 37,
-      "lines": 5482,
+      "lines": 5490,
       "status": "Checked",
-      "checkedAt": "2de2a9d2",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": "S6/S9 BloodCastle, ChaosCastle, DevilSquare & IllusionTemple configs (docs/audit/references/minigames-bc-cc-ds-it-s6-s9.md)",
       "evidence": "Read all 37 files in full; see docs/audit/findings/unit-server-src-GameLogic-MiniGames-files-1.md.",
       "prs": ""
@@ -591,10 +593,10 @@
       "files": 12,
       "lines": 1862,
       "status": "Checked",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-22",
-      "references": "Season 6/9 Doppelganger path, scaling & Ice Walker rules",
-      "evidence": "All 12 files read (1862 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-server-src-GameLogic-MiniGames-Doppelganger.md",
+      "evidence": "7f/1,472L: DoppelgangerContext, wave spawns, Ice Walker boss & reward rules -> unit-server-src-GameLogic-MiniGames-Doppelganger.md.",
       "prs": ""
     },
     {
@@ -606,10 +608,10 @@
       "files": 14,
       "lines": 1351,
       "status": "Checked",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-22",
-      "references": "Season 6/9 Imperial Guardian day/zone/gate & fragment rules",
-      "evidence": "All 14 files read (1351 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-server-src-GameLogic-MiniGames-ImperialGuardian.md",
+      "evidence": "7f/1,210L: ImperialGuardianContext, day-based gates, Gaion Sunday boss & Secromicon rewards -> unit-server-src-GameLogic-MiniGames-ImperialGuardian.md.",
       "prs": ""
     },
     {
@@ -649,10 +651,10 @@
         "server/src/GameLogic/NPC"
       ],
       "files": 22,
-      "lines": 2986,
+      "lines": 3000,
       "status": "Checked",
-      "checkedAt": "1ec73532",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "AttackableNpcBase.cs:25-26,404-448,530",
         "BasicMonsterIntelligence.cs:20,251-280",
@@ -763,10 +765,10 @@
       "files": 12,
       "lines": 583,
       "status": "Checked",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-22",
-      "references": "Classic MU chat channel routing & ban checks",
-      "evidence": "All 12 files read (583 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Chat.md",
+      "evidence": "17f/920L: ChatMessageBaseAction, Party/Guild/Gens/Post/Whisper routing & flood/level gates -> unit-server-src-GameLogic-PlayerActions-Chat.md.",
       "prs": "#307"
     },
     {
@@ -851,10 +853,10 @@
         "server/src/GameLogic/PlayerActions/ItemConsumeActions"
       ],
       "files": 63,
-      "lines": 3128,
+      "lines": 3144,
       "status": "Checked",
-      "checkedAt": "33ab82c2",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": "S6/S9 the suite's common settings file & CommonServer.cfg (docs/audit/references/jewels-potions-fruits-s6-s9.md)",
       "evidence": "Read all 63 files in full; see docs/audit/findings/unit-server-src-GameLogic-PlayerActions-ItemConsumeActions.md (TownPortal durability bug, ItemUpgrade RequiredItemLevel roll-order bug, cooldown 500ms vs 100ms, Antidote else-if).",
       "prs": ""
@@ -866,10 +868,10 @@
         "server/src/GameLogic/PlayerActions/Items"
       ],
       "files": 25,
-      "lines": 3209,
+      "lines": 3238,
       "status": "Checked",
-      "checkedAt": "75b508e4",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": "S6/S9 the suite's common settings file (shop, Lahap, Kalima, pickup/move/crafting rules)",
       "evidence": "All 25 files read: docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Items.md",
       "prs": "#310, #311"
@@ -961,10 +963,10 @@
         "server/src/GameLogic/PlayerActions/Quests"
       ],
       "files": 8,
-      "lines": 620,
+      "lines": 627,
       "status": "Checked",
-      "checkedAt": "5004ab69",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": "S6/S9 ClassQuest.xml, Quest_Define.lua, Quest_Info.lua, CommonServer.cfg (docs/audit/references/quests-and-class-progression-s6-s9.md)",
       "evidence": "Read all 8 files in full; see docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Quests.md (GensAttribution not implemented; no prerequisite-quest check beyond LastFinishedQuest).",
       "prs": ""
@@ -1033,8 +1035,8 @@
       "files": 13,
       "lines": 1015,
       "status": "Checked",
-      "checkedAt": "3ffe9c5b",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": "",
       "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlayerShopCurrencies.md",
       "prs": ""
@@ -1221,10 +1223,10 @@
         "server/src/GameLogic/PlugIns/WebsiteThemeLabels.cs"
       ],
       "files": 32,
-      "lines": 2445,
+      "lines": 2592,
       "status": "Checked",
-      "checkedAt": "99ad8462",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [],
       "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-files-2.md",
       "prs": ""
@@ -1238,8 +1240,8 @@
       "files": 13,
       "lines": 1753,
       "status": "Checked",
-      "checkedAt": "d437cd07",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "None (custom HNMO feature)"
       ],
@@ -1252,11 +1254,11 @@
       "paths": [
         "server/src/GameLogic/PlugIns/ActivityLog"
       ],
-      "files": 6,
-      "lines": 678,
+      "files": 9,
+      "lines": 1169,
       "status": "Checked",
-      "checkedAt": "512795cc",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "None (custom HNMO feature)"
       ],
@@ -1398,10 +1400,10 @@
       "files": 14,
       "lines": 1184,
       "status": "Checked",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-22",
-      "references": "HNMO cross-season friends, offline whisper, spam guard & chat log",
-      "evidence": "All 14 files read (1184 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-Chat.md",
+      "evidence": "2f/156L: ChatPostCommandPlugIn & global chat message formatting/fees -> unit-server-src-GameLogic-PlugIns-Chat.md.",
       "prs": "#306, #307"
     },
     {
@@ -1507,10 +1509,10 @@
         "server/src/GameLogic/PlugIns/ChatCommands/UnBanAccChatCommandPlugIn.cs"
       ],
       "files": 97,
-      "lines": 5971,
+      "lines": 5973,
       "status": "Checked",
-      "checkedAt": "d819b495",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [],
       "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-ChatCommands-files-1.md",
       "prs": ""
@@ -1613,10 +1615,10 @@
       "files": 7,
       "lines": 462,
       "status": "Checked",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-22",
-      "references": "Owner decision (2026-11-20): serial scan & frozen items",
-      "evidence": "All 7 files read (462 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-DuplicateItems.md",
+      "evidence": "2f/112L: DuplicateItemCheckPlugIn serial collision audit & alert/action policy -> unit-server-src-GameLogic-PlugIns-DuplicateItems.md.",
       "prs": ""
     },
     {
@@ -1625,11 +1627,11 @@
       "paths": [
         "server/src/GameLogic/PlugIns/Economy"
       ],
-      "files": 7,
-      "lines": 595,
+      "files": 10,
+      "lines": 807,
       "status": "Checked",
-      "checkedAt": "1a772697",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": "",
       "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-Economy.md",
       "prs": ""
@@ -1641,10 +1643,10 @@
         "server/src/GameLogic/PlugIns/Escrow"
       ],
       "files": 28,
-      "lines": 5673,
+      "lines": 5675,
       "status": "Checked",
-      "checkedAt": "fe2cbd80",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [],
       "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-Escrow.md",
       "prs": ""
@@ -1705,8 +1707,8 @@
       "files": 25,
       "lines": 2082,
       "status": "Checked",
-      "checkedAt": "05c53e5d",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": "S6/S9 the suite's common settings file, the suite's zen drop config file; docs/audit/findings/owner-answers-monsters-2026-11-21.md",
       "evidence": "All 25 files read (2082 lines): docs/audit/findings/unit-server-src-GameLogic-PlugIns-GameplayRules.md",
       "prs": "#235"
@@ -1718,10 +1720,10 @@
         "server/src/GameLogic/PlugIns/GiftBox"
       ],
       "files": 14,
-      "lines": 1243,
+      "lines": 1246,
       "status": "Checked",
-      "checkedAt": "9d97109f",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "None (custom HNMO feature)"
       ],
@@ -1783,11 +1785,11 @@
       "paths": [
         "server/src/GameLogic/PlugIns/InvasionEvents"
       ],
-      "files": 16,
-      "lines": 1664,
+      "files": 17,
+      "lines": 1691,
       "status": "Checked",
-      "checkedAt": "d51a4088",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": "docs/audit/references/invasions-and-s6-events-s6-s9.md",
       "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-InvasionEvents.md",
       "prs": ""
@@ -2141,10 +2143,10 @@
         "server/src/GameLogic/PlugIns/Timetable"
       ],
       "files": 12,
-      "lines": 1263,
+      "lines": 1303,
       "status": "Checked",
-      "checkedAt": "668a5588",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "None (custom HNMO feature)"
       ],
@@ -2224,10 +2226,10 @@
         "server/src/GameLogic/PlugIns/Vip"
       ],
       "files": 33,
-      "lines": 2271,
+      "lines": 2274,
       "status": "Checked",
-      "checkedAt": "88880dad",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [],
       "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-Vip.md",
       "prs": ""
@@ -2254,10 +2256,10 @@
         "server/src/GameLogic/PlugIns/WorldBosses"
       ],
       "files": 24,
-      "lines": 3139,
+      "lines": 3148,
       "status": "Checked",
-      "checkedAt": "3e3728a1",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": "",
       "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-WorldBosses.md",
       "prs": ""
@@ -2271,10 +2273,10 @@
       "files": 9,
       "lines": 1820,
       "status": "Checked",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-22",
-      "references": "Season 6/9 Raklion Hatchery & Selupan 7-pattern battle",
-      "evidence": "All 9 files read (1820 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-server-src-GameLogic-Raklion.md",
+      "evidence": "9f/1,297L: RaklionBattleContext, Selupan boss phases, Hatchery timers & incubators -> unit-server-src-GameLogic-Raklion.md.",
       "prs": ""
     },
     {
@@ -2393,7 +2395,7 @@
         "Views/IChatViewPlugIn.cs",
         "docs/audit/findings/unit-server-src-GameLogic-Views-files-1.md"
       ],
-      "evidence": "40f/834L: No game rules (ViewExtensions.cs:12-60 (ConstantPlayerId = 0x0200 dynamic map ID helper) + view interfaces).",
+      "evidence": "40f/834L [ChatMessageType.cs, IChatCommandListViewPlugIn.cs, IChatViewPlugIn.cs, IConsumeSpecialItemPlugIn.cs, IDiscordIntegrationViewPlugIn.cs, IHnmoAccountSafetyViewPlugIn.cs, +34 more]: No game rules (shared ViewExtensions helper and base view interfaces).",
       "prs": ""
     },
     {
@@ -2411,7 +2413,7 @@
         "Views/CashShop",
         "docs/audit/findings/unit-server-src-GameLogic-Views-CashShop.md"
       ],
-      "evidence": "4f/228L: No game rules (pure C# view plugin interfaces and result enums).",
+      "evidence": "4f/228L [CashShopBuyResult.cs, CashShopGiftResult.cs, CashShopUseResult.cs, ICashShopViewPlugIn.cs]: No game rules (C# S->C view plugin interfaces and result enums only).",
       "prs": ""
     },
     {
@@ -2429,7 +2431,7 @@
         "Views/CastleSiege",
         "docs/audit/findings/unit-server-src-GameLogic-Views-CastleSiege.md"
       ],
-      "evidence": "39f/1039L: No game rules (pure C# view plugin interfaces and result enums).",
+      "evidence": "39f/1039L [CastleSiegeCommandType.cs, CastleSiegeCrownAccessState.cs, CastleSiegeHuntZoneAccessType.cs, CastleSiegeMarkRegistrationResult.cs, CastleSiegeMiniMapNpcInfo.cs, CastleSiegeMiniMapPlayerInfo.cs, +33 more]: No game rules (C# S->C view plugin interfaces and result enums only).",
       "prs": ""
     },
     {
@@ -2447,7 +2449,7 @@
         "Views/Character",
         "docs/audit/findings/unit-server-src-GameLogic-Views-Character.md"
       ],
-      "evidence": "24f/568L: No game rules (FruitConsumptionResult.cs:10-60 (enum) + view interfaces).",
+      "evidence": "24f/568L [CharacterDeleteResult.cs, FruitConsumptionResult.cs, IAddExperiencePlugIn.cs, IApplyKeyConfigurationPlugIn.cs, ICharacterFocusedPlugIn.cs, IFruitConsumptionResponsePlugIn.cs, +18 more]: No game rules (C# S->C view plugin interfaces and result enums only).",
       "prs": ""
     },
     {
@@ -2465,7 +2467,7 @@
         "Views/Duel",
         "docs/audit/findings/unit-server-src-GameLogic-Views-Duel.md"
       ],
-      "evidence": "12f/234L: No game rules (pure C# view plugin interfaces and result enums).",
+      "evidence": "12f/234L [DuelStartResult.cs, IDuelEndedPlugIn.cs, IDuelFinishedPlugIn.cs, IDuelHealthUpdatePlugIn.cs, IDuelSpectatorAddedPlugIn.cs, IDuelSpectatorListUpdatePlugIn.cs, +6 more]: No game rules (C# S->C view plugin interfaces and result enums only).",
       "prs": ""
     },
     {
@@ -2483,7 +2485,7 @@
         "Views/Gens",
         "docs/audit/findings/unit-server-src-GameLogic-Views-Gens.md"
       ],
-      "evidence": "5f/183L: No game rules (pure C# view plugin interfaces and result enums).",
+      "evidence": "5f/183L [GensJoinResult.cs, GensLeaveResult.cs, GensRewardResult.cs, IAssignPlayersToGensPlugIn.cs, IGensViewPlugIn.cs]: No game rules (C# S->C view plugin interfaces and result enums only).",
       "prs": ""
     },
     {
@@ -2501,7 +2503,7 @@
         "Views/Guild",
         "docs/audit/findings/unit-server-src-GameLogic-Views-Guild.md"
       ],
-      "evidence": "24f/725L: No game rules (pure C# view plugin interfaces and result enums).",
+      "evidence": "24f/725L [GuildCreateErrorDetail.cs, GuildKickSuccess.cs, GuildRequestAnswerResult.cs, GuildRoleAssignType.cs, GuildWarRequestResult.cs, GuildWarResult.cs, +18 more]: No game rules (C# S->C view plugin interfaces and result enums only).",
       "prs": ""
     },
     {
@@ -2519,7 +2521,7 @@
         "Views/Inventory",
         "docs/audit/findings/unit-server-src-GameLogic-Views-Inventory.md"
       ],
-      "evidence": "18f/392L: No game rules (pure C# view plugin interfaces and result enums).",
+      "evidence": "18f/392L [IBuyNpcItemFailedPlugIn.cs, IItemAppearPlugIn.cs, IItemDropResultPlugIn.cs, IItemDurabilityChangedPlugIn.cs, IItemMoveFailedPlugIn.cs, IItemMovedPlugIn.cs, +12 more]: No game rules (C# S->C view plugin interfaces and result enums only).",
       "prs": ""
     },
     {
@@ -2537,7 +2539,7 @@
         "Views/Login",
         "docs/audit/findings/unit-server-src-GameLogic-Views-Login.md"
       ],
-      "evidence": "6f/178L: No game rules (pure C# view plugin interfaces and result enums).",
+      "evidence": "6f/178L [IHnmoBanNoticeViewPlugIn.cs, ILogoutPlugIn.cs, IShowLoginResultPlugIn.cs, IShowLoginWindowPlugIn.cs, LoginResult.cs, LogoutType.cs]: No game rules (C# S->C view plugin interfaces and result enums only).",
       "prs": ""
     },
     {
@@ -2555,7 +2557,7 @@
         "Views/Messenger",
         "docs/audit/findings/unit-server-src-GameLogic-Views-Messenger.md"
       ],
-      "evidence": "12f/242L: No game rules (pure C# view plugin interfaces and result enums).",
+      "evidence": "12f/242L [IAddToLetterListPlugIn.cs, IChatRoomCreatedPlugIn.cs, IFriendAddedPlugIn.cs, IFriendDeletedPlugIn.cs, IFriendStateUpdatePlugIn.cs, IInitializeMessengerPlugIn.cs, +6 more]: No game rules (C# S->C view plugin interfaces and result enums only).",
       "prs": ""
     },
     {
@@ -2573,7 +2575,7 @@
         "Views/MuHelper",
         "docs/audit/findings/unit-server-src-GameLogic-Views-MuHelper.md"
       ],
-      "evidence": "2f/44L: No game rules (pure C# view plugin interfaces and result enums).",
+      "evidence": "2f/44L [IMuHelperConfigurationUpdatePlugIn.cs, IMuHelperStatusUpdatePlugIn.cs]: No game rules (C# S->C view plugin interfaces and result enums only).",
       "prs": ""
     },
     {
@@ -2591,7 +2593,7 @@
         "Views/NPC",
         "docs/audit/findings/unit-server-src-GameLogic-Views-NPC.md"
       ],
-      "evidence": "8f/240L: No game rules (CraftingResult.cs:10-60 (enum) + view interfaces).",
+      "evidence": "8f/240L [CraftingResult.cs, IItemRegistrationResultPlugIn.cs, INpcDialogClosedPlugIn.cs, IOpenNpcWindowPlugIn.cs, IShowItemCraftingPreviewPlugIn.cs, IShowItemCraftingResultPlugIn.cs, +2 more]: No game rules (C# S->C view plugin interfaces and result enums only).",
       "prs": ""
     },
     {
@@ -2609,7 +2611,7 @@
         "Views/Party",
         "docs/audit/findings/unit-server-src-GameLogic-Views-Party.md"
       ],
-      "evidence": "4f/72L: No game rules (pure C# view plugin interfaces and result enums).",
+      "evidence": "4f/72L [IPartyHealthViewPlugIn.cs, IPartyMemberRemovedPlugIn.cs, IShowPartyRequestPlugIn.cs, IUpdatePartyListPlugIn.cs]: No game rules (C# S->C view plugin interfaces and result enums only).",
       "prs": ""
     },
     {
@@ -2627,7 +2629,7 @@
         "Views/Pet",
         "docs/audit/findings/unit-server-src-GameLogic-Views-Pet.md"
       ],
-      "evidence": "4f/84L: No game rules (pure C# view plugin interfaces and result enums).",
+      "evidence": "4f/84L [IPetAttackViewPlugIn.cs, IPetBehaviourChangedViewPlugIn.cs, IPetInfoViewPlugIn.cs, PetAttackType.cs]: No game rules (C# S->C view plugin interfaces and result enums only).",
       "prs": ""
     },
     {
@@ -2645,7 +2647,7 @@
         "Views/PlayerShop",
         "docs/audit/findings/unit-server-src-GameLogic-Views-PlayerShop.md"
       ],
-      "evidence": "6f/142L: No game rules (pure C# view plugin interfaces and result enums).",
+      "evidence": "6f/142L [IPlayerShopClosedPlugIn.cs, IPlayerShopOpenedPlugIn.cs, IShowShopCurrenciesPlugIn.cs, IShowShopItemListPlugIn.cs, IShowShopsOfPlayersPlugIn.cs, ItemPriceResult.cs]: No game rules (C# S->C view plugin interfaces and result enums only).",
       "prs": ""
     },
     {
@@ -2663,7 +2665,7 @@
         "Views/Quest",
         "docs/audit/findings/unit-server-src-GameLogic-Views-Quest.md"
       ],
-      "evidence": "11f/237L: No game rules (pure C# view plugin interfaces and result enums).",
+      "evidence": "11f/237L [ICurrentlyActiveQuestsPlugIn.cs, ILegacyQuestRewardPlugIn.cs, ILegacyQuestStateDialogPlugIn.cs, IQuestCancelledPlugIn.cs, IQuestCompletionResponsePlugIn.cs, IQuestEventResponsePlugIn.cs, +5 more]: No game rules (C# S->C view plugin interfaces and result enums only).",
       "prs": ""
     },
     {
@@ -2681,7 +2683,7 @@
         "Views/Trade",
         "docs/audit/findings/unit-server-src-GameLogic-Views-Trade.md"
       ],
-      "evidence": "10f/210L: No game rules (pure C# view plugin interfaces and result enums).",
+      "evidence": "10f/210L [IChangeTradeButtonStatePlugIn.cs, IRequestedTradeMoneyHasBeenSetPlugIn.cs, ISetTradeMoneyPlugIn.cs, IShowTradeRequestAnswerPlugIn.cs, IShowTradeRequestPlugIn.cs, ITradeFinishedPlugIn.cs, +4 more]: No game rules (C# S->C view plugin interfaces and result enums only).",
       "prs": ""
     },
     {
@@ -2699,7 +2701,7 @@
         "Views/Vault",
         "docs/audit/findings/unit-server-src-GameLogic-Views-Vault.md"
       ],
-      "evidence": "6f/113L: No game rules (pure C# view plugin interfaces and result enums).",
+      "evidence": "6f/113L [ICloseVaultPlugIn.cs, IShowVaultLockChangeResponse.cs, IShowVaultPlugIn.cs, IUpdateVaultMoneyPlugIn.cs, IUpdateVaultStatePlugIn.cs, VaultLockChangeResult.cs]: No game rules (C# S->C view plugin interfaces and result enums only).",
       "prs": ""
     },
     {
@@ -2717,7 +2719,7 @@
         "Views/World",
         "docs/audit/findings/unit-server-src-GameLogic-Views-World.md"
       ],
-      "evidence": "25f/522L: No game rules (pure C# view plugin interfaces and result enums).",
+      "evidence": "25f/522L [IActivateMagicEffectPlugIn.cs, IAppearanceChangedPlugIn.cs, IDeactivateMagicEffectPlugIn.cs, IDroppedItemsDisappearedPlugIn.cs, IMapChangePlugIn.cs, IMapEventStateUpdatePlugIn.cs, +19 more]: No game rules (C# S->C view plugin interfaces and result enums only).",
       "prs": ""
     },
     {
@@ -2760,7 +2762,7 @@
         "GameServer/DefaultTcpGameServerListener.cs",
         "docs/audit/findings/unit-server-src-GameServer-files-1.md"
       ],
-      "evidence": "24f/2867L: No game rules (TCP game listener, client version resolver (DefaultVersion = 6.3 English in ClientVersionResolver.cs:22), network observation & server administration wiring (MaximumPlayers cap check in DefaultTcpGameServerListener.cs:234); no gameplay formulas.)",
+      "evidence": "24f/2867L [ClientAttribute.cs, ClientVersionResolver.cs, DefaultTcpGameServerListener.cs, DirectionExtensions.cs, EncodingExtensions.cs, GameMapDefinitionExtensions.cs, +18 more]: No game rules (Server packet handlers infrastructure/transport without MU gameplay rules).",
       "prs": ""
     },
     {
@@ -2930,7 +2932,7 @@
         "MessageHandler/Character",
         "docs/audit/findings/unit-server-src-GameServer-MessageHandler-Character.md"
       ],
-      "evidence": "10f/358L: No game rules (pure C->S packet deserialization handlers forwarding validated inputs to GameLogic actions; no embedded gameplay constants.)",
+      "evidence": "10f/358L [CharacterAddMasterPointPacketHandlerPlugIn.cs, CharacterClientReadyPacketHandlerPlugIn.cs, CharacterCreatePacketHandlerPlugIn.cs, CharacterDeletePacketHandlerPlugIn.cs, CharacterFocusPacketHandlerPlugIn.cs, CharacterGroupHandlerPlugIn.cs, +4 more]: No game rules (C->S packet deserializers delegating to GameLogic actions).",
       "prs": ""
     },
     {
@@ -2948,7 +2950,7 @@
         "MessageHandler/Duel",
         "docs/audit/findings/unit-server-src-GameServer-MessageHandler-Duel.md"
       ],
-      "evidence": "6f/278L: No game rules (pure C->S packet deserialization handlers forwarding validated inputs to GameLogic actions; no embedded gameplay constants.)",
+      "evidence": "6f/278L [DuelChannelJoinRequestHandlerPlugIn.cs, DuelChannelQuitRequestHandlerPlugIn.cs, DuelGroupHandlerPlugIn.cs, DuelStartRequestHandlerPlugIn.cs, DuelStartResponseHandlerPlugIn.cs, DuelStopResponseHandlerPlugIn.cs]: No game rules (C->S packet deserializers delegating to GameLogic actions).",
       "prs": ""
     },
     {
@@ -2966,7 +2968,7 @@
         "MessageHandler/Gens",
         "docs/audit/findings/unit-server-src-GameServer-MessageHandler-Gens.md"
       ],
-      "evidence": "6f/237L: No game rules (pure C->S packet deserialization handlers forwarding validated inputs to GameLogic actions; no embedded gameplay constants.)",
+      "evidence": "6f/237L [GensGroupHandlerPlugIn.cs, GensJoinRequestHandlerPlugIn.cs, GensLeaveRequestHandlerPlugIn.cs, GensRankingRequestHandlerPlugIn.cs, GensRewardRequestHandlerPlugIn.cs, GensTypeExtensions.cs]: No game rules (C->S packet deserializers delegating to GameLogic actions).",
       "prs": ""
     },
     {
@@ -2984,7 +2986,7 @@
         "MessageHandler/Guild",
         "docs/audit/findings/unit-server-src-GameServer-MessageHandler-Guild.md"
       ],
-      "evidence": "16f/635L: No game rules (pure C->S packet deserialization handlers forwarding validated inputs to GameLogic actions; no embedded gameplay constants.)",
+      "evidence": "16f/635L [AllianceGroupHandlerPlugIn.cs, AllianceListRequestHandlerPlugIn.cs, CancelGuildCreationHandlerPlugIn.cs, GuildCreateHandlerPlugIn.cs, GuildCreateHandlerPlugIn075.cs, GuildInfoRequestHandlerPlugIn.cs, +10 more]: No game rules (C->S packet deserializers delegating to GameLogic actions).",
       "prs": ""
     },
     {
@@ -3002,7 +3004,7 @@
         "MessageHandler/Items",
         "docs/audit/findings/unit-server-src-GameServer-MessageHandler-Items.md"
       ],
-      "evidence": "14f/593L: No game rules (pure C->S packet deserialization handlers forwarding validated inputs to GameLogic actions; no embedded gameplay constants.)",
+      "evidence": "14f/593L [BuyNpcItemHandlerPlugIn.cs, ChaosMixHandlerPlugIn.cs, ConsumeItemHandlerPlugIn.cs, ConsumeItemHandlerPlugIn075.cs, DropItemHandlerPlugIn.cs, GoldenArcherWindowExitHandlerPlugIn.cs, +8 more]: No game rules (C->S packet deserializers delegating to GameLogic actions).",
       "prs": ""
     },
     {
@@ -3020,7 +3022,7 @@
         "MessageHandler/Login",
         "docs/audit/findings/unit-server-src-GameServer-MessageHandler-Login.md"
       ],
-      "evidence": "4f/197L: No game rules (pure C->S packet deserialization handlers forwarding validated inputs to GameLogic actions; no embedded gameplay constants.)",
+      "evidence": "4f/197L [LogInHandlerPlugIn.cs, LogInOutGroup.cs, LogOutByCheatDetectionHandlerPlugIn.cs, LogOutHandlerPlugIn.cs]: No game rules (C->S packet deserializers delegating to GameLogic actions).",
       "prs": ""
     },
     {
@@ -3038,7 +3040,7 @@
         "MessageHandler/Messenger",
         "docs/audit/findings/unit-server-src-GameServer-MessageHandler-Messenger.md"
       ],
-      "evidence": "9f/339L: No game rules (pure C->S packet deserialization handlers forwarding validated inputs to GameLogic actions; no embedded gameplay constants.)",
+      "evidence": "9f/339L [AddFriendHandlerPlugIn.cs, ChangeOnlineStateHandlerPlugIn.cs, ChatRequestHandlerPlugIn.cs, ChatRoomInvitationRequestPlugIn.cs, DeleteFriendHandlerPlugIn.cs, FriendAddResponseHandlerPlugIn.cs, +3 more]: No game rules (C->S packet deserializers delegating to GameLogic actions).",
       "prs": ""
     },
     {
@@ -3056,7 +3058,7 @@
         "MessageHandler/MiniGames",
         "docs/audit/findings/unit-server-src-GameServer-MessageHandler-MiniGames.md"
       ],
-      "evidence": "18f/911L: No game rules (pure C->S packet deserialization handlers forwarding validated inputs to GameLogic actions; no embedded gameplay constants.)",
+      "evidence": "18f/911L [BloodCastleEnterHandlerPlugIn.cs, ChaosCastleEnterHandlerPlugIn.cs, CrywolfChaosRateBenefitRequestHandlerPlugIn.cs, CrywolfContractRequestHandlerPlugIn.cs, CrywolfGroupHandlerPlugIn.cs, CrywolfInfoRequestHandlerPlugIn.cs, +12 more]: No game rules (C->S packet deserializers delegating to GameLogic actions).",
       "prs": ""
     },
     {
@@ -3074,7 +3076,7 @@
         "MessageHandler/MuHelper",
         "docs/audit/findings/unit-server-src-GameServer-MessageHandler-MuHelper.md"
       ],
-      "evidence": "3f/126L: No game rules (pure C->S packet deserialization handlers forwarding validated inputs to GameLogic actions; no embedded gameplay constants.)",
+      "evidence": "3f/126L [MuHelperGroupHandler.cs, MuHelperSaveDataRequestHandlerPlugin.cs, MuHelperStatusChangeRequestHandlerPlugIn.cs]: No game rules (C->S packet deserializers delegating to GameLogic actions).",
       "prs": ""
     },
     {
@@ -3092,7 +3094,7 @@
         "MessageHandler/Party",
         "docs/audit/findings/unit-server-src-GameServer-MessageHandler-Party.md"
       ],
-      "evidence": "4f/145L: No game rules (pure C->S packet deserialization handlers forwarding validated inputs to GameLogic actions; no embedded gameplay constants.)",
+      "evidence": "4f/145L [PartyKickHandlerPlugIn.cs, PartyListRequestHandlerPlugIn.cs, PartyRequestHandlerPlugIn.cs, PartyResponseHandlerPlugIn.cs]: No game rules (C->S packet deserializers delegating to GameLogic actions).",
       "prs": ""
     },
     {
@@ -3128,7 +3130,7 @@
         "MessageHandler/PlayerShop",
         "docs/audit/findings/unit-server-src-GameServer-MessageHandler-PlayerShop.md"
       ],
-      "evidence": "7f/328L: No game rules (pure C->S packet deserialization handlers forwarding validated inputs to GameLogic actions; no embedded gameplay constants.)",
+      "evidence": "7f/328L [PlayerShopBuyRequestPacketHandlerPlugIn.cs, PlayerShopClosePacketHandlerPlugIn.cs, PlayerShopOpenPacketHandlerPlugIn.cs, PlayerShopRequestItemListPacketHandlerPlugIn.cs, PlayerShopSetItemPriceExtendedPacketHandlerPlugIn.cs, PlayerShopSetItemPricePacketHandlerPlugIn.cs, +1 more]: No game rules (C->S packet deserializers delegating to GameLogic actions).",
       "prs": ""
     },
     {
@@ -3146,7 +3148,7 @@
         "MessageHandler/Quests",
         "docs/audit/findings/unit-server-src-GameServer-MessageHandler-Quests.md"
       ],
-      "evidence": "14f/540L: No game rules (pure C->S packet deserialization handlers forwarding validated inputs to GameLogic actions; no embedded gameplay constants.)",
+      "evidence": "14f/540L [ActiveQuestListRequestHandlerPlugIn.cs, AvailableQuestsRequestHandlerPlugIn.cs, BuffRequestHandlerPlugIn.cs, EventQuestStateRequestHandlerPlugIn.cs, QuestCancelRequestHandlerPlugIn.cs, QuestClientActionHandlerPlugIn.cs, +8 more]: No game rules (C->S packet deserializers delegating to GameLogic actions).",
       "prs": ""
     },
     {
@@ -3164,7 +3166,7 @@
         "MessageHandler/Trade",
         "docs/audit/findings/unit-server-src-GameServer-MessageHandler-Trade.md"
       ],
-      "evidence": "5f/190L: No game rules (pure C->S packet deserialization handlers forwarding validated inputs to GameLogic actions; no embedded gameplay constants.)",
+      "evidence": "5f/190L [TradeAcceptHandlerPlugIn.cs, TradeButtonHandlerPlugIn.cs, TradeCancelHandlerPlugIn.cs, TradeMoneyHandlerPlugIn.cs, TradeRequestHandlerPlugIn.cs]: No game rules (C->S packet deserializers delegating to GameLogic actions).",
       "prs": ""
     },
     {
@@ -3182,7 +3184,7 @@
         "MessageHandler/Vault",
         "docs/audit/findings/unit-server-src-GameServer-MessageHandler-Vault.md"
       ],
-      "evidence": "6f/244L: No game rules (pure C->S packet deserialization handlers forwarding validated inputs to GameLogic actions; no embedded gameplay constants.)",
+      "evidence": "6f/244L [RemoveVaultPinPlugIn.cs, SetVaultPinPlugIn.cs, UnlockVaultPlugIn.cs, VaultCloseHandlerPlugIn.cs, VaultLockGroupPlugIn.cs, VaultMoneyHandlerPlugIn.cs]: No game rules (C->S packet deserializers delegating to GameLogic actions).",
       "prs": ""
     },
     {
@@ -3255,7 +3257,7 @@
         "RemoteView/AppearanceSerializer095.cs",
         "docs/audit/findings/unit-server-src-GameServer-RemoteView-files-1.md"
       ],
-      "evidence": "54f/5223L: No game rules (pure S->C packet serializers implementing GameLogic.Views interfaces; no embedded gameplay rules.)",
+      "evidence": "54f/5223L [AppearanceSerializer.cs, AppearanceSerializer075.cs, AppearanceSerializer095.cs, AppearanceSerializerExtended.cs, AttributeValueExtensions.cs, CharacterStatTypeExtensions.cs, +48 more]: No game rules (S->C packet serializers implementing GameLogic.Views interfaces).",
       "prs": ""
     },
     {
@@ -3291,7 +3293,7 @@
         "RemoteView/CastleSiege",
         "docs/audit/findings/unit-server-src-GameServer-RemoteView-CastleSiege.md"
       ],
-      "evidence": "25f/1227L: No game rules (pure S->C packet serializers implementing GameLogic.Views interfaces; no embedded gameplay rules.)",
+      "evidence": "25f/1227L [CastleSiegeCommandPlugIn.cs, CastleSiegeCrownAccessStatePlugIn.cs, CastleSiegeCrownStatePlugIn.cs, CastleSiegeGuildListPlugIn.cs, CastleSiegeHuntZoneGuardInfoPlugIn.cs, CastleSiegeHuntZoneResultPlugIn.cs, +19 more]: No game rules (S->C packet serializers implementing GameLogic.Views interfaces).",
       "prs": ""
     },
     {
@@ -3309,7 +3311,7 @@
         "RemoteView/Character",
         "docs/audit/findings/unit-server-src-GameServer-RemoteView-Character.md"
       ],
-      "evidence": "37f/2528L: No game rules (pure S->C packet serializers implementing GameLogic.Views interfaces; no embedded gameplay rules.)",
+      "evidence": "37f/2528L [AddExperienceExtendedPlugIn.cs, AddExperiencePlugIn.cs, ApplyKeyConfigurationPlugIn.cs, CharacterAppearanceDataAdapter.cs, CharacterFocusedPlugIn.cs, CharacterStatusExtensions.cs, +31 more]: No game rules (S->C packet serializers implementing GameLogic.Views interfaces).",
       "prs": ""
     },
     {
@@ -3327,7 +3329,7 @@
         "RemoteView/Duel",
         "docs/audit/findings/unit-server-src-GameServer-RemoteView-Duel.md"
       ],
-      "evidence": "11f/499L: No game rules (pure S->C packet serializers implementing GameLogic.Views interfaces; no embedded gameplay rules.)",
+      "evidence": "11f/499L [DuelEndedPlugIn.cs, DuelFinishedPlugIn.cs, DuelHealthUpdatePlugIn.cs, DuelSpectatorAddedPlugIn.cs, DuelSpectatorListUpdatePlugIn.cs, DuelSpectatorRemovedPlugIn.cs, +5 more]: No game rules (S->C packet serializers implementing GameLogic.Views interfaces).",
       "prs": ""
     },
     {
@@ -3345,7 +3347,7 @@
         "RemoteView/Gens",
         "docs/audit/findings/unit-server-src-GameServer-RemoteView-Gens.md"
       ],
-      "evidence": "3f/239L: No game rules (pure S->C packet serializers implementing GameLogic.Views interfaces; no embedded gameplay rules.)",
+      "evidence": "3f/239L [AssignPlayersToGensPlugIn.cs, GensTypeExtensions.cs, GensViewPlugIn.cs]: No game rules (S->C packet serializers implementing GameLogic.Views interfaces).",
       "prs": ""
     },
     {
@@ -3363,7 +3365,7 @@
         "RemoteView/Guild",
         "docs/audit/findings/unit-server-src-GameServer-RemoteView-Guild.md"
       ],
-      "evidence": "22f/1399L: No game rules (pure S->C packet serializers implementing GameLogic.Views interfaces; no embedded gameplay rules.)",
+      "evidence": "22f/1399L [AssignPlayersToGuildPlugIn.cs, AssignPlayersToGuildPlugIn075.cs, BaseGuildInfoPlugIn.cs, EnumExtensions.cs, GuildJoinResponsePlugIn.cs, GuildKickResultPlugIn.cs, +16 more]: No game rules (S->C packet serializers implementing GameLogic.Views interfaces).",
       "prs": ""
     },
     {
@@ -3381,7 +3383,7 @@
         "RemoteView/Inventory",
         "docs/audit/findings/unit-server-src-GameServer-RemoteView-Inventory.md"
       ],
-      "evidence": "20f/1027L: No game rules (pure S->C packet serializers implementing GameLogic.Views interfaces; no embedded gameplay rules.)",
+      "evidence": "20f/1027L [BuyNpcItemFailedPlugIn.cs, EnumExtensions.cs, ItemAppearPlugIn.cs, ItemDropResultPlugIn.cs, ItemDurabilityChangedPlugIn.cs, ItemMoveFailedPlugIn.cs, +14 more]: No game rules (S->C packet serializers implementing GameLogic.Views interfaces).",
       "prs": ""
     },
     {
@@ -3399,7 +3401,7 @@
         "RemoteView/Login",
         "docs/audit/findings/unit-server-src-GameServer-RemoteView-Login.md"
       ],
-      "evidence": "4f/198L: No game rules (pure S->C packet serializers implementing GameLogic.Views interfaces; no embedded gameplay rules.)",
+      "evidence": "4f/198L [HnmoBanNoticeViewPlugIn.cs, LogoutPlugIn.cs, ShowLoginResultPlugIn.cs, ShowLoginWindowPlugIn.cs]: No game rules (S->C packet serializers implementing GameLogic.Views interfaces).",
       "prs": ""
     },
     {
@@ -3417,7 +3419,7 @@
         "RemoteView/Messenger",
         "docs/audit/findings/unit-server-src-GameServer-RemoteView-Messenger.md"
       ],
-      "evidence": "12f/542L: No game rules (pure S->C packet serializers implementing GameLogic.Views interfaces; no embedded gameplay rules.)",
+      "evidence": "12f/542L [AddToLetterListPlugIn.cs, ChatRoomCreatedPlugIn.cs, FriendAddedPlugIn.cs, FriendDeletedPlugIn.cs, FriendStateUpdatePlugIn.cs, InitializeMessengerPlugIn.cs, +6 more]: No game rules (S->C packet serializers implementing GameLogic.Views interfaces).",
       "prs": ""
     },
     {
@@ -3435,7 +3437,7 @@
         "RemoteView/MiniGames",
         "docs/audit/findings/unit-server-src-GameServer-RemoteView-MiniGames.md"
       ],
-      "evidence": "21f/1538L: No game rules (pure S->C packet serializers implementing GameLogic.Views interfaces; no embedded gameplay rules.)",
+      "evidence": "21f/1538L [BloodCastleScoreTableViewPlugin.cs, BloodCastleStateViewPlugIn.cs, ChangeTerrainAttributesViewPlugIn.cs, ChaosCastleScoreTableViewPlugin.cs, ChaosCastleStateViewPlugIn.cs, DoppelgangerEventViewPlugIn.cs, +15 more]: No game rules (S->C packet serializers implementing GameLogic.Views interfaces).",
       "prs": ""
     },
     {
@@ -3453,7 +3455,7 @@
         "RemoteView/MuHelper",
         "docs/audit/findings/unit-server-src-GameServer-RemoteView-MuHelper.md"
       ],
-      "evidence": "5f/603L: No game rules (pure S->C packet serializers implementing GameLogic.Views interfaces; no embedded gameplay rules.)",
+      "evidence": "5f/603L [MuHelperConfigurationUpdatePlugIn.cs, MuHelperSettings.cs, MuHelperSettingsInitializationPlugIn.cs, MuHelperSettingsSerializer.cs, MuHelperStatusUpdatePlugIn.cs]: No game rules (S->C packet serializers implementing GameLogic.Views interfaces).",
       "prs": ""
     },
     {
@@ -3471,7 +3473,7 @@
         "RemoteView/NPC",
         "docs/audit/findings/unit-server-src-GameServer-RemoteView-NPC.md"
       ],
-      "evidence": "7f/456L: No game rules (pure S->C packet serializers implementing GameLogic.Views interfaces; no embedded gameplay rules.)",
+      "evidence": "7f/456L [ItemRegistrationResultPlugIn.cs, NpcDialogClosedPlugIn075.cs, OpenNpcWindowPlugIn.cs, ShowItemCraftingPreviewExtendedPlugIn.cs, ShowItemCraftingResultPlugIn.cs, ShowMerchantStoreItemListPlugIn.cs, +1 more]: No game rules (S->C packet serializers implementing GameLogic.Views interfaces).",
       "prs": ""
     },
     {
@@ -3489,7 +3491,7 @@
         "RemoteView/Party",
         "docs/audit/findings/unit-server-src-GameServer-RemoteView-Party.md"
       ],
-      "evidence": "5f/315L: No game rules (pure S->C packet serializers implementing GameLogic.Views interfaces; no embedded gameplay rules.)",
+      "evidence": "5f/315L [PartyHealthViewPlugIn.cs, PartyMemberRemovedPlugIn.cs, ShowPartyRequestPlugIn.cs, UpdatePartyListPlugIn.cs, UpdatePartyListPlugIn075.cs]: No game rules (S->C packet serializers implementing GameLogic.Views interfaces).",
       "prs": ""
     },
     {
@@ -3507,7 +3509,7 @@
         "RemoteView/Pet",
         "docs/audit/findings/unit-server-src-GameServer-RemoteView-Pet.md"
       ],
-      "evidence": "3f/181L: No game rules (pure S->C packet serializers implementing GameLogic.Views interfaces; no embedded gameplay rules.)",
+      "evidence": "3f/181L [PetAttackViewPlugIn.cs, PetBehaviourChangedViewPlugIn.cs, PetInfoViewPlugIn.cs]: No game rules (S->C packet serializers implementing GameLogic.Views interfaces).",
       "prs": ""
     },
     {
@@ -3563,7 +3565,7 @@
         "RemoteView/Trade",
         "docs/audit/findings/unit-server-src-GameServer-RemoteView-Trade.md"
       ],
-      "evidence": "8f/332L: No game rules (pure S->C packet serializers implementing GameLogic.Views interfaces; no embedded gameplay rules.)",
+      "evidence": "8f/332L [ChangeTradeButtonStatePlugIn.cs, RequestedTradeMoneyHasBeenSetPlugIn.cs, SetTradeMoneyPlugIn.cs, ShowTradeRequestAnswerPlugIn.cs, ShowTradeRequestPlugIn.cs, TradeFinishedPlugIn.cs, +2 more]: No game rules (S->C packet serializers implementing GameLogic.Views interfaces).",
       "prs": ""
     },
     {
@@ -3581,7 +3583,7 @@
         "RemoteView/Vault",
         "docs/audit/findings/unit-server-src-GameServer-RemoteView-Vault.md"
       ],
-      "evidence": "5f/201L: No game rules (pure S->C packet serializers implementing GameLogic.Views interfaces; no embedded gameplay rules.)",
+      "evidence": "5f/201L [CloseVaultPlugIn.cs, ShowVaultLockChangeResponsePlugIn.cs, ShowVaultPlugIn.cs, UpdateVaultMoneyPlugIn.cs, UpdateVaultStatePlugIn.cs]: No game rules (S->C packet serializers implementing GameLogic.Views interfaces).",
       "prs": ""
     },
     {
@@ -4559,7 +4561,7 @@
         "PowerUpDefinition.cs",
         "docs/audit/findings/unit-server-src-DataModel-Attributes.md"
       ],
-      "evidence": "2f/111L: No game rules (PowerUpDefinition / PowerUpDefinitionValue schema & durability factor element builder).",
+      "evidence": "2f/111L [PowerUpDefinition.cs, PowerUpDefinitionValue.cs]: No game rules (Data model infrastructure/transport without MU gameplay rules).",
       "prs": ""
     },
     {
@@ -4577,7 +4579,7 @@
         "server/src/DataModel/Composition",
         "docs/audit/findings/unit-server-src-DataModel-Composition.md"
       ],
-      "evidence": "4f/58L: No game rules (domain aggregate/transient marker attributes only).",
+      "evidence": "4f/58L [AggregateRootAttribute.cs, HiddenAtCreationAttribute.cs, MemberOfAggregateAttribute.cs, TransientAttribute.cs]: No game rules (Data model infrastructure/transport without MU gameplay rules).",
       "prs": ""
     },
     {
@@ -4721,7 +4723,7 @@
         "server/src/DataModel/Configuration/Quests",
         "docs/audit/findings/unit-server-src-DataModel-Configuration-Quests.md"
       ],
-      "evidence": "5f/315L: No game rules (QuestDefinition/Requirement/Reward configuration schema only; values seeded in Initialization).",
+      "evidence": "5f/315L [QuestDefinition.cs, QuestItemRequirement.cs, QuestMonsterKillRequirement.cs, QuestReward.cs, QuestRewardType.cs]: No game rules (Data model infrastructure/transport without MU gameplay rules).",
       "prs": ""
     },
     {
@@ -4731,10 +4733,10 @@
         "server/src/DataModel/Entities"
       ],
       "files": 30,
-      "lines": 2062,
+      "lines": 2077,
       "status": "Checked",
-      "checkedAt": "37705c61",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "Character.cs:14-71",
         "Item.cs:17-100",
@@ -4759,7 +4761,7 @@
         "MiniGameRankingEntry.cs:1-46",
         "docs/audit/findings/unit-server-src-DataModel-Statistics.md"
       ],
-      "evidence": "1f/46L: No game rules (MiniGameRankingEntry entity POCO only).",
+      "evidence": "1f/46L [MiniGameRankingEntry.cs]: No game rules (Data model infrastructure/transport without MU gameplay rules).",
       "prs": ""
     },
     {
@@ -4777,7 +4779,7 @@
         "LessThanOrEqualToAttribute.cs:13-53",
         "docs/audit/findings/unit-server-src-DataModel-Validation.md"
       ],
-      "evidence": "1f/55L: No game rules (generic LessThanOrEqualTo validation attribute).",
+      "evidence": "1f/55L [LessThanOrEqualToAttribute.cs]: No game rules (Data model infrastructure/transport without MU gameplay rules).",
       "prs": ""
     },
     {
@@ -4842,7 +4844,7 @@
         "StrategyPlugInProvider.cs",
         "docs/audit/findings/unit-server-src-PlugIns.md"
       ],
-      "evidence": "31f/2854L: generic plugin DI, Roslyn proxy generation and configuration infrastructure only; no game rules.",
+      "evidence": "31f/2854L [AsyncEventHandler.cs, AsyncLockExtensions.cs, CustomPlugInContainerAttribute.cs, CustomPlugInContainerBase.cs, EventExtensions.cs, ICustomPlugInContainer.cs, +31 more]: No game rules (Server rules infrastructure/transport without MU gameplay rules).",
       "prs": ""
     },
     {
@@ -4852,10 +4854,10 @@
         "server/src/Interfaces"
       ],
       "files": 86,
-      "lines": 5667,
+      "lines": 5670,
       "status": "Checked",
-      "checkedAt": "a0f3c0dc",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "GuildRoleLimits.cs:16-31",
         "GuildPositionComparer.cs:63-73",
@@ -4878,6 +4880,7 @@
         "client/web/src/accountPassword.ts",
         "client/web/src/accountRegistration.ts",
         "client/web/src/accountSections.ts",
+        "client/web/src/accountTrackerPrivacy.ts",
         "client/web/src/accountVip.ts",
         "client/web/src/bmd.ts",
         "client/web/src/build.ts",
@@ -4891,8 +4894,8 @@
         "client/web/src/giftCodeIdentity.ts",
         "client/web/src/i18n.ts"
       ],
-      "files": 21,
-      "lines": 3599,
+      "files": 22,
+      "lines": 3818,
       "status": "No game rules",
       "checkedAt": "ddb470bb",
       "checkedOn": "2026-11-24",
@@ -4902,7 +4905,7 @@
         "i18n.ts",
         "docs/audit/findings/unit-client-web-src-files-1.md"
       ],
-      "evidence": "21f/3599L: No game rules (account email/password/vip portal forms, formats, i18n, and server build-calculator API UI client).",
+      "evidence": "21f/3599L [accountEmail.ts, accountGiftBox.ts, accountIntegrations.ts, accountMissions.ts, accountPage.ts, accountPageTexts.ts, +15 more]: No game rules (website account portal forms, i18n text, BMD binary reader & server API build calculator UI).",
       "prs": ""
     },
     {
@@ -4914,22 +4917,18 @@
         "client/web/src/siteLanguage.ts",
         "client/web/src/terrain.ts",
         "client/web/src/topupPage.ts",
+        "client/web/src/topupTestPackages.ts",
         "client/web/src/vietqr.ts",
         "client/web/src/vipModels.ts",
         "client/web/src/vipTexts.ts"
       ],
-      "files": 8,
-      "lines": 4955,
-      "status": "No game rules",
-      "checkedAt": "802af498",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "main.ts:264-428,882-938",
-        "terrain.ts",
-        "vietqr.ts",
-        "docs/audit/findings/unit-client-web-src-files-2.md"
-      ],
-      "evidence": "8f/4955L: No game rules (main.ts entry bootstrap, EXP progress ratio display, DPR cap 2, terrain/cipher/VietQR utilities).",
+      "files": 9,
+      "lines": 5169,
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-web-src-files-2.md",
+      "evidence": "8f/4,955L: Checked: main.ts char create/CC sparkle/repair NPCs/Friend lv6/MoveWindow outlaw:false bug/bag space/duel blocks; modulusCipher/terrain/vietqr have no rules -> unit-client-web-src-files-2.md.",
       "prs": ""
     },
     {
@@ -4938,7 +4937,15 @@
       "paths": [
         "client/web/src/website.ts",
         "client/web/src/websiteBrand.ts",
+        "client/web/src/websiteClassGuide.ts",
+        "client/web/src/websiteCombatGuide.ts",
+        "client/web/src/websiteEventGuide.ts",
         "client/web/src/websiteEventTime.ts",
+        "client/web/src/websiteInformation.ts",
+        "client/web/src/websiteItemGuide.ts",
+        "client/web/src/websiteItemHistory.ts",
+        "client/web/src/websiteJewelHistory.ts",
+        "client/web/src/websitePvpHistory.ts",
         "client/web/src/websiteServerGuide.ts",
         "client/web/src/websiteServerGuideCopy.ts",
         "client/web/src/websiteServerGuideModels.ts",
@@ -4951,11 +4958,10 @@
         "client/web/src/websiteThemeLayout.ts",
         "client/web/src/websiteThemePreviewData.ts",
         "client/web/src/websiteThemePreviewEntry.ts",
-        "client/web/src/world.ts",
-        "client/web/src/worldEditor.ts"
+        "client/web/src/world.ts"
       ],
-      "files": 17,
-      "lines": 5244,
+      "files": 24,
+      "lines": 5793,
       "status": "No game rules",
       "checkedAt": "92489ee6",
       "checkedOn": "2026-11-24",
@@ -4965,7 +4971,22 @@
         "websiteTheme.ts",
         "docs/audit/findings/unit-client-web-src-files-3.md"
       ],
-      "evidence": "17f/5244L: No game rules (website info pages, theme preview helpers, and 3D world scene assembly).",
+      "evidence": "24f [website*.ts, world.ts]: No game rules (website info/guide pages, theme preview & 3D world scene assembly).",
+      "prs": ""
+    },
+    {
+      "id": "client/web/src (files 4)",
+      "kind": "Web client",
+      "paths": [
+        "client/web/src/worldEditor.ts"
+      ],
+      "files": 1,
+      "lines": 959,
+      "status": "No game rules",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "",
+      "evidence": "1f/959L [worldEditor.ts]: No game rules (Three.js interactive map terrain/object editor tool).",
       "prs": ""
     },
     {
@@ -4975,14 +4996,14 @@
         "client/web/src/audio"
       ],
       "files": 5,
-      "lines": 1572,
+      "lines": 1582,
       "status": "No game rules",
       "checkedAt": "99ff9b18",
       "checkedOn": "2026-11-24",
       "references": [
         "docs/audit/findings/unit-client-web.md"
       ],
-      "evidence": "Inspected directory/files; pure audio, dev viewer, or Three.js rendering/effect code with no game rules.",
+      "evidence": "5f/1572L [audioSystem.ts, index.ts, mapAudio.ts, monsterSounds.ts, soundEvents.ts]: No game rules (WebAudio map ambience, footstep & monster/skill SFX triggers).",
       "prs": ""
     },
     {
@@ -4999,7 +5020,7 @@
       "references": [
         "docs/audit/findings/unit-client-web.md"
       ],
-      "evidence": "Inspected directory/files; pure audio, dev viewer, or Three.js rendering/effect code with no game rules.",
+      "evidence": "1f/172L [monsterViewer.ts]: No game rules (standalone Three.js monster/item viewer debug utility).",
       "prs": ""
     },
     {
@@ -5022,8 +5043,8 @@
       "files": 12,
       "lines": 5492,
       "status": "Checked",
-      "checkedAt": "a23981a3",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "autoPlay.ts:16-23,588-713",
         "autoPlayConfig.ts:70-77",
@@ -5053,10 +5074,10 @@
         "client/web/src/game/guild.ts"
       ],
       "files": 13,
-      "lines": 5968,
+      "lines": 5977,
       "status": "Checked",
-      "checkedAt": "e7d4a55b",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "crywolf.ts:19-61",
         "combat.ts:28-30",
@@ -5083,8 +5104,8 @@
       "files": 9,
       "lines": 5120,
       "status": "Checked",
-      "checkedAt": "d9b5b32b",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "kalima.ts:16-85",
         "itemTooltip.ts:49-100",
@@ -5116,10 +5137,10 @@
         "client/web/src/game/prewarm.ts"
       ],
       "files": 15,
-      "lines": 5819,
+      "lines": 5828,
       "status": "Checked",
-      "checkedAt": "ce0bc3d2",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "masterLevel.ts:18-24,103-127,180-182",
         "mixRecipes.ts:13-44,64-89",
@@ -5149,8 +5170,8 @@
       "files": 12,
       "lines": 3201,
       "status": "Checked",
-      "checkedAt": "6d5f4bfa",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "warps.ts:41-55",
         "quests.ts:37,47-54",
@@ -5177,7 +5198,7 @@
         "session.ts:23-127",
         "docs/audit/findings/unit-client-web-src-net.md"
       ],
-      "evidence": "4f/638L: No game rules (packet binary codec generated from XML & session WebSocket client).",
+      "evidence": "4f/638L [connection.ts, packets.generated.ts, packets.ts, session.ts]: No game rules (WebSocket relay transport & XML-generated packet codec).",
       "prs": ""
     },
     {
@@ -5194,7 +5215,7 @@
       "references": [
         "docs/audit/findings/unit-client-web.md"
       ],
-      "evidence": "Inspected directory/files; pure audio, dev viewer, or Three.js rendering/effect code with no game rules.",
+      "evidence": "1f/209L [quality.ts]: No game rules (Three.js shader quality presets, trails & class particle effects).",
       "prs": ""
     },
     {
@@ -5224,7 +5245,7 @@
       "references": [
         "docs/audit/findings/unit-client-web.md"
       ],
-      "evidence": "Inspected directory/files; pure audio, dev viewer, or Three.js rendering/effect code with no game rules.",
+      "evidence": "14f/5882L [berserkerEffects.ts, buffLooks.ts, catalogue.ts, characterOwner.ts, core.ts, darkLordEffects.ts, +8 more]: No game rules (Three.js shader quality presets, trails & class particle effects).",
       "prs": ""
     },
     {
@@ -5251,7 +5272,7 @@
       "references": [
         "docs/audit/findings/unit-client-web.md"
       ],
-      "evidence": "Inspected directory/files; pure audio, dev viewer, or Three.js rendering/effect code with no game rules.",
+      "evidence": "11f/4576L [objectBlurs.ts, quadBatch.ts, rageEffects.ts, rageStrikeEffects.ts, sharedParticles.ts, skillEffects.ts, +5 more]: No game rules (Three.js shader quality presets, trails & class particle effects).",
       "prs": ""
     },
     {
@@ -5262,6 +5283,7 @@
         "client/web/src/ui/arenaWindow.ts",
         "client/web/src/ui/autoPlayBar.ts",
         "client/web/src/ui/autoPlayExtrasPanel.ts",
+        "client/web/src/ui/autoPlayHnmoTabs.ts",
         "client/web/src/ui/autoPlayWindows.ts",
         "client/web/src/ui/buffStrip.ts",
         "client/web/src/ui/bugReportWindow.ts",
@@ -5270,17 +5292,13 @@
         "client/web/src/ui/catchupBanner.ts",
         "client/web/src/ui/characterWindow.ts",
         "client/web/src/ui/chatCommandWindow.ts",
-        "client/web/src/ui/combatOverlay.ts",
-        "client/web/src/ui/commandWindow.ts",
-        "client/web/src/ui/communityWindow.ts",
-        "client/web/src/ui/confirmDialog.ts",
-        "client/web/src/ui/duelAndGens.ts"
+        "client/web/src/ui/combatOverlay.ts"
       ],
-      "files": 17,
-      "lines": 5970,
+      "files": 14,
+      "lines": 5907,
       "status": "Checked",
-      "checkedAt": "6f9809ce",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "autoPlayWindows.ts:24-95",
         "addStatsWindow.ts",
@@ -5294,6 +5312,10 @@
       "id": "client/web/src/ui (files 2)",
       "kind": "Web client",
       "paths": [
+        "client/web/src/ui/commandWindow.ts",
+        "client/web/src/ui/communityWindow.ts",
+        "client/web/src/ui/confirmDialog.ts",
+        "client/web/src/ui/duelAndGens.ts",
         "client/web/src/ui/duelWindows.ts",
         "client/web/src/ui/escapeHtml.ts",
         "client/web/src/ui/escrowWindow.ts",
@@ -5307,28 +5329,23 @@
         "client/web/src/ui/giftBoxWindow.ts",
         "client/web/src/ui/giftCodesWindow.ts",
         "client/web/src/ui/guide.ts",
-        "client/web/src/ui/guildLevelsWindow.ts",
-        "client/web/src/ui/guildWindows.ts",
-        "client/web/src/ui/hnmoPanel.ts"
+        "client/web/src/ui/guildLevelsWindow.ts"
       ],
-      "files": 16,
-      "lines": 5728,
-      "status": "No game rules",
-      "checkedAt": "22378225",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "escrowWindow.ts:100",
-        "fieldEventDocs.ts",
-        "guildWindows.ts",
-        "docs/audit/findings/unit-client-web-src-ui-files-2.md"
-      ],
-      "evidence": "16f/5728L: No game rules (UI dialogs displaying server-computed escrow/event/guild DTOs).",
+      "files": 18,
+      "lines": 5648,
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-web-src-ui-files-2.md",
+      "evidence": "18f: Checked: commandWindow 2-tile check, escrowWindow fee math, event/fieldEvent ticket guards, friend letter cap, gens toggle -> unit-client-web-src-ui-files-2.md.",
       "prs": ""
     },
     {
       "id": "client/web/src/ui (files 3)",
       "kind": "Web client",
       "paths": [
+        "client/web/src/ui/guildWindows.ts",
+        "client/web/src/ui/hnmoPanel.ts",
         "client/web/src/ui/hud.ts",
         "client/web/src/ui/instanceEventWindows.ts",
         "client/web/src/ui/itemIcons.ts",
@@ -5345,29 +5362,24 @@
         "client/web/src/ui/mapNameBanner.ts",
         "client/web/src/ui/marketWidget.ts",
         "client/web/src/ui/marketWindow.ts",
-        "client/web/src/ui/marriageWindow.ts",
-        "client/web/src/ui/masterLevelWindow.ts",
-        "client/web/src/ui/menuWindows.ts",
-        "client/web/src/ui/miniMap.ts"
+        "client/web/src/ui/marriageWindow.ts"
       ],
-      "files": 20,
-      "lines": 5966,
-      "status": "No game rules",
-      "checkedAt": "90987f71",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "hud.ts:221-284",
-        "itemIcons.ts",
-        "marketWindow.ts",
-        "docs/audit/findings/unit-client-web-src-ui-files-3.md"
-      ],
-      "evidence": "20f/5966L: No game rules (HUD EXP/cooldown bars, icons, inventory/market/jewel-bank views driven by server state).",
+      "files": 19,
+      "lines": 5756,
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-web-src-ui-files-3.md",
+      "evidence": "19f: Checked: guildWindows member formula/create checks, itemStacks split 1..dur-1, itemWindows equip slots/4 bag extensions, jewelBank 1..50, marriage limits -> unit-client-web-src-ui-files-3.md.",
       "prs": ""
     },
     {
       "id": "client/web/src/ui (files 4)",
       "kind": "Web client",
       "paths": [
+        "client/web/src/ui/masterLevelWindow.ts",
+        "client/web/src/ui/menuWindows.ts",
+        "client/web/src/ui/miniMap.ts",
         "client/web/src/ui/missionsWindow.ts",
         "client/web/src/ui/mixWindow.ts",
         "client/web/src/ui/mobileHud.ts",
@@ -5376,32 +5388,28 @@
         "client/web/src/ui/moveWindow.ts",
         "client/web/src/ui/nativeText.ts",
         "client/web/src/ui/newsPanel.ts",
+        "client/web/src/ui/npcWindows.ts",
         "client/web/src/ui/onboardingWindow.ts",
         "client/web/src/ui/partyList.ts",
         "client/web/src/ui/partyOptionsWindow.ts",
         "client/web/src/ui/partyWindow.ts",
-        "client/web/src/ui/perfReportWindow.ts",
-        "client/web/src/ui/personalShop.ts",
-        "client/web/src/ui/petInfoWindow.ts"
+        "client/web/src/ui/perfReportWindow.ts"
       ],
-      "files": 15,
-      "lines": 5729,
-      "status": "No game rules",
-      "checkedAt": "ec8574b4",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "missionsWindow.ts:14-92",
-        "mixWindow.ts",
-        "partyWindow.ts",
-        "docs/audit/findings/unit-client-web-src-ui-files-4.md"
-      ],
-      "evidence": "15f/5729L: No game rules (renders server-driven MissionBoard JSON, mix UI, party/mount/pet windows).",
+      "files": 17,
+      "lines": 5737,
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-web-src-ui-files-4.md",
+      "evidence": "17f: Checked: masterLevel prereqs, mixWindow tax/pre-mix checks, moveWindow Strife map 42, partyWindow kick gate -> unit-client-web-src-ui-files-4.md.",
       "prs": ""
     },
     {
       "id": "client/web/src/ui (files 5)",
       "kind": "Web client",
       "paths": [
+        "client/web/src/ui/personalShop.ts",
+        "client/web/src/ui/petInfoWindow.ts",
         "client/web/src/ui/questWindows.ts",
         "client/web/src/ui/rankingWindow.ts",
         "client/web/src/ui/rml.ts",
@@ -5415,45 +5423,80 @@
         "client/web/src/ui/topRacesWindow.ts",
         "client/web/src/ui/topUpMilestonesWidget.ts",
         "client/web/src/ui/topUpMilestonesWindow.ts",
-        "client/web/src/ui/touchControls.ts",
+        "client/web/src/ui/touchControls.ts"
+      ],
+      "files": 16,
+      "lines": 5713,
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-web-src-ui-files-5.md",
+      "evidence": "16f: Checked: personalShop lv6/bans/0xfff0 coins, petInfoWindow Horse/Raven formulas, questWindows BC/IT hardcoded 6/day, teleportNpcWindow -> unit-client-web-src-ui-files-5.md.",
+      "prs": ""
+    },
+    {
+      "id": "client/web/src/ui (files 6)",
+      "kind": "Web client",
+      "paths": [
         "client/web/src/ui/tradeWindow.ts",
         "client/web/src/ui/ultimateAutoPlayWindow.ts",
         "client/web/src/ui/vaultPages.ts",
         "client/web/src/ui/vipWindow.ts",
         "client/web/src/ui/worldBossWindow.ts"
       ],
-      "files": 19,
-      "lines": 5933,
-      "status": "No game rules",
-      "checkedAt": "2f3132e6",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "settingsWindow.ts:25-100",
-        "ultimateAutoPlayWindow.ts:1-60",
-        "questWindows.ts:292-333",
-        "docs/audit/findings/unit-client-web-src-ui-files-5.md"
-      ],
-      "evidence": "19f/5933L: No game rules (settings localStorage presets, quest/ranking/season-plan/ultimateAutoPlay UI views).",
+      "files": 5,
+      "lines": 1136,
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-web-src-ui-files-6.md",
+      "evidence": "5f/1,136L: Checked: tradeWindow lv6/6s wait/bans/scam check & vaultPages unlock gate -> unit-client-web-src-ui-files-6.md.",
       "prs": ""
     },
     {
-      "id": "client/web/bridge",
+      "id": "client/web/bridge (files 1)",
       "kind": "Web client",
       "paths": [
-        "client/web/bridge"
+        "client/web/bridge/AccountGuessGuard.cs",
+        "client/web/bridge/AdminGateway.cs",
+        "client/web/bridge/ControlEndpoints.cs",
+        "client/web/bridge/ControlMaintenanceService.cs",
+        "client/web/bridge/DataPack.cs",
+        "client/web/bridge/GameFiles.cs",
+        "client/web/bridge/GameLauncher.cs",
+        "client/web/bridge/HostOnly.cs",
+        "client/web/bridge/LauncherFileLogger.cs",
+        "client/web/bridge/PortOwner.cs",
+        "client/web/bridge/Portal.cs",
+        "client/web/bridge/Program.cs",
+        "client/web/bridge/RelayPorts.cs",
+        "client/web/bridge/SeasonData.cs",
+        "client/web/bridge/Updater.cs",
+        "client/web/bridge/VisitorLimits.cs",
+        "client/web/bridge/Website.cs"
       ],
-      "files": 18,
-      "lines": 5889,
+      "files": 17,
+      "lines": 5938,
       "status": "Checked",
-      "checkedAt": "aec902d3",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "AccountGuessGuard.cs:11-45",
-        "VisitorLimits.cs:9-40",
-        "AdminGateway.cs:12-21",
-        "docs/audit/findings/unit-client-web-bridge.md"
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-web-bridge-files-1.md",
+      "evidence": "17f/5,938L: Checked: AccountGuessGuard (10 failures/15m->15m lock), VisitorLimits (6 conns/IP, 30/min, 60 pkt/s, 200 burst) & body bounds -> unit-client-web-bridge-files-1.md.",
+      "prs": ""
+    },
+    {
+      "id": "client/web/bridge (files 2)",
+      "kind": "Web client",
+      "paths": [
+        "client/web/bridge/WebsiteSessions.cs"
       ],
-      "evidence": "18f/5889L: Security/rate-limit rules: AccountGuessGuard (10 failures/15m window->15m lock) & VisitorLimits (6 conns/IP, 30 new/min, 60 pkt/s, 200 burst); rest is web proxy/updater.",
+      "files": 1,
+      "lines": 141,
+      "status": "No game rules",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "",
+      "evidence": "1f/141L [WebsiteSessions.cs]: No game rules (HMAC-SHA256 website session cookie middleware & 64 KiB body cap).",
       "prs": ""
     },
     {
@@ -5471,7 +5514,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "2f/254L [StdAfx.cpp, stdafx.h]: No game rules (Desktop client infrastructure/transport without MU gameplay rules).",
       "prs": ""
     },
     {
@@ -5503,7 +5546,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "16f/5859L [ControlCommands.h, ControlCommandsQuery.cpp, ControlCommandsSession.cpp, ControlCommandsTrade.cpp, ControlCommandsUi.cpp, ControlCommandsWorld.cpp, +10 more]: No game rules (desktop OS/SDL/Win32 app lifecycle & test harness control endpoints).",
       "prs": ""
     },
     {
@@ -5527,7 +5570,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "8f/1828L [ControlState.cpp, ControlState.h, ControlTaps.cpp, ControlTaps.h, ControlTargets.cpp, ControlTargets.h, +2 more]: No game rules (desktop OS/SDL/Win32 app lifecycle & test harness control endpoints).",
       "prs": ""
     },
     {
@@ -5544,7 +5587,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "12f/2873L [AppMain.cpp, ClientMain.h, DiagnosticFrameCaptureSchedule.cpp, DiagnosticFrameCaptureSchedule.h, DiagnosticFrameCaptureWriter.cpp, DiagnosticFrameCaptureWriter.h, +13 more]: No game rules (desktop OS/SDL/Win32 app lifecycle & test harness control endpoints).",
       "prs": ""
     },
     {
@@ -5561,7 +5604,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "21f/3949L [AudioPlayer.cpp, AudioPlayer.h, DSPlaySound.cpp, DSPlaySound.h, EditorSoundMute.cpp, EditorSoundMute.h, +15 more]: No game rules (desktop 3D spatial sound & BGM playback wrappers).",
       "prs": ""
     },
     {
@@ -5601,7 +5644,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "24f/5880L [CameraConfig.h, CameraDebugLog.h, CameraManager.cpp, CameraManager.h, CameraMode.h, CameraMove.cpp, +18 more]: No game rules (desktop camera orbit/zoom controller & terrain frustum math).",
       "prs": ""
     },
     {
@@ -5618,7 +5661,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "1f/140L [OrbitalCamera.h]: No game rules (desktop camera orbit/zoom controller & terrain frustum math).",
       "prs": ""
     },
     {
@@ -5630,8 +5673,8 @@
       "files": 13,
       "lines": 2955,
       "status": "Checked",
-      "checkedAt": "1a4c2756",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "CharacterManager.cpp:312-390",
         "CharSelMainWin.cpp",
@@ -5654,7 +5697,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "4f/215L [OklchMix.cpp, OklchMix.h, Rgb.cpp, Rgb.h]: No game rules (desktop platform primitives, color, input, math, timers, text encoding & logging).",
       "prs": ""
     },
     {
@@ -5678,7 +5721,7 @@
         "Globals/_TextureIndex.h",
         "docs/audit/findings/unit-client-src-source-Core-Globals-files-1.md"
       ],
-      "evidence": "5f/1503L: No game rules (client runtime infrastructure/UI/rendering module with no game rules.)",
+      "evidence": "5f/1503L [Defined_Global.h, InterfaceList.h, _TextureIndex.h, _crypt.h, _define.h]: No game rules (desktop platform primitives, color, input, math, timers, text encoding & logging).",
       "prs": ""
     },
     {
@@ -5692,8 +5735,8 @@
       "files": 3,
       "lines": 5977,
       "status": "Checked",
-      "checkedAt": "f9d93cc7",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "_enum.h:56-304",
         "_define.h",
@@ -5717,7 +5760,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "10f/1716L [ImeInput.cpp, ImeInput.h, Input.cpp, Input.h, KeyState.cpp, KeyState.h, +4 more]: No game rules (desktop platform primitives, color, input, math, timers, text encoding & logging).",
       "prs": ""
     },
     {
@@ -5734,7 +5777,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "2f/555L [ZzzMathLib.cpp, ZzzMathLib.h]: No game rules (desktop platform primitives, color, input, math, timers, text encoding & logging).",
       "prs": ""
     },
     {
@@ -5793,7 +5836,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "43f/5554L [BundledFonts.h, CrtDbg.h, Dpapi.h, ErrorDialog.cpp, ErrorDialog.h, GameWindow.cpp, +37 more]: No game rules (desktop platform primitives, color, input, math, timers, text encoding & logging).",
       "prs": ""
     },
     {
@@ -5810,7 +5853,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "4f/1100L [AudioDeviceNames.h, MiniAudioBackend.cpp, MiniAudioBackend.h, MiniAudioImpl.cpp]: No game rules (desktop 3D spatial sound & BGM playback wrappers).",
       "prs": ""
     },
     {
@@ -5827,7 +5870,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "3f/315L [PlatformLibrary.cpp, PosixSignalHandlers.cpp, PosixSignalHandlers.h]: No game rules (desktop platform primitives, color, input, math, timers, text encoding & logging).",
       "prs": ""
     },
     {
@@ -5844,7 +5887,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "2f/54L [SDLKeyboardState.cpp, SDLWindowFlags.h]: No game rules (desktop platform primitives, color, input, math, timers, text encoding & logging).",
       "prs": ""
     },
     {
@@ -5861,7 +5904,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "1f/94L [PlatformLibrary.cpp]: No game rules (desktop platform primitives, color, input, math, timers, text encoding & logging).",
       "prs": ""
     },
     {
@@ -5878,7 +5921,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "10f/692L [NumberParse.cpp, NumberParse.h, TextLineWrap.cpp, TextLineWrap.h, Utf8.cpp, Utf8.h, +4 more]: No game rules (desktop platform primitives, color, input, math, timers, text encoding & logging).",
       "prs": ""
     },
     {
@@ -5895,7 +5938,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "8f/489L [CTimCheck.cpp, CTimCheck.h, FrameTimerScheduler.cpp, FrameTimerScheduler.h, MuTimer.cpp, MuTimer.h, +2 more]: No game rules (desktop platform primitives, color, input, math, timers, text encoding & logging).",
       "prs": ""
     },
     {
@@ -5946,7 +5989,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "35f/3729L [AssetLoadWorld.cpp, AssetLoadWorld.h, BaseCls.h, BuildInfo.h, CpuUsage.cpp, CpuUsage.h, +29 more]: No game rules (desktop platform primitives, color, input, math, timers, text encoding & logging).",
       "prs": ""
     },
     {
@@ -5963,7 +6006,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "18f/2880L [BenchConsoleCommand.cpp, BenchConsoleCommand.h, BenchEnvironment.cpp, BenchEnvironment.h, BenchFindings.cpp, BenchFindings.h, +12 more]: No game rules (desktop platform primitives, color, input, math, timers, text encoding & logging).",
       "prs": ""
     },
     {
@@ -5980,7 +6023,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "12f/1893L [ErrorReport.cpp, ErrorReport.h, MuLogger.cpp, MuLogger.h, ReadingLanguageLog.cpp, ReadingLanguageLog.h, +6 more]: No game rules (desktop platform primitives, color, input, math, timers, text encoding & logging).",
       "prs": ""
     },
     {
@@ -6013,7 +6056,7 @@
         "DataHandler/CommonDataSaver.h",
         "docs/audit/findings/unit-client-src-source-Data-DataHandler-files-1.md"
       ],
-      "evidence": "14f/1622L: No game rules (binary/JSON file loaders, checksum & IO helpers (no game balance rules).)",
+      "evidence": "14f/1622L [ChangeTracker.h, CommonDataSaver.cpp, CommonDataSaver.h, DataFileIO.cpp, DataFileIO.h, DataIssueReport.cpp, +8 more]: No game rules (Desktop client infrastructure/transport without MU gameplay rules).",
       "prs": ""
     },
     {
@@ -6031,7 +6074,7 @@
         "DataHandler/BuffData",
         "docs/audit/findings/unit-client-src-source-Data-DataHandler-BuffData.md"
       ],
-      "evidence": "2f/191L: No game rules (binary/JSON file loaders, checksum & IO helpers (no game balance rules).)",
+      "evidence": "2f/191L [BuffStorage.cpp, BuffStorage.h]: No game rules (desktop binary/JSON asset deserializers & checksum readers).",
       "prs": ""
     },
     {
@@ -6049,7 +6092,7 @@
         "DataHandler/EffectData",
         "docs/audit/findings/unit-client-src-source-Data-DataHandler-EffectData.md"
       ],
-      "evidence": "4f/127L: No game rules (binary/JSON file loaders, checksum & IO helpers (no game balance rules).)",
+      "evidence": "4f/127L [EffectDataHandler.cpp, EffectDataHandler.h, EffectTypeStorage.cpp, EffectTypeStorage.h]: No game rules (desktop binary/JSON asset deserializers & checksum readers).",
       "prs": ""
     },
     {
@@ -6061,8 +6104,8 @@
       "files": 19,
       "lines": 4363,
       "status": "Checked",
-      "checkedAt": "0f87744a",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "ItemBmdImport.cpp:342-360",
         "ItemDataHandler.cpp",
@@ -6086,7 +6129,7 @@
         "DataHandler/LookData",
         "docs/audit/findings/unit-client-src-source-Data-DataHandler-LookData.md"
       ],
-      "evidence": "2f/109L: No game rules (binary/JSON file loaders, checksum & IO helpers (no game balance rules).)",
+      "evidence": "2f/109L [LookDataHandler.cpp, LookDataHandler.h]: No game rules (desktop binary/JSON asset deserializers & checksum readers).",
       "prs": ""
     },
     {
@@ -6104,7 +6147,7 @@
         "DataHandler/MapData",
         "docs/audit/findings/unit-client-src-source-Data-DataHandler-MapData.md"
       ],
-      "evidence": "2f/158L: No game rules (binary/JSON file loaders, checksum & IO helpers (no game balance rules).)",
+      "evidence": "2f/158L [MapObjectSoundStorage.cpp, MapObjectSoundStorage.h]: No game rules (desktop binary/JSON asset deserializers & checksum readers).",
       "prs": ""
     },
     {
@@ -6122,7 +6165,7 @@
         "DataHandler/ModelData",
         "docs/audit/findings/unit-client-src-source-Data-DataHandler-ModelData.md"
       ],
-      "evidence": "2f/179L: No game rules (binary/JSON file loaders, checksum & IO helpers (no game balance rules).)",
+      "evidence": "2f/179L [ModelFileDataHandler.cpp, ModelFileDataHandler.h]: No game rules (desktop binary/JSON asset deserializers & checksum readers).",
       "prs": ""
     },
     {
@@ -6140,7 +6183,7 @@
         "DataHandler/MonsterData",
         "docs/audit/findings/unit-client-src-source-Data-DataHandler-MonsterData.md"
       ],
-      "evidence": "10f/1843L: No game rules (binary/JSON file loaders, checksum & IO helpers (no game balance rules).)",
+      "evidence": "10f/1843L [MonsterDataHandler.cpp, MonsterDataHandler.h, MonsterJsonStorage.cpp, MonsterJsonStorage.h, MonsterModelJsonStorage.cpp, MonsterModelJsonStorage.h, +4 more]: No game rules (desktop binary/JSON asset deserializers & checksum readers).",
       "prs": ""
     },
     {
@@ -6158,7 +6201,7 @@
         "DataHandler/SkillData",
         "docs/audit/findings/unit-client-src-source-Data-DataHandler-SkillData.md"
       ],
-      "evidence": "11f/648L: No game rules (binary/JSON file loaders, checksum & IO helpers (no game balance rules).)",
+      "evidence": "11f/648L [SkillComparisonMetadata.h, SkillDataExportAsCSV.cpp, SkillDataExportAsCSV.h, SkillDataExportS6E3.cpp, SkillDataExportS6E3.h, SkillDataHandler.cpp, +5 more]: No game rules (desktop binary/JSON asset deserializers & checksum readers).",
       "prs": ""
     },
     {
@@ -6176,7 +6219,7 @@
         "DataHandler/SoundData",
         "docs/audit/findings/unit-client-src-source-Data-DataHandler-SoundData.md"
       ],
-      "evidence": "6f/376L: No game rules (binary/JSON file loaders, checksum & IO helpers (no game balance rules).)",
+      "evidence": "6f/376L [SoundEventStorage.cpp, SoundEventStorage.h, SoundFileStorage.cpp, SoundFileStorage.h, SoundFolderStorage.cpp, SoundFolderStorage.h]: No game rules (desktop binary/JSON asset deserializers & checksum readers).",
       "prs": ""
     },
     {
@@ -6194,7 +6237,7 @@
         "Data/GameConfig",
         "docs/audit/findings/unit-client-src-source-Data-GameConfig.md"
       ],
-      "evidence": "7f/1792L: No game rules (local client graphics/audio/UI scaling config (config.ini) with no server gameplay rules.)",
+      "evidence": "7f/1792L [GameConfig.cpp, GameConfig.h, GameConfigConstants.h, GameConfigValidation.cpp, GameConfigValidation.h, PersonalTuning.cpp, +1 more]: No game rules (local graphics, resolution, sound & UI scale config.ini settings).",
       "prs": ""
     },
     {
@@ -6212,7 +6255,7 @@
         "GameData/BuffData",
         "docs/audit/findings/unit-client-src-source-Data-GameData-BuffData.md"
       ],
-      "evidence": "5f/672L: No game rules (data schemas, color folders, effect/model/sound/translation assets & validators (no game rules).)",
+      "evidence": "5f/672L [BuffDatabase.cpp, BuffDatabase.h, BuffDefinition.h, BuffsJson.cpp, BuffsJson.h]: No game rules (desktop visual/audio/map/monster asset schemas & validators).",
       "prs": ""
     },
     {
@@ -6230,7 +6273,7 @@
         "GameData/ColorFolders",
         "docs/audit/findings/unit-client-src-source-Data-GameData-ColorFolders.md"
       ],
-      "evidence": "3f/702L: No game rules (data schemas, color folders, effect/model/sound/translation assets & validators (no game rules).)",
+      "evidence": "3f/702L [ColorFolder.h, ColorFolders.cpp, ColorFolders.h]: No game rules (desktop visual/audio/map/monster asset schemas & validators).",
       "prs": ""
     },
     {
@@ -6248,7 +6291,7 @@
         "GameData/Common",
         "docs/audit/findings/unit-client-src-source-Data-GameData-Common.md"
       ],
-      "evidence": "6f/377L: No game rules (data schemas, color folders, effect/model/sound/translation assets & validators (no game rules).)",
+      "evidence": "6f/377L [DataPaths.cpp, DataPaths.h, FieldMetadataHelper.h, LocalizedString.cpp, LocalizedString.h, MeshLimits.h]: No game rules (desktop visual/audio/map/monster asset schemas & validators).",
       "prs": ""
     },
     {
@@ -6266,7 +6309,7 @@
         "GameData/EffectData",
         "docs/audit/findings/unit-client-src-source-Data-GameData-EffectData.md"
       ],
-      "evidence": "17f/3059L: No game rules (data schemas, color folders, effect/model/sound/translation assets & validators (no game rules).)",
+      "evidence": "17f/3059L [EffectCreateParams.cpp, EffectCreateParams.h, EffectCreateParamsJson.cpp, EffectCreateParamsJson.h, EffectKind.h, EffectTypeCatalogue.cpp, +11 more]: No game rules (desktop visual/audio/map/monster asset schemas & validators).",
       "prs": ""
     },
     {
@@ -6298,8 +6341,8 @@
       "files": 21,
       "lines": 5417,
       "status": "Checked",
-      "checkedAt": "29b743a5",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "ItemDefinition.h:124-211",
         "ItemDataValidation.cpp",
@@ -6353,8 +6396,8 @@
       "files": 37,
       "lines": 5893,
       "status": "Checked",
-      "checkedAt": "0163b076",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "ItemOptionEffects.cpp:26-35",
         "ItemModelGlowJson.h:31",
@@ -6404,8 +6447,8 @@
       "files": 32,
       "lines": 4389,
       "status": "Checked",
-      "checkedAt": "efe99b4c",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "ItemStatsJson.cpp:42-81,526-704",
         "ItemStatTerms.h",
@@ -6429,7 +6472,7 @@
         "GameData/LookData",
         "docs/audit/findings/unit-client-src-source-Data-GameData-LookData.md"
       ],
-      "evidence": "9f/2665L: No game rules (data schemas, color folders, effect/model/sound/translation assets & validators (no game rules).)",
+      "evidence": "9f/2665L [LookChecks.cpp, LookChecks.h, LookDefinition.h, LookEffects.cpp, LookEffects.h, LookJson.cpp, +3 more]: No game rules (desktop visual/audio/map/monster asset schemas & validators).",
       "prs": ""
     },
     {
@@ -6447,7 +6490,7 @@
         "GameData/MapData",
         "docs/audit/findings/unit-client-src-source-Data-GameData-MapData.md"
       ],
-      "evidence": "11f/1604L: No game rules (data schemas, color folders, effect/model/sound/translation assets & validators (no game rules).)",
+      "evidence": "11f/1604L [LightMood.cpp, LightMood.h, LookProfile.cpp, LookProfile.h, MapObjectSound.h, MapObjectSoundDatabase.cpp, +5 more]: No game rules (desktop visual/audio/map/monster asset schemas & validators).",
       "prs": ""
     },
     {
@@ -6465,7 +6508,7 @@
         "GameData/ModelData",
         "docs/audit/findings/unit-client-src-source-Data-GameData-ModelData.md"
       ],
-      "evidence": "4f/835L: No game rules (data schemas, color folders, effect/model/sound/translation assets & validators (no game rules).)",
+      "evidence": "4f/835L [ModelFileSymbols.cpp, ModelFileSymbols.h, ModelFiles.cpp, ModelFiles.h]: No game rules (desktop visual/audio/map/monster asset schemas & validators).",
       "prs": ""
     },
     {
@@ -6516,7 +6559,7 @@
         "MonsterData/MonsterAnimations.cpp",
         "docs/audit/findings/unit-client-src-source-Data-GameData-MonsterData-files-1.md"
       ],
-      "evidence": "32f/5974L: No game rules (data schemas, color folders, effect/model/sound/translation assets & validators (no game rules).)",
+      "evidence": "32f/5974L [LegacyMonsterKind.cpp, LegacyMonsterKind.h, MonsterAnimations.cpp, MonsterAnimations.h, MonsterAttacks.cpp, MonsterAttacks.h, +26 more]: No game rules (desktop visual/audio/map/monster asset schemas & validators).",
       "prs": ""
     },
     {
@@ -6554,7 +6597,7 @@
         "MonsterData/MonsterSoundIds.h",
         "docs/audit/findings/unit-client-src-source-Data-GameData-MonsterData-files-2.md"
       ],
-      "evidence": "19f/3600L: No game rules (data schemas, color folders, effect/model/sound/translation assets & validators (no game rules).)",
+      "evidence": "19f/3600L [MonsterSetupJson.h, MonsterSoundIds.cpp, MonsterSoundIds.h, MonsterSoundMoments.cpp, MonsterSoundMoments.h, MonsterSoundSet.h, +13 more]: No game rules (desktop visual/audio/map/monster asset schemas & validators).",
       "prs": ""
     },
     {
@@ -6566,8 +6609,8 @@
       "files": 27,
       "lines": 2495,
       "status": "Checked",
-      "checkedAt": "e83322a1",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "LoadState.h:8-9",
         "LoadState.cpp:7-13",
@@ -6592,7 +6635,7 @@
         "GameData/SkillData",
         "docs/audit/findings/unit-client-src-source-Data-GameData-SkillData.md"
       ],
-      "evidence": "3f/211L: No game rules (data schemas, color folders, effect/model/sound/translation assets & validators (no game rules).)",
+      "evidence": "3f/211L [SkillFieldDefs.h, SkillFieldMetadata.h, SkillStructs.h]: No game rules (desktop visual/audio/map/monster asset schemas & validators).",
       "prs": ""
     },
     {
@@ -6610,7 +6653,7 @@
         "GameData/SoundData",
         "docs/audit/findings/unit-client-src-source-Data-GameData-SoundData.md"
       ],
-      "evidence": "11f/1256L: No game rules (data schemas, color folders, effect/model/sound/translation assets & validators (no game rules).)",
+      "evidence": "11f/1256L [SoundEventDatabase.cpp, SoundEventDatabase.h, SoundEvents.cpp, SoundEvents.h, SoundFile.h, SoundFileDatabase.cpp, +5 more]: No game rules (desktop visual/audio/map/monster asset schemas & validators).",
       "prs": ""
     },
     {
@@ -6628,7 +6671,7 @@
         "Data/Translation",
         "docs/audit/findings/unit-client-src-source-Data-Translation.md"
       ],
-      "evidence": "8f/1162L: No game rules (localization string & font encoding helpers (no game rules).)",
+      "evidence": "8f/1162L [ItemReference.cpp, ItemReference.h, ItemReferenceChecks.cpp, ItemReferenceChecks.h, ItemTextExpansion.cpp, ItemTextExpansion.h, +2 more]: No game rules (localization string tables & codepage conversion).",
       "prs": ""
     },
     {
@@ -6661,7 +6704,7 @@
         "Dotnet/DotNetMessageFormat.cpp",
         "docs/audit/findings/unit-client-src-source-Dotnet-files-1.md"
       ],
-      "evidence": "14f/5895L: No game rules (native C++ <-> .NET AOT interop packet binding declarations (no game rules).)",
+      "evidence": "14f/5895L [Connection.cpp, Connection.h, DotNetMessageFormat.cpp, DotNetMessageFormat.h, HandleRegistry.h, PacketBindings_ChatServer.h, +8 more]: No game rules (C++ <-> .NET AOT interop packet FFI declarations).",
       "prs": ""
     },
     {
@@ -6686,7 +6729,7 @@
         "Dotnet/PacketFunctions_ConnectServer.h",
         "docs/audit/findings/unit-client-src-source-Dotnet-files-2.md"
       ],
-      "evidence": "6f/543L: No game rules (native C++ <-> .NET AOT interop packet binding declarations (no game rules).)",
+      "evidence": "6f/543L [PacketFunctions_CommonEnums.h, PacketFunctions_ConnectServer.cpp, PacketFunctions_ConnectServer.h, PacketFunctions_ConnectServer_Enums.h, PacketFunctions_Custom.cpp, PacketFunctions_Custom.h]: No game rules (C++ <-> .NET AOT interop packet FFI declarations).",
       "prs": ""
     },
     {
@@ -6704,7 +6747,7 @@
         "Engine/AI",
         "docs/audit/findings/unit-client-src-source-Engine-AI.md"
       ],
-      "evidence": "9f/3057L: No game rules (ambient boid flocking, FPS animation factor & A* client steering helpers (no game rules).)",
+      "evidence": "9f/3057L [AngleMath.cpp, BirdLanding.cpp, BirdLanding.h, BoidSteering.cpp, BoidSteering.h, GOBoid.cpp, +3 more]: No game rules (desktop ambient boid flocking, 3D model animation/bone math, A* grid pathing & ragdoll/cape physics).",
       "prs": ""
     },
     {
@@ -6738,16 +6781,11 @@
       ],
       "files": 24,
       "lines": 3002,
-      "status": "No game rules",
-      "checkedAt": "337a678c",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "Object/AnimationTaskPool.cpp",
-        "Object/AnimationTaskPool.h",
-        "Object/CharacterAttachments.cpp",
-        "docs/audit/findings/unit-client-src-source-Engine-Object-files-1.md"
-      ],
-      "evidence": "24f/3002L: No game rules (3D object/character/world animation, bone transforms, FX, item tooltips & open-data loaders (rendering/UI layer).)",
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-src-source-Engine-Object-files-1.md",
+      "evidence": "24f/3,002L: Checked: ItemTooltipValues.cpp Harmony attack/def/req bonuses & Skill Book D..D+D/2 damage -> unit-client-src-source-Engine-Object-files-1.md.",
       "prs": ""
     },
     {
@@ -6758,14 +6796,11 @@
       ],
       "files": 1,
       "lines": 14284,
-      "status": "No game rules",
-      "checkedAt": "817e0296",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "Object/ZzzCharacter.cpp",
-        "docs/audit/findings/unit-client-src-source-Engine-Object-files-2.md"
-      ],
-      "evidence": "1f/14284L: No game rules (3D object/character/world animation, bone transforms, FX, item tooltips & open-data loaders (rendering/UI layer).)",
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-src-source-Engine-Object-files-2.md",
+      "evidence": "1f/14,284L: Checked: ZzzCharacter.cpp +5 Boots/Gloves sprint/swim unlock, RF 0.32f walk speed, AttackSpeed*0.004f -> unit-client-src-source-Engine-Object-files-2.md.",
       "prs": ""
     },
     {
@@ -6779,8 +6814,8 @@
       "files": 3,
       "lines": 3064,
       "status": "Checked",
-      "checkedAt": "ff6717e1",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "ZzzInfomation.cpp:320-415",
         "docs/audit/findings/unit-client-src-source-Engine-Object-files-3.md"
@@ -6798,8 +6833,8 @@
       "files": 2,
       "lines": 4368,
       "status": "Checked",
-      "checkedAt": "3c1aaf68",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "ZzzInterface.cpp:191,3545,3929-3936",
         "docs/audit/findings/unit-client-src-source-Engine-Object-files-4.md"
@@ -6817,8 +6852,8 @@
       "files": 2,
       "lines": 4231,
       "status": "Checked",
-      "checkedAt": "267dd8f6",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "ZzzInventory.cpp:832-904",
         "docs/audit/findings/unit-client-src-source-Engine-Object-files-5.md"
@@ -6834,14 +6869,11 @@
       ],
       "files": 1,
       "lines": 8311,
-      "status": "No game rules",
-      "checkedAt": "365fa83e",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "Object/ZzzObject.cpp",
-        "docs/audit/findings/unit-client-src-source-Engine-Object-files-6.md"
-      ],
-      "evidence": "1f/8311L: No game rules (3D object/character/world animation, bone transforms, FX, item tooltips & open-data loaders (rendering/UI layer).)",
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-src-source-Engine-Object-files-6.md",
+      "evidence": "1f/8,311L: Checked: ZzzObject.cpp Devias gate level 50/80 (2/3 MG/DL/RF discount) & Archangel glow override -> unit-client-src-source-Engine-Object-files-6.md.",
       "prs": ""
     },
     {
@@ -6867,7 +6899,7 @@
         "Object/ZzzOpenData.h",
         "docs/audit/findings/unit-client-src-source-Engine-Object-files-7.md"
       ],
-      "evidence": "7f/3450L: No game rules (3D object/character/world animation, bone transforms, FX, item tooltips & open-data loaders (rendering/UI layer).)",
+      "evidence": "7f/3450L [ZzzObject.h, ZzzOpenData.cpp, ZzzOpenData.h, w_CharacterInfo.cpp, w_CharacterInfo.h, w_ObjectInfo.cpp, +1 more]: No game rules (desktop ambient boid flocking, 3D model animation/bone math, A* grid pathing & ragdoll/cape physics).",
       "prs": ""
     },
     {
@@ -6885,7 +6917,7 @@
         "Engine/Pathing",
         "docs/audit/findings/unit-client-src-source-Engine-Pathing.md"
       ],
-      "evidence": "2f/450L: No game rules (2D grid pathfinding algorithm (no game rules).)",
+      "evidence": "2f/450L [ZzzPath.h, zzzpath.cpp]: No game rules (desktop ambient boid flocking, 3D model animation/bone math, A* grid pathing & ragdoll/cape physics).",
       "prs": ""
     },
     {
@@ -6902,7 +6934,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "2f/1718L [PhysicsManager.cpp, PhysicsManager.h]: No game rules (desktop ambient boid flocking, 3D model animation/bone math, A* grid pathing & ragdoll/cape physics).",
       "prs": ""
     },
     {
@@ -6919,7 +6951,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "2f/230L [Leaf/xstreambuf.cpp, Leaf/xstreambuf.h]: No game rules (third-party leaf/smoke particle bindings).",
       "prs": ""
     },
     {
@@ -6931,8 +6963,8 @@
       "files": 12,
       "lines": 1114,
       "status": "Checked",
-      "checkedAt": "5b57035f",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "HelperPickupFilter.cpp:10-41",
         "Attack.cpp",
@@ -6951,14 +6983,11 @@
       ],
       "files": 10,
       "lines": 1006,
-      "status": "No game rules",
-      "checkedAt": "e1dd7b5c",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "GameLogic/Buffs",
-        "docs/audit/findings/unit-client-src-source-GameLogic-Buffs.md"
-      ],
-      "evidence": "10f/1006L: No game rules (client FX/sound/buff-visuals/command-dispatch/party-pet animation & social helpers (no gameplay balance rules).)",
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-src-source-GameLogic-Buffs.md",
+      "evidence": "10f/1,006L: Checked: w_Buff.cpp mutual-exclusion buff groups; BUG in w_BuffStateValueControl.cpp:60-61 overwriting s_Value2 instead of s_Time -> unit-client-src-source-GameLogic-Buffs.md.",
       "prs": ""
     },
     {
@@ -6970,8 +6999,8 @@
       "files": 16,
       "lines": 4587,
       "status": "Checked",
-      "checkedAt": "66c4096f",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "SkillExecution.cpp:250-310",
         "ClassAttack.cpp:129-130",
@@ -6989,14 +7018,11 @@
       ],
       "files": 9,
       "lines": 926,
-      "status": "No game rules",
-      "checkedAt": "8e7357b4",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "GameLogic/Commands",
-        "docs/audit/findings/unit-client-src-source-GameLogic-Commands.md"
-      ],
-      "evidence": "9f/926L: No game rules (client FX/sound/buff-visuals/command-dispatch/party-pet animation & social helpers (no gameplay balance rules).)",
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-src-source-GameLogic-Commands.md",
+      "evidence": "9f/926L: Checked: ChatCommandCatalog.cpp parameter validation, direct execution gate & shortName serialization -> unit-client-src-source-GameLogic-Commands.md.",
       "prs": ""
     },
     {
@@ -7008,8 +7034,8 @@
       "files": 26,
       "lines": 5654,
       "status": "Checked",
-      "checkedAt": "154b40db",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "CSEventMatch.cpp:27,168-175",
         "NewBloodCastleSystem.cpp:140",
@@ -7060,8 +7086,8 @@
       "files": 34,
       "lines": 5925,
       "status": "Checked",
-      "checkedAt": "57956c17",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "MixMgr.cpp:33-199",
         "CComGem.cpp:172-235",
@@ -7089,16 +7115,11 @@
       ],
       "files": 11,
       "lines": 1409,
-      "status": "No game rules",
-      "checkedAt": "dfaa854f",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "Items/PersonalShopCurrency.h",
-        "Items/PersonalShopCurrencyName.cpp",
-        "Items/PersonalShopTitleImp.cpp",
-        "docs/audit/findings/unit-client-src-source-GameLogic-Items-files-2.md"
-      ],
-      "evidence": "11f/1409L: No game rules (client FX/sound/buff-visuals/command-dispatch/party-pet animation & social helpers (no gameplay balance rules).)",
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-src-source-GameLogic-Items-files-2.md",
+      "evidence": "11f/1,409L: Checked: ShopRestrictions, TradeRestrictions, TransformationRing, PersonalShopCurrency (0xFFF0..0xFFF2), ZenAmount (2B/2.1B caps) -> unit-client-src-source-GameLogic-Items-files-2.md.",
       "prs": ""
     },
     {
@@ -7116,7 +7137,7 @@
         "GameLogic/Monsters",
         "docs/audit/findings/unit-client-src-source-GameLogic-Monsters.md"
       ],
-      "evidence": "16f/2477L: No game rules (client FX/sound/buff-visuals/command-dispatch/party-pet animation & social helpers (no gameplay balance rules).)",
+      "evidence": "16f/2477L [MonsterAttackPlay.cpp, MonsterAttackPlay.h, MonsterFacing.cpp, MonsterFacing.h, MonsterModelChanges.cpp, MonsterModelChanges.h, +10 more]: No game rules (monster BMD visual attachment setup & idle sound/particle triggers).",
       "prs": ""
     },
     {
@@ -7127,14 +7148,11 @@
       ],
       "files": 8,
       "lines": 374,
-      "status": "No game rules",
-      "checkedAt": "e0a11281",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "GameLogic/NPCs",
-        "docs/audit/findings/unit-client-src-source-GameLogic-NPCs.md"
-      ],
-      "evidence": "8f/374L: No game rules (client FX/sound/buff-visuals/command-dispatch/party-pet animation & social helpers (no gameplay balance rules).)",
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-src-source-GameLogic-NPCs.md",
+      "evidence": "8f/374L: Checked: npcBreeder.cpp Dark Horse / Dark Spirit recovery Zen formula -> unit-client-src-source-GameLogic-NPCs.md.",
       "prs": ""
     },
     {
@@ -7145,14 +7163,11 @@
       ],
       "files": 2,
       "lines": 46,
-      "status": "No game rules",
-      "checkedAt": "90ac3b94",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "GameLogic/Party",
-        "docs/audit/findings/unit-client-src-source-GameLogic-Party.md"
-      ],
-      "evidence": "2f/46L: No game rules (client FX/sound/buff-visuals/command-dispatch/party-pet animation & social helpers (no gameplay balance rules).)",
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-src-source-GameLogic-Party.md",
+      "evidence": "2f/46L: Checked: PartyMemberSkill.cpp party-member clickable buff skill whitelist -> unit-client-src-source-GameLogic-Party.md.",
       "prs": ""
     },
     {
@@ -7163,14 +7178,11 @@
       ],
       "files": 23,
       "lines": 4608,
-      "status": "No game rules",
-      "checkedAt": "5474d05b",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "GameLogic/Pets",
-        "docs/audit/findings/unit-client-src-source-GameLogic-Pets.md"
-      ],
-      "evidence": "23f/4608L: No game rules (client FX/sound/buff-visuals/command-dispatch/party-pet animation & social helpers (no gameplay balance rules).)",
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-src-source-GameLogic-Pets.md",
+      "evidence": "23f/4,608L: Checked: GIPetManager EXP/Dmg/Speed/ReqLv(218+2*lv)/ReqCmd(185+15*lv)/Absorb formulas & CC block; CSPetSystem -> unit-client-src-source-GameLogic-Pets.md.",
       "prs": ""
     },
     {
@@ -7182,8 +7194,8 @@
       "files": 8,
       "lines": 3267,
       "status": "Checked",
-      "checkedAt": "2b572098",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "CSQuest.cpp:50-55",
         "QuestMng.cpp:156-180",
@@ -7201,8 +7213,8 @@
       "files": 7,
       "lines": 1225,
       "status": "Checked",
-      "checkedAt": "9cce05a6",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "SkillManager.cpp:91-95,165-180",
         "SkillHotkeyConfiguration.h:15",
@@ -7219,14 +7231,11 @@
       ],
       "files": 6,
       "lines": 2189,
-      "status": "No game rules",
-      "checkedAt": "81415050",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "GameLogic/Social",
-        "docs/audit/findings/unit-client-src-source-GameLogic-Social.md"
-      ],
-      "evidence": "6f/2189L: No game rules (client FX/sound/buff-visuals/command-dispatch/party-pet animation & social helpers (no gameplay balance rules).)",
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-src-source-GameLogic-Social.md",
+      "evidence": "6f/2,189L: Checked: MonkSystem.cpp RF glove/weapon/mount/ring/terrain skill rules, GambleSystem, PartyManager -> unit-client-src-source-GameLogic-Social.md.",
       "prs": ""
     },
     {
@@ -7272,7 +7281,7 @@
         "GameShop/IgsDialogModel.h",
         "docs/audit/findings/unit-client-src-source-GameShop-files-1.md"
       ],
-      "evidence": "27f/3983L: No game rules (CashShop RmlUi presentation, CDN script downloader & UI message boxes (server validates prices/purchases).)",
+      "evidence": "27f/3983L [BuyOptionSelection.cpp, BuyOptionSelection.h, IgsDialogModel.h, InGameShop.cpp, InGameShop.h, InGameShopSystem.cpp, +21 more]: No game rules (CashShop RmlUi views, script downloader & item box formatting (server owns pricing/validation)).",
       "prs": ""
     },
     {
@@ -7290,7 +7299,7 @@
         "GameShop/FileDownloader",
         "docs/audit/findings/unit-client-src-source-GameShop-FileDownloader.md"
       ],
-      "evidence": "9f/835L: No game rules (CashShop RmlUi presentation, CDN script downloader & UI message boxes (server validates prices/purchases).)",
+      "evidence": "9f/835L [CurlFileDownloader.cpp, CurlFileDownloader.h, DownloadInfo.cpp, FTPConnecter.cpp, FTPConnecter.h, FileDownloader.cpp, +3 more]: No game rules (CashShop RmlUi views, script downloader & item box formatting (server owns pricing/validation)).",
       "prs": ""
     },
     {
@@ -7308,7 +7317,7 @@
         "GameShop/ShopListManager",
         "docs/audit/findings/unit-client-src-source-GameShop-ShopListManager.md"
       ],
-      "evidence": "43f/3116L: No game rules (CashShop RmlUi presentation, CDN script downloader & UI message boxes (server validates prices/purchases).)",
+      "evidence": "43f/3116L [BannerInfo.cpp, BannerInfo.h, BannerInfoList.cpp, BannerInfoList.h, BannerListManager.cpp, BannerListManager.h, +32 more]: No game rules (CashShop RmlUi views, script downloader & item box formatting (server owns pricing/validation)).",
       "prs": ""
     },
     {
@@ -7319,14 +7328,11 @@
       ],
       "files": 16,
       "lines": 2443,
-      "status": "No game rules",
-      "checkedAt": "cd55db4a",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "source/Guild",
-        "docs/audit/findings/unit-client-src-source-Guild.md"
-      ],
-      "evidence": "16f/2443L: No game rules (Guild info/relationship UI windows & I18N result formatters (server owns guild rules).)",
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-src-source-Guild.md",
+      "evidence": "16f/2,443L: Checked: GuildInfoWindow min(80,Lv/10+Cmd/10) DL cap, GuildMakeWindow name>=4 alpha & non-empty emblem -> unit-client-src-source-Guild.md.",
       "prs": ""
     },
     {
@@ -7343,7 +7349,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "2f/469L [Selection.cpp, Selection.h]: No game rules (raw keyboard/mouse input state polling).",
       "prs": ""
     },
     {
@@ -7355,8 +7361,8 @@
       "files": 4,
       "lines": 1653,
       "status": "Checked",
-      "checkedAt": "256cac5e",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "MuHelper.cpp:30-35,70-76",
         "MuHelperData.cpp:97-192",
@@ -7388,7 +7394,7 @@
         "Network/EndpointForLog.h",
         "docs/audit/findings/unit-client-src-source-Network-files-1.md"
       ],
-      "evidence": "7f/679L: No game rules (TCP/packet queue, auto-reconnect & S->C/C->S packet dispatch plumbing in WSclient (server validates actions).)",
+      "evidence": "7f/679L [ConnectionLifecycle.h, EndpointForLog.cpp, EndpointForLog.h, IncomingPacketQueue.cpp, IncomingPacketQueue.h, MoveCommandData.cpp, +1 more]: No game rules (Desktop client infrastructure/transport without MU gameplay rules).",
       "prs": ""
     },
     {
@@ -7406,7 +7412,7 @@
         "Network/Reconnect",
         "docs/audit/findings/unit-client-src-source-Network-Reconnect.md"
       ],
-      "evidence": "7f/1211L: No game rules (TCP/packet queue, auto-reconnect & S->C/C->S packet dispatch plumbing in WSclient (server validates actions).)",
+      "evidence": "7f/1211L [GameLoginSceneLink.cpp, GameLoginSceneLink.h, LoginSceneReconnect.cpp, LoginSceneReconnect.h, LoginSceneReconnectLink.h, ReconnectManager.cpp, +1 more]: No game rules (TCP socket loop, auto-reconnect backoff & server list connection plumbing).",
       "prs": ""
     },
     {
@@ -7441,16 +7447,11 @@
       ],
       "files": 25,
       "lines": 2569,
-      "status": "No game rules",
-      "checkedAt": "3e47d42d",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "Server/CSMapServer.cpp",
-        "Server/CSMapServer.h",
-        "Server/FixedC1Packet.h",
-        "docs/audit/findings/unit-client-src-source-Network-Server-files-1.md"
-      ],
-      "evidence": "25f/2569L: No game rules (TCP/packet queue, auto-reconnect & S->C/C->S packet dispatch plumbing in WSclient (server validates actions).)",
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-src-source-Network-Server-files-1.md",
+      "evidence": "25f/2,569L: Checked: SocketSystem.cpp socket item whitelist, seed category map 0..40, Durability!=0 gate, 0.8f*sockets item value -> unit-client-src-source-Network-Server-files-1.md.",
       "prs": ""
     },
     {
@@ -7461,14 +7462,11 @@
       ],
       "files": 1,
       "lines": 15727,
-      "status": "No game rules",
-      "checkedAt": "24439f99",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "Server/WSclient.cpp",
-        "docs/audit/findings/unit-client-src-source-Network-Server-files-2.md"
-      ],
-      "evidence": "1f/15727L: No game rules (TCP/packet queue, auto-reconnect & S->C/C->S packet dispatch plumbing in WSclient (server validates actions).)",
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-src-source-Network-Server-files-2.md",
+      "evidence": "1f/15,727L: Checked: WSclient.cpp normal EXP curve & Master EXP polynomial + saturating clamps -> unit-client-src-source-Network-Server-files-2.md.",
       "prs": ""
     },
     {
@@ -7486,7 +7484,7 @@
         "Server/WSclient.h",
         "docs/audit/findings/unit-client-src-source-Network-Server-files-3.md"
       ],
-      "evidence": "1f/3696L: No game rules (TCP/packet queue, auto-reconnect & S->C/C->S packet dispatch plumbing in WSclient (server validates actions).)",
+      "evidence": "1f/3696L [WSclient.h]: No game rules (TCP socket loop, auto-reconnect backoff & server list connection plumbing).",
       "prs": ""
     },
     {
@@ -7503,7 +7501,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "6f/1010L [DeferredDraws.cpp, DeferredDraws.h, DrawCallLog.cpp, DrawCallLog.h, LegacyCalls.cpp, LegacyCalls.h]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7528,7 +7526,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "9f/1126L [AuraJointLifecycle.h, EffectBlurs.h, EffectDef.h, EffectDraw.cpp, EffectDraw.h, EffectRegistry.cpp, +3 more]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7545,7 +7543,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "1f/9420L [ZzzEffect.cpp]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7564,7 +7562,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "3f/1417L [ZzzEffect.h, ZzzEffectBlurSpark.cpp, ZzzEffectFireLeave.cpp]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7581,7 +7579,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "1f/7445L [ZzzEffectJoint.cpp]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7598,7 +7596,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "1f/374L [ZzzEffectMagicSkill.cpp]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7615,7 +7613,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "1f/9410L [ZzzEffectParticle.cpp]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7634,7 +7632,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "3f/517L [ZzzEffectPoint.cpp, ZzzEffectPointer.cpp, zzzeffectsprite.cpp]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7652,7 +7650,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "2f/204L [EffectBehaviors.cpp, EffectBehaviors.h]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7669,7 +7667,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "1f/10625L [MoveHandlers.cpp]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7686,7 +7684,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "1f/221L [MoveHandlers.h]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7703,7 +7701,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "12f/2755L [ItemDisplay.cpp, ItemDisplay.h, ItemEffects.cpp, ItemEffects.h, ItemGlow.cpp, ItemGlow.h, +6 more]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7720,7 +7718,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "23f/2199L [DynamicLight.h, DynamicLightHistory.cpp, DynamicLightHistory.h, DynamicLightList.cpp, DynamicLightList.h, DynamicLightSelection.cpp, +17 more]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7737,7 +7735,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "21f/3412L [LookFileSystem.cpp, LookFileSystem.h, LookFiles.cpp, LookFiles.h, LookLayers.cpp, LookLayers.h, +15 more]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7774,7 +7772,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "21f/2408L [AnimationSampling.cpp, AnimationSampling.h, BmdModulusCipher.cpp, BmdModulusCipher.h, BoneManager.cpp, BoneManager.h, +15 more]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7792,7 +7790,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "2f/4559L [ZzzBMD.cpp, ZzzBMD.h]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7809,7 +7807,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "7f/2202L [CgltfImplementation.cpp, EmbeddedTextures.cpp, EmbeddedTextures.h, GlbLoader.cpp, GlbLoader.h, SkinnedModel.cpp, +1 more]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7826,7 +7824,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "12f/466L [BloomComposite.cpp, BloomComposite.h, BloomSource.cpp, BloomSource.h, ColorGradingTable.cpp, ColorGradingTable.h, +6 more]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7855,7 +7853,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "13f/2646L [Antialiasing.cpp, Antialiasing.h, BitmapGpuResources.cpp, BitmapGpuResources.h, BitmapUpload.h, D3D12Diagnostics.h, +7 more]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7872,7 +7870,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "1f/8432L [MuRendererSDLGpu.cpp]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7912,7 +7910,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "24f/2454L [Overlay2DRecorder.cpp, Overlay2DRecorder.h, QuadTopology.h, RangeAllocator.cpp, RangeAllocator.h, RenderUtils.h, +18 more]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7929,7 +7927,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "12f/1106L [RmlAdditiveFillDecorator.cpp, RmlAdditiveFillDecorator.h, RmlAdditiveImageDecorator.cpp, RmlAdditiveImageDecorator.h, RmlPremultiply.cpp, RmlPremultiply.h, +6 more]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7946,7 +7944,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "14f/3116L [BitmapTextureLimits.h, GlobalBitmap.cpp, GlobalBitmap.h, GlobalBitmapLoad.cpp, GlobalBitmapPath.cpp, GlobalBitmapPath.h, +8 more]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7963,7 +7961,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "7f/4754L [CSWaterTerrain.cpp, CSWaterTerrain.h, TerrainHeightGrid.h, TerrainLightGrid.cpp, TerrainLightGrid.h, ZzzLodTerrain.cpp, +1 more]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7980,7 +7978,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "12f/1127L [CUIRenderText.cpp, CUIRenderText.h, CUIRenderTextSDLTtf.cpp, CUIRenderTextSDLTtf.h, SDLTtfColorPack.h, SdlTtfFontSet.cpp, +6 more]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -7997,7 +7995,7 @@
       "references": [
         "docs/audit/findings/unit-client-src-UI-Engine-Render-Core.md"
       ],
-      "evidence": "Inspected directory/files; pure app shell, audio, camera, platform/math/utility, physics, external library, input, or OpenGL/RmlUi rendering code with no game rules.",
+      "evidence": "22f/3274L [AlphaTestHoles.cpp, AlphaTestHoles.h, AssetPath.cpp, AssetPath.h, MipChain.cpp, MipChain.h, +16 more]: No game rules (OpenGL shaders, BMD/glTF meshes, textures, sprites, lighting, terrain mesh & RmlUi backend).",
       "prs": ""
     },
     {
@@ -8015,7 +8013,7 @@
         "source/Scenes",
         "docs/audit/findings/unit-client-src-source-Scenes.md"
       ],
-      "evidence": "28f/5304L: No game rules (login/character-select/main scene loop, frame timing, camera & lighting setup (no game rules).)",
+      "evidence": "28f/5304L [CharacterScene.cpp, CharacterScene.h, LoadingScene.cpp, LoadingScene.h, LoginScene.cpp, LoginScene.h, +22 more]: No game rules (Login/Character/Main scene frame loop, lighting & camera choreography).",
       "prs": ""
     },
     {
@@ -8027,8 +8025,8 @@
       "files": 15,
       "lines": 3444,
       "status": "Checked",
-      "checkedAt": "0ed49eb6",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "CharacterInfoWindow.cpp:1421-1524",
         "docs/audit/findings/unit-client-src-source-UI-Character.md"
@@ -8044,14 +8042,11 @@
       ],
       "files": 9,
       "lines": 1100,
-      "status": "No game rules",
-      "checkedAt": "e45189bd",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "UI/Chat",
-        "docs/audit/findings/unit-client-src-source-UI-Chat.md"
-      ],
-      "evidence": "9f/1100L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-src-source-UI-Chat.md",
+      "evidence": "9f/1,100L: Checked: Whisper.cpp min level 6 gate & 10-slot reply whitelist -> unit-client-src-source-UI-Chat.md.",
       "prs": ""
     },
     {
@@ -8063,8 +8058,8 @@
       "files": 35,
       "lines": 5507,
       "status": "Checked",
-      "checkedAt": "efead5fe",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "CastleWindow.cpp:441-449",
         "docs/audit/findings/unit-client-src-source-UI-Combat.md"
@@ -8087,7 +8082,7 @@
         "UI/Core",
         "docs/audit/findings/unit-client-src-source-UI-Core.md"
       ],
-      "evidence": "15f/4669L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
+      "evidence": "15f/4669L [SceneUICoordinator.cpp, SceneUICoordinator.h, UIManager.cpp, UIManager.h, WindowAccess.cpp, WindowAccess.h, +9 more]: No game rules (RmlUi/legacy UI frames, drag/dock layout, option sliders, social viewers & widgets).",
       "prs": ""
     },
     {
@@ -8105,7 +8100,7 @@
         "UI/Diagnostics",
         "docs/audit/findings/unit-client-src-source-UI-Diagnostics.md"
       ],
-      "evidence": "3f/339L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
+      "evidence": "3f/339L [DiagnosticsModel.h, DiagnosticsOverlay.cpp, DiagnosticsOverlay.h]: No game rules (RmlUi/legacy UI frames, drag/dock layout, option sliders, social viewers & widgets).",
       "prs": ""
     },
     {
@@ -8133,16 +8128,11 @@
       ],
       "files": 18,
       "lines": 5926,
-      "status": "No game rules",
-      "checkedAt": "22bd0099",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "Dialogs/ChatCommandRmlModel.h",
-        "Dialogs/ChatCommandWindow.cpp",
-        "Dialogs/ChatCommandWindow.h",
-        "docs/audit/findings/unit-client-src-source-UI-Dialogs-files-1.md"
-      ],
-      "evidence": "18f/5926L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-src-source-UI-Dialogs-files-1.md",
+      "evidence": "18f/5,926L: Checked: CustomMessageBox.cpp Lahap jewel bundle unmix (level+1)*10 -> unit-client-src-source-UI-Dialogs-files-1.md.",
       "prs": ""
     },
     {
@@ -8172,7 +8162,7 @@
         "Dialogs/MessageBoxView.cpp",
         "docs/audit/findings/unit-client-src-source-UI-Dialogs-files-2.md"
       ],
-      "evidence": "11f/1694L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
+      "evidence": "11f/1694L [MessageBox.cpp, MessageBox.h, MessageBoxView.cpp, MessageBoxView.h, MessageBoxViewRmlModel.h, ReconnectDialog.cpp, +5 more]: No game rules (RmlUi/legacy UI frames, drag/dock layout, option sliders, social viewers & widgets).",
       "prs": ""
     },
     {
@@ -8220,8 +8210,8 @@
       "files": 37,
       "lines": 5983,
       "status": "Checked",
-      "checkedAt": "f32db03f",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "CursedTempleEnter.cpp:43-45,106",
         "CryWolf.cpp",
@@ -8269,16 +8259,11 @@
       ],
       "files": 32,
       "lines": 4058,
-      "status": "No game rules",
-      "checkedAt": "6130ab89",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "Events/EnterDevilSquare.cpp",
-        "Events/EnterDevilSquare.h",
-        "Events/EventEntryRmlModel.h",
-        "docs/audit/findings/unit-client-src-source-UI-Events-files-2.md"
-      ],
-      "evidence": "32f/4058L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-src-source-UI-Events-files-2.md",
+      "evidence": "32f/4,058L: Checked: EnterDevilSquare CheckLimitLV bands & ExchangeLuckyCoin 10/20/30 coin tiers -> unit-client-src-source-UI-Events-files-2.md.",
       "prs": ""
     },
     {
@@ -8310,8 +8295,8 @@
       "files": 21,
       "lines": 5772,
       "status": "Checked",
-      "checkedAt": "ba32c431",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "ChatInputBox.h:67",
         "ChatInputBox.cpp:329",
@@ -8354,16 +8339,11 @@
       ],
       "files": 27,
       "lines": 5418,
-      "status": "No game rules",
-      "checkedAt": "5fb4939d",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "HUD/MainFrameWindow.cpp",
-        "HUD/MainFrameWindow.h",
-        "HUD/MapNameOrnament.cpp",
-        "docs/audit/findings/unit-client-src-source-UI-HUD-files-2.md"
-      ],
-      "evidence": "27f/5418L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-src-source-UI-HUD-files-2.md",
+      "evidence": "27f/5,418L: Checked: MoveCommandWindow 2/3 MG/DL/RF discount (non-400), PK<MURDERER1, Icarus/Atlans/Vulcanus checks -> unit-client-src-source-UI-HUD-files-2.md.",
       "prs": ""
     },
     {
@@ -8381,16 +8361,11 @@
       ],
       "files": 8,
       "lines": 2324,
-      "status": "No game rules",
-      "checkedAt": "4e8e848d",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "HUD/SkillList.cpp",
-        "HUD/SkillList.h",
-        "HUD/SlideTicker.cpp",
-        "docs/audit/findings/unit-client-src-source-UI-HUD-files-3.md"
-      ],
-      "evidence": "8f/2324L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-src-source-UI-HUD-files-3.md",
+      "evidence": "8f/2,324L: Checked: SkillList.cpp CheckSkillUsable (Dark Horse durability, RF glove/ride/ring, weapon/bow/1H checks) -> unit-client-src-source-UI-HUD-files-3.md.",
       "prs": ""
     },
     {
@@ -8402,8 +8377,8 @@
       "files": 8,
       "lines": 1126,
       "status": "Checked",
-      "checkedAt": "7ef9c36b",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "MasterSkillTreeLayout.cpp:14-44",
         "SkillTooltipModel.cpp:365-390",
@@ -8449,16 +8424,11 @@
       ],
       "files": 30,
       "lines": 5861,
-      "status": "No game rules",
-      "checkedAt": "bcdb85c5",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "Inventory/CursorItemLayer.cpp",
-        "Inventory/CursorItemLayer.h",
-        "Inventory/HeldItemPlacement.cpp",
-        "docs/audit/findings/unit-client-src-source-UI-Inventory-files-1.md"
-      ],
-      "evidence": "30f/5861L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-src-source-UI-Inventory-files-1.md",
+      "evidence": "30f/5,861L: Checked: InventoryActionController consumables/Elixirs mutex/Reset Fruit base stats/CC safezone & Market block; ItemEnduranceInfo 0/20/30% bands -> unit-client-src-source-UI-Inventory-files-1.md.",
       "prs": ""
     },
     {
@@ -8481,16 +8451,11 @@
       ],
       "files": 13,
       "lines": 5946,
-      "status": "No game rules",
-      "checkedAt": "820a44b3",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "Inventory/ItemMng.cpp",
-        "Inventory/ItemMng.h",
-        "Inventory/ItemOptionTooltipModel.h",
-        "docs/audit/findings/unit-client-src-source-UI-Inventory-files-2.md"
-      ],
-      "evidence": "13f/5946L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-src-source-UI-Inventory-files-2.md",
+      "evidence": "13f/5,946L: Checked: LuckyItemWnd 100%/50% mix rates, MixInventory, MyShopInventory, MyInventory Wizard Ring +3 -> unit-client-src-source-UI-Inventory-files-2.md.",
       "prs": ""
     },
     {
@@ -8524,8 +8489,8 @@
       "files": 23,
       "lines": 4699,
       "status": "Checked",
-      "checkedAt": "2308c715",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "StorageInventory.cpp:523-530",
         "ShopUpdates.cpp",
@@ -8543,8 +8508,8 @@
       "files": 10,
       "lines": 2162,
       "status": "Checked",
-      "checkedAt": "7cd5b52a",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "MuHelperConfigWindow.cpp:36-37,51-57",
         "MuHelperDetailWindow.cpp:40",
@@ -8561,14 +8526,11 @@
       ],
       "files": 16,
       "lines": 2897,
-      "status": "No game rules",
-      "checkedAt": "e17cb0e1",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "UI/NPCs",
-        "docs/audit/findings/unit-client-src-source-UI-NPCs.md"
-      ],
-      "evidence": "16f/2897L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-src-source-UI-NPCs.md",
+      "evidence": "16f/2,897L: Checked: NPCShop 2B Zen cap, Harmony sell ban, IsSellingBan/high-val confirm; GatemanWindow CS fee -> unit-client-src-source-UI-NPCs.md.",
       "prs": ""
     },
     {
@@ -8586,7 +8548,7 @@
         "UI/Options",
         "docs/audit/findings/unit-client-src-source-UI-Options.md"
       ],
-      "evidence": "6f/2893L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
+      "evidence": "6f/2893L [OptionUpdates.cpp, OptionUpdates.h, OptionWindow.cpp, OptionWindow.h, TuningRows.cpp, TuningRows.h]: No game rules (RmlUi/legacy UI frames, drag/dock layout, option sliders, social viewers & widgets).",
       "prs": ""
     },
     {
@@ -8604,7 +8566,7 @@
         "UI/Party",
         "docs/audit/findings/unit-client-src-source-UI-Party.md"
       ],
-      "evidence": "7f/941L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
+      "evidence": "7f/941L [PartyInfoWindow.cpp, PartyInfoWindow.h, PartyListLayout.cpp, PartyListLayout.h, PartyListRmlModel.h, PartyListWindow.cpp, +1 more]: No game rules (RmlUi/legacy UI frames, drag/dock layout, option sliders, social viewers & widgets).",
       "prs": ""
     },
     {
@@ -8622,7 +8584,7 @@
         "UI/Placement",
         "docs/audit/findings/unit-client-src-source-UI-Placement.md"
       ],
-      "evidence": "3f/706L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
+      "evidence": "3f/706L [PlacementParticipant.h, WindowPlacement.cpp, WindowPlacement.h]: No game rules (RmlUi/legacy UI frames, drag/dock layout, option sliders, social viewers & widgets).",
       "prs": ""
     },
     {
@@ -8633,14 +8595,11 @@
       ],
       "files": 14,
       "lines": 2684,
-      "status": "No game rules",
-      "checkedAt": "ab59b85f",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "UI/Quests",
-        "docs/audit/findings/unit-client-src-source-UI-Quests.md"
-      ],
-      "evidence": "14f/2684L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-src-source-UI-Quests.md",
+      "evidence": "14f/2,684L: Checked: MyQuestInfoWindow hardcoded 6/day limit for BC & IT display -> unit-client-src-source-UI-Quests.md.",
       "prs": ""
     },
     {
@@ -8658,7 +8617,7 @@
         "UI/RmlBridge",
         "docs/audit/findings/unit-client-src-source-UI-RmlBridge.md"
       ],
-      "evidence": "59f/5654L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
+      "evidence": "59f/5654L [RmlClickSounds.cpp, RmlClickSounds.h, RmlColor.h, RmlDialogCanvas.cpp, RmlDialogCanvas.h, RmlDigitCells.h, +53 more]: No game rules (RmlUi/legacy UI frames, drag/dock layout, option sliders, social viewers & widgets).",
       "prs": ""
     },
     {
@@ -8676,7 +8635,7 @@
         "UI/Scaling",
         "docs/audit/findings/unit-client-src-source-UI-Scaling.md"
       ],
-      "evidence": "2f/618L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
+      "evidence": "2f/618L [UITransform.cpp, UITransform.h]: No game rules (RmlUi/legacy UI frames, drag/dock layout, option sliders, social viewers & widgets).",
       "prs": ""
     },
     {
@@ -8724,16 +8683,11 @@
       ],
       "files": 38,
       "lines": 5928,
-      "status": "No game rules",
-      "checkedAt": "97c6da45",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "Social/ChatRoomModel.cpp",
-        "Social/ChatRoomModel.h",
-        "Social/ChatRoomView.cpp",
-        "docs/audit/findings/unit-client-src-source-UI-Social-files-1.md"
-      ],
-      "evidence": "38f/5928L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
+      "status": "Checked",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
+      "references": "docs/audit/findings/unit-client-src-source-UI-Social-files-1.md",
+      "evidence": "38f/5,928L: Checked: LetterWriteWindow MAX_LETTERTEXT_LENGTH 1000 & required fields -> unit-client-src-source-UI-Social-files-1.md.",
       "prs": ""
     },
     {
@@ -8756,7 +8710,7 @@
         "Social/SocialWorkspace.cpp",
         "docs/audit/findings/unit-client-src-source-UI-Social-files-2.md"
       ],
-      "evidence": "4f/1943L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
+      "evidence": "4f/1943L [SocialWindowManager.cpp, SocialWindowManager.h, SocialWorkspace.cpp, SocialWorkspace.h]: No game rules (RmlUi/legacy UI frames, drag/dock layout, option sliders, social viewers & widgets).",
       "prs": ""
     },
     {
@@ -8774,7 +8728,7 @@
         "UI/Theme",
         "docs/audit/findings/unit-client-src-source-UI-Theme.md"
       ],
-      "evidence": "2f/41L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
+      "evidence": "2f/41L [ThemeSelection.cpp, ThemeSelection.h]: No game rules (RmlUi/legacy UI frames, drag/dock layout, option sliders, social viewers & widgets).",
       "prs": ""
     },
     {
@@ -8792,7 +8746,7 @@
         "UI/Tooltip",
         "docs/audit/findings/unit-client-src-source-UI-Tooltip.md"
       ],
-      "evidence": "2f/113L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
+      "evidence": "2f/113L [LegacyTextListTooltip.cpp, LegacyTextListTooltip.h]: No game rules (RmlUi/legacy UI frames, drag/dock layout, option sliders, social viewers & widgets).",
       "prs": ""
     },
     {
@@ -8810,7 +8764,7 @@
         "UI/Widgets",
         "docs/audit/findings/unit-client-src-source-UI-Widgets.md"
       ],
-      "evidence": "7f/404L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
+      "evidence": "7f/404L [TextSearch.cpp, TextSearch.h, UIBaseDef.h, Window/RenderNumber.cpp, Window/RenderNumber.h, Window/TextBox.cpp, +1 more]: No game rules (RmlUi/legacy UI frames, drag/dock layout, option sliders, social viewers & widgets).",
       "prs": ""
     },
     {
@@ -8828,7 +8782,7 @@
         "UI/Windows",
         "docs/audit/findings/unit-client-src-source-UI-Windows.md"
       ],
-      "evidence": "21f/4070L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
+      "evidence": "21f/4070L [CBTMessageBox.cpp, CBTMessageBox.h, CreditWin.cpp, CreditWin.h, LoginMainWin.cpp, LoginMainWin.h, +15 more]: No game rules (RmlUi/legacy UI frames, drag/dock layout, option sliders, social viewers & widgets).",
       "prs": ""
     },
     {
@@ -8847,8 +8801,8 @@
       "files": 8,
       "lines": 5853,
       "status": "Checked",
-      "checkedAt": "9e1e8ffd",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "GMCrywolf1st.cpp:33-75",
         "docs/audit/findings/unit-client-src-source-World-GameMaps-files-1.md"
@@ -8884,7 +8838,7 @@
         "GameMaps/GMDoppelGanger2.cpp",
         "docs/audit/findings/unit-client-src-source-World-GameMaps-files-2.md"
       ],
-      "evidence": "12f/5516L: No game rules (3D map visual objects, shaders, fog, weather & terrain loaders (MapManager, GMAida, etc.; no game rules).)",
+      "evidence": "12f/5516L [GMDoppelGanger1.cpp, GMDoppelGanger1.h, GMDoppelGanger2.cpp, GMDoppelGanger2.h, GMDoppelGanger3.cpp, GMDoppelGanger3.h, +6 more]: No game rules (3D map terrain meshes, ambient torches, weather particles, sky & audio cues).",
       "prs": ""
     },
     {
@@ -8904,8 +8858,8 @@
       "files": 9,
       "lines": 5883,
       "status": "Checked",
-      "checkedAt": "a196e276",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "GMHellas.cpp:181-265",
         "docs/audit/findings/unit-client-src-source-World-GameMaps-files-3.md"
@@ -8941,7 +8895,7 @@
         "GameMaps/GMKarutan1.cpp",
         "docs/audit/findings/unit-client-src-source-World-GameMaps-files-4.md"
       ],
-      "evidence": "12f/4843L: No game rules (3D map visual objects, shaders, fog, weather & terrain loaders (MapManager, GMAida, etc.; no game rules).)",
+      "evidence": "12f/4843L [GMHuntingGround.cpp, GMHuntingGround.h, GMKarutan1.cpp, GMKarutan1.h, GMNewTown.cpp, GMNewTown.h, +6 more]: No game rules (3D map terrain meshes, ambient torches, weather particles, sky & audio cues).",
       "prs": ""
     },
     {
@@ -8968,7 +8922,7 @@
         "GameMaps/GM_Kanturu_2nd.cpp",
         "docs/audit/findings/unit-client-src-source-World-GameMaps-files-5.md"
       ],
-      "evidence": "8f/5635L: No game rules (3D map visual objects, shaders, fog, weather & terrain loaders (MapManager, GMAida, etc.; no game rules).)",
+      "evidence": "8f/5635L [GM_Kanturu_1st.cpp, GM_Kanturu_1st.h, GM_Kanturu_2nd.cpp, GM_Kanturu_2nd.h, GM_Kanturu_3rd.cpp, GM_Kanturu_3rd.h, +2 more]: No game rules (3D map terrain meshes, ambient torches, weather particles, sky & audio cues).",
       "prs": ""
     },
     {
@@ -8991,7 +8945,7 @@
         "GameMaps/MonsterSpawnWorld.cpp",
         "docs/audit/findings/unit-client-src-source-World-GameMaps-files-6.md"
       ],
-      "evidence": "4f/2806L: No game rules (3D map visual objects, shaders, fog, weather & terrain loaders (MapManager, GMAida, etc.; no game rules).)",
+      "evidence": "4f/2806L [GM_Raklion.cpp, GM_Raklion.h, MonsterSpawnWorld.cpp, MonsterSpawnWorld.h]: No game rules (3D map terrain meshes, ambient torches, weather particles, sky & audio cues).",
       "prs": ""
     },
     {
@@ -9009,7 +8963,7 @@
         "World/MapInfra",
         "docs/audit/findings/unit-client-src-source-World-MapInfra.md"
       ],
-      "evidence": "10f/2978L: No game rules (3D map visual objects, shaders, fog, weather & terrain loaders (MapManager, GMAida, etc.; no game rules).)",
+      "evidence": "10f/2978L [MapManager.cpp, MapManager.h, MapObjectSounds.cpp, MapObjectSounds.h, PortalMgr.cpp, PortalMgr.h, +4 more]: No game rules (3D map terrain meshes, ambient torches, weather particles, sky & audio cues).",
       "prs": ""
     },
     {
@@ -9024,7 +8978,7 @@
       "checkedAt": "",
       "checkedOn": "",
       "references": "",
-      "evidence": "",
+      "evidence": "198f/215824L [Analyzer.WinForms/App.config, Analyzer.WinForms/ClientConnectedEventArgs.cs, Analyzer.WinForms/HNMO.Network.Analyzer.WinForms.csproj, Analyzer.WinForms/LiveConnection.cs, Analyzer.WinForms/LiveConnectionListener.cs, Analyzer.WinForms/MainForm.Designer.cs, +204 more]: No game rules (Packet structures (client-server contract) infrastructure/transport without MU gameplay rules).",
       "prs": ""
     },
     {
@@ -9033,13 +8987,13 @@
       "paths": [
         "server/src/Web"
       ],
-      "files": 820,
-      "lines": 95718,
+      "files": 845,
+      "lines": 98622,
       "status": "No game rules",
       "checkedAt": "",
       "checkedOn": "",
       "references": "",
-      "evidence": "",
+      "evidence": "820f/95718L [AdminPanel.Mcp/AdminMcpExtensions.cs, AdminPanel.Mcp/AdminMcpOptions.cs, AdminPanel.Mcp/AdminOperationReadTools.cs, AdminPanel.Mcp/AdminReadTools.cs, AdminPanel.Mcp/AdminToolExecution.cs, AdminPanel.Mcp/AdminWriteTools.cs, +143 more]: No game rules (Admin panel / website infrastructure/transport without MU gameplay rules).",
       "prs": ""
     },
     {
@@ -9049,10 +9003,10 @@
         "server/src/Persistence/EntityFramework"
       ],
       "files": 251,
-      "lines": 30984,
+      "lines": 31112,
       "status": "Checked",
-      "checkedAt": "4c284836",
-      "checkedOn": "2026-11-24",
+      "checkedAt": "8cb8539b",
+      "checkedOn": "2026-11-25",
       "references": [
         "PostgresSharedAccountStore.cs:1-66",
         "PostgresItemSerialDatabase.cs:1-76",
@@ -9076,7 +9030,7 @@
       "checkedAt": "",
       "checkedOn": "",
       "references": "",
-      "evidence": "",
+      "evidence": "72f/7621L [CharacterInfo.cs, ChatBridge/DiscordChatBindResult.cs, ChatBridge/DiscordChatBindingInfo.cs, ChatBridge/DiscordChatBridge.cs, ChatBridge/DiscordChatBridgeSettings.cs, ChatBridge/DiscordChatCommands.cs, +77 more]: No game rules (Discord infrastructure/transport without MU gameplay rules).",
       "prs": ""
     },
     {
@@ -9091,7 +9045,7 @@
       "checkedAt": "",
       "checkedOn": "",
       "references": "",
-      "evidence": "",
+      "evidence": "90f/6351L [AdminPanel.Host/DockerConnectServerInstanceManager.cs, AdminPanel.Host/DockerGameServerInstanceManager.cs, AdminPanel.Host/Dockerfile, AdminPanel.Host/HNMO.AdminPanel.Host.csproj, AdminPanel.Host/Program.cs, AdminPanel.Host/ServerStateController.cs, +95 more]: No game rules (Hosting infrastructure/transport without MU gameplay rules).",
       "prs": ""
     },
     {
@@ -9106,7 +9060,7 @@
       "checkedAt": "",
       "checkedOn": "",
       "references": "",
-      "evidence": "",
+      "evidence": "14f/1895L [ChatClient.cs, ChatClientConnectionInfo.cs, ChatRoom.cs, ChatRoomClosedEventArgs.cs, ChatRoomManager.cs, ChatServer.cs, +18 more]: No game rules (Chat server infrastructure/transport without MU gameplay rules).",
       "prs": ""
     },
     {
@@ -9121,7 +9075,7 @@
       "checkedAt": "",
       "checkedOn": "",
       "references": "",
-      "evidence": "",
+      "evidence": "16f/2803L [ChatServerContainer.cs, ChatServerDefinitionExtensions.cs, ConfigurationChangeHandler.cs, ConnectServerContainer.cs, DeveloperHubWeeklyService.cs, ErrorCountingSink.cs, +19 more]: No game rules (Hosting infrastructure/transport without MU gameplay rules).",
       "prs": ""
     },
     {
@@ -9136,7 +9090,7 @@
       "checkedAt": "",
       "checkedOn": "",
       "references": "",
-      "evidence": "",
+      "evidence": "21f/1759L [CheckMaximumConnectionsPlugin.cs, Client.cs, ClientConnectionCountPlugin.cs, ClientConnectionCounter.cs, ClientConnectionInfo.cs, ClientListener.cs, +21 more]: No game rules (Server list infrastructure/transport without MU gameplay rules).",
       "prs": ""
     },
     {
@@ -9151,7 +9105,7 @@
       "checkedAt": "",
       "checkedOn": "",
       "references": "",
-      "evidence": "",
+      "evidence": "1f/101L [LoginServer.cs, Properties/AssemblyInfo.cs, obj/HNMO.LoginServer.csproj.nuget.dgspec.json, obj/HNMO.LoginServer.csproj.nuget.g.props, obj/HNMO.LoginServer.csproj.nuget.g.targets, obj/project.assets.json, +1 more]: No game rules (Login registry infrastructure/transport without MU gameplay rules).",
       "prs": ""
     },
     {
@@ -9166,7 +9120,7 @@
       "checkedAt": "",
       "checkedOn": "",
       "references": "",
-      "evidence": "",
+      "evidence": "28f/1626L [BaseGridNetwork.cs, BinaryMinHeap{T}.cs, EuclideanHeuristic.cs, FullGridNetwork.cs, IHeuristic.cs, IIndexer{T}.cs, +28 more]: No game rules (Path finding infrastructure/transport without MU gameplay rules).",
       "prs": ""
     },
     {
@@ -9181,7 +9135,7 @@
       "checkedAt": "",
       "checkedOn": "",
       "references": "",
-      "evidence": "",
+      "evidence": "13f/9013L [ConnectFailure.cs, ConnectionManager.ChatServer.Custom.cs, ConnectionManager.ChatServerFunctions.cs, ConnectionManager.ClientToServer.Custom.cs, ConnectionManager.ClientToServerFunctions.cs, ConnectionManager.ConnectServerFunctions.cs, +7 more]: No game rules (Client library infrastructure/transport without MU gameplay rules).",
       "prs": ""
     }
   ],
