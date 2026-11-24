@@ -1,5 +1,5 @@
 {
-  "generatedAt": "d9f71980",
+  "generatedAt": "eaef5c8d",
   "maxLines": 6000,
   "units": [
     {
@@ -1717,11 +1717,11 @@
       ],
       "files": 18,
       "lines": 2202,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "eaef5c8d",
+      "checkedOn": "2026-11-24",
+      "references": "HNMO Guilds system + S6/S9 baseline (docs/audit/references/guild-and-alliance-s6-s9.md)",
+      "evidence": "Read all 18 files in full; see docs/audit/findings/unit-server-src-GameLogic-PlugIns-Guilds.md.",
       "prs": ""
     },
     {
