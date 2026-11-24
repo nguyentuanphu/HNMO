@@ -1,5 +1,5 @@
 {
-  "generatedAt": "e45189bd",
+  "generatedAt": "efead5fe",
   "maxLines": 6000,
   "units": [
     {
@@ -8062,11 +8062,14 @@
       ],
       "files": 35,
       "lines": 5507,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "efead5fe",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "CastleWindow.cpp:441-449",
+        "docs/audit/findings/unit-client-src-source-UI-Combat.md"
+      ],
+      "evidence": "35f/5507L: Castle Siege tax management UI reads/applies NPC & Chaos Goblin tax percentages matching server CastleSiege rules.",
       "prs": ""
     },
     {
