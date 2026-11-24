@@ -1,5 +1,5 @@
 {
-  "generatedAt": "79cd659e",
+  "generatedAt": "668a5588",
   "maxLines": 6000,
   "units": [
     {
@@ -2077,11 +2077,13 @@
       ],
       "files": 12,
       "lines": 1263,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "668a5588",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "None (custom HNMO feature)"
+      ],
+      "evidence": "All 12 Timetable files read in full. Verified DST-aware schedule resolution, source collection, ASCII-escaped JSON serialization, and locked winner history. See docs/audit/findings/unit-server-src-GameLogic-PlugIns-Timetable.md.",
       "prs": ""
     },
     {
@@ -2107,11 +2109,13 @@
       ],
       "files": 13,
       "lines": 1089,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "668a5588",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "None (custom HNMO feature)"
+      ],
+      "evidence": "All 13 TopUpMilestones files read in full. Verified idempotent credit deduplication, atomic owed-item queuing under store.Lock, and HnmoStateStore persistence. See docs/audit/findings/unit-server-src-GameLogic-PlugIns-TopUpMilestones.md.",
       "prs": ""
     },
     {
