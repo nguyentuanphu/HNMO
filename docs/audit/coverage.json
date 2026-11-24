@@ -1,5 +1,5 @@
 {
-  "generatedAt": "ab59b85f",
+  "generatedAt": "6ef85ca4",
   "maxLines": 6000,
   "units": [
     {
@@ -8651,11 +8651,14 @@
       ],
       "files": 59,
       "lines": 5654,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "6ef85ca4",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "UI/RmlBridge",
+        "docs/audit/findings/unit-client-src-source-UI-RmlBridge.md"
+      ],
+      "evidence": "59f/5654L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
       "prs": ""
     },
     {
