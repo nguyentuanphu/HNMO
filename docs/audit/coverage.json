@@ -1,5 +1,5 @@
 {
-  "generatedAt": "57956c17",
+  "generatedAt": "dfaa854f",
   "maxLines": 6000,
   "units": [
     {
@@ -7089,11 +7089,16 @@
       ],
       "files": 11,
       "lines": 1409,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "dfaa854f",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Items/PersonalShopCurrency.h",
+        "Items/PersonalShopCurrencyName.cpp",
+        "Items/PersonalShopTitleImp.cpp",
+        "docs/audit/findings/unit-client-src-source-GameLogic-Items-files-2.md"
+      ],
+      "evidence": "11f/1409L: No game rules (client FX/sound/buff-visuals/command-dispatch/party-pet animation & social helpers (no gameplay balance rules).)",
       "prs": ""
     },
     {
