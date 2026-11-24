@@ -1,5 +1,5 @@
 {
-  "generatedAt": "9bb8e889",
+  "generatedAt": "4c299903",
   "maxLines": 6000,
   "units": [
     {
@@ -740,11 +740,11 @@
       ],
       "files": 8,
       "lines": 598,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "4c299903",
+      "checkedOn": "2026-11-24",
+      "references": "docs/audit/references/common-server-and-character-rules-s6-s9.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Character.md",
       "prs": ""
     },
     {
@@ -905,11 +905,11 @@
       ],
       "files": 2,
       "lines": 78,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
+      "status": "Checked",
+      "checkedAt": "4c299903",
+      "checkedOn": "2026-11-24",
       "references": "",
-      "evidence": "",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlayerActions-MuHelper.md",
       "prs": ""
     },
     {
@@ -2227,11 +2227,11 @@
       ],
       "files": 1,
       "lines": 105,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
+      "status": "Checked",
+      "checkedAt": "4c299903",
+      "checkedOn": "2026-11-24",
       "references": "",
-      "evidence": "",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-Seasons.md",
       "prs": ""
     },
     {
