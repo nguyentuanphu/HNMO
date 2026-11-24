@@ -1,5 +1,5 @@
 {
-  "generatedAt": "6ec9f6ab",
+  "generatedAt": "e8eeb6eb",
   "maxLines": 6000,
   "units": [
     {
@@ -3942,11 +3942,15 @@
       ],
       "files": 3,
       "lines": 658,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "e8eeb6eb",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "the Season 6/9 suites' item list files",
+        "the Season 6/9 suites' gate settings files",
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-Version075-TestAccounts.md"
+      ],
+      "evidence": "Read all 3 files (658 lines) in Version075/TestAccounts; verified item IDs and spawn gate bounds against S6/S9 suites: docs/audit/findings/unit-server-src-Persistence-Initialization-Version075-TestAccounts.md",
       "prs": ""
     },
     {
