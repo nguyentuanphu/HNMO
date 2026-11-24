@@ -1,5 +1,5 @@
 {
-  "generatedAt": "5004ab69",
+  "generatedAt": "310902ef",
   "maxLines": 6000,
   "units": [
     {
@@ -920,11 +920,11 @@
       ],
       "files": 4,
       "lines": 270,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "310902ef",
+      "checkedOn": "2026-11-24",
+      "references": "S6/S9 CommonServer.cfg & IGC_Common.ini (docs/audit/references/party-exp-and-pk.md)",
+      "evidence": "Read all 4 files in full; see docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Party.md.",
       "prs": ""
     },
     {
