@@ -1,5 +1,5 @@
 {
-  "generatedAt": "bb49af7a",
+  "generatedAt": "3a83e4a4",
   "maxLines": 6000,
   "units": [
     {
@@ -7283,11 +7283,14 @@
       ],
       "files": 9,
       "lines": 835,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "3a83e4a4",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "GameShop/FileDownloader",
+        "docs/audit/findings/unit-client-src-source-GameShop-FileDownloader.md"
+      ],
+      "evidence": "9f/835L: No game rules (CashShop RmlUi presentation, CDN script downloader & UI message boxes (server validates prices/purchases).)",
       "prs": ""
     },
     {
