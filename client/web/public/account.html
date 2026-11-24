@@ -104,7 +104,20 @@
         <div id="accountHelp" role="note" data-at="help" hidden></div>
       </div>
       <nav id="accountNav" aria-label="Account sections / Các mục tài khoản" hidden></nav>
-      <select id="accountSectionSelect" aria-label="Account sections / Các mục tài khoản"></select>
+      <nav id="accountMobileNav" aria-label="Account sections / Các mục tài khoản" hidden>
+        <button type="button" data-mobile-section="overview"><span aria-hidden="true">◈</span><span data-at="mobileHome">Home</span></button>
+        <button type="button" data-mobile-section="characters"><span aria-hidden="true">♜</span><span data-at="characters">Characters</span></button>
+        <button type="button" data-mobile-section="items"><span aria-hidden="true">▣</span><span data-at="mobileItems">Items</span></button>
+        <button type="button" data-mobile-section="coins"><span aria-hidden="true">◇</span><span data-at="mobileWallet">Wallet</span></button>
+        <button type="button" id="accountMoreButton" aria-haspopup="dialog" aria-expanded="false" aria-controls="accountMore"><span aria-hidden="true">⋯</span><span data-at="mobileMore">More</span></button>
+      </nav>
+      <dialog id="accountMore" aria-labelledby="accountMoreTitle">
+        <div class="account-more-heading">
+          <h2 id="accountMoreTitle" data-at="menu">Account sections</h2>
+          <button id="accountMoreClose" type="button" autofocus data-at="storedItemClose">Close</button>
+        </div>
+        <div id="accountMoreSections"></div>
+      </dialog>
       <div id="accountPanels" hidden></div>
     </div>
 
