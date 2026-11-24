@@ -1,5 +1,5 @@
 {
-  "generatedAt": "1ab77a4c",
+  "generatedAt": "236277b0",
   "maxLines": 6000,
   "units": [
     {
@@ -6697,11 +6697,14 @@
       ],
       "files": 9,
       "lines": 3057,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "236277b0",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Engine/AI",
+        "docs/audit/findings/unit-client-src-source-Engine-AI.md"
+      ],
+      "evidence": "9f/3057L: No game rules (ambient boid flocking, FPS animation factor & A* client steering helpers (no game rules).)",
       "prs": ""
     },
     {
