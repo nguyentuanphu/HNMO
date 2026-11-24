@@ -1,5 +1,5 @@
 {
-  "generatedAt": "310902ef",
+  "generatedAt": "2492a534",
   "maxLines": 6000,
   "units": [
     {
@@ -479,11 +479,11 @@
       ],
       "files": 11,
       "lines": 1065,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "2492a534",
+      "checkedOn": "2026-11-24",
+      "references": "S6 IGC_GensSystem.ini, IGC_GensRanking.dat & S9 IGC_GensSystem.xml (docs/audit/references/gens-system-s6-s9.md)",
+      "evidence": "Read all 11 files in full; see docs/audit/findings/unit-server-src-GameLogic-Gens.md.",
       "prs": ""
     },
     {
@@ -815,11 +815,11 @@
       ],
       "files": 1,
       "lines": 334,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "2492a534",
+      "checkedOn": "2026-11-24",
+      "references": "S6/S9 Gens configs (docs/audit/references/gens-system-s6-s9.md)",
+      "evidence": "Read GensActions.cs (333 lines) in full; see docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Gens.md.",
       "prs": ""
     },
     {
