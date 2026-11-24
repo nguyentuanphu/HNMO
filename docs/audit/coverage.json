@@ -1,5 +1,5 @@
 {
-  "generatedAt": "eaef5c8d",
+  "generatedAt": "33ab82c2",
   "maxLines": 6000,
   "units": [
     {
@@ -845,11 +845,11 @@
       ],
       "files": 63,
       "lines": 3128,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "33ab82c2",
+      "checkedOn": "2026-11-24",
+      "references": "S6/S9 IGC_Common.ini & CommonServer.cfg (docs/audit/references/jewels-potions-fruits-s6-s9.md)",
+      "evidence": "Read all 63 files in full; see docs/audit/findings/unit-server-src-GameLogic-PlayerActions-ItemConsumeActions.md (TownPortal durability bug, ItemUpgrade RequiredItemLevel roll-order bug, cooldown 500ms vs 100ms, Antidote else-if).",
       "prs": ""
     },
     {
