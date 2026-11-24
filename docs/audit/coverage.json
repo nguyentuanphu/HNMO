@@ -1,5 +1,5 @@
 {
-  "generatedAt": "7cd5b52a",
+  "generatedAt": "e17cb0e1",
   "maxLines": 6000,
   "units": [
     {
@@ -8561,11 +8561,14 @@
       ],
       "files": 16,
       "lines": 2897,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "e17cb0e1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "UI/NPCs",
+        "docs/audit/findings/unit-client-src-source-UI-NPCs.md"
+      ],
+      "evidence": "16f/2897L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
       "prs": ""
     },
     {
