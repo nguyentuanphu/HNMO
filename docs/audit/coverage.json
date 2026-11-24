@@ -1,5 +1,5 @@
 {
-  "generatedAt": "fc84e7ee",
+  "generatedAt": "26f0cd02",
   "maxLines": 6000,
   "units": [
     {
@@ -2002,11 +2002,11 @@
       ],
       "files": 21,
       "lines": 2505,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
+      "status": "Checked",
+      "checkedAt": "26f0cd02",
+      "checkedOn": "2026-11-24",
       "references": "",
-      "evidence": "",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-ResetOptions.md",
       "prs": ""
     },
     {
