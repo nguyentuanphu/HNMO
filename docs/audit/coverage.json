@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2ed5f768",
+  "generatedAt": "3e47d42d",
   "maxLines": 6000,
   "units": [
     {
@@ -7441,11 +7441,16 @@
       ],
       "files": 25,
       "lines": 2569,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "3e47d42d",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Server/CSMapServer.cpp",
+        "Server/CSMapServer.h",
+        "Server/FixedC1Packet.h",
+        "docs/audit/findings/unit-client-src-source-Network-Server-files-1.md"
+      ],
+      "evidence": "25f/2569L: No game rules (TCP/packet queue, auto-reconnect & S->C/C->S packet dispatch plumbing in WSclient (server validates actions).)",
       "prs": ""
     },
     {
