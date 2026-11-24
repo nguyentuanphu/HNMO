@@ -414,16 +414,53 @@
   IBSBanner.txt: S6=1 rows | S9=1 rows
   Npcname(eng): S6 txt=532 rows | S9 Npcname_eng.bmd=169520 bytes
 
-## Encoded .bmd table presence & byte sizes (S6 vs S9)
-  Item_eng.bmd: S6=688132 bytes | S9=786264 bytes
-  Skill_eng.bmd: S6=57204 bytes | S9=72804 bytes
-  BuffEffect_eng.bmd: S6=24972 bytes | S9=31924 bytes
-  Quest_eng.bmd: S6=148800 bytes | S9=148800 bytes
-  QuestProgress.bmd: S6=37515 bytes | S9=42886 bytes
-  NPCDialogue.bmd: S6=5104 bytes | S9=7392 bytes
-  SocketItem_eng.bmd: S6=15600 bytes | S9=16200 bytes
-  JewelOfHarmonyOption_eng.bmd: S6=5400 bytes | S9=135000 bytes
-  ItemSetOption_eng.bmd: S6=7044 bytes | S9=28054 bytes
-  ItemSetType.bmd: S6=32772 bytes | S9=49156 bytes
-  ItemAddOption.bmd: S6=131072 bytes | S9=131072 bytes
-  MonsterSkill.bmd: S6=2692 bytes | S9=3652 bytes
+## QuestWords_eng.bmd: S6=2288 strings, S9=2690 strings (+402 S9)
+
+## Remaining Shared Encoded .bmd Tables (S6 vs S9)
+  Text_eng.bmd: S6=123459B | S9=169898B [strings S6=3244 S9=4347]
+  Dialog_eng.bmd: S6=204800B | S9=204800B
+  ItemTooltipText_eng.bmd: S6=133124B | S9=208004B
+  ItemLevelTooltip_eng.bmd: S6=13060B | S9=14596B
+  MasterSkillTooltip_eng.bmd: S6=315396B | S9=413700B
+  JewelOfHarmonySmelt_eng.bmd: S6=557056B | S9=557056B
+  slide_eng.bmd: S6=41008B | S9=41008B
+  pet.bmd: S6=2512B | S9=2512B
+  PetData.bmd: S6=1540B | S9=1540B
+  MapCharacters.bmd: S6=3100B | S9=3696B
+  MasterSkillTree.bmd: S6=3217B | S9=3217B
+  Filter.bmd: S6=20004B | S9=20004B
+  FilterName.bmd: S6=10004B | S9=10004B
+  Glow.bmd: S6=122880B | S9=122880B
+  credit.bmd: S6=13200B | S9=13200B
+  ServerInfo.bmd: S6=331B | S9=349B
+  ServerList.bmd: S6=165B | S9=164B
+
+## Season 9-Only Encoded .bmd Rule & UI Tables
+  ArcaBattleBootyMix.bmd: S9=10x20 (208B)
+  ArcaBattleScript_eng.bmd: S9=13x264 (3440B) sample=[Another guild is trying to conquer the Obelisk., The barrier was destroyed. Hurry and conquer th]
+  AttributeVariation.bmd: S9=38x3140 (119328B) sample=[J, K, L]
+  BonusExp.bmd: S9=30x12 (368B)
+  EvolutionMonsterBox.bmd: S9=156x1 (164B)
+  ExcellentCommonOption_eng.bmd: S9=12x116 (1400B) sample=[ance of doing Excellent damage, creases attack power and magical damage, creases attack power and magical damage]
+  ExcellentWingOption_eng.bmd: S9=25x116 (2908B) sample=[crease Attack (Wizardry) Speed, crease Maximum AG, ance of Damage from Breaking Enemy's Defense]
+  HelpData_eng.bmd: S9=1x69632 (69636B)
+  InfoTooltip.bmd: S9=22x42 (932B)
+  InfoTooltipText_eng.bmd: S9=8x258 (2072B) sample=[ements that are weaker than Inherent Elements ar, aker Element < Weak Element < Inherent Element, Since No Element is weaker than Inherent Element]
+  ItemSetOptionText_eng.bmd: S9=255x102 (26018B) sample=[rease Strength, rease Agility, rease Energy]
+  ItemTRSData.bmd: S9=1310x32 (41928B) sample=[L?Y?, L?Y?]
+  Minimap_eng.bmd: S9=22x965 (21238B)
+  MuRummyCard.bmd: S9=35x60 (2108B)
+  MuRummyOption.bmd: S9=25x8 (208B)
+  MuRummySlot.bmd: S9=10x11 (118B)
+  MuunExchange.bmd: S9=108B
+  MuunInfo.bmd: S9=76x56 (4264B)
+  MuunMeshInfo.bmd: S9=49x300 (14708B)
+  MuunOption_eng.bmd: S9=37x560 (20728B)
+  MuunRenderInfo.bmd: S9=82x612 (50192B)
+  MuunTooltipInfo.bmd: S9=82x32 (2632B)
+  Npcname_eng.bmd: S9=169520B
+  PentagramJewelOptionValue_eng.bmd: S9=60x372 (22328B)
+  PentagramMixNeedSource.bmd: S9=30x92 (2768B)
+  PentagramOption_eng.bmd: S9=2608B
+  StatOption.bmd: S9=15x12 (188B)
+  StatOptionText_eng.bmd: S9=12x260 (3128B) sample=[Increases Attack Power by %d~%d, Increases Attack Success Rate by %d, Increases PVP Attack Success Rate by %d]

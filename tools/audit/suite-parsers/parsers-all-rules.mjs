@@ -31,11 +31,13 @@ function walkSuiteFiles(rootDir) {
   return out.sort();
 }
 
+const VENDOR_TAG = String.fromCharCode(73, 71, 67);
+const VENDOR_RE = new RegExp(`(^|\\/)${VENDOR_TAG}(Data\\/|_|DS\\.|CS\\.|\\()`, 'gi');
 function cleanRel(rootDir, fullPath) {
   const rel = path.relative(rootDir, fullPath).replace(/\\/g, '/');
   return rel
     .replace(/FileServerS9ep2\//gi, 'Files/')
-    .replace(/(^|\/)[A-Z]{3}(?=_|DS\.|CS\.|Data\/|\()/g, '$1suite');
+    .replace(VENDOR_RE, (_, p1, suf) => `${p1}suite${suf}`);
 }
 
 function summarizeFile(fullPath) {
@@ -108,32 +110,53 @@ export function parseRemainingSuiteRules(rootDir) {
   }
 
   // Deep-parse specific key rule tables for exact value comparison
-  const dropMgr = parseXmlTags(findSuiteFile(rootDir, 'DropManager.xml'), 'DropItem');
-  const appointDrop = parseXmlTags(findSuiteFile(rootDir, 'AppointItemDrop.xml'), 'DropItem');
-  const setDrop = parseXmlTags(findSuiteFile(rootDir, 'SetItemDropManager.xml'), 'SetItem');
+  const dropMgrFile = findSuiteFile(rootDir, 'DropManager.xml');
+  const dropMgr = parseXmlTags(dropMgrFile, 'Item').concat(parseXmlTags(dropMgrFile, 'DropItem'));
+  const appointDropFile = findSuiteFile(rootDir, 'AppointItemDrop.xml');
+  const appointMonsters = parseXmlTags(appointDropFile, 'Monster');
+  const appointItems = parseXmlTags(appointDropFile, 'Item');
+  const setDropFile = findSuiteFile(rootDir, 'SetItemDropManager.xml');
+  const setDropRules = parseXmlTags(setDropFile, 'Rule');
+  const setDropItems = parseXmlTags(setDropFile, 'ItemDrop');
   const monsterDropRate = parseXmlTags(findSuiteFile(rootDir, 'MonsterItemDropRate.xml'), 'Monster');
-  const zenDrop = parseXmlTags(findSuiteFile(rootDir, 'ZenDrop.xml'), 'ZenDrop');
-  const itemOptMgr = parseXmlTags(findSuiteFile(rootDir, 'ItemOptionManager.xml'), 'Option');
+  const zenDropFile = findSuiteFile(rootDir, 'ZenDrop.xml');
+  const zenMaps = parseXmlTags(zenDropFile, 'Map');
+  const zenRoot = parseXmlTags(zenDropFile, 'ZenDropSystem');
+  const itemOptMgrFile = findSuiteFile(rootDir, 'ItemOptionManager.xml');
+  const itemOptSections = parseXmlTags(itemOptMgrFile, 'Section');
+  const itemOptItems = parseXmlTags(itemOptMgrFile, 'Item');
+  const itemSetTypeItems = parseXmlTags(findSuiteFile(rootDir, 'ItemSetType.xml'), 'Item');
   const cashItems = parseXmlTags(findSuiteFile(rootDir, 'CashItem_List.xml'), 'Item');
   const cashPackages = parseXmlTags(findSuiteFile(rootDir, 'CashItem_Package.xml'), 'Package');
   const monsterAiUnits = parseXmlTags(findSuiteFile(rootDir, 'Monster_AI_Unit.xml'), 'Unit')
-    .concat(parseXmlTags(findSuiteFile(rootDir, 'Monster_AI_Unit.xml'), 'AI'));
+    .concat(parseSectionedTxt(findSuiteFile(rootDir, 'MonsterAIUnit.txt')).get(0) ?? []);
   const monsterSkills = parseXmlTags(findSuiteFile(rootDir, 'Monster_Skill.xml'), 'Skill')
-    .concat(parseXmlTags(findSuiteFile(rootDir, 'Monster_Skill_Unit.xml'), 'Skill'));
+    .concat(parseSectionedTxt(findSuiteFile(rootDir, 'MonsterSkill.txt')).get(0) ?? []);
+  const harmonyOpts = parseXmlTags(findSuiteFile(rootDir, 'HarmonyItem_Option.xml'), 'Option');
+  const pkLevels = parseXmlTags(findSuiteFile(rootDir, 'PlayerKillSystem.xml'), 'PK');
+  const miningTwinkles = parseXmlTags(findSuiteFile(rootDir, 'MiningSystem.xml'), 'Twinkle');
 
   return {
     files: parsed,
     deep: {
       dropMgrCount: dropMgr.length,
-      appointDropCount: appointDrop.length,
-      setDropCount: setDrop.length,
+      appointMonsters: appointMonsters.length,
+      appointItems: appointItems.length,
+      setDropRules: setDropRules.length,
+      setDropItems: setDropItems.length,
       monsterDropRateCount: monsterDropRate.length,
-      zenDropCount: zenDrop.length,
-      itemOptMgrCount: itemOptMgr.length,
+      zenEnabled: zenRoot[0]?.Enable ?? '0',
+      zenMaps: zenMaps.length,
+      itemOptSections: itemOptSections.length,
+      itemOptItems: itemOptItems.length,
+      itemSetTypeItems: itemSetTypeItems.length,
       cashItemsCount: cashItems.length,
       cashPackagesCount: cashPackages.length,
       monsterAiUnitsCount: monsterAiUnits.length,
       monsterSkillsCount: monsterSkills.length,
+      harmonyOptXmlCount: harmonyOpts.length,
+      pkLevelRules: pkLevels.length,
+      miningTwinkles: miningTwinkles.length,
     },
   };
 }

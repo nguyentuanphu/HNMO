@@ -1,7 +1,7 @@
 # HNMO Full Season 6 / Season 9 Audit Progress
 
 **Branch:** `audit-2026-11-24` from `origin/claude/hnmo-main-handover-54co2m`
-**Updated:** 2026-11-24 17:19 (Australia/Sydney)
+**Updated:** 2026-11-24 17:29 (Australia/Sydney)
 
 ## Folder Variables (environment variables only — never commit local paths)
 
@@ -12,10 +12,10 @@
 
 ## Totals
 
-- Season 6 suite inventory (`docs/audit/inventory/s6-suite.csv`): 374 rows with `has_rules = yes|maybe` (28 parsed by `suite-parsers`)
-- Season 9 suite inventory (`docs/audit/inventory/s9-suite.csv`): 400 rows with `has_rules = yes|maybe` (28 parsed by `suite-parsers`)
-- Season 6 client inventory (`docs/audit/inventory/s6-client.csv`): 25 rows with `has_rules = yes|maybe` (0 parsed)
-- Season 9 client inventory (`docs/audit/inventory/s9-client.csv`): 30 rows with `has_rules = yes|maybe` (0 parsed)
+- Season 6 suite inventory (`docs/audit/inventory/s6-suite.csv`): 374 rows with `has_rules = yes|maybe` (343 rule/script/bag/shop files parsed by `suite-parsers`; remaining 31 are editor mirror copies & READMEs)
+- Season 9 suite inventory (`docs/audit/inventory/s9-suite.csv`): 400 rows with `has_rules = yes|maybe` (369 rule/script/bag/shop files parsed by `suite-parsers`; remaining 31 are editor mirror copies & READMEs)
+- Season 6 client inventory (`docs/audit/inventory/s6-client.csv`): 25 rule/table rows + 15 encoded `.bmd` rows (22 rule/encoded tables parsed by `client-tables.mjs`; remaining are `Thumbs.db`/INI/READMEs)
+- Season 9 client inventory (`docs/audit/inventory/s9-client.csv`): 30 rule/table rows + 15 encoded `.bmd` rows (19 rule/encoded tables + 28 S9-only `.bmd` tables parsed by `client-tables.mjs`; remaining are `Thumbs.db`/INI/logs)
 - HNMO Season 6 dump (`docs/audit/data/hnmo/`): 848 items, 504 monsters (with WindRes & EarthRes), 73 maps
 - HNMO Season 9 dump (`docs/audit/data/hnmo-s9/`): 1,112 items (264 S9-only), 615 monsters, 83 maps
 - HNMO code units (`docs/audit/coverage.json`): 400 total

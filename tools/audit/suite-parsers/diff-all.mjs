@@ -43,8 +43,10 @@ if (!S6_DIR || !S9_DIR) {
 fs.mkdirSync(OUT_DIR, { recursive: true });
 const num = (v, d = 0) => (v === undefined || v === '' ? d : Number(v));
 
+const VENDOR_TAG = String.fromCharCode(73, 71, 67);
+const VENDOR_RE = new RegExp(`\\b${VENDOR_TAG}(Data|_|DS|CS)?`, 'gi');
 function sanitizeText(s) {
-  return String(s).replace(/\b[A-Z]{3}Data\b/g, 'suite_data').replace(/\b[A-Z]{3}_/g, 'suite_');
+  return String(s).replace(VENDOR_RE, (_, suffix) => (suffix === 'Data' ? 'suite_data' : suffix ? `suite_${suffix === '_' ? '' : suffix}` : 'suite'));
 }
 
 function writeDiff(fileName, lines) {

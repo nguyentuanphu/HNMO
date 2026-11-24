@@ -531,28 +531,144 @@ const lines = [
   lines.push(`  Npcname(eng): S6 txt=${npc6Count} rows | S9 Npcname_eng.bmd=${npc9Bytes} bytes`);
 }
 
-// 10. Remaining encoded .bmd table byte sizes (S6 vs S9)
-lines.push('', '## Encoded .bmd table presence & byte sizes (S6 vs S9)');
-const tables = [
-  ['Item_eng.bmd', ['Data/Local/Eng/item_eng.bmd', 'Data/Local/Item.bmd'], ['Data/Local/Eng/Item_eng.bmd']],
-  ['Skill_eng.bmd', ['Data/Local/Eng/skill_eng.bmd', 'Data/Local/Skill.bmd'], ['Data/Local/Eng/skill_eng.bmd']],
-  ['BuffEffect_eng.bmd', ['Data/Local/Eng/BuffEffect_eng.bmd', 'Data/Local/BuffEffect.bmd'], ['Data/Local/Eng/BuffEffect_eng.bmd']],
-  ['Quest_eng.bmd', ['Data/Local/Eng/Quest_eng.bmd', 'Data/Local/Quest.bmd'], ['Data/Local/Eng/Quest_eng.bmd']],
-  ['QuestProgress.bmd', ['Data/Local/QuestProgress.bmd'], ['Data/Local/QuestProgress.bmd']],
-  ['NPCDialogue.bmd', ['Data/Local/NPCDialogue.bmd'], ['Data/Local/NPCDialogue.bmd']],
-  ['SocketItem_eng.bmd', ['Data/Local/Eng/socketitem_eng.bmd'], ['Data/Local/Eng/SocketItem_eng.bmd']],
-  ['JewelOfHarmonyOption_eng.bmd', ['Data/Local/Eng/JewelOfHarmonyOption_eng.bmd'], ['Data/Local/Eng/JewelOfHarmonyOption_eng.bmd']],
-  ['ItemSetOption_eng.bmd', ['Data/Local/Eng/itemsetoption_eng.bmd'], ['Data/Local/Eng/itemsetoption_eng.bmd']],
-  ['ItemSetType.bmd', ['Data/Local/Eng/itemsettype.bmd', 'Data/Local/itemsettype.bmd'], ['Data/Local/itemsettype.bmd']],
-  ['ItemAddOption.bmd', ['Data/Local/ItemAddOption.bmd'], ['Data/Local/ItemAddOption.bmd']],
-  ['MonsterSkill.bmd', ['Data/Local/MonsterSkill.bmd'], ['Data/Local/MonsterSkill.bmd']],
-];
-for (const [label, c6, c9] of tables) {
-  const p6 = findClientFile(S6_CLIENT, c6);
-  const p9 = findClientFile(S9_CLIENT, c9);
-  const s6 = p6 ? fs.statSync(p6).size : 0;
-  const s9 = p9 ? fs.statSync(p9).size : 0;
-  lines.push(`  ${label}: S6=${s6} bytes | S9=${s9} bytes`);
+function decodeQuestWords(filePath) {
+  if (!filePath) return new Map();
+  const buf = fs.readFileSync(filePath);
+  const out = new Map();
+  let off = 0;
+  while (off + 6 <= buf.length) {
+    const hdr = unbux(buf, off, 6);
+    off += 6;
+    const id = hdr.readInt32LE(0);
+    const len = hdr.readInt16LE(4);
+    if (len < 0 || len > 1024 || off + len > buf.length) break;
+    const text = unbux(buf, off, len).toString('utf8');
+    off += len;
+    out.set(id, text);
+  }
+  return out;
+}
+
+function decodeHeaderTableSummary(filePath) {
+  if (!filePath) return null;
+  const buf = fs.readFileSync(filePath);
+  const size = buf.length;
+  const u32 = size >= 4 ? buf.readUInt32LE(0) : 0;
+  const dec0 = size >= 4 ? ((buf[0] ^ 0xfc) | ((buf[1] ^ 0xcf) << 8) | ((buf[2] ^ 0xab) << 16) | ((buf[3] ^ 0xfc) << 24)) >>> 0 : 0;
+  if (u32 > 0 && u32 < 20000 && ((size - 4) % u32 === 0 || (size - 8) % u32 === 0)) {
+    const stride = (size - 4) % u32 === 0 ? (size - 4) / u32 : (size - 8) / u32;
+    const sample = [];
+    for (let i = 0; i < Math.min(3, u32) && 4 + (i + 1) * stride <= size; i++) {
+      const r = unbux(buf, 4 + i * stride, stride);
+      const s = readCString(r, 4, Math.min(48, Math.max(0, stride - 4))).replace(/[\x00-\x1f\ufffd]/g, '');
+      if (s && /^[A-Za-z0-9]/.test(s)) sample.push(s);
+    }
+    return { count: u32, stride, size, sample };
+  }
+  if (dec0 > 0 && dec0 < 5000 && ((size - 4) % dec0 === 0 || (size - 8) % dec0 === 0)) {
+    const stride = (size - 4) % dec0 === 0 ? (size - 4) / dec0 : (size - 8) / dec0;
+    return { count: dec0, stride, size, sample: [] };
+  }
+  return { count: null, stride: null, size, sample: [] };
+}
+
+function decodeTextBmdCount(filePath) {
+  if (!filePath) return 0;
+  const buf = fs.readFileSync(filePath);
+  if (buf.length < 6) return 0;
+  // Header is either 2 bytes ('TG' etc) + count or count(u32) + variable BUX records
+  let off = 6;
+  let count = 0;
+  if (buf.readUInt16LE(0) === 0x4754) { // 'TG'
+    return buf.readUInt32LE(2);
+  }
+  while (off + 8 <= buf.length) {
+    const idx = buf.readUInt32LE(off);
+    const len = buf.readUInt32LE(off + 4);
+    if (len > 4096 || off + 8 + len > buf.length) break;
+    off += 8 + len;
+    count++;
+    if (idx > 50000) break;
+  }
+  return count;
+}
+
+// 10. All remaining S6, S9, and S9-only encoded .bmd tables (decoded headers, record counts, and samples)
+{
+  const qw6 = decodeQuestWords(findClientFile(S6_CLIENT, ['Data/Local/Eng/QuestWords_eng.bmd']));
+  const qw9 = decodeQuestWords(findClientFile(S9_CLIENT, ['Data/Local/Eng/QuestWords_eng.bmd']));
+  lines.push('', `## QuestWords_eng.bmd: S6=${qw6.size} strings, S9=${qw9.size} strings (+${qw9.size - qw6.size} S9)`);
+
+  lines.push('', '## Remaining Shared Encoded .bmd Tables (S6 vs S9)');
+  const shared = [
+    ['Text_eng.bmd', ['Data/Local/Eng/Text_eng.bmd'], ['Data/Local/Eng/Text_eng.bmd']],
+    ['Dialog_eng.bmd', ['Data/Local/Eng/Dialog_eng.bmd'], ['Data/Local/Eng/Dialog_eng.bmd']],
+    ['ItemTooltipText_eng.bmd', ['Data/Local/Eng/ItemTooltipText_eng.bmd'], ['Data/Local/Eng/ItemTooltipText_eng.bmd']],
+    ['ItemLevelTooltip_eng.bmd', ['Data/Local/Eng/ItemLevelTooltip_eng.bmd'], ['Data/Local/Eng/ItemLevelTooltip_eng.bmd']],
+    ['MasterSkillTooltip_eng.bmd', ['Data/Local/Eng/MasterSkillTooltip_eng.bmd'], ['Data/Local/Eng/MasterSkillTooltip_eng.bmd']],
+    ['JewelOfHarmonySmelt_eng.bmd', ['Data/Local/Eng/JewelOfHarmonySmelt_eng.bmd'], ['Data/Local/Eng/JewelOfHarmonySmelt_eng.bmd']],
+    ['slide_eng.bmd', ['Data/Local/Eng/slide_eng.bmd'], ['Data/Local/Eng/slide_eng.bmd']],
+    ['pet.bmd', ['Data/Local/pet.bmd'], ['Data/Local/pet.bmd']],
+    ['PetData.bmd', ['Data/Local/PetData.bmd'], ['Data/Local/PetData.bmd']],
+    ['MapCharacters.bmd', ['Data/Local/MapCharacters.bmd'], ['Data/Local/MapCharacters.bmd']],
+    ['MasterSkillTree.bmd', ['Data/Local/MasterSkillTree.bmd'], ['Data/Local/MasterSkillTree.bmd']],
+    ['Filter.bmd', ['Data/Local/Filter.bmd'], ['Data/Local/Filter.bmd']],
+    ['FilterName.bmd', ['Data/Local/FilterName.bmd'], ['Data/Local/FilterName.bmd']],
+    ['Glow.bmd', ['Data/Local/Glow.bmd'], ['Data/Local/Glow.bmd']],
+    ['credit.bmd', ['Data/Local/credit.bmd'], ['Data/Local/credit.bmd']],
+    ['ServerInfo.bmd', ['Data/Local/ServerInfo.bmd'], ['Data/Local/ServerInfo.bmd']],
+    ['ServerList.bmd', ['Data/Local/ServerList.bmd'], ['Data/Local/ServerList.bmd']],
+  ];
+  for (const [label, c6, c9] of shared) {
+    const p6 = findClientFile(S6_CLIENT, c6);
+    const p9 = findClientFile(S9_CLIENT, c9);
+    const s6 = decodeHeaderTableSummary(p6);
+    const s9 = decodeHeaderTableSummary(p9);
+    const fmt = (s) => (!s ? 'absent' : s.count ? `${s.count}x${s.stride} (${s.size}B)` : `${s.size}B`);
+    const extra = label === 'Text_eng.bmd'
+      ? ` [strings S6=${decodeTextBmdCount(p6)} S9=${decodeTextBmdCount(p9)}]`
+      : '';
+    lines.push(`  ${label}: S6=${fmt(s6)} | S9=${fmt(s9)}${extra}`);
+  }
+
+  lines.push('', '## Season 9-Only Encoded .bmd Rule & UI Tables');
+  const s9OnlyBmds = [
+    'Data/Local/ArcaBattleBootyMix.bmd',
+    'Data/Local/Eng/ArcaBattleScript_eng.bmd',
+    'Data/Local/AttributeVariation.bmd',
+    'Data/Local/BonusExp.bmd',
+    'Data/Local/EvolutionMonsterBox.bmd',
+    'Data/Local/Eng/ExcellentCommonOption_eng.bmd',
+    'Data/Local/Eng/ExcellentWingOption_eng.bmd',
+    'Data/Local/Eng/HelpData_eng.bmd',
+    'Data/Local/InfoTooltip.bmd',
+    'Data/Local/Eng/InfoTooltipText_eng.bmd',
+    'Data/Local/Eng/ItemSetOptionText_eng.bmd',
+    'Data/Local/ItemTRSData.bmd',
+    'Data/Local/Eng/Minimap_eng.bmd',
+    'Data/Local/MuRummyCard.bmd',
+    'Data/Local/MuRummyOption.bmd',
+    'Data/Local/MuRummySlot.bmd',
+    'Data/Local/MuunExchange.bmd',
+    'Data/Local/MuunInfo.bmd',
+    'Data/Local/MuunMeshInfo.bmd',
+    'Data/Local/Eng/MuunOption_eng.bmd',
+    'Data/Local/MuunRenderInfo.bmd',
+    'Data/Local/MuunTooltipInfo.bmd',
+    'Data/Local/Eng/Npcname_eng.bmd',
+    'Data/Local/Eng/PentagramJewelOptionValue_eng.bmd',
+    'Data/Local/PentagramMixNeedSource.bmd',
+    'Data/Local/Eng/PentagramOption_eng.bmd',
+    'Data/Local/StatOption.bmd',
+    'Data/Local/Eng/StatOptionText_eng.bmd',
+  ];
+  for (const rel of s9OnlyBmds) {
+    const p = findClientFile(S9_CLIENT, [rel]);
+    const s = decodeHeaderTableSummary(p);
+    const fmt = !s ? 'absent' : s.count ? `${s.count}x${s.stride} (${s.size}B)` : `${s.size}B`;
+    const smp = s?.sample?.length ? ` sample=[${s.sample.join(', ')}]` : '';
+    lines.push(`  ${path.basename(rel)}: S9=${fmt}${smp}`);
+  }
 }
 
 fs.writeFileSync(OUT_FILE, lines.join('\n') + '\n', 'utf8');
