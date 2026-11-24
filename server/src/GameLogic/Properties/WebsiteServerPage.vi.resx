@@ -8,4 +8,8 @@
   <data name="NotForSaleVi" xml:space="preserve"><value>Không bán (tiếng Việt)</value></data>
   <data name="Description" xml:space="preserve"><value>Nội dung công khai cho người chơi, mỗi quy định một dòng. Để trống nếu chưa công bố. Không nhập mật khẩu hoặc thông tin tài khoản riêng tư vào đây.</value></data>
   <data name="MaximumLength" xml:space="preserve"><value>Chỉ nhập tối đa {1} ký tự.</value></data>
+  <data name="TrackerEnabled" xml:space="preserve"><value>Theo dõi hoạt động công khai</value></data>
+  <data name="TrackerEnabledDescription" xml:space="preserve"><value>Công bố danh sách hoạt động có giới hạn. Mỗi tài khoản có thể từ chối tham gia.</value></data>
+  <data name="TrackerNames" xml:space="preserve"><value>Hiện tên nhân vật trong theo dõi</value></data>
+  <data name="TrackerNamesDescription" xml:space="preserve"><value>Cho phép hiện tên nhân vật đủ điều kiện. Quyền từ chối của người chơi vẫn được áp dụng.</value></data>
 </root>

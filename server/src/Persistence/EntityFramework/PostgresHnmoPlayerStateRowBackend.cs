@@ -58,6 +58,8 @@ public sealed class PostgresHnmoPlayerStateRowBackend : IHnmoPlayerStateRowQuery
                 CREATE INDEX IF NOT EXISTS ix_hnmo_pfs_expires
                     ON hnmo.player_feature_state (expires_at_utc)
                     WHERE expires_at_utc IS NOT NULL;
+                CREATE INDEX IF NOT EXISTS ix_hnmo_pfs_feature_recent
+                    ON hnmo.player_feature_state (feature, updated_at_utc DESC, scope_id);
                 CREATE TABLE IF NOT EXISTS hnmo.archived_feature_state (
                     feature TEXT NOT NULL,
                     scope_id TEXT NOT NULL,
@@ -125,7 +127,7 @@ public sealed class PostgresHnmoPlayerStateRowBackend : IHnmoPlayerStateRowQuery
     public IReadOnlyList<HnmoFeatureRow> LoadScopePage(string feature, string scopePrefix, int offset, int limit)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(feature);
-        ArgumentException.ThrowIfNullOrWhiteSpace(scopePrefix);
+        ArgumentNullException.ThrowIfNull(scopePrefix);
         if (offset < 0 || limit is < 1 or > 101)
         {
             throw new ArgumentOutOfRangeException(nameof(limit), "A nonnegative offset and bounded row page are required.");

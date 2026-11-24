@@ -15,9 +15,9 @@ public interface IHnmoPlayerStateRowQueryBackend : IHnmoPlayerStateRowBackend
 
     /// <summary>Reads a bounded literal scope prefix, newest first with a stable scope-key tie-break.</summary>
     /// <param name="feature">The feature key.</param>
-    /// <param name="scopePrefix">The literal scope prefix; wildcard characters have no special meaning.</param>
+    /// <param name="scopePrefix">The literal scope prefix. Use an empty string to query the whole feature.</param>
     /// <param name="offset">The nonnegative number of matching rows to skip.</param>
-    /// <param name="limit">The maximum rows, between one and101.</param>
+    /// <param name="limit">The maximum rows, between 1 and 101.</param>
     /// <returns>Only the bounded matching page.</returns>
     IReadOnlyList<HnmoFeatureRow> LoadScopePage(string feature, string scopePrefix, int offset, int limit);
 }

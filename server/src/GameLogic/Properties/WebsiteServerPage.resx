@@ -8,4 +8,8 @@
   <data name="NotForSaleVi" xml:space="preserve"><value>Not for sale (Vietnamese)</value></data>
   <data name="Description" xml:space="preserve"><value>Public player information, one line per rule. Leave empty until you have published your policy. Do not put passwords or private account details here.</value></data>
   <data name="MaximumLength" xml:space="preserve"><value>Use at most {1} characters.</value></data>
+  <data name="TrackerEnabled" xml:space="preserve"><value>Public activity tracker</value></data>
+  <data name="TrackerEnabledDescription" xml:space="preserve"><value>Publish a bounded activity feed. Each account can opt out.</value></data>
+  <data name="TrackerNames" xml:space="preserve"><value>Show tracker character names</value></data>
+  <data name="TrackerNamesDescription" xml:space="preserve"><value>Allow eligible character names in the public feed. Player opt-outs still apply.</value></data>
 </root>
