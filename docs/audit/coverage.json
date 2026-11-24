@@ -1,5 +1,5 @@
 {
-  "generatedAt": "22378225",
+  "generatedAt": "90987f71",
   "maxLines": 6000,
   "units": [
     {
@@ -5352,11 +5352,16 @@
       ],
       "files": 20,
       "lines": 5966,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "90987f71",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "hud.ts:221-284",
+        "itemIcons.ts",
+        "marketWindow.ts",
+        "docs/audit/findings/unit-client-web-src-ui-files-3.md"
+      ],
+      "evidence": "20f/5966L: No game rules (HUD EXP/cooldown bars, icons, inventory/market/jewel-bank views driven by server state).",
       "prs": ""
     },
     {
