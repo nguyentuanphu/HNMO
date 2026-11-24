@@ -190,6 +190,146 @@
   Diff warp #30 (KanturuRelics): S6(Lv=400,Zen=300) -> S9(Lv=400,Zen=230)
   Diff warp #42 (Vulcanus): S6(Lv=400,Zen=250) -> S9(Lv=400,Zen=30)
 
+## Gate.bmd: S6=339 non-zero gates, S9=438 non-zero gates, HNMO enter=116 exit=225
+  S9-only gate #345: map=82 flag=0 (60,66)-(63,69) target=0 lvl=0
+  S9-only gate #346: map=82 flag=0 (69,195)-(72,198) target=0 lvl=0
+  S9-only gate #347: map=82 flag=0 (196,187)-(199,190) target=0 lvl=0
+  S9-only gate #348: map=82 flag=0 (187,61)-(190,64) target=0 lvl=0
+  S9-only gate #349: map=83 flag=0 (60,66)-(63,69) target=0 lvl=0
+  S9-only gate #350: map=83 flag=0 (69,195)-(72,198) target=0 lvl=0
+  S9-only gate #351: map=83 flag=0 (196,187)-(199,190) target=0 lvl=0
+  S9-only gate #352: map=83 flag=0 (187,61)-(190,64) target=0 lvl=0
+  S9-only gate #353: map=84 flag=0 (60,66)-(63,69) target=0 lvl=0
+  S9-only gate #354: map=84 flag=0 (69,195)-(72,198) target=0 lvl=0
+  S9-only gate #355: map=84 flag=0 (196,187)-(199,190) target=0 lvl=0
+  S9-only gate #356: map=84 flag=0 (187,61)-(190,64) target=0 lvl=0
+  S9-only gate #357: map=85 flag=0 (60,66)-(63,69) target=0 lvl=0
+  S9-only gate #358: map=85 flag=0 (69,195)-(72,198) target=0 lvl=0
+  S9-only gate #359: map=85 flag=0 (196,187)-(199,190) target=0 lvl=0
+  S9-only gate #360: map=85 flag=0 (187,61)-(190,64) target=0 lvl=0
+  S9-only gate #361: map=86 flag=0 (60,66)-(63,69) target=0 lvl=0
+  S9-only gate #362: map=86 flag=0 (69,195)-(72,198) target=0 lvl=0
+  S9-only gate #363: map=86 flag=0 (196,187)-(199,190) target=0 lvl=0
+  S9-only gate #364: map=86 flag=0 (187,61)-(190,64) target=0 lvl=0
+  S9-only gate #365: map=87 flag=0 (60,66)-(63,69) target=0 lvl=0
+  S9-only gate #366: map=87 flag=0 (69,195)-(72,198) target=0 lvl=0
+  S9-only gate #367: map=87 flag=0 (196,187)-(199,190) target=0 lvl=0
+  S9-only gate #368: map=87 flag=0 (187,61)-(190,64) target=0 lvl=0
+  S9-only gate #369: map=88 flag=0 (60,66)-(63,69) target=0 lvl=0
+  S9-only gate #370: map=88 flag=0 (69,195)-(72,198) target=0 lvl=0
+  S9-only gate #371: map=88 flag=0 (196,187)-(199,190) target=0 lvl=0
+  S9-only gate #372: map=88 flag=0 (187,61)-(190,64) target=0 lvl=0
+  S9-only gate #373: map=89 flag=0 (60,66)-(63,69) target=0 lvl=0
+  S9-only gate #374: map=89 flag=0 (69,195)-(72,198) target=0 lvl=0
+  S9-only gate #375: map=89 flag=0 (196,187)-(199,190) target=0 lvl=0
+  S9-only gate #376: map=89 flag=0 (187,61)-(190,64) target=0 lvl=0
+  S9-only gate #377: map=90 flag=0 (60,66)-(63,69) target=0 lvl=0
+  S9-only gate #378: map=90 flag=0 (69,195)-(72,198) target=0 lvl=0
+  S9-only gate #379: map=90 flag=0 (196,187)-(199,190) target=0 lvl=0
+  S9-only gate #380: map=90 flag=0 (187,61)-(190,64) target=0 lvl=0
+  S9-only gate #381: map=82 flag=0 (123,120)-(129,134) target=0 lvl=0
+  S9-only gate #382: map=82 flag=0 (123,126)-(134,132) target=0 lvl=0
+  S9-only gate #383: map=82 flag=0 (127,121)-(133,133) target=0 lvl=0
+  S9-only gate #384: map=82 flag=0 (123,121)-(133,128) target=0 lvl=0
+  S9-only gate #385: map=83 flag=0 (123,120)-(129,134) target=0 lvl=0
+  S9-only gate #386: map=83 flag=0 (123,126)-(134,132) target=0 lvl=0
+  S9-only gate #387: map=83 flag=0 (127,121)-(133,133) target=0 lvl=0
+  S9-only gate #388: map=83 flag=0 (123,121)-(133,128) target=0 lvl=0
+  S9-only gate #389: map=84 flag=0 (123,120)-(129,134) target=0 lvl=0
+  S9-only gate #390: map=84 flag=0 (123,126)-(134,132) target=0 lvl=0
+  S9-only gate #391: map=84 flag=0 (127,121)-(133,133) target=0 lvl=0
+  S9-only gate #392: map=84 flag=0 (123,121)-(133,128) target=0 lvl=0
+  S9-only gate #393: map=85 flag=0 (123,120)-(129,134) target=0 lvl=0
+  S9-only gate #394: map=85 flag=0 (123,126)-(134,132) target=0 lvl=0
+  S9-only gate #395: map=85 flag=0 (127,121)-(133,133) target=0 lvl=0
+  S9-only gate #396: map=85 flag=0 (123,121)-(133,128) target=0 lvl=0
+  S9-only gate #397: map=86 flag=0 (123,120)-(129,134) target=0 lvl=0
+  S9-only gate #398: map=86 flag=0 (123,126)-(134,132) target=0 lvl=0
+  S9-only gate #399: map=86 flag=0 (127,121)-(133,133) target=0 lvl=0
+  S9-only gate #400: map=86 flag=0 (123,121)-(133,128) target=0 lvl=0
+  S9-only gate #401: map=87 flag=0 (123,120)-(129,134) target=0 lvl=0
+  S9-only gate #402: map=87 flag=0 (123,126)-(134,132) target=0 lvl=0
+  S9-only gate #403: map=87 flag=0 (127,121)-(133,133) target=0 lvl=0
+  S9-only gate #404: map=87 flag=0 (123,121)-(133,128) target=0 lvl=0
+  S9-only gate #405: map=88 flag=0 (123,120)-(129,134) target=0 lvl=0
+  S9-only gate #406: map=88 flag=0 (123,126)-(134,132) target=0 lvl=0
+  S9-only gate #407: map=88 flag=0 (127,121)-(133,133) target=0 lvl=0
+  S9-only gate #408: map=88 flag=0 (123,121)-(133,128) target=0 lvl=0
+  S9-only gate #409: map=89 flag=0 (123,120)-(129,134) target=0 lvl=0
+  S9-only gate #410: map=89 flag=0 (123,126)-(134,132) target=0 lvl=0
+  S9-only gate #411: map=89 flag=0 (127,121)-(133,133) target=0 lvl=0
+  S9-only gate #412: map=89 flag=0 (123,121)-(133,128) target=0 lvl=0
+  S9-only gate #413: map=90 flag=0 (123,120)-(129,134) target=0 lvl=0
+  S9-only gate #414: map=90 flag=0 (123,126)-(134,132) target=0 lvl=0
+  S9-only gate #415: map=90 flag=0 (127,121)-(133,133) target=0 lvl=0
+  S9-only gate #416: map=90 flag=0 (123,121)-(133,128) target=0 lvl=0
+  S9-only gate #417: map=91 flag=0 (51,190)-(60,197) target=0 lvl=0
+  S9-only gate #418: map=91 flag=1 (26,168)-(28,172) target=419 lvl=0
+  S9-only gate #419: map=91 flag=2 (112,161)-(114,166) target=0 lvl=0
+  S9-only gate #420: map=91 flag=1 (115,168)-(118,170) target=421 lvl=0
+  S9-only gate #421: map=91 flag=2 (33,167)-(37,170) target=0 lvl=0
+  S9-only gate #422: map=91 flag=1 (82,204)-(86,205) target=423 lvl=0
+  S9-only gate #423: map=91 flag=2 (151,198)-(156,200) target=0 lvl=0
+  S9-only gate #424: map=91 flag=1 (147,202)-(148,206) target=425 lvl=0
+  S9-only gate #425: map=91 flag=2 (81,197)-(83,199) target=0 lvl=0
+  S9-only gate #426: map=92 flag=0 (51,190)-(60,197) target=0 lvl=0
+  S9-only gate #427: map=92 flag=1 (26,168)-(28,172) target=428 lvl=0
+  S9-only gate #428: map=92 flag=2 (112,161)-(114,166) target=0 lvl=0
+  S9-only gate #429: map=92 flag=1 (115,168)-(118,170) target=430 lvl=0
+  S9-only gate #430: map=92 flag=2 (33,167)-(37,170) target=0 lvl=0
+  S9-only gate #431: map=92 flag=1 (82,204)-(86,205) target=432 lvl=0
+  S9-only gate #432: map=92 flag=2 (151,198)-(156,200) target=0 lvl=0
+  S9-only gate #433: map=92 flag=1 (147,202)-(148,206) target=434 lvl=0
+  S9-only gate #434: map=92 flag=2 (81,197)-(83,199) target=0 lvl=0
+  S9-only gate #435: map=91 flag=1 (52,161)-(53,163) target=436 lvl=0
+  S9-only gate #436: map=95 flag=2 (19,104)-(20,105) target=0 lvl=0
+  S9-only gate #437: map=95 flag=1 (17,106)-(18,107) target=438 lvl=0
+  S9-only gate #438: map=91 flag=2 (54,163)-(55,164) target=0 lvl=0
+  S9-only gate #439: map=92 flag=1 (52,161)-(53,163) target=440 lvl=0
+  S9-only gate #440: map=96 flag=2 (19,104)-(20,105) target=0 lvl=0
+  S9-only gate #441: map=96 flag=1 (17,106)-(18,107) target=442 lvl=0
+  S9-only gate #442: map=92 flag=2 (54,163)-(55,164) target=0 lvl=0
+  S9-only gate #443: map=97 flag=0 (31,88)-(36,95) target=0 lvl=0
+
+## BuffEffect_eng.bmd: S6=158 buffs, S9=202 buffs (+44 S9-only)
+  S9-only buff #122: �Hawk Figurine
+  S9-only buff #123: �Goat Figurine
+  S9-only buff #124: �Oak Charm
+  S9-only buff #125: �Maple Charm
+  S9-only buff #126: �Golden Oak Charm
+  S9-only buff #127: �Golden Maple Charm
+  S9-only buff #128: �Worn Horseshoe
+  S9-only buff #174: �Fire
+  S9-only buff #175: �Frost
+  S9-only buff #176: �Tornado
+  S9-only buff #177: �Bind
+  S9-only buff #178: �Darkness
+  S9-only buff #179: �Fire Tower
+  S9-only buff #180: �Water Tower
+  S9-only buff #181: �Earth Tower
+  S9-only buff #182: �Wind Tower
+  S9-only buff #183: �Darkness Tower
+  S9-only buff #184: �Resurrection Penalty
+  S9-only buff #185: �Vault Expansion
+  S9-only buff #186: �Confusion
+  S9-only buff #187: �EXP Rewards
+  S9-only buff #190: �Talisman of Ascension I
+  S9-only buff #191: �Talisman of Ascension II
+  S9-only buff #192: �Talisman of Ascension III
+  S9-only buff #193: �Seal of Ascension II
+  ... (19 more)
+
+## Ancient Sets (itemsetoption_eng.bmd): S6=49, S9=63, HNMO ancient_sets.csv=437
+## Socket Options (socketitem_eng.bmd): S6=35, S9=108
+## Harmony Options (JewelOfHarmonyOption_eng.bmd): S6=26, S9=10
+
+## Item_eng.bmd: S6=967 items (8192x84), S9=1252 items (1252x628)
+## skill_eng.bmd: S6=399 skills, S9=403 skills (+4 S9-only)
+  S9-only skill #618: Spell of Protection
+  S9-only skill #619: Spell of Restriction
+  S9-only skill #620: Spell of Pursuit
+  S9-only skill #621: Shied-Burn
+
 ## Encoded .bmd table presence & byte sizes (S6 vs S9)
   Item_eng.bmd: S6=688132 bytes | S9=786264 bytes
   Skill_eng.bmd: S6=57204 bytes | S9=72804 bytes

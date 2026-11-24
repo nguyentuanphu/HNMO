@@ -120,6 +120,117 @@ function decodeQuestProgress(filePath) {
   return Math.floor(buf.length / REC);
 }
 
+function decodeGateBmd(filePath) {
+  if (!filePath) return [];
+  const buf = fs.readFileSync(filePath);
+  const REC = 14;
+  const gates = [];
+  for (let i = 0; (i + 1) * REC <= buf.length; i++) {
+    const r = unbux(buf, i * REC, REC);
+    const flag = r.readUInt8(0);
+    const map = r.readUInt8(1);
+    const x1 = r.readUInt8(2);
+    const y1 = r.readUInt8(3);
+    const x2 = r.readUInt8(4);
+    const y2 = r.readUInt8(5);
+    const target = r.readUInt16LE(6);
+    const level = r.readUInt16LE(10);
+    if (flag !== 0 || map !== 0 || target !== 0 || level !== 0) {
+      gates.push({ index: i, flag, map, x1, y1, x2, y2, target, level });
+    }
+  }
+  return gates;
+}
+
+function decodeBuffEffect(filePath) {
+  if (!filePath) return [];
+  const buf = fs.readFileSync(filePath);
+  if (buf.length < 4) return [];
+  const count = buf.readUInt32LE(0);
+  const recSize = Math.floor((buf.length - 4) / Math.max(1, count));
+  const out = [];
+  for (let i = 0; i < count && 4 + (i + 1) * recSize <= buf.length; i++) {
+    const r = unbux(buf, 4 + i * recSize, recSize);
+    const index = r.readInt16LE(0);
+    const name = readCString(r, 4, 50);
+    if (index > 0 || name) out.push({ index, name });
+  }
+  return out;
+}
+
+function decodeItemSetOptions(filePath) {
+  if (!filePath) return [];
+  const buf = fs.readFileSync(filePath);
+  const REC = 110;
+  const out = [];
+  for (let i = 0; i < 64 && (i + 1) * REC <= buf.length; i++) {
+    const r = unbux(buf, i * REC, REC);
+    const name = readCString(r, 0, 64);
+    if (name) out.push({ index: i, name, optionCount: r.readUInt8(92) });
+  }
+  return out;
+}
+
+function decodeSocketOptions(filePath) {
+  if (!filePath) return [];
+  const buf = fs.readFileSync(filePath);
+  const REC = 104;
+  const out = [];
+  for (let i = 0; i < 150 && (i + 1) * REC <= buf.length; i++) {
+    const r = unbux(buf, i * REC, REC);
+    const id = r.readInt32LE(0);
+    const name = readCString(r, 8, 64);
+    if (name) out.push({ slot: i, id, name, category: r.readInt32LE(4) });
+  }
+  return out;
+}
+
+function decodeHarmonyOptions(filePath) {
+  if (!filePath) return [];
+  const buf = fs.readFileSync(filePath);
+  const REC = 180;
+  const out = [];
+  for (let i = 0; i < 30 && (i + 1) * REC <= buf.length; i++) {
+    const r = unbux(buf, i * REC, REC);
+    const name = readCString(r, 4, 60);
+    if (name) out.push({ index: i, name });
+  }
+  return out;
+}
+
+function decodeItemBmdCount(filePath) {
+  if (!filePath) return { count: 0, format: 'none' };
+  const buf = fs.readFileSync(filePath);
+  if (buf.length === 8192 * 84 + 4) {
+    let populated = 0;
+    for (let i = 0; i < 8192; i++) {
+      const r = unbux(buf, i * 84, 84);
+      if (readCString(r, 0, 30)) populated++;
+    }
+    return { count: populated, format: '8192x84' };
+  }
+  const u32 = buf.length >= 4 ? buf.readUInt32LE(0) : 0;
+  if (u32 > 0 && u32 < 10000 && ((buf.length - 4) % u32 === 0 || (buf.length - 8) % u32 === 0)) {
+    const stride = (buf.length - 4) % u32 === 0 ? (buf.length - 4) / u32 : (buf.length - 8) / u32;
+    return { count: u32, format: `${u32}x${stride}` };
+  }
+  return { count: 0, format: `${buf.length}b` };
+}
+
+function decodeSkillBmdNames(filePath) {
+  if (!filePath) return new Map();
+  const buf = fs.readFileSync(filePath);
+  const recSize = buf.length === 650 * 88 + 4 ? 88 : buf.length === 650 * 112 + 4 ? 112 : 0;
+  const out = new Map();
+  if (!recSize) return out;
+  for (let i = 0; i < 650; i++) {
+    const r = unbux(buf, i * recSize, recSize);
+    const name = readCString(r, 0, 32);
+    if (name) out.set(i, name);
+  }
+  return out;
+}
+
 const lines = [
   '# Client Encoded Data Tables Comparison (Season 6 vs Season 9 vs HNMO)',
   '',
@@ -179,7 +290,68 @@ const lines = [
   }
 }
 
-// 4. Encoded table inventory & byte sizes
+// 4. Gate.bmd vs HNMO enter_gates.csv / exit_gates.csv
+{
+  const g6 = decodeGateBmd(findClientFile(S6_CLIENT, ['Data/Gate.bmd', 'Data/gate.bmd']));
+  const g9 = decodeGateBmd(findClientFile(S9_CLIENT, ['Data/Local/Gate.bmd', 'Data/Gate.bmd']));
+  const hEnter = parseCsv(path.join(HNMO_DIR, 'enter_gates.csv'));
+  const hExit = parseCsv(path.join(HNMO_DIR, 'exit_gates.csv'));
+  lines.push('', `## Gate.bmd: S6=${g6.length} non-zero gates, S9=${g9.length} non-zero gates, HNMO enter=${hEnter.length} exit=${hExit.length}`);
+  const m6 = new Map(g6.map((g) => [g.index, g]));
+  for (const g of g9) {
+    const o = m6.get(g.index);
+    if (!o) lines.push(`  S9-only gate #${g.index}: map=${g.map} flag=${g.flag} (${g.x1},${g.y1})-(${g.x2},${g.y2}) target=${g.target} lvl=${g.level}`);
+    else if (o.map !== g.map || o.target !== g.target || o.level !== g.level) {
+      lines.push(`  Diff gate #${g.index}: S6(map=${o.map},target=${o.target},lvl=${o.level}) -> S9(map=${g.map},target=${g.target},lvl=${g.level})`);
+    }
+  }
+}
+
+// 5. BuffEffect_eng.bmd (S6 vs S9)
+{
+  const b6 = decodeBuffEffect(findClientFile(S6_CLIENT, ['Data/Local/Eng/BuffEffect_eng.bmd']));
+  const b9 = decodeBuffEffect(findClientFile(S9_CLIENT, ['Data/Local/Eng/BuffEffect_eng.bmd']));
+  const s6Ids = new Set(b6.map((b) => b.index));
+  const s9Only = b9.filter((b) => !s6Ids.has(b.index));
+  lines.push('', `## BuffEffect_eng.bmd: S6=${b6.length} buffs, S9=${b9.length} buffs (+${s9Only.length} S9-only)`);
+  for (const b of s9Only.slice(0, 25)) lines.push(`  S9-only buff #${b.index}: ${b.name}`);
+  if (s9Only.length > 25) lines.push(`  ... (${s9Only.length - 25} more)`);
+}
+
+// 6. ItemSetOption_eng.bmd, SocketItem_eng.bmd, JewelOfHarmonyOption_eng.bmd
+{
+  const sets6 = decodeItemSetOptions(findClientFile(S6_CLIENT, ['Data/Local/Eng/itemsetoption_eng.bmd']));
+  const sets9 = decodeItemSetOptions(findClientFile(S9_CLIENT, ['Data/Local/Eng/itemsetoption_eng.bmd']));
+  const hSets = parseCsv(path.join(HNMO_DIR, 'ancient_sets.csv'));
+  const sock6 = decodeSocketOptions(findClientFile(S6_CLIENT, ['Data/Local/Eng/socketitem_eng.bmd']));
+  const sock9 = decodeSocketOptions(findClientFile(S9_CLIENT, ['Data/Local/Eng/SocketItem_eng.bmd']));
+  const harm6 = decodeHarmonyOptions(findClientFile(S6_CLIENT, ['Data/Local/Eng/JewelOfHarmonyOption_eng.bmd']));
+  const harm9 = decodeHarmonyOptions(findClientFile(S9_CLIENT, ['Data/Local/Eng/JewelOfHarmonyOption_eng.bmd']));
+  lines.push(
+    '',
+    `## Ancient Sets (itemsetoption_eng.bmd): S6=${sets6.length}, S9=${sets9.length}, HNMO ancient_sets.csv=${hSets.length}`,
+    `## Socket Options (socketitem_eng.bmd): S6=${sock6.length}, S9=${sock9.length}`,
+    `## Harmony Options (JewelOfHarmonyOption_eng.bmd): S6=${harm6.length}, S9=${harm9.length}`,
+  );
+}
+
+// 7. Item_eng.bmd & skill_eng.bmd
+{
+  const it6 = decodeItemBmdCount(findClientFile(S6_CLIENT, ['Data/Local/Eng/item_eng.bmd']));
+  const it9 = decodeItemBmdCount(findClientFile(S9_CLIENT, ['Data/Local/Eng/Item_eng.bmd']));
+  const sk6 = decodeSkillBmdNames(findClientFile(S6_CLIENT, ['Data/Local/Eng/skill_eng.bmd']));
+  const sk9 = decodeSkillBmdNames(findClientFile(S9_CLIENT, ['Data/Local/Eng/skill_eng.bmd']));
+  const s9OnlySkills = [...sk9.entries()].filter(([id]) => !sk6.has(id));
+  lines.push(
+    '',
+    `## Item_eng.bmd: S6=${it6.count} items (${it6.format}), S9=${it9.count} items (${it9.format})`,
+    `## skill_eng.bmd: S6=${sk6.size} skills, S9=${sk9.size} skills (+${s9OnlySkills.length} S9-only)`,
+  );
+  for (const [id, name] of s9OnlySkills.slice(0, 20)) lines.push(`  S9-only skill #${id}: ${name}`);
+  if (s9OnlySkills.length > 20) lines.push(`  ... (${s9OnlySkills.length - 20} more)`);
+}
+
+// 8. Remaining encoded .bmd table byte sizes (S6 vs S9)
 lines.push('', '## Encoded .bmd table presence & byte sizes (S6 vs S9)');
 const tables = [
   ['Item_eng.bmd', ['Data/Local/Eng/item_eng.bmd', 'Data/Local/Item.bmd'], ['Data/Local/Eng/Item_eng.bmd']],
