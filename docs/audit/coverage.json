@@ -1,5 +1,5 @@
 {
-  "generatedAt": "3a413fc6",
+  "generatedAt": "9d33e265",
   "maxLines": 6000,
   "units": [
     {
@@ -4297,11 +4297,13 @@
       ],
       "files": 10,
       "lines": 1073,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "9d33e265",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-DataModel.md"
+      ],
+      "evidence": "Audited InventoryConstants, ItemExtensions, GameConfigurationHelper, Configuration/* (ItemCrafting, Items, Quests), Entities, Attributes, Composition, Statistics, and Validation.",
       "prs": ""
     },
     {
@@ -4312,11 +4314,13 @@
       ],
       "files": 2,
       "lines": 111,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "9d33e265",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-DataModel.md"
+      ],
+      "evidence": "Audited InventoryConstants, ItemExtensions, GameConfigurationHelper, Configuration/* (ItemCrafting, Items, Quests), Entities, Attributes, Composition, Statistics, and Validation.",
       "prs": ""
     },
     {
@@ -4327,11 +4331,13 @@
       ],
       "files": 4,
       "lines": 58,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "9d33e265",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-DataModel.md"
+      ],
+      "evidence": "Audited InventoryConstants, ItemExtensions, GameConfigurationHelper, Configuration/* (ItemCrafting, Items, Quests), Entities, Attributes, Composition, Statistics, and Validation.",
       "prs": ""
     },
     {
@@ -4407,11 +4413,13 @@
       ],
       "files": 66,
       "lines": 5251,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "9d33e265",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-DataModel.md"
+      ],
+      "evidence": "Audited InventoryConstants, ItemExtensions, GameConfigurationHelper, Configuration/* (ItemCrafting, Items, Quests), Entities, Attributes, Composition, Statistics, and Validation.",
       "prs": ""
     },
     {
@@ -4422,11 +4430,13 @@
       ],
       "files": 6,
       "lines": 406,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "9d33e265",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-DataModel.md"
+      ],
+      "evidence": "Audited InventoryConstants, ItemExtensions, GameConfigurationHelper, Configuration/* (ItemCrafting, Items, Quests), Entities, Attributes, Composition, Statistics, and Validation.",
       "prs": ""
     },
     {
@@ -4437,11 +4447,13 @@
       ],
       "files": 25,
       "lines": 1638,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "9d33e265",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-DataModel.md"
+      ],
+      "evidence": "Audited InventoryConstants, ItemExtensions, GameConfigurationHelper, Configuration/* (ItemCrafting, Items, Quests), Entities, Attributes, Composition, Statistics, and Validation.",
       "prs": ""
     },
     {
@@ -4452,11 +4464,13 @@
       ],
       "files": 5,
       "lines": 315,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "9d33e265",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-DataModel.md"
+      ],
+      "evidence": "Audited InventoryConstants, ItemExtensions, GameConfigurationHelper, Configuration/* (ItemCrafting, Items, Quests), Entities, Attributes, Composition, Statistics, and Validation.",
       "prs": ""
     },
     {
@@ -4467,11 +4481,13 @@
       ],
       "files": 30,
       "lines": 2062,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "9d33e265",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-DataModel.md"
+      ],
+      "evidence": "Audited InventoryConstants, ItemExtensions, GameConfigurationHelper, Configuration/* (ItemCrafting, Items, Quests), Entities, Attributes, Composition, Statistics, and Validation.",
       "prs": ""
     },
     {
@@ -4482,11 +4498,13 @@
       ],
       "files": 1,
       "lines": 46,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "9d33e265",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-DataModel.md"
+      ],
+      "evidence": "Audited InventoryConstants, ItemExtensions, GameConfigurationHelper, Configuration/* (ItemCrafting, Items, Quests), Entities, Attributes, Composition, Statistics, and Validation.",
       "prs": ""
     },
     {
@@ -4497,11 +4515,13 @@
       ],
       "files": 1,
       "lines": 55,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "9d33e265",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-DataModel.md"
+      ],
+      "evidence": "Audited InventoryConstants, ItemExtensions, GameConfigurationHelper, Configuration/* (ItemCrafting, Items, Quests), Entities, Attributes, Composition, Statistics, and Validation.",
       "prs": ""
     },
     {
@@ -4557,17 +4577,14 @@
       ],
       "files": 31,
       "lines": 2854,
-      "status": "Changed since check",
-      "checkedAt": "2026-11-24T04:04:38.660Z",
+      "status": "Checked",
+      "checkedAt": "9d33e265",
       "checkedOn": "2026-11-24",
       "references": [
         "docs/audit/findings/unit-server-src-Interfaces-and-PlugIns.md"
       ],
       "evidence": "Audited PlugInManager, PlugInConfiguration, PlugInConfigurationChangeApplier, StrategyPlugInProvider, and PlugInProxyTypeGenerator.",
-      "prs": "",
-      "changedFiles": [
-        "(commit not found)"
-      ]
+      "prs": ""
     },
     {
       "id": "server/src/Interfaces",
@@ -4577,17 +4594,14 @@
       ],
       "files": 86,
       "lines": 5667,
-      "status": "Changed since check",
-      "checkedAt": "2026-11-24T04:04:38.660Z",
+      "status": "Checked",
+      "checkedAt": "9d33e265",
       "checkedOn": "2026-11-24",
       "references": [
         "docs/audit/findings/unit-server-src-Interfaces-and-PlugIns.md"
       ],
       "evidence": "Audited GuildRoleLimits, HnmoSeasonInstance, HostSettings/Validator, ControlOperations, CrashWatch, RollingLogWriter, and inter-server contracts (IGameServer, IGuildServer, IFriendServer, ILoginServer, IConnectServer).",
-      "prs": "",
-      "changedFiles": [
-        "(commit not found)"
-      ]
+      "prs": ""
     },
     {
       "id": "client/web/src (files 1)",
