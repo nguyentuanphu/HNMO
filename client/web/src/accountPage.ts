@@ -11,11 +11,24 @@ import { AccountGiftBox } from './accountGiftBox.js';
 import { AccountTrackerPrivacy } from './accountTrackerPrivacy.js';
 
 interface Credentials { loginName: string; password: string }
+interface StoredItem {
+  character: string | null;
+  slot: number;
+  level: number;
+  name: string;
+  nameVi?: string;
+  serial: string | null;
+}
+interface StoredItems {
+  truncated: boolean;
+  items: readonly StoredItem[];
+}
 interface AccountSnapshot {
   loginName: string;
   accountOnline: boolean;
   balances: { wCoinC: number; wCoinP: number; goblinPoints: number };
   vipLevel: number;
+  storedItems?: { inventory: StoredItems; vault: StoredItems };
   characters: readonly { name: string; className: string; classNameVi?: string; level: number; resets: number; map: number | null; online?: boolean | null }[];
   history: readonly { id: string; coinType: string; amount: number; reason: string | null; purchase?: { nameEn: string; nameVi: string; giftRecipient: string | null } | null; balanceChange?: { action: string; otherCharacter: string | null } | null; vipPurchase?: { nameEn: string; nameVi: string; days: number } | null; vipDaily?: { nameEn: string; nameVi: string } | null; vipRemoved?: boolean; giftBox?: { titleEn: string; titleVi: string } | null; createdAt: string; pending: boolean }[];
   page: number;
@@ -154,12 +167,102 @@ function renderOverview(): void {
   const quick = node('div'); quick.className = 'account-actions';
   // The existing ticket feature owns #play and #playNowButton; this link leads to it.
   const play = link('play', 'playHint', '/account.html?play=1'); play.dataset.enterGame = ''; play.id = 'accountPlaySlot';
-  quick.append(play, link('topup', 'topupHint', '/topup.html'));
+  quick.append(play, link('topup', 'topupHint', '/topup.html'), link('itemHistory', 'itemHistoryHint', '/tracker.html'));
   root.append(quick, node('h3', t('characters')));
   root.append(snapshot.characters.length ? table([t('character'), t('className'), t('level'), t('resetCount'), t('map'), t('status')],
     snapshot.characters.map(c => [c.name, (language === 'vi' ? c.classNameVi || c.className : c.className) || t('unknown'), String(c.level), String(c.resets), c.map === null ? t('unknown') : String(c.map), t(c.online === true ? 'online' : c.online === false ? 'offline' : 'presenceUnknown')])) : node('p', t('noCharacters')));
   root.append(node('p', t('lastSeenNote')), node('p', `VIP: ${snapshot.vipLevel}`));
   root.append(integrations.play);
+}
+
+function renderStoredItems(): void {
+  const root = element('account-items');
+  const title = node('h2', t('storedItems'));
+  title.id = 'account-title-items';
+  root.replaceChildren(title);
+  if (!snapshot) return;
+  const saved = snapshot.storedItems;
+  if (!saved) {
+    root.append(node('p', t('storedItemsUnavailable')));
+    return;
+  }
+
+  const search = node('input');
+  search.type = 'search';
+  search.autocomplete = 'off';
+  const label = node('label', t('storedItemsSearch'));
+  label.append(search);
+  const details = node('dialog');
+  details.className = 'account-item-details';
+  details.setAttribute('aria-labelledby', 'account-item-details-title');
+  const results = node('div');
+  const inventory = node('section');
+  const vault = node('section');
+  results.append(inventory, vault);
+  const showMatches = () => {
+    const query = search.value.trim().toLowerCase();
+    renderStorage(inventory, 'storedInventory', saved.inventory, query, details);
+    renderStorage(vault, 'storedVault', saved.vault, query, details);
+  };
+  search.addEventListener('input', showMatches);
+  showMatches();
+  root.append(node('p', t('storedItemsNote')), label, results, details);
+}
+
+function renderStorage(root: HTMLElement, label: AccountTextKey, storage: StoredItems, query: string, details: HTMLDialogElement): void {
+  const list = node('ul');
+  for (const item of storage.items) {
+    const terms = [item.name, item.nameVi, item.character, item.serial];
+    if (query && !terms.some(value => value?.toLowerCase().includes(query))) continue;
+    const display = language === 'vi' ? item.nameVi || item.name : item.name;
+    const row = node('li', item.character ? `${item.character} · ` : '');
+    const name = `${display || t('unknown')}${item.level > 0 ? ` +${item.level}` : ''}`;
+    const serial = validItemSerial(item.serial);
+    row.append(serial ? itemHistoryLink(name, serial) : document.createTextNode(name));
+    const open = button('storedItemDetails', 'storedItemDetailsHint', () => showStoredItem(details, label, name, item, serial));
+    open.setAttribute('aria-label', `${t('storedItemDetails')} · ${name}`);
+    row.append(' ', open);
+    list.append(row);
+  }
+  const emptyLabel = query && storage.items.length ? 'noMatchingStoredItems' : 'noStoredItems';
+  root.replaceChildren(node('h3', t(label)), list.childElementCount ? list : node('p', t(emptyLabel)));
+  if (storage.truncated) root.append(node('p', t('storedItemsTruncated')));
+}
+
+function validItemSerial(value: string | null): string | null {
+  return value && /^[a-f0-9]{32}$/i.test(value) && value !== '0'.repeat(32) ? value : null;
+}
+
+function itemHistoryLink(name: string, serial: string): HTMLAnchorElement {
+  const history = node('a', name);
+  history.href = `/tracker.html?serial=${encodeURIComponent(serial)}`;
+  history.title = t('itemHistoryHint');
+  return history;
+}
+
+function showStoredItem(dialog: HTMLDialogElement, location: AccountTextKey, name: string, item: StoredItem, serial: string | null): void {
+  const title = node('h3', name);
+  title.id = 'account-item-details-title';
+  const facts = node('dl');
+  const fields = [[t('storedItemLocation'), t(location)], [t('storedItemSlot'), String(item.slot)]];
+  if (item.character) fields.push([t('character'), item.character]);
+  for (const [label, value] of fields) facts.append(node('dt', label), node('dd', value));
+  const close = button('storedItemClose', 'storedItemCloseHint', () => dialog.close());
+  close.autofocus = true;
+  dialog.replaceChildren(title, facts);
+  if (serial) {
+    const value = node('dd');
+    value.append(node('code', serial));
+    facts.append(node('dt', t('storedItemSerial')), value);
+    dialog.append(node('p', t('storedItemHistoryLimit')), itemHistoryLink(t('itemHistory'), serial));
+  } else {
+    dialog.append(node('p', t('storedItemNoSerial')));
+  }
+  const actions = node('div');
+  actions.className = 'account-actions';
+  actions.append(close);
+  dialog.append(actions);
+  dialog.showModal();
 }
 
 function renderCoins(): void {
@@ -231,7 +334,7 @@ function translate(): void {
   missions.updateCharacters(snapshot?.characters.map(c => c.name) ?? []);
   document.title = `${gameName()} — ${t('account')}`;
   element<HTMLSelectElement>('accountSectionSelect').setAttribute('aria-label', t('menu'));
-  renderOverview(); renderCoins(); renderCommunity(); renderNavigation();
+  renderOverview(); renderCoins(); renderCommunity(); renderStoredItems(); renderNavigation();
   element('accountPasswordChange').hidden = !snapshot;
 }
 
@@ -338,6 +441,7 @@ function mount(): void {
   mountAccountPasswordForm(security, { text: t, request, message: showMessage, error: showError, changed: passwordChanged });
   security.append(email.root, trackerPrivacy.root);
   panel('community', 'community');
+  panel('items', 'storedItems');
   onAccountSectionsChanged(() => { renderNavigation(); });
   element<HTMLSelectElement>('accountSectionSelect').addEventListener('change', event => { void openSection((event.target as HTMLSelectElement).value); });
   element('accountHelpButton').addEventListener('click', () => {
@@ -391,7 +495,7 @@ function logOut(): void {
   element('accountDashboard').hidden = true; element('accountPanels').hidden = true; element('accountLoginPanel').hidden = true;
   vip.reset();
   giftBox.reset();
-  credentials = null; snapshot = null; trackerPrivacy.reset(); generation++; element<HTMLFormElement>('accountSignIn').reset();
+  credentials = null; snapshot = null; renderStoredItems(); trackerPrivacy.reset(); generation++; element<HTMLFormElement>('accountSignIn').reset();
   // Reload clears credentials retained by the existing gift/reset/safety modules as well.
 }
 
@@ -404,15 +508,15 @@ function passwordChanged(): void {
 
 mount();
 window.addEventListener('hnmo-account-ready', () => { void restoreSession().catch(() => showMessage('serverError')); });
-window.addEventListener('hnmo-session-expired', () => { credentials = null; snapshot = null; trackerPrivacy.reset(); generation++; element('accountDashboard').hidden = true; element('accountPanels').hidden = true; element('accountLoginPanel').hidden = false; showMessage('loginError'); });
+window.addEventListener('hnmo-session-expired', () => { credentials = null; snapshot = null; renderStoredItems(); trackerPrivacy.reset(); generation++; element('accountDashboard').hidden = true; element('accountPanels').hidden = true; element('accountLoginPanel').hidden = false; showMessage('loginError'); });
 window.addEventListener('hnmo-website-session-changed', () => {
-  authEpoch++; generation++; snapshot = null; credentials = null; trackerPrivacy.reset();
+  authEpoch++; generation++; snapshot = null; credentials = null; renderStoredItems(); trackerPrivacy.reset();
   element('accountDashboard').hidden = true; element('accountPanels').hidden = true;
   location.reload();
 });
 window.addEventListener('pageshow', event => {
   if (!event.persisted) return;
-  authEpoch++; generation++; snapshot = null; credentials = null; trackerPrivacy.reset(); loadedLegacy.clear();
+  authEpoch++; generation++; snapshot = null; credentials = null; renderStoredItems(); trackerPrivacy.reset(); loadedLegacy.clear();
   element('accountDashboard').hidden = true; element('accountPanels').hidden = true; element('accountLoginPanel').hidden = false;
   void restoreSession().catch(() => showMessage('serverError'));
 });

@@ -7,6 +7,7 @@ namespace HNMO.Web.Tests.Api;
 using System.Text.Json;
 using System.Threading;
 using HNMO.DataModel.Configuration;
+using HNMO.DataModel.Configuration.Items;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.CashShop;
 using HNMO.GameLogic.PlugIns.GiftBox;
@@ -88,6 +89,32 @@ public class WebsiteAccountControllerTests
         {
             ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() },
         };
+    }
+
+    /// <summary>Publishes only the authenticated player's saved items and never assigns a new serial.</summary>
+    [Test]
+    public async Task SavedStorageUsesOnlyExistingSerialsAsync()
+    {
+        using var definitions = this._persistence.CreateNewContext();
+        var definition = definitions.CreateNew<ItemDefinition>();
+        definition.Name = "Test sword";
+        using var players = this._persistence.CreateNewPlayerContext(this._configuration);
+        var bag = players.CreateNew<ItemStorage>();
+        this._account.Characters.Single().Inventory = bag;
+        this._account.Vault = players.CreateNew<ItemStorage>();
+        var known = Guid.NewGuid();
+        var stored = players.CreateNew<Item>();
+        stored.Definition = definition;
+        stored.Serial = known;
+        bag.Items.Add(stored);
+        var legacy = players.CreateNew<Item>();
+        legacy.Definition = definition;
+        this._account.Vault.Items.Add(legacy);
+
+        var snapshot = (await this.ReadAsync(0).ConfigureAwait(false)).GetProperty("storedItems");
+        Assert.That(snapshot.GetProperty("inventory").GetProperty("items")[0].GetProperty("serial").GetString(), Is.EqualTo(known.ToString("N")));
+        Assert.That(snapshot.GetProperty("vault").GetProperty("items")[0].GetProperty("serial").ValueKind, Is.EqualTo(JsonValueKind.Null));
+        Assert.That(legacy.Serial, Is.Null);
     }
 
     /// <summary>Wrong, missing and banned credentials all reveal no account data.</summary>

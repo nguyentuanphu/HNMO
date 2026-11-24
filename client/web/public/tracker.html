@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{game}</title>
+  <link rel="stylesheet" href="/website-tracker.css">
+  <link rel="stylesheet" href="/website-themes.css">
+  <link rel="stylesheet" href="/website-shell.css">
+  <script type="module" src="/js/websiteThemeEntry.js"></script>
+  <script type="module" src="/js/websiteShellEntry.js"></script>
+</head>
+<body data-website-page="tracker">
+  <main id="item-history" data-no-i18n>
+    <a href="/home.html"><img data-brand-logo alt="" width="48" height="48" hidden><span data-game-name></span></a>
+    <span class="tracker-languages" role="group" aria-label="Language / Ngôn ngữ">
+      <button type="button" data-site-language="en">English</button>
+      <button type="button" data-site-language="vi">Tiếng Việt</button>
+    </span>
+    <h1 id="item-history-heading">Item history</h1>
+    <form id="item-history-search">
+      <label for="item-serial">Item serial</label>
+      <div>
+        <input id="item-serial" name="serial" type="text" maxlength="36" autocomplete="off" spellcheck="false" required>
+        <button type="submit" id="item-search-button">Search</button>
+      </div>
+    </form>
+    <p id="item-history-limits"></p>
+    <p id="item-history-status" role="status"></p>
+    <ol id="item-history-results"></ol>
+  </main>
+  <script type="module" src="/js/siteLanguage.js"></script>
+  <script type="module" src="/js/websiteItemHistory.js"></script>
+</body>
+</html>

@@ -20,4 +20,11 @@ public interface IHnmoPlayerStateRowQueryBackend : IHnmoPlayerStateRowBackend
     /// <param name="limit">The maximum rows, between 1 and 101.</param>
     /// <returns>Only the bounded matching page.</returns>
     IReadOnlyList<HnmoFeatureRow> LoadScopePage(string feature, string scopePrefix, int offset, int limit);
+
+    /// <summary>Reads the active log rows containing an exact origin serial, using the same activity store.</summary>
+    /// <param name="serial">The origin serial, maintained by item persistence.</param>
+    /// <param name="fromUtc">The inclusive retention cutoff.</param>
+    /// <param name="limit">The maximum number of matches, between 1 and 101.</param>
+    /// <returns>The bounded results, or null if this backend does not support indexed serial reads.</returns>
+    IReadOnlyList<HnmoFeatureRow>? LoadActivityItemPage(Guid serial, DateTime fromUtc, int limit) => null;
 }

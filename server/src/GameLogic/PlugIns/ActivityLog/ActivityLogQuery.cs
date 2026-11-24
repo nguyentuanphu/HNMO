@@ -18,6 +18,9 @@ public sealed class ActivityLogQuery
     /// <summary>Gets or sets optional item name, GUID, or detail substring filter.</summary>
     public string? Item { get; set; }
 
+    /// <summary>Gets or sets a filter for the exact origin serial, excluding old entity IDs and unstructured text.</summary>
+    public Guid? ItemSerial { get; set; }
+
     /// <summary>Gets or sets optional activity type filter.</summary>
     public ActivityKind? Kind { get; set; }
 
