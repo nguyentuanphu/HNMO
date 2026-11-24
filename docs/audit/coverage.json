@@ -1,5 +1,5 @@
 {
-  "generatedAt": "446a83b7",
+  "generatedAt": "dd76795e",
   "maxLines": 6000,
   "units": [
     {
@@ -6603,11 +6603,14 @@
       ],
       "files": 11,
       "lines": 1256,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "dd76795e",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "GameData/SoundData",
+        "docs/audit/findings/unit-client-src-source-Data-GameData-SoundData.md"
+      ],
+      "evidence": "11f/1256L: No game rules (data schemas, color folders, effect/model/sound/translation assets & validators (no game rules).)",
       "prs": ""
     },
     {
