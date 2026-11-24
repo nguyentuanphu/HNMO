@@ -1,5 +1,5 @@
 {
-  "generatedAt": "eb3b5ab1",
+  "generatedAt": "97c6da45",
   "maxLines": 6000,
   "units": [
     {
@@ -8724,11 +8724,16 @@
       ],
       "files": 38,
       "lines": 5928,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "97c6da45",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Social/ChatRoomModel.cpp",
+        "Social/ChatRoomModel.h",
+        "Social/ChatRoomView.cpp",
+        "docs/audit/findings/unit-client-src-source-UI-Social-files-1.md"
+      ],
+      "evidence": "38f/5928L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
       "prs": ""
     },
     {
