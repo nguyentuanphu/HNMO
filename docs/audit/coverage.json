@@ -1,5 +1,5 @@
 {
-  "generatedAt": "6ee76a24",
+  "generatedAt": "ab59b85f",
   "maxLines": 6000,
   "units": [
     {
@@ -8633,11 +8633,14 @@
       ],
       "files": 14,
       "lines": 2684,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "ab59b85f",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "UI/Quests",
+        "docs/audit/findings/unit-client-src-source-UI-Quests.md"
+      ],
+      "evidence": "14f/2684L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
       "prs": ""
     },
     {
