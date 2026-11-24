@@ -1,5 +1,5 @@
 {
-  "generatedAt": "369415d3",
+  "generatedAt": "4492b11c",
   "maxLines": 6000,
   "units": [
     {
@@ -3338,11 +3338,14 @@
       ],
       "files": 3,
       "lines": 239,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "4492b11c",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "RemoteView/Gens",
+        "docs/audit/findings/unit-server-src-GameServer-RemoteView-Gens.md"
+      ],
+      "evidence": "3f/239L: No game rules (pure S->C packet serializers implementing GameLogic.Views interfaces; no embedded gameplay rules.)",
       "prs": ""
     },
     {
