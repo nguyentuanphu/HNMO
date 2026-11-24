@@ -1,5 +1,5 @@
 {
-  "generatedAt": "5fb4939d",
+  "generatedAt": "4e8e848d",
   "maxLines": 6000,
   "units": [
     {
@@ -8381,11 +8381,16 @@
       ],
       "files": 8,
       "lines": 2324,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "4e8e848d",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "HUD/SkillList.cpp",
+        "HUD/SkillList.h",
+        "HUD/SlideTicker.cpp",
+        "docs/audit/findings/unit-client-src-source-UI-HUD-files-3.md"
+      ],
+      "evidence": "8f/2324L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
       "prs": ""
     },
     {
