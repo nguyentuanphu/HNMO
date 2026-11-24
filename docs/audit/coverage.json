@@ -1,5 +1,5 @@
 {
-  "generatedAt": "3e47d42d",
+  "generatedAt": "24439f99",
   "maxLines": 6000,
   "units": [
     {
@@ -7461,11 +7461,14 @@
       ],
       "files": 1,
       "lines": 15727,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "24439f99",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Server/WSclient.cpp",
+        "docs/audit/findings/unit-client-src-source-Network-Server-files-2.md"
+      ],
+      "evidence": "1f/15727L: No game rules (TCP/packet queue, auto-reconnect & S->C/C->S packet dispatch plumbing in WSclient (server validates actions).)",
       "prs": ""
     },
     {
