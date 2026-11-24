@@ -1,5 +1,5 @@
 {
-  "generatedAt": "eb42cbb2",
+  "generatedAt": "1aa6cabe",
   "maxLines": 6000,
   "units": [
     {
@@ -4443,11 +4443,14 @@
       ],
       "files": 4,
       "lines": 58,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "1aa6cabe",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "server/src/DataModel/Composition",
+        "docs/audit/findings/unit-server-src-DataModel-Composition.md"
+      ],
+      "evidence": "4f/58L: No game rules (domain aggregate/transient marker attributes only).",
       "prs": ""
     },
     {
