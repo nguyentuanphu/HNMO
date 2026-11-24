@@ -83,7 +83,7 @@ public sealed class EconomyStore
             return 0;
         }
 
-        if (item.Definition.Group == 12)
+        if (item.Definition.Group == 12 && item.Definition.Number != 15)
         {
             return (item.Level + 1) * 10;
         }
