@@ -1,5 +1,5 @@
 {
-  "generatedAt": "5d43bdbf",
+  "generatedAt": "f9d93cc7",
   "maxLines": 6000,
   "units": [
     {
@@ -5691,11 +5691,16 @@
       ],
       "files": 3,
       "lines": 5977,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "f9d93cc7",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "_enum.h:56-304",
+        "_define.h",
+        "_struct.h",
+        "docs/audit/findings/unit-client-src-source-Core-Globals-files-2.md"
+      ],
+      "evidence": "3f/5977L: Core client enums (_enum.h skill IDs, option effect IDs AT_*, eExperienceType_MaxLevelReached=0x10) & struct bounds matching server/web protocol.",
       "prs": ""
     },
     {
