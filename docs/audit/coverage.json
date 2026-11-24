@@ -1,5 +1,5 @@
 {
-  "generatedAt": "28ceb59c",
+  "generatedAt": "f9b96fc8",
   "maxLines": 6000,
   "units": [
     {
@@ -1223,11 +1223,13 @@
       ],
       "files": 6,
       "lines": 678,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "f9b96fc8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "None (custom HNMO feature)"
+      ],
+      "evidence": "All 6 ActivityLog files read in full. Verified row-level persistence, 6h retention archival, and valuable item filtering. See docs/audit/findings/unit-server-src-GameLogic-PlugIns-ActivityLog.md.",
       "prs": ""
     },
     {
@@ -1283,11 +1285,13 @@
       ],
       "files": 5,
       "lines": 649,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "f9b96fc8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "None (custom HNMO feature)"
+      ],
+      "evidence": "All 5 BannedWords files read in full. Verified FormC normalization, same-length diacritic folding, and chat/name filtering. See docs/audit/findings/unit-server-src-GameLogic-PlugIns-BannedWords.md.",
       "prs": ""
     },
     {
@@ -1328,11 +1332,13 @@
       ],
       "files": 4,
       "lines": 378,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "f9b96fc8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "None (custom HNMO feature)"
+      ],
+      "evidence": "All 4 BuildCalculator files read in full. Verified server-authoritative ItemAwareAttributeSystem evaluation and input clamping. See docs/audit/findings/unit-server-src-GameLogic-PlugIns-BuildCalculator.md.",
       "prs": ""
     },
     {
@@ -1704,11 +1710,13 @@
       ],
       "files": 5,
       "lines": 502,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "f9b96fc8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "None (custom HNMO feature)"
+      ],
+      "evidence": "All 5 GmManager files read in full. Verified GmCommandPermissionCatalog, thread-safe GmPermissionStore, and ActivityLog auditing. See docs/audit/findings/unit-server-src-GameLogic-PlugIns-GmManager.md.",
       "prs": ""
     },
     {
@@ -1764,11 +1772,13 @@
       ],
       "files": 3,
       "lines": 121,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "f9b96fc8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "None (server feature config)"
+      ],
+      "evidence": "All 3 ItemRegistration files read in full. Verified default Golden Archer (236) Rena (14:21) registration rule. See docs/audit/findings/unit-server-src-GameLogic-PlugIns-ItemRegistration.md.",
       "prs": ""
     },
     {
@@ -1899,11 +1909,13 @@
       ],
       "files": 5,
       "lines": 553,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "f9b96fc8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "None (custom HNMO feature)"
+      ],
+      "evidence": "All 5 News files read in full. Verified NewsStore row-sync persistence, ImageUrl sanitization, and noted NotifyInChat is not checked on login. See docs/audit/findings/unit-server-src-GameLogic-PlugIns-News.md.",
       "prs": ""
     },
     {
@@ -2143,11 +2155,13 @@
       ],
       "files": 5,
       "lines": 161,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "f9b96fc8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/references/common-server-and-character-rules-s6-s9.md"
+      ],
+      "evidence": "All 5 UnlockCharacterClass files read in full. Verified S6/S9 unlock levels (MG 220, DL 250, RF 150, SUM 1) and bot exclusion guard. See docs/audit/findings/unit-server-src-GameLogic-PlugIns-UnlockCharacterClass.md.",
       "prs": ""
     },
     {
