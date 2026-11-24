@@ -25,6 +25,7 @@ internal static class Website
 
         Forward(app, "/website/server-guide", "api/website/server-guide", options, clients, rateLimited: true);
         Forward(app, "/website/tracker", "api/website/tracker", options, clients, rateLimited: true);
+        Forward(app, "/website/tracker/jewels", "api/website/tracker/jewels", options, clients, rateLimited: true);
         Forward(app, "/website/tracker/item", "api/website/tracker/item", options, clients, rateLimited: true, guidQueryKey: "serial");
         Forward(app, "/website/class-guide", "api/website/class-guide", options, clients, rateLimited: true, integerQueryKeys: ["serverId", "classId"]);
         Forward(app, "/website/data", "api/website", options, clients);

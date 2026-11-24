@@ -8,6 +8,7 @@ using System.Threading;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.PlugIns.Economy;
+using HNMO.GameLogic.PlugIns.JewelBank;
 using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.Persistence.AdminAuth;
@@ -48,11 +49,13 @@ public sealed class EconomyDashboardOperations(
     /// </summary>
     /// <param name="config">Economy dashboard configuration.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
+    /// <param name="jewelBank">The active Jewel Bank settings, if the bank is enabled.</param>
     /// <returns>The newly captured snapshot.</returns>
     [NotExposedToAgents("Admin panel economy dashboard UI only.")]
     public async ValueTask<EconomyDailySnapshot> CaptureNowAsync(
         EconomyConfiguration config,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken,
+        JewelBankConfiguration? jewelBank = null)
     {
         ArgumentNullException.ThrowIfNull(config);
         await executor.RequireAsync(AdminRoles.Administrator, cancellationToken).ConfigureAwait(false);
@@ -75,7 +78,9 @@ public sealed class EconomyDashboardOperations(
             accounts,
             external,
             config,
-            timeProvider.GetUtcNow().UtcDateTime);
+            timeProvider.GetUtcNow().UtcDateTime,
+            owner,
+            jewelBank);
     }
 
     private static async ValueTask<List<Account>> LoadAllAccountsAsync(IPlayerContext context, CancellationToken cancellationToken)
@@ -91,7 +96,13 @@ public sealed class EconomyDashboardOperations(
                 break;
             }
 
-            result.AddRange(page);
+            foreach (var summary in page)
+            {
+                if (await context.GetAccountByLoginNameAsync(summary.LoginName, cancellationToken).ConfigureAwait(false) is { } account)
+                {
+                    result.Add(account);
+                }
+            }
             if (page.Count < batchSize)
             {
                 break;

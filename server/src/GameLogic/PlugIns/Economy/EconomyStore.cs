@@ -8,8 +8,10 @@ using System.Collections.Concurrent;
 using System.Globalization;
 using System.IO;
 using System.Text.Json;
+using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.PlugIns.ActivityLog;
+using HNMO.GameLogic.PlugIns.JewelBank;
 using HNMO.Persistence;
 
 /// <summary>
@@ -138,12 +140,16 @@ public sealed class EconomyStore
     /// <param name="externalBalances">Optional external asset entries (Jewel Bank, Item Market).</param>
     /// <param name="config">Economy dashboard configuration.</param>
     /// <param name="utcNow">Current UTC timestamp.</param>
+    /// <param name="world">The installed world used for the verified jewel projection, when available.</param>
+    /// <param name="jewelBank">The active Jewel Bank settings, if the bank is enabled.</param>
     /// <returns>The persisted snapshot.</returns>
     public EconomyDailySnapshot CaptureSnapshot(
         IReadOnlyList<Account> accounts,
         IReadOnlyList<EconomyAccountTotals> externalBalances,
         EconomyConfiguration config,
-        DateTime utcNow)
+        DateTime utcNow,
+        GameConfiguration? world = null,
+        JewelBankConfiguration? jewelBank = null)
     {
         ArgumentNullException.ThrowIfNull(accounts);
         ArgumentNullException.ThrowIfNull(externalBalances);
@@ -210,6 +216,16 @@ public sealed class EconomyStore
             .Take(10)
             .ToList();
 
+        var mixes = world?.JewelMixes;
+        var bankJewels = jewelBank?.Jewels?.Select(jewel => (jewel.Group, jewel.Number)).ToArray() ?? [];
+        var jewelActivity = mixes is { Count: > 0 } || bankJewels.Length > 0
+            ? EconomyJewelActivity.Capture(accounts, dayActivities, dayActivities.Count == 2000, new ConfiguredJewelCounter(mixes ?? [], bankJewels))
+            : null;
+        if (jewelActivity is not null && jewelBank is not null && !string.IsNullOrWhiteSpace(jewelBank.FileName))
+        {
+            jewelActivity = jewelActivity with { BankPieces = EconomyJewelActivity.ReadBankPieces(accounts, jewelBank.FileName) };
+        }
+
         var snapshot = new EconomyDailySnapshot
         {
             DateSydney = dateKey,
@@ -218,6 +234,7 @@ public sealed class EconomyStore
             TotalZen = allAccounts.Sum(a => a.Zen),
             TotalCoins = allAccounts.Sum(a => a.Coins),
             TotalJewels = allAccounts.Sum(a => a.Jewels),
+            JewelActivity = jewelActivity,
             TotalValuableItems = allAccounts.Sum(a => a.ValuableItems),
             DropsPickedPerDay = dayActivities.Count(e => e.Kind == ActivityKind.Pickup),
             ChaosMixesPerDay = dayActivities.Count(e => e.Kind == ActivityKind.ChaosMix),
@@ -259,6 +276,31 @@ public sealed class EconomyStore
                 snapshot.CapturedAtUtc,
                 snapshot.CapturedAtUtc.AddDays(retentionDays));
             backend.UpsertBatch([row], []);
+        }
+    }
+
+    /// <summary>Loads the most recent public jewel source without reading private account samples on PostgreSQL.</summary>
+    /// <returns>The stored snapshot with the required jewel projection, if one exists.</returns>
+    public EconomyDailySnapshot? ReadLatestJewelSnapshot()
+    {
+        var backend = HnmoPlayerStateRowStoreRegistry.GetBackend(this._resolvedStatePath);
+        if (backend is not IHnmoPlayerStateRowQueryBackend indexed)
+        {
+            return this.LoadSnapshots(1).LastOrDefault();
+        }
+
+        if (indexed.LoadLatestEconomyJewels() is not { } row)
+        {
+            return null;
+        }
+
+        try
+        {
+            return JsonSerializer.Deserialize<EconomyDailySnapshot>(row.PayloadJson, JsonOptions);
+        }
+        catch (JsonException)
+        {
+            return null;
         }
     }
 

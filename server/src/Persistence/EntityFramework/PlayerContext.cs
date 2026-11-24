@@ -170,6 +170,19 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext
     }
 
     /// <inheritdoc />
+    public async ValueTask<IReadOnlySet<string>> ReadEligibleAccountKeysAsync(IEnumerable<string> loginNames, CancellationToken cancellationToken = default)
+    {
+        var keys = loginNames.Distinct(StringComparer.OrdinalIgnoreCase).Take(100).ToArray();
+        using var l = await this.LockAsync(cancellationToken).ConfigureAwait(false);
+        var eligible = await this.Context.Set<Account>().AsNoTracking()
+            .Where(account => keys.Contains(account.LoginName) && !account.IsBot && !account.IsTemplate
+                && account.State != DataModel.Entities.AccountState.Banned && account.State != DataModel.Entities.AccountState.TemporarilyBanned)
+            .Select(account => account.LoginName)
+            .ToArrayAsync(cancellationToken).ConfigureAwait(false);
+        return eligible.ToHashSet(StringComparer.OrdinalIgnoreCase);
+    }
+
+    /// <inheritdoc />
     public async ValueTask<IEnumerable<DataModel.Entities.Account>> SearchAccountsAsync(string searchTerm, int skip, int count, CancellationToken cancellationToken = default)
     {
         using var l = await this.LockAsync(cancellationToken).ConfigureAwait(false);
