@@ -1,5 +1,5 @@
 {
-  "generatedAt": "f501f313",
+  "generatedAt": "5b57035f",
   "maxLines": 6000,
   "units": [
     {
@@ -6930,11 +6930,17 @@
       ],
       "files": 12,
       "lines": 1114,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "5b57035f",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "HelperPickupFilter.cpp:10-41",
+        "Attack.cpp",
+        "Movement.cpp",
+        "Pickup.cpp",
+        "docs/audit/findings/unit-client-src-source-GameLogic-Automation.md"
+      ],
+      "evidence": "12f/1114L: HelperPickupFilter & automation helpers implement MuHelper pickup/attack/movement rules mirrored to Web autoPlay.ts.",
       "prs": ""
     },
     {
