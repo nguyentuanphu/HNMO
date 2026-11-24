@@ -1,5 +1,5 @@
 {
-  "generatedAt": "dee6c8de",
+  "generatedAt": "f4ed31a7",
   "maxLines": 6000,
   "units": [
     {
@@ -6507,11 +6507,16 @@
       ],
       "files": 32,
       "lines": 5974,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "f4ed31a7",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "MonsterData/LegacyMonsterKind.cpp",
+        "MonsterData/LegacyMonsterKind.h",
+        "MonsterData/MonsterAnimations.cpp",
+        "docs/audit/findings/unit-client-src-source-Data-GameData-MonsterData-files-1.md"
+      ],
+      "evidence": "32f/5974L: No game rules (data schemas, color folders, effect/model/sound/translation assets & validators (no game rules).)",
       "prs": ""
     },
     {
