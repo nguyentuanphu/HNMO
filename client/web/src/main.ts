@@ -21,7 +21,7 @@ import { glowMaterialCount, loadGlowColors, prewarmItemGlow } from './game/itemG
 import { drawItem } from './ui/itemIcons.js';
 import { BAG, Inventory } from './game/inventory.js';
 import { ItemWindows } from './ui/itemWindows.js';
-import { CharacterStats } from './game/stats.js';
+import { CharacterStats, isOutlawHeroState } from './game/stats.js';
 import { Hud } from './ui/hud.js';
 import { setUpGuide } from './ui/guide.js';
 import { setUpSettings, type SettingsWindow } from './ui/settingsWindow.js';
@@ -1360,7 +1360,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   const info = await enterWorld(connection, character.name);
   inventory.money = typeof info.Money === 'number' ? info.Money : 0;
   // Level, experience, life, mana and stats from here on (the HUD and the tooltips read them).
-  const stats = new CharacterStats(connection, character.level, info);
+  const stats = new CharacterStats(connection, character.level, info, () => connection.playerId ?? null);
   state.stats = stats;
   state.itemWindows = new ItemWindows({
     inventory,
@@ -1748,6 +1748,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   const characterWindow = new CharacterWindow({
     connection, stats, inventory, classIndex: character.classIndex, name: character.name,
     currentSkill: () => skills.skillAt(skills.current),
+    pkLevel: () => stats.heroState,
     onQuest: () => quests.toggleMyQuest(),
     onPet: () => { void petInfoWindow.toggle(); },
     onToggle: (open) => {
@@ -1884,7 +1885,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   // The move window (M): the warp list; a click warps (WarpCommandRequest).
   const moveWindow = new MoveWindow({
     check: () => ({
-      classIndex: character.classIndex, level: stats.level, money: inventory.money, outlaw: false,
+      classIndex: character.classIndex, level: stats.level, money: inventory.money, outlaw: isOutlawHeroState(stats.heroState),
       wings: inventory.items.get(7), helper: inventory.items.get(8), rings: [inventory.items.get(10), inventory.items.get(11)],
     }),
     warp: (warp) => connection.send('ClientToServer', 'WarpCommandRequest', { CommandKey: moveCommandKey, WarpInfoIndex: warp.index }),
@@ -1894,6 +1895,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     if (event.key.toLowerCase() === 'm' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void moveWindow.toggle(); }
   });
   inventory.onChange(() => moveWindow.refresh());
+  stats.onChange(() => moveWindow.refresh());
   // Gates you walk into (CheckGate): the server takes the hero through (EnterGateRequest).
   state.gates = new GateWatcher({
     hero: () => state.hero && state.mapNumber !== null ? {
@@ -1932,12 +1934,8 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     buy: (slot) => inventory.buy(slot), sell: (slot) => inventory.sell(slot), selling: () => inventory.sellingSlot !== null,
     closeShop: () => itemWindows.closeAll(),
     bagItems: () => [...inventory.items].filter(([slot]) => slot >= 12),
-    // "Full": fewer than four free cells left.
-    bagFull: () => {
-      let free = 0;
-      for (let slot = 12; slot < 76; slot++) if (inventory.fits(inventory.items, BAG, slot, { width: 1, height: 1 }, null)) free++;
-      return free < 4;
-    },
+    // "Full": fewer than four free cells left (across main bag + unlocked extensions).
+    bagFull: () => inventory.countFreeBagCells(stats.inventoryExtensions) < 4,
     healingPotions: healingCount,
     isHealingPotion: (item) => itemDefinition(item.group, item.number)?.tags?.includes('healingPotion') ?? false,
     // Kept: everything but plain weapons and armour (groups 0-11) that aren't expensive or unsellable.
