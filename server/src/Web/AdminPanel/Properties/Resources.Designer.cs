@@ -16285,5 +16285,138 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("ArenaEnabledHint", resourceCulture);
             }
         }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string SeasonsPageTitle {
+            get {
+                return ResourceManager.GetString("SeasonsPageTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string SeasonsPageIntro {
+            get {
+                return ResourceManager.GetString("SeasonsPageIntro", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string SeasonsPageHelp {
+            get {
+                return ResourceManager.GetString("SeasonsPageHelp", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string SeasonsHostOnly {
+            get {
+                return ResourceManager.GetString("SeasonsHostOnly", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string SeasonsPrimaryBadge {
+            get {
+                return ResourceManager.GetString("SeasonsPrimaryBadge", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string SeasonsStatusOn {
+            get {
+                return ResourceManager.GetString("SeasonsStatusOn", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string SeasonsStatusOff {
+            get {
+                return ResourceManager.GetString("SeasonsStatusOff", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string SeasonsEnableLabel {
+            get {
+                return ResourceManager.GetString("SeasonsEnableLabel", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string SeasonsAlwaysEnabledNote {
+            get {
+                return ResourceManager.GetString("SeasonsAlwaysEnabledNote", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string SeasonsPortsSummary {
+            get {
+                return ResourceManager.GetString("SeasonsPortsSummary", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string SeasonsOpenPanel {
+            get {
+                return ResourceManager.GetString("SeasonsOpenPanel", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string SeasonsManageLink {
+            get {
+                return ResourceManager.GetString("SeasonsManageLink", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string SeasonsSaveButton {
+            get {
+                return ResourceManager.GetString("SeasonsSaveButton", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string SeasonsSaved {
+            get {
+                return ResourceManager.GetString("SeasonsSaved", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string SeasonsRestartRequired {
+            get {
+                return ResourceManager.GetString("SeasonsRestartRequired", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string SeasonsRestartButton {
+            get {
+                return ResourceManager.GetString("SeasonsRestartButton", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string SeasonsRestartConfirm {
+            get {
+                return ResourceManager.GetString("SeasonsRestartConfirm", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string SeasonsRestartCancel {
+            get {
+                return ResourceManager.GetString("SeasonsRestartCancel", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string SeasonsRestartSent {
+            get {
+                return ResourceManager.GetString("SeasonsRestartSent", resourceCulture);
+            }
+        }
     }
 }
