@@ -1,5 +1,5 @@
 {
-  "generatedAt": "820a44b3",
+  "generatedAt": "2308c715",
   "maxLines": 6000,
   "units": [
     {
@@ -8523,11 +8523,15 @@
       ],
       "files": 23,
       "lines": 4699,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "2308c715",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "StorageInventory.cpp:523-530",
+        "ShopUpdates.cpp",
+        "docs/audit/findings/unit-client-src-source-UI-Inventory-files-3.md"
+      ],
+      "evidence": "23f/4699L: StorageInventory computes classic Vault access fee floor(totalLv^2*0.04) + (locked ? Lv*2 : 0), min 1, rounded 10/100.",
       "prs": ""
     },
     {
