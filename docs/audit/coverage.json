@@ -1,5 +1,5 @@
 {
-  "generatedAt": "a196e276",
+  "generatedAt": "f4519e60",
   "maxLines": 6000,
   "units": [
     {
@@ -8932,11 +8932,16 @@
       ],
       "files": 12,
       "lines": 4843,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "f4519e60",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "GameMaps/GMHuntingGround.cpp",
+        "GameMaps/GMHuntingGround.h",
+        "GameMaps/GMKarutan1.cpp",
+        "docs/audit/findings/unit-client-src-source-World-GameMaps-files-4.md"
+      ],
+      "evidence": "12f/4843L: No game rules (3D map visual objects, shaders, fog, weather & terrain loaders (MapManager, GMAida, etc.; no game rules).)",
       "prs": ""
     },
     {
