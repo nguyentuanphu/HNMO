@@ -1,5 +1,5 @@
 {
-  "generatedAt": "b622ffa7",
+  "generatedAt": "0b67af2e",
   "maxLines": 6000,
   "units": [
     {
@@ -1985,11 +1985,13 @@
       ],
       "files": 28,
       "lines": 1842,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "0b67af2e",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/references/common-server-and-character-rules-s6-s9.md"
+      ],
+      "evidence": "All 28 PeriodicTasks files read in full. Verified PeriodicTaskBasePlugIn scheduling, MiniGameStartBasePlugIn lifecycle, Kanturu tower window, HappyHour S6/S9 parity, and DurabilityDecayPlugIn wear-period math. See docs/audit/findings/unit-server-src-GameLogic-PlugIns-PeriodicTasks.md.",
       "prs": ""
     },
     {
