@@ -29,4 +29,6 @@
   <data name="ContentPrivacyEn" xml:space="preserve"><value>Nội dung chính sách quyền riêng tư công khai (tiếng Anh)</value></data>
   <data name="ContentPrivacyVi" xml:space="preserve"><value>Nội dung chính sách quyền riêng tư công khai (tiếng Việt)</value></data>
   <data name="ContentDescription" xml:space="preserve"><value>Hiển thị dưới dạng văn bản. Dùng dòng trống giữa các đoạn. Để trống nếu chưa công bố ngôn ngữ này.</value></data>
+  <data name="BannedCharacters" xml:space="preserve"><value>Công bố nhân vật bị khóa</value></data>
+  <data name="BannedCharactersDescription" xml:space="preserve"><value>Chỉ hiển thị nhân vật đang bị khóa khi cho phép công bố tên. Vẫn áp dụng lựa chọn ẩn tên của người chơi.</value></data>
 </root>

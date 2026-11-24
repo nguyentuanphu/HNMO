@@ -29,4 +29,6 @@
   <data name="ContentPrivacyEn" xml:space="preserve"><value>Datenschutzerklärung (Englisch)</value></data>
   <data name="ContentPrivacyVi" xml:space="preserve"><value>Datenschutzerklärung (Vietnamesisch)</value></data>
   <data name="ContentDescription" xml:space="preserve"><value>Wird als Klartext veröffentlicht. Leerzeilen trennen Absätze. Leer lassen, um diese Sprache unveröffentlicht zu lassen.</value></data>
+  <data name="BannedCharacters" xml:space="preserve"><value>Charaktersperren veröffentlichen</value></data>
+  <data name="BannedCharactersDescription" xml:space="preserve"><value>Zeigt aktive Charaktersperren, wenn Charakternamen freigegeben sind. Die Datenschutzeinstellungen der Spieler gelten weiterhin.</value></data>
 </root>

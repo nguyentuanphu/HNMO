@@ -159,6 +159,25 @@ public interface IPlayerContext : IContext
     /// </returns>
     ValueTask<Account?> GetAccountByCharacterNameAsync(string characterName, CancellationToken cancellationToken = default);
 
+    /// <summary>Reads private ownership for a bounded set of ranking candidates.</summary>
+    /// <param name="characterNames">Character names from existing ranking or moderation records.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Character names and private account keys and states.</returns>
+    async ValueTask<IReadOnlyList<(string Character, string Account, AccountState State)>> ReadRankingOwnersAsync(
+        IEnumerable<string> characterNames, CancellationToken cancellationToken = default)
+    {
+        var owners = new List<(string, string, AccountState)>();
+        foreach (var name in characterNames.Distinct(StringComparer.OrdinalIgnoreCase).Take(100))
+        {
+            if (await this.GetAccountByCharacterNameAsync(name, cancellationToken).ConfigureAwait(false) is { IsBot: false, IsTemplate: false } account)
+            {
+                owners.Add((name, account.LoginName, account.State));
+            }
+        }
+
+        return owners;
+    }
+
     /// <summary>
     /// Gets the identifier of the account of a character, without loading the account.
     /// </summary>

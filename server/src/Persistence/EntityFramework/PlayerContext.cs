@@ -268,6 +268,20 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext
     }
 
     /// <inheritdoc />
+    public async ValueTask<IReadOnlyList<(string Character, string Account, DataModel.Entities.AccountState State)>> ReadRankingOwnersAsync(
+        IEnumerable<string> characterNames, CancellationToken cancellationToken = default)
+    {
+        var names = characterNames.Distinct(StringComparer.OrdinalIgnoreCase).Take(100).ToArray();
+        using var l = await this.LockAsync(cancellationToken).ConfigureAwait(false);
+        var owners = await this.Context.Set<Account>().AsNoTracking()
+            .Where(account => !account.IsBot && !account.IsTemplate)
+            .SelectMany(account => account.RawCharacters.Where(character => names.Contains(character.Name)),
+                (account, character) => new { character.Name, account.LoginName, account.State })
+            .Take(100).ToListAsync(cancellationToken).ConfigureAwait(false);
+        return owners.Select(owner => (owner.Name, owner.LoginName, owner.State)).ToArray();
+    }
+
+    /// <inheritdoc />
     public async ValueTask<Guid?> GetAccountIdByCharacterNameAsync(string characterName, CancellationToken cancellationToken = default)
     {
         using var l = await this.LockAsync(cancellationToken).ConfigureAwait(false);

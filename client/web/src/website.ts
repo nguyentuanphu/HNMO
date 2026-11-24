@@ -1372,13 +1372,14 @@ else setTimeout(preloadGame, 1500);
 
 // ---------- schedule, rankings and drops (read from the server, /website/details) ----------
 
-interface RankedCharacter { rank: number; name: string; className: string; level: number; masterLevel: number; resets: number }
-interface EventRanking { type: string; entries: { rank: number; name: string; className: string; score: number; games: number }[] }
+interface RankedCharacter { rank: number; name: string | null; className: string; level: number; masterLevel: number; resets: number }
+interface EventRanking { type: string; entries: { rank: number; name: string | null; className: string; score: number; games: number }[] }
 interface UpcomingEvent { name: string; nameVi: string; startsAt: string }
 interface DropGroup { name: string | null; chancePercent: number; minimumMonsterLevel: number | null; maximumMonsterLevel: number | null; monster: string | null; itemCount: number }
 interface Details {
   characters: RankedCharacter[] | null;
   eventRankings: EventRanking[] | null;
+  bannedCharacters?: string[] | null;
   upcoming: { serverId: number; events: UpcomingEvent[] }[] | null;
   drops: DropGroup[] | null;
 }
@@ -1436,7 +1437,7 @@ function renderDetails(): void {
   const characters = details?.characters;
   if (characters === null || characters === undefined) table("ranking", [], [], details ? t("partUnavailable") : "");
   else table("ranking", [[t("rank"), false], [t("character"), false], [t("className"), false], [t("level"), true], [t("masterShort"), true], [t("resets"), true]],
-    characters.map((c) => [c.rank, c.name, localized(c.className), c.level, c.masterLevel, c.resets]), t("noRanking"));
+    characters.map((c) => [c.rank, c.name ?? "—", localized(c.className), c.level, c.masterLevel, c.resets]), t("noRanking"));
   // Event rankings.
   const select = element("event-ranking") as HTMLSelectElement;
   const boards = details?.eventRankings ?? [];
@@ -1446,7 +1447,12 @@ function renderDetails(): void {
   const board = boards.find((entry) => entry.type === eventType);
   if (!details?.eventRankings) table("event-table", [], [], details ? t("partUnavailable") : "");
   else table("event-table", [[t("rank"), false], [t("character"), false], [t("className"), false], [t("score"), true], [t("games"), true]],
-    (board?.entries ?? []).map((e) => [e.rank, e.name, localized(e.className), e.score, e.games]), t("noRanking"));
+    (board?.entries ?? []).map((e) => [e.rank, e.name ?? "—", localized(e.className), e.score, e.games]), t("noRanking"));
+  element("banned-characters").hidden = !details?.bannedCharacters;
+  element("banned-characters-title").textContent = language === "vi" ? "Nhân vật đang bị khóa" : "Active character bans";
+  const banned = clear("banned-characters-list");
+  for (const character of details?.bannedCharacters ?? []) banned.append(node("li", character));
+  element("banned-characters-empty").textContent = details?.bannedCharacters?.length ? "" : language === "vi" ? "Chưa có bản ghi công khai." : "No public records.";
   // Drops.
   const drops = details?.drops;
   if (drops === null || drops === undefined) table("drop-table", [], [], details ? t("partUnavailable") : "");

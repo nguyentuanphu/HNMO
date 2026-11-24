@@ -29,4 +29,6 @@
   <data name="ContentPrivacyEn" xml:space="preserve"><value>Public privacy policy (English)</value></data>
   <data name="ContentPrivacyVi" xml:space="preserve"><value>Public privacy policy (Vietnamese)</value></data>
   <data name="ContentDescription" xml:space="preserve"><value>Published as plain text. Use a blank line between paragraphs. Leave blank to keep this language unpublished.</value></data>
+  <data name="BannedCharacters" xml:space="preserve"><value>Publish character bans</value></data>
+  <data name="BannedCharactersDescription" xml:space="preserve"><value>Show only active character bans when character names are permitted. Player visibility choices still apply.</value></data>
 </root>

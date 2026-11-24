@@ -30,7 +30,7 @@ internal static class Website
         Forward(app, "/website/tracker/item", "api/website/tracker/item", options, clients, rateLimited: true, guidQueryKey: "serial");
         Forward(app, "/website/class-guide", "api/website/class-guide", options, clients, rateLimited: true, integerQueryKeys: ["serverId", "classId"]);
         Forward(app, "/website/data", "api/website", options, clients);
-        Forward(app, "/website/details", "api/website/details", options, clients);
+        Forward(app, "/website/details", "api/website/details", options, clients, rateLimited: true);
         Forward(app, "/website/missions", "api/website/missions", options, clients);
         Forward(app, "/website/timetable", "api/website/timetable", options, clients);
         Forward(app, "/website/event-guide", "api/website/event-guide", options, clients, rateLimited: true, integerQueryKeys: ["serverId"]);
