@@ -1,5 +1,5 @@
 {
-  "generatedAt": "297a1fe8",
+  "generatedAt": "5d7bf7da",
   "maxLines": 6000,
   "units": [
     {
@@ -1147,11 +1147,13 @@
       ],
       "files": 123,
       "lines": 5930,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "5d7bf7da",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-GameLogic-PlugIns-files-1.md"
+      ],
+      "evidence": "Read all 123 files in full; verified death XP/zen loss defaults against S6/S9 suites, pet XP split, ping validation, and all 64 plugin interface contracts.",
       "prs": ""
     },
     {
