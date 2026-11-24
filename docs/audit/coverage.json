@@ -1,5 +1,5 @@
 {
-  "generatedAt": "09cf3c4c",
+  "generatedAt": "6f9809ce",
   "maxLines": 6000,
   "units": [
     {
@@ -5278,11 +5278,16 @@
       ],
       "files": 17,
       "lines": 5970,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "6f9809ce",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "autoPlayWindows.ts:24-95",
+        "addStatsWindow.ts",
+        "arenaWindow.ts",
+        "docs/audit/findings/unit-client-web-src-ui-files-1.md"
+      ],
+      "evidence": "17f/5970L: autoPlayWindows enforces desktop MuHelper UI bounds (Hunting 6, Obtaining 8, 6 slots, Gauge max 10, class features) & edits staged copy.",
       "prs": ""
     },
     {
