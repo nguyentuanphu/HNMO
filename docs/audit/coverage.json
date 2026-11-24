@@ -1,5 +1,5 @@
 {
-  "generatedAt": "ce0bc3d2",
+  "generatedAt": "6d5f4bfa",
   "maxLines": 6000,
   "units": [
     {
@@ -5148,11 +5148,17 @@
       ],
       "files": 12,
       "lines": 3201,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "6d5f4bfa",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "warps.ts:41-55",
+        "quests.ts:37,47-54",
+        "skills.ts:12-85",
+        "resets.ts:13-96",
+        "docs/audit/findings/unit-client-web-src-game-files-5.md"
+      ],
+      "evidence": "12f/3201L: MG/DL/RF 2/3 warp level (non-400), Icarus/Atlans mount rules & 10 active quest cap match desktop; resets.ts & skills 700..727 are HNMO custom.",
       "prs": ""
     },
     {
