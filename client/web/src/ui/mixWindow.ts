@@ -65,8 +65,16 @@ const SHOWS_ZEN: MixType[] = [...GOBLIN, MixType.CASTLE_SENIOR, MixType.TRAINER,
   MixType.ATTACH_SOCKET, MixType.DETACH_SOCKET];
 
 /** The NPC windows (NpcWindowResponse) that open the mix window the same way (ReceiveTalk) and their mix types. */
-const MIX_NPC_WINDOWS: Partial<Record<number, MixType>> = {
-  [NpcWindow.CHAOS_MACHINE]: MixType.GOBLIN_NORMAL, 0x12: MixType.OSBOURNE, 0x13: MixType.JERRIDON, 0x15: MixType.CHAOS_CARD, 0x16: MixType.CHERRYBLOSSOM,
+export const MIX_NPC_WINDOWS: Partial<Record<number, MixType>> = {
+  [NpcWindow.CHAOS_MACHINE]: MixType.GOBLIN_NORMAL,
+  0x07: MixType.TRAINER,
+  0x11: MixType.ELPIS,
+  0x12: MixType.OSBOURNE,
+  0x13: MixType.JERRIDON,
+  0x15: MixType.CHAOS_CARD,
+  0x16: MixType.CHERRYBLOSSOM,
+  0x17: MixType.EXTRACT_SEED,
+  0x18: MixType.ATTACH_SOCKET,
 };
 
 // A line of the window's lists (MixInventoryRmlModel::MixLine).
@@ -310,7 +318,38 @@ export class ChaosMachine {
 
   // ReceiveTalk: the refinery asks first; the Chaos Goblin's window opens with the method menu.
   private async talk(npcWindow: number, type: MixType): Promise<void> {
-    if (npcWindow === 0x12 && !(await this.options.confirm(`${TEXT.warning}\n\n${TEXT.refinery}`))) return;
+    const { inventory, connection } = this.options;
+    if (npcWindow === 0x12 && !(await this.options.confirm(`${TEXT.warning}\n\n${TEXT.refinery}`))) {
+      connection.send('ClientToServer', 'CloseNpcRequest', {});
+      inventory.openWindow = null;
+      return;
+    }
+    if (npcWindow === 0x17) {
+      const choice = await chooseInGame('Seed Master', [
+        { label: 'Seed Extraction', lines: ['Extract a seed from an excellent/ancient item.'] },
+        { label: 'Seed Sphere Assembly', lines: ['Combine a Seed and a Sphere into a Seed Sphere.'] },
+      ], TEXT.close);
+      if (choice === null) {
+        connection.send('ClientToServer', 'CloseNpcRequest', {});
+        inventory.openWindow = null;
+        return;
+      }
+      await this.open(choice === 0 ? MixType.EXTRACT_SEED : MixType.SEED_SPHERE);
+      return;
+    }
+    if (npcWindow === 0x18) {
+      const choice = await chooseInGame('Seed Researcher', [
+        { label: 'Attach Seed Sphere', lines: ['Mount a Seed Sphere onto a socket item.'] },
+        { label: 'Destroy Seed Sphere', lines: ['Remove a Seed Sphere from a socket item.'] },
+      ], TEXT.close);
+      if (choice === null) {
+        connection.send('ClientToServer', 'CloseNpcRequest', {});
+        inventory.openWindow = null;
+        return;
+      }
+      await this.open(choice === 0 ? MixType.ATTACH_SOCKET : MixType.DETACH_SOCKET);
+      return;
+    }
     await this.open(type);
   }
 
