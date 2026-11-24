@@ -104,6 +104,24 @@ public class CharacterInitializationTest
     }
 
     /// <summary>
+    /// Tests that spawn gate placement uses <see cref="ExitGateExtensions.GetRandomPoint"/>
+    /// (supporting single-point edge coordinates and throwing <see cref="ExitGateExtensions"/> bounds validation).
+    /// </summary>
+    [Test]
+    public void CharacterSpawnGateUsesExitGateGetRandomPointContract()
+    {
+        var characterClass = this.CreateCharacterClass();
+        var spawnGate = characterClass.HomeMap!.ExitGates.Single();
+        spawnGate.X1 = 135;
+        spawnGate.X2 = 130;
+        var character = this._context.CreateNew<Character>();
+
+        Assert.That(
+            () => this._context.InitializeNewCharacter(character, characterClass),
+            Throws.TypeOf<ArgumentOutOfRangeException>().With.Property(nameof(ArgumentOutOfRangeException.ParamName)).EqualTo(nameof(ExitGate.X2)));
+    }
+
+    /// <summary>
     /// Tests that a new character gets an inventory and the default key configuration.
     /// </summary>
     [Test]
