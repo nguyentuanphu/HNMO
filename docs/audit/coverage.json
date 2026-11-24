@@ -1,5 +1,5 @@
 {
-  "generatedAt": "20de6828",
+  "generatedAt": "a037f0ce",
   "maxLines": 6000,
   "units": [
     {
@@ -4045,11 +4045,16 @@
       ],
       "files": 15,
       "lines": 2453,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "a037f0ce",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "the Season 6/9 suites' event config files",
+        "the Season 6/9 suites' monster list files",
+        "the Season 6 suite's move list file",
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-VersionSeasonSix-Events.md"
+      ],
+      "evidence": "Read all 15 files (2453 lines) in VersionSeasonSix/Events; compared BC/CC/DS/IT/Doppelganger/ImperialGuardian/Kanturu/Crywolf/CastleSiege against S6/S9 suites: docs/audit/findings/unit-server-src-Persistence-Initialization-VersionSeasonSix-Events.md",
       "prs": "#171, #173, #230"
     },
     {
