@@ -46,11 +46,11 @@ test('the sound pauses while the game is out of sight', async ({ page, context }
     document.dispatchEvent(new Event('visibilitychange'));
   });
   await expect.poll(state, { timeout: 10_000 }).toEqual({ playing: false, paused: true, hidden: 'hidden' });
+  await page.bringToFront();
   await page.evaluate(() => {
     Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'visible' });
     document.dispatchEvent(new Event('visibilitychange'));
   });
-  await page.bringToFront();
   await expect.poll(state, { timeout: 10_000 }).toEqual({ playing: true, paused: false, hidden: 'visible' });
   await other.close();
   await expectNoPageErrors(errors);
