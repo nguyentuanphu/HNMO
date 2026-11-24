@@ -1,5 +1,5 @@
 {
-  "generatedAt": "802af498",
+  "generatedAt": "92489ee6",
   "maxLines": 6000,
   "units": [
     {
@@ -4956,11 +4956,16 @@
       ],
       "files": 17,
       "lines": 5244,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "92489ee6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "website.ts",
+        "world.ts",
+        "websiteTheme.ts",
+        "docs/audit/findings/unit-client-web-src-files-3.md"
+      ],
+      "evidence": "17f/5244L: No game rules (website info pages, theme preview helpers, and 3D world scene assembly).",
       "prs": ""
     },
     {
