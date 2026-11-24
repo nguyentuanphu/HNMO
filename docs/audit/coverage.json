@@ -1,5 +1,5 @@
 {
-  "generatedAt": "e53e51d2",
+  "generatedAt": "88880dad",
   "maxLines": 6000,
   "units": [
     {
@@ -2196,11 +2196,11 @@
       ],
       "files": 33,
       "lines": 2271,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "88880dad",
+      "checkedOn": "2026-11-24",
+      "references": [],
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-Vip.md",
       "prs": ""
     },
     {
