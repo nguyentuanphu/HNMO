@@ -1,5 +1,5 @@
 {
-  "generatedAt": "154b40db",
+  "generatedAt": "57956c17",
   "maxLines": 6000,
   "units": [
     {
@@ -7059,11 +7059,16 @@
       ],
       "files": 34,
       "lines": 5925,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "57956c17",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "MixMgr.cpp:33-199",
+        "CComGem.cpp:172-235",
+        "CSItemOption.cpp:500",
+        "docs/audit/findings/unit-client-src-source-GameLogic-Items-files-1.md"
+      ],
+      "evidence": "34f/5925L: MixMgr loads Mix.bmd recipes, +4*opt life regen scaling & 380/Exc/Set flags; CComGem validates Lahap attach/detach at 100%; matching Web mixRecipes.ts.",
       "prs": ""
     },
     {
