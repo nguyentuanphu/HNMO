@@ -12,9 +12,13 @@ export interface ServerGuideFacts {
   vip: GuideVip[];
   catalog: { products: GuideProduct[] | null; truncated: boolean };
 }
+export interface GuideRealmRules {
+  guildCreationMinimumLevel: number;
+  bloodCastle: { minimumSeconds: number; maximumSeconds: number } | null;
+}
 export interface ServerGuideView {
   updatedAt: string; clientRules: { en: string; vi: string }; notForSale: { en: string; vi: string };
-  servers: { id: number; facts: ServerGuideFacts; extras?: ServerGuideExtras }[];
+  servers: { id: number; facts: ServerGuideFacts; extras?: ServerGuideExtras; realmRules?: GuideRealmRules }[];
 }
 
 export interface GuideQuest { nameEn: string; nameVi: string; npcEn: string; npcVi: string; minimumLevel: number; maximumLevel: number; requiredStartMoney: number; classEn: string; classVi: string }
@@ -85,9 +89,30 @@ function extras(value: unknown): ServerGuideExtras {
   return { systems: { antiCheatEnabled: flag(systems.antiCheatEnabled), activityLogEnabled: flag(systems.activityLogEnabled), onlyValuableDrops: flag(systems.onlyValuableDrops) }, quests: array(row.quests, quest, MAX_PUBLIC_ROWS), questsTruncated: flag(row.questsTruncated), crafts: array(row.crafts, craft, MAX_PUBLIC_ROWS), craftsTruncated: flag(row.craftsTruncated) };
 }
 
+function realmRules(value: unknown): GuideRealmRules {
+  const row = object(value);
+  return {
+    guildCreationMinimumLevel: number(row.guildCreationMinimumLevel),
+    bloodCastle: optional(row.bloodCastle, item => ({
+      minimumSeconds: number(item.minimumSeconds),
+      maximumSeconds: number(item.maximumSeconds),
+    })),
+  };
+}
+
+function server(value: unknown): ServerGuideView['servers'][number] {
+  const row = object(value);
+  return {
+    id: number(row.id),
+    facts: facts(row.facts),
+    ...(row.extras === undefined ? {} : { extras: extras(row.extras) }),
+    ...(row.realmRules === undefined ? {} : { realmRules: realmRules(row.realmRules) }),
+  };
+}
+
 /** Reject incompatible replies rather than rendering invented fallback rates or old offers. */
 export function parseServerGuide(value: unknown): ServerGuideView {
   const row = object(value); const updatedAt = text(row.updatedAt);
   if (Number.isNaN(Date.parse(updatedAt))) throw new Error('server-guide-time');
-  return { updatedAt, clientRules: bilingual(row.clientRules), notForSale: bilingual(row.notForSale), servers: array(row.servers, value => { const server = object(value); return { id: number(server.id), facts: facts(server.facts), ...(server.extras === undefined ? {} : { extras: extras(server.extras) }) }; }, MAX_PUBLIC_ROWS) };
+  return { updatedAt, clientRules: bilingual(row.clientRules), notForSale: bilingual(row.notForSale), servers: array(row.servers, server, MAX_PUBLIC_ROWS) };
 }
