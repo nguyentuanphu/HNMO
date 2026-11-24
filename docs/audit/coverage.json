@@ -1,5 +1,5 @@
 {
-  "generatedAt": "1a845fb0",
+  "generatedAt": "8f8fd347",
   "maxLines": 6000,
   "units": [
     {
@@ -688,15 +688,12 @@
       ],
       "files": 6,
       "lines": 579,
-      "status": "Changed since check",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-22",
-      "references": "Season 6/9 Dark Raven / Dark Horse durability & behaviour",
-      "evidence": "All 6 files read (579 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
-      "prs": "#308",
-      "changedFiles": [
-        "server/src/GameLogic/Pet/RavenCommandManager.cs"
-      ]
+      "status": "Checked",
+      "checkedAt": "8f8fd347",
+      "checkedOn": "2026-11-24",
+      "references": "S6/S9 IGCData/IGC_PetSettings.ini, Scripts/Character/CalcCharacter.lua",
+      "evidence": "All 6 files read (579 lines): docs/audit/findings/unit-server-src-GameLogic-Pet.md",
+      "prs": "#308"
     },
     {
       "id": "server/src/GameLogic/PlayerActions (files 1)",
