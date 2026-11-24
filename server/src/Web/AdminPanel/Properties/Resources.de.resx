@@ -2719,4 +2719,31 @@
   <data name="CashShopCoinsDeliveredPending" xml:space="preserve">
     <value>Das Konto ist online, aber nicht im Spiel: die Münzen kommen beim nächsten Öffnen des Shops an.</value>
   </data>
+  <data name="ActivityLogKindLoot" xml:space="preserve">
+    <value>Beute</value>
+  </data>
+  <data name="ActivityLogKindUpgrade" xml:space="preserve">
+    <value>Aufwertung</value>
+  </data>
+  <data name="ActivityLogKindConsume" xml:space="preserve">
+    <value>Gegenstand verwendet</value>
+  </data>
+  <data name="ActivityLogKindGrant" xml:space="preserve">
+    <value>Gegenstand vergeben</value>
+  </data>
+  <data name="ActivityLogKindPvpKill" xml:space="preserve">
+    <value>PvP-Niederlage</value>
+  </data>
+  <data name="ActivityLogSerials" xml:space="preserve">
+    <value>Gegenstandsseriennummern</value>
+  </data>
+  <data name="ActivityLogLegacyIds" xml:space="preserve">
+    <value>Alte Gegenstands-IDs</value>
+  </data>
+  <data name="ActivityLogBefore" xml:space="preserve">
+    <value>Vorher</value>
+  </data>
+  <data name="ActivityLogAfter" xml:space="preserve">
+    <value>Danach</value>
+  </data>
 </root>

@@ -89,6 +89,12 @@ public class DropItemAction
 
         // we have to remove it from the inventory already here, so it gets saved without a storage.
         var originalSlot = item.ItemSlot;
+        var activity = PlugIns.ActivityLog.ActivityLogPlugIn.Get(player.GameContext);
+        if (activity?.ShouldRecordFloorItem(item) == true)
+        {
+            item.EnsureSerial();
+        }
+
         await this.RemoveItemFromInventoryAsync(player, item).ConfigureAwait(false);
 
         // We have to save here already. Otherwise, if the item got modified since last
@@ -116,7 +122,7 @@ public class DropItemAction
         var wasItemPersisted = player.PersistenceContext.Detach(item);
         var droppedItem = new DroppedItem(item, target, player.CurrentMap!, player, owners, wasItemPersisted);
         await player.CurrentMap!.AddAsync(droppedItem).ConfigureAwait(false);
-        PlugIns.ActivityLog.ActivityLogPlugIn.Get(player.GameContext)?.RecordDrop(player, item, player.CurrentMap.Definition?.Name.ValueInNeutralLanguage ?? string.Empty);
+        activity?.RecordDrop(player, item, player.CurrentMap.Definition?.Name.ValueInNeutralLanguage ?? string.Empty);
         player.Logger.LogInformation("Item dropped: {Player} dropped '{DroppedItem}' from slot {Slot} (persisted: {Persisted}).", player, droppedItem, originalSlot, wasItemPersisted);
     }
 

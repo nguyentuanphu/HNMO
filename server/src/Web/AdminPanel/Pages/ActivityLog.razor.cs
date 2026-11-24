@@ -87,8 +87,13 @@ public partial class ActivityLog : ComponentBase
         ActivityKind.PersonalStore => L("Personal store", "Cửa hàng cá nhân"),
         ActivityKind.ItemMarket => L("Item market", "Chợ đồ"),
         ActivityKind.Administration => HNMO.Web.AdminPanel.Properties.Resources.VipActivityAdministration,
+        ActivityKind.Loot or ActivityKind.Upgrade or ActivityKind.Consume or ActivityKind.Grant or ActivityKind.PvpKill
+            => ActivityLabel($"ActivityLogKind{kind}"),
         _ => kind.ToString(),
     };
+
+    private static string ActivityLabel(string key)
+        => HNMO.Web.AdminPanel.Properties.Resources.ResourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? key;
 
     private static string FormatActor(string account, string character)
     {

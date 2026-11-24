@@ -6,6 +6,7 @@ namespace HNMO.GameLogic.PlugIns.ActivityLog;
 
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices;
+using System.Threading;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.PlugIns.AccountSafety;
 using HNMO.GameLogic.PlugIns.PeriodicTasks;
@@ -20,12 +21,14 @@ using HNMO.PlugIns;
 [PlugIn]
 [Display(Name = "Player activity log", Description = "Records trades, valuable drops/pickups, Chaos mixes, NPC shops, personal store, and Item Market actions.")]
 [Guid("6E2B8D14-4C93-4F81-9A70-5D3E1C8A2B04")]
-public sealed class ActivityLogPlugIn :
+public sealed partial class ActivityLogPlugIn :
     IPeriodicTaskPlugIn,
     ISupportCustomConfiguration<ActivityLogConfiguration>,
     ISupportDefaultCustomConfiguration
 {
-    private DateTime _lastArchiveUtc = DateTime.MinValue;
+    private static readonly ActivityLogConfiguration DefaultConfiguration = new();
+    private long _lastArchiveTicks;
+    private StoreBinding? _store;
 
     /// <inheritdoc />
     public ActivityLogConfiguration? Configuration { get; set; }
@@ -34,7 +37,7 @@ public sealed class ActivityLogPlugIn :
     /// <param name="gameContext">The game context.</param>
     /// <returns>The active plug-in, or <c>null</c>.</returns>
     public static ActivityLogPlugIn? Get(IGameContext? gameContext) =>
-        gameContext?.PlugInManager.GetActivePlugInsOf<IPeriodicTaskPlugIn>().OfType<ActivityLogPlugIn>().FirstOrDefault();
+        gameContext?.PlugInManager?.GetActivePlugInsOf<IPeriodicTaskPlugIn>().OfType<ActivityLogPlugIn>().FirstOrDefault();
 
     /// <summary>
     /// Determines whether an item should be treated as valuable for drop/pickup logging.
@@ -83,19 +86,22 @@ public sealed class ActivityLogPlugIn :
     public object CreateDefaultConfig() => new ActivityLogConfiguration();
 
     /// <inheritdoc />
-    public void ForceStart() => this._lastArchiveUtc = DateTime.MinValue;
+    public void ForceStart() => Interlocked.Exchange(ref this._lastArchiveTicks, 0);
 
     /// <inheritdoc />
     public ValueTask ExecuteTaskAsync(GameContext gameContext)
     {
-        var cfg = this.Configuration ?? new ActivityLogConfiguration();
+        var cfg = this.EffectiveConfig();
+        var logger = gameContext.LoggerFactory.CreateLogger<ActivityLogPlugIn>();
+        ActivityLogStore.FlushAllPending(logger);
         var now = DateTime.UtcNow;
-        if (!cfg.Enabled || now - this._lastArchiveUtc < TimeSpan.FromHours(6))
+        var last = Interlocked.Read(ref this._lastArchiveTicks);
+        if (!cfg.Enabled || now.Ticks - last < TimeSpan.FromHours(6).Ticks
+            || Interlocked.CompareExchange(ref this._lastArchiveTicks, now.Ticks, last) != last)
         {
             return ValueTask.CompletedTask;
         }
 
-        this._lastArchiveUtc = now;
         ActivityLogStore.Open(cfg.FileName).ArchiveExpired(now);
         return ValueTask.CompletedTask;
     }
@@ -117,7 +123,7 @@ public sealed class ActivityLogPlugIn :
 
         var gaveSummary = SummarizeItems(traderItems);
         var gotSummary = SummarizeItems(partnerItems);
-        var allIds = JoinItemIds(traderItems.Concat(partnerItems));
+        var allSerials = JoinItemSerials(traderItems.Concat(partnerItems));
         var summary = $"Gave: {(string.IsNullOrEmpty(gaveSummary) ? "-" : gaveSummary)} | Got: {(string.IsNullOrEmpty(gotSummary) ? "-" : gotSummary)}";
 
         this.AppendEntry(new ActivityLogEntry
@@ -128,7 +134,7 @@ public sealed class ActivityLogPlugIn :
             PartnerAccount = LoginOf(partner),
             PartnerCharacter = partner.Name,
             ItemSummary = summary,
-            ItemIds = allIds,
+            ItemSerials = allSerials,
             ZenDelta = partnerZen - traderZen,
             Details = $"ZenGave={traderZen};ZenGot={partnerZen}",
         });
@@ -156,7 +162,7 @@ public sealed class ActivityLogPlugIn :
             PartnerAccount = LoginOf(buyer),
             PartnerCharacter = buyer.Name,
             ItemSummary = AccountSafetyPlugIn.Describe(item),
-            ItemIds = ItemIdString(item),
+            ItemSerials = ItemSerialString(item),
             ZenDelta = zen,
             Details = string.IsNullOrEmpty(otherPrice) ? "Currency=Zen" : $"Price={otherPrice}",
         });
@@ -174,22 +180,15 @@ public sealed class ActivityLogPlugIn :
             return;
         }
 
-        this.AppendEntry(new ActivityLogEntry
-        {
-            Kind = ActivityKind.Drop,
-            Account = LoginOf(player),
-            Character = player.Name,
-            ItemSummary = AccountSafetyPlugIn.Describe(item),
-            ItemIds = ItemIdString(item),
-            Details = $"Map={mapName}",
-        });
+        this.RecordItemStates(ActivityKind.Drop, player, $"Map={mapName}", before: CaptureItems([item]));
     }
 
     /// <summary>Records an item pickup from the floor (filtered by value when configured).</summary>
     /// <param name="player">Picking player.</param>
     /// <param name="item">Picked-up or target stacked item.</param>
     /// <param name="mapName">Map name.</param>
-    public void RecordPickup(Player player, Item item, string mapName)
+    /// <param name="stackTarget">Existing inventory stack if the dropped item was merged.</param>
+    public void RecordPickup(Player player, Item item, string mapName, Item? stackTarget = null)
     {
         var cfg = this.EffectiveConfig();
         if (!cfg.Enabled || (cfg.OnlyValuableDropsAndPickups && !IsValuableItem(item, cfg.MinValuableDropLevel)))
@@ -197,15 +196,8 @@ public sealed class ActivityLogPlugIn :
             return;
         }
 
-        this.AppendEntry(new ActivityLogEntry
-        {
-            Kind = ActivityKind.Pickup,
-            Account = LoginOf(player),
-            Character = player.Name,
-            ItemSummary = AccountSafetyPlugIn.Describe(item),
-            ItemIds = ItemIdString(item),
-            Details = $"Map={mapName}",
-        });
+        this.RecordItemStates(ActivityKind.Pickup, player, $"Map={mapName}",
+            before: CaptureItems([item]), after: CaptureItems([stackTarget ?? item]), pickupQuantity: item.IsStackable() ? item.Durability : 1);
     }
 
     /// <summary>Records a Chaos Machine or NPC crafting attempt and output.</summary>
@@ -228,7 +220,7 @@ public sealed class ActivityLogPlugIn :
             Character = player.Name,
             PartnerCharacter = npcName,
             ItemSummary = resultItem is not null ? AccountSafetyPlugIn.Describe(resultItem) : result.ToString(),
-            ItemIds = resultItem is not null ? ItemIdString(resultItem) : string.Empty,
+            ItemSerials = resultItem is not null ? ItemSerialString(resultItem) : string.Empty,
             Details = $"Result={result}",
         });
     }
@@ -253,7 +245,7 @@ public sealed class ActivityLogPlugIn :
             Character = player.Name,
             PartnerCharacter = npcName,
             ItemSummary = AccountSafetyPlugIn.Describe(item),
-            ItemIds = ItemIdString(item),
+            ItemSerials = ItemSerialString(item),
             ZenDelta = -price,
             Details = $"Npc={npcName}",
         });
@@ -279,7 +271,7 @@ public sealed class ActivityLogPlugIn :
             Character = player.Name,
             PartnerCharacter = npcName,
             ItemSummary = AccountSafetyPlugIn.Describe(item),
-            ItemIds = ItemIdString(item),
+            ItemSerials = ItemSerialString(item),
             ZenDelta = price,
             Details = $"Npc={npcName}",
         });
@@ -290,22 +282,27 @@ public sealed class ActivityLogPlugIn :
             ? login
             : trader.Name;
 
-    private static string ItemIdString(Item item) =>
-        item is IIdentifiable identifiable && identifiable.Id != Guid.Empty
-            ? identifiable.Id.ToString("N")
-            : string.Empty;
+    private static string ItemSerialString(Item item) => item.EnsureSerial().ToString("N");
 
-    private static string JoinItemIds(IEnumerable<Item> items) =>
-        string.Join(",", items.Select(ItemIdString).Where(id => !string.IsNullOrEmpty(id)));
+    private static string JoinItemSerials(IEnumerable<Item> items) => string.Join(",", items.Select(ItemSerialString).Distinct());
 
     private static string SummarizeItems(IReadOnlyList<Item> items) =>
         string.Join(", ", items.Select(AccountSafetyPlugIn.Describe));
 
-    private ActivityLogConfiguration EffectiveConfig() => this.Configuration ?? new ActivityLogConfiguration();
+    private ActivityLogConfiguration EffectiveConfig() => this.Configuration ?? DefaultConfiguration;
 
     private void AppendEntry(ActivityLogEntry entry)
     {
         var cfg = this.EffectiveConfig();
-        ActivityLogStore.Open(cfg.FileName).Append(entry, cfg.RetentionDays);
+        var binding = Volatile.Read(ref this._store);
+        if (binding is null || !string.Equals(binding.FileName, cfg.FileName, StringComparison.Ordinal))
+        {
+            binding = new(cfg.FileName, ActivityLogStore.Open(cfg.FileName));
+            Volatile.Write(ref this._store, binding);
+        }
+
+        binding.Store.Enqueue(entry, cfg.RetentionDays);
     }
+
+    private sealed record StoreBinding(string FileName, ActivityLogStore Store);
 }

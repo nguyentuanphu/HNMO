@@ -6,6 +6,7 @@ namespace HNMO.GameLogic.PlayerActions.ItemConsumeActions;
 
 using System.ComponentModel;
 using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.PlugIns.ActivityLog;
 using HNMO.GameLogic.PlugIns.SeasonPlan;
 using HNMO.GameLogic.PlugIns.Talismans;
 using HNMO.GameLogic.Views.Inventory;
@@ -42,6 +43,8 @@ public class ItemConsumeAction
             return;
         }
 
+        var activity = ActivityLogPlugIn.Get(player.GameContext);
+        var itemBefore = activity?.IsEnabled == true ? ActivityItemState.Capture(item) : null;
         var (talismanHandled, talismanSucceeded) = await TalismanPlugIn.TryConsumeStatItemAsync(player, item).ConfigureAwait(false);
         if (talismanHandled)
         {
@@ -58,6 +61,11 @@ public class ItemConsumeAction
             else
             {
                 await player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(item, true)).ConfigureAwait(false);
+            }
+
+            if (itemBefore is not null)
+            {
+                activity?.RecordConsumption(player, itemBefore, item.Durability == 0 ? null : item, null, null);
             }
 
             player.GameContext.PlugInManager.GetPlugInPoint<IItemConsumedPlugIn>()?.ItemConsumed(player, item, player.Inventory!.GetItem(inventoryTargetSlot));
@@ -96,6 +104,7 @@ public class ItemConsumeAction
             }
         }
 
+        var targetBefore = itemBefore is not null && targetItem != item ? ActivityItemState.Capture(targetItem) : null;
         if (!await consumeHandler.ConsumeItemAsync(player, item, targetItem, fruitUsage).ConfigureAwait(false))
         {
             await player.InvokeViewPlugInAsync<IRequestedItemConsumptionFailedPlugIn>(p => p.RequestedItemConsumptionFailedAsync()).ConfigureAwait(false);
@@ -109,6 +118,12 @@ public class ItemConsumeAction
         else
         {
             await player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(item, true)).ConfigureAwait(false);
+        }
+
+        if (itemBefore is not null)
+        {
+            var targetAfter = player.Inventory?.GetItem(inventoryTargetSlot);
+            activity?.RecordConsumption(player, itemBefore, item.Durability == 0 ? null : item, targetBefore, targetAfter == targetItem ? targetAfter : null);
         }
 
         player.GameContext.PlugInManager.GetPlugInPoint<IItemConsumedPlugIn>()?.ItemConsumed(player, item, targetItem);

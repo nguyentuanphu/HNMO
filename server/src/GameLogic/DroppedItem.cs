@@ -215,6 +215,7 @@ public sealed class DroppedItem : AsyncDisposable, ILocateable
                 return false;
             }
 
+            this.Item.EnsureSerial();
             if (!itemWasTemporary)
             {
                 // We already attach it here so that the next changes are in the context.
@@ -287,8 +288,16 @@ public sealed class DroppedItem : AsyncDisposable, ILocateable
                 return;
             }
 
+            var activity = PlugIns.ActivityLog.ActivityLogPlugIn.Get(player.GameContext);
+            var before = activity?.ShouldRecordFloorItem(this.Item) == true
+                ? PlugIns.ActivityLog.ActivityItemState.Capture(this.Item)
+                : null;
             partialTarget.Durability += partialAmount;
             this.Item.Durability -= partialAmount;
+            if (before is not null)
+            {
+                activity?.RecordPartialPickup(player, before, partialTarget, partialAmount);
+            }
         }
 
         player.Logger.LogInformation("Item '{0}' partially stacked on '{1}' of player '{2}', durability of the stack is now {3}.", this, partialTarget, player, partialTarget.Durability);

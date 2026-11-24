@@ -583,6 +583,7 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
 
         var firstItem = !droppedMoney.HasValue;
         var plugInPoint = killer.GameContext.PlugInManager.GetPlugInPoint<IMonsterItemDropPlugIn>();
+        var activity = PlugIns.ActivityLog.ActivityLogPlugIn.Get(killer.GameContext);
         foreach (var item in generatedItems)
         {
             if (plugInPoint is not null)
@@ -607,8 +608,14 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
             }
 
             var owners = killer.Party?.PartyList.AsEnumerable() ?? killer.GetAsEnumerable();
+            if (activity?.ShouldRecordFloorItem(item) == true)
+            {
+                item.EnsureSerial();
+            }
+
             var droppedItem = new DroppedItem(item, dropCoordinates, this.CurrentMap, null, owners);
             await this.CurrentMap.AddAsync(droppedItem).ConfigureAwait(false);
+            activity?.RecordLoot(killer, item, $"Monster={this.Definition.Designation.ValueInNeutralLanguage}");
             await killer.GameContext.PlugInManager.NotifyPlugInsAsync<IMonsterItemDroppedPlugIn>(
                 p => p.MonsterItemDroppedAsync(this, killer, droppedItem),
                 killer.Logger).ConfigureAwait(false);

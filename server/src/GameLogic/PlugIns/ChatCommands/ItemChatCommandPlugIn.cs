@@ -41,9 +41,11 @@ public class ItemChatCommandPlugIn : ChatCommandPlugInBase<ItemChatCommandArgs>
             }
 
             var item = GameMasterItemFactory.CreateItem(itemDefinition!, new ItemSpecification(arguments.Group, arguments.Number, arguments.Level, arguments.Skill, arguments.Luck, arguments.Opt, arguments.ExcellentNumber, arguments.Ancient, arguments.AncientBonusLevel));
+            item.EnsureSerial();
             var dropCoordinates = gameMaster.CurrentMap.Terrain.GetRandomCoordinate(gameMaster.Position, 1);
             var droppedItem = new DroppedItem(item, dropCoordinates, gameMaster.CurrentMap, gameMaster);
             await gameMaster.CurrentMap.AddAsync(droppedItem).ConfigureAwait(false);
+            ActivityLog.ActivityLogPlugIn.Get(gameMaster.GameContext)?.RecordGrant(gameMaster, item, "GameMasterDrop");
             await gameMaster.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.ItemCreatedResult), this.Key, item).ConfigureAwait(false);
         }
     }

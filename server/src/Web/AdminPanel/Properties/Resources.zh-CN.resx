@@ -2894,4 +2894,31 @@
   <data name="CashShopCoinsDeliveredPending" xml:space="preserve">
     <value>账号在线但不在游戏中：下次打开商城时到账。</value>
   </data>
+  <data name="ActivityLogKindLoot" xml:space="preserve">
+    <value>战利品</value>
+  </data>
+  <data name="ActivityLogKindUpgrade" xml:space="preserve">
+    <value>强化</value>
+  </data>
+  <data name="ActivityLogKindConsume" xml:space="preserve">
+    <value>使用物品</value>
+  </data>
+  <data name="ActivityLogKindGrant" xml:space="preserve">
+    <value>发放物品</value>
+  </data>
+  <data name="ActivityLogKindPvpKill" xml:space="preserve">
+    <value>PvP 击败</value>
+  </data>
+  <data name="ActivityLogSerials" xml:space="preserve">
+    <value>物品序列号</value>
+  </data>
+  <data name="ActivityLogLegacyIds" xml:space="preserve">
+    <value>旧物品 ID</value>
+  </data>
+  <data name="ActivityLogBefore" xml:space="preserve">
+    <value>操作前</value>
+  </data>
+  <data name="ActivityLogAfter" xml:space="preserve">
+    <value>操作后</value>
+  </data>
 </root>
