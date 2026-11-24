@@ -1,5 +1,5 @@
 {
-  "generatedAt": "c19c1c35",
+  "generatedAt": "d1877032",
   "maxLines": 6000,
   "units": [
     {
@@ -6187,11 +6187,14 @@
       ],
       "files": 7,
       "lines": 1792,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "d1877032",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Data/GameConfig",
+        "docs/audit/findings/unit-client-src-source-Data-GameConfig.md"
+      ],
+      "evidence": "7f/1792L: No game rules (local client graphics/audio/UI scaling config (config.ini) with no server gameplay rules.)",
       "prs": ""
     },
     {
