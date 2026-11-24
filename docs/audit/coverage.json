@@ -1,5 +1,5 @@
 {
-  "generatedAt": "fcbc6a57",
+  "generatedAt": "a04cbc52",
   "maxLines": 6000,
   "units": [
     {
@@ -3284,11 +3284,14 @@
       ],
       "files": 25,
       "lines": 1227,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "a04cbc52",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "RemoteView/CastleSiege",
+        "docs/audit/findings/unit-server-src-GameServer-RemoteView-CastleSiege.md"
+      ],
+      "evidence": "25f/1227L: No game rules (pure S->C packet serializers implementing GameLogic.Views interfaces; no embedded gameplay rules.)",
       "prs": ""
     },
     {
