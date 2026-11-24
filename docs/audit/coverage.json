@@ -1,5 +1,5 @@
 {
-  "generatedAt": "a36dbabd",
+  "generatedAt": "fc3d34bb",
   "maxLines": 6000,
   "units": [
     {
@@ -3887,11 +3887,14 @@
       ],
       "files": 46,
       "lines": 3141,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "fc3d34bb",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "the Season 6 suite's CommonServer.cfg, ChaosBox.ini, SkillList.xml & RegularSkillCalc.lua",
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-Updates-files-5.md"
+      ],
+      "evidence": "Audited all 46 files (3141 lines): docs/audit/findings/unit-server-src-Persistence-Initialization-Updates-files-5.md",
       "prs": ""
     },
     {
