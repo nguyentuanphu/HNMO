@@ -1,6 +1,6 @@
 // Bottom HUD bar (#btn_cshop, #btn_chainfo, #btn_myinven, #btn_friend, #btn_window) + WindowMenu + SysMenu.
 import { test, expect, type Page } from '@playwright/test';
-import { chatText, clickAt, dismissOnboarding, enterWorld, expectNoPageErrors } from './helpers.js';
+import { chatText, clickAt, dismissOnboarding, ensureLorenciaSafeZone, enterWorld, expectNoPageErrors } from './helpers.js';
 
 const OPEN = { timeout: 60_000 };
 
@@ -28,6 +28,7 @@ test('bottom HUD buttons open their windows, highlight while open, and WindowMen
   page.on('pageerror', (error) => errors.push(error.message));
 
   await enterWorld(page, 'test400');
+  await ensureLorenciaSafeZone(page);
   await dismissOnboarding(page);
   await expect(page.locator('.rml-main_frame #hud_layout')).toBeVisible(OPEN);
 
