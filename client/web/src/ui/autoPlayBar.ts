@@ -3,6 +3,7 @@
 
 import { openDocument, type RmlDocument, type RmlModel } from './rml.js';
 import { uiScale } from './nativeText.js';
+import { onLanguageChange, translate } from '../i18n.js';
 
 interface BarModel extends RmlModel {
   position_text: string; mu_helper_active: boolean; config_hint: string; start_hint: string; stop_hint: string;
@@ -20,6 +21,7 @@ export class AutoPlayBar {
       mu_helper_config_click: actions.settings, mu_helper_toggle_click: actions.toggle,
     };
     window.addEventListener('resize', () => this.place());
+    onLanguageChange(() => this.syncHints());
   }
 
   async open(parent: HTMLElement = document.body): Promise<void> {
@@ -28,6 +30,15 @@ export class AutoPlayBar {
     const panel = this.doc.$('#panel');
     if (panel) panel.style.pointerEvents = 'auto';
     this.place();
+    this.syncHints();
+  }
+
+  private syncHints(): void {
+    if (!this.doc) return;
+    for (const el of this.doc.root.querySelectorAll<HTMLElement>('[data-hint]')) {
+      const hint = el.getAttribute('data-hint');
+      if (hint) el.title = translate(hint) ?? hint;
+    }
   }
 
   private place(): void {

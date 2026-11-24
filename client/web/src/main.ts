@@ -1525,6 +1525,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     });
     for (const buff of now) if (!before.includes(buff)) playBuffEffect(effects, buff, ownerFromCharacter(who), true, player);
     for (const buff of before) if (!now.includes(buff)) playBuffEffect(effects, buff, ownerFromCharacter(who), false, player);
+    if (who === online.hero) state.hud?.setPoisoned(has(Buff.POISON));
   });
   // Dark Side's dash (the desktop keeps one, the hero's): its state ticks with the effects, its copies are drawn here.
   const darkSideGhosts = new DarkSideGhosts(root);
@@ -1761,9 +1762,23 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
       if (!characterWindow.isOpen) void characterWindow.open();
     },
   });
+  const dockedRightPx = () => {
+    const columns = itemWindows.dockedRight
+      + (itemWindows.bag.isOpen ? 1 : 0)
+      + (itemWindows.extension.isOpen ? 1 : 0)
+      + (itemWindows.vault.isOpen || itemWindows.shop.isOpen || itemWindows.trade.isOpen ? 1 : 0);
+    return columns * 190;
+  };
+  let buffStrip: BuffStrip | null = null;
+  let partyList: PartyList | null = null;
+  const syncHudDocking = () => {
+    buffStrip?.place();
+    partyList?.place();
+  };
   const prevPlaced = itemWindows.onPlaced;
   itemWindows.onPlaced = () => {
     prevPlaced();
+    syncHudDocking();
     if (itemWindows.bag.isOpen) petInfoWindow.close();
   };
   const characterWindow = new CharacterWindow({
@@ -1777,6 +1792,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
       else petInfoWindow.close();
       state.addStats?.setCharacterWindowOpen(open);
       state.hud?.setOpenStates({ character: open });
+      state.hud?.setAlertStates({ character: stats.levelUpPoints > 0 && !open });
       itemWindows.dockedRight = open ? 1 : 0;
       itemWindows.placeAll();
     },
@@ -1794,7 +1810,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     }
     void state.social?.friendWindow.toggle();
   };
-  itemWindows.onBagToggle = (open) => { state.hud?.setOpenStates({ inventory: open }); };
+  itemWindows.onBagToggle = (open) => { state.hud?.setOpenStates({ inventory: open }); syncHudDocking(); };
   state.hud = new Hud(stats, {
     inventory: () => { void itemWindows.toggle(); },
     character: () => { void characterWindow.toggle(); },
@@ -1810,8 +1826,17 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     use: useHotkey,
   });
   const hud = state.hud;
+  let lastHeartMs = 0;
+  stats.onChange(() => {
+    hud.setAlertStates({ character: stats.levelUpPoints > 0 && !characterWindow.isOpen });
+    const now = performance.now();
+    if (!online.hero.dead && stats.life > 0 && stats.maxLife > 0 && (stats.life / stats.maxLife) < 0.2 && now - lastHeartMs >= 1200) {
+      lastHeartMs = now;
+      sounds.play('SOUND_HEART');
+    }
+  });
   // The buff strip: the hero's buffs; hover for what they do, right-click to cancel a skill's buff.
-  const buffStrip = new BuffStrip({
+  buffStrip = new BuffStrip({
     active: () => [...buffs.of(playerId), ...(state.guildLevels?.activeBuffs() ?? [])],
     secondsLeft: (buff) => buffs.secondsLeft(buff),
     tooltip: (lines, box) => {
@@ -1822,8 +1847,9 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
       if (window.confirm(translate(`Do you want to cancel the ${name} skill?`) ?? `Do you want to cancel the ${name} skill?`)) connection.send('ClientToServer', 'MagicEffectCancelRequest', { SkillId: skill, PlayerId: playerId });
     },
     skillName: (skill) => skillInfo(skill)?.name ?? `Skill ${skill}`,
+    dockedRight: dockedRightPx,
   });
-  buffs.onChange((id) => { if (id === playerId) buffStrip.refresh(); });
+  buffs.onChange((id) => { if (id === playerId) buffStrip?.refresh(); });
   void buffStrip.open();
   // Auto play (the desktop's helper): Home starts and stops it, the bar shows where the hero is.
   const autoPlay = new AutoPlay(connection, {
@@ -2629,9 +2655,10 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   state.instanceEvents = setUpInstanceEvents({ connection, events: state.events, heroName: character.name, hero: () => ({ level: stats.level, classIndex: character.classIndex, master: character.master ?? false }), heroCharacter: () => online.hero, heroId: () => online.playerId, characters: () => online.characters.values(), mapNumber: () => state.mapNumber, message: (text, kind) => chat.add(text, kind), audio: sounds.audio, sounds, closeOthers: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); }, bag: itemWindows.bag, inventory, online, pickPlayer: (event) => pickCharacter(event, ['player']) });
   // The master level and skill tree (A, the character window's button; ui/masterLevelWindow.ts).
   setupMasterLevel({ connection, classNumber: character.classNumber ?? character.classIndex * 4, classIndex: character.classIndex, stats, skills, inventory, hud, characterWindow, earlyPackets, click: () => sounds.click(), closeOthers: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); } });
-  void new PartyList(party, {
+  partyList = new PartyList(party, {
     heroName: character.name,
     inSight: (name) => name === character.name || [...online.characters.values()].some((c) => c.kind === 'player' && c.name === name),
+    dockedRight: dockedRightPx,
   });
   chat.enable((text) => {
     const command = text.trim().toLowerCase();
@@ -2647,7 +2674,15 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     online.say(text);
   });
   // Guild, friends, letters and whispers (game/social.ts): G, F, /guild, the guild master NPC.
-  state.social = setupSocial({ connection, chat, heroName: character.name, earlyPackets, click: () => sounds.click(), heroCharacter: () => online.hero, players: () => online.characters.values(), hero: () => ({ level: stats.level, leadership: stats.leadership, classIndex: character.classIndex }), closeDocked: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); }, dockedChanged: (open) => { itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); }, guildWindowToggled: (open) => { state.hud?.setOpenStates({ guild: open }); if (open) state.guildLevels?.open(); else state.guildLevels?.close(); }, friendWindowToggled: (open) => { state.hud?.setOpenStates({ friends: open }); } });
+  const syncFriendAlert = () => {
+    const messenger = state.social?.messenger;
+    if (!messenger) return;
+    const unread = messenger.newMailAlert || messenger.letters.some((letter) => !letter.read);
+    hud.setAlertStates({ friends: unread && !state.social?.friendWindow.isOpen });
+  };
+  state.social = setupSocial({ connection, chat, heroName: character.name, earlyPackets, click: () => sounds.click(), heroCharacter: () => online.hero, players: () => online.characters.values(), hero: () => ({ level: stats.level, leadership: stats.leadership, classIndex: character.classIndex }), closeDocked: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); }, dockedChanged: (open) => { itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); }, guildWindowToggled: (open) => { state.hud?.setOpenStates({ guild: open }); if (open) state.guildLevels?.open(); else state.guildLevels?.close(); }, friendWindowToggled: (open) => { state.hud?.setOpenStates({ friends: open }); syncFriendAlert(); } });
+  state.social.messenger.onChange(() => syncFriendAlert());
+  syncFriendAlert();
   // Duels (/DuelChallenge, the score window, Doorkeeper Titus) and Gens (the stewards, B); ui/duelAndGens.ts.
   state.duelAndGens = setUpDuelAndGens({ connection, heroName: character.name, hero: () => online.hero, players: () => online.characters.values(), level: () => stats.level, mapNumber: () => state.mapNumber, chat, buffs, quests, camera, canvas: ui.canvas, click: () => sounds.click(), sound: (id) => sounds.audio.play(id), duelBlocked: () => !!state.chaosMachine?.isOpen || itemWindows.vault.isOpen, closeOthers: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); }, earlyPackets });
   const toggleGuide = () => {

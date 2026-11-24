@@ -10,6 +10,7 @@ import type { Item } from '../game/inventory.js';
 import { drawItem } from './itemIcons.js';
 import { skillCooldowns, skillIconSprite, type SkillList } from '../game/skills.js';
 import { hudScale } from './nativeText.js';
+import { onLanguageChange, translate } from '../i18n.js';
 
 /** What the skill bar shows: the skill list and whether a skill can be used now (lit or grey icon). */
 export interface HudSkills {
@@ -128,6 +129,7 @@ export class Hud {
       skill_pet_hover: (index: number) => { this.hoveredSkill = index; this.skillTooltip(index, this.hoveredElement, 'grid'); },
     };
     stats.onChange(() => this.refresh());
+    onLanguageChange(() => this.syncHints());
     window.addEventListener('resize', () => this.place());
   }
 
@@ -173,6 +175,35 @@ export class Hud {
 
   /** Lights the cash shop button while the shop is open (MAINFRAME_BTN_PARTCHARGE). */
   setCashShopOpen(open: boolean): void { this.setOpenStates({ cashShop: open }); }
+
+  /** Swaps the HP orb art between red and poisoned green (eDeBuff_Poison). */
+  setPoisoned(poisoned: boolean): void {
+    if (this.model.poisoned === poisoned) return;
+    this.model.poisoned = poisoned;
+    this.doc?.update();
+  }
+
+  /** Lights the Character (quest/stat alert) and Friends (unread mail/chat alert) dots. */
+  setAlertStates(alerts: Partial<{ character: boolean; friends: boolean }>): void {
+    let changed = false;
+    if (alerts.character !== undefined && this.model.chainfo_alert !== alerts.character) {
+      this.model.chainfo_alert = alerts.character;
+      changed = true;
+    }
+    if (alerts.friends !== undefined && this.model.friend_alert !== alerts.friends) {
+      this.model.friend_alert = alerts.friends;
+      changed = true;
+    }
+    if (changed) this.doc?.update();
+  }
+
+  private syncHints(): void {
+    if (!this.doc) return;
+    for (const el of this.doc.root.querySelectorAll<HTMLElement>('[data-hint]')) {
+      const hint = el.getAttribute('data-hint');
+      if (hint) el.title = translate(hint) ?? hint;
+    }
+  }
 
   /** Updates bottom HUD frame button highlight states (`open` class). */
   setOpenStates(states: Partial<{
@@ -229,6 +260,7 @@ export class Hud {
     this.refreshItemSlots();
     this.refreshSkills();
     this.doc.update();
+    this.syncHints();
   }
 
   /** The master experience the bar shows instead (IsMasterExperienceActive), or null for the normal one. */

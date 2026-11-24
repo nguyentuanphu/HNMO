@@ -3,6 +3,7 @@
 
 import { currentLanguage } from '../i18n.js';
 import type { AutoPlayExtras } from '../game/autoPlayExtras.js';
+import { hudScale } from './nativeText.js';
 
 const tx = (en: string, vi: string) => (currentLanguage() === 'vi' ? vi : en);
 
@@ -79,8 +80,9 @@ export class UltimateAutoPlayWindow {
     if (this.hud) return;
     const hud = document.createElement('div');
     hud.id = 'hnmo-ultimate-hud';
+    const bottomOffset = () => `${Math.round(54 * hudScale() + 8)}px`;
     Object.assign(hud.style, {
-      position: 'fixed', left: '12px', bottom: '68px', zIndex: '60',
+      position: 'fixed', left: '12px', bottom: bottomOffset(), zIndex: '60',
       display: this.opts.extras.settings.showUltimateHud ? 'flex' : 'none',
       alignItems: 'center', gap: '8px', padding: '6px 10px',
       borderRadius: '8px', border: '1px solid rgba(212,175,55,0.45)',
@@ -88,6 +90,7 @@ export class UltimateAutoPlayWindow {
       fontFamily: 'system-ui, -apple-system, sans-serif', fontSize: '12px',
       boxShadow: '0 4px 16px rgba(0,0,0,0.45)', pointerEvents: 'auto',
     });
+    window.addEventListener('resize', () => { hud.style.bottom = bottomOffset(); });
     hud.addEventListener('pointerdown', (e) => e.stopPropagation());
     hud.innerHTML = `
       <span style="display:inline-flex;align-items:center;gap:5px;font-weight:600;color:#e7c873">
