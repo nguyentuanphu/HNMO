@@ -1,5 +1,5 @@
 {
-  "generatedAt": "a33e7979",
+  "generatedAt": "10513cb5",
   "maxLines": 6000,
   "units": [
     {
@@ -3418,11 +3418,17 @@
       ],
       "files": 23,
       "lines": 3279,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "10513cb5",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "the Season 6 suite's CommonServer.cfg & Common.ini",
+        "the Season 9 suite's ItemCalc.lua & Common.ini",
+        "docs/audit/data/diff-common-rules.txt",
+        "docs/audit/data/diff-suite-rules.txt",
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-files-1.md"
+      ],
+      "evidence": "Audited all 23 files (3279 lines): docs/audit/findings/unit-server-src-Persistence-Initialization-files-1.md",
       "prs": "#267-#272"
     },
     {
