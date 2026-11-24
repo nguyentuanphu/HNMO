@@ -1,5 +1,5 @@
 {
-  "generatedAt": "652ed94a",
+  "generatedAt": "8d4e6bb1",
   "maxLines": 6000,
   "units": [
     {
@@ -3473,11 +3473,13 @@
       ],
       "files": 7,
       "lines": 815,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "8d4e6bb1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-Persistence-Init-S6-S9.md"
+      ],
+      "evidence": "Read files in full; verified quest/skill initializers, Season 9 update plugins, and caption linking service.",
       "prs": ""
     },
     {
@@ -3902,11 +3904,13 @@
       ],
       "files": 10,
       "lines": 2759,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "8d4e6bb1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-Persistence-Init-S6-S9.md"
+      ],
+      "evidence": "Read files in full; verified quest/skill initializers, Season 9 update plugins, and caption linking service.",
       "prs": ""
     },
     {
@@ -4041,11 +4045,13 @@
       ],
       "files": 2,
       "lines": 3453,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "8d4e6bb1",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "docs/audit/findings/unit-server-src-Persistence-Init-S6-S9.md"
+      ],
+      "evidence": "Read files in full; verified quest/skill initializers, Season 9 update plugins, and caption linking service.",
       "prs": ""
     },
     {
