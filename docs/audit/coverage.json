@@ -1,5 +1,5 @@
 {
-  "generatedAt": "0b67af2e",
+  "generatedAt": "15c801d2",
   "maxLines": 6000,
   "units": [
     {
@@ -1549,11 +1549,13 @@
       ],
       "files": 16,
       "lines": 2233,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "15c801d2",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "None (custom HNMO feature)"
+      ],
+      "evidence": "All 16 Community files read in full. Verified Discord/Zalo/event-code rules, drop cooldowns, and noted MarkCoinsPaid on failed grant + CommunityStore dirty tracking. See docs/audit/findings/unit-server-src-GameLogic-PlugIns-Community.md.",
       "prs": ""
     },
     {
