@@ -1,5 +1,5 @@
 {
-  "generatedAt": "ce7a42f8",
+  "generatedAt": "79ad34af",
   "maxLines": 6000,
   "units": [
     {
@@ -4567,11 +4567,16 @@
       ],
       "files": 25,
       "lines": 1638,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "79ad34af",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "ItemStatProfile.cs:19-57",
+        "ItemStatTerms.cs:15-96",
+        "ItemPriceDefinition.cs:15-83",
+        "docs/audit/findings/unit-server-src-DataModel-Configuration-Items.md"
+      ],
+      "evidence": "25f/1638L: ItemStatTerms encodes exact client excellent & ancient scaling formulas; ItemPriceDefinition documents +16% guardian option, 3B buy cap & 1/3 sell rule matching client.",
       "prs": ""
     },
     {
