@@ -1,5 +1,5 @@
 {
-  "generatedAt": "d260790c",
+  "generatedAt": "ce7a42f8",
   "maxLines": 6000,
   "units": [
     {
@@ -4547,11 +4547,16 @@
       ],
       "files": 6,
       "lines": 406,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "ce7a42f8",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "SimpleCraftingSettings.cs:13-100",
+        "ItemCraftingRequiredItem.cs",
+        "MixResult.cs",
+        "docs/audit/findings/unit-server-src-DataModel-Configuration-ItemCrafting.md"
+      ],
+      "evidence": "6f/406L: SimpleCraftingSettings models NpcPriceDivisor (1% chaos rate step), luck/exc/anc/guardian/socket rate additions & MoneyPerFinalSuccessPercentage matching S6/S9 chaos mixes.",
       "prs": ""
     },
     {
