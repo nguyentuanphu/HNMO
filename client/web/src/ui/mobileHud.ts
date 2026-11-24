@@ -6,7 +6,7 @@
 
 import type { Chat, ChatKind } from '../game/chat.js';
 import { currentLanguage, onLanguageChange } from '../i18n.js';
-import { isBlocked as chatIsBlocked, setBlocked as chatSetBlocked } from '../game/chatExtras.js';
+import { isBlocked as chatIsBlocked, loadWindowSize, saveWindowSize, setBlocked as chatSetBlocked, type BoxWindowBounds } from '../game/chatExtras.js';
 import { loadMiniMapData, type MiniMapMarker } from '../game/miniMapData.js';
 import { isWakeLockActive, type HudMode } from '../render/quality.js';
 
@@ -603,9 +603,20 @@ body.hnmo-modern-hud > #touchMore { display: none !important; }
   background: rgba(9, 12, 20, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  padding: 3px 5px;
+  padding: 4px 16px 4px 6px;
   display: grid;
   gap: 3px;
+}
+.mh-chat-resize {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 14px;
+  height: 14px;
+  cursor: nesw-resize;
+  touch-action: none;
+  border-radius: 3px;
+  background: linear-gradient(225deg, rgba(255, 232, 173, 0.7) 0 5px, transparent 5px);
 }
 .mh-chat.mh-collapsed { display: none; }
 .mh-chat-tabs { display: flex; gap: 2px; align-items: center; overflow-x: auto; scrollbar-width: none; }
@@ -1231,7 +1242,40 @@ export class MobileHud {
     this.macroBarEl = document.createElement('div');
     this.macroBarEl.id = 'mobileMacroBar';
     this.macroBarEl.className = 'mh-macros';
-    chatCard.append(this.chatTabsWrap, this.chatLinesEl, inputRow, this.macroBarEl);
+    const drawerBounds: BoxWindowBounds = { minW: 170, maxW: 560, minH: 46, maxH: 360 };
+    const savedDrawer = loadWindowSize('mobile_chat', drawerBounds);
+    if (savedDrawer) {
+      chatCard.style.width = `${savedDrawer.width}px`;
+      this.chatLinesEl.style.height = `${savedDrawer.height}px`;
+    }
+    const resizeCorner = document.createElement('div');
+    resizeCorner.id = 'mobileChatResize';
+    resizeCorner.className = 'mh-chat-resize';
+    resizeCorner.title = 'Drag to resize';
+    resizeCorner.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const startX = e.clientX;
+      const startY = e.clientY;
+      const startW = chatCard.getBoundingClientRect().width || savedDrawer?.width || 210;
+      const startH = this.chatLinesEl.getBoundingClientRect().height || savedDrawer?.height || 46;
+      let latest = { width: Math.round(startW), height: Math.round(startH) };
+      const move = (ev: PointerEvent) => {
+        const w = Math.max(drawerBounds.minW, Math.min(drawerBounds.maxW, Math.round(startW + (ev.clientX - startX))));
+        const h = Math.max(drawerBounds.minH, Math.min(drawerBounds.maxH, Math.round(startH + (startY - ev.clientY))));
+        latest = { width: w, height: h };
+        chatCard.style.width = `${w}px`;
+        this.chatLinesEl.style.height = `${h}px`;
+      };
+      const up = () => {
+        window.removeEventListener('pointermove', move);
+        window.removeEventListener('pointerup', up);
+        saveWindowSize('mobile_chat', latest, drawerBounds);
+      };
+      window.addEventListener('pointermove', move);
+      window.addEventListener('pointerup', up);
+    });
+    chatCard.append(resizeCorner, this.chatTabsWrap, this.chatLinesEl, inputRow, this.macroBarEl);
     this.chatCardEl = chatCard;
 
     // 6. Exp: a thin line along the very bottom.
