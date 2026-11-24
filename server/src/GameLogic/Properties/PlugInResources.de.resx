@@ -2075,4 +2075,52 @@
   <data name="MossGambleConfiguration_Enabled_Description" xml:space="preserve"><value>Wenn deaktiviert, wird der Kauf von Glücksspiel-Gutscheinen bei Moss (492) ohne Zen-Abzug abgelehnt.</value></data>
   <data name="MossGambleConfiguration_PriceZen_Name" xml:space="preserve"><value>Glücksspielpreis (Zen)</value></data>
   <data name="MossGambleConfiguration_PriceZen_Description" xml:space="preserve"><value>Zen-Preis pro Wurf bei Händler Moss (Standard 2.000.000 Zen).</value></data>
+  <data name="GameNameConfiguration_Name_Caption" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="GameNameConfiguration_Name_Description" xml:space="preserve">
+    <value>Dieser Name ersetzt den Standardnamen für Spieler (1 bis 60 Zeichen). Das Webspiel übernimmt ihn innerhalb einer Minute.</value>
+  </data>
+  <data name="GameNameConfiguration_ZaloLink_Caption" xml:space="preserve">
+    <value>Zalo</value>
+  </data>
+  <data name="GameNameConfiguration_ZaloLink_Description" xml:space="preserve">
+    <value>Link zu einer Zalo-Gruppe oder einem Kontakt, über den Spieler Sie erreichen können. Leer lassen, um den Link auszublenden.</value>
+  </data>
+  <data name="GameNameConfiguration_DiscordLink_Caption" xml:space="preserve">
+    <value>Discord</value>
+  </data>
+  <data name="GameNameConfiguration_DiscordLink_Description" xml:space="preserve">
+    <value>Einladungslink zu Discord. Leer lassen, um den Link auszublenden.</value>
+  </data>
+  <data name="GameNameConfiguration_FacebookLink_Caption" xml:space="preserve">
+    <value>Facebook</value>
+  </data>
+  <data name="GameNameConfiguration_FacebookLink_Description" xml:space="preserve">
+    <value>Link zu einer Facebook-Seite oder -Gruppe. Leer lassen, um den Link auszublenden.</value>
+  </data>
+  <data name="WebsitePlugIn_Name" xml:space="preserve">
+    <value>Website (Admin-Adresse, Google-Anmeldung)</value>
+  </data>
+  <data name="WebsitePlugIn_Description" xml:space="preserve">
+    <value>Einstellungen der öffentlichen Website: der private Pfad zum Admin-Panel und die Client-ID für die Google-Anmeldung.</value>
+  </data>
+  <data name="WebsiteConfiguration_AdminPath_Caption" xml:space="preserve">
+    <value>Adresse des Admin-Panels</value>
+  </data>
+  <data name="WebsiteConfiguration_AdminPath_Description" xml:space="preserve">
+    <value>Die Website öffnet das Admin-Panel unter diesem Pfad. Wählen Sie 3 bis 40 schwer zu erratende Buchstaben, Ziffern, Bindestriche oder Unterstriche. Bei einem leeren Feld ist das Admin-Panel nur auf dem Hostcomputer erreichbar. Änderungen werden innerhalb von 30 Sekunden übernommen. Für den Zugriff über die Website ist ein Administratorkonto erforderlich.</value>
+  </data>
+  <data name="WebsiteConfiguration_GoogleClientId_Caption" xml:space="preserve">
+    <value>Google-Client-ID</value>
+  </data>
+  <data name="WebsiteConfiguration_GoogleClientId_Description" xml:space="preserve">
+    <value>Client-ID eines OAuth-Clients in Google Cloud vom Typ Webanwendung. Hinterlegen Sie Ihre Website als zulässigen JavaScript-Ursprung. Leer lassen, um die Google-Anmeldung auszuschalten.</value>
+  </data>
+  <data name="WebsiteConfiguration_RequireWebsiteLogin_Caption" xml:space="preserve">
+    <value>Webspiel: Website-Anmeldung erforderlich</value>
+  </data>
+  <data name="WebsiteConfiguration_RequireWebsiteLogin_Description" xml:space="preserve">
+    <value>Wenn diese Option aktiviert ist, wird das Passwortformular im Webspiel ausgeblendet. Spieler melden sich zuerst auf der Website an und klicken dann auf „Jetzt spielen“.</value>
+  </data>
 </root>
