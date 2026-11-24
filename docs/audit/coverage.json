@@ -1,5 +1,5 @@
 {
-  "generatedAt": "3c1aaf68",
+  "generatedAt": "267dd8f6",
   "maxLines": 6000,
   "units": [
     {
@@ -6816,11 +6816,14 @@
       ],
       "files": 2,
       "lines": 4231,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "267dd8f6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "ZzzInventory.cpp:832-904",
+        "docs/audit/findings/unit-client-src-source-Engine-Object-files-5.md"
+      ],
+      "evidence": "2f/4231L: NPC/Chaos tax conversion & CalcRepairCost (min(Value,400M), 3.5*V^(3/4)*lost+1, broken x2.0 DL pet / x1.4 normal, self-repair x2.5) matching Web itemValue.ts.",
       "prs": ""
     },
     {
