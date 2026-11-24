@@ -1,5 +1,5 @@
 {
-  "generatedAt": "668ecbd4",
+  "generatedAt": "d2acf288",
   "maxLines": 6000,
   "units": [
     {
@@ -3749,11 +3749,15 @@
       ],
       "files": 49,
       "lines": 5891,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "d2acf288",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "the Season 6 suite's RegularSkillCalc.lua & MonsterList.xml",
+        "the Season 9 suite's ItemCalc.lua",
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-Updates-files-3.md"
+      ],
+      "evidence": "Audited all 49 files (5891 lines): docs/audit/findings/unit-server-src-Persistence-Initialization-Updates-files-3.md",
       "prs": ""
     },
     {
