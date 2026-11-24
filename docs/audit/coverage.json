@@ -1,5 +1,5 @@
 {
-  "generatedAt": "49a5970d",
+  "generatedAt": "f1e56a23",
   "maxLines": 6000,
   "units": [
     {
@@ -4027,16 +4027,12 @@
       ],
       "files": 8,
       "lines": 3135,
-      "status": "Changed since check",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-22",
+      "status": "Checked",
+      "checkedAt": "f1e56a23",
+      "checkedOn": "2026-11-24",
       "references": "S6 SocketOptionSettings.ini, S9 SocketOption.xml, ItemList.xml",
-      "evidence": "Read in full via data dump (ledger-game-data.md + ZzDataDump at 477b9466): socket options (#220, #233), 2nd wing AG/speed (#251), 3rd wings (#234).",
-      "prs": "#220, #233, #234, #251",
-      "changedFiles": [
-        "server/src/Persistence/Initialization/VersionSeasonSix/Items/Pets.cs",
-        "server/src/Persistence/Initialization/VersionSeasonSix/Items/SocketWeaponMixItems.cs"
-      ]
+      "evidence": "All 8 files read (3135 lines): docs/audit/findings/unit-server-src-Persistence-Initialization-VersionSeasonSix-Items-files-2.md; ref: docs/audit/references/socket-options-and-pets-s6-s9.md",
+      "prs": "#220, #233, #234, #251"
     },
     {
       "id": "server/src/Persistence/Initialization/VersionSeasonSix/Maps (files 1)",
