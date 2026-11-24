@@ -1,5 +1,5 @@
 {
-  "generatedAt": "256cac5e",
+  "generatedAt": "f613c11e",
   "maxLines": 6000,
   "units": [
     {
@@ -7379,11 +7379,16 @@
       ],
       "files": 7,
       "lines": 679,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "f613c11e",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Network/ConnectionLifecycle.h",
+        "Network/EndpointForLog.cpp",
+        "Network/EndpointForLog.h",
+        "docs/audit/findings/unit-client-src-source-Network-files-1.md"
+      ],
+      "evidence": "7f/679L: No game rules (TCP/packet queue, auto-reconnect & S->C/C->S packet dispatch plumbing in WSclient (server validates actions).)",
       "prs": ""
     },
     {
