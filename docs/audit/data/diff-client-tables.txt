@@ -1,0 +1,475 @@
+# Client Encoded Data Tables Comparison (Season 6 Client vs Season 9 Client vs HNMO Server vs HNMO Web/Client Data)
+
+## MasterSkillTreeData.bmd: S6=293 nodes, S9=472 nodes, HNMO_Client/Web=293 nodes, HNMO_Server_master_skills=200
+  HNMO_Client vs S6_Client: same=293, differs=0
+  S9-only node: class=1 skill=315 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=1 skill=316 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=1 skill=317 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=1 skill=318 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=1 skill=319 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=1 skill=320 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=1 skill=322 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=1 skill=324 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=1 skill=339 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=1 skill=340 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=1 skill=341 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=1 skill=342 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=1 skill=343 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=1 skill=345 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=1 skill=344 max=10 | HNMO_Client=missing in HNMO
+  S9-only node: class=1 skill=346 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=1 skill=363 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=1 skill=364 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=1 skill=366 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=1 skill=367 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=1 skill=368 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=1 skill=369 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=1 skill=370 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=1 skill=372 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=1 skill=371 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=315 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=316 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=317 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=318 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=319 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=320 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=375 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=377 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=390 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=341 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=391 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=392 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=393 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=394 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=495 max=10 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=497 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=406 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=407 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=366 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=367 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=368 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=369 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=370 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=372 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=2 skill=371 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=315 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=316 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=317 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=318 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=319 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=320 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=410 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=412 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=425 max=10 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=411 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=341 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=426 max=10 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=431 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=428 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=429 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=430 max=10 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=427 max=10 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=432 max=10 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=433 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=434 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=443 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=366 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=367 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=368 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=369 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=370 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=372 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=4 skill=371 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=8 skill=315 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=8 skill=316 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=8 skill=317 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=8 skill=318 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=8 skill=319 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=8 skill=320 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=8 skill=446 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=8 skill=447 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=8 skill=460 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=8 skill=341 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=8 skill=459 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=8 skill=462 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=8 skill=461 max=10 | HNMO_Client=missing in HNMO
+  S9-only node: class=8 skill=463 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=8 skill=472 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=8 skill=473 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=8 skill=366 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=8 skill=367 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=8 skill=368 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=8 skill=369 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=8 skill=370 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=8 skill=372 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=8 skill=371 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=315 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=316 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=317 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=318 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=319 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=320 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=476 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=478 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=492 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=491 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=341 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=494 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=493 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=496 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=344 max=10 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=495 max=10 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=346 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=497 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=407 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=364 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=366 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=367 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=368 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=369 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=370 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=372 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=16 skill=371 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=315 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=316 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=317 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=318 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=319 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=320 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=505 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=506 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=507 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=519 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=520 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=341 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=522 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=523 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=521 max=10 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=524 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=536 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=366 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=364 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=538 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=369 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=367 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=368 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=539 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=370 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=372 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=32 skill=371 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=64 skill=593 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=64 skill=594 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=64 skill=595 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=64 skill=596 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=64 skill=597 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=64 skill=598 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=64 skill=549 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=64 skill=550 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=64 skill=602 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=64 skill=561 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=64 skill=562 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=64 skill=563 max=10 | HNMO_Client=missing in HNMO
+  S9-only node: class=64 skill=564 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=64 skill=565 max=10 | HNMO_Client=missing in HNMO
+  S9-only node: class=64 skill=566 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=64 skill=567 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=64 skill=609 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=64 skill=610 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=64 skill=611 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=64 skill=612 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=64 skill=613 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=64 skill=614 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=64 skill=616 max=20 | HNMO_Client=missing in HNMO
+  S9-only node: class=64 skill=615 max=20 | HNMO_Client=missing in HNMO
+
+## mix.bmd: S6=101 recipes, S9=159 recipes (expanded layout), HNMO_Client/Web(mixRecipes.ts)=99 recipes, HNMO_Server(mixes.csv)=43
+  HNMO_Client vs S6_Client: same=101, differs=0
+
+## movereq_eng.bmd: S6=39 warps, S9=37 warps, HNMO_Client/Web(warps.ts)=37, HNMO_Server(warps.csv)=40
+  Warp #49 (Stadium): S6=(Lv=50,Zen=2000,Gate=345) | HNMO_Client=missing | HNMO_Server=missing -> differs
+  Warp #25 (Aida1): S6=(Lv=150,Zen=50000,Gate=119) | S9=(Lv=150,Zen=8500) | HNMO_Client=(Lv=150,Zen=8500,Gate=119) | HNMO_Server=(Lv=150,Zen=8500) -> differs
+  Warp #27 (Aida2): S6=(Lv=150,Zen=100000,Gate=140) | S9=(Lv=150,Zen=8500) | HNMO_Client=(Lv=150,Zen=8500,Gate=140) | HNMO_Server=(Lv=150,Zen=8500) -> differs
+  Warp #23 (Icarus): S6=(Lv=170,Zen=50000,Gate=63) | S9=(Lv=170,Zen=10000) | HNMO_Client=(Lv=170,Zen=10000,Gate=63) | HNMO_Server=(Lv=170,Zen=10000) -> differs
+  Warp #28 (KanturuRuins1): S6=(Lv=200,Zen=300000,Gate=138) | S9=(Lv=160,Zen=9000) | HNMO_Client=(Lv=160,Zen=9000,Gate=138) | HNMO_Server=(Lv=160,Zen=9000) -> differs
+  Warp #29 (KanturuRuins2): S6=(Lv=220,Zen=350000,Gate=141) | S9=(Lv=160,Zen=9000) | HNMO_Client=(Lv=160,Zen=9000,Gate=141) | HNMO_Server=(Lv=160,Zen=9000) -> differs
+  Warp #45 (KanturuRuins3): S6=(Lv=250,Zen=400000,Gate=334) | S9=(Lv=160,Zen=15000) | HNMO_Client=(Lv=160,Zen=15000,Gate=334) | HNMO_Server=(Lv=160,Zen=15000) -> differs
+  Warp #30 (KanturuRelics): S6=(Lv=300,Zen=500000,Gate=139) | S9=(Lv=230,Zen=12000) | HNMO_Client=(Lv=230,Zen=12000,Gate=139) | HNMO_Server=(Lv=230,Zen=12000) -> differs
+  Warp #46 (Karutan1): S6=(Lv=170,Zen=100000,Gate=335) | S9=(Lv=170,Zen=13000) | HNMO_Client=(Lv=170,Zen=13000,Gate=335) | HNMO_Server=(Lv=170,Zen=13000) -> differs
+  Warp #47 (Karutan2): S6=(Lv=170,Zen=150000,Gate=344) | S9=(Lv=170,Zen=14000) | HNMO_Client=(Lv=170,Zen=14000,Gate=344) | HNMO_Server=(Lv=170,Zen=14000) -> differs
+  Warp #34 (LaCleon): S6=(Lv=280,Zen=500000,Gate=287) | S9=(Lv=280,Zen=15000) | HNMO_Client=(Lv=280,Zen=15000,Gate=287) | HNMO_Server=(Lv=280,Zen=15000) -> differs
+  Warp #33 (PeaceSwamp): S6=(Lv=400,Zen=1000000,Gate=273) | S9=(Lv=400,Zen=15000) | HNMO_Client=(Lv=400,Zen=15000,Gate=273) | HNMO_Server=(Lv=400,Zen=15000) -> differs
+  Warp #42 (Vulcanus): S6=(Lv=250,Zen=350000,Gate=294) | S9=(Lv=30,Zen=15000) | HNMO_Client=(Lv=30,Zen=15000,Gate=294) | HNMO_Server=(Lv=30,Zen=15000) -> differs
+  Warp #48 (Crywolf): S6=(Lv=300,Zen=150000,Gate=118) | HNMO_Client=missing | HNMO_Server=(Lv=280,Zen=15000) -> differs
+
+## Gate.bmd: S6=339 non-zero gates, S9=438 non-zero gates, HNMO_Client/Web(gates.ts)=339, HNMO_Server enter=116 exit=225
+  HNMO_Client vs S6_Client: same=339, differs=0
+  S9-only gate #345: map=82 flag=0 (60,66)-(63,69) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #346: map=82 flag=0 (69,195)-(72,198) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #347: map=82 flag=0 (196,187)-(199,190) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #348: map=82 flag=0 (187,61)-(190,64) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #349: map=83 flag=0 (60,66)-(63,69) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #350: map=83 flag=0 (69,195)-(72,198) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #351: map=83 flag=0 (196,187)-(199,190) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #352: map=83 flag=0 (187,61)-(190,64) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #353: map=84 flag=0 (60,66)-(63,69) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #354: map=84 flag=0 (69,195)-(72,198) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #355: map=84 flag=0 (196,187)-(199,190) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #356: map=84 flag=0 (187,61)-(190,64) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #357: map=85 flag=0 (60,66)-(63,69) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #358: map=85 flag=0 (69,195)-(72,198) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #359: map=85 flag=0 (196,187)-(199,190) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #360: map=85 flag=0 (187,61)-(190,64) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #361: map=86 flag=0 (60,66)-(63,69) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #362: map=86 flag=0 (69,195)-(72,198) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #363: map=86 flag=0 (196,187)-(199,190) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #364: map=86 flag=0 (187,61)-(190,64) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #365: map=87 flag=0 (60,66)-(63,69) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #366: map=87 flag=0 (69,195)-(72,198) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #367: map=87 flag=0 (196,187)-(199,190) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #368: map=87 flag=0 (187,61)-(190,64) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #369: map=88 flag=0 (60,66)-(63,69) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #370: map=88 flag=0 (69,195)-(72,198) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #371: map=88 flag=0 (196,187)-(199,190) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #372: map=88 flag=0 (187,61)-(190,64) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #373: map=89 flag=0 (60,66)-(63,69) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #374: map=89 flag=0 (69,195)-(72,198) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #375: map=89 flag=0 (196,187)-(199,190) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #376: map=89 flag=0 (187,61)-(190,64) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #377: map=90 flag=0 (60,66)-(63,69) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #378: map=90 flag=0 (69,195)-(72,198) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #379: map=90 flag=0 (196,187)-(199,190) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #380: map=90 flag=0 (187,61)-(190,64) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #381: map=82 flag=0 (123,120)-(129,134) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #382: map=82 flag=0 (123,126)-(134,132) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #383: map=82 flag=0 (127,121)-(133,133) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #384: map=82 flag=0 (123,121)-(133,128) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #385: map=83 flag=0 (123,120)-(129,134) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #386: map=83 flag=0 (123,126)-(134,132) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #387: map=83 flag=0 (127,121)-(133,133) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #388: map=83 flag=0 (123,121)-(133,128) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #389: map=84 flag=0 (123,120)-(129,134) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #390: map=84 flag=0 (123,126)-(134,132) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #391: map=84 flag=0 (127,121)-(133,133) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #392: map=84 flag=0 (123,121)-(133,128) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #393: map=85 flag=0 (123,120)-(129,134) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #394: map=85 flag=0 (123,126)-(134,132) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #395: map=85 flag=0 (127,121)-(133,133) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #396: map=85 flag=0 (123,121)-(133,128) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #397: map=86 flag=0 (123,120)-(129,134) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #398: map=86 flag=0 (123,126)-(134,132) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #399: map=86 flag=0 (127,121)-(133,133) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #400: map=86 flag=0 (123,121)-(133,128) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #401: map=87 flag=0 (123,120)-(129,134) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #402: map=87 flag=0 (123,126)-(134,132) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #403: map=87 flag=0 (127,121)-(133,133) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #404: map=87 flag=0 (123,121)-(133,128) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #405: map=88 flag=0 (123,120)-(129,134) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #406: map=88 flag=0 (123,126)-(134,132) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #407: map=88 flag=0 (127,121)-(133,133) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #408: map=88 flag=0 (123,121)-(133,128) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #409: map=89 flag=0 (123,120)-(129,134) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #410: map=89 flag=0 (123,126)-(134,132) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #411: map=89 flag=0 (127,121)-(133,133) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #412: map=89 flag=0 (123,121)-(133,128) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #413: map=90 flag=0 (123,120)-(129,134) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #414: map=90 flag=0 (123,126)-(134,132) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #415: map=90 flag=0 (127,121)-(133,133) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #416: map=90 flag=0 (123,121)-(133,128) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #417: map=91 flag=0 (51,190)-(60,197) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #418: map=91 flag=1 (26,168)-(28,172) target=419 lvl=0 | HNMO_Client=missing
+  S9-only gate #419: map=91 flag=2 (112,161)-(114,166) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #420: map=91 flag=1 (115,168)-(118,170) target=421 lvl=0 | HNMO_Client=missing
+  S9-only gate #421: map=91 flag=2 (33,167)-(37,170) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #422: map=91 flag=1 (82,204)-(86,205) target=423 lvl=0 | HNMO_Client=missing
+  S9-only gate #423: map=91 flag=2 (151,198)-(156,200) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #424: map=91 flag=1 (147,202)-(148,206) target=425 lvl=0 | HNMO_Client=missing
+  S9-only gate #425: map=91 flag=2 (81,197)-(83,199) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #426: map=92 flag=0 (51,190)-(60,197) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #427: map=92 flag=1 (26,168)-(28,172) target=428 lvl=0 | HNMO_Client=missing
+  S9-only gate #428: map=92 flag=2 (112,161)-(114,166) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #429: map=92 flag=1 (115,168)-(118,170) target=430 lvl=0 | HNMO_Client=missing
+  S9-only gate #430: map=92 flag=2 (33,167)-(37,170) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #431: map=92 flag=1 (82,204)-(86,205) target=432 lvl=0 | HNMO_Client=missing
+  S9-only gate #432: map=92 flag=2 (151,198)-(156,200) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #433: map=92 flag=1 (147,202)-(148,206) target=434 lvl=0 | HNMO_Client=missing
+  S9-only gate #434: map=92 flag=2 (81,197)-(83,199) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #435: map=91 flag=1 (52,161)-(53,163) target=436 lvl=0 | HNMO_Client=missing
+  S9-only gate #436: map=95 flag=2 (19,104)-(20,105) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #437: map=95 flag=1 (17,106)-(18,107) target=438 lvl=0 | HNMO_Client=missing
+  S9-only gate #438: map=91 flag=2 (54,163)-(55,164) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #439: map=92 flag=1 (52,161)-(53,163) target=440 lvl=0 | HNMO_Client=missing
+  S9-only gate #440: map=96 flag=2 (19,104)-(20,105) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #441: map=96 flag=1 (17,106)-(18,107) target=442 lvl=0 | HNMO_Client=missing
+  S9-only gate #442: map=92 flag=2 (54,163)-(55,164) target=0 lvl=0 | HNMO_Client=missing
+  S9-only gate #443: map=97 flag=0 (31,88)-(36,95) target=0 lvl=0 | HNMO_Client=missing
+
+## BuffEffect_eng.bmd: S6=158 buffs, S9=202 buffs (+44 S9-only), HNMO_Client/Web(Buffs.json)=158 buffs (matched_vs_S6=158/158, missing_vs_S6=0)
+  S9-only buff #122: Hawk Figurine | HNMO_Client=missing
+  S9-only buff #123: Goat Figurine | HNMO_Client=missing
+  S9-only buff #124: Oak Charm | HNMO_Client=missing
+  S9-only buff #125: Maple Charm | HNMO_Client=missing
+  S9-only buff #126: Golden Oak Charm | HNMO_Client=missing
+  S9-only buff #127: Golden Maple Charm | HNMO_Client=missing
+  S9-only buff #128: Worn Horseshoe | HNMO_Client=missing
+  S9-only buff #174: Fire | HNMO_Client=missing
+  S9-only buff #175: Frost | HNMO_Client=missing
+  S9-only buff #176: Tornado | HNMO_Client=missing
+  S9-only buff #177: Bind | HNMO_Client=missing
+  S9-only buff #178: Darkness | HNMO_Client=missing
+  S9-only buff #179: Fire Tower | HNMO_Client=missing
+  S9-only buff #180: Water Tower | HNMO_Client=missing
+  S9-only buff #181: Earth Tower | HNMO_Client=missing
+  S9-only buff #182: Wind Tower | HNMO_Client=missing
+  S9-only buff #183: Darkness Tower | HNMO_Client=missing
+  S9-only buff #184: Resurrection Penalty | HNMO_Client=missing
+  S9-only buff #185: Vault Expansion | HNMO_Client=missing
+  S9-only buff #186: Confusion | HNMO_Client=missing
+  ... (24 more)
+
+## Ancient Sets (itemsetoption_eng.bmd): S6=49, S9=63, HNMO_Client=49, HNMO_Server(ancient_sets.csv)=437
+## Socket Options (socketitem_eng.bmd): S6=35, S9=111, HNMO_Client=35, HNMO_Server(socket_options.csv)=35
+## Harmony Options (JewelOfHarmonyOption_eng.bmd): S6=26, S9=26, HNMO_Client=26, HNMO_Server(item_options.csv)=26
+
+## Item_eng.bmd vs HNMO Server vs Web/Client Data/Items/Group*.json:
+  Counts: S6_Client=967 (8192x84), S9_Client=1252 (1252x628), HNMO_Client/Web=922, HNMO_Srv_S6=848, HNMO_Srv_S9=1112
+  S6_Client missing_in_HNMO_Client/Web=48, S9_Client missing_in_HNMO_Client/Web=337
+  S9-only item 0-29 (Sonic Blade): HNMO_Web=missing, HNMO_Srv9=present
+  S9-only item 0-30 (Asura): HNMO_Web=missing, HNMO_Srv9=present
+  S9-only item 0-36 (Cyclone Sword): HNMO_Web=missing, HNMO_Srv9=present
+  S9-only item 0-37 (Blast Break): HNMO_Web=missing, HNMO_Srv9=present
+  S9-only item 0-39 (Lighting Sword-J): HNMO_Web=missing, HNMO_Srv9=missing
+  S9-only item 0-40 (Sacred Glove-J): HNMO_Web=missing, HNMO_Srv9=missing
+  S9-only item 0-41 (Pandora Pick (two-handed)): HNMO_Web=missing, HNMO_Srv9=present
+  S9-only item 2-19 (Thunderbolt): HNMO_Web=missing, HNMO_Srv9=present
+  S9-only item 2-20 (Horn of Steal): HNMO_Web=missing, HNMO_Srv9=present
+  S9-only item 2-21 (Master Scepter-J): HNMO_Web=missing, HNMO_Srv9=missing
+  S9-only item 3-12 (Magmus Peer): HNMO_Web=missing, HNMO_Srv9=present
+  S9-only item 4-25 (Angelic Bow): HNMO_Web=missing, HNMO_Srv9=present
+  S9-only item 4-26 (Devil Crossbow): HNMO_Web=missing, HNMO_Srv9=present
+  S9-only item 4-27 (Silver Bow-J): HNMO_Web=missing, HNMO_Srv9=missing
+  S9-only item 5-35 (Miracle Staff): HNMO_Web=missing, HNMO_Srv9=present
+  S9-only item 5-37 (Spite Staff): HNMO_Web=missing, HNMO_Srv9=present
+  S9-only item 5-38 (Legendary Staff-J): HNMO_Web=missing, HNMO_Srv9=missing
+  S9-only item 5-39 (Red Wing Stick-J): HNMO_Web=missing, HNMO_Srv9=missing
+  S9-only item 5-40 (Book of Neil-J): HNMO_Web=missing, HNMO_Srv9=missing
+  S9-only item 6-22 (Lazy Wind Shield): HNMO_Web=missing, HNMO_Srv9=present
+  ... (280 more)
+## skill_eng.bmd vs HNMO Server vs Web/Client:
+  Counts: S6_Client=399, S9_Client=403 (+4 S9-only), HNMO_Client=399, Web_new_skills(700+)=28, HNMO_Srv=316
+  S9-only skill #618 (Spell of Protection): HNMO_Client=missing, HNMO_Srv=missing
+  S9-only skill #619 (Spell of Restriction): HNMO_Client=missing, HNMO_Srv=missing
+  S9-only skill #620 (Spell of Pursuit): HNMO_Client=missing, HNMO_Srv=missing
+  S9-only skill #621 (Shied-Burn): HNMO_Client=missing, HNMO_Srv=missing
+## Web public/data/Monsters/Season9.json: entries=35 vs HNMO_Srv_S9 monsters=615
+
+## itemsettype.bmd: S6=168 ancient items, S9=210 (+42 S9-only), HNMO_Client=168
+  S9-only ancient item 0-17: sets=[57] | HNMO_Client=missing
+  S9-only ancient item 0-31: sets=[60] | HNMO_Client=missing
+  S9-only ancient item 0-33: sets=[56] | HNMO_Client=missing
+  S9-only ancient item 0-34: sets=[63] | HNMO_Client=missing
+  S9-only ancient item 2-11: sets=[61] | HNMO_Client=missing
+  S9-only ancient item 4-17: sets=[59] | HNMO_Client=missing
+  S9-only ancient item 5-8: sets=[51] | HNMO_Client=missing
+  S9-only ancient item 5-9: sets=[58] | HNMO_Client=missing
+  S9-only ancient item 5-18: sets=[62] | HNMO_Client=missing
+  S9-only ancient item 6-12: sets=[50] | HNMO_Client=missing
+  S9-only ancient item 7-17: sets=[57] | HNMO_Client=missing
+  S9-only ancient item 7-36: sets=[52] | HNMO_Client=missing
+  S9-only ancient item 7-38: sets=[61] | HNMO_Client=missing
+  S9-only ancient item 7-61: sets=[63] | HNMO_Client=missing
+  S9-only ancient item 8-17: sets=[57] | HNMO_Client=missing
+  ... (27 more)
+
+## ItemAddOption.bmd: S6=101 items, S9=121 (+21 S9-only, 20 differing), HNMO_Client=101
+  S9-only add-option 13-2: op1=0:0 op2=0:0 time=4294967286 | HNMO_Client=missing
+  S9-only add-option 13-3: op1=0:0 op2=0:0 time=4294967286 | HNMO_Client=missing
+  S9-only add-option 13-4: op1=0:0 op2=0:0 time=4294967286 | HNMO_Client=missing
+  S9-only add-option 13-37: op1=0:0 op2=0:0 time=4294967286 | HNMO_Client=missing
+  S9-only add-option 13-177: op1=87:50 op2=0:0 time=4294967286 | HNMO_Client=missing
+  S9-only add-option 13-178: op1=87:100 op2=0:0 time=4294967286 | HNMO_Client=missing
+  S9-only add-option 13-179: op1=87:200 op2=0:0 time=4294967286 | HNMO_Client=missing
+  S9-only add-option 13-180: op1=6:100 op2=0:0 time=0 | HNMO_Client=missing
+  S9-only add-option 13-181: op1=6:100 op2=0:0 time=0 | HNMO_Client=missing
+  S9-only add-option 14-224: op1=88:200 op2=0:0 time=1800 | HNMO_Client=missing
+
+## MonsterSkill.bmd: S6=56 monsters, S9=76 (+20 S9-only), HNMO_Client=0
+  S9-only monster #592: skills=[85,86,87] | HNMO_Client=missing
+  S9-only monster #593: skills=[82,83,84] | HNMO_Client=missing
+  S9-only monster #594: skills=[91,92,93] | HNMO_Client=missing
+  S9-only monster #595: skills=[88,89,90] | HNMO_Client=missing
+  S9-only monster #596: skills=[94,95,96] | HNMO_Client=missing
+  S9-only monster #611: skills=[82,83,84] | HNMO_Client=missing
+  S9-only monster #612: skills=[85,86,87] | HNMO_Client=missing
+  S9-only monster #613: skills=[91,92,93] | HNMO_Client=missing
+  S9-only monster #614: skills=[88,89,90] | HNMO_Client=missing
+  S9-only monster #615: skills=[94,95,96] | HNMO_Client=missing
+  S9-only monster #632: skills=[85,86,87] | HNMO_Client=missing
+  S9-only monster #633: skills=[82,83,84] | HNMO_Client=missing
+  S9-only monster #634: skills=[91,92,93] | HNMO_Client=missing
+  S9-only monster #635: skills=[88,89,90] | HNMO_Client=missing
+  S9-only monster #636: skills=[94,95,96] | HNMO_Client=missing
+  S9-only monster #637: skills=[82,83,84] | HNMO_Client=missing
+  S9-only monster #638: skills=[85,86,87] | HNMO_Client=missing
+  S9-only monster #639: skills=[91,92,93] | HNMO_Client=missing
+  S9-only monster #640: skills=[88,89,90] | HNMO_Client=missing
+  S9-only monster #641: skills=[94,95,96] | HNMO_Client=missing
+
+## Quest_eng.bmd: S6=7 quests, S9=7 quests, HNMO_Client=7
+## QuestProgress.bmd (used by Web questData.ts): S6=915 steps, S9=1046 steps (+131 S9), HNMO_Client/Web=915
+## NPCDialogue.bmd (used by Web questData.ts): S6=58 entries, S9=84 entries (+26 S9), HNMO_Client/Web=58
+
+## Client Text Rule Tables (S6 vs S9 vs HNMO)
+  IBSCategory.txt: S6=22 rows | S9=14 rows | HNMO=CashShopInitializer.cs (server-defined products)
+  IBSPackage.txt: S6=235 rows | S9=161 rows | HNMO=CashShopInitializer.cs (server-defined products)
+  IBSProduct.txt: S6=2189 rows | S9=715 rows | HNMO=CashShopInitializer.cs (server-defined products)
+  IBSBanner.txt: S6=1 rows | S9=1 rows | HNMO=CashShopInitializer.cs (server-defined products)
+  Npcname(eng): S6 txt=532 rows | S9 Npcname_eng.bmd=169520B | HNMO_Srv monsters/npcs=504
+
+## QuestWords_eng.bmd (used by Web questData.ts): S6=2288 strings, S9=2690 (+402 S9), HNMO_Client/Web=2288
+
+## Remaining Shared Encoded .bmd Tables (S6 vs S9 vs HNMO Client/Web)
+  Text_eng.bmd: S6=123459B | S9=169898B | HNMO_Client=absent [strings S6=3244 S9=4347]
+  Dialog_eng.bmd: S6=204800B | S9=204800B | HNMO_Client=absent
+  ItemTooltipText_eng.bmd: S6=133124B | S9=208004B | HNMO_Client=absent
+  ItemLevelTooltip_eng.bmd: S6=13060B | S9=14596B | HNMO_Client=absent
+  MasterSkillTooltip_eng.bmd: S6=315396B | S9=413700B | HNMO_Client=315396B
+  JewelOfHarmonySmelt_eng.bmd: S6=557056B | S9=557056B | HNMO_Client=557056B
+  slide_eng.bmd: S6=41008B | S9=41008B | HNMO_Client=41008B
+  pet.bmd: S6=2512B | S9=2512B | HNMO_Client=2512B
+  PetData.bmd: S6=1540B | S9=1540B | HNMO_Client=1540B
+  MapCharacters.bmd: S6=3100B | S9=3696B | HNMO_Client=absent
+  MasterSkillTree.bmd: S6=3217B | S9=3217B | HNMO_Client=3217B
+  Filter.bmd: S6=20004B | S9=20004B | HNMO_Client=20004B
+  FilterName.bmd: S6=10004B | S9=10004B | HNMO_Client=10004B
+  Glow.bmd: S6=122880B | S9=122880B | HNMO_Client=absent
+  credit.bmd: S6=13200B | S9=13200B | HNMO_Client=13200B
+
+## Season 9-Only Encoded .bmd Rule & UI Tables (absent from HNMO Client)
+  ArcaBattleBootyMix.bmd: S9=10x20 (208B) | HNMO_Client=missing
+  ArcaBattleScript_eng.bmd: S9=13x264 (3440B) sample=[Another guild is trying to conquer the Obelisk., The barrier was destroyed. Hurry and conquer th] | HNMO_Client=missing
+  AttributeVariation.bmd: S9=38x3140 (119328B) sample=[J, K, L] | HNMO_Client=missing
+  BonusExp.bmd: S9=30x12 (368B) | HNMO_Client=missing
+  EvolutionMonsterBox.bmd: S9=156x1 (164B) | HNMO_Client=missing
+  ExcellentCommonOption_eng.bmd: S9=12x116 (1400B) sample=[ance of doing Excellent damage, creases attack power and magical damage, creases attack power and magical damage] | HNMO_Client=missing
+  ExcellentWingOption_eng.bmd: S9=25x116 (2908B) sample=[crease Attack (Wizardry) Speed, crease Maximum AG, ance of Damage from Breaking Enemy's Defense] | HNMO_Client=missing
+  HelpData_eng.bmd: S9=1x69632 (69636B) | HNMO_Client=missing
+  InfoTooltip.bmd: S9=22x42 (932B) | HNMO_Client=missing
+  InfoTooltipText_eng.bmd: S9=8x258 (2072B) sample=[ements that are weaker than Inherent Elements ar, aker Element < Weak Element < Inherent Element, Since No Element is weaker than Inherent Element] | HNMO_Client=missing
+  ItemSetOptionText_eng.bmd: S9=255x102 (26018B) sample=[rease Strength, rease Agility, rease Energy] | HNMO_Client=missing
+  ItemTRSData.bmd: S9=1310x32 (41928B) sample=[L?Y?, L?Y?] | HNMO_Client=missing
+  Minimap_eng.bmd: S9=22x965 (21238B) | HNMO_Client=missing
+  MuRummyCard.bmd: S9=35x60 (2108B) | HNMO_Client=missing
+  MuRummyOption.bmd: S9=25x8 (208B) | HNMO_Client=missing
+  MuRummySlot.bmd: S9=10x11 (118B) | HNMO_Client=missing
+  MuunExchange.bmd: S9=108B | HNMO_Client=missing
+  MuunInfo.bmd: S9=76x56 (4264B) | HNMO_Client=missing
+  MuunMeshInfo.bmd: S9=49x300 (14708B) | HNMO_Client=missing
+  MuunOption_eng.bmd: S9=37x560 (20728B) | HNMO_Client=missing
+  MuunRenderInfo.bmd: S9=82x612 (50192B) | HNMO_Client=missing
+  MuunTooltipInfo.bmd: S9=82x32 (2632B) | HNMO_Client=missing
+  Npcname_eng.bmd: S9=169520B | HNMO_Client=missing
+  PentagramJewelOptionValue_eng.bmd: S9=60x372 (22328B) | HNMO_Client=missing
+  PentagramMixNeedSource.bmd: S9=30x92 (2768B) | HNMO_Client=missing
+  PentagramOption_eng.bmd: S9=2608B | HNMO_Client=missing
+  StatOption.bmd: S9=15x12 (188B) | HNMO_Client=missing
+  StatOptionText_eng.bmd: S9=12x260 (3128B) sample=[Increases Attack Power by %d~%d, Increases Attack Success Rate by %d, Increases PVP Attack Success Rate by %d] | HNMO_Client=missing

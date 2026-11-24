@@ -1,0 +1,95 @@
+# All Events and Invasions Summary & Differences (Season 6 vs Season 9 vs HNMO)
+# Suites parsed: S6=16 events, S9=22 events | HNMO events.csv rows=40
+
+AcheronGuardian:
+  S6 (absent): absent
+  S9 (AcheronGuardian.xml): [en=1, minLv=n/a, players=n/a, times=n/a, sched=1x(23:00), rew/drop=see XML]
+  HNMO: missing in HNMO -> missing in HNMO
+ArcaBattle:
+  S6 (absent): absent
+  S9 (ArcaBattle.xml): [en=1, minLv=n/a, players=n/a, times=n/a, sched=1x(22:00), rew/drop=see XML]
+  HNMO: missing in HNMO -> missing in HNMO
+BloodCastle:
+  S6 (BloodCastle.ini): [en=1, minLv=n/a, players=n/a, times=enter=300s,play=900s,exit=60s, sched=12x(0:30..), rew/drop=Scroll=80/10000,Bone=80/10000,BC1HP=65000/150000]
+  S9 (BloodCastle.xml): [en=1, minLv=n/a, players=n/a, times=enter=300s,play=900s,exit=60s, sched=12x(00:30,02:30,04:30,..), rew/drop=Scroll=800/10000,Bone=800/10000,BC1HP=65000/150000]
+  HNMO: [enter=300s, play=900s, exit=60s, maxPlayers=10; BloodCastleInitializer.cs:212 (min=1,max=10,enter=300s,play=900s,exit=60s)] -> same core timings/limits
+BonusEvent:
+  S6 (BonusEvent.xml): [en=1, minLv=n/a, players=n/a, times=n/a, sched=none, rew/drop=StartHour=8,EndHour=10,ExpMultiplier=1.5,MasterExpMultiplier=1.5]
+  S9 (BonusEvent.xml): [en=1, minLv=n/a, players=n/a, times=n/a, sched=none, rew/drop=DayOfWeek=-1,StartHour=8,EndHour=10,ExpMultiplier=1.5]
+  HNMO: missing in HNMO -> missing in HNMO
+ChaosCastle:
+  S6 (ChaosCastle.ini): [en=1, minLv=n/a, players=min=2,maxObj=100, times=enter=300s,play=600s,exit=60s, sched=12x(1:0..), rew/drop=n/a]
+  S9 (ChaosCastle.xml): [en=1, minLv=n/a, players=min=1,maxObj=100, times=enter=300s,play=600s,exit=60s, sched=24x(01:00,02:00,03:30,..), rew/drop=n/a]
+  HNMO: [enter=300s, play=600s, exit=60s, maxPlayers=70; ChaosCastleInitializer.cs:90-93 (min=2,max=70,enter=300s,play=600s,exit=60s)] -> differs
+ChaosCastleSurvival:
+  S6 (absent): absent
+  S9 (ChaosCastle_Survival.xml): [en=1, minLv=280, players=2, times=StartIn=5,Duration=10,TownSpawn=1,Notify=10, sched=24x(01:00,02:00,03:30,..), rew/drop=see XML]
+  HNMO: missing in HNMO -> missing in HNMO
+CryWolf:
+  S6 (CryWolf.xml): [en=1, minLv=n/a, players=n/a, times=notify1=600s,notify2=300s,ready=150s,battle=900s, sched=2x(02:10,04:10), rew/drop=RankS>=10001(1.8M EXP),Peace:+5%Chaos/90%HP]
+  S9 (CryWolf.xml): [en=1, minLv=n/a, players=n/a, times=notify1=600s,notify2=300s,ready=150s,battle=900s, sched=2x(02:10,04:10), rew/drop=RankS>=10001(1.8M EXP),Peace:+5%Chaos/90%HP]
+  HNMO: [CrywolfInitializer.cs:58-66 (mobs 340..349, Peace/Occupied/War states) -> same core rules] -> differs (implemented as static/plugin spawns or partial)
+DevilSquare:
+  S6 (DevilSquare.ini): [en=1, minLv=n/a, players=max=15, times=enter=300s,play=1200s,close=2100s, sched=42 monster waves, rew/drop=Eye=80/10000,Key=80/10000]
+  S9 (DevilSquare_Classic.xml): [en=1, minLv=n/a, players=max=15, times=enter=300s,play=1200s,close=2100s, sched=6x(03:00,07:00,11:00,..), rew/drop=Eye=80/10000,Key=80/10000]
+  HNMO: [enter=300s, play=1200s, exit=180s, maxPlayers=15; DevilSquareInitializer.cs:17 (max=15,enter=300s,play=1200s,exit=180s)] -> same core timings/limits
+DoppelGanger:
+  S6 (DoppelGanger_Config.ini): [en=1, minLv=n/a, players=n/a, times=ready=60s,play=600s,end=60s, sched=n/a, rew/drop=MLExpRate=1.0]
+  S9 (DoppelGanger.ini): [en=1, minLv=n/a, players=n/a, times=ready=60s,play=600s,end=60s, sched=n/a, rew/drop=MLExpRate=1.0]
+  HNMO: [enter=30s, play=600s, exit=60s, maxPlayers=5; DoppelgangerInitializer.cs:51-54 (max=5,enter=30s,play=600s,exit=60s)] -> differs
+DragonEvent:
+  S6 (absent): absent
+  S9 (DragonEvent.xml): [en=1, minLv=n/a, players=n/a, times=n/a, sched=none, rew/drop=see XML]
+  HNMO: [InvasionMobsInitialization.cs (Red Dragon #44) -> static/map spawn vs timed invasion] -> differs (implemented as static/plugin spawns or partial)
+GamblingLottery:
+  S6 (GamblingLottery.xml): [en=1, minLv=n/a, players=n/a, times=n/a, sched=none, rew/drop=see XML]
+  S9 (GamblingLottery.xml): [en=1, minLv=n/a, players=n/a, times=n/a, sched=none, rew/drop=see XML]
+  HNMO: missing in HNMO -> missing in HNMO
+GoldenInvasion:
+  S6 (GoldenInvasion.ini): [en=0, minLv=n/a, players=n/a, times=n/a, sched=n/a, rew/drop=regen=60m]
+  S9 (GoldenInvasion.xml): [en=1, minLv=n/a, players=n/a, times=n/a, sched=none, rew/drop=see XML]
+  HNMO: [InvasionMobsInitialization.cs:37-150 (Golden mobs + Box of Kundun 1..5) -> same mobs/boxes, static spawns vs timer] -> differs (implemented as static/plugin spawns or partial)
+IllusionTemple:
+  S6 (IllusionTemple_Classic.xml): [en=1, minLv=n/a, players=min=2,max=10, times=enter=300s,wait=60s,play=900s,exit=240s, sched=7x(01:00,05:00,09:00,..), rew/drop=WinPts=7,MinSkill=3,KillPts=5/2]
+  S9 (IllusionTemple_Renewal.xml): [en=1, minLv=n/a, players=minUserInParty=5, times=enter=300s,wait=60s,play=900s,exit=60s, sched=23x(01:00,02:00,03:00,..), rew/drop=n/a]
+  HNMO: [enter=300s, play=900s, exit=60s, maxPlayers=10; IllusionTempleInitializer.cs:89-93 (min=2,max=10,enter=300s,play=900s,exit=60s)] -> same core timings/limits
+ImperialGuardian:
+  S6 (ImperialGuardian.ini): [en=1, minLv=n/a, players=n/a, times=standby=180s,round=600s,loot=20s, sched=n/a, rew/drop=MixZen=1000000]
+  S9 (ImperialGuardian.ini): [en=1, minLv=n/a, players=n/a, times=standby=180s,round=600s,loot=20s, sched=n/a, rew/drop=MixZen=1000000]
+  HNMO: [enter=60s, play=3000s, exit=60s, maxPlayers=5; ImperialGuardianInitializer.cs:63-104 (Lv150-400,max=5,enter=60s,play=3000s,exit=60s)] -> differs
+InvasionManager:
+  S6 (absent): absent
+  S9 (InvasionManager.xml): [en=1, minLv=n/a, players=n/a, times=n/a, sched=19x(01:00,03:00,13:00,..), rew/drop=see XML]
+  HNMO: missing in HNMO -> missing in HNMO
+Kanturu:
+  S6 (Kanturu.dat): [en=1, minLv=n/a, players=n/a, times=Standby=1200s,Maya=15+15+20m,Nightmare=20m,Tower=23h, sched=n/a, rew/drop=MoonStone(13:38),JoH]
+  S9 (KanturuEvent.xml): [en=1, minLv=n/a, players=n/a, times=Standby=1200s,Maya=15+15+20m,Nightmare=20m,Tower=23h, sched=n/a, rew/drop=MoonStoneDrop=10/10000,JoHDrop=20/10000]
+  HNMO: [enter=300s, play=8100s, exit=60s, maxPlayers=15; KanturuInitializer.cs:34-41 (Lv350-400,max=15,enter=300s,play=8100s,exit=60s)] -> same core timings/limits
+LastManStanding:
+  S6 (LastManStanding_Config.ini): [en=1, minLv=n/a, players=min=2,max=500, times=reg=15m,play=15m, sched=n/a, rew/drop=n/a]
+  S9 (LastManStanding.xml): [en=1, minLv=n/a, players=n/a, times=n/a, sched=5x(12:00,14:00,16:00,..), rew/drop=Duration=15,MapNumber=6,StartX=146,StartY=78]
+  HNMO: missing in HNMO -> missing in HNMO
+LorenDeep:
+  S6 (LorenDeep.xml): [en=1, minLv=n/a, players=n/a, times=n/a, sched=1x(20:00), rew/drop=see XML]
+  S9 (LorenDeep.xml): [en=1, minLv=n/a, players=n/a, times=n/a, sched=1x(20:00), rew/drop=see XML]
+  HNMO: missing in HNMO -> missing in HNMO
+Raklion:
+  S6 (Raklion.dat): [en=1, minLv=n/a, players=n/a, times=appear=5s,close=300s,open=300s, sched=n/a, rew/drop=Eggs=5/15]
+  S9 (RaklionHatchery.xml): [en=1, minLv=n/a, players=n/a, times=appear=5s,close=300s,open=43200s, sched=n/a, rew/drop=Eggs=5/15]
+  HNMO: [AddRaklionEventUpdatePlugIn.cs:28-86 (Selupan #459, Eggs 460..462) -> same core hatchery waves] -> differs (implemented as static/plugin spawns or partial)
+RingAttack:
+  S6 (RingAttackEvent.dat): [en=1, minLv=n/a, players=n/a, times=raw0=[3,30,25], sched=n/a, rew/drop=n/a]
+  S9 (absent): absent
+  HNMO: missing in HNMO -> missing in HNMO
+TormentedSquare:
+  S6 (absent): absent
+  S9 (TormentedSquare.xml): [en=1, minLv=1, players=4, times=StartIn=5,WaitingArea=1,Round=2,AfterRound=10,AfterBossRound=20,TownSpawn=10, sched=11x(17:30,19:00,20:30,..), rew/drop=see XML]
+  HNMO: missing in HNMO -> missing in HNMO
+WhiteWizardAttack:
+  S6 (absent): absent
+  S9 (WhiteWizardAttack.xml): [en=1, minLv=n/a, players=n/a, times=ToOpen=3,PlayDuration=30,ToClose=25, sched=4x(02:00,14:00,18:00,..), rew/drop=see XML]
+  HNMO: [AddWhiteWizardInvasionMobsUpdatePlugIn.cs & InvasionMobsInitialization.cs:33 -> same mobs (135/136/137)] -> differs (implemented as static/plugin spawns or partial)
+XMasAttack:
+  S6 (XMasEvent.ini): [en=1, minLv=n/a, players=n/a, times=buff=1800s, sched=n/a, rew/drop=drop=10%]
+  S9 (XMasAttack.xml): [en=0, minLv=n/a, players=n/a, times=ToOpen=3,PlayDuration=10,ToClose=5, sched=12x(01:20,03:20,05:20,..), rew/drop=DropRate=10,SantaBuffDuration=1800,RestBuffDuration=1800]
+  HNMO: missing in HNMO -> missing in HNMO

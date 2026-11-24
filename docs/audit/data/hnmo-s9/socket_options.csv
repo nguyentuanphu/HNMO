@@ -1,0 +1,36 @@
+﻿Definition,OptionNumber,SubOptionType,TargetAttribute,AggregateType,Levels,BonusSocketRequirements
+Socket Options (Earth),0,5,Maximum Health,AddRaw,1=30;2=32;3=34;4=36;5=38,
+Socket Options (Fire),0,0,"Base Damage Bonus (physical and wizardry, min and max)",AddRaw,1=0;2=0;3=0;4=0;5=0,
+Socket Options (Fire),1,0,Attack Speed Any,AddRaw,1=7;2=8;3=9;4=10;5=11,
+Socket Options (Fire),2,0,Base Max Damage Bonus (physical and wizardry),AddRaw,1=30;2=32;3=35;4=40;5=50,
+Socket Options (Fire),3,0,Base Min Damage Bonus (physical and wizardry),AddRaw,1=20;2=22;3=25;4=30;5=35,
+Socket Options (Fire),4,0,"Base Damage Bonus (physical and wizardry, min and max)",AddRaw,1=20;2=22;3=25;4=30;5=35,
+Socket Options (Fire),5,0,Ability Usage Reduction,AddRaw,1=0.400000006;2=0.409999996;3=0.419999987;4=0.430000007;5=0.439999998,
+Socket Options (Ice),0,2,"Health recover after Monster kill, multiplier of max health",AddRaw,1=0.125;2=0.142857149;3=0.166666672;4=0.200000003;5=0.25,
+Socket Options (Ice),1,2,"Mana recover after Monster kill, multiplier of max mana",AddRaw,1=0.125;2=0.142857149;3=0.166666672;4=0.200000003;5=0.25,
+Socket Options (Ice),2,2,Skill Damage Bonus,AddRaw,1=37;2=40;3=45;4=50;5=60,
+Socket Options (Ice),3,2,Attack Rate (PvM),AddRaw,1=25;2=27;3=30;4=35;5=40,
+Socket Options (Ice),4,2,Weapon Duration Increase,AddRaw,1=0.300000012;2=0.319999993;3=0.340000004;4=0.360000014;5=0.379999995,
+Socket Options (Lightning),0,4,Excellent Damage Bonus,AddRaw,1=15;2=20;3=25;4=30;5=40,
+Socket Options (Lightning),1,4,Excellent Damage Chance,AddRaw,1=0.100000001;2=0.109999999;3=0.119999997;4=0.129999995;5=0.140000001,
+Socket Options (Lightning),2,4,Critical Damage Bonus,AddRaw,1=30;2=32;3=35;4=40;5=50,
+Socket Options (Lightning),3,4,Critical Damage Chance,AddRaw,1=0.0799999982;2=0.0900000036;3=0.100000001;4=0.109999999;5=0.119999997,
+Socket Options (Water),0,1,Defense Rate (PvM),Multiplicate,1=1.10000002;2=1.11000001;3=1.12;4=1.13;5=1.13999999,
+Socket Options (Water),1,1,Final Defense,AddRaw,1=30;2=33;3=36;4=39;5=42,
+Socket Options (Water),2,1,Shield Item Defense Increase Multiplier,AddRaw,1=0.0700000003;2=0.100000001;3=0.150000006;4=0.200000003;5=0.300000012,
+Socket Options (Water),3,1,Armor Damage Decrease,AddRaw,1=0.0399999991;2=0.0500000007;3=0.0599999987;4=0.0700000003;5=0.0799999982,
+Socket Options (Water),4,1,Damage Reflection,AddRaw,1=0.0500000007;2=0.0599999987;3=0.0700000003;4=0.0799999982;5=0.0900000036,
+Socket Options (Wind),0,3,Health Recovery Absolute Increase,AddRaw,1=8;2=10;3=13;4=16;5=20,
+Socket Options (Wind),1,3,Maximum Health,Multiplicate,1=1.03999996;2=1.04999995;3=1.05999994;4=1.07000005;5=1.08000004,
+Socket Options (Wind),2,3,Maximum Mana,Multiplicate,1=1.03999996;2=1.04999995;3=1.05999994;4=1.07000005;5=1.08000004,
+Socket Options (Wind),3,3,Mana Recovery Absolute Increase,AddRaw,1=7;2=14;3=21;4=28;5=35,
+Socket Options (Wind),4,3,Maximum Ability,AddRaw,1=50;2=70;3=90;4=110;5=130,
+Socket Options (Wind),5,3,Ability Recovery Absolute Increase,AddRaw,1=5;2=7;3=9;4=11;5=13,
+Bonus:Socket package option: Double Damage Chance 3%,1,0,Double Damage Chance,AddRaw,0.0299999993,1:0;1:1;1:2;1:3;1:4;1:5
+Bonus:Socket package option: Ignore Defense Chance 1%,2,0,Defense Ignore Chance,AddRaw,0.00999999978,1:0;3:1;1:2;3:3;1:4;2:5
+Bonus:Black Fenrir Option: Movement Speed,101,0,Movement Speed,Maximum,19,1:0
+Bonus:Black Fenrir Option: Underwater Movement Speed,102,0,Underwater Movement Speed,Maximum,19,1:0
+Bonus:Blue Fenrir Option: Movement Speed,103,0,Movement Speed,Maximum,19,1:0
+Bonus:Blue Fenrir Option: Underwater Movement Speed,104,0,Underwater Movement Speed,Maximum,19,1:0
+Bonus:Gold Fenrir Option: Movement Speed,105,0,Movement Speed,Maximum,19,1:0
+Bonus:Gold Fenrir Option: Underwater Movement Speed,106,0,Underwater Movement Speed,Maximum,19,1:0

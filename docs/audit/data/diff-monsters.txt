@@ -2,149 +2,14 @@
 # Counts: HNMO=504, S6=625, S9=654
 
 ## Shared Monsters Differing from Season 6 Suite
-0 (Bull Fighter): HP:0->100, Dmg:0-0->16-20, Def:0->6, AR:0->28, DR:0->6
-1 (Hound): HP:0->140, Dmg:0-0->22-27, Def:0->9, AR:0->39, DR:0->9
-2 (Budge Dragon): HP:0->60, Dmg:0-0->10-13, Def:0->3, AR:0->18, DR:0->3
-3 (Spider): HP:0->30, Dmg:0-0->4-7, Def:0->1, AR:0->8, DR:0->1
-4 (Elite Bull Fighter): HP:0->190, Dmg:0-0->31-36, Def:0->12, AR:0->50, DR:0->12
-5 (Hell Hound): HP:0->1400, Dmg:0-0->125-130, Def:0->55, AR:0->190, DR:0->45
-6 (Lich): HP:0->255, Dmg:0-0->41-46, Def:0->14, AR:0->62, DR:0->14
-7 (Giant): HP:0->400, Dmg:0-0->57-62, Def:0->18, AR:0->80, DR:0->18
-8 (Poison Bull): HP:0->2500, Dmg:0-0->145-150, Def:0->75, AR:0->230, DR:0->61
-9 (Thunder Lich): HP:0->2000, Dmg:0-0->140-145, Def:0->70, AR:0->220, DR:0->55
-10 (Dark Knight): HP:0->3000, Dmg:0-0->150-155, Def:0->80, AR:0->240, DR:0->70
-11 (Ghost): HP:0->1000, Dmg:0-0->110-115, Def:0->40, AR:0->160, DR:0->39
-12 (Larva): HP:0->750, Dmg:0-0->90-95, Def:0->31, AR:0->125, DR:0->31
-13 (Hell Spider): HP:0->1600, Dmg:0-0->130-135, Def:0->60, AR:0->200, DR:0->47
-14 (Skeleton Warrior): HP:0->525, Dmg:0-0->68-74, Def:0->22, AR:0->93, DR:0->22
-15 (Skeleton Archer): HP:0->1100, Dmg:0-0->115-120, Def:0->45, AR:0->170, DR:0->41
-16 (Elite Skeleton): HP:0->1800, Dmg:0-0->135-140, Def:0->65, AR:0->210, DR:0->49
-17 (Cyclops): HP:0->850, Dmg:0-0->100-105, Def:0->35, AR:0->140, DR:0->35
-18 (Gorgon): HP:0->6000, Dmg:0-0->165-175, Def:0->100, AR:0->275, DR:0->82
-19 (Yeti): HP:0->900, Dmg:0-0->105-110, Def:0->37, AR:0->150, DR:0->37
-20 (Elite Yeti): HP:0->1200, Dmg:0-0->120-125, Def:0->50, AR:0->180, DR:0->43
-21 (Assassin): HP:0->800, Dmg:0-0->95-100, Def:0->33, AR:0->130, DR:0->33
-22 (Ice Monster): HP:0->650, Dmg:0-0->80-85, Def:0->27, AR:0->110, DR:0->27
-23 (Hommerd): HP:0->700, Dmg:0-0->85-90, Def:0->29, AR:0->120, DR:0->29
-24 (Worm): HP:0->600, Dmg:0-0->75-80, Def:0->25, AR:0->100, DR:0->25
-25 (Ice Queen): HP:0->4000, Dmg:0-0->155-165, Def:0->90, AR:0->260, DR:0->76
-26 (Goblin): HP:0->45, Dmg:0-0->7-10, Def:0->2, AR:0->13, DR:0->2
-27 (Chain Scorpion): HP:0->80, Dmg:0-0->13-17, Def:0->4, AR:0->23, DR:0->4
-28 (Beetle Monster): HP:0->165, Dmg:0-0->26-31, Def:0->10, AR:0->44, DR:0->10
-29 (Hunter): HP:0->220, Dmg:0-0->36-41, Def:0->13, AR:0->56, DR:0->13
-30 (Forest Monster): HP:0->295, Dmg:0-0->46-51, Def:0->15, AR:0->68, DR:0->15
-31 (Agon): HP:0->340, Dmg:0-0->51-57, Def:0->16, AR:0->74, DR:0->16
-32 (Stone Golem): HP:0->465, Dmg:0-0->62-68, Def:0->20, AR:0->86, DR:0->20
-33 (Elite Goblin): HP:0->120, Dmg:0-0->19-23, Def:0->8, AR:0->33, DR:0->8
-34 (Cursed Wizard): HP:0->4000, Dmg:0-0->160-170, Def:0->95, AR:0->270, DR:0->80
-35 (Death Gorgon): HP:0->6000, Dmg:0-0->200-210, Def:0->130, AR:0->320, DR:0->94
-36 (Shadow): HP:0->2800, Dmg:0-0->148-153, Def:0->78, AR:0->235, DR:0->67
-37 (Devil): HP:0->5000, Dmg:0-0->180-195, Def:0->115, AR:0->300, DR:0->88
-38 (Balrog): HP:0->9000, Dmg:0-0->220-240, Def:0->160, AR:0->330, DR:0->99
-39 (Poison Shadow): HP:0->3500, Dmg:0-0->155-160, Def:0->85, AR:0->250, DR:0->73
-40 (Death Knight): HP:0->5500, Dmg:0-0->190-200, Def:0->120, AR:0->310, DR:0->91
-41 (Death Cow): HP:0->4500, Dmg:0-0->170-180, Def:0->110, AR:0->285, DR:0->85
-43 (Golden Budge Dragon): HP:0->2200, Dmg:0-0->120-125, Def:0->45, AR:0->75, DR:0->30
-44 (Red Dragon): HP:0->15000, Dmg:0-0->190-210, Def:0->120, AR:0->300, DR:0->88
-45 (Bahamut): HP:0->2400, Dmg:0-0->130-140, Def:0->65, AR:0->215, DR:0->52
-46 (Vepar): HP:0->2800, Dmg:0-0->135-145, Def:0->70, AR:0->225, DR:0->58
-47 (Valkyrie): HP:0->3200, Dmg:0-0->140-150, Def:0->75, AR:0->230, DR:0->64
-48 (Lizard King): HP:0->9000, Dmg:0-0->240-270, Def:0->180, AR:0->350, DR:0->115
-49 (Hydra): HP:0->19000, Dmg:0-0->250-310, Def:0->200, AR:0->430, DR:0->125
-50 (Sea Worm): HP:0->19000, Dmg:0-0->250-310, Def:0->200, AR:0->430, DR:0->125
-51 (Great Bahamut): HP:0->7000, Dmg:0-0->210-230, Def:0->150, AR:0->330, DR:0->98
-52 (Silver Valkyrie): HP:0->8000, Dmg:0-0->230-260, Def:0->170, AR:0->340, DR:0->110
-53 (Golden Titan): HP:0->8000, Dmg:0-0->170-180, Def:0->105, AR:0->265, DR:0->77
-54 (Golden Soldier): HP:0->3500, Dmg:0-0->140-150, Def:0->75, AR:0->230, DR:0->64
-57 (Iron Wheel): HP:0->17000, Dmg:0-0->280-330, Def:0->215, AR:0->446, DR:0->150
-58 (Tantallos): HP:0->22000, Dmg:0-0->335-385, Def:0->250, AR:0->500, DR:0->175
-59 (Zaikan): HP:0->34000, Dmg:0-0->510-590, Def:0->400, AR:0->550, DR:0->185
-60 (Bloody Wolf): HP:0->13500, Dmg:0-0->260-300, Def:0->200, AR:0->410, DR:0->130
-61 (Beam Knight): HP:0->25000, Dmg:0-0->375-425, Def:0->275, AR:0->530, DR:0->190
-62 (Mutant): HP:0->10000, Dmg:0-0->250-280, Def:0->190, AR:0->365, DR:0->120
-63 (Death Beam Knight): HP:0->40000, Dmg:0-0->590-650, Def:0->420, AR:0->575, DR:0->220
-64 (Orc Archer): HP:0->10000, Dmg:0-0->220-250, Def:0->170, AR:0->350, DR:0->115
-65 (Elite Orc): HP:0->14000, Dmg:0-0->260-290, Def:0->190, AR:0->400, DR:0->125
-66 (Cursed King): HP:0->38000, Dmg:0-0->500-570, Def:0->350, AR:0->525, DR:0->200
-67 (Metal Balrog): HP:0->26000, Dmg:0-0->300-360, Def:0->220, AR:0->385, DR:0->150
-69 (Alquamos): HP:0->11500, Dmg:0-0->255-290, Def:0->195, AR:0->385, DR:0->125
-70 (Queen Rainer): HP:0->19000, Dmg:0-0->305-350, Def:0->230, AR:0->475, DR:0->160
-71 (Mega Crust): HP:0->15000, Dmg:0-0->270-320, Def:0->210, AR:0->430, DR:0->140
-72 (Phantom Knight): HP:0->41000, Dmg:0-0->560-610, Def:0->425, AR:0->690, DR:0->270
-73 (Drakan): HP:0->29000, Dmg:0-0->425-480, Def:0->305, AR:0->570, DR:0->210
-74 (Alpha Crust): HP:0->34500, Dmg:0-0->489-540, Def:0->360, AR:0->620, DR:0->240
-75 (Great Drakan): HP:0->50000, Dmg:0-0->650-700, Def:0->495, AR:0->800, DR:0->305
-76 (Dark Phoenix Shield): HP:0->73000, Dmg:0-0->850-960, Def:0->580, AR:0->840, DR:0->305
-77 (Dark Phoenix): HP:0->95000, Dmg:0-0->950-1000, Def:0->600, AR:0->900, DR:0->350
-78 (Golden Goblin): HP:0->3100, Dmg:0-0->125-130, Def:0->50, AR:0->100, DR:0->30
-79 (Golden Dragon): HP:0->23000, Dmg:0-0->300-350, Def:0->230, AR:0->400, DR:0->90
-80 (Golden Lizard King): HP:0->25000, Dmg:0-0->310-360, Def:0->240, AR:0->415, DR:0->150
-81 (Golden Vepar): HP:0->6300, Dmg:0-0->190-200, Def:0->110, AR:0->310, DR:0->90
-82 (Golden Tantallos): HP:0->30000, Dmg:0-0->450-560, Def:0->300, AR:0->450, DR:0->185
-83 (Golden Wheel): HP:0->15000, Dmg:0-0->320-360, Def:0->230, AR:0->385, DR:0->160
-84 (Chief Skeleton Warrior 1): HP:0->1100, Dmg:0-0->100-120, Def:0->55, AR:0->190, DR:0->45
-85 (Chief Skeleton Archer 1): HP:0->1400, Dmg:0-0->110-130, Def:0->65, AR:0->210, DR:0->49
-86 (Dark Skull Soldier 1): HP:0->1700, Dmg:0-0->120-140, Def:0->75, AR:0->230, DR:0->61
-87 (Giant Ogre 1): HP:0->2100, Dmg:0-0->130-150, Def:0->85, AR:0->250, DR:0->73
-88 (Red Skeleton Knight 1): HP:0->2800, Dmg:0-0->140-160, Def:0->95, AR:0->270, DR:0->77
-89 (Magic Skeleton 1): HP:0->3700, Dmg:0-0->150-180, Def:0->115, AR:0->300, DR:0->88
-90 (Chief Skeleton Warrior 2): HP:0->3500, Dmg:0-0->140-170, Def:0->90, AR:0->250, DR:0->76
-91 (Chief Skeleton Archer 2): HP:0->4100, Dmg:0-0->150-180, Def:0->100, AR:0->275, DR:0->80
-92 (Dark Skull Soldier 2): HP:0->5000, Dmg:0-0->160-190, Def:0->115, AR:0->300, DR:0->88
-93 (Giant Ogre 2): HP:0->6000, Dmg:0-0->175-210, Def:0->130, AR:0->320, DR:0->95
-94 (Red Skeleton Knight 2): HP:0->7000, Dmg:0-0->185-220, Def:0->170, AR:0->360, DR:0->110
-95 (Magic Skeleton 2): HP:0->8000, Dmg:0-0->200-240, Def:0->190, AR:0->400, DR:0->130
-96 (Chief Skeleton Warrior 3): HP:0->5000, Dmg:0-0->160-180, Def:0->110, AR:0->300, DR:0->85
-97 (Chief Skeleton Archer 3): HP:0->6500, Dmg:0-0->180-200, Def:0->120, AR:0->330, DR:0->93
-98 (Dark Skull Soldier 3): HP:0->8000, Dmg:0-0->190-220, Def:0->150, AR:0->360, DR:0->98
-99 (Giant Ogre 3): HP:0->9500, Dmg:0-0->210-240, Def:0->180, AR:0->400, DR:0->115
-100 (Lance Trap): HP:0->1000, Dmg:0-0->100-110, AR:0->400, DR:0->500, ViewRng:4->1, MoveMs:0->500
-101 (Iron Stick Trap): HP:0->1000, Dmg:0-0->110-130, AR:0->400, DR:0->500, MoveMs:0->500
-102 (Fire Trap): HP:0->1000, Dmg:0-0->130-150, AR:0->400, DR:0->500, MoveMs:0->500
-103 (Meteorite Trap): HP:0->1000, Dmg:0-0->160-190, AR:0->450, DR:0->500, AtkRng:3->0
-105 (Canon Trap): HP:0->1000, Dmg:0-0->200-203, AR:0->400, DR:0->500
-106 (Laser Trap): HP:0->1000, Dmg:0-0->150-152, AR:0->400, DR:0->500
-111 (Red Skeleton Knight 3): HP:0->12000, Dmg:0-0->220-260, Def:0->190, AR:0->440, DR:0->130
-112 (Magic Skeleton 3): HP:0->15000, Dmg:0-0->230-280, Def:0->240, AR:0->500, DR:0->180
-113 (Chief Skeleton Warrior 4): HP:0->7500, Dmg:0-0->180-220, Def:0->150, AR:0->340, DR:0->98
-114 (Chief Skeleton Archer 4): HP:0->9500, Dmg:0-0->200-240, Def:0->170, AR:0->380, DR:0->110
-115 (Dark Skull Soldier 4): HP:0->12000, Dmg:0-0->220-260, Def:0->190, AR:0->440, DR:0->130
-116 (Giant Ogre 4): HP:0->15000, Dmg:0-0->250-290, Def:0->210, AR:0->500, DR:0->150
-117 (Red Skeleton Knight 4): HP:0->18000, Dmg:0-0->270-320, Def:0->290, AR:0->560, DR:0->170
-118 (Magic Skeleton 4): HP:0->24000, Dmg:0-0->300-350, Def:0->360, AR:0->640, DR:0->200
-119 (Chief Skeleton Warrior 5): HP:0->12000, Dmg:0-0->210-270, Def:0->185, AR:0->380, DR:0->125
-120 (Chief Skeleton Archer 5): HP:0->15000, Dmg:0-0->240-300, Def:0->190, AR:0->420, DR:0->130
-121 (Dark Skull Soldier 5): HP:0->19000, Dmg:0-0->280-340, Def:0->220, AR:0->470, DR:0->175
-122 (Giant Ogre 5): HP:0->23000, Dmg:0-0->340-390, Def:0->300, AR:0->520, DR:0->190
-123 (Red Skeleton Knight 5): HP:0->26000, Dmg:0-0->370-410, Def:0->400, AR:0->650, DR:0->200
-124 (Magic Skeleton 5): HP:0->32000, Dmg:0-0->400-460, Def:0->450, AR:0->720, DR:0->260
-125 (Chief Skeleton Warrior 6): HP:0->17000, Dmg:0-0->260-290, Def:0->210, AR:0->460, DR:0->150
-126 (Chief Skeleton Archer 6): HP:0->20000, Dmg:0-0->320-350, Def:0->270, AR:0->520, DR:0->160
-127 (Dark Skull Soldier 6): HP:0->25000, Dmg:0-0->390-420, Def:0->360, AR:0->580, DR:0->195
-128 (Giant Ogre 6): HP:0->32000, Dmg:0-0->440-500, Def:0->400, AR:0->660, DR:0->230
-129 (Red Skeleton Knight 6): HP:0->38000, Dmg:0-0->480-540, Def:0->450, AR:0->720, DR:0->260
-130 (Magic Skeleton 6): HP:0->47000, Dmg:0-0->530-580, Def:0->500, AR:0->840, DR:0->280
-131 (Castle Gate): Lv:0->2, HP:0->2000, DR:0->1
-132 (Statue of Saint): Lv:0->2, HP:0->3000, DR:0->1
-133 (Statue of Saint): Lv:0->2, HP:0->3000, DR:0->1
-134 (Statue of Saint): Lv:0->2, HP:0->3000, DR:0->1
-135 (White Wizard): HP:0->26000, Dmg:0-0->370-410, Def:0->400, AR:0->550, DR:0->200
-136 (Destructive Ogre Soldier): HP:0->9500, Dmg:0-0->210-240, Def:0->180, AR:0->400, DR:0->125
-137 (Destructive Ogre Archer): HP:0->12000, Dmg:0-0->220-260, Def:0->190, AR:0->440, DR:0->130
-138 (Chief Skeleton Warrior 7): HP:0->23000, Dmg:0-0->340-390, Def:0->340, AR:0->520, DR:0->190
-139 (Chief Skeleton Archer 7): HP:0->26000, Dmg:0-0->390-430, Def:0->380, AR:0->590, DR:0->200
-140 (Dark Skull Soldier 7): HP:0->32000, Dmg:0-0->430-480, Def:0->400, AR:0->660, DR:0->230
-141 (Giant Ogre 7): HP:0->37000, Dmg:0-0->470-520, Def:0->440, AR:0->730, DR:0->250
-142 (Red Skeleton Knight 7): HP:0->45000, Dmg:0-0->510-560, Def:0->490, AR:0->800, DR:0->270
-143 (Magic Skeleton 7): HP:0->55000, Dmg:0-0->560-600, Def:0->550, AR:0->870, DR:0->310
-144 (Death Angel 1): HP:0->740, Dmg:0-0->80-87, Def:0->30, AR:0->100, DR:0->24
-145 (Death Centurion 1): HP:0->1250, Dmg:0-0->110-117, Def:0->50, AR:0->145, DR:0->39
-146 (Blood Soldier 1): HP:0->600, Dmg:0-0->70-77, Def:0->25, AR:0->88, DR:0->20
-147 (Aegis 1): HP:0->440, Dmg:0-0->55-62, Def:0->17, AR:0->75, DR:0->17
-148 (Rogue Centurion 1): HP:0->500, Dmg:0-0->60-67, Def:0->20, AR:0->80, DR:0->18
-149 (Necron 1): HP:0->900, Dmg:0-0->95-102, Def:0->38, AR:0->118, DR:0->30
-150 (Bali): HP:0->5000, Dmg:0-0->165-170, Def:0->100, AR:0->260, DR:0->75
-151 (Soldier): HP:0->4000, Dmg:0-0->175-180, Def:0->110, AR:0->290, DR:0->86
+100 (Lance Trap): ViewRng:4->1, MoveMs:0->500
+101 (Iron Stick Trap): MoveMs:0->500
+102 (Fire Trap): MoveMs:0->500
+103 (Meteorite Trap): AtkRng:3->0
+131 (Castle Gate): Lv:0->2, HP:5000000->2000, DR:0->1
+132 (Statue of Saint): Lv:0->2, HP:5000000->3000, DR:0->1
+133 (Statue of Saint): Lv:0->2, HP:5000000->3000, DR:0->1
+134 (Statue of Saint): Lv:0->2, HP:5000000->3000, DR:0->1
 152 (Gate to Kalima 1 of {0}): Lv:0->10, HP:0->50
 153 (Gate to Kalima 2 of {0}): Lv:0->10, HP:0->50
 154 (Gate to Kalima 3 of {0}): Lv:0->10, HP:0->50
@@ -152,51 +17,8 @@
 156 (Gate to Kalima 5 of {0}): Lv:0->10, HP:0->50
 157 (Gate to Kalima 6 of {0}): Lv:0->10, HP:0->50
 158 (Gate to Kalima 7 of {0}): Lv:0->10, HP:0->50
-160 (Schriker 1): HP:0->1800, Dmg:0-0->130-137, Def:0->66, AR:0->180, DR:0->50
-161 (Illusion of Kundun 1): HP:0->3000, Dmg:0-0->165-172, Def:0->90, AR:0->255, DR:0->70
-162 (Chaos Castle 1): HP:0->700, Dmg:0-0->70-90, Def:0->30, AR:0->160, DR:0->20
-163 (Chaos Castle 2): HP:0->800, Dmg:0-0->80-100, Def:0->40, AR:0->180, DR:0->30
-164 (Chaos Castle 3): HP:0->1600, Dmg:0-0->132-135, Def:0->75, AR:0->225, DR:0->60
-165 (Chaos Castle 4): HP:0->2700, Dmg:0-0->150-150, Def:0->90, AR:0->250, DR:0->70
-166 (Chaos Castle 5): HP:0->4000, Dmg:0-0->168-165, Def:0->105, AR:0->270, DR:0->80
-167 (Chaos Castle 6): HP:0->5000, Dmg:0-0->180-180, Def:0->120, AR:0->290, DR:0->90
-168 (Chaos Castle 7): HP:0->6500, Dmg:0-0->185-210, Def:0->145, AR:0->320, DR:0->110
-169 (Chaos Castle 8): HP:0->8000, Dmg:0-0->205-230, Def:0->160, AR:0->350, DR:0->120
-170 (Chaos Castle 9): HP:0->10000, Dmg:0-0->215-240, Def:0->170, AR:0->370, DR:0->120
-171 (Chaos Castle 10): HP:0->12500, Dmg:0-0->235-260, Def:0->190, AR:0->400, DR:0->130
-172 (Chaos Castle 11): HP:0->15000, Dmg:0-0->255-280, Def:0->215, AR:0->430, DR:0->140
-173 (Chaos Castle 12): HP:0->18000, Dmg:0-0->280-300, Def:0->240, AR:0->470, DR:0->150
-174 (Death Angel 2): HP:0->1800, Dmg:0-0->130-137, Def:0->57, AR:0->182, DR:0->45
-175 (Death Centurion 2): HP:0->3000, Dmg:0-0->155-162, Def:0->81, AR:0->235, DR:0->58
-176 (Blood Soldier 2): HP:0->1400, Dmg:0-0->120-127, Def:0->50, AR:0->163, DR:0->40
-177 (Aegis 2): HP:0->1000, Dmg:0-0->105-112, Def:0->42, AR:0->135, DR:0->33
-178 (Rogue Centurion 2): HP:0->1200, Dmg:0-0->112-119, Def:0->45, AR:0->147, DR:0->36
-179 (Necron 2): HP:0->2300, Dmg:0-0->140-147, Def:0->68, AR:0->205, DR:0->50
-180 (Schriker 2): HP:0->3900, Dmg:0-0->180-187, Def:0->100, AR:0->275, DR:0->67
-181 (Illusion of Kundun 2): HP:0->6000, Dmg:0-0->220-227, Def:0->140, AR:0->355, DR:0->100
-182 (Death Angel 3): HP:0->4400, Dmg:0-0->175-185, Def:0->105, AR:0->273, DR:0->67
-183 (Death Centurion 3): HP:0->6600, Dmg:0-0->225-235, Def:0->150, AR:0->325, DR:0->92
-184 (Blood Soldier 3): HP:0->3650, Dmg:0-0->160-170, Def:0->90, AR:0->250, DR:0->60
-185 (Aegis 3): HP:0->2700, Dmg:0-0->145-155, Def:0->73, AR:0->220, DR:0->54
-186 (Rogue Centurion 3): HP:0->3100, Dmg:0-0->152-162, Def:0->80, AR:0->232, DR:0->56
-187 (Necron 3): HP:0->5300, Dmg:0-0->195-205, Def:0->126, AR:0->296, DR:0->77
-188 (Schriker 3): HP:0->8400, Dmg:0-0->260-270, Def:0->180, AR:0->365, DR:0->110
-189 (Illusion of Kundun 3): HP:0->14000, Dmg:0-0->350-360, Def:0->255, AR:0->460, DR:0->160
-190 (Death Angel 4): HP:0->12000, Dmg:0-0->270-295, Def:0->185, AR:0->397, DR:0->120
-191 (Death Centurion 4): HP:0->22500, Dmg:0-0->350-375, Def:0->255, AR:0->500, DR:0->175
-192 (Blood Soldier 4): HP:0->8800, Dmg:0-0->245-265, Def:0->165, AR:0->360, DR:0->105
-193 (Aegis 4): HP:0->6000, Dmg:0-0->215-235, Def:0->140, AR:0->310, DR:0->87
-194 (Rogue Centurion 4): HP:0->6900, Dmg:0-0->230-250, Def:0->150, AR:0->330, DR:0->95
-195 (Necron 4): HP:0->16000, Dmg:0-0->305-330, Def:0->215, AR:0->440, DR:0->145
-196 (Schriker 4): HP:0->30000, Dmg:0-0->410-435, Def:0->300, AR:0->575, DR:0->215
-197 (Illusion of Kundun 4): HP:0->50000, Dmg:0-0->600-625, Def:0->500, AR:0->780, DR:0->295
+166 (Chaos Castle 5): Dmg:165-168->168-165
 200 (Soccerball): Lv:0->12, HP:0->1000, Dmg:0-0->150-200, AR:0->60, DR:0->500, AtkRng:0->4, ViewRng:0->1, MoveMs:0->500, AtkMs:0->1000, Respawn:0->3
-204 (Wolf Status): HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30
-205 (Wolf Altar1): HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30
-206 (Wolf Altar2): HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30
-207 (Wolf Altar3): HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30
-208 (Wolf Altar4): HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30
-209 (Wolf Altar5): HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30
 215 (Shield): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
 216 (Crown): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30
 217 (Crown Switch1): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30
@@ -225,9 +47,9 @@
 244 (Caren the Barmaid): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
 245 (Izabel The Wizard): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
 246 (Zienna The Weapons Merchant): Lv:0->20, HP:0->1000, Dmg:0-0->15-30, Def:0->70, AR:0->100, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
-247 (Crossbow Guard): HP:0->10000, Dmg:0-0->180-195, Def:0->70, AR:0->300, DR:0->100, AtkRng:5->2, ViewRng:7->2, MoveRng:3->5, Respawn:3->10
+247 (Crossbow Guard): AtkRng:5->2, ViewRng:7->2, MoveRng:3->5, Respawn:3->10
 248 (Wandering Merchant Martin): Lv:0->20, HP:0->1000, Dmg:0-0->15-30, Def:0->70, AR:0->100, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
-249 (Berdysh Guard): HP:0->10000, Dmg:0-0->180-195, Def:0->70, AR:0->300, DR:0->100, AtkRng:2->5, ViewRng:7->5, MoveRng:3->5, Respawn:3->10
+249 (Berdysh Guard): AtkRng:2->5, ViewRng:7->5, MoveRng:3->5, Respawn:3->10
 250 (Wandering Merchant Harold): Lv:0->20, HP:0->1000, Dmg:0-0->15-30, Def:0->70, AR:0->100, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1000, Respawn:0->10
 251 (Hanzo The Blacksmith): Lv:0->20, HP:0->1000, Dmg:0-0->15-30, Def:0->70, AR:0->100, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
 253 (Potion Girl Amy): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
@@ -236,78 +58,13 @@
 256 (Lahap): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
 257 (Elf Soldier): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
 259 (Oracle Layla): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
-260 (Death Angel 5): HP:0->31000, Dmg:0-0->408-443, Def:0->315, AR:0->587, DR:0->195
-261 (Death Centurion 5): HP:0->48000, Dmg:0-0->546-581, Def:0->430, AR:0->715, DR:0->250
-262 (Blood Soldier 5): HP:0->26000, Dmg:0-0->365-395, Def:0->280, AR:0->540, DR:0->177
-263 (Aegis 5): HP:0->18000, Dmg:0-0->310-340, Def:0->230, AR:0->460, DR:0->163
-264 (Rogue Centurion 5): HP:0->21000, Dmg:0-0->335-365, Def:0->250, AR:0->490, DR:0->168
-265 (Necron 5): HP:0->38500, Dmg:0-0->470-505, Def:0->370, AR:0->645, DR:0->220
-266 (Schriker 5): HP:0->60000, Dmg:0-0->640-675, Def:0->515, AR:0->810, DR:0->290
-267 (Illusion of Kundun 5): HP:0->100000, Dmg:0-0->835-870, Def:0->680, AR:0->1000, DR:0->360
-268 (Death Angel 6): HP:0->65000, Dmg:0-0->610-645, Def:0->500, AR:0->760, DR:0->275
-269 (Death Centurion 6): HP:0->87500, Dmg:0-0->753-788, Def:0->620, AR:0->900, DR:0->335
-270 (Blood Soldier 6): HP:0->56000, Dmg:0-0->570-600, Def:0->460, AR:0->713, DR:0->255
-271 (Aegis 6): HP:0->42000, Dmg:0-0->520-550, Def:0->410, AR:0->655, DR:0->230
-272 (Rogue Centurion 6): HP:0->48500, Dmg:0-0->540-570, Def:0->432, AR:0->680, DR:0->240
-273 (Necron 6): HP:0->75500, Dmg:0-0->672-707, Def:0->550, AR:0->820, DR:0->303
-274 (Schriker 6): HP:0->105000, Dmg:0-0->850-885, Def:0->710, AR:0->1000, DR:0->370
-275 (Illusion of Kundun 7): HP:0->5000000, Dmg:0-0->2000-2500, Def:0->1500, AR:0->2000, DR:0->1000
 277 (Castle Gate1): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30
-278 (Life Stone): Lv:0->2, HP:0->250000, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30
+278 (Life Stone): Lv:0->2, HP:10000->250000, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30
 283 (Guardian Statue): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30
 285 (Guardian): Lv:0->2, HP:0->30000, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
 286 (Battle Guard1): Lv:0->100, HP:0->23000, Dmg:0-0->340-390, Def:0->340, AR:0->520, DR:0->190, AtkRng:0->6, ViewRng:0->7, MoveMs:0->400, AtkMs:0->2000
 287 (Battle Guard2): Lv:0->100, HP:0->26000, Dmg:0-0->390-430, Def:0->380, AR:0->590, DR:0->200, AtkRng:0->1, ViewRng:0->3, MoveMs:0->400, AtkMs:0->1600
 288 (Canon Tower): Lv:0->200, HP:0->50, Dmg:0-0->575-610, Def:0->500, AR:0->1000, DR:0->30, AtkRng:0->7, ViewRng:0->6, MoveMs:0->400, AtkMs:0->2000
-290 (Lizard Warrior): HP:0->15000, Dmg:0-0->270-320, Def:0->210, AR:0->430, DR:0->140
-291 (Fire Golem): HP:0->55000, Dmg:0-0->560-600, Def:0->550, AR:0->870, DR:0->310
-292 (Queen Bee): HP:0->34500, Dmg:0-0->489-540, Def:0->360, AR:0->620, DR:0->240
-293 (Poison Golem): HP:0->25000, Dmg:0-0->375-425, Def:0->275, AR:0->530, DR:0->190
-294 (Axe Warrior): HP:0->11500, Dmg:0-0->255-290, Def:0->195, AR:0->385, DR:0->125
-295 (Erohim): HP:0->3000000, Dmg:0-0->1500-2000, Def:0->1000, AR:0->1500, DR:0->800
-304 (Witch Queen): HP:0->38500, Dmg:0-0->408-442, Def:0->357, AR:0->637, DR:0->230
-305 (Blue Golem): HP:0->25000, Dmg:0-0->288-322, Def:0->277, AR:0->507, DR:0->170
-306 (Death Rider): HP:0->14000, Dmg:0-0->260-294, Def:0->222, AR:0->402, DR:0->144
-307 (Forest Orc): HP:0->11000, Dmg:0-0->258-282, Def:0->197, AR:0->390, DR:0->127
-308 (Death Tree): HP:0->10000, Dmg:0-0->248-272, Def:0->187, AR:0->362, DR:0->120
-309 (Hell Maine): HP:0->50000, Dmg:0-0->550-600, Def:0->520, AR:0->850, DR:0->300
-310 (Hammer Scout): HP:0->45000, Dmg:0-0->530-560, Def:0->420, AR:0->670, DR:0->250
-311 (Lance Scout): HP:0->45000, Dmg:0-0->530-560, Def:0->420, AR:0->670, DR:0->250
-312 (Bow Scout): HP:0->45000, Dmg:0-0->530-560, Def:0->420, AR:0->670, DR:0->250
-313 (Werewolf): HP:0->110000, Dmg:0-0->830-850, Def:0->680, AR:0->950, DR:0->355
-314 (Scout(Hero)): HP:0->120000, Dmg:0-0->890-910, Def:0->740, AR:0->980, DR:0->370
-315 (Werewolf(Hero)): HP:0->123000, Dmg:0-0->964-1015, Def:0->800, AR:0->1027, DR:0->397
-316 (Balram): HP:0->140000, Dmg:0-0->1075-1140, Def:0->885, AR:0->1100, DR:0->440
-317 (Soram): HP:0->164000, Dmg:0-0->1200-1300, Def:0->982, AR:0->1173, DR:0->500
-331 (Aegis 7): HP:0->82000, Dmg:0-0->712-752, Def:0->584, AR:0->850, DR:0->315
-332 (Rogue Centurion 7): HP:0->88000, Dmg:0-0->751-791, Def:0->615, AR:0->880, DR:0->330
-333 (Blood Soldier 7): HP:0->97300, Dmg:0-0->805-845, Def:0->660, AR:0->920, DR:0->345
-334 (Death Angel 7): HP:0->110000, Dmg:0-0->870-915, Def:0->720, AR:0->960, DR:0->370
-335 (Necron 7): HP:0->125000, Dmg:0-0->951-996, Def:0->783, AR:0->1015, DR:0->405
-336 (Death Centurion 7): HP:0->145000, Dmg:0-0->1040-1085, Def:0->865, AR:0->1080, DR:0->440
-337 (Schriker 7): HP:0->170000, Dmg:0-0->1168-1213, Def:0->992, AR:0->1190, DR:0->485
-338 (Illusion of Kundun 6): HP:0->140000, Dmg:0-0->1070-1105, Def:0->892, AR:0->1200, DR:0->450
-340 (Dark Elf): HP:0->1500000, Dmg:0-0->800-900, Def:0->900, AR:0->1500, DR:0->370
-341 (Soram): HP:0->100000, Dmg:0-0->600-700, Def:0->500, AR:0->1500, DR:0->397
-344 (Balram): HP:0->90000, Dmg:0-0->600-700, Def:0->500, AR:0->1500, DR:0->370
-345 (Death Spirit): HP:0->95000, Dmg:0-0->600-700, Def:0->500, AR:0->1500, DR:0->397
-348 (Tanker): HP:0->450000, Dmg:0-0->800-1000, Def:0->840, AR:0->1500, DR:0->370
-349 (Balgass): HP:0->500000, Dmg:0-0->1000-1500, Def:0->800, AR:0->2000, DR:0->370
-350 (Berserker): HP:0->44370, Dmg:0-0->555-590, Def:0->443, AR:0->728, DR:0->255
-351 (Splinter Wolf): HP:0->16000, Dmg:0-0->310-340, Def:0->230, AR:0->460, DR:0->163
-352 (Iron Rider): HP:0->18000, Dmg:0-0->335-365, Def:0->250, AR:0->490, DR:0->168
-353 (Satyros): HP:0->22000, Dmg:0-0->365-395, Def:0->280, AR:0->540, DR:0->177
-354 (Blade Hunter): HP:0->32000, Dmg:0-0->408-443, Def:0->315, AR:0->587, DR:0->195
-355 (Kentauros): HP:0->38500, Dmg:0-0->470-505, Def:0->370, AR:0->645, DR:0->220
-356 (Gigantis): HP:0->43000, Dmg:0-0->546-581, Def:0->430, AR:0->715, DR:0->250
-357 (Genocider): HP:0->48500, Dmg:0-0->640-675, Def:0->515, AR:0->810, DR:0->290
-358 (Persona): HP:0->68000, Dmg:0-0->1168-1213, Def:0->615, AR:0->1190, DR:0->485
-359 (Twin Tale): HP:0->87500, Dmg:0-0->830-1085, Def:0->865, AR:0->1080, DR:0->440
-360 (Dreadfear): HP:0->94000, Dmg:0-0->946-996, Def:0->783, AR:0->1015, DR:0->905
-361 (Nightmare): HP:0->1500000, Dmg:0-0->1225-1468, Def:0->1000, AR:0->2000, DR:0->420
-362 (Maya (Hand Left)): HP:0->400000, Dmg:0-0->732-932, Def:0->315, AR:0->2000, DR:0->1445
-363 (Maya (Hand Right)): HP:0->350000, Dmg:0-0->732-932, Def:0->800, AR:0->2000, DR:0->550
-364 (Maya): HP:0->300, Dmg:0-0->712-752, Def:0->584, AR:0->850, DR:0->315
 367 (Gateway Machine): Lv:0->20, HP:0->1000, Dmg:0-0->15-30, Def:0->70, AR:0->100, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
 368 (Elphis): Lv:0->20, HP:0->1000, Dmg:0-0->15-30, Def:0->70, AR:0->100, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
 369 (Osbourne): Lv:0->20, HP:0->1000, Dmg:0-0->15-30, Def:0->70, AR:0->100, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
@@ -325,77 +82,32 @@
 383 (Alliance Item Storage): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
 384 (Illusion Item Storage): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
 385 (Mirage): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
-386 (Illusion Sorc. Spirit): HP:0->7150, Dmg:0-0->195-245, Def:0->150, AR:0->340, DR:0->98, Respawn:10->0
-387 (Illusion Sorc. Spirit): HP:0->7150, Dmg:0-0->215-265, Def:0->170, AR:0->380, DR:0->110, Respawn:10->0
-388 (Illusion Sorc. Spirit): HP:0->7370, Dmg:0-0->235-285, Def:0->190, AR:0->440, DR:0->130, Respawn:10->0
-389 (Illusion Sorc. Spirit): HP:0->8680, Dmg:0-0->280-330, Def:0->210, AR:0->500, DR:0->150, Respawn:10->0
-390 (Illusion Sorc. Spirit): HP:0->8680, Dmg:0-0->300-350, Def:0->230, AR:0->560, DR:0->170, Respawn:10->0
-391 (Illusion Sorc. Spirit): HP:0->8928, Dmg:0-0->320-370, Def:0->250, AR:0->640, DR:0->200, Respawn:10->0
-392 (Illusion Sorc. Spirit): HP:0->15000, Dmg:0-0->375-395, Def:0->280, AR:0->460, DR:0->150, Respawn:10->0
-393 (Illusion Sorc. Spirit): HP:0->15000, Dmg:0-0->395-415, Def:0->300, AR:0->520, DR:0->160, Respawn:10->0
-394 (Illusion Sorc. Spirit): HP:0->15400, Dmg:0-0->415-435, Def:0->320, AR:0->580, DR:0->195, Respawn:10->0
-395 (Illusion Sorc. Spirit): HP:0->19200, Dmg:0-0->480-500, Def:0->360, AR:0->660, DR:0->230, Respawn:10->0
-396 (Illusion Sorc. Spirit): HP:0->19200, Dmg:0-0->500-520, Def:0->380, AR:0->720, DR:0->260, Respawn:10->0
-397 (Illusion Sorc. Spirit): HP:0->19680, Dmg:0-0->520-540, Def:0->400, AR:0->840, DR:0->280, Respawn:10->0
-398 (Illusion Sorc. Spirit): HP:0->25500, Dmg:0-0->595-615, Def:0->450, AR:0->760, DR:0->275, Respawn:10->0
-399 (Illusion Sorc. Spirit): HP:0->25500, Dmg:0-0->615-635, Def:0->470, AR:0->820, DR:0->303, Respawn:10->0
+386 (Illusion Sorc. Spirit): Respawn:10->0
+387 (Illusion Sorc. Spirit): Respawn:10->0
+388 (Illusion Sorc. Spirit): Respawn:10->0
+389 (Illusion Sorc. Spirit): Respawn:10->0
+390 (Illusion Sorc. Spirit): Respawn:10->0
+391 (Illusion Sorc. Spirit): Respawn:10->0
+392 (Illusion Sorc. Spirit): Respawn:10->0
+393 (Illusion Sorc. Spirit): Respawn:10->0
+394 (Illusion Sorc. Spirit): Respawn:10->0
+395 (Illusion Sorc. Spirit): Respawn:10->0
+396 (Illusion Sorc. Spirit): Respawn:10->0
+397 (Illusion Sorc. Spirit): Respawn:10->0
+398 (Illusion Sorc. Spirit): Respawn:10->0
+399 (Illusion Sorc. Spirit): Respawn:10->0
 404 (MU Allies): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
 405 (Illusion Sorcerer): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
 406 (Priest Devin): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
 407 (Werewolf Quarrel): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
 408 (Gatekeeper): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
-409 (Balram (Trainee Soldier)): HP:0->75000, Dmg:0-0->550-650, Def:0->480, AR:0->1200, DR:0->370
-410 (Death Spirit (Trainee Soldier)): HP:0->85000, Dmg:0-0->580-680, Def:0->490, AR:0->1200, DR:0->390
-411 (Soram (Trainee Soldier)): HP:0->90000, Dmg:0-0->600-700, Def:0->500, AR:0->1200, DR:0->390
-412 (Dark Elf (Trainee Soldier)): HP:0->1500000, Dmg:0-0->800-900, Def:0->900, AR:0->1500, DR:0->400
 415 (Silvia): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
 416 (Rhea): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
 417 (Marce): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
-418 (Strange Rabbit): HP:0->60, Dmg:0-0->10-13, Def:0->3, AR:0->18, DR:0->3
-419 (Hideous Rabbit): HP:0->520, Dmg:0-0->68-72, Def:0->22, AR:0->93, DR:0->22
-420 (Werewolf): HP:0->720, Dmg:0-0->85-90, Def:0->30, AR:0->120, DR:0->30
-421 (Polluted Butterfly): HP:0->230, Dmg:0-0->37-42, Def:0->13, AR:0->58, DR:0->13
-422 (Cursed Lich): HP:0->900, Dmg:0-0->105-110, Def:0->33, AR:0->150, DR:0->36
-423 (Totem Golem): HP:0->1200, Dmg:0-0->120-125, Def:0->50, AR:0->180, DR:0->43
-424 (Grizzly): HP:0->2400, Dmg:0-0->130-140, Def:0->65, AR:0->215, DR:0->52
-425 (Captain Grizzly): HP:0->3000, Dmg:0-0->150-155, Def:0->80, AR:0->240, DR:0->70
-426 (Chaos Castle 13): HP:0->20000, Dmg:0-0->300-345, Def:0->245, AR:0->480, DR:0->190
-427 (Chaos Castle 14): HP:0->23000, Dmg:0-0->330-380, Def:0->280, AR:0->520, DR:0->200
-428 (Chief Skeleton Warrior 8): HP:0->29000, Dmg:0-0->475-510, Def:0->440, AR:0->570, DR:0->250
-429 (Chief Skeleton Archer 8): HP:0->32000, Dmg:0-0->510-555, Def:0->480, AR:0->640, DR:0->260
-430 (Dark Skull Soldier 8): HP:0->37000, Dmg:0-0->600-650, Def:0->500, AR:0->710, DR:0->300
-431 (Giant Ogre 8): HP:0->45000, Dmg:0-0->645-690, Def:0->540, AR:0->780, DR:0->310
-432 (Red Skeleton Knight 8): HP:0->55000, Dmg:0-0->780-820, Def:0->600, AR:0->850, DR:0->360
-433 (Magic Skeleton 8): HP:0->65000, Dmg:0-0->830-865, Def:0->680, AR:0->920, DR:0->370
-434 (Gigantis): HP:0->30000, Dmg:0-0->475-510, Def:0->360, AR:0->715, DR:0->270
-435 (Berserk): HP:0->33000, Dmg:0-0->500-540, Def:0->410, AR:0->750, DR:0->280
-436 (Balram (Trainee)): HP:0->37000, Dmg:0-0->560-600, Def:0->460, AR:0->800, DR:0->320
-437 (Soram (Trainee)): HP:0->40000, Dmg:0-0->610-650, Def:0->510, AR:0->835, DR:0->330
-438 (Persona): HP:0->50000, Dmg:0-0->640-680, Def:0->560, AR:0->935, DR:0->370
-439 (Dreadfear): HP:0->55000, Dmg:0-0->700-740, Def:0->610, AR:0->1015, DR:0->380
-440 (Dark_Elf): HP:0->75000, Dmg:0-0->850-900, Def:0->690, AR:0->1300, DR:0->430
-441 (Sapi-Unus): HP:0->37000, Dmg:0-0->475-510, Def:0->370, AR:0->700, DR:0->220
-442 (Sapi-Duo): HP:0->39500, Dmg:0-0->485-505, Def:0->375, AR:0->730, DR:0->225
-443 (Sapi-Tres): HP:0->58000, Dmg:0-0->590-625, Def:0->470, AR:0->880, DR:0->275
-444 (Shadow Pawn): HP:0->48500, Dmg:0-0->540-575, Def:0->430, AR:0->830, DR:0->240
-445 (Shadow Knight): HP:0->52000, Dmg:0-0->570-600, Def:0->455, AR:0->860, DR:0->255
-446 (Shadow Look): HP:0->62000, Dmg:0-0->600-645, Def:0->500, AR:0->950, DR:0->290
-447 (Thunder Napin): HP:0->42000, Dmg:0-0->520-555, Def:0->395, AR:0->750, DR:0->235
-448 (Ghost Napin): HP:0->68000, Dmg:0-0->635-665, Def:0->535, AR:0->980, DR:0->295
-449 (Blaze Napin): HP:0->70000, Dmg:0-0->670-725, Def:0->530, AR:0->1000, DR:0->303
 450 (Cherry Blossom Spirit): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
 451 (Cherry Blossom Tree): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
 452 (Seed Master): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
 453 (Seed Researcher): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
-454 (Ice Walker): HP:0->68000, Dmg:0-0->1310-1965, Def:0->615, AR:0->1190, DR:0->800
-455 (Giant Mammoth): HP:0->77000, Dmg:0-0->1441-2017, Def:0->585, AR:0->1350, DR:0->840
-456 (Ice Giant): HP:0->84000, Dmg:0-0->1585-2060, Def:0->620, AR:0->1570, DR:0->770
-457 (Coolutin): HP:0->88000, Dmg:0-0->1743-2092, Def:0->650, AR:0->1940, DR:0->840
-458 (Iron Knight): HP:0->95000, Dmg:0-0->1917-2301, Def:0->660, AR:0->2000, DR:0->800
-459 (Selupan): HP:0->4800000, Dmg:0-0->2500-3000, Def:0->1250, AR:0->2200, DR:0->1800
-460 (Spider Eggs 1): HP:0->40000, Dmg:0-0->500-540, Def:0->410, AR:0->750, DR:0->280
-461 (Spider Eggs 2): HP:0->40000, Dmg:0-0->500-540, Def:0->410, AR:0->750, DR:0->280
-462 (Spider Eggs 3): HP:0->40000, Dmg:0-0->500-540, Def:0->410, AR:0->750, DR:0->280
 467 (Snowman): Lv:0->10, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
 468 (Little Santa Yellow): Lv:0->10, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
 469 (Little Santa Green): Lv:0->10, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
@@ -409,88 +121,42 @@
 477 (Transformed Snowman): Lv:0->10, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
 478 (Delgado - Lucky Coins): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
 479 (Gatekeeper Titus): Lv:0->10, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
-480 (Zombie Fighter): HP:0->20000, Dmg:0-0->300-345, Def:0->200, AR:0->750, DR:0->170
-481 (Zombie Fighter): HP:0->500000, Dmg:0-0->850-950, Def:0->210, AR:0->1190, DR:0->820
-482 (Resurrected Gladiator): HP:0->23000, Dmg:0-0->320-360, Def:0->220, AR:0->780, DR:0->200
-483 (Resurrected Gladiator): HP:0->513000, Dmg:0-0->860-960, Def:0->230, AR:0->1210, DR:0->825
-484 (Ash Slaughterer): HP:0->27000, Dmg:0-0->335-370, Def:0->270, AR:0->810, DR:0->230
-485 (Ash Slaughterer): HP:0->520000, Dmg:0-0->870-970, Def:0->280, AR:0->1230, DR:0->830
-486 (Blood Assassin): HP:0->37000, Dmg:0-0->550-600, Def:0->475, AR:0->900, DR:0->300
-487 (Cruel Blood Assassin): HP:0->40000, Dmg:0-0->570-620, Def:0->490, AR:0->950, DR:0->325
-488 (Cruel Blood Assassin): HP:0->523000, Dmg:0-0->880-980, Def:0->500, AR:0->1250, DR:0->835
-489 (Burning Lava Giant): HP:0->50000, Dmg:0-0->600-650, Def:0->520, AR:0->970, DR:0->330
-490 (Ruthless Lava Giant): HP:0->55000, Dmg:0-0->630-680, Def:0->535, AR:0->1000, DR:0->340
-491 (Ruthless Lava Giant): HP:0->530000, Dmg:0-0->890-990, Def:0->545, AR:0->1270, DR:0->840
 492 (Moss The Merchant): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
-504 (Gayion The Gladiator): Lv:138->1, HP:0->1250, Dmg:0-0->45-50, Def:0->35, AR:0->91, DR:0->80, AtkRng:5->6, ViewRng:7->10, MoveRng:3->6, MoveMs:500->600, AtkMs:1600->3000
-505 (Jerry): Lv:140->1, HP:0->930, Dmg:0-0->42-47, Def:0->30, AR:0->80, DR:0->70, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1600
-506 (Raymond): Lv:146->1, HP:0->800, Dmg:0-0->39-44, Def:0->28, AR:0->70, DR:0->60, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1600
-507 (Lucas): Lv:142->1, HP:0->800, Dmg:0-0->39-44, Def:0->28, AR:0->70, DR:0->60, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1600
-508 (Fred): Lv:145->1, HP:0->780, Dmg:0-0->36-41, Def:0->27, AR:0->70, DR:0->60, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1600
-509 (Hammerize): Lv:143->1, HP:0->780, Dmg:0-0->36-41, Def:0->27, AR:0->70, DR:0->60, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1600
-510 (Dual Berserker): Lv:144->1, HP:0->780, Dmg:0-0->36-41, Def:0->27, AR:0->70, DR:0->60, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1400
-511 (Devil Lord): Lv:141->1, HP:0->780, Dmg:0-0->36-41, Def:0->27, AR:0->70, DR:0->60, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1400
-512 (Quarter Master): Lv:134->1, HP:0->650, Dmg:0-0->33-38, Def:0->22, AR:0->50, DR:0->40, AtkRng:7->2, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1600
-513 (Combat Instructor): Lv:118->1, HP:0->650, Dmg:0-0->33-38, Def:0->22, AR:0->50, DR:0->40, AtkRng:5->2, ViewRng:7->10, MoveRng:3->6, MoveMs:500->600
-514 (Aticle's Head): Lv:135->1, HP:0->650, Dmg:0-0->33-38, Def:0->22, AR:0->50, DR:0->40, AtkRng:6->2, MoveMs:700->600, AtkMs:1700->1600
-515 (Dark Ghost): Lv:134->1, HP:0->650, Dmg:0-0->33-38, Def:0->22, AR:0->50, DR:0->40, AtkRng:4->6, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1600
-516 (Banshee): Lv:119->1, HP:0->650, Dmg:0-0->33-38, Def:0->22, AR:0->50, DR:0->40, AtkRng:6->2, ViewRng:7->10, MoveRng:3->6, MoveMs:500->600, AtkMs:1600->1200
-517 (Head Mounter): Lv:140->1, HP:0->650, Dmg:0-0->33-38, Def:0->22, AR:0->50, DR:0->40, AtkRng:10->2, ViewRng:7->10, MoveRng:3->6, MoveMs:800->600, AtkMs:1700->1600, Respawn:10800->10
-518 (Defender): Lv:118->1, HP:0->580, Dmg:0-0->30-35, Def:0->20, AR:0->30, DR:0->20, MoveRng:3->6, MoveMs:500->600, AtkMs:1600->1400
-519 (Forsaker): Lv:115->1, HP:0->500, Dmg:0-0->25-30, Def:0->15, AR:0->30, DR:0->20, AtkRng:1->6, ViewRng:7->10, MoveRng:3->6, MoveMs:800->600, AtkMs:1700->1400
-520 (Ocelot the Lord): Lv:113->1, HP:0->550, Dmg:0-0->28-33, Def:0->17, AR:0->30, DR:0->20, AtkRng:1->2, MoveRng:3->6, MoveMs:500->600, AtkMs:1500->1400
-521 (Eric the Guard): Lv:120->1, HP:0->570, Dmg:0-0->30-35, Def:0->18, AR:0->30, DR:0->20, AtkRng:1->2, ViewRng:7->10, MoveRng:3->6, MoveMs:500->600, AtkMs:1600->1400
+504 (Gayion The Gladiator): Lv:138->1, HP:1800000->1250, Dmg:2680-4130->45-50, Def:4550->35, AR:2500->91, DR:1485->80, AtkRng:5->6, ViewRng:7->10, MoveRng:3->6, MoveMs:500->600, AtkMs:1600->3000
+505 (Jerry): Lv:140->1, HP:1000000->930, Dmg:2100-3400->42-47, Def:5000->30, AR:2000->80, DR:1500->70, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1600
+506 (Raymond): Lv:146->1, HP:1600000->800, Dmg:2600-4000->39-44, Def:5600->28, AR:2600->70, DR:1800->60, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1600
+507 (Lucas): Lv:142->1, HP:1200000->800, Dmg:2200-3600->39-44, Def:5200->28, AR:2200->70, DR:1200->60, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1600
+508 (Fred): Lv:145->1, HP:1500000->780, Dmg:2500-3900->36-41, Def:5500->27, AR:2500->70, DR:1500->60, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1600
+509 (Hammerize): Lv:143->1, HP:1300000->780, Dmg:2300-3700->36-41, Def:5300->27, AR:2300->70, DR:1300->60, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1600
+510 (Dual Berserker): Lv:144->1, HP:1400000->780, Dmg:2400-3800->36-41, Def:5400->27, AR:2400->70, DR:1400->60, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1400
+511 (Devil Lord): Lv:141->1, HP:1100000->780, Dmg:2100-3500->36-41, Def:5100->27, AR:2100->70, DR:1100->60, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1400
+512 (Quarter Master): Lv:134->1, HP:90000->650, Dmg:1100-1200->33-38, Def:992->22, AR:1150->50, DR:585->40, AtkRng:7->2, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1600
+513 (Combat Instructor): Lv:118->1, HP:68000->650, Dmg:931-1116->33-38, Def:750->22, AR:1100->50, DR:550->40, AtkRng:5->2, ViewRng:7->10, MoveRng:3->6, MoveMs:500->600
+514 (Aticle's Head): Lv:135->1, HP:300000->650, Dmg:900-1300->33-38, Def:850->22, AR:1400->50, DR:797->40, AtkRng:6->2, MoveMs:700->600, AtkMs:1700->1600
+515 (Dark Ghost): Lv:134->1, HP:100000->650, Dmg:1168-1250->33-38, Def:1020->22, AR:1270->50, DR:665->40, AtkRng:4->6, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1600
+516 (Banshee): Lv:119->1, HP:105000->650, Dmg:980-1060->33-38, Def:830->22, AR:1150->50, DR:605->40, AtkRng:6->2, ViewRng:7->10, MoveRng:3->6, MoveMs:500->600, AtkMs:1600->1200
+517 (Head Mounter): Lv:140->1, HP:140000->650, Dmg:1000-1400->33-38, Def:950->22, AR:1600->50, DR:880->40, AtkRng:10->2, ViewRng:7->10, MoveRng:3->6, MoveMs:800->600, AtkMs:1700->1600, Respawn:10800->10
+518 (Defender): Lv:118->1, HP:78000->580, Dmg:951-996->30-35, Def:783->20, AR:1015->30, DR:505->20, MoveRng:3->6, MoveMs:500->600, AtkMs:1600->1400
+519 (Forsaker): Lv:115->1, HP:70000->500, Dmg:870-915->25-30, Def:720->15, AR:960->30, DR:470->20, AtkRng:1->6, ViewRng:7->10, MoveRng:3->6, MoveMs:800->600, AtkMs:1700->1400
+520 (Ocelot the Lord): Lv:113->1, HP:53000->550, Dmg:805-845->28-33, Def:660->17, AR:920->30, DR:445->20, AtkRng:1->2, MoveRng:3->6, MoveMs:500->600, AtkMs:1500->1400
+521 (Eric the Guard): Lv:120->1, HP:78500->570, Dmg:1040-1085->30-35, Def:865->18, AR:1080->30, DR:540->20, AtkRng:1->2, ViewRng:7->10, MoveRng:3->6, MoveMs:500->600, AtkMs:1600->1400
 522 (Adviser Jerinteu): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
-523 (Trap): Lv:57->2, HP:0->100, Dmg:0-0->15-52, AR:0->45, DR:0->50, AtkRng:1->5, ViewRng:2->5, AtkMs:1600->1000, Respawn:10->3
-524 (Evil Gate): Lv:2->1, HP:0->500, DR:0->1, ViewRng:5->0, MoveMs:400->0, AtkMs:1500->0, Respawn:10->0
-525 (Lion Gate): Lv:2->1, HP:0->600, DR:0->1, ViewRng:5->0, MoveMs:400->0, AtkMs:1500->0, Respawn:10->0
-526 (Statue): Lv:2->1, HP:0->650, DR:0->1, ViewRng:5->0, MoveMs:400->0, AtkMs:1500->0, Respawn:10->0
-527 (Star Gate): Lv:2->1, HP:0->500, DR:0->1, ViewRng:5->0, MoveMs:400->0, AtkMs:1500->0, Respawn:10->0
-528 (Rush Gate): Lv:2->1, HP:0->600, DR:0->1, ViewRng:5->0, MoveMs:400->0, AtkMs:1500->0, Respawn:10->0
-529 (Terrible Butcher): HP:0->2800, Dmg:0-0->125-135, Def:0->83, AR:0->2000, DR:0->1500
-530 (Mad Butcher): HP:0->2300, Dmg:0-0->110-120, Def:0->73, AR:0->1000, DR:0->1000
-531 (Ice Walker): HP:0->1500, Dmg:0-0->85-90, Def:0->60, AR:0->800, DR:0->1000
-532 (Larva): HP:0->1000, Dmg:0-0->75-80, Def:0->55, AR:0->800, DR:0->900
-533 (Doppelganger): HP:0->600, Dmg:0-0->80-85, Def:0->45, AR:0->1000, DR:0->900
-534 (Doppelganger Elf): HP:0->500, Dmg:0-0->65-70, Def:0->30, AR:0->700, DR:0->500
-535 (Doppelganger Knight): HP:0->500, Dmg:0-0->65-70, Def:0->30, AR:0->700, DR:0->500
-536 (Doppelganger Wizard): HP:0->500, Dmg:0-0->65-70, Def:0->30, AR:0->700, DR:0->500
-537 (Doppelganger Magic Gladiator): HP:0->500, Dmg:0-0->65-70, Def:0->30, AR:0->700, DR:0->500
-538 (Doppelganger Dark Lord): HP:0->900, Dmg:0-0->85-90, Def:0->55, AR:0->900, DR:0->800
-539 (Doppelganger Summoner): HP:0->500, Dmg:0-0->65-70, Def:0->30, AR:0->500, DR:0->300
+523 (Trap): Lv:57->2, HP:4500->100, Dmg:1570-1880->15-52, Def:1110->0, AR:1085->45, DR:1085->50, AtkRng:1->5, ViewRng:2->5, AtkMs:1600->1000, Respawn:10->3
+524 (Evil Gate): Lv:2->1, HP:988500->500, Dmg:15-30->0-0, Def:2515->0, AR:10->0, DR:2230->1, ViewRng:5->0, MoveMs:400->0, AtkMs:1500->0, Respawn:10->0
+525 (Lion Gate): Lv:2->1, HP:988000->600, Dmg:15-30->0-0, Def:2615->0, AR:10->0, DR:2230->1, ViewRng:5->0, MoveMs:400->0, AtkMs:1500->0, Respawn:10->0
+526 (Statue): Lv:2->1, HP:987500->650, Dmg:15-30->0-0, Def:2865->0, AR:10->0, DR:2230->1, ViewRng:5->0, MoveMs:400->0, AtkMs:1500->0, Respawn:10->0
+527 (Star Gate): Lv:2->1, HP:987500->500, Dmg:15-30->0-0, Def:2865->0, AR:10->0, DR:2230->1, ViewRng:5->0, MoveMs:400->0, AtkMs:1500->0, Respawn:10->0
+528 (Rush Gate): Lv:2->1, HP:994000->600, Dmg:15-30->0-0, Def:2750->0, AR:10->0, DR:2230->1, ViewRng:5->0, MoveMs:400->0, AtkMs:1500->0, Respawn:10->0
 540 (Lugard): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
-541 (Compensation Box): HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
-542 (Golden Compensation Box): HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+541 (Compensation Box): Dmg:0-0->10-10, AR:0->10
+542 (Golden Compensation Box): Dmg:0-0->10-10, AR:0->10
 543 (Gens Duprian): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
 544 (Gens Vanert): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
 545 (Christine the General Goods Merchant): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
 546 (Jeweler Raul): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
 547 (Market Union Member Julia): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
-549 (Bloody Orc): HP:0->117000, Dmg:0-0->675-710, Def:0->420, AR:0->900, DR:0->820
-550 (Bloody Death Rider): HP:0->88000, Dmg:0-0->795-830, Def:0->460, AR:0->1100, DR:0->430
-551 (Bloody Golem): HP:0->129700, Dmg:0-0->715-750, Def:0->470, AR:0->900, DR:0->960
-552 (Bloody Witch Queen): HP:0->85700, Dmg:0-0->835-870, Def:0->480, AR:0->1100, DR:0->430
-553 (Berserker Warrior): HP:0->184370, Dmg:0-0->915-990, Def:0->543, AR:0->1557, DR:0->755
-554 (Kentauros Warrior): HP:0->198500, Dmg:0-0->970-1005, Def:0->570, AR:0->1258, DR:0->920
-555 (Gigantis Warrior): HP:0->203000, Dmg:0-0->1046-1181, Def:0->630, AR:0->1575, DR:0->750
-556 (Genocider Warrior): HP:0->218500, Dmg:0-0->1240-1375, Def:0->715, AR:0->1251, DR:0->990
-557 (Sapi Queen): HP:0->218000, Dmg:0-0->1441-2017, Def:0->670, AR:0->1847, DR:0->875
-558 (Ice Napin): HP:0->230000, Dmg:0-0->1585-2060, Def:0->730, AR:0->1544, DR:0->903
-559 (Shadow Master): HP:0->242000, Dmg:0-0->1743-2092, Def:0->700, AR:0->1646, DR:0->990
-562 (Dark Mammoth): HP:0->237000, Dmg:0-0->1741-2317, Def:0->785, AR:0->2240, DR:0->1440
-563 (Dark Giant): HP:0->254000, Dmg:0-0->1885-2360, Def:0->820, AR:0->2647, DR:0->970
-564 (Dark Coolutin): HP:0->248000, Dmg:0-0->2043-2392, Def:0->850, AR:0->2142, DR:0->1440
-565 (Dark Iron Knight): HP:0->265000, Dmg:0-0->2217-2601, Def:0->860, AR:0->2441, DR:0->1430
 566 (Mercenary Guild Felicia): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
 568 (Wandering Merchant Zyro): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
-569 (Venomous Chain Scorpion): HP:0->50000, Dmg:0-0->555-590, Def:0->445, AR:0->845, DR:0->248
-570 (Bone Scorpion): HP:0->60000, Dmg:0-0->595-635, Def:0->485, AR:0->915, DR:0->283
-571 (Orcus): HP:0->65000, Dmg:0-0->618-655, Def:0->518, AR:0->965, DR:0->293
-572 (Gollock): HP:0->72000, Dmg:0-0->685-735, Def:0->545, AR:0->1020, DR:0->315
-573 (Crypta): HP:0->78000, Dmg:0-0->705-755, Def:0->560, AR:0->1080, DR:0->340
-574 (Crypos): HP:0->83000, Dmg:0-0->720-770, Def:0->575, AR:0->1140, DR:0->375
-575 (Condra): HP:0->90000, Dmg:0-0->735-790, Def:0->610, AR:0->1200, DR:0->405
-576 (Narcondra): HP:0->96000, Dmg:0-0->750-815, Def:0->640, AR:0->1265, DR:0->425
 577 (Leina the General Goods Merchant): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
 578 (Weapons Merchant Bolo): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
 579 (David): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10

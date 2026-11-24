@@ -1,0 +1,219 @@
+# Monster Differences: HNMO vs Season 6 & Season 9 MonsterList.xml
+# Counts: HNMO=615, S6=625, S9=654
+
+## Shared Monsters Differing from Season 6 Suite
+100 (Lance Trap): ViewRng:4->1, MoveMs:0->500
+101 (Iron Stick Trap): MoveMs:0->500
+102 (Fire Trap): MoveMs:0->500
+103 (Meteorite Trap): AtkRng:3->0
+131 (Castle Gate): Lv:0->2, HP:5000000->2000, DR:0->1
+132 (Statue of Saint): Lv:0->2, HP:5000000->3000, DR:0->1
+133 (Statue of Saint): Lv:0->2, HP:5000000->3000, DR:0->1
+134 (Statue of Saint): Lv:0->2, HP:5000000->3000, DR:0->1
+152 (Gate to Kalima 1 of {0}): Lv:0->10, HP:0->50
+153 (Gate to Kalima 2 of {0}): Lv:0->10, HP:0->50
+154 (Gate to Kalima 3 of {0}): Lv:0->10, HP:0->50
+155 (Gate to Kalima 4 of {0}): Lv:0->10, HP:0->50
+156 (Gate to Kalima 5 of {0}): Lv:0->10, HP:0->50
+157 (Gate to Kalima 6 of {0}): Lv:0->10, HP:0->50
+158 (Gate to Kalima 7 of {0}): Lv:0->10, HP:0->50
+166 (Chaos Castle 5): Dmg:165-168->168-165
+200 (Soccerball): Lv:0->12, HP:0->1000, Dmg:0-0->150-200, AR:0->60, DR:0->500, AtkRng:0->4, ViewRng:0->1, MoveMs:0->500, AtkMs:0->1000, Respawn:0->3
+215 (Shield): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+216 (Crown): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30
+217 (Crown Switch1): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30
+218 (Crown Switch2): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30
+219 (Castle Gate Switch): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30
+220 (Guard): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, MoveMs:0->400, AtkMs:0->1500
+221 (Slingshot Attack): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, MoveMs:0->400, AtkMs:0->1500
+222 (Slingshot Defense): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, MoveMs:0->400, AtkMs:0->1500
+223 (Senior): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30
+224 (Guardsman): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30
+226 (Pet Trainer): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+229 (Marlon): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+230 (Alex): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+231 (Thompson the Merchant): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+232 (Archangel): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+233 (Messenger of Arch.): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+235 (Sevina the Priestess): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+236 (Golden Archer): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+237 (Charon): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+238 (Chaos Goblin): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+239 (Arena Guard): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+240 (Baz The Vault Keeper): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+241 (Guild Master): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+242 (Elf Lala): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+243 (Eo the Craftsman): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+244 (Caren the Barmaid): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+245 (Izabel The Wizard): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+246 (Zienna The Weapons Merchant): Lv:0->20, HP:0->1000, Dmg:0-0->15-30, Def:0->70, AR:0->100, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+247 (Crossbow Guard): AtkRng:5->2, ViewRng:7->2, MoveRng:3->5, Respawn:3->10
+248 (Wandering Merchant Martin): Lv:0->20, HP:0->1000, Dmg:0-0->15-30, Def:0->70, AR:0->100, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+249 (Berdysh Guard): AtkRng:2->5, ViewRng:7->5, MoveRng:3->5, Respawn:3->10
+250 (Wandering Merchant Harold): Lv:0->20, HP:0->1000, Dmg:0-0->15-30, Def:0->70, AR:0->100, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1000, Respawn:0->10
+251 (Hanzo The Blacksmith): Lv:0->20, HP:0->1000, Dmg:0-0->15-30, Def:0->70, AR:0->100, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+253 (Potion Girl Amy): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+254 (Pasi The Mage): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+255 (Lumen the Barmaid): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+256 (Lahap): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+257 (Elf Soldier): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+259 (Oracle Layla): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+277 (Castle Gate1): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30
+278 (Life Stone): Lv:0->2, HP:10000->250000, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30
+283 (Guardian Statue): Lv:0->2, HP:0->50, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30
+285 (Guardian): Lv:0->2, HP:0->30000, Dmg:0-0->15-30, Def:0->70, AR:0->10, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+286 (Battle Guard1): Lv:0->100, HP:0->23000, Dmg:0-0->340-390, Def:0->340, AR:0->520, DR:0->190, AtkRng:0->6, ViewRng:0->7, MoveMs:0->400, AtkMs:0->2000
+287 (Battle Guard2): Lv:0->100, HP:0->26000, Dmg:0-0->390-430, Def:0->380, AR:0->590, DR:0->200, AtkRng:0->1, ViewRng:0->3, MoveMs:0->400, AtkMs:0->1600
+288 (Canon Tower): Lv:0->200, HP:0->50, Dmg:0-0->575-610, Def:0->500, AR:0->1000, DR:0->30, AtkRng:0->7, ViewRng:0->6, MoveMs:0->400, AtkMs:0->2000
+367 (Gateway Machine): Lv:0->20, HP:0->1000, Dmg:0-0->15-30, Def:0->70, AR:0->100, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+368 (Elphis): Lv:0->20, HP:0->1000, Dmg:0-0->15-30, Def:0->70, AR:0->100, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+369 (Osbourne): Lv:0->20, HP:0->1000, Dmg:0-0->15-30, Def:0->70, AR:0->100, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+370 (Jerridon): Lv:0->20, HP:0->1000, Dmg:0-0->15-30, Def:0->70, AR:0->100, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+371 (Leo The Helper): Lv:0->90, HP:0->10000, Dmg:0-0->180-195, Def:0->70, AR:0->300, DR:0->100, AtkRng:0->5, ViewRng:0->5, MoveRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+372 (Elite Skill Soldier): Lv:0->10, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+375 (Chaos Card Master): Lv:0->10, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+376 (Pamela the Supplier): Lv:0->20, HP:0->1000, Dmg:0-0->15-30, Def:0->70, AR:0->100, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+377 (Angela the Supplier): Lv:0->20, HP:0->1000, Dmg:0-0->15-30, Def:0->70, AR:0->100, DR:0->30, ViewRng:0->5, MoveMs:0->400, AtkMs:0->1500, Respawn:0->10
+378 (GameMaster): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+379 (Fireworks Girl): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+380 (Stone Statue): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+381 (MU Allies General): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+382 (Illusion Elder): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+383 (Alliance Item Storage): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+384 (Illusion Item Storage): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+385 (Mirage): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+386 (Illusion Sorc. Spirit): Respawn:10->0
+387 (Illusion Sorc. Spirit): Respawn:10->0
+388 (Illusion Sorc. Spirit): Respawn:10->0
+389 (Illusion Sorc. Spirit): Respawn:10->0
+390 (Illusion Sorc. Spirit): Respawn:10->0
+391 (Illusion Sorc. Spirit): Respawn:10->0
+392 (Illusion Sorc. Spirit): Respawn:10->0
+393 (Illusion Sorc. Spirit): Respawn:10->0
+394 (Illusion Sorc. Spirit): Respawn:10->0
+395 (Illusion Sorc. Spirit): Respawn:10->0
+396 (Illusion Sorc. Spirit): Respawn:10->0
+397 (Illusion Sorc. Spirit): Respawn:10->0
+398 (Illusion Sorc. Spirit): Respawn:10->0
+399 (Illusion Sorc. Spirit): Respawn:10->0
+404 (MU Allies): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+405 (Illusion Sorcerer): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+406 (Priest Devin): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+407 (Werewolf Quarrel): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+408 (Gatekeeper): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+412 (Dark Elf (Trainee Soldier)): Respawn:10800->10
+415 (Silvia): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+416 (Rhea): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+417 (Marce): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+450 (Cherry Blossom Spirit): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+451 (Cherry Blossom Tree): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+452 (Seed Master): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+453 (Seed Researcher): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+467 (Snowman): Lv:0->10, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+468 (Little Santa Yellow): Lv:0->10, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+469 (Little Santa Green): Lv:0->10, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+470 (Little Santa Red): Lv:0->10, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+471 (Little Santa Blue): Lv:0->10, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+472 (Little Santa White): Lv:0->10, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+473 (Little Santa Black): Lv:0->10, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+474 (Little Santa Orange): Lv:0->10, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+475 (Little Santa Pink): Lv:0->10, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+476 (Cursed Santa): Lv:0->149, HP:0->26000, Dmg:0-0->370-410, Def:0->400, AR:0->550, DR:0->200, AtkRng:0->2, ViewRng:0->6, MoveRng:0->4, MoveMs:0->400, AtkMs:0->2200, Respawn:0->10
+477 (Transformed Snowman): Lv:0->10, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+478 (Delgado - Lucky Coins): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+479 (Gatekeeper Titus): Lv:0->10, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+492 (Moss The Merchant): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+504 (Gayion The Gladiator): Lv:138->1, HP:1800000->1250, Dmg:2680-4130->45-50, Def:4550->35, AR:2500->91, DR:1485->80, AtkRng:5->6, ViewRng:7->10, MoveRng:3->6, MoveMs:500->600, AtkMs:1600->3000
+505 (Jerry): Lv:140->1, HP:1000000->930, Dmg:2100-3400->42-47, Def:5000->30, AR:2000->80, DR:1500->70, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1600
+506 (Raymond): Lv:146->1, HP:1600000->800, Dmg:2600-4000->39-44, Def:5600->28, AR:2600->70, DR:1800->60, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1600
+507 (Lucas): Lv:142->1, HP:1200000->800, Dmg:2200-3600->39-44, Def:5200->28, AR:2200->70, DR:1200->60, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1600
+508 (Fred): Lv:145->1, HP:1500000->780, Dmg:2500-3900->36-41, Def:5500->27, AR:2500->70, DR:1500->60, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1600
+509 (Hammerize): Lv:143->1, HP:1300000->780, Dmg:2300-3700->36-41, Def:5300->27, AR:2300->70, DR:1300->60, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1600
+510 (Dual Berserker): Lv:144->1, HP:1400000->780, Dmg:2400-3800->36-41, Def:5400->27, AR:2400->70, DR:1400->60, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1400
+511 (Devil Lord): Lv:141->1, HP:1100000->780, Dmg:2100-3500->36-41, Def:5100->27, AR:2100->70, DR:1100->60, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1400
+512 (Quarter Master): Lv:134->1, HP:90000->650, Dmg:1100-1200->33-38, Def:992->22, AR:1150->50, DR:585->40, AtkRng:7->2, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1600
+513 (Combat Instructor): Lv:118->1, HP:68000->650, Dmg:931-1116->33-38, Def:750->22, AR:1100->50, DR:550->40, AtkRng:5->2, ViewRng:7->10, MoveRng:3->6, MoveMs:500->600
+514 (Aticle's Head): Lv:135->1, HP:300000->650, Dmg:900-1300->33-38, Def:850->22, AR:1400->50, DR:797->40, AtkRng:6->2, MoveMs:700->600, AtkMs:1700->1600
+515 (Dark Ghost): Lv:134->1, HP:100000->650, Dmg:1168-1250->33-38, Def:1020->22, AR:1270->50, DR:665->40, AtkRng:4->6, ViewRng:7->10, MoveMs:700->600, AtkMs:1700->1600
+516 (Banshee): Lv:119->1, HP:105000->650, Dmg:980-1060->33-38, Def:830->22, AR:1150->50, DR:605->40, AtkRng:6->2, ViewRng:7->10, MoveRng:3->6, MoveMs:500->600, AtkMs:1600->1200
+517 (Head Mounter): Lv:140->1, HP:140000->650, Dmg:1000-1400->33-38, Def:950->22, AR:1600->50, DR:880->40, AtkRng:10->2, ViewRng:7->10, MoveRng:3->6, MoveMs:800->600, AtkMs:1700->1600, Respawn:10800->10
+518 (Defender): Lv:118->1, HP:78000->580, Dmg:951-996->30-35, Def:783->20, AR:1015->30, DR:505->20, MoveRng:3->6, MoveMs:500->600, AtkMs:1600->1400
+519 (Forsaker): Lv:115->1, HP:70000->500, Dmg:870-915->25-30, Def:720->15, AR:960->30, DR:470->20, AtkRng:1->6, ViewRng:7->10, MoveRng:3->6, MoveMs:800->600, AtkMs:1700->1400
+520 (Ocelot the Lord): Lv:113->1, HP:53000->550, Dmg:805-845->28-33, Def:660->17, AR:920->30, DR:445->20, AtkRng:1->2, MoveRng:3->6, MoveMs:500->600, AtkMs:1500->1400
+521 (Eric the Guard): Lv:120->1, HP:78500->570, Dmg:1040-1085->30-35, Def:865->18, AR:1080->30, DR:540->20, AtkRng:1->2, ViewRng:7->10, MoveRng:3->6, MoveMs:500->600, AtkMs:1600->1400
+522 (Adviser Jerinteu): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+523 (Trap): Lv:57->2, HP:4500->100, Dmg:1570-1880->15-52, Def:1110->0, AR:1085->45, DR:1085->50, AtkRng:1->5, ViewRng:2->5, AtkMs:1600->1000, Respawn:10->3
+524 (Evil Gate): Lv:2->1, HP:988500->500, Dmg:15-30->0-0, Def:2515->0, AR:10->0, DR:2230->1, ViewRng:5->0, MoveMs:400->0, AtkMs:1500->0, Respawn:10->0
+525 (Lion Gate): Lv:2->1, HP:988000->600, Dmg:15-30->0-0, Def:2615->0, AR:10->0, DR:2230->1, ViewRng:5->0, MoveMs:400->0, AtkMs:1500->0, Respawn:10->0
+526 (Statue): Lv:2->1, HP:987500->650, Dmg:15-30->0-0, Def:2865->0, AR:10->0, DR:2230->1, ViewRng:5->0, MoveMs:400->0, AtkMs:1500->0, Respawn:10->0
+527 (Star Gate): Lv:2->1, HP:987500->500, Dmg:15-30->0-0, Def:2865->0, AR:10->0, DR:2230->1, ViewRng:5->0, MoveMs:400->0, AtkMs:1500->0, Respawn:10->0
+528 (Rush Gate): Lv:2->1, HP:994000->600, Dmg:15-30->0-0, Def:2750->0, AR:10->0, DR:2230->1, ViewRng:5->0, MoveMs:400->0, AtkMs:1500->0, Respawn:10->0
+540 (Lugard): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+541 (Compensation Box): Dmg:0-0->10-10, AR:0->10
+542 (Golden Compensation Box): Dmg:0-0->10-10, AR:0->10
+543 (Gens Duprian): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+544 (Gens Vanert): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+545 (Christine the General Goods Merchant): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+546 (Jeweler Raul): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+547 (Market Union Member Julia): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+566 (Mercenary Guild Felicia): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+568 (Wandering Merchant Zyro): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+577 (Leina the General Goods Merchant): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+578 (Weapons Merchant Bolo): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+579 (David): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+580 (Captain Slough): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+581 (Deruvish): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+582 (Element Master Adniel): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+583 (Jin): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+584 (Sir Lesnar): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+585 (Scarecrow): Lv:0->2, HP:0->99999999, Dmg:0-0->10-10, Def:0->100, AR:0->10, DR:0->10
+604 (Jin): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+625 (Robot Knight Transformation Ring): Lv:0->10, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+626 (Mini Robot Transformation Ring): Lv:0->10, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+642 (Great Heavenly Mage Transformation Ring): Lv:0->10, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+643 (Mait): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+646 (Brown Panda Transformation Ring): Lv:0->10, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+651 (Private Store Bulletin Board): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+658 (Cursed Statue): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+659 (Captured Stone Statue (1)): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+660 (Captured Stone Statue (2)): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+661 (Captured Stone Statue (3)): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+662 (Captured Stone Statue (4)): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+663 (Captured Stone Statue (5)): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+664 (Captured Stone Statue (6)): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+665 (Captured Stone Statue (7)): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+666 (Captured Stone Statue (8)): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+667 (Captured Stone Statue (9)): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+668 (Captured Stone Statue (10)): Lv:0->2, HP:0->10, Dmg:0-0->10-10, Def:0->10, AR:0->10, DR:0->10
+
+## Shared Monsters where Season 9 suite differs from Season 6 suite
+412 (Dark Elf (Trainee Soldier)): regenTime:10->10800
+S9-only 669 | Ellin | Lv=2 HP=10 Dmg=10-10 Def=10 Respawn=0
+S9-only 670 | Uruk Devil Fairy | Lv=115 HP=68000 Dmg=730-760 Def=630 Respawn=10
+S9-only 671 | Uruk Elemental Beast | Lv=117 HP=75000 Dmg=770-800 Def=650 Respawn=10
+S9-only 672 | Uruk Elemental Knight | Lv=119 HP=80000 Dmg=810-840 Def=680 Respawn=10
+S9-only 673 | Lord Silvester | Lv=180 HP=8000000 Dmg=5000-6000 Def=1400 Respawn=86400
+S9-only 678 | Lord Devil Fairy | Lv=120 HP=2000000 Dmg=2900-3500 Def=1000 Respawn=10
+S9-only 679 | Lord Elemental Beast | Lv=123 HP=1500000 Dmg=1800-2200 Def=800 Respawn=10
+S9-only 680 | Lord Elemental Knight | Lv=127 HP=300000 Dmg=1200-1700 Def=500 Respawn=10
+S9-only 681 | Evomon | Lv=1 HP=500 Dmg=30-50 Def=20 Respawn=300
+S9-only 682 | Monica | Lv=2 HP=10 Dmg=10-10 Def=10 Respawn=0
+S9-only 683 | Marce | Lv=2 HP=10 Dmg=10-10 Def=10 Respawn=0
+S9-only 684 | Silvia | Lv=2 HP=10 Dmg=10-10 Def=10 Respawn=0
+S9-only 685 | Izabel | Lv=2 HP=50 Dmg=15-30 Def=70 Respawn=10
+S9-only 686 | Sophia (repair) | Lv=20 HP=1000 Dmg=15-30 Def=70 Respawn=10
+S9-only 687 | Bolo (repair) | Lv=2 HP=10 Dmg=10-10 Def=10 Respawn=0
+S9-only 688 | Christine | Lv=2 HP=10 Dmg=10-10 Def=10 Respawn=0
+S9-only 689 | Flame Trap | Lv=80 HP=1000 Dmg=5000-6000 Def=1400 Respawn=3
+S9-only 690 | Special Evomon | Lv=1 HP=24000000 Dmg=2120-5000 Def=1553 Respawn=300
+S9-only 691 | New Year Horse (Green) | Lv=100 HP=10000 Dmg=0-0 Def=100 Respawn=120
+S9-only 692 | New Year Horse (Yellow) | Lv=100 HP=10000 Dmg=0-0 Def=100 Respawn=120
+S9-only 693 | New Year Horse (Brown) | Lv=100 HP=10000 Dmg=0-0 Def=100 Respawn=120
+S9-only 694 | New Year Horse (Blue) | Lv=100 HP=10000 Dmg=0-0 Def=100 Respawn=120
+S9-only 704 | Evolution Succeeded | Lv=220 HP=10 Dmg=10-10 Def=10 Respawn=0
+S9-only 705 | Evolution Failed | Lv=220 HP=10 Dmg=10-10 Def=10 Respawn=0
+S9-only 706 | Darkness Transformation Ring | Lv=0 HP=10 Dmg=10-10 Def=10 Respawn=0
+S9-only 726 | Green Goat | Lv=110 HP=10 Dmg=10-10 Def=10 Respawn=0
+S9-only 727 | White Goat | Lv=110 HP=10 Dmg=10-10 Def=10 Respawn=0
+S9-only 728 | Purple Goat | Lv=110 HP=10 Dmg=10-10 Def=10 Respawn=0
+S9-only 729 | Red Goat | Lv=110 HP=10 Dmg=10-10 Def=10 Respawn=0

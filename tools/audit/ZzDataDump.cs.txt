@@ -9,6 +9,7 @@
 namespace HNMO.Persistence.Initialization.Tests;
 
 using System.Globalization;
+using System.IO;
 using System.Text;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Configuration.Items;
@@ -158,7 +159,7 @@ internal class ZzDataDump
     {
         var rows = new List<string>
         {
-            "Number,Designation,Kind,NpcWindow,AttackSkill,MoveRange,AttackRange,ViewRange,MoveDelayMs,AttackDelayMs,RespawnDelaySec,MaxDrops,Level,MaxHp,MinDmg,MaxDmg,Defense,AttackRatePvm,DefenseRatePvm,IceRes,PoisonRes,LightRes,FireRes,WaterRes",
+            "Number,Designation,Kind,NpcWindow,AttackSkill,MoveRange,AttackRange,ViewRange,MoveDelayMs,AttackDelayMs,RespawnDelaySec,MaxDrops,Level,MaxHp,MinDmg,MaxDmg,Defense,AttackRatePvm,DefenseRatePvm,IceRes,PoisonRes,LightRes,FireRes,WaterRes,WindRes,EarthRes",
         };
         foreach (var m in config.Monsters.OrderBy(x => x.Number))
         {
@@ -177,17 +178,19 @@ internal class ZzDataDump
                 (int)m.RespawnDelay.TotalSeconds,
                 m.NumberOfMaximumItemDrops,
                 Inv(Attr("Level")),
-                Inv(Attr("Max Health")),
-                Inv(Attr("Minimum Phys. Base Dmg")),
-                Inv(Attr("Maximum Phys. Base Dmg")),
-                Inv(Attr("Defense Base")),
-                Inv(Attr("Attack Rate PvM")),
-                Inv(Attr("Defense Rate PvM")),
+                            Inv(Attr("Maximum Health")),
+                            Inv(Attr("Minimum Physical Base Damage")),
+                            Inv(Attr("Maximum Physical Base Damage")),
+                            Inv(Attr("Base Defense")),
+                            Inv(Attr("Attack Rate (PvM)")),
+                            Inv(Attr("Defense Rate (PvM)")),
                 Inv(Attr("Ice Resistance")),
                 Inv(Attr("Poison Resistance")),
                 Inv(Attr("Lightning Resistance")),
                 Inv(Attr("Fire Resistance")),
-                Inv(Attr("Water Resistance"))));
+                Inv(Attr("Water Resistance")),
+                Inv(Attr("Wind Resistance")),
+                Inv(Attr("Earth Resistance"))));
         }
 
         File.WriteAllLines(path, rows, Encoding.UTF8);
