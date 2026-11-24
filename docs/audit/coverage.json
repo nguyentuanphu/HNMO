@@ -1,5 +1,5 @@
 {
-  "generatedAt": "4efad233",
+  "generatedAt": "9bd23b34",
   "maxLines": 6000,
   "units": [
     {
@@ -1012,11 +1012,16 @@
       ],
       "files": 3,
       "lines": 116,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "9bd23b34",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "UnlockVaultAction.cs:22-38",
+        "SetVaultPinAction.cs:22-36",
+        "RemoveVaultPinAction.cs:19-26",
+        "docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Vault.md"
+      ],
+      "evidence": "3f/116L: Routes Vault PIN through AccountSafetyPlugIn (hashed PIN + retry limits) & BCrypt account password verification (differs from plain warehouse code).",
       "prs": ""
     },
     {
