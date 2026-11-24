@@ -1,5 +1,5 @@
 {
-  "generatedAt": "26f0cd02",
+  "generatedAt": "d51a4088",
   "maxLines": 6000,
   "units": [
     {
@@ -1732,11 +1732,11 @@
       ],
       "files": 16,
       "lines": 1664,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "d51a4088",
+      "checkedOn": "2026-11-24",
+      "references": "docs/audit/references/invasions-and-s6-events-s6-s9.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-InvasionEvents.md",
       "prs": ""
     },
     {
@@ -2017,11 +2017,11 @@
       ],
       "files": 12,
       "lines": 1522,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "d51a4088",
+      "checkedOn": "2026-11-24",
+      "references": "docs/audit/references/invasions-and-s6-events-s6-s9.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-S6Events.md",
       "prs": ""
     },
     {
