@@ -1,5 +1,5 @@
 {
-  "generatedAt": "bdbc1034",
+  "generatedAt": "4efad233",
   "maxLines": 6000,
   "units": [
     {
@@ -992,11 +992,16 @@
       ],
       "files": 6,
       "lines": 681,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "4efad233",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "TradeButtonAction.cs:84-94,152,162,232-258",
+        "TradeMoneyAction.cs:32-40",
+        "TradeRequestAction.cs:39,58",
+        "docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Trade.md"
+      ],
+      "evidence": "6f/681L: Inv max zen cap, IsTradable, free space, /requests off match S6/S9; HNMO adds AccountSafety locks, 2nd password check & Escrow cooldown.",
       "prs": "#215, #216"
     },
     {
