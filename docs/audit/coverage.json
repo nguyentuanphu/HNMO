@@ -1,5 +1,5 @@
 {
-  "generatedAt": "9321d2af",
+  "generatedAt": "8b3240ce",
   "maxLines": 6000,
   "units": [
     {
@@ -180,16 +180,12 @@
       ],
       "files": 21,
       "lines": 5948,
-      "status": "Changed since check",
-      "checkedAt": "e977aa40",
-      "checkedOn": "2026-11-21",
+      "status": "Checked",
+      "checkedAt": "8b3240ce",
+      "checkedOn": "2026-11-24",
       "references": "Season 6/9 server suites; docs/audit/findings/owner-answers-monsters-2026-11-21.md",
-      "evidence": "ExpSplitByDamageAndDropTest, ExperienceRateSplitTest",
-      "prs": "",
-      "changedFiles": [
-        "server/src/GameLogic/Player.cs",
-        "server/src/GameLogic/PlayerExperience.cs"
-      ]
+      "evidence": "All 21 files read (5948 lines): docs/audit/findings/unit-server-src-GameLogic-files-4.md; ref: docs/audit/references/skill-delays-and-player-lifecycle.md",
+      "prs": ""
     },
     {
       "id": "server/src/GameLogic (files 5)",
