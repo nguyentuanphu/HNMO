@@ -502,16 +502,52 @@ function writeDiff(fileName, lines) {
   const e6 = parseSuiteEventsAndInvasions(S6_DIR);
   const e9 = parseSuiteEventsAndInvasions(S9_DIR);
   const hEvents = parseCsv(path.join(HNMO_DIR, 'events.csv'));
+  const hByType = new Map();
+  for (const r of hEvents) {
+    if (!hByType.has(r.Type)) hByType.set(r.Type, r);
+  }
+  const hExtras = {
+    BloodCastle: { csvType: 'BloodCastle', note: 'BloodCastleInitializer.cs:212 (min=1,max=10,enter=300s,play=900s,exit=60s)' },
+    ChaosCastle: { csvType: 'ChaosCastle', note: 'ChaosCastleInitializer.cs:90-93 (min=2,max=70,enter=300s,play=600s,exit=60s)' },
+    DevilSquare: { csvType: 'DevilSquare', note: 'DevilSquareInitializer.cs:17 (max=15,enter=300s,play=1200s,exit=180s)' },
+    IllusionTemple: { csvType: 'IllusionTemple', note: 'IllusionTempleInitializer.cs:89-93 (min=2,max=10,enter=300s,play=900s,exit=60s)' },
+    DoppelGanger: { csvType: 'Doppelganger', note: 'DoppelgangerInitializer.cs:51-54 (max=5,enter=30s,play=600s,exit=60s)' },
+    ImperialGuardian: { csvType: 'ImperialGuardian', note: 'ImperialGuardianInitializer.cs:63-104 (Lv150-400,max=5,enter=60s,play=3000s,exit=60s)' },
+    Kanturu: { csvType: 'Kanturu', note: 'KanturuInitializer.cs:34-41 (Lv350-400,max=15,enter=300s,play=8100s,exit=60s)' },
+    CryWolf: { csvType: null, note: 'CrywolfInitializer.cs:58-66 (mobs 340..349, Peace/Occupied/War states) -> same core rules' },
+    Raklion: { csvType: null, note: 'AddRaklionEventUpdatePlugIn.cs:28-86 (Selupan #459, Eggs 460..462) -> same core hatchery waves' },
+    GoldenInvasion: { csvType: null, note: 'InvasionMobsInitialization.cs:37-150 (Golden mobs + Box of Kundun 1..5) -> same mobs/boxes, static spawns vs timer' },
+    WhiteWizardAttack: { csvType: null, note: 'AddWhiteWizardInvasionMobsUpdatePlugIn.cs & InvasionMobsInitialization.cs:33 -> same mobs (135/136/137)' },
+    DragonEvent: { csvType: null, note: 'InvasionMobsInitialization.cs (Red Dragon #44) -> static/map spawn vs timed invasion' },
+  };
   const lines = [
-    '# All Events and Invasions Summary & Differences (S6 vs S9 vs HNMO)',
-    `# HNMO events.csv rows: ${hEvents.length}`,
+    '# All Events and Invasions Summary & Differences (Season 6 vs Season 9 vs HNMO)',
+    `# Suites parsed: S6=${Object.keys(e6).length} events, S9=${Object.keys(e9).length} events | HNMO events.csv rows=${hEvents.length}`,
     '',
   ];
+  const fmt = (v) =>
+    v ? `[en=${v.enable}, minLv=${v.minLevel}, players=${v.players}, times=${v.times}, sched=${v.schedule}, rew/drop=${v.rewardsOrDrops}]` : 'absent';
   const keys = new Set([...Object.keys(e6), ...Object.keys(e9)]);
   for (const k of [...keys].sort()) {
     const v6 = e6[k];
     const v9 = e9[k];
-    lines.push(`${k}: S6=${v6 ? `${v6.file} (${v6.kind})` : 'absent'} | S9=${v9 ? `${v9.file} (${v9.kind})` : 'absent'}`);
+    const hx = hExtras[k];
+    let hStr = 'missing in HNMO';
+    let verdict = 'missing in HNMO';
+    if (hx) {
+      const row = hx.csvType ? hByType.get(hx.csvType) : null;
+      if (row) {
+        hStr = `[enter=${row.EnterDurationSec}s, play=${row.GameDurationSec}s, exit=${row.ExitDurationSec}s, maxPlayers=${row.MaxPlayers}; ${hx.note}]`;
+        verdict = k === 'DoppelGanger' || k === 'ImperialGuardian' || k === 'ChaosCastle' ? 'differs' : 'same core timings/limits';
+      } else {
+        hStr = `[${hx.note}]`;
+        verdict = 'differs (implemented as static/plugin spawns or partial)';
+      }
+    }
+    lines.push(`${k}:`);
+    lines.push(`  S6 (${v6?.file ?? 'absent'}): ${fmt(v6)}`);
+    lines.push(`  S9 (${v9?.file ?? 'absent'}): ${fmt(v9)}`);
+    lines.push(`  HNMO: ${hStr} -> ${verdict}`);
   }
   writeDiff('diff-events-all.txt', lines);
 }

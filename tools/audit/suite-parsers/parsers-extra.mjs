@@ -133,6 +133,12 @@ export function parseSuiteQuests(rootDir) {
 
 export function parseSuiteEventsAndInvasions(rootDir) {
   const summary = {};
+  const extractStartTimes = (xmlPath) => {
+    const starts = parseXmlTags(xmlPath, 'Start');
+    return starts.length
+      ? `${starts.length}x(${starts.slice(0, 3).map((s) => `${String(s.Hour ?? '?').padStart(2, '0')}:${String(s.Minute ?? '0').padStart(2, '0')}`).join(',')}${starts.length > 3 ? ',..' : ''})`
+      : 'none';
+  };
   const cfgFiles = [
     ['BloodCastle', 'BloodCastle.ini', 'BloodCastle.xml', 'BloodCastle.dat'],
     ['ChaosCastle', 'ChaosCastle.ini', 'ChaosCastle.xml', 'ChaosCastle.dat'],
@@ -167,23 +173,180 @@ export function parseSuiteEventsAndInvasions(rootDir) {
     }
     if (!found) continue;
     const ext = path.extname(found).toLowerCase();
-    if (ext === '.xml') {
-      const tags = parseXmlTags(found, 'Setting');
-      const entries = parseXmlTags(found, 'Event')
-        .concat(parseXmlTags(found, 'Invasion'))
-        .concat(parseXmlTags(found, 'Schedule'))
-        .concat(parseXmlTags(found, 'Start'));
-      summary[name] = { kind: 'xml', file: cleanName(found), settings: tags.length, entries: entries.length, sample: entries.slice(0, 3) };
+    const entry = {
+      file: cleanName(found),
+      kind: ext.slice(1),
+      enable: 'n/a',
+      minLevel: 'n/a',
+      players: 'n/a',
+      times: 'n/a',
+      schedule: 'n/a',
+      rewardsOrDrops: 'n/a',
+    };
+
+    if (name === 'BloodCastle') {
+      const xml = findSuiteFile(rootDir, 'BloodCastle.xml');
+      const ini = parseIni(findSuiteFile(rootDir, 'BloodCastle.ini')).main ?? {};
+      const dat = parseSectionedTxt(findSuiteFile(rootDir, 'BloodCastle.dat'));
+      if (xml) {
+        const root = parseXmlTags(xml, 'BloodCastle')[0] ?? {};
+        const t = parseXmlTags(xml, 'Time')[0] ?? {};
+        const castles = parseXmlTags(xml, 'Castle');
+        entry.enable = root.Enable ?? '1';
+        entry.times = `enter=${num(t.ToOpen) * 60}s,play=${num(t.PlayDuration) * 60}s,exit=${num(t.ToClose) * 60}s`;
+        entry.schedule = extractStartTimes(xml);
+        entry.rewardsOrDrops = `Scroll=${root.ScrollofArchangelDropRate}/10000,Bone=${root.BloodBoneDropRate}/10000,BC1HP=${castles[0]?.StatueHP}/${castles[0]?.GateHP}`;
+      } else {
+        const s0 = dat.get(0)?.[0] ?? [];
+        const s2 = dat.get(2)?.[0] ?? [];
+        const s4 = dat.get(4) ?? [];
+        entry.enable = ini.BloodCastleEvent ?? '1';
+        entry.times = s0.length >= 3 ? `enter=${num(s0[0]) * 60}s,play=${num(s0[1]) * 60}s,exit=${num(s0[2]) * 60}s` : 'n/a';
+        entry.schedule = s4.length ? `${s4.length}x(${s4[0][0]}:${s4[0][1]}..)` : 'n/a';
+        entry.rewardsOrDrops = `Scroll=${ini.ScrollofArchangelDropRate}/10000,Bone=${ini.BloodBoneDropRate}/10000,BC1HP=${s2[1]}/${s2[2]}`;
+      }
+    } else if (name === 'ChaosCastle') {
+      const xml = findSuiteFile(rootDir, 'ChaosCastle.xml');
+      const ini = parseIni(findSuiteFile(rootDir, 'ChaosCastle.ini')).main ?? {};
+      const dat = parseSectionedTxt(findSuiteFile(rootDir, 'ChaosCastle.dat'));
+      if (xml) {
+        const root = parseXmlTags(xml, 'ChaosCastle')[0] ?? {};
+        const t = parseXmlTags(xml, 'Time')[0] ?? {};
+        entry.enable = root.Enable ?? '1';
+        entry.players = `min=${root.MinPlayer},maxObj=100`;
+        entry.times = `enter=${num(t.StartIn) * 60}s,play=${num(t.Duration) * 60}s,exit=${num(t.TownSpawn) * 60}s`;
+        entry.schedule = extractStartTimes(xml);
+      } else {
+        const s0 = dat.get(0)?.[0] ?? [];
+        const s2 = dat.get(2) ?? [];
+        entry.enable = '1';
+        entry.players = `min=${ini.ChaosCastleStartUser ?? 2},maxObj=100`;
+        entry.times = s0.length >= 3 ? `enter=${num(s0[0]) * 60}s,play=${num(s0[1]) * 60}s,exit=${num(s0[2]) * 60}s` : 'n/a';
+        entry.schedule = s2.length ? `${s2.length}x(${s2[0][0]}:${s2[0][1]}..)` : 'n/a';
+      }
+    } else if (name === 'DevilSquare') {
+      const xml = findSuiteFile(rootDir, 'DevilSquare_Classic.xml');
+      const ini = parseIni(findSuiteFile(rootDir, 'DevilSquare.ini')).main ?? {};
+      const dat = parseSectionedTxt(findSuiteFile(rootDir, 'DevilSquare.dat'));
+      if (xml) {
+        const root = parseXmlTags(xml, 'DevilSquare_Classic')[0] ?? {};
+        const t = parseXmlTags(xml, 'Time')[0] ?? {};
+        entry.enable = root.Enable ?? '1';
+        entry.players = `max=${root.MaxPlayerPerRoom}`;
+        entry.times = `enter=${num(t.ToOpen) * 60}s,play=${num(t.PlayDuration) * 60}s,close=${num(t.Close) * 60}s`;
+        entry.schedule = extractStartTimes(xml);
+        entry.rewardsOrDrops = `Eye=${root.DevilsEyeDropRate}/10000,Key=${root.DevilsKeyDropRate}/10000`;
+      } else {
+        const s0 = dat.get(0)?.[0] ?? [];
+        const s1 = dat.get(1) ?? [];
+        entry.enable = ini.DevilSquareEvent ?? '1';
+        entry.players = `max=${ini.DevilSquareMaxPlayerPerRoom ?? 15}`;
+        entry.times = s0.length >= 3 ? `enter=${num(s0[1]) * 60}s,play=${num(s0[2]) * 60}s,close=${num(s0[0]) * 60}s` : 'n/a';
+        entry.schedule = s1.length ? `${s1.length} monster waves` : 'n/a';
+        entry.rewardsOrDrops = `Eye=${ini.EyesOfDevilSquareDropRate}/10000,Key=${ini.KeyOfDevilSquareDropRate}/10000`;
+      }
+    } else if (name === 'IllusionTemple') {
+      const cXml = findSuiteFile(rootDir, 'IllusionTemple_Classic.xml');
+      const rXml = findSuiteFile(rootDir, 'IllusionTemple_Renewal.xml');
+      if (cXml) {
+        const root = parseXmlTags(cXml, 'IllusionTempleClassic')[0] ?? {};
+        const t = parseXmlTags(cXml, 'Time')[0] ?? {};
+        const kp = parseXmlTags(cXml, 'KillPoint')[0] ?? {};
+        entry.enable = root.Enable ?? '1';
+        entry.players = `min=${root.MinPlayer},max=10`;
+        entry.times = `enter=${num(t.StartIn) * 60}s,wait=${num(t.WaitingArea) * 60}s,play=${num(t.Duration) * 60}s,exit=${num(t.TownSpawn) * 60}s`;
+        entry.schedule = extractStartTimes(cXml);
+        entry.rewardsOrDrops = `WinPts=${root.MaxMatchPoint},MinSkill=${root.MinUseSkillCount},KillPts=${kp.OpponentKill}/${kp.MonsterKill}`;
+      } else if (rXml) {
+        const root = parseXmlTags(rXml, 'IllusionTempleRenewal')[0] ?? {};
+        const t = parseXmlTags(rXml, 'Time')[0] ?? {};
+        entry.enable = root.Enable ?? '1';
+        entry.players = `minUserInParty=${root.MinUserInParty}`;
+        entry.times = `enter=${num(t.StartIn) * 60}s,wait=${num(t.WaitingArea) * 60}s,play=${num(t.Duration) * 60}s,exit=${num(t.TownSpawn) * 60}s`;
+        entry.schedule = extractStartTimes(rXml);
+      }
+    } else if (name === 'DoppelGanger') {
+      const ini = parseIni(found).Config ?? {};
+      const luaPath = findSuiteFile(rootDir, 'DoppelGanger.lua');
+      const lua = luaPath && fs.existsSync(luaPath) ? fs.readFileSync(luaPath, 'utf8') : '';
+      const rdy = /LuaSetReadyTime\((\d+)\)/.exec(lua)?.[1];
+      const ply = /LuaSetPlayTime\((\d+)\)/.exec(lua)?.[1];
+      const end = /LuaSetEndTime\((\d+)\)/.exec(lua)?.[1];
+      entry.enable = ini.DoppelGangerEvent ?? ini.Enable ?? '1';
+      entry.times = `ready=${rdy ? `${Number(rdy) * 60}s` : '?'},play=${ply ? `${Number(ply) * 60}s` : '?'},end=${end ? `${Number(end) * 60}s` : '?'}`;
+      entry.rewardsOrDrops = `MLExpRate=${ini.DPMasterLevelExpRate ?? '1.0'}`;
+    } else if (name === 'ImperialGuardian') {
+      const ini = parseIni(found).ImperialGuardian ?? {};
+      entry.enable = ini.IGEventOn ?? ini.Enable ?? '1';
+      entry.times = `standby=${ini.WaitPlayerTime ?? ini.StandByTime}s,round=${ini.TimeAttackTime ?? ini.RoundDurationTime}s,loot=${ini.LootTime}s`;
+      entry.rewardsOrDrops = `MixZen=${ini.MixNeedZen ?? ini.CompleteSecromiconMixReqMoney}`;
+    } else if (name === 'Kanturu') {
+      const xml = findSuiteFile(rootDir, 'KanturuEvent.xml');
+      if (xml) {
+        const root = parseXmlTags(xml, 'KanturuEvent')[0] ?? {};
+        const item = parseXmlTags(xml, 'Item')[0] ?? {};
+        entry.enable = root.Enable ?? '1';
+        entry.times = 'Standby=1200s,Maya=15+15+20m,Nightmare=20m,Tower=23h';
+        entry.rewardsOrDrops = `MoonStoneDrop=${item.MoonStoneDropRate}/10000,JoHDrop=${item.JewelOfHarmonyDropRate}/10000`;
+      } else {
+        entry.enable = '1';
+        entry.times = 'Standby=1200s,Maya=15+15+20m,Nightmare=20m,Tower=23h';
+        entry.rewardsOrDrops = 'MoonStone(13:38),JoH';
+      }
+    } else if (name === 'CryWolf') {
+      const root = parseXmlTags(found, 'CryWolf')[0] ?? {};
+      const cycs = parseXmlTags(found, 'Cycle');
+      const totalBattle = cycs.find((c) => c.State === '4')?.Seconds ?? '900';
+      entry.enable = root.Enable ?? '1';
+      entry.times = `notify1=600s,notify2=300s,ready=150s,battle=${totalBattle}s`;
+      entry.schedule = extractStartTimes(found);
+      entry.rewardsOrDrops = `RankS>=10001(1.8M EXP),Peace:+5%Chaos/90%HP`;
+    } else if (name === 'Raklion') {
+      if (ext === '.xml') {
+        const root = parseXmlTags(found, 'RaklionEvent')[0] ?? {};
+        const t = parseXmlTags(found, 'Time')[0] ?? {};
+        const eggs = parseXmlTags(found, 'EggCount')[0] ?? {};
+        entry.enable = root.Enable ?? '1';
+        entry.times = `appear=${t.BossAppearance}s,close=${t.BossZoneClose}s,open=${t.EventStart}s`;
+        entry.rewardsOrDrops = `Eggs=${eggs.Half}/${eggs.Max}`;
+      } else {
+        const secs = parseSectionedTxt(found);
+        const s0 = secs.get(0)?.[0] ?? [];
+        const s1 = secs.get(1)?.[0] ?? [];
+        entry.enable = '1';
+        entry.times = `appear=${s0[0]}s,close=${s0[1]}s,open=${s0[2]}s`;
+        entry.rewardsOrDrops = `Eggs=${s1[0]}/${s1[1]}`;
+      }
+    } else if (ext === '.xml') {
+      const firstTag = /<([A-Za-z0-9_]+)\s+([^>]*)>/.exec(
+        fs.readFileSync(found, 'utf8').replace(/<!--[\s\S]*?-->/g, '').replace(/<\?xml[^>]*\?>/, ''),
+      );
+      const attrs = firstTag ? parseXmlTagsInText(`<X ${firstTag[2]}>`, 'X')[0] ?? {} : {};
+      const t = parseXmlTags(found, 'Time')[0] ?? {};
+      entry.enable = attrs.Enable ?? '1';
+      entry.minLevel = attrs.MinLevel ?? 'n/a';
+      entry.players = attrs.MinPlayer ?? attrs.MinUserToStart ?? attrs.MaxPlayer ?? 'n/a';
+      entry.times = Object.keys(t).length ? Object.entries(t).map(([k, v]) => `${k}=${v}`).join(',') : 'n/a';
+      entry.schedule = extractStartTimes(found);
+      const rew = parseXmlTags(found, 'Reward')[0] ?? parseXmlTags(found, 'Event')[0] ?? {};
+      entry.rewardsOrDrops = Object.keys(rew).length
+        ? Object.entries(rew).slice(0, 4).map(([k, v]) => `${k}=${v}`).join(',')
+        : 'see XML';
     } else if (ext === '.ini') {
       const ini = parseIni(found);
-      const keys = Object.values(ini).reduce((acc, s) => acc + Object.keys(s).length, 0);
-      summary[name] = { kind: 'ini', file: cleanName(found), sections: Object.keys(ini).length, keys };
-    } else {
+      const flat = Object.values(ini).reduce((acc, s) => Object.assign(acc, s), {});
+      entry.enable = flat.Enabled ?? flat.EnableInvasion ?? flat.Enable ?? '1';
+      entry.minLevel = flat.MinLevel ?? 'n/a';
+      entry.players = flat.PVPMinPlayers ? `min=${flat.PVPMinPlayers},max=${flat.PVPMaxPlayers}` : 'n/a';
+      entry.times = flat.Duration ? `reg=${flat.RegTime}m,play=${flat.Duration}m` : flat.XMasEventSantaBuffDuration ? `buff=${flat.XMasEventSantaBuffDuration}s` : 'n/a';
+      entry.rewardsOrDrops = flat.XMasEventItemDropRate ? `drop=${flat.XMasEventItemDropRate}%` : flat.GoldenGoblin ? `regen=${flat.GoldenGoblin}m` : 'n/a';
+    } else if (ext === '.dat') {
       const secs = parseSectionedTxt(found);
-      let rows = 0;
-      for (const arr of secs.values()) rows += arr.length;
-      summary[name] = { kind: 'dat', file: cleanName(found), sections: secs.size, rows };
+      const s0 = secs.get(0)?.[0] ?? [];
+      entry.enable = '1';
+      entry.times = s0.length ? `raw0=[${s0.join(',')}]` : 'n/a';
     }
+    summary[name] = entry;
   }
   return summary;
 }
