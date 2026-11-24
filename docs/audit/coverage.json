@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2d33e254",
+  "generatedAt": "4e6f9c9d",
   "maxLines": 6000,
   "units": [
     {
@@ -1317,11 +1317,13 @@
       ],
       "files": 8,
       "lines": 827,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "4e6f9c9d",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "None (custom HNMO feature)"
+      ],
+      "evidence": "All 8 BugReports files read in full. Verified daily Sydney-time quota, idempotent confirmation rewards, credential scrubbing, and Discord webhook validation. See docs/audit/findings/unit-server-src-GameLogic-PlugIns-BugReports.md.",
       "prs": ""
     },
     {
@@ -1622,11 +1624,13 @@
       ],
       "files": 9,
       "lines": 1056,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "4e6f9c9d",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "None (custom HNMO feature)"
+      ],
+      "evidence": "All 9 EventAlerts files read in full. Verified push-service allowlist, subscription caps, SentKey deduplication, and RFC 8291/8292 WebPushCrypto. See docs/audit/findings/unit-server-src-GameLogic-PlugIns-EventAlerts.md.",
       "prs": ""
     },
     {
@@ -1821,11 +1825,13 @@
       ],
       "files": 11,
       "lines": 1194,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "4e6f9c9d",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "None (custom HNMO feature)"
+      ],
+      "evidence": "All 11 LuckyNumber files read in full. Verified draw RNG, store locking, idempotent coin grants, and noted PickAsync Zen rollback & ClaimOwedAsync concurrency gaps. See docs/audit/findings/unit-server-src-GameLogic-PlugIns-LuckyNumber.md.",
       "prs": ""
     },
     {
