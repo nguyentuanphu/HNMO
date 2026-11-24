@@ -1,5 +1,5 @@
 {
-  "generatedAt": "1b3f525b",
+  "generatedAt": "a567c746",
   "maxLines": 6000,
   "units": [
     {
@@ -3049,11 +3049,14 @@
       ],
       "files": 18,
       "lines": 911,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "a567c746",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "MessageHandler/MiniGames",
+        "docs/audit/findings/unit-server-src-GameServer-MessageHandler-MiniGames.md"
+      ],
+      "evidence": "18f/911L: No game rules (pure C->S packet deserialization handlers forwarding validated inputs to GameLogic actions; no embedded gameplay constants.)",
       "prs": ""
     },
     {
