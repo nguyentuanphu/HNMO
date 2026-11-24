@@ -1,5 +1,5 @@
 {
-  "generatedAt": "4c284836",
+  "generatedAt": "1ec73532",
   "maxLines": 6000,
   "units": [
     {
@@ -650,11 +650,18 @@
       ],
       "files": 22,
       "lines": 2986,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "1ec73532",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "AttackableNpcBase.cs:25-26,404-448,530",
+        "BasicMonsterIntelligence.cs:20,251-280",
+        "GuardIntelligence.cs:41-70",
+        "GateNpc.cs:16,104",
+        "SoccerBall.cs:106",
+        "docs/audit/findings/unit-server-src-GameLogic-NPC.md"
+      ],
+      "evidence": "22f/2986L: Guard PK1+, BattleSoccer 2/3-tile kick, DS/CC no zen drop match S6/S9; 20s walk-home leash w/ full HP restore and OutlawPoints kill reduction are HNMO custom.",
       "prs": "#212, #214, #224-#228, #274"
     },
     {
