@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2308c715",
+  "generatedAt": "7cd5b52a",
   "maxLines": 6000,
   "units": [
     {
@@ -8542,11 +8542,15 @@
       ],
       "files": 10,
       "lines": 2162,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "7cd5b52a",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "MuHelperConfigWindow.cpp:36-37,51-57",
+        "MuHelperDetailWindow.cpp:40",
+        "docs/audit/findings/unit-client-src-source-UI-MuHelper.md"
+      ],
+      "evidence": "10f/2162L: Enforces MaxHuntingRange=6, MaxObtainingRange=8, mutually exclusive Timer/Condition flags & GaugeMaxLevel=10 matching Web autoPlayWindows.ts.",
       "prs": ""
     },
     {
