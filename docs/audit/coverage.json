@@ -1,5 +1,5 @@
 {
-  "generatedAt": "6d7d4985",
+  "generatedAt": "53baa75b",
   "maxLines": 6000,
   "units": [
     {
@@ -2903,11 +2903,16 @@
       ],
       "files": 28,
       "lines": 1232,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "53baa75b",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "CastleSiegeDefenseBuyHandlerPlugIn.cs:22",
+        "CastleSiegeNpcListHandlerBase.cs:15",
+        "CastleSiegeHuntZoneToggleHandlerPlugIn.cs:22",
+        "docs/audit/findings/unit-server-src-GameServer-MessageHandler-CastleSiege.md"
+      ],
+      "evidence": "28f/1232L: Enforces Senior NPC #223 identity guard across siege defense buy/repair/upgrade, hunt zone toggle & NPC list handlers.",
       "prs": ""
     },
     {
