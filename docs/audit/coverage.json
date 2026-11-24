@@ -1,5 +1,5 @@
 {
-  "generatedAt": "dc9c0128",
+  "generatedAt": "6ac501e9",
   "maxLines": 6000,
   "units": [
     {
@@ -6097,11 +6097,14 @@
       ],
       "files": 2,
       "lines": 158,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "6ac501e9",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "DataHandler/MapData",
+        "docs/audit/findings/unit-client-src-source-Data-DataHandler-MapData.md"
+      ],
+      "evidence": "2f/158L: No game rules (binary/JSON file loaders, checksum & IO helpers (no game balance rules).)",
       "prs": ""
     },
     {
