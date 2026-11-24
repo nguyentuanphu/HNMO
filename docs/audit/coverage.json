@@ -1,5 +1,5 @@
 {
-  "generatedAt": "98df33ab",
+  "generatedAt": "98e6f5a9",
   "maxLines": 6000,
   "units": [
     {
@@ -2751,11 +2751,16 @@
       ],
       "files": 24,
       "lines": 2867,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "98e6f5a9",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "GameServer/ClientAttribute.cs",
+        "GameServer/ClientVersionResolver.cs",
+        "GameServer/DefaultTcpGameServerListener.cs",
+        "docs/audit/findings/unit-server-src-GameServer-files-1.md"
+      ],
+      "evidence": "24f/2867L: No game rules (TCP game listener, client version resolver (DefaultVersion = 6.3 English in ClientVersionResolver.cs:22), network observation & server administration wiring (MaximumPlayers cap check in DefaultTcpGameServerListener.cs:234); no gameplay formulas.)",
       "prs": ""
     },
     {
