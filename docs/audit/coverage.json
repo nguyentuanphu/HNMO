@@ -1,5 +1,5 @@
 {
-  "generatedAt": "1a4c2756",
+  "generatedAt": "5d43bdbf",
   "maxLines": 6000,
   "units": [
     {
@@ -5669,11 +5669,16 @@
       ],
       "files": 5,
       "lines": 1503,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "5d43bdbf",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Globals/Defined_Global.h",
+        "Globals/InterfaceList.h",
+        "Globals/_TextureIndex.h",
+        "docs/audit/findings/unit-client-src-source-Core-Globals-files-1.md"
+      ],
+      "evidence": "5f/1503L: No game rules (client runtime infrastructure/UI/rendering module with no game rules.)",
       "prs": ""
     },
     {
