@@ -1,5 +1,5 @@
 {
-  "generatedAt": "292d6f4b",
+  "generatedAt": "cc013e4a",
   "maxLines": 6000,
   "units": [
     {
@@ -3428,11 +3428,14 @@
       ],
       "files": 21,
       "lines": 1538,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "cc013e4a",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "RemoteView/MiniGames",
+        "docs/audit/findings/unit-server-src-GameServer-RemoteView-MiniGames.md"
+      ],
+      "evidence": "21f/1538L: No game rules (pure S->C packet serializers implementing GameLogic.Views interfaces; no embedded gameplay rules.)",
       "prs": ""
     },
     {
