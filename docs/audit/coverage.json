@@ -1,5 +1,5 @@
 {
-  "generatedAt": "e8eeb6eb",
+  "generatedAt": "6df27858",
   "maxLines": 6000,
   "units": [
     {
@@ -3897,11 +3897,16 @@
       ],
       "files": 9,
       "lines": 1386,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "6df27858",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "the Season 6/9 suites' item list files",
+        "the Season 6/9 suites' monster list files",
+        "the Season 6/9 suites' warp table file",
+        "docs/audit/findings/unit-server-src-Persistence-Initialization-Version075-files-1.md"
+      ],
+      "evidence": "Read all 9 files (1386 lines) in Version075 (files 1); found Hanzo shop slot 73 collision and Mace item index bug: docs/audit/findings/unit-server-src-Persistence-Initialization-Version075-files-1.md",
       "prs": ""
     },
     {
