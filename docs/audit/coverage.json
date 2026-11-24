@@ -1,5 +1,5 @@
 {
-  "generatedAt": "dfaa854f",
+  "generatedAt": "7a90d54a",
   "maxLines": 6000,
   "units": [
     {
@@ -7109,11 +7109,14 @@
       ],
       "files": 16,
       "lines": 2477,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "7a90d54a",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "GameLogic/Monsters",
+        "docs/audit/findings/unit-client-src-source-GameLogic-Monsters.md"
+      ],
+      "evidence": "16f/2477L: No game rules (client FX/sound/buff-visuals/command-dispatch/party-pet animation & social helpers (no gameplay balance rules).)",
       "prs": ""
     },
     {
