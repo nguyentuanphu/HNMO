@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2f3132e6",
+  "generatedAt": "aec902d3",
   "maxLines": 6000,
   "units": [
     {
@@ -5444,11 +5444,16 @@
       ],
       "files": 18,
       "lines": 5889,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "aec902d3",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "AccountGuessGuard.cs:11-45",
+        "VisitorLimits.cs:9-40",
+        "AdminGateway.cs:12-21",
+        "docs/audit/findings/unit-client-web-bridge.md"
+      ],
+      "evidence": "18f/5889L: Security/rate-limit rules: AccountGuessGuard (10 failures/15m window->15m lock) & VisitorLimits (6 conns/IP, 30 new/min, 60 pkt/s, 200 burst); rest is web proxy/updater.",
       "prs": ""
     },
     {
