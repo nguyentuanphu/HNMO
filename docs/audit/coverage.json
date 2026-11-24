@@ -1,5 +1,5 @@
 {
-  "generatedAt": "da9484ad",
+  "generatedAt": "ce3607e6",
   "maxLines": 6000,
   "units": [
     {
@@ -2422,11 +2422,14 @@
       ],
       "files": 39,
       "lines": 1039,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "ce3607e6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Views/CastleSiege",
+        "docs/audit/findings/unit-server-src-GameLogic-Views-CastleSiege.md"
+      ],
+      "evidence": "39f/1039L: No game rules (pure C# view plugin interfaces and result enums).",
       "prs": ""
     },
     {
