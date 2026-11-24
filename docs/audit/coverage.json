@@ -1,5 +1,5 @@
 {
-  "generatedAt": "15c801d2",
+  "generatedAt": "ea5877d5",
   "maxLines": 6000,
   "units": [
     {
@@ -2128,11 +2128,13 @@
       ],
       "files": 19,
       "lines": 2419,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "ea5877d5",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "None (custom HNMO feature)"
+      ],
+      "evidence": "All 19 TopRaces files read in full. Verified window/DST math, tie-breaking, same-account PK exclusion, idempotent PaidReferences, and noted GrantAsync return & TopRaceStore dirty-tracking. See docs/audit/findings/unit-server-src-GameLogic-PlugIns-TopRaces.md.",
       "prs": ""
     },
     {
