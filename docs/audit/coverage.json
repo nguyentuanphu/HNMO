@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2b572098",
+  "generatedAt": "9cce05a6",
   "maxLines": 6000,
   "units": [
     {
@@ -7200,11 +7200,15 @@
       ],
       "files": 7,
       "lines": 1225,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "9cce05a6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "SkillManager.cpp:91-95,165-180",
+        "SkillHotkeyConfiguration.h:15",
+        "docs/audit/findings/unit-client-src-source-GameLogic-Skills.md"
+      ],
+      "evidence": "7f/1225L: Skill Energy formula base 20 (Knight 10) + Energy*Level*4% (Summon 3%); KeyConfigurationSize=30 bytes.",
       "prs": ""
     },
     {
