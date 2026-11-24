@@ -1,5 +1,5 @@
 {
-  "generatedAt": "6d5f4bfa",
+  "generatedAt": "09cf3c4c",
   "maxLines": 6000,
   "units": [
     {
@@ -5169,11 +5169,15 @@
       ],
       "files": 4,
       "lines": 638,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "09cf3c4c",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "packets.ts:60-80",
+        "session.ts:23-127",
+        "docs/audit/findings/unit-client-web-src-net.md"
+      ],
+      "evidence": "4f/638L: No game rules (packet binary codec generated from XML & session WebSocket client).",
       "prs": ""
     },
     {
