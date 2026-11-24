@@ -132,11 +132,12 @@ export class UltimateAutoPlayWindow {
         <span data-uap-ref="status"></span>
         <span data-uap-ref="vip" style="display:none;padding:1px 5px;border-radius:4px;background:#78350f;color:#fde68a;font-size:10px;font-weight:700">VIP</span>
       </span>
-      <span style="color:#cbd5e1"><span data-uap-ref="killsLabel"></span>: <b data-uap-ref="kills">0</b></span>
-      <span style="color:#cbd5e1">EXP/h: <b data-uap-ref="exp">0</b></span>
-      <button type="button" data-uap-hud="toggle" style="${btnStyle('#166534')}"></button>
-      <button type="button" data-uap-hud="town" style="${btnStyle('#334155')}"></button>
-      <button type="button" data-uap-hud="open" style="${btnStyle('#78350f')}"></button>
+      <span data-uap-hud-detail="1" style="color:#cbd5e1"><span data-uap-ref="killsLabel"></span>: <b data-uap-ref="kills">0</b></span>
+      <span data-uap-hud-detail="1" style="color:#cbd5e1">EXP/h: <b data-uap-ref="exp">0</b></span>
+      <button type="button" data-uap-hud="toggle" data-uap-hud-detail="1" style="${btnStyle('#166534')}"></button>
+      <button type="button" data-uap-hud="town" data-uap-hud-detail="1" style="${btnStyle('#334155')}"></button>
+      <button type="button" data-uap-hud="open" data-uap-hud-detail="1" style="${btnStyle('#78350f')}"></button>
+      <button type="button" data-uap-hud="minimize" style="${btnStyle('#1e293b')}" aria-label="Minimize Ultimate HUD">−</button>
     `;
     const dot = hud.querySelector<HTMLElement>('[data-uap-ref="dot"]')!;
     const statusHost = hud.querySelector<HTMLElement>('[data-uap-ref="status"]')!;
@@ -151,6 +152,17 @@ export class UltimateAutoPlayWindow {
     const toggleBtn = hud.querySelector<HTMLButtonElement>('[data-uap-hud="toggle"]')!;
     const townBtn = hud.querySelector<HTMLButtonElement>('[data-uap-hud="town"]')!;
     const openBtn = hud.querySelector<HTMLButtonElement>('[data-uap-hud="open"]')!;
+    const minimizeBtn = hud.querySelector<HTMLButtonElement>('[data-uap-hud="minimize"]')!;
+    let minimized = false;
+    minimizeBtn.addEventListener('click', () => {
+      minimized = !minimized;
+      hud.dataset.minimized = minimized ? 'true' : 'false';
+      minimizeBtn.textContent = minimized ? '+' : '−';
+      minimizeBtn.setAttribute('aria-label', minimized ? 'Expand Ultimate HUD' : 'Minimize Ultimate HUD');
+      for (const el of hud.querySelectorAll<HTMLElement>('[data-uap-hud-detail]')) {
+        el.style.display = minimized ? 'none' : '';
+      }
+    });
 
     toggleBtn.addEventListener('click', () => this.opts.toggleActive());
     townBtn.addEventListener('click', () => {

@@ -1,0 +1,55 @@
+// Small UI feedback items:
+// 9. Vault zen uses an in-game dialog instead of window.prompt().
+// 10. Alt toggles always-show ground item names.
+// 11. Ultimate HUD can be minimized and expanded.
+import { test, expect } from '@playwright/test';
+import { dismissOnboarding, enterWorld, expectNoPageErrors } from './helpers.js';
+
+interface UiFeedbackGame {
+  hero: { cell: { x: number; y: number } };
+  ground: { namesShown: boolean };
+  itemWindows: { askMoney(toVault: boolean): Promise<void> };
+  connection: { dispatch(bytes: Uint8Array): void };
+}
+
+test('vault zen in-game dialog, Alt ground-names toggle, and Ultimate HUD minimize', async ({ page }) => {
+  test.setTimeout(3 * 60_000);
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+
+  await enterWorld(page, 'test0');
+  await dismissOnboarding(page);
+
+  // 9. Vault zen uses .vault-zen-dialog instead of browser prompt()
+  let promptCalled = false;
+  page.on('dialog', () => { promptCalled = true; });
+  await page.evaluate(() => { void (window as unknown as { __game: UiFeedbackGame }).__game.itemWindows.askMoney(true); });
+  await expect(page.locator('.vault-zen-dialog #panel')).toBeVisible({ timeout: 30_000 });
+  expect(promptCalled).toBe(false);
+  await page.locator('.vault-zen-dialog #gcd_btn_cancel').click();
+  await expect(page.locator('.vault-zen-dialog')).toHaveCount(0);
+
+  // 10. Alt toggles always-show names (press + release keeps it on; second press toggles off)
+  await page.evaluate(async () => {
+    const { write } = await import('/js/net/packets.js' as string) as { write(g: string, n: string, v: Record<string, unknown>): Uint8Array };
+    const g = (window as unknown as { __game: UiFeedbackGame }).__game;
+    g.connection.dispatch(write('ServerToClient', 'MoneyDroppedExtended', { IsFreshDrop: true, Id: 0x2234, PositionX: g.hero.cell.x, PositionY: g.hero.cell.y, Amount: 1000 }));
+  });
+  await page.keyboard.press('Alt');
+  expect(await page.evaluate(() => (window as unknown as { __game: UiFeedbackGame }).__game.ground.namesShown)).toBe(true);
+  await page.keyboard.press('Alt');
+  expect(await page.evaluate(() => (window as unknown as { __game: UiFeedbackGame }).__game.ground.namesShown)).toBe(false);
+
+  // 11. Ultimate HUD can be minimized and expanded
+  const hud = page.locator('#hnmo-ultimate-hud');
+  await expect(hud).toBeVisible({ timeout: 30_000 });
+  const minBtn = hud.locator('[data-uap-hud="minimize"]');
+  await minBtn.click();
+  await expect(hud).toHaveAttribute('data-minimized', 'true');
+  await expect(hud.locator('[data-uap-hud="open"]')).toBeHidden();
+  await minBtn.click();
+  await expect(hud).toHaveAttribute('data-minimized', 'false');
+  await expect(hud.locator('[data-uap-hud="open"]')).toBeVisible();
+
+  await expectNoPageErrors(errors);
+});

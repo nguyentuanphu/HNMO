@@ -4,6 +4,7 @@
 .shop-grid-pane { min-width: 0; }
 .grid-and-details { display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: flex-start; }
 .shop-grid-scroll { overflow-x: auto; max-width: 100%; }
+.shop-grid-scroll ::deep .mu-item-storage, .shop-grid-scroll ::deep .mu-item { --boxSize: 56px; }
 .shop-details { flex: 1 1 240px; min-width: 220px; max-width: 420px; }
 .shop-details ::deep .lookup-field { max-width: 100%; }
 fieldset[disabled] ::deep .mu-item-selector { pointer-events: none; }

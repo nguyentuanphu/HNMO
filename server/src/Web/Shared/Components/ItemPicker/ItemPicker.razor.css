@@ -1,9 +1,9 @@
 .item-picker { min-width: 0; }
 .form-label { width: 100%; }
 .picker-scroll { height: 560px; overflow-y: auto; border: 1px solid var(--bs-border-color, #ccd1d7); border-radius: .375rem; }
-.picker-entry { display: flex; align-items: center; gap: .6rem; min-height: 76px; height: 76px; padding: .35rem .65rem; border-bottom: 1px solid var(--bs-border-color, #e1e4e8); }
+.picker-entry { display: flex; align-items: center; gap: .6rem; min-height: 84px; height: 84px; padding: .35rem .65rem; border-bottom: 1px solid var(--bs-border-color, #e1e4e8); }
 .picker-add { display: flex; align-items: center; gap: .7rem; min-width: 0; width: 100%; background: transparent; border: 0; text-align: left; color: inherit; padding: .1rem; }
-.picker-add img { width: 42px; height: 54px; object-fit: contain; }
+.picker-add img { width: 64px; height: 64px; object-fit: contain; }
 .picker-add span { min-width: 0; }
 .picker-add strong, .picker-add small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .picker-add small { font-size: .75rem; opacity: .75; }
