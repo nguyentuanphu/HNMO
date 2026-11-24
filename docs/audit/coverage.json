@@ -1,5 +1,5 @@
 {
-  "generatedAt": "f9d93cc7",
+  "generatedAt": "1b5c2b92",
   "maxLines": 6000,
   "units": [
     {
@@ -6004,11 +6004,16 @@
       ],
       "files": 14,
       "lines": 1622,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "1b5c2b92",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "DataHandler/ChangeTracker.h",
+        "DataHandler/CommonDataSaver.cpp",
+        "DataHandler/CommonDataSaver.h",
+        "docs/audit/findings/unit-client-src-source-Data-DataHandler-files-1.md"
+      ],
+      "evidence": "14f/1622L: No game rules (binary/JSON file loaders, checksum & IO helpers (no game balance rules).)",
       "prs": ""
     },
     {
