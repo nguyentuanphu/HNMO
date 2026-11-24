@@ -1,5 +1,5 @@
 {
-  "generatedAt": "d437cd07",
+  "generatedAt": "9d97109f",
   "maxLines": 6000,
   "units": [
     {
@@ -1688,11 +1688,13 @@
       ],
       "files": 14,
       "lines": 1243,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "9d97109f",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "None (custom HNMO feature)"
+      ],
+      "evidence": "All 14 GiftBox files read in full. Verified idempotent send fingerprinting, detached scratch bag planning, and atomic CashShopCoinGrant replay proof with disconnect-on-uncertain-save. See docs/audit/findings/unit-server-src-GameLogic-PlugIns-GiftBox.md.",
       "prs": ""
     },
     {
