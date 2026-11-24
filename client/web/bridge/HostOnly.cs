@@ -1,4 +1,5 @@
 using System.Net;
+using Microsoft.AspNetCore.Http;
 
 /// <summary>
 /// Decides whether a request really comes from the person sitting at the host computer. The control page,
@@ -56,6 +57,19 @@ internal static class HostOnly
         }
 
         return true;
+    }
+
+    // The same-site iframe makes its own same-origin requests to the launcher. A remote gateway
+    // or another local web page cannot host this frame.
+    public static bool IsAdminFrame(HttpContext context, Uri adminUrl)
+    {
+        return IsHostRequest(context)
+            && context.Request.Headers["Sec-Fetch-Dest"] == "iframe"
+            && Uri.TryCreate(context.Request.Headers.Referer, UriKind.Absolute, out var parent)
+            && parent.IsLoopback
+            && IsLocalName(adminUrl.Host)
+            && parent.Scheme == adminUrl.Scheme
+            && parent.Port == adminUrl.Port;
     }
 
     private static bool IsLocalName(string host)

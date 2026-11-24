@@ -455,6 +455,18 @@ app.Use(async (context, next) =>
 
 // The web client and its libraries, then the game's data files.
 app.UseDefaultFiles(new DefaultFilesOptions { FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(webRoot) });
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path.Value is { } path
+        && (path.Equals("/control.html", StringComparison.OrdinalIgnoreCase)
+            || path.Equals("/control-recovery.html", StringComparison.OrdinalIgnoreCase)))
+    {
+        context.Response.StatusCode = StatusCodes.Status404NotFound;
+        return;
+    }
+
+    await next();
+});
 app.UseStaticFiles(new StaticFileOptions { FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(webRoot) });
 if (Directory.Exists(Path.Combine(vendorRoot, "three")))
 {

@@ -1,0 +1,35 @@
+@using HNMO.GameLogic.PlugIns
+@using HNMO.Persistence
+@using Microsoft.Extensions.DependencyInjection
+@using HNMO.Web.AdminPanel.API
+@inject IServiceProvider Services
+
+@if (this._brand is { } brand)
+{
+    <span class="d-inline-flex align-items-center gap-2 px-2 py-1 rounded"
+          style="background-color:@(brand.PanelColor ?? brand.BackgroundColor);color:@brand.TextColor;outline:1px solid @brand.AccentColor">
+        @if (brand.LogoUrl is { } logo)
+        {
+            <img src="@logo" alt="" width="28" height="28" style="object-fit:contain" referrerpolicy="no-referrer" />
+        }
+        <span>@this._name</span>
+    </span>
+}
+
+@code {
+    private WebsiteBrand? _brand;
+    private string? _name;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var persistence = this.Services.GetService<IPersistenceContextProvider>();
+        if (persistence is null)
+        {
+            return;
+        }
+
+        var settings = await PlugInSettings.ReadActiveAsync<GameNameConfiguration>(persistence, typeof(GameNamePlugIn), default);
+        this._name = string.IsNullOrWhiteSpace(settings?.Name) ? GameNameConfiguration.DefaultName : settings.Name;
+        this._brand = WebsiteBrand.FromConfiguration(settings ?? new GameNameConfiguration());
+    }
+}

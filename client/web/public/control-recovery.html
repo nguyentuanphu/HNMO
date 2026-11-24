@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Launcher recovery</title>
+<style>
+  body { color-scheme: light dark; font: 1rem system-ui, sans-serif; max-width: 36rem; margin: 12vh auto; padding: 1rem; }
+  button, select { font: inherit; padding: .4rem; }
+  footer { margin-top: 2rem; font-size: .8rem; }
+</style>
+<main>
+  <select id="language" aria-label="Language">
+    <option value="en">EN</option><option value="vi">VI</option>
+    <option value="de">DE</option><option value="zh">简体中文</option>
+  </select>
+  <h1 id="heading"></h1>
+  <p id="status" role="status"></p>
+  <button id="start" type="button" disabled></button>
+  <a id="admin" hidden></a>
+  <footer>Powered by HNMO, made by HenryN</footer>
+</main>
+<script>
+const strings = {
+  en: ['Launcher recovery', 'Start services', 'Open admin panel', 'Admin is available.', 'Admin is offline.', 'Starting services…', 'Unable to contact the launcher.'],
+  vi: ['Khôi phục trình khởi chạy', 'Khởi động dịch vụ', 'Mở trang quản trị', 'Trang quản trị đã sẵn sàng.', 'Trang quản trị đang tắt.', 'Đang khởi động dịch vụ…', 'Không liên hệ được trình khởi chạy.'],
+  de: ['Startprogramm wiederherstellen', 'Dienste starten', 'Admin-Panel öffnen', 'Das Admin-Panel ist verfügbar.', 'Das Admin-Panel ist offline.', 'Dienste werden gestartet…', 'Das Startprogramm ist nicht erreichbar.'],
+  zh: ['启动器恢复', '启动服务', '打开管理面板', '管理面板已就绪。', '管理面板已离线。', '正在启动服务…', '无法联系启动器。'],
+};
+const language = document.getElementById('language');
+language.value = Object.hasOwn(strings, navigator.language.slice(0, 2)) ? navigator.language.slice(0, 2) : 'en';
+const heading = document.getElementById('heading');
+const start = document.getElementById('start');
+const status = document.getElementById('status');
+const admin = document.getElementById('admin');
+async function refresh() {
+  const [title, launch, open, online, offline, launching, unavailable] = strings[language.value];
+  document.documentElement.lang = language.value === 'zh' ? 'zh-CN' : language.value;
+  document.title = heading.textContent = title;
+  start.textContent = launch;
+  admin.textContent = open;
+  try {
+    const response = await fetch('/api/control/status', { cache: 'no-store' });
+    if (!response.ok) throw new Error();
+    const state = await response.json();
+    start.hidden = state.adminPanel;
+    start.disabled = !state.launcherEnabled || state.isLaunching;
+    admin.hidden = !state.adminPanel;
+    if (state.adminPanel) admin.href = new URL('/server-control', state.adminUrl);
+    status.textContent = state.adminPanel ? online : state.isLaunching ? launching : offline;
+  } catch {
+    status.textContent = unavailable;
+    start.disabled = true;
+    admin.hidden = true;
+  }
+}
+language.addEventListener('change', refresh);
+start.addEventListener('click', async () => {
+  start.disabled = true;
+  try {
+    const response = await fetch('/api/control/start', { method: 'POST' });
+    if (!response.ok) throw new Error();
+    status.textContent = strings[language.value][5];
+  } catch {
+    status.textContent = strings[language.value][6];
+  }
+});
+refresh();
+setInterval(refresh, 4000);
+</script>
+</html>

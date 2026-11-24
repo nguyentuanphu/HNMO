@@ -41,6 +41,20 @@ internal static class ControlEndpoints
 
         static IResult Forbidden() => Results.StatusCode(StatusCodes.Status403Forbidden);
 
+        async Task<IResult> SendControlAsync(HttpContext ctx, string fileName = "control.html")
+        {
+            var path = Path.Combine(webRoot, fileName);
+            if (!File.Exists(path))
+            {
+                return Results.NotFound();
+            }
+
+            ctx.Response.Headers.CacheControl = "no-store";
+            ctx.Response.ContentType = "text/html; charset=utf-8";
+            await ctx.Response.SendFileAsync(path, ctx.RequestAborted).ConfigureAwait(false);
+            return Results.Empty;
+        }
+
         app.MapGet("/control", async (HttpContext ctx) =>
         {
             if (!IsLoopback(ctx))
@@ -48,15 +62,21 @@ internal static class ControlEndpoints
                 return Forbidden();
             }
 
-            var path = Path.Combine(webRoot, "control.html");
-            if (!File.Exists(path))
+            ctx.Response.Headers.ContentSecurityPolicy = "frame-ancestors 'none'";
+            return await SendControlAsync(ctx, options.Enabled && File.Exists(setupMarker) ? "control-recovery.html" : "control.html").ConfigureAwait(false);
+        });
+
+        app.MapGet("/control/console", async (HttpContext ctx) =>
+        {
+            if (!Uri.TryCreate(options.AdminUrl, UriKind.Absolute, out var admin) || !HostOnly.IsAdminFrame(ctx, admin))
             {
-                return Results.NotFound("control.html not found.");
+                return Forbidden();
             }
 
-            ctx.Response.ContentType = "text/html; charset=utf-8";
-            await ctx.Response.SendFileAsync(path, ctx.RequestAborted).ConfigureAwait(false);
-            return Results.Empty;
+            var origin = admin.GetLeftPart(UriPartial.Authority);
+            var alternate = new UriBuilder(admin) { Host = admin.Host == "localhost" ? "127.0.0.1" : "localhost" };
+            ctx.Response.Headers.ContentSecurityPolicy = $"frame-ancestors {origin} {alternate.Uri.GetLeftPart(UriPartial.Authority)}";
+            return await SendControlAsync(ctx).ConfigureAwait(false);
         });
 
         app.MapGet("/api/control/status", async (HttpContext ctx) =>
@@ -132,6 +152,32 @@ internal static class ControlEndpoints
                     database = options.DatabasePort,
                 },
             });
+        });
+
+        app.MapGet("/api/control/ports", (HttpContext ctx) =>
+        {
+            if (!IsLoopback(ctx))
+            {
+                return Forbidden();
+            }
+
+            var admin = Uri.TryCreate(options.AdminUrl, UriKind.Absolute, out var address) ? address.Port : 8095;
+            var ports = new[]
+            {
+                (Service: "web", Port: options.WebPort),
+                (Service: "admin", Port: admin),
+                (Service: "game", Port: options.ConnectServerPort),
+                (Service: "database", Port: options.DatabasePort),
+            };
+            var listeners = System.Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties()
+                .GetActiveTcpListeners().Select(listener => listener.Port).ToHashSet();
+            return Results.Ok(ports.Select(port => new
+            {
+                port.Service,
+                port.Port,
+                Listening = listeners.Contains(port.Port),
+                Owner = listeners.Contains(port.Port) ? PortOwner.Describe(port.Port) : null,
+            }));
         });
 
         app.MapPost("/api/control/start", (HttpContext ctx) =>

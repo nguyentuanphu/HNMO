@@ -101,7 +101,7 @@ public sealed class MaintenanceToolsPageTests
         var cut = this._context.Render<MaintenanceTools>();
         cut.Find("#mt-help-btn").Click();
         Assert.That(cut.Find("#maintenance-tools-help").TextContent, Contains.Substring("Dry-run first"));
-        Assert.That(cut.Markup, Contains.Substring("href=\"/control\""));
+        Assert.That(cut.Markup, Contains.Substring("href=\"server-control\""));
 
         cut.Find("#mt-inactive-preview").Click();
         cut.WaitForAssertion(() => Assert.That(cut.Find("#mt-inactive-table").TextContent, Contains.Substring("staleuser")), LoadTimeout);
