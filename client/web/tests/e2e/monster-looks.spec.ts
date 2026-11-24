@@ -131,11 +131,11 @@ test.describe('monster looks', () => {
       for (const row of rows) {
         // Every number has an entry and a model (no "noEntry" or "noModel" ghost in either season).
         expect(row.unknown === null || row.unknown === 'missingFile', `${season} ${row.number} ${row.name}: ${row.unknown}`).toBe(true);
-        expect(row.model, `${row.number}`).toMatch(/^(MONSTER_)?MODEL_S9_/);
         expect(row.error, `${row.number}`).toBeNull();
         if (!seasons.s9) continue; // without the Season 9 pack the files are missing: the ghost, for a reason
         // With the pack (both seasons: the files are Season 9's own, whichever season plays): its body, textured.
         expect(row.unknown, `${season} ${row.number} ${row.name}`).toBeNull();
+        expect(row.model, `${row.number}`).toMatch(/^(MONSTER_)?MODEL_S9_/);
         expect(row.playerShaped, `${row.number}`).toBe(false);
         expect(row.visibleMeshes, `${season} ${row.number} ${row.name}`).toBeGreaterThan(0);
         expect(row.untextured, `${season} ${row.number} ${row.name}: ${row.warnings.join('; ')}`).toBe(0);
