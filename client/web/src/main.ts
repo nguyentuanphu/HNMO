@@ -757,8 +757,27 @@ function stepThumbstickWalk(): void {
 // has its name over its head (not in Chaos Castle); the pointer is looked at once a frame.
 const labelElements = new Map<Character, HTMLSpanElement>();
 let labelPointer: MouseEvent | null = null;
+let alwaysShowNames = false;
+let altPressedAlone = false;
 ui.canvas.addEventListener('pointermove', (event) => { labelPointer = event; }, { passive: true });
 ui.canvas.addEventListener('pointerleave', () => { labelPointer = null; });
+window.addEventListener('keydown', (event) => {
+  if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+  if (event.key === 'Alt' && !event.repeat && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
+    altPressedAlone = true;
+  } else if (event.key !== 'Alt') {
+    altPressedAlone = false;
+  }
+});
+window.addEventListener('keyup', (event) => {
+  if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+  if (event.key === 'Alt' && altPressedAlone) {
+    altPressedAlone = false;
+    alwaysShowNames = !alwaysShowNames;
+    event.preventDefault();
+  }
+});
+window.addEventListener('blur', () => { altPressedAlone = false; });
 
 const labelsShown = new Set<Character>();
 const speechBalloons = new Map<Character, { lines: string[]; expiresAt: number }>();
@@ -779,7 +798,8 @@ function updateLabels(): void {
   for (const [who, balloon] of speechBalloons) {
     if (balloon.expiresAt <= now) speechBalloons.delete(who);
   }
-  const pointed = labelPointer && eventOfMap(state.mapNumber ?? null) !== 'chaosCastle' ? pickCharacter(labelPointer, ['npc']) : null;
+  const inChaosCastle = eventOfMap(state.mapNumber ?? null) === 'chaosCastle';
+  const pointed = labelPointer && !inChaosCastle ? pickCharacter(labelPointer, ['npc']) : null;
   if (state.online && hero && world) {
     const rect = canvasRect();
     const candidates: Character[] = [...state.online.characters.values()];
@@ -787,7 +807,8 @@ function updateLabels(): void {
     for (const character of candidates) {
       const balloon = speechBalloons.get(character);
       // A pointed player's name box (with its Gens mark and guild line) is the Gens marks' (ui/gensWindow.ts).
-      if (!balloon && (character !== pointed || character.kind === 'player') && character.kind !== 'kalimaGate') continue; // a Kalima gate keeps its name box
+      const showByAlt = alwaysShowNames && !inChaosCastle;
+      if (!balloon && !showByAlt && (character !== pointed || character.kind === 'player') && character.kind !== 'kalimaGate') continue; // a Kalima gate keeps its name box
       const dx = character.cell.x - hero.cell.x, dy = character.cell.y - hero.cell.y;
       if (Math.hypot(dx, dy) > LABEL_RANGE_CELLS) continue;
       const point = toScene(character.position.x, character.position.y, sampleHeight(world.heights, character.position.x, character.position.y) + 220).project(camera);
