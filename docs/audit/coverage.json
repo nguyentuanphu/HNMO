@@ -1,5 +1,5 @@
 {
-  "generatedAt": "35fe28a7",
+  "generatedAt": "72489586",
   "maxLines": 6000,
   "units": [
     {
@@ -4404,11 +4404,16 @@
       ],
       "files": 10,
       "lines": 1073,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "72489586",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "InventoryConstants.cs:15-177",
+        "ItemExtensions.cs:34-38,80-83,135-143,205",
+        "GameConfigurationHelper.cs:1-100",
+        "docs/audit/findings/unit-server-src-DataModel-files-1.md"
+      ],
+      "evidence": "10f/1073L: Inventory slot offsets (12 equip, 64 inv, 128 ext, 32 store at 204, 120 vault), wing detection, Dark Raven cmd formula (petLv*15)+185, clamped stack [1..255] & ceiling durability match S6/S9.",
       "prs": ""
     },
     {
