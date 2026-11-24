@@ -1,5 +1,5 @@
 {
-  "generatedAt": "3436e785",
+  "generatedAt": "d2db3a29",
   "maxLines": 6000,
   "units": [
     {
@@ -344,11 +344,11 @@
       ],
       "files": 20,
       "lines": 1073,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "d2db3a29",
+      "checkedOn": "2026-11-24",
+      "references": "S6/S9 Cash Shop catalog & HNMO cash shop rules (docs/audit/references/item-options-380-harmony-cashshop.md)",
+      "evidence": "Read all 20 files in full; see docs/audit/findings/unit-server-src-GameLogic-CashShop.md (Duration > 0 expiring items unsupported).",
       "prs": ""
     },
     {
@@ -725,11 +725,11 @@
       ],
       "files": 1,
       "lines": 475,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "d2db3a29",
+      "checkedOn": "2026-11-24",
+      "references": "S6/S9 Cash Shop catalog & HNMO cash shop rules (docs/audit/references/item-options-380-harmony-cashshop.md)",
+      "evidence": "Read CashShopActions.cs (474 lines) in full; see docs/audit/findings/unit-server-src-GameLogic-PlayerActions-CashShop.md.",
       "prs": ""
     },
     {
