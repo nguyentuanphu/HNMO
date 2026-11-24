@@ -1,5 +1,5 @@
 {
-  "generatedAt": "3ad91882",
+  "generatedAt": "1391f523",
   "maxLines": 6000,
   "units": [
     {
@@ -3537,11 +3537,15 @@
       ],
       "files": 17,
       "lines": 1179,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "1391f523",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "CharacterClassExtensions.cs:20-28",
+        "EnumExtensions.cs:20-29",
+        "docs/audit/findings/unit-server-src-GameServer-RemoteView-Quest.md"
+      ],
+      "evidence": "17f/1179L: GetBaseClass maps evolved character classes back to root class ID for client legacy quest packet compatibility.",
       "prs": ""
     },
     {
