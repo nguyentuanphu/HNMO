@@ -1,5 +1,5 @@
 {
-  "generatedAt": "8495f4d7",
+  "generatedAt": "1ab77a4c",
   "maxLines": 6000,
   "units": [
     {
@@ -6677,11 +6677,16 @@
       ],
       "files": 6,
       "lines": 543,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "1ab77a4c",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Dotnet/PacketFunctions_CommonEnums.h",
+        "Dotnet/PacketFunctions_ConnectServer.cpp",
+        "Dotnet/PacketFunctions_ConnectServer.h",
+        "docs/audit/findings/unit-client-src-source-Dotnet-files-2.md"
+      ],
+      "evidence": "6f/543L: No game rules (native C++ <-> .NET AOT interop packet binding declarations (no game rules).)",
       "prs": ""
     },
     {
