@@ -1,5 +1,5 @@
 {
-  "generatedAt": "f4519e60",
+  "generatedAt": "ba63bf52",
   "maxLines": 6000,
   "units": [
     {
@@ -8959,11 +8959,16 @@
       ],
       "files": 8,
       "lines": 5635,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "ba63bf52",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "GameMaps/GM_Kanturu_1st.cpp",
+        "GameMaps/GM_Kanturu_1st.h",
+        "GameMaps/GM_Kanturu_2nd.cpp",
+        "docs/audit/findings/unit-client-src-source-World-GameMaps-files-5.md"
+      ],
+      "evidence": "8f/5635L: No game rules (3D map visual objects, shaders, fog, weather & terrain loaders (MapManager, GMAida, etc.; no game rules).)",
       "prs": ""
     },
     {
