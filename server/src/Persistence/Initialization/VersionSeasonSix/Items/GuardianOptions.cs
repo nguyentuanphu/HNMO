@@ -103,7 +103,7 @@ internal class GuardianOptions : InitializerBase
         definition.AddsRandomly = false;
 
         definition.PossibleOptions.Add(this.CreateOption(ItemGroups.Boots, Stats.DefenseRatePvp, 10, AggregateType.AddRaw, ItemOptionDefinitionNumbers.GuardianOption1));
-        definition.PossibleOptions.Add(this.CreateOption(ItemGroups.Boots, Stats.MaximumShield, 200, AggregateType.AddFinal, ItemOptionDefinitionNumbers.GuardianOption2));
+        definition.PossibleOptions.Add(this.CreateOption(ItemGroups.Boots, Stats.MaximumShield, 700, AggregateType.AddFinal, ItemOptionDefinitionNumbers.GuardianOption2));
     }
 
     private IncreasableItemOption CreateOption(ItemGroups itemGroup, AttributeDefinition attributeDefinition, float value, AggregateType aggregateType, short optionNumber)
