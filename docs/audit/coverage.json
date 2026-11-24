@@ -1,5 +1,5 @@
 {
-  "generatedAt": "8b903567",
+  "generatedAt": "6a47bdb6",
   "maxLines": 6000,
   "units": [
     {
@@ -1276,17 +1276,12 @@
       ],
       "files": 25,
       "lines": 4305,
-      "status": "Changed since check",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-22",
+      "status": "Checked",
+      "checkedAt": "6a47bdb6",
+      "checkedOn": "2026-11-24",
       "references": "HNMO Arena Teams/Royale/GuildWar/Duels/Ranking",
-      "evidence": "All 25 files read (4273 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
-      "prs": "#304, #305, #307",
-      "changedFiles": [
-        "server/src/GameLogic/PlugIns/Arena/ArenaGuildWar.cs",
-        "server/src/GameLogic/PlugIns/Arena/ArenaPlugIn.cs",
-        "server/src/GameLogic/PlugIns/Arena/ArenaTeams.cs"
-      ]
+      "evidence": "All 25 files read (4305 lines): docs/audit/findings/unit-server-src-GameLogic-PlugIns-Arena.md",
+      "prs": "#304, #305, #307"
     },
     {
       "id": "server/src/GameLogic/PlugIns/BannedWords",
