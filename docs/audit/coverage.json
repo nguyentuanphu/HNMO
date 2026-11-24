@@ -1,5 +1,5 @@
 {
-  "generatedAt": "bec0d346",
+  "generatedAt": "0d875c3e",
   "maxLines": 6000,
   "units": [
     {
@@ -389,11 +389,11 @@
       ],
       "files": 31,
       "lines": 5522,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "0d875c3e",
+      "checkedOn": "2026-11-24",
+      "references": "docs/audit/references/castle-siege-s6-s9.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-CastleSiege-files-1.md",
       "prs": ""
     },
     {
@@ -404,11 +404,11 @@
       ],
       "files": 22,
       "lines": 1950,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "0d875c3e",
+      "checkedOn": "2026-11-24",
+      "references": "docs/audit/references/castle-siege-s6-s9.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-CastleSiege-Actions.md",
       "prs": ""
     },
     {
@@ -420,10 +420,10 @@
       "files": 7,
       "lines": 349,
       "status": "Checked",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-21",
-      "references": "Season 6/9 server suites Castle Siege behavior",
-      "evidence": "Read all 7 Castle Siege AI files in full (ledger-monster-ai.md Unit 4 at 4b75b2c5, unchanged through 477b9466): crown (attackers only), switch (participants only), statue (5 s regen).",
+      "checkedAt": "0d875c3e",
+      "checkedOn": "2026-11-24",
+      "references": "docs/audit/references/castle-siege-s6-s9.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-CastleSiege-Intelligence.md",
       "prs": ""
     },
     {
@@ -434,11 +434,11 @@
       ],
       "files": 11,
       "lines": 1078,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "0d875c3e",
+      "checkedOn": "2026-11-24",
+      "references": "docs/audit/references/castle-siege-s6-s9.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-CastleSiege-NPC.md",
       "prs": ""
     },
     {
@@ -620,15 +620,12 @@
       ],
       "files": 28,
       "lines": 3129,
-      "status": "Changed since check",
-      "checkedAt": "2026-11-24",
-      "checkedOn": "bec0d346",
+      "status": "Checked",
+      "checkedAt": "0d875c3e",
+      "checkedOn": "2026-11-24",
       "references": "docs/audit/references/kanturu-s6-s9.md",
       "evidence": "docs/audit/findings/unit-server-src-GameLogic-MiniGames-Kanturu.md",
-      "prs": "",
-      "changedFiles": [
-        "(commit not found)"
-      ]
+      "prs": ""
     },
     {
       "id": "server/src/GameLogic/MuHelper",
