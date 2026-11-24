@@ -1,5 +1,5 @@
 {
-  "generatedAt": "9817db7d",
+  "generatedAt": "8ea3ed45",
   "maxLines": 6000,
   "units": [
     {
@@ -3103,11 +3103,14 @@
       ],
       "files": 2,
       "lines": 115,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "8ea3ed45",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "PetCommandRequestHandlerPlugIn.cs:29,51",
+        "docs/audit/findings/unit-server-src-GameServer-MessageHandler-Pet.md"
+      ],
+      "evidence": "2f/115L: Maps Dark Raven skill-slot modulo SkillOffset=120 to PetBehaviour enum.",
       "prs": ""
     },
     {
