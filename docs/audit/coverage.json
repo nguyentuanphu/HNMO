@@ -1,5 +1,5 @@
 {
-  "generatedAt": "582a47f8",
+  "generatedAt": "98df33ab",
   "maxLines": 6000,
   "units": [
     {
@@ -4643,11 +4643,14 @@
       ],
       "files": 1,
       "lines": 55,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "98df33ab",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "LessThanOrEqualToAttribute.cs:13-53",
+        "docs/audit/findings/unit-server-src-DataModel-Validation.md"
+      ],
+      "evidence": "1f/55L: No game rules (generic LessThanOrEqualTo validation attribute).",
       "prs": ""
     },
     {
