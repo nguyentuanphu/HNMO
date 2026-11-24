@@ -1,5 +1,5 @@
 {
-  "generatedAt": "9d97109f",
+  "generatedAt": "b622ffa7",
   "maxLines": 6000,
   "units": [
     {
@@ -1953,11 +1953,13 @@
       ],
       "files": 17,
       "lines": 2322,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "b622ffa7",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "None (custom HNMO feature)"
+      ],
+      "evidence": "All 17 Onboarding files read in full. Verified step engine, MoneyPerAccount starter kit anti-farm, atomic GiveGoodsAsync rollback, and flagged OnboardingStore dirty-tracking for Persistence cross-check. See docs/audit/findings/unit-server-src-GameLogic-PlugIns-Onboarding.md.",
       "prs": ""
     },
     {
