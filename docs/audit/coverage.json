@@ -1,5 +1,5 @@
 {
-  "generatedAt": "ec8574b4",
+  "generatedAt": "2f3132e6",
   "maxLines": 6000,
   "units": [
     {
@@ -5424,11 +5424,16 @@
       ],
       "files": 19,
       "lines": 5933,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "2f3132e6",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "settingsWindow.ts:25-100",
+        "ultimateAutoPlayWindow.ts:1-60",
+        "questWindows.ts:292-333",
+        "docs/audit/findings/unit-client-web-src-ui-files-5.md"
+      ],
+      "evidence": "19f/5933L: No game rules (settings localStorage presets, quest/ranking/season-plan/ultimateAutoPlay UI views).",
       "prs": ""
     },
     {
