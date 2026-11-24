@@ -1,5 +1,5 @@
 {
-  "generatedAt": "8ef6758f",
+  "generatedAt": "75b508e4",
   "maxLines": 6000,
   "units": [
     {
@@ -868,17 +868,12 @@
       ],
       "files": 25,
       "lines": 3209,
-      "status": "Changed since check",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-22",
-      "references": "Season 6/9 JewelMix, MoveItem, NPC buy/sell, Chaos mix",
-      "evidence": "All 25 files read (3209 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
-      "prs": "#310, #311",
-      "changedFiles": [
-        "server/src/GameLogic/PlayerActions/Items/ItemRepairAction.cs",
-        "server/src/GameLogic/PlayerActions/Items/ItemStackAction.cs",
-        "server/src/GameLogic/PlayerActions/Items/MoveItemAction.cs"
-      ]
+      "status": "Checked",
+      "checkedAt": "75b508e4",
+      "checkedOn": "2026-11-24",
+      "references": "S6/S9 IGCData/IGC_Common.ini (shop, Lahap, Kalima, pickup/move/crafting rules)",
+      "evidence": "All 25 files read: docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Items.md",
+      "prs": "#310, #311"
     },
     {
       "id": "server/src/GameLogic/PlayerActions/Messenger",
