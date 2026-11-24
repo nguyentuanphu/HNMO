@@ -1,5 +1,5 @@
 {
-  "generatedAt": "4e6f9c9d",
+  "generatedAt": "d437cd07",
   "maxLines": 6000,
   "units": [
     {
@@ -1208,11 +1208,13 @@
       ],
       "files": 13,
       "lines": 1753,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "d437cd07",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "None (custom HNMO feature)"
+      ],
+      "evidence": "All 13 AccountSafety files read in full. Verified BCrypt PIN hashing/lockout, item lock/unlock wait rules, login/trade history bounds, and HnmoFeatureRowSync storage. See docs/audit/findings/unit-server-src-GameLogic-PlugIns-AccountSafety.md.",
       "prs": ""
     },
     {
