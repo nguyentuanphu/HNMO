@@ -357,25 +357,69 @@ export function parseSuiteItemBags(rootDir) {
   const bags = new Map();
   for (const f of xmlBags) {
     const base = path.basename(f, '.xml');
-    const items = parseXmlTags(f, 'Item');
-    const drops = parseXmlTags(f, 'DropAllow');
-    const bagsCfg = parseXmlTags(f, 'BagConfig');
+    const raw = fs.readFileSync(f, 'utf8').replace(/<!--[\s\S]*?-->/g, '');
+    const bagsCfg = parseXmlTagsInText(raw, 'BagConfig')[0] ?? {};
+    const dropAllows = parseXmlTagsInText(raw, 'DropAllow');
+    const dropRates = parseXmlTagsInText(raw, 'Drop').map((d) => ({ rate: num(d.Rate), count: num(d.Count) }));
+    const itemEntries = parseXmlTagsInText(raw, 'Item').map((it) => ({
+      cat: num(it.Cat),
+      index: num(it.Index),
+      minLv: num(it.ItemMinLevel),
+      maxLv: num(it.ItemMaxLevel),
+      skill: num(it.Skill),
+      luck: num(it.Luck),
+      option: num(it.Option),
+      exc: num(it.Exc),
+      set: num(it.SetItem),
+      socket: num(it.SocketCount),
+      elem: num(it.ElementalItem),
+    }));
     bags.set(base, {
       format: 'xml',
-      items: items.length,
-      dropGroups: drops.length,
-      moneyDrop: bagsCfg[0] ? num(bagsCfg[0].MoneyDrop) : 0,
-      itemRate: bagsCfg[0] ? num(bagsCfg[0].ItemRate) : 0,
+      items: itemEntries.length,
+      itemEntries,
+      dropGroups: dropAllows.length,
+      dropRates,
+      moneyDrop: num(bagsCfg.MoneyDrop),
+      itemRate: num(bagsCfg.ItemRate),
+      setItemRate: num(bagsCfg.SetItemRate),
     });
   }
   for (const f of txtBags) {
     const base = path.basename(f, '.txt');
     const secs = parseSectionedTxt(f);
-    let itemCount = 0;
+    const itemEntries = [];
     for (const [sec, rows] of secs) {
-      if (sec >= 1) itemCount += rows.length;
+      if (sec >= 1) {
+        for (const r of rows) {
+          if (r.length >= 2) {
+            itemEntries.push({
+              cat: num(r[0]),
+              index: num(r[1]),
+              minLv: num(r[2]),
+              maxLv: num(r[3]),
+              skill: num(r[4]),
+              luck: num(r[5]),
+              option: num(r[6]),
+              exc: num(r[7]),
+              set: 0,
+              socket: 0,
+              elem: 0,
+            });
+          }
+        }
+      }
     }
-    bags.set(base, { format: 'txt', items: itemCount, dropGroups: secs.size, moneyDrop: 0, itemRate: 0 });
+    bags.set(base, {
+      format: 'txt',
+      items: itemEntries.length,
+      itemEntries,
+      dropGroups: secs.size,
+      dropRates: [],
+      moneyDrop: 0,
+      itemRate: 0,
+      setItemRate: 0,
+    });
   }
   return bags;
 }

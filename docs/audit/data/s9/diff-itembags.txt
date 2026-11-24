@@ -1,24 +1,174 @@
-# ItemBags & EventItemBags Differences (S6 vs S9)
-# Counts: S6=112, S9=118
+# ItemBags & EventItemBags Item-Level Differences (Season 6 vs Season 9 vs HNMO)
+# Bag counts: S6=112, S9=118 | HNMO BoxOfLuck groups=27
 
-## Shared bags with differing item counts or money/rate
-S6-only bag: Event_IllusionTemple_Classic_(1-2)_Monsters (xml, items=74)
-S6-only bag: Event_IllusionTemple_Classic_(3-4)_Monsters (xml, items=63)
-S6-only bag: Event_IllusionTemple_Classic_(5-6)_Monsters (xml, items=76)
-S6-only bag: Event_IllusionTemple_Classic_Reward (xml, items=87)
-Item_(14,11,10)_Kundun_Box+3: S6(items=5,money=7000,rate=10000) -> S9(items=63,money=0,rate=10000)
-Item_(14,11,11)_Kundun_Box+4: S6(items=10,money=0,rate=10000) -> S9(items=63,money=0,rate=10000)
-Item_(14,11,12)_Kundun_Box+5: S6(items=10,money=0,rate=10000) -> S9(items=63,money=0,rate=10000)
-Monster_(275)_Kundun: S6(items=42,money=1000000,rate=8000) -> S9(items=42,money=1000000,rate=1000)
-
-## S9-only bags
-S9-only bag: Item_(13,350,0)_Roomy_Egg (xml, items=6)
-S9-only bag: Item_(14,254,0)_Gift_of_Henchmen (xml, items=3)
-S9-only bag: Item_(14,256,0)_Gift_of_Knights (xml, items=3)
-S9-only bag: Item_(14,257,0)_Gift_of_High_Knights (xml, items=3)
-S9-only bag: Item_(14,258,0)_Minor_Devils_Box (xml, items=3)
-S9-only bag: Item_(14,259,0)_Devils_Box (xml, items=53)
-S9-only bag: Item_(14,260,0)_High_Devils_Box (xml, items=53)
-S9-only bag: Item_(14,261,0)_Guardsmans_Box (xml, items=3)
-S9-only bag: Item_(14,262,0)_Guardman_Captains_Box (xml, items=6)
-S9-only bag: Monster_(673)_Lord_Silvester (xml, items=77)
+## Suite Item Bags vs HNMO Drop Groups & Boxes (items, levels, options, rates, zen)
+Buff_AkeronTower_Drop: S6=S9 | S6=80items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=1,rate=1000,zen=10000) | S9=80items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=1,rate=1000,zen=10000) | sample=[11:5,10:5,7:5,9:5,8:5,2:1] | HNMO=missing dedicated bag -> missing in HNMO
+Buff_Gladiators_Drop: S6=S9 | S6=146items(Lv0-0,S=1,L=1,O=1,Exc=1,Set=1,rate=50,zen=10000) | S9=146items(Lv0-0,S=1,L=1,O=1,Exc=1,Set=1,rate=50,zen=10000) | sample=[0:17,0:18,0:31,0:20,0:21,0:25] | HNMO=missing dedicated bag -> missing in HNMO
+Event_AcheronGuardian_Reward: S6=S9 | S6=13items(Lv0-2,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=10000000) | S9=13items(Lv0-2,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=10000000) | sample=[12:212,12:213,12:214,12:208,12:209,12:210] | HNMO=missing dedicated bag -> missing in HNMO
+Event_BloodCastle(1)_Reward: S6=6items([13:14,13:52,14:13,14:14,14:16,12:15],zen=300000) | S9=6items([13:14,13:52,14:13,14:14,14:16,12:15],zen=300000) | HNMO=[12:15 Jewel of Chaos only @ BloodCastleInitializer.cs:329] -> differs (HNMO drops only Chaos)
+Event_BloodCastle(2)_Reward: S6=6items([13:14,13:52,14:13,14:14,14:16,12:15],zen=300000) | S9=6items([13:14,13:52,14:13,14:14,14:16,12:15],zen=300000) | HNMO=[12:15 Jewel of Chaos only @ BloodCastleInitializer.cs:329] -> differs (HNMO drops only Chaos)
+Event_BloodCastle(3)_Reward: S6=6items([13:14,13:52,14:13,14:14,14:16,12:15],zen=300000) | S9=6items([13:14,13:52,14:13,14:14,14:16,12:15],zen=300000) | HNMO=[12:15 Jewel of Chaos only @ BloodCastleInitializer.cs:329] -> differs (HNMO drops only Chaos)
+Event_BloodCastle(4)_Reward: S6=6items([13:14,13:52,14:13,14:14,14:16,12:15],zen=300000) | S9=6items([13:14,13:52,14:13,14:14,14:16,12:15],zen=300000) | HNMO=[12:15 Jewel of Chaos only @ BloodCastleInitializer.cs:329] -> differs (HNMO drops only Chaos)
+Event_BloodCastle(5)_Reward: S6=6items([13:14,13:52,14:13,14:14,14:16,12:15],zen=300000) | S9=6items([13:14,13:52,14:13,14:14,14:16,12:15],zen=300000) | HNMO=[12:15 Jewel of Chaos only @ BloodCastleInitializer.cs:329] -> differs (HNMO drops only Chaos)
+Event_BloodCastle(6)_Reward: S6=6items([13:14,13:52,14:13,14:14,14:16,12:15],zen=300000) | S9=6items([13:14,13:52,14:13,14:14,14:16,12:15],zen=300000) | HNMO=[12:15 Jewel of Chaos only @ BloodCastleInitializer.cs:329] -> differs (HNMO drops only Chaos)
+Event_BloodCastle(7)_Reward: S6=6items([13:14,13:52,14:13,14:14,14:16,12:15],zen=300000) | S9=6items([13:14,13:52,14:13,14:14,14:16,12:15],zen=300000) | HNMO=[12:15 Jewel of Chaos only @ BloodCastleInitializer.cs:329] -> differs (HNMO drops only Chaos)
+Event_BloodCastle(8)_Reward: S6=6items([13:14,13:52,14:13,14:14,14:16,12:15],zen=300000) | S9=6items([13:14,13:52,14:13,14:14,14:16,12:15],zen=300000) | HNMO=[12:15 Jewel of Chaos only @ BloodCastleInitializer.cs:329] -> differs (HNMO drops only Chaos)
+Event_ChaosCastle(1)_Reward: S6=117items(Lv0-7,S=1,L=1,O=1,Exc=1,Set=0) | S9=117items(Lv0-7,S=1,L=1,O=1,Exc=1,Set=0) | HNMO=[ChaosCastleDropGenerator fixed Bless/Soul/Creation/Life + Ancient @ ChaosCastleInitializer.cs] -> differs
+Event_ChaosCastle(2)_Reward: S6=2items(Lv0-3,S=0,L=0,O=0,Exc=0,Set=0) | S9=2items(Lv0-3,S=0,L=0,O=0,Exc=0,Set=0) | HNMO=[ChaosCastleDropGenerator fixed Bless/Soul/Creation/Life + Ancient @ ChaosCastleInitializer.cs] -> differs
+Event_ChaosCastle(3)_Reward: S6=2items(Lv0-3,S=0,L=0,O=0,Exc=0,Set=0) | S9=2items(Lv0-3,S=0,L=0,O=0,Exc=0,Set=0) | HNMO=[ChaosCastleDropGenerator fixed Bless/Soul/Creation/Life + Ancient @ ChaosCastleInitializer.cs] -> differs
+Event_ChaosCastle(4)_Reward: S6=2items(Lv0-3,S=0,L=0,O=0,Exc=0,Set=0) | S9=2items(Lv0-3,S=0,L=0,O=0,Exc=0,Set=0) | HNMO=[ChaosCastleDropGenerator fixed Bless/Soul/Creation/Life + Ancient @ ChaosCastleInitializer.cs] -> differs
+Event_ChaosCastle(5)_Reward: S6=2items(Lv0-3,S=0,L=0,O=0,Exc=0,Set=0) | S9=2items(Lv0-3,S=0,L=0,O=0,Exc=0,Set=0) | HNMO=[ChaosCastleDropGenerator fixed Bless/Soul/Creation/Life + Ancient @ ChaosCastleInitializer.cs] -> differs
+Event_ChaosCastle(6)_Reward: S6=2items(Lv0-3,S=0,L=0,O=0,Exc=0,Set=0) | S9=2items(Lv0-3,S=0,L=0,O=0,Exc=0,Set=0) | HNMO=[ChaosCastleDropGenerator fixed Bless/Soul/Creation/Life + Ancient @ ChaosCastleInitializer.cs] -> differs
+Event_ChaosCastle(7)_Reward: S6=2items(Lv0-3,S=0,L=0,O=0,Exc=0,Set=0) | S9=2items(Lv0-3,S=0,L=0,O=0,Exc=0,Set=0) | HNMO=[ChaosCastleDropGenerator fixed Bless/Soul/Creation/Life + Ancient @ ChaosCastleInitializer.cs] -> differs
+Event_IllusionTemple_Classic_(1-2)_Monsters: S6-only | S6=74items(Lv0-3,S=1,L=1,O=1,Exc=1,Set=0,rate=10000,zen=1500) | S9=0items(none,rate=absent,zen=absent) | sample=[14:3,14:6,14:8,14:35,14:20,14:36] | HNMO=missing dedicated bag -> missing in HNMO
+  S6_vs_S9_item_diff: S6-only=14:3,14:6,14:8,14:35,14:20,14:36,7:34,7:35; S9-only=none
+Event_IllusionTemple_Classic_(3-4)_Monsters: S6-only | S6=63items(Lv0-4,S=1,L=1,O=1,Exc=1,Set=0,rate=10000,zen=2500) | S9=0items(none,rate=absent,zen=absent) | sample=[14:3,14:6,14:8,14:40,14:35,14:20] | HNMO=missing dedicated bag -> missing in HNMO
+  S6_vs_S9_item_diff: S6-only=14:3,14:6,14:8,14:40,14:35,14:20,14:36,10:16; S9-only=none
+Event_IllusionTemple_Classic_(5-6)_Monsters: S6-only | S6=76items(Lv0-4,S=1,L=1,O=1,Exc=1,Set=0,rate=10000,zen=3500) | S9=0items(none,rate=absent,zen=absent) | sample=[14:3,14:6,14:8,14:40,14:36,14:20] | HNMO=missing dedicated bag -> missing in HNMO
+  S6_vs_S9_item_diff: S6-only=14:3,14:6,14:8,14:40,14:36,14:20,14:37,10:21; S9-only=none
+Event_IllusionTemple_Classic_Reward: S6-only | S6=87items(Lv0-9,S=1,L=1,O=1,Exc=1,Set=0,rate=10000,zen=300000) | S9=0items(none,rate=absent,zen=absent) | sample=[0:16,0:17,4:16,5:6,5:8,5:17] | HNMO=missing dedicated bag -> missing in HNMO
+  S6_vs_S9_item_diff: S6-only=0:16,0:17,4:16,5:6,5:8,5:17,0:18,2:10; S9-only=none
+Event_IllusionTemple_Renewal_1: S6=S9 | S6=6items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=1000000) | S9=6items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=1000000) | sample=[14:13,14:14,14:16,12:15,14:22,14:42] | HNMO=missing dedicated bag -> missing in HNMO
+Event_IllusionTemple_Renewal_2: S6=S9 | S6=6items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=2000000) | S9=6items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=2000000) | sample=[14:13,14:14,14:16,12:15,14:22,14:42] | HNMO=missing dedicated bag -> missing in HNMO
+Event_IllusionTemple_Renewal_3: S6=S9 | S6=6items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | S9=6items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | sample=[14:13,14:14,14:16,12:15,14:22,14:42] | HNMO=missing dedicated bag -> missing in HNMO
+Event_IllusionTemple_Renewal_4: S6=S9 | S6=6items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | S9=6items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | sample=[14:13,14:14,14:16,12:15,14:22,14:42] | HNMO=missing dedicated bag -> missing in HNMO
+Event_IllusionTemple_Renewal_5: S6=S9 | S6=6items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | S9=6items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | sample=[14:13,14:14,14:16,12:15,14:22,14:42] | HNMO=missing dedicated bag -> missing in HNMO
+Event_IllusionTemple_Renewal_6: S6=S9 | S6=22items(Lv0-0,S=0,L=0,O=0,Exc=1,Set=0,rate=10000,zen=0) | S9=22items(Lv0-0,S=0,L=0,O=0,Exc=1,Set=0,rate=10000,zen=0) | sample=[14:13,14:14,14:16,12:15,14:22,14:42] | HNMO=missing dedicated bag -> missing in HNMO
+Event_LastManStanding_Reward: S6=S9 | S6=107items(Lv0-7,S=1,L=1,O=1,Exc=1,Set=1,rate=1000,zen=1400) | S9=107items(Lv0-7,S=1,L=1,O=1,Exc=1,Set=1,rate=1000,zen=1400) | sample=[8:21,7:22,8:22,9:22,10:22,11:22] | HNMO=missing dedicated bag -> missing in HNMO
+Event_Monster_(560)_Sapi_Queen: S6=S9 | S6=63items(Lv0-0,S=1,L=1,O=1,Exc=1,Set=0,rate=10000,zen=0) | S9=63items(Lv0-0,S=1,L=1,O=1,Exc=1,Set=0,rate=10000,zen=0) | sample=[0:16,0:17,0:18,4:17,5:9,2:15] | HNMO=missing dedicated bag -> missing in HNMO
+Event_Monster_(561)_Medusa: S6=S9 | S6=90items(Lv0-3,S=1,L=1,O=1,Exc=1,Set=1,rate=1000,zen=100000) | S9=90items(Lv0-3,S=1,L=1,O=1,Exc=1,Set=1,rate=1000,zen=100000) | sample=[12:30,12:31,14:13,14:14,14:16,14:22] | HNMO=missing dedicated bag -> missing in HNMO
+Event_MuRummy_Reward_1: S6=S9 | S6=56items(Lv0-7,S=1,L=1,O=1,Exc=1,Set=0,rate=10000,zen=0) | S9=56items(Lv0-7,S=1,L=1,O=1,Exc=1,Set=0,rate=10000,zen=0) | sample=[14:13,14:16,14:14,14:42,12:15,13:146] | HNMO=missing dedicated bag -> missing in HNMO
+Event_MuRummy_Reward_2: S6=S9 | S6=7items(Lv0-2,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | S9=7items(Lv0-2,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | sample=[12:30,12:136,12:140,13:37,13:53,12:31] | HNMO=missing dedicated bag -> missing in HNMO
+Item_(12,32,0)_Red_Ribbon_Box: S6=47items(Lv6-9,S=1,L=1,O=1,Exc=0,Set=0,rate=1000/10000,zen=30000) | S9=47items(Lv6-9,S=1,L=1,O=1,Exc=0,Set=0,rate=1000/10000,zen=30000) | HNMO=47items(RandomItem@50%,Lv7-9:BoxOfLuck.cs:1075,zen=10000) -> same items
+Item_(12,33,0)_Green_Ribbon_Box: S6=73items(Lv0-6,S=1,L=1,O=1,Exc=1,Set=0,rate=1000/10000,zen=60000) | S9=73items(Lv0-6,S=1,L=1,O=1,Exc=1,Set=0,rate=1000/10000,zen=60000) | HNMO=70items(RandomItem@40%,Lv7-9:BoxOfLuck.cs:1112+Excellent@10%,Lv0-0:BoxOfLuck.cs:1140,zen=40000) -> differs
+  missing_in_HNMO(3): 14:19,13:18,13:51
+Item_(12,34,0)_Blue_Ribbon_Box: S6=70items(Lv0-7,S=1,L=1,O=1,Exc=1,Set=0,rate=1000/10000,zen=90000) | S9=70items(Lv0-7,S=1,L=1,O=1,Exc=1,Set=0,rate=1000/10000,zen=90000) | HNMO=65items(RandomItem@40%,Lv7-9:BoxOfLuck.cs:1164+Excellent@10%,Lv0-0:BoxOfLuck.cs:1190,zen=80000) -> differs
+  missing_in_HNMO(4): 14:19,13:18,14:28,13:51
+Item_(13,210,0)_WereRabbit_Egg: S6=S9 | S6=12items(Lv0-1,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=100000) | S9=12items(Lv0-1,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=100000) | sample=[13:216,13:218,12:15,14:14,14:16,14:13] | HNMO=missing dedicated bag -> missing in HNMO
+Item_(13,220,0)_Lucky_Bag_Egg: S6=S9 | S6=12items(Lv0-1,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=200000) | S9=12items(Lv0-1,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=200000) | sample=[13:216,13:218,12:15,14:14,14:16,14:13] | HNMO=missing dedicated bag -> missing in HNMO
+Item_(13,221,0)_Fire_Flame_Ghost_Egg: S6=S9 | S6=12items(Lv0-2,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=300000) | S9=12items(Lv0-2,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=300000) | sample=[13:216,13:218,12:15,14:14,14:16,14:13] | HNMO=missing dedicated bag -> missing in HNMO
+Item_(13,222,0)_Golden_Goblin_Egg: S6=S9 | S6=6items(Lv0-1,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | S9=6items(Lv0-1,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | sample=[13:216,13:218,13:212,13:211] | HNMO=missing dedicated bag -> missing in HNMO
+Item_(13,350,0)_Roomy_Egg: S9-only | S6=0items(none,rate=absent,zen=absent) | S9=6items(Lv0-2,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | sample=[12:30,12:31,12:136,12:137,14:264,14:224] | HNMO=missing dedicated bag -> missing in HNMO
+  S6_vs_S9_item_diff: S6-only=none; S9-only=12:30,12:31,12:136,12:137,14:264,14:224
+Item_(14,11,0)_Luck_Box: S6=50items(Lv0-4,S=0,L=0,O=1,Exc=0,Set=0,rate=10000/10000,zen=5000) | S9=50items(Lv0-4,S=0,L=0,O=1,Exc=0,Set=0,rate=10000/10000,zen=5000) | HNMO=67items(RandomItem@50%,Lv6-6:BoxOfLuck.cs:77,zen=10000) -> differs
+  missing_in_HNMO(24): 0:7,0:8,1:3,1:4,1:5,2:2,3:6,3:1,3:3,4:2,4:10,4:3,5:1,6:6,6:10,..
+  extra_in_HNMO(41): 0:3,0:10,0:13,4:4,4:5,4:9,4:11,4:12,5:0,5:3,5:4,7:2,8:2,9:2,10:2,..
+Item_(14,11,1)_Sacred_Birth_Star: S6=68items(Lv0-7,S=1,L=1,O=1,Exc=0,Set=0,rate=300/10000,zen=50000) | S9=68items(Lv0-7,S=1,L=1,O=1,Exc=0,Set=0,rate=300/10000,zen=50000) | HNMO=34items(RandomItem@100%,Lv0-0:BoxOfLuck.cs:114,zen=0) -> differs
+  missing_in_HNMO(68): 0:0,0:2,0:4,0:3,0:10,0:11,0:13,1:1,1:2,1:5,1:6,1:7,2:0,2:1,2:3,..
+  extra_in_HNMO(34): 0:17,0:20,0:21,2:12,3:10,4:19,4:20,5:11,6:13,6:15,7:21,8:21,9:21,10:21,11:21,..
+Item_(14,11,10)_Kundun_Box+3: S6=5items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000/10000,zen=7000) | S9=63items(Lv0-0,S=1,L=1,O=1,Exc=1,Set=0,rate=10000/10000,zen=0) | HNMO=72items(Excellent@20%,Lv0-0:BoxOfLuck.cs:459,zen=150000) -> differs
+  missing_in_HNMO(49): 0:16,0:17,0:18,4:17,5:9,2:15,5:22,7:17,8:17,9:17,10:17,11:17,7:18,8:18,9:18,..
+  extra_in_HNMO(58): 0:11,0:12,0:13,0:14,0:15,1:8,2:5,2:6,2:7,2:10,3:9,4:5,4:6,4:13,4:14,..
+  S6_vs_S9_item_diff: S6-only=12:140; S9-only=0:16,0:17,0:18,4:17,5:9,2:15,0:32,5:17
+Item_(14,11,11)_Kundun_Box+4: S6=10items(Lv0-7,S=0,L=0,O=0,Exc=0,Set=0,rate=10000/10000,zen=0) | S9=63items(Lv0-0,S=1,L=1,O=1,Exc=1,Set=0,rate=10000/10000,zen=0) | HNMO=58items(Excellent@20%,Lv0-0:BoxOfLuck.cs:509,zen=200000) -> differs
+  missing_in_HNMO(31): 2:15,0:32,5:17,5:22,13:8,13:9,13:12,13:13,13:25,13:26,13:27,13:22,13:23,13:21,13:24,..
+  extra_in_HNMO(26): 0:19,0:33,2:11,2:12,2:13,3:10,4:16,4:18,4:19,5:8,5:10,5:19,7:16,8:16,9:16,..
+  S6_vs_S9_item_diff: S6-only=14:44,14:19,13:18,14:28,13:51; S9-only=0:16,0:17,0:18,4:17,5:9,2:15,0:32,5:17
+Item_(14,11,12)_Kundun_Box+5: S6=10items(Lv0-8,S=0,L=0,O=0,Exc=0,Set=0,rate=10000/10000,zen=0) | S9=63items(Lv0-0,S=1,L=1,O=1,Exc=1,Set=0,rate=10000/10000,zen=0) | HNMO=60items(Excellent@20%,Lv0-0:BoxOfLuck.cs:545,zen=250000) -> differs
+  missing_in_HNMO(62): 0:16,0:17,0:18,4:17,5:9,0:32,5:17,5:22,7:17,8:17,9:17,10:17,11:17,7:18,8:18,..
+  extra_in_HNMO(59): 0:20,0:21,0:31,0:34,4:20,5:11,5:13,7:21,8:21,9:21,10:21,11:21,7:22,8:22,9:22,..
+  S6_vs_S9_item_diff: S6-only=14:44,14:19,13:18,14:28,13:51; S9-only=0:16,0:17,0:18,4:17,5:9,2:15,0:32,5:17
+Item_(14,11,2)_Firecracker: S6=60items(Lv0-5,S=0,L=0,O=0,Exc=0,Set=0,rate=10000/10000,zen=5000) | S9=60items(Lv0-5,S=0,L=0,O=0,Exc=0,Set=0,rate=10000/10000,zen=5000) | HNMO=89items(RandomItem@20%,Lv0-0:BoxOfLuck.cs:137+RandomItem@30%,Lv7-9:BoxOfLuck.cs:149,zen=2004) -> differs
+  missing_in_HNMO(19): 0:3,1:1,1:2,2:0,2:1,4:8,4:9,6:1,0:10,0:13,1:7,3:7,3:4,6:5,7:13,..
+  extra_in_HNMO(48): 13:2,0:5,0:6,0:8,0:12,0:14,0:15,1:3,1:4,2:2,2:8,2:9,3:0,3:3,3:8,..
+Item_(14,11,3)_Love_Heart: S6=60items(Lv0-5,S=0,L=0,O=0,Exc=0,Set=0,rate=10000/10000,zen=5000) | S9=60items(Lv0-5,S=0,L=0,O=0,Exc=0,Set=0,rate=10000/10000,zen=5000) | HNMO=89items(RandomItem@20%,Lv0-0:BoxOfLuck.cs:209+RandomItem@30%,Lv7-9:BoxOfLuck.cs:221,zen=1004) -> differs
+  missing_in_HNMO(19): 0:3,1:1,1:2,2:0,2:1,4:8,4:9,6:1,0:10,0:13,1:7,3:7,3:4,6:5,7:13,..
+  extra_in_HNMO(48): 13:2,0:5,0:6,0:8,0:12,0:14,0:15,1:3,1:4,2:2,2:8,2:9,3:0,3:3,3:8,..
+Item_(14,11,5)_Silver_Medal: S6=38items(Lv0-3,S=0,L=0,O=0,Exc=0,Set=0,rate=10000/10000,zen=5000) | S9=38items(Lv0-3,S=0,L=0,O=0,Exc=0,Set=0,rate=10000/10000,zen=5000) | HNMO=44items(RandomItem@50%,Lv6-6:BoxOfLuck.cs:281,zen=100000) -> differs
+  missing_in_HNMO(32): 0:12,1:8,3:8,4:4,4:12,5:4,6:8,6:11,7:9,8:9,9:9,10:9,11:9,7:7,8:7,..
+  extra_in_HNMO(38): 0:10,0:11,0:13,0:32,1:7,2:3,3:0,3:4,4:3,4:11,5:2,5:3,6:5,6:6,7:6,..
+Item_(14,11,6)_Gold_Medal: S6=37items(Lv0-3,S=0,L=0,O=0,Exc=0,Set=0,rate=10000/10000,zen=5000) | S9=37items(Lv0-3,S=0,L=0,O=0,Exc=0,Set=0,rate=10000/10000,zen=5000) | HNMO=45items(RandomItem@50%,Lv7-7:BoxOfLuck.cs:317,zen=100000) -> differs
+  missing_in_HNMO(31): 0:11,0:13,1:7,2:3,3:0,3:4,4:11,4:3,5:2,5:3,6:6,6:5,7:6,8:6,9:6,..
+  extra_in_HNMO(39): 0:12,0:15,0:32,1:8,3:8,4:4,4:12,5:4,6:8,6:11,7:9,8:9,9:9,10:9,11:9,..
+Item_(14,11,7)_Heaven_Box: S6=50items(Lv0-4,S=0,L=0,O=1,Exc=0,Set=0,rate=10000/10000,zen=5000) | S9=50items(Lv0-4,S=0,L=0,O=1,Exc=0,Set=0,rate=10000/10000,zen=5000) | HNMO=3items(RandomItem@50%,Lv0-0:BoxOfLuck.cs:350,zen=1000) -> differs
+  missing_in_HNMO(47): 0:7,0:8,0:9,0:5,1:3,1:4,1:5,2:2,3:6,3:1,3:3,4:2,4:10,4:3,5:1,..
+Item_(14,11,8)_Kundun_Box+1: S6=55items(Lv0-1,S=1,L=1,O=1,Exc=1,Set=0,rate=10000/10000,zen=0) | S9=55items(Lv0-1,S=1,L=1,O=1,Exc=1,Set=0,rate=10000/10000,zen=0) | HNMO=67items(Excellent@20%,Lv0-0:BoxOfLuck.cs:362,zen=50000) -> differs
+  missing_in_HNMO(28): 0:13,0:9,0:12,4:4,4:10,4:13,5:4,2:8,6:6,6:7,7:9,8:9,9:9,10:9,11:9,..
+  extra_in_HNMO(40): 0:1,0:2,0:4,1:0,1:1,1:2,2:0,2:1,2:2,3:1,3:2,3:5,3:6,3:7,4:0,..
+Item_(14,11,9)_Kundun_Box+2: S6=116items(Lv0-9,S=1,L=1,O=1,Exc=1,Set=0,rate=10000/10000,zen=0) | S9=116items(Lv0-9,S=1,L=1,O=1,Exc=1,Set=0,rate=10000/10000,zen=0) | HNMO=74items(Excellent@20%,Lv0-0:BoxOfLuck.cs:409,zen=100000) -> differs
+  missing_in_HNMO(85): 0:14,0:16,2:5,0:17,0:31,3:9,2:7,4:17,4:14,5:6,5:8,2:10,5:21,5:22,7:16,..
+  extra_in_HNMO(57): 0:5,0:6,0:7,0:8,0:9,0:10,1:4,1:5,1:6,1:7,2:3,2:8,3:0,3:3,3:4,..
+Item_(14,123,0)_Golden_Box: S6=S9 | S6=9items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | S9=9items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | sample=[14:70,14:71,14:86,14:85,14:87,12:15] | HNMO=missing dedicated bag -> missing in HNMO
+Item_(14,124,0)_Silver_Box: S6=S9 | S6=8items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | S9=8items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | sample=[14:70,14:71,14:86,14:85,14:87,12:15] | HNMO=missing dedicated bag -> missing in HNMO
+Item_(14,141,0)_Shining_Jewelry_Case: S6=S9 | S6=6items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=90000) | S9=6items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=90000) | sample=[14:41,12:15,14:14,14:13,14:22,14:16] | HNMO=missing dedicated bag -> missing in HNMO
+Item_(14,142,0)_Elegant_Jewelry_Case: S6=S9 | S6=6items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=90000) | S9=6items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=90000) | sample=[14:41,12:15,14:14,14:13,14:22,14:16] | HNMO=missing dedicated bag -> missing in HNMO
+Item_(14,143,0)_Steel_Jewelry_Case: S6=S9 | S6=6items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=60000) | S9=6items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=60000) | sample=[14:41,14:13,12:15,14:14,14:22,14:16] | HNMO=missing dedicated bag -> missing in HNMO
+Item_(14,144,0)_Old_Jewelry_Case: S6=S9 | S6=6items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=60000) | S9=6items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=60000) | sample=[14:41,12:15,14:14,14:13,14:22,14:16] | HNMO=missing dedicated bag -> missing in HNMO
+Item_(14,157,0)_Green_Box: S6=S9 | S6=31items(Lv0-3,S=1,L=1,O=1,Exc=1,Set=1,rate=1000,zen=100000) | S9=31items(Lv0-3,S=1,L=1,O=1,Exc=1,Set=1,rate=1000,zen=100000) | sample=[0:17,0:21,4:19,5:9,5:17,2:11] | HNMO=missing dedicated bag -> missing in HNMO
+Item_(14,158,0)_Red_Box: S6=S9 | S6=125items(Lv0-3,S=0,L=1,O=1,Exc=1,Set=1,rate=1000,zen=100000) | S9=125items(Lv0-3,S=0,L=1,O=1,Exc=1,Set=1,rate=1000,zen=100000) | sample=[7:21,8:21,9:21,10:21,11:21,7:22] | HNMO=missing dedicated bag -> missing in HNMO
+Item_(14,159,0)_Purple_Box: S6=S9 | S6=12items(Lv0-8,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=100000) | S9=12items(Lv0-8,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=100000) | sample=[13:18,14:19,13:51,14:13,14:14,14:16] | HNMO=missing dedicated bag -> missing in HNMO
+Item_(14,254,0)_Gift_of_Henchmen: S9-only | S6=0items(none,rate=absent,zen=absent) | S9=3items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | sample=[14:14,15:13,15:16] | HNMO=missing dedicated bag -> missing in HNMO
+  S6_vs_S9_item_diff: S6-only=none; S9-only=14:14,15:13,15:16
+Item_(14,256,0)_Gift_of_Knights: S9-only | S6=0items(none,rate=absent,zen=absent) | S9=3items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | sample=[14:14,15:13,15:16] | HNMO=missing dedicated bag -> missing in HNMO
+  S6_vs_S9_item_diff: S6-only=none; S9-only=14:14,15:13,15:16
+Item_(14,257,0)_Gift_of_High_Knights: S9-only | S6=0items(none,rate=absent,zen=absent) | S9=3items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | sample=[14:14,15:13,15:16] | HNMO=missing dedicated bag -> missing in HNMO
+  S6_vs_S9_item_diff: S6-only=none; S9-only=14:14,15:13,15:16
+Item_(14,258,0)_Minor_Devils_Box: S9-only | S6=0items(none,rate=absent,zen=absent) | S9=3items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | sample=[14:14,15:13,15:16] | HNMO=missing dedicated bag -> missing in HNMO
+  S6_vs_S9_item_diff: S6-only=none; S9-only=14:14,15:13,15:16
+Item_(14,259,0)_Devils_Box: S9-only | S6=0items(none,rate=absent,zen=absent) | S9=53items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | sample=[14:14,14:13,14:16,6:22,7:54,8:54] | HNMO=missing dedicated bag -> missing in HNMO
+  S6_vs_S9_item_diff: S6-only=none; S9-only=14:14,14:13,14:16,6:22,7:54,8:54,9:54,10:54
+Item_(14,260,0)_High_Devils_Box: S9-only | S6=0items(none,rate=absent,zen=absent) | S9=53items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | sample=[14:14,14:13,14:16,6:22,7:54,8:54] | HNMO=missing dedicated bag -> missing in HNMO
+  S6_vs_S9_item_diff: S6-only=none; S9-only=14:14,14:13,14:16,6:22,7:54,8:54,9:54,10:54
+Item_(14,261,0)_Guardsmans_Box: S9-only | S6=0items(none,rate=absent,zen=absent) | S9=3items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | sample=[14:263,14:264,14:224] | HNMO=missing dedicated bag -> missing in HNMO
+  S6_vs_S9_item_diff: S6-only=none; S9-only=14:263,14:264,14:224
+Item_(14,262,0)_Guardman_Captains_Box: S9-only | S6=0items(none,rate=absent,zen=absent) | S9=6items(Lv0-2,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | sample=[12:30,12:31,12:136,12:137,14:264,14:224] | HNMO=missing dedicated bag -> missing in HNMO
+  S6_vs_S9_item_diff: S6-only=none; S9-only=12:30,12:31,12:136,12:137,14:264,14:224
+Item_(14,32,0)_Pink_Chocolate_Box: S6=107items(Lv0-9,S=1,L=1,O=1,Exc=1,Set=0,rate=1000/10000,zen=30000) | S9=107items(Lv0-9,S=1,L=1,O=1,Exc=1,Set=0,rate=1000/10000,zen=30000) | HNMO=87items(RandomItem@40%,Lv6-9:BoxOfLuck.cs:610+Excellent@10%,Lv0-0:BoxOfLuck.cs:661,zen=100000) -> differs
+  missing_in_HNMO(3): 14:19,13:18,14:28
+Item_(14,32,1)_Light_Purple_Candy_Box: S6=107items(Lv0-9,S=1,L=1,O=1,Exc=1,Set=0,rate=1000/10000,zen=30000) | S9=107items(Lv0-9,S=1,L=1,O=1,Exc=1,Set=0,rate=1000/10000,zen=30000) | HNMO=87items(RandomItem@40%,Lv6-9:BoxOfLuck.cs:683+Excellent@10%,Lv0-0:BoxOfLuck.cs:733,zen=100000) -> differs
+  missing_in_HNMO(3): 14:19,13:18,14:28
+Item_(14,33,0)_Red_Chocolate_Box: S6=136items(Lv0-9,S=1,L=1,O=1,Exc=1,Set=0,rate=1000/10000,zen=60000) | S9=136items(Lv0-9,S=1,L=1,O=1,Exc=1,Set=0,rate=1000/10000,zen=60000) | HNMO=52items(Excellent@10%,Lv0-0:BoxOfLuck.cs:803,zen=0) -> differs
+  missing_in_HNMO(53): 0:12,3:9,4:5,5:5,2:5,4:14,2:10,7:34,8:34,9:34,10:34,11:34,7:35,8:35,9:35,..
+Item_(14,33,1)_Orange_Candy_Box: S6=136items(Lv0-9,S=1,L=1,O=1,Exc=1,Set=0,rate=1000/10000,zen=60000) | S9=136items(Lv0-9,S=1,L=1,O=1,Exc=1,Set=0,rate=1000/10000,zen=60000) | HNMO=101items(RandomItem@40%,Lv6-9:BoxOfLuck.cs:841+Excellent@10%,Lv0-0:BoxOfLuck.cs:885,zen=400000) -> differs
+  missing_in_HNMO(4): 14:19,13:18,14:28,13:51
+Item_(14,34,0)_Blue_Chocolate_Box: S6=S9 | S6=79items(Lv0-8,S=1,L=1,O=1,Exc=1,Set=0,rate=1000,zen=90000) | S9=79items(Lv0-8,S=1,L=1,O=1,Exc=1,Set=0,rate=1000,zen=90000) | sample=[0:31,2:11,5:9,4:17,4:22,0:20] | HNMO=missing dedicated bag -> missing in HNMO
+Item_(14,34,1)_Dark_Blue_Candy_Box: S6=79items(Lv0-8,S=1,L=1,O=1,Exc=1,Set=0,rate=1000/10000,zen=90000) | S9=79items(Lv0-8,S=1,L=1,O=1,Exc=1,Set=0,rate=1000/10000,zen=90000) | HNMO=74items(RandomItem@40%,Lv6-9:BoxOfLuck.cs:990+Excellent@10%,Lv0-0:BoxOfLuck.cs:1022,zen=800000) -> differs
+  missing_in_HNMO(4): 14:19,13:18,14:28,13:51
+Item_(14,45,0)_Pumpkin_of_Luck: S6=6items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000/10000,zen=1000000) | S9=6items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000/10000,zen=1000000) | HNMO=5items(RandomItem@100%,Lv0-0:BoxOfLuck.cs:1059,zen=0) -> differs
+  missing_in_HNMO(1): 13:40
+Item_(14,52,0)_GM_Gift_Box: S6=S9 | S6=55items(Lv0-0,S=1,L=1,O=1,Exc=1,Set=0,rate=10000,zen=5000000) | S9=55items(Lv0-0,S=1,L=1,O=1,Exc=1,Set=0,rate=10000,zen=5000000) | sample=[13:1,14:13,14:22,14:16,13:20,3:4] | HNMO=missing dedicated bag -> missing in HNMO
+Item_(14,55,0)_Green_Chaos_Box: S6=S9 | S6=40items(Lv7-7,S=1,L=1,O=1,Exc=0,Set=0,rate=10000,zen=5000) | S9=40items(Lv7-7,S=1,L=1,O=1,Exc=0,Set=0,rate=10000,zen=5000) | sample=[0:3,0:7,0:9,7:5,8:5,9:5] | HNMO=missing dedicated bag -> missing in HNMO
+Item_(14,56,0)_Red_Chaos_Box: S6=S9 | S6=40items(Lv7-7,S=1,L=1,O=1,Exc=0,Set=0,rate=10000,zen=5000) | S9=40items(Lv7-7,S=1,L=1,O=1,Exc=0,Set=0,rate=10000,zen=5000) | sample=[0:3,0:7,0:9,7:5,8:5,9:5] | HNMO=missing dedicated bag -> missing in HNMO
+Item_(14,57,0)_Purple_Chaos_Box: S6=S9 | S6=40items(Lv7-7,S=1,L=1,O=1,Exc=0,Set=0,rate=10000,zen=5000) | S9=40items(Lv7-7,S=1,L=1,O=1,Exc=0,Set=0,rate=10000,zen=5000) | sample=[0:3,0:7,0:9,7:5,8:5,9:5] | HNMO=missing dedicated bag -> missing in HNMO
+Item_(14,84,0)_Cherry_Blossom_Play_Box: S6=4items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000/10000,zen=30000) | S9=4items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000/10000,zen=30000) | HNMO=4items(RandomItem@100%,Lv0-0:BoxOfLuck.cs:1247,zen=0) -> same items
+Item_WarriorRing(40)_Reward: S6=S9 | S6=64items(Lv6-6,S=1,L=1,O=1,Exc=0,Set=0,rate=10000,zen=5000) | S9=64items(Lv6-6,S=1,L=1,O=1,Exc=0,Set=0,rate=10000,zen=5000) | sample=[0:5,0:9,0:10,0:13,3:8,4:4] | HNMO=missing dedicated bag -> missing in HNMO
+Item_WarriorRing(80)_Reward: S6=S9 | S6=64items(Lv6-6,S=1,L=1,O=1,Exc=0,Set=0,rate=10000,zen=5000) | S9=64items(Lv6-6,S=1,L=1,O=1,Exc=0,Set=0,rate=10000,zen=5000) | sample=[0:5,0:9,0:10,0:13,3:8,4:4] | HNMO=missing dedicated bag -> missing in HNMO
+Mix_Cherry_Blossom_Gold_Reward: S6=S9 | S6=141items(Lv0-0,S=1,L=1,O=1,Exc=1,Set=1,rate=10000,zen=100000) | S9=141items(Lv0-0,S=1,L=1,O=1,Exc=1,Set=1,rate=10000,zen=100000) | sample=[13:12,13:13,13:25,13:26,13:8,13:9] | HNMO=missing dedicated bag -> missing in HNMO
+Mix_Cherry_Blossom_Red_Reward: S6=S9 | S6=4items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | S9=4items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | sample=[13:1,13:2,13:0,13:3] | HNMO=missing dedicated bag -> missing in HNMO
+Mix_Cherry_Blossom_White_Reward: S6=S9 | S6=4items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | S9=4items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=0) | sample=[14:85,14:86,14:87,14:90] | HNMO=missing dedicated bag -> missing in HNMO
+Mix_LuckyCoin(10)_Reward: S6=S9 | S6=126items(Lv0-7,S=1,L=1,O=1,Exc=1,Set=0,rate=10000,zen=90000) | S9=126items(Lv0-7,S=1,L=1,O=1,Exc=1,Set=0,rate=10000,zen=90000) | sample=[0:16,0:17,0:18,0:31,2:11,3:10] | HNMO=missing dedicated bag -> missing in HNMO
+Mix_LuckyCoin(20)_Reward: S6=S9 | S6=126items(Lv0-7,S=1,L=1,O=1,Exc=1,Set=0,rate=10000,zen=90000) | S9=126items(Lv0-7,S=1,L=1,O=1,Exc=1,Set=0,rate=10000,zen=90000) | sample=[0:16,0:17,0:18,0:31,2:11,3:10] | HNMO=missing dedicated bag -> missing in HNMO
+Mix_LuckyCoin(30)_Reward: S6=S9 | S6=1items(Lv0-5,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=90000) | S9=1items(Lv0-5,S=0,L=0,O=0,Exc=0,Set=0,rate=10000,zen=90000) | sample=[12:100] | HNMO=missing dedicated bag -> missing in HNMO
+Mix_Senior_Reward: S6=S9 | S6=57items(Lv0-0,S=1,L=1,O=0,Exc=1,Set=0,rate=10000,zen=0) | S9=57items(Lv0-0,S=1,L=1,O=0,Exc=1,Set=0,rate=10000,zen=0) | sample=[0:20,0:21,2:12,4:20,0:24,5:13] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(275)_Kundun: S6!=S9 | S6=42items(Lv0-4,S=1,L=1,O=0,Exc=1,Set=0,rate=8000,zen=1000000) | S9=42items(Lv0-4,S=1,L=1,O=0,Exc=1,Set=0,rate=1000,zen=1000000) | sample=[0:17,0:18,0:31,0:20,0:21,0:22] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(295)_Erohim: S6=S9 | S6=32items(Lv0-4,S=1,L=1,O=0,Exc=1,Set=0,rate=1000,zen=1000000) | S9=32items(Lv0-4,S=1,L=1,O=0,Exc=1,Set=0,rate=1000,zen=1000000) | sample=[0:17,0:18,0:31,0:20,0:21,2:12] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(340)_Dark_Elf: S6=S9 | S6=31items(Lv0-6,S=1,L=1,O=1,Exc=1,Set=0,rate=1000,zen=1000000) | S9=31items(Lv0-6,S=1,L=1,O=1,Exc=1,Set=0,rate=1000,zen=1000000) | sample=[0:17,0:18,2:12,4:19,5:9,6:13] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(349)_Balgass: S6=S9 | S6=55items(Lv0-5,S=1,L=1,O=1,Exc=1,Set=0,rate=1000,zen=1000000) | S9=55items(Lv0-5,S=1,L=1,O=1,Exc=1,Set=0,rate=1000,zen=1000000) | sample=[0:16,2:10,3:10,4:16,4:17,5:8] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(361)_Nightmare: S6=S9 | S6=69items(Lv0-7,S=1,L=1,O=1,Exc=1,Set=0,rate=10000,zen=0) | S9=69items(Lv0-7,S=1,L=1,O=1,Exc=1,Set=0,rate=10000,zen=0) | sample=[0:20,0:21,4:20,2:12,5:11,0:16] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(362)_Mayas_Left_Hand: S6=S9 | S6=66items(Lv0-7,S=1,L=1,O=1,Exc=1,Set=0,rate=10000,zen=0) | S9=66items(Lv0-7,S=1,L=1,O=1,Exc=1,Set=0,rate=10000,zen=0) | sample=[0:17,0:18,2:11,4:19,5:9,0:14] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(363)_Mayas_Right_Hand: S6=S9 | S6=66items(Lv0-7,S=1,L=1,O=1,Exc=1,Set=0,rate=10000,zen=0) | S9=66items(Lv0-7,S=1,L=1,O=1,Exc=1,Set=0,rate=10000,zen=0) | sample=[0:17,0:18,2:11,4:19,5:9,0:14] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(365)_Pouch_of_Blessing: S6=S9 | S6=87items(Lv0-0,S=1,L=1,O=1,Exc=1,Set=0,rate=1000,zen=10000) | S9=87items(Lv0-0,S=1,L=1,O=1,Exc=1,Set=0,rate=1000,zen=10000) | sample=[0:9,0:10,0:11,0:12,0:15,1:5] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(413)_Lunar_Rabbit: S6=S9 | S6=93items(Lv0-0,S=1,L=1,O=1,Exc=1,Set=0,rate=1000,zen=10000) | S9=93items(Lv0-0,S=1,L=1,O=1,Exc=1,Set=0,rate=1000,zen=10000) | sample=[14:13,14:14,14:16,14:22,14:42,0:14] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(414)_Helper_Ellen: S6=S9 | S6=2items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=200000) | S9=2items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=200000) | sample=[13:1,12:15] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(44)_Dragon_Red: S6=S9 | S6=50items(Lv0-5,S=0,L=0,O=1,Exc=0,Set=0,rate=10000,zen=5000) | S9=50items(Lv0-5,S=0,L=0,O=1,Exc=0,Set=0,rate=10000,zen=5000) | sample=[0:11,0:13,1:6,1:7,2:3,3:7] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(459)_Selupan: S6=S9 | S6=94items(Lv0-5,S=1,L=1,O=1,Exc=1,Set=0,rate=10000,zen=0) | S9=94items(Lv0-5,S=1,L=1,O=1,Exc=1,Set=0,rate=10000,zen=0) | sample=[5:8,5:9,0:14,0:16,0:31,2:7] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(55)_Death_King: S6=S9 | S6=40items(Lv0-5,S=0,L=0,O=1,Exc=0,Set=0,rate=10000,zen=5000) | S9=40items(Lv0-5,S=0,L=0,O=1,Exc=0,Set=0,rate=10000,zen=5000) | sample=[0:2,0:4,0:3,1:1,1:2,2:0] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(647)_Snake_Green: S6=S9 | S6=46items(Lv0-0,S=1,L=1,O=1,Exc=0,Set=0,rate=6000,zen=50000) | S9=46items(Lv0-0,S=1,L=1,O=1,Exc=0,Set=0,rate=6000,zen=50000) | sample=[0:14,0:32,2:9,4:5,5:6,5:16] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(648)_Snake_Yellow: S6=S9 | S6=48items(Lv0-0,S=1,L=1,O=1,Exc=1,Set=0,rate=6000,zen=100000) | S9=48items(Lv0-0,S=1,L=1,O=1,Exc=1,Set=0,rate=6000,zen=100000) | sample=[0:16,0:33,2:10,3:10,4:17,5:8] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(649)_Snake_Purple: S6=S9 | S6=15items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=6000,zen=150000) | S9=15items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=6000,zen=150000) | sample=[12:15,14:14,14:22,14:42,14:16,14:13] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(650)_Snake_Red: S6=S9 | S6=10items(Lv0-1,S=0,L=0,O=0,Exc=0,Set=0,rate=6000,zen=1000) | S9=10items(Lv0-1,S=0,L=0,O=0,Exc=0,Set=0,rate=6000,zen=1000) | sample=[14:13,14:14,14:16,12:15,13:170,13:37] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(652)_Golden_Goblin: S6=S9 | S6=7items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=9000,zen=100000) | S9=7items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=9000,zen=100000) | sample=[14:13,14:14,14:16,12:15,14:22,14:42] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(653)_Golden_Titan: S6=S9 | S6=13items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=9000,zen=100000) | S9=13items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=9000,zen=100000) | sample=[14:13,14:14,14:16,12:15,14:22,14:42] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(654)_Golden_Tantalose: S6=S9 | S6=19items(Lv0-1,S=0,L=0,O=0,Exc=0,Set=0,rate=9000,zen=100000) | S9=19items(Lv0-1,S=0,L=0,O=0,Exc=0,Set=0,rate=9000,zen=100000) | sample=[14:13,14:14,14:16,12:15,14:22,14:42] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(655)_Golden_Erohim: S6=S9 | S6=25items(Lv0-2,S=0,L=0,O=0,Exc=0,Set=0,rate=9000,zen=100000) | S9=25items(Lv0-2,S=0,L=0,O=0,Exc=0,Set=0,rate=9000,zen=100000) | sample=[14:13,14:14,14:16,12:15,14:22,14:42] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(656)_Golden_Hell_Maine: S6=S9 | S6=25items(Lv0-2,S=0,L=0,O=0,Exc=0,Set=0,rate=9000,zen=100000) | S9=25items(Lv0-2,S=0,L=0,O=0,Exc=0,Set=0,rate=9000,zen=100000) | sample=[14:13,14:14,14:16,12:15,14:22,14:42] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(657)_Golden_Kundun: S6=S9 | S6=24items(Lv0-2,S=0,L=0,O=0,Exc=0,Set=0,rate=9000,zen=100000) | S9=24items(Lv0-2,S=0,L=0,O=0,Exc=0,Set=0,rate=9000,zen=100000) | sample=[14:13,14:14,14:16,12:15,14:22,14:42] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(673)_Lord_Silvester: S9-only | S6=0items(none,rate=absent,zen=absent) | S9=77items(Lv0-5,S=1,L=1,O=1,Exc=0,Set=0,rate=10000,zen=0) | sample=[0:26,0:27,0:28,2:16,2:17,4:23] | HNMO=missing dedicated bag -> missing in HNMO
+  S6_vs_S9_item_diff: S6-only=none; S9-only=0:26,0:27,0:28,2:16,2:17,4:23,5:30,5:31
+Monster_(674)_Moon_Rabbit: S6=S9 | S6=1items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=100000) | S9=1items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=100000) | sample=[13:210] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(675)_Pouch_of_Blessing: S6=S9 | S6=1items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=1000) | S9=1items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=1000) | sample=[13:220] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(676)_Fire_Flame_Ghost: S6=S9 | S6=1items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=1000) | S9=1items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=1000) | sample=[13:221] | HNMO=missing dedicated bag -> missing in HNMO
+Monster_(677)_Golden_Goblin: S6=S9 | S6=1items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=1000) | S9=1items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=1000) | sample=[13:222] | HNMO=missing dedicated bag -> missing in HNMO
+NPC_SantaClause(1)_Reward: S6=S9 | S6=7items(Lv0-7,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=30000) | S9=7items(Lv0-7,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=30000) | sample=[12:15,13:0,13:1,14:19,13:18,14:28] | HNMO=missing dedicated bag -> missing in HNMO
+NPC_SantaClause(2)_Reward: S6=S9 | S6=2items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=60000) | S9=2items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=60000) | sample=[13:68,14:99] | HNMO=missing dedicated bag -> missing in HNMO
+NPC_SantaClause(3)_Reward: S6=S9 | S6=1items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=90000) | S9=1items(Lv0-0,S=0,L=0,O=0,Exc=0,Set=0,rate=1000,zen=90000) | sample=[13:67] | HNMO=missing dedicated bag -> missing in HNMO

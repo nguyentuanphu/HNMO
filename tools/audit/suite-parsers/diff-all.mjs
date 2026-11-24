@@ -556,23 +556,150 @@ function writeDiff(fileName, lines) {
 {
   const b6 = parseSuiteItemBags(S6_DIR);
   const b9 = parseSuiteItemBags(S9_DIR);
-  const lines = [
-    '# ItemBags & EventItemBags Differences (S6 vs S9)',
-    `# Counts: S6=${b6.size}, S9=${b9.size}`,
-    '',
-    '## Shared bags with differing item counts or money/rate',
-  ];
-  for (const [k, v6] of [...b6.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
-    const v9 = b9.get(k);
-    if (!v9) {
-      lines.push(`S6-only bag: ${k} (${v6.format}, items=${v6.items})`);
-    } else if (v6.items !== v9.items || v6.moneyDrop !== v9.moneyDrop || v6.itemRate !== v9.itemRate) {
-      lines.push(`${k}: S6(items=${v6.items},money=${v6.moneyDrop},rate=${v6.itemRate}) -> S9(items=${v9.items},money=${v9.moneyDrop},rate=${v9.itemRate})`);
+  const hItemKeys = new Set(parseCsv(path.join(HNMO_DIR, 'items.csv')).map((r) => `${r.Group}:${r.Number}`));
+  const boxCsPath = path.join(ROOT, 'server/src/Persistence/Initialization/VersionSeasonSix/Items/BoxOfLuck.cs');
+  const boxSrc = fs.existsSync(boxCsPath) ? fs.readFileSync(boxCsPath, 'utf8') : '';
+
+  // Parse HNMO BoxOfLuck.cs drop groups keyed by "(group,number,sourceLevel)"
+  const hBoxGroups = new Map();
+  let curBoxKey = null;
+  const varToKey = new Map();
+  const groupData = new Map();
+  const linesSrc = boxSrc.split(/\r?\n/);
+  for (let i = 0; i < linesSrc.length; i++) {
+    const l = linesSrc[i];
+    const cm = /this\.CreateBox\([^,]+,\s*(\d+),\s*(\d+)/.exec(l);
+    if (cm) curBoxKey = `${cm[1]}:${cm[2]}`;
+    const gm = /var\s+(\w+)\s*=\s*this\.Context\.CreateNew<ItemDropItemGroup>\(\)/.exec(l);
+    if (gm) {
+      groupData.set(gm[1], {
+        boxKey: curBoxKey,
+        srcLv: 0,
+        chance: 1,
+        itemType: 'RandomItem',
+        minLv: 0,
+        maxLv: 0,
+        money: 0,
+        items: new Set(),
+        line: i + 1,
+      });
+      varToKey.set(gm[1], gm[1]);
+    }
+    const pm = /(\w+)\.(SourceItemLevel|Chance|MinimumLevel|MaximumLevel|ItemType|MoneyAmount)\s*=\s*([^;]+);/.exec(l);
+    if (pm && groupData.has(pm[1])) {
+      const g = groupData.get(pm[1]);
+      const prop = pm[2];
+      const val = pm[3].trim();
+      if (prop === 'SourceItemLevel') g.srcLv = num(val);
+      else if (prop === 'Chance') g.chance = num(val);
+      else if (prop === 'MinimumLevel') g.minLv = num(val);
+      else if (prop === 'MaximumLevel') g.maxLv = num(val);
+      else if (prop === 'ItemType') g.itemType = val.replace('SpecialItemType.', '');
+      else if (prop === 'MoneyAmount') g.money = num(val);
+    }
+    const am = /this\.AddDropItem\(\s*(\w+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/.exec(l);
+    if (am && groupData.has(am[1])) {
+      groupData.get(am[1]).items.add(`${num(am[2])}:${num(am[3])}`);
+    }
+    const sm = /this\.AddArmorSet\(\s*(\w+)\s*,\s*(\d+)\s*\)/.exec(l);
+    if (sm && groupData.has(sm[1])) {
+      const setNo = num(sm[2]);
+      for (const grp of [7, 8, 9, 10, 11]) {
+        const k = `${grp}:${setNo}`;
+        if (hItemKeys.has(k)) groupData.get(sm[1]).items.add(k);
+      }
+    }
+    const mm = /this\.AddMoneyDropFallback\(\s*\w+\s*,\s*(\d+)\s*,\s*(\w+)/.exec(l);
+    if (mm && groupData.has(mm[2])) {
+      groupData.get(mm[2]).money = num(mm[1]);
     }
   }
-  lines.push('', '## S9-only bags');
-  for (const [k, v9] of [...b9.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
-    if (!b6.has(k)) lines.push(`S9-only bag: ${k} (${v9.format}, items=${v9.items})`);
+  for (const g of groupData.values()) {
+    if (!g.boxKey || g.itemType === 'Money') continue;
+    const key = `${g.boxKey}:${g.srcLv}`;
+    if (!hBoxGroups.has(key)) hBoxGroups.set(key, []);
+    hBoxGroups.get(key).push(g);
+  }
+
+  const lines = [
+    '# ItemBags & EventItemBags Item-Level Differences (Season 6 vs Season 9 vs HNMO)',
+    `# Bag counts: S6=${b6.size}, S9=${b9.size} | HNMO BoxOfLuck groups=${hBoxGroups.size}`,
+    '',
+    '## Suite Item Bags vs HNMO Drop Groups & Boxes (items, levels, options, rates, zen)',
+  ];
+
+  const allBagKeys = [...new Set([...b6.keys(), ...b9.keys()])].sort();
+  const bagKeyToHnmo = (bagName) => {
+    const im = /^Item_\((\d+),(\d+),(\d+)\)/.exec(bagName);
+    if (im) return `${num(im[1])}:${num(im[2])}:${num(im[3])}`;
+    if (bagName === 'Item_WarriorRing(40)_Reward') return '13:20:1';
+    if (bagName === 'Item_WarriorRing(80)_Reward') return '13:20:2';
+    return null;
+  };
+  const itemKeySet = (arr) => new Set((arr ?? []).map((x) => `${x.cat}:${x.index}`));
+  const optSig = (arr) => {
+    if (!arr?.length) return 'none';
+    const minL = Math.min(...arr.map((x) => x.minLv));
+    const maxL = Math.max(...arr.map((x) => x.maxLv));
+    const hasSkill = arr.some((x) => x.skill > 0) ? 1 : 0;
+    const hasLuck = arr.some((x) => x.luck > 0) ? 1 : 0;
+    const hasOpt = arr.some((x) => x.option > 0) ? 1 : 0;
+    const hasExc = arr.some((x) => x.exc !== 0) ? 1 : 0;
+    const hasSet = arr.some((x) => x.set > 0) ? 1 : 0;
+    return `Lv${minL}-${maxL},S=${hasSkill},L=${hasLuck},O=${hasOpt},Exc=${hasExc},Set=${hasSet}`;
+  };
+
+  for (const bag of allBagKeys) {
+    const v6 = b6.get(bag);
+    const v9 = b9.get(bag);
+    const ref = v6 ?? v9;
+    const s6Items = itemKeySet(v6?.itemEntries);
+    const s9Items = itemKeySet(v9?.itemEntries);
+    const s6OnlyItems = [...s6Items].filter((x) => !s9Items.has(x));
+    const s9OnlyItems = [...s9Items].filter((x) => !s6Items.has(x));
+    const s6VsS9Sig =
+      v6 && v9 ? (optSig(v6.itemEntries) === optSig(v9.itemEntries) && v6.moneyDrop === v9.moneyDrop && v6.itemRate === v9.itemRate ? 'S6=S9' : 'S6!=S9') : v6 ? 'S6-only' : 'S9-only';
+
+    const boxKey = bagKeyToHnmo(bag);
+    const hGroups = boxKey ? hBoxGroups.get(boxKey) : null;
+    if (hGroups) {
+      const hAllItems = new Set();
+      let hChanceSum = 0;
+      let hMoney = 0;
+      const hMeta = [];
+      for (const g of hGroups) {
+        for (const it of g.items) hAllItems.add(it);
+        hChanceSum += g.chance;
+        hMoney = Math.max(hMoney, g.money);
+        hMeta.push(`${g.itemType}@${Math.round(g.chance * 100)}%,Lv${g.minLv}-${g.maxLv}:BoxOfLuck.cs:${g.line}`);
+      }
+      const suiteSet = v6?.items >= (v9?.items ?? 0) ? s6Items : s9Items;
+      const missingInHnmo = [...suiteSet].filter((x) => !hAllItems.has(x));
+      const extraInHnmo = [...hAllItems].filter((x) => !suiteSet.has(x));
+      const sameItems = missingInHnmo.length === 0 && extraInHnmo.length === 0 && v6 && v9 && s6OnlyItems.length === 0 && s9OnlyItems.length === 0;
+      const status = sameItems ? 'same items' : 'differs';
+      lines.push(
+        `${bag}: S6=${v6?.items ?? 0}items(${optSig(v6?.itemEntries)},rate=${v6 ? v6.itemRate : 'absent'}/10000,zen=${v6 ? v6.moneyDrop : 'absent'}) | S9=${v9?.items ?? 0}items(${optSig(v9?.itemEntries)},rate=${v9 ? v9.itemRate : 'absent'}/10000,zen=${v9 ? v9.moneyDrop : 'absent'}) | HNMO=${hAllItems.size}items(${hMeta.join('+')},zen=${hMoney}) -> ${status}`,
+      );
+      if (missingInHnmo.length) lines.push(`  missing_in_HNMO(${missingInHnmo.length}): ${missingInHnmo.slice(0, 15).join(',')}${missingInHnmo.length > 15 ? ',..' : ''}`);
+      if (extraInHnmo.length) lines.push(`  extra_in_HNMO(${extraInHnmo.length}): ${extraInHnmo.slice(0, 15).join(',')}${extraInHnmo.length > 15 ? ',..' : ''}`);
+    } else if (bag.startsWith('Event_BloodCastle(')) {
+      lines.push(
+        `${bag}: S6=${v6?.items ?? 0}items([${[...s6Items].join(',')}],zen=${v6 ? v6.moneyDrop : 'absent'}) | S9=${v9?.items ?? 0}items([${[...s9Items].join(',')}],zen=${v9 ? v9.moneyDrop : 'absent'}) | HNMO=[12:15 Jewel of Chaos only @ BloodCastleInitializer.cs:329] -> differs (HNMO drops only Chaos)`,
+      );
+    } else if (bag.startsWith('Event_ChaosCastle(')) {
+      lines.push(
+        `${bag}: S6=${v6?.items ?? 0}items(${optSig(v6?.itemEntries)}) | S9=${v9?.items ?? 0}items(${optSig(v9?.itemEntries)}) | HNMO=[ChaosCastleDropGenerator fixed Bless/Soul/Creation/Life + Ancient @ ChaosCastleInitializer.cs] -> differs`,
+      );
+    } else {
+      const sampleItems = [...itemKeySet(ref.itemEntries)].slice(0, 6).join(',');
+      lines.push(
+        `${bag}: ${s6VsS9Sig} | S6=${v6?.items ?? 0}items(${optSig(v6?.itemEntries)},rate=${v6 ? v6.itemRate : 'absent'},zen=${v6 ? v6.moneyDrop : 'absent'}) | S9=${v9?.items ?? 0}items(${optSig(v9?.itemEntries)},rate=${v9 ? v9.itemRate : 'absent'},zen=${v9 ? v9.moneyDrop : 'absent'}) | sample=[${sampleItems}] | HNMO=missing dedicated bag -> missing in HNMO`,
+      );
+    }
+    if (s6OnlyItems.length || s9OnlyItems.length) {
+      lines.push(`  S6_vs_S9_item_diff: S6-only=${s6OnlyItems.slice(0, 8).join(',') || 'none'}; S9-only=${s9OnlyItems.slice(0, 8).join(',') || 'none'}`);
+    }
   }
   writeDiff('diff-itembags.txt', lines);
 }
