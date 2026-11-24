@@ -1,0 +1,3 @@
+# Gens System Rules (S6 vs S9)
+S6: {"format":"ini+dat","sections":1,"rankCount":13,"general":{}}
+S9: {"format":"xml","blueMuMode":0,"minLevel":0,"minReset":0,"rankCount":0,"rewardCount":0}

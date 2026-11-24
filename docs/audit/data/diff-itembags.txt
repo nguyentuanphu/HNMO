@@ -1,0 +1,24 @@
+# ItemBags & EventItemBags Differences (S6 vs S9)
+# Counts: S6=112, S9=118
+
+## Shared bags with differing item counts or money/rate
+S6-only bag: Event_IllusionTemple_Classic_(1-2)_Monsters (xml, items=74)
+S6-only bag: Event_IllusionTemple_Classic_(3-4)_Monsters (xml, items=63)
+S6-only bag: Event_IllusionTemple_Classic_(5-6)_Monsters (xml, items=76)
+S6-only bag: Event_IllusionTemple_Classic_Reward (xml, items=87)
+Item_(14,11,10)_Kundun_Box+3: S6(items=5,money=7000,rate=10000) -> S9(items=63,money=0,rate=10000)
+Item_(14,11,11)_Kundun_Box+4: S6(items=10,money=0,rate=10000) -> S9(items=63,money=0,rate=10000)
+Item_(14,11,12)_Kundun_Box+5: S6(items=10,money=0,rate=10000) -> S9(items=63,money=0,rate=10000)
+Monster_(275)_Kundun: S6(items=42,money=1000000,rate=8000) -> S9(items=42,money=1000000,rate=1000)
+
+## S9-only bags
+S9-only bag: Item_(13,350,0)_Roomy_Egg (xml, items=6)
+S9-only bag: Item_(14,254,0)_Gift_of_Henchmen (xml, items=3)
+S9-only bag: Item_(14,256,0)_Gift_of_Knights (xml, items=3)
+S9-only bag: Item_(14,257,0)_Gift_of_High_Knights (xml, items=3)
+S9-only bag: Item_(14,258,0)_Minor_Devils_Box (xml, items=3)
+S9-only bag: Item_(14,259,0)_Devils_Box (xml, items=53)
+S9-only bag: Item_(14,260,0)_High_Devils_Box (xml, items=53)
+S9-only bag: Item_(14,261,0)_Guardsmans_Box (xml, items=3)
+S9-only bag: Item_(14,262,0)_Guardman_Captains_Box (xml, items=6)
+S9-only bag: Monster_(673)_Lord_Silvester (xml, items=77)

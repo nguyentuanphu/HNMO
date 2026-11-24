@@ -1,0 +1,6 @@
+# Quests Differences: Season 6 vs Season 9 Suites
+# ClassQuest counts: S6=7 (22 jobs), S9=7 (22 jobs)
+
+## QuestInfo differences
+
+## QuestSystem.ini sections (S6): none

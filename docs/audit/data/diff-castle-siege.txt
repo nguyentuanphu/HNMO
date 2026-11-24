@@ -1,0 +1,3 @@
+# Castle Siege Rules (S6 vs S9)
+S6: {"enable":1,"friendlyFire":1,"lordMixDailyLimit":1,"towerWithoutAlliance":0,"cycleDays":[0,0,0,0,0,0,0,0,0],"stateCount":0,"npcCount":24}
+S9: {"enable":1,"friendlyFire":1,"lordMixDailyLimit":1,"towerWithoutAlliance":0,"cycleDays":[0,0,0,0,0,0,0,0,0],"stateCount":0,"npcCount":24}

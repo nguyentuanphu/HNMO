@@ -1,0 +1,148 @@
+# Common, PK, Party, Guild, Pet, Price, & VIP Rules (S6 vs S9)
+VIP Tiers: S6=0, S9=0
+
+## CommonServer.cfg differences (S6 vs S9)
+ApplyHeroSystem: S6=1 -> S9=absent
+AttackEventRegenTime: S6=10 -> S9=absent
+CQSystemQuestCount: S6=0 -> S9=absent
+ChaosCastleEvent: S6=1 -> S9=absent
+CountOfJewelOfHarmonyForMix: S6=1 -> S9=absent
+CountOfSuhoOfHarmonyForMix: S6=1 -> S9=absent
+CrestOfMonarchDropLevel: S6=86 -> S9=absent
+CrestOfMonarchDropRate: S6=10 -> S9=absent
+EventChipServerIp: S6=127.0.0.1 -> S9=192.168.1.10
+EventManagerOn: S6=1 -> S9=absent
+ImperialGuardian: S6=1 -> S9=absent
+IsCQSystem: S6=0 -> S9=absent
+ItemDisapearTime: S6=10 -> S9=20
+KanturuEvent: S6=1 -> S9=absent
+KanturuJewelOfHarmonyDropRate: S6=20 -> S9=absent
+KanturuMoonStoneDropRate: S6=10 -> S9=absent
+KanturuSpecialItemDropOn: S6=1 -> S9=absent
+MarryDivorceItem: S6=1 -> S9=absent
+MarryDivorceItemGroup: S6=2 -> S9=absent
+MarryDivorceItemIndex: S6=2 -> S9=absent
+MarryEnabled: S6=1 -> S9=absent
+MarryFemaleItemGroup: S6=14 -> S9=absent
+MarryFemaleItemIndex: S6=14 -> S9=absent
+MarryGiftItemGroup: S6=12 -> S9=absent
+MarryGiftItemIndex: S6=30 -> S9=absent
+MarryHomosexual: S6=0 -> S9=absent
+MarryIsDivorce: S6=1 -> S9=absent
+MarryItemRequire: S6=0 -> S9=absent
+MarryLevel: S6=50 -> S9=absent
+MarryMaleItemGroup: S6=14 -> S9=absent
+MarryMaleItemIndex: S6=13 -> S9=absent
+MarryMapID: S6=2 -> S9=absent
+MarryMoney: S6=200 -> S9=absent
+MarryX1: S6=14 -> S9=absent
+MarryX2: S6=14 -> S9=absent
+MarryY1: S6=25 -> S9=absent
+MarryY2: S6=26 -> S9=absent
+MirrorFragmentDropRate: S6=10 -> S9=absent
+MixRateForGrade1: S6=50 -> S9=absent
+MixRateForGrade2: S6=60 -> S9=absent
+MixRateForGrade3: S6=70 -> S9=absent
+MixSmeltingStoneItem: S6=1 -> S9=absent
+MonsterHp: S6=1 -> S9=0
+NeedZenForMix: S6=10000000 -> S9=absent
+PKItemDrop: S6=0 -> S9=absent
+PKLevelIncreaseOff: S6=0 -> S9=absent
+PKTIME: S6=1 -> S9=absent
+PaperScrapDropRate: S6=10 -> S9=absent
+PkClearCost: S6=1000000 -> S9=absent
+PkClearKillMultipler: S6=1 -> S9=absent
+PkClearSwitch: S6=1 -> S9=absent
+PurityHarmonyJewel: S6=1 -> S9=absent
+PurityNeedZen: S6=0 -> S9=absent
+PuritySuccessRate: S6=80 -> S9=absent
+RaklionEvent: S6=1 -> S9=absent
+RestoreStrengthenItem: S6=1 -> S9=absent
+RingAttackEvent: S6=1 -> S9=absent
+SleeveOfLordDropLevel: S6=absent -> S9=86
+SleeveOfLordDropRate: S6=absent -> S9=10
+SmeltItemBySmeltingStone: S6=1 -> S9=absent
+SmeltingItemSuccessRateExt: S6=80 -> S9=absent
+SmeltingItemSuccessRateNor: S6=20 -> S9=absent
+SmeltingNeedZen: S6=0 -> S9=absent
+SmeltingStoneSuccesRateExcellent: S6=50 -> S9=absent
+SmeltingStoneSuccesRateNormal: S6=20 -> S9=absent
+StrengthenItem: S6=1 -> S9=absent
+StrengthenSuccessRate: S6=60 -> S9=absent
+System380ItemSystem: S6=1 -> S9=absent
+XMasAttackEvent: S6=1 -> S9=absent
+XMasEvent_LuckNumber1st: S6=100 -> S9=absent
+XMasEvent_LuckNumber2nd: S6=200 -> S9=absent
+ZenDurationTime: S6=10 -> S9=15
+
+## Common.ini differences (S6 vs S9)
+[AntiHack] AntiHackBreachDisconnectUser: S6=0 -> S9=1
+[AntiHack] DLLCRC: S6=0 -> S9=36C0CB2E
+[AntiHack] EnableAgilityCheck: S6=0 -> S9=1
+[AntiHack] EnableHitHackDetection: S6=absent -> S9=0
+[AntiHack] HitHackMaxAgility: S6=absent -> S9=23000
+[AntiHack] MainExeCRC: S6=0 -> S9=F502C056
+[AntiHack] PlayerBmdCRC: S6=0 -> S9=D25ED173
+[AntiHack] SkillCRC: S6=0 -> S9=76B51749
+[CancelItemSale] IsCancelItemSale: S6=absent -> S9=1
+[CancelItemSale] ItemExpiryTime: S6=absent -> S9=86400
+[CancelItemSale] PriceMultipler: S6=absent -> S9=110.0
+[ChatColors] AllianceMessageBlue: S6=absent -> S9=0x00
+[ChatColors] AllianceMessageGreen: S6=absent -> S9=0xC8
+[ChatColors] AllianceMessageRed: S6=absent -> S9=0xC8
+[ChatColors] ChatMessageBlue: S6=absent -> S9=0xEF
+[ChatColors] ChatMessageGreen: S6=absent -> S9=0xDC
+[ChatColors] ChatMessageRed: S6=absent -> S9=0xCD
+[ChatColors] ErrorMessageBlue: S6=absent -> S9=0x00
+[ChatColors] ErrorMessageGreen: S6=absent -> S9=0x1E
+[ChatColors] ErrorMessageRed: S6=absent -> S9=0xFF
+[ChatColors] GMChatMessageBlue: S6=absent -> S9=0x3A
+[ChatColors] GMChatMessageGreen: S6=absent -> S9=0xC8
+[ChatColors] GMChatMessageRed: S6=absent -> S9=0xFA
+[ChatColors] GensMessageBlue: S6=absent -> S9=0x7C
+[ChatColors] GensMessageGreen: S6=absent -> S9=0xF4
+[ChatColors] GensMessageRed: S6=absent -> S9=0xAF
+[ChatColors] GuildMessageBlue: S6=absent -> S9=0x99
+[ChatColors] GuildMessageGreen: S6=absent -> S9=0xCC
+[ChatColors] GuildMessageRed: S6=absent -> S9=0xFF
+[ChatColors] InfoMessageBlue: S6=absent -> S9=0xFF
+[ChatColors] InfoMessageGreen: S6=absent -> S9=0x96
+[ChatColors] InfoMessageRed: S6=absent -> S9=0x64
+[ChatColors] PartyMessageBlue: S6=absent -> S9=0xFF
+[ChatColors] PartyMessageGreen: S6=absent -> S9=0xCC
+[ChatColors] PartyMessageRed: S6=absent -> S9=0x66
+[ChatColors] WhisperMessageBlue: S6=absent -> S9=0xDB
+[ChatColors] WhisperMessageGreen: S6=absent -> S9=0xB7
+[ChatColors] WhisperMessageRed: S6=absent -> S9=0xFF
+[General] AllowMoveCashItems: S6=0 -> S9=absent
+[General] AllowToGetLuckyItemFromGround: S6=absent -> S9=0
+[General] MaxMasterLevel: S6=200 -> S9=330
+[General] PostCMDCooldown: S6=5 -> S9=absent
+[GlobalPostCMD] ColorBlue: S6=absent -> S9=0xE3
+[GlobalPostCMD] ColorGreen: S6=absent -> S9=0xD0
+[GlobalPostCMD] ColorRed: S6=absent -> S9=0x0D
+[GlobalPostCMD] CoolDown: S6=absent -> S9=10
+[GlobalPostCMD] Cost: S6=absent -> S9=500000
+[GlobalPostCMD] Enable: S6=absent -> S9=1
+[GlobalPostCMD] MinLevel: S6=absent -> S9=200
+[PostCMD] ColorBlue: S6=absent -> S9=0xC3
+[PostCMD] ColorGreen: S6=absent -> S9=0xBE
+[PostCMD] ColorRed: S6=absent -> S9=0x8C
+[PostCMD] CoolDown: S6=absent -> S9=5
+[PostCMD] Cost: S6=absent -> S9=100000
+[PostCMD] Enable: S6=absent -> S9=1
+[PostCMD] MinLevel: S6=absent -> S9=50
+[ResetCMD] ClearBuffs: S6=1 -> S9=absent
+[ResetCMD] Cost: S6=10000000 -> S9=50000000
+[ResetCMD] CostMultipler: S6=0 -> S9=absent
+[ResetCMD] DisableMuHelper: S6=1 -> S9=absent
+[ResetCMD] GoblinPointRewardEnable: S6=0 -> S9=absent
+[ResetCMD] GoblinPointRewardValue: S6=100 -> S9=absent
+[ResetCMD] RemoveFromParty: S6=1 -> S9=absent
+[ResetCMD] WCoinCRewardEnable: S6=0 -> S9=absent
+[ResetCMD] WCoinCRewardValue: S6=100 -> S9=absent
+[ResetCMD] WCoinPRewardEnable: S6=0 -> S9=absent
+[ResetCMD] WCoinPRewardValue: S6=100 -> S9=absent
+[SantaVillage] SantaClause1stPrizeMaxVisit: S6=absent -> S9=1
+[SantaVillage] SantaClause2ndPrizeMaxVisit: S6=absent -> S9=3
+[SantaVillage] SantaClauseMinReset: S6=absent -> S9=0

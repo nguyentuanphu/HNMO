@@ -18,6 +18,15 @@ import {
   parseSuiteSocketOptions,
   parseSuiteSpawns,
 } from './parsers.mjs';
+import {
+  parseSuiteCastleSiege,
+  parseSuiteCommonAndLimits,
+  parseSuiteEventsAndInvasions,
+  parseSuiteGens,
+  parseSuiteItemBags,
+  parseSuiteMasterSkillTree,
+  parseSuiteQuests,
+} from './parsers-extra.mjs';
 
 const ROOT = process.cwd();
 const HNMO_DIR = process.env.HNMO_CSV_DIR ?? path.join(ROOT, 'docs', 'audit', 'data', 'hnmo');
@@ -361,4 +370,141 @@ function writeDiff(fileName, lines) {
     lines.push(`${ev.Type} Lv.${ev.GameLevel}: enter=${ev.EnterDurationSec}s, play=${ev.GameDurationSec}s, exit=${ev.ExitDurationSec}s, maxPlayers=${ev.MaxPlayers}`);
   }
   writeDiff('diff-exp-events.txt', lines);
+}
+
+// 11. diff-quests.txt
+{
+  const q6 = parseSuiteQuests(S6_DIR);
+  const q9 = parseSuiteQuests(S9_DIR);
+  const lines = [
+    '# Quests Differences: Season 6 vs Season 9 Suites',
+    `# ClassQuest counts: S6=${q6.quests.length} (${q6.jobs.length} jobs), S9=${q9.quests.length} (${q9.jobs.length} jobs)`,
+    '',
+    '## QuestInfo differences',
+  ];
+  const m6 = new Map(q6.quests.map((q) => [q.index, q]));
+  for (const q of q9.quests) {
+    const o = m6.get(q.index);
+    if (!o) lines.push(`S9-only QuestInfo ${q.index}: ${q.name} (Type=${q.type}, SubType=${q.subType})`);
+    else if (o.type !== q.type || o.subType !== q.subType) lines.push(`QuestInfo ${q.index} (${q.name}): S6=${o.type}/${o.subType} -> S9=${q.type}/${q.subType}`);
+  }
+  lines.push('', `## QuestSystem.ini sections (S6): ${Object.keys(q6.ini).join(', ') || 'none'}`);
+  writeDiff('diff-quests.txt', lines);
+}
+
+// 12. diff-events-all.txt
+{
+  const e6 = parseSuiteEventsAndInvasions(S6_DIR);
+  const e9 = parseSuiteEventsAndInvasions(S9_DIR);
+  const hEvents = parseCsv(path.join(HNMO_DIR, 'events.csv'));
+  const lines = [
+    '# All Events and Invasions Summary & Differences (S6 vs S9 vs HNMO)',
+    `# HNMO events.csv rows: ${hEvents.length}`,
+    '',
+  ];
+  const keys = new Set([...Object.keys(e6), ...Object.keys(e9)]);
+  for (const k of [...keys].sort()) {
+    const v6 = e6[k];
+    const v9 = e9[k];
+    lines.push(`${k}: S6=${v6 ? `${v6.file} (${v6.kind})` : 'absent'} | S9=${v9 ? `${v9.file} (${v9.kind})` : 'absent'}`);
+  }
+  writeDiff('diff-events-all.txt', lines);
+}
+
+// 13. diff-itembags.txt
+{
+  const b6 = parseSuiteItemBags(S6_DIR);
+  const b9 = parseSuiteItemBags(S9_DIR);
+  const lines = [
+    '# ItemBags & EventItemBags Differences (S6 vs S9)',
+    `# Counts: S6=${b6.size}, S9=${b9.size}`,
+    '',
+    '## Shared bags with differing item counts or money/rate',
+  ];
+  for (const [k, v6] of [...b6.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
+    const v9 = b9.get(k);
+    if (!v9) {
+      lines.push(`S6-only bag: ${k} (${v6.format}, items=${v6.items})`);
+    } else if (v6.items !== v9.items || v6.moneyDrop !== v9.moneyDrop || v6.itemRate !== v9.itemRate) {
+      lines.push(`${k}: S6(items=${v6.items},money=${v6.moneyDrop},rate=${v6.itemRate}) -> S9(items=${v9.items},money=${v9.moneyDrop},rate=${v9.itemRate})`);
+    }
+  }
+  lines.push('', '## S9-only bags');
+  for (const [k, v9] of [...b9.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
+    if (!b6.has(k)) lines.push(`S9-only bag: ${k} (${v9.format}, items=${v9.items})`);
+  }
+  writeDiff('diff-itembags.txt', lines);
+}
+
+// 14. diff-master-skills.txt
+{
+  const m6 = parseSuiteMasterSkillTree(S6_DIR);
+  const m9 = parseSuiteMasterSkillTree(S9_DIR);
+  const lines = [
+    '# Master Skill Tree Differences (S6 vs S9)',
+    `# Counts: S6=${m6.skillCount} (${m6.format}), S9=${m9.skillCount} (${m9.format})`,
+    '',
+  ];
+  for (const [k, s9] of m9.skills) {
+    const s6 = m6.skills.get(k);
+    if (!s6) {
+      lines.push(`S9-only: ${k} (Rank=${s9.rank}, Max=${s9.maxPoint})`);
+    } else if (s6.maxPoint !== s9.maxPoint || s6.reqMinPoint !== s9.reqMinPoint || s6.rank !== s9.rank) {
+      lines.push(`${k}: S6(rank=${s6.rank},max=${s6.maxPoint},req=${s6.reqMinPoint}) -> S9(rank=${s9.rank},max=${s9.maxPoint},req=${s9.reqMinPoint})`);
+    }
+  }
+  writeDiff('diff-master-skills.txt', lines);
+}
+
+// 15. diff-castle-siege.txt
+{
+  const cs6 = parseSuiteCastleSiege(S6_DIR);
+  const cs9 = parseSuiteCastleSiege(S9_DIR);
+  const lines = [
+    '# Castle Siege Rules (S6 vs S9)',
+    `S6: ${cs6 ? JSON.stringify(cs6) : 'absent'}`,
+    `S9: ${cs9 ? JSON.stringify(cs9) : 'absent'}`,
+  ];
+  writeDiff('diff-castle-siege.txt', lines);
+}
+
+// 16. diff-gens.txt
+{
+  const g6 = parseSuiteGens(S6_DIR);
+  const g9 = parseSuiteGens(S9_DIR);
+  const lines = [
+    '# Gens System Rules (S6 vs S9)',
+    `S6: ${JSON.stringify(g6)}`,
+    `S9: ${JSON.stringify(g9)}`,
+  ];
+  writeDiff('diff-gens.txt', lines);
+}
+
+// 17. diff-common-rules.txt
+{
+  const c6 = parseSuiteCommonAndLimits(S6_DIR);
+  const c9 = parseSuiteCommonAndLimits(S9_DIR);
+  const lines = [
+    '# Common, PK, Party, Guild, Pet, Price, & VIP Rules (S6 vs S9)',
+    `VIP Tiers: S6=${c6.vipCount}, S9=${c9.vipCount}`,
+    '',
+    '## CommonServer.cfg differences (S6 vs S9)',
+  ];
+  const cfgKeys = new Set([...Object.keys(c6.commonCfg), ...Object.keys(c9.commonCfg)]);
+  for (const k of [...cfgKeys].sort()) {
+    const v6 = c6.commonCfg[k];
+    const v9 = c9.commonCfg[k];
+    if (v6 !== v9) lines.push(`${k}: S6=${v6 ?? 'absent'} -> S9=${v9 ?? 'absent'}`);
+  }
+  lines.push('', '## Common.ini differences (S6 vs S9)');
+  const iniSecs = new Set([...Object.keys(c6.commonIni), ...Object.keys(c9.commonIni)]);
+  for (const sec of [...iniSecs].sort()) {
+    const s6 = c6.commonIni[sec] ?? {};
+    const s9 = c9.commonIni[sec] ?? {};
+    const ks = new Set([...Object.keys(s6), ...Object.keys(s9)]);
+    for (const k of [...ks].sort()) {
+      if (s6[k] !== s9[k]) lines.push(`[${sec}] ${k}: S6=${s6[k] ?? 'absent'} -> S9=${s9[k] ?? 'absent'}`);
+    }
+  }
+  writeDiff('diff-common-rules.txt', lines);
 }
