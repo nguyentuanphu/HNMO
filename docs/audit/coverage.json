@@ -1,5 +1,5 @@
 {
-  "generatedAt": "25c09fd7",
+  "generatedAt": "9bb8e889",
   "maxLines": 6000,
   "units": [
     {
@@ -311,11 +311,11 @@
       ],
       "files": 16,
       "lines": 5852,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
+      "status": "Checked",
+      "checkedAt": "9bb8e889",
+      "checkedOn": "2026-11-24",
       "references": "",
-      "evidence": "",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-Bots-files-2.md",
       "prs": ""
     },
     {
