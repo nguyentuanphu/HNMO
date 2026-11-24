@@ -1,5 +1,5 @@
 {
-  "generatedAt": "90987f71",
+  "generatedAt": "ec8574b4",
   "maxLines": 6000,
   "units": [
     {
@@ -5386,11 +5386,16 @@
       ],
       "files": 15,
       "lines": 5729,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "ec8574b4",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "missionsWindow.ts:14-92",
+        "mixWindow.ts",
+        "partyWindow.ts",
+        "docs/audit/findings/unit-client-web-src-ui-files-4.md"
+      ],
+      "evidence": "15f/5729L: No game rules (renders server-driven MissionBoard JSON, mix UI, party/mount/pet windows).",
       "prs": ""
     },
     {
