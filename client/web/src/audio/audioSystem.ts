@@ -195,6 +195,9 @@ export class AudioSystem {
   /** Whether the page is out of sight (another tab, the window minimised, the phone's home screen): all sound pauses. */
   private hidden = false;
   private readonly visibilityHandler = (): void => this.setHidden(document.visibilityState === 'hidden');
+  private readonly focusHandler = (): void => {
+    if (!this.hidden) this.resumeWhenVisible();
+  };
   /** Whether the sound files are asked for as .opus. */
   private readonly opus: Promise<boolean>;
 
@@ -231,6 +234,8 @@ export class AudioSystem {
       this.hidden = document.visibilityState === 'hidden';
     }
     if (typeof window !== 'undefined') {
+      window.addEventListener('focus', this.focusHandler);
+      window.addEventListener('pageshow', this.focusHandler);
       for (const type of ['pointerdown', 'keydown', 'touchstart', 'mousedown']) {
         window.addEventListener(type, this.unlockHandler, { capture: true, passive: true });
       }
@@ -262,7 +267,12 @@ export class AudioSystem {
       this.music?.pause();
       return;
     }
+    this.resumeWhenVisible();
+  }
+
+  private resumeWhenVisible(): void {
     if (!this.unlocked) return;
+    const context = this.context;
     if (context !== null && context.state !== 'running') context.resume().catch(() => undefined);
     if (this.music !== null && this.music.paused && this.music.src !== '') this.music.play().catch(() => undefined);
   }
