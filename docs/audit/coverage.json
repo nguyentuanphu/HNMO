@@ -1,5 +1,5 @@
 {
-  "generatedAt": "0f87744a",
+  "generatedAt": "dc9c0128",
   "maxLines": 6000,
   "units": [
     {
@@ -6079,11 +6079,14 @@
       ],
       "files": 2,
       "lines": 109,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "dc9c0128",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "DataHandler/LookData",
+        "docs/audit/findings/unit-client-src-source-Data-DataHandler-LookData.md"
+      ],
+      "evidence": "2f/109L: No game rules (binary/JSON file loaders, checksum & IO helpers (no game balance rules).)",
       "prs": ""
     },
     {
