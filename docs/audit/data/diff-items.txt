@@ -1,5 +1,5 @@
 # Item Table Differences: HNMO vs Season 6 & Season 9 Server Suites
-# Counts: HNMO=817, S6=1003, S9=1260
+# Counts: HNMO=848, S6=1003, S9=1260
 
 ## Shared items where HNMO differs from Season 6 suite
 0-19 (Divine Sword of Archangel): Drop:0->1
@@ -35,6 +35,7 @@
 5-23 (Book of Lagle): Dur:50->0
 5-30 (Deadly Staff): Dur:91->0
 5-31 (Imperial Staff): Dur:182->0
+5-32 (Summon Spirit Stick): DropLevel:149->130, Dur:130->0, Drop:0->1
 5-33 (Chromatic Staff): Dur:78->0, Drop:0->1
 5-34 (Raven Stick): Dur:98->0, Drop:0->1
 5-36 (Divine Stick of Archangel): Dur:182->0, Drop:0->1
@@ -303,6 +304,16 @@
 14-162 (Magic Backpack): Dur:1->0
 14-163 (Vault Expansion Certificate): Dur:1->0
 14-169 (Rage Fighter Character Card): Dur:1->0
+14-194 (Magma Combination Note): DropLevel:0->25, Dur:1->0, Drop:0->1
+14-195 (Horn Combination Note): DropLevel:0->25, Dur:1->0, Drop:0->1
+14-196 (Angelic Combination Note): DropLevel:0->25, Dur:1->0, Drop:0->1
+14-197 (Devil Cross Combination Note): DropLevel:0->25, Dur:1->0, Drop:0->1
+14-198 (Miracle Combination Note): DropLevel:0->25, Dur:1->0, Drop:0->1
+14-199 (Spite Combination Note): DropLevel:0->25, Dur:1->0, Drop:0->1
+14-200 (Asura Combination Note): DropLevel:0->25, Dur:1->0, Drop:0->1
+14-201 (Thunder Combination Note): DropLevel:0->25, Dur:1->0, Drop:0->1
+14-202 (Soul Combination Note): DropLevel:0->25, Dur:1->0, Drop:0->1
+14-203 (Greater Combination Note): DropLevel:0->25, Dur:1->0, Drop:0->1
 15-0 (Scroll of Poison): Dur:1->0
 15-1 (Scroll of Meteorite): Dur:1->0
 15-2 (Scroll of Lighting): Dur:1->0
@@ -676,7 +687,6 @@
 0-40 | Sacred Glove-J
 2-21 | Master Scepter-J
 4-27 | Silver Bow-J
-5-32 | Guardian Staff
 5-38 | Legendary Staff-J
 5-39 | Red Wing Stick-J
 5-40 | Book of Neil-J
@@ -722,11 +732,6 @@
 13-60 | Indulgence
 13-69 | Talisman of Resurrection
 13-70 | Talisman of Mobility
-13-71 | Sword/Mace/Spear
-13-72 | Staff
-13-73 | Bow/Crossbow
-13-74 | Scepter
-13-75 | Stick
 13-83 | Talisman of Wings of Satan
 13-84 | Talisman of Wings of Heaven
 13-85 | Talisman of Wings of Elf
@@ -817,16 +822,6 @@
 14-166 | Space Cloth
 14-167 | Phase Cloth
 14-168 | Dimension Cloth
-14-194 | Jewel of Blood
-14-195 | Jewel of Curse
-14-196 | Jewel of Excess
-14-197 | Jewel of Balance
-14-198 | Jewel of Science
-14-199 | Jewel of Madness
-14-200 | Jewel of Black Chaos
-14-201 | Jewel of Dark Bless
-14-202 | Jewel of Dark Life
-14-203 | Jewel of Dark Soul
 14-204 | Jewel of Kondar
 14-205 | Jewel of Kundun
 14-206 | Jewel of Love

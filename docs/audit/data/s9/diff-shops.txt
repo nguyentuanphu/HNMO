@@ -1,0 +1,28 @@
+# NPC Shop Differences: HNMO vs Season 6 & Season 9 Suites
+
+Shop NPC 231: count differs HNMO=32 vs S6=0
+Shop NPC 239: count differs HNMO=32 vs S6=34
+Shop NPC 248: count differs HNMO=25 vs S6=32
+Shop NPC 253: count differs HNMO=32 vs S6=34
+Shop NPC 259: count differs HNMO=32 vs S6=34
+Shop NPC 259: count differs HNMO=32 vs S6=34
+Shop NPC 259: count differs HNMO=32 vs S6=34
+Shop NPC 259: count differs HNMO=32 vs S6=34
+Shop NPC 259: count differs HNMO=32 vs S6=34
+Shop NPC 259: count differs HNMO=32 vs S6=34
+Shop NPC 259: count differs HNMO=32 vs S6=34
+Shop NPC 376: count differs HNMO=32 vs S6=34
+Shop NPC 377: count differs HNMO=32 vs S6=34
+Shop NPC 416: count differs HNMO=32 vs S6=34
+Shop NPC 417: count differs HNMO=6 vs S6=7
+Shop NPC 545: count differs HNMO=32 vs S6=34
+Shop NPC 577: count differs HNMO=32 vs S6=34
+Shop NPC 578: count differs HNMO=6 vs S6=7
+Shop NPC 583: count differs HNMO=32 vs S6=34
+Shop NPC 604: count differs HNMO=32 vs S6=34
+S9-only Shop NPC 683 (Map 79, NPC(683)_Marce_B.xml): 12 items
+S9-only Shop NPC 684 (Map 79, NPC(684)_Silvia_B.xml): 12 items
+S9-only Shop NPC 685 (Map 79, NPC(685)_Izabel_B.xml): 12 items
+S9-only Shop NPC 686 (Map 79, NPC(686)_Sophia_(repair)_B.xml): 32 items
+S9-only Shop NPC 687 (Map 79, NPC(687)_Bolo_(repair)_B.xml): 32 items
+S9-only Shop NPC 688 (Map 79, NPC(688)_Christine_B.xml): 12 items

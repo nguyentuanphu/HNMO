@@ -1,0 +1,317 @@
+﻿Number,Name,SkillType,DamageType,Range,MovesToTarget,Classes,ReqLevel,ReqEnergy,ReqStrength,ReqLeadership,ManaCost,AbilityCost,ImplicitTargetRange,MasterRank,MasterMaxLevel,MasterFormula
+1,Poison,DirectHit,Wizardry,6,0,0;2;3;12;13,,140,,,42,,0,,,
+2,Meteorite,DirectHit,Wizardry,6,0,0;2;3;12;13;20;22;23,,104,,,12,,0,,,
+3,Lightning,DirectHit,Wizardry,6,0,0;2;3;12;13,,72,,,15,,0,,,
+4,Fire Ball,DirectHit,Wizardry,6,0,0;2;3;12;13;20;22;23,,40,,,3,,0,,,
+5,Flame,AreaSkillAutomaticHits,Wizardry,6,0,0;2;3;12;13,,160,,,50,,0,,,
+6,Teleport,Other,Wizardry,6,0,0;2;3,,88,,,30,,0,,,
+7,Ice,DirectHit,Wizardry,6,0,0;2;3;12;13;20;22;23,,120,,,38,,0,,,
+8,Twister,AreaSkillAutomaticHits,Wizardry,6,0,0;2;3;12;13,,180,,,60,,0,,,
+9,Evil Spirit,AreaSkillAutomaticHits,Wizardry,6,0,0;2;3;12;13,,220,,,90,,0,,,
+10,Hellfire,AreaSkillAutomaticHits,Wizardry,0,0,0;2;3;12;13,,260,,,160,,0,,,
+11,Power Wave,DirectHit,Wizardry,6,0,0;2;3;12;13;20;22;23,,56,,,5,,0,,,
+12,Aqua Beam,AreaSkillAutomaticHits,Wizardry,6,0,0;2;3;12;13,,345,,,140,,0,,,
+13,Cometfall,AreaSkillAutomaticHits,Wizardry,6,0,0;2;3;12;13,,436,,,150,,0,,,
+14,Inferno,AreaSkillAutomaticHits,Wizardry,0,0,0;2;3;12;13,,578,,,200,,0,,,
+15,Teleport Ally,Other,None,6,0,2;3,,644,,,90,25,0,,,
+16,Soul Barrier,Buff,None,6,0,0;2;3,,408,,,70,22,0,,,
+17,Energy Ball,DirectHit,Wizardry,6,0,0;2;3;12;13,,,,,1,,0,,,
+18,Defense,Buff,None,0,0,4;6;7;12;13;16;17,,,,,30,,0,,,
+19,Falling Slash,DirectHit,Physical,3,1,4;6;7;12;13;16;17;24;25,,,,,9,,0,,,
+20,Lunge,DirectHit,Physical,2,1,4;6;7;12;13;16;17,,,,,9,,0,,,
+21,Uppercut,DirectHit,Physical,2,1,4;6;7;12;13;16;17,,,,,8,,0,,,
+22,Cyclone,DirectHit,Physical,2,1,4;6;7;12;13;16;17,,,,,9,,0,,,
+23,Slash,DirectHit,Physical,2,1,4;6;7;12;13;16;17,,,,,10,,0,,,
+24,Triple Shot,AreaSkillAutomaticHits,Physical,6,0,8;10;11,,,,,5,,0,,,
+26,Heal,Regeneration,None,6,0,8;10;11,,52,,,20,,0,,,
+27,Greater Defense,Buff,None,6,0,8;10;11,,72,,,30,,0,,,
+28,Greater Damage,Buff,None,6,0,8;10;11,,92,,,40,,0,,,
+30,Summon Goblin,SummonMonster,None,0,0,8;10;11,,90,,,40,,0,,,
+31,Summon Stone Golem,SummonMonster,None,0,0,8;10;11,,170,,,70,,0,,,
+32,Summon Assassin,SummonMonster,None,0,0,8;10;11,,190,,,110,,0,,,
+33,Summon Elite Yeti,SummonMonster,None,0,0,8;10;11,,230,,,160,,0,,,
+34,Summon Dark Knight,SummonMonster,None,0,0,8;10;11,,250,,,200,,0,,,
+35,Summon Bali,SummonMonster,None,0,0,8;10;11,,260,,,250,,0,,,
+36,Summon Soldier,SummonMonster,None,0,0,8;10;11,,280,,,350,,0,,,
+38,Decay,AreaSkillAutomaticHits,Wizardry,6,0,2;3,,953,,,110,7,0,,,
+39,Ice Storm,AreaSkillAutomaticHits,Wizardry,6,0,2;3,,849,,,100,5,0,,,
+40,Nova,DirectHit,Wizardry,6,0,2;3,100,1052,,,15,45,0,,,
+41,Twisting Slash,AreaSkillAutomaticHits,Physical,2,0,4;6;7;12;13,,,,,10,10,0,,,
+42,Rageful Blow,AreaSkillAutomaticHits,Physical,3,0,6;7,170,,,,25,20,0,,,
+43,Death Stab,DirectHit,Physical,2,0,6;7,160,,,,15,12,1,,,
+44,Crescent Moon Slash,DirectHit,Physical,4,1,4;6;7,,,,,22,15,0,,,
+45,Lance,DirectHit,Wizardry,6,0,2;3;20;22;23,,,,,150,10,0,,,
+46,Starfall,DirectHit,Physical,8,0,8;10;11,,,,,20,15,0,,,
+47,Impale,DirectHit,Physical,3,0,4;6;7;12;13,28,,,,8,,0,,,
+48,Swell Life,Buff,None,0,0,4;6;7,120,,,,22,24,0,,,
+49,Fire Breath,DirectHit,Physical,3,0,4;6;7,110,,,,9,,0,,,
+50,Flame of Evil (Monster),DirectHit,None,0,0,,60,100,,,160,,0,,,
+51,Ice Arrow,DirectHit,Physical,8,0,10;11,,,,,10,12,0,,,
+52,Penetration,AreaSkillAutomaticHits,Physical,6,0,8;10;11,130,,,,7,9,0,,,
+55,Fire Slash,AreaSkillAutomaticHits,Physical,2,0,12;13,,,,,15,20,0,,,
+56,Power Slash,AreaSkillAutomaticHits,Physical,5,0,12;13,,100,,,15,,0,,,
+57,Spiral Slash,DirectHit,Physical,5,0,12;13,,,,,20,15,0,,,
+58,Nova (Start),Other,None,0,0,2;3,100,1052,,,,,0,,,
+60,Force,DirectHit,Physical,4,0,16;17,,,,,10,,0,,,
+61,Fire Burst,DirectHit,Physical,6,0,16;17,,79,,,25,,1,,,
+62,Earthshake,AreaSkillAutomaticHits,Physical,10,0,16;17,,,,,,50,0,,,
+63,Summon,Other,None,0,0,16;17,,153,,400,70,30,0,,,
+64,Increase Critical Damage,Buff,None,0,0,16;17,,102,,300,50,50,0,,,
+65,Electric Spike,AreaSkillAutomaticHits,Physical,10,0,16;17,,126,,340,,100,0,,,
+66,Force Wave,DirectHit,Physical,4,0,16;17,,,,,10,,0,,,
+67,Stun,AreaSkillAutomaticHits,None,2,0,0;2;3;4;6;7;8;10;11;12;13;16;17;20;22;23;24;25,,,,,70,50,0,,,
+68,Cancel Stun,Other,None,0,0,0;2;3;4;6;7;8;10;11;12;13;16;17;20;22;23;24;25,,,,,25,30,0,,,
+69,Swell Mana,DirectHit,None,0,0,0;2;3;4;6;7;8;10;11;12;13;16;17;20;22;23;24;25,,,,,35,30,0,,,
+70,Invisibility,DirectHit,None,0,0,0;2;3;4;6;7;8;10;11;12;13;16;17;20;22;23;24;25,,,,,80,60,0,,,
+71,Cancel Invisibility,DirectHit,None,0,0,0;2;3;4;6;7;8;10;11;12;13;16;17;20;22;23;24;25,,,,,40,30,0,,,
+72,Abolish Magic,Other,None,0,0,16;17,,,,,90,70,0,,,
+73,Mana Rays,DirectHit,Wizardry,6,0,12;13,,,,,130,7,0,,,
+74,Fire Blast,DirectHit,Physical,6,0,16;17,,,,,30,10,0,,,
+76,Plasma Storm,AreaSkillAutomaticHits,Fenrir,6,0,2;3;6;7;10;11;12;13;16;17;22;23;24;25,110,,,,50,20,0,,,
+77,Infinity Arrow,Buff,None,6,0,10;11,220,,,,50,10,0,,,
+78,Fire Scream,AreaSkillAutomaticHits,Physical,6,0,16;17,,150,,70,45,10,0,,,
+79,Explosion,DirectHit,Physical,2,0,,,,,,,,0,,,
+150,Generic Monster Skill,Other,None,5,0,,,,,,,,0,,,
+200,Summon Monster,DirectHit,None,0,0,,,90,,,40,,0,,,
+201,Magic Attack Immunity,DirectHit,None,0,0,,,90,,,40,,0,,,
+202,Physical Attack Immunity,DirectHit,None,0,0,,,90,,,40,,0,,,
+203,Potion of Bless,DirectHit,None,0,0,,,90,,,40,,0,,,
+204,Potion of Soul,DirectHit,None,0,0,,,90,,,40,,0,,,
+210,Spell of Protection,DirectHit,None,0,0,0;2;3;4;6;7;8;10;11;12;13;16;17;20;22;23;24;25,,,,,30,,0,,,
+211,Spell of Restriction,DirectHit,None,3,0,0;2;3;4;6;7;8;10;11;12;13;16;17;20;22;23;24;25,,,,,30,,0,,,
+212,Spell of Pursuit,DirectHit,None,0,0,0;2;3;4;6;7;8;10;11;12;13;16;17;20;22;23;24;25,,,,,30,,0,,,
+213,Shield-Burn,DirectHit,None,3,0,0;2;3;4;6;7;8;10;11;12;13;16;17;20;22;23;24;25,,,,,30,,0,,,
+214,Drain Life,AreaSkillExplicitTarget,Wizardry,6,0,20;22;23,,150,,,50,,0,,,
+215,Chain Lightning,AreaSkillExplicitTarget,Wizardry,6,0,20;22;23,,245,,,85,,0,,,
+217,Damage Reflection,Buff,None,5,0,20;22;23,,375,,,40,10,0,,,
+218,Berserker,Buff,None,5,0,20;22;23,,620,,,100,50,0,,,
+219,Sleep,Buff,None,6,0,20;22;23,,180,,,20,3,0,,,
+221,Weakness,Buff,None,6,0,20;22;23,,663,,,50,15,0,,,
+222,Innovation,Buff,None,6,0,20;22;23,,912,,,70,15,0,,,
+223,Explosion,AreaSkillAutomaticHits,Curse,6,0,20;22;23,,100,,,90,5,0,,,
+224,Requiem,AreaSkillAutomaticHits,Curse,6,0,20;22;23,,99,,,110,10,0,,,
+225,Pollution,AreaSkillAutomaticHits,Curse,6,0,20;22;23,,115,,,120,15,0,,,
+230,Lightning Shock,AreaSkillAutomaticHits,Wizardry,6,0,20;22;23,,823,,,115,7,0,,,
+232,Strike of Destruction,AreaSkillAutomaticHits,Physical,5,0,6;7,100,,,,30,24,0,,,
+233,Expansion of Wizardry,Buff,None,6,0,2;3,220,118,,,200,50,0,,,
+234,Recovery,Regeneration,None,6,0,10;11,100,168,,,40,10,0,,,
+235,Multi-Shot,AreaSkillAutomaticHits,Physical,6,0,10;11,100,,,,10,7,0,,,
+236,Flame Strike,AreaSkillAutomaticHits,Physical,3,0,12;13,100,,,,20,25,0,,,
+237,Gigantic Storm,AreaSkillAutomaticHits,Wizardry,6,0,12;13,220,118,,,120,10,0,,,
+238,Chaotic Diseier,AreaSkillAutomaticHits,Physical,6,0,16;17,100,16,,,50,15,0,,,
+239,Doppelganger Self Explosion,DirectHit,Wizardry,3,0,,100,,,,20,25,0,,,
+250,Selupan Poison,AreaSkillExplicitTarget,Physical,10,0,,,,,,,,0,,,
+251,Selupan Ice Storm,AreaSkillExplicitTarget,Physical,10,0,,,,,,,,0,,,
+252,Selupan Ice Strike,AreaSkillExplicitTarget,Physical,10,0,,,,,,,,0,,,
+253,Selupan Fall,AreaSkillExplicitTarget,Physical,10,0,,,,,,,,0,,,
+260,Killing Blow,DirectHit,Physical,2,0,24;25,,,,,9,,0,,,
+261,Beast Uppercut,DirectHit,Physical,2,0,24;25,,,,,9,,0,,,
+262,Chain Drive,DirectHit,Physical,4,0,24;25,150,,,,15,20,0,,,
+263,Dark Side,DirectHit,Physical,4,0,24;25,180,,,,70,,0,,,
+264,Dragon Roar,AreaSkillExplicitTarget,Physical,3,0,24;25,150,,,,50,30,0,,,
+265,Dragon Slasher,DirectHit,Physical,4,0,24;25,200,,,,100,100,0,,,
+266,Ignore Defense,Buff,Physical,3,0,24;25,120,404,,,50,10,0,,,
+267,Increase Health,Buff,Physical,7,0,24;25,80,132,,,50,10,0,,,
+268,Increase Block,Buff,Physical,7,0,24;25,50,80,,,50,10,0,,,
+269,Charge,DirectHit,Physical,4,0,24;25,,,,,20,15,0,,,
+270,Phoenix Shot,AreaSkillExplicitTarget,Physical,4,0,24;25,,,,,30,,0,,,
+300,Durability Reduction (1),PassiveBoost,None,0,0,3;7;11;13;17;23,,,,,,,0,1,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 10 / 100
+301,PvP Defence Rate Inc,PassiveBoost,None,0,0,3;7;11;13;17;23,,,,,,,0,1,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 85 * 6
+302,Maximum SD increase,PassiveBoost,None,0,0,3;7;11;13;17;23,,,,,,,0,2,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 85 * 5
+303,Automatic Mana Rec Inc,PassiveBoost,None,0,0,3;7;11;13;17;23,,,,,,,0,2,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 1.5 * 0.01
+304,Poison Resistance Inc,PassiveBoost,None,0,0,3;7;11;13;17;23,,,,,,,0,2,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12))
+305,Durability Reduction (2),PassiveBoost,None,0,0,3;7;11;13;17;23,,,,,,,0,3,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 10 / 100
+306,SD Recovery Speed Inc,PassiveBoost,None,0,0,3;7;11;13;17;23,,,,,,,0,3,20,1 + (1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) / 100
+307,Automatic HP Rec Inc,PassiveBoost,None,0,0,3;7;11;13;17;23,,,,,,,0,3,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) / 100
+308,Lightning Resistance Inc,PassiveBoost,None,0,0,3;7;11;13;17;23,,,,,,,0,3,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12))
+309,Defense Increase,PassiveBoost,None,0,0,3;7;11;13;17;23,,,,,,,0,4,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 50
+310,Automatic AG Rec Inc,PassiveBoost,None,0,0,3;7;11;13;17;23,,,,,,,0,4,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) / 100
+311,Ice Resistance Increase,PassiveBoost,None,0,0,3;7;11;13;17;23,,,,,,,0,4,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12))
+312,Durability Reduction (3),PassiveBoost,None,0,0,3;7;11;13;17;23,,,,,,,0,5,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 10
+313,Defense Success Rate Inc,PassiveBoost,None,0,0,3;7;11;13;17;23,,,,,,,0,5,20,1 + (1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) / 100
+325,Attack Succ Rate Inc,PassiveBoost,None,0,0,3;7;11;13;17;23,,,,,,,0,1,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 85 * 5
+326,Cyclone Strengthener,DirectHit,Physical,2,1,7,,,,,9,,0,2,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+327,Slash Strengthener,DirectHit,Physical,2,1,7,,,,,10,,0,2,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+328,Falling Slash Streng,DirectHit,Physical,3,1,7,,,,,9,,0,2,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+329,Lunge Strengthener,DirectHit,Physical,2,1,7,,,,,9,,0,2,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+330,Twisting Slash Streng,AreaSkillAutomaticHits,Physical,2,0,7,,,,,10,10,0,3,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+331,Rageful Blow Streng,AreaSkillAutomaticHits,Physical,3,0,7,170,,,,25,22,0,3,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+332,Twisting Slash Mastery,AreaSkillAutomaticHits,Physical,2,0,7,,,,,22,20,0,4,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) / 100
+333,Rageful Blow Mastery,AreaSkillAutomaticHits,Physical,3,0,7,170,,,,50,30,0,4,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) / 100
+334,Maximum Life Increase,PassiveBoost,None,0,0,3;7;11;13;17;23,,,,,,,0,4,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 85
+335,Weapon Mastery,PassiveBoost,None,0,0,7,,,,,,,0,4,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+336,Death Stab Strengthener,DirectHit,Physical,2,0,7,160,,,,15,13,1,5,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+337,Strike of Destr Str,AreaSkillAutomaticHits,Physical,5,0,7,100,,,,30,24,0,5,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+338,Maximum Mana Increase,PassiveBoost,None,0,0,3;7;11;13;17;23,,,,,,,0,5,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 85
+347,PvP Attack Rate,PassiveBoost,None,0,0,3;7;11;13;17;23,,,,,,,0,1,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 85 * 8
+348,Two-handed Sword Stren,PassiveBoost,Physical,0,0,7;13,,,,,,,0,2,20,(0.9 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 8
+349,One-handed Sword Stren,PassiveBoost,Physical,0,0,7;13,,,,,,,0,2,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+350,Mace Strengthener,PassiveBoost,Physical,0,0,7,,,,,,,0,2,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+351,Spear Strengthener,PassiveBoost,Physical,0,0,7,,,,,,,0,2,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+352,Two-handed Sword Mast,PassiveBoost,Physical,0,0,7;13,,,,,,,0,3,20,(0.95 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 10
+353,One-handed Sword Mast,PassiveBoost,Physical,0,0,7;13,,,,,,,0,3,10,1 * level
+354,Mace Mastery,PassiveBoost,Physical,0,0,7,,,,,,,0,3,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) / 100
+355,Spear Mastery,PassiveBoost,Physical,0,0,7,,,,,,,0,3,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) / 100
+356,Swell Life Strengt,Buff,None,0,0,7,120,,,,24,26,0,4,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 1.5 / 100
+357,Mana Reduction,PassiveBoost,None,0,0,3;7;11;13;17;23,,,,,,,0,4,20,((1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6) * 0.01
+358,Monster Attack SD Inc,PassiveBoost,None,0,0,3;7;11;13;17;23,,,,,,,0,4,20,11 / (1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12))
+359,Monster Attack Life Inc,PassiveBoost,None,0,0,3;7;11;13;17;23,,,,,,,0,4,20,52 / (1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6))))
+360,Swell Life Proficiency,Buff,None,0,0,7,120,,,,26,28,0,5,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 1.5 / 100
+361,Minimum Attack Power Inc,PassiveBoost,Physical,0,0,7;13;17,,,,,,,0,5,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+362,Monster Attack Mana Inc,PassiveBoost,None,0,0,3;7;11;13;17;23,,,,,,,0,5,20,52 / (1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6))))
+378,Flame Strengthener,AreaSkillAutomaticHits,Wizardry,6,0,3,35,100,,,55,,0,2,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+379,Lightning Strengthener,DirectHit,Wizardry,6,0,3,13,100,,,20,,0,2,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+380,Expansion of Wiz Streng,Buff,None,6,0,3,220,118,,,220,55,0,2,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 0.01
+381,Inferno Strengthener,AreaSkillAutomaticHits,Wizardry,0,0,3,88,200,,,220,,0,3,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+382,Blast Strengthener,AreaSkillAutomaticHits,Wizardry,6,0,3,80,150,,,165,,0,3,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+383,Expansion of Wiz Mas,Buff,None,6,0,3,220,118,,,220,55,0,3,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 0.01
+384,Poison Strengthener,DirectHit,Wizardry,6,0,3,30,100,,,46,,0,3,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+385,Evil Spirit Streng,AreaSkillAutomaticHits,Wizardry,6,0,3,50,100,,,108,,0,4,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+386,Magic Mastery,PassiveBoost,None,0,0,3,50,,,,,,0,4,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+387,Decay Strengthener,AreaSkillAutomaticHits,Wizardry,6,0,3,96,243,,,120,10,0,4,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+388,Hellfire Strengthener,AreaSkillAutomaticHits,Wizardry,0,0,3,60,100,,,176,,0,5,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+389,Ice Strengthener,DirectHit,Wizardry,6,0,3,25,100,,,42,,0,5,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+397,One-handed Staff Stren,PassiveBoost,Wizardry,0,0,3;13,,,,,,,0,2,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+398,Two-handed Staff Stren,PassiveBoost,Wizardry,0,0,3;13,,,,,,,0,2,20,(0.9 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 8
+399,Shield Strengthener,PassiveBoost,None,0,0,3,,,,,,,0,2,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 8
+400,One-handed Staff Mast,PassiveBoost,None,0,0,3;13,,,,,,,0,3,10,1 * level
+401,Two-handed Staff Mast,PassiveBoost,Wizardry,0,0,3;13,,,,,,,0,3,20,(0.95 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 10
+402,Shield Mastery,PassiveBoost,None,0,0,3,,,,,,,0,3,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 10
+403,Soul Barrier Strength,Buff,None,6,0,3,77,126,,,77,24,0,4,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 1.5 / 100
+404,Soul Barrier Proficie,Buff,None,6,0,3,77,126,,,84,26,0,5,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 8
+405,Minimum Wizardry Inc,PassiveBoost,None,0,0,3;13,,,,,,,0,5,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+413,Heal Strengthener,Regeneration,None,6,0,11,8,100,,,22,,0,2,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+414,Triple Shot Strengthener,AreaSkillAutomaticHits,Physical,6,0,11,,,,,5,,0,2,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+415,Summoned Monster Str (1),PassiveBoost,None,0,0,11,,,,,,,0,2,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 50 / 100
+416,Penetration Strengthener,AreaSkillAutomaticHits,Physical,6,0,11,130,,,,10,11,0,3,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+417,Defense Increase Str,Buff,None,6,0,11,13,100,,,33,,0,3,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5 / 100
+418,Triple Shot Mastery,AreaSkillAutomaticHits,Physical,6,0,11,,,,,9,,0,3,10,if(level < 10; 0; 1)
+419,Summoned Monster Str (2),PassiveBoost,None,0,0,11,,,,,,,0,3,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 50 / 100
+420,Attack Increase Str,Buff,None,6,0,11,18,100,,,44,,0,4,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5 / 100
+421,Weapon Mastery,PassiveBoost,None,0,0,11,,,,,,,0,4,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+422,Attack Increase Mastery,Buff,None,6,0,11,18,100,,,48,,0,5,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5 / 100
+423,Defense Increase Mastery,Buff,None,6,0,11,13,100,,,36,,0,5,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5 / 100
+424,Ice Arrow Strengthener,DirectHit,Physical,8,0,11,,,,,15,18,0,5,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+435,Bow Strengthener,PassiveBoost,None,0,0,11,,,,,,,0,2,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+436,Crossbow Strengthener,PassiveBoost,None,0,0,11,,,,,,,0,2,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+437,Shield Strengthener,PassiveBoost,None,0,0,11,,,,,,,0,2,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 8
+438,Bow Mastery,PassiveBoost,None,0,0,11,,,,,,,0,3,10,1 * level
+439,Crossbow Mastery,PassiveBoost,None,0,0,11,,,,,,,0,3,20,(0.95 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 10
+440,Shield Mastery,PassiveBoost,None,0,0,11,,,,,,,0,3,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 15
+441,Infinity Arrow Str,Buff,None,6,0,11,220,,,,55,11,0,5,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) / 100
+442,Minimum Att Power Inc,PassiveBoost,Physical,0,0,11,,,,,,,0,5,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+448,Fire Tome Strengthener,PassiveBoost,Curse,0,0,23,,,,,,,0,2,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+449,Wind Tome Strengthener,PassiveBoost,Curse,0,0,23,,,,,,,0,2,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+450,Lightning Tome Stren,PassiveBoost,Curse,0,0,23,,,,,,,0,2,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+451,Fire Tome Mastery,PassiveBoost,Curse,0,0,23,,,,,,,0,3,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 1.5 / 100
+452,Wind Tome Mastery,PassiveBoost,None,0,0,23,,,,,,,0,3,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) / 100
+453,Lightning Tome Mastery,PassiveBoost,Curse,0,0,23,,,,,,,0,3,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 1.5 / 100
+454,Sleep Strengthener,Buff,None,6,0,23,40,100,,,30,7,0,3,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 0.01
+455,Chain Lightning Str,AreaSkillExplicitTarget,Wizardry,6,0,23,75,75,,,103,,0,4,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+456,Lightning Shock Str,AreaSkillAutomaticHits,Wizardry,6,0,23,93,216,,,125,10,0,4,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+457,Magic Mastery,PassiveBoost,Curse,0,0,23,,,,,,,0,5,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+458,Drain Life Strengthener,AreaSkillExplicitTarget,Wizardry,6,0,23,35,93,,,57,,0,5,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+465,Stick Strengthener,PassiveBoost,Curse,0,0,23,,,,,,,0,2,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+466,Other World Tome Streng,PassiveBoost,Curse,0,0,23,,,,,,,0,2,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+467,Stick Mastery,PassiveBoost,Curse,0,0,23,,,,,,,0,3,20,(0.95 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 10
+468,Other World Tome Mastery,PassiveBoost,None,0,0,23,,,,,,,0,3,10,1 * level
+469,Berserker Strengthener,Buff,None,5,0,23,83,181,,,150,75,0,4,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 1.5 / 100
+470,Berserker Proficiency,Buff,None,5,0,23,83,181,,,165,82,0,5,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 1.5 / 100
+471,Minimum Wiz/Curse Inc,PassiveBoost,None,0,0,23,,,,,,,0,5,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+479,Cyclone Strengthener,DirectHit,Physical,2,1,13,,,,,9,,0,2,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+480,Lightning Strengthener,DirectHit,Wizardry,6,0,13,13,100,,,20,,0,2,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+481,Twisting Slash Stren,AreaSkillAutomaticHits,Physical,2,0,13,,,,,10,10,0,2,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+482,Power Slash Streng,AreaSkillAutomaticHits,Physical,5,0,13,,,,,15,,0,2,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+483,Flame Strengthener,AreaSkillAutomaticHits,Wizardry,6,0,13,35,100,,,55,,0,3,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+484,Blast Strengthener,AreaSkillAutomaticHits,Wizardry,6,0,13,80,150,,,165,,0,3,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+485,Weapon Mastery,PassiveBoost,None,0,0,13,,,,,,,0,3,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+486,Inferno Strengthener,AreaSkillAutomaticHits,Wizardry,0,0,13,88,200,,,220,,0,4,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+487,Evil Spirit Strengthen,AreaSkillAutomaticHits,Wizardry,6,0,13,50,100,,,108,,0,4,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+488,Magic Mastery,PassiveBoost,None,0,0,13,,,,,,,0,4,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+489,Ice Strengthener,DirectHit,Wizardry,6,0,13,25,100,,,42,,0,5,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+490,Blood Attack Strengthen,AreaSkillAutomaticHits,Physical,3,0,13,,,,,15,22,0,5,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+508,Fire Burst Streng,DirectHit,Physical,6,0,17,74,20,,,25,,1,2,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+509,Force Wave Streng,DirectHit,Physical,4,0,17,,,,,15,,0,2,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+510,Dark Horse Streng (1),PassiveBoost,None,0,0,17,,,,,,,0,2,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 10
+511,Critical DMG Inc PowUp,Buff,None,0,0,17,82,25,,300,75,75,0,3,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+512,Earthshake Streng,AreaSkillAutomaticHits,Physical,10,0,17,,,,,,75,0,3,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+513,Weapon Mastery,PassiveBoost,None,0,0,17,,,,,,,0,3,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+514,Fire Burst Mastery,DirectHit,Physical,6,0,17,74,20,,,27,,1,4,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) / 100
+515,Crit DMG Inc PowUp (2),Buff,None,0,0,17,82,25,,300,82,82,0,4,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 8
+516,Earthshake Mastery,AreaSkillAutomaticHits,Physical,10,0,17,,,,,,75,0,4,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) / 100
+517,Crit DMG Inc PowUp (3),Buff,None,0,0,17,82,25,,300,100,100,0,5,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 1.5 / 100
+518,Fire Scream Stren,AreaSkillAutomaticHits,Physical,6,0,17,102,32,,70,45,11,0,5,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+526,Dark Spirit Str,PassiveBoost,None,0,0,17,,,,,,,0,2,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+527,Scepter Strengthener,PassiveBoost,Physical,0,0,17,,,,,,,0,2,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+528,Shield Strengthener,PassiveBoost,None,0,0,17,,,,,,,0,2,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 8
+529,Use Scepter : Pet Str,PassiveBoost,None,0,0,17,,,,,,,0,2,20,(0.85 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6
+530,Dark Spirit Str (2),PassiveBoost,None,0,0,17,,,,,,,0,3,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 1.5 / 100
+531,Scepter Mastery,PassiveBoost,None,0,0,17,,,,,,,0,3,20,(0.95 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 10
+532,Shield Mastery,PassiveBoost,None,0,0,17,,,,,,,0,3,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 10
+533,Command Attack Inc,PassiveBoost,None,0,0,17,,,,,,,0,3,20,1 / (40 / (1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) + 5)
+534,Dark Spirit Str (3),PassiveBoost,None,0,0,17,,,,,,,0,5,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) / 100
+535,Pet Durability Str,PassiveBoost,None,0,0,17,,,,,,,0,5,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 10
+551,Killing Blow Strengthener,DirectHit,Physical,2,0,25,,,,,10,,0,2,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+552,Beast Uppercut Strengthener,DirectHit,Physical,2,0,25,,,,,10,,0,2,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+554,Killing Blow Mastery,DirectHit,Physical,2,0,25,,,,,10,,0,3,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 0.01
+555,Beast Uppercut Mastery,DirectHit,Physical,2,0,25,,,,,10,,0,3,20,-1 * (1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 0.01
+557,Weapon Mastery,PassiveBoost,None,0,0,25,,,,,,,0,4,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+558,Chain Drive Strengthener,DirectHit,Physical,4,0,25,150,,,,22,20,0,5,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+559,Dark Side Strengthener,DirectHit,Physical,4,0,25,180,,,,84,,0,5,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+560,Dragon Roar Strengthener,AreaSkillExplicitTarget,Physical,3,0,25,150,,,,60,33,0,5,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+568,Equipped Weapon Strengthener,PassiveBoost,None,0,0,25,,,,,,,0,2,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+569,Def SuccessRate IncPowUp,Buff,Physical,7,0,25,50,30,,,55,11,0,2,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+571,Equipped Weapon Mastery,PassiveBoost,None,0,0,25,,,,,,,0,3,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 0.01
+572,DefSuccessRate IncMastery,Buff,Physical,7,0,25,50,30,,,60,12,0,3,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+573,Stamina Increase Strengthener,Buff,Physical,7,0,25,80,35,,,55,11,0,4,20,(0.95 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 10
+578,Durability Reduction (1),PassiveBoost,None,0,0,25,,,,,,,0,1,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 10 / 100
+579,Increase PvP Defense Rate,PassiveBoost,None,0,0,25,,,,,,,0,1,20,(1 + ( ( ( ( ( ( (level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 85 * 2.5
+580,Increase Maximum SD,PassiveBoost,None,0,0,25,,,,,,,0,2,20,(1 + ( ( ( ( ( ((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 85 * 3
+581,Increase Mana Recovery Rate,PassiveBoost,None,0,0,25,,,,,,,0,2,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 1.5 * 0.01
+582,Increase Poison Resistance,PassiveBoost,None,0,0,25,,,,,,,0,2,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12))
+583,Durability Reduction (2),PassiveBoost,None,0,0,25,,,,,,,0,3,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 10 / 100
+584,Increase SD Recovery Rate,PassiveBoost,None,0,0,25,,,,,,,0,3,20,1 + (1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) / 100
+585,Increase HP Recovery Rate,PassiveBoost,None,0,0,25,,,,,,,0,3,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) / 100
+586,Increase Lightning Resistance,PassiveBoost,None,0,0,25,,,,,,,0,3,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12))
+587,Increases Defense,PassiveBoost,None,0,0,25,,,,,,,0,4,20,(1 + ( ( ( ( ( ( (level - 30) ^ 3) + 25000) / 499) / 6) ) ) ) * 28
+588,Increases AG Recovery Rate,PassiveBoost,None,0,0,25,,,,,,,0,4,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) / 100
+589,Increase Ice Resistance,PassiveBoost,None,0,0,25,,,,,,,0,4,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12))
+590,Durability Reduction(3),PassiveBoost,None,0,0,25,,,,,,,0,5,20,(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 10
+591,Increase Defense Success Rate,PassiveBoost,None,0,0,25,,,,,,,0,5,20,(101 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) / 100
+599,Increase Attack Success Rate,PassiveBoost,None,0,0,25,,,,,,,0,1,20,(1 + ( ( ( ( ( ( (level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12) ) * 85 * 2
+600,Increase Maximum HP,PassiveBoost,None,0,0,25,,,,,,,0,4,20,(1 + ( ( ( ( ( ( (level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 45
+601,Increase Maximum Mana,PassiveBoost,None,0,0,25,,,,,,,0,5,20,(1 + ( ( ( ( ( ( (level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 45
+603,Increase PvP Attack Rate,PassiveBoost,None,0,0,25,,,,,,,0,1,20,(1 + ( ( ( ( ( ( (level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 85 * 3.2
+604,Decrease Mana,PassiveBoost,None,0,0,25,,,,,,,0,4,20,((1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 6) * 0.01
+605,Recover SD from Monster Kills,PassiveBoost,None,0,0,25,,,,,,,0,4,20,11 / (1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12))
+606,Recover HP from Monster Kills,PassiveBoost,None,0,0,25,,,,,,,0,4,20,52 / (1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6))))
+607,Increase Minimum Attack Power,PassiveBoost,None,0,0,25,,,,,,,0,5,20,(0.8 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 5
+608,Recover Mana Monster Kills,PassiveBoost,None,0,0,25,,,,,,,0,5,20,52 / (1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6))))
+700,Earth Splitter,AreaSkillAutomaticHits,Physical,3,0,4;6;7,80,,,,30,10,0,,,
+701,Blood Slash,AreaSkillExplicitTarget,Physical,2,0,4;6;7,150,,,,25,12,0,,,
+702,Iron Guard,Buff,None,0,0,4;6;7,220,,,,60,20,0,,,
+703,Charge,DirectHit,Physical,5,1,4;6;7,250,,,,40,15,0,,,
+704,Ice Dragon,AreaSkillAutomaticHits,Wizardry,7,0,0;2;3,80,,,,70,8,0,,,
+705,Meteor Rain,AreaSkillAutomaticHits,Wizardry,6,0,0;2;3,150,,,,110,12,0,,,
+706,Thunder Cage,DirectHit,Wizardry,6,0,0;2;3,220,,,,80,10,0,,,
+707,Mana Shield,Buff,None,0,0,0;2;3,250,,,,100,30,0,,,
+708,Phoenix Arrow,AreaSkillAutomaticHits,Physical,7,0,8;10;11,80,,,,30,8,0,,,
+709,Frost Arrow Rain,AreaSkillAutomaticHits,Physical,6,0,8;10;11,150,,,,60,12,0,,,
+710,Forest Blessing,Buff,None,0,0,8;10;11,220,,,,80,20,0,,,
+711,Spirit Wolf,SummonMonster,None,0,0,8;10;11,250,,,,150,30,0,,,
+712,Chain Lightning Blade,AreaSkillAutomaticHits,Physical,4,0,12;13,80,,,,35,10,0,,,
+713,Flame Whirl,AreaSkillAutomaticHits,Physical,3,0,12;13,150,,,,50,15,0,,,
+714,Twin Power,Buff,None,0,0,12;13,220,,,,60,20,0,,,
+715,Heaven Sword,AreaSkillAutomaticHits,Wizardry,6,0,12;13,250,,,,120,20,0,,,
+716,Shadow Ravens,AreaSkillAutomaticHits,Physical,6,0,16;17,80,,,,40,10,0,,,
+717,War Command,Buff,None,0,0,16;17,150,,,,70,25,0,,,
+718,Earth Stomp,AreaSkillAutomaticHits,Physical,3,0,16;17,220,,,,60,20,0,,,
+719,Royal Beam,AreaSkillAutomaticHits,Physical,7,0,16;17,250,,,,90,20,0,,,
+720,Poison Soul,AreaSkillAutomaticHits,Wizardry,6,0,20;22;23,80,,,,70,10,0,,,
+721,Little Demon,SummonMonster,None,0,0,20;22;23,150,,,,120,25,0,,,
+722,Weakening Curse,Buff,None,6,0,20;22;23,220,,,,50,15,0,,,
+723,Soul Drain,AreaSkillExplicitTarget,Wizardry,6,0,20;22;23,250,,,,20,10,0,,,
+724,Dragon Fist,AreaSkillAutomaticHits,Physical,5,0,24;25,80,,,,30,10,0,,,
+725,Whirl Kicks,AreaSkillAutomaticHits,Physical,2,0,24;25,150,,,,40,15,0,,,
+726,Iron Body,Buff,None,0,0,24;25,220,,,,70,25,0,,,
+727,Quake Fist,AreaSkillAutomaticHits,Physical,3,0,24;25,250,,,,80,25,0,,,

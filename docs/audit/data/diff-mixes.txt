@@ -56,4 +56,4 @@
 
 ## SocketWeaponMix (from suite SocketItem.xml)
 
-## HNMO recipes count: 42
+## HNMO recipes count: 43

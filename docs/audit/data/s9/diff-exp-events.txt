@@ -1,0 +1,84 @@
+# EXP, Globals, and Events Differences: HNMO vs Season 6 & Season 9 Suites
+
+## HNMO Globals & EXP formulas
+MaximumLevel=400
+MaximumMasterLevel=200
+ExperienceRate=1
+MasterExperienceRate=1
+ExperienceFormula=if(level == 0, 0, if(level < 256, 10 * (level + 8) * (level - 1) * (level - 1), (10 * (level + 8) * (level - 1) * (level - 1)) + (1000 * (level - 247) * (level - 256) * (level - 256))))
+MasterExperienceFormula=(505 * level * level * level) + (35278500 * level) + (228045 * level * level)
+MaximumPartySize=5
+MinimumMonsterLevelForMasterExperience=95
+InfoRange=12
+
+## Suite Common settings (Guild / Party / PK / Level)
+[General] MaxNormalLevel: S6=400, S9=400
+[General] MaxMasterLevel: S6=200, S9=330
+[General] MasterPointPerLevel: S6=1, S9=1
+[General] MonsterMinLevelForMLExp: S6=95, S9=95
+[General] CanEnterEventWithPK: S6=0, S9=0
+[General] UseSoulRate: S6=50, S9=50
+[General] UseSoulWithLuckRate: S6=75, S9=75
+[General] UseLifeRate: S6=50, S9=50
+[General] AutoParty: S6=1, S9=1
+[ResetCMD] MinLevel: S6=400, S9=400
+[ResetCMD] IsResetMasterLevel: S6=0, S9=0
+[ResetCMD] BlockLevelUpPointAfterResetCount: S6=-1, S9=-1
+[ResetCMD] RemoveFromParty: S6=1, S9=n/a
+[MuBot] MinLevel: S6=80, S9=80
+[MuBot] NeedVIPLevel: S6=0, S9=0
+[Guilds] GuildCreate: S6=1, S9=1
+[Guilds] GuildDestroy: S6=1, S9=1
+[Guilds] GuildCreateLevel: S6=150, S9=150
+[Guilds] MaxGuildMember: S6=80, S9=80
+[Guilds] CastleOwnerGuildDestroyLimit: S6=1, S9=1
+[Guilds] AllianceMinGuildMember: S6=10, S9=10
+[Guilds] AllianceMaxGuilds: S6=3, S9=3
+[Acheron] SpiritMapDropRate: S6=100, S9=100
+[Acheron] SpiritMapMonsterDropLevel: S6=32, S9=32
+[EggEvent] MoonRabbitSpawnRateFromBook: S6=3000, S9=3000
+[EggEvent] PouchBlessingSpawnRateFromBook: S6=3000, S9=3000
+[EggEvent] FireFlameSpawnRateFromBook: S6=3000, S9=3000
+[EggEvent] GoldGoblinSpawnRateFromBook: S6=1000, S9=1000
+
+## HNMO Events dumped (40 rows):
+DevilSquare Lv.1: enter=300s, play=1200s, exit=180s, maxPlayers=15
+DevilSquare Lv.2: enter=300s, play=1200s, exit=180s, maxPlayers=15
+DevilSquare Lv.3: enter=300s, play=1200s, exit=180s, maxPlayers=15
+DevilSquare Lv.4: enter=300s, play=1200s, exit=180s, maxPlayers=15
+DevilSquare Lv.5: enter=300s, play=1200s, exit=180s, maxPlayers=15
+DevilSquare Lv.6: enter=300s, play=1200s, exit=180s, maxPlayers=15
+DevilSquare Lv.7: enter=300s, play=1200s, exit=180s, maxPlayers=15
+BloodCastle Lv.1: enter=300s, play=900s, exit=60s, maxPlayers=10
+BloodCastle Lv.2: enter=300s, play=900s, exit=60s, maxPlayers=10
+BloodCastle Lv.3: enter=300s, play=900s, exit=60s, maxPlayers=10
+BloodCastle Lv.4: enter=300s, play=900s, exit=60s, maxPlayers=10
+BloodCastle Lv.5: enter=300s, play=900s, exit=60s, maxPlayers=10
+BloodCastle Lv.6: enter=300s, play=900s, exit=60s, maxPlayers=10
+BloodCastle Lv.7: enter=300s, play=900s, exit=60s, maxPlayers=10
+BloodCastle Lv.8: enter=300s, play=900s, exit=60s, maxPlayers=10
+ChaosCastle Lv.1: enter=300s, play=600s, exit=60s, maxPlayers=70
+ChaosCastle Lv.2: enter=300s, play=600s, exit=60s, maxPlayers=70
+ChaosCastle Lv.3: enter=300s, play=600s, exit=60s, maxPlayers=70
+ChaosCastle Lv.4: enter=300s, play=600s, exit=60s, maxPlayers=70
+ChaosCastle Lv.5: enter=300s, play=600s, exit=60s, maxPlayers=70
+ChaosCastle Lv.6: enter=300s, play=600s, exit=60s, maxPlayers=70
+ChaosCastle Lv.7: enter=300s, play=600s, exit=60s, maxPlayers=70
+IllusionTemple Lv.1: enter=300s, play=900s, exit=60s, maxPlayers=10
+IllusionTemple Lv.2: enter=300s, play=900s, exit=60s, maxPlayers=10
+IllusionTemple Lv.3: enter=300s, play=900s, exit=60s, maxPlayers=10
+IllusionTemple Lv.4: enter=300s, play=900s, exit=60s, maxPlayers=10
+IllusionTemple Lv.5: enter=300s, play=900s, exit=60s, maxPlayers=10
+IllusionTemple Lv.6: enter=300s, play=900s, exit=60s, maxPlayers=10
+Doppelganger Lv.1: enter=30s, play=600s, exit=60s, maxPlayers=5
+Doppelganger Lv.2: enter=30s, play=600s, exit=60s, maxPlayers=5
+Doppelganger Lv.3: enter=30s, play=600s, exit=60s, maxPlayers=5
+Doppelganger Lv.4: enter=30s, play=600s, exit=60s, maxPlayers=5
+Kanturu Lv.1: enter=300s, play=8100s, exit=60s, maxPlayers=15
+ImperialGuardian Lv.1: enter=60s, play=3000s, exit=60s, maxPlayers=5
+ImperialGuardian Lv.2: enter=60s, play=3000s, exit=60s, maxPlayers=5
+ImperialGuardian Lv.3: enter=60s, play=3000s, exit=60s, maxPlayers=5
+ImperialGuardian Lv.4: enter=60s, play=3000s, exit=60s, maxPlayers=5
+ImperialGuardian Lv.5: enter=60s, play=3000s, exit=60s, maxPlayers=5
+ImperialGuardian Lv.6: enter=60s, play=3000s, exit=60s, maxPlayers=5
+ImperialGuardian Lv.7: enter=60s, play=3000s, exit=60s, maxPlayers=5

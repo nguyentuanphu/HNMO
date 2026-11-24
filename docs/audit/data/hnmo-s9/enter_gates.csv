@@ -1,0 +1,139 @@
+﻿MapNumber,MapName,Number,X1,Y1,X2,Y2,TargetMapNumber,TargetX1,TargetY1,TargetX2,TargetY2,TargetDirection,LevelReq
+0,Lorencia,1,121,232,123,233,1,107,247,110,247,West,20
+0,Lorencia,18,5,38,6,41,2,242,34,243,37,North,15
+0,Lorencia,23,213,246,217,247,3,148,5,155,6,East,10
+0,Lorencia,102,239,14,240,15,30,29,37,30,42,Undefined,10
+1,Dungeon,3,108,248,109,248,0,121,231,123,231,West,0
+1,Dungeon,5,239,149,239,150,1,231,126,234,127,West,20
+1,Dungeon,7,232,127,233,128,1,240,149,241,151,South,20
+1,Dungeon,9,2,17,2,18,1,3,83,4,86,South,20
+1,Dungeon,11,2,84,2,85,1,3,16,6,17,South,20
+1,Dungeon,13,5,34,6,34,1,29,125,30,126,West,20
+1,Dungeon,15,29,127,30,127,1,5,32,7,33,West,20
+1,Dungeon,475,115,231,117,233,1,45,152,48,155,Undefined,0
+1,Dungeon,477,45,148,47,150,1,112,232,113,234,Undefined,0
+1,Dungeon,479,233,106,237,108,1,241,85,242,89,Undefined,0
+1,Dungeon,481,244,86,245,89,1,229,108,231,110,Undefined,0
+2,Devias,20,244,34,245,37,0,7,38,8,41,South,0
+2,Devias,28,2,248,3,249,4,162,2,166,3,East,40
+2,Devias,259,161,245,166,246,51,26,29,27,30,Undefined,15
+2,Devias,286,52,92,54,92,57,222,211,225,212,Undefined,270
+3,Noria,25,148,3,155,4,0,213,244,217,245,West,10
+3,Noria,45,242,240,245,243,7,14,12,15,13,South,60
+3,Noria,120,220,30,226,30,33,76,9,78,16,Undefined,130
+4,Lost Tower,30,190,6,191,8,4,241,237,244,238,West,40
+4,Lost Tower,32,166,163,167,166,4,86,166,87,168,South,40
+4,Lost Tower,34,132,245,135,246,4,87,86,88,89,South,50
+4,Lost Tower,36,132,135,135,136,4,128,53,131,54,West,50
+4,Lost Tower,38,131,15,132,18,4,52,53,55,54,West,50
+4,Lost Tower,40,6,5,7,8,4,8,85,9,87,West,50
+4,Lost Tower,43,162,0,166,1,2,2,246,3,247,SouthWest,15
+4,Lost Tower,62,17,250,19,250,10,14,13,16,13,East,160
+7,Atlans,47,9,9,11,12,3,240,240,241,243,North,60
+7,Atlans,53,14,225,15,230,8,248,40,251,44,North,130
+7,Atlans,263,13,19,14,20,51,243,149,244,150,Undefined,10
+8,Tarkan,55,246,40,247,44,7,16,225,17,230,South,130
+8,Tarkan,125,6,199,6,201,37,17,219,21,220,Undefined,150
+10,Icarus,64,14,12,16,12,4,17,249,19,249,West,50
+30,Valley of Loren,96,93,242,95,243,30,164,198,187,209,Undefined,0
+30,Valley of Loren,98,160,203,161,205,30,90,236,99,239,Undefined,0
+30,Valley of Loren,107,28,40,28,41,0,235,13,239,13,Undefined,0
+30,Valley of Loren,117,161,37,165,45,34,231,37,234,45,Undefined,10
+31,Land_of_Trials,109,59,7,63,8,30,131,92,138,94,Undefined,0
+33,Aida,121,74,9,74,13,3,220,31,226,34,Undefined,10
+33,Aida,336,237,167,240,168,80,118,44,119,46,South,160
+34,Crywolf Fortress,123,239,40,240,44,30,155,37,158,43,Undefined,10
+37,Kanturu_I,127,17,220,19,222,8,7,199,7,201,Undefined,130
+37,Kanturu_I,129,89,89,89,92,38,70,104,70,107,Undefined,220
+38,Kanturu_III,131,69,104,69,107,37,85,89,86,92,Undefined,150
+45,Illusion Temple 1,160,136,100,137,101,45,170,101,170,103,Undefined,0
+45,Illusion Temple 1,162,150,117,152,119,45,149,84,152,84,Undefined,0
+45,Illusion Temple 1,164,149,88,151,89,45,149,122,151,122,Undefined,0
+45,Illusion Temple 1,166,165,101,166,104,45,132,99,132,103,Undefined,0
+45,Illusion Temple 1,168,173,65,174,68,45,207,65,207,68,Undefined,0
+45,Illusion Temple 1,170,186,79,189,81,45,186,47,189,47,Undefined,0
+45,Illusion Temple 1,172,186,51,188,52,45,186,84,189,84,Undefined,0
+45,Illusion Temple 1,174,202,66,203,68,45,169,65,169,68,Undefined,0
+46,Illusion Temple 2,176,136,100,137,101,46,170,101,170,103,Undefined,0
+46,Illusion Temple 2,178,150,117,152,119,46,149,84,152,84,Undefined,0
+46,Illusion Temple 2,180,149,88,151,89,46,149,122,151,122,Undefined,0
+46,Illusion Temple 2,182,165,101,166,104,46,132,99,132,103,Undefined,0
+46,Illusion Temple 2,184,173,65,174,68,46,207,65,207,68,Undefined,0
+46,Illusion Temple 2,186,186,79,189,81,46,186,47,189,47,Undefined,0
+46,Illusion Temple 2,188,186,51,188,52,46,186,84,189,84,Undefined,0
+46,Illusion Temple 2,190,202,66,203,68,46,169,65,169,68,Undefined,0
+47,Illusion Temple 3,192,136,100,137,101,47,170,101,170,103,Undefined,0
+47,Illusion Temple 3,194,150,117,152,119,47,149,84,152,84,Undefined,0
+47,Illusion Temple 3,196,149,88,151,89,47,149,122,151,122,Undefined,0
+47,Illusion Temple 3,198,165,101,166,104,47,132,99,132,103,Undefined,0
+47,Illusion Temple 3,200,173,65,174,68,47,207,65,207,68,Undefined,0
+47,Illusion Temple 3,202,186,79,189,81,47,186,47,189,47,Undefined,0
+47,Illusion Temple 3,204,186,51,188,52,47,186,84,189,84,Undefined,0
+47,Illusion Temple 3,206,202,66,203,68,47,169,65,169,68,Undefined,0
+48,Illusion Temple 4,208,136,100,137,101,48,170,101,170,103,Undefined,0
+48,Illusion Temple 4,210,150,117,152,119,48,149,84,152,84,Undefined,0
+48,Illusion Temple 4,212,149,88,151,89,48,149,122,151,122,Undefined,0
+48,Illusion Temple 4,214,165,101,166,104,48,132,99,132,103,Undefined,0
+48,Illusion Temple 4,216,173,65,174,68,48,207,65,207,68,Undefined,0
+48,Illusion Temple 4,218,186,79,189,81,48,186,47,189,47,Undefined,0
+48,Illusion Temple 4,220,186,51,188,52,48,186,84,189,84,Undefined,0
+48,Illusion Temple 4,222,202,66,203,68,48,169,65,169,68,Undefined,0
+49,Illusion Temple 5,224,136,100,137,101,49,170,101,170,103,Undefined,0
+49,Illusion Temple 5,226,150,117,152,119,49,149,84,152,84,Undefined,0
+49,Illusion Temple 5,228,149,88,151,89,49,149,122,151,122,Undefined,0
+49,Illusion Temple 5,230,165,101,166,104,49,132,99,132,103,Undefined,0
+49,Illusion Temple 5,232,173,65,174,68,49,207,65,207,68,Undefined,0
+49,Illusion Temple 5,234,186,79,189,81,49,186,47,189,47,Undefined,0
+49,Illusion Temple 5,236,186,51,188,52,49,186,84,189,84,Undefined,0
+49,Illusion Temple 5,238,202,66,203,68,49,169,65,169,68,Undefined,0
+50,Illusion Temple 6,240,136,100,137,101,50,170,101,170,103,Undefined,0
+50,Illusion Temple 6,242,150,117,152,119,50,149,84,152,84,Undefined,0
+50,Illusion Temple 6,244,149,88,151,89,50,149,122,151,122,Undefined,0
+50,Illusion Temple 6,246,165,101,166,104,50,132,99,132,103,Undefined,0
+50,Illusion Temple 6,248,173,65,174,68,50,207,65,207,68,Undefined,0
+50,Illusion Temple 6,250,186,79,189,81,50,186,47,189,47,Undefined,0
+50,Illusion Temple 6,252,186,51,188,52,50,186,84,189,84,Undefined,0
+50,Illusion Temple 6,254,202,66,203,68,50,169,65,169,68,Undefined,0
+51,Elvenland,261,24,29,25,30,2,161,241,163,242,Undefined,15
+51,Elvenland,265,247,149,248,150,7,16,19,17,20,Undefined,60
+56,Swamp Of Calmness,274,139,125,139,126,56,189,190,191,193,Undefined,400
+56,Swamp Of Calmness,276,185,187,186,188,56,135,105,142,111,Undefined,400
+56,Swamp Of Calmness,277,149,109,150,109,56,204,10,206,14,Undefined,400
+56,Swamp Of Calmness,279,197,12,197,14,56,135,105,142,111,Undefined,400
+56,Swamp Of Calmness,280,139,95,140,95,56,65,47,67,48,Undefined,400
+56,Swamp Of Calmness,282,68,52,69,53,56,135,105,142,111,Undefined,400
+56,Swamp Of Calmness,283,124,109,124,110,56,62,174,63,179,Undefined,400
+56,Swamp Of Calmness,285,57,176,57,177,56,135,105,142,111,Undefined,400
+57,LaCleon,288,223,215,225,215,2,52,88,54,89,Undefined,270
+57,LaCleon,290,171,23,171,25,58,160,24,161,27,Undefined,270
+58,LaCleon Boss,292,167,24,167,25,57,174,23,175,25,Undefined,270
+69,Fortress of Imperial Guardian 1,308,209,80,211,82,69,202,24,203,27,Undefined,0
+69,Fortress of Imperial Guardian 1,310,153,60,156,63,69,179,65,181,67,Undefined,0
+70,Fortress of Imperial Guardian 2,313,10,64,12,66,70,35,84,38,85,Undefined,0
+70,Fortress of Imperial Guardian 2,315,54,161,56,163,70,121,110,123,112,Undefined,0
+71,Fortress of Imperial Guardian 3,318,82,194,84,196,71,222,121,224,123,Undefined,0
+71,Fortress of Imperial Guardian 3,320,222,201,224,203,71,165,206,168,207,Undefined,0
+72,Fortress of Imperial Guardian 4,323,30,95,32,97,72,32,162,34,164,Undefined,0
+72,Fortress of Imperial Guardian 4,325,68,160,70,162,72,145,155,147,157,Undefined,0
+72,Fortress of Imperial Guardian 4,327,223,165,225,167,72,241,23,243,25,Undefined,0
+80,Karutan 1,338,116,44,117,47,33,237,166,240,166,West,160
+80,Karutan 1,340,186,210,190,212,81,162,12,164,14,East,160
+81,Karutan 2,342,161,8,165,9,80,188,207,189,208,West,160
+91,Acheron,418,26,168,28,172,91,112,161,114,166,Undefined,0
+91,Acheron,420,115,168,118,170,91,33,167,37,170,Undefined,0
+91,Acheron,422,82,204,86,205,91,151,198,156,200,Undefined,0
+91,Acheron,424,147,202,148,206,91,81,197,83,199,Undefined,0
+91,Acheron,435,52,161,53,163,95,19,104,20,105,West,0
+91,Acheron,450,65,218,67,219,100,24,86,25,90,East,0
+92,Acheron (Arca War),427,26,168,28,172,92,112,161,114,166,Undefined,0
+92,Acheron (Arca War),429,115,168,118,170,92,33,167,37,170,Undefined,0
+92,Acheron (Arca War),431,82,204,86,205,92,151,198,156,200,Undefined,0
+92,Acheron (Arca War),433,147,202,148,206,92,81,197,83,199,Undefined,0
+92,Acheron (Arca War),439,52,161,53,163,96,19,104,20,105,West,0
+95,Debenter,437,17,106,18,107,91,54,163,55,164,East,0
+96,Debenter (Arca War),441,17,106,18,107,92,54,163,55,164,East,0
+100,Uruk Mountain,452,19,87,20,88,91,62,213,64,214,South,0
+100,Uruk Mountain,454,42,80,44,81,100,212,31,213,32,Undefined,0
+100,Uruk Mountain,456,215,33,217,34,100,40,82,41,84,Undefined,0
+100,Uruk Mountain,458,40,97,42,98,100,107,225,109,226,Undefined,0
+100,Uruk Mountain,460,108,229,110,230,100,39,94,40,95,Undefined,0
