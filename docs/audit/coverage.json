@@ -1,5 +1,5 @@
 {
-  "generatedAt": "01e15a98",
+  "generatedAt": "4c284836",
   "maxLines": 6000,
   "units": [
     {
@@ -8321,11 +8321,18 @@
       ],
       "files": 251,
       "lines": 30984,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "4c284836",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "PostgresSharedAccountStore.cs:1-66",
+        "PostgresItemSerialDatabase.cs:1-76",
+        "PostgresArenaShared.cs:71-348",
+        "PostgresDbLogRetentionStore.cs:116-200",
+        "PersistenceContextProvider.cs:101-293",
+        "docs/audit/findings/unit-server-src-Persistence-EntityFramework.md"
+      ],
+      "evidence": "251f/30984L checked: EF contexts/migrations/AdminAuth are persistence plumbing; PostgresSharedAccountStore clamps coins>=0, PostgresItemSerialDatabase enforces UUID anti-dupe serials, PostgresArenaShared enforces transactional dailyCap & 2m cross-season license window, PostgresDbLogRetentionStore exports .json.gz before purge.",
       "prs": ""
     },
     {
