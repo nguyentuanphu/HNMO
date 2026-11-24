@@ -1,5 +1,5 @@
 {
-  "generatedAt": "7abb513b",
+  "generatedAt": "1a845fb0",
   "maxLines": 6000,
   "units": [
     {
@@ -814,15 +814,12 @@
       ],
       "files": 3,
       "lines": 461,
-      "status": "Changed since check",
-      "checkedAt": "477b9466",
-      "checkedOn": "2026-11-22",
-      "references": "Season 6/9 DuelSystem & Arena exclusion",
-      "evidence": "All 3 files read (451 lines): docs/audit/findings/ledger-combat-items-events-2026-11-22.md",
-      "prs": "#305, #307",
-      "changedFiles": [
-        "server/src/GameLogic/PlayerActions/Duel/DuelActions.cs"
-      ]
+      "status": "Checked",
+      "checkedAt": "1a845fb0",
+      "checkedOn": "2026-11-24",
+      "references": "S6/S9 IGCData/IGC_Common.ini [DuelSystem], MapTerrains/64_DuelArena.att",
+      "evidence": "All 3 files read (461 lines): docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Duel.md",
+      "prs": "#305, #307"
     },
     {
       "id": "server/src/GameLogic/PlayerActions/Gens",
