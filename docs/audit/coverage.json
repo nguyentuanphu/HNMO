@@ -1,5 +1,5 @@
 {
-  "generatedAt": "3ffe9c5b",
+  "generatedAt": "cf8c32b8",
   "maxLines": 6000,
   "units": [
     {
@@ -1627,11 +1627,11 @@
       ],
       "files": 4,
       "lines": 429,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
+      "status": "Checked",
+      "checkedAt": "cf8c32b8",
+      "checkedOn": "2026-11-24",
       "references": "",
-      "evidence": "",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-FixedItemOptions.md",
       "prs": ""
     },
     {
@@ -1642,11 +1642,11 @@
       ],
       "files": 2,
       "lines": 410,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
+      "status": "Checked",
+      "checkedAt": "cf8c32b8",
+      "checkedOn": "2026-11-24",
       "references": "",
-      "evidence": "",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-GameEvents.md",
       "prs": ""
     },
     {
@@ -1777,11 +1777,11 @@
       ],
       "files": 4,
       "lines": 494,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
+      "status": "Checked",
+      "checkedAt": "cf8c32b8",
+      "checkedOn": "2026-11-24",
       "references": "",
-      "evidence": "",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-ItemStacks.md",
       "prs": ""
     },
     {
@@ -1942,11 +1942,11 @@
       ],
       "files": 8,
       "lines": 908,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "Checked",
+      "checkedAt": "cf8c32b8",
+      "checkedOn": "2026-11-24",
+      "references": "docs/audit/references/common-server-and-character-rules-s6-s9.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-PartyOptions.md",
       "prs": ""
     },
     {
