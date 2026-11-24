@@ -1,5 +1,5 @@
 {
-  "generatedAt": "bcdb85c5",
+  "generatedAt": "820a44b3",
   "maxLines": 6000,
   "units": [
     {
@@ -8481,11 +8481,16 @@
       ],
       "files": 13,
       "lines": 5946,
-      "status": "Not checked",
-      "checkedAt": "",
-      "checkedOn": "",
-      "references": "",
-      "evidence": "",
+      "status": "No game rules",
+      "checkedAt": "820a44b3",
+      "checkedOn": "2026-11-24",
+      "references": [
+        "Inventory/ItemMng.cpp",
+        "Inventory/ItemMng.h",
+        "Inventory/ItemOptionTooltipModel.h",
+        "docs/audit/findings/unit-client-src-source-UI-Inventory-files-2.md"
+      ],
+      "evidence": "13f/5946L: No game rules (RmlUi/legacy UI panels, draggable frames, fonts, scaling, dialogs & server-driven HUD views (no game rules).)",
       "prs": ""
     },
     {
