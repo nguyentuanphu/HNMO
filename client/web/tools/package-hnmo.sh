@@ -102,60 +102,10 @@ cp -r "$WEB/public/." "$OUT/web/wwwroot/"
 find "$OUT/web/wwwroot" -name '*.js.map' -delete
 cp -r "$WEB/node_modules/three/build" "$OUT/web/vendor/three/build"
 
-# Bundle + minify the web client into a single file for the package (dev keeps the
-# unbundled public/js). three stays external (resolved by the page's import map), and
-# the Data files stay separate. The individual modules are then dropped from the folder.
+# Bundle the page entry points together so they can share modules for language,
+# themes and site navigation. The packaged pages use the generated bundles.
 echo "Bundling the web client (esbuild)"
-# A shipped build mangles the game's names too, so the bundle is hard to read or change. Set
-# HNMO_KEEP_JS_NAMES=1 to keep them, so the performance report (Settings, "Performance report")
-# can name the functions that take the time.
-if [ "${HNMO_KEEP_JS_NAMES:-}" = "1" ]; then
-  MAIN_MINIFY=(--minify-whitespace --minify-syntax)
-else
-  MAIN_MINIFY=(--minify)
-fi
-"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/main.js" \
-  --bundle "${MAIN_MINIFY[@]}" --format=esm --external:three \
-  --outfile="$OUT/web/wwwroot/js/main.min.js" --log-level=warning
-# The website (home.html) has its own script: bundled the same way.
-"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/website.js" \
-  --bundle --minify --format=esm --external:three \
-  --outfile="$OUT/web/wwwroot/js/website.min.js" --log-level=warning
-"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/topupPage.js" \
-  --bundle --minify --format=esm \
-  --outfile="$OUT/web/wwwroot/js/topupPage.min.js" --log-level=warning
-"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/calculator.js" \
-  --bundle --minify --format=esm \
-  --outfile="$OUT/web/wwwroot/js/calculator.min.js" --log-level=warning
-"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/accountPage.js" \
-  --bundle --minify --format=esm \
-  --outfile="$OUT/web/wwwroot/js/accountPage.min.js" --log-level=warning
-"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/siteLanguage.js" \
-  --bundle --minify --format=esm \
-  --outfile="$OUT/web/wwwroot/js/siteLanguage.min.js" --log-level=warning
-"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/deviceId.js" \
-  --bundle --minify --format=esm \
-  --outfile="$OUT/web/wwwroot/js/deviceId.min.js" --log-level=warning
-"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/giftCodeIdentity.js" \
-  --bundle --minify --format=esm \
-  --outfile="$OUT/web/wwwroot/js/giftCodeIdentity.min.js" --log-level=warning
-find "$OUT/web/wwwroot/js" -name '*.js' \
-  ! -name 'main.min.js' ! -name 'website.min.js' ! -name 'topupPage.min.js' ! -name 'calculator.min.js' \
-  ! -name 'accountPage.min.js' ! -name 'siteLanguage.min.js' ! -name 'deviceId.min.js' ! -name 'giftCodeIdentity.min.js' \
-  -delete
-find "$OUT/web/wwwroot/js" -mindepth 1 -type d -empty -delete
-# Point the packaged pages at the bundles (dev pages are untouched).
-sed -i 's#src="/js/main.js"#src="/js/main.min.js"#' "$OUT/web/wwwroot/index.html"
-sed -i 's#src="/js/website.js"#src="/js/website.min.js"#' "$OUT/web/wwwroot/home.html"
-sed -i 's#src="/js/topupPage.js"#src="/js/topupPage.min.js"#' "$OUT/web/wwwroot/topup.html"
-sed -i 's#src="/js/calculator.js"#src="/js/calculator.min.js"#' "$OUT/web/wwwroot/calculator.html"
-sed -i \
-  -e 's#src="/js/accountPage.js"#src="/js/accountPage.min.js"#g' \
-  -e 's#src="/js/siteLanguage.js"#src="/js/siteLanguage.min.js"#g' \
-  -e "s#/js/deviceId.js#/js/deviceId.min.js#g" \
-  -e "s#/js/giftCodeIdentity.js#/js/giftCodeIdentity.min.js#g" \
-  "$OUT/web/wwwroot/account.html"
-sed -i 's#src="/js/siteLanguage.js"#src="/js/siteLanguage.min.js"#' "$OUT/web/wwwroot/guide.html"
+node "$WEB/tools/hnmo/bundle-web.mjs" "$OUT/web/wwwroot"
 # Every script a page loads must be in the folder (a missing one leaves the page empty).
 missing=0
 for page in "$OUT/web/wwwroot"/*.html; do
