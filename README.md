@@ -17,10 +17,14 @@ Sending the game to a friend? Give them [`friends/README.md`](friends/README.md)
 it has the download link and both ways to play.
 
 
-Download [HNMO.zip](https://github.com/nguyentuanphu/HNMO/releases/latest/download/HNMO.zip)
-(always the newest build), unzip it and double-click `Start HNMO.bat`. The game opens in the browser; your
-progress is saved in the folder's `save` directory. The folder's `README.txt`
-explains accounts, coins, the admin panel and playing with friends (Tailscale).
+| System | Start the server |
+| --- | --- |
+| Windows | Extract [HNMO.zip](https://github.com/nguyentuanphu/HNMO/releases/latest/download/HNMO.zip) and open `Start HNMO.bat`. |
+| macOS (Apple Silicon and Intel) | Extract [HNMO-macos.zip](https://github.com/nguyentuanphu/HNMO/releases/latest/download/HNMO-macos.zip) and open `Start HNMO.app`. |
+| Ubuntu and Debian (x64 and ARM64) | Open [HNMO-linux.deb](https://github.com/nguyentuanphu/HNMO/releases/latest/download/HNMO-linux.deb) in the software installer, then open **HNMO** from the applications menu. |
+
+The server opens the game in your browser. The downloads include .NET and
+PostgreSQL. See the packaged `README.txt` for first launch and save locations.
 
 ## Build
 

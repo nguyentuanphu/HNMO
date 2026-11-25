@@ -7,6 +7,7 @@
 #   runtime: portable (one folder for Windows, Linux and macOS), or one system: win-x64 (default), linux-x64, osx-arm64, ...
 #   --no-data: leave the game data out (copy src/bin/Data into HNMO/Data yourself)
 # Environment:
+#   POSTGRES_UNIX_DIR: portable PostgreSQL folders named by .NET runtime identifier.
 #   POSTGRES_DIR: a portable PostgreSQL (with bin/, lib/, share/) to put into the folder,
 #     e.g. the extracted Windows binaries zip of EnterpriseDB. Without it, the folder
 #     uses POSTGRES_BIN (default /usr/lib/postgresql/16/bin), a PostgreSQL installed on the computer.
@@ -47,7 +48,7 @@ if [ "$RUNTIME" = portable ]; then
   ASPNET_VERSION="${HNMO_RUNTIME_VERSION:-$(dotnet --list-runtimes | awk -v major="$NET_MAJOR" '$1 == "Microsoft.AspNetCore.App" && index($2, major ".") == 1 {v=$2} END{print v}')}"
   if [ -z "$ASPNET_VERSION" ]; then echo "No .NET $NET_MAJOR runtime installed here (dotnet --list-runtimes)" >&2; exit 1; fi
   echo "Adding the .NET runtime $ASPNET_VERSION for Windows, Linux and macOS"
-  for rid in win-x64 linux-x64 osx-arm64 osx-x64; do
+  for rid in win-x64 linux-x64 linux-arm64 osx-arm64 osx-x64; do
     ext=$([ "$rid" = win-x64 ] && echo zip || echo tar.gz)
     url="https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/$ASPNET_VERSION/aspnetcore-runtime-$ASPNET_VERSION-$rid.$ext"
     mkdir -p "$OUT/runtime/$rid"
@@ -176,6 +177,17 @@ else
   POSTGRES_BIN_IN_FOLDER="${POSTGRES_BIN:-/usr/lib/postgresql/16/bin}"
 fi
 
+if [ -n "${POSTGRES_UNIX_DIR:-}" ]; then
+  POSTGRES_BIN_IN_FOLDER="../postgres/bin"
+  mkdir -p "$OUT/postgres"
+  for rid in linux-x64 linux-arm64 osx-x64 osx-arm64; do
+    if [ -d "$POSTGRES_UNIX_DIR/$rid" ]; then
+      test -x "$POSTGRES_UNIX_DIR/$rid/bin/pg_ctl"
+      cp -R "$POSTGRES_UNIX_DIR/$rid" "$OUT/postgres/"
+    fi
+  done
+fi
+
 # The game server talks to the folder's own database on its own port
 sed -i 's/Port=5432;/Port=55432;/g' "$OUT/server/ConnectionSettings.xml"
 
@@ -285,13 +297,15 @@ notice() { printf '=============================================================
   cat "$WEB/node_modules/three/LICENSE"; printf '\n\n'
   notice 'DejaVu fonts (Bitstream Vera / DejaVu licence), the text of the web game'
   cat "$WEB/public/fonts/DejaVuSans-LICENSE"; printf '\n\n'
-  if [ -n "${POSTGRES_DIR:-}" ]; then
+  if [ -n "${POSTGRES_DIR:-}${POSTGRES_UNIX_DIR:-}" ]; then
     notice 'PostgreSQL (PostgreSQL License), the save game database'
     printf 'PostgreSQL is released under the PostgreSQL License: https://www.postgresql.org/about/licence/\n'
   fi
 } > "$OUT/licenses/THIRD-PARTY-NOTICES.txt"
 cp "$WEB/tools/hnmo/README.txt" "$OUT/README.txt"
 cp "$WEB/tools/hnmo/start-hnmo.sh" "$WEB/tools/hnmo/stop-hnmo.sh" "$WEB/tools/hnmo/Start HNMO.command" "$WEB/tools/hnmo/Start HNMO.bat" "$OUT/"
+cp -R "$WEB/tools/hnmo/Start HNMO.app" "$OUT/"
+chmod +x "$OUT/Start HNMO.app/Contents/MacOS/start"
 # Windows: HNMO without a console window, its icon next to the clock (launcher/hnmo-tray.ps1, started hidden by
 # launcher/start-hidden.vbs from "Start HNMO.bat"). Passing /window or setting ConsoleWindow=true shows the console.
 mkdir -p "$OUT/launcher"

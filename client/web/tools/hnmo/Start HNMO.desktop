@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=HNMO
+Comment=Start the server and open HNMO in your browser
+Comment[vi]=Khởi động máy chủ và mở HNMO trong trình duyệt
+Exec=hnmo
+Icon=hnmo
+Terminal=false
+Categories=Game;
