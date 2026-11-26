@@ -12,7 +12,11 @@ for (const [language, viewport] of [['en', { width: 1440, height: 900 }], ['vi',
   test(`navigates editable information and existing store links in ${language}`, async ({ page }) => {
     const vi = language === 'vi';
     await page.setViewportSize(viewport);
-    await page.addInitScript(lang => localStorage.setItem('hnmo.language', lang), language);
+    await page.addInitScript(lang => {
+      if (localStorage.getItem('hnmo.language') === null) {
+        localStorage.setItem('hnmo.language', lang);
+      }
+    }, language);
     await page.route('**/website/content', route => route.fulfill({ json: content }));
     await page.route('**/game-name.json', route => route.fulfill({ json: { name: 'Fictional realm name' } }));
     await page.goto('/home.html');
@@ -39,6 +43,7 @@ for (const [language, viewport] of [['en', { width: 1440, height: 900 }], ['vi',
     await expect(info.locator('#information-body')).toHaveText('Sample privacy text.');
     await info.getByRole('link', { name: 'Top up coins', exact: true }).click();
     await expect(page).toHaveURL(/\/topup\.html$/);
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     await expect(page.locator('[data-information-footer]').getByRole('link', { name: 'Terms of use' })).toHaveAttribute('href', '/information.html?page=terms');
   });
 }
