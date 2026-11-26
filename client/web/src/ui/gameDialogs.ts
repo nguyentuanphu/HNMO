@@ -150,7 +150,9 @@ class ConfirmDialog {
     m.input_value = c.input?.initialText ?? '';
     m.has_item3d = Boolean(c.item);
     m.canvas_top = canvasTop();
-    this.opening ??= openDocument('generic_confirm_dialog', m, { parent: document.body }).then((doc) => {
+    // The next box of the queue reuses the open document; opening another one left it in the page for good, on top
+    // of the box in use, where it caught the clicks meant for that box's buttons.
+    if (!this.doc) this.opening ??= openDocument('generic_confirm_dialog', m, { parent: document.body }).then((doc) => {
       doc.root.addEventListener('pointerdown', (event) => { if (event.target !== doc.root) event.stopPropagation(); });
       // Test hooks and the callers' names for the buttons and the field.
       doc.$('#gcd_btn_primary')?.classList.add('confirm-ok');
@@ -166,7 +168,7 @@ class ConfirmDialog {
       });
       return doc;
     });
-    const doc = this.doc ?? await this.opening.catch((error: unknown) => { warn(error); return null; });
+    const doc = this.doc ?? await (this.opening ?? Promise.resolve(null)).catch((error: unknown) => { warn(error); return null; });
     this.opening = null;
     if (!doc) { entry.resolve({ button: 'cancel', text: '' }); this.current = null; void this.next(); return; }
     if (this.current !== entry) return;
@@ -305,11 +307,13 @@ class MenuDialog {
       return { label: button.label, tooltip: '', lines, has_lines: lines.length > 0, enabled: button.enabled ?? true, compact: button.compact ?? false, cols2: false, narrow: false, lines_below: false };
     });
     m.canvas_top = canvasTop();
-    this.opening ??= openDocument('generic_menu_dialog', m, { parent: document.body }).then((doc) => {
+    // The next box of the queue reuses the open document; opening another one left it in the page for good, on top
+    // of the box in use, where it caught the clicks meant for that box's buttons.
+    if (!this.doc) this.opening ??= openDocument('generic_menu_dialog', m, { parent: document.body }).then((doc) => {
       doc.root.addEventListener('pointerdown', (event) => event.stopPropagation());
       return doc;
     });
-    const doc = this.doc ?? await this.opening.catch((error: unknown) => { warn(error); return null; });
+    const doc = this.doc ?? await (this.opening ?? Promise.resolve(null)).catch((error: unknown) => { warn(error); return null; });
     this.opening = null;
     if (!doc) { entry.resolve(null); this.current = null; void this.next(); return; }
     if (this.current !== entry) return;
