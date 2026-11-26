@@ -28,11 +28,12 @@ public static class JewelBankStateWriter
     /// <param name="engine">Jewel Bank engine.</param>
     /// <returns>Plain-ASCII JSON.</returns>
     public static string WritePublic(JewelBankEngine engine) =>
-        WriteAccountState(engine, loginName: null, masterFree: 0, masterSpent: 0, bagJewels: null);
+        WriteAccountState(engine, balances: null, pending: null, masterFree: 0, masterSpent: 0, bagJewels: null);
 
     /// <summary>Writes full Jewel Bank account state for in-game UI and authenticated website API.</summary>
     /// <param name="engine">Jewel Bank engine.</param>
-    /// <param name="loginName">Account login name.</param>
+    /// <param name="balances">The account's balances by jewel key (from the database), or <c>null</c>.</param>
+    /// <param name="pending">The website withdrawals waiting for room in a bag, or <c>null</c>.</param>
     /// <param name="masterFree">Free master skill points on current character.</param>
     /// <param name="masterSpent">Spent master skill points on current character.</param>
     /// <param name="bagJewels">Jewel slots currently in the bag (<c>(Slot, Key, NameEn, NameVi)</c>).</param>
@@ -42,7 +43,8 @@ public static class JewelBankStateWriter
     /// <returns>Plain-ASCII JSON.</returns>
     public static string WriteAccountState(
         JewelBankEngine engine,
-        string? loginName,
+        IReadOnlyDictionary<string, int>? balances,
+        IReadOnlyList<(string Id, string Key, int Quantity)>? pending,
         int masterFree,
         int masterSpent,
         IReadOnlyList<(byte Slot, string Key, string NameEn, string NameVi)>? bagJewels,
@@ -51,14 +53,8 @@ public static class JewelBankStateWriter
         string? messageVi = null)
     {
         var cfg = engine.Configuration;
-        var balances = string.IsNullOrWhiteSpace(loginName)
-            ? new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
-            : engine.GetBalances(loginName);
-        var pending = string.IsNullOrWhiteSpace(loginName)
-            ? []
-            : engine.PeekPending(loginName)
-                .Select(p => new { id = p.Id, key = p.JewelKey, quantity = p.Quantity })
-                .ToList();
+        balances ??= new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        var pendingRows = (pending ?? []).Select(p => new { id = p.Id, key = p.Key, quantity = p.Quantity }).ToList();
 
         var jewels = cfg.Jewels.Select(j => new
         {
@@ -88,7 +84,7 @@ public static class JewelBankStateWriter
                 clearMasterCoinType = cfg.ClearMasterCoinType.ToString(),
             },
             jewels,
-            pending,
+            pending = pendingRows,
             bagJewels = (bagJewels ?? []).Select(b => new { slot = b.Slot, key = b.Key, nameEn = b.NameEn, nameVi = b.NameVi }).ToList(),
             master = new { freePoints = masterFree, spentPoints = masterSpent },
             @event = actionResult is null ? null : new { result = actionResult, textEn = messageEn, textVi = messageVi },

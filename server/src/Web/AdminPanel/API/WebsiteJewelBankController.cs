@@ -95,11 +95,54 @@ public sealed class WebsiteJewelBankController(
 
         var qty = Math.Clamp(request.Quantity, 1, 50);
         var key = request.JewelKey?.Trim() ?? string.Empty;
-        var outcome = engine.TryWithdraw(account.LoginName, key, qty, "website", DateTime.UtcNow, enqueuePending: true);
-        if (outcome != JewelBankResult.Ok)
+        if (engine.FindByKey(key) is not { } jewel)
         {
             return this.Content(
-                await this.SerializeAccountResponseAsync(engine, account, outcome.ToString(), "Insufficient banked jewels or invalid jewel.", "Số dư ngọc không đủ hoặc loại ngọc không hợp lệ.").ConfigureAwait(false),
+                await this.SerializeAccountResponseAsync(engine, account, nameof(JewelBankResult.JewelNotAllowed), "Insufficient banked jewels or invalid jewel.", "Số dư ngọc không đủ hoặc loại ngọc không hợp lệ.").ConfigureAwait(false),
+                "application/json");
+        }
+
+        // The bank is debited and the delivery written in one transaction. The caller's operation id makes a retry of
+        // the same request (e.g. after a lost answer) find the first one instead of withdrawing again.
+        var operationId = request.OperationId is { } given && given != Guid.Empty ? given : Guid.NewGuid();
+        var payload = $"web-withdraw|{jewel.Key}:{qty}";
+        var operation = new AssetOperationRequest(
+            operationId,
+            account.GetId(),
+            JewelBankPlugIn.WebsiteWithdrawKind,
+            JewelBankPlugIn.PayloadHash(payload),
+            "website",
+            payload,
+            [new JewelBankDelta(jewel.Key, -qty, int.MaxValue)],
+            jewel.Key,
+            qty);
+        AssetCommitStatus status;
+        try
+        {
+            status = await context.SaveChangesWithAssetOperationAsync(operation, cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            // The answer of the commit may be lost: what the database holds decides.
+            logger.LogWarning(ex, "Jewel Bank (website): the withdrawal {Operation} of {Login} failed or lost its answer.", operationId, account.LoginName);
+            using var check = persistence.CreateNewPlayerContext(configuration);
+            if (await check.GetAssetOperationAsync(operationId, cancellationToken).ConfigureAwait(false) is not { } receipt)
+            {
+                return this.StatusCode(503, new { error = "retry", operationId });
+            }
+
+            status = receipt.PayloadHash == operation.PayloadHash ? AssetCommitStatus.AlreadyCommitted : AssetCommitStatus.Conflict;
+        }
+
+        if (status == AssetCommitStatus.Conflict)
+        {
+            return this.Conflict(new { error = "operationId", operationId });
+        }
+
+        if (status == AssetCommitStatus.Refused)
+        {
+            return this.Content(
+                await this.SerializeAccountResponseAsync(engine, account, nameof(JewelBankResult.InsufficientBalance), "Insufficient banked jewels or invalid jewel.", "Số dư ngọc không đủ hoặc loại ngọc không hợp lệ.").ConfigureAwait(false),
                 "application/json");
         }
 
@@ -228,7 +271,8 @@ public sealed class WebsiteJewelBankController(
         string? messageEn = null,
         string? messageVi = null)
     {
-        var stateJson = JewelBankStateWriter.WriteAccountState(engine, account.LoginName, 0, 0, bagJewels: null, result, messageEn, messageVi);
+        var (balances, pending) = await this.ReadBankAsync(account).ConfigureAwait(false);
+        var stateJson = JewelBankStateWriter.WriteAccountState(engine, balances, pending, 0, 0, bagJewels: null, result, messageEn, messageVi);
         var busy = false;
         try
         {
@@ -273,5 +317,21 @@ public sealed class WebsiteJewelBankController(
     {
         var configuration = await PlugInSettings.ReadActiveAsync<JewelBankConfiguration>(persistence, typeof(JewelBankPlugIn), () => new JewelBankConfiguration(), cancellationToken).ConfigureAwait(false);
         return configuration is null ? null : new JewelBankEngine(configuration, JewelBankStore.Open(configuration.FileName), enabled: true);
+    }
+
+    /// <summary>Reads an account's balances and waiting deliveries from the database, with a context of their own.</summary>
+    /// <param name="account">The account.</param>
+    /// <returns>The balances and the waiting deliveries.</returns>
+    private async Task<(IReadOnlyDictionary<string, int> Balances, IReadOnlyList<(string Id, string Key, int Quantity)> Pending)> ReadBankAsync(Account account)
+    {
+        var configuration = await gameConfigurationSource.GetOwnerAsync(Guid.Empty).ConfigureAwait(false);
+        using var context = persistence.CreateNewPlayerContext(configuration);
+        var accountId = account.GetId();
+        var balances = await context.GetJewelBankBalancesAsync(accountId).ConfigureAwait(false);
+        var pending = (await context.GetPendingAssetOperationsAsync(accountId).ConfigureAwait(false))
+            .Where(operation => operation.Kind == JewelBankPlugIn.WebsiteWithdrawKind && operation.PendingKey is not null)
+            .Select(operation => (operation.Id.ToString("N"), operation.PendingKey!, operation.PendingCount))
+            .ToList();
+        return (balances, pending);
     }
 }
