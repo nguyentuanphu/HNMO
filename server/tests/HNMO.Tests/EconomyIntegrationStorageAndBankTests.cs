@@ -11,6 +11,7 @@ using HNMO.DataModel.Entities;
 using HNMO.GameLogic;
 using HNMO.DataModel;
 using HNMO.GameLogic.PlugIns.JewelBank;
+using HNMO.Persistence;
 using BasicModel = HNMO.Persistence.BasicModel;
 
 /// <summary>
@@ -352,6 +353,149 @@ public class EconomyIntegrationJewelBankPlugInTests
         Assert.That(after, Is.EqualTo(4));
     }
 
+    /// <summary>
+    /// A deposit whose bag save fails banks nothing: the jewels and the fee are back in the bag, nothing waits in the
+    /// bank's file, and a later good save writes no marker.
+    /// </summary>
+    /// <returns>A task.</returns>
+    [Test]
+    public async Task ADepositWhoseBagSaveFailsBanksNothingAsync()
+    {
+        var (plugIn, player, bless) = await this.CreateAsync(capacity: 100, depositFee: 1_000).ConfigureAwait(false);
+        await AddStackAsync(player, bless, FirstBagSlot, 4).ConfigureAwait(false);
+        player.TryAddMoney(5_000);
+        var fails = true;
+        CashShopActionsTest.SaveFailingContext.Install(player, () => fails);
+
+        await plugIn.DepositAsync(player, FirstBagSlot, depositAll: false).ConfigureAwait(false);
+        fails = false;
+        await player.SaveProgressAsync().ConfigureAwait(false);
+
+        var engine = plugIn.GetEngine();
+        Assert.Multiple(async () =>
+        {
+            Assert.That(engine.GetBalances("alice"), Is.Empty);
+            Assert.That(engine.PeekOperations("alice"), Is.Empty);
+            Assert.That(player.Inventory!.Items.Where(i => i.Definition == bless).Sum(i => (int)i.Durability), Is.EqualTo(4));
+            Assert.That(player.Money, Is.EqualTo(5_000));
+            Assert.That(await MarkersAsync(player).ConfigureAwait(false), Is.Empty);
+        });
+    }
+
+    /// <summary>
+    /// A stop right after the bag of a deposit was saved: the bank isn't credited yet, the deposit waits in the bank's
+    /// file, and the next login credits it once.
+    /// </summary>
+    /// <returns>A task.</returns>
+    [Test]
+    public async Task ADepositStoppedAfterTheBagSaveIsCreditedOnceAtTheNextLoginAsync()
+    {
+        var (plugIn, player, bless) = await this.CreateAsync(capacity: 100, depositFee: 0).ConfigureAwait(false);
+        await AddStackAsync(player, bless, FirstBagSlot, 4).ConfigureAwait(false);
+        plugIn.StopAfterBagSaved = () => throw new InvalidOperationException("stop");
+
+        Assert.ThrowsAsync<InvalidOperationException>(async () => await plugIn.DepositAsync(player, FirstBagSlot, depositAll: false).ConfigureAwait(false));
+        Assert.That(plugIn.GetEngine().GetBalances("alice"), Is.Empty, "not credited before the stop");
+
+        // The server starts again: a new engine reads the bank's file.
+        plugIn.StopAfterBagSaved = null;
+        var restarted = this.Restart(plugIn);
+        Assert.That(restarted.GetEngine().PeekOperations("alice"), Has.Count.EqualTo(1), "the deposit is in the bank's file");
+        await restarted.FinishPendingOperationsAsync(player, "alice").ConfigureAwait(false);
+        await restarted.FinishPendingOperationsAsync(player, "alice").ConfigureAwait(false);
+
+        Assert.Multiple(async () =>
+        {
+            Assert.That(restarted.GetEngine().GetBalances("alice")["bless"], Is.EqualTo(4), "credited once");
+            Assert.That(restarted.GetEngine().PeekOperations("alice"), Is.Empty);
+            Assert.That(player.Inventory!.Items.Where(i => i.Definition == bless), Is.Empty);
+            Assert.That(await MarkersAsync(player).ConfigureAwait(false), Is.Empty);
+        });
+    }
+
+    /// <summary>A deposit written but stopped before its bag was saved is dropped: the jewels are still in the saved bag.</summary>
+    /// <returns>A task.</returns>
+    [Test]
+    public async Task ADepositStoppedBeforeTheBagSaveIsDroppedAsync()
+    {
+        var (plugIn, player, _) = await this.CreateAsync(capacity: 100, depositFee: 0).ConfigureAwait(false);
+        plugIn.GetEngine().BeginDeposit("alice", new Dictionary<string, int> { ["bless"] = 4 }, DateTime.UtcNow);
+
+        await this.Restart(plugIn).FinishPendingOperationsAsync(player, "alice").ConfigureAwait(false);
+
+        Assert.That(plugIn.GetEngine().GetBalances("alice"), Is.Empty);
+        Assert.That(plugIn.GetEngine().PeekOperations("alice"), Is.Empty);
+    }
+
+    /// <summary>A withdrawal whose bag save fails takes nothing: the jewels leave the bag again, the bank and the fee get them back.</summary>
+    /// <returns>A task.</returns>
+    [Test]
+    public async Task AWithdrawalWhoseBagSaveFailsTakesNothingAsync()
+    {
+        var (plugIn, player, bless) = await this.CreateAsync(capacity: 100, depositFee: 0, withdrawFee: 1_000).ConfigureAwait(false);
+        Assert.That(plugIn.GetEngine().Deposit("alice", "bless", 5, "game", DateTime.UtcNow), Is.EqualTo(JewelBankResult.Ok));
+        await AddStackAsync(player, bless, FirstBagSlot, 2).ConfigureAwait(false); // a stack the jewels may join
+        player.TryAddMoney(5_000);
+        var fails = true;
+        CashShopActionsTest.SaveFailingContext.Install(player, () => fails);
+
+        await plugIn.WithdrawAsync(player, "bless", 3).ConfigureAwait(false);
+        fails = false;
+
+        Assert.Multiple(async () =>
+        {
+            Assert.That(plugIn.GetEngine().GetBalances("alice")["bless"], Is.EqualTo(5));
+            Assert.That(plugIn.GetEngine().PeekOperations("alice"), Is.Empty);
+            Assert.That(player.Inventory!.Items.Where(i => i.Definition == bless).Sum(i => (int)i.Durability), Is.EqualTo(2));
+            Assert.That(player.Money, Is.EqualTo(5_000));
+            Assert.That(await MarkersAsync(player).ConfigureAwait(false), Is.Empty);
+        });
+    }
+
+    /// <summary>A stop right after the bag of a withdrawal was saved keeps the withdrawal: nothing goes back to the bank.</summary>
+    /// <returns>A task.</returns>
+    [Test]
+    public async Task AWithdrawalStoppedAfterTheBagSaveIsKeptAsync()
+    {
+        var (plugIn, player, bless) = await this.CreateAsync(capacity: 100, depositFee: 0).ConfigureAwait(false);
+        Assert.That(plugIn.GetEngine().Deposit("alice", "bless", 5, "game", DateTime.UtcNow), Is.EqualTo(JewelBankResult.Ok));
+        plugIn.StopAfterBagSaved = () => throw new InvalidOperationException("stop");
+
+        Assert.ThrowsAsync<InvalidOperationException>(async () => await plugIn.WithdrawAsync(player, "bless", 3).ConfigureAwait(false));
+        var restarted = this.Restart(plugIn);
+        await restarted.FinishPendingOperationsAsync(player, "alice").ConfigureAwait(false);
+
+        Assert.That(restarted.GetEngine().GetBalances("alice")["bless"], Is.EqualTo(2));
+        Assert.That(restarted.GetEngine().PeekOperations("alice"), Is.Empty);
+        Assert.That(player.Inventory!.Items.Where(i => i.Definition == bless).Sum(i => (int)i.Durability), Is.EqualTo(3));
+    }
+
+    /// <summary>A withdrawal debited but stopped before its bag was saved is credited back at the next login.</summary>
+    /// <returns>A task.</returns>
+    [Test]
+    public async Task AWithdrawalStoppedBeforeTheBagSaveIsCreditedBackAsync()
+    {
+        var (plugIn, player, _) = await this.CreateAsync(capacity: 5, depositFee: 0).ConfigureAwait(false);
+        var engine = plugIn.GetEngine();
+        Assert.That(engine.Deposit("alice", "bless", 5, "game", DateTime.UtcNow), Is.EqualTo(JewelBankResult.Ok));
+        var (result, operation) = engine.BeginWithdraw("alice", "bless", 3, DateTime.UtcNow);
+        Assert.That(result, Is.EqualTo(JewelBankResult.Ok));
+        Assert.That(operation, Is.Not.Null);
+        Assert.That(engine.GetBalances("alice")["bless"], Is.EqualTo(2));
+
+        var restarted = this.Restart(plugIn);
+        await restarted.FinishPendingOperationsAsync(player, "alice").ConfigureAwait(false);
+
+        Assert.That(restarted.GetEngine().GetBalances("alice")["bless"], Is.EqualTo(5), "back in full, even at the capacity");
+        Assert.That(restarted.GetEngine().PeekOperations("alice"), Is.Empty);
+    }
+
+    private static async Task<IEnumerable<CashShopCoinGrant>> MarkersAsync(Player player)
+    {
+        var history = await player.PersistenceContext.GetCashShopCoinHistoryAsync(player.Account!.GetId(), 0, 50).ConfigureAwait(false);
+        return history.Where(h => h.Reference?.StartsWith("hnmo-jewel-bank:", StringComparison.Ordinal) == true);
+    }
+
     private static async Task<Item> AddStackAsync(Player player, BasicModel.ItemDefinition definition, byte slot, int count)
     {
         var item = player.PersistenceContext.CreateNew<Item>();
@@ -361,7 +505,10 @@ public class EconomyIntegrationJewelBankPlugInTests
         return item;
     }
 
-    private async Task<(JewelBankPlugIn PlugIn, Player Player, BasicModel.ItemDefinition Bless)> CreateAsync(int capacity, int depositFee)
+    // A new plug-in on the same bank file: what a server start finds.
+    private JewelBankPlugIn Restart(JewelBankPlugIn plugIn) => new() { Configuration = plugIn.Configuration };
+
+    private async Task<(JewelBankPlugIn PlugIn, Player Player, BasicModel.ItemDefinition Bless)> CreateAsync(int capacity, int depositFee, int withdrawFee = 0)
     {
         var context = GameContextTestHelper.CreateGameContext([]);
         var player = await PlayerTestHelper.CreatePlayerAsync(context).ConfigureAwait(false);
@@ -375,6 +522,7 @@ public class EconomyIntegrationJewelBankPlugInTests
                 FileName = Path.Combine(this._tempDir, "hnmo-state.json"),
                 SafeZoneOnly = false,
                 DepositZenFee = depositFee,
+                WithdrawZenFee = withdrawFee,
                 Jewels = [new() { Key = "bless", NameEn = "Jewel of Bless", NameVi = "Ngọc Ước Nguyện", Group = 14, Number = 13, Enabled = true, MaxCapacity = capacity }],
             },
         };

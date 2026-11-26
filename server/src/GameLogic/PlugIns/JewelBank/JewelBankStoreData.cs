@@ -18,6 +18,9 @@ public sealed class JewelBankStoreData
     /// <summary>Gets or sets pending website withdrawals.</summary>
     public List<JewelBankPendingWithdrawal> PendingWithdrawals { get; set; } = [];
 
+    /// <summary>Gets or sets the in-game deposits and withdrawals whose bag save isn't confirmed yet.</summary>
+    public List<JewelBankPendingOperation> PendingOperations { get; set; } = [];
+
     /// <summary>Gets or sets newest-first log entries.</summary>
     public List<JewelBankLogEntry> Log { get; set; } = [];
 }
