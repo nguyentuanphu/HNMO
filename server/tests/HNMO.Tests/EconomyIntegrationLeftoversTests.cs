@@ -1,4 +1,4 @@
-// <copyright file="EconomyIntegrationLeftoversTests.cs" company="HNMO">
+﻿// <copyright file="EconomyIntegrationLeftoversTests.cs" company="HNMO">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -134,6 +134,37 @@ public class EconomyIntegrationLeftoversTests
 
         Assert.That(player.Inventory.Items.Count(i => i.Definition == output), Is.EqualTo(1));
         Assert.That(PeekOwed(plugIn, characterId), Is.Zero);
+    }
+
+    /// <summary>
+    /// The materials are saved as taken before a waiting reward is written to the store: a stop in between can't give
+    /// the materials back while the reward is kept.
+    /// </summary>
+    /// <returns>A task.</returns>
+    [Test]
+    public async Task TheMaterialsAreSavedBeforeAWaitingRewardIsWrittenAsync()
+    {
+        var (plugIn, player, life, _) = await this.CreatePlayerAsync(outputWidth: 2).ConfigureAwait(false);
+        await AddAsync(player, life, FirstBagSlot, 5).ConfigureAwait(false);
+        var filler = new BasicModel.ItemDefinition { Group = 14, Number = 0, Width = 1, Height = 1, Durability = 1 };
+        player.GameContext.Configuration.Items.Add(filler);
+        for (var slot = FirstBagSlot + 1; slot < FirstBagSlot + 64; slot++)
+        {
+            await AddAsync(player, filler, (byte)slot, 1).ConfigureAwait(false);
+        }
+
+        var characterId = player.SelectedCharacter!.GetId().ToString();
+        int? owedAtFirstSave = null;
+        CashShopActionsTest.SaveFailingContext.Install(player, () =>
+        {
+            owedAtFirstSave ??= PeekOwed(plugIn, characterId);
+            return false;
+        });
+
+        await plugIn.CombineAsync(player, RecipeId).ConfigureAwait(false);
+
+        Assert.That(owedAtFirstSave, Is.EqualTo(0), "the reward was written before the materials were saved");
+        Assert.That(PeekOwed(plugIn, characterId), Is.EqualTo(1));
     }
 
     private static int PeekOwed(CombiningLeftoversPlugIn plugIn, string characterId)

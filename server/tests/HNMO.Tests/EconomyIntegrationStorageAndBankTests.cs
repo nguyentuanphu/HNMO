@@ -1,4 +1,4 @@
-// <copyright file="EconomyIntegrationStorageAndBankTests.cs" company="HNMO">
+﻿// <copyright file="EconomyIntegrationStorageAndBankTests.cs" company="HNMO">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -325,6 +325,31 @@ public class EconomyIntegrationJewelBankPlugInTests
         var inBag = player.Inventory!.Items.Where(i => i.Definition == bless).Sum(i => (int)i.Durability);
         plugIn.GetEngine().GetBalances("alice").TryGetValue("bless", out var inBank);
         Assert.That(inBag + inBank, Is.EqualTo(4));
+    }
+
+    /// <summary>
+    /// The bag is saved before the bank is credited: a stop in between can't leave a jewel both in the saved bag and in
+    /// the bank.
+    /// </summary>
+    /// <returns>A task.</returns>
+    [Test]
+    public async Task TheBagIsSavedBeforeTheBankIsCreditedAsync()
+    {
+        var (plugIn, player, bless) = await this.CreateAsync(capacity: 100, depositFee: 0).ConfigureAwait(false);
+        await AddStackAsync(player, bless, FirstBagSlot, 4).ConfigureAwait(false);
+        int? bankAtFirstSave = null;
+        CashShopActionsTest.SaveFailingContext.Install(player, () =>
+        {
+            plugIn.GetEngine().GetBalances("alice").TryGetValue("bless", out var banked);
+            bankAtFirstSave ??= banked;
+            return false;
+        });
+
+        await plugIn.DepositAsync(player, FirstBagSlot, depositAll: false).ConfigureAwait(false);
+
+        plugIn.GetEngine().GetBalances("alice").TryGetValue("bless", out var after);
+        Assert.That(bankAtFirstSave, Is.EqualTo(0), "the bank was credited before the bag was saved");
+        Assert.That(after, Is.EqualTo(4));
     }
 
     private static async Task<Item> AddStackAsync(Player player, BasicModel.ItemDefinition definition, byte slot, int count)
