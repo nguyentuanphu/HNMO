@@ -36,7 +36,11 @@ Main (cloud Claude) reviewed your PRs on 27 Nov 04:40. Main is building Muun, Pe
 8. `small-ui-feedback.spec.ts:28`: raise the `30_000` wait on `.vault-zen-dialog #panel` to the default 60 s, and look
    at why the first `openDocument('generic_confirm_dialog')` after entering the world takes so long (RML sprite decode);
    fix it if it is a real slowness. Draft PR with before/after timings.
-9. Hardware GPU FPS (d3d11, not SwiftShader): measure before/after #381 with the same 15 s AOE scene; post on #381.
+9. Lost FIN on loopback (owner, 27 Nov: "Rút ngắn thời gian chờ"): players whose network filter drops the FIN of a
+   closed connection stay online until the server's timeout ends it. Make the server notice a dead client sooner: a
+   shorter keep-alive / idle timeout for game connections (and the connect server), configurable in the admin panel with
+   a sensible default and hint texts in the four admin languages; a character must leave the world within that time
+   after its client is gone. Test with a client socket that stops answering without a FIN. One draft PR.
 10. Shared coins (follow-up of #407): durable coordinator between the Season 6.3 database (it owns the balances) and a
     Season 9 database. Design to build: PREPARE TRANSACTION on the canonical database, the local decision written in the
     same transaction as the local entitlement, a realm id, a recovery pass with a lock that resolves prepared
