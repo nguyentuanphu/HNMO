@@ -1,33 +1,32 @@
-# Prompt cho Claude chạy trên máy anh, lượt 6 (27 Nov 2026, 04:20 Sydney). Dán nguyên phần dưới dòng kẻ.
+# Prompt cho Claude chạy trên máy anh, lượt 7 (27 Nov 2026, 05:00 Sydney). Dán nguyên phần dưới dòng kẻ.
 
 ---
 
 You are local Claude for HNMO (repo nguyentuanphu/HNMO). Answer the owner in Vietnamese; all times in Sydney time.
-Read `CLAUDE.md` and `docs/owner-decisions.md` first. Rules: never merge, never touch `main`, no live data; commit only to
-the branch named in each task and report in that PR (end comments with the Claude Code footer); run only the tests of
-what you touched; say exactly what was run (commands, pass/fail/skip) and what was not, and what was real vs mock.
-No keys, local paths or third-party names in the repo.
+Rules as before: never merge, never touch `main`, no live data; commit only to the branch named in each task and report
+in that PR (Claude Code footer); run only the tests of what you touched; say what was run and not run, real vs mock.
 
-Already done by main (cloud), don't redo: #406 merged into the working branch with the `client-pipe-selfcheck` workflow
-(windows-latest and ubuntu-latest green with HNMO_PIPE_REQUIRE_CLOSE_CHECKS=1); #412 merged.
+Answers from main to your 04:24 report:
+1. Task 3 on #419: GO. Run it now on `integration/s9` with the owner's S9 pack (outside the repo): S9 -> S6 -> S9 in one
+   browser session; tooltips of an S9-only item and of a shared item with an S9 override; M menu price for Vulcanus in
+   both seasons (Normal 15,000; outlaw: window locked); /move for an outlaw (Vulcanus 30,000; Lorencia 50x). Post on #419.
+2. The client pipe self-check workflow is already added by main (in #406, merged): windows-latest and ubuntu-latest green
+   with HNMO_PIPE_REQUIRE_CLOSE_CHECKS=1. Nothing to do.
+3. Your drafts: main reviews and merges #413, #415, #420, #421 into the working branch once their e2e reruns are not red
+   for their own specs; #408 goes in with #419.
+4. Trade/vault real-game test: YES, make it a test PR (one draft PR, its own spec, into the working branch).
+5. New:
+   a. Desktop data tests on #425 (`fix/buff-english-texts`): main added the English texts of the 30 Vietnamese-only buffs.
+      Run `test_buffs` (expect 158 loaded, the 4 Buffs tests green); post the result on #425.
+   b. The 15 item descriptions without "vi": the owner decided main writes them. List the 15 items (group, number, the
+      test name and the English text) in a comment on #425, and add the Vietnamese texts on `fix/buff-english-texts`
+      yourself, in the desktop writer's layout, with the test green. The owner reviews them in #425.
+   c. #419 desktop [data] ctest with MU_TOOLTIP_SNAPSHOT_UPDATE=1: the tooltip snapshot must only add Season 9 lines;
+      update the counts 911 (item exchange) and 295 (monster models) if S9 changes them; commit to `integration/s9`.
+   d. Real PostgreSQL + realms on the packaged folder from `integration/s9`: fresh databases for S6.3 and S9, update an
+      existing S6 database, switch a realm to the S9 pack, log in test300/test400 in both, check the shared coins.
+   e. #423 (Jewel Bank and Leftovers in the database): on the packaged folder with real PostgreSQL, deposit 4 Bless,
+      kill the server process right after, restart, log in: bank 4 once, bag empty. Withdraw 3, kill, restart: bag 3,
+      bank 1. Old JSON balances of an account appear in the bank on its first login (the import). Post on #423.
 
-1. Season 9 integration, PR #419, branch `integration/s9` (head 4e96cb38): clean Windows build of the desktop client and
-   ctest [data] (item database, item model files, monster data files, item tooltips, item exchange file, monster model
-   files). Main converted 52 multi-use model files to shared models (38 -> 88), re-laid the item, model and monster files
-   in the writer's layout, and set 575 monsters / 451 groups. Run with MU_TOOLTIP_SNAPSHOT_UPDATE=1 to record
-   item_tooltip_snapshot.txt: the diff must only add Season 9 lines (if an S6 line changes, report it, don't overwrite).
-   Update the counts 911 (item exchange) and 295 (monster models) if the S9 data changes them, with the reason in the
-   commit. Commit to `integration/s9`.
-2. Real PostgreSQL + realms (the packaged HNMO folder from `integration/s9`): fresh database for Season 6.3 and for
-   Season 9; update an existing S6 database; switch a realm to the S9 pack; log in test300 / test400 in both seasons and
-   check the shared coins.
-3. Trade/Vault, #414 + #415 (branches `fix/trade-vault-session-followup`, `fix/confirm-dialog-orphan`), real web game,
-   two browsers: change the trade zen, then the partner changes the offer -> the old OK box can't confirm; the trade ends
-   -> the zen box closes; switch the vault page with the zen box open -> the box is dropped; three queued confirm boxes ->
-   each OK takes its own click.
-4. Desktop client data parity is the owner's priority: report any desktop-only feature you see missing on the web.
-
-Not for you yet (the owner decides first): the local branches `local/econ-crash-consistency` and `local/s9c-gameplay`
-in main's cloud session (Jewel Bank and Leftovers in the database, S9 master cap and Shield-Burn).
-
-Report: SHAs tested, commands, pass/fail/skip, what is still waiting for Windows, PostgreSQL or the S9 pack.
+Only the owner can do: real launches on Mac/Linux, turning the network filter off once (optional).
