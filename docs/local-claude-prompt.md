@@ -29,17 +29,6 @@ Answers from main to your 04:24 report:
       kill the server process right after, restart, log in: bank 4 once, bag empty. Withdraw 3, kill, restart: bag 3,
       bank 1. Old JSON balances of an account appear in the bank on its first login (the import). Post on #423.
 
-   f. Skills 618-621 (owner: learned through the master tree, effects as the S9 desktop client): the repo's desktop data
-      has nothing for them; only the owner's S9 pack has. On `fix/s9c-gameplay` (#424) run
-      `python3 tools/local-checks/desktop-data/master_tree.py <S9 Data folder> 618 619 620 621` and post its output
-      (rank, required points, max level, prerequisites, class) on #424, plus what the S9 desktop client shows/does when
-      each skill is cast (damage, area, cooldown, buff, visual). Don't copy pack files into the repo.
-
-   g. Muun (#427) and Pentagram/Errtel (#428), from the owner's S9 desktop pack (owner, 27 Nov: "Theo client desktop
-      S9"): read and post on the PR, as values with the file they came from (don't copy pack files into the repo):
-      Muun level-up / evolution costs per level, Muun option values and conditions (to check the table in #403, which
-      came from another server suite's data: coding rule 9), Muun drop rates if the client has them; Pentagram/Errtel
-      grades, slots, option values, the elements of monsters, mix recipes and costs (errtel mixes, pentagram jewel mixes,
-      extraction), and any drop data. Say plainly when the pack has no value for something.
+   f. Skills 618-621, Muun and Pentagram values from the S9 pack: Antigravity does this (docs/antigravity-client-audit-2026-11-27.md).
 
 Only the owner can do: real launches on Mac/Linux, turning the network filter off once (optional).
