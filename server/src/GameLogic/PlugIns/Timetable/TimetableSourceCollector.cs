@@ -5,8 +5,9 @@
 namespace HNMO.GameLogic.PlugIns.Timetable;
 
 using System.Globalization;
-using System.Text;
 using HNMO.DataModel.Configuration;
+using HNMO.DataModel.Configuration.Items;
+using HNMO.GameLogic.CastleSiege;
 using HNMO.GameLogic.MiniGames;
 using HNMO.GameLogic.PlugIns.InvasionEvents;
 using HNMO.GameLogic.PlugIns.PeriodicTasks;
@@ -35,7 +36,18 @@ public static class TimetableSourceCollector
         GameConfiguration? gameConfiguration,
         bool isActiveNow = false)
     {
-        var (id, nameEn, nameVi, defaultDropsEn, defaultDropsVi) = DescribeInvasion(plugInType, configuration);
+        var (id, nameEn, nameVi) = DescribeInvasion(plugInType);
+        var find = configuration as FindTheGmConfiguration;
+        var monsterIds = configuration.Mobs.Select(mob => (int)mob.MonsterId).ToHashSet();
+        var items = gameConfiguration?.Monsters?
+            .Where(monster => monster.IsActive && monsterIds.Contains(monster.Number))
+            .SelectMany(monster => monster.DropItemGroups)
+            .SelectMany(group => group.PossibleItems).Where(item => item.IsActive).Distinct().Take(8).ToArray() ?? [];
+        var reward = find is null ? string.Empty : string.Join(" + ", new[]
+        {
+            find.RewardCoins > 0 ? $"{find.RewardCoins} {find.RewardCoinType}" : string.Empty,
+            find.RewardZen > 0 ? $"{find.RewardZen:N0} Zen" : string.Empty,
+        }.Where(part => part.Length > 0));
         var (mapsEn, mapsVi) = DescribeInvasionMaps(configuration, gameConfiguration);
         return new TimetableSourceItem
         {
@@ -45,13 +57,13 @@ public static class TimetableSourceCollector
             NameVi = nameVi,
             MapsEn = mapsEn,
             MapsVi = mapsVi,
-            DropsEn = defaultDropsEn,
-            DropsVi = defaultDropsVi,
+            DropsEn = find is null ? string.Join(", ", items.Select(item => item.Name.GetTranslation(English))) : reward,
+            DropsVi = find is null ? string.Join(", ", items.Select(item => item.Name.GetTranslation(Vietnamese))) : reward,
             DailyTimes = configuration.Timetable.ToList(),
             Duration = configuration.TaskDuration > TimeSpan.Zero ? configuration.TaskDuration : TimeSpan.FromMinutes(20),
             IsLiveNow = isActiveNow,
             InvasionConfiguration = configuration,
-            WinnerReward = configuration is FindTheGmConfiguration find ? (find.RewardCoins, find.RewardCoinType, find.RewardZen) : null,
+            WinnerReward = find is not null ? (find.RewardCoins, find.RewardCoinType, find.RewardZen) : null,
         };
     }
 
@@ -84,6 +96,16 @@ public static class TimetableSourceCollector
                     items.Add(FromMiniGame(plugIn.Key, taskConfig, gameConfig, scheduled.GetNextStartUtc(utcNow, scheduleTimeZone), isLive));
                 }
             }
+        }
+
+        if (timetableConfiguration.ShowMiniGames
+            && gameContext is IGameServerContext server
+            && gameContext.PlugInManager.GetActivePlugInsOf<IPeriodicTaskPlugIn>().OfType<CastleSiegePlugIn>().FirstOrDefault()
+                ?.GetContext(gameContext) is { Configuration: { Enabled: true, CastleSiegeMapDefinition: { IsActive: true } siegeMap } } siege
+            && server.ServerConfiguration.Maps.Any(map => map.IsActive && map.Number == siegeMap.Number)
+            && FromCastleSiege(siege, utcNow) is { } battle)
+        {
+            items.Add(battle);
         }
 
         if (timetableConfiguration.ShowInvasions)
@@ -162,6 +184,34 @@ public static class TimetableSourceCollector
         return items;
     }
 
+    /// <summary>Projects the configured Castle Siege battle and its actual active window.</summary>
+    /// <param name="siege">The running Castle Siege event.</param>
+    /// <param name="utcNow">The schedule reference time in UTC.</param>
+    /// <returns>The Castle Siege battle, when configured.</returns>
+    public static TimetableSourceItem? FromCastleSiege(CastleSiegeContext siege, DateTime utcNow)
+    {
+        var next = siege.Schedule.GetNextPeriod(CastleSiegeState.Start, utcNow);
+        var active = siege.IsEventRunning && siege.StateEndTimeUtc > utcNow;
+        if (!active && next is null)
+        {
+            return null;
+        }
+
+        var map = siege.Configuration.CastleSiegeMapDefinition;
+        return new TimetableSourceItem
+        {
+            Id = "event-castle-siege",
+            Category = "event",
+            NameEn = "Castle Siege",
+            NameVi = "Công thành chiến",
+            MapsEn = map?.Name.GetTranslation(English) ?? string.Empty,
+            MapsVi = map?.Name.GetTranslation(Vietnamese) ?? string.Empty,
+            ExplicitNextStartUtc = next?.StartUtc,
+            ExplicitEndsAtUtc = active ? siege.StateEndTimeUtc : next?.EndUtc,
+            IsLiveNow = active,
+        };
+    }
+
     /// <summary>Creates a timetable source item for one of the Arena's scheduled battles.</summary>
     /// <param name="entry">The battle as the Arena published it.</param>
     /// <returns>The timetable source item.</returns>
@@ -179,8 +229,6 @@ public static class TimetableSourceCollector
             NameVi = royale ? "Đấu trường: đấu sinh tồn" : "Đấu trường: bang chiến",
             MapsEn = royale ? "Arena (Lorencia)" : "Arena (Valley of Loren)",
             MapsVi = royale ? "Đấu trường (Lorencia)" : "Đấu trường (Thung lũng Loren)",
-            DropsEn = royale ? "Arena points: winner 20, others 2" : "Arena points: win 15, loss 4; guild XP",
-            DropsVi = royale ? "Điểm Đấu trường: người thắng 20, còn lại 2" : "Điểm Đấu trường: thắng 15, thua 4; XP bang",
             DailyTimes = times,
             AllowedDays = days,
             Duration = TimeSpan.FromMinutes(royale ? 12 : 15),
@@ -273,88 +321,24 @@ public static class TimetableSourceCollector
             ?? (plugIn as ISupportDefaultCustomConfiguration)?.CreateDefaultConfig() as PeriodicInvasionConfiguration;
     }
 
-    private static (string Id, string NameEn, string NameVi, string DropsEn, string DropsVi) DescribeInvasion(
-        Type plugInType,
-        PeriodicInvasionConfiguration configuration)
-    {
-        if (plugInType == typeof(GoldenInvasionPlugIn))
+    private static (string Id, string NameEn, string NameVi) DescribeInvasion(Type plugInType)
+        => plugInType.Name switch
         {
-            return (
-                "invasion-golden",
-                "Golden Invasion",
-                "Xâm lăng Rồng Vàng / Quái Vàng",
-                "Boxes of Kundun +1 to +5, Excellent items, Jewels",
-                "Hộp Kundun +1 đến +5, đồ Hoàn Hảo, Ngọc");
-        }
-
-        if (plugInType == typeof(RedDragonInvasionPlugIn))
-        {
-            return (
-                "invasion-red-dragon",
-                "Red Dragon Invasion",
-                "Xâm lăng Rồng Đỏ",
-                "Jewels of Bless & Soul, Zen",
-                "Ngọc Ước Nguyện, Ngọc Tâm Linh, Zen");
-        }
-
-        if (plugInType == typeof(WhiteWizardInvasionPlugIn))
-        {
-            return (
-                "invasion-white-wizard",
-                "White Wizard Corps",
-                "Phù Thủy Trắng",
-                "Ring of Wizardry, Jewels of Bless & Soul",
-                "Nhẫn Phù Thủy, Ngọc Ước Nguyện & Tâm Linh");
-        }
-
-        if (plugInType == typeof(RabbitInvasionPlugIn))
-        {
-            return (
-                "invasion-rabbits",
-                "Lunar Rabbit Invasion",
-                "Thỏ Ngọc",
-                "Box of Heaven, Jewels, Firecracker / Chaos items",
-                "Hộp Thiên Đường, Ngọc, vật phẩm sự kiện");
-        }
-
-        if (plugInType == typeof(SnowmanInvasionPlugIn))
-        {
-            return (
-                "invasion-snowmen",
-                "Snowman Invasion",
-                "Người Tuyết & Ông Già Noel",
-                "Jewels of Bless/Soul/Life, Zen, Festive rewards",
-                "Ngọc Bless/Soul/Life, Zen, quà Giáng Sinh");
-        }
-
-        if (plugInType == typeof(FindTheGmInvasionPlugIn))
-        {
-            var findGm = configuration as FindTheGmConfiguration ?? new FindTheGmConfiguration();
-            var coins = findGm.RewardCoins > 0 ? $"{findGm.RewardCoins} {findGm.RewardCoinType}" : string.Empty;
-            var zenEn = findGm.RewardZen > 0 ? $"{findGm.RewardZen:N0} Zen" : string.Empty;
-            var reward = string.Join(" + ", new[] { coins, zenEn }.Where(s => !string.IsNullOrEmpty(s)));
-            return (
-                "invasion-find-gm",
-                "Find the GM",
-                "Truy tìm GM",
-                string.IsNullOrEmpty(reward) ? "Special GM gift" : $"First finder(s) ({findGm.MaxWinners}): {reward}",
-                string.IsNullOrEmpty(reward) ? "Quà đặc biệt từ GM" : $"Top {findGm.MaxWinners} tìm thấy trước: {reward}");
-        }
-
-        return (
-            $"invasion-{plugInType.Name.ToLowerInvariant()}",
-            plugInType.Name,
-            plugInType.Name,
-            "Event monster drops",
-            "Vật phẩm rơi từ quái sự kiện");
-    }
+            nameof(GoldenInvasionPlugIn) => ("invasion-golden", "Golden Invasion", "Xâm lăng Rồng Vàng / Quái Vàng"),
+            nameof(RedDragonInvasionPlugIn) => ("invasion-red-dragon", "Red Dragon Invasion", "Xâm lăng Rồng Đỏ"),
+            nameof(WhiteWizardInvasionPlugIn) => ("invasion-white-wizard", "White Wizard Corps", "Phù Thủy Trắng"),
+            nameof(RabbitInvasionPlugIn) => ("invasion-rabbits", "Lunar Rabbit Invasion", "Thỏ Ngọc"),
+            nameof(SnowmanInvasionPlugIn) => ("invasion-snowmen", "Snowman Invasion", "Người Tuyết & Ông Già Noel"),
+            nameof(FindTheGmInvasionPlugIn) => ("invasion-find-gm", "Find the GM", "Truy tìm GM"),
+            _ => ($"invasion-{plugInType.Name.ToLowerInvariant()}", plugInType.Name, plugInType.Name),
+        };
 
     private static (string En, string Vi) DescribeInvasionMaps(PeriodicInvasionConfiguration config, GameConfiguration? gameConfiguration)
     {
         var mapIds = config.Mobs.SelectMany(m => m.MapIds).Distinct().ToList();
         if (mapIds.Count == 0)
         {
-            return ("Lorencia, Noria, Devias", "Lorencia, Noria, Devias");
+            return (string.Empty, string.Empty);
         }
 
         var en = new List<string>();
@@ -384,25 +368,13 @@ public static class TimetableSourceCollector
         GameConfiguration? gameConfiguration)
     {
         var defs = gameConfiguration?.MiniGameDefinitions?.Where(d => d.IsActive && d.Type == type).ToList() ?? [];
-        var rewardSbEn = new StringBuilder();
         var mapEn = defs.FirstOrDefault()?.Entrance?.Map?.Name.GetTranslation(English);
         var mapVi = defs.FirstOrDefault()?.Entrance?.Map?.Name.GetTranslation(Vietnamese) ?? mapEn;
-
-        foreach (var reward in defs.SelectMany(d => d.Rewards ?? Enumerable.Empty<MiniGameReward>()).Take(4))
-        {
-            var itemName = reward.ItemReward?.PossibleItems?.FirstOrDefault()?.Name.GetTranslation(English);
-            if (!string.IsNullOrWhiteSpace(itemName))
-            {
-                if (rewardSbEn.Length > 0)
-                {
-                    rewardSbEn.Append(", ");
-                }
-
-                rewardSbEn.Append(itemName);
-            }
-        }
-
-        var extractedDrops = rewardSbEn.Length > 0 ? rewardSbEn.ToString() : null;
+        var rewardItems = defs.SelectMany(definition => definition.Rewards)
+            .SelectMany(reward => reward.ItemReward?.PossibleItems ?? Enumerable.Empty<ItemDefinition>())
+            .Where(item => item.IsActive).Distinct().Take(4).ToArray();
+        var dropsEn = string.Join(", ", rewardItems.Select(item => item.Name.GetTranslation(English)));
+        var dropsVi = string.Join(", ", rewardItems.Select(item => item.Name.GetTranslation(Vietnamese)));
 
         return type switch
         {
@@ -411,43 +383,43 @@ public static class TimetableSourceCollector
                 "Huyết Lâu (Blood Castle)",
                 mapEn ?? "Blood Castle (enter via Spirit Archangel in Devias)",
                 mapVi ?? "Huyết Lâu (vào qua Thiên Sứ ở Devias)",
-                extractedDrops ?? "Jewel of Chaos, Jewels, EXP & Zen",
-                extractedDrops ?? "Ngọc Hỗn Nguyên, Ngọc, EXP & Zen"),
+                dropsEn,
+                dropsVi),
             MiniGameType.DevilSquare => (
                 "Devil Square",
                 "Quảng Trường Quỷ (Devil Square)",
                 mapEn ?? "Devil Square (enter via Charon in Noria)",
                 mapVi ?? "Quảng Trường Quỷ (vào qua Charon ở Noria)",
-                extractedDrops ?? "High EXP waves, Zen, Jewels",
-                extractedDrops ?? "Luyện cấp EXP cao, Zen, Ngọc"),
+                dropsEn,
+                dropsVi),
             MiniGameType.ChaosCastle => (
                 "Chaos Castle",
                 "Hỗn Nguyên Lâu (Chaos Castle)",
                 mapEn ?? "Chaos Castle (use Armor of Guardsman)",
                 mapVi ?? "Hỗn Nguyên Lâu (dùng Giáp Hộ Vệ)",
-                extractedDrops ?? "Ancient items, Jewels of Creation/Soul/Bless/Life",
-                extractedDrops ?? "Đồ Thần, Ngọc Sáng Tạo/Tâm Linh/Ước Nguyện/Sinh Mệnh"),
+                dropsEn,
+                dropsVi),
             MiniGameType.IllusionTemple => (
                 "Illusion Temple",
                 "Bạch Long Điện (Illusion Temple)",
                 mapEn ?? "Illusion Temple (Mirage in Devias)",
                 mapVi ?? "Bạch Long Điện (Mirage ở Devias)",
-                extractedDrops ?? "Jewel of Chaos, PvP team victory rewards",
-                extractedDrops ?? "Ngọc Hỗn Nguyên, phần thưởng thắng đội PvP"),
+                dropsEn,
+                dropsVi),
             MiniGameType.Kanturu => (
                 "Kanturu / Nightmare",
                 "Tháp Tinh Luyện Kanturu",
                 mapEn ?? "Kanturu Remains -> Refinery Tower",
                 mapVi ?? "Kanturu Di Tích -> Tháp Tinh Luyện",
-                extractedDrops ?? "Nightmare drops, 380 items, Gemstone refining",
-                extractedDrops ?? "Rơi đồ 380, tinh luyện Đá Tạo Hóa"),
+                dropsEn,
+                dropsVi),
             _ => (
                 type.ToString(),
                 type.ToString(),
                 mapEn ?? "Event Map",
                 mapVi ?? "Bản đồ sự kiện",
-                extractedDrops ?? "Event rewards",
-                extractedDrops ?? "Phần thưởng sự kiện"),
+                dropsEn,
+                dropsVi),
         };
     }
 

@@ -11,6 +11,7 @@ using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Configuration.Items;
 using HNMO.DataModel.Configuration.Quests;
 using HNMO.GameLogic;
+using HNMO.GameLogic.CastleSiege;
 using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.PlugIns.InvasionEvents;
 using HNMO.GameLogic.PlugIns.PeriodicTasks;
@@ -37,6 +38,14 @@ public sealed class WebsiteEventGuideTests
         AddMap(persistence, world, 0, "First map");
         AddMap(persistence, world, 2, "Featured map");
         var featuredMonster = InvasionConfigurationDefaults.Golden.Mobs.Single(spawn => spawn.MapIds.Count > 1).MonsterId;
+        var customLoot = persistence.CreateNew<ItemDefinition>();
+        customLoot.Name = new("Test configured invasion loot");
+        var lootGroup = persistence.CreateNew<DropItemGroup>();
+        lootGroup.PossibleItems.Add(customLoot);
+        var monster = persistence.CreateNew<MonsterDefinition>();
+        monster.Number = 20;
+        monster.DropItemGroups.Add(lootGroup);
+        world.Monsters.Add(monster);
         var manager = new PlugInManager([], NullLoggerFactory.Instance, null, null);
         var plugin = manager.GetActivePlugInsOf<IPeriodicTaskPlugIn>().OfType<GoldenInvasionPlugIn>().Single();
         plugin.Configuration = new()
@@ -53,6 +62,7 @@ public sealed class WebsiteEventGuideTests
         Assert.That(excluded.Where(row => row.Id == "invasion-golden").Select(row => row.InvasionConfiguration?.AllowedServerIds), Is.Empty);
         var included = TimetableSourceCollector.CollectFromContext(game.Object, timetable, Now, 4).Single(row => row.Id == "invasion-golden");
         Assert.That(included.ExplicitNextStartUtc, Is.EqualTo(Now.AddHours(1.5)));
+        Assert.That(included.DropsEn, Is.EqualTo("Test configured invasion loot"));
         var spawns = included.ActiveInvasionSpawns!;
         Assert.That(spawns, Has.Count.EqualTo(2));
         Assert.That(spawns.SelectMany(spawn => spawn.MapIds).Distinct(), Is.EqualTo(new ushort[] { 2 }));
@@ -76,6 +86,13 @@ public sealed class WebsiteEventGuideTests
         var quest = persistence.CreateNew<QuestDefinition>(); quest.Name = new("Test task"); quest.MinimumCharacterLevel = 37; quest.RequiredStartMoney = 123;
         var kill = persistence.CreateNew<QuestMonsterKillRequirement>(); kill.Monster = target; kill.MinimumNumber = 9; quest.RequiredMonsterKills.Add(kill);
         var reward = persistence.CreateNew<QuestReward>(); reward.RewardType = QuestRewardType.Money; reward.Value = 1456; quest.Rewards.Add(reward);
+        var requiredItem = persistence.CreateNew<QuestItemRequirement>();
+        requiredItem.Item = item;
+        requiredItem.MinimumNumber = 4;
+        requiredItem.DropItemGroup = pool;
+        pool.Monster = target;
+        pool.MinimumMonsterLevel = 24;
+        quest.RequiredItems.Add(requiredItem);
         npc.Quests.Add(quest);
         var game = persistence.CreateNew<MiniGameDefinition>(); game.Type = MiniGameType.BloodCastle; game.MinimumCharacterLevel = 73;
         var gameReward = persistence.CreateNew<MiniGameReward>(); gameReward.RewardType = MiniGameRewardType.ExperiencePerRemainingSeconds;
@@ -100,7 +117,44 @@ public sealed class WebsiteEventGuideTests
         Assert.That(quests[0]!["maps"]!.AsArray(), Has.Count.EqualTo(1));
         Assert.That(quests[0]!["kills"]![0]!["count"]!.GetValue<int>(), Is.EqualTo(9));
         Assert.That(quests[0]!["rewards"]![0]!["value"]!.GetValue<int>(), Is.EqualTo(1456));
+        var drop = quests[0]!["items"]![0]!["dropGroup"]!;
+        Assert.That(drop["chance"]!.GetValue<double>(), Is.EqualTo(.15));
+        Assert.That(drop["monster"]!["en"]!.GetValue<string>(), Is.EqualTo("Test monster"));
+        Assert.That(drop["minimumMonsterLevel"]!.GetValue<byte>(), Is.EqualTo(24));
         Assert.That(result.ToJsonString(), Does.Not.Contain("Fallback reward text").And.Not.Contain("Not an actual configured reward").And.Not.Contain("Hidden field"));
+    }
+
+    /// <summary>Uses the Castle Siege runtime schedule in the configured time zone.</summary>
+    [Test]
+    public void SiegeGuideUsesConfiguredBattleTimes()
+    {
+        using var persistence = new InMemoryPersistenceContextProvider().CreateNewContext();
+        var configuration = persistence.CreateNew<GameConfiguration>();
+        var map = AddMap(persistence, configuration, 30, "Test siege field");
+        var siegeConfiguration = persistence.CreateNew<CastleSiegeConfiguration>();
+        siegeConfiguration.CastleSiegeMapDefinition = map;
+        var start = persistence.CreateNew<CastleSiegeStateScheduleEntry>();
+        start.State = CastleSiegeState.Start;
+        start.DayOfWeek = DayOfWeek.Tuesday;
+        start.Hour = 18;
+        start.Minute = 23;
+        var end = persistence.CreateNew<CastleSiegeStateScheduleEntry>();
+        end.State = CastleSiegeState.End;
+        end.DayOfWeek = DayOfWeek.Tuesday;
+        end.Hour = 19;
+        end.Minute = 2;
+        siegeConfiguration.StateSchedule.Add(start);
+        siegeConfiguration.StateSchedule.Add(end);
+        var game = new Mock<IGameContext>();
+        game.SetupGet(context => context.ServerTimeZone).Returns(TimeZoneInfo.FindSystemTimeZoneById("Australia/Sydney"));
+
+        var battle = TimetableSourceCollector.FromCastleSiege(new CastleSiegeContext(game.Object, siegeConfiguration), Now);
+        Assert.That(battle, Is.Not.Null);
+        var sources = new[] { battle! };
+        var snapshot = TimetableEngine.BuildSnapshot(new(), true, Now, sources, []);
+        var data = Project(configuration, [map], snapshot, sources)["events"]![0]!;
+        Assert.That(data["nextStartUtc"]!.GetValue<DateTime>(), Is.EqualTo(Now.AddHours(6).AddMinutes(23)));
+        Assert.That(data["scheduledEndUtc"]!.GetValue<DateTime>(), Is.EqualTo(Now.AddHours(7).AddMinutes(2)));
     }
 
     /// <summary>Caps event output and leaves missing next-start data empty.</summary>

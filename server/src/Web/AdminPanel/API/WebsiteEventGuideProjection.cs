@@ -55,6 +55,7 @@ public static class WebsiteEventGuideProjection
                     nextStartUtc = row.NextStartUtc is { } next && next >= schedule.NowUtc ? UtcInstant(next) : null,
                     endsAtUtc = source?.IsLiveNow == true ? UtcInstant(row.EndsAtUtc) : null,
                     isActive = source?.IsLiveNow == true,
+                    scheduledEndUtc = source is { Id: "event-castle-siege", IsLiveNow: false } ? UtcInstant(source.ExplicitEndsAtUtc) : null,
                     tiers = miniGames[row.Id].OrderBy(game => game.GameLevel).Take(MaximumTiers).Select(MiniGame).ToArray(),
                     invasion = source?.InvasionConfiguration is { } invasion ? Invasion(invasion, source.ActiveInvasionSpawns, maps, configuration) : null,
                     boss = actualBoss is null ? null : Boss(actualBoss, configuration),
@@ -164,7 +165,18 @@ public static class WebsiteEventGuideProjection
         kills = quest.RequiredMonsterKills.Where(requirement => requirement.Monster is { IsActive: true }).Take(MaximumDetails)
             .Select(requirement => new { name = Name(requirement.Monster!.Designation), count = requirement.MinimumNumber }).ToArray(),
         items = quest.RequiredItems.Where(requirement => requirement.Item is { IsActive: true }).Take(MaximumDetails)
-            .Select(requirement => new { name = Name(requirement.Item!.Name), count = requirement.MinimumNumber }).ToArray(),
+            .Select(requirement => new
+            {
+                name = Name(requirement.Item!.Name),
+                count = requirement.MinimumNumber,
+                dropGroup = requirement.DropItemGroup is { } group ? new
+                {
+                    chance = double.IsFinite(group.Chance) && group.Chance is >= 0 and <= 1 ? (double?)group.Chance : null,
+                    monster = group.Monster is { IsActive: true } monster ? Name(monster.Designation) : null,
+                    group.MinimumMonsterLevel,
+                    group.MaximumMonsterLevel,
+                } : null,
+            }).ToArray(),
         rewards = quest.Rewards.Where(reward => reward.RewardType != QuestRewardType.Undefined).Take(MaximumDetails).Select(reward => new
         {
             kind = reward.RewardType.ToString(),
