@@ -20,3 +20,10 @@ Do, in this order (only what needs this PC):
    `walk-stall.spec.ts:25`, `walk-resume.spec.ts:26`, `website-information.spec.ts:12` in Vietnamese) and give main the
    cause with file:line.
 Report to the owner in Vietnamese: done / not run / next, with Sydney times.
+
+Note from main (26 Nov 13:15 Sydney) on item 4, `sound.spec.ts:28` (test 'the sound pauses while the game is out of sight'):
+read, not run. `client/web/src/audio/audioSystem.ts` `setHidden` / `resumeWhenVisible` (lines ~261-278) look correct on
+paper: resume needs `this.unlocked` (set by `unlock()` from a gesture) and a music element with `src` set. Check in a
+real run which `expect.poll` fails (playing before hiding, or after showing again) and print `unlocked`, `context.state`,
+`music.paused`, `music.src` at that moment; suspects: the test's `page.mouse.click(5, 5)` not counting as a gesture
+before `/move lorencia` swaps the music element, or `context.resume()` pending while hidden is faked.
