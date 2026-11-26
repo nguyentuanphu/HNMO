@@ -224,12 +224,17 @@ public class Storage : IStorage
         var result = true;
 
         var itemsWithSlots = anotherStorage.Items.Select(item => (item.ItemSlot, Item: item)).ToList();
+        var addedItems = new List<Item>(itemsWithSlots.Count);
         try
         {
             foreach (var item in itemsWithSlots)
             {
                 await anotherStorage.RemoveItemAsync(item.Item).ConfigureAwait(false);
-                if (!await this.AddItemAsync(item.Item).ConfigureAwait(false))
+                if (await this.AddItemAsync(item.Item).ConfigureAwait(false))
+                {
+                    addedItems.Add(item.Item);
+                }
+                else
                 {
                     result = false;
                 }
@@ -239,9 +244,13 @@ public class Storage : IStorage
         {
             if (!result)
             {
+                foreach (var addedItem in addedItems)
+                {
+                    await this.RemoveItemAsync(addedItem).ConfigureAwait(false);
+                }
+
                 foreach (var item in itemsWithSlots)
                 {
-                    await this.RemoveItemAsync(item.Item).ConfigureAwait(false);
                     await anotherStorage.AddItemAsync(item.ItemSlot, item.Item).ConfigureAwait(false);
                 }
             }
@@ -286,6 +295,11 @@ public class Storage : IStorage
         if (this.ContainsSlot(item.ItemSlot))
         {
             var slot = item.ItemSlot - this._slotOffset;
+            if (!ReferenceEquals(this.ItemArray[slot], item))
+            {
+                return;
+            }
+
             this.ItemArray[slot] = null;
             if (slot >= this._boxOffset)
             {
