@@ -301,7 +301,7 @@ public sealed class CombiningLeftoversPlugIn :
         return cap > 0 ? cap : null;
     }
 
-    private static async ValueTask RemoveBagSlotsAsync(Player player, IReadOnlyList<byte> slots)
+    internal static async ValueTask RemoveBagSlotsAsync(Player player, IReadOnlyList<byte> slots)
     {
         if (player.Inventory is not { } inventory)
         {
@@ -318,7 +318,7 @@ public sealed class CombiningLeftoversPlugIn :
                 continue;
             }
 
-            if (item.Durability > consumeCount)
+            if (!item.IsWearable() && item.Durability > consumeCount)
             {
                 item.Durability -= (byte)consumeCount;
                 await player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(item, false)).ConfigureAwait(false);

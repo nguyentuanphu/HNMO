@@ -42,9 +42,17 @@ public static class CombiningLeftoversStateWriter
                 item.Definition.Number,
                 item.Level,
                 isLocked is not null && isLocked(item),
-                Math.Max(1, (int)item.Durability)))
+                PieceCount(item)))
             .ToList();
     }
+
+    /// <summary>
+    /// The pieces an item counts as: the durability of an item which is no equipment (a stack), one for equipment
+    /// (weapons, armor, wings), whose durability is its wear and not a count.
+    /// </summary>
+    /// <param name="item">The item.</param>
+    /// <returns>The pieces.</returns>
+    internal static int PieceCount(Item item) => item.IsWearable() ? 1 : Math.Max(1, (int)item.Durability);
 
     /// <summary>Serializes the public endpoint payload (recipes, exchange offers, effective box cap).</summary>
     /// <param name="engine">Leftovers engine.</param>
