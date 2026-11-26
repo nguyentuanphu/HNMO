@@ -220,6 +220,7 @@
       "kind": "buff",
       "group": 7,
       "description": {
+        "en": "AG recovery speed increases.",
         "vi": "Hiệu ứng tăng tốc độ hồi AG."
       },
       "displayName": {
@@ -381,6 +382,7 @@
       "kind": "buff",
       "group": 12,
       "description": {
+        "en": "Abolish Magic: magic effects are removed.",
         "vi": "Hiệu ứng Abolish Magic (Hóa giải ma thuật)."
       },
       "displayName": {
@@ -404,6 +406,7 @@
       "kind": "buff",
       "group": 13,
       "description": {
+        "en": "Shows whether the gate is open or closed.",
         "vi": "Trạng thái đóng/mở cổng."
       },
       "displayName": {
@@ -606,6 +609,7 @@
       "kind": "buff",
       "group": 16,
       "description": {
+        "en": "Effect of the Dark Rod battle skill.",
         "vi": "Hiệu ứng kỹ năng Dark Rod Battle Skill."
       },
       "displayName": {
@@ -630,6 +634,7 @@
       "kind": "buff",
       "group": 17,
       "description": {
+        "en": "Shows the crown registration.",
         "vi": "Trạng thái đăng ký vương miện."
       },
       "displayName": {
@@ -654,6 +659,7 @@
       "kind": "buff",
       "group": 18,
       "description": {
+        "en": "A contract can be made at the Altar of Wolf.",
         "vi": "Trạng thái cho phép lập khế ước tại Tế đàn Sói."
       },
       "displayName": {
@@ -678,6 +684,7 @@
       "kind": "buff",
       "group": 18,
       "description": {
+        "en": "No contract can be made at the Altar of Wolf.",
         "vi": "Trạng thái không cho phép lập khế ước tại Tế đàn Sói."
       },
       "displayName": {
@@ -702,6 +709,7 @@
       "kind": "buff",
       "group": 18,
       "description": {
+        "en": "Shows the contract at the Altar of Wolf.",
         "vi": "Trạng thái khế ước tại Tế đàn Sói."
       },
       "displayName": {
@@ -726,6 +734,7 @@
       "kind": "buff",
       "group": 18,
       "description": {
+        "en": "A contract at the Altar of Wolf is being made.",
         "vi": "Trạng thái đang thử lập khế ước tại Tế đàn Sói."
       },
       "displayName": {
@@ -750,6 +759,7 @@
       "kind": "buff",
       "group": 18,
       "description": {
+        "en": "The Altar of Wolf is under siege.",
         "vi": "Trạng thái công phá Tế đàn Sói."
       },
       "displayName": {
@@ -774,6 +784,7 @@
       "kind": "buff",
       "group": 18,
       "description": {
+        "en": "Shows the hero contract at the Altar of Wolf.",
         "vi": "Trạng thái khế ước anh hùng tại Tế đàn Sói."
       },
       "displayName": {
@@ -798,6 +809,7 @@
       "kind": "buff",
       "group": 19,
       "description": {
+        "en": "A Cry Wolf NPC is shown transparent.",
         "vi": "Trạng thái hiển thị trong suốt của NPC Cry Wolf."
       },
       "displayName": {
@@ -822,6 +834,7 @@
       "kind": "buff",
       "group": 20,
       "description": {
+        "en": "In-game administrator.",
         "vi": "Trạng thái quản trị viên trong game."
       },
       "displayName": {
@@ -952,6 +965,7 @@
       "kind": "buff",
       "group": 22,
       "description": {
+        "en": "Spell of Quickness in the Temple: movement speed increases.",
         "vi": "Hiệu ứng Spell of Quickness (Phép tăng tốc) trong Temple."
       },
       "displayName": {
@@ -975,6 +989,7 @@
       "kind": "buff",
       "group": 22,
       "description": {
+        "en": "Spell of Sublimation in the Temple.",
         "vi": "Hiệu ứng Spell of Sublimation (Phép thăng hoa) trong Temple."
       },
       "displayName": {
@@ -1942,6 +1957,7 @@
       "kind": "debuff",
       "group": 31,
       "description": {
+        "en": "Attack power decreases.",
         "vi": "Hiệu ứng giảm tấn công."
       },
       "displayName": {
@@ -1966,6 +1982,7 @@
       "kind": "debuff",
       "group": 32,
       "description": {
+        "en": "The wizardry increase is reduced.",
         "vi": "Hiệu ứng giảm mức tăng ma lực."
       },
       "displayName": {
@@ -2025,6 +2042,7 @@
       "kind": "debuff",
       "group": 34,
       "description": {
+        "en": "Magic defense increases.",
         "vi": "Hiệu ứng phòng thủ phép."
       },
       "displayName": {
@@ -2048,6 +2066,7 @@
       "kind": "debuff",
       "group": 35,
       "description": {
+        "en": "The monster resists magic attacks.",
         "vi": "Hiệu ứng kháng đòn phép của quái."
       },
       "displayName": {
@@ -2072,6 +2091,7 @@
       "kind": "debuff",
       "group": 36,
       "description": {
+        "en": "The monster resists chemistry attacks.",
         "vi": "Hiệu ứng kháng đòn hóa học của quái."
       },
       "displayName": {
@@ -2131,6 +2151,7 @@
       "kind": "buff",
       "group": 38,
       "description": {
+        "en": "Divine protection in Cry Wolf.",
         "vi": "Trạng thái Thần hộ mệnh trong Cry Wolf."
       },
       "displayName": {
@@ -2155,6 +2176,7 @@
       "kind": "buff",
       "group": 38,
       "description": {
+        "en": "Divine protection in Cry Wolf.",
         "vi": "Trạng thái Thần hộ mệnh trong Cry Wolf."
       },
       "displayName": {
@@ -2179,6 +2201,7 @@
       "kind": "buff",
       "group": 38,
       "description": {
+        "en": "Divine protection in Cry Wolf.",
         "vi": "Trạng thái Thần hộ mệnh trong Cry Wolf."
       },
       "displayName": {
@@ -2203,6 +2226,7 @@
       "kind": "buff",
       "group": 38,
       "description": {
+        "en": "Divine protection in Cry Wolf.",
         "vi": "Trạng thái Thần hộ mệnh trong Cry Wolf."
       },
       "displayName": {
@@ -2227,6 +2251,7 @@
       "kind": "buff",
       "group": 38,
       "description": {
+        "en": "Divine protection in Cry Wolf.",
         "vi": "Trạng thái Thần hộ mệnh trong Cry Wolf."
       },
       "displayName": {
@@ -2665,6 +2690,7 @@
       "kind": "debuff",
       "group": 46,
       "description": {
+        "en": "Effect of the Flame Strike skill.",
         "vi": "Hiệu ứng kỹ năng Flame Strike (Hỏa kích)."
       },
       "displayName": {
@@ -2687,6 +2713,7 @@
       "kind": "debuff",
       "group": 47,
       "description": {
+        "en": "Effect of the Gigantic Storm skill.",
         "vi": "Hiệu ứng kỹ năng Gigantic Storm (Bão tố)."
       },
       "displayName": {
@@ -2709,6 +2736,7 @@
       "kind": "debuff",
       "group": 48,
       "description": {
+        "en": "Effect of the Lightning Shock skill.",
         "vi": "Hiệu ứng kỹ năng Lightning Shock (Sét giật)."
       },
       "displayName": {
@@ -3443,6 +3471,7 @@
       "kind": "buff",
       "group": 54,
       "description": {
+        "en": "Effect of Ascension.",
         "vi": "Hiệu ứng Ascension (Thăng hoa)."
       },
       "displayName": {
@@ -4594,6 +4623,7 @@
       "kind": "debuff",
       "group": 91,
       "description": {
+        "en": "Effect of the Earth Binds skill.",
         "vi": "Hiệu ứng kỹ năng Earth Binds (Trói đất)."
       },
       "displayName": {
