@@ -2900,14 +2900,6 @@
       ]
     },
     {
-      "name": {"en": "Arena Herald", "vi": "Sứ giả Đấu trường"},
-      "kind": "npc",
-      "model": "MODEL_TOURNAMENT",
-      "numbers": [
-        {"number": 900, "maps": [0, 2, 3, 51]}
-      ]
-    },
-    {
       "name": {"en": "Safety Guardian", "es": "Guardián de Seguridad", "pt": "Guardião de segurança"},
       "kind": "npc",
       "model": "MODEL_STORAGE",
@@ -6953,6 +6945,14 @@
       "shadow": false,
       "numbers": [
         {"number": 668, "maps": [45, 46, 47, 48, 49, 50]}
+      ]
+    },
+    {
+      "name": {"en": "Arena Herald", "vi": "Sứ giả Đấu trường"},
+      "kind": "npc",
+      "model": "MODEL_TOURNAMENT",
+      "numbers": [
+        {"number": 900, "maps": [0, 2, 3, 51]}
       ]
     }
   ]

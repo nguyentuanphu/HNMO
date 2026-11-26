@@ -399,8 +399,7 @@
     },
     {
       "number": 32,
-      "file": "Data/Item/giftbox_r.bmd",
-      "textureFolders": ["Item"],
+      "model": "giftBoxRed",
       "inventory": {
         "offset": [0, -0.05],
         "scale": 0.001
@@ -412,8 +411,7 @@
     },
     {
       "number": 33,
-      "file": "Data/Item/giftbox_g.bmd",
-      "textureFolders": ["Item"],
+      "model": "giftBoxGreen",
       "inventory": {
         "offset": [0, -0.05],
         "scale": 0.001

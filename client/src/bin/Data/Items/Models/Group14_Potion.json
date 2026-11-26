@@ -371,8 +371,7 @@
     },
     {
       "number": 32,
-      "file": "Data/Item/giftbox_bp.bmd",
-      "textureFolders": ["Item"],
+      "model": "giftBoxBluePurple",
       "inventory": {
         "anchor": [0.5, 0.95],
         "offset": [0, 0.05],
@@ -665,8 +664,7 @@
     },
     {
       "number": 55,
-      "file": "Data/Item/giftbox_g.bmd",
-      "textureFolders": ["Item"],
+      "model": "giftBoxGreen",
       "inventory": {
         "anchor": [0.5, 0.95],
         "offset": [0, 0.05],
@@ -680,8 +678,7 @@
     },
     {
       "number": 56,
-      "file": "Data/Item/giftbox_r.bmd",
-      "textureFolders": ["Item"],
+      "model": "giftBoxRed",
       "inventory": {
         "anchor": [0.5, 0.95],
         "offset": [0, 0.05],
@@ -695,8 +692,7 @@
     },
     {
       "number": 57,
-      "file": "Data/Item/giftbox_bp.bmd",
-      "textureFolders": ["Item"],
+      "model": "giftBoxBluePurple",
       "inventory": {
         "anchor": [0.5, 0.95],
         "offset": [0, 0.05],
@@ -806,8 +802,7 @@
     },
     {
       "number": 64,
-      "file": "Data/Item/songss.bmd",
-      "textureFolders": ["Item"],
+      "model": "songss",
       "inventory": {
         "anchor": [0.5, 0.95],
         "offset": [0, 0.02],
@@ -1629,8 +1624,7 @@
     },
     {
       "number": 125,
-      "file": "Data/Item/Ingameshop/package_money_item.bmd",
-      "textureFolders": ["Item/Ingameshop"]
+      "model": "packageBox"
     },
     {
       "number": 126,
@@ -1943,8 +1937,7 @@
     },
     {
       "number": 153,
-      "file": "Data/Item/songss.bmd",
-      "textureFolders": ["Item"],
+      "model": "songss",
       "inventory": {
         "anchor": [0.5, 0.95],
         "offset": [0, 0.02],
@@ -1957,8 +1950,7 @@
     },
     {
       "number": 157,
-      "file": "Data/Item/giftbox_g.bmd",
-      "textureFolders": ["Item"],
+      "model": "giftBoxGreen",
       "inventory": {
         "anchor": [0.5, 0.95],
         "offset": [0, 0.05],
@@ -1972,8 +1964,7 @@
     },
     {
       "number": 158,
-      "file": "Data/Item/giftbox_r.bmd",
-      "textureFolders": ["Item"],
+      "model": "giftBoxRed",
       "inventory": {
         "anchor": [0.5, 0.95],
         "offset": [0, 0.05],
@@ -1987,8 +1978,7 @@
     },
     {
       "number": 159,
-      "file": "Data/Item/giftbox_bp.bmd",
-      "textureFolders": ["Item"],
+      "model": "giftBoxBluePurple",
       "inventory": {
         "anchor": [0.5, 0.95],
         "offset": [0, 0.05],
