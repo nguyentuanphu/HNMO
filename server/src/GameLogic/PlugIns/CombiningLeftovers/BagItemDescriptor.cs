@@ -10,4 +10,5 @@ namespace HNMO.GameLogic.PlugIns.CombiningLeftovers;
 /// <param name="Number">Item number.</param>
 /// <param name="Level">Item level.</param>
 /// <param name="Locked">Whether account-safety locked.</param>
-public sealed record BagItemDescriptor(byte Slot, byte Group, short Number, byte Level, bool Locked = false);
+/// <param name="Quantity">Item stack quantity (durability).</param>
+public sealed record BagItemDescriptor(byte Slot, byte Group, short Number, byte Level, bool Locked = false, int Quantity = 1);

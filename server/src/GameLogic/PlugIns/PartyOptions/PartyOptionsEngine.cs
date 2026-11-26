@@ -158,7 +158,8 @@ public sealed class PartyOptionsEngine
     public PartyJoinCheckResult PlanSpotJoin(string leaderName, string? password, int playerLevel, bool hasParty, out PartyAdvertisement? match)
     {
         match = null;
-        if (!this.Enabled || !this.Configuration.AllowAutoSpotParty)
+        var viaPassword = !string.IsNullOrEmpty(password?.Trim());
+        if (!this.Enabled || (viaPassword ? !this.Configuration.AllowPasswordJoin : !this.Configuration.AllowAutoSpotParty))
         {
             return PartyJoinCheckResult.Disabled;
         }
