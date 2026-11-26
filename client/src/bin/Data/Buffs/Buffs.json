@@ -219,10 +219,6 @@
       "name": "agRecoverySpeedIncrease",
       "kind": "buff",
       "group": 7,
-      "description": {
-        "en": "AG recovery speed increases.",
-        "vi": "Hiệu ứng tăng tốc độ hồi AG."
-      },
       "displayName": {
         "en": "AG recovery speed increase",
         "de": "AG-Regeneration erhöht",
@@ -237,6 +233,10 @@
         "vi": "Tăng tốc độ hồi AG",
         "zh-CN": "AG恢复速度提升",
         "zh-TW": "AG恢復速度提升"
+      },
+      "description": {
+        "en": "AG recovery speed increases.",
+        "vi": "Hiệu ứng tăng tốc độ hồi AG."
       }
     },
     {
@@ -381,10 +381,6 @@
       "name": "abolishMagic",
       "kind": "buff",
       "group": 12,
-      "description": {
-        "en": "Abolish Magic: magic effects are removed.",
-        "vi": "Hiệu ứng Abolish Magic (Hóa giải ma thuật)."
-      },
       "displayName": {
         "en": "Abolish Magic",
         "de": "Magie aufheben",
@@ -398,6 +394,10 @@
         "vi": "Hóa giải ma thuật",
         "zh-CN": "魔法消除",
         "zh-TW": "魔法消除"
+      },
+      "description": {
+        "en": "Abolish Magic: magic effects are removed.",
+        "vi": "Hiệu ứng Abolish Magic (Hóa giải ma thuật)."
       }
     },
     {
@@ -405,10 +405,6 @@
       "name": "gateOpenCloseStatus",
       "kind": "buff",
       "group": 13,
-      "description": {
-        "en": "Shows whether the gate is open or closed.",
-        "vi": "Trạng thái đóng/mở cổng."
-      },
       "displayName": {
         "en": "Gate Open/Close Status",
         "de": "Torstatus offen/geschlossen",
@@ -423,6 +419,10 @@
         "vi": "Trạng thái đóng/mở cổng",
         "zh-CN": "城门开关状态",
         "zh-TW": "城門開關狀態"
+      },
+      "description": {
+        "en": "Shows whether the gate is open or closed.",
+        "vi": "Trạng thái đóng/mở cổng."
       }
     },
     {
@@ -608,10 +608,6 @@
       "name": "darkRodBattleSkill",
       "kind": "buff",
       "group": 16,
-      "description": {
-        "en": "Effect of the Dark Rod battle skill.",
-        "vi": "Hiệu ứng kỹ năng Dark Rod Battle Skill."
-      },
       "displayName": {
         "en": "Dark Rod Battle Skill",
         "de": "Kampffähigkeit des Dunkelstabs",
@@ -626,6 +622,10 @@
         "vi": "Kỹ năng chiến đấu Dark Rod",
         "zh-CN": "暗黑权杖战斗技能",
         "zh-TW": "黑暗權杖戰鬥技能"
+      },
+      "description": {
+        "en": "Effect of the Dark Rod battle skill.",
+        "vi": "Hiệu ứng kỹ năng Dark Rod Battle Skill."
       }
     },
     {
@@ -633,10 +633,6 @@
       "name": "crownRegistrationStatus",
       "kind": "buff",
       "group": 17,
-      "description": {
-        "en": "Shows the crown registration.",
-        "vi": "Trạng thái đăng ký vương miện."
-      },
       "displayName": {
         "en": "Crown Registration Status",
         "de": "Kronenregistrierung",
@@ -651,6 +647,10 @@
         "vi": "Trạng thái đăng ký vương miện",
         "zh-CN": "王冠刻印登记状态",
         "zh-TW": "王冠登記狀態"
+      },
+      "description": {
+        "en": "Shows the crown registration.",
+        "vi": "Trạng thái đăng ký vương miện."
       }
     },
     {
@@ -658,10 +658,6 @@
       "name": "altarOfWolfContractEnabled",
       "kind": "buff",
       "group": 18,
-      "description": {
-        "en": "A contract can be made at the Altar of Wolf.",
-        "vi": "Trạng thái cho phép lập khế ước tại Tế đàn Sói."
-      },
       "displayName": {
         "en": "Altar of Wolf contract enabled",
         "de": "Vertrag am Wolfsaltar aktiviert",
@@ -676,6 +672,10 @@
         "vi": "Tế đàn Sói: cho phép khế ước",
         "zh-CN": "狼之祭坛 可签订契约",
         "zh-TW": "狼之祭壇 可簽訂契約"
+      },
+      "description": {
+        "en": "A contract can be made at the Altar of Wolf.",
+        "vi": "Trạng thái cho phép lập khế ước tại Tế đàn Sói."
       }
     },
     {
@@ -683,10 +683,6 @@
       "name": "altarOfWolfContractDisabled",
       "kind": "buff",
       "group": 18,
-      "description": {
-        "en": "No contract can be made at the Altar of Wolf.",
-        "vi": "Trạng thái không cho phép lập khế ước tại Tế đàn Sói."
-      },
       "displayName": {
         "en": "Altar of Wolf contract disabled",
         "de": "Vertrag am Wolfsaltar deaktiviert",
@@ -701,6 +697,10 @@
         "vi": "Tế đàn Sói: khóa khế ước",
         "zh-CN": "狼之祭坛 无法签订契约",
         "zh-TW": "狼之祭壇 無法簽訂契約"
+      },
+      "description": {
+        "en": "No contract can be made at the Altar of Wolf.",
+        "vi": "Trạng thái không cho phép lập khế ước tại Tế đàn Sói."
       }
     },
     {
@@ -708,10 +708,6 @@
       "name": "altarOfWolfContractStatus",
       "kind": "buff",
       "group": 18,
-      "description": {
-        "en": "Shows the contract at the Altar of Wolf.",
-        "vi": "Trạng thái khế ước tại Tế đàn Sói."
-      },
       "displayName": {
         "en": "Altar of Wolf contract Status",
         "de": "Vertragsstatus am Wolfsaltar",
@@ -726,6 +722,10 @@
         "vi": "Trạng thái khế ước Tế đàn Sói",
         "zh-CN": "狼之祭坛 契约状态",
         "zh-TW": "狼之祭壇 契約狀態"
+      },
+      "description": {
+        "en": "Shows the contract at the Altar of Wolf.",
+        "vi": "Trạng thái khế ước tại Tế đàn Sói."
       }
     },
     {
@@ -733,10 +733,6 @@
       "name": "altarOfWolfContractAttempt",
       "kind": "buff",
       "group": 18,
-      "description": {
-        "en": "A contract at the Altar of Wolf is being made.",
-        "vi": "Trạng thái đang thử lập khế ước tại Tế đàn Sói."
-      },
       "displayName": {
         "en": "Altar of Wolf contract attempt",
         "de": "Vertragsversuch am Wolfsaltar",
@@ -751,6 +747,10 @@
         "vi": "Đang lập khế ước Tế đàn Sói",
         "zh-CN": "狼之祭坛 尝试签订契约",
         "zh-TW": "狼之祭壇 嘗試簽訂契約"
+      },
+      "description": {
+        "en": "A contract at the Altar of Wolf is being made.",
+        "vi": "Trạng thái đang thử lập khế ước tại Tế đàn Sói."
       }
     },
     {
@@ -758,10 +758,6 @@
       "name": "altarOfWolfBesiegementStatus",
       "kind": "buff",
       "group": 18,
-      "description": {
-        "en": "The Altar of Wolf is under siege.",
-        "vi": "Trạng thái công phá Tế đàn Sói."
-      },
       "displayName": {
         "en": "Altar of Wolf besiegement Status",
         "de": "Belagerungsstatus am Wolfsaltar",
@@ -776,6 +772,10 @@
         "vi": "Trạng thái công phá Tế đàn Sói",
         "zh-CN": "狼之祭坛 占领状态",
         "zh-TW": "狼之祭壇 佔領狀態"
+      },
+      "description": {
+        "en": "The Altar of Wolf is under siege.",
+        "vi": "Trạng thái công phá Tế đàn Sói."
       }
     },
     {
@@ -783,10 +783,6 @@
       "name": "altarOfWolfHeroContractStatus",
       "kind": "buff",
       "group": 18,
-      "description": {
-        "en": "Shows the hero contract at the Altar of Wolf.",
-        "vi": "Trạng thái khế ước anh hùng tại Tế đàn Sói."
-      },
       "displayName": {
         "en": "Altar of Wolf hero contract Status",
         "de": "Heldenvertrag am Wolfsaltar",
@@ -801,6 +797,10 @@
         "vi": "Khế ước anh hùng Tế đàn Sói",
         "zh-CN": "狼之祭坛 英雄契约状态",
         "zh-TW": "狼之祭壇 英雄契約狀態"
+      },
+      "description": {
+        "en": "Shows the hero contract at the Altar of Wolf.",
+        "vi": "Trạng thái khế ước anh hùng tại Tế đàn Sói."
       }
     },
     {
@@ -808,10 +808,6 @@
       "name": "cryWolfNpcTransparency",
       "kind": "buff",
       "group": 19,
-      "description": {
-        "en": "A Cry Wolf NPC is shown transparent.",
-        "vi": "Trạng thái hiển thị trong suốt của NPC Cry Wolf."
-      },
       "displayName": {
         "en": "Cry Wolf NPC transparency",
         "de": "Crywolf-NPC unsichtbar",
@@ -826,6 +822,10 @@
         "vi": "NPC Cry Wolf: trong suốt",
         "zh-CN": "狼魂NPC透明化",
         "zh-TW": "冷狼NPC透明化"
+      },
+      "description": {
+        "en": "A Cry Wolf NPC is shown transparent.",
+        "vi": "Trạng thái hiển thị trong suốt của NPC Cry Wolf."
       }
     },
     {
@@ -833,13 +833,13 @@
       "name": "gm",
       "kind": "buff",
       "group": 20,
+      "displayName": {
+        "en": "GM",
+        "vi": "GM"
+      },
       "description": {
         "en": "In-game administrator.",
         "vi": "Trạng thái quản trị viên trong game."
-      },
-      "displayName": {
-        "vi": "GM",
-        "en": "GM"
       }
     },
     {
@@ -964,10 +964,6 @@
       "name": "templeSpellOfQuickness",
       "kind": "buff",
       "group": 22,
-      "description": {
-        "en": "Spell of Quickness in the Temple: movement speed increases.",
-        "vi": "Hiệu ứng Spell of Quickness (Phép tăng tốc) trong Temple."
-      },
       "displayName": {
         "en": "Temple - Spell of Quickness",
         "de": "Tempel - Zauber der Schnelligkeit",
@@ -981,6 +977,10 @@
         "vi": "Temple: phép tăng tốc",
         "zh-CN": "神殿 - 迅捷咒语",
         "zh-TW": "神殿 - 迅捷咒語"
+      },
+      "description": {
+        "en": "Spell of Quickness in the Temple: movement speed increases.",
+        "vi": "Hiệu ứng Spell of Quickness (Phép tăng tốc) trong Temple."
       }
     },
     {
@@ -988,10 +988,6 @@
       "name": "templeSpellOfSublimation",
       "kind": "buff",
       "group": 22,
-      "description": {
-        "en": "Spell of Sublimation in the Temple.",
-        "vi": "Hiệu ứng Spell of Sublimation (Phép thăng hoa) trong Temple."
-      },
       "displayName": {
         "en": "Temple - Spell of Sublimation",
         "de": "Tempel - Zauber der Sublimation",
@@ -1005,6 +1001,10 @@
         "vi": "Temple: phép thăng hoa",
         "zh-CN": "神殿 - 升华咒语",
         "zh-TW": "神殿 - 昇華咒語"
+      },
+      "description": {
+        "en": "Spell of Sublimation in the Temple.",
+        "vi": "Hiệu ứng Spell of Sublimation (Phép thăng hoa) trong Temple."
       }
     },
     {
@@ -1956,10 +1956,6 @@
       "name": "attackPowerReduction",
       "kind": "debuff",
       "group": 31,
-      "description": {
-        "en": "Attack power decreases.",
-        "vi": "Hiệu ứng giảm tấn công."
-      },
       "displayName": {
         "en": "Attack power reduction",
         "de": "Angriffskraft verringert",
@@ -1974,6 +1970,10 @@
         "vi": "Giảm tấn công",
         "zh-CN": "攻击力降低",
         "zh-TW": "攻擊力降低"
+      },
+      "description": {
+        "en": "Attack power decreases.",
+        "vi": "Hiệu ứng giảm tấn công."
       }
     },
     {
@@ -1981,10 +1981,6 @@
       "name": "wizardryIncreaseReduction",
       "kind": "debuff",
       "group": 32,
-      "description": {
-        "en": "The wizardry increase is reduced.",
-        "vi": "Hiệu ứng giảm mức tăng ma lực."
-      },
       "displayName": {
         "en": "Wizardry increase reduction",
         "de": "Zaubereibonus verringert",
@@ -1999,6 +1995,10 @@
         "vi": "Giảm mức tăng ma lực",
         "zh-CN": "魔力增幅降低",
         "zh-TW": "魔力增幅降低"
+      },
+      "description": {
+        "en": "The wizardry increase is reduced.",
+        "vi": "Hiệu ứng giảm mức tăng ma lực."
       }
     },
     {
@@ -2041,10 +2041,6 @@
       "name": "magicDefense",
       "kind": "debuff",
       "group": 34,
-      "description": {
-        "en": "Magic defense increases.",
-        "vi": "Hiệu ứng phòng thủ phép."
-      },
       "displayName": {
         "en": "Magic Defense",
         "de": "Magische Verteidigung",
@@ -2058,6 +2054,10 @@
         "vi": "Phòng thủ phép",
         "zh-CN": "魔法防御",
         "zh-TW": "魔法防禦"
+      },
+      "description": {
+        "en": "Magic defense increases.",
+        "vi": "Hiệu ứng phòng thủ phép."
       }
     },
     {
@@ -2065,10 +2065,6 @@
       "name": "monsterMagicAttackResistance",
       "kind": "debuff",
       "group": 35,
-      "description": {
-        "en": "The monster resists magic attacks.",
-        "vi": "Hiệu ứng kháng đòn phép của quái."
-      },
       "displayName": {
         "en": "Monster Magic Attack Resistance",
         "de": "Resistenz gegen magische Monsterangriffe",
@@ -2083,6 +2079,10 @@
         "vi": "Kháng đòn phép của quái",
         "zh-CN": "怪物魔法攻击抗性",
         "zh-TW": "怪物魔法攻擊抗性"
+      },
+      "description": {
+        "en": "The monster resists magic attacks.",
+        "vi": "Hiệu ứng kháng đòn phép của quái."
       }
     },
     {
@@ -2090,10 +2090,6 @@
       "name": "monsterChemistryAttackResistance",
       "kind": "debuff",
       "group": 36,
-      "description": {
-        "en": "The monster resists chemistry attacks.",
-        "vi": "Hiệu ứng kháng đòn hóa học của quái."
-      },
       "displayName": {
         "en": "Monster Chemistry Attack Resistance",
         "de": "Resistenz gegen chemische Monsterangriffe",
@@ -2108,6 +2104,10 @@
         "vi": "Kháng đòn hóa học của quái",
         "zh-CN": "怪物化学攻击抗性",
         "zh-TW": "怪物化學攻擊抗性"
+      },
+      "description": {
+        "en": "The monster resists chemistry attacks.",
+        "vi": "Hiệu ứng kháng đòn hóa học của quái."
       }
     },
     {
@@ -2150,10 +2150,6 @@
       "name": "cryWolfProtection1",
       "kind": "buff",
       "group": 38,
-      "description": {
-        "en": "Divine protection in Cry Wolf.",
-        "vi": "Trạng thái Thần hộ mệnh trong Cry Wolf."
-      },
       "displayName": {
         "en": "Cry Wolf Divine Protection Status",
         "de": "Göttlicher Schutz von Crywolf",
@@ -2168,6 +2164,10 @@
         "vi": "Cry Wolf: Thần hộ mệnh",
         "zh-CN": "狼魂加护状态",
         "zh-TW": "冷狼加護狀態"
+      },
+      "description": {
+        "en": "Divine protection in Cry Wolf.",
+        "vi": "Trạng thái Thần hộ mệnh trong Cry Wolf."
       }
     },
     {
@@ -2175,10 +2175,6 @@
       "name": "cryWolfProtection2",
       "kind": "buff",
       "group": 38,
-      "description": {
-        "en": "Divine protection in Cry Wolf.",
-        "vi": "Trạng thái Thần hộ mệnh trong Cry Wolf."
-      },
       "displayName": {
         "en": "Cry Wolf Divine Protection Status",
         "de": "Göttlicher Schutz von Crywolf",
@@ -2193,6 +2189,10 @@
         "vi": "Cry Wolf: Thần hộ mệnh",
         "zh-CN": "狼魂加护状态",
         "zh-TW": "冷狼加護狀態"
+      },
+      "description": {
+        "en": "Divine protection in Cry Wolf.",
+        "vi": "Trạng thái Thần hộ mệnh trong Cry Wolf."
       }
     },
     {
@@ -2200,10 +2200,6 @@
       "name": "cryWolfProtection3",
       "kind": "buff",
       "group": 38,
-      "description": {
-        "en": "Divine protection in Cry Wolf.",
-        "vi": "Trạng thái Thần hộ mệnh trong Cry Wolf."
-      },
       "displayName": {
         "en": "Cry Wolf Divine Protection Status",
         "de": "Göttlicher Schutz von Crywolf",
@@ -2218,6 +2214,10 @@
         "vi": "Cry Wolf: Thần hộ mệnh",
         "zh-CN": "狼魂加护状态",
         "zh-TW": "冷狼加護狀態"
+      },
+      "description": {
+        "en": "Divine protection in Cry Wolf.",
+        "vi": "Trạng thái Thần hộ mệnh trong Cry Wolf."
       }
     },
     {
@@ -2225,10 +2225,6 @@
       "name": "cryWolfProtection4",
       "kind": "buff",
       "group": 38,
-      "description": {
-        "en": "Divine protection in Cry Wolf.",
-        "vi": "Trạng thái Thần hộ mệnh trong Cry Wolf."
-      },
       "displayName": {
         "en": "Cry Wolf Divine Protection Status",
         "de": "Göttlicher Schutz von Crywolf",
@@ -2243,6 +2239,10 @@
         "vi": "Cry Wolf: Thần hộ mệnh",
         "zh-CN": "狼魂加护状态",
         "zh-TW": "冷狼加護狀態"
+      },
+      "description": {
+        "en": "Divine protection in Cry Wolf.",
+        "vi": "Trạng thái Thần hộ mệnh trong Cry Wolf."
       }
     },
     {
@@ -2250,10 +2250,6 @@
       "name": "cryWolfProtection5",
       "kind": "buff",
       "group": 38,
-      "description": {
-        "en": "Divine protection in Cry Wolf.",
-        "vi": "Trạng thái Thần hộ mệnh trong Cry Wolf."
-      },
       "displayName": {
         "en": "Cry Wolf Divine Protection Status",
         "de": "Göttlicher Schutz von Crywolf",
@@ -2268,6 +2264,10 @@
         "vi": "Cry Wolf: Thần hộ mệnh",
         "zh-CN": "狼魂加护状态",
         "zh-TW": "冷狼加護狀態"
+      },
+      "description": {
+        "en": "Divine protection in Cry Wolf.",
+        "vi": "Trạng thái Thần hộ mệnh trong Cry Wolf."
       }
     },
     {
@@ -2689,10 +2689,6 @@
       "name": "flameStrike",
       "kind": "debuff",
       "group": 46,
-      "description": {
-        "en": "Effect of the Flame Strike skill.",
-        "vi": "Hiệu ứng kỹ năng Flame Strike (Hỏa kích)."
-      },
       "displayName": {
         "en": "Flame Strike",
         "es": "Ataque con Llamas",
@@ -2705,6 +2701,10 @@
         "zh-CN": "火焰打击",
         "zh-TW": "火焰打擊"
       },
+      "description": {
+        "en": "Effect of the Flame Strike skill.",
+        "vi": "Hiệu ứng kỹ năng Flame Strike (Hỏa kích)."
+      },
       "hidden": true
     },
     {
@@ -2712,10 +2712,6 @@
       "name": "giganticStorm",
       "kind": "debuff",
       "group": 47,
-      "description": {
-        "en": "Effect of the Gigantic Storm skill.",
-        "vi": "Hiệu ứng kỹ năng Gigantic Storm (Bão tố)."
-      },
       "displayName": {
         "en": "Gigantic Storm",
         "es": "Tormenta Gigantesca",
@@ -2728,6 +2724,10 @@
         "zh-CN": "巨型风暴",
         "zh-TW": "巨型風暴"
       },
+      "description": {
+        "en": "Effect of the Gigantic Storm skill.",
+        "vi": "Hiệu ứng kỹ năng Gigantic Storm (Bão tố)."
+      },
       "hidden": true
     },
     {
@@ -2735,10 +2735,6 @@
       "name": "lightningShock",
       "kind": "debuff",
       "group": 48,
-      "description": {
-        "en": "Effect of the Lightning Shock skill.",
-        "vi": "Hiệu ứng kỹ năng Lightning Shock (Sét giật)."
-      },
       "displayName": {
         "en": "Lightning Shock",
         "es": "Descarga de Relámpagos",
@@ -2750,6 +2746,10 @@
         "vi": "Lightning Shock",
         "zh-CN": "闪电冲击",
         "zh-TW": "閃電衝擊"
+      },
+      "description": {
+        "en": "Effect of the Lightning Shock skill.",
+        "vi": "Hiệu ứng kỹ năng Lightning Shock (Sét giật)."
       },
       "hidden": true
     },
@@ -3470,10 +3470,6 @@
       "name": "ascension",
       "kind": "buff",
       "group": 54,
-      "description": {
-        "en": "Effect of Ascension.",
-        "vi": "Hiệu ứng Ascension (Thăng hoa)."
-      },
       "displayName": {
         "en": "Ascension",
         "de": "Aufstieg",
@@ -3487,6 +3483,10 @@
         "vi": "Thăng hoa",
         "zh-CN": "晋升",
         "zh-TW": "晉升"
+      },
+      "description": {
+        "en": "Effect of Ascension.",
+        "vi": "Hiệu ứng Ascension (Thăng hoa)."
       }
     },
     {
@@ -4622,10 +4622,6 @@
       "name": "earthBinds",
       "kind": "debuff",
       "group": 91,
-      "description": {
-        "en": "Effect of the Earth Binds skill.",
-        "vi": "Hiệu ứng kỹ năng Earth Binds (Trói đất)."
-      },
       "displayName": {
         "en": "Earth Binds",
         "es": "Ataduras de Tierra",
@@ -4637,6 +4633,10 @@
         "vi": "Earth Binds",
         "zh-CN": "大地束缚",
         "zh-TW": "大地束縛"
+      },
+      "description": {
+        "en": "Effect of the Earth Binds skill.",
+        "vi": "Hiệu ứng kỹ năng Earth Binds (Trói đất)."
       }
     },
     {
