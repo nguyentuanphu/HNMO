@@ -29,9 +29,10 @@ public class SeasonNineSystemsUpdatePlugIn : SeasonNineUpdatePlugInBase
 
     private static readonly (SkillNumber Number, string LocalizedName, short Distance, int Mana, SkillType Type, SkillTarget Target)[] SeasonNineOnlySkills =
     [
-        (SkillNumber.SpellOfProtection, "Spell of Protection||vi=Phép Bảo Hộ||de=Schutzzauber||zh-CN=守护咒语", 0, 30, SkillType.Buff, SkillTarget.Explicit),
-        (SkillNumber.SpellOfRestriction, "Spell of Restriction||vi=Phép Trói Buộc||de=Bannzauber||zh-CN=束缚咒语", 3, 30, SkillType.Other, SkillTarget.Explicit),
-        (SkillNumber.SpellOfPursuit, "Spell of Pursuit||vi=Phép Truy Đuổi||de=Verfolgungszauber||zh-CN=追击咒语", 0, 30, SkillType.Buff, SkillTarget.Explicit),
+        // 618-620 have no verified effect yet: placeholders which cost nothing.
+        (SkillNumber.SpellOfProtection, "Spell of Protection||vi=Phép Bảo Hộ||de=Schutzzauber||zh-CN=守护咒语", 0, 0, SkillType.Buff, SkillTarget.Explicit),
+        (SkillNumber.SpellOfRestriction, "Spell of Restriction||vi=Phép Trói Buộc||de=Bannzauber||zh-CN=束缚咒语", 3, 0, SkillType.Other, SkillTarget.Explicit),
+        (SkillNumber.SpellOfPursuit, "Spell of Pursuit||vi=Phép Truy Đuổi||de=Verfolgungszauber||zh-CN=追击咒语", 0, 0, SkillType.Buff, SkillTarget.Explicit),
         (SkillNumber.ShieldBurnS9, "Shield-Burn||vi=Thiêu Đốt Khiên SD||de=Schildbrand||zh-CN=护盾焚烧", 3, 30, SkillType.Other, SkillTarget.Explicit),
     ];
 
@@ -57,6 +58,13 @@ public class SeasonNineSystemsUpdatePlugIn : SeasonNineUpdatePlugInBase
     public override DateTime CreatedAt => new(2026, 11, 26, 9, 0, 0, DateTimeKind.Utc);
 
     /// <inheritdoc />
+    /// <remarks>Version 2: Rage Fighters can't learn the four skills, and 618-620 cost no mana.</remarks>
+    public override int Version => 2;
+
+    /// <inheritdoc />
+    public override DateTime UpdatedAt => new(2026, 11, 27, 0, 0, 0, DateTimeKind.Utc);
+
+    /// <inheritdoc />
     protected override ValueTask ApplySeasonNineAsync(IContext context, GameConfiguration gameConfiguration)
     {
         if (gameConfiguration.MaximumMasterLevel == SeasonSixMasterLevelCap)
@@ -64,39 +72,51 @@ public class SeasonNineSystemsUpdatePlugIn : SeasonNineUpdatePlugInBase
             gameConfiguration.MaximumMasterLevel = SeasonNineMasterLevelCap;
         }
 
-        // Qualified classes match IGC_SkillList.xml (all classes except Rage Fighter).
+        // Every class but the Rage Fighter line (Rage Fighter 24, Fist Master 25) learns them.
         var qualified = gameConfiguration.CharacterClasses
-            .Where(c => (c.Number >> 2) != 24)
+            .Where(c => c.Number is not (24 or 25))
             .ToList();
 
         foreach (var spec in SeasonNineOnlySkills)
         {
-            if (gameConfiguration.Skills.Any(s => s.Number == (short)spec.Number))
+            if (gameConfiguration.Skills.FirstOrDefault(s => s.Number == (short)spec.Number) is not { } skill)
             {
-                continue;
+                skill = context.CreateNew<Skill>();
+                skill.Number = (short)spec.Number;
+                skill.Name = new LocalizedString(spec.LocalizedName);
+                skill.Range = spec.Distance;
+                skill.SkillType = spec.Type;
+                skill.Target = spec.Target;
+                skill.DamageType = DamageType.Wizardry;
+                skill.NumberOfHitsPerAttack = 1;
+                skill.SetGuid(skill.Number);
+                gameConfiguration.Skills.Add(skill);
             }
 
-            var skill = context.CreateNew<Skill>();
-            skill.Number = (short)spec.Number;
-            skill.Name = new LocalizedString(spec.LocalizedName);
-            skill.Range = spec.Distance;
-            skill.SkillType = spec.Type;
-            skill.Target = spec.Target;
-            skill.DamageType = DamageType.Wizardry;
-            skill.NumberOfHitsPerAttack = 1;
-            skill.SetGuid(skill.Number);
+            // Cumulative (version 1 added them with a mana cost for 618-620 and for every class).
+            var manaAttribute = Stats.CurrentMana.GetPersistent(gameConfiguration);
+            var manaCost = skill.ConsumeRequirements.FirstOrDefault(r => Equals(r.Attribute, manaAttribute));
+            if (spec.Mana <= 0 && manaCost is not null)
+            {
+                skill.ConsumeRequirements.Remove(manaCost);
+            }
+            else if (spec.Mana > 0 && manaCost is null)
+            {
+                manaCost = context.CreateNew<AttributeRequirement>();
+                manaCost.Attribute = manaAttribute;
+                manaCost.MinimumValue = spec.Mana;
+                skill.ConsumeRequirements.Add(manaCost);
+            }
 
-            var manaCost = context.CreateNew<AttributeRequirement>();
-            manaCost.Attribute = Stats.CurrentMana.GetPersistent(gameConfiguration);
-            manaCost.MinimumValue = spec.Mana;
-            skill.ConsumeRequirements.Add(manaCost);
+            foreach (var notQualified in skill.QualifiedCharacters.Where(c => !qualified.Contains(c)).ToList())
+            {
+                skill.QualifiedCharacters.Remove(notQualified);
+            }
 
-            foreach (var cls in qualified)
+            foreach (var cls in qualified.Where(c => !skill.QualifiedCharacters.Contains(c)))
             {
                 skill.QualifiedCharacters.Add(cls);
             }
-
-            gameConfiguration.Skills.Add(skill);
         }
 
         return ValueTask.CompletedTask;

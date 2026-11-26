@@ -6280,5 +6280,23 @@ namespace HNMO.GameLogic.Properties {
 
         /// <summary>Gets the localized Pentagram chat command plug-in description.</summary>
         public static string PentagramChatCommandPlugIn_Description => ResourceManager.GetString("PentagramChatCommandPlugIn_Description", resourceCulture)!;
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Season 9 skill: Shield-Burn.
+        /// </summary>
+        public static string ShieldBurnSkillPlugIn_Name {
+            get {
+                return ResourceManager.GetString("ShieldBurnSkillPlugIn_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Burns a part of the target player&apos;s shield (SD) and leaves the health as it is..
+        /// </summary>
+        public static string ShieldBurnSkillPlugIn_Description {
+            get {
+                return ResourceManager.GetString("ShieldBurnSkillPlugIn_Description", resourceCulture);
+            }
+        }
     }
 }

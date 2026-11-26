@@ -2129,4 +2129,10 @@
   <data name="MuunChatCommandPlugIn_Description" xml:space="preserve"><value>Zeigt aktive Muun-Einstellungen und Entwicklungsmultiplikatoren.</value></data>
   <data name="PentagramChatCommandPlugIn_Name" xml:space="preserve"><value>Pentagramm-Befehl (/pentagram)</value></data>
   <data name="PentagramChatCommandPlugIn_Description" xml:space="preserve"><value>Zeigt aktive Pentagramm- und Errtel-Raten.</value></data>
+  <data name="ShieldBurnSkillPlugIn_Name" xml:space="preserve">
+    <value>Season-9-Fertigkeit: Schildbrand</value>
+  </data>
+  <data name="ShieldBurnSkillPlugIn_Description" xml:space="preserve">
+    <value>Verbrennt einen Teil des Schilds (SD) des Zielspielers und lässt die Lebenspunkte unverändert. Nur in einem Season-9-Realm mit eingeschalteten Season-9-Systemen und -Fertigkeiten.</value>
+  </data>
 </root>

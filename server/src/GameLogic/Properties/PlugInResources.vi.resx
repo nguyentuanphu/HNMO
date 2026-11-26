@@ -2496,4 +2496,10 @@
   <data name="MuunChatCommandPlugIn_Description" xml:space="preserve"><value>Xem trạng thái thú cưng Muun và hệ số tiến hóa.</value></data>
   <data name="PentagramChatCommandPlugIn_Name" xml:space="preserve"><value>Lệnh Pentagram (/pentagram)</value></data>
   <data name="PentagramChatCommandPlugIn_Description" xml:space="preserve"><value>Xem trạng thái Ngũ Hành Pentagram và tỉ lệ Errtel.</value></data>
+  <data name="ShieldBurnSkillPlugIn_Name" xml:space="preserve">
+    <value>Kỹ năng Season 9: Thiêu Đốt Khiên SD</value>
+  </data>
+  <data name="ShieldBurnSkillPlugIn_Description" xml:space="preserve">
+    <value>Đốt một phần khiên (SD) của người chơi mục tiêu, không trừ máu. Chỉ chạy ở realm Season 9 khi bật hệ thống và kỹ năng Season 9.</value>
+  </data>
 </root>
