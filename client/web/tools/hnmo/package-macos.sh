@@ -12,10 +12,12 @@ trap 'rm -rf "$staging"' EXIT
 app="$staging/Start HNMO.app"
 cp -R "$tools/Start HNMO.app" "$app"
 entry="$app/Contents/MacOS/start"
-mv "$entry" "$entry.sh"
-install -m 0755 "$launcher" "$entry"
 resources="$app/Contents/Resources"
 install -d "$resources"
+# The start script goes to Resources: a script left in Contents/MacOS is treated as code and cannot be sealed.
+mv "$entry" "$resources/start.sh"
+chmod 0755 "$resources/start.sh"
+install -m 0755 "$launcher" "$entry"
 install -m 0644 "$archive" "$resources/HNMO.zip"
 install -m 0755 "$tools/install-user-folder.sh" "$resources/install-user-folder.sh"
 # Seal the assembled app, including the ZIP and scripts in Resources.
