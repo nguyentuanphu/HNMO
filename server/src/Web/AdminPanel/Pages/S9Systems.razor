@@ -19,10 +19,10 @@
     </div>
     <PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextS9Systems" />
     <div class="btn-group btn-group-sm" role="group" aria-label="Language">
-        <button type="button" class="btn @(this._lang == "en" ? "btn-primary" : "btn-outline-secondary")" @onclick='() => this.SetLanguage("en")'>EN</button>
-        <button type="button" class="btn @(this._lang == "vi" ? "btn-primary" : "btn-outline-secondary")" @onclick='() => this.SetLanguage("vi")'>VI</button>
-        <button type="button" class="btn @(this._lang == "de" ? "btn-primary" : "btn-outline-secondary")" @onclick='() => this.SetLanguage("de")'>DE</button>
-        <button type="button" class="btn @(this._lang == "zh-CN" ? "btn-primary" : "btn-outline-secondary")" @onclick='() => this.SetLanguage("zh-CN")'>中文</button>
+        <button type="button" class="btn @(this._lang == "en" ? "btn-primary" : "btn-outline-secondary")" title="@this.T("Show this page in English.", "Hiện trang này bằng tiếng Anh.", "Diese Seite auf Englisch anzeigen.", "以英文显示此页面。")" @onclick='() => this.SetLanguage("en")'>EN</button>
+        <button type="button" class="btn @(this._lang == "vi" ? "btn-primary" : "btn-outline-secondary")" title="@this.T("Show this page in Vietnamese.", "Hiện trang này bằng tiếng Việt.", "Diese Seite auf Vietnamesisch anzeigen.", "以越南文显示此页面。")" @onclick='() => this.SetLanguage("vi")'>VI</button>
+        <button type="button" class="btn @(this._lang == "de" ? "btn-primary" : "btn-outline-secondary")" title="@this.T("Show this page in German.", "Hiện trang này bằng tiếng Đức.", "Diese Seite auf Deutsch anzeigen.", "以德文显示此页面。")" @onclick='() => this.SetLanguage("de")'>DE</button>
+        <button type="button" class="btn @(this._lang == "zh-CN" ? "btn-primary" : "btn-outline-secondary")" title="@this.T("Show this page in Chinese.", "Hiện trang này bằng tiếng Trung.", "Diese Seite auf Chinesisch anzeigen.", "以中文显示此页面。")" @onclick='() => this.SetLanguage("zh-CN")'>中文</button>
     </div>
 </div>
 
@@ -56,17 +56,14 @@ else
                     <input id="sysEnabled" class="form-check-input" type="checkbox" @bind="this._configuration.Enabled" />
                     <label class="form-check-label" for="sysEnabled">@this.T("Systems Enabled", "Bật hệ thống", "Systeme aktiv", "启用系统")</label>
                 </div>
-                <div class="form-check form-switch">
-                    <input id="sysS9Only" class="form-check-input" type="checkbox" @bind="this._configuration.SeasonNineOnly" />
-                    <label class="form-check-label" for="sysS9Only">@this.T("Season 9 Only", "Chỉ chạy Season 9", "Nur Season 9", "仅第 9 赛季")</label>
-                </div>
+                <small class="text-muted align-self-center">@this.T("Runs only on Season 9 servers; Season 6.3 and Arena never use these systems.", "Chỉ chạy trên máy chủ Season 9; Season 6.3 và Arena không bao giờ dùng các hệ thống này.", "Läuft nur auf Season-9-Servern; Season 6.3 und Arena nutzen diese Systeme nie.", "仅在第 9 赛季服务器运行；第 6.3 赛季和竞技场从不使用这些系统。")</small>
             </div>
             <div class="col-md-3">
                 <label class="form-label">@this.T("Master Level Max Cap", "Giới hạn cấp Master", "Master-Level-Limit", "大师等级上限")</label>
                 <input type="number" class="form-control form-control-sm" min="200" max="400" @bind="this._configuration.MasterLevelMaxCap" />
             </div>
             <div class="col-md-3 text-end">
-                <button type="button" class="btn btn-primary btn-sm" disabled="@this._isSaving" @onclick="this.SaveAsync">
+                <button type="button" class="btn btn-primary btn-sm" title="@this.T("Save every setting on this page.", "Lưu mọi thiết lập trên trang này.", "Alle Einstellungen dieser Seite speichern.", "保存此页面的所有设置。")" disabled="@this._isSaving" @onclick="this.SaveAsync">
                     @(this._isSaving ? this.T("Saving...", "Đang lưu...", "Speichern...", "保存中...") : this.T("Save All", "Lưu tất cả", "Alles speichern", "保存全部"))
                 </button>
             </div>
