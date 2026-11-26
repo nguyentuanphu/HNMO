@@ -135,11 +135,17 @@
   <data name="DeepBlueCandyBoxMoney" xml:space="preserve">
     <value>深蓝糖果盒：金币</value>
   </data>
+  <data name="DeepBlueCandyBoxNormalItems" xml:space="preserve">
+    <value>深蓝糖果盒：普通物品</value>
+  </data>
   <data name="BlueChocolateBoxExcellentItems" xml:space="preserve">
     <value>蓝色巧克力盒：卓越物品</value>
   </data>
   <data name="BlueChocolateBoxMoney" xml:space="preserve">
     <value>蓝色巧克力盒：金币</value>
+  </data>
+  <data name="BlueChocolateBoxNormalItems" xml:space="preserve">
+    <value>蓝色巧克力盒：普通物品</value>
   </data>
   <data name="VermilionCandyBoxMoney" xml:space="preserve">
     <value>朱红糖果盒：金币</value>

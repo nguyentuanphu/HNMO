@@ -196,7 +196,7 @@ public class AncientSets : InitializerBase
             (Stats.WizardryBaseDmgIncrease, 1.10f, AggregateType.Multiplicate),
             (Stats.TotalStrength, 15.0f, AggregateType.AddRaw),
             (Stats.SkillDamageBonus, 25.0f, AggregateType.AddRaw),
-            (Stats.ExcellentDamageChance, 10.0f, AggregateType.AddRaw),
+            (Stats.ExcellentDamageChance, 0.10f, AggregateType.AddRaw),
             (Stats.ExcellentDamageBonus, 20.0f, AggregateType.AddRaw));
         kantata.SetGuid(9, 1);
         this.AddItems(

@@ -336,6 +336,13 @@ namespace HNMO.Persistence.Initialization.Properties {
             }
         }
 
+        /// <summary>Gets DeepBlueCandyBoxNormalItems from the configuration name resources.</summary>
+        public static string DeepBlueCandyBoxNormalItems {
+            get {
+                return ResourceManager.GetString("DeepBlueCandyBoxNormalItems", resourceCulture);
+            }
+        }
+
         /// <summary>Gets BlueChocolateBoxExcellentItems from the configuration name resources.</summary>
         public static string BlueChocolateBoxExcellentItems {
             get {
@@ -347,6 +354,13 @@ namespace HNMO.Persistence.Initialization.Properties {
         public static string BlueChocolateBoxMoney {
             get {
                 return ResourceManager.GetString("BlueChocolateBoxMoney", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets BlueChocolateBoxNormalItems from the configuration name resources.</summary>
+        public static string BlueChocolateBoxNormalItems {
+            get {
+                return ResourceManager.GetString("BlueChocolateBoxNormalItems", resourceCulture);
             }
         }
 
