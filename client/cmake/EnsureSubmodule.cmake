@@ -73,7 +73,7 @@ function(_mu_submodule_update path)
 endfunction()
 
 function(mu_ensure_submodule rel_path)
-  set(oneValueArgs INDICATOR URL)
+  set(oneValueArgs INDICATOR URL BRANCH)
   cmake_parse_arguments(MES "" "${oneValueArgs}" "" ${ARGN})
 
   if (NOT MES_INDICATOR)
@@ -137,8 +137,13 @@ function(mu_ensure_submodule rel_path)
         "Submodule ${rel_path} not registered in git index and no URL provided.")
     endif()
     message(STATUS "Submodule ${rel_path} not in index, adding ${MES_URL}...")
+    # The branch client/.gitmodules names (RmlUi's port branch): its default branch lacks what the client uses.
+    set(branch_args "")
+    if (MES_BRANCH)
+      set(branch_args -b "${MES_BRANCH}")
+    endif()
     execute_process(
-      COMMAND ${GIT_EXECUTABLE} submodule add --force "${MES_URL}" "${submodule_repo_rel}"
+      COMMAND ${GIT_EXECUTABLE} submodule add --force ${branch_args} "${MES_URL}" "${submodule_repo_rel}"
       WORKING_DIRECTORY ${REPO_ROOT}
       RESULT_VARIABLE rc
       ERROR_VARIABLE err

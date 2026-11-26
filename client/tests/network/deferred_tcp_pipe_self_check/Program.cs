@@ -23,6 +23,11 @@ internal static class Program
         {
             await ClosingSendsWhatIsQueued();
             await ClosingAnEncryptedConnectionSendsItsLastPacket();
+            Console.WriteLine("DeferredTcpPipe: the close checks ran and passed.");
+        }
+        else if (Environment.GetEnvironmentVariable("HNMO_PIPE_REQUIRE_CLOSE_CHECKS") == "1")
+        {
+            throw new InvalidOperationException("DeferredTcpPipe: the close checks must run here, but plain loopback half-closes lose their FIN.");
         }
         else
         {
