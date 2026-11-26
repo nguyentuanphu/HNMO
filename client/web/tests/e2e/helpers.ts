@@ -28,7 +28,10 @@ export async function enterWorld(page: Page, account: string): Promise<void> {
   await page.fill('#password', account);
   await page.click('button.primary');
   await page.waitForSelector('#servers .choice, #characters .choice', { timeout: 60_000 });
-  if (await page.isVisible('#servers .choice')) await page.click('#servers .choice >> nth=0');
+  // HNMO_SEASON_COLUMN=s9 (or arena) picks the first server of that season's column on the start screen; default: the first server.
+  const column = process.env.HNMO_SEASON_COLUMN;
+  const server = column ? `#servers .season-${column} .choice >> nth=0` : '#servers .choice >> nth=0';
+  if (await page.isVisible(server)) await page.click(server);
   await page.waitForSelector('#characters .choice', { timeout: 60_000 });
   await page.click('#characters .choice >> nth=0');
   await page.waitForFunction(() => (window as unknown as { __viewerReady?: boolean }).__viewerReady, null, { timeout: 180_000 });
