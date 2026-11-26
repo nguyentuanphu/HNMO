@@ -2751,4 +2751,10 @@
   <data name="PageHelpTextTopUpMilestones" xml:space="preserve">
     <value>Legen Sie Stufen für kumulierte VND-Aufladungen fest, damit Konten die jeweiligen Münzen, Zen und Gegenstände einmalig im Konto oder im Spiel abholen können.</value>
   </data>
+  <data name="PageHelpTextS9Systems" xml:space="preserve">
+    <value>Konfigurieren Sie die Season-9-Systeme: Master-Limit 330, Muun-Begleiter (76 Gefährten), Pentagramm-Elementarsystem, Errtel-Raten, Fertigkeiten 618-621 und Season-9-Minimap.</value>
+  </data>
+  <data name="S9SystemsTitle" xml:space="preserve">
+    <value>Season-9-Systeme (Muun, Pentagramm, Master 330)</value>
+  </data>
 </root>

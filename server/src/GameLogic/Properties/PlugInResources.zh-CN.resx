@@ -1917,4 +1917,10 @@
   <data name="WebsiteConfiguration_RequireWebsiteLogin_Description" xml:space="preserve">
     <value>启用后，网页版游戏会隐藏密码表单。玩家需先登录网站，再点击“立即开始”。</value>
   </data>
+  <data name="SeasonNineSystemsPlugIn_Name" xml:space="preserve"><value>第 9 赛季系统 (萌宠、五芒星、330 级大师)</value></data>
+  <data name="SeasonNineSystemsPlugIn_Description" xml:space="preserve"><value>配置萌宠、五芒星元素克制、艾尔特合成与提取成功率、技能 618-621、330 级大师与小地图。</value></data>
+  <data name="MuunChatCommandPlugIn_Name" xml:space="preserve"><value>萌宠指令 (/muun)</value></data>
+  <data name="MuunChatCommandPlugIn_Description" xml:space="preserve"><value>查看第 9 赛季萌宠设置与进化倍率。</value></data>
+  <data name="PentagramChatCommandPlugIn_Name" xml:space="preserve"><value>五芒星指令 (/pentagram)</value></data>
+  <data name="PentagramChatCommandPlugIn_Description" xml:space="preserve"><value>查看第 9 赛季五芒星与艾尔特加成。</value></data>
 </root>

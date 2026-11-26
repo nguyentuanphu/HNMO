@@ -900,4 +900,6 @@
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 10 bản đồ Season 9, tệp địa hình, cổng dịch chuyển (417-461, 474-482) và điểm xuất hiện quái/NPC Season 9 khi chạy Season 9.</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: cửa hàng thử vận may của Moss</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 5 phiếu thử vận may của Moss (13-71..75) giá 2.000.000 Zen và trang bị cửa hàng cho Thương nhân Moss (492) nếu đang trống.</value></data>
+  <data name="SeasonNineSystemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Master 330 &amp; kỹ năng 618-621</value></data>
+  <data name="SeasonNineSystemsUpdatePlugIn_Description" xml:space="preserve"><value>Nâng giới hạn Master từ 200 lên 330 và thêm 4 kỹ năng Season 9 (618-621) khi chạy ở chế độ Season 9.</value></data>
 </root>

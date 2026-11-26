@@ -45,6 +45,7 @@ public static class AdminNavHints
         ["merchants/legacy"] = ("NPC shops, table view", "Cửa hàng NPC dạng bảng"),
         ["castle-siege"] = ("Siege dates and prizes", "Lịch công thành, phần thưởng"),
         ["s6-events"] = ("Blood Castle, Devil Square", "Huyết Lâu, Quảng Trường Quỷ"),
+        ["s9-systems"] = ("Muun, Pentagram, Master 330", "Muun, Ngũ Hành, Master 330"),
         ["timetable"] = ("Event times (Sydney)", "Giờ sự kiện (Sydney)"),
         ["event-alerts"] = ("Push and Discord alerts", "Thông báo đẩy và Discord"),
         ["world-bosses-rankings"] = ("Boss spawns, weekly prizes", "Boss, phần thưởng tuần"),

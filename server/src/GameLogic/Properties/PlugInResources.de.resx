@@ -2123,4 +2123,10 @@
   <data name="WebsiteConfiguration_RequireWebsiteLogin_Description" xml:space="preserve">
     <value>Wenn diese Option aktiviert ist, wird das Passwortformular im Webspiel ausgeblendet. Spieler melden sich zuerst auf der Website an und klicken dann auf „Jetzt spielen“.</value>
   </data>
+  <data name="SeasonNineSystemsPlugIn_Name" xml:space="preserve"><value>Season-9-Systeme (Muun, Pentagramm, Master 330)</value></data>
+  <data name="SeasonNineSystemsPlugIn_Description" xml:space="preserve"><value>Konfiguriert Muun-Begleiter, Pentagramm-Elementarvorteil, Errtel-Raten, Fertigkeiten 618-621, Master-Limit 330 und Minimap.</value></data>
+  <data name="MuunChatCommandPlugIn_Name" xml:space="preserve"><value>Muun-Befehl (/muun)</value></data>
+  <data name="MuunChatCommandPlugIn_Description" xml:space="preserve"><value>Zeigt aktive Muun-Einstellungen und Entwicklungsmultiplikatoren.</value></data>
+  <data name="PentagramChatCommandPlugIn_Name" xml:space="preserve"><value>Pentagramm-Befehl (/pentagram)</value></data>
+  <data name="PentagramChatCommandPlugIn_Description" xml:space="preserve"><value>Zeigt aktive Pentagramm- und Errtel-Raten.</value></data>
 </root>

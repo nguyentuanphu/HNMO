@@ -5282,4 +5282,10 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   <data name="ActivityLogAfter" xml:space="preserve">
     <value>Sau</value>
   </data>
+  <data name="PageHelpTextS9Systems" xml:space="preserve">
+    <value>Cấu hình hệ thống Season 9: giới hạn Master cấp 330, thú cưng Muun (76 loại), Ngũ Hành Pentagram &amp; tỉ lệ Errtel, kỹ năng 618-621 và Minimap Season 9.</value>
+  </data>
+  <data name="S9SystemsTitle" xml:space="preserve">
+    <value>Hệ Thống Season 9 (Muun, Pentagram, Master 330)</value>
+  </data>
 </root>
