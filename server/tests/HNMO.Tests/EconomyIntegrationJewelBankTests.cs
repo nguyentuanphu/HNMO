@@ -4,6 +4,7 @@
 
 namespace HNMO.Tests;
 
+using HNMO.DataModel;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic;
 using HNMO.GameLogic.PlugIns.GiftCodes;
