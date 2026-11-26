@@ -13,10 +13,22 @@ Inputs: the owner's Season 6.3 client data and the Season 9 client data pack (`D
 Tools already in the repo: `tools/local-checks/desktop-data/master_tree.py` (decodes a Data folder's master tree and
 skill names; on branch `fix/s9c-gameplay`), the item/model/monster readers of the C++ client under `client/src/source/Data`.
 
-Goal: an evidence file per area, `docs/audit/client-s6-s9-<area>.md`, with a table: value, S6.3 client, S9 client, HNMO
-server, HNMO web, source file + record/offset, and "match / differs / missing". Then a decoder tool for each binary file
-you needed (`tools/local-checks/desktop-data/`, Python, reads a Data folder given as an argument), so the values can be
-read again on any machine with the pack.
+What exists already (read first, don't redo): `docs/audit/audit-method.md` (how HNMO is audited), the code ledger
+`docs/audit/coverage.json`/`.md` (224 rule-bearing units read in full on 23-25 Nov, findings in `docs/audit/findings/`),
+the server data dumps `docs/audit/data/hnmo/` and `hnmo-s9/` with their diffs against the two server suites
+(`diff-*.txt`, `data/s9/`), and `docs/s6-s9-gap-audit-2026-11-20.md`, which compared the two client packs by file names
+and counts only. What has NEVER been done: reading the VALUES inside the client packs. That is your job.
+
+Goal, in the same layout as the server dumps:
+- `tools/local-checks/desktop-data/` (Python, takes a Data folder as an argument): one decoder per binary file you need
+  (skills, master tree, items, item options/sets/sockets, buffs, Muun, Pentagram/Errtel, monsters, maps/gates, shops,
+  mixes), so anyone with the packs can rerun it. Extend `master_tree.py` (branch `fix/s9c-gameplay`).
+- `docs/audit/data/client-s6/*.csv` and `docs/audit/data/client-s9/*.csv`: the decoded values (values only, no files).
+- `docs/audit/data/diff-client-s6.txt` and `diff-client-s9.txt`: each value against HNMO (server dump in
+  `docs/audit/data/hnmo*/` and the web data in `client/src/bin/Data`): match / differs / missing, with the source file
+  and record.
+- `docs/audit/client-s6-s9-<area>.md` for the areas below: what the desktop client does, file and record, and what HNMO
+  must change. Add each area to `docs/audit/coverage.json` as evidence the way audit-method.md says.
 
 Areas, most urgent first (main and its agents are waiting for 1-3):
 1. Skills 618-621 (owner: learned through the master tree; effects as the S9 desktop client): master tree row (rank,
