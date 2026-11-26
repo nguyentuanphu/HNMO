@@ -37,6 +37,38 @@ The old socket seed system (`SocketCount`, seed spheres) is separate and untouch
   - Option values come from HNMO's own data: at levels 0/5/10, linear in between.
 - **Season gate.** Everything only when `SeasonNineSystemsPlugIn.IsActive()` (Season 9 realm) and `PentagramEnabled`.
 
+## Where each value comes from (rule 9, owner 27 Nov: "Rà lại, làm theo desktop")
+
+| Value | Source | Where it lives now |
+|---|---|---|
+| Pentagram items 12/200–214: names, size 3x3, `"slot": "pentagram"`, defense, level/energy requirements, classes | **desktop data**: `client/src/bin/Data/Items/Group12_Wing.json:4064` and following (one entry per pentagram) | item definitions (`SeasonNineOnlyItemsCatalog.cs:137-151`) |
+| Errtel items 12/221–261 (names, size 2x2) | **desktop data** (same file) | item definitions (`SeasonNineOnlyItemsCatalog.cs:152-156`) |
+| Pentagram grades (usable slots = grade + 2) | built-in table from #403 (`SeasonNineSystemsCatalog.cs:193-210`), not in the desktop data | **admin**: `PentagramGrades` (empty = built-in); **waiting for the S9 pack** |
+| Errtel options: rank, weight, values at levels 0/5/10, texts (60 rows) | built-in table from #403 (`SeasonNineSystemsCatalog.cs:213-277`), not in the desktop data | **admin**: `ErrtelOptions` (empty = built-in); **waiting for the S9 pack** |
+| Errtel extraction rates (55 rows) | built-in table from #403 (`SeasonNineSystemsCatalog.cs:278+`) | **admin**: `ErrtelExtractionRates` (empty = built-in); **waiting for the S9 pack** |
+| Element advantage cycle and +15 % / −7.5 % | #403 engine (`SeasonNineSystemsEngine.cs:175-213`) | **admin**: `PentagramElementalAdvantageBonusPct`, `PentagramElementalDamageMultiplier` |
+| Monster elements | not in HNMO's data | **admin**: `MonsterElements` (default: none); **waiting for the S9 pack** |
+| Pentagram / errtel drops | not in HNMO's data | **admin**: `PentagramDropChance`, `ErrtelDropChance` (default 0 = off), `PentagramDropMinimumMonsterLevel`; **waiting for the S9 pack** |
+| Mix costs and rates (level-up, rank-up, extraction Zen) | not in HNMO's data | **admin**, HNMO defaults: level-up 100,000 Zen × new level at 90 % − 5 % per level (min 40 %), rank-up 1,000,000 Zen at 60 %, extraction 100,000 Zen; **waiting for the S9 pack** |
+| Mix NPC | not in HNMO's data | **admin**: `PentagramMixNpcNumber` (default 0 = any safe zone); **waiting for the S9 pack** |
+| Desktop UI | the desktop client has no pentagram window or slot handling (`client/src/source`: no use of the `pentagram` slot; `_enum.h:4162-4173` only buff effect ids) | the web follows its own HNMO panel pattern (`ui/pentagramWindow.ts`, as `ui/jewelBankWindow.ts`) |
+
+The local Claude reads the pack's values and posts them on #428. They then go into the admin settings: no code change is needed, because every table above is a setting.
+
+## Network and web (this branch, second step)
+
+- **Packets** (XML + generated code):
+  - `HnmoPentagramCommand` (C1 F5 58): request, wear, take off, put in, take out, level up, rank up.
+  - `HnmoPentagramState` (C2 F5 59): JSON state with the worn pentagram, the bag's pentagrams and errtels, the costs and the last result.
+  - `HnmoElementalHit` (C1 F5 5A): target id, elemental damage, element.
+  - The state is sent on entering the world (S9 realms) and after each action.
+- **Web:**
+  - `ui/pentagramWindow.ts` (Ctrl+P): the worn pentagram and its slots, and the bag's pentagrams and errtels with wear / take off / put in / take out / level up / rank up.
+  - `game/pentagram.ts`: element and errtel lines on item tooltips.
+  - Elemental damage shows above the target in the element's colour.
+  - EN and VI texts.
+  - Not done: a pentagram slot drawn in the inventory window itself. The window is the desktop's RML layout, which has no such slot; the worn pentagram shows in the pentagram window.
+
 ## Still missing (next steps)
 
 1. **Network.** Packets (XML in `server/src/Network/Packets`): the worn pentagram and its errtels, equip/unequip, attach/remove; the item serialization of element and errtels to the client; then regenerate the web packets.
