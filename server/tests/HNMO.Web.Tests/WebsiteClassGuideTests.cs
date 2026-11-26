@@ -61,6 +61,12 @@ public sealed class WebsiteClassGuideTests
         cost.Attribute = Stats.CurrentMana;
         cost.MinimumValue = 30;
         skill.ConsumeRequirements.Add(cost);
+        var master = persistence.CreateNew<MasterSkillDefinition>();
+        master.Rank = 3;
+        master.MinimumLevel = 2;
+        master.MaximumLevel = 17;
+        master.ValueFormula = "level * 2.75";
+        skill.MasterDefinition = master;
         var unrelated = persistence.CreateNew<Skill>();
         unrelated.QualifiedCharacters.Add(next);
         configuration.Skills.Add(skill);
@@ -83,6 +89,10 @@ public sealed class WebsiteClassGuideTests
         Assert.That(skillRows[0]!["attackDamage"]!.GetValue<int>(), Is.EqualTo(96));
         Assert.That(skillRows[0]!["requirements"]![0]!["value"]!.GetValue<int>(), Is.EqualTo(179));
         Assert.That(skillRows[0]!["costs"]![0]!["value"]!.GetValue<int>(), Is.EqualTo(30));
+        var details = skillRows[0]!["masterDetail"]!;
+        Assert.That(details["minimumLevel"]!.GetValue<byte>(), Is.EqualTo(2));
+        Assert.That(details["maximumLevel"]!.GetValue<byte>(), Is.EqualTo(17));
+        Assert.That(details["valueFormula"]!.GetValue<string>(), Is.EqualTo("level * 2.75"));
     }
 
     /// <summary>Limits the published rows while preserving stable configured skill order.</summary>

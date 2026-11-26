@@ -21,7 +21,8 @@ for (const [language, viewport] of [['en', { width: 1440, height: 900 }], ['vi',
           stats: [{ attribute: 'Base Strength', value: serverId === 5 ? 47 : 63, increasableByPlayer: true }],
           constants: [{ attribute: 'Maximum Health', value: 150, aggregate: 'AddRaw' }],
           formulas: [{ target: 'Maximum Health', input: 'Total Vitality', operand: null, coefficient: 2.75, operation: 'Multiply', aggregate: 'AddFinal' }],
-          skills: [{ id: 18, name: name('Test Strike', 'Đòn thử nghiệm'), range: 7, attackDamage: 96, masterRank: null,
+          skills: [{ id: 18, name: name('Test Strike', 'Đòn thử nghiệm'), range: 7, attackDamage: 96, masterRank: 3,
+            masterDetail: { minimumLevel: 2, maximumLevel: serverId === 5 ? 17 : 19, valueFormula: 'level * 2.75', prerequisites: [name('Test prerequisite', 'Yêu cầu thử nghiệm')] },
             requirements: [{ attribute: 'Total Strength', value: 179 }], costs: [{ attribute: 'Current Mana', value: 30 }] }],
           truncated: false,
         },
@@ -45,6 +46,9 @@ for (const [language, viewport] of [['en', { width: 1440, height: 900 }], ['vi',
     await expect(guide.locator('#classGuideSkills')).toContainText(translated ? 'Đòn thử nghiệm' : 'Test Strike');
     await expect(guide.locator('#classGuideSkills')).toContainText('179');
     await expect(guide.locator('#classGuideSkills')).toContainText('30');
+    await expect(guide.locator('#classGuideSkills')).toContainText('level * 2.75');
+    await expect(guide.locator('#classGuideSkills')).toContainText(translated ? 'Yêu cầu thử nghiệm' : 'Test prerequisite');
+    await expect(guide.locator('#classGuideSkills')).toContainText(translated ? /Cấp kỹ năng Master tối đa\s*19/ : /Maximum master skill level\s*19/);
     expect(await guide.evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true);
     await mkdir('docs/screenshots/class-guide', { recursive: true });
     await guide.screenshot({ path: `docs/screenshots/class-guide/class-${language}-${viewport.width}.png` });

@@ -135,11 +135,17 @@
   <data name="DeepBlueCandyBoxMoney" xml:space="preserve">
     <value>Tiefblaue Bonbonschachtel – Geld</value>
   </data>
+  <data name="DeepBlueCandyBoxNormalItems" xml:space="preserve">
+    <value>Tiefblaue Bonbonschachtel – Normale Gegenstände</value>
+  </data>
   <data name="BlueChocolateBoxExcellentItems" xml:space="preserve">
     <value>Blaue Pralinenschachtel – Exzellente Gegenstände</value>
   </data>
   <data name="BlueChocolateBoxMoney" xml:space="preserve">
     <value>Blaue Pralinenschachtel – Geld</value>
+  </data>
+  <data name="BlueChocolateBoxNormalItems" xml:space="preserve">
+    <value>Blaue Pralinenschachtel – Normale Gegenstände</value>
   </data>
   <data name="VermilionCandyBoxMoney" xml:space="preserve">
     <value>Zinnoberrote Bonbonschachtel – Geld</value>

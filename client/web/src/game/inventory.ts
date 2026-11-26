@@ -356,4 +356,22 @@ export class Inventory {
     }
     return cells.every((cell) => !occupied.has(cell));
   }
+
+  // Counts free 1x1 cells across the main bag and any unlocked inventory extensions (0..4, 8x4 each).
+  countFreeBagCells(extensions = 0): number {
+    let free = 0;
+    const grids: ItemGrid[] = [BAG];
+    const unlocked = Math.max(0, Math.min(4, Math.floor(extensions)));
+    for (let page = 0; page < unlocked; page++) {
+      grids.push({ firstSlot: BAG.firstSlot + BAG.columns * BAG.rows + page * 32, columns: 8, rows: 4 });
+    }
+    const oneCell = { width: 1, height: 1 };
+    for (const grid of grids) {
+      const total = grid.columns * grid.rows;
+      for (let i = 0; i < total; i++) {
+        if (this.fits(this.items, grid, grid.firstSlot + i, oneCell, null)) free++;
+      }
+    }
+    return free;
+  }
 }

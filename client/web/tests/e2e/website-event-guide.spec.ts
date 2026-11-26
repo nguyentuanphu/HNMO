@@ -19,10 +19,18 @@ const invasion = {
   invasion: { singleMap: false, spawns: [{ monster: name('Test invader', 'Quái xâm lăng thử nghiệm'), count: 5,
     everyMap: false, maps: [name('Test field', 'Bãi thử nghiệm')], loot: [name('Test token', 'Thẻ thử nghiệm')] }] },
 };
+const siege = {
+  id: 'event-castle-siege', category: 'event', name: name('Castle Siege', 'Công thành chiến'),
+  nextStartUtc: '2026-11-24T07:23:00Z', scheduledEndUtc: '2026-11-24T08:02:00Z',
+  endsAtUtc: null, isActive: false, tiers: [], invasion: null, boss: null, winner: null,
+};
 const quest = {
   group: 1, number: 2, name: name('Test quest', 'Nhiệm vụ thử nghiệm'), npc: name('Test guide', 'NPC thử nghiệm'),
   maps: [name('Test field', 'Bãi thử nghiệm')], minimumLevel: 30, maximumLevel: 94, requiredStartMoney: 123,
-  repeatable: true, qualifiedClass: null, items: [], kills: [{ name: name('Test invader', 'Quái xâm lăng thử nghiệm'), count: 7 }],
+  repeatable: true, qualifiedClass: null, items: [{
+    name: name('Test artifact', 'Cổ vật thử nghiệm'), count: 4,
+    dropGroup: { chance: 0.15, monster: name('Test invader', 'Quái xâm lăng thử nghiệm'), minimumMonsterLevel: 24, maximumMonsterLevel: 34 },
+  }], kills: [{ name: name('Test invader', 'Quái xâm lăng thử nghiệm'), count: 7 }],
   rewards: [{ kind: 'Money', value: 1456, name: null, level: null, attribute: null }],
 };
 
@@ -33,7 +41,7 @@ for (const [language, viewport] of [['en', { width: 1440, height: 900 }], ['vi',
     await page.route('**/website/event-guide**', async route => {
       const serverId = Number(new URL(route.request().url()).searchParams.get('serverId') ?? 1);
       await route.fulfill({ json: { enabled: true, serverId, servers, guide: {
-        events: serverId === 1 ? [timedEvent, invasion] : [], eventsTruncated: false,
+        events: serverId === 1 ? [timedEvent, invasion, siege] : [], eventsTruncated: false,
         quests: serverId === 1 ? [quest] : [], questsTruncated: false,
       } } });
     });
@@ -49,6 +57,9 @@ for (const [language, viewport] of [['en', { width: 1440, height: 900 }], ['vi',
     await event.locator('summary').click();
     await expect(event).toContainText(vi ? '37 EXP mỗi giây còn lại' : '37 EXP per remaining second');
     await expect(event).toContainText('62 Zen');
+    const siegeCard = guide.getByRole('article').filter({ has: page.getByRole('heading', { name: vi ? 'Công thành chiến' : 'Castle Siege', exact: true }) });
+    await expect(siegeCard).toContainText(vi ? '18:23 24 thg 11, 2026 (Sydney)' : '24 Nov 2026, 18:23 (Sydney)');
+    await expect(siegeCard).toContainText(vi ? '19:02 24 thg 11, 2026 (Sydney)' : '24 Nov 2026, 19:02 (Sydney)');
     const invasionCard = guide.getByRole('article').filter({ has: page.getByRole('heading', { name: vi ? 'Xâm lăng thử nghiệm' : 'Test invasion', exact: true }) });
     await invasionCard.locator('summary').click();
     await expect(invasionCard).toContainText(vi ? 'Thẻ thử nghiệm' : 'Test token');
@@ -56,6 +67,8 @@ for (const [language, viewport] of [['en', { width: 1440, height: 900 }], ['vi',
     await questCard.locator('summary').click();
     await expect(questCard).toContainText(vi ? '1.456 Zen' : '1,456 Zen');
     await expect(questCard).toContainText('123 Zen');
+    await expect(questCard).toContainText(vi ? 'Tỷ lệ nhóm rơi theo cấu hình 15%' : 'Configured drop group chance 15%');
+    await expect(questCard).toContainText('24–34');
     expect(await guide.evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true);
     await mkdir('docs/screenshots/event-guide', { recursive: true });
     await guide.screenshot({ path: `docs/screenshots/event-guide/guide-${language}-${viewport.width}.png` });

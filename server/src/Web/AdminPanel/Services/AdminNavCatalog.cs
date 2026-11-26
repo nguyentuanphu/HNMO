@@ -76,7 +76,13 @@ public static class AdminNavCatalog
                 new("top-races", "events", "oi-trophy", "Top Races", "Đua top", "Create daily, weekly, monthly, or custom date-range competitions.", "Tạo sự kiện đua top ngày, tuần, tháng hoặc ngày đặc biệt.", true, "resets-relife", "leaderboards", "gift-codes"),
                 new("missions-rewards", "events", "oi-task", "Missions & Coins", "Nhiệm vụ & Xu", "Configure J daily/weekly missions, streaks, and online coin caps.", "Thiết lập nhiệm vụ ngày/tuần, chuỗi và giới hạn coin mỗi ngày.", true, "onboarding-starter-kit", "gift-codes", "community"),
                 new("gift-codes", "events", "oi-tag", "Gift Codes", "Gift Code", "Generate single/batch promo codes with EN/VI rules and items.", "Tạo mã quà tặng đơn hoặc hàng loạt kèm điều kiện & vật phẩm.", true, "topup-milestones", "missions-rewards", "community"),
-                new("topup-milestones", "events", "oi-dollar", "Top-up Milestones", "Thưởng mốc nạp", "Configure cumulative VND top-up reward tiers and VietQR.", "Thiết lập mốc nạp tích lũy, thưởng và VietQR.", true, "cash-shop-catalog", "gift-codes", "host-settings"),
+                new("topup-milestones", "events", "oi-dollar", "Top-up Milestones", "Thưởng mốc nạp", "Configure cumulative VND top-up reward tiers and VietQR.", "Thiết lập mốc nạp tích lũy, thưởng và VietQR.", true, "cash-shop-catalog", "gift-codes", "host-settings")
+                {
+                    TitleDe = "Aufladestufen",
+                    TitleZh = "充值里程碑",
+                    DescriptionDe = "Belohnungsstufen für kumulierte VND-Aufladungen und VietQR konfigurieren.",
+                    DescriptionZh = "配置累计 VND 充值奖励等级和 VietQR。",
+                },
                 new("resets-relife", "events", "oi-loop-circular", "Resets & Relife", "Reset & Relife", "Configure reset tiers, relife rules, and offline /uythac auto-reset.", "Cấu hình mức Reset, Relife và ủy thác tự reset.", true, "rankings-settings", "top-races", "jewel-bank"),
                 new("onboarding-starter-kit", "events", "oi-flag", "Onboarding & Starter Kit", "Tân thủ & Quà khởi đầu", "Configure Y new-player tutorial steps and starter gear.", "Thiết lập hướng dẫn tân thủ phím Y và trang bị khởi đầu.", true, "missions-rewards", "buffer-npc", "gift-codes"),
                 new("community", "events", "oi-comment-square", "Community & Zalo/Discord", "Cộng đồng Discord/Zalo", "Manage K community events, Discord/Zalo coin approvals, and feed.", "Duyệt thưởng Zalo/Discord, sự kiện K và tin nổi bật.", true, "discord", "gift-codes", "event-alerts"),
@@ -139,7 +145,13 @@ public static class AdminNavCatalog
                 new("users", "host", "oi-key", "Admin Users", "Tài khoản Admin", "Manage panel operator logins, roles, and 2FA enforcement.", "Quản lý tài khoản đăng nhập bảng điều khiển và phân quyền.", false, "api-keys", "account/security", "audit"),
                 new("api-keys", "host", "oi-share-boxed", "API Keys & MCP", "Khóa API & MCP", "Create scoped API tokens for website bridge and external tools.", "Tạo khóa API cho bridge website và công cụ tự động.", false, "users", "audit", "host-settings"),
                 new("discord", "host", "oi-chat", "Discord Bridge", "Kết nối Discord", "Connect Discord bot webhook and channel announcements.", "Kết nối bot Discord để đồng bộ chat và thông báo.", false, "community", "event-alerts", "plugins"),
-                new("server-control", "host", "oi-power-standby", "Server control", "Điều khiển máy chủ", "Manage local services, logs, updates, ports and backups.", "Quản lý dịch vụ, nhật ký, cập nhật, cổng và sao lưu trên máy chủ.", true, "host-settings", "logfiles", "state-retention"),
+                new("server-control", "host", "oi-power-standby", "Server control", "Điều khiển máy chủ", "Manage local services, logs, updates, ports and backups.", "Quản lý dịch vụ, nhật ký, cập nhật, cổng và sao lưu trên máy chủ.", true, "host-settings", "logfiles", "state-retention")
+                {
+                    TitleDe = "Serversteuerung",
+                    TitleZh = "服务器控制",
+                    DescriptionDe = "Lokale Dienste, Protokolle, Updates, Ports und Sicherungen verwalten.",
+                    DescriptionZh = "管理本地服务、日志、更新、端口和备份。",
+                },
                 new("host-settings", "host", "oi-wrench", "Host & VietQR Settings", "Cài đặt Host & VietQR", "Edit centralized ports, DB connection, SMTP email, and VietQR.", "Cấu hình cổng, PostgreSQL, SMTP gửi email và ngân hàng VietQR.", true, "crash-watch", "topup-milestones", "setup"),
                 new("crash-watch", "host", "oi-warning", "Crash Watch", "Giám sát sự cố", "Inspect unexpected process exits, restart history, and logs.", "Theo dõi sự cố dừng server bất thường và tự khởi động lại.", true, "host-settings", "logfiles", "maintenance-tools"),
                 new("import-server", "host", "oi-cloud-upload", "Import Another Server", "Nhập dữ liệu máy chủ khác", "Dry-run and import accounts, characters, shops, and drops safely.", "Xem thử và nhập tài khoản, nhân vật, shop từ máy chủ cũ.", false, "worlds", "setup", "maintenance-tools"),

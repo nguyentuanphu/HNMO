@@ -21,7 +21,7 @@ import { glowMaterialCount, loadGlowColors, prewarmItemGlow } from './game/itemG
 import { drawItem } from './ui/itemIcons.js';
 import { BAG, Inventory } from './game/inventory.js';
 import { ItemWindows } from './ui/itemWindows.js';
-import { CharacterStats } from './game/stats.js';
+import { CharacterStats, isOutlawHeroState } from './game/stats.js';
 import { Hud } from './ui/hud.js';
 import { setUpGuide } from './ui/guide.js';
 import { setUpSettings, type SettingsWindow } from './ui/settingsWindow.js';
@@ -757,8 +757,27 @@ function stepThumbstickWalk(): void {
 // has its name over its head (not in Chaos Castle); the pointer is looked at once a frame.
 const labelElements = new Map<Character, HTMLSpanElement>();
 let labelPointer: MouseEvent | null = null;
+let alwaysShowNames = false;
+let altPressedAlone = false;
 ui.canvas.addEventListener('pointermove', (event) => { labelPointer = event; }, { passive: true });
 ui.canvas.addEventListener('pointerleave', () => { labelPointer = null; });
+window.addEventListener('keydown', (event) => {
+  if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+  if (event.key === 'Alt' && !event.repeat && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
+    altPressedAlone = true;
+  } else if (event.key !== 'Alt') {
+    altPressedAlone = false;
+  }
+});
+window.addEventListener('keyup', (event) => {
+  if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+  if (event.key === 'Alt' && altPressedAlone) {
+    altPressedAlone = false;
+    alwaysShowNames = !alwaysShowNames;
+    event.preventDefault();
+  }
+});
+window.addEventListener('blur', () => { altPressedAlone = false; });
 
 const labelsShown = new Set<Character>();
 const speechBalloons = new Map<Character, { lines: string[]; expiresAt: number }>();
@@ -779,7 +798,8 @@ function updateLabels(): void {
   for (const [who, balloon] of speechBalloons) {
     if (balloon.expiresAt <= now) speechBalloons.delete(who);
   }
-  const pointed = labelPointer && eventOfMap(state.mapNumber ?? null) !== 'chaosCastle' ? pickCharacter(labelPointer, ['npc']) : null;
+  const inChaosCastle = eventOfMap(state.mapNumber ?? null) === 'chaosCastle';
+  const pointed = labelPointer && !inChaosCastle ? pickCharacter(labelPointer, ['npc']) : null;
   if (state.online && hero && world) {
     const rect = canvasRect();
     const candidates: Character[] = [...state.online.characters.values()];
@@ -787,7 +807,8 @@ function updateLabels(): void {
     for (const character of candidates) {
       const balloon = speechBalloons.get(character);
       // A pointed player's name box (with its Gens mark and guild line) is the Gens marks' (ui/gensWindow.ts).
-      if (!balloon && (character !== pointed || character.kind === 'player') && character.kind !== 'kalimaGate') continue; // a Kalima gate keeps its name box
+      const showByAlt = alwaysShowNames && !inChaosCastle;
+      if (!balloon && !showByAlt && (character !== pointed || character.kind === 'player') && character.kind !== 'kalimaGate') continue; // a Kalima gate keeps its name box
       const dx = character.cell.x - hero.cell.x, dy = character.cell.y - hero.cell.y;
       if (Math.hypot(dx, dy) > LABEL_RANGE_CELLS) continue;
       const point = toScene(character.position.x, character.position.y, sampleHeight(world.heights, character.position.x, character.position.y) + 220).project(camera);
@@ -1360,7 +1381,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   const info = await enterWorld(connection, character.name);
   inventory.money = typeof info.Money === 'number' ? info.Money : 0;
   // Level, experience, life, mana and stats from here on (the HUD and the tooltips read them).
-  const stats = new CharacterStats(connection, character.level, info);
+  const stats = new CharacterStats(connection, character.level, info, () => connection.playerId ?? null);
   state.stats = stats;
   state.itemWindows = new ItemWindows({
     inventory,
@@ -1748,6 +1769,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   const characterWindow = new CharacterWindow({
     connection, stats, inventory, classIndex: character.classIndex, name: character.name,
     currentSkill: () => skills.skillAt(skills.current),
+    pkLevel: () => stats.heroState,
     onQuest: () => quests.toggleMyQuest(),
     onPet: () => { void petInfoWindow.toggle(); },
     onToggle: (open) => {
@@ -1884,7 +1906,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   // The move window (M): the warp list; a click warps (WarpCommandRequest).
   const moveWindow = new MoveWindow({
     check: () => ({
-      classIndex: character.classIndex, level: stats.level, money: inventory.money, outlaw: false,
+      classIndex: character.classIndex, level: stats.level, money: inventory.money, outlaw: isOutlawHeroState(stats.heroState),
       wings: inventory.items.get(7), helper: inventory.items.get(8), rings: [inventory.items.get(10), inventory.items.get(11)],
     }),
     warp: (warp) => connection.send('ClientToServer', 'WarpCommandRequest', { CommandKey: moveCommandKey, WarpInfoIndex: warp.index }),
@@ -1894,6 +1916,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     if (event.key.toLowerCase() === 'm' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void moveWindow.toggle(); }
   });
   inventory.onChange(() => moveWindow.refresh());
+  stats.onChange(() => moveWindow.refresh());
   // Gates you walk into (CheckGate): the server takes the hero through (EnterGateRequest).
   state.gates = new GateWatcher({
     hero: () => state.hero && state.mapNumber !== null ? {
@@ -1932,12 +1955,8 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     buy: (slot) => inventory.buy(slot), sell: (slot) => inventory.sell(slot), selling: () => inventory.sellingSlot !== null,
     closeShop: () => itemWindows.closeAll(),
     bagItems: () => [...inventory.items].filter(([slot]) => slot >= 12),
-    // "Full": fewer than four free cells left.
-    bagFull: () => {
-      let free = 0;
-      for (let slot = 12; slot < 76; slot++) if (inventory.fits(inventory.items, BAG, slot, { width: 1, height: 1 }, null)) free++;
-      return free < 4;
-    },
+    // "Full": fewer than four free cells left (across main bag + unlocked extensions).
+    bagFull: () => inventory.countFreeBagCells(stats.inventoryExtensions) < 4,
     healingPotions: healingCount,
     isHealingPotion: (item) => itemDefinition(item.group, item.number)?.tags?.includes('healingPotion') ?? false,
     // Kept: everything but plain weapons and armour (groups 0-11) that aren't expensive or unsellable.

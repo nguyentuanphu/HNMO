@@ -2921,4 +2921,9 @@
   <data name="ActivityLogAfter" xml:space="preserve">
     <value>操作后</value>
   </data>
+  <data name="PageHelpTitle" xml:space="preserve"><value>如何使用此页</value></data>
+  <data name="PageHelpToggleHint" xml:space="preserve"><value>显示或隐藏此页的用途、建议修改与注意事项。</value></data>
+  <data name="PageHelpTextTopUpMilestones" xml:space="preserve">
+    <value>配置越南盾累计充值奖励等级，让账户在账户页面或游戏内一次性领取各等级的代币、Zen 和物品组合。</value>
+  </data>
 </root>

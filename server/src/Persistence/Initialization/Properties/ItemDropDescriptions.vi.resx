@@ -43,8 +43,10 @@
   <data name="GreenRibbonBoxNormalItems" xml:space="preserve"><value>Hộp Ruy Băng Xanh - Vật Phẩm Thông Thường</value></data>
   <data name="RedRibbonBoxMoney" xml:space="preserve"><value>Hộp Ruy Băng Đỏ - Tiền</value></data>
   <data name="DeepBlueCandyBoxMoney" xml:space="preserve"><value>Hộp Kẹo Xanh Đậm - Tiền</value></data>
+  <data name="DeepBlueCandyBoxNormalItems" xml:space="preserve"><value>Hộp Kẹo Xanh Đậm - Vật Phẩm Thông Thường</value></data>
   <data name="BlueChocolateBoxExcellentItems" xml:space="preserve"><value>Hộp Sôcôla Xanh - Vật Phẩm Tuyệt Vời</value></data>
   <data name="BlueChocolateBoxMoney" xml:space="preserve"><value>Hộp Socola Xanh - Tiền</value></data>
+  <data name="BlueChocolateBoxNormalItems" xml:space="preserve"><value>Hộp Socola Xanh - Vật Phẩm Thông Thường</value></data>
   <data name="VermilionCandyBoxMoney" xml:space="preserve"><value>Hộp Kẹo Son - Tiền</value></data>
   <data name="VermilionCandyBoxExcellentItems" xml:space="preserve"><value>Hộp Kẹo Vermilion - Vật Phẩm Tuyệt Vời</value></data>
   <data name="VermilionCandyBoxNormalItems" xml:space="preserve"><value>Hộp Kẹo Son - Vật Phẩm Thường</value></data>

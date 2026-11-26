@@ -1,11 +1,13 @@
-# Unit: client/src/source/Data/GameData/ServerListData
+# Unit Audit: `client/src/source/Data/GameData/ServerListData`
 
-Checked against: ConnectServer load percentage protocol.
+- **Unit**: `client/src/source/Data/GameData/ServerListData`
+- **Checked at**: `8cb8539b` (`2026-11-25`)
+- **Files in unit**: `27` (`2,495` lines) including `LoadState.cpp`, `LoadState.h`, `LoadBar.cpp`, `ChannelNameBuilder.cpp`, `ServerListJson.cpp`, `VipType.h`
+- **Status**: `Checked`
 
-Scope: `client/src/source/Data/GameData/ServerListData` (`27` files, `2495` lines).
+## Rules & Behavior Checked (`file:line`)
 
-## Findings
-
-| File & Line | Rule / Constant | Role & Value | Result |
-|---|---|---|---|
-| `LoadState.h:8-9`, `LoadState.cpp:7-13` | `FullLoadPercent = 100`, `OverloadedLoadPercent = 128` map server load bar states | Client server-list threshold | Same as classic |
+| Rule / Behaviour | Location | Client Value / Formula | Server / Suite Reference | Match |
+|---|---|---|---|---|
+| Server population load status thresholds | `LoadState.cpp:7-14`, `LoadState.h:8-9` | `GetLoadState(percent)`: returns `LoadState::Overloaded` when `percent >= OverloadedLoadPercent`, `LoadState::Full` when `>= FullLoadPercent`, else `LoadState::Open` | `ConnectServer` server load % buckets | Same |
+| Channel naming, PvP/VIP badges & bar theme | `ChannelNameBuilder.cpp`, `ServerListJson.cpp`, `VipType.h`, `ButtonColors.cpp` | Formats Non-PvP / Castle Siege / VIP sub-server labels and load bar fill percentages from server list JSON | Server list presentation | No game rules |

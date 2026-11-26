@@ -135,11 +135,17 @@
   <data name="DeepBlueCandyBoxMoney" xml:space="preserve">
     <value>Deep Blue Candy Box - Money</value>
   </data>
+  <data name="DeepBlueCandyBoxNormalItems" xml:space="preserve">
+    <value>Deep Blue Candy Box - Normal Items</value>
+  </data>
   <data name="BlueChocolateBoxExcellentItems" xml:space="preserve">
     <value>Blue Chocolate Box - Excellent Items</value>
   </data>
   <data name="BlueChocolateBoxMoney" xml:space="preserve">
     <value>Blue Chocolate Box - Money</value>
+  </data>
+  <data name="BlueChocolateBoxNormalItems" xml:space="preserve">
+    <value>Blue Chocolate Box - Normal Items</value>
   </data>
   <data name="VermilionCandyBoxMoney" xml:space="preserve">
     <value>Vermilion Candy Box - Money</value>

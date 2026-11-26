@@ -4,7 +4,7 @@ type Name = { en: string | null; vi: string | null };
 type ClassRow = { id: number; name: Name; canGetCreated: boolean; creationLevel: number | null; isMasterClass: boolean };
 type AttributeValue = { attribute: string; value: number };
 type Formula = { target: string; input: string; operand: string | null; coefficient: number | null; operation: string; aggregate: string };
-type Skill = { id: number; name: Name; range: number; attackDamage: number; masterRank: number | null; requirements: AttributeValue[]; costs: AttributeValue[] };
+type Skill = { id: number; name: Name; range: number; attackDamage: number; masterRank: number | null; masterDetail?: { minimumLevel: number; maximumLevel: number; valueFormula: string | null; prerequisites: Name[] } | null; requirements: AttributeValue[]; costs: AttributeValue[] };
 type Details = {
   id: number; home: Name | null; nextClass: ClassRow | null; stats: (AttributeValue & { increasableByPlayer: boolean })[];
   constants: (AttributeValue & { aggregate: string })[]; formulas: Formula[]; skills: Skill[]; truncated: boolean;
@@ -28,6 +28,10 @@ const copy = {
   formulas: ['Class formula contributions', 'Thành phần công thức của lớp'],
   formulaNote: ['The server combines these class contributions with equipment and other active effects.', 'Máy chủ kết hợp các thành phần này với trang bị và hiệu ứng đang áp dụng.'],
   skills: ['Qualified skills', 'Kỹ năng của lớp'], damage: ['Configured attack damage', 'Sát thương kỹ năng đã cấu hình'],
+  masterInitial: ['Points to activate', 'Điểm để kích hoạt'],
+  masterCap: ['Maximum master skill level', 'Cấp kỹ năng Master tối đa'],
+  masterFormula: ['Configured value formula', 'Công thức tính theo cấu hình'],
+  masterPrerequisites: ['Prerequisite master skills', 'Kỹ năng Master tiên quyết'],
   range: ['Range', 'Tầm sử dụng'], rank: ['Master rank', 'Bậc Master'], requirements: ['Requirements', 'Yêu cầu'], costs: ['Costs to use', 'Chi phí khi dùng'],
   limited: ['Only the first configured entries are shown.', 'Chỉ hiển thị các mục đầu trong cấu hình.'],
 } as const;
@@ -126,6 +130,14 @@ function skillRow(skill: Skill): HTMLElement {
   values.append(node('dt', text('range')), node('dd', number(skill.range)));
   if (skill.attackDamage !== 0) values.append(node('dt', text('damage')), node('dd', number(skill.attackDamage)));
   if (skill.masterRank !== null) values.append(node('dt', text('rank')), node('dd', number(skill.masterRank)));
+  const master = skill.masterDetail;
+  if (master) {
+    values.append(node('dt', text('masterInitial')), node('dd', number(master.minimumLevel)),
+      node('dt', text('masterCap')), node('dd', number(master.maximumLevel)));
+    if (master.valueFormula) values.append(node('dt', text('masterFormula')), node('dd', master.valueFormula));
+    const prerequisites = master.prerequisites.map(prerequisite => name(prerequisite)).filter(Boolean);
+    if (prerequisites.length) values.append(node('dt', text('masterPrerequisites')), node('dd', prerequisites.join(', ')));
+  }
   row.append(values);
   if (skill.requirements.length) row.append(node('h5', text('requirements')), attributeList(skill.requirements));
   if (skill.costs.length) row.append(node('h5', text('costs')), attributeList(skill.costs));

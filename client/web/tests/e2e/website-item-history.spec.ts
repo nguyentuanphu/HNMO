@@ -47,3 +47,41 @@ test('reports that item history is disabled when the host turns off the tracker'
   await page.goto('/tracker.html?serial=' + serial);
   await expect(page.locator('#item-history-status')).toHaveText('The host has disabled item history.');
 });
+
+for (const [language, width, title] of [['en', 1440, 'Item history'], ['vi', 390, 'Lịch sử vật phẩm']] as const) {
+  test(`home links to public item history in ${language} only while available`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.addInitScript(lang => {
+      localStorage.setItem('website-language', lang);
+      localStorage.setItem('hnmo.language', lang);
+    }, language);
+    let enabled = false;
+    await page.route('**/website/tracker/status', route => route.fulfill({ json: { enabled } }));
+    const status = () => page.waitForResponse('**/website/tracker/status');
+    let loaded = status();
+    await page.goto('/home.html');
+    await loaded;
+    const entry = page.locator('#home-item-history');
+    await expect(entry).toBeHidden();
+
+    enabled = true;
+    loaded = status();
+    await page.locator('#refresh').click();
+    await loaded;
+    await expect(entry).toBeVisible();
+    await expect(entry).toHaveText(title);
+    const right = await entry.evaluate(link => link.getBoundingClientRect().right);
+    expect(right).toBeLessThanOrEqual(width);
+    await entry.click();
+    await expect(page).toHaveURL(/\/tracker\.html$/);
+    await expect(page.locator('#item-history-heading')).toHaveText(title);
+  });
+}
+
+test('home keeps item history hidden when availability cannot be read', async ({ page }) => {
+  await page.route('**/website/tracker/status', route => route.fulfill({ status: 503 }));
+  const status = page.waitForResponse('**/website/tracker/status');
+  await page.goto('/home.html');
+  await status;
+  await expect(page.locator('#home-item-history')).toBeHidden();
+});

@@ -928,10 +928,11 @@ internal class BoxOfLuck : InitializerBase
         blueBox.ItemType = SpecialItemType.RandomItem;
         blueBox.SourceItemLevel = 0;
         blueBox.Chance = 0.4;
-        blueBox.Description = "Blue Chocolate Box - Normal Items";
+        blueBox.Description = LocalizedString.FromResource(() => ItemDropDescriptions.BlueChocolateBoxNormalItems);
         blueBox.MinimumLevel = 6;
         blueBox.MaximumLevel = 9;
         blueBox.DropEffect = ItemDropEffect.Fireworks;
+        box.DropItems.Add(blueBox);
         this.AddDropItem(blueBox, 0, 20);
         this.AddDropItem(blueBox, 0, 25);
         this.AddDropItem(blueBox, 0, 31);
@@ -991,10 +992,11 @@ internal class BoxOfLuck : InitializerBase
         deepBlueBox.ItemType = SpecialItemType.RandomItem;
         deepBlueBox.SourceItemLevel = 1;
         deepBlueBox.Chance = 0.4;
-        deepBlueBox.Description = "Deep Blue Candy Box - Normal Items";
+        deepBlueBox.Description = LocalizedString.FromResource(() => ItemDropDescriptions.DeepBlueCandyBoxNormalItems);
         deepBlueBox.MinimumLevel = 6;
         deepBlueBox.MaximumLevel = 9;
         deepBlueBox.DropEffect = ItemDropEffect.Fireworks;
+        box.DropItems.Add(deepBlueBox);
         this.AddDropItem(deepBlueBox, 0, 20);
         this.AddDropItem(deepBlueBox, 0, 25);
         this.AddDropItem(deepBlueBox, 0, 31);
