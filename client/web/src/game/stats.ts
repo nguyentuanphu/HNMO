@@ -25,6 +25,11 @@ const num = (values: PacketValues, name: string): number => {
   return typeof value === 'number' ? value : 0;
 };
 
+/** PK state from PlayerKiller1stStage (5) upward counts as outlaw for warps (MoveCommandWindow PVP_MURDERER1). */
+export function isOutlawHeroState(heroState: number): boolean {
+  return heroState >= 5;
+}
+
 export class CharacterStats implements StatValues {
   level = 1; experience = 0; nextExperience = 0; levelUpPoints = 0;
   strength = 0; agility = 0; vitality = 0; energy = 0; leadership = 0;
@@ -33,6 +38,8 @@ export class CharacterStats implements StatValues {
   /** The attack and wizardry speeds and the speed cap, as the server computes them (CharacterAttribute->AttackSpeed…). */
   attackSpeed = 0; magicSpeed = 0; maxAttackSpeed = 0;
   resets = 0;
+  /** Character hero/PK state (CharacterHeroState: 0=New..3=Normal..5=PK1, 6=PK2). */
+  heroState = 3;
   /** The stat fruits: points added and removed, and their maxima (AddPoint, MaxAddPoint, wMinusPoint, wMaxMinusPoint). */
   usedFruitPoints = 0; maxFruitPoints = 0; usedNegativeFruitPoints = 0; maxNegativeFruitPoints = 0;
   /** Unlocked inventory extension boxes (0..4), sent in CharacterInformation. */
@@ -40,7 +47,7 @@ export class CharacterStats implements StatValues {
   private readonly listeners = new Set<(change: StatsChange, detail?: PacketValues) => void>();
   private readonly stop: () => void;
 
-  constructor(connection: Connection, level: number, info: PacketValues) {
+  constructor(connection: Connection, level: number, info: PacketValues, private readonly selfId?: () => number | null) {
     this.level = level;
     this.experience = num(info, 'CurrentExperience');
     this.nextExperience = num(info, 'ExperienceForNextLevel');
@@ -58,6 +65,7 @@ export class CharacterStats implements StatValues {
     this.usedNegativeFruitPoints = num(info, 'UsedNegativeFruitPoints');
     this.maxNegativeFruitPoints = num(info, 'MaxNegativeFruitPoints');
     this.inventoryExtensions = num(info, 'InventoryExtensions');
+    this.heroState = typeof info.HeroState === 'number' ? info.HeroState : 3;
     this.stop = connection.onPacket((bytes) => this.handle(bytes));
   }
 
@@ -131,6 +139,13 @@ export class CharacterStats implements StatValues {
       this.maxLife = num(p, 'UpdatedMaximumHealth') || 1; this.maxMana = num(p, 'UpdatedMaximumMana') || 1;
       this.maxShield = num(p, 'UpdatedMaximumShield') || 1; this.maxAbility = num(p, 'UpdatedMaximumAbility') || 1;
       this.changed('stats', p);
+    } else if (bytes[0] === 0xc1 && bytes[2] === 0xf3 && bytes[3] === 0x08) {
+      const p = read('ServerToClient', 'HeroStateChanged', bytes);
+      const id = this.selfId?.() ?? null;
+      if (id !== null && (num(p, 'PlayerId') & 0x7fff) === (id & 0x7fff)) {
+        this.heroState = num(p, 'NewState');
+        this.changed('stats', p);
+      }
     } else if (bytes[0] === 0xc1 && bytes[2] === 0xf3 && bytes[3] === 0x32) {
       const p = read('ServerToClient', 'BaseStatsExtended', bytes);
       this.strength = num(p, 'Strength'); this.agility = num(p, 'Agility'); this.vitality = num(p, 'Vitality');
