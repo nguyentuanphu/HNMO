@@ -2177,6 +2177,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     send: (name, fields) => connection.send('ClientToServer', name, fields),
     message: (text) => chat.add(text, 'system'),
     anchor: () => (itemWindows.vault.isOpen && itemWindows.vault.panel ? itemWindows.vault.panel.getBoundingClientRect() : null),
+    pageChanged: () => itemWindows.vaultPageChanged(),
   });
   state.vaultPages = vaultPages;
   connection.onPacket((bytes) => { vaultPages.handle(bytes); });
