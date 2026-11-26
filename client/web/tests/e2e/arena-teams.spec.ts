@@ -62,6 +62,8 @@ test('the Arena team battle, played by the machine', async ({ browser }) => {
 
     // Everyone queues from the Arena window.
     for (const page of pages) {
+      // Six game pages drawn in software leave the last one almost no frames; in front it draws, so the click lands.
+      await page.bringToFront();
       await page.evaluate(() => (window as unknown as Win).__game.arena?.open());
       await page.locator('#arena-team-join').click({ timeout: 60_000 });
       await expect(page.locator('#arena-team-leave')).toBeVisible({ timeout: 30_000 });
