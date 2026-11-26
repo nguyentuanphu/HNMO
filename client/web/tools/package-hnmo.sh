@@ -7,6 +7,7 @@
 #   runtime: portable (one folder for Windows, Linux and macOS), or one system: win-x64 (default), linux-x64, osx-arm64, ...
 #   --no-data: leave the game data out (copy src/bin/Data into HNMO/Data yourself)
 # Environment:
+#   POSTGRES_UNIX_DIR: portable PostgreSQL folders named by .NET runtime identifier.
 #   POSTGRES_DIR: a portable PostgreSQL (with bin/, lib/, share/) to put into the folder,
 #     e.g. the extracted Windows binaries zip of EnterpriseDB. Without it, the folder
 #     uses POSTGRES_BIN (default /usr/lib/postgresql/16/bin), a PostgreSQL installed on the computer.
@@ -47,7 +48,7 @@ if [ "$RUNTIME" = portable ]; then
   ASPNET_VERSION="${HNMO_RUNTIME_VERSION:-$(dotnet --list-runtimes | awk -v major="$NET_MAJOR" '$1 == "Microsoft.AspNetCore.App" && index($2, major ".") == 1 {v=$2} END{print v}')}"
   if [ -z "$ASPNET_VERSION" ]; then echo "No .NET $NET_MAJOR runtime installed here (dotnet --list-runtimes)" >&2; exit 1; fi
   echo "Adding the .NET runtime $ASPNET_VERSION for Windows, Linux and macOS"
-  for rid in win-x64 linux-x64 osx-arm64 osx-x64; do
+  for rid in win-x64 linux-x64 linux-arm64 osx-arm64 osx-x64; do
     ext=$([ "$rid" = win-x64 ] && echo zip || echo tar.gz)
     url="https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/$ASPNET_VERSION/aspnetcore-runtime-$ASPNET_VERSION-$rid.$ext"
     mkdir -p "$OUT/runtime/$rid"
@@ -101,60 +102,10 @@ cp -r "$WEB/public/." "$OUT/web/wwwroot/"
 find "$OUT/web/wwwroot" -name '*.js.map' -delete
 cp -r "$WEB/node_modules/three/build" "$OUT/web/vendor/three/build"
 
-# Bundle + minify the web client into a single file for the package (dev keeps the
-# unbundled public/js). three stays external (resolved by the page's import map), and
-# the Data files stay separate. The individual modules are then dropped from the folder.
+# Bundle the page entry points together so they can share modules for language,
+# themes and site navigation. The packaged pages use the generated bundles.
 echo "Bundling the web client (esbuild)"
-# A shipped build mangles the game's names too, so the bundle is hard to read or change. Set
-# HNMO_KEEP_JS_NAMES=1 to keep them, so the performance report (Settings, "Performance report")
-# can name the functions that take the time.
-if [ "${HNMO_KEEP_JS_NAMES:-}" = "1" ]; then
-  MAIN_MINIFY=(--minify-whitespace --minify-syntax)
-else
-  MAIN_MINIFY=(--minify)
-fi
-"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/main.js" \
-  --bundle "${MAIN_MINIFY[@]}" --format=esm --external:three \
-  --outfile="$OUT/web/wwwroot/js/main.min.js" --log-level=warning
-# The website (home.html) has its own script: bundled the same way.
-"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/website.js" \
-  --bundle --minify --format=esm --external:three \
-  --outfile="$OUT/web/wwwroot/js/website.min.js" --log-level=warning
-"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/topupPage.js" \
-  --bundle --minify --format=esm \
-  --outfile="$OUT/web/wwwroot/js/topupPage.min.js" --log-level=warning
-"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/calculator.js" \
-  --bundle --minify --format=esm \
-  --outfile="$OUT/web/wwwroot/js/calculator.min.js" --log-level=warning
-"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/accountPage.js" \
-  --bundle --minify --format=esm \
-  --outfile="$OUT/web/wwwroot/js/accountPage.min.js" --log-level=warning
-"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/siteLanguage.js" \
-  --bundle --minify --format=esm \
-  --outfile="$OUT/web/wwwroot/js/siteLanguage.min.js" --log-level=warning
-"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/deviceId.js" \
-  --bundle --minify --format=esm \
-  --outfile="$OUT/web/wwwroot/js/deviceId.min.js" --log-level=warning
-"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/giftCodeIdentity.js" \
-  --bundle --minify --format=esm \
-  --outfile="$OUT/web/wwwroot/js/giftCodeIdentity.min.js" --log-level=warning
-find "$OUT/web/wwwroot/js" -name '*.js' \
-  ! -name 'main.min.js' ! -name 'website.min.js' ! -name 'topupPage.min.js' ! -name 'calculator.min.js' \
-  ! -name 'accountPage.min.js' ! -name 'siteLanguage.min.js' ! -name 'deviceId.min.js' ! -name 'giftCodeIdentity.min.js' \
-  -delete
-find "$OUT/web/wwwroot/js" -mindepth 1 -type d -empty -delete
-# Point the packaged pages at the bundles (dev pages are untouched).
-sed -i 's#src="/js/main.js"#src="/js/main.min.js"#' "$OUT/web/wwwroot/index.html"
-sed -i 's#src="/js/website.js"#src="/js/website.min.js"#' "$OUT/web/wwwroot/home.html"
-sed -i 's#src="/js/topupPage.js"#src="/js/topupPage.min.js"#' "$OUT/web/wwwroot/topup.html"
-sed -i 's#src="/js/calculator.js"#src="/js/calculator.min.js"#' "$OUT/web/wwwroot/calculator.html"
-sed -i \
-  -e 's#src="/js/accountPage.js"#src="/js/accountPage.min.js"#g' \
-  -e 's#src="/js/siteLanguage.js"#src="/js/siteLanguage.min.js"#g' \
-  -e "s#/js/deviceId.js#/js/deviceId.min.js#g" \
-  -e "s#/js/giftCodeIdentity.js#/js/giftCodeIdentity.min.js#g" \
-  "$OUT/web/wwwroot/account.html"
-sed -i 's#src="/js/siteLanguage.js"#src="/js/siteLanguage.min.js"#' "$OUT/web/wwwroot/guide.html"
+node "$WEB/tools/hnmo/bundle-web.mjs" "$OUT/web/wwwroot"
 # Every script a page loads must be in the folder (a missing one leaves the page empty).
 missing=0
 for page in "$OUT/web/wwwroot"/*.html; do
@@ -174,6 +125,17 @@ if [ -n "${POSTGRES_DIR:-}" ]; then
   for part in bin lib share; do cp -r "$POSTGRES_DIR/$part" "$OUT/postgres/$part"; done
 else
   POSTGRES_BIN_IN_FOLDER="${POSTGRES_BIN:-/usr/lib/postgresql/16/bin}"
+fi
+
+if [ -n "${POSTGRES_UNIX_DIR:-}" ]; then
+  POSTGRES_BIN_IN_FOLDER="../postgres/bin"
+  mkdir -p "$OUT/postgres"
+  for rid in linux-x64 linux-arm64 osx-x64 osx-arm64; do
+    if [ -d "$POSTGRES_UNIX_DIR/$rid" ]; then
+      test -x "$POSTGRES_UNIX_DIR/$rid/bin/pg_ctl"
+      cp -R "$POSTGRES_UNIX_DIR/$rid" "$OUT/postgres/"
+    fi
+  done
 fi
 
 # The game server talks to the folder's own database on its own port
@@ -285,7 +247,7 @@ notice() { printf '=============================================================
   cat "$WEB/node_modules/three/LICENSE"; printf '\n\n'
   notice 'DejaVu fonts (Bitstream Vera / DejaVu licence), the text of the web game'
   cat "$WEB/public/fonts/DejaVuSans-LICENSE"; printf '\n\n'
-  if [ -n "${POSTGRES_DIR:-}" ]; then
+  if [ -n "${POSTGRES_DIR:-}${POSTGRES_UNIX_DIR:-}" ]; then
     notice 'PostgreSQL (PostgreSQL License), the save game database'
     printf 'PostgreSQL is released under the PostgreSQL License: https://www.postgresql.org/about/licence/\n'
   fi
