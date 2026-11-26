@@ -9,6 +9,7 @@ using HNMO.DataModel.Attributes;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Configuration.Items;
 using HNMO.GameLogic.Attributes;
+using HNMO.GameLogic.CastleSiege.NPC;
 using HNMO.GameLogic.NPC;
 using HNMO.GameLogic.Pet;
 using HNMO.GameLogic.Views.World;
@@ -19,6 +20,24 @@ using HNMO.Pathfinding;
 /// </summary>
 public static class AttackableExtensions
 {
+    /// <summary>
+    /// The number of the magic effect of the Potion of Bless.
+    /// </summary>
+    internal const short BlessPotionEffectNumber = 10;
+
+    /// <summary>
+    /// The damage multiplier of the Potion of Bless against Castle Siege gates and statues (owner, 26 Nov 2026: only there).
+    /// </summary>
+    internal const float BlessPotionDamageMultiplier = 1.2f;
+
+    /// <summary>
+    /// Determines whether the damage is raised by the Potion of Bless: the attacker has its effect and the defender is a Castle Siege gate or statue.
+    /// </summary>
+    /// <param name="attackerHasBless">Whether the attacker has the Potion of Bless effect.</param>
+    /// <param name="defenderIsSiegeStructure">Whether the defender is a Castle Siege gate or statue.</param>
+    /// <returns><c>true</c>, if the damage is raised.</returns>
+    internal static bool IsBlessBoosted(bool attackerHasBless, bool defenderIsSiegeStructure) => attackerHasBless && defenderIsSiegeStructure;
+
     /// <summary>The factor applied to damage dealt to a duel opponent.</summary>
     public const double DuelDamageFactor = 0.6;
 
@@ -222,6 +241,11 @@ public static class AttackableExtensions
         var petDamage = dmg;
 
         dmg = (int)(dmg * attacker.Attributes[Stats.AttackDamageIncrease]);
+        if (IsBlessBoosted(attackerPlayer?.MagicEffectList.ContainsEffect(BlessPotionEffectNumber) ?? false, defender is CastleSiegeGate or CastleSiegeStatue))
+        {
+            dmg = (int)(dmg * BlessPotionDamageMultiplier);
+        }
+
         if (dmg > 1)
         {
             dmg = (int)(dmg * defender.Attributes[Stats.DamageReceiveDecrement]);
