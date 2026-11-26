@@ -58,6 +58,7 @@ import { VaultPages } from './ui/vaultPages.js';
 import { ItemStacks } from './ui/itemStacks.js';
 import { setStackCountRule } from './ui/itemWindows.js';
 import { JewelBankWindow } from './ui/jewelBankWindow.js';
+import { MuunWindow } from './ui/muunWindow.js';
 import { VipWindow } from './ui/vipWindow.js';
 import { GiftBoxWindow } from './ui/giftBoxWindow.js';
 import { GuildLevelsWindow } from './ui/guildLevelsWindow.js';
@@ -233,6 +234,7 @@ export interface GameState {
   bugReports?: BugReportWindow;
   escrow?: EscrowWindow;
   jewelBank?: JewelBankWindow;
+  muun?: MuunWindow;
   vip?: VipWindow;
   giftBox?: GiftBoxWindow;
   guildLevels?: GuildLevelsWindow;
@@ -2259,6 +2261,18 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     if (event.key === 'F7' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); jewelBank.toggle(); }
   });
   window.addEventListener('hnmo-jewel-bank-open', () => { jewelBank.open(); });
+  // HNMO's Season 9 Muun companions (Alt+N): the active Muun, its bonus and its condition; the server decides.
+  const muun = new MuunWindow({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => chat.add(text, 'system'),
+  });
+  state.muun = muun;
+  connection.onPacket((bytes) => { muun.handle(bytes); });
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+    if (event.key.toLowerCase() === 'n' && event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) { event.preventDefault(); muun.toggle(); }
+  });
+  window.addEventListener('hnmo-muun-open', () => { muun.open(); });
   // HNMO's guild levels: a panel next to the guild window (G) with the level, the experience, this week's ladder rank and
   // the buff (also on the buff strip); level-ups and ladder rewards are told in the chat.
   const guildLevels = new GuildLevelsWindow({
