@@ -1,0 +1,716 @@
+source,record,productId,name,quantityOrDays,unitType,price,itemCode,flags
+IBSProduct.txt,1,1,testddd,Quantity,test,EA,1,673
+IBSProduct.txt,2,2,testddd,Quantity,test,EA,2,673
+IBSProduct.txt,3,3,Seal of Wealth(3day),Duration,259200,Sec.,3,673
+IBSProduct.txt,4,4,Scroll of Wizardry(3Day),Duration,259200,Sec.,4,673
+IBSProduct.txt,5,5,Scroll of Wrath(3Day),Duration,259200,Sec.,5,673
+IBSProduct.txt,6,6,Pet Panda(3Day),Duration,259200,Sec.,6,673
+IBSProduct.txt,7,7,Ruby Ring(5Day),Duration,432000,Sec.,7,673
+IBSProduct.txt,8,8,Topaz Ring(5Day),Duration,432000,Sec.,8,673
+IBSProduct.txt,9,9, Seal of Ascension,Duration,1440,[1 Day(s)],9,673
+IBSProduct.txt,10,9, Seal of Ascension,Duration,4320,[3 Day(s)],10,673
+IBSProduct.txt,11,9, Seal of Ascension,Duration,10080,[7 Day(s)],11,673
+IBSProduct.txt,12,9, Seal of Ascension,Duration,43200,[30 Day(s)],12,673
+IBSProduct.txt,13,10, Seal of Wealth,Duration,1440,[1 Day(s)],13,673
+IBSProduct.txt,14,10, Seal of Wealth,Duration,4320,[3 Day(s)],14,673
+IBSProduct.txt,15,10, Seal of Wealth,Duration,10080,[7 Day(s)],15,673
+IBSProduct.txt,16,10, Seal of Wealth,Duration,43200,[30 Day(s)],16,673
+IBSProduct.txt,17,11, Seal of Sustenance,Duration,1440,[1 Day(s)],17,673
+IBSProduct.txt,18,11, Seal of Sustenance,Duration,14400,[10 Day(s)],18,673
+IBSProduct.txt,19,11, Seal of Sustenance,Duration,43200,[30 Day(s)],19,673
+IBSProduct.txt,20,12, Devil Square Ticket,Quantity,1,EA,20,673
+IBSProduct.txt,21,12, Devil Square Ticket,Quantity,1,EA,21,673
+IBSProduct.txt,22,13, Blood Castle Ticket,Quantity,1,EA,22,673
+IBSProduct.txt,23,13, Blood Castle Ticket,Quantity,1,EA,23,673
+IBSProduct.txt,24,14,Reset Fruit Strength,Quantity,1,EA,24,673
+IBSProduct.txt,25,15,Reset Fruit Quickness,Quantity,1,EA,25,673
+IBSProduct.txt,26,16,Reset Fruit Health,Quantity,1,EA,26,673
+IBSProduct.txt,27,17,Reset Fruit Energy,Quantity,1,EA,27,673
+IBSProduct.txt,28,18,Reset Fruit Control,Quantity,1,EA,28,673
+IBSProduct.txt,29,19, Illusion Temple Ticket,Quantity,1,EA,29,673
+IBSProduct.txt,30,19, Illusion Temple Ticket,Quantity,1,EA,30,673
+IBSProduct.txt,31,20, Demon,Duration,1440,[1 Day(s)],31,673
+IBSProduct.txt,32,20, Demon,Duration,10080,[7 Day(s)],32,673
+IBSProduct.txt,33,20, Demon,Duration,43200,[30 Day(s)],33,673
+IBSProduct.txt,34,21, Spirit of Guardian,Duration,1440,[1 Day(s)],34,673
+IBSProduct.txt,35,21, Spirit of Guardian,Duration,10080,[7 Day(s)],35,673
+IBSProduct.txt,36,21, Spirit of Guardian,Duration,43200,[30 Day(s)],36,673
+IBSProduct.txt,37,22, Talisman of Luck,Rate,1,%,37,673
+IBSProduct.txt,38,22, Talisman of Luck,Rate,1,%,38,673
+IBSProduct.txt,39,23,Elite Healing Potion,Quantity,1,EA,39,673
+IBSProduct.txt,40,24,Elite Mana Potion,Quantity,1,EA,40,673
+IBSProduct.txt,41,25, Scroll of Quickness,Duration,1440,[1 Day(s)],41,673
+IBSProduct.txt,42,25, Scroll of Quickness,Duration,10080,[7 Day(s)],42,673
+IBSProduct.txt,43,26, Scroll of Protection,Duration,1440,[1 Day(s)],43,673
+IBSProduct.txt,44,26, Scroll of Protection,Duration,10080,[7 Day(s)],44,673
+IBSProduct.txt,45,27, Scroll of Wrath,Duration,1440,[1 Day(s)],45,673
+IBSProduct.txt,46,27, Scroll of Wrath,Duration,10080,[7 Day(s)],46,673
+IBSProduct.txt,47,28, Scroll of Wizardry,Duration,1440,[1 Day(s)],47,673
+IBSProduct.txt,48,28, Scroll of Wizardry,Duration,10080,[7 Day(s)],48,673
+IBSProduct.txt,49,29, Scroll of Health,Duration,1440,[1 Day(s)],49,673
+IBSProduct.txt,50,29, Scroll of Health,Duration,10080,[7 Day(s)],50,673
+IBSProduct.txt,51,30, Scroll of Mana,Duration,1440,[1 Day(s)],51,673
+IBSProduct.txt,52,30, Scroll of Mana,Duration,10080,[7 Day(s)],52,673
+IBSProduct.txt,53,31,Summoner Character Card,Quantity,1,NA,53,673
+IBSProduct.txt,54,32,Chaos Card Gold,Quantity,1,EA,54,673
+IBSProduct.txt,55,33,Chaos Card Rare,Quantity,1,EA,55,673
+IBSProduct.txt,56,34,Chaos Card  Mini,Quantity,1,EA,56,673
+IBSProduct.txt,57,35,Talisman of Chaos Assembly,Quantity,1,EA,57,673
+IBSProduct.txt,58,36, Scroll of Battle,Duration,1440,[1 Day(s)],58,673
+IBSProduct.txt,59,36, Scroll of Battle,Duration,10080,[7 Day(s)],59,673
+IBSProduct.txt,60,37, Scroll of Strengthener,Duration,1440,[1 Day(s)],60,673
+IBSProduct.txt,61,37, Scroll of Strengthener,Duration,10080,[7 Day(s)],61,673
+IBSProduct.txt,62,38, Seal of Healing,Duration,1440,[1 Day(s)],62,673
+IBSProduct.txt,63,38, Seal of Healing,Duration,10080,[7 Day(s)],63,673
+IBSProduct.txt,64,39, Seal of Divinity,Duration,1440,[1 Day(s)],64,673
+IBSProduct.txt,65,39, Seal of Divinity,Duration,10080,[7 Day(s)],65,673
+IBSProduct.txt,66,40,Talisman of Resurrection,Quantity,1,EA,66,673
+IBSProduct.txt,67,41,Talisman of Mobility,Quantity,1,EA,67,673
+IBSProduct.txt,68,42,Leap of Strength,Quantity,1,EA,68,673
+IBSProduct.txt,69,43,Leap of Quickness,Quantity,1,EA,69,673
+IBSProduct.txt,70,44,Leap of Health,Quantity,1,EA,70,673
+IBSProduct.txt,71,45,Leap of Energy,Quantity,1,EA,71,673
+IBSProduct.txt,72,46,Leap of Control,Quantity,1,EA,72,673
+IBSProduct.txt,73,47, Kalima Ticket,Quantity,1,EA,73,673
+IBSProduct.txt,74,47, Kalima Ticket,Quantity,1,EA,74,673
+IBSProduct.txt,75,48,Talisman of Guardian,Quantity,1,EA,75,673
+IBSProduct.txt,76,49,Talisman of Item Protection,Quantity,1,EA,76,673
+IBSProduct.txt,77,50, Master Seal of Ascension,Duration,1440,[1 Day(s)],77,673
+IBSProduct.txt,78,50, Master Seal of Ascension,Duration,10080,[7 Day(s)],78,673
+IBSProduct.txt,79,50, Master Seal of Ascension,Duration,43200,[30 Day(s)],79,673
+IBSProduct.txt,80,51, Master Seal of Wealth,Duration,1440,[1 Day(s)],80,673
+IBSProduct.txt,81,51, Master Seal of Wealth,Duration,10080,[7 Day(s)],81,673
+IBSProduct.txt,82,51, Master Seal of Wealth,Duration,43200,[30 Day(s)],82,673
+IBSProduct.txt,83,52,Gold Channel Ticket,Duration,604800,Sec.,83,673
+IBSProduct.txt,84,52,Gold Channel Ticket,Duration,2592000,Sec.,84,673
+IBSProduct.txt,85,53, Small Wings of Disaster,Duration,1440,[1 Day(s)],85,673
+IBSProduct.txt,86,53, Small Wings of Disaster,Duration,10080,[7 Day(s)],86,673
+IBSProduct.txt,87,54, Small Wings of Fairy,Duration,1440,[1 Day(s)],87,673
+IBSProduct.txt,88,54, Small Wings of Fairy,Duration,10080,[7 Day(s)],88,673
+IBSProduct.txt,89,55, Small Wings of Heaven,Duration,1440,[1 Day(s)],89,673
+IBSProduct.txt,90,55, Small Wings of Heaven,Duration,10080,[7 Day(s)],90,673
+IBSProduct.txt,91,56, Small Wings of Satan,Duration,1440,[1 Day(s)],91,673
+IBSProduct.txt,92,56, Small Wings of Satan,Duration,10080,[7 Day(s)],92,673
+IBSProduct.txt,93,57, Panda Ring,Duration,1440,[1 Day(s)],93,673
+IBSProduct.txt,94,57, Panda Ring,Duration,10080,[7 Day(s)],94,673
+IBSProduct.txt,95,58, Wizard Ring,Duration,1440,[1 Day(s)],95,673
+IBSProduct.txt,96,58, Wizard Ring,Duration,10080,[7 Day(s)],96,673
+IBSProduct.txt,97,59, Skeleton Transformation Ring,Duration,1440,[1 Day(s)],97,673
+IBSProduct.txt,98,59, Skeleton Transformation Ring,Duration,10080,[7 Day(s)],98,673
+IBSProduct.txt,99,60, Pet Panda,Duration,1440,[1 Day(s)],99,673
+IBSProduct.txt,100,60, Pet Panda,Duration,10080,[7 Day(s)],100,673
+IBSProduct.txt,101,61, Pet Skeleton,Duration,1440,[1 Day(s)],101,673
+IBSProduct.txt,102,61, Pet Skeleton,Duration,10080,[7 Day(s)],102,673
+IBSProduct.txt,103,62, Sapphire Ring,Duration,1440,[1 Day(s)],103,673
+IBSProduct.txt,104,62, Sapphire Ring,Duration,10080,[7 Day(s)],104,673
+IBSProduct.txt,105,63, Ruby Ring,Duration,1440,[1 Day(s)],105,673
+IBSProduct.txt,106,63, Ruby Ring,Duration,10080,[7 Day(s)],106,673
+IBSProduct.txt,107,64, Topaz Ring,Duration,1440,[1 Day(s)],107,673
+IBSProduct.txt,108,64, Topaz Ring,Duration,10080,[7 Day(s)],108,673
+IBSProduct.txt,109,65, Amethyst Ring,Duration,1440,[1 Day(s)],109,673
+IBSProduct.txt,110,65, Amethyst Ring,Duration,10080,[7 Day(s)],110,673
+IBSProduct.txt,111,66, Ruby Necklace,Duration,1440,[1 Day(s)],111,673
+IBSProduct.txt,112,66, Ruby Necklace,Duration,10080,[7 Day(s)],112,673
+IBSProduct.txt,113,67, Emerald Necklace,Duration,1440,[1 Day(s)],113,673
+IBSProduct.txt,114,67, Emerald Necklace,Duration,10080,[7 Day(s)],114,673
+IBSProduct.txt,115,68, Sapphire Necklace,Duration,1440,[1 Day(s)],115,673
+IBSProduct.txt,116,68, Sapphire Necklace,Duration,10080,[7 Day(s)],116,673
+IBSProduct.txt,117,69,Silver Key,Quantity,1,EA,117,673
+IBSProduct.txt,118,70,Gold Key,Quantity,1,EA,118,673
+IBSProduct.txt,119,71, Critical Ring of Wizard,Duration,1440,[1 Day(s)],119,673
+IBSProduct.txt,120,71, Critical Ring of Wizard,Duration,10080,[7 Day(s)],120,673
+IBSProduct.txt,121,72, Pet Unicorn,Duration,1440,[1 Day(s)],121,673
+IBSProduct.txt,122,72, Pet Unicorn,Duration,10080,[7 Day(s)],122,673
+IBSProduct.txt,123,73, AG Boost Aura,Duration,1440,[1 Day(s)],123,673
+IBSProduct.txt,124,73, AG Boost Aura,Duration,10080,[7 Day(s)],124,673
+IBSProduct.txt,125,74, SD Boost Aura,Duration,1440,[1 Day(s)],125,673
+IBSProduct.txt,126,74, SD Boost Aura,Duration,10080,[7 Day(s)],126,673
+IBSProduct.txt,127,75,Party EXP Increase,Duration,86400,Sec.,127,673
+IBSProduct.txt,128,75,Party EXP Increase,Duration,604800,Sec.,128,673
+IBSProduct.txt,129,76,Elite SD Potion,Quantity,1,EA,129,673
+IBSProduct.txt,130,77,Open Access Ticket to Doppelganger,Quantity,1,EA,130,673
+IBSProduct.txt,131,77,Open Access Ticket to Doppelganger,Quantity,10,EA,131,673
+IBSProduct.txt,132,78,Open Access Ticket to Varka,Quantity,1,EA,132,673
+IBSProduct.txt,133,78,Open Access Ticket to Varka,Quantity,10,EA,133,673
+IBSProduct.txt,134,79, Open Access Ticket to Varka 7,Quantity,1,EA,134,673
+IBSProduct.txt,135,79, Open Access Ticket to Varka 7,Quantity,1,EA,135,673
+IBSProduct.txt,136,80,Talisman of Guardian,Duration,86400,Sec.,136,673
+IBSProduct.txt,137,80,Talisman of Guardian,Duration,604800,Sec.,137,673
+IBSProduct.txt,138,81,Talisman of Item Protection,Duration,86400,Sec.,138,673
+IBSProduct.txt,139,81,Talisman of Item Protection,Duration,604800,Sec.,139,673
+IBSProduct.txt,140,82,Gold Channel Ticket*,Duration,259200,Sec.,140,673
+IBSProduct.txt,141,83,G-Scroll of Wrath,Duration,21600,Sec.,141,673
+IBSProduct.txt,142,84,G-Scroll of Wizardry,Duration,21600,Sec.,142,673
+IBSProduct.txt,143,85,G-Scroll of Health,Duration,21600,Sec.,143,673
+IBSProduct.txt,144,86,G-Scroll of Mana,Duration,21600,Sec.,144,673
+IBSProduct.txt,145,87,G-Scroll of Quickness,Duration,21600,Sec.,145,673
+IBSProduct.txt,146,88,G-Scroll of Protection,Duration,21600,Sec.,146,673
+IBSProduct.txt,147,89,G-Medium Elite Healing Potion,Quantity,10,EA,147,673
+IBSProduct.txt,148,90,G-Devil Square Ticket,Quantity,1,EA,148,673
+IBSProduct.txt,149,91,G-Blood Castle Ticket,Quantity,1,EA,149,673
+IBSProduct.txt,150,92,G-Illusion Temple Ticket,Quantity,1,EA,150,673
+IBSProduct.txt,151,93,Test_GB,ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½,100000,WReward,151,673
+IBSProduct.txt,152,94,Seal of Wealth*,Duration,604800,Sec.,152,673
+IBSProduct.txt,153,95,Master Seal of Wealth*,Duration,604800,Sec.,153,673
+IBSProduct.txt,154,96,Chaos Card Gold*,Quantity,1,EA,154,673
+IBSProduct.txt,155,97,Scroll of Protection*,Duration,86400,Sec.,155,673
+IBSProduct.txt,156,98,Gold Channel Ticket**,Duration,604800,Sec.,156,673
+IBSProduct.txt,157,99,Chaos Card Gold**,Quantity,1,EA,157,673
+IBSProduct.txt,158,100,Chaos Card Gold***,Quantity,1,EA,158,673
+IBSProduct.txt,159,101,Pet Panda*,Duration,172800,Sec.,159,673
+IBSProduct.txt,160,102,Pet Panda**,Duration,345600,Sec.,160,673
+IBSProduct.txt,161,103,Silver Key_Day,Quantity,1,EA,162,673
+IBSProduct.txt,162,104,Gold Key_7Days,Quantity,1,EA,163,673
+IBSProduct.txt,163,105,Elite Healing Potion_7Days,Quantity,20,EA,164,673
+IBSProduct.txt,164,106,Skeleton Transformation Ring_7Days,Duration,86400,Sec.,165,673
+IBSProduct.txt,165,107,Pet Panda_30Days,Duration,259200,Sec.,166,673
+IBSProduct.txt,166,108,Chaos Card Gold_30Days,Quantity,1,EA,167,673
+IBSProduct.txt,167,109,Seal of Ascension_30Days,Duration,604800,Sec.,168,673
+IBSProduct.txt,168,110,Master Seal of Ascension_30Days,Duration,604800,Sec.,169,673
+IBSProduct.txt,169,111,Gold Channel Ticket_3Days,Duration,259200,Sec.,170,673
+IBSProduct.txt,170,112,Seed (Lightning),Quantity,1,EA,171,673
+IBSProduct.txt,171,113,Seed (Fire),Quantity,1,EA,172,673
+IBSProduct.txt,172,114,Seed (Ice),Quantity,1,EA,173,673
+IBSProduct.txt,173,115,D-Scroll of Quickness,Duration,86400,Sec.,174,673
+IBSProduct.txt,174,116,D-Elite SD Potion,Quantity,10,EA,175,673
+IBSProduct.txt,175,117,B-Chaos Card  Mini,Quantity,1,EA,176,673
+IBSProduct.txt,176,118,D-Critical Ring of Wizard,Duration,86400,Sec.,177,673
+IBSProduct.txt,177,119,D-Demon,Duration,86400,Sec.,178,673
+IBSProduct.txt,178,120,D-Scroll of Strengthener,Duration,86400,Sec.,179,673
+IBSProduct.txt,179,121,D-SD Boost Aura,Duration,86400,Sec.,180,673
+IBSProduct.txt,180,122,D-Ruby Necklace,Duration,86400,Sec.,181,673
+IBSProduct.txt,181,123,B-Talisman of Luck,Rate,1,%,182,673
+IBSProduct.txt,182,124,B-Silver Key,Quantity,1,EA,183,673
+IBSProduct.txt,183,125,B-1 Silver Key,Quantity,1,EA,184,673
+IBSProduct.txt,184,126,B-2 Silver Key,Quantity,1,EA,185,673
+IBSProduct.txt,185,128,Gold Channel Ticket,Duration,259200,Sec.,187,673
+IBSProduct.txt,186,129,Gold Channel Ticket-Limited,Duration,604800,Sec.,188,673
+IBSProduct.txt,187,129,Gold Channel Ticket-Limited,Duration,2592000,Sec.,189,673
+IBSProduct.txt,188,130,Pet Panda-1Day,Duration,86400,Sec.,190,673
+IBSProduct.txt,189,131,Gold Key-1EA,Quantity,1,EA,191,673
+IBSProduct.txt,190,132,Chaos Card Gold_BUG Event,Quantity,1,EA,192,673
+IBSProduct.txt,191,133,Seed (Water) DEF Accuracy,Quantity,1,EA,193,673
+IBSProduct.txt,192,134,Seed (Water) DEF Increase,Quantity,1,EA,194,673
+IBSProduct.txt,193,135,Seed (Wind),Quantity,1,EA,195,673
+IBSProduct.txt,194,136,Seed (Earth),Quantity,1,EA,196,673
+IBSProduct.txt,195,137,Gold Channel Ticket_Nov_Event,Duration,604800,Sec.,197,673
+IBSProduct.txt,196,138,Chaos Card Gold_Nov_Event,Quantity,1,EA,198,673
+IBSProduct.txt,197,139,Scroll of Quickness-ALL,Duration,86400,Sec.,199,673
+IBSProduct.txt,198,140,Scroll of Protection-ALL,Duration,86400,Sec.,200,673
+IBSProduct.txt,199,141,Scroll of Wrath-ALL,Duration,86400,Sec.,201,673
+IBSProduct.txt,200,142,Scroll of Wizardry-ALL,Duration,86400,Sec.,202,673
+IBSProduct.txt,201,143,Scroll of Health-ALL,Duration,86400,Sec.,203,673
+IBSProduct.txt,202,144,Scroll of Mana-ALL,Duration,86400,Sec.,204,673
+IBSProduct.txt,203,145,Charater Transfer,Quantity,1,EA,205,673
+IBSProduct.txt,204,146,Server Transfer,Quantity,1,EA,206,673
+IBSProduct.txt,205,147,Character Name Change,Quantity,1,EA,207,673
+IBSProduct.txt,206,148,Master Skill Initialization,Quantity,1,EA,208,673
+IBSProduct.txt,207,149,Premium Service,Quantity,1,&nbsp;,209,673
+IBSProduct.txt,208,150,Server Transfer,Quantity,1,EA,210,673
+IBSProduct.txt,209,151,Character Transfer,Quantity,1,EA,211,673
+IBSProduct.txt,210,152,Pet Panda-7day_Event,Duration,604800,Sec.,212,673
+IBSProduct.txt,211,154,Gold Channel Ticket_1Day,Duration,86400,Sec.,214,673
+IBSProduct.txt,212,155,GP-500,ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½,500,WReward,215,673
+IBSProduct.txt,213,156,Scroll of Mana-P,Duration,86400,Sec.,216,673
+IBSProduct.txt,214,157,Scroll of Health-P,Duration,86400,Sec.,217,673
+IBSProduct.txt,215,158,Scroll of Wizardry-P,Duration,86400,Sec.,218,673
+IBSProduct.txt,216,159,Scroll of Wrath-P,Duration,86400,Sec.,219,673
+IBSProduct.txt,217,160,Scroll of Protection-P,Duration,86400,Sec.,220,673
+IBSProduct.txt,218,161,Scroll of Quickness-P,Duration,86400,Sec.,221,673
+IBSProduct.txt,219,162,Scroll of Battle-P,Duration,86400,Sec.,222,673
+IBSProduct.txt,220,163,Silver Key - 1th day,Quantity,1,EA,223,673
+IBSProduct.txt,221,164,Gold Key - 5th day,Quantity,1,EA,224,673
+IBSProduct.txt,222,165,Chaos Card Mini - 9th day,Quantity,1,EA,225,673
+IBSProduct.txt,223,166,Chaos Card Gold - 13th day,Quantity,1,EA,226,673
+IBSProduct.txt,224,167,Pet Panda_1Day - 17th day,Duration,86400,Sec.,227,673
+IBSProduct.txt,225,168,Panda Ring_1Day - 17th day,Duration,86400,Sec.,228,673
+IBSProduct.txt,226,169,Gold Channel Ticket_3Days - 20th day,Duration,259200,Sec.,229,673
+IBSProduct.txt,227,170,Talisman of Luck_1% Increases - 20th day,Rate,1,%,230,673
+IBSProduct.txt,228,171,Gold Channel Ticket_3Days_Event,Duration,259200,Sec.,231,673
+IBSProduct.txt,229,172,Pet Skeleton_7Day_Event,Duration,604800,Sec.,232,673
+IBSProduct.txt,230,173,Skeleton Transformation Ring_7Day_Event,Duration,604800,Sec.,233,673
+IBSProduct.txt,231,174,Rage Fighter Character Card_Event,Quantity,1,EA,234,673
+IBSProduct.txt,232,175,Gold Channel Ticket_7Day_Event,Duration,604800,Sec.,235,673
+IBSProduct.txt,233,176,Pet Panda_7Day_Event,Duration,604800,Sec.,236,673
+IBSProduct.txt,234,177,Panda Ring_7Day_Event,Duration,604800,Sec.,237,673
+IBSProduct.txt,235,178,Talisman of Mobility_Event,Quantity,1,EA,238,673
+IBSProduct.txt,236,179,Talisman of Resurrection_Event,Quantity,1,EA,239,673
+IBSProduct.txt,237,180,Scroll of Protection_7Day_Event,Duration,604800,Sec.,240,673
+IBSProduct.txt,238,181,Scroll of Health_7Day_Event,Duration,604800,Sec.,241,673
+IBSProduct.txt,239,182,Scroll of Mana_7Day_Event,Duration,604800,Sec.,242,673
+IBSProduct.txt,240,183,Charater transfer_Event,Quantity,1,EA,243,673
+IBSProduct.txt,241,184,Seal of Ascension_Reward for DC,Duration,86400,Sec.,244,673
+IBSProduct.txt,242,185,Master Seal of Ascension_Reward for DC,Duration,86400,Sec.,245,673
+IBSProduct.txt,243,186,Charater transfer_Event,Quantity,1,EA,246,673
+IBSProduct.txt,244,187,Silver Key_Event,Quantity,1,EA,247,673
+IBSProduct.txt,245,188,Gold Key_Event,Quantity,1,EA,248,673
+IBSProduct.txt,246,189,Chaos Card Mini_Event,Quantity,1,EA,249,673
+IBSProduct.txt,247,190,Chaos Card Gold_Event,Quantity,1,EA,250,673
+IBSProduct.txt,248,191,Seal of Divinity_Event,Duration,86400,Sec.,251,673
+IBSProduct.txt,249,192,Seal of Healing_Event,Duration,86400,Sec.,252,673
+IBSProduct.txt,250,193,Skeleton Transformation Ring_Event,Duration,86400,Sec.,253,673
+IBSProduct.txt,251,194,Pet Skeleton_Event,Duration,86400,Sec.,254,673
+IBSProduct.txt,252,195,Gold Channel Ticket_Event,Duration,259200,Sec.,255,673
+IBSProduct.txt,253,196,Talisman of Luck 1%_Event,Rate,1,%,256,673
+IBSProduct.txt,254,197,Gold Channel Ticket_7Day_Event,Duration,604800,Sec.,257,673
+IBSProduct.txt,255,198,Seal of Wealth(Normal)_7Day_Event,Duration,604800,Sec.,258,673
+IBSProduct.txt,256,199,Scroll of Protection_1Day_Event,Duration,86400,Sec.,259,673
+IBSProduct.txt,257,200,Chaos Card Gold_Event*,Quantity,1,EA,260,673
+IBSProduct.txt,258,201,Chaos Card Gold_Event**,Quantity,1,EA,261,673
+IBSProduct.txt,259,202,Chaos Card Gold_Event***,Quantity,1,EA,262,673
+IBSProduct.txt,260,203,Scroll of Protection_Red,Duration,86400,Sec.,263,673
+IBSProduct.txt,261,204,Scroll of Health_Red,Duration,86400,Sec.,264,673
+IBSProduct.txt,262,205,Scroll of Mana_Red,Duration,86400,Sec.,265,673
+IBSProduct.txt,263,206,Scroll of Battle_Red,Duration,86400,Sec.,266,673
+IBSProduct.txt,264,207,Scroll of Strengthener_Red,Duration,86400,Sec.,267,673
+IBSProduct.txt,265,208,Scroll of Quickness_Red,Duration,86400,Sec.,268,673
+IBSProduct.txt,266,209,Scroll of Wrath_Red,Duration,86400,Sec.,269,673
+IBSProduct.txt,267,210,Scroll of Wizardry_Red,Duration,86400,Sec.,270,673
+IBSProduct.txt,268,211,Skeleton Transformation Ring_Red,Duration,86400,Sec.,271,673
+IBSProduct.txt,269,212,Pet Skeleton_Red,Duration,86400,Sec.,272,673
+IBSProduct.txt,270,213,Panda Ring_Red,Duration,86400,Sec.,273,673
+IBSProduct.txt,271,214,Pet Panda_Red,Duration,86400,Sec.,274,673
+IBSProduct.txt,272,215,Talisman of Luck 1%_Red,Rate,1,%,275,673
+IBSProduct.txt,273,216,Talisman of Luck 5%_Red,Rate,5,%,276,673
+IBSProduct.txt,274,217,Talisman of Luck 10%_Red,Rate,10,%,277,673
+IBSProduct.txt,275,218,Bundle of Jewel of Bless (30)_Red,Quantity,1,EA,278,673
+IBSProduct.txt,276,219,Bundle of Jewel of Soul (30)_Red,Quantity,1,EA,279,673
+IBSProduct.txt,277,220,Talisman of Chaos Assembly_Red,Quantity,1,EA,280,673
+IBSProduct.txt,278,221,Rare Item Ticket 4_Red,Quantity,1,EA,281,673
+IBSProduct.txt,279,222,Cherry Blossom Wine (3),Quantity,1,EA,282,673
+IBSProduct.txt,280,223,Cherry Blossom Rice Cake (2),Quantity,1,EA,283,673
+IBSProduct.txt,281,224,Cherry Blossom Petal (3),Quantity,1,EA,284,673
+IBSProduct.txt,282,225,Rare Item Ticket 5(ï¿½Ì»ï¿½ï¿½),Quantity,1,EA,285,673
+IBSProduct.txt,283,226,Rare Item Ticket 6(ï¿½Ì»ï¿½ï¿½),Quantity,1,EA,286,673
+IBSProduct.txt,284,227,Rare Item Ticket 7(ï¿½Ì»ï¿½ï¿½),Quantity,1,EA,287,673
+IBSProduct.txt,285,228,Rare Item Ticket 8(ï¿½Ì»ï¿½ï¿½),Quantity,1,EA,288,673
+IBSProduct.txt,286,229,Rare Item Ticket 8_BLUE,Quantity,1,EA,289,673
+IBSProduct.txt,287,230,Rare Item Ticket 7_BLUE,Quantity,1,EA,290,673
+IBSProduct.txt,288,231,Wing of Ruin_BLUE,Quantity,1,EA,291,673
+IBSProduct.txt,289,232,Wing of Storm_BLUE,Quantity,1,EA,292,673
+IBSProduct.txt,290,233,Wing of Dimension_BLUE,Quantity,1,EA,293,673
+IBSProduct.txt,291,234,Cape of Emperor_BLUE,Quantity,1,EA,294,673
+IBSProduct.txt,292,235,Wing of Illusion_BLUE,Quantity,1,EA,295,673
+IBSProduct.txt,293,236,Wing of Eternal_BLUE,Quantity,1,EA,296,673
+IBSProduct.txt,294,237,Bundle of Jewel of Bless (30)_BLUE,Quantity,1,EA,297,673
+IBSProduct.txt,295,238,Bundle of Jewel of Soul (30)_BLUE,Quantity,1,EA,298,673
+IBSProduct.txt,296,239,Seed (Lightning)_BLUE,Quantity,1,EA,299,673
+IBSProduct.txt,297,240,Seed (Earth)_BLUE,Quantity,1,EA,300,673
+IBSProduct.txt,298,241,Seed (Fire)_BLUE,Quantity,1,EA,301,673
+IBSProduct.txt,299,242,Seed (Ice Mana)_BLUE,Quantity,1,EA,302,673
+IBSProduct.txt,300,243,Seed (Ice Skill)_BLUE,Quantity,1,EA,303,673
+IBSProduct.txt,301,244,Seed (Water DR)_BLUE,Quantity,1,EA,304,673
+IBSProduct.txt,302,245,Seed (Water BR)_BLUE,Quantity,1,EA,305,673
+IBSProduct.txt,303,246,Scroll of Protection_S,Duration,86400,Sec.,306,673
+IBSProduct.txt,304,246,Scroll of Protection_S,Duration,604800,Sec.,307,673
+IBSProduct.txt,305,247,Scroll of Health_S,Duration,86400,Sec.,308,673
+IBSProduct.txt,306,247,Scroll of Health_S,Duration,604800,Sec.,309,673
+IBSProduct.txt,307,248,Scroll of Mana_S,Duration,86400,Sec.,310,673
+IBSProduct.txt,308,248,Scroll of Mana_S,Duration,604800,Sec.,311,673
+IBSProduct.txt,309,249,Scroll of Battle_S,Duration,86400,Sec.,312,673
+IBSProduct.txt,310,249,Scroll of Battle_S,Duration,604800,Sec.,313,673
+IBSProduct.txt,311,250,Scroll of Strengthener_S,Duration,86400,Sec.,314,673
+IBSProduct.txt,312,250,Scroll of Strengthener_S,Duration,604800,Sec.,315,673
+IBSProduct.txt,313,251,Scroll of Quickness_S,Duration,86400,Sec.,316,673
+IBSProduct.txt,314,251,Scroll of Quickness_S,Duration,604800,Sec.,317,673
+IBSProduct.txt,315,252,Scroll of Wrath_S,Duration,86400,Sec.,318,673
+IBSProduct.txt,316,252,Scroll of Wrath_S,Duration,604800,Sec.,319,673
+IBSProduct.txt,317,253,Scroll of Wizardry_S,Duration,86400,Sec.,320,673
+IBSProduct.txt,318,253,Scroll of Wizardry_S,Duration,604800,Sec.,321,673
+IBSProduct.txt,319,254,Scroll of Protection_P,Duration,86400,Sec.,322,673
+IBSProduct.txt,320,255,Scroll of Health_P,Duration,86400,Sec.,323,673
+IBSProduct.txt,321,256,Scroll of Mana_P,Duration,86400,Sec.,324,673
+IBSProduct.txt,322,257,Scroll of Battle_P,Duration,86400,Sec.,325,673
+IBSProduct.txt,323,258,Scroll of Quickness_P,Duration,86400,Sec.,326,673
+IBSProduct.txt,324,259,Scroll of Wrath_P,Duration,86400,Sec.,327,673
+IBSProduct.txt,325,260,Scroll of Wizardry_P,Duration,86400,Sec.,328,673
+IBSProduct.txt,326,261,Brave ITEM_ï¿½Ç¸ÅºÒ°ï¿½,Quantity,1,EA,329,673
+IBSProduct.txt,327,262,Penrill_ï¿½Ç¸ÅºÒ°ï¿½,Quantity,1,EA,330,673
+IBSProduct.txt,328,263,Rage Fighter Character Card_ï¿½Ç¸ÅºÒ°ï¿½,Quantity,1,EA,331,673
+IBSProduct.txt,329,264,Rare Item Ticket 8_Red,Quantity,1,EA,332,673
+IBSProduct.txt,330,265,Rare Item Ticket 4_Red,Quantity,1,EA,333,673
+IBSProduct.txt,331,266,Gold Channel Ticket_Red,Duration,259200,Sec.,334,673
+IBSProduct.txt,332,267,Talisman of Luck 10%_Red,Rate,10,%,335,673
+IBSProduct.txt,333,268,Bundle of Jewel of Chaos (30)_Red,Quantity,1,EA,336,673
+IBSProduct.txt,334,269,Bundle of Jewel of Soul (30)_Red,Quantity,1,EA,337,673
+IBSProduct.txt,335,270,Bundle of Jewel of Bless (30)_Red,Quantity,1,EA,338,673
+IBSProduct.txt,336,271,2nd Lucky Boots Ticket_Red,Quantity,1,EA,339,673
+IBSProduct.txt,337,272,2nd Lucky Gloves Ticket_Red,Quantity,1,EA,340,673
+IBSProduct.txt,338,273,2nd Lucky Helm Ticket_Red,Quantity,1,EA,341,673
+IBSProduct.txt,339,274,2nd Lucky Pants Ticket_Red,Quantity,1,EA,342,673
+IBSProduct.txt,340,275,2nd Lucky Armor Ticket_Red,Quantity,1,EA,343,673
+IBSProduct.txt,341,276,1st Lucky Boots Ticket_Red,Quantity,1,EA,344,673
+IBSProduct.txt,342,277,1st Lucky Gloves Ticket_Red,Quantity,1,EA,345,673
+IBSProduct.txt,343,278,1st Lucky Helm Ticket_Red,Quantity,1,EA,346,673
+IBSProduct.txt,344,279,1st Lucky Pants Ticket_Red,Quantity,1,EA,347,673
+IBSProduct.txt,345,280,1st Lucky Armor Ticket_Red,Quantity,1,EA,348,673
+IBSProduct.txt,346,281,Magic Backpack,Quantity,1,EA,349,673
+IBSProduct.txt,347,282,Vault Expansion Certificate,Quantity,1,EA,350,673
+IBSProduct.txt,348,283, Little Warrior's Cloak,Duration,1440,[1 Day(s)],351,673
+IBSProduct.txt,349,283, Little Warrior's Cloak,Duration,10080,[7 Day(s)],352,673
+IBSProduct.txt,350,284,Rage Fighter Character Card,Quantity,1,NA,353,673
+IBSProduct.txt,351,285,Silver Key_Time Attack,Quantity,1,EA,354,673
+IBSProduct.txt,352,286,Gold Key_Time Attack,Quantity,1,EA,355,673
+IBSProduct.txt,353,287,Chaos Card Gold_Time Attack,Quantity,1,EA,356,673
+IBSProduct.txt,354,288,Talisman of Luck 10%_Time Attack,Rate,10,%,357,673
+IBSProduct.txt,355,289,Seed of Lightning_Time Attack,Quantity,1,EA,358,673
+IBSProduct.txt,356,290,Chaos Card Gold_Time Attack_,Quantity,1,EA,359,673
+IBSProduct.txt,357,291,Event Reward - Dragon Helm,Quantity,1,EA,360,673
+IBSProduct.txt,358,292,Event Reward - Dragon Armor,Quantity,1,EA,361,673
+IBSProduct.txt,359,293,Event Reward - Dragon Gloves,Quantity,1,EA,362,673
+IBSProduct.txt,360,294,Event Reward - Dragon Boots,Quantity,1,EA,363,673
+IBSProduct.txt,361,295,Event Reward - Legendary Helm,Quantity,1,EA,364,673
+IBSProduct.txt,362,296,Event Reward - Legendary Armor,Quantity,1,EA,365,673
+IBSProduct.txt,363,297,Event Reward - Legendary Boots,Quantity,1,EA,366,673
+IBSProduct.txt,364,298,Event Reward - Legendary Pants,Quantity,1,EA,367,673
+IBSProduct.txt,365,299,Event Reward - Legendary Gloves,Quantity,1,EA,368,673
+IBSProduct.txt,366,300,Event Reward - Dragon Pants,Quantity,1,EA,369,673
+IBSProduct.txt,367,301,Event Reward - Redwing Helm,Quantity,1,EA,370,673
+IBSProduct.txt,368,302,Event Reward - Redwing Armor,Quantity,1,EA,371,673
+IBSProduct.txt,369,303,Event Reward - Redwing Gloves,Quantity,1,EA,372,673
+IBSProduct.txt,370,304,Event Reward - Redwing Pants,Quantity,1,EA,373,673
+IBSProduct.txt,371,305,Event Reward - Redwing Boots,Quantity,1,EA,374,673
+IBSProduct.txt,372,306,Event Reward - Guardian Helm,Quantity,1,EA,375,673
+IBSProduct.txt,373,307,Event Reward - Guardian Armor,Quantity,1,EA,376,673
+IBSProduct.txt,374,308,Event Reward - Guardian Gloves,Quantity,1,EA,377,673
+IBSProduct.txt,375,309,Event Reward - Guardian Pants,Quantity,1,EA,378,673
+IBSProduct.txt,376,310,Event Reward - Guardian Boots,Quantity,1,EA,379,673
+IBSProduct.txt,377,311,Event Reward - Great Dragon Helm,Quantity,1,EA,380,673
+IBSProduct.txt,378,312,Event Reward - Great Dragon Armor,Quantity,1,EA,381,673
+IBSProduct.txt,379,313,Event Reward - Great Dragon Pants,Quantity,1,EA,382,673
+IBSProduct.txt,380,314,Event Reward - Great Dragon Gloves,Quantity,1,EA,383,673
+IBSProduct.txt,381,315,Event Reward - Great Dragon Boots,Quantity,1,EA,384,673
+IBSProduct.txt,382,316,Event Reward - Black Soul Helm,Quantity,1,EA,385,673
+IBSProduct.txt,383,317,Event Reward - Black Soul Armor,Quantity,1,EA,386,673
+IBSProduct.txt,384,318,Event Reward - Black Soul Pants,Quantity,1,EA,387,673
+IBSProduct.txt,385,319,Event Reward - Black Soul Gloves,Quantity,1,EA,388,673
+IBSProduct.txt,386,320,Event Reward - Black Soul Boots,Quantity,1,EA,389,673
+IBSProduct.txt,387,321,Event Reward - Storm Blitz Helm,Quantity,1,EA,390,673
+IBSProduct.txt,388,322,Event Reward - Storm Blitz Armor,Quantity,1,EA,391,673
+IBSProduct.txt,389,323,Event Reward - Storm Blitz Pants,Quantity,1,EA,392,673
+IBSProduct.txt,390,324,Event Reward - Storm Blitz Gloves,Quantity,1,EA,393,673
+IBSProduct.txt,391,325,Event Reward - Storm Blitz Boots,Quantity,1,EA,394,673
+IBSProduct.txt,392,326,Event Reward - Red Spirit Helm,Quantity,1,EA,395,673
+IBSProduct.txt,393,327,Event Reward - Red Spirit Armor,Quantity,1,EA,396,673
+IBSProduct.txt,394,328,Event Reward - Red Spirit Pants,Quantity,1,EA,397,673
+IBSProduct.txt,395,329,Event Reward - Red Spirit Gloves,Quantity,1,EA,398,673
+IBSProduct.txt,396,330,Event Reward - Red Spirit Boots,Quantity,1,EA,399,673
+IBSProduct.txt,397,331,Event Reward - Sacred Fire Helm,Quantity,1,EA,400,673
+IBSProduct.txt,398,332,Event Reward - Sacred Fire Armor,Quantity,1,EA,401,673
+IBSProduct.txt,399,333,Event Reward - Sacred Fire Pants,Quantity,1,EA,402,673
+IBSProduct.txt,400,334,Event Reward - Sacred Fire Gloves,Quantity,1,EA,403,673
+IBSProduct.txt,401,335,Event Reward - Sacred Fire Boots,Quantity,1,EA,404,673
+IBSProduct.txt,402,336,Event Reward - Piercing Groove Helm,Quantity,1,EA,405,673
+IBSProduct.txt,403,337,Event Reward - Piercing Groove Armor,Quantity,1,EA,406,673
+IBSProduct.txt,404,338,Event Reward - Piercing Groove Pants,Quantity,1,EA,407,673
+IBSProduct.txt,405,339,Event Reward - Piercing Groove Boots,Quantity,1,EA,408,673
+IBSProduct.txt,406,340,Event Reward - Piercing Groove Gloves,Quantity,1,EA,409,673
+IBSProduct.txt,407,341,Event Reward - Wings of Dragon,Quantity,1,EA,410,673
+IBSProduct.txt,408,342,Event Reward - Wings of Soul ,Quantity,1,EA,411,673
+IBSProduct.txt,409,343,Event Reward -Wings of Despair ,Quantity,1,EA,412,673
+IBSProduct.txt,410,344,Event Reward -Wings of Spirits ,Quantity,1,EA,413,673
+IBSProduct.txt,411,345,Event Reward -Wings of Darkness ,Quantity,1,EA,414,673
+IBSProduct.txt,412,346,Event Reward -Cape of Lord ,Quantity,1,EA,415,673
+IBSProduct.txt,413,347,Event Reward -Cape of Fighter,Quantity,1,EA,416,673
+IBSProduct.txt,414,348,Seal of Ascension 3Days,Duration,259200,Sec.,417,673
+IBSProduct.txt,415,349,Jewel of Chaos Bundle (30)_BLUE,Quantity,1,EA,418,673
+IBSProduct.txt,416,350,Jewel of Life Bundle (30)_BLUE,Quantity,1,EA,419,673
+IBSProduct.txt,417,351,Horn of Fenrir_Platinum,Quantity,1,EA,420,673
+IBSProduct.txt,418,352,Feather of Condor_Platinum,Quantity,1,EA,421,673
+IBSProduct.txt,419,353,Rare Item Ticket 1_Platinum,Quantity,1,EA,422,673
+IBSProduct.txt,420,354,Rare Item Ticket 2_Platinum,Quantity,1,EA,423,673
+IBSProduct.txt,421,355,Rare Item Ticket 3_Platinum,Quantity,1,EA,424,673
+IBSProduct.txt,422,356,Rare Item Ticket 4_Platinum,Quantity,1,EA,425,673
+IBSProduct.txt,423,357,Rare Item Ticket 7_Platinum,Quantity,1,EA,426,673
+IBSProduct.txt,424,358,Rare Item Ticket 8_Platinum,Quantity,1,EA,427,673
+IBSProduct.txt,425,359,Talisman of Chaos Assembly_Platinum,Quantity,1,EA,428,673
+IBSProduct.txt,426,360,Jewel of Life Bundle (30)_Platinum,Quantity,1,EA,429,673
+IBSProduct.txt,427,361,Jewel of Chaos Bundle (30)_Platinum,Quantity,1,EA,430,673
+IBSProduct.txt,428,362,Seal of Healing 7DAYS,Duration,86400,Sec.,431,673
+IBSProduct.txt,429,363,Rage Fighter Character Card_Event,Quantity,1,EA,432,673
+IBSProduct.txt,430,364,Summoner Character Card_Event,Quantity,1,EA,433,673
+IBSProduct.txt,431,365,Gold Channel Ticket_7day_Event,Duration,604800,Sec.,434,673
+IBSProduct.txt,432,366,Seal of Wealth_7day_Event,Duration,604800,Sec.,435,673
+IBSProduct.txt,433,367,Pet Panda_7day_Event,Duration,604800,Sec.,436,673
+IBSProduct.txt,434,368,Feather of Condor_Event,Quantity,1,EA,437,673
+IBSProduct.txt,435,369,Event Reward -Dark Master Mask,Quantity,1,EA,438,673
+IBSProduct.txt,436,370,Event Reward - Dark Master Armor,Quantity,1,EA,439,673
+IBSProduct.txt,437,371,Event Reward -Dark Master Pants,Quantity,1,EA,440,673
+IBSProduct.txt,438,372,Event Reward -Dark Master Gloves,Quantity,1,EA,441,673
+IBSProduct.txt,439,373,Event Reward -Dark Master Boots,Quantity,1,EA,442,673
+IBSProduct.txt,440,374,Event Reward -Thunder Hawk Armor,Quantity,1,EA,443,673
+IBSProduct.txt,441,375,Event Reward -Thunder Hawk Pants,Quantity,1,EA,444,673
+IBSProduct.txt,442,376,Event Reward -Thunder Hawk Gloves,Quantity,1,EA,445,673
+IBSProduct.txt,443,377,Event Reward -Thunder Hawk Boots,Quantity,1,EA,446,673
+IBSProduct.txt,444,378,Skeleton Transformation Ring [3Days],Duration,259200,Sec.,447,673
+IBSProduct.txt,445,379,Pet Skeleton [3Days],Duration,259200,Sec.,448,673
+IBSProduct.txt,446,380,Panda Ring [3Days],Duration,259200,Sec.,449,673
+IBSProduct.txt,447,381,Pet Panda [3Days],Duration,259200,Sec.,450,673
+IBSProduct.txt,448,382,Rare Item Ticket 9,Quantity,1,EA,451,673
+IBSProduct.txt,449,383,Rare Item Ticket 10,Quantity,1,EA,452,673
+IBSProduct.txt,450,384,Rare Item Ticket 11,Quantity,1,EA,453,673
+IBSProduct.txt,451,385,Rare Item Ticket 12,Quantity,1,EA,454,673
+IBSProduct.txt,452,386,Horn of Fenrir_Event,Quantity,1,EA,455,673
+IBSProduct.txt,453,387,Wings of Spirits_Event,Quantity,1,EA,456,673
+IBSProduct.txt,454,388,Wings of Dragon_Event,Quantity,1,EA,457,673
+IBSProduct.txt,455,389,Wings of Darkness_Event,Quantity,1,EA,458,673
+IBSProduct.txt,456,390,Wings of Soul_Event,Quantity,1,EA,459,673
+IBSProduct.txt,457,391,Wings of Despair_Event,Quantity,1,EA,460,673
+IBSProduct.txt,458,392,Cape of Lord_Event,Quantity,1,EA,461,673
+IBSProduct.txt,459,393,Cape of Fighter_Event,Quantity,1,EA,462,673
+IBSProduct.txt,460,394,Jewel of Life Bundle (10),Quantity,1,EA,463,673
+IBSProduct.txt,461,395,Jewel of Life Bundle (30),Quantity,1,EA,464,673
+IBSProduct.txt,462,396,Bundle of Jewel of Soul (10),Quantity,1,EA,465,673
+IBSProduct.txt,463,397,Bundle of Jewel of Soul (30),Quantity,1,EA,466,673
+IBSProduct.txt,464,398,Bundle of Jewel of Bless (10),Quantity,1,EA,467,673
+IBSProduct.txt,465,399,Bundle of Jewel of Bless (30),Quantity,1,EA,468,673
+IBSProduct.txt,466,400,Bundle of Jewel of Harmony (10),Quantity,1,EA,469,673
+IBSProduct.txt,467,401,Bundle of Jewel of Harmony (30),Quantity,1,EA,470,673
+IBSProduct.txt,468,402,Pet Panda [28 Day]_ï¿½ï¿½ï¿½Ç¸ï¿½,Duration,2419200,Sec.,471,673
+IBSProduct.txt,469,403,Pet Panda_28 Day_Event,Duration,2419200,Sec.,472,673
+IBSProduct.txt,470,404,Pet Panda_7Day_ï¿½ï¿½ï¿½Ç¸ï¿½,Duration,604800,Sec.,473,673
+IBSProduct.txt,471,405,Pet Panda_28Day_Event,Duration,2419200,Sec.,474,673
+IBSProduct.txt,472,406,Bundle of Jewel of Soul (20),Quantity,1,EA,475,673
+IBSProduct.txt,473,407,Bundle of Jewel of Bless (20),Quantity,1,EA,476,673
+IBSProduct.txt,474,408,Bundle of Jewel of Chaos (20),Quantity,1,EA,477,673
+IBSProduct.txt,475,409,Jewel of Life Bundle (20),Quantity,1,EA,478,673
+IBSProduct.txt,476,410,Feather of Loch,Quantity,1,EA,479,673
+IBSProduct.txt,477,411,Bundle of Jewel of Creation (20),Quantity,1,EA,480,673
+IBSProduct.txt,478,412,Bundle of Jewel of Creation (10),Quantity,1,EA,481,673
+IBSProduct.txt,479,413,Bundle of Jewel of Chaos (10),Quantity,1,EA,482,673
+IBSProduct.txt,480,414,Talisman of Chaos Assembly_CARD,Quantity,1,EA,483,673
+IBSProduct.txt,481,415,Feather of Condor_CARD,Quantity,1,EA,484,673
+IBSProduct.txt,482,416,Horn of Fenrir_CARD,Quantity,1,EA,485,673
+IBSProduct.txt,483,417,Wing of Eternal_CARD,Quantity,1,EA,486,673
+IBSProduct.txt,484,418,Wing of Illusion_CARD,Quantity,1,EA,487,673
+IBSProduct.txt,485,419,Cape of Emperor_CARD,Quantity,1,EA,488,673
+IBSProduct.txt,486,420,Wing of Dimension_CARD,Quantity,1,EA,489,673
+IBSProduct.txt,487,421,Wing of Storm_CARD,Quantity,1,EA,490,673
+IBSProduct.txt,488,422,Wing of Ruin_CARD,Quantity,1,EA,491,673
+IBSProduct.txt,489,423,Cape of Overrule_CARD,Quantity,1,EA,492,673
+IBSProduct.txt,490,424,Rare Item Ticket 1_CARD,Quantity,1,EA,493,673
+IBSProduct.txt,491,425,Rare Item Ticket 2_CARD,Quantity,1,EA,494,673
+IBSProduct.txt,492,426,Rare Item Ticket 3_CARD,Quantity,1,EA,495,673
+IBSProduct.txt,493,427,Rare Item Ticket 4_CARD,Quantity,1,EA,496,673
+IBSProduct.txt,494,428,Rare Item Ticket 8_CARD,Quantity,1,EA,497,673
+IBSProduct.txt,495,429,Rare Item Ticket 9_CARD,Quantity,1,EA,498,673
+IBSProduct.txt,496,430,Rare Item Ticket 11_CARD,Quantity,1,EA,499,673
+IBSProduct.txt,497,431,Pet Panda (7 Day)_P,Duration,604800,Sec.,500,673
+IBSProduct.txt,498,432,Seal of Healing (7 Day)_P,Duration,604800,Sec.,501,673
+IBSProduct.txt,499,433,Bundle of Jewel of Bless (10)_P,Quantity,1,EA,502,673
+IBSProduct.txt,500,434,Bundle of Jewel of Soul (10)_P,Quantity,1,EA,503,673
+IBSProduct.txt,501,435,Orb of Strike of Destruction_P,Quantity,1,EA,504,673
+IBSProduct.txt,502,436,Orb of Rageful Blow_P,Quantity,1,EA,505,673
+IBSProduct.txt,503,437,Orb of Death Stab_P,Quantity,1,EA,506,673
+IBSProduct.txt,504,438,Orb of Swell Life_P,Quantity,1,EA,507,673
+IBSProduct.txt,505,439,Scroll of Evil Spirit_P,Quantity,1,EA,508,673
+IBSProduct.txt,506,440,Scroll of Expansion of Wizardry_P,Quantity,1,EA,509,673
+IBSProduct.txt,507,441,Scroll of Nova_P,Quantity,1,EA,510,673
+IBSProduct.txt,508,442,Scroll of Soul Barrior_P,Quantity,1,EA,511,673
+IBSProduct.txt,509,443,Chain Lightning Parchment_P,Quantity,1,EA,512,673
+IBSProduct.txt,510,444,Damage Reflection Parchment_P,Quantity,1,EA,513,673
+IBSProduct.txt,511,445,Berserker Parchment_P,Quantity,1,EA,514,673
+IBSProduct.txt,512,446,Lightning Shock Parchment_P,Quantity,1,EA,515,673
+IBSProduct.txt,513,447,Increase Health Parchment_P,Quantity,1,EA,516,673
+IBSProduct.txt,514,448,Dark Side Parchment_P,Quantity,1,EA,517,673
+IBSProduct.txt,515,449,Dragon Slasher Parchment_P,Quantity,1,EA,518,673
+IBSProduct.txt,516,450,Increase Block Parchment_P,Quantity,1,EA,519,673
+IBSProduct.txt,517,451,Scroll of Multi Shot_P,Quantity,1,EA,520,673
+IBSProduct.txt,518,452,Orb of Ice Arrow_P,Quantity,1,EA,521,673
+IBSProduct.txt,519,453,Orb of Penetration_P,Quantity,1,EA,522,673
+IBSProduct.txt,520,454,Orb of Recovery_P,Quantity,1,EA,523,673
+IBSProduct.txt,521,455,Scroll of Gigantic Storm_P,Quantity,1,EA,524,673
+IBSProduct.txt,522,456,Scroll of Cometfall_P,Quantity,1,EA,525,673
+IBSProduct.txt,523,457,Scroll of Flame Strike_P,Quantity,1,EA,526,673
+IBSProduct.txt,524,458,Cape of Overrule_BLUE,Quantity,1,EA,527,673
+IBSProduct.txt,525,459, Statue of Hawk,Duration,1440,[1 Day(s)],528,673
+IBSProduct.txt,526,459, Statue of Hawk,Duration,10080,[7 Day(s)],529,673
+IBSProduct.txt,527,459, Statue of Hawk,Duration,43200,[30 Day(s)],530,673
+IBSProduct.txt,528,460, Statue of Goral,Duration,1440,[1 Day(s)],531,673
+IBSProduct.txt,529,460, Statue of Goral,Duration,10080,[7 Day(s)],532,673
+IBSProduct.txt,530,460, Statue of Goral,Duration,43200,[30 Day(s)],533,673
+IBSProduct.txt,531,461, Oak Charm,Duration,1440,[1 Day(s)],534,673
+IBSProduct.txt,532,461, Oak Charm,Duration,10080,[7 Day(s)],535,673
+IBSProduct.txt,533,461, Oak Charm,Duration,43200,[30 Day(s)],536,673
+IBSProduct.txt,534,462, Golden Oak Charm,Duration,1440,[1 Day(s)],537,673
+IBSProduct.txt,535,462, Golden Oak Charm,Duration,10080,[7 Day(s)],538,673
+IBSProduct.txt,536,462, Golden Oak Charm,Duration,43200,[30 Day(s)],539,673
+IBSProduct.txt,537,463, Worn Horseshoe,Duration,1440,[1 Day(s)],540,673
+IBSProduct.txt,538,463, Worn Horseshoe,Duration,10080,[7 Day(s)],541,673
+IBSProduct.txt,539,463, Worn Horseshoe,Duration,43200,[30 Day(s)],542,673
+IBSProduct.txt,540,464,10000 GP,ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½,10000,WReward,543,673
+IBSProduct.txt,541,465,1st Lucky Armor Ticket,Quantity,1,EA,544,673
+IBSProduct.txt,542,466,1st Lucky Pants Ticket,Quantity,1,EA,545,673
+IBSProduct.txt,543,467,1st Lucky Helm Ticket,Quantity,1,EA,546,673
+IBSProduct.txt,544,468,1st Lucky Gloves Ticket,Quantity,1,EA,547,673
+IBSProduct.txt,545,469,1st Lucky Boots Ticket,Quantity,1,EA,548,673
+IBSProduct.txt,546,470,2nd Lucky Armor Ticket,Quantity,1,EA,549,673
+IBSProduct.txt,547,471,2nd Lucky Pants Ticket,Quantity,1,EA,550,673
+IBSProduct.txt,548,472,2nd Lucky Helm Ticket,Quantity,1,EA,551,673
+IBSProduct.txt,549,473,2nd Lucky Gloves Ticket,Quantity,1,EA,552,673
+IBSProduct.txt,550,474,2nd Lucky Boots Ticket,Quantity,1,EA,553,673
+IBSProduct.txt,551,475,Talisman of Luck 10%_BLUE,Rate,10,%,554,673
+IBSProduct.txt,552,476,Jewel of Extension_BLUE,Quantity,1,EA,555,673
+IBSProduct.txt,553,477,Bundle of Jewel of Soul (30)_BLUE,Quantity,1,EA,556,673
+IBSProduct.txt,554,478,Bundle of Jewel of Bless (30))_BLUE,Quantity,1,EA,557,673
+IBSProduct.txt,555,479,+11 Wing of Eternal_BLUE,Quantity,1,EA,558,673
+IBSProduct.txt,556,480,+11 Wing of Illusion_BLUE,Quantity,1,EA,559,673
+IBSProduct.txt,557,481,+11 Cape of Emperor_BLUE,Quantity,1,EA,560,673
+IBSProduct.txt,558,482,+11 Wing of Dimension_BLUE,Quantity,1,EA,561,673
+IBSProduct.txt,559,483,+11 Wing of Storm_BLUE,Quantity,1,EA,562,673
+IBSProduct.txt,560,484,+11 Wing of Ruin_BLUE,Quantity,1,EA,563,673
+IBSProduct.txt,561,485,+11 Cape of Overrule,Quantity,1,EA,564,673
+IBSProduct.txt,562,486,Rare Item Ticket 4_BLUE,Quantity,1,EA,565,673
+IBSProduct.txt,563,487,Jewel of Chaos Bundle (30)_Event,Quantity,1,EA,566,673
+IBSProduct.txt,564,488,Cherry Blossom Petal,Quantity,1,EA,567,673
+IBSProduct.txt,565,489,Cherry Blossom Wine,Quantity,1,EA,568,673
+IBSProduct.txt,566,490,Cherry Blossom Rice Cake,Quantity,1,EA,569,673
+IBSProduct.txt,567,491,Scroll of Protection_7 Day,Duration,604800,Sec.,570,673
+IBSProduct.txt,568,492,Scroll of Health_7 Day,Duration,604800,Sec.,571,673
+IBSProduct.txt,569,493,Scroll of Mana_7 Day,Duration,604800,Sec.,572,673
+IBSProduct.txt,570,494,Scroll of Battle_7 Day,Duration,604800,Sec.,573,673
+IBSProduct.txt,571,495,Scroll of Strengthener_7 Day,Duration,604800,Sec.,574,673
+IBSProduct.txt,572,496,Scroll of Quickness_7 Day,Duration,604800,Sec.,575,673
+IBSProduct.txt,573,497,Scroll of Wrath_7 Day,Duration,604800,Sec.,576,673
+IBSProduct.txt,574,498,Scroll of Wizardry_7 Day,Duration,604800,Sec.,577,673
+IBSProduct.txt,575,499,Bundle of Jewel of Bless (30),Quantity,1,EA,578,673
+IBSProduct.txt,576,500,Bundle of Jewel of Soul (30),Quantity,1,EA,579,673
+IBSProduct.txt,577,501,Jewel of Chaos Bundle (10),Quantity,1,EA,580,673
+IBSProduct.txt,578,502,Jewel of Life Bundle (10),Quantity,1,EA,581,673
+IBSProduct.txt,579,503,Bundle of Jewel of Harmony (10),Quantity,1,EA,582,673
+IBSProduct.txt,580,504,Talisman of Luck 10%,Rate,10,%,583,673
+IBSProduct.txt,581,505,Rare Item Ticket 11,Quantity,1,EA,584,673
+IBSProduct.txt,582,506,Rare Item Ticket 8,Quantity,1,EA,585,673
+IBSProduct.txt,583,507,8 Goblin Point,ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½,8,WReward,586,673
+IBSProduct.txt,584,508,20 Goblin Point,ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½,20,WReward,587,673
+IBSProduct.txt,585,509,25 Goblin Point,ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½,25,WReward,588,673
+IBSProduct.txt,586,510,30 Goblin Point,ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½,30,WReward,589,673
+IBSProduct.txt,587,511,35 Goblin Point,ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½,35,WReward,590,673
+IBSProduct.txt,588,512,40 Goblin Point,ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½,40,WReward,591,673
+IBSProduct.txt,589,513,60 Goblin Point,ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½,60,WReward,592,673
+IBSProduct.txt,590,514,70 Goblin Point,ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½,70,WReward,593,673
+IBSProduct.txt,591,515,90 Goblin Point,ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½,90,WReward,594,673
+IBSProduct.txt,592,516,105 Goblin Point,ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½,105,WReward,595,673
+IBSProduct.txt,593,517,115 Goblin Point,ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½,115,WReward,596,673
+IBSProduct.txt,594,518,Seal of Wealth_7 Day,Duration,604800,Sec.,597,673
+IBSProduct.txt,595,519,Seal of Wealth_30 Day,Duration,2592000,Sec.,598,673
+IBSProduct.txt,596,520,Master Seal of Wealth_7 Day,Duration,604800,Sec.,599,673
+IBSProduct.txt,597,521,Master Seal of Wealth_30 Day,Duration,2592000,Sec.,600,673
+IBSProduct.txt,598,522,Seal of Ascension_7 Day,Duration,604800,Sec.,601,673
+IBSProduct.txt,599,523,Seal of Ascension_30 Day,Duration,2592000,Sec.,602,673
+IBSProduct.txt,600,524,Master Seal of Ascension_7 Day,Duration,604800,Sec.,603,673
+IBSProduct.txt,601,525,Master Seal of Ascension_30 Day,Duration,2592000,Sec.,604,673
+IBSProduct.txt,602,526,Gold Channel Ticket_7 Day,Duration,604800,Sec.,605,673
+IBSProduct.txt,603,527,Gold Channel Ticket_30 Day,Duration,2592000,Sec.,606,673
+IBSProduct.txt,604,528,Gold Channel Ticket,Duration,86400,Sec.,607,673
+IBSProduct.txt,605,528,Gold Channel Ticket,Duration,259200,Sec.,608,673
+IBSProduct.txt,606,528,Gold Channel Ticket,Duration,604800,Sec.,609,673
+IBSProduct.txt,607,528,Gold Channel Ticket,Duration,2592000,Sec.,610,673
+IBSProduct.txt,608,529,Seal of Ascension_30 Day,Duration,2592000,Sec.,611,673
+IBSProduct.txt,609,530,Chaos Card GOLD_Bonus(3),Quantity,1,EA,612,673
+IBSProduct.txt,610,531,Chaos Card  Mini_Bonus,Quantity,1,EA,613,673
+IBSProduct.txt,611,533,Chaos Card Gold_6 Bundle,Quantity,6,EA,620,673
+IBSProduct.txt,612,534,Chaos Card GOLD_Bonus(2),Quantity,1,EA,621,673
+IBSProduct.txt,613,535,Chaos Card GOLD_Bonus(1),Quantity,1,EA,622,673
+IBSProduct.txt,614,536,Chaos Card GOLD_10,Quantity,1,EA,623,673
+IBSProduct.txt,615,537,Chaos Card GOLD_9,Quantity,1,EA,624,673
+IBSProduct.txt,616,538,Chaos Card GOLD_8,Quantity,1,EA,625,673
+IBSProduct.txt,617,539,Chaos Card GOLD_7,Quantity,1,EA,626,673
+IBSProduct.txt,618,540,Chaos Card GOLD_6,Quantity,1,EA,627,673
+IBSProduct.txt,619,541,Chaos Card GOLD_5,Quantity,1,EA,628,673
+IBSProduct.txt,620,542,Chaos Card GOLD_4,Quantity,1,EA,629,673
+IBSProduct.txt,621,543,Chaos Card GOLD_3,Quantity,1,EA,630,673
+IBSProduct.txt,622,544,Chaos Card GOLD_2,Quantity,1,EA,631,673
+IBSProduct.txt,623,545,Chaos Card GOLD_1,Quantity,1,EA,632,673
+IBSProduct.txt,624,546,Chaos Card  Mini_Bonus(3),Quantity,1,EA,633,673
+IBSProduct.txt,625,547,Chaos Card  Mini_Bonus(2),Quantity,1,EA,634,673
+IBSProduct.txt,626,548,Chaos Card  Mini_Bonus(1),Quantity,1,EA,635,673
+IBSProduct.txt,627,549,Chaos Card  Mini_10,Quantity,1,EA,636,673
+IBSProduct.txt,628,550,Chaos Card  Mini_9,Quantity,1,EA,637,673
+IBSProduct.txt,629,551,Chaos Card  Mini_8,Quantity,1,EA,638,673
+IBSProduct.txt,630,552,Chaos Card  Mini_7,Quantity,1,EA,639,673
+IBSProduct.txt,631,553,Chaos Card  Mini_6,Quantity,1,EA,640,673
+IBSProduct.txt,632,554,Chaos Card  Mini_5,Quantity,1,EA,641,673
+IBSProduct.txt,633,555,Chaos Card  Mini_4,Quantity,1,EA,642,673
+IBSProduct.txt,634,556,Chaos Card  Mini_3,Quantity,1,EA,643,673
+IBSProduct.txt,635,557,Chaos Card  Mini_2,Quantity,1,EA,644,673
+IBSProduct.txt,636,558,Chaos Card  Mini_1,Quantity,1,EA,645,673
+IBSProduct.txt,637,559,Box of Kundun +1 ,Quantity,1,EA,646,673
+IBSProduct.txt,638,560,Box of kundun +2,Quantity,1,EA,647,673
+IBSProduct.txt,639,561,Box of kundun +3,Quantity,1,EA,648,673
+IBSProduct.txt,640,562,Box of kundun +4,Quantity,1,EA,649,673
+IBSProduct.txt,641,563,Box of kundun +5,Quantity,1,EA,650,673
+IBSProduct.txt,642,564,GM Gift Box,Quantity,1,EA,651,673
+IBSProduct.txt,643,565,Pet Rudolph,Quantity,1,EA,652,673
+IBSProduct.txt,644,566,Snowman Transformation Ring,Quantity,1,EA,653,673
+IBSProduct.txt,645,567,Emerald Necklace,Duration,86400,Sec.,654,673
+IBSProduct.txt,646,568,Sapphire Necklace,Duration,86400,Sec.,655,673
+IBSProduct.txt,647,569,Topaz Ring,Duration,86400,Sec.,656,673
+IBSProduct.txt,648,570,Ruby Ring,Duration,86400,Sec.,657,673
+IBSProduct.txt,649,571,Sapphire Ring,Duration,86400,Sec.,658,673
+IBSProduct.txt,650,572,Kalima Ticket ,Quantity,1,EA,659,673
+IBSProduct.txt,651,573,Devil Square Ticket,Quantity,1,EA,660,673
+IBSProduct.txt,652,574,Blood Castle Ticket,Quantity,1,EA,661,673
+IBSProduct.txt,653,575,Illusion Temple Ticket,Quantity,1,EA,662,673
+IBSProduct.txt,654,576,Open Access Ticket to Varka 7,Quantity,1,EA,663,673
+IBSProduct.txt,655,577,Gold Channel Ticket_Compensation,Duration,86400,Sec.,664,673
+IBSProduct.txt,656,578,+11 Wing of Eternal_CARD,Quantity,1,EA,665,673
+IBSProduct.txt,657,579,+11 Wing of Illusion_CARD,Quantity,1,EA,666,673
+IBSProduct.txt,658,580,+11 Cape of Emperor_CARD,Quantity,1,EA,667,673
+IBSProduct.txt,659,581,+11 Wing of Dimension_CARD,Quantity,1,EA,668,673
+IBSProduct.txt,660,582,+11 Wing of Storm_CARD,Quantity,1,EA,669,673
+IBSProduct.txt,661,583,+11 Wing of Ruin_CARD,Quantity,1,EA,670,673
+IBSProduct.txt,662,584,+11 Cape of Overrule_CARD,Quantity,1,EA,671,673
+IBSProduct.txt,663,585, [Discount][Gold Channel Ticket],Duration,1,Days,672,673
+IBSProduct.txt,664,585, [Discount][Gold Channel Ticket],Duration,3,Days,673,673
+IBSProduct.txt,665,585, [Discount][Gold Channel Ticket],Duration,7,Days,674,673
+IBSProduct.txt,666,585, [Discount][Gold Channel Ticket],Duration,30,Days,675,673
+IBSProduct.txt,667,586,+11 Wings of Spirits_Event,Quantity,1,EA,676,673
+IBSProduct.txt,668,587,+11 Wings of Dragon_Event,Quantity,1,EA,677,673
+IBSProduct.txt,669,588,+11 Wings of Darkness_Event,Quantity,1,EA,678,673
+IBSProduct.txt,670,589,+11 Wings of Soul_Event,Quantity,1,EA,679,673
+IBSProduct.txt,671,590,+11 Wings of Despair_Event,Quantity,1,EA,680,673
+IBSProduct.txt,672,591,+11 Cape of Lord_Event,Quantity,1,EA,681,673
+IBSProduct.txt,673,592,+11 Cape of Fighter_Event,Quantity,1,EA,682,673
+IBSProduct.txt,674,593,Horn of Fenrir_Event,Quantity,1,EA,683,673
+IBSProduct.txt,675,594,Wing of Eternal_Event,Quantity,1,EA,684,673
+IBSProduct.txt,676,595,Wing of Illusion_Event,Quantity,1,EA,685,673
+IBSProduct.txt,677,596,Cape of Emperor_Event,Quantity,1,EA,686,673
+IBSProduct.txt,678,597,Wing of Dimension_Event,Quantity,1,EA,687,673
+IBSProduct.txt,679,598,Wing of Storm_Event,Quantity,1,EA,688,673
+IBSProduct.txt,680,599,Wing of Ruin_Event,Quantity,1,EA,689,673
+IBSProduct.txt,681,600,Cape of Overrule_Event,Quantity,1,EA,690,673
+IBSProduct.txt,682,601,15 Goblin Point,ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½,15,WReward,691,673
+IBSProduct.txt,683,602,50 Goblin Point,ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½,50,WReward,692,673
+IBSProduct.txt,684,603,80 Goblin Point,ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½,80,WReward,693,673
+IBSProduct.txt,685,604,100 Goblin Point,ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½,100,WReward,694,673
+IBSProduct.txt,686,605,240 Goblin Point,ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½,240,WReward,695,673
+IBSProduct.txt,687,606,280 Goblin Point,ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½,280,WReward,696,673
+IBSProduct.txt,688,607,360 Goblin Point,ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½,360,WReward,697,673
+IBSProduct.txt,689,608,420 Goblin Point,ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½,420,WReward,698,673
+IBSProduct.txt,690,609,460 Goblin Point,ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½,460,WReward,699,673
+IBSProduct.txt,691,610,[+GP_EVENT] Seal of Wealth_7 Day,Duration,10080,[7 Day(s)],700,673
+IBSProduct.txt,692,611,[+GP_EVENT] Seal of Wealth_30 Day,Duration,43200,[30 Day(s)],701,673
+IBSProduct.txt,693,612,[+GP_EVENT] Master Seal of Wealth_7 Day,Duration,10080,[7 Day(s)],702,673
+IBSProduct.txt,694,613,[+GP_EVENT] Master Seal of Wealth_30 Day,Duration,43200,[30 Day(s)],703,673
+IBSProduct.txt,695,614,[+GP_EVENT] Seal of Ascension_7 Day,Duration,10080,[7 Day(s)],704,673
+IBSProduct.txt,696,615,[+GP_EVENT] Seal of Ascension_30 Day,Duration,43200,[30 Day(s)],705,673
+IBSProduct.txt,697,616,[+GP_EVENT] Master Seal of Ascension_7 Day,Duration,10080,[7 Day(s)],706,673
+IBSProduct.txt,698,617,[+GP_EVENT] Master Seal of Ascension_30 Day,Duration,43200,[30 Day(s)],707,673
+IBSProduct.txt,699,618,[+GP_EVENT] Statue of Hawk 7 Day,Duration,10080,[7 Day(s)],708,673
+IBSProduct.txt,700,619,[+GP_EVENT] Statue of Hawk 30 Day,Duration,43200,[30 Day(s)],709,673
+IBSProduct.txt,701,620,[+GP_EVENT] Statue of Goral 7 Day,Duration,10080,[7 Day(s)],710,673
+IBSProduct.txt,702,621,[+GP_EVENT] Statue of Goral 30 Day,Duration,43200,[30 Day(s)],711,673
+IBSProduct.txt,703,622,[+GP_EVENT] Oak Charm 7 Day,Duration,10080,[7 Day(s)],712,673
+IBSProduct.txt,704,623,[+GP_EVENT] Oak Charm 30 Day,Duration,43200,[30 Day(s)],713,673
+IBSProduct.txt,705,624,[+GP_EVENT] Golden Oak Charm 7 Day,Duration,10080,[7 Day(s)],714,673
+IBSProduct.txt,706,625,[+GP_EVENT] Golden Oak Charm 30 Day,Duration,43200,[30 Day(s)],715,673
+IBSProduct.txt,707,626,[+GP_EVENT] Worn Horseshoe 7 Day,Duration,10080,[7 Day(s)],716,673
+IBSProduct.txt,708,627,[+GP_EVENT] Worn Horseshoe 30 Day,Duration,43200,[30 Day(s)],717,673
+IBSProduct.txt,709,628,Rage Fighters Small Wing,Duration,604800,Sec.,718,673
+IBSProduct.txt,710,629,100000 Goblin Point,ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½,100000,WReward,719,673
+IBSProduct.txt,711,893,Invitation Ticket to Santa Village,Quantity,1,EA,1094,673
+IBSProduct.txt,712,894, [Discount][Gold Channel Ticket],Duration,1,Days,1095,673
+IBSProduct.txt,713,894, [Discount][Gold Channel Ticket],Duration,3,Days,1096,673
+IBSProduct.txt,714,894, [Discount][Gold Channel Ticket],Duration,7,Days,1097,673
+IBSProduct.txt,715,894, [Discount][Gold Channel Ticket],Duration,30,Days,1098,673
