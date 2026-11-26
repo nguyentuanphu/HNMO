@@ -31,7 +31,9 @@ internal class SeasonNineMonstersDataTest
 
         await plugin.ApplyUpdateAsync(context, config).ConfigureAwait(false);
 
-        Assert.That(config.Monsters.Count, Is.EqualTo(beforeCount + 111));
+        // Mining Area NPCs 605..607 are already ensured in Season 6 by S6EventsMonstersAndItemsUpdatePlugIn,
+        // so SeasonNineMonstersUpdatePlugIn adds the remaining 108 of the 111 monsters/NPCs.
+        Assert.That(config.Monsters.Count, Is.EqualTo(beforeCount + 108));
 
         var chinese = CultureInfo.GetCultureInfo("zh-CN");
         var vietnamese = CultureInfo.GetCultureInfo("vi");
@@ -92,7 +94,7 @@ internal class SeasonNineMonstersDataTest
             var added = config.Monsters
                 .Where(m => m.Designation.SourceKey?.StartsWith("SeasonNineMonsterNames/", StringComparison.Ordinal) == true)
                 .ToList();
-            Assert.That(added, Has.Count.EqualTo(111));
+            Assert.That(added, Has.Count.EqualTo(108));
             foreach (var monster in added)
             {
                 Assert.That(monster.Designation.GetOwnTranslation(chinese), Is.Not.Null.And.Not.Empty, monster.Designation.SourceKey);
