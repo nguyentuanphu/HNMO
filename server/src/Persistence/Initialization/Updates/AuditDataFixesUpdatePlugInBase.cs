@@ -32,13 +32,14 @@ public abstract class AuditDataFixesUpdatePlugInBase : UpdatePlugInBase
     protected override ValueTask ApplyAsync(IContext context, GameConfiguration gameConfiguration)
     {
         FixHanzoStore(gameConfiguration);
-        this.ApplyVersionFixes(gameConfiguration);
+        this.ApplyVersionFixes(context, gameConfiguration);
         return ValueTask.CompletedTask;
     }
 
     /// <summary>Applies the fixes of one game version.</summary>
+    /// <param name="context">The context, to create what is missing.</param>
     /// <param name="gameConfiguration">The game configuration.</param>
-    protected virtual void ApplyVersionFixes(GameConfiguration gameConfiguration)
+    protected virtual void ApplyVersionFixes(IContext context, GameConfiguration gameConfiguration)
     {
     }
 

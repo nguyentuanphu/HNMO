@@ -14,7 +14,8 @@ using HNMO.Persistence.InMemory;
 
 /// <summary>
 /// <see cref="AuditDataFixesUpdatePlugInSeason6"/>: the data fixes of the 25 Nov 2026 audit (Kantata's excellent damage
-/// chance, the SD of the Guardian option on boots, Hanzo's store) reach databases created before them.
+/// chance, the SD of the Guardian option on boots, Hanzo's store, the normal items of the Blue Chocolate / Deep Blue
+/// Candy Box) reach databases created before them.
 /// </summary>
 [TestFixture]
 internal class AuditDataFixesUpdateTest
@@ -45,6 +46,11 @@ internal class AuditDataFixesUpdateTest
         Sword(store, 8).ItemSlot = 74;
         Sword(store, 5).ItemSlot = 75;
         store.Items.Single(i => i.ItemSlot == 50).Definition = gameConfiguration.Items.Single(d => d.Group == 2 && d.Number == 1);
+        var blueBox = BlueBox(gameConfiguration);
+        foreach (var normal in NormalGroups(blueBox).ToList())
+        {
+            blueBox.DropItems.Remove(normal); // as before the fix: the normal-item groups were never attached
+        }
 
         var update = new AuditDataFixesUpdatePlugInSeason6();
         await update.ApplyUpdateAsync(contextProvider.CreateNewContext(), gameConfiguration).ConfigureAwait(false);
@@ -65,6 +71,11 @@ internal class AuditDataFixesUpdateTest
             Assert.That(store.Items.GroupBy(i => i.ItemSlot).Where(g => g.Count() > 1), Is.Empty, "one item per store slot");
             Assert.That(new[] { Sword(store, 7).ItemSlot, Sword(store, 8).ItemSlot, Sword(store, 5).ItemSlot }, Is.EqualTo(new byte[] { 74, 75, 76 }));
             Assert.That(store.Items.Single(i => i.ItemSlot == 50).Definition!.Number, Is.EqualTo(0), "slot 50 holds the Mace");
+            var normals = NormalGroups(BlueBox(gameConfiguration)).ToList();
+            Assert.That(normals.Select(g => (int)g.SourceItemLevel).OrderBy(l => l), Is.EqualTo(new[] { 0, 1 }), "one normal-item group per box level, once");
+            Assert.That(normals.Select(g => g.Chance), Is.All.EqualTo(0.4));
+            Assert.That(normals.Select(g => g.PossibleItems.Count), Is.All.EqualTo(38), "19 items and the parts of 4 armor sets, as a new database has them (one set has no helm)");
+            Assert.That(normals.All(g => g.PossibleItems.Any(i => i.Group == 14 && i.Number == 13)), Is.True, "the jewels are in it");
         });
     }
 
@@ -82,6 +93,12 @@ internal class AuditDataFixesUpdateTest
         => gameConfiguration.ItemOptions.SelectMany(o => o.PossibleOptions)
             .Single(o => o.OptionType == ItemOptionTypes.GuardianOption && o.Number == 11 && o.PowerUpDefinition?.TargetAttribute == Stats.MaximumShield)
             .PowerUpDefinition!.Boost!.ConstantValue;
+
+    private static ItemDefinition BlueBox(GameConfiguration gameConfiguration)
+        => gameConfiguration.Items.Single(i => i.Group == 14 && i.Number == 34);
+
+    private static IEnumerable<ItemDropItemGroup> NormalGroups(ItemDefinition box)
+        => box.DropItems.OfType<ItemDropItemGroup>().Where(g => g.ItemType == SpecialItemType.RandomItem);
 
     private static ItemStorage Hanzo(GameConfiguration gameConfiguration)
         => gameConfiguration.Monsters.Single(m => m.Number == AuditDataFixesUpdatePlugInBase.HanzoNumber).MerchantStore!;
