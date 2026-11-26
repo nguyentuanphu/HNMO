@@ -9,6 +9,7 @@ using System.ComponentModel;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using HNMO.GameLogic;
+using HNMO.GameLogic.Gens;
 using HNMO.GameLogic.PlugIns.GameplayRules;
 using HNMO.GameLogic.Views.Guild;
 using HNMO.GameServer;
@@ -102,6 +103,12 @@ public class AllianceMinimumMembersTest
             new ConfigurationChangeMediator());
         mapInitializer.PlugInManager = gameServer.PlugInManager;
         mapInitializer.PathFinderPool = gameServer.PathFinderPool;
+        var gens = gameServer.FeaturePlugIns.GetPlugIn<GensFeaturePlugIn>();
+        if (gens is not null)
+        {
+            // These tests are about guilds, not gens: the guild rules of the gens (same gens required) are off.
+            gens.Configuration = new GensConfiguration { GuildRequiresGens = false, AllianceRequiresSameGens = false };
+        }
         return gameServer;
     }
 }
