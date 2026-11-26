@@ -349,5 +349,12 @@ namespace HNMO.Persistence.Initialization.Properties {
                 return ResourceManager.GetString("LuckyItemExchange", resourceCulture);
             }
         }
+
+        /// <summary>Gets ChaosCardCombination from the configuration name resources.</summary>
+        public static string ChaosCardCombination {
+            get {
+                return ResourceManager.GetString("ChaosCardCombination", resourceCulture);
+            }
+        }
     }
 }

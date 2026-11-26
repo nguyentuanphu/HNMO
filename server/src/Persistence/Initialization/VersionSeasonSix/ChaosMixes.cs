@@ -65,6 +65,7 @@ public class ChaosMixes : InitializerBase
         chaosGoblin.ItemCraftings.Add(this.Level380OptionCrafting());
         chaosGoblin.ItemCraftings.Add(this.SecromiconCrafting());
         new GoblinBoxItems(this.Context, this.GameConfiguration).AddCraftings();
+        new ChaosCardItems(this.Context, this.GameConfiguration).AddCraftings();
         new SocketWeaponMixItems(this.Context, this.GameConfiguration).Initialize();
 
         var elphis = this.GameConfiguration.Monsters.Single(m => m.NpcWindow == NpcWindow.ElphisRefinery);

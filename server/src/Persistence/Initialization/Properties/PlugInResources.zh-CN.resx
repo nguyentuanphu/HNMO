@@ -523,4 +523,6 @@
   <data name="AuditDataFixesUpdatePlugIn_Description" xml:space="preserve"><value>将2026年11月25日审计的数据修正应用到已有服务器（之前只对新服务器生效）：铁匠汉佐的商店（两件武器占同一格，晨星占了钉锤的格子）；第6季另修正坎塔塔套装的卓越伤害几率（每次攻击都是卓越）和靴子守护选项的SD（700）；在第6季还补上了蓝色巧克力盒和深蓝糖果盒的普通物品（以前只开出金币或卓越物品）。</value></data>
   <data name="BlessPotionSiegeOnlyUpdatePlugIn_Name" xml:space="preserve"><value>祝福药水仅用于攻城</value></data>
   <data name="BlessPotionSiegeOnlyUpdatePlugIn_Description" xml:space="preserve"><value>祝福药水不再提高对怪物和玩家的伤害，只对攻城战的城门和雕像有效。</value></data>
+  <data name="AddChaosCardMixesUpdatePlugIn_Name" xml:space="preserve"><value>添加玛雅卡片与合成配方</value></data>
+  <data name="AddChaosCardMixesUpdatePlugIn_Description" xml:space="preserve"><value>添加四种玛雅卡片（14-54、14-92、14-93、14-95），接入玛雅卡片大师合成（MixType 40），并启用商城中的对应礼包。</value></data>
 </root>

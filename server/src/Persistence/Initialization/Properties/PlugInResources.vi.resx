@@ -904,4 +904,6 @@
   <data name="AuditDataFixesUpdatePlugIn_Description" xml:space="preserve"><value>Áp các chỗ sửa dữ liệu của audit ngày 25/11/2026 (trước chỉ có trên server mới): cửa hàng Hanzo the Blacksmith (hai vũ khí chung một ô, Morning Star nằm ở ô của Mace); ở Season 6 thêm tỉ lệ sát thương hoàn hảo của bộ Kantata (mọi đòn đều hoàn hảo) và SD của dòng Guardian trên giày (700); ở Season 6 còn có vật phẩm thường của Hộp Sô-cô-la Xanh và Hộp Kẹo Xanh Đậm (trước chỉ ra Zen hoặc đồ excellent).</value></data>
   <data name="BlessPotionSiegeOnlyUpdatePlugIn_Name" xml:space="preserve"><value>Thuốc Ban Phước chỉ dùng cho công thành</value></data>
   <data name="BlessPotionSiegeOnlyUpdatePlugIn_Description" xml:space="preserve"><value>Thuốc Ban Phước không còn tăng sát thương lên quái và người chơi; chỉ tăng khi đánh cổng và tượng trong Công thành chiến.</value></data>
+  <data name="AddChaosCardMixesUpdatePlugIn_Name" xml:space="preserve"><value>Thêm Thẻ Hỗn Nguyên và công thức kết hợp</value></data>
+  <data name="AddChaosCardMixesUpdatePlugIn_Description" xml:space="preserve"><value>Thêm bốn loại Thẻ Hỗn Nguyên (14-54, 14-92, 14-93, 14-95), gắn công thức cho Bậc Thầy Thẻ Hỗn Nguyên (#375, MixType 40) và mở bán các gói tương ứng trong cửa hàng.</value></data>
 </root>

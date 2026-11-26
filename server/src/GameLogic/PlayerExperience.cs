@@ -7,7 +7,6 @@ namespace HNMO.GameLogic;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.PlugIns.CatchupCap;
-using HNMO.GameLogic.PlugIns.SeasonPlan;
 using HNMO.GameLogic.Views.Character;
 using HNMO.GameLogic.Views.World;
 using Nito.AsyncEx;
@@ -186,8 +185,7 @@ internal sealed class PlayerExperience
         var isMaxLevel = currentLevel >= CatchupCapPlugIn.GetEffectiveMaximumLevel(this._player.GameContext);
         isMasterExperience = characterClass.IsMasterClass
             && isMaxLevel
-            && currentLevel >= this._player.GameContext.Configuration.MaximumLevel
-            && SeasonPlanPlugIn.IsFeatureUnlocked(this._player.GameContext, SeasonFeatureGate.MasterLevels);
+            && currentLevel >= this._player.GameContext.Configuration.MaximumLevel; // owner, 26 Nov 2026: not gated by the Season Plan
         return true;
     }
 

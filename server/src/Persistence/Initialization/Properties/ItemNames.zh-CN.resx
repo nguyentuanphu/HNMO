@@ -2361,4 +2361,16 @@
   <data name="TalismanOfItemProtection" xml:space="preserve">
     <value>物品保护护身符</value>
   </data>
+  <data name="ChaosCard" xml:space="preserve">
+    <value>玛雅卡片</value>
+  </data>
+  <data name="ChaosCardGold" xml:space="preserve">
+    <value>黄金玛雅卡片</value>
+  </data>
+  <data name="ChaosCardRare" xml:space="preserve">
+    <value>稀有玛雅卡片</value>
+  </data>
+  <data name="ChaosCardMini" xml:space="preserve">
+    <value>迷你玛雅卡片</value>
+  </data>
 </root>

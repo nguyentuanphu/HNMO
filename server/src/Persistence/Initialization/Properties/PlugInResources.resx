@@ -498,4 +498,6 @@
   <data name="AuditDataFixesUpdatePlugIn_Description" xml:space="preserve"><value>Fixes data the 25 Nov 2026 audit corrected for new servers only: Hanzo the Blacksmith's store (two weapons in one slot, a Morning Star in the Mace's slot); in Season 6 also the excellent damage chance of the Kantata set (every hit was excellent) and the SD of the Guardian option on boots (700) and, in Season 6, the normal items of the Blue Chocolate Box and the Deep Blue Candy Box (they gave only Zen or excellent items).</value></data>
   <data name="BlessPotionSiegeOnlyUpdatePlugIn_Name" xml:space="preserve"><value>Potion of Bless only for the siege</value></data>
   <data name="BlessPotionSiegeOnlyUpdatePlugIn_Description" xml:space="preserve"><value>The Potion of Bless no longer raises the damage against monsters and players; it only does against Castle Siege gates and statues.</value></data>
+  <data name="AddChaosCardMixesUpdatePlugIn_Name" xml:space="preserve"><value>Add Chaos Card items and mixes</value></data>
+  <data name="AddChaosCardMixesUpdatePlugIn_Description" xml:space="preserve"><value>Adds the four Chaos Cards (14-54, 14-92, 14-93, 14-95), wires the Chaos Card Master combination (MixType 40), and activates their in-game shop packages.</value></data>
 </root>
