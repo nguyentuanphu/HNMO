@@ -495,5 +495,7 @@
   <data name="MossMerchantShopUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: Moss the Merchant gamble shop</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>Adds the 5 Moss gamble vouchers (13-71..75) at 2,000,000 Zen and equips Moss the Merchant (492) with his gamble shop when empty.</value></data>
   <data name="AuditDataFixesUpdatePlugIn_Name" xml:space="preserve"><value>Audit data fixes of 25 Nov 2026</value></data>
-  <data name="AuditDataFixesUpdatePlugIn_Description" xml:space="preserve"><value>Fixes data the 25 Nov 2026 audit corrected for new servers only: Hanzo the Blacksmith's store (two weapons in one slot, a Morning Star in the Mace's slot); in Season 6 also the excellent damage chance of the Kantata set (every hit was excellent) and the SD of the Guardian option on boots (700).</value></data>
+  <data name="AuditDataFixesUpdatePlugIn_Description" xml:space="preserve"><value>Fixes data the 25 Nov 2026 audit corrected for new servers only: Hanzo the Blacksmith's store (two weapons in one slot, a Morning Star in the Mace's slot); in Season 6 also the excellent damage chance of the Kantata set (every hit was excellent) and the SD of the Guardian option on boots (700) and, in Season 6, the normal items of the Blue Chocolate Box and the Deep Blue Candy Box (they gave only Zen or excellent items).</value></data>
+  <data name="BlessPotionSiegeOnlyUpdatePlugIn_Name" xml:space="preserve"><value>Potion of Bless only for the siege</value></data>
+  <data name="BlessPotionSiegeOnlyUpdatePlugIn_Description" xml:space="preserve"><value>The Potion of Bless no longer raises the damage against monsters and players; it only does against Castle Siege gates and statues.</value></data>
 </root>
