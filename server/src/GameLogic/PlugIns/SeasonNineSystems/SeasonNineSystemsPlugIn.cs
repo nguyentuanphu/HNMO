@@ -26,6 +26,7 @@ using HNMO.PlugIns;
 public sealed class SeasonNineSystemsPlugIn :
     IPeriodicTaskPlugIn,
     IPlayerStateChangedPlugIn,
+    IAttackableGotKilledPlugIn,
     ISupportCustomConfiguration<SeasonNineSystemsConfiguration>,
     ISupportDefaultCustomConfiguration,
     IDisabledByDefault
@@ -62,6 +63,27 @@ public sealed class SeasonNineSystemsPlugIn :
     /// </summary>
     /// <returns><c>true</c> when they run.</returns>
     public bool IsActive() => this.Configuration is { Enabled: true } && this.IsSeasonNineRealm();
+
+    /// <summary>
+    /// Gets the realm's Season 9 client settings as plain-ASCII JSON, or <c>null</c> outside an active Season 9 realm (the
+    /// web client then keeps its defaults).
+    /// </summary>
+    /// <returns>The JSON, or <c>null</c>.</returns>
+    public string? ClientStateJson() =>
+        this.IsActive() && this.Configuration is { } cfg
+            ? System.Text.Json.JsonSerializer.Serialize(new { v = 1, minimap = cfg.SeasonNineMinimapEnabled })
+            : null;
+
+    /// <summary>Sends the realm's Season 9 client settings to the player (the answer to the web client's request).</summary>
+    /// <param name="player">The player.</param>
+    /// <returns>A task.</returns>
+    public async ValueTask SendClientStateAsync(Player player)
+    {
+        if (this.ClientStateJson() is { } json)
+        {
+            await player.InvokeViewPlugInAsync<Views.IHnmoSeasonNineClientViewPlugIn>(p => p.ShowSeasonNineClientStateAsync(json)).ConfigureAwait(false);
+        }
+    }
 
     /// <inheritdoc />
     public object CreateDefaultConfig() => new SeasonNineSystemsConfiguration();
@@ -100,6 +122,7 @@ public sealed class SeasonNineSystemsPlugIn :
             return;
         }
 
+        await player.InvokeViewPlugInAsync<Views.IHnmoPentagramViewPlugIn>(p => p.ShowPentagramAsync(PentagramStateWriter.Write(player))).ConfigureAwait(false);
         var isVi = string.Equals(player.Culture.TwoLetterISOLanguageName, "vi", StringComparison.OrdinalIgnoreCase);
         await player.ShowBlueMessageAsync(
             isVi
@@ -187,5 +210,29 @@ public sealed class SeasonNineSystemsPlugIn :
         }
 
         return ValueTask.CompletedTask;
+    }
+
+    /// <summary>
+    /// Drops a pentagram or an errtel from a killed monster with the admin's chances (off by default). A pentagram gets
+    /// a random element; an errtel a random kind and element, with one option of rank 1 at level 0.
+    /// </summary>
+    /// <param name="killed">The killed object.</param>
+    /// <param name="killer">The killer.</param>
+    /// <returns>A task.</returns>
+    public async ValueTask AttackableGotKilledAsync(IAttackable killed, IAttacker? killer)
+    {
+        if (killed is not NPC.Monster monster || killer is not Player player || !this.IsActive()
+            || this.Configuration is not { PentagramEnabled: true } cfg
+            || monster.Definition[Attributes.Stats.Level] < cfg.PentagramDropMinimumMonsterLevel
+            || monster.CurrentMap is not { } map)
+        {
+            return;
+        }
+
+        if (PentagramDrops.Roll(player.GameContext, cfg) is { } item)
+        {
+            var owners = player.Party?.PartyList.AsEnumerable() ?? player.GetAsEnumerable();
+            await map.AddAsync(new DroppedItem(item, monster.Position, map, null, owners)).ConfigureAwait(false);
+        }
     }
 }

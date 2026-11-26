@@ -10868,6 +10868,66 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoPentagramState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON payload: whether the system is on, the worn pentagram with its element and errtel slots, the pentagrams and errtels of the bag by slot, the mix costs and an optional action result.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent in a Season 9 realm after entering the world, after a pentagram action, or upon HnmoPentagramCommand.
+    /// Causes reaction on client side: Updates the web client's pentagram window, the pentagram slot of the inventory and the element and errtels on item tooltips.
+    /// </remarks>
+    public static async ValueTask SendHnmoPentagramStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoPentagramStateRef.GetRequiredSize(json);
+            var packet = new HnmoPentagramStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoElementalHit" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="targetId">The id of the target object.</param>
+    /// <param name="damage">The elemental damage of the hit.</param>
+    /// <param name="element">The attacker's element: 1 fire, 2 water, 3 earth, 4 wind, 5 darkness.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent to an attacker in a Season 9 realm when a hit dealt elemental damage.
+    /// Causes reaction on client side: The web client shows the elemental part of the damage above the target, in the element's colour.
+    /// </remarks>
+    public static async ValueTask SendHnmoElementalHitAsync(this IConnection? connection, ushort @targetId, uint @damage, byte @element)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoElementalHitRef.Length;
+            var packet = new HnmoElementalHitRef(connection.Output.GetSpan(length)[..length]);
+            packet.TargetId = @targetId;
+            packet.Damage = @damage;
+            packet.Element = @element;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="HnmoJewelBankState" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>
@@ -10943,6 +11003,34 @@ public static class ConnectionExtensions
         {
             var length = HnmoCatchupCapStateRef.GetRequiredSize(json);
             var packet = new HnmoCatchupCapStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoSeasonNineClientState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON payload: {"v":1,"minimap":bool}.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent upon HnmoSeasonNineClientRequest, in a Season 9 realm.
+    /// Causes reaction on client side: The web client applies the Season 9 client settings of the realm (e.g. the Season 9 minimap markers).
+    /// </remarks>
+    public static async ValueTask SendHnmoSeasonNineClientStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoSeasonNineClientStateRef.GetRequiredSize(json);
+            var packet = new HnmoSeasonNineClientStateRef(connection.Output.GetSpan(length)[..length]);
             packet.Json = @json;
 
             return packet.Header.Length;

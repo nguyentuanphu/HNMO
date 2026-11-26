@@ -8526,5 +8526,37 @@ namespace HNMO.GameServer.Properties {
                 return ResourceManager.GetString("HnmoBanNoticeViewPlugIn_Description", resourceCulture);
             }
         }
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO Season 9 client settings view.
+        /// </summary>
+        public static string HnmoSeasonNineClientViewPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoSeasonNineClientViewPlugIn_Name", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Sends a Season 9 realm's client settings (the Season 9 minimap markers) to the web game, as the a....
+        /// </summary>
+        public static string HnmoSeasonNineClientViewPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoSeasonNineClientViewPlugIn_Description", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO Season 9 client settings request handler.
+        /// </summary>
+        public static string HnmoSeasonNineClientRequestHandlerPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoSeasonNineClientRequestHandlerPlugIn_Name", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Answers the web game's request with the Season 9 realm's client settings; nothing outside an acti....
+        /// </summary>
+        public static string HnmoSeasonNineClientRequestHandlerPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoSeasonNineClientRequestHandlerPlugIn_Description", resourceCulture);
+            }
+        }
     }
 }

@@ -2846,4 +2846,16 @@
   <data name="HnmoBanNoticeViewPlugIn_Description" xml:space="preserve">
     <value>Gửi lý do khóa tài khoản, nhân vật hoặc cấm chat cùng thời hạn theo giờ Sydney tới client.</value>
   </data>
+  <data name="HnmoSeasonNineClientViewPlugIn_Name" xml:space="preserve">
+    <value>HNMO: gửi cài đặt Season 9 cho client</value>
+  </data>
+  <data name="HnmoSeasonNineClientViewPlugIn_Description" xml:space="preserve">
+    <value>Gửi cài đặt client của realm Season 9 (điểm đánh dấu minimap Season 9) cho web game, khi web game hỏi.</value>
+  </data>
+  <data name="HnmoSeasonNineClientRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>HNMO: xử lý yêu cầu cài đặt Season 9</value>
+  </data>
+  <data name="HnmoSeasonNineClientRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Trả lời yêu cầu của web game bằng cài đặt client của realm Season 9; ngoài realm Season 9 đang bật thì không gửi gì.</value>
+  </data>
 </root>

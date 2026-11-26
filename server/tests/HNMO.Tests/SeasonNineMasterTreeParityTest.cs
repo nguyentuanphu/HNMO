@@ -35,9 +35,6 @@ public class SeasonNineMasterTreeParityTest
     // Skills the web tree draws which aren't master skills of the server yet (docs/audit/s9c-evidence-2026-11-27.md).
     private const int MissingSkillCount = 108;
 
-    // Equipped Weapon Mastery (571): the server allows 20 levels, the web tree 10. Left for the owner to decide.
-    private static readonly HashSet<short> KnownMaximumLevelDifferences = [571];
-
     private GameConfiguration _configuration = null!;
 
     /// <summary>Creates the Season 6 data once.</summary>
@@ -78,7 +75,7 @@ public class SeasonNineMasterTreeParityTest
                 continue;
             }
 
-            if (definition.MaximumLevel != node.GetProperty("maxLevel").GetInt32() && !KnownMaximumLevelDifferences.Contains(number))
+            if (definition.MaximumLevel != node.GetProperty("maxLevel").GetInt32())
             {
                 problems.Add($"{where}: maximum level {definition.MaximumLevel}, web {node.GetProperty("maxLevel").GetInt32()}");
             }
