@@ -16887,6 +16887,23 @@
     <Packet>
       <HeaderType>C2HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
+      <SubCode>59</SubCode>
+      <Name>HnmoSeasonNineClientState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent upon HnmoSeasonNineClientRequest, in a Season 9 realm.</SentWhen>
+      <CausedReaction>The web client applies the Season 9 client settings of the realm (e.g. the Season 9 minimap markers).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON payload: {"v":1,"minimap":bool}.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
       <SubCode>3F</SubCode>
       <Name>HnmoSeasonPlanState</Name>
       <Direction>ServerToClient</Direction>

@@ -5387,6 +5387,17 @@
     <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
+      <SubCode>58</SubCode>
+      <Name>HnmoSeasonNineClientRequest</Name>
+      <Length>4</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client after entering the world in a Season 9 realm.</SentWhen>
+      <CausedReaction>The server responds with HnmoSeasonNineClientState (F5 59).</CausedReaction>
+      <Fields />
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
       <SubCode>3E</SubCode>
       <Name>HnmoSeasonPlanRequest</Name>
       <Length>4</Length>

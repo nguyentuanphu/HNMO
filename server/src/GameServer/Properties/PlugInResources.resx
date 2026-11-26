@@ -2947,4 +2947,16 @@
   <data name="HnmoBanNoticeViewPlugIn_Description" xml:space="preserve">
     <value>Sends structured bilingual ban or mute reason and Sydney expiry time to the game client.</value>
   </data>
+  <data name="HnmoSeasonNineClientViewPlugIn_Name" xml:space="preserve">
+    <value>HNMO Season 9 client settings view</value>
+  </data>
+  <data name="HnmoSeasonNineClientViewPlugIn_Description" xml:space="preserve">
+    <value>Sends a Season 9 realm's client settings (the Season 9 minimap markers) to the web game, as the answer to its request.</value>
+  </data>
+  <data name="HnmoSeasonNineClientRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>HNMO Season 9 client settings request handler</value>
+  </data>
+  <data name="HnmoSeasonNineClientRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Answers the web game's request with the Season 9 realm's client settings; nothing outside an active Season 9 realm.</value>
+  </data>
 </root>

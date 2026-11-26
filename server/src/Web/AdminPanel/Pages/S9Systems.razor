@@ -133,10 +133,8 @@ else
                 <label class="form-label">@this.T("Shield-Burn SD % (621)", "Thiêu đốt SD % (621)", "Schildbrand SD % (621)", "护盾焚烧 SD % (621)")</label>
                 <input type="number" min="1" max="100" class="form-control form-control-sm" @bind="this._configuration.ShieldBurnSdPercent" />
             </div>
-            <div class="col-md-2">
-                <label class="form-label">@this.T("Protection Def % (618)", "Bảo hộ Def % (618)", "Schutz Def % (618)", "守护防御 % (618)")</label>
-                <input type="number" min="1" max="100" class="form-control form-control-sm" @bind="this._configuration.SpellOfProtectionDefensePct" />
-            </div>
+            @* "Protection Def % (618)" is hidden: Spell of Protection has no effect yet (its effect comes from the Season 9
+               desktop client's data, which isn't in the repository). The stored value is kept. *@
         </div>
     </div>
 }

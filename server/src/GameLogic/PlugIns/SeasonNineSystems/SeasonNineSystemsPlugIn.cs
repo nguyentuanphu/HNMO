@@ -52,6 +52,27 @@ public sealed class SeasonNineSystemsPlugIn :
     /// <returns><c>true</c> when they run.</returns>
     public bool IsActive() => this.Configuration is { Enabled: true } && this.IsSeasonNineRealm();
 
+    /// <summary>
+    /// Gets the realm's Season 9 client settings as plain-ASCII JSON, or <c>null</c> outside an active Season 9 realm (the
+    /// web client then keeps its defaults).
+    /// </summary>
+    /// <returns>The JSON, or <c>null</c>.</returns>
+    public string? ClientStateJson() =>
+        this.IsActive() && this.Configuration is { } cfg
+            ? System.Text.Json.JsonSerializer.Serialize(new { v = 1, minimap = cfg.SeasonNineMinimapEnabled })
+            : null;
+
+    /// <summary>Sends the realm's Season 9 client settings to the player (the answer to the web client's request).</summary>
+    /// <param name="player">The player.</param>
+    /// <returns>A task.</returns>
+    public async ValueTask SendClientStateAsync(Player player)
+    {
+        if (this.ClientStateJson() is { } json)
+        {
+            await player.InvokeViewPlugInAsync<Views.IHnmoSeasonNineClientViewPlugIn>(p => p.ShowSeasonNineClientStateAsync(json)).ConfigureAwait(false);
+        }
+    }
+
     /// <inheritdoc />
     public object CreateDefaultConfig() => new SeasonNineSystemsConfiguration();
 

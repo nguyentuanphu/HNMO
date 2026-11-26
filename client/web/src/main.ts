@@ -67,6 +67,7 @@ import { CommunityWindow } from './ui/communityWindow.js';
 import { TopRacesWindow } from './ui/topRacesWindow.js';
 import { GiftCodesWindow } from './ui/giftCodesWindow.js';
 import { CatchupBanner } from './ui/catchupBanner.js';
+import { handleSeasonNineClientState, requestSeasonNineClientState } from './game/seasonNineClient.js';
 import { SeasonPlanWindow } from './ui/seasonPlanWindow.js';
 import { LeftoversWindow } from './ui/leftoversWindow.js';
 import { MountChainWindow } from './ui/mountChainWindow.js';
@@ -2078,6 +2079,8 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   state.catchupCap = catchupCap;
   connection.onPacket((bytes) => { catchupCap.handle(bytes); });
   window.addEventListener('hnmo-catchup-open', () => { catchupCap.open(); });
+  connection.onPacket((bytes) => { handleSeasonNineClientState(bytes); });
+  requestSeasonNineClientState((name, fields) => connection.send('ClientToServer', name, fields));
   const seasonPlan = new SeasonPlanWindow((name, fields) => connection.send('ClientToServer', name, fields));
   state.seasonPlan = seasonPlan;
   connection.onPacket((bytes) => { seasonPlan.handle(bytes); });

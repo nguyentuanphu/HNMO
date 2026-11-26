@@ -6638,6 +6638,31 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoSeasonNineClientRequest" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client after entering the world in a Season 9 realm.
+    /// Causes reaction on server side: The server responds with HnmoSeasonNineClientState (F5 59).
+    /// </remarks>
+    public static async ValueTask SendHnmoSeasonNineClientRequestAsync(this IConnection? connection)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoSeasonNineClientRequestRef.Length;
+            var packet = new HnmoSeasonNineClientRequestRef(connection.Output.GetSpan(length)[..length]);
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="HnmoSeasonPlanRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

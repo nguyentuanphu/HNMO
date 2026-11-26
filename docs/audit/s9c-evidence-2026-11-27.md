@@ -52,7 +52,7 @@ Status:
 |---|---|---|
 | The web's S9 tree (480 rows) against the server's master skills | `SeasonNineMasterTreeParityTest` (new). Every row whose skill exists on the server matches: maximum level, master prerequisites, class, and the F3:52/53 index (`MasterSkillExtensions.cs:22/377`) | wired |
 | Rows the server can't learn | 108 skills the web tree draws are not server master skills in this base (passives of ranks 6-9 such as 314-324, and others; #411 adds some). The web merges them into the tree (`masterLevel.ts:99`), and a click on one is refused by the server | **missing** |
-| 571 maximum level | Server 20, web tree 10 | **owner decision** |
+| 571 maximum level | The desktop client's master tree (`Data/Local/MasterSkillTreeData.bmd`, read with `tools/local-checks/desktop-data/master_tree.py`) gives 10, like every other weapon mastery; server now 10 (initializer + `FinishRageFighterMasterTreePlugIn` version 2); the web tree had 10 | wired (fixed) |
 | Cap: experience | `PlayerExperience.cs:197`; tables from `GameContext.cs:144/727`. The runtime cap change now rebuilds the tables (`GameContext.RefreshExperienceTables`); before the fix, a character past 200 read outside the table | wired (fixed) |
 | Cap: plug-in off | The realm's own cap comes back; characters above it keep their level and gain no master experience | wired (fixed) |
 | Cap: importer | `LegacyServerImportEngine.cs:41` (400; Season 9: 330) | wired |
@@ -72,7 +72,9 @@ Status:
 | Step | Evidence | Status |
 |---|---|---|
 | Save → configuration → game | The page saves the plug-in configuration; the plug-in reads it on its next run (cap) or cast (621) | wired |
-| Settings that do nothing in play | `MuunEnabled`, `MuunDropRatePermille`, `MuunStrictConditions`, `MuunEvoPointMultiplier`, `PentagramEnabled`, `PentagramElementalDamageMultiplier`, `PentagramErrtelMixBonusPct`, `PentagramErrtelExtractBonusPct`, `SpellOfProtectionDefensePct`, `SeasonNineMinimapEnabled` | **toggles without effect** |
+| `SeasonNineMinimapEnabled` | The web game asks a Season 9 realm (`HnmoSeasonNineClientRequest`, F5 58) and gets `{v, minimap}` (`HnmoSeasonNineClientState`, F5 59); off hides the Season 9 minimap markers (`miniMapData.ts`). Nothing is sent outside an active Season 9 realm | wired |
+| `SpellOfProtectionDefensePct` | Skill 618 has no effect: hidden on the admin page (value kept) until the Season 9 desktop data gives the effect | hidden |
+| `MuunEnabled`, `MuunDropRatePermille`, `MuunStrictConditions`, `MuunEvoPointMultiplier`, `PentagramEnabled`, `PentagramElementalDamageMultiplier`, `PentagramErrtelMixBonusPct`, `PentagramErrtelExtractBonusPct` | Wait for the Muun and Pentagram systems (owner: build both, 27 Nov); left visible for that work | waiting |
 | Minimap | `miniMapData.ts` reads `Season9/minimap.json` in S9; the server's `SeasonNineMinimapEnabled` doesn't reach the browser; 31 maps and season switching in one tab were not run in a browser | engine/display; not run |
 
 ## Decisions for the owner
@@ -82,3 +84,16 @@ Status:
    this wanted? The desktop client has no such UI, and the web follows the desktop.
 4. Equipped Weapon Mastery (571): 20 or 10 levels.
 5. The ten admin settings without effect: hide them until wired, or keep them?
+
+## The desktop client and skills 618–621 (27 Nov)
+
+The owner chose: 618–621 are learned through the master tree, and 618–620 take their effects from the Season 9 desktop
+client. The desktop data in this repository (`client/src/bin/Data`) has nothing for them:
+- `Local/MasterSkillTreeData.bmd`: 293 rows, skills 300–608; no 618–621;
+- `Local/Skill.bmd` and `Local/Eng/skill_eng.bmd`: the records 618–621 are empty (no name, no values);
+- the client code has no case for them.
+
+So they are left as they are (621 casts; 618–620 do nothing and cost nothing), and nothing is invented. To finish them,
+run `tools/local-checks/desktop-data/master_tree.py <Season 9 desktop Data folder> 618 619 620 621` on the Season 9
+desktop pack (on the owner's computer): it prints their master tree rows (column, rank index, required points, maximum
+level, required skills) and names. The effects need the same pack's skill data and effect code.
