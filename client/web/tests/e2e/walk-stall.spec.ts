@@ -31,15 +31,23 @@ test('a walk catches up with the clock after the page stood still', async ({ pag
   await expect.poll(() => game(page, (g) => g.mapNumber), { timeout: 60_000 }).toBe(0);
   await walkAndWait(page, START);
 
-  await page.evaluate((target) => (window as unknown as Win).__game.online.walkTo(target), END);
-  await expect.poll(() => game(page, (g) => g.hero.cell.x), { timeout: 30_000 }).toBeGreaterThanOrEqual(START.x + 2);
-  const before = await game(page, (g) => g.hero.cell.x);
-  // The page stands still for 3 seconds: no frame is drawn.
-  await page.evaluate(() => { const until = performance.now() + 3000; while (performance.now() < until) { /* held */ } });
-  // One frame later the hero has walked the 3 seconds (9 cells at 3 a second; a run is faster), not half a second.
-  await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-  const after = await game(page, (g) => g.hero.cell.x);
+  // Start, hold and measure inside one page call: on a slow machine (frames of 150 ms) the round trips of a poll let the
+  // hero walk most of the field before the hold began, leaving fewer cells than the hold is worth.
+  const { before, after } = await page.evaluate(async ({ end, startX }) => {
+    const g = (window as unknown as Win).__game;
+    const frame = () => new Promise((resolve) => requestAnimationFrame(resolve));
+    g.online.walkTo(end);
+    while (g.hero.cell.x < startX + 2) await frame();
+    const beforeX = g.hero.cell.x;
+    // The page stands still for 3 seconds: no frame is drawn.
+    const until = performance.now() + 3000;
+    while (performance.now() < until) { /* held */ }
+    // One frame later the hero has walked the 3 seconds (9 cells at 3 a second; a run is faster), not half a second.
+    await frame(); await frame();
+    return { before: beforeX, after: g.hero.cell.x };
+  }, { end: END, startX: START.x });
   expect(after - before, `from ${before} to ${after}`).toBeGreaterThanOrEqual(6);
+
   await walkAndWait(page, END);
   await expectNoPageErrors(errors);
 });
