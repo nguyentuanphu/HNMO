@@ -45,6 +45,10 @@ decision. Add new decisions here as they are made; never turn an agent's habit i
 | 27 Nov | Merge the working branch into `main`, release 1.0.1 | Popup answer: "Chờ anh báo" |
 | 27 Nov | Hub PR #2 (test licence orders) | Popup answer: "Merge" |
 | 27 Nov | Real payments (Stripe, bank) | Popup answer: "Chuẩn bị mở" (prepare the list of what is needed; don't turn it on) |
+| 27 Nov | Merging PRs with red e2e shards into the working branch | Popup answer: "Được, nếu đỏ không liên quan" (server tests green, the PR's own specs green, the red specs red on the base too or green on a rerun; `main` still needs green) |
+| 27 Nov | Hardware GPU FPS for #381 | Popup answer: "Không cần" |
+| 27 Nov | Real launches on Mac and Linux | Popup answer: "Chỉ Mac" (the owner tries the Mac builds; Linux relies on CI) |
+| 27 Nov | Lost FIN on loopback (network filter) | Popup answer: "Rút ngắn thời gian chờ" (a shorter keep-alive / idle timeout, set in the admin panel) |
 
 Earlier decisions (Maya's body, Fenrir, `/move` in events, the skill sweep points, the socket weapon mix in
 Season 6 and 9, the MUVIETNAM2 purge after the merge into `main`) are summarized in
