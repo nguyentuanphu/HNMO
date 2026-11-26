@@ -2207,7 +2207,11 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   state.vaultPages = vaultPages;
   connection.onPacket((bytes) => { vaultPages.handle(bytes); });
   itemWindows.onVaultShown = (shown) => { if (shown) vaultPages.show(); else { vaultPages.hide(); itemStacks.hidePanel(); } };
-  itemWindows.onPlaced = () => vaultPages.place();
+  const prevVaultPlaced = itemWindows.onPlaced;
+  itemWindows.onPlaced = () => {
+    prevVaultPlaced();
+    vaultPages.place();
+  };
   // HNMO's Escrow Contracts (F9, /contract, CommandWindow Contract -> right-click player).
   const escrow = new EscrowWindow({
     send: (name, fields) => connection.send('ClientToServer', name, fields),
