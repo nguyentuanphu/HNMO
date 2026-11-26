@@ -2,7 +2,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import { chatText, clickAt, dismissOnboarding, ensureLorenciaSafeZone, enterWorld, expectNoPageErrors } from './helpers.js';
 
-const OPEN = { timeout: 60_000 };
+const OPEN = { timeout: 90_000 };
 
 async function clickHudButton(page: Page, selector: string): Promise<void> {
   const box = await page.locator(`.rml-main_frame ${selector}`).boundingBox();

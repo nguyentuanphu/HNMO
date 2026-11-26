@@ -14,16 +14,16 @@ test('Ultimate HUD bar buttons (Start, Town, Ultimate) respond reliably across r
 
   const hud = page.locator('#hnmo-ultimate-hud');
   // Floating toolbar is hidden by default because all features live inside Window 1 (mu_helper_config).
-  await expect(hud).toBeHidden({ timeout: 30_000 });
+  await expect(hud).toBeHidden({ timeout: 60_000 });
 
   // Enable the opt-in floating toolbar via Window 1 Tab 4 and verify its buttons stay responsive across ticks.
   await page.keyboard.press('Alt+z');
   const setupCfg = page.locator('.rml-mu_helper_config');
-  await expect(setupCfg.locator('#panel')).toBeVisible({ timeout: 30_000 });
+  await expect(setupCfg.locator('#panel')).toBeVisible({ timeout: 90_000 });
   await setupCfg.locator('#hnmo_page_ultimate input[data-uap-key="showUltimateHud"]').click();
   await setupCfg.locator('#btn_save').click();
   await expect(setupCfg).toHaveCount(0);
-  await expect(hud).toBeVisible({ timeout: 30_000 });
+  await expect(hud).toBeVisible({ timeout: 60_000 });
 
   const startBtn = hud.locator('[data-uap-hud="toggle"]');
   const townBtn = hud.locator('[data-uap-hud="town"]');

@@ -35,6 +35,7 @@ decision. Add new decisions here as they are made; never turn an agent's habit i
 | 26 Nov | Q13 Season 9 data set | "Làm tất cả cùng lúc" (items, events, combat/progression systems) |
 | 26 Nov | Mac app: Apple signing and notarization | The owner says he already told main that the Mac app may run without notarization ("anh đã báo là chạy ko công chứng app mac dc"; not found in this file before, recorded now): ship it unsigned, Gatekeeper asks once; no Apple Developer account needed for now |
 | 26 Nov | #381 Arena Home | Fix the PR text (Home is only the standing and respawn rectangle, walkable, not a safe zone); no new protection rule ("Sửa mô tả PR cho đúng") |
+| 26 Nov | Autoplay tiers & floating HUD bar (#367) | Keep Extras town automation at VIP Lv 1+ (`VipOnly`), keep the 3-tier Free / VIP Lv 1+ / Higher VIP Lv 2+ split (Sparkle, Stats, Auto-Pick Free; 6 Ultimate groups + Presets at Higher VIP Lv 2+), and keep the floating Ultimate HUD bar hidden by default (`showUltimateHud: false`, opt-in in Tab 4) |
 
 Earlier decisions (Maya's body, Fenrir, `/move` in events, the skill sweep points, the socket weapon mix in
 Season 6 and 9, the MUVIETNAM2 purge after the merge into `main`) are summarized in
