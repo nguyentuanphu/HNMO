@@ -38,3 +38,29 @@ Your tasks, in this order (push what you have before usage runs out):
 6. `walk-resume.spec.ts:26` (flaky): run it 10 times on the PC and give the pass count; do not change code.
 
 Report to the owner in Vietnamese: done / not run / next, Sydney times; list what only the owner can do.
+
+---
+
+# Lượt 3 (26 Nov, 17:45 Sydney): việc cần dữ liệu trong thư mục suites trên máy anh
+
+You are local Claude for HNMO. Same rules as round 2 (draft PRs into `claude/hnmo-main-handover-54co2m`, one per area,
+tests of what you touch, never name the suites or the original game in anything pushed: say "the Season 6 / Season 9
+server suites"). The owner answered the audit questions on 26 Nov (`docs/owner-decisions.md`). Main cannot do these in
+the cloud because the audit only keeps counts, not the data. Read the data from the suites on this PC and implement:
+
+1. Q11 Chaos Card mixes at the Chaos Card Master (monster 375): the 20 recipes of Season 6 (14 in Season 9). Add them to
+   `ChaosMixes.cs` (new databases) and an update plug-in (existing saves), with tests of each recipe's inputs, rate and
+   result. Items 14:54, 14:92, 14:93, 14:95 are the cards. Keep the owner's Chaos mix rates (+12 = 55 %, +14 = 50 %).
+2. Q1 master skill tree: add the missing Season 6 passives (nodes 314-324 for every class that has them, per
+   `docs/audit/data/diff-master-skills.txt`: Cast Invincibility, Armor Set Bonus Increase, Vengeance, the four stat
+   increases, the wing power-ups) with rank, maximum, parents and per-level values from the suite's skill list and
+   master skill value script; effect in `SkillsInitializer.cs`, an update plug-in for existing saves, the nodes in the
+   web and desktop tree data; tests. Do not add the 330-level Season 9 tree.
+3. Q3 episode quests: import the 209 missing Ep1/Ep2 steps and sync the 146 differing Ep19 rewards
+   (`docs/audit/data/diff-quests.txt` lists them) from the suite's quest scripts, with dialogs in EN and VI; update
+   plug-in for existing saves; tests. Keep Class quest 4 and 5 as they are (owner: keep HNMO's rule).
+4. Q6 events, one draft PR per kind, in this order: BonusEvent (scheduled x1.5 EXP hours), the two exchanges (Delgado
+   Lucky Coin, Cherry Blossom), XMasAttack + Santa, LorenDeep + RingAttack, LastManStanding, MiningSystem, MuRummy.
+   Every amount, chance and schedule editable in the admin panel (texts in 4 languages); use the existing plug-in
+   patterns (see `docs/handover-2026-11-21.md`); tests.
+Stop when usage runs low and push what you have. Report in Vietnamese: done / not run / next, Sydney times.
