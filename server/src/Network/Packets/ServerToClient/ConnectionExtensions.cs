@@ -10896,6 +10896,34 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoMuunState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON payload: whether Muuns are on, the active Muun and its bonus or unmet condition, the Muuns in the bag, the energy, the costs and an optional event text.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent after HnmoMuunCommand, and when the active Muun's bonus changes (map, level, hour, weekday) for a client which asked for the state once.
+    /// Causes reaction on client side: Updates the web client's Season 9 Muun window.
+    /// </remarks>
+    public static async ValueTask SendHnmoMuunStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoMuunStateRef.GetRequiredSize(json);
+            var packet = new HnmoMuunStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="HnmoCatchupCapState" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

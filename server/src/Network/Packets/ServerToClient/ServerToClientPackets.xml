@@ -16823,6 +16823,23 @@
     <Packet>
       <HeaderType>C2HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
+      <SubCode>2C</SubCode>
+      <Name>HnmoMuunState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent after HnmoMuunCommand, and when the active Muun's bonus changes (map, level, hour, weekday) for a client which asked for the state once.</SentWhen>
+      <CausedReaction>Updates the web client's Season 9 Muun window.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON payload: whether Muuns are on, the active Muun and its bonus or unmet condition, the Muuns in the bag, the energy, the costs and an optional event text.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
       <SubCode>3D</SubCode>
       <Name>HnmoCatchupCapState</Name>
       <Direction>ServerToClient</Direction>

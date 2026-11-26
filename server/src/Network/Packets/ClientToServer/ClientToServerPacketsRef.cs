@@ -20617,6 +20617,101 @@ public readonly ref struct HnmoJewelBankCommandRef
 
 
 /// <summary>
+/// Is sent by the client when: Sent by the web client to open the Season 9 Muun window, make a bag Muun the active one, put it away, evolve it, convert a Muun into energy or level up the active Muun.
+/// Causes reaction on server side: The server performs the action and responds with HnmoMuunState (F5 2C).
+/// </summary>
+public readonly ref struct HnmoMuunCommandRef
+{
+    private readonly Span<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoMuunCommandRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoMuunCommandRef(Span<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoMuunCommandRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoMuunCommandRef(Span<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (byte)Math.Min(data.Length, Length);
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC1;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x2B;
+
+    /// <summary>
+    /// Gets the initial length of this data packet. When the size is dynamic, this value may be bigger than actually needed.
+    /// </summary>
+    public static int Length => 6;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C1HeaderWithSubCodeRef Header => new (this._data);
+
+    /// <summary>
+    /// Gets or sets 1 = Request state, 2 = Make the Muun in the bag slot active, 3 = Put the active Muun away, 4 = Evolve the active Muun, 5 = Convert the Muun in the bag slot into energy, 6 = Level up the active Muun.
+    /// </summary>
+    public byte Action
+    {
+        get => this._data[4];
+        set => this._data[4] = value;
+    }
+
+    /// <summary>
+    /// Gets or sets inventory slot of the Muun for actions 2 and 5.
+    /// </summary>
+    public byte Slot
+    {
+        get => this._data[5];
+        set => this._data[5] = value;
+    }
+
+    /// <summary>
+    /// Performs an implicit conversion from a Span of bytes to a <see cref="HnmoMuunCommand"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoMuunCommandRef(Span<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoMuunCommand"/> to a Span of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Span<byte>(HnmoMuunCommandRef packet) => packet._data; 
+}
+
+
+/// <summary>
 /// Is sent by the client when: Sent by the web client to query today's Catch-up Level and Reset Cap state.
 /// Causes reaction on server side: The server responds with HnmoCatchupCapState (F5 3D).
 /// </summary>

@@ -378,6 +378,7 @@
   * [C2 F5 28 - HnmoGiftBoxState (by server)](C2-F5-28-HnmoGiftBoxState_by-server.md)
   * [C2 F5 29 - HnmoBanNotice (by server)](C2-F5-29-HnmoBanNotice_by-server.md)
   * [C2 F5 2A - HnmoNewsNotice (by server)](C2-F5-2A-HnmoNewsNotice_by-server.md)
+  * [C2 F5 2C - HnmoMuunState (by server)](C2-F5-2C-HnmoMuunState_by-server.md)
   * [C2 F5 31 - HnmoTopUpMilestonesState (by server)](C2-F5-31-HnmoTopUpMilestonesState_by-server.md)
   * [C2 F5 33 - HnmoTimetableState (by server)](C2-F5-33-HnmoTimetableState_by-server.md)
   * [C2 F5 35 - HnmoLuckyNumberState (by server)](C2-F5-35-HnmoLuckyNumberState_by-server.md)

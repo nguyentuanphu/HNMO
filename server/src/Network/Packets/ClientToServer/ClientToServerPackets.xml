@@ -5346,6 +5346,30 @@
     <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
+      <SubCode>2B</SubCode>
+      <Name>HnmoMuunCommand</Name>
+      <Length>6</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client to open the Season 9 Muun window, make a bag Muun the active one, put it away, evolve it, convert a Muun into energy or level up the active Muun.</SentWhen>
+      <CausedReaction>The server performs the action and responds with HnmoMuunState (F5 2C).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Byte</Type>
+          <Name>Action</Name>
+          <Description>1 = Request state, 2 = Make the Muun in the bag slot active, 3 = Put the active Muun away, 4 = Evolve the active Muun, 5 = Convert the Muun in the bag slot into energy, 6 = Level up the active Muun.</Description>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>Byte</Type>
+          <Name>Slot</Name>
+          <Description>Inventory slot of the Muun for actions 2 and 5.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
       <SubCode>3C</SubCode>
       <Name>HnmoCatchupCapRequest</Name>
       <Length>4</Length>

@@ -6581,6 +6581,36 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoMuunCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">1 = Request state, 2 = Make the Muun in the bag slot active, 3 = Put the active Muun away, 4 = Evolve the active Muun, 5 = Convert the Muun in the bag slot into energy, 6 = Level up the active Muun.</param>
+    /// <param name="slot">Inventory slot of the Muun for actions 2 and 5.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to open the Season 9 Muun window, make a bag Muun the active one, put it away, evolve it, convert a Muun into energy or level up the active Muun.
+    /// Causes reaction on server side: The server performs the action and responds with HnmoMuunState (F5 2C).
+    /// </remarks>
+    public static async ValueTask SendHnmoMuunCommandAsync(this IConnection? connection, byte @action, byte @slot)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoMuunCommandRef.Length;
+            var packet = new HnmoMuunCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Slot = @slot;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="HnmoCatchupCapRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>
