@@ -265,6 +265,7 @@ const copy = {
     marriageDays: "Days",
     marriageNone: "No married couples yet.",
     rankingsNav: "Rankings",
+    itemHistoryNav: "Item history",
     rankingsTitle: "The realm's best.",
     topCharacters: "Top characters",
     eventRankings: "Event rankings",
@@ -733,6 +734,7 @@ const copy = {
     marriageDays: "Số ngày",
     marriageNone: "Chưa có cặp đôi nào kết hôn.",
     rankingsNav: "Xếp hạng",
+    itemHistoryNav: "Lịch sử vật phẩm",
     rankingsTitle: "Những người mạnh nhất.",
     topCharacters: "Nhân vật hàng đầu",
     eventRankings: "Xếp hạng sự kiện",
@@ -1292,7 +1294,24 @@ function render(): void {
   element("updated").textContent =
     `${t("updated")}: ${new Date(snapshot!.updatedAt).toLocaleString(language, { timeZone: "Australia/Sydney" })} · Sydney`;
 }
+async function refreshItemHistoryLink(): Promise<void> {
+  const link = document.getElementById("home-item-history");
+  if (!link) return;
+
+  try {
+    const response = await fetch("/website/tracker/status", {
+      cache: "no-store",
+      signal: AbortSignal.timeout(8000),
+    });
+    const status = response.ok ? await response.json() as { enabled?: boolean } | null : null;
+    link.hidden = status?.enabled !== true;
+  } catch {
+    link.hidden = true;
+  }
+}
+
 async function refresh(): Promise<void> {
+  const itemHistoryStatus = refreshItemHistoryLink();
   (element("refresh") as HTMLButtonElement).disabled = true;
   element("connection").textContent = t("loading");
   try {
@@ -1318,6 +1337,7 @@ async function refresh(): Promise<void> {
     snapshot = null;
   } // Clear old numbers rather than present them as live.
   render();
+  await itemHistoryStatus;
   (element("refresh") as HTMLButtonElement).disabled = false;
 }
 for (const lang of ["en", "vi"] as const)
