@@ -12,7 +12,7 @@ namespace HNMO.Persistence.EntityFramework.CompiledModels.ForTradeContext
     public partial class TradeContextModel
     {
         private TradeContextModel()
-            : base(skipDetectChanges: false, modelId: new Guid("4742f7e2-acdd-4a10-9dbb-77ecd59c739f"), entityTypeCount: 48)
+            : base(skipDetectChanges: false, modelId: new Guid("6ed176cb-3edb-4a18-a089-083a9e218fbd"), entityTypeCount: 50)
         {
         }
 
@@ -23,6 +23,7 @@ namespace HNMO.Persistence.EntityFramework.CompiledModels.ForTradeContext
             var accountCharacterClass = AccountCharacterClassEntityType.Create(this);
             var accountExternalLink = AccountExternalLinkEntityType.Create(this);
             var appearanceData = AppearanceDataEntityType.Create(this);
+            var assetOperation = AssetOperationEntityType.Create(this);
             var attributeRelationship = AttributeRelationshipEntityType.Create(this);
             var cashShopCoinGrant = CashShopCoinGrantEntityType.Create(this);
             var cashShopStorageItem = CashShopStorageItemEntityType.Create(this);
@@ -54,6 +55,7 @@ namespace HNMO.Persistence.EntityFramework.CompiledModels.ForTradeContext
             var itemDropItemGroupItemDefinition = ItemDropItemGroupItemDefinitionEntityType.Create(this);
             var itemItemOfItemSet = ItemItemOfItemSetEntityType.Create(this);
             var itemOptionLink = ItemOptionLinkEntityType.Create(this);
+            var jewelBankBalance = JewelBankBalanceEntityType.Create(this);
             var letterBody = LetterBodyEntityType.Create(this);
             var letterHeader = LetterHeaderEntityType.Create(this);
             var masterSkillDefinitionSkill = MasterSkillDefinitionSkillEntityType.Create(this);
@@ -70,6 +72,7 @@ namespace HNMO.Persistence.EntityFramework.CompiledModels.ForTradeContext
             AccountAttributeGrantEntityType.CreateForeignKey1(accountAttributeGrant, account);
             AccountCharacterClassEntityType.CreateForeignKey1(accountCharacterClass, account);
             AccountExternalLinkEntityType.CreateForeignKey1(accountExternalLink, account);
+            AssetOperationEntityType.CreateForeignKey1(assetOperation, account);
             AttributeRelationshipEntityType.CreateForeignKey1(attributeRelationship, powerUpDefinitionValue);
             CashShopCoinGrantEntityType.CreateForeignKey1(cashShopCoinGrant, account);
             CashShopStorageItemEntityType.CreateForeignKey1(cashShopStorageItem, account);
@@ -86,6 +89,7 @@ namespace HNMO.Persistence.EntityFramework.CompiledModels.ForTradeContext
             ItemAppearanceItemOptionTypeEntityType.CreateForeignKey1(itemAppearanceItemOptionType, itemAppearance);
             ItemItemOfItemSetEntityType.CreateForeignKey1(itemItemOfItemSet, item);
             ItemOptionLinkEntityType.CreateForeignKey1(itemOptionLink, item);
+            JewelBankBalanceEntityType.CreateForeignKey1(jewelBankBalance, account);
             LetterBodyEntityType.CreateForeignKey1(letterBody, letterHeader);
             LetterBodyEntityType.CreateForeignKey2(letterBody, appearanceData);
             LetterHeaderEntityType.CreateForeignKey1(letterHeader, character);
@@ -101,6 +105,7 @@ namespace HNMO.Persistence.EntityFramework.CompiledModels.ForTradeContext
             AccountCharacterClassEntityType.CreateAnnotations(accountCharacterClass);
             AccountExternalLinkEntityType.CreateAnnotations(accountExternalLink);
             AppearanceDataEntityType.CreateAnnotations(appearanceData);
+            AssetOperationEntityType.CreateAnnotations(assetOperation);
             AttributeRelationshipEntityType.CreateAnnotations(attributeRelationship);
             CashShopCoinGrantEntityType.CreateAnnotations(cashShopCoinGrant);
             CashShopStorageItemEntityType.CreateAnnotations(cashShopStorageItem);
@@ -132,6 +137,7 @@ namespace HNMO.Persistence.EntityFramework.CompiledModels.ForTradeContext
             ItemDropItemGroupItemDefinitionEntityType.CreateAnnotations(itemDropItemGroupItemDefinition);
             ItemItemOfItemSetEntityType.CreateAnnotations(itemItemOfItemSet);
             ItemOptionLinkEntityType.CreateAnnotations(itemOptionLink);
+            JewelBankBalanceEntityType.CreateAnnotations(jewelBankBalance);
             LetterBodyEntityType.CreateAnnotations(letterBody);
             LetterHeaderEntityType.CreateAnnotations(letterHeader);
             MasterSkillDefinitionSkillEntityType.CreateAnnotations(masterSkillDefinitionSkill);

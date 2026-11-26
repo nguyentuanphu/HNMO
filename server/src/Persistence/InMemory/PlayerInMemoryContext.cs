@@ -233,6 +233,109 @@ public class PlayerInMemoryContext : InMemoryContext, IPlayerContext
     }
 
     /// <inheritdoc />
+    public async ValueTask<IReadOnlyDictionary<string, int>> GetJewelBankBalancesAsync(Guid accountId, CancellationToken cancellationToken = default)
+    {
+        var balances = await this.Provider.GetRepository<JewelBankBalance>().GetAllAsync(cancellationToken).ConfigureAwait(false);
+        return balances.Where(balance => balance.AccountId == accountId && balance.Count > 0)
+            .ToDictionary(balance => balance.JewelKey, balance => balance.Count, StringComparer.OrdinalIgnoreCase);
+    }
+
+    /// <inheritdoc />
+    public async ValueTask<DataModel.Entities.AssetOperation?> GetAssetOperationAsync(Guid operationId, CancellationToken cancellationToken = default)
+    {
+        var operations = await this.Provider.GetRepository<AssetOperation>().GetAllAsync(cancellationToken).ConfigureAwait(false);
+        return operations.FirstOrDefault(operation => operation.Id == operationId);
+    }
+
+    /// <inheritdoc />
+    public async ValueTask<IReadOnlyList<DataModel.Entities.AssetOperation>> GetPendingAssetOperationsAsync(Guid accountId, CancellationToken cancellationToken = default)
+    {
+        var operations = await this.Provider.GetRepository<AssetOperation>().GetAllAsync(cancellationToken).ConfigureAwait(false);
+        return operations.Where(operation => operation.AccountId == accountId && operation.PendingCount > 0)
+            .OrderBy(operation => operation.CreatedAt)
+            .ToList();
+    }
+
+    /// <inheritdoc />
+    public async ValueTask<AssetCommitStatus> SaveChangesWithAssetOperationAsync(AssetOperationRequest request, CancellationToken cancellationToken = default)
+    {
+        // Everything is checked first and written after the save, under the lock all contexts of this database share:
+        // the in-memory stand-in of the one transaction of the database.
+        var linkLock = LinkLocks.GetValue(this.Provider, static _ => new AsyncLock());
+        using var l = await linkLock.LockAsync(cancellationToken).ConfigureAwait(false);
+        var operations = await this.Provider.GetRepository<AssetOperation>().GetAllAsync(cancellationToken).ConfigureAwait(false);
+        if (operations.FirstOrDefault(operation => operation.Id == request.OperationId) is { } earlier)
+        {
+            return earlier.PayloadHash == request.PayloadHash && earlier.AccountId == request.AccountId
+                ? AssetCommitStatus.AlreadyCommitted
+                : AssetCommitStatus.Conflict;
+        }
+
+        var balances = (await this.Provider.GetRepository<JewelBankBalance>().GetAllAsync(cancellationToken).ConfigureAwait(false))
+            .Where(balance => balance.AccountId == request.AccountId)
+            .ToList();
+        foreach (var delta in request.JewelDeltas)
+        {
+            var current = balances.FirstOrDefault(balance => balance.JewelKey == delta.JewelKey)?.Count ?? 0;
+            if (current + delta.Delta < 0 || current + delta.Delta > delta.Capacity)
+            {
+                return AssetCommitStatus.Refused;
+            }
+        }
+
+        var delivered = request.DeliveredOperationId is { } deliveredId && request.DeliveredCount > 0
+            ? operations.FirstOrDefault(operation => operation.Id == deliveredId && operation.AccountId == request.AccountId)
+            : null;
+        if (request.DeliveredCount > 0 && (delivered is null || delivered.PendingCount < request.DeliveredCount))
+        {
+            return AssetCommitStatus.Refused;
+        }
+
+        if (!await this.SaveChangesAsync(cancellationToken).ConfigureAwait(false))
+        {
+            return AssetCommitStatus.Refused;
+        }
+
+        foreach (var delta in request.JewelDeltas)
+        {
+            if (balances.FirstOrDefault(balance => balance.JewelKey == delta.JewelKey) is { } balance)
+            {
+                balance.Count += delta.Delta;
+            }
+            else
+            {
+                var created = this.CreateNew<DataModel.Entities.JewelBankBalance>();
+                created.AccountId = request.AccountId;
+                created.JewelKey = delta.JewelKey;
+                created.Count = delta.Delta;
+            }
+        }
+
+        if (delivered is not null)
+        {
+            delivered.PendingCount -= request.DeliveredCount;
+        }
+
+        var receipt = this.CreateNew<DataModel.Entities.AssetOperation>();
+        receipt.Id = request.OperationId;
+        receipt.AccountId = request.AccountId;
+        receipt.Kind = request.Kind;
+        receipt.PayloadHash = request.PayloadHash;
+        receipt.Source = request.Source;
+        receipt.Detail = request.Detail;
+        receipt.PendingKey = request.PendingKey;
+        receipt.PendingCount = Math.Max(0, request.PendingCount);
+        receipt.CreatedAt = DateTime.UtcNow;
+        return AssetCommitStatus.Committed;
+    }
+
+    /// <inheritdoc />
+    public void AcceptChangesOfCommittedOperation()
+    {
+        // The in-memory objects are always saved.
+    }
+
+    /// <inheritdoc />
     public async ValueTask<Guid?> GetAccountIdByLoginNameAsync(string loginName, CancellationToken cancellationToken = default)
     {
         var accounts = await this.Provider.GetRepository<Account>()
