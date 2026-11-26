@@ -855,7 +855,7 @@ public static class AttackableExtensions
         skillMaximumDamage = 0;
         var attackerStats = attacker.Attributes;
         damageType = DamageType.Physical;
-        isSummonerSkill = attackerStats[Stats.MinimumCurseBaseDmg] > 0 && damageType != DamageType.Fenrir;
+        isSummonerSkill = false;
 
         if (skillEntry?.Skill is not { } skill)
         {
@@ -863,6 +863,7 @@ public static class AttackableExtensions
         }
 
         damageType = skill.DamageType;
+        isSummonerSkill = attackerStats[Stats.MinimumCurseBaseDmg] > 0 && damageType != DamageType.Fenrir;
         var skillDamage = skillEntry.GetDamage(attacker);
         skillMinimumDamage += skillDamage;
         skillMaximumDamage += skillDamage + (skillDamage / 2);

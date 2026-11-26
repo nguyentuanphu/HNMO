@@ -110,6 +110,17 @@ public sealed class DroppedItem : AsyncDisposable, ILocateable
             return (false, stackTarget);
         }
 
+        if (this.Item.Definition!.IsBoundToCharacter && !this.IsPlayerAnOwner(player))
+        {
+            return (false, stackTarget);
+        }
+
+        if (!this.IsPlayerAnOwner(player)
+            && DateTime.UtcNow < this._dropTimestamp.Add(TimeUntilDropIsFree))
+        {
+            return (false, stackTarget);
+        }
+
         if (this.Item.IsStackable())
         {
             stackTarget = player.Inventory?.Items.FirstOrDefault(i => i.CanCompletelyStackOn(this.Item));
@@ -122,18 +133,12 @@ public sealed class DroppedItem : AsyncDisposable, ILocateable
                 return (true, stackTarget);
             }
 
-            return (false, stackTarget);
-        }
+            if (!this._availableToPick)
+            {
+                return (false, stackTarget);
+            }
 
-        if (this.Item.Definition!.IsBoundToCharacter && !this.IsPlayerAnOwner(player))
-        {
-            return (false, stackTarget);
-        }
-
-        if (!this.IsPlayerAnOwner(player)
-            && DateTime.UtcNow < this._dropTimestamp.Add(TimeUntilDropIsFree))
-        {
-            return (false, stackTarget);
+            stackTarget = null;
         }
 
         if (this.Item.IsStackable())
@@ -282,18 +287,31 @@ public sealed class DroppedItem : AsyncDisposable, ILocateable
                 return;
             }
 
-            var partialAmount = (byte)Math.Min(partialTarget.MaximumStackSize() - partialTarget.Durability, this.Item.Durability);
-            if (partialAmount <= 0)
+            byte partialAmount;
+            PlugIns.ActivityLog.ActivityLogPlugIn? activity;
+            PlugIns.ActivityLog.ActivityItemState? before;
+            lock (partialTarget)
             {
-                return;
+                var remainingCapacity = partialTarget.MaximumStackSize() - partialTarget.Durability;
+                if (remainingCapacity <= 0 || !this.Item.CanPartiallyStackOn(partialTarget))
+                {
+                    return;
+                }
+
+                partialAmount = (byte)Math.Min(remainingCapacity, this.Item.Durability);
+                if (partialAmount <= 0)
+                {
+                    return;
+                }
+
+                activity = PlugIns.ActivityLog.ActivityLogPlugIn.Get(player.GameContext);
+                before = activity?.ShouldRecordFloorItem(this.Item) == true
+                    ? PlugIns.ActivityLog.ActivityItemState.Capture(this.Item)
+                    : null;
+                partialTarget.Durability += partialAmount;
+                this.Item.Durability -= partialAmount;
             }
 
-            var activity = PlugIns.ActivityLog.ActivityLogPlugIn.Get(player.GameContext);
-            var before = activity?.ShouldRecordFloorItem(this.Item) == true
-                ? PlugIns.ActivityLog.ActivityItemState.Capture(this.Item)
-                : null;
-            partialTarget.Durability += partialAmount;
-            this.Item.Durability -= partialAmount;
             if (before is not null)
             {
                 activity?.RecordPartialPickup(player, before, partialTarget, partialAmount);
@@ -309,14 +327,23 @@ public sealed class DroppedItem : AsyncDisposable, ILocateable
         player.Logger.LogDebug("Player {0} tries to pick up {1}, trying to add to an existing item at slot {2}", player, this, stackTarget.ItemSlot);
         using (await this._pickupLock.LockAsync().ConfigureAwait(false))
         {
-            if (!this._availableToPick)
+            lock (stackTarget)
             {
-                player.Logger.LogDebug("Picked up by another player in the mean time, Player {0}, Item {1}", player, this);
-                return false;
-            }
+                if (!this._availableToPick)
+                {
+                    player.Logger.LogDebug("Picked up by another player in the mean time, Player {0}, Item {1}", player, this);
+                    return false;
+                }
 
-            stackTarget.Durability += this.Item.Durability;
-            this._availableToPick = false;
+                if (!stackTarget.CanCompletelyStackOn(this.Item))
+                {
+                    player.Logger.LogDebug("Target stack at slot {0} no longer has capacity for {1}", stackTarget.ItemSlot, this);
+                    return false;
+                }
+
+                stackTarget.Durability += this.Item.Durability;
+                this._availableToPick = false;
+            }
         }
 
         player.Logger.LogInformation("Item '{0}' got picked up by player '{1}'. Durability of available stack {2} increased to {3}", this, player, stackTarget, stackTarget.Durability);
