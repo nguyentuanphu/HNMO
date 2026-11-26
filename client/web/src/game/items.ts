@@ -4,6 +4,7 @@
 
 import { loadItemLooks } from './itemLooks.js';
 import { currentLanguage } from '../i18n.js';
+import { currentSeason, onSeasonChange, type SeasonKey } from '../dataRoot.js';
 
 const GROUP_FILES = ['Group00_Sword', 'Group01_Axe', 'Group02_Mace', 'Group03_Spear', 'Group04_Bow', 'Group05_Staff',
   'Group06_Shield', 'Group07_Helm', 'Group08_Armor', 'Group09_Pants', 'Group10_Gloves', 'Group11_Boots', 'Group12_Wing',
@@ -120,7 +121,7 @@ export interface ItemDefinition {
   [field: string]: unknown;
 }
 
-/** An item override served dynamically from the admin panel via /website/items. */
+/** An item override served dynamically from the admin panel via /website/items or seasonal override tables. */
 export interface WebsiteItemOverride {
   group: number;
   number: number;
@@ -130,8 +131,18 @@ export interface WebsiteItemOverride {
   level?: number;
   maximumItemLevel?: number;
   durability?: number;
+  magicDurability?: number;
+  damageMin?: number;
+  damageMax?: number;
+  attackSpeed?: number;
+  defense?: number;
+  skill?: number;
   buyPrice?: number;
+  tradable?: boolean;
+  sellable?: boolean;
+  storable?: boolean;
   requirements?: Partial<Record<string, number | null>>;
+  classRequirements?: Partial<Record<string, number>>;
   glowColor?: string;
   tooltip?: LocalizedText | null;
   modelSourceGroup?: number | null;
@@ -161,6 +172,8 @@ export interface ItemCatalog {
 export interface ItemChoice { group: number; number: number; name: string }
 
 let catalog: ItemCatalog | null = null;
+let loadedSeason: SeasonKey | null = null;
+onSeasonChange(() => { catalog = null; loadedSeason = null; });
 /** The part models (Data/Items/Models/PartModels.json): the +15 armour's decorations, by name. */
 let partModels = new Map<string, ItemModelSource>();
 
@@ -182,7 +195,8 @@ function splitPath(file: string): { dir: string; fileName: string } {
 }
 
 export async function loadItemCatalog(): Promise<ItemCatalog> {
-  if (catalog) return catalog;
+  const season = currentSeason();
+  if (catalog && loadedSeason === season) return catalog;
   const looks = loadItemLooks();
   const [shared, ...groups] = await Promise.all([
     fetchJson<SharedModelsFile>('/data/Items/Models/SharedModels.json'),
@@ -222,6 +236,16 @@ export async function loadItemCatalog(): Promise<ItemCatalog> {
   });
   await looks;
   catalog = { models, names, definitions };
+  loadedSeason = season;
+  if (season === 's9') {
+    const seasonResponse = await fetch('/data/Items/Season9Overrides.json').catch(() => null);
+    if (seasonResponse?.ok) {
+      const seasonPayload = await seasonResponse.json().catch(() => null) as { items?: WebsiteItemOverride[] } | null;
+      if (Array.isArray(seasonPayload?.items) && seasonPayload.items.length > 0) {
+        applyItemOverrides(catalog, seasonPayload.items);
+      }
+    }
+  }
   const overridesResponse = await fetch('/website/items').catch(() => null);
   if (overridesResponse?.ok) {
     const payload = await overridesResponse.json().catch(() => null) as { items?: WebsiteItemOverride[] } | null;
@@ -254,8 +278,18 @@ export function applyItemOverrides(targetCatalog: ItemCatalog, overrides: Websit
       level: entry.level ?? existing?.level ?? 0,
       maximumItemLevel: entry.maximumItemLevel ?? existing?.maximumItemLevel,
       durability: entry.durability ?? existing?.durability,
+      magicDurability: entry.magicDurability ?? existing?.magicDurability,
+      damageMin: entry.damageMin ?? existing?.damageMin,
+      damageMax: entry.damageMax ?? existing?.damageMax,
+      attackSpeed: entry.attackSpeed ?? existing?.attackSpeed,
+      defense: entry.defense ?? existing?.defense,
+      skill: entry.skill ?? existing?.skill,
       buyPrice: entry.buyPrice ?? existing?.buyPrice,
+      tradable: entry.tradable ?? existing?.tradable,
+      sellable: entry.sellable ?? existing?.sellable,
+      storable: entry.storable ?? existing?.storable,
       requirements: Object.keys(mergedRequirements).length > 0 ? mergedRequirements : undefined,
+      classRequirements: entry.classRequirements ? { ...(existing?.classRequirements ?? {}), ...entry.classRequirements } : existing?.classRequirements,
       tooltip: entry.tooltip ?? existing?.tooltip,
     };
     targetCatalog.definitions.set(key, merged);

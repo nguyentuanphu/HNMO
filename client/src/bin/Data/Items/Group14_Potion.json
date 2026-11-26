@@ -11,11 +11,15 @@
         "pl": "Jabłko",
         "pt": "Maçã"
       },
-      "tags": ["healingPotion"],
+      "tags": [
+        "healingPotion"
+      ],
       "description": [
         {
           "text": "@numberOfItems",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
       "width": 1,
@@ -34,11 +38,15 @@
         "pl": "Mała mikstura leczenia",
         "pt": "Pequena poção de cura"
       },
-      "tags": ["healingPotion"],
+      "tags": [
+        "healingPotion"
+      ],
       "description": [
         {
           "text": "@numberOfItems",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
       "width": 1,
@@ -57,11 +65,15 @@
         "pl": "Mikstura leczenia",
         "pt": "Poção de cura"
       },
-      "tags": ["healingPotion"],
+      "tags": [
+        "healingPotion"
+      ],
       "description": [
         {
           "text": "@numberOfItems",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
       "width": 1,
@@ -80,11 +92,15 @@
         "pl": "Duża mikstura leczenia",
         "pt": "Grande poção de cura"
       },
-      "tags": ["healingPotion"],
+      "tags": [
+        "healingPotion"
+      ],
       "description": [
         {
           "text": "@numberOfItems",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
       "width": 1,
@@ -103,11 +119,15 @@
         "pl": "Mała mikstura many",
         "pt": "Pequena poção de mana"
       },
-      "tags": ["manaPotion"],
+      "tags": [
+        "manaPotion"
+      ],
       "description": [
         {
           "text": "@numberOfItems",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
       "width": 1,
@@ -126,11 +146,15 @@
         "pl": "Mikstura many",
         "pt": "Poção de mana"
       },
-      "tags": ["manaPotion"],
+      "tags": [
+        "manaPotion"
+      ],
       "description": [
         {
           "text": "@numberOfItems",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
       "width": 1,
@@ -149,11 +173,15 @@
         "pl": "Duża mikstura many",
         "pt": "Grande poção de mana"
       },
-      "tags": ["manaPotion"],
+      "tags": [
+        "manaPotion"
+      ],
       "description": [
         {
           "text": "@numberOfItems",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
       "width": 1,
@@ -188,7 +216,10 @@
             "zh-TW": "傷害+20% 效果增加"
           },
           "color": "darkRed",
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -205,7 +236,10 @@
             "zh-TW": "持續時間 60 秒"
           },
           "color": "darkRed",
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -222,7 +256,10 @@
             "zh-TW": "僅適用於城堡大門和雕像"
           },
           "color": "darkRed",
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -239,7 +276,10 @@
             "zh-TW": "增加+8 AG恢復速度"
           },
           "color": "darkRed",
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         },
         {
           "text": {
@@ -256,7 +296,10 @@
             "zh-TW": "增加閃電和冰的抗性"
           },
           "color": "darkRed",
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         },
         {
           "text": {
@@ -273,7 +316,10 @@
             "zh-TW": "攻擊速度增加+20"
           },
           "color": "darkRed",
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         }
       ],
       "nameLines": [
@@ -291,7 +337,10 @@
             "uk": "Зілля благословення",
             "zh-TW": "祝福藥水"
           },
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -307,10 +356,17 @@
             "uk": "Зілля душі",
             "zh-TW": "靈魂藥水"
           },
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         }
       ],
-      "groundLabels": [{"style": "white"}],
+      "groundLabels": [
+        {
+          "style": "white"
+        }
+      ],
       "width": 1,
       "height": 1,
       "sellValue": 30,
@@ -328,7 +384,9 @@
       "description": [
         {
           "text": "@numberOfItems",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
       "width": 1,
@@ -351,14 +409,28 @@
           "text": {
             "en": "{name}"
           },
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": "@oliveOfLove",
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         }
       ],
-      "groundLabels": [{"style": "white", "levels": [1, 1]}],
+      "groundLabels": [
+        {
+          "style": "white",
+          "levels": [
+            1,
+            1
+          ]
+        }
+      ],
       "width": 1,
       "height": 2,
       "level": 15,
@@ -389,7 +461,10 @@
             "uk": "Деформація до відповідної області через 3 секунд",
             "zh-TW": "3秒後扭曲到對應區域"
           },
-          "levels": [1, 8]
+          "levels": [
+            1,
+            8
+          ]
         }
       ],
       "width": 1,
@@ -422,7 +497,10 @@
             "uk": "Коли ти впустиш його на землю,",
             "zh-TW": "當你把它丟到地上時，"
           },
-          "levels": [7, 7]
+          "levels": [
+            7,
+            7
+          ]
         },
         {
           "text": {
@@ -438,7 +516,10 @@
             "uk": "[Rena/Zen/Jewel/Item]",
             "zh-TW": "[蕾娜/禪/寶石/物品]"
           },
-          "levels": [7, 7]
+          "levels": [
+            7,
+            7
+          ]
         },
         {
           "text": {
@@ -454,7 +535,10 @@
             "uk": "ви отримаєте один із зазначених вище предметів.",
             "zh-TW": "您將獲得上述物品之一。"
           },
-          "levels": [7, 7]
+          "levels": [
+            7,
+            7
+          ]
         },
         {
           "text": {
@@ -470,7 +554,10 @@
             "uk": "Безкоштовний вхід в Каліму",
             "zh-TW": "免費進入卡利馬"
           },
-          "levels": [14, 14]
+          "levels": [
+            14,
+            14
+          ]
         },
         {
           "text": {
@@ -486,11 +573,17 @@
             "uk": "Підвищити витривалість",
             "zh-TW": "增加耐力"
           },
-          "levels": [14, 14]
+          "levels": [
+            14,
+            14
+          ]
         },
         {
           "text": "@throwForZenOrItems",
-          "when": ["level!=7", "level!=14"]
+          "when": [
+            "level!=7",
+            "level!=14"
+          ]
         },
         {
           "text": "@cannotBeSold",
@@ -499,7 +592,10 @@
         {
           "text": "@cannotStoreInVault",
           "color": "red",
-          "levels": [13, 13]
+          "levels": [
+            13,
+            13
+          ]
         }
       ],
       "nameLines": [
@@ -507,7 +603,10 @@
           "text": {
             "en": "{name}"
           },
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -523,7 +622,10 @@
             "uk": "Зірка священного народження",
             "zh-TW": "神聖誕生之星"
           },
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         },
         {
           "text": {
@@ -539,7 +641,10 @@
             "uk": "петарда",
             "zh-TW": "鞭炮"
           },
-          "levels": [2, 2]
+          "levels": [
+            2,
+            2
+          ]
         },
         {
           "text": {
@@ -555,11 +660,17 @@
             "uk": "Серце кохання",
             "zh-TW": "愛的心"
           },
-          "levels": [3, 3]
+          "levels": [
+            3,
+            3
+          ]
         },
         {
           "text": "@oliveOfLove",
-          "levels": [4, 4]
+          "levels": [
+            4,
+            4
+          ]
         },
         {
           "text": {
@@ -575,7 +686,10 @@
             "uk": "Срібна медаль",
             "zh-TW": "銀牌"
           },
-          "levels": [5, 5]
+          "levels": [
+            5,
+            5
+          ]
         },
         {
           "text": {
@@ -591,7 +705,10 @@
             "uk": "Золота медаль",
             "zh-TW": "金牌"
           },
-          "levels": [6, 6]
+          "levels": [
+            6,
+            6
+          ]
         },
         {
           "text": {
@@ -607,7 +724,10 @@
             "uk": "Скринька Неба",
             "zh-TW": "天堂之盒"
           },
-          "levels": [7, 7]
+          "levels": [
+            7,
+            7
+          ]
         },
         {
           "text": {
@@ -623,7 +743,10 @@
             "uk": "Коробка Кундуна +1",
             "zh-TW": "昆頓之盒 +1"
           },
-          "levels": [8, 8]
+          "levels": [
+            8,
+            8
+          ]
         },
         {
           "text": {
@@ -639,7 +762,10 @@
             "uk": "Коробка Кундуна +2",
             "zh-TW": "昆頓之盒 +2"
           },
-          "levels": [9, 9]
+          "levels": [
+            9,
+            9
+          ]
         },
         {
           "text": {
@@ -655,7 +781,10 @@
             "uk": "Коробка Кундуна +3",
             "zh-TW": "昆頓之盒 +3"
           },
-          "levels": [10, 10]
+          "levels": [
+            10,
+            10
+          ]
         },
         {
           "text": {
@@ -671,7 +800,10 @@
             "uk": "Коробка Кундуна +4",
             "zh-TW": "昆頓之盒 +4"
           },
-          "levels": [11, 11]
+          "levels": [
+            11,
+            11
+          ]
         },
         {
           "text": {
@@ -687,7 +819,10 @@
             "uk": "Коробка Кундуна +5",
             "zh-TW": "昆頓之盒 +5"
           },
-          "levels": [12, 12]
+          "levels": [
+            12,
+            12
+          ]
         },
         {
           "text": {
@@ -703,7 +838,10 @@
             "uk": "Серце Темного Лорда",
             "zh-TW": "黑暗領主之心"
           },
-          "levels": [13, 13]
+          "levels": [
+            13,
+            13
+          ]
         },
         {
           "text": {
@@ -719,7 +857,10 @@
             "uk": "Синій мішечок на щастя",
             "zh-TW": "藍色福袋"
           },
-          "levels": [14, 14]
+          "levels": [
+            14,
+            14
+          ]
         },
         {
           "text": {
@@ -735,10 +876,45 @@
             "uk": "Червоний щасливчик",
             "zh-TW": "紅色福袋"
           },
-          "levels": [15, 15]
+          "levels": [
+            15,
+            15
+          ]
         }
       ],
-      "groundLabels": [{"style": "white", "levels": [1, 1]}, {"style": "white", "levels": [3, 3]}, {"style": "white", "levels": [5, 6]}, {"style": "white", "levels": [8, 12]}, {"style": "eventItem"}],
+      "groundLabels": [
+        {
+          "style": "white",
+          "levels": [
+            1,
+            1
+          ]
+        },
+        {
+          "style": "white",
+          "levels": [
+            3,
+            3
+          ]
+        },
+        {
+          "style": "white",
+          "levels": [
+            5,
+            6
+          ]
+        },
+        {
+          "style": "white",
+          "levels": [
+            8,
+            12
+          ]
+        },
+        {
+          "style": "eventItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "sellable": false,
@@ -768,7 +944,10 @@
             "uk": "Ви можете зареєструватися, передавши його NPC",
             "zh-TW": "交給NPC即可註冊"
           },
-          "levels": [0, 1]
+          "levels": [
+            0,
+            1
+          ]
         }
       ],
       "nameLines": [
@@ -786,7 +965,10 @@
             "uk": "Дзен",
             "zh-TW": "禪"
           },
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -802,7 +984,10 @@
             "uk": "серце",
             "zh-TW": "心"
           },
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         },
         {
           "text": {
@@ -818,10 +1003,17 @@
             "uk": "Подарунковий сертифікат на подію Chaos",
             "zh-TW": "混沌活動禮券"
           },
-          "levels": [2, 2]
+          "levels": [
+            2,
+            2
+          ]
         }
       ],
-      "groundLabels": [{"style": "white"}],
+      "groundLabels": [
+        {
+          "style": "white"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -835,7 +1027,10 @@
         "pl": "Klejnot Błogosławieństwa",
         "pt": "Joia da bênção"
       },
-      "tags": ["jewel", "valuable"],
+      "tags": [
+        "jewel",
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -859,7 +1054,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "jewel"}],
+      "groundLabels": [
+        {
+          "style": "jewel"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 25,
@@ -875,7 +1074,10 @@
         "pl": "Klejnot Duszy",
         "pt": "Joia da alma"
       },
-      "tags": ["jewel", "valuable"],
+      "tags": [
+        "jewel",
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -899,7 +1101,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "jewel"}],
+      "groundLabels": [
+        {
+          "style": "jewel"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 30,
@@ -915,7 +1121,11 @@
         "pl": "Zen",
         "pt": "Zen"
       },
-      "groundLabels": [{"style": "zen"}],
+      "groundLabels": [
+        {
+          "style": "zen"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -929,7 +1139,10 @@
         "pl": "Klejnot Życia",
         "pt": "Joia da vida"
       },
-      "tags": ["jewel", "valuable"],
+      "tags": [
+        "jewel",
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -953,7 +1166,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "jewel"}],
+      "groundLabels": [
+        {
+          "style": "jewel"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 72,
@@ -978,7 +1195,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "devilSquareEntry"}],
+      "groundLabels": [
+        {
+          "style": "devilSquareEntry"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 1,
@@ -1003,7 +1224,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "devilSquareEntry"}],
+      "groundLabels": [
+        {
+          "style": "devilSquareEntry"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 1,
@@ -1031,7 +1256,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "devilSquareEntry"}],
+      "groundLabels": [
+        {
+          "style": "devilSquareEntry"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -1073,7 +1302,10 @@
             "uk": "Використовується в онлайн-події",
             "zh-TW": "用於線上活動"
           },
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         },
         {
           "text": {
@@ -1089,7 +1321,10 @@
             "uk": "Використовується в події My Friend.",
             "zh-TW": "在「我的朋友」活動中使用。"
           },
-          "levels": [2, 2]
+          "levels": [
+            2,
+            2
+          ]
         },
         {
           "text": {
@@ -1105,12 +1340,20 @@
             "uk": "Використання при реєстрації облоги",
             "zh-TW": "用於攻城登記"
           },
-          "levels": [3, 3]
+          "levels": [
+            3,
+            3
+          ]
         },
         {
           "text": "@numberOfItems",
-          "when": ["durability"],
-          "levels": [3, 3]
+          "when": [
+            "durability"
+          ],
+          "levels": [
+            3,
+            3
+          ]
         }
       ],
       "nameLines": [
@@ -1119,7 +1362,10 @@
             "en": "{name}"
           },
           "color": "yellow",
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1136,7 +1382,10 @@
             "zh-TW": "結石"
           },
           "color": "yellow",
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         },
         {
           "text": {
@@ -1153,7 +1402,10 @@
             "zh-TW": "友誼之石"
           },
           "color": "yellow",
-          "levels": [2, 2]
+          "levels": [
+            2,
+            2
+          ]
         },
         {
           "text": {
@@ -1170,13 +1422,24 @@
             "zh-TW": "主的標誌"
           },
           "color": "yellow",
-          "levels": [3, 3]
+          "levels": [
+            3,
+            3
+          ]
         },
         {
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "eventItem", "levels": [1, 3]}],
+      "groundLabels": [
+        {
+          "style": "eventItem",
+          "levels": [
+            1,
+            3
+          ]
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -1193,7 +1456,10 @@
         "pl": "Klejnot Stworzenia",
         "pt": "Joia da criação"
       },
-      "tags": ["jewel", "valuable"],
+      "tags": [
+        "jewel",
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -1217,7 +1483,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "jewel"}],
+      "groundLabels": [
+        {
+          "style": "jewel"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 78,
@@ -1232,7 +1502,9 @@
         "pl": "Zwój Cesarza",
         "pt": "Pergaminho do Imperador"
       },
-      "tags": ["secondClassQuestItem"],
+      "tags": [
+        "secondClassQuestItem"
+      ],
       "description": [
         {
           "text": "@questItem"
@@ -1252,7 +1524,10 @@
             "en": "{name}"
           },
           "color": "yellow",
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1269,13 +1544,24 @@
             "zh-TW": "榮譽戒指"
           },
           "color": "yellow",
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         },
         {
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "questItem", "levels": [1, 1]}],
+      "groundLabels": [
+        {
+          "style": "questItem",
+          "levels": [
+            1,
+            1
+          ]
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -1293,7 +1579,9 @@
         "pl": "Złamany Miecz",
         "pt": "Espada quebrada"
       },
-      "tags": ["secondClassQuestItem"],
+      "tags": [
+        "secondClassQuestItem"
+      ],
       "description": [
         {
           "text": "@questItem"
@@ -1313,7 +1601,10 @@
             "en": "{name}"
           },
           "color": "yellow",
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1330,13 +1621,24 @@
             "zh-TW": "暗黑石"
           },
           "color": "yellow",
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         },
         {
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "questItem", "levels": [1, 1]}],
+      "groundLabels": [
+        {
+          "style": "questItem",
+          "levels": [
+            1,
+            1
+          ]
+        }
+      ],
       "width": 1,
       "height": 2,
       "tradable": false,
@@ -1359,7 +1661,9 @@
           "acc": "Łzę Elfa"
         }
       },
-      "tags": ["secondClassQuestItem"],
+      "tags": [
+        "secondClassQuestItem"
+      ],
       "description": [
         {
           "text": "@questItem"
@@ -1398,7 +1702,9 @@
         "pl": "Odłamek Duszy Czarodzieja",
         "pt": "Fragmento da alma do Mago"
       },
-      "tags": ["secondClassQuestItem"],
+      "tags": [
+        "secondClassQuestItem"
+      ],
       "description": [
         {
           "text": "@questItem"
@@ -1446,7 +1752,10 @@
             "en": "{name}"
           },
           "color": "yellow",
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1455,7 +1764,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "questItem"}],
+      "groundLabels": [
+        {
+          "style": "questItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -1474,7 +1787,10 @@
           "text": {
             "en": "{name}"
           },
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1482,7 +1798,11 @@
           }
         }
       ],
-      "groundLabels": [{"style": "questItem"}],
+      "groundLabels": [
+        {
+          "style": "questItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -1496,7 +1816,10 @@
         "pl": "Klejnot Strażnika",
         "pt": "Joia do guardião"
       },
-      "tags": ["jewel", "valuable"],
+      "tags": [
+        "jewel",
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -1520,7 +1843,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "jewel"}],
+      "groundLabels": [
+        {
+          "style": "jewel"
+        }
+      ],
       "width": 1,
       "height": 1,
       "sellValue": 75,
@@ -1540,7 +1867,9 @@
           "text": "@dropItToReceiveTheGift",
           "colors": [
             {
-              "when": ["level<=1"],
+              "when": [
+                "level<=1"
+              ],
               "color": "purple"
             }
           ]
@@ -1551,7 +1880,10 @@
           "text": {
             "en": "{name}"
           },
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1567,10 +1899,24 @@
             "uk": "Бузкова цукерниця",
             "zh-TW": "紫丁香糖果盒"
           },
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         }
       ],
-      "groundLabels": [{"style": "giftBoxPink", "levels": [0, 1]}, {"style": "white"}],
+      "groundLabels": [
+        {
+          "style": "giftBoxPink",
+          "levels": [
+            0,
+            1
+          ]
+        },
+        {
+          "style": "white"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -1589,7 +1935,9 @@
           "text": "@dropItToReceiveTheGift",
           "colors": [
             {
-              "when": ["level<=1"],
+              "when": [
+                "level<=1"
+              ],
               "color": "red"
             }
           ]
@@ -1600,7 +1948,10 @@
           "text": {
             "en": "{name}"
           },
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1616,10 +1967,24 @@
             "uk": "Помаранчева цукерниця",
             "zh-TW": "橘色糖果盒"
           },
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         }
       ],
-      "groundLabels": [{"style": "giftBoxRed", "levels": [0, 1]}, {"style": "white"}],
+      "groundLabels": [
+        {
+          "style": "giftBoxRed",
+          "levels": [
+            0,
+            1
+          ]
+        },
+        {
+          "style": "white"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -1638,7 +2003,9 @@
           "text": "@dropItToReceiveTheGift",
           "colors": [
             {
-              "when": ["level<=1"],
+              "when": [
+                "level<=1"
+              ],
               "color": "blue"
             }
           ]
@@ -1649,7 +2016,10 @@
           "text": {
             "en": "{name}"
           },
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1665,10 +2035,24 @@
             "uk": "Темно-синя цукерниця",
             "zh-TW": "海軍藍糖果盒"
           },
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         }
       ],
-      "groundLabels": [{"style": "giftBoxBlue", "levels": [0, 1]}, {"style": "white"}],
+      "groundLabels": [
+        {
+          "style": "giftBoxBlue",
+          "levels": [
+            0,
+            1
+          ]
+        },
+        {
+          "style": "white"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -1682,11 +2066,15 @@
         "pl": "Mała mikstura SD",
         "pt": "Pequena poção de SD"
       },
-      "tags": ["shieldPotion"],
+      "tags": [
+        "shieldPotion"
+      ],
       "description": [
         {
           "text": "@numberOfItems",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
       "width": 1,
@@ -1704,11 +2092,15 @@
         "pl": "Mikstura SD",
         "pt": "Poção de SD"
       },
-      "tags": ["shieldPotion"],
+      "tags": [
+        "shieldPotion"
+      ],
       "description": [
         {
           "text": "@numberOfItems",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
       "width": 1,
@@ -1726,11 +2118,15 @@
         "pl": "Duża mikstura SD",
         "pt": "Grande poção de SD"
       },
-      "tags": ["shieldPotion"],
+      "tags": [
+        "shieldPotion"
+      ],
       "description": [
         {
           "text": "@numberOfItems",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
       "width": 1,
@@ -1748,11 +2144,15 @@
         "pl": "Mała mikstura złożona",
         "pt": "Pequena poção complexa"
       },
-      "tags": ["complexPotion"],
+      "tags": [
+        "complexPotion"
+      ],
       "description": [
         {
           "text": "@numberOfItems",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
       "width": 1,
@@ -1771,11 +2171,15 @@
         "pl": "Mikstura złożona",
         "pt": "Poção complexa"
       },
-      "tags": ["complexPotion"],
+      "tags": [
+        "complexPotion"
+      ],
       "description": [
         {
           "text": "@numberOfItems",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
       "width": 1,
@@ -1794,11 +2198,15 @@
         "pl": "Duża mikstura złożona",
         "pt": "Grande poção complexa"
       },
-      "tags": ["complexPotion"],
+      "tags": [
+        "complexPotion"
+      ],
       "description": [
         {
           "text": "@numberOfItems",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
       "width": 1,
@@ -1817,7 +2225,9 @@
         "pl": "Kamień szlachetny",
         "pt": "Pedra preciosa"
       },
-      "tags": ["valuable"],
+      "tags": [
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -1844,7 +2254,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "jewel"}],
+      "groundLabels": [
+        {
+          "style": "jewel"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 25,
@@ -1860,7 +2274,9 @@
         "pl": "Klejnot Harmonii",
         "pt": "Joia da harmonia"
       },
-      "tags": ["valuable"],
+      "tags": [
+        "valuable"
+      ],
       "description": [
         {
           "text": "@reinforcementJewel"
@@ -1874,7 +2290,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "jewel"}],
+      "groundLabels": [
+        {
+          "style": "jewel"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 25,
@@ -1890,7 +2310,10 @@
         "pl": "Niższy kamień rafinacji",
         "pt": "Pedra refinada inferior"
       },
-      "tags": ["refineStone", "valuable"],
+      "tags": [
+        "refineStone",
+        "valuable"
+      ],
       "description": [
         {
           "text": "@grantPowerToReinforcedItem"
@@ -1904,7 +2327,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "jewel"}],
+      "groundLabels": [
+        {
+          "style": "jewel"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 25,
@@ -1920,7 +2347,10 @@
         "pl": "Wyższy kamień rafinacji",
         "pt": "Pedra refinada superior"
       },
-      "tags": ["refineStone", "valuable"],
+      "tags": [
+        "refineStone",
+        "valuable"
+      ],
       "description": [
         {
           "text": "@grantPowerToReinforcedItem"
@@ -1934,7 +2364,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "jewel"}],
+      "groundLabels": [
+        {
+          "style": "jewel"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 25,
@@ -1963,7 +2397,11 @@
           }
         }
       ],
-      "groundLabels": [{"style": "halloween"}],
+      "groundLabels": [
+        {
+          "style": "halloween"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 1,
@@ -1997,7 +2435,9 @@
         },
         {
           "text": "@numberOfItems",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
       "nameLines": [
@@ -2007,7 +2447,11 @@
           }
         }
       ],
-      "groundLabels": [{"style": "halloween"}],
+      "groundLabels": [
+        {
+          "style": "halloween"
+        }
+      ],
       "width": 1,
       "height": 2,
       "repairable": false
@@ -2040,7 +2484,9 @@
         },
         {
           "text": "@numberOfItems",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
       "nameLines": [
@@ -2050,7 +2496,11 @@
           }
         }
       ],
-      "groundLabels": [{"style": "halloween"}],
+      "groundLabels": [
+        {
+          "style": "halloween"
+        }
+      ],
       "width": 1,
       "height": 2,
       "repairable": false
@@ -2083,7 +2533,9 @@
         },
         {
           "text": "@numberOfItems",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
       "nameLines": [
@@ -2093,7 +2545,11 @@
           }
         }
       ],
-      "groundLabels": [{"style": "halloween"}],
+      "groundLabels": [
+        {
+          "style": "halloween"
+        }
+      ],
       "width": 1,
       "height": 2,
       "repairable": false
@@ -2126,7 +2582,9 @@
         },
         {
           "text": "@numberOfItems",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
       "nameLines": [
@@ -2136,7 +2594,11 @@
           }
         }
       ],
-      "groundLabels": [{"style": "halloween"}],
+      "groundLabels": [
+        {
+          "style": "halloween"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -2169,7 +2631,9 @@
         },
         {
           "text": "@numberOfItems",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
       "nameLines": [
@@ -2179,7 +2643,11 @@
           }
         }
       ],
-      "groundLabels": [{"style": "halloween"}],
+      "groundLabels": [
+        {
+          "style": "halloween"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -2249,7 +2717,9 @@
         "pl": "Talizman Szczęścia",
         "pt": "Talismã da sorte"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -2281,10 +2751,16 @@
             "uk": "{durability}% Збільшення рівня успіху комбінації",
             "zh-TW": "{durability}% 組合成功率提升"
           },
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -2303,14 +2779,20 @@
         "pl": "Karta Chaosu",
         "pt": "Cartão do caos"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@specialItemsWithCombinations",
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -2368,14 +2850,20 @@
         "pl": "Bilet na rzadki przedmiot 1",
         "pt": "Bilhete de item raro1"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@contactCsTeam",
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -2394,14 +2882,20 @@
         "pl": "Bilet na rzadki przedmiot 2",
         "pt": "Bilhete de item raro2"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@contactCsTeam",
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -2420,14 +2914,20 @@
         "pl": "Bilet na rzadki przedmiot 3",
         "pt": "Bilhete de item raro3"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@contactCsTeam",
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -2446,14 +2946,20 @@
         "pl": "Bilet na rzadki przedmiot 4",
         "pt": "Bilhete de item raro4"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@contactCsTeam",
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -2472,14 +2978,20 @@
         "pl": "Bilet na rzadki przedmiot 5",
         "pt": "Bilhete de item raro5"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@contactCsTeam",
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -2535,7 +3047,11 @@
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "questItem"}],
+      "groundLabels": [
+        {
+          "style": "questItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -2550,7 +3066,9 @@
         "pl": "Płomień Rycerza Promienia Śmierci",
         "pt": "Chama do Cav. Raio da Morte"
       },
-      "tags": ["thirdClassQuestItem"],
+      "tags": [
+        "thirdClassQuestItem"
+      ],
       "description": [
         {
           "text": "@questItem"
@@ -2586,7 +3104,9 @@
         "pl": "Róg Piekielnego Górnika",
         "pt": "Chifre do Mineiro do Inferno"
       },
-      "tags": ["thirdClassQuestItem"],
+      "tags": [
+        "thirdClassQuestItem"
+      ],
       "description": [
         {
           "text": "@questItem"
@@ -2622,7 +3142,9 @@
         "pl": "Pióro Mrocznego Feniksa",
         "pt": "Pena de fênix negra"
       },
-      "tags": ["thirdClassQuestItem"],
+      "tags": [
+        "thirdClassQuestItem"
+      ],
       "description": [
         {
           "text": "@questItem"
@@ -2658,7 +3180,9 @@
         "pl": "Oko Otchłani",
         "pt": "Olho abissal"
       },
-      "tags": ["thirdClassQuestItem"],
+      "tags": [
+        "thirdClassQuestItem"
+      ],
       "description": [
         {
           "text": "@questItem"
@@ -2694,7 +3218,10 @@
         "pl": "Elitarna mikstura leczenia",
         "pt": "Poção de cura de elite"
       },
-      "tags": ["elitePotion", "cashShop"],
+      "tags": [
+        "elitePotion",
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@numberOfItems",
@@ -2717,7 +3244,11 @@
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -2736,7 +3267,10 @@
         "pl": "Elitarna mikstura many",
         "pt": "Poção de mana de elite"
       },
-      "tags": ["elitePotion", "cashShop"],
+      "tags": [
+        "elitePotion",
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@numberOfItems",
@@ -2759,7 +3293,11 @@
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -2778,7 +3316,10 @@
         "pl": "Zwój Szybkości",
         "pt": "Pergaminho da rapidez"
       },
-      "tags": ["buffScroll", "cashShop"],
+      "tags": [
+        "buffScroll",
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -2801,7 +3342,11 @@
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 2,
       "height": 2,
@@ -2820,7 +3365,10 @@
         "pl": "Zwój Obrony",
         "pt": "Pergaminho da defesa"
       },
-      "tags": ["buffScroll", "cashShop"],
+      "tags": [
+        "buffScroll",
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -2843,7 +3391,11 @@
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 2,
       "height": 2,
@@ -2862,7 +3414,10 @@
         "pl": "Zwój Gniewu",
         "pt": "Pergaminho da ira"
       },
-      "tags": ["buffScroll", "cashShop"],
+      "tags": [
+        "buffScroll",
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -2885,7 +3440,11 @@
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 2,
       "height": 2,
@@ -2904,7 +3463,10 @@
         "pl": "Zwój Magii",
         "pt": "Pergaminho do poder de magia"
       },
-      "tags": ["buffScroll", "cashShop"],
+      "tags": [
+        "buffScroll",
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -2927,7 +3489,11 @@
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 2,
       "height": 2,
@@ -2946,7 +3512,10 @@
         "pl": "Zwój Zdrowia",
         "pt": "Pergaminho de vida"
       },
-      "tags": ["buffScroll", "cashShop"],
+      "tags": [
+        "buffScroll",
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -2969,7 +3538,11 @@
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 2,
       "height": 2,
@@ -2988,7 +3561,10 @@
         "pl": "Zwój Many",
         "pt": "Pergaminho de mana"
       },
-      "tags": ["buffScroll", "cashShop"],
+      "tags": [
+        "buffScroll",
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -3011,7 +3587,11 @@
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 2,
       "height": 2,
@@ -3030,7 +3610,10 @@
         "pl": "Eliksir Siły",
         "pt": "Elixir da força"
       },
-      "tags": ["elixir", "cashShop"],
+      "tags": [
+        "elixir",
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@numberOfItems",
@@ -3070,7 +3653,11 @@
           "text": "@available"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 2,
@@ -3089,7 +3676,10 @@
         "pl": "Eliksir Zwinności",
         "pt": "Elixir da agilidade"
       },
-      "tags": ["elixir", "cashShop"],
+      "tags": [
+        "elixir",
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@numberOfItems",
@@ -3129,7 +3719,11 @@
           "text": "@available"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 2,
@@ -3148,7 +3742,10 @@
         "pl": "Eliksir Witalności",
         "pt": "Elixir da vida"
       },
-      "tags": ["elixir", "cashShop"],
+      "tags": [
+        "elixir",
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@numberOfItems",
@@ -3188,7 +3785,11 @@
           "text": "@available"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 2,
@@ -3207,7 +3808,10 @@
         "pl": "Eliksir Energii",
         "pt": "Elixir da energia"
       },
-      "tags": ["elixir", "cashShop"],
+      "tags": [
+        "elixir",
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@numberOfItems",
@@ -3247,7 +3851,11 @@
           "text": "@available"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 2,
@@ -3266,7 +3874,10 @@
         "pl": "Eliksir Dowodzenia",
         "pt": "Elixir do controle"
       },
-      "tags": ["elixir", "cashShop"],
+      "tags": [
+        "elixir",
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@numberOfItems",
@@ -3321,7 +3932,11 @@
           "text": "@available"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 2,
@@ -3346,7 +3961,11 @@
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -3366,7 +3985,11 @@
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cherryBlossom"}],
+      "groundLabels": [
+        {
+          "style": "cherryBlossom"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -3404,7 +4027,11 @@
           "color": "purple"
         }
       ],
-      "groundLabels": [{"style": "cherryBlossom"}],
+      "groundLabels": [
+        {
+          "style": "cherryBlossom"
+        }
+      ],
       "width": 1,
       "height": 2,
       "repairable": false
@@ -3442,7 +4069,11 @@
           "color": "purple"
         }
       ],
-      "groundLabels": [{"style": "cherryBlossom"}],
+      "groundLabels": [
+        {
+          "style": "cherryBlossom"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -3480,7 +4111,11 @@
           "color": "purple"
         }
       ],
-      "groundLabels": [{"style": "cherryBlossom"}],
+      "groundLabels": [
+        {
+          "style": "cherryBlossom"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -3504,7 +4139,11 @@
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cherryBlossom"}],
+      "groundLabels": [
+        {
+          "style": "cherryBlossom"
+        }
+      ],
       "width": 1,
       "height": 2,
       "repairable": false
@@ -3528,7 +4167,11 @@
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cherryBlossom"}],
+      "groundLabels": [
+        {
+          "style": "cherryBlossom"
+        }
+      ],
       "width": 1,
       "height": 2,
       "repairable": false
@@ -3552,7 +4195,11 @@
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cherryBlossom"}],
+      "groundLabels": [
+        {
+          "style": "cherryBlossom"
+        }
+      ],
       "width": 1,
       "height": 2,
       "repairable": false
@@ -3566,8 +4213,14 @@
         "pl": "Karta postaci: Summoner",
         "pt": "Cartão do Pers. Invocador"
       },
-      "tags": ["cashShop"],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "tags": [
+        "cashShop"
+      ],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -3586,14 +4239,20 @@
         "pl": "Złota Karta Chaosu",
         "pt": "Cartão dourado do caos"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@specialItemsWithCombinations",
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -3612,14 +4271,20 @@
         "pl": "Rzadka Karta Chaosu",
         "pt": "Cartão raro do caos"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@specialItemsWithCombinations",
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -3638,7 +4303,9 @@
         "pl": "Średnia elitarna mikstura leczenia",
         "pt": "Poção média de cura de elite"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@numberOfItems",
@@ -3661,7 +4328,11 @@
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -3680,14 +4351,20 @@
         "pl": "Mini Karta Chaosu",
         "pt": "Mini cartão do caos"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@specialItemsWithCombinations",
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -3706,7 +4383,9 @@
         "pl": "Talizman Kombinacji Chaosu",
         "pt": "Talismã do Agrup. do Caos"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -3757,7 +4436,11 @@
           "color": "purple"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -3776,7 +4459,10 @@
         "pl": "Zwój Bitwy",
         "pt": "Pergaminho da batalha"
       },
-      "tags": ["battleOrStrengthScroll", "cashShop"],
+      "tags": [
+        "battleOrStrengthScroll",
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -3799,7 +4485,11 @@
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 2,
       "height": 2,
@@ -3818,7 +4508,10 @@
         "pl": "Zwój Siły",
         "pt": "Pergaminho da força"
       },
-      "tags": ["battleOrStrengthScroll", "cashShop"],
+      "tags": [
+        "battleOrStrengthScroll",
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -3841,7 +4534,11 @@
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 2,
       "height": 2,
@@ -3876,7 +4573,9 @@
       "description": [
         {
           "text": "@numberOfItems",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         },
         {
           "text": {
@@ -3901,7 +4600,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "eventItem"}],
+      "groundLabels": [
+        {
+          "style": "eventItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -3946,7 +4649,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "questItem"}],
+      "groundLabels": [
+        {
+          "style": "questItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 32,
@@ -4016,7 +4723,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "questItem"}],
+      "groundLabels": [
+        {
+          "style": "questItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -4043,7 +4754,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "questItem"}],
+      "groundLabels": [
+        {
+          "style": "questItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -4070,7 +4785,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "questItem"}],
+      "groundLabels": [
+        {
+          "style": "questItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -4097,7 +4816,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "questItem"}],
+      "groundLabels": [
+        {
+          "style": "questItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -4124,7 +4847,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "questItem"}],
+      "groundLabels": [
+        {
+          "style": "questItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -4151,7 +4878,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "questItem"}],
+      "groundLabels": [
+        {
+          "style": "questItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -4178,7 +4909,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "questItem"}],
+      "groundLabels": [
+        {
+          "style": "questItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -4232,7 +4967,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "questItem"}],
+      "groundLabels": [
+        {
+          "style": "questItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -4302,7 +5041,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "questItem"}],
+      "groundLabels": [
+        {
+          "style": "questItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -4316,7 +5059,10 @@
         "pl": "Srebrny klucz",
         "pt": "Chave prateada"
       },
-      "tags": ["cashShop", "valuable"],
+      "tags": [
+        "cashShop",
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -4334,7 +5080,11 @@
           }
         }
       ],
-      "groundLabels": [{"style": "eventItem"}],
+      "groundLabels": [
+        {
+          "style": "eventItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -4353,7 +5103,10 @@
         "pl": "Złoty klucz",
         "pt": "Chave dourada"
       },
-      "tags": ["cashShop", "valuable"],
+      "tags": [
+        "cashShop",
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -4371,7 +5124,11 @@
           }
         }
       ],
-      "groundLabels": [{"style": "eventItem"}],
+      "groundLabels": [
+        {
+          "style": "eventItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -4390,8 +5147,14 @@
         "pl": "Reset umiejętności mistrzowskich",
         "pt": "Reinic. de Habilidade Mestre"
       },
-      "tags": ["cashShop"],
-      "groundLabels": [{"style": "cashShopService"}],
+      "tags": [
+        "cashShop"
+      ],
+      "groundLabels": [
+        {
+          "style": "cashShopService"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -4409,8 +5172,14 @@
         "pl": "Korekta statystyk",
         "pt": "Ajuste de atributos"
       },
-      "tags": ["cashShop"],
-      "groundLabels": [{"style": "cashShopService"}],
+      "tags": [
+        "cashShop"
+      ],
+      "groundLabels": [
+        {
+          "style": "cashShopService"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -4428,8 +5197,14 @@
         "pl": "Usługa przeniesienia postaci",
         "pt": "Serviço Nova Local. de Pers."
       },
-      "tags": ["cashShop"],
-      "groundLabels": [{"style": "cashShopService"}],
+      "tags": [
+        "cashShop"
+      ],
+      "groundLabels": [
+        {
+          "style": "cashShopService"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -4447,8 +5222,14 @@
         "pl": "Usługa zmiany imienia postaci",
         "pt": "Serviço Novo Nome do Pers."
       },
-      "tags": ["cashShop"],
-      "groundLabels": [{"style": "cashShopService"}],
+      "tags": [
+        "cashShop"
+      ],
+      "groundLabels": [
+        {
+          "style": "cashShopService"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -4466,8 +5247,14 @@
         "pl": "Usługa przeniesienia na inny serwer",
         "pt": "Serviço Nova Local. de Serv."
       },
-      "tags": ["cashShop"],
-      "groundLabels": [{"style": "cashShopService"}],
+      "tags": [
+        "cashShop"
+      ],
+      "groundLabels": [
+        {
+          "style": "cashShopService"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -4485,8 +5272,14 @@
         "pl": "Pakiet Premium",
         "pt": "Pacote Premium"
       },
-      "tags": ["cashShop"],
-      "groundLabels": [{"style": "cashShopService"}],
+      "tags": [
+        "cashShop"
+      ],
+      "groundLabels": [
+        {
+          "style": "cashShopService"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -4504,7 +5297,9 @@
         "pl": "Złota moneta goblina",
         "pt": "Moeda dourada do goblin"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -4522,7 +5317,11 @@
           }
         }
       ],
-      "groundLabels": [{"style": "eventItem"}],
+      "groundLabels": [
+        {
+          "style": "eventItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -4540,7 +5339,9 @@
         "pl": "Zapieczętowana złota szkatuła",
         "pt": "Caixa dourada lacrada"
       },
-      "tags": ["valuable"],
+      "tags": [
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -4558,7 +5359,11 @@
           }
         }
       ],
-      "groundLabels": [{"style": "eventItem"}],
+      "groundLabels": [
+        {
+          "style": "eventItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "droppable": false,
@@ -4573,7 +5378,9 @@
         "pl": "Zapieczętowana srebrna szkatuła",
         "pt": "Caixa prateada lacrada"
       },
-      "tags": ["valuable"],
+      "tags": [
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -4591,7 +5398,11 @@
           }
         }
       ],
-      "groundLabels": [{"style": "eventItem"}],
+      "groundLabels": [
+        {
+          "style": "eventItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "droppable": false,
@@ -4606,13 +5417,19 @@
         "pl": "Złota szkatuła",
         "pt": "Caixa dourada"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@mayTurnIntoRareItem"
         }
       ],
-      "groundLabels": [{"style": "eventItem"}],
+      "groundLabels": [
+        {
+          "style": "eventItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -4630,13 +5447,19 @@
         "pl": "Srebrna szkatuła",
         "pt": "Caixa prateada"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@mayTurnIntoRareItem"
         }
       ],
-      "groundLabels": [{"style": "eventItem"}],
+      "groundLabels": [
+        {
+          "style": "eventItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -4667,8 +5490,14 @@
         "pl": "Karnet 30-dniowy",
         "pt": "Passe de 30 dias"
       },
-      "tags": ["cashShop"],
-      "groundLabels": [{"style": "cashShopService"}],
+      "tags": [
+        "cashShop"
+      ],
+      "groundLabels": [
+        {
+          "style": "cashShopService"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -4686,8 +5515,14 @@
         "pl": "Karnet 90-dniowy",
         "pt": "Passe de 90 dias"
       },
-      "tags": ["cashShop"],
-      "groundLabels": [{"style": "cashShopService"}],
+      "tags": [
+        "cashShop"
+      ],
+      "groundLabels": [
+        {
+          "style": "cashShopService"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -4705,8 +5540,14 @@
         "pl": "Karnet 30-dniowy – punkty",
         "pt": "Passe de 30 dias - Pontos"
       },
-      "tags": ["cashShop"],
-      "groundLabels": [{"style": "cashShopService"}],
+      "tags": [
+        "cashShop"
+      ],
+      "groundLabels": [
+        {
+          "style": "cashShopService"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -4724,8 +5565,14 @@
         "pl": "Karnet 90-dniowy – punkty",
         "pt": "Passe de 90 dias - Pontos"
       },
-      "tags": ["cashShop"],
-      "groundLabels": [{"style": "cashShopService"}],
+      "tags": [
+        "cashShop"
+      ],
+      "groundLabels": [
+        {
+          "style": "cashShopService"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -4743,8 +5590,14 @@
         "pl": "Karnet 3-godzinny",
         "pt": "Passe de 3 horas"
       },
-      "tags": ["cashShop"],
-      "groundLabels": [{"style": "cashShopService"}],
+      "tags": [
+        "cashShop"
+      ],
+      "groundLabels": [
+        {
+          "style": "cashShopService"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -4762,8 +5615,14 @@
         "pl": "Karnet 5-godzinny",
         "pt": "Passe de 5 horas"
       },
-      "tags": ["cashShop"],
-      "groundLabels": [{"style": "cashShopService"}],
+      "tags": [
+        "cashShop"
+      ],
+      "groundLabels": [
+        {
+          "style": "cashShopService"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -4781,8 +5640,14 @@
         "pl": "Karnet 10-godzinny",
         "pt": "Passe de 10 horas"
       },
-      "tags": ["cashShop"],
-      "groundLabels": [{"style": "cashShopService"}],
+      "tags": [
+        "cashShop"
+      ],
+      "groundLabels": [
+        {
+          "style": "cashShopService"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -4800,7 +5665,9 @@
         "pl": "Elitarna mikstura SD",
         "pt": "Poção de SD de elite"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@numberOfItems",
@@ -4841,13 +5708,19 @@
         "pl": "Paczka A",
         "pt": "Caixa de pacote A"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@boxOfVariousItems"
         }
       ],
-      "groundLabels": [{"style": "cashShopService"}],
+      "groundLabels": [
+        {
+          "style": "cashShopService"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -4865,13 +5738,19 @@
         "pl": "Paczka B",
         "pt": "Caixa de pacote B"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@boxOfVariousItems"
         }
       ],
-      "groundLabels": [{"style": "cashShopService"}],
+      "groundLabels": [
+        {
+          "style": "cashShopService"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -4889,13 +5768,19 @@
         "pl": "Paczka C",
         "pt": "Caixa de pacote C"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@boxOfVariousItems"
         }
       ],
-      "groundLabels": [{"style": "cashShopService"}],
+      "groundLabels": [
+        {
+          "style": "cashShopService"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -4913,13 +5798,19 @@
         "pl": "Paczka D",
         "pt": "Caixa de pacote D"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@boxOfVariousItems"
         }
       ],
-      "groundLabels": [{"style": "cashShopService"}],
+      "groundLabels": [
+        {
+          "style": "cashShopService"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -4937,13 +5828,19 @@
         "pl": "Paczka E",
         "pt": "Caixa de pacote E"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@boxOfVariousItems"
         }
       ],
-      "groundLabels": [{"style": "cashShopService"}],
+      "groundLabels": [
+        {
+          "style": "cashShopService"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -4961,13 +5858,19 @@
         "pl": "Paczka F",
         "pt": "Caixa de pacote F"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@boxOfVariousItems"
         }
       ],
-      "groundLabels": [{"style": "cashShopService"}],
+      "groundLabels": [
+        {
+          "style": "cashShopService"
+        }
+      ],
       "width": 1,
       "height": 1,
       "tradable": false,
@@ -4985,7 +5888,9 @@
         "pl": "Zwój Leczenia",
         "pt": "Pergaminho da cura"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@automaticHpRecovery3",
@@ -5035,7 +5940,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "jewelryCase"}],
+      "groundLabels": [
+        {
+          "style": "jewelryCase"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -5059,7 +5968,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "jewelryCase"}],
+      "groundLabels": [
+        {
+          "style": "jewelryCase"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -5083,7 +5996,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "jewelryCase"}],
+      "groundLabels": [
+        {
+          "style": "jewelryCase"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -5107,7 +6024,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "jewelryCase"}],
+      "groundLabels": [
+        {
+          "style": "jewelryCase"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false
@@ -5121,14 +6042,20 @@
         "pl": "Bilet na rzadki przedmiot 7",
         "pt": "Bilhete de item raro7"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@contactCsTeam",
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -5147,14 +6074,20 @@
         "pl": "Bilet na rzadki przedmiot 8",
         "pt": "Bilhete de item raro8"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@contactCsTeam",
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -5173,14 +6106,20 @@
         "pl": "Bilet na rzadki przedmiot 9",
         "pt": "Bilhete de item raro9"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@contactCsTeam",
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -5199,14 +6138,20 @@
         "pl": "Bilet na rzadki przedmiot 10",
         "pt": "Bilhete de item raro10"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@contactCsTeam",
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -5225,14 +6170,20 @@
         "pl": "Bilet na rzadki przedmiot 11",
         "pt": "Bilhete de item raro11"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@contactCsTeam",
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -5251,14 +6202,20 @@
         "pl": "Bilet na rzadki przedmiot 12",
         "pt": "Bilhete de item raro12"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@contactCsTeam",
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -5306,7 +6263,9 @@
       "description": [
         {
           "text": "@numberOfItems",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
       "width": 1,
@@ -5326,7 +6285,9 @@
       "description": [
         {
           "text": "@numberOfItems",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
       "width": 1,
@@ -5346,7 +6307,9 @@
       "description": [
         {
           "text": "@numberOfItems",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
       "width": 2,
@@ -5366,7 +6329,9 @@
       "description": [
         {
           "text": "@numberOfItems",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
       "width": 1,
@@ -5508,6 +6473,61 @@
       "repairable": false
     },
     {
+      "number": 164,
+      "name": {
+        "en": "Ancient Statue"
+      },
+      "width": 1,
+      "height": 2,
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 165,
+      "name": {
+        "en": "Magic Cloth"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 166,
+      "name": {
+        "en": "Space Cloth"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 167,
+      "name": {
+        "en": "Phase Cloth"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 168,
+      "name": {
+        "en": "Dimension Cloth"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
       "number": 169,
       "name": {
         "en": "RageFighter Character Card",
@@ -5519,6 +6539,1105 @@
       "width": 1,
       "height": 1,
       "repairable": false
+    },
+    {
+      "number": 170,
+      "name": {
+        "en": "Lv. 2 letter of Request",
+        "vi": "Thư Yêu Cầu Cấp 2",
+        "de": "Anfragebrief Stufe 2",
+        "zh-CN": "Lv. 2 委托书"
+      },
+      "width": 1,
+      "height": 2,
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 171,
+      "name": {
+        "en": "Lv. 2 Completion Certificate",
+        "vi": "Chứng Chỉ Hoàn Thành Cấp 2",
+        "de": "Abschlusszertifikat Stufe 2",
+        "zh-CN": "Lv. 2 完成证明"
+      },
+      "width": 1,
+      "height": 2,
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 176,
+      "name": {
+        "en": "Death King's Bone",
+        "vi": "Xương Vua Tử Thần",
+        "de": "Knochen des Todeskönigs",
+        "zh-CN": "骷髅王之骨"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false,
+      "sellable": false
+    },
+    {
+      "number": 177,
+      "name": {
+        "en": "Hell Maine's Leather",
+        "vi": "Da Hell Maine",
+        "de": "Leder von Hell Maine",
+        "zh-CN": "地狱犬皮革"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false,
+      "sellable": false
+    },
+    {
+      "number": 178,
+      "name": {
+        "en": "Dark Phoenix Flame",
+        "vi": "Ngọn Lửa Phượng Hoàng Bóng Tối",
+        "de": "Flamme des Dunklen Phönix",
+        "zh-CN": "暗黑凤凰之焰"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false,
+      "sellable": false
+    },
+    {
+      "number": 179,
+      "name": {
+        "en": "Death Beam Knight Soul",
+        "vi": "Linh Hồn Hiệp Sĩ Tia Tử Thần",
+        "de": "Seele des Todesstrahl-Ritters",
+        "zh-CN": "死亡射线骑士之魂"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false,
+      "sellable": false
+    },
+    {
+      "number": 180,
+      "name": {
+        "en": "Ice Walker's Mane",
+        "vi": "Bờm Kẻ Đi Băng",
+        "de": "Mähne des Eiswandlers",
+        "zh-CN": "冰行者鬃毛"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 181,
+      "name": {
+        "en": "Mammoth's Bundle of Fur",
+        "vi": "Bó Lông Voi Ma Mút",
+        "de": "Fellbündel des Mammuts",
+        "zh-CN": "猛犸毛束"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 182,
+      "name": {
+        "en": "Giant's Icicle",
+        "vi": "Băng Nhọn Người Khổng Lồ",
+        "de": "Eiszapfen des Riesen",
+        "zh-CN": "巨人冰柱"
+      },
+      "width": 1,
+      "height": 2,
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 183,
+      "name": {
+        "en": "Coolutin's Poison",
+        "vi": "Độc Dược của Coolutin",
+        "de": "Gift von Coolutin",
+        "zh-CN": "库鲁廷剧毒"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 184,
+      "name": {
+        "en": "Iron Knight's Heart",
+        "vi": "Trái Tim Hiệp Sĩ Sắt",
+        "de": "Herz des Eisenritters",
+        "zh-CN": "铁骑士之心"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 185,
+      "name": {
+        "en": "Dark Mammoth's Horn",
+        "vi": "Sừng Voi Ma Mút Bóng Tối",
+        "de": "Horn des Dunklen Mammuts",
+        "zh-CN": "暗黑猛犸之角"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 186,
+      "name": {
+        "en": "Dark Giant's Axe",
+        "vi": "Rìu Người Khổng Lồ Bóng Tối",
+        "de": "Axt des Dunklen Riesen",
+        "zh-CN": "暗黑巨人之斧"
+      },
+      "width": 1,
+      "height": 2,
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 187,
+      "name": {
+        "en": "Dark Coolutin's Blood",
+        "vi": "Máu Coolutin Bóng Tối",
+        "de": "Blut von Dunkel-Coolutin",
+        "zh-CN": "暗黑库鲁廷之血"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 188,
+      "name": {
+        "en": "Dark Iron Knight's Sword",
+        "vi": "Kiếm Hiệp Sĩ Sắt Bóng Tối",
+        "de": "Schwert des Dunklen Eisenritters",
+        "zh-CN": "暗黑铁骑士之剑"
+      },
+      "width": 1,
+      "height": 4,
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 189,
+      "name": {
+        "en": "Elemental Talisman of Luck",
+        "vi": "Bùa May Mắn Nguyên Tố",
+        "de": "Elementartalisman des Glücks",
+        "zh-CN": "元素幸运符"
+      },
+      "width": 1,
+      "height": 1,
+      "level": 10,
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 190,
+      "name": {
+        "en": "Elemental Talisman of Chaos",
+        "vi": "Bùa Hỗn Mang Nguyên Tố",
+        "de": "Elementartalisman des Chaos",
+        "zh-CN": "元素混沌符"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 191,
+      "name": {
+        "en": "Sonic Combination Note",
+        "vi": "Ghi Chú Kết Hợp Sonic",
+        "de": "Sonic-Kombinationsnotiz",
+        "zh-CN": "音速合成笔记"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 192,
+      "name": {
+        "en": "Cyclone Combination Note",
+        "vi": "Ghi Chú Kết Hợp Cyclone",
+        "de": "Zyklon-Kombinationsnotiz",
+        "zh-CN": "旋风合成笔记"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 193,
+      "name": {
+        "en": "Blast Combination Note",
+        "vi": "Ghi Chú Kết Hợp Blast",
+        "de": "Explosions-Kombinationsnotiz",
+        "zh-CN": "爆裂合成笔记"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 194,
+      "name": {
+        "en": "Magma Combination Note",
+        "vi": "Ghi Chú Kết Hợp Magma",
+        "de": "Magma-Kombinationsnotiz",
+        "zh-CN": "岩浆合成笔记"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 195,
+      "name": {
+        "en": "Horn Combination Note",
+        "vi": "Ghi Chú Kết Hợp Sừng",
+        "de": "Horn-Kombinationsnotiz",
+        "zh-CN": "角之合成笔记"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 196,
+      "name": {
+        "en": "Angelic Combination Note",
+        "vi": "Ghi Chú Kết Hợp Thiên Thần",
+        "de": "Engel-Kombinationsnotiz",
+        "zh-CN": "天使合成笔记"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 197,
+      "name": {
+        "en": "Devil Cross Combination Note",
+        "vi": "Ghi Chú Kết Hợp Nỏ Quỷ",
+        "de": "Teufelsarmbrust-Kombinationsnotiz",
+        "zh-CN": "恶魔十字弩合成笔记"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 198,
+      "name": {
+        "en": "Miracle Combination Note",
+        "vi": "Ghi Chú Kết Hợp Kỳ Tích",
+        "de": "Wunder-Kombinationsnotiz",
+        "zh-CN": "奇迹合成笔记"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 199,
+      "name": {
+        "en": "Spite Combination Note",
+        "vi": "Ghi Chú Kết Hợp Oán Hận",
+        "de": "Groll-Kombinationsnotiz",
+        "zh-CN": "怨恨合成笔记"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 200,
+      "name": {
+        "en": "Asura Combination Note",
+        "vi": "Ghi Chú Kết Hợp Asura",
+        "de": "Asura-Kombinationsnotiz",
+        "zh-CN": "阿修罗合成笔记"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 201,
+      "name": {
+        "en": "Thunder Combination Note",
+        "vi": "Ghi Chú Kết Hợp Sấm Sét",
+        "de": "Donner-Kombinationsnotiz",
+        "zh-CN": "雷霆合成笔记"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 202,
+      "name": {
+        "en": "Soul Combination Note",
+        "vi": "Ghi Chú Kết Hợp Linh Hồn",
+        "de": "Seelen-Kombinationsnotiz",
+        "zh-CN": "灵魂合成笔记"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 206,
+      "name": {
+        "en": "Lackluster Box"
+      },
+      "width": 1,
+      "height": 1,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 207,
+      "name": {
+        "en": "Luxurious Box"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 208,
+      "name": {
+        "en": "Exciting Box"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 209,
+      "name": {
+        "en": "Tradeable Seal"
+      },
+      "width": 1,
+      "height": 1,
+      "tradable": false,
+      "sellable": false
+    },
+    {
+      "number": 210,
+      "name": {
+        "en": "Summon Scroll (Lv1)"
+      },
+      "width": 1,
+      "height": 1,
+      "level": 32,
+      "droppable": false
+    },
+    {
+      "number": 211,
+      "name": {
+        "en": "Summon Scroll (Lv2)"
+      },
+      "width": 1,
+      "height": 1,
+      "level": 32,
+      "droppable": false
+    },
+    {
+      "number": 212,
+      "name": {
+        "en": "Summon Scroll (Lv3)"
+      },
+      "width": 1,
+      "height": 1,
+      "level": 32,
+      "droppable": false
+    },
+    {
+      "number": 213,
+      "name": {
+        "en": "Summon Scroll (Lv4)"
+      },
+      "width": 1,
+      "height": 1,
+      "level": 32,
+      "droppable": false
+    },
+    {
+      "number": 215,
+      "name": {
+        "en": "Card Piece"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 216,
+      "name": {
+        "en": "Card Deck"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 217,
+      "name": {
+        "en": "Titan's Anger"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false
+    },
+    {
+      "number": 218,
+      "name": {
+        "en": "Tantalose's Punishment"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false
+    },
+    {
+      "number": 219,
+      "name": {
+        "en": "Erohim's Nightmare"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false
+    },
+    {
+      "number": 220,
+      "name": {
+        "en": "Hell Maine's Insanity"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false
+    },
+    {
+      "number": 221,
+      "name": {
+        "en": "Kundun's Greed"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false
+    },
+    {
+      "number": 222,
+      "name": {
+        "en": "Unique Accessory Box"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 223,
+      "name": {
+        "en": "Cursed Castle Water"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false
+    },
+    {
+      "number": 224,
+      "name": {
+        "en": "Bless of Light (Greater)"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false
+    },
+    {
+      "number": 225,
+      "name": {
+        "en": "Scroll Master of Defense"
+      },
+      "width": 2,
+      "height": 2,
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 226,
+      "name": {
+        "en": "Scroll Master of Wizardry"
+      },
+      "width": 2,
+      "height": 2,
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 227,
+      "name": {
+        "en": "Scroll Master of Health"
+      },
+      "width": 2,
+      "height": 2,
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 228,
+      "name": {
+        "en": "Scroll Master of Mana"
+      },
+      "width": 2,
+      "height": 2,
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 229,
+      "name": {
+        "en": "Scroll Master of Wrath"
+      },
+      "width": 2,
+      "height": 2,
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 230,
+      "name": {
+        "en": "Scroll Master of Recovery"
+      },
+      "width": 2,
+      "height": 2,
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 231,
+      "name": {
+        "en": "Scroll Master of Battle"
+      },
+      "width": 2,
+      "height": 2,
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 232,
+      "name": {
+        "en": "Scroll Master of Strenghener"
+      },
+      "width": 2,
+      "height": 2,
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 233,
+      "name": {
+        "en": "Unique Weapon Box"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 234,
+      "name": {
+        "en": "Monster Summoning Scroll"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false
+    },
+    {
+      "number": 235,
+      "name": {
+        "en": "Scroll of Swiftness Master",
+        "vi": "Cuộn Bậc Thầy Nhanh Nhẹn",
+        "de": "Schriftrolle des Schnelligkeitsmeisters",
+        "zh-CN": "敏捷大师卷轴"
+      },
+      "width": 2,
+      "height": 2,
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 236,
+      "name": {
+        "en": "Reward Jar",
+        "vi": "Hũ Phần Thưởng",
+        "de": "Belohnungskrug",
+        "zh-CN": "奖励罐"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false,
+      "sellable": false
+    },
+    {
+      "number": 237,
+      "name": {
+        "en": "Reward Jar",
+        "vi": "Hũ Phần Thưởng",
+        "de": "Belohnungskrug",
+        "zh-CN": "奖励罐"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false,
+      "sellable": false
+    },
+    {
+      "number": 238,
+      "name": {
+        "en": "Reward Jar",
+        "vi": "Hũ Phần Thưởng",
+        "de": "Belohnungskrug",
+        "zh-CN": "奖励罐"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false,
+      "sellable": false
+    },
+    {
+      "number": 239,
+      "name": {
+        "en": "Reward Jar",
+        "vi": "Hũ Phần Thưởng",
+        "de": "Belohnungskrug",
+        "zh-CN": "奖励罐"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false,
+      "sellable": false
+    },
+    {
+      "number": 240,
+      "name": {
+        "en": "Reward Jar",
+        "vi": "Hũ Phần Thưởng",
+        "de": "Belohnungskrug",
+        "zh-CN": "奖励罐"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false,
+      "sellable": false
+    },
+    {
+      "number": 241,
+      "name": {
+        "en": "Valuable Reward Jar",
+        "vi": "Hũ Phần Thưởng Giá Trị",
+        "de": "Wertvoller Belohnungskrug",
+        "zh-CN": "珍贵奖励罐"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false,
+      "sellable": false
+    },
+    {
+      "number": 242,
+      "name": {
+        "en": "Golden Apple",
+        "vi": "Táo Vàng",
+        "de": "Goldener Apfel",
+        "zh-CN": "金苹果"
+      },
+      "width": 1,
+      "height": 1,
+      "buyPrice": 5,
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 243,
+      "name": {
+        "en": "Golden Apple(2)",
+        "vi": "Táo Vàng (2)",
+        "de": "Goldener Apfel (2)",
+        "zh-CN": "金苹果(2)"
+      },
+      "width": 1,
+      "height": 1,
+      "buyPrice": 5,
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 244,
+      "name": {
+        "en": "Evomon Summoning Scroll",
+        "vi": "Cuộn Triệu Hồi Evomon",
+        "de": "Evomon-Beschwörungsrolle",
+        "zh-CN": "进化怪召唤卷轴"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 245,
+      "name": {
+        "en": "Tetra Crystal (Greater)",
+        "vi": "Tinh Thể Tetra (Lớn)",
+        "de": "Tetra-Kristall (Groß)",
+        "zh-CN": "四面体水晶（大）"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false
+    },
+    {
+      "number": 246,
+      "name": {
+        "en": "Tetra Crystal (Standard)",
+        "vi": "Tinh Thể Tetra (Thường)",
+        "de": "Tetra-Kristall (Normal)",
+        "zh-CN": "四面体水晶（标准）"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false
+    },
+    {
+      "number": 247,
+      "name": {
+        "en": "Tetra Crystal (Minor)",
+        "vi": "Tinh Thể Tetra (Nhỏ)",
+        "de": "Tetra-Kristall (Klein)",
+        "zh-CN": "四面体水晶（小）"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false
+    },
+    {
+      "number": 248,
+      "name": {
+        "en": "Minor Evomon Box",
+        "vi": "Hộp Evomon Nhỏ",
+        "de": "Kleine Evomon-Kiste",
+        "zh-CN": "小型进化怪宝箱"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false,
+      "sellable": false
+    },
+    {
+      "number": 249,
+      "name": {
+        "en": "Standard Evomon Box",
+        "vi": "Hộp Evomon Thường",
+        "de": "Normale Evomon-Kiste",
+        "zh-CN": "标准进化怪宝箱"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false,
+      "sellable": false
+    },
+    {
+      "number": 250,
+      "name": {
+        "en": "Greater Evomon Box",
+        "vi": "Hộp Evomon Lớn",
+        "de": "Große Evomon-Kiste",
+        "zh-CN": "高级进化怪宝箱"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false,
+      "sellable": false
+    },
+    {
+      "number": 251,
+      "name": {
+        "en": "Luxurious Evomon Box",
+        "vi": "Hộp Evomon Sang Trọng",
+        "de": "Luxuriöse Evomon-Kiste",
+        "zh-CN": "豪华进化怪宝箱"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false,
+      "sellable": false
+    },
+    {
+      "number": 252,
+      "name": {
+        "en": "Magnificent Evomon Box",
+        "vi": "Hộp Evomon Tráng Lệ",
+        "de": "Prächtige Evomon-Kiste",
+        "zh-CN": "华丽进化怪宝箱"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false,
+      "sellable": false
+    },
+    {
+      "number": 253,
+      "name": {
+        "en": "Legendary Evomon Box",
+        "vi": "Hộp Evomon Huyền Thoại",
+        "de": "Legendäre Evomon-Kiste",
+        "zh-CN": "传说进化怪宝箱"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "tradable": false,
+      "sellable": false
+    },
+    {
+      "number": 254,
+      "name": {
+        "en": "Gift of Henchmen",
+        "vi": "Quà Của Thuộc Hạ",
+        "de": "Geschenk der Handlanger",
+        "zh-CN": "部下之礼"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false
+    },
+    {
+      "number": 256,
+      "name": {
+        "en": "Gift of Knights",
+        "vi": "Quà Của Hiệp Sĩ",
+        "de": "Geschenk der Ritter",
+        "zh-CN": "骑士之礼"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false
+    },
+    {
+      "number": 257,
+      "name": {
+        "en": "Gift of High Knights",
+        "vi": "Quà Của Hiệp Sĩ Cao Cấp",
+        "de": "Geschenk der Hohen Ritter",
+        "zh-CN": "高阶骑士之礼"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false
+    },
+    {
+      "number": 258,
+      "name": {
+        "en": "Minor Devil's Box",
+        "vi": "Hộp Ác Quỷ Nhỏ",
+        "de": "Kleine Teufelskiste",
+        "zh-CN": "小恶魔宝箱"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false
+    },
+    {
+      "number": 259,
+      "name": {
+        "en": "Devil's Box",
+        "vi": "Hộp Ác Quỷ",
+        "de": "Teufelskiste",
+        "zh-CN": "恶魔宝箱"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false
+    },
+    {
+      "number": 260,
+      "name": {
+        "en": "High Devil's Box",
+        "vi": "Hộp Ác Quỷ Cao Cấp",
+        "de": "Große Teufelskiste",
+        "zh-CN": "高阶恶魔宝箱"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false
+    },
+    {
+      "number": 261,
+      "name": {
+        "en": "Guardsman's Box",
+        "vi": "Hộp Vệ Binh",
+        "de": "Kiste des Wachmanns",
+        "zh-CN": "卫兵宝箱"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false
+    },
+    {
+      "number": 262,
+      "name": {
+        "en": "Guardman Captain's Box",
+        "vi": "Hộp Đội Trưởng Vệ Binh",
+        "de": "Kiste des Wachhauptmanns",
+        "zh-CN": "卫队长宝箱"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false
+    },
+    {
+      "number": 263,
+      "name": {
+        "en": "Bless of Light (Low Grade)",
+        "vi": "Phước Lành Ánh Sáng (Thấp)",
+        "de": "Segen des Lichts (Niedrig)",
+        "zh-CN": "光之祝福（低级）"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false
+    },
+    {
+      "number": 264,
+      "name": {
+        "en": "Bless of Light (Middle Grade)",
+        "vi": "Phước Lành Ánh Sáng (Trung)",
+        "de": "Segen des Lichts (Mittel)",
+        "zh-CN": "光之祝福（中级）"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false
+    },
+    {
+      "number": 277,
+      "name": {
+        "en": "Special Card",
+        "vi": "Thẻ Đặc Biệt",
+        "de": "Spezialkarte",
+        "zh-CN": "特殊卡片"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 278,
+      "name": {
+        "en": "Summoning Scroll Fragment",
+        "vi": "Mảnh Cuộn Triệu Hồi",
+        "de": "Beschwörungsrollen-Fragment",
+        "zh-CN": "召唤卷轴碎片"
+      },
+      "width": 1,
+      "height": 1,
+      "droppable": false,
+      "storable": false,
+      "sellable": false
     }
   ]
 }

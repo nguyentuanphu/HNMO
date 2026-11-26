@@ -11,7 +11,11 @@
         "pl": "Brązowe rękawice",
         "pt": "Luvas de bronze"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -40,7 +44,11 @@
         "pl": "Smocze rękawice",
         "pt": "Luvas do dragão"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -68,7 +76,11 @@
         "pl": "Pikowane rękawice",
         "pt": "Luvas acolchoadas"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -94,7 +106,11 @@
         "pl": "Legendarne rękawice",
         "pt": "Luvas lendárias"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -120,7 +136,11 @@
         "pl": "Kościane rękawice",
         "pt": "Luvas de osso"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -146,7 +166,11 @@
         "pl": "Skórzane rękawice",
         "pt": "Luvas de couro"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -174,7 +198,11 @@
         "pl": "Łuskowe rękawice",
         "pt": "Luvas de escamas"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -202,7 +230,11 @@
         "pl": "Rękawice Sfinksa",
         "pt": "Luvas da esfinge"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -228,7 +260,11 @@
         "pl": "Mosiężne rękawice",
         "pt": "Luvas de latão"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -256,7 +292,11 @@
         "pl": "Płytowe rękawice",
         "pt": "Luvas de placa"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -283,7 +323,11 @@
         "pl": "Rękawice z pnączy",
         "pt": "Luvas da vinha"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -310,7 +354,11 @@
         "pl": "Jedwabne rękawice",
         "pt": "Luvas de seda"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -337,7 +385,11 @@
         "pl": "Rękawice Wiatru",
         "pt": "Luvas do vento"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -364,7 +416,11 @@
         "pl": "Rękawice Ducha",
         "pt": "Luvas do espírito"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -391,7 +447,11 @@
         "pl": "Rękawice Strażnika",
         "pt": "Luvas do guardião"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -418,7 +478,11 @@
         "pl": "Rękawice Burzowej Wrony",
         "pt": "Luvas do corvo da tempestade"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -445,7 +509,11 @@
         "pl": "Rękawice Czarnego Smoka",
         "pt": "Luvas do dragão negro"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -472,7 +540,11 @@
         "pl": "Rękawice Mrocznego Feniksa",
         "pt": "Luvas da fênix negra"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -499,7 +571,11 @@
         "pl": "Rękawice Wielkiej Duszy",
         "pt": "Luvas da grande alma"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -526,7 +602,11 @@
         "pl": "Boskie rękawice",
         "pt": "Luvas divinas"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -553,7 +633,11 @@
         "pl": "Rękawice Gromowego Jastrzębia",
         "pt": "Luvas de Thunder Hawk"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -580,7 +664,11 @@
         "pl": "Rękawice Wielkiego Smoka",
         "pt": "Luvas do grande dragão"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -607,7 +695,11 @@
         "pl": "Rękawice Mrocznej Duszy",
         "pt": "Luvas da alma negra"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -634,7 +726,11 @@
         "pl": "Rękawice Huraganu",
         "pt": "Luvas do furacão"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -661,7 +757,11 @@
         "pl": "Rękawice Czerwonego Ducha",
         "pt": "Luvas do espírito vermelho"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -688,7 +788,11 @@
         "pl": "Lekkie rękawice płytowe",
         "pt": "Luvas de placa leve"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -715,7 +819,11 @@
         "pl": "Adamantytowe rękawice",
         "pt": "Luvas de adamantina"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -742,7 +850,11 @@
         "pl": "Rękawice z mrocznej stali",
         "pt": "Luvas de aço negro"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -769,7 +881,11 @@
         "pl": "Rękawice Mrocznego Mistrza",
         "pt": "Luvas do Mestre negro"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -796,7 +912,11 @@
         "pl": "Rękawice Smoczego Rycerza",
         "pt": "Luvas do cavaleiro dragão"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -824,7 +944,11 @@
         "pl": "Rękawice Jadowitej Mgły",
         "pt": "Luvas da névoa de veneno"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -852,7 +976,11 @@
         "pl": "Rękawice Sylphid Ray",
         "pt": "Luvas do raio silfídico"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -880,7 +1008,11 @@
         "pl": "Rękawice Wulkanu",
         "pt": "Luvas do vulcão"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -908,7 +1040,11 @@
         "pl": "Rękawice Słońca",
         "pt": "Luvas da luz do sol"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -936,7 +1072,11 @@
         "pl": "Rękawice Ashcrow",
         "pt": "Luvas de Ashcrow"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -962,7 +1102,11 @@
         "pl": "Rękawice Zaćmienia",
         "pt": "Luvas do eclipse"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -988,7 +1132,11 @@
         "pl": "Rękawice Iris",
         "pt": "Luvas de Iris"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1014,7 +1162,11 @@
         "pl": "Waleczne rękawice",
         "pt": "Luvas do valor"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1040,7 +1192,11 @@
         "pl": "Chwalebne rękawice",
         "pt": "Luvas gloriosas"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1066,7 +1222,11 @@
         "pl": "Rękawice Gwałtownego Wiatru",
         "pt": "Luvas do vento violento"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1092,7 +1252,11 @@
         "pl": "Rękawice Czerwonego Skrzydła",
         "pt": "Luvas da asa vermelha"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1119,7 +1283,11 @@
         "pl": "Pradawne rękawice",
         "pt": "Luvas antigas"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1146,7 +1314,11 @@
         "pl": "Demoniczne rękawice",
         "pt": "Luvas demoníacas"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1172,7 +1344,11 @@
         "pl": "Rękawice Burzowego Błysku",
         "pt": "Luvas Relâmpago de Tempest."
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1200,7 +1376,11 @@
         "pl": "Rękawice Wiecznego Skrzydła",
         "pt": "Luvas da asa eterna"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1227,7 +1407,11 @@
         "pl": "Rękawice Tytana",
         "pt": "Luvas do titã"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1254,7 +1438,11 @@
         "pl": "Rękawice Śmiałka",
         "pt": "Luvas da coragem"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1281,7 +1469,11 @@
         "pl": "Rękawice Widma",
         "pt": "Luvas do fantasma"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1308,7 +1500,11 @@
         "pl": "Rękawice Zniszczenia",
         "pt": "Luvas da destruição"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1336,7 +1532,11 @@
         "pl": "Rękawice Serafina",
         "pt": "Luvas do serafim"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1363,7 +1563,11 @@
         "pl": "Rękawice Wiary",
         "pt": "Luvas da fé"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1391,7 +1595,11 @@
         "pl": "Królewskie rękawice",
         "pt": "Luvas reais"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1418,7 +1626,11 @@
         "pl": "Rękawice Hadesa",
         "pt": "Luvas de Hades"
       },
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1441,6 +1653,152 @@
       "number": 53
     },
     {
+      "number": 54,
+      "name": {
+        "en": "Lazy Wind Gloves",
+        "vi": "Găng tay Gió Lười",
+        "de": "Träger Wind-Handschuhe",
+        "zh-CN": "慵懒之风护手"
+      },
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 142,
+      "durability": 90,
+      "attackSpeed": 7,
+      "defense": 59,
+      "requirements": {
+        "level": 400,
+        "strength": 67,
+        "dexterity": 151
+      },
+      "classRequirements": {
+        "darkKnight": 3
+      },
+      "options": [
+        "luck",
+        "defenseOption"
+      ]
+    },
+    {
+      "number": 55,
+      "name": {
+        "en": "Dark Devil Gloves",
+        "vi": "Găng tay Ác Quỷ Bóng Tối",
+        "de": "Dunkelteufel-Handschuhe",
+        "zh-CN": "暗黑恶魔护手"
+      },
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 142,
+      "durability": 90,
+      "attackSpeed": 7,
+      "defense": 40,
+      "requirements": {
+        "level": 400,
+        "strength": 45,
+        "dexterity": 13,
+        "energy": 171
+      },
+      "classRequirements": {
+        "darkWizard": 3
+      },
+      "options": [
+        "luck",
+        "defenseOption"
+      ]
+    },
+    {
+      "number": 56,
+      "name": {
+        "en": "Sticky Gloves",
+        "vi": "Găng tay Bám Dính",
+        "de": "Klebrige-Handschuhe",
+        "zh-CN": "粘性护手"
+      },
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 142,
+      "durability": 90,
+      "attackSpeed": 7,
+      "defense": 52,
+      "requirements": {
+        "level": 400,
+        "strength": 48,
+        "dexterity": 180
+      },
+      "classRequirements": {
+        "fairyElf": 3
+      },
+      "options": [
+        "luck",
+        "defenseOption"
+      ]
+    },
+    {
+      "number": 57,
+      "name": {
+        "en": "Hell Night Gloves",
+        "vi": "Găng tay Đêm Địa Ngục",
+        "de": "Höllennacht-Handschuhe",
+        "zh-CN": "地狱之夜护手"
+      },
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 142,
+      "durability": 90,
+      "attackSpeed": 7,
+      "defense": 58,
+      "requirements": {
+        "level": 400,
+        "strength": 194,
+        "dexterity": 52
+      },
+      "classRequirements": {
+        "magicGladiator": 3
+      },
+      "options": [
+        "luck",
+        "defenseOption"
+      ]
+    },
+    {
+      "number": 58,
+      "name": {
+        "en": "Ambition Gloves",
+        "vi": "Găng tay Tham Vọng",
+        "de": "Ehrgeiz-Handschuhe",
+        "zh-CN": "野心护手"
+      },
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 142,
+      "durability": 90,
+      "attackSpeed": 7,
+      "defense": 43,
+      "requirements": {
+        "level": 400,
+        "strength": 112,
+        "dexterity": 22
+      },
+      "classRequirements": {
+        "darkLord": 3
+      },
+      "options": [
+        "luck",
+        "defenseOption"
+      ]
+    },
+    {
       "number": 62,
       "name": {
         "en": "Scale Gloves",
@@ -1449,8 +1807,14 @@
         "pl": "Łuskowe rękawice",
         "pt": "Luvas de escamas"
       },
-      "tags": ["luckyItem"],
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "tags": [
+        "luckyItem"
+      ],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1485,8 +1849,14 @@
         "pl": "Jedwabne rękawice",
         "pt": "Luvas de seda"
       },
-      "tags": ["luckyItem"],
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "tags": [
+        "luckyItem"
+      ],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1518,8 +1888,14 @@
         "pl": "Rękawice Sfinksa",
         "pt": "Luvas de Esfinge"
       },
-      "tags": ["luckyItem"],
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "tags": [
+        "luckyItem"
+      ],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1551,8 +1927,14 @@
         "pl": "Rękawice Gwałtownego Wiatru",
         "pt": "Luvas do vento violento"
       },
-      "tags": ["luckyItem"],
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "tags": [
+        "luckyItem"
+      ],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1584,8 +1966,14 @@
         "pl": "Adamantytowe rękawice",
         "pt": "Luvas de adamantina"
       },
-      "tags": ["luckyItem"],
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "tags": [
+        "luckyItem"
+      ],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1617,8 +2005,14 @@
         "pl": "Smocze rękawice",
         "pt": "Luvas de Dragão"
       },
-      "tags": ["luckyItem"],
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "tags": [
+        "luckyItem"
+      ],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1651,8 +2045,14 @@
         "pl": "Rękawice Strażnika",
         "pt": "Luvas de Guardião"
       },
-      "tags": ["luckyItem"],
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "tags": [
+        "luckyItem"
+      ],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1684,8 +2084,14 @@
         "pl": "Legendarne rękawice",
         "pt": "Luvas Lendárias"
       },
-      "tags": ["luckyItem"],
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "tags": [
+        "luckyItem"
+      ],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1717,8 +2123,14 @@
         "pl": "Rękawice Czerwonego Skrzydła",
         "pt": "Luvas da asa vermelha"
       },
-      "tags": ["luckyItem"],
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "tags": [
+        "luckyItem"
+      ],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1750,8 +2162,14 @@
         "pl": "Rękawice Atlans",
         "pt": "Luvas do corvo da tempestade"
       },
-      "tags": ["luckyItem"],
-      "options": ["luck", "defenseOption", "excellentDefense"],
+      "tags": [
+        "luckyItem"
+      ],
+      "options": [
+        "luck",
+        "defenseOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "gloves",
@@ -1773,6 +2191,230 @@
       "classRequirements": {
         "magicGladiator": 1
       }
+    },
+    {
+      "number": 74,
+      "name": {
+        "en": "Stormwing Gloves",
+        "vi": "Găng tay Cánh Bão",
+        "de": "Sturmflügel-Handschuhe",
+        "zh-CN": "风暴之翼护手"
+      },
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 142,
+      "durability": 90,
+      "attackSpeed": 7,
+      "defense": 65,
+      "requirements": {
+        "level": 400,
+        "strength": 200,
+        "dexterity": 33
+      },
+      "classRequirements": {
+        "darkKnight": 3
+      },
+      "options": [
+        "luck",
+        "defenseOption"
+      ]
+    },
+    {
+      "number": 75,
+      "name": {
+        "en": "Light Lord Gloves",
+        "vi": "Găng tay Chúa Tể Ánh Sáng",
+        "de": "Lichtlord-Handschuhe",
+        "zh-CN": "光之领主护手"
+      },
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 142,
+      "durability": 90,
+      "attackSpeed": 7,
+      "defense": 45,
+      "requirements": {
+        "level": 400,
+        "strength": 14,
+        "dexterity": 31,
+        "energy": 127
+      },
+      "classRequirements": {
+        "fairyElf": 3
+      },
+      "options": [
+        "luck",
+        "defenseOption"
+      ]
+    },
+    {
+      "number": 76,
+      "name": {
+        "en": "Magic Knight Gloves",
+        "vi": "Găng tay Hiệp Sĩ Phép Thuật",
+        "de": "Magieritter-Handschuhe",
+        "zh-CN": "魔剑士护手"
+      },
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 142,
+      "durability": 90,
+      "attackSpeed": 7,
+      "defense": 49,
+      "requirements": {
+        "level": 400,
+        "strength": 48,
+        "dexterity": 17,
+        "energy": 142
+      },
+      "classRequirements": {
+        "magicGladiator": 3
+      },
+      "options": [
+        "luck",
+        "defenseOption"
+      ]
+    },
+    {
+      "number": 78,
+      "name": {
+        "en": "Dragon Gloves-J"
+      },
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 52,
+      "durability": 68,
+      "attackSpeed": 6,
+      "defense": 16,
+      "requirements": {
+        "strength": 120,
+        "dexterity": 30
+      },
+      "classRequirements": {
+        "darkKnight": 1,
+        "magicGladiator": 1
+      },
+      "options": [
+        "luck",
+        "defenseOption"
+      ],
+      "droppable": false,
+      "tradable": false
+    },
+    {
+      "number": 79,
+      "name": {
+        "en": "Legendary Gloves-J"
+      },
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 44,
+      "durability": 42,
+      "defense": 13,
+      "requirements": {
+        "strength": 20
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "magicGladiator": 1
+      },
+      "options": [
+        "luck",
+        "defenseOption"
+      ],
+      "droppable": false,
+      "tradable": false
+    },
+    {
+      "number": 80,
+      "name": {
+        "en": "Guardian Gloves-J"
+      },
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 50,
+      "durability": 45,
+      "attackSpeed": 6,
+      "defense": 17,
+      "requirements": {
+        "strength": 40,
+        "dexterity": 80
+      },
+      "classRequirements": {
+        "fairyElf": 1
+      },
+      "options": [
+        "luck",
+        "defenseOption"
+      ],
+      "droppable": false,
+      "tradable": false
+    },
+    {
+      "number": 81,
+      "name": {
+        "en": "Light Plate Gloves-J"
+      },
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 42,
+      "durability": 42,
+      "attackSpeed": 7,
+      "defense": 14,
+      "requirements": {
+        "strength": 70,
+        "dexterity": 20
+      },
+      "classRequirements": {
+        "darkLord": 1
+      },
+      "options": [
+        "luck",
+        "defenseOption"
+      ],
+      "droppable": false,
+      "tradable": false
+    },
+    {
+      "number": 82,
+      "name": {
+        "en": "Red Wing Gloves-J"
+      },
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 44,
+      "durability": 42,
+      "attackSpeed": 8,
+      "defense": 15,
+      "requirements": {
+        "strength": 18,
+        "dexterity": 4
+      },
+      "classRequirements": {
+        "summoner": 1
+      },
+      "options": [
+        "luck",
+        "defenseOption"
+      ],
+      "droppable": false,
+      "tradable": false
     }
   ]
 }

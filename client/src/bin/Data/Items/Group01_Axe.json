@@ -11,7 +11,11 @@
         "pl": "Mały topór",
         "pt": "Machado pequeno"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 3,
       "slot": "mainHand",
@@ -45,7 +49,11 @@
         "pl": "Toporek",
         "pt": "Machado de mão"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 3,
       "slot": "mainHand",
@@ -79,7 +87,11 @@
         "pl": "Podwójny topór",
         "pt": "Machado duplo"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 3,
       "slot": "mainHand",
@@ -110,7 +122,11 @@
         "pl": "Tomahawk",
         "pt": "Machadinha"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 3,
       "slot": "mainHand",
@@ -142,7 +158,11 @@
         "pl": "Elfi topór",
         "pt": "Machado élfico"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 3,
       "slot": "mainHand",
@@ -174,7 +194,11 @@
         "pl": "Topór bojowy",
         "pt": "Machado de batalha"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 3,
       "slot": "mainHand",
@@ -206,7 +230,11 @@
         "pl": "Topór Nikei",
         "pt": "Machado de Nikea"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 3,
       "slot": "mainHand",
@@ -238,7 +266,11 @@
         "pl": "Topór Larkana",
         "pt": "Machado de Larkan"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 3,
       "slot": "mainHand",
@@ -269,7 +301,11 @@
         "pl": "Topór półksiężyca",
         "pt": "Machado crescente"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 3,
       "slot": "mainHand",

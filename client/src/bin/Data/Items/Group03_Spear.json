@@ -11,7 +11,11 @@
         "pl": "Lekka włócznia",
         "pt": "Lança de luz"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "mainHand",
@@ -44,7 +48,11 @@
         "pl": "Włócznia",
         "pt": "Lança"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "mainHand",
@@ -76,7 +84,11 @@
         "pl": "Smocza lanca",
         "pt": "Lança do dragão"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "mainHand",
@@ -108,7 +120,11 @@
         "pl": "Trójząb olbrzyma",
         "pt": "Tridente gigante"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "mainHand",
@@ -140,7 +156,11 @@
         "pl": "Wężowa włócznia",
         "pt": "Lança da serpente"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "mainHand",
@@ -173,7 +193,11 @@
         "pl": "Podwójny czekan",
         "pt": "Gadanha dupla"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "mainHand",
@@ -205,7 +229,11 @@
         "pl": "Halabarda",
         "pt": "Alabarda"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "mainHand",
@@ -237,7 +265,11 @@
         "pl": "Berdysz",
         "pt": "Berdysh"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "mainHand",
@@ -270,7 +302,11 @@
         "pl": "Wielka kosa",
         "pt": "Grande foice"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "mainHand",
@@ -303,7 +339,11 @@
         "pl": "Gizarma Balroga",
         "pt": "Gancho de Balrog"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "mainHand",
@@ -336,7 +376,11 @@
         "pl": "Smocza włócznia",
         "pt": "Lança do dragão"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "mainHand",
@@ -367,7 +411,11 @@
         "pl": "Brova",
         "pt": "Brova"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "mainHand",
@@ -389,6 +437,40 @@
         "darkKnight": 2,
         "magicGladiator": 1
       }
+    },
+    {
+      "number": 12,
+      "name": {
+        "en": "Magmus Peer",
+        "vi": "Thương Magmus",
+        "de": "Magmus-Speer",
+        "zh-CN": "岩浆之矛"
+      },
+      "width": 2,
+      "height": 4,
+      "slot": "mainHand",
+      "weaponKind": "spear",
+      "statProfile": "weapon",
+      "twoHanded": true,
+      "level": 149,
+      "durability": 85,
+      "damageMin": 135,
+      "damageMax": 236,
+      "attackSpeed": 35,
+      "skill": 20,
+      "requirements": {
+        "level": 400,
+        "strength": 49,
+        "dexterity": 162
+      },
+      "classRequirements": {
+        "darkKnight": 3
+      },
+      "options": [
+        "luck",
+        "physicalDamageOption"
+      ],
+      "droppable": false
     }
   ]
 }

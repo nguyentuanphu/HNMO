@@ -5,68 +5,128 @@
     {
       "number": 0,
       "file": "Data/Item/Bow01.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "rotation": [180, 270, 25]
+        "rotation": [
+          180,
+          270,
+          25
+        ]
       },
       "ground": {
-        "rotation": [0, 270, -45]
+        "rotation": [
+          0,
+          270,
+          -45
+        ]
       }
     },
     {
       "number": 1,
       "file": "Data/Item/Bow02.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "rotation": [180, 270, 25]
+        "rotation": [
+          180,
+          270,
+          25
+        ]
       },
       "ground": {
-        "rotation": [0, 270, -45]
+        "rotation": [
+          0,
+          270,
+          -45
+        ]
       }
     },
     {
       "number": 2,
       "file": "Data/Item/Bow03.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "rotation": [180, 270, 25]
+        "rotation": [
+          180,
+          270,
+          25
+        ]
       },
       "ground": {
-        "rotation": [0, 270, -45]
+        "rotation": [
+          0,
+          270,
+          -45
+        ]
       }
     },
     {
       "number": 3,
       "file": "Data/Item/Bow04.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "rotation": [180, 270, 25]
+        "rotation": [
+          180,
+          270,
+          25
+        ]
       },
       "ground": {
-        "rotation": [0, 270, -45]
+        "rotation": [
+          0,
+          270,
+          -45
+        ]
       },
       "renderStyle": "monsterBattleBow"
     },
     {
       "number": 4,
       "file": "Data/Item/Bow05.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "rotation": [180, 270, 25]
+        "rotation": [
+          180,
+          270,
+          25
+        ]
       },
       "ground": {
-        "rotation": [0, 270, -45]
+        "rotation": [
+          0,
+          270,
+          -45
+        ]
       }
     },
     {
       "number": 5,
       "file": "Data/Item/Bow06.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "rotation": [180, 270, 25]
+        "rotation": [
+          180,
+          270,
+          25
+        ]
       },
       "ground": {
-        "rotation": [0, 270, -45]
+        "rotation": [
+          0,
+          270,
+          -45
+        ]
       },
       "glow": {
         "color": "white",
@@ -76,165 +136,363 @@
     {
       "number": 6,
       "file": "Data/Item/Bow07.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "rotation": [180, 270, 25]
+        "rotation": [
+          180,
+          270,
+          25
+        ]
       },
       "ground": {
-        "rotation": [0, 270, -45]
+        "rotation": [
+          0,
+          270,
+          -45
+        ]
       },
       "itemEffect": "pulsingGlow",
-      "itemEffectValues": {"glowMesh": "all"}
+      "itemEffectValues": {
+        "glowMesh": "all"
+      }
     },
     {
       "number": 7,
       "file": "Data/Item/Arrows01.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "rotation": [0, 270, 15],
+        "rotation": [
+          0,
+          270,
+          15
+        ],
         "scale": 0.0012
       },
       "ground": {
-        "rotation": [0, 270, -45]
+        "rotation": [
+          0,
+          270,
+          -45
+        ]
       },
       "glow": {
-        "level": [0, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31]
+        "level": [
+          0,
+          3,
+          5,
+          7,
+          9,
+          11,
+          13,
+          15,
+          17,
+          19,
+          21,
+          23,
+          25,
+          27,
+          29,
+          31
+        ]
       },
       "renderStyle": "ammunition"
     },
     {
       "number": 8,
       "file": "Data/Item/CrossBow01.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "anchor": [0.7, 0.7],
-        "rotation": [90, 180, 20]
+        "anchor": [
+          0.7,
+          0.7
+        ],
+        "rotation": [
+          90,
+          180,
+          20
+        ]
       },
       "ground": {
-        "rotation": [90, 0, -45]
+        "rotation": [
+          90,
+          0,
+          -45
+        ]
       }
     },
     {
       "number": 9,
       "file": "Data/Item/CrossBow02.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "anchor": [0.7, 0.7],
-        "rotation": [90, 180, 20]
+        "anchor": [
+          0.7,
+          0.7
+        ],
+        "rotation": [
+          90,
+          180,
+          20
+        ]
       },
       "ground": {
-        "rotation": [90, 0, -45]
+        "rotation": [
+          90,
+          0,
+          -45
+        ]
       }
     },
     {
       "number": 10,
       "file": "Data/Item/CrossBow03.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "anchor": [0.7, 0.7],
-        "rotation": [90, 180, 20]
+        "anchor": [
+          0.7,
+          0.7
+        ],
+        "rotation": [
+          90,
+          180,
+          20
+        ]
       },
       "ground": {
-        "rotation": [90, 0, -45]
+        "rotation": [
+          90,
+          0,
+          -45
+        ]
       }
     },
     {
       "number": 11,
       "file": "Data/Item/CrossBow04.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "anchor": [0.7, 0.7],
-        "rotation": [90, 180, 20]
+        "anchor": [
+          0.7,
+          0.7
+        ],
+        "rotation": [
+          90,
+          180,
+          20
+        ]
       },
       "ground": {
-        "rotation": [90, 0, -45]
+        "rotation": [
+          90,
+          0,
+          -45
+        ]
       }
     },
     {
       "number": 12,
       "file": "Data/Item/CrossBow05.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "anchor": [0.7, 0.7],
-        "rotation": [90, 180, 20]
+        "anchor": [
+          0.7,
+          0.7
+        ],
+        "rotation": [
+          90,
+          180,
+          20
+        ]
       },
       "ground": {
-        "rotation": [90, 0, -45]
+        "rotation": [
+          90,
+          0,
+          -45
+        ]
       }
     },
     {
       "number": 13,
       "file": "Data/Item/CrossBow06.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "anchor": [0.7, 0.7],
-        "rotation": [90, 180, 20]
+        "anchor": [
+          0.7,
+          0.7
+        ],
+        "rotation": [
+          90,
+          180,
+          20
+        ]
       },
       "ground": {
-        "rotation": [90, 0, -45]
+        "rotation": [
+          90,
+          0,
+          -45
+        ]
       },
       "glow": {
         "color": "white",
         "shineColor": "blue"
       },
       "itemEffect": "pulsingGlow",
-      "itemEffectValues": {"glowMesh": "all"}
+      "itemEffectValues": {
+        "glowMesh": "all"
+      }
     },
     {
       "number": 14,
       "file": "Data/Item/CrossBow07.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "anchor": [0.7, 0.7],
-        "rotation": [90, 180, 20]
+        "anchor": [
+          0.7,
+          0.7
+        ],
+        "rotation": [
+          90,
+          180,
+          20
+        ]
       },
       "ground": {
-        "rotation": [90, 0, -45]
+        "rotation": [
+          90,
+          0,
+          -45
+        ]
       },
       "itemEffect": "pulsingGlow",
-      "itemEffectValues": {"glowMesh": "all"}
+      "itemEffectValues": {
+        "glowMesh": "all"
+      }
     },
     {
       "number": 15,
       "file": "Data/Item/Arrows02.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "anchor": [0.7, 0.7],
-        "rotation": [0, 270, 15],
+        "anchor": [
+          0.7,
+          0.7
+        ],
+        "rotation": [
+          0,
+          270,
+          15
+        ],
         "scale": 0.0011
       },
       "ground": {
-        "rotation": [90, 0, -45]
+        "rotation": [
+          90,
+          0,
+          -45
+        ]
       },
       "glow": {
-        "level": [0, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31]
+        "level": [
+          0,
+          3,
+          5,
+          7,
+          9,
+          11,
+          13,
+          15,
+          17,
+          19,
+          21,
+          23,
+          25,
+          27,
+          29,
+          31
+        ]
       },
       "renderStyle": "ammunition"
     },
     {
       "number": 16,
       "file": "Data/Item/CrossBow17.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "anchor": [0.7, 0.7],
-        "rotation": [90, 180, 20]
+        "anchor": [
+          0.7,
+          0.7
+        ],
+        "rotation": [
+          90,
+          180,
+          20
+        ]
       },
       "ground": {
-        "rotation": [90, 0, -45]
+        "rotation": [
+          90,
+          0,
+          -45
+        ]
       },
       "itemEffect": "pulsingGlow",
-      "itemEffectValues": {"glowMesh": "all", "glowStrength": {"shape": "wave", "from": 0.7, "to": 1.1, "seconds": 1.5707963}}
+      "itemEffectValues": {
+        "glowMesh": "all",
+        "glowStrength": {
+          "shape": "wave",
+          "from": 0.7,
+          "to": 1.1,
+          "seconds": 1.5707963
+        }
+      }
     },
     {
       "number": 17,
       "file": "Data/Item/Bow18.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "anchor": [0.5, 0.5],
-        "rotation": [0, 90, 15]
+        "anchor": [
+          0.5,
+          0.5
+        ],
+        "rotation": [
+          0,
+          90,
+          15
+        ]
       },
       "ground": {
-        "rotation": [0, 270, -45]
+        "rotation": [
+          0,
+          270,
+          -45
+        ]
       },
       "glow": {
         "color": "steelBlue"
@@ -243,13 +501,26 @@
     {
       "number": 18,
       "file": "Data/Item/Bow19.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "anchor": [0.7, 0.7],
-        "rotation": [90, 180, 20]
+        "anchor": [
+          0.7,
+          0.7
+        ],
+        "rotation": [
+          90,
+          180,
+          20
+        ]
       },
       "ground": {
-        "rotation": [90, 0, -45]
+        "rotation": [
+          90,
+          0,
+          -45
+        ]
       },
       "glow": {
         "color": "sand"
@@ -259,14 +530,27 @@
     {
       "number": 19,
       "file": "Data/Item/CrossBow20.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "anchor": [0.7, 0.75],
-        "rotation": [90, 180, 20],
+        "anchor": [
+          0.7,
+          0.75
+        ],
+        "rotation": [
+          90,
+          180,
+          20
+        ],
         "scale": 0.002
       },
       "ground": {
-        "rotation": [90, 0, -45]
+        "rotation": [
+          90,
+          0,
+          -45
+        ]
       },
       "glow": {
         "color": "steelBlue"
@@ -276,10 +560,19 @@
     {
       "number": 20,
       "file": "Data/Item/Bow20.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "anchor": [0.5, 0.55],
-        "rotation": [180, -90, 15]
+        "anchor": [
+          0.5,
+          0.55
+        ],
+        "rotation": [
+          180,
+          -90,
+          15
+        ]
       },
       "glow": {
         "color": "copper"
@@ -289,11 +582,23 @@
     {
       "number": 21,
       "file": "Data/Item/HDK_Bow.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "anchor": [0.7, 0.7],
-        "offset": [0, 0.12],
-        "rotation": [180, -90, 15],
+        "anchor": [
+          0.7,
+          0.7
+        ],
+        "offset": [
+          0,
+          0.12
+        ],
+        "rotation": [
+          180,
+          -90,
+          15
+        ],
         "scale": 0.0022
       },
       "glow": {
@@ -304,11 +609,23 @@
     {
       "number": 22,
       "file": "Data/Item/CW_Bow.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "anchor": [0.7, 0.7],
-        "offset": [-0.1, 0.08],
-        "rotation": [180, -90, 15],
+        "anchor": [
+          0.7,
+          0.7
+        ],
+        "offset": [
+          -0.1,
+          0.08
+        ],
+        "rotation": [
+          180,
+          -90,
+          15
+        ],
         "scale": 0.002
       },
       "glow": {
@@ -319,15 +636,31 @@
     {
       "number": 23,
       "file": "Data/Item/Bow_24.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "anchor": [0.7, 0.7],
-        "offset": [-0.1, 0.08],
-        "rotation": [180, -90, 15],
+        "anchor": [
+          0.7,
+          0.7
+        ],
+        "offset": [
+          -0.1,
+          0.08
+        ],
+        "rotation": [
+          180,
+          -90,
+          15
+        ],
         "scale": 0.0032
       },
       "ground": {
-        "rotation": [0, 270, -45]
+        "rotation": [
+          0,
+          270,
+          -45
+        ]
       },
       "glow": {
         "color": "rose"
@@ -336,20 +669,59 @@
     {
       "number": 24,
       "file": "Data/Item/gamblebow.bmd",
-      "textureFolders": ["Item"],
+      "textureFolders": [
+        "Item"
+      ],
       "inventory": {
-        "anchor": [0.7, 0.7],
-        "offset": [-0.07, 0.07],
-        "rotation": [180, -90, 15],
+        "anchor": [
+          0.7,
+          0.7
+        ],
+        "offset": [
+          -0.07,
+          0.07
+        ],
+        "rotation": [
+          180,
+          -90,
+          15
+        ],
         "scale": 0.0023
       },
       "ground": {
-        "rotation": [0, 270, -45]
+        "rotation": [
+          0,
+          270,
+          -45
+        ]
       },
       "glow": {
         "color": "periwinkle",
-        "meshes": [0]
+        "meshes": [
+          0
+        ]
       }
+    },
+    {
+      "number": 25,
+      "file": "Data/s9/Item/bow26.bmd",
+      "textureFolders": [
+        "s9/Item"
+      ]
+    },
+    {
+      "number": 26,
+      "file": "Data/s9/Item/devilcrossbow.bmd",
+      "textureFolders": [
+        "s9/Item"
+      ]
+    },
+    {
+      "number": 27,
+      "file": "Data/Item/Bow06.bmd",
+      "textureFolders": [
+        "Item"
+      ]
     }
   ]
 }

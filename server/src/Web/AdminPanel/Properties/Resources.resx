@@ -5242,4 +5242,7 @@ On your account page, open Security and paste this code to confirm your new emai
   <data name="ActivityLogAfter" xml:space="preserve">
     <value>After</value>
   </data>
+  <data name="ItemDefinitions_SeasonNineNotice" xml:space="preserve">
+    <value>Season 9 mode active: the web client applies the 210 Season 9 shared item overrides and Season 9 item catalog automatically.</value>
+  </data>
 </root>
