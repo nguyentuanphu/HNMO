@@ -8,6 +8,7 @@
 //    disbands it, both go back to Lorencia.
 // Creating a guild needs level 100 (the server's rule), so A is test300; B is test4.
 import { test, expect, type Page } from '@playwright/test';
+import { joinDuprian } from './gensHelpers.js';
 import { enterWorld, expectNoPageErrors, screenPointOf } from './helpers.js';
 
 interface Npc { id: number; name: string; kind: string; monsterNumber: number | null; cell: { x: number; y: number } }
@@ -74,6 +75,10 @@ test('guild, friends, a letter and a whisper between two players', async ({ brow
     await b.evaluate((sender) => { const m = (window as unknown as Win).__game.social.messenger; const l = m.letters.find((x) => x.sender === sender); if (l) m.deleteLetter(l.id); }, nameA);
     await expect.poll(lettersFromA, { timeout: 30_000 }).toBe(left - 1);
   }
+
+  // Guilds need the same gens (GensConfiguration.GuildRequiresGens): both join Duprian first.
+  await joinDuprian(a);
+  await joinDuprian(b);
 
   // Both go to Devias; A walks to the guild master and talks to it: its window opens.
   for (const page of [a, b]) await page.evaluate(() => (window as unknown as Win).__game.online.say('/move devias'));
