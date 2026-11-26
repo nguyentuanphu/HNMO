@@ -2,6 +2,21 @@
   "formatVersion": 1,
   "models": [
     {
+      "name": "book01",
+      "file": "Data/Item/Book01.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
+      "name": "bookOfNeil",
+      "file": "Data/Item/Book_of_Neil.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
+      "name": "bow06",
+      "file": "Data/Item/Bow06.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
       "name": "capeOfFighter",
       "file": "Data/Item/Wing50.bmd",
       "textureFolders": ["Item"]
@@ -27,6 +42,11 @@
       "textureFolders": ["Item"]
     },
     {
+      "name": "doubtPaper",
+      "file": "Data/Item/doubt_paper.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
       "name": "eliteHealingPotion",
       "file": "Data/Item/partCharge2/EPotionR.bmd",
       "textureFolders": ["Item/partCharge2"]
@@ -34,6 +54,36 @@
     {
       "name": "gemstone",
       "file": "Data/Item/rs.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
+      "name": "giftBoxBluePurple",
+      "file": "Data/Item/giftbox_bp.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
+      "name": "giftBoxGreen",
+      "file": "Data/Item/giftbox_g.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
+      "name": "giftBoxRed",
+      "file": "Data/Item/giftbox_r.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
+      "name": "giftboxBb",
+      "file": "Data/Item/giftbox_bb.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
+      "name": "giftboxBr",
+      "file": "Data/Item/giftbox_br.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
+      "name": "gm02",
+      "file": "Data/Item/GM02.bmd",
       "textureFolders": ["Item"]
     },
     {
@@ -102,6 +152,16 @@
       "textureFolders": ["Item/LuckyItem"]
     },
     {
+      "name": "mace01",
+      "file": "Data/Item/Mace01.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
+      "name": "mace10",
+      "file": "Data/Item/Mace10.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
       "name": "membershipItem",
       "file": "Data/Item/Ingameshop/primium_membership_item.bmd",
       "textureFolders": ["Item/Ingameshop"]
@@ -110,6 +170,181 @@
       "name": "packageBox",
       "file": "Data/Item/Ingameshop/package_money_item.bmd",
       "textureFolders": ["Item/Ingameshop"]
+    },
+    {
+      "name": "potion01",
+      "file": "Data/Item/Potion01.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
+      "name": "s9Armormail3003",
+      "file": "Data/s9/Item/ArmorMail3003.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Armormale4003",
+      "file": "Data/s9/Item/ArmorMale4003.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Armormale75",
+      "file": "Data/s9/Item/ArmorMale75.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Attgempiece",
+      "file": "Data/s9/Item/attgempiece.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9BalhallaSword",
+      "file": "Data/s9/Item/balhalla_sword.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Billusionbead",
+      "file": "Data/s9/Item/BIllusionBead.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Bootmail3003",
+      "file": "Data/s9/Item/BootMail3003.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Bootmale4003",
+      "file": "Data/s9/Item/BootMale4003.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Bootmale75",
+      "file": "Data/s9/Item/BootMale75.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Conquerorwing",
+      "file": "Data/s9/Item/ConquerorWing.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Elixirpiece",
+      "file": "Data/s9/Item/ElixirPiece.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Glovemail3003",
+      "file": "Data/s9/Item/GloveMail3003.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Glovemale4003",
+      "file": "Data/s9/Item/GloveMale4003.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Glovemale75",
+      "file": "Data/s9/Item/GloveMale75.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Helmmail3003",
+      "file": "Data/s9/Item/HelmMail3003.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Helmmale75",
+      "file": "Data/s9/Item/HelmMale75.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9ItemboxGold",
+      "file": "Data/s9/Item/itembox_gold.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Ivmonmarka",
+      "file": "Data/s9/Item/IVmonmarkA.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Ivmonmarkb",
+      "file": "Data/s9/Item/IVmonmarkB.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Ivmonmarkc",
+      "file": "Data/s9/Item/IVmonmarkC.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Msiitemblack",
+      "file": "Data/s9/Item/MSIitemBlack.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Msiitemblue",
+      "file": "Data/s9/Item/MSIitemBlue.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Msiitemgreen",
+      "file": "Data/s9/Item/MSIitemGreen.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Msiitemred",
+      "file": "Data/s9/Item/MSIitemRed.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Pantmail3003",
+      "file": "Data/s9/Item/PantMail3003.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Pantmale4003",
+      "file": "Data/s9/Item/PantMale4003.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Pantmale75",
+      "file": "Data/s9/Item/PantMale75.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Penta01",
+      "file": "Data/s9/Item/penta01.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Penta02",
+      "file": "Data/s9/Item/penta02.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Pentaexdan",
+      "file": "Data/s9/Item/PentaExDan.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Pentaexshi",
+      "file": "Data/s9/Item/PentaExShi.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Pentaliquid",
+      "file": "Data/s9/Item/PentaLiquid.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Petegg",
+      "file": "Data/s9/Item/PetEgg.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "name": "s9Suhocham01",
+      "file": "Data/s9/Item/suhocham01.bmd",
+      "textureFolders": ["s9/Item"]
     },
     {
       "name": "secromiconFragment",
@@ -142,6 +377,16 @@
       "textureFolders": ["Item", "Effect"]
     },
     {
+      "name": "shield12",
+      "file": "Data/Item/Shield12.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
+      "name": "shield15",
+      "file": "Data/Item/Shield15.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
       "name": "silverBox",
       "file": "Data/Item/Ingameshop/itembox_silver.bmd",
       "textureFolders": ["Item/Ingameshop"]
@@ -160,6 +405,31 @@
       "name": "socketSeed",
       "file": "Data/Item/s30_seed.bmd",
       "textureFolders": ["Effect"]
+    },
+    {
+      "name": "songss",
+      "file": "Data/Item/songss.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
+      "name": "staff06",
+      "file": "Data/Item/Staff06.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
+      "name": "staff17",
+      "file": "Data/Item/Staff17.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
+      "name": "sword15",
+      "file": "Data/Item/Sword15.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
+      "name": "sword33",
+      "file": "Data/Item/Sword33.bmd",
+      "textureFolders": ["Player"]
     },
     {
       "name": "transformationRing",

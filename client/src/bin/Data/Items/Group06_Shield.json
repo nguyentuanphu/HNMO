@@ -11,11 +11,7 @@
         "pl": "Mała tarcza",
         "pt": "Escudo pequeno"
       },
-      "options": [
-        "luck",
-        "defenseRateOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -46,11 +42,7 @@
         "pl": "Rogowa tarcza",
         "pt": "Escudo de chifre"
       },
-      "options": [
-        "luck",
-        "defenseRateOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -79,11 +71,7 @@
         "pl": "Tarcza migdałowa",
         "pt": "Escudo ogival"
       },
-      "options": [
-        "luck",
-        "defenseRateOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -112,11 +100,7 @@
         "pl": "Elfia tarcza",
         "pt": "Escudo élfico"
       },
-      "options": [
-        "luck",
-        "defenseRateOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -144,11 +128,7 @@
         "pl": "Puklerz",
         "pt": "Broquel"
       },
-      "options": [
-        "luck",
-        "defenseRateOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -180,11 +160,7 @@
         "pl": "Tarcza Pogromcy Smoków",
         "pt": "Escudo do matador de dragões"
       },
-      "options": [
-        "luck",
-        "defenseRateOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -215,11 +191,7 @@
         "pl": "Tarcza czaszki",
         "pt": "Escudo da caveira"
       },
-      "options": [
-        "luck",
-        "defenseRateOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -251,11 +223,7 @@
         "pl": "Kolczasta tarcza",
         "pt": "Escudo com espinhos"
       },
-      "options": [
-        "luck",
-        "defenseRateOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -285,11 +253,7 @@
         "pl": "Tarcza wieżowa",
         "pt": "Escudo de torre"
       },
-      "options": [
-        "luck",
-        "defenseRateOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -320,11 +284,7 @@
         "pl": "Płytowa tarcza",
         "pt": "Escudo de placa"
       },
-      "options": [
-        "luck",
-        "defenseRateOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -354,11 +314,7 @@
         "pl": "Duża okrągła tarcza",
         "pt": "Grande escudo redondo"
       },
-      "options": [
-        "luck",
-        "defenseRateOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -388,11 +344,7 @@
         "pl": "Wężowa tarcza",
         "pt": "Escudo da serpente"
       },
-      "options": [
-        "luck",
-        "defenseRateOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -423,11 +375,7 @@
         "pl": "Brązowa tarcza",
         "pt": "Escudo de bronze"
       },
-      "options": [
-        "luck",
-        "defenseRateOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -456,11 +404,7 @@
         "pl": "Smocza tarcza",
         "pt": "Escudo do dragão"
       },
-      "options": [
-        "luck",
-        "defenseRateOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -490,11 +434,7 @@
         "pl": "Legendarna tarcza",
         "pt": "Escudo lendário"
       },
-      "options": [
-        "luck",
-        "defenseRateOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "offHand",
@@ -524,11 +464,7 @@
         "pl": "Tarcza Wielkiej Duszy",
         "pt": "Grande escudo da alma"
       },
-      "options": [
-        "luck",
-        "defenseRateOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "offHand",
@@ -556,11 +492,7 @@
         "pl": "Tarcza żywiołów",
         "pt": "Escudo elemental"
       },
-      "options": [
-        "luck",
-        "defenseRateOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -589,11 +521,7 @@
         "pl": "Szkarłatna Chwała",
         "pt": "Glória carmesim"
       },
-      "options": [
-        "luck",
-        "defenseRateOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -623,11 +551,7 @@
         "pl": "Tarcza Salamandry",
         "pt": "Escudo da salamandra"
       },
-      "options": [
-        "luck",
-        "defenseRateOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -657,11 +581,7 @@
         "pl": "Mroźna Bariera",
         "pt": "Barreira gelada"
       },
-      "options": [
-        "luck",
-        "defenseRateOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -691,11 +611,7 @@
         "pl": "Tarcza Strażnika",
         "pt": "Escudo do guardião"
       },
-      "options": [
-        "luck",
-        "defenseRateOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -725,11 +641,7 @@
         "pl": "Tarcza z krzyżem",
         "pt": "Escudo em cruz"
       },
-      "options": [
-        "luck",
-        "defenseRateOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -774,10 +686,7 @@
       "classRequirements": {
         "darkKnight": 3
       },
-      "options": [
-        "luck",
-        "defenseOption"
-      ]
+      "options": ["luck", "defenseOption"]
     },
     {
       "number": 23,
@@ -804,10 +713,7 @@
       "classRequirements": {
         "fairyElf": 3
       },
-      "options": [
-        "luck",
-        "defenseOption"
-      ]
+      "options": ["luck", "defenseOption"]
     },
     {
       "number": 24,
@@ -833,10 +739,7 @@
       "classRequirements": {
         "darkWizard": 3
       },
-      "options": [
-        "luck",
-        "defenseOption"
-      ]
+      "options": ["luck", "defenseOption"]
     },
     {
       "number": 25,
@@ -863,10 +766,7 @@
       "classRequirements": {
         "magicGladiator": 3
       },
-      "options": [
-        "luck",
-        "defenseOption"
-      ]
+      "options": ["luck", "defenseOption"]
     },
     {
       "number": 26,
@@ -893,10 +793,7 @@
       "classRequirements": {
         "darkLord": 3
       },
-      "options": [
-        "luck",
-        "defenseOption"
-      ]
+      "options": ["luck", "defenseOption"]
     },
     {
       "number": 27,
@@ -920,10 +817,7 @@
         "fairyElf": 1,
         "magicGladiator": 1
       },
-      "options": [
-        "luck",
-        "defenseOption"
-      ],
+      "options": ["luck", "defenseOption"],
       "droppable": false,
       "tradable": false
     },
@@ -950,10 +844,7 @@
         "magicGladiator": 1,
         "darkLord": 1
       },
-      "options": [
-        "luck",
-        "defenseOption"
-      ],
+      "options": ["luck", "defenseOption"],
       "droppable": false,
       "tradable": false
     }

@@ -5,14 +5,9 @@
     {
       "number": 0,
       "file": "Data/Player/HelmMale01.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -26,14 +21,9 @@
     {
       "number": 1,
       "file": "Data/Player/HelmMale02.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -50,14 +40,9 @@
     {
       "number": 2,
       "file": "Data/Player/HelmMale03.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -68,14 +53,9 @@
     {
       "number": 3,
       "file": "Data/Player/HelmMale04.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -90,14 +70,9 @@
     {
       "number": 4,
       "file": "Data/Player/HelmMale05.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -112,14 +87,9 @@
     {
       "number": 5,
       "file": "Data/Player/HelmMale06.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -130,14 +100,9 @@
     {
       "number": 6,
       "file": "Data/Player/HelmMale07.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -154,14 +119,9 @@
     {
       "number": 7,
       "file": "Data/Player/HelmMale08.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -172,14 +132,9 @@
     {
       "number": 8,
       "file": "Data/Player/HelmMale09.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -193,14 +148,9 @@
     {
       "number": 9,
       "file": "Data/Player/HelmMale10.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -219,14 +169,9 @@
     {
       "number": 10,
       "file": "Data/Player/HelmElf01.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -237,14 +182,9 @@
     {
       "number": 11,
       "file": "Data/Player/HelmElf02.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -255,14 +195,9 @@
     {
       "number": 12,
       "file": "Data/Player/HelmElf03.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -276,14 +211,9 @@
     {
       "number": 13,
       "file": "Data/Player/HelmElf04.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -297,14 +227,9 @@
     {
       "number": 14,
       "file": "Data/Player/HelmElf05.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -319,14 +244,9 @@
     {
       "number": 16,
       "file": "Data/Player/HelmMale17.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -343,14 +263,9 @@
     {
       "number": 17,
       "file": "Data/Player/HelmMale18.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -369,14 +284,9 @@
     {
       "number": 18,
       "file": "Data/Player/HelmMale19.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -391,14 +301,9 @@
     {
       "number": 19,
       "file": "Data/Player/HelmMaleTest20.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -413,14 +318,9 @@
     {
       "number": 21,
       "file": "Data/Player/HelmMale22.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -438,14 +338,9 @@
     {
       "number": 22,
       "file": "Data/Player/HelmMale23.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -459,14 +354,9 @@
     {
       "number": 24,
       "file": "Data/Player/HelmMale25.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -481,14 +371,9 @@
     {
       "number": 25,
       "file": "Data/Player/HelmMale26.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -505,14 +390,9 @@
     {
       "number": 26,
       "file": "Data/Player/HelmMale27.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -529,14 +409,9 @@
     {
       "number": 27,
       "file": "Data/Player/HelmMale28.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -553,14 +428,9 @@
     {
       "number": 28,
       "file": "Data/Player/HelmMale29.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -577,14 +447,9 @@
     {
       "number": 29,
       "file": "Data/Player/HDK_HelmMale01.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -601,23 +466,11 @@
     {
       "number": 30,
       "file": "Data/Player/HDK_HelmMale02.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
-        "offset": [
-          -0.03,
-          0.07
-        ],
-        "rotation": [
-          -90,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.8],
+        "offset": [-0.03, 0.07],
+        "rotation": [-90, 0, 0],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -631,23 +484,11 @@
     {
       "number": 31,
       "file": "Data/Player/HDK_HelmMale03.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
-        "offset": [
-          0.03,
-          -0.06
-        ],
-        "rotation": [
-          -90,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.8],
+        "offset": [0.03, -0.06],
+        "rotation": [-90, 0, 0],
         "scale": 0.007,
         "bodyHeight": -160
       },
@@ -661,14 +502,9 @@
     {
       "number": 33,
       "file": "Data/Player/HDK_HelmMale05.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -685,14 +521,9 @@
     {
       "number": 34,
       "file": "Data/Player/CW_HelmMale01.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -709,23 +540,11 @@
     {
       "number": 35,
       "file": "Data/Player/CW_HelmMale02.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
-        "offset": [
-          -0.02,
-          0.05
-        ],
-        "rotation": [
-          -90,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.8],
+        "offset": [-0.02, 0.05],
+        "rotation": [-90, 0, 0],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -739,14 +558,9 @@
     {
       "number": 36,
       "file": "Data/Player/CW_HelmMale03.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -760,14 +574,9 @@
     {
       "number": 38,
       "file": "Data/Player/CW_HelmMale05.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -784,32 +593,16 @@
     {
       "number": 39,
       "file": "Data/Player/HelmMale40.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
-        "offset": [
-          0,
-          -0.05
-        ],
-        "rotation": [
-          -90,
-          25,
-          0
-        ],
+        "anchor": [0.5, 0.8],
+        "offset": [0, -0.05],
+        "rotation": [-90, 25, 0],
         "scale": 0.007,
         "bodyHeight": -160
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          45
-        ],
+        "rotation": [0, 0, 45],
         "scale": 1.5,
         "bodyHeight": -160
       },
@@ -819,41 +612,21 @@
         "excellentMeshWithoutSkin": 2
       },
       "renderStyle": "violentWindToEternalWingHelm",
-      "renderStyleValues": {
-        "inventoryMesh": [
-          2
-        ]
-      }
+      "renderStyleValues": {"inventoryMesh": [2]}
     },
     {
       "number": 40,
       "file": "Data/Player/HelmMale41.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
-        "offset": [
-          0,
-          -0.05
-        ],
-        "rotation": [
-          -90,
-          25,
-          0
-        ],
+        "anchor": [0.5, 0.8],
+        "offset": [0, -0.05],
+        "rotation": [-90, 25, 0],
         "scale": 0.007,
         "bodyHeight": -160
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          45
-        ],
+        "rotation": [0, 0, 45],
         "scale": 1.5,
         "bodyHeight": -160
       },
@@ -863,41 +636,21 @@
         "excellentMeshWithoutSkin": 1
       },
       "renderStyle": "violentWindToEternalWingHelm",
-      "renderStyleValues": {
-        "inventoryMesh": [
-          1
-        ]
-      }
+      "renderStyleValues": {"inventoryMesh": [1]}
     },
     {
       "number": 41,
       "file": "Data/Player/HelmMale42.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
-        "offset": [
-          0,
-          -0.05
-        ],
-        "rotation": [
-          -90,
-          25,
-          0
-        ],
+        "anchor": [0.5, 0.8],
+        "offset": [0, -0.05],
+        "rotation": [-90, 25, 0],
         "scale": 0.007,
         "bodyHeight": -160
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          45
-        ],
+        "rotation": [0, 0, 45],
         "scale": 1.5,
         "bodyHeight": -160
       },
@@ -907,41 +660,21 @@
         "excellentMeshWithoutSkin": 0
       },
       "renderStyle": "violentWindToEternalWingHelm",
-      "renderStyleValues": {
-        "inventoryMesh": [
-          0
-        ]
-      }
+      "renderStyleValues": {"inventoryMesh": [0]}
     },
     {
       "number": 42,
       "file": "Data/Player/HelmMale43.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
-        "offset": [
-          0,
-          -0.05
-        ],
-        "rotation": [
-          -90,
-          25,
-          0
-        ],
+        "anchor": [0.5, 0.8],
+        "offset": [0, -0.05],
+        "rotation": [-90, 25, 0],
         "scale": 0.007,
         "bodyHeight": -160
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          45
-        ],
+        "rotation": [0, 0, 45],
         "scale": 1.5,
         "bodyHeight": -160
       },
@@ -951,41 +684,21 @@
         "excellentMeshWithoutSkin": 2
       },
       "renderStyle": "violentWindToEternalWingHelm",
-      "renderStyleValues": {
-        "inventoryMesh": [
-          2
-        ]
-      }
+      "renderStyleValues": {"inventoryMesh": [2]}
     },
     {
       "number": 43,
       "file": "Data/Player/HelmMale44.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
-        "offset": [
-          0,
-          -0.05
-        ],
-        "rotation": [
-          -90,
-          25,
-          0
-        ],
+        "anchor": [0.5, 0.8],
+        "offset": [0, -0.05],
+        "rotation": [-90, 25, 0],
         "scale": 0.007,
         "bodyHeight": -160
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          45
-        ],
+        "rotation": [0, 0, 45],
         "scale": 1.5,
         "bodyHeight": -160
       },
@@ -995,41 +708,21 @@
         "excellentMeshWithoutSkin": 1
       },
       "renderStyle": "violentWindToEternalWingHelm",
-      "renderStyleValues": {
-        "inventoryMesh": [
-          1
-        ]
-      }
+      "renderStyleValues": {"inventoryMesh": [1]}
     },
     {
       "number": 44,
       "file": "Data/Player/HelmMale45.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
-        "offset": [
-          0,
-          -0.05
-        ],
-        "rotation": [
-          -90,
-          25,
-          0
-        ],
+        "anchor": [0.5, 0.8],
+        "offset": [0, -0.05],
+        "rotation": [-90, 25, 0],
         "scale": 0.007,
         "bodyHeight": -160
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          45
-        ],
+        "rotation": [0, 0, 45],
         "scale": 1.5,
         "bodyHeight": -160
       },
@@ -1039,23 +732,14 @@
         "excellentMeshWithoutSkin": 2
       },
       "renderStyle": "violentWindToEternalWingHelm",
-      "renderStyleValues": {
-        "inventoryMesh": [
-          2
-        ]
-      }
+      "renderStyleValues": {"inventoryMesh": [2]}
     },
     {
       "number": 45,
       "file": "Data/Player/HelmMale46.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -1072,14 +756,9 @@
     {
       "number": 46,
       "file": "Data/Player/HelmMale47.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -1096,14 +775,9 @@
     {
       "number": 49,
       "file": "Data/Player/HelmMale50.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -1112,26 +786,17 @@
       },
       "glow": {
         "color": "rose",
-        "meshes": [
-          0
-        ],
-        "shineMeshes": [
-          0
-        ]
+        "meshes": [0],
+        "shineMeshes": [0]
       },
       "renderStyle": "onlyMesh0WithoutSkin"
     },
     {
       "number": 50,
       "file": "Data/Player/HelmMale51.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -1140,26 +805,17 @@
       },
       "glow": {
         "color": "moss",
-        "meshes": [
-          1
-        ],
-        "shineMeshes": [
-          1
-        ]
+        "meshes": [1],
+        "shineMeshes": [1]
       },
       "renderStyle": "onlyMesh1WithoutSkin"
     },
     {
       "number": 51,
       "file": "Data/Player/HelmMale52.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -1176,14 +832,9 @@
     {
       "number": 52,
       "file": "Data/Player/HelmMale53.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -1197,14 +848,9 @@
     {
       "number": 53,
       "file": "Data/Player/HelmMale54.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -1213,63 +859,37 @@
       },
       "glow": {
         "color": "magenta",
-        "meshes": [
-          2
-        ],
-        "shineMeshes": [
-          2
-        ]
+        "meshes": [2],
+        "shineMeshes": [2]
       },
       "renderStyle": "onlyMesh2WithoutSkin"
     },
     {
       "number": 54,
-      "file": "Data/s9/Item/HelmMale75.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "model": "s9Helmmale75"
     },
     {
       "number": 55,
       "file": "Data/s9/Item/HelmMale56.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 56,
-      "file": "Data/s9/Item/HelmMail3003.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "model": "s9Helmmail3003"
     },
     {
       "number": 58,
       "file": "Data/s9/Item/HelmMale4005.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 59,
       "file": "Data/Player/HelmMale60.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
-        "offset": [
-          0,
-          0.04
-        ],
-        "rotation": [
-          -90,
-          25,
-          0
-        ],
+        "anchor": [0.5, 0.8],
+        "offset": [0, 0.04],
+        "rotation": [-90, 25, 0],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -1278,12 +898,8 @@
       },
       "glow": {
         "color": "copper",
-        "meshes": [
-          1
-        ],
-        "shineMeshes": [
-          1
-        ],
+        "meshes": [1],
+        "shineMeshes": [1],
         "excellentMesh": 1
       },
       "renderStyle": "onlyMesh1WithoutSkin"
@@ -1291,14 +907,9 @@
     {
       "number": 60,
       "file": "Data/Player/HelmMale61.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -1307,12 +918,8 @@
       },
       "glow": {
         "color": "darkOrange",
-        "meshes": [
-          1
-        ],
-        "shineMeshes": [
-          1
-        ],
+        "meshes": [1],
+        "shineMeshes": [1],
         "excellentMesh": 1
       },
       "renderStyle": "onlyMesh1WithoutSkin"
@@ -1320,14 +927,9 @@
     {
       "number": 61,
       "file": "Data/Player/HelmMale62.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -1336,12 +938,8 @@
       },
       "glow": {
         "color": "brown",
-        "meshes": [
-          0
-        ],
-        "shineMeshes": [
-          0
-        ],
+        "meshes": [0],
+        "shineMeshes": [0],
         "excellentMesh": 0
       },
       "renderStyle": "onlyMesh0WithoutSkin"
@@ -1349,23 +947,14 @@
     {
       "number": 62,
       "file": "Data/Player/LuckyItem/62/new_Helm01.bmd",
-      "textureFolders": [
-        "Player/LuckyItem/62"
-      ],
+      "textureFolders": ["Player/LuckyItem/62"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -170
       },
       "ground": {
-        "rotation": [
-          250,
-          180,
-          45
-        ],
+        "rotation": [250, 180, 45],
         "bodyHeight": -160
       },
       "renderStyle": "luckyItem"
@@ -1373,23 +962,14 @@
     {
       "number": 63,
       "file": "Data/Player/LuckyItem/63/new_Helm02.bmd",
-      "textureFolders": [
-        "Player/LuckyItem/63"
-      ],
+      "textureFolders": ["Player/LuckyItem/63"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -170
       },
       "ground": {
-        "rotation": [
-          250,
-          180,
-          45
-        ],
+        "rotation": [250, 180, 45],
         "bodyHeight": -160
       },
       "renderStyle": "luckyItem"
@@ -1397,23 +977,14 @@
     {
       "number": 64,
       "file": "Data/Player/LuckyItem/64/new_Helm03.bmd",
-      "textureFolders": [
-        "Player/LuckyItem/64"
-      ],
+      "textureFolders": ["Player/LuckyItem/64"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -170
       },
       "ground": {
-        "rotation": [
-          250,
-          180,
-          45
-        ],
+        "rotation": [250, 180, 45],
         "bodyHeight": -160
       },
       "renderStyle": "luckyItem"
@@ -1421,59 +992,31 @@
     {
       "number": 65,
       "file": "Data/Player/LuckyItem/65/new_Helm04.bmd",
-      "textureFolders": [
-        "Player/LuckyItem/65"
-      ],
+      "textureFolders": ["Player/LuckyItem/65"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
-        "offset": [
-          0.04,
-          0
-        ],
+        "anchor": [0.5, 0.8],
+        "offset": [0.04, 0],
         "scale": 0.007,
         "bodyHeight": -170
       },
       "ground": {
-        "rotation": [
-          250,
-          180,
-          45
-        ],
+        "rotation": [250, 180, 45],
         "bodyHeight": -160
       },
       "renderStyle": "luckyItem",
-      "renderStyleValues": {
-        "inventoryMeshes": [
-          2
-        ],
-        "meshes": [
-          2
-        ]
-      }
+      "renderStyleValues": {"inventoryMeshes": [2], "meshes": [2]}
     },
     {
       "number": 66,
       "file": "Data/Player/LuckyItem/66/new_Helm05.bmd",
-      "textureFolders": [
-        "Player/LuckyItem/66"
-      ],
+      "textureFolders": ["Player/LuckyItem/66"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -170
       },
       "ground": {
-        "rotation": [
-          250,
-          180,
-          45
-        ],
+        "rotation": [250, 180, 45],
         "bodyHeight": -160
       },
       "renderStyle": "luckyItem"
@@ -1481,23 +1024,14 @@
     {
       "number": 67,
       "file": "Data/Player/LuckyItem/67/new_Helm06.bmd",
-      "textureFolders": [
-        "Player/LuckyItem/67"
-      ],
+      "textureFolders": ["Player/LuckyItem/67"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -170
       },
       "ground": {
-        "rotation": [
-          250,
-          180,
-          45
-        ],
+        "rotation": [250, 180, 45],
         "bodyHeight": -160
       },
       "renderStyle": "luckyItem"
@@ -1505,23 +1039,14 @@
     {
       "number": 68,
       "file": "Data/Player/LuckyItem/68/new_Helm07.bmd",
-      "textureFolders": [
-        "Player/LuckyItem/68"
-      ],
+      "textureFolders": ["Player/LuckyItem/68"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -170
       },
       "ground": {
-        "rotation": [
-          250,
-          180,
-          45
-        ],
+        "rotation": [250, 180, 45],
         "bodyHeight": -160
       },
       "renderStyle": "luckyItem"
@@ -1529,23 +1054,14 @@
     {
       "number": 69,
       "file": "Data/Player/LuckyItem/69/new_Helm08.bmd",
-      "textureFolders": [
-        "Player/LuckyItem/69"
-      ],
+      "textureFolders": ["Player/LuckyItem/69"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -170
       },
       "ground": {
-        "rotation": [
-          250,
-          180,
-          45
-        ],
+        "rotation": [250, 180, 45],
         "bodyHeight": -160
       },
       "renderStyle": "luckyItem"
@@ -1553,60 +1069,31 @@
     {
       "number": 70,
       "file": "Data/Player/LuckyItem/70/new_Helm09.bmd",
-      "textureFolders": [
-        "Player/LuckyItem/70",
-        "Player/LuckyItem/65"
-      ],
+      "textureFolders": ["Player/LuckyItem/70", "Player/LuckyItem/65"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
-        "offset": [
-          0.04,
-          0
-        ],
+        "anchor": [0.5, 0.8],
+        "offset": [0.04, 0],
         "scale": 0.007,
         "bodyHeight": -170
       },
       "ground": {
-        "rotation": [
-          250,
-          180,
-          45
-        ],
+        "rotation": [250, 180, 45],
         "bodyHeight": -160
       },
       "renderStyle": "luckyItem",
-      "renderStyleValues": {
-        "inventoryMeshes": [
-          1
-        ],
-        "meshes": [
-          1
-        ]
-      }
+      "renderStyleValues": {"inventoryMeshes": [1], "meshes": [1]}
     },
     {
       "number": 72,
       "file": "Data/Player/LuckyItem/72/new_Helm11.bmd",
-      "textureFolders": [
-        "Player/LuckyItem/72"
-      ],
+      "textureFolders": ["Player/LuckyItem/72"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -170
       },
       "ground": {
-        "rotation": [
-          250,
-          180,
-          45
-        ],
+        "rotation": [250, 180, 45],
         "bodyHeight": -160
       },
       "renderStyle": "luckyItem"
@@ -1614,14 +1101,9 @@
     {
       "number": 73,
       "file": "Data/Player/HelmMale74.bmd",
-      "textureFolders": [
-        "Player"
-      ],
+      "textureFolders": ["Player"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ],
+        "anchor": [0.5, 0.8],
         "scale": 0.0039,
         "bodyHeight": -160
       },
@@ -1630,71 +1112,49 @@
       },
       "glow": {
         "color": "ice",
-        "meshes": [
-          0
-        ],
-        "shineMeshes": [
-          0
-        ],
+        "meshes": [0],
+        "shineMeshes": [0],
         "excellentMesh": 0
       },
       "renderStyle": "phoenixSoulHelmet"
     },
     {
       "number": 74,
-      "file": "Data/s9/Item/HelmMale75.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "model": "s9Helmmale75"
     },
     {
       "number": 75,
-      "file": "Data/s9/Item/HelmMail3003.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "model": "s9Helmmail3003"
     },
     {
       "number": 78,
       "file": "Data/s9/Item/HelmMale02.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 79,
       "file": "Data/s9/Item/HelmMale04.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 80,
       "file": "Data/s9/Item/HelmElf05.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 81,
       "file": "Data/s9/Item/HelmMale26.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 82,
       "file": "Data/s9/Item/HelmMale41.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 83,
       "file": "Data/s9/Item/HelmMale60.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     }
   ]
 }

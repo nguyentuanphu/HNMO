@@ -11,11 +11,7 @@
         "pl": "Brązowa zbroja",
         "pt": "Armadura de bronze"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -43,11 +39,7 @@
         "pl": "Smocza zbroja",
         "pt": "Armadura do dragão"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -74,11 +66,7 @@
         "pl": "Pikowana zbroja",
         "pt": "Armadura acolchoada"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -104,11 +92,7 @@
         "pl": "Legendarna zbroja",
         "pt": "Armadura lendária"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -134,11 +118,7 @@
         "pl": "Kościana zbroja",
         "pt": "Armadura de osso"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -164,11 +144,7 @@
         "pl": "Skórzana zbroja",
         "pt": "Armadura de couro"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -196,11 +172,7 @@
         "pl": "Łuskowa zbroja",
         "pt": "Armadura de escamas"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -228,11 +200,7 @@
         "pl": "Zbroja Sfinksa",
         "pt": "Armadura da esfinge"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -258,11 +226,7 @@
         "pl": "Mosiężna zbroja",
         "pt": "Armadura de latão"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -290,11 +254,7 @@
         "pl": "Płytowa zbroja",
         "pt": "Armadura de placa"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -321,11 +281,7 @@
         "pl": "Zbroja z pnączy",
         "pt": "Armadura da vinha"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -351,11 +307,7 @@
         "pl": "Jedwabna zbroja",
         "pt": "Armadura de seda"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -381,11 +333,7 @@
         "pl": "Zbroja Wiatru",
         "pt": "Armadura do vento"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -411,11 +359,7 @@
         "pl": "Zbroja Ducha",
         "pt": "Armadura do espírito"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -441,11 +385,7 @@
         "pl": "Zbroja Strażnika",
         "pt": "Armadura do guardião"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -471,11 +411,7 @@
         "pl": "Zbroja Burzowej Wrony",
         "pt": "Arm. do Corvo da Tempestade"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -501,11 +437,7 @@
         "pl": "Zbroja Czarnego Smoka",
         "pt": "Armadura do dragão negro"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -531,11 +463,7 @@
         "pl": "Zbroja Mrocznego Feniksa",
         "pt": "Armadura da fênix negra"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -561,11 +489,7 @@
         "pl": "Zbroja Wielkiej Duszy",
         "pt": "Armadura da grande alma"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -591,11 +515,7 @@
         "pl": "Boska zbroja",
         "pt": "Armadura divina"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -621,11 +541,7 @@
         "pl": "Zbroja Gromowego Jastrzębia",
         "pt": "Armadura de Thunder Hawk"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -651,11 +567,7 @@
         "pl": "Zbroja Wielkiego Smoka",
         "pt": "Armadura do grande dragão"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -681,11 +593,7 @@
         "pl": "Zbroja Mrocznej Duszy",
         "pt": "Armadura da alma negra"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -711,11 +619,7 @@
         "pl": "Zbroja Huraganu",
         "pt": "Armadura do furacão"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -741,11 +645,7 @@
         "pl": "Zbroja Czerwonego Ducha",
         "pt": "Armadura do espírito vermelho"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -771,11 +671,7 @@
         "pl": "Lekka zbroja płytowa",
         "pt": "Armadura de placa leve"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -801,11 +697,7 @@
         "pl": "Adamantytowa zbroja",
         "pt": "Armadura de adamantina"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -831,11 +723,7 @@
         "pl": "Zbroja z mrocznej stali",
         "pt": "Armadura de aço negro"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -861,11 +749,7 @@
         "pl": "Zbroja Mrocznego Mistrza",
         "pt": "Armadura do Mestre negro"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -891,11 +775,7 @@
         "pl": "Zbroja Smoczego Rycerza",
         "pt": "Armadura do cavaleiro dragão"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -922,11 +802,7 @@
         "pl": "Zbroja Jadowitej Mgły",
         "pt": "Armadura da névoa de veneno"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -953,11 +829,7 @@
         "pl": "Zbroja Sylphid Ray",
         "pt": "Armadura do raio silfídico"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -984,11 +856,7 @@
         "pl": "Zbroja Wulkanu",
         "pt": "Armadura do vulcão"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -1015,11 +883,7 @@
         "pl": "Zbroja Słońca",
         "pt": "Armadura da luz do sol"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -1046,11 +910,7 @@
         "pl": "Zbroja Ashcrow",
         "pt": "Armadura de Ashcrow"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -1075,11 +935,7 @@
         "pl": "Zbroja Zaćmienia",
         "pt": "Armadura do eclipse"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -1104,11 +960,7 @@
         "pl": "Zbroja Iris",
         "pt": "Armadura de Iris"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -1133,11 +985,7 @@
         "pl": "Waleczna zbroja",
         "pt": "Armadura do valor"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -1162,11 +1010,7 @@
         "pl": "Chwalebna zbroja",
         "pt": "Armadura gloriosa"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -1191,11 +1035,7 @@
         "pl": "Zbroja Gwałtownego Wiatru",
         "pt": "Armadura do vento violento"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -1220,11 +1060,7 @@
         "pl": "Zbroja Czerwonego Skrzydła",
         "pt": "Armadura da asa vermelha"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -1250,11 +1086,7 @@
         "pl": "Pradawna zbroja",
         "pt": "Armadura antiga"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -1280,11 +1112,7 @@
         "pl": "Demoniczna zbroja",
         "pt": "Armadura demoníaca"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -1309,11 +1137,7 @@
         "pl": "Zbroja Burzowego Błysku",
         "pt": "Arm. Relâmpago de Tempestade"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -1340,11 +1164,7 @@
         "pl": "Zbroja Wiecznego Skrzydła",
         "pt": "Armadura da asa eterna"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -1371,11 +1191,7 @@
         "pl": "Zbroja Tytana",
         "pt": "Armadura do titã"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -1401,11 +1217,7 @@
         "pl": "Zbroja Śmiałka",
         "pt": "Armadura da coragem"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -1431,11 +1243,7 @@
         "pl": "Zbroja Widma",
         "pt": "Armadura do fantasma"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -1461,11 +1269,7 @@
         "pl": "Zbroja Zniszczenia",
         "pt": "Armadura da destruição"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -1492,11 +1296,7 @@
         "pl": "Zbroja Serafina",
         "pt": "Armadura do serafim"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -1522,11 +1322,7 @@
         "pl": "Zbroja Wiary",
         "pt": "Armadura da fé"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -1553,11 +1349,7 @@
         "pl": "Królewska zbroja",
         "pt": "Armadura real"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -1583,11 +1375,7 @@
         "pl": "Zbroja Hadesa",
         "pt": "Armadura de Hades"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -1631,10 +1419,7 @@
       "classRequirements": {
         "darkKnight": 3
       },
-      "options": [
-        "luck",
-        "defenseOption"
-      ]
+      "options": ["luck", "defenseOption"]
     },
     {
       "number": 55,
@@ -1660,10 +1445,7 @@
       "classRequirements": {
         "darkWizard": 3
       },
-      "options": [
-        "luck",
-        "defenseOption"
-      ]
+      "options": ["luck", "defenseOption"]
     },
     {
       "number": 56,
@@ -1688,10 +1470,7 @@
       "classRequirements": {
         "fairyElf": 3
       },
-      "options": [
-        "luck",
-        "defenseOption"
-      ]
+      "options": ["luck", "defenseOption"]
     },
     {
       "number": 57,
@@ -1716,10 +1495,7 @@
       "classRequirements": {
         "magicGladiator": 3
       },
-      "options": [
-        "luck",
-        "defenseOption"
-      ]
+      "options": ["luck", "defenseOption"]
     },
     {
       "number": 58,
@@ -1744,10 +1520,7 @@
       "classRequirements": {
         "darkLord": 3
       },
-      "options": [
-        "luck",
-        "defenseOption"
-      ]
+      "options": ["luck", "defenseOption"]
     },
     {
       "number": 59,
@@ -1758,11 +1531,7 @@
         "pl": "Zbroja Świętego Ognia",
         "pt": "Armadura de Fogo Sagrado"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -1788,11 +1557,7 @@
         "pl": "Zbroja Storm Jahad",
         "pt": "Armadura de Tempestade Zahard"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -1817,11 +1582,7 @@
         "pl": "Zbroja Piercing Groove",
         "pt": "Armadura de Entalhe Perfurante"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -1846,14 +1607,8 @@
         "pl": "Łuskowa zbroja",
         "pt": "Armadura de escama"
       },
-      "tags": [
-        "luckyItem"
-      ],
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "tags": ["luckyItem"],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -1887,14 +1642,8 @@
         "pl": "Jedwabna zbroja",
         "pt": "Armadura de seda"
       },
-      "tags": [
-        "luckyItem"
-      ],
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "tags": ["luckyItem"],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -1925,14 +1674,8 @@
         "pl": "Zbroja Sfinksa",
         "pt": "Armadura de Esfinge"
       },
-      "tags": [
-        "luckyItem"
-      ],
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "tags": ["luckyItem"],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -1964,14 +1707,8 @@
         "pl": "Zbroja Gwałtownego Wiatru",
         "pt": "Armadura do vento violento"
       },
-      "tags": [
-        "luckyItem"
-      ],
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "tags": ["luckyItem"],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -2002,14 +1739,8 @@
         "pl": "Adamantytowa zbroja",
         "pt": "Armadura de adamantina"
       },
-      "tags": [
-        "luckyItem"
-      ],
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "tags": ["luckyItem"],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -2040,14 +1771,8 @@
         "pl": "Smocza zbroja",
         "pt": "Armadura de Dragão"
       },
-      "tags": [
-        "luckyItem"
-      ],
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "tags": ["luckyItem"],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -2079,14 +1804,8 @@
         "pl": "Zbroja Strażnika",
         "pt": "Armadura de Guardião"
       },
-      "tags": [
-        "luckyItem"
-      ],
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "tags": ["luckyItem"],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -2117,14 +1836,8 @@
         "pl": "Legendarna zbroja",
         "pt": "Armadura Lendária"
       },
-      "tags": [
-        "luckyItem"
-      ],
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "tags": ["luckyItem"],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -2156,14 +1869,8 @@
         "pl": "Zbroja Czerwonego Skrzydła",
         "pt": "Armadura da asa vermelha"
       },
-      "tags": [
-        "luckyItem"
-      ],
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "tags": ["luckyItem"],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -2194,14 +1901,8 @@
         "pl": "Zbroja Atlans",
         "pt": "Armadura do corvo da tempestade"
       },
-      "tags": [
-        "luckyItem"
-      ],
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "tags": ["luckyItem"],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -2232,14 +1933,8 @@
         "pl": "Zbroja Storm Jahad",
         "pt": "Armadura de Tempestade Zahard"
       },
-      "tags": [
-        "luckyItem"
-      ],
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "tags": ["luckyItem"],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -2270,11 +1965,7 @@
         "pl": "Zbroja Duszy Feniksa",
         "pt": "Armadura de Alma de Fênix"
       },
-      "options": [
-        "luck",
-        "defenseOption",
-        "excellentDefense"
-      ],
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -2314,10 +2005,7 @@
       "classRequirements": {
         "darkKnight": 3
       },
-      "options": [
-        "luck",
-        "defenseOption"
-      ]
+      "options": ["luck", "defenseOption"]
     },
     {
       "number": 75,
@@ -2343,10 +2031,7 @@
       "classRequirements": {
         "fairyElf": 3
       },
-      "options": [
-        "luck",
-        "defenseOption"
-      ]
+      "options": ["luck", "defenseOption"]
     },
     {
       "number": 76,
@@ -2372,10 +2057,7 @@
       "classRequirements": {
         "magicGladiator": 3
       },
-      "options": [
-        "luck",
-        "defenseOption"
-      ]
+      "options": ["luck", "defenseOption"]
     },
     {
       "number": 78,
@@ -2397,10 +2079,7 @@
         "darkKnight": 1,
         "magicGladiator": 1
       },
-      "options": [
-        "luck",
-        "defenseOption"
-      ],
+      "options": ["luck", "defenseOption"],
       "droppable": false,
       "tradable": false
     },
@@ -2423,10 +2102,7 @@
         "darkWizard": 1,
         "magicGladiator": 1
       },
-      "options": [
-        "luck",
-        "defenseOption"
-      ],
+      "options": ["luck", "defenseOption"],
       "droppable": false,
       "tradable": false
     },
@@ -2449,10 +2125,7 @@
       "classRequirements": {
         "fairyElf": 1
       },
-      "options": [
-        "luck",
-        "defenseOption"
-      ],
+      "options": ["luck", "defenseOption"],
       "droppable": false,
       "tradable": false
     },
@@ -2475,10 +2148,7 @@
       "classRequirements": {
         "darkLord": 1
       },
-      "options": [
-        "luck",
-        "defenseOption"
-      ],
+      "options": ["luck", "defenseOption"],
       "droppable": false,
       "tradable": false
     },
@@ -2501,10 +2171,7 @@
       "classRequirements": {
         "summoner": 1
       },
-      "options": [
-        "luck",
-        "defenseOption"
-      ],
+      "options": ["luck", "defenseOption"],
       "droppable": false,
       "tradable": false
     },
@@ -2527,10 +2194,7 @@
       "classRequirements": {
         "rageFighter": 1
       },
-      "options": [
-        "luck",
-        "defenseOption"
-      ],
+      "options": ["luck", "defenseOption"],
       "droppable": false,
       "tradable": false
     }

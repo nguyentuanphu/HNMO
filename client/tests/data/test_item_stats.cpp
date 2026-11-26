@@ -380,13 +380,14 @@ TEST_CASE("Item requirements come from the item's stat profile [data][items]")
     CHECK(GameLogic::Items::ComputeItemStats(ringSources, {ITEM_RING_OF_ICE, 3, 0x01}).requireLevel == 50);
 
     // Books: energy with one per level; their strength grows with the option even from 0. The item counts its option
-    // at its value list's last level above the list (GetAdditionalOptionLevel): 4.
+    // at its value list's last level above the list (GetAdditionalOptionLevel): 7 since the +28 option
+    // (Jewel of Life level 7).
     CHECK(stats(ITEM_BOOK_OF_SAHAMUTT, 0).requireEnergy == ComputeItem(ITEM_BOOK_OF_SAHAMUTT, 0).RequireEnergy);
     CHECK(stats(ITEM_BOOK_OF_SAHAMUTT, 15, 0, 0, 12).requireStrength == 60);
     CHECK(stats(ITEM_BOOK_OF_SAHAMUTT, 15, 0, 0, 4).requireStrength ==
           ComputeItem(ITEM_BOOK_OF_SAHAMUTT, 15, 0, 0, 4).RequireStrength);
     CHECK(ComputeItem(ITEM_BOOK_OF_SAHAMUTT, 15, 0, 0, 12).RequireStrength ==
-          ComputeItem(ITEM_BOOK_OF_SAHAMUTT, 15, 0, 0, 4).RequireStrength);
+          ComputeItem(ITEM_BOOK_OF_SAHAMUTT, 15, 0, 0, 7).RequireStrength);
 
     // Scrolls: the energy as stored, the level requirement + 4 per level.
     const int wizardryEnhance = MakeItemType(15, 28);

@@ -5,60 +5,35 @@
     {
       "number": 0,
       "file": "Data/Player/Helper01.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ]
+        "anchor": [0.5, 0.7]
       },
       "itemEffect": "glowingMesh"
     },
     {
       "number": 1,
       "file": "Data/Player/Helper02.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ]
+        "anchor": [0.5, 0.7]
       }
     },
     {
       "number": 2,
       "file": "Data/Player/Helper03.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ]
+        "anchor": [0.5, 0.7]
       }
     },
     {
       "number": 3,
       "file": "Data/Player/Helper04.bmd",
-      "textureFolders": [
-        "Item",
-        "Skill"
-      ],
+      "textureFolders": ["Item", "Skill"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "rotation": [
-          -90,
-          -90,
-          0
-        ]
+        "anchor": [0.5, 0.7],
+        "rotation": [-90, -90, 0]
       },
       "glow": {
         "level": 8
@@ -67,16 +42,9 @@
     {
       "number": 4,
       "file": "Data/Item/DarkHorseHorn.bmd",
-      "textureFolders": [
-        "Item",
-        "Skill"
-      ],
+      "textureFolders": ["Item", "Skill"],
       "inventory": {
-        "rotation": [
-          -90,
-          -90,
-          0
-        ],
+        "rotation": [-90, -90, 0],
         "scale": 0.0015
       },
       "renderStyle": "darkHorse"
@@ -84,20 +52,10 @@
     {
       "number": 5,
       "file": "Data/Item/spiritbill.bmd",
-      "textureFolders": [
-        "Item",
-        "Skill"
-      ],
+      "textureFolders": ["Item", "Skill"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "rotation": [
-          -90,
-          -35,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "rotation": [-90, -35, 0],
         "scale": 0.005
       },
       "renderStyle": "darkRaven"
@@ -105,14 +63,9 @@
     {
       "number": 7,
       "file": "Data/Item/Covenant.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.9
-        ]
+        "anchor": [0.5, 0.9]
       },
       "renderStyle": "contractSummon",
       "itemEffect": "hiddenMeshByLevel"
@@ -121,33 +74,22 @@
       "number": 8,
       "model": "transformationRing",
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ]
+        "anchor": [0.5, 0.7]
       }
     },
     {
       "number": 9,
       "file": "Data/Item/Ring02.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ]
+        "anchor": [0.5, 0.7]
       }
     },
     {
       "number": 10,
       "model": "transformationRing",
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ]
+        "anchor": [0.5, 0.7]
       },
       "glow": {
         "level": 8
@@ -156,14 +98,9 @@
     {
       "number": 11,
       "file": "Data/Item/SummonBook.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.8
-        ]
+        "anchor": [0.5, 0.8]
       },
       "renderStyle": "lifeStone",
       "itemEffect": "hideMesh1"
@@ -171,71 +108,39 @@
     {
       "number": 12,
       "file": "Data/Item/Necklace01.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "rotation": [
-          360,
-          0,
-          0
-        ]
+        "anchor": [0.5, 0.7],
+        "rotation": [360, 0, 0]
       }
     },
     {
       "number": 13,
       "file": "Data/Item/Necklace02.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "rotation": [
-          360,
-          0,
-          0
-        ]
+        "anchor": [0.5, 0.7],
+        "rotation": [360, 0, 0]
       }
     },
     {
       "number": 14,
       "file": "Data/Item/Quest04.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.6,
-          1
-        ],
+        "anchor": [0.6, 1],
         "scale": 0.003
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          45
-        ]
+        "rotation": [0, 0, 45]
       }
     },
     {
       "number": 15,
       "file": "Data/Item/Quest05.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.6,
-          1
-        ],
+        "anchor": [0.6, 1],
         "scale": 0.003
       },
       "renderStyle": "fruits"
@@ -243,44 +148,26 @@
     {
       "number": 16,
       "file": "Data/Item/EventBloodCastle00.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.9
-        ],
+        "anchor": [0.5, 0.9],
         "scale": 0.002
       },
       "ground": {
-        "rotation": [
-          -45,
-          -5,
-          18
-        ],
+        "rotation": [-45, -5, 18],
         "scale": 0.48
       }
     },
     {
       "number": 17,
       "file": "Data/Item/EventBloodCastle01.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.9
-        ],
+        "anchor": [0.5, 0.9],
         "scale": 0.0018
       },
       "ground": {
-        "rotation": [
-          -45,
-          -5,
-          18
-        ],
+        "rotation": [-45, -5, 18],
         "scale": 0.48
       },
       "renderStyle": "bloodBone"
@@ -288,27 +175,14 @@
     {
       "number": 18,
       "file": "Data/Item/EventBloodCastle02.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.75
-        ],
-        "rotation": [
-          290,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.75],
+        "rotation": [290, 0, 0],
         "scale": 0.0018
       },
       "ground": {
-        "rotation": [
-          165,
-          -168,
-          198
-        ],
+        "rotation": [165, -168, 198],
         "scale": 0.48
       },
       "renderStyle": "invisibilityCloak"
@@ -316,214 +190,106 @@
     {
       "number": 21,
       "file": "Data/Item/firering.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "rotation": [
-          270,
-          160,
-          20
-        ]
+        "anchor": [0.5, 0.7],
+        "rotation": [270, 160, 20]
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          20
-        ]
+        "rotation": [0, 0, 20]
       }
     },
     {
       "number": 22,
       "file": "Data/Item/groundring.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "rotation": [
-          270,
-          160,
-          20
-        ]
+        "anchor": [0.5, 0.7],
+        "rotation": [270, 160, 20]
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          20
-        ]
+        "rotation": [0, 0, 20]
       }
     },
     {
       "number": 23,
       "file": "Data/Item/windring.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "rotation": [
-          270,
-          160,
-          20
-        ]
+        "anchor": [0.5, 0.7],
+        "rotation": [270, 160, 20]
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          20
-        ]
+        "rotation": [0, 0, 20]
       }
     },
     {
       "number": 24,
       "file": "Data/Item/manaring.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "rotation": [
-          270,
-          160,
-          20
-        ]
+        "anchor": [0.5, 0.7],
+        "rotation": [270, 160, 20]
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          20
-        ]
+        "rotation": [0, 0, 20]
       }
     },
     {
       "number": 25,
       "file": "Data/Item/icenecklace.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "rotation": [
-          360,
-          0,
-          0
-        ]
+        "anchor": [0.5, 0.7],
+        "rotation": [360, 0, 0]
       }
     },
     {
       "number": 26,
       "file": "Data/Item/windnecklace.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "rotation": [
-          360,
-          0,
-          0
-        ]
+        "anchor": [0.5, 0.7],
+        "rotation": [360, 0, 0]
       }
     },
     {
       "number": 27,
       "file": "Data/Item/waternecklace.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "rotation": [
-          360,
-          0,
-          0
-        ]
+        "anchor": [0.5, 0.7],
+        "rotation": [360, 0, 0]
       }
     },
     {
       "number": 28,
       "file": "Data/Item/agnecklace.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "rotation": [
-          360,
-          0,
-          0
-        ]
+        "anchor": [0.5, 0.7],
+        "rotation": [360, 0, 0]
       }
     },
     {
       "number": 29,
       "file": "Data/Item/EventChaosCastle.bmd",
-      "textureFolders": [
-        "NPC"
-      ],
+      "textureFolders": ["NPC"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.5
-        ],
-        "rotation": [
-          290,
-          0,
-          0
-        ]
+        "anchor": [0.5, 0.5],
+        "rotation": [290, 0, 0]
       }
     },
     {
       "number": 30,
       "model": "capeOfLord",
       "inventory": {
-        "anchor": [
-          0.5,
-          0.5
-        ],
-        "rotation": [
-          -90,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.5],
+        "rotation": [-90, 0, 0],
         "scale": 0.002
       },
       "ground": {
-        "rotation": [
-          -45,
-          0,
-          45
-        ],
+        "rotation": [-45, 0, 45],
         "scale": 0.5
       },
       "cloth": true,
@@ -535,217 +301,104 @@
     {
       "number": 31,
       "file": "Data/Item/DarkHorseSoul.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.9
-        ],
-        "rotation": [
-          -90,
-          -90,
-          0
-        ]
+        "anchor": [0.5, 0.9],
+        "rotation": [-90, -90, 0]
       },
       "renderStyle": "spirit"
     },
     {
       "number": 32,
       "file": "Data/Item/FR_1.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.5
-        ],
-        "offset": [
-          0.01,
-          -0.03
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.5],
+        "offset": [0.01, -0.03],
+        "rotation": [270, 0, 0],
         "scale": 0.0019
       }
     },
     {
       "number": 33,
       "file": "Data/Item/FR_2.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          0.02
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, 0.02],
+        "rotation": [270, 0, 0],
         "scale": 0.004
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          45
-        ],
+        "rotation": [0, 0, 45],
         "scale": 1.2
       }
     },
     {
       "number": 34,
       "file": "Data/Item/FR_3.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.01,
-          0.02
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.01, 0.02],
+        "rotation": [270, 0, 0],
         "scale": 0.004
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ]
+        "rotation": [90, 0, -45]
       }
     },
     {
       "number": 35,
       "file": "Data/Item/FR_4.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.01,
-          0.02
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.01, 0.02],
+        "rotation": [270, 0, 0],
         "scale": 0.004
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          90
-        ]
+        "rotation": [0, 0, 90]
       }
     },
     {
       "number": 36,
       "file": "Data/Item/FR_5.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.01,
-          0.05
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.01, 0.05],
+        "rotation": [270, 0, 0],
         "scale": 0.007
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          90
-        ],
+        "rotation": [0, 0, 90],
         "scale": 1.3
       }
     },
     {
       "number": 37,
       "file": "Data/Item/FR_6.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.01,
-          0.04
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.01, 0.04],
+        "rotation": [270, 0, 0],
         "scale": 0.005
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          180
-        ]
+        "rotation": [0, 0, 180]
       }
     },
     {
       "number": 38,
       "file": "Data/Item/kanneck2.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          0.02
-        ],
-        "rotation": [
-          -198,
-          0,
-          0
-        ]
+        "anchor": [0.5, 0.7],
+        "offset": [0, 0.02],
+        "rotation": [-198, 0, 0]
       },
       "glow": {
         "shineBelowPlus3": "harmony"
@@ -755,15 +408,8 @@
       "number": 39,
       "model": "transformationRing",
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ]
+        "anchor": [0.5, 0.7],
+        "rotation": [270, 0, 0]
       },
       "glow": {
         "level": 13
@@ -773,15 +419,8 @@
       "number": 40,
       "model": "transformationRing",
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ]
+        "anchor": [0.5, 0.7],
+        "rotation": [270, 0, 0]
       },
       "glow": {
         "level": 13
@@ -791,15 +430,8 @@
       "number": 41,
       "model": "transformationRing",
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ]
+        "anchor": [0.5, 0.7],
+        "rotation": [270, 0, 0]
       },
       "glow": {
         "level": 13
@@ -809,15 +441,8 @@
       "number": 42,
       "model": "transformationRing",
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ]
+        "anchor": [0.5, 0.7],
+        "rotation": [270, 0, 0]
       },
       "glow": {
         "level": 13
@@ -826,31 +451,15 @@
     {
       "number": 43,
       "file": "Data/Item/partCharge1/monmark01.bmd",
-      "textureFolders": [
-        "Item/partCharge1"
-      ],
+      "textureFolders": ["Item/partCharge1"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.005,
-          -0.027
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.005, -0.027],
+        "rotation": [270, 0, 0],
         "scale": 0.0021
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.5
       },
       "glow": {
@@ -861,31 +470,15 @@
     {
       "number": 44,
       "file": "Data/Item/partCharge1/monmark02.bmd",
-      "textureFolders": [
-        "Item/partCharge1"
-      ],
+      "textureFolders": ["Item/partCharge1"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.005,
-          -0.03
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.005, -0.03],
+        "rotation": [270, 0, 0],
         "scale": 0.0021
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.5
       },
       "glow": {
@@ -896,31 +489,15 @@
     {
       "number": 45,
       "file": "Data/Item/partCharge1/monmark03.bmd",
-      "textureFolders": [
-        "Item/partCharge1"
-      ],
+      "textureFolders": ["Item/partCharge1"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.005,
-          -0.02
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.005, -0.02],
+        "rotation": [270, 0, 0],
         "scale": 0.0021
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.5
       },
       "glow": {
@@ -931,31 +508,15 @@
     {
       "number": 46,
       "file": "Data/Item/partCharge1/entrancegray.bmd",
-      "textureFolders": [
-        "Item/partCharge1"
-      ],
+      "textureFolders": ["Item/partCharge1"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.04
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.04],
+        "rotation": [270, 0, 0],
         "scale": 0.0018
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.5
       },
       "renderStyle": "eventTicket"
@@ -963,31 +524,15 @@
     {
       "number": 47,
       "file": "Data/Item/partCharge1/entrancered.bmd",
-      "textureFolders": [
-        "Item/partCharge1"
-      ],
+      "textureFolders": ["Item/partCharge1"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.04
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.04],
+        "rotation": [270, 0, 0],
         "scale": 0.0018
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.5
       },
       "renderStyle": "eventTicket"
@@ -995,31 +540,15 @@
     {
       "number": 48,
       "file": "Data/Item/partCharge1/entrancebleu.bmd",
-      "textureFolders": [
-        "Item/partCharge1"
-      ],
+      "textureFolders": ["Item/partCharge1"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.04
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.04],
+        "rotation": [270, 0, 0],
         "scale": 0.0018
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.5
       },
       "renderStyle": "eventTicket"
@@ -1027,31 +556,15 @@
     {
       "number": 49,
       "file": "Data/Item/scrollpaper.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.04
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.04],
+        "rotation": [270, 0, 0],
         "scale": 0.0013
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.3
       },
       "renderStyle": "oldScroll"
@@ -1059,23 +572,11 @@
     {
       "number": 50,
       "file": "Data/Item/oath.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.03
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.03],
+        "rotation": [270, 0, 0],
         "scale": 0.003
       },
       "ground": {
@@ -1090,31 +591,15 @@
     {
       "number": 51,
       "file": "Data/Item/songbl.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.02
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.02],
+        "rotation": [270, 0, 0],
         "scale": 0.003
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.45
       },
       "renderStyle": "scrollOfBlood"
@@ -1122,23 +607,11 @@
     {
       "number": 52,
       "file": "Data/Item/condolstone.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          0.045
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, 0.045],
+        "rotation": [270, 0, 0],
         "scale": 0.005
       },
       "ground": {
@@ -1152,23 +625,11 @@
     {
       "number": 53,
       "file": "Data/Item/condolwing.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          0.04
-        ],
-        "rotation": [
-          270,
-          120,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, 0.04],
+        "rotation": [270, 120, 0],
         "scale": 0.005
       },
       "ground": {
@@ -1182,31 +643,15 @@
     {
       "number": 54,
       "file": "Data/Item/partCharge2/resetfruit_power.bmd",
-      "textureFolders": [
-        "Item/partCharge2"
-      ],
+      "textureFolders": ["Item/partCharge2"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.02
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.02],
+        "rotation": [270, 0, 0],
         "scale": 0.004
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          90
-        ],
+        "rotation": [0, 0, 90],
         "scale": 0.7
       },
       "renderStyle": "textured"
@@ -1214,31 +659,15 @@
     {
       "number": 55,
       "file": "Data/Item/partCharge2/resetfruit_quick.bmd",
-      "textureFolders": [
-        "Item/partCharge2"
-      ],
+      "textureFolders": ["Item/partCharge2"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.02
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.02],
+        "rotation": [270, 0, 0],
         "scale": 0.004
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          90
-        ],
+        "rotation": [0, 0, 90],
         "scale": 0.7
       },
       "renderStyle": "textured"
@@ -1246,31 +675,15 @@
     {
       "number": 56,
       "file": "Data/Item/partCharge2/resetfruit_strenth.bmd",
-      "textureFolders": [
-        "Item/partCharge2"
-      ],
+      "textureFolders": ["Item/partCharge2"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.02
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.02],
+        "rotation": [270, 0, 0],
         "scale": 0.004
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          90
-        ],
+        "rotation": [0, 0, 90],
         "scale": 0.7
       },
       "renderStyle": "textured"
@@ -1278,31 +691,15 @@
     {
       "number": 57,
       "file": "Data/Item/partCharge2/resetfruit_energe.bmd",
-      "textureFolders": [
-        "Item/partCharge2"
-      ],
+      "textureFolders": ["Item/partCharge2"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.02
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.02],
+        "rotation": [270, 0, 0],
         "scale": 0.004
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          90
-        ],
+        "rotation": [0, 0, 90],
         "scale": 0.7
       },
       "renderStyle": "textured"
@@ -1310,31 +707,15 @@
     {
       "number": 58,
       "file": "Data/Item/partCharge2/resetfruit_command.bmd",
-      "textureFolders": [
-        "Item/partCharge2"
-      ],
+      "textureFolders": ["Item/partCharge2"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.02
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.02],
+        "rotation": [270, 0, 0],
         "scale": 0.004
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          90
-        ],
+        "rotation": [0, 0, 90],
         "scale": 0.7
       },
       "renderStyle": "textured"
@@ -1342,31 +723,15 @@
     {
       "number": 59,
       "file": "Data/Item/partCharge2/sealmove.bmd",
-      "textureFolders": [
-        "Item/partCharge2"
-      ],
+      "textureFolders": ["Item/partCharge2"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.01,
-          0.02
-        ],
-        "rotation": [
-          90,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.01, 0.02],
+        "rotation": [90, 0, 0],
         "scale": 0.0008
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          90
-        ],
+        "rotation": [0, 0, 90],
         "scale": 0.2
       },
       "renderStyle": "textured"
@@ -1374,31 +739,15 @@
     {
       "number": 60,
       "file": "Data/Item/partCharge2/indulgence.bmd",
-      "textureFolders": [
-        "Item/partCharge2"
-      ],
+      "textureFolders": ["Item/partCharge2"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.06
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.06],
+        "rotation": [270, 0, 0],
         "scale": 0.005
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          90
-        ],
+        "rotation": [0, 0, 90],
         "scale": 1.5
       },
       "renderStyle": "textured"
@@ -1406,31 +755,15 @@
     {
       "number": 61,
       "file": "Data/Item/partCharge2/entrancepurple.bmd",
-      "textureFolders": [
-        "Item/partCharge2"
-      ],
+      "textureFolders": ["Item/partCharge2"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.04
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.04],
+        "rotation": [270, 0, 0],
         "scale": 0.0018
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.5
       },
       "renderStyle": "eventTicket"
@@ -1438,32 +771,15 @@
     {
       "number": 62,
       "file": "Data/Item/partcharge4/curemark.bmd",
-      "textureFolders": [
-        "Item/partcharge4",
-        "Item/partCharge1"
-      ],
+      "textureFolders": ["Item/partcharge4", "Item/partCharge1"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.01,
-          -0.03
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.01, -0.03],
+        "rotation": [270, 0, 0],
         "scale": 0.002
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.5
       },
       "renderStyle": "textured"
@@ -1471,31 +787,15 @@
     {
       "number": 63,
       "file": "Data/Item/partcharge4/holinessmark.bmd",
-      "textureFolders": [
-        "Item/partcharge4"
-      ],
+      "textureFolders": ["Item/partcharge4"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.01,
-          0.082
-        ],
-        "rotation": [
-          90,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.01, 0.082],
+        "rotation": [90, 0, 0],
         "scale": 0.002
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.5
       },
       "renderStyle": "textured"
@@ -1503,26 +803,14 @@
     {
       "number": 64,
       "file": "Data/Item/partcharge4/demon.bmd",
-      "textureFolders": [
-        "Item/partcharge4"
-      ],
+      "textureFolders": ["Item/partcharge4"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.05
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.05],
         "scale": 0.0005
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          70
-        ],
+        "rotation": [0, 0, 70],
         "scale": 0.21
       },
       "renderStyle": "textured"
@@ -1530,26 +818,14 @@
     {
       "number": 65,
       "file": "Data/Item/partcharge4/maria.bmd",
-      "textureFolders": [
-        "Item/partcharge4"
-      ],
+      "textureFolders": ["Item/partcharge4"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.02
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.02],
         "scale": 0.0016
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          70
-        ],
+        "rotation": [0, 0, 70],
         "scale": 0.5
       },
       "renderStyle": "textured"
@@ -1557,31 +833,15 @@
     {
       "number": 66,
       "file": "Data/Item/xmas/santa_village.bmd",
-      "textureFolders": [
-        "Item/xmas"
-      ],
+      "textureFolders": ["Item/xmas"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.01,
-          -0.05
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.01, -0.05],
+        "rotation": [270, 0, 0],
         "scale": 0.002
       },
       "ground": {
-        "rotation": [
-          270,
-          0,
-          -45
-        ],
+        "rotation": [270, 0, -45],
         "scale": 1
       },
       "renderStyle": "invitationToSantaVillage"
@@ -1589,69 +849,33 @@
     {
       "number": 67,
       "file": "Data/Item/xmas/xmas_deer.bmd",
-      "textureFolders": [
-        "Item/xmas"
-      ],
+      "textureFolders": ["Item/xmas"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.05
-        ],
-        "rotation": [
-          270,
-          40,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.05],
+        "rotation": [270, 40, 0],
         "scale": 0.0015
       }
     },
     {
       "number": 68,
       "file": "Data/Item/xmas/xmasring.bmd",
-      "textureFolders": [
-        "Item/xmas"
-      ],
+      "textureFolders": ["Item/xmas"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.02,
-          -0.02
-        ],
-        "rotation": [
-          300,
-          10,
-          20
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.02, -0.02],
+        "rotation": [300, 10, 20],
         "scale": 0.0026
       }
     },
     {
       "number": 69,
       "file": "Data/Item/PartCharge5/ressurection.bmd",
-      "textureFolders": [
-        "Item/PartCharge5"
-      ],
+      "textureFolders": ["Item/PartCharge5"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.005,
-          -0.05
-        ],
-        "rotation": [
-          270,
-          -30,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.005, -0.05],
+        "rotation": [270, -30, 0],
         "scale": 0.0023
       },
       "renderStyle": "talismanOfResurrection"
@@ -1659,23 +883,11 @@
     {
       "number": 70,
       "file": "Data/Item/PartCharge5/potalcharm.bmd",
-      "textureFolders": [
-        "Item/PartCharge5"
-      ],
+      "textureFolders": ["Item/PartCharge5"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.04,
-          0
-        ],
-        "rotation": [
-          270,
-          0,
-          70
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.04, 0],
+        "rotation": [270, 0, 70],
         "scale": 0.0018
       },
       "renderStyle": "talismanOfMobility"
@@ -1683,23 +895,11 @@
     {
       "number": 71,
       "file": "Data/Item/gamble_scyderx01.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          0.07
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, 0.07],
+        "rotation": [270, 0, 0],
         "scale": 0.0019
       },
       "renderStyle": "gambleItem"
@@ -1707,23 +907,11 @@
     {
       "number": 72,
       "file": "Data/Item/gamble_wand01.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          0.07
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, 0.07],
+        "rotation": [270, 0, 0],
         "scale": 0.0019
       },
       "renderStyle": "gambleItem"
@@ -1731,23 +919,11 @@
     {
       "number": 73,
       "file": "Data/Item/gamble_bowx01.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          0.07
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, 0.07],
+        "rotation": [270, 0, 0],
         "scale": 0.0019
       },
       "renderStyle": "gambleItem"
@@ -1755,23 +931,11 @@
     {
       "number": 74,
       "file": "Data/Item/gamble_safterx01.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          0.07
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, 0.07],
+        "rotation": [270, 0, 0],
         "scale": 0.0019
       },
       "renderStyle": "gambleItem"
@@ -1779,23 +943,11 @@
     {
       "number": 75,
       "file": "Data/Item/gamble_stickx01.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          0.07
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, 0.07],
+        "rotation": [270, 0, 0],
         "scale": 0.0019
       },
       "renderStyle": "gambleItem"
@@ -1803,84 +955,43 @@
     {
       "number": 76,
       "file": "Data/Item/PandaPetRing.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.02
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.02],
+        "rotation": [270, 0, 0],
         "scale": 0.0026
       }
     },
     {
       "number": 77,
       "file": "Data/s9/Item/PandaPetRing_brown.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 78,
       "file": "Data/s9/Item/PandaPetRing_pink.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 80,
       "file": "Data/Item/PandaPet.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.05
-        ],
-        "rotation": [
-          270,
-          40,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.05],
+        "rotation": [270, 40, 0],
         "scale": 0.002
       }
     },
     {
       "number": 81,
       "file": "Data/Item/PartCharge6/suhocham01.bmd",
-      "textureFolders": [
-        "Item/PartCharge6",
-        "Effect"
-      ],
+      "textureFolders": ["Item/PartCharge6", "Effect"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.005,
-          0.035
-        ],
-        "rotation": [
-          -90,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.005, 0.035],
+        "rotation": [-90, 0, 0],
         "scale": 0.0012
       },
       "renderStyle": "talismanOfGuardian"
@@ -1888,23 +999,11 @@
     {
       "number": 82,
       "file": "Data/Item/PartCharge6/imteam_protect.bmd",
-      "textureFolders": [
-        "Item/PartCharge6"
-      ],
+      "textureFolders": ["Item/PartCharge6"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.005,
-          0.035
-        ],
-        "rotation": [
-          -90,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.005, 0.035],
+        "rotation": [-90, 0, 0],
         "scale": 0.0012
       },
       "renderStyle": "talismanOfItemProtection"
@@ -1912,31 +1011,15 @@
     {
       "number": 83,
       "file": "Data/Item/PartCharge6/amulet_satan.bmd",
-      "textureFolders": [
-        "Item/PartCharge6"
-      ],
+      "textureFolders": ["Item/PartCharge6"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.03
-        ],
-        "rotation": [
-          -90,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.03],
+        "rotation": [-90, 0, 0],
         "scale": 0.002
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          90
-        ],
+        "rotation": [0, 0, 90],
         "scale": 0.5
       },
       "renderStyle": "textured"
@@ -1944,31 +1027,15 @@
     {
       "number": 84,
       "file": "Data/Item/PartCharge6/amulet_sky.bmd",
-      "textureFolders": [
-        "Item/PartCharge6"
-      ],
+      "textureFolders": ["Item/PartCharge6"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.03
-        ],
-        "rotation": [
-          -90,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.03],
+        "rotation": [-90, 0, 0],
         "scale": 0.002
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          90
-        ],
+        "rotation": [0, 0, 90],
         "scale": 0.5
       },
       "renderStyle": "textured"
@@ -1976,31 +1043,15 @@
     {
       "number": 85,
       "file": "Data/Item/PartCharge6/amulet_elf.bmd",
-      "textureFolders": [
-        "Item/PartCharge6"
-      ],
+      "textureFolders": ["Item/PartCharge6"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.03
-        ],
-        "rotation": [
-          -90,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.03],
+        "rotation": [-90, 0, 0],
         "scale": 0.002
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          90
-        ],
+        "rotation": [0, 0, 90],
         "scale": 0.5
       },
       "renderStyle": "textured"
@@ -2008,31 +1059,15 @@
     {
       "number": 86,
       "file": "Data/Item/PartCharge6/amulet_disaster.bmd",
-      "textureFolders": [
-        "Item/PartCharge6"
-      ],
+      "textureFolders": ["Item/PartCharge6"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.03
-        ],
-        "rotation": [
-          -90,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.03],
+        "rotation": [-90, 0, 0],
         "scale": 0.002
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          90
-        ],
+        "rotation": [0, 0, 90],
         "scale": 0.5
       },
       "renderStyle": "textured"
@@ -2040,31 +1075,15 @@
     {
       "number": 87,
       "file": "Data/Item/PartCharge6/amulet_cloak.bmd",
-      "textureFolders": [
-        "Item/PartCharge6"
-      ],
+      "textureFolders": ["Item/PartCharge6"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.03
-        ],
-        "rotation": [
-          -90,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.03],
+        "rotation": [-90, 0, 0],
         "scale": 0.002
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          90
-        ],
+        "rotation": [0, 0, 90],
         "scale": 0.5
       },
       "renderStyle": "textured"
@@ -2072,31 +1091,15 @@
     {
       "number": 88,
       "file": "Data/Item/PartCharge6/amulet_dragon.bmd",
-      "textureFolders": [
-        "Item/PartCharge6"
-      ],
+      "textureFolders": ["Item/PartCharge6"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.03
-        ],
-        "rotation": [
-          -90,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.03],
+        "rotation": [-90, 0, 0],
         "scale": 0.002
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          90
-        ],
+        "rotation": [0, 0, 90],
         "scale": 0.5
       },
       "renderStyle": "textured"
@@ -2104,31 +1107,15 @@
     {
       "number": 89,
       "file": "Data/Item/PartCharge6/amulet_soul.bmd",
-      "textureFolders": [
-        "Item/PartCharge6"
-      ],
+      "textureFolders": ["Item/PartCharge6"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.03
-        ],
-        "rotation": [
-          -90,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.03],
+        "rotation": [-90, 0, 0],
         "scale": 0.002
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          90
-        ],
+        "rotation": [0, 0, 90],
         "scale": 0.5
       },
       "renderStyle": "textured"
@@ -2136,31 +1123,15 @@
     {
       "number": 90,
       "file": "Data/Item/PartCharge6/amulet_spirit.bmd",
-      "textureFolders": [
-        "Item/PartCharge6"
-      ],
+      "textureFolders": ["Item/PartCharge6"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.03
-        ],
-        "rotation": [
-          -90,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.03],
+        "rotation": [-90, 0, 0],
         "scale": 0.002
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          90
-        ],
+        "rotation": [0, 0, 90],
         "scale": 0.5
       },
       "renderStyle": "textured"
@@ -2168,31 +1139,15 @@
     {
       "number": 91,
       "file": "Data/Item/PartCharge6/amulet_despair.bmd",
-      "textureFolders": [
-        "Item/PartCharge6"
-      ],
+      "textureFolders": ["Item/PartCharge6"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.03
-        ],
-        "rotation": [
-          -90,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.03],
+        "rotation": [-90, 0, 0],
         "scale": 0.002
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          90
-        ],
+        "rotation": [0, 0, 90],
         "scale": 0.5
       },
       "renderStyle": "textured"
@@ -2200,31 +1155,15 @@
     {
       "number": 92,
       "file": "Data/Item/PartCharge6/amulet_dark.bmd",
-      "textureFolders": [
-        "Item/PartCharge6"
-      ],
+      "textureFolders": ["Item/PartCharge6"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.03
-        ],
-        "rotation": [
-          -90,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.03],
+        "rotation": [-90, 0, 0],
         "scale": 0.002
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          90
-        ],
+        "rotation": [0, 0, 90],
         "scale": 0.5
       },
       "renderStyle": "textured"
@@ -2232,31 +1171,15 @@
     {
       "number": 93,
       "file": "Data/Item/PartCharge6/MasterSealA.bmd",
-      "textureFolders": [
-        "Item/PartCharge6"
-      ],
+      "textureFolders": ["Item/PartCharge6"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.005,
-          0
-        ],
-        "rotation": [
-          -90,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.005, 0],
+        "rotation": [-90, 0, 0],
         "scale": 0.002
       },
       "ground": {
-        "rotation": [
-          0,
-          0,
-          90
-        ],
+        "rotation": [0, 0, 90],
         "scale": 0.5
       },
       "glow": {
@@ -2267,23 +1190,11 @@
     {
       "number": 94,
       "file": "Data/Item/PartCharge6/MasterSealB.bmd",
-      "textureFolders": [
-        "Item/PartCharge6"
-      ],
+      "textureFolders": ["Item/PartCharge6"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.005,
-          0
-        ],
-        "rotation": [
-          -90,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.005, 0],
+        "rotation": [-90, 0, 0],
         "scale": 0.0021
       },
       "glow": {
@@ -2294,101 +1205,53 @@
     {
       "number": 96,
       "file": "Data/Item/strongmark.bmd",
-      "textureFolders": [
-        "Item"
-      ]
+      "textureFolders": ["Item"]
     },
     {
       "number": 97,
       "model": "characterCard",
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.002,
-          -0.04
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.002, -0.04],
+        "rotation": [270, 0, 0],
         "scale": 0.0028
       },
       "ground": {
-        "rotation": [
-          270,
-          0,
-          -45
-        ],
+        "rotation": [270, 0, -45],
         "scale": 1
       },
       "renderStyle": "characterCard",
-      "renderStyleValues": {
-        "glowTexture": "Item/Ingameshop/kacama_R.jpg"
-      }
+      "renderStyleValues": {"glowTexture": "Item/Ingameshop/kacama_R.jpg"}
     },
     {
       "number": 98,
       "model": "characterCard",
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.002,
-          -0.04
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.002, -0.04],
+        "rotation": [270, 0, 0],
         "scale": 0.0028
       },
       "ground": {
-        "rotation": [
-          270,
-          0,
-          -45
-        ],
+        "rotation": [270, 0, -45],
         "scale": 1
       },
       "renderStyle": "characterCard",
-      "renderStyleValues": {
-        "glowTexture": "Item/Ingameshop/kacada_R.jpg"
-      }
+      "renderStyleValues": {"glowTexture": "Item/Ingameshop/kacada_R.jpg"}
     },
     {
       "number": 99,
       "file": "Data/Item/Ingameshop/key.bmd",
-      "textureFolders": [
-        "Item/Ingameshop"
-      ]
+      "textureFolders": ["Item/Ingameshop"]
     },
     {
       "number": 103,
       "file": "Data/Item/partcharge7/EXPscroll.bmd",
-      "textureFolders": [
-        "Item/partcharge7"
-      ],
+      "textureFolders": ["Item/partcharge7"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.01,
-          0.01
-        ],
-        "rotation": [
-          0,
-          0,
-          0
-        ]
+        "anchor": [0.5, 0.7],
+        "offset": [0.01, 0.01],
+        "rotation": [0, 0, 0]
       },
       "ground": {
         "scale": 1
@@ -2397,30 +1260,14 @@
     {
       "number": 104,
       "file": "Data/Item/partcharge7/injang_AG.bmd",
-      "textureFolders": [
-        "Item/partcharge7"
-      ],
+      "textureFolders": ["Item/partcharge7"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.01,
-          -0.03
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ]
+        "anchor": [0.5, 0.7],
+        "offset": [0.01, -0.03],
+        "rotation": [270, 0, 0]
       },
       "ground": {
-        "rotation": [
-          270,
-          0,
-          -45
-        ],
+        "rotation": [270, 0, -45],
         "scale": 1
       },
       "renderStyle": "boostAura"
@@ -2428,31 +1275,15 @@
     {
       "number": 105,
       "file": "Data/Item/partcharge7/injang_SD.bmd",
-      "textureFolders": [
-        "Item/partcharge7"
-      ],
+      "textureFolders": ["Item/partcharge7"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.01,
-          -0.03
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.01, -0.03],
+        "rotation": [270, 0, 0],
         "scale": 0.002
       },
       "ground": {
-        "rotation": [
-          270,
-          0,
-          -45
-        ],
+        "rotation": [270, 0, -45],
         "scale": 1
       },
       "renderStyle": "boostAura"
@@ -2460,50 +1291,25 @@
     {
       "number": 106,
       "file": "Data/Item/partcharge7/pet_unicorn.bmd",
-      "textureFolders": [
-        "Item/partcharge7"
-      ],
+      "textureFolders": ["Item/partcharge7"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.01,
-          -0.05
-        ],
-        "rotation": [
-          255,
-          45,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.01, -0.05],
+        "rotation": [255, 45, 0],
         "scale": 0.0015
       }
     },
     {
       "number": 107,
       "file": "Data/Item/partcharge7/FatalRing.bmd",
-      "textureFolders": [
-        "Item/partcharge7"
-      ],
+      "textureFolders": ["Item/partcharge7"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "rotation": [
-          90,
-          225,
-          45
-        ],
+        "anchor": [0.5, 0.7],
+        "rotation": [90, 225, 45],
         "scale": 0.0034
       },
       "ground": {
-        "rotation": [
-          270,
-          0,
-          -45
-        ],
+        "rotation": [270, 0, -45],
         "scale": 1
       },
       "renderStyle": "chromeMesh1"
@@ -2511,31 +1317,15 @@
     {
       "number": 109,
       "file": "Data/Item/Ingameshop/PeriodRingBlue.bmd",
-      "textureFolders": [
-        "Item/Ingameshop"
-      ],
+      "textureFolders": ["Item/Ingameshop"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.025,
-          -0.035
-        ],
-        "rotation": [
-          270,
-          25,
-          25
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.025, -0.035],
+        "rotation": [270, 25, 25],
         "scale": 0.0045
       },
       "ground": {
-        "rotation": [
-          270,
-          0,
-          -45
-        ],
+        "rotation": [270, 0, -45],
         "scale": 1
       },
       "renderStyle": "chromeMesh1"
@@ -2543,31 +1333,15 @@
     {
       "number": 110,
       "file": "Data/Item/Ingameshop/PeriodRingRed.bmd",
-      "textureFolders": [
-        "Item/Ingameshop"
-      ],
+      "textureFolders": ["Item/Ingameshop"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.025,
-          -0.035
-        ],
-        "rotation": [
-          270,
-          25,
-          25
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.025, -0.035],
+        "rotation": [270, 25, 25],
         "scale": 0.0045
       },
       "ground": {
-        "rotation": [
-          270,
-          0,
-          -45
-        ],
+        "rotation": [270, 0, -45],
         "scale": 1
       },
       "renderStyle": "chromeMesh1"
@@ -2575,31 +1349,15 @@
     {
       "number": 111,
       "file": "Data/Item/Ingameshop/PeriodRingYellow.bmd",
-      "textureFolders": [
-        "Item/Ingameshop"
-      ],
+      "textureFolders": ["Item/Ingameshop"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.025,
-          -0.035
-        ],
-        "rotation": [
-          270,
-          25,
-          25
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.025, -0.035],
+        "rotation": [270, 25, 25],
         "scale": 0.0045
       },
       "ground": {
-        "rotation": [
-          270,
-          0,
-          -45
-        ],
+        "rotation": [270, 0, -45],
         "scale": 1
       },
       "renderStyle": "chromeMesh1"
@@ -2607,31 +1365,15 @@
     {
       "number": 112,
       "file": "Data/Item/Ingameshop/PeriodRingViolet.bmd",
-      "textureFolders": [
-        "Item/Ingameshop"
-      ],
+      "textureFolders": ["Item/Ingameshop"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.025,
-          -0.035
-        ],
-        "rotation": [
-          270,
-          25,
-          25
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.025, -0.035],
+        "rotation": [270, 25, 25],
         "scale": 0.0045
       },
       "ground": {
-        "rotation": [
-          270,
-          0,
-          -45
-        ],
+        "rotation": [270, 0, -45],
         "scale": 1
       },
       "renderStyle": "chromeMesh1"
@@ -2639,31 +1381,15 @@
     {
       "number": 113,
       "file": "Data/Item/Ingameshop/necklace_red.bmd",
-      "textureFolders": [
-        "Item/Ingameshop"
-      ],
+      "textureFolders": ["Item/Ingameshop"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.005,
-          0
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.005, 0],
+        "rotation": [270, 0, 0],
         "scale": 0.0018
       },
       "ground": {
-        "rotation": [
-          270,
-          0,
-          -45
-        ],
+        "rotation": [270, 0, -45],
         "scale": 1
       },
       "renderStyle": "chromeMesh1"
@@ -2671,31 +1397,15 @@
     {
       "number": 114,
       "file": "Data/Item/Ingameshop/necklace_blue.bmd",
-      "textureFolders": [
-        "Item/Ingameshop"
-      ],
+      "textureFolders": ["Item/Ingameshop"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.005,
-          0
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.005, 0],
+        "rotation": [270, 0, 0],
         "scale": 0.0018
       },
       "ground": {
-        "rotation": [
-          270,
-          0,
-          -45
-        ],
+        "rotation": [270, 0, -45],
         "scale": 1
       },
       "renderStyle": "chromeMesh1"
@@ -2703,31 +1413,15 @@
     {
       "number": 115,
       "file": "Data/Item/Ingameshop/necklace_green.bmd",
-      "textureFolders": [
-        "Item/Ingameshop"
-      ],
+      "textureFolders": ["Item/Ingameshop"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.005,
-          0
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.005, 0],
+        "rotation": [270, 0, 0],
         "scale": 0.0018
       },
       "ground": {
-        "rotation": [
-          270,
-          0,
-          -45
-        ],
+        "rotation": [270, 0, -45],
         "scale": 1
       },
       "renderStyle": "chromeMesh1"
@@ -2735,31 +1429,15 @@
     {
       "number": 116,
       "file": "Data/Item/monmark02.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.005,
-          -0.03
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.005, -0.03],
+        "rotation": [270, 0, 0],
         "scale": 0.0021
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.5
       },
       "glow": {
@@ -2770,59 +1448,35 @@
     {
       "number": 117,
       "file": "Data/Item/Ingameshop/FRpotionA.bmd",
-      "textureFolders": [
-        "Item/Ingameshop"
-      ]
+      "textureFolders": ["Item/Ingameshop"]
     },
     {
       "number": 118,
       "file": "Data/Item/Ingameshop/FRpotionB.bmd",
-      "textureFolders": [
-        "Item/Ingameshop"
-      ]
+      "textureFolders": ["Item/Ingameshop"]
     },
     {
       "number": 119,
       "file": "Data/Item/Ingameshop/FRpotionC.bmd",
-      "textureFolders": [
-        "Item/Ingameshop"
-      ]
+      "textureFolders": ["Item/Ingameshop"]
     },
     {
       "number": 120,
       "file": "Data/Item/Ingameshop/FRpotionD.bmd",
-      "textureFolders": [
-        "Item/Ingameshop"
-      ]
+      "textureFolders": ["Item/Ingameshop"]
     },
     {
       "number": 121,
       "file": "Data/Item/Ingameshop/entrancegreen.bmd",
-      "textureFolders": [
-        "Item/Ingameshop"
-      ],
+      "textureFolders": ["Item/Ingameshop"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.04
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.04],
+        "rotation": [270, 0, 0],
         "scale": 0.0018
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.5
       },
       "renderStyle": "eventTicket"
@@ -2830,23 +1484,11 @@
     {
       "number": 122,
       "file": "Data/Item/SkeletonRing.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.01,
-          -0.035
-        ],
-        "rotation": [
-          290,
-          -20,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.01, -0.035],
+        "rotation": [290, -20, 0],
         "scale": 0.0033
       },
       "renderStyle": "skeletonTransformationRing"
@@ -2854,85 +1496,41 @@
     {
       "number": 123,
       "file": "Data/Item/skeletonpet.bmd",
-      "textureFolders": [
-        "Item"
-      ],
+      "textureFolders": ["Item"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.05
-        ],
-        "rotation": [
-          270,
-          40,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.05],
+        "rotation": [270, 40, 0],
         "scale": 0.0009
       },
       "ground": {
-        "rotation": [
-          30,
-          0,
-          -45
-        ],
+        "rotation": [30, 0, -45],
         "scale": 0.4
       }
     },
     {
       "number": 124,
       "file": "Data/Item/PartCharge6/ChannelCard.bmd",
-      "textureFolders": [
-        "Item/PartCharge6"
-      ],
+      "textureFolders": ["Item/PartCharge6"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          -0.04
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, -0.04],
+        "rotation": [270, 0, 0],
         "scale": 0.0018
       }
     },
     {
       "number": 125,
       "file": "Data/Item/partCharge8/DoppelCard.bmd",
-      "textureFolders": [
-        "Item/partCharge8"
-      ],
+      "textureFolders": ["Item/partCharge8"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.007,
-          -0.035
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.007, -0.035],
+        "rotation": [270, 0, 0],
         "scale": 0.0013
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.5
       },
       "renderStyle": "openAccessTicketToDoppelganger"
@@ -2940,31 +1538,15 @@
     {
       "number": 126,
       "file": "Data/Item/partCharge8/BarcaCard.bmd",
-      "textureFolders": [
-        "Item/partCharge8"
-      ],
+      "textureFolders": ["Item/partCharge8"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.007,
-          -0.035
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.007, -0.035],
+        "rotation": [270, 0, 0],
         "scale": 0.0013
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.5
       },
       "renderStyle": "openAccessTicketToVarka"
@@ -2972,31 +1554,15 @@
     {
       "number": 127,
       "file": "Data/Item/partCharge8/Barca7Card.bmd",
-      "textureFolders": [
-        "Item/partCharge8"
-      ],
+      "textureFolders": ["Item/partCharge8"],
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0.007,
-          -0.035
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0.007, -0.035],
+        "rotation": [270, 0, 0],
         "scale": 0.0013
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.5
       },
       "renderStyle": "openAccessTicketToVarka7"
@@ -3004,63 +1570,39 @@
     {
       "number": 128,
       "file": "Data/Item/hawkstatue.bmd",
-      "textureFolders": [
-        "Item"
-      ]
+      "textureFolders": ["Item"]
     },
     {
       "number": 129,
       "file": "Data/Item/sheepstatue.bmd",
-      "textureFolders": [
-        "Item"
-      ]
+      "textureFolders": ["Item"]
     },
     {
       "number": 130,
       "file": "Data/Item/ork_cham.bmd",
-      "textureFolders": [
-        "Item"
-      ]
+      "textureFolders": ["Item"]
     },
     {
       "number": 132,
       "file": "Data/Item/goldenork_cham.bmd",
-      "textureFolders": [
-        "Item"
-      ]
+      "textureFolders": ["Item"]
     },
     {
       "number": 134,
       "file": "Data/Item/horseshoe.bmd",
-      "textureFolders": [
-        "Item"
-      ]
+      "textureFolders": ["Item"]
     },
     {
       "number": 135,
       "model": "luckyTicketGreen",
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          0.02
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, 0.02],
+        "rotation": [270, 0, 0],
         "scale": 0.001
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.2
       }
     },
@@ -3068,27 +1610,13 @@
       "number": 136,
       "model": "luckyTicketGreen",
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          0.02
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, 0.02],
+        "rotation": [270, 0, 0],
         "scale": 0.001
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.2
       }
     },
@@ -3096,27 +1624,13 @@
       "number": 137,
       "model": "luckyTicketGreen",
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          0.02
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, 0.02],
+        "rotation": [270, 0, 0],
         "scale": 0.001
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.2
       }
     },
@@ -3124,27 +1638,13 @@
       "number": 138,
       "model": "luckyTicketGreen",
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          0.02
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, 0.02],
+        "rotation": [270, 0, 0],
         "scale": 0.001
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.2
       }
     },
@@ -3152,27 +1652,13 @@
       "number": 139,
       "model": "luckyTicketGreen",
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          0.02
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, 0.02],
+        "rotation": [270, 0, 0],
         "scale": 0.001
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.2
       }
     },
@@ -3180,27 +1666,13 @@
       "number": 140,
       "model": "luckyTicketRed",
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          0.02
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, 0.02],
+        "rotation": [270, 0, 0],
         "scale": 0.001
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.2
       }
     },
@@ -3208,27 +1680,13 @@
       "number": 141,
       "model": "luckyTicketRed",
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          0.02
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, 0.02],
+        "rotation": [270, 0, 0],
         "scale": 0.001
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.2
       }
     },
@@ -3236,27 +1694,13 @@
       "number": 142,
       "model": "luckyTicketRed",
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          0.02
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, 0.02],
+        "rotation": [270, 0, 0],
         "scale": 0.001
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.2
       }
     },
@@ -3264,27 +1708,13 @@
       "number": 143,
       "model": "luckyTicketRed",
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          0.02
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, 0.02],
+        "rotation": [270, 0, 0],
         "scale": 0.001
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.2
       }
     },
@@ -3292,862 +1722,587 @@
       "number": 144,
       "model": "luckyTicketRed",
       "inventory": {
-        "anchor": [
-          0.5,
-          0.7
-        ],
-        "offset": [
-          0,
-          0.02
-        ],
-        "rotation": [
-          270,
-          0,
-          0
-        ],
+        "anchor": [0.5, 0.7],
+        "offset": [0, 0.02],
+        "rotation": [270, 0, 0],
         "scale": 0.001
       },
       "ground": {
-        "rotation": [
-          90,
-          0,
-          -45
-        ],
+        "rotation": [90, 0, -45],
         "scale": 0.2
       }
     },
     {
       "number": 145,
       "file": "Data/s9/Item/SpiritMapPiece.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 146,
       "file": "Data/s9/Item/SpiritMap.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 147,
       "file": "Data/s9/Item/trophy.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 148,
       "file": "Data/s9/Item/FRpotionD.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 149,
       "file": "Data/s9/Item/FRpotionA.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 150,
       "file": "Data/s9/Item/FRpotionC.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 151,
-      "file": "Data/Item/rollofpaper.bmd",
-      "textureFolders": [
-        "Item"
-      ]
+      "model": "skillParchment"
     },
     {
       "number": 152,
-      "file": "Data/s9/Item/MSIitemGreen.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "model": "s9Msiitemgreen"
     },
     {
       "number": 153,
-      "file": "Data/s9/Item/MSIitemBlue.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "model": "s9Msiitemblue"
     },
     {
       "number": 154,
-      "file": "Data/s9/Item/MSIitemRed.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "model": "s9Msiitemred"
     },
     {
       "number": 155,
-      "file": "Data/s9/Item/MSIitemBlack.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "model": "s9Msiitemblack"
     },
     {
       "number": 156,
-      "file": "Data/s9/Item/MSIitemGreen.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "model": "s9Msiitemgreen"
     },
     {
       "number": 157,
-      "file": "Data/s9/Item/MSIitemBlue.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "model": "s9Msiitemblue"
     },
     {
       "number": 158,
-      "file": "Data/s9/Item/MSIitemRed.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "model": "s9Msiitemred"
     },
     {
       "number": 159,
-      "file": "Data/s9/Item/MSIitemBlack.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "model": "s9Msiitemblack"
     },
     {
       "number": 160,
-      "file": "Data/s9/Item/suhocham01.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "model": "s9Suhocham01"
     },
     {
       "number": 161,
-      "file": "Data/s9/Item/suhocham01.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "model": "s9Suhocham01"
     },
     {
       "number": 163,
       "file": "Data/s9/Item/RobotRing.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 164,
       "file": "Data/s9/Item/RobotRing_gold.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 165,
       "file": "Data/s9/Item/monkyRing.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 169,
-      "file": "Data/Item/Ring01.bmd",
-      "textureFolders": [
-        "Item"
-      ]
+      "model": "transformationRing"
     },
     {
       "number": 170,
-      "file": "Data/Item/Ring01.bmd",
-      "textureFolders": [
-        "Item"
-      ]
+      "model": "transformationRing"
     },
     {
       "number": 171,
       "file": "Data/s9/Item/necklace.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 172,
       "file": "Data/s9/Item/hardnecklace.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 173,
       "file": "Data/s9/Item/finalgori.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 175,
       "file": "Data/s9/Item/ProGuardRing.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 176,
       "file": "Data/s9/Item/GuardRing.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 177,
-      "file": "Data/s9/Item/IVmonmarkA.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "model": "s9Ivmonmarka"
     },
     {
       "number": 178,
-      "file": "Data/s9/Item/IVmonmarkA.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "model": "s9Ivmonmarka"
     },
     {
       "number": 179,
-      "file": "Data/s9/Item/IVmonmarkA.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "model": "s9Ivmonmarka"
     },
     {
       "number": 180,
-      "file": "Data/s9/Item/IVmonmarkB.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "model": "s9Ivmonmarkb"
     },
     {
       "number": 181,
-      "file": "Data/s9/Item/IVmonmarkB.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "model": "s9Ivmonmarkb"
     },
     {
       "number": 210,
-      "file": "Data/s9/Item/PetEgg.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "model": "s9Petegg"
     },
     {
       "number": 211,
       "file": "Data/s9/Item/evolutionstone.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 212,
       "file": "Data/s9/Item/dragonpet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 213,
       "file": "Data/s9/Item/dragonpet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 214,
       "file": "Data/s9/Item/stonepet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 215,
       "file": "Data/s9/Item/stonepet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 216,
       "file": "Data/s9/Item/mermaidpet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 217,
       "file": "Data/s9/Item/mermaidpet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 218,
       "file": "Data/s9/Item/satanpet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 219,
       "file": "Data/s9/Item/satanpet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 220,
-      "file": "Data/s9/Item/PetEgg.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "model": "s9Petegg"
     },
     {
       "number": 221,
-      "file": "Data/s9/Item/PetEgg.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "model": "s9Petegg"
     },
     {
       "number": 222,
-      "file": "Data/s9/Item/PetEgg.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "model": "s9Petegg"
     },
     {
       "number": 223,
       "file": "Data/s9/Item/williumpet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 224,
       "file": "Data/s9/Item/williumpet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 225,
       "file": "Data/s9/Item/polpet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 226,
       "file": "Data/s9/Item/polpet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 227,
       "file": "Data/s9/Item/Kironpet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 228,
       "file": "Data/s9/Item/Kironpet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 229,
       "file": "Data/s9/Item/wooparoopet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 230,
       "file": "Data/s9/Item/wooparoopet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 231,
       "file": "Data/s9/Item/wolfpet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 232,
       "file": "Data/s9/Item/wolfpet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 233,
       "file": "Data/s9/Item/Witchpet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 234,
       "file": "Data/s9/Item/Witchpet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 235,
       "file": "Data/s9/Item/Skullpet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 236,
       "file": "Data/s9/Item/Skullpet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 237,
       "file": "Data/s9/Item/pumpipet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 238,
       "file": "Data/s9/Item/pumpipet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 239,
       "file": "Data/s9/Item/spellst01.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 240,
       "file": "Data/s9/Item/spellst02.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 241,
       "file": "Data/s9/Item/sabatpet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 242,
       "file": "Data/s9/Item/sabatpet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 243,
       "file": "Data/s9/Item/Lycanpet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 244,
       "file": "Data/s9/Item/Lycanpet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 245,
       "file": "Data/s9/Item/tobypet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 246,
       "file": "Data/s9/Item/tobypet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 252,
       "file": "Data/s9/Item/seirenpet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 253,
       "file": "Data/s9/Item/seirenpet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 254,
       "file": "Data/s9/Item/Behemothpet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 255,
       "file": "Data/s9/Item/Behemothpet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 256,
       "file": "Data/s9/Item/loglepet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 257,
       "file": "Data/s9/Item/loglepet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 258,
       "file": "Data/s9/Item/minopet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 259,
       "file": "Data/s9/Item/minopet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 260,
       "file": "Data/s9/Item/houndpet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 261,
       "file": "Data/s9/Item/houndpet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 262,
       "file": "Data/s9/Item/tribepet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 263,
       "file": "Data/s9/Item/tribepet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 264,
       "file": "Data/s9/Item/bogeonpet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 265,
       "file": "Data/s9/Item/bogeonpet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 266,
       "file": "Data/s9/Item/cyclopspet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 267,
       "file": "Data/s9/Item/cyclopspet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 268,
       "file": "Data/s9/Item/DarknessRing.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 270,
       "file": "Data/s9/Item/Bonpeupet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 271,
       "file": "Data/s9/Item/Bonpeupet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 272,
       "file": "Data/s9/Item/hawkpet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 273,
       "file": "Data/s9/Item/hawkpet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 274,
       "file": "Data/s9/Item/MuTpet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 275,
       "file": "Data/s9/Item/MuTpet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 276,
       "file": "Data/s9/Item/ProofOfConqueror.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 277,
       "file": "Data/s9/Item/ProofOfOrdeal.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 278,
       "file": "Data/s9/Item/mantispet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 279,
       "file": "Data/s9/Item/mantispet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 280,
       "file": "Data/s9/Item/scolpipet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 281,
       "file": "Data/s9/Item/scolpipet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 282,
       "file": "Data/s9/Item/chaferpet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 283,
       "file": "Data/s9/Item/chaferpet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 290,
       "file": "Data/s9/Item/cosgirlpet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 291,
       "file": "Data/s9/Item/cosgirlpet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 292,
       "file": "Data/s9/Item/taegeukgirlpet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 293,
       "file": "Data/s9/Item/taegeukgirlpet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 294,
       "file": "Data/s9/Item/SportyGirlpet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 295,
       "file": "Data/s9/Item/SportyGirlpet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 296,
       "file": "Data/s9/Item/baelpet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 297,
       "file": "Data/s9/Item/baelpet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 298,
       "file": "Data/s9/Item/gapppet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 299,
       "file": "Data/s9/Item/gapppet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 300,
       "file": "Data/s9/Item/tapppet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 301,
       "file": "Data/s9/Item/tapppet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 302,
       "file": "Data/s9/Item/Frozenpet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 303,
       "file": "Data/s9/Item/Frozenpet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 304,
       "file": "Data/s9/Item/lurepet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 305,
       "file": "Data/s9/Item/lurepet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 306,
       "file": "Data/s9/Item/persilpet.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 307,
       "file": "Data/s9/Item/persilpet_evol.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "textureFolders": ["s9/Item"]
     },
     {
       "number": 350,
-      "file": "Data/s9/Item/PetEgg.bmd",
-      "textureFolders": [
-        "s9/Item"
-      ]
+      "model": "s9Petegg"
     }
   ]
 }

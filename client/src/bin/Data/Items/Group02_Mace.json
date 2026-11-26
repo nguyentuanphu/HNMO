@@ -11,11 +11,7 @@
         "pl": "Buława",
         "pt": "Maça"
       },
-      "options": [
-        "luck",
-        "physicalDamageOption",
-        "excellentPhysicalAttack"
-      ],
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
       "width": 1,
       "height": 3,
       "slot": "mainHand",
@@ -46,11 +42,7 @@
         "pl": "Morgenstern",
         "pt": "Estrela da manhã"
       },
-      "options": [
-        "luck",
-        "physicalDamageOption",
-        "excellentPhysicalAttack"
-      ],
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
       "width": 1,
       "height": 3,
       "slot": "mainHand",
@@ -82,11 +74,7 @@
         "pl": "Cep bojowy",
         "pt": "Mangual"
       },
-      "options": [
-        "luck",
-        "physicalDamageOption",
-        "excellentPhysicalAttack"
-      ],
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
       "width": 1,
       "height": 3,
       "slot": "mainHand",
@@ -118,11 +106,7 @@
         "pl": "Wielki młot",
         "pt": "Martelo grande"
       },
-      "options": [
-        "luck",
-        "physicalDamageOption",
-        "excellentPhysicalAttack"
-      ],
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
       "width": 2,
       "height": 3,
       "slot": "mainHand",
@@ -154,11 +138,7 @@
         "pl": "Kryształowy morgenstern",
         "pt": "Estrela da manhã de cristal"
       },
-      "options": [
-        "luck",
-        "physicalDamageOption",
-        "excellentPhysicalAttack"
-      ],
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
       "width": 2,
       "height": 3,
       "slot": "mainHand",
@@ -192,11 +172,7 @@
         "pl": "Kryształowy miecz",
         "pt": "Espada de cristal"
       },
-      "options": [
-        "luck",
-        "physicalDamageOption",
-        "excellentPhysicalAttack"
-      ],
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
       "width": 2,
       "height": 4,
       "slot": "mainHand",
@@ -230,11 +206,7 @@
         "pl": "Topór Smoka Chaosu",
         "pt": "Machado do dragão do caos"
       },
-      "options": [
-        "luck",
-        "physicalDamageOption",
-        "excellentPhysicalAttack"
-      ],
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
       "width": 2,
       "height": 4,
       "slot": "mainHand",
@@ -266,11 +238,7 @@
         "pl": "Buława żywiołów",
         "pt": "Maça elemental"
       },
-      "options": [
-        "luck",
-        "physicalDamageOption",
-        "excellentPhysicalAttack"
-      ],
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
       "width": 1,
       "height": 3,
       "slot": "mainHand",
@@ -299,14 +267,8 @@
         "pl": "Berło bojowe",
         "pt": "Cetro de batalha"
       },
-      "tags": [
-        "sceptre"
-      ],
-      "options": [
-        "luck",
-        "physicalDamageOption",
-        "excellentPhysicalAttack"
-      ],
+      "tags": ["sceptre"],
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
       "width": 1,
       "height": 3,
       "slot": "mainHand",
@@ -337,14 +299,8 @@
         "pl": "Berło Mistrza",
         "pt": "Cetro do mestre"
       },
-      "tags": [
-        "sceptre"
-      ],
-      "options": [
-        "luck",
-        "physicalDamageOption",
-        "excellentPhysicalAttack"
-      ],
+      "tags": ["sceptre"],
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
       "width": 1,
       "height": 3,
       "slot": "mainHand",
@@ -375,14 +331,8 @@
         "pl": "Wielkie berło",
         "pt": "Grande cetro"
       },
-      "tags": [
-        "sceptre"
-      ],
-      "options": [
-        "luck",
-        "physicalDamageOption",
-        "excellentPhysicalAttack"
-      ],
+      "tags": ["sceptre"],
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
       "width": 1,
       "height": 4,
       "slot": "mainHand",
@@ -413,14 +363,8 @@
         "pl": "Berło Lorda",
         "pt": "Cetro do Lorde"
       },
-      "tags": [
-        "sceptre"
-      ],
-      "options": [
-        "luck",
-        "physicalDamageOption",
-        "excellentPhysicalAttack"
-      ],
+      "tags": ["sceptre"],
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
       "width": 1,
       "height": 4,
       "slot": "mainHand",
@@ -451,14 +395,8 @@
         "pl": "Berło Wielkiego Lorda",
         "pt": "Grande cetro do Lorde"
       },
-      "tags": [
-        "sceptre"
-      ],
-      "options": [
-        "luck",
-        "physicalDamageOption",
-        "excellentPhysicalAttack"
-      ],
+      "tags": ["sceptre"],
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
       "width": 1,
       "height": 4,
       "slot": "mainHand",
@@ -489,26 +427,15 @@
         "pl": "Boskie Berło Archanioła",
         "pt": "Cetro divino do arcanjo"
       },
-      "tags": [
-        "divineArchangelWeapon",
-        "sceptre",
-        "valuable"
-      ],
-      "options": [
-        "luck",
-        "physicalDamageOption",
-        "excellentPhysicalAttack"
-      ],
+      "tags": ["divineArchangelWeapon", "sceptre", "valuable"],
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
       "nameLines": [
         {
           "text": {
             "en": "{name}"
           },
           "color": "purple",
-          "levels": [
-            0,
-            0
-          ]
+          "levels": [0, 0]
         },
         {
           "text": {
@@ -547,14 +474,8 @@
         "pl": "Berło Soleil",
         "pt": "Cetro Soleil"
       },
-      "tags": [
-        "sceptre"
-      ],
-      "options": [
-        "luck",
-        "physicalDamageOption",
-        "excellentPhysicalAttack"
-      ],
+      "tags": ["sceptre"],
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
       "width": 1,
       "height": 4,
       "slot": "mainHand",
@@ -586,14 +507,8 @@
         "pl": "Lśniące berło",
         "pt": "Cetro brilhante"
       },
-      "tags": [
-        "sceptre"
-      ],
-      "options": [
-        "luck",
-        "physicalDamageOption",
-        "excellentPhysicalAttack"
-      ],
+      "tags": ["sceptre"],
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
       "width": 1,
       "height": 4,
       "slot": "mainHand",
@@ -623,11 +538,7 @@
         "pl": "Mroźna buława",
         "pt": "Maça de gelo"
       },
-      "options": [
-        "luck",
-        "physicalDamageOption",
-        "excellentPhysicalAttack"
-      ],
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
       "width": 1,
       "height": 3,
       "slot": "mainHand",
@@ -657,14 +568,8 @@
         "pl": "Absolutne berło",
         "pt": "Cetro absoluto"
       },
-      "tags": [
-        "sceptre"
-      ],
-      "options": [
-        "luck",
-        "physicalDamageOption",
-        "excellentPhysicalAttack"
-      ],
+      "tags": ["sceptre"],
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
       "width": 1,
       "height": 4,
       "slot": "mainHand",
@@ -695,14 +600,8 @@
         "pl": "Berło Uderzenia",
         "pt": "Cetro golpeador"
       },
-      "tags": [
-        "sceptre"
-      ],
-      "options": [
-        "luck",
-        "physicalDamageOption",
-        "excellentPhysicalAttack"
-      ],
+      "tags": ["sceptre"],
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
       "width": 1,
       "height": 4,
       "slot": "mainHand",
@@ -751,10 +650,7 @@
       "classRequirements": {
         "darkLord": 3
       },
-      "options": [
-        "luck",
-        "physicalDamageOption"
-      ],
+      "options": ["luck", "physicalDamageOption"],
       "droppable": false
     },
     {
@@ -785,10 +681,7 @@
       "classRequirements": {
         "darkKnight": 3
       },
-      "options": [
-        "luck",
-        "physicalDamageOption"
-      ],
+      "options": ["luck", "physicalDamageOption"],
       "droppable": false
     },
     {
@@ -815,10 +708,7 @@
       "classRequirements": {
         "darkLord": 1
       },
-      "options": [
-        "luck",
-        "physicalDamageOption"
-      ],
+      "options": ["luck", "physicalDamageOption"],
       "droppable": false,
       "tradable": false
     }
