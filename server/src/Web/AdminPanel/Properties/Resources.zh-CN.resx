@@ -3025,4 +3025,7 @@
   <data name="SeasonsRestartSent" xml:space="preserve">
     <value>已发送重启请求，请在几秒后刷新此页面。</value>
   </data>
+  <data name="ItemDefinitions_SeasonNineNotice" xml:space="preserve">
+    <value>第 9 赛季模式已启用：网页客户端将自动应用 210 项第 9 赛季共享物品覆盖及第 9 赛季物品目录。</value>
+  </data>
 </root>

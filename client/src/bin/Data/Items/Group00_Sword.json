@@ -11,7 +11,11 @@
         "pl": "Kris",
         "pt": "Cris"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 2,
       "slot": "mainHand",
@@ -46,7 +50,11 @@
         "pl": "Krótki miecz",
         "pt": "Espada curta"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 3,
       "slot": "mainHand",
@@ -80,7 +88,11 @@
         "pl": "Rapier",
         "pt": "Rapieira"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 3,
       "slot": "mainHand",
@@ -113,7 +125,11 @@
         "pl": "Katana",
         "pt": "Cataná"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 3,
       "slot": "mainHand",
@@ -145,7 +161,11 @@
         "pl": "Miecz Zabójcy",
         "pt": "Espada do assassino"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 3,
       "slot": "mainHand",
@@ -177,7 +197,11 @@
         "pl": "Ostrze",
         "pt": "Lâmina"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 3,
       "slot": "mainHand",
@@ -211,7 +235,11 @@
         "pl": "Gladius",
         "pt": "Gládio"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 3,
       "slot": "mainHand",
@@ -243,7 +271,11 @@
         "pl": "Falchion",
         "pt": "Cimitarra"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 3,
       "slot": "mainHand",
@@ -274,7 +306,11 @@
         "pl": "Wężowy miecz",
         "pt": "Espada da serpente"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 3,
       "slot": "mainHand",
@@ -305,7 +341,11 @@
         "pl": "Miecz Salamandry",
         "pt": "Espada da salamandra"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 3,
       "slot": "mainHand",
@@ -336,7 +376,11 @@
         "pl": "Miecz świetlny",
         "pt": "Sabre de luz"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "mainHand",
@@ -369,7 +413,11 @@
         "pl": "Legendarny miecz",
         "pt": "Espada lendária"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 3,
       "slot": "mainHand",
@@ -400,7 +448,11 @@
         "pl": "Słoneczny miecz",
         "pt": "Espada helíaca"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 3,
       "slot": "mainHand",
@@ -431,7 +483,11 @@
         "pl": "Podwójne ostrze",
         "pt": "Lâmina dupla"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 3,
       "slot": "mainHand",
@@ -463,7 +519,11 @@
         "pl": "Miecz błyskawic",
         "pt": "Espada de luz"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 3,
       "slot": "mainHand",
@@ -495,7 +555,11 @@
         "pl": "Miecz olbrzyma",
         "pt": "Espada gigante"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 3,
       "slot": "mainHand",
@@ -526,7 +590,11 @@
         "pl": "Miecz Zniszczenia",
         "pt": "Espada da destruição"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 4,
       "slot": "mainHand",
@@ -557,7 +625,11 @@
         "pl": "Mroczny Łamacz",
         "pt": "Destruidora Negra"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "mainHand",
@@ -588,7 +660,11 @@
         "pl": "Ostrze Gromu",
         "pt": "Lâmina do trovão"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 3,
       "slot": "mainHand",
@@ -619,15 +695,25 @@
         "pl": "Boski Miecz Archanioła",
         "pt": "Espada divina do arcanjo"
       },
-      "tags": ["divineArchangelWeapon", "valuable"],
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "tags": [
+        "divineArchangelWeapon",
+        "valuable"
+      ],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "nameLines": [
         {
           "text": {
             "en": "{name}"
           },
           "color": "purple",
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -666,7 +752,11 @@
         "pl": "Ostrze Rycerza",
         "pt": "Lâmina do cavaleiro"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 4,
       "slot": "mainHand",
@@ -696,8 +786,14 @@
         "pl": "Ostrze Mrocznych Rządów",
         "pt": "Lâmina do Império negro"
       },
-      "tags": ["magicSword"],
-      "options": ["luck", "physicalAndWizardryDamageOption", "excellentPhysicalAttack"],
+      "tags": [
+        "magicSword"
+      ],
+      "options": [
+        "luck",
+        "physicalAndWizardryDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "mainHand",
@@ -730,7 +826,11 @@
         "pl": "Kościane ostrze",
         "pt": "Lâmina de osso"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 4,
       "slot": "mainHand",
@@ -761,8 +861,14 @@
         "pl": "Ostrze Eksplozji",
         "pt": "Lâmina da explosão"
       },
-      "tags": ["magicSword"],
-      "options": ["luck", "physicalAndWizardryDamageOption", "excellentPhysicalAttack"],
+      "tags": [
+        "magicSword"
+      ],
+      "options": [
+        "luck",
+        "physicalAndWizardryDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "mainHand",
@@ -796,7 +902,11 @@
         "pl": "Świt",
         "pt": "Aurora"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "mainHand",
@@ -826,8 +936,14 @@
         "pl": "Tancerz Ostrzy",
         "pt": "Dançarino da espada"
       },
-      "tags": ["magicSword"],
-      "options": ["luck", "physicalAndWizardryDamageOption", "excellentPhysicalAttack"],
+      "tags": [
+        "magicSword"
+      ],
+      "options": [
+        "luck",
+        "physicalAndWizardryDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "mainHand",
@@ -859,7 +975,11 @@
         "pl": "Flamberga",
         "pt": "Flameberge"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 4,
       "slot": "mainHand",
@@ -889,7 +1009,11 @@
         "pl": "Łamacz mieczy",
         "pt": "Destruidora de Espadas"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 4,
       "slot": "mainHand",
@@ -919,8 +1043,14 @@
         "pl": "Runiczny miecz półtoraręczny",
         "pt": "Espada bastarda das runas"
       },
-      "tags": ["magicSword"],
-      "options": ["luck", "physicalAndWizardryDamageOption", "excellentPhysicalAttack"],
+      "tags": [
+        "magicSword"
+      ],
+      "options": [
+        "luck",
+        "physicalAndWizardryDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 4,
       "slot": "mainHand",
@@ -944,6 +1074,74 @@
       }
     },
     {
+      "number": 29,
+      "name": {
+        "en": "Sonic Blade",
+        "vi": "Thanh kiếm Sonic",
+        "de": "Schallklinge",
+        "zh-CN": "音速之刃"
+      },
+      "width": 1,
+      "height": 4,
+      "slot": "mainHand",
+      "weaponKind": "sword",
+      "statProfile": "weapon",
+      "level": 149,
+      "durability": 80,
+      "damageMin": 109,
+      "damageMax": 116,
+      "attackSpeed": 35,
+      "skill": 22,
+      "requirements": {
+        "level": 400,
+        "strength": 49,
+        "dexterity": 162
+      },
+      "classRequirements": {
+        "darkKnight": 3
+      },
+      "options": [
+        "luck",
+        "physicalDamageOption"
+      ],
+      "droppable": false
+    },
+    {
+      "number": 30,
+      "name": {
+        "en": "Asura",
+        "vi": "Asura",
+        "de": "Asura",
+        "zh-CN": "阿修罗"
+      },
+      "width": 1,
+      "height": 4,
+      "slot": "mainHand",
+      "weaponKind": "sword",
+      "statProfile": "weapon",
+      "level": 149,
+      "durability": 90,
+      "damageMin": 115,
+      "damageMax": 140,
+      "attackSpeed": 45,
+      "magicPower": 112,
+      "skill": 56,
+      "requirements": {
+        "level": 400,
+        "strength": 86,
+        "dexterity": 70,
+        "energy": 16
+      },
+      "classRequirements": {
+        "magicGladiator": 3
+      },
+      "options": [
+        "luck",
+        "physicalDamageOption"
+      ],
+      "droppable": false
+    },
+    {
       "number": 31,
       "name": {
         "en": "Rune Blade",
@@ -952,8 +1150,14 @@
         "pl": "Runiczne ostrze",
         "pt": "Lâmina das runas"
       },
-      "tags": ["magicSword"],
-      "options": ["luck", "physicalAndWizardryDamageOption", "excellentPhysicalAttack"],
+      "tags": [
+        "magicSword"
+      ],
+      "options": [
+        "luck",
+        "physicalAndWizardryDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "mainHand",
@@ -986,7 +1190,11 @@
         "pl": "Święta rękawica",
         "pt": "Luvas Sagradas"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 2,
       "slot": "mainHand",
@@ -1016,7 +1224,11 @@
         "pl": "Pazur Świętej Burzy",
         "pt": "Garra de Tempestade Sagrada"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 2,
       "slot": "mainHand",
@@ -1045,7 +1257,11 @@
         "pl": "Rękawica Przeszywającego Ostrza",
         "pt": "Luvas de Lâmina Perfurante"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 2,
       "slot": "mainHand",
@@ -1074,7 +1290,11 @@
         "pl": "Gwiazda Duszy Feniksa",
         "pt": "Estrela de Alma de Fênix"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 2,
       "slot": "mainHand",
@@ -1094,6 +1314,163 @@
       "classRequirements": {
         "rageFighter": 1
       }
+    },
+    {
+      "number": 36,
+      "name": {
+        "en": "Cyclone Sword",
+        "vi": "Kiếm Lốc Xoáy",
+        "de": "Zyklonschwert",
+        "zh-CN": "旋风之剑"
+      },
+      "width": 1,
+      "height": 4,
+      "slot": "mainHand",
+      "weaponKind": "sword",
+      "statProfile": "weapon",
+      "level": 149,
+      "durability": 90,
+      "damageMin": 129,
+      "damageMax": 144,
+      "attackSpeed": 40,
+      "skill": 22,
+      "requirements": {
+        "level": 400,
+        "strength": 182,
+        "dexterity": 50
+      },
+      "classRequirements": {
+        "darkKnight": 3
+      },
+      "options": [
+        "luck",
+        "physicalDamageOption"
+      ],
+      "droppable": false
+    },
+    {
+      "number": 37,
+      "name": {
+        "en": "Blast Break",
+        "vi": "Kiếm Phá Hủy",
+        "de": "Explosionsbrecher",
+        "zh-CN": "爆裂破坏剑"
+      },
+      "width": 2,
+      "height": 4,
+      "slot": "mainHand",
+      "weaponKind": "sword",
+      "statProfile": "weapon",
+      "twoHanded": true,
+      "level": 149,
+      "durability": 130,
+      "damageMin": 163,
+      "damageMax": 216,
+      "attackSpeed": 30,
+      "skill": 23,
+      "requirements": {
+        "level": 400,
+        "strength": 182,
+        "dexterity": 50
+      },
+      "classRequirements": {
+        "darkKnight": 3,
+        "magicGladiator": 3
+      },
+      "options": [
+        "luck",
+        "physicalDamageOption"
+      ],
+      "droppable": false
+    },
+    {
+      "number": 39,
+      "name": {
+        "en": "Lighting Sword-J"
+      },
+      "width": 1,
+      "height": 3,
+      "slot": "mainHand",
+      "weaponKind": "sword",
+      "statProfile": "weapon",
+      "level": 59,
+      "durability": 50,
+      "damageMin": 59,
+      "damageMax": 67,
+      "attackSpeed": 35,
+      "skill": 22,
+      "requirements": {
+        "strength": 90,
+        "dexterity": 50
+      },
+      "classRequirements": {
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1
+      },
+      "options": [
+        "luck",
+        "physicalDamageOption"
+      ],
+      "droppable": false,
+      "tradable": false
+    },
+    {
+      "number": 40,
+      "name": {
+        "en": "Sacred Glove-J"
+      },
+      "width": 1,
+      "height": 2,
+      "slot": "mainHand",
+      "weaponKind": "claw",
+      "statProfile": "weapon",
+      "level": 52,
+      "durability": 65,
+      "damageMin": 52,
+      "damageMax": 58,
+      "attackSpeed": 30,
+      "skill": 260,
+      "requirements": {
+        "strength": 85,
+        "dexterity": 35
+      },
+      "classRequirements": {
+        "rageFighter": 1
+      },
+      "options": [
+        "luck",
+        "physicalDamageOption"
+      ],
+      "droppable": false,
+      "tradable": false
+    },
+    {
+      "number": 41,
+      "name": {
+        "en": "Pandora Pick (two-handed)",
+        "vi": "Cuốc Pandora (hai tay)",
+        "de": "Pandora-Spitzhacke (Zweihand)",
+        "zh-CN": "潘多拉矿镐（双手）"
+      },
+      "width": 2,
+      "height": 2,
+      "slot": "mainHand",
+      "weaponKind": "sword",
+      "statProfile": "weapon",
+      "twoHanded": true,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "sellable": false
     }
   ]
 }

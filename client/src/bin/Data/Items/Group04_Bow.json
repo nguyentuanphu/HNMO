@@ -11,7 +11,11 @@
         "pl": "Krótki łuk",
         "pt": "Arco curto"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 3,
       "slot": "offHand",
@@ -42,7 +46,11 @@
         "pl": "Łuk",
         "pt": "Arco"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 3,
       "slot": "offHand",
@@ -73,7 +81,11 @@
         "pl": "Elfi łuk",
         "pt": "Arco élfico"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 3,
       "slot": "offHand",
@@ -104,7 +116,11 @@
         "pl": "Łuk bojowy",
         "pt": "Arco de batalha"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 3,
       "slot": "offHand",
@@ -135,7 +151,11 @@
         "pl": "Tygrysi łuk",
         "pt": "Arco do tigre"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "offHand",
@@ -166,7 +186,11 @@
         "pl": "Srebrny łuk",
         "pt": "Arco de prata"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "offHand",
@@ -197,7 +221,11 @@
         "pl": "Łuk Natury Chaosu",
         "pt": "Arco da natureza do caos"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "offHand",
@@ -228,21 +256,31 @@
         "pl": "Bełty",
         "pt": "Dardo"
       },
-      "tags": ["ammunition"],
+      "tags": [
+        "ammunition"
+      ],
       "description": [
         {
           "text": "@numberOfItems"
         },
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:ammunitionDamageIncrease"},
+          "values": {
+            "percent": "table:ammunitionDamageIncrease"
+          },
           "color": "blue",
-          "levels": [1, 15]
+          "levels": [
+            1,
+            15
+          ]
         },
         {
           "text": "@additionalDamagePlusOne",
           "color": "blue",
-          "levels": [1, 15]
+          "levels": [
+            1,
+            15
+          ]
         }
       ],
       "tooltipLayout": "noDurabilityLine",
@@ -264,7 +302,11 @@
         "pl": "Kusza",
         "pt": "Besta"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 2,
       "slot": "mainHand",
@@ -295,7 +337,11 @@
         "pl": "Złota kusza",
         "pt": "Besta dourada"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 2,
       "slot": "mainHand",
@@ -326,7 +372,11 @@
         "pl": "Arkebuz",
         "pt": "Arquebus"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 2,
       "slot": "mainHand",
@@ -357,7 +407,11 @@
         "pl": "Lekka kusza",
         "pt": "Besta leve"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 3,
       "slot": "mainHand",
@@ -388,7 +442,11 @@
         "pl": "Wężowa kusza",
         "pt": "Besta da serpente"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 3,
       "slot": "mainHand",
@@ -419,7 +477,11 @@
         "pl": "Kusza Błękitnego Skrzydła",
         "pt": "Besta Bluewing"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 3,
       "slot": "mainHand",
@@ -450,7 +512,11 @@
         "pl": "Kusza Wodnego Złota",
         "pt": "Besta Aquagold"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 3,
       "slot": "mainHand",
@@ -481,21 +547,31 @@
         "pl": "Strzały",
         "pt": "Flecha"
       },
-      "tags": ["ammunition"],
+      "tags": [
+        "ammunition"
+      ],
       "description": [
         {
           "text": "@numberOfItems"
         },
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:ammunitionDamageIncrease"},
+          "values": {
+            "percent": "table:ammunitionDamageIncrease"
+          },
           "color": "blue",
-          "levels": [1, 15]
+          "levels": [
+            1,
+            15
+          ]
         },
         {
           "text": "@additionalDamagePlusOne",
           "color": "blue",
-          "levels": [1, 15]
+          "levels": [
+            1,
+            15
+          ]
         }
       ],
       "tooltipLayout": "noDurabilityLine",
@@ -517,7 +593,11 @@
         "pl": "Święta kusza",
         "pt": "Besta do santo"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "mainHand",
@@ -548,7 +628,11 @@
         "pl": "Niebiański łuk",
         "pt": "Arco celestial"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "offHand",
@@ -579,15 +663,25 @@
         "pl": "Boska Kusza Archanioła",
         "pt": "Besta divina do arcanjo"
       },
-      "tags": ["divineArchangelWeapon", "valuable"],
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "tags": [
+        "divineArchangelWeapon",
+        "valuable"
+      ],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "nameLines": [
         {
           "text": {
             "en": "{name}"
           },
           "color": "purple",
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -625,7 +719,11 @@
         "pl": "Kusza Wielkich Rządów",
         "pt": "Grande besta do Império"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 3,
       "slot": "mainHand",
@@ -656,7 +754,11 @@
         "pl": "Łuk Żmii",
         "pt": "Arco víbora de flecha"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "offHand",
@@ -687,7 +789,11 @@
         "pl": "Łuk Wiatru Sylfy",
         "pt": "Arco vento da silfe"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "offHand",
@@ -719,7 +825,11 @@
         "pl": "Łuk Albatrosa",
         "pt": "Arco do albatroz"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "offHand",
@@ -749,7 +859,11 @@
         "pl": "Mroczne Żądło",
         "pt": "Golpeador negro"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "offHand",
@@ -781,7 +895,11 @@
         "pl": "Łuk Aileen",
         "pt": "Arco do Aileen"
       },
-      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "options": [
+        "luck",
+        "physicalDamageOption",
+        "excellentPhysicalAttack"
+      ],
       "width": 2,
       "height": 4,
       "slot": "offHand",
@@ -801,6 +919,105 @@
       "classRequirements": {
         "fairyElf": 2
       }
+    },
+    {
+      "number": 25,
+      "name": {
+        "en": "Angelic Bow",
+        "vi": "Cung Thiên Thần",
+        "de": "Engelsbogen",
+        "zh-CN": "天使之弓"
+      },
+      "width": 2,
+      "height": 4,
+      "slot": "offHand",
+      "weaponKind": "bow",
+      "statProfile": "weapon",
+      "twoHanded": true,
+      "level": 149,
+      "durability": 70,
+      "damageMin": 179,
+      "damageMax": 202,
+      "attackSpeed": 45,
+      "skill": 24,
+      "requirements": {
+        "level": 400,
+        "strength": 30,
+        "dexterity": 193
+      },
+      "classRequirements": {
+        "fairyElf": 3
+      },
+      "options": [
+        "luck",
+        "physicalDamageOption"
+      ],
+      "droppable": false
+    },
+    {
+      "number": 26,
+      "name": {
+        "en": "Devil Crossbow",
+        "vi": "Nỏ Ác Quỷ",
+        "de": "Teufelsarmbrust",
+        "zh-CN": "恶魔之弩"
+      },
+      "width": 2,
+      "height": 3,
+      "slot": "mainHand",
+      "weaponKind": "crossbow",
+      "statProfile": "weapon",
+      "twoHanded": true,
+      "level": 149,
+      "durability": 90,
+      "damageMin": 167,
+      "damageMax": 218,
+      "attackSpeed": 40,
+      "skill": 24,
+      "requirements": {
+        "level": 400,
+        "strength": 30,
+        "dexterity": 193
+      },
+      "classRequirements": {
+        "fairyElf": 3
+      },
+      "options": [
+        "luck",
+        "physicalDamageOption"
+      ],
+      "droppable": false
+    },
+    {
+      "number": 27,
+      "name": {
+        "en": "Silver Bow-J"
+      },
+      "width": 2,
+      "height": 4,
+      "slot": "offHand",
+      "weaponKind": "bow",
+      "statProfile": "weapon",
+      "twoHanded": true,
+      "level": 56,
+      "durability": 48,
+      "damageMin": 59,
+      "damageMax": 71,
+      "attackSpeed": 45,
+      "skill": 24,
+      "requirements": {
+        "strength": 30,
+        "dexterity": 100
+      },
+      "classRequirements": {
+        "fairyElf": 1
+      },
+      "options": [
+        "luck",
+        "physicalDamageOption"
+      ],
+      "droppable": false,
+      "tradable": false
     }
   ]
 }

@@ -11,7 +11,11 @@
         "pl": "Mała tarcza",
         "pt": "Escudo pequeno"
       },
-      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseRateOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -42,7 +46,11 @@
         "pl": "Rogowa tarcza",
         "pt": "Escudo de chifre"
       },
-      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseRateOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -71,7 +79,11 @@
         "pl": "Tarcza migdałowa",
         "pt": "Escudo ogival"
       },
-      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseRateOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -100,7 +112,11 @@
         "pl": "Elfia tarcza",
         "pt": "Escudo élfico"
       },
-      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseRateOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -128,7 +144,11 @@
         "pl": "Puklerz",
         "pt": "Broquel"
       },
-      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseRateOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -160,7 +180,11 @@
         "pl": "Tarcza Pogromcy Smoków",
         "pt": "Escudo do matador de dragões"
       },
-      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseRateOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -191,7 +215,11 @@
         "pl": "Tarcza czaszki",
         "pt": "Escudo da caveira"
       },
-      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseRateOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -223,7 +251,11 @@
         "pl": "Kolczasta tarcza",
         "pt": "Escudo com espinhos"
       },
-      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseRateOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -253,7 +285,11 @@
         "pl": "Tarcza wieżowa",
         "pt": "Escudo de torre"
       },
-      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseRateOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -284,7 +320,11 @@
         "pl": "Płytowa tarcza",
         "pt": "Escudo de placa"
       },
-      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseRateOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -314,7 +354,11 @@
         "pl": "Duża okrągła tarcza",
         "pt": "Grande escudo redondo"
       },
-      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseRateOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -344,7 +388,11 @@
         "pl": "Wężowa tarcza",
         "pt": "Escudo da serpente"
       },
-      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseRateOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -375,7 +423,11 @@
         "pl": "Brązowa tarcza",
         "pt": "Escudo de bronze"
       },
-      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseRateOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -404,7 +456,11 @@
         "pl": "Smocza tarcza",
         "pt": "Escudo do dragão"
       },
-      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseRateOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -434,7 +490,11 @@
         "pl": "Legendarna tarcza",
         "pt": "Escudo lendário"
       },
-      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseRateOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 3,
       "slot": "offHand",
@@ -464,7 +524,11 @@
         "pl": "Tarcza Wielkiej Duszy",
         "pt": "Grande escudo da alma"
       },
-      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseRateOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 3,
       "slot": "offHand",
@@ -492,7 +556,11 @@
         "pl": "Tarcza żywiołów",
         "pt": "Escudo elemental"
       },
-      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseRateOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -521,7 +589,11 @@
         "pl": "Szkarłatna Chwała",
         "pt": "Glória carmesim"
       },
-      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseRateOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -551,7 +623,11 @@
         "pl": "Tarcza Salamandry",
         "pt": "Escudo da salamandra"
       },
-      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseRateOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -581,7 +657,11 @@
         "pl": "Mroźna Bariera",
         "pt": "Barreira gelada"
       },
-      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseRateOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -611,7 +691,11 @@
         "pl": "Tarcza Strażnika",
         "pt": "Escudo do guardião"
       },
-      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseRateOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -641,7 +725,11 @@
         "pl": "Tarcza z krzyżem",
         "pt": "Escudo em cruz"
       },
-      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "options": [
+        "luck",
+        "defenseRateOption",
+        "excellentDefense"
+      ],
       "width": 2,
       "height": 2,
       "slot": "offHand",
@@ -660,6 +748,214 @@
       "classRequirements": {
         "darkLord": 1
       }
+    },
+    {
+      "number": 22,
+      "name": {
+        "en": "Lazy Wind Shield",
+        "vi": "Khiên Gió Lười",
+        "de": "Träger-Wind-Schild",
+        "zh-CN": "慵懒之风盾"
+      },
+      "width": 2,
+      "height": 2,
+      "slot": "offHand",
+      "statProfile": "shield",
+      "level": 129,
+      "durability": 90,
+      "defense": 36,
+      "blockRate": 108,
+      "skill": 18,
+      "requirements": {
+        "level": 400,
+        "strength": 67,
+        "dexterity": 56
+      },
+      "classRequirements": {
+        "darkKnight": 3
+      },
+      "options": [
+        "luck",
+        "defenseOption"
+      ]
+    },
+    {
+      "number": 23,
+      "name": {
+        "en": "Light Lord Shield",
+        "vi": "Khiên Chúa Tể Ánh Sáng",
+        "de": "Lichtlord-Schild",
+        "zh-CN": "光之领主盾"
+      },
+      "width": 2,
+      "height": 2,
+      "slot": "offHand",
+      "statProfile": "shield",
+      "level": 124,
+      "durability": 90,
+      "defense": 23,
+      "blockRate": 69,
+      "requirements": {
+        "level": 400,
+        "strength": 16,
+        "dexterity": 35,
+        "energy": 35
+      },
+      "classRequirements": {
+        "fairyElf": 3
+      },
+      "options": [
+        "luck",
+        "defenseOption"
+      ]
+    },
+    {
+      "number": 24,
+      "name": {
+        "en": "Dark Devil Shield",
+        "vi": "Khiên Ác Quỷ Bóng Tối",
+        "de": "Dunkelteufel-Schild",
+        "zh-CN": "暗黑恶魔盾"
+      },
+      "width": 2,
+      "height": 2,
+      "slot": "offHand",
+      "statProfile": "shield",
+      "level": 122,
+      "durability": 90,
+      "defense": 21,
+      "blockRate": 63,
+      "requirements": {
+        "level": 400,
+        "strength": 52,
+        "dexterity": 15
+      },
+      "classRequirements": {
+        "darkWizard": 3
+      },
+      "options": [
+        "luck",
+        "defenseOption"
+      ]
+    },
+    {
+      "number": 25,
+      "name": {
+        "en": "Magic Knight Shield",
+        "vi": "Khiên Hiệp Sĩ Phép Thuật",
+        "de": "Magieritter-Schild",
+        "zh-CN": "魔剑士之盾"
+      },
+      "width": 2,
+      "height": 2,
+      "slot": "offHand",
+      "statProfile": "shield",
+      "level": 128,
+      "durability": 90,
+      "defense": 29,
+      "blockRate": 87,
+      "skill": 18,
+      "requirements": {
+        "level": 400,
+        "strength": 53,
+        "dexterity": 18
+      },
+      "classRequirements": {
+        "magicGladiator": 3
+      },
+      "options": [
+        "luck",
+        "defenseOption"
+      ]
+    },
+    {
+      "number": 26,
+      "name": {
+        "en": "Ambition Shield",
+        "vi": "Khiên Tham Vọng",
+        "de": "Ehrgeiz-Schild",
+        "zh-CN": "野心之盾"
+      },
+      "width": 2,
+      "height": 2,
+      "slot": "offHand",
+      "statProfile": "shield",
+      "level": 131,
+      "durability": 90,
+      "defense": 25,
+      "blockRate": 75,
+      "skill": 18,
+      "requirements": {
+        "level": 400,
+        "strength": 104,
+        "dexterity": 24
+      },
+      "classRequirements": {
+        "darkLord": 3
+      },
+      "options": [
+        "luck",
+        "defenseOption"
+      ]
+    },
+    {
+      "number": 27,
+      "name": {
+        "en": "Legendary Shield-J"
+      },
+      "width": 2,
+      "height": 3,
+      "slot": "offHand",
+      "statProfile": "shield",
+      "level": 48,
+      "durability": 50,
+      "defense": 9,
+      "blockRate": 48,
+      "requirements": {
+        "strength": 90,
+        "dexterity": 25
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1
+      },
+      "options": [
+        "luck",
+        "defenseOption"
+      ],
+      "droppable": false,
+      "tradable": false
+    },
+    {
+      "number": 28,
+      "name": {
+        "en": "Serpent Shield-J"
+      },
+      "width": 2,
+      "height": 2,
+      "slot": "offHand",
+      "statProfile": "shield",
+      "level": 45,
+      "durability": 48,
+      "defense": 14,
+      "blockRate": 45,
+      "skill": 18,
+      "requirements": {
+        "strength": 130
+      },
+      "classRequirements": {
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1
+      },
+      "options": [
+        "luck",
+        "defenseOption"
+      ],
+      "droppable": false,
+      "tradable": false
     }
   ]
 }

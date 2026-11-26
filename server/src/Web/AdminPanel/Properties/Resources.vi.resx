@@ -5339,4 +5339,7 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   <data name="SeasonsRestartSent" xml:space="preserve">
     <value>Đã gửi yêu cầu khởi động lại. Vui lòng tải lại trang sau vài giây.</value>
   </data>
+  <data name="ItemDefinitions_SeasonNineNotice" xml:space="preserve">
+    <value>Đang bật chế độ Season 9: bản web tự động áp dụng 210 ghi đè vật phẩm dùng chung và danh mục vật phẩm Season 9.</value>
+  </data>
 </root>

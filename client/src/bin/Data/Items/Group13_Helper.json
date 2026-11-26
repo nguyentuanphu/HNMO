@@ -45,7 +45,9 @@
         },
         {
           "text": "@life",
-          "when": ["!timed"]
+          "when": [
+            "!timed"
+          ]
         }
       ],
       "tooltipLayout": "noDurabilityLine",
@@ -96,7 +98,9 @@
         },
         {
           "text": "@life",
-          "when": ["!timed"]
+          "when": [
+            "!timed"
+          ]
         }
       ],
       "tooltipLayout": "noDurabilityLine",
@@ -129,11 +133,16 @@
         "pl": "Róg Unirii",
         "pt": "Chifre de Uniria"
       },
-      "tags": ["mount", "hornMount"],
+      "tags": [
+        "mount",
+        "hornMount"
+      ],
       "description": [
         {
           "text": "@life",
-          "when": ["!timed"]
+          "when": [
+            "!timed"
+          ]
         }
       ],
       "tooltipLayout": "noDurabilityLine",
@@ -166,7 +175,12 @@
         "pl": "Róg Dinoranta",
         "pt": "Chifre de Dinorant"
       },
-      "tags": ["mount", "hornMount", "flying", "valuable"],
+      "tags": [
+        "mount",
+        "hornMount",
+        "flying",
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -202,7 +216,9 @@
         },
         {
           "text": "@life",
-          "when": ["!timed"]
+          "when": [
+            "!timed"
+          ]
         }
       ],
       "tooltipLayout": "noDurabilityLine",
@@ -236,11 +252,18 @@
         "pl": "Mroczny Koń",
         "pt": "Cavalo negro"
       },
-      "tags": ["mount", "flying", "darkLordPet", "valuable"],
+      "tags": [
+        "mount",
+        "flying",
+        "darkLordPet",
+        "valuable"
+      ],
       "description": [
         {
           "text": "@life",
-          "when": ["!timed"]
+          "when": [
+            "!timed"
+          ]
         }
       ],
       "tooltipLayout": "noDurabilityLine",
@@ -268,11 +291,16 @@
         "pl": "Mroczny Kruk",
         "pt": "Corvo negro"
       },
-      "tags": ["darkLordPet", "valuable"],
+      "tags": [
+        "darkLordPet",
+        "valuable"
+      ],
       "description": [
         {
           "text": "@life",
-          "when": ["!timed"]
+          "when": [
+            "!timed"
+          ]
         }
       ],
       "tooltipLayout": "noDurabilityLine",
@@ -302,25 +330,41 @@
         {
           "text": "@archer",
           "color": "yellow",
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": "@spearman",
           "color": "yellow",
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         }
       ],
       "nameLines": [
         {
           "text": "@archer",
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": "@spearman",
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         }
       ],
-      "groundLabels": [{"style": "white"}],
+      "groundLabels": [
+        {
+          "style": "white"
+        }
+      ],
       "tooltipLayout": "noDurabilityLine",
       "width": 1,
       "height": 1,
@@ -345,7 +389,10 @@
         "pl": "Pierścień Lodu",
         "pt": "Anel de gelo"
       },
-      "options": ["jewelryHealthRecovery", "excellentDefense"],
+      "options": [
+        "jewelryHealthRecovery",
+        "excellentDefense"
+      ],
       "width": 1,
       "height": 1,
       "slot": "ring",
@@ -378,7 +425,10 @@
         "pl": "Pierścień Trucizny",
         "pt": "Anel do veneno"
       },
-      "options": ["jewelryHealthRecovery", "excellentDefense"],
+      "options": [
+        "jewelryHealthRecovery",
+        "excellentDefense"
+      ],
       "width": 1,
       "height": 1,
       "slot": "ring",
@@ -411,7 +461,9 @@
         "pl": "Pierścień Przemiany",
         "pt": "Anel de Transformação"
       },
-      "tags": ["transformationRing"],
+      "tags": [
+        "transformationRing"
+      ],
       "description": [
         {
           "text": {
@@ -449,8 +501,13 @@
             "uk": "{monster} Перстень трансформації",
             "zh-TW": "{monster} 變身戒指"
           },
-          "values": {"monster": "monsterName:2"},
-          "levels": [0, 0]
+          "values": {
+            "monster": "monsterName:2"
+          },
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -466,8 +523,13 @@
             "uk": "{monster} Перстень трансформації",
             "zh-TW": "{monster} 變身戒指"
           },
-          "values": {"monster": "monsterName:7"},
-          "levels": [1, 1]
+          "values": {
+            "monster": "monsterName:7"
+          },
+          "levels": [
+            1,
+            1
+          ]
         },
         {
           "text": {
@@ -483,8 +545,13 @@
             "uk": "{monster} Перстень трансформації",
             "zh-TW": "{monster} 變身戒指"
           },
-          "values": {"monster": "monsterName:14"},
-          "levels": [2, 2]
+          "values": {
+            "monster": "monsterName:14"
+          },
+          "levels": [
+            2,
+            2
+          ]
         },
         {
           "text": {
@@ -500,8 +567,13 @@
             "uk": "{monster} Перстень трансформації",
             "zh-TW": "{monster} 變身戒指"
           },
-          "values": {"monster": "monsterName:8"},
-          "levels": [3, 3]
+          "values": {
+            "monster": "monsterName:8"
+          },
+          "levels": [
+            3,
+            3
+          ]
         },
         {
           "text": {
@@ -517,8 +589,13 @@
             "uk": "{monster} Перстень трансформації",
             "zh-TW": "{monster} 變身戒指"
           },
-          "values": {"monster": "monsterName:9"},
-          "levels": [4, 4]
+          "values": {
+            "monster": "monsterName:9"
+          },
+          "levels": [
+            4,
+            4
+          ]
         },
         {
           "text": {
@@ -534,18 +611,46 @@
             "uk": "{monster} Перстень трансформації",
             "zh-TW": "{monster} 變身戒指"
           },
-          "values": {"monster": "monsterName:41"},
-          "levels": [5, 5]
+          "values": {
+            "monster": "monsterName:41"
+          },
+          "levels": [
+            5,
+            5
+          ]
         }
       ],
-      "groundLabels": [{"style": "white"}],
+      "groundLabels": [
+        {
+          "style": "white"
+        }
+      ],
       "tooltipLayout": "noClassOrDurabilityLines",
       "width": 1,
       "height": 1,
       "slot": "ring",
       "durability": 200,
       "repairable": false,
-      "requirementsByLevel": {"level": [20, 20, 20, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50]},
+      "requirementsByLevel": {
+        "level": [
+          20,
+          20,
+          20,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50
+        ]
+      },
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -569,25 +674,41 @@
         {
           "text": "@scrollOfGuardian",
           "color": "yellow",
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": "@placeLifeStone",
           "color": "yellow",
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         }
       ],
       "nameLines": [
         {
           "text": "@scrollOfGuardian",
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": "@placeLifeStone",
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         }
       ],
-      "groundLabels": [{"style": "white"}],
+      "groundLabels": [
+        {
+          "style": "white"
+        }
+      ],
       "tooltipLayout": "noDurabilityLine",
       "width": 1,
       "height": 1,
@@ -612,7 +733,10 @@
         "pl": "Wisior Błyskawic",
         "pt": "Pingente da luz"
       },
-      "options": ["jewelryHealthRecovery", "excellentWizardryAttack"],
+      "options": [
+        "jewelryHealthRecovery",
+        "excellentWizardryAttack"
+      ],
       "width": 1,
       "height": 1,
       "slot": "pendant",
@@ -645,7 +769,10 @@
         "pl": "Wisior Ognia",
         "pt": "Pingente do fogo"
       },
-      "options": ["jewelryHealthRecovery", "excellentPhysicalAttack"],
+      "options": [
+        "jewelryHealthRecovery",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 1,
       "slot": "pendant",
@@ -678,7 +805,9 @@
         "pl": "Pióro Locha",
         "pt": "Pena de Loch"
       },
-      "tags": ["valuable"],
+      "tags": [
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -694,7 +823,10 @@
             "uk": "Використовується для покращення крил",
             "zh-TW": "用於升級翅膀"
           },
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -710,7 +842,10 @@
             "uk": "Використовується для поєднання накидки лорда та плаща воїна",
             "zh-TW": "用於組合領主斗篷和戰士斗篷"
           },
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         }
       ],
       "nameLines": [
@@ -719,7 +854,10 @@
             "en": "{name}"
           },
           "color": "yellow",
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -736,15 +874,32 @@
             "zh-TW": "君主的紋章"
           },
           "color": "yellow",
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         },
         {
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "eventItem", "levels": [1, 1]}, {"style": "jewel"}],
+      "groundLabels": [
+        {
+          "style": "eventItem",
+          "levels": [
+            1,
+            1
+          ]
+        },
+        {
+          "style": "jewel"
+        }
+      ],
       "tooltipLayoutChanges": {
-        "hide": ["requiredLevel", "lackingLevel"]
+        "hide": [
+          "requiredLevel",
+          "lackingLevel"
+        ]
       },
       "width": 1,
       "height": 2,
@@ -774,7 +929,9 @@
         "pt": "Fruta",
         "zh-CN": "果实"
       },
-      "tags": ["valuable"],
+      "tags": [
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -791,7 +948,10 @@
             "zh-CN": "{stat} 增加 1～3 点属性",
             "zh-TW": "{stat} 增加1~3點屬性點"
           },
-          "levels": [0, 4]
+          "levels": [
+            0,
+            4
+          ]
         },
         {
           "text": {
@@ -808,7 +968,10 @@
             "zh-CN": "{stat} 可减少 1～9 点属性",
             "zh-TW": "{stat} 可減少屬性1~9點"
           },
-          "levels": [0, 4]
+          "levels": [
+            0,
+            4
+          ]
         },
         {
           "text": {
@@ -826,7 +989,10 @@
             "zh-TW": "它可以在移除物品的情況下使用。"
           },
           "color": "darkRed",
-          "levels": [0, 4]
+          "levels": [
+            0,
+            4
+          ]
         },
         {
           "text": {
@@ -846,11 +1012,16 @@
           "color": "darkRed",
           "colors": [
             {
-              "when": ["class:darkLord"],
+              "when": [
+                "class:darkLord"
+              ],
               "color": "white"
             }
           ],
-          "levels": [4, 4]
+          "levels": [
+            4,
+            4
+          ]
         }
       ],
       "levelValues": {
@@ -933,13 +1104,20 @@
             "en": "{stat} {name}"
           },
           "color": "yellow",
-          "levels": [0, 4]
+          "levels": [
+            0,
+            4
+          ]
         },
         {
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "eventItem"}],
+      "groundLabels": [
+        {
+          "style": "eventItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false,
@@ -962,7 +1140,9 @@
         "pl": "Zwój Archanioła",
         "pt": "Pergaminho do arcanjo"
       },
-      "tags": ["bloodCastleTicketPart"],
+      "tags": [
+        "bloodCastleTicketPart"
+      ],
       "description": [
         {
           "text": "@invisibilityCloakIngredient"
@@ -997,7 +1177,9 @@
         "pl": "Krwawa Kość",
         "pt": "Osso de sangue"
       },
-      "tags": ["bloodCastleTicketPart"],
+      "tags": [
+        "bloodCastleTicketPart"
+      ],
       "description": [
         {
           "text": "@invisibilityCloakIngredient"
@@ -1082,7 +1264,9 @@
         "pl": "Absolutna Broń Archanioła",
         "pt": "Arma absoluta do arcanjo"
       },
-      "tags": ["valuable"],
+      "tags": [
+        "valuable"
+      ],
       "description": [
         {
           "text": "@questItem"
@@ -1120,7 +1304,10 @@
             "uk": "Пошкодження магії: 107 ~ 110",
             "zh-TW": "魔法傷害: 107 ~ 110"
           },
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1136,7 +1323,10 @@
             "uk": "Пошкодження однією рукою: 110 ~ 120",
             "zh-TW": "單手傷害: 110 ~ 120"
           },
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         },
         {
           "text": {
@@ -1152,7 +1342,10 @@
             "uk": "Пошкодження двома руками: 120 ~ 140",
             "zh-TW": "雙手傷害: 120 ~ 140"
           },
-          "levels": [2, 2]
+          "levels": [
+            2,
+            2
+          ]
         },
         {
           "text": {
@@ -1168,7 +1361,10 @@
             "uk": "Швидкість атаки: 20",
             "zh-TW": "攻擊速度：20"
           },
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1184,7 +1380,10 @@
             "uk": "Швидкість атаки: 35",
             "zh-TW": "攻擊速度：35"
           },
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         },
         {
           "text": {
@@ -1200,7 +1399,10 @@
             "uk": "Швидкість атаки: 35",
             "zh-TW": "攻擊速度：35"
           },
-          "levels": [2, 2]
+          "levels": [
+            2,
+            2
+          ]
         },
         {
           "text": {
@@ -1216,7 +1418,10 @@
             "uk": "Вимоги до міцності: 132",
             "zh-TW": "強度要求：132"
           },
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1232,7 +1437,10 @@
             "uk": "Вимоги до міцності: 381",
             "zh-TW": "強度要求：381"
           },
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         },
         {
           "text": {
@@ -1248,7 +1456,10 @@
             "uk": "Вимоги до міцності: 140",
             "zh-TW": "強度要求：140"
           },
-          "levels": [2, 2]
+          "levels": [
+            2,
+            2
+          ]
         },
         {
           "text": {
@@ -1264,7 +1475,10 @@
             "uk": "Вимоги до спритності: 32",
             "zh-TW": "敏捷性需求：32"
           },
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1280,7 +1494,10 @@
             "uk": "Вимоги до спритності: 149",
             "zh-TW": "敏捷性需求：149"
           },
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         },
         {
           "text": {
@@ -1296,7 +1513,10 @@
             "uk": "Вимоги до спритності: 350",
             "zh-TW": "敏捷性需求：350"
           },
-          "levels": [2, 2]
+          "levels": [
+            2,
+            2
+          ]
         },
         {
           "text": ""
@@ -1349,7 +1569,10 @@
           },
           "color": "blue",
           "bold": true,
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1366,7 +1589,10 @@
             "zh-TW": "增加魔法傷害+level/20"
           },
           "color": "blue",
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1383,7 +1609,10 @@
             "zh-TW": "增加魔法傷害+2%"
           },
           "color": "blue",
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1399,14 +1628,22 @@
             "uk": "Навички Cyclone Cutting (Мана:{mana})",
             "zh-TW": "旋風切割技能（法力：{mana}）"
           },
-          "values": {"mana": "skillMana:22"},
+          "values": {
+            "mana": "skillMana:22"
+          },
           "color": "blue",
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         },
         {
           "text": "@increaseDamageLevel20",
           "color": "blue",
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         },
         {
           "text": {
@@ -1423,7 +1660,10 @@
             "zh-TW": "增加傷害+2%"
           },
           "color": "blue",
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         },
         {
           "text": {
@@ -1439,14 +1679,22 @@
             "uk": "Навичка «Потрійний постріл» (мана:{mana})",
             "zh-TW": "三重射擊技能（法力：{mana}）"
           },
-          "values": {"mana": "skillMana:24"},
+          "values": {
+            "mana": "skillMana:24"
+          },
           "color": "blue",
-          "levels": [2, 2]
+          "levels": [
+            2,
+            2
+          ]
         },
         {
           "text": "@increaseDamageLevel20",
           "color": "blue",
-          "levels": [2, 2]
+          "levels": [
+            2,
+            2
+          ]
         },
         {
           "text": {
@@ -1463,7 +1711,10 @@
             "zh-TW": "增加傷害+2%"
           },
           "color": "blue",
-          "levels": [2, 2]
+          "levels": [
+            2,
+            2
+          ]
         },
         {
           "text": {
@@ -1534,7 +1785,10 @@
             "zh-TW": "大天使的絕對法杖"
           },
           "color": "yellow",
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1551,7 +1805,10 @@
             "zh-TW": "絕對大天使之劍"
           },
           "color": "yellow",
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         },
         {
           "text": {
@@ -1568,7 +1825,10 @@
             "zh-TW": "大天使的絕對弩"
           },
           "color": "yellow",
-          "levels": [2, 2]
+          "levels": [
+            2,
+            2
+          ]
         },
         {
           "color": "yellow"
@@ -1605,9 +1865,15 @@
       "description": [
         {
           "text": "@cannotRepair",
-          "when": ["level!=1", "level!=2"],
+          "when": [
+            "level!=1",
+            "level!=2"
+          ],
           "color": "red",
-          "levels": [0, 3]
+          "levels": [
+            0,
+            3
+          ]
         },
         {
           "text": {
@@ -1623,7 +1889,10 @@
             "uk": "Можна викинути після рівня 40",
             "zh-TW": "等級 40 後可掉落"
           },
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         },
         {
           "text": {
@@ -1639,26 +1908,42 @@
             "uk": "Можна викинути після рівня 80",
             "zh-TW": "等級 80 後可掉落"
           },
-          "levels": [2, 2]
+          "levels": [
+            2,
+            2
+          ]
         },
         {
           "text": "@cannotStoreInVault",
           "color": "red",
-          "levels": [1, 2]
+          "levels": [
+            1,
+            2
+          ]
         },
         {
           "text": "@cannotBeTraded",
           "color": "red",
-          "levels": [1, 2]
+          "levels": [
+            1,
+            2
+          ]
         },
         {
           "text": "@cannotBeSold",
           "color": "red",
-          "levels": [1, 2]
+          "levels": [
+            1,
+            2
+          ]
         },
         {
           "text": "@durability",
-          "when": ["!timed", "level!=1", "level!=2"]
+          "when": [
+            "!timed",
+            "level!=1",
+            "level!=2"
+          ]
         }
       ],
       "nameLines": [
@@ -1667,7 +1952,10 @@
             "en": "{name}"
           },
           "color": "yellow",
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1684,7 +1972,10 @@
             "zh-TW": "戰士之戒"
           },
           "color": "yellow",
-          "levels": [1, 2]
+          "levels": [
+            1,
+            2
+          ]
         },
         {
           "text": {
@@ -1701,13 +1992,24 @@
             "zh-TW": "榮耀之戒"
           },
           "color": "yellow",
-          "levels": [3, 3]
+          "levels": [
+            3,
+            3
+          ]
         },
         {
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "eventItem", "levels": [0, 3]}],
+      "groundLabels": [
+        {
+          "style": "eventItem",
+          "levels": [
+            0,
+            3
+          ]
+        }
+      ],
       "tooltipLayout": "noDurabilityLine",
       "width": 1,
       "height": 1,
@@ -1737,7 +2039,10 @@
         "pl": "Pierścień Ognia",
         "pt": "Anel do fogo"
       },
-      "options": ["jewelryHealthRecovery", "excellentDefense"],
+      "options": [
+        "jewelryHealthRecovery",
+        "excellentDefense"
+      ],
       "width": 1,
       "height": 1,
       "slot": "ring",
@@ -1770,7 +2075,10 @@
         "pl": "Pierścień Ziemi",
         "pt": "Anel da terra"
       },
-      "options": ["jewelryHealthRecovery", "excellentDefense"],
+      "options": [
+        "jewelryHealthRecovery",
+        "excellentDefense"
+      ],
       "width": 1,
       "height": 1,
       "slot": "ring",
@@ -1803,7 +2111,10 @@
         "pl": "Pierścień Wiatru",
         "pt": "Anel do vento"
       },
-      "options": ["jewelryHealthRecovery", "excellentDefense"],
+      "options": [
+        "jewelryHealthRecovery",
+        "excellentDefense"
+      ],
       "width": 1,
       "height": 1,
       "slot": "ring",
@@ -1836,7 +2147,10 @@
         "pl": "Pierścień Magii",
         "pt": "Anel da magia"
       },
-      "options": ["ringOfMagicMana", "excellentDefense"],
+      "options": [
+        "ringOfMagicMana",
+        "excellentDefense"
+      ],
       "width": 1,
       "height": 1,
       "slot": "ring",
@@ -1866,7 +2180,10 @@
         "pl": "Wisior Lodu",
         "pt": "Pingente do gelo"
       },
-      "options": ["jewelryHealthRecovery", "excellentWizardryAttack"],
+      "options": [
+        "jewelryHealthRecovery",
+        "excellentWizardryAttack"
+      ],
       "width": 1,
       "height": 1,
       "slot": "pendant",
@@ -1899,7 +2216,10 @@
         "pl": "Wisior Wiatru",
         "pt": "Pingente do vento"
       },
-      "options": ["jewelryHealthRecovery", "excellentPhysicalAttack"],
+      "options": [
+        "jewelryHealthRecovery",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 1,
       "slot": "pendant",
@@ -1932,7 +2252,10 @@
         "pl": "Wisior Wody",
         "pt": "Pingente da água"
       },
-      "options": ["jewelryHealthRecovery", "excellentWizardryAttack"],
+      "options": [
+        "jewelryHealthRecovery",
+        "excellentWizardryAttack"
+      ],
       "width": 1,
       "height": 1,
       "slot": "pendant",
@@ -1965,7 +2288,10 @@
         "pl": "Wisior Zdolności",
         "pt": "Pingente da habilidade"
       },
-      "options": ["pendantOfAbilityAg", "excellentPhysicalAttack"],
+      "options": [
+        "pendantOfAbilityAg",
+        "excellentPhysicalAttack"
+      ],
       "width": 1,
       "height": 1,
       "slot": "pendant",
@@ -2017,16 +2343,25 @@
         "pl": "Peleryna Lorda",
         "pt": "Capa do Lorde"
       },
-      "tags": ["cape", "valuable"],
-      "options": ["luck"],
+      "tags": [
+        "cape",
+        "valuable"
+      ],
+      "options": [
+        "luck"
+      ],
       "description": [
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:capeDamageIncrease"}
+          "values": {
+            "percent": "table:capeDamageIncrease"
+          }
         },
         {
           "text": "@damageAbsorb",
-          "values": {"percent": "table:capeOfLordDamageAbsorb"}
+          "values": {
+            "percent": "table:capeOfLordDamageAbsorb"
+          }
         }
       ],
       "nameLines": [
@@ -2037,15 +2372,22 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ],
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -2054,11 +2396,15 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ]
@@ -2088,7 +2434,9 @@
         "pl": "Duch",
         "pt": "Espírito"
       },
-      "tags": ["valuable"],
+      "tags": [
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -2104,7 +2452,10 @@
             "uk": "Використовується у воскресінні Dark Horse",
             "zh-TW": "用於黑馬復活"
           },
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -2120,7 +2471,10 @@
             "uk": "Використовується у воскресінні Dark Raven",
             "zh-TW": "用於暗鴉復活"
           },
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         }
       ],
       "nameLines": [
@@ -2138,7 +2492,10 @@
             "uk": "{name} (Темна конячка)",
             "zh-TW": "{name} (黑馬)"
           },
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -2154,10 +2511,17 @@
             "uk": "{name} (Темний ворон)",
             "zh-TW": "{name} (暗鴉)"
           },
-          "levels": [1, 1]
+          "levels": [
+            1,
+            1
+          ]
         }
       ],
-      "groundLabels": [{"style": "eventItem"}],
+      "groundLabels": [
+        {
+          "style": "eventItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "classRequirements": {
@@ -2281,7 +2645,9 @@
         "pl": "Pazur Bestii",
         "pt": "Garra da besta"
       },
-      "tags": ["valuable"],
+      "tags": [
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -2327,7 +2693,9 @@
         "pl": "Fragment Rogu",
         "pt": "Fragmento de chifre"
       },
-      "tags": ["valuable"],
+      "tags": [
+        "valuable"
+      ],
       "description": [
         {
           "text": "@brokenHornCanBeMadeUsingTheClawOfBeastAndFragmentOfHorn",
@@ -2367,7 +2735,9 @@
         "pl": "Złamany Róg",
         "pt": "Chifre quebrado"
       },
-      "tags": ["valuable"],
+      "tags": [
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -2418,11 +2788,18 @@
         "pl": "Róg Fenrira",
         "pt": "Chifre de Fenrir"
       },
-      "tags": ["mount", "hornMount", "flying", "valuable"],
+      "tags": [
+        "mount",
+        "hornMount",
+        "flying",
+        "valuable"
+      ],
       "description": [
         {
           "text": "@life",
-          "when": ["!timed"]
+          "when": [
+            "!timed"
+          ]
         }
       ],
       "nameLines": [
@@ -2440,7 +2817,9 @@
             "uk": "{name} +Знищити",
             "zh-TW": "{name} +摧毀"
           },
-          "when": ["excellentFlags=1"],
+          "when": [
+            "excellentFlags=1"
+          ],
           "color": "blue"
         },
         {
@@ -2457,7 +2836,9 @@
             "uk": "{name} +Захистити",
             "zh-TW": "{name} +保護"
           },
-          "when": ["excellentFlags=2"],
+          "when": [
+            "excellentFlags=2"
+          ],
           "color": "blue"
         },
         {
@@ -2474,7 +2855,9 @@
             "uk": "{name} +Ілюзія",
             "zh-TW": "{name} +幻象"
           },
-          "when": ["excellentFlags=4"],
+          "when": [
+            "excellentFlags=4"
+          ],
           "color": "blue"
         },
         {
@@ -2577,7 +2960,9 @@
         "pl": "Elitarny Pierścień Przemiany w Szkieleta",
         "pt": "Anel Esqueleto Transf. Acel."
       },
-      "tags": ["transformationRing"],
+      "tags": [
+        "transformationRing"
+      ],
       "description": [
         {
           "text": {
@@ -2655,7 +3040,9 @@
         "pl": "Pierścień Jack O'Lantern",
         "pt": "Anel do Jack Olantern"
       },
-      "tags": ["transformationRing"],
+      "tags": [
+        "transformationRing"
+      ],
       "description": [
         {
           "text": "@unableToEquipWithADifferentTransformationRing",
@@ -2693,7 +3080,9 @@
         "pl": "Świąteczny Pierścień Przemiany",
         "pt": "Anel do Natal de Transf."
       },
-      "tags": ["transformationRing"],
+      "tags": [
+        "transformationRing"
+      ],
       "description": [
         {
           "text": {
@@ -2790,7 +3179,9 @@
         "pl": "Pierścień GM",
         "pt": "Anel de GM"
       },
-      "tags": ["transformationRing"],
+      "tags": [
+        "transformationRing"
+      ],
       "description": [
         {
           "text": {
@@ -2955,7 +3346,9 @@
         "pl": "Pieczęć Wzniesienia",
         "pt": "Selo da ascensão"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@increasesExperience",
@@ -2974,7 +3367,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "seal"}],
+      "groundLabels": [
+        {
+          "style": "seal"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -3004,7 +3401,9 @@
         "pl": "Pieczęć Bogactwa",
         "pt": "Selo da riqueza"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@increasesExperienceAndDrops",
@@ -3023,7 +3422,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "seal"}],
+      "groundLabels": [
+        {
+          "style": "seal"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -3053,7 +3456,9 @@
         "pl": "Pieczęć Wytrwałości",
         "pt": "Selo do sustento"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -3080,7 +3485,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "seal"}],
+      "groundLabels": [
+        {
+          "style": "seal"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -3110,7 +3519,9 @@
         "pl": "Bilet do Devil Square",
         "pt": "Bilhete da Praça do Diabo"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -3139,7 +3550,11 @@
           "text": "@usableTimes"
         }
       ],
-      "groundLabels": [{"style": "ticket"}],
+      "groundLabels": [
+        {
+          "style": "ticket"
+        }
+      ],
       "tooltipLayout": "noClassOrDurabilityLines",
       "width": 1,
       "height": 1,
@@ -3168,7 +3583,9 @@
         "pl": "Bilet do Blood Castle",
         "pt": "Bilhete do Castelo de Sangue"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -3197,7 +3614,11 @@
           "text": "@usableTimes"
         }
       ],
-      "groundLabels": [{"style": "ticket"}],
+      "groundLabels": [
+        {
+          "style": "ticket"
+        }
+      ],
       "tooltipLayout": "noClassOrDurabilityLines",
       "width": 1,
       "height": 1,
@@ -3226,7 +3647,9 @@
         "pl": "Bilet do Kalimy",
         "pt": "Bilhete de Kalima"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -3255,7 +3678,11 @@
           "text": "@usableTimes"
         }
       ],
-      "groundLabels": [{"style": "ticket"}],
+      "groundLabels": [
+        {
+          "style": "ticket"
+        }
+      ],
       "tooltipLayout": "noClassOrDurabilityLines",
       "width": 1,
       "height": 1,
@@ -3302,7 +3729,11 @@
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "questItem"}],
+      "groundLabels": [
+        {
+          "style": "questItem"
+        }
+      ],
       "width": 1,
       "height": 1,
       "repairable": false,
@@ -3343,7 +3774,11 @@
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "questItem"}],
+      "groundLabels": [
+        {
+          "style": "questItem"
+        }
+      ],
       "width": 1,
       "height": 2,
       "repairable": false,
@@ -3384,7 +3819,11 @@
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "questItem"}],
+      "groundLabels": [
+        {
+          "style": "questItem"
+        }
+      ],
       "width": 2,
       "height": 2,
       "durability": 1,
@@ -3408,7 +3847,9 @@
         "pl": "Płomień Kondora",
         "pt": "Chama do Condor"
       },
-      "tags": ["valuable"],
+      "tags": [
+        "valuable"
+      ],
       "description": [
         {
           "text": "@thirdWingIngredient"
@@ -3440,7 +3881,9 @@
         "pl": "Pióro Kondora",
         "pt": "Pena do Condor"
       },
-      "tags": ["valuable"],
+      "tags": [
+        "valuable"
+      ],
       "description": [
         {
           "text": "@thirdWingIngredient"
@@ -3472,8 +3915,14 @@
         "pl": "Owoc resetu Siły",
         "pt": "Reiniciar força da fruta"
       },
-      "tags": ["cashShop"],
-      "groundLabels": [{"style": "resetFruit"}],
+      "tags": [
+        "cashShop"
+      ],
+      "groundLabels": [
+        {
+          "style": "resetFruit"
+        }
+      ],
       "tooltipLayout": "noClassOrDurabilityLines",
       "width": 1,
       "height": 1,
@@ -3502,8 +3951,14 @@
         "pl": "Owoc resetu Zwinności",
         "pt": "Reiniciar rapidez da fruta"
       },
-      "tags": ["cashShop"],
-      "groundLabels": [{"style": "resetFruit"}],
+      "tags": [
+        "cashShop"
+      ],
+      "groundLabels": [
+        {
+          "style": "resetFruit"
+        }
+      ],
       "tooltipLayout": "noClassOrDurabilityLines",
       "width": 1,
       "height": 1,
@@ -3532,8 +3987,14 @@
         "pl": "Owoc resetu Witalności",
         "pt": "Reiniciar saúde da Fruta"
       },
-      "tags": ["cashShop"],
-      "groundLabels": [{"style": "resetFruit"}],
+      "tags": [
+        "cashShop"
+      ],
+      "groundLabels": [
+        {
+          "style": "resetFruit"
+        }
+      ],
       "tooltipLayout": "noClassOrDurabilityLines",
       "width": 1,
       "height": 1,
@@ -3562,8 +4023,14 @@
         "pl": "Owoc resetu Energii",
         "pt": "Reiniciar energia da fruta"
       },
-      "tags": ["cashShop"],
-      "groundLabels": [{"style": "resetFruit"}],
+      "tags": [
+        "cashShop"
+      ],
+      "groundLabels": [
+        {
+          "style": "resetFruit"
+        }
+      ],
       "tooltipLayout": "noClassOrDurabilityLines",
       "width": 1,
       "height": 1,
@@ -3592,8 +4059,14 @@
         "pl": "Owoc resetu Dowodzenia",
         "pt": "Reiniciar controle da fruta"
       },
-      "tags": ["cashShop"],
-      "groundLabels": [{"style": "resetFruit"}],
+      "tags": [
+        "cashShop"
+      ],
+      "groundLabels": [
+        {
+          "style": "resetFruit"
+        }
+      ],
       "tooltipLayout": "noClassOrDurabilityLines",
       "width": 1,
       "height": 1,
@@ -3622,7 +4095,9 @@
         "pl": "Pieczęć Mobilności",
         "pt": "Selo da mobilidade"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -3641,7 +4116,11 @@
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "seal"}],
+      "groundLabels": [
+        {
+          "style": "seal"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -3669,7 +4148,9 @@
         "pl": "Odpust",
         "pt": "Indulgência"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -3688,7 +4169,11 @@
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "cashShopItem"}],
+      "groundLabels": [
+        {
+          "style": "cashShopItem"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 2,
@@ -3716,7 +4201,9 @@
         "pl": "Bilet do Illusion Temple",
         "pt": "Bilhete do Templo da Ilusão"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -3745,7 +4232,11 @@
           "text": "@usableTimes"
         }
       ],
-      "groundLabels": [{"style": "ticket"}],
+      "groundLabels": [
+        {
+          "style": "ticket"
+        }
+      ],
       "tooltipLayout": "noClassOrDurabilityLines",
       "width": 1,
       "height": 1,
@@ -3774,7 +4265,9 @@
         "pl": "Pieczęć Uzdrowienia",
         "pt": "Selo da cura"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -3829,7 +4322,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "seal"}],
+      "groundLabels": [
+        {
+          "style": "seal"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -3857,7 +4354,9 @@
         "pl": "Pieczęć Boskości",
         "pt": "Selo da divindade"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -3908,7 +4407,11 @@
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "seal"}],
+      "groundLabels": [
+        {
+          "style": "seal"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -3936,7 +4439,11 @@
         "pl": "Demon",
         "pt": "Demônio"
       },
-      "tags": ["guardianPet", "cashShop", "valuable"],
+      "tags": [
+        "guardianPet",
+        "cashShop",
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -3960,10 +4467,16 @@
         },
         {
           "text": "@life",
-          "when": ["!timed"]
+          "when": [
+            "!timed"
+          ]
         }
       ],
-      "groundLabels": [{"style": "pet"}],
+      "groundLabels": [
+        {
+          "style": "pet"
+        }
+      ],
       "tooltipLayout": "noClassOrDurabilityLines",
       "width": 1,
       "height": 1,
@@ -3999,7 +4512,11 @@
         "pl": "Duch Strażnika",
         "pt": "Espír. Guardião"
       },
-      "tags": ["guardianPet", "cashShop", "valuable"],
+      "tags": [
+        "guardianPet",
+        "cashShop",
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -4035,10 +4552,16 @@
         },
         {
           "text": "@life",
-          "when": ["!timed"]
+          "when": [
+            "!timed"
+          ]
         }
       ],
-      "groundLabels": [{"style": "pet"}],
+      "groundLabels": [
+        {
+          "style": "pet"
+        }
+      ],
       "tooltipLayout": "noClassOrDurabilityLines",
       "width": 1,
       "height": 1,
@@ -4098,10 +4621,16 @@
           "after": "options"
         }
       ],
-      "groundLabels": [{"style": "santaInvitation"}],
+      "groundLabels": [
+        {
+          "style": "santaInvitation"
+        }
+      ],
       "tooltipLayout": "noDurabilityLine",
       "tooltipLayoutChanges": {
-        "hide": ["blankAfterOptions"]
+        "hide": [
+          "blankAfterOptions"
+        ]
       },
       "width": 1,
       "height": 1,
@@ -4133,10 +4662,16 @@
         },
         {
           "text": "@life",
-          "when": ["!timed"]
+          "when": [
+            "!timed"
+          ]
         }
       ],
-      "groundLabels": [{"style": "pet"}],
+      "groundLabels": [
+        {
+          "style": "pet"
+        }
+      ],
       "tooltipLayout": "noClassOrDurabilityLines",
       "width": 1,
       "height": 1,
@@ -4167,7 +4702,9 @@
         "pl": "Pierścień Przemiany w Bałwana",
         "pt": "Anel Transf. Homem da Neve"
       },
-      "tags": ["transformationRing"],
+      "tags": [
+        "transformationRing"
+      ],
       "description": [
         {
           "text": "@unableToEquipWithADifferentTransformationRing",
@@ -4175,7 +4712,11 @@
           "after": "options"
         }
       ],
-      "groundLabels": [{"style": "transformationRing"}],
+      "groundLabels": [
+        {
+          "style": "transformationRing"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -4206,7 +4747,9 @@
         "pl": "Talizman Wskrzeszenia",
         "pt": "Talismã da ressurreição"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -4234,7 +4777,9 @@
         "pl": "Talizman Mobilności",
         "pt": "Talismã da mobilidade"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -4266,7 +4811,9 @@
             "uk": "Зберігає розташування клацанням правою кнопкою миші.",
             "zh-TW": "點選滑鼠右鍵儲存位置。"
           },
-          "when": ["durability=2"],
+          "when": [
+            "durability=2"
+          ],
           "color": "blue"
         },
         {
@@ -4283,7 +4830,9 @@
             "uk": "Повернення до збереженого місця клацанням.",
             "zh-TW": "單擊即可返回已儲存的位置。"
           },
-          "when": ["durability=1"],
+          "when": [
+            "durability=1"
+          ],
           "color": "blue"
         }
       ],
@@ -4315,7 +4864,9 @@
         "pl": "Miecz/Buława/Włócznia",
         "pt": "Espada/Maça/Lança"
       },
-      "tags": ["gambleItem"],
+      "tags": [
+        "gambleItem"
+      ],
       "description": [
         {
           "text": "@itemSkillLuckOptionWillBeRandomlyAdded"
@@ -4346,7 +4897,9 @@
         "pl": "Kostur",
         "pt": "Bastão"
       },
-      "tags": ["gambleItem"],
+      "tags": [
+        "gambleItem"
+      ],
       "description": [
         {
           "text": "@itemSkillLuckOptionWillBeRandomlyAdded"
@@ -4377,7 +4930,9 @@
         "pl": "Łuk/Kusza",
         "pt": "Arco/Besta"
       },
-      "tags": ["gambleItem"],
+      "tags": [
+        "gambleItem"
+      ],
       "description": [
         {
           "text": "@itemSkillLuckOptionWillBeRandomlyAdded"
@@ -4408,7 +4963,9 @@
         "pl": "Berło",
         "pt": "Cetro"
       },
-      "tags": ["gambleItem"],
+      "tags": [
+        "gambleItem"
+      ],
       "description": [
         {
           "text": "@itemSkillLuckOptionWillBeRandomlyAdded"
@@ -4439,7 +4996,9 @@
         "pl": "Różdżka",
         "pt": "Cajado"
       },
-      "tags": ["gambleItem"],
+      "tags": [
+        "gambleItem"
+      ],
       "description": [
         {
           "text": "@itemSkillLuckOptionWillBeRandomlyAdded"
@@ -4470,7 +5029,11 @@
         "pl": "Pierścień Pandy",
         "pt": "Anel do Panda"
       },
-      "tags": ["pandaOrSkeleton", "transformationRing", "valuable"],
+      "tags": [
+        "pandaOrSkeleton",
+        "transformationRing",
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -4533,7 +5096,11 @@
           "after": "options"
         }
       ],
-      "groundLabels": [{"style": "transformationRing"}],
+      "groundLabels": [
+        {
+          "style": "transformationRing"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -4561,6 +5128,60 @@
       }
     },
     {
+      "number": 77,
+      "name": {
+        "en": "Brown Panda Ring",
+        "vi": "Nhẫn Gấu Trúc Nâu",
+        "de": "Brauner Panda-Ring",
+        "zh-CN": "棕色熊猫戒指"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "statProfile": "helper",
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 78,
+      "name": {
+        "en": "Pink Panda Ring",
+        "vi": "Nhẫn Gấu Trúc Hồng",
+        "de": "Rosa Panda-Ring",
+        "zh-CN": "粉色熊猫戒指"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "statProfile": "helper",
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
       "number": 80,
       "name": {
         "en": "Pet Panda",
@@ -4569,7 +5190,10 @@
         "pl": "Zwierzak Panda",
         "pt": "Animal de estimação Panda"
       },
-      "tags": ["pandaOrSkeleton", "valuable"],
+      "tags": [
+        "pandaOrSkeleton",
+        "valuable"
+      ],
       "description": [
         {
           "text": "@autoCollectsZen",
@@ -4597,10 +5221,16 @@
         },
         {
           "text": "@life",
-          "when": ["!timed"]
+          "when": [
+            "!timed"
+          ]
         }
       ],
-      "groundLabels": [{"style": "pet"}],
+      "groundLabels": [
+        {
+          "style": "pet"
+        }
+      ],
       "tooltipLayout": "noClassOrDurabilityLines",
       "width": 1,
       "height": 1,
@@ -4636,7 +5266,9 @@
         "pl": "Talizman Strażnika",
         "pt": "Talismã do Guardião"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -4714,7 +5346,9 @@
         "pl": "Talizman Ochrony Przedmiotu",
         "pt": "Talismã de Proteção de Item"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -4802,10 +5436,16 @@
         },
         {
           "text": "@talismanOfWingsOfSatan",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
-      "groundLabels": [{"style": "talismanOfWings"}],
+      "groundLabels": [
+        {
+          "style": "talismanOfWings"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -4841,10 +5481,16 @@
         },
         {
           "text": "@talismanOfWingsOfHeaven",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
-      "groundLabels": [{"style": "talismanOfWings"}],
+      "groundLabels": [
+        {
+          "style": "talismanOfWings"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -4880,10 +5526,16 @@
         },
         {
           "text": "@talismanOfWingsOfElf",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
-      "groundLabels": [{"style": "talismanOfWings"}],
+      "groundLabels": [
+        {
+          "style": "talismanOfWings"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -4919,10 +5571,16 @@
         },
         {
           "text": "@talismanOfWingOfCurse",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
-      "groundLabels": [{"style": "talismanOfWings"}],
+      "groundLabels": [
+        {
+          "style": "talismanOfWings"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -4958,10 +5616,16 @@
         },
         {
           "text": "@talismanOfCapeOfEmperor",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
-      "groundLabels": [{"style": "talismanOfWings"}],
+      "groundLabels": [
+        {
+          "style": "talismanOfWings"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -4997,10 +5661,16 @@
         },
         {
           "text": "@talismanOfWingsOfDragon",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
-      "groundLabels": [{"style": "talismanOfWings"}],
+      "groundLabels": [
+        {
+          "style": "talismanOfWings"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -5036,10 +5706,16 @@
         },
         {
           "text": "@talismanOfWingsOfSoul",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
-      "groundLabels": [{"style": "talismanOfWings"}],
+      "groundLabels": [
+        {
+          "style": "talismanOfWings"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -5075,10 +5751,16 @@
         },
         {
           "text": "@talismanOfWingsOfSpirits",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
-      "groundLabels": [{"style": "talismanOfWings"}],
+      "groundLabels": [
+        {
+          "style": "talismanOfWings"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -5114,10 +5796,16 @@
         },
         {
           "text": "@talismanOfWingOfDespair",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
-      "groundLabels": [{"style": "talismanOfWings"}],
+      "groundLabels": [
+        {
+          "style": "talismanOfWings"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -5153,10 +5841,16 @@
         },
         {
           "text": "@talismanOfWingsOfDarkness",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
-      "groundLabels": [{"style": "talismanOfWings"}],
+      "groundLabels": [
+        {
+          "style": "talismanOfWings"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -5182,7 +5876,9 @@
         "pl": "Mistrzowska Pieczęć Wzniesienia",
         "pt": "Selo Mestre da Ascensão"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@increasesExperience",
@@ -5194,10 +5890,16 @@
         },
         {
           "text": "@attackRateAndDefenseRateIncrease",
-          "when": ["durability"]
+          "when": [
+            "durability"
+          ]
         }
       ],
-      "groundLabels": [{"style": "seal"}],
+      "groundLabels": [
+        {
+          "style": "seal"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -5226,7 +5928,9 @@
         "pl": "Mistrzowska Pieczęć Bogactwa",
         "pt": "Selo Mestre da Riqueza"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@increasesExperienceAndDrops",
@@ -5308,7 +6012,11 @@
         "pl": "Karta postaci: Magic Gladiator",
         "pt": "Carta de Personagem - Gladiador Mágico"
       },
-      "groundLabels": [{"style": "cashShopService"}],
+      "groundLabels": [
+        {
+          "style": "cashShopService"
+        }
+      ],
       "tradable": false,
       "droppable": false,
       "personalShopSellable": false
@@ -5322,7 +6030,11 @@
         "pl": "Karta postaci: Dark Lord",
         "pt": "Carta de Personagem - Lorde Sombrio"
       },
-      "groundLabels": [{"style": "cashShopService"}],
+      "groundLabels": [
+        {
+          "style": "cashShopService"
+        }
+      ],
       "tradable": false,
       "droppable": false,
       "personalShopSellable": false
@@ -5336,7 +6048,11 @@
         "pl": "Klucz miejsca na postać",
         "pt": "Fenda de Chave de Personagem"
       },
-      "groundLabels": [{"style": "cashShopService"}],
+      "groundLabels": [
+        {
+          "style": "cashShopService"
+        }
+      ],
       "slot": "mainHand",
       "tradable": false,
       "droppable": false,
@@ -5351,7 +6067,9 @@
         "pl": "Zwój doświadczenia grupy",
         "pt": "Pergaminho de EXP de grupo"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -5396,7 +6114,9 @@
         "pl": "Aura zwiększenia max AG",
         "pt": "Aura de aumento de AG máx"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -5441,7 +6161,9 @@
         "pl": "Aura zwiększenia max SD",
         "pt": "Aura de aumento de SD máx"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -5486,7 +6208,9 @@
         "pl": "Zwierzak Jednorożec",
         "pt": "Unic. Est."
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@autoCollectsZen",
@@ -5514,10 +6238,16 @@
         },
         {
           "text": "@life",
-          "when": ["!timed"]
+          "when": [
+            "!timed"
+          ]
         }
       ],
-      "groundLabels": [{"style": "pet"}],
+      "groundLabels": [
+        {
+          "style": "pet"
+        }
+      ],
       "tooltipLayout": "noClassOrDurabilityLines",
       "width": 1,
       "height": 1,
@@ -5553,7 +6283,9 @@
         "pl": "Zabójczy Pierścień Czarodzieja",
         "pt": "Anel do Mago Letal"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": "@cannotRepair",
@@ -5597,7 +6329,11 @@
         "pl": "Szafirowy pierścień",
         "pt": "Anel de safira"
       },
-      "tags": ["cashShop", "gemJewelry", "valuable"],
+      "tags": [
+        "cashShop",
+        "gemJewelry",
+        "valuable"
+      ],
       "description": [
         {
           "text": "@automaticHpRecovery3"
@@ -5618,7 +6354,11 @@
           }
         }
       ],
-      "groundLabels": [{"style": "eventJewelry"}],
+      "groundLabels": [
+        {
+          "style": "eventJewelry"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "ring",
@@ -5647,7 +6387,11 @@
         "pl": "Rubinowy pierścień",
         "pt": "Anel de rubi"
       },
-      "tags": ["cashShop", "gemJewelry", "valuable"],
+      "tags": [
+        "cashShop",
+        "gemJewelry",
+        "valuable"
+      ],
       "description": [
         {
           "text": "@automaticHpRecovery3"
@@ -5668,7 +6412,11 @@
           }
         }
       ],
-      "groundLabels": [{"style": "eventJewelry"}],
+      "groundLabels": [
+        {
+          "style": "eventJewelry"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "ring",
@@ -5697,7 +6445,11 @@
         "pl": "Topazowy pierścień",
         "pt": "Anel de topázio"
       },
-      "tags": ["cashShop", "gemJewelry", "valuable"],
+      "tags": [
+        "cashShop",
+        "gemJewelry",
+        "valuable"
+      ],
       "description": [
         {
           "text": "@automaticHpRecovery3"
@@ -5718,7 +6470,11 @@
           }
         }
       ],
-      "groundLabels": [{"style": "eventJewelry"}],
+      "groundLabels": [
+        {
+          "style": "eventJewelry"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "ring",
@@ -5747,7 +6503,11 @@
         "pl": "Ametystowy pierścień",
         "pt": "Anel de ametista"
       },
-      "tags": ["cashShop", "gemJewelry", "valuable"],
+      "tags": [
+        "cashShop",
+        "gemJewelry",
+        "valuable"
+      ],
       "description": [
         {
           "text": "@automaticHpRecovery3"
@@ -5768,7 +6528,11 @@
           }
         }
       ],
-      "groundLabels": [{"style": "eventJewelry"}],
+      "groundLabels": [
+        {
+          "style": "eventJewelry"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "ring",
@@ -5797,7 +6561,11 @@
         "pl": "Rubinowy naszyjnik",
         "pt": "Colar de rubi"
       },
-      "tags": ["cashShop", "gemJewelry", "valuable"],
+      "tags": [
+        "cashShop",
+        "gemJewelry",
+        "valuable"
+      ],
       "description": [
         {
           "text": "@automaticHpRecovery3"
@@ -5818,7 +6586,11 @@
           }
         }
       ],
-      "groundLabels": [{"style": "eventJewelry"}],
+      "groundLabels": [
+        {
+          "style": "eventJewelry"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "pendant",
@@ -5847,7 +6619,11 @@
         "pl": "Szmaragdowy naszyjnik",
         "pt": "Colar de esmeralda"
       },
-      "tags": ["cashShop", "gemJewelry", "valuable"],
+      "tags": [
+        "cashShop",
+        "gemJewelry",
+        "valuable"
+      ],
       "description": [
         {
           "text": "@automaticHpRecovery3"
@@ -5868,7 +6644,11 @@
           }
         }
       ],
-      "groundLabels": [{"style": "eventJewelry"}],
+      "groundLabels": [
+        {
+          "style": "eventJewelry"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "pendant",
@@ -5897,7 +6677,11 @@
         "pl": "Szafirowy naszyjnik",
         "pt": "Colar de safira"
       },
-      "tags": ["cashShop", "gemJewelry", "valuable"],
+      "tags": [
+        "cashShop",
+        "gemJewelry",
+        "valuable"
+      ],
       "description": [
         {
           "text": "@automaticHpRecovery3"
@@ -5906,7 +6690,11 @@
           "text": "@increasesAcquisitionRateOfManaAfterHuntingMonstersMana8"
         }
       ],
-      "groundLabels": [{"style": "eventJewelry"}],
+      "groundLabels": [
+        {
+          "style": "eventJewelry"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "pendant",
@@ -5935,7 +6723,9 @@
         "pl": "Pieczęć Bogactwa",
         "pt": "Selo da riqueza"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -5954,7 +6744,11 @@
           "color": "blue"
         }
       ],
-      "groundLabels": [{"style": "seal"}],
+      "groundLabels": [
+        {
+          "style": "seal"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "ring",
@@ -6066,7 +6860,9 @@
         "pl": "Bilet wolnego wstępu do Chaos Castle",
         "pt": "Bilhete Ac. Livre Cast. Caos"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -6091,14 +6887,22 @@
         },
         {
           "text": "@durability",
-          "when": ["!timed"]
+          "when": [
+            "!timed"
+          ]
         },
         {
           "text": "@usableTimes",
-          "when": ["timed"]
+          "when": [
+            "timed"
+          ]
         }
       ],
-      "groundLabels": [{"style": "eventItem"}],
+      "groundLabels": [
+        {
+          "style": "eventItem"
+        }
+      ],
       "tooltipLayout": "noClassOrDurabilityLines",
       "width": 1,
       "height": 1,
@@ -6127,7 +6931,11 @@
         "pl": "Pierścień Przemiany w Szkieleta",
         "pt": "Anel Transf. de Esqueleto"
       },
-      "tags": ["pandaOrSkeleton", "transformationRing", "valuable"],
+      "tags": [
+        "pandaOrSkeleton",
+        "transformationRing",
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -6211,7 +7019,11 @@
           "after": "options"
         }
       ],
-      "groundLabels": [{"style": "transformationRing"}],
+      "groundLabels": [
+        {
+          "style": "transformationRing"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -6247,7 +7059,10 @@
         "pl": "Zwierzak Szkielet",
         "pt": "Mascote esqueleto"
       },
-      "tags": ["pandaOrSkeleton", "valuable"],
+      "tags": [
+        "pandaOrSkeleton",
+        "valuable"
+      ],
       "description": [
         {
           "text": "@collectsSurroundingZen",
@@ -6291,7 +7106,9 @@
         },
         {
           "text": "@life",
-          "when": ["!timed"]
+          "when": [
+            "!timed"
+          ]
         },
         {
           "text": {
@@ -6328,10 +7145,16 @@
           "after": "options"
         }
       ],
-      "groundLabels": [{"style": "pet"}],
+      "groundLabels": [
+        {
+          "style": "pet"
+        }
+      ],
       "tooltipLayout": "noDurabilityLine",
       "tooltipLayoutChanges": {
-        "hide": ["blankAfterOptions"]
+        "hide": [
+          "blankAfterOptions"
+        ]
       },
       "width": 1,
       "height": 1,
@@ -6367,7 +7190,9 @@
         "pl": "Bilet wstępu na płatny kanał",
         "pt": "Bilhete Ac. a Canal Pago"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -6428,7 +7253,9 @@
         "pl": "Bilet wolnego wstępu do Doppelganger",
         "pt": "Bilhete Ac. Livre Doppeganger"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -6453,7 +7280,11 @@
           "text": "@usableTimes"
         }
       ],
-      "groundLabels": [{"style": "ticket"}],
+      "groundLabels": [
+        {
+          "style": "ticket"
+        }
+      ],
       "tooltipLayout": "noClassOrDurabilityLines",
       "width": 1,
       "height": 1,
@@ -6482,7 +7313,9 @@
         "pl": "Bilet wolnego wstępu do Varka",
         "pt": "Bilhete Ac. Livre Varka"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -6522,7 +7355,11 @@
           }
         }
       ],
-      "groundLabels": [{"style": "ticket"}],
+      "groundLabels": [
+        {
+          "style": "ticket"
+        }
+      ],
       "tooltipLayout": "noClassOrDurabilityLines",
       "width": 1,
       "height": 1,
@@ -6551,7 +7388,9 @@
         "pl": "Bilet wolnego wstępu do Varka (mapa 7)",
         "pt": "Bil. Ac. Livre Mapa 7 Varka"
       },
-      "tags": ["cashShop"],
+      "tags": [
+        "cashShop"
+      ],
       "description": [
         {
           "text": {
@@ -6591,7 +7430,11 @@
           }
         }
       ],
-      "groundLabels": [{"style": "ticket"}],
+      "groundLabels": [
+        {
+          "style": "ticket"
+        }
+      ],
       "tooltipLayout": "noClassOrDurabilityLines",
       "width": 1,
       "height": 1,
@@ -6620,7 +7463,11 @@
         "pl": "Figurka jastrzębia",
         "pt": "Estatueta de falcão"
       },
-      "groundLabels": [{"style": "charm"}],
+      "groundLabels": [
+        {
+          "style": "charm"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "ring",
@@ -6644,7 +7491,11 @@
         "pl": "Figurka kozy",
         "pt": "Estatueta de bode"
       },
-      "groundLabels": [{"style": "charm"}],
+      "groundLabels": [
+        {
+          "style": "charm"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "ring",
@@ -6668,7 +7519,11 @@
         "pl": "Dębowy amulet",
         "pt": "Amuleto de carvalho"
       },
-      "groundLabels": [{"style": "charm"}],
+      "groundLabels": [
+        {
+          "style": "charm"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "ring",
@@ -6692,7 +7547,11 @@
         "pl": "Klonowy amulet",
         "pt": "Amuleto de bordo"
       },
-      "groundLabels": [{"style": "charm"}],
+      "groundLabels": [
+        {
+          "style": "charm"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "ring",
@@ -6716,7 +7575,11 @@
         "pl": "Złoty dębowy amulet",
         "pt": "Amuleto de carvalho dourado"
       },
-      "groundLabels": [{"style": "charm"}],
+      "groundLabels": [
+        {
+          "style": "charm"
+        }
+      ],
       "width": 1,
       "height": 2,
       "slot": "ring",
@@ -6740,7 +7603,11 @@
         "pl": "Złoty klonowy amulet",
         "pt": "Amuleto de bordo dourado"
       },
-      "groundLabels": [{"style": "charm"}],
+      "groundLabels": [
+        {
+          "style": "charm"
+        }
+      ],
       "width": 1,
       "height": 2,
       "slot": "ring",
@@ -6764,7 +7631,11 @@
         "pl": "Zużyta podkowa",
         "pt": "Ferradura gasta"
       },
-      "groundLabels": [{"style": "charm"}],
+      "groundLabels": [
+        {
+          "style": "charm"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "ring",
@@ -6788,7 +7659,9 @@
         "pl": "Bilet szczęścia I na zbroję",
         "pt": "1º Bilhete de Armadura da Sorte"
       },
-      "tags": ["luckyItemTicket"],
+      "tags": [
+        "luckyItemTicket"
+      ],
       "description": [
         {
           "text": "@specialItemsWithCombinations",
@@ -6830,7 +7703,9 @@
         "pl": "Bilet szczęścia I na spodnie",
         "pt": "1º Bilhete de Calças da Sorte"
       },
-      "tags": ["luckyItemTicket"],
+      "tags": [
+        "luckyItemTicket"
+      ],
       "description": [
         {
           "text": "@specialItemsWithCombinations",
@@ -6872,7 +7747,9 @@
         "pl": "Bilet szczęścia I na hełm",
         "pt": "1º Bilhete de Elmo da Sorte"
       },
-      "tags": ["luckyItemTicket"],
+      "tags": [
+        "luckyItemTicket"
+      ],
       "description": [
         {
           "text": "@specialItemsWithCombinations",
@@ -6914,7 +7791,9 @@
         "pl": "Bilet szczęścia I na rękawice",
         "pt": "1º Bilhete de Luvas da Sorte"
       },
-      "tags": ["luckyItemTicket"],
+      "tags": [
+        "luckyItemTicket"
+      ],
       "description": [
         {
           "text": "@specialItemsWithCombinations",
@@ -6956,7 +7835,9 @@
         "pl": "Bilet szczęścia I na buty",
         "pt": "1º Bilhete de Botas da Sorte"
       },
-      "tags": ["luckyItemTicket"],
+      "tags": [
+        "luckyItemTicket"
+      ],
       "description": [
         {
           "text": "@specialItemsWithCombinations",
@@ -6998,7 +7879,9 @@
         "pl": "Bilet szczęścia II na zbroję",
         "pt": "2º Bilhete de Armadura da Sorte"
       },
-      "tags": ["luckyItemTicket"],
+      "tags": [
+        "luckyItemTicket"
+      ],
       "description": [
         {
           "text": "@specialItemsWithCombinations",
@@ -7040,7 +7923,9 @@
         "pl": "Bilet szczęścia II na spodnie",
         "pt": "2º Bilhete de Calças da Sorte"
       },
-      "tags": ["luckyItemTicket"],
+      "tags": [
+        "luckyItemTicket"
+      ],
       "description": [
         {
           "text": "@specialItemsWithCombinations",
@@ -7082,7 +7967,9 @@
         "pl": "Bilet szczęścia II na hełm",
         "pt": "2º Bilhete de Elmo da Sorte"
       },
-      "tags": ["luckyItemTicket"],
+      "tags": [
+        "luckyItemTicket"
+      ],
       "description": [
         {
           "text": "@specialItemsWithCombinations",
@@ -7124,7 +8011,9 @@
         "pl": "Bilet szczęścia II na rękawice",
         "pt": "2º Bilhete de Luvas da Sorte"
       },
-      "tags": ["luckyItemTicket"],
+      "tags": [
+        "luckyItemTicket"
+      ],
       "description": [
         {
           "text": "@specialItemsWithCombinations",
@@ -7166,7 +8055,9 @@
         "pl": "Bilet szczęścia II na buty",
         "pt": "2º Bilhete de Botas da Sorte"
       },
-      "tags": ["luckyItemTicket"],
+      "tags": [
+        "luckyItemTicket"
+      ],
       "description": [
         {
           "text": "@specialItemsWithCombinations",
@@ -7198,6 +8089,3010 @@
         "summoner": 1,
         "rageFighter": 1
       }
+    },
+    {
+      "number": 145,
+      "name": {
+        "en": "Spirit Map Fragment",
+        "vi": "Mảnh Bản Đồ Linh Hồn",
+        "de": "Geisterkarten-Fragment",
+        "zh-CN": "灵魂地图碎片"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 1,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 146,
+      "name": {
+        "en": "Spirit Map",
+        "vi": "Bản Đồ Linh Hồn",
+        "de": "Geisterkarte",
+        "zh-CN": "灵魂地图"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 147,
+      "name": {
+        "en": "Trophies of Battle",
+        "vi": "Chiến Tích Trận Đánh",
+        "de": "Kriegstrophäen",
+        "zh-CN": "战斗战利品"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 1,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 148,
+      "name": {
+        "en": "Green Ink",
+        "vi": "Mực Xanh Lá",
+        "de": "Grüne Tinte",
+        "zh-CN": "绿色墨水"
+      },
+      "width": 1,
+      "height": 2,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 149,
+      "name": {
+        "en": "Blue Ink",
+        "vi": "Mực Xanh Dương",
+        "de": "Blaue Tinte",
+        "zh-CN": "蓝色墨水"
+      },
+      "width": 1,
+      "height": 2,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 150,
+      "name": {
+        "en": "Red Ink",
+        "vi": "Mực Đỏ",
+        "de": "Rote Tinte",
+        "zh-CN": "红色墨水"
+      },
+      "width": 1,
+      "height": 2,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 151,
+      "name": {
+        "en": "Parchment of Soul",
+        "vi": "Giấy Da Linh Hồn",
+        "de": "Pergament der Seele",
+        "zh-CN": "灵魂羊皮纸"
+      },
+      "width": 1,
+      "height": 2,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 152,
+      "name": {
+        "en": "Scroll of Green Oblivion",
+        "vi": "Cuộn Lãng Quên Xanh Lá",
+        "de": "Schriftrolle der grünen Vergessenheit",
+        "zh-CN": "绿色遗忘卷轴"
+      },
+      "width": 2,
+      "height": 2,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 153,
+      "name": {
+        "en": "Scroll of Blue Oblivion",
+        "vi": "Cuộn Lãng Quên Xanh Dương",
+        "de": "Schriftrolle der blauen Vergessenheit",
+        "zh-CN": "蓝色遗忘卷轴"
+      },
+      "width": 2,
+      "height": 2,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 154,
+      "name": {
+        "en": "Scroll of Red Oblivion",
+        "vi": "Cuộn Lãng Quên Đỏ",
+        "de": "Schriftrolle der roten Vergessenheit",
+        "zh-CN": "红色遗忘卷轴"
+      },
+      "width": 2,
+      "height": 2,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 155,
+      "name": {
+        "en": "Scroll of Gray Oblivion",
+        "vi": "Cuộn Lãng Quên Xám",
+        "de": "Schriftrolle der grauen Vergessenheit",
+        "zh-CN": "灰色遗忘卷轴"
+      },
+      "width": 2,
+      "height": 2,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 156,
+      "name": {
+        "en": "Sealed Green Oblivion Scroll",
+        "vi": "Cuộn Lãng Quên Xanh Lá Phong Ấn",
+        "de": "Versiegelte grüne Vergessenheitsrolle",
+        "zh-CN": "封印的绿色遗忘卷轴"
+      },
+      "width": 2,
+      "height": 2,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "sellable": false
+    },
+    {
+      "number": 157,
+      "name": {
+        "en": "Sealed Blue Oblivion Scroll",
+        "vi": "Cuộn Lãng Quên Xanh Dương Phong Ấn",
+        "de": "Versiegelte blaue Vergessenheitsrolle",
+        "zh-CN": "封印的蓝色遗忘卷轴"
+      },
+      "width": 2,
+      "height": 2,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "sellable": false
+    },
+    {
+      "number": 158,
+      "name": {
+        "en": "Sealed Red Oblivion Scroll",
+        "vi": "Cuộn Lãng Quên Đỏ Phong Ấn",
+        "de": "Versiegelte rote Vergessenheitsrolle",
+        "zh-CN": "封印的红色遗忘卷轴"
+      },
+      "width": 2,
+      "height": 2,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "sellable": false
+    },
+    {
+      "number": 159,
+      "name": {
+        "en": "Sealed Gray Oblivion Scroll",
+        "vi": "Cuộn Lãng Quên Xám Phong Ấn",
+        "de": "Versiegelte graue Vergessenheitsrolle",
+        "zh-CN": "封印的灰色遗忘卷轴"
+      },
+      "width": 2,
+      "height": 2,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "sellable": false
+    },
+    {
+      "number": 160,
+      "name": {
+        "en": "Protection Talisman",
+        "vi": "Bùa Bảo Hộ",
+        "de": "Schutztalisman",
+        "zh-CN": "保护符咒"
+      },
+      "width": 1,
+      "height": 1,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 161,
+      "name": {
+        "en": "Cooperation Talisman",
+        "vi": "Bùa Hợp Tác",
+        "de": "Kooperationstalisman",
+        "zh-CN": "合作符咒"
+      },
+      "width": 1,
+      "height": 1,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 163,
+      "name": {
+        "en": "Robot Knight Ring",
+        "vi": "Nhẫn Hiệp Sĩ Robot",
+        "de": "Roboterritter-Ring",
+        "zh-CN": "机器人骑士戒指"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "statProfile": "helper",
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 164,
+      "name": {
+        "en": "Mini Robot Ring",
+        "vi": "Nhẫn Robot Nhỏ",
+        "de": "Mini-Roboter-Ring",
+        "zh-CN": "迷你机器人戒指"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "statProfile": "helper",
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 165,
+      "name": {
+        "en": "Great Heavenly Mage Ring",
+        "vi": "Nhẫn Đại Pháp Sư Thiên Đàng",
+        "de": "Großer Himmlischer Magierring",
+        "zh-CN": "大天法师戒指"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "statProfile": "helper",
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 169,
+      "name": {
+        "en": "Decoration Ring",
+        "vi": "Nhẫn Trang Trí",
+        "de": "Dekorationsring",
+        "zh-CN": "装饰戒指"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "statProfile": "helper",
+      "durability": 30,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 170,
+      "name": {
+        "en": "Blessed Decoration Ring",
+        "vi": "Nhẫn Trang Trí Ban Phước",
+        "de": "Gesegneter Dekorationsring",
+        "zh-CN": "祝福装饰戒指"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "statProfile": "helper",
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 171,
+      "name": {
+        "en": "Necklace of Agony",
+        "vi": "Dây Chuyền Thống Khổ",
+        "de": "Halskette der Qual",
+        "zh-CN": "痛苦项链"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "pendant",
+      "statProfile": "helper",
+      "durability": 60,
+      "requirements": {
+        "level": 122
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 172,
+      "name": {
+        "en": "Solid Symbol",
+        "vi": "Biểu Tượng Vững Chắc",
+        "de": "Festes Symbol",
+        "zh-CN": "坚固徽章"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "pendant",
+      "statProfile": "helper",
+      "durability": 60,
+      "requirements": {
+        "level": 110
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 173,
+      "name": {
+        "en": "Ring of Ultimatum",
+        "vi": "Nhẫn Tối Hậu Thư",
+        "de": "Ring des Ultimatums",
+        "zh-CN": "最后通牒戒指"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "statProfile": "helper",
+      "durability": 60,
+      "requirements": {
+        "level": 98
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 174,
+      "name": {
+        "en": "Ring of Block",
+        "vi": "Nhẫn Phòng Thủ",
+        "de": "Ring des Blockens",
+        "zh-CN": "格挡戒指"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "statProfile": "helper",
+      "durability": 60,
+      "requirements": {
+        "level": 86
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 175,
+      "name": {
+        "en": "Protector Protection Ring",
+        "vi": "Nhẫn Bảo Hộ Hộ Vệ",
+        "de": "Beschützer-Schutzring",
+        "zh-CN": "守护者保护戒指"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "statProfile": "helper",
+      "durability": 60,
+      "requirements": {
+        "level": 74
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 176,
+      "name": {
+        "en": "Protection Ring",
+        "vi": "Nhẫn Bảo Hộ",
+        "de": "Schutzring",
+        "zh-CN": "保护戒指"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "statProfile": "helper",
+      "durability": 60,
+      "requirements": {
+        "level": 62
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 177,
+      "name": {
+        "en": "Talisman of Ascension I",
+        "vi": "Bùa Thăng Hoa I",
+        "de": "Talisman des Aufstiegs I",
+        "zh-CN": "飞升护符 I"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 178,
+      "name": {
+        "en": "Talisman of Ascension II",
+        "vi": "Bùa Thăng Hoa II",
+        "de": "Talisman des Aufstiegs II",
+        "zh-CN": "飞升护符 II"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 179,
+      "name": {
+        "en": "Talisman of Ascension III",
+        "vi": "Bùa Thăng Hoa III",
+        "de": "Talisman des Aufstiegs III",
+        "zh-CN": "飞升护符 III"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 180,
+      "name": {
+        "en": "Seal of Ascension II",
+        "vi": "Ấn Thăng Hoa II",
+        "de": "Siegel des Aufstiegs II",
+        "zh-CN": "飞升印章 II"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "statProfile": "helper",
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 181,
+      "name": {
+        "en": "Master Seal of Ascension II",
+        "vi": "Ấn Thăng Hoa Bậc Thầy II",
+        "de": "Meistersiegel des Aufstiegs II",
+        "zh-CN": "大师飞升印章 II"
+      },
+      "width": 1,
+      "height": 1,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 210,
+      "name": {
+        "en": "WereRabbit Egg",
+        "vi": "Trứng Thỏ Ma",
+        "de": "Werkaninchen-Ei",
+        "zh-CN": "狼兔蛋"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 211,
+      "name": {
+        "en": "Evolution Stone",
+        "vi": "Đá Tiến Hóa",
+        "de": "Entwicklungsstein",
+        "zh-CN": "进化石"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 212,
+      "name": {
+        "en": "Luki",
+        "vi": "Luki",
+        "de": "Luki",
+        "zh-CN": "路基"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 213,
+      "name": {
+        "en": "Luki (Evolved)",
+        "vi": "Luki (Tiến hóa)",
+        "de": "Luki (Entwickelt)",
+        "zh-CN": "路基（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 214,
+      "name": {
+        "en": "Tony",
+        "vi": "Tony",
+        "de": "Tony",
+        "zh-CN": "托尼"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 215,
+      "name": {
+        "en": "Tony (Evolved)",
+        "vi": "Tony (Tiến hóa)",
+        "de": "Tony (Entwickelt)",
+        "zh-CN": "托尼（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 216,
+      "name": {
+        "en": "Nymph",
+        "vi": "Nữ Thần Rừng",
+        "de": "Nymphe",
+        "zh-CN": "仙女"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 217,
+      "name": {
+        "en": "Nymph (Evolved)",
+        "vi": "Nữ Thần Rừng (Tiến hóa)",
+        "de": "Nymphe (Entwickelt)",
+        "zh-CN": "仙女（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 218,
+      "name": {
+        "en": "Safi",
+        "vi": "Safi",
+        "de": "Safi",
+        "zh-CN": "萨菲"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 219,
+      "name": {
+        "en": "Safi (Evolved)",
+        "vi": "Safi (Tiến hóa)",
+        "de": "Safi (Entwickelt)",
+        "zh-CN": "萨菲（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 220,
+      "name": {
+        "en": "Lucky Bag Egg",
+        "vi": "Trứng Túi May Mắn",
+        "de": "Glücksbeutel-Ei",
+        "zh-CN": "幸运袋蛋"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 221,
+      "name": {
+        "en": "Fire Flame Ghost Egg",
+        "vi": "Trứng Ma Lửa",
+        "de": "Flammengeister-Ei",
+        "zh-CN": "火焰幽灵蛋"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 222,
+      "name": {
+        "en": "Golden Goblin Egg",
+        "vi": "Trứng Yêu Tinh Vàng",
+        "de": "Goldenes Goblin-Ei",
+        "zh-CN": "黄金哥布林蛋"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
+    },
+    {
+      "number": 223,
+      "name": {
+        "en": "William",
+        "vi": "William",
+        "de": "William",
+        "zh-CN": "威廉"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 224,
+      "name": {
+        "en": "William (Evolved)",
+        "vi": "William (Tiến hóa)",
+        "de": "William (Entwickelt)",
+        "zh-CN": "威廉（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 225,
+      "name": {
+        "en": "Paul",
+        "vi": "Paul",
+        "de": "Paul",
+        "zh-CN": "保罗"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 226,
+      "name": {
+        "en": "Paul (Evolved)",
+        "vi": "Paul (Tiến hóa)",
+        "de": "Paul (Entwickelt)",
+        "zh-CN": "保罗（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 227,
+      "name": {
+        "en": "Chiron",
+        "vi": "Chiron",
+        "de": "Chiron",
+        "zh-CN": "喀戎"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 228,
+      "name": {
+        "en": "Chiron (Evolved)",
+        "vi": "Chiron (Tiến hóa)",
+        "de": "Chiron (Entwickelt)",
+        "zh-CN": "喀戎（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 229,
+      "name": {
+        "en": "Wooparoo",
+        "vi": "Wooparoo",
+        "de": "Wooparoo",
+        "zh-CN": "乌帕鲁"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 230,
+      "name": {
+        "en": "Wooparoo (Evolved)",
+        "vi": "Wooparoo (Tiến hóa)",
+        "de": "Wooparoo (Entwickelt)",
+        "zh-CN": "乌帕鲁（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 231,
+      "name": {
+        "en": "Tibetton",
+        "vi": "Tibetton",
+        "de": "Tibetton",
+        "zh-CN": "蒂贝顿"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 232,
+      "name": {
+        "en": "Tibetton (Evolved)",
+        "vi": "Tibetton (Tiến hóa)",
+        "de": "Tibetton (Entwickelt)",
+        "zh-CN": "蒂贝顿（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 233,
+      "name": {
+        "en": "Witch",
+        "vi": "Phù Thủy",
+        "de": "Hexe",
+        "zh-CN": "女巫"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 234,
+      "name": {
+        "en": "Witch (evolved)",
+        "vi": "Phù Thủy (Tiến hóa)",
+        "de": "Hexe (Entwickelt)",
+        "zh-CN": "女巫（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 235,
+      "name": {
+        "en": "Skull",
+        "vi": "Đầu Lâu",
+        "de": "Schädel",
+        "zh-CN": "骷髅"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 236,
+      "name": {
+        "en": "Skull (evolved)",
+        "vi": "Đầu Lâu (Tiến hóa)",
+        "de": "Schädel (Entwickelt)",
+        "zh-CN": "骷髅（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 237,
+      "name": {
+        "en": "Pumpy",
+        "vi": "Pumpy",
+        "de": "Pumpy",
+        "zh-CN": "南瓜仔"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 238,
+      "name": {
+        "en": "Pumpy (evolved)",
+        "vi": "Pumpy (Tiến hóa)",
+        "de": "Pumpy (Entwickelt)",
+        "zh-CN": "南瓜仔（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 239,
+      "name": {
+        "en": "Muun Energy Converter",
+        "vi": "Bộ Chuyển Đổi Năng Lượng Muun",
+        "de": "Muun-Energiewandler",
+        "zh-CN": "萌宠能量转换器"
+      },
+      "width": 1,
+      "height": 1,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 240,
+      "name": {
+        "en": "Wizardry Stone",
+        "vi": "Đá Ma Pháp",
+        "de": "Zauberstein",
+        "zh-CN": "魔力石"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 241,
+      "name": {
+        "en": "Savath",
+        "vi": "Savath",
+        "de": "Savath",
+        "zh-CN": "萨瓦斯"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 242,
+      "name": {
+        "en": "Savath (Evolved)",
+        "vi": "Savath (Tiến hóa)",
+        "de": "Savath (Entwickelt)",
+        "zh-CN": "萨瓦斯（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 243,
+      "name": {
+        "en": "Lycan",
+        "vi": "Người Sói Lycan",
+        "de": "Lykan",
+        "zh-CN": "狼人"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 244,
+      "name": {
+        "en": "Lycan (Evolved)",
+        "vi": "Người Sói Lycan (Tiến hóa)",
+        "de": "Lykan (Entwickelt)",
+        "zh-CN": "狼人（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 245,
+      "name": {
+        "en": "Torby",
+        "vi": "Torby",
+        "de": "Torby",
+        "zh-CN": "托比"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 246,
+      "name": {
+        "en": "Torby (Evolved)",
+        "vi": "Torby (Tiến hóa)",
+        "de": "Torby (Entwickelt)",
+        "zh-CN": "托比（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 252,
+      "name": {
+        "en": "Seiren",
+        "vi": "Mỹ Nhân Ngư Seiren",
+        "de": "Sirene",
+        "zh-CN": "塞壬"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 253,
+      "name": {
+        "en": "Seiren (Evolved)",
+        "vi": "Mỹ Nhân Ngư Seiren (Tiến hóa)",
+        "de": "Sirene (Entwickelt)",
+        "zh-CN": "塞壬（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 254,
+      "name": {
+        "en": "Behemoth",
+        "vi": "Behemoth",
+        "de": "Behemoth",
+        "zh-CN": "巨兽"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 255,
+      "name": {
+        "en": "Behemoth (Evolved)",
+        "vi": "Behemoth (Tiến hóa)",
+        "de": "Behemoth (Entwickelt)",
+        "zh-CN": "巨兽（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 256,
+      "name": {
+        "en": "Loggle",
+        "vi": "Loggle",
+        "de": "Loggle",
+        "zh-CN": "洛格尔"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 257,
+      "name": {
+        "en": "Loggle (Evolved)",
+        "vi": "Loggle (Tiến hóa)",
+        "de": "Loggle (Entwickelt)",
+        "zh-CN": "洛格尔（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 258,
+      "name": {
+        "en": "Mino",
+        "vi": "Mino",
+        "de": "Mino",
+        "zh-CN": "米诺"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 259,
+      "name": {
+        "en": "Mino (Evolved)",
+        "vi": "Mino (Tiến hóa)",
+        "de": "Mino (Entwickelt)",
+        "zh-CN": "米诺（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 260,
+      "name": {
+        "en": "Hound",
+        "vi": "Chó Săn",
+        "de": "Jagdhund",
+        "zh-CN": "猎犬"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 261,
+      "name": {
+        "en": "Hound (Evolved)",
+        "vi": "Chó Săn (Tiến hóa)",
+        "de": "Jagdhund (Entwickelt)",
+        "zh-CN": "猎犬（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 262,
+      "name": {
+        "en": "Trive",
+        "vi": "Trive",
+        "de": "Trive",
+        "zh-CN": "特莱夫"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 263,
+      "name": {
+        "en": "Trive (Evolved)",
+        "vi": "Trive (Tiến hóa)",
+        "de": "Trive (Entwickelt)",
+        "zh-CN": "特莱夫（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 264,
+      "name": {
+        "en": "Vogan",
+        "vi": "Vogan",
+        "de": "Vogan",
+        "zh-CN": "沃甘"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 265,
+      "name": {
+        "en": "Vogan (Evolved)",
+        "vi": "Vogan (Tiến hóa)",
+        "de": "Vogan (Entwickelt)",
+        "zh-CN": "沃甘（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 266,
+      "name": {
+        "en": "Cyclop",
+        "vi": "Khổng Lồ Một Mắt",
+        "de": "Zyklop",
+        "zh-CN": "独眼巨人"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 267,
+      "name": {
+        "en": "Cyclop (Evolved)",
+        "vi": "Khổng Lồ Một Mắt (Tiến hóa)",
+        "de": "Zyklop (Entwickelt)",
+        "zh-CN": "独眼巨人（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 268,
+      "name": {
+        "en": "Dark Transformation Ring",
+        "vi": "Nhẫn Biến Hình Bóng Tối",
+        "de": "Dunkler Verwandlungsring",
+        "zh-CN": "暗黑变身戒指"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "statProfile": "helper",
+      "durability": 255,
+      "requirements": {
+        "level": 400
+      },
+      "classRequirements": {
+        "darkWizard": 3,
+        "darkKnight": 3,
+        "fairyElf": 3,
+        "magicGladiator": 3,
+        "darkLord": 3,
+        "summoner": 3,
+        "rageFighter": 3
+      },
+      "droppable": false
+    },
+    {
+      "number": 270,
+      "name": {
+        "en": "Bonf",
+        "vi": "Bonf",
+        "de": "Bonf",
+        "zh-CN": "邦夫"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 271,
+      "name": {
+        "en": "Bonf (Evolved)",
+        "vi": "Bonf (Tiến hóa)",
+        "de": "Bonf (Entwickelt)",
+        "zh-CN": "邦夫（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 272,
+      "name": {
+        "en": "Hawk",
+        "vi": "Diều Hâu",
+        "de": "Falke",
+        "zh-CN": "猎鹰"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 273,
+      "name": {
+        "en": "Hawk (Evolved)",
+        "vi": "Diều Hâu (Tiến hóa)",
+        "de": "Falke (Entwickelt)",
+        "zh-CN": "猎鹰（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 274,
+      "name": {
+        "en": "Muty",
+        "vi": "Muty",
+        "de": "Muty",
+        "zh-CN": "穆蒂"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 275,
+      "name": {
+        "en": "Muty (Evolved)",
+        "vi": "Muty (Tiến hóa)",
+        "de": "Muty (Entwickelt)",
+        "zh-CN": "穆蒂（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 276,
+      "name": {
+        "en": "Conqueror's Badge",
+        "vi": "Huy Hiệu Kẻ Chinh Phục",
+        "de": "Abzeichen des Eroberers",
+        "zh-CN": "征服者徽章"
+      },
+      "width": 3,
+      "height": 3,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 277,
+      "name": {
+        "en": "Badge of Hardships",
+        "vi": "Huy Hiệu Gian Khổ",
+        "de": "Abzeichen der Mühen",
+        "zh-CN": "磨难徽章"
+      },
+      "width": 3,
+      "height": 3,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "sellable": false
+    },
+    {
+      "number": 278,
+      "name": {
+        "en": "Mantis",
+        "vi": "Bọ Ngựa",
+        "de": "Gottesanbeterin",
+        "zh-CN": "螳螂"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 279,
+      "name": {
+        "en": "Mantis (Evolved)",
+        "vi": "Bọ Ngựa (Tiến hóa)",
+        "de": "Gottesanbeterin (Entwickelt)",
+        "zh-CN": "螳螂（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 280,
+      "name": {
+        "en": "Scolpy",
+        "vi": "Bọ Cạp",
+        "de": "Skorpy",
+        "zh-CN": "蝎子"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 281,
+      "name": {
+        "en": "Scolpy (Evolved)",
+        "vi": "Bọ Cạp (Tiến hóa)",
+        "de": "Skorpy (Entwickelt)",
+        "zh-CN": "蝎子（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 282,
+      "name": {
+        "en": "Chafer",
+        "vi": "Bọ Hung",
+        "de": "Käfer",
+        "zh-CN": "圣甲虫"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 283,
+      "name": {
+        "en": "Chafer (Evolved)",
+        "vi": "Bọ Hung (Tiến hóa)",
+        "de": "Käfer (Entwickelt)",
+        "zh-CN": "圣甲虫（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 290,
+      "name": {
+        "en": "Cosplay Girl",
+        "vi": "Cô Gái Cosplay",
+        "de": "Cosplay-Mädchen",
+        "zh-CN": "角色扮演少女"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 291,
+      "name": {
+        "en": "Cosplay Girl (Evolved)",
+        "vi": "Cô Gái Cosplay (Tiến hóa)",
+        "de": "Cosplay-Mädchen (Entwickelt)",
+        "zh-CN": "角色扮演少女（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 292,
+      "name": {
+        "en": "Cheer Girl",
+        "vi": "Cô Gái Cổ Vũ",
+        "de": "Cheer-Mädchen",
+        "zh-CN": "啦啦队少女"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 293,
+      "name": {
+        "en": "Cheer Girl (Evolved)",
+        "vi": "Cô Gái Cổ Vũ (Tiến hóa)",
+        "de": "Cheer-Mädchen (Entwickelt)",
+        "zh-CN": "啦啦队少女（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 294,
+      "name": {
+        "en": "Sporty Girl",
+        "vi": "Cô Gái Thể Thao",
+        "de": "Sport-Mädchen",
+        "zh-CN": "运动少女"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 295,
+      "name": {
+        "en": "Sporty Girl (Evolved)",
+        "vi": "Cô Gái Thể Thao (Tiến hóa)",
+        "de": "Sport-Mädchen (Entwickelt)",
+        "zh-CN": "运动少女（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 296,
+      "name": {
+        "en": "Baal",
+        "vi": "Baal",
+        "de": "Baal",
+        "zh-CN": "巴尔"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 297,
+      "name": {
+        "en": "Baal (Evolved)",
+        "vi": "Baal (Tiến hóa)",
+        "de": "Baal (Entwickelt)",
+        "zh-CN": "巴尔（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 298,
+      "name": {
+        "en": "Gaap",
+        "vi": "Gaap",
+        "de": "Gaap",
+        "zh-CN": "加普"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 299,
+      "name": {
+        "en": "Gaap (Evolved)",
+        "vi": "Gaap (Tiến hóa)",
+        "de": "Gaap (Entwickelt)",
+        "zh-CN": "加普（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 300,
+      "name": {
+        "en": "Taaf",
+        "vi": "Taaf",
+        "de": "Taaf",
+        "zh-CN": "塔夫"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 301,
+      "name": {
+        "en": "Taaf (Evolved)",
+        "vi": "Taaf (Tiến hóa)",
+        "de": "Taaf (Entwickelt)",
+        "zh-CN": "塔夫（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 302,
+      "name": {
+        "en": "Frozen",
+        "vi": "Băng Giá",
+        "de": "Gefroren",
+        "zh-CN": "冰霜"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 303,
+      "name": {
+        "en": "Frozen(Evolved)",
+        "vi": "Băng Giá (Tiến hóa)",
+        "de": "Gefroren (Entwickelt)",
+        "zh-CN": "冰霜（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 304,
+      "name": {
+        "en": "Loor",
+        "vi": "Loor",
+        "de": "Loor",
+        "zh-CN": "卢尔"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 305,
+      "name": {
+        "en": "Loor(Evolved)",
+        "vi": "Loor (Tiến hóa)",
+        "de": "Loor (Entwickelt)",
+        "zh-CN": "卢尔（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 306,
+      "name": {
+        "en": "Purssil",
+        "vi": "Purssil",
+        "de": "Purssil",
+        "zh-CN": "普西尔"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 307,
+      "name": {
+        "en": "Purssil(Evolved)",
+        "vi": "Purssil (Tiến hóa)",
+        "de": "Purssil (Entwickelt)",
+        "zh-CN": "普西尔（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false
+    },
+    {
+      "number": 350,
+      "name": {
+        "en": "Roomy Egg",
+        "vi": "Trứng Rộng Rãi",
+        "de": "Geräumiges Ei",
+        "zh-CN": "宽敞魔蛋"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "sellable": false
     }
   ]
 }

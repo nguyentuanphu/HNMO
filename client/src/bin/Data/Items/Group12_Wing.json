@@ -11,16 +11,24 @@
         "pl": "Skrzydła Elfa",
         "pt": "Asas do elfo"
       },
-      "tags": ["valuable"],
-      "options": ["luck"],
+      "tags": [
+        "valuable"
+      ],
+      "options": [
+        "luck"
+      ],
       "description": [
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:wingDamageIncrease1st"}
+          "values": {
+            "percent": "table:wingDamageIncrease1st"
+          }
         },
         {
           "text": "@damageAbsorb",
-          "values": {"percent": "table:wingDamageAbsorb1st"}
+          "values": {
+            "percent": "table:wingDamageAbsorb1st"
+          }
         },
         {
           "text": "@increaseSpeed"
@@ -50,16 +58,24 @@
         "pl": "Skrzydła Niebios",
         "pt": "Asas do paraíso"
       },
-      "tags": ["valuable"],
-      "options": ["luck"],
+      "tags": [
+        "valuable"
+      ],
+      "options": [
+        "luck"
+      ],
       "description": [
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:wingDamageIncrease1st"}
+          "values": {
+            "percent": "table:wingDamageIncrease1st"
+          }
         },
         {
           "text": "@damageAbsorb",
-          "values": {"percent": "table:wingDamageAbsorb1st"}
+          "values": {
+            "percent": "table:wingDamageAbsorb1st"
+          }
         },
         {
           "text": "@increaseSpeed"
@@ -90,16 +106,24 @@
         "pl": "Skrzydła Szatana",
         "pt": "Asas de Satã"
       },
-      "tags": ["valuable"],
-      "options": ["luck"],
+      "tags": [
+        "valuable"
+      ],
+      "options": [
+        "luck"
+      ],
       "description": [
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:wingDamageIncrease1st"}
+          "values": {
+            "percent": "table:wingDamageIncrease1st"
+          }
         },
         {
           "text": "@damageAbsorb",
-          "values": {"percent": "table:wingDamageAbsorb1st"}
+          "values": {
+            "percent": "table:wingDamageAbsorb1st"
+          }
         },
         {
           "text": "@increaseSpeed"
@@ -130,16 +154,24 @@
         "pl": "Skrzydła Duchów",
         "pt": "Asas dos espíritos"
       },
-      "tags": ["valuable"],
-      "options": ["luck"],
+      "tags": [
+        "valuable"
+      ],
+      "options": [
+        "luck"
+      ],
       "description": [
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:wingDamageIncrease2nd"}
+          "values": {
+            "percent": "table:wingDamageIncrease2nd"
+          }
         },
         {
           "text": "@damageAbsorb",
-          "values": {"percent": "table:wingDamageAbsorb2nd"}
+          "values": {
+            "percent": "table:wingDamageAbsorb2nd"
+          }
         },
         {
           "text": "@increaseSpeed"
@@ -153,15 +185,22 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ],
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -170,11 +209,15 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ]
@@ -204,16 +247,24 @@
         "pl": "Skrzydła Duszy",
         "pt": "Asas da alma"
       },
-      "tags": ["valuable"],
-      "options": ["luck"],
+      "tags": [
+        "valuable"
+      ],
+      "options": [
+        "luck"
+      ],
       "description": [
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:wingDamageIncrease2nd"}
+          "values": {
+            "percent": "table:wingDamageIncrease2nd"
+          }
         },
         {
           "text": "@damageAbsorb",
-          "values": {"percent": "table:wingDamageAbsorb2nd"}
+          "values": {
+            "percent": "table:wingDamageAbsorb2nd"
+          }
         },
         {
           "text": "@increaseSpeed"
@@ -227,15 +278,22 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ],
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -244,11 +302,15 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ]
@@ -278,16 +340,24 @@
         "pl": "Skrzydła Smoka",
         "pt": "Asas do dragão"
       },
-      "tags": ["valuable"],
-      "options": ["luck"],
+      "tags": [
+        "valuable"
+      ],
+      "options": [
+        "luck"
+      ],
       "description": [
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:wingDamageIncrease2nd"}
+          "values": {
+            "percent": "table:wingDamageIncrease2nd"
+          }
         },
         {
           "text": "@damageAbsorb",
-          "values": {"percent": "table:wingDamageAbsorb2nd"}
+          "values": {
+            "percent": "table:wingDamageAbsorb2nd"
+          }
         },
         {
           "text": "@increaseSpeed"
@@ -301,15 +371,22 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ],
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -318,11 +395,15 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ]
@@ -352,16 +433,24 @@
         "pl": "Skrzydła Ciemności",
         "pt": "Asas da escuridão"
       },
-      "tags": ["valuable"],
-      "options": ["luck"],
+      "tags": [
+        "valuable"
+      ],
+      "options": [
+        "luck"
+      ],
       "description": [
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:wingDamageIncrease2nd"}
+          "values": {
+            "percent": "table:wingDamageIncrease2nd"
+          }
         },
         {
           "text": "@damageAbsorb",
-          "values": {"percent": "table:wingDamageAbsorb2nd"}
+          "values": {
+            "percent": "table:wingDamageAbsorb2nd"
+          }
         },
         {
           "text": "@increaseSpeed"
@@ -375,15 +464,22 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ],
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -392,11 +488,15 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ]
@@ -529,8 +629,13 @@
             "uk": "{skill} Коштовність",
             "zh-TW": "{skill} 寶石"
           },
-          "values": {"skill": "skillName:30"},
-          "levels": [0, 0]
+          "values": {
+            "skill": "skillName:30"
+          },
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -546,8 +651,13 @@
             "uk": "{skill} Коштовність",
             "zh-TW": "{skill} 寶石"
           },
-          "values": {"skill": "skillName:31"},
-          "levels": [1, 1]
+          "values": {
+            "skill": "skillName:31"
+          },
+          "levels": [
+            1,
+            1
+          ]
         },
         {
           "text": {
@@ -563,8 +673,13 @@
             "uk": "{skill} Коштовність",
             "zh-TW": "{skill} 寶石"
           },
-          "values": {"skill": "skillName:32"},
-          "levels": [2, 2]
+          "values": {
+            "skill": "skillName:32"
+          },
+          "levels": [
+            2,
+            2
+          ]
         },
         {
           "text": {
@@ -580,8 +695,13 @@
             "uk": "{skill} Коштовність",
             "zh-TW": "{skill} 寶石"
           },
-          "values": {"skill": "skillName:33"},
-          "levels": [3, 3]
+          "values": {
+            "skill": "skillName:33"
+          },
+          "levels": [
+            3,
+            3
+          ]
         },
         {
           "text": {
@@ -597,8 +717,13 @@
             "uk": "{skill} Коштовність",
             "zh-TW": "{skill} 寶石"
           },
-          "values": {"skill": "skillName:34"},
-          "levels": [4, 4]
+          "values": {
+            "skill": "skillName:34"
+          },
+          "levels": [
+            4,
+            4
+          ]
         },
         {
           "text": {
@@ -614,8 +739,13 @@
             "uk": "{skill} Коштовність",
             "zh-TW": "{skill} 寶石"
           },
-          "values": {"skill": "skillName:35"},
-          "levels": [5, 5]
+          "values": {
+            "skill": "skillName:35"
+          },
+          "levels": [
+            5,
+            5
+          ]
         },
         {
           "text": {
@@ -631,17 +761,45 @@
             "uk": "{skill} Коштовність",
             "zh-TW": "{skill} 寶石"
           },
-          "values": {"skill": "skillName:36"},
-          "levels": [6, 6]
+          "values": {
+            "skill": "skillName:36"
+          },
+          "levels": [
+            6,
+            6
+          ]
         }
       ],
-      "groundLabels": [{"style": "orbOfSummoning"}],
+      "groundLabels": [
+        {
+          "style": "orbOfSummoning"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 3,
       "buyPrice": 150,
       "repairable": false,
-      "requirementsByLevel": {"energy": [30, 60, 90, 130, 170, 210, 300, 500, 0, 0, 0, 0, 0, 0, 0, 0]},
+      "requirementsByLevel": {
+        "energy": [
+          30,
+          60,
+          90,
+          130,
+          170,
+          210,
+          300,
+          500,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
       "classRequirements": {
         "fairyElf": 1
       }
@@ -719,7 +877,10 @@
         "pl": "Klejnot Chaosu",
         "pt": "Joia do caos"
       },
-      "tags": ["jewel", "valuable"],
+      "tags": [
+        "jewel",
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -743,7 +904,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "jewel"}],
+      "groundLabels": [
+        {
+          "style": "jewel"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -963,7 +1128,10 @@
         "pl": "Paczka Klejnotów Błogosławieństwa",
         "pt": "Lote de Joias da bênção"
       },
-      "tags": ["jewel", "valuable"],
+      "tags": [
+        "jewel",
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -992,7 +1160,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "jewel"}],
+      "groundLabels": [
+        {
+          "style": "jewel"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -1016,7 +1188,10 @@
         "pl": "Paczka Klejnotów Duszy",
         "pt": "Lote de Joias da alma"
       },
-      "tags": ["jewel", "valuable"],
+      "tags": [
+        "jewel",
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -1045,7 +1220,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "jewel"}],
+      "groundLabels": [
+        {
+          "style": "jewel"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -1082,7 +1261,11 @@
           }
         }
       ],
-      "groundLabels": [{"style": "giftBoxRed"}],
+      "groundLabels": [
+        {
+          "style": "giftBoxRed"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -1117,7 +1300,11 @@
           }
         }
       ],
-      "groundLabels": [{"style": "giftBoxGreen"}],
+      "groundLabels": [
+        {
+          "style": "giftBoxGreen"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -1152,7 +1339,11 @@
           }
         }
       ],
-      "groundLabels": [{"style": "giftBoxBlue"}],
+      "groundLabels": [
+        {
+          "style": "giftBoxBlue"
+        }
+      ],
       "tooltipLayout": "noClassLines",
       "width": 1,
       "height": 1,
@@ -1181,7 +1372,11 @@
           }
         }
       ],
-      "groundLabels": [{"style": "white"}],
+      "groundLabels": [
+        {
+          "style": "white"
+        }
+      ],
       "width": 1,
       "height": 2,
       "statProfile": "orb",
@@ -1204,16 +1399,24 @@
         "pl": "Skrzydło Burzy",
         "pt": "Asa da Tempestade"
       },
-      "tags": ["valuable"],
-      "options": ["luck"],
+      "tags": [
+        "valuable"
+      ],
+      "options": [
+        "luck"
+      ],
       "description": [
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:wingDamageIncrease3rd"}
+          "values": {
+            "percent": "table:wingDamageIncrease3rd"
+          }
         },
         {
           "text": "@damageAbsorb",
-          "values": {"percent": "table:wingDamageAbsorb3rd"}
+          "values": {
+            "percent": "table:wingDamageAbsorb3rd"
+          }
         },
         {
           "text": "@increaseSpeed"
@@ -1227,15 +1430,22 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ],
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1244,11 +1454,15 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ]
@@ -1278,16 +1492,24 @@
         "pl": "Skrzydło Wieczności",
         "pt": "Asa da eternidade"
       },
-      "tags": ["valuable"],
-      "options": ["luck"],
+      "tags": [
+        "valuable"
+      ],
+      "options": [
+        "luck"
+      ],
       "description": [
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:wingDamageIncrease3rd"}
+          "values": {
+            "percent": "table:wingDamageIncrease3rd"
+          }
         },
         {
           "text": "@damageAbsorb",
-          "values": {"percent": "table:wingDamageAbsorb3rd"}
+          "values": {
+            "percent": "table:wingDamageAbsorb3rd"
+          }
         },
         {
           "text": "@increaseSpeed"
@@ -1301,15 +1523,22 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ],
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1318,11 +1547,15 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ]
@@ -1352,16 +1585,24 @@
         "pl": "Skrzydło Iluzji",
         "pt": "Asa da ilusão"
       },
-      "tags": ["valuable"],
-      "options": ["luck"],
+      "tags": [
+        "valuable"
+      ],
+      "options": [
+        "luck"
+      ],
       "description": [
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:wingDamageIncrease3rd"}
+          "values": {
+            "percent": "table:wingDamageIncrease3rd"
+          }
         },
         {
           "text": "@damageAbsorb",
-          "values": {"percent": "table:wingDamageAbsorb3rd"}
+          "values": {
+            "percent": "table:wingDamageAbsorb3rd"
+          }
         },
         {
           "text": "@increaseSpeed"
@@ -1375,15 +1616,22 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ],
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1392,11 +1640,15 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ]
@@ -1426,16 +1678,24 @@
         "pl": "Skrzydło Zagłady",
         "pt": "Asa da ruína"
       },
-      "tags": ["valuable"],
-      "options": ["luck"],
+      "tags": [
+        "valuable"
+      ],
+      "options": [
+        "luck"
+      ],
       "description": [
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:wingDamageIncrease3rd"}
+          "values": {
+            "percent": "table:wingDamageIncrease3rd"
+          }
         },
         {
           "text": "@damageAbsorb",
-          "values": {"percent": "table:wingDamageAbsorb3rd"}
+          "values": {
+            "percent": "table:wingDamageAbsorb3rd"
+          }
         },
         {
           "text": "@increaseSpeed"
@@ -1449,15 +1709,22 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ],
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1466,11 +1733,15 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ]
@@ -1500,16 +1771,25 @@
         "pl": "Peleryna Cesarza",
         "pt": "Capa do Imperador"
       },
-      "tags": ["cape", "valuable"],
-      "options": ["luck"],
+      "tags": [
+        "cape",
+        "valuable"
+      ],
+      "options": [
+        "luck"
+      ],
       "description": [
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:wingDamageIncrease3rd"}
+          "values": {
+            "percent": "table:wingDamageIncrease3rd"
+          }
         },
         {
           "text": "@damageAbsorb",
-          "values": {"percent": "table:capeDamageAbsorb3rd"}
+          "values": {
+            "percent": "table:capeDamageAbsorb3rd"
+          }
         },
         {
           "text": "@increaseSpeed"
@@ -1523,15 +1803,22 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ],
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1540,11 +1827,15 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ]
@@ -1574,16 +1865,24 @@
         "pl": "Skrzydło Klątwy",
         "pt": "Asa da maldição"
       },
-      "tags": ["valuable"],
-      "options": ["luck"],
+      "tags": [
+        "valuable"
+      ],
+      "options": [
+        "luck"
+      ],
       "description": [
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:wingDamageIncrease1st"}
+          "values": {
+            "percent": "table:wingDamageIncrease1st"
+          }
         },
         {
           "text": "@damageAbsorb",
-          "values": {"percent": "table:wingDamageAbsorb1st"}
+          "values": {
+            "percent": "table:wingDamageAbsorb1st"
+          }
         },
         {
           "text": "@increaseSpeed"
@@ -1613,16 +1912,24 @@
         "pl": "Skrzydło Rozpaczy",
         "pt": "Asa do desespero"
       },
-      "tags": ["valuable"],
-      "options": ["luck"],
+      "tags": [
+        "valuable"
+      ],
+      "options": [
+        "luck"
+      ],
       "description": [
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:wingDamageIncrease2nd"}
+          "values": {
+            "percent": "table:wingDamageIncrease2nd"
+          }
         },
         {
           "text": "@damageAbsorb",
-          "values": {"percent": "table:wingDamageAbsorb2nd"}
+          "values": {
+            "percent": "table:wingDamageAbsorb2nd"
+          }
         },
         {
           "text": "@increaseSpeed"
@@ -1636,15 +1943,22 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ],
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1653,11 +1967,15 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ]
@@ -1687,16 +2005,24 @@
         "pl": "Skrzydło Wymiarów",
         "pt": "Asa da dimensão"
       },
-      "tags": ["valuable"],
-      "options": ["luck"],
+      "tags": [
+        "valuable"
+      ],
+      "options": [
+        "luck"
+      ],
       "description": [
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:wingDamageIncrease3rd"}
+          "values": {
+            "percent": "table:wingDamageIncrease3rd"
+          }
         },
         {
           "text": "@damageAbsorb",
-          "values": {"percent": "table:wingDamageAbsorb3rd"}
+          "values": {
+            "percent": "table:wingDamageAbsorb3rd"
+          }
         },
         {
           "text": "@increaseSpeed"
@@ -1710,15 +2036,22 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ],
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1727,11 +2060,15 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ]
@@ -1843,7 +2180,11 @@
         "pl": "Zwój: Chaotic Diseier",
         "pt": "Pergaminho Diseier Caótico"
       },
-      "groundLabels": [{"style": "white"}],
+      "groundLabels": [
+        {
+          "style": "white"
+        }
+      ],
       "width": 1,
       "height": 2,
       "statProfile": "orb",
@@ -1866,16 +2207,25 @@
         "pl": "Peleryna Wojownika",
         "pt": "Manto do Guerreiro"
       },
-      "tags": ["cape", "valuable"],
-      "options": ["luck"],
+      "tags": [
+        "cape",
+        "valuable"
+      ],
+      "options": [
+        "luck"
+      ],
       "description": [
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:capeDamageIncrease"}
+          "values": {
+            "percent": "table:capeDamageIncrease"
+          }
         },
         {
           "text": "@damageAbsorb",
-          "values": {"percent": "table:capeOfFighterDamageAbsorb"}
+          "values": {
+            "percent": "table:capeOfFighterDamageAbsorb"
+          }
         }
       ],
       "nameLines": [
@@ -1886,15 +2236,22 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ],
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1903,11 +2260,15 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ]
@@ -1937,16 +2298,25 @@
         "pl": "Peleryna Władzy",
         "pt": "Manto Reinante"
       },
-      "tags": ["cape", "valuable"],
-      "options": ["luck"],
+      "tags": [
+        "cape",
+        "valuable"
+      ],
+      "options": [
+        "luck"
+      ],
       "description": [
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:wingDamageIncrease3rd"}
+          "values": {
+            "percent": "table:wingDamageIncrease3rd"
+          }
         },
         {
           "text": "@damageAbsorb",
-          "values": {"percent": "table:capeDamageAbsorb3rd"}
+          "values": {
+            "percent": "table:capeDamageAbsorb3rd"
+          }
         },
         {
           "text": "@increaseSpeed"
@@ -1960,15 +2330,22 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ],
-          "levels": [0, 0]
+          "levels": [
+            0,
+            0
+          ]
         },
         {
           "text": {
@@ -1977,11 +2354,15 @@
           "color": "white",
           "colors": [
             {
-              "when": ["level>=7"],
+              "when": [
+                "level>=7"
+              ],
               "color": "yellow"
             },
             {
-              "when": ["hasOptions"],
+              "when": [
+                "hasOptions"
+              ],
               "color": "blue"
             }
           ]
@@ -2011,7 +2392,9 @@
         "pl": "Ziarno (Ogień)",
         "pt": "Semente (Fogo)"
       },
-      "tags": ["socketSeed"],
+      "tags": [
+        "socketSeed"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2020,7 +2403,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 150,
@@ -2044,7 +2431,9 @@
         "pl": "Ziarno (Woda)",
         "pt": "Semente (Água)"
       },
-      "tags": ["socketSeed"],
+      "tags": [
+        "socketSeed"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2053,7 +2442,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 150,
@@ -2077,7 +2470,9 @@
         "pl": "Ziarno (Lód)",
         "pt": "Semente (Gelo)"
       },
-      "tags": ["socketSeed"],
+      "tags": [
+        "socketSeed"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2086,7 +2481,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 150,
@@ -2110,7 +2509,9 @@
         "pl": "Ziarno (Wiatr)",
         "pt": "Semente (Vento)"
       },
-      "tags": ["socketSeed"],
+      "tags": [
+        "socketSeed"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2119,7 +2520,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 150,
@@ -2143,7 +2548,9 @@
         "pl": "Ziarno (Błyskawica)",
         "pt": "Semente (Relâmpago)"
       },
-      "tags": ["socketSeed"],
+      "tags": [
+        "socketSeed"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2152,7 +2559,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 150,
@@ -2176,7 +2587,9 @@
         "pl": "Ziarno (Ziemia)",
         "pt": "Semente (Terra)"
       },
-      "tags": ["socketSeed"],
+      "tags": [
+        "socketSeed"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2185,7 +2598,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 150,
@@ -2209,7 +2626,9 @@
         "pl": "Sfera (Mono)",
         "pt": "Esfera (Mono)"
       },
-      "tags": ["socketSphere"],
+      "tags": [
+        "socketSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2218,7 +2637,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 102,
@@ -2242,7 +2665,9 @@
         "pl": "Sfera (Di)",
         "pt": "Esfera (Di)"
       },
-      "tags": ["socketSphere"],
+      "tags": [
+        "socketSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2251,7 +2676,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 122,
@@ -2275,7 +2704,9 @@
         "pl": "Sfera (Tri)",
         "pt": "Esfera (Tri)"
       },
-      "tags": ["socketSphere"],
+      "tags": [
+        "socketSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2284,7 +2715,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 132,
@@ -2318,7 +2753,9 @@
         "pl": "Sfera z ziarnem (Ogień)",
         "pt": "Esfera de semente (Fogo)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2327,7 +2764,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 1,
@@ -2351,7 +2792,9 @@
         "pl": "Sfera z ziarnem (Woda)",
         "pt": "Esfera de semente (Água)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2360,7 +2803,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 1,
@@ -2384,7 +2831,9 @@
         "pl": "Sfera z ziarnem (Lód)",
         "pt": "Esfera de semente (Gelo)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2393,7 +2842,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 1,
@@ -2417,7 +2870,9 @@
         "pl": "Sfera z ziarnem (Wiatr)",
         "pt": "Esfera de semente (Vento)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2426,7 +2881,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 1,
@@ -2450,7 +2909,9 @@
         "pl": "Sfera z ziarnem (Błyskawica)",
         "pt": "Esfera Semente (Relâmpago)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2459,7 +2920,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 1,
@@ -2483,7 +2948,9 @@
         "pl": "Sfera z ziarnem (Ziemia)",
         "pt": "Esfera de semente (Terra)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2492,7 +2959,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 1,
@@ -2516,7 +2987,9 @@
         "pl": "Sfera z ziarnem (Ogień)",
         "pt": "Esfera de semente (Fogo)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2525,7 +2998,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 2,
@@ -2549,7 +3026,9 @@
         "pl": "Sfera z ziarnem (Woda)",
         "pt": "Esfera de semente (Água)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2558,7 +3037,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 2,
@@ -2582,7 +3065,9 @@
         "pl": "Sfera z ziarnem (Lód)",
         "pt": "Esfera de semente (Gelo)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2591,7 +3076,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 2,
@@ -2615,7 +3104,9 @@
         "pl": "Sfera z ziarnem (Wiatr)",
         "pt": "Esfera de semente (Vento)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2624,7 +3115,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 2,
@@ -2648,7 +3143,9 @@
         "pl": "Sfera z ziarnem (Błyskawica)",
         "pt": "Esfera Semente (Relâmpago)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2657,7 +3154,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 2,
@@ -2681,7 +3182,9 @@
         "pl": "Sfera z ziarnem (Ziemia)",
         "pt": "Esfera de semente (Terra)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2690,7 +3193,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 2,
@@ -2714,7 +3221,9 @@
         "pl": "Sfera z ziarnem (Ogień)",
         "pt": "Esfera de semente (Fogo)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2723,7 +3232,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 3,
@@ -2747,7 +3260,9 @@
         "pl": "Sfera z ziarnem (Woda)",
         "pt": "Esfera de semente (Água)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2756,7 +3271,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 3,
@@ -2780,7 +3299,9 @@
         "pl": "Sfera z ziarnem (Lód)",
         "pt": "Esfera de semente (Gelo)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2789,7 +3310,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 3,
@@ -2813,7 +3338,9 @@
         "pl": "Sfera z ziarnem (Wiatr)",
         "pt": "Esfera de semente (Vento)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2822,7 +3349,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 3,
@@ -2846,7 +3377,9 @@
         "pl": "Sfera z ziarnem (Błyskawica)",
         "pt": "Esfera Semente (Relâmpago)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2855,7 +3388,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 3,
@@ -2879,7 +3416,9 @@
         "pl": "Sfera z ziarnem (Ziemia)",
         "pt": "Esfera de semente (Terra)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2888,7 +3427,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 3,
@@ -2912,7 +3455,9 @@
         "pl": "Sfera z ziarnem (Ogień)",
         "pt": "Esfera de semente (Fogo)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2921,7 +3466,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "mainHand"
@@ -2935,7 +3484,9 @@
         "pl": "Sfera z ziarnem (Woda)",
         "pt": "Esfera de semente (Água)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2944,7 +3495,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "mainHand"
@@ -2958,7 +3513,9 @@
         "pl": "Sfera z ziarnem (Lód)",
         "pt": "Esfera de semente (Gelo)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2967,7 +3524,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "mainHand"
@@ -2981,7 +3542,9 @@
         "pl": "Sfera z ziarnem (Wiatr)",
         "pt": "Esfera de semente (Vento)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -2990,7 +3553,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "mainHand"
@@ -3004,7 +3571,9 @@
         "pl": "Sfera z ziarnem (Błyskawica)",
         "pt": "Esfera Semente (Relâmpago)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -3013,7 +3582,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "mainHand"
@@ -3027,7 +3600,9 @@
         "pl": "Sfera z ziarnem (Ziemia)",
         "pt": "Esfera de semente (Terra)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -3036,7 +3611,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "mainHand"
@@ -3050,7 +3629,9 @@
         "pl": "Sfera z ziarnem (Ogień)",
         "pt": "Esfera de semente (Fogo)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -3059,7 +3640,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "mainHand"
@@ -3073,7 +3658,9 @@
         "pl": "Sfera z ziarnem (Woda)",
         "pt": "Esfera de semente (Água)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -3082,7 +3669,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "mainHand"
@@ -3096,7 +3687,9 @@
         "pl": "Sfera z ziarnem (Lód)",
         "pt": "Esfera de semente (Gelo)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -3105,7 +3698,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "mainHand"
@@ -3119,7 +3716,9 @@
         "pl": "Sfera z ziarnem (Wiatr)",
         "pt": "Esfera de semente (Vento)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -3128,7 +3727,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "mainHand"
@@ -3142,7 +3745,9 @@
         "pl": "Sfera z ziarnem (Błyskawica)",
         "pt": "Esfera Semente (Relâmpago)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -3151,7 +3756,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "mainHand"
@@ -3165,7 +3774,9 @@
         "pl": "Sfera z ziarnem (Ziemia)",
         "pt": "Esfera de semente (Terra)"
       },
-      "tags": ["socketSeedSphere"],
+      "tags": [
+        "socketSeedSphere"
+      ],
       "nameLines": [
         {
           "text": {
@@ -3174,7 +3785,11 @@
           "color": "violet"
         }
       ],
-      "groundLabels": [{"style": "seedsAndSpheres"}],
+      "groundLabels": [
+        {
+          "style": "seedsAndSpheres"
+        }
+      ],
       "width": 1,
       "height": 1,
       "slot": "mainHand"
@@ -3188,21 +3803,33 @@
         "pl": "Mała Peleryna Lorda",
         "pt": "Pequena capa do Lorde"
       },
-      "tags": ["cape", "cashShop", "valuable"],
+      "tags": [
+        "cape",
+        "cashShop",
+        "valuable"
+      ],
       "description": [
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:capeDamageIncrease"}
+          "values": {
+            "percent": "table:capeDamageIncrease"
+          }
         },
         {
           "text": "@damageAbsorb",
-          "values": {"percent": "table:smallCapeDamageAbsorb"}
+          "values": {
+            "percent": "table:smallCapeDamageAbsorb"
+          }
         },
         {
           "text": "@increaseSpeed"
         }
       ],
-      "groundLabels": [{"style": "smallWings"}],
+      "groundLabels": [
+        {
+          "style": "smallWings"
+        }
+      ],
       "width": 2,
       "height": 2,
       "slot": "wings",
@@ -3233,21 +3860,32 @@
         "pl": "Małe Skrzydło Klątwy",
         "pt": "Pequenas asas da maldição"
       },
-      "tags": ["cashShop", "valuable"],
+      "tags": [
+        "cashShop",
+        "valuable"
+      ],
       "description": [
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:wingDamageIncrease1st"}
+          "values": {
+            "percent": "table:wingDamageIncrease1st"
+          }
         },
         {
           "text": "@damageAbsorb",
-          "values": {"percent": "table:wingDamageAbsorb1st"}
+          "values": {
+            "percent": "table:wingDamageAbsorb1st"
+          }
         },
         {
           "text": "@increaseSpeed"
         }
       ],
-      "groundLabels": [{"style": "smallWings"}],
+      "groundLabels": [
+        {
+          "style": "smallWings"
+        }
+      ],
       "width": 3,
       "height": 2,
       "slot": "wings",
@@ -3278,21 +3916,32 @@
         "pl": "Małe Skrzydła Elfa",
         "pt": "Pequenas asas do elfo"
       },
-      "tags": ["cashShop", "valuable"],
+      "tags": [
+        "cashShop",
+        "valuable"
+      ],
       "description": [
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:wingDamageIncrease1st"}
+          "values": {
+            "percent": "table:wingDamageIncrease1st"
+          }
         },
         {
           "text": "@damageAbsorb",
-          "values": {"percent": "table:wingDamageAbsorb1st"}
+          "values": {
+            "percent": "table:wingDamageAbsorb1st"
+          }
         },
         {
           "text": "@increaseSpeed"
         }
       ],
-      "groundLabels": [{"style": "smallWings"}],
+      "groundLabels": [
+        {
+          "style": "smallWings"
+        }
+      ],
       "width": 3,
       "height": 2,
       "slot": "wings",
@@ -3323,21 +3972,32 @@
         "pl": "Małe Skrzydła Niebios",
         "pt": "Pequenas asas do paraíso"
       },
-      "tags": ["cashShop", "valuable"],
+      "tags": [
+        "cashShop",
+        "valuable"
+      ],
       "description": [
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:wingDamageIncrease1st"}
+          "values": {
+            "percent": "table:wingDamageIncrease1st"
+          }
         },
         {
           "text": "@damageAbsorb",
-          "values": {"percent": "table:wingDamageAbsorb1st"}
+          "values": {
+            "percent": "table:wingDamageAbsorb1st"
+          }
         },
         {
           "text": "@increaseSpeed"
         }
       ],
-      "groundLabels": [{"style": "smallWings"}],
+      "groundLabels": [
+        {
+          "style": "smallWings"
+        }
+      ],
       "width": 3,
       "height": 2,
       "slot": "wings",
@@ -3369,21 +4029,32 @@
         "pl": "Małe Skrzydła Szatana",
         "pt": "Pequenas asas de Satã"
       },
-      "tags": ["cashShop", "valuable"],
+      "tags": [
+        "cashShop",
+        "valuable"
+      ],
       "description": [
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:wingDamageIncrease1st"}
+          "values": {
+            "percent": "table:wingDamageIncrease1st"
+          }
         },
         {
           "text": "@damageAbsorb",
-          "values": {"percent": "table:wingDamageAbsorb1st"}
+          "values": {
+            "percent": "table:wingDamageAbsorb1st"
+          }
         },
         {
           "text": "@increaseSpeed"
         }
       ],
-      "groundLabels": [{"style": "smallWings"}],
+      "groundLabels": [
+        {
+          "style": "smallWings"
+        }
+      ],
       "width": 3,
       "height": 2,
       "slot": "wings",
@@ -3415,21 +4086,33 @@
         "pl": "Mały Płaszcz Wojownika",
         "pt": "Manto de Pequeno Guerreiro"
       },
-      "tags": ["cape", "cashShop", "valuable"],
+      "tags": [
+        "cape",
+        "cashShop",
+        "valuable"
+      ],
       "description": [
         {
           "text": "@damageIncrease",
-          "values": {"percent": "table:capeDamageIncrease"}
+          "values": {
+            "percent": "table:capeDamageIncrease"
+          }
         },
         {
           "text": "@damageAbsorb",
-          "values": {"percent": "table:smallCapeDamageAbsorb"}
+          "values": {
+            "percent": "table:smallCapeDamageAbsorb"
+          }
         },
         {
           "text": "@increaseSpeed"
         }
       ],
-      "groundLabels": [{"style": "smallWings"}],
+      "groundLabels": [
+        {
+          "style": "smallWings"
+        }
+      ],
       "width": 2,
       "height": 2,
       "slot": "wings",
@@ -3460,7 +4143,10 @@
         "pl": "Paczka Klejnotów Życia",
         "pt": "Lote de Joias da vida"
       },
-      "tags": ["jewel", "valuable"],
+      "tags": [
+        "jewel",
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -3489,7 +4175,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "jewel"}],
+      "groundLabels": [
+        {
+          "style": "jewel"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 72,
@@ -3513,7 +4203,10 @@
         "pl": "Paczka Klejnotów Stworzenia",
         "pt": "Lote de Joias da criação"
       },
-      "tags": ["jewel", "valuable"],
+      "tags": [
+        "jewel",
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -3542,7 +4235,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "jewel"}],
+      "groundLabels": [
+        {
+          "style": "jewel"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 78,
@@ -3566,7 +4263,10 @@
         "pl": "Paczka Klejnotów Strażnika",
         "pt": "Lote de Joias do guardião"
       },
-      "tags": ["jewel", "valuable"],
+      "tags": [
+        "jewel",
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -3595,7 +4295,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "jewel"}],
+      "groundLabels": [
+        {
+          "style": "jewel"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 75,
@@ -3619,7 +4323,10 @@
         "pl": "Paczka kamieni szlachetnych",
         "pt": "Lote de Pedras preciosas"
       },
-      "tags": ["jewel", "valuable"],
+      "tags": [
+        "jewel",
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -3648,7 +4355,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "jewel"}],
+      "groundLabels": [
+        {
+          "style": "jewel"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 25,
@@ -3672,7 +4383,10 @@
         "pl": "Paczka Klejnotów Harmonii",
         "pt": "Lote de Joias da harmonia"
       },
-      "tags": ["jewel", "valuable"],
+      "tags": [
+        "jewel",
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -3701,7 +4415,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "jewel"}],
+      "groundLabels": [
+        {
+          "style": "jewel"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 25,
@@ -3725,7 +4443,10 @@
         "pl": "Paczka Klejnotów Chaosu",
         "pt": "Lote de Joias do caos"
       },
-      "tags": ["jewel", "valuable"],
+      "tags": [
+        "jewel",
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -3754,7 +4475,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "jewel"}],
+      "groundLabels": [
+        {
+          "style": "jewel"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 12,
@@ -3778,7 +4503,10 @@
         "pl": "Paczka niższych kamieni rafinacji",
         "pt": "Lote de Pedras refinadas inferiores"
       },
-      "tags": ["jewel", "valuable"],
+      "tags": [
+        "jewel",
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -3807,7 +4535,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "jewel"}],
+      "groundLabels": [
+        {
+          "style": "jewel"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 25,
@@ -3831,7 +4563,10 @@
         "pl": "Paczka wyższych kamieni rafinacji",
         "pt": "Lote de Pedras refinadas superiores"
       },
-      "tags": ["jewel", "valuable"],
+      "tags": [
+        "jewel",
+        "valuable"
+      ],
       "description": [
         {
           "text": {
@@ -3860,7 +4595,11 @@
           "color": "yellow"
         }
       ],
-      "groundLabels": [{"style": "jewel"}],
+      "groundLabels": [
+        {
+          "style": "jewel"
+        }
+      ],
       "width": 1,
       "height": 1,
       "level": 25,
@@ -3874,6 +4613,953 @@
         "summoner": 1,
         "rageFighter": 1
       }
+    },
+    {
+      "number": 144,
+      "name": {
+        "en": "Mithril Fragment",
+        "vi": "Mảnh Mithril",
+        "de": "Mithril-Fragment",
+        "zh-CN": "秘银碎片"
+      },
+      "width": 1,
+      "height": 1,
+      "level": 1,
+      "durability": 1,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 145,
+      "name": {
+        "en": "Mithril",
+        "vi": "Mithril",
+        "de": "Mithril",
+        "zh-CN": "秘银"
+      },
+      "width": 1,
+      "height": 1,
+      "level": 1,
+      "buyPrice": 1500000,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 146,
+      "name": {
+        "en": "Elixir Fragment",
+        "vi": "Mảnh Tiên Dược",
+        "de": "Elixier-Fragment",
+        "zh-CN": "灵药碎片"
+      },
+      "width": 1,
+      "height": 1,
+      "level": 1,
+      "durability": 1,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 147,
+      "name": {
+        "en": "Elixir",
+        "vi": "Tiên Dược",
+        "de": "Elixier",
+        "zh-CN": "灵药"
+      },
+      "width": 1,
+      "height": 1,
+      "level": 1,
+      "buyPrice": 1500000,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 148,
+      "name": {
+        "en": "Mithril Fragment Bunch",
+        "vi": "Bó Mảnh Mithril",
+        "de": "Mithril-Fragment-Bündel",
+        "zh-CN": "秘银碎片束"
+      },
+      "width": 1,
+      "height": 1,
+      "level": 1,
+      "buyPrice": 1500000,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 149,
+      "name": {
+        "en": "Elixir Fragment Bunch",
+        "vi": "Bó Mảnh Tiên Dược",
+        "de": "Elixier-Fragment-Bündel",
+        "zh-CN": "灵药碎片束"
+      },
+      "width": 1,
+      "height": 1,
+      "level": 1,
+      "buyPrice": 1500000,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 150,
+      "name": {
+        "en": "Jewel Combination Frame",
+        "vi": "Khung Kết Hợp Ngọc",
+        "de": "Juwelen-Kombinationsrahmen",
+        "zh-CN": "宝石合成框架"
+      },
+      "width": 2,
+      "height": 1,
+      "level": 1,
+      "buyPrice": 3000000,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tags": [
+        "jewel"
+      ]
+    },
+    {
+      "number": 151,
+      "name": {
+        "en": "Spirit Powder",
+        "vi": "Bột Linh Hồn",
+        "de": "Geisterstaub",
+        "zh-CN": "灵魂粉末"
+      },
+      "width": 1,
+      "height": 2,
+      "level": 1,
+      "buyPrice": 9000000,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 200,
+      "name": {
+        "en": "Muren's Book of Magic",
+        "vi": "Sách Ma Pháp của Muren",
+        "de": "Murens Buch der Magie",
+        "zh-CN": "穆伦的魔法书"
+      },
+      "width": 3,
+      "height": 3,
+      "slot": "pentagram",
+      "level": 100,
+      "durability": 5,
+      "defense": 30,
+      "requirements": {
+        "level": 30,
+        "energy": 45
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 201,
+      "name": {
+        "en": "Scroll of Etramu",
+        "vi": "Cuộn Giấy của Etramu",
+        "de": "Schriftrolle von Etramu",
+        "zh-CN": "艾特拉姆卷轴"
+      },
+      "width": 3,
+      "height": 3,
+      "slot": "pentagram",
+      "level": 200,
+      "durability": 5,
+      "defense": 50,
+      "requirements": {
+        "level": 50,
+        "energy": 70
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 202,
+      "name": {
+        "en": "Lorencia Knights' Iron Shield",
+        "vi": "Khiên Sắt Hiệp Sĩ Lorencia",
+        "de": "Eisenschild der Ritter von Lorencia",
+        "zh-CN": "勇者大陆骑士铁盾"
+      },
+      "width": 3,
+      "height": 3,
+      "slot": "pentagram",
+      "level": 300,
+      "durability": 5,
+      "defense": 231,
+      "requirements": {
+        "level": 96,
+        "energy": 129
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 203,
+      "name": {
+        "en": "Iron Shield of the Magic",
+        "vi": "Khiên Sắt Ma Pháp",
+        "de": "Eisenschild der Magie",
+        "zh-CN": "魔法铁盾"
+      },
+      "width": 3,
+      "height": 3,
+      "slot": "pentagram",
+      "level": 300,
+      "durability": 5,
+      "defense": 231,
+      "requirements": {
+        "level": 96,
+        "energy": 129
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 204,
+      "name": {
+        "en": "Hero Elixir",
+        "vi": "Tiên Dược Anh Hùng",
+        "de": "Heldenelixier",
+        "zh-CN": "英雄灵药"
+      },
+      "width": 3,
+      "height": 3,
+      "slot": "pentagram",
+      "level": 300,
+      "durability": 5,
+      "defense": 184,
+      "requirements": {
+        "level": 134,
+        "energy": 180
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 205,
+      "name": {
+        "en": "Brave Hero Elixir",
+        "vi": "Tiên Dược Anh Hùng Dũng Cảm",
+        "de": "Tapferes Heldenelixier",
+        "zh-CN": "英勇灵药"
+      },
+      "width": 3,
+      "height": 3,
+      "slot": "pentagram",
+      "level": 300,
+      "durability": 5,
+      "defense": 184,
+      "requirements": {
+        "level": 134,
+        "energy": 180
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 206,
+      "name": {
+        "en": "Gladiator's Dagger",
+        "vi": "Dao Găm Đấu Sĩ",
+        "de": "Dolch des Gladiators",
+        "zh-CN": "角斗士匕首"
+      },
+      "width": 3,
+      "height": 3,
+      "slot": "pentagram",
+      "level": 300,
+      "durability": 5,
+      "defense": 132,
+      "requirements": {
+        "level": 168,
+        "energy": 227
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 207,
+      "name": {
+        "en": "Merciless Gladiator's Dagger",
+        "vi": "Dao Găm Đấu Sĩ Tàn Nhẫn",
+        "de": "Dolch des gnadenlosen Gladiators",
+        "zh-CN": "无情角斗士匕首"
+      },
+      "width": 3,
+      "height": 3,
+      "slot": "pentagram",
+      "level": 300,
+      "durability": 5,
+      "defense": 132,
+      "requirements": {
+        "level": 168,
+        "energy": 227
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 208,
+      "name": {
+        "en": "Kundun's Madness Blade",
+        "vi": "Kiếm Điên Cuồng của Kundun",
+        "de": "Kunduns Wahnsinnsklinge",
+        "zh-CN": "昆顿疯狂之刃"
+      },
+      "width": 3,
+      "height": 3,
+      "slot": "pentagram",
+      "level": 300,
+      "durability": 1,
+      "defense": 249,
+      "requirements": {
+        "level": 181,
+        "energy": 245
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 209,
+      "name": {
+        "en": "Kundun's Magic Spell Scroll",
+        "vi": "Cuộn Chú Ma Pháp của Kundun",
+        "de": "Kunduns Magiezauberrolle",
+        "zh-CN": "昆顿魔法咒语卷轴"
+      },
+      "width": 3,
+      "height": 3,
+      "slot": "pentagram",
+      "level": 300,
+      "durability": 1,
+      "defense": 249,
+      "requirements": {
+        "level": 181,
+        "energy": 245
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 210,
+      "name": {
+        "en": "Empire Guardians' Stronghold",
+        "vi": "Thành Lũy Hộ Vệ Đế Chế",
+        "de": "Festung der Reichswächter",
+        "zh-CN": "帝国护卫要塞"
+      },
+      "width": 3,
+      "height": 3,
+      "slot": "pentagram",
+      "level": 300,
+      "durability": 1,
+      "defense": 249,
+      "requirements": {
+        "level": 181,
+        "energy": 245
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 211,
+      "name": {
+        "en": "Ancient Icarus Scroll",
+        "vi": "Cuộn Giấy Icarus Cổ Đại",
+        "de": "Antike Icarus-Schriftrolle",
+        "zh-CN": "古代天空之城卷轴"
+      },
+      "width": 3,
+      "height": 3,
+      "slot": "pentagram",
+      "level": 300,
+      "durability": 1,
+      "defense": 249,
+      "requirements": {
+        "level": 181,
+        "energy": 245
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 212,
+      "name": {
+        "en": "Arca's Prophecy",
+        "vi": "Lời Tiên Tri của Arca",
+        "de": "Arcas Prophezeiung",
+        "zh-CN": "阿卡预言"
+      },
+      "width": 3,
+      "height": 3,
+      "slot": "pentagram",
+      "level": 300,
+      "durability": 1,
+      "defense": 288,
+      "requirements": {
+        "level": 209,
+        "energy": 284
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 213,
+      "name": {
+        "en": "Antonia's Sword",
+        "vi": "Thanh Kiếm của Antonia",
+        "de": "Antonias Schwert",
+        "zh-CN": "安东尼娅之剑"
+      },
+      "width": 3,
+      "height": 3,
+      "slot": "pentagram",
+      "level": 300,
+      "durability": 1,
+      "defense": 288,
+      "requirements": {
+        "level": 209,
+        "energy": 284
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 214,
+      "name": {
+        "en": "Kundun's Seal Scroll",
+        "vi": "Cuộn Phong Ấn của Kundun",
+        "de": "Kunduns Siegelrolle",
+        "zh-CN": "昆顿封印卷轴"
+      },
+      "width": 3,
+      "height": 3,
+      "slot": "pentagram",
+      "level": 300,
+      "durability": 1,
+      "defense": 288,
+      "requirements": {
+        "level": 209,
+        "energy": 284
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 221,
+      "name": {
+        "en": "Errtel of Anger",
+        "vi": "Errtel Phẫn Nộ",
+        "de": "Errtel des Zorns",
+        "zh-CN": "愤怒艾尔特"
+      },
+      "width": 2,
+      "height": 2,
+      "level": 110,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 231,
+      "name": {
+        "en": "Errtel of Blessing",
+        "vi": "Errtel Ban Phước",
+        "de": "Errtel des Segens",
+        "zh-CN": "祝福艾尔特"
+      },
+      "width": 2,
+      "height": 2,
+      "level": 115,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 241,
+      "name": {
+        "en": "Errtel of Integrity",
+        "vi": "Errtel Chính Trực",
+        "de": "Errtel der Integrität",
+        "zh-CN": "正直艾尔特"
+      },
+      "width": 2,
+      "height": 2,
+      "level": 120,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 251,
+      "name": {
+        "en": "Errtel of Divinity",
+        "vi": "Errtel Thần Thánh",
+        "de": "Errtel der Göttlichkeit",
+        "zh-CN": "神圣艾尔特"
+      },
+      "width": 2,
+      "height": 2,
+      "level": 125,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 261,
+      "name": {
+        "en": "Errtel of Gale",
+        "vi": "Errtel Cuồng Phong",
+        "de": "Errtel des Sturms",
+        "zh-CN": "狂风艾尔特"
+      },
+      "width": 2,
+      "height": 2,
+      "level": 130,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      },
+      "droppable": false
+    },
+    {
+      "number": 262,
+      "name": {
+        "en": "Cloak of Death",
+        "vi": "Áo Choàng Tử Thần",
+        "de": "Umhang des Todes",
+        "zh-CN": "死亡披风"
+      },
+      "width": 2,
+      "height": 3,
+      "slot": "wings",
+      "wingTier": "third",
+      "statProfile": "thirdTierWing",
+      "level": 150,
+      "durability": 210,
+      "defense": 27,
+      "requirements": {
+        "level": 290
+      },
+      "classRequirements": {
+        "darkLord": 1,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tags": [
+        "flying",
+        "cape"
+      ]
+    },
+    {
+      "number": 263,
+      "name": {
+        "en": "Wings of Chaos",
+        "vi": "Cánh Hỗn Mang",
+        "de": "Flügel des Chaos",
+        "zh-CN": "混沌之翼"
+      },
+      "width": 4,
+      "height": 3,
+      "slot": "wings",
+      "wingTier": "third",
+      "statProfile": "thirdTierWing",
+      "level": 150,
+      "durability": 210,
+      "defense": 46,
+      "requirements": {
+        "level": 290
+      },
+      "classRequirements": {
+        "darkKnight": 2,
+        "magicGladiator": 1
+      },
+      "droppable": false,
+      "tags": [
+        "flying"
+      ]
+    },
+    {
+      "number": 264,
+      "name": {
+        "en": "Wings of Magic",
+        "vi": "Cánh Phép Thuật",
+        "de": "Flügel der Magie",
+        "zh-CN": "魔法之翼"
+      },
+      "width": 4,
+      "height": 3,
+      "slot": "wings",
+      "wingTier": "third",
+      "statProfile": "thirdTierWing",
+      "level": 150,
+      "durability": 210,
+      "defense": 37,
+      "requirements": {
+        "level": 290
+      },
+      "classRequirements": {
+        "darkWizard": 2,
+        "magicGladiator": 1,
+        "summoner": 2
+      },
+      "droppable": false,
+      "tags": [
+        "flying"
+      ]
+    },
+    {
+      "number": 265,
+      "name": {
+        "en": "Wings of Life",
+        "vi": "Cánh Sự Sống",
+        "de": "Flügel des Lebens",
+        "zh-CN": "生命之翼"
+      },
+      "width": 4,
+      "height": 3,
+      "slot": "wings",
+      "wingTier": "third",
+      "statProfile": "thirdTierWing",
+      "level": 150,
+      "durability": 210,
+      "defense": 37,
+      "requirements": {
+        "level": 290
+      },
+      "classRequirements": {
+        "fairyElf": 2
+      },
+      "droppable": false,
+      "tags": [
+        "flying"
+      ]
+    },
+    {
+      "number": 266,
+      "name": {
+        "en": "Wings of Conqueror",
+        "vi": "Cánh Chinh Phục",
+        "de": "Flügel des Eroberers",
+        "zh-CN": "征服者之翼"
+      },
+      "width": 4,
+      "height": 3,
+      "slot": "wings",
+      "wingTier": "third",
+      "statProfile": "thirdTierWing",
+      "level": 150,
+      "durability": 220,
+      "defense": 200,
+      "requirements": {
+        "level": 280
+      },
+      "classRequirements": {
+        "darkWizard": 2,
+        "darkKnight": 2,
+        "fairyElf": 2,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 2,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "storable": false,
+      "tags": [
+        "flying"
+      ]
+    },
+    {
+      "number": 267,
+      "name": {
+        "en": "Wings of Angel and Devil",
+        "vi": "Cánh Thiên Thần Và Ác Quỷ",
+        "de": "Flügel von Engel und Teufel",
+        "zh-CN": "天使与恶魔之翼"
+      },
+      "width": 4,
+      "height": 3,
+      "slot": "wings",
+      "wingTier": "third",
+      "statProfile": "thirdTierWing",
+      "level": 350,
+      "durability": 220,
+      "defense": 100,
+      "requirements": {
+        "level": 350
+      },
+      "classRequirements": {
+        "darkWizard": 2,
+        "darkKnight": 2,
+        "fairyElf": 2,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 2,
+        "rageFighter": 1
+      },
+      "droppable": false,
+      "tradable": false,
+      "tags": [
+        "flying"
+      ]
+    },
+    {
+      "number": 268,
+      "name": {
+        "en": "Wings of Conqueror",
+        "vi": "Cánh Chinh Phục",
+        "de": "Flügel des Eroberers",
+        "zh-CN": "征服者之翼"
+      },
+      "width": 4,
+      "height": 3,
+      "slot": "wings",
+      "wingTier": "third",
+      "statProfile": "thirdTierWing",
+      "level": 150,
+      "durability": 220,
+      "defense": 60,
+      "requirements": {
+        "level": 400
+      },
+      "classRequirements": {
+        "darkWizard": 3,
+        "darkKnight": 3,
+        "fairyElf": 3,
+        "magicGladiator": 3,
+        "darkLord": 3,
+        "summoner": 3,
+        "rageFighter": 3
+      },
+      "droppable": false,
+      "tags": [
+        "flying"
+      ]
     }
   ]
 }

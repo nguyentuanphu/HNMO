@@ -16418,5 +16418,12 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("SeasonsRestartSent", resourceCulture);
             }
         }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemDefinitions_SeasonNineNotice {
+            get {
+                return ResourceManager.GetString("ItemDefinitions_SeasonNineNotice", resourceCulture);
+            }
+        }
     }
 }

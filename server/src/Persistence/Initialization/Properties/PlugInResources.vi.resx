@@ -900,4 +900,6 @@
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 10 bản đồ Season 9, tệp địa hình, cổng dịch chuyển (417-461, 474-482) và điểm xuất hiện quái/NPC Season 9 khi chạy Season 9.</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: cửa hàng thử vận may của Moss</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 5 phiếu thử vận may của Moss (13-71..75) giá 2.000.000 Zen và trang bị cửa hàng cho Thương nhân Moss (492) nếu đang trống.</value></data>
+  <data name="SeasonNineExtendedSharedItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: quy tắc vật phẩm dùng chung mở rộng</value></data>
+  <data name="SeasonNineExtendedSharedItemsUpdatePlugIn_Description" xml:space="preserve"><value>Áp dụng giá trị Season 9 cho cấp rơi của Sphere (4) (132) và độ bền/chồng của Reset Fruit (10) khi chạy Season 9; giữ nguyên giá trị đã tùy chỉnh.</value></data>
 </root>
