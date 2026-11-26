@@ -28,6 +28,21 @@ public class PkChatCommandPlugIn : ChatCommandPlugInBase<PkChatCommandArgs>
     /// <inheritdoc/>
     public override CharacterStatus MinCharacterStatusRequirement => CharacterStatus.GameMaster;
 
+    /// <summary>
+    /// Gets the outlaw points total a game master's <c>/pk</c> gives for a stage: 21,600 for the Warning stage, and for
+    /// the killer stages their lowest total plus 21,600 (six hours), so the character stays in the stage asked for
+    /// instead of falling to the stage below on the next tick (the total goes down every second).
+    /// </summary>
+    /// <param name="state">The stage asked for.</param>
+    /// <returns>The points total.</returns>
+    internal static int GetPoints(HeroState state)
+        => state switch
+        {
+            HeroState.PlayerKillWarning => OutlawPoints.WarningPoints,
+            > HeroState.PlayerKillWarning => OutlawPoints.GetMinimumPoints(state) + OutlawPoints.WarningPoints,
+            _ => 0,
+        };
+
     /// <inheritdoc />
     protected override async ValueTask DoHandleCommandAsync(Player gameMaster, PkChatCommandArgs arguments)
     {
@@ -52,9 +67,7 @@ public class PkChatCommandPlugIn : ChatCommandPlugInBase<PkChatCommandArgs>
         }
 
         character.State = HeroState.Normal + arguments.Level;
-
-        // The outlaw points total starts at the lowest total of the stage, 21,600 for the Warning stage.
-        character.StateRemainingSeconds = Math.Max(OutlawPoints.GetMinimumPoints(character.State), OutlawPoints.WarningPoints);
+        character.StateRemainingSeconds = GetPoints(character.State);
         character.PlayerKillCount = arguments.Count;
         await targetPlayer!.ForEachWorldObserverAsync<IUpdateCharacterHeroStatePlugIn>(p => p.UpdateCharacterHeroStateAsync(targetPlayer!), true).ConfigureAwait(false);
 
