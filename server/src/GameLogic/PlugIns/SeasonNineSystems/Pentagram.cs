@@ -17,8 +17,8 @@ using HNMO.DataModel.Entities;
 /// levels 0, 5 and 10, linear in between). A hit's elemental damage is the attacker's elemental attack less the
 /// defender's elemental defense, scaled by the element advantage
 /// (<see cref="SeasonNineSystemsEngine.CalculateElementalMultiplier"/>) and the errtels' "against an element" and PvP
-/// bonuses. Only a character wearing a pentagram of an element deals it. Monsters have no element in HNMO's data, so
-/// against them the elemental attack counts without advantage.
+/// bonuses. Only a character wearing a pentagram of an element deals it. A monster's element is an admin setting
+/// (<see cref="SeasonNineSystemsConfiguration.MonsterElements"/>, none by default).
 /// </remarks>
 public static class Pentagram
 {
@@ -40,13 +40,11 @@ public static class Pentagram
         => definition is { Group: ItemGroup, Number: 221 or 231 or 241 or 251 or 261 };
 
     /// <summary>Gets the number of usable errtel slots of a pentagram: its grade (1..3) plus two, at most five.</summary>
+    /// <param name="configuration">The configuration (the grades in use).</param>
     /// <param name="definition">The pentagram's definition.</param>
     /// <returns>The usable slots.</returns>
-    public static int UsableSlots(ItemDefinition definition)
-    {
-        var grade = SeasonNineSystemsCatalog.Pentagrams.FirstOrDefault(p => p.ItemNumber == definition.Number).Grade;
-        return Math.Clamp(grade + 2, 1, SlotCount);
-    }
+    public static int UsableSlots(SeasonNineSystemsConfiguration? configuration, ItemDefinition definition)
+        => Math.Clamp(PentagramData.Grade(configuration, definition.Number) + 2, 1, SlotCount);
 
     /// <summary>Reads the element and options of an errtel item.</summary>
     /// <param name="errtel">The errtel.</param>
@@ -100,26 +98,28 @@ public static class Pentagram
         pentagram.PentagramErrtels = parts.All(string.IsNullOrEmpty) ? null : string.Join('|', parts);
     }
 
-    /// <summary>The value of an errtel option at a level: the data's values at levels 0, 5 and 10, linear in between.</summary>
+    /// <summary>The value of an errtel option at a level, from the built-in table.</summary>
     /// <param name="optionIndex">The option index.</param>
     /// <param name="level">The level (0..10).</param>
     /// <returns>The value, or 0 for an unknown option.</returns>
-    public static int OptionValue(int optionIndex, byte level)
-    {
-        foreach (var option in SeasonNineSystemsCatalog.ErrtelOptions)
-        {
-            if (option.Index != optionIndex)
-            {
-                continue;
-            }
+    public static int OptionValue(int optionIndex, byte level) => OptionValue(null, optionIndex, level);
 
-            var l = Math.Clamp((int)level, 0, 10);
-            return l <= 5
-                ? option.ValueLv0 + ((option.ValueLv5 - option.ValueLv0) * l / 5)
-                : option.ValueLv5 + ((option.ValueLv10 - option.ValueLv5) * (l - 5) / 5);
+    /// <summary>The value of an errtel option at a level: the table's values at levels 0, 5 and 10, linear in between.</summary>
+    /// <param name="configuration">The configuration (the table in use).</param>
+    /// <param name="optionIndex">The option index.</param>
+    /// <param name="level">The level (0..10).</param>
+    /// <returns>The value, or 0 for an unknown option.</returns>
+    public static int OptionValue(SeasonNineSystemsConfiguration? configuration, int optionIndex, byte level)
+    {
+        if (PentagramData.Option(configuration, optionIndex) is not { } option)
+        {
+            return 0;
         }
 
-        return 0;
+        var l = Math.Clamp((int)level, 0, 10);
+        return l <= 5
+            ? option.ValueLv0 + ((option.ValueLv5 - option.ValueLv0) * l / 5)
+            : option.ValueLv5 + ((option.ValueLv10 - option.ValueLv5) * (l - 5) / 5);
     }
 
     /// <summary>Gets the pentagram a player wears, if any.</summary>
@@ -149,9 +149,14 @@ public static class Pentagram
 
         var attackerElement = (PentagramElement)pentagram.PentagramElement;
         var defenderPentagram = defender is Player defenderPlayer ? Worn(defenderPlayer) : null;
-        var defenderElement = (PentagramElement)(defenderPentagram?.PentagramElement ?? 0);
-        var attack = Sum(pentagram, isPvp, 0, 20, 120);
-        var defense = defenderPentagram is null ? 0 : Sum(defenderPentagram, isPvp, 50, 70, 170);
+        var defenderElement = defender switch
+        {
+            Player => (PentagramElement)(defenderPentagram?.PentagramElement ?? 0),
+            NPC.Monster monster => PentagramData.MonsterElement(configuration, monster.Definition.Number),
+            _ => PentagramElement.Undefined,
+        };
+        var attack = Sum(configuration, pentagram, isPvp, 0, 20, 120);
+        var defense = defenderPentagram is null ? 0 : Sum(configuration, defenderPentagram, isPvp, 50, 70, 170);
         var damage = Math.Max(0, attack - defense);
         if (damage == 0)
         {
@@ -163,28 +168,31 @@ public static class Pentagram
             defenderElement,
             configuration.PentagramElementalAdvantageBonusPct,
             configuration.PentagramElementalDamageMultiplier);
-        if (defenderElement != PentagramElement.Undefined && defenderPentagram is not null)
+        if (defenderElement != PentagramElement.Undefined)
         {
             // "+x% attack against <element>" of the attacker, "+x% defense against <element>" of the defender.
             var against = (int)defenderElement - 1;
-            multiplier *= 1 + ((SumPercent(pentagram, 10 + against) + SumPercent(pentagram, 110 + against)) / 100.0);
-            var from = (int)attackerElement - 1;
-            multiplier *= Math.Max(0, 1 - ((SumPercent(defenderPentagram, 60 + from) + SumPercent(defenderPentagram, 160 + from)) / 100.0));
+            multiplier *= 1 + ((SumPercent(configuration, pentagram, 10 + against) + SumPercent(configuration, pentagram, 110 + against)) / 100.0);
+            if (defenderPentagram is not null)
+            {
+                var from = (int)attackerElement - 1;
+                multiplier *= Math.Max(0, 1 - ((SumPercent(configuration, defenderPentagram, 60 + from) + SumPercent(configuration, defenderPentagram, 160 + from)) / 100.0));
+            }
         }
 
         if (isPvp)
         {
-            multiplier *= 1 + (SumPercent(pentagram, 140) / 100.0);
+            multiplier *= 1 + (SumPercent(configuration, pentagram, 140) / 100.0);
             if (defenderPentagram is not null)
             {
-                multiplier *= Math.Max(0, 1 - ((SumPercent(defenderPentagram, 90) + SumPercent(defenderPentagram, 190)) / 100.0));
+                multiplier *= Math.Max(0, 1 - ((SumPercent(configuration, defenderPentagram, 90) + SumPercent(configuration, defenderPentagram, 190)) / 100.0));
             }
         }
 
         return Math.Max(0, (int)Math.Round(damage * multiplier));
     }
 
-    private static int Sum(Item pentagram, bool isPvp, int always, int pvp1, int pvp2)
+    private static int Sum(SeasonNineSystemsConfiguration configuration, Item pentagram, bool isPvp, int always, int pvp1, int pvp2)
     {
         var total = 0;
         foreach (var errtel in ReadSlots(pentagram))
@@ -198,7 +206,7 @@ public static class Pentagram
             {
                 if (index == always || (isPvp && (index == pvp1 || index == pvp2)))
                 {
-                    total += OptionValue(index, level);
+                    total += OptionValue(configuration, index, level);
                 }
             }
         }
@@ -206,7 +214,7 @@ public static class Pentagram
         return total;
     }
 
-    private static int SumPercent(Item pentagram, int optionIndex)
+    private static int SumPercent(SeasonNineSystemsConfiguration configuration, Item pentagram, int optionIndex)
     {
         var total = 0;
         foreach (var errtel in ReadSlots(pentagram))
@@ -220,7 +228,7 @@ public static class Pentagram
             {
                 if (index == optionIndex)
                 {
-                    total += OptionValue(index, level);
+                    total += OptionValue(configuration, index, level);
                 }
             }
         }

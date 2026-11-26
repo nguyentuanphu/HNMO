@@ -21,9 +21,20 @@ using BasicModel = HNMO.Persistence.BasicModel;
 /// a failed save, and no effect outside Season 9 realms.
 /// </summary>
 [TestFixture]
+[NonParallelizable]
 public class PentagramTests
 {
     private const byte FirstBagSlot = 12;
+
+    private Func<int, int> _random = null!;
+
+    /// <summary>Keeps the random source.</summary>
+    [SetUp]
+    public void KeepRandom() => this._random = PentagramActions.NextRandom;
+
+    /// <summary>Puts the random source back.</summary>
+    [TearDown]
+    public void RestoreRandom() => PentagramActions.NextRandom = this._random;
 
     /// <summary>Option values follow the data at levels 0, 5 and 10, linear in between.</summary>
     [Test]
@@ -184,6 +195,150 @@ public class PentagramTests
         Assert.That(copy.PentagramErrtels, Is.EqualTo(pentagram.PentagramErrtels));
     }
 
+    /// <summary>Taking an errtel out costs its Zen; with a failed extraction roll it breaks, the Zen is gone.</summary>
+    /// <returns>A task.</returns>
+    [Test]
+    public async Task TakingAnErrtelOutCanBreakItAsync()
+    {
+        var (player, _, definitions) = await CreateAsync(seasonNine: true).ConfigureAwait(false);
+        var money = player.Money;
+        Wear(player, PentagramElement.Fire, new ErrtelInfo(221, PentagramElement.Fire, [(0, 9)]), new ErrtelInfo(221, PentagramElement.Fire, [(0, 9)]));
+
+        PentagramActions.NextRandom = max => max - 1; // the highest roll: fails every rate below 100 %
+        Assert.That(await PentagramActions.RemoveErrtelAsync(player, 0).ConfigureAwait(false), Is.EqualTo(PentagramActionResult.Broken));
+        Assert.That(player.Inventory!.Items.Count(i => i.Definition == definitions.Anger), Is.Zero);
+        Assert.That(Pentagram.ReadSlots(Pentagram.Worn(player)!)[0], Is.Null);
+        Assert.That(player.Money, Is.EqualTo(money - 100_000));
+
+        PentagramActions.NextRandom = _ => 0;
+        Assert.That(await PentagramActions.RemoveErrtelAsync(player, 1).ConfigureAwait(false), Is.EqualTo(PentagramActionResult.Ok));
+        Assert.That(player.Inventory.Items.Count(i => i.Definition == definitions.Anger), Is.EqualTo(1));
+    }
+
+    /// <summary>With a mix NPC set, the mixes need that NPC's window open; without enough Zen nothing happens.</summary>
+    /// <returns>A task.</returns>
+    [Test]
+    public async Task MixesNeedTheirPlaceAndTheirZenAsync()
+    {
+        var (player, _, definitions) = await CreateAsync(seasonNine: true, c => c.PentagramMixNpcNumber = 543).ConfigureAwait(false);
+        var errtel = await AddAsync(player, definitions.Anger, FirstBagSlot, PentagramElement.Fire).ConfigureAwait(false);
+        Pentagram.WriteErrtel(errtel, new ErrtelInfo(221, PentagramElement.Fire, [(0, 0)]));
+        Assert.That(await PentagramActions.LevelUpErrtelAsync(player, FirstBagSlot).ConfigureAwait(false), Is.EqualTo(PentagramActionResult.WrongPlace));
+
+        var (poor, _, poorDefinitions) = await CreateAsync(seasonNine: true).ConfigureAwait(false);
+        poor.TryRemoveMoney(poor.Money);
+        var poorErrtel = await AddAsync(poor, poorDefinitions.Anger, FirstBagSlot, PentagramElement.Fire).ConfigureAwait(false);
+        Pentagram.WriteErrtel(poorErrtel, new ErrtelInfo(221, PentagramElement.Fire, [(0, 0)]));
+        Assert.That(await PentagramActions.LevelUpErrtelAsync(poor, FirstBagSlot).ConfigureAwait(false), Is.EqualTo(PentagramActionResult.NotEnoughZen));
+        Assert.That(Pentagram.ReadErrtel(poorErrtel).Options, Is.EqualTo(new[] { (0, (byte)0) }));
+    }
+
+    /// <summary>A level-up raises the errtel by one and costs the Zen of the new level; a failed one keeps the level.</summary>
+    /// <returns>A task.</returns>
+    [Test]
+    public async Task ALevelUpRaisesOrKeepsTheLevelAsync()
+    {
+        var (player, _, definitions) = await CreateAsync(seasonNine: true).ConfigureAwait(false);
+        var errtel = await AddAsync(player, definitions.Anger, FirstBagSlot, PentagramElement.Fire).ConfigureAwait(false);
+        Pentagram.WriteErrtel(errtel, new ErrtelInfo(221, PentagramElement.Fire, [(0, 2)]));
+        var money = player.Money;
+
+        PentagramActions.NextRandom = _ => 0;
+        Assert.That(await PentagramActions.LevelUpErrtelAsync(player, FirstBagSlot).ConfigureAwait(false), Is.EqualTo(PentagramActionResult.Ok));
+        Assert.That(Pentagram.ReadErrtel(errtel).Options, Is.EqualTo(new[] { (0, (byte)3) }));
+        Assert.That(player.Money, Is.EqualTo(money - 300_000));
+
+        PentagramActions.NextRandom = max => max - 1;
+        Assert.That(await PentagramActions.LevelUpErrtelAsync(player, FirstBagSlot).ConfigureAwait(false), Is.EqualTo(PentagramActionResult.Failed));
+        Assert.That(Pentagram.ReadErrtel(errtel).Options, Is.EqualTo(new[] { (0, (byte)3) }));
+    }
+
+    /// <summary>A rank-up uses a second errtel of the same kind and rank and adds an option of the next rank.</summary>
+    /// <returns>A task.</returns>
+    [Test]
+    public async Task ARankUpAddsAnOptionOfTheNextRankAsync()
+    {
+        var (player, _, definitions) = await CreateAsync(seasonNine: true).ConfigureAwait(false);
+        var first = await AddAsync(player, definitions.Anger, FirstBagSlot, PentagramElement.Wind).ConfigureAwait(false);
+        Pentagram.WriteErrtel(first, new ErrtelInfo(221, PentagramElement.Wind, [(0, 4)]));
+        var second = await AddAsync(player, definitions.Anger, FirstBagSlot + 3, PentagramElement.Wind).ConfigureAwait(false);
+        Pentagram.WriteErrtel(second, new ErrtelInfo(221, PentagramElement.Wind, [(0, 0)]));
+
+        PentagramActions.NextRandom = _ => 0;
+        Assert.That(await PentagramActions.RankUpErrtelAsync(player, FirstBagSlot, (byte)(FirstBagSlot + 3)).ConfigureAwait(false), Is.EqualTo(PentagramActionResult.Ok));
+
+        var options = Pentagram.ReadErrtel(first).Options;
+        Assert.That(options, Has.Count.EqualTo(2));
+        Assert.That(PentagramData.Option(null, options[1].Index)!.Rank, Is.EqualTo(2));
+        Assert.That(player.Inventory!.GetItem((byte)(FirstBagSlot + 3)), Is.Null, "the second errtel is used up");
+    }
+
+    /// <summary>Drops are off by default; with a chance set, a pentagram with an element drops.</summary>
+    /// <returns>A task.</returns>
+    [Test]
+    public async Task DropsAreOffByDefaultAndFollowTheChanceAsync()
+    {
+        var (player, _, _) = await CreateAsync(seasonNine: true).ConfigureAwait(false);
+        var configuration = SeasonNineSystemsPlugIn.Get(player.GameContext)!.Configuration!;
+        PentagramActions.NextRandom = _ => 0;
+        Assert.That(PentagramDrops.Roll(player.GameContext, configuration), Is.Null);
+
+        configuration.PentagramDropChance = 10;
+        var drop = PentagramDrops.Roll(player.GameContext, configuration);
+        Assert.That(Pentagram.IsPentagram(drop?.Definition), Is.True);
+        Assert.That(drop!.PentagramElement, Is.InRange(1, 5));
+
+        configuration.PentagramDropChance = 0;
+        configuration.ErrtelDropChance = 10;
+        var errtel = PentagramDrops.Roll(player.GameContext, configuration);
+        Assert.That(Pentagram.IsErrtel(errtel?.Definition), Is.True);
+        Assert.That(Pentagram.ReadErrtel(errtel!).Options, Has.Count.EqualTo(1));
+    }
+
+    /// <summary>The admin's tables replace the built-in ones: an option's values and a monster's element.</summary>
+    /// <returns>A task.</returns>
+    [Test]
+    public async Task TheAdminTablesReplaceTheDefaultsAsync()
+    {
+        var (attacker, _, _) = await CreateAsync(seasonNine: true, c =>
+        {
+            c.ErrtelOptions = [new ErrtelOptionSetting { Index = 0, ErrtelNumber = 221, Rank = 1, Rate = 1, ValueLv0 = 100, ValueLv5 = 200, ValueLv10 = 300, Name = "Elemental Dmg +%d" }];
+            c.MonsterElements = [new PentagramMonsterElement { MonsterNumber = 7, Element = PentagramElement.Darkness }];
+        }).ConfigureAwait(false);
+        var configuration = SeasonNineSystemsPlugIn.Get(attacker.GameContext)!.Configuration!;
+        Assert.That(Pentagram.OptionValue(configuration, 0, 5), Is.EqualTo(200));
+        Assert.That(PentagramData.MonsterElement(configuration, 7), Is.EqualTo(PentagramElement.Darkness));
+        Assert.That(PentagramData.MonsterElement(configuration, 8), Is.EqualTo(PentagramElement.Undefined));
+
+        Wear(attacker, PentagramElement.Fire, new ErrtelInfo(221, PentagramElement.Fire, [(0, 0)]));
+        Assert.That(Pentagram.ElementalDamage(attacker, new Mock<IAttackable>().Object, isPvp: false), Is.EqualTo(100));
+    }
+
+    /// <summary>The state the web client gets names the worn pentagram, its slots and the bag's errtels.</summary>
+    /// <returns>A task.</returns>
+    [Test]
+    public async Task TheStateNamesTheWornPentagramAndTheBagAsync()
+    {
+        var (player, _, definitions) = await CreateAsync(seasonNine: true).ConfigureAwait(false);
+        Wear(player, PentagramElement.Earth, new ErrtelInfo(221, PentagramElement.Earth, [(0, 5)]));
+        var errtel = await AddAsync(player, definitions.Anger, FirstBagSlot, PentagramElement.Earth).ConfigureAwait(false);
+        Pentagram.WriteErrtel(errtel, new ErrtelInfo(221, PentagramElement.Earth, [(0, 1)]));
+
+        using var json = JsonDocument.Parse(PentagramStateWriter.Write(player, PentagramActionResult.Ok));
+        var root = json.RootElement;
+        Assert.Multiple(() =>
+        {
+            Assert.That(root.GetProperty("enabled").GetBoolean(), Is.True);
+            Assert.That(root.GetProperty("worn").GetProperty("element").GetInt32(), Is.EqualTo(3));
+            Assert.That(root.GetProperty("worn").GetProperty("errtels")[0].GetProperty("options")[0].GetProperty("value").GetInt32(), Is.EqualTo(65));
+            Assert.That(root.GetProperty("items")[0].GetProperty("slot").GetInt32(), Is.EqualTo(FirstBagSlot));
+            Assert.That(root.GetProperty("result").GetString(), Is.EqualTo("Ok"));
+        });
+
+        var (s6, _, _) = await CreateAsync(seasonNine: false).ConfigureAwait(false);
+        Assert.That(PentagramStateWriter.Write(s6), Is.EqualTo(PentagramStateWriter.DisabledState));
+    }
+
     private static void Wear(Player player, PentagramElement element, params ErrtelInfo[] errtels)
     {
         var inventory = player.SelectedCharacter!.Inventory!;
@@ -208,13 +363,15 @@ public class PentagramTests
         return item;
     }
 
-    private static async Task<(Player Attacker, Player Defender, (ItemDefinition Pentagram, ItemDefinition Anger) Definitions)> CreateAsync(bool seasonNine)
+    private static async Task<(Player Attacker, Player Defender, (ItemDefinition Pentagram, ItemDefinition Anger) Definitions)> CreateAsync(bool seasonNine, Action<SeasonNineSystemsConfiguration>? tweak = null)
     {
+        var settings = new SeasonNineSystemsConfiguration { Enabled = true, PentagramEnabled = true };
+        tweak?.Invoke(settings);
         var configuration = new PlugInConfiguration
         {
             TypeId = typeof(SeasonNineSystemsPlugIn).GUID,
             IsActive = true,
-            CustomConfiguration = JsonSerializer.Serialize(new SeasonNineSystemsConfiguration { Enabled = true, PentagramEnabled = true }),
+            CustomConfiguration = JsonSerializer.Serialize(settings),
         };
         var gameContext = GameContextTestHelper.CreateGameContext([configuration]);
         SeasonNineSystemsPlugIn.Get(gameContext)!.IsSeasonNineRealm = () => seasonNine;
@@ -226,6 +383,12 @@ public class PentagramTests
         gameContext.Configuration.Items.Add(blessing);
         var attacker = await PlayerTestHelper.CreatePlayerAsync(gameContext).ConfigureAwait(false);
         var defender = await PlayerTestHelper.CreatePlayerAsync(gameContext).ConfigureAwait(false);
+        foreach (var player in new[] { attacker, defender })
+        {
+            player.TryAddMoney(10_000_000);
+            player.CurrentMap!.Terrain.SafezoneMap[player.Position.X, player.Position.Y] = true;
+        }
+
         return (attacker, defender, (pentagram, anger));
     }
 }

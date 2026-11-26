@@ -26,6 +26,7 @@ using HNMO.PlugIns;
 public sealed class SeasonNineSystemsPlugIn :
     IPeriodicTaskPlugIn,
     IPlayerStateChangedPlugIn,
+    IAttackableGotKilledPlugIn,
     ISupportCustomConfiguration<SeasonNineSystemsConfiguration>,
     ISupportDefaultCustomConfiguration,
     IDisabledByDefault
@@ -100,11 +101,36 @@ public sealed class SeasonNineSystemsPlugIn :
             return;
         }
 
+        await player.InvokeViewPlugInAsync<Views.IHnmoPentagramViewPlugIn>(p => p.ShowPentagramAsync(PentagramStateWriter.Write(player))).ConfigureAwait(false);
         var isVi = string.Equals(player.Culture.TwoLetterISOLanguageName, "vi", StringComparison.OrdinalIgnoreCase);
         await player.ShowBlueMessageAsync(
             isVi
                 ? $"Season 9 Systems đang bật (Master Cap {cfg.MasterLevelMaxCap}, {SeasonNineSystemsCatalog.Muuns.Count} Muun, {SeasonNineSystemsCatalog.Pentagrams.Count} Pentagram)."
                 : $"Season 9 Systems active (Master Cap {cfg.MasterLevelMaxCap}, {SeasonNineSystemsCatalog.Muuns.Count} Muun, {SeasonNineSystemsCatalog.Pentagrams.Count} Pentagram).").ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Drops a pentagram or an errtel from a killed monster with the admin's chances (off by default). A pentagram gets
+    /// a random element; an errtel a random kind and element, with one option of rank 1 at level 0.
+    /// </summary>
+    /// <param name="killed">The killed object.</param>
+    /// <param name="killer">The killer.</param>
+    /// <returns>A task.</returns>
+    public async ValueTask AttackableGotKilledAsync(IAttackable killed, IAttacker? killer)
+    {
+        if (killed is not NPC.Monster monster || killer is not Player player || !this.IsActive()
+            || this.Configuration is not { PentagramEnabled: true } cfg
+            || monster.Definition[Attributes.Stats.Level] < cfg.PentagramDropMinimumMonsterLevel
+            || monster.CurrentMap is not { } map)
+        {
+            return;
+        }
+
+        if (PentagramDrops.Roll(player.GameContext, cfg) is { } item)
+        {
+            var owners = player.Party?.PartyList.AsEnumerable() ?? player.GetAsEnumerable();
+            await map.AddAsync(new DroppedItem(item, monster.Position, map, null, owners)).ConfigureAwait(false);
+        }
     }
 
     /// <summary>Executes <c>/muun</c> or <c>/pentagram</c> status command cleanly.</summary>
