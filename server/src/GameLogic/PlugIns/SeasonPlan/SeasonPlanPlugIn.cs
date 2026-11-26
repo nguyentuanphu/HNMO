@@ -35,8 +35,11 @@ public sealed class SeasonPlanPlugIn :
     /// <summary>Gets the active <see cref="SeasonPlanPlugIn"/> for a game context, or <c>null</c> when disabled.</summary>
     /// <param name="gameContext">Game context.</param>
     /// <returns>Active plug-in or <c>null</c>.</returns>
-    public static SeasonPlanPlugIn? Get(IGameContext gameContext) =>
-        gameContext.PlugInManager.GetActivePlugInsOf<IPlayerStateChangedPlugIn>().OfType<SeasonPlanPlugIn>().FirstOrDefault();
+    public static SeasonPlanPlugIn? Get(IGameContext gameContext)
+    {
+        var candidates = gameContext.PlugInManager.GetActivePlugInsOf<IPlayerStateChangedPlugIn>().OfType<SeasonPlanPlugIn>();
+        return candidates.FirstOrDefault(p => p.Configuration is not null) ?? candidates.FirstOrDefault();
+    }
 
     /// <summary>Checks whether <paramref name="gate"/> is currently unlocked (<c>true</c> whenever Season Plan is disabled).</summary>
     /// <param name="gameContext">Game context.</param>

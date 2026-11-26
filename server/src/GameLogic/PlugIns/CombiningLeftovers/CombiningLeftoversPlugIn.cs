@@ -97,7 +97,8 @@ public sealed class CombiningLeftoversPlugIn :
     {
         var engine = this.GetEngine();
         var bag = this.ReadPlayerBag(player);
-        var json = CombiningLeftoversStateWriter.WriteForPlayer(engine, player, bag, seasonCapOverride: null, notice);
+        var seasonCap = GetSeasonCapOverride(player.GameContext);
+        var json = CombiningLeftoversStateWriter.WriteForPlayer(engine, player, bag, seasonCap, notice);
         await player.InvokeViewPlugInAsync<IHnmoLeftoversViewPlugIn>(p => p.ShowLeftoversAsync(json, requested)).ConfigureAwait(false);
     }
 
@@ -114,7 +115,7 @@ public sealed class CombiningLeftoversPlugIn :
 
         var engine = this.GetEngine();
         var bag = this.ReadPlayerBag(player);
-        var check = engine.PlanCombine(recipeId, bag, player.Money, seasonCapOverride: null, out var pickedSlots);
+        var check = engine.PlanCombine(recipeId, bag, player.Money, GetSeasonCapOverride(player.GameContext), out var pickedSlots);
         if (check != LeftoversCheckResult.Ok)
         {
             var (en, vi) = DescribeFailure(check);
@@ -294,6 +295,12 @@ public sealed class CombiningLeftoversPlugIn :
         _ => ("Action could not be completed.", "Không thể thực hiện."),
     };
 
+    private static int? GetSeasonCapOverride(IGameContext gameContext)
+    {
+        var cap = SeasonPlan.SeasonPlanPlugIn.GetCurrentMaxBoxLevel(gameContext);
+        return cap > 0 ? cap : null;
+    }
+
     private static async ValueTask RemoveBagSlotsAsync(Player player, IReadOnlyList<byte> slots)
     {
         if (player.Inventory is not { } inventory)
@@ -301,11 +308,20 @@ public sealed class CombiningLeftoversPlugIn :
             return;
         }
 
-        foreach (var slot in slots)
+        foreach (var group in slots.GroupBy(s => s))
         {
+            var slot = group.Key;
+            var consumeCount = group.Count();
             var item = inventory.GetItem(slot);
             if (item is null)
             {
+                continue;
+            }
+
+            if (item.Durability > consumeCount)
+            {
+                item.Durability -= (byte)consumeCount;
+                await player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(item, false)).ConfigureAwait(false);
                 continue;
             }
 
