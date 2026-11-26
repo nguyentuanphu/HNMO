@@ -64,3 +64,12 @@ the cloud because the audit only keeps counts, not the data. Read the data from 
    Every amount, chance and schedule editable in the admin panel (texts in 4 languages); use the existing plug-in
    patterns (see `docs/handover-2026-11-21.md`); tests.
 Stop when usage runs low and push what you have. Report in Vietnamese: done / not run / next, Sydney times.
+
+## Addition (26 Nov, 18:00 Sydney): two red browser specs main could not trace from the CI logs alone
+
+5. `small-ui-feedback.spec.ts:16` (waits for `.vault-zen-dialog #panel`, never appears) and `trade.spec.ts:48` (waits for
+   `.confirm-dialog .confirm-ok`, never appears) are red on the working branch in 6 of the last 7 runs. Both wait for a
+   game dialog from `ui/gameDialogs.ts` `showConfirm`, which queues a new box behind an open one (`show` only starts it
+   when `current` is empty). Run both on this PC, and when it fails print `confirmOpen()` and the open box's text: is
+   another confirm box (onboarding, update, death, gens ...) open and hiding the test's box? Fix the test or the code
+   in one draft PR with the cause in its body.
