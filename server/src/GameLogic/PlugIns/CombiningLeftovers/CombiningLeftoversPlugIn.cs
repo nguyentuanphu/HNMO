@@ -5,11 +5,11 @@
 namespace HNMO.GameLogic.PlugIns.CombiningLeftovers;
 
 using System.Runtime.InteropServices;
+using HNMO.DataModel.Entities;
 using HNMO.GameLogic.CashShop;
 using HNMO.GameLogic.NPC;
 using HNMO.GameLogic.PlugIns.AccountSafety;
 using HNMO.GameLogic.PlugIns.GiftCodes;
-using HNMO.GameLogic.PlugIns.Missions;
 using HNMO.GameLogic.Views;
 using HNMO.GameLogic.Views.Inventory;
 using HNMO.Interfaces;
@@ -64,7 +64,7 @@ public sealed class CombiningLeftoversPlugIn :
     {
         if (currentState == PlayerState.EnteredWorld)
         {
-            await this.TryDeliverOwedAsync(player).ConfigureAwait(false);
+            await this.TryDeliverOwedAsync(player, atLogin: true).ConfigureAwait(false);
         }
     }
 
@@ -157,13 +157,16 @@ public sealed class CombiningLeftoversPlugIn :
 
             var delivered = await GiftCodeRewards.GiveGoodsAsync(player, reward).ConfigureAwait(false);
 
-            // The materials, the Zen and a reward put into the bag go into one save; a reward which has to wait is written
-            // only after it, so a stop in between can't give the materials back while the reward is kept.
-            await SaveAsync(player).ConfigureAwait(false);
+            // The materials, the Zen and a reward put into the bag go into one save. A reward which has to wait is written
+            // with a marker that goes into that save: it is delivered only once the marker is saved, so neither a stop nor
+            // a failed save can give the materials back while the reward is kept.
             if (!delivered)
             {
+                reward.PaidMarker = CreatePaidMarker(player, reward.Reference);
                 engine.Store.AddOwed(player.SelectedCharacter.GetId().ToString(), reward);
             }
+
+            await SaveAsync(player).ConfigureAwait(false);
 
             engine.Store.AppendLog(new LeftoversLogEntry
             {
@@ -229,19 +232,21 @@ public sealed class CombiningLeftoversPlugIn :
         var offer = engine.Configuration.ExchangeOffers.First(o => o.Enabled && string.Equals(o.Id, offerId.Trim(), StringComparison.OrdinalIgnoreCase));
         await RemoveBagSlotsAsync(player, pickedSlots).ConfigureAwait(false);
 
-        // The materials are saved as taken before any reward goes out (coins are granted at once, a waiting reward is
-        // written to the state file): a stop in between can't give the materials back while the reward is kept.
-        await SaveAsync(player).ConfigureAwait(false);
-
+        // The materials, the coins (a grant of this player's own database context) and a reward put into the bag go
+        // into one save; a reward which has to wait carries a marker of that save. A stop or a failed save can't give
+        // the materials back while a reward is kept: the next good save writes both, or neither was written.
         var opId = Guid.NewGuid().ToString("N");
         var login = player.Account.LoginName;
-        if (offer.RewardCoins > 0)
+        if (offer.RewardCoins > 0 && Enum.IsDefined(offer.RewardCoinType))
         {
-            await MissionCoinGranter.GrantAsync(
-                player.GameContext,
-                new CoinGrant(login, offer.RewardCoinType, offer.RewardCoins, $"Surplus exchange: {offer.NameEn}", $"leftover-ex:{login}:{offer.Id}:{opId}"),
-                "HNMO leftovers").ConfigureAwait(false);
-            await player.ApplyPendingCashShopCoinGrantsAsync().ConfigureAwait(false);
+            var grant = player.PersistenceContext.CreateNew<CashShopCoinGrant>();
+            grant.AccountId = player.Account.GetId();
+            grant.CoinType = offer.RewardCoinType;
+            grant.Amount = offer.RewardCoins;
+            grant.Reason = $"Surplus exchange: {offer.NameEn}";
+            grant.Reference = $"leftover-ex:{login}:{offer.Id}:{opId}";
+            grant.GrantedBy = "HNMO leftovers";
+            grant.CreatedAt = DateTime.UtcNow;
         }
 
         var deliveredAll = true;
@@ -268,11 +273,16 @@ public sealed class CombiningLeftoversPlugIn :
             };
 
             deliveredAll = await GiftCodeRewards.GiveGoodsAsync(player, reward).ConfigureAwait(false);
-            await SaveAsync(player).ConfigureAwait(false);
             if (!deliveredAll)
             {
+                reward.PaidMarker = CreatePaidMarker(player, reward.Reference);
                 engine.Store.AddOwed(player.SelectedCharacter.GetId().ToString(), reward);
             }
+        }
+
+        if (await SaveAsync(player).ConfigureAwait(false) && offer.RewardCoins > 0)
+        {
+            await player.ApplyPendingCashShopCoinGrantsAsync().ConfigureAwait(false);
         }
 
         engine.Store.AppendLog(new LeftoversLogEntry
@@ -295,19 +305,39 @@ public sealed class CombiningLeftoversPlugIn :
         await this.SendStateAsync(player, requested: true, ("ok", msgEn, msgVi)).ConfigureAwait(false);
     }
 
-    private static async ValueTask SaveAsync(Player player)
+    private static async ValueTask<bool> SaveAsync(Player player)
     {
         try
         {
-            if (!await player.SaveProgressAsync().ConfigureAwait(false))
+            if (await player.SaveProgressAsync().ConfigureAwait(false))
             {
-                player.Logger.LogWarning("Combining leftovers: the progress of {Player} couldn't be saved; the next save tries again.", player.Name);
+                return true;
             }
+
+            player.Logger.LogWarning("Combining leftovers: the progress of {Player} couldn't be saved; the next save tries again.", player.Name);
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
             player.Logger.LogWarning(ex, "Combining leftovers: the progress of {Player} couldn't be saved; the next save tries again.", player.Name);
         }
+
+        return false;
+    }
+
+    // A zero-coin receipt saved with the materials of a reward that has to wait: once it is in the database, the
+    // materials were taken for good.
+    private static string CreatePaidMarker(Player player, string rewardReference)
+    {
+        var now = DateTime.UtcNow;
+        var marker = player.PersistenceContext.CreateNew<CashShopCoinGrant>();
+        marker.AccountId = player.Account!.GetId();
+        marker.CoinType = CashShopCoinType.WCoinC;
+        marker.Amount = 0;
+        marker.CreatedAt = now;
+        marker.AppliedAt = now;
+        marker.Reference = $"hnmo-leftovers-paid:{rewardReference}";
+        marker.Reason = "leftovers";
+        return marker.Reference;
     }
 
     private static (string En, string Vi) DescribeFailure(LeftoversCheckResult result) => result switch
@@ -369,7 +399,7 @@ public sealed class CombiningLeftoversPlugIn :
         return CombiningLeftoversStateWriter.ReadBag(player, isLocked);
     }
 
-    private async ValueTask TryDeliverOwedAsync(Player player)
+    private async ValueTask TryDeliverOwedAsync(Player player, bool atLogin = false)
     {
         if (player.SelectedCharacter is null)
         {
@@ -388,6 +418,29 @@ public sealed class CombiningLeftoversPlugIn :
         var deliveredCount = 0;
         foreach (var reward in owed)
         {
+            if (reward.PaidMarker is { } markerReference)
+            {
+                if (await player.PersistenceContext.GetCashShopCoinGrantByReferenceAsync(markerReference).ConfigureAwait(false) is not { } marker)
+                {
+                    if (atLogin)
+                    {
+                        // The save that took its materials never reached the database (a stop): they are still in the
+                        // saved bag, so the reward goes.
+                        player.Logger.LogWarning("Combining leftovers: the reward {Reference} of {Player} was dropped; its materials were never saved as taken.", reward.Reference, player.Name);
+                    }
+                    else
+                    {
+                        remaining.Add(reward);
+                    }
+
+                    continue;
+                }
+
+                // Paid for good: the marker has done its work.
+                reward.PaidMarker = null;
+                await player.PersistenceContext.DeleteAsync(marker).ConfigureAwait(false);
+            }
+
             if (await GiftCodeRewards.GiveGoodsAsync(player, reward).ConfigureAwait(false))
             {
                 deliveredCount++;

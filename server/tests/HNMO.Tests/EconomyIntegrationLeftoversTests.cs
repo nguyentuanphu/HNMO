@@ -6,9 +6,12 @@ namespace HNMO.Tests;
 
 using System.IO;
 using HNMO.DataModel;
+using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic;
+using HNMO.GameLogic.CashShop;
 using HNMO.GameLogic.PlugIns.CombiningLeftovers;
+using HNMO.GameLogic.PlugIns.GiftCodes;
 using HNMO.Persistence;
 using BasicModel = HNMO.Persistence.BasicModel;
 
@@ -20,6 +23,8 @@ using BasicModel = HNMO.Persistence.BasicModel;
 public class EconomyIntegrationLeftoversTests
 {
     private const string RecipeId = "test-mix";
+
+    private const string ExchangeId = "test-exchange";
 
     private static readonly byte FirstBagSlot = InventoryConstants.EquippableSlotsCount;
 
@@ -137,34 +142,120 @@ public class EconomyIntegrationLeftoversTests
     }
 
     /// <summary>
-    /// The materials are saved as taken before a waiting reward is written to the store: a stop in between can't give
-    /// the materials back while the reward is kept.
+    /// A reward that has to wait (full bag) carries a marker saved together with its materials, and is delivered once
+    /// that marker is in the database: at the next login with room, once.
     /// </summary>
     /// <returns>A task.</returns>
     [Test]
-    public async Task TheMaterialsAreSavedBeforeAWaitingRewardIsWrittenAsync()
+    public async Task AWaitingRewardIsDeliveredOnceItsMaterialsWereSavedAsync()
     {
-        var (plugIn, player, life, _) = await this.CreatePlayerAsync(outputWidth: 2).ConfigureAwait(false);
+        var (plugIn, player, life, output) = await this.CreatePlayerAsync(outputWidth: 2).ConfigureAwait(false);
         await AddAsync(player, life, FirstBagSlot, 5).ConfigureAwait(false);
-        var filler = new BasicModel.ItemDefinition { Group = 14, Number = 0, Width = 1, Height = 1, Durability = 1 };
-        player.GameContext.Configuration.Items.Add(filler);
-        for (var slot = FirstBagSlot + 1; slot < FirstBagSlot + 64; slot++)
-        {
-            await AddAsync(player, filler, (byte)slot, 1).ConfigureAwait(false);
-        }
-
+        var fillers = await FillBagAsync(player).ConfigureAwait(false);
         var characterId = player.SelectedCharacter!.GetId().ToString();
-        int? owedAtFirstSave = null;
+        string? markerAtSave = null;
+        var markerSavedWithMaterials = false;
         CashShopActionsTest.SaveFailingContext.Install(player, () =>
         {
-            owedAtFirstSave ??= PeekOwed(plugIn, characterId);
+            if (markerAtSave is null && TakeAndReturnOwed(plugIn, characterId) is [{ PaidMarker: { } marker }])
+            {
+                markerAtSave = marker;
+                markerSavedWithMaterials = player.Inventory!.Items.All(i => i.Definition != life);
+            }
+
             return false;
         });
 
         await plugIn.CombineAsync(player, RecipeId).ConfigureAwait(false);
 
-        Assert.That(owedAtFirstSave, Is.EqualTo(0), "the reward was written before the materials were saved");
-        Assert.That(PeekOwed(plugIn, characterId), Is.EqualTo(1));
+        Assert.That(markerAtSave, Is.Not.Null, "the waiting reward is written with its marker before the save");
+        Assert.That(markerSavedWithMaterials, Is.True, "the marker goes into the save without the materials");
+        Assert.That(TakeAndReturnOwed(plugIn, characterId), Has.Count.EqualTo(1), "the reward waits for room");
+
+        await FreeAsync(player, fillers).ConfigureAwait(false);
+        await plugIn.PlayerStateChangedAsync(player, PlayerState.EnteredWorld, PlayerState.EnteredWorld).ConfigureAwait(false);
+        await plugIn.PlayerStateChangedAsync(player, PlayerState.EnteredWorld, PlayerState.EnteredWorld).ConfigureAwait(false);
+
+        Assert.That(player.Inventory!.Items.Count(i => i.Definition == output), Is.EqualTo(1), "delivered once");
+        Assert.That(TakeAndReturnOwed(plugIn, characterId), Is.Empty);
+        Assert.That(await player.PersistenceContext.GetCashShopCoinGrantByReferenceAsync(markerAtSave!).ConfigureAwait(false), Is.Null, "the marker is removed");
+    }
+
+    /// <summary>
+    /// A waiting reward whose materials' save never reached the database (a stop before it: no marker) is dropped at the
+    /// next login, since the materials are still in the saved bag.
+    /// </summary>
+    /// <returns>A task.</returns>
+    [Test]
+    public async Task AWaitingRewardWhoseMaterialsWereNeverSavedIsDroppedAtLoginAsync()
+    {
+        var (plugIn, player, _, output) = await this.CreatePlayerAsync(outputWidth: 1).ConfigureAwait(false);
+        var characterId = player.SelectedCharacter!.GetId().ToString();
+        plugIn.GetEngine().Store.AddOwed(characterId, new GiftCodeOwedReward
+        {
+            Reference = "leftover-cb:test-mix:stopped",
+            Items = [new GiftCodeItem { Group = 13, Number = 90 }],
+            PaidMarker = "hnmo-leftovers-paid:leftover-cb:test-mix:stopped",
+        });
+
+        await plugIn.PlayerStateChangedAsync(player, PlayerState.EnteredWorld, PlayerState.EnteredWorld).ConfigureAwait(false);
+
+        Assert.That(player.Inventory!.Items.Count(i => i.Definition == output), Is.Zero);
+        Assert.That(TakeAndReturnOwed(plugIn, characterId), Is.Empty);
+    }
+
+    /// <summary>
+    /// The coins of a surplus exchange are a grant in the player's own save, with the materials: a failed save applies
+    /// none, and the next good save gives them once.
+    /// </summary>
+    /// <returns>A task.</returns>
+    [Test]
+    public async Task ExchangeCoinsGoIntoTheMaterialsSaveAsync()
+    {
+        var (plugIn, player, life, _) = await this.CreatePlayerAsync(outputWidth: 1).ConfigureAwait(false);
+        await AddAsync(player, life, FirstBagSlot, 5).ConfigureAwait(false);
+        var fails = true;
+        CashShopActionsTest.SaveFailingContext.Install(player, () => fails);
+
+        await plugIn.ExchangeAsync(player, ExchangeId).ConfigureAwait(false);
+        Assert.That(player.Account!.WCoinC, Is.Zero, "no coins while the materials aren't saved");
+
+        fails = false;
+        Assert.That(await player.SaveProgressAsync().ConfigureAwait(false), Is.True);
+        await player.ApplyPendingCashShopCoinGrantsAsync().ConfigureAwait(false);
+        await player.ApplyPendingCashShopCoinGrantsAsync().ConfigureAwait(false);
+
+        Assert.That(player.Account.WCoinC, Is.EqualTo(7), "given once");
+        Assert.That(player.Inventory!.Items.Where(i => i.Definition == life), Is.Empty);
+    }
+
+    private static List<GiftCodeOwedReward> TakeAndReturnOwed(CombiningLeftoversPlugIn plugIn, string characterId)
+    {
+        var store = plugIn.GetEngine().Store;
+        var owed = store.TakeOwed(characterId);
+        store.ReturnOwed(characterId, owed);
+        return owed;
+    }
+
+    private static async Task<List<Item>> FillBagAsync(Player player)
+    {
+        var filler = new BasicModel.ItemDefinition { Group = 14, Number = 0, Width = 1, Height = 1, Durability = 1 };
+        player.GameContext.Configuration.Items.Add(filler);
+        var items = new List<Item>();
+        for (var slot = FirstBagSlot + 1; slot < FirstBagSlot + 64; slot++)
+        {
+            items.Add(await AddAsync(player, filler, (byte)slot, 1).ConfigureAwait(false));
+        }
+
+        return items;
+    }
+
+    private static async Task FreeAsync(Player player, IEnumerable<Item> items)
+    {
+        foreach (var item in items)
+        {
+            await player.Inventory!.RemoveItemAsync(item).ConfigureAwait(false);
+        }
     }
 
     private static int PeekOwed(CombiningLeftoversPlugIn plugIn, string characterId)
@@ -201,7 +292,20 @@ public class EconomyIntegrationLeftoversTests
                 Inputs = [new LeftoverIngredient { Group = 14, Number = 16, Count = 5 }],
             },
         ],
-        ExchangeOffers = [],
+        ExchangeOffers =
+        [
+            new LeftoverExchangeOffer
+            {
+                Id = ExchangeId,
+                NameEn = "Test exchange",
+                NameVi = "Đổi thử",
+                InputGroup = 14,
+                InputNumber = 16,
+                InputCount = 5,
+                RewardCoins = 7,
+                RewardCoinType = CashShopCoinType.WCoinC,
+            },
+        ],
     };
 
     private CombiningLeftoversEngine CreateEngine(int outputWidth)

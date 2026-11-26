@@ -30,4 +30,11 @@ public sealed class GiftCodeOwedReward
 
     /// <summary>Gets or sets the items.</summary>
     public List<GiftCodeItem> Items { get; set; } = new();
+
+    /// <summary>
+    /// Gets or sets the reference of a marker saved together with what the reward was paid with (e.g. materials taken
+    /// from the bag), or <c>null</c>. A reward with a marker is delivered only once the marker is saved: without it, the
+    /// payment never reached the database.
+    /// </summary>
+    public string? PaidMarker { get; set; }
 }
