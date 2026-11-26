@@ -18,7 +18,7 @@ const name = (text) => [...new TextEncoder().encode(text.padEnd(10, '\0'))].slic
 const accepted = (partner) => new Uint8Array([0xc1, 16, 0x37, 1, ...name(partner), 0, 10]);
 const finished = () => new Uint8Array([0xc1, 4, 0x3d, 0]);
 
-function setUp() {
+function setUp({ confirm = async () => true } = {}) {
   const sent = [];
   let onPacket = () => undefined;
   const connection = { onPacket(fn) { onPacket = fn; return () => undefined; }, send(group, packet, fields) { sent.push({ packet, fields }); } };
@@ -33,10 +33,10 @@ function setUp() {
   const answers = [];
   const trade = new Trade({
     connection, inventory, itemWindows,
-    message() {}, confirm: async () => true,
+    message() {}, confirm,
     prompt: () => { const d = deferred(); answers.push(d); return d.promise; },
   });
-  return { trade, sent, feed: (bytes) => onPacket(bytes), answers, moneySent: () => sent.filter((s) => s.packet === 'SetTradeMoney') };
+  return { trade, sent, view, feed: (bytes) => onPacket(bytes), answers, moneySent: () => sent.filter((s) => s.packet === 'SetTradeMoney'), okSent: () => sent.filter((s) => s.packet === 'TradeButtonStateChange') };
 }
 
 test('an answer in the same trade puts the zen in', async () => {
@@ -72,4 +72,47 @@ test('an answer after the trade ended puts nothing in', async () => {
   answers[0].resolve('5000');
   await asking;
   assert.deepEqual(moneySent(), []);
+});
+
+const partnerGold = (amount) => new Uint8Array([0xc1, 8, 0x3b, 0, amount & 0xff, (amount >> 8) & 0xff, (amount >> 16) & 0xff, (amount >>> 24) & 0xff]);
+
+test('OK on the item-change warning confirms the trade it was shown in', async () => {
+  const box = deferred();
+  const { trade, feed, okSent } = setUp({ confirm: () => box.promise });
+  feed(accepted('Alice'));
+  await new Promise((r) => setTimeout(r, 0));
+  trade.alert = true;
+  const pressing = trade.pressOk();
+  box.resolve(true);
+  await pressing;
+  assert.equal(okSent().length, 1);
+});
+
+test('OK on a warning of an ended trade does not confirm the next trade, which is still in its wait', async () => {
+  const box = deferred();
+  const { trade, feed, view, okSent } = setUp({ confirm: () => box.promise });
+  feed(accepted('Alice'));
+  await new Promise((r) => setTimeout(r, 0));
+  trade.alert = true;
+  const pressing = trade.pressOk();
+  feed(finished());
+  feed(accepted('Bob'));
+  await new Promise((r) => setTimeout(r, 0));
+  view.waitUntil = performance.now() + 60_000; // trade B's wait after a change
+  box.resolve(true);
+  await pressing;
+  assert.deepEqual(okSent(), [], 'the old warning confirmed the new trade');
+});
+
+test('OK on a warning about an offer that changed meanwhile does not confirm', async () => {
+  const box = deferred();
+  const { trade, feed, okSent } = setUp({ confirm: () => box.promise });
+  feed(accepted('Alice'));
+  await new Promise((r) => setTimeout(r, 0));
+  trade.alert = true;
+  const pressing = trade.pressOk();
+  feed(partnerGold(25_000)); // the partner changed the zen while the warning was open
+  box.resolve(true);
+  await pressing;
+  assert.deepEqual(okSent(), [], 'the warning about the old offer confirmed the new one');
 });
