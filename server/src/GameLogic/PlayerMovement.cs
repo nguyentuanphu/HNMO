@@ -42,6 +42,11 @@ internal sealed class PlayerMovement : IDisposable
     private const double PositionLagSlack = 1.0;
 
     /// <summary>
+    /// The extra tile a client may be ahead on the server's own walk when it sends the next part of a long walk.
+    /// </summary>
+    private const double NextPartLead = 1.0;
+
+    /// <summary>
     /// The total distance of small position corrections (up to <see cref="NextTileDistance"/> each)
     /// which may stay uncharged to the walk speed check at a time.
     /// </summary>
@@ -542,7 +547,9 @@ internal sealed class PlayerMovement : IDisposable
 
         // A diagonal neighbour tile is always ~1.41 tiles away, e.g. when the client turns. The lag bound
         // is lower than that right after a step, so the rounding tolerance is the lower limit.
-        var maxOffset = Math.Max(NextTileDistance, isOnCurrentWalk ? this.GetMaxAllowedLagOffset() : this.GetMaxAllowedWalkStartOffset());
+        // On the server's own walk the client may be one step further ahead: it sends the next part of a long walk when
+        // it reaches the end of the previous one, while the server, a little behind, still walks towards that end.
+        var maxOffset = Math.Max(NextTileDistance, isOnCurrentWalk ? this.GetMaxAllowedLagOffset() + NextPartLead : this.GetMaxAllowedWalkStartOffset());
         if (offset > maxOffset)
         {
             this._player.Logger.LogWarning(
