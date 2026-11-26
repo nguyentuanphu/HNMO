@@ -40,7 +40,9 @@ while(TRUE)
   file(GET_RUNTIME_DEPENDENCIES
     EXECUTABLES "${EXE}"
     DIRECTORIES "${DLL_DIR}"
-    PRE_EXCLUDE_REGEXES "^api-ms-" "^ext-ms-"
+    # The Visual C++ runtime comes with its redistributable, never from vcpkg. The 32-bit cmake.exe that ships
+    # with Visual Studio sees SysWOW64 instead of System32 and cannot find the 64-bit VCRUNTIME140_1.dll there.
+    PRE_EXCLUDE_REGEXES "^api-ms-" "^ext-ms-" "^[Vv][Cc][Rr][Uu][Nn][Tt][Ii][Mm][Ee][0-9_]*\\.[Dd][Ll][Ll]$" "^[Mm][Ss][Vv][Cc][Pp][0-9_]*\\.[Dd][Ll][Ll]$"
     # Don't walk into the OS DLLs: that runs dumpbin on hundreds of files, and
     # their imports must never be shadowed by a same-named vcpkg DLL.
     POST_EXCLUDE_REGEXES "^[A-Za-z]:[/\\\\][Ww][Ii][Nn][Dd][Oo][Ww][Ss][/\\\\]"
