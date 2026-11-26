@@ -105,3 +105,36 @@ Your tasks now, in this order:
    as your "before" numbers; write both into #381.
 5. `small-ui-feedback.spec.ts:16` and `trade.spec.ts:48` (still red in most CI runs): reproduce and give the cause.
 Report in Vietnamese: done / not run / next, Sydney times.
+
+---
+
+# Round 5 (26 Nov, 21:30 Sydney): the six-item audit, the parts that need this PC
+
+You are local Claude for HNMO. Same rules (draft PRs into `claude/hnmo-main-handover-54co2m`, one per area, tests of
+what you touch, say what was run and what was not, no third-party names, heavy jobs through heavy.ps1).
+Main did in the cloud: #386 (Gens warp: an outlaw from PK level 2 pays 2x into a battle zone, 50x elsewhere; owner chose
+Warning x1, PK2+ x2 on 26 Nov), #400 (walk next part; walk-stall green in its CI run, red in every run without it),
+#404 and #407 (economy write order; coin undo gives back only what the shared store took), #409 (Season 9 item catalog
+race, stacked on #401), #410 (trade / vault zen boxes bound to their session).
+
+Your tasks:
+1. Gens warp (#386), desktop: `client/src/source/UI/HUD/MoveCommandWindow.cpp` shows the base cost
+   (`_ReqInfo.iReqZen`). Show what the server takes: an outlaw (Hero->PK >= PVP_MURDERER1) pays 50x, into the battle
+   zone (the strife index 42) 2x; the lock for outlaws stays as it is. Build and run the client's tests. Check in the
+   Season 9 data pack that `Local/Eng/MoveReq_eng.bmd` index 42 is Vulcanus at 15,000 Zen as in Season 6.3 (main
+   verified Season 6.3 only). In game (both seasons): Normal, Warning, PK2 and a murderer warp with /move to Vulcanus
+   and to Lorencia, with and without a gens, one zen short and exactly enough; write the zen before / after.
+2. Trade / vault (#410) in game: a trade zen box left open when the trade ends and a new trade opens; a vault zen box
+   open while the vault closes, the page changes or the map changes; Escape, keyboard and touch; zen and items on both
+   sides before and after. Then find why `trade.spec.ts:48` and `small-ui-feedback.spec.ts:16` stay red (a game dialog
+   that never shows).
+3. Desktop tests: from a clean checkout, configure the `windows-x64` preset with `-DBUILD_TESTING=ON`, build
+   `windows-x64-release`, run `ctest --test-dir out/build/windows-x64 -C Release --output-on-failure --output-junit
+   ctest-windows.xml`; keep `LastTest.log` and the JUnit file. Write the commit SHA, data root and the CMake / MSVC /
+   .NET / vcpkg / RmlUi versions, and the name of every failing test into a draft PR's body. Then the DeferredTcpPipe
+   cause (Program.cs:137 and :285; Linux passes 3/3) and the data tests (buffs 128/158 and the missing English text,
+   monsters 548/424 vs 547/423, tooltips 12/15 and 13/38, models (14,125), (14,134), (14,135), Book of Sahamutt +15
+   Strength with option 12/4, the Kris / Dark Wizard snapshot): for each, code, data or stale expectation, with evidence.
+4. #400 on this PC: run walk-stall, walk-resume and sound 5 times each on the working branch with #400 and without it,
+   normal and with the 3 s frame hold; write the hero's and the server's last cells and the server log lines.
+Report in Vietnamese: done / not run / next, Sydney times.
