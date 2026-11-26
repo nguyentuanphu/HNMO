@@ -54,6 +54,18 @@ public class GameFilesMissingLogTests
         Assert.That(files.ReportedMissing, Is.EquivalentTo(new[] { "Skill/flare.ktx2" }));
     }
 
+    [Test]
+    public async Task MissingPathsAreRememberedOnlyUpToTheLimit()
+    {
+        using var files = new GameFiles(Path.Combine(this._root, "served"));
+        for (var i = 0; i < GameFiles.MaximumReportedMissing + 50; i++)
+        {
+            await files.ServeAsync(new DefaultHttpContext(), $"Skill/missing{i}.ktx2");
+        }
+
+        Assert.That(files.ReportedMissing, Has.Count.EqualTo(GameFiles.MaximumReportedMissing));
+    }
+
     private sealed class ListLogger : ILogger
     {
         public List<(LogLevel Level, string Message)> Entries { get; } = [];

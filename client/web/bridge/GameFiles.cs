@@ -44,6 +44,9 @@ internal sealed class GameFiles : IDisposable
     // before the shared one, a texture beside its model before the Effect folder, optional files such as
     // Audio/Opus.json. Each such 404 is normal, so it is noted once per path at Debug level, not as a warning
     // per request (thousands of lines in the launcher log per play session).
+    /// <summary>The most missing paths remembered (and logged); the requested paths come from any visitor.</summary>
+    internal const int MaximumReportedMissing = 10_000;
+
     private readonly ConcurrentDictionary<string, byte> _reportedMissing = new(StringComparer.OrdinalIgnoreCase);
 
     public GameFiles(string root, ILogger? logger = null)
@@ -71,7 +74,8 @@ internal sealed class GameFiles : IDisposable
 
     private void ReportMissing(string relativePath)
     {
-        if (this._reportedMissing.TryAdd(relativePath, 0))
+        // The paths come from any visitor: past a limit nothing more is remembered, so the set can't grow without end.
+        if (this._reportedMissing.Count < MaximumReportedMissing && this._reportedMissing.TryAdd(relativePath, 0))
         {
             this._logger?.LogDebug("Data file not in the packs (the game may look elsewhere next): {Path}", relativePath);
         }
