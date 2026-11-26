@@ -83,10 +83,21 @@ public static class SeasonSharedAccounts
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns><c>true</c> if the shared balances were updated.</returns>
     public static async ValueTask<bool> SyncCoinsAsync(ISharedAccountStore? store, Account? account, CancellationToken cancellationToken = default)
+        => await TrySyncCoinsAsync(store, account, cancellationToken).ConfigureAwait(false) is not null;
+
+    /// <summary>
+    /// Like <see cref="SyncCoinsAsync"/>, but returns what the sync did, so a caller whose own save fails afterwards can
+    /// take it back with <see cref="UndoCoinSyncAsync"/> (the shared store must not keep a fee whose benefit was not saved).
+    /// </summary>
+    /// <param name="store">The shared store, or <c>null</c> (Season 6.3).</param>
+    /// <param name="account">The account of the player being saved.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The receipt, or <c>null</c> if the shared balances were not updated.</returns>
+    public static async ValueTask<CoinSyncReceipt?> TrySyncCoinsAsync(ISharedAccountStore? store, Account? account, CancellationToken cancellationToken = default)
     {
         if (store is null || account is null || account.IsBot || account.IsTemplate || string.IsNullOrEmpty(account.LoginName))
         {
-            return false;
+            return null;
         }
 
         var syncLock = SyncLocks.GetOrAdd(account.LoginName, static _ => new SemaphoreSlim(1, 1));
@@ -95,10 +106,11 @@ public static class SeasonSharedAccounts
         {
             var snapshot = CoinBalances.Of(account);
             var baseline = Baselines.TryGetValue(account.LoginName, out var known) ? known : snapshot;
-            var result = await store.AddCoinsAsync(account.LoginName, snapshot - baseline, cancellationToken).ConfigureAwait(false);
+            var delta = snapshot - baseline;
+            var result = await store.AddCoinsAsync(account.LoginName, delta, cancellationToken).ConfigureAwait(false);
             if (result is not { } shared)
             {
-                return false;
+                return null;
             }
 
             var inFlightDelta = CoinBalances.Of(account) - snapshot;
@@ -107,7 +119,41 @@ public static class SeasonSharedAccounts
                 shared.WCoinP + inFlightDelta.WCoinP,
                 shared.GoblinPoints + inFlightDelta.GoblinPoints).ApplyTo(account);
             Baselines[account.LoginName] = shared;
-            return true;
+            return new CoinSyncReceipt(account.LoginName, delta, baseline, shared - snapshot);
+        }
+        finally
+        {
+            syncLock.Release();
+        }
+    }
+
+    /// <summary>
+    /// Takes back a sync whose caller could not save its own progress: the change goes out of the shared store again, the
+    /// account loses what the sync took over from the shared balances, and the baseline goes back, so the next sync sends
+    /// the change again (once).
+    /// </summary>
+    /// <param name="store">The shared store.</param>
+    /// <param name="account">The account that was synced.</param>
+    /// <param name="receipt">What the sync did.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task.</returns>
+    public static async ValueTask UndoCoinSyncAsync(ISharedAccountStore store, Account account, CoinSyncReceipt receipt, CancellationToken cancellationToken = default)
+    {
+        var syncLock = SyncLocks.GetOrAdd(receipt.LoginName, static _ => new SemaphoreSlim(1, 1));
+        await syncLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            if (receipt.Delta != default)
+            {
+                var back = new CoinBalances(-receipt.Delta.WCoinC, -receipt.Delta.WCoinP, -receipt.Delta.GoblinPoints);
+                if (await store.AddCoinsAsync(receipt.LoginName, back, cancellationToken).ConfigureAwait(false) is null)
+                {
+                    return;
+                }
+            }
+
+            (CoinBalances.Of(account) - receipt.Shift).ApplyTo(account);
+            Baselines[receipt.LoginName] = receipt.PreviousBaseline;
         }
         finally
         {
@@ -118,3 +164,10 @@ public static class SeasonSharedAccounts
     /// <summary>Forgets what was taken (tests).</summary>
     internal static void Reset() => Baselines.Clear();
 }
+
+/// <summary>What one <see cref="SeasonSharedAccounts.TrySyncCoinsAsync"/> did, to take it back if the caller's save fails.</summary>
+/// <param name="LoginName">The login name.</param>
+/// <param name="Delta">The change that was added to the shared store.</param>
+/// <param name="PreviousBaseline">The baseline before the sync.</param>
+/// <param name="Shift">What the account took over from the shared balances (shared balance after the change minus the account's own balance).</param>
+public readonly record struct CoinSyncReceipt(string LoginName, CoinBalances Delta, CoinBalances PreviousBaseline, CoinBalances Shift);
