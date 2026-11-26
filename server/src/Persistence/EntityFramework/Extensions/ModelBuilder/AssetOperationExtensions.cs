@@ -28,12 +28,12 @@ internal static class AssetOperationExtensions
     }
 
     /// <summary>
-    /// Applies the settings for the <see cref="AssetOperation"/> entity; its key is the caller's operation identifier.
+    /// Applies the settings for the <see cref="AssetOperation"/> entity; its key is the caller's operation identifier
+    /// (generated only when none is given).
     /// </summary>
     /// <param name="builder">The builder.</param>
     public static void Apply(this EntityTypeBuilder<AssetOperation> builder)
     {
-        builder.Property(operation => operation.Id).ValueGeneratedNever();
         builder.Property(operation => operation.Kind).HasMaxLength(64);
         builder.Property(operation => operation.PayloadHash).HasMaxLength(128);
         builder.Property(operation => operation.Source).HasMaxLength(32);

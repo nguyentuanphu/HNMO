@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HNMO.Persistence.EntityFramework.Migrations
 {
     [DbContext(typeof(HNMO.Persistence.EntityFramework.EntityDataContext))]
-    [Migration("20261126120907_AddJewelBankBalancesAndAssetOperations")]
+    [Migration("20261126132627_AddJewelBankBalancesAndAssetOperations")]
     partial class AddJewelBankBalancesAndAssetOperations
     {
         /// <inheritdoc />

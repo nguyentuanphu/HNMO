@@ -397,6 +397,7 @@ internal class EntityFrameworkContextBase : IContext, IConfigurationEditContext
                 return false;
             }
 
+            await AssetOperationTestBarrier.ReachAsync("before-save", cancellationToken).ConfigureAwait(false);
             try
             {
                 await context.SaveChangesAsync(acceptAllChangesOnSuccess: false, cancellationToken).ConfigureAwait(false);
@@ -407,7 +408,9 @@ internal class EntityFrameworkContextBase : IContext, IConfigurationEditContext
                 throw new PersistenceConflictException(exception);
             }
 
+            await AssetOperationTestBarrier.ReachAsync("before-commit", cancellationToken).ConfigureAwait(false);
             await transaction.CommitAsync(cancellationToken).ConfigureAwait(false);
+            await AssetOperationTestBarrier.ReachAsync("after-commit", cancellationToken).ConfigureAwait(false);
             context.ChangeTracker.AcceptAllChanges();
             return true;
         }

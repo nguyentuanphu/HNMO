@@ -12,7 +12,7 @@ namespace HNMO.Persistence.EntityFramework.CompiledModels.ForEntityDataContext
     public partial class EntityDataContextModel
     {
         private EntityDataContextModel()
-            : base(skipDetectChanges: false, modelId: new Guid("f633e61b-48a3-45b9-9c83-26f0f80f27dd"), entityTypeCount: 131)
+            : base(skipDetectChanges: false, modelId: new Guid("075c1dc4-b15f-400b-88fe-b82fde54411d"), entityTypeCount: 131)
         {
         }
 

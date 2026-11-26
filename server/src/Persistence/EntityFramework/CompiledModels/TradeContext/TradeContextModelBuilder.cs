@@ -12,7 +12,7 @@ namespace HNMO.Persistence.EntityFramework.CompiledModels.ForTradeContext
     public partial class TradeContextModel
     {
         private TradeContextModel()
-            : base(skipDetectChanges: false, modelId: new Guid("6ed176cb-3edb-4a18-a089-083a9e218fbd"), entityTypeCount: 50)
+            : base(skipDetectChanges: false, modelId: new Guid("f9bda505-f6a9-40af-a115-3ec17e685720"), entityTypeCount: 50)
         {
         }
 
