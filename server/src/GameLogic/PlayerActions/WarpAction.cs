@@ -22,6 +22,11 @@ public class WarpAction
     private const int PlayerKillerCostsMultiplier = 50;
 
     /// <summary>
+    /// The multiplier of the warp costs for outlaws from PK level 2 up into a battle zone of the gens (owner, 26 Nov 2026).
+    /// </summary>
+    private const int BattleZoneOutlawCostsMultiplier = 2;
+
+    /// <summary>
     /// Warps the player.
     /// </summary>
     /// <param name="player">The player.</param>
@@ -70,11 +75,20 @@ public class WarpAction
     /// <param name="player">The player.</param>
     /// <param name="warpInfo">The warp information.</param>
     /// <returns>The costs in zen.</returns>
-    private static int GetCosts(Player player, WarpInfo warpInfo)
+    internal static int GetCosts(Player player, WarpInfo warpInfo)
     {
-        return player.SelectedCharacter?.State >= HeroState.PlayerKiller1stStage
-            ? warpInfo.Costs * PlayerKillerCostsMultiplier
-            : warpInfo.Costs;
+        if (player.SelectedCharacter?.State < HeroState.PlayerKiller1stStage || player.SelectedCharacter is null)
+        {
+            return warpInfo.Costs;
+        }
+
+        // Into a battle zone of the gens an outlaw pays twice the costs instead (owner, 26 Nov 2026, audit Q8); leaving
+        // it, or any other map, keeps the 50 times. Without the gens system there is no battle zone.
+        return warpInfo.Gate?.Map is { } map
+               && HNMO.GameLogic.Gens.GensFeaturePlugIn.GetConfiguration(player.GameContext) is { } gens
+               && gens.IsBattleZone(map.Number)
+            ? warpInfo.Costs * BattleZoneOutlawCostsMultiplier
+            : warpInfo.Costs * PlayerKillerCostsMultiplier;
     }
 
     private bool CheckRequirements(Player player, WarpInfo warpInfo, [MaybeNullWhen(true)] out string errorMessage)

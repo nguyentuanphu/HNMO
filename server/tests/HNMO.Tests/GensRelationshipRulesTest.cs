@@ -91,6 +91,36 @@ public class GensRelationshipRulesTest
     }
 
     /// <summary>
+    /// Tests the defaults of the owner's decision of 26 Nov 2026: guilds and alliances need the same gens, and the
+    /// normal chat is hidden from the opposite gens.
+    /// </summary>
+    [Test]
+    public void DefaultsKeepTheGensApart()
+    {
+        var configuration = new GensConfiguration();
+        Assert.That(configuration.GuildRequiresGens, Is.True);
+        Assert.That(configuration.AllianceRequiresSameGens, Is.True);
+        Assert.That(configuration.CanSeeOppositeGensChat, Is.False);
+    }
+
+    /// <summary>
+    /// Tests which observers the normal chat of a gens member is hidden from.
+    /// </summary>
+    /// <param name="hide">Whether the chat is hidden from the opposite gens.</param>
+    /// <param name="senderGens">The gens of the sender.</param>
+    /// <param name="observerGens">The gens of the observer.</param>
+    /// <param name="hidden">Whether the observer must not see the message.</param>
+    [TestCase(true, GensType.Duprian, GensType.Vanert, true)]
+    [TestCase(true, GensType.Duprian, GensType.Duprian, false)]
+    [TestCase(true, GensType.Duprian, GensType.None, false)]
+    [TestCase(true, GensType.None, GensType.Vanert, false)]
+    [TestCase(false, GensType.Duprian, GensType.Vanert, false)]
+    public void NormalChatIsHiddenFromTheOppositeGens(bool hide, GensType senderGens, GensType observerGens, bool hidden)
+    {
+        Assert.That(HNMO.GameLogic.PlayerActions.Chat.ChatMessageNormalProcessor.IsOppositeGens(hide, senderGens, observerGens), Is.EqualTo(hidden));
+    }
+
+    /// <summary>
     /// Tests that a player can only join the guild of a guild master of the same gens.
     /// </summary>
     /// <param name="requesterGens">The gens of the requesting player.</param>

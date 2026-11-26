@@ -2,7 +2,7 @@
 // zen; a click on a map the hero may enter warps there (WarpCommandRequest with the server's key).
 
 import { openDocument, type RmlDocument, type RmlModel } from './rml.js';
-import { canWarp, loadWarps, warpLevel, type Warp, type WarpCheck } from '../game/warps.js';
+import { BATTLE_ZONE_WARP_INDEX, canWarp, loadWarps, warpCost, warpLevel, type Warp, type WarpCheck } from '../game/warps.js';
 import { nativeTextPx, uiScale } from './nativeText.js';
 
 interface Row { index: number; strife_text: string; map_name: string; req_level: string; req_zen: string; can_move: boolean; level_unmet: boolean; zen_unmet: boolean }
@@ -66,9 +66,11 @@ export class MoveWindow {
     const check = this.actions.check();
     this.model.rows = this.warps.map((warp) => {
       const level = warpLevel(warp, check.classIndex);
+      // The zen the server takes (an outlaw pays more), not the list's base costs.
+      const zen = warpCost(warp, check.outlaw);
       return {
-        index: warp.index, strife_text: warp.index === 42 ? '*' : '', map_name: warp.mapName, req_level: String(level), req_zen: String(warp.zen),
-        can_move: canWarp(warp, check), level_unmet: level > check.level, zen_unmet: warp.zen > check.money,
+        index: warp.index, strife_text: warp.index === BATTLE_ZONE_WARP_INDEX ? '*' : '', map_name: warp.mapName, req_level: String(level), req_zen: String(zen),
+        can_move: canWarp(warp, check), level_unmet: level > check.level, zen_unmet: zen > check.money,
       };
     });
     this.doc.update();

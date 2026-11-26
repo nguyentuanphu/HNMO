@@ -48,6 +48,15 @@ test('CharacterStats tracks initial HeroState and HeroStateChanged packet for se
   );
 });
 
+test('warpCost: the zen the server takes (base, 50x for outlaws, 2x for outlaws into the battle zone)', () => {
+  const lorencia = { index: 1, mapName: 'Lorencia', subName: '', level: 10, maxLevel: 400, zen: 2000, gate: 17 };
+  const vulcanus = { index: 42, mapName: 'Vulcanus', subName: '', level: 30, maxLevel: 400, zen: 15000, gate: 294 };
+  assert.equal(warpsMod.warpCost(lorencia, false), 2000);
+  assert.equal(warpsMod.warpCost(lorencia, true), 100000);
+  assert.equal(warpsMod.warpCost(vulcanus, false), 15000);
+  assert.equal(warpsMod.warpCost(vulcanus, true), 30000);
+});
+
 test('Inventory.countFreeBagCells counts base bag plus unlocked inventory extensions', () => {
   const fakeConnection = { onPacket: () => () => {} };
   const inv = new invMod.Inventory(fakeConnection);
