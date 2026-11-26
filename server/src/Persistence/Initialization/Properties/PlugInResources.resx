@@ -494,4 +494,6 @@
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>Adds the 10 Season 9 maps, terrain files, gates (417-461, 474-482), and Season 9 field spawns when running as Season 9.</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: Moss the Merchant gamble shop</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>Adds the 5 Moss gamble vouchers (13-71..75) at 2,000,000 Zen and equips Moss the Merchant (492) with his gamble shop when empty.</value></data>
+  <data name="AddChaosCardMixesUpdatePlugIn_Name" xml:space="preserve"><value>Add Chaos Card items and mixes</value></data>
+  <data name="AddChaosCardMixesUpdatePlugIn_Description" xml:space="preserve"><value>Adds the four Chaos Cards (14-54, 14-92, 14-93, 14-95), wires the Chaos Card Master combination (MixType 40), and activates their in-game shop packages.</value></data>
 </root>
