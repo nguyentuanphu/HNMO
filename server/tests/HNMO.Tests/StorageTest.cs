@@ -112,6 +112,38 @@ public class StorageTest
         Assert.That(storage.FreeSlots.Contains((byte)(12 + (7 * 8))), Is.True);
     }
 
+    /// <summary>
+    /// Tests that when <see cref="Storage.TryTakeAllAsync"/> fails partway and rolls back,
+    /// existing items already residing in the destination storage are never evicted.
+    /// </summary>
+    [Test]
+    public async ValueTask TryTakeAllRollbackPreservesExistingDestinationItemsAsync()
+    {
+        var destStorage = new Storage(12 + 64, 12, 0, this.CreateItemStorage());
+        var existingAt13 = this.GetItem(1, 1);
+        Assert.That(await destStorage.AddItemAsync(13, existingAt13).ConfigureAwait(false), Is.True);
+
+        // Fill slots 14..75 so only slot 12 remains free in destStorage.
+        for (byte slot = 14; slot < 12 + 64; slot++)
+        {
+            Assert.That(await destStorage.AddItemAsync(slot, this.GetItem(1, 1)).ConfigureAwait(false), Is.True);
+        }
+
+        var sourceStorage = new Storage(12 + 64, 12, 0, this.CreateItemStorage());
+        var source12 = this.GetItem(1, 1);
+        var source13 = this.GetItem(1, 1);
+        Assert.That(await sourceStorage.AddItemAsync(12, source12).ConfigureAwait(false), Is.True);
+        Assert.That(await sourceStorage.AddItemAsync(13, source13).ConfigureAwait(false), Is.True);
+
+        var ok = await destStorage.TryTakeAllAsync(sourceStorage).ConfigureAwait(false);
+
+        Assert.That(ok, Is.False);
+        Assert.That(destStorage.GetItem(13), Is.SameAs(existingAt13));
+        Assert.That(destStorage.FreeSlots.Contains((byte)13), Is.False);
+        Assert.That(sourceStorage.GetItem(12), Is.SameAs(source12));
+        Assert.That(sourceStorage.GetItem(13), Is.SameAs(source13));
+    }
+
     private ItemDefinition GetItemDefintion(byte width, byte heigth)
     {
         var itemDefinition = new ItemDefinition
