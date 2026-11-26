@@ -39,6 +39,7 @@ public partial class NavMenu : IDisposable
 
     private static readonly HashSet<string> DropdownHandledRoutes = new(StringComparer.OrdinalIgnoreCase)
     {
+        "seasons",
         "setup",
         "config-updates",
         "config-captions",
