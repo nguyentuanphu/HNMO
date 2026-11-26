@@ -7309,7 +7309,7 @@
   <data name="There is no deletable item." xml:space="preserve">
     <value>沒有可刪除的項目。</value>
   </data>
-  <data name="Cannot open MU Item Shop.#Please reconnect to the game." xml:space="preserve">
+  <data name="Cannot open the Item Shop.#Please reconnect to the game." xml:space="preserve">
     <value>無法開啟MU物品商店。 #請重新連接遊戲。</value>
   </data>
   <data name="Cannot use the selected item." xml:space="preserve">
@@ -7354,7 +7354,7 @@
   <data name="W Coin: %s Coins" xml:space="preserve">
     <value>W幣：%s幣</value>
   </data>
-  <data name="You can only open MU Item Shop in a town or safe zone." xml:space="preserve">
+  <data name="You can only open the Item Shop in a town or safe zone." xml:space="preserve">
     <value>您只能在城鎮或安全區開設 MU 物品商店。</value>
   </data>
   <data name="This item cannot be bought." xml:space="preserve">
