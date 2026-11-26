@@ -128,12 +128,56 @@ else
         </div>
     </section>
 
+    <section class="card mb-3" id="jb-import">
+        <div class="card-body">
+            <h2 class="h5">@Resources.JewelBankImportHeading</h2>
+            <p class="text-muted mb-2">@Resources.JewelBankImportDescription</p>
+            @if (this._importPreview is { } preview)
+            {
+                <div class="small mb-2">
+                    <div><strong>@Resources.JewelBankImportChecksum:</strong> <code>@preview.InputChecksum</code></div>
+                    <div>
+                        <strong>@Resources.JewelBankImportWouldImport:</strong> @preview.WouldImport.Count
+                        &nbsp;|&nbsp;
+                        <strong>@Resources.JewelBankImportAlready:</strong> @preview.AlreadyImported
+                        &nbsp;|&nbsp;
+                        <strong>@Resources.JewelBankImportConflicts:</strong> @preview.Conflicts.Count
+                        &nbsp;|&nbsp;
+                        <strong>@Resources.JewelBankImportUnknownAccounts:</strong> @preview.UnknownAccounts.Count
+                    </div>
+                    @if (preview.JsonTotals.Count > 0)
+                    {
+                        <div><strong>@Resources.JewelBankImportTotals:</strong> @string.Join(", ", preview.JsonTotals.Select(kv => $"{kv.Key}: {kv.Value}"))</div>
+                    }
+                    @if (preview.JsonPending.Count > 0)
+                    {
+                        <div><strong>@Resources.JewelBankImportPending:</strong> @string.Join(", ", preview.JsonPending.Select(kv => $"{kv.Key}: {kv.Value}"))</div>
+                    }
+                    @if (preview.WouldImport.Count > 0)
+                    {
+                        <ul class="mt-1 mb-0">
+                            @foreach (var line in preview.WouldImport.Take(20))
+                            {
+                                <li><code>@line</code></li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <div class="text-muted">@Resources.JewelBankImportNothing</div>
+                    }
+                </div>
+            }
+            <button type="button" class="btn btn-outline-primary btn-sm" id="jb-run-import" disabled="@this._isImporting" @onclick="this.RunImportAsync" title="@Resources.JewelBankImportRunHint">@Resources.JewelBankImportRunButton</button>
+        </div>
+    </section>
+
     <section class="card" id="jb-log">
         <div class="card-body">
-            <h2 class="h5">@L("Recent Jewel Bank activity (Sydney time)", "Nhật ký Ngân hàng ngọc (giờ Sydney)")</h2>
-            @if (this._log.Count == 0)
+            <h2 class="h5">@Resources.JewelBankReceiptsHeading</h2>
+            @if (this._receipts.Count == 0)
             {
-                <p class="text-muted mb-0">@L("No activity recorded yet.", "Chưa có giao dịch nào.")</p>
+                <p class="text-muted mb-0">@Resources.JewelBankReceiptsEmpty</p>
             }
             else
             {
@@ -141,23 +185,23 @@ else
                     <table class="table table-sm align-middle">
                         <thead>
                             <tr>
-                                <th>@L("Time (Sydney)", "Thời gian")</th>
-                                <th>@L("Account", "Tài khoản")</th>
-                                <th>@L("Action", "Thao tác")</th>
-                                <th>@L("Detail", "Chi tiết")</th>
-                                <th>@L("Amount", "Số lượng")</th>
-                                <th>@L("Source", "Nguồn")</th>
+                                <th>@Resources.JewelBankColTime</th>
+                                <th>@Resources.JewelBankColAccount</th>
+                                <th>@Resources.JewelBankColKind</th>
+                                <th>@Resources.JewelBankColDetail</th>
+                                <th>@Resources.JewelBankColPending</th>
+                                <th>@Resources.JewelBankColSource</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var entry in this._log)
+                            @foreach (var entry in this._receipts)
                             {
                                 <tr>
-                                    <td>@SydneyTime(entry.AtUtc)</td>
+                                    <td>@SydneyTime(entry.CreatedAt)</td>
                                     <td>@entry.LoginName</td>
-                                    <td>@entry.Action</td>
-                                    <td>@entry.Detail</td>
-                                    <td>@entry.Amount</td>
+                                    <td>@entry.Kind</td>
+                                    <td><code>@entry.Detail</code></td>
+                                    <td>@(entry.PendingCount > 0 && entry.PendingKey is not null ? $"{entry.PendingKey} × {entry.PendingCount}" : "-")</td>
                                     <td>@entry.Source</td>
                                 </tr>
                             }

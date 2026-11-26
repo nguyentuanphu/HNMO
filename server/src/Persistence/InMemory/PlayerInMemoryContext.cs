@@ -257,6 +257,34 @@ public class PlayerInMemoryContext : InMemoryContext, IPlayerContext
     }
 
     /// <inheritdoc />
+    public async ValueTask<IReadOnlyList<AssetOperationSummary>> GetRecentAssetOperationsAsync(int maximumCount, IReadOnlyCollection<string>? kinds = null, CancellationToken cancellationToken = default)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThan(maximumCount, 1);
+        var operations = await this.Provider.GetRepository<AssetOperation>().GetAllAsync(cancellationToken).ConfigureAwait(false);
+        var accounts = (await this.Provider.GetRepository<Account>().GetAllAsync(cancellationToken).ConfigureAwait(false))
+            .OfType<IIdentifiable>()
+            .ToDictionary(a => a.Id, a => ((Account)a).LoginName);
+
+        var kindFilter = kinds is { Count: > 0 } ? new HashSet<string>(kinds, StringComparer.OrdinalIgnoreCase) : null;
+        return operations
+            .Where(operation => kindFilter is null || kindFilter.Contains(operation.Kind))
+            .OrderByDescending(operation => operation.CreatedAt)
+            .ThenByDescending(operation => operation.Id)
+            .Take(maximumCount)
+            .Select(operation => new AssetOperationSummary(
+                operation.Id,
+                operation.AccountId,
+                accounts.GetValueOrDefault(operation.AccountId) ?? operation.AccountId.ToString("N"),
+                operation.Kind,
+                operation.Detail,
+                operation.PendingKey,
+                operation.PendingCount,
+                operation.Source,
+                operation.CreatedAt))
+            .ToList();
+    }
+
+    /// <inheritdoc />
     public async ValueTask<AssetCommitStatus> SaveChangesWithAssetOperationAsync(AssetOperationRequest request, CancellationToken cancellationToken = default)
     {
         // Everything is checked first and written after the save, under the lock all contexts of this database share:

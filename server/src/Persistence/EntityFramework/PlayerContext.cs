@@ -426,6 +426,42 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext
     }
 
     /// <inheritdoc />
+    public async ValueTask<IReadOnlyList<AssetOperationSummary>> GetRecentAssetOperationsAsync(int maximumCount, IReadOnlyCollection<string>? kinds = null, CancellationToken cancellationToken = default)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThan(maximumCount, 1);
+        using var l = await this.LockAsync(cancellationToken).ConfigureAwait(false);
+        var query = this.Context.Set<AssetOperation>().AsNoTracking();
+        if (kinds is { Count: > 0 })
+        {
+            query = query.Where(operation => kinds.Contains(operation.Kind));
+        }
+
+        var rows = await (from operation in query
+                          join account in this.Context.Set<Account>().AsNoTracking() on operation.AccountId equals account.Id into accounts
+                          from account in accounts.DefaultIfEmpty()
+                          orderby operation.CreatedAt descending, operation.Id descending
+                          select new
+                          {
+                              operation.Id,
+                              operation.AccountId,
+                              LoginName = account != null ? account.LoginName : operation.AccountId.ToString("N"),
+                              operation.Kind,
+                              operation.Detail,
+                              operation.PendingKey,
+                              operation.PendingCount,
+                              operation.Source,
+                              operation.CreatedAt,
+                          })
+            .Take(maximumCount)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+
+        return rows
+            .Select(r => new AssetOperationSummary(r.Id, r.AccountId, r.LoginName, r.Kind, r.Detail, r.PendingKey, r.PendingCount, r.Source, r.CreatedAt))
+            .ToList();
+    }
+
+    /// <inheritdoc />
     public async ValueTask<AssetCommitStatus> SaveChangesWithAssetOperationAsync(AssetOperationRequest request, CancellationToken cancellationToken = default)
     {
         var status = AssetCommitStatus.Refused;

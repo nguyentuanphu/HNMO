@@ -3025,4 +3025,67 @@
   <data name="SeasonsRestartSent" xml:space="preserve">
     <value>已发送重启请求，请在几秒后刷新此页面。</value>
   </data>
+  <data name="JewelBankReceiptsHeading" xml:space="preserve">
+    <value>宝石银行近期数据库回执（悉尼时间）</value>
+  </data>
+  <data name="JewelBankReceiptsEmpty" xml:space="preserve">
+    <value>尚无数据库回执记录。</value>
+  </data>
+  <data name="JewelBankColTime" xml:space="preserve">
+    <value>时间（悉尼）</value>
+  </data>
+  <data name="JewelBankColAccount" xml:space="preserve">
+    <value>账号</value>
+  </data>
+  <data name="JewelBankColKind" xml:space="preserve">
+    <value>类型</value>
+  </data>
+  <data name="JewelBankColDetail" xml:space="preserve">
+    <value>详情</value>
+  </data>
+  <data name="JewelBankColPending" xml:space="preserve">
+    <value>待发放</value>
+  </data>
+  <data name="JewelBankColSource" xml:space="preserve">
+    <value>来源</value>
+  </data>
+  <data name="JewelBankImportHeading" xml:space="preserve">
+    <value>旧版 JSON 数据导入数据库</value>
+  </data>
+  <data name="JewelBankImportDescription" xml:space="preserve">
+    <value>对比数据库回执后，对旧版 JSON 宝石银行余额与待领取提现的试运行（dry-run）报告。</value>
+  </data>
+  <data name="JewelBankImportChecksum" xml:space="preserve">
+    <value>输入校验和</value>
+  </data>
+  <data name="JewelBankImportWouldImport" xml:space="preserve">
+    <value>待导入</value>
+  </data>
+  <data name="JewelBankImportAlready" xml:space="preserve">
+    <value>已导入</value>
+  </data>
+  <data name="JewelBankImportConflicts" xml:space="preserve">
+    <value>冲突</value>
+  </data>
+  <data name="JewelBankImportUnknownAccounts" xml:space="preserve">
+    <value>未知账号</value>
+  </data>
+  <data name="JewelBankImportTotals" xml:space="preserve">
+    <value>JSON 总计</value>
+  </data>
+  <data name="JewelBankImportPending" xml:space="preserve">
+    <value>JSON 待领取</value>
+  </data>
+  <data name="JewelBankImportRunButton" xml:space="preserve">
+    <value>执行导入数据库</value>
+  </data>
+  <data name="JewelBankImportRunHint" xml:space="preserve">
+    <value>将尚未迁移的 JSON 宝石银行余额与待领取提现幂等导入 PostgreSQL 数据库。</value>
+  </data>
+  <data name="JewelBankImportDone" xml:space="preserve">
+    <value>宝石银行导入完成：新导入 {0} 项，已存在 {1} 项，冲突 {2} 项。</value>
+  </data>
+  <data name="JewelBankImportNothing" xml:space="preserve">
+    <value>没有待导入的 JSON 记录。</value>
+  </data>
 </root>

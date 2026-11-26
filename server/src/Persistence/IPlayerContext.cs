@@ -264,6 +264,15 @@ public interface IPlayerContext : IContext
     ValueTask<IReadOnlyList<AssetOperation>> GetPendingAssetOperationsAsync(Guid accountId, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Gets recent committed asset operations, newest first, optionally filtered by <paramref name="kinds"/> (not tracked).
+    /// </summary>
+    /// <param name="maximumCount">The maximum number of receipts to return.</param>
+    /// <param name="kinds">Optional operation kinds filter; when empty or <c>null</c>, returns all kinds.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>Recent receipts with their account login names.</returns>
+    ValueTask<IReadOnlyList<AssetOperationSummary>> GetRecentAssetOperationsAsync(int maximumCount, IReadOnlyCollection<string>? kinds = null, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Saves the context's changes together with an asset operation in one database transaction: its receipt, its
     /// relative balance changes and its delivery are written, or nothing is. A second attempt with the same identifier
     /// reports <see cref="AssetCommitStatus.AlreadyCommitted"/> or <see cref="AssetCommitStatus.Conflict"/> and writes
