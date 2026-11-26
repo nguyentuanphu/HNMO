@@ -64,15 +64,15 @@ All remaining Season 9 work will ship in **three implementation draft PRs** (Par
 **Goal:** Implement the remaining Season 9 core gameplay systems on server and web client, behind season checks and host settings.
 
 1. **Muun Pet System**
-   - Sub-inventory / Muun equipment slots (`main` & `sub`), `IGC_MuunInfo` (`76` Muun entries), option scaling (`IGC_MuunOption`), Muun exchange (`IGC_MuunExchange`), evolution via Evolution Stone / Muun Energy Converter (`13:239`), server stat application & persistence, and web UI Muun window + in-world companion rendering.
+   - Sub-inventory / Muun equipment slots (`main` & `sub`), the suite's Muun list (`76` Muun entries), option scaling (its Muun option table), Muun exchange (its Muun exchange table), evolution via Evolution Stone / Muun Energy Converter (`13:239`), server stat application & persistence, and web UI Muun window + in-world companion rendering.
 2. **Pentagram / Elemental System**
-   - Elemental affinity attribute (`Fire`, `Water`, `Earth`, `Wind`, `Darkness`), Pentagram equip slot (`236`) and Errtel socket slots (Anger, Blessing, Integrity, Divinity, Gale), `IGC_PentagramOption` / `IGC_PentagramJewelOptionValue` scaling, Errtel mix & extraction rates (`IGC_PentagramMixNeedSource`, `IGC_PentagramJewelOutRate`), elemental damage & resistance calculations (PvP/PvE elemental advantage matrix & monster elemental attributes in Acheron/Debenter/Uruk Mountain), and web tooltip/UI display.
+   - Elemental affinity attribute (`Fire`, `Water`, `Earth`, `Wind`, `Darkness`), Pentagram equip slot (`236`) and Errtel socket slots (Anger, Blessing, Integrity, Divinity, Gale), its Pentagram option table / its Errtel option values scaling, Errtel mix & extraction rates (its Errtel mix sources, its Errtel extraction rates), elemental damage & resistance calculations (PvP/PvE elemental advantage matrix & monster elemental attributes in Acheron/Debenter/Uruk Mountain), and web tooltip/UI display.
 3. **Four Season 9-Only Skills (`618-621`)**
    - `618 Spell of Protection`, `619 Spell of Restriction`, `620 Spell of Pursuit`, `621 Shield-Burn` — server skill & effect definitions, learn/cast rules, cooldown/duration/shield-burn mechanics, client/web skill catalog entries and cast animations/effects.
 4. **330-Level Master Tree**
    - Season 9 Master Level cap `330` (vs Season 6 cap `200`) controlled by `HnmoSeasonInstance.IsSeasonNine` / tunable Admin Panel setting; extend `MasterSkillTree` node definitions (`293 -> 480` suite nodes across all 7 third-class trees including skill tier ranks, formulas, and missing passives) and update the web `MasterLevelWindow` grid/validation to render Season 9 nodes cleanly.
 5. **Season 9 Minimap**
-   - Port `IGC_MiniMap` (`256` markers) & battle-core minimap markers for Season 9 maps (`91, 92, 95, 96, 97, 98, 99, 100, 101, 102`) into web `MiniMap` (`client/web/src/ui/miniMap.ts`) and server/data definitions behind season gating.
+   - Port the Season 9 minimap table (`256` markers) & battle-core minimap markers for Season 9 maps (`91, 92, 95, 96, 97, 98, 99, 100, 101, 102`) into web `MiniMap` (`client/web/src/ui/miniMap.ts`) and server/data definitions behind season gating.
 6. **Admin Panel & Tests**
    - Host-tunable settings for Master Level max cap, Muun drop/exchange/evolution rates, Pentagram drop/mix/extraction multipliers, S9 skills enable/balance knobs, and Minimap visibility — all localized in `en`, `vi`, `de`, and `zh-CN` and verified by `AllCaptionsCanBeTranslatedAsync`.
 
