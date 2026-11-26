@@ -133,6 +133,38 @@ test("the game's server list shows the season and the game loads the picked worl
   expect(result.after).toEqual({ season: 's6', model: '/data/Monster/Monster01.bmd' });
 });
 
+test("a Season 9 server is named from its own program's worlds, like a Season 6.3 server", async ({ page }) => {
+  await routeWebsite(page, TWO_SEASONS);
+  await page.goto('/index.html');
+
+  const result = await page.evaluate(async () => {
+    type Meta = Record<string, unknown>;
+    const { describeServerChoice, seasonNineServerMeta } = await import('/js/main.js' as string) as {
+      describeServerChoice(id: number, load: number, meta?: Meta, vi?: boolean, inSeasonColumn?: boolean): string;
+      seasonNineServerMeta(id: number, own: Map<number, Meta>, seasonSix: Map<number, Meta>): Meta | undefined;
+    };
+    // Season 9's program lists its servers from id 0, in its own default world (season left out by an older one).
+    const own = new Map<number, Meta>([[0, { worldLabel: 'World 1 — Origin', description: 'Server 0' }]]);
+    const seasonSix = new Map<number, Meta>([[0, { worldLabel: 'World 1 — Origin', season: 's6', description: 'Server 0' }], [5, { worldLabel: 'Acheron', season: 's9', description: 'New lands' }]]);
+    const named = seasonNineServerMeta(0, own, seasonSix);
+    return {
+      named,
+      nineColumn: describeServerChoice(0, 0, named, false, true),
+      sixColumn: describeServerChoice(0, 0, seasonSix.get(0), false, true),
+      // Without its own program's data: only a Season 9 world of Season 6.3's data names it, else the plain fallback.
+      fallback: seasonNineServerMeta(5, new Map(), seasonSix)?.worldLabel,
+      notSeasonSix: describeServerChoice(0, 0, seasonNineServerMeta(0, new Map(), seasonSix), false, true),
+    };
+  });
+
+  expect(result.named?.season).toBe('s9');
+  expect(result.nineColumn).toContain('World 1 — Origin — Server 0');
+  expect(result.nineColumn.replace(/<small>.*$/, '')).toBe(result.sixColumn.replace(/<small>.*$/, ''));
+  expect(result.fallback).toBe('Acheron');
+  expect(result.notSeasonSix).toContain('Server 1');
+  expect(result.notSeasonSix).not.toContain('Origin');
+});
+
 test('the web server says which seasons it has data for, and a Season 9 address falls back to the base game', async ({ request }) => {
   const seasons = await request.get('/data/seasons.json');
   expect(seasons.ok()).toBeTruthy();
