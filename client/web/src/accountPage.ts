@@ -8,6 +8,8 @@ import { AccountMissions } from './accountMissions.js';
 import { AccountEmail } from './accountEmail.js';
 import { AccountVip } from './accountVip.js';
 import { AccountGiftBox } from './accountGiftBox.js';
+import { appendStoredItemHistory } from './accountStoredItemHistory.js';
+import { AccountMobileNavigation } from './accountMobileNavigation.js';
 import { AccountTrackerPrivacy } from './accountTrackerPrivacy.js';
 
 interface Credentials { loginName: string; password: string }
@@ -53,6 +55,7 @@ const email = new AccountEmail({ text: t, language: () => language, request, mes
 const vip = new AccountVip({ language: () => language, accountKey: () => snapshot?.loginName ?? '', request, changed: () => { void refresh(snapshot?.page ?? 0); }, error: showError });
 const giftBox = new AccountGiftBox({ language: () => language, request, changed: () => { void refresh(snapshot?.page ?? 0); }, error: () => showMessage('serverError') });
 const trackerPrivacy = new AccountTrackerPrivacy(request, () => language);
+const mobileNavigation = new AccountMobileNavigation(() => language, id => { void openSection(id); });
 
 function element<T extends HTMLElement>(id: string): T {
   const found = document.getElementById(id);
@@ -162,13 +165,22 @@ function balances(): HTMLElement {
 function renderOverview(): void {
   if (!snapshot) return;
   const root = element('account-overview');
-  root.replaceChildren(node('h2', `${t('overview')} — ${snapshot.loginName}`), node('p', t('saved')),
-    node('p', t(snapshot.accountOnline ? 'accountOnline' : 'accountOffline')), balances());
+  const header = node('div');
+  header.className = 'account-profile-banner';
+  const realm = node('p', gameName());
+  realm.dataset.gameName = '';
+  const title = node('h2', `${t('overview')} — ${snapshot.loginName}`);
+  title.id = 'account-title-overview';
+  header.append(realm, title, node('p', t(snapshot.accountOnline ? 'accountOnline' : 'accountOffline')));
+  root.replaceChildren(header, node('p', t('saved')), balances());
   const quick = node('div'); quick.className = 'account-actions';
   // The existing ticket feature owns #play and #playNowButton; this link leads to it.
   const play = link('play', 'playHint', '/account.html?play=1'); play.dataset.enterGame = ''; play.id = 'accountPlaySlot';
   quick.append(play, link('topup', 'topupHint', '/topup.html'), link('itemHistory', 'itemHistoryHint', '/tracker.html'));
-  root.append(quick, node('h3', t('characters')));
+  const characters = node('h3', t('characters'));
+  characters.id = 'accountCharactersHeading';
+  characters.tabIndex = -1;
+  root.append(quick, characters);
   root.append(snapshot.characters.length ? table([t('character'), t('className'), t('level'), t('resetCount'), t('map'), t('status')],
     snapshot.characters.map(c => [c.name, (language === 'vi' ? c.classNameVi || c.className : c.className) || t('unknown'), String(c.level), String(c.resets), c.map === null ? t('unknown') : String(c.map), t(c.online === true ? 'online' : c.online === false ? 'offline' : 'presenceUnknown')])) : node('p', t('noCharacters')));
   root.append(node('p', t('lastSeenNote')), node('p', `VIP: ${snapshot.vipLevel}`));
@@ -255,6 +267,7 @@ function showStoredItem(dialog: HTMLDialogElement, location: AccountTextKey, nam
     value.append(node('code', serial));
     facts.append(node('dt', t('storedItemSerial')), value);
     dialog.append(node('p', t('storedItemHistoryLimit')), itemHistoryLink(t('itemHistory'), serial));
+    appendStoredItemHistory(dialog, serial, language);
   } else {
     dialog.append(node('p', t('storedItemNoSerial')));
   }
@@ -333,27 +346,26 @@ function translate(): void {
   giftBox.refreshLanguage(snapshot !== null && active === 'rewards');
   missions.updateCharacters(snapshot?.characters.map(c => c.name) ?? []);
   document.title = `${gameName()} — ${t('account')}`;
-  element<HTMLSelectElement>('accountSectionSelect').setAttribute('aria-label', t('menu'));
   renderOverview(); renderCoins(); renderCommunity(); renderStoredItems(); renderNavigation();
   element('accountPasswordChange').hidden = !snapshot;
 }
 
 function renderNavigation(): void {
-  const nav = element('accountNav'); const select = element<HTMLSelectElement>('accountSectionSelect');
-  nav.hidden = !snapshot; nav.replaceChildren(); select.replaceChildren();
+  const nav = element('accountNav');
+  nav.hidden = !snapshot; nav.replaceChildren();
   const sections = accountSections();
   if (!sections.some(s => s.id === active)) active = sections[0]?.id ?? 'overview';
   for (const section of sections) {
     if (section.element.parentElement !== element('accountPanels')) element('accountPanels').append(section.element);
     section.element.dataset.accountPanel = section.id;
     const item = node('button', section.label[language]); item.type = 'button'; item.title = t('sectionHint');
+    item.dataset.accountSection = section.id;
     item.setAttribute('aria-controls', section.element.id);
     item.setAttribute('aria-current', String(section.id === active));
     item.addEventListener('click', () => { void openSection(section.id); }); nav.append(item);
-    const option = node('option', section.label[language]); option.value = section.id; select.append(option);
     section.element.hidden = !snapshot || section.id !== active;
   }
-  select.value = active;
+  mobileNavigation.update(sections, active, snapshot !== null);
 }
 
 function loadLegacy(id: string): void {
@@ -443,7 +455,6 @@ function mount(): void {
   panel('community', 'community');
   panel('items', 'storedItems');
   onAccountSectionsChanged(() => { renderNavigation(); });
-  element<HTMLSelectElement>('accountSectionSelect').addEventListener('change', event => { void openSection((event.target as HTMLSelectElement).value); });
   element('accountHelpButton').addEventListener('click', () => {
     const help = element('accountHelp'); help.hidden = !help.hidden;
     element('accountHelpButton').setAttribute('aria-expanded', String(!help.hidden));
@@ -521,4 +532,7 @@ window.addEventListener('pageshow', event => {
   void restoreSession().catch(() => showMessage('serverError'));
 });
 void restoreSession().catch(() => showMessage('serverError'));
-void loadGameName().then(() => translate());
+void loadGameName().then(() => {
+  document.title = `${gameName()} — ${t('account')}`;
+  renderCommunity();
+});

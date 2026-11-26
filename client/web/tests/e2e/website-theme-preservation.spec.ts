@@ -57,12 +57,21 @@ for (const theme of themes) {
       await expect(page.locator('#accountLoginPanel')).toBeHidden();
       await expect(page.locator('[data-account-language]:visible')).toHaveCount(2);
       await page.locator('header [data-account-language=vi]').click();
-      await expect(page.locator('#accountSectionSelect')).toContainText('Tổng quan');
+      if (width <= 600) await expect(page.locator('#accountMobileNav [data-mobile-section="overview"]')).toHaveText(/Trang chủ/);
+      else await expect(page.locator('#accountNav [data-account-section="overview"]')).toHaveText('Tổng quan');
       await page.locator('header [data-account-language=en]').click();
       for (const section of accountSections) {
         await expect(page.locator(`#account-${section}`)).toHaveCount(1);
-        if (width <= 600) await page.locator('#accountSectionSelect').selectOption(section);
-        else await page.locator(`#accountNav button`).filter({ hasText: new RegExp(`^${section === 'overview' ? 'Overview' : section === 'coins' ? 'Coins' : section === 'vip' ? 'VIP' : section[0].toUpperCase() + section.slice(1)}$`) }).click();
+        if (width <= 600) {
+          const primary = page.locator(`#accountMobileNav [data-mobile-section="${section}"]`);
+          if (await primary.count()) await primary.click();
+          else {
+            await page.locator('#accountMoreButton').click();
+            await page.locator(`#accountMore [data-account-section="${section}"]`).click();
+          }
+        } else {
+          await page.locator(`#accountNav [data-account-section="${section}"]`).click();
+        }
         await expect(page.locator(`#account-${section}`)).toBeVisible();
         if (section === 'rewards' && theme === 'violet' && width > 600) {
           const panel = await page.locator('#account-rewards').boundingBox(); const navigation = await page.locator('#accountNav').boundingBox();
