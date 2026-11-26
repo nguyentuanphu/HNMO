@@ -171,36 +171,49 @@ public class GameLogicCoreAuditBugTests
             IsBoundToCharacter = false,
         };
 
-        for (int attempt = 0; attempt < 200; attempt++)
+        var stackLimit = HNMO.DataModel.ItemExtensions.StackLimit;
+        try
         {
-            var gameContext = GameContextTestHelper.CreateGameContext();
-            var player = await PlayerTestHelper.CreatePlayerAsync(gameContext).ConfigureAwait(false);
-            var existing = new BasicModel.Item { Definition = stackDef, Durability = 3 };
-            await player.Inventory!.AddItemAsync(12, existing).ConfigureAwait(false);
-
-            var drop1Item = new BasicModel.Item { Definition = stackDef, Durability = 2 };
-            var drop2Item = new BasicModel.Item { Definition = stackDef, Durability = 2 };
-            var map = player.CurrentMap!;
-            var drop1 = new DroppedItem(drop1Item, player.Position, map, player);
-            var drop2 = new DroppedItem(drop2Item, player.Position, map, player);
-            await map.AddAsync(drop1).ConfigureAwait(false);
-            await map.AddAsync(drop2).ConfigureAwait(false);
-
-            using var barrier = new Barrier(2);
-            var t1 = Task.Factory.StartNew(() =>
+            for (int attempt = 0; attempt < 200; attempt++)
             {
-                barrier.SignalAndWait();
-                return drop1.TryPickUpByAsync(player).AsTask().GetAwaiter().GetResult();
-            }, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
-            var t2 = Task.Factory.StartNew(() =>
-            {
-                barrier.SignalAndWait();
-                return drop2.TryPickUpByAsync(player).AsTask().GetAwaiter().GetResult();
-            }, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+                var gameContext = GameContextTestHelper.CreateGameContext();
+                var player = await PlayerTestHelper.CreatePlayerAsync(gameContext).ConfigureAwait(false);
 
-            await Task.WhenAll(t1, t2).ConfigureAwait(false);
+                // The game context's item stack plug-in sets the static rule (stacks up to 255): check against the
+                // definition's own cap of 5, or an overflow could never be seen.
+                HNMO.DataModel.ItemExtensions.StackLimit = null;
+                var existing = new BasicModel.Item { Definition = stackDef, Durability = 3 };
+                await player.Inventory!.AddItemAsync(12, existing).ConfigureAwait(false);
 
-            Assert.That(existing.Durability, Is.LessThanOrEqualTo(existing.MaximumStackSize()), $"Overflow on attempt {attempt}: Durability={existing.Durability}");
+                var drop1Item = new BasicModel.Item { Definition = stackDef, Durability = 2 };
+                var drop2Item = new BasicModel.Item { Definition = stackDef, Durability = 2 };
+                var map = player.CurrentMap!;
+                var drop1 = new DroppedItem(drop1Item, player.Position, map, player);
+                var drop2 = new DroppedItem(drop2Item, player.Position, map, player);
+                await map.AddAsync(drop1).ConfigureAwait(false);
+                await map.AddAsync(drop2).ConfigureAwait(false);
+
+                using var barrier = new Barrier(2);
+                var t1 = Task.Factory.StartNew(() =>
+                {
+                    barrier.SignalAndWait();
+                    return drop1.TryPickUpByAsync(player).AsTask().GetAwaiter().GetResult();
+                }, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+                var t2 = Task.Factory.StartNew(() =>
+                {
+                    barrier.SignalAndWait();
+                    return drop2.TryPickUpByAsync(player).AsTask().GetAwaiter().GetResult();
+                }, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+
+                await Task.WhenAll(t1, t2).ConfigureAwait(false);
+
+                Assert.That(existing.MaximumStackSize(), Is.EqualTo(5));
+                Assert.That(existing.Durability, Is.LessThanOrEqualTo(existing.MaximumStackSize()), $"Overflow on attempt {attempt}: Durability={existing.Durability}");
+            }
+        }
+        finally
+        {
+            HNMO.DataModel.ItemExtensions.StackLimit = stackLimit;
         }
     }
 
