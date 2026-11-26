@@ -4585,6 +4585,20 @@ public class PacketStructureTests
     }
 
     /// <summary>
+    /// Tests the packet size calculation for HnmoSeasonNineClientRequest.
+    /// </summary>
+    [Test]
+    public void HnmoSeasonNineClientRequest_PacketSizeValidation()
+    {
+        // Fixed-length packet validation
+        const int expectedLength = 4;
+        var actualLength = HnmoSeasonNineClientRequestRef.Length;
+        
+        Assert.That(actualLength, Is.EqualTo(expectedLength), 
+            "Packet length mismatch: declared length does not match calculated size");
+    }
+
+    /// <summary>
     /// Tests the packet size calculation for HnmoSeasonPlanRequest.
     /// </summary>
     [Test]

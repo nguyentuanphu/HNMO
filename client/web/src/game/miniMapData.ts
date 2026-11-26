@@ -76,10 +76,27 @@ const cache = new Map<string, Promise<MiniMapData | null>>();
 let previous: Promise<MiniMapData | null> = Promise.resolve(null);
 let s9MarkersPromise: Promise<Record<string, Array<{ id: number; kind: number; npcIndex: number; x: number; y: number; name: string }>>> | null = null;
 
+// The Season 9 realm's admin setting (sent by the server, game/seasonNineClient.ts); shown until it says otherwise.
+let seasonNineMarkers = true;
+
 onSeasonChange(() => {
   cache.clear();
   previous = Promise.resolve(null);
+  seasonNineMarkers = true;
 });
+
+/** Shows or hides the Season 9 minimap markers (the realm's admin setting); the mini maps are read again. */
+export function setSeasonNineMinimapMarkers(enabled: boolean): void {
+  if (enabled === seasonNineMarkers) return;
+  seasonNineMarkers = enabled;
+  cache.clear();
+  previous = Promise.resolve(null);
+}
+
+/** Whether the Season 9 minimap markers are shown. */
+export function seasonNineMinimapMarkers(): boolean {
+  return seasonNineMarkers;
+}
 
 async function loadS9MinimapMarkers(): Promise<Record<string, Array<{ id: number; kind: number; npcIndex: number; x: number; y: number; name: string }>>> {
   s9MarkersPromise ??= fetch('/data/Season9/minimap.json')
@@ -98,7 +115,7 @@ async function loadFolder(folder: number, mapNumber: number): Promise<MiniMapDat
   const lang = LANGUAGE.toLowerCase();
   const bytes = await fetchBytes(`/data/Local/${LANGUAGE}/Minimap/Minimap_${worldName}_${lang}.bmd`).catch(() => null);
   const markers = bytes ? parseMiniMapMarkers(bytes) : [];
-  if (isS9) {
+  if (isS9 && seasonNineMarkers) {
     const s9All = await loadS9MinimapMarkers();
     const s9Entries = s9All[String(mapNumber)] ?? [];
     for (const entry of s9Entries) {

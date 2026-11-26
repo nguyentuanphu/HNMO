@@ -10924,6 +10924,34 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoSeasonNineClientState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON payload: {"v":1,"minimap":bool}.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent upon HnmoSeasonNineClientRequest, in a Season 9 realm.
+    /// Causes reaction on client side: The web client applies the Season 9 client settings of the realm (e.g. the Season 9 minimap markers).
+    /// </remarks>
+    public static async ValueTask SendHnmoSeasonNineClientStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoSeasonNineClientStateRef.GetRequiredSize(json);
+            var packet = new HnmoSeasonNineClientStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="HnmoSeasonPlanState" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>
