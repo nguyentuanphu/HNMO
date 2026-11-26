@@ -19,3 +19,13 @@
 | Buff strip family dedup | `buffs.ts:24-61` | Loads `/data/Buffs/Buffs.json` and merges `HnmoCustomBuff`; keeps strongest buff per mutual-exclusion family on HUD strip | Server `MagicEffectSystem` / Desktop `w_Buff` | Same |
 | Chat limits, cooldown & mute/filter | `chat.ts:38-49`, `chatExtras.ts:8-48` | `CHAT_MAX = 60`, `NAME_MAX = 10`, `MAX_LINES = 200`, `SYSTEM_LINES = 6`, `COOLDOWN_MS = 1000`, `FADE_MS = 10s`, channel prefixes `['','~','@','$']`; local blocklist & profanity filter | Desktop `ChatLogWindow` & `SystemLogBox` | Same |
 | CashShop script parser & walk speed | `cashShopScript.ts:31-67`, `characters.ts:45-75` | `PACKAGES_PER_PAGE = 9`, `GIFT_ENABLED = 184`; walk speed `WALK_CELLS_PER_SECOND` synced with 25 FPS | Desktop `CShopListManager` & `ZzzCharacter` | Same |
+
+## Re-check 2026-11-27 (changes 8cb8539b..a108e846)
+
+Commits read (every changed file read in full):
+
+- ba5139b1 feat(web): make chat, whisper and messenger windows resizable with localStorage persistence
+
+Evidence:
+
+- chat.ts / chatExtras.ts: chat, whisper and messenger windows resizable (width 260-640, 3-24 lines) and remembered per browser. DIFFERS from the desktop client, whose chat height moves in 3-line steps with a fixed width (the web used to do the same): a web-only convenience, owner to confirm (rule "Same as the desktop"). Tooltips are translated through i18n.ts (title attributes, texts in vi-overrides.json).
