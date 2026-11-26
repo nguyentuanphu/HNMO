@@ -16806,6 +16806,53 @@
     <Packet>
       <HeaderType>C2HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
+      <SubCode>59</SubCode>
+      <Name>HnmoPentagramState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent in a Season 9 realm after entering the world, after a pentagram action, or upon HnmoPentagramCommand.</SentWhen>
+      <CausedReaction>Updates the web client's pentagram window, the pentagram slot of the inventory and the element and errtels on item tooltips.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON payload: whether the system is on, the worn pentagram with its element and errtel slots, the pentagrams and errtels of the bag by slot, the mix costs and an optional action result.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>5A</SubCode>
+      <Name>HnmoElementalHit</Name>
+      <Length>11</Length>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent to an attacker in a Season 9 realm when a hit dealt elemental damage.</SentWhen>
+      <CausedReaction>The web client shows the elemental part of the damage above the target, in the element's colour.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>ShortBigEndian</Type>
+          <Name>TargetId</Name>
+          <Description>The id of the target object.</Description>
+        </Field>
+        <Field>
+          <Index>6</Index>
+          <Type>IntegerLittleEndian</Type>
+          <Name>Damage</Name>
+          <Description>The elemental damage of the hit.</Description>
+        </Field>
+        <Field>
+          <Index>10</Index>
+          <Type>Byte</Type>
+          <Name>Element</Name>
+          <Description>The attacker's element: 1 fire, 2 water, 3 earth, 4 wind, 5 darkness.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
       <SubCode>3B</SubCode>
       <Name>HnmoJewelBankState</Name>
       <Direction>ServerToClient</Direction>

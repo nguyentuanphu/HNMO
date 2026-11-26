@@ -398,6 +398,8 @@
   * [C2 F5 53 - HnmoArenaTravelState (by server)](C2-F5-53-HnmoArenaTravelState_by-server.md)
   * [C2 F5 55 - HnmoBugReportState (by server)](C2-F5-55-HnmoBugReportState_by-server.md)
   * [C2 F5 57 - HnmoUltimateAutoPlayPolicy (by server)](C2-F5-57-HnmoUltimateAutoPlayPolicy_by-server.md)
+  * [C2 F5 59 - HnmoPentagramState (by server)](C2-F5-59-HnmoPentagramState_by-server.md)
+  * [C1 F5 5A - HnmoElementalHit (by server)](C1-F5-5A-HnmoElementalHit_by-server.md)
   * [C1 F6 00 - QuestEventLimitResult (by server)](C1-F6-00-QuestEventLimitResult_by-server.md)
   * [C1 F6 03 - QuestEventResponse (by server)](C1-F6-03-QuestEventResponse_by-server.md)
   * [C1 F6 04 - QuestStartedByItem (by server)](C1-F6-04-QuestStartedByItem_by-server.md)
