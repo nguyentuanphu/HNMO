@@ -900,4 +900,6 @@
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 10 bản đồ Season 9, tệp địa hình, cổng dịch chuyển (417-461, 474-482) và điểm xuất hiện quái/NPC Season 9 khi chạy Season 9.</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: cửa hàng thử vận may của Moss</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 5 phiếu thử vận may của Moss (13-71..75) giá 2.000.000 Zen và trang bị cửa hàng cho Thương nhân Moss (492) nếu đang trống.</value></data>
+  <data name="AuditDataFixesUpdatePlugIn_Name" xml:space="preserve"><value>Sửa dữ liệu theo audit ngày 25/11/2026</value></data>
+  <data name="AuditDataFixesUpdatePlugIn_Description" xml:space="preserve"><value>Áp các chỗ sửa dữ liệu của audit ngày 25/11/2026 (trước chỉ có trên server mới): cửa hàng Hanzo the Blacksmith (hai vũ khí chung một ô, Morning Star nằm ở ô của Mace); ở Season 6 thêm tỉ lệ sát thương hoàn hảo của bộ Kantata (mọi đòn đều hoàn hảo) và SD của dòng Guardian trên giày (700).</value></data>
 </root>
