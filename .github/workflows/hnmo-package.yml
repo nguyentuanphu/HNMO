@@ -24,6 +24,7 @@ permissions:
 jobs:
   postgres:
     strategy:
+      fail-fast: false
       matrix:
         include:
           - { runner: ubuntu-22.04, rid: linux-x64 }
@@ -51,7 +52,7 @@ jobs:
         run: |
           clang -Wall -Wextra -Werror -Os -arch arm64 -arch x86_64 -mmacosx-version-min=13.0 \
             client/web/tools/hnmo/start-macos.c -o hnmo-macos-start
-          lipo -verify_arch arm64 x86_64 hnmo-macos-start
+          lipo hnmo-macos-start -verify_arch arm64 x86_64
           codesign --force --sign - hnmo-macos-start
           codesign --verify hnmo-macos-start
       - uses: actions/upload-artifact@v4
