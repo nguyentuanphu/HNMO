@@ -7,6 +7,7 @@
 #   runtime: portable (one folder for Windows, Linux and macOS), or one system: win-x64 (default), linux-x64, osx-arm64, ...
 #   --no-data: leave the game data out (copy src/bin/Data into HNMO/Data yourself)
 # Environment:
+#   HNMO_MACOS_LAUNCHER: universal Mach-O executable for the packaged Finder app.
 #   POSTGRES_UNIX_DIR: portable PostgreSQL folders named by .NET runtime identifier.
 #   POSTGRES_DIR: a portable PostgreSQL (with bin/, lib/, share/) to put into the folder,
 #     e.g. the extracted Windows binaries zip of EnterpriseDB. Without it, the folder
@@ -255,7 +256,13 @@ notice() { printf '=============================================================
 cp "$WEB/tools/hnmo/README.txt" "$OUT/README.txt"
 cp "$WEB/tools/hnmo/start-hnmo.sh" "$WEB/tools/hnmo/stop-hnmo.sh" "$WEB/tools/hnmo/Start HNMO.command" "$WEB/tools/hnmo/Start HNMO.bat" "$OUT/"
 cp -R "$WEB/tools/hnmo/Start HNMO.app" "$OUT/"
-chmod +x "$OUT/Start HNMO.app/Contents/MacOS/start"
+macos_entry="$OUT/Start HNMO.app/Contents/MacOS/start"
+if [ -n "${HNMO_MACOS_LAUNCHER:-}" ]; then
+  mv "$macos_entry" "$macos_entry.sh"
+  install -m 0755 "$HNMO_MACOS_LAUNCHER" "$macos_entry"
+else
+  chmod +x "$macos_entry"
+fi
 # Windows: HNMO without a console window, its icon next to the clock (launcher/hnmo-tray.ps1, started hidden by
 # launcher/start-hidden.vbs from "Start HNMO.bat"). Passing /window or setting ConsoleWindow=true shows the console.
 mkdir -p "$OUT/launcher"

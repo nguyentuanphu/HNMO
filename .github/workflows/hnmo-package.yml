@@ -46,6 +46,21 @@ jobs:
           path: postgres-${{ matrix.rid }}.tar.gz
           retention-days: 1
 
+      - name: Build the universal macOS Finder launcher
+        if: matrix.rid == 'osx-arm64'
+        run: |
+          clang -Wall -Wextra -Werror -Os -arch arm64 -arch x86_64 -mmacosx-version-min=13.0 \
+            client/web/tools/hnmo/start-macos.c -o hnmo-macos-start
+          lipo -verify_arch arm64 x86_64 hnmo-macos-start
+          codesign --force --sign - hnmo-macos-start
+          codesign --verify hnmo-macos-start
+      - uses: actions/upload-artifact@v4
+        if: matrix.rid == 'osx-arm64'
+        with:
+          name: macos-launcher
+          path: hnmo-macos-start
+          retention-days: 1
+
   package:
     needs: postgres
     runs-on: ubuntu-latest
@@ -74,6 +89,10 @@ jobs:
           pattern: postgres-*
           path: pg-artifacts
           merge-multiple: true
+      - uses: actions/download-artifact@v4
+        with:
+          name: macos-launcher
+          path: launch-artifacts
       - name: Build the HNMO folder (Windows, Linux, macOS)
         run: |
           for rid in linux-x64 linux-arm64 osx-x64 osx-arm64; do
@@ -81,6 +100,7 @@ jobs:
             tar -xzf "pg-artifacts/postgres-$rid.tar.gz" -C "pg/$rid"
           done
           POSTGRES_DIR="$GITHUB_WORKSPACE/pg/pgsql" POSTGRES_UNIX_DIR="$GITHUB_WORKSPACE/pg" \
+            HNMO_MACOS_LAUNCHER="$GITHUB_WORKSPACE/launch-artifacts/hnmo-macos-start" \
             client/web/tools/package-hnmo.sh "$GITHUB_WORKSPACE/server" portable "$GITHUB_WORKSPACE/HNMO"
       - name: Pack it
         run: |
@@ -183,6 +203,7 @@ jobs:
   unix-start:
     needs: package
     strategy:
+      fail-fast: false
       matrix:
         runner: [ubuntu-22.04, ubuntu-22.04-arm, macos-15-intel, macos-15]
     runs-on: ${{ matrix.runner }}
