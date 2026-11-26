@@ -8,6 +8,61 @@
 const BLOCKED_KEY = 'hnmo.chat.blocked';
 const FILTER_KEY = 'hnmo.chat.filter';
 const HISTORY_KEY = 'hnmo.chat.history.';
+const CHAT_SIZE_KEY = 'hnmo.chat.size';
+const WINDOW_SIZE_KEY = 'hnmo.window.size.';
+
+export interface ChatWindowSize { width: number; lines: number }
+export interface BoxWindowSize { width: number; height: number }
+export interface BoxWindowBounds { minW: number; maxW: number; minH: number; maxH: number }
+
+export const CHAT_WIDTH_BOUNDS = { min: 260, max: 640, defaultWidth: 281 } as const;
+export const CHAT_LINES_BOUNDS = { min: 3, max: 24, defaultLines: 6 } as const;
+
+export function clampChatSize(size: Partial<ChatWindowSize> | null | undefined): ChatWindowSize {
+  const rawW = Number(size?.width);
+  const rawL = Number(size?.lines);
+  const width = Number.isFinite(rawW)
+    ? Math.max(CHAT_WIDTH_BOUNDS.min, Math.min(CHAT_WIDTH_BOUNDS.max, Math.round(rawW)))
+    : CHAT_WIDTH_BOUNDS.defaultWidth;
+  const lines = Number.isFinite(rawL)
+    ? Math.max(CHAT_LINES_BOUNDS.min, Math.min(CHAT_LINES_BOUNDS.max, Math.round(rawL)))
+    : CHAT_LINES_BOUNDS.defaultLines;
+  return { width, lines };
+}
+
+export function loadChatSize(): ChatWindowSize {
+  return clampChatSize(read<Partial<ChatWindowSize> | null>(CHAT_SIZE_KEY, null));
+}
+
+export function saveChatSize(size: Partial<ChatWindowSize>): ChatWindowSize {
+  const clamped = clampChatSize(size);
+  write(CHAT_SIZE_KEY, clamped);
+  return clamped;
+}
+
+export function clampBoxWindowSize(size: Partial<BoxWindowSize> | null | undefined, bounds: BoxWindowBounds): BoxWindowSize | null {
+  if (!size) return null;
+  const rawW = Number(size.width);
+  const rawH = Number(size.height);
+  if (!Number.isFinite(rawW) || !Number.isFinite(rawH) || rawW <= 0 || rawH <= 0) return null;
+  return {
+    width: Math.max(bounds.minW, Math.min(bounds.maxW, Math.round(rawW))),
+    height: Math.max(bounds.minH, Math.min(bounds.maxH, Math.round(rawH))),
+  };
+}
+
+export function loadWindowSize(windowKey: string, bounds: BoxWindowBounds): BoxWindowSize | null {
+  if (!windowKey) return null;
+  return clampBoxWindowSize(read<Partial<BoxWindowSize> | null>(WINDOW_SIZE_KEY + windowKey, null), bounds);
+}
+
+export function saveWindowSize(windowKey: string, size: BoxWindowSize, bounds: BoxWindowBounds): BoxWindowSize | null {
+  if (!windowKey) return null;
+  const clamped = clampBoxWindowSize(size, bounds);
+  if (!clamped) return null;
+  write(WINDOW_SIZE_KEY + windowKey, clamped);
+  return clamped;
+}
 
 function read<T>(key: string, fallback: T): T {
   try {

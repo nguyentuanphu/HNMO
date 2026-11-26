@@ -9,6 +9,7 @@ using System.Threading;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.NPC;
 using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.PlugIns.CatchupCap;
 using HNMO.GameLogic.Views;
 using HNMO.GameLogic.Views.Party;
 using HNMO.Persistence;
@@ -383,10 +384,14 @@ public sealed class Party : AsyncDisposable
     private static async ValueTask<int> AwardExperienceAsync(Player player, float perLevel, IAttackable killed)
     {
         var attributes = player.Attributes!;
-        var isAtMaxLevel = (short)attributes[Stats.Level] == player.GameContext.Configuration.MaximumLevel;
+        var currentLevel = (short)attributes[Stats.Level];
+        var isAtCatchupCap = currentLevel >= CatchupCapPlugIn.GetEffectiveMaximumLevel(player.GameContext);
+        var isAtConfigMax = currentLevel >= player.GameContext.Configuration.MaximumLevel;
         var isMasterClass = player.SelectedCharacter?.CharacterClass?.IsMasterClass ?? false;
 
-        if (isAtMaxLevel && isMasterClass)
+        if (isAtCatchupCap
+            && isAtConfigMax
+            && isMasterClass)
         {
             var masterExperience = perLevel
                                    * attributes[Stats.TotalLevel]
@@ -408,7 +413,7 @@ public sealed class Party : AsyncDisposable
                                    * (attributes[Stats.ExperienceRate] + attributes[Stats.BonusExperienceRate]);
         var normalExperience = await ApplyExperienceCalculationPlugInsAsync(player, killed, false, calculatedExperience).ConfigureAwait(false);
 
-        if (!isAtMaxLevel)
+        if (!isAtCatchupCap)
         {
             await player.AddExperienceAsync(normalExperience, killed).ConfigureAwait(false);
             await NotifyGainedExperienceAsync(player, normalExperience, killed, false).ConfigureAwait(false);

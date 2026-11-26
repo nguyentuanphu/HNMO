@@ -8089,5 +8089,8 @@
   "Riding the Horn of Fenrir requires the second class or higher.": "Cưỡi Sói Tinh (Horn of Fenrir) yêu cầu cấp chuyển chức lần 2 trở lên.",
   "Happy Hour & bonus events": "Giờ vàng & sự kiện nhân tỉ lệ",
   "Scheduled rate multipliers in Sydney time announced in chat and on the timetable. When Happy Hour and another bonus event overlap, only the larger multiplier applies (zen rate bonuses apply separately).": "Hệ số nhân theo lịch giờ Sydney, thông báo trong chat và lịch sự kiện. Khi Giờ vàng trùng với sự kiện tăng tỉ lệ khác, chỉ áp dụng mức nhân cao hơn (tỉ lệ Zen tính riêng).",
-  "Extras": "Tuỳ chọn thêm"
+  "Extras": "Tuỳ chọn thêm",
+  "Drag to resize": "Kéo để đổi kích thước",
+  "Drag to resize window": "Kéo để đổi kích thước cửa sổ",
+  "Drag to resize chat window": "Kéo để đổi kích thước cửa sổ chat"
 }

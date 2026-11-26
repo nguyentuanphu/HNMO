@@ -6,6 +6,7 @@ namespace HNMO.GameLogic.PlugIns.JewelBank;
 
 using System.Runtime.InteropServices;
 using HNMO.DataModel.Configuration;
+using HNMO.DataModel.Entities;
 using HNMO.GameLogic.CashShop;
 using HNMO.GameLogic.PlugIns.AccountSafety;
 using HNMO.GameLogic.PlugIns.GiftCodes;
@@ -182,27 +183,74 @@ public sealed class JewelBankPlugIn :
             return;
         }
 
-        var depositedCount = 0;
+        // The jewels leave the bag and that is saved first; the bank is credited afterwards. A stop in between can't
+        // leave a jewel both in the saved bag and in the bank (a doubled deposit); the worst case is a lost deposit.
+        var planned = new List<(JewelBankEntryConfig Config, int Count)>();
+        var balances = engine.GetBalances(login);
         foreach (var (item, cfg) in targets)
         {
-            if (engine.Deposit(login, cfg.Key, 1, "game", DateTime.UtcNow) != JewelBankResult.Ok)
+            var stackCount = Math.Max(1, (int)item.Durability);
+            balances.TryGetValue(cfg.Key, out var currentBalance);
+            var availableCapacity = Math.Max(0, Math.Max(1, cfg.MaxCapacity) - currentBalance);
+            var toDeposit = Math.Min(stackCount, availableCapacity);
+            if (toDeposit <= 0)
             {
-                break;
+                continue;
+            }
+
+            balances[cfg.Key] = currentBalance + toDeposit;
+            planned.Add((cfg, toDeposit));
+            if (toDeposit < stackCount)
+            {
+                item.Durability = (byte)(stackCount - toDeposit);
+                await player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(item, false)).ConfigureAwait(false);
+                continue;
             }
 
             var itemSlot = item.ItemSlot;
             await player.Inventory.RemoveItemAsync(item).ConfigureAwait(false);
             await player.PersistenceContext.DeleteAsync(item).ConfigureAwait(false);
             await player.InvokeViewPlugInAsync<IItemRemovedPlugIn>(p => p.RemoveItemAsync(itemSlot)).ConfigureAwait(false);
-            depositedCount++;
         }
 
-        if (depositedCount == 0 && fee > 0)
+        if (planned.Count == 0 && fee > 0)
         {
             player.TryAddMoney(fee);
         }
 
-        await player.SaveProgressAsync().ConfigureAwait(false);
+        // A failed save keeps the change for the next one: the bank is credited all the same, so the running game holds
+        // every jewel exactly once.
+        try
+        {
+            if (!await player.SaveProgressAsync().ConfigureAwait(false))
+            {
+                player.Logger.LogWarning("Jewel Bank: the bag of {Player} couldn't be saved before the deposit; the next save tries again.", player.Name);
+            }
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            player.Logger.LogWarning(ex, "Jewel Bank: the bag of {Player} couldn't be saved before the deposit; the next save tries again.", player.Name);
+        }
+
+        var depositedCount = 0;
+        foreach (var (cfg, count) in planned)
+        {
+            if (engine.Deposit(login, cfg.Key, count, "game", DateTime.UtcNow) == JewelBankResult.Ok)
+            {
+                depositedCount += count;
+                continue;
+            }
+
+            // The bank refused it after all (e.g. a website deposit filled it meanwhile): the jewels go back into the bag.
+            var back = new GiftCodeOwedReward { Items = [new GiftCodeItem { Group = cfg.Group, Number = cfg.Number, Count = count, Durability = 1 }] };
+            if (!await GiftCodeRewards.GiveGoodsAsync(player, back).ConfigureAwait(false))
+            {
+                player.Logger.LogError("Jewel Bank: {Count} x {Jewel} of {Player} could neither be banked nor given back.", count, cfg.Key, player.Name);
+            }
+
+            await player.SaveProgressAsync().ConfigureAwait(false);
+        }
+
         if (depositedCount > 0)
         {
             await this.NotifyAsync(player, "Deposited", $"Deposited {depositedCount} jewel(s) into your Jewel Bank.", $"Đã gửi {depositedCount} viên ngọc vào Ngân hàng ngọc.").ConfigureAwait(false);
@@ -258,7 +306,7 @@ public sealed class JewelBankPlugIn :
         {
             var singleReward = new GiftCodeOwedReward
             {
-                Items = [new GiftCodeItem { Group = cfg.Group, Number = cfg.Number, Count = 1 }],
+                Items = [new GiftCodeItem { Group = cfg.Group, Number = cfg.Number, Count = 1, Durability = 1 }],
             };
             if (!await GiftCodeRewards.GiveGoodsAsync(player, singleReward).ConfigureAwait(false))
             {
@@ -328,18 +376,20 @@ public sealed class JewelBankPlugIn :
 
         var coins = Math.Max(0, engine.Configuration.ClearMasterCoins);
         var coinType = engine.Configuration.ClearMasterCoinType;
+        var priorBalance = 0;
+        CashShopCoinGrant? coinReceipt = null;
         if (coins > 0)
         {
             await player.ApplyPendingCashShopCoinGrantsAsync().ConfigureAwait(false);
-            var balance = player.Account.GetCashShopCoins(coinType);
-            if (balance < coins)
+            priorBalance = player.Account.GetCashShopCoins(coinType);
+            if (priorBalance < coins)
             {
                 await this.SendNoticeAsync(player, fromPanel, "NotEnoughCoins", $"Need {coins:N0} {coinType} to clear master skills.", $"Cần {coins:N0} {coinType} để tẩy điểm master.").ConfigureAwait(false);
                 return;
             }
 
-            player.Account.SetCashShopCoins(coinType, balance - coins);
-            CashShopBalanceReceipt.Record(player.PersistenceContext, player.Account, coinType, -coins, CashShopBalanceReason.ClearMaster);
+            player.Account.SetCashShopCoins(coinType, priorBalance - coins);
+            coinReceipt = CashShopBalanceReceipt.Record(player.PersistenceContext, player.Account, coinType, -coins, CashShopBalanceReason.ClearMaster);
         }
 
         if (zen > 0)
@@ -351,7 +401,23 @@ public sealed class JewelBankPlugIn :
             ? await concrete.ClearMasterSkillsAsync().ConfigureAwait(false)
             : await ResetApplier.ClearMasterSkillsOfflineAsync(character, player.PersistenceContext).ConfigureAwait(false);
 
-        await player.SaveProgressAsync().ConfigureAwait(false);
+        if (!await player.SaveProgressAsync().ConfigureAwait(false))
+        {
+            if (coins > 0)
+            {
+                player.Account.SetCashShopCoins(coinType, priorBalance);
+                await CashShopBalanceReceipt.RemoveAsync(player.PersistenceContext, coinReceipt).ConfigureAwait(false);
+            }
+
+            if (zen > 0)
+            {
+                player.TryAddMoney(zen);
+            }
+
+            await this.SendNoticeAsync(player, fromPanel, "SaveFailed", "Could not save master skill reset; please try again.", "Không lưu được thao tác tẩy điểm master; vui lòng thử lại.").ConfigureAwait(false);
+            return;
+        }
+
         engine.RecordClearMaster(login, character.Name, refunded, "game", DateTime.UtcNow);
         await this.SendNoticeAsync(
             player,
@@ -406,7 +472,7 @@ public sealed class JewelBankPlugIn :
                 {
                     var ok = await GiftCodeRewards.GiveGoodsAsync(player, new GiftCodeOwedReward
                     {
-                        Items = [new GiftCodeItem { Group = cfg.Group, Number = cfg.Number, Count = 1 }],
+                        Items = [new GiftCodeItem { Group = cfg.Group, Number = cfg.Number, Count = 1, Durability = 1 }],
                     }).ConfigureAwait(false);
                     if (!ok)
                     {

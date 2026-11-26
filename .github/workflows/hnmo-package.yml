@@ -4,10 +4,11 @@ name: HNMO package
 # web client + game data + save database), offers it as a download on the run's page and publishes
 # it on the release page as HNMO.zip (a link that always gives the newest build). The server and the
 # web server are portable .NET programs built once; runtime/<system> holds Microsoft's .NET runtime
-# for each system, and the start files pick the right one. Windows gets a portable PostgreSQL; Ubuntu
-# and macOS use the one installed on the computer (README.txt).
+# for each system. Each supported system also gets a portable PostgreSQL installation.
 on:
   workflow_dispatch:
+  pull_request:
+    paths: ['client/web/tools/hnmo/**', 'client/web/tools/package-hnmo.sh', 'client/web/bridge/GameLauncher.cs', '.github/workflows/hnmo-package.yml']
   push:
     branches: [main]
     paths: ['server/**', 'client/web/**', 'client/src/bin/**', '.github/workflows/hnmo-package.yml']
@@ -21,7 +22,48 @@ permissions:
   contents: write
 
 jobs:
+  postgres:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { runner: ubuntu-22.04, rid: linux-x64 }
+          - { runner: ubuntu-22.04-arm, rid: linux-arm64 }
+          - { runner: macos-15-intel, rid: osx-x64 }
+          - { runner: macos-15, rid: osx-arm64 }
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Linux build tools
+        if: runner.os == 'Linux'
+        run: sudo apt-get update -q && sudo apt-get install -y -q patchelf zlib1g-dev
+      - name: Build portable PostgreSQL
+        run: |
+          client/web/tools/hnmo/build-postgres.sh "$RUNNER_TEMP/postgres"
+          tar -czf "postgres-${{ matrix.rid }}.tar.gz" -C "$RUNNER_TEMP/postgres" .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: postgres-${{ matrix.rid }}
+          path: postgres-${{ matrix.rid }}.tar.gz
+          retention-days: 1
+
+      - name: Build the universal macOS Finder launcher
+        if: matrix.rid == 'osx-arm64'
+        run: |
+          clang -Wall -Wextra -Werror -Os -arch arm64 -arch x86_64 -mmacosx-version-min=13.0 \
+            client/web/tools/hnmo/start-macos.c -o hnmo-macos-start
+          lipo hnmo-macos-start -verify_arch arm64 x86_64
+          codesign --force --sign - hnmo-macos-start
+          codesign --verify hnmo-macos-start
+      - uses: actions/upload-artifact@v4
+        if: matrix.rid == 'osx-arm64'
+        with:
+          name: macos-launcher
+          path: hnmo-macos-start
+          retention-days: 1
+
   package:
+    needs: postgres
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -43,23 +85,38 @@ jobs:
           unzip -q pg.zip -d pg
           # Only what the database needs; leave out pgAdmin, StackBuilder, docs and headers
           rm -rf pg/pgsql/pgAdmin* pg/pgsql/StackBuilder pg/pgsql/stackbuilder pg/pgsql/doc pg/pgsql/include pg/pgsql/symbols
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: postgres-*
+          path: pg-artifacts
+          merge-multiple: true
       - name: Build the HNMO folder (Windows, Linux, macOS)
-        run: POSTGRES_DIR="$GITHUB_WORKSPACE/pg/pgsql" client/web/tools/package-hnmo.sh "$GITHUB_WORKSPACE/server" portable "$GITHUB_WORKSPACE/HNMO"
+        run: |
+          for rid in linux-x64 linux-arm64 osx-x64 osx-arm64; do
+            mkdir -p "pg/$rid"
+            tar -xzf "pg-artifacts/postgres-$rid.tar.gz" -C "pg/$rid"
+          done
+          POSTGRES_DIR="$GITHUB_WORKSPACE/pg/pgsql" POSTGRES_UNIX_DIR="$GITHUB_WORKSPACE/pg" \
+            client/web/tools/package-hnmo.sh "$GITHUB_WORKSPACE/server" portable "$GITHUB_WORKSPACE/HNMO"
       - name: Pack it
         run: |
           zip -qr HNMO.zip HNMO
-          ls -la HNMO.zip
+          client/web/tools/hnmo/package-deb.sh HNMO.zip "$(tr -d '[:space:]' < VERSION)" HNMO-linux.deb
+          ls -la HNMO.zip HNMO-linux.deb
           du -sh HNMO HNMO/* | sort -h
       - uses: actions/upload-artifact@v4
         with:
           name: HNMO
-          path: HNMO.zip
+          path: |
+            HNMO.zip
+            HNMO-linux.deb
           retention-days: 14
       # The update files on Cloudflare R2 (owner, 2026-11-21): every file stored once by its SHA-256 (files/<hash>),
       # only those not there yet are uploaded; the manifest goes to releases/<version>/manifest.json. The HNMO
       # developer publishes a version in the hub's console and the servers' "Update" downloads what changed.
       # Skipped while the R2 secrets aren't set.
       - name: Upload the update files to R2
+        if: github.ref == 'refs/heads/main'
         env:
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
@@ -137,9 +194,64 @@ jobs:
           if (-not ($game -and $admin)) { throw "HNMO didn't start on Windows" }
           Get-Process | Where-Object { $_.Path -like "$folder*" } | Stop-Process -Force -ErrorAction SilentlyContinue
 
-  # Published only when it started on Windows.
+  macos-package:
+    needs: package
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: HNMO
+      - uses: actions/download-artifact@v4
+        with:
+          name: macos-launcher
+          path: launch-artifacts
+      - name: Assemble and sign the macOS app
+        run: client/web/tools/hnmo/package-macos.sh HNMO.zip HNMO-macos.zip launch-artifacts/hnmo-macos-start
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HNMO-macos
+          path: HNMO-macos.zip
+          retention-days: 14
+
+  linux-start:
+    needs: package
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [ubuntu-22.04, ubuntu-22.04-arm]
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: HNMO
+      - name: Install Linux desktop integration test tools
+        run: sudo apt-get update -q && sudo apt-get install -y -q desktop-file-utils libglib2.0-bin xdg-utils
+      - name: Start the installed server and check the database
+        run: client/web/tools/hnmo/smoke-unix-package.sh "$PWD"
+
+  macos-start:
+    needs: macos-package
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [macos-15-intel, macos-15]
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: HNMO-macos
+      - name: Start the installed server and check the database
+        run: client/web/tools/hnmo/smoke-unix-package.sh "$PWD"
+
+  # Publish only after the downloaded package starts on all supported platforms.
   release:
-    needs: [package, windows-start]
+    needs: [package, windows-start, linux-start, macos-start]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
@@ -147,6 +259,9 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: HNMO
+      - uses: actions/download-artifact@v4
+        with:
+          name: HNMO-macos
       - name: Publish HNMO.zip as the latest release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -154,6 +269,6 @@ jobs:
           # The same file also under the old name, so that earlier download links keep working.
           cp HNMO.zip HNMO-windows.zip
           gh release delete hnmo-latest --cleanup-tag --yes || true
-          gh release create hnmo-latest HNMO.zip HNMO-windows.zip --target "$GITHUB_SHA" --latest \
+          gh release create hnmo-latest HNMO.zip HNMO-windows.zip HNMO-linux.deb HNMO-macos.zip --target "$GITHUB_SHA" --latest \
             --title "HNMO" \
-            --notes "The newest HNMO folder, for Windows, Ubuntu and macOS. Unzip HNMO.zip. Windows: before unzipping, right-click HNMO.zip, Properties, tick Unblock (Smart App Control), then Extract All and double-click Start HNMO.bat. Ubuntu: install PostgreSQL 16 (sudo apt install postgresql-16), then run ./start-hnmo.sh. macOS: install PostgreSQL 16 (brew install postgresql@16, or Postgres.app), then run ./start-hnmo.sh (the first time: xattr -dr com.apple.quarantine HNMO). Guide: friends/README.md"
+            --notes "Windows: extract HNMO.zip and open Start HNMO.bat. macOS: extract HNMO-macos.zip and open Start HNMO.app. Ubuntu and Debian: install HNMO-linux.deb and open HNMO from the applications menu. See the packaged README for first-launch and save instructions."

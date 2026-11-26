@@ -40,6 +40,15 @@ internal sealed class GameFiles : IDisposable
     private readonly DataPackArchive? _packs;
     private readonly ConcurrentDictionary<string, Dictionary<string, string>?> _directories = new();
 
+    // The web game asks for files that are often not there on purpose: an interface document in the theme's folder
+    // before the shared one, a texture beside its model before the Effect folder, optional files such as
+    // Audio/Opus.json. Each such 404 is normal, so it is noted once per path at Debug level, not as a warning
+    // per request (thousands of lines in the launcher log per play session).
+    /// <summary>The most missing paths remembered (and logged); the requested paths come from any visitor.</summary>
+    internal const int MaximumReportedMissing = 10_000;
+
+    private readonly ConcurrentDictionary<string, byte> _reportedMissing = new(StringComparer.OrdinalIgnoreCase);
+
     public GameFiles(string root, ILogger? logger = null)
     {
         this._root = Path.GetFullPath(root);
@@ -55,9 +64,21 @@ internal sealed class GameFiles : IDisposable
 
     public int PackedEntryCount => this._packs?.EntryCount ?? 0;
 
+    /// <summary>The paths answered with 404 so far (each once), for tests and diagnostics.</summary>
+    internal IReadOnlyCollection<string> ReportedMissing => (IReadOnlyCollection<string>)this._reportedMissing.Keys;
+
     public void Dispose()
     {
         this._packs?.Dispose();
+    }
+
+    private void ReportMissing(string relativePath)
+    {
+        // The paths come from any visitor: past a limit nothing more is remembered, so the set can't grow without end.
+        if (this._reportedMissing.Count < MaximumReportedMissing && this._reportedMissing.TryAdd(relativePath, 0))
+        {
+            this._logger?.LogDebug("Data file not in the packs (the game may look elsewhere next): {Path}", relativePath);
+        }
     }
 
     public async Task ServeAsync(HttpContext context, string relativePath)
@@ -69,7 +90,7 @@ internal sealed class GameFiles : IDisposable
 
         if (this._packs is not null)
         {
-            this._logger?.LogWarning("Data file missing from packs: {Path}", relativePath);
+            this.ReportMissing(relativePath);
         }
 
         context.Response.StatusCode = StatusCodes.Status404NotFound;
@@ -111,7 +132,7 @@ internal sealed class GameFiles : IDisposable
         var normalized = NormalizeRelativePath(relativePath);
         if (normalized is null || !TryResolveInPack(packs, normalized, out var entry))
         {
-            this._logger?.LogWarning("Data file missing from packs: {Path}", relativePath);
+            this.ReportMissing(relativePath);
             context.Response.StatusCode = StatusCodes.Status404NotFound;
             return;
         }

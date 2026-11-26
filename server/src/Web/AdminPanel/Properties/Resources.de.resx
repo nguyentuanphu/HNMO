@@ -2751,4 +2751,103 @@
   <data name="PageHelpTextTopUpMilestones" xml:space="preserve">
     <value>Legen Sie Stufen für kumulierte VND-Aufladungen fest, damit Konten die jeweiligen Münzen, Zen und Gegenstände einmalig im Konto oder im Spiel abholen können.</value>
   </data>
+  <data name="SeasonChooserTitle" xml:space="preserve">
+    <value>Welche Season möchtest du einrichten?</value>
+  </data>
+  <data name="SeasonSixButton" xml:space="preserve">
+    <value>Season 6.3</value>
+  </data>
+  <data name="SeasonNineButton" xml:space="preserve">
+    <value>Season 9</value>
+  </data>
+  <data name="SeasonSixButtonHint" xml:space="preserve">
+    <value>Die klassischen Welten: Karten, Monster, Gegenstände, Drops, Läden, Events und Raten von Season 6.3.</value>
+  </data>
+  <data name="SeasonNineButtonHint" xml:space="preserve">
+    <value>Die neueren Welten: Karten, Monster, Gegenstände, Drops, Läden, Events und Raten von Season 9.</value>
+  </data>
+  <data name="SeasonYouAreHere" xml:space="preserve">
+    <value>Aktuell geöffnet</value>
+  </data>
+  <data name="SeasonNineOff" xml:space="preserve">
+    <value>Aus. Aktiviere sie in den Season-Einstellungen und starte HNMO neu.</value>
+  </data>
+  <data name="SharedSettingsButton" xml:space="preserve">
+    <value>Gemeinsame Einstellungen</value>
+  </data>
+  <data name="SharedSettingsButtonHint" xml:space="preserve">
+    <value>Alle Seasons: Konten, Coins, Website, Neuigkeiten, Sperren, Admin-Benutzer und Host-Einstellungen.</value>
+  </data>
+  <data name="HostSettingsHostOnly" xml:space="preserve">
+    <value>Host-Einstellungen können nur direkt auf dem Host-Rechner geändert werden (http://localhost:8095).</value>
+  </data>
+  <data name="ArenaButton" xml:space="preserve">
+    <value>Arena</value>
+  </data>
+  <data name="ArenaButtonHint" xml:space="preserve">
+    <value>Server- und Season-übergreifende Kämpfe: Arena-Charaktere, Ranglistenduelle, Teamkämpfe und Events.</value>
+  </data>
+  <data name="ArenaOff" xml:space="preserve">
+    <value>Aus: Aktiviere „Arena“ in den Season-Einstellungen und starte HNMO neu.</value>
+  </data>
+  <data name="ArenaEnabledHint" xml:space="preserve">
+    <value>Der Launcher startet zusätzlich die HNMO-Arena (eigene Datenbank, Connect-Port +200, Admin-Panel zwei Ports höher; Konten geteilt). Nach Änderung HNMO neu starten.</value>
+  </data>
+  <data name="SeasonsPageTitle" xml:space="preserve">
+    <value>Seasons &amp; Welten</value>
+  </data>
+  <data name="SeasonsPageIntro" xml:space="preserve">
+    <value>Aktiviere oder deaktiviere Season 9 und die Arena neben Season 6.3 zentral an einem Ort, prüfe die Ports und öffne jedes Panel.</value>
+  </data>
+  <data name="SeasonsPageHelp" xml:space="preserve">
+    <value>Season 6.3 läuft immer als Hauptwelt für gemeinsame Konten, Coins und Website-Einstellungen. Schalte Season 9 oder die Arena hier ein oder aus, speichere und starte HNMO neu.</value>
+  </data>
+  <data name="SeasonsHostOnly" xml:space="preserve">
+    <value>Season-Schalter können nur auf dem Host-Computer gespeichert werden (z. B. http://localhost:8095/seasons). Derzeit schreibgeschützt.</value>
+  </data>
+  <data name="SeasonsPrimaryBadge" xml:space="preserve">
+    <value>Primär (immer aktiv)</value>
+  </data>
+  <data name="SeasonsStatusOn" xml:space="preserve">
+    <value>Aktiviert</value>
+  </data>
+  <data name="SeasonsStatusOff" xml:space="preserve">
+    <value>Deaktiviert</value>
+  </data>
+  <data name="SeasonsEnableLabel" xml:space="preserve">
+    <value>Server aktivieren</value>
+  </data>
+  <data name="SeasonsAlwaysEnabledNote" xml:space="preserve">
+    <value>Startet immer mit HNMO; verwaltet gemeinsame Logins, Coin-Guthaben und Website-Konfiguration.</value>
+  </data>
+  <data name="SeasonsPortsSummary" xml:space="preserve">
+    <value>Connect-Port {0} · Admin-Port {1}</value>
+  </data>
+  <data name="SeasonsOpenPanel" xml:space="preserve">
+    <value>Panel öffnen</value>
+  </data>
+  <data name="SeasonsManageLink" xml:space="preserve">
+    <value>Seasons verwalten</value>
+  </data>
+  <data name="SeasonsSaveButton" xml:space="preserve">
+    <value>Season-Einstellungen speichern</value>
+  </data>
+  <data name="SeasonsSaved" xml:space="preserve">
+    <value>Season-Einstellungen gespeichert.</value>
+  </data>
+  <data name="SeasonsRestartRequired" xml:space="preserve">
+    <value>Season-Schalter wurden geändert. Starte HNMO neu, damit der Launcher die aktualisierten Welten startet oder stoppt.</value>
+  </data>
+  <data name="SeasonsRestartButton" xml:space="preserve">
+    <value>HNMO neu starten</value>
+  </data>
+  <data name="SeasonsRestartConfirm" xml:space="preserve">
+    <value>Neustart von HNMO bestätigen</value>
+  </data>
+  <data name="SeasonsRestartCancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="SeasonsRestartSent" xml:space="preserve">
+    <value>Neustart angefordert. Lade diese Seite in ein paar Sekunden neu.</value>
+  </data>
 </root>

@@ -97,7 +97,8 @@ public sealed class CombiningLeftoversPlugIn :
     {
         var engine = this.GetEngine();
         var bag = this.ReadPlayerBag(player);
-        var json = CombiningLeftoversStateWriter.WriteForPlayer(engine, player, bag, seasonCapOverride: null, notice);
+        var seasonCap = GetSeasonCapOverride(player.GameContext);
+        var json = CombiningLeftoversStateWriter.WriteForPlayer(engine, player, bag, seasonCap, notice);
         await player.InvokeViewPlugInAsync<IHnmoLeftoversViewPlugIn>(p => p.ShowLeftoversAsync(json, requested)).ConfigureAwait(false);
     }
 
@@ -114,7 +115,7 @@ public sealed class CombiningLeftoversPlugIn :
 
         var engine = this.GetEngine();
         var bag = this.ReadPlayerBag(player);
-        var check = engine.PlanCombine(recipeId, bag, player.Money, seasonCapOverride: null, out var pickedSlots);
+        var check = engine.PlanCombine(recipeId, bag, player.Money, GetSeasonCapOverride(player.GameContext), out var pickedSlots);
         if (check != LeftoversCheckResult.Ok)
         {
             var (en, vi) = DescribeFailure(check);
@@ -155,6 +156,10 @@ public sealed class CombiningLeftoversPlugIn :
             };
 
             var delivered = await GiftCodeRewards.GiveGoodsAsync(player, reward).ConfigureAwait(false);
+
+            // The materials, the Zen and a reward put into the bag go into one save; a reward which has to wait is written
+            // only after it, so a stop in between can't give the materials back while the reward is kept.
+            await SaveAsync(player).ConfigureAwait(false);
             if (!delivered)
             {
                 engine.Store.AddOwed(player.SelectedCharacter.GetId().ToString(), reward);
@@ -179,6 +184,7 @@ public sealed class CombiningLeftoversPlugIn :
         }
         else
         {
+            await SaveAsync(player).ConfigureAwait(false);
             engine.Store.AppendLog(new LeftoversLogEntry
             {
                 AtUtc = DateTime.UtcNow,
@@ -223,6 +229,10 @@ public sealed class CombiningLeftoversPlugIn :
         var offer = engine.Configuration.ExchangeOffers.First(o => o.Enabled && string.Equals(o.Id, offerId.Trim(), StringComparison.OrdinalIgnoreCase));
         await RemoveBagSlotsAsync(player, pickedSlots).ConfigureAwait(false);
 
+        // The materials are saved as taken before any reward goes out (coins are granted at once, a waiting reward is
+        // written to the state file): a stop in between can't give the materials back while the reward is kept.
+        await SaveAsync(player).ConfigureAwait(false);
+
         var opId = Guid.NewGuid().ToString("N");
         var login = player.Account.LoginName;
         if (offer.RewardCoins > 0)
@@ -258,6 +268,7 @@ public sealed class CombiningLeftoversPlugIn :
             };
 
             deliveredAll = await GiftCodeRewards.GiveGoodsAsync(player, reward).ConfigureAwait(false);
+            await SaveAsync(player).ConfigureAwait(false);
             if (!deliveredAll)
             {
                 engine.Store.AddOwed(player.SelectedCharacter.GetId().ToString(), reward);
@@ -284,6 +295,21 @@ public sealed class CombiningLeftoversPlugIn :
         await this.SendStateAsync(player, requested: true, ("ok", msgEn, msgVi)).ConfigureAwait(false);
     }
 
+    private static async ValueTask SaveAsync(Player player)
+    {
+        try
+        {
+            if (!await player.SaveProgressAsync().ConfigureAwait(false))
+            {
+                player.Logger.LogWarning("Combining leftovers: the progress of {Player} couldn't be saved; the next save tries again.", player.Name);
+            }
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            player.Logger.LogWarning(ex, "Combining leftovers: the progress of {Player} couldn't be saved; the next save tries again.", player.Name);
+        }
+    }
+
     private static (string En, string Vi) DescribeFailure(LeftoversCheckResult result) => result switch
     {
         LeftoversCheckResult.Disabled => ("Combining leftovers is currently disabled.", "Tính năng Đổi đồ dư đang tắt."),
@@ -294,18 +320,33 @@ public sealed class CombiningLeftoversPlugIn :
         _ => ("Action could not be completed.", "Không thể thực hiện."),
     };
 
-    private static async ValueTask RemoveBagSlotsAsync(Player player, IReadOnlyList<byte> slots)
+    private static int? GetSeasonCapOverride(IGameContext gameContext)
+    {
+        var cap = SeasonPlan.SeasonPlanPlugIn.GetCurrentMaxBoxLevel(gameContext);
+        return cap > 0 ? cap : null;
+    }
+
+    internal static async ValueTask RemoveBagSlotsAsync(Player player, IReadOnlyList<byte> slots)
     {
         if (player.Inventory is not { } inventory)
         {
             return;
         }
 
-        foreach (var slot in slots)
+        foreach (var group in slots.GroupBy(s => s))
         {
+            var slot = group.Key;
+            var consumeCount = group.Count();
             var item = inventory.GetItem(slot);
             if (item is null)
             {
+                continue;
+            }
+
+            if (!item.IsWearable() && item.Durability > consumeCount)
+            {
+                item.Durability -= (byte)consumeCount;
+                await player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(item, false)).ConfigureAwait(false);
                 continue;
             }
 
@@ -360,6 +401,8 @@ public sealed class CombiningLeftoversPlugIn :
         engine.Store.ReturnOwed(charId, remaining);
         if (deliveredCount > 0)
         {
+            // The delivered rewards left the state file: save them in the bag at once.
+            await SaveAsync(player).ConfigureAwait(false);
             await player.ShowBlueMessageAsync(IsVietnamese(player)
                 ? $"Đã giao {deliveredCount} phần thưởng Đổi đồ dư còn thiếu từ túi đồ trước đó."
                 : $"Delivered {deliveredCount} pending Combining Leftovers reward(s) to your bag.").ConfigureAwait(false);

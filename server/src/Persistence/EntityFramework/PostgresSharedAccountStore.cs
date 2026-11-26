@@ -63,4 +63,32 @@ public sealed class PostgresSharedAccountStore(string connectionString) : IShare
             ? new CoinBalances(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2))
             : null;
     }
+
+    /// <inheritdoc />
+    public async ValueTask<(CoinBalances Before, CoinBalances After)?> AddCoinsAndReportAsync(string loginName, CoinBalances change, CancellationToken cancellationToken = default)
+    {
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+        await using var command = connection.CreateCommand();
+
+        // One statement: the old row is locked and read, then updated, so "before" belongs to exactly this change.
+        command.CommandText = """
+            WITH old AS (
+                SELECT "Id", "WCoinC", "WCoinP", "GoblinPoints" FROM data."Account"
+                WHERE lower("LoginName") = lower(@login) AND NOT "IsTemplate" AND NOT "IsBot"
+                FOR UPDATE)
+            UPDATE data."Account" AS a
+            SET "WCoinC" = GREATEST(0, a."WCoinC" + @c), "WCoinP" = GREATEST(0, a."WCoinP" + @p), "GoblinPoints" = GREATEST(0, a."GoblinPoints" + @g)
+            FROM old WHERE a."Id" = old."Id"
+            RETURNING old."WCoinC", old."WCoinP", old."GoblinPoints", a."WCoinC", a."WCoinP", a."GoblinPoints";
+            """;
+        command.Parameters.AddWithValue("login", loginName);
+        command.Parameters.AddWithValue("c", change.WCoinC);
+        command.Parameters.AddWithValue("p", change.WCoinP);
+        command.Parameters.AddWithValue("g", change.GoblinPoints);
+        await using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        return await reader.ReadAsync(cancellationToken).ConfigureAwait(false)
+            ? (new CoinBalances(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2)), new CoinBalances(reader.GetInt32(3), reader.GetInt32(4), reader.GetInt32(5)))
+            : null;
+    }
 }

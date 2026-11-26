@@ -496,4 +496,6 @@
   <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>Adds the 5 Moss gamble vouchers (13-71..75) at 2,000,000 Zen and equips Moss the Merchant (492) with his gamble shop when empty.</value></data>
   <data name="MasterPassives314To324UpdatePlugIn_Name" xml:space="preserve"><value>Season 6: Rank 6-9 master passives</value></data>
   <data name="MasterPassives314To324UpdatePlugIn_Description" xml:space="preserve"><value>Adds the Season 6 rank 6-9 passive master skills (Cast Invincibility, Armor Set Bonus, Vengeance, stat increases, third-wing defense/attack/absorption bonuses, Maximum AG/Attack/Wizardry, hit recovery, and critical/excellent/double/ignore-def chances) with passive power-ups.</value></data>
+  <data name="AddChaosCardMixesUpdatePlugIn_Name" xml:space="preserve"><value>Add Chaos Card items and mixes</value></data>
+  <data name="AddChaosCardMixesUpdatePlugIn_Description" xml:space="preserve"><value>Adds the four Chaos Cards (14-54, 14-92, 14-93, 14-95), wires the Chaos Card Master combination (MixType 40), and activates their in-game shop packages.</value></data>
 </root>

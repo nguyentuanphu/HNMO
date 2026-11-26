@@ -11,6 +11,7 @@
 import { openDocument, prepareDocument, type RmlDocument, type RmlModel } from './rml.js';
 import { askInGame, noticeInGame, promptInGame } from './socialDialogs.js';
 import { keepTypingInside } from './guildWindows.js';
+import { loadWindowSize, saveWindowSize, type BoxWindowBounds } from '../game/chatExtras.js';
 import { LAST_ONLINE_SERVER, LETTER_COST, UNAVAILABLE_SERVER, type Letter, type LetterBody, type Messenger } from '../game/messenger.js';
 import { nativeTextPx, typographyScale } from './nativeText.js';
 
@@ -25,7 +26,15 @@ const SHELL_CSS = `
 #panel { transform-origin: left top; }
 #panel button, #panel input, #panel textarea { font-size: inherit; }
 #panel button { border: 0; padding-top: 0; padding-bottom: 0; background-color: transparent; }
+#resize { pointer-events: auto; cursor: nwse-resize; }
+.hnmo-shell-resize { position: absolute; right: 2px; bottom: 2px; width: 12px; height: 12px; cursor: nwse-resize; pointer-events: auto; z-index: 25; background: linear-gradient(315deg, rgba(220,190,120,.8) 0 4px, transparent 4px); }
 `;
+
+const SHELL_SIZE_BOUNDS: Record<string, BoxWindowBounds & { defaultW: number; defaultH: number }> = {
+  friend_shell: { minW: 290, maxW: 720, minH: 150, maxH: 560, defaultW: 300, defaultH: 170 },
+  letter_read: { minW: 360, maxW: 760, minH: 182, maxH: 540, defaultW: 420, defaultH: 182 },
+  letter_write: { minW: 360, maxW: 760, minH: 190, maxH: 540, defaultW: 420, defaultH: 216 },
+};
 
 interface ShellModel extends RmlModel {
   title: string; has_title: boolean; positioned: boolean; root_x: number; root_y: number; maximized: boolean;
@@ -36,6 +45,7 @@ abstract class ShellWindow<M extends ShellModel> {
   protected doc: RmlDocument | null = null;
   private opening: Promise<void> | null = null;
   private hidden = false;
+  private restoreSize: { width: number; height: number } | null = null;
 
   protected constructor(protected readonly documentName: string, protected readonly model: M, protected readonly click?: () => void) {
     prepareDocument(documentName).catch((error: unknown) => console.warn('Interface', error));
@@ -43,6 +53,20 @@ abstract class ShellWindow<M extends ShellModel> {
 
   get isOpen(): boolean { return this.doc !== null && !this.hidden; }
   get exists(): boolean { return this.doc !== null; }
+
+  /** Sets and saves this messenger window size for the current browser. */
+  setWindowSize(width: number, height: number): { width: number; height: number } | null {
+    const bounds = SHELL_SIZE_BOUNDS[this.documentName] ?? { minW: 260, maxW: 760, minH: 150, maxH: 560, defaultW: 340, defaultH: 220 };
+    const saved = saveWindowSize(this.documentName, { width, height }, bounds);
+    const panel = this.doc?.$('#panel');
+    if (panel && saved) {
+      panel.style.width = `${saved.width}px`;
+      panel.style.height = `${saved.height}px`;
+      this.model.maximized = false;
+      this.refresh();
+    }
+    return saved;
+  }
 
   async open(): Promise<void> {
     if (this.doc) { this.show(); return; }
@@ -69,14 +93,27 @@ abstract class ShellWindow<M extends ShellModel> {
       const scale = shellScale();
       panel.style.transform = `scale(${scale.toFixed(3)})`;
       panel.style.setProperty('--rml-rem', `${(nativeTextPx() / scale).toFixed(3)}px`);
-    }
-    if (panel) {
+      const bounds = SHELL_SIZE_BOUNDS[this.documentName];
+      const saved = bounds ? loadWindowSize(this.documentName, bounds) : null;
+      if (saved) {
+        panel.style.width = `${saved.width}px`;
+        panel.style.height = `${saved.height}px`;
+      }
       panel.style.pointerEvents = 'auto';
       panel.addEventListener('pointerdown', (event) => { event.stopPropagation(); this.toFront(); });
       panel.addEventListener('contextmenu', (event) => event.preventDefault());
       panel.addEventListener('wheel', (event) => event.stopPropagation());
       const grip = doc.$('#drag_strip') ?? doc.$('#window_shell_header');
       if (grip) this.makeDraggable(grip);
+      let resizeGrip = doc.$('#resize');
+      if (!resizeGrip) {
+        resizeGrip = document.createElement('div');
+        resizeGrip.id = 'hnmo_shell_resize';
+        resizeGrip.className = 'hnmo-shell-resize';
+        resizeGrip.title = 'Drag to resize window';
+        panel.append(resizeGrip);
+      }
+      this.makeResizable(resizeGrip, panel);
     }
     keepTypingInside(doc.host);
     this.model.positioned = true;
@@ -105,6 +142,68 @@ abstract class ShellWindow<M extends ShellModel> {
       grip.addEventListener('pointermove', move);
       grip.addEventListener('pointerup', up);
     });
+  }
+
+  private makeResizable(grip: HTMLElement, panel: HTMLElement): void {
+    const bounds = SHELL_SIZE_BOUNDS[this.documentName] ?? { minW: 260, maxW: 760, minH: 150, maxH: 560, defaultW: 340, defaultH: 220 };
+    grip.style.pointerEvents = 'auto';
+    grip.style.cursor = 'nwse-resize';
+    grip.addEventListener('pointerdown', (event) => {
+      if (event.button !== 0) return;
+      event.preventDefault();
+      event.stopPropagation();
+      const scale = Math.max(0.25, shellScale());
+      const rect = panel.getBoundingClientRect();
+      const startW = rect.width / scale || bounds.defaultW;
+      const startH = rect.height / scale || bounds.defaultH;
+      const startX = event.clientX;
+      const startY = event.clientY;
+      let latest = { width: startW, height: startH };
+      grip.setPointerCapture(event.pointerId);
+      const move = (e: PointerEvent) => {
+        const maxFitW = Math.min(bounds.maxW, Math.max(bounds.minW, Math.floor((window.innerWidth - this.model.root_x - 8) / scale)));
+        const maxFitH = Math.min(bounds.maxH, Math.max(bounds.minH, Math.floor((workspaceBottom() - this.model.root_y - 4) / scale)));
+        const w = Math.max(bounds.minW, Math.min(maxFitW, Math.round(startW + (e.clientX - startX) / scale)));
+        const h = Math.max(bounds.minH, Math.min(maxFitH, Math.round(startH + (e.clientY - startY) / scale)));
+        latest = { width: w, height: h };
+        panel.style.width = `${w}px`;
+        panel.style.height = `${h}px`;
+        this.model.maximized = false;
+      };
+      const up = () => {
+        grip.removeEventListener('pointermove', move);
+        grip.removeEventListener('pointerup', up);
+        saveWindowSize(this.documentName, latest, bounds);
+        this.refresh();
+      };
+      grip.addEventListener('pointermove', move);
+      grip.addEventListener('pointerup', up);
+    });
+  }
+
+  protected toggleMaximize(): void {
+    const panel = this.doc?.$('#panel');
+    if (!panel) return;
+    const bounds = SHELL_SIZE_BOUNDS[this.documentName] ?? { minW: 260, maxW: 760, minH: 150, maxH: 560, defaultW: 340, defaultH: 220 };
+    const scale = Math.max(0.25, shellScale());
+    if (!this.model.maximized) {
+      const rect = panel.getBoundingClientRect();
+      this.restoreSize = { width: Math.round(rect.width / scale) || bounds.defaultW, height: Math.round(rect.height / scale) || bounds.defaultH };
+      const maxW = Math.min(bounds.maxW, Math.max(bounds.minW, Math.floor((window.innerWidth - 20) / scale)));
+      const maxH = Math.min(bounds.maxH, Math.max(bounds.minH, Math.floor((workspaceBottom() - 20) / scale)));
+      this.model.root_x = 10;
+      this.model.root_y = 10;
+      panel.style.width = `${maxW}px`;
+      panel.style.height = `${maxH}px`;
+      this.model.maximized = true;
+    } else {
+      const target = this.restoreSize ?? loadWindowSize(this.documentName, bounds) ?? { width: bounds.defaultW, height: bounds.defaultH };
+      panel.style.width = `${target.width}px`;
+      panel.style.height = `${target.height}px`;
+      this.model.maximized = false;
+      saveWindowSize(this.documentName, target, bounds);
+    }
+    this.refresh();
   }
 
   toFront(): void { if (this.doc) this.doc.host.style.zIndex = String(++topLayer); }
@@ -289,7 +388,7 @@ export class FriendWindow extends ShellWindow<FriendShellModel> {
       case 'hide_all': for (const w of [...this.letterWindows.values(), ...this.writeWindows.values()]) w.hide(); break;
       case 'reject': void this.toggleReject(); break;
       case 'close': case 'minimize': this.lastTab = m.active_tab; this.hide(); break;
-      case 'maximize': break;
+      case 'maximize': this.toggleMaximize(); break;
       default:
     }
     this.refresh();

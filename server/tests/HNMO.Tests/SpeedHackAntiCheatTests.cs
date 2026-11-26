@@ -1,4 +1,4 @@
-// <copyright file="SpeedHackAntiCheatTests.cs" company="HNMO">
+﻿// <copyright file="SpeedHackAntiCheatTests.cs" company="HNMO">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -981,6 +981,29 @@ public class SpeedHackAntiCheatTests
         await player.WalkToAsync(P(3), turnSteps).ConfigureAwait(false);
 
         Assert.That(player.Position.X, Is.GreaterThanOrEqualTo(P(2).X), "The diagonal client position was not taken over.");
+    }
+
+    /// <summary>
+    /// Tests that the next part of a long walk is taken over when it starts two tiles ahead of the server, on the
+    /// server's own walk, right after a server step. The client sends the next part when it reaches the end of the
+    /// previous one; the server walks a step or two behind (latency, a busy machine), and refusing that part put the
+    /// hero back and ended the walk.
+    /// </summary>
+    [Test]
+    public async Task TestNextWalkPartTwoTilesAheadOnTheServerWalkIsTakenOverAsync()
+    {
+        var player = await CreatePlayerWithSpeedAttributesAsync().ConfigureAwait(false);
+        player.Position = StartPoint;
+
+        Point P(int offset) => new((byte)(StartPoint.X + offset), StartPoint.Y);
+        WalkingStep[] steps = [.. Enumerable.Range(0, 6).Select(i => new WalkingStep { From = P(i), To = P(i + 1), Direction = Direction.East })];
+        await player.WalkToAsync(P(6), steps).ConfigureAwait(false);
+        Assert.That(await WaitUntilAsync(() => player.Position == P(1), TimeSpan.FromSeconds(5)).ConfigureAwait(false), Is.True);
+
+        WalkingStep[] nextPart = [new() { From = P(3), To = P(4), Direction = Direction.East }];
+        await player.WalkToAsync(P(4), nextPart).ConfigureAwait(false);
+
+        Assert.That(player.Position.X, Is.GreaterThanOrEqualTo(P(3).X), "The next part, two tiles ahead on the server's walk, was refused.");
     }
 
     /// <summary>

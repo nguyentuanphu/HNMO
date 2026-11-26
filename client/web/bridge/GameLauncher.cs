@@ -147,12 +147,27 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
 
     private string PostgresTool(string name) => Path.Combine(this._postgresBin ??= this.FindPostgres(), OperatingSystem.IsWindows() ? name + ".exe" : name);
 
-    // The folder's own PostgreSQL (Windows), else one installed on the computer (Ubuntu: apt install
-    // postgresql-16; macOS: brew install postgresql@16 or Postgres.app).
+    // Use a configured PostgreSQL or the portable copy for this platform. Older
+    // packages and saves from other PostgreSQL versions can use the system tools.
     private string FindPostgres()
     {
         var tool = OperatingSystem.IsWindows() ? "pg_ctl.exe" : "pg_ctl";
         var candidates = new List<string> { this.Full(options.PostgresPath) };
+        if (!OperatingSystem.IsWindows() && this.CanUseBundledPostgres())
+        {
+            var family = OperatingSystem.IsMacOS() ? "osx" : "linux";
+            var architecture = RuntimeInformation.ProcessArchitecture switch
+            {
+                Architecture.Arm64 => "arm64",
+                Architecture.X64 => "x64",
+                _ => null,
+            };
+            if (architecture is not null)
+            {
+                candidates.Add(this.Full($"../postgres/{family}-{architecture}/bin"));
+            }
+        }
+
         if (OperatingSystem.IsLinux())
         {
             foreach (var version in new[] { "17", "16", "15", "14" })
@@ -189,6 +204,13 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
 
         logger.LogInformation("PostgreSQL: {Path}", found);
         return found;
+    }
+
+    private bool CanUseBundledPostgres()
+    {
+        const string BundledMajorVersion = "16";
+        var versionFile = Path.Combine(this.DatabaseDirectory, "PG_VERSION");
+        return !File.Exists(versionFile) || File.ReadAllText(versionFile).Trim() == BundledMajorVersion;
     }
 
     public Task StartAsync(CancellationToken cancellationToken)

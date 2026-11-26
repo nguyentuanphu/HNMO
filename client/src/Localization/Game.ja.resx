@@ -7063,7 +7063,7 @@
   <data name="There is no deletable item." xml:space="preserve">
     <value>削除できるアイテムがありません。</value>
   </data>
-  <data name="Cannot open MU Item Shop.#Please reconnect to the game." xml:space="preserve">
+  <data name="Cannot open the Item Shop.#Please reconnect to the game." xml:space="preserve">
     <value>アイテムモールを開くことができません。#ゲームに再ログインしてください。</value>
   </data>
   <data name="Cannot use the selected item." xml:space="preserve">
@@ -7108,7 +7108,7 @@
   <data name="W Coin: %s Coins" xml:space="preserve">
     <value>JEWEL %sJEWEL</value>
   </data>
-  <data name="You can only open MU Item Shop in a town or safe zone." xml:space="preserve">
+  <data name="You can only open the Item Shop in a town or safe zone." xml:space="preserve">
     <value>町や安全地帯でのみアイテムモールを開くことができます。</value>
   </data>
   <data name="This item cannot be bought." xml:space="preserve">

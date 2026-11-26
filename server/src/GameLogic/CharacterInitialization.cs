@@ -89,8 +89,9 @@ public static class CharacterInitialization
         character.CurrentMap = characterClass.HomeMap;
         if (character.CurrentMap?.ExitGates.Where(g => g.IsSpawnGate).SelectRandom() is { } spawnGate)
         {
-            character.PositionX = (byte)Rand.NextInt(spawnGate.X1, spawnGate.X2);
-            character.PositionY = (byte)Rand.NextInt(spawnGate.Y1, spawnGate.Y2);
+            var spawnPoint = spawnGate.GetRandomPoint();
+            character.PositionX = spawnPoint.X;
+            character.PositionY = spawnPoint.Y;
         }
 
         character.Inventory ??= context.CreateNew<ItemStorage>();

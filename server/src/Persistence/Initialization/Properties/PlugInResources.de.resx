@@ -998,4 +998,6 @@
   <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>Fügt die 5 Moss-Glücksspielgutscheine (13-71..75) für 2.000.000 Zen hinzu und stattet Moss den Händler (492) mit seinem Laden aus, sofern leer.</value></data>
   <data name="MasterPassives314To324UpdatePlugIn_Name" xml:space="preserve"><value>Season 6: Passive Master-Fertigkeiten (Rang 6-9)</value></data>
   <data name="MasterPassives314To324UpdatePlugIn_Description" xml:space="preserve"><value>Fügt die passiven Master-Fertigkeiten der Ränge 6-9 aus Season 6 samt passiven Power-Ups hinzu (Unverwundbarkeit, Rüstungsset-Bonus, Vergeltung, Statuswert-Boni, Flügel-Boni der 3. Stufe, Max-AG/Angriff/Zauberkraft, Treffererholung und Trefferchancen).</value></data>
+  <data name="AddChaosCardMixesUpdatePlugIn_Name" xml:space="preserve"><value>Chaos-Karten und Kombinationen hinzufügen</value></data>
+  <data name="AddChaosCardMixesUpdatePlugIn_Description" xml:space="preserve"><value>Fügt die vier Chaos-Karten (14-54, 14-92, 14-93, 14-95) hinzu, verknüpft die Kombination beim Chaos-Karten-Meister (MixType 40) und aktiviert die zugehörigen Shop-Pakete.</value></data>
 </root>

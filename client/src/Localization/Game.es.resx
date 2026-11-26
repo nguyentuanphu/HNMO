@@ -7309,7 +7309,7 @@
   <data name="There is no deletable item." xml:space="preserve">
     <value>No hay ningún elemento eliminable.</value>
   </data>
-  <data name="Cannot open MU Item Shop.#Please reconnect to the game." xml:space="preserve">
+  <data name="Cannot open the Item Shop.#Please reconnect to the game." xml:space="preserve">
     <value>No se puede abrir la tienda de artículos MU.#Vuelve a conectarte al juego.</value>
   </data>
   <data name="Cannot use the selected item." xml:space="preserve">
@@ -7354,7 +7354,7 @@
   <data name="W Coin: %s Coins" xml:space="preserve">
     <value>Moneda W: Monedas %s</value>
   </data>
-  <data name="You can only open MU Item Shop in a town or safe zone." xml:space="preserve">
+  <data name="You can only open the Item Shop in a town or safe zone." xml:space="preserve">
     <value>Solo puedes abrir MU Item Shop en una ciudad o zona segura.</value>
   </data>
   <data name="This item cannot be bought." xml:space="preserve">
