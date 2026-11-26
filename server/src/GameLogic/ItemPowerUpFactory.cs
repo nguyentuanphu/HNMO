@@ -106,12 +106,16 @@ public class ItemPowerUpFactory : IItemPowerUpFactory
 
         if (item.Definition is { Group: 12, Number: 36 or 37 or 38 or 39 or 40 or 43 or 50 })
         {
-            if (attributeHolder.GetComposableAttribute(Stats.MasterWingDefenseBonus) is { } wingDefBonus)
+            // Only wire master wing passives when the bonus attribute is non-zero; GetComposableAttribute creates
+            // an empty attribute on demand, which would otherwise attach zero-value wrappers to every 3rd wing.
+            if (attributeHolder[Stats.MasterWingDefenseBonus] > 0
+                && attributeHolder.GetComposableAttribute(Stats.MasterWingDefenseBonus) is { } wingDefBonus)
             {
                 yield return new PowerUpWrapper(wingDefBonus, Stats.DefenseFinal, attributeHolder, AggregateType.AddFinal);
             }
 
-            if (attributeHolder.GetComposableAttribute(Stats.MasterWingAttackBonus) is { } wingAtkBonus)
+            if (attributeHolder[Stats.MasterWingAttackBonus] > 0
+                && attributeHolder.GetComposableAttribute(Stats.MasterWingAttackBonus) is { } wingAtkBonus)
             {
                 yield return new PowerUpWrapper(wingAtkBonus, Stats.MinimumPhysBaseDmg, attributeHolder, AggregateType.AddRaw);
                 yield return new PowerUpWrapper(wingAtkBonus, Stats.MaximumPhysBaseDmg, attributeHolder, AggregateType.AddRaw);
@@ -128,7 +132,8 @@ public class ItemPowerUpFactory : IItemPowerUpFactory
                 }
             }
 
-            if (attributeHolder.GetComposableAttribute(Stats.MasterWingAbsorbBonus) is { } wingAbsorbBonus)
+            if (attributeHolder[Stats.MasterWingAbsorbBonus] > 0
+                && attributeHolder.GetComposableAttribute(Stats.MasterWingAbsorbBonus) is { } wingAbsorbBonus)
             {
                 yield return new PowerUpWrapper(new InverseReductionElement(wingAbsorbBonus), Stats.DamageReceiveDecrement, attributeHolder, AggregateType.Multiplicate);
             }
