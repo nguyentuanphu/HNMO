@@ -788,4 +788,8 @@
   <data name="PandoraPick" xml:space="preserve"><value>Cuốc Pandora</value></data>
   <data name="CardPiece" xml:space="preserve"><value>Mảnh bài Rummy</value></data>
   <data name="CardDeck" xml:space="preserve"><value>Bộ bài Rummy</value></data>
+  <data name="ChaosCard" xml:space="preserve"><value>Thẻ Hỗn Nguyên</value></data>
+  <data name="ChaosCardGold" xml:space="preserve"><value>Thẻ Hỗn Nguyên Vàng</value></data>
+  <data name="ChaosCardRare" xml:space="preserve"><value>Thẻ Hỗn Nguyên Hiếm</value></data>
+  <data name="ChaosCardMini" xml:space="preserve"><value>Thẻ Hỗn Nguyên Nhỏ</value></data>
 </root>

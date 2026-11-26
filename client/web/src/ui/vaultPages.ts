@@ -46,6 +46,8 @@ export class VaultPages {
     parent?: HTMLElement;
     /** An extra element at the end of the bar (the item stacks button). */
     extra?: HTMLElement;
+    /** The page in use changes (a switch was sent, or the server answered with another page): each page has its own zen. */
+    pageChanged?: () => void;
   }) {
     this.bar = document.createElement('div');
     this.bar.className = 'hnmo-vault-pages';
@@ -76,6 +78,7 @@ export class VaultPages {
   switchTo(page: number): void {
     if (this.busy || !this.state || page === this.state.active || page >= this.state.unlocked) return;
     this.busy = true;
+    this.options.pageChanged?.();
     this.options.send('HnmoVaultPageCommand', { Action: 1, Page: page });
     this.render();
   }
@@ -98,11 +101,13 @@ export class VaultPages {
     if (bytes.length < 5 || bytes[0] !== 0xc2 || bytes[3] !== 0xf5 || bytes[4] !== 0x4f) return false;
     const parsed = read('ServerToClient', 'HnmoVaultPageState', bytes);
     const raw = typeof parsed.Json === 'string' ? parsed.Json : '';
+    const before = this.state?.active;
     try {
       this.state = JSON.parse(raw) as VaultPageState;
     } catch {
       return true;
     }
+    if (before !== undefined && before !== this.state.active) this.options.pageChanged?.();
     this.busy = false;
     if (this.state.message) this.options.message(this.state.message);
     this.render();

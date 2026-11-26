@@ -521,4 +521,6 @@
   <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>添加 5 种 2,000,000 金币的莫斯抽奖券（13-71..75），并在商人莫斯（492）商店为空时为其配备抽奖商店。</value></data>
   <data name="S6EventsMonstersAndItemsUpdatePlugIn_Name" xml:space="preserve"><value>第 6 赛季：活动怪物、采矿点与卡牌物品</value></data>
   <data name="S6EventsMonstersAndItemsUpdatePlugIn_Description" xml:space="preserve"><value>补充缺少的罗兰深渊怪物（300-303）、被诅咒的哥布林（466）、采矿点（605-607）、潘多拉矿镐（0-41）和拉米卡牌道具（14-215..216）。</value></data>
+  <data name="AddChaosCardMixesUpdatePlugIn_Name" xml:space="preserve"><value>添加玛雅卡片与合成配方</value></data>
+  <data name="AddChaosCardMixesUpdatePlugIn_Description" xml:space="preserve"><value>添加四种玛雅卡片（14-54、14-92、14-93、14-95），接入玛雅卡片大师合成（MixType 40），并启用商城中的对应礼包。</value></data>
 </root>

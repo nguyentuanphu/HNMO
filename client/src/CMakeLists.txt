@@ -105,7 +105,8 @@ endforeach()
 
 mu_ensure_submodule("ThirdParty/RmlUi"
   INDICATOR "CMakeLists.txt"
-  URL "https://github.com/nitoygo/RmlUi.git")
+  URL "https://github.com/nitoygo/RmlUi.git"
+  BRANCH "integration/sdl-gpu-parity")
 
 # RmlUi -- static link, no bundled samples/Lua bindings. We supply our own
 # Rml::RenderInterface/SystemInterface (source/Render/RmlUi/) targeting this branch's

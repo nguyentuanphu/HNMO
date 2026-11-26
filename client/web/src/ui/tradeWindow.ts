@@ -11,6 +11,7 @@ import { itemDefinition } from '../game/items.js';
 import type { Connection } from '../net/connection.js';
 import type { ItemWindows, TradeView } from './itemWindows.js';
 import { promptInGame } from './confirmDialog.js';
+import { dismissConfirm } from './gameDialogs.js';
 
 /** The character level from which the trade command works (TRADELIMITLEVEL). */
 export const TRADE_MIN_LEVEL = 6;
@@ -126,6 +127,7 @@ export class Trade {
       return false;
     };
     window.onOfferChanged = (kind) => {
+      this.offerRevision++;
       // Putting an item in clears the own OK (UncheckMyConfirm); taking one out after OK too.
       if (kind === 'added') this.uncheck(true);
       else if (this.view.myConfirmed) this.uncheck(true);
@@ -139,6 +141,10 @@ export class Trade {
   /** Whether a trade is open (from the accepted answer until TradeFinished; the window may still be loading). */
   get isOpen(): boolean { return this.active; }
   private active = false;
+  /** Counts trades opened and ended: a zen box asked in one trade does nothing in the next. */
+  private session = 0;
+  /** Counts changes of the offers on both sides: an OK answered on a warning about one offer does nothing to another. */
+  private offerRevision = 0;
 
   /** Asks another player (by object id) to trade (TradeRequest); the server forwards it if they are in view. */
   requestTrade(playerId: number): void {
@@ -176,13 +182,14 @@ export class Trade {
       // TradeRequestAnswer: 0 declined, 1 accepted, 2 not possible now
       const partner = { name: readName(bytes, 4, 10), level: bytes.length >= 16 ? (bytes[14] << 8) | bytes[15] : 0 };
       void this.answered(bytes[3], partner);
-    } else if (code === 0x38 && bytes.length >= 4) this.partnerRemoved(bytes[3]);
-    else if (code === 0x39 && bytes.length >= 9) this.partnerAdded(bytes[3], decodeItem(bytes, 4));
+    } else if (code === 0x38 && bytes.length >= 4) { this.offerRevision++; this.partnerRemoved(bytes[3]); }
+    else if (code === 0x39 && bytes.length >= 9) { this.offerRevision++; this.partnerAdded(bytes[3], decodeItem(bytes, 4)); }
     else if (code === 0x3a && bytes[3] === 0x01) {
       // TradeMoneySetResponse: the zen asked for is in the trade
       this.view.myGold = this.requestedGold;
       this.itemWindows.trade.refresh();
     } else if (code === 0x3b && bytes.length >= 8) {
+      this.offerRevision++;
       this.view.partnerGold = u32le(bytes, 4);
       this.itemWindows.trade.refresh();
     } else if (code === 0x3c && bytes.length >= 4) this.partnerConfirmChanged(bytes[3]);
@@ -220,6 +227,7 @@ export class Trade {
     this.view.warnings.clear();
     this.requestedGold = 0;
     this.active = true;
+    this.session++;
     await this.itemWindows.openTrade();
     // The trade may have ended while its window was loading.
     if (!this.active) { this.itemWindows.closeTrade(); return; }
@@ -310,6 +318,8 @@ export class Trade {
     this.view.myConfirmed = false;
     this.view.partnerConfirmed = false;
     this.active = false;
+    this.session++;
+    dismissConfirm('trade-zen-dialog');
     this.itemWindows.closeTrade();
     this.onChange('closed');
   }
@@ -335,21 +345,33 @@ export class Trade {
 
   // The OK button: not while it waits or an item is on the cursor; with changed partner items it warns first.
   async confirmButton(): Promise<void> {
-    if (performance.now() < this.view.waitUntil || this.itemWindows.picked.source) return;
+    if (!this.mayConfirm()) return;
     if (this.alert && !this.view.myConfirmed) {
+      const session = this.session;
+      const revision = this.offerRevision;
       const sure = await this.options.confirm('The levels and options of some items have been changed in trade. '
         + 'Please check whether the item is the same item that you want to trade.');
       if (!sure) return;
+      // The warning was about this trade and these offers: after another trade began, or an offer changed while it was
+      // open, its OK does nothing (OK has to be pressed again, on what is shown now). The wait and the cursor again too.
+      if (session !== this.session || revision !== this.offerRevision || !this.mayConfirm()) return;
     }
     this.toggleConfirm();
+  }
+
+  /** The own OK may be pressed: a trade is open, its wait after a change is over and no item is on the cursor. */
+  private mayConfirm(): boolean {
+    return this.isOpen && performance.now() >= this.view.waitUntil && !this.itemWindows.picked.source;
   }
 
   // The zen button (trade_zen_click, SendRequestMyGoldInput): an amount up to the money plus what's in already.
   async askGold(): Promise<void> {
     const ask = this.options.prompt ?? ((text: string) => promptInGame(text, { numericOnly: true, maxLength: 8, initialText: '' }, 'trade-zen-dialog'));
     const question = 'Enter the amount of Zen you would like to trade.';
+    const session = this.session;
     const text = await ask(translate(question) ?? question);
-    if (text === null) return;
+    // The trade it was asked for ended (and maybe another one began) while the box was open.
+    if (text === null || session !== this.session || !this.isOpen) return;
     const amount = Math.floor(Number(text.replace(/[^0-9]/g, '').slice(0, 8)) || 0);
     if (amount === 0) return;
     this.setGold(amount);

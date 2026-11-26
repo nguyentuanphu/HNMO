@@ -2370,4 +2370,16 @@
   <data name="CardDeck" xml:space="preserve">
     <value>整副卡牌</value>
   </data>
+  <data name="ChaosCard" xml:space="preserve">
+    <value>玛雅卡片</value>
+  </data>
+  <data name="ChaosCardGold" xml:space="preserve">
+    <value>黄金玛雅卡片</value>
+  </data>
+  <data name="ChaosCardRare" xml:space="preserve">
+    <value>稀有玛雅卡片</value>
+  </data>
+  <data name="ChaosCardMini" xml:space="preserve">
+    <value>迷你玛雅卡片</value>
+  </data>
 </root>

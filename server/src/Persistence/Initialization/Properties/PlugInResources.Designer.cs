@@ -1204,5 +1204,10 @@ namespace HNMO.Persistence.Initialization.Properties {
 
         /// <summary>Gets the localized S6EventsMonstersAndItemsUpdatePlugIn_Description text.</summary>
         public static string S6EventsMonstersAndItemsUpdatePlugIn_Description => ResourceManager.GetString("S6EventsMonstersAndItemsUpdatePlugIn_Description", resourceCulture)!;
+        /// <summary>Gets the localized AddChaosCardMixesUpdatePlugIn_Name text.</summary>
+        public static string AddChaosCardMixesUpdatePlugIn_Name => ResourceManager.GetString("AddChaosCardMixesUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized AddChaosCardMixesUpdatePlugIn_Description text.</summary>
+        public static string AddChaosCardMixesUpdatePlugIn_Description => ResourceManager.GetString("AddChaosCardMixesUpdatePlugIn_Description", resourceCulture)!;
     }
 }

@@ -998,4 +998,6 @@
   <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>Fügt die 5 Moss-Glücksspielgutscheine (13-71..75) für 2.000.000 Zen hinzu und stattet Moss den Händler (492) mit seinem Laden aus, sofern leer.</value></data>
   <data name="S6EventsMonstersAndItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: Event-Monster, Bergbauknoten und Kartengegenstände</value></data>
   <data name="S6EventsMonstersAndItemsUpdatePlugIn_Description" xml:space="preserve"><value>Fügt Loren-Deep-Monster (300-303), Verfluchten Goblin (466), Bergbauknoten (605-607), Pandora-Spitzhacke (0-41) und Rummy-Karten (14-215..216) hinzu, sofern sie fehlen.</value></data>
+  <data name="AddChaosCardMixesUpdatePlugIn_Name" xml:space="preserve"><value>Chaos-Karten und Kombinationen hinzufügen</value></data>
+  <data name="AddChaosCardMixesUpdatePlugIn_Description" xml:space="preserve"><value>Fügt die vier Chaos-Karten (14-54, 14-92, 14-93, 14-95) hinzu, verknüpft die Kombination beim Chaos-Karten-Meister (MixType 40) und aktiviert die zugehörigen Shop-Pakete.</value></data>
 </root>

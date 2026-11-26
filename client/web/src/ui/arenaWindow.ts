@@ -166,8 +166,12 @@ const HOME_KEY = 'hnmo-arena-home';
 
 type Send = (name: string, fields: PacketValues) => void;
 
-/** The values that change every second (countdowns, live scores, the shrinking zone): written in place, not redrawn. */
-const LIVE_FIELDS = new Set(['secondsToStart', 'secondsLeft', 'zoneX', 'zoneY', 'zoneRadius', 'seconds', 'scoreA', 'scoreB']);
+/**
+ * The values that change while the window is open (countdowns, live scores, the shrinking zone, how many wait in a
+ * queue or signed up): written in place, not redrawn. Redrawing replaced the buttons under the pointer, so a click
+ * made while someone else joined a queue was lost.
+ */
+const LIVE_FIELDS = new Set(['secondsToStart', 'secondsLeft', 'zoneX', 'zoneY', 'zoneRadius', 'seconds', 'scoreA', 'scoreB', 'waiting', 'signups']);
 
 /** What decides whether the window is drawn again: the answer without its live values. */
 export function renderKey(state: unknown): string {
@@ -176,6 +180,24 @@ export function renderKey(state: unknown): string {
 
 function tx(en: string, vi: string): string {
   return currentLanguage() === 'vi' ? vi : en;
+}
+
+/** The team battle's queue button, which shows how many wait while the player is queued. */
+export function teamQueueText(team: ArenaTeam): string {
+  return team.queued
+    ? tx(`Leave the team queue (${team.waiting} waiting)`, `Rời hàng chờ đấu đội (${team.waiting} người chờ)`)
+    : team.running
+      ? tx('Queue for the next team battle', 'Xếp hàng trận đấu đội tiếp theo')
+      : tx('Find a team battle', 'Tìm trận đấu đội');
+}
+
+/** The ranked 1v1 queue button. */
+export function rankedQueueText(ranked: ArenaRanked): string {
+  return ranked.inDuel
+    ? tx('In a duel…', 'Đang đấu…')
+    : ranked.queued
+      ? tx(`Leave the queue (${ranked.waiting} waiting)`, `Rời hàng chờ (${ranked.waiting} người chờ)`)
+      : tx('Find a 1v1 opponent', 'Tìm đối thủ 1v1');
 }
 
 /** The home server saved before going to the Arena, if any. */
@@ -309,6 +331,8 @@ export class ArenaWindow {
     if (state.royale) set('arena-royale-status', this.royaleStatus(state.royale));
     if (state.guildWar) set('arena-guild-status', this.guildWarStatus(state.guildWar));
     if (state.team?.side) set('arena-team-score', this.scoreText(state.team));
+    if (state.team) set(state.team.queued ? 'arena-team-leave' : 'arena-team-join', teamQueueText(state.team));
+    if (state.ranked) set(state.ranked.queued ? 'arena-leave-queue' : 'arena-join-queue', rankedQueueText(state.ranked));
   }
 
   private render(): void {
@@ -509,11 +533,7 @@ export class ArenaWindow {
     queue.type = 'button';
     queue.className = 'hnmo-btn';
     queue.id = team.queued ? 'arena-team-leave' : 'arena-team-join';
-    queue.textContent = team.queued
-      ? tx(`Leave the team queue (${team.waiting} waiting)`, `Rời hàng chờ đấu đội (${team.waiting} người chờ)`)
-      : team.running
-        ? tx('Queue for the next team battle', 'Xếp hàng trận đấu đội tiếp theo')
-        : tx('Find a team battle', 'Tìm trận đấu đội');
+    queue.textContent = teamQueueText(team);
     queue.addEventListener('click', () => {
       this.options.send('HnmoArenaTravelRequest', { Action: team.queued ? 6 : 5, Index: 0 });
     });
@@ -593,11 +613,7 @@ export class ArenaWindow {
     queue.className = 'hnmo-btn';
     queue.id = ranked.queued ? 'arena-leave-queue' : 'arena-join-queue';
     queue.disabled = ranked.inDuel;
-    queue.textContent = ranked.inDuel
-      ? tx('In a duel…', 'Đang đấu…')
-      : ranked.queued
-        ? tx(`Leave the queue (${ranked.waiting} waiting)`, `Rời hàng chờ (${ranked.waiting} người chờ)`)
-        : tx('Find a 1v1 opponent', 'Tìm đối thủ 1v1');
+    queue.textContent = rankedQueueText(ranked);
     queue.addEventListener('click', () => {
       this.options.send('HnmoArenaTravelRequest', { Action: ranked.queued ? 3 : 2, Index: 0 });
     });

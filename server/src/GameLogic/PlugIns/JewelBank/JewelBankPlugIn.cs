@@ -183,7 +183,9 @@ public sealed class JewelBankPlugIn :
             return;
         }
 
-        var depositedCount = 0;
+        // The jewels leave the bag and that is saved first; the bank is credited afterwards. A stop in between can't
+        // leave a jewel both in the saved bag and in the bank (a doubled deposit); the worst case is a lost deposit.
+        var planned = new List<(JewelBankEntryConfig Config, int Count)>();
         var balances = engine.GetBalances(login);
         foreach (var (item, cfg) in targets)
         {
@@ -191,13 +193,13 @@ public sealed class JewelBankPlugIn :
             balances.TryGetValue(cfg.Key, out var currentBalance);
             var availableCapacity = Math.Max(0, Math.Max(1, cfg.MaxCapacity) - currentBalance);
             var toDeposit = Math.Min(stackCount, availableCapacity);
-            if (toDeposit <= 0 || engine.Deposit(login, cfg.Key, toDeposit, "game", DateTime.UtcNow) != JewelBankResult.Ok)
+            if (toDeposit <= 0)
             {
                 continue;
             }
 
             balances[cfg.Key] = currentBalance + toDeposit;
-            depositedCount += toDeposit;
+            planned.Add((cfg, toDeposit));
             if (toDeposit < stackCount)
             {
                 item.Durability = (byte)(stackCount - toDeposit);
@@ -211,12 +213,44 @@ public sealed class JewelBankPlugIn :
             await player.InvokeViewPlugInAsync<IItemRemovedPlugIn>(p => p.RemoveItemAsync(itemSlot)).ConfigureAwait(false);
         }
 
-        if (depositedCount == 0 && fee > 0)
+        if (planned.Count == 0 && fee > 0)
         {
             player.TryAddMoney(fee);
         }
 
-        await player.SaveProgressAsync().ConfigureAwait(false);
+        // A failed save keeps the change for the next one: the bank is credited all the same, so the running game holds
+        // every jewel exactly once.
+        try
+        {
+            if (!await player.SaveProgressAsync().ConfigureAwait(false))
+            {
+                player.Logger.LogWarning("Jewel Bank: the bag of {Player} couldn't be saved before the deposit; the next save tries again.", player.Name);
+            }
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            player.Logger.LogWarning(ex, "Jewel Bank: the bag of {Player} couldn't be saved before the deposit; the next save tries again.", player.Name);
+        }
+
+        var depositedCount = 0;
+        foreach (var (cfg, count) in planned)
+        {
+            if (engine.Deposit(login, cfg.Key, count, "game", DateTime.UtcNow) == JewelBankResult.Ok)
+            {
+                depositedCount += count;
+                continue;
+            }
+
+            // The bank refused it after all (e.g. a website deposit filled it meanwhile): the jewels go back into the bag.
+            var back = new GiftCodeOwedReward { Items = [new GiftCodeItem { Group = cfg.Group, Number = cfg.Number, Count = count, Durability = 1 }] };
+            if (!await GiftCodeRewards.GiveGoodsAsync(player, back).ConfigureAwait(false))
+            {
+                player.Logger.LogError("Jewel Bank: {Count} x {Jewel} of {Player} could neither be banked nor given back.", count, cfg.Key, player.Name);
+            }
+
+            await player.SaveProgressAsync().ConfigureAwait(false);
+        }
+
         if (depositedCount > 0)
         {
             await this.NotifyAsync(player, "Deposited", $"Deposited {depositedCount} jewel(s) into your Jewel Bank.", $"Đã gửi {depositedCount} viên ngọc vào Ngân hàng ngọc.").ConfigureAwait(false);
