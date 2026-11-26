@@ -167,17 +167,23 @@ public class GensConfiguration
     /// and to be a member of the gens of the guild master to join a guild.
     /// </summary>
     /// <remarks>
-    /// The original game requires it. It's not the default, because it affects all players, also the ones which don't care about the gens.
+    /// The original game requires it. It's the default since 26 Nov 2026 (owner's decision); a host can switch it off in the plug-in settings.
     /// </remarks>
-    public bool GuildRequiresGens { get; set; }
+    public bool GuildRequiresGens { get; set; } = true;
 
     /// <summary>
     /// Gets or sets a value indicating whether the masters of two guilds have to be members of the same gens to form an alliance.
     /// </summary>
     /// <remarks>
-    /// The original game requires it. It's not the default, because it affects all guilds, also the ones which don't care about the gens.
+    /// The original game requires it. It's the default since 26 Nov 2026 (owner's decision); a host can switch it off in the plug-in settings.
     /// </remarks>
-    public bool AllianceRequiresSameGens { get; set; }
+    public bool AllianceRequiresSameGens { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether players can read the normal chat of members of the opposite gens
+    /// (owner, 26 Nov 2026: hidden by default, so the rivalry matters).
+    /// </summary>
+    public bool CanSeeOppositeGensChat { get; set; }
 
     /// <summary>
     /// Gets the gens of the npc with the specified number.
