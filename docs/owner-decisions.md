@@ -35,6 +35,10 @@ decision. Add new decisions here as they are made; never turn an agent's habit i
 | 26 Nov | Q13 Season 9 data set | "Làm tất cả cùng lúc" (items, events, combat/progression systems) |
 | 26 Nov | Mac app: Apple signing and notarization | The owner says he already told main that the Mac app may run without notarization ("anh đã báo là chạy ko công chứng app mac dc"; not found in this file before, recorded now): ship it unsigned, Gatekeeper asks once; no Apple Developer account needed for now |
 | 26 Nov | #381 Arena Home | Fix the PR text (Home is only the standing and respawn rectangle, walkable, not a safe zone); no new protection rule ("Sửa mô tả PR cho đúng") |
+| 26 Nov | M menu for outlaws (PK level 2 and up) | "Giữ khóa như desktop gốc" (the M menu stays locked; /move charges 2x into a gens battle zone, 50x elsewhere) |
+| 26 Nov | Vault zen with several vault pages | "Mỗi trang một két Zen riêng" (one purse per page; a zen box belongs to its page) |
+| 26 Nov | Gens defaults on servers already running | "Áp cho mọi server" |
+| 26 Nov | #377 master experience at the maximum level waits for the Season Plan | "Bỏ điều kiện Season Plan" (solo and party alike) |
 
 Earlier decisions (Maya's body, Fenrir, `/move` in events, the skill sweep points, the socket weapon mix in
 Season 6 and 9, the MUVIETNAM2 purge after the merge into `main`) are summarized in
