@@ -107,11 +107,17 @@ public static class SeasonSharedAccounts
             var snapshot = CoinBalances.Of(account);
             var baseline = Baselines.TryGetValue(account.LoginName, out var known) ? known : snapshot;
             var delta = snapshot - baseline;
-            var result = await store.AddCoinsAsync(account.LoginName, delta, cancellationToken).ConfigureAwait(false);
-            if (result is not { } shared)
+            var result = await store.AddCoinsAndReportAsync(account.LoginName, delta, cancellationToken).ConfigureAwait(false);
+            if (result is not { } change)
             {
                 return null;
             }
+
+            var shared = change.After;
+
+            // A balance kept at zero takes less than asked: the receipt holds what the shared store really took, so an
+            // undo gives back no more than that.
+            var applied = change.After - change.Before;
 
             var inFlightDelta = CoinBalances.Of(account) - snapshot;
             new CoinBalances(
@@ -119,7 +125,7 @@ public static class SeasonSharedAccounts
                 shared.WCoinP + inFlightDelta.WCoinP,
                 shared.GoblinPoints + inFlightDelta.GoblinPoints).ApplyTo(account);
             Baselines[account.LoginName] = shared;
-            return new CoinSyncReceipt(account.LoginName, delta, baseline, shared - snapshot);
+            return new CoinSyncReceipt(account.LoginName, applied, baseline, shared - snapshot);
         }
         finally
         {
@@ -167,7 +173,7 @@ public static class SeasonSharedAccounts
 
 /// <summary>What one <see cref="SeasonSharedAccounts.TrySyncCoinsAsync"/> did, to take it back if the caller's save fails.</summary>
 /// <param name="LoginName">The login name.</param>
-/// <param name="Delta">The change that was added to the shared store.</param>
+/// <param name="Delta">The change the shared store really applied (less than asked when a balance was kept at zero).</param>
 /// <param name="PreviousBaseline">The baseline before the sync.</param>
 /// <param name="Shift">What the account took over from the shared balances (shared balance after the change minus the account's own balance).</param>
 public readonly record struct CoinSyncReceipt(string LoginName, CoinBalances Delta, CoinBalances PreviousBaseline, CoinBalances Shift);
