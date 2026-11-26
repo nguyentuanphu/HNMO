@@ -720,6 +720,17 @@ public class GameContext : AsyncDisposable, IGameContext
         }
     }
 
+    /// <summary>
+    /// Builds the experience tables again from the configuration's formulas and maximum levels. A plug-in which changes
+    /// <see cref="GameConfiguration.MaximumMasterLevel"/> or <see cref="GameConfiguration.MaximumLevel"/> at run time
+    /// calls it: the tables hold one entry per level, so a higher maximum level needs longer tables.
+    /// </summary>
+    internal void RefreshExperienceTables()
+    {
+        this.ExperienceTable = CreateExpTable(this.Configuration.ExperienceFormula ?? DefaultExperienceFormula, this.Configuration.MaximumLevel);
+        this.MasterExperienceTable = CreateExpTable(this.Configuration.MasterExperienceFormula ?? DefaultMasterExperienceFormula, this.Configuration.MaximumMasterLevel);
+    }
+
     private ValueTask OnGameConfigurationChangeAsync(Action unregisterAction, GameConfiguration gameConfiguration, GameContext context)
     {
         this._recoverTimer.Change(gameConfiguration.RecoveryInterval, gameConfiguration.RecoveryInterval);

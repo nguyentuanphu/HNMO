@@ -13,7 +13,10 @@ public sealed class SeasonNineSystemsConfiguration
     /// <summary>Gets or sets a value indicating whether Season 9 gameplay systems are enabled.</summary>
     public bool Enabled { get; set; }
 
-    /// <summary>Gets or sets a value indicating whether enforcement stays gated to <c>HNMO_SEASON=s9</c>.</summary>
+    /// <summary>
+    /// Gets or sets a value kept for stored configurations. It changes nothing: the Season 9 systems only ever run in a
+    /// Season 9 realm (<c>HNMO_SEASON=s9</c>), never in Season 6.3 or Arena.
+    /// </summary>
     public bool SeasonNineOnly { get; set; } = true;
 
     /// <summary>Gets or sets configured Master Level cap applied when Season 9 systems are active (default 330).</summary>
