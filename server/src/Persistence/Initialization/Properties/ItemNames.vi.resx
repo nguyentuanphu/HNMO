@@ -785,4 +785,8 @@
   <data name="GambleStick" xml:space="preserve"><value>Trượng</value></data>
   <data name="TalismanOfGuardian" xml:space="preserve"><value>Bùa hộ mệnh</value></data>
   <data name="TalismanOfItemProtection" xml:space="preserve"><value>Bùa bảo vệ vật phẩm</value></data>
+  <data name="ChaosCard" xml:space="preserve"><value>Thẻ Hỗn Nguyên</value></data>
+  <data name="ChaosCardGold" xml:space="preserve"><value>Thẻ Hỗn Nguyên Vàng</value></data>
+  <data name="ChaosCardRare" xml:space="preserve"><value>Thẻ Hỗn Nguyên Hiếm</value></data>
+  <data name="ChaosCardMini" xml:space="preserve"><value>Thẻ Hỗn Nguyên Nhỏ</value></data>
 </root>
