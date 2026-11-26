@@ -272,7 +272,7 @@ public sealed class JewelBankPlugIn :
         {
             var singleReward = new GiftCodeOwedReward
             {
-                Items = [new GiftCodeItem { Group = cfg.Group, Number = cfg.Number, Count = 1 }],
+                Items = [new GiftCodeItem { Group = cfg.Group, Number = cfg.Number, Count = 1, Durability = 1 }],
             };
             if (!await GiftCodeRewards.GiveGoodsAsync(player, singleReward).ConfigureAwait(false))
             {
@@ -438,7 +438,7 @@ public sealed class JewelBankPlugIn :
                 {
                     var ok = await GiftCodeRewards.GiveGoodsAsync(player, new GiftCodeOwedReward
                     {
-                        Items = [new GiftCodeItem { Group = cfg.Group, Number = cfg.Number, Count = 1 }],
+                        Items = [new GiftCodeItem { Group = cfg.Group, Number = cfg.Number, Count = 1, Durability = 1 }],
                     }).ConfigureAwait(false);
                     if (!ok)
                     {
