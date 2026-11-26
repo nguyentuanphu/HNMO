@@ -10,6 +10,7 @@ import type { Inventory, Item } from '../game/inventory.js';
 import { itemDefinition } from '../game/items.js';
 import type { Connection } from '../net/connection.js';
 import type { ItemWindows, TradeView } from './itemWindows.js';
+import { promptInGame } from './confirmDialog.js';
 
 /** The character level from which the trade command works (TRADELIMITLEVEL). */
 export const TRADE_MIN_LEVEL = 6;
@@ -345,7 +346,7 @@ export class Trade {
 
   // The zen button (trade_zen_click, SendRequestMyGoldInput): an amount up to the money plus what's in already.
   async askGold(): Promise<void> {
-    const ask = this.options.prompt ?? ((text: string) => Promise.resolve(window.prompt(text, '')));
+    const ask = this.options.prompt ?? ((text: string) => promptInGame(text, { numericOnly: true, maxLength: 8, initialText: '' }, 'trade-zen-dialog'));
     const question = 'Enter the amount of Zen you would like to trade.';
     const text = await ask(translate(question) ?? question);
     if (text === null) return;

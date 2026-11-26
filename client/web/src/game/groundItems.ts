@@ -79,7 +79,9 @@ export class GroundItems {
   private readonly layer: HTMLDivElement;
   private pickupTarget: GroundDrop | null = null;
   private requested: number | null = null;
+  private altHeld = false;
   private showNames = false;
+  private altPressedAlone = false;
   private hovered: GroundDrop | null = null;
   private readonly stop: () => void;
 
@@ -97,18 +99,31 @@ export class GroundItems {
     void loadTooltipData();
     this.stop = connection.onPacket((bytes) => this.handle(bytes));
     window.addEventListener('keydown', (event) => {
-      if (event.key !== 'Alt' || event.repeat) return;
-      if (event.isTrusted) this.showNames = !this.showNames;
-      else this.showNames = true;
-      event.preventDefault();
+      if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+      if (event.key === 'Alt') {
+        this.altHeld = true;
+        this.altPressedAlone = event.isTrusted && !event.repeat && !event.ctrlKey && !event.metaKey && !event.shiftKey;
+        event.preventDefault();
+      } else {
+        this.altPressedAlone = false;
+      }
     });
     window.addEventListener('keyup', (event) => {
-      if (event.key === 'Alt' && !event.isTrusted) this.showNames = false;
+      if (event.key !== 'Alt') return;
+      this.altHeld = false;
+      if (event.isTrusted && this.altPressedAlone) {
+        this.altPressedAlone = false;
+        if (!(event.target instanceof Element && event.target.closest('input, textarea, select'))) {
+          this.showNames = !this.showNames;
+          event.preventDefault();
+        }
+      }
     });
+    window.addEventListener('blur', () => { this.altHeld = false; this.altPressedAlone = false; });
   }
 
-  /** Whether ground item names are toggled on. */
-  get namesShown(): boolean { return this.showNames; }
+  /** Whether ground item names are shown (held Alt or toggled on). */
+  get namesShown(): boolean { return this.altHeld || this.showNames; }
 
   handle(bytes: Uint8Array): void {
     try {
@@ -238,7 +253,7 @@ export class GroundItems {
     for (const drop of this.drops.values()) {
       const x = cellCenter(drop.cell.x), y = cellCenter(drop.cell.y);
       drop.group.position.set(x, y, sampleHeight(world.heights, x, y));
-      const show = this.showNames || this.hovered === drop;
+      const show = this.altHeld || this.showNames || this.hovered === drop;
       const at = show ? this.screenOf(drop) : null;
       if (!at) { drop.label.style.display = 'none'; continue; }
       Object.assign(drop.label.style, { display: 'block', left: `${at.x}px`, top: `${at.y - LABEL_RAISE * scale}px`, fontSize: `${nativeTextPx()}px` });

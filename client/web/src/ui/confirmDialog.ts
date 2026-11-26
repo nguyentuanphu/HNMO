@@ -11,3 +11,12 @@ export function confirmInGame(text: string, okOnly = false): Promise<boolean> {
 export function messageInGame(text: string): Promise<void> {
   return confirmInGame(text, true).then(() => undefined);
 }
+
+/** An input prompt inside the game UI (does not block packets like window.prompt). */
+export function promptInGame(
+  text: string,
+  input: { masked?: boolean; maxLength?: number; numericOnly?: boolean; initialText?: string } = {},
+  tag?: string,
+): Promise<string | null> {
+  return showConfirm({ lines: [text], showCancel: true, input, tag }).then((answer) => (answer.button === 'primary' ? answer.text : null));
+}
