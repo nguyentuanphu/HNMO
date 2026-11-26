@@ -40,6 +40,9 @@ public sealed class JewelBankPlugIn :
     /// <summary>The accounts with an operation whose outcome couldn't be read (the database was unreachable).</summary>
     private static readonly System.Collections.Concurrent.ConcurrentDictionary<Guid, Guid> UncertainOperations = new();
 
+    /// <summary>The accounts (by state file and account id) whose JSON entries were imported in this process.</summary>
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, bool> ImportedLogins = new(StringComparer.OrdinalIgnoreCase);
+
     private (JewelBankConfiguration Config, JewelBankEngine Engine)? _engine;
 
     /// <inheritdoc />
@@ -119,6 +122,7 @@ public sealed class JewelBankPlugIn :
         var bagJewels = CollectBagJewels(player, engine);
         var masterFree = player.SelectedCharacter.MasterLevelUpPoints;
         var masterSpent = ResetApplier.CountSpentMasterPoints(player.SelectedCharacter);
+        await this.ImportJsonOnceAsync(player).ConfigureAwait(false);
         var (balances, pending) = await ReadBankAsync(player.PersistenceContext, player.Account!.GetId()).ConfigureAwait(false);
         var json = JewelBankStateWriter.WriteAccountState(engine, balances, pending, masterFree, masterSpent, bagJewels, actionResult, messageEn, messageVi);
         await player.InvokeViewPlugInAsync<IHnmoJewelBankViewPlugIn>(p => p.ShowJewelBankAsync(json, requested)).ConfigureAwait(false);
@@ -393,6 +397,40 @@ public sealed class JewelBankPlugIn :
         return list.OrderBy(x => x.Item1).ToList();
     }
 
+    /// <summary>
+    /// Imports the account's entries of the JSON state file into the database once (each entry has a fixed operation id,
+    /// so this is cheap and safe to repeat).
+    /// </summary>
+    /// <param name="player">The player.</param>
+    /// <returns>A task.</returns>
+    private async ValueTask ImportJsonOnceAsync(Player player)
+    {
+        if (player.Account?.LoginName is not { } login)
+        {
+            return;
+        }
+
+        var memo = $"{this.GetEngine().Configuration.FileName}|{player.Account.GetId():N}";
+        if (!ImportedLogins.TryAdd(memo, true))
+        {
+            return;
+        }
+
+        try
+        {
+            var report = await JewelBankDatabaseImport.RunAsync(player.GameContext.PersistenceContextProvider, player.GameContext.Configuration, this.GetEngine().Store, dryRun: false, login, player.Account.GetId()).ConfigureAwait(false);
+            if (report.Imported.Count > 0 || report.Conflicts.Count > 0)
+            {
+                player.Logger.LogInformation("Jewel Bank: imported {Count} JSON entries of {Login} into the database ({Conflicts} conflicts).", report.Imported.Count, login, report.Conflicts.Count);
+            }
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            ImportedLogins.TryRemove(memo, out _);
+            player.Logger.LogWarning(ex, "Jewel Bank: the JSON entries of {Login} couldn't be imported yet.", login);
+        }
+    }
+
     private bool IsUncertain(Player player) => UncertainOperations.ContainsKey(player.Account!.GetId());
 
     private ValueTask NotifyUncertainAsync(Player player) =>
@@ -401,6 +439,7 @@ public sealed class JewelBankPlugIn :
     private async ValueTask DepositLockedAsync(Player player, string login, byte slot, bool depositAll)
     {
         var engine = this.GetEngine();
+        await this.ImportJsonOnceAsync(player).ConfigureAwait(false);
         if (this.IsUncertain(player))
         {
             await this.NotifyUncertainAsync(player).ConfigureAwait(false);
@@ -562,6 +601,7 @@ public sealed class JewelBankPlugIn :
     private async ValueTask WithdrawLockedAsync(Player player, string jewelKey, int quantity)
     {
         var engine = this.GetEngine();
+        await this.ImportJsonOnceAsync(player).ConfigureAwait(false);
         if (!await this.EnsureSafeZoneAsync(player, engine).ConfigureAwait(false))
         {
             return;
@@ -652,6 +692,7 @@ public sealed class JewelBankPlugIn :
     // transaction as that bag.
     private async ValueTask DeliverPendingLockedAsync(Player player)
     {
+        await this.ImportJsonOnceAsync(player).ConfigureAwait(false);
         if (this.IsUncertain(player))
         {
             return;

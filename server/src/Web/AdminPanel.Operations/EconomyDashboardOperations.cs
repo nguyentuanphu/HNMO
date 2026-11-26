@@ -74,13 +74,15 @@ public sealed class EconomyDashboardOperations(
             }
         }
 
+        long? bankPieces = jewelBank is null ? null : await EconomyJewelActivity.SumBankPiecesAsync(context, accounts).ConfigureAwait(false);
         return EconomyStore.Open(config.FileName).CaptureSnapshot(
             accounts,
             external,
             config,
             timeProvider.GetUtcNow().UtcDateTime,
             owner,
-            jewelBank);
+            jewelBank,
+            bankPieces);
     }
 
     private static async ValueTask<List<Account>> LoadAllAccountsAsync(IPlayerContext context, CancellationToken cancellationToken)

@@ -93,6 +93,8 @@ public sealed class WebsiteJewelBankController(
             return this.Unauthorized(new { error = "login" });
         }
 
+        // The account's entries of the old JSON state file go into the database first (once; safe to repeat).
+        await JewelBankDatabaseImport.RunAsync(persistence, configuration, engine.Store, dryRun: false, account.LoginName, account.GetId()).ConfigureAwait(false);
         var qty = Math.Clamp(request.Quantity, 1, 50);
         var key = request.JewelKey?.Trim() ?? string.Empty;
         if (engine.FindByKey(key) is not { } jewel)
@@ -325,6 +327,11 @@ public sealed class WebsiteJewelBankController(
     private async Task<(IReadOnlyDictionary<string, int> Balances, IReadOnlyList<(string Id, string Key, int Quantity)> Pending)> ReadBankAsync(Account account)
     {
         var configuration = await gameConfigurationSource.GetOwnerAsync(Guid.Empty).ConfigureAwait(false);
+        if (await this.EngineAsync(default).ConfigureAwait(false) is { } engine)
+        {
+            await JewelBankDatabaseImport.RunAsync(persistence, configuration, engine.Store, dryRun: false, account.LoginName, account.GetId()).ConfigureAwait(false);
+        }
+
         using var context = persistence.CreateNewPlayerContext(configuration);
         var accountId = account.GetId();
         var balances = await context.GetJewelBankBalancesAsync(accountId).ConfigureAwait(false);

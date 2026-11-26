@@ -142,6 +142,7 @@ public sealed class EconomyStore
     /// <param name="utcNow">Current UTC timestamp.</param>
     /// <param name="world">The installed world used for the verified jewel projection, when available.</param>
     /// <param name="jewelBank">The active Jewel Bank settings, if the bank is enabled.</param>
+    /// <param name="bankPieces">The banked jewel pieces (from the database), when the bank is enabled.</param>
     /// <returns>The persisted snapshot.</returns>
     public EconomyDailySnapshot CaptureSnapshot(
         IReadOnlyList<Account> accounts,
@@ -149,7 +150,8 @@ public sealed class EconomyStore
         EconomyConfiguration config,
         DateTime utcNow,
         GameConfiguration? world = null,
-        JewelBankConfiguration? jewelBank = null)
+        JewelBankConfiguration? jewelBank = null,
+        long? bankPieces = null)
     {
         ArgumentNullException.ThrowIfNull(accounts);
         ArgumentNullException.ThrowIfNull(externalBalances);
@@ -221,9 +223,9 @@ public sealed class EconomyStore
         var jewelActivity = mixes is { Count: > 0 } || bankJewels.Length > 0
             ? EconomyJewelActivity.Capture(accounts, dayActivities, dayActivities.Count == 2000, new ConfiguredJewelCounter(mixes ?? [], bankJewels))
             : null;
-        if (jewelActivity is not null && jewelBank is not null && !string.IsNullOrWhiteSpace(jewelBank.FileName))
+        if (jewelActivity is not null && jewelBank is not null && bankPieces is { } banked)
         {
-            jewelActivity = jewelActivity with { BankPieces = EconomyJewelActivity.ReadBankPieces(accounts, jewelBank.FileName) };
+            jewelActivity = jewelActivity with { BankPieces = banked };
         }
 
         var snapshot = new EconomyDailySnapshot
