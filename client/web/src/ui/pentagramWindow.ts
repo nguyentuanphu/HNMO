@@ -1,6 +1,6 @@
 // HNMO Season 9 pentagram window (Ctrl+P): the worn pentagram with its element and errtel slots, the pentagrams and
 // errtels of the bag, wearing and taking off, putting errtels in and taking them out, and the errtel mixes.
-// Uses F5 58 (HnmoPentagramCommand) and F5 59 (HnmoPentagramState); elemental hits come as F5 5A (HnmoElementalHit).
+// Uses F5 5B (HnmoPentagramCommand) and F5 5C (HnmoPentagramState); elemental hits come as F5 5D (HnmoElementalHit).
 // The desktop client has no pentagram window, so this follows the web game's HNMO panels (see jewelBankWindow.ts).
 
 import { currentLanguage, onLanguageChange } from '../i18n.js';
@@ -15,8 +15,8 @@ export interface PentagramWindowOptions {
   elementalHit: (targetId: number, damage: number, element: number) => void;
 }
 
-const SUBCODE_STATE = 0x59;
-const SUBCODE_HIT = 0x5a;
+const SUBCODE_STATE = 0x5c;
+const SUBCODE_HIT = 0x5d;
 const CMD = { Request: 1, Wear: 2, TakeOff: 3, Attach: 4, Remove: 5, LevelUp: 6, RankUp: 7 } as const;
 
 function tx(en: string, vi: string): string {
@@ -74,7 +74,7 @@ export class PentagramWindow {
     else this.open();
   }
 
-  /** Handles F5 59 and F5 5A; returns whether the packet was one of them. */
+  /** Handles F5 5C and F5 5D; returns whether the packet was one of them. */
   public handle(bytes: Uint8Array): boolean {
     if (bytes.length >= 5 && bytes[0] === 0xc2 && bytes[3] === 0xf5 && bytes[4] === SUBCODE_STATE) {
       const parsed = read('ServerToClient', 'HnmoPentagramState', bytes);

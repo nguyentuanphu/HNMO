@@ -231,7 +231,7 @@
   * [C1 F5 52 - HnmoArenaTravelRequest (by client)](C1-F5-52-HnmoArenaTravelRequest_by-client.md)
   * [C2 F5 54 - HnmoBugReportCommand (by client)](C2-F5-54-HnmoBugReportCommand_by-client.md)
   * [C1 F5 56 - HnmoUltimateAutoPlayRequest (by client)](C1-F5-56-HnmoUltimateAutoPlayRequest_by-client.md)
-  * [C1 F5 58 - HnmoPentagramCommand (by client)](C1-F5-58-HnmoPentagramCommand_by-client.md)
+  * [C1 F5 5B - HnmoPentagramCommand (by client)](C1-F5-5B-HnmoPentagramCommand_by-client.md)
   * [C1 F6 0A - QuestSelectRequest (by client)](C1-F6-0A-QuestSelectRequest_by-client.md)
   * [C1 F6 0B - QuestProceedRequest (by client)](C1-F6-0B-QuestProceedRequest_by-client.md)
   * [C1 F6 0D - QuestCompletionRequest (by client)](C1-F6-0D-QuestCompletionRequest_by-client.md)

@@ -21014,7 +21014,7 @@ public readonly struct GameGuardAuthResponse
 
 /// <summary>
 /// Is sent by the client when: Sent by the web client in a Season 9 realm to open the pentagram window, wear or take off the pentagram, put an errtel into a slot or take it out, or mix an errtel.
-/// Causes reaction on server side: The server performs the action and responds with HnmoPentagramState (F5 59).
+/// Causes reaction on server side: The server performs the action and responds with HnmoPentagramState (F5 5C).
 /// </summary>
 public readonly struct HnmoPentagramCommand
 {
@@ -21061,7 +21061,7 @@ public readonly struct HnmoPentagramCommand
     /// Gets the operation sub-code of this data packet.
     /// The <see cref="Code" /> is used as a grouping key.
     /// </summary>
-    public static byte SubCode => 0x58;
+    public static byte SubCode => 0x5B;
 
     /// <summary>
     /// Gets the initial length of this data packet. When the size is dynamic, this value may be bigger than actually needed.

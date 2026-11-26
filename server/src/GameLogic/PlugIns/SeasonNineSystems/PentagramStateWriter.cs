@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.Json;
 using HNMO.DataModel.Entities;
 
-/// <summary>Writes the pentagram state the web client shows (HnmoPentagramState, <c>F5 59</c>), as plain-ASCII JSON.</summary>
+/// <summary>Writes the pentagram state the web client shows (HnmoPentagramState, <c>F5 5C</c>), as plain-ASCII JSON.</summary>
 public static class PentagramStateWriter
 {
     /// <summary>The state when the system is off or this isn't a Season 9 realm.</summary>

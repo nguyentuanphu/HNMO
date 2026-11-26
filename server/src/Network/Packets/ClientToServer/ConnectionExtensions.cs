@@ -6555,7 +6555,7 @@ public static class ConnectionExtensions
     /// <param name="index">The errtel slot of the pentagram (0..4), or the bag slot of the second errtel of a rank-up.</param>
     /// <remarks>
     /// Is sent by the client when: Sent by the web client in a Season 9 realm to open the pentagram window, wear or take off the pentagram, put an errtel into a slot or take it out, or mix an errtel.
-    /// Causes reaction on server side: The server performs the action and responds with HnmoPentagramState (F5 59).
+    /// Causes reaction on server side: The server performs the action and responds with HnmoPentagramState (F5 5C).
     /// </remarks>
     public static async ValueTask SendHnmoPentagramCommandAsync(this IConnection? connection, byte @action, byte @slot, byte @index)
     {

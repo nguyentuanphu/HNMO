@@ -58,9 +58,9 @@ The local Claude reads the pack's values and posts them on #428. They then go in
 ## Network and web (this branch, second step)
 
 - **Packets** (XML + generated code):
-  - `HnmoPentagramCommand` (C1 F5 58): request, wear, take off, put in, take out, level up, rank up.
-  - `HnmoPentagramState` (C2 F5 59): JSON state with the worn pentagram, the bag's pentagrams and errtels, the costs and the last result.
-  - `HnmoElementalHit` (C1 F5 5A): target id, elemental damage, element.
+  - `HnmoPentagramCommand` (C1 F5 5B): request, wear, take off, put in, take out, level up, rank up.
+  - `HnmoPentagramState` (C2 F5 5C): JSON state with the worn pentagram, the bag's pentagrams and errtels, the costs and the last result.
+  - `HnmoElementalHit` (C1 F5 5D): target id, elemental damage, element.
   - The state is sent on entering the world (S9 realms) and after each action.
 - **Web:**
   - `ui/pentagramWindow.ts` (Ctrl+P): the worn pentagram and its slots, and the bag's pentagrams and errtels with wear / take off / put in / take out / level up / rank up.

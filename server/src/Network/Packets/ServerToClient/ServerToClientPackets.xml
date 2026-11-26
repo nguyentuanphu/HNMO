@@ -16806,7 +16806,7 @@
     <Packet>
       <HeaderType>C2HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
-      <SubCode>59</SubCode>
+      <SubCode>5C</SubCode>
       <Name>HnmoPentagramState</Name>
       <Direction>ServerToClient</Direction>
       <SentWhen>Sent in a Season 9 realm after entering the world, after a pentagram action, or upon HnmoPentagramCommand.</SentWhen>
@@ -16823,7 +16823,7 @@
     <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
-      <SubCode>5A</SubCode>
+      <SubCode>5D</SubCode>
       <Name>HnmoElementalHit</Name>
       <Length>11</Length>
       <Direction>ServerToClient</Direction>

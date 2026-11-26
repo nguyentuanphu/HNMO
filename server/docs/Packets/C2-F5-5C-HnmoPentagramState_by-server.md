@@ -1,4 +1,4 @@
-# C2 F5 59 - HnmoPentagramState (by server)
+# C2 F5 5C - HnmoPentagramState (by server)
 
 ## Is sent when
 
@@ -15,5 +15,5 @@ Updates the web client's pentagram window, the pentagram slot of the inventory a
 | 0 | 1 |   Byte   | 0xC2  | [Packet type](PacketTypes.md) |
 | 1 | 2 |    Short   |      | Packet header - length of the packet |
 | 3 | 1 |    Byte   | 0xF5  | Packet header - packet type identifier |
-| 4 | 1 |    Byte   | 0x59  | Packet header - sub packet type identifier |
+| 4 | 1 |    Byte   | 0x5C  | Packet header - sub packet type identifier |
 | 5 |  | String |  | Json; Plain-ASCII JSON payload: whether the system is on, the worn pentagram with its element and errtel slots, the pentagrams and errtels of the bag by slot, the mix costs and an optional action result. |

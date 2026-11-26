@@ -48438,7 +48438,7 @@ public readonly struct HnmoPentagramState
     /// Gets the operation sub-code of this data packet.
     /// The <see cref="Code" /> is used as a grouping key.
     /// </summary>
-    public static byte SubCode => 0x59;
+    public static byte SubCode => 0x5C;
 
     /// <summary>
     /// Gets the header of this packet.
@@ -48531,7 +48531,7 @@ public readonly struct HnmoElementalHit
     /// Gets the operation sub-code of this data packet.
     /// The <see cref="Code" /> is used as a grouping key.
     /// </summary>
-    public static byte SubCode => 0x5A;
+    public static byte SubCode => 0x5D;
 
     /// <summary>
     /// Gets the initial length of this data packet. When the size is dynamic, this value may be bigger than actually needed.

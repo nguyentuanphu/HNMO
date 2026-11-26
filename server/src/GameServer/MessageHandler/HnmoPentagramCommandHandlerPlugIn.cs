@@ -13,7 +13,7 @@ using HNMO.Network.PlugIns;
 using HNMO.PlugIns;
 
 /// <summary>
-/// Packet handler for <see cref="HnmoPentagramCommand"/> (<c>F5 58</c>): the Season 9 pentagram and errtel actions.
+/// Packet handler for <see cref="HnmoPentagramCommand"/> (<c>F5 5B</c>): the Season 9 pentagram and errtel actions.
 /// </summary>
 [PlugIn]
 [Display(Name = "HNMO Pentagram Handler", Description = "Handles the Season 9 pentagram and errtel packets from the client.")]

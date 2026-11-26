@@ -1,4 +1,4 @@
-// Season 9 pentagram and errtels: the state the server sends (HnmoPentagramState, F5 59), the tooltip lines of
+// Season 9 pentagram and errtels: the state the server sends (HnmoPentagramState, F5 5C), the tooltip lines of
 // pentagrams and errtels, and the colours of the elements. The desktop client has no pentagram window or tooltip (only
 // the pentagram jewels' buff effects), so this follows the web game's own window and tooltip patterns.
 

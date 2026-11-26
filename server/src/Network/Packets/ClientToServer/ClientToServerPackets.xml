@@ -5311,12 +5311,12 @@
     <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
-      <SubCode>58</SubCode>
+      <SubCode>5B</SubCode>
       <Name>HnmoPentagramCommand</Name>
       <Length>7</Length>
       <Direction>ClientToServer</Direction>
       <SentWhen>Sent by the web client in a Season 9 realm to open the pentagram window, wear or take off the pentagram, put an errtel into a slot or take it out, or mix an errtel.</SentWhen>
-      <CausedReaction>The server performs the action and responds with HnmoPentagramState (F5 59).</CausedReaction>
+      <CausedReaction>The server performs the action and responds with HnmoPentagramState (F5 5C).</CausedReaction>
       <Fields>
         <Field>
           <Index>4</Index>
