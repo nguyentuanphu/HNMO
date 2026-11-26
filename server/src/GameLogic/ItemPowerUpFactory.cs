@@ -103,6 +103,36 @@ public class ItemPowerUpFactory : IItemPowerUpFactory
         {
             yield return petLevel;
         }
+
+        if (item.Definition is { Group: 12, Number: 36 or 37 or 38 or 39 or 40 or 43 or 50 })
+        {
+            if (attributeHolder.GetComposableAttribute(Stats.MasterWingDefenseBonus) is { } wingDefBonus)
+            {
+                yield return new PowerUpWrapper(wingDefBonus, Stats.DefenseFinal, attributeHolder, AggregateType.AddFinal);
+            }
+
+            if (attributeHolder.GetComposableAttribute(Stats.MasterWingAttackBonus) is { } wingAtkBonus)
+            {
+                yield return new PowerUpWrapper(wingAtkBonus, Stats.MinimumPhysBaseDmg, attributeHolder, AggregateType.AddRaw);
+                yield return new PowerUpWrapper(wingAtkBonus, Stats.MaximumPhysBaseDmg, attributeHolder, AggregateType.AddRaw);
+                if (item.Definition.Number is 37 or 39 or 43)
+                {
+                    yield return new PowerUpWrapper(wingAtkBonus, Stats.MinimumWizBaseDmg, attributeHolder, AggregateType.AddRaw);
+                    yield return new PowerUpWrapper(wingAtkBonus, Stats.MaximumWizBaseDmg, attributeHolder, AggregateType.AddRaw);
+                }
+
+                if (item.Definition.Number == 43)
+                {
+                    yield return new PowerUpWrapper(wingAtkBonus, Stats.MinimumCurseBaseDmg, attributeHolder, AggregateType.AddRaw);
+                    yield return new PowerUpWrapper(wingAtkBonus, Stats.MaximumCurseBaseDmg, attributeHolder, AggregateType.AddRaw);
+                }
+            }
+
+            if (attributeHolder.GetComposableAttribute(Stats.MasterWingAbsorbBonus) is { } wingAbsorbBonus)
+            {
+                yield return new PowerUpWrapper(new InverseReductionElement(wingAbsorbBonus), Stats.DamageReceiveDecrement, attributeHolder, AggregateType.Multiplicate);
+            }
+        }
     }
 
     /// <inheritdoc/>
@@ -121,6 +151,7 @@ public class ItemPowerUpFactory : IItemPowerUpFactory
 
         var result = Enumerable.Empty<PowerUpDefinition>();
         var alwaysGroups = activeItems.SelectMany(i => i.Definition!.PossibleItemSetGroups).Where(i => i.AlwaysApplies).Distinct();
+        var hasCompleteAlwaysAppliedSet = false;
 
         foreach (var group in alwaysGroups.Concat(itemGroups).Distinct())
         {
@@ -146,6 +177,11 @@ public class ItemPowerUpFactory : IItemPowerUpFactory
             var setIsComplete = itemCount == group.Items.Count;
             if (setIsComplete)
             {
+                if (group.AlwaysApplies)
+                {
+                    hasCompleteAlwaysAppliedSet = true;
+                }
+
                 // Take all options when the set is complete
                 result = result.Concat(
                     options.PossibleOptions
@@ -164,7 +200,13 @@ public class ItemPowerUpFactory : IItemPowerUpFactory
 
         result = result.Concat(this.GetOptionCombinationBonus(activeItems, gameConfiguration));
 
-        return result.SelectMany(p => PowerUpWrapper.CreateByPowerUpDefinition(p, attributeHolder));
+        var wrappers = result.SelectMany(p => PowerUpWrapper.CreateByPowerUpDefinition(p, attributeHolder)).ToList();
+        if (hasCompleteAlwaysAppliedSet && attributeHolder.GetComposableAttribute(Stats.ArmorSetDefenseBonus) is { } armorSetDefenseBonus)
+        {
+            wrappers.Add(new PowerUpWrapper(armorSetDefenseBonus, Stats.DefenseFinal, attributeHolder, AggregateType.AddFinal));
+        }
+
+        return wrappers;
     }
 
     /// <summary>
@@ -484,5 +526,22 @@ public class ItemPowerUpFactory : IItemPowerUpFactory
             new SimpleElement(item.Level, AggregateType.AddRaw),
             item.Definition?.Number == darkHorseNumber ? Stats.HorseLevel : Stats.RavenLevel,
             attributeHolder);
+    }
+
+    private sealed class InverseReductionElement : IElement
+    {
+        private readonly IElement _source;
+
+        public InverseReductionElement(IElement source)
+        {
+            this._source = source;
+            this._source.ValueChanged += (_, _) => this.ValueChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public event EventHandler? ValueChanged;
+
+        public float Value => MathF.Max(0f, 1f - this._source.Value);
+
+        public AggregateType AggregateType => AggregateType.Multiplicate;
     }
 }

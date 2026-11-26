@@ -900,4 +900,6 @@
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 10 bản đồ Season 9, tệp địa hình, cổng dịch chuyển (417-461, 474-482) và điểm xuất hiện quái/NPC Season 9 khi chạy Season 9.</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: cửa hàng thử vận may của Moss</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 5 phiếu thử vận may của Moss (13-71..75) giá 2.000.000 Zen và trang bị cửa hàng cho Thương nhân Moss (492) nếu đang trống.</value></data>
+  <data name="MasterPassives314To324UpdatePlugIn_Name" xml:space="preserve"><value>Season 6: kỹ năng master bị động bậc 6-9</value></data>
+  <data name="MasterPassives314To324UpdatePlugIn_Description" xml:space="preserve"><value>Bổ sung các kỹ năng master bị động bậc 6-9 của Season 6 (Hộ thân bất tử, Tăng thủ bộ giáp, Báo thù, tăng chỉ số, thưởng công/thủ/hấp thụ cánh cấp 3, tăng AG/công/ma công tối đa, hồi phục khi bị đánh và tỷ lệ chí mạng/hoàn hảo/kép/bỏ qua phòng thủ).</value></data>
 </root>

@@ -494,4 +494,6 @@
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>Adds the 10 Season 9 maps, terrain files, gates (417-461, 474-482), and Season 9 field spawns when running as Season 9.</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: Moss the Merchant gamble shop</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>Adds the 5 Moss gamble vouchers (13-71..75) at 2,000,000 Zen and equips Moss the Merchant (492) with his gamble shop when empty.</value></data>
+  <data name="MasterPassives314To324UpdatePlugIn_Name" xml:space="preserve"><value>Season 6: Rank 6-9 master passives</value></data>
+  <data name="MasterPassives314To324UpdatePlugIn_Description" xml:space="preserve"><value>Adds the Season 6 rank 6-9 passive master skills (Cast Invincibility, Armor Set Bonus, Vengeance, stat increases, third-wing defense/attack/absorption bonuses, Maximum AG/Attack/Wizardry, hit recovery, and critical/excellent/double/ignore-def chances) with passive power-ups.</value></data>
 </root>

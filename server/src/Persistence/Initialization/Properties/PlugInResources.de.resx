@@ -996,4 +996,6 @@
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>Fügt die 10 Season-9-Karten, Terraindateien, Tore (417-461, 474-482) und Season-9-Spawns im Season-9-Betrieb hinzu.</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: Glücksspiel-Laden von Moss dem Händler</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>Fügt die 5 Moss-Glücksspielgutscheine (13-71..75) für 2.000.000 Zen hinzu und stattet Moss den Händler (492) mit seinem Laden aus, sofern leer.</value></data>
+  <data name="MasterPassives314To324UpdatePlugIn_Name" xml:space="preserve"><value>Season 6: Passive Master-Fertigkeiten (Rang 6-9)</value></data>
+  <data name="MasterPassives314To324UpdatePlugIn_Description" xml:space="preserve"><value>Fügt die passiven Master-Fertigkeiten der Ränge 6-9 aus Season 6 samt passiven Power-Ups hinzu (Unverwundbarkeit, Rüstungsset-Bonus, Vergeltung, Statuswert-Boni, Flügel-Boni der 3. Stufe, Max-AG/Angriff/Zauberkraft, Treffererholung und Trefferchancen).</value></data>
 </root>
