@@ -378,4 +378,29 @@
   <data name="TrialOfTheDarkLord" xml:space="preserve"><value>Dùng thử Chúa tể</value></data>
   <data name="TrialOfTheSummoner" xml:space="preserve"><value>Dùng thử Thuật sư</value></data>
   <data name="TrialOfTheRageFighter" xml:space="preserve"><value>Dùng thử Thiết binh</value></data>
+  <data name="FirstStepsGift" xml:space="preserve"><value>Quà tân thủ</value></data>
+  <data name="CharacterWindowTutorial" xml:space="preserve"><value>Hướng dẫn cửa sổ nhân vật</value></data>
+  <data name="InventoryTutorial" xml:space="preserve"><value>Hướng dẫn túi đồ</value></data>
+  <data name="PreparePotions" xml:space="preserve"><value>Chuẩn bị bình máu</value></data>
+  <data name="FirstHunt" xml:space="preserve"><value>Chuyến đi săn đầu tiên</value></data>
+  <data name="PrepareTownPortal" xml:space="preserve"><value>Chuẩn bị Cuộn về thành</value></data>
+  <data name="ReceiveElfBlessing" xml:space="preserve"><value>Nhận chúc phúc Hỗ trợ</value></data>
+  <data name="ThirtyMonsterHunt" xml:space="preserve"><value>Săn 30 quái vật</value></data>
+  <data name="StarterEquipmentGift" xml:space="preserve"><value>Quà trang bị khởi đầu</value></data>
+  <data name="MountUniriaTrial" xml:space="preserve"><value>Thử thách Sừng Kỳ Lân</value></data>
+  <data name="ManaPotionMilestone" xml:space="preserve"><value>Tiếp tế bình năng lượng</value></data>
+  <data name="LargeManaPotionMilestone" xml:space="preserve"><value>Tiếp tế bình năng lượng lớn</value></data>
+  <data name="GuardianAngelMilestone" xml:space="preserve"><value>Tiếp tế Thiên Thần Hộ Mệnh</value></data>
+  <data name="BlessingZenMilestone" xml:space="preserve"><value>Hỗ trợ lộ phí</value></data>
+  <data name="AdventureExperienceMilestone" xml:space="preserve"><value>Kinh nghiệm mạo hiểm</value></data>
+  <data name="VeteranZenMilestone" xml:space="preserve"><value>Quỹ hỗ trợ mạo hiểm</value></data>
+  <data name="JourneyRingsGift" xml:space="preserve"><value>Quà Nhẫn Phù Thủy</value></data>
+  <data name="ChaosCastleIntroduction" xml:space="preserve"><value>Giới thiệu Hỗn Nguyên Lâu</value></data>
+  <data name="ChaosCastle1Preparation" xml:space="preserve"><value>Chuẩn bị Hỗn Nguyên Lâu I</value></data>
+  <data name="ChaosCastle2Preparation" xml:space="preserve"><value>Chuẩn bị Hỗn Nguyên Lâu II</value></data>
+  <data name="ChaosCastle3Preparation" xml:space="preserve"><value>Chuẩn bị Hỗn Nguyên Lâu III</value></data>
+  <data name="ChaosCastle4Preparation" xml:space="preserve"><value>Chuẩn bị Hỗn Nguyên Lâu IV</value></data>
+  <data name="ChaosCastle5Preparation" xml:space="preserve"><value>Chuẩn bị Hỗn Nguyên Lâu V</value></data>
+  <data name="ChaosCastle6Preparation" xml:space="preserve"><value>Chuẩn bị Hỗn Nguyên Lâu VI</value></data>
+  <data name="ChaosCastle7Preparation" xml:space="preserve"><value>Chuẩn bị Hỗn Nguyên Lâu VII</value></data>
 </root>

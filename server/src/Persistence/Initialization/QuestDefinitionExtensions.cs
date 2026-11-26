@@ -90,14 +90,15 @@ internal static class QuestDefinitionExtensions
         byte itemLevel = 0,
         int itemOption = 0,
         bool hasLuck = false,
-        bool hasSkill = false)
+        bool hasSkill = false,
+        byte? durability = null)
     {
         var reward = context.CreateNew<QuestReward>();
         reward.RewardType = QuestRewardType.Item;
         var item = context.CreateNew<Item>();
         item.Definition = gameConfiguration.Items.First(def => def.Group == itemGroup && def.Number == itemNumber);
         item.HasSkill = item.Definition.Skill != null && hasSkill;
-        item.Durability = item.IsWearable() ? item.GetMaximumDurabilityOfOnePiece() : item.Durability;
+        item.Durability = durability ?? (item.IsWearable() ? item.GetMaximumDurabilityOfOnePiece() : item.Durability);
         item.Level = itemLevel;
         if (hasLuck
             && item.Definition.PossibleItemOptions.SelectMany(o => o.PossibleOptions)

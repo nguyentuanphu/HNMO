@@ -56,6 +56,7 @@ internal class Quests : InitializerBase
         this.IntoTheDarknessZone();
 
         this.CreateNewQuests();
+        Updates.EpisodeQuestsUpdatePlugIn.Apply(this.Context, this.GameConfiguration);
     }
 
     private QuestDefinition CreateQuest(
