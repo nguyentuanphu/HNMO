@@ -103,7 +103,7 @@ public class EconomyIntegrationLeftoversTests
     }
 
     /// <summary>
-    /// With no room for the output the reward waits in the store; a login while the bag is still full keeps it
+    /// With no room for the output the reward waits in the database; a login while the bag is still full keeps it
     /// waiting (not lost); the first login with room delivers it, and a further login doesn't deliver it again.
     /// </summary>
     /// <returns>A task.</returns>
@@ -124,10 +124,10 @@ public class EconomyIntegrationLeftoversTests
 
         var characterId = player.SelectedCharacter!.GetId().ToString();
         Assert.That(player.Inventory!.Items.Count(i => i.Definition == output), Is.Zero);
-        Assert.That(PeekOwed(plugIn, characterId), Is.EqualTo(1), "the reward waits");
+        Assert.That(await WaitingAsync(player).ConfigureAwait(false), Is.EqualTo(1), "the reward waits");
 
         await plugIn.PlayerStateChangedAsync(player, PlayerState.CharacterSelection, PlayerState.EnteredWorld).ConfigureAwait(false);
-        Assert.That(PeekOwed(plugIn, characterId), Is.EqualTo(1), "a login with a full bag keeps it waiting");
+        Assert.That(await WaitingAsync(player).ConfigureAwait(false), Is.EqualTo(1), "a login with a full bag keeps it waiting");
 
         foreach (var item in fillers.Take(10))
         {
@@ -138,70 +138,62 @@ public class EconomyIntegrationLeftoversTests
         await plugIn.PlayerStateChangedAsync(player, PlayerState.CharacterSelection, PlayerState.EnteredWorld).ConfigureAwait(false);
 
         Assert.That(player.Inventory.Items.Count(i => i.Definition == output), Is.EqualTo(1));
-        Assert.That(PeekOwed(plugIn, characterId), Is.Zero);
+        Assert.That(await WaitingAsync(player).ConfigureAwait(false), Is.Zero);
     }
 
     /// <summary>
-    /// A reward that has to wait (full bag) carries a marker saved together with its materials, and is delivered once
-    /// that marker is in the database: at the next login with room, once.
+    /// A reward that has to wait (full bag) is a row of the player's own context, not a write of its own: a failed save
+    /// leaves the materials and the reward for the next save together, and nothing goes to the JSON state file.
     /// </summary>
     /// <returns>A task.</returns>
     [Test]
-    public async Task AWaitingRewardIsDeliveredOnceItsMaterialsWereSavedAsync()
+    public async Task AWaitingRewardGoesIntoTheMaterialsSaveAsync()
     {
         var (plugIn, player, life, output) = await this.CreatePlayerAsync(outputWidth: 2).ConfigureAwait(false);
         await AddAsync(player, life, FirstBagSlot, 5).ConfigureAwait(false);
         var fillers = await FillBagAsync(player).ConfigureAwait(false);
         var characterId = player.SelectedCharacter!.GetId().ToString();
-        string? markerAtSave = null;
-        var markerSavedWithMaterials = false;
-        CashShopActionsTest.SaveFailingContext.Install(player, () =>
-        {
-            if (markerAtSave is null && TakeAndReturnOwed(plugIn, characterId) is [{ PaidMarker: { } marker }])
-            {
-                markerAtSave = marker;
-                markerSavedWithMaterials = player.Inventory!.Items.All(i => i.Definition != life);
-            }
-
-            return false;
-        });
+        var fails = true;
+        CashShopActionsTest.SaveFailingContext.Install(player, () => fails);
 
         await plugIn.CombineAsync(player, RecipeId).ConfigureAwait(false);
 
-        Assert.That(markerAtSave, Is.Not.Null, "the waiting reward is written with its marker before the save");
-        Assert.That(markerSavedWithMaterials, Is.True, "the marker goes into the save without the materials");
-        Assert.That(TakeAndReturnOwed(plugIn, characterId), Has.Count.EqualTo(1), "the reward waits for room");
+        Assert.That(TakeAndReturnOwed(plugIn, characterId), Is.Empty, "nothing is written outside the player's save");
+        fails = false;
+        Assert.That(await player.SaveProgressAsync().ConfigureAwait(false), Is.True);
+        Assert.That(await WaitingAsync(player).ConfigureAwait(false), Is.EqualTo(1));
+        Assert.That(player.Inventory!.Items.Where(i => i.Definition == life), Is.Empty);
 
         await FreeAsync(player, fillers).ConfigureAwait(false);
         await plugIn.PlayerStateChangedAsync(player, PlayerState.EnteredWorld, PlayerState.EnteredWorld).ConfigureAwait(false);
         await plugIn.PlayerStateChangedAsync(player, PlayerState.EnteredWorld, PlayerState.EnteredWorld).ConfigureAwait(false);
 
-        Assert.That(player.Inventory!.Items.Count(i => i.Definition == output), Is.EqualTo(1), "delivered once");
-        Assert.That(TakeAndReturnOwed(plugIn, characterId), Is.Empty);
-        Assert.That(await player.PersistenceContext.GetCashShopCoinGrantByReferenceAsync(markerAtSave!).ConfigureAwait(false), Is.Null, "the marker is removed");
+        Assert.That(player.Inventory.Items.Count(i => i.Definition == output), Is.EqualTo(1), "delivered once");
+        Assert.That(await WaitingAsync(player).ConfigureAwait(false), Is.Zero);
     }
 
     /// <summary>
-    /// A waiting reward whose materials' save never reached the database (a stop before it: no marker) is dropped at the
-    /// next login, since the materials are still in the saved bag.
+    /// A reward an earlier version left in the JSON state file moves into the database and is delivered once, however
+    /// often the character logs in.
     /// </summary>
     /// <returns>A task.</returns>
     [Test]
-    public async Task AWaitingRewardWhoseMaterialsWereNeverSavedIsDroppedAtLoginAsync()
+    public async Task ARewardFromTheJsonFileIsDeliveredOnceAsync()
     {
         var (plugIn, player, _, output) = await this.CreatePlayerAsync(outputWidth: 1).ConfigureAwait(false);
         var characterId = player.SelectedCharacter!.GetId().ToString();
         plugIn.GetEngine().Store.AddOwed(characterId, new GiftCodeOwedReward
         {
-            Reference = "leftover-cb:test-mix:stopped",
+            Reference = "leftover-cb:test-mix:old",
             Items = [new GiftCodeItem { Group = 13, Number = 90 }],
-            PaidMarker = "hnmo-leftovers-paid:leftover-cb:test-mix:stopped",
         });
 
         await plugIn.PlayerStateChangedAsync(player, PlayerState.EnteredWorld, PlayerState.EnteredWorld).ConfigureAwait(false);
+        await plugIn.PlayerStateChangedAsync(player, PlayerState.EnteredWorld, PlayerState.EnteredWorld).ConfigureAwait(false);
 
-        Assert.That(player.Inventory!.Items.Count(i => i.Definition == output), Is.Zero);
+        Assert.That(player.Inventory!.Items.Count(i => i.Definition == output), Is.EqualTo(1));
         Assert.That(TakeAndReturnOwed(plugIn, characterId), Is.Empty);
+        Assert.That(await WaitingAsync(player).ConfigureAwait(false), Is.Zero);
     }
 
     /// <summary>
@@ -258,13 +250,9 @@ public class EconomyIntegrationLeftoversTests
         }
     }
 
-    private static int PeekOwed(CombiningLeftoversPlugIn plugIn, string characterId)
-    {
-        var store = plugIn.GetEngine().Store;
-        var owed = store.TakeOwed(characterId);
-        store.ReturnOwed(characterId, owed);
-        return owed.Count;
-    }
+    private static async Task<int> WaitingAsync(Player player)
+        => (await player.PersistenceContext.GetPendingAssetOperationsAsync(player.Account!.GetId()).ConfigureAwait(false))
+            .Count(row => row.Kind == CombiningLeftoversPlugIn.WaitingRewardKind);
 
     private static async Task<Item> AddAsync(Player player, BasicModel.ItemDefinition definition, byte slot, int count)
     {

@@ -35,11 +35,6 @@ public sealed class JewelBankPlugIn :
     /// <summary>The kind of a website withdrawal, whose jewels wait for room in a bag.</summary>
     public const string WebsiteWithdrawKind = "jewel-web-withdraw";
 
-    private const int OutcomeReadAttempts = 6;
-
-    /// <summary>The accounts with an operation whose outcome couldn't be read (the database was unreachable).</summary>
-    private static readonly System.Collections.Concurrent.ConcurrentDictionary<Guid, Guid> UncertainOperations = new();
-
     /// <summary>The accounts (by state file and account id) whose JSON entries were imported in this process.</summary>
     private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, bool> ImportedLogins = new(StringComparer.OrdinalIgnoreCase);
 
@@ -54,20 +49,16 @@ public sealed class JewelBankPlugIn :
     /// <summary>Gets or sets a hook which runs right after a commit (tests: a stop after it).</summary>
     internal Func<AssetOperationRequest, ValueTask>? AfterCommit { get; set; }
 
-    /// <summary>Gets or sets the delay between reads of a lost outcome (tests make it short).</summary>
-    internal TimeSpan OutcomeReadDelay { get; set; } = TimeSpan.FromSeconds(2);
-
     /// <summary>Gets the active <see cref="JewelBankPlugIn"/> for a game context.</summary>
     /// <param name="gameContext">Game context.</param>
     /// <returns>Active plug-in or <c>null</c>.</returns>
     public static JewelBankPlugIn? Get(IGameContext gameContext) =>
         gameContext.PlugInManager.GetActivePlugInsOf<IPlayerStateChangedPlugIn>().OfType<JewelBankPlugIn>().FirstOrDefault();
 
-    /// <summary>A short, stable hash of what an operation does; another payload under the same id is a conflict.</summary>
+    /// <summary>A short, stable hash of what an operation does (see <see cref="AssetOperationCommitter.PayloadHash"/>).</summary>
     /// <param name="payload">The payload text.</param>
     /// <returns>The hash.</returns>
-    public static string PayloadHash(string payload) =>
-        Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(payload)));
+    public static string PayloadHash(string payload) => AssetOperationCommitter.PayloadHash(payload);
 
     /// <inheritdoc />
     public object CreateDefaultConfig() => new JewelBankConfiguration();
@@ -247,65 +238,12 @@ public sealed class JewelBankPlugIn :
             $"Đã tẩy điểm master và hoàn lại {refunded} điểm master!").ConfigureAwait(false);
     }
 
-    /// <summary>
-    /// Commits an asset operation with the player's other changes. When the commit's answer is lost, the outcome is read
-    /// with a context of its own; while the database can't tell, it is asked again for a while.
-    /// </summary>
+    /// <summary>Commits an asset operation of the Jewel Bank (see <see cref="AssetOperationCommitter.CommitAsync"/>).</summary>
     /// <param name="player">The player.</param>
     /// <param name="request">The operation.</param>
-    /// <returns>The outcome; <c>null</c> when it couldn't be read (the caller leaves everything as it is).</returns>
-    internal async ValueTask<AssetCommitStatus?> CommitAsync(Player player, AssetOperationRequest request)
-    {
-        if (this.BeforeCommit is { } before)
-        {
-            await before(request).ConfigureAwait(false);
-        }
-
-        try
-        {
-            var status = await player.PersistenceContext.SaveChangesWithAssetOperationAsync(request).ConfigureAwait(false);
-            if (this.AfterCommit is { } after)
-            {
-                await after(request).ConfigureAwait(false);
-            }
-
-            return status;
-        }
-        catch (Exception ex) when (ex is not OperationCanceledException)
-        {
-            player.Logger.LogWarning(ex, "Jewel Bank: the commit of {Operation} for {Player} failed or lost its answer; reading the outcome.", request.OperationId, player.Name);
-        }
-
-        for (var attempt = 0; attempt < OutcomeReadAttempts; attempt++)
-        {
-            try
-            {
-                using var check = player.GameContext.PersistenceContextProvider.CreateNewPlayerContext(player.GameContext.Configuration);
-                if (await check.GetAssetOperationAsync(request.OperationId).ConfigureAwait(false) is { } receipt)
-                {
-                    if (receipt.PayloadHash != request.PayloadHash)
-                    {
-                        return AssetCommitStatus.Conflict;
-                    }
-
-                    // It went through: the changes are in the database, so they must not be written again.
-                    player.PersistenceContext.AcceptChangesOfCommittedOperation();
-                    return AssetCommitStatus.Committed;
-                }
-
-                return AssetCommitStatus.Refused;
-            }
-            catch (Exception ex) when (ex is not OperationCanceledException)
-            {
-                player.Logger.LogWarning(ex, "Jewel Bank: the outcome of {Operation} couldn't be read (attempt {Attempt}).", request.OperationId, attempt + 1);
-                await Task.Delay(this.OutcomeReadDelay * (attempt + 1)).ConfigureAwait(false);
-            }
-        }
-
-        UncertainOperations[request.AccountId] = request.OperationId;
-        player.Logger.LogError("Jewel Bank: the outcome of {Operation} for {Player} is unknown; its operations stay refused until it is known.", request.OperationId, player.Name);
-        return null;
-    }
+    /// <returns>The outcome; <c>null</c> when it couldn't be read.</returns>
+    internal ValueTask<AssetCommitStatus?> CommitAsync(Player player, AssetOperationRequest request)
+        => AssetOperationCommitter.CommitAsync(player, request, this.BeforeCommit, this.AfterCommit);
 
     private static async ValueTask<(IReadOnlyDictionary<string, int> Balances, IReadOnlyList<(string Id, string Key, int Quantity)> Pending)> ReadBankAsync(IPlayerContext context, Guid accountId)
     {
@@ -431,7 +369,7 @@ public sealed class JewelBankPlugIn :
         }
     }
 
-    private bool IsUncertain(Player player) => UncertainOperations.ContainsKey(player.Account!.GetId());
+    private bool IsUncertain(Player player) => AssetOperationCommitter.IsUncertain(player.Account!.GetId());
 
     private ValueTask NotifyUncertainAsync(Player player) =>
         this.NotifyAsync(player, "Checking", "Your last Jewel Bank action is still being checked; please try again in a moment.", "Thao tác Ngân hàng ngọc trước đang được kiểm tra; vui lòng thử lại sau ít phút.");

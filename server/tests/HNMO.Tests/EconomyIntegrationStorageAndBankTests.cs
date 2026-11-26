@@ -316,7 +316,7 @@ public class EconomyIntegrationJewelBankPlugInTests
         var (plugIn, player, bless) = await this.CreateAsync(capacity: 100, depositFee: 1_000).ConfigureAwait(false);
         await AddStackAsync(player, bless, FirstBagSlot, 4).ConfigureAwait(false);
         player.TryAddMoney(5_000);
-        plugIn.OutcomeReadDelay = TimeSpan.Zero;
+        AssetOperationCommitter.OutcomeReadDelay = TimeSpan.Zero;
         var fails = true;
         CashShopActionsTest.SaveFailingContext.Install(player, () => fails);
 
@@ -341,7 +341,7 @@ public class EconomyIntegrationJewelBankPlugInTests
     {
         var (plugIn, player, bless) = await this.CreateAsync(capacity: 100, depositFee: 0).ConfigureAwait(false);
         await AddStackAsync(player, bless, FirstBagSlot, 4).ConfigureAwait(false);
-        plugIn.OutcomeReadDelay = TimeSpan.Zero;
+        AssetOperationCommitter.OutcomeReadDelay = TimeSpan.Zero;
         plugIn.AfterCommit = _ => throw new InvalidOperationException("the answer is lost");
 
         await plugIn.DepositAsync(player, FirstBagSlot, depositAll: false).ConfigureAwait(false);
@@ -374,7 +374,7 @@ public class EconomyIntegrationJewelBankPlugInTests
         await SeedBankAsync(player, 5).ConfigureAwait(false);
         await AddStackAsync(player, bless, FirstBagSlot, 2).ConfigureAwait(false); // a stack the jewels may join
         player.TryAddMoney(5_000);
-        plugIn.OutcomeReadDelay = TimeSpan.Zero;
+        AssetOperationCommitter.OutcomeReadDelay = TimeSpan.Zero;
         var fails = true;
         CashShopActionsTest.SaveFailingContext.Install(player, () => fails);
 
