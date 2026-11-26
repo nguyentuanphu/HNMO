@@ -82,7 +82,7 @@ export class UltimateAutoPlayWindow {
     hud.id = 'hnmo-ultimate-hud';
     const bottomOffset = () => `${Math.round(54 * hudScale() + 8)}px`;
     Object.assign(hud.style, {
-      position: 'fixed', left: '12px', bottom: bottomOffset(), zIndex: '60',
+      position: 'fixed', left: '12px', bottom: bottomOffset(), zIndex: '22',
       display: this.opts.extras.settings.showUltimateHud ? 'flex' : 'none',
       alignItems: 'center', gap: '8px', padding: '6px 10px',
       borderRadius: '8px', border: '1px solid rgba(212,175,55,0.45)',
