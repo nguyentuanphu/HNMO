@@ -221,7 +221,7 @@ public class MuunCompanionTests
         {
             TypeId = typeof(SeasonNineSystemsPlugIn).GUID,
             IsActive = true,
-            CustomConfiguration = JsonSerializer.Serialize(new SeasonNineSystemsConfiguration { Enabled = true, MuunLevelUpEnergyCost = levelUpCost }),
+            CustomConfiguration = JsonSerializer.Serialize(new SeasonNineSystemsConfiguration { Enabled = true, MuunLevelUpEnergyCosts = [levelUpCost, levelUpCost * 2, levelUpCost * 3] }),
         };
         var gameContext = GameContextTestHelper.CreateGameContext([configuration]);
         foreach (var number in new short[] { MuunCompanion.EvolutionStoneNumber, 212, 213, 214, 215, MuunCompanion.EnergyConverterNumber })

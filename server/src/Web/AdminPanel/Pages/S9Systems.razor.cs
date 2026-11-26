@@ -28,6 +28,9 @@ public partial class S9Systems : ComponentBase
     private bool _showHelp;
     private string _lang = "en";
     private string? _statusMessage;
+    private string _muunCostsText = string.Empty;
+    private string _muunPetsJson = string.Empty;
+    private string _muunOptionsJson = string.Empty;
     private bool _statusIsError;
 
     [Inject]
@@ -79,6 +82,12 @@ public partial class S9Systems : ComponentBase
             var cfg = saved ?? new SeasonNineSystemsConfiguration();
             this._configuration = JsonSerializer.Deserialize<SeasonNineSystemsConfiguration>(JsonSerializer.Serialize(cfg))
                 ?? new SeasonNineSystemsConfiguration();
+
+            // The Muun tables are shown as they apply: the saved ones, or the built-in ones (which wait for the pack).
+            var indented = new JsonSerializerOptions { WriteIndented = true };
+            this._muunCostsText = string.Join(", ", this._configuration.MuunLevelUpEnergyCosts ?? []);
+            this._muunPetsJson = JsonSerializer.Serialize(this._configuration.MuunPets is { Count: > 0 } pets ? pets : SeasonNineSystemsCatalog.Muuns, indented);
+            this._muunOptionsJson = JsonSerializer.Serialize(this._configuration.MuunOptions is { Count: > 0 } options ? options : SeasonNineSystemsCatalog.MuunOptions, indented);
         }
         catch (Exception ex)
         {
@@ -90,6 +99,43 @@ public partial class S9Systems : ComponentBase
         finally
         {
             this._isLoading = false;
+        }
+    }
+
+    /// <summary>
+    /// Reads the Muun cost list and the two Muun tables of the page into the configuration; a table equal to the built-in
+    /// one is saved as none, so the built-in values (and their later fixes) keep applying.
+    /// </summary>
+    /// <param name="cfg">The configuration to save.</param>
+    /// <returns><c>false</c> (with a message) when a field can't be read.</returns>
+    private bool TryReadMuunTables(SeasonNineSystemsConfiguration cfg)
+    {
+        try
+        {
+            var costs = new List<int>();
+            foreach (var part in this._muunCostsText.Split([',', ';', ' '], StringSplitOptions.RemoveEmptyEntries))
+            {
+                costs.Add(Math.Max(0, int.Parse(part, CultureInfo.InvariantCulture)));
+            }
+
+            cfg.MuunLevelUpEnergyCosts = costs;
+            var pets = JsonSerializer.Deserialize<List<SeasonNineSystemsCatalog.MuunSpec>>(this._muunPetsJson) ?? [];
+            var options = JsonSerializer.Deserialize<List<SeasonNineSystemsCatalog.MuunOptionSpec>>(this._muunOptionsJson) ?? [];
+            cfg.MuunPets = pets.SequenceEqual(SeasonNineSystemsCatalog.Muuns) ? null : pets;
+            cfg.MuunOptions = options.SequenceEqual(SeasonNineSystemsCatalog.MuunOptions) ? null : options;
+            return true;
+        }
+        catch (Exception ex) when (ex is JsonException or FormatException or OverflowException)
+        {
+            this._statusIsError = true;
+            this._statusMessage = this.T(
+                $"The Muun tables couldn't be read: {ex.Message}",
+                $"Không đọc được bảng Muun: {ex.Message}",
+                $"Die Muun-Tabellen konnten nicht gelesen werden: {ex.Message}",
+                $"无法读取萌宠表：{ex.Message}");
+            this.ToastService.ShowError(this._statusMessage);
+            this._isSaving = false;
+            return false;
         }
     }
 
@@ -108,6 +154,10 @@ public partial class S9Systems : ComponentBase
             cfg.MasterLevelMaxCap = (short)Math.Clamp((int)cfg.MasterLevelMaxCap, 200, 400);
             cfg.ShieldBurnSdPercent = Math.Clamp(cfg.ShieldBurnSdPercent, 1, 100);
             cfg.SpellOfProtectionDefensePct = Math.Clamp(cfg.SpellOfProtectionDefensePct, 1, 100);
+            if (!this.TryReadMuunTables(cfg))
+            {
+                return;
+            }
 
             var serialized = new PlugInConfiguration();
             serialized.SetConfiguration(cfg, null);

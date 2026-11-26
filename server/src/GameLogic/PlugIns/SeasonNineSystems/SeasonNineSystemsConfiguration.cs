@@ -32,10 +32,30 @@ public sealed class SeasonNineSystemsConfiguration
     public bool MuunStrictConditions { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets the energy a Muun level up costs per current level (default 10). HNMO's data has no cost table; a
-    /// stored configuration without the setting reads 0, which counts as the default.
+    /// Gets or sets the energy a Muun level up costs per current level, for levels without an entry in
+    /// <see cref="MuunLevelUpEnergyCosts"/> (default 10; a stored configuration without the setting reads 0, which counts
+    /// as the default).
     /// </summary>
     public int MuunLevelUpEnergyCost { get; set; } = 10;
+
+    /// <summary>
+    /// Gets or sets the energy of each Muun level up: entry 0 from level 1 to 2, entry 1 from 2 to 3, and so on. HNMO's
+    /// defaults (10, 20, 30, 40: <see cref="MuunLevelUpEnergyCost"/> times the level) wait for the desktop client's
+    /// values from the Season 9 pack.
+    /// </summary>
+    public List<int>? MuunLevelUpEnergyCosts { get; set; } = [10, 20, 30, 40];
+
+    /// <summary>
+    /// Gets or sets the Muun pets (item, rank, option, add option, evolved item). Empty: the built-in table of
+    /// <see cref="SeasonNineSystemsCatalog.Muuns"/>, whose values wait for the desktop client's Season 9 pack.
+    /// </summary>
+    public List<SeasonNineSystemsCatalog.MuunSpec>? MuunPets { get; set; }
+
+    /// <summary>
+    /// Gets or sets the Muun options (stat type, values by level, condition). Empty: the built-in table of
+    /// <see cref="SeasonNineSystemsCatalog.MuunOptions"/>, whose values wait for the desktop client's Season 9 pack.
+    /// </summary>
+    public List<SeasonNineSystemsCatalog.MuunOptionSpec>? MuunOptions { get; set; }
 
     /// <summary>Gets or sets Muun drop bonus permille (n/10000, default 50 = 0.5%).</summary>
     public int MuunDropRatePermille { get; set; } = 50;

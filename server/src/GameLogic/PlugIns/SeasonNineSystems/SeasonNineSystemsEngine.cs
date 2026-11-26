@@ -69,13 +69,14 @@ public static class SeasonNineSystemsEngine
     /// <summary>The highest level a Muun reaches before it can evolve: its option's last level with a value (1..5).</summary>
     /// <param name="muun">The Muun.</param>
     /// <returns>The level.</returns>
-    public static int MuunMaximumLevel(SeasonNineSystemsCatalog.MuunSpec muun)
-    {
-        if (FindMuunOption(muun.OptionIndex) is not { } option)
-        {
-            return 1;
-        }
+    public static int MuunMaximumLevel(SeasonNineSystemsCatalog.MuunSpec muun) =>
+        FindMuunOption(muun.OptionIndex) is { } option ? MuunMaximumLevel(option) : 1;
 
+    /// <summary>The highest level of a Muun option: its last level with a value (1..5).</summary>
+    /// <param name="option">The option.</param>
+    /// <returns>The level.</returns>
+    public static int MuunMaximumLevel(SeasonNineSystemsCatalog.MuunOptionSpec option)
+    {
         int[] values = [option.ValueLv1, option.ValueLv2, option.ValueLv3, option.ValueLv4, option.ValueLv5];
         for (var level = values.Length; level > 1; level--)
         {
@@ -154,11 +155,31 @@ public static class SeasonNineSystemsEngine
         DateTime localNow,
         bool strictConditions = true)
     {
-        if (!MuunOptionMap.TryGetValue(muun.OptionIndex, out var opt))
-        {
-            return 0;
-        }
+        return MuunOptionMap.TryGetValue(muun.OptionIndex, out var opt)
+            ? EvaluateMuunBonus(muun, opt, muunLevel, evolved, mapNumber, totalLevel, localNow, strictConditions)
+            : 0;
+    }
 
+    /// <summary>Evaluates the active bonus value of a Muun with a given option (e.g. one of the admin's table).</summary>
+    /// <param name="muun">Muun definition.</param>
+    /// <param name="opt">The Muun's option.</param>
+    /// <param name="muunLevel">Current Muun level (1..5).</param>
+    /// <param name="evolved">Whether the Muun is evolved.</param>
+    /// <param name="mapNumber">Player current map number.</param>
+    /// <param name="totalLevel">Player level + master level.</param>
+    /// <param name="localNow">Local server time.</param>
+    /// <param name="strictConditions">Whether map/time/day conditions are enforced.</param>
+    /// <returns>Scaled bonus value, or <c>0</c> if condition fails.</returns>
+    public static int EvaluateMuunBonus(
+        SeasonNineSystemsCatalog.MuunSpec muun,
+        SeasonNineSystemsCatalog.MuunOptionSpec opt,
+        int muunLevel,
+        bool evolved,
+        int mapNumber,
+        int totalLevel,
+        DateTime localNow,
+        bool strictConditions = true)
+    {
         if (strictConditions && !IsMuunConditionMet(opt, mapNumber, totalLevel, localNow))
         {
             return 0;

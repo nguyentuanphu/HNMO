@@ -89,6 +89,18 @@ else
                 <label class="form-label">@this.T("Drop Permille (n/10000)", "Tỉ lệ rơi (n/10000)", "Drop-Promille", "掉落率 (万分比)")</label>
                 <input type="number" min="0" max="10000" class="form-control form-control-sm" @bind="this._configuration.MuunDropRatePermille" />
             </div>
+            <div class="col-md-12">
+                <label class="form-label" title="@this.T("Energy of each level up: the 1st number from level 1 to 2, the 2nd from 2 to 3, and so on. HNMO's defaults wait for the desktop client's values from the Season 9 pack.", "Năng lượng mỗi lần lên cấp: số thứ 1 từ cấp 1 lên 2, số thứ 2 từ 2 lên 3, v.v. Giá trị mặc định của HNMO chờ số liệu từ bộ client desktop Season 9.", "Energie je Stufenaufstieg: die 1. Zahl von Stufe 1 auf 2, die 2. von 2 auf 3 usw. HNMOs Standardwerte warten auf die Werte des Season-9-Desktop-Clients.", "每次升级所需能量：第 1 个数字为 1 级升 2 级，第 2 个为 2 级升 3 级，以此类推。HNMO 默认值待第 9 赛季桌面客户端数据确认。")">@this.T("Level up energy by level", "Năng lượng lên cấp theo cấp", "Energie je Stufe", "各等级升级能量")</label>
+                <input type="text" class="form-control form-control-sm" @bind="this._muunCostsText" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" title="@this.T("The Muun pets (item, rank, option, add option, evolved item) as JSON. The built-in values wait for the desktop client's Season 9 pack.", "Danh sách Muun (vật phẩm, hạng, tùy chọn, cộng thêm, bản tiến hóa) dạng JSON. Giá trị có sẵn chờ bộ client desktop Season 9.", "Die Muun-Begleiter (Gegenstand, Rang, Option, Zusatz, entwickelte Form) als JSON. Die eingebauten Werte warten auf den Season-9-Desktop-Client.", "萌宠列表（物品、等级、选项、附加、进化形态）JSON。内置数值待第 9 赛季桌面客户端数据确认。")">@this.T("Muun pets (JSON)", "Danh sách Muun (JSON)", "Muun-Begleiter (JSON)", "萌宠列表 (JSON)")</label>
+                <textarea class="form-control form-control-sm font-monospace" rows="8" @bind="this._muunPetsJson"></textarea>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" title="@this.T("The Muun options (stat type, values by level, condition) as JSON. The built-in values wait for the desktop client's Season 9 pack.", "Tùy chọn Muun (loại chỉ số, giá trị theo cấp, điều kiện) dạng JSON. Giá trị có sẵn chờ bộ client desktop Season 9.", "Die Muun-Optionen (Werttyp, Werte je Stufe, Bedingung) als JSON. Die eingebauten Werte warten auf den Season-9-Desktop-Client.", "萌宠选项（属性类型、各级数值、条件）JSON。内置数值待第 9 赛季桌面客户端数据确认。")">@this.T("Muun options (JSON)", "Tùy chọn Muun (JSON)", "Muun-Optionen (JSON)", "萌宠选项 (JSON)")</label>
+                <textarea class="form-control form-control-sm font-monospace" rows="8" @bind="this._muunOptionsJson"></textarea>
+            </div>
         </div>
     </div>
 

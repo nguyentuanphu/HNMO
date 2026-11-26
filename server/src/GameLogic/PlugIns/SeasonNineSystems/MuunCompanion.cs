@@ -73,13 +73,19 @@ public sealed class MuunCompanion
     /// <returns>The stat and the factor of one option point.</returns>
     public static (AttributeDefinition Stat, float Factor)? StatOf(int optionType) => optionType switch
     {
-        1 or 8 => (Stats.BaseDamageBonus, 1f),
-        7 or 14 => (Stats.BaseMaxDamageBonus, 1f),
+        1 => (Stats.BaseDamageBonus, 1f),
+        7 => (Stats.BaseMaxDamageBonus, 1f),
         2 => (Stats.DefenseBase, 1f),
-        3 or 10 => (Stats.ExcellentDamageBonus, 1f),
+        3 => (Stats.ExcellentDamageBonus, 1f),
         4 => (Stats.CriticalDamageBonus, 1f),
-        11 => (Stats.CriticalDamageChance, 0.01f),
-        5 or 12 => (Stats.SkillDamageBonus, 1f),
+        5 => (Stats.SkillDamageBonus, 1f),
+
+        // The options marked non-PvP count only on hits on monsters.
+        8 => (Stats.BaseDamageBonusPvm, 1f),
+        14 => (Stats.BaseMaxDamageBonusPvm, 1f),
+        10 => (Stats.ExcellentDamageBonusPvm, 1f),
+        11 => (Stats.CriticalDamageChancePvm, 0.01f),
+        12 => (Stats.SkillDamageBonusPvm, 1f),
         _ => null,
     };
 
@@ -94,7 +100,7 @@ public sealed class MuunCompanion
             return;
         }
 
-        if (BagMuun(player, slot) is not { } muun)
+        if (this.BagMuun(player, slot) is not { } muun)
         {
             await this.SendStateAsync(player, true, "InvalidMuun", "Choose a Muun in your bag.", "Hãy chọn một Muun trong túi đồ.").ConfigureAwait(false);
             return;
@@ -133,13 +139,13 @@ public sealed class MuunCompanion
         }
 
         var state = this.LoadState(player);
-        if (ActiveMuun(player, state) is not { } muun || IsEvolved(muun.Spec))
+        if (this.ActiveMuun(player, state) is not { } muun || IsEvolved(muun.Spec))
         {
             await this.SendStateAsync(player, true, "CannotEvolve", "Only an active Muun which can evolve, can evolve.", "Chỉ Muun đồng hành chưa tiến hóa mới tiến hóa được.").ConfigureAwait(false);
             return;
         }
 
-        var maximum = SeasonNineSystemsEngine.MuunMaximumLevel(muun.Spec);
+        var maximum = this.MaximumLevel(muun.Spec);
         if (muun.Item.Level < maximum)
         {
             await this.SendStateAsync(player, true, "CannotEvolve", $"The Muun evolves at level {maximum}.", $"Muun tiến hóa ở cấp {maximum}.").ConfigureAwait(false);
@@ -197,7 +203,7 @@ public sealed class MuunCompanion
         }
 
         var state = this.LoadState(player);
-        if (BagMuun(player, slot) is not { } muun || muun.Item.GetId() == state.ActiveItemId)
+        if (this.BagMuun(player, slot) is not { } muun || muun.Item.GetId() == state.ActiveItemId)
         {
             await this.SendStateAsync(player, true, "InvalidMuun", "Choose a Muun in your bag which isn't your active one.", "Hãy chọn một Muun trong túi đồ không phải Muun đồng hành.").ConfigureAwait(false);
             return;
@@ -241,7 +247,7 @@ public sealed class MuunCompanion
         }
 
         var state = this.LoadState(player);
-        if (ActiveMuun(player, state) is not { } muun || IsEvolved(muun.Spec) || muun.Item.Level >= SeasonNineSystemsEngine.MuunMaximumLevel(muun.Spec))
+        if (this.ActiveMuun(player, state) is not { } muun || IsEvolved(muun.Spec) || muun.Item.Level >= this.MaximumLevel(muun.Spec))
         {
             await this.SendStateAsync(player, true, "CannotLevel", "Only an active Muun below its highest level can level up.", "Chỉ Muun đồng hành chưa đạt cấp cao nhất mới lên cấp được.").ConfigureAwait(false);
             return;
@@ -286,7 +292,7 @@ public sealed class MuunCompanion
 
         var applied = this._applied.GetOrCreateValue(player);
         var (stat, value) = (default(AttributeDefinition), 0f);
-        if (this.IsOn && ActiveMuun(player, this.LoadState(player)) is { } muun && SeasonNineSystemsEngine.FindMuunOption(muun.Spec.OptionIndex) is { } option
+        if (this.IsOn && this.ActiveMuun(player, this.LoadState(player)) is { } muun && this.FindOption(muun.Spec.OptionIndex) is { } option
             && StatOf(option.OptionType) is { } target)
         {
             var bonus = this.BonusOf(player, muun);
@@ -352,15 +358,15 @@ public sealed class MuunCompanion
     internal string WriteState(Player player, string? result = null, string? textEn = null, string? textVi = null)
     {
         var state = this.LoadState(player);
-        var active = this.IsOn ? ActiveMuun(player, state) : null;
+        var active = this.IsOn ? this.ActiveMuun(player, state) : null;
         object? activeJson = null;
-        if (active is { } muun && SeasonNineSystemsEngine.FindMuunOption(muun.Spec.OptionIndex) is { } option)
+        if (active is { } muun && this.FindOption(muun.Spec.OptionIndex) is { } option)
         {
             var conditionMet = !this.Configuration.MuunStrictConditions
                 || SeasonNineSystemsEngine.IsMuunConditionMet(option, MapNumber(player), TotalLevel(player), this.LocalNow());
             var bonus = this.BonusOf(player, muun);
-            var shown = conditionMet ? bonus : SeasonNineSystemsEngine.EvaluateMuunBonus(muun.Spec, muun.Item.Level, IsEvolved(muun.Spec), MapNumber(player), TotalLevel(player), this.LocalNow(), strictConditions: false);
-            var maximum = SeasonNineSystemsEngine.MuunMaximumLevel(muun.Spec);
+            var shown = conditionMet ? bonus : SeasonNineSystemsEngine.EvaluateMuunBonus(muun.Spec, option, muun.Item.Level, IsEvolved(muun.Spec), MapNumber(player), TotalLevel(player), this.LocalNow(), strictConditions: false);
+            var maximum = this.MaximumLevel(muun.Spec);
             var (conditionEn, conditionVi) = DescribeCondition(option);
             activeJson = new
             {
@@ -383,7 +389,7 @@ public sealed class MuunCompanion
         }
 
         var bag = this.IsOn
-            ? BagMuuns(player).Select(m => new
+            ? this.BagMuuns(player).Select(m => new
             {
                 slot = m.Item.ItemSlot,
                 group = (int)m.Spec.ItemGroup,
@@ -435,46 +441,6 @@ public sealed class MuunCompanion
     private static int TotalLevel(Player player) => player.Attributes is { } a ? (int)(a[Stats.Level] + a[Stats.MasterLevel]) : 0;
 
     private static bool IsBagSlot(byte slot) => slot >= InventoryConstants.EquippableSlotsCount && slot < InventoryConstants.FirstStoreItemSlotIndex;
-
-    private static (Item Item, SeasonNineSystemsCatalog.MuunSpec Spec)? BagMuun(Player player, byte slot)
-    {
-        if (!IsBagSlot(slot) || player.Inventory?.GetItem(slot) is not { Definition: { } definition } item
-            || SeasonNineSystemsEngine.FindMuunByItem(definition.Group, definition.Number) is not { } spec)
-        {
-            return null;
-        }
-
-        return (item, spec);
-    }
-
-    private static IEnumerable<(Item Item, SeasonNineSystemsCatalog.MuunSpec Spec)> BagMuuns(Player player)
-    {
-        foreach (var item in player.Inventory?.Items.OrderBy(i => i.ItemSlot) ?? Enumerable.Empty<Item>())
-        {
-            if (BagMuun(player, item.ItemSlot) is { } muun && muun.Item == item)
-            {
-                yield return muun;
-            }
-        }
-    }
-
-    private static (Item Item, SeasonNineSystemsCatalog.MuunSpec Spec)? ActiveMuun(Player player, MuunState state)
-    {
-        if (state.ActiveItemId is not { } id)
-        {
-            return null;
-        }
-
-        foreach (var muun in BagMuuns(player))
-        {
-            if (muun.Item.GetId() == id)
-            {
-                return muun;
-            }
-        }
-
-        return null;
-    }
 
     private static Item? FindBagItem(Player player, short number) =>
         player.Inventory?.Items.Where(i => IsBagSlot(i.ItemSlot) && i.Definition is { Group: MuunGroup } d && d.Number == number)
@@ -591,12 +557,98 @@ public sealed class MuunCompanion
         return sb.ToString();
     }
 
-    private int LevelUpCost(int level) => (this.Configuration.MuunLevelUpEnergyCost > 0 ? this.Configuration.MuunLevelUpEnergyCost : DefaultLevelUpCost) * Math.Max(1, level);
+    private (Item Item, SeasonNineSystemsCatalog.MuunSpec Spec)? BagMuun(Player player, byte slot)
+    {
+        if (!IsBagSlot(slot) || player.Inventory?.GetItem(slot) is not { Definition: { } definition } item
+            || this.FindPet(definition.Group, definition.Number) is not { } spec)
+        {
+            return null;
+        }
+
+        return (item, spec);
+    }
+
+    private IEnumerable<(Item Item, SeasonNineSystemsCatalog.MuunSpec Spec)> BagMuuns(Player player)
+    {
+        foreach (var item in player.Inventory?.Items.OrderBy(i => i.ItemSlot) ?? Enumerable.Empty<Item>())
+        {
+            if (this.BagMuun(player, item.ItemSlot) is { } muun && muun.Item == item)
+            {
+                yield return muun;
+            }
+        }
+    }
+
+    private (Item Item, SeasonNineSystemsCatalog.MuunSpec Spec)? ActiveMuun(Player player, MuunState state)
+    {
+        if (state.ActiveItemId is not { } id)
+        {
+            return null;
+        }
+
+        foreach (var muun in this.BagMuuns(player))
+        {
+            if (muun.Item.GetId() == id)
+            {
+                return muun;
+            }
+        }
+
+        return null;
+    }
+
+    // The admin's table: entry (level - 1) is the cost from that level to the next; a level without one uses the per-level
+    // cost times the level.
+    private int LevelUpCost(int level)
+    {
+        if (this.Configuration.MuunLevelUpEnergyCosts is { } table && level >= 1 && level <= table.Count && table[level - 1] > 0)
+        {
+            return table[level - 1];
+        }
+
+        return (this.Configuration.MuunLevelUpEnergyCost > 0 ? this.Configuration.MuunLevelUpEnergyCost : DefaultLevelUpCost) * Math.Max(1, level);
+    }
 
     private DateTime LocalNow() => SeasonNineSystemsPlugIn.ToRealmTime(this.UtcNow());
 
     private int BonusOf(Player player, (Item Item, SeasonNineSystemsCatalog.MuunSpec Spec) muun) =>
-        SeasonNineSystemsEngine.EvaluateMuunBonus(muun.Spec, muun.Item.Level, IsEvolved(muun.Spec), MapNumber(player), TotalLevel(player), this.LocalNow(), this.Configuration.MuunStrictConditions);
+        this.FindOption(muun.Spec.OptionIndex) is { } option
+            ? SeasonNineSystemsEngine.EvaluateMuunBonus(muun.Spec, option, muun.Item.Level, IsEvolved(muun.Spec), MapNumber(player), TotalLevel(player), this.LocalNow(), this.Configuration.MuunStrictConditions)
+            : 0;
+
+    // The admin's tables (configuration), or the built-in ones when the admin hasn't set any.
+    private IReadOnlyList<SeasonNineSystemsCatalog.MuunSpec> Pets() =>
+        this.Configuration.MuunPets is { Count: > 0 } pets ? pets : SeasonNineSystemsCatalog.Muuns;
+
+    private SeasonNineSystemsCatalog.MuunSpec? FindPet(byte group, short number)
+    {
+        foreach (var pet in this.Pets())
+        {
+            if (pet.ItemGroup == group && pet.ItemNumber == number)
+            {
+                return pet;
+            }
+        }
+
+        return null;
+    }
+
+    private SeasonNineSystemsCatalog.MuunOptionSpec? FindOption(int index)
+    {
+        var options = this.Configuration.MuunOptions is { Count: > 0 } configured ? configured : SeasonNineSystemsCatalog.MuunOptions;
+        foreach (var option in options)
+        {
+            if (option.Index == index)
+            {
+                return option;
+            }
+        }
+
+        return null;
+    }
+
+    private int MaximumLevel(SeasonNineSystemsCatalog.MuunSpec pet) =>
+        this.FindOption(pet.OptionIndex) is { } option ? SeasonNineSystemsEngine.MuunMaximumLevel(option) : 1;
 
     private async ValueTask<bool> EnsureOnAsync(Player player)
     {
