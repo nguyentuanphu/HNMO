@@ -18,7 +18,7 @@
 
 import { openDocument, type RmlDocument, type RmlModel } from '../ui/rml.js';
 import { hudScale, nativeTextPx } from '../ui/nativeText.js';
-import { blockedNames, filterWords, isBlocked, loadHistory, saveHistory, setBlocked } from './chatExtras.js';
+import { blockedNames, CHAT_LINES_BOUNDS, CHAT_WIDTH_BOUNDS, type ChatWindowSize, filterWords, isBlocked, loadChatSize, loadHistory, saveChatSize, saveHistory, setBlocked } from './chatExtras.js';
 
 /** How a message shows: said (in public, to the party, guild, alliance or Gens), whispered, from the game, or from a game master. */
 export type ChatKind = 'chat' | 'whisper' | 'system' | 'error' | 'party' | 'guild' | 'union' | 'gens' | 'gm';
@@ -41,7 +41,6 @@ interface LineEntry { text: string; kind: string; has_id: boolean }
 
 const MAX_LINES = 200; // MAX_NUMBER_OF_LINES
 const SYSTEM_LINES = 6; // CSystemLogWindow's MAX_NUMBER_OF_LINES
-const CLIENT_WIDTH = 281 - 7 * 2 - 4 * 2; // WND_WIDTH - 2 scroll bars - 2 edges
 const ROW = 15; // SCROLL_MIDDLE_PART_HEIGHT
 const CHAT_MAX = 60; // MAX_CHAT_SIZE
 const NAME_MAX = 10; // MAX_USERNAME_SIZE
@@ -91,9 +90,11 @@ export class Chat {
   private readonly unread = TABS.map(() => 0);
   private systemHistory: Message[] = [];
   private tabBar: HTMLElement | null = null;
+  private resizeCorner: HTMLElement | null = null;
   private menu: HTMLElement | null = null;
   private saveTimer = 0;
-  private showingLines = 6;
+  private showingLines = loadChatSize().lines;
+  private panelWidth = loadChatSize().width;
   private backAlpha = 0.6;
   private chatHistory: string[] = [];
   private whisperHistory: string[] = [];
@@ -142,7 +143,8 @@ export class Chat {
       else if (event.button === 0) { event.preventDefault(); event.stopPropagation(); this.openMenu(message.id, event.clientX, event.clientY); }
     }, true);
     // Lines fade a while after they came (only while the chat is closed and unframed).
-    setInterval(() => this.applyFade(), 1000);
+    const fadeTimer = setInterval(() => this.applyFade(), 1000) as unknown as { unref?: () => void };
+    fadeTimer.unref?.();
   }
 
   /** The windows show and the line is sent to `send` (CheckCommand and the public chat). */
@@ -254,6 +256,18 @@ export class Chat {
   /** The lines of the chat log and of the system log as they show now (for tests). */
   get shownLines(): { chat: string[]; system: string[] } {
     return { chat: this.logModel.lines.map((line) => line.text), system: this.systemModel.lines.map((line) => line.text) };
+  }
+
+  /** Current chat/whisper log window size (width in dp/px and visible line count), persisted per browser. */
+  get windowSize(): ChatWindowSize { return { width: this.panelWidth, lines: this.showingLines }; }
+
+  /** Sets and saves the chat/whisper log size for this browser. */
+  setWindowSize(width: number, lines: number): ChatWindowSize {
+    const next = saveChatSize({ width, lines });
+    this.panelWidth = next.width;
+    this.showingLines = next.lines;
+    this.sync(true);
+    return next;
   }
 
   /** Puts a name in the whisper box (a right click on a player or a line, a friend's chat button) and opens the input. */
@@ -425,13 +439,21 @@ export class Chat {
       #hnmo_tabs button { all: unset; cursor: pointer; padding: 1px 6px; background: rgba(0,0,0,.6); color: #c8c8c8; border: 1px solid rgba(160,130,70,.6); border-bottom: 0; border-radius: 3px 3px 0 0; }
       #hnmo_tabs button.on { color: #ffd986; background: rgba(40,28,10,.85); }
       #hnmo_tabs button .count { color: #ff8060; margin-left: 3px; }
+      #hnmo_chat_corner { position: absolute; right: 0; top: 0; width: 12px; height: 12px; cursor: nesw-resize; pointer-events: auto; z-index: 5; background: linear-gradient(225deg, rgba(255,217,134,.75) 0 4px, transparent 4px); }
+      #hnmo_chat_corner[hidden] { display: none; }
     `;
     this.log.host.shadowRoot?.append(style);
     const bar = document.createElement('div');
     bar.id = 'hnmo_tabs';
     bar.addEventListener('pointerdown', (event) => event.stopPropagation());
-    panel.append(bar);
+    const corner = document.createElement('div');
+    corner.id = 'hnmo_chat_corner';
+    corner.title = 'Drag to resize chat window';
+    corner.hidden = !this.logModel.show_frame;
+    corner.addEventListener('pointerdown', (event) => this.resizeDrag(event));
+    panel.append(bar, corner);
     this.tabBar = bar;
+    this.resizeCorner = corner;
   }
 
   private syncTabs(): void {
@@ -503,6 +525,11 @@ export class Chat {
   private sync(added = false): void {
     if (!this.log || !this.input || !this.systemLog) return;
     const lines = this.log.$('#lines');
+    const panel = this.log.$('#panel');
+    if (panel) panel.style.width = `${this.panelWidth}px`;
+    const handle = this.log.$('#resize_handle');
+    if (handle) handle.style.width = `${this.panelWidth}px`;
+    if (this.resizeCorner) this.resizeCorner.hidden = !this.logModel.show_frame;
     const follow = !this.logModel.show_frame || !lines || lines.scrollTop + lines.clientHeight >= lines.scrollHeight - ROW;
     const client = ROW * this.showingLines;
     this.logModel.client_height = client;
@@ -541,21 +568,33 @@ export class Chat {
     if (lines < 3) lines = 3;
     if (lines > 15) lines = 3;
     this.showingLines = lines;
+    saveChatSize({ width: this.panelWidth, lines: this.showingLines });
     this.sync(true);
   }
 
-  // The handle above the framed log: dragging changes the height in 3-line steps.
+  // The handle / corner on the framed log: dragging adjusts both visible line count and panel width, saved per browser.
   private resizeDrag(start: PointerEvent): void {
     start.preventDefault();
     start.stopPropagation();
     const scale = hudScale();
-    const from = this.showingLines;
+    const fromLines = this.showingLines;
+    const fromWidth = this.panelWidth;
     const move = (event: PointerEvent) => {
-      const rows = Math.round((start.clientY - event.clientY) / scale / ROW / 3) * 3;
-      const lines = Math.min(15, Math.max(3, from + rows));
-      if (lines !== this.showingLines) { this.showingLines = lines; this.sync(true); }
+      const rows = Math.round((start.clientY - event.clientY) / scale / ROW);
+      const lines = Math.min(CHAT_LINES_BOUNDS.max, Math.max(CHAT_LINES_BOUNDS.min, fromLines + rows));
+      const dw = Math.round((event.clientX - start.clientX) / scale);
+      const width = Math.min(CHAT_WIDTH_BOUNDS.max, Math.max(CHAT_WIDTH_BOUNDS.min, fromWidth + dw));
+      if (lines !== this.showingLines || width !== this.panelWidth) {
+        this.showingLines = lines;
+        this.panelWidth = width;
+        this.sync(true);
+      }
     };
-    const up = () => { window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); };
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+      saveChatSize({ width: this.panelWidth, lines: this.showingLines });
+    };
     window.addEventListener('pointermove', move);
     window.addEventListener('pointerup', up);
   }
@@ -564,7 +603,8 @@ export class Chat {
   private separate(id: string, text: string): [string, string] {
     if (text.length < 20 || !this.measure) return [text, ''];
     const width = (value: string) => { this.measure!.textContent = value; return this.measure!.offsetWidth; };
-    const room = CLIENT_WIDTH - (id ? width(`${id} : `) : 0);
+    const wrapWidth = Math.max(120, this.panelWidth - (7 * 2 + 4 * 2));
+    const room = wrapWidth - (id ? width(`${id} : `) : 0);
     if (width(text) <= room) return [text, ''];
     const spaces = text.includes(' ');
     let cut = text.length;

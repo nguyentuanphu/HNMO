@@ -108,6 +108,29 @@ public sealed class TopUpMilestonesPageTests
         Assert.That(cut.Find("#topup-milestones-accounts").TextContent, Does.Contain("250,000"));
     }
 
+    /// <summary>Verifies the page, help and validation use the requested language.</summary>
+    [TestCase("en", "Top-up milestones", "Configure cumulative VND", "Invalid item syntax", "Enter login name")]
+    [TestCase("vi", "Thưởng mốc nạp", "mốc", "Cú pháp vật phẩm không hợp lệ", "Nhập tên tài khoản")]
+    [TestCase("de", "Aufladestufen", "kumulierte VND-Aufladungen", "Ungültige Gegenstandsangabe", "Kontoname")]
+    [TestCase("zh-CN", "充值里程碑", "累计充值奖励", "物品格式无效", "请输入登录账号")]
+    public void LocalizesMilestoneControlsAndValidation(string culture, string title, string help, string invalidItem, string invalidTransfer)
+    {
+        CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(culture);
+        var cut = this._context.Render<TopUpMilestones>();
+        cut.WaitForElement("#topup-milestones-settings", LoadTimeout);
+
+        Assert.That(cut.Find("h1").TextContent, Is.EqualTo(title));
+        cut.Find(".page-help button").Click();
+        Assert.That(cut.Find(".page-help [role=note]").TextContent, Does.Contain(help));
+        cut.Find("#manual-record-btn").Click();
+        Assert.That(cut.Find("#topup-milestones-errors").TextContent, Does.Contain(invalidTransfer));
+
+        var errors = TopUpMilestones.ValidateAndBuildSteps(
+            [new() { Id = "invalid", ThresholdVnd = 100_000, ItemsText = "bad-syntax" }],
+            out _);
+        Assert.That(errors.Single(), Does.Contain(invalidItem));
+    }
+
     /// <summary>Verifies step validation catches duplicate IDs and invalid item syntax.</summary>
     [Test]
     public void ValidatesStepDrafts()

@@ -80,10 +80,24 @@ async function signIn(page: Page): Promise<void> {
 }
 
 async function section(page: Page, width: number, index: number, language: 'en' | 'vi'): Promise<void> {
-  if (width <= 600) await page.locator('#accountSectionSelect').selectOption({ label: labels[language][index] });
-  else await page.locator('#accountNav').getByRole('button', { name: labels[language][index], exact: true }).click();
+  const id = ['overview', 'coins', 'vip', 'rewards', 'resets', 'security', 'community'][index];
+  await chooseAccountSection(page, width, id, labels[language][index]);
 }
 
+
+async function chooseAccountSection(page: Page, width: number, id: string, label: string): Promise<void> {
+  if (width > 600) {
+    await page.locator('#accountNav').getByRole('button', { name: label, exact: true }).click();
+    return;
+  }
+  const primary = page.locator(`#accountMobileNav [data-mobile-section="${id}"]`);
+  if (await primary.count()) {
+    await primary.click();
+    return;
+  }
+  await page.locator('#accountMoreButton').click();
+  await page.locator('#accountMore').getByRole('button', { name: label, exact: true }).click();
+}
 
 async function checkPasswordChange(page: Page, width: number, language: 'en' | 'vi'): Promise<void> {
   await signIn(page);
@@ -413,8 +427,7 @@ for (const [language, width] of [['en', 1440], ['vi', 390]] as const) {
     await signIn(page);
     const storage = page.locator('#account-items');
     await expect(storage).toBeHidden();
-    if (width === 390) await page.locator('#accountSectionSelect').selectOption({ label: sectionName });
-    else await page.locator('#accountNav').getByRole('button', { name: sectionName, exact: true }).click();
+    await chooseAccountSection(page, width, 'items', sectionName);
     const sword = storage.getByRole('link', { name: swordName });
     await expect(sword).toHaveAttribute('href', '/tracker.html?serial=0123456789abcdef0123456789abcdef');
     await expect(storage.getByText(legacyName)).toBeVisible();
@@ -464,3 +477,83 @@ for (const [language, width] of [['en', 1440], ['vi', 390]] as const) {
     await expect(storage.getByText(legacyName)).toHaveCount(0);
   });
 }
+
+test('the five mobile targets and open account menu survive delayed host branding', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 740 });
+  await mockAccount(page, 'vi');
+  let releaseName!: () => void;
+  const pending = new Promise<void>(resolve => { releaseName = resolve; });
+  const requests = new Set<string>();
+  await page.route('**/game-name.json', async route => {
+    requests.add(route.request().url());
+    await pending;
+    await route.fulfill({ json: { name: 'Late fictional brand' } });
+  });
+  try {
+    await signIn(page);
+    const menu = page.locator('#accountMobileNav');
+    const targets = menu.getByRole('button');
+    await expect(targets).toHaveCount(5);
+    await expect(targets.nth(1)).toHaveText(/Nhân vật/);
+    await page.evaluate(() => document.fonts.ready.then(() => undefined));
+    const measurements = await targets.evaluateAll(elements => elements.map(element => ({
+      height: element.getBoundingClientRect().height,
+      width: element.getBoundingClientRect().width,
+      overflow: element.lastElementChild!.scrollWidth > element.clientWidth,
+    })));
+    expect(measurements.every(item => item.height >= 44 && !item.overflow)).toBe(true);
+    expect(Math.max(...measurements.map(item => item.width)) - Math.min(...measurements.map(item => item.width))).toBeLessThan(1);
+
+    await menu.locator('[data-mobile-section="characters"]').click();
+    await expect(page.locator('#accountCharactersHeading')).toBeFocused();
+    const more = page.locator('#accountMoreButton');
+    await more.click();
+    const dialog = page.getByRole('dialog', { name: 'Các mục tài khoản' });
+    await expect(dialog).toBeVisible();
+    expect(requests.size).toBeGreaterThan(0);
+    releaseName();
+    await expect(page.locator('.account-profile-banner [data-game-name]')).toHaveText('Late fictional brand');
+    await expect(dialog).toBeVisible();
+    await expect(more).toHaveAttribute('aria-expanded', 'true');
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+    await expect(more).toBeFocused();
+    await more.click();
+    await dialog.getByRole('button', { name: 'Bảo mật', exact: true }).click();
+    await expect(page.locator('#account-security')).toBeVisible();
+    await expect(dialog).toBeHidden();
+  } finally {
+    releaseName();
+  }
+});
+
+test('an owned saved item displays and filters captured activity when requested', async ({ page }) => {
+  await mockAccount(page, 'en');
+  let requests = 0;
+  await page.route('**/website/tracker/item?*', route => {
+    requests++;
+    expect(new URL(route.request().url()).searchParams.get('serial')).toBe('0123456789abcdef0123456789abcdef');
+    return route.fulfill({ json: {
+      enabled: true, retentionDays: 21,
+      events: [
+        { kind: 'upgrade', time: '2026-11-22T03:00:00Z', character: null, partner: null, before: null, after: null },
+        { kind: 'pickup', time: '2026-11-21T03:00:00Z', character: null, partner: null, before: null, after: null },
+      ],
+    } });
+  });
+  await signIn(page);
+  await page.locator('#accountNav [data-account-section="items"]').click();
+  await page.locator('#account-items').getByRole('button', { name: /Item details.*Fixture sword/ }).click();
+  const dialog = page.getByRole('dialog', { name: 'Fixture sword +1' });
+  expect(requests).toBe(0);
+  await dialog.getByRole('button', { name: 'Show recorded activity' }).click();
+  await expect(dialog.getByRole('status')).toContainText('21 days of retained activity');
+  await expect(dialog.getByRole('listitem')).toHaveCount(2);
+  await expect(dialog.locator('time').first()).toContainText('Sydney');
+  await dialog.getByLabel('Event type').selectOption('upgrade');
+  await expect(dialog.getByRole('listitem')).toHaveCount(1);
+  await expect(dialog.getByRole('listitem')).toContainText('Upgrade');
+  await page.keyboard.press('Escape');
+  await expect(dialog).toBeHidden();
+  expect(requests).toBe(1);
+});

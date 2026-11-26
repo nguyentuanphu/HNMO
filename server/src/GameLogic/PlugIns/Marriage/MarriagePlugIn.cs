@@ -28,15 +28,15 @@ public sealed class MarriagePlugIn :
     ISupportDefaultCustomConfiguration,
     IDisabledByDefault
 {
-    /// <summary>Buff effect number (200+ is server-side only, matching GuildsPlugIn).</summary>
-    public const short BuffEffectNumber = 242;
+    /// <summary>Buff effect number (200+ is server-side only, distinct from MountChain's 242).</summary>
+    public const short BuffEffectNumber = 241;
 
     private static readonly TimeSpan BuffDuration = TimeSpan.FromMinutes(2);
     private static readonly MagicEffectDefinition BuffDefinition = new()
     {
         Number = BuffEffectNumber,
         Name = "HNMO couple hunting bonus",
-        SubType = 242,
+        SubType = 241,
         InformObservers = false,
         StopByDeath = false,
         SendDuration = false,
@@ -503,6 +503,11 @@ public sealed class MarriagePlugIn :
 
         if (!this.IsCoupleBonusActive(player, engine))
         {
+            if (player.MagicEffectList.TryGetEffect(BuffEffectNumber, out var existing) && existing is not null)
+            {
+                await existing.DisposeAsync().ConfigureAwait(false);
+            }
+
             return;
         }
 

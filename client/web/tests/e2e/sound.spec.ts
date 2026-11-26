@@ -32,9 +32,14 @@ test('the sound pauses while the game is out of sight', async ({ page, context }
   // In Lorencia's town, where its music plays (another test may have left the hero out in a field).
   await page.evaluate(() => (window as unknown as { __game: { online: { say(text: string): void } } }).__game.online.say('/move lorencia'));
   await page.mouse.click(5, 5); // a gesture lets the browser play sound
-  const state = () => page.evaluate(async () => {
-    const audio = (await import('/js/audio/index.js' as string)) as { audioSystem(): { isMusicPlaying: boolean; isHiddenPaused: boolean } };
-    const system = audio.audioSystem();
+  // The module is loaded once, before the page goes out of sight: on a slow machine (software WebGL, frames of 150 ms)
+  // the first evaluate after the page is seen again waited 14 s for its dynamic import, longer than the poll below.
+  type AudioModule = { audioSystem(): { isMusicPlaying: boolean; isHiddenPaused: boolean } };
+  await page.evaluate(async () => {
+    (window as unknown as { __audioModule: unknown }).__audioModule = await import('/js/audio/index.js' as string);
+  });
+  const state = () => page.evaluate(() => {
+    const system = (window as unknown as { __audioModule: AudioModule }).__audioModule.audioSystem();
     return { playing: system.isMusicPlaying, paused: system.isHiddenPaused, hidden: document.visibilityState };
   });
   await expect.poll(async () => (await state()).playing, { timeout: 60_000 }).toBe(true);
@@ -51,7 +56,7 @@ test('the sound pauses while the game is out of sight', async ({ page, context }
     Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'visible' });
     document.dispatchEvent(new Event('visibilitychange'));
   });
-  await expect.poll(state, { timeout: 10_000 }).toEqual({ playing: true, paused: false, hidden: 'visible' });
+  await expect.poll(state, { timeout: 30_000 }).toEqual({ playing: true, paused: false, hidden: 'visible' });
   await other.close();
   await expectNoPageErrors(errors);
 });

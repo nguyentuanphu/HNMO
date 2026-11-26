@@ -6,7 +6,10 @@
 @inject NavigationManager Navigation
 
 <section class="season-chooser" aria-label="@Resources.SeasonChooserTitle">
-    <h2 class="season-chooser-title">@Resources.SeasonChooserTitle</h2>
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+        <h2 class="season-chooser-title mb-0">@Resources.SeasonChooserTitle</h2>
+        <a class="btn btn-sm btn-outline-primary" id="season-manage-link" href="seasons">@Resources.SeasonsManageLink</a>
+    </div>
     <div class="season-chooser-grid">
         @foreach (var panel in this._panels)
         {

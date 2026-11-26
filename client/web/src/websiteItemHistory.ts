@@ -1,20 +1,11 @@
 import { currentLanguage, onLanguageChange } from './i18n.js';
-
-type Snapshot = { group: number; number: number; level: number; quantity: number; durability: number; sockets: number; hasSkill: boolean };
-type HistoryEvent = { kind: string; time: string; character: string | null; partner: string | null; before: Snapshot | null; after: Snapshot | null };
-type History = { enabled: true; retentionDays: number; events: HistoryEvent[] } | { enabled: false };
+import { renderItemHistoryEvents, type History } from './itemHistoryTimeline.js';
 
 const form = document.querySelector<HTMLFormElement>('#item-history-search')!;
 const input = document.querySelector<HTMLInputElement>('#item-serial')!;
 const results = document.querySelector<HTMLOListElement>('#item-history-results')!;
 const status = document.querySelector<HTMLElement>('#item-history-status')!;
 const serialPattern = /^(?:[0-9a-f]{32}|[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12})$/i;
-const kinds: Record<string, [string, string]> = {
-  loot: ['Loot generated', 'Tạo đồ rơi'], pickup: ['Picked up', 'Nhặt lên'], drop: ['Dropped', 'Thả xuống'],
-  trade: ['Trade', 'Giao dịch'], mix: ['Crafting', 'Chế tạo'], upgrade: ['Upgrade', 'Nâng cấp'],
-  consume: ['Consumed', 'Đã dùng'], grant: ['Granted', 'Đã cấp'], 'npc-buy': ['NPC purchase', 'Mua từ NPC'],
-  'npc-sell': ['NPC sale', 'Bán cho NPC'], 'personal-store': ['Personal store', 'Cửa hàng cá nhân'], 'item-market': ['Market', 'Chợ vật phẩm'],
-};
 let history: History | undefined;
 let phase: 'idle' | 'loading' | 'invalid' | 'unavailable' = 'idle';
 let request: AbortController | undefined;
@@ -23,7 +14,6 @@ function render(): void {
   const vi = currentLanguage() === 'vi';
   const copy = (en: string, vietnamese: string) => vi ? vietnamese : en;
   const number = new Intl.NumberFormat(vi ? 'vi-VN' : 'en-AU', { maximumFractionDigits: 2 });
-  const date = new Intl.DateTimeFormat(vi ? 'vi-VN' : 'en-AU', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Australia/Sydney' });
   document.querySelector('#item-history-heading')!.textContent = copy('Item history', 'Lịch sử vật phẩm');
   document.querySelector('#item-jewel-link')!.textContent = copy('Jewel totals and hunters', 'Tổng ngọc và thợ săn');
   document.querySelector('#item-pvp-link')!.textContent = copy('PvP log', 'Nhật ký PvP');
@@ -42,33 +32,7 @@ function render(): void {
     unavailable: copy('Item history is temporarily unavailable.', 'Lịch sử vật phẩm tạm thời không có.'),
   }[phase];
 
-  results.replaceChildren();
-  if (!history?.enabled) return;
-  for (const entry of history.events) {
-    const row = document.createElement('li');
-    const heading = document.createElement('h2');
-    heading.textContent = kinds[entry.kind]?.[vi ? 1 : 0] ?? copy('Item activity', 'Hoạt động vật phẩm');
-    const time = document.createElement('time');
-    time.dateTime = entry.time;
-    time.textContent = `${date.format(new Date(entry.time))} (Sydney)`;
-    row.append(heading, time);
-    const actors = [entry.character, entry.partner].filter(Boolean);
-    if (actors.length) {
-      const participants = document.createElement('p');
-      participants.textContent = actors.join(' · ');
-      row.append(participants);
-    }
-    for (const [label, snapshot] of [[copy('Before', 'Trước'), entry.before], [copy('After', 'Sau'), entry.after]] as const) {
-      if (!snapshot) continue;
-      const state = document.createElement('p');
-      state.textContent = copy(
-        `${label} · Item ${snapshot.group}/${snapshot.number} · Level +${snapshot.level} · Quantity ${number.format(snapshot.quantity)} · Sockets ${number.format(snapshot.sockets)}`,
-        `${label} · Vật phẩm ${snapshot.group}/${snapshot.number} · Cấp +${snapshot.level} · Số lượng ${number.format(snapshot.quantity)} · Ô socket ${number.format(snapshot.sockets)}`,
-      );
-      row.append(state);
-    }
-    results.append(row);
-  }
+  renderItemHistoryEvents(results, history?.enabled ? history.events : [], vi ? 'vi' : 'en', 'h2');
 }
 
 async function search(raw: string): Promise<void> {

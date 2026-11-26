@@ -55,6 +55,15 @@ public sealed class WebsiteTrackerController(IPersistenceContextProvider persist
         return this.Ok(new { enabled = true, retentionDays, timeZone = Sydney.Id, events = result });
     }
 
+    /// <summary>Reports whether public item history is available.</summary>
+    /// <returns>The availability of the tracker and its activity log.</returns>
+    [HttpGet("status")]
+    public async ValueTask<IActionResult> GetStatusAsync()
+    {
+        this.Response.Headers.CacheControl = "no-store";
+        return this.Ok(new { enabled = await this.ReadActiveTrackerAsync().ConfigureAwait(false) is not null });
+    }
+
     /// <summary>Reads recent activity for a supplied origin serial, without opening private inventories.</summary>
     /// <param name="serial">The real origin serial, using the 32-character or dashed GUID format.</param>
     /// <returns>A privacy-filtered snapshot limited to the active log's retention.</returns>
