@@ -5,7 +5,7 @@
 import { translate } from '../i18n.js';
 import { openDocument, prepareDocument } from './rml.js';
 import type { RmlDocument, RmlModel } from './rml.js';
-import { showConfirm } from './gameDialogs.js';
+import { dismissConfirm, showConfirm } from './gameDialogs.js';
 import { drawItem } from './itemIcons.js';
 import { BAG, VAULT, SHOP, SHOP_STORAGE, TRADE, Equipment, Inventory, NpcWindow, Storage } from '../game/inventory.js';
 import type { Item, ItemGrid } from '../game/inventory.js';
@@ -1083,9 +1083,10 @@ export class ItemWindows {
       await this.vault.open(this.parent);
       this.placeAll();
       this.syncBagToggle();
-      if (!wasOpen) this.onVaultShown(true);
+      if (!wasOpen) { this.vaultSession++; this.onVaultShown(true); }
     } else if (this.vault.isOpen) {
       this.vault.close();
+      this.vaultEnded();
       this.onVaultShown(false);
       this.placeAll();
     }
@@ -1095,7 +1096,7 @@ export class ItemWindows {
     if (this.docked.some((d) => d.window.isOpen && !d.close())) return;
     this.tooltip.hide();
     if (this.picked.source) this.picked.drop();
-    if (this.vault.isOpen) { this.vault.close(); this.inventory.closeVault(); this.onVaultShown(false); }
+    if (this.vault.isOpen) { this.vault.close(); this.inventory.closeVault(); this.vaultEnded(); this.onVaultShown(false); }
     if (this.shop.isOpen) { this.shop.close(); this.repairMode = false; this.inventory.closeShop(); }
     // Closing the inventory (or Escape) while trading cancels the trade (CSystem's HideAllGroupA, CTrade::UpdateKeyEvent).
     if (this.trade.isOpen) { this.trade.close(); this.onTradeClosed(); }
@@ -1121,7 +1122,7 @@ export class ItemWindows {
   async openTrade(): Promise<void> {
     this.tooltip.hide();
     if (this.picked.source) this.picked.drop();
-    if (this.vault.isOpen) { this.vault.close(); this.inventory.closeVault(); this.onVaultShown(false); }
+    if (this.vault.isOpen) { this.vault.close(); this.inventory.closeVault(); this.vaultEnded(); this.onVaultShown(false); }
     if (this.shop.isOpen) { this.shop.close(); this.repairMode = false; this.inventory.closeShop(); }
     await this.bag.open(this.parent);
     await this.trade.open(this.parent);
@@ -1177,8 +1178,17 @@ export class ItemWindows {
     this.inventory.sell(slot);
   }
 
+  /** Counts the vault's openings and closings: a zen box asked while it was open does nothing after it closed. */
+  private vaultSession = 0;
+
+  private vaultEnded(): void {
+    this.vaultSession++;
+    dismissConfirm('vault-zen-dialog');
+  }
+
   async askMoney(toVault: boolean): Promise<void> {
     const question = toVault ? 'How much zen to deposit?' : 'How much zen to withdraw?';
+    const session = this.vaultSession;
     const answer = await showConfirm({
       title: translate('Vault') ?? 'Vault',
       lines: [translate(question) ?? question],
@@ -1186,7 +1196,8 @@ export class ItemWindows {
       showCancel: true,
       tag: 'vault-zen-dialog',
     });
-    if (answer.button !== 'primary') return;
+    // The vault it was asked for closed (and maybe opened again) while the box was open.
+    if (answer.button !== 'primary' || session !== this.vaultSession || !this.vault.isOpen) return;
     const amount = Math.floor(Number(answer.text));
     if (amount > 0) this.inventory.moveMoney(toVault, amount);
   }

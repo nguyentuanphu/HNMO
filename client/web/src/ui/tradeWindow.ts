@@ -11,6 +11,7 @@ import { itemDefinition } from '../game/items.js';
 import type { Connection } from '../net/connection.js';
 import type { ItemWindows, TradeView } from './itemWindows.js';
 import { promptInGame } from './confirmDialog.js';
+import { dismissConfirm } from './gameDialogs.js';
 
 /** The character level from which the trade command works (TRADELIMITLEVEL). */
 export const TRADE_MIN_LEVEL = 6;
@@ -139,6 +140,8 @@ export class Trade {
   /** Whether a trade is open (from the accepted answer until TradeFinished; the window may still be loading). */
   get isOpen(): boolean { return this.active; }
   private active = false;
+  /** Counts trades opened and ended: a zen box asked in one trade does nothing in the next. */
+  private session = 0;
 
   /** Asks another player (by object id) to trade (TradeRequest); the server forwards it if they are in view. */
   requestTrade(playerId: number): void {
@@ -220,6 +223,7 @@ export class Trade {
     this.view.warnings.clear();
     this.requestedGold = 0;
     this.active = true;
+    this.session++;
     await this.itemWindows.openTrade();
     // The trade may have ended while its window was loading.
     if (!this.active) { this.itemWindows.closeTrade(); return; }
@@ -310,6 +314,8 @@ export class Trade {
     this.view.myConfirmed = false;
     this.view.partnerConfirmed = false;
     this.active = false;
+    this.session++;
+    dismissConfirm('trade-zen-dialog');
     this.itemWindows.closeTrade();
     this.onChange('closed');
   }
@@ -348,8 +354,10 @@ export class Trade {
   async askGold(): Promise<void> {
     const ask = this.options.prompt ?? ((text: string) => promptInGame(text, { numericOnly: true, maxLength: 8, initialText: '' }, 'trade-zen-dialog'));
     const question = 'Enter the amount of Zen you would like to trade.';
+    const session = this.session;
     const text = await ask(translate(question) ?? question);
-    if (text === null) return;
+    // The trade it was asked for ended (and maybe another one began) while the box was open.
+    if (text === null || session !== this.session || !this.isOpen) return;
     const amount = Math.floor(Number(text.replace(/[^0-9]/g, '').slice(0, 8)) || 0);
     if (amount === 0) return;
     this.setGold(amount);

@@ -121,6 +121,17 @@ class ConfirmDialog {
   get isOpen(): boolean { return this.current !== null; }
   get lines(): string[] { return this.model.lines.map((line) => line.text); }
 
+  /** Closes the boxes with this tag, open or waiting, as if cancelled (their window or session ended). */
+  dismiss(tag: string): void {
+    for (let i = this.queue.length - 1; i >= 0; i--) {
+      const entry = this.queue[i];
+      if (entry?.config.tag !== tag) continue;
+      this.queue.splice(i, 1);
+      entry.resolve({ button: 'cancel', text: '' });
+    }
+    if (this.current?.config.tag === tag) this.finish('cancel', true);
+  }
+
   show(config: ConfirmConfig): Promise<ConfirmAnswer> {
     return new Promise((resolve) => {
       this.queue.push({ config, resolve });
@@ -229,6 +240,9 @@ const confirms = (): ConfirmDialog => (confirmDialog ??= new ConfirmDialog());
 export function showConfirm(config: ConfirmConfig): Promise<ConfirmAnswer> {
   return confirms().show(config);
 }
+
+/** Closes the confirm boxes with this tag, open or waiting, as cancelled. */
+export function dismissConfirm(tag: string): void { confirmDialog?.dismiss(tag); }
 
 /** Whether a confirm box is open (the game's hotkeys wait while it is). */
 export function confirmOpen(): boolean { return confirmDialog?.isOpen ?? false; }
