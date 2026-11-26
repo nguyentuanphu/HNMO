@@ -900,4 +900,6 @@
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 10 bản đồ Season 9, tệp địa hình, cổng dịch chuyển (417-461, 474-482) và điểm xuất hiện quái/NPC Season 9 khi chạy Season 9.</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: cửa hàng thử vận may của Moss</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 5 phiếu thử vận may của Moss (13-71..75) giá 2.000.000 Zen và trang bị cửa hàng cho Thương nhân Moss (492) nếu đang trống.</value></data>
+  <data name="S6EventsMonstersAndItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: quái sự kiện, mỏ đào và vật phẩm bài</value></data>
+  <data name="S6EventsMonstersAndItemsUpdatePlugIn_Description" xml:space="preserve"><value>Bổ sung quái Loren Deep (300-303), Yêu tinh Bị nguyền (466), mỏ khoáng sản (605-607), Cuốc Pandora (0-41) và bài Rummy (14-215..216) nếu chưa có.</value></data>
 </root>

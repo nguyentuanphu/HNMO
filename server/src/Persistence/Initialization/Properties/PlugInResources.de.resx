@@ -996,4 +996,6 @@
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>Fügt die 10 Season-9-Karten, Terraindateien, Tore (417-461, 474-482) und Season-9-Spawns im Season-9-Betrieb hinzu.</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: Glücksspiel-Laden von Moss dem Händler</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>Fügt die 5 Moss-Glücksspielgutscheine (13-71..75) für 2.000.000 Zen hinzu und stattet Moss den Händler (492) mit seinem Laden aus, sofern leer.</value></data>
+  <data name="S6EventsMonstersAndItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: Event-Monster, Bergbauknoten und Kartengegenstände</value></data>
+  <data name="S6EventsMonstersAndItemsUpdatePlugIn_Description" xml:space="preserve"><value>Fügt Loren-Deep-Monster (300-303), Verfluchten Goblin (466), Bergbauknoten (605-607), Pandora-Spitzhacke (0-41) und Rummy-Karten (14-215..216) hinzu, sofern sie fehlen.</value></data>
 </root>

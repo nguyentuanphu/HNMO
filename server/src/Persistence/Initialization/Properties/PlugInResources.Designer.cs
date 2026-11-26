@@ -1198,5 +1198,11 @@ namespace HNMO.Persistence.Initialization.Properties {
 
         /// <summary>Gets the localized MossMerchantShopUpdatePlugIn_Description text.</summary>
         public static string MossMerchantShopUpdatePlugIn_Description => ResourceManager.GetString("MossMerchantShopUpdatePlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized S6EventsMonstersAndItemsUpdatePlugIn_Name text.</summary>
+        public static string S6EventsMonstersAndItemsUpdatePlugIn_Name => ResourceManager.GetString("S6EventsMonstersAndItemsUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized S6EventsMonstersAndItemsUpdatePlugIn_Description text.</summary>
+        public static string S6EventsMonstersAndItemsUpdatePlugIn_Description => ResourceManager.GetString("S6EventsMonstersAndItemsUpdatePlugIn_Description", resourceCulture)!;
     }
 }

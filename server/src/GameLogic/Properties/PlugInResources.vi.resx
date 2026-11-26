@@ -2490,4 +2490,6 @@
   <data name="MossGambleConfiguration_Enabled_Description" xml:space="preserve"><value>Khi tắt, người chơi không thể mua phiếu quay thưởng tại Moss (492) và không bị trừ Zen.</value></data>
   <data name="MossGambleConfiguration_PriceZen_Name" xml:space="preserve"><value>Giá quay (Zen)</value></data>
   <data name="MossGambleConfiguration_PriceZen_Description" xml:space="preserve"><value>Số Zen trừ mỗi lần mua phiếu tại Moss (mặc định 2.000.000 Zen).</value></data>
+  <data name="MossGambleConfiguration_UseWeightedExcellentSelection_Name" xml:space="preserve"><value>Dùng tỷ lệ dòng Hoàn Hảo theo trọng số</value></data>
+  <data name="MossGambleConfiguration_UseWeightedExcellentSelection_Description" xml:space="preserve"><value>Chọn dòng Hoàn Hảo theo trọng số bộ máy chủ Season 6/9 (10% / 20% / 20% / 20% / 20% / 10%) thay vì chọn đều.</value></data>
 </root>

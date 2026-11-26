@@ -2361,4 +2361,13 @@
   <data name="TalismanOfItemProtection" xml:space="preserve">
     <value>Talisman of Item Protection</value>
   </data>
+  <data name="PandoraPick" xml:space="preserve">
+    <value>Pandora Pick</value>
+  </data>
+  <data name="CardPiece" xml:space="preserve">
+    <value>Card Piece</value>
+  </data>
+  <data name="CardDeck" xml:space="preserve">
+    <value>Card Deck</value>
+  </data>
 </root>

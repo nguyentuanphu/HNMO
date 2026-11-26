@@ -112,6 +112,72 @@ public sealed class S6EventsConfiguration
     /// <summary>Gets or sets configured Lucky Coin exchange tiers.</summary>
     public List<S6ExchangeTier> LuckyCoinTiers { get; set; } = CreateDefaultLuckyCoinTiers();
 
+    /// <summary>Gets or sets a value indicating whether Loren Deep assault waves are enabled.</summary>
+    public bool LorenDeepEnabled { get; set; } = true;
+
+    /// <summary>Gets or sets daily Loren Deep start times in <see cref="TimeZone"/> (<c>HH:mm</c>, default <c>20:00</c>).</summary>
+    public List<string> LorenDeepDailyTimes { get; set; } = ["20:00"];
+
+    /// <summary>Gets or sets total duration of a Loren Deep assault event in minutes (default 30).</summary>
+    public int LorenDeepDurationMinutes { get; set; } = 30;
+
+    /// <summary>Gets or sets Valley of Loren map number for Loren Deep waves (default 30).</summary>
+    public short LorenDeepMapNumber { get; set; } = 30;
+
+    /// <summary>Gets or sets Type 1 Common Assault appearance weight (default 50).</summary>
+    public int LorenDeepCommonAssaultWeight { get; set; } = 50;
+
+    /// <summary>Gets or sets Type 2 Special Raid appearance weight (default 50).</summary>
+    public int LorenDeepSpecialRaidWeight { get; set; } = 50;
+
+    /// <summary>Gets or sets a value indicating whether the Mining System (Pandora Pick + Twinkle nodes) is enabled.</summary>
+    public bool MiningEnabled { get; set; } = true;
+
+    /// <summary>Gets or sets chance denominator used by mining success rates (default 1,000,000).</summary>
+    public int MiningChanceDenominator { get; set; } = 1_000_000;
+
+    /// <summary>Gets or sets Stage 1..5 success rates for Mining Area (Small) (NPC 605).</summary>
+    public List<int> MiningSmallRates { get; set; } = [475_000, 491_667, 496_429, 467_188, 475_126];
+
+    /// <summary>Gets or sets Stage 1..5 success rates for Mining Area (Medium) (NPC 606).</summary>
+    public List<int> MiningMediumRates { get; set; } = [475_000, 491_667, 463_333, 469_118, 476_632];
+
+    /// <summary>Gets or sets Stage 1..5 success rates for Mining Area (Large) (NPC 607).</summary>
+    public List<int> MiningLargeRates { get; set; } = [475_000, 491_667, 479_310, 475_385, 475_311];
+
+    /// <summary>Gets or sets Stage 5 Pandora jackpot rates for Small/Medium/Large twinkles.</summary>
+    public List<int> MiningPandoraRates { get; set; } = [25_000, 19_000, 18_000];
+
+    /// <summary>Gets or sets maximum durability cap when repairing Pandora Pick with Jewel of Bless (default 120).</summary>
+    public int MiningRepairMaxDurability { get; set; } = 120;
+
+    /// <summary>Gets or sets a value indicating whether Mu Rummy card drops and mini-game are enabled.</summary>
+    public bool MuRummyEnabled { get; set; } = true;
+
+    /// <summary>Gets or sets Card Piece (14-215) drop rate per 10,000 kills (default 50 = 0.5%).</summary>
+    public int MuRummyCardPieceDropRatePer10k { get; set; } = 50;
+
+    /// <summary>Gets or sets Card Pieces combined into one Card Deck (default 24).</summary>
+    public int MuRummyRequiredPieces { get; set; } = 24;
+
+    /// <summary>Gets or sets minimum score for Mu Rummy Tier 1 reward (default 250).</summary>
+    public int MuRummyRewardScoreFirst { get; set; } = 250;
+
+    /// <summary>Gets or sets minimum score for Mu Rummy Tier 2 reward (default 400).</summary>
+    public int MuRummyRewardScoreSecond { get; set; } = 400;
+
+    /// <summary>Gets or sets a value indicating whether Christmas Santa Village NPC buffs and gifts are enabled.</summary>
+    public bool XMasEnabled { get; set; } = true;
+
+    /// <summary>Gets or sets Christmas Santa buff duration in seconds (default 1800).</summary>
+    public int XMasBuffDurationSeconds { get; set; } = 1800;
+
+    /// <summary>Gets or sets minimum character resets required to claim Snowman (467) / /xmas gifts (default 0).</summary>
+    public int XMasMinReset { get; set; }
+
+    /// <summary>Gets or sets cooldown in minutes between Snowman (467) gifts per character (default 60).</summary>
+    public int XMasGiftCooldownMinutes { get; set; } = 60;
+
     /// <summary>Creates default Cherry Blossom tiers (10 / 50 / 255 stacked branches).</summary>
     /// <returns>Initialized list of exchange tiers.</returns>
     public static List<S6ExchangeTier> CreateDefaultCherryBlossomTiers() =>

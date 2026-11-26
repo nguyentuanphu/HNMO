@@ -854,4 +854,28 @@
   <data name="ArenaHerald" xml:space="preserve">
     <value>竞技场使者</value>
   </data>
+  <data name="HeroMutant" xml:space="preserve">
+    <value>变异英雄</value>
+  </data>
+  <data name="OmegaWing" xml:space="preserve">
+    <value>欧米伽之翼</value>
+  </data>
+  <data name="AxlHero" xml:space="preserve">
+    <value>阿克塞尔英雄</value>
+  </data>
+  <data name="GigasGolem" xml:space="preserve">
+    <value>巨像傀儡</value>
+  </data>
+  <data name="CursedGoblin" xml:space="preserve">
+    <value>被诅咒的哥布林</value>
+  </data>
+  <data name="MiningAreaSmall" xml:space="preserve">
+    <value>采矿点（小）</value>
+  </data>
+  <data name="MiningAreaMedium" xml:space="preserve">
+    <value>采矿点（中）</value>
+  </data>
+  <data name="MiningAreaLarge" xml:space="preserve">
+    <value>采矿点（大）</value>
+  </data>
 </root>

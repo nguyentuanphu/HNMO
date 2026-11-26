@@ -20,4 +20,11 @@ public class MossGambleConfiguration
     [Range(0, 2_000_000_000)]
     [Display(Name = nameof(PlugInResources.MossGambleConfiguration_PriceZen_Name), Description = nameof(PlugInResources.MossGambleConfiguration_PriceZen_Description), ResourceType = typeof(PlugInResources))]
     public long PriceZen { get; set; } = 2_000_000;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether rolled excellent options use the Season 6 server suite
+    /// weighted slot table (10% / 20% / 20% / 20% / 20% / 10%) instead of uniform selection.
+    /// </summary>
+    [Display(Name = nameof(PlugInResources.MossGambleConfiguration_UseWeightedExcellentSelection_Name), Description = nameof(PlugInResources.MossGambleConfiguration_UseWeightedExcellentSelection_Description), ResourceType = typeof(PlugInResources))]
+    public bool UseWeightedExcellentSelection { get; set; }
 }

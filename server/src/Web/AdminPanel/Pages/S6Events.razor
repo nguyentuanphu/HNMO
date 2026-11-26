@@ -193,6 +193,125 @@ else
         <button type="button" class="btn btn-outline-secondary" @onclick="this.ReloadState" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintRefresh">@L("Refresh History", "Làm Mới Lịch Sử")</button>
     </div>
 
+    <div class="row g-3 mb-3">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>@L("Loren Deep Assault (/loren, Map 30)", "Quái Xâm Lăng Loren Deep (/loren, Map 30)")</span>
+                    <button type="button"
+                            class="btn btn-sm btn-outline-warning"
+                            title="@L("Immediately start a 3-wave Loren Deep assault on Valley of Loren.", "Mở ngay 3 đợt tấn công Loren Deep tại Thung Lũng Loren.")"
+                            @onclick="this.TriggerLorenDeepNowAsync">
+                        @L("Start Loren Deep", "Mở Loren Deep Ngay")
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="form-check mb-2">
+                        <input id="lorenEnabled" class="form-check-input" type="checkbox" @bind="this._configuration.LorenDeepEnabled" />
+                        <label class="form-check-label" for="lorenEnabled" title="@L("Enable daily scheduled Valley of Loren assault waves.", "Bật sự kiện quái tấn công Thung Lũng Loren.")">@L("Enable Loren Deep", "Bật Loren Deep")</label>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <label class="form-label">@L("Daily Times (HH:mm)", "Khung Giờ (HH:mm)")</label>
+                            <input type="text" class="form-control form-control-sm" @bind="this._lorenTimesText" />
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label">@L("Duration (m)", "Thời lượng (phút)")</label>
+                            <input type="number" class="form-control form-control-sm" min="5" max="120" @bind="this._configuration.LorenDeepDurationMinutes" />
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label">@L("Map #", "Mã Map")</label>
+                            <input type="number" class="form-control form-control-sm" min="0" max="255" @bind="this._configuration.LorenDeepMapNumber" />
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">@L("Common Weight", "Trọng số Thường")</label>
+                            <input type="number" class="form-control form-control-sm" min="0" max="100" @bind="this._configuration.LorenDeepCommonAssaultWeight" />
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">@L("Special Raid Weight", "Trọng số Tập Kích")</label>
+                            <input type="number" class="form-control form-control-sm" min="0" max="100" @bind="this._configuration.LorenDeepSpecialRaidWeight" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">@L("XMas Attack & Santa Village (/xmas, NPC 467..475)", "Sự Kiện Giáng Sinh & Làng Santa (/xmas, NPC 467..475)")</div>
+                <div class="card-body">
+                    <div class="form-check mb-2">
+                        <input id="xmasEnabled" class="form-check-input" type="checkbox" @bind="this._configuration.XMasEnabled" />
+                        <label class="form-check-label" for="xmasEnabled" title="@L("Enable Little Santa buffs (91/92/93) and Snowman seasonal gifts.", "Bật chúc phúc Ông Già Noel và quà Người Tuyết.")">@L("Enable XMas Santa & Gifts", "Bật Sự Kiện Giáng Sinh")</label>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-4">
+                            <label class="form-label">@L("Buff (sec)", "Buff (giây)")</label>
+                            <input type="number" class="form-control form-control-sm" min="60" max="86400" @bind="this._configuration.XMasBuffDurationSeconds" />
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label">@L("Min Reset", "Reset Tối Thiểu")</label>
+                            <input type="number" class="form-control form-control-sm" min="0" max="10000" @bind="this._configuration.XMasMinReset" />
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label">@L("Cooldown (m)", "Hồi Quà (phút)")</label>
+                            <input type="number" class="form-control form-control-sm" min="0" max="10080" @bind="this._configuration.XMasGiftCooldownMinutes" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">@L("Mining System (/mine, Pandora Pick 0-41, NPC 605..607)", "Hệ Thống Đào Khoáng (/mine, Cuốc Pandora 0-41)")</div>
+                <div class="card-body">
+                    <div class="form-check mb-2">
+                        <input id="miningEnabled" class="form-check-input" type="checkbox" @bind="this._configuration.MiningEnabled" />
+                        <label class="form-check-label" for="miningEnabled" title="@L("Enable twinkle crystal mining and Jewel of Bless Pandora Pick repairs.", "Bật đào tinh thể khoáng sản và sửa Cuốc Pandora bằng Ngọc.")">@L("Enable Mining System", "Bật Đào Khoáng")</label>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <label class="form-label">@L("Rate Denominator", "Mẫu Số Tỉ Lệ")</label>
+                            <input type="number" class="form-control form-control-sm" min="1000" max="10000000" @bind="this._configuration.MiningChanceDenominator" />
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">@L("Max Repair Dur", "Độ Bền Tối Đa")</label>
+                            <input type="number" class="form-control form-control-sm" min="1" max="255" @bind="this._configuration.MiningRepairMaxDurability" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">@L("Mu Rummy (/rummy, 14-215 / 14-216)", "Trò Chơi Bài Mu Rummy (/rummy, 14-215 / 14-216)")</div>
+                <div class="card-body">
+                    <div class="form-check mb-2">
+                        <input id="rummyEnabled" class="form-check-input" type="checkbox" @bind="this._configuration.MuRummyEnabled" />
+                        <label class="form-check-label" for="rummyEnabled" title="@L("Enable Card Piece monster drops and /rummy card mini-game rewards.", "Bật rơi Mảnh Bài từ quái và trò chơi ghép bài /rummy.")">@L("Enable Mu Rummy", "Bật Mu Rummy")</label>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-3">
+                            <label class="form-label">@L("Drop /10k", "Rớt /10k")</label>
+                            <input type="number" class="form-control form-control-sm" min="0" max="10000" @bind="this._configuration.MuRummyCardPieceDropRatePer10k" />
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label">@L("Pieces", "Số Mảnh")</label>
+                            <input type="number" class="form-control form-control-sm" min="1" max="255" @bind="this._configuration.MuRummyRequiredPieces" />
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label">@L("Tier 1 Score", "Điểm Mốc 1")</label>
+                            <input type="number" class="form-control form-control-sm" min="10" max="1000" @bind="this._configuration.MuRummyRewardScoreFirst" />
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label">@L("Tier 2 Score", "Điểm Mốc 2")</label>
+                            <input type="number" class="form-control form-control-sm" min="20" max="2000" @bind="this._configuration.MuRummyRewardScoreSecond" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="card">
         <div class="card-header">@L("Recent LMS Winners & Owed Rewards Queue", "Lịch Sử Vô Địch LMS & Hàng Đợi Quà")</div>
         <div class="card-body">
