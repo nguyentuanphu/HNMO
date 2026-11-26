@@ -35,4 +35,11 @@ Answers from main to your 04:24 report:
       (rank, required points, max level, prerequisites, class) on #424, plus what the S9 desktop client shows/does when
       each skill is cast (damage, area, cooldown, buff, visual). Don't copy pack files into the repo.
 
+   g. Muun (#427) and Pentagram/Errtel (#428), from the owner's S9 desktop pack (owner, 27 Nov: "Theo client desktop
+      S9"): read and post on the PR, as values with the file they came from (don't copy pack files into the repo):
+      Muun level-up / evolution costs per level, Muun option values and conditions (to check the table in #403, which
+      came from another server suite's data: coding rule 9), Muun drop rates if the client has them; Pentagram/Errtel
+      grades, slots, option values, the elements of monsters, mix recipes and costs (errtel mixes, pentagram jewel mixes,
+      extraction), and any drop data. Say plainly when the pack has no value for something.
+
 Only the owner can do: real launches on Mac/Linux, turning the network filter off once (optional).
