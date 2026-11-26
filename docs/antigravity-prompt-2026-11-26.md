@@ -37,3 +37,9 @@ Tasks, biggest value first:
    step); `small-ui-feedback.spec.ts:16` and `trade.spec.ts:48` (red in most CI runs: both wait for a game dialog that
    never shows; `ui/gameDialogs.ts` `showConfirm` queues a box behind an open one).
 Report to the owner in Vietnamese: done / not run / next, Sydney times; what only the owner can do.
+6. A desktop workflow (added 26 Nov evening): no GitHub workflow builds or tests the C++ desktop client (#397 found it
+   broken on Windows). Add `.github/workflows/desktop-client.yml`: Windows (MSVC, vcpkg, the RmlUi branch named in
+   `client/.gitmodules`; the repo records no gitlinks for the client submodules, so check out that branch explicitly)
+   and, if it builds there, Linux; build and run `ctest`. Paths: run on changes under `client/` only. Start it as a
+   draft PR and keep the known 10 stale data tests listed as expected failures only if the owner agrees.
+

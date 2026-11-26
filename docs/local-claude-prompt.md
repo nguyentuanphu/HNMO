@@ -73,3 +73,35 @@ Stop when usage runs low and push what you have. Report in Vietnamese: done / no
    when `current` is empty). Run both on this PC, and when it fails print `confirmOpen()` and the open box's text: is
    another confirm box (onboarding, update, death, gens ...) open and hiding the test's box? Fix the test or the code
    in one draft PR with the cause in its body.
+
+---
+
+# Round 4 (26 Nov, 20:50 Sydney): main's answers to the local report of 17:40-20:00
+
+You are local Claude for HNMO. Same rules as before (draft PRs into `claude/hnmo-main-handover-54co2m`, one per area,
+tests of what you touch, say what was run and what was not, no third-party names, heavy jobs through heavy.ps1).
+
+What main did with your report:
+- Merged: #395 (with a cap of 10,000 remembered missing paths, from main), #397, and earlier #393, #394, #387, #384.
+  #398 merges when its browser run is green.
+- Fixed in #404: 4a (the stack pickup test now checks the definition's cap of 5 and fails without #373's re-check),
+  4b (Jewel Bank: the bag is saved before the bank is credited), 4c (leftovers: materials saved before a waiting reward
+  or coins). Main chose the anti-duplication order (a stop can lose a deposit, never double it), not the undo receipt.
+- DeferredTcpPipe on Linux (cloud, .NET 10): 3 of 3 runs pass. Your 5/5 red is Windows only.
+- #400 fixes walk-stall's last step on the server (the next part of a long walk gets one more tile when it lies on the
+  server's own walk); walk-stall was green in #400's browser run.
+
+Your tasks now, in this order:
+1. DeferredTcpPipe on Windows: the accepted server socket sees no FIN/RST for 12 s after the client's Shutdown(Send) and
+   dispose. Try `LingerState(true, 0)` vs the default, `Shutdown(Both)`, and whether Windows Defender / the loopback
+   fast path holds the FIN; give the cause with file:line and fix the pipe or the self-check in one draft PR.
+2. The 10 stale C++ data tests: for each, say whether the shipped data or the expectation is wrong, with the evidence
+   (git log of the data file, the desktop's own source of the value). Fix the expectations where the data is right in
+   one draft PR; list the ones where the data looks wrong (e.g. Buffs.json: 128 buffs load instead of 158 and buffs[6]
+   has no English text: find the commit that dropped them) for main and the owner.
+3. `skill-effects-cast.spec.ts`: add the elf, summoner and the other classes the spec misses (Season 6.3 and the S9
+   column), run them on the PC, one draft PR.
+4. #381: build a package from #381's branch and take the FPS / heap "after" numbers in town (S6 and S9), the same way
+   as your "before" numbers; write both into #381.
+5. `small-ui-feedback.spec.ts:16` and `trade.spec.ts:48` (still red in most CI runs): reproduce and give the cause.
+Report in Vietnamese: done / not run / next, Sydney times.
