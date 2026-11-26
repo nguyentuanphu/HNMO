@@ -5282,4 +5282,10 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   <data name="ActivityLogAfter" xml:space="preserve">
     <value>Sau</value>
   </data>
+  <data name="PageHelpTextS9Events" xml:space="preserve">
+    <value>Cấu hình các sự kiện Season 9 (Hộ Vệ Acheron, Chiến Trường Arca, Hỗn Nguyên Lâu Sinh Tồn, Quảng Trường Đau Khổ, Trình Quản Lý Xâm Lăng) và quái Boss Núi Uruk (669-729).</value>
+  </data>
+  <data name="S9EventsTitle" xml:space="preserve">
+    <value>Sự Kiện Season 9 &amp; Núi Uruk</value>
+  </data>
 </root>

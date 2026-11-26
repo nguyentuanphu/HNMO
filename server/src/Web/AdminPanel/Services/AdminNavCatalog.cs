@@ -69,6 +69,13 @@ public static class AdminNavCatalog
             [
                 new("castle-siege", "events", "oi-shield", "Castle Siege", "Công Thành Chiến", "Schedule Castle Siege stages, guilds, and siege rewards.", "Lịch trình Công Thành Chiến, bang đăng ký và thưởng.", true, "guilds-levels-ladder", "s6-events", "timetable"),
                 new("s6-events", "events", "oi-timer", "S6 Events & Chaos Castle", "Sự kiện S6 & Boss", "Tune Blood Castle, Devil Square, Chaos Castle, and Illusions.", "Tùy chỉnh BC, DV, CC, Huyết Lâu và phần thưởng.", true, "timetable", "world-bosses-rankings", "rate-tuning"),
+                new("s9-events", "events", "oi-fire", "S9 Events & Uruk", "Sự kiện S9 & Núi Uruk", "Configure Acheron Guardian, Arca Battle, Chaos Castle Survival, Tormented Square, Invasions, and Uruk Mountain.", "Cấu hình Hộ Vệ Acheron, Chiến Trường Arca, Hỗn Nguyên Lâu Sinh Tồn, Quảng Trường Đau Khổ, Xâm Lăng và Núi Uruk.", true, "s6-events", "timetable", "world-bosses-rankings")
+                {
+                    TitleDe = "S9-Events & Uruk",
+                    TitleZh = "S9 活动与乌鲁克山",
+                    DescriptionDe = "Acheron Guardian, Arca Battle, Chaos Castle Survival, Tormented Square, Invasionen und Berg Uruk konfigurieren.",
+                    DescriptionZh = "配置阿卡伦守护者、阿卡战争、生存赤色要塞、苦痛广场、入侵管理器与乌鲁克山。",
+                },
                 new("timetable", "events", "oi-calendar", "Timetable", "Lịch sự kiện", "Configure H event calendar, invasions, and alerts in Sydney time.", "Cấu hình lịch sự kiện phím H và xâm lăng theo giờ Sydney.", true, "event-alerts", "s6-events", "world-bosses-rankings"),
                 new("event-alerts", "events", "oi-bell", "Event Alerts", "Thông báo sự kiện", "Manage Web Push VAPID notifications and Discord event posts.", "Quản lý thông báo đẩy Web Push và Discord cho sự kiện.", true, "timetable", "discord", "world-bosses-rankings"),
                 new("world-bosses-rankings", "events", "oi-bolt", "World Bosses & Weekly Coins", "Boss thế giới & Đua tuần", "Configure custom boss spawns, damages, and weekly rewards.", "Cấu hình Boss thế giới, sát thương và thưởng tuần.", true, "timetable", "top-races", "mounts"),

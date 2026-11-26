@@ -2751,4 +2751,10 @@
   <data name="PageHelpTextTopUpMilestones" xml:space="preserve">
     <value>Legen Sie Stufen für kumulierte VND-Aufladungen fest, damit Konten die jeweiligen Münzen, Zen und Gegenstände einmalig im Konto oder im Spiel abholen können.</value>
   </data>
+  <data name="PageHelpTextS9Events" xml:space="preserve">
+    <value>Konfigurieren Sie die Season-9-Events (Acheron Guardian, Arca Battle, Chaos Castle Survival, Tormented Square, Invasion Manager) sowie die Boss-Wellen am Berg Uruk (669-729).</value>
+  </data>
+  <data name="S9EventsTitle" xml:space="preserve">
+    <value>Season-9-Events &amp; Berg Uruk</value>
+  </data>
 </root>

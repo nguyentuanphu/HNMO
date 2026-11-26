@@ -2285,4 +2285,14 @@
   <data name="MossGambleConfiguration_Enabled_Description" xml:space="preserve"><value>When turned off, buying gamble vouchers at Moss (492) is refused without charging Zen.</value></data>
   <data name="MossGambleConfiguration_PriceZen_Name" xml:space="preserve"><value>Gamble price (Zen)</value></data>
   <data name="MossGambleConfiguration_PriceZen_Description" xml:space="preserve"><value>Zen charged per gamble roll at Moss the Merchant (default 2,000,000 Zen).</value></data>
+  <data name="SeasonNineEventsPlugIn_Name" xml:space="preserve"><value>Season 9 Events &amp; Uruk Mountain</value></data>
+  <data name="SeasonNineEventsPlugIn_Description" xml:space="preserve"><value>Schedules and rewards Acheron Guardian, Arca Battle, Chaos Castle Survival, Tormented Square, Invasion Manager, and Uruk Mountain boss encounters (669-729).</value></data>
+  <data name="AcheronChatCommandPlugIn_Name" xml:space="preserve"><value>Acheron Guardian Command (/acheron)</value></data>
+  <data name="AcheronChatCommandPlugIn_Description" xml:space="preserve"><value>Enters or checks the Acheron Guardian event schedule.</value></data>
+  <data name="ArcaBattleChatCommandPlugIn_Name" xml:space="preserve"><value>Arca Battle Command (/arcabattle)</value></data>
+  <data name="ArcaBattleChatCommandPlugIn_Description" xml:space="preserve"><value>Enters or checks the Arca Battle schedule.</value></data>
+  <data name="ChaosCastleSurvivalChatCommandPlugIn_Name" xml:space="preserve"><value>Chaos Castle Survival Command (/ccs)</value></data>
+  <data name="ChaosCastleSurvivalChatCommandPlugIn_Description" xml:space="preserve"><value>Enters or checks Chaos Castle Survival and tournament stage.</value></data>
+  <data name="TormentedSquareChatCommandPlugIn_Name" xml:space="preserve"><value>Tormented Square Command (/tsquare)</value></data>
+  <data name="TormentedSquareChatCommandPlugIn_Description" xml:space="preserve"><value>Enters or checks Tormented Square rounds and schedule.</value></data>
 </root>

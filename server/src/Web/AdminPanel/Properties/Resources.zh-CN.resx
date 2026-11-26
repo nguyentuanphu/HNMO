@@ -2926,4 +2926,10 @@
   <data name="PageHelpTextTopUpMilestones" xml:space="preserve">
     <value>配置越南盾累计充值奖励等级，让账户在账户页面或游戏内一次性领取各等级的代币、Zen 和物品组合。</value>
   </data>
+  <data name="PageHelpTextS9Events" xml:space="preserve">
+    <value>配置第 9 赛季活动（阿卡伦守护者、阿卡战争、生存赤色要塞、苦痛广场、入侵管理器）以及乌鲁克山首领护卫波次（669-729）。</value>
+  </data>
+  <data name="S9EventsTitle" xml:space="preserve">
+    <value>第 9 赛季活动与乌鲁克山</value>
+  </data>
 </root>
