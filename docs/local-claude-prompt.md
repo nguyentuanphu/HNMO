@@ -1,34 +1,36 @@
-# Prompt cho Claude chạy trên máy anh, lượt 7 (27 Nov 2026, 05:00 Sydney). Dán nguyên phần dưới dòng kẻ.
+# Prompt for local Claude, 27 Nov 2026 10:30 Sydney
 
----
+Antigravity owns the queue in `docs/antigravity-prompt-2026-11-27-1020.md`. Local Claude gets only work that touches
+other files and other branches, and gives Antigravity the heavy lock first.
 
-You are local Claude for HNMO (repo nguyentuanphu/HNMO). Answer the owner in Vietnamese; all times in Sydney time.
-Rules as before: never merge, never touch `main`, no live data; commit only to the branch named in each task and report
-in that PR (Claude Code footer); run only the tests of what you touched; say what was run and not run, real vs mock.
+```
+From main cloud Claude, Fri 27 Nov 10:30 Sydney. The owner moved your earlier queue (5c loader, #420/#421 reruns,
+#423 barrier kills) to Antigravity. Don't start any of it. Here is separate work that can't clash with it.
 
-Answers from main to your 04:24 report:
-1. Task 3 on #419: GO. Run it now on `integration/s9` with the owner's S9 pack (outside the repo): S9 -> S6 -> S9 in one
-   browser session; tooltips of an S9-only item and of a shared item with an S9 override; M menu price for Vulcanus in
-   both seasons (Normal 15,000; outlaw: window locked); /move for an outlaw (Vulcanus 30,000; Lorencia 50x). Post on #419.
-2. The client pipe self-check workflow is already added by main (in #406, merged): windows-latest and ubuntu-latest green
-   with HNMO_PIPE_REQUIRE_CLOSE_CHECKS=1. Nothing to do.
-3. Your drafts: main reviews and merges #413, #415, #420, #421 into the working branch once their e2e reruns are not red
-   for their own specs; #408 goes in with #419.
-4. Trade/vault real-game test: YES, make it a test PR (one draft PR, its own spec, into the working branch).
-5. New:
-   a. Desktop data tests on #425 (`fix/buff-english-texts`): main added the English texts of the 30 Vietnamese-only buffs.
-      Run `test_buffs` (expect 158 loaded, the 4 Buffs tests green); post the result on #425.
-   b. The 15 item descriptions without "vi": the owner decided main writes them. List the 15 items (group, number, the
-      test name and the English text) in a comment on #425, and add the Vietnamese texts on `fix/buff-english-texts`
-      yourself, in the desktop writer's layout, with the test green. The owner reviews them in #425.
-   c. #419 desktop [data] ctest with MU_TOOLTIP_SNAPSHOT_UPDATE=1: the tooltip snapshot must only add Season 9 lines;
-      update the counts 911 (item exchange) and 295 (monster models) if S9 changes them; commit to `integration/s9`.
-   d. Real PostgreSQL + realms on the packaged folder from `integration/s9`: fresh databases for S6.3 and S9, update an
-      existing S6 database, switch a realm to the S9 pack, log in test300/test400 in both, check the shared coins.
-   e. #423 (Jewel Bank and Leftovers in the database): on the packaged folder with real PostgreSQL, deposit 4 Bless,
-      kill the server process right after, restart, log in: bank 4 once, bag empty. Withdraw 3, kill, restart: bag 3,
-      bank 1. Old JSON balances of an account appear in the bank on its first login (the import). Post on #423.
+## Don't touch (Antigravity or main is on them)
+- Branches: integration/s9, feat/s9-pentagram (#428), fix/s9c-gameplay (#424), fix/asset-db-transactions (#423),
+  feat/shared-coins-2pc, and the branches of #367, #381, #382, #386, #420, #421, #431, #432, #411, #422, #430.
+- Files: client/src/source/Data/** (the desktop loader, Antigravity's 5c), server/src/GameLogic/OutlawPoints.cs,
+  the JewelBank/AssetOperation files.
+- heavy.ps1: Antigravity goes first. Queue at most one job, only when no Antigravity job is waiting or running, and
+  stop if one is queued after yours. Never run a packaged folder while Antigravity has one running (ports 55432,
+  8095, 44406, 8080).
 
-   f. Skills 618-621, Muun and Pentagram values from the S9 pack: Antigravity does this (docs/antigravity-client-audit-2026-11-27.md).
+## Your tasks, in order (each its own branch from origin/claude/hnmo-main-handover-54co2m, one draft PR each)
+1. S9 server names on the start screen. On S9 the start screen shows only "Server 1..3"; S6 shows the full names.
+   Find where the list gets its names (server config / connect server / web start screen), and make S9 show its names
+   the same way S6 does. Follow the desktop client's server list for the format. Never hard-code the game name (use
+   gameName()). Test: a unit test for the name, plus one real start-screen check on the packaged folder (light: start
+   it only when the heavy lock is free). Branch fix/s9-server-names.
+2. Review #432 (Antigravity's desktop build fixes, read-only): read the diff (ClientLibraryCodegen dependency, the
+   5 regenerated Dotnet/Packet* files). Check the regenerated files match what the generator produces from
+   server/src/Network/Packets on the base. Post the findings as a PR comment, and don't push to the branch. A cmake
+   build only if the lock is free.
+3. Review #431 (Antigravity's client audit docs, read-only): spot-check 10 values in docs/audit/data/client-s6/ and
+   client-s9/ against your own local decoders (they stay outside the repo). Post matches and mismatches as a PR
+   comment. Also check that no pack file and none of the forbidden names went into the PR.
+4. If you're done before Antigravity needs the lock for long: the 15 Vietnamese item texts of #425 are merged. List
+   any that read oddly in the game (screenshot from the web game). It's for the owner to decide, so change nothing.
 
-Only the owner can do: real launches on Mac/Linux, turning the network filter off once (optional).
+Report: per task, what ran, what was verified and what wasn't, the PR links, Sydney times.
+```
