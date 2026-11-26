@@ -42,8 +42,20 @@ export function warpLevel(warp: Warp, classIndex: number): number {
   return [3, 4, 6].includes(classIndex) && warp.level !== 400 ? Math.floor((warp.level * 2) / 3) : warp.level;
 }
 
+/** The index of the gens battle zone in the warp list (Vulcanus; CMoveCommandWindow::SetStrifeMap). */
+export const BATTLE_ZONE_WARP_INDEX = 42;
+
+/**
+ * The zen the server takes for a warp (WarpAction.GetCosts): an outlaw from PK level 2 up pays 50 times the costs, into
+ * the gens battle zone twice (owner, 26 Nov 2026); everyone else the costs.
+ */
+export function warpCost(warp: Warp, outlaw: boolean): number {
+  if (!outlaw) return warp.zen;
+  return warp.zen * (warp.index === BATTLE_ZONE_WARP_INDEX ? 2 : 50);
+}
+
 export function canWarp(warp: Warp, check: WarpCheck): boolean {
-  if (check.level < warpLevel(warp, check.classIndex) || check.money < warp.zen || check.outlaw) return false;
+  if (check.level < warpLevel(warp, check.classIndex) || check.money < warpCost(warp, check.outlaw) || check.outlaw) return false;
   const helper = check.helper;
   if (warp.mapName === 'Icarus') {
     // Wings, a Dinorant or a Fenrir (not a Uniria) — HasFlightEquipment; the transformation rings that
