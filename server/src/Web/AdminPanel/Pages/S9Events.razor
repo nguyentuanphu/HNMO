@@ -20,10 +20,10 @@
     </div>
     <PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextS9Events" />
     <div class="btn-group btn-group-sm" role="group" aria-label="Language">
-        <button type="button" class="btn @(this._lang == "en" ? "btn-primary" : "btn-outline-secondary")" @onclick='() => this.SetLanguage("en")'>EN</button>
-        <button type="button" class="btn @(this._lang == "vi" ? "btn-primary" : "btn-outline-secondary")" @onclick='() => this.SetLanguage("vi")'>VI</button>
-        <button type="button" class="btn @(this._lang == "de" ? "btn-primary" : "btn-outline-secondary")" @onclick='() => this.SetLanguage("de")'>DE</button>
-        <button type="button" class="btn @(this._lang == "zh-CN" ? "btn-primary" : "btn-outline-secondary")" @onclick='() => this.SetLanguage("zh-CN")'>中文</button>
+        <button type="button" class="btn @(this._lang == "en" ? "btn-primary" : "btn-outline-secondary")" title="@this.T("Show this page in English.", "Hiện trang này bằng tiếng Anh.", "Diese Seite auf Englisch anzeigen.", "以英文显示此页面。")" @onclick='() => this.SetLanguage("en")'>EN</button>
+        <button type="button" class="btn @(this._lang == "vi" ? "btn-primary" : "btn-outline-secondary")" title="@this.T("Show this page in Vietnamese.", "Hiện trang này bằng tiếng Việt.", "Diese Seite auf Vietnamesisch anzeigen.", "以越南文显示此页面。")" @onclick='() => this.SetLanguage("vi")'>VI</button>
+        <button type="button" class="btn @(this._lang == "de" ? "btn-primary" : "btn-outline-secondary")" title="@this.T("Show this page in German.", "Hiện trang này bằng tiếng Đức.", "Diese Seite auf Deutsch anzeigen.", "以德文显示此页面。")" @onclick='() => this.SetLanguage("de")'>DE</button>
+        <button type="button" class="btn @(this._lang == "zh-CN" ? "btn-primary" : "btn-outline-secondary")" title="@this.T("Show this page in Chinese.", "Hiện trang này bằng tiếng Trung.", "Diese Seite auf Chinesisch anzeigen.", "以中文显示此页面。")" @onclick='() => this.SetLanguage("zh-CN")'>中文</button>
     </div>
 </div>
 
@@ -67,7 +67,7 @@ else
                 <input type="text" class="form-control form-control-sm" @bind="this._configuration.TimeZone" />
             </div>
             <div class="col-md-2 text-end">
-                <button type="button" class="btn btn-primary btn-sm" disabled="@this._isSaving" @onclick="this.SaveAsync">
+                <button type="button" class="btn btn-primary btn-sm" title="@this.T("Save every setting on this page.", "Lưu mọi thiết lập trên trang này.", "Alle Einstellungen dieser Seite speichern.", "保存此页面的所有设置。")" disabled="@this._isSaving" @onclick="this.SaveAsync">
                     @(this._isSaving ? this.T("Saving...", "Đang lưu...", "Speichern...", "保存中...") : this.T("Save All", "Lưu tất cả", "Alles speichern", "保存全部"))
                 </button>
             </div>
@@ -77,7 +77,7 @@ else
     <div class="card mb-3">
         <div class="card-header d-flex justify-content-between align-items-center">
             <span>@this.T("1. Acheron Guardian (/acheron)", "1. Hộ Vệ Acheron (/acheron)", "1. Acheron Guardian (/acheron)", "1. 阿卡伦守护者 (/acheron)")</span>
-            <button type="button" class="btn btn-sm btn-outline-warning" @onclick='() => this.TriggerEventNowAsync("acheron")'>@this.T("Trigger Now", "Chạy ngay", "Jetzt starten", "立即触发")</button>
+            <button type="button" class="btn btn-sm btn-outline-warning" title="@this.T("Start this event now, without waiting for its time.", "Bắt đầu sự kiện này ngay, không chờ đến giờ.", "Dieses Ereignis sofort starten, ohne auf seine Zeit zu warten.", "立即开始此活动，无需等待时间。")" @onclick='() => this.TriggerEventNowAsync("acheron")'>@this.T("Trigger Now", "Chạy ngay", "Jetzt starten", "立即触发")</button>
         </div>
         <div class="card-body row g-2">
             <div class="col-md-2 form-check ms-2">
@@ -110,7 +110,7 @@ else
     <div class="card mb-3">
         <div class="card-header d-flex justify-content-between align-items-center">
             <span>@this.T("2. Arca Battle & Trophy Mix (/arcabattle)", "2. Chiến Trường Arca (/arcabattle)", "2. Arca Battle (/arcabattle)", "2. 阿卡战争 (/arcabattle)")</span>
-            <button type="button" class="btn btn-sm btn-outline-warning" @onclick='() => this.TriggerEventNowAsync("arca")'>@this.T("Trigger Now", "Chạy ngay", "Jetzt starten", "立即触发")</button>
+            <button type="button" class="btn btn-sm btn-outline-warning" title="@this.T("Start this event now, without waiting for its time.", "Bắt đầu sự kiện này ngay, không chờ đến giờ.", "Dieses Ereignis sofort starten, ohne auf seine Zeit zu warten.", "立即开始此活动，无需等待时间。")" @onclick='() => this.TriggerEventNowAsync("arca")'>@this.T("Trigger Now", "Chạy ngay", "Jetzt starten", "立即触发")</button>
         </div>
         <div class="card-body row g-2">
             <div class="col-md-2 form-check ms-2">
@@ -151,7 +151,7 @@ else
     <div class="card mb-3">
         <div class="card-header d-flex justify-content-between align-items-center">
             <span>@this.T("3. Chaos Castle Survival (/ccs)", "3. Hỗn Nguyên Lâu Sinh Tồn (/ccs)", "3. Chaos Castle Survival (/ccs)", "3. 生存赤色要塞 (/ccs)")</span>
-            <button type="button" class="btn btn-sm btn-outline-warning" @onclick='() => this.TriggerEventNowAsync("ccs")'>@this.T("Trigger Now", "Chạy ngay", "Jetzt starten", "立即触发")</button>
+            <button type="button" class="btn btn-sm btn-outline-warning" title="@this.T("Start this event now, without waiting for its time.", "Bắt đầu sự kiện này ngay, không chờ đến giờ.", "Dieses Ereignis sofort starten, ohne auf seine Zeit zu warten.", "立即开始此活动，无需等待时间。")" @onclick='() => this.TriggerEventNowAsync("ccs")'>@this.T("Trigger Now", "Chạy ngay", "Jetzt starten", "立即触发")</button>
         </div>
         <div class="card-body row g-2">
             <div class="col-md-2 form-check ms-2">
@@ -192,7 +192,7 @@ else
     <div class="card mb-3">
         <div class="card-header d-flex justify-content-between align-items-center">
             <span>@this.T("4. Tormented Square (/tsquare)", "4. Quảng Trường Đau Khổ (/tsquare)", "4. Tormented Square (/tsquare)", "4. 苦痛广场 (/tsquare)")</span>
-            <button type="button" class="btn btn-sm btn-outline-warning" @onclick='() => this.TriggerEventNowAsync("tsquare")'>@this.T("Trigger Now", "Chạy ngay", "Jetzt starten", "立即触发")</button>
+            <button type="button" class="btn btn-sm btn-outline-warning" title="@this.T("Start this event now, without waiting for its time.", "Bắt đầu sự kiện này ngay, không chờ đến giờ.", "Dieses Ereignis sofort starten, ohne auf seine Zeit zu warten.", "立即开始此活动，无需等待时间。")" @onclick='() => this.TriggerEventNowAsync("tsquare")'>@this.T("Trigger Now", "Chạy ngay", "Jetzt starten", "立即触发")</button>
         </div>
         <div class="card-body row g-2">
             <div class="col-md-2 form-check ms-2">
@@ -221,7 +221,7 @@ else
     <div class="card mb-3">
         <div class="card-header d-flex justify-content-between align-items-center">
             <span>@this.T("5. Invasion Manager (674-694, 726-729) & Uruk Mountain (673, 678-680)", "5. Trình Quản Lý Xâm Lăng & Núi Uruk (673, 678-680)", "5. Invasion Manager & Berg Uruk (673, 678-680)", "5. 入侵管理器与乌鲁克山 (673, 678-680)")</span>
-            <button type="button" class="btn btn-sm btn-outline-warning" @onclick='() => this.TriggerEventNowAsync("uruk")'>@this.T("Spawn Uruk Guards", "Triệu hồi hộ vệ Uruk", "Uruk-Wachen rufen", "召唤乌鲁克护卫")</button>
+            <button type="button" class="btn btn-sm btn-outline-warning" title="@this.T("Call the Uruk Mountain guards now, without waiting for their time.", "Triệu hồi hộ vệ núi Uruk ngay, không chờ đến giờ.", "Die Wachen des Uruk-Bergs sofort rufen, ohne auf ihre Zeit zu warten.", "立即召唤乌鲁克山护卫，无需等待时间。")" @onclick='() => this.TriggerEventNowAsync("uruk")'>@this.T("Spawn Uruk Guards", "Triệu hồi hộ vệ Uruk", "Uruk-Wachen rufen", "召唤乌鲁克护卫")</button>
         </div>
         <div class="card-body">
             <div class="row g-2 mb-3">
@@ -267,7 +267,7 @@ else
                                 <td><input type="text" class="form-control form-control-sm" @bind="row.MapsText" /></td>
                                 <td><input type="text" class="form-control form-control-sm" @bind="row.TimesText" /></td>
                                 <td>
-                                    <button type="button" class="btn btn-xs btn-outline-secondary" @onclick='() => this.TriggerEventNowAsync($"invasion:{row.Entry.Id}")'>@this.T("Run", "Chạy", "Start", "运行")</button>
+                                    <button type="button" class="btn btn-xs btn-outline-secondary" title="@this.T("Start this invasion now, without waiting for its time.", "Bắt đầu cuộc xâm lăng này ngay, không chờ đến giờ.", "Diese Invasion sofort starten, ohne auf ihre Zeit zu warten.", "立即开始此入侵，无需等待时间。")" @onclick='() => this.TriggerEventNowAsync($"invasion:{row.Entry.Id}")'>@this.T("Run", "Chạy", "Start", "运行")</button>
                                 </td>
                             </tr>
                         }

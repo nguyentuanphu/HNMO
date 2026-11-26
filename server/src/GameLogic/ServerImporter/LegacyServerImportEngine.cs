@@ -633,7 +633,7 @@ public static class LegacyServerImportEngine
                 result.AppliedCount++;
             }
 
-            // HNMO's master skill tree goes to master level 200 (Season 6); a higher one (Season 9: 330) is kept out.
+            // HNMO's master levels go to 400 (Season 9: 330); a higher one is kept out.
             if (rates.MaximumMasterLevel is { } maximumMasterLevel)
             {
                 if (maximumMasterLevel is > 0 and <= MaximumSupportedMasterLevel)
