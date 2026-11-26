@@ -52,10 +52,15 @@ test('Quest Window closes CashShop overlay and all tabs + bottom buttons respond
   // Bottom Scroll (#btn_quest_open) & Book (#btn_quest_giveup) are unoccluded and explain when locked.
   await clickQuestButton(page, '#btn_quest_open');
   await expect.poll(() => chatText(page)).toMatch(/quest/i);
-  const afterOpenLen = (await chatText(page)).length;
-
+  // The chat keeps its newest lines only, so its length can shrink when a line comes in: the Book's explanation is
+  // looked for among the lines after the last one before the click.
+  await page.evaluate(() => { const w = window as unknown as { __game: { chat: { entries: unknown[] } }; __beforeGiveUp: unknown }; w.__beforeGiveUp = w.__game.chat.entries.at(-1); });
   await clickQuestButton(page, '#btn_quest_giveup');
-  await expect.poll(async () => (await chatText(page)).length).toBeGreaterThan(afterOpenLen);
+  await expect.poll(() => page.evaluate(() => {
+    const w = window as unknown as { __game: { chat: { entries: { text: string }[] } }; __beforeGiveUp: unknown };
+    const entries = w.__game.chat.entries;
+    return entries.slice(entries.indexOf(w.__beforeGiveUp as { text: string }) + 1).some((line) => /No active quest to give up\.|Select a quest from the list first\./.test(line.text));
+  })).toBe(true);
 
   // Bottom Exit (#btn_exit) closes Quest Window on real click.
   await clickQuestButton(page, '#btn_exit');
