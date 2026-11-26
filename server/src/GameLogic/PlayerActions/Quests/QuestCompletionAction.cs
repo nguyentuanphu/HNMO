@@ -7,6 +7,8 @@ namespace HNMO.GameLogic.PlayerActions.Quests;
 using HNMO.AttributeSystem;
 using HNMO.DataModel.Configuration.Quests;
 using HNMO.GameLogic.Attributes;
+using HNMO.GameLogic.Gens;
+using HNMO.GameLogic.Properties;
 using HNMO.GameLogic.Views.Character;
 using HNMO.GameLogic.Views.Inventory;
 using HNMO.GameLogic.Views.Quest;
@@ -188,7 +190,36 @@ public class QuestCompletionAction
                 await player.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
                 break;
             case QuestRewardType.GensAttribution:
-                // not yet implemented.
+                if (reward.Value <= 0)
+                {
+                    break;
+                }
+
+                var gensConfig = GensFeaturePlugIn.GetConfiguration(player.GameContext);
+                var gainedGens = await player.RunPersistenceExclusiveAsync(async () =>
+                {
+                    if (await player.GetGensMemberAsync().ConfigureAwait(false) is not { Gens: not GensType.None } member)
+                    {
+                        return 0;
+                    }
+
+                    var previousContribution = member.Contribution;
+                    member.Contribution = Math.Max(member.Contribution + reward.Value, 0);
+                    if (gensConfig is not null)
+                    {
+                        member.Rank = gensConfig.GetRank(member.Contribution, member.RankingPosition);
+                    }
+
+                    await player.SaveProgressAsync().ConfigureAwait(false);
+                    return member.Contribution - previousContribution;
+                }).ConfigureAwait(false);
+
+                if (gainedGens > 0)
+                {
+                    await player.ShowChangedGensAsync().ConfigureAwait(false);
+                    await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.GensContributionGainedFormat), gainedGens).ConfigureAwait(false);
+                }
+
                 break;
             case QuestRewardType.Skill:
                 if (reward.SkillReward is not { } skill)
