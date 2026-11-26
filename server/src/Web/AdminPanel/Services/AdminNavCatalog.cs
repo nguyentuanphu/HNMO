@@ -121,6 +121,13 @@ public static class AdminNavCatalog
                 new("rankings-settings", "world", "oi-list-rich", "In-Game Rankings & Add Stats", "BXH & Cộng điểm nhanh", "Toggle Shift+R live rankings window and Shift+A bulk stat add.", "Bật/tắt bảng xếp hạng Shift+R và cộng điểm nhanh Shift+A.", false, "leaderboards", "resets-relife", "custom-ranks"),
                 new("custom-ranks", "world", "oi-star", "Custom Ranks & Titles", "Danh hiệu tùy chỉnh", "Define unlockable EN/VI nameplate titles and attribute bonuses.", "Tạo danh hiệu hiển thị cạnh tên nhân vật và chỉ số cộng thêm.", false, "rankings-settings", "marriage", "accounts"),
                 new("hnmo-skills", "world", "oi-bolt", "Master Skills", "Kỹ năng Master", "Inspect and adjust custom skill behaviors and scaling.", "Kiểm tra và tinh chỉnh kỹ năng Master.", false, "gameplay-rules", "qol-settings", "accounts"),
+                new("s9-systems", "world", "oi-star", "S9 Systems (Muun / Pentagram)", "Hệ thống S9 (Muun / Ngũ Hành)", "Configure Muun pets, Pentagram elemental combat, S9 skills 618-621, 330 Master cap, and S9 Minimap.", "Cấu hình Muun, Ngũ Hành Pentagram, kỹ năng 618-621, Master cấp 330 và Minimap S9.", true, "hnmo-skills", "rate-tuning", "gameplay-rules")
+                {
+                    TitleDe = "S9-Systeme (Muun / Pentagram)",
+                    TitleZh = "S9 系统 (萌宠 / 五芒星)",
+                    DescriptionDe = "Muun-Begleiter, Pentagramm-Elementarkampf, S9-Fertigkeiten 618-621, 330er-Master-Limit und Minimap konfigurieren.",
+                    DescriptionZh = "配置萌宠、五芒星元素系统、第 9 赛季技能 618-621、330 级大师树与小地图。",
+                },
                 new("map-editor", "world", "oi-grid-four-up", "Map Spawn Editor", "Chỉnh sửa quái bản đồ", "Place monster spawns and NPC positions on 2D map grids.", "Chỉnh sửa vị trí quái và NPC trên bản đồ 2D.", false, "world-editor", "terrain-editor", "teleport-npc"),
                 new("terrain-editor", "world", "oi-brush", "Terrain Safezone & Walk Map", "Vùng an toàn & Địa hình", "Paint safe zones, obstacles, and walkable terrain flags.", "Chỉnh vùng an toàn, vật cản và ô di chuyển được.", false, "map-editor", "world-editor", "worlds"),
                 new("world-editor", "world", "oi-layers", "3D World Editor", "Trình sửa thế giới 3D", "Edit 3D map objects, foliage, and props interactively.", "Chỉnh sửa mô hình vật thể 3D trên từng bản đồ.", false, "map-editor", "terrain-editor", "worlds"),

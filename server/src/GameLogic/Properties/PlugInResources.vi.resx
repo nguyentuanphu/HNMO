@@ -2500,4 +2500,10 @@
   <data name="ChaosCastleSurvivalChatCommandPlugIn_Description" xml:space="preserve"><value>Tham gia hoặc xem vòng đấu Hỗn Nguyên Lâu Sinh Tồn.</value></data>
   <data name="TormentedSquareChatCommandPlugIn_Name" xml:space="preserve"><value>Lệnh Quảng Trường Đau Khổ (/tsquare)</value></data>
   <data name="TormentedSquareChatCommandPlugIn_Description" xml:space="preserve"><value>Tham gia hoặc xem lịch Quảng Trường Đau Khổ.</value></data>
+  <data name="SeasonNineSystemsPlugIn_Name" xml:space="preserve"><value>Hệ thống Season 9 (Muun, Pentagram, Master 330)</value></data>
+  <data name="SeasonNineSystemsPlugIn_Description" xml:space="preserve"><value>Cấu hình Muun, Ngũ Hành Pentagram, tỉ lệ ép/tháo Errtel, kỹ năng 618-621, Master 330 và Minimap Season 9.</value></data>
+  <data name="MuunChatCommandPlugIn_Name" xml:space="preserve"><value>Lệnh Muun (/muun)</value></data>
+  <data name="MuunChatCommandPlugIn_Description" xml:space="preserve"><value>Xem trạng thái thú cưng Muun và hệ số tiến hóa.</value></data>
+  <data name="PentagramChatCommandPlugIn_Name" xml:space="preserve"><value>Lệnh Pentagram (/pentagram)</value></data>
+  <data name="PentagramChatCommandPlugIn_Description" xml:space="preserve"><value>Xem trạng thái Ngũ Hành Pentagram và tỉ lệ Errtel.</value></data>
 </root>

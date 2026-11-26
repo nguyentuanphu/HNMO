@@ -3034,4 +3034,10 @@
   <data name="S9EventsTitle" xml:space="preserve">
     <value>第 9 赛季活动与乌鲁克山</value>
   </data>
+  <data name="PageHelpTextS9Systems" xml:space="preserve">
+    <value>配置第 9 赛季进阶系统：330 级大师树上限、76 种萌宠、五芒星元素克制与艾尔特概率、技能 618-621 以及第 9 赛季小地图。</value>
+  </data>
+  <data name="S9SystemsTitle" xml:space="preserve">
+    <value>第 9 赛季系统 (萌宠、五芒星、330 级大师)</value>
+  </data>
 </root>

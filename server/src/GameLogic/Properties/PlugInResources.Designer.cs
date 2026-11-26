@@ -6292,5 +6292,23 @@ namespace HNMO.GameLogic.Properties {
 
         /// <summary>Gets the localized Tormented Square chat command plug-in description.</summary>
         public static string TormentedSquareChatCommandPlugIn_Description => ResourceManager.GetString("TormentedSquareChatCommandPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized Season Nine Systems plug-in name.</summary>
+        public static string SeasonNineSystemsPlugIn_Name => ResourceManager.GetString("SeasonNineSystemsPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Season Nine Systems plug-in description.</summary>
+        public static string SeasonNineSystemsPlugIn_Description => ResourceManager.GetString("SeasonNineSystemsPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized Muun chat command plug-in name.</summary>
+        public static string MuunChatCommandPlugIn_Name => ResourceManager.GetString("MuunChatCommandPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Muun chat command plug-in description.</summary>
+        public static string MuunChatCommandPlugIn_Description => ResourceManager.GetString("MuunChatCommandPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized Pentagram chat command plug-in name.</summary>
+        public static string PentagramChatCommandPlugIn_Name => ResourceManager.GetString("PentagramChatCommandPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Pentagram chat command plug-in description.</summary>
+        public static string PentagramChatCommandPlugIn_Description => ResourceManager.GetString("PentagramChatCommandPlugIn_Description", resourceCulture)!;
     }
 }

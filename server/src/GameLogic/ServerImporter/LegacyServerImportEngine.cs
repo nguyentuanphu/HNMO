@@ -38,7 +38,7 @@ public static class LegacyServerImportEngine
         ["+10"] = 3, ["+11"] = 4, ["+12"] = 22, ["+13"] = 23, ["+14"] = 49, ["+15"] = 50,
     };
 
-    private const int MaximumSupportedMasterLevel = 200;
+    private const int MaximumSupportedMasterLevel = 400;
 
     private const int ShopColumns = 8;
 

@@ -1927,4 +1927,10 @@
   <data name="ChaosCastleSurvivalChatCommandPlugIn_Description" xml:space="preserve"><value>进入生存赤色要塞或查看赛程阶段。</value></data>
   <data name="TormentedSquareChatCommandPlugIn_Name" xml:space="preserve"><value>苦痛广场指令 (/tsquare)</value></data>
   <data name="TormentedSquareChatCommandPlugIn_Description" xml:space="preserve"><value>进入苦痛广场或查看时间表。</value></data>
+  <data name="SeasonNineSystemsPlugIn_Name" xml:space="preserve"><value>第 9 赛季系统 (萌宠、五芒星、330 级大师)</value></data>
+  <data name="SeasonNineSystemsPlugIn_Description" xml:space="preserve"><value>配置萌宠、五芒星元素克制、艾尔特合成与提取成功率、技能 618-621、330 级大师与小地图。</value></data>
+  <data name="MuunChatCommandPlugIn_Name" xml:space="preserve"><value>萌宠指令 (/muun)</value></data>
+  <data name="MuunChatCommandPlugIn_Description" xml:space="preserve"><value>查看第 9 赛季萌宠设置与进化倍率。</value></data>
+  <data name="PentagramChatCommandPlugIn_Name" xml:space="preserve"><value>五芒星指令 (/pentagram)</value></data>
+  <data name="PentagramChatCommandPlugIn_Description" xml:space="preserve"><value>查看第 9 赛季五芒星与艾尔特加成。</value></data>
 </root>

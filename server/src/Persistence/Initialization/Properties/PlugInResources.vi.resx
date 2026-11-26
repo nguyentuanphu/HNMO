@@ -902,4 +902,6 @@
   <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 5 phiếu thử vận may của Moss (13-71..75) giá 2.000.000 Zen và trang bị cửa hàng cho Thương nhân Moss (492) nếu đang trống.</value></data>
   <data name="SeasonNineExtendedSharedItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: quy tắc vật phẩm dùng chung mở rộng</value></data>
   <data name="SeasonNineExtendedSharedItemsUpdatePlugIn_Description" xml:space="preserve"><value>Áp dụng giá trị Season 9 cho cấp rơi của Sphere (4) (132) và độ bền/chồng của Reset Fruit (10) khi chạy Season 9; giữ nguyên giá trị đã tùy chỉnh.</value></data>
+  <data name="SeasonNineSystemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Master 330 &amp; kỹ năng 618-621</value></data>
+  <data name="SeasonNineSystemsUpdatePlugIn_Description" xml:space="preserve"><value>Nâng giới hạn Master từ 200 lên 330 và thêm 4 kỹ năng Season 9 (618-621) khi chạy ở chế độ Season 9.</value></data>
 </root>

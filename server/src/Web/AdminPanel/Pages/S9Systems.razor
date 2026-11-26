@@ -1,0 +1,145 @@
+@page "/s9-systems"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using Microsoft.AspNetCore.Authorization
+@using HNMO.GameLogic.PlugIns.SeasonNineSystems
+@using HNMO.Web.AdminPanel.Auth
+
+<PageTitle>@HNMO.Web.AdminPanel.Properties.Resources.S9SystemsTitle</PageTitle>
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+    <div class="d-flex align-items-center gap-2">
+        <h3 class="mb-0">@HNMO.Web.AdminPanel.Properties.Resources.S9SystemsTitle</h3>
+        <button type="button"
+                class="btn btn-sm btn-outline-info"
+                title="@this.T("Show or hide setup instructions.", "Hiện hoặc ẩn hướng dẫn.", "Hilfe anzeigen oder ausblenden.", "显示或隐藏说明。")"
+                @onclick="() => this._showHelp = !this._showHelp">
+            ?
+        </button>
+    </div>
+    <PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextS9Systems" />
+    <div class="btn-group btn-group-sm" role="group" aria-label="Language">
+        <button type="button" class="btn @(this._lang == "en" ? "btn-primary" : "btn-outline-secondary")" @onclick='() => this.SetLanguage("en")'>EN</button>
+        <button type="button" class="btn @(this._lang == "vi" ? "btn-primary" : "btn-outline-secondary")" @onclick='() => this.SetLanguage("vi")'>VI</button>
+        <button type="button" class="btn @(this._lang == "de" ? "btn-primary" : "btn-outline-secondary")" @onclick='() => this.SetLanguage("de")'>DE</button>
+        <button type="button" class="btn @(this._lang == "zh-CN" ? "btn-primary" : "btn-outline-secondary")" @onclick='() => this.SetLanguage("zh-CN")'>中文</button>
+    </div>
+</div>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info mb-3" role="note">
+        @HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextS9Systems
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(this._statusMessage))
+{
+    <div class="alert @(this._statusIsError ? "alert-danger" : "alert-success") py-2 mb-3">@this._statusMessage</div>
+}
+
+@if (this._isLoading || this._configuration is null)
+{
+    <p>@this.T("Loading...", "Đang tải...", "Wird geladen...", "正在加载...")</p>
+}
+else
+{
+    <div class="card mb-3">
+        <div class="card-header">@this.T("Master Tree (330) & General Gate", "Bảng Master (330) & Điều Khiển", "Master-Baum (330) & Steuerung", "330 级大师树与开关")</div>
+        <div class="card-body row g-3 align-items-end">
+            <div class="col-md-6 d-flex flex-wrap gap-3">
+                <div class="form-check form-switch">
+                    <input id="sysActive" class="form-check-input" type="checkbox" @bind="this._isActive" />
+                    <label class="form-check-label" for="sysActive">@this.T("Plug-in Active", "Kích hoạt Plug-in", "Plugin aktiv", "启用插件")</label>
+                </div>
+                <div class="form-check form-switch">
+                    <input id="sysEnabled" class="form-check-input" type="checkbox" @bind="this._configuration.Enabled" />
+                    <label class="form-check-label" for="sysEnabled">@this.T("Systems Enabled", "Bật hệ thống", "Systeme aktiv", "启用系统")</label>
+                </div>
+                <div class="form-check form-switch">
+                    <input id="sysS9Only" class="form-check-input" type="checkbox" @bind="this._configuration.SeasonNineOnly" />
+                    <label class="form-check-label" for="sysS9Only">@this.T("Season 9 Only", "Chỉ chạy Season 9", "Nur Season 9", "仅第 9 赛季")</label>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">@this.T("Master Level Max Cap", "Giới hạn cấp Master", "Master-Level-Limit", "大师等级上限")</label>
+                <input type="number" class="form-control form-control-sm" min="200" max="400" @bind="this._configuration.MasterLevelMaxCap" />
+            </div>
+            <div class="col-md-3 text-end">
+                <button type="button" class="btn btn-primary btn-sm" disabled="@this._isSaving" @onclick="this.SaveAsync">
+                    @(this._isSaving ? this.T("Saving...", "Đang lưu...", "Speichern...", "保存中...") : this.T("Save All", "Lưu tất cả", "Alles speichern", "保存全部"))
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">@this.T($"Muun Companion System ({SeasonNineSystemsCatalog.Muuns.Count} Pets / {SeasonNineSystemsCatalog.MuunOptions.Count} Options)", $"Hệ thống Thú Cưng Muun ({SeasonNineSystemsCatalog.Muuns.Count} Muun)", $"Muun-System ({SeasonNineSystemsCatalog.Muuns.Count} Begleiter)", $"萌宠系统 ({SeasonNineSystemsCatalog.Muuns.Count} 只萌宠)")</div>
+        <div class="card-body row g-2">
+            <div class="col-md-3 form-check ms-2">
+                <input id="muunEn" class="form-check-input" type="checkbox" @bind="this._configuration.MuunEnabled" />
+                <label class="form-check-label" for="muunEn">@this.T("Muun Enabled", "Bật Muun", "Muun aktiv", "启用萌宠")</label>
+            </div>
+            <div class="col-md-3 form-check">
+                <input id="muunCond" class="form-check-input" type="checkbox" @bind="this._configuration.MuunStrictConditions" />
+                <label class="form-check-label" for="muunCond">@this.T("Strict Hour/Map Conditions", "Áp dụng giờ/bản đồ", "Strenge Bedingungen", "严格时段/地图条件")</label>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">@this.T("Evolution Point Multiplier", "Hệ số điểm tiến hóa", "Entwicklungs-Faktor", "进化点数倍率")</label>
+                <input type="number" step="0.1" min="0.1" max="10" class="form-control form-control-sm" @bind="this._configuration.MuunEvoPointMultiplier" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@this.T("Drop Permille (n/10000)", "Tỉ lệ rơi (n/10000)", "Drop-Promille", "掉落率 (万分比)")</label>
+                <input type="number" min="0" max="10000" class="form-control form-control-sm" @bind="this._configuration.MuunDropRatePermille" />
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">@this.T($"Pentagram & Elemental Matrix ({SeasonNineSystemsCatalog.Pentagrams.Count} Pentagrams)", $"Ngũ Hành Pentagram ({SeasonNineSystemsCatalog.Pentagrams.Count} Sách)", $"Pentagramm & Elemente ({SeasonNineSystemsCatalog.Pentagrams.Count})", $"五芒星元素系统 ({SeasonNineSystemsCatalog.Pentagrams.Count} 本)")</div>
+        <div class="card-body row g-2">
+            <div class="col-md-2 form-check ms-2">
+                <input id="pentEn" class="form-check-input" type="checkbox" @bind="this._configuration.PentagramEnabled" />
+                <label class="form-check-label" for="pentEn">@this.T("Enabled", "Bật", "Aktiv", "启用")</label>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">@this.T("Elemental Damage Multiplier", "Hệ số sát thương Ngũ Hành", "Elementar-Schaden Faktor", "元素伤害倍率")</label>
+                <input type="number" step="0.1" min="0.1" max="10" class="form-control form-control-sm" @bind="this._configuration.PentagramElementalDamageMultiplier" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@this.T("Affinity Advantage +%", "Khắc hệ +%", "Element-Vorteil +%", "元素克制 +% ")</label>
+                <input type="number" min="0" max="100" class="form-control form-control-sm" @bind="this._configuration.PentagramElementalAdvantageBonusPct" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@this.T("Errtel Mix Bonus %", "Cộng ép Errtel %", "Errtel-Mix +%", "艾尔特合成加成%")</label>
+                <input type="number" min="-50" max="100" class="form-control form-control-sm" @bind="this._configuration.PentagramErrtelMixBonusPct" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@this.T("Errtel Extract Bonus %", "Cộng tháo Errtel %", "Errtel-Extrakt +%", "艾尔特提取加成%")</label>
+                <input type="number" min="-50" max="100" class="form-control form-control-sm" @bind="this._configuration.PentagramErrtelExtractBonusPct" />
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">@this.T("Season 9 Skills (618-621) & Minimap Overlay", "Kỹ Năng Season 9 (618-621) & Minimap", "Season-9-Fertigkeiten (618-621) & Minimap", "第 9 赛季技能 (618-621) 与小地图")</div>
+        <div class="card-body row g-2">
+            <div class="col-md-3 form-check ms-2">
+                <input id="skEn" class="form-check-input" type="checkbox" @bind="this._configuration.SeasonNineSkillsEnabled" />
+                <label class="form-check-label" for="skEn">@this.T("Skills 618-621 Enabled", "Bật kỹ năng 618-621", "Fertigkeiten 618-621", "启用技能 618-621")</label>
+            </div>
+            <div class="col-md-3 form-check">
+                <input id="mmEn" class="form-check-input" type="checkbox" @bind="this._configuration.SeasonNineMinimapEnabled" />
+                <label class="form-check-label" for="mmEn">@this.T("S9 Minimap Markers", "Bật Minimap S9", "S9-Minimap-Marker", "启用 S9 小地图标记")</label>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">@this.T("Shield-Burn SD % (621)", "Thiêu đốt SD % (621)", "Schildbrand SD % (621)", "护盾焚烧 SD % (621)")</label>
+                <input type="number" min="1" max="100" class="form-control form-control-sm" @bind="this._configuration.ShieldBurnSdPercent" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@this.T("Protection Def % (618)", "Bảo hộ Def % (618)", "Schutz Def % (618)", "守护防御 % (618)")</label>
+                <input type="number" min="1" max="100" class="form-control form-control-sm" @bind="this._configuration.SpellOfProtectionDefensePct" />
+            </div>
+        </div>
+    </div>
+}

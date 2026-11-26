@@ -16439,5 +16439,19 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("S9EventsTitle", resourceCulture);
             }
         }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextS9Systems {
+            get {
+                return ResourceManager.GetString("PageHelpTextS9Systems", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string S9SystemsTitle {
+            get {
+                return ResourceManager.GetString("S9SystemsTitle", resourceCulture);
+            }
+        }
     }
 }

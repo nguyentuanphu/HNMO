@@ -2133,4 +2133,10 @@
   <data name="ChaosCastleSurvivalChatCommandPlugIn_Description" xml:space="preserve"><value>Tritt Chaos Castle Survival bei oder zeigt die Turnierphase an.</value></data>
   <data name="TormentedSquareChatCommandPlugIn_Name" xml:space="preserve"><value>Tormented-Square-Befehl (/tsquare)</value></data>
   <data name="TormentedSquareChatCommandPlugIn_Description" xml:space="preserve"><value>Tritt Tormented Square bei oder zeigt den Zeitplan an.</value></data>
+  <data name="SeasonNineSystemsPlugIn_Name" xml:space="preserve"><value>Season-9-Systeme (Muun, Pentagramm, Master 330)</value></data>
+  <data name="SeasonNineSystemsPlugIn_Description" xml:space="preserve"><value>Konfiguriert Muun-Begleiter, Pentagramm-Elementarvorteil, Errtel-Raten, Fertigkeiten 618-621, Master-Limit 330 und Minimap.</value></data>
+  <data name="MuunChatCommandPlugIn_Name" xml:space="preserve"><value>Muun-Befehl (/muun)</value></data>
+  <data name="MuunChatCommandPlugIn_Description" xml:space="preserve"><value>Zeigt aktive Muun-Einstellungen und Entwicklungsmultiplikatoren.</value></data>
+  <data name="PentagramChatCommandPlugIn_Name" xml:space="preserve"><value>Pentagramm-Befehl (/pentagram)</value></data>
+  <data name="PentagramChatCommandPlugIn_Description" xml:space="preserve"><value>Zeigt aktive Pentagramm- und Errtel-Raten.</value></data>
 </root>

@@ -4,6 +4,7 @@
 // BUX code, then 45 unused bytes and a GenerateCheckSum2 (key 0x2BC1) of everything before it.
 
 import { fetchBytes } from '../bmd.js';
+import { currentSeason, onSeasonChange } from '../dataRoot.js';
 import { filesFolder } from '../world.js';
 
 /** A marker: Kind 1 an NPC, Kind 2 a gate; location in cells (Location[0] is the cell's x). */
@@ -71,24 +72,56 @@ export function parseMiniMapMarkers(bytes: Uint8Array): MiniMapMarker[] {
   return markers;
 }
 
-const cache = new Map<number, Promise<MiniMapData | null>>();
+const cache = new Map<string, Promise<MiniMapData | null>>();
 let previous: Promise<MiniMapData | null> = Promise.resolve(null);
+let s9MarkersPromise: Promise<Record<string, Array<{ id: number; kind: number; npcIndex: number; x: number; y: number; name: string }>>> | null = null;
 
-async function loadFolder(folder: number): Promise<MiniMapData | null> {
+onSeasonChange(() => {
+  cache.clear();
+  previous = Promise.resolve(null);
+});
+
+async function loadS9MinimapMarkers(): Promise<Record<string, Array<{ id: number; kind: number; npcIndex: number; x: number; y: number; name: string }>>> {
+  s9MarkersPromise ??= fetch('/data/Season9/minimap.json')
+    .then((r) => (r.ok ? r.json() : {}))
+    .catch(() => ({}));
+  return s9MarkersPromise;
+}
+
+async function loadFolder(folder: number, mapNumber: number): Promise<MiniMapData | null> {
   const worldName = `World${folder}`;
+  const isS9 = currentSeason() === 's9';
+  const s9OnlyWorld = folder === 83 || folder === 92 || (folder >= 94 && folder <= 103);
   // LoadImages(): a world without a mini_map picture has no mini map (the view finds that out
   // when the picture does not load).
-  const pictureUrl = `/data/${worldName}/mini_map.tga`;
+  const pictureUrl = isS9 && s9OnlyWorld ? `/data/s9/${worldName}/mini_map.tga` : `/data/${worldName}/mini_map.tga`;
   const lang = LANGUAGE.toLowerCase();
   const bytes = await fetchBytes(`/data/Local/${LANGUAGE}/Minimap/Minimap_${worldName}_${lang}.bmd`).catch(() => null);
-  return { worldName, pictureUrl, markers: bytes ? parseMiniMapMarkers(bytes) : [] };
+  const markers = bytes ? parseMiniMapMarkers(bytes) : [];
+  if (isS9) {
+    const s9All = await loadS9MinimapMarkers();
+    const s9Entries = s9All[String(mapNumber)] ?? [];
+    for (const entry of s9Entries) {
+      const duplicate = markers.some((m) => m.location[0] === entry.x && m.location[1] === entry.y && m.name === entry.name);
+      if (!duplicate) {
+        markers.push({
+          kind: entry.kind,
+          location: [entry.x, entry.y],
+          rotation: 0,
+          name: entry.name,
+        });
+      }
+    }
+  }
+  return { worldName, pictureUrl, markers };
 }
 
 /** The mini map data of a map number (its world folder, picture URL and markers). */
 export function loadMiniMapData(mapNumber: number): Promise<MiniMapData | null> {
   const folder = filesFolder(mapNumber);
   if (KEEPS_PREVIOUS.has(folder)) return previous;
-  if (!cache.has(folder)) cache.set(folder, loadFolder(folder));
-  previous = cache.get(folder)!;
+  const cacheKey = `${currentSeason()}:${folder}:${mapNumber}`;
+  if (!cache.has(cacheKey)) cache.set(cacheKey, loadFolder(folder, mapNumber));
+  previous = cache.get(cacheKey)!;
   return previous;
 }

@@ -998,4 +998,6 @@
   <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>Fügt die 5 Moss-Glücksspielgutscheine (13-71..75) für 2.000.000 Zen hinzu und stattet Moss den Händler (492) mit seinem Laden aus, sofern leer.</value></data>
   <data name="SeasonNineExtendedSharedItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: erweiterte Regeln gemeinsamer Gegenstände</value></data>
   <data name="SeasonNineExtendedSharedItemsUpdatePlugIn_Description" xml:space="preserve"><value>Wendet im Season-9-Betrieb die Season-9-Werte für die Drop-Stufe von Sphere (4) (132) und die Haltbarkeit der Reset-Früchte (10) an; angepasste Werte bleiben erhalten.</value></data>
+  <data name="SeasonNineSystemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Master-Limit 330 &amp; Fertigkeiten 618-621</value></data>
+  <data name="SeasonNineSystemsUpdatePlugIn_Description" xml:space="preserve"><value>Erhöht das Master-Level-Limit im Season-9-Betrieb von 200 auf 330 und fügt die vier Season-9-Fertigkeiten (618-621) hinzu.</value></data>
 </root>

@@ -2295,4 +2295,10 @@
   <data name="ChaosCastleSurvivalChatCommandPlugIn_Description" xml:space="preserve"><value>Enters or checks Chaos Castle Survival and tournament stage.</value></data>
   <data name="TormentedSquareChatCommandPlugIn_Name" xml:space="preserve"><value>Tormented Square Command (/tsquare)</value></data>
   <data name="TormentedSquareChatCommandPlugIn_Description" xml:space="preserve"><value>Enters or checks Tormented Square rounds and schedule.</value></data>
+  <data name="SeasonNineSystemsPlugIn_Name" xml:space="preserve"><value>Season 9 Systems (Muun, Pentagram, 330 Master)</value></data>
+  <data name="SeasonNineSystemsPlugIn_Description" xml:space="preserve"><value>Configures Muun companion scaling, Pentagram elemental advantage, Errtel extraction/mix rates, skills 618-621, 330 Master cap, and Minimap.</value></data>
+  <data name="MuunChatCommandPlugIn_Name" xml:space="preserve"><value>Muun Status Command (/muun)</value></data>
+  <data name="MuunChatCommandPlugIn_Description" xml:space="preserve"><value>Displays active Season 9 Muun companion settings and evolution multipliers.</value></data>
+  <data name="PentagramChatCommandPlugIn_Name" xml:space="preserve"><value>Pentagram Status Command (/pentagram)</value></data>
+  <data name="PentagramChatCommandPlugIn_Description" xml:space="preserve"><value>Displays active Season 9 Pentagram elemental and Errtel mix bonus settings.</value></data>
 </root>

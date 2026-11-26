@@ -496,4 +496,6 @@
   <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>Adds the 5 Moss gamble vouchers (13-71..75) at 2,000,000 Zen and equips Moss the Merchant (492) with his gamble shop when empty.</value></data>
   <data name="SeasonNineExtendedSharedItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: extended shared item rules</value></data>
   <data name="SeasonNineExtendedSharedItemsUpdatePlugIn_Description" xml:space="preserve"><value>Applies the Season 9 values for Sphere (4) drop level (132) and Reset Fruit stack durability (10) when running as Season 9, leaving customized values unchanged.</value></data>
+  <data name="SeasonNineSystemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Master 330 cap &amp; skills 618-621</value></data>
+  <data name="SeasonNineSystemsUpdatePlugIn_Description" xml:space="preserve"><value>Raises Maximum Master Level from 200 to 330 and registers Season 9 skills 618-621 (Spell of Protection, Restriction, Pursuit, Shield-Burn) when running as Season 9.</value></data>
 </root>

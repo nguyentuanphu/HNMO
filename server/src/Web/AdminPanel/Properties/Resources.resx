@@ -5308,4 +5308,10 @@ On your account page, open Security and paste this code to confirm your new emai
   <data name="S9EventsTitle" xml:space="preserve">
     <value>Season 9 Events &amp; Uruk Mountain</value>
   </data>
+  <data name="PageHelpTextS9Systems" xml:space="preserve">
+    <value>Configure Season 9 progression &amp; combat systems: 330-level Master Tree cap, Muun pets (76 companions), Pentagram elemental matrix &amp; Errtel rates, skills 618-621, and Season 9 Minimap overlay.</value>
+  </data>
+  <data name="S9SystemsTitle" xml:space="preserve">
+    <value>Season 9 Systems (Muun, Pentagram, Master 330)</value>
+  </data>
 </root>
