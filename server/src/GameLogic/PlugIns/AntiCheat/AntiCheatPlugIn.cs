@@ -163,7 +163,7 @@ public sealed class AntiCheatPlugIn :
         var nowTimestamp = this._timeProvider.GetTimestamp();
         var nowUtc = this._timeProvider.GetUtcNow().UtcDateTime;
         var tracker = this._trackers.GetOrCreateValue(player);
-        var attackSpeed = player.Attributes[Stats.AttackSpeed];
+        var attackSpeed = Math.Max(player.Attributes[Stats.AttackSpeed], player.Attributes[Stats.MagicSpeed]);
         var agility = player.Attributes[Stats.TotalAgility];
 
         double? elapsedMs = null;
@@ -172,7 +172,7 @@ public sealed class AntiCheatPlugIn :
         {
             if (tracker.LastAttackTimestamp != 0)
             {
-                elapsedMs = (nowTimestamp - tracker.LastAttackTimestamp) * 1000.0 / Stopwatch.Frequency;
+                elapsedMs = this._timeProvider.GetElapsedTime(tracker.LastAttackTimestamp, nowTimestamp).TotalMilliseconds;
             }
 
             tracker.LastAttackTimestamp = nowTimestamp;
