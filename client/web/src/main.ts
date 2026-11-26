@@ -58,6 +58,8 @@ import { VaultPages } from './ui/vaultPages.js';
 import { ItemStacks } from './ui/itemStacks.js';
 import { setStackCountRule } from './ui/itemWindows.js';
 import { JewelBankWindow } from './ui/jewelBankWindow.js';
+import { PentagramWindow } from './ui/pentagramWindow.js';
+import { bindPentagramInventory, elementColor, pentagramState } from './game/pentagram.js';
 import { VipWindow } from './ui/vipWindow.js';
 import { GiftBoxWindow } from './ui/giftBoxWindow.js';
 import { GuildLevelsWindow } from './ui/guildLevelsWindow.js';
@@ -2259,6 +2261,19 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     if (event.key === 'F7' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); jewelBank.toggle(); }
   });
   window.addEventListener('hnmo-jewel-bank-open', () => { jewelBank.open(); });
+  // Season 9 pentagram and errtels (Ctrl+P); the server sends their state only in a Season 9 realm.
+  bindPentagramInventory(inventory.items);
+  const pentagram = new PentagramWindow({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => chat.add(text, 'system'),
+    elementalHit: (targetId, damage, element) => state.combat?.showElementalHit(targetId, damage, elementColor(element)),
+  });
+  connection.onPacket((bytes) => { pentagram.handle(bytes); });
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+    if ((event.key === 'p' || event.key === 'P') && event.ctrlKey && !event.altKey && !event.metaKey && pentagramState()?.enabled) { event.preventDefault(); pentagram.toggle(); }
+  });
+  window.addEventListener('hnmo-pentagram-open', () => { pentagram.open(); });
   // HNMO's guild levels: a panel next to the guild window (G) with the level, the experience, this week's ladder rank and
   // the buff (also on the buff strip); level-ups and ladder rewards are told in the chat.
   const guildLevels = new GuildLevelsWindow({

@@ -16,6 +16,7 @@ import { loadMonsterCatalog, localName } from './monsterData.js';
 import type { MonsterCatalog } from './monsterData.js';
 import { buxConvert } from '../formats.js';
 import { hellasTooltipLines } from './kalima.js';
+import { pentagramTooltipFor } from './pentagram.js';
 import { currentLanguage } from '../i18n.js';
 
 /** A row of the tooltip. */
@@ -1426,6 +1427,7 @@ export function tooltipLines(item: Item, character: TooltipCharacter | null = nu
   writer.writeDescription(true);
   writer.writeLayoutLines('afterOptions');
   writer.lines.push(...hellasTooltipLines(item, character)); // RenderHellasItemInfo: the Lost Map, the Symbol of Kundun
+  writer.lines.push(...pentagramTooltipFor(item).map((entry) => line(entry.text, entry.color))); // Season 9 element, errtels
   setLines(item, writer.lines);
   socketLines(item, character, writer.lines);
   return writer.lines;
