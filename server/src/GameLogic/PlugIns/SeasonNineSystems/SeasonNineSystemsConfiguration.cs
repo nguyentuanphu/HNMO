@@ -31,6 +31,12 @@ public sealed class SeasonNineSystemsConfiguration
     /// <summary>Gets or sets a value indicating whether Muun map/hour/weekday conditions are enforced.</summary>
     public bool MuunStrictConditions { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets the energy a Muun level up costs per current level (default 10). HNMO's data has no cost table; a
+    /// stored configuration without the setting reads 0, which counts as the default.
+    /// </summary>
+    public int MuunLevelUpEnergyCost { get; set; } = 10;
+
     /// <summary>Gets or sets Muun drop bonus permille (n/10000, default 50 = 0.5%).</summary>
     public int MuunDropRatePermille { get; set; } = 50;
 

@@ -60,6 +60,34 @@ public static class SeasonNineSystemsEngine
         return null;
     }
 
+    /// <summary>Looks up a Muun option by its index.</summary>
+    /// <param name="index">The option index of a <see cref="SeasonNineSystemsCatalog.MuunSpec"/>.</param>
+    /// <returns>The option, or <c>null</c>.</returns>
+    public static SeasonNineSystemsCatalog.MuunOptionSpec? FindMuunOption(int index) =>
+        MuunOptionMap.TryGetValue(index, out var option) ? option : null;
+
+    /// <summary>The highest level a Muun reaches before it can evolve: its option's last level with a value (1..5).</summary>
+    /// <param name="muun">The Muun.</param>
+    /// <returns>The level.</returns>
+    public static int MuunMaximumLevel(SeasonNineSystemsCatalog.MuunSpec muun)
+    {
+        if (FindMuunOption(muun.OptionIndex) is not { } option)
+        {
+            return 1;
+        }
+
+        int[] values = [option.ValueLv1, option.ValueLv2, option.ValueLv3, option.ValueLv4, option.ValueLv5];
+        for (var level = values.Length; level > 1; level--)
+        {
+            if (values[level - 1] > 0)
+            {
+                return level;
+            }
+        }
+
+        return 1;
+    }
+
     /// <summary>Checks whether a Muun option's time/map/level/day condition is currently satisfied.</summary>
     /// <param name="option">Option spec.</param>
     /// <param name="mapNumber">Current map number.</param>

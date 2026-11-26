@@ -30,10 +30,17 @@ public sealed class SeasonNineSystemsPlugIn :
     ISupportDefaultCustomConfiguration,
     IDisabledByDefault
 {
+    private static readonly TimeZoneInfo RealmTimeZone = FindRealmTimeZone();
+
     private short _realmMasterCap;
+
+    private MuunCompanion? _muuns;
 
     /// <inheritdoc />
     public SeasonNineSystemsConfiguration? Configuration { get; set; }
+
+    /// <summary>Gets the Muun companions of this plug-in.</summary>
+    public MuunCompanion Muuns => this._muuns ??= new MuunCompanion(this);
 
     /// <summary>Gets or sets the season check (tests); the realm's <see cref="HnmoSeasonInstance.IsSeasonNine"/> by default.</summary>
     internal Func<bool> IsSeasonNineRealm { get; set; } = static () => HnmoSeasonInstance.IsSeasonNine;
@@ -43,6 +50,11 @@ public sealed class SeasonNineSystemsPlugIn :
     /// <returns>Active instance or <c>null</c>.</returns>
     public static SeasonNineSystemsPlugIn? Get(IGameContext gameContext) =>
         gameContext.PlugInManager.GetActivePlugInsOf<IPeriodicTaskPlugIn>().OfType<SeasonNineSystemsPlugIn>().FirstOrDefault();
+
+    /// <summary>The realm's local time (Sydney, as HNMO's other time rules) of a UTC time.</summary>
+    /// <param name="utc">The UTC time.</param>
+    /// <returns>The local time.</returns>
+    public static DateTime ToRealmTime(DateTime utc) => TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(utc, DateTimeKind.Utc), RealmTimeZone);
 
     /// <summary>
     /// Gets a value indicating whether the Season 9 systems run: switched on, and only in a Season 9 realm. Season 6.3
@@ -60,7 +72,92 @@ public sealed class SeasonNineSystemsPlugIn :
     }
 
     /// <inheritdoc />
-    public ValueTask ExecuteTaskAsync(GameContext gameContext)
+    public async ValueTask ExecuteTaskAsync(GameContext gameContext)
+    {
+        await this.ApplyMasterCapAsync(gameContext).ConfigureAwait(false);
+
+        // The Muun bonuses follow the map, the level, the hour and the weekday; when the systems are off they go.
+        foreach (var player in await gameContext.GetPlayersAsync().ConfigureAwait(false))
+        {
+            if (player.SelectedCharacter is not null && player.Attributes is not null)
+            {
+                await this.Muuns.RefreshAsync(player).ConfigureAwait(false);
+            }
+        }
+    }
+
+    /// <inheritdoc />
+    public async ValueTask PlayerStateChangedAsync(Player player, State previousState, State currentState)
+    {
+        if (currentState != PlayerState.EnteredWorld)
+        {
+            return;
+        }
+
+        await this.Muuns.RecomputeAsync(player).ConfigureAwait(false);
+        if (!this.IsActive() || this.Configuration is not { } cfg)
+        {
+            return;
+        }
+
+        var isVi = string.Equals(player.Culture.TwoLetterISOLanguageName, "vi", StringComparison.OrdinalIgnoreCase);
+        await player.ShowBlueMessageAsync(
+            isVi
+                ? $"Season 9 Systems đang bật (Master Cap {cfg.MasterLevelMaxCap}, {SeasonNineSystemsCatalog.Muuns.Count} Muun, {SeasonNineSystemsCatalog.Pentagrams.Count} Pentagram)."
+                : $"Season 9 Systems active (Master Cap {cfg.MasterLevelMaxCap}, {SeasonNineSystemsCatalog.Muuns.Count} Muun, {SeasonNineSystemsCatalog.Pentagrams.Count} Pentagram).").ConfigureAwait(false);
+    }
+
+    /// <summary>Executes <c>/muun</c> or <c>/pentagram</c> status command cleanly.</summary>
+    /// <param name="player">Issuing player.</param>
+    /// <param name="topic"><c>muun</c> or <c>pentagram</c>.</param>
+    /// <returns>A task representing completion.</returns>
+    public static async ValueTask ExecuteStatusCommandAsync(Player player, string topic)
+    {
+        var isVi = string.Equals(player.Culture.TwoLetterISOLanguageName, "vi", StringComparison.OrdinalIgnoreCase);
+        if (Get(player.GameContext) is not { Configuration: { } cfg } plugIn || !plugIn.IsActive())
+        {
+            await player.ShowBlueMessageAsync(
+                isVi ? "Hệ thống Muun / Pentagram Season 9 đang tắt." : "Season 9 Muun / Pentagram system is disabled.").ConfigureAwait(false);
+            return;
+        }
+
+        if (topic == "muun")
+        {
+            await plugIn.Muuns.SendStateAsync(player, requested: true).ConfigureAwait(false);
+            await player.ShowBlueMessageAsync(
+                isVi
+                    ? $"[Muun] {(cfg.MuunEnabled ? "Bật" : "Tắt")} | {SeasonNineSystemsCatalog.Muuns.Count} Muun | Hệ số Tiến Hóa x{cfg.MuunEvoPointMultiplier:0.##}"
+                    : $"[Muun] {(cfg.MuunEnabled ? "On" : "Off")} | {SeasonNineSystemsCatalog.Muuns.Count} Pets | Evo Mult x{cfg.MuunEvoPointMultiplier:0.##}").ConfigureAwait(false);
+        }
+        else
+        {
+            await player.ShowBlueMessageAsync(
+                isVi
+                    ? $"[Pentagram] {(cfg.PentagramEnabled ? "Bật" : "Tắt")} | Lợi thế Ngũ Hành +{cfg.PentagramElementalAdvantageBonusPct}% | Cộng tỉ lệ ép Errtel +{cfg.PentagramErrtelMixBonusPct}%"
+                    : $"[Pentagram] {(cfg.PentagramEnabled ? "On" : "Off")} | Elemental Advantage +{cfg.PentagramElementalAdvantageBonusPct}% | Errtel Mix Bonus +{cfg.PentagramErrtelMixBonusPct}%").ConfigureAwait(false);
+        }
+    }
+
+    private static TimeZoneInfo FindRealmTimeZone()
+    {
+        try
+        {
+            return TimeZoneInfo.FindSystemTimeZoneById("Australia/Sydney");
+        }
+        catch (TimeZoneNotFoundException)
+        {
+            try
+            {
+                return TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time");
+            }
+            catch (TimeZoneNotFoundException)
+            {
+                return TimeZoneInfo.Utc;
+            }
+        }
+    }
+
+    private ValueTask ApplyMasterCapAsync(GameContext gameContext)
     {
         var configuration = gameContext.Configuration;
         if (!this.IsActive())
@@ -90,50 +187,5 @@ public sealed class SeasonNineSystemsPlugIn :
         }
 
         return ValueTask.CompletedTask;
-    }
-
-    /// <inheritdoc />
-    public async ValueTask PlayerStateChangedAsync(Player player, State previousState, State currentState)
-    {
-        if (currentState != PlayerState.EnteredWorld || !this.IsActive() || this.Configuration is not { } cfg)
-        {
-            return;
-        }
-
-        var isVi = string.Equals(player.Culture.TwoLetterISOLanguageName, "vi", StringComparison.OrdinalIgnoreCase);
-        await player.ShowBlueMessageAsync(
-            isVi
-                ? $"Season 9 Systems đang bật (Master Cap {cfg.MasterLevelMaxCap}, {SeasonNineSystemsCatalog.Muuns.Count} Muun, {SeasonNineSystemsCatalog.Pentagrams.Count} Pentagram)."
-                : $"Season 9 Systems active (Master Cap {cfg.MasterLevelMaxCap}, {SeasonNineSystemsCatalog.Muuns.Count} Muun, {SeasonNineSystemsCatalog.Pentagrams.Count} Pentagram).").ConfigureAwait(false);
-    }
-
-    /// <summary>Executes <c>/muun</c> or <c>/pentagram</c> status command cleanly.</summary>
-    /// <param name="player">Issuing player.</param>
-    /// <param name="topic"><c>muun</c> or <c>pentagram</c>.</param>
-    /// <returns>A task representing completion.</returns>
-    public static async ValueTask ExecuteStatusCommandAsync(Player player, string topic)
-    {
-        var isVi = string.Equals(player.Culture.TwoLetterISOLanguageName, "vi", StringComparison.OrdinalIgnoreCase);
-        if (Get(player.GameContext) is not { Configuration: { } cfg } plugIn || !plugIn.IsActive())
-        {
-            await player.ShowBlueMessageAsync(
-                isVi ? "Hệ thống Muun / Pentagram Season 9 đang tắt." : "Season 9 Muun / Pentagram system is disabled.").ConfigureAwait(false);
-            return;
-        }
-
-        if (topic == "muun")
-        {
-            await player.ShowBlueMessageAsync(
-                isVi
-                    ? $"[Muun] {(cfg.MuunEnabled ? "Bật" : "Tắt")} | {SeasonNineSystemsCatalog.Muuns.Count} Muun | Hệ số Tiến Hóa x{cfg.MuunEvoPointMultiplier:0.##}"
-                    : $"[Muun] {(cfg.MuunEnabled ? "On" : "Off")} | {SeasonNineSystemsCatalog.Muuns.Count} Pets | Evo Mult x{cfg.MuunEvoPointMultiplier:0.##}").ConfigureAwait(false);
-        }
-        else
-        {
-            await player.ShowBlueMessageAsync(
-                isVi
-                    ? $"[Pentagram] {(cfg.PentagramEnabled ? "Bật" : "Tắt")} | Lợi thế Ngũ Hành +{cfg.PentagramElementalAdvantageBonusPct}% | Cộng tỉ lệ ép Errtel +{cfg.PentagramErrtelMixBonusPct}%"
-                    : $"[Pentagram] {(cfg.PentagramEnabled ? "On" : "Off")} | Elemental Advantage +{cfg.PentagramElementalAdvantageBonusPct}% | Errtel Mix Bonus +{cfg.PentagramErrtelMixBonusPct}%").ConfigureAwait(false);
-        }
     }
 }
