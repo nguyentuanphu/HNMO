@@ -56,10 +56,7 @@ else
                     <input id="sysEnabled" class="form-check-input" type="checkbox" @bind="this._configuration.Enabled" />
                     <label class="form-check-label" for="sysEnabled">@this.T("Systems Enabled", "Bật hệ thống", "Systeme aktiv", "启用系统")</label>
                 </div>
-                <div class="form-check form-switch">
-                    <input id="sysS9Only" class="form-check-input" type="checkbox" @bind="this._configuration.SeasonNineOnly" />
-                    <label class="form-check-label" for="sysS9Only">@this.T("Season 9 Only", "Chỉ chạy Season 9", "Nur Season 9", "仅第 9 赛季")</label>
-                </div>
+                <small class="text-muted align-self-center">@this.T("Runs only on Season 9 servers; Season 6.3 and Arena never use these systems.", "Chỉ chạy trên máy chủ Season 9; Season 6.3 và Arena không bao giờ dùng các hệ thống này.", "Läuft nur auf Season-9-Servern; Season 6.3 und Arena nutzen diese Systeme nie.", "仅在第 9 赛季服务器运行；第 6.3 赛季和竞技场从不使用这些系统。")</small>
             </div>
             <div class="col-md-3">
                 <label class="form-label">@this.T("Master Level Max Cap", "Giới hạn cấp Master", "Master-Level-Limit", "大师等级上限")</label>

@@ -1933,4 +1933,10 @@
   <data name="MuunChatCommandPlugIn_Description" xml:space="preserve"><value>查看第 9 赛季萌宠设置与进化倍率。</value></data>
   <data name="PentagramChatCommandPlugIn_Name" xml:space="preserve"><value>五芒星指令 (/pentagram)</value></data>
   <data name="PentagramChatCommandPlugIn_Description" xml:space="preserve"><value>查看第 9 赛季五芒星与艾尔特加成。</value></data>
+  <data name="ShieldBurnSkillPlugIn_Name" xml:space="preserve">
+    <value>第 9 赛季技能：护盾焚烧</value>
+  </data>
+  <data name="ShieldBurnSkillPlugIn_Description" xml:space="preserve">
+    <value>焚烧目标玩家的一部分护盾 (SD)，不减少生命值。仅在开启第 9 赛季系统及其技能的第 9 赛季服务器中生效。</value>
+  </data>
 </root>

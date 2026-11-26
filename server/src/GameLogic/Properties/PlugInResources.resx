@@ -2301,4 +2301,10 @@
   <data name="MuunChatCommandPlugIn_Description" xml:space="preserve"><value>Displays active Season 9 Muun companion settings and evolution multipliers.</value></data>
   <data name="PentagramChatCommandPlugIn_Name" xml:space="preserve"><value>Pentagram Status Command (/pentagram)</value></data>
   <data name="PentagramChatCommandPlugIn_Description" xml:space="preserve"><value>Displays active Season 9 Pentagram elemental and Errtel mix bonus settings.</value></data>
+  <data name="ShieldBurnSkillPlugIn_Name" xml:space="preserve">
+    <value>Season 9 skill: Shield-Burn</value>
+  </data>
+  <data name="ShieldBurnSkillPlugIn_Description" xml:space="preserve">
+    <value>Burns a part of the target player's shield (SD) and leaves the health as it is. Only in a Season 9 realm with the Season 9 systems and their skills switched on.</value>
+  </data>
 </root>

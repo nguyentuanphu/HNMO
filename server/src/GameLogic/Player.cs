@@ -808,14 +808,7 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
             throw new InvalidOperationException("AttributeSystem not set.");
         }
 
-        if (this.IsAttackBlockedBySafezone(attacker)
-            || this.IsAttackPreventedByPlugIns(attacker))
-        {
-            return null;
-        }
-
-        if (!this.GameContext.PvpEnabled && this.CurrentMap?.Definition.BattleZone == null &&
-            this.CurrentMiniGame?.AllowPlayerKilling is false)
+        if (!this.MayBeHitBy(attacker))
         {
             return null;
         }
@@ -2420,6 +2413,47 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     /// </summary>
     /// <param name="attacker">The attacker.</param>
     /// <returns><c>true</c>, if the attack is prevented; otherwise, <c>false</c>.</returns>
+    /// <summary>
+    /// Burns a part of this player's shield (SD), as the Season 9 Shield-Burn skill does: the health stays as it is.
+    /// The same rules as for a hit decide whether the attacker may do it (safe zones, attack restriction plug-ins, PvP).
+    /// </summary>
+    /// <param name="attacker">The attacking player.</param>
+    /// <param name="percent">The part of the current shield which burns, in percent.</param>
+    /// <returns>The burned shield, or 0 when nothing burned.</returns>
+    internal async ValueTask<int> BurnShieldAsync(Player attacker, int percent)
+    {
+        if (attacker == this || this.Attributes is not { } attributes || !this.MayBeHitBy(attacker))
+        {
+            return 0;
+        }
+
+        var burned = PlugIns.SeasonNineSystems.SeasonNineSystemsEngine.CalculateShieldBurnReduction((int)attributes[Stats.CurrentShield], percent);
+        if (burned <= 0)
+        {
+            return 0;
+        }
+
+        attributes[Stats.CurrentShield] -= burned;
+        var hitInfo = new HitInfo(0, (uint)burned, DamageAttributes.Undefined);
+        await this.InvokeViewPlugInAsync<IShowHitPlugIn>(p => p.ShowHitAsync(this, hitInfo)).ConfigureAwait(false);
+        await attacker.InvokeViewPlugInAsync<IShowHitPlugIn>(p => p.ShowHitAsync(this, hitInfo)).ConfigureAwait(false);
+        return burned;
+    }
+
+    /// <summary>Determines whether the attacker may hit this player at all (safe zones, restriction plug-ins, PvP).</summary>
+    /// <param name="attacker">The attacker.</param>
+    /// <returns><c>true</c> when a hit may land.</returns>
+    internal bool MayBeHitBy(IAttacker attacker)
+    {
+        if (this.IsAttackBlockedBySafezone(attacker) || this.IsAttackPreventedByPlugIns(attacker))
+        {
+            return false;
+        }
+
+        return this.GameContext.PvpEnabled || this.CurrentMap?.Definition.BattleZone != null
+            || this.CurrentMiniGame?.AllowPlayerKilling is not false;
+    }
+
     private bool IsAttackPreventedByPlugIns(IAttacker attacker)
     {
         if ((attacker as Player ?? (attacker as IPlayerSurrogate)?.Owner) is not { } attackerPlayer

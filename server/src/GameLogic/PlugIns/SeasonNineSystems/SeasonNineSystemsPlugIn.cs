@@ -30,10 +30,13 @@ public sealed class SeasonNineSystemsPlugIn :
     ISupportDefaultCustomConfiguration,
     IDisabledByDefault
 {
-    private short _lastAppliedMasterCap;
+    private short _realmMasterCap;
 
     /// <inheritdoc />
     public SeasonNineSystemsConfiguration? Configuration { get; set; }
+
+    /// <summary>Gets or sets the season check (tests); the realm's <see cref="HnmoSeasonInstance.IsSeasonNine"/> by default.</summary>
+    internal Func<bool> IsSeasonNineRealm { get; set; } = static () => HnmoSeasonInstance.IsSeasonNine;
 
     /// <summary>Gets active <see cref="SeasonNineSystemsPlugIn"/> from <paramref name="gameContext"/>.</summary>
     /// <param name="gameContext">Game context.</param>
@@ -41,25 +44,49 @@ public sealed class SeasonNineSystemsPlugIn :
     public static SeasonNineSystemsPlugIn? Get(IGameContext gameContext) =>
         gameContext.PlugInManager.GetActivePlugInsOf<IPeriodicTaskPlugIn>().OfType<SeasonNineSystemsPlugIn>().FirstOrDefault();
 
+    /// <summary>
+    /// Gets a value indicating whether the Season 9 systems run: switched on, and only in a Season 9 realm. Season 6.3
+    /// and Arena never run them, whatever <see cref="SeasonNineSystemsConfiguration.SeasonNineOnly"/> says.
+    /// </summary>
+    /// <returns><c>true</c> when they run.</returns>
+    public bool IsActive() => this.Configuration is { Enabled: true } && this.IsSeasonNineRealm();
+
     /// <inheritdoc />
     public object CreateDefaultConfig() => new SeasonNineSystemsConfiguration();
 
     /// <inheritdoc />
-    public void ForceStart() => this._lastAppliedMasterCap = 0;
+    public void ForceStart()
+    {
+    }
 
     /// <inheritdoc />
     public ValueTask ExecuteTaskAsync(GameContext gameContext)
     {
-        if (this.Configuration is not { Enabled: true } cfg || (cfg.SeasonNineOnly && !HnmoSeasonInstance.IsSeasonNine))
+        var configuration = gameContext.Configuration;
+        if (!this.IsActive())
         {
+            // Off (or not a Season 9 realm): the realm's own cap comes back. Characters above it keep their level; they
+            // just gain no master experience there.
+            if (this._realmMasterCap > 0)
+            {
+                configuration.MaximumMasterLevel = this._realmMasterCap;
+                this._realmMasterCap = 0;
+                gameContext.RefreshExperienceTables();
+            }
+
             return ValueTask.CompletedTask;
         }
 
-        var targetCap = Math.Clamp(cfg.MasterLevelMaxCap, (short)200, (short)400);
-        if (this._lastAppliedMasterCap != targetCap && gameContext.Configuration.MaximumMasterLevel != targetCap)
+        var targetCap = Math.Clamp(this.Configuration!.MasterLevelMaxCap, (short)200, (short)400);
+        if (configuration.MaximumMasterLevel != targetCap)
         {
-            gameContext.Configuration.MaximumMasterLevel = targetCap;
-            this._lastAppliedMasterCap = targetCap;
+            if (this._realmMasterCap == 0)
+            {
+                this._realmMasterCap = configuration.MaximumMasterLevel;
+            }
+
+            configuration.MaximumMasterLevel = targetCap;
+            gameContext.RefreshExperienceTables();
         }
 
         return ValueTask.CompletedTask;
@@ -68,9 +95,7 @@ public sealed class SeasonNineSystemsPlugIn :
     /// <inheritdoc />
     public async ValueTask PlayerStateChangedAsync(Player player, State previousState, State currentState)
     {
-        if (currentState != PlayerState.EnteredWorld
-            || this.Configuration is not { Enabled: true } cfg
-            || (cfg.SeasonNineOnly && !HnmoSeasonInstance.IsSeasonNine))
+        if (currentState != PlayerState.EnteredWorld || !this.IsActive() || this.Configuration is not { } cfg)
         {
             return;
         }
@@ -89,7 +114,7 @@ public sealed class SeasonNineSystemsPlugIn :
     public static async ValueTask ExecuteStatusCommandAsync(Player player, string topic)
     {
         var isVi = string.Equals(player.Culture.TwoLetterISOLanguageName, "vi", StringComparison.OrdinalIgnoreCase);
-        if (Get(player.GameContext) is not { Configuration: { Enabled: true } cfg } || (cfg.SeasonNineOnly && !HnmoSeasonInstance.IsSeasonNine))
+        if (Get(player.GameContext) is not { Configuration: { } cfg } plugIn || !plugIn.IsActive())
         {
             await player.ShowBlueMessageAsync(
                 isVi ? "Hệ thống Muun / Pentagram Season 9 đang tắt." : "Season 9 Muun / Pentagram system is disabled.").ConfigureAwait(false);
