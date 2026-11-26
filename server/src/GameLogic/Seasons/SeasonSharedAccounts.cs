@@ -24,6 +24,9 @@ public static class SeasonSharedAccounts
     /// <summary>The shared balances each account had when this season last took them, by login name.</summary>
     private static readonly ConcurrentDictionary<string, CoinBalances> Baselines = new(StringComparer.OrdinalIgnoreCase);
 
+    /// <summary>Serializes coin syncs per login name so concurrent saves cannot double-apply an in-flight delta.</summary>
+    private static readonly ConcurrentDictionary<string, SemaphoreSlim> SyncLocks = new(StringComparer.OrdinalIgnoreCase);
+
     /// <summary>
     /// Copies a shared account into this season's database before the login checks it.
     /// </summary>
@@ -86,17 +89,30 @@ public static class SeasonSharedAccounts
             return false;
         }
 
-        var current = CoinBalances.Of(account);
-        var baseline = Baselines.TryGetValue(account.LoginName, out var known) ? known : current;
-        var result = await store.AddCoinsAsync(account.LoginName, current - baseline, cancellationToken).ConfigureAwait(false);
-        if (result is not { } shared)
+        var syncLock = SyncLocks.GetOrAdd(account.LoginName, static _ => new SemaphoreSlim(1, 1));
+        await syncLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
         {
-            return false;
-        }
+            var snapshot = CoinBalances.Of(account);
+            var baseline = Baselines.TryGetValue(account.LoginName, out var known) ? known : snapshot;
+            var result = await store.AddCoinsAsync(account.LoginName, snapshot - baseline, cancellationToken).ConfigureAwait(false);
+            if (result is not { } shared)
+            {
+                return false;
+            }
 
-        shared.ApplyTo(account);
-        Baselines[account.LoginName] = shared;
-        return true;
+            var inFlightDelta = CoinBalances.Of(account) - snapshot;
+            new CoinBalances(
+                shared.WCoinC + inFlightDelta.WCoinC,
+                shared.WCoinP + inFlightDelta.WCoinP,
+                shared.GoblinPoints + inFlightDelta.GoblinPoints).ApplyTo(account);
+            Baselines[account.LoginName] = shared;
+            return true;
+        }
+        finally
+        {
+            syncLock.Release();
+        }
     }
 
     /// <summary>Forgets what was taken (tests).</summary>
