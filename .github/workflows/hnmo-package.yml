@@ -90,10 +90,6 @@ jobs:
           pattern: postgres-*
           path: pg-artifacts
           merge-multiple: true
-      - uses: actions/download-artifact@v4
-        with:
-          name: macos-launcher
-          path: launch-artifacts
       - name: Build the HNMO folder (Windows, Linux, macOS)
         run: |
           for rid in linux-x64 linux-arm64 osx-x64 osx-arm64; do
@@ -101,14 +97,12 @@ jobs:
             tar -xzf "pg-artifacts/postgres-$rid.tar.gz" -C "pg/$rid"
           done
           POSTGRES_DIR="$GITHUB_WORKSPACE/pg/pgsql" POSTGRES_UNIX_DIR="$GITHUB_WORKSPACE/pg" \
-            HNMO_MACOS_LAUNCHER="$GITHUB_WORKSPACE/launch-artifacts/hnmo-macos-start" \
             client/web/tools/package-hnmo.sh "$GITHUB_WORKSPACE/server" portable "$GITHUB_WORKSPACE/HNMO"
       - name: Pack it
         run: |
           zip -qr HNMO.zip HNMO
           client/web/tools/hnmo/package-deb.sh HNMO.zip "$(tr -d '[:space:]' < VERSION)" HNMO-linux.deb
-          client/web/tools/hnmo/package-macos.sh HNMO.zip HNMO-macos.zip
-          ls -la HNMO.zip HNMO-linux.deb HNMO-macos.zip
+          ls -la HNMO.zip HNMO-linux.deb
           du -sh HNMO HNMO/* | sort -h
       - uses: actions/upload-artifact@v4
         with:
@@ -116,7 +110,6 @@ jobs:
           path: |
             HNMO.zip
             HNMO-linux.deb
-            HNMO-macos.zip
           retention-days: 14
       # The update files on Cloudflare R2 (owner, 2026-11-21): every file stored once by its SHA-256 (files/<hash>),
       # only those not there yet are uploaded; the manifest goes to releases/<version>/manifest.json. The HNMO
@@ -201,12 +194,33 @@ jobs:
           if (-not ($game -and $admin)) { throw "HNMO didn't start on Windows" }
           Get-Process | Where-Object { $_.Path -like "$folder*" } | Stop-Process -Force -ErrorAction SilentlyContinue
 
-  unix-start:
+  macos-package:
+    needs: package
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: HNMO
+      - uses: actions/download-artifact@v4
+        with:
+          name: macos-launcher
+          path: launch-artifacts
+      - name: Assemble and sign the macOS app
+        run: client/web/tools/hnmo/package-macos.sh HNMO.zip HNMO-macos.zip launch-artifacts/hnmo-macos-start
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HNMO-macos
+          path: HNMO-macos.zip
+          retention-days: 14
+
+  linux-start:
     needs: package
     strategy:
       fail-fast: false
       matrix:
-        runner: [ubuntu-22.04, ubuntu-22.04-arm, macos-15-intel, macos-15]
+        runner: [ubuntu-22.04, ubuntu-22.04-arm]
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 20
     steps:
@@ -215,14 +229,29 @@ jobs:
         with:
           name: HNMO
       - name: Install Linux desktop integration test tools
-        if: runner.os == 'Linux'
         run: sudo apt-get update -q && sudo apt-get install -y -q desktop-file-utils libglib2.0-bin xdg-utils
+      - name: Start the installed server and check the database
+        run: client/web/tools/hnmo/smoke-unix-package.sh "$PWD"
+
+  macos-start:
+    needs: macos-package
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [macos-15-intel, macos-15]
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: HNMO-macos
       - name: Start the installed server and check the database
         run: client/web/tools/hnmo/smoke-unix-package.sh "$PWD"
 
   # Publish only after the downloaded package starts on all supported platforms.
   release:
-    needs: [package, windows-start, unix-start]
+    needs: [package, windows-start, linux-start, macos-start]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
@@ -230,6 +259,9 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: HNMO
+      - uses: actions/download-artifact@v4
+        with:
+          name: HNMO-macos
       - name: Publish HNMO.zip as the latest release
         env:
           GH_TOKEN: ${{ github.token }}

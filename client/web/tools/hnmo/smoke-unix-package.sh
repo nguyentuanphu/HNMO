@@ -26,7 +26,7 @@ trap cleanup EXIT
 if [ "$(uname -s)" = Darwin ]; then
   ditto -x -k "$artifacts/HNMO-macos.zip" "$scratch"
   lipo "$scratch/Start HNMO.app/Contents/MacOS/start" -verify_arch arm64 x86_64
-  codesign --verify "$scratch/Start HNMO.app/Contents/MacOS/start"
+  codesign --verify --strict "$scratch/Start HNMO.app"
   open "$scratch/Start HNMO.app"
 else
   dpkg-deb -x "$artifacts/HNMO-linux.deb" "$scratch/package"

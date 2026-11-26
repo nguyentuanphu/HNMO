@@ -16,8 +16,8 @@ START
            muốn hiện cửa sổ console hãy chạy `Start HNMO.bat /window` hoặc đặt `"ConsoleWindow": true`.)
   macOS:   extract HNMO-macos.zip and double-click "Start HNMO.app". Your save
            is under Library/Application Support/HNMO in your home folder.
-           The portable HNMO.zip also includes a launcher that stays inside its
-           HNMO folder and saves there.
+           The portable HNMO.zip still supports Start HNMO.command and
+           keeps saves inside its HNMO folder.
            (Tiếng Việt: Giải nén HNMO-macos.zip rồi bấm đúp "Start HNMO.app".)
   Ubuntu/Debian: open "HNMO-linux.deb" in the software installer, choose Install,
            then open HNMO from the applications menu. The first launch copies the
