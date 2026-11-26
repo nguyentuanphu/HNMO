@@ -494,4 +494,6 @@
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>Adds the 10 Season 9 maps, terrain files, gates (417-461, 474-482), and Season 9 field spawns when running as Season 9.</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: Moss the Merchant gamble shop</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>Adds the 5 Moss gamble vouchers (13-71..75) at 2,000,000 Zen and equips Moss the Merchant (492) with his gamble shop when empty.</value></data>
+  <data name="EpisodeQuestsUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: Episode 1/2 quests and Episode 19 rewards</value></data>
+  <data name="EpisodeQuestsUpdatePlugIn_Description" xml:space="preserve"><value>Adds the missing Episode 1 starter tutorial/supply steps and Episode 2 Chaos Castle preparation steps for NPC 257 and synchronizes all 120 Episode 19 random quest Experience and Zen rewards to the Season 6 server suite.</value></data>
 </root>

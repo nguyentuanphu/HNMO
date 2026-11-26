@@ -2680,5 +2680,180 @@ namespace HNMO.Persistence.Initialization.Properties {
                 return ResourceManager.GetString("TrialOfTheRageFighter", resourceCulture);
             }
         }
+
+        /// <summary>Gets FirstStepsGift from the configuration name resources.</summary>
+        public static string FirstStepsGift {
+            get {
+                return ResourceManager.GetString("FirstStepsGift", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets CharacterWindowTutorial from the configuration name resources.</summary>
+        public static string CharacterWindowTutorial {
+            get {
+                return ResourceManager.GetString("CharacterWindowTutorial", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets InventoryTutorial from the configuration name resources.</summary>
+        public static string InventoryTutorial {
+            get {
+                return ResourceManager.GetString("InventoryTutorial", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets PreparePotions from the configuration name resources.</summary>
+        public static string PreparePotions {
+            get {
+                return ResourceManager.GetString("PreparePotions", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets FirstHunt from the configuration name resources.</summary>
+        public static string FirstHunt {
+            get {
+                return ResourceManager.GetString("FirstHunt", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets PrepareTownPortal from the configuration name resources.</summary>
+        public static string PrepareTownPortal {
+            get {
+                return ResourceManager.GetString("PrepareTownPortal", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets ReceiveElfBlessing from the configuration name resources.</summary>
+        public static string ReceiveElfBlessing {
+            get {
+                return ResourceManager.GetString("ReceiveElfBlessing", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets ThirtyMonsterHunt from the configuration name resources.</summary>
+        public static string ThirtyMonsterHunt {
+            get {
+                return ResourceManager.GetString("ThirtyMonsterHunt", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets StarterEquipmentGift from the configuration name resources.</summary>
+        public static string StarterEquipmentGift {
+            get {
+                return ResourceManager.GetString("StarterEquipmentGift", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets MountUniriaTrial from the configuration name resources.</summary>
+        public static string MountUniriaTrial {
+            get {
+                return ResourceManager.GetString("MountUniriaTrial", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets ManaPotionMilestone from the configuration name resources.</summary>
+        public static string ManaPotionMilestone {
+            get {
+                return ResourceManager.GetString("ManaPotionMilestone", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets LargeManaPotionMilestone from the configuration name resources.</summary>
+        public static string LargeManaPotionMilestone {
+            get {
+                return ResourceManager.GetString("LargeManaPotionMilestone", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets GuardianAngelMilestone from the configuration name resources.</summary>
+        public static string GuardianAngelMilestone {
+            get {
+                return ResourceManager.GetString("GuardianAngelMilestone", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets BlessingZenMilestone from the configuration name resources.</summary>
+        public static string BlessingZenMilestone {
+            get {
+                return ResourceManager.GetString("BlessingZenMilestone", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets AdventureExperienceMilestone from the configuration name resources.</summary>
+        public static string AdventureExperienceMilestone {
+            get {
+                return ResourceManager.GetString("AdventureExperienceMilestone", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets VeteranZenMilestone from the configuration name resources.</summary>
+        public static string VeteranZenMilestone {
+            get {
+                return ResourceManager.GetString("VeteranZenMilestone", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets JourneyRingsGift from the configuration name resources.</summary>
+        public static string JourneyRingsGift {
+            get {
+                return ResourceManager.GetString("JourneyRingsGift", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets ChaosCastleIntroduction from the configuration name resources.</summary>
+        public static string ChaosCastleIntroduction {
+            get {
+                return ResourceManager.GetString("ChaosCastleIntroduction", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets ChaosCastle1Preparation from the configuration name resources.</summary>
+        public static string ChaosCastle1Preparation {
+            get {
+                return ResourceManager.GetString("ChaosCastle1Preparation", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets ChaosCastle2Preparation from the configuration name resources.</summary>
+        public static string ChaosCastle2Preparation {
+            get {
+                return ResourceManager.GetString("ChaosCastle2Preparation", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets ChaosCastle3Preparation from the configuration name resources.</summary>
+        public static string ChaosCastle3Preparation {
+            get {
+                return ResourceManager.GetString("ChaosCastle3Preparation", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets ChaosCastle4Preparation from the configuration name resources.</summary>
+        public static string ChaosCastle4Preparation {
+            get {
+                return ResourceManager.GetString("ChaosCastle4Preparation", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets ChaosCastle5Preparation from the configuration name resources.</summary>
+        public static string ChaosCastle5Preparation {
+            get {
+                return ResourceManager.GetString("ChaosCastle5Preparation", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets ChaosCastle6Preparation from the configuration name resources.</summary>
+        public static string ChaosCastle6Preparation {
+            get {
+                return ResourceManager.GetString("ChaosCastle6Preparation", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets ChaosCastle7Preparation from the configuration name resources.</summary>
+        public static string ChaosCastle7Preparation {
+            get {
+                return ResourceManager.GetString("ChaosCastle7Preparation", resourceCulture);
+            }
+        }
     }
 }

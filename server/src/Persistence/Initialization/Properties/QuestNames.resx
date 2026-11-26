@@ -1140,4 +1140,79 @@
   <data name="TrialOfTheRageFighter" xml:space="preserve">
     <value>Trial of the Rage Fighter</value>
   </data>
+  <data name="FirstStepsGift" xml:space="preserve">
+    <value>First Steps Gift</value>
+  </data>
+  <data name="CharacterWindowTutorial" xml:space="preserve">
+    <value>Character Window Tutorial</value>
+  </data>
+  <data name="InventoryTutorial" xml:space="preserve">
+    <value>Inventory Tutorial</value>
+  </data>
+  <data name="PreparePotions" xml:space="preserve">
+    <value>Prepare Potions</value>
+  </data>
+  <data name="FirstHunt" xml:space="preserve">
+    <value>First Hunt</value>
+  </data>
+  <data name="PrepareTownPortal" xml:space="preserve">
+    <value>Prepare Town Portal Scroll</value>
+  </data>
+  <data name="ReceiveElfBlessing" xml:space="preserve">
+    <value>Receive Shadow Phantom Blessing</value>
+  </data>
+  <data name="ThirtyMonsterHunt" xml:space="preserve">
+    <value>Hunt 30 Monsters</value>
+  </data>
+  <data name="StarterEquipmentGift" xml:space="preserve">
+    <value>Starter Equipment Gift</value>
+  </data>
+  <data name="MountUniriaTrial" xml:space="preserve">
+    <value>Horn of Uniria Trial</value>
+  </data>
+  <data name="ManaPotionMilestone" xml:space="preserve">
+    <value>Mana Potion Supply</value>
+  </data>
+  <data name="LargeManaPotionMilestone" xml:space="preserve">
+    <value>Large Mana Potion Supply</value>
+  </data>
+  <data name="GuardianAngelMilestone" xml:space="preserve">
+    <value>Guardian Angel Supply</value>
+  </data>
+  <data name="BlessingZenMilestone" xml:space="preserve">
+    <value>Adventure Funding</value>
+  </data>
+  <data name="AdventureExperienceMilestone" xml:space="preserve">
+    <value>Adventure Experience</value>
+  </data>
+  <data name="VeteranZenMilestone" xml:space="preserve">
+    <value>Veteran Supply Funding</value>
+  </data>
+  <data name="JourneyRingsGift" xml:space="preserve">
+    <value>Wizard's Rings Gift</value>
+  </data>
+  <data name="ChaosCastleIntroduction" xml:space="preserve">
+    <value>Chaos Castle Introduction</value>
+  </data>
+  <data name="ChaosCastle1Preparation" xml:space="preserve">
+    <value>Chaos Castle I Preparation</value>
+  </data>
+  <data name="ChaosCastle2Preparation" xml:space="preserve">
+    <value>Chaos Castle II Preparation</value>
+  </data>
+  <data name="ChaosCastle3Preparation" xml:space="preserve">
+    <value>Chaos Castle III Preparation</value>
+  </data>
+  <data name="ChaosCastle4Preparation" xml:space="preserve">
+    <value>Chaos Castle IV Preparation</value>
+  </data>
+  <data name="ChaosCastle5Preparation" xml:space="preserve">
+    <value>Chaos Castle V Preparation</value>
+  </data>
+  <data name="ChaosCastle6Preparation" xml:space="preserve">
+    <value>Chaos Castle VI Preparation</value>
+  </data>
+  <data name="ChaosCastle7Preparation" xml:space="preserve">
+    <value>Chaos Castle VII Preparation</value>
+  </data>
 </root>

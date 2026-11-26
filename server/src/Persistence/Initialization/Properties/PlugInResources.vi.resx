@@ -900,4 +900,6 @@
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 10 bản đồ Season 9, tệp địa hình, cổng dịch chuyển (417-461, 474-482) và điểm xuất hiện quái/NPC Season 9 khi chạy Season 9.</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: cửa hàng thử vận may của Moss</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 5 phiếu thử vận may của Moss (13-71..75) giá 2.000.000 Zen và trang bị cửa hàng cho Thương nhân Moss (492) nếu đang trống.</value></data>
+  <data name="EpisodeQuestsUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: nhiệm vụ Episode 1/2 và thưởng Episode 19</value></data>
+  <data name="EpisodeQuestsUpdatePlugIn_Description" xml:space="preserve"><value>Bổ sung các bước nhiệm vụ tân thủ Episode 1 và chuẩn bị Hỗn Nguyên Lâu Episode 2 tại NPC 257 còn thiếu, đồng thời đồng bộ phần thưởng Kinh nghiệm và Zen của toàn bộ 120 nhiệm vụ ngẫu nhiên Episode 19 theo gói Season 6.</value></data>
 </root>

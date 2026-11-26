@@ -996,4 +996,6 @@
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>Fügt die 10 Season-9-Karten, Terraindateien, Tore (417-461, 474-482) und Season-9-Spawns im Season-9-Betrieb hinzu.</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: Glücksspiel-Laden von Moss dem Händler</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>Fügt die 5 Moss-Glücksspielgutscheine (13-71..75) für 2.000.000 Zen hinzu und stattet Moss den Händler (492) mit seinem Laden aus, sofern leer.</value></data>
+  <data name="EpisodeQuestsUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: Episode-1/2-Quests und Episode-19-Belohnungen</value></data>
+  <data name="EpisodeQuestsUpdatePlugIn_Description" xml:space="preserve"><value>Fügt die fehlenden Episode-1-Anfänger- und Episode-2-Chaos-Castle-Quests für NPC 257 hinzu und gleicht alle 120 Episode-19-Zufallsquest-Belohnungen (Erfahrung und Zen) an die Season-6-Serversuite an.</value></data>
 </root>

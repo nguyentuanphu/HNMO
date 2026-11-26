@@ -1140,4 +1140,79 @@
   <data name="TrialOfTheRageFighter" xml:space="preserve">
     <value>格斗家的试炼</value>
   </data>
+  <data name="FirstStepsGift" xml:space="preserve">
+    <value>新手赠礼</value>
+  </data>
+  <data name="CharacterWindowTutorial" xml:space="preserve">
+    <value>角色窗口教程</value>
+  </data>
+  <data name="InventoryTutorial" xml:space="preserve">
+    <value>背包使用教程</value>
+  </data>
+  <data name="PreparePotions" xml:space="preserve">
+    <value>准备恢复药水</value>
+  </data>
+  <data name="FirstHunt" xml:space="preserve">
+    <value>初次狩猎</value>
+  </data>
+  <data name="PrepareTownPortal" xml:space="preserve">
+    <value>准备回城卷轴</value>
+  </data>
+  <data name="ReceiveElfBlessing" xml:space="preserve">
+    <value>领取幽灵士兵祝福</value>
+  </data>
+  <data name="ThirtyMonsterHunt" xml:space="preserve">
+    <value>狩猎30只怪物</value>
+  </data>
+  <data name="StarterEquipmentGift" xml:space="preserve">
+    <value>新手装备赠礼</value>
+  </data>
+  <data name="MountUniriaTrial" xml:space="preserve">
+    <value>彩云兽试炼</value>
+  </data>
+  <data name="ManaPotionMilestone" xml:space="preserve">
+    <value>魔力药水补给</value>
+  </data>
+  <data name="LargeManaPotionMilestone" xml:space="preserve">
+    <value>大型魔力药水补给</value>
+  </data>
+  <data name="GuardianAngelMilestone" xml:space="preserve">
+    <value>守护天使补给</value>
+  </data>
+  <data name="BlessingZenMilestone" xml:space="preserve">
+    <value>冒险金币补给</value>
+  </data>
+  <data name="AdventureExperienceMilestone" xml:space="preserve">
+    <value>冒险经验奖励</value>
+  </data>
+  <data name="VeteranZenMilestone" xml:space="preserve">
+    <value>历练金币补给</value>
+  </data>
+  <data name="JourneyRingsGift" xml:space="preserve">
+    <value>法师指环赠礼</value>
+  </data>
+  <data name="ChaosCastleIntroduction" xml:space="preserve">
+    <value>赤色要塞指南</value>
+  </data>
+  <data name="ChaosCastle1Preparation" xml:space="preserve">
+    <value>赤色要塞 I 准备</value>
+  </data>
+  <data name="ChaosCastle2Preparation" xml:space="preserve">
+    <value>赤色要塞 II 准备</value>
+  </data>
+  <data name="ChaosCastle3Preparation" xml:space="preserve">
+    <value>赤色要塞 III 准备</value>
+  </data>
+  <data name="ChaosCastle4Preparation" xml:space="preserve">
+    <value>赤色要塞 IV 准备</value>
+  </data>
+  <data name="ChaosCastle5Preparation" xml:space="preserve">
+    <value>赤色要塞 V 准备</value>
+  </data>
+  <data name="ChaosCastle6Preparation" xml:space="preserve">
+    <value>赤色要塞 VI 准备</value>
+  </data>
+  <data name="ChaosCastle7Preparation" xml:space="preserve">
+    <value>赤色要塞 VII 准备</value>
+  </data>
 </root>
