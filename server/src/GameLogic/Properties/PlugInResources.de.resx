@@ -2123,4 +2123,14 @@
   <data name="WebsiteConfiguration_RequireWebsiteLogin_Description" xml:space="preserve">
     <value>Wenn diese Option aktiviert ist, wird das Passwortformular im Webspiel ausgeblendet. Spieler melden sich zuerst auf der Website an und klicken dann auf „Jetzt spielen“.</value>
   </data>
+  <data name="SeasonNineEventsPlugIn_Name" xml:space="preserve"><value>Season-9-Events &amp; Berg Uruk</value></data>
+  <data name="SeasonNineEventsPlugIn_Description" xml:space="preserve"><value>Steuert Acheron Guardian, Arca Battle, Chaos Castle Survival, Tormented Square, Invasion Manager und die Boss-Wellen am Berg Uruk (669-729).</value></data>
+  <data name="AcheronChatCommandPlugIn_Name" xml:space="preserve"><value>Acheron-Befehl (/acheron)</value></data>
+  <data name="AcheronChatCommandPlugIn_Description" xml:space="preserve"><value>Tritt Acheron Guardian bei oder zeigt den Zeitplan an.</value></data>
+  <data name="ArcaBattleChatCommandPlugIn_Name" xml:space="preserve"><value>Arca-Battle-Befehl (/arcabattle)</value></data>
+  <data name="ArcaBattleChatCommandPlugIn_Description" xml:space="preserve"><value>Tritt Arca Battle bei oder zeigt den Zeitplan an.</value></data>
+  <data name="ChaosCastleSurvivalChatCommandPlugIn_Name" xml:space="preserve"><value>Chaos-Castle-Survival-Befehl (/ccs)</value></data>
+  <data name="ChaosCastleSurvivalChatCommandPlugIn_Description" xml:space="preserve"><value>Tritt Chaos Castle Survival bei oder zeigt die Turnierphase an.</value></data>
+  <data name="TormentedSquareChatCommandPlugIn_Name" xml:space="preserve"><value>Tormented-Square-Befehl (/tsquare)</value></data>
+  <data name="TormentedSquareChatCommandPlugIn_Description" xml:space="preserve"><value>Tritt Tormented Square bei oder zeigt den Zeitplan an.</value></data>
 </root>

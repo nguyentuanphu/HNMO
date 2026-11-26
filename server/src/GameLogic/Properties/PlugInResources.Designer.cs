@@ -6263,5 +6263,34 @@ namespace HNMO.GameLogic.Properties {
         /// <summary>Gets the localized Monster AI Rules plug-in description.</summary>
         public static string MonsterAiPlugIn_Description => ResourceManager.GetString("MonsterAiPlugIn_Description", resourceCulture)!;
 
+        /// <summary>Gets the localized Season Nine Events plug-in name.</summary>
+        public static string SeasonNineEventsPlugIn_Name => ResourceManager.GetString("SeasonNineEventsPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Season Nine Events plug-in description.</summary>
+        public static string SeasonNineEventsPlugIn_Description => ResourceManager.GetString("SeasonNineEventsPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized Acheron chat command plug-in name.</summary>
+        public static string AcheronChatCommandPlugIn_Name => ResourceManager.GetString("AcheronChatCommandPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Acheron chat command plug-in description.</summary>
+        public static string AcheronChatCommandPlugIn_Description => ResourceManager.GetString("AcheronChatCommandPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized Arca Battle chat command plug-in name.</summary>
+        public static string ArcaBattleChatCommandPlugIn_Name => ResourceManager.GetString("ArcaBattleChatCommandPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Arca Battle chat command plug-in description.</summary>
+        public static string ArcaBattleChatCommandPlugIn_Description => ResourceManager.GetString("ArcaBattleChatCommandPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized Chaos Castle Survival chat command plug-in name.</summary>
+        public static string ChaosCastleSurvivalChatCommandPlugIn_Name => ResourceManager.GetString("ChaosCastleSurvivalChatCommandPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Chaos Castle Survival chat command plug-in description.</summary>
+        public static string ChaosCastleSurvivalChatCommandPlugIn_Description => ResourceManager.GetString("ChaosCastleSurvivalChatCommandPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized Tormented Square chat command plug-in name.</summary>
+        public static string TormentedSquareChatCommandPlugIn_Name => ResourceManager.GetString("TormentedSquareChatCommandPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Tormented Square chat command plug-in description.</summary>
+        public static string TormentedSquareChatCommandPlugIn_Description => ResourceManager.GetString("TormentedSquareChatCommandPlugIn_Description", resourceCulture)!;
     }
 }

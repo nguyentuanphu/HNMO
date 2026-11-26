@@ -2490,4 +2490,14 @@
   <data name="MossGambleConfiguration_Enabled_Description" xml:space="preserve"><value>Khi tắt, người chơi không thể mua phiếu quay thưởng tại Moss (492) và không bị trừ Zen.</value></data>
   <data name="MossGambleConfiguration_PriceZen_Name" xml:space="preserve"><value>Giá quay (Zen)</value></data>
   <data name="MossGambleConfiguration_PriceZen_Description" xml:space="preserve"><value>Số Zen trừ mỗi lần mua phiếu tại Moss (mặc định 2.000.000 Zen).</value></data>
+  <data name="SeasonNineEventsPlugIn_Name" xml:space="preserve"><value>Sự kiện Season 9 &amp; Núi Uruk</value></data>
+  <data name="SeasonNineEventsPlugIn_Description" xml:space="preserve"><value>Lập lịch và phát thưởng Hộ Vệ Acheron, Chiến Trường Arca, Hỗn Nguyên Lâu Sinh Tồn, Quảng Trường Đau Khổ, Xâm Lăng và Boss Núi Uruk (669-729).</value></data>
+  <data name="AcheronChatCommandPlugIn_Name" xml:space="preserve"><value>Lệnh Hộ Vệ Acheron (/acheron)</value></data>
+  <data name="AcheronChatCommandPlugIn_Description" xml:space="preserve"><value>Tham gia hoặc xem lịch sự kiện Hộ Vệ Acheron.</value></data>
+  <data name="ArcaBattleChatCommandPlugIn_Name" xml:space="preserve"><value>Lệnh Chiến Trường Arca (/arcabattle)</value></data>
+  <data name="ArcaBattleChatCommandPlugIn_Description" xml:space="preserve"><value>Tham gia hoặc xem lịch Chiến Trường Arca.</value></data>
+  <data name="ChaosCastleSurvivalChatCommandPlugIn_Name" xml:space="preserve"><value>Lệnh Hỗn Nguyên Lâu Sinh Tồn (/ccs)</value></data>
+  <data name="ChaosCastleSurvivalChatCommandPlugIn_Description" xml:space="preserve"><value>Tham gia hoặc xem vòng đấu Hỗn Nguyên Lâu Sinh Tồn.</value></data>
+  <data name="TormentedSquareChatCommandPlugIn_Name" xml:space="preserve"><value>Lệnh Quảng Trường Đau Khổ (/tsquare)</value></data>
+  <data name="TormentedSquareChatCommandPlugIn_Description" xml:space="preserve"><value>Tham gia hoặc xem lịch Quảng Trường Đau Khổ.</value></data>
 </root>

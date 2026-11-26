@@ -1917,4 +1917,14 @@
   <data name="WebsiteConfiguration_RequireWebsiteLogin_Description" xml:space="preserve">
     <value>启用后，网页版游戏会隐藏密码表单。玩家需先登录网站，再点击“立即开始”。</value>
   </data>
+  <data name="SeasonNineEventsPlugIn_Name" xml:space="preserve"><value>第 9 赛季活动与乌鲁克山</value></data>
+  <data name="SeasonNineEventsPlugIn_Description" xml:space="preserve"><value>管理阿卡伦守护者、阿卡战争、生存赤色要塞、苦痛广场、入侵管理器及乌鲁克山首领事件（669-729）。</value></data>
+  <data name="AcheronChatCommandPlugIn_Name" xml:space="preserve"><value>阿卡伦守护者指令 (/acheron)</value></data>
+  <data name="AcheronChatCommandPlugIn_Description" xml:space="preserve"><value>进入阿卡伦守护者活动或查看时间表。</value></data>
+  <data name="ArcaBattleChatCommandPlugIn_Name" xml:space="preserve"><value>阿卡战争指令 (/arcabattle)</value></data>
+  <data name="ArcaBattleChatCommandPlugIn_Description" xml:space="preserve"><value>进入阿卡战争或查看时间表。</value></data>
+  <data name="ChaosCastleSurvivalChatCommandPlugIn_Name" xml:space="preserve"><value>生存赤色要塞指令 (/ccs)</value></data>
+  <data name="ChaosCastleSurvivalChatCommandPlugIn_Description" xml:space="preserve"><value>进入生存赤色要塞或查看赛程阶段。</value></data>
+  <data name="TormentedSquareChatCommandPlugIn_Name" xml:space="preserve"><value>苦痛广场指令 (/tsquare)</value></data>
+  <data name="TormentedSquareChatCommandPlugIn_Description" xml:space="preserve"><value>进入苦痛广场或查看时间表。</value></data>
 </root>

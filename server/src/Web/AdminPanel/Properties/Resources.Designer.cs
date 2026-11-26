@@ -16425,5 +16425,19 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("ItemDefinitions_SeasonNineNotice", resourceCulture);
             }
         }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextS9Events {
+            get {
+                return ResourceManager.GetString("PageHelpTextS9Events", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string S9EventsTitle {
+            get {
+                return ResourceManager.GetString("S9EventsTitle", resourceCulture);
+            }
+        }
     }
 }

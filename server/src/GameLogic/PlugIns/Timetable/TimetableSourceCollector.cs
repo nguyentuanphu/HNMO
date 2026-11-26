@@ -12,6 +12,7 @@ using HNMO.GameLogic.MiniGames;
 using HNMO.GameLogic.PlugIns.InvasionEvents;
 using HNMO.GameLogic.PlugIns.PeriodicTasks;
 using HNMO.GameLogic.PlugIns.S6Events;
+using HNMO.GameLogic.PlugIns.SeasonNineEvents;
 using HNMO.GameLogic.PlugIns.WorldBosses;
 using HNMO.PlugIns;
 
@@ -158,6 +159,94 @@ public static class TimetableSourceCollector
                 IsLiveNow = s6Events.IsLmsActive,
                 WinnerReward = (s6Cfg.LmsRewardCoins, s6Cfg.LmsRewardCoinType, s6Cfg.LmsRewardZen),
             });
+        }
+
+        if (timetableConfiguration.ShowMiniGames
+            && gameContext.PlugInManager.GetActivePlugInsOf<IPeriodicTaskPlugIn>().OfType<SeasonNineEventsPlugIn>().FirstOrDefault() is { } s9Events
+            && s9Events.Configuration is { Enabled: true } s9Cfg
+            && (!s9Cfg.SeasonNineOnly || HNMO.Interfaces.HnmoSeasonInstance.IsSeasonNine))
+        {
+            static List<TimeOnly> ParseTimes(IEnumerable<string> raws) => raws
+                .Select(raw => TimeOnly.TryParseExact(raw?.Trim(), "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out var t) ? (TimeOnly?)t : null)
+                .Where(t => t.HasValue)
+                .Select(t => t!.Value)
+                .ToList();
+
+            if (s9Cfg.AcheronGuardianEnabled)
+            {
+                items.Add(new TimetableSourceItem
+                {
+                    Id = "event-s9-acheron",
+                    Category = "event",
+                    NameEn = "Acheron Guardian",
+                    NameVi = "Hộ Vệ Acheron",
+                    MapsEn = "Acheron / Debenter",
+                    MapsVi = "Acheron / Debenter",
+                    DropsEn = $"{s9Cfg.AcheronGuardianRewardCoins} {s9Cfg.AcheronGuardianRewardCoinType} + {s9Cfg.AcheronGuardianRewardZen:N0} Zen",
+                    DropsVi = $"{s9Cfg.AcheronGuardianRewardCoins} {s9Cfg.AcheronGuardianRewardCoinType} + {s9Cfg.AcheronGuardianRewardZen:N0} Zen",
+                    DailyTimes = ParseTimes(s9Cfg.AcheronGuardianDailyTimes),
+                    Duration = TimeSpan.FromMinutes(Math.Max(1, s9Cfg.AcheronGuardianDurationMinutes)),
+                    IsLiveNow = s9Events.IsEventLive("acheron"),
+                    WinnerReward = (s9Cfg.AcheronGuardianRewardCoins, s9Cfg.AcheronGuardianRewardCoinType, s9Cfg.AcheronGuardianRewardZen),
+                });
+            }
+
+            if (s9Cfg.ArcaBattleEnabled)
+            {
+                items.Add(new TimetableSourceItem
+                {
+                    Id = "event-s9-arca",
+                    Category = "event",
+                    NameEn = "Arca Battle",
+                    NameVi = "Chiến Trường Arca",
+                    MapsEn = "Alkmaar / Ubaid / Debenter",
+                    MapsVi = "Alkmaar / Ubaid / Debenter",
+                    DropsEn = $"{s9Cfg.ArcaBattleWinnerCoins} {s9Cfg.ArcaBattleWinnerCoinType} + {s9Cfg.ArcaBattleWinnerZen:N0} Zen",
+                    DropsVi = $"{s9Cfg.ArcaBattleWinnerCoins} {s9Cfg.ArcaBattleWinnerCoinType} + {s9Cfg.ArcaBattleWinnerZen:N0} Zen",
+                    DailyTimes = ParseTimes(s9Cfg.ArcaBattleDailyTimes),
+                    Duration = TimeSpan.FromMinutes(Math.Max(1, s9Cfg.ArcaBattleDurationMinutes)),
+                    IsLiveNow = s9Events.IsEventLive("arca"),
+                    WinnerReward = (s9Cfg.ArcaBattleWinnerCoins, s9Cfg.ArcaBattleWinnerCoinType, s9Cfg.ArcaBattleWinnerZen),
+                });
+            }
+
+            if (s9Cfg.ChaosCastleSurvivalEnabled)
+            {
+                items.Add(new TimetableSourceItem
+                {
+                    Id = "event-s9-ccs",
+                    Category = "event",
+                    NameEn = "Chaos Castle Survival",
+                    NameVi = "Hỗn Nguyên Lâu Sinh Tồn",
+                    MapsEn = "Chaos Castle Survival",
+                    MapsVi = "Hỗn Nguyên Lâu Sinh Tồn",
+                    DropsEn = $"{s9Cfg.ChaosCastleSurvivalWinnerCoins} {s9Cfg.ChaosCastleSurvivalWinnerCoinType} + {s9Cfg.ChaosCastleSurvivalWinnerZen:N0} Zen",
+                    DropsVi = $"{s9Cfg.ChaosCastleSurvivalWinnerCoins} {s9Cfg.ChaosCastleSurvivalWinnerCoinType} + {s9Cfg.ChaosCastleSurvivalWinnerZen:N0} Zen",
+                    DailyTimes = ParseTimes(s9Cfg.ChaosCastleSurvivalDailyTimes),
+                    Duration = TimeSpan.FromMinutes(Math.Max(1, s9Cfg.ChaosCastleSurvivalDurationMinutes)),
+                    IsLiveNow = s9Events.IsEventLive("ccs"),
+                    WinnerReward = (s9Cfg.ChaosCastleSurvivalWinnerCoins, s9Cfg.ChaosCastleSurvivalWinnerCoinType, s9Cfg.ChaosCastleSurvivalWinnerZen),
+                });
+            }
+
+            if (s9Cfg.TormentedSquareEnabled)
+            {
+                items.Add(new TimetableSourceItem
+                {
+                    Id = "event-s9-tsquare",
+                    Category = "event",
+                    NameEn = "Tormented Square",
+                    NameVi = "Quảng Trường Đau Khổ",
+                    MapsEn = "Tormented Square",
+                    MapsVi = "Quảng Trường Đau Khổ",
+                    DropsEn = $"{s9Cfg.TormentedSquareWinnerCoins} {s9Cfg.TormentedSquareWinnerCoinType} + {s9Cfg.TormentedSquareWinnerZen:N0} Zen",
+                    DropsVi = $"{s9Cfg.TormentedSquareWinnerCoins} {s9Cfg.TormentedSquareWinnerCoinType} + {s9Cfg.TormentedSquareWinnerZen:N0} Zen",
+                    DailyTimes = ParseTimes(s9Cfg.TormentedSquareDailyTimes),
+                    Duration = TimeSpan.FromMinutes(Math.Max(5, s9Cfg.TormentedSquareRoundMinutes * Math.Max(1, s9Cfg.TormentedSquareRoundsCount))),
+                    IsLiveNow = s9Events.IsEventLive("tsquare"),
+                    WinnerReward = (s9Cfg.TormentedSquareWinnerCoins, s9Cfg.TormentedSquareWinnerCoinType, s9Cfg.TormentedSquareWinnerZen),
+                });
+            }
         }
 
         if (timetableConfiguration.ShowWorldBosses
