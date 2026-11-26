@@ -97,6 +97,7 @@ public static class AdminNavHints
         ["api-keys"] = ("Keys for website, tools", "Khóa cho website, công cụ"),
         ["discord"] = ("Connect Discord", "Kết nối Discord"),
         ["server-control"] = ("Services, ports, backups", "Dịch vụ, cổng, sao lưu"),
+        ["seasons"] = ("Turn Season 9 & Arena on/off", "Bật/tắt Season 9 & Arena"),
         ["host-settings"] = ("Ports, database, email", "Cổng, cơ sở dữ liệu, email"),
         ["crash-watch"] = ("Crashes and restarts", "Sự cố và khởi động lại"),
         ["import-server"] = ("Bring in another server", "Nhập dữ liệu server khác"),
