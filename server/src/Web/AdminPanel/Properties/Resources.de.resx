@@ -2746,4 +2746,9 @@
   <data name="ActivityLogAfter" xml:space="preserve">
     <value>Danach</value>
   </data>
+  <data name="PageHelpTitle" xml:space="preserve"><value>Hilfe zu dieser Seite</value></data>
+  <data name="PageHelpToggleHint" xml:space="preserve"><value>Zweck, empfohlene Änderungen und Hinweise zu dieser Seite ein- oder ausblenden.</value></data>
+  <data name="PageHelpTextTopUpMilestones" xml:space="preserve">
+    <value>Legen Sie Stufen für kumulierte VND-Aufladungen fest, damit Konten die jeweiligen Münzen, Zen und Gegenstände einmalig im Konto oder im Spiel abholen können.</value>
+  </data>
 </root>

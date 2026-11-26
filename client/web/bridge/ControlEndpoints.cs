@@ -189,7 +189,7 @@ internal static class ControlEndpoints
 
             if (launcher is null)
             {
-                return Results.BadRequest(new { message = "Launcher is disabled." });
+                return Results.BadRequest(new { message = "Launcher is disabled.", messageKey = "launcherDisabled" });
             }
 
             _ = Task.Run(() => launcher.StartGameAsync(CancellationToken.None));
@@ -205,7 +205,7 @@ internal static class ControlEndpoints
 
             if (launcher is null)
             {
-                return Results.BadRequest(new { message = "Launcher is disabled." });
+                return Results.BadRequest(new { message = "Launcher is disabled.", messageKey = "launcherDisabled" });
             }
 
             await launcher.StopGameAsync(ctx.RequestAborted).ConfigureAwait(false);
@@ -258,7 +258,13 @@ internal static class ControlEndpoints
                 app.Services.GetRequiredService<IHostApplicationLifetime>().StopApplication();
                 return Task.CompletedTask;
             });
-            return ok ? Results.Ok(new { ok, message }) : Results.BadRequest(new { message });
+            if (!ok)
+            {
+                logger.LogWarning("Could not start the update: {Reason}", message);
+                return Results.BadRequest(new { message, messageKey = "updateFailed" });
+            }
+
+            return Results.Ok(new { ok, message });
         });
 
         app.MapPost("/api/control/restart", (HttpContext ctx) =>
@@ -270,7 +276,7 @@ internal static class ControlEndpoints
 
             if (launcher is null)
             {
-                return Results.BadRequest(new { message = "Launcher is disabled." });
+                return Results.BadRequest(new { message = "Launcher is disabled.", messageKey = "launcherDisabled" });
             }
 
             _ = Task.Run(() => launcher.RestartGameAsync(CancellationToken.None));
@@ -310,13 +316,13 @@ internal static class ControlEndpoints
             var fileName = ctx.Request.Query["file"].ToString();
             if (string.IsNullOrWhiteSpace(fileName) || fileName.Contains('/') || fileName.Contains('\\') || fileName.Contains("..", StringComparison.Ordinal))
             {
-                return Results.BadRequest(new { message = "Invalid log file name." });
+                return Results.BadRequest(new { message = "Invalid log file name.", messageKey = "invalidLog" });
             }
 
             var path = Path.Combine(saveDir, "logs", fileName);
             if (!File.Exists(path))
             {
-                return Results.NotFound(new { message = "Log file not found." });
+                return Results.NotFound(new { message = "Log file not found.", messageKey = "logMissing" });
             }
 
             var contentType = fileName.EndsWith(".gz", StringComparison.OrdinalIgnoreCase) ? "application/gzip" : "text/plain; charset=utf-8";
@@ -389,7 +395,7 @@ internal static class ControlEndpoints
 
             if (maintenance is null)
             {
-                return Results.BadRequest(new { message = "Maintenance service is unavailable." });
+                return Results.BadRequest(new { message = "Maintenance service is unavailable.", messageKey = "maintenanceUnavailable" });
             }
 
             var result = await maintenance.RunMaintenanceCycleAsync(forceBackup: false, forceVacuum: true, ctx.RequestAborted).ConfigureAwait(false);
@@ -411,7 +417,7 @@ internal static class ControlEndpoints
             catch (Exception ex)
             {
                 logger.LogWarning(ex, "Could not update auto-start setting.");
-                return Results.BadRequest(new { message = ex.Message });
+                return Results.BadRequest(new { message = ex.Message, messageKey = "autoStartFailed" });
             }
         });
 
@@ -430,7 +436,7 @@ internal static class ControlEndpoints
             catch (Exception ex)
             {
                 logger.LogWarning(ex, "Could not configure system service.");
-                return Results.BadRequest(new { message = ex.Message });
+                return Results.BadRequest(new { message = ex.Message, messageKey = "serviceFailed" });
             }
         });
 
@@ -466,7 +472,7 @@ internal static class ControlEndpoints
             catch (Exception ex)
             {
                 logger.LogError(ex, "Backup failed.");
-                return Results.BadRequest(new { message = ex.Message });
+                return Results.BadRequest(new { message = ex.Message, messageKey = "backupFailed" });
             }
             finally
             {
@@ -515,7 +521,7 @@ internal static class ControlEndpoints
             catch (Exception ex)
             {
                 logger.LogError(ex, "Restore failed.");
-                return Results.BadRequest(new { message = ex.Message });
+                return Results.BadRequest(new { message = ex.Message, messageKey = "restoreFailed" });
             }
         });
 
@@ -531,7 +537,7 @@ internal static class ControlEndpoints
                 // The newest release as the HNMO developer published it on the hub (no link to where HNMO is built).
                 if (DeveloperHubAddress.LatestRelease is not { Length: > 0 } latestUrl)
                 {
-                    return Results.BadRequest(new { message = "Update checks are off on this server." });
+                    return Results.BadRequest(new { message = "Update checks are off on this server.", messageKey = "updateDisabled" });
                 }
 
                 using var request = new HttpRequestMessage(HttpMethod.Get, latestUrl);
@@ -539,7 +545,12 @@ internal static class ControlEndpoints
                 using var response = await http.SendAsync(request, ctx.RequestAborted).ConfigureAwait(false);
                 if (!response.IsSuccessStatusCode)
                 {
-                    return Results.BadRequest(new { message = response.StatusCode == System.Net.HttpStatusCode.NotFound ? "No release published yet." : $"The update check answered {(int)response.StatusCode}." });
+                    logger.LogWarning("Release check returned HTTP {StatusCode}.", (int)response.StatusCode);
+                    return Results.BadRequest(new
+                    {
+                        message = response.StatusCode == System.Net.HttpStatusCode.NotFound ? "No release published yet." : $"The update check answered {(int)response.StatusCode}.",
+                        messageKey = response.StatusCode == System.Net.HttpStatusCode.NotFound ? "noRelease" : "releaseCheckFailed",
+                    });
                 }
 
                 var json = await response.Content.ReadAsStringAsync(ctx.RequestAborted).ConfigureAwait(false);
@@ -549,7 +560,7 @@ internal static class ControlEndpoints
             }
             catch (Exception ex)
             {
-                return Results.BadRequest(new { message = ex.Message });
+                return Results.BadRequest(new { message = ex.Message, messageKey = "releaseCheckFailed" });
             }
         });
 
@@ -563,7 +574,7 @@ internal static class ControlEndpoints
             int[] ports = [req.WebPort, req.AdminPort, req.ConnectServerPort, req.DatabasePort];
             if (ports.Any(p => p is < 1 or > 65535) || ports.Distinct().Count() != ports.Length)
             {
-                return Results.BadRequest(new { message = "Ports must be unique numbers between 1 and 65535." });
+                return Results.BadRequest(new { message = "Ports must be unique numbers between 1 and 65535.", messageKey = "invalidPorts" });
             }
 
             Directory.CreateDirectory(saveDir);

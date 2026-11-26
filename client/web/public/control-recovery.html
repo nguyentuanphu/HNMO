@@ -21,10 +21,10 @@
 </main>
 <script>
 const strings = {
-  en: ['Launcher recovery', 'Start services', 'Open admin panel', 'Admin is available.', 'Admin is offline.', 'Starting services…', 'Unable to contact the launcher.'],
-  vi: ['Khôi phục trình khởi chạy', 'Khởi động dịch vụ', 'Mở trang quản trị', 'Trang quản trị đã sẵn sàng.', 'Trang quản trị đang tắt.', 'Đang khởi động dịch vụ…', 'Không liên hệ được trình khởi chạy.'],
-  de: ['Startprogramm wiederherstellen', 'Dienste starten', 'Admin-Panel öffnen', 'Das Admin-Panel ist verfügbar.', 'Das Admin-Panel ist offline.', 'Dienste werden gestartet…', 'Das Startprogramm ist nicht erreichbar.'],
-  zh: ['启动器恢复', '启动服务', '打开管理面板', '管理面板已就绪。', '管理面板已离线。', '正在启动服务…', '无法联系启动器。'],
+  en: ['Launcher recovery', 'Start services', 'Open admin panel', 'Admin is available.', 'Admin is offline.', 'Starting services…', 'Unable to contact the launcher.', 'Language'],
+  vi: ['Khôi phục trình khởi chạy', 'Khởi động dịch vụ', 'Mở trang quản trị', 'Trang quản trị đã sẵn sàng.', 'Trang quản trị đang tắt.', 'Đang khởi động dịch vụ…', 'Không liên hệ được trình khởi chạy.', 'Ngôn ngữ'],
+  de: ['Startprogramm wiederherstellen', 'Dienste starten', 'Admin-Panel öffnen', 'Das Admin-Panel ist verfügbar.', 'Das Admin-Panel ist offline.', 'Dienste werden gestartet…', 'Das Startprogramm ist nicht erreichbar.', 'Sprache'],
+  zh: ['启动器恢复', '启动服务', '打开管理面板', '管理面板已就绪。', '管理面板已离线。', '正在启动服务…', '无法联系启动器。', '语言'],
 };
 const language = document.getElementById('language');
 language.value = Object.hasOwn(strings, navigator.language.slice(0, 2)) ? navigator.language.slice(0, 2) : 'en';
@@ -33,8 +33,9 @@ const start = document.getElementById('start');
 const status = document.getElementById('status');
 const admin = document.getElementById('admin');
 async function refresh() {
-  const [title, launch, open, online, offline, launching, unavailable] = strings[language.value];
+  const [title, launch, open, online, offline, launching, unavailable, languageLabel] = strings[language.value];
   document.documentElement.lang = language.value === 'zh' ? 'zh-CN' : language.value;
+  language.setAttribute('aria-label', languageLabel);
   document.title = heading.textContent = title;
   start.textContent = launch;
   admin.textContent = open;

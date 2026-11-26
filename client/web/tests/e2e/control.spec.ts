@@ -90,6 +90,37 @@ test.describe('/control page logs, retention, backups, and disk usage', () => {
   });
 });
 
+for (const [language, disk, log, backup, error] of [
+  ['de', 'Laufwerk', 'Alle Protokolle', 'Sicherung erstellt: fictional.zip', 'Das Startprogramm ist deaktiviert.'],
+  ['zh-CN', '磁盘', '所有日志', '已创建备份：fictional.zip', '启动器已禁用。'],
+]) {
+  test(`control runtime messages stay localized in ${language}`, async ({ page }) => {
+    await page.route('**/api/control/status', route => route.fulfill({ json: {
+      disk: { driveRoot: '/', isLowDisk: true, lowDiskWarningMb: 64 },
+      backups: [],
+      crashWatch: {
+        unacknowledgedCount: 1,
+        incidents: [{ occurredAtSydney: '2026-11-24 22:01', exitCode: 17, autoRestarted: true, delaySeconds: 12 }],
+      },
+    } }));
+    await page.route('**/api/control/logs?*', route => route.fulfill({ json: { files: [], lines: [] } }));
+    await page.route('**/api/control/backup', route => route.fulfill({ json: { fileName: 'fictional.zip' } }));
+    await page.route('**/api/control/start', route => route.fulfill({
+      status: 400, json: { message: 'Launcher is disabled.', messageKey: 'launcherDisabled' },
+    }));
+
+    await page.goto(`/control?lang=${language}`);
+    await expect(page.locator('html')).toHaveAttribute('lang', language);
+    await expect(page.locator('#diskSummary')).toContainText(disk);
+    await expect(page.locator('#crashBannerDetail')).toContainText(/17.*12/);
+    await expect(page.locator('#logFileSelect option').first()).toHaveText(log);
+    await page.locator('#btnBackup').click();
+    await expect(page.locator('#statusMsg')).toHaveText(backup);
+    await page.locator('#btnStart').click();
+    await expect(page.locator('#statusMsg')).toHaveText(error);
+  });
+}
+
 test('launcher serves the full console only inside its primary local admin origin', async ({ request }) => {
   const consolePage = '/control/console';
   expect((await request.get(consolePage)).status()).toBe(403);

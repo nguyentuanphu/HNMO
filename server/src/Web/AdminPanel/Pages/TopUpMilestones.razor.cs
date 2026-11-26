@@ -63,25 +63,25 @@ public partial class TopUpMilestones : ComponentBase
             var id = draft.Id.Trim();
             if (string.IsNullOrWhiteSpace(id))
             {
-                errors.Add(L("Each milestone step needs a non-empty ID.", "Mỗi mốc cần mã không để trống."));
+                errors.Add(L("Each milestone step needs a non-empty ID.", "Mỗi mốc cần mã không để trống.", "Für jede Aufladestufe ist eine Kennung erforderlich.", "每个里程碑都必须有编号。"));
                 continue;
             }
 
             if (!seenIds.Add(id))
             {
-                errors.Add(L($"Duplicate step ID '{id}'.", $"Trùng mã mốc '{id}'."));
+                errors.Add(L($"Duplicate step ID '{id}'.", $"Trùng mã mốc '{id}'.", $"Die Stufenkennung '{id}' ist doppelt vorhanden.", $"等级编号“{id}”已存在。"));
                 continue;
             }
 
             if (draft.ThresholdVnd <= 0)
             {
-                errors.Add(L($"Step '{id}' threshold must be positive.", $"Số tiền mốc '{id}' phải dương."));
+                errors.Add(L($"Step '{id}' threshold must be positive.", $"Số tiền mốc '{id}' phải dương.", $"Der Schwellenwert für Stufe '{id}' muss größer als null sein.", $"等级“{id}”的门槛必须大于零。"));
                 continue;
             }
 
             if (!TryParseItems(draft.ItemsText, out var items, out var itemError))
             {
-                errors.Add(L($"Step '{id}': {itemError}", $"Mốc '{id}': {itemError}"));
+                errors.Add(L($"Step '{id}': {itemError}", $"Mốc '{id}': {itemError}", $"Stufe '{id}': {itemError}", $"等级“{id}”：{itemError}"));
                 continue;
             }
 
@@ -108,9 +108,14 @@ public partial class TopUpMilestones : ComponentBase
         await this.LoadAsync().ConfigureAwait(true);
     }
 
-    private static bool IsVi => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi";
-
-    private static string L(string en, string vi) => IsVi ? vi : en;
+    private static string L(string en, string vi, string de, string zh) =>
+        CultureInfo.CurrentUICulture.TwoLetterISOLanguageName switch
+        {
+            "vi" => vi,
+            "de" => de,
+            "zh" => zh,
+            _ => en,
+        };
 
     private static bool TryParseItems(string? text, out List<TopUpMilestoneItem> items, out string error)
     {
@@ -128,21 +133,21 @@ public partial class TopUpMilestones : ComponentBase
                 || !short.TryParse(parts[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out var group)
                 || !short.TryParse(parts[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out var number))
             {
-                error = "Invalid item syntax (use group:number[:level[:qty]]).";
+                error = L("Invalid item syntax (use group:number[:level[:qty]]).", "Cú pháp vật phẩm không hợp lệ (dùng nhóm:mã[:cấp[:sl]]).", "Ungültige Gegenstandsangabe (Gruppe:Nr.[:Stufe[:Menge]]).", "物品格式无效（请使用组:编号[:等级[:数量]]）。");
                 return false;
             }
 
             byte level = 0;
             if (parts.Length >= 3 && !byte.TryParse(parts[2], NumberStyles.Integer, CultureInfo.InvariantCulture, out level))
             {
-                error = "Invalid item level.";
+                error = L("Invalid item level.", "Cấp vật phẩm không hợp lệ.", "Ungültige Gegenstandsstufe.", "物品等级无效。");
                 return false;
             }
 
             var qty = 1;
             if (parts.Length >= 4 && (!int.TryParse(parts[3], NumberStyles.Integer, CultureInfo.InvariantCulture, out qty) || qty <= 0))
             {
-                error = "Invalid item quantity.";
+                error = L("Invalid item quantity.", "Số lượng vật phẩm không hợp lệ.", "Ungültige Gegenstandsmenge.", "物品数量无效。");
                 return false;
             }
 
@@ -198,7 +203,7 @@ public partial class TopUpMilestones : ComponentBase
         catch (Exception ex)
         {
             this.Logger.LogError(ex, "Failed to load top-up milestone settings.");
-            this._errors.Add(ex.Message);
+            this._errors.Add(L("Could not load top-up milestone settings. See the server log for details.", "Không tải được cài đặt thưởng mốc nạp. Xem chi tiết trong nhật ký máy chủ.", "Aufladestufen konnten nicht geladen werden. Details stehen im Serverprotokoll.", "无法加载充值里程碑设置。详情请查阅服务器日志。"));
         }
         finally
         {
@@ -287,12 +292,12 @@ public partial class TopUpMilestones : ComponentBase
 
             this._store = TopUpMilestoneStore.Open(this._configuration.FileName);
             this.RefreshAccounts();
-            this.ToastService.ShowSuccess(L("Top-up milestone settings saved.", "Đã lưu cài đặt thưởng mốc nạp."));
+            this.ToastService.ShowSuccess(L("Top-up milestone settings saved.", "Đã lưu cài đặt thưởng mốc nạp.", "Aufladestufen gespeichert.", "已保存充值里程碑设置。"));
         }
         catch (Exception ex)
         {
             this.Logger.LogError(ex, "Failed to save top-up milestones configuration.");
-            this._errors.Add(ex.Message);
+            this._errors.Add(L("Could not save top-up milestone settings. See the server log for details.", "Không lưu được cài đặt thưởng mốc nạp. Xem chi tiết trong nhật ký máy chủ.", "Aufladestufen konnten nicht gespeichert werden. Details stehen im Serverprotokoll.", "无法保存充值里程碑设置。详情请查阅服务器日志。"));
         }
         finally
         {
@@ -310,7 +315,7 @@ public partial class TopUpMilestones : ComponentBase
         this._errors.Clear();
         if (string.IsNullOrWhiteSpace(this._manualLogin) || this._manualVnd <= 0 || string.IsNullOrWhiteSpace(this._manualReference))
         {
-            this._errors.Add(L("Enter login name, positive VND amount, and a unique transfer reference.", "Nhập tên tài khoản, số tiền VND dương và mã giao dịch riêng."));
+            this._errors.Add(L("Enter login name, positive VND amount, and a unique transfer reference.", "Nhập tên tài khoản, số tiền VND dương và mã giao dịch riêng.", "Kontoname, positiver VND-Betrag und eindeutige Überweisungsreferenz sind erforderlich.", "请输入登录账号、正数 VND 金额及唯一的转账编号。"));
             return;
         }
 
@@ -324,14 +329,16 @@ public partial class TopUpMilestones : ComponentBase
 
         if (!outcome.Recorded)
         {
-            this._errors.Add(L("That transfer reference was already recorded.", "Mã giao dịch này đã được ghi nhận trước đó."));
+            this._errors.Add(L("That transfer reference was already recorded.", "Mã giao dịch này đã được ghi nhận trước đó.", "Diese Überweisungsreferenz wurde bereits erfasst.", "该转账编号已登记。"));
             return;
         }
 
         this.RefreshAccounts();
         this.ToastService.ShowSuccess(L(
             $"Recorded {this._manualVnd:N0} VND for {this._manualLogin.Trim()} (total {outcome.NewTotalVnd:N0} VND).",
-            $"Đã ghi nhận {this._manualVnd:N0} đ cho {this._manualLogin.Trim()} (tổng {outcome.NewTotalVnd:N0} đ)."));
+            $"Đã ghi nhận {this._manualVnd:N0} đ cho {this._manualLogin.Trim()} (tổng {outcome.NewTotalVnd:N0} đ).",
+            $"Für {this._manualLogin.Trim()} wurden {this._manualVnd:N0} VND erfasst (insgesamt {outcome.NewTotalVnd:N0} VND).",
+            $"已为 {this._manualLogin.Trim()} 登记 {this._manualVnd:N0} VND（总额 {outcome.NewTotalVnd:N0} VND）。"));
         this._manualReference = string.Empty;
     }
 
