@@ -25,3 +25,6 @@ tra (#401, #402, #403, #409, #13, #17 đã đóng); chat đổi kích thước �
 #399: anh chọn merge (đã merge 504fa615). 19:55: 618-621 là phép event/siege như S9 gốc (không vào cây Master);
 gói /download vẫn công khai (lớp 1 chỉ khóa tự cập nhật; hub#6 đã merge 22b6f50f). Antigravity hết usage: việc
 còn lại giao local Claude (docs/local-claude-prompt-2026-11-27-2000.md).
+
+27/11 22:40: anh yêu cầu màn login/chọn server/chọn nhân vật giống client desktop (cảnh 3D). Prompt cho local Claude:
+`docs/local-claude-prompt-2026-11-27-login-character-scenes.md` (làm trước cửa sổ chat đổi kích thước).
