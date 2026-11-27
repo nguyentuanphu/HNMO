@@ -15,7 +15,7 @@ export type Language = string;
 export interface LanguageInfo { code: Language; name: string }
 
 const STORAGE_KEY = 'hnmo.language';
-const ATTRIBUTES = ['title', 'placeholder', 'aria-label'] as const;
+const ATTRIBUTES = ['title', 'placeholder', 'aria-label', 'data-hint'] as const;
 /** Preserve player content, configured names, and literal key/code labels. */
 const SKIP = '#chatLog, #chatInput, input, textarea, kbd, code, pre, script, style, [data-no-i18n], [data-game-name]';
 const MAX_CACHE = 8000;

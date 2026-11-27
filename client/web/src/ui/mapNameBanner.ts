@@ -4,6 +4,7 @@
 
 import { loadImage, openDocument, type RmlDocument, type RmlModel } from './rml.js';
 import { uiScale } from './nativeText.js';
+import { currentLanguage } from '../i18n.js';
 
 interface BannerModel extends RmlModel {
   alpha: number; map_name: string; language: string; icon: boolean; icon_source: string; icon_style: string; strife: boolean; strife_source: string;
@@ -44,6 +45,7 @@ export class MapNameBanner {
     const icon = data?.maps.get(mapNumber);
     const place = icon ? data?.places[icon] : undefined;
     this.model.map_name = name;
+    this.model.language = currentLanguage();
     // The icon as a picture the browser can show (a .tga drawn by the interface image loader): the
     // binding sets the source on every update of the fade, so it must already be the drawn one.
     const picture = icon && place ? await loadImage(`${ORNAMENTS}/${icon}.tga`.replace(/^\/Data\//, '/data/')).catch(() => null) : null;
