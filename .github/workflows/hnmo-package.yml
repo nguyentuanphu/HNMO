@@ -262,6 +262,32 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: HNMO-macos
+      # The macOS app and the Debian/Ubuntu package next to HNMO.zip on the update storage (owner, 2026-11-27: downloads
+      # come from Cloudflare, not GitHub): the hub's /download?os=macos|linux sends there. A version's files are written
+      # once (raise VERSION for a new release). Skipped while the R2 secrets aren't set; it never fails the release.
+      - name: Upload the macOS and Debian/Ubuntu downloads to R2
+        continue-on-error: true
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          AWS_DEFAULT_REGION: auto
+        run: |
+          if [ -z "$R2_ACCOUNT_ID" ] || [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$R2_BUCKET" ]; then
+            echo "R2 secrets not set: the macOS and Debian/Ubuntu downloads are not uploaded."; exit 0
+          fi
+          endpoint="https://$R2_ACCOUNT_ID.r2.cloudflarestorage.com"
+          version="$(tr -d '[:space:]' < VERSION)"
+          for file in HNMO-macos.zip HNMO-linux.deb; do
+            key="releases/$version/$file"
+            if aws s3api head-object --bucket "$R2_BUCKET" --key "$key" --endpoint-url "$endpoint" >/dev/null 2>&1; then
+              echo "$key is already there: kept as it was."
+            else
+              aws s3 cp "$file" "s3://$R2_BUCKET/$key" --endpoint-url "$endpoint" --only-show-errors
+              echo "Uploaded $key"
+            fi
+          done
       - name: Publish HNMO.zip as the latest release
         env:
           GH_TOKEN: ${{ github.token }}
