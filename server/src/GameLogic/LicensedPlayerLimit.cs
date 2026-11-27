@@ -4,7 +4,9 @@
 
 namespace HNMO.GameLogic;
 
+using System.Text;
 using System.Threading;
+using HNMO.Integrity;
 using HNMO.Interfaces;
 using HNMO.Persistence;
 
@@ -24,6 +26,10 @@ public static class LicensedPlayerLimit
     private static readonly Dictionary<string, Player?> Admitted = new(StringComparer.OrdinalIgnoreCase);
     private static readonly Lock Sync = new();
     private static int _maximum = DefaultMaximum;
+    private static byte[]? _licenceBytes;
+    private static Func<IntegrityStatus>? _integrityStatusProvider;
+    private static Func<byte[]?, DateOnly, PlayerLicense>? _licenseEvaluator;
+    private static bool _hasVerificationContext;
     private static IReadOnlyCollection<string> _elsewhere = [];
     private static DateTime _elsewhereReadUtc = DateTime.MinValue;
     private static int _publishing;
@@ -31,11 +37,12 @@ public static class LicensedPlayerLimit
     private static Timer? _heartbeat;
 
     /// <summary>
-    /// Gets or sets the players allowed at once (at least 1).
+    /// Gets or sets the players allowed at once (at least 1), always bounded by independent re-verification
+    /// of build integrity, signed licence, withdrawal state, and developer-hub reachability.
     /// </summary>
     public static int Maximum
     {
-        get => Volatile.Read(ref _maximum);
+        get => ResolveEffectiveMaximum(DateTime.UtcNow);
         set => Volatile.Write(ref _maximum, Math.Max(1, value));
     }
 
@@ -110,6 +117,7 @@ public static class LicensedPlayerLimit
             return true;
         }
 
+        var effectiveMaximum = ReevaluateAndEnforce(DateTime.UtcNow);
         var elsewhere = Elsewhere();
         lock (Sync)
         {
@@ -118,7 +126,7 @@ public static class LicensedPlayerLimit
             var alreadyIn = Admitted.ContainsKey(loginName) || elsewhere.Contains(loginName, StringComparer.OrdinalIgnoreCase);
 
             // Over the limit, a week of grace lets more play while the admin panel asks for a licence (owner, 2026-11-20).
-            if (!alreadyIn && inGame >= Maximum && !DeveloperHub.AllowOverLimit(DateTime.UtcNow))
+            if (!alreadyIn && inGame >= effectiveMaximum && !DeveloperHub.AllowOverLimit(DateTime.UtcNow))
             {
                 return false;
             }
@@ -136,6 +144,133 @@ public static class LicensedPlayerLimit
 
         return true;
     }
+
+    /// <summary>
+    /// Registers the runtime build integrity check and optional custom licence evaluator used to re-derive
+    /// the player cap independently at startup, login, and weekly ticks.
+    /// </summary>
+    /// <param name="integrityStatusProvider">Returns the current build <see cref="IntegrityStatus"/>.</param>
+    /// <param name="licenseEvaluator">Optional custom licence evaluator (primarily for tests).</param>
+    public static void ConfigureBuildIntegrity(
+        Func<IntegrityStatus> integrityStatusProvider,
+        Func<byte[]?, DateOnly, PlayerLicense>? licenseEvaluator = null)
+    {
+        _integrityStatusProvider = integrityStatusProvider ?? throw new ArgumentNullException(nameof(integrityStatusProvider));
+        if (licenseEvaluator is not null)
+        {
+            _licenseEvaluator = licenseEvaluator;
+        }
+
+        _hasVerificationContext = true;
+    }
+
+    /// <summary>
+    /// Stores raw signed licence bytes and applies the verified cap (or silently falls back to <see cref="DefaultMaximum"/>
+    /// when binaries, signature, withdrawal state, or hub reachability fail validation).
+    /// </summary>
+    /// <param name="licenceBytes">The raw signed <c>license.hnmo</c> bytes, or <c>null</c>.</param>
+    /// <param name="nowUtc">Optional UTC timestamp (for deterministic tests).</param>
+    /// <returns>The derived effective player limit.</returns>
+    public static int ApplyLicence(byte[]? licenceBytes, DateTime? nowUtc = null)
+    {
+        _licenceBytes = licenceBytes is { Length: > 0 } ? [.. licenceBytes] : null;
+        _hasVerificationContext = true;
+
+        var now = nowUtc ?? DateTime.UtcNow;
+        var (derived, licensee) = EvaluateSource(now);
+        Volatile.Write(ref _maximum, derived);
+        Licensee = derived > DefaultMaximum ? licensee : null;
+        return derived;
+    }
+
+    /// <summary>
+    /// Independently re-derives the allowed player cap from build integrity, signed licence, withdrawal list,
+    /// and hub unreachability past <see cref="DeveloperHub.GraceDays"/>, clamping any tampered in-memory value.
+    /// </summary>
+    /// <param name="nowUtc">The current UTC time.</param>
+    /// <returns>The effective player cap.</returns>
+    public static int ReevaluateAndEnforce(DateTime nowUtc)
+    {
+        var (derived, licensee) = EvaluateSource(nowUtc);
+        var current = Volatile.Read(ref _maximum);
+        var effective = _hasVerificationContext || current > DefaultMaximum ? Math.Min(current, derived) : current;
+        if (_hasVerificationContext || current > DefaultMaximum)
+        {
+            Volatile.Write(ref _maximum, effective);
+            if (derived <= DefaultMaximum)
+            {
+                Licensee = null;
+            }
+            else if (Licensee is null)
+            {
+                Licensee = licensee;
+            }
+        }
+
+        return effective;
+    }
+
+    /// <summary>
+    /// Clears verification state and restores defaults; for tests.
+    /// </summary>
+    internal static void ResetVerification()
+    {
+        _licenceBytes = null;
+        _integrityStatusProvider = null;
+        _licenseEvaluator = null;
+        _hasVerificationContext = false;
+        Volatile.Write(ref _maximum, DefaultMaximum);
+        Licensee = null;
+    }
+
+    private static int ResolveEffectiveMaximum(DateTime nowUtc)
+    {
+        var (derived, _) = EvaluateSource(nowUtc);
+        var current = Volatile.Read(ref _maximum);
+        return _hasVerificationContext || current > DefaultMaximum ? Math.Min(current, derived) : current;
+    }
+
+    private static (int Maximum, string? Licensee) EvaluateSource(DateTime nowUtc)
+    {
+        var integrity = _integrityStatusProvider?.Invoke() ?? IntegrityStatus.Ok;
+        if (integrity is IntegrityStatus.SignatureInvalid or IntegrityStatus.ManifestInvalid or IntegrityStatus.FileMismatch)
+        {
+            return (DefaultMaximum, null);
+        }
+
+        if (DeveloperHub.IsHubUnreachablePastGrace(nowUtc))
+        {
+            return (DefaultMaximum, null);
+        }
+
+        var bytes = _licenceBytes ?? (DeveloperHub.LicenceFile is { Length: > 0 } text ? Encoding.UTF8.GetBytes(text) : null);
+        if (bytes is null or { Length: 0 })
+        {
+            return (DefaultMaximum, null);
+        }
+
+        var today = DateOnly.FromDateTime(nowUtc);
+        var license = (_licenseEvaluator ?? DefaultLicenseEvaluator)(bytes, today);
+        if (!license.IsValid)
+        {
+            return (DefaultMaximum, null);
+        }
+
+        var licenceText = Encoding.UTF8.GetString(bytes);
+        if (DeveloperHub.IsWithdrawn(licenceText))
+        {
+            return (DefaultMaximum, null);
+        }
+
+        return (Math.Max(1, license.MaximumPlayers), license.Licensee);
+    }
+
+    private static PlayerLicense DefaultLicenseEvaluator(byte[]? bytes, DateOnly today)
+        => PlayerLicense.CheckWithEmbeddedKeys(
+            bytes,
+            DeveloperHub.MachineId.Length > 0 ? DeveloperHub.MachineId : PlayerLicense.MachineId,
+            today,
+            DeveloperHub.LegacyMachineId.Length > 0 ? DeveloperHub.LegacyMachineId : PlayerLicense.LegacyMachineId);
 
     /// <summary>
     /// Frees all places; for tests.

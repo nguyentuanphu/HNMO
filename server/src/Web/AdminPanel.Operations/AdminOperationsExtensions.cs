@@ -5,6 +5,7 @@
 namespace HNMO.Web.AdminPanel.Operations;
 
 using System.IO;
+using HNMO.GameLogic.PlugIns;
 using HNMO.Interfaces;
 using HNMO.Persistence.AdminAuth;
 using HNMO.Persistence.Worlds;
@@ -74,30 +75,12 @@ public static class AdminOperationsExtensions
     }
 
     /// <summary>
-    /// The worlds list lives with the other saved state (the working folder, the package's <c>save</c>), not in
-    /// the program folder, which a new version of the package replaces. A list an older version wrote into the
-    /// program folder is taken along once. Season 9's and the Arena's programs keep their own list (in the
-    /// <c>s9</c> or <c>arena</c> folder): their server ids start at 0 too, and a shared list named them as Season
-    /// 6.3's servers.
+    /// The worlds list lives with the other saved state in the package's <c>save</c> folder, not in the program folder,
+    /// which a new version of the package replaces. Older copies in the program folder are taken once at start
+    /// (<see cref="HnmoSaveFolder.MoveOldStateFiles"/>). Season 9's and the Arena's programs keep their own list (in
+    /// <c>save/s9</c> or <c>save/arena</c>), because their server ids start at 0 too.
     /// </summary>
-    private static string ResolveWorldsFile()
-    {
-        var fileName = HnmoSeasonInstance.SaveFileFor(HnmoSeasonInstance.Current, "hnmo-worlds.json");
-        var saved = Path.GetFullPath(fileName);
-        var old = Path.Combine(AppContext.BaseDirectory, fileName);
-        try
-        {
-            if (!File.Exists(saved) && File.Exists(old) && !string.Equals(saved, old, StringComparison.OrdinalIgnoreCase))
-            {
-                File.Copy(old, saved);
-            }
-        }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-        {
-            // The old list stays where it is and is used from there.
-            return old;
-        }
-
-        return saved;
-    }
+    private static string ResolveWorldsFile() => Path.Combine(
+        HnmoSaveFolder.Default.Directory,
+        HnmoSeasonInstance.SaveFileFor(HnmoSeasonInstance.Current, HnmoSaveFolder.WorldsFileName));
 }

@@ -173,3 +173,11 @@ mu_add_test(
     SOURCES
         test_skill_hotkey_configuration.cpp
 )
+
+mu_add_test(
+    NAME test_move_cost
+    SOURCES
+        test_move_cost.cpp
+    LINK_LIBS
+        MuClient
+)

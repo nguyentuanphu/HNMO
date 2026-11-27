@@ -44,7 +44,7 @@ public partial class DbLogRetention : ComponentBase
 
     private string ResolveSaveDir() =>
         string.IsNullOrWhiteSpace(this.SaveDirectory)
-            ? Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "save"))
+            ? HNMO.GameLogic.PlugIns.HnmoSaveFolder.Default.Directory
             : Path.GetFullPath(this.SaveDirectory);
 
     private void RefreshArchives(string saveDir)

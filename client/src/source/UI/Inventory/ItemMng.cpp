@@ -191,6 +191,11 @@ void FillItemFromParameters(ITEM& item, const ItemCreationParams& parameters)
     for (int i = 0; i < MAX_SOCKETS; ++i)
     {
         item.bySocketOption[i] = parameters.SocketOptions[i];
+        // As CreateItem: 0xFF is no socket, and the item's sockets end at the first one (not seed 5, "Fire").
+        if (item.bySocketOption[i] == 0xFF && i < item.SocketCount)
+        {
+            item.SocketCount = i;
+        }
         if (item.bySocketOption[i] == SOCKET_EMPTY)
         {
             item.SocketSeedID[i] = SOCKET_EMPTY;

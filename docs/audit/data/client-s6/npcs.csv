@@ -1,0 +1,533 @@
+source,record,id,param,name
+Npcname(eng).txt,1,84,1,Chief Skeleton Warrior
+Npcname(eng).txt,2,85,1,Chief Skeleton Archer
+Npcname(eng).txt,3,86,1,Dark Skull Soldier
+Npcname(eng).txt,4,87,1,Giant Ogre
+Npcname(eng).txt,5,88,1,Red Skeleton Knight
+Npcname(eng).txt,6,89,1,Magic Skeleton
+Npcname(eng).txt,7,90,1,Chief Skeleton Warrior
+Npcname(eng).txt,8,91,1,Chief Skeleton Archer
+Npcname(eng).txt,9,92,1,Dark Skull Soldier
+Npcname(eng).txt,10,93,1,Giant Ogre
+Npcname(eng).txt,11,94,1,Red Skeleton Knight
+Npcname(eng).txt,12,95,1,Magic Skeleton
+Npcname(eng).txt,13,96,1,Chief Skeleton Warrior
+Npcname(eng).txt,14,97,1,Chief Skeleton Archer
+Npcname(eng).txt,15,98,1,Dark Skull Soldier
+Npcname(eng).txt,16,99,1,Giant Ogre
+Npcname(eng).txt,17,111,1,Red Skeleton Knight
+Npcname(eng).txt,18,112,1,Magic Skeleton
+Npcname(eng).txt,19,113,1,Chief Skeleton Warrior
+Npcname(eng).txt,20,114,1,Chief Skeleton Archer
+Npcname(eng).txt,21,115,1,Dark Skull Soldier
+Npcname(eng).txt,22,116,1,Giant Ogre
+Npcname(eng).txt,23,117,1,Red Skeleton Knight
+Npcname(eng).txt,24,118,1,Magic Skeleton
+Npcname(eng).txt,25,119,1,Chief Skeleton Warrior
+Npcname(eng).txt,26,120,1,Chief Skeleton Archer
+Npcname(eng).txt,27,121,1,Dark Skull Soldier
+Npcname(eng).txt,28,122,1,Giant Ogre
+Npcname(eng).txt,29,123,1,Red Skeleton Knight
+Npcname(eng).txt,30,124,1,Magic Skeleton
+Npcname(eng).txt,31,125,1,Chief Skeleton Warrior
+Npcname(eng).txt,32,126,1,Chief Skeleton Archer
+Npcname(eng).txt,33,127,1,Dark Skull Soldier
+Npcname(eng).txt,34,128,1,Giant Ogre
+Npcname(eng).txt,35,129,1,Red Skeleton Knight
+Npcname(eng).txt,36,130,1,Magic Skeleton
+Npcname(eng).txt,37,131,1,Castle Gate
+Npcname(eng).txt,38,132,1,Statue of Saint
+Npcname(eng).txt,39,133,1,Statue of Saint
+Npcname(eng).txt,40,134,1,Statue of Saint
+Npcname(eng).txt,41,135,1,White wizard
+Npcname(eng).txt,42,136,1,Destructive ogre soldier
+Npcname(eng).txt,43,137,1,Destructive ogre archer
+Npcname(eng).txt,44,138,1,Chief Skeleton Warrior
+Npcname(eng).txt,45,139,1,Chief Skeleton Archer
+Npcname(eng).txt,46,140,1,Dark Skull Soldier
+Npcname(eng).txt,47,141,1,Giant Ogre
+Npcname(eng).txt,48,142,1,Red Skeleton Knight
+Npcname(eng).txt,49,143,1,Magic Skeleton
+Npcname(eng).txt,50,147,1,Aegis
+Npcname(eng).txt,51,148,1,Rogue Centurion
+Npcname(eng).txt,52,146,1,Bloody Soldier
+Npcname(eng).txt,53,144,1,Death Angel
+Npcname(eng).txt,54,149,1,Necron
+Npcname(eng).txt,55,145,1,Death Centurion
+Npcname(eng).txt,56,160,1,Schriker
+Npcname(eng).txt,57,161,1,Illusion of Kundun
+Npcname(eng).txt,58,177,1,Aegis
+Npcname(eng).txt,59,178,1,Rogue Centurion
+Npcname(eng).txt,60,176,1,Bloody Soldier
+Npcname(eng).txt,61,174,1,Death Angel
+Npcname(eng).txt,62,179,1,Necron
+Npcname(eng).txt,63,175,1,Death Centurion
+Npcname(eng).txt,64,180,1,Schriker
+Npcname(eng).txt,65,181,1,Illusion of Kundun
+Npcname(eng).txt,66,185,1,Aegis
+Npcname(eng).txt,67,186,1,Rogue Centurion
+Npcname(eng).txt,68,184,1,Bloody Soldier
+Npcname(eng).txt,69,182,1,Death Angel
+Npcname(eng).txt,70,187,1,Necron
+Npcname(eng).txt,71,183,1,Death Centurion
+Npcname(eng).txt,72,188,1,Schriker
+Npcname(eng).txt,73,189,1,Illusion of Kundun
+Npcname(eng).txt,74,193,1,Aegis
+Npcname(eng).txt,75,194,1,Rogue Centurion
+Npcname(eng).txt,76,192,1,Bloody Soldier
+Npcname(eng).txt,77,190,1,Death Angel
+Npcname(eng).txt,78,195,1,Necron
+Npcname(eng).txt,79,191,1,Death Centurion
+Npcname(eng).txt,80,196,1,Schriker
+Npcname(eng).txt,81,197,1,Illusion of Kundun
+Npcname(eng).txt,82,162,1,Chaos Castle 1
+Npcname(eng).txt,83,163,1,Chaos Castle 2
+Npcname(eng).txt,84,164,1,Chaos Castle 3
+Npcname(eng).txt,85,165,1,Chaos Castle 4
+Npcname(eng).txt,86,166,1,Chaos Castle 5
+Npcname(eng).txt,87,167,1,Chaos Castle 6
+Npcname(eng).txt,88,168,1,Chaos Castle 7
+Npcname(eng).txt,89,169,1,Chaos Castle 8
+Npcname(eng).txt,90,170,1,Chaos Castle 9
+Npcname(eng).txt,91,171,1,Chaos Castle 10
+Npcname(eng).txt,92,172,1,Chaos Castle 11
+Npcname(eng).txt,93,173,1,Chaos Castle 12
+Npcname(eng).txt,94,83,1,Golden Wheel
+Npcname(eng).txt,95,82,1,Golden Tantalos
+Npcname(eng).txt,96,81,1,Golden Vepar
+Npcname(eng).txt,97,80,1,Golden Lizard King
+Npcname(eng).txt,98,79,1,Golden Derkon
+Npcname(eng).txt,99,78,1,Golden Goblin
+Npcname(eng).txt,100,77,1,Phoenix of Darkness
+Npcname(eng).txt,101,76,1,Phoenix Darkness shield
+Npcname(eng).txt,102,75,1,Great Drakan
+Npcname(eng).txt,103,74,1,Alpha Crust
+Npcname(eng).txt,104,73,1,Drakan
+Npcname(eng).txt,105,72,1,Phantom Knight
+Npcname(eng).txt,106,71,1,Mega Crust
+Npcname(eng).txt,107,70,1,Queen Rainier
+Npcname(eng).txt,108,69,1,Alquamos
+Npcname(eng).txt,109,68,1,Molt
+Npcname(eng).txt,110,57,1,Iron Wheel
+Npcname(eng).txt,111,58,1,Tantalos
+Npcname(eng).txt,112,59,1,Zaikan
+Npcname(eng).txt,113,60,1,Bloody wolf
+Npcname(eng).txt,114,61,1,Beam Knight
+Npcname(eng).txt,115,62,1,Mutant
+Npcname(eng).txt,116,63,1,Death Beam Knight
+Npcname(eng).txt,117,64,1,Ogre archer
+Npcname(eng).txt,118,65,1,Elite Ogre
+Npcname(eng).txt,119,66,1,Cursed king
+Npcname(eng).txt,120,67,1,Metal Balrog
+Npcname(eng).txt,121,36,1,Shadow
+Npcname(eng).txt,122,39,1,Poison Shadow
+Npcname(eng).txt,123,34,1,Cursed Wizard
+Npcname(eng).txt,124,41,1,Death Cow
+Npcname(eng).txt,125,37,1,Devil
+Npcname(eng).txt,126,40,1,Death Knight
+Npcname(eng).txt,127,35,1,Death Gorgon
+Npcname(eng).txt,128,38,1,Balrog
+Npcname(eng).txt,129,3,1,Spider
+Npcname(eng).txt,130,26,1,Goblin
+Npcname(eng).txt,131,2,1,Budge Dragon
+Npcname(eng).txt,132,27,1,Chain Scorpion
+Npcname(eng).txt,133,0,1,Bull Fighter
+Npcname(eng).txt,134,33,1,Elite Goblin
+Npcname(eng).txt,135,1,1,Hound
+Npcname(eng).txt,136,28,1,Beetle Monster
+Npcname(eng).txt,137,4,1,Elite Bull Fighter
+Npcname(eng).txt,138,29,1,Hunter
+Npcname(eng).txt,139,6,1,LIch
+Npcname(eng).txt,140,30,1,Forest Monster
+Npcname(eng).txt,141,31,1,Agon
+Npcname(eng).txt,142,7,1,Giant
+Npcname(eng).txt,143,32,1,Stone Golem
+Npcname(eng).txt,144,14,1,Skeleton
+Npcname(eng).txt,145,24,1,Worm
+Npcname(eng).txt,146,22,1,Ice Monster
+Npcname(eng).txt,147,23,1,Hommerd
+Npcname(eng).txt,148,12,1,Larva
+Npcname(eng).txt,149,21,1,Assassin
+Npcname(eng).txt,150,17,1,Cyclops
+Npcname(eng).txt,151,19,1,Yeti
+Npcname(eng).txt,152,11,1,Ghost
+Npcname(eng).txt,153,15,1,Skeleton Archer
+Npcname(eng).txt,154,20,1,Elite Yeti
+Npcname(eng).txt,155,5,1,Hell Hound
+Npcname(eng).txt,156,13,1,Hell Spider
+Npcname(eng).txt,157,16,1,Chief Skeleton Warrior
+Npcname(eng).txt,158,9,1,Thunder Lich
+Npcname(eng).txt,159,8,1,Poison Bull Fighter
+Npcname(eng).txt,160,10,1,Dark Knight
+Npcname(eng).txt,161,25,1,Ice Queen
+Npcname(eng).txt,162,18,1,Gorgon
+Npcname(eng).txt,163,45,1,Bahamut
+Npcname(eng).txt,164,46,1,Vepar
+Npcname(eng).txt,165,47,1,Valkyrie
+Npcname(eng).txt,166,48,1,Lizard King
+Npcname(eng).txt,167,49,1,Hydra
+Npcname(eng).txt,168,50,1,Sea Worm
+Npcname(eng).txt,169,51,1,Great Bahamut
+Npcname(eng).txt,170,52,1,Silver Valkyrie
+Npcname(eng).txt,171,43,1,Golden Budge Dragon
+Npcname(eng).txt,172,44,1,Dragon
+Npcname(eng).txt,173,53,1,Golden Titan
+Npcname(eng).txt,174,54,1,Golden Soldier
+Npcname(eng).txt,175,55,1,Death King
+Npcname(eng).txt,176,56,1,Death Bone
+Npcname(eng).txt,177,150,1,Bali
+Npcname(eng).txt,178,151,1,Soldier
+Npcname(eng).txt,179,152,1,Magic stone of %s 
+Npcname(eng).txt,180,153,1,Magic stone of %s 
+Npcname(eng).txt,181,154,1,Magic stone of %s 
+Npcname(eng).txt,182,155,1,Magic stone of %s 
+Npcname(eng).txt,183,156,1,Magic stone of %s 
+Npcname(eng).txt,184,157,1,Magic stone of %s 
+Npcname(eng).txt,185,158,1,Magic stone of %s 
+Npcname(eng).txt,187,100,1,Lance
+Npcname(eng).txt,188,101,1,Iron Stick
+Npcname(eng).txt,189,102,1,Fire
+Npcname(eng).txt,190,103,1,Meteorite
+Npcname(eng).txt,191,104,1,Trap
+Npcname(eng).txt,192,105,1,Canon Trap
+Npcname(eng).txt,193,106,1,Laser Trap
+Npcname(eng).txt,194,200,1,Soccer Ball
+Npcname(eng).txt,195,204,1,Wolf Statue
+Npcname(eng).txt,196,205,1,Wolf Altar 1
+Npcname(eng).txt,197,206,1,Wolf Altar 2
+Npcname(eng).txt,198,207,1,Wolf Altar 3
+Npcname(eng).txt,199,208,1,Wolf Altar 4
+Npcname(eng).txt,200,209,1,Wolf Altar 5
+Npcname(eng).txt,201,215,1,Shield
+Npcname(eng).txt,202,216,1,Crown
+Npcname(eng).txt,203,217,1,Crown Switch 2
+Npcname(eng).txt,204,218,1,Crown Switch 1
+Npcname(eng).txt,205,219,1,Castle Gate Switch
+Npcname(eng).txt,206,220,1,Gatekeeper
+Npcname(eng).txt,207,221,1,Slingshot attack
+Npcname(eng).txt,208,222,1,Slingshot defense
+Npcname(eng).txt,209,223,1,Senior
+Npcname(eng).txt,210,224,1,Guardsman
+Npcname(eng).txt,211,226,1,Trainer
+Npcname(eng).txt,214,229,1,Marlon
+Npcname(eng).txt,215,230,1,Wandering Merchant Alex
+Npcname(eng).txt,216,231,1,Thompson Kenel
+Npcname(eng).txt,217,232,1,Archangel
+Npcname(eng).txt,218,233,1,Messenger of Archangel
+Npcname(eng).txt,219,234,1,Pet Trainer
+Npcname(eng).txt,220,235,1,Sebina the Priest
+Npcname(eng).txt,221,236,1,Golden Archer
+Npcname(eng).txt,222,237,1,Charon
+Npcname(eng).txt,223,238,1,Chaos Goblin
+Npcname(eng).txt,224,239,1,Arena Guard
+Npcname(eng).txt,225,240,1,Safety Guardian
+Npcname(eng).txt,226,241,1,Royal Guard Captain Lorence
+Npcname(eng).txt,227,242,1,Elf Lala
+Npcname(eng).txt,228,243,1,Eo the Craftsman
+Npcname(eng).txt,229,244,1,Caren the Barmaid
+Npcname(eng).txt,230,245,1,Wizard Izabel
+Npcname(eng).txt,231,246,1,Weapons Merchant Zienna
+Npcname(eng).txt,232,247,1,Guard
+Npcname(eng).txt,233,248,1,Wandering Merchant Martin
+Npcname(eng).txt,234,249,1,Guard
+Npcname(eng).txt,235,250,1,Wandering Merchant
+Npcname(eng).txt,236,251,1,Hanzo the Blacksmith
+Npcname(eng).txt,237,252,1,
+Npcname(eng).txt,238,253,1,Potion Girl Amy
+Npcname(eng).txt,239,254,1,Pasi the Mage
+Npcname(eng).txt,240,255,1,Lumen the Barmaid
+Npcname(eng).txt,241,256,1,Lahap
+Npcname(eng).txt,242,257,1,Shadow Phantom Soldier
+Npcname(eng).txt,243,263,1,Aegis
+Npcname(eng).txt,244,264,1,Rogue Centurion
+Npcname(eng).txt,245,262,1,Blood Soldier
+Npcname(eng).txt,246,260,1,Death Angel
+Npcname(eng).txt,247,265,1,Necron
+Npcname(eng).txt,248,261,1,Death Centurion
+Npcname(eng).txt,249,266,1,Schriker
+Npcname(eng).txt,250,267,1,Illusion of Kundun
+Npcname(eng).txt,251,271,1,Aegis
+Npcname(eng).txt,252,272,1,Rogue Centurion
+Npcname(eng).txt,253,270,1,Blood Soldier
+Npcname(eng).txt,254,268,1,Death Angel
+Npcname(eng).txt,255,273,1,Necron
+Npcname(eng).txt,256,269,1,Death Centurion
+Npcname(eng).txt,257,274,1,Schriker
+Npcname(eng).txt,258,275,1,Kundun
+Npcname(eng).txt,259,277,1,Castle Gate
+Npcname(eng).txt,260,278,1,Life Stone
+Npcname(eng).txt,261,283,1,Guardian Statue
+Npcname(eng).txt,262,285,1,Guardian
+Npcname(eng).txt,263,286,1,Archer
+Npcname(eng).txt,264,287,1,Spearman
+Npcname(eng).txt,265,288,1,Canon Tower
+Npcname(eng).txt,266,290,1,Lizard Warrior
+Npcname(eng).txt,267,291,1,Fire Golem
+Npcname(eng).txt,268,292,1,Queen Bee
+Npcname(eng).txt,269,293,1,Poison Golem
+Npcname(eng).txt,270,294,1,Ax Warrior
+Npcname(eng).txt,271,295,1,Erohim
+Npcname(eng).txt,272,296,1,Monster7
+Npcname(eng).txt,273,300,1,Hero Mutant
+Npcname(eng).txt,274,301,1,Omega Wing
+Npcname(eng).txt,275,302,1,Axl Hero
+Npcname(eng).txt,276,303,1,Gigas Golem
+Npcname(eng).txt,277,308,1,Death Tree
+Npcname(eng).txt,278,307,1,Forest Orc
+Npcname(eng).txt,279,306,1,Death Rider
+Npcname(eng).txt,280,305,1,Blue Golem
+Npcname(eng).txt,281,304,1,Witch Queen
+Npcname(eng).txt,282,309,1,Hell Maine
+Npcname(eng).txt,283,310,1,Hammer Scout
+Npcname(eng).txt,284,311,1,Lance Scout
+Npcname(eng).txt,285,312,1,Bow Scout
+Npcname(eng).txt,286,313,1,Werewolf
+Npcname(eng).txt,287,314,1,Scout(Hero)
+Npcname(eng).txt,288,315,1,Werewolf(Hero)
+Npcname(eng).txt,289,316,1,Balram
+Npcname(eng).txt,290,317,1,Soram
+Npcname(eng).txt,291,340,1,Dark Elf
+Npcname(eng).txt,292,341,1,Soram
+Npcname(eng).txt,293,344,1,Balram
+Npcname(eng).txt,294,345,1,Death spirit
+Npcname(eng).txt,295,348,1,Tanker
+Npcname(eng).txt,296,349,1,Balgass
+Npcname(eng).txt,297,331,1,Aegis
+Npcname(eng).txt,298,332,1,Rogue Centurion
+Npcname(eng).txt,299,333,1,Blood Soldier
+Npcname(eng).txt,300,334,1,Death Angel
+Npcname(eng).txt,301,335,1,Necron
+Npcname(eng).txt,302,336,1,Death Centurion
+Npcname(eng).txt,303,337,1,Schriker
+Npcname(eng).txt,304,338,1,Illusion of Kundun
+Npcname(eng).txt,307,258,1,Luke the Helper
+Npcname(eng).txt,308,259,1,Oracle Layla
+Npcname(eng).txt,309,350,1,Berserker
+Npcname(eng).txt,310,351,1,Splinter Wolf
+Npcname(eng).txt,311,352,1,Iron Rider
+Npcname(eng).txt,312,353,1,Satyros
+Npcname(eng).txt,313,354,1,Blade Hunter
+Npcname(eng).txt,314,355,1,Kentauros
+Npcname(eng).txt,315,356,1,Gigantis
+Npcname(eng).txt,316,357,1,Genocider
+Npcname(eng).txt,317,358,1,Persona
+Npcname(eng).txt,318,359,1,Twin Tail
+Npcname(eng).txt,319,360,1,Dreadfear
+Npcname(eng).txt,320,361,1,Nightmare
+Npcname(eng).txt,321,362,1,Maya Hand
+Npcname(eng).txt,322,363,1,Maya Hand
+Npcname(eng).txt,323,364,1,Maya
+Npcname(eng).txt,324,367,1,Gateway Machine
+Npcname(eng).txt,325,368,1,Elpis
+Npcname(eng).txt,326,369,1,Osbourne
+Npcname(eng).txt,327,370,1,Jerridon
+Npcname(eng).txt,328,371,1,Leo the Helper
+Npcname(eng).txt,329,372,1,Elite Skull Soldier
+Npcname(eng).txt,330,373,1,Jack Olantern
+Npcname(eng).txt,331,374,1,Santa
+Npcname(eng).txt,332,375,1,Chaos Card Master
+Npcname(eng).txt,333,376,1,Pamela the Supplier
+Npcname(eng).txt,334,377,1,Angela the Supplier
+Npcname(eng).txt,335,365,1,Pouch of Blessing
+Npcname(eng).txt,336,378,1,GameMaster
+Npcname(eng).txt,337,379,1,Natasha the Firecracker Merchant
+Npcname(eng).txt,338,380,1,Stone Statue
+Npcname(eng).txt,339,381,1,MU Allies General
+Npcname(eng).txt,340,382,1,Illusion Sorcerer Elder
+Npcname(eng).txt,341,383,1,Alliance Sacred Item Storage
+Npcname(eng).txt,342,384,1,Illusion Castle Sacred Item Storage
+Npcname(eng).txt,343,385,1,Mirage
+Npcname(eng).txt,344,386,1,Illusion Sorcerer Spirit
+Npcname(eng).txt,345,387,1,Illusion Sorcerer Spirit
+Npcname(eng).txt,346,388,1,Illusion Sorcerer Spirit
+Npcname(eng).txt,347,389,1,Illusion Sorcerer Spirit
+Npcname(eng).txt,348,390,1,Illusion Sorcerer Spirit
+Npcname(eng).txt,349,391,1,Illusion Sorcerer Spirit
+Npcname(eng).txt,350,392,1,Illusion Sorcerer Spirit
+Npcname(eng).txt,351,393,1,Illusion Sorcerer Spirit
+Npcname(eng).txt,352,394,1,Illusion Sorcerer Spirit
+Npcname(eng).txt,353,395,1,Illusion Sorcerer Spirit
+Npcname(eng).txt,354,396,1,Illusion Sorcerer Spirit
+Npcname(eng).txt,355,397,1,Illusion Sorcerer Spirit
+Npcname(eng).txt,356,398,1,Illusion Sorcerer Spirit
+Npcname(eng).txt,357,399,1,Illusion Sorcerer Spirit
+Npcname(eng).txt,358,400,1,Illusion Sorcerer Spirit
+Npcname(eng).txt,359,401,1,Illusion Sorcerer Spirit
+Npcname(eng).txt,360,402,1,Illusion Sorcerer Spirit
+Npcname(eng).txt,361,403,1,Illusion Sorcerer Spirit
+Npcname(eng).txt,362,404,1,MU Allies
+Npcname(eng).txt,363,405,1,Illusion Sorcerer
+Npcname(eng).txt,364,406,1,Apostle Devin
+Npcname(eng).txt,365,407,1,Werewolf Quarel
+Npcname(eng).txt,366,408,1,Gatekeeper
+Npcname(eng).txt,367,409,1,Balram (Trainee Soldier)
+Npcname(eng).txt,368,410,1,Death Spirit (Trainee Soldier)
+Npcname(eng).txt,369,411,1,Soram (Trainee Soldier)
+Npcname(eng).txt,370,412,1,Dark Elf (Trainee Soldier)
+Npcname(eng).txt,371,413,1,Lunar Rabbit
+Npcname(eng).txt,372,414,1,Helper Ellen
+Npcname(eng).txt,373,415,1,Silvia
+Npcname(eng).txt,374,416,1,Rhea
+Npcname(eng).txt,375,417,1,Marce
+Npcname(eng).txt,376,418,1,Strange Rabbit
+Npcname(eng).txt,377,419,1,Hideous Rabbit
+Npcname(eng).txt,378,420,1,Werewolf
+Npcname(eng).txt,379,421,1,Polluted Butterfly
+Npcname(eng).txt,380,422,1,Cursed Lich
+Npcname(eng).txt,381,423,1,Totem Golem
+Npcname(eng).txt,382,424,1,Grizzly
+Npcname(eng).txt,383,425,1,Captain Grizzly
+Npcname(eng).txt,384,426,1,Chaos Castle13
+Npcname(eng).txt,385,427,1,Chaos Castle14
+Npcname(eng).txt,386,428,1,Chief Skeleton Warrior
+Npcname(eng).txt,387,429,1,Chief Skeleton Archer
+Npcname(eng).txt,388,430,1,Dark Skull Soldier
+Npcname(eng).txt,389,431,1,Giant Ogre
+Npcname(eng).txt,390,432,1,Red Skeleton Knight
+Npcname(eng).txt,391,433,1,Magic Skeleton
+Npcname(eng).txt,392,434,1,Gigantis
+Npcname(eng).txt,393,435,1,Berserker
+Npcname(eng).txt,394,436,1,Balram (Trainee Soldier)
+Npcname(eng).txt,395,437,1,Soram (Trainee Soldier)
+Npcname(eng).txt,396,438,1,Persona
+Npcname(eng).txt,397,439,1,Dreadfear
+Npcname(eng).txt,398,440,1,Dark Elf
+Npcname(eng).txt,399,441,1,Sapi-Unus
+Npcname(eng).txt,400,442,1,Sapi-Duo
+Npcname(eng).txt,401,443,1,Sapi-Tres
+Npcname(eng).txt,402,444,1,Shadow Pawn
+Npcname(eng).txt,403,445,1,Shadow Knight
+Npcname(eng).txt,404,446,1,Shadow Look
+Npcname(eng).txt,405,447,1,Thunder Napin
+Npcname(eng).txt,406,448,1,Ghost Napin
+Npcname(eng).txt,407,449,1,Blaze Napin
+Npcname(eng).txt,408,450,1,Cherry Blossom Spirit
+Npcname(eng).txt,409,451,1,Cherry Blossom Tree
+Npcname(eng).txt,410,452,1,Seed Master
+Npcname(eng).txt,411,453,1,Seed Researcher
+Npcname(eng).txt,412,454,1,Ice Walker
+Npcname(eng).txt,413,455,1,Giant Mammoth
+Npcname(eng).txt,414,456,1,Ice Giant
+Npcname(eng).txt,415,457,1,Coolutin
+Npcname(eng).txt,416,458,1,Iron Knight
+Npcname(eng).txt,417,459,1,Selupan
+Npcname(eng).txt,418,460,1,Spider Eggs
+Npcname(eng).txt,419,461,1,Spider Eggs
+Npcname(eng).txt,420,462,1,Spider Eggs
+Npcname(eng).txt,421,463,1,Fire Flame Ghost
+Npcname(eng).txt,423,478,1,Delgado
+Npcname(eng).txt,424,465,1,Santa Claus
+Npcname(eng).txt,425,466,1,Cursed Goblin
+Npcname(eng).txt,426,467,1,Snowman
+Npcname(eng).txt,427,468,1,Dasher
+Npcname(eng).txt,428,469,1,Kermit
+Npcname(eng).txt,429,470,1,Little Santa
+Npcname(eng).txt,430,471,1,Cupid
+Npcname(eng).txt,431,472,1,Prancer
+Npcname(eng).txt,432,473,1,Donner
+Npcname(eng).txt,433,474,1,Vixen
+Npcname(eng).txt,434,475,1,Blitzen
+Npcname(eng).txt,435,476,1,Cursed Santa
+Npcname(eng).txt,436,477,1,Transformed Snowman
+Npcname(eng).txt,437,479,1,Gatekeeper Titus
+Npcname(eng).txt,438,480,1,Zombie Fighter
+Npcname(eng).txt,439,481,1,Zombie Fighter
+Npcname(eng).txt,440,482,1,Resurrected Gladiator
+Npcname(eng).txt,441,483,1,Resurrected Gladiator
+Npcname(eng).txt,442,484,1,Ash Slaughterer
+Npcname(eng).txt,443,485,1,Ash Slaughterer
+Npcname(eng).txt,444,486,1,Bloody Assassin
+Npcname(eng).txt,445,487,1,Cruel Blood Assassin
+Npcname(eng).txt,446,488,1,Cruel Blood Assassin
+Npcname(eng).txt,447,489,1,Burning Lava Giant
+Npcname(eng).txt,448,490,1,Ruthless Lava Giant
+Npcname(eng).txt,449,491,1,Ruthless Lava Giant
+Npcname(eng).txt,450,492,1,Moss
+Npcname(eng).txt,451,502,1,Golden Rabbit
+Npcname(eng).txt,452,493,1,Golden Dark Knight
+Npcname(eng).txt,453,494,1,Golden Devil
+Npcname(eng).txt,454,495,1,Golden Stone Golem
+Npcname(eng).txt,455,496,1,Golden Crust
+Npcname(eng).txt,456,497,1,Golden Satyros
+Npcname(eng).txt,457,498,1,Golden Twin Tail
+Npcname(eng).txt,458,499,1,Golden Iron Knight
+Npcname(eng).txt,459,500,1,Golden Napin
+Npcname(eng).txt,460,501,1,Great Golden Dragon
+Npcname(eng).txt,461,503,1,Transformed Panda
+Npcname(eng).txt,462,504,1,Gaion Kharein
+Npcname(eng).txt,463,505,1,Jerint
+Npcname(eng).txt,464,506,1,Raymond
+Npcname(eng).txt,465,507,1,Erkanne
+Npcname(eng).txt,466,508,1,Destler
+Npcname(eng).txt,467,509,1,Vermont
+Npcname(eng).txt,468,510,1,Kato
+Npcname(eng).txt,469,511,1,Galia
+Npcname(eng).txt,470,512,1,Quartermaster
+Npcname(eng).txt,471,513,1,Combat Instructor
+Npcname(eng).txt,472,514,1,Knight Commander
+Npcname(eng).txt,473,515,1,Grand Wizard
+Npcname(eng).txt,474,516,1,Master Assassin
+Npcname(eng).txt,475,517,1,Cavalry Captain
+Npcname(eng).txt,476,518,1,Shield Bearer
+Npcname(eng).txt,477,519,1,Medic
+Npcname(eng).txt,478,520,1,Knights
+Npcname(eng).txt,479,521,1,Bodyguard
+Npcname(eng).txt,480,522,1,Jerint the Assistant
+Npcname(eng).txt,481,523,1,Trap
+Npcname(eng).txt,482,524,1,Castle Gate 1
+Npcname(eng).txt,483,525,1,Castle Gate 2
+Npcname(eng).txt,484,526,1,Stone Statue 1
+Npcname(eng).txt,485,527,1,Castle Gate 3
+Npcname(eng).txt,486,528,1,Castle Gate 4
+Npcname(eng).txt,487,529,1,Furious Slaughterer
+Npcname(eng).txt,488,530,1,Slaughterer
+Npcname(eng).txt,489,531,1,Ice Walker
+Npcname(eng).txt,490,532,1,Larva
+Npcname(eng).txt,491,533,1,Doppelganger
+Npcname(eng).txt,492,534,1,Doppelganger Elf
+Npcname(eng).txt,493,535,1,Doppelganger Knight
+Npcname(eng).txt,494,536,1,Doppelganger Wizard
+Npcname(eng).txt,495,537,1,Doppelganger Magic Gladiator
+Npcname(eng).txt,496,538,1,Doppelganger Dark Lord
+Npcname(eng).txt,497,539,1,Doppelganger Summoner
+Npcname(eng).txt,498,540,1,Lugard
+Npcname(eng).txt,499,541,1,Interim Reward Chest
+Npcname(eng).txt,500,542,1,Final Reward Chest
+Npcname(eng).txt,501,543,1,Gens Duprian Steward
+Npcname(eng).txt,502,544,1,Gens Vanert Steward
+Npcname(eng).txt,503,545,1,Christine the General Goods Merchant
+Npcname(eng).txt,504,546,1,Jeweler Raul
+Npcname(eng).txt,505,547,1,Market Union Member Julia
+Npcname(eng).txt,506,548,1,Transformed Skeleton
+Npcname(eng).txt,507,549,1,Bloody Orc
+Npcname(eng).txt,508,550,1,Bloody Death Rider
+Npcname(eng).txt,509,551,1,Bloody Golem
+Npcname(eng).txt,510,552,1,Bloody Witch Queen
+Npcname(eng).txt,511,553,1,Berserker Warrior
+Npcname(eng).txt,512,554,1,Kentauros Warrior
+Npcname(eng).txt,513,555,1,Gigantis Warrior
+Npcname(eng).txt,514,556,1,Genocider Warrior
+Npcname(eng).txt,515,557,1,Sapi Queen
+Npcname(eng).txt,516,558,1,Ice Napin
+Npcname(eng).txt,517,559,1,Shadow Master
+Npcname(eng).txt,518,560,1,Sapi Queen
+Npcname(eng).txt,519,561,1,Medusa
+Npcname(eng).txt,520,562,1,Dark Mammoth
+Npcname(eng).txt,521,563,1,Dark Giant
+Npcname(eng).txt,522,564,1,Dark Coolutin
+Npcname(eng).txt,523,565,1,Dark Iron Knight
+Npcname(eng).txt,524,566,1,Mercenary Guild Manager Tercia
+Npcname(eng).txt,525,567,1,Priestess Veina
+Npcname(eng).txt,526,568,1,Wandering Merchant Zyro
+Npcname(eng).txt,527,569,1,Venomous Chain Scorpion
+Npcname(eng).txt,528,570,1,Bone Scorpion
+Npcname(eng).txt,529,571,1,Orcus
+Npcname(eng).txt,530,572,1,Gollock
+Npcname(eng).txt,531,573,1,Crypta
+Npcname(eng).txt,532,574,1,Crypos
+Npcname(eng).txt,533,575,1,Condra
+Npcname(eng).txt,534,576,1,Narcondra
+Npcname(eng).txt,535,577,1,Leina the General Goods Merchant
+Npcname(eng).txt,536,578,1,Weapons Merchant Bolo
+Npcname(eng).txt,537,579,1,David
+Npcname(eng).txt,538,585,1,Scarecrow
