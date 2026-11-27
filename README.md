@@ -19,9 +19,9 @@ it has the download link and both ways to play.
 
 | System | Start the server |
 | --- | --- |
-| Windows | Extract [HNMO.zip](https://github.com/nguyentuanphu/HNMO/releases/latest/download/HNMO.zip) and open `Start HNMO.bat`. |
-| macOS (Apple Silicon and Intel) | Extract [HNMO-macos.zip](https://github.com/nguyentuanphu/HNMO/releases/latest/download/HNMO-macos.zip) and open `Start HNMO.app`. |
-| Ubuntu and Debian (x64 and ARM64) | Open [HNMO-linux.deb](https://github.com/nguyentuanphu/HNMO/releases/latest/download/HNMO-linux.deb) in the software installer, then open **HNMO** from the applications menu. |
+| Windows | Extract [HNMO.zip](https://hnmobug.netlify.app/download) and open `Start HNMO.bat`. |
+| macOS (Apple Silicon and Intel) | Extract [HNMO-macos.zip](https://hnmobug.netlify.app/download?os=macos) and open `Start HNMO.app`. |
+| Ubuntu and Debian (x64 and ARM64) | Open [HNMO-linux.deb](https://hnmobug.netlify.app/download?os=linux) in the software installer, then open **HNMO** from the applications menu. |
 
 The server opens the game in your browser. The downloads include .NET and
 PostgreSQL. See the packaged `README.txt` for first launch and save locations.
