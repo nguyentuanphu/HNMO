@@ -41,6 +41,7 @@ test('game windows show Vietnamese, and players\' chat stays as typed', async ({
   await enterWorld(page, 'test3');
   // Like the character test: the hero's stats are there before the window opens.
   await page.waitForFunction(() => (window as unknown as { __game: { hero?: { name?: string } } }).__game.hero?.name);
+  await page.locator('#hudToolsToggle').click();
   await page.locator('.language-picker:not(#loginLanguage) button[data-lang="vi"]').click();
   const window = page.locator('.rml-character_info');
   // The C key works once the game has set up its windows, a moment after the world shows.

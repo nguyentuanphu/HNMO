@@ -47,7 +47,8 @@ public partial class UltimateAutoPlay : ComponentBase
     [
         (UltimateFeatureMode.Off, L("Off", "Tắt")),
         (UltimateFeatureMode.Free, L("Free (All)", "Miễn phí")),
-        (UltimateFeatureMode.VipOnly, L("VIP Only", "Chỉ VIP")),
+        (UltimateFeatureMode.VipOnly, L("VIP (Bronze+)", "VIP (Đồng+)")),
+        (UltimateFeatureMode.HigherVip, L("Higher VIP (Silver+)", "VIP Cao cấp (Bạc+)")),
     ];
 
     private RenderFragment RenderModeSelect(string id, UltimateFeatureMode current, Action<UltimateFeatureMode> setter) => builder =>
@@ -84,18 +85,19 @@ public partial class UltimateAutoPlay : ComponentBase
 
         this._configuration.Enabled = true;
         this._configuration.SparkleGuide = UltimateFeatureMode.Free;
-        this._configuration.PresetsAndStats = UltimateFeatureMode.Free;
-        this._configuration.ManaSdPotions = UltimateFeatureMode.VipOnly;
-        this._configuration.JewelDeposit = UltimateFeatureMode.VipOnly;
-        this._configuration.TargetPriority = UltimateFeatureMode.VipOnly;
-        this._configuration.Patrol = UltimateFeatureMode.VipOnly;
-        this._configuration.Survival = UltimateFeatureMode.VipOnly;
-        this._configuration.BossFocus = UltimateFeatureMode.VipOnly;
+        this._configuration.ExtrasTown = UltimateFeatureMode.VipOnly;
+        this._configuration.ManaSdPotions = UltimateFeatureMode.HigherVip;
+        this._configuration.JewelDeposit = UltimateFeatureMode.HigherVip;
+        this._configuration.TargetPriority = UltimateFeatureMode.HigherVip;
+        this._configuration.Patrol = UltimateFeatureMode.HigherVip;
+        this._configuration.Survival = UltimateFeatureMode.HigherVip;
+        this._configuration.BossFocus = UltimateFeatureMode.HigherVip;
+        this._configuration.PresetsAndStats = UltimateFeatureMode.HigherVip;
     }
 
     private void ApplyAllFree() => this.SetAllModes(UltimateFeatureMode.Free);
 
-    private void ApplyAllVip() => this.SetAllModes(UltimateFeatureMode.VipOnly);
+    private void ApplyAllHigherVip() => this.SetAllModes(UltimateFeatureMode.HigherVip);
 
     private void SetAllModes(UltimateFeatureMode mode)
     {
@@ -106,6 +108,7 @@ public partial class UltimateAutoPlay : ComponentBase
 
         this._configuration.Enabled = true;
         this._configuration.SparkleGuide = mode;
+        this._configuration.ExtrasTown = mode;
         this._configuration.ManaSdPotions = mode;
         this._configuration.JewelDeposit = mode;
         this._configuration.TargetPriority = mode;
