@@ -1001,7 +1001,7 @@ internal sealed class Program : IDisposable
         this._logger.Information("{Season}: accounts and coins are shared with Season 6.3 (database {Database}).", SeasonLabel, builder.Database);
     }
 
-    private async Task RecoverSharedCoinsAsync(PersistenceContextProvider contextProvider)
+    private async Task RecoverSharedCoinsAsync(IPersistenceContextProvider contextProvider)
     {
         if (!HnmoSeasonInstance.IsSecondary || SharedAccountStore.Current is not ICoordinatedSharedCoinStore coordinated)
         {
@@ -1011,7 +1011,7 @@ internal sealed class Program : IDisposable
         try
         {
             var gameConfiguration = await new GameConfigurationDataSource(
-                NullLogger<GameConfigurationDataSource>.Instance,
+                Microsoft.Extensions.Logging.Abstractions.NullLogger<GameConfigurationDataSource>.Instance,
                 contextProvider).GetOwnerAsync(Guid.Empty, default).ConfigureAwait(false);
             var report = await HNMO.GameLogic.Seasons.SharedCoinCoordinator.RecoverAsync(
                 coordinated,
