@@ -1,0 +1,38 @@
+source,record,index,optionType,valueEvolved,valueLv1,valueLv2,valueLv3,valueLv4,valueLv5,conditionType,conditionVal1,conditionVal2,name,conditionText
+MuunOption_eng.bmd,0,0,2,38,22,26,30,34,0,3,18,24,Increase Defense +%d,6 ~ 12PM
+MuunOption_eng.bmd,1,1,1,8,2,4,6,0,0,1,56,-1,Increase Attack Power/Mana/Curse Spells +%d,Swamp of Peace Hunting Field
+MuunOption_eng.bmd,2,2,4,6,2,4,0,0,0,2,1,200,Increase Critical Damage +%d,Level 1 ~ 200
+MuunOption_eng.bmd,3,3,1,24,14,16,18,20,22,4,71,-1,Increase Attack Power/Mana/Curse Spells +%d,"Thu, Fri, Sat, Sun"
+MuunOption_eng.bmd,4,4,3,10,4,6,8,0,0,3,1,12,Increase Excellent Damage +%d,1 ~ 12AM
+MuunOption_eng.bmd,5,5,3,8,2,4,6,0,0,3,13,24,Increase Excellent Damage +%d,1 ~ 12PM
+MuunOption_eng.bmd,6,6,7,24,14,16,18,20,22,4,71,-1,Increase Maximum Attack Power/Mana/Curse Spells +%d,"Thu, Fri, Sat, Sun"
+MuunOption_eng.bmd,7,7,4,8,2,4,6,0,0,2,201,750,Increase Critical Damage +%d,201~Master Level
+MuunOption_eng.bmd,8,8,4,8,2,4,6,0,0,2,1,200,Increase Critical Damage +%d,Level 1 ~ 200
+MuunOption_eng.bmd,9,9,3,21,9,12,15,18,0,4,56,-1,Increase Excellent Damage +%d,"Mon, Tue, Wed"
+MuunOption_eng.bmd,10,10,3,38,23,26,29,32,35,4,71,-1,Increase Excellent Damage +%d,"Thu, Fri, Sat, Sun"
+MuunOption_eng.bmd,11,11,1,14,6,8,10,12,0,3,13,24,Increase Attack Power/Mana/Curse Spells +%d,1 ~ 12PM
+MuunOption_eng.bmd,12,12,2,14,2,6,10,0,0,2,1,200,Increase Defense +%d,Level 1 ~ 200
+MuunOption_eng.bmd,13,13,50,10,4,6,8,0,0,3,13,24,Attack Skill (%dLevel),1 ~ 12PM
+MuunOption_eng.bmd,14,14,1,24,14,16,18,20,22,4,71,-1,Increase Attack Power/Mana/Curse Spells +%d,"Thu, Fri, Sat, Sun"
+MuunOption_eng.bmd,15,15,7,8,2,4,6,0,0,2,1,300,Increase Maximum Attack Power/Mana/Curse Spells +%d,Level 1 ~ 300
+MuunOption_eng.bmd,16,16,50,10,4,6,8,0,0,4,56,-1,Attack Skill (%dLevel),"Mon, Tue, Wed"
+MuunOption_eng.bmd,17,17,7,24,14,16,18,20,22,4,71,-1,Increase Maximum Attack Power/Mana/Curse Spells +%d,"Thu, Fri, Sat, Sun"
+MuunOption_eng.bmd,18,18,50,10,4,6,8,0,0,2,201,750,Attack Skill (%dLevel),201~Master Level
+MuunOption_eng.bmd,19,19,1,8,2,4,6,0,0,4,56,-1,Increase Attack Power/Mana/Curse Spells +%d,"Mon, Tue, Wed"
+MuunOption_eng.bmd,20,20,5,19,9,11,13,15,17,4,71,-1,Increase Skill Attack Power +%d,"Thu, Fri, Sat, Sun"
+MuunOption_eng.bmd,21,21,5,8,2,4,6,0,0,4,56,-1,Increase Skill Attack Power +%d,"Mon, Tue, Wed"
+MuunOption_eng.bmd,22,22,50,10,4,6,8,0,0,3,13,24,Attack Skill (%dLevel),1 ~ 12PM
+MuunOption_eng.bmd,23,23,10,8,2,4,6,0,0,4,60,-1,Increases Excellent Damage +%d (non-PVP),"Mon, Tue, Wed, Thu"
+MuunOption_eng.bmd,24,24,8,24,14,16,18,20,22,4,79,-1,Increases Attack Power/Magical Damage/Curse by +%d (non-PVP),"Wed, Thu, Fri, Sat, Sun"
+MuunOption_eng.bmd,25,25,53,10,4,6,8,0,0,2,201,750,Attack Skill (Level %d) (non-PVP),201~Master Level
+MuunOption_eng.bmd,26,26,14,24,14,16,18,20,22,4,79,-1,Increases MAX Attack Power/Magical Damage/Curse by +%d (non-PVP),"Wed, Thu, Fri, Sat, Sun"
+MuunOption_eng.bmd,27,27,14,8,2,4,6,0,0,3,13,24,Increases MAX Attack Power/Magical Damage/Curse by +%d (non-PVP),1 ~ 12PM
+MuunOption_eng.bmd,28,28,53,10,4,6,8,0,0,4,60,-1,Attack Skill (Level %d) (non-PVP),"Mon, Tue, Wed, Thu"
+MuunOption_eng.bmd,29,29,1,22,14,16,18,20,0,4,60,-1,Increases Attack Power/Magical Damage/Curse by +%d,"Mon, Tue, Wed, Thu"
+MuunOption_eng.bmd,30,30,5,17,9,11,13,15,0,4,71,-1,Increases Skill Damage +%d,"Thur, Fri, Sat, Sun"
+MuunOption_eng.bmd,31,31,3,35,23,26,29,32,0,3,13,24,Increases Excellent Damage +%d,1 ~ 12PM
+MuunOption_eng.bmd,32,32,12,19,9,11,13,15,17,4,79,-1,Increases Skill Damage by +%d (non-PVP),"Wed, Thu, Fri, Sat, Sun"
+MuunOption_eng.bmd,33,33,8,8,2,4,6,0,0,2,201,750,Increases Attack Power/Magical Damage/Curse by +%d (non-PVP),201~Master Level
+MuunOption_eng.bmd,34,34,53,10,4,6,8,0,0,3,13,24,Attack Skill (Level %d) (non-PVP),1 ~ 12PM
+MuunOption_eng.bmd,35,35,11,8,2,4,6,0,0,4,60,-1,Increases Critical Damage Chance +%d (non-PVP),"Mon, Tue, Wed, Thu"
+MuunOption_eng.bmd,36,36,12,8,2,4,6,0,0,3,13,24,,

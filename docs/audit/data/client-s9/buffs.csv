@@ -1,0 +1,203 @@
+source,record,id,group,itemGroup,itemNumber,name,description
+BuffEffect_eng.bmd,0,1,1,255,255,Increase Attack Power,Attack power increases.
+BuffEffect_eng.bmd,1,2,2,255,255,Increase Defense,Defensibility increases.
+BuffEffect_eng.bmd,2,3,3,255,255,Shadow Phantom effect,Attack power and Defensibility increases
+BuffEffect_eng.bmd,3,4,4,255,255,Soul Barrier,Manna absorbs the damage.
+BuffEffect_eng.bmd,4,5,5,255,255,Critical Damage increase,Critical damage increases.
+BuffEffect_eng.bmd,5,6,6,255,255,Infinity Arrow,Arrows do not become consumed.
+BuffEffect_eng.bmd,6,7,7,255,255,AG recovery speed increase,Arrows do not become consumed.
+BuffEffect_eng.bmd,7,8,8,255,255,Swell Life,Health stat increases to maximum.
+BuffEffect_eng.bmd,8,9,9,255,255,Swell Mana,Mana stat increases to maximum.
+BuffEffect_eng.bmd,9,10,10,255,255,Potion of Blessing,Attack power +20%% increase
+BuffEffect_eng.bmd,10,11,11,255,255,Potion of Soul,AG recovery speed increase +8/Lightning and Ice resistance increase/attack speed increase +20
+BuffEffect_eng.bmd,11,12,12,255,255,Abolish Magic,AG recovery speed increase +8/Lightning and Ice resistance increase/attack speed increase +20
+BuffEffect_eng.bmd,12,13,13,255,255,Gate Open/Close Status,AG recovery speed increase +8/Lightning and Ice resistance increase/attack speed increase +20
+BuffEffect_eng.bmd,13,14,14,255,255,Watchtower,Watching over the castle.
+BuffEffect_eng.bmd,14,15,14,255,255,Besiegement Guild1,In the process of attacking the castle
+BuffEffect_eng.bmd,15,16,14,255,255,Besiegement Guild2,In the process of attacking the castle
+BuffEffect_eng.bmd,16,17,14,255,255,Besiegement Guild3,In the process of attacking the castle
+BuffEffect_eng.bmd,17,18,15,255,255,Invisibility,Transparency Status
+BuffEffect_eng.bmd,18,19,16,255,255,Dark Rod Battle Skill,Transparency Status
+BuffEffect_eng.bmd,19,20,17,255,255,Crown Registration Status,Transparency Status
+BuffEffect_eng.bmd,20,21,18,255,255,Altar of Wolf contract enabled,Transparency Status
+BuffEffect_eng.bmd,21,22,18,255,255,Altar of Wolf contract disabled,Transparency Status
+BuffEffect_eng.bmd,22,23,18,255,255,Altar of Wolf contract Status,Transparency Status
+BuffEffect_eng.bmd,23,24,18,255,255,Altar of Wolf contract attempt,Transparency Status
+BuffEffect_eng.bmd,24,25,18,255,255,Altar of Wolf besiegement Status,Transparency Status
+BuffEffect_eng.bmd,25,26,18,255,255,Altar of Wolf hero contract Status,Transparency Status
+BuffEffect_eng.bmd,26,27,19,255,255,Cry Wolf NPC transparency,Transparency Status
+BuffEffect_eng.bmd,27,28,20,255,255,GM,Transparency Status
+BuffEffect_eng.bmd,28,29,60,13,43,Seal of Ascension,EXP gain increase 50%%
+BuffEffect_eng.bmd,29,30,61,13,44,Seal of Wealth,EXP gain increase 100%%/item gain increase 150%%
+BuffEffect_eng.bmd,30,31,62,13,45,Seal of Sustenance,EXP gain disabled
+BuffEffect_eng.bmd,31,32,22,255,255,Temple - Spell of Quickness,EXP gain disabled
+BuffEffect_eng.bmd,32,33,22,255,255,Temple - Spell of Sublimation,EXP gain disabled
+BuffEffect_eng.bmd,33,34,22,255,255,Spell of Protection,Damage absorbed at 100%%.
+BuffEffect_eng.bmd,34,35,23,14,46,Jack O'Lantern Blessings,Attack speed increase +10
+BuffEffect_eng.bmd,35,36,23,14,47,Wrath of Jack O¡¯ Lantern,"Attack Power, Magical Damage Increased by  +25"
+BuffEffect_eng.bmd,36,37,23,14,48,Jack O'Lantern Cry,Defensibility increase +100
+BuffEffect_eng.bmd,37,38,23,14,49,Jack O'Lantern Food,Maximum Life increase +500
+BuffEffect_eng.bmd,38,39,23,14,50,Jack O'Lantern Drink,Maximum Mana increase +500
+BuffEffect_eng.bmd,39,40,60,13,43,Seal of Ascension,EXP gain increase 50%%
+BuffEffect_eng.bmd,40,41,61,13,44,Seal of Wealth,EXP gain increase 100%%/Item gain increase 150%%
+BuffEffect_eng.bmd,41,42,65,13,45,Seal of Sustenance,EXP gain disabled
+BuffEffect_eng.bmd,42,43,57,13,59,Seal of Mobility,Mobility enabled
+BuffEffect_eng.bmd,43,44,67,14,72,Scroll of Quickness,Attack speed increase +15
+BuffEffect_eng.bmd,44,45,68,14,73,Scroll of Defense,Defensibility increase +60
+BuffEffect_eng.bmd,45,46,69,14,74,Scroll of Wrath,Attack power increase +30
+BuffEffect_eng.bmd,46,47,70,14,75,Scroll of Wizardry,Wizardry increase +30
+BuffEffect_eng.bmd,47,48,71,14,76,Scroll of Health,HP increase +200
+BuffEffect_eng.bmd,48,49,72,14,77,Scroll of Mana,Mana increase +300
+BuffEffect_eng.bmd,49,50,26,14,78,Elixir of Strength,Strength Status +50
+BuffEffect_eng.bmd,50,51,26,14,79,Elixir of Agility,Agility Status +50
+BuffEffect_eng.bmd,51,52,26,14,80,Elixir of Health,Health Status +50
+BuffEffect_eng.bmd,52,53,26,14,81,Elixir of Energy,Energy Status +50
+BuffEffect_eng.bmd,53,54,26,14,82,Elixir of Control,Control Status +50
+BuffEffect_eng.bmd,54,55,27,255,255,Poison,Poisoned status of condition
+BuffEffect_eng.bmd,55,56,28,255,255,Ice,Mobility speed decreases.
+BuffEffect_eng.bmd,56,57,29,255,255,Iced Arrow,Mobility disabled
+BuffEffect_eng.bmd,57,58,30,255,255,Defensibility reduction,Random defensibility decreases at 10%%.
+BuffEffect_eng.bmd,58,59,31,255,255,Attack power reduction,Random defensibility decreases at 10%%.
+BuffEffect_eng.bmd,59,60,32,255,255,Wizardry increase reduction,Random defensibility decreases at 10%%.
+BuffEffect_eng.bmd,60,61,33,255,255,Stun,Mobility disabled
+BuffEffect_eng.bmd,61,62,34,255,255,Magic Defense,Mobility disabled
+BuffEffect_eng.bmd,62,63,35,255,255,Monster Magic Attack Resistance,Mobility disabled
+BuffEffect_eng.bmd,63,64,36,255,255,Monster Chemistry Attack Resistance,Mobility disabled
+BuffEffect_eng.bmd,64,65,37,255,255,Spell of Restriction,Mobility disabled
+BuffEffect_eng.bmd,65,66,38,255,255,Cry Wolf Divine Protection Status,Cry Wolf Divine Protection Status
+BuffEffect_eng.bmd,66,67,38,255,255,Cry Wolf Divine Protection Status,Cry Wolf Divine Protection Status
+BuffEffect_eng.bmd,67,68,38,255,255,Cry Wolf Divine Protection Status,Cry Wolf Divine Protection Status
+BuffEffect_eng.bmd,68,69,38,255,255,Cry Wolf Divine Protection Status,Cry Wolf Divine Protection Status
+BuffEffect_eng.bmd,69,70,38,255,255,Cry Wolf Divine Protection Status,Cry Wolf Divine Protection Status
+BuffEffect_eng.bmd,70,71,39,255,255,Damage Reflection,Partial damage reflected out.
+BuffEffect_eng.bmd,71,72,40,255,255,Sleep,Short period of nap
+BuffEffect_eng.bmd,72,73,40,255,255,Blind,Shortened view and the attack accuracy decreases.
+BuffEffect_eng.bmd,73,74,41,255,255,Requiem,Summoner Neil attack
+BuffEffect_eng.bmd,74,75,42,255,255,Explosion,Summoner Shamut attack
+BuffEffect_eng.bmd,75,76,43,255,255,Weakness,Attack power reduction
+BuffEffect_eng.bmd,76,77,44,255,255,Innovation,Defensibility reduction
+BuffEffect_eng.bmd,77,78,23,14,85,Cherry Blossom Wine,Maximum Mana increase +700
+BuffEffect_eng.bmd,78,79,23,14,86,Cherry Blossom Rice Cake,Maximum Life increase +700
+BuffEffect_eng.bmd,79,80,23,14,87,Cherry Blossom Flower Petal,Attack power increase +40
+BuffEffect_eng.bmd,80,81,1,255,255,Berserker,"Curse spell, Wizardry, Attack power and Maximum Mana increases, Defense and Maximum Life decreases"
+BuffEffect_eng.bmd,81,82,45,255,255,Expansion of Wizardry,Minimum Wizardry increases.
+BuffEffect_eng.bmd,82,83,46,255,255,Flame Strike,Minimum Wizardry increases.
+BuffEffect_eng.bmd,83,84,47,255,255,Gigantic Storm,Minimum Wizardry increases.
+BuffEffect_eng.bmd,84,85,48,255,255,Lightning Shock,Minimum Wizardry increases.
+BuffEffect_eng.bmd,85,86,49,255,255,Cold,Detrimental cold reduces /the mobility speed.
+BuffEffect_eng.bmd,86,87,13,13,62,Seal of Healing,EXP gain increase 50%%/Automatic Life recovery at 5%%
+BuffEffect_eng.bmd,87,88,13,13,63,Seal of Divinity,Item gain increase at 150%%/Automatic Mana recovery at 5%%
+BuffEffect_eng.bmd,88,89,14,14,97,Scroll of Battle,Critical damage increase at 20%%
+BuffEffect_eng.bmd,89,90,14,14,98,Scroll of Strength,Excellent damage increase at 20%%
+BuffEffect_eng.bmd,90,91,23,255,255,Blessing of Christmas,Attack power and Defensibility increases
+BuffEffect_eng.bmd,91,92,23,255,255,Santa Healing,Maximum Life increase +500
+BuffEffect_eng.bmd,92,93,23,255,255,Santa Protection,Maximum Mana increase +500
+BuffEffect_eng.bmd,93,94,23,255,255,Santa Strengthener,Attack power +30
+BuffEffect_eng.bmd,94,95,23,255,255,Santa Defense,Defensibility +100
+BuffEffect_eng.bmd,95,96,23,255,255,Santa Quickness,Attack speed +15
+BuffEffect_eng.bmd,96,97,23,255,255,Santa Fortune,AG recovery speed increase +10
+BuffEffect_eng.bmd,97,98,50,255,255,Watch,You may enter and watch a duel in Arena.
+BuffEffect_eng.bmd,98,99,52,13,81,Talisman of Protection,You receive no penalties when dying../Cannot receive this effect when you are  in outlaw status.
+BuffEffect_eng.bmd,99,100,53,13,82,Talisman of Item Protection,Keeps item durable
+BuffEffect_eng.bmd,100,101,60,13,93,Master Seal of Ascension,EXP gain increase 50%%
+BuffEffect_eng.bmd,101,102,61,13,94,Master Seal of Wealth,EXP gain increase 100%%/Item gain increase 150%%
+BuffEffect_eng.bmd,102,103,51,13,95,Gladiator's Honor,Increases EXP by 20%% /Rare Item drop rate/can be used in Vulcanus only.
+BuffEffect_eng.bmd,103,104,21,13,96,Seal of Strength,Increases Attack Rate and Defense Rate'
+BuffEffect_eng.bmd,104,105,54,255,255,Ascension,Increases Attack Rate and Defense Rate'
+BuffEffect_eng.bmd,105,106,55,255,255,PK Penalty,Warp Command Window access restricted for five minutes.
+BuffEffect_eng.bmd,106,107,56,255,255,You feel tired.,50%% EXP Gain /50%% Item Drop Rate 
+BuffEffect_eng.bmd,107,108,56,255,255,You feel exhausted.,50%% EXP Gain /0%% Item Drop Rate 
+BuffEffect_eng.bmd,108,112,24,13,103,Party EXP Bonus Item,"Up to 30%% EXP gain, depending on the number of members in the party."
+BuffEffect_eng.bmd,109,113,58,13,104,Max AG Boost Aura,Increases your max AG.
+BuffEffect_eng.bmd,110,114,59,13,105,Max SD Boost Aura,Increases your max SD.
+BuffEffect_eng.bmd,111,115,56,13,117,Minimum Vitality,100%% EXP Gain/100%% Item Drop Rate/Stops stamina from diminishing for a fixed duration of time.
+BuffEffect_eng.bmd,112,116,56,13,118,Low Vitality,100%% EXP Gain/100%% Item Drop Rate/Stops stamina from diminishing for a fixed duration of time.
+BuffEffect_eng.bmd,113,117,56,13,119,Medium Vitality,100%% EXP Gain/100%% Item Drop Rate/Stops stamina from diminishing for a fixed duration of time.
+BuffEffect_eng.bmd,114,118,56,13,120,High Vitality,100%% EXP Gain/100%% Item Drop Rate/Stops stamina from diminishing for a fixed duration of time.
+BuffEffect_eng.bmd,115,119,66,13,116,Seal of Wealth,Increases Item Drop Rate to 150%%.
+BuffEffect_eng.bmd,116,120,59,255,255,Punishment for Illicit Software Use,50%% EXP Gain /0%% Item Drop Rate 
+BuffEffect_eng.bmd,117,121,75,14,140,Scroll of Healing,+3%% HP Regen/+100 HP
+BuffEffect_eng.bmd,118,122,76,13,128,Hawk Figurine,Critical Damage +10%%
+BuffEffect_eng.bmd,119,123,76,13,129,Goat Figurine,Excellent Damage +10%%
+BuffEffect_eng.bmd,120,124,77,13,130,Oak Charm,Maximum Life +50
+BuffEffect_eng.bmd,121,125,77,13,131,Maple Charm,Maximum Mana +50
+BuffEffect_eng.bmd,122,126,77,13,132,Golden Oak Charm,Maximum Life +150 / Maximum SD +500
+BuffEffect_eng.bmd,123,127,77,13,133,Golden Maple Charm,Maximum Mana +150 / Maximum AG +50
+BuffEffect_eng.bmd,124,128,78,13,134,Worn Horseshoe,Item Drop Rate increase
+BuffEffect_eng.bmd,125,129,79,255,255,Ignore Enemy's Defense,Increases chance to ignore enemy's defense and inflict damage.
+BuffEffect_eng.bmd,126,130,80,255,255,Increase Health,Increases health stat.
+BuffEffect_eng.bmd,127,131,81,255,255,Increase Defense Rate,Increases maximum defend rate.
+BuffEffect_eng.bmd,128,132,82,255,255,Defense success rate decrease,Decreases defense success rate.
+BuffEffect_eng.bmd,129,133,83,255,255,Invincibility,Invincible
+BuffEffect_eng.bmd,130,134,84,255,255,Iron Defense,Significantly increases defense and HP.
+BuffEffect_eng.bmd,131,135,8,255,255,Swell Life,Increases max life and Mana.
+BuffEffect_eng.bmd,132,136,8,255,255,Swell Life,"Increases max life, Mana, and AG."
+BuffEffect_eng.bmd,133,137,85,255,255,Bleeding,HP is reduced continually.
+BuffEffect_eng.bmd,134,138,45,255,255,Expansion of Wizardry,Increases min Wizardry and max Wizardry.
+BuffEffect_eng.bmd,135,139,45,255,255,Expansion of Wizardry,"Increases min Wizardry, max Wizardry,/ and critical damage rate."
+BuffEffect_eng.bmd,136,140,4,255,255,Soul Barrier,"Uses Mana to absorb damage,/ and increases max Mana."
+BuffEffect_eng.bmd,137,141,86,255,255,Reduce attack speed,Reduces Attack speed.
+BuffEffect_eng.bmd,138,142,87,255,255,Bless,Increases all stats
+BuffEffect_eng.bmd,139,143,6,255,255,Infinity Arrow,"Arrows are not consumed,/ and increases your damage."
+BuffEffect_eng.bmd,140,144,88,255,255,Blind,You are blinded./Decreases attack success rate.
+BuffEffect_eng.bmd,141,145,89,255,255,Vampiric,HP is drained every second and transferred to the target.
+BuffEffect_eng.bmd,142,146,90,255,255,Freeze,Immobilized when you are frozen.
+BuffEffect_eng.bmd,143,147,91,255,255,Earth Binds,Earth Binds
+BuffEffect_eng.bmd,144,148,5,255,255,Critical Damage increase,Increases critical damage and critical damage rate.
+BuffEffect_eng.bmd,145,149,5,255,255,Critical Damage increase,"Increases critical damage and critical damage rate,/ and also increases excellent damage rate."
+BuffEffect_eng.bmd,146,150,1,255,255,Berserker,"Curse spell, Wizardry, Attack power and Maximum Mana increases, Defense and Maximum Life decreases"
+BuffEffect_eng.bmd,147,151,1,255,255,Berserker,"Curse spell, Wizardry, Attack power and Maximum Mana increases, Defense and Maximum Life decreases"
+BuffEffect_eng.bmd,148,152,1,255,255,Berserker,"Curse spell, Wizardry, Attack power and Maximum Mana increases, Defense and Maximum Life decreases"
+BuffEffect_eng.bmd,149,153,81,255,255,Increase Defense Success Rate,Increases defense success rate.
+BuffEffect_eng.bmd,150,154,81,255,255,Increase Defense Success Rate,Increases maximum defense and defense success rate.
+BuffEffect_eng.bmd,151,155,80,255,255,Increase HP,Increases HP.
+BuffEffect_eng.bmd,152,156,79,255,255,Ignore Enemy's Defense,"Increases defense ignore rate. If successful, a chance to ignore defense increase."
+BuffEffect_eng.bmd,153,157,92,255,255,Fire,HP is reduced for every second of fire damage.
+BuffEffect_eng.bmd,154,158,93,255,255,Frost,HP is reduced for every second of frost damage.
+BuffEffect_eng.bmd,155,159,94,255,255,Poison,HP is reduced for every second of poison damage.
+BuffEffect_eng.bmd,156,160,94,255,255,Poison,HP is reduced for every second of poison damage.
+BuffEffect_eng.bmd,157,161,87,255,255,Bless,Increases all stats by %d.
+BuffEffect_eng.bmd,158,162,43,255,255,Weaken,Decreases attack rate.
+BuffEffect_eng.bmd,159,163,44,255,255,Innovate,Decreases defense rate.
+BuffEffect_eng.bmd,160,164,30,255,255,Decrease Defense Rate,Decreases defense rate.
+BuffEffect_eng.bmd,161,165,84,255,255,Iron Defense,Significantly increases defense rate and HP.
+BuffEffect_eng.bmd,162,166,95,255,255,Blood Howl,HP is reduced every second.
+BuffEffect_eng.bmd,163,167,95,255,255,Blood Howl,HP is reduced every second.
+BuffEffect_eng.bmd,164,169,96,255,255,Penetrate Armor,Decreases defense and defense success rate.
+BuffEffect_eng.bmd,165,174,98,255,255,Fire,Total amount of SD is reduced to half.
+BuffEffect_eng.bmd,166,175,99,255,255,Frost,Total amount of MP is reduced to half.
+BuffEffect_eng.bmd,167,176,100,255,255,Tornado,Attack speed is reduced to half.
+BuffEffect_eng.bmd,168,177,101,255,255,Bind,Total amount of HP is reduced to half.
+BuffEffect_eng.bmd,169,178,102,255,255,Darkness,You can't do anything while you're stunned. 
+BuffEffect_eng.bmd,170,179,103,255,255,Fire Tower,ATK+25/EXP+20%%/when fire equipped ATK&DEF+5%%/set item drop chance(excludes Debenter)
+BuffEffect_eng.bmd,171,180,104,255,255,Water Tower,"DEF +50/EXP +20%%/when Water equipped, ATK & DEF +5%%/set item drop chance(excludes Debenter)"
+BuffEffect_eng.bmd,172,181,105,255,255,Earth Tower,CRIT+5%%/EXP+20%%/when Earth equipped ATK&DEF+5%%/set item drop chance(excludes Debenter)
+BuffEffect_eng.bmd,173,182,106,255,255,Wind Tower,"ATK+30/EXP+20%%/when Wind equipped, ATK&DEF+5%%/set item drop chance(excludes Debenter)"
+BuffEffect_eng.bmd,174,183,107,255,255,Darkness Tower,"DMG Rec.-10%%/EXP+20%%/when Darkness equipped, ATK&DEF+5%%/set item drop chance(excludes Debenter)"
+BuffEffect_eng.bmd,175,184,108,255,255,Resurrection Penalty,Movement speed decreased for a certain period of time.
+BuffEffect_eng.bmd,176,185,97,14,163,Vault Expansion,Vault Expansion
+BuffEffect_eng.bmd,177,186,109,255,255,Confusion,Movement speed decreased when hit by this.
+BuffEffect_eng.bmd,178,187,255,255,255,EXP Rewards,EXP increase by 20%%/ possible set item drops.
+BuffEffect_eng.bmd,179,190,115,13,177,Talisman of Ascension I,Earning additional 50%% EXP
+BuffEffect_eng.bmd,180,191,115,13,178,Talisman of Ascension II,Earning additional 100%% EXP
+BuffEffect_eng.bmd,181,192,115,13,179,Talisman of Ascension III,Earning additional 200%% EXP
+BuffEffect_eng.bmd,182,193,60,13,180,Seal of Ascension II,Earning additional 100%% EXP
+BuffEffect_eng.bmd,183,194,60,13,181,Seal of Ascension II,Earning additional 100%% EXP (For Master Level)
+BuffEffect_eng.bmd,184,195,116,14,224,Bless of Light (Greater),Earning additional 200%% EXP after quick blessing
+BuffEffect_eng.bmd,185,196,68,14,225,Scroll Master of Defense,Defense +120
+BuffEffect_eng.bmd,186,197,70,14,226,Scroll Master of Wizardry,Wizardry +60
+BuffEffect_eng.bmd,187,198,71,14,227,Scroll Master of Health,HP +400
+BuffEffect_eng.bmd,188,199,72,14,228,Scroll Master of Mana,MP +600
+BuffEffect_eng.bmd,189,200,69,14,229,Scroll Master of Wrath,Attack Power +60
+BuffEffect_eng.bmd,190,201,75,14,230,Scroll Master of Recovery,"Automatic HP Recovery +4%%, HP +200"
+BuffEffect_eng.bmd,191,202,14,14,231,Scroll Master of Battle,Critical Damage +25%%
+BuffEffect_eng.bmd,192,203,14,14,232,Scroll Master of Strenghener,Excellent Damage +25%%
+BuffEffect_eng.bmd,193,204,67,14,235,Scroll Master of Quickness,Attack speed increase +20
+BuffEffect_eng.bmd,194,205,117,13,2,Horn of Uniria,Summons Uniria to mount.
+BuffEffect_eng.bmd,195,206,117,13,3,Horn of Dinorant,Summons Dinorant to mount.
+BuffEffect_eng.bmd,196,207,117,13,4,Horn of Dark Horse,Summons Dark Horse to mount.
+BuffEffect_eng.bmd,197,208,117,13,37,Horn of Fenrir,Summons Fenrir to mount.
+BuffEffect_eng.bmd,198,211,119,255,255,Internet Cafe,Extra XP/Chaos Castle in PC Cafe/Access to Kalima/Accum. Gob. Pts.
+BuffEffect_eng.bmd,199,212,116,14,7,Bless of Light (Low Grade),"Receiving the blessing for a short period of time, you acquire 50%% of basic EXP additionally."
+BuffEffect_eng.bmd,200,213,116,14,8,Bless of Light (Middle Grade),"Receiving the blessing for a short period of time, you acquire 100%% of basic EXP additionally."
+BuffEffect_eng.bmd,201,215,119,255,255,Internet Cafe,Extra XP/Chaos Castle in PC Cafe/Acesss to Kalima/Accum. Gob. Pts./Stam. Sys. Disabled

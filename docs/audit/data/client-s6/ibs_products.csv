@@ -1,0 +1,2190 @@
+source,record,productId,name,quantityOrDays,unitType,price,itemCode,flags
+IBSProduct.txt,1,1,testddd,Quantity,test,EA,1,673
+IBSProduct.txt,2,2,testddd,Quantity,test,EA,2,673
+IBSProduct.txt,3,3,Seal of Wealth(3day),Duration,259200,Sec.,3,673
+IBSProduct.txt,4,3,Seal of Wealth(3day),±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),3,673
+IBSProduct.txt,5,3,Seal of Wealth(3day),±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),3,673
+IBSProduct.txt,6,4,Scroll of Wizardry(3Day),Duration,259200,Sec.,4,673
+IBSProduct.txt,7,4,Scroll of Wizardry(3Day),±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),4,673
+IBSProduct.txt,8,4,Scroll of Wizardry(3Day),±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),4,673
+IBSProduct.txt,9,5,Scroll of Wrath(3Day),Duration,259200,Sec.,5,673
+IBSProduct.txt,10,5,Scroll of Wrath(3Day),±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),5,673
+IBSProduct.txt,11,5,Scroll of Wrath(3Day),±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),5,673
+IBSProduct.txt,12,6,Pet Panda(3Day),Duration,259200,Sec.,6,673
+IBSProduct.txt,13,6,Pet Panda(3Day),±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),6,673
+IBSProduct.txt,14,6,Pet Panda(3Day),±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),6,673
+IBSProduct.txt,15,7,Ruby Ring(5Day),Duration,432000,Sec.,7,673
+IBSProduct.txt,16,7,Ruby Ring(5Day),±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),7,673
+IBSProduct.txt,17,7,Ruby Ring(5Day),±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),7,673
+IBSProduct.txt,18,8,Topaz Ring(5Day),Duration,432000,Sec.,8,673
+IBSProduct.txt,19,8,Topaz Ring(5Day),±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),8,673
+IBSProduct.txt,20,8,Topaz Ring(5Day),±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),8,673
+IBSProduct.txt,21,9,Seal of Ascension,Duration,86400,Sec.,9,673
+IBSProduct.txt,22,9,Seal of Ascension,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),9,673
+IBSProduct.txt,23,9,Seal of Ascension,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),9,673
+IBSProduct.txt,24,9,Seal of Ascension,Duration,259200,Sec.,10,673
+IBSProduct.txt,25,9,Seal of Ascension,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),10,673
+IBSProduct.txt,26,9,Seal of Ascension,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),10,673
+IBSProduct.txt,27,9,Seal of Ascension,Duration,604800,Sec.,11,673
+IBSProduct.txt,28,9,Seal of Ascension,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),11,673
+IBSProduct.txt,29,9,Seal of Ascension,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),11,673
+IBSProduct.txt,30,9,Seal of Ascension,Duration,2592000,Sec.,12,673
+IBSProduct.txt,31,9,Seal of Ascension,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),12,673
+IBSProduct.txt,32,9,Seal of Ascension,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),12,673
+IBSProduct.txt,33,10,Seal of Wealth,Duration,86400,Sec.,13,673
+IBSProduct.txt,34,10,Seal of Wealth,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),13,673
+IBSProduct.txt,35,10,Seal of Wealth,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),13,673
+IBSProduct.txt,36,10,Seal of Wealth,Duration,259200,Sec.,14,673
+IBSProduct.txt,37,10,Seal of Wealth,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),14,673
+IBSProduct.txt,38,10,Seal of Wealth,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),14,673
+IBSProduct.txt,39,10,Seal of Wealth,Duration,604800,Sec.,15,673
+IBSProduct.txt,40,10,Seal of Wealth,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),15,673
+IBSProduct.txt,41,10,Seal of Wealth,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),15,673
+IBSProduct.txt,42,10,Seal of Wealth,Duration,2592000,Sec.,16,673
+IBSProduct.txt,43,10,Seal of Wealth,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),16,673
+IBSProduct.txt,44,10,Seal of Wealth,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),16,673
+IBSProduct.txt,45,11,Seal of Sustenance,Duration,86400,Sec.,17,673
+IBSProduct.txt,46,11,Seal of Sustenance,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),17,673
+IBSProduct.txt,47,11,Seal of Sustenance,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),17,673
+IBSProduct.txt,48,11,Seal of Sustenance,Duration,864000,Sec.,18,673
+IBSProduct.txt,49,11,Seal of Sustenance,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),18,673
+IBSProduct.txt,50,11,Seal of Sustenance,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),18,673
+IBSProduct.txt,51,11,Seal of Sustenance,Duration,2592000,Sec.,19,673
+IBSProduct.txt,52,11,Seal of Sustenance,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),19,673
+IBSProduct.txt,53,11,Seal of Sustenance,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),19,673
+IBSProduct.txt,54,12,Devil Square Ticket,Quantity,1,EA,20,673
+IBSProduct.txt,55,12,Devil Square Ticket,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),20,673
+IBSProduct.txt,56,12,Devil Square Ticket,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),20,673
+IBSProduct.txt,57,12,Devil Square Ticket,Quantity,10,EA,21,673
+IBSProduct.txt,58,12,Devil Square Ticket,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),21,673
+IBSProduct.txt,59,12,Devil Square Ticket,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),21,673
+IBSProduct.txt,60,13,Blood Castle Ticket,Quantity,1,EA,22,673
+IBSProduct.txt,61,13,Blood Castle Ticket,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,355,Day(s),22,673
+IBSProduct.txt,62,13,Blood Castle Ticket,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,355,Day(s),22,673
+IBSProduct.txt,63,13,Blood Castle Ticket,Quantity,10,EA,23,673
+IBSProduct.txt,64,13,Blood Castle Ticket,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,355,Day(s),23,673
+IBSProduct.txt,65,13,Blood Castle Ticket,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,355,Day(s),23,673
+IBSProduct.txt,66,14,Reset Fruit Strength,Quantity,1,EA,24,673
+IBSProduct.txt,67,14,Reset Fruit Strength,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),24,673
+IBSProduct.txt,68,14,Reset Fruit Strength,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),24,673
+IBSProduct.txt,69,15,Reset Fruit Quickness,Quantity,1,EA,25,673
+IBSProduct.txt,70,15,Reset Fruit Quickness,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),25,673
+IBSProduct.txt,71,15,Reset Fruit Quickness,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),25,673
+IBSProduct.txt,72,16,Reset Fruit Health,Quantity,1,EA,26,673
+IBSProduct.txt,73,16,Reset Fruit Health,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),26,673
+IBSProduct.txt,74,16,Reset Fruit Health,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),26,673
+IBSProduct.txt,75,17,Reset Fruit Energy,Quantity,1,EA,27,673
+IBSProduct.txt,76,17,Reset Fruit Energy,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),27,673
+IBSProduct.txt,77,17,Reset Fruit Energy,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),27,673
+IBSProduct.txt,78,18,Reset Fruit Control,Quantity,1,EA,28,673
+IBSProduct.txt,79,18,Reset Fruit Control,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),28,673
+IBSProduct.txt,80,18,Reset Fruit Control,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),28,673
+IBSProduct.txt,81,19,Illusion Temple Ticket,Quantity,1,EA,29,673
+IBSProduct.txt,82,19,Illusion Temple Ticket,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),29,673
+IBSProduct.txt,83,19,Illusion Temple Ticket,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),29,673
+IBSProduct.txt,84,19,Illusion Temple Ticket,Quantity,10,EA,30,673
+IBSProduct.txt,85,19,Illusion Temple Ticket,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),30,673
+IBSProduct.txt,86,19,Illusion Temple Ticket,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),30,673
+IBSProduct.txt,87,20,Demon,Duration,86400,Sec.,31,673
+IBSProduct.txt,88,20,Demon,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),31,673
+IBSProduct.txt,89,20,Demon,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),31,673
+IBSProduct.txt,90,20,Demon,Duration,604800,Sec.,32,673
+IBSProduct.txt,91,20,Demon,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),32,673
+IBSProduct.txt,92,20,Demon,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),32,673
+IBSProduct.txt,93,20,Demon,Duration,2592000,Sec.,33,673
+IBSProduct.txt,94,20,Demon,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),33,673
+IBSProduct.txt,95,20,Demon,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),33,673
+IBSProduct.txt,96,21,Spirit of Guardian,Duration,86400,Sec.,34,673
+IBSProduct.txt,97,21,Spirit of Guardian,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),34,673
+IBSProduct.txt,98,21,Spirit of Guardian,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),34,673
+IBSProduct.txt,99,21,Spirit of Guardian,Duration,604800,Sec.,35,673
+IBSProduct.txt,100,21,Spirit of Guardian,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),35,673
+IBSProduct.txt,101,21,Spirit of Guardian,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),35,673
+IBSProduct.txt,102,21,Spirit of Guardian,Duration,2592000,Sec.,36,673
+IBSProduct.txt,103,21,Spirit of Guardian,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),36,673
+IBSProduct.txt,104,21,Spirit of Guardian,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),36,673
+IBSProduct.txt,105,22,Talisman of Luck,Rate,1,%,37,673
+IBSProduct.txt,106,22,Talisman of Luck,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),37,673
+IBSProduct.txt,107,22,Talisman of Luck,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),37,673
+IBSProduct.txt,108,22,Talisman of Luck,Rate,5,%,38,673
+IBSProduct.txt,109,22,Talisman of Luck,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),38,673
+IBSProduct.txt,110,22,Talisman of Luck,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),38,673
+IBSProduct.txt,111,23,Elite Healing Potion,Quantity,20,EA,39,673
+IBSProduct.txt,112,23,Elite Healing Potion,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),39,673
+IBSProduct.txt,113,23,Elite Healing Potion,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),39,673
+IBSProduct.txt,114,24,Elite Mana Potion,Quantity,20,EA,40,673
+IBSProduct.txt,115,24,Elite Mana Potion,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),40,673
+IBSProduct.txt,116,24,Elite Mana Potion,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),40,673
+IBSProduct.txt,117,25,Scroll of Quickness,Duration,86400,Sec.,41,673
+IBSProduct.txt,118,25,Scroll of Quickness,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),41,673
+IBSProduct.txt,119,25,Scroll of Quickness,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),41,673
+IBSProduct.txt,120,25,Scroll of Quickness,Duration,604800,Sec.,42,673
+IBSProduct.txt,121,25,Scroll of Quickness,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),42,673
+IBSProduct.txt,122,25,Scroll of Quickness,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),42,673
+IBSProduct.txt,123,26,Scroll of Protection,Duration,86400,Sec.,43,673
+IBSProduct.txt,124,26,Scroll of Protection,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),43,673
+IBSProduct.txt,125,26,Scroll of Protection,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),43,673
+IBSProduct.txt,126,26,Scroll of Protection,Duration,604800,Sec.,44,673
+IBSProduct.txt,127,26,Scroll of Protection,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),44,673
+IBSProduct.txt,128,26,Scroll of Protection,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),44,673
+IBSProduct.txt,129,27,Scroll of Wrath,Duration,86400,Sec.,45,673
+IBSProduct.txt,130,27,Scroll of Wrath,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),45,673
+IBSProduct.txt,131,27,Scroll of Wrath,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),45,673
+IBSProduct.txt,132,27,Scroll of Wrath,Duration,604800,Sec.,46,673
+IBSProduct.txt,133,27,Scroll of Wrath,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),46,673
+IBSProduct.txt,134,27,Scroll of Wrath,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),46,673
+IBSProduct.txt,135,28,Scroll of Wizardry,Duration,86400,Sec.,47,673
+IBSProduct.txt,136,28,Scroll of Wizardry,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),47,673
+IBSProduct.txt,137,28,Scroll of Wizardry,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),47,673
+IBSProduct.txt,138,28,Scroll of Wizardry,Duration,604800,Sec.,48,673
+IBSProduct.txt,139,28,Scroll of Wizardry,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),48,673
+IBSProduct.txt,140,28,Scroll of Wizardry,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),48,673
+IBSProduct.txt,141,29,Scroll of Health,Duration,86400,Sec.,49,673
+IBSProduct.txt,142,29,Scroll of Health,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),49,673
+IBSProduct.txt,143,29,Scroll of Health,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),49,673
+IBSProduct.txt,144,29,Scroll of Health,Duration,604800,Sec.,50,673
+IBSProduct.txt,145,29,Scroll of Health,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),50,673
+IBSProduct.txt,146,29,Scroll of Health,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),50,673
+IBSProduct.txt,147,30,Scroll of Mana,Duration,86400,Sec.,51,673
+IBSProduct.txt,148,30,Scroll of Mana,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),51,673
+IBSProduct.txt,149,30,Scroll of Mana,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),51,673
+IBSProduct.txt,150,30,Scroll of Mana,Duration,604800,Sec.,52,673
+IBSProduct.txt,151,30,Scroll of Mana,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),52,673
+IBSProduct.txt,152,30,Scroll of Mana,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),52,673
+IBSProduct.txt,153,31,Summoner Character Card,Quantity,1,EA,53,673
+IBSProduct.txt,154,31,Summoner Character Card,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),53,673
+IBSProduct.txt,155,31,Summoner Character Card,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),53,673
+IBSProduct.txt,156,32,Chaos Card Gold,Quantity,1,EA,54,673
+IBSProduct.txt,157,32,Chaos Card Gold,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),54,673
+IBSProduct.txt,158,32,Chaos Card Gold,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),54,673
+IBSProduct.txt,159,33,Chaos Card Rare,Quantity,1,EA,55,673
+IBSProduct.txt,160,33,Chaos Card Rare,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),55,673
+IBSProduct.txt,161,33,Chaos Card Rare,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),55,673
+IBSProduct.txt,162,34,Chaos Card  Mini,Quantity,1,EA,56,673
+IBSProduct.txt,163,34,Chaos Card  Mini,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),56,673
+IBSProduct.txt,164,34,Chaos Card  Mini,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),56,673
+IBSProduct.txt,165,35,Talisman of Chaos Assembly,Quantity,1,EA,57,673
+IBSProduct.txt,166,35,Talisman of Chaos Assembly,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),57,673
+IBSProduct.txt,167,35,Talisman of Chaos Assembly,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),57,673
+IBSProduct.txt,168,36,Scroll of Battle,Duration,86400,Sec.,58,673
+IBSProduct.txt,169,36,Scroll of Battle,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),58,673
+IBSProduct.txt,170,36,Scroll of Battle,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),58,673
+IBSProduct.txt,171,36,Scroll of Battle,Duration,604800,Sec.,59,673
+IBSProduct.txt,172,36,Scroll of Battle,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),59,673
+IBSProduct.txt,173,36,Scroll of Battle,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),59,673
+IBSProduct.txt,174,37,Scroll of Strengthener,Duration,86400,Sec.,60,673
+IBSProduct.txt,175,37,Scroll of Strengthener,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),60,673
+IBSProduct.txt,176,37,Scroll of Strengthener,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),60,673
+IBSProduct.txt,177,37,Scroll of Strengthener,Duration,604800,Sec.,61,673
+IBSProduct.txt,178,37,Scroll of Strengthener,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),61,673
+IBSProduct.txt,179,37,Scroll of Strengthener,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),61,673
+IBSProduct.txt,180,38,Seal of Healing,Duration,86400,Sec.,62,673
+IBSProduct.txt,181,38,Seal of Healing,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),62,673
+IBSProduct.txt,182,38,Seal of Healing,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),62,673
+IBSProduct.txt,183,38,Seal of Healing,Duration,604800,Sec.,63,673
+IBSProduct.txt,184,38,Seal of Healing,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),63,673
+IBSProduct.txt,185,38,Seal of Healing,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),63,673
+IBSProduct.txt,186,39,Seal of Divinity,Duration,86400,Sec.,64,673
+IBSProduct.txt,187,39,Seal of Divinity,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),64,673
+IBSProduct.txt,188,39,Seal of Divinity,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),64,673
+IBSProduct.txt,189,39,Seal of Divinity,Duration,604800,Sec.,65,673
+IBSProduct.txt,190,39,Seal of Divinity,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),65,673
+IBSProduct.txt,191,39,Seal of Divinity,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),65,673
+IBSProduct.txt,192,40,Talisman of Resurrection,Quantity,1,EA,66,673
+IBSProduct.txt,193,40,Talisman of Resurrection,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),66,673
+IBSProduct.txt,194,40,Talisman of Resurrection,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),66,673
+IBSProduct.txt,195,41,Talisman of Mobility,Quantity,1,EA,67,673
+IBSProduct.txt,196,41,Talisman of Mobility,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),67,673
+IBSProduct.txt,197,41,Talisman of Mobility,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),67,673
+IBSProduct.txt,198,42,Leap of Strength,Quantity,1,EA,68,673
+IBSProduct.txt,199,42,Leap of Strength,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),68,673
+IBSProduct.txt,200,42,Leap of Strength,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),68,673
+IBSProduct.txt,201,43,Leap of Quickness,Quantity,1,EA,69,673
+IBSProduct.txt,202,43,Leap of Quickness,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),69,673
+IBSProduct.txt,203,43,Leap of Quickness,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),69,673
+IBSProduct.txt,204,44,Leap of Health,Quantity,1,EA,70,673
+IBSProduct.txt,205,44,Leap of Health,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),70,673
+IBSProduct.txt,206,44,Leap of Health,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),70,673
+IBSProduct.txt,207,45,Leap of Energy,Quantity,1,EA,71,673
+IBSProduct.txt,208,45,Leap of Energy,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),71,673
+IBSProduct.txt,209,45,Leap of Energy,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),71,673
+IBSProduct.txt,210,46,Leap of Control,Quantity,1,EA,72,673
+IBSProduct.txt,211,46,Leap of Control,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),72,673
+IBSProduct.txt,212,46,Leap of Control,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),72,673
+IBSProduct.txt,213,47,Kalima Ticket,Quantity,1,EA,73,673
+IBSProduct.txt,214,47,Kalima Ticket,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),73,673
+IBSProduct.txt,215,47,Kalima Ticket,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),73,673
+IBSProduct.txt,216,47,Kalima Ticket,Quantity,10,EA,74,673
+IBSProduct.txt,217,47,Kalima Ticket,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),74,673
+IBSProduct.txt,218,47,Kalima Ticket,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),74,673
+IBSProduct.txt,219,48,Talisman of Guardian,Quantity,1,EA,75,673
+IBSProduct.txt,220,48,Talisman of Guardian,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),75,673
+IBSProduct.txt,221,48,Talisman of Guardian,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),75,673
+IBSProduct.txt,222,49,Talisman of Item Protection,Quantity,1,EA,76,673
+IBSProduct.txt,223,49,Talisman of Item Protection,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),76,673
+IBSProduct.txt,224,49,Talisman of Item Protection,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),76,673
+IBSProduct.txt,225,50,Master Seal of Ascension,Duration,86400,Sec.,77,673
+IBSProduct.txt,226,50,Master Seal of Ascension,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),77,673
+IBSProduct.txt,227,50,Master Seal of Ascension,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),77,673
+IBSProduct.txt,228,50,Master Seal of Ascension,Duration,604800,Sec.,78,673
+IBSProduct.txt,229,50,Master Seal of Ascension,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),78,673
+IBSProduct.txt,230,50,Master Seal of Ascension,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),78,673
+IBSProduct.txt,231,50,Master Seal of Ascension,Duration,2592000,Sec.,79,673
+IBSProduct.txt,232,50,Master Seal of Ascension,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),79,673
+IBSProduct.txt,233,50,Master Seal of Ascension,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),79,673
+IBSProduct.txt,234,51,Master Seal of Wealth,Duration,86400,Sec.,80,673
+IBSProduct.txt,235,51,Master Seal of Wealth,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),80,673
+IBSProduct.txt,236,51,Master Seal of Wealth,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),80,673
+IBSProduct.txt,237,51,Master Seal of Wealth,Duration,604800,Sec.,81,673
+IBSProduct.txt,238,51,Master Seal of Wealth,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),81,673
+IBSProduct.txt,239,51,Master Seal of Wealth,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),81,673
+IBSProduct.txt,240,51,Master Seal of Wealth,Duration,2592000,Sec.,82,673
+IBSProduct.txt,241,51,Master Seal of Wealth,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),82,673
+IBSProduct.txt,242,51,Master Seal of Wealth,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),82,673
+IBSProduct.txt,243,52,Gold Channel Ticket,Duration,604800,Sec.,83,673
+IBSProduct.txt,244,52,Gold Channel Ticket,IP Quantity,1,EA,83,673
+IBSProduct.txt,245,52,Gold Channel Ticket,Ãß°¡ »ç¿ëÀÏ,0,Day(s),83,673
+IBSProduct.txt,246,52,Gold Channel Ticket,Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),83,673
+IBSProduct.txt,247,52,Gold Channel Ticket,Á¤¾× À¯È¿±â°£,365,Day(s),83,673
+IBSProduct.txt,248,52,Gold Channel Ticket,Duration,2592000,Sec.,84,673
+IBSProduct.txt,249,52,Gold Channel Ticket,IP Quantity,1,EA,84,673
+IBSProduct.txt,250,52,Gold Channel Ticket,Ãß°¡ »ç¿ëÀÏ,0,Day(s),84,673
+IBSProduct.txt,251,52,Gold Channel Ticket,Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),84,673
+IBSProduct.txt,252,52,Gold Channel Ticket,Á¤¾× À¯È¿±â°£,365,Day(s),84,673
+IBSProduct.txt,253,53,Small Wings of Disaster,Duration,86400,Sec.,85,673
+IBSProduct.txt,254,53,Small Wings of Disaster,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),85,673
+IBSProduct.txt,255,53,Small Wings of Disaster,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),85,673
+IBSProduct.txt,256,53,Small Wings of Disaster,Duration,604800,Sec.,86,673
+IBSProduct.txt,257,53,Small Wings of Disaster,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),86,673
+IBSProduct.txt,258,53,Small Wings of Disaster,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),86,673
+IBSProduct.txt,259,54,Small Wings of Fairy,Duration,86400,Sec.,87,673
+IBSProduct.txt,260,54,Small Wings of Fairy,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),87,673
+IBSProduct.txt,261,54,Small Wings of Fairy,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),87,673
+IBSProduct.txt,262,54,Small Wings of Fairy,Duration,604800,Sec.,88,673
+IBSProduct.txt,263,54,Small Wings of Fairy,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),88,673
+IBSProduct.txt,264,54,Small Wings of Fairy,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),88,673
+IBSProduct.txt,265,55,Small Wings of Heaven,Duration,86400,Sec.,89,673
+IBSProduct.txt,266,55,Small Wings of Heaven,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),89,673
+IBSProduct.txt,267,55,Small Wings of Heaven,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),89,673
+IBSProduct.txt,268,55,Small Wings of Heaven,Duration,604800,Sec.,90,673
+IBSProduct.txt,269,55,Small Wings of Heaven,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),90,673
+IBSProduct.txt,270,55,Small Wings of Heaven,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),90,673
+IBSProduct.txt,271,56,Small Wings of Satan,Duration,86400,Sec.,91,673
+IBSProduct.txt,272,56,Small Wings of Satan,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),91,673
+IBSProduct.txt,273,56,Small Wings of Satan,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),91,673
+IBSProduct.txt,274,56,Small Wings of Satan,Duration,604800,Sec.,92,673
+IBSProduct.txt,275,56,Small Wings of Satan,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),92,673
+IBSProduct.txt,276,56,Small Wings of Satan,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),92,673
+IBSProduct.txt,277,57,Panda Ring,Duration,86400,Sec.,93,673
+IBSProduct.txt,278,57,Panda Ring,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),93,673
+IBSProduct.txt,279,57,Panda Ring,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),93,673
+IBSProduct.txt,280,57,Panda Ring,Duration,604800,Sec.,94,673
+IBSProduct.txt,281,57,Panda Ring,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),94,673
+IBSProduct.txt,282,57,Panda Ring,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),94,673
+IBSProduct.txt,283,58,Wizard Ring,Duration,86400,Sec.,95,673
+IBSProduct.txt,284,58,Wizard Ring,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),95,673
+IBSProduct.txt,285,58,Wizard Ring,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),95,673
+IBSProduct.txt,286,58,Wizard Ring,Duration,604800,Sec.,96,673
+IBSProduct.txt,287,58,Wizard Ring,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),96,673
+IBSProduct.txt,288,58,Wizard Ring,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),96,673
+IBSProduct.txt,289,59,Skeleton Transformation Ring,Duration,86400,Sec.,97,673
+IBSProduct.txt,290,59,Skeleton Transformation Ring,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),97,673
+IBSProduct.txt,291,59,Skeleton Transformation Ring,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),97,673
+IBSProduct.txt,292,59,Skeleton Transformation Ring,Duration,604800,Sec.,98,673
+IBSProduct.txt,293,59,Skeleton Transformation Ring,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),98,673
+IBSProduct.txt,294,59,Skeleton Transformation Ring,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),98,673
+IBSProduct.txt,295,60,Pet Panda,Duration,86400,Sec.,99,673
+IBSProduct.txt,296,60,Pet Panda,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),99,673
+IBSProduct.txt,297,60,Pet Panda,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),99,673
+IBSProduct.txt,298,60,Pet Panda,Duration,604800,Sec.,100,673
+IBSProduct.txt,299,60,Pet Panda,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),100,673
+IBSProduct.txt,300,60,Pet Panda,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),100,673
+IBSProduct.txt,301,61,Pet Skeleton,Duration,86400,Sec.,101,673
+IBSProduct.txt,302,61,Pet Skeleton,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),101,673
+IBSProduct.txt,303,61,Pet Skeleton,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),101,673
+IBSProduct.txt,304,61,Pet Skeleton,Duration,604800,Sec.,102,673
+IBSProduct.txt,305,61,Pet Skeleton,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),102,673
+IBSProduct.txt,306,61,Pet Skeleton,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),102,673
+IBSProduct.txt,307,62,Sapphire Ring,Duration,86400,Sec.,103,673
+IBSProduct.txt,308,62,Sapphire Ring,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),103,673
+IBSProduct.txt,309,62,Sapphire Ring,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),103,673
+IBSProduct.txt,310,62,Sapphire Ring,Duration,604800,Sec.,104,673
+IBSProduct.txt,311,62,Sapphire Ring,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),104,673
+IBSProduct.txt,312,62,Sapphire Ring,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),104,673
+IBSProduct.txt,313,63,Ruby Ring,Duration,86400,Sec.,105,673
+IBSProduct.txt,314,63,Ruby Ring,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),105,673
+IBSProduct.txt,315,63,Ruby Ring,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),105,673
+IBSProduct.txt,316,63,Ruby Ring,Duration,604800,Sec.,106,673
+IBSProduct.txt,317,63,Ruby Ring,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),106,673
+IBSProduct.txt,318,63,Ruby Ring,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),106,673
+IBSProduct.txt,319,64,Topaz Ring,Duration,86400,Sec.,107,673
+IBSProduct.txt,320,64,Topaz Ring,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),107,673
+IBSProduct.txt,321,64,Topaz Ring,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),107,673
+IBSProduct.txt,322,64,Topaz Ring,Duration,604800,Sec.,108,673
+IBSProduct.txt,323,64,Topaz Ring,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),108,673
+IBSProduct.txt,324,64,Topaz Ring,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),108,673
+IBSProduct.txt,325,65,Amethyst Ring,Duration,86400,Sec.,109,673
+IBSProduct.txt,326,65,Amethyst Ring,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),109,673
+IBSProduct.txt,327,65,Amethyst Ring,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),109,673
+IBSProduct.txt,328,65,Amethyst Ring,Duration,604800,Sec.,110,673
+IBSProduct.txt,329,65,Amethyst Ring,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),110,673
+IBSProduct.txt,330,65,Amethyst Ring,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),110,673
+IBSProduct.txt,331,66,Ruby Necklace,Duration,86400,Sec.,111,673
+IBSProduct.txt,332,66,Ruby Necklace,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),111,673
+IBSProduct.txt,333,66,Ruby Necklace,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),111,673
+IBSProduct.txt,334,66,Ruby Necklace,Duration,604800,Sec.,112,673
+IBSProduct.txt,335,66,Ruby Necklace,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),112,673
+IBSProduct.txt,336,66,Ruby Necklace,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),112,673
+IBSProduct.txt,337,67,Emerald Necklace,Duration,86400,Sec.,113,673
+IBSProduct.txt,338,67,Emerald Necklace,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),113,673
+IBSProduct.txt,339,67,Emerald Necklace,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),113,673
+IBSProduct.txt,340,67,Emerald Necklace,Duration,604800,Sec.,114,673
+IBSProduct.txt,341,67,Emerald Necklace,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),114,673
+IBSProduct.txt,342,67,Emerald Necklace,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),114,673
+IBSProduct.txt,343,68,Sapphire Necklace,Duration,86400,Sec.,115,673
+IBSProduct.txt,344,68,Sapphire Necklace,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),115,673
+IBSProduct.txt,345,68,Sapphire Necklace,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),115,673
+IBSProduct.txt,346,68,Sapphire Necklace,Duration,604800,Sec.,116,673
+IBSProduct.txt,347,68,Sapphire Necklace,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),116,673
+IBSProduct.txt,348,68,Sapphire Necklace,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),116,673
+IBSProduct.txt,349,69,Silver Key,Quantity,1,EA,117,673
+IBSProduct.txt,350,69,Silver Key,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),117,673
+IBSProduct.txt,351,69,Silver Key,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),117,673
+IBSProduct.txt,352,70,Gold Key,Quantity,1,EA,118,673
+IBSProduct.txt,353,70,Gold Key,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),118,673
+IBSProduct.txt,354,70,Gold Key,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),118,673
+IBSProduct.txt,355,71,Critical Ring of Wizard,Duration,86400,Sec.,119,673
+IBSProduct.txt,356,71,Critical Ring of Wizard,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),119,673
+IBSProduct.txt,357,71,Critical Ring of Wizard,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),119,673
+IBSProduct.txt,358,71,Critical Ring of Wizard,Duration,604800,Sec.,120,673
+IBSProduct.txt,359,71,Critical Ring of Wizard,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),120,673
+IBSProduct.txt,360,71,Critical Ring of Wizard,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),120,673
+IBSProduct.txt,361,72,Pet Unicorn,Duration,86400,Sec.,121,673
+IBSProduct.txt,362,72,Pet Unicorn,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),121,673
+IBSProduct.txt,363,72,Pet Unicorn,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),121,673
+IBSProduct.txt,364,72,Pet Unicorn,Duration,604800,Sec.,122,673
+IBSProduct.txt,365,72,Pet Unicorn,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),122,673
+IBSProduct.txt,366,72,Pet Unicorn,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),122,673
+IBSProduct.txt,367,73,AG Boost Aura,Duration,86400,Sec.,123,673
+IBSProduct.txt,368,73,AG Boost Aura,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),123,673
+IBSProduct.txt,369,73,AG Boost Aura,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),123,673
+IBSProduct.txt,370,73,AG Boost Aura,Duration,604800,Sec.,124,673
+IBSProduct.txt,371,73,AG Boost Aura,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),124,673
+IBSProduct.txt,372,73,AG Boost Aura,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),124,673
+IBSProduct.txt,373,74,SD Boost Aura,Duration,86400,Sec.,125,673
+IBSProduct.txt,374,74,SD Boost Aura,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),125,673
+IBSProduct.txt,375,74,SD Boost Aura,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),125,673
+IBSProduct.txt,376,74,SD Boost Aura,Duration,604800,Sec.,126,673
+IBSProduct.txt,377,74,SD Boost Aura,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),126,673
+IBSProduct.txt,378,74,SD Boost Aura,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),126,673
+IBSProduct.txt,379,75,Party EXP Increase,Duration,86400,Sec.,127,673
+IBSProduct.txt,380,75,Party EXP Increase,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),127,673
+IBSProduct.txt,381,75,Party EXP Increase,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),127,673
+IBSProduct.txt,382,75,Party EXP Increase,Duration,604800,Sec.,128,673
+IBSProduct.txt,383,75,Party EXP Increase,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),128,673
+IBSProduct.txt,384,75,Party EXP Increase,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),128,673
+IBSProduct.txt,385,76,Elite SD Potion,Quantity,10,EA,129,673
+IBSProduct.txt,386,76,Elite SD Potion,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),129,673
+IBSProduct.txt,387,76,Elite SD Potion,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),129,673
+IBSProduct.txt,388,77,Open Access Ticket to Doppelganger,Quantity,1,EA,130,673
+IBSProduct.txt,389,77,Open Access Ticket to Doppelganger,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),130,673
+IBSProduct.txt,390,77,Open Access Ticket to Doppelganger,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),130,673
+IBSProduct.txt,391,77,Open Access Ticket to Doppelganger,Quantity,10,EA,131,673
+IBSProduct.txt,392,77,Open Access Ticket to Doppelganger,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),131,673
+IBSProduct.txt,393,77,Open Access Ticket to Doppelganger,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),131,673
+IBSProduct.txt,394,78,Open Access Ticket to Varka,Quantity,1,EA,132,673
+IBSProduct.txt,395,78,Open Access Ticket to Varka,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),132,673
+IBSProduct.txt,396,78,Open Access Ticket to Varka,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),132,673
+IBSProduct.txt,397,78,Open Access Ticket to Varka,Quantity,10,EA,133,673
+IBSProduct.txt,398,78,Open Access Ticket to Varka,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),133,673
+IBSProduct.txt,399,78,Open Access Ticket to Varka,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),133,673
+IBSProduct.txt,400,79,Open Access Ticket to Varka 7,Quantity,1,EA,134,673
+IBSProduct.txt,401,79,Open Access Ticket to Varka 7,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),134,673
+IBSProduct.txt,402,79,Open Access Ticket to Varka 7,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),134,673
+IBSProduct.txt,403,79,Open Access Ticket to Varka 7,Quantity,10,EA,135,673
+IBSProduct.txt,404,79,Open Access Ticket to Varka 7,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),135,673
+IBSProduct.txt,405,79,Open Access Ticket to Varka 7,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),135,673
+IBSProduct.txt,406,80,Talisman of Guardian,Duration,86400,Sec.,136,673
+IBSProduct.txt,407,80,Talisman of Guardian,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),136,673
+IBSProduct.txt,408,80,Talisman of Guardian,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),136,673
+IBSProduct.txt,409,80,Talisman of Guardian,Duration,604800,Sec.,137,673
+IBSProduct.txt,410,80,Talisman of Guardian,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),137,673
+IBSProduct.txt,411,80,Talisman of Guardian,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),137,673
+IBSProduct.txt,412,81,Talisman of Item Protection,Duration,86400,Sec.,138,673
+IBSProduct.txt,413,81,Talisman of Item Protection,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),138,673
+IBSProduct.txt,414,81,Talisman of Item Protection,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),138,673
+IBSProduct.txt,415,81,Talisman of Item Protection,Duration,604800,Sec.,139,673
+IBSProduct.txt,416,81,Talisman of Item Protection,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),139,673
+IBSProduct.txt,417,81,Talisman of Item Protection,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),139,673
+IBSProduct.txt,418,82,Gold Channel Ticket*,Duration,259200,Sec.,140,673
+IBSProduct.txt,419,82,Gold Channel Ticket*,IP Quantity,1,EA,140,673
+IBSProduct.txt,420,82,Gold Channel Ticket*,Ãß°¡ »ç¿ëÀÏ,0,Day(s),140,673
+IBSProduct.txt,421,82,Gold Channel Ticket*,Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),140,673
+IBSProduct.txt,422,82,Gold Channel Ticket*,Á¤¾× À¯È¿±â°£,365,Day(s),140,673
+IBSProduct.txt,423,83,G-Scroll of Wrath,Duration,21600,Sec.,141,673
+IBSProduct.txt,424,83,G-Scroll of Wrath,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),141,673
+IBSProduct.txt,425,83,G-Scroll of Wrath,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),141,673
+IBSProduct.txt,426,84,G-Scroll of Wizardry,Duration,21600,Sec.,142,673
+IBSProduct.txt,427,84,G-Scroll of Wizardry,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),142,673
+IBSProduct.txt,428,84,G-Scroll of Wizardry,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),142,673
+IBSProduct.txt,429,85,G-Scroll of Health,Duration,21600,Sec.,143,673
+IBSProduct.txt,430,85,G-Scroll of Health,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),143,673
+IBSProduct.txt,431,85,G-Scroll of Health,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),143,673
+IBSProduct.txt,432,86,G-Scroll of Mana,Duration,21600,Sec.,144,673
+IBSProduct.txt,433,86,G-Scroll of Mana,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),144,673
+IBSProduct.txt,434,86,G-Scroll of Mana,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),144,673
+IBSProduct.txt,435,87,G-Scroll of Quickness,Duration,21600,Sec.,145,673
+IBSProduct.txt,436,87,G-Scroll of Quickness,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),145,673
+IBSProduct.txt,437,87,G-Scroll of Quickness,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),145,673
+IBSProduct.txt,438,88,G-Scroll of Protection,Duration,21600,Sec.,146,673
+IBSProduct.txt,439,88,G-Scroll of Protection,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),146,673
+IBSProduct.txt,440,88,G-Scroll of Protection,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),146,673
+IBSProduct.txt,441,89,G-Medium Elite Healing Potion,Quantity,10,EA,147,673
+IBSProduct.txt,442,89,G-Medium Elite Healing Potion,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),147,673
+IBSProduct.txt,443,89,G-Medium Elite Healing Potion,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),147,673
+IBSProduct.txt,444,90,G-Devil Square Ticket,Quantity,1,EA,148,673
+IBSProduct.txt,445,90,G-Devil Square Ticket,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),148,673
+IBSProduct.txt,446,90,G-Devil Square Ticket,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),148,673
+IBSProduct.txt,447,91,G-Blood Castle Ticket,Quantity,1,EA,149,673
+IBSProduct.txt,448,91,G-Blood Castle Ticket,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),149,673
+IBSProduct.txt,449,91,G-Blood Castle Ticket,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),149,673
+IBSProduct.txt,450,92,G-Illusion Temple Ticket,Quantity,1,EA,150,673
+IBSProduct.txt,451,92,G-Illusion Temple Ticket,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),150,673
+IBSProduct.txt,452,92,G-Illusion Temple Ticket,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),150,673
+IBSProduct.txt,453,93,Test_GB,Áö±Þ ¸¶ÀÏ¸®Áö,100000,WReward,151,673
+IBSProduct.txt,454,93,Test_GB,À¯È¿±â°£,365,Day(s),151,673
+IBSProduct.txt,455,93,Test_GB,°¨°¡»ó°¢±â°£,365,Day(s),151,673
+IBSProduct.txt,456,94,Seal of Wealth*,Duration,604800,Sec.,152,673
+IBSProduct.txt,457,94,Seal of Wealth*,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),152,673
+IBSProduct.txt,458,94,Seal of Wealth*,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),152,673
+IBSProduct.txt,459,95,Master Seal of Wealth*,Duration,604800,Sec.,153,673
+IBSProduct.txt,460,95,Master Seal of Wealth*,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),153,673
+IBSProduct.txt,461,95,Master Seal of Wealth*,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),153,673
+IBSProduct.txt,462,96,Chaos Card Gold*,Quantity,1,EA,154,673
+IBSProduct.txt,463,96,Chaos Card Gold*,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),154,673
+IBSProduct.txt,464,96,Chaos Card Gold*,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),154,673
+IBSProduct.txt,465,97,Scroll of Protection*,Duration,86400,Sec.,155,673
+IBSProduct.txt,466,97,Scroll of Protection*,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),155,673
+IBSProduct.txt,467,97,Scroll of Protection*,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),155,673
+IBSProduct.txt,468,98,Gold Channel Ticket**,Duration,604800,Sec.,156,673
+IBSProduct.txt,469,98,Gold Channel Ticket**,IP Quantity,1,EA,156,673
+IBSProduct.txt,470,98,Gold Channel Ticket**,Ãß°¡ »ç¿ëÀÏ,0,Day(s),156,673
+IBSProduct.txt,471,98,Gold Channel Ticket**,Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),156,673
+IBSProduct.txt,472,98,Gold Channel Ticket**,Á¤¾× À¯È¿±â°£,365,Day(s),156,673
+IBSProduct.txt,473,99,Chaos Card Gold**,Quantity,1,EA,157,673
+IBSProduct.txt,474,99,Chaos Card Gold**,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),157,673
+IBSProduct.txt,475,99,Chaos Card Gold**,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),157,673
+IBSProduct.txt,476,100,Chaos Card Gold***,Quantity,1,EA,158,673
+IBSProduct.txt,477,100,Chaos Card Gold***,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),158,673
+IBSProduct.txt,478,100,Chaos Card Gold***,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),158,673
+IBSProduct.txt,479,101,Pet Panda*,Duration,172800,Sec.,159,673
+IBSProduct.txt,480,101,Pet Panda*,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),159,673
+IBSProduct.txt,481,101,Pet Panda*,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),159,673
+IBSProduct.txt,482,102,Pet Panda**,Duration,345600,Sec.,160,673
+IBSProduct.txt,483,102,Pet Panda**,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),160,673
+IBSProduct.txt,484,102,Pet Panda**,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),160,673
+IBSProduct.txt,485,103,Silver Key_Day,Quantity,1,EA,162,673
+IBSProduct.txt,486,103,Silver Key_Day,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),162,673
+IBSProduct.txt,487,103,Silver Key_Day,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),162,673
+IBSProduct.txt,488,104,Gold Key_7Days,Quantity,1,EA,163,673
+IBSProduct.txt,489,104,Gold Key_7Days,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),163,673
+IBSProduct.txt,490,104,Gold Key_7Days,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),163,673
+IBSProduct.txt,491,105,Elite Healing Potion_7Days,Quantity,20,EA,164,673
+IBSProduct.txt,492,105,Elite Healing Potion_7Days,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),164,673
+IBSProduct.txt,493,105,Elite Healing Potion_7Days,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),164,673
+IBSProduct.txt,494,106,Skeleton Transformation Ring_7Days,Duration,86400,Sec.,165,673
+IBSProduct.txt,495,106,Skeleton Transformation Ring_7Days,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),165,673
+IBSProduct.txt,496,106,Skeleton Transformation Ring_7Days,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),165,673
+IBSProduct.txt,497,107,Pet Panda_30Days,Duration,259200,Sec.,166,673
+IBSProduct.txt,498,107,Pet Panda_30Days,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),166,673
+IBSProduct.txt,499,107,Pet Panda_30Days,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),166,673
+IBSProduct.txt,500,108,Chaos Card Gold_30Days,Quantity,1,EA,167,673
+IBSProduct.txt,501,108,Chaos Card Gold_30Days,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),167,673
+IBSProduct.txt,502,108,Chaos Card Gold_30Days,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),167,673
+IBSProduct.txt,503,109,Seal of Ascension_30Days,Duration,604800,Sec.,168,673
+IBSProduct.txt,504,109,Seal of Ascension_30Days,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),168,673
+IBSProduct.txt,505,109,Seal of Ascension_30Days,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),168,673
+IBSProduct.txt,506,110,Master Seal of Ascension_30Days,Duration,604800,Sec.,169,673
+IBSProduct.txt,507,110,Master Seal of Ascension_30Days,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),169,673
+IBSProduct.txt,508,110,Master Seal of Ascension_30Days,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),169,673
+IBSProduct.txt,509,111,Gold Channel Ticket_3Days,Duration,259200,Sec.,170,673
+IBSProduct.txt,510,111,Gold Channel Ticket_3Days,IP Quantity,1,EA,170,673
+IBSProduct.txt,511,111,Gold Channel Ticket_3Days,Ãß°¡ »ç¿ëÀÏ,0,Day(s),170,673
+IBSProduct.txt,512,111,Gold Channel Ticket_3Days,Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),170,673
+IBSProduct.txt,513,111,Gold Channel Ticket_3Days,Á¤¾× À¯È¿±â°£,365,Day(s),170,673
+IBSProduct.txt,514,112,Seed (Lightning),Quantity,1,EA,171,673
+IBSProduct.txt,515,112,Seed (Lightning),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),171,673
+IBSProduct.txt,516,112,Seed (Lightning),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),171,673
+IBSProduct.txt,517,113,Seed (Fire),Quantity,1,EA,172,673
+IBSProduct.txt,518,113,Seed (Fire),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),172,673
+IBSProduct.txt,519,113,Seed (Fire),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),172,673
+IBSProduct.txt,520,114,Seed (Ice),Quantity,1,EA,173,673
+IBSProduct.txt,521,114,Seed (Ice),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),173,673
+IBSProduct.txt,522,114,Seed (Ice),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),173,673
+IBSProduct.txt,523,115,D-Scroll of Quickness,Duration,86400,Sec.,174,673
+IBSProduct.txt,524,115,D-Scroll of Quickness,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),174,673
+IBSProduct.txt,525,115,D-Scroll of Quickness,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),174,673
+IBSProduct.txt,526,116,D-Elite SD Potion,Quantity,10,EA,175,673
+IBSProduct.txt,527,116,D-Elite SD Potion,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),175,673
+IBSProduct.txt,528,116,D-Elite SD Potion,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),175,673
+IBSProduct.txt,529,117,B-Chaos Card  Mini,Quantity,1,EA,176,673
+IBSProduct.txt,530,117,B-Chaos Card  Mini,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),176,673
+IBSProduct.txt,531,117,B-Chaos Card  Mini,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),176,673
+IBSProduct.txt,532,118,D-Critical Ring of Wizard,Duration,86400,Sec.,177,673
+IBSProduct.txt,533,118,D-Critical Ring of Wizard,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),177,673
+IBSProduct.txt,534,118,D-Critical Ring of Wizard,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),177,673
+IBSProduct.txt,535,119,D-Demon,Duration,86400,Sec.,178,673
+IBSProduct.txt,536,119,D-Demon,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),178,673
+IBSProduct.txt,537,119,D-Demon,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),178,673
+IBSProduct.txt,538,120,D-Scroll of Strengthener,Duration,86400,Sec.,179,673
+IBSProduct.txt,539,120,D-Scroll of Strengthener,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),179,673
+IBSProduct.txt,540,120,D-Scroll of Strengthener,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),179,673
+IBSProduct.txt,541,121,D-SD Boost Aura,Duration,86400,Sec.,180,673
+IBSProduct.txt,542,121,D-SD Boost Aura,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),180,673
+IBSProduct.txt,543,121,D-SD Boost Aura,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),180,673
+IBSProduct.txt,544,122,D-Ruby Necklace,Duration,86400,Sec.,181,673
+IBSProduct.txt,545,122,D-Ruby Necklace,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),181,673
+IBSProduct.txt,546,122,D-Ruby Necklace,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),181,673
+IBSProduct.txt,547,123,B-Talisman of Luck,Rate,1,%,182,673
+IBSProduct.txt,548,123,B-Talisman of Luck,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),182,673
+IBSProduct.txt,549,123,B-Talisman of Luck,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),182,673
+IBSProduct.txt,550,124,B-Silver Key,Quantity,1,EA,183,673
+IBSProduct.txt,551,124,B-Silver Key,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),183,673
+IBSProduct.txt,552,124,B-Silver Key,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),183,673
+IBSProduct.txt,553,125,B-1 Silver Key,Quantity,1,EA,184,673
+IBSProduct.txt,554,125,B-1 Silver Key,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),184,673
+IBSProduct.txt,555,125,B-1 Silver Key,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),184,673
+IBSProduct.txt,556,126,B-2 Silver Key,Quantity,1,EA,185,673
+IBSProduct.txt,557,126,B-2 Silver Key,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),185,673
+IBSProduct.txt,558,126,B-2 Silver Key,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),185,673
+IBSProduct.txt,559,128,Gold Channel Ticket,Duration,259200,Sec.,187,673
+IBSProduct.txt,560,128,Gold Channel Ticket,IP Quantity,1,EA,187,673
+IBSProduct.txt,561,128,Gold Channel Ticket,Ãß°¡ »ç¿ëÀÏ,0,Day(s),187,673
+IBSProduct.txt,562,128,Gold Channel Ticket,Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),187,673
+IBSProduct.txt,563,128,Gold Channel Ticket,Á¤¾× À¯È¿±â°£,365,Day(s),187,673
+IBSProduct.txt,564,129,Gold Channel Ticket-Limited,Duration,604800,Sec.,188,673
+IBSProduct.txt,565,129,Gold Channel Ticket-Limited,IP Quantity,1,EA,188,673
+IBSProduct.txt,566,129,Gold Channel Ticket-Limited,Ãß°¡ »ç¿ëÀÏ,0,Day(s),188,673
+IBSProduct.txt,567,129,Gold Channel Ticket-Limited,Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),188,673
+IBSProduct.txt,568,129,Gold Channel Ticket-Limited,Á¤¾× À¯È¿±â°£,365,Day(s),188,673
+IBSProduct.txt,569,129,Gold Channel Ticket-Limited,Duration,2592000,Sec.,189,673
+IBSProduct.txt,570,129,Gold Channel Ticket-Limited,IP Quantity,1,EA,189,673
+IBSProduct.txt,571,129,Gold Channel Ticket-Limited,Ãß°¡ »ç¿ëÀÏ,0,Day(s),189,673
+IBSProduct.txt,572,129,Gold Channel Ticket-Limited,Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),189,673
+IBSProduct.txt,573,129,Gold Channel Ticket-Limited,Á¤¾× À¯È¿±â°£,365,Day(s),189,673
+IBSProduct.txt,574,130,Pet Panda-1Day,Duration,86400,Sec.,190,673
+IBSProduct.txt,575,130,Pet Panda-1Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),190,673
+IBSProduct.txt,576,130,Pet Panda-1Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),190,673
+IBSProduct.txt,577,131,Gold Key-1EA,Quantity,1,EA,191,673
+IBSProduct.txt,578,131,Gold Key-1EA,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),191,673
+IBSProduct.txt,579,131,Gold Key-1EA,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),191,673
+IBSProduct.txt,580,132,Chaos Card Gold_BUG Event,Quantity,1,EA,192,673
+IBSProduct.txt,581,132,Chaos Card Gold_BUG Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),192,673
+IBSProduct.txt,582,132,Chaos Card Gold_BUG Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),192,673
+IBSProduct.txt,583,133,Seed (Water) DEF Accuracy,Quantity,1,EA,193,673
+IBSProduct.txt,584,133,Seed (Water) DEF Accuracy,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),193,673
+IBSProduct.txt,585,133,Seed (Water) DEF Accuracy,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),193,673
+IBSProduct.txt,586,134,Seed (Water) DEF Increase,Quantity,1,EA,194,673
+IBSProduct.txt,587,134,Seed (Water) DEF Increase,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),194,673
+IBSProduct.txt,588,134,Seed (Water) DEF Increase,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),194,673
+IBSProduct.txt,589,135,Seed (Wind),Quantity,1,EA,195,673
+IBSProduct.txt,590,135,Seed (Wind),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),195,673
+IBSProduct.txt,591,135,Seed (Wind),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),195,673
+IBSProduct.txt,592,136,Seed (Earth),Quantity,1,EA,196,673
+IBSProduct.txt,593,136,Seed (Earth),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),196,673
+IBSProduct.txt,594,136,Seed (Earth),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),196,673
+IBSProduct.txt,595,137,Gold Channel Ticket_Nov_Event,Duration,604800,Sec.,197,673
+IBSProduct.txt,596,137,Gold Channel Ticket_Nov_Event,IP Quantity,1,EA,197,673
+IBSProduct.txt,597,137,Gold Channel Ticket_Nov_Event,Ãß°¡ »ç¿ëÀÏ,0,Day(s),197,673
+IBSProduct.txt,598,137,Gold Channel Ticket_Nov_Event,Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),197,673
+IBSProduct.txt,599,137,Gold Channel Ticket_Nov_Event,Á¤¾× À¯È¿±â°£,365,Day(s),197,673
+IBSProduct.txt,600,138,Chaos Card Gold_Nov_Event,Quantity,1,EA,198,673
+IBSProduct.txt,601,138,Chaos Card Gold_Nov_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),198,673
+IBSProduct.txt,602,138,Chaos Card Gold_Nov_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),198,673
+IBSProduct.txt,603,139,Scroll of Quickness-ALL,Duration,86400,Sec.,199,673
+IBSProduct.txt,604,139,Scroll of Quickness-ALL,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),199,673
+IBSProduct.txt,605,139,Scroll of Quickness-ALL,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),199,673
+IBSProduct.txt,606,140,Scroll of Protection-ALL,Duration,86400,Sec.,200,673
+IBSProduct.txt,607,140,Scroll of Protection-ALL,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),200,673
+IBSProduct.txt,608,140,Scroll of Protection-ALL,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),200,673
+IBSProduct.txt,609,141,Scroll of Wrath-ALL,Duration,86400,Sec.,201,673
+IBSProduct.txt,610,141,Scroll of Wrath-ALL,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),201,673
+IBSProduct.txt,611,141,Scroll of Wrath-ALL,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),201,673
+IBSProduct.txt,612,142,Scroll of Wizardry-ALL,Duration,86400,Sec.,202,673
+IBSProduct.txt,613,142,Scroll of Wizardry-ALL,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),202,673
+IBSProduct.txt,614,142,Scroll of Wizardry-ALL,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),202,673
+IBSProduct.txt,615,143,Scroll of Health-ALL,Duration,86400,Sec.,203,673
+IBSProduct.txt,616,143,Scroll of Health-ALL,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),203,673
+IBSProduct.txt,617,143,Scroll of Health-ALL,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),203,673
+IBSProduct.txt,618,144,Scroll of Mana-ALL,Duration,86400,Sec.,204,673
+IBSProduct.txt,619,144,Scroll of Mana-ALL,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),204,673
+IBSProduct.txt,620,144,Scroll of Mana-ALL,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),204,673
+IBSProduct.txt,621,145,Charater Transfer,Quantity,1,EA,205,673
+IBSProduct.txt,622,145,Charater Transfer,ÇÁ¸®¹Ì¾ö-°¨°¡»ó°¢±â°£,365,Day(s),205,673
+IBSProduct.txt,623,145,Charater Transfer,À¯È¿±â°£,365,Day(s),205,673
+IBSProduct.txt,624,146,Server Transfer,Quantity,1,EA,206,673
+IBSProduct.txt,625,146,Server Transfer,ÇÁ¸®¹Ì¾ö-°¨°¡»ó°¢±â°£,365,Day(s),206,673
+IBSProduct.txt,626,146,Server Transfer,À¯È¿±â°£,365,Day(s),206,673
+IBSProduct.txt,627,147,Character Name Change,Quantity,1,EA,207,673
+IBSProduct.txt,628,147,Character Name Change,ÇÁ¸®¹Ì¾ö-°¨°¡»ó°¢±â°£,365,Day(s),207,673
+IBSProduct.txt,629,147,Character Name Change,À¯È¿±â°£,365,Day(s),207,673
+IBSProduct.txt,630,148,Master Skill Initialization,Quantity,1,EA,208,673
+IBSProduct.txt,631,148,Master Skill Initialization,ÇÁ¸®¹Ì¾ö-°¨°¡»ó°¢±â°£,365,Day(s),208,673
+IBSProduct.txt,632,148,Master Skill Initialization,À¯È¿±â°£,365,Day(s),208,673
+IBSProduct.txt,633,149,Premium Service,Quantity,1,&nbsp;,209,673
+IBSProduct.txt,634,149,Premium Service,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),209,673
+IBSProduct.txt,635,149,Premium Service,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),209,673
+IBSProduct.txt,636,150,Server Transfer,Quantity,1,EA,210,673
+IBSProduct.txt,637,150,Server Transfer,ÇÁ¸®¹Ì¾ö-°¨°¡»ó°¢±â°£,365,Day(s),210,673
+IBSProduct.txt,638,150,Server Transfer,À¯È¿±â°£,365,Day(s),210,673
+IBSProduct.txt,639,151,Character Transfer,Quantity,1,EA,211,673
+IBSProduct.txt,640,151,Character Transfer,ÇÁ¸®¹Ì¾ö-°¨°¡»ó°¢±â°£,365,Day(s),211,673
+IBSProduct.txt,641,151,Character Transfer,À¯È¿±â°£,365,Day(s),211,673
+IBSProduct.txt,642,152,Pet Panda-7day_Event,Duration,604800,Sec.,212,673
+IBSProduct.txt,643,152,Pet Panda-7day_Event,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),212,673
+IBSProduct.txt,644,152,Pet Panda-7day_Event,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),212,673
+IBSProduct.txt,645,154,Gold Channel Ticket_1Day,Duration,86400,Sec.,214,673
+IBSProduct.txt,646,154,Gold Channel Ticket_1Day,IP Quantity,1,EA,214,673
+IBSProduct.txt,647,154,Gold Channel Ticket_1Day,Ãß°¡ »ç¿ëÀÏ,0,Day(s),214,673
+IBSProduct.txt,648,154,Gold Channel Ticket_1Day,Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),214,673
+IBSProduct.txt,649,154,Gold Channel Ticket_1Day,Á¤¾× À¯È¿±â°£,365,Day(s),214,673
+IBSProduct.txt,650,155,GP-500,Áö±Þ ¸¶ÀÏ¸®Áö,500,WReward,215,673
+IBSProduct.txt,651,155,GP-500,À¯È¿±â°£,120,Day(s),215,673
+IBSProduct.txt,652,155,GP-500,°¨°¡»ó°¢±â°£,120,Day(s),215,673
+IBSProduct.txt,653,156,Scroll of Mana-P,Duration,86400,Sec.,216,673
+IBSProduct.txt,654,156,Scroll of Mana-P,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),216,673
+IBSProduct.txt,655,156,Scroll of Mana-P,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),216,673
+IBSProduct.txt,656,157,Scroll of Health-P,Duration,86400,Sec.,217,673
+IBSProduct.txt,657,157,Scroll of Health-P,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),217,673
+IBSProduct.txt,658,157,Scroll of Health-P,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),217,673
+IBSProduct.txt,659,158,Scroll of Wizardry-P,Duration,86400,Sec.,218,673
+IBSProduct.txt,660,158,Scroll of Wizardry-P,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),218,673
+IBSProduct.txt,661,158,Scroll of Wizardry-P,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),218,673
+IBSProduct.txt,662,159,Scroll of Wrath-P,Duration,86400,Sec.,219,673
+IBSProduct.txt,663,159,Scroll of Wrath-P,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),219,673
+IBSProduct.txt,664,159,Scroll of Wrath-P,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),219,673
+IBSProduct.txt,665,160,Scroll of Protection-P,Duration,86400,Sec.,220,673
+IBSProduct.txt,666,160,Scroll of Protection-P,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),220,673
+IBSProduct.txt,667,160,Scroll of Protection-P,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),220,673
+IBSProduct.txt,668,161,Scroll of Quickness-P,Duration,86400,Sec.,221,673
+IBSProduct.txt,669,161,Scroll of Quickness-P,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),221,673
+IBSProduct.txt,670,161,Scroll of Quickness-P,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),221,673
+IBSProduct.txt,671,162,Scroll of Battle-P,Duration,86400,Sec.,222,673
+IBSProduct.txt,672,162,Scroll of Battle-P,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),222,673
+IBSProduct.txt,673,162,Scroll of Battle-P,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),222,673
+IBSProduct.txt,674,163,Silver Key - 1th day,Quantity,1,EA,223,673
+IBSProduct.txt,675,163,Silver Key - 1th day,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),223,673
+IBSProduct.txt,676,163,Silver Key - 1th day,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),223,673
+IBSProduct.txt,677,164,Gold Key - 5th day,Quantity,1,EA,224,673
+IBSProduct.txt,678,164,Gold Key - 5th day,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),224,673
+IBSProduct.txt,679,164,Gold Key - 5th day,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),224,673
+IBSProduct.txt,680,165,Chaos Card Mini - 9th day,Quantity,1,EA,225,673
+IBSProduct.txt,681,165,Chaos Card Mini - 9th day,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),225,673
+IBSProduct.txt,682,165,Chaos Card Mini - 9th day,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),225,673
+IBSProduct.txt,683,166,Chaos Card Gold - 13th day,Quantity,1,EA,226,673
+IBSProduct.txt,684,166,Chaos Card Gold - 13th day,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),226,673
+IBSProduct.txt,685,166,Chaos Card Gold - 13th day,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),226,673
+IBSProduct.txt,686,167,Pet Panda_1Day - 17th day,Duration,86400,Sec.,227,673
+IBSProduct.txt,687,167,Pet Panda_1Day - 17th day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),227,673
+IBSProduct.txt,688,167,Pet Panda_1Day - 17th day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),227,673
+IBSProduct.txt,689,168,Panda Ring_1Day - 17th day,Duration,86400,Sec.,228,673
+IBSProduct.txt,690,168,Panda Ring_1Day - 17th day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),228,673
+IBSProduct.txt,691,168,Panda Ring_1Day - 17th day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),228,673
+IBSProduct.txt,692,169,Gold Channel Ticket_3Days - 20th day,Duration,259200,Sec.,229,673
+IBSProduct.txt,693,169,Gold Channel Ticket_3Days - 20th day,IP Quantity,1,EA,229,673
+IBSProduct.txt,694,169,Gold Channel Ticket_3Days - 20th day,Ãß°¡ »ç¿ëÀÏ,0,Day(s),229,673
+IBSProduct.txt,695,169,Gold Channel Ticket_3Days - 20th day,Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),229,673
+IBSProduct.txt,696,169,Gold Channel Ticket_3Days - 20th day,Á¤¾× À¯È¿±â°£,365,Day(s),229,673
+IBSProduct.txt,697,170,Talisman of Luck_1% Increases - 20th day,Rate,1,%,230,673
+IBSProduct.txt,698,170,Talisman of Luck_1% Increases - 20th day,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),230,673
+IBSProduct.txt,699,170,Talisman of Luck_1% Increases - 20th day,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),230,673
+IBSProduct.txt,700,171,Gold Channel Ticket_3Days_Event,Duration,259200,Sec.,231,673
+IBSProduct.txt,701,171,Gold Channel Ticket_3Days_Event,IP Quantity,1,EA,231,673
+IBSProduct.txt,702,171,Gold Channel Ticket_3Days_Event,Ãß°¡ »ç¿ëÀÏ,0,Day(s),231,673
+IBSProduct.txt,703,171,Gold Channel Ticket_3Days_Event,Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),231,673
+IBSProduct.txt,704,171,Gold Channel Ticket_3Days_Event,Á¤¾× À¯È¿±â°£,365,Day(s),231,673
+IBSProduct.txt,705,172,Pet Skeleton_7Day_Event,Duration,604800,Sec.,232,673
+IBSProduct.txt,706,172,Pet Skeleton_7Day_Event,±â°£Á¦-°¨°¡»ó°¢±â°£,60,Day(s),232,673
+IBSProduct.txt,707,172,Pet Skeleton_7Day_Event,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,60,Day(s),232,673
+IBSProduct.txt,708,173,Skeleton Transformation Ring_7Day_Event,Duration,604800,Sec.,233,673
+IBSProduct.txt,709,173,Skeleton Transformation Ring_7Day_Event,±â°£Á¦-°¨°¡»ó°¢±â°£,60,Day(s),233,673
+IBSProduct.txt,710,173,Skeleton Transformation Ring_7Day_Event,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,60,Day(s),233,673
+IBSProduct.txt,711,174,Rage Fighter Character Card_Event,Quantity,1,EA,234,673
+IBSProduct.txt,712,174,Rage Fighter Character Card_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,60,Day(s),234,673
+IBSProduct.txt,713,174,Rage Fighter Character Card_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,60,Day(s),234,673
+IBSProduct.txt,714,175,Gold Channel Ticket_7Day_Event,Duration,604800,Sec.,235,673
+IBSProduct.txt,715,175,Gold Channel Ticket_7Day_Event,IP Quantity,1,EA,235,673
+IBSProduct.txt,716,175,Gold Channel Ticket_7Day_Event,Ãß°¡ »ç¿ëÀÏ,0,Day(s),235,673
+IBSProduct.txt,717,175,Gold Channel Ticket_7Day_Event,Á¤¾×-°¨°¡»ó°¢±â°£,30,Day(s),235,673
+IBSProduct.txt,718,175,Gold Channel Ticket_7Day_Event,Á¤¾× À¯È¿±â°£,30,Day(s),235,673
+IBSProduct.txt,719,176,Pet Panda_7Day_Event,Duration,604800,Sec.,236,673
+IBSProduct.txt,720,176,Pet Panda_7Day_Event,±â°£Á¦-°¨°¡»ó°¢±â°£,30,Day(s),236,673
+IBSProduct.txt,721,176,Pet Panda_7Day_Event,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,30,Day(s),236,673
+IBSProduct.txt,722,177,Panda Ring_7Day_Event,Duration,604800,Sec.,237,673
+IBSProduct.txt,723,177,Panda Ring_7Day_Event,±â°£Á¦-°¨°¡»ó°¢±â°£,30,Day(s),237,673
+IBSProduct.txt,724,177,Panda Ring_7Day_Event,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,30,Day(s),237,673
+IBSProduct.txt,725,178,Talisman of Mobility_Event,Quantity,1,EA,238,673
+IBSProduct.txt,726,178,Talisman of Mobility_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,30,Day(s),238,673
+IBSProduct.txt,727,178,Talisman of Mobility_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,30,Day(s),238,673
+IBSProduct.txt,728,179,Talisman of Resurrection_Event,Quantity,1,EA,239,673
+IBSProduct.txt,729,179,Talisman of Resurrection_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,30,Day(s),239,673
+IBSProduct.txt,730,179,Talisman of Resurrection_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,30,Day(s),239,673
+IBSProduct.txt,731,180,Scroll of Protection_7Day_Event,Duration,604800,Sec.,240,673
+IBSProduct.txt,732,180,Scroll of Protection_7Day_Event,±â°£Á¦-°¨°¡»ó°¢±â°£,30,Day(s),240,673
+IBSProduct.txt,733,180,Scroll of Protection_7Day_Event,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,30,Day(s),240,673
+IBSProduct.txt,734,181,Scroll of Health_7Day_Event,Duration,604800,Sec.,241,673
+IBSProduct.txt,735,181,Scroll of Health_7Day_Event,±â°£Á¦-°¨°¡»ó°¢±â°£,30,Day(s),241,673
+IBSProduct.txt,736,181,Scroll of Health_7Day_Event,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,30,Day(s),241,673
+IBSProduct.txt,737,182,Scroll of Mana_7Day_Event,Duration,604800,Sec.,242,673
+IBSProduct.txt,738,182,Scroll of Mana_7Day_Event,±â°£Á¦-°¨°¡»ó°¢±â°£,30,Day(s),242,673
+IBSProduct.txt,739,182,Scroll of Mana_7Day_Event,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,30,Day(s),242,673
+IBSProduct.txt,740,183,Charater transfer_Event,Quantity,1,EA,243,673
+IBSProduct.txt,741,183,Charater transfer_Event,ÇÁ¸®¹Ì¾ö-°¨°¡»ó°¢±â°£,30,Day(s),243,673
+IBSProduct.txt,742,183,Charater transfer_Event,À¯È¿±â°£,30,Day(s),243,673
+IBSProduct.txt,743,184,Seal of Ascension_Reward for DC,Duration,86400,Sec.,244,673
+IBSProduct.txt,744,184,Seal of Ascension_Reward for DC,±â°£Á¦-°¨°¡»ó°¢±â°£,30,Day(s),244,673
+IBSProduct.txt,745,184,Seal of Ascension_Reward for DC,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,30,Day(s),244,673
+IBSProduct.txt,746,185,Master Seal of Ascension_Reward for DC,Duration,86400,Sec.,245,673
+IBSProduct.txt,747,185,Master Seal of Ascension_Reward for DC,±â°£Á¦-°¨°¡»ó°¢±â°£,30,Day(s),245,673
+IBSProduct.txt,748,185,Master Seal of Ascension_Reward for DC,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,30,Day(s),245,673
+IBSProduct.txt,749,186,Charater transfer_Event,Quantity,1,EA,246,673
+IBSProduct.txt,750,186,Charater transfer_Event,ÇÁ¸®¹Ì¾ö-°¨°¡»ó°¢±â°£,30,Day(s),246,673
+IBSProduct.txt,751,186,Charater transfer_Event,À¯È¿±â°£,30,Day(s),246,673
+IBSProduct.txt,752,187,Silver Key_Event,Quantity,1,EA,247,673
+IBSProduct.txt,753,187,Silver Key_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),247,673
+IBSProduct.txt,754,187,Silver Key_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),247,673
+IBSProduct.txt,755,188,Gold Key_Event,Quantity,1,EA,248,673
+IBSProduct.txt,756,188,Gold Key_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),248,673
+IBSProduct.txt,757,188,Gold Key_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),248,673
+IBSProduct.txt,758,189,Chaos Card Mini_Event,Quantity,1,EA,249,673
+IBSProduct.txt,759,189,Chaos Card Mini_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),249,673
+IBSProduct.txt,760,189,Chaos Card Mini_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),249,673
+IBSProduct.txt,761,190,Chaos Card Gold_Event,Quantity,1,EA,250,673
+IBSProduct.txt,762,190,Chaos Card Gold_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),250,673
+IBSProduct.txt,763,190,Chaos Card Gold_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),250,673
+IBSProduct.txt,764,191,Seal of Divinity_Event,Duration,86400,Sec.,251,673
+IBSProduct.txt,765,191,Seal of Divinity_Event,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),251,673
+IBSProduct.txt,766,191,Seal of Divinity_Event,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),251,673
+IBSProduct.txt,767,192,Seal of Healing_Event,Duration,86400,Sec.,252,673
+IBSProduct.txt,768,192,Seal of Healing_Event,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),252,673
+IBSProduct.txt,769,192,Seal of Healing_Event,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),252,673
+IBSProduct.txt,770,193,Skeleton Transformation Ring_Event,Duration,86400,Sec.,253,673
+IBSProduct.txt,771,193,Skeleton Transformation Ring_Event,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),253,673
+IBSProduct.txt,772,193,Skeleton Transformation Ring_Event,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),253,673
+IBSProduct.txt,773,194,Pet Skeleton_Event,Duration,86400,Sec.,254,673
+IBSProduct.txt,774,194,Pet Skeleton_Event,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),254,673
+IBSProduct.txt,775,194,Pet Skeleton_Event,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),254,673
+IBSProduct.txt,776,195,Gold Channel Ticket_Event,Duration,259200,Sec.,255,673
+IBSProduct.txt,777,195,Gold Channel Ticket_Event,IP Quantity,1,EA,255,673
+IBSProduct.txt,778,195,Gold Channel Ticket_Event,Ãß°¡ »ç¿ëÀÏ,0,Day(s),255,673
+IBSProduct.txt,779,195,Gold Channel Ticket_Event,Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),255,673
+IBSProduct.txt,780,195,Gold Channel Ticket_Event,Á¤¾× À¯È¿±â°£,365,Day(s),255,673
+IBSProduct.txt,781,196,Talisman of Luck 1%_Event,Rate,1,%,256,673
+IBSProduct.txt,782,196,Talisman of Luck 1%_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),256,673
+IBSProduct.txt,783,196,Talisman of Luck 1%_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),256,673
+IBSProduct.txt,784,197,Gold Channel Ticket_7Day_Event,Duration,604800,Sec.,257,673
+IBSProduct.txt,785,197,Gold Channel Ticket_7Day_Event,IP Quantity,1,EA,257,673
+IBSProduct.txt,786,197,Gold Channel Ticket_7Day_Event,Ãß°¡ »ç¿ëÀÏ,0,Day(s),257,673
+IBSProduct.txt,787,197,Gold Channel Ticket_7Day_Event,Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),257,673
+IBSProduct.txt,788,197,Gold Channel Ticket_7Day_Event,Á¤¾× À¯È¿±â°£,365,Day(s),257,673
+IBSProduct.txt,789,198,Seal of Wealth(Normal)_7Day_Event,Duration,604800,Sec.,258,673
+IBSProduct.txt,790,198,Seal of Wealth(Normal)_7Day_Event,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),258,673
+IBSProduct.txt,791,198,Seal of Wealth(Normal)_7Day_Event,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),258,673
+IBSProduct.txt,792,199,Scroll of Protection_1Day_Event,Duration,86400,Sec.,259,673
+IBSProduct.txt,793,199,Scroll of Protection_1Day_Event,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),259,673
+IBSProduct.txt,794,199,Scroll of Protection_1Day_Event,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),259,673
+IBSProduct.txt,795,200,Chaos Card Gold_Event*,Quantity,1,EA,260,673
+IBSProduct.txt,796,200,Chaos Card Gold_Event*,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),260,673
+IBSProduct.txt,797,200,Chaos Card Gold_Event*,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),260,673
+IBSProduct.txt,798,201,Chaos Card Gold_Event**,Quantity,1,EA,261,673
+IBSProduct.txt,799,201,Chaos Card Gold_Event**,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),261,673
+IBSProduct.txt,800,201,Chaos Card Gold_Event**,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),261,673
+IBSProduct.txt,801,202,Chaos Card Gold_Event***,Quantity,1,EA,262,673
+IBSProduct.txt,802,202,Chaos Card Gold_Event***,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),262,673
+IBSProduct.txt,803,202,Chaos Card Gold_Event***,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),262,673
+IBSProduct.txt,804,203,Scroll of Protection_Red,Duration,86400,Sec.,263,673
+IBSProduct.txt,805,203,Scroll of Protection_Red,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),263,673
+IBSProduct.txt,806,203,Scroll of Protection_Red,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),263,673
+IBSProduct.txt,807,204,Scroll of Health_Red,Duration,86400,Sec.,264,673
+IBSProduct.txt,808,204,Scroll of Health_Red,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),264,673
+IBSProduct.txt,809,204,Scroll of Health_Red,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),264,673
+IBSProduct.txt,810,205,Scroll of Mana_Red,Duration,86400,Sec.,265,673
+IBSProduct.txt,811,205,Scroll of Mana_Red,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),265,673
+IBSProduct.txt,812,205,Scroll of Mana_Red,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),265,673
+IBSProduct.txt,813,206,Scroll of Battle_Red,Duration,86400,Sec.,266,673
+IBSProduct.txt,814,206,Scroll of Battle_Red,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),266,673
+IBSProduct.txt,815,206,Scroll of Battle_Red,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),266,673
+IBSProduct.txt,816,207,Scroll of Strengthener_Red,Duration,86400,Sec.,267,673
+IBSProduct.txt,817,207,Scroll of Strengthener_Red,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),267,673
+IBSProduct.txt,818,207,Scroll of Strengthener_Red,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),267,673
+IBSProduct.txt,819,208,Scroll of Quickness_Red,Duration,86400,Sec.,268,673
+IBSProduct.txt,820,208,Scroll of Quickness_Red,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),268,673
+IBSProduct.txt,821,208,Scroll of Quickness_Red,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),268,673
+IBSProduct.txt,822,209,Scroll of Wrath_Red,Duration,86400,Sec.,269,673
+IBSProduct.txt,823,209,Scroll of Wrath_Red,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),269,673
+IBSProduct.txt,824,209,Scroll of Wrath_Red,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),269,673
+IBSProduct.txt,825,210,Scroll of Wizardry_Red,Duration,86400,Sec.,270,673
+IBSProduct.txt,826,210,Scroll of Wizardry_Red,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),270,673
+IBSProduct.txt,827,210,Scroll of Wizardry_Red,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),270,673
+IBSProduct.txt,828,211,Skeleton Transformation Ring_Red,Duration,86400,Sec.,271,673
+IBSProduct.txt,829,211,Skeleton Transformation Ring_Red,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),271,673
+IBSProduct.txt,830,211,Skeleton Transformation Ring_Red,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),271,673
+IBSProduct.txt,831,212,Pet Skeleton_Red,Duration,86400,Sec.,272,673
+IBSProduct.txt,832,212,Pet Skeleton_Red,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),272,673
+IBSProduct.txt,833,212,Pet Skeleton_Red,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),272,673
+IBSProduct.txt,834,213,Panda Ring_Red,Duration,86400,Sec.,273,673
+IBSProduct.txt,835,213,Panda Ring_Red,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),273,673
+IBSProduct.txt,836,213,Panda Ring_Red,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),273,673
+IBSProduct.txt,837,214,Pet Panda_Red,Duration,86400,Sec.,274,673
+IBSProduct.txt,838,214,Pet Panda_Red,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),274,673
+IBSProduct.txt,839,214,Pet Panda_Red,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),274,673
+IBSProduct.txt,840,215,Talisman of Luck 1%_Red,Rate,1,%,275,673
+IBSProduct.txt,841,215,Talisman of Luck 1%_Red,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),275,673
+IBSProduct.txt,842,215,Talisman of Luck 1%_Red,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),275,673
+IBSProduct.txt,843,216,Talisman of Luck 5%_Red,Rate,5,%,276,673
+IBSProduct.txt,844,216,Talisman of Luck 5%_Red,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),276,673
+IBSProduct.txt,845,216,Talisman of Luck 5%_Red,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),276,673
+IBSProduct.txt,846,217,Talisman of Luck 10%_Red,Rate,10,%,277,673
+IBSProduct.txt,847,217,Talisman of Luck 10%_Red,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),277,673
+IBSProduct.txt,848,217,Talisman of Luck 10%_Red,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),277,673
+IBSProduct.txt,849,218,Bundle of Jewel of Bless (30)_Red,Quantity,1,EA,278,673
+IBSProduct.txt,850,218,Bundle of Jewel of Bless (30)_Red,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),278,673
+IBSProduct.txt,851,218,Bundle of Jewel of Bless (30)_Red,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),278,673
+IBSProduct.txt,852,219,Bundle of Jewel of Soul (30)_Red,Quantity,1,EA,279,673
+IBSProduct.txt,853,219,Bundle of Jewel of Soul (30)_Red,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),279,673
+IBSProduct.txt,854,219,Bundle of Jewel of Soul (30)_Red,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),279,673
+IBSProduct.txt,855,220,Talisman of Chaos Assembly_Red,Quantity,1,EA,280,673
+IBSProduct.txt,856,220,Talisman of Chaos Assembly_Red,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),280,673
+IBSProduct.txt,857,220,Talisman of Chaos Assembly_Red,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),280,673
+IBSProduct.txt,858,221,Rare Item Ticket 4_Red,Quantity,1,EA,281,673
+IBSProduct.txt,859,221,Rare Item Ticket 4_Red,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),281,673
+IBSProduct.txt,860,221,Rare Item Ticket 4_Red,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),281,673
+IBSProduct.txt,861,222,Cherry Blossom Wine (3),Quantity,1,EA,282,673
+IBSProduct.txt,862,222,Cherry Blossom Wine (3),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,60,Day(s),282,673
+IBSProduct.txt,863,222,Cherry Blossom Wine (3),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,60,Day(s),282,673
+IBSProduct.txt,864,223,Cherry Blossom Rice Cake (2),Quantity,1,EA,283,673
+IBSProduct.txt,865,223,Cherry Blossom Rice Cake (2),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,60,Day(s),283,673
+IBSProduct.txt,866,223,Cherry Blossom Rice Cake (2),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,60,Day(s),283,673
+IBSProduct.txt,867,224,Cherry Blossom Petal (3),Quantity,1,EA,284,673
+IBSProduct.txt,868,224,Cherry Blossom Petal (3),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,60,Day(s),284,673
+IBSProduct.txt,869,224,Cherry Blossom Petal (3),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,60,Day(s),284,673
+IBSProduct.txt,870,225,Rare Item Ticket 5(¹Ì»ç¿ë),Quantity,1,EA,285,673
+IBSProduct.txt,871,225,Rare Item Ticket 5(¹Ì»ç¿ë),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,1,Day(s),285,673
+IBSProduct.txt,872,225,Rare Item Ticket 5(¹Ì»ç¿ë),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,1,Day(s),285,673
+IBSProduct.txt,873,226,Rare Item Ticket 6(¹Ì»ç¿ë),Quantity,1,EA,286,673
+IBSProduct.txt,874,226,Rare Item Ticket 6(¹Ì»ç¿ë),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,1,Day(s),286,673
+IBSProduct.txt,875,226,Rare Item Ticket 6(¹Ì»ç¿ë),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,1,Day(s),286,673
+IBSProduct.txt,876,227,Rare Item Ticket 7(¹Ì»ç¿ë),Quantity,1,EA,287,673
+IBSProduct.txt,877,227,Rare Item Ticket 7(¹Ì»ç¿ë),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,1,Day(s),287,673
+IBSProduct.txt,878,227,Rare Item Ticket 7(¹Ì»ç¿ë),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,1,Day(s),287,673
+IBSProduct.txt,879,228,Rare Item Ticket 8(¹Ì»ç¿ë),Quantity,1,EA,288,673
+IBSProduct.txt,880,228,Rare Item Ticket 8(¹Ì»ç¿ë),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,1,Day(s),288,673
+IBSProduct.txt,881,228,Rare Item Ticket 8(¹Ì»ç¿ë),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,1,Day(s),288,673
+IBSProduct.txt,882,229,Rare Item Ticket 8_BLUE,Quantity,1,EA,289,673
+IBSProduct.txt,883,229,Rare Item Ticket 8_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),289,673
+IBSProduct.txt,884,229,Rare Item Ticket 8_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),289,673
+IBSProduct.txt,885,230,Rare Item Ticket 7_BLUE,Quantity,1,EA,290,673
+IBSProduct.txt,886,230,Rare Item Ticket 7_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),290,673
+IBSProduct.txt,887,230,Rare Item Ticket 7_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),290,673
+IBSProduct.txt,888,231,Wing of Ruin_BLUE,Quantity,1,EA,291,673
+IBSProduct.txt,889,231,Wing of Ruin_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),291,673
+IBSProduct.txt,890,231,Wing of Ruin_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),291,673
+IBSProduct.txt,891,232,Wing of Storm_BLUE,Quantity,1,EA,292,673
+IBSProduct.txt,892,232,Wing of Storm_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),292,673
+IBSProduct.txt,893,232,Wing of Storm_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),292,673
+IBSProduct.txt,894,233,Wing of Dimension_BLUE,Quantity,1,EA,293,673
+IBSProduct.txt,895,233,Wing of Dimension_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),293,673
+IBSProduct.txt,896,233,Wing of Dimension_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),293,673
+IBSProduct.txt,897,234,Cape of Emperor_BLUE,Quantity,1,EA,294,673
+IBSProduct.txt,898,234,Cape of Emperor_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),294,673
+IBSProduct.txt,899,234,Cape of Emperor_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),294,673
+IBSProduct.txt,900,235,Wing of Illusion_BLUE,Quantity,1,EA,295,673
+IBSProduct.txt,901,235,Wing of Illusion_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),295,673
+IBSProduct.txt,902,235,Wing of Illusion_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),295,673
+IBSProduct.txt,903,236,Wing of Eternal_BLUE,Quantity,1,EA,296,673
+IBSProduct.txt,904,236,Wing of Eternal_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),296,673
+IBSProduct.txt,905,236,Wing of Eternal_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),296,673
+IBSProduct.txt,906,237,Bundle of Jewel of Bless (30)_BLUE,Quantity,1,EA,297,673
+IBSProduct.txt,907,237,Bundle of Jewel of Bless (30)_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),297,673
+IBSProduct.txt,908,237,Bundle of Jewel of Bless (30)_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),297,673
+IBSProduct.txt,909,238,Bundle of Jewel of Soul (30)_BLUE,Quantity,1,EA,298,673
+IBSProduct.txt,910,238,Bundle of Jewel of Soul (30)_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),298,673
+IBSProduct.txt,911,238,Bundle of Jewel of Soul (30)_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),298,673
+IBSProduct.txt,912,239,Seed (Lightning)_BLUE,Quantity,1,EA,299,673
+IBSProduct.txt,913,239,Seed (Lightning)_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),299,673
+IBSProduct.txt,914,239,Seed (Lightning)_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),299,673
+IBSProduct.txt,915,240,Seed (Earth)_BLUE,Quantity,1,EA,300,673
+IBSProduct.txt,916,240,Seed (Earth)_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),300,673
+IBSProduct.txt,917,240,Seed (Earth)_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),300,673
+IBSProduct.txt,918,241,Seed (Fire)_BLUE,Quantity,1,EA,301,673
+IBSProduct.txt,919,241,Seed (Fire)_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),301,673
+IBSProduct.txt,920,241,Seed (Fire)_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),301,673
+IBSProduct.txt,921,242,Seed (Ice Mana)_BLUE,Quantity,1,EA,302,673
+IBSProduct.txt,922,242,Seed (Ice Mana)_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),302,673
+IBSProduct.txt,923,242,Seed (Ice Mana)_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),302,673
+IBSProduct.txt,924,243,Seed (Ice Skill)_BLUE,Quantity,1,EA,303,673
+IBSProduct.txt,925,243,Seed (Ice Skill)_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),303,673
+IBSProduct.txt,926,243,Seed (Ice Skill)_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),303,673
+IBSProduct.txt,927,244,Seed (Water DR)_BLUE,Quantity,1,EA,304,673
+IBSProduct.txt,928,244,Seed (Water DR)_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),304,673
+IBSProduct.txt,929,244,Seed (Water DR)_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),304,673
+IBSProduct.txt,930,245,Seed (Water BR)_BLUE,Quantity,1,EA,305,673
+IBSProduct.txt,931,245,Seed (Water BR)_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),305,673
+IBSProduct.txt,932,245,Seed (Water BR)_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),305,673
+IBSProduct.txt,933,246,Scroll of Protection_S,Duration,86400,Sec.,306,673
+IBSProduct.txt,934,246,Scroll of Protection_S,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),306,673
+IBSProduct.txt,935,246,Scroll of Protection_S,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),306,673
+IBSProduct.txt,936,246,Scroll of Protection_S,Duration,604800,Sec.,307,673
+IBSProduct.txt,937,246,Scroll of Protection_S,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),307,673
+IBSProduct.txt,938,246,Scroll of Protection_S,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),307,673
+IBSProduct.txt,939,247,Scroll of Health_S,Duration,86400,Sec.,308,673
+IBSProduct.txt,940,247,Scroll of Health_S,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),308,673
+IBSProduct.txt,941,247,Scroll of Health_S,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),308,673
+IBSProduct.txt,942,247,Scroll of Health_S,Duration,604800,Sec.,309,673
+IBSProduct.txt,943,247,Scroll of Health_S,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),309,673
+IBSProduct.txt,944,247,Scroll of Health_S,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),309,673
+IBSProduct.txt,945,248,Scroll of Mana_S,Duration,86400,Sec.,310,673
+IBSProduct.txt,946,248,Scroll of Mana_S,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),310,673
+IBSProduct.txt,947,248,Scroll of Mana_S,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),310,673
+IBSProduct.txt,948,248,Scroll of Mana_S,Duration,604800,Sec.,311,673
+IBSProduct.txt,949,248,Scroll of Mana_S,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),311,673
+IBSProduct.txt,950,248,Scroll of Mana_S,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),311,673
+IBSProduct.txt,951,249,Scroll of Battle_S,Duration,86400,Sec.,312,673
+IBSProduct.txt,952,249,Scroll of Battle_S,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),312,673
+IBSProduct.txt,953,249,Scroll of Battle_S,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),312,673
+IBSProduct.txt,954,249,Scroll of Battle_S,Duration,604800,Sec.,313,673
+IBSProduct.txt,955,249,Scroll of Battle_S,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),313,673
+IBSProduct.txt,956,249,Scroll of Battle_S,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),313,673
+IBSProduct.txt,957,250,Scroll of Strengthener_S,Duration,86400,Sec.,314,673
+IBSProduct.txt,958,250,Scroll of Strengthener_S,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),314,673
+IBSProduct.txt,959,250,Scroll of Strengthener_S,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),314,673
+IBSProduct.txt,960,250,Scroll of Strengthener_S,Duration,604800,Sec.,315,673
+IBSProduct.txt,961,250,Scroll of Strengthener_S,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),315,673
+IBSProduct.txt,962,250,Scroll of Strengthener_S,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),315,673
+IBSProduct.txt,963,251,Scroll of Quickness_S,Duration,86400,Sec.,316,673
+IBSProduct.txt,964,251,Scroll of Quickness_S,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),316,673
+IBSProduct.txt,965,251,Scroll of Quickness_S,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),316,673
+IBSProduct.txt,966,251,Scroll of Quickness_S,Duration,604800,Sec.,317,673
+IBSProduct.txt,967,251,Scroll of Quickness_S,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),317,673
+IBSProduct.txt,968,251,Scroll of Quickness_S,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),317,673
+IBSProduct.txt,969,252,Scroll of Wrath_S,Duration,86400,Sec.,318,673
+IBSProduct.txt,970,252,Scroll of Wrath_S,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),318,673
+IBSProduct.txt,971,252,Scroll of Wrath_S,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),318,673
+IBSProduct.txt,972,252,Scroll of Wrath_S,Duration,604800,Sec.,319,673
+IBSProduct.txt,973,252,Scroll of Wrath_S,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),319,673
+IBSProduct.txt,974,252,Scroll of Wrath_S,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),319,673
+IBSProduct.txt,975,253,Scroll of Wizardry_S,Duration,86400,Sec.,320,673
+IBSProduct.txt,976,253,Scroll of Wizardry_S,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),320,673
+IBSProduct.txt,977,253,Scroll of Wizardry_S,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),320,673
+IBSProduct.txt,978,253,Scroll of Wizardry_S,Duration,604800,Sec.,321,673
+IBSProduct.txt,979,253,Scroll of Wizardry_S,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),321,673
+IBSProduct.txt,980,253,Scroll of Wizardry_S,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),321,673
+IBSProduct.txt,981,254,Scroll of Protection_P,Duration,86400,Sec.,322,673
+IBSProduct.txt,982,254,Scroll of Protection_P,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),322,673
+IBSProduct.txt,983,254,Scroll of Protection_P,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),322,673
+IBSProduct.txt,984,255,Scroll of Health_P,Duration,86400,Sec.,323,673
+IBSProduct.txt,985,255,Scroll of Health_P,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),323,673
+IBSProduct.txt,986,255,Scroll of Health_P,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),323,673
+IBSProduct.txt,987,256,Scroll of Mana_P,Duration,86400,Sec.,324,673
+IBSProduct.txt,988,256,Scroll of Mana_P,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),324,673
+IBSProduct.txt,989,256,Scroll of Mana_P,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),324,673
+IBSProduct.txt,990,257,Scroll of Battle_P,Duration,86400,Sec.,325,673
+IBSProduct.txt,991,257,Scroll of Battle_P,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),325,673
+IBSProduct.txt,992,257,Scroll of Battle_P,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),325,673
+IBSProduct.txt,993,258,Scroll of Quickness_P,Duration,86400,Sec.,326,673
+IBSProduct.txt,994,258,Scroll of Quickness_P,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),326,673
+IBSProduct.txt,995,258,Scroll of Quickness_P,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),326,673
+IBSProduct.txt,996,259,Scroll of Wrath_P,Duration,86400,Sec.,327,673
+IBSProduct.txt,997,259,Scroll of Wrath_P,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),327,673
+IBSProduct.txt,998,259,Scroll of Wrath_P,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),327,673
+IBSProduct.txt,999,260,Scroll of Wizardry_P,Duration,86400,Sec.,328,673
+IBSProduct.txt,1000,260,Scroll of Wizardry_P,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),328,673
+IBSProduct.txt,1001,260,Scroll of Wizardry_P,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),328,673
+IBSProduct.txt,1002,261,Brave ITEM_ÆÇ¸ÅºÒ°¡,Quantity,1,EA,329,673
+IBSProduct.txt,1003,261,Brave ITEM_ÆÇ¸ÅºÒ°¡,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),329,673
+IBSProduct.txt,1004,261,Brave ITEM_ÆÇ¸ÅºÒ°¡,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),329,673
+IBSProduct.txt,1005,262,Penrill_ÆÇ¸ÅºÒ°¡,Quantity,1,EA,330,673
+IBSProduct.txt,1006,262,Penrill_ÆÇ¸ÅºÒ°¡,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),330,673
+IBSProduct.txt,1007,262,Penrill_ÆÇ¸ÅºÒ°¡,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),330,673
+IBSProduct.txt,1008,263,Rage Fighter Character Card_ÆÇ¸ÅºÒ°¡,Quantity,1,EA,331,673
+IBSProduct.txt,1009,263,Rage Fighter Character Card_ÆÇ¸ÅºÒ°¡,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),331,673
+IBSProduct.txt,1010,263,Rage Fighter Character Card_ÆÇ¸ÅºÒ°¡,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),331,673
+IBSProduct.txt,1011,264,Rare Item Ticket 8_Red,Quantity,1,EA,332,673
+IBSProduct.txt,1012,264,Rare Item Ticket 8_Red,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),332,673
+IBSProduct.txt,1013,264,Rare Item Ticket 8_Red,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),332,673
+IBSProduct.txt,1014,265,Rare Item Ticket 4_Red,Quantity,1,EA,333,673
+IBSProduct.txt,1015,265,Rare Item Ticket 4_Red,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),333,673
+IBSProduct.txt,1016,265,Rare Item Ticket 4_Red,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),333,673
+IBSProduct.txt,1017,266,Gold Channel Ticket_Red,Duration,259200,Sec.,334,673
+IBSProduct.txt,1018,266,Gold Channel Ticket_Red,IP Quantity,1,EA,334,673
+IBSProduct.txt,1019,266,Gold Channel Ticket_Red,Ãß°¡ »ç¿ëÀÏ,0,Day(s),334,673
+IBSProduct.txt,1020,266,Gold Channel Ticket_Red,Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),334,673
+IBSProduct.txt,1021,266,Gold Channel Ticket_Red,Á¤¾× À¯È¿±â°£,365,Day(s),334,673
+IBSProduct.txt,1022,267,Talisman of Luck 10%_Red,Rate,10,%,335,673
+IBSProduct.txt,1023,267,Talisman of Luck 10%_Red,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),335,673
+IBSProduct.txt,1024,267,Talisman of Luck 10%_Red,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),335,673
+IBSProduct.txt,1025,268,Bundle of Jewel of Chaos (30)_Red,Quantity,1,EA,336,673
+IBSProduct.txt,1026,268,Bundle of Jewel of Chaos (30)_Red,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),336,673
+IBSProduct.txt,1027,268,Bundle of Jewel of Chaos (30)_Red,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),336,673
+IBSProduct.txt,1028,269,Bundle of Jewel of Soul (30)_Red,Quantity,1,EA,337,673
+IBSProduct.txt,1029,269,Bundle of Jewel of Soul (30)_Red,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),337,673
+IBSProduct.txt,1030,269,Bundle of Jewel of Soul (30)_Red,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),337,673
+IBSProduct.txt,1031,270,Bundle of Jewel of Bless (30)_Red,Quantity,1,EA,338,673
+IBSProduct.txt,1032,270,Bundle of Jewel of Bless (30)_Red,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),338,673
+IBSProduct.txt,1033,270,Bundle of Jewel of Bless (30)_Red,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),338,673
+IBSProduct.txt,1034,271,2nd Lucky Boots Ticket_Red,Quantity,1,EA,339,673
+IBSProduct.txt,1035,271,2nd Lucky Boots Ticket_Red,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),339,673
+IBSProduct.txt,1036,271,2nd Lucky Boots Ticket_Red,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),339,673
+IBSProduct.txt,1037,272,2nd Lucky Gloves Ticket_Red,Quantity,1,EA,340,673
+IBSProduct.txt,1038,272,2nd Lucky Gloves Ticket_Red,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),340,673
+IBSProduct.txt,1039,272,2nd Lucky Gloves Ticket_Red,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),340,673
+IBSProduct.txt,1040,273,2nd Lucky Helm Ticket_Red,Quantity,1,EA,341,673
+IBSProduct.txt,1041,273,2nd Lucky Helm Ticket_Red,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),341,673
+IBSProduct.txt,1042,273,2nd Lucky Helm Ticket_Red,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),341,673
+IBSProduct.txt,1043,274,2nd Lucky Pants Ticket_Red,Quantity,1,EA,342,673
+IBSProduct.txt,1044,274,2nd Lucky Pants Ticket_Red,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),342,673
+IBSProduct.txt,1045,274,2nd Lucky Pants Ticket_Red,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),342,673
+IBSProduct.txt,1046,275,2nd Lucky Armor Ticket_Red,Quantity,1,EA,343,673
+IBSProduct.txt,1047,275,2nd Lucky Armor Ticket_Red,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),343,673
+IBSProduct.txt,1048,275,2nd Lucky Armor Ticket_Red,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),343,673
+IBSProduct.txt,1049,276,1st Lucky Boots Ticket_Red,Quantity,1,EA,344,673
+IBSProduct.txt,1050,276,1st Lucky Boots Ticket_Red,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),344,673
+IBSProduct.txt,1051,276,1st Lucky Boots Ticket_Red,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),344,673
+IBSProduct.txt,1052,277,1st Lucky Gloves Ticket_Red,Quantity,1,EA,345,673
+IBSProduct.txt,1053,277,1st Lucky Gloves Ticket_Red,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),345,673
+IBSProduct.txt,1054,277,1st Lucky Gloves Ticket_Red,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),345,673
+IBSProduct.txt,1055,278,1st Lucky Helm Ticket_Red,Quantity,1,EA,346,673
+IBSProduct.txt,1056,278,1st Lucky Helm Ticket_Red,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),346,673
+IBSProduct.txt,1057,278,1st Lucky Helm Ticket_Red,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),346,673
+IBSProduct.txt,1058,279,1st Lucky Pants Ticket_Red,Quantity,1,EA,347,673
+IBSProduct.txt,1059,279,1st Lucky Pants Ticket_Red,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),347,673
+IBSProduct.txt,1060,279,1st Lucky Pants Ticket_Red,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),347,673
+IBSProduct.txt,1061,280,1st Lucky Armor Ticket_Red,Quantity,1,EA,348,673
+IBSProduct.txt,1062,280,1st Lucky Armor Ticket_Red,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),348,673
+IBSProduct.txt,1063,280,1st Lucky Armor Ticket_Red,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),348,673
+IBSProduct.txt,1064,281,Magic Backpack,Quantity,1,EA,349,673
+IBSProduct.txt,1065,281,Magic Backpack,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),349,673
+IBSProduct.txt,1066,281,Magic Backpack,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),349,673
+IBSProduct.txt,1067,282,Vault Expansion Certificate,Quantity,1,EA,350,673
+IBSProduct.txt,1068,282,Vault Expansion Certificate,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),350,673
+IBSProduct.txt,1069,282,Vault Expansion Certificate,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),350,673
+IBSProduct.txt,1070,283,Little Warrior's Cloak,Duration,86400,Sec.,351,673
+IBSProduct.txt,1071,283,Little Warrior's Cloak,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),351,673
+IBSProduct.txt,1072,283,Little Warrior's Cloak,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),351,673
+IBSProduct.txt,1073,283,Little Warrior's Cloak,Duration,604800,Sec.,352,673
+IBSProduct.txt,1074,283,Little Warrior's Cloak,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),352,673
+IBSProduct.txt,1075,283,Little Warrior's Cloak,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),352,673
+IBSProduct.txt,1076,284,Rage Fighter Character Card,Quantity,1,EA,353,673
+IBSProduct.txt,1077,284,Rage Fighter Character Card,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),353,673
+IBSProduct.txt,1078,284,Rage Fighter Character Card,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),353,673
+IBSProduct.txt,1079,285,Silver Key_Time Attack,Quantity,1,EA,354,673
+IBSProduct.txt,1080,285,Silver Key_Time Attack,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,30,Day(s),354,673
+IBSProduct.txt,1081,285,Silver Key_Time Attack,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,30,Day(s),354,673
+IBSProduct.txt,1082,286,Gold Key_Time Attack,Quantity,1,EA,355,673
+IBSProduct.txt,1083,286,Gold Key_Time Attack,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,30,Day(s),355,673
+IBSProduct.txt,1084,286,Gold Key_Time Attack,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,30,Day(s),355,673
+IBSProduct.txt,1085,287,Chaos Card Gold_Time Attack,Quantity,1,EA,356,673
+IBSProduct.txt,1086,287,Chaos Card Gold_Time Attack,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,30,Day(s),356,673
+IBSProduct.txt,1087,287,Chaos Card Gold_Time Attack,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,30,Day(s),356,673
+IBSProduct.txt,1088,288,Talisman of Luck 10%_Time Attack,Rate,10,%,357,673
+IBSProduct.txt,1089,288,Talisman of Luck 10%_Time Attack,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,30,Day(s),357,673
+IBSProduct.txt,1090,288,Talisman of Luck 10%_Time Attack,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,30,Day(s),357,673
+IBSProduct.txt,1091,289,Seed of Lightning_Time Attack,Quantity,1,EA,358,673
+IBSProduct.txt,1092,289,Seed of Lightning_Time Attack,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,30,Day(s),358,673
+IBSProduct.txt,1093,289,Seed of Lightning_Time Attack,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,30,Day(s),358,673
+IBSProduct.txt,1094,290,Chaos Card Gold_Time Attack_,Quantity,1,EA,359,673
+IBSProduct.txt,1095,290,Chaos Card Gold_Time Attack_,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,30,Day(s),359,673
+IBSProduct.txt,1096,290,Chaos Card Gold_Time Attack_,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,30,Day(s),359,673
+IBSProduct.txt,1097,291,Event Reward - Dragon Helm,Quantity,1,EA,360,673
+IBSProduct.txt,1098,291,Event Reward - Dragon Helm,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),360,673
+IBSProduct.txt,1099,291,Event Reward - Dragon Helm,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),360,673
+IBSProduct.txt,1100,292,Event Reward - Dragon Armor,Quantity,1,EA,361,673
+IBSProduct.txt,1101,292,Event Reward - Dragon Armor,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),361,673
+IBSProduct.txt,1102,292,Event Reward - Dragon Armor,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),361,673
+IBSProduct.txt,1103,293,Event Reward - Dragon Gloves,Quantity,1,EA,362,673
+IBSProduct.txt,1104,293,Event Reward - Dragon Gloves,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),362,673
+IBSProduct.txt,1105,293,Event Reward - Dragon Gloves,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),362,673
+IBSProduct.txt,1106,294,Event Reward - Dragon Boots,Quantity,1,EA,363,673
+IBSProduct.txt,1107,294,Event Reward - Dragon Boots,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),363,673
+IBSProduct.txt,1108,294,Event Reward - Dragon Boots,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),363,673
+IBSProduct.txt,1109,295,Event Reward - Legendary Helm,Quantity,1,EA,364,673
+IBSProduct.txt,1110,295,Event Reward - Legendary Helm,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),364,673
+IBSProduct.txt,1111,295,Event Reward - Legendary Helm,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),364,673
+IBSProduct.txt,1112,296,Event Reward - Legendary Armor,Quantity,1,EA,365,673
+IBSProduct.txt,1113,296,Event Reward - Legendary Armor,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),365,673
+IBSProduct.txt,1114,296,Event Reward - Legendary Armor,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),365,673
+IBSProduct.txt,1115,297,Event Reward - Legendary Boots,Quantity,1,EA,366,673
+IBSProduct.txt,1116,297,Event Reward - Legendary Boots,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),366,673
+IBSProduct.txt,1117,297,Event Reward - Legendary Boots,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),366,673
+IBSProduct.txt,1118,298,Event Reward - Legendary Pants,Quantity,1,EA,367,673
+IBSProduct.txt,1119,298,Event Reward - Legendary Pants,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),367,673
+IBSProduct.txt,1120,298,Event Reward - Legendary Pants,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),367,673
+IBSProduct.txt,1121,299,Event Reward - Legendary Gloves,Quantity,1,EA,368,673
+IBSProduct.txt,1122,299,Event Reward - Legendary Gloves,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),368,673
+IBSProduct.txt,1123,299,Event Reward - Legendary Gloves,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),368,673
+IBSProduct.txt,1124,300,Event Reward - Dragon Pants,Quantity,1,EA,369,673
+IBSProduct.txt,1125,300,Event Reward - Dragon Pants,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),369,673
+IBSProduct.txt,1126,300,Event Reward - Dragon Pants,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),369,673
+IBSProduct.txt,1127,301,Event Reward - Redwing Helm,Quantity,1,EA,370,673
+IBSProduct.txt,1128,301,Event Reward - Redwing Helm,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),370,673
+IBSProduct.txt,1129,301,Event Reward - Redwing Helm,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),370,673
+IBSProduct.txt,1130,302,Event Reward - Redwing Armor,Quantity,1,EA,371,673
+IBSProduct.txt,1131,302,Event Reward - Redwing Armor,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),371,673
+IBSProduct.txt,1132,302,Event Reward - Redwing Armor,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),371,673
+IBSProduct.txt,1133,303,Event Reward - Redwing Gloves,Quantity,1,EA,372,673
+IBSProduct.txt,1134,303,Event Reward - Redwing Gloves,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),372,673
+IBSProduct.txt,1135,303,Event Reward - Redwing Gloves,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),372,673
+IBSProduct.txt,1136,304,Event Reward - Redwing Pants,Quantity,1,EA,373,673
+IBSProduct.txt,1137,304,Event Reward - Redwing Pants,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),373,673
+IBSProduct.txt,1138,304,Event Reward - Redwing Pants,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),373,673
+IBSProduct.txt,1139,305,Event Reward - Redwing Boots,Quantity,1,EA,374,673
+IBSProduct.txt,1140,305,Event Reward - Redwing Boots,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),374,673
+IBSProduct.txt,1141,305,Event Reward - Redwing Boots,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),374,673
+IBSProduct.txt,1142,306,Event Reward - Guardian Helm,Quantity,1,EA,375,673
+IBSProduct.txt,1143,306,Event Reward - Guardian Helm,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),375,673
+IBSProduct.txt,1144,306,Event Reward - Guardian Helm,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),375,673
+IBSProduct.txt,1145,307,Event Reward - Guardian Armor,Quantity,1,EA,376,673
+IBSProduct.txt,1146,307,Event Reward - Guardian Armor,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),376,673
+IBSProduct.txt,1147,307,Event Reward - Guardian Armor,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),376,673
+IBSProduct.txt,1148,308,Event Reward - Guardian Gloves,Quantity,1,EA,377,673
+IBSProduct.txt,1149,308,Event Reward - Guardian Gloves,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),377,673
+IBSProduct.txt,1150,308,Event Reward - Guardian Gloves,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),377,673
+IBSProduct.txt,1151,309,Event Reward - Guardian Pants,Quantity,1,EA,378,673
+IBSProduct.txt,1152,309,Event Reward - Guardian Pants,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),378,673
+IBSProduct.txt,1153,309,Event Reward - Guardian Pants,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),378,673
+IBSProduct.txt,1154,310,Event Reward - Guardian Boots,Quantity,1,EA,379,673
+IBSProduct.txt,1155,310,Event Reward - Guardian Boots,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),379,673
+IBSProduct.txt,1156,310,Event Reward - Guardian Boots,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),379,673
+IBSProduct.txt,1157,311,Event Reward - Great Dragon Helm,Quantity,1,EA,380,673
+IBSProduct.txt,1158,311,Event Reward - Great Dragon Helm,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),380,673
+IBSProduct.txt,1159,311,Event Reward - Great Dragon Helm,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),380,673
+IBSProduct.txt,1160,312,Event Reward - Great Dragon Armor,Quantity,1,EA,381,673
+IBSProduct.txt,1161,312,Event Reward - Great Dragon Armor,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),381,673
+IBSProduct.txt,1162,312,Event Reward - Great Dragon Armor,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),381,673
+IBSProduct.txt,1163,313,Event Reward - Great Dragon Pants,Quantity,1,EA,382,673
+IBSProduct.txt,1164,313,Event Reward - Great Dragon Pants,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),382,673
+IBSProduct.txt,1165,313,Event Reward - Great Dragon Pants,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),382,673
+IBSProduct.txt,1166,314,Event Reward - Great Dragon Gloves,Quantity,1,EA,383,673
+IBSProduct.txt,1167,314,Event Reward - Great Dragon Gloves,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),383,673
+IBSProduct.txt,1168,314,Event Reward - Great Dragon Gloves,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),383,673
+IBSProduct.txt,1169,315,Event Reward - Great Dragon Boots,Quantity,1,EA,384,673
+IBSProduct.txt,1170,315,Event Reward - Great Dragon Boots,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),384,673
+IBSProduct.txt,1171,315,Event Reward - Great Dragon Boots,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),384,673
+IBSProduct.txt,1172,316,Event Reward - Black Soul Helm,Quantity,1,EA,385,673
+IBSProduct.txt,1173,316,Event Reward - Black Soul Helm,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),385,673
+IBSProduct.txt,1174,316,Event Reward - Black Soul Helm,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),385,673
+IBSProduct.txt,1175,317,Event Reward - Black Soul Armor,Quantity,1,EA,386,673
+IBSProduct.txt,1176,317,Event Reward - Black Soul Armor,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),386,673
+IBSProduct.txt,1177,317,Event Reward - Black Soul Armor,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),386,673
+IBSProduct.txt,1178,318,Event Reward - Black Soul Pants,Quantity,1,EA,387,673
+IBSProduct.txt,1179,318,Event Reward - Black Soul Pants,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),387,673
+IBSProduct.txt,1180,318,Event Reward - Black Soul Pants,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),387,673
+IBSProduct.txt,1181,319,Event Reward - Black Soul Gloves,Quantity,1,EA,388,673
+IBSProduct.txt,1182,319,Event Reward - Black Soul Gloves,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),388,673
+IBSProduct.txt,1183,319,Event Reward - Black Soul Gloves,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),388,673
+IBSProduct.txt,1184,320,Event Reward - Black Soul Boots,Quantity,1,EA,389,673
+IBSProduct.txt,1185,320,Event Reward - Black Soul Boots,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),389,673
+IBSProduct.txt,1186,320,Event Reward - Black Soul Boots,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),389,673
+IBSProduct.txt,1187,321,Event Reward - Storm Blitz Helm,Quantity,1,EA,390,673
+IBSProduct.txt,1188,321,Event Reward - Storm Blitz Helm,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),390,673
+IBSProduct.txt,1189,321,Event Reward - Storm Blitz Helm,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),390,673
+IBSProduct.txt,1190,322,Event Reward - Storm Blitz Armor,Quantity,1,EA,391,673
+IBSProduct.txt,1191,322,Event Reward - Storm Blitz Armor,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),391,673
+IBSProduct.txt,1192,322,Event Reward - Storm Blitz Armor,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),391,673
+IBSProduct.txt,1193,323,Event Reward - Storm Blitz Pants,Quantity,1,EA,392,673
+IBSProduct.txt,1194,323,Event Reward - Storm Blitz Pants,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),392,673
+IBSProduct.txt,1195,323,Event Reward - Storm Blitz Pants,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),392,673
+IBSProduct.txt,1196,324,Event Reward - Storm Blitz Gloves,Quantity,1,EA,393,673
+IBSProduct.txt,1197,324,Event Reward - Storm Blitz Gloves,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),393,673
+IBSProduct.txt,1198,324,Event Reward - Storm Blitz Gloves,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),393,673
+IBSProduct.txt,1199,325,Event Reward - Storm Blitz Boots,Quantity,1,EA,394,673
+IBSProduct.txt,1200,325,Event Reward - Storm Blitz Boots,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),394,673
+IBSProduct.txt,1201,325,Event Reward - Storm Blitz Boots,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),394,673
+IBSProduct.txt,1202,326,Event Reward - Red Spirit Helm,Quantity,1,EA,395,673
+IBSProduct.txt,1203,326,Event Reward - Red Spirit Helm,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),395,673
+IBSProduct.txt,1204,326,Event Reward - Red Spirit Helm,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),395,673
+IBSProduct.txt,1205,327,Event Reward - Red Spirit Armor,Quantity,1,EA,396,673
+IBSProduct.txt,1206,327,Event Reward - Red Spirit Armor,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),396,673
+IBSProduct.txt,1207,327,Event Reward - Red Spirit Armor,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),396,673
+IBSProduct.txt,1208,328,Event Reward - Red Spirit Pants,Quantity,1,EA,397,673
+IBSProduct.txt,1209,328,Event Reward - Red Spirit Pants,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),397,673
+IBSProduct.txt,1210,328,Event Reward - Red Spirit Pants,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),397,673
+IBSProduct.txt,1211,329,Event Reward - Red Spirit Gloves,Quantity,1,EA,398,673
+IBSProduct.txt,1212,329,Event Reward - Red Spirit Gloves,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),398,673
+IBSProduct.txt,1213,329,Event Reward - Red Spirit Gloves,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),398,673
+IBSProduct.txt,1214,330,Event Reward - Red Spirit Boots,Quantity,1,EA,399,673
+IBSProduct.txt,1215,330,Event Reward - Red Spirit Boots,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),399,673
+IBSProduct.txt,1216,330,Event Reward - Red Spirit Boots,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),399,673
+IBSProduct.txt,1217,331,Event Reward - Sacred Fire Helm,Quantity,1,EA,400,673
+IBSProduct.txt,1218,331,Event Reward - Sacred Fire Helm,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),400,673
+IBSProduct.txt,1219,331,Event Reward - Sacred Fire Helm,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),400,673
+IBSProduct.txt,1220,332,Event Reward - Sacred Fire Armor,Quantity,1,EA,401,673
+IBSProduct.txt,1221,332,Event Reward - Sacred Fire Armor,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),401,673
+IBSProduct.txt,1222,332,Event Reward - Sacred Fire Armor,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),401,673
+IBSProduct.txt,1223,333,Event Reward - Sacred Fire Pants,Quantity,1,EA,402,673
+IBSProduct.txt,1224,333,Event Reward - Sacred Fire Pants,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),402,673
+IBSProduct.txt,1225,333,Event Reward - Sacred Fire Pants,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),402,673
+IBSProduct.txt,1226,334,Event Reward - Sacred Fire Gloves,Quantity,1,EA,403,673
+IBSProduct.txt,1227,334,Event Reward - Sacred Fire Gloves,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),403,673
+IBSProduct.txt,1228,334,Event Reward - Sacred Fire Gloves,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),403,673
+IBSProduct.txt,1229,335,Event Reward - Sacred Fire Boots,Quantity,1,EA,404,673
+IBSProduct.txt,1230,335,Event Reward - Sacred Fire Boots,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),404,673
+IBSProduct.txt,1231,335,Event Reward - Sacred Fire Boots,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),404,673
+IBSProduct.txt,1232,336,Event Reward - Piercing Groove Helm,Quantity,1,EA,405,673
+IBSProduct.txt,1233,336,Event Reward - Piercing Groove Helm,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),405,673
+IBSProduct.txt,1234,336,Event Reward - Piercing Groove Helm,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),405,673
+IBSProduct.txt,1235,337,Event Reward - Piercing Groove Armor,Quantity,1,EA,406,673
+IBSProduct.txt,1236,337,Event Reward - Piercing Groove Armor,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),406,673
+IBSProduct.txt,1237,337,Event Reward - Piercing Groove Armor,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),406,673
+IBSProduct.txt,1238,338,Event Reward - Piercing Groove Pants,Quantity,1,EA,407,673
+IBSProduct.txt,1239,338,Event Reward - Piercing Groove Pants,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),407,673
+IBSProduct.txt,1240,338,Event Reward - Piercing Groove Pants,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),407,673
+IBSProduct.txt,1241,339,Event Reward - Piercing Groove Boots,Quantity,1,EA,408,673
+IBSProduct.txt,1242,339,Event Reward - Piercing Groove Boots,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),408,673
+IBSProduct.txt,1243,339,Event Reward - Piercing Groove Boots,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),408,673
+IBSProduct.txt,1244,340,Event Reward - Piercing Groove Gloves,Quantity,1,EA,409,673
+IBSProduct.txt,1245,340,Event Reward - Piercing Groove Gloves,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),409,673
+IBSProduct.txt,1246,340,Event Reward - Piercing Groove Gloves,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),409,673
+IBSProduct.txt,1247,341,Event Reward - Wings of Dragon,Quantity,1,EA,410,673
+IBSProduct.txt,1248,341,Event Reward - Wings of Dragon,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),410,673
+IBSProduct.txt,1249,341,Event Reward - Wings of Dragon,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),410,673
+IBSProduct.txt,1250,342,Event Reward - Wings of Soul ,Quantity,1,EA,411,673
+IBSProduct.txt,1251,342,Event Reward - Wings of Soul ,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),411,673
+IBSProduct.txt,1252,342,Event Reward - Wings of Soul ,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),411,673
+IBSProduct.txt,1253,343,Event Reward -Wings of Despair ,Quantity,1,EA,412,673
+IBSProduct.txt,1254,343,Event Reward -Wings of Despair ,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),412,673
+IBSProduct.txt,1255,343,Event Reward -Wings of Despair ,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),412,673
+IBSProduct.txt,1256,344,Event Reward -Wings of Spirits ,Quantity,1,EA,413,673
+IBSProduct.txt,1257,344,Event Reward -Wings of Spirits ,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),413,673
+IBSProduct.txt,1258,344,Event Reward -Wings of Spirits ,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),413,673
+IBSProduct.txt,1259,345,Event Reward -Wings of Darkness ,Quantity,1,EA,414,673
+IBSProduct.txt,1260,345,Event Reward -Wings of Darkness ,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),414,673
+IBSProduct.txt,1261,345,Event Reward -Wings of Darkness ,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),414,673
+IBSProduct.txt,1262,346,Event Reward -Cape of Lord ,Quantity,1,EA,415,673
+IBSProduct.txt,1263,346,Event Reward -Cape of Lord ,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),415,673
+IBSProduct.txt,1264,346,Event Reward -Cape of Lord ,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),415,673
+IBSProduct.txt,1265,347,Event Reward -Cape of Fighter,Quantity,1,EA,416,673
+IBSProduct.txt,1266,347,Event Reward -Cape of Fighter,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,360,Day(s),416,673
+IBSProduct.txt,1267,347,Event Reward -Cape of Fighter,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,360,Day(s),416,673
+IBSProduct.txt,1268,348,Seal of Ascension 3Days,Duration,259200,Sec.,417,673
+IBSProduct.txt,1269,348,Seal of Ascension 3Days,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),417,673
+IBSProduct.txt,1270,348,Seal of Ascension 3Days,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),417,673
+IBSProduct.txt,1271,349,Jewel of Chaos Bundle (30)_BLUE,Quantity,1,EA,418,673
+IBSProduct.txt,1272,349,Jewel of Chaos Bundle (30)_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),418,673
+IBSProduct.txt,1273,349,Jewel of Chaos Bundle (30)_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),418,673
+IBSProduct.txt,1274,350,Jewel of Life Bundle (30)_BLUE,Quantity,1,EA,419,673
+IBSProduct.txt,1275,350,Jewel of Life Bundle (30)_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),419,673
+IBSProduct.txt,1276,350,Jewel of Life Bundle (30)_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),419,673
+IBSProduct.txt,1277,351,Horn of Fenrir_Platinum,Quantity,1,EA,420,673
+IBSProduct.txt,1278,351,Horn of Fenrir_Platinum,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),420,673
+IBSProduct.txt,1279,351,Horn of Fenrir_Platinum,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),420,673
+IBSProduct.txt,1280,352,Feather of Condor_Platinum,Quantity,1,EA,421,673
+IBSProduct.txt,1281,352,Feather of Condor_Platinum,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),421,673
+IBSProduct.txt,1282,352,Feather of Condor_Platinum,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),421,673
+IBSProduct.txt,1283,353,Rare Item Ticket 1_Platinum,Quantity,1,EA,422,673
+IBSProduct.txt,1284,353,Rare Item Ticket 1_Platinum,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),422,673
+IBSProduct.txt,1285,353,Rare Item Ticket 1_Platinum,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),422,673
+IBSProduct.txt,1286,354,Rare Item Ticket 2_Platinum,Quantity,1,EA,423,673
+IBSProduct.txt,1287,354,Rare Item Ticket 2_Platinum,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),423,673
+IBSProduct.txt,1288,354,Rare Item Ticket 2_Platinum,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),423,673
+IBSProduct.txt,1289,355,Rare Item Ticket 3_Platinum,Quantity,1,EA,424,673
+IBSProduct.txt,1290,355,Rare Item Ticket 3_Platinum,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),424,673
+IBSProduct.txt,1291,355,Rare Item Ticket 3_Platinum,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),424,673
+IBSProduct.txt,1292,356,Rare Item Ticket 4_Platinum,Quantity,1,EA,425,673
+IBSProduct.txt,1293,356,Rare Item Ticket 4_Platinum,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),425,673
+IBSProduct.txt,1294,356,Rare Item Ticket 4_Platinum,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),425,673
+IBSProduct.txt,1295,357,Rare Item Ticket 7_Platinum,Quantity,1,EA,426,673
+IBSProduct.txt,1296,357,Rare Item Ticket 7_Platinum,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),426,673
+IBSProduct.txt,1297,357,Rare Item Ticket 7_Platinum,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),426,673
+IBSProduct.txt,1298,358,Rare Item Ticket 8_Platinum,Quantity,1,EA,427,673
+IBSProduct.txt,1299,358,Rare Item Ticket 8_Platinum,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),427,673
+IBSProduct.txt,1300,358,Rare Item Ticket 8_Platinum,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),427,673
+IBSProduct.txt,1301,359,Talisman of Chaos Assembly_Platinum,Quantity,1,EA,428,673
+IBSProduct.txt,1302,359,Talisman of Chaos Assembly_Platinum,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),428,673
+IBSProduct.txt,1303,359,Talisman of Chaos Assembly_Platinum,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),428,673
+IBSProduct.txt,1304,360,Jewel of Life Bundle (30)_Platinum,Quantity,1,EA,429,673
+IBSProduct.txt,1305,360,Jewel of Life Bundle (30)_Platinum,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),429,673
+IBSProduct.txt,1306,360,Jewel of Life Bundle (30)_Platinum,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),429,673
+IBSProduct.txt,1307,361,Jewel of Chaos Bundle (30)_Platinum,Quantity,1,EA,430,673
+IBSProduct.txt,1308,361,Jewel of Chaos Bundle (30)_Platinum,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),430,673
+IBSProduct.txt,1309,361,Jewel of Chaos Bundle (30)_Platinum,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),430,673
+IBSProduct.txt,1310,362,Seal of Healing 7DAYS,Duration,86400,Sec.,431,673
+IBSProduct.txt,1311,362,Seal of Healing 7DAYS,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),431,673
+IBSProduct.txt,1312,362,Seal of Healing 7DAYS,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,30,Day(s),431,673
+IBSProduct.txt,1313,363,Rage Fighter Character Card_Event,Quantity,1,EA,432,673
+IBSProduct.txt,1314,363,Rage Fighter Character Card_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),432,673
+IBSProduct.txt,1315,363,Rage Fighter Character Card_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),432,673
+IBSProduct.txt,1316,364,Summoner Character Card_Event,Quantity,1,EA,433,673
+IBSProduct.txt,1317,364,Summoner Character Card_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),433,673
+IBSProduct.txt,1318,364,Summoner Character Card_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),433,673
+IBSProduct.txt,1319,365,Gold Channel Ticket_7day_Event,Duration,604800,Sec.,434,673
+IBSProduct.txt,1320,365,Gold Channel Ticket_7day_Event,IP Quantity,1,EA,434,673
+IBSProduct.txt,1321,365,Gold Channel Ticket_7day_Event,Ãß°¡ »ç¿ëÀÏ,0,Day(s),434,673
+IBSProduct.txt,1322,365,Gold Channel Ticket_7day_Event,Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),434,673
+IBSProduct.txt,1323,365,Gold Channel Ticket_7day_Event,Á¤¾× À¯È¿±â°£,365,Day(s),434,673
+IBSProduct.txt,1324,366,Seal of Wealth_7day_Event,Duration,604800,Sec.,435,673
+IBSProduct.txt,1325,366,Seal of Wealth_7day_Event,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),435,673
+IBSProduct.txt,1326,366,Seal of Wealth_7day_Event,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),435,673
+IBSProduct.txt,1327,367,Pet Panda_7day_Event,Duration,604800,Sec.,436,673
+IBSProduct.txt,1328,367,Pet Panda_7day_Event,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),436,673
+IBSProduct.txt,1329,367,Pet Panda_7day_Event,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),436,673
+IBSProduct.txt,1330,368,Feather of Condor_Event,Quantity,1,EA,437,673
+IBSProduct.txt,1331,368,Feather of Condor_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),437,673
+IBSProduct.txt,1332,368,Feather of Condor_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),437,673
+IBSProduct.txt,1333,369,Event Reward -Dark Master Mask,Quantity,1,EA,438,673
+IBSProduct.txt,1334,369,Event Reward -Dark Master Mask,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),438,673
+IBSProduct.txt,1335,369,Event Reward -Dark Master Mask,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),438,673
+IBSProduct.txt,1336,370,Event Reward - Dark Master Armor,Quantity,1,EA,439,673
+IBSProduct.txt,1337,370,Event Reward - Dark Master Armor,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),439,673
+IBSProduct.txt,1338,370,Event Reward - Dark Master Armor,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),439,673
+IBSProduct.txt,1339,371,Event Reward -Dark Master Pants,Quantity,1,EA,440,673
+IBSProduct.txt,1340,371,Event Reward -Dark Master Pants,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),440,673
+IBSProduct.txt,1341,371,Event Reward -Dark Master Pants,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),440,673
+IBSProduct.txt,1342,372,Event Reward -Dark Master Gloves,Quantity,1,EA,441,673
+IBSProduct.txt,1343,372,Event Reward -Dark Master Gloves,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),441,673
+IBSProduct.txt,1344,372,Event Reward -Dark Master Gloves,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),441,673
+IBSProduct.txt,1345,373,Event Reward -Dark Master Boots,Quantity,1,EA,442,673
+IBSProduct.txt,1346,373,Event Reward -Dark Master Boots,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),442,673
+IBSProduct.txt,1347,373,Event Reward -Dark Master Boots,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),442,673
+IBSProduct.txt,1348,374,Event Reward -Thunder Hawk Armor,Quantity,1,EA,443,673
+IBSProduct.txt,1349,374,Event Reward -Thunder Hawk Armor,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),443,673
+IBSProduct.txt,1350,374,Event Reward -Thunder Hawk Armor,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),443,673
+IBSProduct.txt,1351,375,Event Reward -Thunder Hawk Pants,Quantity,1,EA,444,673
+IBSProduct.txt,1352,375,Event Reward -Thunder Hawk Pants,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),444,673
+IBSProduct.txt,1353,375,Event Reward -Thunder Hawk Pants,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),444,673
+IBSProduct.txt,1354,376,Event Reward -Thunder Hawk Gloves,Quantity,1,EA,445,673
+IBSProduct.txt,1355,376,Event Reward -Thunder Hawk Gloves,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),445,673
+IBSProduct.txt,1356,376,Event Reward -Thunder Hawk Gloves,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),445,673
+IBSProduct.txt,1357,377,Event Reward -Thunder Hawk Boots,Quantity,1,EA,446,673
+IBSProduct.txt,1358,377,Event Reward -Thunder Hawk Boots,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),446,673
+IBSProduct.txt,1359,377,Event Reward -Thunder Hawk Boots,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),446,673
+IBSProduct.txt,1360,378,Skeleton Transformation Ring [3Days],Duration,259200,Sec.,447,673
+IBSProduct.txt,1361,378,Skeleton Transformation Ring [3Days],Quantity,1,&nbsp;,447,673
+IBSProduct.txt,1362,378,Skeleton Transformation Ring [3Days],±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),447,673
+IBSProduct.txt,1363,378,Skeleton Transformation Ring [3Days],±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),447,673
+IBSProduct.txt,1364,379,Pet Skeleton [3Days],Duration,259200,Sec.,448,673
+IBSProduct.txt,1365,379,Pet Skeleton [3Days],Quantity,1,&nbsp;,448,673
+IBSProduct.txt,1366,379,Pet Skeleton [3Days],±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),448,673
+IBSProduct.txt,1367,379,Pet Skeleton [3Days],±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),448,673
+IBSProduct.txt,1368,380,Panda Ring [3Days],Duration,259200,Sec.,449,673
+IBSProduct.txt,1369,380,Panda Ring [3Days],Quantity,1,&nbsp;,449,673
+IBSProduct.txt,1370,380,Panda Ring [3Days],±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),449,673
+IBSProduct.txt,1371,380,Panda Ring [3Days],±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),449,673
+IBSProduct.txt,1372,381,Pet Panda [3Days],Duration,259200,Sec.,450,673
+IBSProduct.txt,1373,381,Pet Panda [3Days],Quantity,1,&nbsp;,450,673
+IBSProduct.txt,1374,381,Pet Panda [3Days],±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),450,673
+IBSProduct.txt,1375,381,Pet Panda [3Days],±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),450,673
+IBSProduct.txt,1376,382,Rare Item Ticket 9,Quantity,1,EA,451,673
+IBSProduct.txt,1377,382,Rare Item Ticket 9,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),451,673
+IBSProduct.txt,1378,382,Rare Item Ticket 9,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),451,673
+IBSProduct.txt,1379,383,Rare Item Ticket 10,Quantity,1,EA,452,673
+IBSProduct.txt,1380,383,Rare Item Ticket 10,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),452,673
+IBSProduct.txt,1381,383,Rare Item Ticket 10,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),452,673
+IBSProduct.txt,1382,384,Rare Item Ticket 11,Quantity,1,EA,453,673
+IBSProduct.txt,1383,384,Rare Item Ticket 11,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),453,673
+IBSProduct.txt,1384,384,Rare Item Ticket 11,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),453,673
+IBSProduct.txt,1385,385,Rare Item Ticket 12,Quantity,1,EA,454,673
+IBSProduct.txt,1386,385,Rare Item Ticket 12,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),454,673
+IBSProduct.txt,1387,385,Rare Item Ticket 12,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),454,673
+IBSProduct.txt,1388,386,Horn of Fenrir_Event,Quantity,1,EA,455,673
+IBSProduct.txt,1389,386,Horn of Fenrir_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),455,673
+IBSProduct.txt,1390,386,Horn of Fenrir_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),455,673
+IBSProduct.txt,1391,387,Wings of Spirits_Event,Quantity,1,EA,456,673
+IBSProduct.txt,1392,387,Wings of Spirits_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),456,673
+IBSProduct.txt,1393,387,Wings of Spirits_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),456,673
+IBSProduct.txt,1394,388,Wings of Dragon_Event,Quantity,1,EA,457,673
+IBSProduct.txt,1395,388,Wings of Dragon_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),457,673
+IBSProduct.txt,1396,388,Wings of Dragon_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),457,673
+IBSProduct.txt,1397,389,Wings of Darkness_Event,Quantity,1,EA,458,673
+IBSProduct.txt,1398,389,Wings of Darkness_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),458,673
+IBSProduct.txt,1399,389,Wings of Darkness_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),458,673
+IBSProduct.txt,1400,390,Wings of Soul_Event,Quantity,1,EA,459,673
+IBSProduct.txt,1401,390,Wings of Soul_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),459,673
+IBSProduct.txt,1402,390,Wings of Soul_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),459,673
+IBSProduct.txt,1403,391,Wings of Despair_Event,Quantity,1,EA,460,673
+IBSProduct.txt,1404,391,Wings of Despair_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),460,673
+IBSProduct.txt,1405,391,Wings of Despair_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),460,673
+IBSProduct.txt,1406,392,Cape of Lord_Event,Quantity,1,EA,461,673
+IBSProduct.txt,1407,392,Cape of Lord_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),461,673
+IBSProduct.txt,1408,392,Cape of Lord_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),461,673
+IBSProduct.txt,1409,393,Cape of Fighter_Event,Quantity,1,EA,462,673
+IBSProduct.txt,1410,393,Cape of Fighter_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),462,673
+IBSProduct.txt,1411,393,Cape of Fighter_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),462,673
+IBSProduct.txt,1412,394,Jewel of Life Bundle (10),Quantity,1,EA,463,673
+IBSProduct.txt,1413,394,Jewel of Life Bundle (10),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),463,673
+IBSProduct.txt,1414,394,Jewel of Life Bundle (10),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),463,673
+IBSProduct.txt,1415,395,Jewel of Life Bundle (30),Quantity,1,EA,464,673
+IBSProduct.txt,1416,395,Jewel of Life Bundle (30),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),464,673
+IBSProduct.txt,1417,395,Jewel of Life Bundle (30),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),464,673
+IBSProduct.txt,1418,396,Bundle of Jewel of Soul (10),Quantity,1,EA,465,673
+IBSProduct.txt,1419,396,Bundle of Jewel of Soul (10),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),465,673
+IBSProduct.txt,1420,396,Bundle of Jewel of Soul (10),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),465,673
+IBSProduct.txt,1421,397,Bundle of Jewel of Soul (30),Quantity,1,EA,466,673
+IBSProduct.txt,1422,397,Bundle of Jewel of Soul (30),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),466,673
+IBSProduct.txt,1423,397,Bundle of Jewel of Soul (30),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),466,673
+IBSProduct.txt,1424,398,Bundle of Jewel of Bless (10),Quantity,1,EA,467,673
+IBSProduct.txt,1425,398,Bundle of Jewel of Bless (10),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),467,673
+IBSProduct.txt,1426,398,Bundle of Jewel of Bless (10),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),467,673
+IBSProduct.txt,1427,399,Bundle of Jewel of Bless (30),Quantity,1,EA,468,673
+IBSProduct.txt,1428,399,Bundle of Jewel of Bless (30),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),468,673
+IBSProduct.txt,1429,399,Bundle of Jewel of Bless (30),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),468,673
+IBSProduct.txt,1430,400,Bundle of Jewel of Harmony (10),Quantity,1,EA,469,673
+IBSProduct.txt,1431,400,Bundle of Jewel of Harmony (10),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),469,673
+IBSProduct.txt,1432,400,Bundle of Jewel of Harmony (10),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),469,673
+IBSProduct.txt,1433,401,Bundle of Jewel of Harmony (30),Quantity,1,EA,470,673
+IBSProduct.txt,1434,401,Bundle of Jewel of Harmony (30),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),470,673
+IBSProduct.txt,1435,401,Bundle of Jewel of Harmony (30),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),470,673
+IBSProduct.txt,1436,402,Pet Panda [28 Day]_¹ÌÆÇ¸Å,Duration,2419200,Sec.,471,673
+IBSProduct.txt,1437,402,Pet Panda [28 Day]_¹ÌÆÇ¸Å,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),471,673
+IBSProduct.txt,1438,402,Pet Panda [28 Day]_¹ÌÆÇ¸Å,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),471,673
+IBSProduct.txt,1439,403,Pet Panda_28 Day_Event,Duration,2419200,Sec.,472,673
+IBSProduct.txt,1440,403,Pet Panda_28 Day_Event,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),472,673
+IBSProduct.txt,1441,403,Pet Panda_28 Day_Event,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),472,673
+IBSProduct.txt,1442,404,Pet Panda_7Day_¹ÌÆÇ¸Å,Duration,604800,Sec.,473,673
+IBSProduct.txt,1443,404,Pet Panda_7Day_¹ÌÆÇ¸Å,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),473,673
+IBSProduct.txt,1444,404,Pet Panda_7Day_¹ÌÆÇ¸Å,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),473,673
+IBSProduct.txt,1445,405,Pet Panda_28Day_Event,Duration,2419200,Sec.,474,673
+IBSProduct.txt,1446,405,Pet Panda_28Day_Event,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),474,673
+IBSProduct.txt,1447,405,Pet Panda_28Day_Event,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),474,673
+IBSProduct.txt,1448,406,Bundle of Jewel of Soul (20),Quantity,1,EA,475,673
+IBSProduct.txt,1449,406,Bundle of Jewel of Soul (20),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),475,673
+IBSProduct.txt,1450,406,Bundle of Jewel of Soul (20),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),475,673
+IBSProduct.txt,1451,407,Bundle of Jewel of Bless (20),Quantity,1,EA,476,673
+IBSProduct.txt,1452,407,Bundle of Jewel of Bless (20),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),476,673
+IBSProduct.txt,1453,407,Bundle of Jewel of Bless (20),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),476,673
+IBSProduct.txt,1454,408,Bundle of Jewel of Chaos (20),Quantity,1,EA,477,673
+IBSProduct.txt,1455,408,Bundle of Jewel of Chaos (20),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),477,673
+IBSProduct.txt,1456,408,Bundle of Jewel of Chaos (20),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),477,673
+IBSProduct.txt,1457,409,Jewel of Life Bundle (20),Quantity,1,EA,478,673
+IBSProduct.txt,1458,409,Jewel of Life Bundle (20),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),478,673
+IBSProduct.txt,1459,409,Jewel of Life Bundle (20),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),478,673
+IBSProduct.txt,1460,410,Feather of Loch,Quantity,1,EA,479,673
+IBSProduct.txt,1461,410,Feather of Loch,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),479,673
+IBSProduct.txt,1462,410,Feather of Loch,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),479,673
+IBSProduct.txt,1463,411,Bundle of Jewel of Creation (20),Quantity,1,EA,480,673
+IBSProduct.txt,1464,411,Bundle of Jewel of Creation (20),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),480,673
+IBSProduct.txt,1465,411,Bundle of Jewel of Creation (20),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),480,673
+IBSProduct.txt,1466,412,Bundle of Jewel of Creation (10),Quantity,1,EA,481,673
+IBSProduct.txt,1467,412,Bundle of Jewel of Creation (10),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),481,673
+IBSProduct.txt,1468,412,Bundle of Jewel of Creation (10),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),481,673
+IBSProduct.txt,1469,413,Bundle of Jewel of Chaos (10),Quantity,1,EA,482,673
+IBSProduct.txt,1470,413,Bundle of Jewel of Chaos (10),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),482,673
+IBSProduct.txt,1471,413,Bundle of Jewel of Chaos (10),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),482,673
+IBSProduct.txt,1472,414,Talisman of Chaos Assembly_CARD,Quantity,1,EA,483,673
+IBSProduct.txt,1473,414,Talisman of Chaos Assembly_CARD,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),483,673
+IBSProduct.txt,1474,414,Talisman of Chaos Assembly_CARD,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),483,673
+IBSProduct.txt,1475,415,Feather of Condor_CARD,Quantity,1,EA,484,673
+IBSProduct.txt,1476,415,Feather of Condor_CARD,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),484,673
+IBSProduct.txt,1477,415,Feather of Condor_CARD,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),484,673
+IBSProduct.txt,1478,416,Horn of Fenrir_CARD,Quantity,1,EA,485,673
+IBSProduct.txt,1479,416,Horn of Fenrir_CARD,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),485,673
+IBSProduct.txt,1480,416,Horn of Fenrir_CARD,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),485,673
+IBSProduct.txt,1481,417,Wing of Eternal_CARD,Quantity,1,EA,486,673
+IBSProduct.txt,1482,417,Wing of Eternal_CARD,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),486,673
+IBSProduct.txt,1483,417,Wing of Eternal_CARD,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),486,673
+IBSProduct.txt,1484,418,Wing of Illusion_CARD,Quantity,1,EA,487,673
+IBSProduct.txt,1485,418,Wing of Illusion_CARD,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),487,673
+IBSProduct.txt,1486,418,Wing of Illusion_CARD,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),487,673
+IBSProduct.txt,1487,419,Cape of Emperor_CARD,Quantity,1,EA,488,673
+IBSProduct.txt,1488,419,Cape of Emperor_CARD,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),488,673
+IBSProduct.txt,1489,419,Cape of Emperor_CARD,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),488,673
+IBSProduct.txt,1490,420,Wing of Dimension_CARD,Quantity,1,EA,489,673
+IBSProduct.txt,1491,420,Wing of Dimension_CARD,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),489,673
+IBSProduct.txt,1492,420,Wing of Dimension_CARD,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),489,673
+IBSProduct.txt,1493,421,Wing of Storm_CARD,Quantity,1,EA,490,673
+IBSProduct.txt,1494,421,Wing of Storm_CARD,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),490,673
+IBSProduct.txt,1495,421,Wing of Storm_CARD,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),490,673
+IBSProduct.txt,1496,422,Wing of Ruin_CARD,Quantity,1,EA,491,673
+IBSProduct.txt,1497,422,Wing of Ruin_CARD,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),491,673
+IBSProduct.txt,1498,422,Wing of Ruin_CARD,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),491,673
+IBSProduct.txt,1499,423,Cape of Overrule_CARD,Quantity,1,EA,492,673
+IBSProduct.txt,1500,423,Cape of Overrule_CARD,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),492,673
+IBSProduct.txt,1501,423,Cape of Overrule_CARD,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),492,673
+IBSProduct.txt,1502,424,Rare Item Ticket 1_CARD,Quantity,1,EA,493,673
+IBSProduct.txt,1503,424,Rare Item Ticket 1_CARD,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),493,673
+IBSProduct.txt,1504,424,Rare Item Ticket 1_CARD,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),493,673
+IBSProduct.txt,1505,425,Rare Item Ticket 2_CARD,Quantity,1,EA,494,673
+IBSProduct.txt,1506,425,Rare Item Ticket 2_CARD,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),494,673
+IBSProduct.txt,1507,425,Rare Item Ticket 2_CARD,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),494,673
+IBSProduct.txt,1508,426,Rare Item Ticket 3_CARD,Quantity,1,EA,495,673
+IBSProduct.txt,1509,426,Rare Item Ticket 3_CARD,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),495,673
+IBSProduct.txt,1510,426,Rare Item Ticket 3_CARD,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),495,673
+IBSProduct.txt,1511,427,Rare Item Ticket 4_CARD,Quantity,1,EA,496,673
+IBSProduct.txt,1512,427,Rare Item Ticket 4_CARD,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),496,673
+IBSProduct.txt,1513,427,Rare Item Ticket 4_CARD,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),496,673
+IBSProduct.txt,1514,428,Rare Item Ticket 8_CARD,Quantity,1,EA,497,673
+IBSProduct.txt,1515,428,Rare Item Ticket 8_CARD,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),497,673
+IBSProduct.txt,1516,428,Rare Item Ticket 8_CARD,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),497,673
+IBSProduct.txt,1517,429,Rare Item Ticket 9_CARD,Quantity,1,EA,498,673
+IBSProduct.txt,1518,429,Rare Item Ticket 9_CARD,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),498,673
+IBSProduct.txt,1519,429,Rare Item Ticket 9_CARD,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),498,673
+IBSProduct.txt,1520,430,Rare Item Ticket 11_CARD,Quantity,1,EA,499,673
+IBSProduct.txt,1521,430,Rare Item Ticket 11_CARD,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),499,673
+IBSProduct.txt,1522,430,Rare Item Ticket 11_CARD,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),499,673
+IBSProduct.txt,1523,431,Pet Panda (7 Day)_P,Duration,604800,Sec.,500,673
+IBSProduct.txt,1524,431,Pet Panda (7 Day)_P,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),500,673
+IBSProduct.txt,1525,431,Pet Panda (7 Day)_P,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),500,673
+IBSProduct.txt,1526,432,Seal of Healing (7 Day)_P,Duration,604800,Sec.,501,673
+IBSProduct.txt,1527,432,Seal of Healing (7 Day)_P,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),501,673
+IBSProduct.txt,1528,432,Seal of Healing (7 Day)_P,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),501,673
+IBSProduct.txt,1529,433,Bundle of Jewel of Bless (10)_P,Quantity,1,EA,502,673
+IBSProduct.txt,1530,433,Bundle of Jewel of Bless (10)_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),502,673
+IBSProduct.txt,1531,433,Bundle of Jewel of Bless (10)_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),502,673
+IBSProduct.txt,1532,434,Bundle of Jewel of Soul (10)_P,Quantity,1,EA,503,673
+IBSProduct.txt,1533,434,Bundle of Jewel of Soul (10)_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),503,673
+IBSProduct.txt,1534,434,Bundle of Jewel of Soul (10)_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),503,673
+IBSProduct.txt,1535,435,Orb of Strike of Destruction_P,Quantity,1,EA,504,673
+IBSProduct.txt,1536,435,Orb of Strike of Destruction_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),504,673
+IBSProduct.txt,1537,435,Orb of Strike of Destruction_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),504,673
+IBSProduct.txt,1538,436,Orb of Rageful Blow_P,Quantity,1,EA,505,673
+IBSProduct.txt,1539,436,Orb of Rageful Blow_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),505,673
+IBSProduct.txt,1540,436,Orb of Rageful Blow_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),505,673
+IBSProduct.txt,1541,437,Orb of Death Stab_P,Quantity,1,EA,506,673
+IBSProduct.txt,1542,437,Orb of Death Stab_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),506,673
+IBSProduct.txt,1543,437,Orb of Death Stab_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),506,673
+IBSProduct.txt,1544,438,Orb of Swell Life_P,Quantity,1,EA,507,673
+IBSProduct.txt,1545,438,Orb of Swell Life_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),507,673
+IBSProduct.txt,1546,438,Orb of Swell Life_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),507,673
+IBSProduct.txt,1547,439,Scroll of Evil Spirit_P,Quantity,1,EA,508,673
+IBSProduct.txt,1548,439,Scroll of Evil Spirit_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),508,673
+IBSProduct.txt,1549,439,Scroll of Evil Spirit_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),508,673
+IBSProduct.txt,1550,440,Scroll of Expansion of Wizardry_P,Quantity,1,EA,509,673
+IBSProduct.txt,1551,440,Scroll of Expansion of Wizardry_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),509,673
+IBSProduct.txt,1552,440,Scroll of Expansion of Wizardry_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),509,673
+IBSProduct.txt,1553,441,Scroll of Nova_P,Quantity,1,EA,510,673
+IBSProduct.txt,1554,441,Scroll of Nova_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),510,673
+IBSProduct.txt,1555,441,Scroll of Nova_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),510,673
+IBSProduct.txt,1556,442,Scroll of Soul Barrior_P,Quantity,1,EA,511,673
+IBSProduct.txt,1557,442,Scroll of Soul Barrior_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),511,673
+IBSProduct.txt,1558,442,Scroll of Soul Barrior_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),511,673
+IBSProduct.txt,1559,443,Chain Lightning Parchment_P,Quantity,1,EA,512,673
+IBSProduct.txt,1560,443,Chain Lightning Parchment_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),512,673
+IBSProduct.txt,1561,443,Chain Lightning Parchment_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),512,673
+IBSProduct.txt,1562,444,Damage Reflection Parchment_P,Quantity,1,EA,513,673
+IBSProduct.txt,1563,444,Damage Reflection Parchment_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),513,673
+IBSProduct.txt,1564,444,Damage Reflection Parchment_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),513,673
+IBSProduct.txt,1565,445,Berserker Parchment_P,Quantity,1,EA,514,673
+IBSProduct.txt,1566,445,Berserker Parchment_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),514,673
+IBSProduct.txt,1567,445,Berserker Parchment_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),514,673
+IBSProduct.txt,1568,446,Lightning Shock Parchment_P,Quantity,1,EA,515,673
+IBSProduct.txt,1569,446,Lightning Shock Parchment_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),515,673
+IBSProduct.txt,1570,446,Lightning Shock Parchment_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),515,673
+IBSProduct.txt,1571,447,Increase Health Parchment_P,Quantity,1,EA,516,673
+IBSProduct.txt,1572,447,Increase Health Parchment_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),516,673
+IBSProduct.txt,1573,447,Increase Health Parchment_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),516,673
+IBSProduct.txt,1574,448,Dark Side Parchment_P,Quantity,1,EA,517,673
+IBSProduct.txt,1575,448,Dark Side Parchment_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),517,673
+IBSProduct.txt,1576,448,Dark Side Parchment_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),517,673
+IBSProduct.txt,1577,449,Dragon Slasher Parchment_P,Quantity,1,EA,518,673
+IBSProduct.txt,1578,449,Dragon Slasher Parchment_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),518,673
+IBSProduct.txt,1579,449,Dragon Slasher Parchment_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),518,673
+IBSProduct.txt,1580,450,Increase Block Parchment_P,Quantity,1,EA,519,673
+IBSProduct.txt,1581,450,Increase Block Parchment_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),519,673
+IBSProduct.txt,1582,450,Increase Block Parchment_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),519,673
+IBSProduct.txt,1583,451,Scroll of Multi Shot_P,Quantity,1,EA,520,673
+IBSProduct.txt,1584,451,Scroll of Multi Shot_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),520,673
+IBSProduct.txt,1585,451,Scroll of Multi Shot_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),520,673
+IBSProduct.txt,1586,452,Orb of Ice Arrow_P,Quantity,1,EA,521,673
+IBSProduct.txt,1587,452,Orb of Ice Arrow_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),521,673
+IBSProduct.txt,1588,452,Orb of Ice Arrow_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),521,673
+IBSProduct.txt,1589,453,Orb of Penetration_P,Quantity,1,EA,522,673
+IBSProduct.txt,1590,453,Orb of Penetration_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),522,673
+IBSProduct.txt,1591,453,Orb of Penetration_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),522,673
+IBSProduct.txt,1592,454,Orb of Recovery_P,Quantity,1,EA,523,673
+IBSProduct.txt,1593,454,Orb of Recovery_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),523,673
+IBSProduct.txt,1594,454,Orb of Recovery_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),523,673
+IBSProduct.txt,1595,455,Scroll of Gigantic Storm_P,Quantity,1,EA,524,673
+IBSProduct.txt,1596,455,Scroll of Gigantic Storm_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),524,673
+IBSProduct.txt,1597,455,Scroll of Gigantic Storm_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),524,673
+IBSProduct.txt,1598,456,Scroll of Cometfall_P,Quantity,1,EA,525,673
+IBSProduct.txt,1599,456,Scroll of Cometfall_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),525,673
+IBSProduct.txt,1600,456,Scroll of Cometfall_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),525,673
+IBSProduct.txt,1601,457,Scroll of Flame Strike_P,Quantity,1,EA,526,673
+IBSProduct.txt,1602,457,Scroll of Flame Strike_P,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),526,673
+IBSProduct.txt,1603,457,Scroll of Flame Strike_P,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),526,673
+IBSProduct.txt,1604,458,Cape of Overrule_BLUE,Quantity,1,EA,527,673
+IBSProduct.txt,1605,458,Cape of Overrule_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),527,673
+IBSProduct.txt,1606,458,Cape of Overrule_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),527,673
+IBSProduct.txt,1607,459,Statue of Hawk,Duration,86400,Sec.,528,673
+IBSProduct.txt,1608,459,Statue of Hawk,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),528,673
+IBSProduct.txt,1609,459,Statue of Hawk,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),528,673
+IBSProduct.txt,1610,459,Statue of Hawk,Duration,604800,Sec.,529,673
+IBSProduct.txt,1611,459,Statue of Hawk,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),529,673
+IBSProduct.txt,1612,459,Statue of Hawk,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),529,673
+IBSProduct.txt,1613,459,Statue of Hawk,Duration,2592000,Sec.,530,673
+IBSProduct.txt,1614,459,Statue of Hawk,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),530,673
+IBSProduct.txt,1615,459,Statue of Hawk,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),530,673
+IBSProduct.txt,1616,460,Statue of Goral,Duration,86400,Sec.,531,673
+IBSProduct.txt,1617,460,Statue of Goral,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),531,673
+IBSProduct.txt,1618,460,Statue of Goral,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),531,673
+IBSProduct.txt,1619,460,Statue of Goral,Duration,604800,Sec.,532,673
+IBSProduct.txt,1620,460,Statue of Goral,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),532,673
+IBSProduct.txt,1621,460,Statue of Goral,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),532,673
+IBSProduct.txt,1622,460,Statue of Goral,Duration,2592000,Sec.,533,673
+IBSProduct.txt,1623,460,Statue of Goral,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),533,673
+IBSProduct.txt,1624,460,Statue of Goral,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),533,673
+IBSProduct.txt,1625,461,Oak Charm,Duration,86400,Sec.,534,673
+IBSProduct.txt,1626,461,Oak Charm,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),534,673
+IBSProduct.txt,1627,461,Oak Charm,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),534,673
+IBSProduct.txt,1628,461,Oak Charm,Duration,604800,Sec.,535,673
+IBSProduct.txt,1629,461,Oak Charm,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),535,673
+IBSProduct.txt,1630,461,Oak Charm,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),535,673
+IBSProduct.txt,1631,461,Oak Charm,Duration,2592000,Sec.,536,673
+IBSProduct.txt,1632,461,Oak Charm,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),536,673
+IBSProduct.txt,1633,461,Oak Charm,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),536,673
+IBSProduct.txt,1634,462,Golden Oak Charm,Duration,86400,Sec.,537,673
+IBSProduct.txt,1635,462,Golden Oak Charm,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),537,673
+IBSProduct.txt,1636,462,Golden Oak Charm,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),537,673
+IBSProduct.txt,1637,462,Golden Oak Charm,Duration,604800,Sec.,538,673
+IBSProduct.txt,1638,462,Golden Oak Charm,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),538,673
+IBSProduct.txt,1639,462,Golden Oak Charm,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),538,673
+IBSProduct.txt,1640,462,Golden Oak Charm,Duration,2592000,Sec.,539,673
+IBSProduct.txt,1641,462,Golden Oak Charm,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),539,673
+IBSProduct.txt,1642,462,Golden Oak Charm,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),539,673
+IBSProduct.txt,1643,463,Worn Horseshoe,Duration,86400,Sec.,540,673
+IBSProduct.txt,1644,463,Worn Horseshoe,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),540,673
+IBSProduct.txt,1645,463,Worn Horseshoe,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),540,673
+IBSProduct.txt,1646,463,Worn Horseshoe,Duration,604800,Sec.,541,673
+IBSProduct.txt,1647,463,Worn Horseshoe,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),541,673
+IBSProduct.txt,1648,463,Worn Horseshoe,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),541,673
+IBSProduct.txt,1649,463,Worn Horseshoe,Duration,2592000,Sec.,542,673
+IBSProduct.txt,1650,463,Worn Horseshoe,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),542,673
+IBSProduct.txt,1651,463,Worn Horseshoe,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),542,673
+IBSProduct.txt,1652,464,10000 GP,Áö±Þ ¸¶ÀÏ¸®Áö,10000,WReward,543,673
+IBSProduct.txt,1653,464,10000 GP,À¯È¿±â°£,30,Day(s),543,673
+IBSProduct.txt,1654,464,10000 GP,°¨°¡»ó°¢±â°£,30,Day(s),543,673
+IBSProduct.txt,1655,465,1st Lucky Armor Ticket,Quantity,1,EA,544,673
+IBSProduct.txt,1656,465,1st Lucky Armor Ticket,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),544,673
+IBSProduct.txt,1657,465,1st Lucky Armor Ticket,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),544,673
+IBSProduct.txt,1658,466,1st Lucky Pants Ticket,Quantity,1,EA,545,673
+IBSProduct.txt,1659,466,1st Lucky Pants Ticket,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),545,673
+IBSProduct.txt,1660,466,1st Lucky Pants Ticket,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),545,673
+IBSProduct.txt,1661,467,1st Lucky Helm Ticket,Quantity,1,EA,546,673
+IBSProduct.txt,1662,467,1st Lucky Helm Ticket,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),546,673
+IBSProduct.txt,1663,467,1st Lucky Helm Ticket,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),546,673
+IBSProduct.txt,1664,468,1st Lucky Gloves Ticket,Quantity,1,EA,547,673
+IBSProduct.txt,1665,468,1st Lucky Gloves Ticket,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),547,673
+IBSProduct.txt,1666,468,1st Lucky Gloves Ticket,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),547,673
+IBSProduct.txt,1667,469,1st Lucky Boots Ticket,Quantity,1,EA,548,673
+IBSProduct.txt,1668,469,1st Lucky Boots Ticket,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),548,673
+IBSProduct.txt,1669,469,1st Lucky Boots Ticket,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),548,673
+IBSProduct.txt,1670,470,2nd Lucky Armor Ticket,Quantity,1,EA,549,673
+IBSProduct.txt,1671,470,2nd Lucky Armor Ticket,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),549,673
+IBSProduct.txt,1672,470,2nd Lucky Armor Ticket,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),549,673
+IBSProduct.txt,1673,471,2nd Lucky Pants Ticket,Quantity,1,EA,550,673
+IBSProduct.txt,1674,471,2nd Lucky Pants Ticket,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),550,673
+IBSProduct.txt,1675,471,2nd Lucky Pants Ticket,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),550,673
+IBSProduct.txt,1676,472,2nd Lucky Helm Ticket,Quantity,1,EA,551,673
+IBSProduct.txt,1677,472,2nd Lucky Helm Ticket,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),551,673
+IBSProduct.txt,1678,472,2nd Lucky Helm Ticket,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),551,673
+IBSProduct.txt,1679,473,2nd Lucky Gloves Ticket,Quantity,1,EA,552,673
+IBSProduct.txt,1680,473,2nd Lucky Gloves Ticket,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),552,673
+IBSProduct.txt,1681,473,2nd Lucky Gloves Ticket,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),552,673
+IBSProduct.txt,1682,474,2nd Lucky Boots Ticket,Quantity,1,EA,553,673
+IBSProduct.txt,1683,474,2nd Lucky Boots Ticket,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),553,673
+IBSProduct.txt,1684,474,2nd Lucky Boots Ticket,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),553,673
+IBSProduct.txt,1685,475,Talisman of Luck 10%_BLUE,Rate,10,%,554,673
+IBSProduct.txt,1686,475,Talisman of Luck 10%_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),554,673
+IBSProduct.txt,1687,475,Talisman of Luck 10%_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),554,673
+IBSProduct.txt,1688,476,Jewel of Extension_BLUE,Quantity,1,EA,555,673
+IBSProduct.txt,1689,476,Jewel of Extension_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),555,673
+IBSProduct.txt,1690,476,Jewel of Extension_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),555,673
+IBSProduct.txt,1691,477,Bundle of Jewel of Soul (30)_BLUE,Quantity,1,EA,556,673
+IBSProduct.txt,1692,477,Bundle of Jewel of Soul (30)_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),556,673
+IBSProduct.txt,1693,477,Bundle of Jewel of Soul (30)_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),556,673
+IBSProduct.txt,1694,478,Bundle of Jewel of Bless (30))_BLUE,Quantity,1,EA,557,673
+IBSProduct.txt,1695,478,Bundle of Jewel of Bless (30))_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),557,673
+IBSProduct.txt,1696,478,Bundle of Jewel of Bless (30))_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),557,673
+IBSProduct.txt,1697,479,+11 Wing of Eternal_BLUE,Quantity,1,EA,558,673
+IBSProduct.txt,1698,479,+11 Wing of Eternal_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),558,673
+IBSProduct.txt,1699,479,+11 Wing of Eternal_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),558,673
+IBSProduct.txt,1700,480,+11 Wing of Illusion_BLUE,Quantity,1,EA,559,673
+IBSProduct.txt,1701,480,+11 Wing of Illusion_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),559,673
+IBSProduct.txt,1702,480,+11 Wing of Illusion_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),559,673
+IBSProduct.txt,1703,481,+11 Cape of Emperor_BLUE,Quantity,1,EA,560,673
+IBSProduct.txt,1704,481,+11 Cape of Emperor_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),560,673
+IBSProduct.txt,1705,481,+11 Cape of Emperor_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),560,673
+IBSProduct.txt,1706,482,+11 Wing of Dimension_BLUE,Quantity,1,EA,561,673
+IBSProduct.txt,1707,482,+11 Wing of Dimension_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),561,673
+IBSProduct.txt,1708,482,+11 Wing of Dimension_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),561,673
+IBSProduct.txt,1709,483,+11 Wing of Storm_BLUE,Quantity,1,EA,562,673
+IBSProduct.txt,1710,483,+11 Wing of Storm_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),562,673
+IBSProduct.txt,1711,483,+11 Wing of Storm_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),562,673
+IBSProduct.txt,1712,484,+11 Wing of Ruin_BLUE,Quantity,1,EA,563,673
+IBSProduct.txt,1713,484,+11 Wing of Ruin_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),563,673
+IBSProduct.txt,1714,484,+11 Wing of Ruin_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),563,673
+IBSProduct.txt,1715,485,+11 Cape of Overrule,Quantity,1,EA,564,673
+IBSProduct.txt,1716,485,+11 Cape of Overrule,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),564,673
+IBSProduct.txt,1717,485,+11 Cape of Overrule,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),564,673
+IBSProduct.txt,1718,486,Rare Item Ticket 4_BLUE,Quantity,1,EA,565,673
+IBSProduct.txt,1719,486,Rare Item Ticket 4_BLUE,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),565,673
+IBSProduct.txt,1720,486,Rare Item Ticket 4_BLUE,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),565,673
+IBSProduct.txt,1721,487,Jewel of Chaos Bundle (30)_Event,Quantity,1,EA,566,673
+IBSProduct.txt,1722,487,Jewel of Chaos Bundle (30)_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),566,673
+IBSProduct.txt,1723,487,Jewel of Chaos Bundle (30)_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),566,673
+IBSProduct.txt,1724,488,Cherry Blossom Petal,Quantity,1,EA,567,673
+IBSProduct.txt,1725,488,Cherry Blossom Petal,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),567,673
+IBSProduct.txt,1726,488,Cherry Blossom Petal,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),567,673
+IBSProduct.txt,1727,489,Cherry Blossom Wine,Quantity,1,EA,568,673
+IBSProduct.txt,1728,489,Cherry Blossom Wine,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),568,673
+IBSProduct.txt,1729,489,Cherry Blossom Wine,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),568,673
+IBSProduct.txt,1730,490,Cherry Blossom Rice Cake,Quantity,1,EA,569,673
+IBSProduct.txt,1731,490,Cherry Blossom Rice Cake,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),569,673
+IBSProduct.txt,1732,490,Cherry Blossom Rice Cake,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),569,673
+IBSProduct.txt,1733,491,Scroll of Protection_7 Day,Duration,604800,Sec.,570,673
+IBSProduct.txt,1734,491,Scroll of Protection_7 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),570,673
+IBSProduct.txt,1735,491,Scroll of Protection_7 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),570,673
+IBSProduct.txt,1736,492,Scroll of Health_7 Day,Duration,604800,Sec.,571,673
+IBSProduct.txt,1737,492,Scroll of Health_7 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),571,673
+IBSProduct.txt,1738,492,Scroll of Health_7 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),571,673
+IBSProduct.txt,1739,493,Scroll of Mana_7 Day,Duration,604800,Sec.,572,673
+IBSProduct.txt,1740,493,Scroll of Mana_7 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),572,673
+IBSProduct.txt,1741,493,Scroll of Mana_7 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),572,673
+IBSProduct.txt,1742,494,Scroll of Battle_7 Day,Duration,604800,Sec.,573,673
+IBSProduct.txt,1743,494,Scroll of Battle_7 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),573,673
+IBSProduct.txt,1744,494,Scroll of Battle_7 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),573,673
+IBSProduct.txt,1745,495,Scroll of Strengthener_7 Day,Duration,604800,Sec.,574,673
+IBSProduct.txt,1746,495,Scroll of Strengthener_7 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),574,673
+IBSProduct.txt,1747,495,Scroll of Strengthener_7 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),574,673
+IBSProduct.txt,1748,496,Scroll of Quickness_7 Day,Duration,604800,Sec.,575,673
+IBSProduct.txt,1749,496,Scroll of Quickness_7 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),575,673
+IBSProduct.txt,1750,496,Scroll of Quickness_7 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),575,673
+IBSProduct.txt,1751,497,Scroll of Wrath_7 Day,Duration,604800,Sec.,576,673
+IBSProduct.txt,1752,497,Scroll of Wrath_7 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),576,673
+IBSProduct.txt,1753,497,Scroll of Wrath_7 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),576,673
+IBSProduct.txt,1754,498,Scroll of Wizardry_7 Day,Duration,604800,Sec.,577,673
+IBSProduct.txt,1755,498,Scroll of Wizardry_7 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),577,673
+IBSProduct.txt,1756,498,Scroll of Wizardry_7 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),577,673
+IBSProduct.txt,1757,499,Bundle of Jewel of Bless (30),Quantity,1,EA,578,673
+IBSProduct.txt,1758,499,Bundle of Jewel of Bless (30),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),578,673
+IBSProduct.txt,1759,499,Bundle of Jewel of Bless (30),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),578,673
+IBSProduct.txt,1760,500,Bundle of Jewel of Soul (30),Quantity,1,EA,579,673
+IBSProduct.txt,1761,500,Bundle of Jewel of Soul (30),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),579,673
+IBSProduct.txt,1762,500,Bundle of Jewel of Soul (30),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),579,673
+IBSProduct.txt,1763,501,Jewel of Chaos Bundle (10),Quantity,1,EA,580,673
+IBSProduct.txt,1764,501,Jewel of Chaos Bundle (10),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),580,673
+IBSProduct.txt,1765,501,Jewel of Chaos Bundle (10),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),580,673
+IBSProduct.txt,1766,502,Jewel of Life Bundle (10),Quantity,1,EA,581,673
+IBSProduct.txt,1767,502,Jewel of Life Bundle (10),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),581,673
+IBSProduct.txt,1768,502,Jewel of Life Bundle (10),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),581,673
+IBSProduct.txt,1769,503,Bundle of Jewel of Harmony (10),Quantity,1,EA,582,673
+IBSProduct.txt,1770,503,Bundle of Jewel of Harmony (10),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),582,673
+IBSProduct.txt,1771,503,Bundle of Jewel of Harmony (10),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),582,673
+IBSProduct.txt,1772,504,Talisman of Luck 10%,Rate,10,%,583,673
+IBSProduct.txt,1773,504,Talisman of Luck 10%,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),583,673
+IBSProduct.txt,1774,504,Talisman of Luck 10%,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),583,673
+IBSProduct.txt,1775,505,Rare Item Ticket 11,Quantity,1,EA,584,673
+IBSProduct.txt,1776,505,Rare Item Ticket 11,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),584,673
+IBSProduct.txt,1777,505,Rare Item Ticket 11,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),584,673
+IBSProduct.txt,1778,506,Rare Item Ticket 8,Quantity,1,EA,585,673
+IBSProduct.txt,1779,506,Rare Item Ticket 8,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),585,673
+IBSProduct.txt,1780,506,Rare Item Ticket 8,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),585,673
+IBSProduct.txt,1781,507,8 Goblin Point,Áö±Þ ¸¶ÀÏ¸®Áö,8,WReward,586,673
+IBSProduct.txt,1782,507,8 Goblin Point,À¯È¿±â°£,365,Day(s),586,673
+IBSProduct.txt,1783,507,8 Goblin Point,°¨°¡»ó°¢±â°£,365,Day(s),586,673
+IBSProduct.txt,1784,508,20 Goblin Point,Áö±Þ ¸¶ÀÏ¸®Áö,20,WReward,587,673
+IBSProduct.txt,1785,508,20 Goblin Point,À¯È¿±â°£,365,Day(s),587,673
+IBSProduct.txt,1786,508,20 Goblin Point,°¨°¡»ó°¢±â°£,365,Day(s),587,673
+IBSProduct.txt,1787,509,25 Goblin Point,Áö±Þ ¸¶ÀÏ¸®Áö,25,WReward,588,673
+IBSProduct.txt,1788,509,25 Goblin Point,À¯È¿±â°£,365,Day(s),588,673
+IBSProduct.txt,1789,509,25 Goblin Point,°¨°¡»ó°¢±â°£,365,Day(s),588,673
+IBSProduct.txt,1790,510,30 Goblin Point,Áö±Þ ¸¶ÀÏ¸®Áö,30,WReward,589,673
+IBSProduct.txt,1791,510,30 Goblin Point,À¯È¿±â°£,365,Day(s),589,673
+IBSProduct.txt,1792,510,30 Goblin Point,°¨°¡»ó°¢±â°£,365,Day(s),589,673
+IBSProduct.txt,1793,511,35 Goblin Point,Áö±Þ ¸¶ÀÏ¸®Áö,35,WReward,590,673
+IBSProduct.txt,1794,511,35 Goblin Point,À¯È¿±â°£,365,Day(s),590,673
+IBSProduct.txt,1795,511,35 Goblin Point,°¨°¡»ó°¢±â°£,365,Day(s),590,673
+IBSProduct.txt,1796,512,40 Goblin Point,Áö±Þ ¸¶ÀÏ¸®Áö,40,WReward,591,673
+IBSProduct.txt,1797,512,40 Goblin Point,À¯È¿±â°£,365,Day(s),591,673
+IBSProduct.txt,1798,512,40 Goblin Point,°¨°¡»ó°¢±â°£,365,Day(s),591,673
+IBSProduct.txt,1799,513,60 Goblin Point,Áö±Þ ¸¶ÀÏ¸®Áö,60,WReward,592,673
+IBSProduct.txt,1800,513,60 Goblin Point,À¯È¿±â°£,365,Day(s),592,673
+IBSProduct.txt,1801,513,60 Goblin Point,°¨°¡»ó°¢±â°£,365,Day(s),592,673
+IBSProduct.txt,1802,514,70 Goblin Point,Áö±Þ ¸¶ÀÏ¸®Áö,70,WReward,593,673
+IBSProduct.txt,1803,514,70 Goblin Point,À¯È¿±â°£,365,Day(s),593,673
+IBSProduct.txt,1804,514,70 Goblin Point,°¨°¡»ó°¢±â°£,365,Day(s),593,673
+IBSProduct.txt,1805,515,90 Goblin Point,Áö±Þ ¸¶ÀÏ¸®Áö,90,WReward,594,673
+IBSProduct.txt,1806,515,90 Goblin Point,À¯È¿±â°£,365,Day(s),594,673
+IBSProduct.txt,1807,515,90 Goblin Point,°¨°¡»ó°¢±â°£,365,Day(s),594,673
+IBSProduct.txt,1808,516,105 Goblin Point,Áö±Þ ¸¶ÀÏ¸®Áö,105,WReward,595,673
+IBSProduct.txt,1809,516,105 Goblin Point,À¯È¿±â°£,365,Day(s),595,673
+IBSProduct.txt,1810,516,105 Goblin Point,°¨°¡»ó°¢±â°£,365,Day(s),595,673
+IBSProduct.txt,1811,517,115 Goblin Point,Áö±Þ ¸¶ÀÏ¸®Áö,115,WReward,596,673
+IBSProduct.txt,1812,517,115 Goblin Point,À¯È¿±â°£,365,Day(s),596,673
+IBSProduct.txt,1813,517,115 Goblin Point,°¨°¡»ó°¢±â°£,365,Day(s),596,673
+IBSProduct.txt,1814,518,Seal of Wealth_7 Day,Duration,604800,Sec.,597,673
+IBSProduct.txt,1815,518,Seal of Wealth_7 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),597,673
+IBSProduct.txt,1816,518,Seal of Wealth_7 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),597,673
+IBSProduct.txt,1817,519,Seal of Wealth_30 Day,Duration,2592000,Sec.,598,673
+IBSProduct.txt,1818,519,Seal of Wealth_30 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),598,673
+IBSProduct.txt,1819,519,Seal of Wealth_30 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),598,673
+IBSProduct.txt,1820,520,Master Seal of Wealth_7 Day,Duration,604800,Sec.,599,673
+IBSProduct.txt,1821,520,Master Seal of Wealth_7 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),599,673
+IBSProduct.txt,1822,520,Master Seal of Wealth_7 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),599,673
+IBSProduct.txt,1823,521,Master Seal of Wealth_30 Day,Duration,2592000,Sec.,600,673
+IBSProduct.txt,1824,521,Master Seal of Wealth_30 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),600,673
+IBSProduct.txt,1825,521,Master Seal of Wealth_30 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),600,673
+IBSProduct.txt,1826,522,Seal of Ascension_7 Day,Duration,604800,Sec.,601,673
+IBSProduct.txt,1827,522,Seal of Ascension_7 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),601,673
+IBSProduct.txt,1828,522,Seal of Ascension_7 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),601,673
+IBSProduct.txt,1829,523,Seal of Ascension_30 Day,Duration,2592000,Sec.,602,673
+IBSProduct.txt,1830,523,Seal of Ascension_30 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),602,673
+IBSProduct.txt,1831,523,Seal of Ascension_30 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),602,673
+IBSProduct.txt,1832,524,Master Seal of Ascension_7 Day,Duration,604800,Sec.,603,673
+IBSProduct.txt,1833,524,Master Seal of Ascension_7 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),603,673
+IBSProduct.txt,1834,524,Master Seal of Ascension_7 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),603,673
+IBSProduct.txt,1835,525,Master Seal of Ascension_30 Day,Duration,2592000,Sec.,604,673
+IBSProduct.txt,1836,525,Master Seal of Ascension_30 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),604,673
+IBSProduct.txt,1837,525,Master Seal of Ascension_30 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),604,673
+IBSProduct.txt,1838,526,Gold Channel Ticket_7 Day,Duration,604800,Sec.,605,673
+IBSProduct.txt,1839,526,Gold Channel Ticket_7 Day,IP Quantity,1,EA,605,673
+IBSProduct.txt,1840,526,Gold Channel Ticket_7 Day,Ãß°¡ »ç¿ëÀÏ,0,Day(s),605,673
+IBSProduct.txt,1841,526,Gold Channel Ticket_7 Day,Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),605,673
+IBSProduct.txt,1842,526,Gold Channel Ticket_7 Day,Á¤¾× À¯È¿±â°£,365,Day(s),605,673
+IBSProduct.txt,1843,527,Gold Channel Ticket_30 Day,Duration,2592000,Sec.,606,673
+IBSProduct.txt,1844,527,Gold Channel Ticket_30 Day,IP Quantity,1,EA,606,673
+IBSProduct.txt,1845,527,Gold Channel Ticket_30 Day,Ãß°¡ »ç¿ëÀÏ,0,Day(s),606,673
+IBSProduct.txt,1846,527,Gold Channel Ticket_30 Day,Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),606,673
+IBSProduct.txt,1847,527,Gold Channel Ticket_30 Day,Á¤¾× À¯È¿±â°£,365,Day(s),606,673
+IBSProduct.txt,1848,528,Gold Channel Ticket,Duration,86400,Sec.,607,673
+IBSProduct.txt,1849,528,Gold Channel Ticket,IP Quantity,1,EA,607,673
+IBSProduct.txt,1850,528,Gold Channel Ticket,Ãß°¡ »ç¿ëÀÏ,0,Day(s),607,673
+IBSProduct.txt,1851,528,Gold Channel Ticket,Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),607,673
+IBSProduct.txt,1852,528,Gold Channel Ticket,Á¤¾× À¯È¿±â°£,365,Day(s),607,673
+IBSProduct.txt,1853,528,Gold Channel Ticket,Duration,259200,Sec.,608,673
+IBSProduct.txt,1854,528,Gold Channel Ticket,IP Quantity,1,EA,608,673
+IBSProduct.txt,1855,528,Gold Channel Ticket,Ãß°¡ »ç¿ëÀÏ,0,Day(s),608,673
+IBSProduct.txt,1856,528,Gold Channel Ticket,Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),608,673
+IBSProduct.txt,1857,528,Gold Channel Ticket,Á¤¾× À¯È¿±â°£,365,Day(s),608,673
+IBSProduct.txt,1858,528,Gold Channel Ticket,Duration,604800,Sec.,609,673
+IBSProduct.txt,1859,528,Gold Channel Ticket,IP Quantity,1,EA,609,673
+IBSProduct.txt,1860,528,Gold Channel Ticket,Ãß°¡ »ç¿ëÀÏ,0,Day(s),609,673
+IBSProduct.txt,1861,528,Gold Channel Ticket,Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),609,673
+IBSProduct.txt,1862,528,Gold Channel Ticket,Á¤¾× À¯È¿±â°£,365,Day(s),609,673
+IBSProduct.txt,1863,528,Gold Channel Ticket,Duration,2592000,Sec.,610,673
+IBSProduct.txt,1864,528,Gold Channel Ticket,IP Quantity,1,EA,610,673
+IBSProduct.txt,1865,528,Gold Channel Ticket,Ãß°¡ »ç¿ëÀÏ,0,Day(s),610,673
+IBSProduct.txt,1866,528,Gold Channel Ticket,Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),610,673
+IBSProduct.txt,1867,528,Gold Channel Ticket,Á¤¾× À¯È¿±â°£,365,Day(s),610,673
+IBSProduct.txt,1868,529,Seal of Ascension_30 Day,Duration,2592000,Sec.,611,673
+IBSProduct.txt,1869,529,Seal of Ascension_30 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),611,673
+IBSProduct.txt,1870,529,Seal of Ascension_30 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),611,673
+IBSProduct.txt,1871,530,Chaos Card GOLD_Bonus(3),Quantity,1,EA,612,673
+IBSProduct.txt,1872,530,Chaos Card GOLD_Bonus(3),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),612,673
+IBSProduct.txt,1873,530,Chaos Card GOLD_Bonus(3),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),612,673
+IBSProduct.txt,1874,531,Chaos Card  Mini_Bonus,Quantity,1,EA,613,673
+IBSProduct.txt,1875,531,Chaos Card  Mini_Bonus,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),613,673
+IBSProduct.txt,1876,531,Chaos Card  Mini_Bonus,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),613,673
+IBSProduct.txt,1877,533,Chaos Card Gold_6 Bundle,Quantity,6,EA,620,673
+IBSProduct.txt,1878,533,Chaos Card Gold_6 Bundle,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),620,673
+IBSProduct.txt,1879,533,Chaos Card Gold_6 Bundle,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),620,673
+IBSProduct.txt,1880,534,Chaos Card GOLD_Bonus(2),Quantity,1,EA,621,673
+IBSProduct.txt,1881,534,Chaos Card GOLD_Bonus(2),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),621,673
+IBSProduct.txt,1882,534,Chaos Card GOLD_Bonus(2),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),621,673
+IBSProduct.txt,1883,535,Chaos Card GOLD_Bonus(1),Quantity,1,EA,622,673
+IBSProduct.txt,1884,535,Chaos Card GOLD_Bonus(1),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),622,673
+IBSProduct.txt,1885,535,Chaos Card GOLD_Bonus(1),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),622,673
+IBSProduct.txt,1886,536,Chaos Card GOLD_10,Quantity,1,EA,623,673
+IBSProduct.txt,1887,536,Chaos Card GOLD_10,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),623,673
+IBSProduct.txt,1888,536,Chaos Card GOLD_10,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),623,673
+IBSProduct.txt,1889,537,Chaos Card GOLD_9,Quantity,1,EA,624,673
+IBSProduct.txt,1890,537,Chaos Card GOLD_9,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),624,673
+IBSProduct.txt,1891,537,Chaos Card GOLD_9,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),624,673
+IBSProduct.txt,1892,538,Chaos Card GOLD_8,Quantity,1,EA,625,673
+IBSProduct.txt,1893,538,Chaos Card GOLD_8,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),625,673
+IBSProduct.txt,1894,538,Chaos Card GOLD_8,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),625,673
+IBSProduct.txt,1895,539,Chaos Card GOLD_7,Quantity,1,EA,626,673
+IBSProduct.txt,1896,539,Chaos Card GOLD_7,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),626,673
+IBSProduct.txt,1897,539,Chaos Card GOLD_7,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),626,673
+IBSProduct.txt,1898,540,Chaos Card GOLD_6,Quantity,1,EA,627,673
+IBSProduct.txt,1899,540,Chaos Card GOLD_6,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),627,673
+IBSProduct.txt,1900,540,Chaos Card GOLD_6,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),627,673
+IBSProduct.txt,1901,541,Chaos Card GOLD_5,Quantity,1,EA,628,673
+IBSProduct.txt,1902,541,Chaos Card GOLD_5,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),628,673
+IBSProduct.txt,1903,541,Chaos Card GOLD_5,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),628,673
+IBSProduct.txt,1904,542,Chaos Card GOLD_4,Quantity,1,EA,629,673
+IBSProduct.txt,1905,542,Chaos Card GOLD_4,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),629,673
+IBSProduct.txt,1906,542,Chaos Card GOLD_4,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),629,673
+IBSProduct.txt,1907,543,Chaos Card GOLD_3,Quantity,1,EA,630,673
+IBSProduct.txt,1908,543,Chaos Card GOLD_3,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),630,673
+IBSProduct.txt,1909,543,Chaos Card GOLD_3,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),630,673
+IBSProduct.txt,1910,544,Chaos Card GOLD_2,Quantity,1,EA,631,673
+IBSProduct.txt,1911,544,Chaos Card GOLD_2,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),631,673
+IBSProduct.txt,1912,544,Chaos Card GOLD_2,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),631,673
+IBSProduct.txt,1913,545,Chaos Card GOLD_1,Quantity,1,EA,632,673
+IBSProduct.txt,1914,545,Chaos Card GOLD_1,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),632,673
+IBSProduct.txt,1915,545,Chaos Card GOLD_1,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),632,673
+IBSProduct.txt,1916,546,Chaos Card  Mini_Bonus(3),Quantity,1,EA,633,673
+IBSProduct.txt,1917,546,Chaos Card  Mini_Bonus(3),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),633,673
+IBSProduct.txt,1918,546,Chaos Card  Mini_Bonus(3),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),633,673
+IBSProduct.txt,1919,547,Chaos Card  Mini_Bonus(2),Quantity,1,EA,634,673
+IBSProduct.txt,1920,547,Chaos Card  Mini_Bonus(2),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),634,673
+IBSProduct.txt,1921,547,Chaos Card  Mini_Bonus(2),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),634,673
+IBSProduct.txt,1922,548,Chaos Card  Mini_Bonus(1),Quantity,1,EA,635,673
+IBSProduct.txt,1923,548,Chaos Card  Mini_Bonus(1),¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),635,673
+IBSProduct.txt,1924,548,Chaos Card  Mini_Bonus(1),¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),635,673
+IBSProduct.txt,1925,549,Chaos Card  Mini_10,Quantity,1,EA,636,673
+IBSProduct.txt,1926,549,Chaos Card  Mini_10,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),636,673
+IBSProduct.txt,1927,549,Chaos Card  Mini_10,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),636,673
+IBSProduct.txt,1928,550,Chaos Card  Mini_9,Quantity,1,EA,637,673
+IBSProduct.txt,1929,550,Chaos Card  Mini_9,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),637,673
+IBSProduct.txt,1930,550,Chaos Card  Mini_9,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),637,673
+IBSProduct.txt,1931,551,Chaos Card  Mini_8,Quantity,1,EA,638,673
+IBSProduct.txt,1932,551,Chaos Card  Mini_8,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),638,673
+IBSProduct.txt,1933,551,Chaos Card  Mini_8,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),638,673
+IBSProduct.txt,1934,552,Chaos Card  Mini_7,Quantity,1,EA,639,673
+IBSProduct.txt,1935,552,Chaos Card  Mini_7,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),639,673
+IBSProduct.txt,1936,552,Chaos Card  Mini_7,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),639,673
+IBSProduct.txt,1937,553,Chaos Card  Mini_6,Quantity,1,EA,640,673
+IBSProduct.txt,1938,553,Chaos Card  Mini_6,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),640,673
+IBSProduct.txt,1939,553,Chaos Card  Mini_6,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),640,673
+IBSProduct.txt,1940,554,Chaos Card  Mini_5,Quantity,1,EA,641,673
+IBSProduct.txt,1941,554,Chaos Card  Mini_5,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),641,673
+IBSProduct.txt,1942,554,Chaos Card  Mini_5,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),641,673
+IBSProduct.txt,1943,555,Chaos Card  Mini_4,Quantity,1,EA,642,673
+IBSProduct.txt,1944,555,Chaos Card  Mini_4,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),642,673
+IBSProduct.txt,1945,555,Chaos Card  Mini_4,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),642,673
+IBSProduct.txt,1946,556,Chaos Card  Mini_3,Quantity,1,EA,643,673
+IBSProduct.txt,1947,556,Chaos Card  Mini_3,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),643,673
+IBSProduct.txt,1948,556,Chaos Card  Mini_3,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),643,673
+IBSProduct.txt,1949,557,Chaos Card  Mini_2,Quantity,1,EA,644,673
+IBSProduct.txt,1950,557,Chaos Card  Mini_2,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),644,673
+IBSProduct.txt,1951,557,Chaos Card  Mini_2,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),644,673
+IBSProduct.txt,1952,558,Chaos Card  Mini_1,Quantity,1,EA,645,673
+IBSProduct.txt,1953,558,Chaos Card  Mini_1,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),645,673
+IBSProduct.txt,1954,558,Chaos Card  Mini_1,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),645,673
+IBSProduct.txt,1955,559,Box of Kundun +1 ,Quantity,1,EA,646,673
+IBSProduct.txt,1956,559,Box of Kundun +1 ,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),646,673
+IBSProduct.txt,1957,559,Box of Kundun +1 ,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),646,673
+IBSProduct.txt,1958,560,Box of kundun +2,Quantity,1,EA,647,673
+IBSProduct.txt,1959,560,Box of kundun +2,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),647,673
+IBSProduct.txt,1960,560,Box of kundun +2,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),647,673
+IBSProduct.txt,1961,561,Box of kundun +3,Quantity,1,EA,648,673
+IBSProduct.txt,1962,561,Box of kundun +3,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),648,673
+IBSProduct.txt,1963,561,Box of kundun +3,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),648,673
+IBSProduct.txt,1964,562,Box of kundun +4,Quantity,1,EA,649,673
+IBSProduct.txt,1965,562,Box of kundun +4,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),649,673
+IBSProduct.txt,1966,562,Box of kundun +4,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),649,673
+IBSProduct.txt,1967,563,Box of kundun +5,Quantity,1,EA,650,673
+IBSProduct.txt,1968,563,Box of kundun +5,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),650,673
+IBSProduct.txt,1969,563,Box of kundun +5,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),650,673
+IBSProduct.txt,1970,564,GM Gift Box,Quantity,1,EA,651,673
+IBSProduct.txt,1971,564,GM Gift Box,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),651,673
+IBSProduct.txt,1972,564,GM Gift Box,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),651,673
+IBSProduct.txt,1973,565,Pet Rudolph,Quantity,1,EA,652,673
+IBSProduct.txt,1974,565,Pet Rudolph,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),652,673
+IBSProduct.txt,1975,565,Pet Rudolph,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),652,673
+IBSProduct.txt,1976,566,Snowman Transformation Ring,Quantity,1,EA,653,673
+IBSProduct.txt,1977,566,Snowman Transformation Ring,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),653,673
+IBSProduct.txt,1978,566,Snowman Transformation Ring,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),653,673
+IBSProduct.txt,1979,567,Emerald Necklace,Duration,86400,Sec.,654,673
+IBSProduct.txt,1980,567,Emerald Necklace,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),654,673
+IBSProduct.txt,1981,567,Emerald Necklace,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),654,673
+IBSProduct.txt,1982,568,Sapphire Necklace,Duration,86400,Sec.,655,673
+IBSProduct.txt,1983,568,Sapphire Necklace,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),655,673
+IBSProduct.txt,1984,568,Sapphire Necklace,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),655,673
+IBSProduct.txt,1985,569,Topaz Ring,Duration,86400,Sec.,656,673
+IBSProduct.txt,1986,569,Topaz Ring,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),656,673
+IBSProduct.txt,1987,569,Topaz Ring,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),656,673
+IBSProduct.txt,1988,570,Ruby Ring,Duration,86400,Sec.,657,673
+IBSProduct.txt,1989,570,Ruby Ring,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),657,673
+IBSProduct.txt,1990,570,Ruby Ring,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),657,673
+IBSProduct.txt,1991,571,Sapphire Ring,Duration,86400,Sec.,658,673
+IBSProduct.txt,1992,571,Sapphire Ring,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),658,673
+IBSProduct.txt,1993,571,Sapphire Ring,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),658,673
+IBSProduct.txt,1994,572,Kalima Ticket ,Quantity,1,EA,659,673
+IBSProduct.txt,1995,572,Kalima Ticket ,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),659,673
+IBSProduct.txt,1996,572,Kalima Ticket ,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),659,673
+IBSProduct.txt,1997,573,Devil Square Ticket,Quantity,1,EA,660,673
+IBSProduct.txt,1998,573,Devil Square Ticket,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),660,673
+IBSProduct.txt,1999,573,Devil Square Ticket,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),660,673
+IBSProduct.txt,2000,574,Blood Castle Ticket,Quantity,1,EA,661,673
+IBSProduct.txt,2001,574,Blood Castle Ticket,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),661,673
+IBSProduct.txt,2002,574,Blood Castle Ticket,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),661,673
+IBSProduct.txt,2003,575,Illusion Temple Ticket,Quantity,1,EA,662,673
+IBSProduct.txt,2004,575,Illusion Temple Ticket,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),662,673
+IBSProduct.txt,2005,575,Illusion Temple Ticket,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),662,673
+IBSProduct.txt,2006,576,Open Access Ticket to Varka 7,Quantity,1,EA,663,673
+IBSProduct.txt,2007,576,Open Access Ticket to Varka 7,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),663,673
+IBSProduct.txt,2008,576,Open Access Ticket to Varka 7,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),663,673
+IBSProduct.txt,2009,577,Gold Channel Ticket_Compensation,Duration,86400,Sec.,664,673
+IBSProduct.txt,2010,577,Gold Channel Ticket_Compensation,IP Quantity,1,EA,664,673
+IBSProduct.txt,2011,577,Gold Channel Ticket_Compensation,Ãß°¡ »ç¿ëÀÏ,0,Day(s),664,673
+IBSProduct.txt,2012,577,Gold Channel Ticket_Compensation,Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),664,673
+IBSProduct.txt,2013,577,Gold Channel Ticket_Compensation,Á¤¾× À¯È¿±â°£,365,Day(s),664,673
+IBSProduct.txt,2014,578,+11 Wing of Eternal_CARD,Quantity,1,EA,665,673
+IBSProduct.txt,2015,578,+11 Wing of Eternal_CARD,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),665,673
+IBSProduct.txt,2016,578,+11 Wing of Eternal_CARD,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),665,673
+IBSProduct.txt,2017,579,+11 Wing of Illusion_CARD,Quantity,1,EA,666,673
+IBSProduct.txt,2018,579,+11 Wing of Illusion_CARD,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),666,673
+IBSProduct.txt,2019,579,+11 Wing of Illusion_CARD,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),666,673
+IBSProduct.txt,2020,580,+11 Cape of Emperor_CARD,Quantity,1,EA,667,673
+IBSProduct.txt,2021,580,+11 Cape of Emperor_CARD,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),667,673
+IBSProduct.txt,2022,580,+11 Cape of Emperor_CARD,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),667,673
+IBSProduct.txt,2023,581,+11 Wing of Dimension_CARD,Quantity,1,EA,668,673
+IBSProduct.txt,2024,581,+11 Wing of Dimension_CARD,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),668,673
+IBSProduct.txt,2025,581,+11 Wing of Dimension_CARD,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),668,673
+IBSProduct.txt,2026,582,+11 Wing of Storm_CARD,Quantity,1,EA,669,673
+IBSProduct.txt,2027,582,+11 Wing of Storm_CARD,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),669,673
+IBSProduct.txt,2028,582,+11 Wing of Storm_CARD,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),669,673
+IBSProduct.txt,2029,583,+11 Wing of Ruin_CARD,Quantity,1,EA,670,673
+IBSProduct.txt,2030,583,+11 Wing of Ruin_CARD,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),670,673
+IBSProduct.txt,2031,583,+11 Wing of Ruin_CARD,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),670,673
+IBSProduct.txt,2032,584,+11 Cape of Overrule_CARD,Quantity,1,EA,671,673
+IBSProduct.txt,2033,584,+11 Cape of Overrule_CARD,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),671,673
+IBSProduct.txt,2034,584,+11 Cape of Overrule_CARD,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),671,673
+IBSProduct.txt,2035,585,[Discount][Gold Channel Ticket],Duration,86400,Sec.,672,673
+IBSProduct.txt,2036,585,[Discount][Gold Channel Ticket],IP Quantity,1,EA,672,673
+IBSProduct.txt,2037,585,[Discount][Gold Channel Ticket],Ãß°¡ »ç¿ëÀÏ,0,Day(s),672,673
+IBSProduct.txt,2038,585,[Discount][Gold Channel Ticket],Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),672,673
+IBSProduct.txt,2039,585,[Discount][Gold Channel Ticket],Á¤¾× À¯È¿±â°£,365,Day(s),672,673
+IBSProduct.txt,2040,585,[Discount][Gold Channel Ticket],Duration,259200,Sec.,673,673
+IBSProduct.txt,2041,585,[Discount][Gold Channel Ticket],IP Quantity,1,EA,673,673
+IBSProduct.txt,2042,585,[Discount][Gold Channel Ticket],Ãß°¡ »ç¿ëÀÏ,0,Day(s),673,673
+IBSProduct.txt,2043,585,[Discount][Gold Channel Ticket],Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),673,673
+IBSProduct.txt,2044,585,[Discount][Gold Channel Ticket],Á¤¾× À¯È¿±â°£,365,Day(s),673,673
+IBSProduct.txt,2045,585,[Discount][Gold Channel Ticket],Duration,604800,Sec.,674,673
+IBSProduct.txt,2046,585,[Discount][Gold Channel Ticket],IP Quantity,1,EA,674,673
+IBSProduct.txt,2047,585,[Discount][Gold Channel Ticket],Ãß°¡ »ç¿ëÀÏ,0,Day(s),674,673
+IBSProduct.txt,2048,585,[Discount][Gold Channel Ticket],Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),674,673
+IBSProduct.txt,2049,585,[Discount][Gold Channel Ticket],Á¤¾× À¯È¿±â°£,365,Day(s),674,673
+IBSProduct.txt,2050,585,[Discount][Gold Channel Ticket],Duration,2592000,Sec.,675,673
+IBSProduct.txt,2051,585,[Discount][Gold Channel Ticket],IP Quantity,1,EA,675,673
+IBSProduct.txt,2052,585,[Discount][Gold Channel Ticket],Ãß°¡ »ç¿ëÀÏ,0,Day(s),675,673
+IBSProduct.txt,2053,585,[Discount][Gold Channel Ticket],Á¤¾×-°¨°¡»ó°¢±â°£,365,Day(s),675,673
+IBSProduct.txt,2054,585,[Discount][Gold Channel Ticket],Á¤¾× À¯È¿±â°£,365,Day(s),675,673
+IBSProduct.txt,2055,586,+11 Wings of Spirits_Event,Quantity,1,EA,676,673
+IBSProduct.txt,2056,586,+11 Wings of Spirits_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),676,673
+IBSProduct.txt,2057,586,+11 Wings of Spirits_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),676,673
+IBSProduct.txt,2058,587,+11 Wings of Dragon_Event,Quantity,1,EA,677,673
+IBSProduct.txt,2059,587,+11 Wings of Dragon_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),677,673
+IBSProduct.txt,2060,587,+11 Wings of Dragon_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),677,673
+IBSProduct.txt,2061,588,+11 Wings of Darkness_Event,Quantity,1,EA,678,673
+IBSProduct.txt,2062,588,+11 Wings of Darkness_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),678,673
+IBSProduct.txt,2063,588,+11 Wings of Darkness_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),678,673
+IBSProduct.txt,2064,589,+11 Wings of Soul_Event,Quantity,1,EA,679,673
+IBSProduct.txt,2065,589,+11 Wings of Soul_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),679,673
+IBSProduct.txt,2066,589,+11 Wings of Soul_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),679,673
+IBSProduct.txt,2067,590,+11 Wings of Despair_Event,Quantity,1,EA,680,673
+IBSProduct.txt,2068,590,+11 Wings of Despair_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),680,673
+IBSProduct.txt,2069,590,+11 Wings of Despair_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),680,673
+IBSProduct.txt,2070,591,+11 Cape of Lord_Event,Quantity,1,EA,681,673
+IBSProduct.txt,2071,591,+11 Cape of Lord_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),681,673
+IBSProduct.txt,2072,591,+11 Cape of Lord_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),681,673
+IBSProduct.txt,2073,592,+11 Cape of Fighter_Event,Quantity,1,EA,682,673
+IBSProduct.txt,2074,592,+11 Cape of Fighter_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),682,673
+IBSProduct.txt,2075,592,+11 Cape of Fighter_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),682,673
+IBSProduct.txt,2076,593,Horn of Fenrir_Event,Quantity,1,EA,683,673
+IBSProduct.txt,2077,593,Horn of Fenrir_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),683,673
+IBSProduct.txt,2078,593,Horn of Fenrir_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),683,673
+IBSProduct.txt,2079,594,Wing of Eternal_Event,Quantity,1,EA,684,673
+IBSProduct.txt,2080,594,Wing of Eternal_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),684,673
+IBSProduct.txt,2081,594,Wing of Eternal_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),684,673
+IBSProduct.txt,2082,595,Wing of Illusion_Event,Quantity,1,EA,685,673
+IBSProduct.txt,2083,595,Wing of Illusion_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),685,673
+IBSProduct.txt,2084,595,Wing of Illusion_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),685,673
+IBSProduct.txt,2085,596,Cape of Emperor_Event,Quantity,1,EA,686,673
+IBSProduct.txt,2086,596,Cape of Emperor_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),686,673
+IBSProduct.txt,2087,596,Cape of Emperor_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),686,673
+IBSProduct.txt,2088,597,Wing of Dimension_Event,Quantity,1,EA,687,673
+IBSProduct.txt,2089,597,Wing of Dimension_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),687,673
+IBSProduct.txt,2090,597,Wing of Dimension_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),687,673
+IBSProduct.txt,2091,598,Wing of Storm_Event,Quantity,1,EA,688,673
+IBSProduct.txt,2092,598,Wing of Storm_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),688,673
+IBSProduct.txt,2093,598,Wing of Storm_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),688,673
+IBSProduct.txt,2094,599,Wing of Ruin_Event,Quantity,1,EA,689,673
+IBSProduct.txt,2095,599,Wing of Ruin_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),689,673
+IBSProduct.txt,2096,599,Wing of Ruin_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),689,673
+IBSProduct.txt,2097,600,Cape of Overrule_Event,Quantity,1,EA,690,673
+IBSProduct.txt,2098,600,Cape of Overrule_Event,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,365,Day(s),690,673
+IBSProduct.txt,2099,600,Cape of Overrule_Event,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),690,673
+IBSProduct.txt,2100,601,15 Goblin Point,Áö±Þ ¸¶ÀÏ¸®Áö,15,WReward,691,673
+IBSProduct.txt,2101,601,15 Goblin Point,À¯È¿±â°£,365,Day(s),691,673
+IBSProduct.txt,2102,601,15 Goblin Point,°¨°¡»ó°¢±â°£,365,Day(s),691,673
+IBSProduct.txt,2103,602,50 Goblin Point,Áö±Þ ¸¶ÀÏ¸®Áö,50,WReward,692,673
+IBSProduct.txt,2104,602,50 Goblin Point,À¯È¿±â°£,365,Day(s),692,673
+IBSProduct.txt,2105,602,50 Goblin Point,°¨°¡»ó°¢±â°£,365,Day(s),692,673
+IBSProduct.txt,2106,603,80 Goblin Point,Áö±Þ ¸¶ÀÏ¸®Áö,80,WReward,693,673
+IBSProduct.txt,2107,603,80 Goblin Point,À¯È¿±â°£,365,Day(s),693,673
+IBSProduct.txt,2108,603,80 Goblin Point,°¨°¡»ó°¢±â°£,365,Day(s),693,673
+IBSProduct.txt,2109,604,100 Goblin Point,Áö±Þ ¸¶ÀÏ¸®Áö,100,WReward,694,673
+IBSProduct.txt,2110,604,100 Goblin Point,À¯È¿±â°£,365,Day(s),694,673
+IBSProduct.txt,2111,604,100 Goblin Point,°¨°¡»ó°¢±â°£,365,Day(s),694,673
+IBSProduct.txt,2112,605,240 Goblin Point,Áö±Þ ¸¶ÀÏ¸®Áö,240,WReward,695,673
+IBSProduct.txt,2113,605,240 Goblin Point,À¯È¿±â°£,365,Day(s),695,673
+IBSProduct.txt,2114,605,240 Goblin Point,°¨°¡»ó°¢±â°£,365,Day(s),695,673
+IBSProduct.txt,2115,606,280 Goblin Point,Áö±Þ ¸¶ÀÏ¸®Áö,280,WReward,696,673
+IBSProduct.txt,2116,606,280 Goblin Point,À¯È¿±â°£,365,Day(s),696,673
+IBSProduct.txt,2117,606,280 Goblin Point,°¨°¡»ó°¢±â°£,365,Day(s),696,673
+IBSProduct.txt,2118,607,360 Goblin Point,Áö±Þ ¸¶ÀÏ¸®Áö,360,WReward,697,673
+IBSProduct.txt,2119,607,360 Goblin Point,À¯È¿±â°£,365,Day(s),697,673
+IBSProduct.txt,2120,607,360 Goblin Point,°¨°¡»ó°¢±â°£,365,Day(s),697,673
+IBSProduct.txt,2121,608,420 Goblin Point,Áö±Þ ¸¶ÀÏ¸®Áö,420,WReward,698,673
+IBSProduct.txt,2122,608,420 Goblin Point,À¯È¿±â°£,365,Day(s),698,673
+IBSProduct.txt,2123,608,420 Goblin Point,°¨°¡»ó°¢±â°£,365,Day(s),698,673
+IBSProduct.txt,2124,609,460 Goblin Point,Áö±Þ ¸¶ÀÏ¸®Áö,460,WReward,699,673
+IBSProduct.txt,2125,609,460 Goblin Point,À¯È¿±â°£,365,Day(s),699,673
+IBSProduct.txt,2126,609,460 Goblin Point,°¨°¡»ó°¢±â°£,365,Day(s),699,673
+IBSProduct.txt,2127,610,[+GP_EVENT] Seal of Wealth_7 Day,Duration,604800,Sec.,700,673
+IBSProduct.txt,2128,610,[+GP_EVENT] Seal of Wealth_7 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),700,673
+IBSProduct.txt,2129,610,[+GP_EVENT] Seal of Wealth_7 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),700,673
+IBSProduct.txt,2130,611,[+GP_EVENT] Seal of Wealth_30 Day,Duration,2592000,Sec.,701,673
+IBSProduct.txt,2131,611,[+GP_EVENT] Seal of Wealth_30 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),701,673
+IBSProduct.txt,2132,611,[+GP_EVENT] Seal of Wealth_30 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),701,673
+IBSProduct.txt,2133,612,[+GP_EVENT] Master Seal of Wealth_7 Day,Duration,604800,Sec.,702,673
+IBSProduct.txt,2134,612,[+GP_EVENT] Master Seal of Wealth_7 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),702,673
+IBSProduct.txt,2135,612,[+GP_EVENT] Master Seal of Wealth_7 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),702,673
+IBSProduct.txt,2136,613,[+GP_EVENT] Master Seal of Wealth_30 Day,Duration,2592000,Sec.,703,673
+IBSProduct.txt,2137,613,[+GP_EVENT] Master Seal of Wealth_30 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),703,673
+IBSProduct.txt,2138,613,[+GP_EVENT] Master Seal of Wealth_30 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),703,673
+IBSProduct.txt,2139,614,[+GP_EVENT] Seal of Ascension_7 Day,Duration,604800,Sec.,704,673
+IBSProduct.txt,2140,614,[+GP_EVENT] Seal of Ascension_7 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),704,673
+IBSProduct.txt,2141,614,[+GP_EVENT] Seal of Ascension_7 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),704,673
+IBSProduct.txt,2142,615,[+GP_EVENT] Seal of Ascension_30 Day,Duration,2592000,Sec.,705,673
+IBSProduct.txt,2143,615,[+GP_EVENT] Seal of Ascension_30 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),705,673
+IBSProduct.txt,2144,615,[+GP_EVENT] Seal of Ascension_30 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),705,673
+IBSProduct.txt,2145,616,[+GP_EVENT] Master Seal of Ascension_7 Day,Duration,604800,Sec.,706,673
+IBSProduct.txt,2146,616,[+GP_EVENT] Master Seal of Ascension_7 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),706,673
+IBSProduct.txt,2147,616,[+GP_EVENT] Master Seal of Ascension_7 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),706,673
+IBSProduct.txt,2148,617,[+GP_EVENT] Master Seal of Ascension_30 Day,Duration,2592000,Sec.,707,673
+IBSProduct.txt,2149,617,[+GP_EVENT] Master Seal of Ascension_30 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),707,673
+IBSProduct.txt,2150,617,[+GP_EVENT] Master Seal of Ascension_30 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),707,673
+IBSProduct.txt,2151,618,[+GP_EVENT] Statue of Hawk 7 Day,Duration,604800,Sec.,708,673
+IBSProduct.txt,2152,618,[+GP_EVENT] Statue of Hawk 7 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),708,673
+IBSProduct.txt,2153,618,[+GP_EVENT] Statue of Hawk 7 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),708,673
+IBSProduct.txt,2154,619,[+GP_EVENT] Statue of Hawk 30 Day,Duration,2592000,Sec.,709,673
+IBSProduct.txt,2155,619,[+GP_EVENT] Statue of Hawk 30 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),709,673
+IBSProduct.txt,2156,619,[+GP_EVENT] Statue of Hawk 30 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),709,673
+IBSProduct.txt,2157,620,[+GP_EVENT] Statue of Goral 7 Day,Duration,604800,Sec.,710,673
+IBSProduct.txt,2158,620,[+GP_EVENT] Statue of Goral 7 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),710,673
+IBSProduct.txt,2159,620,[+GP_EVENT] Statue of Goral 7 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),710,673
+IBSProduct.txt,2160,621,[+GP_EVENT] Statue of Goral 30 Day,Duration,2592000,Sec.,711,673
+IBSProduct.txt,2161,621,[+GP_EVENT] Statue of Goral 30 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),711,673
+IBSProduct.txt,2162,621,[+GP_EVENT] Statue of Goral 30 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),711,673
+IBSProduct.txt,2163,622,[+GP_EVENT] Oak Charm 7 Day,Duration,604800,Sec.,712,673
+IBSProduct.txt,2164,622,[+GP_EVENT] Oak Charm 7 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),712,673
+IBSProduct.txt,2165,622,[+GP_EVENT] Oak Charm 7 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),712,673
+IBSProduct.txt,2166,623,[+GP_EVENT] Oak Charm 30 Day,Duration,2592000,Sec.,713,673
+IBSProduct.txt,2167,623,[+GP_EVENT] Oak Charm 30 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),713,673
+IBSProduct.txt,2168,623,[+GP_EVENT] Oak Charm 30 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),713,673
+IBSProduct.txt,2169,624,[+GP_EVENT] Golden Oak Charm 7 Day,Duration,604800,Sec.,714,673
+IBSProduct.txt,2170,624,[+GP_EVENT] Golden Oak Charm 7 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),714,673
+IBSProduct.txt,2171,624,[+GP_EVENT] Golden Oak Charm 7 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),714,673
+IBSProduct.txt,2172,625,[+GP_EVENT] Golden Oak Charm 30 Day,Duration,2592000,Sec.,715,673
+IBSProduct.txt,2173,625,[+GP_EVENT] Golden Oak Charm 30 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),715,673
+IBSProduct.txt,2174,625,[+GP_EVENT] Golden Oak Charm 30 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),715,673
+IBSProduct.txt,2175,626,[+GP_EVENT] Worn Horseshoe 7 Day,Duration,604800,Sec.,716,673
+IBSProduct.txt,2176,626,[+GP_EVENT] Worn Horseshoe 7 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),716,673
+IBSProduct.txt,2177,626,[+GP_EVENT] Worn Horseshoe 7 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),716,673
+IBSProduct.txt,2178,627,[+GP_EVENT] Worn Horseshoe 30 Day,Duration,2592000,Sec.,717,673
+IBSProduct.txt,2179,627,[+GP_EVENT] Worn Horseshoe 30 Day,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),717,673
+IBSProduct.txt,2180,627,[+GP_EVENT] Worn Horseshoe 30 Day,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),717,673
+IBSProduct.txt,2181,628,Rage Fighters Small Wing,Duration,604800,Sec.,718,673
+IBSProduct.txt,2182,628,Rage Fighters Small Wing,±â°£Á¦-°¨°¡»ó°¢±â°£,365,Day(s),718,673
+IBSProduct.txt,2183,628,Rage Fighters Small Wing,±â°£¾ÆÀÌÅÛ À¯È¿±â°£,365,Day(s),718,673
+IBSProduct.txt,2184,629,100000 Goblin Point,Áö±Þ ¸¶ÀÏ¸®Áö,100000,WReward,719,673
+IBSProduct.txt,2185,629,100000 Goblin Point,À¯È¿±â°£,365,Day(s),719,673
+IBSProduct.txt,2186,629,100000 Goblin Point,°¨°¡»ó°¢±â°£,365,Day(s),719,673
+IBSProduct.txt,2187,893,Invitation Ticket to Santa Village,Quantity,1,EA,1094,673
+IBSProduct.txt,2188,893,Invitation Ticket to Santa Village,¼Ò¸ð¼º-°¨°¡»ó°¢±â°£,10,Day(s),1094,673
+IBSProduct.txt,2189,893,Invitation Ticket to Santa Village,¼Ò¸ð¾ÆÀÌÅÛ À¯È¿±â°£,10,Day(s),1094,673
