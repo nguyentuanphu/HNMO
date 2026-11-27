@@ -97,6 +97,31 @@ public sealed class WorldSeasonTests
         Assert.That(main.Servers.Select(s => s.Id), Is.EqualTo(new[] { 0 }), "A Season 9 world's server isn't also listed under the default world.");
     }
 
+    /// <summary>
+    /// Season 9's server program keeps its own worlds list, which starts with a Season 9 world holding its servers:
+    /// the start screen names them as it names Season 6.3's ("World 1 — Origin — Server 0"), not "Server 1".
+    /// </summary>
+    [Test]
+    public void SeasonNineProgramsDefaultWorldIsSeasonNine()
+    {
+        var registry = new WorldRegistryService(this._file, WorldSeason.Season9);
+        registry.EnsureDefaultWorld([0, 1, 2]);
+
+        var world = registry.BuildGroupedSnapshot([Server(0), Server(1), Server(2)], DateTimeOffset.UtcNow).Single();
+        Assert.That((world.WorldId, world.Season, world.SeasonBadge), Is.EqualTo(("main", "s9", "S9")));
+        Assert.That(world.NameEn, Is.EqualTo("World 1 — Origin"));
+        Assert.That(world.Servers.Select(s => s.Id), Is.EqualTo(new[] { 0, 1, 2 }));
+        Assert.That(new WorldRegistryService(this._file).GetWorlds().Single().Season, Is.EqualTo(WorldSeason.Season9), "The season is saved with the list.");
+    }
+
+    /// <summary>Each season's program keeps its worlds list in its own save folder.</summary>
+    [Test]
+    public void EachSeasonKeepsItsOwnWorldsFile()
+    {
+        Assert.That(HnmoSeasonInstance.SaveFileFor(HnmoSeasonInstance.SeasonSix, "hnmo-worlds.json"), Is.EqualTo("hnmo-worlds.json"));
+        Assert.That(HnmoSeasonInstance.SaveFileFor(HnmoSeasonInstance.SeasonNine, "hnmo-worlds.json"), Is.EqualTo(Path.Combine("s9", "hnmo-worlds.json")));
+    }
+
     /// <summary>Season keys from addresses and data are read safely.</summary>
     [Test]
     public void SeasonKeysAreReadSafely()

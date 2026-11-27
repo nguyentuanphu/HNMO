@@ -4,6 +4,7 @@
 #include "UI/Core/WindowSystem.h"
 #include "GameLogic/Items/ChangeRingManager.h"
 #include "GameLogic/Items/ItemCategories.h"
+#include "GameLogic/Commands/MoveCost.h"
 #include "Core/Utilities/KeyGenerator.h"
 #include "Network/Server/ServerListManager.h"
 #include "Engine/Object/ZzzOpenData.h"
@@ -513,6 +514,8 @@ void mu::ui::window::CMoveCommandWindow::RebuildRowModel()
     const int iLevel = CharacterAttribute->Level;
     const DWORD iZen = CharacterMachine->Gold;
     const Rml::String strifeMark = StringUtils::WideToNarrow(I18N::Game::Battle2987);
+    // An outlaw's rows stay locked (SettingCanMoveMap); the price shown is what /move costs such a player.
+    const bool outlaw = (int)Hero->PK >= PVP_MURDERER1;
 
     wchar_t szText[24];
     int index = 0;
@@ -534,11 +537,11 @@ void mu::ui::window::CMoveCommandWindow::RebuildRowModel()
         entry.mapName = StringUtils::WideToNarrow(moveInfo->_ReqInfo.szMainMapName);
         _itow(iReqLevel, szText, 10);
         entry.reqLevel = StringUtils::WideToNarrow(szText);
-        _itow(moveInfo->_ReqInfo.iReqZen, szText, 10);
-        entry.reqZen = StringUtils::WideToNarrow(szText);
+        const long long cost = GameLogic::Commands::ShownMoveCost(moveInfo->_ReqInfo.iReqZen, moveInfo->_bStrife, outlaw);
+        entry.reqZen = std::to_string(cost);
         entry.canMove = moveInfo->_bCanMove;
         entry.levelUnmet = iReqLevel > iLevel;
-        entry.zenUnmet = moveInfo->_ReqInfo.iReqZen > (int)iZen;
+        entry.zenUnmet = cost > static_cast<long long>(iZen);
         entry.index = index++;
 
         rows.push_back(std::move(entry));

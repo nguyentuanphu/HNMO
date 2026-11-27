@@ -341,6 +341,11 @@ public class Stats
     public static AttributeDefinition MinWizardryAndCurseDmgBonus { get; } = new(new Guid("7E32A2B5-54F2-4D95-9968-9DE53100D3D4"), "Minimum Wizardry And Curse Base Damage Bonus (MST)", string.Empty);
 
     /// <summary>
+    /// Gets the maximum wizardry and curse common MST DMG bonus attribute definition.
+    /// </summary>
+    public static AttributeDefinition MaxWizardryAndCurseDmgBonus { get; } = new(new Guid("B4F6D819-3A7C-4E12-89B1-52C3E9F4A710"), "Maximum Wizardry And Curse Base Damage Bonus (MST)", string.Empty);
+
+    /// <summary>
     /// Gets the the min and max wizardry and curse common MST DMG bonus attribute definition.
     /// </summary>
     public static AttributeDefinition WizardryAndCurseBaseDmgBonus { get; } = new(new Guid("A4F57534-4185-450D-93B1-0CE4246FE2D3"), "Wizardry And Curse Base Damage Bonus (min and max, MST)", string.Empty);
@@ -953,6 +958,26 @@ public class Stats
     public static AttributeDefinition BonusDefenseRateWithShield { get; } = new(new Guid("C8CF9CE1-F7AC-48DE-BFCC-349ABBFB1FCA"), "Defense Rate (PvM) Increase Bonus (absolute) With equipped Shield (MST)", string.Empty);
 
     /// <summary>
+    /// Gets the armor set defense bonus (MST) attribute definition.
+    /// </summary>
+    public static AttributeDefinition ArmorSetDefenseBonus { get; } = new(new Guid("8E4F1B2C-9D3A-4712-A5B8-6F2E9D1C3A4B"), "Armor Set Defense Bonus (MST)", string.Empty);
+
+    /// <summary>
+    /// Gets the third class wing defense bonus (MST) attribute definition.
+    /// </summary>
+    public static AttributeDefinition MasterWingDefenseBonus { get; } = new(new Guid("2A5E7C91-4B8D-4F36-91A2-7C8E4B5D9F12"), "Third Wing Defense Bonus (MST)", string.Empty);
+
+    /// <summary>
+    /// Gets the third class wing attack bonus (MST) attribute definition.
+    /// </summary>
+    public static AttributeDefinition MasterWingAttackBonus { get; } = new(new Guid("6C9D2E84-7F1A-4B53-82D4-9E1F3A6C7B24"), "Third Wing Attack Bonus (MST)", string.Empty);
+
+    /// <summary>
+    /// Gets the third class wing absorb bonus (MST) attribute definition.
+    /// </summary>
+    public static AttributeDefinition MasterWingAbsorbBonus { get; } = new(new Guid("4F8B1D63-2E9C-4A75-B3E1-8D2C5F9A4E36"), "Third Wing Absorb Bonus (MST)", string.Empty);
+
+    /// <summary>
     /// Gets the bonus damage (absolute) with an equipped scepter attribute definition.
     /// </summary>
     public static AttributeDefinition BonusDamageWithScepter { get; } = new(new Guid("7977FE44-FC22-4A6B-A4E0-BA522FE807DF"), "Damage Increase Bonus (absolute) With equipped Scepter", string.Empty);
@@ -1463,6 +1488,16 @@ public class Stats
     /// Gets the fully recover health after hit chance definition.
     /// </summary>
     public static AttributeDefinition FullyRecoverHealthAfterHitChance { get; } = new(new Guid("3CA72C07-9C2C-4FC5-8BCB-9BD737F83664"), "Chance to fully recover health when getting hit", "3rd Wing Option");
+
+    /// <summary>
+    /// Gets the fully recover shield after hit chance definition.
+    /// </summary>
+    public static AttributeDefinition FullyRecoverShieldAfterHitChance { get; } = new(new Guid("9C2E7F48-1D6B-439A-8E5F-3B7D9A1C6E48"), "Chance to fully recover shield when getting hit", "Master Skill Tree");
+
+    /// <summary>
+    /// Gets the cast invincibility chance definition.
+    /// </summary>
+    public static AttributeDefinition CastInvincibilityChance { get; } = new(new Guid("5D3A9E71-8C2F-4D64-A9B7-1E4F6C8D3A52"), "Cast Invincibility Chance (MST)", "Master Skill Tree");
 
     /// <summary>
     /// Gets the fully reflect damage after hit chance definition.

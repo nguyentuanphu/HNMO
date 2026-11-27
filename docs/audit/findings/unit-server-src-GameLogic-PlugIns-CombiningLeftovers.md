@@ -17,3 +17,17 @@
    - Because `ItemStackPlugIn` (enabled by default) allows accounts to stack `JoL`/`JoC` (`jewels`) and `Box of Kundun`/`Rena`/`Sign of Lord` (`boxes`), combining consumes **an entire stack** of up to 255 jewels/boxes for a `Count = 1` ingredient, while a single stacked slot of 5 Rena (`Durability = 5`) fails `PlanExchange` as having count `1 < 5`.
 2. **NPC Override Note — `CombiningLeftoversPlugIn.cs:72-86`**:
    - When active with default `ExchangeNpcNumber = 546`, talking to NPC `546` marks `HasBeenHandled = true` and opens Combining Leftovers instead of Lahap's vanilla jewel mix/unmix dialog.
+
+## Re-check 2026-11-27 (changes 8e98a00d..a108e846)
+
+Commits read (every changed file read in full):
+
+- 19e08d15 Economy write order: the bag is saved before the Jewel Bank is credited or a leftovers reward is kept; the stack pickup test checks the real cap
+- 1e0121c8 Economy guards: equipment counts as one piece in combining leftovers; a Jewel Bank withdrawal gives one piece
+- 478f9cf3 fix(plugins): fix stack deposits/consumption, receipt rollback, buff id collision, and partypass
+
+Evidence:
+
+- Engine: ingredients counted by stack pieces across slots (BagItemDescriptor.Quantity), equipment counts as one piece (PieceCount) - fixed.
+- Plug-in: the live Season Plan box cap is used for planning and for the state - fixed.
+- Plug-in: materials are saved before a waiting reward is written. OPEN: a failed save is ignored and the reward (coins through MissionCoinGranter in its own context, owed reward in the JSON file) still goes out, so a crash before the next good save gives the materials back and keeps the reward. Fixed by PR #423 (open): coins as a grant of the player's own context and waiting rewards as AssetOperation rows in the same save.

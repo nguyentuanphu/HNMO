@@ -396,6 +396,161 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext
     }
 
     /// <inheritdoc />
+    public async ValueTask<IReadOnlyDictionary<string, int>> GetJewelBankBalancesAsync(Guid accountId, CancellationToken cancellationToken = default)
+    {
+        using var l = await this.LockAsync(cancellationToken).ConfigureAwait(false);
+        return await this.Context.Set<JewelBankBalance>().AsNoTracking()
+            .Where(balance => balance.AccountId == accountId && balance.Count > 0)
+            .ToDictionaryAsync(balance => balance.JewelKey, balance => balance.Count, StringComparer.OrdinalIgnoreCase, cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    /// <inheritdoc />
+    public async ValueTask<DataModel.Entities.AssetOperation?> GetAssetOperationAsync(Guid operationId, CancellationToken cancellationToken = default)
+    {
+        using var l = await this.LockAsync(cancellationToken).ConfigureAwait(false);
+        return await this.Context.Set<AssetOperation>().AsNoTracking()
+            .FirstOrDefaultAsync(operation => operation.Id == operationId, cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    /// <inheritdoc />
+    public async ValueTask<IReadOnlyList<DataModel.Entities.AssetOperation>> GetPendingAssetOperationsAsync(Guid accountId, CancellationToken cancellationToken = default)
+    {
+        using var l = await this.LockAsync(cancellationToken).ConfigureAwait(false);
+        return await this.Context.Set<AssetOperation>().AsNoTracking()
+            .Where(operation => operation.AccountId == accountId && operation.PendingCount > 0)
+            .OrderBy(operation => operation.CreatedAt)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    /// <inheritdoc />
+    public async ValueTask<IReadOnlyList<AssetOperationSummary>> GetRecentAssetOperationsAsync(int maximumCount, IReadOnlyCollection<string>? kinds = null, CancellationToken cancellationToken = default)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThan(maximumCount, 1);
+        using var l = await this.LockAsync(cancellationToken).ConfigureAwait(false);
+        var query = this.Context.Set<AssetOperation>().AsNoTracking();
+        if (kinds is { Count: > 0 })
+        {
+            query = query.Where(operation => kinds.Contains(operation.Kind));
+        }
+
+        var rows = await (from operation in query
+                          join account in this.Context.Set<Account>().AsNoTracking() on operation.AccountId equals account.Id into accounts
+                          from account in accounts.DefaultIfEmpty()
+                          orderby operation.CreatedAt descending, operation.Id descending
+                          select new
+                          {
+                              operation.Id,
+                              operation.AccountId,
+                              LoginName = account != null ? account.LoginName : operation.AccountId.ToString("N"),
+                              operation.Kind,
+                              operation.Detail,
+                              operation.PendingKey,
+                              operation.PendingCount,
+                              operation.Source,
+                              operation.CreatedAt,
+                          })
+            .Take(maximumCount)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+
+        return rows
+            .Select(r => new AssetOperationSummary(r.Id, r.AccountId, r.LoginName, r.Kind, r.Detail, r.PendingKey, r.PendingCount, r.Source, r.CreatedAt))
+            .ToList();
+    }
+
+    /// <inheritdoc />
+    public async ValueTask<AssetCommitStatus> SaveChangesWithAssetOperationAsync(AssetOperationRequest request, CancellationToken cancellationToken = default)
+    {
+        var status = AssetCommitStatus.Refused;
+        var added = new List<object>();
+        async ValueTask<bool> WriteFirstAsync(EntityDataContext context, CancellationToken token)
+        {
+            if (await context.Set<AssetOperation>().AsNoTracking()
+                    .FirstOrDefaultAsync(operation => operation.Id == request.OperationId, token).ConfigureAwait(false) is { } earlier)
+            {
+                status = earlier.PayloadHash == request.PayloadHash && earlier.AccountId == request.AccountId
+                    ? AssetCommitStatus.AlreadyCommitted
+                    : AssetCommitStatus.Conflict;
+                return false;
+            }
+
+            foreach (var delta in request.JewelDeltas)
+            {
+                var key = delta.JewelKey;
+                var change = delta.Delta;
+                var capacity = delta.Capacity;
+
+                // Relative and conditional: a concurrent writer can't be overwritten, and the row stays locked until
+                // the commit.
+                var changed = await context.Set<JewelBankBalance>()
+                    .Where(balance => balance.AccountId == request.AccountId && balance.JewelKey == key
+                                      && balance.Count + change >= 0 && balance.Count + change <= capacity)
+                    .ExecuteUpdateAsync(setters => setters.SetProperty(balance => balance.Count, balance => balance.Count + change), token)
+                    .ConfigureAwait(false);
+                if (changed == 1)
+                {
+                    continue;
+                }
+
+                var exists = await context.Set<JewelBankBalance>().AsNoTracking()
+                    .AnyAsync(balance => balance.AccountId == request.AccountId && balance.JewelKey == key, token).ConfigureAwait(false);
+                if (exists || change < 0 || change > capacity)
+                {
+                    status = AssetCommitStatus.Refused;
+                    return false;
+                }
+
+                // The first deposit of this kind: a concurrent first deposit fails on the unique index, and the caller
+                // reads the outcome and tries again.
+                var balanceRow = new JewelBankBalance { Id = GuidV7.NewGuid() };
+                context.Add(balanceRow);
+                balanceRow.AccountId = request.AccountId;
+                balanceRow.JewelKey = key;
+                balanceRow.Count = change;
+                added.Add(balanceRow);
+            }
+
+            if (request.DeliveredOperationId is { } deliveredId && request.DeliveredCount > 0)
+            {
+                var count = request.DeliveredCount;
+                var taken = await context.Set<AssetOperation>()
+                    .Where(operation => operation.Id == deliveredId && operation.AccountId == request.AccountId && operation.PendingCount >= count)
+                    .ExecuteUpdateAsync(setters => setters.SetProperty(operation => operation.PendingCount, operation => operation.PendingCount - count), token)
+                    .ConfigureAwait(false);
+                if (taken != 1)
+                {
+                    status = AssetCommitStatus.Refused;
+                    return false;
+                }
+            }
+
+            var receipt = new AssetOperation { Id = request.OperationId };
+            context.Add(receipt);
+            receipt.AccountId = request.AccountId;
+            receipt.Kind = request.Kind;
+            receipt.PayloadHash = request.PayloadHash;
+            receipt.Source = request.Source;
+            receipt.Detail = request.Detail;
+            receipt.PendingKey = request.PendingKey;
+            receipt.PendingCount = Math.Max(0, request.PendingCount);
+            receipt.CreatedAt = DateTime.UtcNow;
+            added.Add(receipt);
+            status = AssetCommitStatus.Committed;
+            return true;
+        }
+
+        return await this.SaveChangesInTransactionAsync(WriteFirstAsync, added, cancellationToken).ConfigureAwait(false)
+            ? AssetCommitStatus.Committed
+            : status;
+    }
+
+    /// <inheritdoc />
+    public void AcceptChangesOfCommittedOperation() => this.AcceptAllChanges();
+
+    /// <inheritdoc />
     public async ValueTask<Guid?> GetAccountIdByLoginNameAsync(string loginName, CancellationToken cancellationToken = default)
     {
         using var l = await this.LockAsync(cancellationToken).ConfigureAwait(false);

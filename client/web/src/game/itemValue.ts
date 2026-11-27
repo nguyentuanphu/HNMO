@@ -22,6 +22,7 @@
 import { itemDefinition, loadItemCatalog } from './items.js';
 import type { ItemDefinition } from './items.js';
 import type { Item } from './inventory.js';
+import { SOCKET_EMPTY, socketBytes } from './socketBytes.js';
 
 // ---------- item types (Core/Globals/_define.h, _enum.h): group * MAX_ITEM_INDEX + number ----------
 
@@ -227,10 +228,9 @@ const PRICED_SKILLS = new Set([AT_SKILL_BLOCKING, AT_SKILL_FALLING_SLASH, AT_SKI
 const MAX_ITEM_SPECIAL = 16;
 // Data::Items::MaxExcellentOptionNumber
 const MAX_EXCELLENT_OPTION_NUMBER = 6;
-// SEASON4A::MAX_SOCKET_OPTION, MAX_SOCKET_TYPES, SOCKET_EMPTY, MAX_SOCKETS
+// SEASON4A::MAX_SOCKET_OPTION, MAX_SOCKET_TYPES, MAX_SOCKETS (SOCKET_EMPTY is in socketBytes.ts)
 const MAX_SOCKET_OPTION = 50;
 const MAX_SOCKET_TYPES = 6;
-const SOCKET_EMPTY = 0xfe;
 const MAX_SOCKETS = 5;
 // COMGEM's FIRST: a bundle at level n holds (n + 1) * 10 jewels.
 const COMGEM_FIRST = 10;
@@ -558,11 +558,12 @@ function isSocketItem(item: Item): boolean {
 /** CSocketItemMgr::CalcSocketBonusItemValue: 80% more per socket, and the price of each socketed seed sphere. */
 function socketBonus(item: Item, gold: number): number {
   if (!isSocketItem(item)) return 0;
-  const count = Math.min(item.sockets.length, MAX_SOCKETS);
+  const sockets = socketBytes(item.sockets);
+  const count = Math.min(sockets.length, MAX_SOCKETS);
   // int64 * float: the sum is a float, cast back to int64.
   let result = Math.trunc(Math.fround(Math.fround(gold) * Math.fround(count * Math.fround(0.8))));
   for (let i = 0; i < count; i++) {
-    const socket = item.sockets[i];
+    const socket = sockets[i];
     if (socket === SOCKET_EMPTY) continue;
     const seed = socket % MAX_SOCKET_OPTION;
     const sphereLevel = div(socket, MAX_SOCKET_OPTION) + 1;

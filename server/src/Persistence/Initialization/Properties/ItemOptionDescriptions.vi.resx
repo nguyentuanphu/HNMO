@@ -2,7 +2,7 @@
 <root>
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
-  <data name="ThisOptionIsAddedByTheChaosMachineWithAJewelOfGuardianOnLevel380Items" xml:space="preserve"><value>Tùy chọn này được thêm vào bởi cỗ máy hỗn loạn với viên ngọc hộ mệnh trên vật phẩm cấp 380.</value></data>
+  <data name="ThisOptionIsAddedByTheChaosMachineWithAJewelOfGuardianOnLevel380Items" xml:space="preserve"><value>Tùy chọn này được thêm vào bởi cỗ máy hỗn loạn với Ngọc Hộ Mệnh trên vật phẩm cấp 380.</value></data>
   <data name="BlackFenrirMovementSpeed" xml:space="preserve"><value>Tùy chọn Fenrir đen: Tốc độ di chuyển</value></data>
   <data name="BlackFenrirUnderwaterMovementSpeed" xml:space="preserve"><value>Tùy chọn Fenrir đen: Tốc độ di chuyển dưới nước</value></data>
   <data name="BlueFenrirMovementSpeed" xml:space="preserve"><value>Tùy chọn Fenrir xanh: Tốc độ di chuyển</value></data>

@@ -1,12 +1,13 @@
 // Skills cast for real (Combat.cast at a monster next to the hero, as the right mouse button does) draw their effects:
 // the cast plan lets the skill out, the cast's effect hook runs, and the effect objects it makes are counted (every
-// createEffect / createParticle / createSprite / createJoint call during the cast, less what the fields around make
-// with no cast over the same time). skill-effects.spec.ts plays each effect through the hook directly; this one
-// catches a skill whose cast never reaches it (Spiral Slash had no cast plan, a Rage Fighter on a horn mount
-// can't use Chain Drive, Dragon Slasher or Charge) or whose effect makes nothing (Phoenix Shot).
+// createEffect / createParticle / createSprite / createJoint call and every arrow shot during the cast, less what
+// the fields around make with no cast over the same time). skill-effects.spec.ts plays each effect through the hook
+// directly; this one catches a skill whose cast never reaches it (Spiral Slash had no cast plan, a Rage Fighter on
+// a horn mount can't use Chain Drive, Dragon Slasher or Charge) or whose effect makes nothing (Phoenix Shot).
 //
 // It needs level 400 test characters of each class (the demo server's testgm: Dark Knight, Dark Wizard, -, Dark Lord,
-// Magic Gladiator; testgm2: -, Rage Fighter). FX_ACCOUNTS=testgm:0,testgm2:1 picks some; SHOTS_DIR keeps the pictures.
+// Magic Gladiator; testgm2: Summoner, Rage Fighter; test400's elf). FX_ACCOUNTS=testgm:0,testgm2:1 picks some;
+// SHOTS_DIR keeps the pictures; HNMO_SEASON_COLUMN=s9 plays the Season 9 column.
 import { test, expect, type Page } from '@playwright/test';
 import { mkdirSync } from 'node:fs';
 
@@ -16,8 +17,15 @@ interface Hero { account: string; slot: number; class: string; cases: Case[]; un
 const HEROES: Hero[] = [
   { account: 'testgm', slot: 0, class: 'knight', cases: [{ skill: 701, name: 'blood-slash', expect: ['particle:damage2', 'particle:damage1', 'particle:blood2'] }] },
   { account: 'testgm', slot: 1, class: 'wizard', cases: [{ skill: 17, name: 'energy-ball', expect: ['effect:energy', 'particle:energy'] }] },
+  // The level 400 elf rides a Fenrir: on foot, as the fighter.
+  { account: 'test400', slot: 2, class: 'elf', unmount: true, cases: [{ skill: 24, name: 'triple-shot', expect: ['projectile:laceArrow'] }] },
   { account: 'testgm', slot: 3, class: 'lord', cases: [{ skill: 65, name: 'electric-spike', expect: ['joint:flareForceJoint'] }] },
   { account: 'testgm', slot: 4, class: 'gladiator', cases: [{ skill: 57, name: 'spiral-slash', expect: ['joint:flare'] }] },
+  { account: 'testgm2', slot: 0, class: 'summoner', cases: [
+    { skill: 214, name: 'drain-life', expect: ['effect:aliceDrainLife'] },
+    { skill: 215, name: 'chain-lightning', expect: ['effect:chainLightning', 'joint:jointThunder'] },
+    { skill: 230, name: 'lightning-shock', expect: ['effect:lightningShock', 'particle:lightningMega'] },
+  ] },
   // On foot: the test fighter rides a horn mount, which keeps Chain Drive, Dragon Slasher and Charge from casting.
   { account: 'testgm2', slot: 1, class: 'fighter', unmount: true, cases: [
     { skill: 262, name: 'chain-drive', expect: ['effect:swordEffect', 'effect:shockWave1'] },
@@ -41,7 +49,10 @@ async function enter(page: Page, account: string, slot: number): Promise<void> {
   await page.fill('#password', account);
   await page.click('button.primary');
   await page.waitForSelector('.season-column .choice, #servers .choice', { timeout: 120_000 });
-  await page.click('.season-column .choice >> nth=0').catch(() => page.click('#servers .choice >> nth=0'));
+  // HNMO_SEASON_COLUMN=s9 (or arena) plays on the first server of that season's column.
+  const column = process.env.HNMO_SEASON_COLUMN;
+  if (column) await page.click(`.season-${column} .choice >> nth=0`, { timeout: 60_000 });
+  else await page.click('.season-column .choice >> nth=0').catch(() => page.click('#servers .choice >> nth=0'));
   await page.waitForSelector('#characters .choice', { timeout: 120_000 });
   await page.click(`#characters .choice >> nth=${slot}`);
   await page.waitForFunction(() => (window as unknown as { __viewerReady?: boolean }).__viewerReady, null, { timeout: 240_000 });
@@ -76,6 +87,11 @@ for (const hero of HEROES) {
       for (const m of ['createEffect', 'createParticle', 'createSprite', 'createJoint']) {
         const f = g.effects[m].bind(g.effects);
         g.effects[m] = (kind: string, ...rest: unknown[]) => { const k = `${m.slice(6).toLowerCase()}:${kind}`; w.__made[k] = (w.__made[k] ?? 0) + 1; return f(kind, ...rest); };
+      }
+      // Arrows fly in their own layer (Triple Shot's fan, the bows' shots): counted as projectile:<kind>.
+      if (g.projectiles) {
+        const shoot = g.projectiles.shoot.bind(g.projectiles);
+        g.projectiles.shoot = (from: G, to: G, kind: string, ...rest: unknown[]) => { const k = `projectile:${kind}`; w.__made[k] = (w.__made[k] ?? 0) + 1; return shoot(from, to, kind, ...rest); };
       }
     });
     let helperSlot: number | null = null;

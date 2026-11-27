@@ -5529,5 +5529,54 @@ namespace HNMO.Persistence.Initialization.Properties {
                 return ResourceManager.GetString("TalismanOfItemProtection", resourceCulture);
             }
         }
+
+        /// <summary>Gets PandoraPick from the configuration name resources.</summary>
+        public static string PandoraPick {
+            get {
+                return ResourceManager.GetString("PandoraPick", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets CardPiece from the configuration name resources.</summary>
+        public static string CardPiece {
+            get {
+                return ResourceManager.GetString("CardPiece", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets CardDeck from the configuration name resources.</summary>
+        public static string CardDeck {
+            get {
+                return ResourceManager.GetString("CardDeck", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets ChaosCard from the configuration name resources.</summary>
+        public static string ChaosCard {
+            get {
+                return ResourceManager.GetString("ChaosCard", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets ChaosCardGold from the configuration name resources.</summary>
+        public static string ChaosCardGold {
+            get {
+                return ResourceManager.GetString("ChaosCardGold", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets ChaosCardRare from the configuration name resources.</summary>
+        public static string ChaosCardRare {
+            get {
+                return ResourceManager.GetString("ChaosCardRare", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets ChaosCardMini from the configuration name resources.</summary>
+        public static string ChaosCardMini {
+            get {
+                return ResourceManager.GetString("ChaosCardMini", resourceCulture);
+            }
+        }
     }
 }

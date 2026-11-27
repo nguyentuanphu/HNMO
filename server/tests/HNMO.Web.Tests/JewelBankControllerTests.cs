@@ -102,9 +102,21 @@ public class JewelBankControllerTests
             await acctCtx.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        var store = JewelBankStore.Open(jbCfg.FileName);
-        var engine = new JewelBankEngine(jbCfg, store, enabled: true);
-        engine.Deposit("hero1", "bless", 7, "game", DateTime.UtcNow);
+        Guid accountId;
+        using (var bankCtx = persistence.CreateNewPlayerContext(gameConfig))
+        {
+            accountId = (await bankCtx.GetAccountByLoginNameAsync("hero1").ConfigureAwait(false))!.GetId();
+            var seed = new AssetOperationRequest(Guid.NewGuid(), accountId, "jewel-deposit", "seed", "test", null, [new JewelBankDelta("bless", 7, 100)]);
+            Assert.That(await bankCtx.SaveChangesWithAssetOperationAsync(seed).ConfigureAwait(false), Is.EqualTo(AssetCommitStatus.Committed));
+        }
+
+        async Task<(int Bank, int Waiting)> BankAsync()
+        {
+            using var read = persistence.CreateNewPlayerContext(gameConfig);
+            var balances = await read.GetJewelBankBalancesAsync(accountId).ConfigureAwait(false);
+            var waiting = await read.GetPendingAssetOperationsAsync(accountId).ConfigureAwait(false);
+            return (balances.GetValueOrDefault("bless"), waiting.Sum(w => w.PendingCount));
+        }
 
         var controller = new WebsiteJewelBankController(
             persistence,
@@ -123,13 +135,25 @@ public class JewelBankControllerTests
             Assert.That(doc.RootElement.GetProperty("jewels").GetArrayLength(), Is.EqualTo(7));
         }
 
-        var wdResult = (ContentResult)await controller.WithdrawAsync(new JewelBankWithdrawRequest("hero1", "pass123", "bless", 3)).ConfigureAwait(false);
-        using (var doc = JsonDocument.Parse(wdResult.Content!))
+        // The same request sent twice (a lost answer, a retry): withdrawn once.
+        var withdrawal = new JewelBankWithdrawRequest("hero1", "pass123", "bless", 3, Guid.NewGuid());
+        foreach (var attempt in Enumerable.Range(0, 2))
         {
-            Assert.That(doc.RootElement.GetProperty("state").GetProperty("event").GetProperty("result").GetString(), Is.EqualTo("Queued"));
-            Assert.That(engine.GetBalances("hero1")["bless"], Is.EqualTo(4));
-            Assert.That(engine.PeekPending("hero1").Sum(p => p.Quantity), Is.EqualTo(3));
+            var wdResult = (ContentResult)await controller.WithdrawAsync(withdrawal).ConfigureAwait(false);
+            using var doc = JsonDocument.Parse(wdResult.Content!);
+            Assert.That(doc.RootElement.GetProperty("state").GetProperty("event").GetProperty("result").GetString(), Is.EqualTo("Queued"), $"attempt {attempt}");
+            Assert.That(doc.RootElement.GetProperty("state").GetProperty("pending")[0].GetProperty("quantity").GetInt32(), Is.EqualTo(3));
         }
+
+        Assert.That(await BankAsync().ConfigureAwait(false), Is.EqualTo((4, 3)));
+        Assert.That(await controller.WithdrawAsync(withdrawal with { Quantity = 4 }).ConfigureAwait(false), Is.InstanceOf<ConflictObjectResult>(), "the same id with another payload");
+        var overdraw = (ContentResult)await controller.WithdrawAsync(new JewelBankWithdrawRequest("hero1", "pass123", "bless", 5)).ConfigureAwait(false);
+        using (var doc = JsonDocument.Parse(overdraw.Content!))
+        {
+            Assert.That(doc.RootElement.GetProperty("state").GetProperty("event").GetProperty("result").GetString(), Is.EqualTo("InsufficientBalance"));
+        }
+
+        Assert.That(await BankAsync().ConfigureAwait(false), Is.EqualTo((4, 3)));
 
         var cmResult = (ContentResult)await controller.ClearMasterAsync(new JewelBankClearMasterRequest("hero1", "pass123", "BladeMaster")).ConfigureAwait(false);
         using (var doc = JsonDocument.Parse(cmResult.Content!))

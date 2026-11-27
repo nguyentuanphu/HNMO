@@ -5339,4 +5339,67 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   <data name="SeasonsRestartSent" xml:space="preserve">
     <value>Đã gửi yêu cầu khởi động lại. Vui lòng tải lại trang sau vài giây.</value>
   </data>
+  <data name="JewelBankReceiptsHeading" xml:space="preserve">
+    <value>Biên lai cơ sở dữ liệu Ngân hàng ngọc gần đây (giờ Sydney)</value>
+  </data>
+  <data name="JewelBankReceiptsEmpty" xml:space="preserve">
+    <value>Chưa có biên lai cơ sở dữ liệu nào.</value>
+  </data>
+  <data name="JewelBankColTime" xml:space="preserve">
+    <value>Thời gian (Sydney)</value>
+  </data>
+  <data name="JewelBankColAccount" xml:space="preserve">
+    <value>Tài khoản</value>
+  </data>
+  <data name="JewelBankColKind" xml:space="preserve">
+    <value>Loại</value>
+  </data>
+  <data name="JewelBankColDetail" xml:space="preserve">
+    <value>Chi tiết</value>
+  </data>
+  <data name="JewelBankColPending" xml:space="preserve">
+    <value>Đang chờ giao</value>
+  </data>
+  <data name="JewelBankColSource" xml:space="preserve">
+    <value>Nguồn</value>
+  </data>
+  <data name="JewelBankImportHeading" xml:space="preserve">
+    <value>Chuyển dữ liệu từ JSON sang cơ sở dữ liệu</value>
+  </data>
+  <data name="JewelBankImportDescription" xml:space="preserve">
+    <value>Báo cáo chạy thử (dry-run) số dư ngọc và lệnh rút chờ từ tệp JSON cũ so với biên lai trong cơ sở dữ liệu.</value>
+  </data>
+  <data name="JewelBankImportChecksum" xml:space="preserve">
+    <value>Mã kiểm tra đầu vào</value>
+  </data>
+  <data name="JewelBankImportWouldImport" xml:space="preserve">
+    <value>Sẽ nhập</value>
+  </data>
+  <data name="JewelBankImportAlready" xml:space="preserve">
+    <value>Đã nhập trước đó</value>
+  </data>
+  <data name="JewelBankImportConflicts" xml:space="preserve">
+    <value>Xung đột</value>
+  </data>
+  <data name="JewelBankImportUnknownAccounts" xml:space="preserve">
+    <value>Tài khoản không tồn tại</value>
+  </data>
+  <data name="JewelBankImportTotals" xml:space="preserve">
+    <value>Tổng JSON</value>
+  </data>
+  <data name="JewelBankImportPending" xml:space="preserve">
+    <value>Rút chờ JSON</value>
+  </data>
+  <data name="JewelBankImportRunButton" xml:space="preserve">
+    <value>Chạy nhập vào CSDL</value>
+  </data>
+  <data name="JewelBankImportRunHint" xml:space="preserve">
+    <value>Nhập số dư ngọc và lệnh rút chờ chưa chuyển từ tệp JSON sang PostgreSQL (an toàn khi chạy lại).</value>
+  </data>
+  <data name="JewelBankImportDone" xml:space="preserve">
+    <value>Đã nhập Ngân hàng ngọc: {0} mục mới, {1} đã có, {2} xung đột.</value>
+  </data>
+  <data name="JewelBankImportNothing" xml:space="preserve">
+    <value>Không có mục JSON nào cần nhập.</value>
+  </data>
 </root>

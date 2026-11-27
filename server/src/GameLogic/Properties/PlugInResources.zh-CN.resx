@@ -1917,4 +1917,10 @@
   <data name="WebsiteConfiguration_RequireWebsiteLogin_Description" xml:space="preserve">
     <value>启用后，网页版游戏会隐藏密码表单。玩家需先登录网站，再点击“立即开始”。</value>
   </data>
+  <data name="MossGambleConfiguration_UseWeightedExcellentSelection_Name" xml:space="preserve">
+    <value>使用套件卓越属性权重概率</value>
+  </data>
+  <data name="MossGambleConfiguration_UseWeightedExcellentSelection_Description" xml:space="preserve">
+    <value>按第 6/9 赛季服务端套件权重（10% / 20% / 20% / 20% / 20% / 10%）抽取卓越属性，而非均匀随机。</value>
+  </data>
 </root>

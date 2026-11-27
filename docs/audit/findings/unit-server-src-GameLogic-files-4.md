@@ -42,3 +42,16 @@
    - `PlayerPersistence` serializes handler mutations against periodic/disconnect saves and syncs shared coins via `SeasonSharedAccounts.SyncCoinsAsync`.
 4. **RNG off-by-one note (`Rand.cs`) — informational**:
    - `NextRandomBool(int percent)` (`a = Next(0, 100); return a <= percent;`) gives `percent + 1` outcomes for `1..99` (e.g. `1` -> `2%`, `50` -> `51%`). Worth keeping in mind for drop/mix audits.
+
+## Re-check 2026-11-27 (changes 8cb8539b..a108e846)
+
+Commits read (every changed file read in full):
+
+- 01003642 Merge fix/walk-next-part-lead into the integration branch
+- 0baffd1c Walking: take over the next part of a long walk one step further ahead on the server's own walk
+- b6bbfd9d fix(economy): take the shared coin change back when the local save fails
+
+Evidence:
+
+- PlayerMovement: NextPartLead = 1.0 extra tile on the server's own walk (PR #400) - same as the walk-stall finding (docs/browser-test-reds-2026-11-26.md) - fixed.
+- PlayerPersistence: the shared-coin sync returns a receipt and a failed local save takes it back (PR #393/#407) - fixed; a stop between the shared commit and the local commit is still open (2PC coordinator, Antigravity task B.10).

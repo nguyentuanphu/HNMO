@@ -18,3 +18,13 @@
    - `PayAccessAsync` records `CashShopBalanceReceipt.Record(..., MarketAccess)` before `player.SaveProgressAsync()`. When save fails (`line 469`), `account` coins are refunded (`line 472`), **but the staged receipt is not removed** (unlike `TryPayBuyerAsync` on line 588 which calls `CashShopBalanceReceipt.RemoveAsync`), leaving a phantom debit receipt for the next save.
 2. **NPC Override Note — `MarketPlugIn.cs:126`**:
    - When active with default `MarketNpcNumber = 547`, talking to NPC `547` (Julia) opens the Item Market instead of vanilla Loren Market NPC window `0x25`.
+
+## Re-check 2026-11-27 (changes 2af1fa59..a108e846)
+
+Commits read (every changed file read in full):
+
+- 478f9cf3 fix(plugins): fix stack deposits/consumption, receipt rollback, buff id collision, and partypass
+
+Evidence:
+
+- MarketPlugIn access fee: a failed save also removes the coin receipt (it was saved by the next save without the coins taken) - fixed.

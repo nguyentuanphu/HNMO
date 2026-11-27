@@ -146,4 +146,105 @@ AcceptQuest = 1, ///< The quest is accepted and started.
 RefuseQuest = 2, ///< The quest is refused and not started.
 };
 
+enum class HnmoMissionsActionType : uint32_t
+{
+ClaimMission = 1, ///< Claim the reward of a finished mission.
+ClaimStreak = 2, ///< Claim the bonus of the daily streak.
+ClaimCalendar = 3, ///< Claim today's day of the login calendar.
+EnterInvite = 4, ///< Enter who invited the account.
+};
+
+enum class HnmoWorldBossesActionType : uint32_t
+{
+ClaimRewards = 1, ///< Take the world boss rewards which wait for room in the bag.
+};
+
+enum class HnmoOnboardingActionType : uint32_t
+{
+SkipGuide = 1, ///< End the guide for this character; rewards earned before still come.
+SkipStep = 2, ///< Skip the current step, when it's optional (no reward).
+ClaimRewards = 3, ///< Take the guide's rewards which wait for room in the bag.
+};
+
+enum class HnmoGuildsActionType : uint32_t
+{
+ClaimRewards = 1, ///< Take the guild ladder rewards which wait for room in the bag.
+};
+
+enum class HnmoCommunityActionType : uint32_t
+{
+ClaimDiscord = 1, ///< Take the one-time coins for linking the account to Discord.
+ClaimZalo = 2, ///< Claim the one-time coins for joining the Zalo group; the admin approves the claim.
+EnterCode = 3, ///< Enter a community event's code.
+ClaimRewards = 4, ///< Take the event rewards which wait for room in the bag.
+};
+
+enum class HnmoTopRacesActionType : uint32_t
+{
+ClaimRewards = 1, ///< Take the top race prizes which wait for room in the bag.
+};
+
+enum class HnmoGiftCodesActionType : uint32_t
+{
+Redeem = 1, ///< Enter the gift code of the argument.
+ClaimRewards = 2, ///< Take the gift code rewards which wait for room in the bag.
+};
+
+enum class HnmoResetsActionType : uint32_t
+{
+Reset = 1, ///< Reset the character.
+Relife = 2, ///< Do the relife (grand reset).
+DelegatedOn = 3, ///< Switch the delegated reset on.
+DelegatedOff = 4, ///< Switch the delegated reset off.
+Info = 5, ///< Tell what the next reset and relife need.
+};
+
+enum class HnmoAccountSafetyActionType : uint32_t
+{
+EnterPin = 1, ///< Enter the second password.
+LockItem = 2, ///< Lock the item at the slot.
+UnlockItem = 3, ///< Ask the unlock of the item at the slot, with the second password.
+};
+
+enum class HnmoTopUpMilestonesActionType : uint32_t
+{
+Request = 0, ///< Request the current top-up milestones state.
+Claim = 1, ///< Claim the milestone step identified by Argument.
+TakeOwed = 2, ///< Take rewards waiting for bag space.
+};
+
+enum class HnmoTimetableActionType : uint32_t
+{
+Request = 1, ///< Request the full event, invasion and boss timetable.
+};
+
+enum class HnmoLuckyNumberActionType : uint32_t
+{
+Request = 1, ///< Request current lucky number state.
+Pick = 2, ///< Pick a lucky number for the active round.
+ClaimOwed = 3, ///< Claim jewels waiting for bag space.
+};
+
+enum class HnmoMarriageActionType : uint32_t
+{
+Request = 1, ///< Request marriage state.
+Propose = 2, ///< Propose marriage to Argument character name.
+Accept = 3, ///< Accept pending marriage proposal and hold ceremony at Devias Church.
+Decline = 4, ///< Decline pending proposal.
+Divorce = 5, ///< Divorce current spouse according to server rules.
+SetTitle = 6, ///< Set custom couple title.
+TeleportToSpouse = 7, ///< Teleport to online spouse.
+};
+
+enum class HnmoMarketActionType : uint32_t
+{
+Request = 1, ///< Request market listings and personal escrow items/payouts.
+List = 2, ///< Escrow and list a bag item.
+Buy = 3, ///< Atomically purchase a listing.
+Cancel = 4, ///< Cancel your own listing and return item to escrow claim.
+Claim = 5, ///< Claim bought/returned items into bag and collect pending Zen payouts.
+PayAccess = 6, ///< Pay the market's one-off seller access fee for this account (selling and buying).
+PayBuyerAccess = 7, ///< Pay the market's one-off buyer access fee for this account (buying only).
+};
+
 #endif // MU_PACKET_ENUMS_CLIENTTOSERVER

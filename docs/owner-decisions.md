@@ -49,6 +49,14 @@ decision. Add new decisions here as they are made; never turn an agent's habit i
 | 27 Nov | Hardware GPU FPS for #381 | Popup answer: "Không cần" |
 | 27 Nov | Real launches on Mac and Linux | Popup answer: "Chỉ Mac" (the owner tries the Mac builds; Linux relies on CI) |
 | 27 Nov | Lost FIN on loopback (network filter) | Popup answer: "Rút ngắn thời gian chờ" (a shorter keep-alive / idle timeout, set in the admin panel) |
+| 27 Nov | Muun level-up cost | Popup answer: "Theo client desktop S9" |
+| 27 Nov | Muun bonuses marked "not in PvP" | Popup answer: "Tách đúng: chỉ đánh quái" (a PvE-only stat) |
+| 27 Nov | Muun and Pentagram data tables taken from another suite's data in #403 (coding rule 9) | Popup answer: "Rà lại, làm theo desktop" (desktop client values where it has them; otherwise admin settings with HNMO's own defaults) |
+| 27 Nov | Pentagram monster elements, drops, mix costs | Popup answer: "Theo client desktop S9 + Admin" |
+| 26 Nov | M menu for outlaws (PK level 2 and up) | "Giữ khóa như desktop gốc" (the M menu stays locked; /move charges 2x into a gens battle zone, 50x elsewhere) |
+| 26 Nov | Vault zen with several vault pages | "Mỗi trang một két Zen riêng" (one purse per page; a zen box belongs to its page) |
+| 26 Nov | Gens defaults on servers already running | "Áp cho mọi server" |
+| 26 Nov | #377 master experience at the maximum level waits for the Season Plan | "Bỏ điều kiện Season Plan" (solo and party alike) |
 
 Earlier decisions (Maya's body, Fenrir, `/move` in events, the skill sweep points, the socket weapon mix in
 Season 6 and 9, the MUVIETNAM2 purge after the merge into `main`) are summarized in

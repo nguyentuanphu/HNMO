@@ -470,4 +470,12 @@
   <data name="Balgass" xml:space="preserve"><value>Balgas</value></data>
   <data name="IllusionSorcererSpirit" xml:space="preserve"><value>Pháp sư ảo ảnh. tinh thần</value></data>
   <data name="ArenaHerald" xml:space="preserve"><value>Sứ giả Đấu trường</value></data>
+  <data name="HeroMutant" xml:space="preserve"><value>Chiến binh Đột biến</value></data>
+  <data name="OmegaWing" xml:space="preserve"><value>Cánh Omega</value></data>
+  <data name="AxlHero" xml:space="preserve"><value>Chiến binh Axl</value></data>
+  <data name="GigasGolem" xml:space="preserve"><value>Golem Khổng lồ</value></data>
+  <data name="CursedGoblin" xml:space="preserve"><value>Yêu tinh Bị nguyền</value></data>
+  <data name="MiningAreaSmall" xml:space="preserve"><value>Mỏ khoáng sản (Nhỏ)</value></data>
+  <data name="MiningAreaMedium" xml:space="preserve"><value>Mỏ khoáng sản (Vừa)</value></data>
+  <data name="MiningAreaLarge" xml:space="preserve"><value>Mỏ khoáng sản (Lớn)</value></data>
 </root>

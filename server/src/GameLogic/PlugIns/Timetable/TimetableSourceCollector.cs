@@ -160,6 +160,34 @@ public static class TimetableSourceCollector
             });
         }
 
+        if (timetableConfiguration.ShowInvasions
+            && gameContext.PlugInManager.GetActivePlugInsOf<IPeriodicTaskPlugIn>().OfType<S6EventsPlugIn>().FirstOrDefault() is { } s6EventsForLoren
+            && s6EventsForLoren.Configuration is { Enabled: true, LorenDeepEnabled: true } lorenCfg)
+        {
+            var lorenMap = gameConfig.Maps?.FirstOrDefault(m => m.Number == lorenCfg.LorenDeepMapNumber);
+            var lorenMapEn = lorenMap?.Name.GetTranslation(English) ?? "Valley of Loren";
+            var lorenMapVi = lorenMap?.Name.GetTranslation(Vietnamese) ?? "Thung lũng Loren";
+            var lorenTimes = lorenCfg.LorenDeepDailyTimes
+                .Select(raw => TimeOnly.TryParseExact(raw?.Trim(), "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out var t) ? (TimeOnly?)t : null)
+                .Where(t => t.HasValue)
+                .Select(t => t!.Value)
+                .ToList();
+            items.Add(new TimetableSourceItem
+            {
+                Id = "event-lorendeep",
+                Category = "invasion",
+                NameEn = "Loren Deep",
+                NameVi = "Quái Xâm Lăng Loren",
+                MapsEn = lorenMapEn,
+                MapsVi = lorenMapVi,
+                DropsEn = "Hero Mutant, Omega Wing, Axl Hero, Gigas Golem, Erohim",
+                DropsVi = "Chiến binh Đột biến, Cánh Omega, Axl Hero, Gigas Golem, Erohim",
+                DailyTimes = lorenTimes,
+                Duration = TimeSpan.FromMinutes(Math.Max(5, lorenCfg.LorenDeepDurationMinutes)),
+                IsLiveNow = s6EventsForLoren.IsLorenDeepActive,
+            });
+        }
+
         if (timetableConfiguration.ShowWorldBosses
             && gameContext.PlugInManager.GetActivePlugInsOf<IPeriodicTaskPlugIn>().OfType<WorldBossesPlugIn>().FirstOrDefault() is { } worldBossPlugIn)
         {

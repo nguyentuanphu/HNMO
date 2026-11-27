@@ -3,7 +3,7 @@
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
   <data name="ChaosWeapon" xml:space="preserve"><value>Vũ khí hỗn loạn</value></data>
-  <data name="DevilsSquareTicket" xml:space="preserve"><value>Vé Quảng trường Quỷ</value></data>
+  <data name="DevilsSquareTicket" xml:space="preserve"><value>Vé Quảng Trường Quỷ</value></data>
   <data name="FirstWings" xml:space="preserve"><value>Cánh cấp 1</value></data>
   <data name="Plus11ItemCombination" xml:space="preserve"><value>+11 Kết hợp vật phẩm</value></data>
   <data name="Plus10ItemCombination" xml:space="preserve"><value>Kết hợp vật phẩm +10</value></data>
@@ -33,7 +33,7 @@
   <data name="Plus12ItemCombination" xml:space="preserve"><value>Kết hợp vật phẩm +12</value></data>
   <data name="PotionOfSoul" xml:space="preserve"><value>Thuốc linh hồn</value></data>
   <data name="PotionOfBless" xml:space="preserve"><value>Thuốc ban phước</value></data>
-  <data name="Fruits" xml:space="preserve"><value>trái cây</value></data>
+  <data name="Fruits" xml:space="preserve"><value>quả</value></data>
   <data name="RemoveSeedSphere" xml:space="preserve"><value>Loại bỏ hạt giống</value></data>
   <data name="MountSeedSphere" xml:space="preserve"><value>Gắn kết quả cầu hạt giống</value></data>
   <data name="SocketWeapon" xml:space="preserve"><value>Chế tạo vũ khí socket</value></data>
@@ -45,4 +45,5 @@
   <data name="GoldenBoxCombination" xml:space="preserve"><value>Kết hợp hộp vàng</value></data>
   <data name="SilverBoxCombination" xml:space="preserve"><value>Hộp Bạc Kết Hợp</value></data>
   <data name="LuckyItemExchange" xml:space="preserve"><value>Trao đổi vật phẩm may mắn</value></data>
+  <data name="ChaosCardCombination" xml:space="preserve"><value>Kết hợp Thẻ Hỗn Nguyên</value></data>
 </root>

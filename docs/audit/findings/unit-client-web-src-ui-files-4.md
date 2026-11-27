@@ -14,3 +14,13 @@
 | Warp window eligibility & Strife map flag | `moveWindow.ts:66-72,78-80` | Marks index `42` (Vulcanus) with `*` (`strife_text`), calls `canWarp(warp, check)` and `warpLevel(warp, check.classIndex)` per row | Desktop `CMoveCommandWindow` (caller `main.ts:1887` passes `outlaw: false`) | Same (`MoveWindow` itself; caller `main.ts` differs) |
 | Party leader kick permission check | `partyWindow.ts:108-124` | Only party leader (`index === 0`) may kick members or self-leave via `party.canLeave` | Server `PartyKickRequest` | Same |
 | Remaining presentation UI files | `menuWindows.ts`, `miniMap.ts`, `missionsWindow.ts`, `mobileHud.ts`, `mount*.ts`, `nativeText.ts`, `newsPanel.ts`, `npcWindows.ts`, `onboardingWindow.ts`, `partyList.ts`, `partyOptionsWindow.ts`, `perfReportWindow.ts` | Server-driven UI windows, mobile touch controls & layout/scale helpers | Presentation only | No game rules |
+
+## Re-check 2026-11-27 (changes 8cb8539b..a108e846)
+
+Commits read (every changed file read in full):
+
+- ba5139b1 feat(web): make chat, whisper and messenger windows resizable with localStorage persistence
+
+Evidence:
+
+- mobileHud.ts: the mobile chat drawer is resizable and remembered - web-only (mobile) convenience; no desktop counterpart.

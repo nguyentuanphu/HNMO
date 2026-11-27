@@ -2127,5 +2127,116 @@ namespace HNMO.Persistence.Initialization.Properties {
                 return ResourceManager.GetString("QuakeFist", resourceCulture);
             }
         }
+
+        /// <summary>Gets CastInvincibility from the configuration name resources.</summary>
+        public static string CastInvincibility { get { return ResourceManager.GetString("CastInvincibility", resourceCulture); } }
+
+        /// <summary>Gets ArmorSetBonusIncrease from the configuration name resources.</summary>
+        public static string ArmorSetBonusIncrease { get { return ResourceManager.GetString("ArmorSetBonusIncrease", resourceCulture); } }
+
+        /// <summary>Gets Vengeance from the configuration name resources.</summary>
+        public static string Vengeance { get { return ResourceManager.GetString("Vengeance", resourceCulture); } }
+
+        /// <summary>Gets EnergyIncrease from the configuration name resources.</summary>
+        public static string EnergyIncrease { get { return ResourceManager.GetString("EnergyIncrease", resourceCulture); } }
+
+        /// <summary>Gets StaminaIncrease from the configuration name resources.</summary>
+        public static string StaminaIncrease { get { return ResourceManager.GetString("StaminaIncrease", resourceCulture); } }
+
+        /// <summary>Gets AgilityIncrease from the configuration name resources.</summary>
+        public static string AgilityIncrease { get { return ResourceManager.GetString("AgilityIncrease", resourceCulture); } }
+
+        /// <summary>Gets StrengthIncrease from the configuration name resources.</summary>
+        public static string StrengthIncrease { get { return ResourceManager.GetString("StrengthIncrease", resourceCulture); } }
+
+        /// <summary>Gets WingOfStormAbsPowUp from the configuration name resources.</summary>
+        public static string WingOfStormAbsPowUp { get { return ResourceManager.GetString("WingOfStormAbsPowUp", resourceCulture); } }
+
+        /// <summary>Gets WingOfStormDefPowUp from the configuration name resources.</summary>
+        public static string WingOfStormDefPowUp { get { return ResourceManager.GetString("WingOfStormDefPowUp", resourceCulture); } }
+
+        /// <summary>Gets WingOfStormAttPowUp from the configuration name resources.</summary>
+        public static string WingOfStormAttPowUp { get { return ResourceManager.GetString("WingOfStormAttPowUp", resourceCulture); } }
+
+        /// <summary>Gets MaximumAgIncrease from the configuration name resources.</summary>
+        public static string MaximumAgIncrease { get { return ResourceManager.GetString("MaximumAgIncrease", resourceCulture); } }
+
+        /// <summary>Gets MaximumAttackPowerIncrease from the configuration name resources.</summary>
+        public static string MaximumAttackPowerIncrease { get { return ResourceManager.GetString("MaximumAttackPowerIncrease", resourceCulture); } }
+
+        /// <summary>Gets IncreaseCriticalDamageRate from the configuration name resources.</summary>
+        public static string IncreaseCriticalDamageRate { get { return ResourceManager.GetString("IncreaseCriticalDamageRate", resourceCulture); } }
+
+        /// <summary>Gets RestoresAllMana from the configuration name resources.</summary>
+        public static string RestoresAllMana { get { return ResourceManager.GetString("RestoresAllMana", resourceCulture); } }
+
+        /// <summary>Gets RestoresAllHp from the configuration name resources.</summary>
+        public static string RestoresAllHp { get { return ResourceManager.GetString("RestoresAllHp", resourceCulture); } }
+
+        /// <summary>Gets IncreaseExcellentDamageRate from the configuration name resources.</summary>
+        public static string IncreaseExcellentDamageRate { get { return ResourceManager.GetString("IncreaseExcellentDamageRate", resourceCulture); } }
+
+        /// <summary>Gets IncreaseDoubleDamageRate from the configuration name resources.</summary>
+        public static string IncreaseDoubleDamageRate { get { return ResourceManager.GetString("IncreaseDoubleDamageRate", resourceCulture); } }
+
+        /// <summary>Gets IncreaseChanceOfIgnoreDef from the configuration name resources.</summary>
+        public static string IncreaseChanceOfIgnoreDef { get { return ResourceManager.GetString("IncreaseChanceOfIgnoreDef", resourceCulture); } }
+
+        /// <summary>Gets RestoresAllSd from the configuration name resources.</summary>
+        public static string RestoresAllSd { get { return ResourceManager.GetString("RestoresAllSd", resourceCulture); } }
+
+        /// <summary>Gets EternalWingsAbsPowUp from the configuration name resources.</summary>
+        public static string EternalWingsAbsPowUp { get { return ResourceManager.GetString("EternalWingsAbsPowUp", resourceCulture); } }
+
+        /// <summary>Gets EternalWingsDefPowUp from the configuration name resources.</summary>
+        public static string EternalWingsDefPowUp { get { return ResourceManager.GetString("EternalWingsDefPowUp", resourceCulture); } }
+
+        /// <summary>Gets EternalWingsAttPowUp from the configuration name resources.</summary>
+        public static string EternalWingsAttPowUp { get { return ResourceManager.GetString("EternalWingsAttPowUp", resourceCulture); } }
+
+        /// <summary>Gets MaximumWizardryIncrease from the configuration name resources.</summary>
+        public static string MaximumWizardryIncrease { get { return ResourceManager.GetString("MaximumWizardryIncrease", resourceCulture); } }
+
+        /// <summary>Gets IllusionWingsAbsPowUp from the configuration name resources.</summary>
+        public static string IllusionWingsAbsPowUp { get { return ResourceManager.GetString("IllusionWingsAbsPowUp", resourceCulture); } }
+
+        /// <summary>Gets IllusionWingsDefPowUp from the configuration name resources.</summary>
+        public static string IllusionWingsDefPowUp { get { return ResourceManager.GetString("IllusionWingsDefPowUp", resourceCulture); } }
+
+        /// <summary>Gets IllusionWingsAttPowUp from the configuration name resources.</summary>
+        public static string IllusionWingsAttPowUp { get { return ResourceManager.GetString("IllusionWingsAttPowUp", resourceCulture); } }
+
+        /// <summary>Gets DimensionWingsDefPowUp from the configuration name resources.</summary>
+        public static string DimensionWingsDefPowUp { get { return ResourceManager.GetString("DimensionWingsDefPowUp", resourceCulture); } }
+
+        /// <summary>Gets DimensionWingsAttPowUp from the configuration name resources.</summary>
+        public static string DimensionWingsAttPowUp { get { return ResourceManager.GetString("DimensionWingsAttPowUp", resourceCulture); } }
+
+        /// <summary>Gets MaximumWizCurseIncrease from the configuration name resources.</summary>
+        public static string MaximumWizCurseIncrease { get { return ResourceManager.GetString("MaximumWizCurseIncrease", resourceCulture); } }
+
+        /// <summary>Gets WingOfRuinDefPowUp from the configuration name resources.</summary>
+        public static string WingOfRuinDefPowUp { get { return ResourceManager.GetString("WingOfRuinDefPowUp", resourceCulture); } }
+
+        /// <summary>Gets WingOfRuinAttPowUp from the configuration name resources.</summary>
+        public static string WingOfRuinAttPowUp { get { return ResourceManager.GetString("WingOfRuinAttPowUp", resourceCulture); } }
+
+        /// <summary>Gets EmperorCapeDefPowUp from the configuration name resources.</summary>
+        public static string EmperorCapeDefPowUp { get { return ResourceManager.GetString("EmperorCapeDefPowUp", resourceCulture); } }
+
+        /// <summary>Gets AddsCommandStat from the configuration name resources.</summary>
+        public static string AddsCommandStat { get { return ResourceManager.GetString("AddsCommandStat", resourceCulture); } }
+
+        /// <summary>Gets EmperorCapeAttPowUp from the configuration name resources.</summary>
+        public static string EmperorCapeAttPowUp { get { return ResourceManager.GetString("EmperorCapeAttPowUp", resourceCulture); } }
+
+        /// <summary>Gets ReigningCloakAbsPowUp from the configuration name resources.</summary>
+        public static string ReigningCloakAbsPowUp { get { return ResourceManager.GetString("ReigningCloakAbsPowUp", resourceCulture); } }
+
+        /// <summary>Gets ReigningCloakDefPowUp from the configuration name resources.</summary>
+        public static string ReigningCloakDefPowUp { get { return ResourceManager.GetString("ReigningCloakDefPowUp", resourceCulture); } }
+
+        /// <summary>Gets ReigningCloakAttPowUp from the configuration name resources.</summary>
+        public static string ReigningCloakAttPowUp { get { return ResourceManager.GetString("ReigningCloakAttPowUp", resourceCulture); } }
     }
 }

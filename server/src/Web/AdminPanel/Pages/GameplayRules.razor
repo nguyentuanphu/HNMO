@@ -144,6 +144,7 @@ else
             </div>
             <div class="d-flex gap-2">
                 <button type="button" class="btn btn-sm btn-outline-secondary" id="gr-bonus-add" title="@L("Add a scheduled bonus event", "Thêm khung giờ vàng mới")" @onclick="this.AddBonusEvent">@L("+ Add bonus event", "+ Thêm giờ vàng")</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" id="gr-bonus-s6" title="@L("Load the 4 Season 6 server suite bonus windows (02:00, 08:00, 14:00, 20:00, 1.5x EXP, +15% Drop).", "Nạp 4 khung giờ vàng chuẩn Season 6 (02:00, 08:00, 14:00, 20:00, 1.5x EXP, +15% Rớt đồ).")" @onclick="this.ApplySeason6BonusWindows">@L("Load S6 defaults", "Nạp mặc định S6")</button>
                 <button type="button" class="btn btn-sm btn-primary" id="gr-bonus-save" disabled="@this._isSaving" @onclick="this.SaveBonusEventsAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@L("Save bonus events", "Lưu giờ vàng")</button>
             </div>
         </div>
