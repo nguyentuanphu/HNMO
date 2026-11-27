@@ -1,4 +1,4 @@
-﻿// <copyright file="TradeButtonAction.cs" company="HNMO">
+// <copyright file="TradeButtonAction.cs" company="HNMO">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -119,6 +119,9 @@ public class TradeButtonAction : BaseTradeAction
     /// <param name="trader">The trader whose state machine is locked first.</param>
     /// <param name="tradingPartner">The other trader.</param>
     /// <returns>The result, or <c>null</c> if the other trader finished the trade in the meantime.</returns>
+    // The inventory's storage is an adapter around the character's stored storage; the database row is the wrapped one.
+    private static ItemStorage? ActualStorageOf(ItemStorage? storage) => storage is ItemStorageAdapter adapter ? adapter.ActualStorage : storage;
+
     private async ValueTask<TradeResult?> InternalFinishTradeAsync(ITrader trader, ITrader tradingPartner, Guid? operationId = null)
     {
         await using var context = await trader.PlayerState.TryBeginAdvanceToAsync(PlayerState.EnteredWorld).ConfigureAwait(false);
@@ -182,8 +185,8 @@ public class TradeButtonAction : BaseTradeAction
             this.DetachItemsFromPersistenceContext(traderItems, trader.PersistenceContext);
             this.DetachItemsFromPersistenceContext(tradePartnerItems, trader.TradingPartner!.PersistenceContext);
             if (itemContext is IAtomicTradeContext atomicTradeContext
-                && trader.Inventory?.ItemStorage is { } traderStorage
-                && tradingPartner.Inventory?.ItemStorage is { } partnerStorage
+                && ActualStorageOf(trader.Inventory?.ItemStorage) is { } traderStorage
+                && ActualStorageOf(tradingPartner.Inventory?.ItemStorage) is { } partnerStorage
                 && traderStorage.GetId() != Guid.Empty
                 && partnerStorage.GetId() != Guid.Empty
                 && ((trader as Player)?.Account?.GetId() ?? (tradingPartner as Player)?.Account?.GetId()) is { } receiptAccountId

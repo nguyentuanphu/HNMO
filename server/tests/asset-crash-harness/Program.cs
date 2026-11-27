@@ -16,6 +16,10 @@ using HNMO.GameLogic.PlayerActions.Trade;
 using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.PlugIns.SeasonNineSystems;
 using HNMO.GameLogic.Seasons;
+using HNMO.GameLogic.Views;
+using HNMO.GameLogic.Views.Trade;
+using Moq;
+using HNMO.PlugIns;
 using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.Persistence.EntityFramework;
@@ -25,6 +29,11 @@ using Npgsql;
 const string Login = "crashtest";
 const string Login2 = "crashtest2";
 HNMO.PlugIns.JsonConverterRegistry.RegisterConverter(new HNMO.Persistence.EntityFramework.Json.BinaryAsHexJsonConverter());
+if (!ConnectionConfigurator.IsInitialized)
+{
+    ConnectionConfigurator.Initialize(new ConfigFileDatabaseConnectionStringProvider());
+}
+
 var provider = new PersistenceContextProvider(new NullLoggerFactory(), null);
 provider.EnableHnmoRowPersistence();
 var command = args.Length > 0 ? args[0] : "state";
@@ -335,7 +344,7 @@ switch (command)
 
         async Task<OfflinePlayer> LoadPlayerAsync(string login)
         {
-            var p = new OfflinePlayer(gc);
+            var p = new TradeHarnessPlayer(gc);
             var acc = (await p.PersistenceContext.GetAccountByLoginNameAsync(login).ConfigureAwait(false))!;
             p.Account = acc;
             var ch = acc.Characters.First();
@@ -343,6 +352,7 @@ switch (command)
             await p.PlayerState.TryAdvanceToAsync(PlayerState.Authenticated).ConfigureAwait(false);
             await p.PlayerState.TryAdvanceToAsync(PlayerState.CharacterSelection).ConfigureAwait(false);
             await p.SetSelectedCharacterAsync(ch).ConfigureAwait(false);
+            _ = await p.PlayerState.TryAdvanceToAsync(PlayerState.EnteredWorld).ConfigureAwait(false);
             return p;
         }
 
@@ -367,7 +377,7 @@ switch (command)
             return 0;
         }
 
-        await new TradeRequestAction().RequestTradeAsync(pA, pB).ConfigureAwait(false);
+        var reqOk = await new TradeRequestAction().RequestTradeAsync(pA, pB).ConfigureAwait(false);
         await new TradeAcceptAction().HandleTradeAcceptAsync(pB, true).ConfigureAwait(false);
         var mover = new MoveItemAction();
         await mover.MoveItemAsync(pA, itemA.ItemSlot, Storages.Inventory, 0, Storages.Trade).ConfigureAwait(false);
@@ -474,7 +484,7 @@ switch (command)
         {
             TypeId = typeof(SeasonNineSystemsPlugIn).GUID,
             IsActive = true,
-            CustomConfiguration = JsonSerializer.Serialize(new SeasonNineSystemsConfiguration { Enabled = true, MuunEnabled = true, MuunLevelUpEnergyCost = 5, MuunEvoPointMultiplier = 1 }),
+            CustomConfiguration = JsonSerializer.Serialize(new SeasonNineSystemsConfiguration { Enabled = true, MuunEnabled = true, MuunLevelUpEnergyCost = 5, MuunLevelUpEnergyCosts = null, MuunEvoPointMultiplier = 1 }),
         };
         var mapInit = new MapInitializer(configuration, new NullLogger<MapInitializer>(), NullDropGenerator.Instance, null);
         var plugInMgr = new PlugInManager([s9Cfg], new NullLoggerFactory(), null, null);
@@ -548,5 +558,33 @@ switch (command)
 
         Console.WriteLine($"vault {inVault} bank {bank} receipts {receipts}");
         return 0;
+    }
+}
+
+/// <summary>An offline player whose view plug-ins are stubs, so the trade actions (which need the views of both traders) run for real.</summary>
+internal sealed class TradeHarnessPlayer : OfflinePlayer
+{
+    public TradeHarnessPlayer(IGameContext gameContext)
+        : base(gameContext)
+    {
+    }
+
+    protected override ICustomPlugInContainer<IViewPlugIn> CreateViewPlugInContainer() => new StubViewPlugInContainer();
+}
+
+internal sealed class StubViewPlugInContainer : ICustomPlugInContainer<IViewPlugIn>
+{
+    private readonly Dictionary<Type, IViewPlugIn> _stubs = new();
+
+    public T GetPlugIn<T>()
+        where T : class, IViewPlugIn
+    {
+        if (!this._stubs.TryGetValue(typeof(T), out var stub))
+        {
+            stub = new Mock<T>().Object;
+            this._stubs.Add(typeof(T), stub);
+        }
+
+        return (T)stub;
     }
 }

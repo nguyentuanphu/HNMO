@@ -1,4 +1,4 @@
-﻿// <copyright file="AssemblyInfo.cs" company="HNMO">
+// <copyright file="AssemblyInfo.cs" company="HNMO">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -11,4 +11,5 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTitle("HNMO.GameLogic")]
 
 [assembly: InternalsVisibleTo("HNMO.Tests")]
+[assembly: InternalsVisibleTo("AssetCrashHarness")]
 [assembly: InternalsVisibleTo("HNMO.Persistence.Initialization.Tests")]

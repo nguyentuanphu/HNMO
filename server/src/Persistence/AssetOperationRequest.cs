@@ -4,6 +4,8 @@
 
 namespace HNMO.Persistence;
 
+using System.Threading;
+
 /// <summary>
 /// One operation on an account's assets, committed with its receipt (<see cref="DataModel.Entities.AssetOperation"/>)
 /// and the context's other changes (the bag) in one database transaction.
@@ -62,7 +64,7 @@ public sealed record TradeMoneyDelta(Guid StorageId, int Delta);
 /// Trade persistence context capable of committing item ownership, Zen transfers, and an asset operation receipt
 /// inside a single database transaction.
 /// </summary>
-public interface IAtomicTradeContext : Interfaces.IContext
+public interface IAtomicTradeContext : IContext
 {
     /// <summary>
     /// Saves all tracked trade item changes together with the relative Zen adjustments and idempotent asset operation
