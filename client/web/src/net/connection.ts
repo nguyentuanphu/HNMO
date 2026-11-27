@@ -35,6 +35,7 @@ export class Connection {
   backlog: Uint8Array[];
   closed: boolean;
   onClose: (() => void) | null;
+  onUnexpectedDisconnect?: () => void;
   socket?: WebSocket;
   /** The player's object id, set by login (session.js). */
   playerId?: number;
@@ -57,7 +58,7 @@ export class Connection {
       socket.onmessage = (event) => this.dispatch(new Uint8Array(event.data));
       socket.onclose = () => {
         // The game closing it (close()) is expected; the server or the network closing it isn't.
-        if (!this.closed) reportAutoError('disconnect', 'The connection to the server was lost', '', 'connection', 0);
+        if (!this.closed) this.onUnexpectedDisconnect?.();
         this.closed = true;
         for (const waiter of this.waiters) waiter.reject(new Error('The server closed the connection.'));
         this.waiters = [];

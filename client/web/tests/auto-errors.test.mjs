@@ -64,3 +64,51 @@ test('tickets and passwords never go with a report', { skip }, () => {
   assert.ok(!clean.includes('?x=1'));
   assert.deepEqual(firstFrame('TypeError: x\n    at f (https://game.example/js/main.js:1200:5)\n    at g (https://game.example/js/b.js:3:1)'), { file: 'https://game.example/js/main.js', line: 1200 });
 });
+
+test('diagnostics use allowlisted source coordinates instead of raw error text', { skip }, () => {
+  const { diagnosticSignature } = mod;
+  assert.equal(diagnosticSignature('error', 'https://example.invalid/private/main.js?key=secret', 12), 'error|main.js|12');
+  assert.equal(diagnosticSignature('packet', '/home/private-name.js', 12), 'packet');
+  assert.equal(diagnosticSignature('error', '/js/main.js', 50001), 'error');
+});
+
+test('an unavailable storage write still limits reports in the tab', { skip }, () => {
+  const storage = { getItem: () => '[]', setItem: () => { throw Error('blocked'); } };
+  const limit = new mod.HourlyLimit(storage);
+  for (let i = 0; i < 5; i++) assert.equal(limit.take(), true);
+  assert.equal(limit.take(), false);
+});
+
+test('a queued disconnect only drains after a matching authenticated reconnect', { skip }, async () => {
+  const items = new Map();
+  const storage = {
+    getItem: key => items.get(key) ?? null,
+    setItem: (key, value) => items.set(key, value),
+    removeItem: key => items.delete(key),
+  };
+  const previousWindow = globalThis.window;
+  globalThis.window = { localStorage: storage, sessionStorage: storage };
+  try {
+    const scope6 = await mod.autoErrorScope('fixture.invalid', 55901, 'fixture');
+    const scope9 = await mod.autoErrorScope('fixture.invalid', 56001, 'fixture');
+    const other = await mod.autoErrorScope('fixture.invalid', 55901, 'other');
+    assert.ok(scope6);
+    assert.notEqual(scope6, scope9);
+    assert.notEqual(scope6, other);
+
+    const sent = [];
+    const disconnect = mod.setAutoErrorSender(json => sent.push(JSON.parse(json)), scope6);
+    disconnect();
+    assert.equal(sent.length, 0);
+    mod.setAutoErrorSender(json => sent.push(JSON.parse(json)), scope9);
+    assert.equal(sent.length, 0);
+    mod.setAutoErrorSender(() => { throw Error('socket not ready'); }, scope6);
+    mod.setAutoErrorSender(json => sent.push(JSON.parse(json)), scope6);
+    assert.deepEqual(sent.map(report => report.kind), ['disconnect']);
+    mod.setAutoErrorSender(json => sent.push(JSON.parse(json)), scope6);
+    assert.equal(sent.length, 1);
+  } finally {
+    if (previousWindow === undefined) delete globalThis.window;
+    else globalThis.window = previousWindow;
+  }
+});

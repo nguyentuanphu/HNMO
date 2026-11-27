@@ -1,57 +1,91 @@
-// Automatic error reports (HNMO extra; owner 2026-11-27: they go to the server's owner only): an error of the page
-// becomes one report on the admin panel (Bug reports, Automatic); the same error again in the same page load sends
-// nothing more, and after a reload it adds to the same row instead of a new one.
+// Uses the isolated demo server and bridge with developer forwarding disabled.
 import { test, expect, type Page } from '@playwright/test';
 import { enterWorld } from './helpers.js';
 
 const ADMIN = process.env.ADMIN_URL ?? 'http://127.0.0.1:8095';
 
-async function throwInPage(page: Page, message: string): Promise<void> {
-  // From a timer, so it is an uncaught error of the page (window "error"), not of the test's evaluate.
-  await page.evaluate((text) => { setTimeout(() => { throw new Error(text); }, 0); }, message);
-  await page.waitForTimeout(500);
-}
-
-async function autoRow(admin: Page, message: string) {
+async function autoCount(admin: Page, fingerprint: string): Promise<number> {
   await admin.goto(`${ADMIN}/bug-reports`);
-  // The page answers clicks once its live connection is up: click until the tab opens.
   await expect(async () => {
     await admin.locator('#bug-tab-auto').click();
     await expect(admin.locator('#auto-settings')).toBeVisible({ timeout: 1_000 });
   }).toPass({ timeout: 30_000 });
   await admin.locator('#auto-filter').selectOption('all');
-  return admin.locator('#auto-table tr.auto-group', { hasText: message });
+  const cells = admin.locator('#auto-table tr.auto-group')
+    .filter({ has: admin.getByText(fingerprint, { exact: true }).and(admin.locator('.auto-fingerprint')) })
+    .locator('.auto-count');
+  const counts = await cells.allTextContents();
+  return counts.reduce((total, count) => total + Number(count), 0);
 }
 
-test('an error of the page reaches the admin panel once, grouped by its fingerprint', async ({ page, browser }) => {
+function watchPackets(page: Page): Record<string, unknown>[] {
+  const reports: Record<string, unknown>[] = [];
+  page.on('websocket', ws => ws.on('framesent', ({ payload }) => {
+    if (typeof payload === 'string' || payload[0] !== 0xc2 || payload[3] !== 0xf5 || payload[4] !== 0x60) return;
+    reports.push(JSON.parse(payload.subarray(5).toString('utf8')));
+  }));
+  return reports;
+}
+
+test('groups one coarse diagnostic across page loads, even when the raw error changes', async ({ page, browser }) => {
   test.setTimeout(5 * 60_000);
-  await enterWorld(page, 'test2');
-  const message = `HNMO e2e automatic report ${Date.now()}`;
-
-  await throwInPage(page, message);
-  await throwInPage(page, message); // the same error again in this page load: not sent again
-
+  const reports = watchPackets(page);
   const admin = await browser.newPage();
-  await expect.poll(async () => (await autoRow(admin, message)).count(), { timeout: 30_000 }).toBe(1);
-  let row = await autoRow(admin, message);
-  await expect(row.locator('.auto-count')).toHaveText('1');
-  await expect(row.locator('.auto-accounts')).toHaveText('1');
-  await admin.locator('#auto-table').screenshot({ path: 'test-results/auto-error-reports-admin.png' });
-
-  // A new page load: the same error adds to its row, never a second row.
+  const signature = 'error|main.js|45991';
+  const before = await autoCount(admin, signature);
   await enterWorld(page, 'test2');
-  await throwInPage(page, message);
-  await expect.poll(async () => (await (await autoRow(admin, message)).locator('.auto-count').textContent())?.trim(), { timeout: 30_000 }).toBe('2');
-  row = await autoRow(admin, message);
-  await expect(row).toHaveCount(1);
+  const raise = (message: string) => page.evaluate(text => {
+    window.dispatchEvent(new ErrorEvent('error', { message: text, filename: '/js/main.js', lineno: 45991 }));
+  }, message);
 
-  // The details never show the login (the character, test2Dk, is shown to the owner); the owner can mark it fixed.
-  await row.locator('summary').click();
-  await expect(row.locator('details')).toContainText('test2Dk');
-  await expect(row.locator('details')).not.toContainText(/\btest2\b/);
-  await row.locator('.auto-fixed').click();
-  await admin.locator('#auto-filter').selectOption('Fixed');
-  await expect(admin.locator('#auto-table tr.auto-group', { hasText: message })).toHaveCount(1);
-  await expect(admin.locator('#blazor-error-ui')).toBeHidden();
+  await raise('person@example.invalid');
+  await raise('synthetic API token');
+  await expect.poll(() => reports.filter(r => r.fingerprint === signature).length).toBe(1);
+  expect(JSON.stringify(reports)).not.toContain('example.invalid');
+  await enterWorld(page, 'test2');
+  await raise('different fixture message');
+  await expect.poll(() => autoCount(admin, signature), { timeout: 30_000 }).toBe(before + 2);
+  await admin.close();
+});
+
+test('reports loss of a real WebGL context to the host', async ({ page, browser }) => {
+  test.setTimeout(5 * 60_000);
+  const admin = await browser.newPage();
+  const before = await autoCount(admin, 'webgl');
+  await enterWorld(page, 'test2');
+  await page.evaluate(async () => {
+    const canvas = document.createElement('canvas');
+    document.body.append(canvas);
+    const extension = canvas.getContext('webgl2')?.getExtension('WEBGL_lose_context');
+    if (!extension) throw new Error('Chromium needs WEBGL_lose_context for this test.');
+    try {
+      const lost = new Promise<void>(resolve => canvas.addEventListener('webglcontextlost', () => resolve(), { once: true }));
+      extension.loseContext();
+      await lost;
+    } finally { canvas.remove(); }
+  });
+
+  await expect.poll(() => autoCount(admin, 'webgl'), { timeout: 30_000 }).toBe(before + 1);
+  await admin.close();
+});
+
+test('queues an unexpected game WebSocket close and flushes it after reauthentication', async ({ page, browser }) => {
+  test.setTimeout(5 * 60_000);
+  const reports = watchPackets(page);
+  const admin = await browser.newPage();
+  const before = await autoCount(admin, 'disconnect');
+  await enterWorld(page, 'test2');
+  await page.evaluate(async () => {
+    const { socket } = (window as unknown as { __game: { connection: { socket: WebSocket } } }).__game.connection;
+    const closed = new Promise<void>(resolve => socket.addEventListener('close', () => resolve(), { once: true }));
+    socket.close(4001, 'isolated fixture');
+    await closed;
+  });
+
+  expect(reports.filter(r => r.kind === 'disconnect')).toHaveLength(0);
+  expect(await autoCount(admin, 'disconnect')).toBe(before);
+  await enterWorld(page, 'test2');
+  await expect.poll(() => autoCount(admin, 'disconnect'), { timeout: 30_000 }).toBe(before + 1);
+  expect(reports.filter(r => r.kind === 'disconnect')).toHaveLength(1);
   await admin.close();
 });

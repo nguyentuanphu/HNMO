@@ -5,7 +5,6 @@
 namespace HNMO.GameServer.MessageHandler;
 
 using System.Runtime.InteropServices;
-using System.Text.Json;
 using HNMO.GameLogic;
 using HNMO.GameLogic.PlugIns.BugReports;
 using HNMO.Network.Packets.ClientToServer;
@@ -23,6 +22,8 @@ using HNMO.PlugIns;
 [BelongsToGroup(ChatCommandGroupHandlerPlugIn.GroupKey)]
 internal sealed class HnmoAutoErrorReportHandlerPlugIn : ISubPacketHandlerPlugIn
 {
+    private static readonly HnmoPacketRateLimiter IngressLimit = new(burst: 5, perSecond: 0.2);
+
     /// <inheritdoc />
     public bool IsEncryptionExpected => false;
 
@@ -32,46 +33,14 @@ internal sealed class HnmoAutoErrorReportHandlerPlugIn : ISubPacketHandlerPlugIn
     /// <inheritdoc />
     public ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
-        if (packet.Length < 6 || BugReportsPlugIn.Get(player.GameContext) is not { } plugIn)
+        if (player.Account is not null
+            && BugReportsPlugIn.Get(player.GameContext) is { } plugIn
+            && IngressLimit.TryTake(player)
+            && AutoErrorPayload.TryReadPacket(packet, out var fingerprint, out var sample))
         {
-            return ValueTask.CompletedTask;
+            plugIn.SubmitAutomatic(player, fingerprint, sample);
         }
 
-        string? fingerprint;
-        AutoErrorSample sample;
-        try
-        {
-            using var document = JsonDocument.Parse(new HnmoAutoErrorReport(packet).Json);
-            var root = document.RootElement;
-            if (root.ValueKind != JsonValueKind.Object)
-            {
-                return ValueTask.CompletedTask;
-            }
-
-            fingerprint = Read(root, "fingerprint");
-            sample = new AutoErrorSample
-            {
-                Kind = Read(root, "kind") ?? "error",
-                Message = Read(root, "message") ?? string.Empty,
-                Stack = Read(root, "stack") ?? string.Empty,
-                Version = Read(root, "version") ?? string.Empty,
-                Browser = Read(root, "browser") ?? string.Empty,
-                Os = Read(root, "os") ?? string.Empty,
-                Device = Read(root, "device") ?? string.Empty,
-                Map = Read(root, "map") ?? string.Empty,
-                Gpu = Read(root, "gpu") ?? string.Empty,
-            };
-        }
-        catch (JsonException)
-        {
-            // a broken report is dropped
-            return ValueTask.CompletedTask;
-        }
-
-        plugIn.SubmitAutomatic(player, fingerprint, sample);
         return ValueTask.CompletedTask;
-
-        static string? Read(JsonElement root, string name) =>
-            root.TryGetProperty(name, out var value) && value.ValueKind == JsonValueKind.String ? value.GetString() : null;
     }
 }

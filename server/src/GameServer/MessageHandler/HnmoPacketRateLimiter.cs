@@ -24,14 +24,20 @@ internal sealed class HnmoPacketRateLimiter
     private readonly ConditionalWeakTable<Player, Bucket> _buckets = new();
 
     private readonly Func<long> _now;
+    private readonly int _burst;
+    private readonly double _perSecond;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="HnmoPacketRateLimiter"/> class.
     /// </summary>
     /// <param name="now">The clock in milliseconds; tests pass their own.</param>
-    internal HnmoPacketRateLimiter(Func<long>? now = null)
+    /// <param name="burst">The capacity of each player bucket.</param>
+    /// <param name="perSecond">The rate at which tokens refill.</param>
+    internal HnmoPacketRateLimiter(Func<long>? now = null, int burst = Burst, double perSecond = PerSecond)
     {
         this._now = now ?? (static () => Environment.TickCount64);
+        this._burst = burst;
+        this._perSecond = perSecond;
     }
 
     /// <summary>Takes one packet from the player's bucket.</summary>
@@ -39,11 +45,11 @@ internal sealed class HnmoPacketRateLimiter
     /// <returns><c>true</c> if the packet may be handled; <c>false</c> if the player sends too many.</returns>
     internal bool TryTake(Player player)
     {
-        var bucket = this._buckets.GetValue(player, _ => new Bucket(this._now()));
+        var bucket = this._buckets.GetValue(player, _ => new Bucket(this._now(), this._burst));
         lock (bucket)
         {
             var now = this._now();
-            bucket.Tokens = Math.Min(Burst, bucket.Tokens + ((now - bucket.LastMilliseconds) * PerSecond / 1000.0));
+            bucket.Tokens = Math.Min(this._burst, bucket.Tokens + ((now - bucket.LastMilliseconds) * this._perSecond / 1000.0));
             bucket.LastMilliseconds = now;
             if (bucket.Tokens < 1)
             {
@@ -55,9 +61,9 @@ internal sealed class HnmoPacketRateLimiter
         }
     }
 
-    private sealed class Bucket(long now)
+    private sealed class Bucket(long now, int burst)
     {
-        public double Tokens { get; set; } = Burst;
+        public double Tokens { get; set; } = burst;
 
         public long LastMilliseconds { get; set; } = now;
     }

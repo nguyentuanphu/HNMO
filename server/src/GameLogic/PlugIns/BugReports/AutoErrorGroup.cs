@@ -10,7 +10,10 @@ public sealed class AutoErrorGroup
     /// <summary>Gets or sets the group's id (e.g. <c>E4</c>).</summary>
     public string Id { get; set; } = string.Empty;
 
-    /// <summary>Gets or sets the fingerprint the client computed.</summary>
+    /// <summary>Gets or sets the stable key used when the host approves this group.</summary>
+    public Guid ApprovalId { get; set; }
+
+    /// <summary>Gets or sets the normalized diagnostic signature.</summary>
     public string Fingerprint { get; set; } = string.Empty;
 
     /// <summary>Gets or sets the kind of the first report.</summary>

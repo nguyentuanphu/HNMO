@@ -258,8 +258,7 @@ public sealed class BugReportsPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn
     }
 
     /// <summary>
-    /// The reports and automatic error groups queued for the HNMO developer and not sent yet (the weekly report takes
-    /// them), at most 50 of each.
+    /// The player reports queued for the HNMO developer (at most 50).
     /// </summary>
     /// <returns>The hub's messages, with their ids.</returns>
     public List<(string Id, System.Text.Json.Nodes.JsonObject Message)> QueuedForDeveloper()
@@ -269,15 +268,11 @@ public sealed class BugReportsPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn
             .Where(r => r.QueuedUtc is not null && r.ForwardedUtc is null)
             .Take(50)
             .Select(r => (r.Id, HubMessage(r, share)))
-            .Concat(data.AutoGroups
-                .Where(g => g.QueuedUtc is not null && g.ForwardedUtc is null)
-                .Take(50)
-                .Select(g => (g.Id, AutoErrorEngine.HubMessage(g, share, SydneyText))))
             .ToList());
     }
 
-    /// <summary>Marks queued reports and automatic error groups as sent (the weekly report was taken).</summary>
-    /// <param name="ids">The reports and groups.</param>
+    /// <summary>Marks queued player reports as sent (the weekly report was taken).</summary>
+    /// <param name="ids">The reports.</param>
     public void MarkSentToDeveloper(IReadOnlyCollection<string> ids)
     {
         var now = DateTime.UtcNow;
@@ -287,12 +282,6 @@ public sealed class BugReportsPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn
             foreach (var report in data.Reports.Where(r => ids.Contains(r.Id)))
             {
                 report.ForwardedUtc = now;
-                changed = true;
-            }
-
-            foreach (var group in data.AutoGroups.Where(g => ids.Contains(g.Id)))
-            {
-                group.ForwardedUtc = now;
                 changed = true;
             }
 
@@ -316,13 +305,6 @@ public sealed class BugReportsPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn
             return AutoErrorEngine.Outcome.Invalid;
         }
 
-        sample.Character = player.SelectedCharacter?.Name ?? string.Empty;
-        if (player.CurrentMap is { } map)
-        {
-            // The server's name of the map, not the client's number.
-            sample.Map = map.Definition.Name.ValueInNeutralLanguage;
-        }
-
         var settings = this.Settings;
         var (outcome, group) = this.Store.Mutate(data =>
         {
@@ -331,7 +313,7 @@ public sealed class BugReportsPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn
         });
         if (outcome == AutoErrorEngine.Outcome.NewGroup && group is not null)
         {
-            player.Logger.LogInformation("Automatic error report {Id} ({Kind}): {Message}", group.Id, group.Kind, group.Message);
+            player.Logger.LogInformation("Automatic error report {Id} ({Kind})", group.Id, group.Kind);
         }
 
         return outcome;
@@ -339,7 +321,16 @@ public sealed class BugReportsPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn
 
     /// <summary>The groups of automatic error reports, most reports first (admin panel).</summary>
     /// <returns>The groups.</returns>
-    public List<AutoErrorGroup> AutoGroups() => this.Store.Read(AutoErrorEngine.ByCount);
+    public List<AutoErrorGroup> AutoGroups() => this.Store.Read(data =>
+    {
+        var groups = AutoErrorEngine.ByCount(data);
+        foreach (var group in groups)
+        {
+            AutoErrorOutbox.ReadStatus(group, HnmoSeasonInstance.Current);
+        }
+
+        return groups;
+    });
 
     /// <summary>Marks a group of automatic error reports fixed, ignored or open (admin panel).</summary>
     /// <param name="id">The group.</param>
@@ -360,18 +351,23 @@ public sealed class BugReportsPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn
     /// <returns>Whether it was queued, and an error.</returns>
     public (bool Ok, string? Error) ForwardAuto(string id)
     {
-        var (found, alreadyQueued) = this.Store.Mutate(data =>
+        if (!DeveloperHub.CanForwardAutomaticErrors)
+        {
+            return (false, "Automatic error forwarding requires a host credential.");
+        }
+
+        return this.Store.Read<(bool Ok, string? Error)>(data =>
         {
             var group = AutoErrorEngine.Find(data, id);
-            if (group is null || group.QueuedUtc is not null)
+            if (group is null)
             {
-                return (false, (group is not null, group is not null));
+                return (false, "There's no such error.");
             }
 
-            group.QueuedUtc = DateTime.UtcNow;
-            return (true, (true, false));
+            return AutoErrorOutbox.TryApprove(group, HnmoSeasonInstance.Current)
+                ? (true, (string?)null)
+                : (false, "This error has already been approved or the queue is full.");
         });
-        return !found ? (false, "There's no such error.") : alreadyQueued ? (false, "It is already waiting for the weekly report.") : (true, null);
     }
 
     /// <summary>All reports, newest first (admin panel).</summary>

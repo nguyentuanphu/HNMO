@@ -2,8 +2,7 @@
 // unhandled promise rejection, a packet its handlers failed on, a lost WebGL context, an unexpected disconnect), the game
 // tells the server's owner on its own (F5 60). The owner sees them grouped on the admin panel (Bug reports, Automatic)
 // and chooses what goes on to the HNMO developer. Each error goes once per page load, at most 5 an hour per browser.
-// A report carries the error, the top of its stack, the build, the browser, the device, the map and the GPU: never
-// the login, the ticket, a password or chat text.
+// Reports carry an error kind, a known source file and line where available, and coarse client metadata.
 
 import { HNMO_BUILD_DATE } from './build.js';
 
@@ -13,23 +12,19 @@ export type AutoErrorKind = 'error' | 'rejection' | 'packet' | 'webgl' | 'discon
 export interface AutoErrorPayload {
   fingerprint: string;
   kind: AutoErrorKind;
-  message: string;
-  stack: string;
   version: string;
   browser: string;
   os: string;
-  device: string;
-  map: string;
-  gpu: string;
 }
 
 /** Reports a browser sends in an hour, at most. */
 export const MAX_PER_HOUR = 5;
 const HOUR_MS = 60 * 60 * 1000;
 const RATE_KEY = 'hnmo.autoErrors.sent';
-const PENDING_KEY = 'hnmo.autoErrors.pending';
+const LEGACY_PENDING_KEY = 'hnmo.autoErrors.pending';
+const PENDING_PREFIX = 'hnmo.autoErrors.pending.v2.';
+const SOURCE_FILES = new Set(['main.js', 'connection.js', 'session.js', 'world.js', 'renderer.js']);
 const MAX_QUEUE = 5;
-const STACK_LINES = 6;
 
 /** Minimal storage (localStorage, or a stand-in in tests). */
 export interface SmallStorage {
@@ -74,6 +69,7 @@ export function firstFrame(stack: string): { file: string; line: number } | null
 /** The hourly limit of a browser, kept in its storage (a page without storage keeps it in memory). */
 export class HourlyLimit {
   private memory: number[] = [];
+  private storageFailed = false;
 
   constructor(private readonly storage: SmallStorage | null, private readonly now: () => number = () => Date.now(), private readonly max = MAX_PER_HOUR) {}
 
@@ -88,7 +84,7 @@ export class HourlyLimit {
   }
 
   private read(): number[] {
-    if (!this.storage) return this.memory;
+    if (!this.storage || this.storageFailed) return this.memory;
     try {
       const parsed: unknown = JSON.parse(this.storage.getItem(RATE_KEY) ?? '[]');
       return Array.isArray(parsed) ? parsed.filter((t): t is number => typeof t === 'number') : [];
@@ -100,12 +96,12 @@ export class HourlyLimit {
   private write(times: number[]): void {
     this.memory = times;
     if (!this.storage) return;
-    try { this.storage.setItem(RATE_KEY, JSON.stringify(times)); } catch { /* storage full or blocked: memory only */ }
+    try { this.storage.setItem(RATE_KEY, JSON.stringify(times)); } catch { this.storageFailed = true; }
   }
 }
 
 /** JSON with only ASCII characters (the server reads \u escapes). */
-function asciiJson(value: unknown): string {
+function asciiJson(value: AutoErrorPayload): string {
   return JSON.stringify(value).replace(/[\u007f-￿]/g, (c) => `\\u${c.charCodeAt(0).toString(16).padStart(4, '0')}`);
 }
 
@@ -125,19 +121,6 @@ function osName(ua: string): string {
   return 'other';
 }
 
-let gpuCache: string | null = null;
-function gpuName(): string {
-  if (gpuCache !== null) return gpuCache;
-  try {
-    const gl = document.createElement('canvas').getContext('webgl2');
-    const info = gl?.getExtension('WEBGL_debug_renderer_info');
-    gpuCache = gl ? String(info ? gl.getParameter(info.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER)) : 'no WebGL2';
-  } catch {
-    gpuCache = 'unknown';
-  }
-  return gpuCache;
-}
-
 function storageOrNull(): SmallStorage | null {
   try { return window.localStorage; } catch { return null; }
 }
@@ -145,89 +128,97 @@ function storageOrNull(): SmallStorage | null {
 type Sender = (json: string) => void;
 
 const sentThisLoad = new Set<string>();
-const queue: string[] = [];
 let sender: Sender | null = null;
-let mapName: () => string = () => '';
+let pendingKey: string | null = null;
+let queue: string[] = [];
 let limit: HourlyLimit | null = null;
 let installed = false;
 let leaving = false;
 
-function readPending(): string[] {
-  const storage = storageOrNull();
-  if (!storage) return [];
+/** Binds queued reports to the authenticated account and endpoint within the tab. */
+export async function autoErrorScope(host: string, port: number, username: string): Promise<string | null> {
   try {
-    const parsed: unknown = JSON.parse(storage.getItem(PENDING_KEY) ?? '[]');
-    return Array.isArray(parsed) ? parsed.filter((s): s is string => typeof s === 'string').slice(0, MAX_QUEUE) : [];
-  } catch {
-    return [];
-  }
+    const identity = JSON.stringify([host.toLowerCase(), port, username.trim().toLowerCase()]);
+    const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(identity));
+    return Array.from(new Uint8Array(digest), b => b.toString(16).padStart(2, '0')).join('');
+  } catch { return null; }
 }
 
-function writePending(items: string[]): void {
-  const storage = storageOrNull();
-  if (!storage) return;
+/** Returns a signature composed only of a known diagnostic kind, source file and line. */
+export function diagnosticSignature(kind: AutoErrorKind, file: string, line: number | string): string {
+  const name = cleanPath(file).split('/').pop() ?? '';
+  const number = Number(line);
+  return SOURCE_FILES.has(name) && Number.isInteger(number) && number > 0 && number <= 50000
+    ? `${kind}|${name}|${number}` : kind;
+}
+
+function readPending(key: string): string[] {
   try {
-    if (items.length) storage.setItem(PENDING_KEY, JSON.stringify(items.slice(-MAX_QUEUE)));
-    else storage.removeItem(PENDING_KEY);
-  } catch { /* nothing to keep it in */ }
+    const raw = window.sessionStorage.getItem(key) ?? '[]';
+    if (raw.length > 8192) return [];
+    const parsed: unknown = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.filter((item): item is string => typeof item === 'string' && item.length <= 512).slice(0, MAX_QUEUE) : [];
+  } catch { return []; }
 }
 
-function flush(): void {
-  if (!sender) return;
-  const items = [...readPending(), ...queue.splice(0)];
-  writePending([]);
-  for (const json of items) {
-    try { sender(json); } catch { /* the connection went: dropped */ }
-  }
+function saveQueue(): void {
+  if (!pendingKey) return;
+  try {
+    if (queue.length) window.sessionStorage.setItem(pendingKey, JSON.stringify(queue));
+    else window.sessionStorage.removeItem(pendingKey);
+  } catch { /* Keep the in-memory queue when storage is unavailable. */ }
 }
 
-/**
- * Reports an error on its own (once per fingerprint and page load, within the hourly limit). Before the game is
- * connected, or after a disconnect, the report waits for the next connection.
- */
-export function reportAutoError(kind: AutoErrorKind, message: string, stack = '', file = '', line: number | string = 0): boolean {
-  if (typeof window === 'undefined') return false;
-  // Leaving the page (reload, close, another address) closes the connection: that's no error.
-  if (kind === 'disconnect' && leaving) return false;
+/** Sends a coarse error report for the current authenticated game connection. */
+export function reportAutoError(kind: AutoErrorKind, _message: string, stack = '', file = '', line: number | string = 0): boolean {
+  if (!sender || leaving) return false;
   const frame = !file ? firstFrame(stack) : null;
-  const fingerprint = fingerprintOf(message, file || frame?.file || kind, line || frame?.line || 0);
+  const fingerprint = diagnosticSignature(kind, file || frame?.file || '', line || frame?.line || 0);
   if (sentThisLoad.has(fingerprint)) return false;
-  sentThisLoad.add(fingerprint);
   limit ??= new HourlyLimit(storageOrNull());
   if (!limit.take()) return false;
+  sentThisLoad.add(fingerprint);
+
   const ua = navigator.userAgent;
-  const payload: AutoErrorPayload = {
-    fingerprint,
-    kind,
-    message: scrub(message).slice(0, 500),
-    stack: scrub(stack).split('\n').map((l) => l.trim()).filter(Boolean).slice(0, STACK_LINES).join('\n').slice(0, 1500),
-    version: `web ${HNMO_BUILD_DATE}`,
-    browser: browserName(ua),
-    os: osName(ua),
-    device: `${screen.width}x${screen.height} dpr ${devicePixelRatio} touch ${navigator.maxTouchPoints > 0 ? 'yes' : 'no'}`,
-    map: (() => { try { return mapName(); } catch { return ''; } })(),
-    gpu: gpuName(),
-  };
-  const json = asciiJson(payload);
-  if (sender && kind !== 'disconnect') {
-    try { sender(json); return true; } catch { /* falls through to the queue */ }
+  const json = asciiJson({ fingerprint, kind, version: `web ${HNMO_BUILD_DATE}`, browser: browserName(ua), os: osName(ua) });
+  if (kind !== 'disconnect') {
+    try { sender(json); return true; } catch { /* Retry on the next authenticated connection for this scope. */ }
   }
-  if (kind === 'disconnect') writePending([...readPending(), json]);
-  else { queue.push(json); if (queue.length > MAX_QUEUE) queue.shift(); }
+
+  queue.push(json);
+  queue = queue.slice(-MAX_QUEUE);
+  saveQueue();
   return true;
 }
 
-/** The connection reports go through (after login), or null when it closed. Waiting reports go at once. */
-export function setAutoErrorSender(send: Sender | null, map?: () => string): void {
+/** Installs a sender after authentication, then drains the matching queue until sending fails. */
+export function setAutoErrorSender(send: Sender, scope: string | null): () => void {
+  const key = scope ? PENDING_PREFIX + scope : null;
+  if (key !== pendingKey || !key) {
+    queue = key ? readPending(key) : [];
+    pendingKey = key;
+    sentThisLoad.clear();
+  }
+
   sender = send;
-  if (map) mapName = map;
-  flush();
+  while (queue.length) {
+    try { send(queue[0]); } catch { break; }
+    queue.shift();
+    saveQueue();
+  }
+
+  return () => {
+    if (sender !== send) return;
+    reportAutoError('disconnect', '');
+    sender = null;
+  };
 }
 
 /** Listens for the page's uncaught errors, unhandled rejections and lost WebGL contexts (called once at start). */
 export function installAutoErrorReports(): void {
   if (installed || typeof window === 'undefined') return;
   installed = true;
+  try { storageOrNull()?.removeItem(LEGACY_PENDING_KEY); } catch { /* Storage is optional. */ }
   window.addEventListener('error', (event) => {
     // A resource that failed to load (an image, a script tag) has no message: not an error of the game's code.
     if (!event.message) return;

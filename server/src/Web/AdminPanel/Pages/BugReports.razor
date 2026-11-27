@@ -87,12 +87,11 @@ else
                                 <div class="small text-break auto-message">@g.Message</div>
                                 <details class="small">
                                     <summary>@L4("Details", "Chi tiết", "Details", "详情") (@g.Samples.Count)</summary>
-                                    <div class="text-muted">@L4("Fingerprint", "Dấu vết", "Fingerabdruck", "指纹"): <code>@g.Fingerprint</code></div>
+                                    <div class="text-muted">@L4("Fingerprint", "Dấu vết", "Fingerabdruck", "指纹"): <code class="auto-fingerprint">@g.Fingerprint</code></div>
                                     @foreach (var s in g.Samples.AsEnumerable().Reverse())
                                     {
                                         <div class="border-top pt-1 mt-1">
-                                            <div>@BugReportsPlugIn.SydneyText(s.ReceivedUtc) · @s.Version · @s.Browser · @s.Os · @s.Device · @s.Map · @s.Gpu @(s.Character.Length > 0 ? $"· {s.Character}" : string.Empty)</div>
-                                            <pre class="small mb-0">@s.Message@(s.Stack.Length > 0 ? "\n" + s.Stack : string.Empty)</pre>
+                                            <div>@BugReportsPlugIn.SydneyText(s.ReceivedUtc) · @s.Version · @s.Browser · @s.Os</div>
                                         </div>
                                     }
                                 </details>
@@ -115,7 +114,7 @@ else
                                     {
                                         <button type="button" class="btn btn-sm btn-outline-warning auto-open" title="@L4("Show it among the open errors again", "Đưa lại vào danh sách lỗi đang mở", "Wieder zu den offenen Fehlern", "重新放回未处理错误")" @onclick="() => this.SetAutoStatusAsync(g.Id, AutoErrorStatus.Open)">@L4("Reopen", "Mở lại", "Wieder öffnen", "重新打开")</button>
                                     }
-                                    <button type="button" class="btn btn-sm btn-outline-primary auto-forward" disabled="@(!this._canForward || g.QueuedUtc is not null)"
+                                    <button type="button" class="btn btn-sm btn-outline-primary auto-forward" disabled="@(!HNMO.GameLogic.DeveloperHub.CanForwardAutomaticErrors || g.QueuedUtc is not null)"
                                             title="@L4("Send it to the HNMO developer with this server's weekly report (no login or IP).", "Gửi cho nhà phát triển HNMO cùng báo cáo tuần của server (không có tài khoản hay IP).", "Mit dem Wochenbericht dieses Servers an den HNMO-Entwickler senden (ohne Login oder IP).", "随本服务器的周报发给 HNMO 开发者（不含账号或 IP）。")"
                                             @onclick="() => this.ForwardAutoAsync(g.Id)">@L4("Forward to developer", "Gửi nhà phát triển", "An Entwickler senden", "转发给开发者")</button>
                                 </div>

@@ -11,6 +11,7 @@ using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.PlugIns;
 using HNMO.Web.AdminPanel.API;
+using HNMO.Web.AdminPanel.Auth;
 using HNMO.Web.AdminPanel.Operations;
 using HNMO.Web.Shared.Components.Toast;
 using Microsoft.AspNetCore.Components;
@@ -37,6 +38,9 @@ public partial class BugReports : ComponentBase
     private int _autoCapAccount = 20;
     private int _autoCapServer = 1000;
     private bool _saving;
+
+    [Inject]
+    private AdminPolicyGuard PolicyGuard { get; set; } = null!;
 
     [Inject]
     private PluginWriteOperations PluginOperations { get; set; } = null!;
@@ -221,6 +225,11 @@ public partial class BugReports : ComponentBase
 
     private async Task ForwardAutoAsync(string id)
     {
+        if (!await this.PolicyGuard.IsAuthorizedAsync(AdminPolicies.Administrator).ConfigureAwait(true))
+        {
+            return;
+        }
+
         var (ok, error) = this.PlugIn().ForwardAuto(id);
         if (ok)
         {
