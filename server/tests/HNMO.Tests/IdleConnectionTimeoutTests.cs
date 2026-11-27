@@ -252,6 +252,77 @@ public class IdleConnectionTimeoutTests
         }
     }
 
+    /// <summary>
+    /// Verifies that answering idle <see cref="PingRequest"/> probes with <see cref="PingResponse"/> keeps the connection alive past the idle timeout.
+    /// </summary>
+    /// <returns>The task.</returns>
+    [Test]
+    public async Task ClientAnsweringPingRequestStaysConnectedPastIdleTimeoutAsync()
+    {
+        var timeout = TimeSpan.FromMilliseconds(350);
+        var acceptedTcs = new TaskCompletionSource<IConnection>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var disconnectedTcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var probesSent = 0;
+
+        var (listener, port) = StartListenerOnFreePort(timeout, l => l.ClientAccepted += args =>
+        {
+            var connection = args.AcceptedConnection;
+            if (connection is Connection tcpConnection)
+            {
+                tcpConnection.IdleProbeRequested += () =>
+                {
+                    Interlocked.Increment(ref probesSent);
+                    return tcpConnection.SendPingRequestAsync();
+                };
+            }
+
+            connection.Disconnected += () => { disconnectedTcs.TrySetResult(); return ValueTask.CompletedTask; };
+            acceptedTcs.TrySetResult(connection);
+            return ValueTask.CompletedTask;
+        });
+        try
+        {
+            using var client = new TcpClient();
+            await client.ConnectAsync(IPAddress.Loopback, port).ConfigureAwait(false);
+            using var connection = await acceptedTcs.Task.WaitAsync(TimeSpan.FromSeconds(3)).ConfigureAwait(false);
+            _ = connection.BeginReceiveAsync();
+
+            var stream = client.GetStream();
+            var expectedRequest = new[] { PingRequest.HeaderType, (byte)PingRequest.Length, PingRequest.Code };
+            var pingResponse = new[] { PingResponse.HeaderType, (byte)PingResponse.Length, PingResponse.Code };
+            var buffer = new byte[3];
+
+            for (var cycle = 0; cycle < 2; cycle++)
+            {
+                var readOffset = 0;
+                using var readCts = new CancellationTokenSource(TimeSpan.FromSeconds(3));
+                while (readOffset < expectedRequest.Length)
+                {
+                    var read = await stream.ReadAsync(buffer.AsMemory(readOffset, expectedRequest.Length - readOffset), readCts.Token).ConfigureAwait(false);
+                    if (read == 0)
+                    {
+                        Assert.Fail($"Stream closed unexpectedly while waiting for PingRequest cycle {cycle}.");
+                    }
+
+                    readOffset += read;
+                }
+
+                Assert.That(buffer, Is.EqualTo(expectedRequest));
+                await stream.WriteAsync(pingResponse).ConfigureAwait(false);
+                await stream.FlushAsync().ConfigureAwait(false);
+            }
+
+            await Task.Delay(120).ConfigureAwait(false);
+            Assert.That(Volatile.Read(ref probesSent), Is.GreaterThanOrEqualTo(2));
+            Assert.That(disconnectedTcs.Task.IsCompleted, Is.False);
+            Assert.That(connection.Connected, Is.True);
+        }
+        finally
+        {
+            listener.Stop();
+        }
+    }
+
     private static (Listener Listener, int Port) StartListenerOnFreePort(
         TimeSpan timeout,
         Action<Listener> configureListener)
