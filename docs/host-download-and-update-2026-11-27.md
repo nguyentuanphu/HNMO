@@ -18,3 +18,10 @@
 ## Lưu ý một lần
 Bản 1.0.0 dùng cách cập nhật cũ (`manifest_url`/`files_url`), hub đã bỏ cách đó (hub#6). Thư mục 1.0.0 không tự lên
 1.0.1 được: tải lại gói 1.0.1 một lần (giữ thư mục `save/` của bản cũ). Từ 1.0.1 trở đi nút Update chạy theo cách mới.
+
+## Quyết định 27/11 21:00
+- Giữ tên hub `hnmobug.netlify.app` (chưa đổi sang `hnmo.netlify.app`; tên đó còn trống). Khi đổi: sửa
+  `DeveloperHubAddress.Default`, `public/setup.html` của hub, secret `HUB_URL`, rồi phát bản mới; Netlify không chuyển
+  tiếp tên cũ.
+- Tạm dùng địa chỉ `r2.dev` cho file tải/cập nhật; gắn tên miền riêng cho R2 khi có host thật (chỉ đổi `UPDATES_URL`).
+- File cập nhật giờ tải thẳng từ Cloudflare R2 (hub#9, `/api/update-file` trả 302 sau khi kiểm tra token).
