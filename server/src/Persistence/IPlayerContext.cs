@@ -239,6 +239,58 @@ public interface IPlayerContext : IContext
     ValueTask<IReadOnlyList<CashShopCoinGrant>> GetCashShopCoinHistoryAsync(Guid accountId, int offset, int maximumCount, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Gets the Jewel Bank balances of an account, read from the database (not tracked).
+    /// </summary>
+    /// <param name="accountId">The account.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The balances above zero, by jewel key.</returns>
+    ValueTask<IReadOnlyDictionary<string, int>> GetJewelBankBalancesAsync(Guid accountId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets the receipt of an operation, read from the database with a connection of its own (not tracked), so that it
+    /// tells whether an attempt whose commit answer was lost went through.
+    /// </summary>
+    /// <param name="operationId">The operation's identifier.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The receipt, or <c>null</c> when the operation wasn't committed.</returns>
+    ValueTask<AssetOperation?> GetAssetOperationAsync(Guid operationId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets the operations of an account with something left to deliver, oldest first (not tracked).
+    /// </summary>
+    /// <param name="accountId">The account.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The operations.</returns>
+    ValueTask<IReadOnlyList<AssetOperation>> GetPendingAssetOperationsAsync(Guid accountId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets recent committed asset operations, newest first, optionally filtered by <paramref name="kinds"/> (not tracked).
+    /// </summary>
+    /// <param name="maximumCount">The maximum number of receipts to return.</param>
+    /// <param name="kinds">Optional operation kinds filter; when empty or <c>null</c>, returns all kinds.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>Recent receipts with their account login names.</returns>
+    ValueTask<IReadOnlyList<AssetOperationSummary>> GetRecentAssetOperationsAsync(int maximumCount, IReadOnlyCollection<string>? kinds = null, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Saves the context's changes together with an asset operation in one database transaction: its receipt, its
+    /// relative balance changes and its delivery are written, or nothing is. A second attempt with the same identifier
+    /// reports <see cref="AssetCommitStatus.AlreadyCommitted"/> or <see cref="AssetCommitStatus.Conflict"/> and writes
+    /// nothing. An exception leaves the outcome open: read it with <see cref="GetAssetOperationAsync"/> before retrying
+    /// or taking the change back, and then call <see cref="AcceptChangesOfCommittedOperation"/> when it was committed.
+    /// </summary>
+    /// <param name="request">The operation.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The outcome.</returns>
+    ValueTask<AssetCommitStatus> SaveChangesWithAssetOperationAsync(AssetOperationRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Marks the context's pending changes as saved after <see cref="GetAssetOperationAsync"/> showed that an attempt
+    /// whose commit answer was lost went through, so the next save doesn't write them a second time.
+    /// </summary>
+    void AcceptChangesOfCommittedOperation();
+
+    /// <summary>
     /// Gets the grant of cash shop coins with the specified reference.
     /// </summary>
     /// <param name="reference">The reference of the granting system.</param>

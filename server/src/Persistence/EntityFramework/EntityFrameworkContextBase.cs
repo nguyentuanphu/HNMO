@@ -368,6 +368,65 @@ internal class EntityFrameworkContextBase : IContext, IConfigurationEditContext
     }
 
     /// <summary>
+    /// Saves the tracked changes in one database transaction together with what <paramref name="writeFirst"/> writes in
+    /// it. The changes are accepted only after the commit: a commit which fails or whose answer is lost leaves them
+    /// pending, so they aren't taken for saved. Entities added by <paramref name="writeFirst"/> are passed back through
+    /// <paramref name="addedEntities"/> and detached after the transaction, whatever its outcome.
+    /// </summary>
+    /// <param name="writeFirst">Writes in the transaction before the changes are saved; returns <c>false</c> to roll back.</param>
+    /// <param name="addedEntities">The entities which <paramref name="writeFirst"/> added to the context.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns><c>true</c> when committed; <c>false</c> when <paramref name="writeFirst"/> refused.</returns>
+    internal async ValueTask<bool> SaveChangesInTransactionAsync(
+        Func<EntityDataContext, CancellationToken, ValueTask<bool>> writeFirst,
+        List<object> addedEntities,
+        CancellationToken cancellationToken)
+    {
+        using var l = await this._lock.LockAsync(cancellationToken).ConfigureAwait(false);
+        if (this._changeListener is not null || this._configurationEditTransaction is not null || this.Context is not EntityDataContext context)
+        {
+            throw new InvalidOperationException("Only a player context saves an asset operation.");
+        }
+
+        try
+        {
+            await using var transaction = await context.Database.BeginTransactionAsync(cancellationToken).ConfigureAwait(false);
+            if (!await writeFirst(context, cancellationToken).ConfigureAwait(false))
+            {
+                await transaction.RollbackAsync(cancellationToken).ConfigureAwait(false);
+                return false;
+            }
+
+            await AssetOperationTestBarrier.ReachAsync("before-save", cancellationToken).ConfigureAwait(false);
+            try
+            {
+                await context.SaveChangesAsync(acceptAllChangesOnSuccess: false, cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception exception) when (IsRejectedSave(exception))
+            {
+                this.LogConcurrencyConflicts(exception);
+                throw new PersistenceConflictException(exception);
+            }
+
+            await AssetOperationTestBarrier.ReachAsync("before-commit", cancellationToken).ConfigureAwait(false);
+            await transaction.CommitAsync(cancellationToken).ConfigureAwait(false);
+            await AssetOperationTestBarrier.ReachAsync("after-commit", cancellationToken).ConfigureAwait(false);
+            context.ChangeTracker.AcceptAllChanges();
+            return true;
+        }
+        finally
+        {
+            foreach (var entity in addedEntities)
+            {
+                context.Entry(entity).State = EntityState.Detached;
+            }
+        }
+    }
+
+    /// <summary>Marks the tracked changes as saved (an asset operation whose commit answer was lost went through).</summary>
+    internal void AcceptAllChanges() => this.Context.ChangeTracker.AcceptAllChanges();
+
+    /// <summary>
     /// Releases unmanaged and - optionally - managed resources.
     /// </summary>
     /// <param name="dispose"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>

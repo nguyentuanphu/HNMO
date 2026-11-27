@@ -29,6 +29,7 @@ public class ExtendedTypeContext : Microsoft.EntityFrameworkCore.DbContext
         modelBuilder.Ignore<HNMO.DataModel.Entities.AccountAttributeGrant>();
         modelBuilder.Ignore<HNMO.DataModel.Entities.AccountExternalLink>();
         modelBuilder.Ignore<HNMO.DataModel.Entities.AppearanceData>();
+        modelBuilder.Ignore<HNMO.DataModel.Entities.AssetOperation>();
         modelBuilder.Ignore<HNMO.DataModel.Entities.CashShopCoinGrant>();
         modelBuilder.Ignore<HNMO.DataModel.Entities.CashShopStorageItem>();
         modelBuilder.Ignore<HNMO.DataModel.Entities.CastleSiegeData>();
@@ -48,6 +49,7 @@ public class ExtendedTypeContext : Microsoft.EntityFrameworkCore.DbContext
         modelBuilder.Ignore<HNMO.DataModel.Entities.ItemAppearance>();
         modelBuilder.Ignore<HNMO.DataModel.Entities.ItemOptionLink>();
         modelBuilder.Ignore<HNMO.DataModel.Entities.ItemStorage>();
+        modelBuilder.Ignore<HNMO.DataModel.Entities.JewelBankBalance>();
         modelBuilder.Ignore<HNMO.DataModel.Entities.LetterBody>();
         modelBuilder.Ignore<HNMO.DataModel.Entities.QuestMonsterKillRequirementState>();
         modelBuilder.Ignore<HNMO.DataModel.Entities.SkillEntry>();

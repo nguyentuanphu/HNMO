@@ -184,14 +184,16 @@ public sealed class EconomyDashboardTests
         await context.SaveChangesAsync().ConfigureAwait(false);
 
         var bank = new JewelBankConfiguration { FileName = this._file, AllowWebsite = false };
-        JewelBankStore.Open(bank.FileName).Mutate(data =>
+        async Task SeedAsync(string login, string key, int count, int waiting = 0)
         {
-            data.Accounts["ALICE"] = new() { ["bless"] = 7, ["soul"] = 4 };
-            data.Accounts["banned"] = new() { ["bless"] = 90 };
-            data.Accounts["unknown"] = new() { ["bless"] = 100 };
-            data.PendingWithdrawals.Add(new() { LoginName = "alice", JewelKey = "bless", Quantity = 15 });
-            return (true, true);
-        });
+            var accountId = (await context.GetAccountIdByLoginNameAsync(login).ConfigureAwait(false))!.Value;
+            var request = new AssetOperationRequest(Guid.NewGuid(), accountId, "jewel-deposit", $"{login}{key}{count}", "test", null, [new JewelBankDelta(key, count, int.MaxValue)], waiting > 0 ? key : null, waiting);
+            Assert.That(await context.SaveChangesWithAssetOperationAsync(request).ConfigureAwait(false), Is.EqualTo(AssetCommitStatus.Committed));
+        }
+
+        await SeedAsync("alice", "bless", 7).ConfigureAwait(false);
+        await SeedAsync("alice", "soul", 4, waiting: 15).ConfigureAwait(false); // a waiting delivery isn't in the bank
+        await SeedAsync("banned", "bless", 90).ConfigureAwait(false);
 
         var source = new Mock<IDataSource<GameConfiguration>>();
         source.Setup(s => s.GetOwnerAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync(this._config);
