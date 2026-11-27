@@ -176,6 +176,7 @@ test('in the game: the top races window with F9, the chat notices and Take', asy
   await expect.poll(() => sent(page).then((list) => list.find((s) => s.name === 'HnmoTopRacesAction')?.fields)).toEqual({ Action: 1, Argument: '' });
 
   // Vietnamese.
+  if (await page.locator('#hudToolsToggle').isVisible()) await page.locator('#hudToolsToggle').click();
   await page.locator('.language-picker button[data-lang="vi"]:visible').first().click();
   await expect(resets.locator('.tr-name')).toHaveText('Đua top reset tuần');
   await expect(resets.locator('.tr-mine')).toHaveText('Hạng của bạn: 2 · 7 lần reset');

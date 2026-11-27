@@ -30,6 +30,20 @@ test('auto play goes to town for potions and comes back to hunt', async ({ page 
   }
   const spot = await page.evaluate(() => ({ ...(window as unknown as Win).__game.online.hero.cell }));
   const before = await potions(page);
+  // Extras town automation requires VIP (Lv 1+); grant VIP Lv 1 policy before starting the trip.
+  await page.evaluate(async () => {
+    const { write } = await import('/js/net/packets.js' as string) as { write(g: string, n: string, v: Record<string, unknown>): Uint8Array };
+    const g = (window as unknown as { __game: { connection: { dispatch(b: Uint8Array): void } } }).__game;
+    g.connection.dispatch(write('ServerToClient', 'HnmoUltimateAutoPlayPolicy', {
+      Json: JSON.stringify({
+        v: 2, enabled: true, isVip: true, vipLevel: 1,
+        features: {
+          sparkleGuide: { mode: 1, allowed: true, vipRequired: false, requiredVipLevel: 0 },
+          extrasTown: { mode: 2, allowed: true, vipRequired: false, requiredVipLevel: 1 },
+        },
+      }),
+    }));
+  });
   await page.evaluate((target) => {
     const g = (window as unknown as Win).__game;
     g.autoPlayExtras.settings.potionsToBuy = target;

@@ -27,6 +27,7 @@ export interface PatrolSpot {
 
 export type UltimateFeatureKey =
   | 'sparkleGuide'
+  | 'extrasTown'
   | 'manaSdPotions'
   | 'jewelDeposit'
   | 'targetPriority'
@@ -36,32 +37,36 @@ export type UltimateFeatureKey =
   | 'presetsStats';
 
 export interface UltimateFeatureAccess {
-  mode: number; // 0 = Off, 1 = Free, 2 = VipOnly
+  mode: number; // 0 = Off, 1 = Free, 2 = VipOnly (Lv 1+), 3 = HigherVip (Lv 2+)
   allowed: boolean;
   vipRequired: boolean;
+  requiredVipLevel?: number;
 }
 
 export interface UltimateAutoPlayPolicy {
   v: number;
   enabled: boolean;
   isVip: boolean;
+  vipLevel?: number;
   features: Partial<Record<UltimateFeatureKey, UltimateFeatureAccess>>;
 }
 
 export function defaultPolicy(): UltimateAutoPlayPolicy {
   return {
-    v: 1,
+    v: 2,
     enabled: true,
     isVip: false,
+    vipLevel: 0,
     features: {
-      sparkleGuide: { mode: 1, allowed: true, vipRequired: false },
-      presetsStats: { mode: 1, allowed: true, vipRequired: false },
-      manaSdPotions: { mode: 2, allowed: false, vipRequired: true },
-      jewelDeposit: { mode: 2, allowed: false, vipRequired: true },
-      targetPriority: { mode: 2, allowed: false, vipRequired: true },
-      patrol: { mode: 2, allowed: false, vipRequired: true },
-      survival: { mode: 2, allowed: false, vipRequired: true },
-      bossFocus: { mode: 2, allowed: false, vipRequired: true },
+      sparkleGuide: { mode: 1, allowed: true, vipRequired: false, requiredVipLevel: 0 },
+      extrasTown: { mode: 2, allowed: false, vipRequired: true, requiredVipLevel: 1 },
+      manaSdPotions: { mode: 3, allowed: false, vipRequired: true, requiredVipLevel: 2 },
+      jewelDeposit: { mode: 3, allowed: false, vipRequired: true, requiredVipLevel: 2 },
+      targetPriority: { mode: 3, allowed: false, vipRequired: true, requiredVipLevel: 2 },
+      patrol: { mode: 3, allowed: false, vipRequired: true, requiredVipLevel: 2 },
+      survival: { mode: 3, allowed: false, vipRequired: true, requiredVipLevel: 2 },
+      bossFocus: { mode: 3, allowed: false, vipRequired: true, requiredVipLevel: 2 },
+      presetsStats: { mode: 3, allowed: false, vipRequired: true, requiredVipLevel: 2 },
     },
   };
 }
@@ -131,7 +136,7 @@ export function defaultExtrasSettings(): AutoPlayExtrasSettings {
     patrolSpots: [],
     retreatHpPercent: 15,
     autoReturnAfterDeath: false,
-    showUltimateHud: true,
+    showUltimateHud: false,
     sparkleGuide: true,
     bossFocus: false,
   };
@@ -338,11 +343,21 @@ export class AutoPlayExtras {
     try {
       const parsed = JSON.parse(json) as Partial<UltimateAutoPlayPolicy>;
       if (typeof parsed.enabled === 'boolean') {
+        const isVip = Boolean(parsed.isVip);
+        const vipLevel = typeof parsed.vipLevel === 'number' ? parsed.vipLevel : (isVip ? 2 : 0);
+        const rawFeatures = parsed.features ?? {};
+        const extrasFallback: UltimateFeatureAccess = {
+          mode: 2,
+          allowed: isVip || vipLevel >= 1,
+          vipRequired: parsed.enabled && !(isVip || vipLevel >= 1),
+          requiredVipLevel: 1,
+        };
         this.policy = {
-          v: parsed.v ?? 1,
+          v: parsed.v ?? 2,
           enabled: parsed.enabled,
-          isVip: Boolean(parsed.isVip),
-          features: parsed.features ?? {},
+          isVip: isVip || vipLevel > 0,
+          vipLevel,
+          features: { extrasTown: extrasFallback, ...rawFeatures },
         };
         this.syncUltimateHooks();
       }
@@ -362,6 +377,13 @@ export class AutoPlayExtras {
     return Boolean(access?.vipRequired);
   }
 
+  featureRequiredVipLevel(key: UltimateFeatureKey): number {
+    const access = this.policy.features[key];
+    if (!access) return 0;
+    if (typeof access.requiredVipLevel === 'number') return access.requiredVipLevel;
+    return access.mode >= 3 ? 2 : access.mode === 2 ? 1 : 0;
+  }
+
   get onTrip(): boolean { return this.trip !== null; }
   get tripStepLabel(): string { return this.trip?.step ?? (this.pendingDeathReturn ? 'respawnWait' : 'idle'); }
 
@@ -377,6 +399,10 @@ export class AutoPlayExtras {
 
   /** Starts a trip to town now (from the hunting spot), as when the bag is full. */
   goToTown(now = performance.now()): void {
+    if (!this.isFeatureAllowed('extrasTown')) {
+      this.world.message(tx('Auto play: VIP required for town trip automation.', 'Tự động: cần VIP để tự động về thành.'));
+      return;
+    }
     const map = this.world.mapNumber();
     if (this.trip || map === null) return;
     this.world.stop();
@@ -465,7 +491,7 @@ export class AutoPlayExtras {
     if (full && !this.bagFullAlerted && this.settings.alertOnBagFull) { this.bagFullAlerted = true; this.alert('Your bag is full.'); }
     if (!full) this.bagFullAlerted = false;
     const outOfPotions = this.world.healingPotions() === 0;
-    if ((full && this.settings.returnWhenBagFull) || (outOfPotions && this.settings.returnWhenOutOfPotions)) {
+    if (this.isFeatureAllowed('extrasTown') && ((full && this.settings.returnWhenBagFull) || (outOfPotions && this.settings.returnWhenOutOfPotions))) {
       const map = this.world.mapNumber();
       if (map === null) return;
       this.world.message(full ? 'Bag full: going to town to sell and buy potions.' : 'Out of potions: going to town to buy more.');

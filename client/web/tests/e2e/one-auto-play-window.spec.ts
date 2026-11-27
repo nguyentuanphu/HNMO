@@ -10,8 +10,8 @@ interface GameAutoView {
     hero: { name: string };
     autoPlay: { config: { huntingRange: number; obtainingRange: number; maxSecondsAway: number } };
     autoPlayExtras: {
-      settings: { returnWhenBagFull: boolean; potionsToBuy: number; stopAfterMinutes: number; showUltimateHud: boolean; sparkleGuide: boolean; patrolIdleSeconds: number };
-      policy: { enabled: boolean; isVip: boolean };
+      settings: { returnWhenBagFull: boolean; potionsToBuy: number; stopAfterMinutes: number; alertOnBagFull: boolean; showUltimateHud: boolean; sparkleGuide: boolean; patrolIdleSeconds: number };
+      policy: { enabled: boolean; isVip: boolean; vipLevel?: number };
     };
   };
 }
@@ -30,8 +30,46 @@ test('Window 1 unifies five tabs, shortcuts, Save, switcher, EN/VI texts, and HU
   const panel = win.locator('#panel');
   const oldExtras = page.locator('.auto-play-extras');
   const oldUltimate = page.locator('#hnmo-ultimate-autoplay-panel');
-  const hudOpen = page.locator('#hnmo-ultimate-hud [data-uap-hud="open"]');
-  await expect(hudOpen).toBeVisible({ timeout: 30_000 });
+  const hud = page.locator('#hnmo-ultimate-hud');
+  await expect(hud).toBeHidden({ timeout: 30_000 });
+
+  // 0. Top HUD: collapsed cog (#hudToolsToggle) + hero name & FPS right beside Autoplay (.rml-mu_helper_bar).
+  const helperBar = page.locator('.rml-mu_helper_bar #panel');
+  const toolsToggle = page.locator('#hudToolsToggle');
+  const hudStatus = page.locator('.hud-status');
+  await expect(helperBar).toBeVisible(OPEN);
+  await expect(toolsToggle).toBeVisible();
+  await expect(toolsToggle).toHaveAttribute('aria-expanded', 'false');
+  await expect(page.locator('#soundButton')).toBeHidden();
+  await expect(page.locator('#guideButton')).toBeHidden();
+  await expect(page.locator('#settingsButton')).toBeHidden();
+  await expect(hudStatus).toBeVisible();
+  await expect(page.locator('#heroName')).not.toHaveText('-');
+  await expect(page.locator('#fps')).toBeVisible();
+
+  const layoutBoxes = await page.evaluate(() => {
+    const bar = document.querySelector('.rml-mu_helper_bar')?.shadowRoot?.querySelector('#panel')?.getBoundingClientRect();
+    const tools = document.querySelector('#hudToolsToggle')?.getBoundingClientRect();
+    const status = document.querySelector('.hud-status')?.getBoundingClientRect();
+    return { bar, tools, status };
+  });
+  expect(layoutBoxes.bar).toBeTruthy();
+  expect(layoutBoxes.tools).toBeTruthy();
+  expect(layoutBoxes.status).toBeTruthy();
+  expect(layoutBoxes.tools!.left).toBeGreaterThanOrEqual(layoutBoxes.bar!.right - 2);
+  expect(layoutBoxes.status!.left).toBeGreaterThanOrEqual(layoutBoxes.tools!.right - 2);
+  await page.screenshot({ path: 'test-results/hud-tools-collapsed.png' });
+
+  // Expanding #hudToolsToggle reveals Sound, Guide, Language, Options without breaking outside tap collapse.
+  await toolsToggle.click();
+  await expect(toolsToggle).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.locator('#soundButton')).toBeVisible();
+  await expect(page.locator('#guideButton')).toBeVisible();
+  await expect(page.locator('#settingsButton')).toBeVisible();
+  await page.screenshot({ path: 'test-results/hud-tools-expanded.png' });
+  await toolsToggle.click();
+  await expect(toolsToggle).toHaveAttribute('aria-expanded', 'false');
+  await expect(page.locator('#soundButton')).toBeHidden();
 
   // 1. Z opens Window 1 on Tab 0 (Hunting); clicking across all 5 tabs stays inside Window 1 and captures screenshots.
   await page.keyboard.press('z');
@@ -53,12 +91,19 @@ test('Window 1 unifies five tabs, shortcuts, Save, switcher, EN/VI texts, and HU
   await expect(win.locator('#tab_3')).toHaveClass(/\bactive\b/);
   await expect(win.locator('#hnmo_page_extras')).toBeVisible();
   await expect(win.locator('#tab_3_label')).toHaveText('Extras');
+  // Free account sees Extras town automation gated to VIP ONLY while stop timer & alerts remain Free.
+  await expect(win.locator('#hnmo_page_extras')).toContainText(/VIP ONLY|CHỈ VIP/);
+  await expect(win.locator('#hnmo_page_extras [data-extras-toggle="returnWhenBagFull"]')).toHaveClass(/\bdisabled\b/);
+  await expect(win.locator('#hnmo_page_extras input[data-extras-num="stopAfterMinutes"]')).toBeEnabled();
   await page.screenshot({ path: 'test-results/one-autoplay-tab3.png' });
 
   await win.locator('#tab_4').click();
   await expect(win.locator('#tab_4')).toHaveClass(/\bactive\b/);
   await expect(win.locator('#hnmo_page_ultimate')).toBeVisible();
-  await expect(win.locator('#hnmo_page_ultimate')).toContainText(/VIP ONLY|CHỈ VIP/);
+  // Ultimate tab locks Higher VIP functions at VIP 2+ while Stats & Sparkle Trail stay Free.
+  await expect(win.locator('#hnmo_page_ultimate')).toContainText(/VIP 2\+|VIP CAO/);
+  await expect(win.locator('#hnmo_page_ultimate [data-uap-preset="balanced"]')).toBeDisabled();
+  await expect(win.locator('#hnmo_page_ultimate #uap-autopick-skills')).toBeEnabled();
 
   // Single-column layout of Tab 4 fits within the body without horizontal overflow.
   const ultOverflow = await page.evaluate(() => {
@@ -71,7 +116,8 @@ test('Window 1 unifies five tabs, shortcuts, Save, switcher, EN/VI texts, and HU
 
   // Ultimate small switcher switches cleanly between Survival / Combat / Stats inside Tab 4.
   await win.locator('#hnmo_page_ultimate [data-uap-tab="combat"]').click();
-  await expect(win.locator('#hnmo_page_ultimate #uap-add-spot')).toBeVisible();
+  await expect(win.locator('#hnmo_page_ultimate #uap-add-spot')).toBeDisabled();
+  await expect(win.locator('#hnmo_page_ultimate input[data-uap-key="sparkleGuide"]')).toBeEnabled();
   await win.locator('#hnmo_page_ultimate [data-uap-tab="stats"]').click();
   await expect(win.locator('#hnmo_page_ultimate #uap-reset-stats')).toBeVisible();
   await win.locator('#hnmo_page_ultimate [data-uap-tab="survival"]').click();
@@ -96,8 +142,8 @@ test('Window 1 unifies five tabs, shortcuts, Save, switcher, EN/VI texts, and HU
   await page.keyboard.press('Alt+z');
   await expect(win).toHaveCount(0);
 
-  // 3. Compact HUD bar button opens Ultimate tab directly in Window 1.
-  await hudOpen.click();
+  // 3. Re-opening with Alt+Z lands directly on Tab 4 (Ultimate) inside Window 1.
+  await page.keyboard.press('Alt+z');
   await expect(panel).toBeVisible(OPEN);
   await expect(win.locator('#tab_4')).toHaveClass(/\bactive\b/);
   await expect(oldUltimate).toHaveCount(0);
@@ -115,16 +161,15 @@ test('Window 1 unifies five tabs, shortcuts, Save, switcher, EN/VI texts, and HU
   });
   await expect(win.locator('#tab_3_label')).toHaveText('Extras');
 
-  // 5. Save persists Desktop huntingRange + Extras potionsToBuy/stopAfterMinutes + Ultimate flag together.
+  // 5. Save persists Desktop huntingRange + Extras stopAfterMinutes/alertOnBagFull + Ultimate Free flag together.
   await win.locator('#tab_0').click();
   const initialRange = await page.evaluate(() => (window as unknown as GameAutoView).__game.autoPlay.config.huntingRange);
   await win.locator(initialRange > 1 ? '#btn_hunt_minus' : '#btn_hunt_add').click();
   const expectedRange = initialRange > 1 ? initialRange - 1 : initialRange + 1;
 
   await win.locator('#tab_3').click();
-  const initialBagFull = await page.evaluate(() => (window as unknown as GameAutoView).__game.autoPlayExtras.settings.returnWhenBagFull);
-  await win.locator('#hnmo_page_extras [data-extras-toggle="returnWhenBagFull"]').click();
-  await win.locator('#hnmo_page_extras input[data-extras-num="potionsToBuy"]').fill('37');
+  const initialAlertBag = await page.evaluate(() => (window as unknown as GameAutoView).__game.autoPlayExtras.settings.alertOnBagFull);
+  await win.locator('#hnmo_page_extras [data-extras-toggle="alertOnBagFull"]').click();
   await win.locator('#hnmo_page_extras input[data-extras-num="stopAfterMinutes"]').fill('45');
 
   await win.locator('#tab_4').click();
@@ -145,11 +190,9 @@ test('Window 1 unifies five tabs, shortcuts, Save, switcher, EN/VI texts, and HU
     };
   });
   expect(savedState.huntingRange).toBe(expectedRange);
-  expect(savedState.settings.returnWhenBagFull).toBe(!initialBagFull);
-  expect(savedState.settings.potionsToBuy).toBe(37);
+  expect((savedState.settings as unknown as { alertOnBagFull: boolean }).alertOnBagFull).toBe(!initialAlertBag);
   expect(savedState.settings.stopAfterMinutes).toBe(45);
   expect(savedState.settings.sparkleGuide).toBe(!initialSparkle);
-  expect(savedState.persisted?.potionsToBuy).toBe(37);
   expect(savedState.persisted?.stopAfterMinutes).toBe(45);
   expect(savedState.persisted?.sparkleGuide).toBe(!initialSparkle);
 

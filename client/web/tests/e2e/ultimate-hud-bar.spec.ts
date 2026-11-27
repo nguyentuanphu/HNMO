@@ -13,7 +13,17 @@ test('Ultimate HUD bar buttons (Start, Town, Ultimate) respond reliably across r
   await dismissOnboarding(page);
 
   const hud = page.locator('#hnmo-ultimate-hud');
-  await expect(hud).toBeVisible({ timeout: 30_000 });
+  // Floating toolbar is hidden by default because all features live inside Window 1 (mu_helper_config).
+  await expect(hud).toBeHidden({ timeout: 60_000 });
+
+  // Enable the opt-in floating toolbar via Window 1 Tab 4 and verify its buttons stay responsive across ticks.
+  await page.keyboard.press('Alt+z');
+  const setupCfg = page.locator('.rml-mu_helper_config');
+  await expect(setupCfg.locator('#panel')).toBeVisible({ timeout: 90_000 });
+  await setupCfg.locator('#hnmo_page_ultimate input[data-uap-key="showUltimateHud"]').click();
+  await setupCfg.locator('#btn_save').click();
+  await expect(setupCfg).toHaveCount(0);
+  await expect(hud).toBeVisible({ timeout: 60_000 });
 
   const startBtn = hud.locator('[data-uap-hud="toggle"]');
   const townBtn = hud.locator('[data-uap-hud="town"]');
@@ -46,7 +56,20 @@ test('Ultimate HUD bar buttons (Start, Town, Ultimate) respond reliably across r
   await helperCfg.locator('#btn_exit').click();
   await expect(helperCfg).toHaveCount(0);
 
-  // Town starts the town trip and notifies in chat.
+  // Town requires VIP (Bronze+); grant VIP Lv 1 policy and verify clicking Town starts the town trip.
+  await page.evaluate(async () => {
+    const { write } = await import('/js/net/packets.js' as string) as { write(g: string, n: string, v: Record<string, unknown>): Uint8Array };
+    const g = (window as unknown as { __game: { connection: { dispatch(b: Uint8Array): void } } }).__game;
+    g.connection.dispatch(write('ServerToClient', 'HnmoUltimateAutoPlayPolicy', {
+      Json: JSON.stringify({
+        v: 2, enabled: true, isVip: true, vipLevel: 1,
+        features: {
+          sparkleGuide: { mode: 1, allowed: true, vipRequired: false, requiredVipLevel: 0 },
+          extrasTown: { mode: 2, allowed: true, vipRequired: false, requiredVipLevel: 1 },
+        },
+      }),
+    }));
+  });
   const townBox = (await townBtn.boundingBox())!;
   await clickAt(page, { x: townBox.x + townBox.width / 2, y: townBox.y + townBox.height / 2 });
   await expect.poll(() => chatText(page)).toContain('returning to Lorencia');

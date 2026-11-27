@@ -186,6 +186,7 @@ test('in the game: the second password box, locked items and the vault lock as o
   await page.screenshot({ path: 'test-results/account-safety-game.png' });
 
   // Vietnamese: the lock line of the tooltip.
+  if (await page.locator('#hudToolsToggle').isVisible()) await page.locator('#hudToolsToggle').click();
   await page.locator('.language-picker button[data-lang="vi"]:visible').first().click();
   await feed(page, STATE());
   await expect.poll(() => lines(0, 12), { timeout: 30_000 }).toEqual(['', 'Đã khóa (bảo vệ tài khoản)']);

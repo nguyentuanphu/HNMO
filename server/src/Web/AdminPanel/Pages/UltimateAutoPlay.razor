@@ -7,8 +7,8 @@
 <PageTitle>HNMO: @L("Ultimate Autoplay", "Autoplay Toàn Diện")</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@L("Ultimate Autoplay", "Autoplay Toàn Diện")" />
 
-<h1>@L("Ultimate Autoplay switches & Free/VIP policy", "Công tắc Autoplay Toàn Diện & phân quyền Free/VIP")</h1>
-<PageHelp Text="@L("Set each Ultimate Autoplay function to Off, Free (every player) or VIP Only (players with VIP on the character or the account). Players in the game get the new settings as soon as you save; others when they enter the game.", "Chỉnh từng tính năng Autoplay Toàn Diện về Tắt, Miễn phí (mọi người chơi) hoặc Chỉ VIP (người chơi có VIP trên nhân vật hoặc tài khoản). Người đang chơi nhận cài đặt mới ngay khi bạn lưu; người khác khi vào game.")" />
+<h1>@L("Ultimate Autoplay switches & Free / VIP / Higher VIP policy", "Công tắc Autoplay Toàn Diện & phân quyền Free / VIP / VIP Cao cấp")</h1>
+<PageHelp Text="@L("Set each function to Off, Free (everyone), VIP Only (VIP Lv 1+ / Bronze+), or Higher VIP (VIP Lv 2+ / Silver+). Players in the game get the new settings as soon as you save; others when they enter the game.", "Chỉnh từng tính năng về Tắt, Miễn phí (mọi người chơi), Chỉ VIP (VIP cấp 1+ / Đồng+), hoặc VIP Cao cấp (VIP cấp 2+ / Bạc+). Người đang chơi nhận cài đặt mới ngay khi bạn lưu; người khác khi vào game.")" />
 
 @if (this._isLoading || this._configuration is not { } cfg)
 {
@@ -30,9 +30,9 @@ else
                     </div>
                 </div>
                 <div class="btn-group btn-group-sm" role="group">
-                    <button type="button" class="btn btn-outline-primary" id="uap-preset-split" title="@L("Sparkles and presets free, the rest for VIP", "Vệt sáng và preset miễn phí, còn lại chỉ VIP")" @onclick="this.ApplyRecommendedSplit">@L("Recommended Free/VIP Split", "Phân chia Free/VIP đề xuất")</button>
+                    <button type="button" class="btn btn-outline-primary" id="uap-preset-split" title="@L("Standard/sparkles free, Extras for VIP 1+, Ultimate for Higher VIP 2+", "Cơ bản/vệt sáng miễn phí, Extras cho VIP 1+, Ultimate cho VIP 2+")" @onclick="this.ApplyRecommendedSplit">@L("Recommended 3-Tier Split", "Phân quyền 3 cấp đề xuất")</button>
                     <button type="button" class="btn btn-outline-success" id="uap-preset-free" title="@L("Every function free for every player", "Mọi tính năng miễn phí cho mọi người chơi")" @onclick="this.ApplyAllFree">@L("All Free", "Tất cả Miễn phí")</button>
-                    <button type="button" class="btn btn-outline-warning" id="uap-preset-vip" title="@L("Every function for VIP players only", "Mọi tính năng chỉ cho người chơi VIP")" @onclick="this.ApplyAllVip">@L("All VIP Only", "Tất cả Chỉ VIP")</button>
+                    <button type="button" class="btn btn-outline-warning" id="uap-preset-vip" title="@L("Every function for Higher VIP players only", "Mọi tính năng chỉ cho VIP Cao cấp")" @onclick="this.ApplyAllHigherVip">@L("All Higher VIP", "Tất cả VIP Cao cấp")</button>
                 </div>
             </div>
 
@@ -50,6 +50,11 @@ else
                             <td><strong>@L("3D Ground Sparkle Trail & Ring", "Vệt sáng dẫn đường 3D & Vòng phạm vi")</strong></td>
                             <td class="text-muted small">@L("Color-coded sparkles on the terrain to targets, quests, and World Bosses.", "Vệt sáng lấp lánh trên mặt đất dẫn tới quái, nhiệm vụ và Boss thế giới.")</td>
                             <td>@this.RenderModeSelect("uap-mode-sparkle", cfg.SparkleGuide, v => cfg.SparkleGuide = v)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>@L("Extras: Town Restock & Sell Junk", "Tuỳ chọn thêm: Về thành mua máu & bán đồ rác")</strong></td>
+                            <td class="text-muted small">@L("Auto return to Lorencia when bag is full or out of healing potions, sell junk, and restock.", "Tự về Lorencia khi đầy túi hoặc hết bình máu, bán đồ rác và mua thêm bình máu.")</td>
+                            <td>@this.RenderModeSelect("uap-mode-extras", cfg.ExtrasTown, v => cfg.ExtrasTown = v)</td>
                         </tr>
                         <tr>
                             <td><strong>@L("Auto Mana & SD Potions", "Tự uống bình Mana & SD")</strong></td>
