@@ -16,4 +16,4 @@ The server groups it by its fingerprint for the server's owner (admin panel, Bug
 | 1 | 2 |    Short   |      | Packet header - length of the packet |
 | 3 | 1 |    Byte   | 0xF5  | Packet header - packet type identifier |
 | 4 | 1 |    Byte   | 0x60  | Packet header - sub packet type identifier |
-| 5 |  | String |  | Json; Plain-ASCII JSON: fingerprint, kind, message, stack (top lines), version, browser, os, device, map, gpu. Never the login, ticket, password or chat text. |
+| 5 |  | String |  | Json; Flat plain-ASCII JSON of strings, no terminator from the web client (the C# writer adds one NUL; both are read): fingerprint (kind|file|line), kind, version, browser, os. Older clients' message, stack, device, map and gpu are accepted and dropped; any other field, a repeated field or more than 16 KiB rejects the packet. Never the login, ticket, password or chat text. |

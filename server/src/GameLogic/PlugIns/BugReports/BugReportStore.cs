@@ -86,6 +86,9 @@ public sealed class BugReportStore
 
         if (changed)
         {
+            // A write copies the previous file to .bak, so the first write would leave the old text there; the second
+            // makes the backup the cleaned file too.
+            this._store.WriteSection(SectionKey, data, JsonOptions);
             this._store.WriteSection(SectionKey, data, JsonOptions);
         }
 

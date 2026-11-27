@@ -22331,7 +22331,7 @@ public readonly struct HnmoAutoErrorReport
     public C2HeaderWithSubCode Header => new (this._data);
 
     /// <summary>
-    /// Gets or sets plain-ASCII JSON: fingerprint, kind, message, stack (top lines), version, browser, os, device, map, gpu. Never the login, ticket, password or chat text.
+    /// Gets or sets flat plain-ASCII JSON of strings, no terminator from the web client (the C# writer adds one NUL; both are read): fingerprint (kind|file|line), kind, version, browser, os. Older clients' message, stack, device, map and gpu are accepted and dropped; any other field, a repeated field or more than 16 KiB rejects the packet. Never the login, ticket, password or chat text.
     /// </summary>
     public string Json
     {

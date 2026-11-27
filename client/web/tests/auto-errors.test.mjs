@@ -102,6 +102,10 @@ test('a queued disconnect only drains after a matching authenticated reconnect',
     assert.equal(sent.length, 0);
     mod.setAutoErrorSender(json => sent.push(JSON.parse(json)), scope9);
     assert.equal(sent.length, 0);
+    mod.setAutoErrorSender(json => sent.push(JSON.parse(json)), other);
+    assert.equal(sent.length, 0, 'another account on the same endpoint gets nothing');
+    mod.setAutoErrorSender(json => sent.push(JSON.parse(json)), null);
+    assert.equal(sent.length, 0, 'no scope (no Web Crypto) gets nothing');
     mod.setAutoErrorSender(() => { throw Error('socket not ready'); }, scope6);
     mod.setAutoErrorSender(json => sent.push(JSON.parse(json)), scope6);
     assert.deepEqual(sent.map(report => report.kind), ['disconnect']);
@@ -111,4 +115,16 @@ test('a queued disconnect only drains after a matching authenticated reconnect',
     if (previousWindow === undefined) delete globalThis.window;
     else globalThis.window = previousWindow;
   }
+});
+
+test('the web writer sends C2 F5 60 with the JSON from offset 5 and no terminator', async () => {
+  const { write } = await import(pathToFileURL(path.resolve(__dirname, '../public/js/net/packets.js')).href);
+  const json = '{"fingerprint":"error|main.js|12","kind":"error","version":"web 20261127","browser":"Chrome 131","os":"Linux"}';
+  const bytes = write('ClientToServer', 'HnmoAutoErrorReport', { Json: json });
+  assert.equal(bytes[0], 0xc2);
+  assert.equal((bytes[1] << 8) | bytes[2], bytes.length);
+  assert.deepEqual([bytes[3], bytes[4]], [0xf5, 0x60]);
+  assert.equal(bytes.length, 5 + json.length);
+  assert.equal(new TextDecoder().decode(bytes.subarray(5)), json);
+  assert.ok(!bytes.subarray(5).includes(0), 'no NUL after the header');
 });

@@ -34,6 +34,9 @@ public static class DeveloperHub
     /// <summary>The days more players than allowed may play once the limit was first passed (owner, 2026-11-20).</summary>
     public const int GraceDays = 7;
 
+    /// <summary>The hub's error when the automatic error credential doesn't match this computer.</summary>
+    private const string AutomaticCredentialRefused = "automatic report credential";
+
     private static readonly HttpClient DefaultClient = new() { Timeout = TimeSpan.FromSeconds(30) };
     private static readonly HttpClient AutoErrorClient = new(new HttpClientHandler { AllowAutoRedirect = false }) { Timeout = TimeSpan.FromSeconds(30) };
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
@@ -416,6 +419,15 @@ public static class DeveloperHub
         }
 
         var (ok, answer, en, _) = await PostAsync("api/weekly", weekly, client, key).ConfigureAwait(false);
+        if (!ok && key is not null && answer?["error"]?.GetValue<string>() == AutomaticCredentialRefused)
+        {
+            // The hub refuses the whole report before it writes anything when the automatic error credential is wrong;
+            // the weekly report and the players' reports go without the automatic errors, which stay in the outbox.
+            weekly.Remove("autoErrors");
+            acceptAuto = null;
+            (ok, answer, en, _) = await PostAsync("api/weekly", weekly, client).ConfigureAwait(false);
+        }
+
         var withdrawn = ok && answer?["revoked"]?.GetValue<bool>() == true;
         var now = DateTime.UtcNow;
         ChangeState(s =>
