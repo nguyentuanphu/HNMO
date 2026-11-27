@@ -111,6 +111,9 @@ import { ChaosMachine } from './ui/mixWindow.js';
 import { PersonalShop } from './ui/personalShop.js';
 import { CashShop } from './ui/cashShop.js';
 import { loginMusic } from './audio/index.js';
+import { audioSystem } from './audio/audioSystem.js';
+import { characterSelectedSound } from './audio/soundEvents.js';
+import { CharacterStage } from './scenes/characterStage.js';
 import { AUTO_PLAY_DATA_LENGTH, decodeAutoPlayConfig, encodeAutoPlayConfig, initialAutoPlayConfig, type AutoPlayConfig } from './game/autoPlayConfig.js';
 import { AutoPlaySettingsWindow } from './ui/autoPlayWindows.js';
 import { maxDurability, repairCost } from './game/itemValue.js';
@@ -231,6 +234,8 @@ export interface GameState {
   arena?: ArenaWindow;
   /** The bug report window (ui/bugReportWindow.ts). */
   bugReports?: BugReportWindow;
+  /** The 3D character stage while the character choice shows (scenes/characterStage.ts). */
+  characterStage?: CharacterStage | null;
   escrow?: EscrowWindow;
   jewelBank?: JewelBankWindow;
   vip?: VipWindow;
@@ -1006,6 +1011,8 @@ function step(dt: number, rec: PerfRecorder | null): void {
     updateCamera();
     updateLabels();
     rec?.lap('camera');
+  } else {
+    characterStage?.update(dt);
   }
   renderer.render(scene, camera);
   rec?.lap('render');
@@ -1107,20 +1114,93 @@ async function chooseCharacter(connection: Connection): Promise<CharacterListEnt
   const quick = quickPlayCharacter ? characters.find((c) => c.name === quickPlayCharacter) : undefined;
   quickPlayCharacter = null;
   if (quick) return quick;
-  for (;;) {
-    const choices: (CharacterListEntry | typeof NEW_CHARACTER)[] = characters.length < MAX_CHARACTERS ? [...characters, NEW_CHARACTER] : characters;
-    const choice = await chooseFrom(ui.characters, choices, (c) => ('create' in c ? '+ Create a character<small>Dark Wizard, Dark Knight, Fairy Elf, …</small>' : `${escapeHtml(c.name)}<small>Level ${c.level} ${CLASSES[c.classIndex]}</small>`));
-    if (!('create' in choice)) return choice;
-    const created = await askNewCharacter();
-    if (!created) continue;
-    try {
-      const result = await createCharacter(connection, created.name, created.classIndex);
-      characters.push({ slot: result.CharacterSlot, name: result.CharacterName || created.name, level: result.Level ?? 1, classIndex: created.classIndex, equipment: {} });
-    } catch (error) {
-      showError(error);
+  // The 3D stage (the desktop's CharacterScene) behind the list; the list's buttons stay the way in.
+  const stage = openCharacterStage(characters);
+  try {
+    for (;;) {
+      const choices: (CharacterListEntry | typeof NEW_CHARACTER)[] = characters.length < MAX_CHARACTERS ? [...characters, NEW_CHARACTER] : characters;
+      const picked = chooseFrom(ui.characters, choices, (c) => ('create' in c ? '+ Create a character<small>Dark Wizard, Dark Knight, Fairy Elf, …</small>' : `${escapeHtml(c.name)}<small>Level ${c.level} ${CLASSES[c.classIndex]}</small>`));
+      // The buttons know their characters' places: a pick on the stage marks one, a double click or Enter presses it.
+      ui.characters.querySelectorAll<HTMLButtonElement>('button.choice').forEach((button, index) => {
+        const choice = choices[index];
+        if (choice && !('create' in choice)) {
+          button.dataset.slot = String(choice.slot);
+          button.addEventListener('mouseenter', () => stage?.select(choice.slot));
+        }
+      });
+      const choice = await picked;
+      if (!('create' in choice)) return choice;
+      const created = await askNewCharacter();
+      if (!created) continue;
+      try {
+        const result = await createCharacter(connection, created.name, created.classIndex);
+        characters.push({ slot: result.CharacterSlot, name: result.CharacterName || created.name, level: result.Level ?? 1, classIndex: created.classIndex, equipment: {} });
+        void stage?.setCharacters(characters);
+      } catch (error) {
+        showError(error);
+      }
     }
+  } finally {
+    // Released before the world loads (the stage's world, models and listeners).
+    stage?.dispose();
+    characterStage = null;
+    state.characterStage = null;
+    document.body.classList.remove('character-stage');
   }
 }
+
+/** The character stage while the character choice shows (main loop: update). */
+let characterStage: CharacterStage | null = null;
+
+/** The button of a character on the list. */
+function characterButton(slot: number): HTMLButtonElement | null {
+  return ui.characters.querySelector<HTMLButtonElement>(`button.choice[data-slot="${slot}"]`);
+}
+
+/**
+ * Starts the 3D character stage (world 74 loads in the background; the list works at once). Without WebGL, or when it
+ * can't load, the plain list stays.
+ */
+function openCharacterStage(characters: CharacterListEntry[]): CharacterStage | null {
+  const mark = (slot: number | null) => {
+    ui.characters.querySelectorAll('button.choice.selected').forEach((b) => b.classList.remove('selected'));
+    if (slot !== null) characterButton(slot)?.classList.add('selected');
+  };
+  const stage = new CharacterStage({
+    root,
+    camera,
+    canvas: ui.canvas,
+    playSound: () => { const sound = characterSelectedSound(); if (sound) audioSystem().play(sound); },
+    onSelect: (slot) => mark(slot),
+    onEnter: (slot) => characterButton(slot)?.click(),
+  });
+  characterStage = stage;
+  state.characterStage = stage;
+  stage.load()
+    .then(() => stage.setCharacters(characters))
+    .then(() => {
+      if (characterStage !== stage) return;
+      document.body.classList.add('character-stage');
+      resize();
+      const first = characters[0];
+      if (first) { stage.select(first.slot); mark(first.slot); }
+    })
+    .catch((error: unknown) => {
+      console.warn('The character stage could not load; the plain list stays.', error);
+      if (characterStage === stage) { stage.dispose(); characterStage = null; }
+    });
+  return stage;
+}
+
+// Enter on the character choice enters with the picked character (the desktop's CharacterScene).
+window.addEventListener('keydown', (event) => {
+  if (event.key !== 'Enter' || !characterStage || ui.characters.hidden) return;
+  if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+  const slot = characterStage.selectedSlot;
+  if (slot === null) return;
+  event.preventDefault();
+  characterButton(slot)?.click();
+});
 
 function askNewCharacter(): Promise<{ name: string; classIndex: number } | null> {
   ui.characters.replaceChildren();
