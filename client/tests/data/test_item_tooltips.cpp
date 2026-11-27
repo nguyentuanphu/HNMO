@@ -225,7 +225,7 @@ TEST_CASE("Every item's tooltip is as recorded [data][items][tooltip]")
                     changedTooltips.emplace_back(key, text);
                 }
             });
-        CHECK(tooltips == 911 * 25 * 16);
+        CHECK(tooltips == 1254 * 25 * 16);
     }
     SetItemTooltipTextMeasure(nullptr);
 
@@ -551,6 +551,35 @@ TEST_CASE("An item from the server with a guardian option shows its 380 lines [d
         CHECK(HasLine(guardedLines, line, TEXT_COLOR_REDPURPLE));
         CHECK_FALSE(HasLine(plainLines, line));
     }
+}
+
+// 0xFF is no socket and ends the item's sockets, as CItemMng::CreateItem reads them; 0xFE is an empty socket ("No
+// item application"). Five 0xFF bytes once read as five seeds 5 (255 % 50), five "Fire(AG cost decrease +0%)" lines.
+TEST_CASE("A socket byte 0xFF is no socket and 0xFE an empty one [data][items][tooltip]")
+{
+    ClientDataScope client(ClientDirectory);
+    std::string errorMessage;
+    REQUIRE(g_ItemDataHandler.Load(errorMessage));
+
+    ItemCreationParams none = Engine::Items::TooltipSnapshot::FullItemParameters(0, 0);
+    none.SocketCount = MAX_SOCKETS;
+    std::fill(std::begin(none.SocketOptions), std::end(none.SocketOptions), BYTE{0xFF});
+    ITEM withoutSockets;
+    FillItemFromParameters(withoutSockets, none);
+    CHECK(withoutSockets.SocketCount == 0);
+
+    // A seed sphere (0x33: seed 1, sphere level 2), two empty sockets, then no more.
+    ItemCreationParams mixed = Engine::Items::TooltipSnapshot::FullItemParameters(0, 0);
+    mixed.SocketCount = MAX_SOCKETS;
+    const std::array<BYTE, MAX_SOCKETS> bytes{0x33, SOCKET_EMPTY, SOCKET_EMPTY, 0xFF, 0xFF};
+    std::copy(bytes.begin(), bytes.end(), std::begin(mixed.SocketOptions));
+    ITEM socketed;
+    FillItemFromParameters(socketed, mixed);
+    CHECK(socketed.SocketCount == 3);
+    CHECK(socketed.SocketSeedID[0] == 1);
+    CHECK(socketed.SocketSphereLv[0] == 2);
+    CHECK(socketed.SocketSeedID[1] == SOCKET_EMPTY);
+    CHECK(socketed.SocketSeedID[2] == SOCKET_EMPTY);
 }
 
 // A bundle holds ten jewels per level step; every other item holds none, a single jewel and any equipment too.

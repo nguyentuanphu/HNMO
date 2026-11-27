@@ -2212,8 +2212,7 @@
     },
     {
       "number": 206,
-      "file": "Data/Item/giftbox_bp.bmd",
-      "textureFolders": ["Item"]
+      "model": "giftBoxBluePurple"
     },
     {
       "number": 207,
@@ -2280,8 +2279,7 @@
     },
     {
       "number": 223,
-      "file": "Data/Item/songss.bmd",
-      "textureFolders": ["Item"]
+      "model": "songss"
     },
     {
       "number": 224,

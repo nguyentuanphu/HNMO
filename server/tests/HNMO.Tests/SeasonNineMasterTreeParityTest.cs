@@ -33,7 +33,7 @@ public class SeasonNineMasterTreeParityTest
     };
 
     // Skills the web tree draws which aren't master skills of the server yet (docs/audit/s9c-evidence-2026-11-27.md).
-    private const int MissingSkillCount = 108;
+    private const int MissingSkillCount = 54; // 108 before the rank 6-9 passives (#411) reached the working branch
 
     private GameConfiguration _configuration = null!;
 

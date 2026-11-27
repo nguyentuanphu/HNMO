@@ -177,6 +177,9 @@ ItemSlot GetWeaponKindSlot(WeaponKind kind)
     case WeaponKind::Mace:
     case WeaponKind::Staff:
     case WeaponKind::Glove:
+    case WeaponKind::Claw:
+    case WeaponKind::Sceptre:
+    case WeaponKind::Stick:
         return ItemSlot::MainHand;
     default:
         return ItemSlot::None;

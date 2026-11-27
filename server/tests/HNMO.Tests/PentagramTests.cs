@@ -36,17 +36,20 @@ public class PentagramTests
     [TearDown]
     public void RestoreRandom() => PentagramActions.NextRandom = this._random;
 
-    /// <summary>Option values follow the data at levels 0, 5 and 10, linear in between.</summary>
+    /// <summary>Option values follow the exact 11-level errtel curve in the catalog.</summary>
     [Test]
     public void OptionValuesFollowTheErrtelData()
     {
         Assert.Multiple(() =>
         {
             Assert.That(Pentagram.OptionValue(0, 0), Is.EqualTo(30));
+            Assert.That(Pentagram.OptionValue(0, 3), Is.EqualTo(45));
             Assert.That(Pentagram.OptionValue(0, 5), Is.EqualTo(65));
             Assert.That(Pentagram.OptionValue(0, 10), Is.EqualTo(168));
-            Assert.That(Pentagram.OptionValue(0, 3), Is.EqualTo(51));
             Assert.That(Pentagram.OptionValue(999, 3), Is.Zero);
+            Assert.That(PentagramData.LevelUpZen(null, 2), Is.EqualTo(150_000));
+            Assert.That(PentagramData.LevelUpZen(null, 9), Is.EqualTo(500_000));
+            Assert.That(PentagramData.LevelUpRatePct(null, 0, 10), Is.EqualTo(50));
         });
     }
 
@@ -246,7 +249,7 @@ public class PentagramTests
         PentagramActions.NextRandom = _ => 0;
         Assert.That(await PentagramActions.LevelUpErrtelAsync(player, FirstBagSlot).ConfigureAwait(false), Is.EqualTo(PentagramActionResult.Ok));
         Assert.That(Pentagram.ReadErrtel(errtel).Options, Is.EqualTo(new[] { (0, (byte)3) }));
-        Assert.That(player.Money, Is.EqualTo(money - 300_000));
+        Assert.That(player.Money, Is.EqualTo(money - 150_000));
 
         PentagramActions.NextRandom = max => max - 1;
         Assert.That(await PentagramActions.LevelUpErrtelAsync(player, FirstBagSlot).ConfigureAwait(false), Is.EqualTo(PentagramActionResult.Failed));

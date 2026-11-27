@@ -20,3 +20,14 @@ Audited unit: `server/src/Persistence/Initialization/Updates (files 2)` (48 file
 | `FixCharStatsForceWavePlugInBase.cs`, `FixCharStatsForceWavePlugInSeason6.cs:84-200` | Fixes DW agility/def (`0.25f`), MG BaseEnergy (`26`), DL HP/Mana (`90/40`, `1.5*Lv`, `2*Vit`), RF PvP def (`0.2*Agi+1.5*Lv`), AttackRate PvM/PvP, Fenrir (`Str/5+Vit/3`), Summoner def (`Agi/3`) | Season 6 character calc (`CalcCharacter.lua`) & `CharacterClassInitialization` | Aligns character stat multipliers |
 
 Remaining files (`AddStardustItem*`, `AddWhiteWizardInvasionMobs*`, `ArenaGuardShop*`, `ArenaTitles*`, `ChainLightning*`, `ChaosCastleData*`, `CircularUpdateDependencyException`, `ConfigureCastleSiegeGuardTalkPlugIns*`, `ConfigureNpcTalkPlugIns*`, `DarkLordAttackRate*`, `DarkWizardTeleportSoulBarrier*`, `DataUpdateService`, `FenrirSecondClass*`, `FieldMonsterSpawnsUpdatePlugIn*`, `FinishDarkLordMasterTree*`, `FinishDarkWizardMasterTree*`, `FinishElfMasterTree*`, `FinishRageFighterMasterTree*`, `FinishSummonerMasterTree*`, `FixAncientDiscriminators*`, `FixAttackSpeedCalculationUpdate`, `FixChaosMixesUpdatePlugIn075`, `FixCharStatsForceWavePlugIn075`, `095d`) apply master-tree, attack-speed, shop, or service plumbing already reflected in current initializers.
+
+## Re-check 2026-11-27 (changes 668ecbd4..a108e846)
+
+Commits read (every changed file read in full):
+
+- 7a58c00b Potion of Bless: raise the damage only against Castle Siege gates and statues
+
+Evidence:
+
+- BlessPotionSiegeOnlyUpdatePlugIn (Season 6, mandatory, idempotent: removes the power-ups of effect 10) - fixed. Style: its Display name/description are literals, not PlugInResources (rule 10).
+- NEW (this re-check): commit 1fc60d72 fixed five data values in the initializers only (Kantata 10.0 -> 0.10 excellent damage chance, Guardian boots SD 200 -> 700, Hanzo store slots and Mace, Blue/Deep Blue box normal-item groups, GM test account slots). Existing databases never got them (rule 4). AuditDataFixesUpdatePlugInSeason6/075/095d added for Kantata, Guardian boots and Hanzo (PR "audit follow-ups 27 Nov"); the box groups need a rebuild of the normal-item group on existing databases - listed for main.

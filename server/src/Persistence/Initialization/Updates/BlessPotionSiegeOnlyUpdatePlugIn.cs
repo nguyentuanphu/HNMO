@@ -14,21 +14,15 @@ using HNMO.PlugIns;
 /// its bonus applies only against Castle Siege gates and statues, and the damage calculation does that itself.
 /// </summary>
 [PlugIn]
-[Display(Name = PlugInName, Description = PlugInDescription)]
+[Display(Name = nameof(HNMO.Persistence.Initialization.Properties.PlugInResources.BlessPotionSiegeOnlyUpdatePlugIn_Name), Description = nameof(HNMO.Persistence.Initialization.Properties.PlugInResources.BlessPotionSiegeOnlyUpdatePlugIn_Description), ResourceType = typeof(HNMO.Persistence.Initialization.Properties.PlugInResources))]
 [Guid("7C0E7B5E-2D4B-4F0B-9B1A-5E3C8A21D4F6")]
 public class BlessPotionSiegeOnlyUpdatePlugIn : UpdatePlugInBase
 {
-    /// <summary>The plug-in name.</summary>
-    internal const string PlugInName = "Potion of Bless only for the siege";
-
-    /// <summary>The plug-in description.</summary>
-    internal const string PlugInDescription = "The Potion of Bless no longer raises the damage against monsters and players; it only does against Castle Siege gates and statues.";
+    /// <inheritdoc />
+    public override string Name => HNMO.Persistence.Initialization.Properties.PlugInResources.BlessPotionSiegeOnlyUpdatePlugIn_Name;
 
     /// <inheritdoc />
-    public override string Name => PlugInName;
-
-    /// <inheritdoc />
-    public override string Description => PlugInDescription;
+    public override string Description => HNMO.Persistence.Initialization.Properties.PlugInResources.BlessPotionSiegeOnlyUpdatePlugIn_Description;
 
     /// <inheritdoc />
     public override string DataInitializationKey => VersionSeasonSix.DataInitialization.Id;

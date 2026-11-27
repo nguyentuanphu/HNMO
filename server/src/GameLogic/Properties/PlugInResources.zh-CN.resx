@@ -1939,4 +1939,28 @@
   <data name="ShieldBurnSkillPlugIn_Description" xml:space="preserve">
     <value>焚烧目标玩家的一部分护盾 (SD)，不减少生命值。仅在开启第 9 赛季系统及其技能的第 9 赛季服务器中生效。</value>
   </data>
+  <data name="MossGambleConfiguration_UseWeightedExcellentSelection_Name" xml:space="preserve">
+    <value>使用套件卓越属性权重概率</value>
+  </data>
+  <data name="MossGambleConfiguration_UseWeightedExcellentSelection_Description" xml:space="preserve">
+    <value>按第 6/9 赛季服务端套件权重（10% / 20% / 20% / 20% / 20% / 10%）抽取卓越属性，而非均匀随机。</value>
+  </data>
+  <data name="SpellOfProtectionSkillPlugIn_Name" xml:space="preserve">
+    <value>第 9 赛季技能：守护咒语</value>
+  </data>
+  <data name="SpellOfProtectionSkillPlugIn_Description" xml:space="preserve">
+    <value>开启第 9 赛季系统及技能时提供临时减伤守护。</value>
+  </data>
+  <data name="SpellOfRestrictionSkillPlugIn_Name" xml:space="preserve">
+    <value>第 9 赛季技能：束缚咒语</value>
+  </data>
+  <data name="SpellOfRestrictionSkillPlugIn_Description" xml:space="preserve">
+    <value>开启第 9 赛季系统及技能时暂时束缚目标。</value>
+  </data>
+  <data name="SpellOfPursuitSkillPlugIn_Name" xml:space="preserve">
+    <value>第 9 赛季技能：追击咒语</value>
+  </data>
+  <data name="SpellOfPursuitSkillPlugIn_Description" xml:space="preserve">
+    <value>开启第 9 赛季系统及技能时将施法者传送到目标身旁。</value>
+  </data>
 </root>

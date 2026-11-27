@@ -1,0 +1,8 @@
+source,record,optionNum,name,reqPairs
+PentagramOption_eng.bmd,0,1,Pentagram damage +10%%,
+PentagramOption_eng.bmd,1,2,Pentagram defense +10%%,
+PentagramOption_eng.bmd,2,3,Elemental critical damage chance +10%%,
+PentagramOption_eng.bmd,3,4,Defense to elemental defense +5%%,errtel=1:minRank=3:minLv=5
+PentagramOption_eng.bmd,4,5,Damage to elemental attack +1%%,errtel=1:minRank=3:minLv=5
+PentagramOption_eng.bmd,5,6,Resistance against stronger element +5%%,errtel=1:minRank=3:minLv=6;errtel=2:minRank=3:minLv=6
+PentagramOption_eng.bmd,6,7,Resistance against elemental attack +5%%,errtel=1:minRank=3:minLv=6;errtel=2:minRank=3:minLv=6;errtel=3:minRank=3:minLv=6

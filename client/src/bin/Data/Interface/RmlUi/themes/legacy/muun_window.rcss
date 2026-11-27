@@ -1,0 +1,18 @@
+/* Legacy theme for CMuunWindow (Alt+N). */
+.frame-top { decorator: image(docked-bg-top-b); }
+#panel { height: 432px; pointer-events: auto; }
+.sharp-text { display: block; position: relative; white-space: normal; text-align: left; pointer-events: none; }
+.s9-title { position: absolute; left: 0; top: 12px; width: 100%; text-align: center; font-weight: bold; color: #f6d365; }
+.s9-body { display: block; position: absolute; left: 16px; top: 38px; width: 158px; height: 344px; overflow-y: auto; }
+.s9-note, .s9-summary, .s9-card, .s9-row { display: block; margin-bottom: 6px; padding: 4px; background-color: #141720cc; border: 1px #52452b; }
+.s9-line { display: block; margin-bottom: 2px; }
+.s9-text { color: #e8e8e8; }
+.s9-gold { color: #f6d365; font-weight: bold; }
+.s9-muted { color: #aab4c8; }
+.s9-btn-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 3px; }
+.s9-btn { padding: 2px 6px; background-color: #2b3346; border: 1px #7c89a6; pointer-events: auto; }
+.s9-btn:hover { background-color: #3a455f; border-color: #f6d365; }
+.s9-btn-label { color: #ffffff; }
+.s9-tag { padding: 2px 4px; }
+.s9-list { display: block; max-height: 220px; overflow-y: auto; }
+#btn_exit { position: absolute; left: 13px; top: 392px; width: 36px; height: 29px; pointer-events: auto; }

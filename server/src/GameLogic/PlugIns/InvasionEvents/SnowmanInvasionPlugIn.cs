@@ -38,30 +38,31 @@ public sealed class SnowmanInvasionPlugIn : BaseInvasionPlugIn<PeriodicInvasionC
         }
 
         var isBoss = monsterId == InvasionMonsters.CursedSanta;
+        var isGoblin = monsterId == InvasionMonsters.CursedGoblin;
         var clone = new MonsterDefinition
         {
             Number = existing.Number,
             Designation = existing.Designation,
             ObjectKind = NpcObjectKind.Monster,
-            MoveRange = 4,
+            MoveRange = isGoblin ? (byte)3 : (byte)4,
             AttackRange = 2,
-            ViewRange = 6,
-            MoveDelay = TimeSpan.FromMilliseconds(450),
-            AttackDelay = TimeSpan.FromMilliseconds(1500),
-            RespawnDelay = TimeSpan.FromSeconds(30),
+            ViewRange = isGoblin ? (byte)5 : (byte)6,
+            MoveDelay = TimeSpan.FromMilliseconds(isGoblin ? 400 : 450),
+            AttackDelay = TimeSpan.FromMilliseconds(isGoblin ? 1800 : 1500),
+            RespawnDelay = TimeSpan.FromSeconds(10),
             Attribute = 2,
-            NumberOfMaximumItemDrops = isBoss ? 2 : 1,
+            NumberOfMaximumItemDrops = isBoss ? (byte)2 : (byte)1,
         };
 
         var pairs = new (AttributeDefinition Stat, float Value)[]
         {
-            (Stats.Level, isBoss ? 55f : 35f),
-            (Stats.MaximumHealth, isBoss ? 12000f : 3500f),
-            (Stats.MinimumPhysBaseDmg, isBoss ? 120f : 55f),
-            (Stats.MaximumPhysBaseDmg, isBoss ? 165f : 80f),
-            (Stats.DefenseBase, isBoss ? 80f : 40f),
-            (Stats.AttackRatePvm, isBoss ? 180f : 90f),
-            (Stats.DefenseRatePvm, isBoss ? 75f : 35f),
+            (Stats.Level, isBoss ? 55f : isGoblin ? 70f : 35f),
+            (Stats.MaximumHealth, isBoss ? 12000f : isGoblin ? 12000f : 3500f),
+            (Stats.MinimumPhysBaseDmg, isBoss ? 120f : isGoblin ? 220f : 55f),
+            (Stats.MaximumPhysBaseDmg, isBoss ? 165f : isGoblin ? 260f : 80f),
+            (Stats.DefenseBase, isBoss ? 80f : isGoblin ? 190f : 40f),
+            (Stats.AttackRatePvm, isBoss ? 180f : isGoblin ? 440f : 90f),
+            (Stats.DefenseRatePvm, isBoss ? 75f : isGoblin ? 130f : 35f),
         };
 
         foreach (var (stat, value) in pairs)

@@ -83,8 +83,8 @@ public class PlugInAuditBugTests
 
         await plugIn.DepositAsync(player, 12, depositAll: false).ConfigureAwait(false);
 
-        var engine = new JewelBankEngine(cfg, JewelBankStore.Open(stateFile), enabled: true);
-        Assert.That(engine.GetBalances("stacker1").GetValueOrDefault("bless"), Is.EqualTo(25));
+        async Task<int> BankAsync() => (await player.PersistenceContext.GetJewelBankBalancesAsync(player.Account.GetId()).ConfigureAwait(false)).GetValueOrDefault("bless");
+        Assert.That(await BankAsync().ConfigureAwait(false), Is.EqualTo(25));
         Assert.That(player.Inventory.GetItem(12), Is.Null);
 
         // Now deposit a 10-stack when only 5 capacity remains -> balance = 30, bag stack = 5.
@@ -92,7 +92,7 @@ public class PlugInAuditBugTests
         await player.Inventory.AddItemAsync(13, stack10).ConfigureAwait(false);
         await plugIn.DepositAsync(player, 13, depositAll: false).ConfigureAwait(false);
 
-        Assert.That(engine.GetBalances("stacker1").GetValueOrDefault("bless"), Is.EqualTo(30));
+        Assert.That(await BankAsync().ConfigureAwait(false), Is.EqualTo(30));
         Assert.That(stack10.Durability, Is.EqualTo(5));
         Assert.That(player.Inventory.GetItem(13), Is.SameAs(stack10));
     }

@@ -854,4 +854,28 @@
   <data name="ArenaHerald" xml:space="preserve">
     <value>Arena Herald</value>
   </data>
+  <data name="HeroMutant" xml:space="preserve">
+    <value>Hero Mutant</value>
+  </data>
+  <data name="OmegaWing" xml:space="preserve">
+    <value>Omega Wing</value>
+  </data>
+  <data name="AxlHero" xml:space="preserve">
+    <value>Axl Hero</value>
+  </data>
+  <data name="GigasGolem" xml:space="preserve">
+    <value>Gigas Golem</value>
+  </data>
+  <data name="CursedGoblin" xml:space="preserve">
+    <value>Cursed Goblin</value>
+  </data>
+  <data name="MiningAreaSmall" xml:space="preserve">
+    <value>Mining Area (Small)</value>
+  </data>
+  <data name="MiningAreaMedium" xml:space="preserve">
+    <value>Mining Area (Medium)</value>
+  </data>
+  <data name="MiningAreaLarge" xml:space="preserve">
+    <value>Mining Area (Large)</value>
+  </data>
 </root>

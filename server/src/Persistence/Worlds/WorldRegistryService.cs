@@ -24,13 +24,17 @@ public sealed class WorldRegistryService
     private readonly SemaphoreSlim _asyncGate = new(1, 1);
     private readonly ConcurrentDictionary<string, IPersistenceContextProvider> _worldProviders = new(StringComparer.OrdinalIgnoreCase);
     private readonly string? _storagePath;
+    private readonly WorldSeason _defaultSeason;
     private WorldRegistryState _state = new();
 
     /// <summary>Initializes a new instance of the <see cref="WorldRegistryService"/> class.</summary>
     /// <param name="storagePath">Optional JSON persistence path (<c>null</c> runs purely in memory for tests).</param>
-    public WorldRegistryService(string? storagePath = null)
+    /// <param name="defaultSeason">The season of the default world a new list starts with: the season of the server
+    /// program that keeps the list (Season 9's program keeps its own list).</param>
+    public WorldRegistryService(string? storagePath = null, WorldSeason defaultSeason = WorldSeason.Season6)
     {
         this._storagePath = storagePath;
+        this._defaultSeason = defaultSeason;
         this.LoadFromDisk();
     }
 
@@ -75,6 +79,7 @@ public sealed class WorldRegistryService
             this._state.Worlds.Add(new WorldDefinition
             {
                 WorldId = "main",
+                Season = this._defaultSeason,
                 NameEn = "World 1 — Origin",
                 NameVi = "Thế giới 1 — Khởi Nguyên",
                 DatabaseName = "hnmo_world_1",

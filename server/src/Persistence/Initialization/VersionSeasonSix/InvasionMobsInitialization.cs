@@ -31,6 +31,7 @@ internal class InvasionMobsInitialization : Version095d.InvasionMobsInitializati
     {
         base.Initialize();
         this.InitializeWhiteWizardInvasionMobs();
+        Updates.S6EventsMonstersAndItemsUpdatePlugIn.ApplyMonsters(this.Context, this.GameConfiguration);
     }
 
     /// <inheritdoc />

@@ -128,15 +128,20 @@ export interface WebsiteItemOverride {
   name?: LocalizedText;
   width?: number;
   height?: number;
+  slot?: string;
+  weaponKind?: string;
+  statProfile?: string;
   level?: number;
   maximumItemLevel?: number;
   durability?: number;
   magicDurability?: number;
+  magicPower?: number;
   damageMin?: number;
   damageMax?: number;
   attackSpeed?: number;
   defense?: number;
   skill?: number;
+  options?: string[];
   buyPrice?: number;
   tradable?: boolean;
   sellable?: boolean;
@@ -301,15 +306,20 @@ export function applyItemOverrides(targetCatalog: ItemCatalog, overrides: Websit
       name: mergedName,
       width: entry.width ?? existing?.width ?? 1,
       height: entry.height ?? existing?.height ?? 1,
+      slot: entry.slot ?? existing?.slot,
+      weaponKind: entry.weaponKind ?? existing?.weaponKind,
+      statProfile: entry.statProfile ?? existing?.statProfile,
       level: entry.level ?? existing?.level ?? 0,
       maximumItemLevel: entry.maximumItemLevel ?? existing?.maximumItemLevel,
       durability: entry.durability ?? existing?.durability,
       magicDurability: entry.magicDurability ?? existing?.magicDurability,
+      magicPower: entry.magicPower ?? existing?.magicPower,
       damageMin: entry.damageMin ?? existing?.damageMin,
       damageMax: entry.damageMax ?? existing?.damageMax,
       attackSpeed: entry.attackSpeed ?? existing?.attackSpeed,
       defense: entry.defense ?? existing?.defense,
       skill: entry.skill ?? existing?.skill,
+      options: entry.options ?? existing?.options,
       buyPrice: entry.buyPrice ?? existing?.buyPrice,
       tradable: entry.tradable ?? existing?.tradable,
       sellable: entry.sellable ?? existing?.sellable,

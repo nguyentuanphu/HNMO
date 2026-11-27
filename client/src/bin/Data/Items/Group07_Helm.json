@@ -1207,10 +1207,11 @@
       "number": 54,
       "name": {
         "en": "Lazy Wind Helm",
-        "vi": "Mũ Gió Lười",
         "de": "Träger Wind-Helm",
+        "vi": "Mũ Gió Lười",
         "zh-CN": "慵懒之风头盔"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "helm",
@@ -1225,17 +1226,17 @@
       },
       "classRequirements": {
         "darkKnight": 3
-      },
-      "options": ["luck", "defenseOption"]
+      }
     },
     {
       "number": 55,
       "name": {
         "en": "Dark Devil Helm",
-        "vi": "Mũ Ác Quỷ Bóng Tối",
         "de": "Dunkelteufel-Helm",
+        "vi": "Mũ Ác Quỷ Bóng Tối",
         "zh-CN": "暗黑恶魔头盔"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "helm",
@@ -1251,17 +1252,17 @@
       },
       "classRequirements": {
         "darkWizard": 3
-      },
-      "options": ["luck", "defenseOption"]
+      }
     },
     {
       "number": 56,
       "name": {
         "en": "Sticky Helm",
-        "vi": "Mũ Bám Dính",
         "de": "Klebrige-Helm",
+        "vi": "Mũ Bám Dính",
         "zh-CN": "粘性头盔"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "helm",
@@ -1276,17 +1277,17 @@
       },
       "classRequirements": {
         "fairyElf": 3
-      },
-      "options": ["luck", "defenseOption"]
+      }
     },
     {
       "number": 58,
       "name": {
         "en": "Ambition Mask",
-        "vi": "Mặt nạ Tham Vọng",
         "de": "Ehrgeiz-Maske",
+        "vi": "Mặt nạ Tham Vọng",
         "zh-CN": "野心面具"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "helm",
@@ -1301,8 +1302,7 @@
       },
       "classRequirements": {
         "darkLord": 3
-      },
-      "options": ["luck", "defenseOption"]
+      }
     },
     {
       "number": 59,
@@ -1732,10 +1732,11 @@
       "number": 74,
       "name": {
         "en": "Stormwing Helm",
-        "vi": "Mũ Cánh Bão",
         "de": "Sturmflügel-Helm",
+        "vi": "Mũ Cánh Bão",
         "zh-CN": "风暴之翼头盔"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "helm",
@@ -1750,17 +1751,17 @@
       },
       "classRequirements": {
         "darkKnight": 3
-      },
-      "options": ["luck", "defenseOption"]
+      }
     },
     {
       "number": 75,
       "name": {
         "en": "Light Lord Helmet",
-        "vi": "Mũ Chúa Tể Ánh Sáng",
         "de": "Lichtlord-Helm",
+        "vi": "Mũ Chúa Tể Ánh Sáng",
         "zh-CN": "光之领主头盔"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "helm",
@@ -1776,14 +1777,14 @@
       },
       "classRequirements": {
         "fairyElf": 3
-      },
-      "options": ["luck", "defenseOption"]
+      }
     },
     {
       "number": 78,
       "name": {
         "en": "Dragon Helm-J"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "helm",
@@ -1791,22 +1792,22 @@
       "level": 57,
       "durability": 68,
       "defense": 26,
+      "tradable": false,
+      "droppable": false,
       "requirements": {
         "strength": 120,
         "dexterity": 30
       },
       "classRequirements": {
         "darkKnight": 1
-      },
-      "options": ["luck", "defenseOption"],
-      "droppable": false,
-      "tradable": false
+      }
     },
     {
       "number": 79,
       "name": {
         "en": "Legendary Helm-J"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "helm",
@@ -1814,21 +1815,21 @@
       "level": 50,
       "durability": 42,
       "defense": 20,
+      "tradable": false,
+      "droppable": false,
       "requirements": {
         "strength": 30
       },
       "classRequirements": {
         "darkWizard": 1
-      },
-      "options": ["luck", "defenseOption"],
-      "droppable": false,
-      "tradable": false
+      }
     },
     {
       "number": 80,
       "name": {
         "en": "Guardian Helm-J"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "helm",
@@ -1836,22 +1837,22 @@
       "level": 53,
       "durability": 45,
       "defense": 25,
+      "tradable": false,
+      "droppable": false,
       "requirements": {
         "strength": 40,
         "dexterity": 80
       },
       "classRequirements": {
         "fairyElf": 1
-      },
-      "options": ["luck", "defenseOption"],
-      "droppable": false,
-      "tradable": false
+      }
     },
     {
       "number": 81,
       "name": {
         "en": "Light Plate Mask-J"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "helm",
@@ -1859,22 +1860,22 @@
       "level": 46,
       "durability": 42,
       "defense": 22,
+      "tradable": false,
+      "droppable": false,
       "requirements": {
         "strength": 70,
         "dexterity": 20
       },
       "classRequirements": {
         "darkLord": 1
-      },
-      "options": ["luck", "defenseOption"],
-      "droppable": false,
-      "tradable": false
+      }
     },
     {
       "number": 82,
       "name": {
         "en": "Red Wing Helm-J"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "helm",
@@ -1882,22 +1883,22 @@
       "level": 50,
       "durability": 42,
       "defense": 20,
+      "tradable": false,
+      "droppable": false,
       "requirements": {
         "strength": 26,
         "dexterity": 4
       },
       "classRequirements": {
         "summoner": 1
-      },
-      "options": ["luck", "defenseOption"],
-      "droppable": false,
-      "tradable": false
+      }
     },
     {
       "number": 83,
       "name": {
         "en": "Sacred Fire Helm-J"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "helm",
@@ -1905,16 +1906,15 @@
       "level": 54,
       "durability": 52,
       "defense": 26,
+      "tradable": false,
+      "droppable": false,
       "requirements": {
         "strength": 85,
         "vitality": 75
       },
       "classRequirements": {
         "rageFighter": 1
-      },
-      "options": ["luck", "defenseOption"],
-      "droppable": false,
-      "tradable": false
+      }
     }
   ]
 }

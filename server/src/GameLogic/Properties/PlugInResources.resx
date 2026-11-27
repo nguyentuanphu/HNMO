@@ -2307,4 +2307,24 @@
   <data name="ShieldBurnSkillPlugIn_Description" xml:space="preserve">
     <value>Burns a part of the target player's shield (SD) and leaves the health as it is. Only in a Season 9 realm with the Season 9 systems and their skills switched on.</value>
   </data>
+  <data name="MossGambleConfiguration_UseWeightedExcellentSelection_Name" xml:space="preserve"><value>Use suite weighted Excellent option odds</value></data>
+  <data name="MossGambleConfiguration_UseWeightedExcellentSelection_Description" xml:space="preserve"><value>Selects Excellent options using the Season 6/9 server suites weights (10% / 20% / 20% / 20% / 20% / 10%) instead of uniform random picks.</value></data>
+  <data name="SpellOfProtectionSkillPlugIn_Name" xml:space="preserve">
+    <value>Season 9 skill: Spell of Protection</value>
+  </data>
+  <data name="SpellOfProtectionSkillPlugIn_Description" xml:space="preserve">
+    <value>Grants a temporary damage-reduction barrier when Season 9 systems and skills are active.</value>
+  </data>
+  <data name="SpellOfRestrictionSkillPlugIn_Name" xml:space="preserve">
+    <value>Season 9 skill: Spell of Restriction</value>
+  </data>
+  <data name="SpellOfRestrictionSkillPlugIn_Description" xml:space="preserve">
+    <value>Binds a target in place temporarily when Season 9 systems and skills are active.</value>
+  </data>
+  <data name="SpellOfPursuitSkillPlugIn_Name" xml:space="preserve">
+    <value>Season 9 skill: Spell of Pursuit</value>
+  </data>
+  <data name="SpellOfPursuitSkillPlugIn_Description" xml:space="preserve">
+    <value>Warps the caster next to the target when Season 9 systems and skills are active.</value>
+  </data>
 </root>

@@ -26,3 +26,13 @@ Scope: `server/src/Persistence/EntityFramework` (`251` unit files, `30984` lines
 | `AccountContext.cs:1-32`, `TradeContext.cs:1-33`, `EntityDataContext.cs:1-100` | EF context ignore/DbSet mappings for accounts, trades, siege, Crywolf, CashShop, Gens | Schema mapping | No game rules |
 | `AdminAuth/AdminUserRepository.cs:22-32`, `AdminAuth/ApiKeyRepository.cs:61-64`, `DatabaseSnapshotService.cs:29-45` | Admin DB timeouts (`3s`/`30s`/`30s`), disabled API key filter (`!k.IsDisabled`), v2 binary snapshot export | Admin/backup infrastructure | No game rules |
 | `PlayerContext.cs:172-184,270-285`, `PostgresHnmoPlayerStateRowBackend.cs` | Re-check `8cb8539b`: `ReadEligibleAccountKeysAsync` & `ReadRankingOwnersAsync` exclude bots/templates/banned accounts (`Take(100)`); Postgres row store updates for retained history | Ranking & tracker privacy queries | No game rules |
+
+## Re-check 2026-11-27 (changes 8cb8539b..a108e846)
+
+Commits read (every changed file read in full):
+
+- 004b40c3 Coins: take back only what the shared store really took
+
+Evidence:
+
+- PostgresSharedAccountStore.AddCoinsAndReportAsync: one statement (CTE with FOR UPDATE + UPDATE ... RETURNING old and new) so "before" belongs to exactly this change - fixed (#407).

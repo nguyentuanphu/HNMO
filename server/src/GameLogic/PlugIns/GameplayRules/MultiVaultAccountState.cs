@@ -21,4 +21,11 @@ public sealed class MultiVaultAccountState
     /// existed are still in <see cref="MultiVaultStorageSnapshot"/> rows and move into a storage when first opened.
     /// </summary>
     public Dictionary<int, Guid> StorageIds { get; set; } = [];
+
+    /// <summary>
+    /// Gets or sets the extra-vault purchases started and not finished, by operation id. A purchase is written here before
+    /// its coins are taken; a stop before the page is added leaves it here, and the next look at the account adds the page
+    /// when its coin receipt was saved, or drops it when it wasn't (nothing was paid).
+    /// </summary>
+    public List<string> PendingPurchases { get; set; } = [];
 }

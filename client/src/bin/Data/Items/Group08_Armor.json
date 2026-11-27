@@ -1400,10 +1400,11 @@
       "number": 54,
       "name": {
         "en": "Lazy Wind Armor",
-        "vi": "Áo giáp Gió Lười",
         "de": "Träger Wind-Rüstung",
+        "vi": "Áo giáp Gió Lười",
         "zh-CN": "慵懒之风铠甲"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -1418,17 +1419,17 @@
       },
       "classRequirements": {
         "darkKnight": 3
-      },
-      "options": ["luck", "defenseOption"]
+      }
     },
     {
       "number": 55,
       "name": {
         "en": "Dark Devil Armor",
-        "vi": "Áo giáp Ác Quỷ Bóng Tối",
         "de": "Dunkelteufel-Rüstung",
+        "vi": "Áo giáp Ác Quỷ Bóng Tối",
         "zh-CN": "暗黑恶魔铠甲"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -1444,17 +1445,17 @@
       },
       "classRequirements": {
         "darkWizard": 3
-      },
-      "options": ["luck", "defenseOption"]
+      }
     },
     {
       "number": 56,
       "name": {
         "en": "Sticky Armor",
-        "vi": "Áo giáp Bám Dính",
         "de": "Klebrige-Rüstung",
+        "vi": "Áo giáp Bám Dính",
         "zh-CN": "粘性铠甲"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -1469,17 +1470,17 @@
       },
       "classRequirements": {
         "fairyElf": 3
-      },
-      "options": ["luck", "defenseOption"]
+      }
     },
     {
       "number": 57,
       "name": {
         "en": "Hell Night Armor",
-        "vi": "Áo giáp Đêm Địa Ngục",
         "de": "Höllennacht-Rüstung",
+        "vi": "Áo giáp Đêm Địa Ngục",
         "zh-CN": "地狱之夜铠甲"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -1494,17 +1495,17 @@
       },
       "classRequirements": {
         "magicGladiator": 3
-      },
-      "options": ["luck", "defenseOption"]
+      }
     },
     {
       "number": 58,
       "name": {
         "en": "Ambition Armor",
-        "vi": "Áo giáp Tham Vọng",
         "de": "Ehrgeiz-Rüstung",
+        "vi": "Áo giáp Tham Vọng",
         "zh-CN": "野心铠甲"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -1519,8 +1520,7 @@
       },
       "classRequirements": {
         "darkLord": 3
-      },
-      "options": ["luck", "defenseOption"]
+      }
     },
     {
       "number": 59,
@@ -1986,10 +1986,11 @@
       "number": 74,
       "name": {
         "en": "Stormwing Armor",
-        "vi": "Áo giáp Cánh Bão",
         "de": "Sturmflügel-Rüstung",
+        "vi": "Áo giáp Cánh Bão",
         "zh-CN": "风暴之翼铠甲"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -2004,17 +2005,17 @@
       },
       "classRequirements": {
         "darkKnight": 3
-      },
-      "options": ["luck", "defenseOption"]
+      }
     },
     {
       "number": 75,
       "name": {
         "en": "Light Lord Armor",
-        "vi": "Áo giáp Chúa Tể Ánh Sáng",
         "de": "Lichtlord-Rüstung",
+        "vi": "Áo giáp Chúa Tể Ánh Sáng",
         "zh-CN": "光之领主铠甲"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -2030,17 +2031,17 @@
       },
       "classRequirements": {
         "fairyElf": 3
-      },
-      "options": ["luck", "defenseOption"]
+      }
     },
     {
       "number": 76,
       "name": {
         "en": "Magic Knight Armor",
-        "vi": "Áo giáp Hiệp Sĩ Phép Thuật",
         "de": "Magieritter-Rüstung",
+        "vi": "Áo giáp Hiệp Sĩ Phép Thuật",
         "zh-CN": "魔剑士铠甲"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -2056,14 +2057,14 @@
       },
       "classRequirements": {
         "magicGladiator": 3
-      },
-      "options": ["luck", "defenseOption"]
+      }
     },
     {
       "number": 78,
       "name": {
         "en": "Dragon Armor-J"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -2071,6 +2072,8 @@
       "level": 59,
       "durability": 68,
       "defense": 39,
+      "tradable": false,
+      "droppable": false,
       "requirements": {
         "strength": 120,
         "dexterity": 30
@@ -2078,16 +2081,14 @@
       "classRequirements": {
         "darkKnight": 1,
         "magicGladiator": 1
-      },
-      "options": ["luck", "defenseOption"],
-      "droppable": false,
-      "tradable": false
+      }
     },
     {
       "number": 79,
       "name": {
         "en": "Legendary Armor-J"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -2095,22 +2096,22 @@
       "level": 56,
       "durability": 42,
       "defense": 24,
+      "tradable": false,
+      "droppable": false,
       "requirements": {
         "strength": 40
       },
       "classRequirements": {
         "darkWizard": 1,
         "magicGladiator": 1
-      },
-      "options": ["luck", "defenseOption"],
-      "droppable": false,
-      "tradable": false
+      }
     },
     {
       "number": 80,
       "name": {
         "en": "Guardian Armor-J"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -2118,22 +2119,22 @@
       "level": 57,
       "durability": 45,
       "defense": 31,
+      "tradable": false,
+      "droppable": false,
       "requirements": {
         "strength": 40,
         "dexterity": 80
       },
       "classRequirements": {
         "fairyElf": 1
-      },
-      "options": ["luck", "defenseOption"],
-      "droppable": false,
-      "tradable": false
+      }
     },
     {
       "number": 81,
       "name": {
         "en": "Light Plate Armor-J"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -2141,22 +2142,22 @@
       "level": 62,
       "durability": 42,
       "defense": 27,
+      "tradable": false,
+      "droppable": false,
       "requirements": {
         "strength": 70,
         "dexterity": 20
       },
       "classRequirements": {
         "darkLord": 1
-      },
-      "options": ["luck", "defenseOption"],
-      "droppable": false,
-      "tradable": false
+      }
     },
     {
       "number": 82,
       "name": {
         "en": "Red Wing Armor-J"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "armor",
@@ -2164,22 +2165,22 @@
       "level": 56,
       "durability": 42,
       "defense": 30,
+      "tradable": false,
+      "droppable": false,
       "requirements": {
         "strength": 35,
         "dexterity": 8
       },
       "classRequirements": {
         "summoner": 1
-      },
-      "options": ["luck", "defenseOption"],
-      "droppable": false,
-      "tradable": false
+      }
     },
     {
       "number": 83,
       "name": {
         "en": "Sacred Fire Armor-J"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 3,
       "slot": "armor",
@@ -2187,16 +2188,15 @@
       "level": 66,
       "durability": 52,
       "defense": 45,
+      "tradable": false,
+      "droppable": false,
       "requirements": {
         "strength": 85,
         "vitality": 75
       },
       "classRequirements": {
         "rageFighter": 1
-      },
-      "options": ["luck", "defenseOption"],
-      "droppable": false,
-      "tradable": false
+      }
     }
   ]
 }

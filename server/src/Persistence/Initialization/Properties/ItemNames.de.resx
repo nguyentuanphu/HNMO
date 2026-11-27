@@ -2274,4 +2274,16 @@
   <data name="TalismanOfItemProtection" xml:space="preserve">
     <value>Talisman des Gegenstandsschutzes</value>
   </data>
+  <data name="ChaosCard" xml:space="preserve">
+    <value>Chaos-Karte</value>
+  </data>
+  <data name="ChaosCardGold" xml:space="preserve">
+    <value>Chaos-Karte Gold</value>
+  </data>
+  <data name="ChaosCardRare" xml:space="preserve">
+    <value>Chaos-Karte Selten</value>
+  </data>
+  <data name="ChaosCardMini" xml:space="preserve">
+    <value>Chaos-Karte Mini</value>
+  </data>
 </root>

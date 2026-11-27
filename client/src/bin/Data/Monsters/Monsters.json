@@ -6878,6 +6878,23 @@
       ]
     },
     {
+      "name": {"en": "Brown Panda Transformation Ring"},
+      "kind": "npc",
+      "model": "player",
+      "numbers": [
+        {"number": 616},
+        {"number": 646}
+      ]
+    },
+    {
+      "name": {"en": "Pink Panda Transformation Ring"},
+      "kind": "npc",
+      "model": "player",
+      "numbers": [
+        {"number": 617}
+      ]
+    },
+    {
       "name": {"en": "Robot Knight Transformation Ring"},
       "kind": "npc",
       "model": "player",
@@ -6899,14 +6916,6 @@
       "model": "player",
       "numbers": [
         {"number": 642}
-      ]
-    },
-    {
-      "name": {"en": "Brown Panda Transformation Ring"},
-      "kind": "npc",
-      "model": "player",
-      "numbers": [
-        {"number": 646}
       ]
     },
     {

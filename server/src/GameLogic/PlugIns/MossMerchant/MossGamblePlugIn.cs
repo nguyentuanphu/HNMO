@@ -45,7 +45,11 @@ public sealed class MossGamblePlugIn :
             return;
         }
 
-        var rolled = MossGambleCatalog.RollReward(player.GameContext.Configuration, voucherDef.Number, Rand.GetRandomizer());
+        var rolled = MossGambleCatalog.RollReward(
+            player.GameContext.Configuration,
+            voucherDef.Number,
+            Rand.GetRandomizer(),
+            config.UseWeightedExcellentSelection);
         if (rolled is null)
         {
             eventArgs.Cancel = true;

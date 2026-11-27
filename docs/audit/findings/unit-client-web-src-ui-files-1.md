@@ -17,3 +17,13 @@
 | CashShop item code bit-packing | `cashShop.ts:60-63` | Decodes item code as `group = code >> 9`, `number = code & 0x1ff` (`512` items/group) | Server `CashShop` item definitions | Same |
 | Buff strip icon atlas index clamp | `buffStrip.ts:18-22` | Maps buff icons `< 81` (`buff - 1`) vs `>= 81` (`buff - 81`) clamped to `0..89` | Desktop `BuffStrip` atlas layout | Same |
 | Remaining presentation UI panels | `arenaWindow.ts`, `autoPlayBar.ts`, `bugReportWindow.ts`, `catchupBanner.ts`, `chatCommandWindow.ts`, `combatOverlay.ts` | Server-driven HTML/RML UI wrappers & telemetry overlays | UI presentation | No game rules |
+
+## Re-check 2026-11-27 (changes 8cb8539b..a108e846)
+
+Commits read (every changed file read in full):
+
+- 1c540803 fix(web): the Arena window's queue buttons stay clickable while others join
+
+Evidence:
+
+- arenaWindow.ts: queue counts (waiting, signups) are live fields written in place, so the queue buttons are not redrawn under the pointer - fixed (#398, a 16-minute battle passed on the owner's PC).

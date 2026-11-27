@@ -27,3 +27,13 @@ Audited unit: `server/src/Persistence/Initialization/Skills` (42 files, 4,109 li
 | Potions & Consumables | `PotionOfBless` (`10`, `120s`, `x1.2` all attacks — `TODO` L42 says Castle Siege gates/statues only); `PotionOfSoul` (`11`, `60s`, `+20 Spd`, `+8 AG`, `+50%` Light/Ice res); `Alcohol` (`201/sub54`, `80s`, `+20 Spd`) | Season 6 buff table (`BuffEffectManager.xml:45-46`: Bless `+20%` Siege-only, Soul `+8 AG / +50% Light+Ice / +20 Spd`) | `same` Potion of Soul; `differs` Bless potion scope (applies globally in HNMO due to `TODO` at L42) & Alcohol uses internal ID `201` (`sub54`) |
 | Elemental status & base skill helpers | `SkillsInitializerBase.cs:171-306` (`Poison` `20s`, `Decay` `10s`, `Ice` `10s`, `IceArrow` `7s`, `Pollution` `2s`, `ChainDrive` `10s 40%`) | Season 6/9 skill attributes & elemental status durations | `same` structure; note `StunEffectInitializer` uses `Duration=2s` base |
 | HNMO custom skills & trials (`700..727`) | `HnmoSkillsInitializer.cs:1-274`, `HnmoSkillValues.cs:1-177`, `HnmoTrialQuestsInitializer.cs:1-151` (`28` skills `700..727`, `7` effects `180..186`, `7` Trial quests Lv `250` = `200` kills + `5` Chaos) | HNMO custom rules; matched count `28/28` in `diff-client-tables.txt:358` (`Web_new_skills(700+)=28`) | Custom HNMO rules (`same` vs web client table) |
+
+## Re-check 2026-11-27 (changes 9f72bccd..a108e846)
+
+Commits read (every changed file read in full):
+
+- 7a58c00b Potion of Bless: raise the damage only against Castle Siege gates and statues
+
+Evidence:
+
+- BlessPotionEffectInitializer: no damage power-up any more (the bonus is applied by the damage calculation, siege gates/statues only) - same as the owner decision of 26 Nov - fixed.

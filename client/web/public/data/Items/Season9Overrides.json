@@ -95,9 +95,18 @@
     {
       "group": 5,
       "number": 32,
+      "slot": "mainHand",
+      "weaponKind": "staff",
+      "statProfile": "weapon",
+      "options": ["luck", "wizardryDamageOption", "excellentWizardryAttack"],
+      "width": 1,
+      "height": 4,
       "level": 149,
       "magicDurability": 130,
+      "magicPower": 110,
+      "damageMin": 59,
       "damageMax": 61,
+      "attackSpeed": 30,
       "requirements": {
         "level": 400,
         "strength": 56,
@@ -167,12 +176,18 @@
     {
       "group": 7,
       "number": 53,
+      "slot": "helm",
+      "statProfile": "armor",
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
       "level": 143,
       "durability": 90,
       "defense": 44,
       "requirements": {
         "level": 400,
         "strength": 56,
+        "dexterity": 19,
         "energy": 157
       },
       "classRequirements": {
@@ -236,12 +251,18 @@
     {
       "group": 8,
       "number": 53,
+      "slot": "armor",
+      "statProfile": "armor",
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
       "level": 148,
       "durability": 90,
       "defense": 58,
       "requirements": {
         "level": 400,
         "strength": 56,
+        "dexterity": 19,
         "energy": 157
       },
       "classRequirements": {
@@ -309,12 +330,18 @@
     {
       "group": 9,
       "number": 53,
+      "slot": "pants",
+      "statProfile": "armor",
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
       "level": 145,
       "durability": 90,
       "defense": 50,
       "requirements": {
         "level": 400,
         "strength": 56,
+        "dexterity": 19,
         "energy": 157
       },
       "classRequirements": {
@@ -382,6 +409,11 @@
     {
       "group": 10,
       "number": 53,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
       "level": 142,
       "durability": 90,
       "attackSpeed": 6,
@@ -389,6 +421,7 @@
       "requirements": {
         "level": 400,
         "strength": 56,
+        "dexterity": 19,
         "energy": 157
       },
       "classRequirements": {
@@ -455,12 +488,18 @@
     {
       "group": 11,
       "number": 53,
+      "slot": "boots",
+      "statProfile": "armor",
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
       "level": 140,
       "durability": 90,
       "defense": 41,
       "requirements": {
         "level": 400,
         "strength": 56,
+        "dexterity": 19,
         "energy": 157
       },
       "classRequirements": {
@@ -618,6 +657,8 @@
     {
       "group": 13,
       "number": 30,
+      "level": 150,
+      "defense": 0,
       "requirements": {
         "level": 150
       }

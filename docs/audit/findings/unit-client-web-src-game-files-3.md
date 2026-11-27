@@ -16,3 +16,13 @@
 | Kalima level tables, Symbol of Kundun count & safezone ban | `kalima.ts:16-85` | `KALIMA_MAPS = [24..29, 36]`, `LOST_MAP = 14:28`, `SYMBOL_OF_KUNDUN = 14:29` (`5` symbols), `KALIMA_TICKET = 13:48`, gates `152..158`; min levels `[40,131,181,231,281,331,350]` vs MG/DL/RF `[20,111,161,211,261,311,350]`, `MAX_LEVEL = 400`; refuses ticket in SafeZone or Kalima | Desktop `GMHellas` & server `Kalima` rules | Same |
 | Instance event map constants (IT / DG / IG) | `instanceEvents.ts:26-28,93-95` | `ILLUSION_TEMPLE_MAPS = [45..50]`, `DOPPELGANGER_MAPS = [65..68]`, `IMPERIAL_GUARDIAN_MAPS = [69..72]` | Server `MiniGames` map numbers | Same |
 | Glow pass tiers, item looks & item group files | `itemGlow.ts:67-71`, `itemLooks.ts`, `items.ts:8-15` | `+7..+15` shader glow tiers (`+7`, `+9`, `+11`, `+13..+15`); loads `Group00..15` JSON definitions | Client visual rendering / data loader | No game rules |
+
+## Re-check 2026-11-27 (changes 8cb8539b..a108e846)
+
+Commits read (every changed file read in full):
+
+- 98f231d4 fix(client): fix buff value time assignment, outlaw warp check, and extended bag space check
+
+Evidence:
+
+- inventory.ts countFreeBagCells: bag 12..75 plus 32 slots per unlocked extension (0..4) - same as server InventoryConstants (RowSize 8, InventoryRows 8, RowsOfOneExtension 4, MaximumNumberOfExtensions 4).

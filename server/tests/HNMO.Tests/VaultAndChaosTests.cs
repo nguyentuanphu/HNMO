@@ -1,4 +1,4 @@
-// <copyright file="VaultAndChaosTests.cs" company="HNMO">
+﻿// <copyright file="VaultAndChaosTests.cs" company="HNMO">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -205,6 +205,89 @@ public sealed class VaultAndChaosTests
 
         var (ok3, _) = await plugIn.SwitchVaultAsync(player, 3).ConfigureAwait(false);
         Assert.That(ok3, Is.True);
+    }
+
+    /// <summary>A failed save of the payment takes nothing: the coins come back, no receipt is kept, no page is added.</summary>
+    /// <returns>The task.</returns>
+    [Test]
+    public async ValueTask ExtraVaultPurchaseWithAFailedSaveTakesNothingAsync()
+    {
+        var (plugIn, player) = await this.CreateVaultBuyerAsync("failbuyer", 120).ConfigureAwait(false);
+        var fails = true;
+        CashShopActionsTest.SaveFailingContext.Install(player, () => fails);
+
+        var (bought, _) = await plugIn.BuyExtraVaultAsync(player).ConfigureAwait(false);
+        fails = false;
+        await player.SaveProgressAsync().ConfigureAwait(false); // a later save must not write the purchase's receipt
+
+        Assert.Multiple(async () =>
+        {
+            Assert.That(bought, Is.False);
+            Assert.That(player.Account!.WCoinC, Is.EqualTo(120));
+            Assert.That(plugIn.GetUnlockedVaultCount(player), Is.EqualTo(2));
+            var history = await player.PersistenceContext.GetCashShopCoinHistoryAsync(player.Account.GetId(), 0, 10).ConfigureAwait(false);
+            Assert.That(history.Where(h => h.Reference?.StartsWith("hnmo-extra-vault:", StringComparison.Ordinal) == true), Is.Empty);
+        });
+    }
+
+    /// <summary>
+    /// A stop after the payment was saved and before the page was added: the next look at the account adds the page
+    /// once, and the coins are taken once.
+    /// </summary>
+    /// <returns>The task.</returns>
+    [Test]
+    public async ValueTask ExtraVaultPaidBeforeAStopIsAddedOnceAfterwardsAsync()
+    {
+        var (plugIn, player) = await this.CreateVaultBuyerAsync("stopbuyer", 120).ConfigureAwait(false);
+        plugIn.StopAfterPaymentSaved = () => true;
+        Assert.ThrowsAsync<InvalidOperationException>(async () => await plugIn.BuyExtraVaultAsync(player).ConfigureAwait(false));
+        Assert.That(plugIn.GetUnlockedVaultCount(player), Is.EqualTo(2), "the page is not added before the stop");
+
+        plugIn.StopAfterPaymentSaved = null;
+        await plugIn.FinishPendingPurchasesAsync(player, "stopbuyer").ConfigureAwait(false);
+        await plugIn.FinishPendingPurchasesAsync(player, "stopbuyer").ConfigureAwait(false);
+
+        Assert.That(plugIn.GetUnlockedVaultCount(player), Is.EqualTo(3), "paid: one page, once");
+        Assert.That(player.Account!.WCoinC, Is.EqualTo(70), "50 taken once");
+    }
+
+    /// <summary>A purchase written but stopped before its payment was saved adds nothing and takes nothing.</summary>
+    /// <returns>The task.</returns>
+    [Test]
+    public async ValueTask ExtraVaultStoppedBeforeThePaymentAddsNothingAsync()
+    {
+        var (plugIn, player) = await this.CreateVaultBuyerAsync("earlystop", 120).ConfigureAwait(false);
+        CashShopActionsTest.SaveFailingContext.Install(player, () => throw new InvalidOperationException("stop"));
+        var (bought, _) = await plugIn.BuyExtraVaultAsync(player).ConfigureAwait(false);
+
+        await plugIn.FinishPendingPurchasesAsync(player, "earlystop").ConfigureAwait(false);
+
+        Assert.That(bought, Is.False);
+        Assert.That(plugIn.GetUnlockedVaultCount(player), Is.EqualTo(2));
+        Assert.That(player.Account!.WCoinC, Is.EqualTo(120));
+    }
+
+    private async ValueTask<(MultiVaultPlugIn PlugIn, Player Player)> CreateVaultBuyerAsync(string login, int coins)
+    {
+        var vaultCfg = new PlugInConfiguration
+        {
+            TypeId = typeof(MultiVaultPlugIn).GUID,
+            IsActive = true,
+            CustomConfiguration = JsonSerializer.Serialize(new MultiVaultConfiguration
+            {
+                Enabled = true,
+                DefaultVaultCount = 2,
+                MaxVaultsPerAccount = 5,
+                PurchaseExtraVaultCost = 50,
+                PurchaseCoinType = CashShopCoinType.WCoinC,
+                FileName = this._file,
+            }),
+        };
+        var context = GameContextTestHelper.CreateGameContext([vaultCfg]);
+        var player = await PlayerTestHelper.CreatePlayerAsync(context).ConfigureAwait(false);
+        player.Account!.LoginName = login;
+        player.Account.WCoinC = coins;
+        return (MultiVaultPlugIn.Get(context)!, player);
     }
 
     /// <summary>

@@ -97,6 +97,27 @@ public partial class GameplayRules : ComponentBase
 
     private void AddBonusEvent() => this._bonusConfig.Events.Add(new BonusEventEntry { StartTimeSydney = "20:00", DurationMinutes = 60, ExpBonusPercent = 50 });
 
+    private void ApplySeason6BonusWindows()
+    {
+        this._bonusConfig.Enabled = true;
+        this._bonusConfig.AnnounceInChat = true;
+        this._bonusConfig.Events.Clear();
+        foreach (var start in new[] { "02:00", "08:00", "14:00", "20:00" })
+        {
+            this._bonusConfig.Events.Add(new BonusEventEntry
+            {
+                NameEn = "Season 6 Bonus Event",
+                NameVi = "Giờ Vàng Season 6",
+                StartTimeSydney = start,
+                DurationMinutes = 120,
+                ExpBonusPercent = 50,
+                ItemDropBonusPercent = 15,
+                ZenDropBonusPercent = 0,
+                Enabled = true,
+            });
+        }
+    }
+
     private Task SaveMapRulesAsync() =>
         this.SavePlugInAsync(typeof(MapRulesPlugIn).GUID, this._mapConfig, L("Saved per-map rules.", "Đã lưu luật bản đồ."));
 

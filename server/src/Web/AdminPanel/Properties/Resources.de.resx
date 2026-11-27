@@ -2865,4 +2865,67 @@
   <data name="S9SystemsTitle" xml:space="preserve">
     <value>Season-9-Systeme (Muun, Pentagramm, Master 330)</value>
   </data>
+  <data name="JewelBankReceiptsHeading" xml:space="preserve">
+    <value>Aktuelle Datenbank-Belege der Juwelenbank (Sydney-Zeit)</value>
+  </data>
+  <data name="JewelBankReceiptsEmpty" xml:space="preserve">
+    <value>Noch keine Datenbank-Belege vorhanden.</value>
+  </data>
+  <data name="JewelBankColTime" xml:space="preserve">
+    <value>Zeit (Sydney)</value>
+  </data>
+  <data name="JewelBankColAccount" xml:space="preserve">
+    <value>Konto</value>
+  </data>
+  <data name="JewelBankColKind" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="JewelBankColDetail" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="JewelBankColPending" xml:space="preserve">
+    <value>Ausstehend</value>
+  </data>
+  <data name="JewelBankColSource" xml:space="preserve">
+    <value>Quelle</value>
+  </data>
+  <data name="JewelBankImportHeading" xml:space="preserve">
+    <value>Import von Legacy-JSON in die Datenbank</value>
+  </data>
+  <data name="JewelBankImportDescription" xml:space="preserve">
+    <value>Testlauf-Vorschau der alten JSON-Juwelenbankbestände und ausstehenden Auszahlungen im Vergleich zu Datenbank-Belegen.</value>
+  </data>
+  <data name="JewelBankImportChecksum" xml:space="preserve">
+    <value>Eingabe-Prüfsumme</value>
+  </data>
+  <data name="JewelBankImportWouldImport" xml:space="preserve">
+    <value>Zu importieren</value>
+  </data>
+  <data name="JewelBankImportAlready" xml:space="preserve">
+    <value>Bereits importiert</value>
+  </data>
+  <data name="JewelBankImportConflicts" xml:space="preserve">
+    <value>Konflikte</value>
+  </data>
+  <data name="JewelBankImportUnknownAccounts" xml:space="preserve">
+    <value>Unbekannte Konten</value>
+  </data>
+  <data name="JewelBankImportTotals" xml:space="preserve">
+    <value>JSON-Summen</value>
+  </data>
+  <data name="JewelBankImportPending" xml:space="preserve">
+    <value>Ausstehend (JSON)</value>
+  </data>
+  <data name="JewelBankImportRunButton" xml:space="preserve">
+    <value>Import in Datenbank starten</value>
+  </data>
+  <data name="JewelBankImportRunHint" xml:space="preserve">
+    <value>Noch nicht migrierte JSON-Juwelenbankbestände und Auszahlungen idempotent in PostgreSQL importieren.</value>
+  </data>
+  <data name="JewelBankImportDone" xml:space="preserve">
+    <value>Juwelenbank-Import abgeschlossen: {0} importiert, {1} bereits vorhanden, {2} Konflikte.</value>
+  </data>
+  <data name="JewelBankImportNothing" xml:space="preserve">
+    <value>Keine offenen JSON-Einträge zum Importieren.</value>
+  </data>
 </root>

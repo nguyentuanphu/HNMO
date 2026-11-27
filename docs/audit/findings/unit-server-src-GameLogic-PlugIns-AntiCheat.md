@@ -17,3 +17,13 @@
    - Reads only `player.Attributes[Stats.AttackSpeed]`. If a caster class has higher `Stats.MagicSpeed` than physical `Stats.AttackSpeed`, `ComputeMinAttackIntervalMs` may compute a tighter minimum interval than intended for magic spells.
 2. **Timestamp Frequency Mismatch — `AntiCheatPlugIn.cs:175`**:
    - Uses `(nowTimestamp - tracker.LastAttackTimestamp) * 1000.0 / Stopwatch.Frequency` instead of `this._timeProvider.GetElapsedTime(...)`; safe with `TimeProvider.System` on Windows/.NET, but would mis-scale if a custom `TimeProvider` defines a different `TimestampFrequency`.
+
+## Re-check 2026-11-27 (changes 8b9574d1..a108e846)
+
+Commits read (every changed file read in full):
+
+- 39443f93 fix(gamelogic): fix anticheat speed/time, season coin race, party master exp gate, chaos jewel count, and gens quest reward
+
+Evidence:
+
+- AntiCheatPlugIn: the speed check uses max(AttackSpeed, MagicSpeed) (casters were judged by attack speed only) and TimeProvider.GetElapsedTime (testable clock) - fixed.

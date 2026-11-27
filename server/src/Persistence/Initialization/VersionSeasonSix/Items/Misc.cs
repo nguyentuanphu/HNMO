@@ -33,6 +33,7 @@ public class Misc : InitializerBase
         this.CreateRena();
         this.CreateStardust();
         MossGambleItemCatalog.CreateItems(this.Context, this.GameConfiguration, ensurePriceDefinition: false);
+        Updates.S6EventsMonstersAndItemsUpdatePlugIn.ApplyItems(this.Context, this.GameConfiguration);
     }
 
     /// <summary>

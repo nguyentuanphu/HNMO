@@ -33,6 +33,7 @@ enum class ItemSlot : BYTE
     Pet = 8,
     Pendant = 9,
     Ring = 10,
+    Pentagram = 236,
     None = 255,
 };
 
@@ -65,6 +66,9 @@ enum class WeaponKind : BYTE
     Staff,
     Glove,
     Book,
+    Claw,
+    Sceptre,
+    Stick,
 };
 
 // The color of a tooltip line; the values are the tooltip's TEXT_COLOR_*.
@@ -376,7 +380,7 @@ struct ItemDefinition
     WORD damageMin = 0;
     WORD damageMax = 0;
     BYTE blockRate = 0;
-    BYTE defense = 0;
+    WORD defense = 0;
     BYTE magicDefense = 0;
     BYTE attackSpeed = 0;
     BYTE walkSpeed = 0;

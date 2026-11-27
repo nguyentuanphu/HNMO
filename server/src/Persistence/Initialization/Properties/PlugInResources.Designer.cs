@@ -461,6 +461,18 @@ namespace HNMO.Persistence.Initialization.Properties {
         /// <summary>Gets the localized FixChaosMixesPlugInBase_Description text.</summary>
         public static string FixChaosMixesPlugInBase_Description => ResourceManager.GetString("FixChaosMixesPlugInBase_Description", resourceCulture)!;
 
+        /// <summary>Gets the localized BlessPotionSiegeOnlyUpdatePlugIn_Name text.</summary>
+        public static string BlessPotionSiegeOnlyUpdatePlugIn_Name => ResourceManager.GetString("BlessPotionSiegeOnlyUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized BlessPotionSiegeOnlyUpdatePlugIn_Description text.</summary>
+        public static string BlessPotionSiegeOnlyUpdatePlugIn_Description => ResourceManager.GetString("BlessPotionSiegeOnlyUpdatePlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized AuditDataFixesUpdatePlugIn_Name text.</summary>
+        public static string AuditDataFixesUpdatePlugIn_Name => ResourceManager.GetString("AuditDataFixesUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized AuditDataFixesUpdatePlugIn_Description text.</summary>
+        public static string AuditDataFixesUpdatePlugIn_Description => ResourceManager.GetString("AuditDataFixesUpdatePlugIn_Description", resourceCulture)!;
+
         /// <summary>Gets the localized FixDamageAbsorbItemsUpdatePlugIn_Name text.</summary>
         public static string FixDamageAbsorbItemsUpdatePlugIn_Name => ResourceManager.GetString("FixDamageAbsorbItemsUpdatePlugIn_Name", resourceCulture)!;
 
@@ -1210,5 +1222,20 @@ namespace HNMO.Persistence.Initialization.Properties {
 
         /// <summary>Gets the localized SeasonNineSystemsUpdatePlugIn_Description text.</summary>
         public static string SeasonNineSystemsUpdatePlugIn_Description => ResourceManager.GetString("SeasonNineSystemsUpdatePlugIn_Description", resourceCulture)!;
+        /// <summary>Gets the localized S6EventsMonstersAndItemsUpdatePlugIn_Name text.</summary>
+        public static string S6EventsMonstersAndItemsUpdatePlugIn_Name => ResourceManager.GetString("S6EventsMonstersAndItemsUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized S6EventsMonstersAndItemsUpdatePlugIn_Description text.</summary>
+        public static string S6EventsMonstersAndItemsUpdatePlugIn_Description => ResourceManager.GetString("S6EventsMonstersAndItemsUpdatePlugIn_Description", resourceCulture)!;
+        /// <summary>Gets the localized MasterPassives314To324UpdatePlugIn_Name text.</summary>
+        public static string MasterPassives314To324UpdatePlugIn_Name => ResourceManager.GetString("MasterPassives314To324UpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized MasterPassives314To324UpdatePlugIn_Description text.</summary>
+        public static string MasterPassives314To324UpdatePlugIn_Description => ResourceManager.GetString("MasterPassives314To324UpdatePlugIn_Description", resourceCulture)!;
+        /// <summary>Gets the localized AddChaosCardMixesUpdatePlugIn_Name text.</summary>
+        public static string AddChaosCardMixesUpdatePlugIn_Name => ResourceManager.GetString("AddChaosCardMixesUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized AddChaosCardMixesUpdatePlugIn_Description text.</summary>
+        public static string AddChaosCardMixesUpdatePlugIn_Description => ResourceManager.GetString("AddChaosCardMixesUpdatePlugIn_Description", resourceCulture)!;
     }
 }

@@ -81,6 +81,10 @@ else
                 <input id="muunCond" class="form-check-input" type="checkbox" @bind="this._configuration.MuunStrictConditions" />
                 <label class="form-check-label" for="muunCond">@this.T("Strict Hour/Map Conditions", "Áp dụng giờ/bản đồ", "Strenge Bedingungen", "严格时段/地图条件")</label>
             </div>
+            <div class="col-md-3 form-check ms-2">
+                <input id="muunDate" class="form-check-input" type="checkbox" @bind="this._configuration.MuunEnforceDatePeriod" />
+                <label class="form-check-label" for="muunDate">@this.T("Enforce Add-Option Dates", "Giới hạn ngày Add-Option", "Datumsgrenzen aktiv", "启用附加属性日期限制")</label>
+            </div>
             <div class="col-md-3">
                 <label class="form-label">@this.T("Evolution Point Multiplier", "Hệ số điểm tiến hóa", "Entwicklungs-Faktor", "进化点数倍率")</label>
                 <input type="number" step="0.1" min="0.1" max="10" class="form-control form-control-sm" @bind="this._configuration.MuunEvoPointMultiplier" />
@@ -145,8 +149,10 @@ else
                 <label class="form-label">@this.T("Shield-Burn SD % (621)", "Thiêu đốt SD % (621)", "Schildbrand SD % (621)", "护盾焚烧 SD % (621)")</label>
                 <input type="number" min="1" max="100" class="form-control form-control-sm" @bind="this._configuration.ShieldBurnSdPercent" />
             </div>
-            @* "Protection Def % (618)" is hidden: Spell of Protection has no effect yet (its effect comes from the Season 9
-               desktop client's data, which isn't in the repository). The stored value is kept. *@
+            <div class="col-md-3">
+                <label class="form-label">@this.T("Protection Def % (618)", "Phép Bảo Hộ Giảm Sát Thương % (618)", "Schutzzauber % (618)", "守护咒语减伤 % (618)")</label>
+                <input type="number" min="1" max="100" class="form-control form-control-sm" @bind="this._configuration.SpellOfProtectionDefensePct" />
+            </div>
         </div>
     </div>
 }

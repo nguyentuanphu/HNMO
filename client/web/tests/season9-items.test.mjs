@@ -71,13 +71,40 @@ test('Season9Overrides.json contains all 210 shared S9 item overrides and applyI
     definitions: new Map([
       ['14:225', { number: 225, name: { en: 'Scroll Master of Defense' }, width: 1, height: 1, level: 25 }],
       ['14:0', { number: 0, name: { en: 'Apple' }, width: 1, height: 1, level: 1, durability: 3 }],
-      ['5:32', { number: 32, name: { en: 'Summon Spirit Stick' }, width: 1, height: 4, level: 130, requirements: { strength: 45, dexterity: 15 } }],
+      ['5:32', { number: 32 }],
+      ['7:53', { number: 53 }],
+      ['8:53', { number: 53 }],
+      ['9:53', { number: 53 }],
+      ['10:53', { number: 53 }],
+      ['11:53', { number: 53 }],
+      ['13:30', { number: 30, name: { en: 'Cape of Lord' }, width: 2, height: 3, level: 180, defense: 15, requirements: { level: 180 } }],
     ]),
   };
   applyItemOverrides(fakeCatalog, doc.items);
   assert.equal(fakeCatalog.definitions.get('14:225').width, 2);
   assert.equal(fakeCatalog.definitions.get('14:225').height, 2);
   assert.equal(fakeCatalog.definitions.get('14:0').durability, 255);
-  assert.equal(fakeCatalog.definitions.get('5:32').level, 149);
-  assert.equal(fakeCatalog.definitions.get('5:32').requirements.level, 400);
+  const stick = fakeCatalog.definitions.get('5:32');
+  assert.equal(stick.slot, 'mainHand');
+  assert.equal(stick.weaponKind, 'staff');
+  assert.equal(stick.statProfile, 'weapon');
+  assert.equal(stick.width, 1);
+  assert.equal(stick.height, 4);
+  assert.equal(stick.level, 149);
+  assert.equal(stick.damageMin, 59);
+  assert.equal(stick.damageMax, 61);
+  assert.equal(stick.attackSpeed, 30);
+  assert.equal(stick.magicPower, 110);
+  assert.equal(stick.requirements.level, 400);
+  const succubusGloves = fakeCatalog.definitions.get('10:53');
+  assert.equal(succubusGloves.slot, 'gloves');
+  assert.equal(succubusGloves.statProfile, 'armor');
+  assert.equal(succubusGloves.width, 2);
+  assert.equal(succubusGloves.height, 2);
+  assert.equal(succubusGloves.attackSpeed, 6);
+  assert.equal(succubusGloves.requirements.dexterity, 19);
+  const cape = fakeCatalog.definitions.get('13:30');
+  assert.equal(cape.level, 150);
+  assert.equal(cape.defense, 0);
+  assert.equal(cape.requirements.level, 150);
 });

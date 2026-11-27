@@ -60,6 +60,9 @@ internal class HnmoMuunCommandHandlerPlugIn : ISubPacketHandlerPlugIn
             case 6:
                 await muuns.LevelUpAsync(player).ConfigureAwait(false);
                 break;
+            case 7:
+                await muuns.FeedDuplicateAsync(player, command.Slot).ConfigureAwait(false);
+                break;
             default:
                 await muuns.SendStateAsync(player, requested: true).ConfigureAwait(false);
                 break;

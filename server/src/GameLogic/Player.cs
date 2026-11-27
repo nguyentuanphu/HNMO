@@ -826,6 +826,11 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
             attacker.ApplyAmmunitionConsumption(hitInfo);
         }
 
+        if (Rand.NextRandomBool(this.Attributes[Stats.CastInvincibilityChance]))
+        {
+            hitInfo = default;
+        }
+
         if (hitInfo is { HealthDamage: 0, ShieldDamage: 0 })
         {
             await this.InvokeViewPlugInAsync<IShowHitPlugIn>(p => p.ShowHitAsync(this, hitInfo)).ConfigureAwait(false);
@@ -856,6 +861,11 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
         if (hitInfo.ManaToll > 0 || manaFullyRecovered)
         {
             this.Attributes[Stats.CurrentMana] = (manaFullyRecovered ? this.Attributes[Stats.MaximumMana] : this.Attributes[Stats.CurrentMana]) - hitInfo.ManaToll;
+        }
+
+        if (Rand.NextRandomBool(this.Attributes[Stats.FullyRecoverShieldAfterHitChance]))
+        {
+            this.Attributes[Stats.CurrentShield] = this.Attributes[Stats.MaximumShield];
         }
 
         await this.HitAsync(hitInfo, attacker, skill?.Skill, isFinalStreakHit).ConfigureAwait(false);

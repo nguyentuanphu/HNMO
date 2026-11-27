@@ -23,8 +23,11 @@ public class SeasonNineSystemsTests
             Assert.That(SeasonNineSystemsCatalog.Muuns, Has.Count.EqualTo(76));
             Assert.That(SeasonNineSystemsCatalog.MuunOptions, Has.Count.EqualTo(37));
             Assert.That(SeasonNineSystemsCatalog.Pentagrams, Has.Count.EqualTo(15));
-            Assert.That(SeasonNineSystemsCatalog.ErrtelOptions, Has.Count.GreaterThanOrEqualTo(60));
+            Assert.That(SeasonNineSystemsCatalog.ErrtelOptions, Has.Count.EqualTo(60));
             Assert.That(SeasonNineSystemsCatalog.ErrtelExtractionRates, Has.Count.EqualTo(55));
+            Assert.That(SeasonNineSystemsCatalog.PentagramMixes, Has.Count.EqualTo(30));
+            Assert.That(SeasonNineSystemsCatalog.PentagramComboOptions, Has.Count.EqualTo(7));
+            Assert.That(SeasonNineSystemsCatalog.MuunOptions[36].Name, Is.Empty);
         });
     }
 

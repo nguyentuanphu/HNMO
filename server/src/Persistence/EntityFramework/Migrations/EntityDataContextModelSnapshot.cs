@@ -273,6 +273,50 @@ namespace HNMO.Persistence.EntityFramework.Migrations
                     b.ToTable("AreaSkillSettings", "config");
                 });
 
+            modelBuilder.Entity("HNMO.Persistence.EntityFramework.Model.AssetOperation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Detail")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Kind")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("PayloadHash")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<int>("PendingCount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("PendingKey")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId", "PendingCount");
+
+                    b.ToTable("AssetOperation", "data");
+                });
+
             modelBuilder.Entity("HNMO.Persistence.EntityFramework.Model.AttributeDefinition", b =>
                 {
                     b.Property<Guid>("Id")
@@ -3298,6 +3342,31 @@ namespace HNMO.Persistence.EntityFramework.Migrations
                     b.ToTable("ItemStorage", "data");
                 });
 
+            modelBuilder.Entity("HNMO.Persistence.EntityFramework.Model.JewelBankBalance", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("JewelKey")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId", "JewelKey")
+                        .IsUnique();
+
+                    b.ToTable("JewelBankBalance", "data");
+                });
+
             modelBuilder.Entity("HNMO.Persistence.EntityFramework.Model.JewelMix", b =>
                 {
                     b.Property<Guid>("Id")
@@ -4715,6 +4784,15 @@ namespace HNMO.Persistence.EntityFramework.Migrations
                     b.Navigation("RawCharacterClass");
                 });
 
+            modelBuilder.Entity("HNMO.Persistence.EntityFramework.Model.AssetOperation", b =>
+                {
+                    b.HasOne("HNMO.Persistence.EntityFramework.Model.Account", null)
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("HNMO.Persistence.EntityFramework.Model.AttributeDefinition", b =>
                 {
                     b.HasOne("HNMO.Persistence.EntityFramework.Model.GameConfiguration", null)
@@ -5981,6 +6059,15 @@ namespace HNMO.Persistence.EntityFramework.Migrations
                     b.Navigation("RawAttribute");
 
                     b.Navigation("RawTable");
+                });
+
+            modelBuilder.Entity("HNMO.Persistence.EntityFramework.Model.JewelBankBalance", b =>
+                {
+                    b.HasOne("HNMO.Persistence.EntityFramework.Model.Account", null)
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("HNMO.Persistence.EntityFramework.Model.JewelMix", b =>

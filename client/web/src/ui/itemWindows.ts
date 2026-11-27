@@ -1186,6 +1186,11 @@ export class ItemWindows {
     dismissConfirm('vault-zen-dialog');
   }
 
+  /** The vault switched to another page (each page has its own zen): a zen box asked on the old page does nothing. */
+  vaultPageChanged(): void {
+    this.vaultEnded();
+  }
+
   async askMoney(toVault: boolean): Promise<void> {
     const question = toVault ? 'How much zen to deposit?' : 'How much zen to withdraw?';
     const session = this.vaultSession;
