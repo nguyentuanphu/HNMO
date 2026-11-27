@@ -18,4 +18,7 @@ public static class DeveloperHubAddress
 
     /// <summary>Gets the address of the newest release's details (version, date, notes, download link).</summary>
     public static string LatestRelease => Url.Length == 0 ? string.Empty : Url + "/api/latest";
+
+    /// <summary>Gets the address of the licence-gated update check (<c>POST /api/update-check</c>).</summary>
+    public static string UpdateCheck => Url.Length == 0 ? string.Empty : Url + "/api/update-check";
 }
