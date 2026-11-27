@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using HNMO.Persistence.EntityFramework.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 
 /// <summary>
@@ -538,13 +539,60 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext
             receipt.PendingCount = Math.Max(0, request.PendingCount);
             receipt.CreatedAt = DateTime.UtcNow;
             added.Add(receipt);
+
+            if (request.FeatureState is { } featureState)
+            {
+                await UpsertFeatureStateInTransactionAsync(context, featureState, token).ConfigureAwait(false);
+            }
+
             status = AssetCommitStatus.Committed;
             return true;
+        }
+
+        if (request.FeatureState is not null && PersistenceContextProvider.ResolveConnectionString() is { } connStr)
+        {
+            new PostgresHnmoPlayerStateRowBackend(connStr).EnsureSchema();
         }
 
         return await this.SaveChangesInTransactionAsync(WriteFirstAsync, added, cancellationToken).ConfigureAwait(false)
             ? AssetCommitStatus.Committed
             : status;
+    }
+
+    private static async ValueTask UpsertFeatureStateInTransactionAsync(EntityDataContext context, FeatureStateWrite fs, CancellationToken token)
+    {
+        var conn = context.Database.GetDbConnection();
+        await using var cmd = conn.CreateCommand();
+        cmd.Transaction = context.Database.CurrentTransaction?.GetDbTransaction();
+        cmd.CommandText = """
+            INSERT INTO hnmo.player_feature_state (feature, scope_id, payload_json, updated_at_utc, expires_at_utc)
+            VALUES (@f, @s, @p::jsonb, @u, @e)
+            ON CONFLICT (feature, scope_id) DO UPDATE
+            SET payload_json = EXCLUDED.payload_json,
+                updated_at_utc = EXCLUDED.updated_at_utc,
+                expires_at_utc = EXCLUDED.expires_at_utc
+            """;
+        var pF = cmd.CreateParameter();
+        pF.ParameterName = "@f";
+        pF.Value = fs.Feature;
+        cmd.Parameters.Add(pF);
+        var pS = cmd.CreateParameter();
+        pS.ParameterName = "@s";
+        pS.Value = fs.ScopeId;
+        cmd.Parameters.Add(pS);
+        var pP = cmd.CreateParameter();
+        pP.ParameterName = "@p";
+        pP.Value = fs.PayloadJson;
+        cmd.Parameters.Add(pP);
+        var pU = cmd.CreateParameter();
+        pU.ParameterName = "@u";
+        pU.Value = DateTime.SpecifyKind(fs.UpdatedAtUtc, DateTimeKind.Utc);
+        cmd.Parameters.Add(pU);
+        var pE = cmd.CreateParameter();
+        pE.ParameterName = "@e";
+        pE.Value = fs.ExpiresAtUtc is { } exp ? DateTime.SpecifyKind(exp, DateTimeKind.Utc) : DBNull.Value;
+        cmd.Parameters.Add(pE);
+        await cmd.ExecuteNonQueryAsync(token).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
