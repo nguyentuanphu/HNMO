@@ -313,24 +313,27 @@ internal sealed class HnmoUpdater
             return;
         }
 
+        // Without a licence file the folder asks as a free host (owner, 2026-11-27: the free build updates itself too);
+        // the hub still refuses a licence that is broken, another computer's or withdrawn.
         var licenceText = this.ReadLicenceText();
-        if (string.IsNullOrWhiteSpace(licenceText))
-        {
-            this.ClearAuthorizedOffer();
-            this._logger.LogInformation("HNMO update check: no licence file present; staying on current files.");
-            return;
-        }
-
+        var hasLicence = !string.IsNullOrWhiteSpace(licenceText);
         var machineId = (this._machineIdProvider ?? (() => HostMachineIdentity.MachineId))();
         var legacyMachineId = (this._legacyMachineIdProvider ?? (() => HostMachineIdentity.LegacyMachineId))();
-        var requestBody = new
-        {
-            licenceId = ReadLicenceId(licenceText),
-            machineId,
-            legacyMachineId,
-            buildStamp = this.ReadBuildStamp(),
-            licence = Convert.ToBase64String(Encoding.UTF8.GetBytes(licenceText)),
-        };
+        object requestBody = hasLicence
+            ? new
+            {
+                licenceId = ReadLicenceId(licenceText),
+                machineId,
+                legacyMachineId,
+                buildStamp = this.ReadBuildStamp(),
+                licence = Convert.ToBase64String(Encoding.UTF8.GetBytes(licenceText)),
+            }
+            : new
+            {
+                machineId,
+                legacyMachineId,
+                buildStamp = this.ReadBuildStamp(),
+            };
 
         try
         {

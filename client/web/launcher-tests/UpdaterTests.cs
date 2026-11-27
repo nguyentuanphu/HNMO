@@ -102,11 +102,22 @@ public class UpdaterTests
             File.WriteAllText(Path.Combine(root, "version.json"), """{"version":"1.0.0"}""");
             File.WriteAllText(Path.Combine(root, "manifest.json"), JsonSerializer.Serialize(new UpdateManifest("1.0.0", "HNMO-test-stamp", [new("server/app.dll", oldBytes.Length, oldHash)])));
 
-            // 1) No licence: no /api/update-check request, no update offered, current files kept.
-            var noLicenceHandler = new StubHubHandler((_, _) => throw new AssertionException("Hub must not be contacted without a licence."));
+            // 1) No licence: the folder asks as a free host (no licence in the request); with no release offered it keeps
+            //    its current files.
+            string? freeBody = null;
+            var noLicenceHandler = new StubHubHandler(async (req, ct) =>
+            {
+                Assert.That(req.RequestUri!.AbsolutePath, Is.EqualTo("/api/update-check"));
+                freeBody = await req.Content!.ReadAsStringAsync(ct).ConfigureAwait(false);
+                return new HttpResponseMessage(HttpStatusCode.NotFound) { Content = new StringContent("""{"error":"none"}""") };
+            });
             var updater = new HnmoUpdater(root, save, 8080, 8095, new StubClientFactory(noLicenceHandler), NullLogger.Instance, () => "aaaa1111bbbb2222", () => "cccc3333dddd4444");
             var noLicStatus = await updater.StatusAsync(true, CancellationToken.None).ConfigureAwait(false);
             Assert.That(noLicStatus.Available, Is.False);
+            var freeSent = JsonNode.Parse(freeBody!)!.AsObject();
+            Assert.That(freeSent["machineId"]!.GetValue<string>(), Is.EqualTo("aaaa1111bbbb2222"));
+            Assert.That(freeSent.ContainsKey("licence"), Is.False, "a free host sends no licence");
+            Assert.That(freeSent.ContainsKey("licenceId"), Is.False);
             Assert.That(File.ReadAllBytes(Path.Combine(root, "server", "app.dll")), Is.EqualTo(oldBytes));
 
             // Write licence.hnmo
