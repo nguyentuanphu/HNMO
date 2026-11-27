@@ -83,6 +83,7 @@ test('the (i) button opens the guide', async ({ page }) => {
   await expect(page.locator('#guide iframe')).toBeVisible();
   await page.click('#guide .close');
   await enterWorld(page, 'test300');
+  await page.click('#hudToolsToggle');
   await page.click('#guideButton');
   const guide = page.frameLocator('#guide iframe');
   await expect(guide.locator('h1')).toHaveText(`${configuredName} Guide`);

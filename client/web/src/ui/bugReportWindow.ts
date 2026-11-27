@@ -119,7 +119,7 @@ export function isBugReportShortcut(event: Pick<KeyboardEvent, 'code' | 'altKey'
 }
 
 /**
- * The 🐞 button for PCs and Macs, in the game's top bar next to the guide's "i" (index.html; phones have it in their
+ * The 🐞 button for PCs and Macs, in the drawer of the top bar's ⚙, next to the guide's "i" (index.html; phones have it in their
  * menus).
  */
 function installDesktopButton(toggle: () => void): void {

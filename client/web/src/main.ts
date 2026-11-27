@@ -1901,6 +1901,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     },
     onApply: (config) => autoPlay.setConfig(config),
     onMessage: (text) => chat.add(text, 'system'),
+    onBeforeOpen: () => { if (state.onboarding?.isOpen) state.onboarding.close(); },
   });
   state.settingsWindow = settingsWindow;
   const applyServerConfig = (bytes: Uint8Array) => {
@@ -2228,7 +2229,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     if (event.key.toLowerCase() === 'a' && event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) { event.preventDefault(); arena.toggle(); }
   });
   window.addEventListener('hnmo-arena-open', () => { arena.open(); });
-  // Bug reports (Alt/Option+B, the 🐞 button in the top bar on PCs and Macs, 🐞 in the phone menu): to the server's owner, who may send them on to the HNMO developer.
+  // Bug reports (Alt/Option+B, the 🐞 button under the top bar's ⚙ on PCs and Macs, 🐞 in the phone menu): to the server's owner, who may send them on to the HNMO developer.
   const bugReports = new BugReportWindow({
     send: (name, fields) => connection.send('ClientToServer', name, fields),
     message: (text) => chat.add(text, 'system'),
@@ -3057,5 +3058,32 @@ if (soundButton) {
   const show = () => soundButton.setAttribute('aria-pressed', String(sounds.audio.getSettings().muted));
   soundButton.addEventListener('click', () => { sounds.audio.setMuted(!sounds.audio.getSettings().muted); show(); });
   show();
+}
+// Touch-expandable top utility bar next to Autoplay (starts collapsed to the cog icon).
+const hudTools = document.getElementById('hudTools');
+const hudToolsToggle = document.getElementById('hudToolsToggle');
+if (hudTools && hudToolsToggle) {
+  const setToolsExpanded = (open: boolean) => {
+    hudTools.classList.toggle('expanded', open);
+    hudToolsToggle.setAttribute('aria-expanded', String(open));
+  };
+  for (const ev of ['pointerdown', 'touchstart', 'mousedown'] as const) {
+    hudTools.addEventListener(ev, (e) => e.stopPropagation(), { passive: ev === 'touchstart' });
+  }
+  hudToolsToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    setToolsExpanded(!hudTools.classList.contains('expanded'));
+  });
+  document.getElementById('guideButton')?.addEventListener('click', () => setToolsExpanded(false));
+  document.getElementById('settingsButton')?.addEventListener('click', () => setToolsExpanded(false));
+  document.getElementById('hnmoBugButton')?.addEventListener('click', () => setToolsExpanded(false));
+  document.addEventListener('pointerdown', (e) => {
+    if (hudTools.classList.contains('expanded') && !hudTools.contains(e.target as Node)) {
+      setToolsExpanded(false);
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && hudTools.classList.contains('expanded')) setToolsExpanded(false);
+  });
 }
 requestAnimationFrame(frame);
