@@ -271,7 +271,7 @@ public sealed class PostgresSharedAccountStore(string connectionString) : ICoord
                 return null;
             }
 
-            return new AdvisoryLockLease(connection);
+            return new AdvisoryLockLease(connection, key);
         }
         catch
         {
@@ -280,8 +280,32 @@ public sealed class PostgresSharedAccountStore(string connectionString) : ICoord
         }
     }
 
-    private sealed class AdvisoryLockLease(NpgsqlConnection connection) : IAsyncDisposable
+    /// <summary>
+    /// A held session advisory lock. It is unlocked explicitly: closing the connection only gives it back to the pool,
+    /// where the session (and its lock) lives on until the connection is used again, so the next recovery found the
+    /// operation or the realm "busy" and skipped it (a transaction kept pending while the local database was unreadable
+    /// then stayed prepared).
+    /// </summary>
+    private sealed class AdvisoryLockLease(NpgsqlConnection connection, long key) : IAsyncDisposable
     {
-        public ValueTask DisposeAsync() => connection.DisposeAsync();
+        public async ValueTask DisposeAsync()
+        {
+            try
+            {
+                await using var cmd = connection.CreateCommand();
+                cmd.CommandText = "SELECT pg_advisory_unlock(@key);";
+                cmd.Parameters.AddWithValue("key", key);
+                await cmd.ExecuteScalarAsync().ConfigureAwait(false);
+            }
+            catch (Exception ex) when (ex is NpgsqlException or InvalidOperationException)
+            {
+                // The connection is gone, and with it the session and its lock: clear it from the pool so it isn't reused.
+                NpgsqlConnection.ClearPool(connection);
+            }
+            finally
+            {
+                await connection.DisposeAsync().ConfigureAwait(false);
+            }
+        }
     }
 }
