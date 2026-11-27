@@ -42,6 +42,11 @@ public static class SeasonSharedAccounts
             return false;
         }
 
+        if (store is ICoordinatedSharedCoinStore coordinated)
+        {
+            await SharedCoinCoordinator.RecoverAsync(coordinated, createContext, SharedCoinRealm.Current, cancellationToken: cancellationToken).ConfigureAwait(false);
+        }
+
         var shared = await store.FindAsync(loginName.Trim(), cancellationToken).ConfigureAwait(false);
         if (shared is null)
         {
@@ -160,6 +165,71 @@ public static class SeasonSharedAccounts
 
             (CoinBalances.Of(account) - receipt.Shift).ApplyTo(account);
             Baselines[receipt.LoginName] = receipt.PreviousBaseline;
+        }
+        finally
+        {
+            syncLock.Release();
+        }
+    }
+
+    /// <summary>
+    /// Saves the player's pending changes and synchronizes any net coin delta with the canonical database via
+    /// two-phase coordination (<see cref="SharedCoinCoordinator"/>). When no coin delta occurred, saves locally.
+    /// Any fee that exceeds the canonical shared balance is refused in full without committing local changes.
+    /// </summary>
+    /// <param name="store">Coordinated canonical coin store.</param>
+    /// <param name="player">Player holding the persistence lock.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns><c>true</c> if the save succeeded; <c>false</c> if refused.</returns>
+    public static async ValueTask<bool> SaveWithCoordinatedCoinsAsync(
+        ICoordinatedSharedCoinStore store,
+        Player player,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(store);
+        ArgumentNullException.ThrowIfNull(player);
+
+        var account = player.Account;
+        if (account is null || account.IsBot || account.IsTemplate || string.IsNullOrEmpty(account.LoginName))
+        {
+            return await player.PersistenceContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        var syncLock = SyncLocks.GetOrAdd(account.LoginName, static _ => new SemaphoreSlim(1, 1));
+        await syncLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            var snapshot = CoinBalances.Of(account);
+            var baseline = Baselines.TryGetValue(account.LoginName, out var known) ? known : snapshot;
+            var delta = snapshot - baseline;
+            if (delta.IsZero)
+            {
+                return await player.PersistenceContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            }
+
+            var operationId = Guid.NewGuid();
+            var payload = $"{SharedCoinRealm.Current}|{account.LoginName}|{operationId:N}|{delta.WCoinC},{delta.WCoinP},{delta.GoblinPoints}";
+            var result = await SharedCoinCoordinator.ExecuteAsync(
+                store,
+                player.PersistenceContext,
+                () => player.GameContext.PersistenceContextProvider.CreateNewPlayerContext(player.GameContext.Configuration),
+                account,
+                operationId,
+                delta,
+                "shared-coin-sync",
+                "game",
+                AssetOperationCommitter.PayloadHash(payload),
+                SharedCoinRealm.Current,
+                player.Logger,
+                cancellationToken: cancellationToken).ConfigureAwait(false);
+
+            if (result.Outcome is SharedCoinCommitOutcome.Refused or SharedCoinCommitOutcome.Conflict)
+            {
+                return false;
+            }
+
+            Baselines[account.LoginName] = result.After;
+            return true;
         }
         finally
         {

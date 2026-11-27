@@ -67,6 +67,15 @@ internal sealed class PlayerPersistence
         return await this.RunExclusiveAsync(
             async () =>
             {
+                if (HNMO.Persistence.SharedAccountStore.Current is HNMO.Persistence.ICoordinatedSharedCoinStore coordinatedStore
+                    && this._player.Account is { IsBot: false, IsTemplate: false, LoginName.Length: > 0 })
+                {
+                    return await Seasons.SeasonSharedAccounts.SaveWithCoordinatedCoinsAsync(
+                        coordinatedStore,
+                        this._player,
+                        cancellationToken).ConfigureAwait(false);
+                }
+
                 var receipt = await this.SyncSharedCoinsAsync(cancellationToken).ConfigureAwait(false);
                 var saved = false;
                 try
