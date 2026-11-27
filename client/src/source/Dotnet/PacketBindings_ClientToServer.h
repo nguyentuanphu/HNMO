@@ -412,6 +412,56 @@ typedef void(CORECLR_DELEGATE_CALLTYPE* SendDiscordLinkCodeRequest)(int32_t);
 
 typedef void(CORECLR_DELEGATE_CALLTYPE* SendDiscordUnlinkRequest)(int32_t);
 
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoMissionsRequest)(int32_t);
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoMissionsAction)(int32_t, HnmoMissionsActionType , const char16_t* );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoWorldBossesRequest)(int32_t);
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoWorldBossesAction)(int32_t, HnmoWorldBossesActionType , const char16_t* );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoOnboardingRequest)(int32_t);
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoOnboardingAction)(int32_t, HnmoOnboardingActionType , const char16_t* );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoGuildsRequest)(int32_t);
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoGuildsAction)(int32_t, HnmoGuildsActionType , const char16_t* );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoCommunityRequest)(int32_t);
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoCommunityAction)(int32_t, HnmoCommunityActionType , const char16_t* );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoTopRacesRequest)(int32_t);
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoTopRacesAction)(int32_t, HnmoTopRacesActionType , const char16_t* );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoGiftCodeRedeemExtended)(int32_t, const char16_t* , const char16_t* );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoGiftCodesRequest)(int32_t);
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoGiftCodesAction)(int32_t, HnmoGiftCodesActionType , const char16_t* );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoResetsRequest)(int32_t);
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoResetsAction)(int32_t, HnmoResetsActionType );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoAccountSafetyRequest)(int32_t);
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoAccountSafetyAction)(int32_t, HnmoAccountSafetyActionType , BYTE , BYTE , uint16_t );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoTicketLogin)(int32_t, const char16_t* , const char16_t* );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoTopUpMilestonesCommand)(int32_t, HnmoTopUpMilestonesActionType , const char16_t* );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoTimetableCommand)(int32_t, HnmoTimetableActionType , const char16_t* );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoLuckyNumberCommand)(int32_t, HnmoLuckyNumberActionType , uint32_t );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoMarriageCommand)(int32_t, HnmoMarriageActionType , const char16_t* );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoMarketCommand)(int32_t, HnmoMarketActionType , BYTE , BYTE , uint32_t , const char16_t* );
+
 typedef void(CORECLR_DELEGATE_CALLTYPE* SendCharacterRenameRequest)(int32_t, const char16_t* , const char16_t* );
 
 typedef void(CORECLR_DELEGATE_CALLTYPE* SendInventoryItemEquipRequest)(int32_t, BYTE , BYTE );
@@ -421,3 +471,37 @@ typedef void(CORECLR_DELEGATE_CALLTYPE* SendRequestD000)(int32_t);
 typedef void(CORECLR_DELEGATE_CALLTYPE* SendGameServerChannelRequest)(int32_t, BYTE );
 
 typedef void(CORECLR_DELEGATE_CALLTYPE* SendGameGuardAuthResponse)(int32_t, const BYTE* , uint32_t);
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoJewelBankCommand)(int32_t, BYTE , BYTE , uint32_t , const char16_t* );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoCatchupCapRequest)(int32_t);
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoSeasonPlanRequest)(int32_t);
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoLeftoversCommand)(int32_t, BYTE , const char16_t* );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoMountChainCommand)(int32_t, BYTE , const char16_t* );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoPartyOptionsCommand)(int32_t, BYTE , const char16_t* );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoRankingCommand)(int32_t, BYTE , const char16_t* );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoCustomRanksCommand)(int32_t, BYTE , const char16_t* );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoTeleportNpcCommand)(int32_t, BYTE , const char16_t* );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoEscrowCommand)(int32_t, BYTE , const char16_t* );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoVaultPageCommand)(int32_t, BYTE , BYTE );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoUltimateAutoPlayRequest)(int32_t);
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoBugReportCommand)(int32_t, BYTE , const char16_t* );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoArenaTravelRequest)(int32_t, BYTE , BYTE );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoItemStackCommand)(int32_t, BYTE , BYTE , BYTE , BYTE , const char16_t* );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoVipRequest)(int32_t, uint32_t , const char16_t* );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoGiftBoxRequest)(int32_t, uint32_t , const char16_t* );

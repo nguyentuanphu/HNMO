@@ -2126,6 +2126,267 @@ public:
     void SendDiscordUnlinkRequest();
 
     /// <summary>
+    /// Sends a HnmoMissionsRequest to this connection.
+    /// </summary>
+    /// <remarks>
+    /// Is sent by the client when: The player opens HNMO's missions window.
+    /// Causes reaction on server side: The server sends the HnmoMissionsState message, and from then on sends it again when something changes, e.g. a mission is finished.
+    /// </remarks>
+    void SendHnmoMissionsRequest();
+
+    /// <summary>
+    /// Sends a HnmoMissionsAction to this connection.
+    /// </summary>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">The mission id for ClaimMission; the invite code or a character name of the inviting account for EnterInvite; empty otherwise.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player clicks a button of HNMO's missions window: claim the reward of a mission, the streak bonus or the login calendar day, or enter who invited the account.
+    /// Causes reaction on server side: The server does it and sends the HnmoMissionsState message with the result.
+    /// </remarks>
+    void SendHnmoMissionsAction(HnmoMissionsActionType action, const char16_t* argument);
+
+    /// <summary>
+    /// Sends a HnmoWorldBossesRequest to this connection.
+    /// </summary>
+    /// <remarks>
+    /// Is sent by the client when: The web game entered the world, or the player opens HNMO's world boss window.
+    /// Causes reaction on server side: The server sends the HnmoWorldBossesState message, and from then on sends it again when something changes, e.g. a boss is announced, appears, is hit or killed.
+    /// </remarks>
+    void SendHnmoWorldBossesRequest();
+
+    /// <summary>
+    /// Sends a HnmoWorldBossesAction to this connection.
+    /// </summary>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">Not used yet; empty.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player clicks a button of HNMO's world boss window, e.g. to take the rewards which waited for room in the bag.
+    /// Causes reaction on server side: The server does it and sends the HnmoWorldBossesState message with the result.
+    /// </remarks>
+    void SendHnmoWorldBossesAction(HnmoWorldBossesActionType action, const char16_t* argument);
+
+    /// <summary>
+    /// Sends a HnmoOnboardingRequest to this connection.
+    /// </summary>
+    /// <remarks>
+    /// Is sent by the client when: The web game entered the world, or the player opens HNMO's guide panel.
+    /// Causes reaction on server side: The server sends the HnmoOnboardingState message, and from then on sends it again when something changes, e.g. a step is done or a reward is given.
+    /// </remarks>
+    void SendHnmoOnboardingRequest();
+
+    /// <summary>
+    /// Sends a HnmoOnboardingAction to this connection.
+    /// </summary>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">Not used yet; empty.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player clicks a button of HNMO's guide panel: skip the guide (after a confirmation), skip an optional step, or take the rewards which waited for room in the bag.
+    /// Causes reaction on server side: The server does it and sends the HnmoOnboardingState message with the result.
+    /// </remarks>
+    void SendHnmoOnboardingAction(HnmoOnboardingActionType action, const char16_t* argument);
+
+    /// <summary>
+    /// Sends a HnmoGuildsRequest to this connection.
+    /// </summary>
+    /// <remarks>
+    /// Is sent by the client when: The web game entered the world, or the player opens the guild window.
+    /// Causes reaction on server side: The server sends the HnmoGuildsState message, and from then on sends it again when something changes, e.g. the guild reached a level or a ladder reward was given.
+    /// </remarks>
+    void SendHnmoGuildsRequest();
+
+    /// <summary>
+    /// Sends a HnmoGuildsAction to this connection.
+    /// </summary>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">Not used yet; empty.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player clicks a button of HNMO's guild levels panel, e.g. to take the ladder rewards which waited for room in the bag.
+    /// Causes reaction on server side: The server does it and sends the HnmoGuildsState message with the result.
+    /// </remarks>
+    void SendHnmoGuildsAction(HnmoGuildsActionType action, const char16_t* argument);
+
+    /// <summary>
+    /// Sends a HnmoCommunityRequest to this connection.
+    /// </summary>
+    /// <remarks>
+    /// Is sent by the client when: The web game entered the world, or the player opens the community window.
+    /// Causes reaction on server side: The server sends the HnmoCommunityState message, and from then on sends it again when something changes, e.g. community coins or an event reward were given.
+    /// </remarks>
+    void SendHnmoCommunityRequest();
+
+    /// <summary>
+    /// Sends a HnmoCommunityAction to this connection.
+    /// </summary>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">The event's code (EnterCode), the player's name in Zalo (ClaimZalo, may be empty); empty otherwise.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player clicks a button of HNMO's community window: take the Discord coins, claim the Zalo coins, enter an event's code or take the waiting rewards.
+    /// Causes reaction on server side: The server does it and sends the HnmoCommunityState message with the result.
+    /// </remarks>
+    void SendHnmoCommunityAction(HnmoCommunityActionType action, const char16_t* argument);
+
+    /// <summary>
+    /// Sends a HnmoTopRacesRequest to this connection.
+    /// </summary>
+    /// <remarks>
+    /// Is sent by the client when: The web game entered the world, or the player opens the top races window.
+    /// Causes reaction on server side: The server sends the HnmoTopRacesState message, and from then on sends it again when something changes, e.g. a race started or ended or a prize was given.
+    /// </remarks>
+    void SendHnmoTopRacesRequest();
+
+    /// <summary>
+    /// Sends a HnmoTopRacesAction to this connection.
+    /// </summary>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">Not used yet; empty.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player clicks a button of HNMO's top races window, e.g. to take the prizes which waited for room in the bag.
+    /// Causes reaction on server side: The server does it and sends the HnmoTopRacesState message with the result.
+    /// </remarks>
+    void SendHnmoTopRacesAction(HnmoTopRacesActionType action, const char16_t* argument);
+
+    /// <summary>
+    /// Sends a HnmoGiftCodeRedeemExtended to this connection.
+    /// </summary>
+    /// <param name="giftCode">The gift code.</param>
+    /// <param name="deviceId">The device id.</param>
+    /// <remarks>
+    /// Is sent by the client when: A web player enters a gift code, including the persistent browser device UUID.
+    /// Causes reaction on server side: The server checks the account, network and optional device limits and sends HnmoGiftCodesState with the result.
+    /// </remarks>
+    void SendHnmoGiftCodeRedeemExtended(const char16_t* giftCode, const char16_t* deviceId);
+
+    /// <summary>
+    /// Sends a HnmoGiftCodesRequest to this connection.
+    /// </summary>
+    /// <remarks>
+    /// Is sent by the client when: The web game entered the world, or the player opens the gift code window.
+    /// Causes reaction on server side: The server sends the HnmoGiftCodesState message, and from then on sends it again when something changes, e.g. a code was entered with the chat command or waiting rewards were given.
+    /// </remarks>
+    void SendHnmoGiftCodesRequest();
+
+    /// <summary>
+    /// Sends a HnmoGiftCodesAction to this connection.
+    /// </summary>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">The code for Redeem; empty otherwise.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player clicks a button of HNMO's gift code window: enter a code, or take the rewards which waited for room in the bag.
+    /// Causes reaction on server side: The server does it and sends the HnmoGiftCodesState message with the result.
+    /// </remarks>
+    void SendHnmoGiftCodesAction(HnmoGiftCodesActionType action, const char16_t* argument);
+
+    /// <summary>
+    /// Sends a HnmoResetsRequest to this connection.
+    /// </summary>
+    /// <remarks>
+    /// Is sent by the client when: The web game entered the world.
+    /// Causes reaction on server side: The server sends the HnmoResetsState message, and from then on sends it again when something changes, e.g. a reset with the NPC or the chat command, a relife, or delegated resets done while the player was away.
+    /// </remarks>
+    void SendHnmoResetsRequest();
+
+    /// <summary>
+    /// Sends a HnmoResetsAction to this connection.
+    /// </summary>
+    /// <param name="action">The action.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player asks the web game for a reset, a relife, the next reset's needs, or switches the delegated reset.
+    /// Causes reaction on server side: The server does it and sends the HnmoResetsState message with the result (and a chat message).
+    /// </remarks>
+    void SendHnmoResetsAction(HnmoResetsActionType action);
+
+    /// <summary>
+    /// Sends a HnmoAccountSafetyRequest to this connection.
+    /// </summary>
+    /// <remarks>
+    /// Is sent by the client when: The web game entered the world.
+    /// Causes reaction on server side: The server sends the HnmoAccountSafetyState message, and from then on sends it again when something changes, e.g. an action needs the second password, an item was locked or unlocked, or a locked item moved.
+    /// </remarks>
+    void SendHnmoAccountSafetyRequest();
+
+    /// <summary>
+    /// Sends a HnmoAccountSafetyAction to this connection.
+    /// </summary>
+    /// <param name="action">The action.</param>
+    /// <param name="vault">Whether the slot is in the vault (else the inventory).</param>
+    /// <param name="slot">The item's slot.</param>
+    /// <param name="pin">The second password (0-9999); 0xFFFF when none was entered.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player enters the second password in the web game, or locks or unlocks an item.
+    /// Causes reaction on server side: The server does it, answers in the chat and sends the HnmoAccountSafetyState message with the result.
+    /// </remarks>
+    void SendHnmoAccountSafetyAction(HnmoAccountSafetyActionType action, BYTE vault, BYTE slot, uint16_t pin);
+
+    /// <summary>
+    /// Sends a HnmoTicketLogin to this connection.
+    /// </summary>
+    /// <param name="username">The account login name.</param>
+    /// <param name="ticket">The one-time login ticket issued on the website.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game connects with a one-time login ticket issued on the website.
+    /// Causes reaction on server side: The server redeems the ticket once and logs the player in without a password.
+    /// </remarks>
+    void SendHnmoTicketLogin(const char16_t* username, const char16_t* ticket);
+
+    /// <summary>
+    /// Sends a HnmoTopUpMilestonesCommand to this connection.
+    /// </summary>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">Milestone step id when Claim; empty otherwise.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game enters the world, opens the top-up milestones window, claims a milestone step, or takes waiting rewards.
+    /// Causes reaction on server side: The server performs the action and replies with HnmoTopUpMilestonesState.
+    /// </remarks>
+    void SendHnmoTopUpMilestonesCommand(HnmoTopUpMilestonesActionType action, const char16_t* argument);
+
+    /// <summary>
+    /// Sends a HnmoTimetableCommand to this connection.
+    /// </summary>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">Optional filter or payload string.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game enters the world or opens the Event and Boss Timetable window.
+    /// Causes reaction on server side: The server replies with HnmoTimetableState (F5 33).
+    /// </remarks>
+    void SendHnmoTimetableCommand(HnmoTimetableActionType action, const char16_t* argument);
+
+    /// <summary>
+    /// Sends a HnmoLuckyNumberCommand to this connection.
+    /// </summary>
+    /// <param name="action">The action.</param>
+    /// <param name="number">The picked lucky number when Action is Pick.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game enters the world, opens Daily Lucky Number (L), picks a number, or claims waiting prizes.
+    /// Causes reaction on server side: The server updates the player's pick or claims owed rewards and answers with HnmoLuckyNumberState (F5 35).
+    /// </remarks>
+    void SendHnmoLuckyNumberCommand(HnmoLuckyNumberActionType action, uint32_t number);
+
+    /// <summary>
+    /// Sends a HnmoMarriageCommand to this connection.
+    /// </summary>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">Partner character name or custom couple title.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player opens the Marriage window (Shift+M), proposes, accepts/declines, edits couple title, warps to spouse, or divorces.
+    /// Causes reaction on server side: The server validates the ceremony/marriage action and sends HnmoMarriageState (F5 37).
+    /// </remarks>
+    void SendHnmoMarriageCommand(HnmoMarriageActionType action, const char16_t* argument);
+
+    /// <summary>
+    /// Sends a HnmoMarketCommand to this connection.
+    /// </summary>
+    /// <param name="action">The action.</param>
+    /// <param name="slot">Inventory slot when listing an item.</param>
+    /// <param name="currency">0=Zen, 1=WCoinC, 2=WCoinP, 3=GoblinPoints.</param>
+    /// <param name="price">Asking price in the selected currency.</param>
+    /// <param name="listingId">Target listing identifier when buying or canceling.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player opens the Item Market (F6 or Julia NPC), lists a bag item, buys or cancels a listing, or claims deliveries/payouts.
+    /// Causes reaction on server side: The server performs the atomic escrow market action and replies with HnmoMarketState (F5 39).
+    /// </remarks>
+    void SendHnmoMarketCommand(HnmoMarketActionType action, BYTE slot, BYTE currency, uint32_t price, const char16_t* listingId);
+
+    /// <summary>
     /// Sends a CharacterRenameRequest to this connection.
     /// </summary>
     /// <param name="oldName">The old name.</param>
@@ -2176,4 +2437,190 @@ public:
     /// Causes reaction on server side: The server can verify the GameGuard answer.
     /// </remarks>
     void SendGameGuardAuthResponse(const BYTE* data, uint32_t dataByteLength);
+
+    /// <summary>
+    /// Sends a HnmoJewelBankCommand to this connection.
+    /// </summary>
+    /// <param name="action">1 = Request state, 2 = Deposit single bag slot, 3 = Deposit all jewels, 4 = Withdraw jewel, 5 = Clear master skill points.</param>
+    /// <param name="slot">Bag slot index when depositing a single slot.</param>
+    /// <param name="amount">Withdrawal quantity.</param>
+    /// <param name="key">Jewel key (e.g. bless, soul, life, creation, chaos, harmony, guardian).</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to open the Jewel Bank, deposit or withdraw jewels, or clear master skill points.
+    /// Causes reaction on server side: The server performs the action and responds with HnmoJewelBankState (F5 3B).
+    /// </remarks>
+    void SendHnmoJewelBankCommand(BYTE action, BYTE slot, uint32_t amount, const char16_t* key);
+
+    /// <summary>
+    /// Sends a HnmoCatchupCapRequest to this connection.
+    /// </summary>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to query today's Catch-up Level and Reset Cap state.
+    /// Causes reaction on server side: The server responds with HnmoCatchupCapState (F5 3D).
+    /// </remarks>
+    void SendHnmoCatchupCapRequest();
+
+    /// <summary>
+    /// Sends a HnmoSeasonPlanRequest to this connection.
+    /// </summary>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to open or refresh the Season Plan timeline (F8).
+    /// Causes reaction on server side: The server replies with HnmoSeasonPlanState (F5 3F).
+    /// </remarks>
+    void SendHnmoSeasonPlanRequest();
+
+    /// <summary>
+    /// Sends a HnmoLeftoversCommand to this connection.
+    /// </summary>
+    /// <param name="action">1 = RequestState, 2 = CombineRecipe, 3 = ExchangeOffer.</param>
+    /// <param name="id">Target recipe or exchange offer identifier.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to open Combining Leftovers / Exchange NPC (F10), run a combine recipe, or exchange surplus materials.
+    /// Causes reaction on server side: The server performs the recipe/exchange and sends HnmoLeftoversState (F5 41).
+    /// </remarks>
+    void SendHnmoLeftoversCommand(BYTE action, const char16_t* id);
+
+    /// <summary>
+    /// Sends a HnmoMountChainCommand to this connection.
+    /// </summary>
+    /// <param name="action">0 = RequestState, 1 = CraftOrUpgrade, 2 = SummonUnlocked.</param>
+    /// <param name="id">Target mount tier or recipe identifier.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to open the Mount Chain collection (Shift+U), craft/upgrade a mount step, or claim/summon a collected mount.
+    /// Causes reaction on server side: The server processes the mount chain action and sends HnmoMountChainState (F5 43).
+    /// </remarks>
+    void SendHnmoMountChainCommand(BYTE action, const char16_t* id);
+
+    /// <summary>
+    /// Sends a HnmoPartyOptionsCommand to this connection.
+    /// </summary>
+    /// <param name="action">0 = RequestState, 1 = AdvertiseSpotOrPass, 2 = JoinByPassword, 3 = JoinSpot, 4 = StopAdvertising.</param>
+    /// <param name="payload">JSON string containing password, spot, leader, minLevel, maxLevel.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to request party options, advertise a hunting spot party/password, or auto-join a spot/password party.
+    /// Causes reaction on server side: The server processes the request and replies with HnmoPartyOptionsState (F5 45).
+    /// </remarks>
+    void SendHnmoPartyOptionsCommand(BYTE action, const char16_t* payload);
+
+    /// <summary>
+    /// Sends a HnmoRankingCommand to this connection.
+    /// </summary>
+    /// <param name="action">0 = RequestRankings, 1 = BulkAddStats.</param>
+    /// <param name="payload">Optional category filter or JSON stat allocation map (str, agi, vit, ene, cmd).</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to request the in-game player, guild, online, and event rankings or submit a bulk stat-point distribution.
+    /// Causes reaction on server side: The server processes the command and replies with HnmoRankingState (F5 47).
+    /// </remarks>
+    void SendHnmoRankingCommand(BYTE action, const char16_t* payload);
+
+    /// <summary>
+    /// Sends a HnmoCustomRanksCommand to this connection.
+    /// </summary>
+    /// <param name="action">0 = RequestState, 1 = SelectRank (empty RankId restores automatic highest rank).</param>
+    /// <param name="rankId">The rank tier identifier to equip, or empty for automatic highest tier.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to request custom rank definitions and active player titles, or to equip/reset a player's displayed title.
+    /// Causes reaction on server side: The server processes the command and replies with HnmoCustomRanksState (F5 49).
+    /// </remarks>
+    void SendHnmoCustomRanksCommand(BYTE action, const char16_t* rankId);
+
+    /// <summary>
+    /// Sends a HnmoTeleportNpcCommand to this connection.
+    /// </summary>
+    /// <param name="action">0 = RequestMenu, 1 = WarpToDestination.</param>
+    /// <param name="destinationId">Target destination identifier from HnmoTeleportNpcState.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to request the Teleport NPC destination list or warp to a selected destination.
+    /// Causes reaction on server side: The server validates requirements and Zen fee, warps the character if eligible, and replies with HnmoTeleportNpcState (F5 4B).
+    /// </remarks>
+    void SendHnmoTeleportNpcCommand(BYTE action, const char16_t* destinationId);
+
+    /// <summary>
+    /// Sends a HnmoEscrowCommand to this connection.
+    /// </summary>
+    /// <param name="action">0 = RequestState, 1 = CreateContract, 2 = AcceptContract, 3 = CancelContract, 4 = ClaimOwed.</param>
+    /// <param name="payload">JSON command payload (contract details, contractId, pin, confirmHighValue).</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to request or mutate escrow contracts or trade credit actions.
+    /// Causes reaction on server side: The server validates safety, balance, and concurrency rules and replies with HnmoEscrowState (F5 4D).
+    /// </remarks>
+    void SendHnmoEscrowCommand(BYTE action, const char16_t* payload);
+
+    /// <summary>
+    /// Sends a HnmoVaultPageCommand to this connection.
+    /// </summary>
+    /// <param name="action">0 = RequestState, 1 = SwitchPage, 2 = BuyPage.</param>
+    /// <param name="page">The page (0-based) for SwitchPage; 0 otherwise.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client when its vault window opens, when the player picks a vault page, or buys one more page.
+    /// Causes reaction on server side: The server answers with HnmoVaultPageState (F5 4F); a switch also sends the new page's items to the open vault window.
+    /// </remarks>
+    void SendHnmoVaultPageCommand(BYTE action, BYTE page);
+
+    /// <summary>
+    /// Sends a HnmoUltimateAutoPlayRequest to this connection.
+    /// </summary>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client on login or when opening Ultimate Autoplay to fetch the current policy.
+    /// Causes reaction on server side: The server answers with HnmoUltimateAutoPlayPolicy (F5 57).
+    /// </remarks>
+    void SendHnmoUltimateAutoPlayRequest();
+
+    /// <summary>
+    /// Sends a HnmoBugReportCommand to this connection.
+    /// </summary>
+    /// <param name="action">0 = RequestState, 1 = Send.</param>
+    /// <param name="json">For Send: plain-ASCII JSON with category, text and info (what the game adds: version, browser, device, recent errors); empty otherwise.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client when the player opens the bug report window or sends a bug report.
+    /// Causes reaction on server side: The server keeps the report for the server's owner and answers with HnmoBugReportState (F5 55).
+    /// </remarks>
+    void SendHnmoBugReportCommand(BYTE action, const char16_t* json);
+
+    /// <summary>
+    /// Sends a HnmoArenaTravelRequest to this connection.
+    /// </summary>
+    /// <param name="action">0 = RequestState, 1 = Travel (a one-time ticket for the other side), 2 = JoinRankedQueue (in the Arena), 3 = LeaveRankedQueue, 4 = BuyFromPointsShop (at home), 5 = JoinTeamQueue (in the Arena, alone or the leader with the party), 6 = LeaveTeamQueue, 7 = SignUpForBattleRoyale, 8 = CancelBattleRoyaleSignUp, 9 = SignUpForGuildWar, 10 = CancelGuildWarSignUp.</param>
+    /// <param name="index">For BuyFromPointsShop: the item's index in the shop.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to ask about the HNMO Arena, or for a one-time ticket to travel to the Arena (or from the Arena back home).
+    /// Causes reaction on server side: The server answers with HnmoArenaTravelState (F5 53).
+    /// </remarks>
+    void SendHnmoArenaTravelRequest(BYTE action, BYTE index);
+
+    /// <summary>
+    /// Sends a HnmoItemStackCommand to this connection.
+    /// </summary>
+    /// <param name="action">0 = RequestState, 1 = Split, 2 = Unlock.</param>
+    /// <param name="storage">For Split: 0 = the bag, 1 = the open vault.</param>
+    /// <param name="slot">For Split: the stack's slot.</param>
+    /// <param name="count">For Split: how many pieces to split off.</param>
+    /// <param name="kind">For Unlock: the stack kind's key.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to ask for the item stack kinds, to split a stack, or to unlock a stack kind with coins.
+    /// Causes reaction on server side: The server answers with HnmoItemStackState (F5 51); a split also sends the bag or the open vault again.
+    /// </remarks>
+    void SendHnmoItemStackCommand(BYTE action, BYTE storage, BYTE slot, BYTE count, const char16_t* kind);
+
+    /// <summary>
+    /// Sends a HnmoVipRequest to this connection.
+    /// </summary>
+    /// <param name="requestId">A nonzero request correlation identifier; not an authentication token.</param>
+    /// <param name="json">ASCII JSON with action, optional operationId, levelId, days and offerToken; at most 247 bytes.</param>
+    /// <remarks>
+    /// Is sent by the client when: The signed-in player opens the VIP window, confirms an offer or claims daily coins.
+    /// Causes reaction on server side: The server validates the session and sends HnmoVipState without accepting client prices or account identity.
+    /// </remarks>
+    void SendHnmoVipRequest(uint32_t requestId, const char16_t* json);
+
+    /// <summary>
+    /// Sends a HnmoGiftBoxRequest to this connection.
+    /// </summary>
+    /// <param name="requestId">A nonzero request correlation identifier; not an authentication token.</param>
+    /// <param name="json">ASCII JSON with action, offset, optional letterId and language; at most 247 bytes.</param>
+    /// <remarks>
+    /// Is sent by the client when: The signed-in player opens the mailbox window, browses a page/letter or collects a reward.
+    /// Causes reaction on server side: The server validates the session, collects safely under the player lock if requested and sends HnmoGiftBoxState.
+    /// </remarks>
+    void SendHnmoGiftBoxRequest(uint32_t requestId, const char16_t* json);
 };
