@@ -23,7 +23,7 @@ internal static class AssetOperationTestBarrier
     /// <returns>A task.</returns>
     public static async ValueTask ReachAsync(string stage, CancellationToken cancellationToken)
     {
-        if (Stage is null || !string.Equals(Stage, stage, StringComparison.Ordinal))
+        if (Stage is null || !Matches(Stage, stage))
         {
             return;
         }
@@ -46,5 +46,20 @@ internal static class AssetOperationTestBarrier
         }
 
         await Task.Delay(Timeout.Infinite, cancellationToken).ConfigureAwait(false);
+    }
+
+    private static bool Matches(string configured, string reached)
+    {
+        if (string.Equals(configured, reached, StringComparison.Ordinal))
+        {
+            return true;
+        }
+
+        return (configured, reached) switch
+        {
+            ("before-local-commit", "before-commit") => true,
+            ("after-local-commit", "after-commit") => true,
+            _ => false,
+        };
     }
 }

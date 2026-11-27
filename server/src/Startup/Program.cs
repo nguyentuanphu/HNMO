@@ -935,6 +935,7 @@ internal sealed class Program : IDisposable
             contextProvider = await this.PrepareRepositoryProviderAsync(args.Contains("-reinit"), version, loggerFactory, changeListener).ConfigureAwait(false);
             await this.MoveSeasonNinePortsAsync().ConfigureAwait(false);
             this.UseSharedAccounts();
+            await this.RecoverSharedCoinsAsync(contextProvider).ConfigureAwait(false);
         }
 
         await this.ReadSystemConfigurationAsync(contextProvider).ConfigureAwait(false);
@@ -998,6 +999,39 @@ internal sealed class Program : IDisposable
 
         SharedAccountStore.Current = new PostgresSharedAccountStore(builder.ToString());
         this._logger.Information("{Season}: accounts and coins are shared with Season 6.3 (database {Database}).", SeasonLabel, builder.Database);
+    }
+
+    private async Task RecoverSharedCoinsAsync(IPersistenceContextProvider contextProvider)
+    {
+        if (!HnmoSeasonInstance.IsSecondary || SharedAccountStore.Current is not ICoordinatedSharedCoinStore coordinated)
+        {
+            return;
+        }
+
+        try
+        {
+            var gameConfiguration = await new GameConfigurationDataSource(
+                Microsoft.Extensions.Logging.Abstractions.NullLogger<GameConfigurationDataSource>.Instance,
+                contextProvider).GetOwnerAsync(Guid.Empty, default).ConfigureAwait(false);
+            var report = await HNMO.GameLogic.Seasons.SharedCoinCoordinator.RecoverAsync(
+                coordinated,
+                () => contextProvider.CreateNewPlayerContext((HNMO.DataModel.Configuration.GameConfiguration)gameConfiguration),
+                HNMO.Persistence.SharedCoinRealm.Current,
+                logger: null).ConfigureAwait(false);
+            if (report.Committed.Count > 0 || report.RolledBack.Count > 0 || report.KeptPendingLocalUnreadable.Count > 0)
+            {
+                this._logger.Information(
+                    "Shared coin recovery ({Realm}): committed {Committed}, rolled back {RolledBack}, kept pending {Pending}.",
+                    HNMO.Persistence.SharedCoinRealm.Current,
+                    report.Committed.Count,
+                    report.RolledBack.Count,
+                    report.KeptPendingLocalUnreadable.Count);
+            }
+        }
+        catch (Exception ex)
+        {
+            this._logger.Warning(ex, "Shared coin start-up recovery ({Realm}) encountered an error.", HNMO.Persistence.SharedCoinRealm.Current);
+        }
     }
 
     /// <summary>

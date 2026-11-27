@@ -9,6 +9,7 @@
     <NoWarn>$(NoWarn);SA0001;CS1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\GameLogic\HNMO.GameLogic.csproj" />
     <ProjectReference Include="..\..\src\Persistence\Initialization\HNMO.Persistence.Initialization.csproj" />
     <ProjectReference Include="..\..\src\Persistence\EntityFramework\HNMO.Persistence.EntityFramework.csproj" />
   </ItemGroup>

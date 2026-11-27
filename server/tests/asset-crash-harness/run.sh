@@ -66,5 +66,37 @@ echo "  retry: $(work deposit "$op")"
 check "vault 0 bank 4 receipts 1" "$(work state "$op")" "after the retry"
 rm -f "$flag" "$go"
 
+echo "=== two-database shared coin 2PC crash tests (hnmo <-> hnmo_s9) ==="
+coin_work() { HNMO_SEASON=s9 HNMO_REALM_ID=s9 work "$@"; }
+work coin-setup | tail -1
+coin_work coin-setup | tail -1
+for stage in before-prepare after-prepare before-local-commit after-local-commit before-canonical-commit after-canonical-commit; do
+  echo "coin-spend killed at $stage"
+  coin_work coin-reset > /dev/null
+  op=$(cat /proc/sys/kernel/random/uuid)
+  flag=$(mktemp -u)
+  ( export HNMO_SEASON=s9 HNMO_REALM_ID=s9 HNMO_TEST_ASSET_BARRIER="$stage" HNMO_TEST_ASSET_BARRIER_FILE="$flag"; exec dotnet "$DLL" coin-spend "$op" 40 s9 > /dev/null 2>&1 ) &
+  pid=$!
+  for _ in $(seq 1 600); do [ -f "$flag" ] && break; sleep 0.1; done
+  [ -f "$flag" ] || { echo "  FAIL never reached $stage"; fail=1; }
+  kill -9 "$pid" 2>/dev/null; wait "$pid" 2>/dev/null; rm -f "$flag"
+  # Unreadable local DB keeps prepared transaction pending when prepared exists
+  HNMO_TEST_LOCAL_OVERRIDE_CONN="127.0.0.1:59999" coin_work coin-recover s9 > /dev/null
+  coin_work coin-recover s9 > /dev/null
+  state=$(coin_work coin-state "$op")
+  if [ "$stage" == "after-local-commit" ] || [ "$stage" == "before-canonical-commit" ] || [ "$stage" == "after-canonical-commit" ]; then
+    check "canon=60 local=60 items=1 receipts=1 prepared=0" "$state" "recovered commit ($stage)"
+  else
+    check "canon=100 local=100 items=0 receipts=0 prepared=0" "$state" "recovered rollback ($stage)"
+  fi
+done
+
+echo "insufficient shared balance refused in full"
+coin_work coin-reset > /dev/null
+op_ins=$(cat /proc/sys/kernel/random/uuid)
+out_ins=$(coin_work coin-spend "$op_ins" 150 s9)
+check "outcome=Refused afterC=0" "$out_ins" "refused in full"
+check "canon=100 local=100 items=0 receipts=0 prepared=0" "$(coin_work coin-state "$op_ins")" "state untouched on refusal"
+
 [ $fail -eq 0 ] && echo "ALL PASSED" || echo "SOME FAILED"
 exit $fail
