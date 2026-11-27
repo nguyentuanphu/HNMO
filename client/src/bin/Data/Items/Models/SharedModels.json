@@ -37,6 +37,21 @@
       "textureFolders": ["Item"]
     },
     {
+      "name": "giftBoxBluePurple",
+      "file": "Data/Item/giftbox_bp.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
+      "name": "giftBoxGreen",
+      "file": "Data/Item/giftbox_g.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
+      "name": "giftBoxRed",
+      "file": "Data/Item/giftbox_r.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
       "name": "goldenBox",
       "file": "Data/Item/Ingameshop/itembox_gold.bmd",
       "textureFolders": ["Item/Ingameshop"]
@@ -160,6 +175,11 @@
       "name": "socketSeed",
       "file": "Data/Item/s30_seed.bmd",
       "textureFolders": ["Effect"]
+    },
+    {
+      "name": "songss",
+      "file": "Data/Item/songss.bmd",
+      "textureFolders": ["Item"]
     },
     {
       "name": "transformationRing",
