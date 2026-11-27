@@ -58,5 +58,6 @@
     <ProjectReference Include="..\..\src\Persistence\Initialization\HNMO.Persistence.Initialization.csproj" />
     <ProjectReference Include="..\..\src\Persistence\InMemory\HNMO.Persistence.InMemory.csproj" />
     <ProjectReference Include="..\..\src\Persistence\HNMO.Persistence.csproj" />
+    <ProjectReference Include="..\..\src\Startup\HNMO.Startup.csproj" />
   </ItemGroup>
 </Project>

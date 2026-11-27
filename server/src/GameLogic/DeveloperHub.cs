@@ -166,6 +166,14 @@ public static class DeveloperHub
         }
     }
 
+    /// <summary>
+    /// Gets a value indicating whether the hub has been unreachable without any response for at least <see cref="GraceDays"/>.
+    /// </summary>
+    /// <param name="nowUtc">The current UTC time.</param>
+    /// <returns><c>true</c> if unreachability has persisted past <see cref="GraceDays"/>.</returns>
+    public static bool IsHubUnreachablePastGrace(DateTime nowUtc)
+        => ReadState().FirstHubUnreachableUtc is { } firstUnreachable && nowUtc >= firstUnreachable.AddDays(GraceDays);
+
     /// <summary>Gets a value indicating whether a licence file's licence was withdrawn by the developer.</summary>
     /// <param name="licenceFile">The licence file's text.</param>
     /// <returns><c>true</c>, if withdrawn.</returns>
@@ -335,6 +343,13 @@ public static class DeveloperHub
         try
         {
             using var response = await (client ?? DefaultClient).PostAsJsonAsync($"{hub}/{path}", message).ConfigureAwait(false);
+            var now = DateTime.UtcNow;
+            ChangeState(s =>
+            {
+                s.LastHubReachUtc = now;
+                s.FirstHubUnreachableUtc = null;
+            });
+
             var text = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             JsonNode? answer = null;
             try
@@ -360,6 +375,8 @@ public static class DeveloperHub
         }
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
         {
+            var now = DateTime.UtcNow;
+            ChangeState(s => s.FirstHubUnreachableUtc ??= now);
             return (false, null, $"The hub can't be reached: {ex.Message}", $"Không kết nối được hub: {ex.Message}");
         }
     }

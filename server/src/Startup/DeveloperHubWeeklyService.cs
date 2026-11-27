@@ -6,11 +6,13 @@ namespace HNMO.Startup;
 
 using System.Diagnostics;
 using System.IO;
+using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Text.Json.Nodes;
 using System.Threading;
 using HNMO.GameLogic;
 using HNMO.GameLogic.PlugIns.BugReports;
+using HNMO.Integrity;
 using HNMO.Interfaces;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -142,8 +144,9 @@ internal sealed class DeveloperHubWeeklyService : BackgroundService
         }
     }
 
-    private async Task SendWeeklyAsync(DateTime? since)
+    internal async Task SendWeeklyAsync(DateTime? since, HttpClient? client = null)
     {
+        var enforcedLimit = LicensedPlayerLimit.ReevaluateAndEnforce(DateTime.UtcNow);
         var contexts = this._servers.Servers.OfType<IGameServerContextProvider>().Select(s => s.Context).ToList();
         var first = contexts.FirstOrDefault();
         var settings = HostSettingsStore.TryLoad(HostSettingsStore.ResolveDefaultPath(AppContext.BaseDirectory));
@@ -186,12 +189,13 @@ internal sealed class DeveloperHubWeeklyService : BackgroundService
 
         var weekly = new JsonObject
         {
+            ["buildStamp"] = HnmoBuildStamp.Resolve(),
             ["os"] = RuntimeInformation.OSDescription,
             ["uptimeHours"] = (int)(DateTime.UtcNow - (TryStartTime() ?? this._startedUtc)).TotalHours,
             ["players"] = new JsonObject
             {
                 ["peak"] = DeveloperHub.TakePeak(online),
-                ["limit"] = LicensedPlayerLimit.Maximum,
+                ["limit"] = enforcedLimit,
                 ["online"] = online,
                 ["accounts"] = accounts,
                 ["characters"] = characters,
@@ -213,7 +217,8 @@ internal sealed class DeveloperHubWeeklyService : BackgroundService
         var hubState = DeveloperHub.ReadState();
         weekly["game"] = new JsonObject { ["name"] = first is null ? string.Empty : HostSetupReport.GameName(first) };
         weekly["host"] = new JsonObject { ["name"] = hubState.HostName, ["contact"] = hubState.HostContact };
-        var (ok, withdrawn, error) = await DeveloperHub.SendWeeklyAsync(weekly).ConfigureAwait(false);
+        var (ok, withdrawn, error) = await DeveloperHub.SendWeeklyAsync(weekly, client).ConfigureAwait(false);
+        LicensedPlayerLimit.ReevaluateAndEnforce(DateTime.UtcNow);
         if (!ok)
         {
             this._logger.LogInformation("HNMO developer hub: the weekly report wasn't taken ({Error}); it is tried again later.", error);
@@ -224,8 +229,6 @@ internal sealed class DeveloperHubWeeklyService : BackgroundService
         this._logger.LogInformation("HNMO developer hub: the weekly report was sent ({Bugs} bug reports).", queued.Count);
         if (withdrawn)
         {
-            LicensedPlayerLimit.Maximum = LicensedPlayerLimit.DefaultMaximum;
-            LicensedPlayerLimit.Licensee = null;
             this._logger.LogWarning("HNMO developer hub: the developer withdrew this server's licence; up to {Players} players at once now.", LicensedPlayerLimit.DefaultMaximum);
         }
     }
