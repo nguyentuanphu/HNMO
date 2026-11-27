@@ -2846,4 +2846,10 @@
   <data name="HnmoBanNoticeViewPlugIn_Description" xml:space="preserve">
     <value>Gửi lý do khóa tài khoản, nhân vật hoặc cấm chat cùng thời hạn theo giờ Sydney tới client.</value>
   </data>
+  <data name="PingResponseHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý phản hồi Ping</value>
+  </data>
+  <data name="PingResponseHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói phản hồi giữ kết nối (0x71) do client gửi lại.</value>
+  </data>
 </root>

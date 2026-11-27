@@ -3025,4 +3025,10 @@
   <data name="SeasonsRestartSent" xml:space="preserve">
     <value>已发送重启请求，请在几秒后刷新此页面。</value>
   </data>
+  <data name="HostSettingsConnectionIdleTimeout" xml:space="preserve">
+    <value>空闲连接超时（秒）</value>
+  </data>
+  <data name="HostSettingsConnectionIdleTimeoutHint" xml:space="preserve">
+    <value>在未收到客户端数据包多少秒后，GameServer 和 ConnectServer 关闭静默连接（5-600，默认 30）。需要重启 HNMO。</value>
+  </data>
 </root>

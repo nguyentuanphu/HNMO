@@ -42,8 +42,8 @@ internal sealed class Client : IDisposable
         this.Timeout = timeout;
         this._packetHandler = packetHandler;
         this._logger = logger;
-        this._lastReceive = DateTime.Now;
-        var checkInterval = new TimeSpan(0, 0, 20);
+        this._lastReceive = DateTime.UtcNow;
+        var checkInterval = TimeSpan.FromMilliseconds(Math.Clamp(timeout.TotalMilliseconds / 4, 50, 5000));
         this._onlineTimer = new Timer(this.OnOnlineTimerElapsed, null, checkInterval, checkInterval);
         this._receiveBuffer = new byte[maxPacketSize];
     }
@@ -109,7 +109,7 @@ internal sealed class Client : IDisposable
     {
         try
         {
-            if (this.Connection.Connected && DateTime.Now.Subtract(this._lastReceive) > this.Timeout)
+            if (this.Connection.Connected && DateTime.UtcNow.Subtract(this._lastReceive) > this.Timeout)
             {
                 this._logger.LogDebug("Connection Timeout ({0}): Address {1}:{2} will be disconnected.", this.Timeout, this.Address, this.Port);
                 this.Connection.DisconnectAsync().AsTask().WaitAndUnwrapException();
@@ -123,7 +123,7 @@ internal sealed class Client : IDisposable
 
     private async ValueTask OnPacketReceivedAsync(ReadOnlySequence<byte> sequence)
     {
-        this._lastReceive = DateTime.Now;
+        this._lastReceive = DateTime.UtcNow;
         if (sequence.Length > this._receiveBuffer.Length)
         {
             this._logger.LogInformation($"Client {this.Address}:{this.Port} will be disconnected because it sent a packet which was too big (size of {sequence.Length}");

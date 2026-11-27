@@ -29,7 +29,7 @@ public class LostConnectionDetectionPlugIn : IPeriodicTaskPlugIn, ISupportCustom
     /// The interval in which the players are checked. It's shorter than any sensible timeout,
     /// so that a lost connection is detected shortly after the timeout elapsed.
     /// </summary>
-    private static readonly TimeSpan CheckInterval = TimeSpan.FromSeconds(10);
+    private static readonly TimeSpan CheckInterval = TimeSpan.FromSeconds(5);
 
     private DateTime _nextCheckUtc = DateTime.UtcNow;
 

@@ -134,6 +134,11 @@ public class ConnectServerContainer : ServerContainerBase, IEnumerable<IConnectS
             connectServerDefinition.ClientListenerPort = hostSettings.ConnectServerPort;
         }
 
+        if (hostSettings is { ConnectionIdleTimeoutSeconds: >= 5 } && (connectServerDefinition.Timeout == TimeSpan.Zero || connectServerDefinition.Timeout > TimeSpan.FromSeconds(hostSettings.ConnectionIdleTimeoutSeconds)))
+        {
+            connectServerDefinition.Timeout = TimeSpan.FromSeconds(hostSettings.ConnectionIdleTimeoutSeconds);
+        }
+
         var connectServer = this._connectServerFactory.CreateConnectServer(connectServerDefinition);
         this._servers.Add(connectServer);
         this._connectServers.Add(connectServer);

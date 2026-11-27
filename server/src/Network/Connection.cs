@@ -43,6 +43,7 @@ public sealed class Connection : PacketPipeReaderBase, IConnection
     private readonly IPipelinedEncryptor? _encryptionPipe;
     private readonly ILogger<Connection> _logger;
     private readonly EndPoint _remoteEndPoint;
+    private readonly TimeSpan? _idleTimeout;
 
     /// <summary>
     /// Lock for the lifecycle of the <see cref="_outgoingCapture"/>. The sinks themselves are
@@ -54,6 +55,9 @@ public sealed class Connection : PacketPipeReaderBase, IConnection
     private IDuplexPipe? _duplexPipe;
     private bool _disconnected;
     private ExtendedPipeWriter? _outputWriter;
+    private long _lastReceiveTimestamp = Stopwatch.GetTimestamp();
+    private int _idleProbeSent;
+    private Timer? _idleWatchdogTimer;
 
     private ImmutableArray<IPacketCaptureSink> _captureSinks = ImmutableArray<IPacketCaptureSink>.Empty;
 
@@ -67,7 +71,7 @@ public sealed class Connection : PacketPipeReaderBase, IConnection
     /// <param name="encryptionPipe">The encryption pipe.</param>
     /// <param name="logger">The logger.</param>
     public Connection(IDuplexPipe duplexPipe, IPipelinedDecryptor? decryptionPipe, IPipelinedEncryptor? encryptionPipe, ILogger<Connection> logger)
-        : this(duplexPipe, decryptionPipe, encryptionPipe, logger, null)
+        : this(duplexPipe, decryptionPipe, encryptionPipe, logger, null, null)
     {
     }
 
@@ -81,10 +85,25 @@ public sealed class Connection : PacketPipeReaderBase, IConnection
     /// <param name="logger">The logger.</param>
     /// <param name="remoteEndPoint">The address of the other side; <c>null</c> takes the socket's.</param>
     public Connection(IDuplexPipe duplexPipe, IPipelinedDecryptor? decryptionPipe, IPipelinedEncryptor? encryptionPipe, ILogger<Connection> logger, EndPoint? remoteEndPoint)
+        : this(duplexPipe, decryptionPipe, encryptionPipe, logger, remoteEndPoint, null)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Connection" /> class with the address of the other side and an optional idle timeout.
+    /// </summary>
+    /// <param name="duplexPipe">The duplex pipe of the (socket) connection.</param>
+    /// <param name="decryptionPipe">The decryption pipe.</param>
+    /// <param name="encryptionPipe">The encryption pipe.</param>
+    /// <param name="logger">The logger.</param>
+    /// <param name="remoteEndPoint">The address of the other side; <c>null</c> takes the socket's.</param>
+    /// <param name="idleTimeout">Optional idle timeout after which an inactive connection is closed.</param>
+    public Connection(IDuplexPipe duplexPipe, IPipelinedDecryptor? decryptionPipe, IPipelinedEncryptor? encryptionPipe, ILogger<Connection> logger, EndPoint? remoteEndPoint, TimeSpan? idleTimeout)
     {
         this._duplexPipe = duplexPipe;
         this._encryptionPipe = encryptionPipe;
         this._logger = logger;
+        this._idleTimeout = idleTimeout;
         this.Source = decryptionPipe?.Reader ?? this._duplexPipe!.Input;
         this._remoteEndPoint = remoteEndPoint ?? this.SocketConnection?.Socket.RemoteEndPoint ?? new IPEndPoint(IPAddress.Any, 0);
         this.LocalEndPoint = this.SocketConnection?.Socket.LocalEndPoint;
@@ -96,6 +115,11 @@ public sealed class Connection : PacketPipeReaderBase, IConnection
 
     /// <inheritdoc />
     public event AsyncEventHandler? Disconnected;
+
+    /// <summary>
+    /// Occurs halfway through <see cref="_idleTimeout"/> when no client packets have been received, allowing a keep-alive probe to be sent.
+    /// </summary>
+    public event AsyncEventHandler? IdleProbeRequested;
 
     /// <inheritdoc />
     public Guid Id { get; } = Guid.NewGuid();
@@ -137,6 +161,7 @@ public sealed class Connection : PacketPipeReaderBase, IConnection
     /// <inheritdoc/>
     public async Task BeginReceiveAsync()
     {
+        this.StartIdleWatchdog();
         try
         {
             ConnectionCounter.Add(1);
@@ -166,6 +191,7 @@ public sealed class Connection : PacketPipeReaderBase, IConnection
         }
 
         ConnectionCounter.Add(-1);
+        this.StopIdleWatchdog();
         this._logger.LogDebug("Disconnecting...");
         if (this._duplexPipe is not null)
         {
@@ -201,9 +227,11 @@ public sealed class Connection : PacketPipeReaderBase, IConnection
     /// <inheritdoc/>
     public void Dispose()
     {
+        this.StopIdleWatchdog();
         this.DisconnectAsync().AsTask().WaitAndUnwrapException();
         this.PacketReceived = null;
         this.Disconnected = null;
+        this.IdleProbeRequested = null;
         this.StopCapturing();
     }
 
@@ -252,6 +280,8 @@ public sealed class Connection : PacketPipeReaderBase, IConnection
     /// <returns><see langword="true" />, if the flush was successful or not required.<see langword="false" />, if the pipe reader is completed and no longer reading data.</returns>
     protected override async ValueTask<bool> ReadPacketAsync(ReadOnlySequence<byte> packet)
     {
+        Interlocked.Exchange(ref this._lastReceiveTimestamp, Stopwatch.GetTimestamp());
+        Interlocked.Exchange(ref this._idleProbeSent, 0);
         IncomingBytesCounter.Add(packet.Length);
 
         using var activity = ActivitySource.CreateActivity("Read Packet", ActivityKind.Server);
@@ -363,6 +393,49 @@ public sealed class Connection : PacketPipeReaderBase, IConnection
             catch (Exception ex)
             {
                 this._logger.LogWarning(ex, "Error in a packet capture sink of connection {connectionId}.", this.Id);
+            }
+        }
+    }
+
+    private void StartIdleWatchdog()
+    {
+        if (this._idleTimeout is not { } timeout || timeout <= TimeSpan.Zero)
+        {
+            return;
+        }
+
+        Interlocked.Exchange(ref this._lastReceiveTimestamp, Stopwatch.GetTimestamp());
+        Interlocked.Exchange(ref this._idleProbeSent, 0);
+        var checkInterval = TimeSpan.FromMilliseconds(Math.Clamp(timeout.TotalMilliseconds / 4, 50, 2000));
+        this._idleWatchdogTimer = new Timer(this.OnIdleWatchdogElapsed, timeout, checkInterval, checkInterval);
+    }
+
+    private void StopIdleWatchdog()
+    {
+        Interlocked.Exchange(ref this._idleWatchdogTimer, null)?.Dispose();
+    }
+
+    private void OnIdleWatchdogElapsed(object? state)
+    {
+        if (this._disconnected || state is not TimeSpan timeout)
+        {
+            return;
+        }
+
+        var elapsed = Stopwatch.GetElapsedTime(Interlocked.Read(ref this._lastReceiveTimestamp));
+        if (elapsed >= timeout)
+        {
+            this.StopIdleWatchdog();
+            this._logger.LogInformation("Disconnecting idle connection {EndPoint} after {Timeout} without client packets.", this._remoteEndPoint, timeout);
+            _ = Task.Run(() => this.DisconnectAsync().AsTask());
+            return;
+        }
+
+        if (elapsed >= timeout / 2 && Interlocked.CompareExchange(ref this._idleProbeSent, 1, 0) == 0)
+        {
+            if (this.IdleProbeRequested is { } probeHandler)
+            {
+                _ = Task.Run(() => probeHandler.SafeInvokeAsync().AsTask());
             }
         }
     }

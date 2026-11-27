@@ -2850,4 +2850,10 @@
   <data name="SeasonsRestartSent" xml:space="preserve">
     <value>Neustart angefordert. Lade diese Seite in ein paar Sekunden neu.</value>
   </data>
+  <data name="HostSettingsConnectionIdleTimeout" xml:space="preserve">
+    <value>Socket-Leerlauf-Timeout (s)</value>
+  </data>
+  <data name="HostSettingsConnectionIdleTimeoutHint" xml:space="preserve">
+    <value>Sekunden ohne Client-Pakete, bis GameServer und ConnectServer eine stumme Verbindung schließen (5-600, Standard 30). Erfordert einen HNMO-Neustart.</value>
+  </data>
 </root>

@@ -5339,4 +5339,10 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   <data name="SeasonsRestartSent" xml:space="preserve">
     <value>Đã gửi yêu cầu khởi động lại. Vui lòng tải lại trang sau vài giây.</value>
   </data>
+  <data name="HostSettingsConnectionIdleTimeout" xml:space="preserve">
+    <value>Thời gian chờ kết nối im lặng (giây)</value>
+  </data>
+  <data name="HostSettingsConnectionIdleTimeoutHint" xml:space="preserve">
+    <value>Số giây không nhận được gói tin trước khi GameServer và ConnectServer đóng kết nối im lặng (5-600, mặc định 30). Cần Khởi động lại HNMO.</value>
+  </data>
 </root>

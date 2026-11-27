@@ -108,6 +108,10 @@
                 <label class="form-label" title="TCP connect timeout in seconds (1-120)">Relay timeout (s)</label>
                 <input type="number" class="form-control" @bind="this._settings.RelayConnectTimeoutSeconds" />
             </div>
+            <div class="col-md-3">
+                <label class="form-label" for="connection-idle-timeout" title="@Resources.HostSettingsConnectionIdleTimeoutHint">@Resources.HostSettingsConnectionIdleTimeout</label>
+                <input id="connection-idle-timeout" type="number" class="form-control" title="@Resources.HostSettingsConnectionIdleTimeoutHint" @bind="this._settings.ConnectionIdleTimeoutSeconds" />
+            </div>
             <div class="col-md-3 d-flex align-items-end">
                 <div class="form-check">
                     <input id="relay-loopback" type="checkbox" class="form-check-input" @bind="this._settings.RelayAllowLoopback" />

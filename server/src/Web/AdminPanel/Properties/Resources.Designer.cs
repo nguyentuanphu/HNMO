@@ -16418,5 +16418,11 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("SeasonsRestartSent", resourceCulture);
             }
         }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string HostSettingsConnectionIdleTimeout => ResourceManager.GetString("HostSettingsConnectionIdleTimeout", resourceCulture)!;
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string HostSettingsConnectionIdleTimeoutHint => ResourceManager.GetString("HostSettingsConnectionIdleTimeoutHint", resourceCulture)!;
     }
 }

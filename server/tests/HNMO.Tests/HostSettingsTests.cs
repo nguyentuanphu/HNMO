@@ -108,6 +108,7 @@ public class HostSettingsTests
             DatabasePort = 0,
             OpenBrowserUrl = "not-a-url",
             RelayConnectTimeoutSeconds = 0,
+            ConnectionIdleTimeoutSeconds = 2,
         };
 
         var errors = HostSettingsValidator.Validate(settings);
@@ -116,6 +117,7 @@ public class HostSettingsTests
         Assert.That(errors.Any(e => e.Contains("DatabasePort", StringComparison.Ordinal)), Is.True);
         Assert.That(errors.Any(e => e.Contains("OpenBrowserUrl", StringComparison.Ordinal)), Is.True);
         Assert.That(errors.Any(e => e.Contains("RelayConnectTimeoutSeconds", StringComparison.Ordinal)), Is.True);
+        Assert.That(errors.Any(e => e.Contains("ConnectionIdleTimeoutSeconds", StringComparison.Ordinal)), Is.True);
     }
 
     /// <summary>

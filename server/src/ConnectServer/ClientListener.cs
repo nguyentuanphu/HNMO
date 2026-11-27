@@ -64,7 +64,7 @@ internal class ClientListener
     /// </summary>
     public void StartListener()
     {
-        this._listener = new Listener(this._connectServerSettings.ClientListenerPort, null, null, this._loggerFactory);
+        this._listener = new Listener(this._connectServerSettings.ClientListenerPort, null, null, this._loggerFactory, this._connectServerSettings.Timeout);
         this._listener.ClientAccepting += this.OnClientAcceptingAsync;
         this._listener.ClientAccepted += this.OnClientAcceptedAsync;
         this._listener.Start(this._connectServerSettings.ListenerBacklog);

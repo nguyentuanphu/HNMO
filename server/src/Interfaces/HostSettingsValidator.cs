@@ -79,6 +79,11 @@ public static class HostSettingsValidator
             errors.Add("RelayConnectTimeoutSeconds must be between 1 and 120.");
         }
 
+        if (settings.ConnectionIdleTimeoutSeconds is < 5 or > 600)
+        {
+            errors.Add("ConnectionIdleTimeoutSeconds must be between 5 and 600.");
+        }
+
         if (settings.RelayAllowedHosts.Length == 0 || settings.RelayAllowedHosts.Any(string.IsNullOrWhiteSpace))
         {
             errors.Add("RelayAllowedHosts must contain at least one valid host.");

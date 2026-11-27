@@ -2947,4 +2947,10 @@
   <data name="HnmoBanNoticeViewPlugIn_Description" xml:space="preserve">
     <value>Sends structured bilingual ban or mute reason and Sydney expiry time to the game client.</value>
   </data>
+  <data name="PingResponseHandlerPlugIn_Name" xml:space="preserve">
+    <value>Ping Response Handler</value>
+  </data>
+  <data name="PingResponseHandlerPlugIn_Description" xml:space="preserve">
+    <value>Handles keep-alive ping responses (0x71) sent by the game client.</value>
+  </data>
 </root>

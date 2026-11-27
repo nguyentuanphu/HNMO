@@ -13,9 +13,9 @@ public class LostConnectionDetectionConfiguration
     /// Gets or sets the time after which a connection is considered lost, when its client didn't report that it's alive.
     /// </summary>
     /// <remarks>
-    /// The game client reports it every 20 seconds, so the default tolerates five missing reports,
-    /// e.g. while a mobile network is switched. A value of zero disables the detection.
+    /// The game client reports it every 20 seconds, so the default tolerates two missing reports.
+    /// A value of zero disables the detection.
     /// </remarks>
     [Display(ResourceType = typeof(PlugInResources), Name = nameof(PlugInResources.LostConnectionDetectionConfiguration_Timeout_Name), Description = nameof(PlugInResources.LostConnectionDetectionConfiguration_Timeout_Description))]
-    public TimeSpan Timeout { get; set; } = TimeSpan.FromMinutes(2);
+    public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(45);
 }

@@ -75,6 +75,11 @@ public sealed class HostSettings
     public int RelayConnectTimeoutSeconds { get; set; } = 10;
 
     /// <summary>
+    /// Gets or sets the idle timeout in seconds before silent GameServer and ConnectServer sockets are closed.
+    /// </summary>
+    public int ConnectionIdleTimeoutSeconds { get; set; } = 30;
+
+    /// <summary>
     /// Gets or sets a value indicating whether the bridge starts PostgreSQL and the game server automatically.
     /// </summary>
     public bool LauncherEnabled { get; set; }

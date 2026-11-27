@@ -8526,5 +8526,15 @@ namespace HNMO.GameServer.Properties {
                 return ResourceManager.GetString("HnmoBanNoticeViewPlugIn_Description", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Ping Response Handler.
+        /// </summary>
+        public static string PingResponseHandlerPlugIn_Name => ResourceManager.GetString("PingResponseHandlerPlugIn_Name", resourceCulture)!;
+
+        /// <summary>
+        ///   Looks up a localized string similar to Handles keep-alive ping responses (0x71) sent by the game client..
+        /// </summary>
+        public static string PingResponseHandlerPlugIn_Description => ResourceManager.GetString("PingResponseHandlerPlugIn_Description", resourceCulture)!;
     }
 }

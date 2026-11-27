@@ -12,6 +12,7 @@ using HNMO.GameLogic;
 using HNMO.GameServer.RemoteView;
 using HNMO.Interfaces;
 using HNMO.Network;
+using HNMO.Network.Packets.ServerToClient;
 using HNMO.Network.PlugIns;
 using HNMO.PlugIns;
 using Microsoft.Extensions.Logging;
@@ -40,6 +41,7 @@ public class DefaultTcpGameServerListener : IGameServerListener
     private readonly IIpAddressResolver _addressResolver;
     private readonly ILoggerFactory _loggerFactory;
     private readonly int? _listenerPort;
+    private readonly TimeSpan? _idleTimeout;
     private Listener? _listener;
 
     /// <summary>
@@ -74,8 +76,27 @@ public class DefaultTcpGameServerListener : IGameServerListener
     /// the same port in every container of the distributed deployment. When it's set, it's also the published port, unless
     /// the endpoint defines an <see cref="GameServerEndpoint.AlternativePublishedPort"/>.</param>
     public DefaultTcpGameServerListener(GameServerEndpoint endPoint, ServerInfo gameServerInfo, IGameServerContext gameContext, IGameServerStateObserver stateObserver, IIpAddressResolver addressResolver, ILoggerFactory loggerFactory, int? listenerPort)
+        : this(endPoint, gameServerInfo, gameContext, stateObserver, addressResolver, loggerFactory, listenerPort, ResolveDefaultIdleTimeout())
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DefaultTcpGameServerListener" /> class.
+    /// </summary>
+    /// <param name="endPoint">The endpoint to which this listener is listening.</param>
+    /// <param name="gameServerInfo">The game server information.</param>
+    /// <param name="gameContext">The game context.</param>
+    /// <param name="stateObserver">The connect server.</param>
+    /// <param name="addressResolver">The address resolver which returns the address on which the listener will be bound to.</param>
+    /// <param name="loggerFactory">The logger factory.</param>
+    /// <param name="listenerPort">The port to listen on instead of the <see cref="ServerEndpoint.NetworkPort"/> of the endpoint, e.g.
+    /// the same port in every container of the distributed deployment. When it's set, it's also the published port, unless
+    /// the endpoint defines an <see cref="GameServerEndpoint.AlternativePublishedPort"/>.</param>
+    /// <param name="idleTimeout">The idle timeout after which silent client sockets are closed; <c>null</c> disables the idle watchdog.</param>
+    public DefaultTcpGameServerListener(GameServerEndpoint endPoint, ServerInfo gameServerInfo, IGameServerContext gameContext, IGameServerStateObserver stateObserver, IIpAddressResolver addressResolver, ILoggerFactory loggerFactory, int? listenerPort, TimeSpan? idleTimeout)
     {
         this._listenerPort = listenerPort;
+        this._idleTimeout = idleTimeout;
         this._endPoint = endPoint;
         this._gameServerInfo = gameServerInfo;
         this._gameContext = gameContext;
@@ -120,7 +141,7 @@ public class DefaultTcpGameServerListener : IGameServerListener
 
         var port = this.ListenerPort;
         this._logger.LogInformation("Starting Server Listener, port {port}", port);
-        this._listener = new Listener(port, this.CreateDecryptor, this.CreateEncryptor, this._loggerFactory);
+        this._listener = new Listener(port, this.CreateDecryptor, this.CreateEncryptor, this._loggerFactory, this._idleTimeout);
         this._listener.ClientAccepted += this.OnClientAcceptedAsync;
         this._listener.ClientAccepting += this.OnClientAcceptingAsync;
         if (this.PublishedPort != port)
@@ -270,6 +291,11 @@ public class DefaultTcpGameServerListener : IGameServerListener
 
         // The remote player disconnects itself when the connection gets disconnected.
         var remotePlayer = new RemotePlayer(this._gameContext, connection, this.ClientVersion);
+        if (connection is Connection tcpConnection)
+        {
+            tcpConnection.IdleProbeRequested += () => tcpConnection.SendPingRequestAsync();
+        }
+
         await this.OnPlayerConnectedAsync(remotePlayer).ConfigureAwait(false);
 
         // we don't want to await the call.
@@ -287,6 +313,15 @@ public class DefaultTcpGameServerListener : IGameServerListener
         {
             this.Log(l => l.LogError($"Event {nameof(this.PlayerConnected)} was not handled."));
         }
+    }
+
+    private static TimeSpan ResolveDefaultIdleTimeout()
+    {
+        var hostSettings = HostSettingsStore.TryLoad(HostSettingsStore.ResolveDefaultPath(AppContext.BaseDirectory));
+        var seconds = hostSettings is { ConnectionIdleTimeoutSeconds: >= 5 }
+            ? hostSettings.ConnectionIdleTimeoutSeconds
+            : 30;
+        return TimeSpan.FromSeconds(seconds);
     }
 
     private void Log(Action<ILogger<DefaultTcpGameServerListener>> logAction)

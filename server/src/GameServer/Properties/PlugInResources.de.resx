@@ -2667,4 +2667,10 @@
   <data name="ShowItemCraftingPreviewExtendedPlugIn_Description" xml:space="preserve">
     <value>Die erweiterte Implementierung von IShowItemCraftingPreviewPlugIn, die alles mit spezifischen Datenpaketen an den Spielclient weiterleitet.</value>
   </data>
+  <data name="PingResponseHandlerPlugIn_Name" xml:space="preserve">
+    <value>Ping-Antwort-Handler</value>
+  </data>
+  <data name="PingResponseHandlerPlugIn_Description" xml:space="preserve">
+    <value>Verarbeitet Keep-Alive-Ping-Antworten (0x71) des Spielclients.</value>
+  </data>
 </root>

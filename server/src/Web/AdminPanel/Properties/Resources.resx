@@ -5299,4 +5299,10 @@ On your account page, open Security and paste this code to confirm your new emai
   <data name="SeasonsRestartSent" xml:space="preserve">
     <value>Restart requested. Refresh this page in a few seconds.</value>
   </data>
+  <data name="HostSettingsConnectionIdleTimeout" xml:space="preserve">
+    <value>Idle socket timeout (s)</value>
+  </data>
+  <data name="HostSettingsConnectionIdleTimeoutHint" xml:space="preserve">
+    <value>Seconds without client packets before GameServer and ConnectServer close a silent connection (5-600, default 30). Requires Restart HNMO.</value>
+  </data>
 </root>

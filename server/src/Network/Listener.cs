@@ -21,6 +21,7 @@ public class Listener
     private readonly Func<PipeReader, IPipelinedDecryptor?>? _decryptorCreator;
     private readonly Func<PipeWriter, IPipelinedEncryptor?>? _encryptorCreator;
     private readonly ILoggerFactory _loggerFactory;
+    private readonly TimeSpan? _idleTimeout;
     private TcpListener? _clientListener;
 
     /// <summary>
@@ -31,11 +32,25 @@ public class Listener
     /// <param name="encryptorCreator">The encryptor creator function.</param>
     /// <param name="loggerFactory">The logger factory.</param>
     public Listener(int port, Func<PipeReader, IPipelinedDecryptor?>? decryptorCreator, Func<PipeWriter, IPipelinedEncryptor?>? encryptorCreator, ILoggerFactory loggerFactory)
+        : this(port, decryptorCreator, encryptorCreator, loggerFactory, null)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Listener" /> class.
+    /// </summary>
+    /// <param name="port">The port on which the tcp listener should listen to.</param>
+    /// <param name="decryptorCreator">The decryptor creator function.</param>
+    /// <param name="encryptorCreator">The encryptor creator function.</param>
+    /// <param name="loggerFactory">The logger factory.</param>
+    /// <param name="idleTimeout">Optional idle timeout after which silent connections are disconnected.</param>
+    public Listener(int port, Func<PipeReader, IPipelinedDecryptor?>? decryptorCreator, Func<PipeWriter, IPipelinedEncryptor?>? encryptorCreator, ILoggerFactory loggerFactory, TimeSpan? idleTimeout)
     {
         this._port = port;
         this._decryptorCreator = decryptorCreator;
         this._encryptorCreator = encryptorCreator;
         this._loggerFactory = loggerFactory;
+        this._idleTimeout = idleTimeout;
 
         this._logger = this._loggerFactory.CreateLogger<Listener>();
     }
@@ -97,7 +112,7 @@ public class Listener
     private IConnection CreateConnection(Socket clientSocket, EndPoint? remoteEndPoint)
     {
         var socketConnection = SocketConnection.Create(clientSocket);
-        return new Connection(socketConnection, this.CreateDecryptor(socketConnection.Input), this.CreateEncryptor(socketConnection.Output), this._loggerFactory.CreateLogger<Connection>(), remoteEndPoint);
+        return new Connection(socketConnection, this.CreateDecryptor(socketConnection.Input), this.CreateEncryptor(socketConnection.Output), this._loggerFactory.CreateLogger<Connection>(), remoteEndPoint, this._idleTimeout);
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD100:Avoid async void methods", Justification = "Exceptions are catched.")]
@@ -148,6 +163,7 @@ public class Listener
             if (cancel is null || !cancel.Cancel)
             {
                 socket.NoDelay = true; // todo: option?
+                ConfigureTcpKeepAlive(socket);
 
                 // HNMO's web bridge tells the browser's address first (only trusted from this computer).
                 var relayed = await ProxyHeader.TryReadAsync(socket).ConfigureAwait(false);
@@ -166,6 +182,21 @@ public class Listener
         catch (Exception ex)
         {
             this._logger.LogError(ex, "Unexpected error in OnAccept.");
+        }
+    }
+
+    private static void ConfigureTcpKeepAlive(Socket socket)
+    {
+        try
+        {
+            socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
+            socket.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.TcpKeepAliveTime, 10);
+            socket.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.TcpKeepAliveInterval, 2);
+            socket.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.TcpKeepAliveRetryCount, 3);
+        }
+        catch (SocketException)
+        {
+            // Some OS builds or socket types do not allow custom keep-alive intervals.
         }
     }
 }
