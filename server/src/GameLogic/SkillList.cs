@@ -385,6 +385,7 @@ public sealed class SkillList : ISkillList, IDisposable
 
         var skillAttributes = new PassiveSkillAttributes(skillEntry);
         this.PassivePowerUps.Add(skillAttributes);
+        var refreshesWings = false;
         foreach (var powerUpDefinition in masterDefinition.PassivePowerUps)
         {
             if (powerUpDefinition is not { TargetAttribute: { } targetAttribute, Boost: not null })
@@ -395,6 +396,19 @@ public sealed class SkillList : ISkillList, IDisposable
 
             var element = skillAttributes.Attributes.CreateElement(powerUpDefinition);
             this.PassivePowerUps.Add(new PowerUpWrapper(element, targetAttribute, this._player.Attributes!));
+            if (targetAttribute == Stats.MasterWingDefenseBonus
+                || targetAttribute == Stats.MasterWingAttackBonus
+                || targetAttribute == Stats.MasterWingAbsorbBonus)
+            {
+                refreshesWings = true;
+            }
+        }
+
+        if (refreshesWings
+            && this._inventory is InventoryStorage inventoryStorage
+            && inventoryStorage.GetItem(HNMO.DataModel.InventoryConstants.WingsSlot) is { } equippedWing)
+        {
+            inventoryStorage.RefreshEquippedItemPowerUps(equippedWing);
         }
     }
 

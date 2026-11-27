@@ -23,4 +23,5 @@ using Microsoft.Extensions.Logging;
 /// <param name="Password">Password.</param>
 /// <param name="JewelKey">Jewel key.</param>
 /// <param name="Quantity">Quantity to withdraw.</param>
-public sealed record JewelBankWithdrawRequest(string? LoginName, string? Password, string? JewelKey, int Quantity);
+/// <param name="OperationId">The caller's id of this withdrawal, the same on every retry; a new one when left out.</param>
+public sealed record JewelBankWithdrawRequest(string? LoginName, string? Password, string? JewelKey, int Quantity, Guid? OperationId = null);

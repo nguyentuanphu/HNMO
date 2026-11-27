@@ -1,14 +1,16 @@
 // <copyright file="DeveloperHub.cs" company="HNMO">
-// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// Proprietary and confidential. All rights reserved. Unauthorized copying, modification, or distribution is prohibited.
 // </copyright>
 
 namespace HNMO.GameLogic;
 
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Reflection;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading;
@@ -166,10 +168,140 @@ public static class DeveloperHub
         }
     }
 
+    /// <summary>
+    /// Gets a value indicating whether the hub has been unreachable without any response for at least <see cref="GraceDays"/>.
+    /// </summary>
+    /// <param name="nowUtc">The current UTC time.</param>
+    /// <returns><c>true</c> if unreachability has persisted past <see cref="GraceDays"/>.</returns>
+    public static bool IsHubUnreachablePastGrace(DateTime nowUtc)
+        => ReadState().FirstHubUnreachableUtc is { } firstUnreachable && nowUtc >= firstUnreachable.AddDays(GraceDays);
+
     /// <summary>Gets a value indicating whether a licence file's licence was withdrawn by the developer.</summary>
     /// <param name="licenceFile">The licence file's text.</param>
     /// <returns><c>true</c>, if withdrawn.</returns>
     public static bool IsWithdrawn(string? licenceFile) => LicenceIdOf(licenceFile) is { } id && ReadState().WithdrawnLicences.Contains(id);
+
+    /// <summary>One update file returned by <c>POST /api/update-check</c>.</summary>
+    /// <param name="Path">Relative target path inside the HNMO folder.</param>
+    /// <param name="Sha256">Expected lower-case SHA-256 hex digest.</param>
+    /// <param name="Size">Optional file size in bytes.</param>
+    /// <param name="Exec">Whether Unix execute permission should be applied.</param>
+    public sealed record HubUpdateFile(string Path, string Sha256, long Size = 0, bool Exec = false);
+
+    /// <summary>Result of asking the hub (<c>POST /api/update-check</c>) whether this licensed server may update.</summary>
+    /// <param name="Authorized">Whether the hub authorized an update manifest and download token.</param>
+    /// <param name="Denied">Whether the hub explicitly denied authorization (HTTP 403 / invalid / withdrawn).</param>
+    /// <param name="ManifestVersion">The offered version.</param>
+    /// <param name="Notes">Release notes, if any.</param>
+    /// <param name="Files">The authorized manifest files returned by the hub.</param>
+    /// <param name="DownloadBase">Base URL for content-addressed file downloads.</param>
+    /// <param name="Token">Short-lived download bearer token.</param>
+    /// <param name="Error">Human-readable failure note when not authorized.</param>
+    public sealed record HubUpdateCheckResult(
+        bool Authorized,
+        bool Denied,
+        string? ManifestVersion,
+        string? Notes,
+        IReadOnlyList<HubUpdateFile> Files,
+        string? DownloadBase,
+        string? Token,
+        string Error);
+
+    /// <summary>
+    /// Calls <c>POST /api/update-check</c> with this folder's licence, machine id, and build stamp before any
+    /// update download. Never throws and never touches local files when denied, missing, or unreachable.
+    /// </summary>
+    /// <param name="buildStamp">This folder's build stamp.</param>
+    /// <param name="licenceFile">Optional licence text (defaults to <see cref="LicenceFile"/>).</param>
+    /// <param name="client">Optional HTTP client (tests).</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The authorization result.</returns>
+    public static async Task<HubUpdateCheckResult> CheckForUpdateAsync(
+        string buildStamp,
+        string? licenceFile = null,
+        HttpClient? client = null,
+        CancellationToken cancellationToken = default)
+    {
+        var hub = Url;
+        var text = licenceFile ?? LicenceFile;
+        if (hub.Length == 0 || MachineId.Length == 0)
+        {
+            return new HubUpdateCheckResult(false, true, null, null, [], null, null, "No hub or machine id.");
+        }
+
+        // Without a licence the folder asks as a free host (owner, 2026-11-27: the free build updates itself too).
+        var payload = new JsonObject
+        {
+            ["machineId"] = MachineId,
+            ["legacyMachineId"] = LegacyMachineId,
+            ["buildStamp"] = buildStamp,
+        };
+        if (!string.IsNullOrWhiteSpace(text))
+        {
+            payload["licenceId"] = LicenceIdOf(text) ?? string.Empty;
+            payload["licence"] = Convert.ToBase64String(Encoding.UTF8.GetBytes(text));
+        }
+
+        try
+        {
+            using var response = await (client ?? DefaultClient)
+                .PostAsJsonAsync($"{hub}/api/update-check", payload, cancellationToken)
+                .ConfigureAwait(false);
+            if (response.StatusCode == HttpStatusCode.Forbidden)
+            {
+                return new HubUpdateCheckResult(false, true, null, null, [], null, null, "Hub denied update authorization (403).");
+            }
+
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return new HubUpdateCheckResult(false, false, null, null, [], null, null, "No release offered (404).");
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return new HubUpdateCheckResult(false, false, null, null, [], null, null, $"Hub returned {(int)response.StatusCode}.");
+            }
+
+            var json = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+            using var doc = JsonDocument.Parse(json);
+            var root = doc.RootElement;
+            var manifestVersion = root.TryGetProperty("manifestVersion", out var mv) && mv.ValueKind == JsonValueKind.String ? mv.GetString() : null;
+            var notes = root.TryGetProperty("notes", out var n) && n.ValueKind == JsonValueKind.String ? n.GetString() : null;
+            var downloadBase = root.TryGetProperty("downloadBase", out var db) && db.ValueKind == JsonValueKind.String ? db.GetString() : null;
+            var token = root.TryGetProperty("token", out var tok) && tok.ValueKind == JsonValueKind.String ? tok.GetString() : null;
+            if (string.IsNullOrWhiteSpace(manifestVersion) || string.IsNullOrWhiteSpace(downloadBase) || string.IsNullOrWhiteSpace(token)
+                || !root.TryGetProperty("files", out var filesEl) || filesEl.ValueKind != JsonValueKind.Array)
+            {
+                return new HubUpdateCheckResult(false, false, null, null, [], null, null, "Invalid update-check response.");
+            }
+
+            var files = new List<HubUpdateFile>();
+            foreach (var item in filesEl.EnumerateArray())
+            {
+                var path = item.TryGetProperty("path", out var p) && p.ValueKind == JsonValueKind.String ? p.GetString() : null;
+                var sha = item.TryGetProperty("sha256", out var s) && s.ValueKind == JsonValueKind.String ? s.GetString() : null;
+                if (string.IsNullOrWhiteSpace(path) || string.IsNullOrWhiteSpace(sha))
+                {
+                    continue;
+                }
+
+                var size = item.TryGetProperty("size", out var sz) && sz.ValueKind == JsonValueKind.Number ? sz.GetInt64() : 0;
+                var exec = item.TryGetProperty("exec", out var ex) && ex.ValueKind == JsonValueKind.True;
+                files.Add(new HubUpdateFile(path, sha, size, exec));
+            }
+
+            if (files.Count == 0)
+            {
+                return new HubUpdateCheckResult(false, false, null, null, [], null, null, "Update-check returned no files.");
+            }
+
+            return new HubUpdateCheckResult(true, false, manifestVersion, notes, files, downloadBase, token, string.Empty);
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or JsonException or OperationCanceledException)
+        {
+            return new HubUpdateCheckResult(false, false, null, null, [], null, null, ex.Message);
+        }
+    }
 
     /// <summary>The id the hub gave a licence, if it has one.</summary>
     /// <param name="licenceFile">The licence file's text.</param>
@@ -335,6 +467,13 @@ public static class DeveloperHub
         try
         {
             using var response = await (client ?? DefaultClient).PostAsJsonAsync($"{hub}/{path}", message).ConfigureAwait(false);
+            var now = DateTime.UtcNow;
+            ChangeState(s =>
+            {
+                s.LastHubReachUtc = now;
+                s.FirstHubUnreachableUtc = null;
+            });
+
             var text = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             JsonNode? answer = null;
             try
@@ -360,6 +499,8 @@ public static class DeveloperHub
         }
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
         {
+            var now = DateTime.UtcNow;
+            ChangeState(s => s.FirstHubUnreachableUtc ??= now);
             return (false, null, $"The hub can't be reached: {ex.Message}", $"Không kết nối được hub: {ex.Message}");
         }
     }

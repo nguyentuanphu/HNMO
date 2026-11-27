@@ -18,3 +18,13 @@
 | Friend system minimum level & chat command guards | `social.ts:24-25` | `FRIEND_LEVEL = 6`, `MAX_NAME = 10` | Server `FriendServer` & Desktop `FriendWindow` | Same |
 | Character stats sync & EXP next-level progress | `stats.ts:28-111` | Updates `level`, `levelUpPoints`, `experience`, `nextExperience = experienceForLevel(level + 1)` from `CurrentStatsExtended`, `CharacterLevelUpdateExtended`, `ExperienceGainedExtended` | Server `ExperienceTable` & Desktop `WSclient.cpp` | Same |
 | Binary quest loader, text helpers & visuals | `questData.ts`, `sparkleGoal.ts`, `spawnEffects.ts`, `textFormat.ts` | BUX quest script reader, onboarding target highlights, spawn FX & string formatters | Data / visual presentation | No game rules |
+
+## Re-check 2026-11-27 (changes 8cb8539b..a108e846)
+
+Commits read (every changed file read in full):
+
+- 98f231d4 fix(client): fix buff value time assignment, outlaw warp check, and extended bag space check
+
+Evidence:
+
+- stats.ts: hero state from CharacterInformation and from HeroStateChanged (F3 08) for the own id only (0x7FFF mask); outlaw = state >= 5 (PK1) - same as the server (PlayerKiller1stStage) and the desktop move window.

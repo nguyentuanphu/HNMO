@@ -12,3 +12,13 @@
 1. **Integration Bug — `SeasonPlanStoreData.cs` & `CombiningLeftovers` (`CombiningLeftoversStore.cs:142` / `CombiningLeftoversPlugIn.cs:117`)**:
    - `CombiningLeftoversPlugIn` passes `seasonCapOverride: null` to `PlanCombine` and falls back to `TryReadSeasonStageMaxBoxLevel()`, which expects a `MaxBoxLevel` property inside the persisted `"seasonPlan"` JSON section.
    - `SeasonPlanStoreData` never stores `MaxBoxLevel` (only `UnlockedStages`, `UnlockReasons`, `BossKills`, `CharacterLevels`), so `SeasonPlan`'s `MaxBoxLevel` stage cap (`2/3/4/5`) is never enforced in `CombiningLeftovers`.
+
+## Re-check 2026-11-27 (changes 8b9574d1..a108e846)
+
+Commits read (every changed file read in full):
+
+- 478f9cf3 fix(plugins): fix stack deposits/consumption, receipt rollback, buff id collision, and partypass
+
+Evidence:
+
+- SeasonPlanPlugIn.Get prefers the instance with a configuration (two registrations of the plug-in returned the unconfigured one) - fixed.

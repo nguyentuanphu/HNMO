@@ -1,0 +1,347 @@
+# Desktop Client vs HNMO Value Diff (Season 6.3)
+# Client CSVs: docs/audit/data/client-s6/ | Server CSVs: docs/audit/data/hnmo/
+
+## Skills (client-s6/skills.csv: 399 client vs 316 server): match=274, differs=8, missing=117
+  DIFFERS skill_eng.bmd[13] skill=13 (Cometfall): range: client=3 vs hnmo=6
+  DIFFERS skill_eng.bmd[40] skill=40 (Nova): mana: client=180 vs hnmo=15
+  DIFFERS skill_eng.bmd[263] skill=263 (Dark Side): range: client=5 vs hnmo=4
+  MISSING skill_eng.bmd[314] skill=314 (Cast Invincibility): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[315] skill=315 (Armor Set Bonus Increase): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[316] skill=316 (Vengeance): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[317] skill=317 (Energy Increase): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[318] skill=318 (Stamina Increase): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[319] skill=319 (Agility Increase): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[320] skill=320 (Strength Increase): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[321] skill=321 (Wing of Storm Absorption PowUp): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[322] skill=322 (Wing of Storm Defense PowUp): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[323] skill=323 (Iron Defense): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[324] skill=324 (Wing of Storm Attack PowUp): missing in HNMO skills.csv
+  DIFFERS skill_eng.bmd[336] skill=336 (Slash Strengthener): range: client=3 vs hnmo=2
+  MISSING skill_eng.bmd[339] skill=339 (Death Stab Proficiency): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[340] skill=340 (Strike of Destruction Proficienc): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[341] skill=341 (Maximum AG Increase): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[342] skill=342 (Death Stab Mastery): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[343] skill=343 (Strike of Destruction Mastery): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[344] skill=344 (Blood Storm): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[345] skill=345 (Combo Strengthener): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[346] skill=346 (Blood Storm Strengthener): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[363] skill=363 (Swell Life Mastery): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[364] skill=364 (Maximum Attack Power Increase): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[366] skill=366 (Increases critical damage rate): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[367] skill=367 (Restores all Mana): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[368] skill=368 (Restores all HP): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[369] skill=369 (Increases excellent damage rate): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[370] skill=370 (Increases double damage rate): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[371] skill=371 (Increases chance of ignore Def): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[372] skill=372 (Restores all SD): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[373] skill=373 (Increases triple damage rate): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[374] skill=374 (Eternal Wings Absorption PowUp): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[375] skill=375 (Eternal Wings Defense PowUp): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[377] skill=377 (Eternal Wings Attack PowUp): missing in HNMO skills.csv
+  DIFFERS skill_eng.bmd[382] skill=382 (Blast Strengthener): range: client=3 vs hnmo=6
+  MISSING skill_eng.bmd[390] skill=390 (Meteor Strengthener): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[391] skill=391 (Ice Storm Strengthener): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[392] skill=392 (Nova Strengthener): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[393] skill=393 (Ice Storm Mastery): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[394] skill=394 (Meteor Mastery): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[395] skill=395 (Nova Cast Strengthener): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[406] skill=406 (Soul Barrier Mastery): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[407] skill=407 (Maximum Wizardry Increase): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[409] skill=409 (Illusion Wings Absorption PowUp): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[410] skill=410 (Illusion Wings Defense PowUp): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[411] skill=411 (Multi-Shot Strengthener): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[412] skill=412 (Illusion Wings Attack PowUp): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[425] skill=425 (Cure): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[426] skill=426 (Party Healing): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[427] skill=427 (Poison Arrow): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[428] skill=428 (Summoned Monster Strengthener (3): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[429] skill=429 (Party Healing Strengthener): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[430] skill=430 (Bless): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[431] skill=431 (Multi-Shot Mastery): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[432] skill=432 (Summon Satyros): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[433] skill=433 (Bless Strengthener): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[434] skill=434 (Poison Arrow Strengthener): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[443] skill=443 (Maximum Attack Power Increase): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[445] skill=445 (DimensionWings Absorb PowUp): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[446] skill=446 (DimensionWings Defense PowUp): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[447] skill=447 (DimensionWings Attack PowUp): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[459] skill=459 (Weakness Strengthener): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[460] skill=460 (Innovation Strengthener): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[461] skill=461 (Blind): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[462] skill=462 (Drain Life Mastery): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[463] skill=463 (Blind Strengthener): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[472] skill=472 (Berserker Mastery): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[473] skill=473 (Maximum Wizardry/Curse Increase): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[475] skill=475 (Wing of Ruin Absorption PowUp): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[476] skill=476 (Wing of Ruin Defense PowUp): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[478] skill=478 (Wing of Ruin Attack PowUp): missing in HNMO skills.csv
+  DIFFERS skill_eng.bmd[484] skill=484 (Blast Strengthener): range: client=3 vs hnmo=6
+  MISSING skill_eng.bmd[491] skill=491 (Ice Mastery): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[492] skill=492 (Flame Strike Strengthener): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[493] skill=493 (Fire Slash Mastery): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[494] skill=494 (Flame Strike Mastery): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[495] skill=495 (Earth Prison): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[496] skill=496 (Gigantic Storm Strengthener): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[497] skill=497 (Earth Prison Strengthener): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[504] skill=504 (Emperor Cape Absorption PowUp): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[505] skill=505 (Emperor Cape Defense PowUp): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[506] skill=506 (Adds Command Stat): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[507] skill=507 (Emperor Cape Attack PowUp): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[519] skill=519 (Electric Spark Strengthener): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[520] skill=520 (Fire Scream Mastery): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[521] skill=521 (Iron Defense ): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[522] skill=522 (Critical Damage Increase Mastery): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[523] skill=523 (Chaotic Diseier Strengthener): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[524] skill=524 (Iron Defense Strengthener): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[536] skill=536 (Dark Spirit Strengthener (4)): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[538] skill=538 (Dark Spirit Strengthener (5)): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[539] skill=539 (Spirit Lord): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[548] skill=548 (Reigning Cloak Absorption PowUp): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[549] skill=549 (Reigning Cloak Defense PowUp): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[550] skill=550 (Reigning Cloak Attack PowUp): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[556] skill=556 (Def Success Rate Strengthener): missing in HNMO skills.csv
+  DIFFERS skill_eng.bmd[558] skill=558 (Chain Drive Strengthener): ag: client=22 vs hnmo=20
+  DIFFERS skill_eng.bmd[559] skill=559 (Dark Side Strengthener): range: client=5 vs hnmo=4
+  MISSING skill_eng.bmd[561] skill=561 (Dragon Roar Mastery): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[562] skill=562 (Chain Drive Mastery): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[563] skill=563 (Dark Side Mastery): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[564] skill=564 (Dragon Slasher Strengthener): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[565] skill=565 (Blood Howling): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[566] skill=566 (Dragon Slasher Mastery): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[567] skill=567 (Blood Howling Strengthener): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[574] skill=574 (Defense Switch): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[592] skill=592 (Cast Invincibility): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[593] skill=593 (Increase Set Defense): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[594] skill=594 (Vengeance): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[595] skill=595 (Increase Energy): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[596] skill=596 (Increase HP): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[597] skill=597 (Increase Agility): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[598] skill=598 (Increase Strength): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[602] skill=602 (Increase Maximum AG): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[609] skill=609 (Increase Maximum Attack Power): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[610] skill=610 (Increases Critical DMG Chance): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[611] skill=611 (Recover Mana Fully): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[612] skill=612 (Recovers HP Fully): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[613] skill=613 (Increase Excellent DMG Chance): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[614] skill=614 (Increase Double Damage Chance): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[615] skill=615 (Increase Ignore Def Chance): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[616] skill=616 (Recovers SD Fully): missing in HNMO skills.csv
+  MISSING skill_eng.bmd[617] skill=617 (Increase Triple Damage Chance): missing in HNMO skills.csv
+
+## Master Tree (293 rows): match_maxLevel=292, differs_or_missing=1
+  DIFFERS MasterSkillTreeData.bmd[285] idx=81 cls=64 skill=571 (Equipped Weapon Mastery): maxLevel client=10 vs hnmo=20
+
+## Buffs (158 client vs 158 web Buffs.json): match=158, missing=0
+
+## Items (967 client vs 848 server): match=769, differs=64, missing_server=134, missing_web=10
+  MISSING_SERVER Item_eng.bmd[100] (0:100) '0'
+  MISSING_SERVER Item_eng.bmd[203] (0:203) '0'
+  DIFFERS Item_eng.bmd[2592] (5:32) 'Guardian Staff': reqLvl: client=0 vs hnmo=400; reqStr: client=45 vs hnmo=56; reqAgi: client=15 vs hnmo=14
+  MISSING_SERVER Item_eng.bmd[3637] (7:53) 'Pearl Helm'
+  DIFFERS Item_eng.bmd[3643] (7:59) 'Sacred Fire Helm': reqLvl: client=0 vs hnmo=1
+  DIFFERS Item_eng.bmd[3644] (7:60) 'Storm Jahad Helm': reqLvl: client=0 vs hnmo=1
+  DIFFERS Item_eng.bmd[3645] (7:61) 'Piercing Groove Helm': reqLvl: client=0 vs hnmo=1
+  MISSING_SERVER Item_eng.bmd[4149] (8:53) 'Pearl Armor'
+  DIFFERS Item_eng.bmd[4155] (8:59) 'Sacred Fire Armor': reqLvl: client=0 vs hnmo=1
+  DIFFERS Item_eng.bmd[4156] (8:60) 'Storm Jahad Armor': reqLvl: client=0 vs hnmo=1
+  DIFFERS Item_eng.bmd[4157] (8:61) 'Piercing Groove Armor': reqLvl: client=0 vs hnmo=1
+  MISSING_SERVER Item_eng.bmd[4661] (9:53) 'Pearl Pants'
+  DIFFERS Item_eng.bmd[4667] (9:59) 'Sacred Fire Pants': reqLvl: client=0 vs hnmo=1
+  DIFFERS Item_eng.bmd[4668] (9:60) 'Storm Jahad Pants': reqLvl: client=0 vs hnmo=1
+  DIFFERS Item_eng.bmd[4669] (9:61) 'Piercing Groove Pants': reqLvl: client=0 vs hnmo=1
+  MISSING_SERVER Item_eng.bmd[5173] (10:53) 'Pearl Gloves'
+  MISSING_SERVER Item_eng.bmd[5685] (11:53) 'Pearl Boots'
+  DIFFERS Item_eng.bmd[5691] (11:59) 'Sacred Fire Boots': reqLvl: client=0 vs hnmo=1
+  DIFFERS Item_eng.bmd[5692] (11:60) 'Storm Jahad Boots': reqLvl: client=0 vs hnmo=1
+  DIFFERS Item_eng.bmd[5693] (11:61) 'Piercing Groove Boots': reqLvl: client=0 vs hnmo=1
+  DIFFERS Item_eng.bmd[6152] (12:8) 'Healing Orb': reqEne: client=100 vs hnmo=52
+  DIFFERS Item_eng.bmd[6153] (12:9) 'Orb of Greater Fortitude': reqEne: client=100 vs hnmo=72
+  DIFFERS Item_eng.bmd[6154] (12:10) 'Orb of Greater Damage': reqEne: client=100 vs hnmo=92
+  DIFFERS Item_eng.bmd[6160] (12:16) 'Orb of Fire Slash': reqStr: client=320 vs hnmo=596
+  DIFFERS Item_eng.bmd[6162] (12:18) 'Orb of Ice Arrow': reqAgi: client=258 vs hnmo=646
+  DIFFERS Item_eng.bmd[6165] (12:21) 'Scroll of FireBurst': reqEne: client=20 vs hnmo=79
+  DIFFERS Item_eng.bmd[6166] (12:22) 'Scroll of Summon': reqEne: client=34 vs hnmo=153
+  DIFFERS Item_eng.bmd[6167] (12:23) 'Scroll of Critical Damage': reqEne: client=25 vs hnmo=102
+  DIFFERS Item_eng.bmd[6168] (12:24) 'Scroll of Electric Spark': reqEne: client=29 vs hnmo=126
+  MISSING_SERVER Item_eng.bmd[6170] (12:26) 'Gem of Secret'
+  DIFFERS Item_eng.bmd[6179] (12:35) 'Scroll of Fire Scream': reqEne: client=32 vs hnmo=150
+  DIFFERS Item_eng.bmd[6190] (12:46) 'Crystal of Recovery': reqEne: client=37 vs hnmo=168
+  DIFFERS Item_eng.bmd[6192] (12:48) 'Scroll of Chaotic Diseier': reqEne: client=16 vs hnmo=84
+  MISSING_SERVER Item_eng.bmd[6663] (13:7) 'Contract (Summon)'
+  DIFFERS Item_eng.bmd[6666] (13:10) 'Transformation Ring': reqLvl: client=0 vs hnmo=50
+  DIFFERS Item_eng.bmd[6670] (13:14) "Loch's Feather": reqLvl: client=78 vs hnmo=0
+  DIFFERS Item_eng.bmd[6697] (13:41) 'Transfer Christmas Ring': reqLvl: client=1 vs hnmo=0
+  DIFFERS Item_eng.bmd[6706] (13:50) 'Illusion Sorcerer Covenant': size: client=1x2 vs hnmo=2x2
+  DIFFERS Item_eng.bmd[6707] (13:51) 'Scroll of Blood': size: client=2x2 vs hnmo=1x2
+  MISSING_SERVER Item_eng.bmd[6715] (13:59) 'Seal of Mobility'
+  MISSING_SERVER Item_eng.bmd[6716] (13:60) 'Indulgence'
+  MISSING_SERVER Item_eng.bmd[6725] (13:69) 'Talisman of Resurrection'
+  MISSING_SERVER Item_eng.bmd[6726] (13:70) 'Talisman of Mobility'
+  DIFFERS Item_eng.bmd[6732] (13:76) 'Panda Ring': reqLvl: client=1 vs hnmo=0
+  MISSING_SERVER Item_eng.bmd[6739] (13:83) 'Talisman of Wings of Satan'
+  MISSING_SERVER Item_eng.bmd[6740] (13:84) 'Talisman of Wings of Heaven'
+  MISSING_SERVER Item_eng.bmd[6741] (13:85) 'Talisman of Wings of Elf'
+  MISSING_SERVER Item_eng.bmd[6742] (13:86) 'Talisman of Wing of Curse'
+  MISSING_SERVER Item_eng.bmd[6743] (13:87) 'Talisman of Cape of Emperor'
+  MISSING_SERVER Item_eng.bmd[6744] (13:88) 'Talisman of Wings of Dragon'
+  MISSING_SERVER Item_eng.bmd[6745] (13:89) 'Talisman of Wings of Soul'
+  MISSING_SERVER Item_eng.bmd[6746] (13:90) 'Talisman of Wings of Spirits'
+  MISSING_SERVER Item_eng.bmd[6747] (13:91) 'Talisman of Wing of Despair'
+  MISSING_SERVER Item_eng.bmd[6748] (13:92) 'Talisman of Wings of Darkness'
+  MISSING_SERVER Item_eng.bmd[6751] (13:95) "Gladiator's Honor"
+  MISSING_SERVER Item_eng.bmd[6752] (13:96) 'Seal of Strength'
+  MISSING_SERVER Item_eng.bmd[6753] (13:97) 'Item 13-97'
+  MISSING_SERVER Item_eng.bmd[6754] (13:98) 'Dark Lord Character Card '
+  MISSING_SERVER Item_eng.bmd[6755] (13:99) 'Character Slot Key'
+  MISSING_SERVER Item_eng.bmd[6759] (13:103) 'Party EXP Scroll'
+  MISSING_SERVER Item_eng.bmd[6772] (13:116) 'Seal of Wealth'
+  MISSING_SERVER Item_eng.bmd[6773] (13:117) 'Minimum Vitality Potion'
+  MISSING_SERVER Item_eng.bmd[6774] (13:118) 'Low Vitality Potion'
+  MISSING_SERVER Item_eng.bmd[6775] (13:119) 'Medium Vitality Potion'
+  MISSING_SERVER Item_eng.bmd[6776] (13:120) 'High Vitality Potion'
+  DIFFERS Item_eng.bmd[6778] (13:122) 'Skeleton Transformation Ring': reqLvl: client=1 vs hnmo=0
+  MISSING_SERVER Item_eng.bmd[6780] (13:124) 'Paid Channel Access Ticket'
+  MISSING_SERVER Item_eng.bmd[6782] (13:126) 'Access Ticket to Kalima'
+  MISSING_SERVER Item_eng.bmd[6783] (13:127) 'Access Ticket to Kalima 7'
+  MISSING_SERVER Item_eng.bmd[6784] (13:128) 'Hawk Figurine'
+  MISSING_SERVER Item_eng.bmd[6785] (13:129) 'Goat Figurine'
+  MISSING_SERVER Item_eng.bmd[6786] (13:130) 'Oak Charm'
+  MISSING_SERVER Item_eng.bmd[6787] (13:131) 'Maple Charm'
+  MISSING_SERVER Item_eng.bmd[6788] (13:132) 'Golden Oak Charm'
+  MISSING_SERVER Item_eng.bmd[6789] (13:133) 'Golden Maple Charm'
+  MISSING_SERVER Item_eng.bmd[6790] (13:134) 'Worn Horseshoe'
+  MISSING_SERVER Item_eng.bmd[7180] (14:12) 'Heart'
+  MISSING_SERVER Item_eng.bmd[7183] (14:15) 'Zen'
+  MISSING_SERVER Item_eng.bmd[7188] (14:20) 'Remedy of Love'
+  MISSING_SERVER Item_eng.bmd[7222] (14:54) 'Chaos Card'
+  MISSING_SERVER Item_eng.bmd[7223] (14:55) 'Green Chaos Box'
+  MISSING_SERVER Item_eng.bmd[7224] (14:56) 'Red Chaos Box'
+  MISSING_SERVER Item_eng.bmd[7225] (14:57) 'Purple Chaos Box'
+  MISSING_SERVER Item_eng.bmd[7226] (14:58) 'Rare Item Ticket1'
+  MISSING_SERVER Item_eng.bmd[7227] (14:59) 'Rare Item Ticket2'
+  MISSING_SERVER Item_eng.bmd[7228] (14:60) 'Rare Item Ticket3'
+  MISSING_SERVER Item_eng.bmd[7229] (14:61) 'Rare Item Ticket4'
+  MISSING_SERVER Item_eng.bmd[7230] (14:62) 'Rare Item Ticket5'
+  MISSING_SERVER Item_eng.bmd[7251] (14:83) 'Rare Item Ticket'
+  MISSING_SERVER Item_eng.bmd[7256] (14:88) 'White Cherry Blossom Branch'
+  MISSING_SERVER Item_eng.bmd[7257] (14:89) 'Red Cherry Blossom Branch'
+  MISSING_SERVER Item_eng.bmd[7260] (14:92) 'Chaos Card Gold'
+  MISSING_SERVER Item_eng.bmd[7261] (14:93) 'Chaos Card Rare'
+  MISSING_SERVER Item_eng.bmd[7263] (14:95) 'Chaos Card  Mini'
+  MISSING_SERVER Item_eng.bmd[7268] (14:100) 'Lucky Coin'
+  MISSING_SERVER Item_eng.bmd[7282] (14:114) 'Master Skill Reset'
+  MISSING_SERVER Item_eng.bmd[7283] (14:115) 'Stat Adjustment'
+  MISSING_SERVER Item_eng.bmd[7284] (14:116) 'Character Relocation Service'
+  MISSING_SERVER Item_eng.bmd[7285] (14:117) 'Character Rename Service'
+  MISSING_SERVER Item_eng.bmd[7286] (14:118) 'Server Relocation Service'
+  MISSING_SERVER Item_eng.bmd[7287] (14:119) 'Premium Package'
+  MISSING_SERVER Item_eng.bmd[7288] (14:120) 'Goblin Gold Coin'
+  MISSING_SERVER Item_eng.bmd[7293] (14:125) 'Package Box'
+  MISSING_SERVER Item_eng.bmd[7294] (14:126) '30-Day Pass'
+  MISSING_SERVER Item_eng.bmd[7295] (14:127) '90-Day Pass'
+  MISSING_SERVER Item_eng.bmd[7296] (14:128) '30-Day Pass - Points'
+  MISSING_SERVER Item_eng.bmd[7297] (14:129) '90-Day Pass - Points'
+  MISSING_SERVER Item_eng.bmd[7298] (14:130) '3-Hour Pass'
+  MISSING_SERVER Item_eng.bmd[7299] (14:131) '5-Hour Pass'
+  MISSING_SERVER Item_eng.bmd[7300] (14:132) '10-Hour Pass'
+  MISSING_SERVER Item_eng.bmd[7302] (14:134) 'Package Box A'
+  MISSING_SERVER Item_eng.bmd[7303] (14:135) 'Package Box B'
+  MISSING_SERVER Item_eng.bmd[7304] (14:136) 'Package Box C'
+  MISSING_SERVER Item_eng.bmd[7305] (14:137) 'Package Box D'
+  MISSING_SERVER Item_eng.bmd[7306] (14:138) 'Package Box E'
+  MISSING_SERVER Item_eng.bmd[7307] (14:139) 'Package Box F'
+  MISSING_SERVER Item_eng.bmd[7313] (14:145) 'Rare Item Ticket 7'
+  MISSING_SERVER Item_eng.bmd[7314] (14:146) 'Rare Item Ticket 8'
+  MISSING_SERVER Item_eng.bmd[7315] (14:147) 'Rare Item Ticket 9'
+  MISSING_SERVER Item_eng.bmd[7316] (14:148) 'Rare Item Ticket 10'
+  DIFFERS Item_eng.bmd[7680] (15:0) 'Scroll of Poison': reqEne: client=100 vs hnmo=140
+  DIFFERS Item_eng.bmd[7681] (15:1) 'Scroll of Meteorite': reqEne: client=100 vs hnmo=104
+  DIFFERS Item_eng.bmd[7682] (15:2) 'Scroll of Lighting': reqEne: client=100 vs hnmo=72
+  DIFFERS Item_eng.bmd[7683] (15:3) 'Scroll of Fire Ball': reqEne: client=100 vs hnmo=40
+  DIFFERS Item_eng.bmd[7684] (15:4) 'Scroll of Flame': reqEne: client=100 vs hnmo=160
+  DIFFERS Item_eng.bmd[7685] (15:5) 'Scroll of Teleport': reqEne: client=100 vs hnmo=88
+  DIFFERS Item_eng.bmd[7686] (15:6) 'Scroll of Ice': reqEne: client=100 vs hnmo=120
+  DIFFERS Item_eng.bmd[7687] (15:7) 'Scroll of Twister': reqEne: client=100 vs hnmo=180
+  DIFFERS Item_eng.bmd[7688] (15:8) 'Scroll of Evil Spirit': reqEne: client=100 vs hnmo=220
+  DIFFERS Item_eng.bmd[7689] (15:9) 'Scroll of Hellfire': reqEne: client=100 vs hnmo=260
+  DIFFERS Item_eng.bmd[7690] (15:10) 'Scroll of Power Wave': reqEne: client=100 vs hnmo=56
+  DIFFERS Item_eng.bmd[7691] (15:11) 'Scroll of Aqua Beam': reqEne: client=110 vs hnmo=345
+  DIFFERS Item_eng.bmd[7692] (15:12) 'Scroll of Cometfall': reqEne: client=150 vs hnmo=500
+  DIFFERS Item_eng.bmd[7693] (15:13) 'Scroll of Inferno': reqEne: client=200 vs hnmo=724
+  DIFFERS Item_eng.bmd[7694] (15:14) 'Scroll of Teleport Ally': reqEne: client=188 vs hnmo=644
+  DIFFERS Item_eng.bmd[7695] (15:15) 'Scroll of Soul Barrier': reqEne: client=126 vs hnmo=408
+  DIFFERS Item_eng.bmd[7696] (15:16) 'Scroll of Decay': reqEne: client=243 vs hnmo=953
+  DIFFERS Item_eng.bmd[7697] (15:17) 'Scroll of Ice Storm': reqEne: client=223 vs hnmo=849
+  DIFFERS Item_eng.bmd[7698] (15:18) 'Scroll of Nova': reqEne: client=258 vs hnmo=1052
+  DIFFERS Item_eng.bmd[7699] (15:19) 'Chain Lightning Parchment': reqEne: client=75 vs hnmo=245
+  DIFFERS Item_eng.bmd[7700] (15:20) 'Drain Life Parchment': reqEne: client=93 vs hnmo=150
+  DIFFERS Item_eng.bmd[7701] (15:21) 'Lightning Shock Parchment': reqEne: client=216 vs hnmo=823
+  DIFFERS Item_eng.bmd[7702] (15:22) 'Damage Reflection Parchment': reqEne: client=111 vs hnmo=375
+  DIFFERS Item_eng.bmd[7703] (15:23) 'Berserker Parchment': reqEne: client=181 vs hnmo=620
+  DIFFERS Item_eng.bmd[7704] (15:24) 'Sleep Parchment': reqEne: client=100 vs hnmo=180
+  DIFFERS Item_eng.bmd[7706] (15:26) 'Weakness Parchment': reqEne: client=173 vs hnmo=663
+  DIFFERS Item_eng.bmd[7707] (15:27) 'Innovation Parchment': reqEne: client=201 vs hnmo=912
+  DIFFERS Item_eng.bmd[7708] (15:28) 'Scroll of Wizardry Enhance': reqEne: client=118 vs hnmo=1058
+  DIFFERS Item_eng.bmd[7709] (15:29) 'Scroll of Gigantic Storm': reqEne: client=118 vs hnmo=1058
+  DIFFERS Item_eng.bmd[7714] (15:34) 'Ignore Defense Parchment': reqEne: client=80 vs hnmo=404
+  ... (2 more)
+
+## Monsters / NPCs (532 client vs 504 server): matched_ids=492, missing_server=40
+  MISSING_SERVER Npcname(eng).txt[175] id=55 'Death King'
+  MISSING_SERVER Npcname(eng).txt[176] id=56 'Death Bone'
+  MISSING_SERVER Npcname(eng).txt[109] id=68 'Molt'
+  MISSING_SERVER Npcname(eng).txt[191] id=104 'Trap'
+  MISSING_SERVER Npcname(eng).txt[219] id=234 'Pet Trainer'
+  MISSING_SERVER Npcname(eng).txt[237] id=252 ''
+  MISSING_SERVER Npcname(eng).txt[307] id=258 'Luke the Helper'
+  MISSING_SERVER Npcname(eng).txt[272] id=296 'Monster7'
+  MISSING_SERVER Npcname(eng).txt[273] id=300 'Hero Mutant'
+  MISSING_SERVER Npcname(eng).txt[274] id=301 'Omega Wing'
+  MISSING_SERVER Npcname(eng).txt[275] id=302 'Axl Hero'
+  MISSING_SERVER Npcname(eng).txt[276] id=303 'Gigas Golem'
+  MISSING_SERVER Npcname(eng).txt[335] id=365 'Pouch of Blessing'
+  MISSING_SERVER Npcname(eng).txt[330] id=373 'Jack Olantern'
+  MISSING_SERVER Npcname(eng).txt[331] id=374 'Santa'
+  MISSING_SERVER Npcname(eng).txt[358] id=400 'Illusion Sorcerer Spirit'
+  MISSING_SERVER Npcname(eng).txt[359] id=401 'Illusion Sorcerer Spirit'
+  MISSING_SERVER Npcname(eng).txt[360] id=402 'Illusion Sorcerer Spirit'
+  MISSING_SERVER Npcname(eng).txt[361] id=403 'Illusion Sorcerer Spirit'
+  MISSING_SERVER Npcname(eng).txt[371] id=413 'Lunar Rabbit'
+  MISSING_SERVER Npcname(eng).txt[372] id=414 'Helper Ellen'
+  MISSING_SERVER Npcname(eng).txt[421] id=463 'Fire Flame Ghost'
+  MISSING_SERVER Npcname(eng).txt[424] id=465 'Santa Claus'
+  MISSING_SERVER Npcname(eng).txt[425] id=466 'Cursed Goblin'
+  MISSING_SERVER Npcname(eng).txt[452] id=493 'Golden Dark Knight'
+  MISSING_SERVER Npcname(eng).txt[453] id=494 'Golden Devil'
+  MISSING_SERVER Npcname(eng).txt[454] id=495 'Golden Stone Golem'
+  MISSING_SERVER Npcname(eng).txt[455] id=496 'Golden Crust'
+  MISSING_SERVER Npcname(eng).txt[456] id=497 'Golden Satyros'
+  MISSING_SERVER Npcname(eng).txt[457] id=498 'Golden Twin Tail'
+  MISSING_SERVER Npcname(eng).txt[458] id=499 'Golden Iron Knight'
+  MISSING_SERVER Npcname(eng).txt[459] id=500 'Golden Napin'
+  MISSING_SERVER Npcname(eng).txt[460] id=501 'Great Golden Dragon'
+  MISSING_SERVER Npcname(eng).txt[451] id=502 'Golden Rabbit'
+  MISSING_SERVER Npcname(eng).txt[461] id=503 'Transformed Panda'
+  MISSING_SERVER Npcname(eng).txt[506] id=548 'Transformed Skeleton'
+  MISSING_SERVER Npcname(eng).txt[518] id=560 'Sapi Queen'
+  MISSING_SERVER Npcname(eng).txt[519] id=561 'Medusa'
+  MISSING_SERVER Npcname(eng).txt[525] id=567 'Priestess Veina'
+  MISSING_SERVER Npcname(eng).txt[538] id=585 'Scarecrow'
+
+## Warps (39 client vs 40 server): match=25, differs_or_missing=14
+  DIFFERS movereq_eng.bmd[28] warp=23 (Icarus): client(lv=170,zen=50000) vs hnmo(lv=170,zen=10000)
+  DIFFERS movereq_eng.bmd[26] warp=25 (Aida1): client(lv=150,zen=50000) vs hnmo(lv=150,zen=8500)
+  DIFFERS movereq_eng.bmd[27] warp=27 (Aida2): client(lv=150,zen=100000) vs hnmo(lv=150,zen=8500)
+  DIFFERS movereq_eng.bmd[29] warp=28 (KanturuRuins1): client(lv=200,zen=300000) vs hnmo(lv=160,zen=9000)
+  DIFFERS movereq_eng.bmd[30] warp=29 (KanturuRuins2): client(lv=220,zen=350000) vs hnmo(lv=160,zen=9000)
+  DIFFERS movereq_eng.bmd[32] warp=30 (KanturuRelics): client(lv=300,zen=500000) vs hnmo(lv=230,zen=12000)
+  DIFFERS movereq_eng.bmd[36] warp=33 (PeaceSwamp): client(lv=400,zen=1000000) vs hnmo(lv=400,zen=15000)
+  DIFFERS movereq_eng.bmd[35] warp=34 (LaCleon): client(lv=280,zen=500000) vs hnmo(lv=280,zen=15000)
+  DIFFERS movereq_eng.bmd[37] warp=42 (Vulcanus): client(lv=250,zen=350000) vs hnmo(lv=30,zen=15000)
+  DIFFERS movereq_eng.bmd[31] warp=45 (KanturuRuins3): client(lv=250,zen=400000) vs hnmo(lv=160,zen=15000)
+  DIFFERS movereq_eng.bmd[33] warp=46 (Karutan1): client(lv=170,zen=100000) vs hnmo(lv=170,zen=13000)
+  DIFFERS movereq_eng.bmd[34] warp=47 (Karutan2): client(lv=170,zen=150000) vs hnmo(lv=170,zen=14000)
+  DIFFERS movereq_eng.bmd[38] warp=48 (Crywolf): client(lv=300,zen=150000) vs hnmo(lv=280,zen=15000)
+  MISSING_SERVER movereq_eng.bmd[1] warp=49 (Stadium)
+
+## Mixes: client=101 recipes (Mix.bmd) vs server=43 rules (mixes.csv)

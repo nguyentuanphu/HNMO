@@ -1,5 +1,5 @@
 // <copyright file="ItemStackPlugIn.cs" company="HNMO">
-// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// Proprietary and confidential. All rights reserved. Unauthorized copying, modification, or distribution is prohibited.
 // </copyright>
 
 namespace HNMO.GameLogic.PlugIns.ItemStacks;
@@ -198,11 +198,12 @@ public sealed class ItemStackPlugIn : IFeaturePlugIn, ISupportCustomConfiguratio
             }
 
             account.SetCashShopCoins(cfg.UnlockCoinType, balance - kind.UnlockPrice);
-            CashShopBalanceReceipt.Record(player.PersistenceContext, account, cfg.UnlockCoinType, -kind.UnlockPrice, CashShopBalanceReason.StackUnlock);
+            var receipt = CashShopBalanceReceipt.Record(player.PersistenceContext, account, cfg.UnlockCoinType, -kind.UnlockPrice, CashShopBalanceReason.StackUnlock);
             if (!await player.SaveProgressAsync().ConfigureAwait(false))
             {
                 // Nothing is bought when the payment couldn't be saved: the coins go back.
                 account.SetCashShopCoins(cfg.UnlockCoinType, account.GetCashShopCoins(cfg.UnlockCoinType) + kind.UnlockPrice);
+                await CashShopBalanceReceipt.RemoveAsync(player.PersistenceContext, receipt).ConfigureAwait(false);
                 return (false, vi ? "Không lưu được giao dịch, chưa trừ xu. Vui lòng thử lại." : "The purchase couldn't be saved; no coins were taken. Please try again.");
             }
 

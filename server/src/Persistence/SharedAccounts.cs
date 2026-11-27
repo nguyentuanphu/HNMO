@@ -1,5 +1,5 @@
 // <copyright file="SharedAccounts.cs" company="HNMO">
-// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// Proprietary and confidential. All rights reserved. Unauthorized copying, modification, or distribution is prohibited.
 // </copyright>
 
 namespace HNMO.Persistence;
@@ -77,6 +77,26 @@ public interface ISharedAccountStore
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The new balances, or <c>null</c> when the account doesn't exist.</returns>
     ValueTask<CoinBalances?> AddCoinsAsync(string loginName, CoinBalances change, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Adds a change like <see cref="AddCoinsAsync"/> and returns the balances before and after it, so a caller can take
+    /// back exactly what was applied: a balance kept at zero takes less than the change asked for. A store which can do
+    /// both in one step overrides this; the default reads the balances first.
+    /// </summary>
+    /// <param name="loginName">The login name.</param>
+    /// <param name="change">The change.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The balances before and after, or <c>null</c> when the account doesn't exist.</returns>
+    async ValueTask<(CoinBalances Before, CoinBalances After)?> AddCoinsAndReportAsync(string loginName, CoinBalances change, CancellationToken cancellationToken = default)
+    {
+        if (await this.FindAsync(loginName, cancellationToken).ConfigureAwait(false) is not { } before
+            || await this.AddCoinsAsync(loginName, change, cancellationToken).ConfigureAwait(false) is not { } after)
+        {
+            return null;
+        }
+
+        return (before.Coins, after);
+    }
 }
 
 /// <summary>The shared account store of this program; <c>null</c> in a Season 6.3 program, which owns the accounts.</summary>

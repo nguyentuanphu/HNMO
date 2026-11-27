@@ -1,0 +1,11 @@
+#!/bin/bash
+set -uo pipefail
+contents="$(cd "$(dirname "$0")/.." && pwd)" || exit 1
+resources="$contents/Resources"
+
+install_dir="$HOME/Library/Application Support/HNMO"
+if ! { "$resources/install-user-folder.sh" "$resources/HNMO.zip" "$install_dir" &&
+       "$install_dir/start-hnmo.sh"; }; then
+  /usr/bin/osascript -e 'display alert "HNMO could not start / HNMO chưa khởi động được" message "Open Start HNMO from the official download. If the first installation is already running, wait for the browser to open. / Hãy mở Start HNMO từ bản tải chính thức. Nếu đang cài đặt, hãy chờ trình duyệt mở."'
+  exit 1
+fi

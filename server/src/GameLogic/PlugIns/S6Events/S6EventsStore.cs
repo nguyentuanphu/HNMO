@@ -137,4 +137,97 @@ public sealed class S6EventsStore
             this._stateStore.WriteSection(SectionKey, state, JsonOptions);
         }
     }
+
+    /// <summary>Marks a scheduled Loren Deep slot key as started so the same minute cannot double-fire.</summary>
+    /// <param name="slotKey">Schedule slot key (<c>yyyy-MM-dd HH:mm</c>).</param>
+    /// <returns><see langword="true"/> if newly claimed; <see langword="false"/> if already fired.</returns>
+    public bool TryClaimLorenScheduleSlot(string slotKey)
+    {
+        lock (this._stateStore.SyncRoot)
+        {
+            var state = this._stateStore.ReadSection<S6EventsState>(SectionKey, JsonOptions) ?? new S6EventsState();
+            if (string.Equals(state.LastLorenTriggeredSlotKey, slotKey, StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            state.LastLorenTriggeredSlotKey = slotKey;
+            this._stateStore.WriteSection(SectionKey, state, JsonOptions);
+            return true;
+        }
+    }
+
+    /// <summary>Checks cooldown and records an XMas gift claim timestamp for <paramref name="characterName"/>.</summary>
+    /// <param name="characterName">Character name.</param>
+    /// <param name="cooldownMinutes">Required cooldown in minutes.</param>
+    /// <param name="utcNow">Current UTC time.</param>
+    /// <param name="nextAvailableUtc">Outputs earliest next UTC claim time when cooling down.</param>
+    /// <returns><see langword="true"/> if claim is allowed and recorded.</returns>
+    public bool TryClaimXMasGift(string characterName, int cooldownMinutes, DateTime utcNow, out DateTime nextAvailableUtc)
+    {
+        nextAvailableUtc = utcNow;
+        if (string.IsNullOrWhiteSpace(characterName))
+        {
+            return false;
+        }
+
+        lock (this._stateStore.SyncRoot)
+        {
+            var state = this._stateStore.ReadSection<S6EventsState>(SectionKey, JsonOptions) ?? new S6EventsState();
+            if (cooldownMinutes > 0
+                && state.LastXMasGiftUtcByCharacter.TryGetValue(characterName, out var prev)
+                && prev.AddMinutes(cooldownMinutes) > utcNow)
+            {
+                nextAvailableUtc = prev.AddMinutes(cooldownMinutes);
+                return false;
+            }
+
+            state.LastXMasGiftUtcByCharacter[characterName] = utcNow;
+            this._stateStore.WriteSection(SectionKey, state, JsonOptions);
+            return true;
+        }
+    }
+
+    /// <summary>Gets saved Mu Rummy game state for <paramref name="characterName"/>.</summary>
+    /// <param name="characterName">Character name.</param>
+    /// <returns>Game state, or <see langword="null"/> if none active.</returns>
+    public MuRummyGameState? GetMuRummyGame(string characterName)
+    {
+        if (string.IsNullOrWhiteSpace(characterName))
+        {
+            return null;
+        }
+
+        lock (this._stateStore.SyncRoot)
+        {
+            var state = this._stateStore.ReadSection<S6EventsState>(SectionKey, JsonOptions);
+            return state?.MuRummyGames.TryGetValue(characterName, out var game) == true ? game : null;
+        }
+    }
+
+    /// <summary>Saves or clears (<see langword="null"/>) Mu Rummy game state for <paramref name="characterName"/>.</summary>
+    /// <param name="characterName">Character name.</param>
+    /// <param name="game">Game state or <see langword="null"/> to remove.</param>
+    public void SaveMuRummyGame(string characterName, MuRummyGameState? game)
+    {
+        if (string.IsNullOrWhiteSpace(characterName))
+        {
+            return;
+        }
+
+        lock (this._stateStore.SyncRoot)
+        {
+            var state = this._stateStore.ReadSection<S6EventsState>(SectionKey, JsonOptions) ?? new S6EventsState();
+            if (game is null)
+            {
+                state.MuRummyGames.Remove(characterName);
+            }
+            else
+            {
+                state.MuRummyGames[characterName] = game;
+            }
+
+            this._stateStore.WriteSection(SectionKey, state, JsonOptions);
+        }
+    }
 }

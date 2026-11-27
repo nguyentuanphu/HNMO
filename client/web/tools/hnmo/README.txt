@@ -14,18 +14,23 @@ START
            `save/hnmo-settings.json`.
            (Tiếng Việt: Bấm đúp "Start HNMO.bat" để chạy ngầm có biểu tượng khay hệ thống;
            muốn hiện cửa sổ console hãy chạy `Start HNMO.bat /window` hoặc đặt `"ConsoleWindow": true`.)
-  Ubuntu/Linux: once, install PostgreSQL 16: sudo apt install postgresql-16
-           Then run ./start-hnmo.sh: HNMO runs in the background (the Terminal can be
-           closed; use `./start-hnmo.sh --window` for a foreground console). Stop it with
-           ./stop-hnmo.sh or "Stop HNMO" in the admin panel / control page.
-  macOS:   once, install PostgreSQL 16: brew install postgresql@16 (or Postgres.app),
-           and allow the folder: xattr -dr com.apple.quarantine HNMO
-           Then double-click "Start HNMO.command" (or run ./start-hnmo.sh in Terminal):
-           HNMO runs in the background (the Terminal can be closed). Stop it with
-           ./stop-hnmo.sh or "Stop HNMO" in the admin panel / control page.
+  macOS:   extract HNMO-macos.zip and double-click "Start HNMO.app". Your save
+           is under Library/Application Support/HNMO in your home folder.
+           The portable HNMO.zip still supports Start HNMO.command and
+           keeps saves inside its HNMO folder.
+           (Tiếng Việt: Giải nén HNMO-macos.zip rồi bấm đúp "Start HNMO.app".)
+  Ubuntu/Debian: open "HNMO-linux.deb" in the software installer, choose Install,
+           then open HNMO from the applications menu. The first launch copies the
+           files to `~/.local/share/HNMO` (or `$XDG_DATA_HOME/HNMO`).
+           (Tiếng Việt: Mở "HNMO-linux.deb" bằng trình cài ứng dụng, chọn Cài đặt,
+           rồi mở HNMO từ danh sách ứng dụng.)
+  Other compatible Linux desktops: use the extracted HNMO.zip with
+           ./start-hnmo.sh. PostgreSQL is included for x64 and ARM64 on Linux
+           and macOS. Builds made without the bundled database can use an
+           existing PostgreSQL installation.
+  To stop on macOS or Linux, choose "Stop HNMO" on the local control page.
   The log (what the old window showed): the admin panel's "Server log" page, or
   save/logs (launcher.log, server.log, database.log).
-  (Windows needs nothing installed: its database is in the folder.)
 
   The website opens in your browser at http://localhost:8080/ when it's ready: server
   information, rankings, the event schedule, accounts. The game loads in the background;
@@ -34,8 +39,9 @@ START
 
   Windows may warn "Windows protected your PC" (the files aren't signed):
   click "More info" and "Run anyway". (Tiếng Việt: Bấm "More info" -> "Run anyway".)
-  macOS Gatekeeper may say the app is from an unidentified developer:
-  right-click HNMO.app (or HNMO), choose "Open", and click "Open" again. (Tiếng Việt: Chuột phải -> "Open" -> "Open".)
+  macOS may ask you to approve a build downloaded from the official HNMO release.
+  Open System Settings → Privacy & Security and choose Open Anyway for Start HNMO.
+  (Tiếng Việt: Mở Cài đặt hệ thống → Quyền riêng tư & Bảo mật → Vẫn mở cho Start HNMO.)
   Control page: http://localhost:8080/control (this computer only: Start/Stop/Restart, logs, backups, updates).
   Windows 11 "Smart App Control blocked a file": Windows marks everything that came from
   the internet. Before unzipping: right-click HNMO.zip, Properties, tick "Unblock", OK,

@@ -36,6 +36,28 @@ decision. Add new decisions here as they are made; never turn an agent's habit i
 | 26 Nov | Mac app: Apple signing and notarization | The owner says he already told main that the Mac app may run without notarization ("anh đã báo là chạy ko công chứng app mac dc"; not found in this file before, recorded now): ship it unsigned, Gatekeeper asks once; no Apple Developer account needed for now |
 | 26 Nov | #381 Arena Home | Fix the PR text (Home is only the standing and respawn rectangle, walkable, not a safe zone); no new protection rule ("Sửa mô tả PR cho đúng") |
 | 26 Nov | Autoplay tiers & floating HUD bar (#367) | Keep Extras town automation at VIP Lv 1+ (`VipOnly`), keep the 3-tier Free / VIP Lv 1+ / Higher VIP Lv 2+ split (Sparkle, Stats, Auto-Pick Free; 6 Ultimate groups + Presets at Higher VIP Lv 2+), and keep the floating Ultimate HUD bar hidden by default (`showUltimateHud: false`, opt-in in Tab 4) |
+| 27 Nov | Two local branches (asset integrity in the database, Season 9 part c) | Popup answer: "Push cả hai" — draft PRs #423 and #424 |
+| 27 Nov | How skills 618–621 are learned | Popup answer: "Qua master tree" |
+| 27 Nov | Effects of skills 618–620 | Popup answer: "Theo client desktop S9" |
+| 27 Nov | Muun and Pentagram/Errtel | Popup answer: "Làm cả hai" (full: slot, packets, damage, desktop and web UI) |
+| 27 Nov | Weapon Mastery 571 (server 20 levels, web tree 10) | Popup answer: "Theo desktop client" |
+| 27 Nov | The 10 Season 9 admin settings without effect | Popup answer: "Làm cho có tác dụng"; any that can't be wired yet stays hidden |
+| 27 Nov | 30 Vietnamese-only buffs, 15 item descriptions without "vi" | Popup answer: "Em viết" (main writes them; the owner reviews in the PR) |
+| 27 Nov | Merge the working branch into `main`, release 1.0.1 | Popup answer: "Chờ anh báo" |
+| 27 Nov | Hub PR #2 (test licence orders) | Popup answer: "Merge" |
+| 27 Nov | Real payments (Stripe, bank) | Popup answer: "Chuẩn bị mở" (prepare the list of what is needed; don't turn it on) |
+| 27 Nov | Merging PRs with red e2e shards into the working branch | Popup answer: "Được, nếu đỏ không liên quan" (server tests green, the PR's own specs green, the red specs red on the base too or green on a rerun; `main` still needs green) |
+| 27 Nov | Hardware GPU FPS for #381 | Popup answer: "Không cần" |
+| 27 Nov | Real launches on Mac and Linux | Popup answer: "Chỉ Mac" (the owner tries the Mac builds; Linux relies on CI) |
+| 27 Nov | Lost FIN on loopback (network filter) | Popup answer: "Rút ngắn thời gian chờ" (a shorter keep-alive / idle timeout, set in the admin panel) |
+| 27 Nov | Muun level-up cost | Popup answer: "Theo client desktop S9" |
+| 27 Nov | Muun bonuses marked "not in PvP" | Popup answer: "Tách đúng: chỉ đánh quái" (a PvE-only stat) |
+| 27 Nov | Muun and Pentagram data tables taken from another suite's data in #403 (coding rule 9) | Popup answer: "Rà lại, làm theo desktop" (desktop client values where it has them; otherwise admin settings with HNMO's own defaults) |
+| 27 Nov | Pentagram monster elements, drops, mix costs | Popup answer: "Theo client desktop S9 + Admin" |
+| 26 Nov | M menu for outlaws (PK level 2 and up) | "Giữ khóa như desktop gốc" (the M menu stays locked; /move charges 2x into a gens battle zone, 50x elsewhere) |
+| 26 Nov | Vault zen with several vault pages | "Mỗi trang một két Zen riêng" (one purse per page; a zen box belongs to its page) |
+| 26 Nov | Gens defaults on servers already running | "Áp cho mọi server" |
+| 26 Nov | #377 master experience at the maximum level waits for the Season Plan | "Bỏ điều kiện Season Plan" (solo and party alike) |
 
 Earlier decisions (Maya's body, Fenrir, `/move` in events, the skill sweep points, the socket weapon mix in
 Season 6 and 9, the MUVIETNAM2 purge after the merge into `main`) are summarized in

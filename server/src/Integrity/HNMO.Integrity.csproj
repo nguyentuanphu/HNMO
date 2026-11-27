@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <PackageReference Include="BouncyCastle.Cryptography" />
+    <ProjectReference Include="..\Interfaces\HNMO.Interfaces.csproj" />
   </ItemGroup>
 
   <ItemGroup>

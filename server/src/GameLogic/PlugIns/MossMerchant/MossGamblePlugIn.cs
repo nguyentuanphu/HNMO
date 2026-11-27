@@ -1,5 +1,5 @@
 // <copyright file="MossGamblePlugIn.cs" company="HNMO">
-// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// Proprietary and confidential. All rights reserved. Unauthorized copying, modification, or distribution is prohibited.
 // </copyright>
 
 namespace HNMO.GameLogic.PlugIns.MossMerchant;
@@ -45,7 +45,11 @@ public sealed class MossGamblePlugIn :
             return;
         }
 
-        var rolled = MossGambleCatalog.RollReward(player.GameContext.Configuration, voucherDef.Number, Rand.GetRandomizer());
+        var rolled = MossGambleCatalog.RollReward(
+            player.GameContext.Configuration,
+            voucherDef.Number,
+            Rand.GetRandomizer(),
+            config.UseWeightedExcellentSelection);
         if (rolled is null)
         {
             eventArgs.Cancel = true;

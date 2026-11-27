@@ -11,7 +11,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 
 /// <summary>
-/// Single atomic JSON state store (<c>save/hnmo-state.json</c>) shared by all plug-ins that keep
+/// Single atomic JSON state store (<c>save/hnmo-state.json</c> of the HNMO folder, see <see cref="HnmoSaveFolder"/>) shared by all plug-ins that keep
 /// state outside the relational database, with per-plug-in sections, <c>.bak</c> recovery, and
 /// automatic migration from legacy per-plug-in JSON files into <c>save/old/</c>.
 /// </summary>
@@ -81,30 +81,78 @@ public sealed class HnmoStateStore
     public object SyncRoot => this._lock;
 
     /// <summary>
-    /// Resolves a configured legacy or state file path to the shared state file path.
+    /// Resolves a configured legacy or state file path to the shared state file path. A bare file name or a
+    /// <c>save/…</c> path relative to the server folder goes into the package's <c>save</c> folder
+    /// (<see cref="HnmoSaveFolder.Default"/>); Season 9 and the Arena keep theirs in <c>save/s9/</c> and <c>save/arena/</c>.
     /// </summary>
     /// <param name="filePath">The configured file path, or <c>null</c>/whitespace for in-memory only.</param>
     /// <returns>The resolved state file path, or <c>null</c> for in-memory only.</returns>
-    public static string? ResolveStateFilePath(string? filePath)
+    public static string? ResolveStateFilePath(string? filePath) =>
+        ResolveStateFilePath(filePath, HnmoSaveFolder.Default, HNMO.Interfaces.HnmoSeasonInstance.Current);
+
+    /// <summary>
+    /// Resolves a configured legacy or state file path to the shared state file path of a season in a save folder.
+    /// </summary>
+    /// <param name="filePath">The configured file path, or <c>null</c>/whitespace for in-memory only.</param>
+    /// <param name="saveFolder">The save folder relative paths of the server folder are mapped into.</param>
+    /// <param name="season">The season key (<see cref="HNMO.Interfaces.HnmoSeasonInstance"/>).</param>
+    /// <returns>The resolved state file path, or <c>null</c> for in-memory only.</returns>
+    public static string? ResolveStateFilePath(string? filePath, HnmoSaveFolder saveFolder, string season)
     {
+        ArgumentNullException.ThrowIfNull(saveFolder);
         if (string.IsNullOrWhiteSpace(filePath))
         {
             return null;
         }
 
-        var fullPath = Path.GetFullPath(filePath.Trim());
+        var fullPath = saveFolder.MapPath(filePath);
         var fileName = Path.GetFileName(fullPath);
         if (string.Equals(fileName, StateFileName, StringComparison.OrdinalIgnoreCase)
             || LegacyFileToSection.ContainsKey(fileName))
         {
             // A Season 9 program keeps its state in save/s9/: two programs never write one file.
             var directory = Path.GetDirectoryName(fullPath);
-            return HNMO.Interfaces.HnmoSeasonInstance.SaveFileFor(HNMO.Interfaces.HnmoSeasonInstance.Current, string.IsNullOrEmpty(directory) ? StateFileName : Path.Combine(directory, StateFileName));
+            return HNMO.Interfaces.HnmoSeasonInstance.SaveFileFor(season, string.IsNullOrEmpty(directory) ? StateFileName : Path.Combine(directory, StateFileName));
         }
 
-        return HNMO.Interfaces.HnmoSeasonInstance.SaveFileFor(HNMO.Interfaces.HnmoSeasonInstance.Current, fullPath);
+        return HNMO.Interfaces.HnmoSeasonInstance.SaveFileFor(season, fullPath);
     }
 
+    /// <summary>Gets whether a file name is one of the per-plug-in JSON files the unified state file replaced.</summary>
+    /// <param name="fileName">The file name.</param>
+    /// <returns><c>true</c> for a legacy file name such as <c>guilds.json</c>.</returns>
+    public static bool IsLegacyFileName(string fileName) => LegacyFileToSection.ContainsKey(fileName);
+
+    /// <summary>
+    /// Reads the sections of a unified state file without opening a store for it.
+    /// </summary>
+    /// <param name="path">The file path.</param>
+    /// <returns>The sections, or <c>null</c> when the file is missing, unreadable or not a unified state file.</returns>
+    public static IReadOnlyDictionary<string, JsonElement>? TryReadSections(string path)
+    {
+        try
+        {
+            var bytes = File.ReadAllBytes(path);
+            if (bytes.Length == 0)
+            {
+                return null;
+            }
+
+            using var document = JsonDocument.Parse(bytes);
+            if (document.RootElement.ValueKind != JsonValueKind.Object
+                || !document.RootElement.TryGetProperty("sections", out var sections)
+                || sections.ValueKind != JsonValueKind.Object)
+            {
+                return null;
+            }
+
+            return sections.EnumerateObject().ToDictionary(p => p.Name, p => p.Value.Clone(), StringComparer.Ordinal);
+        }
+        catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
+        {
+            return null;
+        }
+    }
 
     /// <summary>
     /// Opens or returns the shared <see cref="HnmoStateStore"/> for a configured file path.
@@ -222,6 +270,42 @@ public sealed class HnmoStateStore
 
                 throw;
             }
+        }
+    }
+
+    /// <summary>
+    /// Adds the sections this store doesn't have yet and flushes once; sections it has are left as they are.
+    /// </summary>
+    /// <param name="sections">The sections to add.</param>
+    /// <returns>The keys that were added.</returns>
+    public IReadOnlyList<string> AddMissingSections(IReadOnlyDictionary<string, JsonElement> sections)
+    {
+        ArgumentNullException.ThrowIfNull(sections);
+        lock (this._lock)
+        {
+            var added = new List<string>();
+            foreach (var (key, value) in sections)
+            {
+                if (this._sections.TryAdd(key, value.Clone()))
+                {
+                    added.Add(key);
+                }
+            }
+
+            if (added.Count > 0)
+            {
+                try
+                {
+                    this.SaveLocked();
+                }
+                catch
+                {
+                    added.ForEach(key => this._sections.Remove(key));
+                    throw;
+                }
+            }
+
+            return added;
         }
     }
 

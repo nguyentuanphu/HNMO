@@ -26,3 +26,13 @@
 2. **Missing prerequisite-quest enforcement in `QuestSelectAction` / `QuestStartAction`**: Neither action validates whether a prerequisite quest in the chain was completed (and `CharacterQuestState` only retains a single `LastFinishedQuest` reference per group rather than per-step completion history, overwriting earlier completion state as later quests in the same group finish).
 3. **Class-quest `Repeatable` flag mismatch risk (`PlayerQuestExtensions.cs` / `VersionSeasonSix/Quests.cs:84`)**: S6/S9 class progression quests (Indices `0..6`) are one-time per step in the legacy suite; any quest configured with `Repeatable = true` under `CreateQuest` bypasses the `LastFinishedQuest` duplicate guard in `QuestStartAction.cs:52` unless blocked by level range or `QualifiedCharacter`.
 4. **Full inventory fallback warning (`QuestCompletionAction.cs:136-147`)**: Drops reward item on the map if inventory is full, which matches safe fallback behavior, though no localized error is shown if `CurrentMap` is null (just logs a warning).
+
+## Re-check 2026-11-27 (changes 8cb8539b..a108e846)
+
+Commits read (every changed file read in full):
+
+- 39443f93 fix(gamelogic): fix anticheat speed/time, season coin race, party master exp gate, chaos jewel count, and gens quest reward
+
+Evidence:
+
+- QuestCompletionAction GensAttribution: adds the reward to the Gens contribution (never below 0), re-ranks with GensConfiguration.GetRank, saves under the persistence lock, shows the change - fixed (was "not yet implemented"). Reward amounts come from the quest data: needs suite check of the amounts per quest.

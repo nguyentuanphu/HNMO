@@ -46,7 +46,14 @@ fi
 
 cd web
 # The folder for every system: the .NET runtime of this computer's system (runtime/<system>).
-case "$(uname -s)-$(uname -m)" in
+platform="$(uname -s)"
+machine="$(uname -m)"
+# A translated shell on Apple Silicon reports x86_64. Select the hardware runtime
+# so both the launcher and its PostgreSQL child start as native processes.
+if [ "$platform" = Darwin ] && [ "$(sysctl -n hw.optional.arm64 2>/dev/null || true)" = 1 ]; then
+  machine=arm64
+fi
+case "$platform-$machine" in
   Linux-x86_64) rid=linux-x64 ;;
   Linux-aarch64|Linux-arm64) rid=linux-arm64 ;;
   Darwin-arm64) rid=osx-arm64 ;;

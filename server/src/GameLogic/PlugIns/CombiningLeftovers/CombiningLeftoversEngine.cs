@@ -1,5 +1,5 @@
 // <copyright file="CombiningLeftoversEngine.cs" company="HNMO">
-// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// Proprietary and confidential. All rights reserved. Unauthorized copying, modification, or distribution is prohibited.
 // </copyright>
 
 namespace HNMO.GameLogic.PlugIns.CombiningLeftovers;
@@ -101,25 +101,44 @@ public sealed class CombiningLeftoversEngine
             return LeftoversCheckResult.NotEnoughZen;
         }
 
-        var used = new HashSet<byte>();
+        var usedCounts = new Dictionary<byte, int>();
         foreach (var ing in recipe.Inputs)
         {
-            var matched = bag
-                .Where(b => !b.Locked && !used.Contains(b.Slot)
-                    && b.Group == ing.Group && b.Number == ing.Number
-                    && (ing.ExactLevel < 0 || b.Level == ing.ExactLevel))
-                .Take(ing.Count)
-                .ToList();
-            if (matched.Count < ing.Count)
+            var remainingNeeded = ing.Count;
+            foreach (var b in bag)
+            {
+                if (remainingNeeded <= 0)
+                {
+                    break;
+                }
+
+                if (b.Locked || b.Group != ing.Group || b.Number != ing.Number
+                    || (ing.ExactLevel >= 0 && b.Level != ing.ExactLevel))
+                {
+                    continue;
+                }
+
+                usedCounts.TryGetValue(b.Slot, out var alreadyUsed);
+                var available = Math.Max(0, b.Quantity) - alreadyUsed;
+                if (available <= 0)
+                {
+                    continue;
+                }
+
+                var take = Math.Min(remainingNeeded, available);
+                usedCounts[b.Slot] = alreadyUsed + take;
+                for (var i = 0; i < take; i++)
+                {
+                    pickedSlots.Add(b.Slot);
+                }
+
+                remainingNeeded -= take;
+            }
+
+            if (remainingNeeded > 0)
             {
                 pickedSlots.Clear();
                 return LeftoversCheckResult.MissingIngredients;
-            }
-
-            foreach (var m in matched)
-            {
-                used.Add(m.Slot);
-                pickedSlots.Add(m.Slot);
             }
         }
 
@@ -129,7 +148,7 @@ public sealed class CombiningLeftoversEngine
     /// <summary>Validates and selects bag slots for a surplus material exchange offer.</summary>
     /// <param name="offerId">Offer ID.</param>
     /// <param name="bag">Bag items.</param>
-    /// <param name="pickedSlots">Selected slots.</param>
+    /// <param name="pickedSlots">Selected slots (repeated per stack piece consumed).</param>
     /// <returns>Validation result.</returns>
     public LeftoversCheckResult PlanExchange(
         string offerId,
@@ -148,17 +167,35 @@ public sealed class CombiningLeftoversEngine
             return LeftoversCheckResult.NotFound;
         }
 
-        var matched = bag
-            .Where(b => !b.Locked && b.Group == offer.InputGroup && b.Number == offer.InputNumber
-                && (offer.InputLevel < 0 || b.Level == offer.InputLevel))
-            .Take(offer.InputCount)
-            .ToList();
-        if (matched.Count < offer.InputCount)
+        var remainingNeeded = offer.InputCount;
+        foreach (var b in bag)
         {
+            if (remainingNeeded <= 0)
+            {
+                break;
+            }
+
+            if (b.Locked || b.Group != offer.InputGroup || b.Number != offer.InputNumber
+                || (offer.InputLevel >= 0 && b.Level != offer.InputLevel))
+            {
+                continue;
+            }
+
+            var take = Math.Min(remainingNeeded, Math.Max(0, b.Quantity));
+            for (var i = 0; i < take; i++)
+            {
+                pickedSlots.Add(b.Slot);
+            }
+
+            remainingNeeded -= take;
+        }
+
+        if (remainingNeeded > 0)
+        {
+            pickedSlots.Clear();
             return LeftoversCheckResult.MissingIngredients;
         }
 
-        pickedSlots.AddRange(matched.Select(m => m.Slot));
         return LeftoversCheckResult.Ok;
     }
 }

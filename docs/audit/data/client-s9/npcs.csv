@@ -1,0 +1,652 @@
+source,record,id,param,name
+Npcname_eng.bmd,0,84,250,Chief Skeleton Warrior
+Npcname_eng.bmd,1,85,250,Chief Skeleton Archer
+Npcname_eng.bmd,2,86,250,Dark Skull Soldier
+Npcname_eng.bmd,3,87,250,Giant Ogre
+Npcname_eng.bmd,4,88,200,Red Skeleton Knight
+Npcname_eng.bmd,5,89,260,Magic Skeleton
+Npcname_eng.bmd,6,90,250,Chief Skeleton Warrior
+Npcname_eng.bmd,7,91,250,Chief Skeleton Archer
+Npcname_eng.bmd,8,92,250,Dark Skull Soldier
+Npcname_eng.bmd,9,93,250,Giant Ogre
+Npcname_eng.bmd,10,94,200,Red Skeleton Knight
+Npcname_eng.bmd,11,95,260,Magic Skeleton
+Npcname_eng.bmd,12,96,250,Chief Skeleton Warrior
+Npcname_eng.bmd,13,97,250,Chief Skeleton Archer
+Npcname_eng.bmd,14,98,250,Dark Skull Soldier
+Npcname_eng.bmd,15,99,250,Giant Ogre
+Npcname_eng.bmd,16,111,200,Red Skeleton Knight
+Npcname_eng.bmd,17,112,260,Magic Skeleton
+Npcname_eng.bmd,18,113,250,Chief Skeleton Warrior
+Npcname_eng.bmd,19,114,250,Chief Skeleton Archer
+Npcname_eng.bmd,20,115,250,Dark Skull Soldier
+Npcname_eng.bmd,21,116,250,Giant Ogre
+Npcname_eng.bmd,22,117,200,Red Skeleton Knight
+Npcname_eng.bmd,23,118,260,Magic Skeleton
+Npcname_eng.bmd,24,119,250,Chief Skeleton Warrior
+Npcname_eng.bmd,25,120,250,Chief Skeleton Archer
+Npcname_eng.bmd,26,121,250,Dark Skull Soldier
+Npcname_eng.bmd,27,122,250,Giant Ogre
+Npcname_eng.bmd,28,123,200,Red Skeleton Knight
+Npcname_eng.bmd,29,124,260,Magic Skeleton
+Npcname_eng.bmd,30,125,250,Chief Skeleton Warrior
+Npcname_eng.bmd,31,126,250,Chief Skeleton Archer
+Npcname_eng.bmd,32,127,250,Dark Skull Soldier
+Npcname_eng.bmd,33,128,250,Giant Ogre
+Npcname_eng.bmd,34,129,200,Red Skeleton Knight
+Npcname_eng.bmd,35,130,260,Magic Skeleton
+Npcname_eng.bmd,36,131,350,Castle Gate
+Npcname_eng.bmd,37,132,1,Statue of Saint
+Npcname_eng.bmd,38,133,1,Statue of Saint
+Npcname_eng.bmd,39,134,1,Statue of Saint
+Npcname_eng.bmd,40,135,360,White wizard
+Npcname_eng.bmd,41,136,290,Destructive ogre soldier
+Npcname_eng.bmd,42,137,270,Destructive ogre archer
+Npcname_eng.bmd,43,138,250,Chief Skeleton Warrior
+Npcname_eng.bmd,44,139,250,Chief Skeleton Archer
+Npcname_eng.bmd,45,140,250,Dark Skull Soldier
+Npcname_eng.bmd,46,141,250,Giant Ogre
+Npcname_eng.bmd,47,142,200,Red Skeleton Knight
+Npcname_eng.bmd,48,143,260,Magic Skeleton
+Npcname_eng.bmd,49,147,295,Aegis
+Npcname_eng.bmd,50,148,250,Rogue Centurion
+Npcname_eng.bmd,51,146,285,Blood Soldier
+Npcname_eng.bmd,52,144,250,Death Angel
+Npcname_eng.bmd,53,149,270,Necron
+Npcname_eng.bmd,54,145,360,Death Centurion
+Npcname_eng.bmd,55,160,400,Schriker
+Npcname_eng.bmd,56,161,500,Illusion of Kundun
+Npcname_eng.bmd,57,177,295,Aegis
+Npcname_eng.bmd,58,178,250,Rogue Centurion
+Npcname_eng.bmd,59,176,285,Blood Soldier
+Npcname_eng.bmd,60,174,250,Death Angel
+Npcname_eng.bmd,61,179,270,Necron
+Npcname_eng.bmd,62,175,360,Death Centurion
+Npcname_eng.bmd,63,180,400,Schriker
+Npcname_eng.bmd,64,181,500,Illusion of Kundun
+Npcname_eng.bmd,65,185,295,Aegis
+Npcname_eng.bmd,66,186,250,Rogue Centurion
+Npcname_eng.bmd,67,184,285,Blood Soldier
+Npcname_eng.bmd,68,182,250,Death Angel
+Npcname_eng.bmd,69,187,270,Necron
+Npcname_eng.bmd,70,183,360,Death Centurion
+Npcname_eng.bmd,71,188,400,Schriker
+Npcname_eng.bmd,72,189,500,Illusion of Kundun
+Npcname_eng.bmd,73,193,295,Aegis
+Npcname_eng.bmd,74,194,250,Rogue Centurion
+Npcname_eng.bmd,75,192,285,Blood Soldier
+Npcname_eng.bmd,76,190,250,Death Angel
+Npcname_eng.bmd,77,195,270,Necron
+Npcname_eng.bmd,78,191,360,Death Centurion
+Npcname_eng.bmd,79,196,400,Schriker
+Npcname_eng.bmd,80,197,500,Illusion of Kundun
+Npcname_eng.bmd,81,162,0,Chaos Castle 1
+Npcname_eng.bmd,82,163,0,Chaos Castle 2
+Npcname_eng.bmd,83,164,0,Chaos Castle 3
+Npcname_eng.bmd,84,165,0,Chaos Castle 4
+Npcname_eng.bmd,85,166,0,Chaos Castle 5
+Npcname_eng.bmd,86,167,0,Chaos Castle 6
+Npcname_eng.bmd,87,168,0,Chaos Castle 7
+Npcname_eng.bmd,88,169,0,Chaos Castle 8
+Npcname_eng.bmd,89,170,0,Chaos Castle 9
+Npcname_eng.bmd,90,171,0,Chaos Castle 10
+Npcname_eng.bmd,91,172,0,Chaos Castle 11
+Npcname_eng.bmd,92,173,0,Chaos Castle 12
+Npcname_eng.bmd,93,83,315,Golden Wheel
+Npcname_eng.bmd,94,82,340,Golden Tantalos
+Npcname_eng.bmd,95,81,260,Golden Vepar
+Npcname_eng.bmd,96,80,260,Golden Lizard King
+Npcname_eng.bmd,97,79,350,Golden Derkon
+Npcname_eng.bmd,98,78,130,Golden Goblin
+Npcname_eng.bmd,99,77,330,Phoenix of Darkness
+Npcname_eng.bmd,100,76,0,Phoenix Darkness shield
+Npcname_eng.bmd,101,75,280,Great Drakan
+Npcname_eng.bmd,102,74,280,Alpha Crust
+Npcname_eng.bmd,103,73,280,Drakan
+Npcname_eng.bmd,104,72,310,Phantom Knight
+Npcname_eng.bmd,105,71,260,Mega Crust
+Npcname_eng.bmd,106,70,260,Queen Rainier
+Npcname_eng.bmd,107,69,250,Alquamos
+Npcname_eng.bmd,108,68,0,Molt
+Npcname_eng.bmd,109,57,315,Iron Wheel
+Npcname_eng.bmd,110,58,340,Tantalos
+Npcname_eng.bmd,111,59,390,Zaikan
+Npcname_eng.bmd,112,60,210,Bloody wolf
+Npcname_eng.bmd,113,61,270,Beam Knight
+Npcname_eng.bmd,114,62,270,Mutant
+Npcname_eng.bmd,115,63,320,Death Beam Knight
+Npcname_eng.bmd,116,64,260,Ogre archer
+Npcname_eng.bmd,117,65,280,Elite Ogre
+Npcname_eng.bmd,118,66,360,Cursed king
+Npcname_eng.bmd,119,67,310,Metal Balrog
+Npcname_eng.bmd,120,36,190,Shadow
+Npcname_eng.bmd,121,39,190,Poison Shadow
+Npcname_eng.bmd,122,34,200,Cursed Wizard
+Npcname_eng.bmd,123,41,240,Death Cow
+Npcname_eng.bmd,124,37,225,Devil
+Npcname_eng.bmd,125,40,225,Death Knight
+Npcname_eng.bmd,126,35,265,Death Gorgon
+Npcname_eng.bmd,127,38,310,Balrog
+Npcname_eng.bmd,128,3,80,Spider
+Npcname_eng.bmd,129,26,130,Goblin
+Npcname_eng.bmd,130,2,100,Budge Dragon
+Npcname_eng.bmd,131,27,110,Chain Scorpion
+Npcname_eng.bmd,132,0,210,Bull Fighter
+Npcname_eng.bmd,133,33,175,Elite Goblin
+Npcname_eng.bmd,134,1,200,Hound
+Npcname_eng.bmd,135,28,170,Beetle Monster
+Npcname_eng.bmd,136,4,230,Elite Bull Fighter
+Npcname_eng.bmd,137,29,190,Hunter
+Npcname_eng.bmd,138,6,180,LIch
+Npcname_eng.bmd,139,30,190,Forest Monster
+Npcname_eng.bmd,140,31,250,Agon
+Npcname_eng.bmd,141,7,310,Giant
+Npcname_eng.bmd,142,32,300,Stone Golem
+Npcname_eng.bmd,143,14,200,Skeleton
+Npcname_eng.bmd,144,24,100,Worm
+Npcname_eng.bmd,145,22,180,Ice Monster
+Npcname_eng.bmd,146,23,230,Hommerd
+Npcname_eng.bmd,147,12,80,Larva
+Npcname_eng.bmd,148,21,190,Assassin
+Npcname_eng.bmd,149,17,220,Cyclops
+Npcname_eng.bmd,150,19,200,Yeti
+Npcname_eng.bmd,151,11,205,Ghost
+Npcname_eng.bmd,152,15,240,Skeleton Archer
+Npcname_eng.bmd,153,20,245,Elite Yeti
+Npcname_eng.bmd,154,5,245,Hell Hound
+Npcname_eng.bmd,155,13,220,Hell Spider
+Npcname_eng.bmd,156,16,240,Chief Skeleton Warrior
+Npcname_eng.bmd,157,9,215,Thunder Lich
+Npcname_eng.bmd,158,8,210,Poison Bull Fighter
+Npcname_eng.bmd,159,10,200,Dark Knight
+Npcname_eng.bmd,160,25,270,Ice Queen
+Npcname_eng.bmd,161,18,300,Gorgon
+Npcname_eng.bmd,162,45,120,Bahamut
+Npcname_eng.bmd,163,46,260,Vepar
+Npcname_eng.bmd,164,47,260,Valkyrie
+Npcname_eng.bmd,165,48,260,Lizard King
+Npcname_eng.bmd,166,49,220,Hydra
+Npcname_eng.bmd,167,50,0,Sea Worm
+Npcname_eng.bmd,168,51,160,Great Bahamut
+Npcname_eng.bmd,169,52,310,Silver Valkyrie
+Npcname_eng.bmd,170,43,100,Golden Budge Dragon
+Npcname_eng.bmd,171,44,0,Dragon
+Npcname_eng.bmd,172,53,300,Golden Titan
+Npcname_eng.bmd,173,54,220,Golden Soldier
+Npcname_eng.bmd,174,55,280,Death King
+Npcname_eng.bmd,175,56,200,Death Bone
+Npcname_eng.bmd,176,150,250,Bali
+Npcname_eng.bmd,177,151,260,Soldier
+Npcname_eng.bmd,178,152,0,Magic stone of %s 
+Npcname_eng.bmd,179,153,0,Magic stone of %s 
+Npcname_eng.bmd,180,154,0,Magic stone of %s 
+Npcname_eng.bmd,181,155,0,Magic stone of %s 
+Npcname_eng.bmd,182,156,0,Magic stone of %s 
+Npcname_eng.bmd,183,157,0,Magic stone of %s 
+Npcname_eng.bmd,184,158,0,Magic stone of %s 
+Npcname_eng.bmd,185,100,0,Lance
+Npcname_eng.bmd,186,101,0,Iron Stick
+Npcname_eng.bmd,187,102,0,Fire
+Npcname_eng.bmd,188,103,0,Meteorite
+Npcname_eng.bmd,189,104,0,Trap
+Npcname_eng.bmd,190,105,0,Canon Trap
+Npcname_eng.bmd,191,106,0,Laser Trap
+Npcname_eng.bmd,192,200,0,Soccer Ball
+Npcname_eng.bmd,193,204,0,Wolf Status
+Npcname_eng.bmd,194,205,0,Wolf Altar1
+Npcname_eng.bmd,195,206,0,Wolf Altar2
+Npcname_eng.bmd,196,207,0,Wolf Altar3
+Npcname_eng.bmd,197,208,0,Wolf Altar4
+Npcname_eng.bmd,198,209,0,Wolf Altar5
+Npcname_eng.bmd,199,215,0,Shield
+Npcname_eng.bmd,200,216,0,Crown
+Npcname_eng.bmd,201,217,0,Crown Switch2
+Npcname_eng.bmd,202,218,0,Crown Switch1
+Npcname_eng.bmd,203,219,0,Castle Gate Switch
+Npcname_eng.bmd,204,220,0,Gatekeeper
+Npcname_eng.bmd,205,221,0,Slingshot attack
+Npcname_eng.bmd,206,222,0,Slingshot defense
+Npcname_eng.bmd,207,223,0,Senior
+Npcname_eng.bmd,208,224,0,Guardsman
+Npcname_eng.bmd,209,226,0,Trainer
+Npcname_eng.bmd,210,229,0,Marlon
+Npcname_eng.bmd,211,230,0,Wandering Merchant Alex
+Npcname_eng.bmd,212,231,0,Thompson Kenel
+Npcname_eng.bmd,213,232,0,Archangel
+Npcname_eng.bmd,214,233,0,Messenger of Archangel
+Npcname_eng.bmd,215,234,0,Pet Trainer
+Npcname_eng.bmd,216,235,0,Sebina the Priest
+Npcname_eng.bmd,217,236,0,Golden Archer
+Npcname_eng.bmd,218,237,0,Charon
+Npcname_eng.bmd,219,238,0,Chaos Goblin
+Npcname_eng.bmd,220,239,0,Arena Guard
+Npcname_eng.bmd,221,240,0,Safety Guardian
+Npcname_eng.bmd,222,241,0,Royal Guard Captain Lorence
+Npcname_eng.bmd,223,242,0,Elf Lala
+Npcname_eng.bmd,224,243,0,Eo the Craftsman
+Npcname_eng.bmd,225,244,0,Caren the Barmaid
+Npcname_eng.bmd,226,245,0,Wizard Izabel
+Npcname_eng.bmd,227,246,0,Weapons Merchant Sophia
+Npcname_eng.bmd,228,247,0,Guard
+Npcname_eng.bmd,229,248,0,Wandering Merchant Martin
+Npcname_eng.bmd,230,249,0,Guard
+Npcname_eng.bmd,231,250,0,Wandering Merchant
+Npcname_eng.bmd,232,251,0,Hanzo the Blacksmith
+Npcname_eng.bmd,234,253,0,Potion Girl Amy
+Npcname_eng.bmd,235,254,0,Pasi the Mage
+Npcname_eng.bmd,236,255,0,Lumen the Barmaid
+Npcname_eng.bmd,237,256,0,Lahap
+Npcname_eng.bmd,238,257,0,Shadow Phantom Soldier
+Npcname_eng.bmd,239,263,295,Aegis
+Npcname_eng.bmd,240,264,250,Rogue Centurion
+Npcname_eng.bmd,241,262,285,Blood Soldier
+Npcname_eng.bmd,242,260,250,Death Angel
+Npcname_eng.bmd,243,265,270,Necron
+Npcname_eng.bmd,244,261,360,Death Centurion
+Npcname_eng.bmd,245,266,400,Schriker
+Npcname_eng.bmd,246,267,500,Illusion of Kundun
+Npcname_eng.bmd,247,271,295,Aegis
+Npcname_eng.bmd,248,272,250,Rogue Centurion
+Npcname_eng.bmd,249,270,285,Blood Soldier
+Npcname_eng.bmd,250,268,250,Death Angel
+Npcname_eng.bmd,251,273,270,Necron
+Npcname_eng.bmd,252,269,360,Death Centurion
+Npcname_eng.bmd,253,274,400,Schriker
+Npcname_eng.bmd,254,275,400,Kundun
+Npcname_eng.bmd,255,277,0,Castle Gate
+Npcname_eng.bmd,256,278,0,Life Stone
+Npcname_eng.bmd,257,283,400,Guardian Statue
+Npcname_eng.bmd,258,285,0,Guardian
+Npcname_eng.bmd,259,286,255,Archer
+Npcname_eng.bmd,260,287,255,Spearman
+Npcname_eng.bmd,261,288,0,Canon Tower
+Npcname_eng.bmd,262,290,250,Lizard Warrior
+Npcname_eng.bmd,263,291,330,Fire Golem
+Npcname_eng.bmd,264,292,330,Queen Bee
+Npcname_eng.bmd,265,293,270,Poison Golem
+Npcname_eng.bmd,266,294,250,Ax Warrior
+Npcname_eng.bmd,267,295,400,Erohim
+Npcname_eng.bmd,268,296,0,Monster7
+Npcname_eng.bmd,269,300,270,Hero Mutant
+Npcname_eng.bmd,270,301,290,Omega Wing
+Npcname_eng.bmd,271,302,250,Axl Hero
+Npcname_eng.bmd,272,303,250,Gigas Golem
+Npcname_eng.bmd,273,308,240,Death Tree
+Npcname_eng.bmd,274,307,240,Forest Orc
+Npcname_eng.bmd,275,306,240,Death Rider
+Npcname_eng.bmd,276,305,320,Blue Golem
+Npcname_eng.bmd,277,304,250,Witch Queen
+Npcname_eng.bmd,278,309,375,Hell Maine
+Npcname_eng.bmd,279,310,220,Hammer Scout
+Npcname_eng.bmd,280,311,230,Lance Scout
+Npcname_eng.bmd,281,312,250,Bow Scout
+Npcname_eng.bmd,282,313,270,Werewolf
+Npcname_eng.bmd,283,314,310,Scout(Hero)
+Npcname_eng.bmd,284,315,350,Werewolf(Hero)
+Npcname_eng.bmd,285,316,270,Balram
+Npcname_eng.bmd,286,317,280,Soram
+Npcname_eng.bmd,287,340,290,Dark Elf
+Npcname_eng.bmd,288,341,280,Soram
+Npcname_eng.bmd,289,344,270,Balram
+Npcname_eng.bmd,290,345,280,Death spirit
+Npcname_eng.bmd,291,348,200,Tanker
+Npcname_eng.bmd,292,349,350,Balgass
+Npcname_eng.bmd,293,331,295,Aegis
+Npcname_eng.bmd,294,332,250,Rogue Centurion
+Npcname_eng.bmd,295,333,285,Blood Soldier
+Npcname_eng.bmd,296,334,250,Death Angel
+Npcname_eng.bmd,297,335,270,Necron
+Npcname_eng.bmd,298,336,360,Death Centurion
+Npcname_eng.bmd,299,337,400,Schriker
+Npcname_eng.bmd,300,338,500,Illusion of Kundun
+Npcname_eng.bmd,301,258,0,Luke the Helper
+Npcname_eng.bmd,302,259,0,Oracle Layla
+Npcname_eng.bmd,303,350,220,Berserker
+Npcname_eng.bmd,304,351,180,Splinter Wolf
+Npcname_eng.bmd,305,352,265,Iron Rider
+Npcname_eng.bmd,306,353,245,Satyros
+Npcname_eng.bmd,307,354,275,Blade Hunter
+Npcname_eng.bmd,308,355,285,Kentauros
+Npcname_eng.bmd,309,356,275,Gigantis
+Npcname_eng.bmd,310,357,270,Genocider
+Npcname_eng.bmd,311,358,260,Persona
+Npcname_eng.bmd,312,359,280,Twin Tale
+Npcname_eng.bmd,313,360,280,Dreadfear
+Npcname_eng.bmd,314,361,330,Nightmare
+Npcname_eng.bmd,315,362,350,Maya Hand
+Npcname_eng.bmd,316,363,350,Maya Hand
+Npcname_eng.bmd,317,364,0,Maya
+Npcname_eng.bmd,318,367,0,Gateway Machine
+Npcname_eng.bmd,319,368,0,Elpis
+Npcname_eng.bmd,320,369,0,Osbourne
+Npcname_eng.bmd,321,370,0,Jerridon
+Npcname_eng.bmd,322,371,0,Leo the Helper
+Npcname_eng.bmd,323,372,0,Elite Skull Soldier
+Npcname_eng.bmd,324,373,0,Jack Olantern
+Npcname_eng.bmd,325,374,0,Santa
+Npcname_eng.bmd,326,375,0,Chaos Card Master
+Npcname_eng.bmd,327,376,0,Pamela the Supplier
+Npcname_eng.bmd,328,377,0,Angela the Supplier
+Npcname_eng.bmd,329,365,130,Pouch of Blessing
+Npcname_eng.bmd,330,378,0,GameMaster
+Npcname_eng.bmd,331,379,0,Natasha Firecracker Merchant
+Npcname_eng.bmd,332,380,0,Stone Statue
+Npcname_eng.bmd,333,381,0,MU Allies General
+Npcname_eng.bmd,334,382,0,Illusion Sorcerer Elder
+Npcname_eng.bmd,335,383,0,Alliance Sacred Item Storage
+Npcname_eng.bmd,336,384,0,Illusion Castle Sacred Item Storage
+Npcname_eng.bmd,337,385,0,Mirage
+Npcname_eng.bmd,338,386,210,Illusion Sorcerer Spirit
+Npcname_eng.bmd,339,387,210,Illusion Sorcerer Spirit
+Npcname_eng.bmd,340,388,140,Illusion Sorcerer Spirit
+Npcname_eng.bmd,341,389,210,Illusion Sorcerer Spirit
+Npcname_eng.bmd,342,390,210,Illusion Sorcerer Spirit
+Npcname_eng.bmd,343,391,140,Illusion Sorcerer Spirit
+Npcname_eng.bmd,344,392,210,Illusion Sorcerer Spirit
+Npcname_eng.bmd,345,393,210,Illusion Sorcerer Spirit
+Npcname_eng.bmd,346,394,140,Illusion Sorcerer Spirit
+Npcname_eng.bmd,347,395,210,Illusion Sorcerer Spirit
+Npcname_eng.bmd,348,396,210,Illusion Sorcerer Spirit
+Npcname_eng.bmd,349,397,140,Illusion Sorcerer Spirit
+Npcname_eng.bmd,350,398,210,Illusion Sorcerer Spirit
+Npcname_eng.bmd,351,399,210,Illusion Sorcerer Spirit
+Npcname_eng.bmd,352,400,140,Illusion Sorcerer Spirit
+Npcname_eng.bmd,353,401,210,Illusion Sorcerer Spirit
+Npcname_eng.bmd,354,402,210,Illusion Sorcerer Spirit
+Npcname_eng.bmd,355,403,140,Illusion Sorcerer Spirit
+Npcname_eng.bmd,356,404,0,MU Allies
+Npcname_eng.bmd,357,405,0,Illusion Sorcerer
+Npcname_eng.bmd,358,406,0,Apostle Devin
+Npcname_eng.bmd,359,407,0,Werewolf Quarel
+Npcname_eng.bmd,360,408,0,Gatekeeper
+Npcname_eng.bmd,361,409,270,Balram (Trainee Soldier)
+Npcname_eng.bmd,362,410,280,Death Spirit (Trainee Soldier)
+Npcname_eng.bmd,363,411,280,Soram (Trainee Soldier)
+Npcname_eng.bmd,364,412,290,Dark Elf (Trainee Soldier)
+Npcname_eng.bmd,365,413,110,Gold Rabbit
+Npcname_eng.bmd,366,414,0,Helper Ellen
+Npcname_eng.bmd,367,415,0,Silvia
+Npcname_eng.bmd,368,416,0,Rhea
+Npcname_eng.bmd,369,417,0,Marce
+Npcname_eng.bmd,370,418,110,Strange Rabbit
+Npcname_eng.bmd,371,419,160,Hideous Rabbit
+Npcname_eng.bmd,372,420,200,Werewolf
+Npcname_eng.bmd,373,421,200,Polluted Butterfly
+Npcname_eng.bmd,374,422,200,Cursed Lich
+Npcname_eng.bmd,375,423,275,Totem Golem
+Npcname_eng.bmd,376,424,200,Grizzly
+Npcname_eng.bmd,377,425,250,Captain Grizzly
+Npcname_eng.bmd,378,426,0,Chaos Castle13
+Npcname_eng.bmd,379,427,0,Chaos Castle14
+Npcname_eng.bmd,380,428,250,Chief Skeleton Warrior
+Npcname_eng.bmd,381,429,250,Chief Skeleton Archer
+Npcname_eng.bmd,382,430,250,Dark Skull Soldier
+Npcname_eng.bmd,383,431,250,Giant Ogre
+Npcname_eng.bmd,384,432,200,Red Skeleton Knight
+Npcname_eng.bmd,385,433,260,Magic Skeleton
+Npcname_eng.bmd,386,434,275,Gigantis
+Npcname_eng.bmd,387,435,220,Berserker
+Npcname_eng.bmd,388,436,270,Balram (Trainee Soldier)
+Npcname_eng.bmd,389,437,280,Soram (Trainee Soldier)
+Npcname_eng.bmd,390,438,260,Persona
+Npcname_eng.bmd,391,439,280,Dreadfear
+Npcname_eng.bmd,392,440,290,Dark Elf
+Npcname_eng.bmd,393,441,220,Sapi-Unus
+Npcname_eng.bmd,394,442,220,Sapi-Duo
+Npcname_eng.bmd,395,443,220,Sapi-Tres
+Npcname_eng.bmd,396,444,230,Shadow Pawn
+Npcname_eng.bmd,397,445,230,Shadow Knight
+Npcname_eng.bmd,398,446,265,Shadow Look
+Npcname_eng.bmd,399,447,290,Thunder Napin
+Npcname_eng.bmd,400,448,290,Ghost Napin
+Npcname_eng.bmd,401,449,290,Blaze Napin
+Npcname_eng.bmd,402,450,0,Cherry Blossom Spirit
+Npcname_eng.bmd,403,451,0,Cherry Blossom Tree
+Npcname_eng.bmd,404,452,0,Seed Master
+Npcname_eng.bmd,405,453,0,Seed Researcher
+Npcname_eng.bmd,406,454,175,Ice Walker
+Npcname_eng.bmd,407,455,225,Giant Mammoth
+Npcname_eng.bmd,408,456,295,Ice Giant
+Npcname_eng.bmd,409,457,150,Coolutin
+Npcname_eng.bmd,410,458,300,Iron Knight
+Npcname_eng.bmd,411,459,400,Selupan
+Npcname_eng.bmd,412,460,120,Spider Eggs
+Npcname_eng.bmd,413,461,120,Spider Eggs
+Npcname_eng.bmd,414,462,120,Spider Eggs
+Npcname_eng.bmd,415,463,160,Fire Flame Ghost
+Npcname_eng.bmd,416,464,0,Re-Initialization Helper
+Npcname_eng.bmd,417,478,0,Delgado
+Npcname_eng.bmd,418,465,0,Santa Claus
+Npcname_eng.bmd,419,466,130,Cursed Goblin
+Npcname_eng.bmd,420,467,180,Snowman
+Npcname_eng.bmd,421,468,0,Dasher
+Npcname_eng.bmd,422,469,0,Kermit
+Npcname_eng.bmd,423,470,0,Dancer
+Npcname_eng.bmd,424,471,0,Cupid
+Npcname_eng.bmd,425,472,0,Prancer
+Npcname_eng.bmd,426,473,0,Donner
+Npcname_eng.bmd,427,474,0,Vixen
+Npcname_eng.bmd,428,475,0,Blitzen
+Npcname_eng.bmd,429,476,250,Cursed Santa
+Npcname_eng.bmd,430,477,180,Transformed Snowman
+Npcname_eng.bmd,431,479,0,Doorkeeper Titus
+Npcname_eng.bmd,432,480,200,Zombie Fighter
+Npcname_eng.bmd,433,481,200,Zombie Fighter
+Npcname_eng.bmd,434,482,200,Resurrected Gladiator
+Npcname_eng.bmd,435,483,200,Resurrected Gladiator
+Npcname_eng.bmd,436,484,250,Ash Slaughterer
+Npcname_eng.bmd,437,485,250,Ash Slaughterer
+Npcname_eng.bmd,438,486,200,Blood Assassin
+Npcname_eng.bmd,439,487,200,Cruel Blood Assassin
+Npcname_eng.bmd,440,488,200,Cruel Blood Assassin
+Npcname_eng.bmd,441,489,280,Burning Lava Giant
+Npcname_eng.bmd,442,490,280,Ruthless Lava Giant
+Npcname_eng.bmd,443,491,280,Ruthless Lava Giant
+Npcname_eng.bmd,444,492,0,Moss
+Npcname_eng.bmd,445,502,110,Golden Rabbit
+Npcname_eng.bmd,446,493,200,Golden Dark Knight
+Npcname_eng.bmd,447,494,225,Golden Devil
+Npcname_eng.bmd,448,495,300,Golden Stone Golem
+Npcname_eng.bmd,449,496,280,Golden Crust
+Npcname_eng.bmd,450,497,245,Golden Satyros
+Npcname_eng.bmd,451,498,280,Golden Twin Tail
+Npcname_eng.bmd,452,499,300,Golden Iron Knight
+Npcname_eng.bmd,453,500,290,Golden Napin
+Npcname_eng.bmd,454,501,350,Great Golden Dragon
+Npcname_eng.bmd,455,503,0,Transformed Panda
+Npcname_eng.bmd,456,504,320,Gaion Kharein
+Npcname_eng.bmd,457,505,310,Jerint
+Npcname_eng.bmd,458,506,330,Raymond
+Npcname_eng.bmd,459,507,290,Erkanne
+Npcname_eng.bmd,460,508,290,Destler
+Npcname_eng.bmd,461,509,300,Vermont
+Npcname_eng.bmd,462,510,330,Kato
+Npcname_eng.bmd,463,511,290,Galia
+Npcname_eng.bmd,464,512,290,Quartermaster
+Npcname_eng.bmd,465,513,300,Combat Instructor
+Npcname_eng.bmd,466,514,280,Knight Commander
+Npcname_eng.bmd,467,515,305,Grand Wizard
+Npcname_eng.bmd,468,516,340,Master Assassin
+Npcname_eng.bmd,469,517,280,Cavalry Captain
+Npcname_eng.bmd,470,518,225,Shield Bearer
+Npcname_eng.bmd,471,519,225,Medic
+Npcname_eng.bmd,472,520,250,Knights
+Npcname_eng.bmd,473,521,265,Bodyguard
+Npcname_eng.bmd,474,522,0,Jerint the Assistant
+Npcname_eng.bmd,475,523,0,Trap
+Npcname_eng.bmd,476,524,0,Castle Gate 1
+Npcname_eng.bmd,477,525,0,Castle Gate 2
+Npcname_eng.bmd,478,526,0,Stone Statue 1
+Npcname_eng.bmd,479,527,0,Castle Gate 3
+Npcname_eng.bmd,480,528,0,Castle Gate 4
+Npcname_eng.bmd,481,529,350,Furious Slaughterer
+Npcname_eng.bmd,482,530,280,Slaughterer
+Npcname_eng.bmd,483,531,175,Ice Walker
+Npcname_eng.bmd,484,532,80,Larva
+Npcname_eng.bmd,485,533,370,Doppelganger
+Npcname_eng.bmd,486,534,260,Doppelganger Elf
+Npcname_eng.bmd,487,535,260,Doppelganger Knight
+Npcname_eng.bmd,488,536,260,Doppelganger Wizard
+Npcname_eng.bmd,489,537,260,Doppelganger Magic Gladiator
+Npcname_eng.bmd,490,538,260,Doppelganger Dark Lord
+Npcname_eng.bmd,491,539,260,Doppelganger Summoner
+Npcname_eng.bmd,492,540,0,Lugard
+Npcname_eng.bmd,493,541,0,Interim Reward Chest
+Npcname_eng.bmd,494,542,0,Final Reward Chest
+Npcname_eng.bmd,495,543,0,Gens Duprian Steward
+Npcname_eng.bmd,496,544,0,Gens Vanert Steward
+Npcname_eng.bmd,497,545,0,Christine the Merchant
+Npcname_eng.bmd,498,546,0,Jeweler Raul
+Npcname_eng.bmd,499,547,0,Market Union Member Julia
+Npcname_eng.bmd,500,548,0,Transformed Skeleton
+Npcname_eng.bmd,501,549,270,Bloody Orc
+Npcname_eng.bmd,502,550,270,Bloody Death Rider
+Npcname_eng.bmd,503,551,320,Bloody Golem
+Npcname_eng.bmd,504,552,320,Bloody Witch Queen
+Npcname_eng.bmd,505,553,280,Berserker Warrior
+Npcname_eng.bmd,506,554,330,Kentauros Warrior
+Npcname_eng.bmd,507,555,340,Gigantis Warrior
+Npcname_eng.bmd,508,556,310,Genocider Warrior
+Npcname_eng.bmd,509,557,310,Sapi Queen
+Npcname_eng.bmd,510,558,330,Ice Napin
+Npcname_eng.bmd,511,559,300,Shadow Master
+Npcname_eng.bmd,512,560,310,Sapi Queen
+Npcname_eng.bmd,513,561,330,Medusa
+Npcname_eng.bmd,514,562,310,Dark Mammoth
+Npcname_eng.bmd,515,563,310,Dark Giant
+Npcname_eng.bmd,516,564,180,Dark Coolutin
+Npcname_eng.bmd,517,565,350,Dark Iron Knight
+Npcname_eng.bmd,518,566,0,Mercenary Guild Manager Tercia
+Npcname_eng.bmd,519,567,0,Priestess Veina
+Npcname_eng.bmd,520,568,0,Wandering Merchant Zyro
+Npcname_eng.bmd,521,569,100,Venomous Chain Scorpion
+Npcname_eng.bmd,522,570,100,Bone Scorpion
+Npcname_eng.bmd,523,571,230,Orcus
+Npcname_eng.bmd,524,572,290,Gollock
+Npcname_eng.bmd,525,573,250,Crypta
+Npcname_eng.bmd,526,574,260,Crypos
+Npcname_eng.bmd,527,575,345,Condra
+Npcname_eng.bmd,528,576,375,Narcondra
+Npcname_eng.bmd,529,577,0,Leina the Merchant
+Npcname_eng.bmd,530,578,0,Weapons Merchant Bolo
+Npcname_eng.bmd,531,579,0,David
+Npcname_eng.bmd,532,580,0,Captain Slough
+Npcname_eng.bmd,533,581,0,Deruvish
+Npcname_eng.bmd,534,582,0,Adniel
+Npcname_eng.bmd,535,583,0,Jin
+Npcname_eng.bmd,536,584,0,Sir Lesnar
+Npcname_eng.bmd,537,585,215,Scarecrow
+Npcname_eng.bmd,538,586,275,Devilfairy
+Npcname_eng.bmd,539,587,150,Elemental Beast
+Npcname_eng.bmd,540,588,225,Elemental Knight
+Npcname_eng.bmd,541,589,285,Ubaid Devilfairy
+Npcname_eng.bmd,542,590,150,Ubaid Elemental Beast
+Npcname_eng.bmd,543,591,280,Ubaid Elemental Knight
+Npcname_eng.bmd,544,592,315,Undine
+Npcname_eng.bmd,545,593,270,Salamander
+Npcname_eng.bmd,546,594,360,Sylphid
+Npcname_eng.bmd,547,595,360,Gnome
+Npcname_eng.bmd,548,596,315,Hellraiser
+Npcname_eng.bmd,549,597,245,Summoned Satyros
+Npcname_eng.bmd,550,598,500,Fire Tower
+Npcname_eng.bmd,551,599,500,Water Tower
+Npcname_eng.bmd,552,600,500,Earth Tower
+Npcname_eng.bmd,553,601,500,Wind Tower
+Npcname_eng.bmd,554,602,500,Darkness Tower
+Npcname_eng.bmd,555,603,0,Arca Barrier
+Npcname_eng.bmd,556,604,0,Jin
+Npcname_eng.bmd,557,605,0,Mining Area (Small)
+Npcname_eng.bmd,558,606,0,Mining Area (Medium)
+Npcname_eng.bmd,559,607,0,Mining Area (Large)
+Npcname_eng.bmd,560,608,285,Debenter Devilfairy
+Npcname_eng.bmd,561,609,150,Deventer Elemental Beast
+Npcname_eng.bmd,562,610,280,Debenter Elemental Knight
+Npcname_eng.bmd,563,611,315,Sellihoden
+Npcname_eng.bmd,564,612,270,Ukanva
+Npcname_eng.bmd,565,613,360,Silla
+Npcname_eng.bmd,566,614,360,Normus
+Npcname_eng.bmd,567,615,315,Muff
+Npcname_eng.bmd,568,618,210,[GM] Romeu
+Npcname_eng.bmd,569,619,210,[VM] Nox
+Npcname_eng.bmd,570,620,210,[VM] Redd
+Npcname_eng.bmd,571,621,210,[EVM] Iza
+Npcname_eng.bmd,572,622,210,[VM] Hail
+Npcname_eng.bmd,573,623,210,[VM] Fast
+Npcname_eng.bmd,574,624,210,[GM] Ceth
+Npcname_eng.bmd,575,625,210,Robot Knight Transformation Ring
+Npcname_eng.bmd,576,626,130,Mini Robot Transformation Ring
+Npcname_eng.bmd,577,627,500,Cursed Fire Tower
+Npcname_eng.bmd,578,628,500,Cursed Water Tower
+Npcname_eng.bmd,579,629,500,Cursed Earth Tower
+Npcname_eng.bmd,580,630,500,Cursed Wind Tower
+Npcname_eng.bmd,581,631,500,Cursed Darkness Tower
+Npcname_eng.bmd,582,632,315,Cursed Undine
+Npcname_eng.bmd,583,633,270,Cursed Salamander
+Npcname_eng.bmd,584,634,360,Cursed Sylphid
+Npcname_eng.bmd,585,635,360,Cursed Gnome
+Npcname_eng.bmd,586,636,315,Cursed Hellraiser
+Npcname_eng.bmd,587,637,315,Cursed Sellihoden
+Npcname_eng.bmd,588,638,270,Cursed Ukanva
+Npcname_eng.bmd,589,639,360,Cursed Silla
+Npcname_eng.bmd,590,640,360,Cursed Normus
+Npcname_eng.bmd,591,641,315,Cursed Muff
+Npcname_eng.bmd,592,642,0,Great Heavenly Mage Transformation Ring
+Npcname_eng.bmd,593,643,1,Mait
+Npcname_eng.bmd,594,644,1,Chaos Castle 15
+Npcname_eng.bmd,595,645,1,Chaos Castle 16
+Npcname_eng.bmd,596,646,230,Brown Panda Transformation Ring
+Npcname_eng.bmd,597,647,110,Green Snake (green)
+Npcname_eng.bmd,598,648,110,Yellow Snake (yellow)
+Npcname_eng.bmd,599,649,110,Purple Snake (purple)
+Npcname_eng.bmd,600,650,110,Red Snake (red)
+Npcname_eng.bmd,601,651,0,Private Store Bulletin Board
+Npcname_eng.bmd,602,652,130,Golden Goblin
+Npcname_eng.bmd,603,653,300,Golden Titan
+Npcname_eng.bmd,604,654,340,Golden Tantalose
+Npcname_eng.bmd,605,655,400,Golden Erohim
+Npcname_eng.bmd,606,656,375,Golden Hell Maine
+Npcname_eng.bmd,607,657,400,Golden Kundun
+Npcname_eng.bmd,608,658,0,Cursed Statue
+Npcname_eng.bmd,609,659,0,Captured Stone Statue
+Npcname_eng.bmd,610,660,0,Captured Stone Statue
+Npcname_eng.bmd,611,661,0,Captured Stone Statue
+Npcname_eng.bmd,612,662,0,Captured Stone Statue
+Npcname_eng.bmd,613,663,0,Captured Stone Statue
+Npcname_eng.bmd,614,664,0,Captured Stone Statue
+Npcname_eng.bmd,615,665,0,Captured Stone Statue
+Npcname_eng.bmd,616,666,0,Captured Stone Statue
+Npcname_eng.bmd,617,667,0,Captured Stone Statue
+Npcname_eng.bmd,618,668,0,Captured Stone Statue
+Npcname_eng.bmd,619,669,1,Ellin
+Npcname_eng.bmd,620,670,270,Uruk Devil Fairy
+Npcname_eng.bmd,621,671,260,Uruk Elemental Beast
+Npcname_eng.bmd,622,672,250,Uruk Elemental Knight
+Npcname_eng.bmd,623,673,320,Lord Silvester
+Npcname_eng.bmd,624,674,110,Moon Rabbit
+Npcname_eng.bmd,625,675,130,Pouch of Blessing
+Npcname_eng.bmd,626,676,160,Fire Flame Ghost
+Npcname_eng.bmd,627,677,130,Golden Goblin
+Npcname_eng.bmd,628,678,290,Lord Devil Fairy
+Npcname_eng.bmd,629,679,280,Lord Elemental Beast
+Npcname_eng.bmd,630,680,270,Lord Elemental Knight
+Npcname_eng.bmd,631,681,160,Evomon
+Npcname_eng.bmd,632,682,0,Monica
+Npcname_eng.bmd,633,683,0,Marce
+Npcname_eng.bmd,634,684,0,Silvia
+Npcname_eng.bmd,635,685,0,Izabel
+Npcname_eng.bmd,636,686,0,Sophia (repair)
+Npcname_eng.bmd,637,687,0,Bolo (repair)
+Npcname_eng.bmd,638,688,0,Christine
+Npcname_eng.bmd,639,689,0,Flame Trap
+Npcname_eng.bmd,640,690,280,Special Evomon
+Npcname_eng.bmd,641,691,220,New Year Horse (Green)
+Npcname_eng.bmd,642,692,220,New Year Horse (Yellow)
+Npcname_eng.bmd,643,693,220,New Year Horse (Brown)
+Npcname_eng.bmd,644,694,220,New Year Horse (Blue)
+Npcname_eng.bmd,645,704,220,Evolution Succeeded
+Npcname_eng.bmd,646,705,220,Evolution Failed
+Npcname_eng.bmd,647,706,0,Darkness Transformation Ring
+Npcname_eng.bmd,648,726,110,Green Goat
+Npcname_eng.bmd,649,727,110,White Goat
+Npcname_eng.bmd,650,728,110,Purple Goat
+Npcname_eng.bmd,651,729,110,Red Goat

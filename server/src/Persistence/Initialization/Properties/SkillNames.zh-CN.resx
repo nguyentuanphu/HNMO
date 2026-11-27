@@ -903,4 +903,115 @@
   <data name="QuakeFist" xml:space="preserve">
     <value>震地拳</value>
   </data>
+  <data name="CastInvincibility" xml:space="preserve">
+    <value>钢铁意志</value>
+  </data>
+  <data name="ArmorSetBonusIncrease" xml:space="preserve">
+    <value>套装防御强化</value>
+  </data>
+  <data name="Vengeance" xml:space="preserve">
+    <value>复仇</value>
+  </data>
+  <data name="EnergyIncrease" xml:space="preserve">
+    <value>智力增加</value>
+  </data>
+  <data name="StaminaIncrease" xml:space="preserve">
+    <value>体力增加</value>
+  </data>
+  <data name="AgilityIncrease" xml:space="preserve">
+    <value>敏捷增加</value>
+  </data>
+  <data name="StrengthIncrease" xml:space="preserve">
+    <value>力量增加</value>
+  </data>
+  <data name="WingOfStormAbsPowUp" xml:space="preserve">
+    <value>暴风之翼吸收强化</value>
+  </data>
+  <data name="WingOfStormDefPowUp" xml:space="preserve">
+    <value>暴风之翼防御强化</value>
+  </data>
+  <data name="WingOfStormAttPowUp" xml:space="preserve">
+    <value>暴风之翼攻击强化</value>
+  </data>
+  <data name="MaximumAgIncrease" xml:space="preserve">
+    <value>最大 AG 增加</value>
+  </data>
+  <data name="MaximumAttackPowerIncrease" xml:space="preserve">
+    <value>最大攻击力增加</value>
+  </data>
+  <data name="IncreaseCriticalDamageRate" xml:space="preserve">
+    <value>会心一击概率增加</value>
+  </data>
+  <data name="RestoresAllMana" xml:space="preserve">
+    <value>魔法值完全恢复</value>
+  </data>
+  <data name="RestoresAllHp" xml:space="preserve">
+    <value>生命值完全恢复</value>
+  </data>
+  <data name="IncreaseExcellentDamageRate" xml:space="preserve">
+    <value>卓越一击概率增加</value>
+  </data>
+  <data name="IncreaseDoubleDamageRate" xml:space="preserve">
+    <value>双倍一击概率增加</value>
+  </data>
+  <data name="IncreaseChanceOfIgnoreDef" xml:space="preserve">
+    <value>无视防御概率增加</value>
+  </data>
+  <data name="RestoresAllSd" xml:space="preserve">
+    <value>SD 完全恢复</value>
+  </data>
+  <data name="EternalWingsAbsPowUp" xml:space="preserve">
+    <value>永恒之翼吸收强化</value>
+  </data>
+  <data name="EternalWingsDefPowUp" xml:space="preserve">
+    <value>永恒之翼防御强化</value>
+  </data>
+  <data name="EternalWingsAttPowUp" xml:space="preserve">
+    <value>永恒之翼攻击强化</value>
+  </data>
+  <data name="MaximumWizardryIncrease" xml:space="preserve">
+    <value>最大魔攻增加</value>
+  </data>
+  <data name="IllusionWingsAbsPowUp" xml:space="preserve">
+    <value>幻影之翼吸收强化</value>
+  </data>
+  <data name="IllusionWingsDefPowUp" xml:space="preserve">
+    <value>幻影之翼防御强化</value>
+  </data>
+  <data name="IllusionWingsAttPowUp" xml:space="preserve">
+    <value>幻影之翼攻击强化</value>
+  </data>
+  <data name="DimensionWingsDefPowUp" xml:space="preserve">
+    <value>次元之翼防御强化</value>
+  </data>
+  <data name="DimensionWingsAttPowUp" xml:space="preserve">
+    <value>次元之翼攻击强化</value>
+  </data>
+  <data name="MaximumWizCurseIncrease" xml:space="preserve">
+    <value>最大魔攻/诅咒增加</value>
+  </data>
+  <data name="WingOfRuinDefPowUp" xml:space="preserve">
+    <value>破灭之翼防御强化</value>
+  </data>
+  <data name="WingOfRuinAttPowUp" xml:space="preserve">
+    <value>破灭之翼攻击强化</value>
+  </data>
+  <data name="EmperorCapeDefPowUp" xml:space="preserve">
+    <value>帝王披风防御强化</value>
+  </data>
+  <data name="AddsCommandStat" xml:space="preserve">
+    <value>统率增加</value>
+  </data>
+  <data name="EmperorCapeAttPowUp" xml:space="preserve">
+    <value>帝王披风攻击强化</value>
+  </data>
+  <data name="ReigningCloakAbsPowUp" xml:space="preserve">
+    <value>霸王披风吸收强化</value>
+  </data>
+  <data name="ReigningCloakDefPowUp" xml:space="preserve">
+    <value>霸王披风防御强化</value>
+  </data>
+  <data name="ReigningCloakAttPowUp" xml:space="preserve">
+    <value>霸王披风攻击强化</value>
+  </data>
 </root>

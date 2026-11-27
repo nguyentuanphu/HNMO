@@ -2926,4 +2926,166 @@
   <data name="PageHelpTextTopUpMilestones" xml:space="preserve">
     <value>配置越南盾累计充值奖励等级，让账户在账户页面或游戏内一次性领取各等级的代币、Zen 和物品组合。</value>
   </data>
+  <data name="SeasonChooserTitle" xml:space="preserve">
+    <value>你想配置哪个赛季？</value>
+  </data>
+  <data name="SeasonSixButton" xml:space="preserve">
+    <value>Season 6.3</value>
+  </data>
+  <data name="SeasonNineButton" xml:space="preserve">
+    <value>Season 9</value>
+  </data>
+  <data name="SeasonSixButtonHint" xml:space="preserve">
+    <value>经典大区：Season 6.3 的地图、怪物、物品、掉落、商店、活动与倍率设置。</value>
+  </data>
+  <data name="SeasonNineButtonHint" xml:space="preserve">
+    <value>新版本大区：Season 9 的地图、怪物、物品、掉落、商店、活动与倍率设置。</value>
+  </data>
+  <data name="SeasonYouAreHere" xml:space="preserve">
+    <value>当前位置</value>
+  </data>
+  <data name="SeasonNineOff" xml:space="preserve">
+    <value>已关闭。请在“赛季与大区”设置中开启，然后重启 HNMO。</value>
+  </data>
+  <data name="SharedSettingsButton" xml:space="preserve">
+    <value>共享设置</value>
+  </data>
+  <data name="SharedSettingsButtonHint" xml:space="preserve">
+    <value>跨赛季共享：账号、代币、网站、新闻、封禁、管理员与主机设置。</value>
+  </data>
+  <data name="HostSettingsHostOnly" xml:space="preserve">
+    <value>主机设置只能在服务器本机修改（例如 http://localhost:8095）。</value>
+  </data>
+  <data name="ArenaButton" xml:space="preserve">
+    <value>竞技场 (Arena)</value>
+  </data>
+  <data name="ArenaButtonHint" xml:space="preserve">
+    <value>跨服与跨赛季对战：竞技场角色模板、排位决斗、团队战与活动。</value>
+  </data>
+  <data name="ArenaOff" xml:space="preserve">
+    <value>已关闭：请在“赛季与大区”设置中开启 Arena 并重启 HNMO。</value>
+  </data>
+  <data name="ArenaEnabledHint" xml:space="preserve">
+    <value>启动器将同时运行 HNMO 竞技场（独立数据库，连接端口 +200，管理面板高两个端口；账号共享）。更改后请重启 HNMO。</value>
+  </data>
+  <data name="SeasonsPageTitle" xml:space="preserve">
+    <value>赛季与大区设置</value>
+  </data>
+  <data name="SeasonsPageIntro" xml:space="preserve">
+    <value>在一个页面中与 Season 6.3 一同统一开启或关闭 Season 9 和 Arena，查看端口并打开对应管理面板。</value>
+  </data>
+  <data name="SeasonsPageHelp" xml:space="preserve">
+    <value>Season 6.3 始终作为主大区运行，负责共享账号、代币和网站设置。可在此处启用或停用 Season 9 与 Arena，保存后重启 HNMO 即可生效。</value>
+  </data>
+  <data name="SeasonsHostOnly" xml:space="preserve">
+    <value>只能在主机本机（如 http://localhost:8095/seasons）保存赛季开关。当前为只读模式。</value>
+  </data>
+  <data name="SeasonsPrimaryBadge" xml:space="preserve">
+    <value>主大区（始终开启）</value>
+  </data>
+  <data name="SeasonsStatusOn" xml:space="preserve">
+    <value>已开启</value>
+  </data>
+  <data name="SeasonsStatusOff" xml:space="preserve">
+    <value>已关闭</value>
+  </data>
+  <data name="SeasonsEnableLabel" xml:space="preserve">
+    <value>启用服务器</value>
+  </data>
+  <data name="SeasonsAlwaysEnabledNote" xml:space="preserve">
+    <value>随 HNMO 一同启动；负责共享登录、代币余额和网站配置。</value>
+  </data>
+  <data name="SeasonsPortsSummary" xml:space="preserve">
+    <value>连接端口 {0} · 管理端口 {1}</value>
+  </data>
+  <data name="SeasonsOpenPanel" xml:space="preserve">
+    <value>打开面板</value>
+  </data>
+  <data name="SeasonsManageLink" xml:space="preserve">
+    <value>管理赛季</value>
+  </data>
+  <data name="SeasonsSaveButton" xml:space="preserve">
+    <value>保存赛季设置</value>
+  </data>
+  <data name="SeasonsSaved" xml:space="preserve">
+    <value>赛季设置已保存。</value>
+  </data>
+  <data name="SeasonsRestartRequired" xml:space="preserve">
+    <value>赛季开关已更改。请重启 HNMO，以便启动器启动或停止相应大区。</value>
+  </data>
+  <data name="SeasonsRestartButton" xml:space="preserve">
+    <value>重启 HNMO</value>
+  </data>
+  <data name="SeasonsRestartConfirm" xml:space="preserve">
+    <value>确认重启 HNMO</value>
+  </data>
+  <data name="SeasonsRestartCancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="SeasonsRestartSent" xml:space="preserve">
+    <value>已发送重启请求，请在几秒后刷新此页面。</value>
+  </data>
+  <data name="JewelBankReceiptsHeading" xml:space="preserve">
+    <value>宝石银行近期数据库回执（悉尼时间）</value>
+  </data>
+  <data name="JewelBankReceiptsEmpty" xml:space="preserve">
+    <value>尚无数据库回执记录。</value>
+  </data>
+  <data name="JewelBankColTime" xml:space="preserve">
+    <value>时间（悉尼）</value>
+  </data>
+  <data name="JewelBankColAccount" xml:space="preserve">
+    <value>账号</value>
+  </data>
+  <data name="JewelBankColKind" xml:space="preserve">
+    <value>类型</value>
+  </data>
+  <data name="JewelBankColDetail" xml:space="preserve">
+    <value>详情</value>
+  </data>
+  <data name="JewelBankColPending" xml:space="preserve">
+    <value>待发放</value>
+  </data>
+  <data name="JewelBankColSource" xml:space="preserve">
+    <value>来源</value>
+  </data>
+  <data name="JewelBankImportHeading" xml:space="preserve">
+    <value>旧版 JSON 数据导入数据库</value>
+  </data>
+  <data name="JewelBankImportDescription" xml:space="preserve">
+    <value>对比数据库回执后，对旧版 JSON 宝石银行余额与待领取提现的试运行（dry-run）报告。</value>
+  </data>
+  <data name="JewelBankImportChecksum" xml:space="preserve">
+    <value>输入校验和</value>
+  </data>
+  <data name="JewelBankImportWouldImport" xml:space="preserve">
+    <value>待导入</value>
+  </data>
+  <data name="JewelBankImportAlready" xml:space="preserve">
+    <value>已导入</value>
+  </data>
+  <data name="JewelBankImportConflicts" xml:space="preserve">
+    <value>冲突</value>
+  </data>
+  <data name="JewelBankImportUnknownAccounts" xml:space="preserve">
+    <value>未知账号</value>
+  </data>
+  <data name="JewelBankImportTotals" xml:space="preserve">
+    <value>JSON 总计</value>
+  </data>
+  <data name="JewelBankImportPending" xml:space="preserve">
+    <value>JSON 待领取</value>
+  </data>
+  <data name="JewelBankImportRunButton" xml:space="preserve">
+    <value>执行导入数据库</value>
+  </data>
+  <data name="JewelBankImportRunHint" xml:space="preserve">
+    <value>将尚未迁移的 JSON 宝石银行余额与待领取提现幂等导入 PostgreSQL 数据库。</value>
+  </data>
+  <data name="JewelBankImportDone" xml:space="preserve">
+    <value>宝石银行导入完成：新导入 {0} 项，已存在 {1} 项，冲突 {2} 项。</value>
+  </data>
+  <data name="JewelBankImportNothing" xml:space="preserve">
+    <value>没有待导入的 JSON 记录。</value>
+  </data>
 </root>

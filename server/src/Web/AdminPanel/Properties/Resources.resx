@@ -5177,7 +5177,7 @@ On your account page, open Security and paste this code to confirm your new emai
   <data name="SeasonSixButtonHint" xml:space="preserve"><value>The classic worlds: maps, monsters, items, drops, shops, events and rates of Season 6.3.</value></data>
   <data name="SeasonNineButtonHint" xml:space="preserve"><value>The newer worlds: maps, monsters, items, drops, shops, events and rates of Season 9.</value></data>
   <data name="SeasonYouAreHere" xml:space="preserve"><value>You are here</value></data>
-  <data name="SeasonNineOff" xml:space="preserve"><value>Off. Switch it on in Host settings (Season 9 server), then restart HNMO.</value></data>
+  <data name="SeasonNineOff" xml:space="preserve"><value>Off. Switch it on in Seasons settings, then restart HNMO.</value></data>
   <data name="SharedSettingsButton" xml:space="preserve"><value>Shared settings</value></data>
   <data name="SharedSettingsButtonHint" xml:space="preserve"><value>Both seasons: accounts, coins, website, news, bans, admin users and host settings.</value></data>
   <data name="SeasonBadgeTitle" xml:space="preserve"><value>This admin panel sets up {0}</value></data>
@@ -5198,7 +5198,7 @@ On your account page, open Security and paste this code to confirm your new emai
     <value>Battles across servers and seasons: arena characters, ranked duels, team battles and events.</value>
   </data>
   <data name="ArenaOff" xml:space="preserve">
-    <value>Off: tick "Arena" in Host settings and restart HNMO.</value>
+    <value>Off: enable &quot;Arena&quot; in Seasons settings and restart HNMO.</value>
   </data>
   <data name="ArenaEnabledHint" xml:space="preserve">
     <value>The launcher also starts the HNMO Arena (its own database, connect server port +200, admin panel two ports up; accounts shared). Restart HNMO after changing it.</value>
@@ -5241,5 +5241,125 @@ On your account page, open Security and paste this code to confirm your new emai
   </data>
   <data name="ActivityLogAfter" xml:space="preserve">
     <value>After</value>
+  </data>
+  <data name="SeasonsPageTitle" xml:space="preserve">
+    <value>Seasons &amp; Worlds</value>
+  </data>
+  <data name="SeasonsPageIntro" xml:space="preserve">
+    <value>Enable or disable Season 9 and the Arena alongside Season 6.3 in one place, inspect their ports, and open each panel.</value>
+  </data>
+  <data name="SeasonsPageHelp" xml:space="preserve">
+    <value>Season 6.3 always runs as the primary world hosting shared accounts, coins, and website settings. Switch Season 9 or the Arena on or off here, save, and restart HNMO for the launcher to start or stop those servers.</value>
+  </data>
+  <data name="SeasonsHostOnly" xml:space="preserve">
+    <value>Season switches can only be saved from the host computer (e.g. http://localhost:8095/seasons). Currently shown read-only.</value>
+  </data>
+  <data name="SeasonsPrimaryBadge" xml:space="preserve">
+    <value>Primary (always on)</value>
+  </data>
+  <data name="SeasonsStatusOn" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="SeasonsStatusOff" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="SeasonsEnableLabel" xml:space="preserve">
+    <value>Enable server</value>
+  </data>
+  <data name="SeasonsAlwaysEnabledNote" xml:space="preserve">
+    <value>Runs whenever HNMO starts; owns shared logins, Coin balances, and website setup.</value>
+  </data>
+  <data name="SeasonsPortsSummary" xml:space="preserve">
+    <value>Connect port {0} · Admin port {1}</value>
+  </data>
+  <data name="SeasonsOpenPanel" xml:space="preserve">
+    <value>Open panel</value>
+  </data>
+  <data name="SeasonsManageLink" xml:space="preserve">
+    <value>Manage seasons</value>
+  </data>
+  <data name="SeasonsSaveButton" xml:space="preserve">
+    <value>Save season settings</value>
+  </data>
+  <data name="SeasonsSaved" xml:space="preserve">
+    <value>Season settings saved.</value>
+  </data>
+  <data name="SeasonsRestartRequired" xml:space="preserve">
+    <value>Season switches changed. Restart HNMO so the launcher starts or stops the updated worlds.</value>
+  </data>
+  <data name="SeasonsRestartButton" xml:space="preserve">
+    <value>Restart HNMO</value>
+  </data>
+  <data name="SeasonsRestartConfirm" xml:space="preserve">
+    <value>Confirm restart HNMO</value>
+  </data>
+  <data name="SeasonsRestartCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="SeasonsRestartSent" xml:space="preserve">
+    <value>Restart requested. Refresh this page in a few seconds.</value>
+  </data>
+  <data name="JewelBankReceiptsHeading" xml:space="preserve">
+    <value>Recent Jewel Bank database receipts (Sydney time)</value>
+  </data>
+  <data name="JewelBankReceiptsEmpty" xml:space="preserve">
+    <value>No database receipts recorded yet.</value>
+  </data>
+  <data name="JewelBankColTime" xml:space="preserve">
+    <value>Time (Sydney)</value>
+  </data>
+  <data name="JewelBankColAccount" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="JewelBankColKind" xml:space="preserve">
+    <value>Kind</value>
+  </data>
+  <data name="JewelBankColDetail" xml:space="preserve">
+    <value>Detail</value>
+  </data>
+  <data name="JewelBankColPending" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="JewelBankColSource" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="JewelBankImportHeading" xml:space="preserve">
+    <value>Legacy JSON to database import</value>
+  </data>
+  <data name="JewelBankImportDescription" xml:space="preserve">
+    <value>Dry-run preview of legacy JSON Jewel Bank balances and waiting withdrawals compared against database receipts.</value>
+  </data>
+  <data name="JewelBankImportChecksum" xml:space="preserve">
+    <value>Input checksum</value>
+  </data>
+  <data name="JewelBankImportWouldImport" xml:space="preserve">
+    <value>Would import</value>
+  </data>
+  <data name="JewelBankImportAlready" xml:space="preserve">
+    <value>Already imported</value>
+  </data>
+  <data name="JewelBankImportConflicts" xml:space="preserve">
+    <value>Conflicts</value>
+  </data>
+  <data name="JewelBankImportUnknownAccounts" xml:space="preserve">
+    <value>Unknown accounts</value>
+  </data>
+  <data name="JewelBankImportTotals" xml:space="preserve">
+    <value>JSON totals</value>
+  </data>
+  <data name="JewelBankImportPending" xml:space="preserve">
+    <value>JSON pending</value>
+  </data>
+  <data name="JewelBankImportRunButton" xml:space="preserve">
+    <value>Run import to database</value>
+  </data>
+  <data name="JewelBankImportRunHint" xml:space="preserve">
+    <value>Import unmigrated JSON Jewel Bank balances and waiting withdrawals into the PostgreSQL database (idempotent).</value>
+  </data>
+  <data name="JewelBankImportDone" xml:space="preserve">
+    <value>Jewel Bank import completed: {0} imported, {1} already present, {2} conflicts.</value>
+  </data>
+  <data name="JewelBankImportNothing" xml:space="preserve">
+    <value>No pending JSON entries to import.</value>
   </data>
 </root>

@@ -105,7 +105,8 @@ endforeach()
 
 mu_ensure_submodule("ThirdParty/RmlUi"
   INDICATOR "CMakeLists.txt"
-  URL "https://github.com/nitoygo/RmlUi.git")
+  URL "https://github.com/nitoygo/RmlUi.git"
+  BRANCH "integration/sdl-gpu-parity")
 
 # RmlUi -- static link, no bundled samples/Lua bindings. We supply our own
 # Rml::RenderInterface/SystemInterface (source/Render/RmlUi/) targeting this branch's
@@ -1026,6 +1027,9 @@ if (DOTNET_EXECUTABLE)
     # 4. Build and stage the library whenever Main's dependency is evaluated.
     # Main may not relink after a C#-only change, so TARGET Main POST_BUILD is
     # not sufficient to keep the runtime copy current.
+    add_custom_target(ClientLibraryCodegen DEPENDS "${DOTNET_DLL_PATH}")
+    add_dependencies(MuClient ClientLibraryCodegen)
+
     add_custom_target(ClientLibrary
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "${DOTNET_DLL_PATH}"

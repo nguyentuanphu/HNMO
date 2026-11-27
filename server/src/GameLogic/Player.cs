@@ -664,6 +664,11 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     internal string? LoginServerRegistration => Volatile.Read(ref this._loginServerRegistration);
 
     /// <summary>
+    /// Gets or sets a value indicating whether Season 9 outlaw point rules apply instead of Season 6.3 / Arena timers (defaults to <see cref="HnmoSeasonInstance.IsSeasonNine"/>; settable in tests).
+    /// </summary>
+    internal bool IsSeasonNineOutlawRules { get; set; } = HnmoSeasonInstance.IsSeasonNine;
+
+    /// <summary>
     /// Gets a value indicating whether opening the player store after entering the game is supported by this instance.
     /// </summary>
     protected virtual bool IsPlayerStoreOpeningAfterEnterSupported => true;
@@ -833,6 +838,11 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
             attacker.ApplyAmmunitionConsumption(hitInfo);
         }
 
+        if (Rand.NextRandomBool(this.Attributes[Stats.CastInvincibilityChance]))
+        {
+            hitInfo = default;
+        }
+
         if (hitInfo is { HealthDamage: 0, ShieldDamage: 0 })
         {
             await this.InvokeViewPlugInAsync<IShowHitPlugIn>(p => p.ShowHitAsync(this, hitInfo)).ConfigureAwait(false);
@@ -863,6 +873,11 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
         if (hitInfo.ManaToll > 0 || manaFullyRecovered)
         {
             this.Attributes[Stats.CurrentMana] = (manaFullyRecovered ? this.Attributes[Stats.MaximumMana] : this.Attributes[Stats.CurrentMana]) - hitInfo.ManaToll;
+        }
+
+        if (Rand.NextRandomBool(this.Attributes[Stats.FullyRecoverShieldAfterHitChance]))
+        {
+            this.Attributes[Stats.CurrentShield] = this.Attributes[Stats.MaximumShield];
         }
 
         await this.HitAsync(hitInfo, attacker, skill?.Skill, isFinalStreakHit).ConfigureAwait(false);
@@ -1571,8 +1586,8 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
 
         // The kill raises the running points total, and the outlaw stage follows the total.
         var character = this._selectedCharacter!;
-        character.StateRemainingSeconds = OutlawPoints.GetPointsAfterKill(character.State, character.StateRemainingSeconds);
-        character.State = OutlawPoints.GetState(character.StateRemainingSeconds);
+        character.StateRemainingSeconds = OutlawPoints.GetPointsAfterKill(character.State, character.StateRemainingSeconds, this.IsSeasonNineOutlawRules);
+        character.State = OutlawPoints.GetState(character.StateRemainingSeconds, this.IsSeasonNineOutlawRules);
         character.PlayerKillCount += 1;
         await this.ForEachWorldObserverAsync<IUpdateCharacterHeroStatePlugIn>(o => o.UpdateCharacterHeroStateAsync(this), true).ConfigureAwait(false);
     }
@@ -1797,14 +1812,22 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
         var elapsedSeconds = DateTime.UtcNow.Subtract(this._lastRegenerate).TotalSeconds + this._heroStateSecondsRemainder;
         var elapsedWholeSeconds = Math.Floor(elapsedSeconds);
         this._heroStateSecondsRemainder = elapsedSeconds - elapsedWholeSeconds;
-        currentCharacter.StateRemainingSeconds -= (int)elapsedWholeSeconds;
 
         if (currentCharacter.State > HeroState.Normal)
         {
-            // Outlaws: one running points total, the stage follows it down.
+            if (this.IsSeasonNineOutlawRules)
+            {
+                // Season 9 PK points decay only via monster kills (floor(level / 2)) or /pkclear, never per-second online.
+                this._heroStateSecondsRemainder = 0;
+                return;
+            }
+
+            currentCharacter.StateRemainingSeconds -= (int)elapsedWholeSeconds;
             await this.UpdateOutlawStateAsync(currentCharacter).ConfigureAwait(false);
             return;
         }
+
+        currentCharacter.StateRemainingSeconds -= (int)elapsedWholeSeconds;
 
         if (currentCharacter.StateRemainingSeconds > 0)
         {
@@ -1828,7 +1851,7 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     /// <param name="character">The outlaw character.</param>
     private async ValueTask UpdateOutlawStateAsync(Character character)
     {
-        var newState = OutlawPoints.GetState(character.StateRemainingSeconds);
+        var newState = OutlawPoints.GetState(character.StateRemainingSeconds, this.IsSeasonNineOutlawRules);
         if (newState == HeroState.Normal)
         {
             character.StateRemainingSeconds = 0;
@@ -1845,11 +1868,8 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     }
 
     /// <summary>
-    /// Brings the saved hero state time into the current form: the remaining time of an outlaw saved before the
-    /// points system (each stage counted down 3 hours on its own) becomes the points total with the same time until
-    /// the character is clear, and the stage follows that total. Also limits the remaining time to the longest
-    /// time which the current state can legitimately have: characters of servers which ran with the formerly
-    /// broken countdown can have a remaining time which grew by all the time they spent online.
+    /// Converts saved outlaw points/timers to the current season's scale on login so no character jumps stages
+    /// or drops prematurely when switching rules or migrating from earlier saves.
     /// </summary>
     private async ValueTask LimitHeroStateRemainingTimeAsync()
     {
@@ -1862,11 +1882,15 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
         var savedState = character.State;
         if (character.State > HeroState.Normal)
         {
-            var converted = OutlawPoints.ConvertFormerRemainingTime(character.State, character.StateRemainingSeconds);
+            var converted = OutlawPoints.ConvertFormerRemainingTime(
+                character.State,
+                character.StateRemainingSeconds,
+                character.PlayerKillCount,
+                this.IsSeasonNineOutlawRules);
             if (converted != character.StateRemainingSeconds)
             {
                 this.Logger.LogInformation(
-                    "Converted the remaining outlaw time of character {CharacterName} ({HeroState}) from {RemainingSeconds} seconds of the stage to {Points} points.",
+                    "Converted the remaining outlaw time of character {CharacterName} ({HeroState}) from {RemainingSeconds} to {Points} points.",
                     character.Name,
                     character.State,
                     character.StateRemainingSeconds,
@@ -1874,7 +1898,7 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
                 character.StateRemainingSeconds = converted;
             }
 
-            character.State = OutlawPoints.GetState(character.StateRemainingSeconds);
+            character.State = OutlawPoints.GetState(character.StateRemainingSeconds, this.IsSeasonNineOutlawRules);
             if (character.State == HeroState.Normal)
             {
                 character.StateRemainingSeconds = 0;
@@ -1886,22 +1910,10 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
                 await this.ForEachWorldObserverAsync<IUpdateCharacterHeroStatePlugIn>(p => p.UpdateCharacterHeroStateAsync(this), true).ConfigureAwait(false);
             }
 
-            if (character.State == HeroState.Normal)
-            {
-                return;
-            }
+            return;
         }
 
-        var maximumSeconds = character.State switch
-        {
-            // The first three kills give at most 86,400 points, every further kill at most 3,600 more.
-            HeroState.PlayerKiller2ndStage => OutlawPoints.PlayerKiller2ndStagePoints
-                + (OutlawPoints.FurtherKillPoints * Math.Max(character.PlayerKillCount - 3, 0)),
-            HeroState.PlayerKiller1stStage => OutlawPoints.PlayerKiller2ndStagePoints - 1,
-            HeroState.PlayerKillWarning => OutlawPoints.PlayerKiller1stStagePoints - 1,
-            _ => (int)HeroStateDuration.TotalSeconds,
-        };
-
+        var maximumSeconds = (int)HeroStateDuration.TotalSeconds;
         if (character.StateRemainingSeconds > maximumSeconds)
         {
             this.Logger.LogInformation(

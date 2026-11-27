@@ -88,6 +88,7 @@ public class GameConfigurationInitializer : GameConfigurationInitializerBase
         new BoxOfLuck(this.Context, this.GameConfiguration).Initialize();
         new GensRewardItems(this.Context, this.GameConfiguration).Initialize();
         new GoblinBoxItems(this.Context, this.GameConfiguration).Initialize();
+        new ChaosCardItems(this.Context, this.GameConfiguration).Initialize();
         this.CreateJewelMixes();
         new NpcInitialization(this.Context, this.GameConfiguration).Initialize();
         new InvasionMobsInitialization(this.Context, this.GameConfiguration).Initialize();

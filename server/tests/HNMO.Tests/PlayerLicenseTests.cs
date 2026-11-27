@@ -12,7 +12,11 @@ using System.Text.Json.Nodes;
 using System.Threading;
 using HNMO.GameLogic;
 using HNMO.Integrity;
+using HNMO.Interfaces;
 using HNMO.Persistence;
+using HNMO.Startup;
+using Microsoft.Extensions.Logging.Abstractions;
+using Moq;
 using NUnit.Framework;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
@@ -29,6 +33,7 @@ public class PlayerLicenseTests
     private static readonly DateOnly Today = new(2026, 11, 15);
     private Ed25519PrivateKeyParameters _privateKey = null!;
     private byte[] _publicKeyPem = null!;
+    private string? _previousHub;
 
     /// <summary>A fresh keypair for each test.</summary>
     [SetUp]
@@ -42,7 +47,15 @@ public class PlayerLicenseTests
         new PemWriter(writer).WriteObject(pair.Public);
         this._publicKeyPem = Encoding.UTF8.GetBytes(writer.ToString());
         LicensedPlayerLimit.Reset();
+
+        // These tests talk to a stub hub: they need a hub address even when the test run turned the real one off.
+        this._previousHub = Environment.GetEnvironmentVariable(DeveloperHubAddress.EnvironmentVariableName);
+        Environment.SetEnvironmentVariable(DeveloperHubAddress.EnvironmentVariableName, "https://hub.example");
     }
+
+    /// <summary>Gives the test run its hub setting back.</summary>
+    [TearDown]
+    public void TearDown() => Environment.SetEnvironmentVariable(DeveloperHubAddress.EnvironmentVariableName, this._previousHub);
 
     /// <summary>No file: the default of 10.</summary>
     [Test]
@@ -206,6 +219,81 @@ public class PlayerLicenseTests
     }
 
     /// <summary>
+    /// Layer 1: update checks ask <c>/api/update-check</c> with the folder's licence, machine id and build stamp;
+    /// valid returns the manifest and token, withdrawn (403) refuses cleanly, and unreachable never crashes.
+    /// </summary>
+    /// <returns>The task.</returns>
+    [Test]
+    [NonParallelizable]
+    public async Task UpdateCheckRespectsValidWithdrawnAndUnreachableHubAsync()
+    {
+        var (previousMachine, previousLegacy, previousLicence) = (DeveloperHub.MachineId, DeveloperHub.LegacyMachineId, DeveloperHub.LicenceFile);
+        DeveloperHub.MachineId = "aaaaaaaaaaaaaaaa";
+        DeveloperHub.LegacyMachineId = "bbbbbbbbbbbbbbbb";
+        DeveloperHub.LicenceFile = Encoding.UTF8.GetString(this.File("""{"licensee":"Minh","maxPlayers":40,"expires":null,"machine":"aaaaaaaaaaaaaaaa","id":"L-1"}"""));
+        try
+        {
+            var validJson = """
+            {
+              "manifestVersion": "1.2.0",
+              "notes": "Patch",
+              "downloadBase": "https://cdn.example/files/",
+              "token": "tok-abc",
+              "files": [{"path": "server/HNMO.Startup.dll", "sha256": "deadbeef", "size": 42, "exec": false}]
+            }
+            """;
+            var validHandler = new RecordingHandler(HttpStatusCode.OK, validJson);
+            using (var client = new HttpClient(validHandler))
+            {
+                var res = await DeveloperHub.CheckForUpdateAsync("HNMO-test-20261127", client: client).ConfigureAwait(false);
+                Assert.That(res.Authorized, Is.True);
+                Assert.That(res.ManifestVersion, Is.EqualTo("1.2.0"));
+                Assert.That(res.Token, Is.EqualTo("tok-abc"));
+                Assert.That(res.DownloadBase, Is.EqualTo("https://cdn.example/files/"));
+                Assert.That(res.Files, Has.Count.EqualTo(1));
+                Assert.That(validHandler.Path, Is.EqualTo("/api/update-check"));
+                var sent = JsonNode.Parse(validHandler.Body!)!;
+                Assert.That(sent["licenceId"]!.GetValue<string>(), Is.EqualTo("L-1"));
+                Assert.That(sent["machineId"]!.GetValue<string>(), Is.EqualTo("aaaaaaaaaaaaaaaa"));
+                Assert.That(sent["buildStamp"]!.GetValue<string>(), Is.EqualTo("HNMO-test-20261127"));
+                Assert.That(Encoding.UTF8.GetString(Convert.FromBase64String(sent["licence"]!.GetValue<string>())), Is.EqualTo(DeveloperHub.LicenceFile));
+            }
+
+            using (var withdrawnClient = new HttpClient(new RecordingHandler(HttpStatusCode.Forbidden, """{"error":"forbidden","reason":"withdrawn"}""")))
+            {
+                var res = await DeveloperHub.CheckForUpdateAsync("HNMO-test-20261127", client: withdrawnClient).ConfigureAwait(false);
+                Assert.That(res.Authorized, Is.False);
+                Assert.That(res.Denied, Is.True);
+                Assert.That(res.Files, Is.Empty);
+            }
+
+            using (var unreachableClient = new HttpClient(new ThrowingHandler()))
+            {
+                var res = await DeveloperHub.CheckForUpdateAsync("HNMO-test-20261127", client: unreachableClient).ConfigureAwait(false);
+                Assert.That(res.Authorized, Is.False);
+                Assert.That(res.Denied, Is.False);
+                Assert.That(res.Files, Is.Empty);
+            }
+
+            // No licence: the folder asks as a free host, without a licence in the request.
+            var freeHandler = new RecordingHandler(HttpStatusCode.OK, validJson);
+            using (var freeClient = new HttpClient(freeHandler))
+            {
+                var res = await DeveloperHub.CheckForUpdateAsync("HNMO-test-20261127", licenceFile: string.Empty, client: freeClient).ConfigureAwait(false);
+                Assert.That(res.Authorized, Is.True);
+                var sent = JsonNode.Parse(freeHandler.Body!)!.AsObject();
+                Assert.That(sent["machineId"]!.GetValue<string>(), Is.EqualTo("aaaaaaaaaaaaaaaa"));
+                Assert.That(sent.ContainsKey("licence"), Is.False);
+                Assert.That(sent.ContainsKey("licenceId"), Is.False);
+            }
+        }
+        finally
+        {
+            (DeveloperHub.MachineId, DeveloperHub.LegacyMachineId, DeveloperHub.LicenceFile) = (previousMachine, previousLegacy, previousLicence);
+        }
+    }
+
+    /// <summary>
     /// One limit for the whole folder (owner, 2026-11-21): accounts playing in another program (Season 9, the Arena)
     /// take places too, an account playing elsewhere coming here takes none, and this program publishes its accounts.
     /// </summary>
@@ -239,6 +327,206 @@ public class PlayerLicenseTests
             DeveloperHub.ResetMemoryState();
             DeveloperHub.StateFile = previousFile;
         }
+    }
+
+    /// <summary>
+    /// Any tampered binary integrity status silently downgrades the limit to 10 across Startup, Login, and Weekly ticks without throwing.
+    /// </summary>
+    /// <param name="tamperedStatus">The integrity status representing tampering.</param>
+    [TestCase(IntegrityStatus.FileMismatch)]
+    [TestCase(IntegrityStatus.SignatureInvalid)]
+    [TestCase(IntegrityStatus.ManifestInvalid)]
+    [NonParallelizable]
+    public async Task TamperedIntegritySilentlyDowngradesAcrossCheckpointsAsync(IntegrityStatus tamperedStatus)
+    {
+        var previousFile = DeveloperHub.StateFile;
+        var previousLicence = DeveloperHub.LicenceFile;
+        var (previousMachine, previousLegacy) = (DeveloperHub.MachineId, DeveloperHub.LegacyMachineId);
+        DeveloperHub.StateFile = null;
+        DeveloperHub.ResetMemoryState();
+        DeveloperHub.MachineId = "m1";
+        DeveloperHub.LegacyMachineId = string.Empty;
+        DeveloperHub.ChangeState(s => s.GraceStartedUtc = DateTime.UtcNow.AddDays(-DeveloperHub.GraceDays - 1));
+        LicensedPlayerLimit.Reset();
+        try
+        {
+            var bytes = this.File("""{"id":"lic-1","licensee":"Minh","maxPlayers":50,"expires":"2027-01-31","machine":"m1"}""");
+            var status = IntegrityStatus.Ok;
+            LicensedPlayerLimit.ConfigureBuildIntegrity(
+                () => status,
+                (b, d) => PlayerLicense.Check(b, this._publicKeyPem, "m1", Today));
+
+            Assert.That(LicensedPlayerLimit.ApplyLicence(bytes, new DateTime(2026, 11, 15, 0, 0, 0, DateTimeKind.Utc)), Is.EqualTo(50));
+
+            status = tamperedStatus;
+            Assert.That(LicensedPlayerLimit.ReevaluateAndEnforce(new DateTime(2026, 11, 15, 0, 1, 0, DateTimeKind.Utc)), Is.EqualTo(10));
+            Assert.That(LicensedPlayerLimit.Maximum, Is.EqualTo(10));
+            Assert.That(LicensedPlayerLimit.Licensee, Is.Null);
+
+            for (var i = 0; i < 10; i++)
+            {
+                Assert.That(LicensedPlayerLimit.TryAdmit(null, $"player{i}"), Is.True);
+            }
+
+            Assert.That(LicensedPlayerLimit.TryAdmit(null, "player10"), Is.False);
+
+            var handler = new RecordingHandler(HttpStatusCode.OK);
+            var weeklyService = CreateWeeklyService();
+            using var client = new HttpClient(handler);
+            await weeklyService.SendWeeklyAsync(null, client).ConfigureAwait(false);
+            var parsed = JsonNode.Parse(handler.Body!)!;
+            Assert.That(parsed["players"]!["limit"]!.GetValue<int>(), Is.EqualTo(10));
+            Assert.That(parsed["buildStamp"]!.GetValue<string>(), Is.EqualTo(HnmoBuildStamp.Resolve()));
+        }
+        finally
+        {
+            LicensedPlayerLimit.ResetVerification();
+            LicensedPlayerLimit.Reset();
+            DeveloperHub.LicenceFile = previousLicence;
+            (DeveloperHub.MachineId, DeveloperHub.LegacyMachineId) = (previousMachine, previousLegacy);
+            DeveloperHub.ResetMemoryState();
+            DeveloperHub.StateFile = previousFile;
+        }
+    }
+
+    /// <summary>
+    /// Invalid, expired, wrong-machine, or hub-withdrawn licences silently enforce the default 10-player cap.
+    /// </summary>
+    [Test]
+    [NonParallelizable]
+    public void InvalidOrWithdrawnLicenceSilentlyDowngradesToDefault()
+    {
+        var previousFile = DeveloperHub.StateFile;
+        var previousLicence = DeveloperHub.LicenceFile;
+        DeveloperHub.StateFile = null;
+        DeveloperHub.ResetMemoryState();
+        LicensedPlayerLimit.Reset();
+        try
+        {
+            LicensedPlayerLimit.ConfigureBuildIntegrity(
+                () => IntegrityStatus.Ok,
+                (b, d) => PlayerLicense.Check(b, this._publicKeyPem, "m1", d));
+
+            var wrongMachine = this.File("""{"id":"lic-wrong","licensee":"Minh","maxPlayers":50,"expires":"2027-01-31","machine":"other"}""");
+            Assert.That(LicensedPlayerLimit.ApplyLicence(wrongMachine, new DateTime(2026, 11, 15, 0, 0, 0, DateTimeKind.Utc)), Is.EqualTo(10));
+
+            var expired = this.File("""{"id":"lic-exp","licensee":"Minh","maxPlayers":50,"expires":"2026-11-10","machine":"m1"}""");
+            Assert.That(LicensedPlayerLimit.ApplyLicence(expired, new DateTime(2026, 11, 15, 0, 0, 0, DateTimeKind.Utc)), Is.EqualTo(10));
+
+            var withdrawn = this.File("""{"id":"lic-rev","licensee":"Minh","maxPlayers":50,"expires":"2027-01-31","machine":"m1"}""");
+            Assert.That(LicensedPlayerLimit.ApplyLicence(withdrawn, new DateTime(2026, 11, 15, 0, 0, 0, DateTimeKind.Utc)), Is.EqualTo(50));
+
+            DeveloperHub.ChangeState(s => s.WithdrawnLicences.Add("lic-rev"));
+            Assert.That(LicensedPlayerLimit.ReevaluateAndEnforce(new DateTime(2026, 11, 15, 1, 0, 0, DateTimeKind.Utc)), Is.EqualTo(10));
+            Assert.That(LicensedPlayerLimit.Licensee, Is.Null);
+        }
+        finally
+        {
+            LicensedPlayerLimit.ResetVerification();
+            LicensedPlayerLimit.Reset();
+            DeveloperHub.LicenceFile = previousLicence;
+            DeveloperHub.ResetMemoryState();
+            DeveloperHub.StateFile = previousFile;
+        }
+    }
+
+    /// <summary>
+    /// Hub unreachability past <see cref="DeveloperHub.GraceDays"/> silently downgrades the cap to 10 and clears once reachable again.
+    /// </summary>
+    /// <returns>The task.</returns>
+    [Test]
+    [NonParallelizable]
+    public async Task UnreachableHubPastGraceDaysSilentlyDowngradesAsync()
+    {
+        var previousFile = DeveloperHub.StateFile;
+        var previousLicence = DeveloperHub.LicenceFile;
+        var (previousMachine, previousLegacy) = (DeveloperHub.MachineId, DeveloperHub.LegacyMachineId);
+        DeveloperHub.StateFile = null;
+        DeveloperHub.ResetMemoryState();
+        DeveloperHub.MachineId = "m1";
+        DeveloperHub.LegacyMachineId = string.Empty;
+        LicensedPlayerLimit.Reset();
+        try
+        {
+            var validBytes = this.File("""{"id":"lic-net","licensee":"Minh","maxPlayers":50,"expires":"2027-01-31","machine":"m1"}""");
+            DeveloperHub.LicenceFile = Encoding.UTF8.GetString(validBytes);
+            LicensedPlayerLimit.ConfigureBuildIntegrity(
+                () => IntegrityStatus.Ok,
+                (b, _) => PlayerLicense.Check(b, this._publicKeyPem, "m1", Today));
+            Assert.That(LicensedPlayerLimit.ApplyLicence(validBytes, new DateTime(2026, 11, 15, 0, 0, 0, DateTimeKind.Utc)), Is.EqualTo(50));
+
+            using var failingClient = new HttpClient(new ThrowingHandler());
+            var (ok, _, _) = await DeveloperHub.SendWeeklyAsync(new JsonObject(), failingClient).ConfigureAwait(false);
+            Assert.That(ok, Is.False);
+            var recorded = DeveloperHub.ReadState().FirstHubUnreachableUtc;
+            Assert.That(recorded, Is.Not.Null);
+
+            Assert.That(LicensedPlayerLimit.ReevaluateAndEnforce(recorded!.Value.AddDays(DeveloperHub.GraceDays).AddMinutes(-1)), Is.EqualTo(50));
+            Assert.That(LicensedPlayerLimit.ReevaluateAndEnforce(recorded.Value.AddDays(DeveloperHub.GraceDays)), Is.EqualTo(10));
+
+            using var okClient = new HttpClient(new RecordingHandler(HttpStatusCode.OK));
+            var (recovered, _, _) = await DeveloperHub.SendWeeklyAsync(new JsonObject(), okClient).ConfigureAwait(false);
+            Assert.That(recovered, Is.True);
+            Assert.That(DeveloperHub.ReadState().FirstHubUnreachableUtc, Is.Null);
+        }
+        finally
+        {
+            LicensedPlayerLimit.ResetVerification();
+            LicensedPlayerLimit.Reset();
+            DeveloperHub.LicenceFile = previousLicence;
+            (DeveloperHub.MachineId, DeveloperHub.LegacyMachineId) = (previousMachine, previousLegacy);
+            DeveloperHub.ResetMemoryState();
+            DeveloperHub.StateFile = previousFile;
+        }
+    }
+
+    /// <summary>
+    /// Memory patching <see cref="LicensedPlayerLimit.Maximum"/> cannot raise the limit past the re-derived cap.
+    /// </summary>
+    [Test]
+    [NonParallelizable]
+    public void MemoryPatchedMaximumCannotBypassDerivedLimit()
+    {
+        var previousFile = DeveloperHub.StateFile;
+        DeveloperHub.StateFile = null;
+        DeveloperHub.ResetMemoryState();
+        LicensedPlayerLimit.Reset();
+        try
+        {
+            LicensedPlayerLimit.Maximum = 500;
+            Assert.That(LicensedPlayerLimit.Maximum, Is.EqualTo(10), "without verification context, patch above default is rejected");
+
+            var bytes = this.File("""{"id":"lic-cap","licensee":"Minh","maxPlayers":25,"expires":"2027-01-31","machine":"m1"}""");
+            LicensedPlayerLimit.ConfigureBuildIntegrity(
+                () => IntegrityStatus.Ok,
+                (b, _) => PlayerLicense.Check(b, this._publicKeyPem, "m1", Today));
+            Assert.That(LicensedPlayerLimit.ApplyLicence(bytes, new DateTime(2026, 11, 15, 0, 0, 0, DateTimeKind.Utc)), Is.EqualTo(25));
+
+            LicensedPlayerLimit.Maximum = 999;
+            Assert.That(LicensedPlayerLimit.Maximum, Is.EqualTo(25));
+            Assert.That(LicensedPlayerLimit.ReevaluateAndEnforce(new DateTime(2026, 11, 15, 0, 5, 0, DateTimeKind.Utc)), Is.EqualTo(25));
+        }
+        finally
+        {
+            LicensedPlayerLimit.ResetVerification();
+            LicensedPlayerLimit.Reset();
+            DeveloperHub.ResetMemoryState();
+            DeveloperHub.StateFile = previousFile;
+        }
+    }
+
+    private static DeveloperHubWeeklyService CreateWeeklyService()
+    {
+        var servers = new Mock<IServerProvider>();
+        servers.SetupGet(s => s.Servers).Returns(Array.Empty<IManageableServer>());
+        var licences = new Mock<IHostLicenseProvider>();
+        return new DeveloperHubWeeklyService(servers.Object, licences.Object, NullLogger<DeveloperHubWeeklyService>.Instance);
+    }
+
+    private sealed class ThrowingHandler : HttpMessageHandler
+    {
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+            => throw new HttpRequestException("simulated outage");
     }
 
     private byte[] File(string payloadJson)

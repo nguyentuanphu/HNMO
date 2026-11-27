@@ -1,5 +1,5 @@
 // <copyright file="PartyOptionsEngine.cs" company="HNMO">
-// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// Proprietary and confidential. All rights reserved. Unauthorized copying, modification, or distribution is prohibited.
 // </copyright>
 
 namespace HNMO.GameLogic.PlugIns.PartyOptions;
@@ -158,7 +158,8 @@ public sealed class PartyOptionsEngine
     public PartyJoinCheckResult PlanSpotJoin(string leaderName, string? password, int playerLevel, bool hasParty, out PartyAdvertisement? match)
     {
         match = null;
-        if (!this.Enabled || !this.Configuration.AllowAutoSpotParty)
+        var viaPassword = !string.IsNullOrEmpty(password?.Trim());
+        if (!this.Enabled || (viaPassword ? !this.Configuration.AllowPasswordJoin : !this.Configuration.AllowAutoSpotParty))
         {
             return PartyJoinCheckResult.Disabled;
         }

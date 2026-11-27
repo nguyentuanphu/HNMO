@@ -1,0 +1,156 @@
+@page "/seasons"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+@using HNMO.Interfaces
+@using HNMO.Web.AdminPanel.Services
+@using Resources = HNMO.Web.AdminPanel.Properties.Resources
+
+<PageTitle>HNMO: @Resources.SeasonsPageTitle</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@Resources.SeasonsPageTitle" />
+
+<div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+    <h1 class="mb-0">@Resources.SeasonsPageTitle</h1>
+    <button type="button"
+            id="seasons-help-btn"
+            class="btn btn-sm btn-outline-secondary"
+            title="@Resources.SeasonsPageTitle"
+            @onclick="this.ToggleHelp">?</button>
+</div>
+<PageHelp Text="@Resources.SeasonsPageHelp" />
+
+<p class="text-muted">@Resources.SeasonsPageIntro</p>
+
+@if (this._showHelp)
+{
+    <div id="seasons-help" class="alert alert-info" role="region">@Resources.SeasonsPageHelp</div>
+}
+
+@if (this._errors.Count > 0)
+{
+    <div id="seasons-errors" class="alert alert-danger" role="alert">
+        <ul class="mb-0">
+            @foreach (var err in this._errors)
+            {
+                <li>@err</li>
+            }
+        </ul>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(this._statusMessage))
+{
+    <div id="seasons-status" class="alert alert-success" role="status">@this._statusMessage</div>
+}
+
+@if (this._needsRestart)
+{
+    <div id="seasons-restart-banner" class="alert alert-warning" role="status">@Resources.SeasonsRestartRequired</div>
+}
+
+@if (!this.IsHostComputer)
+{
+    <div class="alert alert-warning" id="seasons-host-only" role="alert">@Resources.SeasonsHostOnly</div>
+}
+
+@if (this._settings is { } settings)
+{
+    var s6Panel = this._panels.FirstOrDefault(p => p.Season == HnmoSeasonInstance.SeasonSix);
+    var s9Panel = this._panels.FirstOrDefault(p => p.Season == HnmoSeasonInstance.SeasonNine);
+    var arenaPanel = this._panels.FirstOrDefault(p => p.Season == HnmoSeasonInstance.Arena);
+
+    <div class="row g-3 mb-4">
+        <div class="col-12 col-lg-4">
+            <section class="card h-100 border-primary" id="season-card-s6">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <strong>@Resources.SeasonSixButton</strong>
+                    <span class="badge text-bg-success" id="season-s6-status">@Resources.SeasonsPrimaryBadge</span>
+                </div>
+                <div class="card-body d-flex flex-column gap-2">
+                    <p class="mb-1">@Resources.SeasonSixButtonHint</p>
+                    <p class="small text-muted mb-1">@Resources.SeasonsAlwaysEnabledNote</p>
+                    <p class="small font-monospace mb-2">@this.FormatPorts(settings.ConnectServerPort, settings.AdminPort)</p>
+                    <div class="mt-auto d-flex flex-wrap gap-2">
+                        @if (s6Panel?.Url is { } s6Url)
+                        {
+                            <a class="btn btn-sm btn-outline-primary" id="season-s6-open" href="@(s6Panel.IsCurrent ? "#season-card-s6" : s6Url)">@Resources.SeasonsOpenPanel</a>
+                        }
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-12 col-lg-4">
+            <section class="card h-100" id="season-card-s9">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <strong>@Resources.SeasonNineButton</strong>
+                    <span class="badge @(settings.SeasonNineEnabled ? "text-bg-success" : "text-bg-secondary")" id="season-s9-status">@(settings.SeasonNineEnabled ? Resources.SeasonsStatusOn : Resources.SeasonsStatusOff)</span>
+                </div>
+                <div class="card-body d-flex flex-column gap-2">
+                    <p class="mb-1">@Resources.SeasonNineButtonHint</p>
+                    <p class="small text-muted mb-1">@Resources.SeasonNineButtonHint</p>
+                    <p class="small font-monospace mb-2">@this.FormatPorts(settings.ConnectServerPort + 100, settings.AdminPort + 1)</p>
+                    <div class="form-check form-switch mb-2">
+                        <input id="season-nine-enabled"
+                               type="checkbox"
+                               class="form-check-input"
+                               disabled="@(!this.IsHostComputer)"
+                               @bind="settings.SeasonNineEnabled" />
+                        <label class="form-check-label" for="season-nine-enabled">@Resources.SeasonsEnableLabel</label>
+                    </div>
+                    <div class="mt-auto d-flex flex-wrap gap-2">
+                        @if (s9Panel?.Url is { } s9Url)
+                        {
+                            <a class="btn btn-sm btn-outline-primary" id="season-s9-open" href="@(s9Panel.IsCurrent ? "#season-card-s9" : s9Url)">@Resources.SeasonsOpenPanel</a>
+                        }
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-12 col-lg-4">
+            <section class="card h-100" id="season-card-arena">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <strong>@Resources.ArenaButton</strong>
+                    <span class="badge @(settings.ArenaEnabled ? "text-bg-success" : "text-bg-secondary")" id="season-arena-status">@(settings.ArenaEnabled ? Resources.SeasonsStatusOn : Resources.SeasonsStatusOff)</span>
+                </div>
+                <div class="card-body d-flex flex-column gap-2">
+                    <p class="mb-1">@Resources.ArenaButtonHint</p>
+                    <p class="small text-muted mb-1">@Resources.ArenaEnabledHint</p>
+                    <p class="small font-monospace mb-2">@this.FormatPorts(settings.ConnectServerPort + 200, settings.AdminPort + 2)</p>
+                    <div class="form-check form-switch mb-2">
+                        <input id="arena-enabled"
+                               type="checkbox"
+                               class="form-check-input"
+                               disabled="@(!this.IsHostComputer)"
+                               @bind="settings.ArenaEnabled" />
+                        <label class="form-check-label" for="arena-enabled">@Resources.SeasonsEnableLabel</label>
+                    </div>
+                    <div class="mt-auto d-flex flex-wrap gap-2">
+                        @if (arenaPanel?.Url is { } arenaUrl)
+                        {
+                            <a class="btn btn-sm btn-outline-primary" id="season-arena-open" href="@(arenaPanel.IsCurrent ? "#season-card-arena" : arenaUrl)">@Resources.SeasonsOpenPanel</a>
+                        }
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    @if (this.IsHostComputer)
+    {
+        <div class="d-flex flex-wrap gap-2 align-items-center mb-4">
+            <button type="button" id="save-seasons-btn" class="btn btn-primary" @onclick="this.SaveAsync">@Resources.SeasonsSaveButton</button>
+            @if (this.RestartService.IsSupported)
+            {
+                @if (!this._confirmRestart)
+                {
+                    <button type="button" id="restart-seasons-btn" class="btn btn-outline-danger" @onclick="() => this._confirmRestart = true">@Resources.SeasonsRestartButton</button>
+                }
+                else
+                {
+                    <button type="button" id="confirm-restart-seasons-btn" class="btn btn-danger" @onclick="this.RestartAsync">@Resources.SeasonsRestartConfirm</button>
+                    <button type="button" id="cancel-restart-seasons-btn" class="btn btn-outline-secondary" @onclick="() => this._confirmRestart = false">@Resources.SeasonsRestartCancel</button>
+                }
+            }
+        </div>
+    }
+}

@@ -1,5 +1,5 @@
 // <copyright file="MarketPlugIn.cs" company="HNMO">
-// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// Proprietary and confidential. All rights reserved. Unauthorized copying, modification, or distribution is prohibited.
 // </copyright>
 
 namespace HNMO.GameLogic.PlugIns.ItemMarket;
@@ -465,11 +465,12 @@ public sealed class MarketPlugIn :
             }
 
             account.SetCashShopCoins(cfg.AccessFeeCoinType, balance - fee);
-            CashShopBalanceReceipt.Record(player.PersistenceContext, account, cfg.AccessFeeCoinType, -fee, CashShopBalanceReason.MarketAccess);
+            var receipt = CashShopBalanceReceipt.Record(player.PersistenceContext, account, cfg.AccessFeeCoinType, -fee, CashShopBalanceReason.MarketAccess);
             if (!await player.SaveProgressAsync().ConfigureAwait(false))
             {
                 // Nothing is bought when the payment couldn't be saved: the coins go back.
                 account.SetCashShopCoins(cfg.AccessFeeCoinType, account.GetCashShopCoins(cfg.AccessFeeCoinType) + fee);
+                await CashShopBalanceReceipt.RemoveAsync(player.PersistenceContext, receipt).ConfigureAwait(false);
                 await this.NotifyAsync(player, "AccessFailed", "The payment couldn't be saved; no coins were taken. Please try again.", "Không lưu được giao dịch, chưa trừ xu. Vui lòng thử lại.").ConfigureAwait(false);
                 return;
             }

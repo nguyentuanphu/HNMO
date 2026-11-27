@@ -11,12 +11,13 @@ using HNMO.Persistence;
 using HNMO.PlugIns;
 using HNMO.Web.AdminPanel.API;
 using HNMO.Web.AdminPanel.Operations;
+using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.Shared.Components.Toast;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 
 /// <summary>
-/// Admin configuration and activity log page for <see cref="JewelBankPlugIn"/>.
+/// Admin configuration and database receipt history page for <see cref="JewelBankPlugIn"/>.
 /// </summary>
 public partial class JewelBank : ComponentBase
 {
@@ -25,14 +26,19 @@ public partial class JewelBank : ComponentBase
     private bool _isActive;
     private bool _isLoading = true;
     private bool _isSaving;
+    private bool _isImporting;
     private bool _showHelp;
-    private List<JewelBankLogEntry> _log = [];
+    private IReadOnlyList<AssetOperationSummary> _receipts = [];
+    private JewelBankImportReport? _importPreview;
 
     [Inject]
     private IPersistenceContextProvider PersistenceContextProvider { get; set; } = null!;
 
     [Inject]
     private PluginWriteOperations PluginOperations { get; set; } = null!;
+
+    [Inject]
+    private JewelBankOperations JewelBankOperations { get; set; } = null!;
 
     [Inject]
     private IToastService ToastService { get; set; } = null!;
@@ -91,8 +97,8 @@ public partial class JewelBank : ComponentBase
             cfg = JsonSerializer.Deserialize<JewelBankConfiguration>(JsonSerializer.Serialize(cfg)) ?? new JewelBankConfiguration();
             this._configuration = cfg;
 
-            var store = JewelBankStore.Open(cfg.FileName);
-            this._log = store.Read(d => d.Log.Take(100).ToList());
+            this._receipts = await this.JewelBankOperations.LoadReceiptsAsync(100).ConfigureAwait(true);
+            this._importPreview = await this.JewelBankOperations.PreviewImportAsync(cfg.FileName).ConfigureAwait(true);
         }
         catch (Exception ex)
         {
@@ -102,6 +108,40 @@ public partial class JewelBank : ComponentBase
         finally
         {
             this._isLoading = false;
+        }
+    }
+
+    private async Task RunImportAsync()
+    {
+        if (this._configuration is not { } cfg || this._isImporting)
+        {
+            return;
+        }
+
+        this._isImporting = true;
+        try
+        {
+            var result = await this.JewelBankOperations.RunImportAsync(cfg.FileName).ConfigureAwait(true);
+            this.ToastService.ShowSuccess(string.Format(
+                CultureInfo.CurrentUICulture,
+                Resources.JewelBankImportDone,
+                result.Imported.Count,
+                result.AlreadyImported,
+                result.Conflicts.Count));
+            await this.LoadAsync().ConfigureAwait(true);
+        }
+        catch (AdminOperationException ex)
+        {
+            this.ToastService.ShowError(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            this.Logger.LogError(ex, "Error importing Jewel Bank JSON data.");
+            this.ToastService.ShowError(ex.Message);
+        }
+        finally
+        {
+            this._isImporting = false;
         }
     }
 

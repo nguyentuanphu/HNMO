@@ -26,6 +26,7 @@ public partial class S6Events : ComponentBase
     private S6EventsConfiguration? _configuration;
     private S6EventsState _state = new();
     private string _lmsTimesText = "20:30";
+    private string _lorenTimesText = "20:00";
     private bool _isActive;
     private bool _isLoading = true;
     private bool _isSaving;
@@ -116,6 +117,7 @@ public partial class S6Events : ComponentBase
             this._configuration = JsonSerializer.Deserialize<S6EventsConfiguration>(JsonSerializer.Serialize(cfg))
                 ?? new S6EventsConfiguration();
             this._lmsTimesText = string.Join(", ", this._configuration.LmsDailyTimes);
+            this._lorenTimesText = string.Join(", ", this._configuration.LorenDeepDailyTimes);
             this.ReloadState();
         }
         catch (Exception ex)
@@ -146,8 +148,12 @@ public partial class S6Events : ComponentBase
             cfg.LmsDailyTimes = this._lmsTimesText
                 .Split([',', ';'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                 .ToList();
+            cfg.LorenDeepDailyTimes = this._lorenTimesText
+                .Split([',', ';'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                .ToList();
             cfg.LmsRegistrationMinutes = Math.Clamp(cfg.LmsRegistrationMinutes, 1, 15);
             cfg.LmsDurationMinutes = Math.Clamp(cfg.LmsDurationMinutes, 1, 60);
+            cfg.LorenDeepDurationMinutes = Math.Clamp(cfg.LorenDeepDurationMinutes, 5, 120);
             cfg.LmsMinPlayers = Math.Clamp(cfg.LmsMinPlayers, 2, 50);
             cfg.LmsMinLevel = Math.Clamp(cfg.LmsMinLevel, 1, 1000);
 
@@ -188,6 +194,40 @@ public partial class S6Events : ComponentBase
         finally
         {
             this._isSaving = false;
+        }
+    }
+
+    private async Task TriggerLorenDeepNowAsync()
+    {
+        try
+        {
+            var contexts = (this.ServiceProvider.GetService<IList<IManageableServer>>() ?? [])
+                .OfType<IGameServerContextProvider>()
+                .Select(s => (IGameContext)s.Context)
+                .ToList();
+            var result = await S6EventsPlugIn.TriggerLorenDeepNowAsync(contexts).ConfigureAwait(true);
+            switch (result)
+            {
+                case "Ok":
+                    this._statusIsError = false;
+                    this._statusMessage = this.L("Loren Deep assault wave 1 launched on Valley of Loren!", "Đã phát động đợt 1 Loren Deep tại Thung Lũng Loren!");
+                    this.ToastService.ShowSuccess(this._statusMessage);
+                    break;
+                case "AlreadyRunning":
+                    this._statusIsError = true;
+                    this._statusMessage = this.L("A Loren Deep assault is already active.", "Sự kiện Loren Deep đang diễn ra.");
+                    break;
+                default:
+                    this._statusIsError = true;
+                    this._statusMessage = this.L("Enable Plug-in Active + Feature Enabled + Loren Deep and click Save first.", "Hãy bật Plug-in + Tính Năng + Loren Deep rồi nhấn Lưu trước.");
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            this._statusIsError = true;
+            this._statusMessage = ex.Message;
+            this.ToastService.ShowError(ex.Message);
         }
     }
 }

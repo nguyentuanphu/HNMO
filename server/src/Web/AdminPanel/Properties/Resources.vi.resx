@@ -5217,7 +5217,7 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   <data name="SeasonSixButtonHint" xml:space="preserve"><value>Thế giới cổ điển: bản đồ, quái, vật phẩm, rơi đồ, cửa hàng, sự kiện và tỉ lệ của Season 6.3.</value></data>
   <data name="SeasonNineButtonHint" xml:space="preserve"><value>Thế giới mới: bản đồ, quái, vật phẩm, rơi đồ, cửa hàng, sự kiện và tỉ lệ của Season 9.</value></data>
   <data name="SeasonYouAreHere" xml:space="preserve"><value>Bạn đang ở đây</value></data>
-  <data name="SeasonNineOff" xml:space="preserve"><value>Đang tắt. Bật trong Cài đặt máy chủ (Máy chủ Season 9), rồi khởi động lại HNMO.</value></data>
+  <data name="SeasonNineOff" xml:space="preserve"><value>Đang tắt. Bật trong trang Các Season, rồi khởi động lại HNMO.</value></data>
   <data name="SharedSettingsButton" xml:space="preserve"><value>Cài đặt chung</value></data>
   <data name="SharedSettingsButtonHint" xml:space="preserve"><value>Cả hai season: tài khoản, xu, trang web, tin tức, cấm, người quản trị và cài đặt máy chủ.</value></data>
   <data name="SeasonBadgeTitle" xml:space="preserve"><value>Trang quản trị này cài đặt {0}</value></data>
@@ -5238,7 +5238,7 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
     <value>Đấu giữa các server và season: nhân vật đấu trường, đấu xếp hạng, đấu đội và sự kiện.</value>
   </data>
   <data name="ArenaOff" xml:space="preserve">
-    <value>Đang tắt: chọn "Đấu trường" trong Cài đặt máy chủ rồi khởi động lại HNMO.</value>
+    <value>Đang tắt: bật &quot;Đấu trường&quot; trong trang Các Season rồi khởi động lại HNMO.</value>
   </data>
   <data name="ArenaEnabledHint" xml:space="preserve">
     <value>Trình khởi động chạy thêm Đấu trường HNMO (database riêng, cổng connect server +200, trang quản trị cách hai cổng; dùng chung tài khoản). Khởi động lại HNMO sau khi đổi.</value>
@@ -5281,5 +5281,125 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   </data>
   <data name="ActivityLogAfter" xml:space="preserve">
     <value>Sau</value>
+  </data>
+  <data name="SeasonsPageTitle" xml:space="preserve">
+    <value>Các Season &amp; Thế giới</value>
+  </data>
+  <data name="SeasonsPageIntro" xml:space="preserve">
+    <value>Bật hoặc tắt Season 9 và Đấu trường (Arena) cùng Season 6.3 trên một trang, xem cổng kết nối và mở từng bảng quản trị.</value>
+  </data>
+  <data name="SeasonsPageHelp" xml:space="preserve">
+    <value>Season 6.3 luôn chạy làm thế giới chính giữ tài khoản dùng chung, coin và cài đặt website. Bật hoặc tắt Season 9 / Arena tại đây, bấm Lưu rồi khởi động lại HNMO để áp dụng.</value>
+  </data>
+  <data name="SeasonsHostOnly" xml:space="preserve">
+    <value>Chỉ có thể lưu thay đổi bật/tắt Season ngay trên máy chủ gốc (vd: http://localhost:8095/seasons). Hiện đang ở chế độ chỉ xem.</value>
+  </data>
+  <data name="SeasonsPrimaryBadge" xml:space="preserve">
+    <value>Chính (luôn bật)</value>
+  </data>
+  <data name="SeasonsStatusOn" xml:space="preserve">
+    <value>Đang bật</value>
+  </data>
+  <data name="SeasonsStatusOff" xml:space="preserve">
+    <value>Đang tắt</value>
+  </data>
+  <data name="SeasonsEnableLabel" xml:space="preserve">
+    <value>Bật máy chủ</value>
+  </data>
+  <data name="SeasonsAlwaysEnabledNote" xml:space="preserve">
+    <value>Luôn khởi chạy cùng HNMO; quản lý đăng nhập dùng chung, số dư Coin và cấu hình website.</value>
+  </data>
+  <data name="SeasonsPortsSummary" xml:space="preserve">
+    <value>Cổng Connect {0} · Cổng Admin {1}</value>
+  </data>
+  <data name="SeasonsOpenPanel" xml:space="preserve">
+    <value>Mở bảng quản trị</value>
+  </data>
+  <data name="SeasonsManageLink" xml:space="preserve">
+    <value>Quản lý Season</value>
+  </data>
+  <data name="SeasonsSaveButton" xml:space="preserve">
+    <value>Lưu cài đặt Season</value>
+  </data>
+  <data name="SeasonsSaved" xml:space="preserve">
+    <value>Đã lưu cài đặt Season.</value>
+  </data>
+  <data name="SeasonsRestartRequired" xml:space="preserve">
+    <value>Trạng thái bật/tắt Season đã thay đổi. Hãy khởi động lại HNMO để launcher bật hoặc dừng các thế giới tương ứng.</value>
+  </data>
+  <data name="SeasonsRestartButton" xml:space="preserve">
+    <value>Khởi động lại HNMO</value>
+  </data>
+  <data name="SeasonsRestartConfirm" xml:space="preserve">
+    <value>Xác nhận khởi động lại</value>
+  </data>
+  <data name="SeasonsRestartCancel" xml:space="preserve">
+    <value>Hủy</value>
+  </data>
+  <data name="SeasonsRestartSent" xml:space="preserve">
+    <value>Đã gửi yêu cầu khởi động lại. Vui lòng tải lại trang sau vài giây.</value>
+  </data>
+  <data name="JewelBankReceiptsHeading" xml:space="preserve">
+    <value>Biên lai cơ sở dữ liệu Ngân hàng ngọc gần đây (giờ Sydney)</value>
+  </data>
+  <data name="JewelBankReceiptsEmpty" xml:space="preserve">
+    <value>Chưa có biên lai cơ sở dữ liệu nào.</value>
+  </data>
+  <data name="JewelBankColTime" xml:space="preserve">
+    <value>Thời gian (Sydney)</value>
+  </data>
+  <data name="JewelBankColAccount" xml:space="preserve">
+    <value>Tài khoản</value>
+  </data>
+  <data name="JewelBankColKind" xml:space="preserve">
+    <value>Loại</value>
+  </data>
+  <data name="JewelBankColDetail" xml:space="preserve">
+    <value>Chi tiết</value>
+  </data>
+  <data name="JewelBankColPending" xml:space="preserve">
+    <value>Đang chờ giao</value>
+  </data>
+  <data name="JewelBankColSource" xml:space="preserve">
+    <value>Nguồn</value>
+  </data>
+  <data name="JewelBankImportHeading" xml:space="preserve">
+    <value>Chuyển dữ liệu từ JSON sang cơ sở dữ liệu</value>
+  </data>
+  <data name="JewelBankImportDescription" xml:space="preserve">
+    <value>Báo cáo chạy thử (dry-run) số dư ngọc và lệnh rút chờ từ tệp JSON cũ so với biên lai trong cơ sở dữ liệu.</value>
+  </data>
+  <data name="JewelBankImportChecksum" xml:space="preserve">
+    <value>Mã kiểm tra đầu vào</value>
+  </data>
+  <data name="JewelBankImportWouldImport" xml:space="preserve">
+    <value>Sẽ nhập</value>
+  </data>
+  <data name="JewelBankImportAlready" xml:space="preserve">
+    <value>Đã nhập trước đó</value>
+  </data>
+  <data name="JewelBankImportConflicts" xml:space="preserve">
+    <value>Xung đột</value>
+  </data>
+  <data name="JewelBankImportUnknownAccounts" xml:space="preserve">
+    <value>Tài khoản không tồn tại</value>
+  </data>
+  <data name="JewelBankImportTotals" xml:space="preserve">
+    <value>Tổng JSON</value>
+  </data>
+  <data name="JewelBankImportPending" xml:space="preserve">
+    <value>Rút chờ JSON</value>
+  </data>
+  <data name="JewelBankImportRunButton" xml:space="preserve">
+    <value>Chạy nhập vào CSDL</value>
+  </data>
+  <data name="JewelBankImportRunHint" xml:space="preserve">
+    <value>Nhập số dư ngọc và lệnh rút chờ chưa chuyển từ tệp JSON sang PostgreSQL (an toàn khi chạy lại).</value>
+  </data>
+  <data name="JewelBankImportDone" xml:space="preserve">
+    <value>Đã nhập Ngân hàng ngọc: {0} mục mới, {1} đã có, {2} xung đột.</value>
+  </data>
+  <data name="JewelBankImportNothing" xml:space="preserve">
+    <value>Không có mục JSON nào cần nhập.</value>
   </data>
 </root>

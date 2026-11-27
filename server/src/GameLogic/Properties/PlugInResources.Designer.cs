@@ -6257,6 +6257,12 @@ namespace HNMO.GameLogic.Properties {
         /// <summary>Gets the localized Moss gamble price option description.</summary>
         public static string MossGambleConfiguration_PriceZen_Description => ResourceManager.GetString("MossGambleConfiguration_PriceZen_Description", resourceCulture)!;
 
+        /// <summary>Gets the localized weighted Excellent selection option name.</summary>
+        public static string MossGambleConfiguration_UseWeightedExcellentSelection_Name => ResourceManager.GetString("MossGambleConfiguration_UseWeightedExcellentSelection_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized weighted Excellent selection option description.</summary>
+        public static string MossGambleConfiguration_UseWeightedExcellentSelection_Description => ResourceManager.GetString("MossGambleConfiguration_UseWeightedExcellentSelection_Description", resourceCulture)!;
+
         /// <summary>Gets the localized Monster AI Rules plug-in name.</summary>
         public static string MonsterAiPlugIn_Name => ResourceManager.GetString("MonsterAiPlugIn_Name", resourceCulture)!;
 

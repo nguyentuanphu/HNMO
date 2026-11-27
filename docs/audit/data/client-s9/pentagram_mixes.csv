@@ -1,0 +1,31 @@
+source,record,category,recipeId,rateOutOf10000,zen,reqLevel,flag21,flag22,materials
+PentagramMixNeedSource.bmd,0,0,1,8000,100000,0,0,0,12:148(Mithril Fragment Bunch)x1 + 12:15(Jewel of Chaos)x1
+PentagramMixNeedSource.bmd,1,0,2,6000,100000,0,0,0,12:149(Elixir Fragment Bunch)x1 + 12:15(Jewel of Chaos)x1
+PentagramMixNeedSource.bmd,2,0,3,5000,100000,0,0,0,12:145(Mithril)x1 + 12:147(Elixir)x1 + 14:13(Jewel of Bless)x1
+PentagramMixNeedSource.bmd,3,0,4,5000,100000,0,0,0,12:200(Muren's Book of Magic)x1 + 14:42(Jewel of Harmony)x1
+PentagramMixNeedSource.bmd,4,0,5,5000,100000,0,0,0,12:201(Scroll of Etramu)x1 + 14:42(Jewel of Harmony)x1
+PentagramMixNeedSource.bmd,5,0,6,5000,100000,0,0,0,12:202(Lorencia Knights' Iron Shield)x1 + 14:42(Jewel of Harmony)x1
+PentagramMixNeedSource.bmd,6,0,7,5000,100000,0,0,0,12:203(Iron Shield of the Magic)x1 + 14:42(Jewel of Harmony)x1
+PentagramMixNeedSource.bmd,7,0,8,5000,100000,0,0,0,12:204(Hero Elixir)x1 + 14:42(Jewel of Harmony)x1
+PentagramMixNeedSource.bmd,8,0,9,5000,100000,0,0,0,12:205(Brave Hero Elixir)x1 + 14:42(Jewel of Harmony)x1
+PentagramMixNeedSource.bmd,9,0,10,5000,100000,0,0,0,12:206(Gladiator's Dagger)x1 + 14:42(Jewel of Harmony)x1
+PentagramMixNeedSource.bmd,10,0,11,5000,100000,0,0,0,12:207(Merciless Gladiator's Dagger)x1 + 14:42(Jewel of Harmony)x1
+PentagramMixNeedSource.bmd,11,0,12,5000,100000,0,0,0,12:208(Kundun's Madness Blade)x1 + 14:42(Jewel of Harmony)x1
+PentagramMixNeedSource.bmd,12,0,13,5000,100000,0,0,0,12:209(Kundun's Magic Spell Scroll)x1 + 14:42(Jewel of Harmony)x1
+PentagramMixNeedSource.bmd,13,0,14,5000,100000,0,0,0,12:210(Empire Guardians' Stronghold)x1 + 14:42(Jewel of Harmony)x1
+PentagramMixNeedSource.bmd,14,0,15,5000,100000,0,0,0,12:211(Ancient Icarus Scroll)x1 + 14:42(Jewel of Harmony)x1
+PentagramMixNeedSource.bmd,15,0,16,5000,100000,0,0,0,12:212(Arca's Prophecy)x1 + 14:42(Jewel of Harmony)x1
+PentagramMixNeedSource.bmd,16,0,17,5000,100000,0,0,0,12:213(Antonia's Sword)x1 + 14:42(Jewel of Harmony)x1
+PentagramMixNeedSource.bmd,17,0,18,5000,100000,0,0,0,12:214(Kundun's Seal Scroll)x1 + 14:42(Jewel of Harmony)x1
+PentagramMixNeedSource.bmd,18,2,1,0,100000,0,0,1,12:150(Jewel Combination Frame)x1 + 14:13(Jewel of Bless)x1
+PentagramMixNeedSource.bmd,19,2,2,0,100000,1,0,1,12:150(Jewel Combination Frame)x1 + 14:13(Jewel of Bless)x1
+PentagramMixNeedSource.bmd,20,2,3,0,150000,2,0,1,12:150(Jewel Combination Frame)x1 + 14:13(Jewel of Bless)x1
+PentagramMixNeedSource.bmd,21,2,4,0,200000,3,0,1,12:150(Jewel Combination Frame)x1 + 14:13(Jewel of Bless)x1
+PentagramMixNeedSource.bmd,22,2,5,0,250000,4,0,1,12:150(Jewel Combination Frame)x1 + 14:13(Jewel of Bless)x1
+PentagramMixNeedSource.bmd,23,2,6,0,300000,5,0,1,12:150(Jewel Combination Frame)x1 + 14:13(Jewel of Bless)x1
+PentagramMixNeedSource.bmd,24,2,7,0,350000,6,0,1,12:150(Jewel Combination Frame)x1 + 14:13(Jewel of Bless)x1
+PentagramMixNeedSource.bmd,25,2,8,0,400000,7,0,1,12:150(Jewel Combination Frame)x1 + 14:13(Jewel of Bless)x1
+PentagramMixNeedSource.bmd,26,2,9,0,450000,8,0,1,12:150(Jewel Combination Frame)x1 + 14:13(Jewel of Bless)x1
+PentagramMixNeedSource.bmd,27,2,10,0,500000,9,0,1,12:150(Jewel Combination Frame)x1 + 14:13(Jewel of Bless)x1
+PentagramMixNeedSource.bmd,28,3,2,5000,100000,0,1,1,12:151(Spirit Powder)x1 + 14:13(Jewel of Bless)x1 + 14:14(Jewel of Soul)x1 + Rank1..5Errtel(num=1)x1
+PentagramMixNeedSource.bmd,29,3,3,5000,100000,0,2,1,12:151(Spirit Powder)x2 + 14:13(Jewel of Bless)x2 + 14:14(Jewel of Soul)x2 + Rank1..5Errtel(num=1)x1

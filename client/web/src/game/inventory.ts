@@ -3,6 +3,7 @@
 // Follows the server's packets like the desktop client's InventoryUpdates / StorageUpdates.
 
 import { itemDefinition } from './items.js';
+import { socketBytes } from './socketBytes.js';
 import type { Connection } from '../net/connection.js';
 
 export const EQUIPMENT_SLOTS = 12;
@@ -101,7 +102,7 @@ export function decodeItem(bytes: Uint8Array, at = 0): Item {
     const count = bytes[next] & 0x0f;
     item.socketBonus = bytes[next] >> 4;
     next++;
-    item.sockets = [...bytes.slice(next, next + count)];
+    item.sockets = socketBytes([...bytes.slice(next, next + count)]);
     next += count;
   }
   item.length = next - at;

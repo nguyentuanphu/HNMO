@@ -519,4 +519,14 @@
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>在以第 9 赛季运行时添加 10 张第 9 赛季地图、地形文件、传送门（417-461、474-482）以及第 9 赛季刷怪/NPC 点位。</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Name" xml:space="preserve"><value>第 6 赛季：商人莫斯抽奖商店</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>添加 5 种 2,000,000 金币的莫斯抽奖券（13-71..75），并在商人莫斯（492）商店为空时为其配备抽奖商店。</value></data>
+  <data name="S6EventsMonstersAndItemsUpdatePlugIn_Name" xml:space="preserve"><value>第 6 赛季：活动怪物、采矿点与卡牌物品</value></data>
+  <data name="S6EventsMonstersAndItemsUpdatePlugIn_Description" xml:space="preserve"><value>补充缺少的罗兰深渊怪物（300-303）、被诅咒的哥布林（466）、采矿点（605-607）、潘多拉矿镐（0-41）和拉米卡牌道具（14-215..216）。</value></data>
+  <data name="MasterPassives314To324UpdatePlugIn_Name" xml:space="preserve"><value>第 6 赛季：6-9 阶被动大师技能</value></data>
+  <data name="MasterPassives314To324UpdatePlugIn_Description" xml:space="preserve"><value>添加第 6 赛季 6-9 阶被动大师技能及被动增益（钢铁意志、套装防御强化、复仇、四维/统率增加、三代翅膀攻防吸收强化、最大 AG/攻击/魔攻、受击回蓝红盾以及会心/卓越/双倍/无视防御概率）。</value></data>
+  <data name="AuditDataFixesUpdatePlugIn_Name" xml:space="preserve"><value>2026年11月25日审计的数据修正</value></data>
+  <data name="AuditDataFixesUpdatePlugIn_Description" xml:space="preserve"><value>将2026年11月25日审计的数据修正应用到已有服务器（之前只对新服务器生效）：铁匠汉佐的商店（两件武器占同一格，晨星占了钉锤的格子）；第6季另修正坎塔塔套装的卓越伤害几率（每次攻击都是卓越）和靴子守护选项的SD（700）；在第6季还补上了蓝色巧克力盒和深蓝糖果盒的普通物品（以前只开出金币或卓越物品）。</value></data>
+  <data name="BlessPotionSiegeOnlyUpdatePlugIn_Name" xml:space="preserve"><value>祝福药水仅用于攻城</value></data>
+  <data name="BlessPotionSiegeOnlyUpdatePlugIn_Description" xml:space="preserve"><value>祝福药水不再提高对怪物和玩家的伤害，只对攻城战的城门和雕像有效。</value></data>
+  <data name="AddChaosCardMixesUpdatePlugIn_Name" xml:space="preserve"><value>添加玛雅卡片与合成配方</value></data>
+  <data name="AddChaosCardMixesUpdatePlugIn_Description" xml:space="preserve"><value>添加四种玛雅卡片（14-54、14-92、14-93、14-95），接入玛雅卡片大师合成（MixType 40），并启用商城中的对应礼包。</value></data>
 </root>

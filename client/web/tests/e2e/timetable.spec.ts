@@ -94,6 +94,10 @@ test('in the game: H key and (i) guide open the timetable with Sydney time, maps
   };
 
   await page.keyboard.press('h');
+  // The window asks the real server, which answers "off" (the plug-in is off by default). Feed the test's state only after
+  // that answer, or a slow page shows the real answer on top of it.
+  await expect(page.locator('#hnmoTimetable')).toBeVisible({ timeout: 90_000 });
+  await expect(page.locator('#hnmoTimetable')).not.toContainText('Loading timetable', { timeout: 90_000 });
   await feed(page, payload);
 
   const modal = page.locator('#hnmoTimetable');

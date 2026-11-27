@@ -12,7 +12,7 @@ namespace HNMO.Persistence.EntityFramework.CompiledModels.ForEntityDataContext
     public partial class EntityDataContextModel
     {
         private EntityDataContextModel()
-            : base(skipDetectChanges: false, modelId: new Guid("d90c29e7-a4b2-42f4-ab81-3be009dc33de"), entityTypeCount: 129)
+            : base(skipDetectChanges: false, modelId: new Guid("075c1dc4-b15f-400b-88fe-b82fde54411d"), entityTypeCount: 131)
         {
         }
 
@@ -24,6 +24,7 @@ namespace HNMO.Persistence.EntityFramework.CompiledModels.ForEntityDataContext
             var accountExternalLink = AccountExternalLinkEntityType.Create(this);
             var appearanceData = AppearanceDataEntityType.Create(this);
             var areaSkillSettings = AreaSkillSettingsEntityType.Create(this);
+            var assetOperation = AssetOperationEntityType.Create(this);
             var attributeDefinition = AttributeDefinitionEntityType.Create(this);
             var attributeRelationship = AttributeRelationshipEntityType.Create(this);
             var attributeRequirement = AttributeRequirementEntityType.Create(this);
@@ -110,6 +111,7 @@ namespace HNMO.Persistence.EntityFramework.CompiledModels.ForEntityDataContext
             var itemStatProfile = ItemStatProfileEntityType.Create(this);
             var itemStatTerms = ItemStatTermsEntityType.Create(this);
             var itemStorage = ItemStorageEntityType.Create(this);
+            var jewelBankBalance = JewelBankBalanceEntityType.Create(this);
             var jewelMix = JewelMixEntityType.Create(this);
             var letterBody = LetterBodyEntityType.Create(this);
             var letterHeader = LetterHeaderEntityType.Create(this);
@@ -155,6 +157,7 @@ namespace HNMO.Persistence.EntityFramework.CompiledModels.ForEntityDataContext
             AccountCharacterClassEntityType.CreateForeignKey2(accountCharacterClass, characterClass);
             AccountExternalLinkEntityType.CreateForeignKey1(accountExternalLink, account);
             AppearanceDataEntityType.CreateForeignKey1(appearanceData, characterClass);
+            AssetOperationEntityType.CreateForeignKey1(assetOperation, account);
             AttributeDefinitionEntityType.CreateForeignKey1(attributeDefinition, gameConfiguration);
             AttributeRelationshipEntityType.CreateForeignKey1(attributeRelationship, characterClass);
             AttributeRelationshipEntityType.CreateForeignKey2(attributeRelationship, gameConfiguration);
@@ -323,6 +326,7 @@ namespace HNMO.Persistence.EntityFramework.CompiledModels.ForEntityDataContext
             ItemStatTermsEntityType.CreateForeignKey1(itemStatTerms, attributeDefinition);
             ItemStatTermsEntityType.CreateForeignKey2(itemStatTerms, itemStatProfile);
             ItemStatTermsEntityType.CreateForeignKey3(itemStatTerms, itemLevelBonusTable);
+            JewelBankBalanceEntityType.CreateForeignKey1(jewelBankBalance, account);
             JewelMixEntityType.CreateForeignKey1(jewelMix, gameConfiguration);
             JewelMixEntityType.CreateForeignKey2(jewelMix, itemDefinition);
             JewelMixEntityType.CreateForeignKey3(jewelMix, itemDefinition);
@@ -410,6 +414,7 @@ namespace HNMO.Persistence.EntityFramework.CompiledModels.ForEntityDataContext
             AccountExternalLinkEntityType.CreateAnnotations(accountExternalLink);
             AppearanceDataEntityType.CreateAnnotations(appearanceData);
             AreaSkillSettingsEntityType.CreateAnnotations(areaSkillSettings);
+            AssetOperationEntityType.CreateAnnotations(assetOperation);
             AttributeDefinitionEntityType.CreateAnnotations(attributeDefinition);
             AttributeRelationshipEntityType.CreateAnnotations(attributeRelationship);
             AttributeRequirementEntityType.CreateAnnotations(attributeRequirement);
@@ -496,6 +501,7 @@ namespace HNMO.Persistence.EntityFramework.CompiledModels.ForEntityDataContext
             ItemStatProfileEntityType.CreateAnnotations(itemStatProfile);
             ItemStatTermsEntityType.CreateAnnotations(itemStatTerms);
             ItemStorageEntityType.CreateAnnotations(itemStorage);
+            JewelBankBalanceEntityType.CreateAnnotations(jewelBankBalance);
             JewelMixEntityType.CreateAnnotations(jewelMix);
             LetterBodyEntityType.CreateAnnotations(letterBody);
             LetterHeaderEntityType.CreateAnnotations(letterHeader);

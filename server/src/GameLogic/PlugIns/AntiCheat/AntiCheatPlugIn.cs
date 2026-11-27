@@ -1,5 +1,5 @@
 // <copyright file="AntiCheatPlugIn.cs" company="HNMO">
-// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// Proprietary and confidential. All rights reserved. Unauthorized copying, modification, or distribution is prohibited.
 // </copyright>
 
 namespace HNMO.GameLogic.PlugIns.AntiCheat;
@@ -163,7 +163,7 @@ public sealed class AntiCheatPlugIn :
         var nowTimestamp = this._timeProvider.GetTimestamp();
         var nowUtc = this._timeProvider.GetUtcNow().UtcDateTime;
         var tracker = this._trackers.GetOrCreateValue(player);
-        var attackSpeed = player.Attributes[Stats.AttackSpeed];
+        var attackSpeed = Math.Max(player.Attributes[Stats.AttackSpeed], player.Attributes[Stats.MagicSpeed]);
         var agility = player.Attributes[Stats.TotalAgility];
 
         double? elapsedMs = null;
@@ -172,7 +172,7 @@ public sealed class AntiCheatPlugIn :
         {
             if (tracker.LastAttackTimestamp != 0)
             {
-                elapsedMs = (nowTimestamp - tracker.LastAttackTimestamp) * 1000.0 / Stopwatch.Frequency;
+                elapsedMs = this._timeProvider.GetElapsedTime(tracker.LastAttackTimestamp, nowTimestamp).TotalMilliseconds;
             }
 
             tracker.LastAttackTimestamp = nowTimestamp;

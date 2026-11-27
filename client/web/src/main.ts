@@ -1167,10 +1167,12 @@ interface WebsiteServerMeta {
   zenRate?: number;
 }
 
-async function fetchServerMetadata(): Promise<Map<number, WebsiteServerMeta>> {
+/** The worlds and servers of a server program's website data: Season 6.3's at /website/data, Season 9's own program
+ * at /website/data/s9 (its server ids start at 0 again). */
+async function fetchServerMetadata(url = '/website/data'): Promise<Map<number, WebsiteServerMeta>> {
   const meta = new Map<number, WebsiteServerMeta>();
   try {
-    const response = await fetch('/website/data', {
+    const response = await fetch(url, {
       cache: 'no-store',
       signal: AbortSignal.timeout(1200),
     });
@@ -1235,6 +1237,13 @@ async function fetchServerMetadata(): Promise<Map<number, WebsiteServerMeta>> {
     /* Optional grouped world & VIP server metadata when offline or standalone relay. */
   }
   return meta;
+}
+
+/** The start screen's data of a Season 9 server: its own program's, else a Season 9 world of Season 6.3's data. */
+export function seasonNineServerMeta(id: number, own: Map<number, WebsiteServerMeta>, seasonSix: Map<number, WebsiteServerMeta>): WebsiteServerMeta | undefined {
+  const mine = own.get(id);
+  if (mine) return { ...mine, season: 's9' };
+  return seasonSix.get(id)?.season === 's9' ? seasonSix.get(id) : undefined;
 }
 
 export function describeServerChoice(id: number, load: number, meta?: WebsiteServerMeta, vi = currentLanguage() === 'vi', inSeasonColumn = false): string {
@@ -1309,16 +1318,18 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   // Season 9 and the Arena run as their own programs with their own connect servers (seasons.json says their ports);
   // their servers are listed next to Season 6.3's, each asking its own connect server for the address.
   const { s9: seasonNineConnect, arena: arenaConnect } = await otherConnectServers(connectServer);
-  const [seasonSixServers, seasonNineServers, arenaServers, serverMeta] = await Promise.all([
+  const [seasonSixServers, seasonNineServers, arenaServers, serverMeta, seasonNineMeta] = await Promise.all([
     fetchServerList(settings.relay, connectServer),
     seasonNineConnect ? fetchServerList(settings.relay, seasonNineConnect).catch(() => [] as ServerListEntry[]) : Promise.resolve([] as ServerListEntry[]),
     arenaConnect ? fetchServerList(settings.relay, arenaConnect).catch(() => [] as ServerListEntry[]) : Promise.resolve([] as ServerListEntry[]),
     fetchServerMetadata(),
+    seasonNineConnect ? fetchServerMetadata('/website/data/s9') : Promise.resolve(new Map<number, WebsiteServerMeta>()),
   ]);
   const servers: SeasonServer[] = [
     ...seasonSixServers.map((s) => ({ ...s, connect: connectServer, season: serverMeta.get(s.id)?.season ?? 's6', meta: serverMeta.get(s.id) })),
-    // A Season 9 program's server ids start at 0 again: the website's world data names them only for Season 9 worlds.
-    ...seasonNineServers.map((s) => ({ ...s, connect: seasonNineConnect!, season: 's9' as const, meta: serverMeta.get(s.id)?.season === 's9' ? serverMeta.get(s.id) : undefined })),
+    // A Season 9 program's server ids start at 0 again: its own program's world data names them (as Season 6.3's
+    // names its servers); a web server without it falls back to Season 9 worlds of Season 6.3's data.
+    ...seasonNineServers.map((s) => ({ ...s, connect: seasonNineConnect!, season: 's9' as const, meta: seasonNineServerMeta(s.id, seasonNineMeta, serverMeta) })),
     // The Arena plays on the base game data (Season 6.3's), in a column of its own.
     ...arenaServers.map((s) => ({ ...s, connect: arenaConnect!, season: 's6' as const, column: 'arena' as const, meta: undefined })),
   ];
@@ -2178,6 +2189,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     send: (name, fields) => connection.send('ClientToServer', name, fields),
     message: (text) => chat.add(text, 'system'),
     anchor: () => (itemWindows.vault.isOpen && itemWindows.vault.panel ? itemWindows.vault.panel.getBoundingClientRect() : null),
+    pageChanged: () => itemWindows.vaultPageChanged(),
   });
   state.vaultPages = vaultPages;
   connection.onPacket((bytes) => { vaultPages.handle(bytes); });

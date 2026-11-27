@@ -31,7 +31,9 @@ internal class SeasonNineOnlyItemsDataTest
 
         await plugin.ApplyUpdateAsync(context, config).ConfigureAwait(false);
 
-        Assert.That(config.Items.Count, Is.EqualTo(beforeCount + 264));
+        // Pandora Pick (0:41) is already ensured in Season 6 by S6EventsMonstersAndItemsUpdatePlugIn,
+        // so SeasonNineOnlyItemsUpdatePlugIn adds the remaining 263 Season 9-only items.
+        Assert.That(config.Items.Count, Is.EqualTo(beforeCount + 263));
 
         var chinese = CultureInfo.GetCultureInfo("zh-CN");
         var vietnamese = CultureInfo.GetCultureInfo("vi");
@@ -69,8 +71,9 @@ internal class SeasonNineOnlyItemsDataTest
             Assert.That(wooparoo.Name.ValueInNeutralLanguage, Is.EqualTo("Wooparoo"));
 
             // Verify every added item resolves a SeasonNineItemNames caption in en, vi, de, zh-CN.
+            // Pandora Pick (0:41) is already ensured in Season 6 without a SeasonNineItemNames key (290 - 1 = 289).
             var added = config.Items.Where(i => i.Name.SourceKey?.StartsWith("SeasonNineItemNames/", StringComparison.Ordinal) == true).ToList();
-            Assert.That(added, Has.Count.EqualTo(290));
+            Assert.That(added, Has.Count.EqualTo(289));
             foreach (var item in added)
             {
                 Assert.That(item.Name.GetOwnTranslation(chinese), Is.Not.Null.And.Not.Empty, item.Name.SourceKey);

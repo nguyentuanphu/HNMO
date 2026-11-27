@@ -67,27 +67,68 @@ internal sealed class PlayerPersistence
         return await this.RunExclusiveAsync(
             async () =>
             {
-                await this.SyncSharedCoinsAsync(cancellationToken).ConfigureAwait(false);
-                return await this._player.PersistenceContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                if (HNMO.Persistence.SharedAccountStore.Current is HNMO.Persistence.ICoordinatedSharedCoinStore coordinatedStore
+                    && this._player.Account is { IsBot: false, IsTemplate: false, LoginName.Length: > 0 })
+                {
+                    return await Seasons.SeasonSharedAccounts.SaveWithCoordinatedCoinsAsync(
+                        coordinatedStore,
+                        this._player,
+                        cancellationToken).ConfigureAwait(false);
+                }
+
+                var receipt = await this.SyncSharedCoinsAsync(cancellationToken).ConfigureAwait(false);
+                var saved = false;
+                try
+                {
+                    saved = await this._player.PersistenceContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                    return saved;
+                }
+                finally
+                {
+                    if (!saved && receipt is { } done)
+                    {
+                        await this.UndoSharedCoinsAsync(done).ConfigureAwait(false);
+                    }
+                }
             },
             cancellationToken).ConfigureAwait(false);
     }
 
     // A Season 9 program's coin changes go to the shared balances (Seasons.SeasonSharedAccounts); never blocks the save.
-    private async ValueTask SyncSharedCoinsAsync(CancellationToken cancellationToken)
+    // The receipt lets the save take them back when the local save fails: the shared store must not keep a fee whose
+    // benefit was not saved with it.
+    private async ValueTask<Seasons.CoinSyncReceipt?> SyncSharedCoinsAsync(CancellationToken cancellationToken)
     {
         if (HNMO.Persistence.SharedAccountStore.Current is not { } store)
+        {
+            return null;
+        }
+
+        try
+        {
+            return await Seasons.SeasonSharedAccounts.TrySyncCoinsAsync(store, this._player.Account, cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            this._player.Logger.LogWarning(ex, "Couldn't add the coin changes of [{Account}] to the shared balances; the next save tries again.", this._player.Account?.LoginName);
+            return null;
+        }
+    }
+
+    private async ValueTask UndoSharedCoinsAsync(Seasons.CoinSyncReceipt receipt)
+    {
+        if (HNMO.Persistence.SharedAccountStore.Current is not { } store || this._player.Account is not { } account)
         {
             return;
         }
 
         try
         {
-            await Seasons.SeasonSharedAccounts.SyncCoinsAsync(store, this._player.Account, cancellationToken).ConfigureAwait(false);
+            await Seasons.SeasonSharedAccounts.UndoCoinSyncAsync(store, account, receipt).ConfigureAwait(false);
         }
-        catch (Exception ex) when (ex is not OperationCanceledException)
+        catch (Exception ex)
         {
-            this._player.Logger.LogWarning(ex, "Couldn't add the coin changes of [{Account}] to the shared balances; the next save tries again.", this._player.Account?.LoginName);
+            this._player.Logger.LogWarning(ex, "Couldn't take the coin changes of [{Account}] back from the shared balances after a failed save.", account.LoginName);
         }
     }
 

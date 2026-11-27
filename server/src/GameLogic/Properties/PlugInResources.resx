@@ -2285,4 +2285,6 @@
   <data name="MossGambleConfiguration_Enabled_Description" xml:space="preserve"><value>When turned off, buying gamble vouchers at Moss (492) is refused without charging Zen.</value></data>
   <data name="MossGambleConfiguration_PriceZen_Name" xml:space="preserve"><value>Gamble price (Zen)</value></data>
   <data name="MossGambleConfiguration_PriceZen_Description" xml:space="preserve"><value>Zen charged per gamble roll at Moss the Merchant (default 2,000,000 Zen).</value></data>
+  <data name="MossGambleConfiguration_UseWeightedExcellentSelection_Name" xml:space="preserve"><value>Use suite weighted Excellent option odds</value></data>
+  <data name="MossGambleConfiguration_UseWeightedExcellentSelection_Description" xml:space="preserve"><value>Selects Excellent options using the Season 6/9 server suites weights (10% / 20% / 20% / 20% / 20% / 10%) instead of uniform random picks.</value></data>
 </root>

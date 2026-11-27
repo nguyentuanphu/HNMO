@@ -518,15 +518,15 @@ bool CInGameShop::IsInGameShopOpen()
 
     if (!(Hero->SafeZone) && !(WD_0LORENCIA == gMapManager.WorldActive && WD_3NORIA == gMapManager.WorldActive && WD_2DEVIAS == gMapManager.WorldActive && WD_51HOME_6TH_CHAR == gMapManager.WorldActive))
     {
-        CreateOkMessageBoxWithTitle(I18N::Game::Error, I18N::Game::YouCanOnlyHNMOItemShopInATownOrSafeZone);
-        g_ConsoleDebug->Write(MCD_NORMAL, L"InGameShopStatue.Txt Return - false <%ls>", I18N::Game::YouCanOnlyHNMOItemShopInATownOrSafeZone);
+        CreateOkMessageBoxWithTitle(I18N::Game::Error, I18N::Game::YouCanOnlyOpenTheItemShopInATownOrSafeZone);
+        g_ConsoleDebug->Write(MCD_NORMAL, L"InGameShopStatue.Txt Return - false <%ls>", I18N::Game::YouCanOnlyOpenTheItemShopInATownOrSafeZone);
         return false;
     }
 
     if (g_InGameShopSystem->IsShopOpen() == false)
     {
-        CreateOkMessageBoxWithTitle(I18N::Game::Error, I18N::Game::CannotHNMOItemShopPleaseReconnectToTheGame);
-        g_ConsoleDebug->Write(MCD_NORMAL, L"InGameShopStatue.Txt Return - false <%ls>", I18N::Game::CannotHNMOItemShopPleaseReconnectToTheGame);
+        CreateOkMessageBoxWithTitle(I18N::Game::Error, I18N::Game::CannotOpenTheItemShopPleaseReconnectToTheGame);
+        g_ConsoleDebug->Write(MCD_NORMAL, L"InGameShopStatue.Txt Return - false <%ls>", I18N::Game::CannotOpenTheItemShopPleaseReconnectToTheGame);
         return false;
     }
     g_ConsoleDebug->Write(MCD_NORMAL, L"InGameShopStatue.Txt Return - true");

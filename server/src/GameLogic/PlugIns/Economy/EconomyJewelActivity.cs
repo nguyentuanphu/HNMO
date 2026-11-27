@@ -1,12 +1,12 @@
 // <copyright file="EconomyJewelActivity.cs" company="HNMO">
-// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// Proprietary and confidential. All rights reserved. Unauthorized copying, modification, or distribution is prohibited.
 // </copyright>
 
 namespace HNMO.GameLogic.PlugIns.Economy;
 
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.PlugIns.ActivityLog;
-using HNMO.GameLogic.PlugIns.JewelBank;
+using HNMO.Persistence;
 
 /// <summary>Jewel holdings and recorded hunting activity captured with an existing economy snapshot.</summary>
 /// <param name="InventoryAndVaultPieces">Configured jewel pieces in eligible persisted inventories and vaults.</param>
@@ -19,15 +19,20 @@ public sealed record EconomyJewelActivity(long InventoryAndVaultPieces, bool Log
     /// <summary>Gets the recorded balance in the active bank, or null for a capture without bank data.</summary>
     public long? BankPieces { get; init; }
 
-    internal static long ReadBankPieces(IEnumerable<Account> accounts, string bankFile)
+    /// <summary>Sums the Jewel Bank balances (from the database) of the accounts which count for the economy.</summary>
+    /// <param name="context">A player context.</param>
+    /// <param name="accounts">The accounts.</param>
+    /// <returns>The banked pieces.</returns>
+    public static async ValueTask<long> SumBankPiecesAsync(IPlayerContext context, IEnumerable<Account> accounts)
     {
-        var eligible = accounts.Where(ConfiguredJewelCounter.IsEligible)
-            .Select(account => account.LoginName).ToHashSet(StringComparer.OrdinalIgnoreCase);
-        return JewelBankStore.Open(bankFile).Read(data => data.Accounts
-            .Where(account => eligible.Contains(account.Key))
-            .SelectMany(account => account.Value.Values)
-            .Where(pieces => pieces > 0)
-            .Sum(pieces => (long)pieces));
+        var total = 0L;
+        foreach (var account in accounts.Where(ConfiguredJewelCounter.IsEligible))
+        {
+            var balances = await context.GetJewelBankBalancesAsync(account.GetId()).ConfigureAwait(false);
+            total += balances.Values.Where(pieces => pieces > 0).Sum(pieces => (long)pieces);
+        }
+
+        return total;
     }
 
     internal static EconomyJewelActivity Capture(

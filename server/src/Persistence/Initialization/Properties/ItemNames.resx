@@ -2361,4 +2361,25 @@
   <data name="TalismanOfItemProtection" xml:space="preserve">
     <value>Talisman of Item Protection</value>
   </data>
+  <data name="PandoraPick" xml:space="preserve">
+    <value>Pandora Pick</value>
+  </data>
+  <data name="CardPiece" xml:space="preserve">
+    <value>Card Piece</value>
+  </data>
+  <data name="CardDeck" xml:space="preserve">
+    <value>Card Deck</value>
+  </data>
+  <data name="ChaosCard" xml:space="preserve">
+    <value>Chaos Card</value>
+  </data>
+  <data name="ChaosCardGold" xml:space="preserve">
+    <value>Chaos Card Gold</value>
+  </data>
+  <data name="ChaosCardRare" xml:space="preserve">
+    <value>Chaos Card Rare</value>
+  </data>
+  <data name="ChaosCardMini" xml:space="preserve">
+    <value>Chaos Card Mini</value>
+  </data>
 </root>

@@ -1,5 +1,5 @@
 // <copyright file="MossGambleCatalog.cs" company="HNMO">
-// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// Proprietary and confidential. All rights reserved. Unauthorized copying, modification, or distribution is prohibited.
 // </copyright>
 
 namespace HNMO.GameLogic.PlugIns.MossMerchant;
@@ -57,15 +57,27 @@ internal static class MossGambleCatalog
         Tier(20, 0, 0, 0, 0, [Fixed(14, 96)]),
     ];
 
+    private static readonly int[] WeightedExcellentSlotRates =
+    [
+        100_000,
+        200_000,
+        200_000,
+        200_000,
+        200_000,
+        100_000,
+    ];
+
     /// <summary>Rolls a temporary reward item for voucher number 71..75 against the active game configuration.</summary>
     /// <param name="configuration">The game configuration.</param>
     /// <param name="voucherNumber">The gamble voucher number (71..75).</param>
     /// <param name="randomizer">The randomizer.</param>
+    /// <param name="useWeightedExcellentSelection">Whether to use suite weighted Excellent bit selection (10/20/20/20/20/10%).</param>
     /// <returns>The rolled temporary reward item, or <see langword="null"/> if not a valid voucher.</returns>
     public static TemporaryItem? RollReward(
         GameConfiguration configuration,
         short voucherNumber,
-        IRandomizer randomizer)
+        IRandomizer randomizer,
+        bool useWeightedExcellentSelection = false)
     {
         var tiers = voucherNumber switch
         {
@@ -171,7 +183,9 @@ internal static class MossGambleCatalog
                 var targetCount = Math.Min(excPool.Count, randomizer.NextInt(0, 10) < 9 ? 2 : 3);
                 for (var i = 0; i < targetCount && excPool.Count > 0; i++)
                 {
-                    var idx = randomizer.NextInt(0, excPool.Count);
+                    var idx = useWeightedExcellentSelection
+                        ? PickWeightedExcellentIndex(excPool.Count, randomizer)
+                        : randomizer.NextInt(0, excPool.Count);
                     item.ItemOptions.Add(new ItemOptionLink { ItemOption = excPool[idx] });
                     excPool.RemoveAt(idx);
                 }
@@ -179,6 +193,36 @@ internal static class MossGambleCatalog
         }
 
         return item;
+    }
+
+    private static int PickWeightedExcellentIndex(int poolCount, IRandomizer randomizer)
+    {
+        if (poolCount <= 1)
+        {
+            return 0;
+        }
+
+        var weights = new int[poolCount];
+        var total = 0;
+        for (var i = 0; i < poolCount; i++)
+        {
+            var weight = i < WeightedExcellentSlotRates.Length ? WeightedExcellentSlotRates[i] : 100_000;
+            weights[i] = weight;
+            total += weight;
+        }
+
+        var roll = randomizer.NextInt(0, total);
+        var acc = 0;
+        for (var i = 0; i < poolCount; i++)
+        {
+            acc += weights[i];
+            if (roll < acc)
+            {
+                return i;
+            }
+        }
+
+        return poolCount - 1;
     }
 
     private static bool RollMillion(IRandomizer randomizer, int chancePerMillion)

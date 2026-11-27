@@ -5,11 +5,13 @@
 namespace HNMO.Persistence.Initialization.VersionSeasonSix;
 
 // ReSharper disable StringLiteralTypo
+using System.Linq.Expressions;
 using HNMO.AttributeSystem;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.Attributes;
 using HNMO.Interfaces;
 using HNMO.Persistence.Initialization.CharacterClasses;
+using HNMO.Persistence.Initialization.Properties;
 using HNMO.Persistence.Initialization.Skills;
 
 /// <summary>
@@ -43,6 +45,11 @@ internal class SkillsInitializer : SkillsInitializerBase
     internal const string Formula4319 = "52 / (1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6))))"; // 6
     internal const string Formula914 = "11 / (1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12))"; // 11
     internal const string Formula3822 = "40 / (1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) + 5"; // 20
+    internal const string FormulaRate6 = "0.94 + (((((((level - 30) ^ 3) + 25000) / 499) / 20)))"; // 38
+    internal const string FormulaRate6Value = "(0.94 + (((((((level - 30) ^ 3) + 25000) / 499) / 20)))) * 0.01"; // 38
+    internal const string Formula963 = "(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 8"; // 36
+    internal const string Formula1806Skill37 = "(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 15"; // 37
+    internal const string Formula2769 = "(1 + (((((((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 23"; // 8
     internal const string Formula25587 = "(1 + ( ( ( ( ( ( (level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 85 * 2.5"; // 29
     internal const string Formula30704 = "(1 + ( ( ( ( ( ((level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 85 * 3"; // 33
     internal const string Formula3371 = "(1 + ( ( ( ( ( ( (level - 30) ^ 3) + 25000) / 499) / 6) ) ) ) * 28"; // 35
@@ -51,6 +58,122 @@ internal class SkillsInitializer : SkillsInitializerBase
     internal const string Formula32751 = "(1 + ( ( ( ( ( ( (level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 85 * 3.2"; // 31
     internal const string Formula5418 = "(1 + ( ( ( ( ( ( (level - 30) ^ 3) + 25000) / 499) / 50) * 100) / 12)) * 45"; // 34
 #pragma warning restore SA1600
+
+    private static readonly (SkillNumber Number, Expression<Func<string>> NameResource, CharacterClasses Classes, byte SkillId)[] SeasonSixRankSixToNinePassiveSkills =
+    [
+        (SkillNumber.CastInvincibility, () => SkillNames.CastInvincibility, CharacterClasses.AllMastersExceptFistMaster, 38),
+        (SkillNumber.ArmorSetBonusInc, () => SkillNames.ArmorSetBonusIncrease, CharacterClasses.AllMastersExceptFistMaster, 3),
+        (SkillNumber.Vengeance, () => SkillNames.Vengeance, CharacterClasses.AllMastersExceptFistMaster, 38),
+        (SkillNumber.EnergyIncrease, () => SkillNames.EnergyIncrease, CharacterClasses.AllMastersExceptFistMaster, 17),
+        (SkillNumber.StaminaIncrease, () => SkillNames.StaminaIncrease, CharacterClasses.AllMastersExceptFistMaster, 17),
+        (SkillNumber.AgilityIncrease, () => SkillNames.AgilityIncrease, CharacterClasses.AllMastersExceptFistMaster, 17),
+        (SkillNumber.StrengthIncrease, () => SkillNames.StrengthIncrease, CharacterClasses.AllMastersExceptFistMaster, 17),
+        (SkillNumber.WingofStormAbsPowUp, () => SkillNames.WingOfStormAbsPowUp, CharacterClasses.BladeMaster, 38),
+        (SkillNumber.WingofStormDefPowUp, () => SkillNames.WingOfStormDefPowUp, CharacterClasses.BladeMaster, 17),
+        (SkillNumber.WingofStormAttPowUp, () => SkillNames.WingOfStormAttPowUp, CharacterClasses.BladeMaster, 17),
+        (SkillNumber.MaximumAgIncrease, () => SkillNames.MaximumAgIncrease, CharacterClasses.AllMastersExceptFistMaster, 8),
+        (SkillNumber.MaximumAttackPowerInc, () => SkillNames.MaximumAttackPowerIncrease, CharacterClasses.BladeMaster | CharacterClasses.DuelMaster | CharacterClasses.LordEmperor, 3),
+        (SkillNumber.Inccritdamagerate, () => SkillNames.IncreaseCriticalDamageRate, CharacterClasses.AllMastersExceptFistMaster, 38),
+        (SkillNumber.RestoresallMana, () => SkillNames.RestoresAllMana, CharacterClasses.AllMastersExceptFistMaster, 38),
+        (SkillNumber.RestoresallHp, () => SkillNames.RestoresAllHp, CharacterClasses.AllMastersExceptFistMaster, 38),
+        (SkillNumber.Incexcdamagerate, () => SkillNames.IncreaseExcellentDamageRate, CharacterClasses.AllMastersExceptFistMaster, 38),
+        (SkillNumber.Incdoubledamagerate, () => SkillNames.IncreaseDoubleDamageRate, CharacterClasses.AllMastersExceptFistMaster, 38),
+        (SkillNumber.IncchanceofignoreDef, () => SkillNames.IncreaseChanceOfIgnoreDef, CharacterClasses.AllMastersExceptFistMaster, 38),
+        (SkillNumber.RestoresallSd, () => SkillNames.RestoresAllSd, CharacterClasses.AllMastersExceptFistMaster, 38),
+        (SkillNumber.EternalWingsAbsPowUp, () => SkillNames.EternalWingsAbsPowUp, CharacterClasses.GrandMaster, 38),
+        (SkillNumber.EternalWingsDefPowUp, () => SkillNames.EternalWingsDefPowUp, CharacterClasses.GrandMaster, 17),
+        (SkillNumber.EternalWingsAttPowUp, () => SkillNames.EternalWingsAttPowUp, CharacterClasses.GrandMaster, 17),
+        (SkillNumber.MaximumWizardryInc, () => SkillNames.MaximumWizardryIncrease, CharacterClasses.GrandMaster | CharacterClasses.DuelMaster, 3),
+        (SkillNumber.IllusionWingsAbsPowUp, () => SkillNames.IllusionWingsAbsPowUp, CharacterClasses.HighElf, 38),
+        (SkillNumber.IllusionWingsDefPowUp, () => SkillNames.IllusionWingsDefPowUp, CharacterClasses.HighElf, 17),
+        (SkillNumber.IllusionWingsAttPowUp, () => SkillNames.IllusionWingsAttPowUp, CharacterClasses.HighElf, 17),
+        (SkillNumber.MaximumAttPowerInc, () => SkillNames.MaximumAttackPowerIncrease, CharacterClasses.HighElf, 3),
+        (SkillNumber.DimensionWingsDefPowUp, () => SkillNames.DimensionWingsDefPowUp, CharacterClasses.DimensionMaster, 17),
+        (SkillNumber.DimensionWingsAttPowUp, () => SkillNames.DimensionWingsAttPowUp, CharacterClasses.DimensionMaster, 17),
+        (SkillNumber.MaximumWizCurseInc, () => SkillNames.MaximumWizCurseIncrease, CharacterClasses.DimensionMaster, 3),
+        (SkillNumber.WingofRuinDefPowUp, () => SkillNames.WingOfRuinDefPowUp, CharacterClasses.DuelMaster, 17),
+        (SkillNumber.WingofRuinAttPowUp, () => SkillNames.WingOfRuinAttPowUp, CharacterClasses.DuelMaster, 17),
+        (SkillNumber.EmperorCapeDefPowUp, () => SkillNames.EmperorCapeDefPowUp, CharacterClasses.LordEmperor, 17),
+        (SkillNumber.AddsCommandStat, () => SkillNames.AddsCommandStat, CharacterClasses.LordEmperor, 17),
+        (SkillNumber.EmperorCapeAttPowUp, () => SkillNames.EmperorCapeAttPowUp, CharacterClasses.LordEmperor, 17),
+        (SkillNumber.ReigningCloakAbsPowUp, () => SkillNames.ReigningCloakAbsPowUp, CharacterClasses.FistMaster, 38),
+        (SkillNumber.ReigningCloakDefPowUp, () => SkillNames.ReigningCloakDefPowUp, CharacterClasses.FistMaster, 17),
+        (SkillNumber.ReigningCloakAttPowUp, () => SkillNames.ReigningCloakAttPowUp, CharacterClasses.FistMaster, 17),
+        (SkillNumber.CastInvincibilityFistMaster, () => SkillNames.CastInvincibility, CharacterClasses.FistMaster, 38),
+        (SkillNumber.IncreaseSetDefenseFistMaster, () => SkillNames.ArmorSetBonusIncrease, CharacterClasses.FistMaster, 3),
+        (SkillNumber.VengeanceFistMaster, () => SkillNames.Vengeance, CharacterClasses.FistMaster, 38),
+        (SkillNumber.IncreaseEnergyFistMaster, () => SkillNames.EnergyIncrease, CharacterClasses.FistMaster, 36),
+        (SkillNumber.IncreaseHpFistMaster, () => SkillNames.StaminaIncrease, CharacterClasses.FistMaster, 36),
+        (SkillNumber.IncreaseAgilityFistMaster, () => SkillNames.AgilityIncrease, CharacterClasses.FistMaster, 36),
+        (SkillNumber.IncreaseStrengthFistMaster, () => SkillNames.StrengthIncrease, CharacterClasses.FistMaster, 36),
+        (SkillNumber.IncreaseMaximumAg, () => SkillNames.MaximumAgIncrease, CharacterClasses.FistMaster, 37),
+        (SkillNumber.IncreaseMaximumAttackPower, () => SkillNames.MaximumAttackPowerIncrease, CharacterClasses.FistMaster, 3),
+        (SkillNumber.IncreasesCritDamageChance, () => SkillNames.IncreaseCriticalDamageRate, CharacterClasses.FistMaster, 38),
+        (SkillNumber.RecoverManaFully, () => SkillNames.RestoresAllMana, CharacterClasses.FistMaster, 38),
+        (SkillNumber.RecoversHpFully, () => SkillNames.RestoresAllHp, CharacterClasses.FistMaster, 38),
+        (SkillNumber.IncreaseExcDamageChance, () => SkillNames.IncreaseExcellentDamageRate, CharacterClasses.FistMaster, 38),
+        (SkillNumber.IncreaseDoubleDamageChance, () => SkillNames.IncreaseDoubleDamageRate, CharacterClasses.FistMaster, 38),
+        (SkillNumber.IncreaseIgnoreDefChance, () => SkillNames.IncreaseChanceOfIgnoreDef, CharacterClasses.FistMaster, 38),
+        (SkillNumber.RecoversSdFully, () => SkillNames.RestoresAllSd, CharacterClasses.FistMaster, 38),
+    ];
+
+    private static readonly (SkillNumber Number, AttributeDefinition TargetAttribute, string ValueFormula, string DisplayFormula, byte Rank, byte Root, SkillNumber RequiredSkill)[] SeasonSixRankSixToNineMasterDefinitions =
+    [
+        (SkillNumber.CastInvincibility, Stats.CastInvincibilityChance, FormulaRate6Value, FormulaRate6, 6, 1, SkillNumber.DefenseSuccessRateInc),
+        (SkillNumber.ArmorSetBonusInc, Stats.ArmorSetDefenseBonus, Formula632, Formula632, 6, 1, SkillNumber.Undefined),
+        (SkillNumber.Vengeance, Stats.FullyReflectDamageAfterHitChance, FormulaRate6Value, FormulaRate6, 6, 1, SkillNumber.ArmorSetBonusInc),
+        (SkillNumber.EnergyIncrease, Stats.TotalEnergy, Formula1204, Formula1204, 7, 1, SkillNumber.Undefined),
+        (SkillNumber.StaminaIncrease, Stats.TotalVitality, Formula1204, Formula1204, 7, 1, SkillNumber.Undefined),
+        (SkillNumber.AgilityIncrease, Stats.TotalAgility, Formula1204, Formula1204, 7, 1, SkillNumber.Undefined),
+        (SkillNumber.StrengthIncrease, Stats.TotalStrength, Formula1204, Formula1204, 7, 1, SkillNumber.Undefined),
+        (SkillNumber.WingofStormAbsPowUp, Stats.MasterWingAbsorbBonus, FormulaRate6Value, FormulaRate6, 8, 1, SkillNumber.Undefined),
+        (SkillNumber.WingofStormDefPowUp, Stats.MasterWingDefenseBonus, Formula1204, Formula1204, 8, 1, SkillNumber.Undefined),
+        (SkillNumber.WingofStormAttPowUp, Stats.MasterWingAttackBonus, Formula1204, Formula1204, 9, 1, SkillNumber.WingofStormDefPowUp),
+        (SkillNumber.EternalWingsAbsPowUp, Stats.MasterWingAbsorbBonus, FormulaRate6Value, FormulaRate6, 8, 1, SkillNumber.Undefined),
+        (SkillNumber.EternalWingsDefPowUp, Stats.MasterWingDefenseBonus, Formula1204, Formula1204, 8, 1, SkillNumber.Undefined),
+        (SkillNumber.EternalWingsAttPowUp, Stats.MasterWingAttackBonus, Formula1204, Formula1204, 9, 1, SkillNumber.EternalWingsDefPowUp),
+        (SkillNumber.IllusionWingsAbsPowUp, Stats.MasterWingAbsorbBonus, FormulaRate6Value, FormulaRate6, 8, 1, SkillNumber.Undefined),
+        (SkillNumber.IllusionWingsDefPowUp, Stats.MasterWingDefenseBonus, Formula1204, Formula1204, 8, 1, SkillNumber.Undefined),
+        (SkillNumber.IllusionWingsAttPowUp, Stats.MasterWingAttackBonus, Formula1204, Formula1204, 9, 1, SkillNumber.IllusionWingsDefPowUp),
+        (SkillNumber.DimensionWingsDefPowUp, Stats.MasterWingDefenseBonus, Formula1204, Formula1204, 8, 1, SkillNumber.Undefined),
+        (SkillNumber.DimensionWingsAttPowUp, Stats.MasterWingAttackBonus, Formula1204, Formula1204, 9, 1, SkillNumber.DimensionWingsDefPowUp),
+        (SkillNumber.WingofRuinDefPowUp, Stats.MasterWingDefenseBonus, Formula1204, Formula1204, 8, 1, SkillNumber.Undefined),
+        (SkillNumber.WingofRuinAttPowUp, Stats.MasterWingAttackBonus, Formula1204, Formula1204, 9, 1, SkillNumber.WingofRuinDefPowUp),
+        (SkillNumber.EmperorCapeDefPowUp, Stats.MasterWingDefenseBonus, Formula1204, Formula1204, 8, 1, SkillNumber.Undefined),
+        (SkillNumber.AddsCommandStat, Stats.TotalLeadership, Formula1204, Formula1204, 8, 1, SkillNumber.Undefined),
+        (SkillNumber.EmperorCapeAttPowUp, Stats.MasterWingAttackBonus, Formula1204, Formula1204, 9, 1, SkillNumber.EmperorCapeDefPowUp),
+        (SkillNumber.ReigningCloakAbsPowUp, Stats.MasterWingAbsorbBonus, FormulaRate6Value, FormulaRate6, 8, 1, SkillNumber.Undefined),
+        (SkillNumber.ReigningCloakDefPowUp, Stats.MasterWingDefenseBonus, Formula1204, Formula1204, 8, 1, SkillNumber.Undefined),
+        (SkillNumber.ReigningCloakAttPowUp, Stats.MasterWingAttackBonus, Formula1204, Formula1204, 9, 1, SkillNumber.ReigningCloakDefPowUp),
+        (SkillNumber.MaximumAgIncrease, Stats.MaximumAbility, Formula2769, Formula2769, 6, 2, SkillNumber.MaximumManaIncrease),
+        (SkillNumber.MaximumAttackPowerInc, Stats.MaximumPhysBaseDmg, Formula632, Formula632, 6, 3, SkillNumber.MinimumAttackPowerInc),
+        (SkillNumber.MaximumWizardryInc, Stats.MaximumWizBaseDmg, Formula632, Formula632, 6, 3, SkillNumber.MinimumWizardryInc),
+        (SkillNumber.MaximumAttPowerInc, Stats.MaximumPhysBaseDmg, Formula632, Formula632, 6, 3, SkillNumber.MinimumAttPowerInc),
+        (SkillNumber.MaximumWizCurseInc, Stats.MaxWizardryAndCurseDmgBonus, Formula632, Formula632, 6, 3, SkillNumber.MinimumWizCurseInc),
+        (SkillNumber.Inccritdamagerate, Stats.CriticalDamageChance, FormulaRate6Value, FormulaRate6, 6, 3, SkillNumber.Undefined),
+        (SkillNumber.RestoresallMana, Stats.FullyRecoverManaAfterHitChance, FormulaRate6Value, FormulaRate6, 7, 3, SkillNumber.Undefined),
+        (SkillNumber.RestoresallHp, Stats.FullyRecoverHealthAfterHitChance, FormulaRate6Value, FormulaRate6, 7, 3, SkillNumber.Undefined),
+        (SkillNumber.Incexcdamagerate, Stats.ExcellentDamageChance, FormulaRate6Value, FormulaRate6, 7, 3, SkillNumber.Inccritdamagerate),
+        (SkillNumber.Incdoubledamagerate, Stats.DoubleDamageChance, FormulaRate6Value, FormulaRate6, 8, 3, SkillNumber.Undefined),
+        (SkillNumber.IncchanceofignoreDef, Stats.DefenseIgnoreChance, FormulaRate6Value, FormulaRate6, 8, 3, SkillNumber.Incdoubledamagerate),
+        (SkillNumber.RestoresallSd, Stats.FullyRecoverShieldAfterHitChance, FormulaRate6Value, FormulaRate6, 8, 3, SkillNumber.RestoresallHp),
+        (SkillNumber.CastInvincibilityFistMaster, Stats.CastInvincibilityChance, FormulaRate6Value, FormulaRate6, 6, 1, SkillNumber.IncreaseDefenseSuccessRate),
+        (SkillNumber.IncreaseSetDefenseFistMaster, Stats.ArmorSetDefenseBonus, Formula632, Formula632, 6, 1, SkillNumber.Undefined),
+        (SkillNumber.VengeanceFistMaster, Stats.FullyReflectDamageAfterHitChance, FormulaRate6Value, FormulaRate6, 6, 1, SkillNumber.IncreaseSetDefenseFistMaster),
+        (SkillNumber.IncreaseEnergyFistMaster, Stats.TotalEnergy, Formula963, Formula963, 7, 1, SkillNumber.Undefined),
+        (SkillNumber.IncreaseHpFistMaster, Stats.TotalVitality, Formula963, Formula963, 7, 1, SkillNumber.Undefined),
+        (SkillNumber.IncreaseAgilityFistMaster, Stats.TotalAgility, Formula963, Formula963, 7, 1, SkillNumber.Undefined),
+        (SkillNumber.IncreaseStrengthFistMaster, Stats.TotalStrength, Formula963, Formula963, 7, 1, SkillNumber.Undefined),
+        (SkillNumber.IncreaseMaximumAg, Stats.MaximumAbility, Formula1806Skill37, Formula1806Skill37, 6, 2, SkillNumber.IncreaseMaximumMana),
+        (SkillNumber.IncreaseMaximumAttackPower, Stats.MaximumPhysBaseDmg, Formula632, Formula632, 6, 3, SkillNumber.IncreaseMinimumAttackPower),
+        (SkillNumber.IncreasesCritDamageChance, Stats.CriticalDamageChance, FormulaRate6Value, FormulaRate6, 6, 3, SkillNumber.Undefined),
+        (SkillNumber.RecoverManaFully, Stats.FullyRecoverManaAfterHitChance, FormulaRate6Value, FormulaRate6, 7, 3, SkillNumber.Undefined),
+        (SkillNumber.RecoversHpFully, Stats.FullyRecoverHealthAfterHitChance, FormulaRate6Value, FormulaRate6, 7, 3, SkillNumber.Undefined),
+        (SkillNumber.IncreaseExcDamageChance, Stats.ExcellentDamageChance, FormulaRate6Value, FormulaRate6, 7, 3, SkillNumber.IncreasesCritDamageChance),
+        (SkillNumber.IncreaseDoubleDamageChance, Stats.DoubleDamageChance, FormulaRate6Value, FormulaRate6, 8, 3, SkillNumber.Undefined),
+        (SkillNumber.IncreaseIgnoreDefChance, Stats.DefenseIgnoreChance, FormulaRate6Value, FormulaRate6, 9, 3, SkillNumber.IncreaseDoubleDamageChance),
+        (SkillNumber.RecoversSdFully, Stats.FullyRecoverShieldAfterHitChance, FormulaRate6Value, FormulaRate6, 8, 3, SkillNumber.RecoversHpFully),
+    ];
 
     private static readonly IDictionary<SkillNumber, MagicEffectNumber> EffectsOfSkills = new Dictionary<SkillNumber, MagicEffectNumber>
     {
@@ -450,6 +573,7 @@ internal class SkillsInitializer : SkillsInitializerBase
         this.CreateSkill(SkillNumber.IncreaseMinimumAttackPower, LocalizedString.FromResource(() => SkillNames.IncreaseMinimumAttackPower), CharacterClasses.FistMaster, damage: 22, skillType: SkillType.PassiveBoost);
         this.CreateSkill(SkillNumber.RecoverManaMonsterKills, LocalizedString.FromResource(() => SkillNames.RecoverManaMonsterKills), CharacterClasses.FistMaster, damage: 6, skillType: SkillType.PassiveBoost);
 
+        this.CreateSeasonSixRankSixToNinePassiveSkills();
         this.InitializeEffects();
         this.MapSkillsToEffects();
         this.InitializeMasterSkillData();
@@ -457,6 +581,26 @@ internal class SkillsInitializer : SkillsInitializerBase
         this.CreateSpecialSummonMonsters();
         this.CreateSkillCombos();
         this.InitializeSkillAttributes();
+    }
+
+    /// <summary>
+    /// Adds missing Season 6 rank 6-9 passive master skills, their persistent target attributes, and passive power-ups
+    /// to an existing configuration, leaving already initialized skills and master definitions untouched.
+    /// </summary>
+    internal void AddMissingSeasonSixRankSixToNinePassives()
+    {
+        if (this._masterSkillRoots.Count == 0 && this.GameConfiguration.MasterSkillRoots.Count >= 3)
+        {
+            var roots = this.GameConfiguration.MasterSkillRoots.ToList();
+            for (byte i = 0; i < 3; i++)
+            {
+                this._masterSkillRoots[(byte)(i + 1)] = roots[i];
+            }
+        }
+
+        this.CreateSeasonSixRankSixToNinePassiveSkills();
+        this.InitializeSeasonSixRankSixToNineMasterData();
+        MasterSkillPassivePowerUps.AddMissing(this.Context, this.GameConfiguration);
     }
 
     // ReSharper disable once UnusedMember.Local
@@ -968,7 +1112,7 @@ internal class SkillsInitializer : SkillsInitializerBase
         this.AddPassiveMasterSkillDefinition(SkillNumber.IncreasePvPAttackRate, Stats.AttackRatePvp, AggregateType.AddRaw, Formula32751, 1, 3);
         this.AddPassiveMasterSkillDefinition(SkillNumber.EquippedWeaponStrengthener, Stats.GloveWeaponBonusDamage, AggregateType.AddRaw, Formula502, 2, 3);
         this.AddMasterSkillDefinition(SkillNumber.DefSuccessRateIncPowUp, SkillNumber.IncreaseBlock, SkillNumber.Undefined, 3, 2, SkillNumber.IncreaseBlock, 20, Formula502, Formula502, Stats.IncreaseBlockBonus, AggregateType.AddFinal);
-        this.AddPassiveMasterSkillDefinition(SkillNumber.EquippedWeaponMastery, Stats.GloveWeaponMasteryDoubleDamageChance, AggregateType.AddRaw, Formula120Value, Formula120, 3, 3, SkillNumber.EquippedWeaponStrengthener);
+        this.AddPassiveMasterSkillDefinition(SkillNumber.EquippedWeaponMastery, Stats.GloveWeaponMasteryDoubleDamageChance, AggregateType.AddRaw, Formula120Value, Formula120, 3, 3, SkillNumber.EquippedWeaponStrengthener, SkillNumber.Undefined, 10);
         this.AddMasterSkillDefinition(SkillNumber.DefSuccessRateIncMastery, SkillNumber.DefSuccessRateIncPowUp, SkillNumber.Undefined, 3, 3, SkillNumber.DefSuccessRateIncPowUp, 20, Formula502, Formula502, Stats.DefenseFinal, AggregateType.AddFinal);
         this.AddMasterSkillDefinition(SkillNumber.StaminaIncreaseStrengthener, SkillNumber.IncreaseHealth, SkillNumber.Undefined, 3, 4, SkillNumber.IncreaseHealth, 20, Formula1154, Formula1154, Stats.TotalVitality, AggregateType.AddFinal);
         this.AddPassiveMasterSkillDefinition(SkillNumber.DecreaseMana, Stats.ManaUsageReduction, AggregateType.AddRaw, Formula722Value, Formula722, 4, 3);
@@ -976,6 +1120,45 @@ internal class SkillsInitializer : SkillsInitializerBase
         this.AddPassiveMasterSkillDefinition(SkillNumber.RecoverHPfromMonsterKills, Stats.HealthAfterMonsterKillMultiplier, AggregateType.AddFinal, Formula4319, 4, 3);
         this.AddPassiveMasterSkillDefinition(SkillNumber.IncreaseMinimumAttackPower, Stats.MinimumPhysBaseDmg, AggregateType.AddRaw, Formula502, 5, 3);
         this.AddPassiveMasterSkillDefinition(SkillNumber.RecoverManaMonsterKills, Stats.ManaAfterMonsterKillMultiplier, AggregateType.AddFinal, Formula4319, 5, 3, SkillNumber.RecoverHPfromMonsterKills);
+
+        this.InitializeSeasonSixRankSixToNineMasterData();
+    }
+
+    private void CreateSeasonSixRankSixToNinePassiveSkills()
+    {
+        foreach (var (number, nameResource, classes, skillId) in SeasonSixRankSixToNinePassiveSkills)
+        {
+            if (this.GameConfiguration.Skills.Any(s => s.Number == (short)number))
+            {
+                continue;
+            }
+
+            this.CreateSkill(number, LocalizedString.FromResource(nameResource), classes, damage: skillId, skillType: SkillType.PassiveBoost);
+        }
+    }
+
+    private void InitializeSeasonSixRankSixToNineMasterData()
+    {
+        foreach (var (_, targetAttribute, _, _, _, _, _) in SeasonSixRankSixToNineMasterDefinitions)
+        {
+            if (this.GameConfiguration.Attributes.All(a => a.Id != targetAttribute.Id))
+            {
+                var persistent = this.Context.CreateNew<AttributeDefinition>(targetAttribute.Id, targetAttribute.Designation, targetAttribute.Description);
+                persistent.MaximumValue = targetAttribute.MaximumValue;
+                this.GameConfiguration.Attributes.Add(persistent);
+            }
+        }
+
+        foreach (var (number, targetAttribute, valueFormula, displayFormula, rank, root, requiredSkill) in SeasonSixRankSixToNineMasterDefinitions)
+        {
+            var skill = this.GameConfiguration.Skills.FirstOrDefault(s => s.Number == (short)number);
+            if (skill is null || skill.MasterDefinition is not null || !this._masterSkillRoots.ContainsKey(root))
+            {
+                continue;
+            }
+
+            this.AddPassiveMasterSkillDefinition(number, targetAttribute, AggregateType.AddRaw, valueFormula, displayFormula, rank, root, requiredSkill);
+        }
     }
 
     private void AddPassiveMasterSkillDefinition(SkillNumber skillNumber, AttributeDefinition targetAttribute, AggregateType aggregateType, string valueFormula, string displayValueFormula, byte rank, byte root, SkillNumber requiredSkill1 = SkillNumber.Undefined, SkillNumber requiredSkill2 = SkillNumber.Undefined, byte maximumLevel = 20)

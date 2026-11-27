@@ -903,4 +903,115 @@
   <data name="QuakeFist" xml:space="preserve">
     <value>Quake Fist</value>
   </data>
+  <data name="CastInvincibility" xml:space="preserve">
+    <value>Cast Invincibility</value>
+  </data>
+  <data name="ArmorSetBonusIncrease" xml:space="preserve">
+    <value>Armor Set Bonus Increase</value>
+  </data>
+  <data name="Vengeance" xml:space="preserve">
+    <value>Vengeance</value>
+  </data>
+  <data name="EnergyIncrease" xml:space="preserve">
+    <value>Energy Increase</value>
+  </data>
+  <data name="StaminaIncrease" xml:space="preserve">
+    <value>Stamina Increase</value>
+  </data>
+  <data name="AgilityIncrease" xml:space="preserve">
+    <value>Agility Increase</value>
+  </data>
+  <data name="StrengthIncrease" xml:space="preserve">
+    <value>Strength Increase</value>
+  </data>
+  <data name="WingOfStormAbsPowUp" xml:space="preserve">
+    <value>Wing of Storm Absorption PowUp</value>
+  </data>
+  <data name="WingOfStormDefPowUp" xml:space="preserve">
+    <value>Wing of Storm Defense PowUp</value>
+  </data>
+  <data name="WingOfStormAttPowUp" xml:space="preserve">
+    <value>Wing of Storm Attack PowUp</value>
+  </data>
+  <data name="MaximumAgIncrease" xml:space="preserve">
+    <value>Maximum AG Increase</value>
+  </data>
+  <data name="MaximumAttackPowerIncrease" xml:space="preserve">
+    <value>Maximum Attack Power Increase</value>
+  </data>
+  <data name="IncreaseCriticalDamageRate" xml:space="preserve">
+    <value>Increases critical damage rate</value>
+  </data>
+  <data name="RestoresAllMana" xml:space="preserve">
+    <value>Restores all Mana</value>
+  </data>
+  <data name="RestoresAllHp" xml:space="preserve">
+    <value>Restores all HP</value>
+  </data>
+  <data name="IncreaseExcellentDamageRate" xml:space="preserve">
+    <value>Increases excellent damage rate</value>
+  </data>
+  <data name="IncreaseDoubleDamageRate" xml:space="preserve">
+    <value>Increases double damage rate</value>
+  </data>
+  <data name="IncreaseChanceOfIgnoreDef" xml:space="preserve">
+    <value>Increases chance of ignore Def</value>
+  </data>
+  <data name="RestoresAllSd" xml:space="preserve">
+    <value>Restores all SD</value>
+  </data>
+  <data name="EternalWingsAbsPowUp" xml:space="preserve">
+    <value>Eternal Wings Absorption PowUp</value>
+  </data>
+  <data name="EternalWingsDefPowUp" xml:space="preserve">
+    <value>Eternal Wings Defense PowUp</value>
+  </data>
+  <data name="EternalWingsAttPowUp" xml:space="preserve">
+    <value>Eternal Wings Attack PowUp</value>
+  </data>
+  <data name="MaximumWizardryIncrease" xml:space="preserve">
+    <value>Maximum Wizardry Increase</value>
+  </data>
+  <data name="IllusionWingsAbsPowUp" xml:space="preserve">
+    <value>Illusion Wings Absorption PowUp</value>
+  </data>
+  <data name="IllusionWingsDefPowUp" xml:space="preserve">
+    <value>Illusion Wings Defense PowUp</value>
+  </data>
+  <data name="IllusionWingsAttPowUp" xml:space="preserve">
+    <value>Illusion Wings Attack PowUp</value>
+  </data>
+  <data name="DimensionWingsDefPowUp" xml:space="preserve">
+    <value>Dimension Wings Defense PowUp</value>
+  </data>
+  <data name="DimensionWingsAttPowUp" xml:space="preserve">
+    <value>Dimension Wings Attack PowUp</value>
+  </data>
+  <data name="MaximumWizCurseIncrease" xml:space="preserve">
+    <value>Maximum Wizardry/Curse Increase</value>
+  </data>
+  <data name="WingOfRuinDefPowUp" xml:space="preserve">
+    <value>Wing of Ruin Defense PowUp</value>
+  </data>
+  <data name="WingOfRuinAttPowUp" xml:space="preserve">
+    <value>Wing of Ruin Attack PowUp</value>
+  </data>
+  <data name="EmperorCapeDefPowUp" xml:space="preserve">
+    <value>Emperor Cape Defense PowUp</value>
+  </data>
+  <data name="AddsCommandStat" xml:space="preserve">
+    <value>Adds Command Stat</value>
+  </data>
+  <data name="EmperorCapeAttPowUp" xml:space="preserve">
+    <value>Emperor Cape Attack PowUp</value>
+  </data>
+  <data name="ReigningCloakAbsPowUp" xml:space="preserve">
+    <value>Reigning Cloak Absorption PowUp</value>
+  </data>
+  <data name="ReigningCloakDefPowUp" xml:space="preserve">
+    <value>Reigning Cloak Defense PowUp</value>
+  </data>
+  <data name="ReigningCloakAttPowUp" xml:space="preserve">
+    <value>Reigning Cloak Attack PowUp</value>
+  </data>
 </root>
