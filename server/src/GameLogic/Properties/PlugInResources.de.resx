@@ -2123,4 +2123,10 @@
   <data name="WebsiteConfiguration_RequireWebsiteLogin_Description" xml:space="preserve">
     <value>Wenn diese Option aktiviert ist, wird das Passwortformular im Webspiel ausgeblendet. Spieler melden sich zuerst auf der Website an und klicken dann auf „Jetzt spielen“.</value>
   </data>
+  <data name="MossGambleConfiguration_UseWeightedExcellentSelection_Name" xml:space="preserve">
+    <value>Gewichtete Exzellent-Optionen verwenden</value>
+  </data>
+  <data name="MossGambleConfiguration_UseWeightedExcellentSelection_Description" xml:space="preserve">
+    <value>Wählt Exzellent-Optionen nach den Gewichten der Season-6/9-Serversuiten (10 % / 20 % / 20 % / 20 % / 20 % / 10 %) statt gleichverteilt aus.</value>
+  </data>
 </root>

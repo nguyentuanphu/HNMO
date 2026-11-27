@@ -204,7 +204,7 @@ internal class ItemStatProfilesDataTest
         {
             "armor: 327",
             "book: 3",
-            "default: 265", // with Stardust (14:153), Combination Notes (14:191..203), Moss gamble vouchers (13:71..75), and Chaos Cards (14:54, 14:92, 14:93, 14:95)
+            "default: 268", // with Stardust (14:153), Combination Notes (14:191..203), Moss gamble vouchers (13:71..75), Pandora Pick (0:41), Rummy cards (14:215..216), and Chaos Cards (14:54, 14:92, 14:93, 14:95)
             "firstTierWing: 4",
             "helper: 27",
             "orb: 12",

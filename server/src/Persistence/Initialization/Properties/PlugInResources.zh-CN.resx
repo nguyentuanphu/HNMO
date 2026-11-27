@@ -519,6 +519,8 @@
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>在以第 9 赛季运行时添加 10 张第 9 赛季地图、地形文件、传送门（417-461、474-482）以及第 9 赛季刷怪/NPC 点位。</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Name" xml:space="preserve"><value>第 6 赛季：商人莫斯抽奖商店</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>添加 5 种 2,000,000 金币的莫斯抽奖券（13-71..75），并在商人莫斯（492）商店为空时为其配备抽奖商店。</value></data>
+  <data name="S6EventsMonstersAndItemsUpdatePlugIn_Name" xml:space="preserve"><value>第 6 赛季：活动怪物、采矿点与卡牌物品</value></data>
+  <data name="S6EventsMonstersAndItemsUpdatePlugIn_Description" xml:space="preserve"><value>补充缺少的罗兰深渊怪物（300-303）、被诅咒的哥布林（466）、采矿点（605-607）、潘多拉矿镐（0-41）和拉米卡牌道具（14-215..216）。</value></data>
   <data name="MasterPassives314To324UpdatePlugIn_Name" xml:space="preserve"><value>第 6 赛季：6-9 阶被动大师技能</value></data>
   <data name="MasterPassives314To324UpdatePlugIn_Description" xml:space="preserve"><value>添加第 6 赛季 6-9 阶被动大师技能及被动增益（钢铁意志、套装防御强化、复仇、四维/统率增加、三代翅膀攻防吸收强化、最大 AG/攻击/魔攻、受击回蓝红盾以及会心/卓越/双倍/无视防御概率）。</value></data>
   <data name="AuditDataFixesUpdatePlugIn_Name" xml:space="preserve"><value>2026年11月25日审计的数据修正</value></data>

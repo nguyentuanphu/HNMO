@@ -785,6 +785,9 @@
   <data name="GambleStick" xml:space="preserve"><value>Trượng</value></data>
   <data name="TalismanOfGuardian" xml:space="preserve"><value>Bùa hộ mệnh</value></data>
   <data name="TalismanOfItemProtection" xml:space="preserve"><value>Bùa bảo vệ vật phẩm</value></data>
+  <data name="PandoraPick" xml:space="preserve"><value>Cuốc Pandora</value></data>
+  <data name="CardPiece" xml:space="preserve"><value>Mảnh bài Rummy</value></data>
+  <data name="CardDeck" xml:space="preserve"><value>Bộ bài Rummy</value></data>
   <data name="ChaosCard" xml:space="preserve"><value>Thẻ Hỗn Nguyên</value></data>
   <data name="ChaosCardGold" xml:space="preserve"><value>Thẻ Hỗn Nguyên Vàng</value></data>
   <data name="ChaosCardRare" xml:space="preserve"><value>Thẻ Hỗn Nguyên Hiếm</value></data>

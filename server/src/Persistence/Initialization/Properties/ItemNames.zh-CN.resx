@@ -2361,6 +2361,15 @@
   <data name="TalismanOfItemProtection" xml:space="preserve">
     <value>物品保护护身符</value>
   </data>
+  <data name="PandoraPick" xml:space="preserve">
+    <value>潘多拉矿镐</value>
+  </data>
+  <data name="CardPiece" xml:space="preserve">
+    <value>卡牌碎片</value>
+  </data>
+  <data name="CardDeck" xml:space="preserve">
+    <value>整副卡牌</value>
+  </data>
   <data name="ChaosCard" xml:space="preserve">
     <value>玛雅卡片</value>
   </data>

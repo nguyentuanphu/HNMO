@@ -5530,6 +5530,27 @@ namespace HNMO.Persistence.Initialization.Properties {
             }
         }
 
+        /// <summary>Gets PandoraPick from the configuration name resources.</summary>
+        public static string PandoraPick {
+            get {
+                return ResourceManager.GetString("PandoraPick", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets CardPiece from the configuration name resources.</summary>
+        public static string CardPiece {
+            get {
+                return ResourceManager.GetString("CardPiece", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets CardDeck from the configuration name resources.</summary>
+        public static string CardDeck {
+            get {
+                return ResourceManager.GetString("CardDeck", resourceCulture);
+            }
+        }
+
         /// <summary>Gets ChaosCard from the configuration name resources.</summary>
         public static string ChaosCard {
             get {

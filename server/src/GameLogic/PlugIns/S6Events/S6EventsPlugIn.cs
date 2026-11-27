@@ -8,17 +8,20 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic;
+using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.NPC;
 using HNMO.GameLogic.PlugIns.Missions;
 using HNMO.GameLogic.Views;
 using HNMO.GameLogic.Views.Inventory;
 using HNMO.Interfaces;
+using HNMO.Pathfinding;
 using HNMO.PlugIns;
 using Microsoft.Extensions.Logging;
 
@@ -46,10 +49,16 @@ public sealed class S6EventsPlugIn :
 
     /// <summary>The entry fee each contestant of the current registration paid, to refund it when the round is cancelled.</summary>
     private readonly ConcurrentDictionary<Player, int> _lmsPaidFees = new();
+    private readonly ConcurrentDictionary<Monster, byte> _lorenMobs = new();
     private LmsPhase _lmsPhase = LmsPhase.Idle;
     private DateTime _phaseDeadlineUtc = DateTime.MinValue;
     private DateTime _lastTickUtc = DateTime.MinValue;
     private string _activeRoundId = string.Empty;
+    private bool _lorenActive;
+    private LorenDeepEngine.AssaultType _lorenType;
+    private int _lorenWave;
+    private DateTime _lorenStartedUtc = DateTime.MinValue;
+    private DateTime _lorenDeadlineUtc = DateTime.MinValue;
     private S6EventsStore? _store;
     private int _tickRunning;
 
@@ -78,11 +87,36 @@ public sealed class S6EventsPlugIn :
     /// <summary>Gets count of currently surviving LMS contestants.</summary>
     public int CurrentContestantCount => this._lmsContestants.Count;
 
+    /// <summary>Gets a value indicating whether a Loren Deep assault event is currently active.</summary>
+    public bool IsLorenDeepActive => this._lorenActive;
+
     /// <summary>Gets active <see cref="S6EventsPlugIn"/> from <paramref name="gameContext"/>, if enabled in plug-in manager.</summary>
     /// <param name="gameContext">Game context.</param>
     /// <returns>Active instance or <c>null</c>.</returns>
     public static S6EventsPlugIn? Get(IGameContext gameContext) =>
         gameContext.PlugInManager.GetActivePlugInsOf<IPeriodicTaskPlugIn>().OfType<S6EventsPlugIn>().FirstOrDefault();
+
+    /// <summary>Immediately starts a Loren Deep assault event from the Admin Panel if enabled.</summary>
+    /// <param name="gameContexts">Running game server contexts.</param>
+    /// <returns>Status code (<c>Ok</c>, <c>AlreadyRunning</c>, <c>Disabled</c>).</returns>
+    public static async ValueTask<string> TriggerLorenDeepNowAsync(IEnumerable<IGameContext> gameContexts)
+    {
+        foreach (var ctx in gameContexts)
+        {
+            if (Get(ctx) is { } plugin && plugin.Configuration is { Enabled: true, LorenDeepEnabled: true } cfg)
+            {
+                if (plugin._lorenActive)
+                {
+                    return "AlreadyRunning";
+                }
+
+                await plugin.StartLorenDeepAsync(ctx, cfg, DateTime.UtcNow).ConfigureAwait(false);
+                return "Ok";
+            }
+        }
+
+        return "Disabled";
+    }
 
     /// <summary>Immediately opens LMS registration from the Admin Panel if enabled.</summary>
     /// <param name="gameContexts">Running game server contexts.</param>
@@ -115,7 +149,7 @@ public sealed class S6EventsPlugIn :
     /// <inheritdoc />
     public async ValueTask ExecuteTaskAsync(GameContext gameContext)
     {
-        if (this.Configuration is not { Enabled: true, LmsEnabled: true } cfg)
+        if (this.Configuration is not { Enabled: true } cfg || (!cfg.LmsEnabled && !cfg.LorenDeepEnabled))
         {
             return;
         }
@@ -134,21 +168,29 @@ public sealed class S6EventsPlugIn :
 
         try
         {
-            if (this._lmsPhase == LmsPhase.Idle)
+            if (cfg.LmsEnabled)
             {
-                var slotKey = S6EventsEngine.ResolveDueScheduleSlot(cfg.LmsDailyTimes, cfg.TimeZone, nowUtc);
-                if (slotKey is not null && this.GetStore(cfg).TryClaimScheduleSlot(slotKey))
+                if (this._lmsPhase == LmsPhase.Idle)
                 {
-                    await this.StartLmsRegistrationAsync(gameContext, cfg).ConfigureAwait(false);
+                    var slotKey = S6EventsEngine.ResolveDueScheduleSlot(cfg.LmsDailyTimes, cfg.TimeZone, nowUtc);
+                    if (slotKey is not null && this.GetStore(cfg).TryClaimScheduleSlot(slotKey))
+                    {
+                        await this.StartLmsRegistrationAsync(gameContext, cfg).ConfigureAwait(false);
+                    }
+                }
+                else if (this._lmsPhase == LmsPhase.Registration && nowUtc >= this._phaseDeadlineUtc)
+                {
+                    await this.BeginLmsFightOrCancelAsync(gameContext, cfg).ConfigureAwait(false);
+                }
+                else if (this._lmsPhase == LmsPhase.Fighting)
+                {
+                    await this.CheckLmsCompletionAsync(gameContext, cfg, timedOut: nowUtc >= this._phaseDeadlineUtc).ConfigureAwait(false);
                 }
             }
-            else if (this._lmsPhase == LmsPhase.Registration && nowUtc >= this._phaseDeadlineUtc)
+
+            if (cfg.LorenDeepEnabled)
             {
-                await this.BeginLmsFightOrCancelAsync(gameContext, cfg).ConfigureAwait(false);
-            }
-            else if (this._lmsPhase == LmsPhase.Fighting)
-            {
-                await this.CheckLmsCompletionAsync(gameContext, cfg, timedOut: nowUtc >= this._phaseDeadlineUtc).ConfigureAwait(false);
+                await this.TickLorenDeepAsync(gameContext, cfg, nowUtc).ConfigureAwait(false);
             }
         }
         finally
@@ -177,12 +219,48 @@ public sealed class S6EventsPlugIn :
             eventArgs.HasBeenHandled = true;
             eventArgs.LeavesDialogOpen = false;
         }
+        else if (cfg.MiningEnabled && npc.Definition.Number is 605 or 606 or 607)
+        {
+            await this.PerformMiningAttemptAsync(player, cfg, (MiningTwinkleType)npc.Definition.Number, stage: 1).ConfigureAwait(false);
+            eventArgs.HasBeenHandled = true;
+            eventArgs.LeavesDialogOpen = false;
+        }
+        else if (cfg.XMasEnabled && npc.Definition.Number == 467)
+        {
+            await this.HandleXMasCommandAsync(player).ConfigureAwait(false);
+            eventArgs.HasBeenHandled = true;
+            eventArgs.LeavesDialogOpen = false;
+        }
+        else if (cfg.XMasEnabled && npc.Definition.Number is >= 468 and <= 475)
+        {
+            await this.ApplySantaBuffAsync(player, cfg, npc.Definition.Number).ConfigureAwait(false);
+            eventArgs.HasBeenHandled = true;
+            eventArgs.LeavesDialogOpen = false;
+        }
     }
 
     /// <inheritdoc />
     public async ValueTask AttackableGotKilledAsync(IAttackable killed, IAttacker? killer)
     {
-        if (this.Configuration is not { Enabled: true, LmsEnabled: true } cfg || this._lmsPhase != LmsPhase.Fighting)
+        if (this.Configuration is not { Enabled: true } cfg)
+        {
+            return;
+        }
+
+        if (cfg.MuRummyEnabled
+            && killed is Monster killedMonster
+            && killedMonster.CurrentMap is { } map
+            && killer is Player monsterKiller
+            && cfg.MuRummyCardPieceDropRatePer10k > 0
+            && Rand.NextInt(0, 10_000) < cfg.MuRummyCardPieceDropRatePer10k
+            && monsterKiller.GameContext.Configuration.Items.FirstOrDefault(i => i.Group == 14 && i.Number == 215) is { } cardPieceDef)
+        {
+            var droppedCard = new TemporaryItem { Definition = cardPieceDef, Durability = 1 };
+            var owners = monsterKiller.Party?.PartyList.AsEnumerable() ?? monsterKiller.GetAsEnumerable();
+            await map.AddAsync(new DroppedItem(droppedCard, killedMonster.Position, map, null, owners)).ConfigureAwait(false);
+        }
+
+        if (!cfg.LmsEnabled || this._lmsPhase != LmsPhase.Fighting)
         {
             return;
         }
@@ -316,6 +394,412 @@ public sealed class S6EventsPlugIn :
         }
 
         return await this.ExchangeTokensAsync(player, cfg, isCherryBlossom, requestedCount).ConfigureAwait(false);
+    }
+
+    /// <summary>Handles <c>/loren</c> command reporting Loren Deep schedule and wave state.</summary>
+    /// <param name="player">Issuing player.</param>
+    /// <returns>A task representing the command handling.</returns>
+    public async ValueTask HandleLorenCommandAsync(Player player)
+    {
+        if (this.Configuration is not { Enabled: true, LorenDeepEnabled: true } cfg)
+        {
+            await this.SendLocalizedBlueAsync(player, "Loren Deep is disabled on this server.", "Sự kiện Loren Deep chưa được bật.").ConfigureAwait(false);
+            return;
+        }
+
+        if (this._lorenActive)
+        {
+            var typeEn = this._lorenType == LorenDeepEngine.AssaultType.SpecialRaid ? "Special Raid" : "Common Assault";
+            var typeVi = this._lorenType == LorenDeepEngine.AssaultType.SpecialRaid ? "Tập Kích Đặc Biệt" : "Tổng Tấn Công";
+            await this.SendLocalizedBlueAsync(
+                player,
+                $"Loren Deep active ({typeEn}) — Wave {this._lorenWave}/3 on Valley of Loren!",
+                $"Loren Deep đang diễn ra ({typeVi}) — Đợt {this._lorenWave}/3 tại Thung Lũng Loren!").ConfigureAwait(false);
+            return;
+        }
+
+        var next = string.Join(", ", cfg.LorenDeepDailyTimes);
+        await this.SendLocalizedBlueAsync(
+            player,
+            $"Loren Deep schedule ({cfg.TimeZone}): {next}.",
+            $"Lịch Loren Deep ({cfg.TimeZone}): {next}.").ConfigureAwait(false);
+    }
+
+    /// <summary>Handles <c>/mine [small|medium|large] [stage]</c> and <c>/mine repair</c>.</summary>
+    /// <param name="player">Player.</param>
+    /// <param name="command">Raw command text.</param>
+    /// <returns>True if handled.</returns>
+    public async ValueTask<bool> HandleMineCommandAsync(Player player, string command)
+    {
+        if (this.Configuration is not { Enabled: true, MiningEnabled: true } cfg)
+        {
+            await this.SendLocalizedBlueAsync(player, "Mining System is disabled on this server.", "Hệ thống Đào Khoáng đang tắt.").ConfigureAwait(false);
+            return false;
+        }
+
+        var tokens = (command ?? string.Empty).Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        if (tokens.Length > 1 && string.Equals(tokens[1], "repair", StringComparison.OrdinalIgnoreCase))
+        {
+            return await this.RepairPandoraPickAsync(player, cfg).ConfigureAwait(false);
+        }
+
+        var twinkle = MiningTwinkleType.Small;
+        var stage = 1;
+        for (var i = 1; i < tokens.Length; i++)
+        {
+            if (string.Equals(tokens[i], "medium", StringComparison.OrdinalIgnoreCase))
+            {
+                twinkle = MiningTwinkleType.Medium;
+            }
+            else if (string.Equals(tokens[i], "large", StringComparison.OrdinalIgnoreCase))
+            {
+                twinkle = MiningTwinkleType.Large;
+            }
+            else if (int.TryParse(tokens[i], NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsedStage))
+            {
+                stage = Math.Clamp(parsedStage, 1, 5);
+            }
+        }
+
+        return await this.PerformMiningAttemptAsync(player, cfg, twinkle, stage).ConfigureAwait(false);
+    }
+
+    /// <summary>Handles <c>/rummy</c> subcommands: combine, start, status, match i j k, finish.</summary>
+    /// <param name="player">Player.</param>
+    /// <param name="command">Raw command text.</param>
+    /// <returns>True when command mutated game/inventory state.</returns>
+    public async ValueTask<bool> HandleRummyCommandAsync(Player player, string command)
+    {
+        if (this.Configuration is not { Enabled: true, MuRummyEnabled: true } cfg)
+        {
+            await this.SendLocalizedBlueAsync(player, "Mu Rummy is disabled on this server.", "Sự kiện Mu Rummy đang tắt.").ConfigureAwait(false);
+            return false;
+        }
+
+        var tokens = (command ?? string.Empty).Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        var sub = tokens.Length > 1 ? tokens[1].ToLowerInvariant() : "status";
+        var charName = player.SelectedCharacter?.Name ?? string.Empty;
+        var store = this.GetStore(cfg);
+
+        switch (sub)
+        {
+            case "combine":
+            {
+                var pieces = S6EventsEngine.CountStackedItems(player.Inventory, 14, 215);
+                if (pieces < cfg.MuRummyRequiredPieces)
+                {
+                    await this.SendLocalizedBlueAsync(
+                        player,
+                        $"Need {cfg.MuRummyRequiredPieces} Card Pieces (have {pieces}).",
+                        $"Cần {cfg.MuRummyRequiredPieces} Mảnh bài (hiện có {pieces}).").ConfigureAwait(false);
+                    return false;
+                }
+
+                if (!await S6EventsEngine.TryConsumeStackedItemsAsync(player, 14, 215, cfg.MuRummyRequiredPieces).ConfigureAwait(false))
+                {
+                    return false;
+                }
+
+                await this.DeliverRewardAsync(
+                    player.GameContext,
+                    player,
+                    player.Account?.LoginName ?? string.Empty,
+                    charName,
+                    0,
+                    0,
+                    CashShopCoinType.WCoinC,
+                    14,
+                    216,
+                    0,
+                    1,
+                    "Card Deck combined from 24 Card Pieces",
+                    "Ghép Bộ bài Rummy từ 24 Mảnh bài",
+                    cfg,
+                    $"s6-rummy-deck-{Guid.NewGuid():N}").ConfigureAwait(false);
+                await this.SendLocalizedBlueAsync(player, "Combined 24 Card Pieces into 1 Card Deck!", "Đã ghép 24 Mảnh bài thành 1 Bộ bài Rummy!").ConfigureAwait(false);
+                return true;
+            }
+
+            case "start":
+            {
+                if (store.GetMuRummyGame(charName) is { } active)
+                {
+                    await this.SendRummyStatusAsync(player, active).ConfigureAwait(false);
+                    return false;
+                }
+
+                if (!await S6EventsEngine.TryConsumeStackedItemsAsync(player, 14, 216, 1).ConfigureAwait(false))
+                {
+                    await this.SendLocalizedBlueAsync(player, "Need 1 Card Deck (14-216) to start Mu Rummy (/rummy combine).", "Cần 1 Bộ bài Rummy (14-216) để bắt đầu (/rummy combine).").ConfigureAwait(false);
+                    return false;
+                }
+
+                var fresh = MuRummyEngine.CreateNewGame(max => Rand.NextInt(0, max));
+                store.SaveMuRummyGame(charName, fresh);
+                await this.SendRummyStatusAsync(player, fresh).ConfigureAwait(false);
+                return true;
+            }
+
+            case "match":
+            {
+                var game = store.GetMuRummyGame(charName);
+                if (game is null)
+                {
+                    await this.SendLocalizedBlueAsync(player, "No active Mu Rummy game. Type /rummy start.", "Chưa có ván Mu Rummy nào. Gõ /rummy start.").ConfigureAwait(false);
+                    return false;
+                }
+
+                if (tokens.Length < 5
+                    || !int.TryParse(tokens[2], NumberStyles.Integer, CultureInfo.InvariantCulture, out var i0)
+                    || !int.TryParse(tokens[3], NumberStyles.Integer, CultureInfo.InvariantCulture, out var i1)
+                    || !int.TryParse(tokens[4], NumberStyles.Integer, CultureInfo.InvariantCulture, out var i2))
+                {
+                    await this.SendLocalizedBlueAsync(player, "Usage: /rummy match <1..5> <1..5> <1..5>", "Cú pháp: /rummy match <1..5> <1..5> <1..5>").ConfigureAwait(false);
+                    return false;
+                }
+
+                var pts = MuRummyEngine.TryPlayMeld(game, i0 - 1, i1 - 1, i2 - 1);
+                if (pts <= 0)
+                {
+                    await this.SendLocalizedBlueAsync(player, "Selected cards do not form a valid meld.", "3 lá bài đã chọn chưa tạo thành bộ hợp lệ.").ConfigureAwait(false);
+                    return false;
+                }
+
+                store.SaveMuRummyGame(charName, game);
+                await this.SendLocalizedBlueAsync(player, $"Meld matched for +{pts} pts! Total score: {game.Score}.", $"Ăn bộ +{pts} điểm! Tổng điểm: {game.Score}.").ConfigureAwait(false);
+                await this.SendRummyStatusAsync(player, game).ConfigureAwait(false);
+                return true;
+            }
+
+            case "finish":
+            {
+                var game = store.GetMuRummyGame(charName);
+                if (game is null)
+                {
+                    await this.SendLocalizedBlueAsync(player, "No active Mu Rummy game.", "Chưa có ván Mu Rummy đang chơi.").ConfigureAwait(false);
+                    return false;
+                }
+
+                var finalScore = game.Score;
+                store.SaveMuRummyGame(charName, null);
+                var reward = MuRummyEngine.ResolveReward(finalScore, cfg.MuRummyRewardScoreFirst, cfg.MuRummyRewardScoreSecond, Rand.NextDouble());
+                await this.DeliverRewardAsync(
+                    player.GameContext,
+                    player,
+                    player.Account?.LoginName ?? string.Empty,
+                    charName,
+                    reward.Zen,
+                    0,
+                    CashShopCoinType.WCoinC,
+                    reward.ItemGroup,
+                    reward.ItemNumber,
+                    reward.ItemLevel,
+                    reward.ItemCount,
+                    reward.ReasonEn,
+                    reward.ReasonVi,
+                    cfg,
+                    $"s6-rummy-fin-{Guid.NewGuid():N}").ConfigureAwait(false);
+                await this.SendLocalizedBlueAsync(
+                    player,
+                    $"Mu Rummy finished (Score {finalScore}) -> Reward: {reward.ReasonEn}!",
+                    $"Kết thúc Mu Rummy (Điểm {finalScore}) -> Phần thưởng: {reward.ReasonVi}!").ConfigureAwait(false);
+                return true;
+            }
+
+            default:
+            {
+                var game = store.GetMuRummyGame(charName);
+                if (game is null)
+                {
+                    var pieces = S6EventsEngine.CountStackedItems(player.Inventory, 14, 215);
+                    await this.SendLocalizedBlueAsync(
+                        player,
+                        $"Mu Rummy: {pieces}/{cfg.MuRummyRequiredPieces} Card Pieces. Use /rummy combine or /rummy start.",
+                        $"Mu Rummy: có {pieces}/{cfg.MuRummyRequiredPieces} Mảnh bài. Dùng /rummy combine hoặc /rummy start.").ConfigureAwait(false);
+                    return false;
+                }
+
+                await this.SendRummyStatusAsync(player, game).ConfigureAwait(false);
+                return false;
+            }
+        }
+    }
+
+    /// <summary>Handles <c>/xmas</c> or Snowman (467) talk for Christmas seasonal gift and buff.</summary>
+    /// <param name="player">Player.</param>
+    /// <returns>True when gift was claimed.</returns>
+    public async ValueTask<bool> HandleXMasCommandAsync(Player player)
+    {
+        if (this.Configuration is not { Enabled: true, XMasEnabled: true } cfg)
+        {
+            await this.SendLocalizedBlueAsync(player, "XMas event is disabled on this server.", "Sự kiện Giáng Sinh đang tắt.").ConfigureAwait(false);
+            return false;
+        }
+
+        var resets = (int)(player.Attributes?[Stats.Resets] ?? 0);
+        if (resets < cfg.XMasMinReset)
+        {
+            await this.SendLocalizedBlueAsync(
+                player,
+                $"Need at least {cfg.XMasMinReset} Reset(s) for Santa gifts.",
+                $"Cần tối thiểu {cfg.XMasMinReset} lần Reset để nhận quà Giáng Sinh.").ConfigureAwait(false);
+            return false;
+        }
+
+        var charName = player.SelectedCharacter?.Name ?? string.Empty;
+        if (!this.GetStore(cfg).TryClaimXMasGift(charName, cfg.XMasGiftCooldownMinutes, DateTime.UtcNow, out _))
+        {
+            await this.SendLocalizedBlueAsync(
+                player,
+                $"Santa gift is on cooldown ({cfg.XMasGiftCooldownMinutes} min).",
+                $"Quà Giáng Sinh đang hồi ({cfg.XMasGiftCooldownMinutes} phút).").ConfigureAwait(false);
+            return false;
+        }
+
+        await this.ApplySantaBuffAsync(player, cfg, 474).ConfigureAwait(false);
+        var gift = XMasSantaEngine.PickSnowmanGift(Rand.NextDouble());
+        await this.DeliverRewardAsync(
+            player.GameContext,
+            player,
+            player.Account?.LoginName ?? string.Empty,
+            charName,
+            gift.Zen,
+            0,
+            CashShopCoinType.WCoinC,
+            gift.ItemGroup,
+            gift.ItemNumber,
+            gift.ItemLevel,
+            gift.ItemCount,
+            gift.ReasonEn,
+            gift.ReasonVi,
+            cfg,
+            $"s6-xmas-{Guid.NewGuid():N}").ConfigureAwait(false);
+        await this.SendLocalizedBlueAsync(
+            player,
+            $"Snowman Gift claimed -> {gift.ReasonEn}!",
+            $"Đã nhận Quà Người Tuyết -> {gift.ReasonVi}!").ConfigureAwait(false);
+        return true;
+    }
+
+    /// <summary>Applies timed buff from Little Santa NPC (468..475).</summary>
+    /// <param name="player">Player.</param>
+    /// <param name="cfg">Active configuration.</param>
+    /// <param name="npcNumber">NPC ID (468..475).</param>
+    /// <returns>Task.</returns>
+    internal async ValueTask ApplySantaBuffAsync(Player player, S6EventsConfiguration cfg, short npcNumber)
+    {
+        var kind = (npcNumber % 3) switch
+        {
+            0 => XMasBuffKind.SantaHealing,
+            1 => XMasBuffKind.SantaProtection,
+            _ => XMasBuffKind.BlessingOfChristmas,
+        };
+        var level = (int)(player.Attributes?[Stats.Level] ?? 1);
+        var duration = TimeSpan.FromSeconds(Math.Clamp(cfg.XMasBuffDurationSeconds, 60, 86400));
+        var def = player.GameContext.Configuration.MagicEffects?.FirstOrDefault(e => e.Number == (byte)kind)
+            ?? new MagicEffectDefinition { Number = (byte)kind, Name = kind.ToString(), StopByDeath = true, SendDuration = true };
+        var powerUps = XMasSantaEngine.BuildBuffPowerUps(kind, level);
+        await player.MagicEffectList.AddEffectAsync(new MagicEffect(duration, def, powerUps)).ConfigureAwait(false);
+
+        var (en, vi) = kind switch
+        {
+            XMasBuffKind.SantaHealing => ("Santa Healing (+500 Max Life) applied!", "Đã nhận Chúc Phúc Hồi Sinh (+500 Sinh Lực tối đa)!"),
+            XMasBuffKind.SantaProtection => ("Santa Protection (+500 Max Mana) applied!", "Đã nhận Bảo Hộ Giáng Sinh (+500 Mana tối đa)!"),
+            _ => ("Blessing of Christmas (+Damage & Defense) applied!", "Đã nhận Phép Lành Giáng Sinh (+Sát thương & Phòng thủ)!"),
+        };
+        await this.SendLocalizedBlueAsync(player, en, vi).ConfigureAwait(false);
+    }
+
+    /// <summary>Executes one Mining System attempt using Pandora Pick (0-41).</summary>
+    internal async ValueTask<bool> PerformMiningAttemptAsync(Player player, S6EventsConfiguration cfg, MiningTwinkleType twinkle, int stage)
+    {
+        if (player.Inventory is not { } inventory)
+        {
+            return false;
+        }
+
+        var pick = inventory.Items.FirstOrDefault(i => i.Definition is { Group: 0, Number: 41 });
+        if (pick is null)
+        {
+            await this.SendLocalizedBlueAsync(player, "Equip or carry Pandora Pick (0-41) to mine.", "Cần mang theo Cuốc Pandora (0-41) để đào khoáng.").ConfigureAwait(false);
+            return false;
+        }
+
+        var dec = MiningSystemEngine.GetDurabilityCost(twinkle);
+        if (pick.Durability < dec)
+        {
+            await this.SendLocalizedBlueAsync(player, $"Pandora Pick needs {dec} durability (has {(int)pick.Durability}). Use /mine repair.", $"Cuốc Pandora cần {dec} độ bền (hiện còn {(int)pick.Durability}). Dùng /mine repair để sửa.").ConfigureAwait(false);
+            return false;
+        }
+
+        pick.Durability -= dec;
+        await player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(pick, true)).ConfigureAwait(false);
+
+        var denom = Math.Max(1, cfg.MiningChanceDenominator);
+        var rate = MiningSystemEngine.GetStageSuccessRate(cfg, twinkle, stage);
+        if (Rand.NextInt(0, denom) >= rate)
+        {
+            await this.SendLocalizedBlueAsync(player, $"Mining ({twinkle}, Stage {stage}) yielded no jewels.", $"Đào khoáng ({twinkle}, Tầng {stage}) chưa trúng ngọc.").ConfigureAwait(false);
+            return false;
+        }
+
+        var jackpot = stage == 5 && Rand.NextInt(0, denom) < MiningSystemEngine.GetPandoraJackpotRate(cfg, twinkle);
+        var totalBless = MiningSystemEngine.GetRewardBlessTotal(twinkle, stage, jackpot);
+        foreach (var reward in MiningSystemEngine.BuildBlessPayoutItems(totalBless))
+        {
+            await this.DeliverRewardAsync(
+                player.GameContext,
+                player,
+                player.Account?.LoginName ?? string.Empty,
+                player.SelectedCharacter?.Name ?? string.Empty,
+                0,
+                0,
+                CashShopCoinType.WCoinC,
+                reward.ItemGroup,
+                reward.ItemNumber,
+                reward.ItemLevel,
+                reward.ItemCount,
+                reward.ReasonEn,
+                reward.ReasonVi,
+                cfg,
+                $"s6-mine-{Guid.NewGuid():N}").ConfigureAwait(false);
+        }
+
+        if (jackpot)
+        {
+            var winner = player.SelectedCharacter?.Name ?? "Miner";
+            await this.BroadcastGoldenAsync(
+                player.GameContext,
+                $"[Mining] {winner} struck Pandora Jackpot: {totalBless} Jewel of Bless!",
+                $"[Đào Khoáng] {winner} trúng Nổ Hũ Pandora: {totalBless} Ngọc Ước Nguyện!").ConfigureAwait(false);
+        }
+        else
+        {
+            await this.SendLocalizedBlueAsync(
+                player,
+                $"Mining succeeded ({twinkle}, Stage {stage}) -> {totalBless} Jewel of Bless!",
+                $"Đào khoáng thành công ({twinkle}, Tầng {stage}) -> Nhận {totalBless} Ngọc Ước Nguyện!").ConfigureAwait(false);
+        }
+
+        return true;
+    }
+
+    /// <summary>Starts Loren Deep waves and schedules wave 2/3.</summary>
+    internal async ValueTask StartLorenDeepAsync(IGameContext gameContext, S6EventsConfiguration cfg, DateTime nowUtc)
+    {
+        this._lorenType = LorenDeepEngine.SelectAssaultType(cfg.LorenDeepCommonAssaultWeight, cfg.LorenDeepSpecialRaidWeight, Rand.NextDouble());
+        this._lorenWave = 1;
+        this._lorenStartedUtc = nowUtc;
+        this._lorenDeadlineUtc = nowUtc.AddMinutes(Math.Clamp(cfg.LorenDeepDurationMinutes, 5, 120));
+        this._lorenActive = true;
+
+        var typeEn = this._lorenType == LorenDeepEngine.AssaultType.SpecialRaid ? "Special Raid" : "Common Assault";
+        var typeVi = this._lorenType == LorenDeepEngine.AssaultType.SpecialRaid ? "Tập Kích Đặc Biệt" : "Tổng Tấn Công";
+        await this.BroadcastGoldenAsync(
+            gameContext,
+            $"Loren Deep ({typeEn}) has begun in Valley of Loren — Wave 1!",
+            $"Loren Deep ({typeVi}) đã bắt đầu tại Thung Lũng Loren — Đợt 1!").ConfigureAwait(false);
+        await this.SpawnLorenWaveAsync(gameContext, cfg, 1).ConfigureAwait(false);
     }
 
     /// <summary>Transitions LMS from Registration into Fighting (or cancels if under min contestants).</summary>
@@ -624,4 +1108,172 @@ public sealed class S6EventsPlugIn :
 
     private S6EventsStore GetStore(S6EventsConfiguration cfg) =>
         this._store ??= S6EventsStore.Open(cfg.FileName);
+
+    private async ValueTask<bool> RepairPandoraPickAsync(Player player, S6EventsConfiguration cfg)
+    {
+        if (player.Inventory is not { } inventory)
+        {
+            return false;
+        }
+
+        var pick = inventory.Items.FirstOrDefault(i => i.Definition is { Group: 0, Number: 41 });
+        if (pick is null)
+        {
+            await this.SendLocalizedBlueAsync(player, "No Pandora Pick found to repair.", "Không tìm thấy Cuốc Pandora để sửa.").ConfigureAwait(false);
+            return false;
+        }
+
+        var maxDur = Math.Clamp(cfg.MiningRepairMaxDurability, 1, 255);
+        if (pick.Durability >= maxDur)
+        {
+            await this.SendLocalizedBlueAsync(player, $"Pandora Pick is already at cap durability ({maxDur}).", $"Cuốc Pandora đã đạt độ bền tối đa ({maxDur}).").ConfigureAwait(false);
+            return false;
+        }
+
+        foreach (var candidate in inventory.Items)
+        {
+            if (candidate.Definition is null)
+            {
+                continue;
+            }
+
+            var amount = MiningSystemEngine.GetRepairAmount(candidate.Definition.Group, candidate.Definition.Number, candidate.Level);
+            if (amount <= 0)
+            {
+                continue;
+            }
+
+            if (!await S6EventsEngine.TryConsumeStackedItemsAsync(player, candidate.Definition.Group, candidate.Definition.Number, 1).ConfigureAwait(false))
+            {
+                continue;
+            }
+
+            pick.Durability = (byte)Math.Min(maxDur, (int)pick.Durability + amount);
+            await player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(pick, true)).ConfigureAwait(false);
+            await this.SendLocalizedBlueAsync(
+                player,
+                $"Repaired Pandora Pick +{amount} (durability {(int)pick.Durability}/{maxDur}).",
+                $"Đã sửa Cuốc Pandora +{amount} (độ bền {(int)pick.Durability}/{maxDur}).").ConfigureAwait(false);
+            return true;
+        }
+
+        await this.SendLocalizedBlueAsync(player, "Need Jewel of Bless or Bless Bundle in inventory to repair.", "Cần Ngọc Ước Nguyện hoặc Cụm Ngọc trong túi để sửa Cuốc Pandora.").ConfigureAwait(false);
+        return false;
+    }
+
+    private ValueTask SendRummyStatusAsync(Player player, MuRummyGameState game)
+    {
+        var cards = string.Join(", ", game.Hand.Select((c, i) => $"[{i + 1}] C{c.Color}-#{c.Number}"));
+        return this.SendLocalizedBlueAsync(
+            player,
+            $"Mu Rummy Score {game.Score} | Deck {game.Deck.Count} | Hand: {cards}",
+            $"Mu Rummy Điểm {game.Score} | Bộ {game.Deck.Count} | Bài: {cards}");
+    }
+
+    private async ValueTask TickLorenDeepAsync(IGameContext gameContext, S6EventsConfiguration cfg, DateTime nowUtc)
+    {
+        if (!this._lorenActive)
+        {
+            var slotKey = S6EventsEngine.ResolveDueScheduleSlot(cfg.LorenDeepDailyTimes, cfg.TimeZone, nowUtc);
+            if (slotKey is not null && this.GetStore(cfg).TryClaimLorenScheduleSlot(slotKey))
+            {
+                await this.StartLorenDeepAsync(gameContext, cfg, nowUtc).ConfigureAwait(false);
+            }
+
+            return;
+        }
+
+        if (nowUtc >= this._lorenDeadlineUtc)
+        {
+            await this.EndLorenDeepAsync(gameContext).ConfigureAwait(false);
+            return;
+        }
+
+        var elapsedMinutes = (nowUtc - this._lorenStartedUtc).TotalMinutes;
+        if (this._lorenWave < 2 && elapsedMinutes >= 10)
+        {
+            this._lorenWave = 2;
+            await this.BroadcastGoldenAsync(gameContext, "Loren Deep — Wave 2 monsters arriving!", "Loren Deep — Đợt quái thứ 2 đã xuất hiện!").ConfigureAwait(false);
+            await this.SpawnLorenWaveAsync(gameContext, cfg, 2).ConfigureAwait(false);
+        }
+        else if (this._lorenWave < 3 && elapsedMinutes >= 20)
+        {
+            this._lorenWave = 3;
+            await this.BroadcastGoldenAsync(gameContext, "Loren Deep — Final Wave 3 has arrived!", "Loren Deep — Đợt cuối cùng thứ 3 đã xuất hiện!").ConfigureAwait(false);
+            await this.SpawnLorenWaveAsync(gameContext, cfg, 3).ConfigureAwait(false);
+        }
+    }
+
+    private async ValueTask SpawnLorenWaveAsync(IGameContext gameContext, S6EventsConfiguration cfg, int wave)
+    {
+        var map = await gameContext.GetMapAsync((ushort)cfg.LorenDeepMapNumber).ConfigureAwait(false);
+        if (map is null)
+        {
+            return;
+        }
+
+        foreach (var entry in LorenDeepEngine.GetWaveSpawns(this._lorenType, wave))
+        {
+            var def = gameContext.Configuration.Monsters.FirstOrDefault(m => m.Number == entry.MonsterNumber);
+            if (def is null)
+            {
+                continue;
+            }
+
+            for (var i = 0; i < entry.Count; i++)
+            {
+                var x = (byte)Rand.NextInt(LorenDeepEngine.SpawnMinX, LorenDeepEngine.SpawnMaxX + 1);
+                var y = (byte)Rand.NextInt(LorenDeepEngine.SpawnMinY, LorenDeepEngine.SpawnMaxY + 1);
+                var pt = map.Terrain.AIgrid[x, y] == 1 ? new Point(x, y) : map.Terrain.RandomWalkableCoordinate;
+                if (pt is null)
+                {
+                    continue;
+                }
+
+                var area = new MonsterSpawnArea
+                {
+                    GameMap = map.Definition,
+                    MonsterDefinition = def,
+                    SpawnTrigger = SpawnTrigger.OnceAtEventStart,
+                    Quantity = 1,
+                    X1 = pt.Value.X,
+                    X2 = pt.Value.X,
+                    Y1 = pt.Value.Y,
+                    Y2 = pt.Value.Y,
+                };
+
+                var monster = new Monster(
+                    area,
+                    def,
+                    map,
+                    gameContext.DropGenerator,
+                    new BasicMonsterIntelligence(),
+                    gameContext.PlugInManager,
+                    gameContext.PathFinderPool);
+                monster.Initialize();
+                await map.AddAsync(monster).ConfigureAwait(false);
+                monster.OnSpawn();
+                this._lorenMobs.TryAdd(monster, 0);
+            }
+        }
+    }
+
+    private async ValueTask EndLorenDeepAsync(IGameContext gameContext)
+    {
+        this._lorenActive = false;
+        this._lorenWave = 0;
+        foreach (var mob in this._lorenMobs.Keys.ToList())
+        {
+            if (this._lorenMobs.TryRemove(mob, out _))
+            {
+                await mob.CurrentMap.RemoveAsync(mob).ConfigureAwait(false);
+                mob.Dispose();
+            }
+        }
+
+        await this.BroadcastGoldenAsync(
+            gameContext,
+            "Loren Deep assault has ended.",
+            "Sự kiện Quái Xâm Lăng Loren Deep đã kết thúc.").ConfigureAwait(false);
+    }
 }
