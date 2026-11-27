@@ -31,6 +31,9 @@ public sealed class SeasonNineSystemsConfiguration
     /// <summary>Gets or sets a value indicating whether Muun map/hour/weekday conditions are enforced.</summary>
     public bool MuunStrictConditions { get; set; } = true;
 
+    /// <summary>Gets or sets a value indicating whether Muun add-option period dates (<c>StartDate..EndDate</c>) are enforced (default false).</summary>
+    public bool MuunEnforceDatePeriod { get; set; }
+
     /// <summary>
     /// Gets or sets the energy a Muun level up costs per current level, for levels without an entry in
     /// <see cref="MuunLevelUpEnergyCosts"/> (default 10; a stored configuration without the setting reads 0, which counts

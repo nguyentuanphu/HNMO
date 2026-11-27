@@ -13,6 +13,7 @@
 #include "Guild/GuildInfoWindow.h"
 #include "UI/Inventory/MyInventory.h"
 #include "GameLogic/Items/CSItemOption.h"
+#include "GameLogic/SeasonNine/SeasonNineClientState.h"
 #include "World/MapInfra/MapManager.h"
 
 #include "Core/Utilities/StringUtils.h"
@@ -410,8 +411,10 @@ void mu::ui::window::CMiniMap::SyncMap()
          MatrixText(UI::MiniMap::ElementToQuad(
              UI::MiniMap::MapQuad(screen, heroX, heroY, length, UI::MiniMap::MapRotation), length, length)));
 
+    const bool hideS9Markers = GameLogic::SeasonNine::SeasonNineClientState::IsSeasonNineOnlyWorld(gMapManager.WorldActive)
+        && !GameLogic::SeasonNine::ClientState().MinimapMarkersEnabled();
     std::vector<MiniMapMarkerEntry> markers;
-    for (int i = 0; i < MAX_MINI_MAP_DATA; i++)
+    for (int i = 0; !hideS9Markers && i < MAX_MINI_MAP_DATA; i++)
     {
         const MINI_MAP& data = m_Mini_Map_Data[i];
         if (data.Kind <= 0)

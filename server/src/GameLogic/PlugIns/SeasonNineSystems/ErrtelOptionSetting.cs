@@ -30,4 +30,10 @@ public sealed class ErrtelOptionSetting
 
     /// <summary>Gets or sets the shown text, with <c>%d</c> for the value.</summary>
     public string Name { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets exact values for levels 0..10 (from the Season 9 client table); when present, overrides linear interpolation between <see cref="ValueLv0"/>, <see cref="ValueLv5"/> and <see cref="ValueLv10"/>.</summary>
+    public int[]? Values { get; set; }
+
+    /// <summary>Gets or sets exact upgrade success rates out of 10000 for target levels 0..10 (from the Season 9 client table).</summary>
+    public int[]? MixRates { get; set; }
 }

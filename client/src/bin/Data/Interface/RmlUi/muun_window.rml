@@ -1,0 +1,65 @@
+<rml>
+<head>
+	<title>Muun Companion</title>
+	<link type="text/rcss" href="base.rcss"/>
+	<link type="text/rcss" href="docked_panel_frame.rcss"/>
+	<link type="text/rcss" href="muun_window.rcss"/>
+</head>
+<body>
+	<div id="panel" data-model="muun_window">
+		<div class="frame-piece frame-top"></div>
+		<div class="frame-piece frame-left"></div>
+		<div class="frame-piece frame-right"></div>
+		<div class="frame-piece frame-bottom"></div>
+
+		<span class="sharp-text s9-title" data-style-font-size="text_px + 'px'">{{title}}</span>
+
+		<div class="s9-body">
+			<div class="s9-note" data-if="status_note != ''">
+				<span class="sharp-text s9-text" data-style-font-size="text_px + 'px'">{{status_note}}</span>
+			</div>
+			<div class="s9-summary" data-if="energy_summary != ''">
+				<span class="sharp-text s9-text s9-muted" data-style-font-size="text_px + 'px'">{{energy_summary}}</span>
+			</div>
+
+			<div class="s9-card" data-if="has_active">
+				<div class="s9-line"><span class="sharp-text s9-gold" data-style-font-size="text_px + 'px'">{{active_name}}</span></div>
+				<div class="s9-line"><span class="sharp-text s9-text" data-style-font-size="text_px + 'px'">{{active_bonus}}</span></div>
+				<div class="s9-line"><span class="sharp-text s9-muted" data-style-font-size="text_px + 'px'">{{active_condition}}</span></div>
+				<div class="s9-btn-row">
+					<div class="s9-btn" data-if="can_level_up" data-event-click="muun_action(6, 0)">
+						<span class="sharp-text s9-btn-label" data-style-font-size="text_px + 'px'">{{level_up_label}}</span>
+					</div>
+					<div class="s9-btn" data-if="can_evolve" data-event-click="muun_action(4, 0)">
+						<span class="sharp-text s9-btn-label" data-style-font-size="text_px + 'px'">{{evolve_label}}</span>
+					</div>
+					<div class="s9-btn" data-event-click="muun_action(3, 0)">
+						<span class="sharp-text s9-btn-label" data-style-font-size="text_px + 'px'">Put away</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="s9-list scroll-pane">
+				<div class="s9-row" data-for="r : bag_rows">
+					<div class="s9-line"><span class="sharp-text s9-text" data-style-font-size="text_px + 'px'">{{r.title}}</span></div>
+					<div class="s9-btn-row">
+						<div class="s9-tag" data-if="r.active"><span class="sharp-text s9-gold" data-style-font-size="text_px + 'px'">Active</span></div>
+						<div class="s9-btn" data-if="!r.active" data-event-click="muun_action(2, r.slot)">
+							<span class="sharp-text s9-btn-label" data-style-font-size="text_px + 'px'">Equip</span>
+						</div>
+						<div class="s9-btn" data-if="r.can_feed" data-event-click="muun_action(7, r.slot)">
+							<span class="sharp-text s9-btn-label" data-style-font-size="text_px + 'px'">{{r.feed_label}}</span>
+						</div>
+						<div class="s9-btn" data-if="r.can_convert" data-event-click="muun_action(5, r.slot)">
+							<span class="sharp-text s9-btn-label" data-style-font-size="text_px + 'px'">{{r.convert_label}}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="btn_exit" data-event-click="muun_exit" data-attr-data-hint="exit_tooltip"></div>
+		<div id="frame_corner_close" data-event-click="muun_exit"></div>
+	</div>
+</body>
+</rml>

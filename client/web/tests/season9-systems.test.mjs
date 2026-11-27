@@ -20,9 +20,13 @@ test('Season 9 master-tree.json exports 480 suite nodes and 330 max master level
   assert.equal(tree.nodes.length, 480);
 });
 
-test('Season 9 s9-skills.json defines skills 618-621', () => {
+test('Season 9 s9-skills.json defines skills 618-621 with mana 30', () => {
   const skills = JSON.parse(fs.readFileSync(path.join(root, 's9-skills.json'), 'utf8'));
   assert.deepEqual(skills.map((s) => s.number), [618, 619, 620, 621]);
   assert.equal(skills[0].name, 'Spell of Protection');
+  assert.equal(skills[0].mana, 30);
+  assert.equal(skills[1].mana, 30);
+  assert.equal(skills[2].mana, 30);
   assert.equal(skills[3].name, 'Shield-Burn');
+  assert.equal(skills[3].mana, 30);
 });

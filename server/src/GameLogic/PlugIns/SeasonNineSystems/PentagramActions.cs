@@ -275,15 +275,14 @@ public static class PentagramActions
                 return PentagramActionResult.MaximumReached;
             }
 
-            var zen = Math.Max(0, configuration.ErrtelLevelUpZenPerLevel) * (level + 1);
+            var zen = PentagramData.LevelUpZen(configuration, level);
             if (player.Money < zen)
             {
                 return PentagramActionResult.NotEnoughZen;
             }
 
-            var rate = Math.Max(configuration.ErrtelLevelUpMinimumRatePct, configuration.ErrtelLevelUpBaseRatePct - (configuration.ErrtelLevelUpRateStepPct * level))
-                       + configuration.PentagramErrtelMixBonusPct;
-            var success = NextRandom(100) < Math.Clamp(rate, 0, 100);
+            var rate = PentagramData.LevelUpRatePct(configuration, info.Options[0].Index, level + 1);
+            var success = NextRandom(100) < rate;
             var before = errtel.PentagramErrtels;
             if (success)
             {
