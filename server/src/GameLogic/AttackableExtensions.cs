@@ -929,7 +929,7 @@ public static class AttackableExtensions
         if (isSummonerSkill)
         {
             skillMinimumDamage += (int)(attackerStats[Stats.WizardryAndCurseBaseDmgBonus] + attackerStats[Stats.MinWizardryAndCurseDmgBonus]);
-            skillMaximumDamage += (int)attackerStats[Stats.WizardryAndCurseBaseDmgBonus];
+            skillMaximumDamage += (int)(attackerStats[Stats.WizardryAndCurseBaseDmgBonus] + attackerStats[Stats.MaxWizardryAndCurseDmgBonus]);
 
             if (damageType == DamageType.Wizardry)
             {
