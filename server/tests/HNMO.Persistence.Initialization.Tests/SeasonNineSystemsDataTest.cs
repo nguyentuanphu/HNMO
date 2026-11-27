@@ -74,8 +74,8 @@ internal class SeasonNineSystemsDataTest
     }
 
     /// <summary>
-    /// No Rage Fighter line learns the four skills; 618-620 (no verified effect yet) cost no mana, Shield-Burn (621) costs
-    /// 30. Applying the update again changes nothing.
+    /// No Rage Fighter line learns the four skills; all four Season 9 skills (618-621) cost 30 mana.
+    /// Applying the update again changes nothing.
     /// </summary>
     [Test]
     public async Task ClassesAndManaCostsAreRightAndASecondRunChangesNothingAsync()
@@ -94,15 +94,15 @@ internal class SeasonNineSystemsDataTest
         });
     }
 
-    /// <summary>A database with version 1 (Rage Fighters qualified, 618-620 costing 30 mana) is repaired by version 2.</summary>
+    /// <summary>A database with version 1 or 2 (Rage Fighters qualified, or 618-620 costing 0 mana) is repaired by version 3.</summary>
     [Test]
-    public async Task VersionOneSkillsAreRepairedAsync()
+    public async Task VersionOneAndTwoSkillsAreRepairedAsync()
     {
         var (context, config) = await TestGameConfiguration.CreateSeason6Async().ConfigureAwait(false);
         var plugin = new SeasonNineSystemsUpdatePlugIn(() => true);
         await plugin.ApplyUpdateAsync(context, config).ConfigureAwait(false);
 
-        // As version 1 left them.
+        // As version 2 left them (Rage Fighters removed, 618-620 costing 0 mana).
         var rageFighters = config.CharacterClasses.Where(c => c.Number is 24 or 25).ToList();
         var mana = Stats.CurrentMana.GetPersistent(config);
         foreach (var skill in config.Skills.Where(s => s.Number is >= 618 and <= 621))
@@ -110,10 +110,10 @@ internal class SeasonNineSystemsDataTest
             rageFighters.ForEach(skill.QualifiedCharacters.Add);
             if (skill.Number != 621)
             {
-                var cost = context.CreateNew<AttributeRequirement>();
-                cost.Attribute = mana;
-                cost.MinimumValue = 30;
-                skill.ConsumeRequirements.Add(cost);
+                foreach (var req in skill.ConsumeRequirements.Where(r => Equals(r.Attribute, mana)).ToList())
+                {
+                    skill.ConsumeRequirements.Remove(req);
+                }
             }
         }
 
@@ -130,7 +130,7 @@ internal class SeasonNineSystemsDataTest
             Assert.That(skill.QualifiedCharacters.Any(c => c.Number is 24 or 25), Is.False, $"{number}: Rage Fighter line");
             Assert.That(skill.QualifiedCharacters.Count(c => c.Number is 0 or 2 or 3), Is.EqualTo(3), $"{number}: wizard line");
             var manaCost = skill.ConsumeRequirements.Where(r => r.Attribute == Stats.CurrentMana).Sum(r => r.MinimumValue);
-            Assert.That(manaCost, Is.EqualTo(number == 621 ? 30 : 0), $"{number}: mana");
+            Assert.That(manaCost, Is.EqualTo(30), $"{number}: mana");
         }
     }
 

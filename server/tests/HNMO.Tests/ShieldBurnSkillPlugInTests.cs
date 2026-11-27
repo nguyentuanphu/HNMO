@@ -90,7 +90,37 @@ public class ShieldBurnSkillPlugInTests
         var plugInManager = caster.GameContext.PlugInManager;
 
         Assert.That(plugInManager.GetStrategy<short, ITargetedSkillPlugin>(621), Is.InstanceOf<ShieldBurnSkillPlugIn>());
-        Assert.That(plugInManager.GetStrategy<short, ITargetedSkillPlugin>(618), Is.Not.InstanceOf<ShieldBurnSkillPlugIn>());
+        Assert.That(plugInManager.GetStrategy<short, ITargetedSkillPlugin>(618), Is.InstanceOf<SpellOfProtectionSkillPlugIn>());
+        Assert.That(plugInManager.GetStrategy<short, ITargetedSkillPlugin>(619), Is.InstanceOf<SpellOfRestrictionSkillPlugIn>());
+        Assert.That(plugInManager.GetStrategy<short, ITargetedSkillPlugin>(620), Is.InstanceOf<SpellOfPursuitSkillPlugIn>());
+    }
+
+    /// <summary>Skills 618-620 apply protection, restriction and pursuit when enabled and spend 30 mana.</summary>
+    /// <returns>A task.</returns>
+    [Test]
+    public async Task ProtectionRestrictionAndPursuitWorkAsync()
+    {
+        var (caster, target) = await CreateAsync(skillsEnabled: true, seasonNine: true).ConfigureAwait(false);
+        target.Position = new Point(12, 10);
+        foreach (short num in new short[] { 618, 619, 620 })
+        {
+            var sk = new HNMO.Persistence.BasicModel.Skill { Number = num, Name = $"Skill {num}", Range = 3, SkillType = num == 619 ? SkillType.Other : SkillType.Buff, Target = SkillTarget.Explicit };
+            sk.ConsumeRequirements.Add(new HNMO.Persistence.BasicModel.AttributeRequirement { Attribute = Stats.CurrentMana, MinimumValue = 30 });
+            caster.GameContext.Configuration.Skills.Add(sk);
+            await caster.SkillList!.AddLearnedSkillAsync(sk).ConfigureAwait(false);
+        }
+
+        await new SpellOfProtectionSkillPlugIn().PerformSkillAsync(caster, target, 618).ConfigureAwait(false);
+        Assert.That(caster.Attributes![Stats.DamageReceiveDecrement], Is.EqualTo(0.85f).Within(0.01f));
+        Assert.That(caster.Attributes[Stats.CurrentMana], Is.EqualTo(70));
+
+        await new SpellOfRestrictionSkillPlugIn().PerformSkillAsync(caster, target, 619).ConfigureAwait(false);
+        Assert.That(target.Attributes![Stats.IsFrozen], Is.EqualTo(1));
+        Assert.That(caster.Attributes[Stats.CurrentMana], Is.EqualTo(40));
+
+        await new SpellOfPursuitSkillPlugIn().PerformSkillAsync(caster, target, 620).ConfigureAwait(false);
+        Assert.That(caster.Position, Is.EqualTo(target.Position));
+        Assert.That(caster.Attributes[Stats.CurrentMana], Is.EqualTo(10));
     }
 
     private static void AssertNothingHappened(Player caster, Player target)

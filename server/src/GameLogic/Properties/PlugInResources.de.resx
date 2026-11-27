@@ -2151,4 +2151,22 @@
   <data name="MossGambleConfiguration_UseWeightedExcellentSelection_Description" xml:space="preserve">
     <value>Wählt Exzellent-Optionen nach den Gewichten der Season-6/9-Serversuiten (10 % / 20 % / 20 % / 20 % / 20 % / 10 %) statt gleichverteilt aus.</value>
   </data>
+  <data name="SpellOfProtectionSkillPlugIn_Name" xml:space="preserve">
+    <value>Season-9-Fertigkeit: Schutzzauber</value>
+  </data>
+  <data name="SpellOfProtectionSkillPlugIn_Description" xml:space="preserve">
+    <value>Gewährt vorübergehende Schadensreduktion, wenn Season-9-Systeme und -Fertigkeiten aktiv sind.</value>
+  </data>
+  <data name="SpellOfRestrictionSkillPlugIn_Name" xml:space="preserve">
+    <value>Season-9-Fertigkeit: Bannzauber</value>
+  </data>
+  <data name="SpellOfRestrictionSkillPlugIn_Description" xml:space="preserve">
+    <value>Hält ein Ziel vorübergehend fest, wenn Season-9-Systeme und -Fertigkeiten aktiv sind.</value>
+  </data>
+  <data name="SpellOfPursuitSkillPlugIn_Name" xml:space="preserve">
+    <value>Season-9-Fertigkeit: Verfolgungszauber</value>
+  </data>
+  <data name="SpellOfPursuitSkillPlugIn_Description" xml:space="preserve">
+    <value>Teleportiert den Zaubernden neben das Ziel, wenn Season-9-Systeme und -Fertigkeiten aktiv sind.</value>
+  </data>
 </root>

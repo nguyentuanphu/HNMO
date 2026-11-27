@@ -104,7 +104,7 @@ public static class Pentagram
     /// <returns>The value, or 0 for an unknown option.</returns>
     public static int OptionValue(int optionIndex, byte level) => OptionValue(null, optionIndex, level);
 
-    /// <summary>The value of an errtel option at a level: the table's values at levels 0, 5 and 10, linear in between.</summary>
+    /// <summary>The value of an errtel option at a level: uses the exact 11-level curve when present, else interpolates 0/5/10.</summary>
     /// <param name="configuration">The configuration (the table in use).</param>
     /// <param name="optionIndex">The option index.</param>
     /// <param name="level">The level (0..10).</param>
@@ -117,6 +117,11 @@ public static class Pentagram
         }
 
         var l = Math.Clamp((int)level, 0, 10);
+        if (option.Values is { Length: > 0 } values)
+        {
+            return values[Math.Min(l, values.Length - 1)];
+        }
+
         return l <= 5
             ? option.ValueLv0 + ((option.ValueLv5 - option.ValueLv0) * l / 5)
             : option.ValueLv5 + ((option.ValueLv10 - option.ValueLv5) * (l - 5) / 5);

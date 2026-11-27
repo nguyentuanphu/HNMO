@@ -21,8 +21,15 @@ public static class PentagramData
             ValueLv5 = o.ValueLv5,
             ValueLv10 = o.ValueLv10,
             Name = o.Name,
+            Values = o.Values,
+            MixRates = o.MixRates,
         })
         .ToList();
+
+    private const int DefaultLevelUpZenPerLevel = 100_000;
+    private const int DefaultLevelUpBaseRatePct = 90;
+    private const int DefaultLevelUpRateStepPct = 5;
+    private const int DefaultLevelUpMinimumRatePct = 40;
 
     /// <summary>Gets the errtel options in use.</summary>
     /// <param name="configuration">The configuration, or <c>null</c> for the defaults.</param>
@@ -74,4 +81,56 @@ public static class PentagramData
     /// <returns>The element.</returns>
     public static PentagramElement MonsterElement(SeasonNineSystemsConfiguration? configuration, int monsterNumber)
         => configuration?.MonsterElements?.FirstOrDefault(m => m.MonsterNumber == monsterNumber)?.Element ?? PentagramElement.Undefined;
+
+    /// <summary>
+    /// Gets the Zen cost to level up an errtel from <paramref name="currentLevel"/> to <paramref name="currentLevel"/> + 1:
+    /// uses the exact Season 9 mix recipe table (<see cref="SeasonNineSystemsCatalog.PentagramMixes"/> category 2)
+    /// when the admin kept the default per-level setting, otherwise multiplies the configured setting.
+    /// </summary>
+    public static int LevelUpZen(SeasonNineSystemsConfiguration? configuration, int currentLevel)
+    {
+        var zenPerLevel = configuration?.ErrtelLevelUpZenPerLevel ?? DefaultLevelUpZenPerLevel;
+        if (zenPerLevel != DefaultLevelUpZenPerLevel)
+        {
+            return Math.Max(0, zenPerLevel) * (currentLevel + 1);
+        }
+
+        foreach (var mix in SeasonNineSystemsCatalog.PentagramMixes)
+        {
+            if (mix.Category == 2 && mix.RequiredLevel == currentLevel)
+            {
+                return Math.Max(0, mix.Zen);
+            }
+        }
+
+        return DefaultLevelUpZenPerLevel * (currentLevel + 1);
+    }
+
+    /// <summary>
+    /// Gets the success rate percentage (0..100) for leveling an errtel option to <paramref name="targetLevel"/>.
+    /// Uses the exact Season 9 mix rate curve when the admin kept default rate parameters, otherwise falls back to the formula.
+    /// </summary>
+    public static int LevelUpRatePct(SeasonNineSystemsConfiguration? configuration, int optionIndex, int targetLevel)
+    {
+        var basePct = configuration?.ErrtelLevelUpBaseRatePct ?? DefaultLevelUpBaseRatePct;
+        var stepPct = configuration?.ErrtelLevelUpRateStepPct ?? DefaultLevelUpRateStepPct;
+        var minPct = configuration?.ErrtelLevelUpMinimumRatePct ?? DefaultLevelUpMinimumRatePct;
+        var bonusPct = configuration?.PentagramErrtelMixBonusPct ?? 0;
+
+        if (basePct == DefaultLevelUpBaseRatePct
+            && stepPct == DefaultLevelUpRateStepPct
+            && minPct == DefaultLevelUpMinimumRatePct
+            && Option(configuration, optionIndex) is { MixRates: { Length: > 0 } rates })
+        {
+            var rateOutOf10000 = rates[Math.Clamp(targetLevel, 0, rates.Length - 1)];
+            if (rateOutOf10000 > 0)
+            {
+                return Math.Clamp((rateOutOf10000 / 100) + bonusPct, 0, 100);
+            }
+        }
+
+        var prevLevel = Math.Max(0, targetLevel - 1);
+        var rate = Math.Max(minPct, basePct - (stepPct * prevLevel)) + bonusPct;
+        return Math.Clamp(rate, 0, 100);
+    }
 }

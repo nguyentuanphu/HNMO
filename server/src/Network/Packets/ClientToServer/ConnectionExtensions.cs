@@ -6616,7 +6616,7 @@ public static class ConnectionExtensions
     /// Sends a <see cref="HnmoMuunCommand" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>
-    /// <param name="action">1 = Request state, 2 = Make the Muun in the bag slot active, 3 = Put the active Muun away, 4 = Evolve the active Muun, 5 = Convert the Muun in the bag slot into energy, 6 = Level up the active Muun.</param>
+    /// <param name="action">1 = Request state, 2 = Make the Muun in the bag slot active, 3 = Put the active Muun away, 4 = Evolve the active Muun, 5 = Convert the Muun in the bag slot into energy, 6 = Level up the active Muun, 7 = Level up the active Muun by feeding a duplicate Muun from the bag slot.</param>
     /// <param name="slot">Inventory slot of the Muun for actions 2 and 5.</param>
     /// <remarks>
     /// Is sent by the client when: Sent by the web client to open the Season 9 Muun window, make a bag Muun the active one, put it away, evolve it, convert a Muun into energy or level up the active Muun.
