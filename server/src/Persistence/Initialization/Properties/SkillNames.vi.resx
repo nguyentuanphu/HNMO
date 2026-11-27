@@ -299,4 +299,41 @@
   <data name="WhirlKicks" xml:space="preserve"><value>cú đá xoáy</value></data>
   <data name="IronBody" xml:space="preserve"><value>Thân sắt</value></data>
   <data name="QuakeFist" xml:space="preserve"><value>Trận động đất</value></data>
+  <data name="CastInvincibility" xml:space="preserve"><value>Hộ thân bất tử</value></data>
+  <data name="ArmorSetBonusIncrease" xml:space="preserve"><value>Tăng thưởng bộ giáp</value></data>
+  <data name="Vengeance" xml:space="preserve"><value>Báo thù</value></data>
+  <data name="EnergyIncrease" xml:space="preserve"><value>Tăng Năng lượng</value></data>
+  <data name="StaminaIncrease" xml:space="preserve"><value>Tăng Thể lực</value></data>
+  <data name="AgilityIncrease" xml:space="preserve"><value>Tăng Nhanh nhẹn</value></data>
+  <data name="StrengthIncrease" xml:space="preserve"><value>Tăng Sức mạnh</value></data>
+  <data name="WingOfStormAbsPowUp" xml:space="preserve"><value>Tăng hấp thụ Cánh Bão</value></data>
+  <data name="WingOfStormDefPowUp" xml:space="preserve"><value>Tăng thủ Cánh Bão</value></data>
+  <data name="WingOfStormAttPowUp" xml:space="preserve"><value>Tăng công Cánh Bão</value></data>
+  <data name="MaximumAgIncrease" xml:space="preserve"><value>Tăng AG tối đa</value></data>
+  <data name="MaximumAttackPowerIncrease" xml:space="preserve"><value>Tăng công vật lý tối đa</value></data>
+  <data name="IncreaseCriticalDamageRate" xml:space="preserve"><value>Tăng tỷ lệ sát thương chí mạng</value></data>
+  <data name="RestoresAllMana" xml:space="preserve"><value>Hồi phục toàn bộ Mana</value></data>
+  <data name="RestoresAllHp" xml:space="preserve"><value>Hồi phục toàn bộ HP</value></data>
+  <data name="IncreaseExcellentDamageRate" xml:space="preserve"><value>Tăng tỷ lệ sát thương hoàn hảo</value></data>
+  <data name="IncreaseDoubleDamageRate" xml:space="preserve"><value>Tăng tỷ lệ sát thương kép</value></data>
+  <data name="IncreaseChanceOfIgnoreDef" xml:space="preserve"><value>Tăng tỷ lệ bỏ qua phòng thủ</value></data>
+  <data name="RestoresAllSd" xml:space="preserve"><value>Hồi phục toàn bộ SD</value></data>
+  <data name="EternalWingsAbsPowUp" xml:space="preserve"><value>Tăng hấp thụ Cánh Vĩnh Hằng</value></data>
+  <data name="EternalWingsDefPowUp" xml:space="preserve"><value>Tăng thủ Cánh Vĩnh Hằng</value></data>
+  <data name="EternalWingsAttPowUp" xml:space="preserve"><value>Tăng công Cánh Vĩnh Hằng</value></data>
+  <data name="MaximumWizardryIncrease" xml:space="preserve"><value>Tăng ma công tối đa</value></data>
+  <data name="IllusionWingsAbsPowUp" xml:space="preserve"><value>Tăng hấp thụ Cánh Ảo Ảnh</value></data>
+  <data name="IllusionWingsDefPowUp" xml:space="preserve"><value>Tăng thủ Cánh Ảo Ảnh</value></data>
+  <data name="IllusionWingsAttPowUp" xml:space="preserve"><value>Tăng công Cánh Ảo Ảnh</value></data>
+  <data name="DimensionWingsDefPowUp" xml:space="preserve"><value>Tăng thủ Cánh Không Gian</value></data>
+  <data name="DimensionWingsAttPowUp" xml:space="preserve"><value>Tăng công Cánh Không Gian</value></data>
+  <data name="MaximumWizCurseIncrease" xml:space="preserve"><value>Tăng ma công / nguyền rủa tối đa</value></data>
+  <data name="WingOfRuinDefPowUp" xml:space="preserve"><value>Tăng thủ Cánh Hủy Diệt</value></data>
+  <data name="WingOfRuinAttPowUp" xml:space="preserve"><value>Tăng công Cánh Hủy Diệt</value></data>
+  <data name="EmperorCapeDefPowUp" xml:space="preserve"><value>Tăng thủ Áo Choàng Đế Vương</value></data>
+  <data name="AddsCommandStat" xml:space="preserve"><value>Tăng Mệnh lệnh</value></data>
+  <data name="EmperorCapeAttPowUp" xml:space="preserve"><value>Tăng công Áo Choàng Đế Vương</value></data>
+  <data name="ReigningCloakAbsPowUp" xml:space="preserve"><value>Tăng hấp thụ Áo Choàng Thống Trị</value></data>
+  <data name="ReigningCloakDefPowUp" xml:space="preserve"><value>Tăng thủ Áo Choàng Thống Trị</value></data>
+  <data name="ReigningCloakAttPowUp" xml:space="preserve"><value>Tăng công Áo Choàng Thống Trị</value></data>
 </root>

@@ -14,3 +14,13 @@
 ## Bugs Found
 1. **Bug — `ItemStackPlugIn.cs:200-207` (Orphaned `CashShopBalanceReceipt` on failed unlock save)**:
    - In `UnlockAsync`, `CashShopBalanceReceipt.Record(...)` (`line 201`) stages a negative `StackUnlock` ledger entry before `player.SaveProgressAsync()`. If `SaveProgressAsync()` returns `false`, line 205 refunds `account`'s coin field, **but does not remove the staged `CashShopBalanceReceipt`** (unlike `AccountCoinShopCurrencyExchange.cs:72` which calls `RemoveAsync`). On the next successful save, a phantom deduction receipt persists without a matching coin deduction.
+
+## Re-check 2026-11-27 (changes cf8c32b8..a108e846)
+
+Commits read (every changed file read in full):
+
+- 478f9cf3 fix(plugins): fix stack deposits/consumption, receipt rollback, buff id collision, and partypass
+
+Evidence:
+
+- ItemStackPlugIn unlock: same receipt rollback on a failed save - fixed.

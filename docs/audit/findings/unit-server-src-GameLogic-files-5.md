@@ -21,3 +21,13 @@ Audited all 13 files (2,372 lines): `SkillHitValidator.cs`, `SkillList.cs`, `Soc
    - `SoccerGameMap.cs:96-112`: Battle Soccer awards `20` points per goal when `SoccerBall` crosses into `LeftGoal` / `RightGoal` and respawns the ball.
    - `SkillHitValidator.cs:20-21, 139-277`: Enforces `0x01..0x32` animation counter sequence, replay window (`SkillHitCounterReplayWindowMs`), 10s max animation-to-hit delay, and area-center slack validation via `ISkillAnimationCounterStrategy`.
    - `Walker.cs:114-160, 265-276, 302-345`: Prevents walk-restart speed exploits (`_lastStepTimestamp`, `_paceFirstStepAcrossWalks`), avoids cross-walk cancellation races (`StopOwnWalkAsync`), and compensates `Task.Delay` timer drift.
+
+## Re-check 2026-11-27 (changes 96a69cae..a108e846)
+
+Commits read (every changed file read in full):
+
+- 49b959ac fix(gamelogic): fix Fenrir skill check order, spawn gate, drop stack lock, and storage rollback
+
+Evidence:
+
+- Storage.TryTakeAllAsync: on failure only the items actually added are removed again before every item goes back to the other storage; RemoveItemAsync ignores a slot that holds another item - fixed (an item could be removed from the wrong slot / lost on rollback).

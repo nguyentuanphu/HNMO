@@ -15,3 +15,13 @@
 | NPCs & merchant stores (`NpcInitialization.cs`, `MerchantStores.cs`) | All S6 NPCs, Elf Soldier buff (`3600s`, def `50+Lvl/5`, dmg `45+Lvl/3`, max lvl 220), 27+ merchant stores including Arena Guard (239), Moss (492), Leina (577), Bolo (578) | S6/S9 `ShopList.xml`, `Shops/*.xml` (`diff-shops.txt`) | Same (with Arena Guard/Moss per owner decision 21 Nov 2026) |
 | Golden & White Wizard invasions (`InvasionMobsInitialization.cs`) | Golden Goblin (78), Golden Dragon (79), Golden Lizard King (80), Golden Vepar (81), Golden Tantallos (82), Golden Wheel (83), White Wizard (135), Destructive Ogre Soldier/Archer (136/137) + drops | S6/S9 `Monster.txt` (`diff-monsters.txt`) | Same |
 | Global config, maps, Arena Herald, CashShop, Master passives | `MaximumAdditionalOptionLevel = 7`, `MaximumAllianceSize = 5`, 73 S6 maps, CashShop `512.2012.084`, `MasterSkillPassivePowerUps` (`-1/500` per level durability reduction), `HnmoArenaHeraldInitializer` (NPC 900) | S6 suite | Same (`HnmoArenaHeraldInitializer` is HNMO-specific) |
+
+## Re-check 2026-11-27 (changes 8ef6758f..a108e846)
+
+Commits read (every changed file read in full):
+
+- 1fc60d72 fix(init): fix Kantata exc chance, Blue/DeepBlue boxes, Guardian boots SD, GM DL slots, and Hanzo store
+
+Evidence:
+
+- MerchantStores (Hanzo 251): same fix as 0.75 - fixed; existing databases by AuditDataFixesUpdatePlugInSeason6 (this re-check).
