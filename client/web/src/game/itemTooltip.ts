@@ -18,6 +18,7 @@ import { buxConvert } from '../formats.js';
 import { hellasTooltipLines } from './kalima.js';
 import { pentagramTooltipFor } from './pentagram.js';
 import { currentLanguage } from '../i18n.js';
+import { SOCKET_EMPTY, socketBytes } from './socketBytes.js';
 
 /** A row of the tooltip. */
 export interface TooltipLine {
@@ -51,7 +52,6 @@ const ITEMS_PER_GROUP = 512;
 const LEVEL_COUNT = 16;
 const MAX_VALUE = 65535;
 const MAX_SOCKETS = 5;
-const SOCKET_EMPTY = 0xfe;
 const MAX_SOCKET_OPTION = 50;
 const MAX_DESCRIPTION_ROWS = 32;
 const MAX_ADDED_ROWS = 16;
@@ -814,7 +814,7 @@ const isSocketItem = (item: Item) => (SOCKET_ITEMS[item.group]?.includes(item.nu
 interface Socket { seed: number; sphereLevel: number }
 
 function socketsOf(item: Item): (Socket | null)[] {
-  return item.sockets.slice(0, MAX_SOCKETS).map((byte) => (byte === SOCKET_EMPTY ? null
+  return socketBytes(item.sockets).slice(0, MAX_SOCKETS).map((byte) => (byte === SOCKET_EMPTY ? null
     : { seed: byte % MAX_SOCKET_OPTION, sphereLevel: Math.floor(byte / MAX_SOCKET_OPTION) + 1 }));
 }
 

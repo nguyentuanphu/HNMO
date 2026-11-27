@@ -19,7 +19,7 @@ Checked on the branch at `c157d7cd` (36 commits, 194 files).
 - Real coverage is 119 of 336 rule units, about 26 % of the 776,438 rule lines; not "400/400".
 - Part 4 (suite rule files nobody parsed, the clients' encoded tables): the commit says "complete", but
   `progress.md` still has Step 3.2 unchecked. Not verified.
-- 92 mentions of the suites' vendor file prefix (`IGC_...`) in findings, coverage.json and coverage.md: write the
+- 92 mentions of the suites' vendor file prefix in findings, coverage.json and coverage.md: write the
   file's role instead ("the Season 6 suite's socket option file").
 
 ## Duplicate PRs to close (keep the newer one)

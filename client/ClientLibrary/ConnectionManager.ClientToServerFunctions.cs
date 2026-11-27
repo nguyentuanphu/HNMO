@@ -6898,6 +6898,869 @@ public unsafe partial class ConnectionManager
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoMissionsRequest" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player opens HNMO's missions window.
+    /// Causes reaction on server side: The server sends the HnmoMissionsState message, and from then on sends it again when something changes, e.g. a mission is finished.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoMissionsRequest")]
+    public static void SendHnmoMissionsRequest(int handle)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoMissionsRequestRef.Length;
+                var packet = new HnmoMissionsRequestRef(pipeWriter.GetSpan(length)[..length]);
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoMissionsAction" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">The mission id for ClaimMission; the invite code or a character name of the inviting account for EnterInvite; empty otherwise.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player clicks a button of HNMO's missions window: claim the reward of a mission, the streak bonus or the login calendar day, or enter who invited the account.
+    /// Causes reaction on server side: The server does it and sends the HnmoMissionsState message with the result.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoMissionsAction")]
+    public static void SendHnmoMissionsAction(int handle, HnmoMissionsAction.HnmoMissionsActionType @action, IntPtr @argument)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoMissionsActionRef.GetRequiredSize(Encoding.UTF8.GetByteCount(NativeInterop.PtrToWideString(@argument)!));
+                var packet = new HnmoMissionsActionRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Argument = NativeInterop.PtrToWideString(@argument);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoWorldBossesRequest" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game entered the world, or the player opens HNMO's world boss window.
+    /// Causes reaction on server side: The server sends the HnmoWorldBossesState message, and from then on sends it again when something changes, e.g. a boss is announced, appears, is hit or killed.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoWorldBossesRequest")]
+    public static void SendHnmoWorldBossesRequest(int handle)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoWorldBossesRequestRef.Length;
+                var packet = new HnmoWorldBossesRequestRef(pipeWriter.GetSpan(length)[..length]);
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoWorldBossesAction" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">Not used yet; empty.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player clicks a button of HNMO's world boss window, e.g. to take the rewards which waited for room in the bag.
+    /// Causes reaction on server side: The server does it and sends the HnmoWorldBossesState message with the result.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoWorldBossesAction")]
+    public static void SendHnmoWorldBossesAction(int handle, HnmoWorldBossesAction.HnmoWorldBossesActionType @action, IntPtr @argument)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoWorldBossesActionRef.GetRequiredSize(Encoding.UTF8.GetByteCount(NativeInterop.PtrToWideString(@argument)!));
+                var packet = new HnmoWorldBossesActionRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Argument = NativeInterop.PtrToWideString(@argument);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoOnboardingRequest" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game entered the world, or the player opens HNMO's guide panel.
+    /// Causes reaction on server side: The server sends the HnmoOnboardingState message, and from then on sends it again when something changes, e.g. a step is done or a reward is given.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoOnboardingRequest")]
+    public static void SendHnmoOnboardingRequest(int handle)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoOnboardingRequestRef.Length;
+                var packet = new HnmoOnboardingRequestRef(pipeWriter.GetSpan(length)[..length]);
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoOnboardingAction" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">Not used yet; empty.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player clicks a button of HNMO's guide panel: skip the guide (after a confirmation), skip an optional step, or take the rewards which waited for room in the bag.
+    /// Causes reaction on server side: The server does it and sends the HnmoOnboardingState message with the result.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoOnboardingAction")]
+    public static void SendHnmoOnboardingAction(int handle, HnmoOnboardingAction.HnmoOnboardingActionType @action, IntPtr @argument)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoOnboardingActionRef.GetRequiredSize(Encoding.UTF8.GetByteCount(NativeInterop.PtrToWideString(@argument)!));
+                var packet = new HnmoOnboardingActionRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Argument = NativeInterop.PtrToWideString(@argument);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoGuildsRequest" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game entered the world, or the player opens the guild window.
+    /// Causes reaction on server side: The server sends the HnmoGuildsState message, and from then on sends it again when something changes, e.g. the guild reached a level or a ladder reward was given.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoGuildsRequest")]
+    public static void SendHnmoGuildsRequest(int handle)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoGuildsRequestRef.Length;
+                var packet = new HnmoGuildsRequestRef(pipeWriter.GetSpan(length)[..length]);
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoGuildsAction" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">Not used yet; empty.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player clicks a button of HNMO's guild levels panel, e.g. to take the ladder rewards which waited for room in the bag.
+    /// Causes reaction on server side: The server does it and sends the HnmoGuildsState message with the result.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoGuildsAction")]
+    public static void SendHnmoGuildsAction(int handle, HnmoGuildsAction.HnmoGuildsActionType @action, IntPtr @argument)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoGuildsActionRef.GetRequiredSize(Encoding.UTF8.GetByteCount(NativeInterop.PtrToWideString(@argument)!));
+                var packet = new HnmoGuildsActionRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Argument = NativeInterop.PtrToWideString(@argument);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoCommunityRequest" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game entered the world, or the player opens the community window.
+    /// Causes reaction on server side: The server sends the HnmoCommunityState message, and from then on sends it again when something changes, e.g. community coins or an event reward were given.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoCommunityRequest")]
+    public static void SendHnmoCommunityRequest(int handle)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoCommunityRequestRef.Length;
+                var packet = new HnmoCommunityRequestRef(pipeWriter.GetSpan(length)[..length]);
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoCommunityAction" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">The event's code (EnterCode), the player's name in Zalo (ClaimZalo, may be empty); empty otherwise.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player clicks a button of HNMO's community window: take the Discord coins, claim the Zalo coins, enter an event's code or take the waiting rewards.
+    /// Causes reaction on server side: The server does it and sends the HnmoCommunityState message with the result.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoCommunityAction")]
+    public static void SendHnmoCommunityAction(int handle, HnmoCommunityAction.HnmoCommunityActionType @action, IntPtr @argument)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoCommunityActionRef.GetRequiredSize(Encoding.UTF8.GetByteCount(NativeInterop.PtrToWideString(@argument)!));
+                var packet = new HnmoCommunityActionRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Argument = NativeInterop.PtrToWideString(@argument);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoTopRacesRequest" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game entered the world, or the player opens the top races window.
+    /// Causes reaction on server side: The server sends the HnmoTopRacesState message, and from then on sends it again when something changes, e.g. a race started or ended or a prize was given.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoTopRacesRequest")]
+    public static void SendHnmoTopRacesRequest(int handle)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoTopRacesRequestRef.Length;
+                var packet = new HnmoTopRacesRequestRef(pipeWriter.GetSpan(length)[..length]);
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoTopRacesAction" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">Not used yet; empty.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player clicks a button of HNMO's top races window, e.g. to take the prizes which waited for room in the bag.
+    /// Causes reaction on server side: The server does it and sends the HnmoTopRacesState message with the result.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoTopRacesAction")]
+    public static void SendHnmoTopRacesAction(int handle, HnmoTopRacesAction.HnmoTopRacesActionType @action, IntPtr @argument)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoTopRacesActionRef.GetRequiredSize(Encoding.UTF8.GetByteCount(NativeInterop.PtrToWideString(@argument)!));
+                var packet = new HnmoTopRacesActionRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Argument = NativeInterop.PtrToWideString(@argument);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoGiftCodeRedeemExtended" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="giftCode">The gift code.</param>
+    /// <param name="deviceId">The device id.</param>
+    /// <remarks>
+    /// Is sent by the client when: A web player enters a gift code, including the persistent browser device UUID.
+    /// Causes reaction on server side: The server checks the account, network and optional device limits and sends HnmoGiftCodesState with the result.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoGiftCodeRedeemExtended")]
+    public static void SendHnmoGiftCodeRedeemExtended(int handle, IntPtr @giftCode, IntPtr @deviceId)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoGiftCodeRedeemExtendedRef.Length;
+                var packet = new HnmoGiftCodeRedeemExtendedRef(pipeWriter.GetSpan(length)[..length]);
+                packet.GiftCode = NativeInterop.PtrToWideString(@giftCode);
+                packet.DeviceId = NativeInterop.PtrToWideString(@deviceId);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoGiftCodesRequest" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game entered the world, or the player opens the gift code window.
+    /// Causes reaction on server side: The server sends the HnmoGiftCodesState message, and from then on sends it again when something changes, e.g. a code was entered with the chat command or waiting rewards were given.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoGiftCodesRequest")]
+    public static void SendHnmoGiftCodesRequest(int handle)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoGiftCodesRequestRef.Length;
+                var packet = new HnmoGiftCodesRequestRef(pipeWriter.GetSpan(length)[..length]);
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoGiftCodesAction" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">The code for Redeem; empty otherwise.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player clicks a button of HNMO's gift code window: enter a code, or take the rewards which waited for room in the bag.
+    /// Causes reaction on server side: The server does it and sends the HnmoGiftCodesState message with the result.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoGiftCodesAction")]
+    public static void SendHnmoGiftCodesAction(int handle, HnmoGiftCodesAction.HnmoGiftCodesActionType @action, IntPtr @argument)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoGiftCodesActionRef.GetRequiredSize(Encoding.UTF8.GetByteCount(NativeInterop.PtrToWideString(@argument)!));
+                var packet = new HnmoGiftCodesActionRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Argument = NativeInterop.PtrToWideString(@argument);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoResetsRequest" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game entered the world.
+    /// Causes reaction on server side: The server sends the HnmoResetsState message, and from then on sends it again when something changes, e.g. a reset with the NPC or the chat command, a relife, or delegated resets done while the player was away.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoResetsRequest")]
+    public static void SendHnmoResetsRequest(int handle)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoResetsRequestRef.Length;
+                var packet = new HnmoResetsRequestRef(pipeWriter.GetSpan(length)[..length]);
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoResetsAction" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">The action.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player asks the web game for a reset, a relife, the next reset's needs, or switches the delegated reset.
+    /// Causes reaction on server side: The server does it and sends the HnmoResetsState message with the result (and a chat message).
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoResetsAction")]
+    public static void SendHnmoResetsAction(int handle, HnmoResetsAction.HnmoResetsActionType @action)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoResetsActionRef.Length;
+                var packet = new HnmoResetsActionRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoAccountSafetyRequest" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game entered the world.
+    /// Causes reaction on server side: The server sends the HnmoAccountSafetyState message, and from then on sends it again when something changes, e.g. an action needs the second password, an item was locked or unlocked, or a locked item moved.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoAccountSafetyRequest")]
+    public static void SendHnmoAccountSafetyRequest(int handle)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoAccountSafetyRequestRef.Length;
+                var packet = new HnmoAccountSafetyRequestRef(pipeWriter.GetSpan(length)[..length]);
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoAccountSafetyAction" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="vault">Whether the slot is in the vault (else the inventory).</param>
+    /// <param name="slot">The item's slot.</param>
+    /// <param name="pin">The second password (0-9999); 0xFFFF when none was entered.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player enters the second password in the web game, or locks or unlocks an item.
+    /// Causes reaction on server side: The server does it, answers in the chat and sends the HnmoAccountSafetyState message with the result.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoAccountSafetyAction")]
+    public static void SendHnmoAccountSafetyAction(int handle, HnmoAccountSafetyAction.HnmoAccountSafetyActionType @action, byte @vault, byte @slot, ushort @pin)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoAccountSafetyActionRef.Length;
+                var packet = new HnmoAccountSafetyActionRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Vault = @vault == 1;
+                packet.Slot = @slot;
+                packet.Pin = @pin;
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoTicketLogin" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="username">The account login name.</param>
+    /// <param name="ticket">The one-time login ticket issued on the website.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game connects with a one-time login ticket issued on the website.
+    /// Causes reaction on server side: The server redeems the ticket once and logs the player in without a password.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoTicketLogin")]
+    public static void SendHnmoTicketLogin(int handle, IntPtr @username, IntPtr @ticket)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoTicketLoginRef.Length;
+                var packet = new HnmoTicketLoginRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Username = NativeInterop.PtrToWideString(@username);
+                packet.Ticket = NativeInterop.PtrToWideString(@ticket);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoTopUpMilestonesCommand" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">Milestone step id when Claim; empty otherwise.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game enters the world, opens the top-up milestones window, claims a milestone step, or takes waiting rewards.
+    /// Causes reaction on server side: The server performs the action and replies with HnmoTopUpMilestonesState.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoTopUpMilestonesCommand")]
+    public static void SendHnmoTopUpMilestonesCommand(int handle, HnmoTopUpMilestonesCommand.HnmoTopUpMilestonesActionType @action, IntPtr @argument)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoTopUpMilestonesCommandRef.GetRequiredSize(Encoding.UTF8.GetByteCount(NativeInterop.PtrToWideString(@argument)!));
+                var packet = new HnmoTopUpMilestonesCommandRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Argument = NativeInterop.PtrToWideString(@argument);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoTimetableCommand" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">Optional filter or payload string.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game enters the world or opens the Event and Boss Timetable window.
+    /// Causes reaction on server side: The server replies with HnmoTimetableState (F5 33).
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoTimetableCommand")]
+    public static void SendHnmoTimetableCommand(int handle, HnmoTimetableCommand.HnmoTimetableActionType @action, IntPtr @argument)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoTimetableCommandRef.Length;
+                var packet = new HnmoTimetableCommandRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Argument = NativeInterop.PtrToWideString(@argument);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoLuckyNumberCommand" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="number">The picked lucky number when Action is Pick.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game enters the world, opens Daily Lucky Number (L), picks a number, or claims waiting prizes.
+    /// Causes reaction on server side: The server updates the player's pick or claims owed rewards and answers with HnmoLuckyNumberState (F5 35).
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoLuckyNumberCommand")]
+    public static void SendHnmoLuckyNumberCommand(int handle, HnmoLuckyNumberCommand.HnmoLuckyNumberActionType @action, uint @number)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoLuckyNumberCommandRef.Length;
+                var packet = new HnmoLuckyNumberCommandRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Number = @number;
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoMarriageCommand" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">Partner character name or custom couple title.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player opens the Marriage window (Shift+M), proposes, accepts/declines, edits couple title, warps to spouse, or divorces.
+    /// Causes reaction on server side: The server validates the ceremony/marriage action and sends HnmoMarriageState (F5 37).
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoMarriageCommand")]
+    public static void SendHnmoMarriageCommand(int handle, HnmoMarriageCommand.HnmoMarriageActionType @action, IntPtr @argument)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoMarriageCommandRef.Length;
+                var packet = new HnmoMarriageCommandRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Argument = NativeInterop.PtrToWideString(@argument);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoMarketCommand" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="slot">Inventory slot when listing an item.</param>
+    /// <param name="currency">0=Zen, 1=WCoinC, 2=WCoinP, 3=GoblinPoints.</param>
+    /// <param name="price">Asking price in the selected currency.</param>
+    /// <param name="listingId">Target listing identifier when buying or canceling.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player opens the Item Market (F6 or Julia NPC), lists a bag item, buys or cancels a listing, or claims deliveries/payouts.
+    /// Causes reaction on server side: The server performs the atomic escrow market action and replies with HnmoMarketState (F5 39).
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoMarketCommand")]
+    public static void SendHnmoMarketCommand(int handle, HnmoMarketCommand.HnmoMarketActionType @action, byte @slot, byte @currency, uint @price, IntPtr @listingId)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoMarketCommandRef.Length;
+                var packet = new HnmoMarketCommandRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Slot = @slot;
+                packet.Currency = @currency;
+                packet.Price = @price;
+                packet.ListingId = NativeInterop.PtrToWideString(@listingId);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
     /// Sends a <see cref="CharacterRenameRequest" /> to this connection.
     /// </summary>
     /// <param name="handle">The handle of the connection.</param>
@@ -7059,6 +7922,613 @@ public unsafe partial class ConnectionManager
                 var length = GameGuardAuthResponseRef.Length;
                 var packet = new GameGuardAuthResponseRef(pipeWriter.GetSpan(length)[..length]);
                 new Span<byte>(@data, (int)dataByteLength).CopyTo(packet.Data);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoJewelBankCommand" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">1 = Request state, 2 = Deposit single bag slot, 3 = Deposit all jewels, 4 = Withdraw jewel, 5 = Clear master skill points.</param>
+    /// <param name="slot">Bag slot index when depositing a single slot.</param>
+    /// <param name="amount">Withdrawal quantity.</param>
+    /// <param name="key">Jewel key (e.g. bless, soul, life, creation, chaos, harmony, guardian).</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to open the Jewel Bank, deposit or withdraw jewels, or clear master skill points.
+    /// Causes reaction on server side: The server performs the action and responds with HnmoJewelBankState (F5 3B).
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoJewelBankCommand")]
+    public static void SendHnmoJewelBankCommand(int handle, byte @action, byte @slot, uint @amount, IntPtr @key)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoJewelBankCommandRef.GetRequiredSize(Encoding.UTF8.GetByteCount(NativeInterop.PtrToWideString(@key)!));
+                var packet = new HnmoJewelBankCommandRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Slot = @slot;
+                packet.Amount = @amount;
+                packet.Key = NativeInterop.PtrToWideString(@key);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoCatchupCapRequest" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to query today's Catch-up Level and Reset Cap state.
+    /// Causes reaction on server side: The server responds with HnmoCatchupCapState (F5 3D).
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoCatchupCapRequest")]
+    public static void SendHnmoCatchupCapRequest(int handle)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoCatchupCapRequestRef.Length;
+                var packet = new HnmoCatchupCapRequestRef(pipeWriter.GetSpan(length)[..length]);
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoSeasonPlanRequest" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to open or refresh the Season Plan timeline (F8).
+    /// Causes reaction on server side: The server replies with HnmoSeasonPlanState (F5 3F).
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoSeasonPlanRequest")]
+    public static void SendHnmoSeasonPlanRequest(int handle)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoSeasonPlanRequestRef.Length;
+                var packet = new HnmoSeasonPlanRequestRef(pipeWriter.GetSpan(length)[..length]);
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoLeftoversCommand" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">1 = RequestState, 2 = CombineRecipe, 3 = ExchangeOffer.</param>
+    /// <param name="id">Target recipe or exchange offer identifier.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to open Combining Leftovers / Exchange NPC (F10), run a combine recipe, or exchange surplus materials.
+    /// Causes reaction on server side: The server performs the recipe/exchange and sends HnmoLeftoversState (F5 41).
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoLeftoversCommand")]
+    public static void SendHnmoLeftoversCommand(int handle, byte @action, IntPtr @id)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoLeftoversCommandRef.GetRequiredSize(Encoding.UTF8.GetByteCount(NativeInterop.PtrToWideString(@id)!));
+                var packet = new HnmoLeftoversCommandRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Id = NativeInterop.PtrToWideString(@id);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoMountChainCommand" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">0 = RequestState, 1 = CraftOrUpgrade, 2 = SummonUnlocked.</param>
+    /// <param name="id">Target mount tier or recipe identifier.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to open the Mount Chain collection (Shift+U), craft/upgrade a mount step, or claim/summon a collected mount.
+    /// Causes reaction on server side: The server processes the mount chain action and sends HnmoMountChainState (F5 43).
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoMountChainCommand")]
+    public static void SendHnmoMountChainCommand(int handle, byte @action, IntPtr @id)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoMountChainCommandRef.GetRequiredSize(Encoding.UTF8.GetByteCount(NativeInterop.PtrToWideString(@id)!));
+                var packet = new HnmoMountChainCommandRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Id = NativeInterop.PtrToWideString(@id);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoPartyOptionsCommand" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">0 = RequestState, 1 = AdvertiseSpotOrPass, 2 = JoinByPassword, 3 = JoinSpot, 4 = StopAdvertising.</param>
+    /// <param name="payload">JSON string containing password, spot, leader, minLevel, maxLevel.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to request party options, advertise a hunting spot party/password, or auto-join a spot/password party.
+    /// Causes reaction on server side: The server processes the request and replies with HnmoPartyOptionsState (F5 45).
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoPartyOptionsCommand")]
+    public static void SendHnmoPartyOptionsCommand(int handle, byte @action, IntPtr @payload)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoPartyOptionsCommandRef.GetRequiredSize(Encoding.UTF8.GetByteCount(NativeInterop.PtrToWideString(@payload)!));
+                var packet = new HnmoPartyOptionsCommandRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Payload = NativeInterop.PtrToWideString(@payload);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoRankingCommand" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">0 = RequestRankings, 1 = BulkAddStats.</param>
+    /// <param name="payload">Optional category filter or JSON stat allocation map (str, agi, vit, ene, cmd).</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to request the in-game player, guild, online, and event rankings or submit a bulk stat-point distribution.
+    /// Causes reaction on server side: The server processes the command and replies with HnmoRankingState (F5 47).
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoRankingCommand")]
+    public static void SendHnmoRankingCommand(int handle, byte @action, IntPtr @payload)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoRankingCommandRef.GetRequiredSize(Encoding.UTF8.GetByteCount(NativeInterop.PtrToWideString(@payload)!));
+                var packet = new HnmoRankingCommandRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Payload = NativeInterop.PtrToWideString(@payload);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoCustomRanksCommand" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">0 = RequestState, 1 = SelectRank (empty RankId restores automatic highest rank).</param>
+    /// <param name="rankId">The rank tier identifier to equip, or empty for automatic highest tier.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to request custom rank definitions and active player titles, or to equip/reset a player's displayed title.
+    /// Causes reaction on server side: The server processes the command and replies with HnmoCustomRanksState (F5 49).
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoCustomRanksCommand")]
+    public static void SendHnmoCustomRanksCommand(int handle, byte @action, IntPtr @rankId)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoCustomRanksCommandRef.GetRequiredSize(Encoding.UTF8.GetByteCount(NativeInterop.PtrToWideString(@rankId)!));
+                var packet = new HnmoCustomRanksCommandRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.RankId = NativeInterop.PtrToWideString(@rankId);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoTeleportNpcCommand" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">0 = RequestMenu, 1 = WarpToDestination.</param>
+    /// <param name="destinationId">Target destination identifier from HnmoTeleportNpcState.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to request the Teleport NPC destination list or warp to a selected destination.
+    /// Causes reaction on server side: The server validates requirements and Zen fee, warps the character if eligible, and replies with HnmoTeleportNpcState (F5 4B).
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoTeleportNpcCommand")]
+    public static void SendHnmoTeleportNpcCommand(int handle, byte @action, IntPtr @destinationId)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoTeleportNpcCommandRef.GetRequiredSize(Encoding.UTF8.GetByteCount(NativeInterop.PtrToWideString(@destinationId)!));
+                var packet = new HnmoTeleportNpcCommandRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.DestinationId = NativeInterop.PtrToWideString(@destinationId);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoEscrowCommand" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">0 = RequestState, 1 = CreateContract, 2 = AcceptContract, 3 = CancelContract, 4 = ClaimOwed.</param>
+    /// <param name="payload">JSON command payload (contract details, contractId, pin, confirmHighValue).</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to request or mutate escrow contracts or trade credit actions.
+    /// Causes reaction on server side: The server validates safety, balance, and concurrency rules and replies with HnmoEscrowState (F5 4D).
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoEscrowCommand")]
+    public static void SendHnmoEscrowCommand(int handle, byte @action, IntPtr @payload)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoEscrowCommandRef.GetRequiredSize(Encoding.UTF8.GetByteCount(NativeInterop.PtrToWideString(@payload)!));
+                var packet = new HnmoEscrowCommandRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Payload = NativeInterop.PtrToWideString(@payload);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoVaultPageCommand" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">0 = RequestState, 1 = SwitchPage, 2 = BuyPage.</param>
+    /// <param name="page">The page (0-based) for SwitchPage; 0 otherwise.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client when its vault window opens, when the player picks a vault page, or buys one more page.
+    /// Causes reaction on server side: The server answers with HnmoVaultPageState (F5 4F); a switch also sends the new page's items to the open vault window.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoVaultPageCommand")]
+    public static void SendHnmoVaultPageCommand(int handle, byte @action, byte @page)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoVaultPageCommandRef.Length;
+                var packet = new HnmoVaultPageCommandRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Page = @page;
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoUltimateAutoPlayRequest" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client on login or when opening Ultimate Autoplay to fetch the current policy.
+    /// Causes reaction on server side: The server answers with HnmoUltimateAutoPlayPolicy (F5 57).
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoUltimateAutoPlayRequest")]
+    public static void SendHnmoUltimateAutoPlayRequest(int handle)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoUltimateAutoPlayRequestRef.Length;
+                var packet = new HnmoUltimateAutoPlayRequestRef(pipeWriter.GetSpan(length)[..length]);
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoBugReportCommand" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">0 = RequestState, 1 = Send.</param>
+    /// <param name="json">For Send: plain-ASCII JSON with category, text and info (what the game adds: version, browser, device, recent errors); empty otherwise.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client when the player opens the bug report window or sends a bug report.
+    /// Causes reaction on server side: The server keeps the report for the server's owner and answers with HnmoBugReportState (F5 55).
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoBugReportCommand")]
+    public static void SendHnmoBugReportCommand(int handle, byte @action, IntPtr @json)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoBugReportCommandRef.GetRequiredSize(Encoding.UTF8.GetByteCount(NativeInterop.PtrToWideString(@json)!));
+                var packet = new HnmoBugReportCommandRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Json = NativeInterop.PtrToWideString(@json);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoArenaTravelRequest" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">0 = RequestState, 1 = Travel (a one-time ticket for the other side), 2 = JoinRankedQueue (in the Arena), 3 = LeaveRankedQueue, 4 = BuyFromPointsShop (at home), 5 = JoinTeamQueue (in the Arena, alone or the leader with the party), 6 = LeaveTeamQueue, 7 = SignUpForBattleRoyale, 8 = CancelBattleRoyaleSignUp, 9 = SignUpForGuildWar, 10 = CancelGuildWarSignUp.</param>
+    /// <param name="index">For BuyFromPointsShop: the item's index in the shop.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to ask about the HNMO Arena, or for a one-time ticket to travel to the Arena (or from the Arena back home).
+    /// Causes reaction on server side: The server answers with HnmoArenaTravelState (F5 53).
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoArenaTravelRequest")]
+    public static void SendHnmoArenaTravelRequest(int handle, byte @action, byte @index)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoArenaTravelRequestRef.Length;
+                var packet = new HnmoArenaTravelRequestRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Index = @index;
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoItemStackCommand" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">0 = RequestState, 1 = Split, 2 = Unlock.</param>
+    /// <param name="storage">For Split: 0 = the bag, 1 = the open vault.</param>
+    /// <param name="slot">For Split: the stack's slot.</param>
+    /// <param name="count">For Split: how many pieces to split off.</param>
+    /// <param name="kind">For Unlock: the stack kind's key.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to ask for the item stack kinds, to split a stack, or to unlock a stack kind with coins.
+    /// Causes reaction on server side: The server answers with HnmoItemStackState (F5 51); a split also sends the bag or the open vault again.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoItemStackCommand")]
+    public static void SendHnmoItemStackCommand(int handle, byte @action, byte @storage, byte @slot, byte @count, IntPtr @kind)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoItemStackCommandRef.GetRequiredSize(Encoding.UTF8.GetByteCount(NativeInterop.PtrToWideString(@kind)!));
+                var packet = new HnmoItemStackCommandRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Storage = @storage;
+                packet.Slot = @slot;
+                packet.Count = @count;
+                packet.Kind = NativeInterop.PtrToWideString(@kind);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoVipRequest" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="requestId">A nonzero request correlation identifier; not an authentication token.</param>
+    /// <param name="json">ASCII JSON with action, optional operationId, levelId, days and offerToken; at most 247 bytes.</param>
+    /// <remarks>
+    /// Is sent by the client when: The signed-in player opens the VIP window, confirms an offer or claims daily coins.
+    /// Causes reaction on server side: The server validates the session and sends HnmoVipState without accepting client prices or account identity.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoVipRequest")]
+    public static void SendHnmoVipRequest(int handle, uint @requestId, IntPtr @json)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoVipRequestRef.GetRequiredSize(Encoding.UTF8.GetByteCount(NativeInterop.PtrToWideString(@json)!));
+                var packet = new HnmoVipRequestRef(pipeWriter.GetSpan(length)[..length]);
+                packet.RequestId = @requestId;
+                packet.Json = NativeInterop.PtrToWideString(@json);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoGiftBoxRequest" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="requestId">A nonzero request correlation identifier; not an authentication token.</param>
+    /// <param name="json">ASCII JSON with action, offset, optional letterId and language; at most 247 bytes.</param>
+    /// <remarks>
+    /// Is sent by the client when: The signed-in player opens the mailbox window, browses a page/letter or collects a reward.
+    /// Causes reaction on server side: The server validates the session, collects safely under the player lock if requested and sends HnmoGiftBoxState.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoGiftBoxRequest")]
+    public static void SendHnmoGiftBoxRequest(int handle, uint @requestId, IntPtr @json)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoGiftBoxRequestRef.GetRequiredSize(Encoding.UTF8.GetByteCount(NativeInterop.PtrToWideString(@json)!));
+                var packet = new HnmoGiftBoxRequestRef(pipeWriter.GetSpan(length)[..length]);
+                packet.RequestId = @requestId;
+                packet.Json = NativeInterop.PtrToWideString(@json);
 
                 return length;
             });

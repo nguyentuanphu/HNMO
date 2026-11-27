@@ -5314,4 +5314,67 @@ On your account page, open Security and paste this code to confirm your new emai
   <data name="S9SystemsTitle" xml:space="preserve">
     <value>Season 9 Systems (Muun, Pentagram, Master 330)</value>
   </data>
+  <data name="JewelBankReceiptsHeading" xml:space="preserve">
+    <value>Recent Jewel Bank database receipts (Sydney time)</value>
+  </data>
+  <data name="JewelBankReceiptsEmpty" xml:space="preserve">
+    <value>No database receipts recorded yet.</value>
+  </data>
+  <data name="JewelBankColTime" xml:space="preserve">
+    <value>Time (Sydney)</value>
+  </data>
+  <data name="JewelBankColAccount" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="JewelBankColKind" xml:space="preserve">
+    <value>Kind</value>
+  </data>
+  <data name="JewelBankColDetail" xml:space="preserve">
+    <value>Detail</value>
+  </data>
+  <data name="JewelBankColPending" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="JewelBankColSource" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="JewelBankImportHeading" xml:space="preserve">
+    <value>Legacy JSON to database import</value>
+  </data>
+  <data name="JewelBankImportDescription" xml:space="preserve">
+    <value>Dry-run preview of legacy JSON Jewel Bank balances and waiting withdrawals compared against database receipts.</value>
+  </data>
+  <data name="JewelBankImportChecksum" xml:space="preserve">
+    <value>Input checksum</value>
+  </data>
+  <data name="JewelBankImportWouldImport" xml:space="preserve">
+    <value>Would import</value>
+  </data>
+  <data name="JewelBankImportAlready" xml:space="preserve">
+    <value>Already imported</value>
+  </data>
+  <data name="JewelBankImportConflicts" xml:space="preserve">
+    <value>Conflicts</value>
+  </data>
+  <data name="JewelBankImportUnknownAccounts" xml:space="preserve">
+    <value>Unknown accounts</value>
+  </data>
+  <data name="JewelBankImportTotals" xml:space="preserve">
+    <value>JSON totals</value>
+  </data>
+  <data name="JewelBankImportPending" xml:space="preserve">
+    <value>JSON pending</value>
+  </data>
+  <data name="JewelBankImportRunButton" xml:space="preserve">
+    <value>Run import to database</value>
+  </data>
+  <data name="JewelBankImportRunHint" xml:space="preserve">
+    <value>Import unmigrated JSON Jewel Bank balances and waiting withdrawals into the PostgreSQL database (idempotent).</value>
+  </data>
+  <data name="JewelBankImportDone" xml:space="preserve">
+    <value>Jewel Bank import completed: {0} imported, {1} already present, {2} conflicts.</value>
+  </data>
+  <data name="JewelBankImportNothing" xml:space="preserve">
+    <value>No pending JSON entries to import.</value>
+  </data>
 </root>

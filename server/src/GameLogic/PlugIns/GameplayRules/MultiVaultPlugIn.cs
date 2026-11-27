@@ -234,29 +234,113 @@ public sealed class MultiVaultPlugIn :
             return (false, isVi ? $"Bạn đã đạt giới hạn tối đa ({cfg.MaxVaultsPerAccount} rương)." : $"You already reached the maximum vault limit ({cfg.MaxVaultsPerAccount}).");
         }
 
-        await player.ApplyPendingCashShopCoinGrantsAsync().ConfigureAwait(false);
-        var balance = player.Account.GetCashShopCoins(cfg.PurchaseCoinType);
-        if (balance < cfg.PurchaseExtraVaultCost)
+        var purchaseLock = PurchaseLocks.GetOrAdd(login, static _ => new SemaphoreSlim(1, 1));
+        await purchaseLock.WaitAsync().ConfigureAwait(false);
+        try
         {
-            return (false, isVi ? $"Cần {cfg.PurchaseExtraVaultCost} {cfg.PurchaseCoinType} để mở thêm rương." : $"Need {cfg.PurchaseExtraVaultCost} {cfg.PurchaseCoinType} to unlock an extra vault.");
-        }
+            await this.FinishPendingPurchasesAsync(player, login).ConfigureAwait(false);
+            if (this.GetUnlockedVaultCount(player) >= cfg.MaxVaultsPerAccount)
+            {
+                return (false, isVi ? $"Bạn đã đạt giới hạn tối đa ({cfg.MaxVaultsPerAccount} rương)." : $"You already reached the maximum vault limit ({cfg.MaxVaultsPerAccount}).");
+            }
 
-        player.Account.SetCashShopCoins(cfg.PurchaseCoinType, balance - cfg.PurchaseExtraVaultCost);
-        CashShopBalanceReceipt.Record(player.PersistenceContext, player.Account, cfg.PurchaseCoinType, -cfg.PurchaseExtraVaultCost, CashShopBalanceReason.ExtraVault);
-        if (!await player.SaveProgressAsync().ConfigureAwait(false))
+            await player.ApplyPendingCashShopCoinGrantsAsync().ConfigureAwait(false);
+            var balance = player.Account.GetCashShopCoins(cfg.PurchaseCoinType);
+            if (balance < cfg.PurchaseExtraVaultCost)
+            {
+                return (false, isVi ? $"Cần {cfg.PurchaseExtraVaultCost} {cfg.PurchaseCoinType} để mở thêm rương." : $"Need {cfg.PurchaseExtraVaultCost} {cfg.PurchaseCoinType} to unlock an extra vault.");
+            }
+
+            // The purchase is written first; its coin receipt carries its id, so after a stop the next look at the account
+            // finds whether it was paid (FinishPendingPurchasesAsync).
+            var operation = Guid.NewGuid().ToString("N");
+            var state = this.LoadAccountState(login);
+            state.PendingPurchases.Add(operation);
+            this.SaveAccountState(login, state);
+
+            player.Account.SetCashShopCoins(cfg.PurchaseCoinType, balance - cfg.PurchaseExtraVaultCost);
+            var receipt = CashShopBalanceReceipt.Record(player.PersistenceContext, player.Account, cfg.PurchaseCoinType, -cfg.PurchaseExtraVaultCost, CashShopBalanceReason.ExtraVault);
+            if (receipt is not null)
+            {
+                receipt.Reference = PurchaseReference(login, operation);
+            }
+
+            bool saved;
+            try
+            {
+                saved = await player.SaveProgressAsync().ConfigureAwait(false);
+            }
+            catch (Exception ex) when (ex is not OperationCanceledException)
+            {
+                player.Logger.LogWarning(ex, "Multi-vault: the purchase of {Login} couldn't be saved.", login);
+                saved = false;
+            }
+
+            if (!saved)
+            {
+                // Nothing is bought when the payment couldn't be saved: the coins and the receipt go back.
+                player.Account.SetCashShopCoins(cfg.PurchaseCoinType, player.Account.GetCashShopCoins(cfg.PurchaseCoinType) + cfg.PurchaseExtraVaultCost);
+                await CashShopBalanceReceipt.RemoveAsync(player.PersistenceContext, receipt).ConfigureAwait(false);
+                state = this.LoadAccountState(login);
+                state.PendingPurchases.Remove(operation);
+                this.SaveAccountState(login, state);
+                return (false, isVi ? "Không lưu được giao dịch, chưa trừ xu. Vui lòng thử lại." : "The purchase couldn't be saved; no coins were taken. Please try again.");
+            }
+
+            if (this.StopAfterPaymentSaved?.Invoke() == true)
+            {
+                throw new InvalidOperationException("Stopped after the payment was saved (test).");
+            }
+
+            state = this.LoadAccountState(login);
+            if (state.PendingPurchases.Remove(operation))
+            {
+                state.PurchasedExtraVaults++;
+            }
+
+            this.SaveAccountState(login, state);
+        }
+        finally
         {
-            // Nothing is bought when the payment couldn't be saved: the coins go back.
-            player.Account.SetCashShopCoins(cfg.PurchaseCoinType, player.Account.GetCashShopCoins(cfg.PurchaseCoinType) + cfg.PurchaseExtraVaultCost);
-            return (false, isVi ? "Không lưu được giao dịch, chưa trừ xu. Vui lòng thử lại." : "The purchase couldn't be saved; no coins were taken. Please try again.");
+            purchaseLock.Release();
         }
-
-        var state = this.LoadAccountState(login);
-        state.PurchasedExtraVaults++;
-        this.SaveAccountState(login, state);
 
         var nextCount = this.GetUnlockedVaultCount(player);
         return (true, isVi ? $"Đã mở khóa thêm rương! Tổng số rương hiện có: {nextCount}." : $"Unlocked an extra vault! Total unlocked: {nextCount}.");
     }
+
+    /// <summary>A stop between saving a purchase's payment and adding its page (tests only): <c>true</c> stops there.</summary>
+    internal Func<bool>? StopAfterPaymentSaved { get; set; }
+
+    /// <summary>
+    /// Finishes the purchases a stop left unfinished: a page for each one whose coin receipt was saved, nothing for the
+    /// others (they weren't paid).
+    /// </summary>
+    /// <param name="player">The player.</param>
+    /// <param name="login">The account login name.</param>
+    /// <returns>A task.</returns>
+    internal async ValueTask FinishPendingPurchasesAsync(Player player, string login)
+    {
+        var state = this.LoadAccountState(login);
+        if (state.PendingPurchases.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var operation in state.PendingPurchases.ToList())
+        {
+            if (await player.PersistenceContext.GetCashShopCoinGrantByReferenceAsync(PurchaseReference(login, operation)).ConfigureAwait(false) is not null)
+            {
+                state.PurchasedExtraVaults++;
+            }
+
+            state.PendingPurchases.Remove(operation);
+        }
+
+        this.SaveAccountState(login, state);
+    }
+
+    private static string PurchaseReference(string login, string operation) => $"hnmo-extra-vault:{login}:{operation}";
 
     private int ActivePageOf(Player player, string login)
     {
@@ -405,6 +489,9 @@ public sealed class MultiVaultPlugIn :
 
         return (true, isVi ? $"Đã chuyển sang trang rương {targetIndex + 1}." : $"Switched to vault page {targetIndex + 1}.");
     }
+
+    /// <summary>Serializes the purchases of one account, so a purchase and the finishing of an earlier one can't both count.</summary>
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, SemaphoreSlim> PurchaseLocks = new(StringComparer.OrdinalIgnoreCase);
 
     private MultiVaultConfiguration EffectiveConfig() => this.Configuration ?? new MultiVaultConfiguration();
 

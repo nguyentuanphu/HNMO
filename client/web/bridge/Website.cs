@@ -13,14 +13,17 @@ internal static class Website
             app.MapGet("/website/arena", () => Results.Json(new { enabled = false }));
         }
 
-        // Each season's server program has its own market: Season 9's comes from its own admin panel.
+        // Each season's server program has its own market and its own worlds list (the start screen's server names):
+        // Season 9's come from its own admin panel.
         if (!string.IsNullOrWhiteSpace(seasonNineApiBaseUrl))
         {
             Forward(app, "/website/market/s9", "api/website/market", options, clients, seasonNineApiBaseUrl);
+            Forward(app, "/website/data/s9", "api/website", options, clients, seasonNineApiBaseUrl);
         }
         else
         {
             app.MapGet("/website/market/s9", () => Results.NotFound());
+            app.MapGet("/website/data/s9", () => Results.NotFound());
         }
 
         Forward(app, "/website/server-guide", "api/website/server-guide", options, clients, rateLimited: true);

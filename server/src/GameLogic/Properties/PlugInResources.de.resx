@@ -2145,4 +2145,10 @@
   <data name="ShieldBurnSkillPlugIn_Description" xml:space="preserve">
     <value>Verbrennt einen Teil des Schilds (SD) des Zielspielers und lässt die Lebenspunkte unverändert. Nur in einem Season-9-Realm mit eingeschalteten Season-9-Systemen und -Fertigkeiten.</value>
   </data>
+  <data name="MossGambleConfiguration_UseWeightedExcellentSelection_Name" xml:space="preserve">
+    <value>Gewichtete Exzellent-Optionen verwenden</value>
+  </data>
+  <data name="MossGambleConfiguration_UseWeightedExcellentSelection_Description" xml:space="preserve">
+    <value>Wählt Exzellent-Optionen nach den Gewichten der Season-6/9-Serversuiten (10 % / 20 % / 20 % / 20 % / 20 % / 10 %) statt gleichverteilt aus.</value>
+  </data>
 </root>

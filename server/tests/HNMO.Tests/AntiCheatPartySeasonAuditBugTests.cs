@@ -114,11 +114,16 @@ public class AntiCheatPartySeasonAuditBugTests
     }
 
     /// <summary>
-    /// Party master experience must be gated by <see cref="CatchupCapPlugIn"/> effective max level and
-    /// <see cref="SeasonPlanPlugIn"/> <see cref="SeasonFeatureGate.MasterLevels"/>.
+    /// Party master experience follows the <see cref="CatchupCapPlugIn"/> effective max level, and not the
+    /// <see cref="SeasonPlanPlugIn"/> (owner, 26 Nov 2026: master experience at the maximum level isn't gated by it):
+    /// at the configured maximum level a master gets master experience although the Season Plan's stage is locked;
+    /// at the catch-up cap below the maximum level it gets neither.
     /// </summary>
-    [Test]
-    public async ValueTask PartyMasterExpRespectsCatchupCapAndSeasonPlanGateAsync()
+    /// <param name="level">The hero's level.</param>
+    /// <param name="masterExperienceExpected">Whether master experience is expected.</param>
+    [TestCase(400, true)]
+    [TestCase(360, false)]
+    public async ValueTask PartyMasterExpFollowsTheCatchupCapAndNotTheSeasonPlanAsync(int level, bool masterExperienceExpected)
     {
         var stateFile = Path.Combine(Path.GetTempPath(), $"hnmo-party-sp-{Guid.NewGuid():N}.json");
         try
@@ -148,8 +153,8 @@ public class AntiCheatPartySeasonAuditBugTests
             gameContext.PlugInManager.RegisterPlugInAtPlugInPoint<IPlayerStateChangedPlugIn>(capPlugIn);
 
             player.SelectedCharacter!.CharacterClass = new BasicModel.CharacterClass { Number = 2, Name = "Blade Master", IsMasterClass = true };
-            player.Attributes![Stats.Level] = 400;
-            player.Attributes.AddElement(new SimpleElement(400.0f, AggregateType.AddRaw), Stats.TotalLevel);
+            player.Attributes![Stats.Level] = level;
+            player.Attributes.AddElement(new SimpleElement(level, AggregateType.AddRaw), Stats.TotalLevel);
             player.Attributes[Stats.MasterLevel] = 1;
             player.Attributes.AddElement(new SimpleElement(1.0f, AggregateType.AddRaw), Stats.MasterExperienceRate);
             player.Attributes.AddElement(new SimpleElement(1.0f, AggregateType.AddRaw), Stats.ExperienceRate);
@@ -173,8 +178,8 @@ public class AntiCheatPartySeasonAuditBugTests
             await party.AddAsync(player).ConfigureAwait(false);
             var shares = await party.DistributeExperienceAfterKillAsync(monster, player).ConfigureAwait(false);
 
-            Assert.That(player.SelectedCharacter.MasterExperience, Is.EqualTo(0));
-            Assert.That(player.SelectedCharacter.Experience, Is.EqualTo(0));
+            Assert.That(player.SelectedCharacter.MasterExperience > 0, Is.EqualTo(masterExperienceExpected));
+            Assert.That(player.SelectedCharacter.Experience, Is.EqualTo(0), "no normal experience at the cap");
             Assert.That(shares, Is.Not.Empty);
         }
         finally

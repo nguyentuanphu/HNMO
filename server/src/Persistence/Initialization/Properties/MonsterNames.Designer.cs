@@ -3324,5 +3324,61 @@ namespace HNMO.Persistence.Initialization.Properties {
                 return ResourceManager.GetString("IllusionSorcererSpirit", resourceCulture);
             }
         }
+
+        /// <summary>Gets HeroMutant from the configuration name resources.</summary>
+        public static string HeroMutant {
+            get {
+                return ResourceManager.GetString("HeroMutant", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets OmegaWing from the configuration name resources.</summary>
+        public static string OmegaWing {
+            get {
+                return ResourceManager.GetString("OmegaWing", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets AxlHero from the configuration name resources.</summary>
+        public static string AxlHero {
+            get {
+                return ResourceManager.GetString("AxlHero", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets GigasGolem from the configuration name resources.</summary>
+        public static string GigasGolem {
+            get {
+                return ResourceManager.GetString("GigasGolem", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets CursedGoblin from the configuration name resources.</summary>
+        public static string CursedGoblin {
+            get {
+                return ResourceManager.GetString("CursedGoblin", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets MiningAreaSmall from the configuration name resources.</summary>
+        public static string MiningAreaSmall {
+            get {
+                return ResourceManager.GetString("MiningAreaSmall", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets MiningAreaMedium from the configuration name resources.</summary>
+        public static string MiningAreaMedium {
+            get {
+                return ResourceManager.GetString("MiningAreaMedium", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets MiningAreaLarge from the configuration name resources.</summary>
+        public static string MiningAreaLarge {
+            get {
+                return ResourceManager.GetString("MiningAreaLarge", resourceCulture);
+            }
+        }
     }
 }

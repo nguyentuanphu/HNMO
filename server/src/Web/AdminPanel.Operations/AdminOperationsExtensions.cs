@@ -5,6 +5,7 @@
 namespace HNMO.Web.AdminPanel.Operations;
 
 using System.IO;
+using HNMO.Interfaces;
 using HNMO.Persistence.AdminAuth;
 using HNMO.Persistence.Worlds;
 using HNMO.Web.AdminPanel.Operations.ItemExchange;
@@ -54,7 +55,7 @@ public static class AdminOperationsExtensions
         services.AddScoped<CastleSiegeOperations>();
         services.AddScoped<LogOperations>();
         services.AddScoped<AuditReadOperations>();
-        services.TryAddSingleton(_ => new WorldRegistryService(ResolveWorldsFile()));
+        services.TryAddSingleton(_ => new WorldRegistryService(ResolveWorldsFile(), HnmoSeasonInstance.IsSeasonNine ? WorldSeason.Season9 : WorldSeason.Season6));
         services.AddScoped<WorldsOperations>();
         services.AddScoped<CashShopCoinService>();
         services.AddScoped<CashShopCoinDelivery>();
@@ -62,6 +63,7 @@ public static class AdminOperationsExtensions
         services.AddScoped<BankTopUpService>();
         services.AddScoped<CastleSiegeManagementService>();
         services.AddScoped<MaintenanceToolsOperations>();
+        services.AddScoped<JewelBankOperations>();
         services.AddScoped<EconomyDashboardOperations>();
         services.AddScoped<EventRewardsOperations>();
         services.AddScoped<ServerSettingsOperations>();
@@ -74,11 +76,13 @@ public static class AdminOperationsExtensions
     /// <summary>
     /// The worlds list lives with the other saved state (the working folder, the package's <c>save</c>), not in
     /// the program folder, which a new version of the package replaces. A list an older version wrote into the
-    /// program folder is taken along once.
+    /// program folder is taken along once. Season 9's and the Arena's programs keep their own list (in the
+    /// <c>s9</c> or <c>arena</c> folder): their server ids start at 0 too, and a shared list named them as Season
+    /// 6.3's servers.
     /// </summary>
     private static string ResolveWorldsFile()
     {
-        const string fileName = "hnmo-worlds.json";
+        var fileName = HnmoSeasonInstance.SaveFileFor(HnmoSeasonInstance.Current, "hnmo-worlds.json");
         var saved = Path.GetFullPath(fileName);
         var old = Path.Combine(AppContext.BaseDirectory, fileName);
         try

@@ -198,6 +198,29 @@ public class InventoryStorage : Storage, IInventoryStorage
         }
     }
 
+    /// <summary>
+    /// Refreshes the power-ups of an equipped item after passive skill attributes change.
+    /// </summary>
+    /// <param name="item">The equipped item.</param>
+    internal void RefreshEquippedItemPowerUps(Item item)
+    {
+        if (this._player.Attributes is null || !this.EquippedItems.Contains(item))
+        {
+            return;
+        }
+
+        if (this._player.Attributes.ItemPowerUps.Remove(item, out var existing))
+        {
+            foreach (var powerUp in existing)
+            {
+                powerUp.Dispose();
+            }
+        }
+
+        var factory = this._gameContext.ItemPowerUpFactory;
+        this._player.Attributes.ItemPowerUps.Add(item, factory.GetPowerUps(item, this._player.Attributes).ToList());
+    }
+
     private void InitializePowerUps()
     {
         if (this._player.Attributes is null)

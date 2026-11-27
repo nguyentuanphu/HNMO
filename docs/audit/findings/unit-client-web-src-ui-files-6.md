@@ -15,3 +15,16 @@
 | Trade auto-decline while Vault open & Zen cap | `tradeWindow.ts:194-197,347-366` | Auto-declines incoming trade while Vault or another trade is open; truncates gold input at 8 digits (`<= 99,999,999`) and checks `<= money + myGold` | Desktop `CTrade` | Same |
 | Extra Vault unlock button gate | `vaultPages.ts:85,137` | Enables unlock button only when `state.price > 0 && state.unlocked < state.max` | `MultiVaultPlugin` | Same |
 | Server-driven AutoPlay/VIP/WorldBoss panels | `ultimateAutoPlayWindow.ts`, `vipWindow.ts`, `worldBossWindow.ts` | HTML/HUD wrappers rendering server policy, VIP, and World Boss DTOs (`game/autoPlayExtras.ts` holds AutoPlay policy) | Presentation only | No game rules |
+
+## Re-check 2026-11-27 (changes 8cb8539b..a108e846)
+
+Commits read (every changed file read in full):
+
+- 719d4380 Trade OK and vault zen boxes are bound to their trade, offer and vault page
+- e385ec55 Trade and vault zen boxes belong to the trade or vault they were asked in
+- be1d1b3e fix(web): trade zen in-game prompt and clean Alt name-tag toggle (Part 9 Item 1)
+
+Evidence:
+
+- tradeWindow.ts: the OK after a warning and the zen box are bound to the trade session and the offer revision (partner packets 0x38/0x39/0x3B bump it); the box closes when the trade ends - fixed (#410/#414, checked in the real game by local Claude on 27 Nov).
+- vaultPages.ts: pageChanged fires on a sent switch and when the server answers another page - fixed.

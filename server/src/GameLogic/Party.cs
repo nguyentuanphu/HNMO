@@ -10,7 +10,6 @@ using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.NPC;
 using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.PlugIns.CatchupCap;
-using HNMO.GameLogic.PlugIns.SeasonPlan;
 using HNMO.GameLogic.Views;
 using HNMO.GameLogic.Views.Party;
 using HNMO.Persistence;
@@ -392,8 +391,7 @@ public sealed class Party : AsyncDisposable
 
         if (isAtCatchupCap
             && isAtConfigMax
-            && isMasterClass
-            && SeasonPlanPlugIn.IsFeatureUnlocked(player.GameContext, SeasonFeatureGate.MasterLevels))
+            && isMasterClass)
         {
             var masterExperience = perLevel
                                    * attributes[Stats.TotalLevel]

@@ -1,0 +1,7 @@
+source,table,record,index,group,number,itemName,count,bagIndex,inGroup,inNumber,inName
+MuunExchange.bmd,requirement,0,0,13,240,Wizardry Stone,2,22,-1,-1,
+MuunExchange.bmd,requirement,1,1,13,240,Wizardry Stone,2,22,-1,-1,
+MuunExchange.bmd,requirement,2,2,13,240,Wizardry Stone,3,22,-1,-1,
+MuunExchange.bmd,exchange,0,0,13,280,Scolpy,22,0,13,211,Evolution Stone
+MuunExchange.bmd,exchange,1,1,13,282,Chafer,22,1,13,211,Evolution Stone
+MuunExchange.bmd,exchange,2,2,13,278,Mantis,22,2,13,211,Evolution Stone

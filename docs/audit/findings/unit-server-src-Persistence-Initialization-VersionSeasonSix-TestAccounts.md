@@ -24,3 +24,13 @@ The Season 6 and Season 9 suites ship empty account tables in their SQL setup sc
 - `Socket.cs:32-163`: Equips `Royal`/`Hades`/`Titan`/`Brave`/`Seraphim` socket sets and weapons with 3–5 sockets -> matches Season 6/9 socket item definitions (**same**; copy-paste comments at `Socket.cs:119-123`).
 - `Level300.cs`, `Level400.cs`, `LowLevel.cs`, `QuestBase.cs`, `Quest150.cs`, `Quest220.cs`, `Quest400.cs`: Item IDs and quest items (`Scroll of Emperor`, `Broken Sword`, `Soul Shard of Wizard`, `Tear of Elf`, `Feather/Flame/Horn` at `Quest400.cs:30-32`) match the Season 6/9 suites' quest & item lists (**same**). Note `LowLevel.cs:35-38,85-89` places DL/DW starter armor in bag slots rather than equipped slots.
 - `Unlocked.cs:22-35`: Passes `level = 0`, unlocks all `CanGetCreated && CreationAllowedFlag > 0` classes (`testunlock`), and sets `AccountState.GameMaster`.
+
+## Re-check 2026-11-27 (changes 0b4249a7..a108e846)
+
+Commits read (every changed file read in full):
+
+- 1fc60d72 fix(init): fix Kantata exc chance, Blue/DeepBlue boxes, Guardian boots SD, GM DL slots, and Hanzo store
+
+Evidence:
+
+- GameMaster: the Dark Lord test character no longer has a second item in the pendant slot - fixed (test data only).

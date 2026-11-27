@@ -16453,5 +16453,66 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("S9SystemsTitle", resourceCulture);
             }
         }
+        public static string JewelBankReceiptsHeading => ResourceManager.GetString("JewelBankReceiptsHeading", resourceCulture);
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string JewelBankReceiptsEmpty => ResourceManager.GetString("JewelBankReceiptsEmpty", resourceCulture);
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string JewelBankColTime => ResourceManager.GetString("JewelBankColTime", resourceCulture);
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string JewelBankColAccount => ResourceManager.GetString("JewelBankColAccount", resourceCulture);
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string JewelBankColKind => ResourceManager.GetString("JewelBankColKind", resourceCulture);
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string JewelBankColDetail => ResourceManager.GetString("JewelBankColDetail", resourceCulture);
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string JewelBankColPending => ResourceManager.GetString("JewelBankColPending", resourceCulture);
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string JewelBankColSource => ResourceManager.GetString("JewelBankColSource", resourceCulture);
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string JewelBankImportHeading => ResourceManager.GetString("JewelBankImportHeading", resourceCulture);
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string JewelBankImportDescription => ResourceManager.GetString("JewelBankImportDescription", resourceCulture);
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string JewelBankImportChecksum => ResourceManager.GetString("JewelBankImportChecksum", resourceCulture);
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string JewelBankImportWouldImport => ResourceManager.GetString("JewelBankImportWouldImport", resourceCulture);
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string JewelBankImportAlready => ResourceManager.GetString("JewelBankImportAlready", resourceCulture);
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string JewelBankImportConflicts => ResourceManager.GetString("JewelBankImportConflicts", resourceCulture);
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string JewelBankImportUnknownAccounts => ResourceManager.GetString("JewelBankImportUnknownAccounts", resourceCulture);
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string JewelBankImportTotals => ResourceManager.GetString("JewelBankImportTotals", resourceCulture);
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string JewelBankImportPending => ResourceManager.GetString("JewelBankImportPending", resourceCulture);
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string JewelBankImportRunButton => ResourceManager.GetString("JewelBankImportRunButton", resourceCulture);
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string JewelBankImportRunHint => ResourceManager.GetString("JewelBankImportRunHint", resourceCulture);
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string JewelBankImportDone => ResourceManager.GetString("JewelBankImportDone", resourceCulture);
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string JewelBankImportNothing => ResourceManager.GetString("JewelBankImportNothing", resourceCulture);
     }
 }

@@ -47,11 +47,11 @@
   <data name="BracketedPetSkeleton" xml:space="preserve"><value>[Bộ xương thú cưng]</value></data>
   <data name="BracketedPetUnicorn" xml:space="preserve"><value>[Kỳ lân thú cưng]</value></data>
   <data name="BracketedRageFighterCharacterCard" xml:space="preserve"><value>[Thẻ nhân vật Thiết binh]</value></data>
-  <data name="BracketedResetFruitControl" xml:space="preserve"><value>[Đặt lại điều khiển trái cây]</value></data>
-  <data name="BracketedResetFruitEnergy" xml:space="preserve"><value>[Đặt lại năng lượng trái cây]</value></data>
-  <data name="BracketedResetFruitHealth" xml:space="preserve"><value>[Đặt lại sức khỏe trái cây]</value></data>
-  <data name="BracketedResetFruitQuickness" xml:space="preserve"><value>[Đặt lại độ nhanh của trái cây]</value></data>
-  <data name="BracketedResetFruitStrength" xml:space="preserve"><value>[Đặt lại sức mạnh trái cây]</value></data>
+  <data name="BracketedResetFruitControl" xml:space="preserve"><value>[Đặt lại điều khiển quả]</value></data>
+  <data name="BracketedResetFruitEnergy" xml:space="preserve"><value>[Đặt lại năng lượng quả]</value></data>
+  <data name="BracketedResetFruitHealth" xml:space="preserve"><value>[Đặt lại sức khỏe quả]</value></data>
+  <data name="BracketedResetFruitQuickness" xml:space="preserve"><value>[Đặt lại độ nhanh của quả]</value></data>
+  <data name="BracketedResetFruitStrength" xml:space="preserve"><value>[Đặt lại sức mạnh quả]</value></data>
   <data name="BracketedRubyNecklace" xml:space="preserve"><value>[Vòng cổ hồng ngọc]</value></data>
   <data name="BracketedRubyRing" xml:space="preserve"><value>[Nhẫn hồng ngọc]</value></data>
   <data name="BracketedSDBoostAura" xml:space="preserve"><value>[Hào quang tăng cường SD]</value></data>
@@ -97,9 +97,9 @@
   <data name="BracketedVaultExpansionCertificate" xml:space="preserve"><value>[Chứng chỉ mở rộng Vault]</value></data>
   <data name="BracketedWizardRing" xml:space="preserve"><value>[Nhẫn phù thủy]</value></data>
   <data name="BracketedWornHorseshoe" xml:space="preserve"><value>[Móng ngựa bị mòn]</value></data>
-  <data name="BundleofJewelofBless30" xml:space="preserve"><value>Gói Ngọc Phước Lành (30)</value></data>
-  <data name="BundleofJewelofHarmony10" xml:space="preserve"><value>Gói Ngọc Hài Hòa (10)</value></data>
-  <data name="BundleofJewelofSoul30" xml:space="preserve"><value>Gói Ngọc Linh Hồn (30)</value></data>
+  <data name="BundleofJewelofBless30" xml:space="preserve"><value>Gói Ngọc Ước Nguyện (30)</value></data>
+  <data name="BundleofJewelofHarmony10" xml:space="preserve"><value>Gói Đá Tạo Hóa (10)</value></data>
+  <data name="BundleofJewelofSoul30" xml:space="preserve"><value>Gói Ngọc Tâm Linh (30)</value></data>
   <data name="CherryBlossomPetal" xml:space="preserve"><value>Cánh hoa anh đào</value></data>
   <data name="CherryBlossomRiceCake" xml:space="preserve"><value>Bánh gạo hoa anh đào</value></data>
   <data name="CherryBlossomWine" xml:space="preserve"><value>Rượu hoa anh đào</value></data>
@@ -126,8 +126,8 @@
   <data name="GoldChannelTicket" xml:space="preserve"><value>Vé Kênh Vàng</value></data>
   <data name="GoldenOakCharm" xml:space="preserve"><value>Bùa Sồi Vàng</value></data>
   <data name="IllusionTempleTicket" xml:space="preserve"><value>Vé Đền Ảo Ảnh</value></data>
-  <data name="JewelofChaosBundle10" xml:space="preserve"><value>Gói ngọc hỗn loạn (10)</value></data>
-  <data name="JewelofLifeBundle10" xml:space="preserve"><value>Gói viên ngọc cuộc sống (10)</value></data>
+  <data name="JewelofChaosBundle10" xml:space="preserve"><value>Gói Ngọc Hỗn Nguyên (10)</value></data>
+  <data name="JewelofLifeBundle10" xml:space="preserve"><value>Gói Ngọc Sinh Mệnh (10)</value></data>
   <data name="KalimaTicket" xml:space="preserve"><value>Vé Kalima</value></data>
   <data name="LittleWarriorsCloak" xml:space="preserve"><value>Áo choàng chiến binh nhỏ</value></data>
   <data name="MagicBackpack" xml:space="preserve"><value>Ba lô ma thuật</value></data>
@@ -146,11 +146,11 @@
   <data name="RageFighterCharacterCard" xml:space="preserve"><value>Thẻ nhân vật Thiết binh</value></data>
   <data name="RareItemTicket11" xml:space="preserve"><value>Vé vật phẩm hiếm 11</value></data>
   <data name="RareItemTicket8" xml:space="preserve"><value>Vé vật phẩm hiếm 8</value></data>
-  <data name="ResetFruitControl" xml:space="preserve"><value>Đặt lại kiểm soát trái cây</value></data>
-  <data name="ResetFruitEnergy" xml:space="preserve"><value>Đặt lại năng lượng trái cây</value></data>
-  <data name="ResetFruitHealth" xml:space="preserve"><value>Đặt lại sức khỏe trái cây</value></data>
-  <data name="ResetFruitQuickness" xml:space="preserve"><value>Đặt lại độ nhanh của trái cây</value></data>
-  <data name="ResetFruitStrength" xml:space="preserve"><value>Đặt lại sức mạnh trái cây</value></data>
+  <data name="ResetFruitControl" xml:space="preserve"><value>Đặt lại kiểm soát quả</value></data>
+  <data name="ResetFruitEnergy" xml:space="preserve"><value>Đặt lại năng lượng quả</value></data>
+  <data name="ResetFruitHealth" xml:space="preserve"><value>Đặt lại sức khỏe quả</value></data>
+  <data name="ResetFruitQuickness" xml:space="preserve"><value>Đặt lại độ nhanh của quả</value></data>
+  <data name="ResetFruitStrength" xml:space="preserve"><value>Đặt lại sức mạnh quả</value></data>
   <data name="RubyNecklace" xml:space="preserve"><value>Vòng cổ Ruby</value></data>
   <data name="RubyRing" xml:space="preserve"><value>Nhẫn Ruby</value></data>
   <data name="SDBoostAura" xml:space="preserve"><value>Hào quang tăng cường SD</value></data>

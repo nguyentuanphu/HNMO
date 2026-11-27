@@ -5,6 +5,7 @@
 namespace HNMO.GameLogic.PlugIns.JewelBank;
 
 using System.Runtime.InteropServices;
+using System.Threading;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.CashShop;
@@ -14,6 +15,7 @@ using HNMO.GameLogic.PlugIns.ResetOptions;
 using HNMO.GameLogic.Views;
 using HNMO.GameLogic.Views.Inventory;
 using HNMO.Interfaces;
+using HNMO.Persistence;
 using HNMO.PlugIns;
 
 /// <summary>
@@ -30,16 +32,33 @@ public sealed class JewelBankPlugIn :
     ISupportDefaultCustomConfiguration,
     IDisabledByDefault
 {
+    /// <summary>The kind of a website withdrawal, whose jewels wait for room in a bag.</summary>
+    public const string WebsiteWithdrawKind = "jewel-web-withdraw";
+
+    /// <summary>The accounts (by state file and account id) whose JSON entries were imported in this process.</summary>
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, bool> ImportedLogins = new(StringComparer.OrdinalIgnoreCase);
+
     private (JewelBankConfiguration Config, JewelBankEngine Engine)? _engine;
 
     /// <inheritdoc />
     public JewelBankConfiguration? Configuration { get; set; }
+
+    /// <summary>Gets or sets a hook which runs right before a commit (tests: a stop before it).</summary>
+    internal Func<AssetOperationRequest, ValueTask>? BeforeCommit { get; set; }
+
+    /// <summary>Gets or sets a hook which runs right after a commit (tests: a stop after it).</summary>
+    internal Func<AssetOperationRequest, ValueTask>? AfterCommit { get; set; }
 
     /// <summary>Gets the active <see cref="JewelBankPlugIn"/> for a game context.</summary>
     /// <param name="gameContext">Game context.</param>
     /// <returns>Active plug-in or <c>null</c>.</returns>
     public static JewelBankPlugIn? Get(IGameContext gameContext) =>
         gameContext.PlugInManager.GetActivePlugInsOf<IPlayerStateChangedPlugIn>().OfType<JewelBankPlugIn>().FirstOrDefault();
+
+    /// <summary>A short, stable hash of what an operation does (see <see cref="AssetOperationCommitter.PayloadHash"/>).</summary>
+    /// <param name="payload">The payload text.</param>
+    /// <returns>The hash.</returns>
+    public static string PayloadHash(string payload) => AssetOperationCommitter.PayloadHash(payload);
 
     /// <inheritdoc />
     public object CreateDefaultConfig() => new JewelBankConfiguration();
@@ -94,7 +113,9 @@ public sealed class JewelBankPlugIn :
         var bagJewels = CollectBagJewels(player, engine);
         var masterFree = player.SelectedCharacter.MasterLevelUpPoints;
         var masterSpent = ResetApplier.CountSpentMasterPoints(player.SelectedCharacter);
-        var json = JewelBankStateWriter.WriteAccountState(engine, login, masterFree, masterSpent, bagJewels, actionResult, messageEn, messageVi);
+        await this.ImportJsonOnceAsync(player).ConfigureAwait(false);
+        var (balances, pending) = await ReadBankAsync(player.PersistenceContext, player.Account!.GetId()).ConfigureAwait(false);
+        var json = JewelBankStateWriter.WriteAccountState(engine, balances, pending, masterFree, masterSpent, bagJewels, actionResult, messageEn, messageVi);
         await player.InvokeViewPlugInAsync<IHnmoJewelBankViewPlugIn>(p => p.ShowJewelBankAsync(json, requested)).ConfigureAwait(false);
     }
 
@@ -111,157 +132,11 @@ public sealed class JewelBankPlugIn :
             return;
         }
 
-        var engine = this.GetEngine();
-        if (!await this.EnsureSafeZoneAsync(player, engine).ConfigureAwait(false))
-        {
-            return;
-        }
-
-        var fee = Math.Max(0, engine.Configuration.DepositZenFee);
-        if (fee > 0 && player.Money < fee)
-        {
-            await this.NotifyAsync(player, "NotEnoughZen", $"Need {fee:N0} Zen deposit fee.", $"Cần {fee:N0} Zen phí gửi ngọc.").ConfigureAwait(false);
-            return;
-        }
-
-        var targets = new List<(Item Item, JewelBankEntryConfig Cfg)>();
-        var safety = AccountSafetyPlugIn.Get(player.GameContext);
-        if (depositAll)
-        {
-            foreach (var item in player.Inventory.Items.ToList())
-            {
-                if (item.ItemSlot < InventoryConstants.EquippableSlotsCount
-                    || item.ItemSlot >= InventoryConstants.FirstStoreItemSlotIndex
-                    || item.Definition is null)
-                {
-                    continue;
-                }
-
-                if (engine.FindByItem(item.Definition.Group, item.Definition.Number) is not { } cfg)
-                {
-                    continue;
-                }
-
-                if (safety is not null && await safety.RefuseLockedItemAsync(player, item).ConfigureAwait(false))
-                {
-                    continue;
-                }
-
-                targets.Add((item, cfg));
-            }
-        }
-        else
-        {
-            var item = player.Inventory.GetItem(slot);
-            if (item?.Definition is null
-                || slot < InventoryConstants.EquippableSlotsCount
-                || slot >= InventoryConstants.FirstStoreItemSlotIndex
-                || engine.FindByItem(item.Definition.Group, item.Definition.Number) is not { } cfg)
-            {
-                await this.NotifyAsync(player, "InvalidJewel", "Select a supported jewel in your bag.", "Hãy chọn một viên ngọc hợp lệ trong túi đồ.").ConfigureAwait(false);
-                return;
-            }
-
-            if (safety is not null && await safety.RefuseLockedItemAsync(player, item).ConfigureAwait(false))
-            {
-                await this.SendStateAsync(player, true).ConfigureAwait(false);
-                return;
-            }
-
-            targets.Add((item, cfg));
-        }
-
-        if (targets.Count == 0)
-        {
-            await this.NotifyAsync(player, "NoJewels", "No supported jewels found in your bag.", "Không tìm thấy ngọc phù hợp trong túi đồ.").ConfigureAwait(false);
-            return;
-        }
-
-        if (fee > 0 && !player.TryRemoveMoney(fee))
-        {
-            await this.NotifyAsync(player, "NotEnoughZen", $"Need {fee:N0} Zen deposit fee.", $"Cần {fee:N0} Zen phí gửi ngọc.").ConfigureAwait(false);
-            return;
-        }
-
-        // The jewels leave the bag and that is saved first; the bank is credited afterwards. A stop in between can't
-        // leave a jewel both in the saved bag and in the bank (a doubled deposit); the worst case is a lost deposit.
-        var planned = new List<(JewelBankEntryConfig Config, int Count)>();
-        var balances = engine.GetBalances(login);
-        foreach (var (item, cfg) in targets)
-        {
-            var stackCount = Math.Max(1, (int)item.Durability);
-            balances.TryGetValue(cfg.Key, out var currentBalance);
-            var availableCapacity = Math.Max(0, Math.Max(1, cfg.MaxCapacity) - currentBalance);
-            var toDeposit = Math.Min(stackCount, availableCapacity);
-            if (toDeposit <= 0)
-            {
-                continue;
-            }
-
-            balances[cfg.Key] = currentBalance + toDeposit;
-            planned.Add((cfg, toDeposit));
-            if (toDeposit < stackCount)
-            {
-                item.Durability = (byte)(stackCount - toDeposit);
-                await player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(item, false)).ConfigureAwait(false);
-                continue;
-            }
-
-            var itemSlot = item.ItemSlot;
-            await player.Inventory.RemoveItemAsync(item).ConfigureAwait(false);
-            await player.PersistenceContext.DeleteAsync(item).ConfigureAwait(false);
-            await player.InvokeViewPlugInAsync<IItemRemovedPlugIn>(p => p.RemoveItemAsync(itemSlot)).ConfigureAwait(false);
-        }
-
-        if (planned.Count == 0 && fee > 0)
-        {
-            player.TryAddMoney(fee);
-        }
-
-        // A failed save keeps the change for the next one: the bank is credited all the same, so the running game holds
-        // every jewel exactly once.
-        try
-        {
-            if (!await player.SaveProgressAsync().ConfigureAwait(false))
-            {
-                player.Logger.LogWarning("Jewel Bank: the bag of {Player} couldn't be saved before the deposit; the next save tries again.", player.Name);
-            }
-        }
-        catch (Exception ex) when (ex is not OperationCanceledException)
-        {
-            player.Logger.LogWarning(ex, "Jewel Bank: the bag of {Player} couldn't be saved before the deposit; the next save tries again.", player.Name);
-        }
-
-        var depositedCount = 0;
-        foreach (var (cfg, count) in planned)
-        {
-            if (engine.Deposit(login, cfg.Key, count, "game", DateTime.UtcNow) == JewelBankResult.Ok)
-            {
-                depositedCount += count;
-                continue;
-            }
-
-            // The bank refused it after all (e.g. a website deposit filled it meanwhile): the jewels go back into the bag.
-            var back = new GiftCodeOwedReward { Items = [new GiftCodeItem { Group = cfg.Group, Number = cfg.Number, Count = count, Durability = 1 }] };
-            if (!await GiftCodeRewards.GiveGoodsAsync(player, back).ConfigureAwait(false))
-            {
-                player.Logger.LogError("Jewel Bank: {Count} x {Jewel} of {Player} could neither be banked nor given back.", count, cfg.Key, player.Name);
-            }
-
-            await player.SaveProgressAsync().ConfigureAwait(false);
-        }
-
-        if (depositedCount > 0)
-        {
-            await this.NotifyAsync(player, "Deposited", $"Deposited {depositedCount} jewel(s) into your Jewel Bank.", $"Đã gửi {depositedCount} viên ngọc vào Ngân hàng ngọc.").ConfigureAwait(false);
-        }
-        else
-        {
-            await this.NotifyAsync(player, "CapacityExceeded", "Your Jewel Bank capacity for that jewel is full.", "Ngân hàng ngọc đã đạt giới hạn cho loại ngọc này.").ConfigureAwait(false);
-        }
+        // The bag change and the bank change commit together; no other save of this player may write the bag between.
+        await player.RunPersistenceExclusiveAsync(() => this.DepositLockedAsync(player, login, slot, depositAll)).ConfigureAwait(false);
     }
 
-    /// <summary>Withdraws <paramref name="quantity"/> units of <paramref name="jewelKey"/> into the player's bag (or claims pending website withdrawals).</summary>
+    /// <summary>Withdraws <paramref name="quantity"/> units of <paramref name="jewelKey"/> into the player's bag.</summary>
     /// <param name="player">The player.</param>
     /// <param name="jewelKey">Jewel key.</param>
     /// <param name="quantity">Number of jewels to withdraw.</param>
@@ -274,71 +149,7 @@ public sealed class JewelBankPlugIn :
             return;
         }
 
-        var engine = this.GetEngine();
-        if (!await this.EnsureSafeZoneAsync(player, engine).ConfigureAwait(false))
-        {
-            return;
-        }
-
-        if (engine.FindByKey(jewelKey) is not { } cfg)
-        {
-            await this.NotifyAsync(player, "JewelNotAllowed", "That jewel type is not enabled.", "Loại ngọc này hiện không khả dụng.").ConfigureAwait(false);
-            return;
-        }
-
-        var count = Math.Clamp(quantity, 1, 50);
-        var fee = Math.Max(0, engine.Configuration.WithdrawZenFee);
-        if (fee > 0 && player.Money < fee)
-        {
-            await this.NotifyAsync(player, "NotEnoughZen", $"Need {fee:N0} Zen withdrawal fee.", $"Cần {fee:N0} Zen phí rút ngọc.").ConfigureAwait(false);
-            return;
-        }
-
-        var withdrawOutcome = engine.TryWithdraw(login, cfg.Key, count, "game", DateTime.UtcNow, enqueuePending: false);
-        if (withdrawOutcome != JewelBankResult.Ok)
-        {
-            await this.NotifyAsync(player, withdrawOutcome.ToString(), "Insufficient banked jewels.", "Số dư ngọc trong ngân hàng không đủ.").ConfigureAwait(false);
-            return;
-        }
-
-        var given = 0;
-        for (var i = 0; i < count; i++)
-        {
-            var singleReward = new GiftCodeOwedReward
-            {
-                Items = [new GiftCodeItem { Group = cfg.Group, Number = cfg.Number, Count = 1, Durability = 1 }],
-            };
-            if (!await GiftCodeRewards.GiveGoodsAsync(player, singleReward).ConfigureAwait(false))
-            {
-                break;
-            }
-
-            given++;
-        }
-
-        if (given < count)
-        {
-            // Return undelivered jewels back into bank atomically.
-            engine.Deposit(login, cfg.Key, count - given, "rollback", DateTime.UtcNow);
-        }
-
-        if (given == 0)
-        {
-            await this.NotifyAsync(player, "BagFull", "Make space in your bag before withdrawing jewels.", "Túi đồ đầy! Hãy dọn chỗ trống trước khi rút ngọc.").ConfigureAwait(false);
-            return;
-        }
-
-        if (fee > 0)
-        {
-            player.TryRemoveMoney(fee);
-        }
-
-        await player.SaveProgressAsync().ConfigureAwait(false);
-        await this.NotifyAsync(
-            player,
-            "Withdrawn",
-            $"Withdrew {given} × {cfg.NameEn} into your bag.",
-            $"Đã rút {given} × {cfg.NameVi} vào túi đồ.").ConfigureAwait(false);
+        await player.RunPersistenceExclusiveAsync(() => this.WithdrawLockedAsync(player, jewelKey, quantity)).ConfigureAwait(false);
     }
 
     /// <summary>Clears and refunds all learned master skill points for the active online character.</summary>
@@ -427,6 +238,77 @@ public sealed class JewelBankPlugIn :
             $"Đã tẩy điểm master và hoàn lại {refunded} điểm master!").ConfigureAwait(false);
     }
 
+    /// <summary>Commits an asset operation of the Jewel Bank (see <see cref="AssetOperationCommitter.CommitAsync"/>).</summary>
+    /// <param name="player">The player.</param>
+    /// <param name="request">The operation.</param>
+    /// <returns>The outcome; <c>null</c> when it couldn't be read.</returns>
+    internal ValueTask<AssetCommitStatus?> CommitAsync(Player player, AssetOperationRequest request)
+        => AssetOperationCommitter.CommitAsync(player, request, this.BeforeCommit, this.AfterCommit);
+
+    private static async ValueTask<(IReadOnlyDictionary<string, int> Balances, IReadOnlyList<(string Id, string Key, int Quantity)> Pending)> ReadBankAsync(IPlayerContext context, Guid accountId)
+    {
+        var balances = await context.GetJewelBankBalancesAsync(accountId).ConfigureAwait(false);
+        var pending = (await context.GetPendingAssetOperationsAsync(accountId).ConfigureAwait(false))
+            .Where(operation => operation.Kind == WebsiteWithdrawKind && operation.PendingKey is not null)
+            .Select(operation => (operation.Id.ToString("N"), operation.PendingKey!, operation.PendingCount))
+            .ToList();
+        return (balances, pending);
+    }
+
+    private static async ValueTask GiveJewelsAsync(Player player, JewelBankEngine engine, IEnumerable<KeyValuePair<string, int>> jewels)
+    {
+        foreach (var (key, count) in jewels)
+        {
+            if (count <= 0 || engine.Configuration.Jewels.FirstOrDefault(j => string.Equals(j.Key, key, StringComparison.OrdinalIgnoreCase)) is not { } cfg)
+            {
+                continue;
+            }
+
+            var back = new GiftCodeOwedReward { Items = [new GiftCodeItem { Group = cfg.Group, Number = cfg.Number, Count = count, Durability = 1 }] };
+            if (!await GiftCodeRewards.GiveGoodsAsync(player, back).ConfigureAwait(false))
+            {
+                player.Logger.LogError("Jewel Bank: {Count} x {Jewel} of {Player} could neither be banked nor given back.", count, cfg.Key, player.Name);
+            }
+        }
+    }
+
+    // Takes jewels given by a withdrawal or delivery back out of the bag: the items it added and what it added to stacks.
+    private static async ValueTask TakeBackAsync(Player player, IReadOnlyDictionary<Item, double> before)
+    {
+        foreach (var item in player.Inventory!.Items.ToList())
+        {
+            if (!before.TryGetValue(item, out var durability))
+            {
+                var itemSlot = item.ItemSlot;
+                await player.Inventory.RemoveItemAsync(item).ConfigureAwait(false);
+                await player.PersistenceContext.DeleteAsync(item).ConfigureAwait(false);
+                await player.InvokeViewPlugInAsync<IItemRemovedPlugIn>(p => p.RemoveItemAsync(itemSlot)).ConfigureAwait(false);
+            }
+            else if (item.Durability > durability)
+            {
+                item.Durability = durability;
+                await player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(item, false)).ConfigureAwait(false);
+            }
+        }
+    }
+
+    private static async ValueTask<int> GiveSinglesAsync(Player player, JewelBankEntryConfig cfg, int count)
+    {
+        var given = 0;
+        for (var i = 0; i < count; i++)
+        {
+            var single = new GiftCodeOwedReward { Items = [new GiftCodeItem { Group = cfg.Group, Number = cfg.Number, Count = 1, Durability = 1 }] };
+            if (!await GiftCodeRewards.GiveGoodsAsync(player, single).ConfigureAwait(false))
+            {
+                break;
+            }
+
+            given++;
+        }
+
+        return given;
+    }
+
     private static IReadOnlyList<(byte Slot, string Key, string NameEn, string NameVi)> CollectBagJewels(Player player, JewelBankEngine engine)
     {
         var list = new List<(byte, string, string, string)>();
@@ -453,44 +335,346 @@ public sealed class JewelBankPlugIn :
         return list.OrderBy(x => x.Item1).ToList();
     }
 
-    private async ValueTask ClaimPendingAndSendAsync(Player player, bool requested)
+    /// <summary>
+    /// Imports the account's entries of the JSON state file into the database once (each entry has a fixed operation id,
+    /// so this is cheap and safe to repeat).
+    /// </summary>
+    /// <param name="player">The player.</param>
+    /// <returns>A task.</returns>
+    private async ValueTask ImportJsonOnceAsync(Player player)
     {
-        var login = player.Account?.LoginName;
-        if (!string.IsNullOrWhiteSpace(login) && player.Inventory is not null)
+        if (player.Account?.LoginName is not { } login)
         {
-            var engine = this.GetEngine();
-            var pending = engine.PeekPending(login);
-            foreach (var p in pending)
+            return;
+        }
+
+        var memo = $"{this.GetEngine().Configuration.FileName}|{player.Account.GetId():N}";
+        if (!ImportedLogins.TryAdd(memo, true))
+        {
+            return;
+        }
+
+        try
+        {
+            var report = await JewelBankDatabaseImport.RunAsync(player.GameContext.PersistenceContextProvider, player.GameContext.Configuration, this.GetEngine().Store, dryRun: false, login, player.Account.GetId()).ConfigureAwait(false);
+            if (report.Imported.Count > 0 || report.Conflicts.Count > 0)
             {
-                if (engine.FindByKey(p.JewelKey) is not { } cfg)
+                player.Logger.LogInformation("Jewel Bank: imported {Count} JSON entries of {Login} into the database ({Conflicts} conflicts).", report.Imported.Count, login, report.Conflicts.Count);
+            }
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            ImportedLogins.TryRemove(memo, out _);
+            player.Logger.LogWarning(ex, "Jewel Bank: the JSON entries of {Login} couldn't be imported yet.", login);
+        }
+    }
+
+    private bool IsUncertain(Player player) => AssetOperationCommitter.IsUncertain(player.Account!.GetId());
+
+    private ValueTask NotifyUncertainAsync(Player player) =>
+        this.NotifyAsync(player, "Checking", "Your last Jewel Bank action is still being checked; please try again in a moment.", "Thao tác Ngân hàng ngọc trước đang được kiểm tra; vui lòng thử lại sau ít phút.");
+
+    private async ValueTask DepositLockedAsync(Player player, string login, byte slot, bool depositAll)
+    {
+        var engine = this.GetEngine();
+        await this.ImportJsonOnceAsync(player).ConfigureAwait(false);
+        if (this.IsUncertain(player))
+        {
+            await this.NotifyUncertainAsync(player).ConfigureAwait(false);
+            return;
+        }
+
+        if (!await this.EnsureSafeZoneAsync(player, engine).ConfigureAwait(false))
+        {
+            return;
+        }
+
+        var fee = Math.Max(0, engine.Configuration.DepositZenFee);
+        if (fee > 0 && player.Money < fee)
+        {
+            await this.NotifyAsync(player, "NotEnoughZen", $"Need {fee:N0} Zen deposit fee.", $"Cần {fee:N0} Zen phí gửi ngọc.").ConfigureAwait(false);
+            return;
+        }
+
+        var targets = new List<(Item Item, JewelBankEntryConfig Cfg)>();
+        var safety = AccountSafetyPlugIn.Get(player.GameContext);
+        if (depositAll)
+        {
+            foreach (var item in player.Inventory!.Items.ToList())
+            {
+                if (item.ItemSlot < InventoryConstants.EquippableSlotsCount
+                    || item.ItemSlot >= InventoryConstants.FirstStoreItemSlotIndex
+                    || item.Definition is null)
                 {
                     continue;
                 }
 
-                var delivered = 0;
-                for (var i = 0; i < p.Quantity; i++)
+                if (engine.FindByItem(item.Definition.Group, item.Definition.Number) is not { } cfg)
                 {
-                    var ok = await GiftCodeRewards.GiveGoodsAsync(player, new GiftCodeOwedReward
-                    {
-                        Items = [new GiftCodeItem { Group = cfg.Group, Number = cfg.Number, Count = 1, Durability = 1 }],
-                    }).ConfigureAwait(false);
-                    if (!ok)
-                    {
-                        break;
-                    }
-
-                    delivered++;
+                    continue;
                 }
 
-                if (delivered > 0)
+                if (safety is not null && await safety.RefuseLockedItemAsync(player, item).ConfigureAwait(false))
                 {
-                    engine.ConsumePending(p.Id, delivered);
-                    await player.SaveProgressAsync().ConfigureAwait(false);
+                    continue;
                 }
+
+                targets.Add((item, cfg));
             }
+        }
+        else
+        {
+            var item = player.Inventory!.GetItem(slot);
+            if (item?.Definition is null
+                || slot < InventoryConstants.EquippableSlotsCount
+                || slot >= InventoryConstants.FirstStoreItemSlotIndex
+                || engine.FindByItem(item.Definition.Group, item.Definition.Number) is not { } cfg)
+            {
+                await this.NotifyAsync(player, "InvalidJewel", "Select a supported jewel in your bag.", "Hãy chọn một viên ngọc hợp lệ trong túi đồ.").ConfigureAwait(false);
+                return;
+            }
+
+            if (safety is not null && await safety.RefuseLockedItemAsync(player, item).ConfigureAwait(false))
+            {
+                await this.SendStateAsync(player, true).ConfigureAwait(false);
+                return;
+            }
+
+            targets.Add((item, cfg));
+        }
+
+        if (targets.Count == 0)
+        {
+            await this.NotifyAsync(player, "NoJewels", "No supported jewels found in your bag.", "Không tìm thấy ngọc phù hợp trong túi đồ.").ConfigureAwait(false);
+            return;
+        }
+
+        if (fee > 0 && !player.TryRemoveMoney(fee))
+        {
+            await this.NotifyAsync(player, "NotEnoughZen", $"Need {fee:N0} Zen deposit fee.", $"Cần {fee:N0} Zen phí gửi ngọc.").ConfigureAwait(false);
+            return;
+        }
+
+        // The jewels leave the bag, and the bank is credited in the same database transaction as that bag (and the fee):
+        // both are written or neither is. A refusal (the bank filled meanwhile) or a failure puts the jewels back.
+        var accountId = player.Account!.GetId();
+        var planned = new List<(JewelBankEntryConfig Config, int Count)>();
+        var balances = new Dictionary<string, int>(await player.PersistenceContext.GetJewelBankBalancesAsync(accountId).ConfigureAwait(false), StringComparer.OrdinalIgnoreCase);
+        foreach (var (item, cfg) in targets)
+        {
+            var stackCount = Math.Max(1, (int)item.Durability);
+            balances.TryGetValue(cfg.Key, out var currentBalance);
+            var availableCapacity = Math.Max(0, Math.Max(1, cfg.MaxCapacity) - currentBalance);
+            var toDeposit = Math.Min(stackCount, availableCapacity);
+            if (toDeposit <= 0)
+            {
+                continue;
+            }
+
+            balances[cfg.Key] = currentBalance + toDeposit;
+            planned.Add((cfg, toDeposit));
+            if (toDeposit < stackCount)
+            {
+                item.Durability = (byte)(stackCount - toDeposit);
+                await player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(item, false)).ConfigureAwait(false);
+                continue;
+            }
+
+            var itemSlot = item.ItemSlot;
+            await player.Inventory!.RemoveItemAsync(item).ConfigureAwait(false);
+            await player.PersistenceContext.DeleteAsync(item).ConfigureAwait(false);
+            await player.InvokeViewPlugInAsync<IItemRemovedPlugIn>(p => p.RemoveItemAsync(itemSlot)).ConfigureAwait(false);
+        }
+
+        if (planned.Count == 0)
+        {
+            if (fee > 0)
+            {
+                player.TryAddMoney(fee);
+            }
+
+            await this.NotifyAsync(player, "CapacityExceeded", "Your Jewel Bank capacity for that jewel is full.", "Ngân hàng ngọc đã đạt giới hạn cho loại ngọc này.").ConfigureAwait(false);
+            return;
+        }
+
+        var jewels = new SortedDictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        foreach (var (cfg, count) in planned)
+        {
+            jewels[cfg.Key] = jewels.GetValueOrDefault(cfg.Key) + count;
+        }
+
+        var payload = "deposit|" + string.Join(",", jewels.Select(j => $"{j.Key}:{j.Value}")) + $"|fee:{fee}";
+        var request = new AssetOperationRequest(
+            Guid.NewGuid(),
+            accountId,
+            "jewel-deposit",
+            PayloadHash(payload),
+            "game",
+            payload,
+            jewels.Select(j => new JewelBankDelta(j.Key, j.Value, Math.Max(1, engine.FindByKey(j.Key)?.MaxCapacity ?? 1))).ToList());
+        var status = await this.CommitAsync(player, request).ConfigureAwait(false);
+        if (status is null)
+        {
+            await this.NotifyUncertainAsync(player).ConfigureAwait(false);
+            return;
+        }
+
+        if (status != AssetCommitStatus.Committed)
+        {
+            // Nothing was written: the jewels and the fee go back, so the running game matches the database again.
+            await GiveJewelsAsync(player, engine, jewels).ConfigureAwait(false);
+            if (fee > 0)
+            {
+                player.TryAddMoney(fee);
+            }
+
+            await this.NotifyAsync(player, "CapacityExceeded", "The deposit couldn't be made; your jewels are back in your bag. Please try again.", "Không gửi được ngọc, ngọc đã trở lại túi đồ. Vui lòng thử lại.").ConfigureAwait(false);
+            return;
+        }
+
+        var depositedCount = jewels.Sum(j => j.Value);
+        await this.NotifyAsync(player, "Deposited", $"Deposited {depositedCount} jewel(s) into your Jewel Bank.", $"Đã gửi {depositedCount} viên ngọc vào Ngân hàng ngọc.").ConfigureAwait(false);
+    }
+
+    private async ValueTask WithdrawLockedAsync(Player player, string jewelKey, int quantity)
+    {
+        var engine = this.GetEngine();
+        await this.ImportJsonOnceAsync(player).ConfigureAwait(false);
+        if (!await this.EnsureSafeZoneAsync(player, engine).ConfigureAwait(false))
+        {
+            return;
+        }
+
+        if (this.IsUncertain(player))
+        {
+            await this.NotifyUncertainAsync(player).ConfigureAwait(false);
+            return;
+        }
+
+        if (engine.FindByKey(jewelKey) is not { } cfg)
+        {
+            await this.NotifyAsync(player, "JewelNotAllowed", "That jewel type is not enabled.", "Loại ngọc này hiện không khả dụng.").ConfigureAwait(false);
+            return;
+        }
+
+        var count = Math.Clamp(quantity, 1, 50);
+        var fee = Math.Max(0, engine.Configuration.WithdrawZenFee);
+        if (fee > 0 && player.Money < fee)
+        {
+            await this.NotifyAsync(player, "NotEnoughZen", $"Need {fee:N0} Zen withdrawal fee.", $"Cần {fee:N0} Zen phí rút ngọc.").ConfigureAwait(false);
+            return;
+        }
+
+        var accountId = player.Account!.GetId();
+        var balance = (await player.PersistenceContext.GetJewelBankBalancesAsync(accountId).ConfigureAwait(false)).GetValueOrDefault(cfg.Key);
+        if (balance < count)
+        {
+            await this.NotifyAsync(player, nameof(JewelBankResult.InsufficientBalance), "Insufficient banked jewels.", "Số dư ngọc trong ngân hàng không đủ.").ConfigureAwait(false);
+            return;
+        }
+
+        // The jewels go into the bag, and the bank is debited in the same transaction as that bag; a refusal (the website
+        // took some meanwhile) or a failure takes them out again.
+        var before = player.Inventory!.Items.ToDictionary(i => i, i => i.Durability);
+        var given = await GiveSinglesAsync(player, cfg, count).ConfigureAwait(false);
+        if (given == 0)
+        {
+            await this.NotifyAsync(player, "BagFull", "Make space in your bag before withdrawing jewels.", "Túi đồ đầy! Hãy dọn chỗ trống trước khi rút ngọc.").ConfigureAwait(false);
+            return;
+        }
+
+        if (fee > 0)
+        {
+            player.TryRemoveMoney(fee);
+        }
+
+        var payload = $"withdraw|{cfg.Key}:{given}|fee:{fee}";
+        var request = new AssetOperationRequest(Guid.NewGuid(), accountId, "jewel-withdraw", PayloadHash(payload), "game", payload, [new JewelBankDelta(cfg.Key, -given, int.MaxValue)]);
+        var status = await this.CommitAsync(player, request).ConfigureAwait(false);
+        if (status is null)
+        {
+            await this.NotifyUncertainAsync(player).ConfigureAwait(false);
+            return;
+        }
+
+        if (status != AssetCommitStatus.Committed)
+        {
+            await TakeBackAsync(player, before).ConfigureAwait(false);
+            if (fee > 0)
+            {
+                player.TryAddMoney(fee);
+            }
+
+            await this.NotifyAsync(player, nameof(JewelBankResult.InsufficientBalance), "The withdrawal couldn't be made; your jewels stay in the bank. Please try again.", "Không rút được ngọc, ngọc vẫn ở trong ngân hàng. Vui lòng thử lại.").ConfigureAwait(false);
+            return;
+        }
+
+        await this.NotifyAsync(
+            player,
+            "Withdrawn",
+            $"Withdrew {given} × {cfg.NameEn} into your bag.",
+            $"Đã rút {given} × {cfg.NameVi} vào túi đồ.").ConfigureAwait(false);
+    }
+
+    private async ValueTask ClaimPendingAndSendAsync(Player player, bool requested)
+    {
+        if (player.Account is not null && player.Inventory is not null)
+        {
+            await player.RunPersistenceExclusiveAsync(() => this.DeliverPendingLockedAsync(player)).ConfigureAwait(false);
         }
 
         await this.SendStateAsync(player, requested).ConfigureAwait(false);
+    }
+
+    // Website withdrawals whose jewels wait: each part delivered into the bag is taken from the waiting count in the same
+    // transaction as that bag.
+    private async ValueTask DeliverPendingLockedAsync(Player player)
+    {
+        await this.ImportJsonOnceAsync(player).ConfigureAwait(false);
+        if (this.IsUncertain(player))
+        {
+            return;
+        }
+
+        var engine = this.GetEngine();
+        var accountId = player.Account!.GetId();
+        var pending = await player.PersistenceContext.GetPendingAssetOperationsAsync(accountId).ConfigureAwait(false);
+        foreach (var waiting in pending.Where(p => p.Kind == WebsiteWithdrawKind))
+        {
+            if (waiting.PendingKey is not { } key || engine.FindByKey(key) is not { } cfg)
+            {
+                continue;
+            }
+
+            var before = player.Inventory!.Items.ToDictionary(i => i, i => i.Durability);
+            var delivered = await GiveSinglesAsync(player, cfg, waiting.PendingCount).ConfigureAwait(false);
+            if (delivered == 0)
+            {
+                break;
+            }
+
+            var payload = $"delivery|{waiting.Id:N}|{key}:{delivered}";
+            var request = new AssetOperationRequest(
+                Guid.NewGuid(),
+                accountId,
+                "jewel-delivery",
+                PayloadHash(payload),
+                "game",
+                payload,
+                [],
+                DeliveredOperationId: waiting.Id,
+                DeliveredCount: delivered);
+            var status = await this.CommitAsync(player, request).ConfigureAwait(false);
+            if (status is null)
+            {
+                return;
+            }
+
+            if (status != AssetCommitStatus.Committed)
+            {
+                await TakeBackAsync(player, before).ConfigureAwait(false);
+            }
+        }
     }
 
     private async ValueTask<bool> EnsureSafeZoneAsync(Player player, JewelBankEngine engine)

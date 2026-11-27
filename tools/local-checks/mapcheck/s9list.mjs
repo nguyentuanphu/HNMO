@@ -1,16 +1,19 @@
-// Season 9's monster numbers (IGC_MonsterList.xml) and spawns (IGC_MonsterSpawn*.xml) against the web game's
-// Monsters.json: which Season 9 numbers have no entry, and on which maps they spawn. Usage: node s9list.mjs <repo>
+// Season 9's monster numbers (the suite's monster list file) and spawns (its spawn files) against the web game's
+// Monsters.json: which Season 9 numbers have no entry, and on which maps they spawn.
+// Usage: node s9list.mjs <repo> <monster list file> <spawn file> [more spawn files] (files of the Season 9 server suite,
+// which are not in the repository).
 import fs from 'node:fs';
 const repo = process.argv[2];
-const dir = process.env.LEGACY_S9_MONSTERS_DIR; // the Season 9 server suite's monster folder (not in the repository)
-const list = fs.readFileSync(`${dir}/IGC_MonsterList.xml`, 'utf8');
+const [listFile, ...spawnFiles] = process.argv.slice(3);
+if (!listFile || spawnFiles.length === 0) throw new Error('Usage: node s9list.mjs <repo> <monster list file> <spawn file> [more spawn files]');
+const list = fs.readFileSync(listFile, 'utf8');
 const names = new Map([...list.matchAll(/<Monster Index="(\d+)"\s+ExpType="\d+"\s+Name="([^"]*)"/g)].map((m) => [Number(m[1]), m[2]]));
 const ours = JSON.parse(fs.readFileSync(`${repo}/client/src/bin/Data/Monsters/Monsters.json`, 'utf8'));
 const known = new Map();
 for (const m of ours.monsters) for (const n of m.numbers) known.set(n.number, { model: n.model ?? m.model, name: typeof m.name === 'string' ? m.name : m.name?.en });
 const spawnsByNumber = new Map();
-for (const file of ['IGC_MonsterSpawn.xml', 'IGC_MonsterSpawn_Event.xml']) {
-  const text = fs.readFileSync(`${dir}/${file}`, 'utf8').replace(/<!--[\s\S]*?-->/g, '');
+for (const file of spawnFiles) {
+  const text = fs.readFileSync(file, 'utf8').replace(/<!--[\s\S]*?-->/g, '');
   for (const map of text.matchAll(/<Map Number="(\d+)"[^>]*>([\s\S]*?)<\/Map>/g)) {
     for (const spot of map[2].matchAll(/<Spawn Index="(\d+)"[^>]*?StartX="(\d+)"\s+StartY="(\d+)"/g)) {
       const n = Number(spot[1]);

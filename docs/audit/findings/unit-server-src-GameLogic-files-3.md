@@ -48,3 +48,13 @@
    - `MoneyDistribution` performs scaling in `double` precision to avoid `float` rounding above ~16.7M and distributes remainders via largest-remainder method.
    - `MapInitializer` respects `MonsterAmountPlugIn` multipliers on non-minigame automatic monster spawns and cleans up tracking on map/NPC disposal.
    - `PartyManager` restores renamed offline members using `OfflinePartyMember.CharacterId`.
+
+## Re-check 2026-11-27 (changes 9321d2af..a108e846)
+
+Commits read (every changed file read in full):
+
+- 39443f93 fix(gamelogic): fix anticheat speed/time, season coin race, party master exp gate, chaos jewel count, and gens quest reward
+
+Evidence:
+
+- Party.AwardExperienceAsync: normal EXP stops at the catch-up cap; master EXP needs catch-up cap + config max + master class + SeasonPlan MasterLevels unlocked. DIFFERS from the owner decision of 26 Nov night ("bỏ điều kiện Season Plan cho EXP master"): the SeasonPlan gate is removed by PR #418 (open). Until #418 merges, a master-class character at the cap with the gate locked gets no EXP at all.

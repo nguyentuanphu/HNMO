@@ -85,6 +85,11 @@ internal static class InvasionMonsters
     public const ushort HideousRabbit = 420;
 
     /// <summary>
+    /// The Cursed Goblin monster.
+    /// </summary>
+    public const ushort CursedGoblin = 466;
+
+    /// <summary>
     /// The Snowman NPC/monster.
     /// </summary>
     public const ushort Snowman = 467;

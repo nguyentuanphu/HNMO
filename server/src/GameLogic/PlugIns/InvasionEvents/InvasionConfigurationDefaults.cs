@@ -102,6 +102,7 @@ public static class InvasionConfigurationDefaults
         Mobs =
         [
             new(InvasionMonsters.TransformedSnowman, 15, [InvasionMaps.Devias, InvasionMaps.Lorencia, InvasionMaps.Noria], SpawnMapStrategy.RandomMap),
+            new(InvasionMonsters.CursedGoblin, 10, [], SpawnMapStrategy.RandomMap),
             new(InvasionMonsters.CursedSanta, 5, [], SpawnMapStrategy.RandomMap, announceDeath: true),
         ],
     };
