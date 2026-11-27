@@ -102,14 +102,17 @@ if [ "${HNMO_SKIP_OBFUSCAR:-0}" != 1 ]; then
   SEARCH_XML="  <AssemblySearchPath path=\"$(to_native_path "$OUT/server")\" />"
   if [ "$RUNTIME" = portable ]; then
     NET_BASE="$(dirname "$(dotnet --list-runtimes | awk -v major="$NET_MAJOR" '$1 == "Microsoft.NETCore.App" && index($2, major ".") == 1 {p=$NF; sub(/\[/,"",p); gsub(/\]/,"",p); dir=p} END{print dir}')" 2>/dev/null || true)"
-    # Fallback via --info base path if available
-    while IFS= read -r fwline; do
+    # A portable server has no framework assemblies of its own: Obfuscar reads them from the newest installed .NET and
+    # ASP.NET Core runtimes of this major version, one of each (a machine with two .NET runtimes of the major version
+    # would otherwise give two .NET folders and no ASP.NET Core one).
+    for fwname in Microsoft.NETCore.App Microsoft.AspNetCore.App; do
+      fwline="$(dotnet --list-runtimes | awk -v name="$fwname" -v major="$NET_MAJOR" '$1 == name && index($2, major ".") == 1' | sort -V -k2,2 | tail -n 1)"
+      [ -n "$fwline" ] || { echo "ERROR: no $fwname $NET_MAJOR runtime for Obfuscar" >&2; exit 1; }
       fwver="$(printf '%s' "$fwline" | awk '{print $2}')"
       fwdir="$(printf '%s' "$fwline" | sed -n 's#.*\[\(.*\)\].*#\1#p')/$fwver"
-      if [ -d "$fwdir" ]; then
-        SEARCH_XML="$SEARCH_XML"$'\n'"  <AssemblySearchPath path=\"$(to_native_path "$fwdir")\" />"
-      fi
-    done < <(dotnet --list-runtimes | grep -E "^Microsoft\.(NETCore|AspNetCore)\.App ${NET_MAJOR}\." | sort -V | tail -n 2)
+      [ -d "$fwdir" ] || { echo "ERROR: $fwdir not found for Obfuscar" >&2; exit 1; }
+      SEARCH_XML="$SEARCH_XML"$'\n'"  <AssemblySearchPath path=\"$(to_native_path "$fwdir")\" />"
+    done
   fi
 
   IN_NATIVE="$(to_native_path "$OUT/server")"
