@@ -1,5 +1,5 @@
-﻿// <copyright file="IntegrityVerifier.cs" company="HNMO">
-// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// <copyright file="IntegrityVerifier.cs" company="HNMO">
+// Proprietary and confidential. All rights reserved. Unauthorized copying, modification, or distribution is prohibited.
 // </copyright>
 
 namespace HNMO.Integrity;
