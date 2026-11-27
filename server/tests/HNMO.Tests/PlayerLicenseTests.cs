@@ -33,6 +33,7 @@ public class PlayerLicenseTests
     private static readonly DateOnly Today = new(2026, 11, 15);
     private Ed25519PrivateKeyParameters _privateKey = null!;
     private byte[] _publicKeyPem = null!;
+    private string? _previousHub;
 
     /// <summary>A fresh keypair for each test.</summary>
     [SetUp]
@@ -46,7 +47,15 @@ public class PlayerLicenseTests
         new PemWriter(writer).WriteObject(pair.Public);
         this._publicKeyPem = Encoding.UTF8.GetBytes(writer.ToString());
         LicensedPlayerLimit.Reset();
+
+        // These tests talk to a stub hub: they need a hub address even when the test run turned the real one off.
+        this._previousHub = Environment.GetEnvironmentVariable(DeveloperHubAddress.EnvironmentVariableName);
+        Environment.SetEnvironmentVariable(DeveloperHubAddress.EnvironmentVariableName, "https://hub.example");
     }
+
+    /// <summary>Gives the test run its hub setting back.</summary>
+    [TearDown]
+    public void TearDown() => Environment.SetEnvironmentVariable(DeveloperHubAddress.EnvironmentVariableName, this._previousHub);
 
     /// <summary>No file: the default of 10.</summary>
     [Test]

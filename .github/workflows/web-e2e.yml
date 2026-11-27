@@ -14,6 +14,11 @@ concurrency:
   group: web-e2e-${{ github.ref }}
   cancel-in-progress: true
 
+# Test runs never report to the real developer hub as a host (setup and weekly reports, licence, update checks).
+# "off", not empty: Windows drops an empty environment variable.
+env:
+  HNMO_DEVELOPER_HUB: "off"
+
 jobs:
   e2e:
     runs-on: ubuntu-latest

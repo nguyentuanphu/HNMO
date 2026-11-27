@@ -4,6 +4,8 @@ They play the web game in Chromium against a running server and web client, like
 log in, enter the world, open the inventory, move and equip items, open the vault, hover items.
 
 ```bash
+# test runs never report to the real developer hub (Windows: set HNMO_DEVELOPER_HUB=off):
+export HNMO_DEVELOPER_HUB=off
 # a server, e.g. the demo server (data in memory):
 dotnet run --project ../../server/src/Startup -c Release -- -demo -autostart -resolveIP:loopback
 # the web client on port 8081:

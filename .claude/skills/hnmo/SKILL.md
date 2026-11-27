@@ -560,3 +560,13 @@ The desktop code stays the reference for how the classic game behaves (parity ru
   for dotnet); publish the bridge with `-r linux-x64 --self-contained -p:PublishSingleFile=true`.
 - A backup must never hold `save/updates/` (the running update helper): restoring it fails with "Text file busy".
 - Logs the host reads (update.log) are in Sydney time like everything else.
+
+## No hub reports from test runs (2026-11-27)
+- Before running the HNMO server in tests, set `HNMO_DEVELOPER_HUB` to empty (`off` on Windows: an empty variable is
+  dropped there). `DeveloperHubAddress.Resolve`: unset = the real hub, empty / `off` / `none` = off, anything else =
+  that hub. `DeveloperHubWeeklyService` waits 10 minutes, then sends the first-setup and weekly reports (a failed try
+  again after 6 hours); a fresh test machine has no `save/developer-hub.json`, so every test run longer than 10 minutes
+  reported as a new host (about 3,500 calls in the week to 27 Nov, mostly answered 429).
+- CI workflows set `HNMO_DEVELOPER_HUB: "off"` at workflow level; `playwright.config.ts` sets it for the servers the
+  specs start; `smoke-unix-package.sh` passes it through `launchctl` (macOS `open` drops the shell's environment).
+- Real hosts' launchers (`start-hnmo.sh`, `Start HNMO.bat`, the tray, the .deb / .app wrappers) never set it.

@@ -1,5 +1,6 @@
 // Unit tests of the updater's rules (bridge/Updater.cs): which version is newer, which files an update brings and
 // takes away, and that a manifest can't reach outside the HNMO folder or into the save game.
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
@@ -14,6 +15,20 @@ namespace HNMO.Launcher.Tests;
 [TestFixture]
 public class UpdaterTests
 {
+    private string? _previousHub;
+
+    /// <summary>The tests talk to a stub hub: they need a hub address even when the test run turned the real one off.</summary>
+    [SetUp]
+    public void UseAStubHub()
+    {
+        this._previousHub = Environment.GetEnvironmentVariable("HNMO_DEVELOPER_HUB");
+        Environment.SetEnvironmentVariable("HNMO_DEVELOPER_HUB", "https://hub.example");
+    }
+
+    /// <summary>Gives the test run its hub setting back.</summary>
+    [TearDown]
+    public void GiveTheHubSettingBack() => Environment.SetEnvironmentVariable("HNMO_DEVELOPER_HUB", this._previousHub);
+
     [TestCase("1.0.1", "1.0.0", true)]
     [TestCase("1.0.10", "1.0.9", true, Description = "numbers, not text")]
     [TestCase("1.1.0", "1.0.99", true)]
