@@ -24,13 +24,14 @@ guide.html), draft PR into claude/hnmo-main-handover-54co2m, never main, Sydney 
   limit), e2e: throw a test error in the page -> one automatic report appears on the admin page; a second identical
   error doesn't add a row.
 
-## B. Reporting from a PC/Mac browser (owner asked how)
-- Today PC/Mac players only have the hotkey Alt+B; the 🐞 button exists only on phones (mobileHud, touchControls).
+## B. Reporting from a PC/Mac browser
+- The owner says the browser already has the 🐞 bug button (on PC and Mac too, not only phones): keep it as the way to
+  report and check it shows on desktop Chrome/Edge/Firefox/Safari at the normal window sizes; if it only shows with
+  the touch controls, show it on desktop as well.
 - Bug: on a Mac, Option+B gives event.key "∫", so `event.key.toLowerCase() === 'b'` (main.ts ~2241) never fires: use
   `event.code === 'KeyB'` (keep the other modifier checks).
-- Add a visible way on desktop: a "Report a bug / Báo lỗi" entry in the game's menu (or next to the (i) guide button),
-  and the chat command `/bug`. Same window. Update guide.html (how to report on PC, Mac, phone).
-- e2e: Option/Alt+B via event.code opens the window; the desktop menu entry opens it.
+- guide.html: "Report a bug: the 🐞 button (PC, Mac, phone) or Alt/Option+B".
+- e2e: the 🐞 button opens the window on a desktop viewport; Alt+B via event.code opens it.
 
 Report on each PR: what ran, what was verified and what wasn't (real browsers on Windows/Mac if you can), Sydney times.
 ```
