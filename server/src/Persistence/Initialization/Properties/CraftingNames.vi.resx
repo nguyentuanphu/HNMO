@@ -33,7 +33,7 @@
   <data name="Plus12ItemCombination" xml:space="preserve"><value>Kết hợp vật phẩm +12</value></data>
   <data name="PotionOfSoul" xml:space="preserve"><value>Thuốc linh hồn</value></data>
   <data name="PotionOfBless" xml:space="preserve"><value>Thuốc ban phước</value></data>
-  <data name="Fruits" xml:space="preserve"><value>trái cây</value></data>
+  <data name="Fruits" xml:space="preserve"><value>quả</value></data>
   <data name="RemoveSeedSphere" xml:space="preserve"><value>Loại bỏ hạt giống</value></data>
   <data name="MountSeedSphere" xml:space="preserve"><value>Gắn kết quả cầu hạt giống</value></data>
   <data name="SocketWeapon" xml:space="preserve"><value>Chế tạo vũ khí socket</value></data>

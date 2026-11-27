@@ -945,7 +945,7 @@
             "ru": "Увеличивает выбор предмета на 1 уровень.",
             "tl": "Pinapataas ng 1 level ang opsyon sa item",
             "uk": "Збільшує опцію предмета на 1 рівень",
-            "vi": "Tăng tùy chọn của vật phẩm thêm 1 cấp",
+            "vi": "Tăng dòng thuộc tính của vật phẩm thêm 1 cấp",
             "zh-CN": "道具追加属性提高一个阶段",
             "zh-TW": "將物品選項增加 1 級"
           }
@@ -1210,7 +1210,7 @@
             "ru": "Используется для создания фруктов, повышающих характеристики.",
             "tl": "Ginagamit upang lumikha ng mga prutas na nagpapataas ng mga istatistika",
             "uk": "Використовується для створення фруктів, які підвищують характеристики",
-            "vi": "Dùng để tạo trái cây tăng điểm chỉ số",
+            "vi": "Dùng để tạo quả tăng điểm chỉ số",
             "zh-CN": "用于合成提高属性的果实",
             "zh-TW": "用於製造增加屬性的水果"
           }
@@ -1894,7 +1894,8 @@
         "de": "Niederer Verfeinerungsstein",
         "es": "Piedra de Más Baja Refinación",
         "pl": "Niższy kamień rafinacji",
-        "pt": "Pedra refinada inferior"
+        "pt": "Pedra refinada inferior",
+        "vi": "Đá Tinh Luyện Cấp Thấp"
       },
       "tags": ["refineStone", "valuable"],
       "description": [
@@ -1924,7 +1925,8 @@
         "de": "Höherer Verfeinerungsstein",
         "es": "Piedra de Más Alta Refinación",
         "pl": "Wyższy kamień rafinacji",
-        "pt": "Pedra refinada superior"
+        "pt": "Pedra refinada superior",
+        "vi": "Đá Tinh Luyện Cấp Cao"
       },
       "tags": ["refineStone", "valuable"],
       "description": [

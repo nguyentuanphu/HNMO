@@ -784,7 +784,7 @@
     <value>Thêm vật phẩm may mắn</value>
   </data>
   <data name="AddLuckyItemsUpdatePlugIn_Description" xml:space="preserve">
-    <value>Bản cập nhật này thêm các bộ giáp may mắn, vé vật phẩm may mắn và ngọc mở rộng và nâng cấp. David ở Elveland đổi một vé lấy bộ giáp may mắn hợp với lớp nhân vật. Các gói của cửa hàng trong game chứa vé được mở bán.</value>
+    <value>Bản cập nhật này thêm các bộ giáp may mắn, vé vật phẩm may mắn và Ngọc Mở Rộng và nâng cấp. David ở Elveland đổi một vé lấy bộ giáp may mắn hợp với lớp nhân vật. Các gói của cửa hàng trong game chứa vé được mở bán.</value>
   </data>
   <data name="AddBuffItemsUpdatePlugIn_Name" xml:space="preserve">
     <value>Thêm vật phẩm buff</value>
