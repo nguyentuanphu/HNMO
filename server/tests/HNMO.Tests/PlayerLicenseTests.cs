@@ -206,6 +206,69 @@ public class PlayerLicenseTests
     }
 
     /// <summary>
+    /// Layer 1: update checks ask <c>/api/update-check</c> with the folder's licence, machine id and build stamp;
+    /// valid returns the manifest and token, withdrawn (403) refuses cleanly, and unreachable never crashes.
+    /// </summary>
+    /// <returns>The task.</returns>
+    [Test]
+    [NonParallelizable]
+    public async Task UpdateCheckRespectsValidWithdrawnAndUnreachableHubAsync()
+    {
+        var (previousMachine, previousLegacy, previousLicence) = (DeveloperHub.MachineId, DeveloperHub.LegacyMachineId, DeveloperHub.LicenceFile);
+        DeveloperHub.MachineId = "aaaaaaaaaaaaaaaa";
+        DeveloperHub.LegacyMachineId = "bbbbbbbbbbbbbbbb";
+        DeveloperHub.LicenceFile = Encoding.UTF8.GetString(this.File("""{"licensee":"Minh","maxPlayers":40,"expires":null,"machine":"aaaaaaaaaaaaaaaa","id":"L-1"}"""));
+        try
+        {
+            var validJson = """
+            {
+              "manifestVersion": "1.2.0",
+              "notes": "Patch",
+              "downloadBase": "https://cdn.example/files/",
+              "token": "tok-abc",
+              "files": [{"path": "server/HNMO.Startup.dll", "sha256": "deadbeef", "size": 42, "exec": false}]
+            }
+            """;
+            var validHandler = new RecordingHandler(HttpStatusCode.OK, validJson);
+            using (var client = new HttpClient(validHandler))
+            {
+                var res = await DeveloperHub.CheckForUpdateAsync("HNMO-test-20261127", client: client).ConfigureAwait(false);
+                Assert.That(res.Authorized, Is.True);
+                Assert.That(res.ManifestVersion, Is.EqualTo("1.2.0"));
+                Assert.That(res.Token, Is.EqualTo("tok-abc"));
+                Assert.That(res.DownloadBase, Is.EqualTo("https://cdn.example/files/"));
+                Assert.That(res.Files, Has.Count.EqualTo(1));
+                Assert.That(validHandler.Path, Is.EqualTo("/api/update-check"));
+                var sent = JsonNode.Parse(validHandler.Body!)!;
+                Assert.That(sent["licenceId"]!.GetValue<string>(), Is.EqualTo("L-1"));
+                Assert.That(sent["machineId"]!.GetValue<string>(), Is.EqualTo("aaaaaaaaaaaaaaaa"));
+                Assert.That(sent["buildStamp"]!.GetValue<string>(), Is.EqualTo("HNMO-test-20261127"));
+                Assert.That(Encoding.UTF8.GetString(Convert.FromBase64String(sent["licence"]!.GetValue<string>())), Is.EqualTo(DeveloperHub.LicenceFile));
+            }
+
+            using (var withdrawnClient = new HttpClient(new RecordingHandler(HttpStatusCode.Forbidden, """{"error":"forbidden","reason":"withdrawn"}""")))
+            {
+                var res = await DeveloperHub.CheckForUpdateAsync("HNMO-test-20261127", client: withdrawnClient).ConfigureAwait(false);
+                Assert.That(res.Authorized, Is.False);
+                Assert.That(res.Denied, Is.True);
+                Assert.That(res.Files, Is.Empty);
+            }
+
+            using (var unreachableClient = new HttpClient(new ThrowingHandler()))
+            {
+                var res = await DeveloperHub.CheckForUpdateAsync("HNMO-test-20261127", client: unreachableClient).ConfigureAwait(false);
+                Assert.That(res.Authorized, Is.False);
+                Assert.That(res.Denied, Is.False);
+                Assert.That(res.Files, Is.Empty);
+            }
+        }
+        finally
+        {
+            (DeveloperHub.MachineId, DeveloperHub.LegacyMachineId, DeveloperHub.LicenceFile) = (previousMachine, previousLegacy, previousLicence);
+        }
+    }
+
+    /// <summary>
     /// One limit for the whole folder (owner, 2026-11-21): accounts playing in another program (Season 9, the Arena)
     /// take places too, an account playing elsewhere coming here takes none, and this program publishes its accounts.
     /// </summary>
@@ -290,5 +353,11 @@ public class PlayerLicenseTests
             this.Body = request.Content is null ? null : await request.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
             return new HttpResponseMessage(status) { Content = new StringContent(answer) };
         }
+    }
+
+    private sealed class ThrowingHandler : HttpMessageHandler
+    {
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+            => Task.FromException<HttpResponseMessage>(new HttpRequestException("hub unreachable"));
     }
 }

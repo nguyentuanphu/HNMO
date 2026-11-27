@@ -11,7 +11,9 @@
 // panel. If they don't come, it puts the old files back, starts the old version and restores the backup.
 using System.Diagnostics;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using HNMO.Interfaces;
@@ -67,10 +69,13 @@ internal sealed class HnmoUpdater
     private readonly IHttpClientFactory _clients;
     private readonly ILogger _logger;
     private readonly object _gate = new();
+    private readonly Func<string>? _machineIdProvider;
+    private readonly Func<string>? _legacyMachineIdProvider;
     private string? _latest;
     private string? _notes;
-    private string? _manifestUrl;
     private string? _filesUrl;
+    private string? _updateToken;
+    private List<UpdateFile>? _authorizedFiles;
     private string _state = "idle";
     private int _percent;
     private string? _message;
@@ -84,7 +89,17 @@ internal sealed class HnmoUpdater
     /// <param name="adminPort">The admin panel's port.</param>
     /// <param name="clients">The HTTP clients.</param>
     /// <param name="logger">The logger.</param>
-    public HnmoUpdater(string root, string saveDir, int webPort, int adminPort, IHttpClientFactory clients, ILogger logger)
+    /// <param name="machineIdProvider">Optional override for tests.</param>
+    /// <param name="legacyMachineIdProvider">Optional override for tests.</param>
+    public HnmoUpdater(
+        string root,
+        string saveDir,
+        int webPort,
+        int adminPort,
+        IHttpClientFactory clients,
+        ILogger logger,
+        Func<string>? machineIdProvider = null,
+        Func<string>? legacyMachineIdProvider = null)
     {
         this._root = root;
         this._saveDir = saveDir;
@@ -92,6 +107,8 @@ internal sealed class HnmoUpdater
         this._adminPort = adminPort;
         this._clients = clients;
         this._logger = logger;
+        this._machineIdProvider = machineIdProvider;
+        this._legacyMachineIdProvider = legacyMachineIdProvider;
         this.ReadLastResult();
     }
 
@@ -194,7 +211,10 @@ internal sealed class HnmoUpdater
                 return (false, "An update is already running.");
             }
 
-            if (!IsNewer(this._latest, this.CurrentVersion) || this._manifestUrl is null || this._filesUrl is null)
+            if (!IsNewer(this._latest, this.CurrentVersion)
+                || this._authorizedFiles is not { Count: > 0 }
+                || this._filesUrl is null
+                || string.IsNullOrEmpty(this._updateToken))
             {
                 return (false, "No newer version is offered.");
             }
@@ -208,27 +228,118 @@ internal sealed class HnmoUpdater
         return (true, "The update started.");
     }
 
+    private void ClearAuthorizedOffer()
+    {
+        lock (this._gate)
+        {
+            this._latest = null;
+            this._notes = null;
+            this._filesUrl = null;
+            this._updateToken = null;
+            this._authorizedFiles = null;
+        }
+    }
+
+    private string? ReadLicenceText()
+    {
+        var serverDir = Path.Combine(this._root, "server");
+        var settingsPath = HostSettingsStore.ResolveDefaultPath(Directory.Exists(serverDir) ? serverDir : this._root);
+        var hostSettings = HostSettingsStore.TryLoad(settingsPath);
+        var configured = hostSettings?.LicenseFilePath;
+        var candidates = new List<string>();
+        if (!string.IsNullOrWhiteSpace(configured))
+        {
+            if (Path.IsPathRooted(configured))
+            {
+                candidates.Add(configured);
+            }
+            else
+            {
+                candidates.Add(Path.Combine(this._root, configured));
+                candidates.Add(Path.Combine(serverDir, configured));
+            }
+        }
+
+        candidates.Add(Path.Combine(this._root, "license.hnmo"));
+        candidates.Add(Path.Combine(serverDir, "license.hnmo"));
+        var found = candidates.FirstOrDefault(File.Exists);
+        return found is null ? null : File.ReadAllText(found);
+    }
+
+    private string ReadBuildStamp()
+    {
+        try
+        {
+            var manifest = Path.Combine(this._root, "manifest.json");
+            if (File.Exists(manifest))
+            {
+                using var doc = JsonDocument.Parse(File.ReadAllText(manifest));
+                if (doc.RootElement.TryGetProperty("build", out var b) && b.ValueKind == JsonValueKind.String && b.GetString() is { Length: > 0 } stamp)
+                {
+                    return stamp;
+                }
+            }
+        }
+        catch (Exception ex) when (ex is IOException or JsonException)
+        {
+            // fall back to .hnmo-build
+        }
+
+        var marker = Path.Combine(this._root, "web", "wwwroot", ".hnmo-build");
+        return File.Exists(marker) ? File.ReadAllText(marker).Trim() : string.Empty;
+    }
+
+    private static string ReadLicenceId(string licenceText)
+    {
+        try
+        {
+            using var outer = JsonDocument.Parse(licenceText);
+            var payload = Convert.FromBase64String(outer.RootElement.GetProperty("payload").GetString() ?? string.Empty);
+            using var body = JsonDocument.Parse(payload);
+            return body.RootElement.TryGetProperty("id", out var id) && id.ValueKind == JsonValueKind.String ? id.GetString() ?? string.Empty : string.Empty;
+        }
+        catch (Exception ex) when (ex is JsonException or FormatException or KeyNotFoundException or InvalidOperationException)
+        {
+            return string.Empty;
+        }
+    }
+
     private async Task CheckAsync(CancellationToken cancellationToken)
     {
-        var url = DeveloperHubAddress.LatestRelease;
+        var url = DeveloperHubAddress.UpdateCheck;
         if (url.Length == 0)
         {
+            this.ClearAuthorizedOffer();
             return;
         }
+
+        var licenceText = this.ReadLicenceText();
+        if (string.IsNullOrWhiteSpace(licenceText))
+        {
+            this.ClearAuthorizedOffer();
+            this._logger.LogInformation("HNMO update check: no licence file present; staying on current files.");
+            return;
+        }
+
+        var machineId = (this._machineIdProvider ?? (() => HostMachineIdentity.MachineId))();
+        var legacyMachineId = (this._legacyMachineIdProvider ?? (() => HostMachineIdentity.LegacyMachineId))();
+        var requestBody = new
+        {
+            licenceId = ReadLicenceId(licenceText),
+            machineId,
+            legacyMachineId,
+            buildStamp = this.ReadBuildStamp(),
+            licence = Convert.ToBase64String(Encoding.UTF8.GetBytes(licenceText)),
+        };
 
         try
         {
             using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             timeout.CancelAfter(TimeSpan.FromSeconds(10));
-            using var response = await this._clients.CreateClient().GetAsync(url, timeout.Token).ConfigureAwait(false);
-            if (response.StatusCode == HttpStatusCode.NotFound)
+            using var response = await this._clients.CreateClient().PostAsJsonAsync(url, requestBody, timeout.Token).ConfigureAwait(false);
+            if (response.StatusCode is HttpStatusCode.Forbidden or HttpStatusCode.NotFound)
             {
-                lock (this._gate)
-                {
-                    this._latest = null;
-                    this._notes = null;
-                }
-
+                this.ClearAuthorizedOffer();
                 return;
             }
 
@@ -236,88 +347,183 @@ internal sealed class HnmoUpdater
             using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync(timeout.Token).ConfigureAwait(false));
             var root = document.RootElement;
             string? Text(string name) => root.TryGetProperty(name, out var value) && value.ValueKind == JsonValueKind.String ? value.GetString() : null;
+            var manifestVersion = Text("manifestVersion");
+            var downloadBase = Text("downloadBase");
+            var token = Text("token");
+            if (string.IsNullOrWhiteSpace(manifestVersion)
+                || string.IsNullOrWhiteSpace(downloadBase)
+                || string.IsNullOrWhiteSpace(token)
+                || !root.TryGetProperty("files", out var filesEl)
+                || filesEl.ValueKind != JsonValueKind.Array)
+            {
+                this.ClearAuthorizedOffer();
+                return;
+            }
+
+            var files = new List<UpdateFile>();
+            foreach (var item in filesEl.EnumerateArray())
+            {
+                var path = item.TryGetProperty("path", out var p) && p.ValueKind == JsonValueKind.String ? p.GetString() : null;
+                var sha = item.TryGetProperty("sha256", out var s) && s.ValueKind == JsonValueKind.String ? s.GetString() : null;
+                if (string.IsNullOrWhiteSpace(path) || string.IsNullOrWhiteSpace(sha) || SafePath(this._root, path) is null)
+                {
+                    this.ClearAuthorizedOffer();
+                    return;
+                }
+
+                var size = item.TryGetProperty("size", out var sz) && sz.ValueKind == JsonValueKind.Number ? sz.GetInt64() : 0;
+                var exec = item.TryGetProperty("exec", out var ex) && ex.ValueKind == JsonValueKind.True;
+                files.Add(new UpdateFile(path, size, sha, exec));
+            }
+
+            if (files.Count == 0)
+            {
+                this.ClearAuthorizedOffer();
+                return;
+            }
+
+            var baseWithSlash = downloadBase.EndsWith('/') ? downloadBase : downloadBase + "/";
             lock (this._gate)
             {
-                this._latest = Text("tag_name");
-                this._notes = Text("body");
-                this._manifestUrl = Text("manifest_url") is { Length: > 0 } manifest ? manifest : null;
-                this._filesUrl = Text("files_url") is { Length: > 0 } files ? files : null;
+                this._latest = manifestVersion;
+                this._notes = Text("notes");
+                this._filesUrl = baseWithSlash;
+                this._updateToken = token;
+                this._authorizedFiles = files;
             }
         }
         catch (Exception ex) when (ex is HttpRequestException or OperationCanceledException or JsonException)
         {
-            this._logger.LogInformation("HNMO update check: the hub can't be reached ({Message}).", ex.Message);
+            this.ClearAuthorizedOffer();
+            this._logger.LogInformation("HNMO update check: the hub can't be reached ({Message}); staying on current files.", ex.Message);
         }
     }
 
-    private async Task RunAsync(Func<Task> stopHnmo)
+    internal async Task<UpdatePlan?> StageAuthorizedUpdateForTestAsync(CancellationToken cancellationToken = default)
     {
-        try
+        List<UpdateFile>? files;
+        string? latest;
+        string? filesUrl;
+        string? token;
+        lock (this._gate)
         {
-            var http = this._clients.CreateClient();
-            http.Timeout = TimeSpan.FromMinutes(30);
-            var next = await http.GetFromJsonAsync<UpdateManifest>(this._manifestUrl!).ConfigureAwait(false)
-                ?? throw new InvalidDataException("The new version's manifest is empty.");
-            var installed = JsonSerializer.Deserialize<UpdateManifest>(await File.ReadAllTextAsync(Path.Combine(this._root, "manifest.json")).ConfigureAwait(false))
-                ?? throw new InvalidDataException("This folder's manifest.json can't be read.");
-            if (next.Files.Any(f => SafePath(this._root, f.Path) is null) || installed.Files.Any(f => SafePath(this._root, f.Path) is null))
+            files = this._authorizedFiles?.ToList();
+            latest = this._latest;
+            filesUrl = this._filesUrl;
+            token = this._updateToken;
+        }
+
+        if (files is not { Count: > 0 } || string.IsNullOrWhiteSpace(latest) || string.IsNullOrWhiteSpace(filesUrl) || string.IsNullOrWhiteSpace(token))
+        {
+            return null;
+        }
+
+        var http = this._clients.CreateClient();
+        http.Timeout = TimeSpan.FromMinutes(30);
+        return await this.StagePlanAsync(http, new UpdateManifest(latest, this.ReadBuildStamp(), files), filesUrl, token, skipBackup: true, cancellationToken).ConfigureAwait(false);
+    }
+
+    private async Task<UpdatePlan> StagePlanAsync(
+        HttpClient http,
+        UpdateManifest next,
+        string filesUrl,
+        string bearerToken,
+        bool skipBackup,
+        CancellationToken cancellationToken)
+    {
+        var installed = JsonSerializer.Deserialize<UpdateManifest>(await File.ReadAllTextAsync(Path.Combine(this._root, "manifest.json"), cancellationToken).ConfigureAwait(false))
+            ?? throw new InvalidDataException("This folder's manifest.json can't be read.");
+        if (next.Files.Any(f => SafePath(this._root, f.Path) is null) || installed.Files.Any(f => SafePath(this._root, f.Path) is null))
+        {
+            throw new InvalidDataException("A manifest names a file outside the HNMO folder or in the save folder.");
+        }
+
+        var (copies, removes) = Diff(installed, next);
+        var staging = Path.Combine(this._saveDir, "updates", next.Version, "files");
+        Directory.CreateDirectory(staging);
+        var total = Math.Max(1, copies.Sum(c => c.Size));
+        long done = 0;
+        lock (this._gate)
+        {
+            this._changedFiles = copies.Count;
+            this._downloadBytes = copies.Sum(c => c.Size);
+        }
+
+        this._logger.LogInformation("HNMO update {From} → {To}: {Files} files to download ({Mb} MB), {Removed} to take away.", installed.Version, next.Version, copies.Count, total / (1 << 20), removes.Count);
+        foreach (var file in copies.DistinctBy(c => c.Sha256, StringComparer.OrdinalIgnoreCase))
+        {
+            var target = Path.Combine(staging, file.Sha256.ToLowerInvariant());
+            if (!File.Exists(target) || !string.Equals(await HashAsync(target).ConfigureAwait(false), file.Sha256, StringComparison.OrdinalIgnoreCase))
             {
-                throw new InvalidDataException("A manifest names a file outside the HNMO folder or in the save folder.");
+                await DownloadAsync(http, filesUrl + file.Sha256.ToLowerInvariant(), target, file.Sha256, bearerToken, cancellationToken).ConfigureAwait(false);
             }
 
-            var (copies, removes) = Diff(installed, next);
-            var staging = Path.Combine(this._saveDir, "updates", next.Version, "files");
-            Directory.CreateDirectory(staging);
-            var total = Math.Max(1, copies.Sum(c => c.Size));
-            long done = 0;
+            done += file.Size;
             lock (this._gate)
             {
-                this._changedFiles = copies.Count;
-                this._downloadBytes = copies.Sum(c => c.Size);
+                this._percent = (int)(done * 90 / total);
             }
+        }
 
-            this._logger.LogInformation("HNMO update {From} → {To}: {Files} files to download ({Mb} MB), {Removed} to take away.", installed.Version, next.Version, copies.Count, total / (1 << 20), removes.Count);
-            foreach (var file in copies.DistinctBy(c => c.Sha256, StringComparer.OrdinalIgnoreCase))
-            {
-                var target = Path.Combine(staging, file.Sha256.ToLowerInvariant());
-                if (!File.Exists(target) || !string.Equals(await HashAsync(target).ConfigureAwait(false), file.Sha256, StringComparison.OrdinalIgnoreCase))
-                {
-                    await DownloadAsync(http, this._filesUrl! + file.Sha256.ToLowerInvariant(), target, file.Sha256).ConfigureAwait(false);
-                }
-
-                done += file.Size;
-                lock (this._gate)
-                {
-                    this._percent = (int)(done * 90 / total);
-                }
-            }
-
+        string? backupZip = null;
+        if (!skipBackup)
+        {
             // The save game first (the database too): the copy restores it when the new version doesn't start.
             lock (this._gate)
             {
                 this._message = "Backing up the save game";
             }
 
-            var backupZip = await this.BackupAsync(http).ConfigureAwait(false);
-            var updateFolder = Path.Combine(this._saveDir, "updates", next.Version);
+            backupZip = await this.BackupAsync(http).ConfigureAwait(false);
+        }
 
-            // The new version's manifest replaces this folder's (the next update compares with it).
-            var newManifest = Path.Combine(updateFolder, "manifest.json");
-            await File.WriteAllTextAsync(newManifest, JsonSerializer.Serialize(next)).ConfigureAwait(false);
-            var plan = new UpdatePlan(
-                this._root,
-                installed.Version,
-                next.Version,
-                staging,
-                Path.Combine(updateFolder, "backup"),
-                copies,
-                removes,
-                backupZip,
-                this._webPort,
-                this._adminPort,
-                newManifest);
-            var planFile = Path.Combine(updateFolder, "plan.json");
-            await File.WriteAllTextAsync(planFile, JsonSerializer.Serialize(plan, Json)).ConfigureAwait(false);
+        var updateFolder = Path.Combine(this._saveDir, "updates", next.Version);
+        var newManifest = Path.Combine(updateFolder, "manifest.json");
+        Directory.CreateDirectory(updateFolder);
+        await File.WriteAllTextAsync(newManifest, JsonSerializer.Serialize(next), cancellationToken).ConfigureAwait(false);
+        var plan = new UpdatePlan(
+            this._root,
+            installed.Version,
+            next.Version,
+            staging,
+            Path.Combine(updateFolder, "backup"),
+            copies,
+            removes,
+            backupZip,
+            this._webPort,
+            this._adminPort,
+            newManifest);
+        var planFile = Path.Combine(updateFolder, "plan.json");
+        await File.WriteAllTextAsync(planFile, JsonSerializer.Serialize(plan, Json), cancellationToken).ConfigureAwait(false);
+        return plan;
+    }
+
+    private async Task RunAsync(Func<Task> stopHnmo)
+    {
+        try
+        {
+            List<UpdateFile>? files;
+            string? latest;
+            string? filesUrl;
+            string? token;
+            lock (this._gate)
+            {
+                files = this._authorizedFiles?.ToList();
+                latest = this._latest;
+                filesUrl = this._filesUrl;
+                token = this._updateToken;
+            }
+
+            if (files is not { Count: > 0 } || string.IsNullOrWhiteSpace(latest) || string.IsNullOrWhiteSpace(filesUrl) || string.IsNullOrWhiteSpace(token))
+            {
+                throw new InvalidOperationException("No authorized update from the hub.");
+            }
+
+            var http = this._clients.CreateClient();
+            http.Timeout = TimeSpan.FromMinutes(30);
+            var next = new UpdateManifest(latest, this.ReadBuildStamp(), files);
+            var plan = await this.StagePlanAsync(http, next, filesUrl, token, skipBackup: false, CancellationToken.None).ConfigureAwait(false);
+            var planFile = Path.Combine(this._saveDir, "updates", next.Version, "plan.json");
 
             // The installer: a copy of this program, which isn't replaced while it runs.
             var runner = Path.Combine(this._saveDir, "updates", "runner");
@@ -369,19 +575,25 @@ internal sealed class HnmoUpdater
         }
     }
 
-    private static async Task DownloadAsync(HttpClient http, string url, string target, string sha256)
+    private static async Task DownloadAsync(HttpClient http, string url, string target, string sha256, string? bearerToken, CancellationToken cancellationToken)
     {
         var part = target + ".part";
         for (var attempt = 1; ; attempt++)
         {
             try
             {
-                using (var response = await http.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
+                using var request = new HttpRequestMessage(HttpMethod.Get, url);
+                if (!string.IsNullOrWhiteSpace(bearerToken))
+                {
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
+                }
+
+                using (var response = await http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false))
                 {
                     response.EnsureSuccessStatusCode();
-                    await using var source = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+                    await using var source = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
                     await using var destination = File.Create(part);
-                    await source.CopyToAsync(destination).ConfigureAwait(false);
+                    await source.CopyToAsync(destination, cancellationToken).ConfigureAwait(false);
                 }
 
                 if (!string.Equals(await HashAsync(part).ConfigureAwait(false), sha256, StringComparison.OrdinalIgnoreCase))
@@ -392,9 +604,9 @@ internal sealed class HnmoUpdater
                 File.Move(part, target, true);
                 return;
             }
-            catch (Exception) when (attempt < 3)
+            catch (Exception) when (attempt < 3 && !cancellationToken.IsCancellationRequested)
             {
-                await Task.Delay(TimeSpan.FromSeconds(2 * attempt)).ConfigureAwait(false);
+                await Task.Delay(TimeSpan.FromSeconds(2 * attempt), cancellationToken).ConfigureAwait(false);
             }
         }
     }
