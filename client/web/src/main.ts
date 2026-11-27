@@ -52,7 +52,7 @@ import { LuckyNumberWindow } from './ui/luckyNumberWindow.js';
 import { MarriageWindow } from './ui/marriageWindow.js';
 import { MarketWindow } from './ui/marketWindow.js';
 import { ArenaWindow, savedArenaHome, type ArenaHome } from './ui/arenaWindow.js';
-import { BugReportWindow, installErrorLog } from './ui/bugReportWindow.js';
+import { BugReportWindow, installErrorLog, isBugReportShortcut } from './ui/bugReportWindow.js';
 import { EscrowWindow } from './ui/escrowWindow.js';
 import { VaultPages } from './ui/vaultPages.js';
 import { ItemStacks } from './ui/itemStacks.js';
@@ -2228,7 +2228,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     if (event.key.toLowerCase() === 'a' && event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) { event.preventDefault(); arena.toggle(); }
   });
   window.addEventListener('hnmo-arena-open', () => { arena.open(); });
-  // Bug reports (Alt+B, 🐞 in the phone menu): to the server's owner, who may send them on to the HNMO developer.
+  // Bug reports (Alt/Option+B, the 🐞 button in the top bar on PCs and Macs, 🐞 in the phone menu): to the server's owner, who may send them on to the HNMO developer.
   const bugReports = new BugReportWindow({
     send: (name, fields) => connection.send('ClientToServer', name, fields),
     message: (text) => chat.add(text, 'system'),
@@ -2238,7 +2238,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   connection.onPacket((bytes) => { bugReports.handle(bytes); });
   window.addEventListener('keydown', (event) => {
     if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
-    if (event.key.toLowerCase() === 'b' && event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) { event.preventDefault(); bugReports.toggle(); }
+    if (isBugReportShortcut(event)) { event.preventDefault(); bugReports.toggle(); }
   });
   window.addEventListener('hnmo-bug-report-open', () => { bugReports.open(); });
   // VIP shares the website's reviewed offers and stable retry identifier, using the authenticated game session.

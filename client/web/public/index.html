@@ -135,8 +135,9 @@
     .hud-status #fps { color: var(--muted); font-size: 12px; }
     .hud-sep { width: 1px; height: 16px; background: var(--line); margin: 0 4px; }
     .hud-tools { pointer-events: auto; }
+    #hnmoBugButton { pointer-events: auto; width: 28px; height: 28px; padding: 0; border-radius: 50%; font: 14px/1 system-ui, sans-serif; color: var(--gold); background: transparent; border: 1px solid transparent; cursor: pointer; }
     .hud-tools #soundButton, .hud-tools #guideButton, .hud-tools #settingsButton { width: 28px; height: 28px; background: transparent; border-color: transparent; }
-    .hud-tools #soundButton:hover, .hud-tools #guideButton:hover, .hud-tools #settingsButton:hover { border-color: var(--gold); }
+    .hud-tools #soundButton:hover, .hud-tools #guideButton:hover, .hud-tools #settingsButton:hover, .hud-tools #hnmoBugButton:hover { border-color: var(--gold); }
     .hud-tools .language-picker button, .hud-tools .language-picker select { height: 26px; background: transparent; border-color: transparent; }
     .hud-tools .language-picker select { padding: 0 4px; line-height: 24px; vertical-align: middle; }
     .hud-tools .language-picker select option { background: #1b2131; color: var(--text); }
@@ -184,6 +185,7 @@
     <span class="hud-group hud-tools">
       <button type="button" id="soundButton" title="Sound on / off" aria-label="Sound on or off" aria-pressed="false">♪</button>
       <button type="button" id="guideButton" title="Guide: what to play and what each feature does" aria-label="Open the guide" data-game-name="Open the {game} guide" data-game-name-attr="aria-label">i</button>
+      <button type="button" id="hnmoBugButton" title="Report a bug (Alt+B)" aria-label="Report a bug">🐞</button>
       <span class="hud-sep" aria-hidden="true"></span>
       <span class="language-picker" data-no-i18n role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-lang="en" aria-pressed="true" title="English">EN</button><button type="button" data-lang="vi" aria-pressed="false" title="Tiếng Việt">VN</button><select class="language-more" title="More languages" aria-label="More languages"><option value="">More…</option></select></span>
       <span class="hud-sep" aria-hidden="true"></span>

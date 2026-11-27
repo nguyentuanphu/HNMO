@@ -1,4 +1,4 @@
-// The HNMO bug report window (an HNMO extra; Alt+B, 🐞 in the phone menu): a player describes a bug, the game adds the
+// The HNMO bug report window (an HNMO extra; Alt/Option+B, the 🐞 button on PCs and Macs, 🐞 in the phone menu): a player describes a bug, the game adds the
 // technical details (browser, device, map, recent errors; never the login ticket), and the server keeps it for the
 // server's owner (F5 54 → F5 55). The owner answers on the admin panel; the answers and the status show here, and in the
 // chat when the player enters the game. No screenshots (owner's choice, 2026-11-20).
@@ -113,6 +113,24 @@ function statusName(row: BugReportRow): string {
   }
 }
 
+/** Whether a key press is the window's shortcut, Alt+B (Option+B on a Mac, whose key gives "∫", so by the key's place). */
+export function isBugReportShortcut(event: Pick<KeyboardEvent, 'code' | 'altKey' | 'ctrlKey' | 'metaKey' | 'shiftKey'>): boolean {
+  return event.code === 'KeyB' && event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey;
+}
+
+/**
+ * The 🐞 button for PCs and Macs, in the game's top bar next to the guide's "i" (index.html; phones have it in their
+ * menus).
+ */
+function installDesktopButton(toggle: () => void): void {
+  const button = document.getElementById('hnmoBugButton');
+  if (!button || button.dataset.bound) return;
+  button.dataset.bound = '1';
+  // The world below shouldn't take the click as a walk.
+  button.addEventListener('pointerdown', (event) => { event.stopPropagation(); });
+  button.addEventListener('click', (event) => { event.stopPropagation(); button.blur(); toggle(); });
+}
+
 export class BugReportWindow {
   private readonly panel: HnmoPanel;
   private state: BugReportState | null = null;
@@ -127,6 +145,7 @@ export class BugReportWindow {
     details: () => Record<string, string | number | null | undefined>;
   }) {
     this.panel = createHnmoPanel('hnmo-bug-panel', tx('Report a bug', 'Báo lỗi'));
+    installDesktopButton(() => this.toggle());
   }
 
   isOpen(): boolean {
