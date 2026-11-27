@@ -75,6 +75,14 @@ public sealed class PostgresHnmoPlayerStateRowBackend : IHnmoPlayerStateRowQuery
                 );
                 CREATE INDEX IF NOT EXISTS ix_hnmo_afs_feature_archived
                     ON hnmo.archived_feature_state (feature, archived_at_utc);
+                DO $$
+                BEGIN
+                    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'account') THEN
+                        GRANT USAGE ON SCHEMA hnmo TO account;
+                        GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE hnmo.player_feature_state TO account;
+                    END IF;
+                END
+                $$;
                 """;
             cmd.ExecuteNonQuery();
             this._schemaEnsured = true;

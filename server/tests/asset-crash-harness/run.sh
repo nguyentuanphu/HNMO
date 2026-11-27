@@ -9,6 +9,12 @@ DLL=bin/Release/AssetCrashHarness.dll
 [ -f "$DLL" ] || DLL=bin/Release/net10.0/AssetCrashHarness.dll
 work() { dotnet "$DLL" "$@"; }
 fail=0
+new_uuid() {
+  if [ -r /proc/sys/kernel/random/uuid ]; then cat /proc/sys/kernel/random/uuid
+  elif command -v uuidgen >/dev/null 2>&1; then uuidgen | tr '[:upper:]' '[:lower:]'
+  else python -c 'import uuid; print(uuid.uuid4())'
+  fi
+}
 check() { # expected actual label
   if [ "$1" == "$2" ]; then echo "  ok   $3: $2"; else echo "  FAIL $3: expected '$1', got '$2'"; fail=1; fi
 }
@@ -27,7 +33,7 @@ work setup | tail -1
 for stage in before-save before-commit after-commit; do
   echo "deposit killed at $stage"
   work reset > /dev/null
-  op=$(cat /proc/sys/kernel/random/uuid)
+  op=$(new_uuid)
   killed_at "$stage" deposit "$op"
   after=$(work state "$op")
   if [ "$stage" == "after-commit" ]; then check "vault 0 bank 4 receipts 1" "$after" "after the kill"; else check "vault 4 bank 0 receipts 0" "$after" "after the kill"; fi
@@ -37,7 +43,7 @@ for stage in before-save before-commit after-commit; do
   check "vault 0 bank 4 receipts 1" "$(work state "$op")" "after a second retry"
 
   echo "withdraw killed at $stage"
-  op2=$(cat /proc/sys/kernel/random/uuid)
+  op2=$(new_uuid)
   killed_at "$stage" withdraw "$op2"
   after=$(work state "$op2")
   if [ "$stage" == "after-commit" ]; then check "vault 3 bank 1 receipts 1" "$after" "after the kill"; else check "vault 0 bank 4 receipts 0" "$after" "after the kill"; fi
@@ -45,7 +51,7 @@ done
 
 echo "two retries of the same deposit at once"
 work reset > /dev/null
-op=$(cat /proc/sys/kernel/random/uuid)
+op=$(new_uuid)
 work deposit "$op" > /tmp/hnmo-crash-a.txt 2>&1 & a=$!
 work deposit "$op" > /tmp/hnmo-crash-b.txt 2>&1 & b=$!
 wait $a $b
@@ -54,7 +60,7 @@ check "vault 0 bank 4 receipts 1" "$(work state "$op")" "after both"
 
 echo "the database connection is cut right before the commit"
 work reset > /dev/null
-op=$(cat /proc/sys/kernel/random/uuid)
+op=$(new_uuid)
 flag=$(mktemp -u); go=$(mktemp -u)
 HNMO_TEST_ASSET_BARRIER=before-commit HNMO_TEST_ASSET_BARRIER_FILE="$flag" HNMO_TEST_ASSET_BARRIER_GO="$go" work deposit "$op" > /tmp/hnmo-crash-c.txt 2>&1 & c=$!
 for _ in $(seq 1 600); do [ -f "$flag" ] && break; sleep 0.1; done
@@ -73,7 +79,7 @@ coin_work coin-setup | tail -1
 for stage in before-prepare after-prepare before-local-commit after-local-commit before-canonical-commit after-canonical-commit; do
   echo "coin-spend killed at $stage"
   coin_work coin-reset > /dev/null
-  op=$(cat /proc/sys/kernel/random/uuid)
+  op=$(new_uuid)
   flag=$(mktemp -u)
   ( export HNMO_SEASON=s9 HNMO_REALM_ID=s9 HNMO_TEST_ASSET_BARRIER="$stage" HNMO_TEST_ASSET_BARRIER_FILE="$flag"; exec dotnet "$DLL" coin-spend "$op" 40 s9 > /dev/null 2>&1 ) &
   pid=$!
@@ -93,10 +99,84 @@ done
 
 echo "insufficient shared balance refused in full"
 coin_work coin-reset > /dev/null
-op_ins=$(cat /proc/sys/kernel/random/uuid)
+op_ins=$(new_uuid)
 out_ins=$(coin_work coin-spend "$op_ins" 150 s9)
 check "outcome=Refused afterC=0" "$out_ins" "refused in full"
 check "canon=100 local=100 items=0 receipts=0 prepared=0" "$(coin_work coin-state "$op_ins")" "state untouched on refusal"
+
+echo "=== trade item + Zen (both sides) crash tests (S6.3 hnmo and S9 hnmo_s9) ==="
+for realm in s6 s9; do
+  twork() {
+    if [ "$realm" == "s9" ]; then HNMO_SEASON=s9 HNMO_REALM_ID=s9 work "$@"; else HNMO_SEASON=s6 HNMO_REALM_ID=s6 work "$@"; fi
+  }
+  for stage in before-write in-transaction after-commit; do
+    echo "trade ($realm) killed at $stage"
+    ids=$(twork trade-reset)
+    idA=$(echo "$ids" | awk '{print $1}')
+    idB=$(echo "$ids" | awk '{print $2}')
+    op=$(new_uuid)
+    flag=$(mktemp -u)
+    ( if [ "$realm" == "s9" ]; then export HNMO_SEASON=s9 HNMO_REALM_ID=s9; else export HNMO_SEASON=s6 HNMO_REALM_ID=s6; fi
+      export HNMO_TEST_ASSET_BARRIER="$stage" HNMO_TEST_ASSET_BARRIER_FILE="$flag"
+      exec dotnet "$DLL" trade "$op" "$idA" "$idB" > /dev/null 2>&1 ) &
+    pid=$!
+    for _ in $(seq 1 600); do [ -f "$flag" ] && break; sleep 0.1; done
+    [ -f "$flag" ] || { echo "  FAIL never reached $stage"; fail=1; }
+    kill -9 "$pid" 2>/dev/null; wait "$pid" 2>/dev/null; rm -f "$flag"
+    after=$(twork trade-state "$op" "$idA" "$idB")
+    if [ "$stage" == "after-commit" ]; then
+      check "itemA=B itemB=A countA=1 countB=1 zenA=800 zenB=700 zenSum=1500 receipts=1" "$after" "after kill ($realm $stage)"
+    else
+      check "itemA=A itemB=B countA=1 countB=1 zenA=1000 zenB=500 zenSum=1500 receipts=0" "$after" "after kill ($realm $stage)"
+      twork trade "$op" "$idA" "$idB" > /dev/null
+      check "itemA=B itemB=A countA=1 countB=1 zenA=800 zenB=700 zenSum=1500 receipts=1" "$(twork trade-state "$op" "$idA" "$idB")" "after retry ($realm $stage)"
+    fi
+  done
+done
+
+echo "=== Muun convert + level-up crash tests (S9 hnmo_s9) ==="
+s9work() { HNMO_SEASON=s9 HNMO_REALM_ID=s9 work "$@"; }
+for stage in before-write in-transaction after-commit; do
+  echo "muun-convert killed at $stage"
+  ids=$(s9work muun-reset)
+  lukiId=$(echo "$ids" | awk '{print $1}')
+  op=$(new_uuid)
+  flag=$(mktemp -u)
+  ( export HNMO_SEASON=s9 HNMO_REALM_ID=s9 HNMO_TEST_ASSET_BARRIER="$stage" HNMO_TEST_ASSET_BARRIER_FILE="$flag"
+    exec dotnet "$DLL" muun-convert "$op" > /dev/null 2>&1 ) &
+  pid=$!
+  for _ in $(seq 1 600); do [ -f "$flag" ] && break; sleep 0.1; done
+  [ -f "$flag" ] || { echo "  FAIL never reached $stage"; fail=1; }
+  kill -9 "$pid" 2>/dev/null; wait "$pid" 2>/dev/null; rm -f "$flag"
+  after=$(s9work muun-state "$op" "$lukiId")
+  if [ "$stage" == "after-commit" ]; then
+    check "lukiSame=true lukiLv=1 tonys=0 convs=0 energy=16 receipts=1" "$after" "after kill (muun-convert $stage)"
+  else
+    check "lukiSame=true lukiLv=1 tonys=1 convs=1 energy=10 receipts=0" "$after" "after kill (muun-convert $stage)"
+    s9work muun-convert "$op" > /dev/null
+    check "lukiSame=true lukiLv=1 tonys=0 convs=0 energy=16 receipts=1" "$(s9work muun-state "$op" "$lukiId")" "after retry (muun-convert $stage)"
+  fi
+
+  echo "muun-levelup killed at $stage"
+  ids=$(s9work muun-reset)
+  lukiId=$(echo "$ids" | awk '{print $1}')
+  op2=$(new_uuid)
+  flag=$(mktemp -u)
+  ( export HNMO_SEASON=s9 HNMO_REALM_ID=s9 HNMO_TEST_ASSET_BARRIER="$stage" HNMO_TEST_ASSET_BARRIER_FILE="$flag"
+    exec dotnet "$DLL" muun-levelup "$op2" > /dev/null 2>&1 ) &
+  pid=$!
+  for _ in $(seq 1 600); do [ -f "$flag" ] && break; sleep 0.1; done
+  [ -f "$flag" ] || { echo "  FAIL never reached $stage"; fail=1; }
+  kill -9 "$pid" 2>/dev/null; wait "$pid" 2>/dev/null; rm -f "$flag"
+  after2=$(s9work muun-state "$op2" "$lukiId")
+  if [ "$stage" == "after-commit" ]; then
+    check "lukiSame=true lukiLv=2 tonys=1 convs=1 energy=5 receipts=1" "$after2" "after kill (muun-levelup $stage)"
+  else
+    check "lukiSame=true lukiLv=1 tonys=1 convs=1 energy=10 receipts=0" "$after2" "after kill (muun-levelup $stage)"
+    s9work muun-levelup "$op2" > /dev/null
+    check "lukiSame=true lukiLv=2 tonys=1 convs=1 energy=5 receipts=1" "$(s9work muun-state "$op2" "$lukiId")" "after retry (muun-levelup $stage)"
+  fi
+done
 
 [ $fail -eq 0 ] && echo "ALL PASSED" || echo "SOME FAILED"
 exit $fail

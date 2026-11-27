@@ -4,9 +4,17 @@
 
 // The worker of the asset operation and two-phase shared coin crash tests: one command per process, so a SIGKILL
 // ends it for real and the next command recovers/reads the databases with connections of its own.
+using System.Globalization;
+using System.Text.Json;
 using HNMO.DataModel.Configuration;
+using HNMO.DataModel.Configuration.Items;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic;
+using HNMO.GameLogic.Offline;
+using HNMO.GameLogic.PlayerActions.Items;
+using HNMO.GameLogic.PlayerActions.Trade;
+using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.PlugIns.SeasonNineSystems;
 using HNMO.GameLogic.Seasons;
 using HNMO.Interfaces;
 using HNMO.Persistence;
@@ -15,8 +23,10 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Npgsql;
 
 const string Login = "crashtest";
+const string Login2 = "crashtest2";
 HNMO.PlugIns.JsonConverterRegistry.RegisterConverter(new HNMO.Persistence.EntityFramework.Json.BinaryAsHexJsonConverter());
 var provider = new PersistenceContextProvider(new NullLoggerFactory(), null);
+provider.EnableHnmoRowPersistence();
 var command = args.Length > 0 ? args[0] : "state";
 
 static string ResolveCanonicalConnectionString()
@@ -267,6 +277,261 @@ switch (command)
             Console.WriteLine($"error {ex.GetType().Name}; outcome {(receipt is null ? "not committed" : "committed")}");
         }
 
+        return 0;
+    }
+
+    case "trade-reset":
+    {
+        async Task<Guid> SetupTraderAsync(string login, string charName, int initialZen)
+        {
+            using var ctx = provider.CreateNewPlayerContext(configuration);
+            if (await ctx.GetAccountByLoginNameAsync(login).ConfigureAwait(false) is { } old)
+            {
+                await ctx.DeleteAsync(old).ConfigureAwait(false);
+                await ctx.SaveChangesAsync().ConfigureAwait(false);
+            }
+
+            var acc = ctx.CreateNew<Account>();
+            acc.LoginName = login;
+            acc.PasswordHash = "x";
+            acc.Vault = ctx.CreateNew<ItemStorage>();
+
+            var ch = ctx.CreateNew<Character>();
+            ch.Name = charName;
+            ch.CharacterClass = configuration.CharacterClasses.First();
+            ch.CurrentMap = configuration.Maps.First(m => m.Number == 0);
+            ch.Inventory = ctx.CreateNew<ItemStorage>();
+            ch.Inventory.Money = initialZen;
+
+            var item = ctx.CreateNew<Item>();
+            item.Definition = bless;
+            item.Durability = 1;
+            item.ItemSlot = 12;
+            ch.Inventory.Items.Add(item);
+
+            acc.Characters.Add(ch);
+            await ctx.SaveChangesAsync().ConfigureAwait(false);
+            return item.GetId();
+        }
+
+        var idA = await SetupTraderAsync(Login, "CrashA", 1000).ConfigureAwait(false);
+        var idB = await SetupTraderAsync(Login2, "CrashB", 500).ConfigureAwait(false);
+        Console.WriteLine($"{idA:D} {idB:D}");
+        return 0;
+    }
+
+    case "trade":
+    {
+        var opId = Guid.Parse(args[1]);
+        var expectedIdA = args.Length > 2 ? Guid.Parse(args[2]) : Guid.Empty;
+        var expectedIdB = args.Length > 3 ? Guid.Parse(args[3]) : Guid.Empty;
+
+        var gameConfig = configuration;
+        var mapInit = new MapInitializer(gameConfig, new NullLogger<MapInitializer>(), NullDropGenerator.Instance, null);
+        var plugInMgr = new PlugInManager([], new NullLoggerFactory(), null, null);
+        var gc = new GameContext(gameConfig, provider, mapInit, new NullLoggerFactory(), plugInMgr, NullDropGenerator.Instance, new ConfigurationChangeMediator());
+        mapInit.PlugInManager = gc.PlugInManager;
+        mapInit.PathFinderPool = gc.PathFinderPool;
+
+        async Task<OfflinePlayer> LoadPlayerAsync(string login)
+        {
+            var p = new OfflinePlayer(gc);
+            var acc = (await p.PersistenceContext.GetAccountByLoginNameAsync(login).ConfigureAwait(false))!;
+            p.Account = acc;
+            var ch = acc.Characters.First();
+            await p.PlayerState.TryAdvanceToAsync(PlayerState.LoginScreen).ConfigureAwait(false);
+            await p.PlayerState.TryAdvanceToAsync(PlayerState.Authenticated).ConfigureAwait(false);
+            await p.PlayerState.TryAdvanceToAsync(PlayerState.CharacterSelection).ConfigureAwait(false);
+            await p.SetSelectedCharacterAsync(ch).ConfigureAwait(false);
+            return p;
+        }
+
+        var pA = await LoadPlayerAsync(Login).ConfigureAwait(false);
+        var pB = await LoadPlayerAsync(Login2).ConfigureAwait(false);
+        var itemA = pA.Inventory!.Items.FirstOrDefault(i => expectedIdA != Guid.Empty ? i.GetId() == expectedIdA : i.Definition == bless);
+        var itemB = pB.Inventory!.Items.FirstOrDefault(i => expectedIdB != Guid.Empty ? i.GetId() == expectedIdB : i.Definition == bless);
+
+        if (itemA is null || itemB is null)
+        {
+            // Post-commit retry check: replay the exact same OperationId via IAtomicTradeContext -> expects AlreadyCommitted.
+            using var retryCtx = provider.CreateNewTradeContext();
+            if (retryCtx is IAtomicTradeContext atomic)
+            {
+                var ids = new[] { expectedIdA, expectedIdB }.Select(g => g.ToString("N")).OrderBy(s => s);
+                var payload = $"{pA.Inventory.ItemStorage.GetId():N}|{pB.Inventory!.ItemStorage.GetId():N}|300|100|{string.Join(",", ids)}";
+                var req = new AssetOperationRequest(opId, pA.Account!.GetId(), "trade", AssetOperationCommitter.PayloadHash(payload), "game", null, []);
+                var st = await atomic.SaveTradeWithAssetOperationAsync(req, [new(pA.Inventory.ItemStorage.GetId(), -200), new(pB.Inventory!.ItemStorage.GetId(), 200)]).ConfigureAwait(false);
+                Console.WriteLine($"retry-status={st}");
+            }
+
+            return 0;
+        }
+
+        await new TradeRequestAction().RequestTradeAsync(pA, pB).ConfigureAwait(false);
+        await new TradeAcceptAction().HandleTradeAcceptAsync(pB, true).ConfigureAwait(false);
+        var mover = new MoveItemAction();
+        await mover.MoveItemAsync(pA, itemA.ItemSlot, Storages.Inventory, 0, Storages.Trade).ConfigureAwait(false);
+        await mover.MoveItemAsync(pB, itemB.ItemSlot, Storages.Inventory, 0, Storages.Trade).ConfigureAwait(false);
+        var moneyAction = new TradeMoneyAction();
+        await moneyAction.TradeMoneyAsync(pA, 300).ConfigureAwait(false);
+        await moneyAction.TradeMoneyAsync(pB, 100).ConfigureAwait(false);
+        var btn = new TradeButtonAction();
+        await btn.TradeButtonChangedAsync(pA, TradeButtonState.Checked, opId).ConfigureAwait(false);
+        try
+        {
+            await btn.TradeButtonChangedAsync(pB, TradeButtonState.Checked, opId).ConfigureAwait(false);
+            Console.WriteLine("trade done");
+        }
+        catch (Exception ex)
+        {
+            using var check = provider.CreateNewPlayerContext(configuration);
+            var receipt = await check.GetAssetOperationAsync(opId).ConfigureAwait(false);
+            Console.WriteLine($"error {ex.GetType().Name}; outcome {(receipt is null ? "not committed" : "committed")}");
+        }
+
+        return 0;
+    }
+
+    case "trade-state":
+    {
+        var opId = Guid.Parse(args[1]);
+        var idA = Guid.Parse(args[2]);
+        var idB = Guid.Parse(args[3]);
+        var accA = (await context.GetAccountByLoginNameAsync(Login).ConfigureAwait(false))!;
+        var accB = (await context.GetAccountByLoginNameAsync(Login2).ConfigureAwait(false))!;
+        var invA = accA.Characters.First().Inventory!;
+        var invB = accB.Characters.First().Inventory!;
+
+        var allA = invA.Items.Select(i => i.GetId()).ToHashSet();
+        var allB = invB.Items.Select(i => i.GetId()).ToHashSet();
+        var inA_ofA = allA.Contains(idA);
+        var inB_ofA = allB.Contains(idA);
+        var inA_ofB = allA.Contains(idB);
+        var inB_ofB = allB.Contains(idB);
+        var aLoc = inA_ofA && !inB_ofA ? "A" : !inA_ofA && inB_ofA ? "B" : "ERR";
+        var bLoc = inA_ofB && !inB_ofB ? "A" : !inA_ofB && inB_ofB ? "B" : "ERR";
+        var receipts = await context.GetAssetOperationAsync(opId).ConfigureAwait(false) is null ? 0 : 1;
+        var sum = invA.Money + invB.Money;
+        Console.WriteLine($"itemA={aLoc} itemB={bLoc} countA={invA.Items.Count} countB={invB.Items.Count} zenA={invA.Money} zenB={invB.Money} zenSum={sum} receipts={receipts}");
+        return 0;
+    }
+
+    case "muun-reset":
+    {
+        if (await context.GetAccountByLoginNameAsync(Login).ConfigureAwait(false) is { } old)
+        {
+            await context.DeleteAsync(old).ConfigureAwait(false);
+            await context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        var lukiDef = configuration.Items.First(i => i.Group == MuunCompanion.MuunGroup && i.Number == 212);
+        var tonyDef = configuration.Items.First(i => i.Group == MuunCompanion.MuunGroup && i.Number == 214);
+        var convDef = configuration.Items.First(i => i.Group == MuunCompanion.MuunGroup && i.Number == MuunCompanion.EnergyConverterNumber);
+
+        var acc = context.CreateNew<Account>();
+        acc.LoginName = Login;
+        acc.PasswordHash = "x";
+        acc.Vault = context.CreateNew<ItemStorage>();
+
+        var ch = context.CreateNew<Character>();
+        ch.Name = "CrashMuun";
+        ch.CharacterClass = configuration.CharacterClasses.First();
+        ch.CurrentMap = configuration.Maps.First(m => m.Number == 0);
+        ch.Inventory = context.CreateNew<ItemStorage>();
+
+        Item AddSlotItem(ItemDefinition def, byte slot, byte level)
+        {
+            var it = context.CreateNew<Item>();
+            it.Definition = def;
+            it.Level = level;
+            it.Durability = 1;
+            it.ItemSlot = slot;
+            ch.Inventory.Items.Add(it);
+            return it;
+        }
+
+        var luki = AddSlotItem(lukiDef, 12, 1);
+        var tony = AddSlotItem(tonyDef, 13, 1);
+        AddSlotItem(convDef, 14, 0);
+
+        acc.Characters.Add(ch);
+        await context.SaveChangesAsync().ConfigureAwait(false);
+
+        var connStr = PersistenceContextProvider.ResolveConnectionString()!;
+        var backend = new PostgresHnmoPlayerStateRowBackend(connStr);
+        backend.EnsureSchema();
+        var stateJson = JsonSerializer.Serialize(new MuunState { ActiveItemId = luki.GetId(), Energy = 10 }, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+        backend.UpsertBatch([new HnmoFeatureRow(MuunCompanion.FeatureKey, ch.GetId().ToString("N"), stateJson, DateTime.UtcNow)], []);
+        Console.WriteLine($"{luki.GetId():D} {tony.GetId():D}");
+        return 0;
+    }
+
+    case "muun-convert":
+    case "muun-levelup":
+    {
+        var opId = Guid.Parse(args[1]);
+        var s9Cfg = new PlugInConfiguration
+        {
+            TypeId = typeof(SeasonNineSystemsPlugIn).GUID,
+            IsActive = true,
+            CustomConfiguration = JsonSerializer.Serialize(new SeasonNineSystemsConfiguration { Enabled = true, MuunEnabled = true, MuunLevelUpEnergyCost = 5, MuunEvoPointMultiplier = 1 }),
+        };
+        var mapInit = new MapInitializer(configuration, new NullLogger<MapInitializer>(), NullDropGenerator.Instance, null);
+        var plugInMgr = new PlugInManager([s9Cfg], new NullLoggerFactory(), null, null);
+        var gc = new GameContext(configuration, provider, mapInit, new NullLoggerFactory(), plugInMgr, NullDropGenerator.Instance, new ConfigurationChangeMediator());
+        mapInit.PlugInManager = gc.PlugInManager;
+        mapInit.PathFinderPool = gc.PathFinderPool;
+
+        var plugIn = SeasonNineSystemsPlugIn.Get(gc)!;
+        plugIn.IsSeasonNineRealm = () => true;
+
+        var player = new OfflinePlayer(gc);
+        var acc = (await player.PersistenceContext.GetAccountByLoginNameAsync(Login).ConfigureAwait(false))!;
+        player.Account = acc;
+        var ch = acc.Characters.First();
+        await player.PlayerState.TryAdvanceToAsync(PlayerState.LoginScreen).ConfigureAwait(false);
+        await player.PlayerState.TryAdvanceToAsync(PlayerState.Authenticated).ConfigureAwait(false);
+        await player.PlayerState.TryAdvanceToAsync(PlayerState.CharacterSelection).ConfigureAwait(false);
+        await player.SetSelectedCharacterAsync(ch).ConfigureAwait(false);
+
+        if (command == "muun-convert")
+        {
+            if (player.Inventory!.GetItem(13) is null)
+            {
+                // Post-commit retry: same OperationId on AlreadyCommitted receipt must return AlreadyCommitted and write nothing.
+                var req = new AssetOperationRequest(opId, acc.GetId(), "muun-convert", AssetOperationCommitter.PayloadHash("retry"), "game", null, []);
+                var st = await player.PersistenceContext.SaveChangesWithAssetOperationAsync(req).ConfigureAwait(false);
+                Console.WriteLine($"retry-status={st}");
+                return 0;
+            }
+
+            await plugIn.Muuns.ConvertAsync(player, 13, opId).ConfigureAwait(false);
+            Console.WriteLine("muun-convert done");
+        }
+        else
+        {
+            await plugIn.Muuns.LevelUpAsync(player, opId).ConfigureAwait(false);
+            Console.WriteLine("muun-levelup done");
+        }
+
+        return 0;
+    }
+
+    case "muun-state":
+    {
+        var opId = Guid.Parse(args[1]);
+        var lukiId = Guid.Parse(args[2]);
+        var acc = (await context.GetAccountByLoginNameAsync(Login).ConfigureAwait(false))!;
+        var ch = acc.Characters.First();
+        var items = ch.Inventory!.Items.ToList();
+        var luki = items.FirstOrDefault(i => i.GetId() == lukiId);
+        var tonys = items.Count(i => i.Definition?.Group == MuunCompanion.MuunGroup && i.Definition?.Number == 214);
+        var convs = items.Count(i => i.Definition?.Group == MuunCompanion.MuunGroup && i.Definition?.Number == MuunCompanion.EnergyConverterNumber);
+        var backend = new PostgresHnmoPlayerStateRowBackend(PersistenceContextProvider.ResolveConnectionString()!);
+        var row = backend.FindRow(MuunCompanion.FeatureKey, ch.GetId().ToString("N"));
+        var muunState = row is null ? new MuunState() : JsonSerializer.Deserialize<MuunState>(row.PayloadJson, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })!;
+        var receipts = await context.GetAssetOperationAsync(opId).ConfigureAwait(false) is null ? 0 : 1;
+        Console.WriteLine($"lukiSame={(luki is not null).ToString().ToLowerInvariant()} lukiLv={(int)(luki?.Level ?? 0)} tonys={tonys} convs={convs} energy={muunState.Energy} receipts={receipts}");
         return 0;
     }
 

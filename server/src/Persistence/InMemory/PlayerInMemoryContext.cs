@@ -354,6 +354,13 @@ public class PlayerInMemoryContext : InMemoryContext, IPlayerContext
         receipt.PendingKey = request.PendingKey;
         receipt.PendingCount = Math.Max(0, request.PendingCount);
         receipt.CreatedAt = DateTime.UtcNow;
+        if (request.FeatureState is { } fs)
+        {
+            var backend = HnmoPlayerStateRowStoreRegistry.GetBackend(fs.StateFileKey);
+            backend.EnsureSchema();
+            backend.UpsertBatch([new HnmoFeatureRow(fs.Feature, fs.ScopeId, fs.PayloadJson, fs.UpdatedAtUtc, fs.ExpiresAtUtc)], []);
+        }
+
         return AssetCommitStatus.Committed;
     }
 
