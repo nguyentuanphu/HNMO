@@ -16,6 +16,7 @@ using HNMO.DataModel.Configuration;
 using HNMO.Discord;
 using HNMO.FriendServer;
 using HNMO.GameLogic;
+using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.TestActors;
 using HNMO.GameServer;
 using HNMO.GuildServer;
@@ -173,6 +174,7 @@ internal sealed class Program : IDisposable
         JsonConverterRegistry.RegisterConverter(new BinaryAsHexJsonConverter());
 
         this.VerifyBuildIntegrity();
+        this.MoveOldStateFiles();
         this.ApplyPlayerLicense();
 
         this._logger.Information("Creating host...");
@@ -212,6 +214,19 @@ internal sealed class Program : IDisposable
     {
         this._serverHost?.StopAsync().WaitAndUnwrapException();
         this._serverHost?.Dispose();
+    }
+
+    /// <summary>
+    /// Moves the state files older versions wrote into the server folder (<c>server/hnmo-state.json</c>,
+    /// <c>server/save/…</c>, the worlds list) into the package's <c>save</c> folder, once, before any plug-in opens them.
+    /// </summary>
+    private void MoveOldStateFiles()
+    {
+        var saveFolder = HnmoSaveFolder.Default;
+        foreach (var line in saveFolder.MoveOldStateFiles(HnmoSeasonInstance.Current))
+        {
+            this._logger.Information("HNMO save folder: {Line}", line);
+        }
     }
 
     /// <summary>
