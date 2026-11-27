@@ -2,6 +2,7 @@
   "formatVersion": 1,
   "rules": [
     {"options": [], "tags": ["ammunition"]},
+    {"options": [], "group": [0], "numbers": [41]},
     {"options": ["luck", "physicalAndWizardryDamageOption", "excellentPhysicalAttack"], "tags": ["magicSword"]},
     {"options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"], "group": [0, 1, 2, 3, 4]},
     {"options": ["luck", "curseDamageOption", "excellentWizardryAttack"], "group": [5], "tags": ["summonerBook"]},

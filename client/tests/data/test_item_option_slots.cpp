@@ -256,6 +256,10 @@ namespace
 // and the third tier wings.
 bool OldCodeGivesLuck(int type)
 {
+    if (type == ITEM_SWORD + 41)
+    {
+        return false;
+    }
     if (type >= ITEM_SWORD && type < ITEM_BOOTS + MAX_ITEM_INDEX)
     {
         return !g_ItemDatabase.HasTag(type, Data::Items::ItemTag::Ammunition);
@@ -382,7 +386,7 @@ bool IsJewelryWithOption(int type)
 // up to +28, as HNMO). The jewelry's levels end at 3.
 std::optional<OptionSlot> OldAdditionalOption(int type, int optionLevel)
 {
-    if (optionLevel == 0)
+    if (optionLevel == 0 || type == ITEM_SWORD + 41)
     {
         return std::nullopt;
     }
@@ -845,7 +849,8 @@ std::vector<OptionSlot> OldExcellentOptions(int type, BYTE flags, int heroLevel)
         }
     }
     const bool offensive = ((type >= ITEM_SWORD && type < ITEM_STAFF + MAX_ITEM_INDEX) &&
-                            !g_ItemDatabase.HasTag(type, Data::Items::ItemTag::Ammunition)) ||
+                            !g_ItemDatabase.HasTag(type, Data::Items::ItemTag::Ammunition) &&
+                            type != ITEM_SWORD + 41) ||
                            (type >= ITEM_PENDANT_OF_LIGHTING && type <= ITEM_PENDANT_OF_FIRE) ||
                            (type >= ITEM_PENDANT_OF_ICE && type <= ITEM_PENDANT_OF_ABILITY);
     if (offensive)

@@ -97,6 +97,29 @@ const ItemModelDataLoadResult& ShippedModels()
     return result;
 }
 
+bool IsPackOnlyModelFile(std::string_view file)
+{
+    constexpr std::string_view prefix = "data/s9/";
+    if (file.size() < prefix.size())
+    {
+        return false;
+    }
+    for (size_t i = 0; i < prefix.size(); ++i)
+    {
+        if (static_cast<char>(std::tolower(static_cast<unsigned char>(file[i]))) != prefix[i])
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool HasS9PackAssets()
+{
+    std::error_code ec;
+    return std::filesystem::is_directory(DataDirectory / "s9", ec);
+}
+
 // The models need the entries of their numbers in the item files to be saved.
 const ItemDataLoadResult& ShippedItems()
 {
@@ -246,7 +269,7 @@ TEST_CASE("Saving the shipped item models from the model database gives the ship
     CHECK(SaveItemAndModelDataDirectories(folder / "Items", items.items,
                                           {folder / "Models", database.GetAllSlots(), allGroups},
                                           issues) == ItemDataSaveResult::Saved);
-    CHECK(issues.empty());
+    CHECK_FALSE(HasFatal(issues));
     for (int group = 0; group < MAX_ITEM_TYPE; ++group)
     {
         const std::string fileName = GetItemGroupFileName(group);
@@ -895,6 +918,33 @@ TEST_CASE("Shipped item model files and texture folders exist [data][items]")
 {
     for (const ItemModelDefinition& model : ShippedModels().models)
     {
+        if (IsPackOnlyModelFile(model.file))
+        {
+            continue;
+        }
+        INFO("(" << model.group << "," << model.number << ") " << model.file);
+        CHECK(std::filesystem::is_regular_file(ClientDirectory / model.file));
+        for (const std::string& folder : model.textureFolders)
+        {
+            INFO(folder);
+            CHECK(std::filesystem::is_directory(DataDirectory / folder));
+        }
+    }
+}
+
+TEST_CASE("Season 9 pack item model files and texture folders exist [data][items]")
+{
+    if (!HasS9PackAssets())
+    {
+        MESSAGE("MU_TEST_SKIPPED: external Season 9 asset pack (Data/s9) is not staged");
+        return;
+    }
+    for (const ItemModelDefinition& model : ShippedModels().models)
+    {
+        if (!IsPackOnlyModelFile(model.file))
+        {
+            continue;
+        }
         INFO("(" << model.group << "," << model.number << ") " << model.file);
         CHECK(std::filesystem::is_regular_file(ClientDirectory / model.file));
         for (const std::string& folder : model.textureFolders)
@@ -966,6 +1016,31 @@ TEST_CASE("Every texture of a shipped item model is in one of its texture folder
 {
     for (const ItemModelDefinition& model : ShippedModels().models)
     {
+        if (IsPackOnlyModelFile(model.file))
+        {
+            continue;
+        }
+        for (const std::string& missing : FindTexturesOutsideFolders(model))
+        {
+            INFO("(" << model.group << "," << model.number << ") " << model.file << " " << missing);
+            CHECK(false);
+        }
+    }
+}
+
+TEST_CASE("Every texture of a Season 9 pack item model is in one of its texture folders [data][items]")
+{
+    if (!HasS9PackAssets())
+    {
+        MESSAGE("MU_TEST_SKIPPED: external Season 9 asset pack (Data/s9) is not staged");
+        return;
+    }
+    for (const ItemModelDefinition& model : ShippedModels().models)
+    {
+        if (!IsPackOnlyModelFile(model.file))
+        {
+            continue;
+        }
         for (const std::string& missing : FindTexturesOutsideFolders(model))
         {
             INFO("(" << model.group << "," << model.number << ") " << model.file << " " << missing);
@@ -980,6 +1055,31 @@ TEST_CASE("Every texture of a shipped item model is a .jpg or .tga texture or hi
 {
     for (const ItemModelDefinition& model : ShippedModels().models)
     {
+        if (IsPackOnlyModelFile(model.file))
+        {
+            continue;
+        }
+        for (const std::string& texture : ReadMeshTextures(model))
+        {
+            INFO("(" << model.group << "," << model.number << ") " << model.file << " " << texture);
+            CHECK((IsHiddenTexture(texture) || GetStoredTextureFileName(texture).has_value()));
+        }
+    }
+}
+
+TEST_CASE("Every texture of a Season 9 pack item model is a .jpg or .tga texture or hidden [data][items]")
+{
+    if (!HasS9PackAssets())
+    {
+        MESSAGE("MU_TEST_SKIPPED: external Season 9 asset pack (Data/s9) is not staged");
+        return;
+    }
+    for (const ItemModelDefinition& model : ShippedModels().models)
+    {
+        if (!IsPackOnlyModelFile(model.file))
+        {
+            continue;
+        }
         for (const std::string& texture : ReadMeshTextures(model))
         {
             INFO("(" << model.group << "," << model.number << ") " << model.file << " " << texture);

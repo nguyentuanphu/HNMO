@@ -17,6 +17,7 @@
 #include "Render/Models/ZzzBMD.h"
 
 #include <algorithm>
+#include <cctype>
 #include <iterator>
 #include <map>
 #include <optional>
@@ -140,6 +141,25 @@ void ApplyMaterial(int itemType, const ItemModelDefinition& model)
     Models[ToModelSlot(itemType)].SpecularStrength = static_cast<float>(model.material.specular);
 }
 
+constexpr std::string_view PackOnlyModelPrefix = "data/s9/";
+
+bool IsPackOnlyModelFile(std::string_view file)
+{
+    if (file.size() < PackOnlyModelPrefix.size())
+    {
+        return false;
+    }
+    for (size_t i = 0; i < PackOnlyModelPrefix.size(); ++i)
+    {
+        const char ch = file[i] == '\\' ? '/' : static_cast<char>(std::tolower(static_cast<unsigned char>(file[i])));
+        if (ch != PackOnlyModelPrefix[i])
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 // Opens the .bmd file into the slot; whether it was opened.
 bool AccessModelFile(int modelType, const std::string& file)
 {
@@ -167,7 +187,9 @@ bool OpenModel(int itemType, const ItemModelDefinition& model, const LookNames& 
 {
     if (!AccessModelFile(ToModelSlot(itemType), model.file))
     {
-        AddProblem(MakeProblem(ItemModelProblemType::ModelFileMissing, model));
+        AddProblem(MakeProblem(IsPackOnlyModelFile(model.file) ? ItemModelProblemType::PackModelFileMissing
+                                                               : ItemModelProblemType::ModelFileMissing,
+                               model));
         return false;
     }
     MarkNoneBlendMeshes(itemType, model);
@@ -195,7 +217,9 @@ void OpenSharedModel(int itemType, const ItemModelDefinition& model, const LookN
     }
     if (opened->second == NotOpened)
     {
-        AddProblem(MakeProblem(ItemModelProblemType::ModelFileMissing, model));
+        AddProblem(MakeProblem(IsPackOnlyModelFile(model.file) ? ItemModelProblemType::PackModelFileMissing
+                                                               : ItemModelProblemType::ModelFileMissing,
+                               model));
         return;
     }
     gLoadData.ShareModel(ToModelSlot(itemType), ToModelSlot(opened->second));

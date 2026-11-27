@@ -869,10 +869,11 @@
       "number": 35,
       "name": {
         "en": "Miracle Staff",
-        "vi": "Gậy Phép Màu",
         "de": "Wunderstab",
+        "vi": "Gậy Phép Màu",
         "zh-CN": "奇迹法杖"
       },
+      "options": ["luck", "wizardryDamageOption", "excellentWizardryAttack"],
       "width": 1,
       "height": 4,
       "slot": "mainHand",
@@ -884,6 +885,7 @@
       "damageMax": 69,
       "attackSpeed": 30,
       "magicPower": 130,
+      "droppable": false,
       "requirements": {
         "level": 400,
         "strength": 46,
@@ -892,9 +894,7 @@
       "classRequirements": {
         "darkWizard": 3,
         "magicGladiator": 3
-      },
-      "options": ["luck", "physicalDamageOption"],
-      "droppable": false
+      }
     },
     {
       "number": 36,
@@ -945,10 +945,11 @@
       "number": 37,
       "name": {
         "en": "Spite Staff",
-        "vi": "Gậy Oán Hận",
         "de": "Trotzstab",
+        "vi": "Gậy Oán Hận",
         "zh-CN": "怨恨法杖"
       },
+      "options": ["luck", "wizardryDamageOption", "excellentWizardryAttack"],
       "width": 2,
       "height": 4,
       "slot": "mainHand",
@@ -961,6 +962,7 @@
       "damageMax": 71,
       "attackSpeed": 25,
       "magicPower": 136,
+      "droppable": false,
       "requirements": {
         "level": 400,
         "strength": 48,
@@ -969,15 +971,14 @@
       "classRequirements": {
         "darkWizard": 3,
         "magicGladiator": 3
-      },
-      "options": ["luck", "physicalDamageOption"],
-      "droppable": false
+      }
     },
     {
       "number": 38,
       "name": {
         "en": "Legendary Staff-J"
       },
+      "options": ["luck", "wizardryDamageOption", "excellentWizardryAttack"],
       "width": 1,
       "height": 4,
       "slot": "mainHand",
@@ -989,22 +990,22 @@
       "damageMax": 31,
       "attackSpeed": 30,
       "magicPower": 59,
+      "tradable": false,
+      "droppable": false,
       "requirements": {
         "strength": 50
       },
       "classRequirements": {
         "darkWizard": 1,
         "magicGladiator": 1
-      },
-      "options": ["luck", "physicalDamageOption"],
-      "droppable": false,
-      "tradable": false
+      }
     },
     {
       "number": 39,
       "name": {
         "en": "Red Wing Stick-J"
       },
+      "options": ["luck", "wizardryDamageOption", "excellentWizardryAttack"],
       "width": 1,
       "height": 4,
       "slot": "mainHand",
@@ -1016,42 +1017,42 @@
       "damageMax": 31,
       "attackSpeed": 30,
       "magicPower": 59,
+      "tradable": false,
+      "droppable": false,
       "requirements": {
         "strength": 36,
         "dexterity": 14
       },
       "classRequirements": {
         "summoner": 1
-      },
-      "options": ["luck", "physicalDamageOption"],
-      "droppable": false,
-      "tradable": false
+      }
     },
     {
       "number": 40,
       "name": {
         "en": "Book of Neil-J"
       },
+      "tags": ["summonerBook"],
+      "options": ["luck", "curseDamageOption", "excellentWizardryAttack"],
       "width": 1,
       "height": 2,
       "slot": "offHand",
       "weaponKind": "book",
       "statProfile": "book",
+      "skill": 224,
       "level": 59,
       "magicDurability": 65,
       "attackSpeed": 30,
       "magicPower": 59,
-      "skill": 224,
+      "tradable": false,
+      "droppable": false,
       "requirements": {
         "dexterity": 25,
         "energy": 168
       },
       "classRequirements": {
         "summoner": 1
-      },
-      "options": ["luck", "wizardryDamageOption"],
-      "droppable": false,
-      "tradable": false
+      }
     }
   ]
 }

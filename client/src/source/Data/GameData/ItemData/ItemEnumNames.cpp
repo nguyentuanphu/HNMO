@@ -9,7 +9,7 @@ namespace Data::Items
 namespace
 {
 // ItemSlot::None has no name: items that cannot be equipped have no slot.
-constexpr std::array<EnumName<ItemSlot>, 11> ItemSlotNames = {{
+constexpr std::array<EnumName<ItemSlot>, 12> ItemSlotNames = {{
     {ItemSlot::MainHand, "mainHand"},
     {ItemSlot::OffHand, "offHand"},
     {ItemSlot::Helm, "helm"},
@@ -21,6 +21,7 @@ constexpr std::array<EnumName<ItemSlot>, 11> ItemSlotNames = {{
     {ItemSlot::Pet, "pet"},
     {ItemSlot::Pendant, "pendant"},
     {ItemSlot::Ring, "ring"},
+    {ItemSlot::Pentagram, "pentagram"},
 }};
 
 constexpr std::array<EnumName<WingTier>, 4> WingTierNames = {{
@@ -30,7 +31,7 @@ constexpr std::array<EnumName<WingTier>, 4> WingTierNames = {{
     {WingTier::Third, "third"},
 }};
 
-constexpr std::array<EnumName<WeaponKind>, 10> WeaponKindNames = {{
+constexpr std::array<EnumName<WeaponKind>, 13> WeaponKindNames = {{
     {WeaponKind::Spear, "spear"},
     {WeaponKind::Bow, "bow"},
     {WeaponKind::Crossbow, "crossbow"},
@@ -41,6 +42,9 @@ constexpr std::array<EnumName<WeaponKind>, 10> WeaponKindNames = {{
     {WeaponKind::Staff, "staff"},
     {WeaponKind::Glove, "glove"},
     {WeaponKind::Book, "book"},
+    {WeaponKind::Claw, "claw"},
+    {WeaponKind::Sceptre, "sceptre"},
+    {WeaponKind::Stick, "stick"},
 }};
 
 constexpr std::array<EnumName<ItemTag>, static_cast<size_t>(ItemTag::Count)> ItemTagNames = {{

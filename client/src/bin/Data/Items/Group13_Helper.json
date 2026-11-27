@@ -4565,8 +4565,8 @@
       "number": 77,
       "name": {
         "en": "Brown Panda Ring",
-        "vi": "Nhẫn Gấu Trúc Nâu",
         "de": "Brauner Panda-Ring",
+        "vi": "Nhẫn Gấu Trúc Nâu",
         "zh-CN": "棕色熊猫戒指"
       },
       "width": 1,
@@ -4574,6 +4574,7 @@
       "slot": "ring",
       "statProfile": "helper",
       "durability": 255,
+      "droppable": false,
       "requirements": {
         "level": 1
       },
@@ -4585,15 +4586,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 78,
       "name": {
         "en": "Pink Panda Ring",
-        "vi": "Nhẫn Gấu Trúc Hồng",
         "de": "Rosa Panda-Ring",
+        "vi": "Nhẫn Gấu Trúc Hồng",
         "zh-CN": "粉色熊猫戒指"
       },
       "width": 1,
@@ -4601,6 +4601,7 @@
       "slot": "ring",
       "statProfile": "helper",
       "durability": 255,
+      "droppable": false,
       "requirements": {
         "level": 1
       },
@@ -4612,8 +4613,7 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 80,
@@ -7258,13 +7258,14 @@
       "number": 145,
       "name": {
         "en": "Spirit Map Fragment",
-        "vi": "Mảnh Bản Đồ Linh Hồn",
         "de": "Geisterkarten-Fragment",
+        "vi": "Mảnh Bản Đồ Linh Hồn",
         "zh-CN": "灵魂地图碎片"
       },
       "width": 1,
       "height": 1,
       "durability": 1,
+      "droppable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -7273,20 +7274,20 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 146,
       "name": {
         "en": "Spirit Map",
-        "vi": "Bản Đồ Linh Hồn",
         "de": "Geisterkarte",
+        "vi": "Bản Đồ Linh Hồn",
         "zh-CN": "灵魂地图"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "droppable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -7295,20 +7296,20 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 147,
       "name": {
         "en": "Trophies of Battle",
-        "vi": "Chiến Tích Trận Đánh",
         "de": "Kriegstrophäen",
+        "vi": "Chiến Tích Trận Đánh",
         "zh-CN": "战斗战利品"
       },
       "width": 1,
       "height": 1,
       "durability": 1,
+      "droppable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -7317,19 +7318,21 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 148,
       "name": {
         "en": "Green Ink",
-        "vi": "Mực Xanh Lá",
         "de": "Grüne Tinte",
+        "vi": "Mực Xanh Lá",
         "zh-CN": "绿色墨水"
       },
       "width": 1,
       "height": 2,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -7338,21 +7341,21 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 149,
       "name": {
         "en": "Blue Ink",
-        "vi": "Mực Xanh Dương",
         "de": "Blaue Tinte",
+        "vi": "Mực Xanh Dương",
         "zh-CN": "蓝色墨水"
       },
       "width": 1,
       "height": 2,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -7361,21 +7364,21 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 150,
       "name": {
         "en": "Red Ink",
-        "vi": "Mực Đỏ",
         "de": "Rote Tinte",
+        "vi": "Mực Đỏ",
         "zh-CN": "红色墨水"
       },
       "width": 1,
       "height": 2,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -7384,21 +7387,21 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 151,
       "name": {
         "en": "Parchment of Soul",
-        "vi": "Giấy Da Linh Hồn",
         "de": "Pergament der Seele",
+        "vi": "Giấy Da Linh Hồn",
         "zh-CN": "灵魂羊皮纸"
       },
       "width": 1,
       "height": 2,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -7407,21 +7410,20 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 152,
       "name": {
         "en": "Scroll of Green Oblivion",
-        "vi": "Cuộn Lãng Quên Xanh Lá",
         "de": "Schriftrolle der grünen Vergessenheit",
+        "vi": "Cuộn Lãng Quên Xanh Lá",
         "zh-CN": "绿色遗忘卷轴"
       },
       "width": 2,
       "height": 2,
+      "droppable": false,
+      "sellable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -7430,20 +7432,20 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "sellable": false
+      }
     },
     {
       "number": 153,
       "name": {
         "en": "Scroll of Blue Oblivion",
-        "vi": "Cuộn Lãng Quên Xanh Dương",
         "de": "Schriftrolle der blauen Vergessenheit",
+        "vi": "Cuộn Lãng Quên Xanh Dương",
         "zh-CN": "蓝色遗忘卷轴"
       },
       "width": 2,
       "height": 2,
+      "droppable": false,
+      "sellable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -7452,20 +7454,20 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "sellable": false
+      }
     },
     {
       "number": 154,
       "name": {
         "en": "Scroll of Red Oblivion",
-        "vi": "Cuộn Lãng Quên Đỏ",
         "de": "Schriftrolle der roten Vergessenheit",
+        "vi": "Cuộn Lãng Quên Đỏ",
         "zh-CN": "红色遗忘卷轴"
       },
       "width": 2,
       "height": 2,
+      "droppable": false,
+      "sellable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -7474,20 +7476,20 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "sellable": false
+      }
     },
     {
       "number": 155,
       "name": {
         "en": "Scroll of Gray Oblivion",
-        "vi": "Cuộn Lãng Quên Xám",
         "de": "Schriftrolle der grauen Vergessenheit",
+        "vi": "Cuộn Lãng Quên Xám",
         "zh-CN": "灰色遗忘卷轴"
       },
       "width": 2,
       "height": 2,
+      "droppable": false,
+      "sellable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -7496,20 +7498,21 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "sellable": false
+      }
     },
     {
       "number": 156,
       "name": {
         "en": "Sealed Green Oblivion Scroll",
-        "vi": "Cuộn Lãng Quên Xanh Lá Phong Ấn",
         "de": "Versiegelte grüne Vergessenheitsrolle",
+        "vi": "Cuộn Lãng Quên Xanh Lá Phong Ấn",
         "zh-CN": "封印的绿色遗忘卷轴"
       },
       "width": 2,
       "height": 2,
+      "tradable": false,
+      "droppable": false,
+      "sellable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -7518,21 +7521,21 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "sellable": false
+      }
     },
     {
       "number": 157,
       "name": {
         "en": "Sealed Blue Oblivion Scroll",
-        "vi": "Cuộn Lãng Quên Xanh Dương Phong Ấn",
         "de": "Versiegelte blaue Vergessenheitsrolle",
+        "vi": "Cuộn Lãng Quên Xanh Dương Phong Ấn",
         "zh-CN": "封印的蓝色遗忘卷轴"
       },
       "width": 2,
       "height": 2,
+      "tradable": false,
+      "droppable": false,
+      "sellable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -7541,21 +7544,21 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "sellable": false
+      }
     },
     {
       "number": 158,
       "name": {
         "en": "Sealed Red Oblivion Scroll",
-        "vi": "Cuộn Lãng Quên Đỏ Phong Ấn",
         "de": "Versiegelte rote Vergessenheitsrolle",
+        "vi": "Cuộn Lãng Quên Đỏ Phong Ấn",
         "zh-CN": "封印的红色遗忘卷轴"
       },
       "width": 2,
       "height": 2,
+      "tradable": false,
+      "droppable": false,
+      "sellable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -7564,21 +7567,21 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "sellable": false
+      }
     },
     {
       "number": 159,
       "name": {
         "en": "Sealed Gray Oblivion Scroll",
-        "vi": "Cuộn Lãng Quên Xám Phong Ấn",
         "de": "Versiegelte graue Vergessenheitsrolle",
+        "vi": "Cuộn Lãng Quên Xám Phong Ấn",
         "zh-CN": "封印的灰色遗忘卷轴"
       },
       "width": 2,
       "height": 2,
+      "tradable": false,
+      "droppable": false,
+      "sellable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -7587,21 +7590,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "sellable": false
+      }
     },
     {
       "number": 160,
       "name": {
         "en": "Protection Talisman",
-        "vi": "Bùa Bảo Hộ",
         "de": "Schutztalisman",
+        "vi": "Bùa Bảo Hộ",
         "zh-CN": "保护符咒"
       },
       "width": 1,
       "height": 1,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "sellable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -7610,22 +7614,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false,
-      "sellable": false
+      }
     },
     {
       "number": 161,
       "name": {
         "en": "Cooperation Talisman",
-        "vi": "Bùa Hợp Tác",
         "de": "Kooperationstalisman",
+        "vi": "Bùa Hợp Tác",
         "zh-CN": "合作符咒"
       },
       "width": 1,
       "height": 1,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "sellable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -7634,18 +7638,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false,
-      "sellable": false
+      }
     },
     {
       "number": 163,
       "name": {
         "en": "Robot Knight Ring",
-        "vi": "Nhẫn Hiệp Sĩ Robot",
         "de": "Roboterritter-Ring",
+        "vi": "Nhẫn Hiệp Sĩ Robot",
         "zh-CN": "机器人骑士戒指"
       },
       "width": 1,
@@ -7653,6 +7653,7 @@
       "slot": "ring",
       "statProfile": "helper",
       "durability": 255,
+      "droppable": false,
       "requirements": {
         "level": 1
       },
@@ -7664,15 +7665,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 164,
       "name": {
         "en": "Mini Robot Ring",
-        "vi": "Nhẫn Robot Nhỏ",
         "de": "Mini-Roboter-Ring",
+        "vi": "Nhẫn Robot Nhỏ",
         "zh-CN": "迷你机器人戒指"
       },
       "width": 1,
@@ -7680,6 +7680,7 @@
       "slot": "ring",
       "statProfile": "helper",
       "durability": 255,
+      "droppable": false,
       "requirements": {
         "level": 1
       },
@@ -7691,15 +7692,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 165,
       "name": {
         "en": "Great Heavenly Mage Ring",
-        "vi": "Nhẫn Đại Pháp Sư Thiên Đàng",
         "de": "Großer Himmlischer Magierring",
+        "vi": "Nhẫn Đại Pháp Sư Thiên Đàng",
         "zh-CN": "大天法师戒指"
       },
       "width": 1,
@@ -7707,6 +7707,7 @@
       "slot": "ring",
       "statProfile": "helper",
       "durability": 255,
+      "droppable": false,
       "requirements": {
         "level": 1
       },
@@ -7718,22 +7719,21 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 169,
       "name": {
         "en": "Decoration Ring",
-        "vi": "Nhẫn Trang Trí",
         "de": "Dekorationsring",
+        "vi": "Nhẫn Trang Trí",
         "zh-CN": "装饰戒指"
       },
       "width": 1,
       "height": 1,
       "slot": "ring",
-      "statProfile": "helper",
       "durability": 30,
+      "droppable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -7742,22 +7742,21 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 170,
       "name": {
         "en": "Blessed Decoration Ring",
-        "vi": "Nhẫn Trang Trí Ban Phước",
         "de": "Gesegneter Dekorationsring",
+        "vi": "Nhẫn Trang Trí Ban Phước",
         "zh-CN": "祝福装饰戒指"
       },
       "width": 1,
       "height": 1,
       "slot": "ring",
-      "statProfile": "helper",
       "durability": 255,
+      "droppable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -7766,15 +7765,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 171,
       "name": {
         "en": "Necklace of Agony",
-        "vi": "Dây Chuyền Thống Khổ",
         "de": "Halskette der Qual",
+        "vi": "Dây Chuyền Thống Khổ",
         "zh-CN": "痛苦项链"
       },
       "width": 1,
@@ -7782,6 +7780,7 @@
       "slot": "pendant",
       "statProfile": "helper",
       "durability": 60,
+      "droppable": false,
       "requirements": {
         "level": 122
       },
@@ -7793,15 +7792,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 172,
       "name": {
         "en": "Solid Symbol",
-        "vi": "Biểu Tượng Vững Chắc",
         "de": "Festes Symbol",
+        "vi": "Biểu Tượng Vững Chắc",
         "zh-CN": "坚固徽章"
       },
       "width": 1,
@@ -7809,6 +7807,7 @@
       "slot": "pendant",
       "statProfile": "helper",
       "durability": 60,
+      "droppable": false,
       "requirements": {
         "level": 110
       },
@@ -7820,15 +7819,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 173,
       "name": {
         "en": "Ring of Ultimatum",
-        "vi": "Nhẫn Tối Hậu Thư",
         "de": "Ring des Ultimatums",
+        "vi": "Nhẫn Tối Hậu Thư",
         "zh-CN": "最后通牒戒指"
       },
       "width": 1,
@@ -7836,6 +7834,7 @@
       "slot": "ring",
       "statProfile": "helper",
       "durability": 60,
+      "droppable": false,
       "requirements": {
         "level": 98
       },
@@ -7847,15 +7846,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 174,
       "name": {
         "en": "Ring of Block",
-        "vi": "Nhẫn Phòng Thủ",
         "de": "Ring des Blockens",
+        "vi": "Nhẫn Phòng Thủ",
         "zh-CN": "格挡戒指"
       },
       "width": 1,
@@ -7863,6 +7861,7 @@
       "slot": "ring",
       "statProfile": "helper",
       "durability": 60,
+      "droppable": false,
       "requirements": {
         "level": 86
       },
@@ -7874,15 +7873,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 175,
       "name": {
         "en": "Protector Protection Ring",
-        "vi": "Nhẫn Bảo Hộ Hộ Vệ",
         "de": "Beschützer-Schutzring",
+        "vi": "Nhẫn Bảo Hộ Hộ Vệ",
         "zh-CN": "守护者保护戒指"
       },
       "width": 1,
@@ -7890,6 +7888,7 @@
       "slot": "ring",
       "statProfile": "helper",
       "durability": 60,
+      "droppable": false,
       "requirements": {
         "level": 74
       },
@@ -7901,15 +7900,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 176,
       "name": {
         "en": "Protection Ring",
-        "vi": "Nhẫn Bảo Hộ",
         "de": "Schutzring",
+        "vi": "Nhẫn Bảo Hộ",
         "zh-CN": "保护戒指"
       },
       "width": 1,
@@ -7917,6 +7915,7 @@
       "slot": "ring",
       "statProfile": "helper",
       "durability": 60,
+      "droppable": false,
       "requirements": {
         "level": 62
       },
@@ -7928,20 +7927,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 177,
       "name": {
         "en": "Talisman of Ascension I",
-        "vi": "Bùa Thăng Hoa I",
         "de": "Talisman des Aufstiegs I",
+        "vi": "Bùa Thăng Hoa I",
         "zh-CN": "飞升护符 I"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -7950,22 +7951,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 178,
       "name": {
         "en": "Talisman of Ascension II",
-        "vi": "Bùa Thăng Hoa II",
         "de": "Talisman des Aufstiegs II",
+        "vi": "Bùa Thăng Hoa II",
         "zh-CN": "飞升护符 II"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -7974,22 +7975,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 179,
       "name": {
         "en": "Talisman of Ascension III",
-        "vi": "Bùa Thăng Hoa III",
         "de": "Talisman des Aufstiegs III",
+        "vi": "Bùa Thăng Hoa III",
         "zh-CN": "飞升护符 III"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -7998,23 +7999,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 180,
       "name": {
         "en": "Seal of Ascension II",
-        "vi": "Ấn Thăng Hoa II",
         "de": "Siegel des Aufstiegs II",
+        "vi": "Ấn Thăng Hoa II",
         "zh-CN": "飞升印章 II"
       },
       "width": 1,
       "height": 1,
       "slot": "ring",
-      "statProfile": "helper",
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "sellable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -8023,22 +8024,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false,
-      "sellable": false
+      }
     },
     {
       "number": 181,
       "name": {
         "en": "Master Seal of Ascension II",
-        "vi": "Ấn Thăng Hoa Bậc Thầy II",
         "de": "Meistersiegel des Aufstiegs II",
+        "vi": "Ấn Thăng Hoa Bậc Thầy II",
         "zh-CN": "大师飞升印章 II"
       },
       "width": 1,
       "height": 1,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "sellable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -8047,23 +8048,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false,
-      "sellable": false
+      }
     },
     {
       "number": 210,
       "name": {
         "en": "WereRabbit Egg",
-        "vi": "Trứng Thỏ Ma",
         "de": "Werkaninchen-Ei",
+        "vi": "Trứng Thỏ Ma",
         "zh-CN": "狼兔蛋"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "sellable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -8072,23 +8073,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false,
-      "sellable": false
+      }
     },
     {
       "number": 211,
       "name": {
         "en": "Evolution Stone",
-        "vi": "Đá Tiến Hóa",
         "de": "Entwicklungsstein",
+        "vi": "Đá Tiến Hóa",
         "zh-CN": "进化石"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -8097,22 +8097,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 212,
       "name": {
         "en": "Luki",
-        "vi": "Luki",
         "de": "Luki",
+        "vi": "Luki",
         "zh-CN": "路基"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -8124,22 +8125,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 213,
       "name": {
         "en": "Luki (Evolved)",
-        "vi": "Luki (Tiến hóa)",
         "de": "Luki (Entwickelt)",
+        "vi": "Luki (Tiến hóa)",
         "zh-CN": "路基（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -8148,22 +8149,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 214,
       "name": {
         "en": "Tony",
-        "vi": "Tony",
         "de": "Tony",
+        "vi": "Tony",
         "zh-CN": "托尼"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -8175,22 +8177,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 215,
       "name": {
         "en": "Tony (Evolved)",
-        "vi": "Tony (Tiến hóa)",
         "de": "Tony (Entwickelt)",
+        "vi": "Tony (Tiến hóa)",
         "zh-CN": "托尼（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -8199,22 +8201,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 216,
       "name": {
         "en": "Nymph",
-        "vi": "Nữ Thần Rừng",
         "de": "Nymphe",
+        "vi": "Nữ Thần Rừng",
         "zh-CN": "仙女"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -8226,22 +8229,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 217,
       "name": {
         "en": "Nymph (Evolved)",
-        "vi": "Nữ Thần Rừng (Tiến hóa)",
         "de": "Nymphe (Entwickelt)",
+        "vi": "Nữ Thần Rừng (Tiến hóa)",
         "zh-CN": "仙女（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -8250,22 +8253,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 218,
       "name": {
         "en": "Safi",
-        "vi": "Safi",
         "de": "Safi",
+        "vi": "Safi",
         "zh-CN": "萨菲"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -8277,22 +8281,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 219,
       "name": {
         "en": "Safi (Evolved)",
-        "vi": "Safi (Tiến hóa)",
         "de": "Safi (Entwickelt)",
+        "vi": "Safi (Tiến hóa)",
         "zh-CN": "萨菲（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -8301,22 +8305,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 220,
       "name": {
         "en": "Lucky Bag Egg",
-        "vi": "Trứng Túi May Mắn",
         "de": "Glücksbeutel-Ei",
+        "vi": "Trứng Túi May Mắn",
         "zh-CN": "幸运袋蛋"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "sellable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -8325,23 +8330,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false,
-      "sellable": false
+      }
     },
     {
       "number": 221,
       "name": {
         "en": "Fire Flame Ghost Egg",
-        "vi": "Trứng Ma Lửa",
         "de": "Flammengeister-Ei",
+        "vi": "Trứng Ma Lửa",
         "zh-CN": "火焰幽灵蛋"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "sellable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -8350,23 +8355,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false,
-      "sellable": false
+      }
     },
     {
       "number": 222,
       "name": {
         "en": "Golden Goblin Egg",
-        "vi": "Trứng Yêu Tinh Vàng",
         "de": "Goldenes Goblin-Ei",
+        "vi": "Trứng Yêu Tinh Vàng",
         "zh-CN": "黄金哥布林蛋"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "sellable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -8375,23 +8380,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false,
-      "sellable": false
+      }
     },
     {
       "number": 223,
       "name": {
         "en": "William",
-        "vi": "William",
         "de": "William",
+        "vi": "William",
         "zh-CN": "威廉"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -8403,22 +8408,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 224,
       "name": {
         "en": "William (Evolved)",
-        "vi": "William (Tiến hóa)",
         "de": "William (Entwickelt)",
+        "vi": "William (Tiến hóa)",
         "zh-CN": "威廉（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -8427,22 +8432,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 225,
       "name": {
         "en": "Paul",
-        "vi": "Paul",
         "de": "Paul",
+        "vi": "Paul",
         "zh-CN": "保罗"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -8454,22 +8460,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 226,
       "name": {
         "en": "Paul (Evolved)",
-        "vi": "Paul (Tiến hóa)",
         "de": "Paul (Entwickelt)",
+        "vi": "Paul (Tiến hóa)",
         "zh-CN": "保罗（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -8478,22 +8484,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 227,
       "name": {
         "en": "Chiron",
-        "vi": "Chiron",
         "de": "Chiron",
+        "vi": "Chiron",
         "zh-CN": "喀戎"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -8505,22 +8512,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 228,
       "name": {
         "en": "Chiron (Evolved)",
-        "vi": "Chiron (Tiến hóa)",
         "de": "Chiron (Entwickelt)",
+        "vi": "Chiron (Tiến hóa)",
         "zh-CN": "喀戎（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -8529,22 +8536,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 229,
       "name": {
         "en": "Wooparoo",
-        "vi": "Wooparoo",
         "de": "Wooparoo",
+        "vi": "Wooparoo",
         "zh-CN": "乌帕鲁"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -8556,22 +8564,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 230,
       "name": {
         "en": "Wooparoo (Evolved)",
-        "vi": "Wooparoo (Tiến hóa)",
         "de": "Wooparoo (Entwickelt)",
+        "vi": "Wooparoo (Tiến hóa)",
         "zh-CN": "乌帕鲁（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -8580,22 +8588,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 231,
       "name": {
         "en": "Tibetton",
-        "vi": "Tibetton",
         "de": "Tibetton",
+        "vi": "Tibetton",
         "zh-CN": "蒂贝顿"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -8607,22 +8616,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 232,
       "name": {
         "en": "Tibetton (Evolved)",
-        "vi": "Tibetton (Tiến hóa)",
         "de": "Tibetton (Entwickelt)",
+        "vi": "Tibetton (Tiến hóa)",
         "zh-CN": "蒂贝顿（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -8631,22 +8640,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 233,
       "name": {
         "en": "Witch",
-        "vi": "Phù Thủy",
         "de": "Hexe",
+        "vi": "Phù Thủy",
         "zh-CN": "女巫"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -8658,22 +8668,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 234,
       "name": {
         "en": "Witch (evolved)",
-        "vi": "Phù Thủy (Tiến hóa)",
         "de": "Hexe (Entwickelt)",
+        "vi": "Phù Thủy (Tiến hóa)",
         "zh-CN": "女巫（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -8682,22 +8692,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 235,
       "name": {
         "en": "Skull",
-        "vi": "Đầu Lâu",
         "de": "Schädel",
+        "vi": "Đầu Lâu",
         "zh-CN": "骷髅"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -8709,22 +8720,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 236,
       "name": {
         "en": "Skull (evolved)",
-        "vi": "Đầu Lâu (Tiến hóa)",
         "de": "Schädel (Entwickelt)",
+        "vi": "Đầu Lâu (Tiến hóa)",
         "zh-CN": "骷髅（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -8733,22 +8744,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 237,
       "name": {
         "en": "Pumpy",
-        "vi": "Pumpy",
         "de": "Pumpy",
+        "vi": "Pumpy",
         "zh-CN": "南瓜仔"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -8760,22 +8772,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 238,
       "name": {
         "en": "Pumpy (evolved)",
-        "vi": "Pumpy (Tiến hóa)",
         "de": "Pumpy (Entwickelt)",
+        "vi": "Pumpy (Tiến hóa)",
         "zh-CN": "南瓜仔（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -8784,21 +8796,21 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 239,
       "name": {
         "en": "Muun Energy Converter",
-        "vi": "Bộ Chuyển Đổi Năng Lượng Muun",
         "de": "Muun-Energiewandler",
+        "vi": "Bộ Chuyển Đổi Năng Lượng Muun",
         "zh-CN": "萌宠能量转换器"
       },
       "width": 1,
       "height": 1,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -8807,22 +8819,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 240,
       "name": {
         "en": "Wizardry Stone",
-        "vi": "Đá Ma Pháp",
         "de": "Zauberstein",
+        "vi": "Đá Ma Pháp",
         "zh-CN": "魔力石"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -8831,22 +8843,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 241,
       "name": {
         "en": "Savath",
-        "vi": "Savath",
         "de": "Savath",
+        "vi": "Savath",
         "zh-CN": "萨瓦斯"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -8858,22 +8871,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 242,
       "name": {
         "en": "Savath (Evolved)",
-        "vi": "Savath (Tiến hóa)",
         "de": "Savath (Entwickelt)",
+        "vi": "Savath (Tiến hóa)",
         "zh-CN": "萨瓦斯（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -8882,22 +8895,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 243,
       "name": {
         "en": "Lycan",
-        "vi": "Người Sói Lycan",
         "de": "Lykan",
+        "vi": "Người Sói Lycan",
         "zh-CN": "狼人"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -8909,22 +8923,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 244,
       "name": {
         "en": "Lycan (Evolved)",
-        "vi": "Người Sói Lycan (Tiến hóa)",
         "de": "Lykan (Entwickelt)",
+        "vi": "Người Sói Lycan (Tiến hóa)",
         "zh-CN": "狼人（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -8933,22 +8947,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 245,
       "name": {
         "en": "Torby",
-        "vi": "Torby",
         "de": "Torby",
+        "vi": "Torby",
         "zh-CN": "托比"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -8960,22 +8975,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 246,
       "name": {
         "en": "Torby (Evolved)",
-        "vi": "Torby (Tiến hóa)",
         "de": "Torby (Entwickelt)",
+        "vi": "Torby (Tiến hóa)",
         "zh-CN": "托比（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -8984,22 +8999,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 252,
       "name": {
         "en": "Seiren",
-        "vi": "Mỹ Nhân Ngư Seiren",
         "de": "Sirene",
+        "vi": "Mỹ Nhân Ngư Seiren",
         "zh-CN": "塞壬"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -9011,22 +9027,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 253,
       "name": {
         "en": "Seiren (Evolved)",
-        "vi": "Mỹ Nhân Ngư Seiren (Tiến hóa)",
         "de": "Sirene (Entwickelt)",
+        "vi": "Mỹ Nhân Ngư Seiren (Tiến hóa)",
         "zh-CN": "塞壬（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -9035,22 +9051,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 254,
       "name": {
         "en": "Behemoth",
-        "vi": "Behemoth",
         "de": "Behemoth",
+        "vi": "Behemoth",
         "zh-CN": "巨兽"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -9062,22 +9079,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 255,
       "name": {
         "en": "Behemoth (Evolved)",
-        "vi": "Behemoth (Tiến hóa)",
         "de": "Behemoth (Entwickelt)",
+        "vi": "Behemoth (Tiến hóa)",
         "zh-CN": "巨兽（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -9086,22 +9103,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 256,
       "name": {
         "en": "Loggle",
-        "vi": "Loggle",
         "de": "Loggle",
+        "vi": "Loggle",
         "zh-CN": "洛格尔"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -9113,22 +9131,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 257,
       "name": {
         "en": "Loggle (Evolved)",
-        "vi": "Loggle (Tiến hóa)",
         "de": "Loggle (Entwickelt)",
+        "vi": "Loggle (Tiến hóa)",
         "zh-CN": "洛格尔（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -9137,22 +9155,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 258,
       "name": {
         "en": "Mino",
-        "vi": "Mino",
         "de": "Mino",
+        "vi": "Mino",
         "zh-CN": "米诺"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -9164,22 +9183,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 259,
       "name": {
         "en": "Mino (Evolved)",
-        "vi": "Mino (Tiến hóa)",
         "de": "Mino (Entwickelt)",
+        "vi": "Mino (Tiến hóa)",
         "zh-CN": "米诺（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -9188,22 +9207,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 260,
       "name": {
         "en": "Hound",
-        "vi": "Chó Săn",
         "de": "Jagdhund",
+        "vi": "Chó Săn",
         "zh-CN": "猎犬"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -9215,22 +9235,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 261,
       "name": {
         "en": "Hound (Evolved)",
-        "vi": "Chó Săn (Tiến hóa)",
         "de": "Jagdhund (Entwickelt)",
+        "vi": "Chó Săn (Tiến hóa)",
         "zh-CN": "猎犬（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -9239,22 +9259,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 262,
       "name": {
         "en": "Trive",
-        "vi": "Trive",
         "de": "Trive",
+        "vi": "Trive",
         "zh-CN": "特莱夫"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -9266,22 +9287,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 263,
       "name": {
         "en": "Trive (Evolved)",
-        "vi": "Trive (Tiến hóa)",
         "de": "Trive (Entwickelt)",
+        "vi": "Trive (Tiến hóa)",
         "zh-CN": "特莱夫（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -9290,22 +9311,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 264,
       "name": {
         "en": "Vogan",
-        "vi": "Vogan",
         "de": "Vogan",
+        "vi": "Vogan",
         "zh-CN": "沃甘"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -9317,22 +9339,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 265,
       "name": {
         "en": "Vogan (Evolved)",
-        "vi": "Vogan (Tiến hóa)",
         "de": "Vogan (Entwickelt)",
+        "vi": "Vogan (Tiến hóa)",
         "zh-CN": "沃甘（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -9341,22 +9363,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 266,
       "name": {
         "en": "Cyclop",
-        "vi": "Khổng Lồ Một Mắt",
         "de": "Zyklop",
+        "vi": "Khổng Lồ Một Mắt",
         "zh-CN": "独眼巨人"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -9368,22 +9391,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 267,
       "name": {
         "en": "Cyclop (Evolved)",
-        "vi": "Khổng Lồ Một Mắt (Tiến hóa)",
         "de": "Zyklop (Entwickelt)",
+        "vi": "Khổng Lồ Một Mắt (Tiến hóa)",
         "zh-CN": "独眼巨人（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -9392,17 +9415,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 268,
       "name": {
         "en": "Dark Transformation Ring",
-        "vi": "Nhẫn Biến Hình Bóng Tối",
         "de": "Dunkler Verwandlungsring",
+        "vi": "Nhẫn Biến Hình Bóng Tối",
         "zh-CN": "暗黑变身戒指"
       },
       "width": 1,
@@ -9410,6 +9430,7 @@
       "slot": "ring",
       "statProfile": "helper",
       "durability": 255,
+      "droppable": false,
       "requirements": {
         "level": 400
       },
@@ -9421,20 +9442,23 @@
         "darkLord": 3,
         "summoner": 3,
         "rageFighter": 3
-      },
-      "droppable": false
+      }
     },
     {
       "number": 270,
       "name": {
         "en": "Bonf",
-        "vi": "Bonf",
         "de": "Bonf",
+        "vi": "Bonf",
         "zh-CN": "邦夫"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -9446,22 +9470,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 271,
       "name": {
         "en": "Bonf (Evolved)",
-        "vi": "Bonf (Tiến hóa)",
         "de": "Bonf (Entwickelt)",
+        "vi": "Bonf (Tiến hóa)",
         "zh-CN": "邦夫（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -9470,22 +9494,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 272,
       "name": {
         "en": "Hawk",
-        "vi": "Diều Hâu",
         "de": "Falke",
+        "vi": "Diều Hâu",
         "zh-CN": "猎鹰"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -9497,22 +9522,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 273,
       "name": {
         "en": "Hawk (Evolved)",
-        "vi": "Diều Hâu (Tiến hóa)",
         "de": "Falke (Entwickelt)",
+        "vi": "Diều Hâu (Tiến hóa)",
         "zh-CN": "猎鹰（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -9521,22 +9546,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 274,
       "name": {
         "en": "Muty",
-        "vi": "Muty",
         "de": "Muty",
+        "vi": "Muty",
         "zh-CN": "穆蒂"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -9548,22 +9574,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 275,
       "name": {
         "en": "Muty (Evolved)",
-        "vi": "Muty (Tiến hóa)",
         "de": "Muty (Entwickelt)",
+        "vi": "Muty (Tiến hóa)",
         "zh-CN": "穆蒂（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -9572,21 +9598,20 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 276,
       "name": {
         "en": "Conqueror's Badge",
-        "vi": "Huy Hiệu Kẻ Chinh Phục",
         "de": "Abzeichen des Eroberers",
+        "vi": "Huy Hiệu Kẻ Chinh Phục",
         "zh-CN": "征服者徽章"
       },
       "width": 3,
       "height": 3,
+      "droppable": false,
+      "sellable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -9595,20 +9620,20 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "sellable": false
+      }
     },
     {
       "number": 277,
       "name": {
         "en": "Badge of Hardships",
-        "vi": "Huy Hiệu Gian Khổ",
         "de": "Abzeichen der Mühen",
+        "vi": "Huy Hiệu Gian Khổ",
         "zh-CN": "磨难徽章"
       },
       "width": 3,
       "height": 3,
+      "droppable": false,
+      "sellable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -9617,21 +9642,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "sellable": false
+      }
     },
     {
       "number": 278,
       "name": {
         "en": "Mantis",
-        "vi": "Bọ Ngựa",
         "de": "Gottesanbeterin",
+        "vi": "Bọ Ngựa",
         "zh-CN": "螳螂"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -9643,22 +9670,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 279,
       "name": {
         "en": "Mantis (Evolved)",
-        "vi": "Bọ Ngựa (Tiến hóa)",
         "de": "Gottesanbeterin (Entwickelt)",
+        "vi": "Bọ Ngựa (Tiến hóa)",
         "zh-CN": "螳螂（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -9667,22 +9694,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 280,
       "name": {
         "en": "Scolpy",
-        "vi": "Bọ Cạp",
         "de": "Skorpy",
+        "vi": "Bọ Cạp",
         "zh-CN": "蝎子"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -9694,22 +9722,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 281,
       "name": {
         "en": "Scolpy (Evolved)",
-        "vi": "Bọ Cạp (Tiến hóa)",
         "de": "Skorpy (Entwickelt)",
+        "vi": "Bọ Cạp (Tiến hóa)",
         "zh-CN": "蝎子（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -9718,22 +9746,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 282,
       "name": {
         "en": "Chafer",
-        "vi": "Bọ Hung",
         "de": "Käfer",
+        "vi": "Bọ Hung",
         "zh-CN": "圣甲虫"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -9745,22 +9774,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 283,
       "name": {
         "en": "Chafer (Evolved)",
-        "vi": "Bọ Hung (Tiến hóa)",
         "de": "Käfer (Entwickelt)",
+        "vi": "Bọ Hung (Tiến hóa)",
         "zh-CN": "圣甲虫（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -9769,22 +9798,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 290,
       "name": {
         "en": "Cosplay Girl",
-        "vi": "Cô Gái Cosplay",
         "de": "Cosplay-Mädchen",
+        "vi": "Cô Gái Cosplay",
         "zh-CN": "角色扮演少女"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -9796,22 +9826,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 291,
       "name": {
         "en": "Cosplay Girl (Evolved)",
-        "vi": "Cô Gái Cosplay (Tiến hóa)",
         "de": "Cosplay-Mädchen (Entwickelt)",
+        "vi": "Cô Gái Cosplay (Tiến hóa)",
         "zh-CN": "角色扮演少女（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -9820,22 +9850,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 292,
       "name": {
         "en": "Cheer Girl",
-        "vi": "Cô Gái Cổ Vũ",
         "de": "Cheer-Mädchen",
+        "vi": "Cô Gái Cổ Vũ",
         "zh-CN": "啦啦队少女"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -9847,22 +9878,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 293,
       "name": {
         "en": "Cheer Girl (Evolved)",
-        "vi": "Cô Gái Cổ Vũ (Tiến hóa)",
         "de": "Cheer-Mädchen (Entwickelt)",
+        "vi": "Cô Gái Cổ Vũ (Tiến hóa)",
         "zh-CN": "啦啦队少女（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -9871,22 +9902,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 294,
       "name": {
         "en": "Sporty Girl",
-        "vi": "Cô Gái Thể Thao",
         "de": "Sport-Mädchen",
+        "vi": "Cô Gái Thể Thao",
         "zh-CN": "运动少女"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -9898,22 +9930,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 295,
       "name": {
         "en": "Sporty Girl (Evolved)",
-        "vi": "Cô Gái Thể Thao (Tiến hóa)",
         "de": "Sport-Mädchen (Entwickelt)",
+        "vi": "Cô Gái Thể Thao (Tiến hóa)",
         "zh-CN": "运动少女（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -9922,22 +9954,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 296,
       "name": {
         "en": "Baal",
-        "vi": "Baal",
         "de": "Baal",
+        "vi": "Baal",
         "zh-CN": "巴尔"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -9949,22 +9982,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 297,
       "name": {
         "en": "Baal (Evolved)",
-        "vi": "Baal (Tiến hóa)",
         "de": "Baal (Entwickelt)",
+        "vi": "Baal (Tiến hóa)",
         "zh-CN": "巴尔（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -9973,22 +10006,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 298,
       "name": {
         "en": "Gaap",
-        "vi": "Gaap",
         "de": "Gaap",
+        "vi": "Gaap",
         "zh-CN": "加普"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -10000,22 +10034,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 299,
       "name": {
         "en": "Gaap (Evolved)",
-        "vi": "Gaap (Tiến hóa)",
         "de": "Gaap (Entwickelt)",
+        "vi": "Gaap (Tiến hóa)",
         "zh-CN": "加普（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -10024,22 +10058,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 300,
       "name": {
         "en": "Taaf",
-        "vi": "Taaf",
         "de": "Taaf",
+        "vi": "Taaf",
         "zh-CN": "塔夫"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -10051,22 +10086,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 301,
       "name": {
         "en": "Taaf (Evolved)",
-        "vi": "Taaf (Tiến hóa)",
         "de": "Taaf (Entwickelt)",
+        "vi": "Taaf (Tiến hóa)",
         "zh-CN": "塔夫（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -10075,22 +10110,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 302,
       "name": {
         "en": "Frozen",
-        "vi": "Băng Giá",
         "de": "Gefroren",
+        "vi": "Băng Giá",
         "zh-CN": "冰霜"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -10102,22 +10138,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 303,
       "name": {
         "en": "Frozen(Evolved)",
-        "vi": "Băng Giá (Tiến hóa)",
         "de": "Gefroren (Entwickelt)",
+        "vi": "Băng Giá (Tiến hóa)",
         "zh-CN": "冰霜（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -10126,22 +10162,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 304,
       "name": {
         "en": "Loor",
-        "vi": "Loor",
         "de": "Loor",
+        "vi": "Loor",
         "zh-CN": "卢尔"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -10153,22 +10190,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 305,
       "name": {
         "en": "Loor(Evolved)",
-        "vi": "Loor (Tiến hóa)",
         "de": "Loor (Entwickelt)",
+        "vi": "Loor (Tiến hóa)",
         "zh-CN": "卢尔（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -10177,22 +10214,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 306,
       "name": {
         "en": "Purssil",
-        "vi": "Purssil",
         "de": "Purssil",
+        "vi": "Purssil",
         "zh-CN": "普西尔"
       },
       "width": 1,
       "height": 1,
+      "statProfile": "helper",
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 1
       },
@@ -10204,22 +10242,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 307,
       "name": {
         "en": "Purssil(Evolved)",
-        "vi": "Purssil (Tiến hóa)",
         "de": "Purssil (Entwickelt)",
+        "vi": "Purssil (Tiến hóa)",
         "zh-CN": "普西尔（进化）"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -10228,22 +10266,23 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false
+      }
     },
     {
       "number": 350,
       "name": {
         "en": "Roomy Egg",
-        "vi": "Trứng Rộng Rãi",
         "de": "Geräumiges Ei",
+        "vi": "Trứng Rộng Rãi",
         "zh-CN": "宽敞魔蛋"
       },
       "width": 1,
       "height": 1,
       "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "sellable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -10252,11 +10291,7 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false,
-      "sellable": false
+      }
     }
   ]
 }

@@ -1400,10 +1400,11 @@
       "number": 54,
       "name": {
         "en": "Lazy Wind Pants",
-        "vi": "Quần Gió Lười",
         "de": "Träger Wind-Hose",
+        "vi": "Quần Gió Lười",
         "zh-CN": "慵懒之风护腿"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "pants",
@@ -1418,17 +1419,17 @@
       },
       "classRequirements": {
         "darkKnight": 3
-      },
-      "options": ["luck", "defenseOption"]
+      }
     },
     {
       "number": 55,
       "name": {
         "en": "Dark Devil Pants",
-        "vi": "Quần Ác Quỷ Bóng Tối",
         "de": "Dunkelteufel-Hose",
+        "vi": "Quần Ác Quỷ Bóng Tối",
         "zh-CN": "暗黑恶魔护腿"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "pants",
@@ -1444,17 +1445,17 @@
       },
       "classRequirements": {
         "darkWizard": 3
-      },
-      "options": ["luck", "defenseOption"]
+      }
     },
     {
       "number": 56,
       "name": {
         "en": "Sticky Pants",
-        "vi": "Quần Bám Dính",
         "de": "Klebrige-Hose",
+        "vi": "Quần Bám Dính",
         "zh-CN": "粘性护腿"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "pants",
@@ -1469,17 +1470,17 @@
       },
       "classRequirements": {
         "fairyElf": 3
-      },
-      "options": ["luck", "defenseOption"]
+      }
     },
     {
       "number": 57,
       "name": {
         "en": "Hell Night Pants",
-        "vi": "Quần Đêm Địa Ngục",
         "de": "Höllennacht-Hose",
+        "vi": "Quần Đêm Địa Ngục",
         "zh-CN": "地狱之夜护腿"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "pants",
@@ -1494,17 +1495,17 @@
       },
       "classRequirements": {
         "magicGladiator": 3
-      },
-      "options": ["luck", "defenseOption"]
+      }
     },
     {
       "number": 58,
       "name": {
         "en": "Ambition Pants",
-        "vi": "Quần Tham Vọng",
         "de": "Ehrgeiz-Hose",
+        "vi": "Quần Tham Vọng",
         "zh-CN": "野心护腿"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "pants",
@@ -1519,8 +1520,7 @@
       },
       "classRequirements": {
         "darkLord": 3
-      },
-      "options": ["luck", "defenseOption"]
+      }
     },
     {
       "number": 59,
@@ -1986,10 +1986,11 @@
       "number": 74,
       "name": {
         "en": "Stormwing Pants",
-        "vi": "Quần Cánh Bão",
         "de": "Sturmflügel-Hose",
+        "vi": "Quần Cánh Bão",
         "zh-CN": "风暴之翼护腿"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "pants",
@@ -2004,17 +2005,17 @@
       },
       "classRequirements": {
         "darkKnight": 3
-      },
-      "options": ["luck", "defenseOption"]
+      }
     },
     {
       "number": 75,
       "name": {
         "en": "Light Lord Pants",
-        "vi": "Quần Chúa Tể Ánh Sáng",
         "de": "Lichtlord-Hose",
+        "vi": "Quần Chúa Tể Ánh Sáng",
         "zh-CN": "光之领主护腿"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "pants",
@@ -2030,17 +2031,17 @@
       },
       "classRequirements": {
         "fairyElf": 3
-      },
-      "options": ["luck", "defenseOption"]
+      }
     },
     {
       "number": 76,
       "name": {
         "en": "Magic Knight Pants",
-        "vi": "Quần Hiệp Sĩ Phép Thuật",
         "de": "Magieritter-Hose",
+        "vi": "Quần Hiệp Sĩ Phép Thuật",
         "zh-CN": "魔剑士护腿"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "pants",
@@ -2056,14 +2057,14 @@
       },
       "classRequirements": {
         "magicGladiator": 3
-      },
-      "options": ["luck", "defenseOption"]
+      }
     },
     {
       "number": 78,
       "name": {
         "en": "Dragon Pants-J"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "pants",
@@ -2071,6 +2072,8 @@
       "level": 55,
       "durability": 68,
       "defense": 28,
+      "tradable": false,
+      "droppable": false,
       "requirements": {
         "strength": 120,
         "dexterity": 30
@@ -2078,16 +2081,14 @@
       "classRequirements": {
         "darkKnight": 1,
         "magicGladiator": 1
-      },
-      "options": ["luck", "defenseOption"],
-      "droppable": false,
-      "tradable": false
+      }
     },
     {
       "number": 79,
       "name": {
         "en": "Legendary Pants-J"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "pants",
@@ -2095,22 +2096,22 @@
       "level": 53,
       "durability": 42,
       "defense": 22,
+      "tradable": false,
+      "droppable": false,
       "requirements": {
         "strength": 40
       },
       "classRequirements": {
         "darkWizard": 1,
         "magicGladiator": 1
-      },
-      "options": ["luck", "defenseOption"],
-      "droppable": false,
-      "tradable": false
+      }
     },
     {
       "number": 80,
       "name": {
         "en": "Guardian Pants-J"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "pants",
@@ -2118,22 +2119,22 @@
       "level": 54,
       "durability": 45,
       "defense": 27,
+      "tradable": false,
+      "droppable": false,
       "requirements": {
         "strength": 40,
         "dexterity": 80
       },
       "classRequirements": {
         "fairyElf": 1
-      },
-      "options": ["luck", "defenseOption"],
-      "droppable": false,
-      "tradable": false
+      }
     },
     {
       "number": 81,
       "name": {
         "en": "Light Plate Pants-J"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "pants",
@@ -2141,22 +2142,22 @@
       "level": 50,
       "durability": 42,
       "defense": 23,
+      "tradable": false,
+      "droppable": false,
       "requirements": {
         "strength": 70,
         "dexterity": 20
       },
       "classRequirements": {
         "darkLord": 1
-      },
-      "options": ["luck", "defenseOption"],
-      "droppable": false,
-      "tradable": false
+      }
     },
     {
       "number": 82,
       "name": {
         "en": "Red Wing Pants-J"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "pants",
@@ -2164,22 +2165,22 @@
       "level": 53,
       "durability": 42,
       "defense": 24,
+      "tradable": false,
+      "droppable": false,
       "requirements": {
         "strength": 35,
         "dexterity": 7
       },
       "classRequirements": {
         "summoner": 1
-      },
-      "options": ["luck", "defenseOption"],
-      "droppable": false,
-      "tradable": false
+      }
     },
     {
       "number": 83,
       "name": {
         "en": "Sacred Fire Pants-J"
       },
+      "options": ["luck", "defenseOption", "excellentDefense"],
       "width": 2,
       "height": 2,
       "slot": "pants",
@@ -2187,16 +2188,15 @@
       "level": 62,
       "durability": 52,
       "defense": 35,
+      "tradable": false,
+      "droppable": false,
       "requirements": {
         "strength": 85,
         "vitality": 75
       },
       "classRequirements": {
         "rageFighter": 1
-      },
-      "options": ["luck", "defenseOption"],
-      "droppable": false,
-      "tradable": false
+      }
     }
   ]
 }

@@ -3880,14 +3880,15 @@
       "number": 144,
       "name": {
         "en": "Mithril Fragment",
-        "vi": "Mảnh Mithril",
         "de": "Mithril-Fragment",
+        "vi": "Mảnh Mithril",
         "zh-CN": "秘银碎片"
       },
       "width": 1,
       "height": 1,
       "level": 1,
       "durability": 1,
+      "droppable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -3896,21 +3897,21 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 145,
       "name": {
         "en": "Mithril",
-        "vi": "Mithril",
         "de": "Mithril",
+        "vi": "Mithril",
         "zh-CN": "秘银"
       },
       "width": 1,
       "height": 1,
       "level": 1,
       "buyPrice": 1500000,
+      "droppable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -3919,21 +3920,21 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 146,
       "name": {
         "en": "Elixir Fragment",
-        "vi": "Mảnh Tiên Dược",
         "de": "Elixier-Fragment",
+        "vi": "Mảnh Tiên Dược",
         "zh-CN": "灵药碎片"
       },
       "width": 1,
       "height": 1,
       "level": 1,
       "durability": 1,
+      "droppable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -3942,21 +3943,21 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 147,
       "name": {
         "en": "Elixir",
-        "vi": "Tiên Dược",
         "de": "Elixier",
+        "vi": "Tiên Dược",
         "zh-CN": "灵药"
       },
       "width": 1,
       "height": 1,
       "level": 1,
       "buyPrice": 1500000,
+      "droppable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -3965,21 +3966,21 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 148,
       "name": {
         "en": "Mithril Fragment Bunch",
-        "vi": "Bó Mảnh Mithril",
         "de": "Mithril-Fragment-Bündel",
+        "vi": "Bó Mảnh Mithril",
         "zh-CN": "秘银碎片束"
       },
       "width": 1,
       "height": 1,
       "level": 1,
       "buyPrice": 1500000,
+      "droppable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -3988,21 +3989,21 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 149,
       "name": {
         "en": "Elixir Fragment Bunch",
-        "vi": "Bó Mảnh Tiên Dược",
         "de": "Elixier-Fragment-Bündel",
+        "vi": "Bó Mảnh Tiên Dược",
         "zh-CN": "灵药碎片束"
       },
       "width": 1,
       "height": 1,
       "level": 1,
       "buyPrice": 1500000,
+      "droppable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -4011,21 +4012,22 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 150,
       "name": {
         "en": "Jewel Combination Frame",
-        "vi": "Khung Kết Hợp Ngọc",
         "de": "Juwelen-Kombinationsrahmen",
+        "vi": "Khung Kết Hợp Ngọc",
         "zh-CN": "宝石合成框架"
       },
+      "tags": ["jewel"],
       "width": 2,
       "height": 1,
       "level": 1,
       "buyPrice": 3000000,
+      "droppable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -4034,22 +4036,21 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tags": ["jewel"]
+      }
     },
     {
       "number": 151,
       "name": {
         "en": "Spirit Powder",
-        "vi": "Bột Linh Hồn",
         "de": "Geisterstaub",
+        "vi": "Bột Linh Hồn",
         "zh-CN": "灵魂粉末"
       },
       "width": 1,
       "height": 2,
       "level": 1,
       "buyPrice": 9000000,
+      "droppable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -4058,15 +4059,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 200,
       "name": {
         "en": "Muren's Book of Magic",
-        "vi": "Sách Ma Pháp của Muren",
         "de": "Murens Buch der Magie",
+        "vi": "Sách Ma Pháp của Muren",
         "zh-CN": "穆伦的魔法书"
       },
       "width": 3,
@@ -4075,6 +4075,7 @@
       "level": 100,
       "durability": 5,
       "defense": 30,
+      "droppable": false,
       "requirements": {
         "level": 30,
         "energy": 45
@@ -4087,15 +4088,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 201,
       "name": {
         "en": "Scroll of Etramu",
-        "vi": "Cuộn Giấy của Etramu",
         "de": "Schriftrolle von Etramu",
+        "vi": "Cuộn Giấy của Etramu",
         "zh-CN": "艾特拉姆卷轴"
       },
       "width": 3,
@@ -4104,6 +4104,7 @@
       "level": 200,
       "durability": 5,
       "defense": 50,
+      "droppable": false,
       "requirements": {
         "level": 50,
         "energy": 70
@@ -4116,15 +4117,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 202,
       "name": {
         "en": "Lorencia Knights' Iron Shield",
-        "vi": "Khiên Sắt Hiệp Sĩ Lorencia",
         "de": "Eisenschild der Ritter von Lorencia",
+        "vi": "Khiên Sắt Hiệp Sĩ Lorencia",
         "zh-CN": "勇者大陆骑士铁盾"
       },
       "width": 3,
@@ -4133,6 +4133,7 @@
       "level": 300,
       "durability": 5,
       "defense": 231,
+      "droppable": false,
       "requirements": {
         "level": 96,
         "energy": 129
@@ -4145,15 +4146,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 203,
       "name": {
         "en": "Iron Shield of the Magic",
-        "vi": "Khiên Sắt Ma Pháp",
         "de": "Eisenschild der Magie",
+        "vi": "Khiên Sắt Ma Pháp",
         "zh-CN": "魔法铁盾"
       },
       "width": 3,
@@ -4162,6 +4162,7 @@
       "level": 300,
       "durability": 5,
       "defense": 231,
+      "droppable": false,
       "requirements": {
         "level": 96,
         "energy": 129
@@ -4174,15 +4175,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 204,
       "name": {
         "en": "Hero Elixir",
-        "vi": "Tiên Dược Anh Hùng",
         "de": "Heldenelixier",
+        "vi": "Tiên Dược Anh Hùng",
         "zh-CN": "英雄灵药"
       },
       "width": 3,
@@ -4191,6 +4191,7 @@
       "level": 300,
       "durability": 5,
       "defense": 184,
+      "droppable": false,
       "requirements": {
         "level": 134,
         "energy": 180
@@ -4203,15 +4204,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 205,
       "name": {
         "en": "Brave Hero Elixir",
-        "vi": "Tiên Dược Anh Hùng Dũng Cảm",
         "de": "Tapferes Heldenelixier",
+        "vi": "Tiên Dược Anh Hùng Dũng Cảm",
         "zh-CN": "英勇灵药"
       },
       "width": 3,
@@ -4220,6 +4220,7 @@
       "level": 300,
       "durability": 5,
       "defense": 184,
+      "droppable": false,
       "requirements": {
         "level": 134,
         "energy": 180
@@ -4232,15 +4233,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 206,
       "name": {
         "en": "Gladiator's Dagger",
-        "vi": "Dao Găm Đấu Sĩ",
         "de": "Dolch des Gladiators",
+        "vi": "Dao Găm Đấu Sĩ",
         "zh-CN": "角斗士匕首"
       },
       "width": 3,
@@ -4249,6 +4249,7 @@
       "level": 300,
       "durability": 5,
       "defense": 132,
+      "droppable": false,
       "requirements": {
         "level": 168,
         "energy": 227
@@ -4261,15 +4262,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 207,
       "name": {
         "en": "Merciless Gladiator's Dagger",
-        "vi": "Dao Găm Đấu Sĩ Tàn Nhẫn",
         "de": "Dolch des gnadenlosen Gladiators",
+        "vi": "Dao Găm Đấu Sĩ Tàn Nhẫn",
         "zh-CN": "无情角斗士匕首"
       },
       "width": 3,
@@ -4278,6 +4278,7 @@
       "level": 300,
       "durability": 5,
       "defense": 132,
+      "droppable": false,
       "requirements": {
         "level": 168,
         "energy": 227
@@ -4290,15 +4291,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 208,
       "name": {
         "en": "Kundun's Madness Blade",
-        "vi": "Kiếm Điên Cuồng của Kundun",
         "de": "Kunduns Wahnsinnsklinge",
+        "vi": "Kiếm Điên Cuồng của Kundun",
         "zh-CN": "昆顿疯狂之刃"
       },
       "width": 3,
@@ -4307,6 +4307,7 @@
       "level": 300,
       "durability": 1,
       "defense": 249,
+      "droppable": false,
       "requirements": {
         "level": 181,
         "energy": 245
@@ -4319,15 +4320,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 209,
       "name": {
         "en": "Kundun's Magic Spell Scroll",
-        "vi": "Cuộn Chú Ma Pháp của Kundun",
         "de": "Kunduns Magiezauberrolle",
+        "vi": "Cuộn Chú Ma Pháp của Kundun",
         "zh-CN": "昆顿魔法咒语卷轴"
       },
       "width": 3,
@@ -4336,6 +4336,7 @@
       "level": 300,
       "durability": 1,
       "defense": 249,
+      "droppable": false,
       "requirements": {
         "level": 181,
         "energy": 245
@@ -4348,15 +4349,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 210,
       "name": {
         "en": "Empire Guardians' Stronghold",
-        "vi": "Thành Lũy Hộ Vệ Đế Chế",
         "de": "Festung der Reichswächter",
+        "vi": "Thành Lũy Hộ Vệ Đế Chế",
         "zh-CN": "帝国护卫要塞"
       },
       "width": 3,
@@ -4365,6 +4365,7 @@
       "level": 300,
       "durability": 1,
       "defense": 249,
+      "droppable": false,
       "requirements": {
         "level": 181,
         "energy": 245
@@ -4377,15 +4378,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 211,
       "name": {
         "en": "Ancient Icarus Scroll",
-        "vi": "Cuộn Giấy Icarus Cổ Đại",
         "de": "Antike Icarus-Schriftrolle",
+        "vi": "Cuộn Giấy Icarus Cổ Đại",
         "zh-CN": "古代天空之城卷轴"
       },
       "width": 3,
@@ -4394,6 +4394,7 @@
       "level": 300,
       "durability": 1,
       "defense": 249,
+      "droppable": false,
       "requirements": {
         "level": 181,
         "energy": 245
@@ -4406,15 +4407,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 212,
       "name": {
         "en": "Arca's Prophecy",
-        "vi": "Lời Tiên Tri của Arca",
         "de": "Arcas Prophezeiung",
+        "vi": "Lời Tiên Tri của Arca",
         "zh-CN": "阿卡预言"
       },
       "width": 3,
@@ -4423,6 +4423,7 @@
       "level": 300,
       "durability": 1,
       "defense": 288,
+      "droppable": false,
       "requirements": {
         "level": 209,
         "energy": 284
@@ -4435,15 +4436,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 213,
       "name": {
         "en": "Antonia's Sword",
-        "vi": "Thanh Kiếm của Antonia",
         "de": "Antonias Schwert",
+        "vi": "Thanh Kiếm của Antonia",
         "zh-CN": "安东尼娅之剑"
       },
       "width": 3,
@@ -4452,6 +4452,7 @@
       "level": 300,
       "durability": 1,
       "defense": 288,
+      "droppable": false,
       "requirements": {
         "level": 209,
         "energy": 284
@@ -4464,15 +4465,14 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 214,
       "name": {
         "en": "Kundun's Seal Scroll",
-        "vi": "Cuộn Phong Ấn của Kundun",
         "de": "Kunduns Siegelrolle",
+        "vi": "Cuộn Phong Ấn của Kundun",
         "zh-CN": "昆顿封印卷轴"
       },
       "width": 3,
@@ -4481,6 +4481,7 @@
       "level": 300,
       "durability": 1,
       "defense": 288,
+      "droppable": false,
       "requirements": {
         "level": 209,
         "energy": 284
@@ -4493,20 +4494,20 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 221,
       "name": {
         "en": "Errtel of Anger",
-        "vi": "Errtel Phẫn Nộ",
         "de": "Errtel des Zorns",
+        "vi": "Errtel Phẫn Nộ",
         "zh-CN": "愤怒艾尔特"
       },
       "width": 2,
       "height": 2,
       "level": 110,
+      "droppable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -4515,20 +4516,20 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 231,
       "name": {
         "en": "Errtel of Blessing",
-        "vi": "Errtel Ban Phước",
         "de": "Errtel des Segens",
+        "vi": "Errtel Ban Phước",
         "zh-CN": "祝福艾尔特"
       },
       "width": 2,
       "height": 2,
       "level": 115,
+      "droppable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -4537,20 +4538,20 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 241,
       "name": {
         "en": "Errtel of Integrity",
-        "vi": "Errtel Chính Trực",
         "de": "Errtel der Integrität",
+        "vi": "Errtel Chính Trực",
         "zh-CN": "正直艾尔特"
       },
       "width": 2,
       "height": 2,
       "level": 120,
+      "droppable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -4559,20 +4560,20 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 251,
       "name": {
         "en": "Errtel of Divinity",
-        "vi": "Errtel Thần Thánh",
         "de": "Errtel der Göttlichkeit",
+        "vi": "Errtel Thần Thánh",
         "zh-CN": "神圣艾尔特"
       },
       "width": 2,
       "height": 2,
       "level": 125,
+      "droppable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -4581,20 +4582,20 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 261,
       "name": {
         "en": "Errtel of Gale",
-        "vi": "Errtel Cuồng Phong",
         "de": "Errtel des Sturms",
+        "vi": "Errtel Cuồng Phong",
         "zh-CN": "狂风艾尔特"
       },
       "width": 2,
       "height": 2,
       "level": 130,
+      "droppable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,
@@ -4603,17 +4604,31 @@
         "darkLord": 1,
         "summoner": 1,
         "rageFighter": 1
-      },
-      "droppable": false
+      }
     },
     {
       "number": 262,
       "name": {
         "en": "Cloak of Death",
-        "vi": "Áo Choàng Tử Thần",
         "de": "Umhang des Todes",
+        "vi": "Áo Choàng Tử Thần",
         "zh-CN": "死亡披风"
       },
+      "tags": ["cape", "flying"],
+      "options": ["luck"],
+      "description": [
+        {
+          "text": "@damageIncrease",
+          "values": {"percent": "table:wingDamageIncrease3rd"}
+        },
+        {
+          "text": "@damageAbsorb",
+          "values": {"percent": "table:capeDamageAbsorb3rd"}
+        },
+        {
+          "text": "@increaseSpeed"
+        }
+      ],
       "width": 2,
       "height": 3,
       "slot": "wings",
@@ -4622,24 +4637,38 @@
       "level": 150,
       "durability": 210,
       "defense": 27,
+      "droppable": false,
       "requirements": {
         "level": 290
       },
       "classRequirements": {
         "darkLord": 1,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tags": ["flying", "cape"]
+      }
     },
     {
       "number": 263,
       "name": {
         "en": "Wings of Chaos",
-        "vi": "Cánh Hỗn Mang",
         "de": "Flügel des Chaos",
+        "vi": "Cánh Hỗn Mang",
         "zh-CN": "混沌之翼"
       },
+      "tags": ["flying"],
+      "options": ["luck"],
+      "description": [
+        {
+          "text": "@damageIncrease",
+          "values": {"percent": "table:wingDamageIncrease3rd"}
+        },
+        {
+          "text": "@damageAbsorb",
+          "values": {"percent": "table:wingDamageAbsorb3rd"}
+        },
+        {
+          "text": "@increaseSpeed"
+        }
+      ],
       "width": 4,
       "height": 3,
       "slot": "wings",
@@ -4648,24 +4677,38 @@
       "level": 150,
       "durability": 210,
       "defense": 46,
+      "droppable": false,
       "requirements": {
         "level": 290
       },
       "classRequirements": {
         "darkKnight": 2,
         "magicGladiator": 1
-      },
-      "droppable": false,
-      "tags": ["flying"]
+      }
     },
     {
       "number": 264,
       "name": {
         "en": "Wings of Magic",
-        "vi": "Cánh Phép Thuật",
         "de": "Flügel der Magie",
+        "vi": "Cánh Phép Thuật",
         "zh-CN": "魔法之翼"
       },
+      "tags": ["flying"],
+      "options": ["luck"],
+      "description": [
+        {
+          "text": "@damageIncrease",
+          "values": {"percent": "table:wingDamageIncrease3rd"}
+        },
+        {
+          "text": "@damageAbsorb",
+          "values": {"percent": "table:wingDamageAbsorb3rd"}
+        },
+        {
+          "text": "@increaseSpeed"
+        }
+      ],
       "width": 4,
       "height": 3,
       "slot": "wings",
@@ -4674,6 +4717,7 @@
       "level": 150,
       "durability": 210,
       "defense": 37,
+      "droppable": false,
       "requirements": {
         "level": 290
       },
@@ -4681,18 +4725,31 @@
         "darkWizard": 2,
         "magicGladiator": 1,
         "summoner": 2
-      },
-      "droppable": false,
-      "tags": ["flying"]
+      }
     },
     {
       "number": 265,
       "name": {
         "en": "Wings of Life",
-        "vi": "Cánh Sự Sống",
         "de": "Flügel des Lebens",
+        "vi": "Cánh Sự Sống",
         "zh-CN": "生命之翼"
       },
+      "tags": ["flying"],
+      "options": ["luck"],
+      "description": [
+        {
+          "text": "@damageIncrease",
+          "values": {"percent": "table:wingDamageIncrease3rd"}
+        },
+        {
+          "text": "@damageAbsorb",
+          "values": {"percent": "table:wingDamageAbsorb3rd"}
+        },
+        {
+          "text": "@increaseSpeed"
+        }
+      ],
       "width": 4,
       "height": 3,
       "slot": "wings",
@@ -4701,23 +4758,37 @@
       "level": 150,
       "durability": 210,
       "defense": 37,
+      "droppable": false,
       "requirements": {
         "level": 290
       },
       "classRequirements": {
         "fairyElf": 2
-      },
-      "droppable": false,
-      "tags": ["flying"]
+      }
     },
     {
       "number": 266,
       "name": {
         "en": "Wings of Conqueror",
-        "vi": "Cánh Chinh Phục",
         "de": "Flügel des Eroberers",
+        "vi": "Cánh Chinh Phục",
         "zh-CN": "征服者之翼"
       },
+      "tags": ["flying"],
+      "options": ["luck"],
+      "description": [
+        {
+          "text": "@damageIncrease",
+          "values": {"percent": "table:wingDamageIncrease3rd"}
+        },
+        {
+          "text": "@damageAbsorb",
+          "values": {"percent": "table:wingDamageAbsorb3rd"}
+        },
+        {
+          "text": "@increaseSpeed"
+        }
+      ],
       "width": 4,
       "height": 3,
       "slot": "wings",
@@ -4726,6 +4797,9 @@
       "level": 150,
       "durability": 220,
       "defense": 200,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
       "requirements": {
         "level": 280
       },
@@ -4737,20 +4811,31 @@
         "darkLord": 1,
         "summoner": 2,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "storable": false,
-      "tags": ["flying"]
+      }
     },
     {
       "number": 267,
       "name": {
         "en": "Wings of Angel and Devil",
-        "vi": "Cánh Thiên Thần Và Ác Quỷ",
         "de": "Flügel von Engel und Teufel",
+        "vi": "Cánh Thiên Thần Và Ác Quỷ",
         "zh-CN": "天使与恶魔之翼"
       },
+      "tags": ["flying"],
+      "options": ["luck"],
+      "description": [
+        {
+          "text": "@damageIncrease",
+          "values": {"percent": "table:wingDamageIncrease3rd"}
+        },
+        {
+          "text": "@damageAbsorb",
+          "values": {"percent": "table:wingDamageAbsorb3rd"}
+        },
+        {
+          "text": "@increaseSpeed"
+        }
+      ],
       "width": 4,
       "height": 3,
       "slot": "wings",
@@ -4759,6 +4844,8 @@
       "level": 350,
       "durability": 220,
       "defense": 100,
+      "tradable": false,
+      "droppable": false,
       "requirements": {
         "level": 350
       },
@@ -4770,19 +4857,31 @@
         "darkLord": 1,
         "summoner": 2,
         "rageFighter": 1
-      },
-      "droppable": false,
-      "tradable": false,
-      "tags": ["flying"]
+      }
     },
     {
       "number": 268,
       "name": {
         "en": "Wings of Conqueror",
-        "vi": "Cánh Chinh Phục",
         "de": "Flügel des Eroberers",
+        "vi": "Cánh Chinh Phục",
         "zh-CN": "征服者之翼"
       },
+      "tags": ["flying"],
+      "options": ["luck"],
+      "description": [
+        {
+          "text": "@damageIncrease",
+          "values": {"percent": "table:wingDamageIncrease3rd"}
+        },
+        {
+          "text": "@damageAbsorb",
+          "values": {"percent": "table:wingDamageAbsorb3rd"}
+        },
+        {
+          "text": "@increaseSpeed"
+        }
+      ],
       "width": 4,
       "height": 3,
       "slot": "wings",
@@ -4791,6 +4890,7 @@
       "level": 150,
       "durability": 220,
       "defense": 60,
+      "droppable": false,
       "requirements": {
         "level": 400
       },
@@ -4802,9 +4902,7 @@
         "darkLord": 3,
         "summoner": 3,
         "rageFighter": 3
-      },
-      "droppable": false,
-      "tags": ["flying"]
+      }
     }
   ]
 }
