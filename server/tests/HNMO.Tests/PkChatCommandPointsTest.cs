@@ -9,23 +9,36 @@ using HNMO.GameLogic;
 using HNMO.GameLogic.PlugIns.ChatCommands;
 
 /// <summary>
-/// The outlaw points a game master's <c>/pk</c> gives: the character stays in the stage asked for after the next tick
-/// (found in the real game: <c>/pk name 2 2</c> fell to the Warning stage a second later).
+/// The outlaw points a game master's <c>/pk</c> gives per season: full 3h/stage totals in Season 6.3
+/// and interior stage totals in Season 9, so the stage holds after ticks or initial monster kills.
 /// </summary>
 [TestFixture]
 public class PkChatCommandPointsTest
 {
-    /// <summary>The stage holds a tick later and still six hours later minus one second.</summary>
+    /// <summary>The stage holds a tick later and for almost 3 hours in Season 6.3.</summary>
     /// <param name="state">The stage asked for.</param>
     [TestCase(HeroState.PlayerKillWarning)]
     [TestCase(HeroState.PlayerKiller1stStage)]
     [TestCase(HeroState.PlayerKiller2ndStage)]
-    public void TheStageHoldsAfterTheNextTick(HeroState state)
+    public void SeasonSixStageHoldsThreeHours(HeroState state)
     {
-        var points = PkChatCommandPlugIn.GetPoints(state);
+        var points = PkChatCommandPlugIn.GetPoints(state, isSeasonNine: false);
 
-        Assert.That(OutlawPoints.GetState(points), Is.EqualTo(state));
-        Assert.That(OutlawPoints.GetState(points - 1), Is.EqualTo(state), "one tick later");
-        Assert.That(OutlawPoints.GetState(points - (OutlawPoints.WarningPoints - 1)), Is.EqualTo(state), "six hours later, less a second");
+        Assert.That(OutlawPoints.GetState(points, isSeasonNine: false), Is.EqualTo(state));
+        Assert.That(OutlawPoints.GetState(points - 1, isSeasonNine: false), Is.EqualTo(state), "one tick later");
+        Assert.That(OutlawPoints.GetState(points - (OutlawPoints.FormerStageSeconds - 1), isSeasonNine: false), Is.EqualTo(state), "3 hours later, less a second");
+    }
+
+    /// <summary>The stage holds well inside its Season 9 range even after initial monster kills.</summary>
+    /// <param name="state">The stage asked for.</param>
+    [TestCase(HeroState.PlayerKillWarning)]
+    [TestCase(HeroState.PlayerKiller1stStage)]
+    [TestCase(HeroState.PlayerKiller2ndStage)]
+    public void SeasonNineStageHoldsInsideRange(HeroState state)
+    {
+        var points = PkChatCommandPlugIn.GetPoints(state, isSeasonNine: true);
+
+        Assert.That(OutlawPoints.GetState(points, isSeasonNine: true), Is.EqualTo(state));
+        Assert.That(OutlawPoints.GetState(points - 500, isSeasonNine: true), Is.EqualTo(state), "does not drop out after monster kills");
     }
 }
