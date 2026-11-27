@@ -20782,7 +20782,7 @@ public readonly ref struct HnmoMuunCommandRef
     public C1HeaderWithSubCodeRef Header => new (this._data);
 
     /// <summary>
-    /// Gets or sets 1 = Request state, 2 = Make the Muun in the bag slot active, 3 = Put the active Muun away, 4 = Evolve the active Muun, 5 = Convert the Muun in the bag slot into energy, 6 = Level up the active Muun.
+    /// Gets or sets 1 = Request state, 2 = Make the Muun in the bag slot active, 3 = Put the active Muun away, 4 = Evolve the active Muun, 5 = Convert the Muun in the bag slot into energy, 6 = Level up the active Muun, 7 = Level up the active Muun by feeding a duplicate Muun from the bag slot.
     /// </summary>
     public byte Action
     {

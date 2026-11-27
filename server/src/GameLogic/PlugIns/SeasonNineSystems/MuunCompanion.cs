@@ -89,6 +89,12 @@ public sealed class MuunCompanion
         _ => null,
     };
 
+    /// <summary>Gets a value indicating whether <paramref name="optionType"/> is a non-PvP (PvM-only) option, including attack skill type 53.</summary>
+    public static bool IsPvmOnlyOption(int optionType) => optionType is 8 or 10 or 11 or 12 or 14 or 53;
+
+    /// <summary>Gets a value indicating whether <paramref name="optionType"/> triggers a periodic attack skill (50 = all targets, 53 = non-PvP).</summary>
+    public static bool IsAttackSkillOption(int optionType) => optionType is 50 or 53;
+
     /// <summary>Makes the Muun in a bag slot the active one.</summary>
     /// <param name="player">The player.</param>
     /// <param name="slot">The inventory slot.</param>
@@ -278,6 +284,51 @@ public sealed class MuunCompanion
     }
 
     /// <summary>
+    /// Levels up the active Muun by feeding it a duplicate Muun from <paramref name="slot"/> in the bag.
+    /// </summary>
+    /// <param name="player">The player.</param>
+    /// <param name="slot">The bag slot of the duplicate Muun.</param>
+    /// <returns>A task.</returns>
+    public async ValueTask FeedDuplicateAsync(Player player, byte slot)
+    {
+        if (!await this.EnsureOnAsync(player).ConfigureAwait(false))
+        {
+            return;
+        }
+
+        var state = this.LoadState(player);
+        if (this.ActiveMuun(player, state) is not { } active || IsEvolved(active.Spec) || active.Item.Level >= this.MaximumLevel(active.Spec))
+        {
+            await this.SendStateAsync(player, true, "CannotLevel", "Only an active Muun below its highest level can level up.", "Chỉ Muun đồng hành chưa đạt cấp cao nhất mới lên cấp được.").ConfigureAwait(false);
+            return;
+        }
+
+        if (this.BagMuun(player, slot) is not { } feeder
+            || feeder.Item.GetId() == state.ActiveItemId
+            || feeder.Spec.ItemGroup != active.Spec.ItemGroup
+            || feeder.Spec.ItemNumber != active.Spec.ItemNumber)
+        {
+            await this.SendStateAsync(player, true, "InvalidMuun", "Choose another duplicate Muun of the same kind in your bag.", "Hãy chọn một Muun cùng loại khác trong túi đồ.").ConfigureAwait(false);
+            return;
+        }
+
+        var (feederDef, feederLevel) = (feeder.Item.Definition!, feeder.Item.Level);
+        await RemoveAsync(player, feeder.Item).ConfigureAwait(false);
+        active.Item.Level++;
+        if (!await player.SaveProgressAsync().ConfigureAwait(false))
+        {
+            active.Item.Level--;
+            await AddAsync(player, feederDef, feederLevel, slot).ConfigureAwait(false);
+            await this.SendStateAsync(player, true, "SaveFailed", "The level up couldn't be saved; nothing changed. Please try again.", "Không lưu được lần lên cấp, chưa có gì thay đổi. Vui lòng thử lại.").ConfigureAwait(false);
+            return;
+        }
+
+        await player.InvokeViewPlugInAsync<IItemUpgradedPlugIn>(p => p.ItemUpgradedAsync(active.Item)).ConfigureAwait(false);
+        await this.RecomputeAsync(player).ConfigureAwait(false);
+        await this.SendStateAsync(player, true, "LeveledUp", $"{active.Spec.Name} reached level {active.Item.Level}.", $"{active.Spec.Name} đạt cấp {active.Item.Level}.").ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Applies the active Muun's bonus as it is now: the previous element goes, the new one comes. Nothing applies when
     /// the system is off, no Muun is active, the Muun left the bag or its condition doesn't hold.
     /// </summary>
@@ -365,7 +416,7 @@ public sealed class MuunCompanion
             var conditionMet = !this.Configuration.MuunStrictConditions
                 || SeasonNineSystemsEngine.IsMuunConditionMet(option, MapNumber(player), TotalLevel(player), this.LocalNow());
             var bonus = this.BonusOf(player, muun);
-            var shown = conditionMet ? bonus : SeasonNineSystemsEngine.EvaluateMuunBonus(muun.Spec, option, muun.Item.Level, IsEvolved(muun.Spec), MapNumber(player), TotalLevel(player), this.LocalNow(), strictConditions: false);
+            var shown = conditionMet ? bonus : SeasonNineSystemsEngine.EvaluateMuunBonus(muun.Spec, option, muun.Item.Level, IsEvolved(muun.Spec), MapNumber(player), TotalLevel(player), this.LocalNow(), strictConditions: false, enforceDatePeriod: this.Configuration.MuunEnforceDatePeriod);
             var maximum = this.MaximumLevel(muun.Spec);
             var (conditionEn, conditionVi) = DescribeCondition(option);
             activeJson = new
@@ -377,8 +428,10 @@ public sealed class MuunCompanion
                 level = (int)muun.Item.Level,
                 maxLevel = maximum,
                 evolved = IsEvolved(muun.Spec),
-                bonusEn = option.Name.Replace("%d", shown.ToString(System.Globalization.CultureInfo.InvariantCulture), StringComparison.Ordinal),
-                bonusVi = DescribeOptionVi(option.OptionType, shown),
+                bonusEn = string.IsNullOrEmpty(option.Name)
+                    ? string.Empty
+                    : option.Name.Replace("%d", shown.ToString(System.Globalization.CultureInfo.InvariantCulture), StringComparison.Ordinal),
+                bonusVi = string.IsNullOrEmpty(option.Name) ? string.Empty : DescribeOptionVi(option.OptionType, shown),
                 bonus = shown,
                 applies = conditionMet && bonus > 0 && StatOf(option.OptionType) is not null,
                 conditionEn,
@@ -536,6 +589,7 @@ public sealed class MuunCompanion
         11 => $"Tăng tỉ lệ chí mạng +{value}% (không PvP)",
         5 => $"Tăng sát thương kỹ năng +{value}",
         12 => $"Tăng sát thương kỹ năng +{value} (không PvP)",
+        53 => $"Kỹ năng tấn công (cấp {value}) (không PvP)",
         _ => $"Kỹ năng tấn công (cấp {value})",
     };
 
@@ -613,7 +667,7 @@ public sealed class MuunCompanion
 
     private int BonusOf(Player player, (Item Item, SeasonNineSystemsCatalog.MuunSpec Spec) muun) =>
         this.FindOption(muun.Spec.OptionIndex) is { } option
-            ? SeasonNineSystemsEngine.EvaluateMuunBonus(muun.Spec, option, muun.Item.Level, IsEvolved(muun.Spec), MapNumber(player), TotalLevel(player), this.LocalNow(), this.Configuration.MuunStrictConditions)
+            ? SeasonNineSystemsEngine.EvaluateMuunBonus(muun.Spec, option, muun.Item.Level, IsEvolved(muun.Spec), MapNumber(player), TotalLevel(player), this.LocalNow(), this.Configuration.MuunStrictConditions, this.Configuration.MuunEnforceDatePeriod)
             : 0;
 
     // The admin's tables (configuration), or the built-in ones when the admin hasn't set any.

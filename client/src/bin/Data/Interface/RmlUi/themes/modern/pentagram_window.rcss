@@ -1,0 +1,17 @@
+/* Modern theme for CPentagramWindow (Ctrl+P). */
+#panel { height: 432px; pointer-events: auto; }
+.sharp-text { display: block; position: relative; white-space: normal; text-align: left; pointer-events: none; }
+.s9-title { position: absolute; left: 0; top: 12px; width: 100%; text-align: center; font-weight: bold; color: token(accent-gold); }
+.s9-body { display: block; position: absolute; left: 14px; top: 38px; width: 162px; height: 344px; overflow-y: auto; }
+.s9-note, .s9-summary, .s9-card, .s9-row { display: block; margin-bottom: 5px; padding: 5px; background-color: token(surface-recessed); border: 1px token(border-frame); border-radius: token(radius-sm)px; }
+.s9-row.selected, .s9-btn.selected { border-color: token(accent-gold); }
+.s9-line { display: block; margin-bottom: 2px; pointer-events: auto; }
+.s9-text { color: token(text-primary); }
+.s9-gold { color: token(accent-gold); font-weight: bold; }
+.s9-muted { color: token(text-secondary); }
+.s9-btn-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 3px; }
+.s9-btn { padding: 2px 6px; background-color: token(surface-raised); border: 1px token(border-frame); border-radius: token(radius-sm)px; pointer-events: auto; }
+.s9-btn:hover { border-color: token(accent-steel-hover); }
+.s9-btn-label { color: token(text-primary); }
+.s9-slot-list, .s9-list { display: block; max-height: 150px; overflow-y: auto; }
+#btn_exit { position: absolute; left: 13px; top: 392px; width: 36px; height: 28px; background-color: token(surface-raised); border: 1px token(border-frame); border-radius: token(radius-sm)px; pointer-events: auto; }

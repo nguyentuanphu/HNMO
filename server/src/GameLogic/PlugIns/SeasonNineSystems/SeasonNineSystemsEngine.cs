@@ -137,6 +137,27 @@ public static class SeasonNineSystemsEngine
         }
     }
 
+    /// <summary>Checks whether a Muun's event period (<c>StartDate..EndDate</c>) includes <paramref name="localNow"/>.</summary>
+    /// <param name="muun">Muun definition.</param>
+    /// <param name="localNow">Local server time.</param>
+    /// <returns><see langword="true"/> when inside the date range or when no range is set.</returns>
+    public static bool IsMuunDateActive(SeasonNineSystemsCatalog.MuunSpec muun, DateTime localNow)
+    {
+        if (string.IsNullOrWhiteSpace(muun.StartDate) || string.IsNullOrWhiteSpace(muun.EndDate))
+        {
+            return true;
+        }
+
+        if (!DateOnly.TryParseExact(muun.StartDate, "yyyy-MM-dd", out var start)
+            || !DateOnly.TryParseExact(muun.EndDate, "yyyy-MM-dd", out var end))
+        {
+            return true;
+        }
+
+        var today = DateOnly.FromDateTime(localNow);
+        return today >= start && today <= end;
+    }
+
     /// <summary>Evaluates active bonus value for a Muun pet at <paramref name="muunLevel"/> (0 = evolved, 1..5 = rank level).</summary>
     /// <param name="muun">Muun definition.</param>
     /// <param name="muunLevel">Current Muun level (1..5 or evolved).</param>
@@ -145,6 +166,7 @@ public static class SeasonNineSystemsEngine
     /// <param name="totalLevel">Player level + master level.</param>
     /// <param name="localNow">Local server time.</param>
     /// <param name="strictConditions">Whether map/time/day conditions are enforced.</param>
+    /// <param name="enforceDatePeriod">Whether <see cref="SeasonNineSystemsCatalog.MuunSpec.StartDate"/>/<see cref="SeasonNineSystemsCatalog.MuunSpec.EndDate"/> are enforced.</param>
     /// <returns>Scaled bonus value, or <c>0</c> if condition fails.</returns>
     public static int EvaluateMuunBonus(
         SeasonNineSystemsCatalog.MuunSpec muun,
@@ -153,10 +175,11 @@ public static class SeasonNineSystemsEngine
         int mapNumber,
         int totalLevel,
         DateTime localNow,
-        bool strictConditions = true)
+        bool strictConditions = true,
+        bool enforceDatePeriod = false)
     {
         return MuunOptionMap.TryGetValue(muun.OptionIndex, out var opt)
-            ? EvaluateMuunBonus(muun, opt, muunLevel, evolved, mapNumber, totalLevel, localNow, strictConditions)
+            ? EvaluateMuunBonus(muun, opt, muunLevel, evolved, mapNumber, totalLevel, localNow, strictConditions, enforceDatePeriod)
             : 0;
     }
 
@@ -169,6 +192,7 @@ public static class SeasonNineSystemsEngine
     /// <param name="totalLevel">Player level + master level.</param>
     /// <param name="localNow">Local server time.</param>
     /// <param name="strictConditions">Whether map/time/day conditions are enforced.</param>
+    /// <param name="enforceDatePeriod">Whether <see cref="SeasonNineSystemsCatalog.MuunSpec.StartDate"/>/<see cref="SeasonNineSystemsCatalog.MuunSpec.EndDate"/> are enforced.</param>
     /// <returns>Scaled bonus value, or <c>0</c> if condition fails.</returns>
     public static int EvaluateMuunBonus(
         SeasonNineSystemsCatalog.MuunSpec muun,
@@ -178,7 +202,8 @@ public static class SeasonNineSystemsEngine
         int mapNumber,
         int totalLevel,
         DateTime localNow,
-        bool strictConditions = true)
+        bool strictConditions = true,
+        bool enforceDatePeriod = false)
     {
         if (strictConditions && !IsMuunConditionMet(opt, mapNumber, totalLevel, localNow))
         {
@@ -201,10 +226,16 @@ public static class SeasonNineSystemsEngine
             return opt.ValueLv1;
         }
 
+        if (enforceDatePeriod && !IsMuunDateActive(muun, localNow))
+        {
+            return baseVal;
+        }
+
         return muun.AddOptionType switch
         {
             1 => baseVal * Math.Max(1, muun.AddOptionValue) / 10 + baseVal,
             2 => baseVal + muun.AddOptionValue,
+            3 => baseVal * Math.Max(1, muun.AddOptionValue),
             _ => baseVal,
         };
     }

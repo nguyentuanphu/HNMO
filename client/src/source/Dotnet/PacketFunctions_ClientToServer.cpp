@@ -2174,6 +2174,281 @@ void PacketFunctions_ClientToServer::SendDiscordUnlinkRequest()
     dotnet_SendDiscordUnlinkRequest(this->GetHandle());
 }
 
+void PacketFunctions_ClientToServer::SendHnmoMissionsRequest()
+{
+    static const auto dotnet_SendHnmoMissionsRequest = LoadManagedSymbol<::SendHnmoMissionsRequest>("SendHnmoMissionsRequest");
+    if (!dotnet_SendHnmoMissionsRequest)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoMissionsRequest(this->GetHandle());
+}
+
+void PacketFunctions_ClientToServer::SendHnmoMissionsAction(HnmoMissionsActionType action, const char16_t* argument)
+{
+    static const auto dotnet_SendHnmoMissionsAction = LoadManagedSymbol<::SendHnmoMissionsAction>("SendHnmoMissionsAction");
+    if (!dotnet_SendHnmoMissionsAction)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoMissionsAction(this->GetHandle(), action, argument);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoWorldBossesRequest()
+{
+    static const auto dotnet_SendHnmoWorldBossesRequest = LoadManagedSymbol<::SendHnmoWorldBossesRequest>("SendHnmoWorldBossesRequest");
+    if (!dotnet_SendHnmoWorldBossesRequest)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoWorldBossesRequest(this->GetHandle());
+}
+
+void PacketFunctions_ClientToServer::SendHnmoWorldBossesAction(HnmoWorldBossesActionType action, const char16_t* argument)
+{
+    static const auto dotnet_SendHnmoWorldBossesAction = LoadManagedSymbol<::SendHnmoWorldBossesAction>("SendHnmoWorldBossesAction");
+    if (!dotnet_SendHnmoWorldBossesAction)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoWorldBossesAction(this->GetHandle(), action, argument);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoOnboardingRequest()
+{
+    static const auto dotnet_SendHnmoOnboardingRequest = LoadManagedSymbol<::SendHnmoOnboardingRequest>("SendHnmoOnboardingRequest");
+    if (!dotnet_SendHnmoOnboardingRequest)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoOnboardingRequest(this->GetHandle());
+}
+
+void PacketFunctions_ClientToServer::SendHnmoOnboardingAction(HnmoOnboardingActionType action, const char16_t* argument)
+{
+    static const auto dotnet_SendHnmoOnboardingAction = LoadManagedSymbol<::SendHnmoOnboardingAction>("SendHnmoOnboardingAction");
+    if (!dotnet_SendHnmoOnboardingAction)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoOnboardingAction(this->GetHandle(), action, argument);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoGuildsRequest()
+{
+    static const auto dotnet_SendHnmoGuildsRequest = LoadManagedSymbol<::SendHnmoGuildsRequest>("SendHnmoGuildsRequest");
+    if (!dotnet_SendHnmoGuildsRequest)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoGuildsRequest(this->GetHandle());
+}
+
+void PacketFunctions_ClientToServer::SendHnmoGuildsAction(HnmoGuildsActionType action, const char16_t* argument)
+{
+    static const auto dotnet_SendHnmoGuildsAction = LoadManagedSymbol<::SendHnmoGuildsAction>("SendHnmoGuildsAction");
+    if (!dotnet_SendHnmoGuildsAction)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoGuildsAction(this->GetHandle(), action, argument);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoCommunityRequest()
+{
+    static const auto dotnet_SendHnmoCommunityRequest = LoadManagedSymbol<::SendHnmoCommunityRequest>("SendHnmoCommunityRequest");
+    if (!dotnet_SendHnmoCommunityRequest)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoCommunityRequest(this->GetHandle());
+}
+
+void PacketFunctions_ClientToServer::SendHnmoCommunityAction(HnmoCommunityActionType action, const char16_t* argument)
+{
+    static const auto dotnet_SendHnmoCommunityAction = LoadManagedSymbol<::SendHnmoCommunityAction>("SendHnmoCommunityAction");
+    if (!dotnet_SendHnmoCommunityAction)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoCommunityAction(this->GetHandle(), action, argument);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoTopRacesRequest()
+{
+    static const auto dotnet_SendHnmoTopRacesRequest = LoadManagedSymbol<::SendHnmoTopRacesRequest>("SendHnmoTopRacesRequest");
+    if (!dotnet_SendHnmoTopRacesRequest)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoTopRacesRequest(this->GetHandle());
+}
+
+void PacketFunctions_ClientToServer::SendHnmoTopRacesAction(HnmoTopRacesActionType action, const char16_t* argument)
+{
+    static const auto dotnet_SendHnmoTopRacesAction = LoadManagedSymbol<::SendHnmoTopRacesAction>("SendHnmoTopRacesAction");
+    if (!dotnet_SendHnmoTopRacesAction)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoTopRacesAction(this->GetHandle(), action, argument);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoGiftCodeRedeemExtended(const char16_t* giftCode, const char16_t* deviceId)
+{
+    static const auto dotnet_SendHnmoGiftCodeRedeemExtended = LoadManagedSymbol<::SendHnmoGiftCodeRedeemExtended>("SendHnmoGiftCodeRedeemExtended");
+    if (!dotnet_SendHnmoGiftCodeRedeemExtended)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoGiftCodeRedeemExtended(this->GetHandle(), giftCode, deviceId);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoGiftCodesRequest()
+{
+    static const auto dotnet_SendHnmoGiftCodesRequest = LoadManagedSymbol<::SendHnmoGiftCodesRequest>("SendHnmoGiftCodesRequest");
+    if (!dotnet_SendHnmoGiftCodesRequest)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoGiftCodesRequest(this->GetHandle());
+}
+
+void PacketFunctions_ClientToServer::SendHnmoGiftCodesAction(HnmoGiftCodesActionType action, const char16_t* argument)
+{
+    static const auto dotnet_SendHnmoGiftCodesAction = LoadManagedSymbol<::SendHnmoGiftCodesAction>("SendHnmoGiftCodesAction");
+    if (!dotnet_SendHnmoGiftCodesAction)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoGiftCodesAction(this->GetHandle(), action, argument);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoResetsRequest()
+{
+    static const auto dotnet_SendHnmoResetsRequest = LoadManagedSymbol<::SendHnmoResetsRequest>("SendHnmoResetsRequest");
+    if (!dotnet_SendHnmoResetsRequest)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoResetsRequest(this->GetHandle());
+}
+
+void PacketFunctions_ClientToServer::SendHnmoResetsAction(HnmoResetsActionType action)
+{
+    static const auto dotnet_SendHnmoResetsAction = LoadManagedSymbol<::SendHnmoResetsAction>("SendHnmoResetsAction");
+    if (!dotnet_SendHnmoResetsAction)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoResetsAction(this->GetHandle(), action);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoAccountSafetyRequest()
+{
+    static const auto dotnet_SendHnmoAccountSafetyRequest = LoadManagedSymbol<::SendHnmoAccountSafetyRequest>("SendHnmoAccountSafetyRequest");
+    if (!dotnet_SendHnmoAccountSafetyRequest)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoAccountSafetyRequest(this->GetHandle());
+}
+
+void PacketFunctions_ClientToServer::SendHnmoAccountSafetyAction(HnmoAccountSafetyActionType action, BYTE vault, BYTE slot, uint16_t pin)
+{
+    static const auto dotnet_SendHnmoAccountSafetyAction = LoadManagedSymbol<::SendHnmoAccountSafetyAction>("SendHnmoAccountSafetyAction");
+    if (!dotnet_SendHnmoAccountSafetyAction)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoAccountSafetyAction(this->GetHandle(), action, vault, slot, pin);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoTicketLogin(const char16_t* username, const char16_t* ticket)
+{
+    static const auto dotnet_SendHnmoTicketLogin = LoadManagedSymbol<::SendHnmoTicketLogin>("SendHnmoTicketLogin");
+    if (!dotnet_SendHnmoTicketLogin)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoTicketLogin(this->GetHandle(), username, ticket);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoTopUpMilestonesCommand(HnmoTopUpMilestonesActionType action, const char16_t* argument)
+{
+    static const auto dotnet_SendHnmoTopUpMilestonesCommand = LoadManagedSymbol<::SendHnmoTopUpMilestonesCommand>("SendHnmoTopUpMilestonesCommand");
+    if (!dotnet_SendHnmoTopUpMilestonesCommand)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoTopUpMilestonesCommand(this->GetHandle(), action, argument);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoTimetableCommand(HnmoTimetableActionType action, const char16_t* argument)
+{
+    static const auto dotnet_SendHnmoTimetableCommand = LoadManagedSymbol<::SendHnmoTimetableCommand>("SendHnmoTimetableCommand");
+    if (!dotnet_SendHnmoTimetableCommand)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoTimetableCommand(this->GetHandle(), action, argument);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoLuckyNumberCommand(HnmoLuckyNumberActionType action, uint32_t number)
+{
+    static const auto dotnet_SendHnmoLuckyNumberCommand = LoadManagedSymbol<::SendHnmoLuckyNumberCommand>("SendHnmoLuckyNumberCommand");
+    if (!dotnet_SendHnmoLuckyNumberCommand)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoLuckyNumberCommand(this->GetHandle(), action, number);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoMarriageCommand(HnmoMarriageActionType action, const char16_t* argument)
+{
+    static const auto dotnet_SendHnmoMarriageCommand = LoadManagedSymbol<::SendHnmoMarriageCommand>("SendHnmoMarriageCommand");
+    if (!dotnet_SendHnmoMarriageCommand)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoMarriageCommand(this->GetHandle(), action, argument);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoMarketCommand(HnmoMarketActionType action, BYTE slot, BYTE currency, uint32_t price, const char16_t* listingId)
+{
+    static const auto dotnet_SendHnmoMarketCommand = LoadManagedSymbol<::SendHnmoMarketCommand>("SendHnmoMarketCommand");
+    if (!dotnet_SendHnmoMarketCommand)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoMarketCommand(this->GetHandle(), action, slot, currency, price, listingId);
+}
+
 void PacketFunctions_ClientToServer::SendCharacterRenameRequest(const char16_t* oldName, const char16_t* newName)
 {
     static const auto dotnet_SendCharacterRenameRequest = LoadManagedSymbol<::SendCharacterRenameRequest>("SendCharacterRenameRequest");
@@ -2227,4 +2502,224 @@ void PacketFunctions_ClientToServer::SendGameGuardAuthResponse(const BYTE* data,
     }
 
     dotnet_SendGameGuardAuthResponse(this->GetHandle(), data, dataByteLength);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoPentagramCommand(BYTE action, BYTE slot, BYTE index)
+{
+    static const auto dotnet_SendHnmoPentagramCommand = LoadManagedSymbol<::SendHnmoPentagramCommand>("SendHnmoPentagramCommand");
+    if (!dotnet_SendHnmoPentagramCommand)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoPentagramCommand(this->GetHandle(), action, slot, index);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoJewelBankCommand(BYTE action, BYTE slot, uint32_t amount, const char16_t* key)
+{
+    static const auto dotnet_SendHnmoJewelBankCommand = LoadManagedSymbol<::SendHnmoJewelBankCommand>("SendHnmoJewelBankCommand");
+    if (!dotnet_SendHnmoJewelBankCommand)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoJewelBankCommand(this->GetHandle(), action, slot, amount, key);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoMuunCommand(BYTE action, BYTE slot)
+{
+    static const auto dotnet_SendHnmoMuunCommand = LoadManagedSymbol<::SendHnmoMuunCommand>("SendHnmoMuunCommand");
+    if (!dotnet_SendHnmoMuunCommand)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoMuunCommand(this->GetHandle(), action, slot);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoCatchupCapRequest()
+{
+    static const auto dotnet_SendHnmoCatchupCapRequest = LoadManagedSymbol<::SendHnmoCatchupCapRequest>("SendHnmoCatchupCapRequest");
+    if (!dotnet_SendHnmoCatchupCapRequest)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoCatchupCapRequest(this->GetHandle());
+}
+
+void PacketFunctions_ClientToServer::SendHnmoSeasonNineClientRequest()
+{
+    static const auto dotnet_SendHnmoSeasonNineClientRequest = LoadManagedSymbol<::SendHnmoSeasonNineClientRequest>("SendHnmoSeasonNineClientRequest");
+    if (!dotnet_SendHnmoSeasonNineClientRequest)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoSeasonNineClientRequest(this->GetHandle());
+}
+
+void PacketFunctions_ClientToServer::SendHnmoSeasonPlanRequest()
+{
+    static const auto dotnet_SendHnmoSeasonPlanRequest = LoadManagedSymbol<::SendHnmoSeasonPlanRequest>("SendHnmoSeasonPlanRequest");
+    if (!dotnet_SendHnmoSeasonPlanRequest)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoSeasonPlanRequest(this->GetHandle());
+}
+
+void PacketFunctions_ClientToServer::SendHnmoLeftoversCommand(BYTE action, const char16_t* id)
+{
+    static const auto dotnet_SendHnmoLeftoversCommand = LoadManagedSymbol<::SendHnmoLeftoversCommand>("SendHnmoLeftoversCommand");
+    if (!dotnet_SendHnmoLeftoversCommand)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoLeftoversCommand(this->GetHandle(), action, id);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoMountChainCommand(BYTE action, const char16_t* id)
+{
+    static const auto dotnet_SendHnmoMountChainCommand = LoadManagedSymbol<::SendHnmoMountChainCommand>("SendHnmoMountChainCommand");
+    if (!dotnet_SendHnmoMountChainCommand)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoMountChainCommand(this->GetHandle(), action, id);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoPartyOptionsCommand(BYTE action, const char16_t* payload)
+{
+    static const auto dotnet_SendHnmoPartyOptionsCommand = LoadManagedSymbol<::SendHnmoPartyOptionsCommand>("SendHnmoPartyOptionsCommand");
+    if (!dotnet_SendHnmoPartyOptionsCommand)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoPartyOptionsCommand(this->GetHandle(), action, payload);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoRankingCommand(BYTE action, const char16_t* payload)
+{
+    static const auto dotnet_SendHnmoRankingCommand = LoadManagedSymbol<::SendHnmoRankingCommand>("SendHnmoRankingCommand");
+    if (!dotnet_SendHnmoRankingCommand)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoRankingCommand(this->GetHandle(), action, payload);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoCustomRanksCommand(BYTE action, const char16_t* rankId)
+{
+    static const auto dotnet_SendHnmoCustomRanksCommand = LoadManagedSymbol<::SendHnmoCustomRanksCommand>("SendHnmoCustomRanksCommand");
+    if (!dotnet_SendHnmoCustomRanksCommand)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoCustomRanksCommand(this->GetHandle(), action, rankId);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoTeleportNpcCommand(BYTE action, const char16_t* destinationId)
+{
+    static const auto dotnet_SendHnmoTeleportNpcCommand = LoadManagedSymbol<::SendHnmoTeleportNpcCommand>("SendHnmoTeleportNpcCommand");
+    if (!dotnet_SendHnmoTeleportNpcCommand)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoTeleportNpcCommand(this->GetHandle(), action, destinationId);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoEscrowCommand(BYTE action, const char16_t* payload)
+{
+    static const auto dotnet_SendHnmoEscrowCommand = LoadManagedSymbol<::SendHnmoEscrowCommand>("SendHnmoEscrowCommand");
+    if (!dotnet_SendHnmoEscrowCommand)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoEscrowCommand(this->GetHandle(), action, payload);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoVaultPageCommand(BYTE action, BYTE page)
+{
+    static const auto dotnet_SendHnmoVaultPageCommand = LoadManagedSymbol<::SendHnmoVaultPageCommand>("SendHnmoVaultPageCommand");
+    if (!dotnet_SendHnmoVaultPageCommand)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoVaultPageCommand(this->GetHandle(), action, page);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoUltimateAutoPlayRequest()
+{
+    static const auto dotnet_SendHnmoUltimateAutoPlayRequest = LoadManagedSymbol<::SendHnmoUltimateAutoPlayRequest>("SendHnmoUltimateAutoPlayRequest");
+    if (!dotnet_SendHnmoUltimateAutoPlayRequest)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoUltimateAutoPlayRequest(this->GetHandle());
+}
+
+void PacketFunctions_ClientToServer::SendHnmoBugReportCommand(BYTE action, const char16_t* json)
+{
+    static const auto dotnet_SendHnmoBugReportCommand = LoadManagedSymbol<::SendHnmoBugReportCommand>("SendHnmoBugReportCommand");
+    if (!dotnet_SendHnmoBugReportCommand)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoBugReportCommand(this->GetHandle(), action, json);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoArenaTravelRequest(BYTE action, BYTE index)
+{
+    static const auto dotnet_SendHnmoArenaTravelRequest = LoadManagedSymbol<::SendHnmoArenaTravelRequest>("SendHnmoArenaTravelRequest");
+    if (!dotnet_SendHnmoArenaTravelRequest)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoArenaTravelRequest(this->GetHandle(), action, index);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoItemStackCommand(BYTE action, BYTE storage, BYTE slot, BYTE count, const char16_t* kind)
+{
+    static const auto dotnet_SendHnmoItemStackCommand = LoadManagedSymbol<::SendHnmoItemStackCommand>("SendHnmoItemStackCommand");
+    if (!dotnet_SendHnmoItemStackCommand)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoItemStackCommand(this->GetHandle(), action, storage, slot, count, kind);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoVipRequest(uint32_t requestId, const char16_t* json)
+{
+    static const auto dotnet_SendHnmoVipRequest = LoadManagedSymbol<::SendHnmoVipRequest>("SendHnmoVipRequest");
+    if (!dotnet_SendHnmoVipRequest)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoVipRequest(this->GetHandle(), requestId, json);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoGiftBoxRequest(uint32_t requestId, const char16_t* json)
+{
+    static const auto dotnet_SendHnmoGiftBoxRequest = LoadManagedSymbol<::SendHnmoGiftBoxRequest>("SendHnmoGiftBoxRequest");
+    if (!dotnet_SendHnmoGiftBoxRequest)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoGiftBoxRequest(this->GetHandle(), requestId, json);
 }

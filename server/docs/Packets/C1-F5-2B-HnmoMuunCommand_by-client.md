@@ -16,5 +16,5 @@ The server performs the action and responds with HnmoMuunState (F5 2C).
 | 1 | 1 |    Byte   |   6   | Packet header - length of the packet |
 | 2 | 1 |    Byte   | 0xF5  | Packet header - packet type identifier |
 | 3 | 1 |    Byte   | 0x2B  | Packet header - sub packet type identifier |
-| 4 | 1 | Byte |  | Action; 1 = Request state, 2 = Make the Muun in the bag slot active, 3 = Put the active Muun away, 4 = Evolve the active Muun, 5 = Convert the Muun in the bag slot into energy, 6 = Level up the active Muun. |
+| 4 | 1 | Byte |  | Action; 1 = Request state, 2 = Make the Muun in the bag slot active, 3 = Put the active Muun away, 4 = Evolve the active Muun, 5 = Convert the Muun in the bag slot into energy, 6 = Level up the active Muun, 7 = Level up the active Muun by feeding a duplicate Muun from the bag slot. |
 | 5 | 1 | Byte |  | Slot; Inventory slot of the Muun for actions 2 and 5. |

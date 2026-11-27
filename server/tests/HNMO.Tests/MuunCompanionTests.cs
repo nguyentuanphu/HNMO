@@ -204,6 +204,28 @@ public class MuunCompanionTests
         Assert.That(plugIn.Muuns.LoadState(player).Energy, Is.Zero);
     }
 
+    /// <summary>Duplicate-feed leveling levels up the active Muun without consuming energy; AddOptionType=3 multiplies by AddOptionValue when period holds or toggle is off.</summary>
+    /// <returns>A task.</returns>
+    [Test]
+    public async Task FeedDuplicateAndAddOptionType3AndDatePeriodWorkAsync()
+    {
+        var (plugIn, player) = await this.CreateAsync().ConfigureAwait(false);
+        var active = await AddAsync(player, 212, FirstBagSlot, level: 1).ConfigureAwait(false);
+        var dup = await AddAsync(player, 212, (byte)(FirstBagSlot + 1), level: 1).ConfigureAwait(false);
+        await plugIn.Muuns.EquipAsync(player, active.ItemSlot).ConfigureAwait(false);
+
+        await plugIn.Muuns.FeedDuplicateAsync(player, dup.ItemSlot).ConfigureAwait(false);
+        Assert.That(active.Level, Is.EqualTo(2));
+        Assert.That(player.Inventory!.GetItem(dup.ItemSlot), Is.Null);
+
+        var lycan = SeasonNineSystemsEngine.FindMuunByItem(13, 243)!.Value;
+        Assert.That(lycan.AddOptionType, Is.EqualTo(3));
+        Assert.That(SeasonNineSystemsEngine.EvaluateMuunBonus(lycan, 1, false, 0, 100, Evening, strictConditions: false, enforceDatePeriod: false), Is.EqualTo(8));
+        Assert.That(SeasonNineSystemsEngine.EvaluateMuunBonus(lycan, 1, false, 0, 100, new DateTime(2026, 11, 27), strictConditions: false, enforceDatePeriod: true), Is.EqualTo(4));
+        Assert.That(MuunCompanion.IsPvmOnlyOption(53), Is.True);
+        Assert.That(MuunCompanion.IsPvmOnlyOption(50), Is.False);
+    }
+
     private static async Task<Item> AddAsync(Player player, short number, byte slot, byte level)
     {
         var definition = player.GameContext.Configuration.Items.First(d => d.Group == MuunCompanion.MuunGroup && d.Number == number);

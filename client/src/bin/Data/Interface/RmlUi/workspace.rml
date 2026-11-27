@@ -47,6 +47,8 @@
 					<div class="slot" data-window="guild_info"></div>
 					<div class="slot" data-window="command"></div>
 					<div class="slot" data-window="command_list"></div>
+					<div class="slot" data-window="muun"></div>
+					<div class="slot" data-window="pentagram"></div>
 					<div class="slot" data-window="gold_bowman"></div>
 					<div class="slot" data-window="gold_bowman_lena"></div>
 					<div class="slot" data-window="npc_dialogue"></div>

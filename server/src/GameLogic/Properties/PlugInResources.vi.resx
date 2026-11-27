@@ -2512,4 +2512,22 @@
   <data name="ShieldBurnSkillPlugIn_Description" xml:space="preserve">
     <value>Đốt một phần khiên (SD) của người chơi mục tiêu, không trừ máu. Chỉ chạy ở realm Season 9 khi bật hệ thống và kỹ năng Season 9.</value>
   </data>
+  <data name="SpellOfProtectionSkillPlugIn_Name" xml:space="preserve">
+    <value>Kỹ năng Season 9: Phép Bảo Hộ</value>
+  </data>
+  <data name="SpellOfProtectionSkillPlugIn_Description" xml:space="preserve">
+    <value>Tạo lớp bảo hộ giảm sát thương tạm thời khi bật hệ thống và kỹ năng Season 9.</value>
+  </data>
+  <data name="SpellOfRestrictionSkillPlugIn_Name" xml:space="preserve">
+    <value>Kỹ năng Season 9: Phép Trói Buộc</value>
+  </data>
+  <data name="SpellOfRestrictionSkillPlugIn_Description" xml:space="preserve">
+    <value>Giữ chân mục tiêu tạm thời khi bật hệ thống và kỹ năng Season 9.</value>
+  </data>
+  <data name="SpellOfPursuitSkillPlugIn_Name" xml:space="preserve">
+    <value>Kỹ năng Season 9: Phép Truy Đuổi</value>
+  </data>
+  <data name="SpellOfPursuitSkillPlugIn_Description" xml:space="preserve">
+    <value>Dịch chuyển người thi triển tới cạnh mục tiêu khi bật hệ thống và kỹ năng Season 9.</value>
+  </data>
 </root>

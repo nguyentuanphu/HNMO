@@ -6328,5 +6328,23 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("ShieldBurnSkillPlugIn_Description", resourceCulture);
             }
         }
+
+        /// <summary>Gets the localized Spell of Protection skill plug-in name.</summary>
+        public static string SpellOfProtectionSkillPlugIn_Name => ResourceManager.GetString("SpellOfProtectionSkillPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Spell of Protection skill plug-in description.</summary>
+        public static string SpellOfProtectionSkillPlugIn_Description => ResourceManager.GetString("SpellOfProtectionSkillPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized Spell of Restriction skill plug-in name.</summary>
+        public static string SpellOfRestrictionSkillPlugIn_Name => ResourceManager.GetString("SpellOfRestrictionSkillPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Spell of Restriction skill plug-in description.</summary>
+        public static string SpellOfRestrictionSkillPlugIn_Description => ResourceManager.GetString("SpellOfRestrictionSkillPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized Spell of Pursuit skill plug-in name.</summary>
+        public static string SpellOfPursuitSkillPlugIn_Name => ResourceManager.GetString("SpellOfPursuitSkillPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Spell of Pursuit skill plug-in description.</summary>
+        public static string SpellOfPursuitSkillPlugIn_Description => ResourceManager.GetString("SpellOfPursuitSkillPlugIn_Description", resourceCulture)!;
     }
 }

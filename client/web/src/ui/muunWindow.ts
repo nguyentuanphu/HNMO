@@ -53,7 +53,7 @@ export interface MuunWindowOptions {
 }
 
 export const MUUN_SUBCODE_STATE = 0x2c;
-export const MUUN_COMMAND = { Request: 1, Equip: 2, Unequip: 3, Evolve: 4, Convert: 5, LevelUp: 6 } as const;
+export const MUUN_COMMAND = { Request: 1, Equip: 2, Unequip: 3, Evolve: 4, Convert: 5, LevelUp: 6, Feed: 7 } as const;
 
 function isVi(): boolean {
   return currentLanguage() === 'vi';
@@ -223,6 +223,10 @@ export class MuunWindow {
         tag.textContent = tx('Active', 'Đang đồng hành');
         right.append(tag);
       } else {
+        const canFeed = Boolean(s.active && !s.active.evolved && s.active.level < s.active.maxLevel && s.active.group === m.group && s.active.number === m.number);
+        if (canFeed) {
+          right.append(this.button(tx('Feed (+1 lv)', 'Cho ăn (+1 cấp)'), () => this.send(MUUN_COMMAND.Feed, m.slot), false));
+        }
         right.append(
           this.button(tx('Make active', 'Chọn đồng hành'), () => this.send(MUUN_COMMAND.Equip, m.slot)),
           this.button(tx(`Convert (+${m.energy})`, `Chuyển đổi (+${m.energy})`), () => this.send(MUUN_COMMAND.Convert, m.slot), (s.converters ?? 0) <= 0),

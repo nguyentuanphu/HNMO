@@ -29,10 +29,9 @@ public class SeasonNineSystemsUpdatePlugIn : SeasonNineUpdatePlugInBase
 
     private static readonly (SkillNumber Number, string LocalizedName, short Distance, int Mana, SkillType Type, SkillTarget Target)[] SeasonNineOnlySkills =
     [
-        // 618-620 have no verified effect yet: placeholders which cost nothing.
-        (SkillNumber.SpellOfProtection, "Spell of Protection||vi=Phép Bảo Hộ||de=Schutzzauber||zh-CN=守护咒语", 0, 0, SkillType.Buff, SkillTarget.Explicit),
-        (SkillNumber.SpellOfRestriction, "Spell of Restriction||vi=Phép Trói Buộc||de=Bannzauber||zh-CN=束缚咒语", 3, 0, SkillType.Other, SkillTarget.Explicit),
-        (SkillNumber.SpellOfPursuit, "Spell of Pursuit||vi=Phép Truy Đuổi||de=Verfolgungszauber||zh-CN=追击咒语", 0, 0, SkillType.Buff, SkillTarget.Explicit),
+        (SkillNumber.SpellOfProtection, "Spell of Protection||vi=Phép Bảo Hộ||de=Schutzzauber||zh-CN=守护咒语", 0, 30, SkillType.Buff, SkillTarget.Explicit),
+        (SkillNumber.SpellOfRestriction, "Spell of Restriction||vi=Phép Trói Buộc||de=Bannzauber||zh-CN=束缚咒语", 3, 30, SkillType.Other, SkillTarget.Explicit),
+        (SkillNumber.SpellOfPursuit, "Spell of Pursuit||vi=Phép Truy Đuổi||de=Verfolgungszauber||zh-CN=追击咒语", 0, 30, SkillType.Buff, SkillTarget.Explicit),
         (SkillNumber.ShieldBurnS9, "Shield-Burn||vi=Thiêu Đốt Khiên SD||de=Schildbrand||zh-CN=护盾焚烧", 3, 30, SkillType.Other, SkillTarget.Explicit),
     ];
 
@@ -58,11 +57,11 @@ public class SeasonNineSystemsUpdatePlugIn : SeasonNineUpdatePlugInBase
     public override DateTime CreatedAt => new(2026, 11, 26, 9, 0, 0, DateTimeKind.Utc);
 
     /// <inheritdoc />
-    /// <remarks>Version 2: Rage Fighters can't learn the four skills, and 618-620 cost no mana.</remarks>
-    public override int Version => 2;
+    /// <remarks>Version 3: Skills 618-620 cost 30 mana matching the Season 9 client skill table and have active plug-ins.</remarks>
+    public override int Version => 3;
 
     /// <inheritdoc />
-    public override DateTime UpdatedAt => new(2026, 11, 27, 0, 0, 0, DateTimeKind.Utc);
+    public override DateTime UpdatedAt => new(2026, 11, 27, 15, 0, 0, DateTimeKind.Utc);
 
     /// <inheritdoc />
     protected override ValueTask ApplySeasonNineAsync(IContext context, GameConfiguration gameConfiguration)
@@ -106,6 +105,10 @@ public class SeasonNineSystemsUpdatePlugIn : SeasonNineUpdatePlugInBase
                 manaCost.Attribute = manaAttribute;
                 manaCost.MinimumValue = spec.Mana;
                 skill.ConsumeRequirements.Add(manaCost);
+            }
+            else if (spec.Mana > 0 && manaCost is not null)
+            {
+                manaCost.MinimumValue = spec.Mana;
             }
 
             foreach (var notQualified in skill.QualifiedCharacters.Where(c => !qualified.Contains(c)).ToList())
