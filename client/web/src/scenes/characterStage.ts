@@ -73,6 +73,10 @@ export interface StageCharacter {
   slot: number;
   name: string;
   classIndex: number;
+  /** Shown on the label over the character. */
+  level?: number;
+  /** The class's name on the label. */
+  className?: string;
   equipment?: EquipmentAppearance;
 }
 
@@ -80,6 +84,8 @@ interface StageEntry {
   slot: number;
   name: string;
   character: Character;
+  /** The name, level and class over the character (an HTML label that follows it). */
+  label: HTMLDivElement | null;
 }
 
 export interface CharacterStageOptions {
@@ -91,6 +97,10 @@ export interface CharacterStageOptions {
   onSelect?: (slot: number, name: string) => void;
   /** The picked character is to enter the game (a double click, or Enter). */
   onEnter?: (slot: number, name: string) => void;
+  /** The pick changed, by a click or by the game (the window's buttons follow it). */
+  onSelectionChange?: (slot: number | null) => void;
+  /** Where the labels over the characters go (none without it). */
+  labelParent?: HTMLElement;
   /** Plays a sound of the game's list (SOUND_CLICK01). */
   playSound?: (name: string) => void;
 }
@@ -130,9 +140,13 @@ export class CharacterStage {
     const texture = await loadTexture('Skill', 'gmmzine.jpg');
     for (const size of [180, 120]) {
       // RenderTerrainAlphaBitmap(BITMAP_GM_AURORA, x, y, 1.8 / 1.2 cells): drawn bright (added) on the ground.
-      // Drawn over the ground like the desktop's terrain bitmap (no depth test: grass and ground bumps don't hide it).
+      // Drawn on the ground like the desktop's terrain bitmap: under the feet, so the legs and anything in front of it
+      // hide it (depth test on); pulled a little towards the camera so the ground itself doesn't flicker through it.
       if (!texture) console.warn('Character stage: the rings\' texture (Skill/gmmzine.jpg) is missing.');
-      const material = new THREE.MeshBasicMaterial({ map: texture, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false, color: 0xffffff });
+      const material = new THREE.MeshBasicMaterial({
+        map: texture, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, depthTest: true, color: 0xffffff,
+        polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4,
+      });
       const ring = new THREE.Mesh(new THREE.PlaneGeometry(size, size), material);
       ring.visible = false;
       ring.renderOrder = 2;
@@ -164,11 +178,25 @@ export class CharacterStage {
       character.group.scale.setScalar(c.classIndex === 6 ? 1.35 : 1.2);
       character.bodyTint = new THREE.Color().setScalar(stageLight(false));
       character.group.name = `character-stage-${c.slot}`;
-      this.entries.push({ slot: c.slot, name: c.name, character });
+      let label: HTMLDivElement | null = null;
+      if (this.options.labelParent) {
+        // Name, level and class over the character (owner 2026-11-28: on each character, not in a box).
+        label = document.createElement('div');
+        label.className = 'stage-label';
+        label.dataset.slot = String(c.slot);
+        const nameLine = document.createElement('b');
+        nameLine.textContent = c.name;
+        const infoLine = document.createElement('small');
+        infoLine.textContent = [c.level !== undefined ? `Lv ${c.level}` : '', c.className ?? ''].filter(Boolean).join(' · ');
+        label.append(nameLine, infoLine);
+        label.style.visibility = 'hidden';
+        this.options.labelParent.append(label);
+      }
+      this.entries.push({ slot: c.slot, name: c.name, character, label });
       this.options.root.add(character.group);
     }));
-    if (this.selected !== null && !this.entries.some((e) => e.slot === this.selected)) this.selected = null;
-    this.refreshLights();
+    if (this.selected !== null && !this.entries.some((e) => e.slot === this.selected)) this.select(null);
+    else this.refreshLights();
   }
 
   /** Picks a character by slot (null: none), with the click sound when asked. */
@@ -176,6 +204,7 @@ export class CharacterStage {
     if (slot !== null && !this.entries.some((e) => e.slot === slot)) return;
     this.selected = slot;
     this.refreshLights();
+    this.options.onSelectionChange?.(slot);
     if (sound && slot !== null) this.options.playSound?.('SOUND_CLICK01');
   }
 
@@ -218,6 +247,7 @@ export class CharacterStage {
     this.placeCamera();
     const world = { heights: this.data.heights, flags: this.data.flags, light: this.data.light, mapNumber: STAGE_MAP };
     for (const entry of this.entries) entry.character.update(dt, world);
+    this.placeLabels();
     const picked = this.entries.find((e) => e.slot === this.selected);
     const lumi = ringBrightness(this.time);
     this.rings.forEach((ring, index) => {
@@ -273,10 +303,33 @@ export class CharacterStage {
   }
 
   private refreshLights(): void {
-    for (const entry of this.entries) entry.character.bodyTint?.setScalar(stageLight(entry.slot === this.selected));
+    for (const entry of this.entries) {
+      entry.character.bodyTint?.setScalar(stageLight(entry.slot === this.selected));
+      entry.label?.classList.toggle('picked', entry.slot === this.selected);
+    }
+  }
+
+  /** The labels follow the characters' heads on the page. */
+  private placeLabels(): void {
+    const canvasRect = this.options.canvas.getBoundingClientRect();
+    const parentRect = this.options.labelParent?.getBoundingClientRect();
+    if (!parentRect) return;
+    for (const entry of this.entries) {
+      if (!entry.label) continue;
+      entry.character.group.updateWorldMatrix(true, false);
+      // A little over the head of the scaled body.
+      const point = entry.character.group.localToWorld(corner.set(0, 0, 215)).project(this.options.camera);
+      const shown = point.z >= -1 && point.z <= 1;
+      entry.label.style.visibility = shown ? 'visible' : 'hidden';
+      if (!shown) continue;
+      const x = canvasRect.left + ((point.x + 1) / 2) * canvasRect.width - parentRect.left;
+      const y = canvasRect.top + ((1 - point.y) / 2) * canvasRect.height - parentRect.top;
+      entry.label.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px) translate(-50%, -100%)`;
+    }
   }
 
   private removeEntry(entry: StageEntry): void {
+    entry.label?.remove();
     this.options.root.remove(entry.character.group);
     this.entries.splice(this.entries.indexOf(entry), 1);
   }

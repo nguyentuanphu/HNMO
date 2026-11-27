@@ -30,6 +30,14 @@ test('the characters stand on the 3D stage; a click picks one, a double click en
   const slot = await page.evaluate(() => (window as unknown as Win).__game.characterStage?.selectedSlot ?? -1);
   expect(slots).toContain(slot);
   await expect(page.locator(`#characters .choice[data-slot="${slot}"]`)).toHaveClass(/selected/);
+  // Each character's name, level and class over it; the desktop's plates; the HNMO mark; no list box.
+  await expect(page.locator('.stage-label')).toHaveCount(slots.length);
+  await expect(page.locator(`.stage-label[data-slot="${slot}"]`)).toHaveClass(/picked/);
+  await expect(page.locator('.stage-label').first()).toContainText(/Lv \d+/);
+  await expect(page.locator('#stageBrand')).toHaveText('HNMO');
+  await expect(page.locator('#btn_create')).toBeVisible({ timeout: 30_000 });
+  await expect(page.locator('#btn_connect')).toBeVisible();
+  expect((await page.locator('#characters .choice').first().boundingBox())?.width ?? 0).toBeLessThanOrEqual(2);
   await page.waitForTimeout(1500);
   await page.screenshot({ path: 'test-results/character-stage.png' });
 
@@ -47,6 +55,48 @@ test('the characters stand on the 3D stage; a click picks one, a double click en
   expect(await page.evaluate(() => (window as unknown as Win).__game.characterStage ?? null)).toBeNull();
   await expect(page.locator('body.character-stage')).toHaveCount(0);
   expect(errors).toEqual([]);
+});
+
+test('a picked character is deleted after a yes and the account\'s code; a wrong code is refused', async ({ page }) => {
+  test.setTimeout(5 * 60_000);
+  await toCharacters(page, 'test6');
+  await expect(page.locator('body.character-stage')).toHaveCount(1, { timeout: 120_000 });
+  const create = page.locator('#characters .choice', { hasText: 'Create a character' });
+  test.skip(await create.count() === 0, 'test6 has five characters already');
+  // A character of this test only, so the others' characters stay.
+  const name = `Del${Date.now() % 1_000_000}`;
+  await create.click();
+  await page.fill('#newName', name);
+  await page.click('#createIt');
+  const button = page.locator('#characters .choice', { hasText: name });
+  await expect(button).toHaveCount(1, { timeout: 30_000 });
+  const slot = Number(await button.getAttribute('data-slot'));
+  await expect.poll(() => page.evaluate((s) => (window as unknown as Win).__game.characterStage?.slots.includes(s) ?? false, slot), { timeout: 60_000 }).toBe(true);
+
+  const pick = async () => {
+    await page.waitForTimeout(500);
+    const point = await page.evaluate((s) => (window as unknown as Win).__game.characterStage?.screenPointOf(s) ?? null, slot);
+    expect(point).not.toBeNull();
+    await page.mouse.click(point!.x, point!.y);
+    await expect(page.locator(`#characters .choice[data-slot="${slot}"]`)).toHaveClass(/selected/);
+  };
+  await pick();
+  await page.locator('#btn_delete').click();
+  await expect(page.locator('#deleteQuestion')).toContainText(name);
+  await page.click('#deleteYes');
+  await page.fill('#deleteCode', 'not-the-password');
+  await page.click('#deleteOk');
+  await expect(page.locator('#loginError')).toContainText(/wrong|không đúng/i, { timeout: 30_000 });
+  await expect(page.locator('#characters .choice', { hasText: name })).toHaveCount(1);
+
+  await pick();
+  await page.locator('#btn_delete').click();
+  await page.click('#deleteYes');
+  await page.fill('#deleteCode', 'test6');
+  await page.screenshot({ path: 'test-results/character-stage-delete.png' });
+  await page.click('#deleteOk');
+  await expect(page.locator('#characters .choice', { hasText: name })).toHaveCount(0, { timeout: 30_000 });
+  await expect.poll(() => page.evaluate((s) => (window as unknown as Win).__game.characterStage?.slots.includes(s) ?? true, slot), { timeout: 30_000 }).toBe(false);
 });
 
 test('the list buttons still enter at once, as every other spec does', async ({ page }) => {

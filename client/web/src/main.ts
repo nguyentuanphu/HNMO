@@ -80,7 +80,7 @@ import { BuffTracker, loadBuffData } from './game/buffs.js';
 import { BuffStrip } from './ui/buffStrip.js';
 import { MoveWindow } from './ui/moveWindow.js';
 import { loadWarps } from './game/warps.js';
-import { prepareDocument } from './ui/rml.js';
+import { prepareDocument, openDocument, type RmlDocument, type RmlModel } from './ui/rml.js';
 import { MapNameBanner } from './ui/mapNameBanner.js';
 import { GameSounds } from './game/gameSounds.js';
 import { Party, facingPlayer } from './game/party.js';
@@ -112,8 +112,8 @@ import { PersonalShop } from './ui/personalShop.js';
 import { CashShop } from './ui/cashShop.js';
 import { loginMusic } from './audio/index.js';
 import { audioSystem } from './audio/audioSystem.js';
-import { characterSelectedSound } from './audio/soundEvents.js';
-import { CharacterStage } from './scenes/characterStage.js';
+import { characterSelectedSound, interfaceClickSound } from './audio/soundEvents.js';
+import { CharacterStage, type StageCharacter } from './scenes/characterStage.js';
 import { AUTO_PLAY_DATA_LENGTH, decodeAutoPlayConfig, encodeAutoPlayConfig, initialAutoPlayConfig, type AutoPlayConfig } from './game/autoPlayConfig.js';
 import { AutoPlaySettingsWindow } from './ui/autoPlayWindows.js';
 import { maxDurability, repairCost } from './game/itemValue.js';
@@ -128,7 +128,7 @@ import { GroundItems } from './game/groundItems.js';
 import { ARROW_RELEASE_DELAY_SECONDS, DeathEffects, ProjectileLayer, arrowKindsForMonster, arrowKindsForWeapons, loadCombatEffectsData } from './game/combatEffects.js';
 import { parseSeason, seasonBadge, setSeason, type SeasonKey } from './dataRoot.js';
 import { chooseServerBySeason } from './ui/seasonColumns.js';
-import { type ServerListEntry, fetchServerList, fetchGameServerAddress, login, loginWithTicket, fetchCharacters, enterWorld, createCharacter, CLASSES } from './net/session.js';
+import { type ServerListEntry, fetchServerList, fetchGameServerAddress, login, loginWithTicket, fetchCharacters, enterWorld, createCharacter, deleteCharacter, CLASSES } from './net/session.js';
 import type { WorldData } from './world.js';
 import type { TerrainMesh } from './terrain.js';
 import type { Character } from './game/characters.js';
@@ -1126,16 +1126,64 @@ async function chooseCharacter(connection: Connection): Promise<CharacterListEnt
         if (choice && !('create' in choice)) {
           button.dataset.slot = String(choice.slot);
           button.addEventListener('mouseenter', () => stage?.select(choice.slot));
+        } else if (choice) {
+          button.dataset.create = '1';
         }
       });
-      const choice = await picked;
+      document.body.classList.remove('stage-dialog');
+      // Delete (char_sel_main's btn_delete): for the picked character, after a yes/no and the account's code.
+      let deleteRequested: (name: string) => void = () => {};
+      const deleting = new Promise<{ delete: string }>((resolve) => { deleteRequested = (name) => resolve({ delete: name }); });
+      const deleteRow = document.createElement('div');
+      deleteRow.className = 'buttons character-actions';
+      const deleteButton = document.createElement('button');
+      deleteButton.type = 'button';
+      deleteButton.id = 'deleteCharacter';
+      deleteButton.textContent = currentLanguage() === 'vi' ? 'Xóa nhân vật' : 'Delete character';
+      deleteButton.addEventListener('click', () => {
+        const slot = Number(ui.characters.querySelector<HTMLButtonElement>('button.choice.selected')?.dataset.slot ?? NaN);
+        const target = characters.find((c) => c.slot === slot);
+        if (target) deleteRequested(target.name);
+      });
+      const refreshDelete = () => { deleteButton.disabled = !ui.characters.querySelector('button.choice.selected'); };
+      refreshDelete();
+      const deleteWatch = new MutationObserver(refreshDelete);
+      deleteWatch.observe(ui.characters, { subtree: true, attributes: true, attributeFilter: ['class'] });
+      deleteRow.append(deleteButton);
+      ui.characters.append(deleteRow);
+      const pickedSlot = stage?.selectedSlot ?? null;
+      if (pickedSlot !== null) characterButton(pickedSlot)?.classList.add('selected');
+      refreshDelete();
+      stageRefresh?.();
+      const choice = await Promise.race([picked, deleting]);
+      deleteWatch.disconnect();
+      if ('delete' in choice) {
+        const code = await askDeleteCharacter(choice.delete);
+        if (code === null) continue;
+        try {
+          const outcome = await deleteCharacter(connection, choice.delete, code);
+          const vi = currentLanguage() === 'vi';
+          if (outcome === 'deleted') {
+            characters.splice(characters.findIndex((c) => c.name === choice.delete), 1);
+            void stage?.setCharacters(stageList(characters));
+            setStatus(vi ? `Đã xóa ${choice.delete}.` : `${choice.delete} was deleted.`, 1);
+          } else {
+            showError(new Error(outcome === 'wrongCode'
+              ? (vi ? 'Mã bảo vệ (hoặc mật khẩu) không đúng.' : 'The security code (or password) is wrong.')
+              : (vi ? `Không xóa được ${choice.delete} (ví dụ: đang ở trong bang hội).` : `${choice.delete} can't be deleted (for example while in a guild).`)));
+          }
+        } catch (error) {
+          showError(error);
+        }
+        continue;
+      }
       if (!('create' in choice)) return choice;
       const created = await askNewCharacter();
       if (!created) continue;
       try {
         const result = await createCharacter(connection, created.name, created.classIndex);
         characters.push({ slot: result.CharacterSlot, name: result.CharacterName || created.name, level: result.Level ?? 1, classIndex: created.classIndex, equipment: {} });
-        void stage?.setCharacters(characters);
+        void stage?.setCharacters(stageList(characters));
       } catch (error) {
         showError(error);
       }
@@ -1143,10 +1191,18 @@ async function chooseCharacter(connection: Connection): Promise<CharacterListEnt
   } finally {
     // Released before the world loads (the stage's world, models and listeners).
     stage?.dispose();
+    stageClose?.();
+    stageClose = null;
+    stageRefresh = null;
     characterStage = null;
     state.characterStage = null;
-    document.body.classList.remove('character-stage');
+    document.body.classList.remove('character-stage', 'stage-dialog');
   }
+}
+
+/** The list as the stage shows it: with the classes' names for the labels. */
+function stageList(characters: readonly CharacterListEntry[]): StageCharacter[] {
+  return characters.map((c) => ({ ...c, className: CLASSES[c.classIndex] }));
 }
 
 /** The character stage while the character choice shows (main loop: update). */
@@ -1162,35 +1218,87 @@ function characterButton(slot: number): HTMLButtonElement | null {
  * can't load, the plain list stays.
  */
 function openCharacterStage(characters: CharacterListEntry[]): CharacterStage | null {
+  // The labels over the characters and the discreet HNMO mark at the top (owner 2026-11-28).
+  const labels = document.createElement('div');
+  labels.id = 'stageLabels';
+  const brand = document.createElement('div');
+  brand.id = 'stageBrand';
+  brand.textContent = 'HNMO';
+  labels.append(brand);
+  document.body.append(labels);
+  // The desktop's char_sel_main window: Create, and Delete / OK once a character is picked (CharSelMainWin::UpdateDisplay).
+  let plates: RmlDocument | null = null;
+  const click = (kind: string) => { const sound = interfaceClickSound(kind); if (sound) audioSystem().play(sound); };
+  const model: RmlModel = {
+    create_disabled: false,
+    delete_disabled: true,
+    connect_disabled: true,
+    account_block_hidden: true,
+    create_label: currentLanguage() === 'vi' ? 'Tạo' : 'Create',
+    connect_label: currentLanguage() === 'vi' ? 'Vào game' : 'Connect',
+    delete_label: currentLanguage() === 'vi' ? 'Xóa' : 'Delete',
+    menu_label: 'Menu',
+    account_block_line1: '',
+    account_block_line2: '',
+    charsel_create_click: () => { if (model.create_disabled) return; click('menu'); ui.characters.querySelector<HTMLButtonElement>('button.choice[data-create]')?.click(); },
+    charsel_delete_click: () => { if (model.delete_disabled) return; click('menu'); document.querySelector<HTMLButtonElement>('#deleteCharacter')?.click(); },
+    charsel_connect_click: () => { const slot = stage.selectedSlot; if (slot === null) return; click('confirm'); characterButton(slot)?.click(); },
+    // The desktop opens its system menu (SysMenuWin: options, back, exit); the web game's is the settings window.
+    charsel_menu_click: () => { click('menu'); void gameOptionsWindow?.open(); },
+  };
+  const refreshPlates = () => {
+    const picked = stage.selectedSlot !== null && !ui.characters.hidden && !!ui.characters.querySelector('button.choice[data-slot]');
+    model.create_disabled = characters.length >= MAX_CHARACTERS;
+    model.delete_disabled = !picked;
+    model.connect_disabled = !picked;
+    plates?.update();
+  };
   const mark = (slot: number | null) => {
     ui.characters.querySelectorAll('button.choice.selected').forEach((b) => b.classList.remove('selected'));
     if (slot !== null) characterButton(slot)?.classList.add('selected');
+    refreshPlates();
   };
   const stage = new CharacterStage({
     root,
     camera,
     canvas: ui.canvas,
+    labelParent: labels,
     playSound: () => { const sound = characterSelectedSound(); if (sound) audioSystem().play(sound); },
-    onSelect: (slot) => mark(slot),
+    onSelectionChange: (slot) => mark(slot),
     onEnter: (slot) => characterButton(slot)?.click(),
   });
   characterStage = stage;
   state.characterStage = stage;
+  stageClose = () => { plates?.close(); plates = null; labels.remove(); };
+  stageRefresh = refreshPlates;
   stage.load()
-    .then(() => stage.setCharacters(characters))
-    .then(() => {
+    .then(() => stage.setCharacters(stageList(characters)))
+    .then(async () => {
       if (characterStage !== stage) return;
       document.body.classList.add('character-stage');
       resize();
       const first = characters[0];
-      if (first) { stage.select(first.slot); mark(first.slot); }
+      if (first) stage.select(first.slot);
+      plates = await openDocument('char_sel_main', model, { parent: document.body });
+      if (characterStage !== stage) { plates.close(); plates = null; return; }
+      plates.host.id = 'stagePlates';
+      // The desktop's CharSelMainWin lays the bar out across the window (its #panel spans it; Connect and Delete anchor
+      // to the right edge): here the panel gets the window's width.
+      const panel = plates.$('#panel');
+      if (panel) Object.assign(panel.style, { position: 'fixed', left: '0', right: '0', width: '100vw' });
+      refreshPlates();
     })
     .catch((error: unknown) => {
       console.warn('The character stage could not load; the plain list stays.', error);
-      if (characterStage === stage) { stage.dispose(); characterStage = null; }
+      if (characterStage === stage) { stage.dispose(); stageClose?.(); characterStage = null; document.body.classList.remove('character-stage'); }
     });
   return stage;
 }
+
+/** Puts the stage's window, labels and mark away (set while the stage is up). */
+let stageClose: (() => void) | null = null;
+/** The window's buttons follow the list (after a create or a delete). */
+let stageRefresh: (() => void) | null = null;
 
 // Enter on the character choice enters with the picked character (the desktop's CharacterScene).
 window.addEventListener('keydown', (event) => {
@@ -1202,7 +1310,43 @@ window.addEventListener('keydown', (event) => {
   characterButton(slot)?.click();
 });
 
+/**
+ * The desktop's two delete boxes (MESSAGE_DELETE_CHARACTER_CONFIRM, then MESSAGE_DELETE_CHARACTER_RESIDENT): a yes/no,
+ * then the account's security code (or its password when it has none). Null when cancelled.
+ */
+function askDeleteCharacter(name: string): Promise<string | null> {
+  document.body.classList.add('stage-dialog');
+  const vi = currentLanguage() === 'vi';
+  ui.characters.replaceChildren();
+  const form = document.createElement('div');
+  form.className = 'choices delete-character';
+  form.innerHTML = `
+    <p id="deleteQuestion" style="margin:0">${vi ? `Xóa <b>${escapeHtml(name)}</b>? Không thể hoàn tác.` : `Delete <b>${escapeHtml(name)}</b>? This can't be undone.`}</p>
+    <div class="buttons" id="deleteConfirmRow"><button type="button" class="primary" id="deleteYes">${vi ? 'Xóa' : 'Delete'}</button><button type="button" id="deleteNo">${vi ? 'Hủy' : 'Cancel'}</button></div>
+    <label class="row" id="deleteCodeRow" hidden><span>${vi ? 'Mã bảo vệ (hoặc mật khẩu tài khoản)' : 'Security code (or the account password)'}</span><input id="deleteCode" type="password" maxlength="20" autocomplete="off"></label>
+    <div class="buttons" id="deleteCodeButtons" hidden><button type="button" class="primary" id="deleteOk">OK</button><button type="button" id="deleteCancel">${vi ? 'Hủy' : 'Cancel'}</button></div>`;
+  ui.characters.append(form);
+  const $ = <T extends HTMLElement>(id: string) => form.querySelector<T>(`#${id}`)!;
+  return new Promise((resolve) => {
+    $('deleteNo').addEventListener('click', () => resolve(null), { once: true });
+    $('deleteCancel').addEventListener('click', () => resolve(null), { once: true });
+    $('deleteYes').addEventListener('click', () => {
+      $('deleteConfirmRow').hidden = true;
+      $('deleteCodeRow').hidden = false;
+      $('deleteCodeButtons').hidden = false;
+      $<HTMLInputElement>('deleteCode').focus();
+    }, { once: true });
+    const submit = () => {
+      const code = $<HTMLInputElement>('deleteCode').value;
+      if (code.length > 0) resolve(code);
+    };
+    $('deleteOk').addEventListener('click', submit);
+    $<HTMLInputElement>('deleteCode').addEventListener('keydown', (event) => { if (event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); submit(); } });
+  });
+}
+
 function askNewCharacter(): Promise<{ name: string; classIndex: number } | null> {
+  document.body.classList.add('stage-dialog');
   ui.characters.replaceChildren();
   const form = document.createElement('div');
   form.className = 'choices';

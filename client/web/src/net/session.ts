@@ -246,6 +246,19 @@ export async function createCharacter(connection: Connection, name: string, clas
   return result;
 }
 
+/** How a delete ended (CharacterDeleteResult). */
+export type CharacterDeleteOutcome = 'deleted' | 'wrongCode' | 'refused';
+
+// Deletes a character with the account's security code (the desktop's SendDeleteCharacter after its second password
+// box): F3 02 out, F3 02 CharacterDeleteResponse back.
+export async function deleteCharacter(connection: Connection, name: string, securityCode: string): Promise<CharacterDeleteOutcome> {
+  const answer = await connection.request<{ Result?: number | string }>('ClientToServer', 'DeleteCharacter', { Name: name, SecurityCode: securityCode }, 'ServerToClient', 'CharacterDeleteResponse');
+  const result = answer.Result;
+  if (result === 1 || result === 'Successful') return 'deleted';
+  if (result === 2 || result === 'WrongSecurityCode') return 'wrongCode';
+  return 'refused';
+}
+
 export async function enterWorld(connection: Connection, characterName: string): Promise<CharacterInformation> {
   const getBanNotice = attachBanNoticeWatcher(connection);
   try {
