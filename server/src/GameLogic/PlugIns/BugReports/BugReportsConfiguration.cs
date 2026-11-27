@@ -33,6 +33,18 @@ public sealed class BugReportsConfiguration
     /// <summary>Gets or sets a value indicating whether reports sent to the HNMO developer name the character.</summary>
     public bool ShareCharacterNames { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether the web client's automatic error reports are kept (admin panel, Bug reports,
+    /// Automatic). They go to this server's owner only.
+    /// </summary>
+    public bool AutomaticReports { get; set; } = true;
+
+    /// <summary>Gets or sets the automatic error reports one account may send in a Sydney day (more are dropped).</summary>
+    public int AutomaticDailyLimitPerAccount { get; set; } = 20;
+
+    /// <summary>Gets or sets the automatic error reports the server takes in a Sydney day (more are dropped).</summary>
+    public int AutomaticDailyLimitPerServer { get; set; } = 1000;
+
     /// <summary>Gets or sets the state file.</summary>
     public string FileName { get; set; } = HnmoStateStore.StateFileName;
 }

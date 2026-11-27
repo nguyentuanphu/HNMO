@@ -53,6 +53,7 @@ import { MarriageWindow } from './ui/marriageWindow.js';
 import { MarketWindow } from './ui/marketWindow.js';
 import { ArenaWindow, savedArenaHome, type ArenaHome } from './ui/arenaWindow.js';
 import { BugReportWindow, installErrorLog } from './ui/bugReportWindow.js';
+import { installAutoErrorReports, setAutoErrorSender } from './autoErrors.js';
 import { EscrowWindow } from './ui/escrowWindow.js';
 import { VaultPages } from './ui/vaultPages.js';
 import { ItemStacks } from './ui/itemStacks.js';
@@ -359,6 +360,7 @@ scene.add(root);
 
 const state: GameState = { world: null, hero: null, online: null, mapNumber: null, camera };
 installErrorLog();
+installAutoErrorReports();
 state.cooldowns = skillCooldowns;
 state.chat = chat;
 window.__game = state; // for automated tests and debugging from the console
@@ -1360,6 +1362,11 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     ? await loginWithTicket(settings.relay, address, settings.username, ticket)
     : await login(settings.relay, address, settings.username, settings.password);
   state.connection = connection; // tests feed recorded packets through it (dispatch)
+  // Automatic error reports (autoErrors.ts) go to the server's owner through this connection from now on.
+  setAutoErrorSender((json) => {
+    if (connection.closed) throw new Error('closed');
+    connection.send('ClientToServer', 'HnmoAutoErrorReport', { Json: json });
+  }, () => (state.mapNumber === null || state.mapNumber === undefined ? '' : `map ${state.mapNumber}`));
   const character = await chooseCharacter(connection);
   ui.characters.hidden = true;
   saveQuickPlay({ username: settings.username, column: columnOf(server), serverId: server.id, character: character.name });

@@ -6926,6 +6926,34 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoAutoErrorReport" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON: fingerprint, kind, message, stack (top lines), version, browser, os, device, map, gpu. Never the login, ticket, password or chat text.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client on its own when the page meets an error: an uncaught error, an unhandled promise rejection, a packet its handlers failed on, a lost WebGL context or an unexpected disconnect (each kind of error once per page load, at most 5 an hour per browser).
+    /// Causes reaction on server side: The server groups it by its fingerprint for the server's owner (admin panel, Bug reports, Automatic); no answer.
+    /// </remarks>
+    public static async ValueTask SendHnmoAutoErrorReportAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoAutoErrorReportRef.GetRequiredSize(json);
+            var packet = new HnmoAutoErrorReportRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="HnmoArenaTravelRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

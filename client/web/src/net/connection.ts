@@ -4,6 +4,7 @@
 
 import { read, write, packetCode } from './packets.js';
 import type { PacketValues } from './packets.js';
+import { reportAutoError } from '../autoErrors.js';
 
 /** Where the relay connects to. */
 export interface ServerAddress {
@@ -55,6 +56,8 @@ export class Connection {
       socket.onerror = () => reject(new Error(`Couldn't reach the relay at ${this.url.split('?')[0]}`));
       socket.onmessage = (event) => this.dispatch(new Uint8Array(event.data));
       socket.onclose = () => {
+        // The game closing it (close()) is expected; the server or the network closing it isn't.
+        if (!this.closed) reportAutoError('disconnect', 'The connection to the server was lost', '', 'connection', 0);
         this.closed = true;
         for (const waiter of this.waiters) waiter.reject(new Error('The server closed the connection.'));
         this.waiters = [];
@@ -67,7 +70,12 @@ export class Connection {
   dispatch(bytes: Uint8Array): void {
     // One handler's error mustn't keep the packet from the others.
     for (const handler of this.handlers) {
-      try { handler(bytes); } catch (error) { console.error('Packet handler failed', bytes[0].toString(16), bytes[2].toString(16), error); }
+      try { handler(bytes); } catch (error) {
+        console.error('Packet handler failed', bytes[0].toString(16), bytes[2].toString(16), error);
+        const { code } = packetCode(bytes);
+        const message = `Packet handler failed (${code.toString(16).toUpperCase()}): ${error instanceof Error ? error.message : String(error)}`;
+        reportAutoError('packet', message, error instanceof Error ? error.stack ?? '' : '');
+      }
     }
     const waiter = this.waiters.find((w) => w.matches(bytes));
     if (!waiter) {

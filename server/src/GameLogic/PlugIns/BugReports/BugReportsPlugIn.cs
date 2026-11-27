@@ -257,8 +257,11 @@ public sealed class BugReportsPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn
         return (true, null);
     }
 
-    /// <summary>The reports queued for the HNMO developer and not sent yet (the weekly report takes them), at most 50.</summary>
-    /// <returns>The hub's messages of the reports, with their ids.</returns>
+    /// <summary>
+    /// The reports and automatic error groups queued for the HNMO developer and not sent yet (the weekly report takes
+    /// them), at most 50 of each.
+    /// </summary>
+    /// <returns>The hub's messages, with their ids.</returns>
     public List<(string Id, System.Text.Json.Nodes.JsonObject Message)> QueuedForDeveloper()
     {
         var share = this.Settings.ShareCharacterNames;
@@ -266,11 +269,15 @@ public sealed class BugReportsPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn
             .Where(r => r.QueuedUtc is not null && r.ForwardedUtc is null)
             .Take(50)
             .Select(r => (r.Id, HubMessage(r, share)))
+            .Concat(data.AutoGroups
+                .Where(g => g.QueuedUtc is not null && g.ForwardedUtc is null)
+                .Take(50)
+                .Select(g => (g.Id, AutoErrorEngine.HubMessage(g, share, SydneyText))))
             .ToList());
     }
 
-    /// <summary>Marks queued reports as sent (the weekly report was taken).</summary>
-    /// <param name="ids">The reports.</param>
+    /// <summary>Marks queued reports and automatic error groups as sent (the weekly report was taken).</summary>
+    /// <param name="ids">The reports and groups.</param>
     public void MarkSentToDeveloper(IReadOnlyCollection<string> ids)
     {
         var now = DateTime.UtcNow;
@@ -283,8 +290,88 @@ public sealed class BugReportsPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn
                 changed = true;
             }
 
+            foreach (var group in data.AutoGroups.Where(g => ids.Contains(g.Id)))
+            {
+                group.ForwardedUtc = now;
+                changed = true;
+            }
+
             return (changed, true);
         });
+    }
+
+    /// <summary>
+    /// Keeps an automatic error report of the web client (HNMO extra; owner 2026-11-27: they go to this server's owner
+    /// only). The login is kept for the caps and the count of accounts only.
+    /// </summary>
+    /// <param name="player">The player.</param>
+    /// <param name="fingerprint">The fingerprint the client computed.</param>
+    /// <param name="sample">The report.</param>
+    /// <returns>What happened.</returns>
+    public AutoErrorEngine.Outcome SubmitAutomatic(Player player, string? fingerprint, AutoErrorSample sample)
+    {
+        ArgumentNullException.ThrowIfNull(sample);
+        if (player.Account?.LoginName is not { Length: > 0 } login)
+        {
+            return AutoErrorEngine.Outcome.Invalid;
+        }
+
+        sample.Character = player.SelectedCharacter?.Name ?? string.Empty;
+        if (player.CurrentMap is { } map)
+        {
+            // The server's name of the map, not the client's number.
+            sample.Map = map.Definition.Name.ValueInNeutralLanguage;
+        }
+
+        var settings = this.Settings;
+        var (outcome, group) = this.Store.Mutate(data =>
+        {
+            var result = AutoErrorEngine.Submit(data, login, fingerprint, sample, settings, DateTime.UtcNow, Sydney);
+            return (result.Group is not null, result);
+        });
+        if (outcome == AutoErrorEngine.Outcome.NewGroup && group is not null)
+        {
+            player.Logger.LogInformation("Automatic error report {Id} ({Kind}): {Message}", group.Id, group.Kind, group.Message);
+        }
+
+        return outcome;
+    }
+
+    /// <summary>The groups of automatic error reports, most reports first (admin panel).</summary>
+    /// <returns>The groups.</returns>
+    public List<AutoErrorGroup> AutoGroups() => this.Store.Read(AutoErrorEngine.ByCount);
+
+    /// <summary>Marks a group of automatic error reports fixed, ignored or open (admin panel).</summary>
+    /// <param name="id">The group.</param>
+    /// <param name="status">The status.</param>
+    /// <returns>Whether it was set.</returns>
+    public bool SetAutoStatus(string id, AutoErrorStatus status) =>
+        this.Store.Mutate(data =>
+        {
+            var group = AutoErrorEngine.SetStatus(data, id, status);
+            return (group is not null, group is not null);
+        });
+
+    /// <summary>
+    /// Puts a group of automatic error reports in the queue for the HNMO developer (admin panel): it goes with the
+    /// server's next weekly report, without any login or IP.
+    /// </summary>
+    /// <param name="id">The group.</param>
+    /// <returns>Whether it was queued, and an error.</returns>
+    public (bool Ok, string? Error) ForwardAuto(string id)
+    {
+        var (found, alreadyQueued) = this.Store.Mutate(data =>
+        {
+            var group = AutoErrorEngine.Find(data, id);
+            if (group is null || group.QueuedUtc is not null)
+            {
+                return (false, (group is not null, group is not null));
+            }
+
+            group.QueuedUtc = DateTime.UtcNow;
+            return (true, (true, false));
+        });
+        return !found ? (false, "There's no such error.") : alreadyQueued ? (false, "It is already waiting for the weekly report.") : (true, null);
     }
 
     /// <summary>All reports, newest first (admin panel).</summary>

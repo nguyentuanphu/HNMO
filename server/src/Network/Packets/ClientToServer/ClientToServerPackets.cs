@@ -22275,6 +22275,99 @@ public readonly struct HnmoBugReportCommand
 
 
 /// <summary>
+/// Is sent by the client when: Sent by the web client on its own when the page meets an error: an uncaught error, an unhandled promise rejection, a packet its handlers failed on, a lost WebGL context or an unexpected disconnect (each kind of error once per page load, at most 5 an hour per browser).
+/// Causes reaction on server side: The server groups it by its fingerprint for the server's owner (admin panel, Bug reports, Automatic); no answer.
+/// </summary>
+public readonly struct HnmoAutoErrorReport
+{
+    private readonly Memory<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoAutoErrorReport"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoAutoErrorReport(Memory<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoAutoErrorReport"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoAutoErrorReport(Memory<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (ushort)data.Length;
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC2;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x60;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C2HeaderWithSubCode Header => new (this._data);
+
+    /// <summary>
+    /// Gets or sets plain-ASCII JSON: fingerprint, kind, message, stack (top lines), version, browser, os, device, map, gpu. Never the login, ticket, password or chat text.
+    /// </summary>
+    public string Json
+    {
+        get => this._data.Span.ExtractString(5, this._data.Length - 5, System.Text.Encoding.UTF8);
+        set => this._data.Slice(5).Span.WriteString(value, System.Text.Encoding.UTF8);
+    }
+
+    /// <summary>
+    /// Performs an implicit conversion from a Memory of bytes to a <see cref="HnmoAutoErrorReport"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoAutoErrorReport(Memory<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoAutoErrorReport"/> to a Memory of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Memory<byte>(HnmoAutoErrorReport packet) => packet._data; 
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="content">The content of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(string content) => System.Text.Encoding.UTF8.GetByteCount(content) + 1 + 5;
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="contentLength">The content length in bytes of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(int contentLength) => contentLength + 1 + 5;
+}
+
+
+/// <summary>
 /// Is sent by the client when: Sent by the web client to ask about the HNMO Arena, or for a one-time ticket to travel to the Arena (or from the Arena back home).
 /// Causes reaction on server side: The server answers with HnmoArenaTravelState (F5 53).
 /// </summary>
