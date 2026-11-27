@@ -6,7 +6,7 @@
 //  - A whispers B through the whisper box;
 //  - then everything is undone: the letter deleted, the friend removed, B leaves the guild, A
 //    disbands it, both go back to Lorencia.
-// Creating a guild needs level 100 (the server's rule), so A is test300; B is test4.
+// Creating a guild needs level 100 (the server's rule), and joining a gens needs level 50, so A is test300; B is test5.
 import { test, expect, type Page } from '@playwright/test';
 import { joinDuprian } from './gensHelpers.js';
 import { enterWorld, expectNoPageErrors, screenPointOf } from './helpers.js';
@@ -57,12 +57,12 @@ test('guild, friends, a letter and a whisper between two players', async ({ brow
   const errors: string[] = [];
   for (const page of [a, b]) page.on('pageerror', (error) => errors.push(error.message));
   await enterWorld(a, 'test300');
-  await enterWorld(b, 'test4');
+  await enterWorld(b, 'test5');
   const nameA = await game(a, (g) => g.hero.name), nameB = await game(b, (g) => g.hero.name);
 
   // A clean start: no guild, not friends, no letter from A in B's box.
   await a.waitForTimeout(5_000); // the guild and the messenger arrive on entering
-  await leaveGuild(b, 'test4');
+  await leaveGuild(b, 'test5');
   // The server keeps a disbanded guild's master as a member until it enters the game again (its
   // GuildDeletedAsync forgets the guild's players before it lets them go): enter again.
   if (await leaveGuild(a, 'test300')) { await enterWorld(a, 'test300'); await a.waitForTimeout(5_000); }
@@ -202,7 +202,7 @@ test('guild, friends, a letter and a whisper between two players', async ({ brow
   await expect.poll(() => hasLetter(b, subject), { timeout: 60_000 }).toBe(false);
   await a.evaluate((name) => (window as unknown as Win).__game.social.messenger.deleteFriend(name), nameB);
   await expect.poll(() => game(a, (g) => g.social.messenger.friends.length), { timeout: 60_000 }).toBe(0);
-  await leaveGuild(b, 'test4');
+  await leaveGuild(b, 'test5');
   await leaveGuild(a, 'test300');
   for (const page of [a, b]) await page.evaluate(() => (window as unknown as Win).__game.online.say('/move lorencia'));
   await expect.poll(() => game(a, (g) => g.mapNumber), { timeout: 90_000 }).toBe(0);
