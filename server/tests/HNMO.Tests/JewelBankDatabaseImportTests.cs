@@ -133,7 +133,7 @@ public class JewelBankDatabaseImportTests
     }
 
     /// <summary>
-    /// The JSON state file moves from <c>server/</c> into the save folder (<see cref="HnmoSaveFolder"/>): what was
+    /// The JSON state file is taken from <c>server/</c> into the save folder (<see cref="HnmoSaveFolder"/>): what was
     /// imported before the move isn't imported again from the moved file, and nothing is credited twice.
     /// </summary>
     /// <returns>A task.</returns>
@@ -147,14 +147,14 @@ public class JewelBankDatabaseImportTests
         var configuration = player.GameContext.Configuration;
         var before = await JewelBankDatabaseImport.RunAsync(provider, configuration, plugIn.GetEngine().Store, dryRun: false).ConfigureAwait(false);
 
-        folder.MoveOldStateFiles("s6");
+        folder.MoveOldStateFiles("s6", DateTime.UtcNow);
         var moved = JewelBankStore.Open(HnmoStateStore.ResolveStateFilePath(HnmoStateStore.StateFileName, folder, "s6"));
         var after = await JewelBankDatabaseImport.RunAsync(provider, configuration, moved, dryRun: false).ConfigureAwait(false);
 
         var balances = await player.PersistenceContext.GetJewelBankBalancesAsync(this._aliceId).ConfigureAwait(false);
         Assert.Multiple(() =>
         {
-            Assert.That(File.Exists(oldFile), Is.False);
+            Assert.That(File.Exists(oldFile), Is.True, "the original stays for an older version");
             Assert.That(before.Imported, Has.Count.EqualTo(3));
             Assert.That(after.InputChecksum, Is.EqualTo(before.InputChecksum), "the moved file holds the same entries");
             Assert.That(after.Imported, Is.Empty);
@@ -176,7 +176,7 @@ public class JewelBankDatabaseImportTests
         var provider = player.GameContext.PersistenceContextProvider;
         var configuration = player.GameContext.Configuration;
 
-        folder.MoveOldStateFiles("s6");
+        folder.MoveOldStateFiles("s6", DateTime.UtcNow);
         var moved = JewelBankStore.Open(HnmoStateStore.ResolveStateFilePath(HnmoStateStore.StateFileName, folder, "s6"));
         var first = await JewelBankDatabaseImport.RunAsync(provider, configuration, moved, dryRun: false).ConfigureAwait(false);
         var second = await JewelBankDatabaseImport.RunAsync(provider, configuration, moved, dryRun: false).ConfigureAwait(false);

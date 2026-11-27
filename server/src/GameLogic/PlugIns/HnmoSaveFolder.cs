@@ -26,6 +26,9 @@ public sealed class HnmoSaveFolder
     /// <summary>The file name of the worlds list.</summary>
     public const string WorldsFileName = "hnmo-worlds.json";
 
+    /// <summary>The folder of the save folder the database log retention page exports old entries to.</summary>
+    public const string ArchivesDirectoryName = "archives";
+
     /// <summary>The name of the program's own (wrong) save folder, relative to the program folder.</summary>
     private const string ProgramSaveName = "save";
 
@@ -102,40 +105,77 @@ public sealed class HnmoSaveFolder
     }
 
     /// <summary>
-    /// Moves the state files an older version wrote into the program folders into the save folder, once: the
-    /// originals are copied to <c>save/old/&lt;program folder&gt;/</c> first, then removed, so a second run finds
-    /// nothing to do. When the save folder already has a file of that name, the sections of two state files are
-    /// merged (a section only the old file has is taken, a section both have keeps the save folder's); of any other
-    /// file the save folder's is kept.
+    /// Takes the state files an older version wrote into the program folders into the save folder, once. Each
+    /// original is copied to <c>save/old/&lt;program folder&gt;/</c> and then into the save folder: when the save folder
+    /// already has a file of that name, the sections of two state files are merged (a section only the old file has is
+    /// taken, a section both have keeps the save folder's); of any other file the save folder's is kept. The
+    /// originals stay where they are, so an older version started after a rollback still finds them, and a marker
+    /// (<c>save/old/server-moved.json</c>, one per season) makes sure a later start never takes them again.
     /// </summary>
     /// <remarks>
-    /// Each season's program moves only its own files (Season 6.3 the top level and the worlds list, Season 9 the
-    /// <c>s9</c> folders, the Arena the <c>arena</c> folders), so programs starting at the same time never move one file.
+    /// Each season's program takes only its own files (Season 6.3 the top level, the worlds list and the exported
+    /// database logs, Season 9 the <c>s9</c> folders, the Arena the <c>arena</c> folders), so programs starting at the
+    /// same time never write one file. When a file couldn't be taken, no marker is written and the next start tries
+    /// again; that repeats nothing, because a merge never replaces what the save folder has.
     /// </remarks>
     /// <param name="season">The season of this program (<see cref="HnmoSeasonInstance"/>).</param>
+    /// <param name="nowUtc">The time written into the marker.</param>
     /// <returns>What was done, one line per decision, for the log.</returns>
-    public IReadOnlyList<string> MoveOldStateFiles(string season)
+    public IReadOnlyList<string> MoveOldStateFiles(string season, DateTime nowUtc)
     {
         var log = new List<string>();
+        var marker = this.MarkerPath(season);
+        if (File.Exists(marker))
+        {
+            return log;
+        }
+
+        var taken = new List<MovedFile>();
+        var failed = false;
         foreach (var program in this.ProgramFolders)
         {
-            foreach (var (source, relative) in this.FindOldFiles(program, season))
+            foreach (var (source, relative, isArchive) in this.FindOldFiles(program, season))
             {
                 var target = Path.Combine(this.Directory, StripProgramSave(relative));
                 var oldCopy = Path.Combine(this.Directory, OldDirectoryName, Path.GetFileName(program), relative);
                 try
                 {
-                    this.MoveOne(source, target, oldCopy, log);
+                    if (isArchive)
+                    {
+                        CopyArchive(source, target, log);
+                    }
+                    else
+                    {
+                        this.TakeOne(source, target, oldCopy, log);
+                    }
+
+                    taken.Add(new MovedFile(source, target));
                 }
                 catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
                 {
-                    log.Add($"Couldn't move {source} to {target} ({ex.Message}); it stays where it is and is moved on the next start.");
+                    failed = true;
+                    log.Add($"Couldn't take {source} into {target} ({ex.Message}); the next start tries again.");
                 }
             }
         }
 
+        if (taken.Count == 0 || failed)
+        {
+            return log;
+        }
+
+        WriteMarker(marker, nowUtc, taken);
+        log.Add($"The copies in the server folder ({string.Join(", ", taken.Select(t => t.Source))}) are no longer used; they stay there for an older version. Marker: {marker}.");
         return log;
     }
+
+    /// <summary>Gets the marker file which says the program folders' files of a season were taken.</summary>
+    /// <param name="season">The season key.</param>
+    /// <returns>The marker's path.</returns>
+    public string MarkerPath(string season) => Path.Combine(
+        this.Directory,
+        OldDirectoryName,
+        season is HnmoSeasonInstance.SeasonNine or HnmoSeasonInstance.Arena ? $"server-moved-{season}.json" : "server-moved.json");
 
     private static HnmoSaveFolder CreateDefault()
     {
@@ -171,18 +211,36 @@ public sealed class HnmoSaveFolder
         File.Copy(source, oldCopy, overwrite: true);
     }
 
-    private static void RemoveWithBackup(string source, string oldCopy)
+    private static void CopyArchive(string source, string target, List<string> log)
     {
-        File.Delete(source);
-        var backup = source + ".bak";
-        if (File.Exists(backup))
+        if (File.Exists(target))
         {
-            File.Copy(backup, oldCopy + ".bak", overwrite: true);
-            File.Delete(backup);
+            log.Add($"Kept {target}; {source} has the same name.");
+            return;
         }
+
+        System.IO.Directory.CreateDirectory(Path.GetDirectoryName(target)!);
+        File.Copy(source, target);
+        log.Add($"Copied {source} to {target}.");
     }
 
-    private IEnumerable<(string Source, string Relative)> FindOldFiles(string program, string season)
+    private static void WriteMarker(string marker, DateTime nowUtc, List<MovedFile> taken)
+    {
+        var utc = DateTime.SpecifyKind(nowUtc, DateTimeKind.Utc);
+        var sydney = HnmoStateStore.ToTimeZone(utc, HnmoStateStore.ResolveTimeZone(null));
+        var document = new
+        {
+            movedAtUtc = utc.ToString("O", System.Globalization.CultureInfo.InvariantCulture),
+            movedAtSydney = sydney.ToString("yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture),
+            files = taken.Select(t => new { source = t.Source, target = t.Target }).ToArray(),
+        };
+        System.IO.Directory.CreateDirectory(Path.GetDirectoryName(marker)!);
+        var temp = marker + ".tmp";
+        File.WriteAllText(temp, System.Text.Json.JsonSerializer.Serialize(document, new System.Text.Json.JsonSerializerOptions { WriteIndented = true }));
+        File.Move(temp, marker, overwrite: true);
+    }
+
+    private IEnumerable<(string Source, string Relative, bool IsArchive)> FindOldFiles(string program, string season)
     {
         var secondary = season is HnmoSeasonInstance.SeasonNine or HnmoSeasonInstance.Arena;
         string[] programFolderFiles = secondary
@@ -193,7 +251,7 @@ public sealed class HnmoSaveFolder
             var source = Path.Combine(program, relative);
             if (File.Exists(source))
             {
-                yield return (source, relative);
+                yield return (source, relative, false);
             }
         }
 
@@ -211,19 +269,30 @@ public sealed class HnmoSaveFolder
 
         foreach (var source in System.IO.Directory.GetFiles(folder, "*.json", SearchOption.TopDirectoryOnly).Order(StringComparer.Ordinal))
         {
-            yield return (source, Path.GetRelativePath(program, source));
+            yield return (source, Path.GetRelativePath(program, source), false);
+        }
+
+        // The database logs the retention page exported (Season 6.3's page only).
+        var archives = Path.Combine(programSave, ArchivesDirectoryName);
+        if (secondary || !System.IO.Directory.Exists(archives))
+        {
+            yield break;
+        }
+
+        foreach (var source in System.IO.Directory.GetFiles(archives, "*", SearchOption.TopDirectoryOnly).Order(StringComparer.Ordinal))
+        {
+            yield return (source, Path.GetRelativePath(program, source), true);
         }
     }
 
-    private void MoveOne(string source, string target, string oldCopy, List<string> log)
+    private void TakeOne(string source, string target, string oldCopy, List<string> log)
     {
         CopyToOld(source, oldCopy);
         if (!File.Exists(target))
         {
             System.IO.Directory.CreateDirectory(Path.GetDirectoryName(target)!);
             File.Copy(source, target);
-            RemoveWithBackup(source, oldCopy);
-            log.Add($"Moved {source} to {target} (original copied to {oldCopy}).");
+            log.Add($"Copied {source} to {target} (and to {oldCopy}).");
             return;
         }
 
@@ -231,7 +300,6 @@ public sealed class HnmoSaveFolder
         var targetSections = HnmoStateStore.TryReadSections(target);
         if (sourceSections is null || targetSections is null)
         {
-            RemoveWithBackup(source, oldCopy);
             log.Add($"Kept {target}; {source} is not a state file to merge, so it was only copied to {oldCopy}.");
             return;
         }
@@ -251,7 +319,8 @@ public sealed class HnmoSaveFolder
             }
         }
 
-        RemoveWithBackup(source, oldCopy);
-        log.Add($"Merged {source} into {target} (original copied to {oldCopy}).");
+        log.Add($"Merged {source} into {target} (and copied it to {oldCopy}).");
     }
+
+    private sealed record MovedFile(string Source, string Target);
 }

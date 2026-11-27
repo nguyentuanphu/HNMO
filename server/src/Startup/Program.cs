@@ -217,13 +217,14 @@ internal sealed class Program : IDisposable
     }
 
     /// <summary>
-    /// Moves the state files older versions wrote into the server folder (<c>server/hnmo-state.json</c>,
-    /// <c>server/save/…</c>, the worlds list) into the package's <c>save</c> folder, once, before any plug-in opens them.
+    /// Takes the state files older versions wrote into the server folder (<c>server/hnmo-state.json</c>,
+    /// <c>server/save/…</c>, the worlds list, exported database logs) into the package's <c>save</c> folder, once,
+    /// before any plug-in opens them. The originals stay for an older version (rollback).
     /// </summary>
     private void MoveOldStateFiles()
     {
         var saveFolder = HnmoSaveFolder.Default;
-        foreach (var line in saveFolder.MoveOldStateFiles(HnmoSeasonInstance.Current))
+        foreach (var line in saveFolder.MoveOldStateFiles(HnmoSeasonInstance.Current, DateTime.UtcNow))
         {
             this._logger.Information("HNMO save folder: {Line}", line);
         }
