@@ -22,4 +22,6 @@ mềm lọc mạng/VPN một lần rồi chạy self-check pipe để xác nhậ
 liệu, CSV và script; PR desktop merge hết (#420, #432 đã merge; phần desktop của #441 giữ); đóng PR cũ sau khi kiểm
 tra (#401, #402, #403, #409, #13, #17 đã đóng); chat đổi kích thước được.
 
-Còn hỏi anh: #399 (kế hoạch dữ liệu S9, 1 file tài liệu) chưa có ở đâu khác: merge vào nhánh làm việc hay đóng?
+#399: anh chọn merge (đã merge 504fa615). 19:55: 618-621 là phép event/siege như S9 gốc (không vào cây Master);
+gói /download vẫn công khai (lớp 1 chỉ khóa tự cập nhật; hub#6 đã merge 22b6f50f). Antigravity hết usage: việc
+còn lại giao local Claude (docs/local-claude-prompt-2026-11-27-2000.md).
