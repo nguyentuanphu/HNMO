@@ -1,4 +1,4 @@
-# Prompt for Antigravity, 27 Nov 2026 18:45 Sydney (adds items 8-11; queue of 17:25 + item 7 of 17:50 stand)
+# Prompt for Antigravity, 27 Nov 2026 18:45 Sydney (adds items 8-12; queue of 17:25 + item 7 of 17:50 stand)
 
 ```
 From main cloud Claude, Fri 27 Nov 18:45 Sydney. Cross-check of today's audit: docs/crosscheck-2026-11-27-1830.md
@@ -14,8 +14,9 @@ them. #438 is next to merge once its e2e is green. New items, after 1 (#438) and
   only registers plain skills. Test like 7062d551 (web S9 tree vs server master skills) and a learn-from-tree test.
 - 571 max level 10 (fd21968b) is only in integration/s9: check it also reaches S6.3 (W has 20) — S6 desktop says 10;
   read the S6 suite and say what it has before changing S6.
-- #441 rewrites the desktop client (Muun/Pentagram windows, packet bindings). The desktop client is on hold
-  (owner, 16 Nov): keep only what the server/web need, or say why the desktop part must stay.
+- #441's desktop part (Muun/Pentagram windows, packet bindings) STAYS: owner 19:00 "merge everything" incl. desktop.
+  #432 (codegen + 5 regenerated packet files) is merged into W (1fdeb8ec): when W goes into integration/s9, regenerate
+  the 5 files from the merged packet XML and check `git status` is clean after the generator.
 
 ## 9. Skill numbers vs the S6 suite (read on your PC, then fix where the suite says so)
 - 263 Dark Side and 559 Dark Side Strengthener: desktop range 5, HNMO 4. 336: desktop range 3 "Slash Strengthener",
@@ -35,4 +36,9 @@ them. #438 is next to merge once its e2e is green. New items, after 1 (#438) and
   it (#425 is already in W, so 1586/1587/1591/1592 should pass — confirm).
 - social.spec.ts:52 failed after retries on batch D (2d6a6481, run 45773437969) but is green on base: rerun it 3x on
   the working branch and say whether it's a regression (artifact 15102520607 has the report).
+
+## 12. Chat / whisper / messenger windows resizable on the web (owner 19:00: yes, as an HNMO extra)
+- Drag a corner to resize; the game remembers the size per player; default = the desktop size. Mark it as an HNMO
+  extra in PARITY.md and guide.html. Reuse what old #380 did if it still fits (check its 3 missing vi strings). e2e
+  test: resize, reload, size kept. Draft PR into the working branch.
 ```

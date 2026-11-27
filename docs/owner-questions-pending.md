@@ -1,4 +1,4 @@
-# Câu hỏi chờ chủ dự án (cập nhật 27 Nov 2026, 17:50 giờ Sydney)
+# Câu hỏi chờ chủ dự án (cập nhật 27 Nov 2026, 19:10 giờ Sydney)
 
 Đã trả lời (ghi trong `docs/owner-decisions.md`): thứ tự lô merge, PR cũ, hub #2, Q1-Q13, Arena Home (#381), app Mac
 không công chứng; tối 26/11: khóa M cho người PK, phí warp PK, túi zen mỗi trang rương, Gens mặc định, bỏ Season Plan
@@ -11,8 +11,15 @@ Còn chờ anh:
 1. Gộp nhánh làm việc vào `main` và phát hành 1.0.1: anh đã nói "Chờ anh báo".
 2. Luật PK: anh đã chọn (27/11 17:45) "chơi S6 thì luật S6, chơi S9 thì luật S9". Antigravity làm
    (`docs/antigravity-prompt-2026-11-27-1750.md`, mục 7); em review và merge.
-3. Cửa sổ chat/messenger đổi kích thước: còn chờ anh chọn.
+3. Cửa sổ chat/messenger: anh chọn (27/11 19:00) cho kéo đổi kích thước, ghi là tính năng thêm (Antigravity mục 12).
 
 Việc của riêng anh: chạy thật trên Mac Intel, Mac Apple Silicon, Ubuntu/Debian x64 và ARM64; xóa nhánh
 `audit-full-2026-11-23`; sau khi merge vào `main` thì xóa `archives/MUVIETNAM2` khỏi lịch sử git; nếu tiện, tắt phần
 mềm lọc mạng/VPN một lần rồi chạy self-check pipe để xác nhận nguyên nhân (#406: máy Windows sạch của GitHub đã xanh).
+
+Đã trả lời tối 27/11 (popup): luật PK theo từng season; số kỹ năng theo bộ server khi khác client desktop; 263/559/336
+đối chiếu bộ server trước; PK Arena: trong event không phạt, ngoài event phạt theo S6 (đã đúng); #431 merge cả tài
+liệu, CSV và script; PR desktop merge hết (#420, #432 đã merge; phần desktop của #441 giữ); đóng PR cũ sau khi kiểm
+tra (#401, #402, #403, #409, #13, #17 đã đóng); chat đổi kích thước được.
+
+Còn hỏi anh: #399 (kế hoạch dữ liệu S9, 1 file tài liệu) chưa có ở đâu khác: merge vào nhánh làm việc hay đóng?
