@@ -1,0 +1,72 @@
+<?xml version='1.0'?>
+<Obfuscator>
+  <Var name="InPath" value="__IN_PATH__" />
+  <Var name="OutPath" value="__OUT_PATH__" />
+  <Var name="KeepPublicApi" value="true" />
+  <Var name="HidePrivateApi" value="true" />
+  <Var name="RenameProperties" value="true" />
+  <Var name="RenameEvents" value="true" />
+  <Var name="RenameFields" value="true" />
+  <Var name="HideStrings" value="false" />
+  <Var name="UseUnicodeNames" value="false" />
+  <Var name="ReuseNames" value="true" />
+  <Var name="OptimizeMethods" value="true" />
+  <Var name="XmlMapping" value="false" />
+  <Var name="SuppressIldasm" value="false" />
+
+__SEARCH_PATHS__
+
+  <Module file="$(InPath)\HNMO.Persistence.dll">
+    <SkipNamespace name="HNMO.Persistence.BasicModel*" />
+    <SkipNamespace name="HNMO.Persistence.EntityFramework*" />
+    <SkipNamespace name="HNMO.Persistence.Json*" />
+    <SkipNamespace name="HNMO.Persistence.AdminAuth*" />
+    <SkipNamespace name="HNMO.Persistence.Worlds*" />
+    <SkipType name="*AnonymousType*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*Migration*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*Model*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*Snapshot*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*Configuration*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*Options*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*Entry*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*Request*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*Summary*" skipMethods="true" skipProperties="true" skipFields="true" />
+  </Module>
+
+  <Module file="$(InPath)\HNMO.Startup.dll">
+    <SkipNamespace name="AspNetCoreGeneratedDocument*" />
+    <SkipNamespace name="HNMO.Startup.TestActors*" />
+    <SkipType name="*AnonymousType*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="Program" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*_Imports*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*Component*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*Page*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*Layout*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*Routes*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*PlugIn*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*Configuration*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*Options*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*HostSettings*" skipMethods="true" skipProperties="true" skipFields="true" />
+  </Module>
+
+  <Module file="$(InPath)\HNMO.GameLogic.dll">
+    <SkipNamespace name="HNMO.GameLogic.PlayerActions*" />
+    <SkipNamespace name="HNMO.GameLogic.Views*" />
+    <SkipNamespace name="HNMO.GameLogic.PlugIns.AnimationCounters*" />
+    <SkipType name="*AnonymousType*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*PlugIn*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*Writer*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*Configuration*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*Config*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*Strategy*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*Handler*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*Action*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*StoreData*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*Record*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*Entry*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*Snapshot*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*Report*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="*State*" skipMethods="true" skipProperties="true" skipFields="true" />
+    <SkipType name="DeveloperHubRequest" skipMethods="true" skipProperties="true" skipFields="true" />
+  </Module>
+</Obfuscator>
