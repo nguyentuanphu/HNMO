@@ -27,3 +27,18 @@ Audited all 30 files (5,412 lines): `AccountExtensions`, `AttackableExtensions`,
    - Lightning knockback (`MoveRandomlyAsync`) and `ElementalModifierTarget` resist probability `1 / (resistance + 1)` with `>= 255` immunity (`lines 445-468`).
    - `DefaultDropGenerator` handles `ExtraRolls` item multipliers without inflating Zen (`lines 130-154`).
    - `DroppedMoney.TryPickUpByAsync` releases `_availableToPick` lock flag if no party member has inventory room (`lines 89-99`).
+
+## Re-check 2026-11-27 (changes 8cb8539b..a108e846)
+
+Commits read (every changed file read in full):
+
+- c5a7c888 Merge origin/fix/bless-potion-siege-only into the integration branch
+- 7a58c00b Potion of Bless: raise the damage only against Castle Siege gates and statues
+- 49b959ac fix(gamelogic): fix Fenrir skill check order, spawn gate, drop stack lock, and storage rollback
+
+Evidence:
+
+- AttackableExtensions: Potion of Bless x1.2 only when the defender is a CastleSiegeGate/CastleSiegeStatue (effect 10 = MagicEffectNumber.PotionOfBless) - same as the owner decision of 26 Nov (Q10) - fixed.
+- AttackableExtensions: isSummonerSkill is now set only after a skill is known; a summoner's basic attack no longer counts as a curse skill - fixed (bug of the earlier code).
+- CharacterInitialization: new characters spawn at ExitGate.GetRandomPoint() (inclusive bounds) instead of Rand.NextInt(X1,X2) which never reached X2/Y2 - fixed.
+- DroppedItem: the bound-to-character and owner-time checks now run before the stack path, so a non-owner can no longer stack-pick an owned drop; partial and complete stacking re-check the target under lock(target) with CanPartiallyStackOn / CanCompletelyStackOn - fixed (race and ownership bypass).

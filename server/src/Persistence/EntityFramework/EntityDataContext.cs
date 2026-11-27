@@ -76,6 +76,16 @@ public class EntityDataContext : ExtendedTypeContext
     internal DbSet<CashShopCoinGrant> CashShopCoinGrants => this.Set<CashShopCoinGrant>();
 
     /// <summary>
+    /// Gets the Jewel Bank balances of the accounts.
+    /// </summary>
+    internal DbSet<JewelBankBalance> JewelBankBalances => this.Set<JewelBankBalance>();
+
+    /// <summary>
+    /// Gets the receipts of the operations on the assets of the accounts.
+    /// </summary>
+    internal DbSet<AssetOperation> AssetOperations => this.Set<AssetOperation>();
+
+    /// <summary>
     /// Gets the links of the accounts to users of external services.
     /// </summary>
     internal DbSet<AccountExternalLink> AccountExternalLinks => this.Set<AccountExternalLink>();
@@ -142,6 +152,8 @@ public class EntityDataContext : ExtendedTypeContext
         modelBuilder.Entity<CashShopPackage>().Apply();
         modelBuilder.Entity<CashShopStorageItem>().Apply();
         modelBuilder.Entity<CashShopCoinGrant>().Apply();
+        modelBuilder.Entity<JewelBankBalance>().Apply();
+        modelBuilder.Entity<AssetOperation>().Apply();
         modelBuilder.Entity<AccountExternalLink>().Apply();
         modelBuilder.Entity<GuildChatBinding>().Apply();
         modelBuilder.Entity<DropItemGroup>().Apply();

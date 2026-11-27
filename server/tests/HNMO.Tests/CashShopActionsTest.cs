@@ -736,7 +736,7 @@ public class CashShopActionsTest
         /// <inheritdoc />
         protected override object? Invoke(MethodInfo? targetMethod, object?[]? args)
         {
-            if (targetMethod!.Name == nameof(IContext.SaveChangesAsync) && this._saveFails())
+            if (targetMethod!.Name is nameof(IContext.SaveChangesAsync) or nameof(IPlayerContext.SaveChangesWithAssetOperationAsync) && this._saveFails())
             {
                 throw new InvalidOperationException("The save failed.");
             }

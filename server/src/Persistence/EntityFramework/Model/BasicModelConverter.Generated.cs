@@ -54,6 +54,7 @@ internal sealed class BasicModelConverter
             AccountExternalLink value => this.Convert(value),
             AppearanceData value => this.Convert(value),
             AreaSkillSettings value => this.Convert(value),
+            AssetOperation value => this.Convert(value),
             AttributeDefinition value => this.Convert(value),
             AttributeRelationship value => this.Convert(value),
             AttributeRequirement value => this.Convert(value),
@@ -122,6 +123,7 @@ internal sealed class BasicModelConverter
             ItemStatProfile value => this.Convert(value),
             ItemStatTerms value => this.Convert(value),
             ItemStorage value => this.Convert(value),
+            JewelBankBalance value => this.Convert(value),
             JewelMix value => this.Convert(value),
             LetterBody value => this.Convert(value),
             LetterHeader value => this.Convert(value),
@@ -312,6 +314,27 @@ internal sealed class BasicModelConverter
         target.HitChancePerDistanceMultiplier = source.HitChancePerDistanceMultiplier;
         target.ProjectileCount = source.ProjectileCount;
         target.EffectRange = source.EffectRange;
+        return target;
+    }
+
+    private BasicModel.AssetOperation Convert(AssetOperation source)
+    {
+        if (this._converted.TryGetValue(source, out var converted))
+        {
+            return (BasicModel.AssetOperation)converted;
+        }
+
+        var target = new BasicModel.AssetOperation();
+        this._converted.Add(source, target);
+        target.Id = source.Id;
+        target.AccountId = source.AccountId;
+        target.Kind = source.Kind;
+        target.PayloadHash = source.PayloadHash;
+        target.Detail = source.Detail;
+        target.PendingKey = source.PendingKey;
+        target.PendingCount = source.PendingCount;
+        target.Source = source.Source;
+        target.CreatedAt = source.CreatedAt;
         return target;
     }
 
@@ -2419,6 +2442,22 @@ internal sealed class BasicModelConverter
         }
 
         target.Money = source.Money;
+        return target;
+    }
+
+    private BasicModel.JewelBankBalance Convert(JewelBankBalance source)
+    {
+        if (this._converted.TryGetValue(source, out var converted))
+        {
+            return (BasicModel.JewelBankBalance)converted;
+        }
+
+        var target = new BasicModel.JewelBankBalance();
+        this._converted.Add(source, target);
+        target.Id = source.Id;
+        target.AccountId = source.AccountId;
+        target.JewelKey = source.JewelKey;
+        target.Count = source.Count;
         return target;
     }
 

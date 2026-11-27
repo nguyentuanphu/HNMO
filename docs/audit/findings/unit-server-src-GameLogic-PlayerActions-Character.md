@@ -21,3 +21,13 @@
    - If `current` already exceeds `maximumValue` (for example from a GM adjustment or lowered cap), `maximumValue - current` is negative. Casting a negative `float` directly to `(ushort)` in unchecked C# wraps to a huge positive value (~`65535`), bypassing the `if (amount == 0)` guard on line 49 and adding wrapped stat points if `LevelUpPoints` allows. Should guard `if (current >= maximumValue)` first (`amount = 0`).
 2. **Observation — `AddMasterPointAction.cs:53-65`**:
    - Does not explicitly reject characters who are not master-class yet (`MasterLevelUpPoints < 1` on line 30 prevents spending unless points were somehow granted via GM/reset).
+
+## Re-check 2026-11-27 (changes 4c299903..a108e846)
+
+Commits read (every changed file read in full):
+
+- 64d84e45 fix(gamelogic): guard IncreaseStatsAction against ushort underflow above stat cap
+
+Evidence:
+
+- IncreaseStatsAction: a stat already above its maximum gives 0 points instead of a ushort underflow (65535) - fixed.

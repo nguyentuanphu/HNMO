@@ -461,6 +461,18 @@ namespace HNMO.Persistence.Initialization.Properties {
         /// <summary>Gets the localized FixChaosMixesPlugInBase_Description text.</summary>
         public static string FixChaosMixesPlugInBase_Description => ResourceManager.GetString("FixChaosMixesPlugInBase_Description", resourceCulture)!;
 
+        /// <summary>Gets the localized BlessPotionSiegeOnlyUpdatePlugIn_Name text.</summary>
+        public static string BlessPotionSiegeOnlyUpdatePlugIn_Name => ResourceManager.GetString("BlessPotionSiegeOnlyUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized BlessPotionSiegeOnlyUpdatePlugIn_Description text.</summary>
+        public static string BlessPotionSiegeOnlyUpdatePlugIn_Description => ResourceManager.GetString("BlessPotionSiegeOnlyUpdatePlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized AuditDataFixesUpdatePlugIn_Name text.</summary>
+        public static string AuditDataFixesUpdatePlugIn_Name => ResourceManager.GetString("AuditDataFixesUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized AuditDataFixesUpdatePlugIn_Description text.</summary>
+        public static string AuditDataFixesUpdatePlugIn_Description => ResourceManager.GetString("AuditDataFixesUpdatePlugIn_Description", resourceCulture)!;
+
         /// <summary>Gets the localized FixDamageAbsorbItemsUpdatePlugIn_Name text.</summary>
         public static string FixDamageAbsorbItemsUpdatePlugIn_Name => ResourceManager.GetString("FixDamageAbsorbItemsUpdatePlugIn_Name", resourceCulture)!;
 

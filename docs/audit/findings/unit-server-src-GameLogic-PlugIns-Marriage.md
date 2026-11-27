@@ -15,3 +15,13 @@
    - When both plugins are active, `MountChainPlugIn.ApplyActiveBuffAsync` (`line 330`) disposes effect `242` (removing the marriage couple buff), and every 15s `MarriagePlugIn.RefreshCoupleBonusAsync` overwrites `MountChainPlugIn`'s aura effect `242` with the 2-minute couple buff.
 2. **Stale Buff Window — `MarriagePlugIn.cs:504-507`**:
    - When spouses separate (leave party or change maps), `RefreshCoupleBonusAsync` returns early without disposing existing buff `242`, leaving the couple buff active for up to 2 minutes until `BuffDuration` expires.
+
+## Re-check 2026-11-27 (changes ba8c04f4..a108e846)
+
+Commits read (every changed file read in full):
+
+- 478f9cf3 fix(plugins): fix stack deposits/consumption, receipt rollback, buff id collision, and partypass
+
+Evidence:
+
+- MarriagePlugIn: buff effect number 241 (was 242, the MountChain buff); 240 Guilds, 242 MountChain, 243 Talismans - no collision left. The couple buff is removed when the couple bonus no longer applies - fixed.

@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- A crash test of the asset operations against a real PostgreSQL database; run by hand with run.sh, not by CI. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <NoWarn>$(NoWarn);SA0001;CS1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Persistence\Initialization\HNMO.Persistence.Initialization.csproj" />
+    <ProjectReference Include="..\..\src\Persistence\EntityFramework\HNMO.Persistence.EntityFramework.csproj" />
+  </ItemGroup>
+</Project>

@@ -62,6 +62,7 @@ public static class AdminOperationsExtensions
         services.AddScoped<BankTopUpService>();
         services.AddScoped<CastleSiegeManagementService>();
         services.AddScoped<MaintenanceToolsOperations>();
+        services.AddScoped<JewelBankOperations>();
         services.AddScoped<EconomyDashboardOperations>();
         services.AddScoped<EventRewardsOperations>();
         services.AddScoped<ServerSettingsOperations>();

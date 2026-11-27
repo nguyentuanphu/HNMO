@@ -25,3 +25,17 @@
 
 1. **`main.ts:1885-1891` (`outlaw: false` in `MoveWindow`)**: Client hardcodes `outlaw: false` instead of wiring the hero's PK level, so Murderer characters see locked maps as movable in the `M` list before the server rejects the warp. (Logged for Part 9 Item 3 bug fix.)
 2. **`main.ts:1936-1978`**: Base bag check inspects slots `12..75` only (does not count extended inventory slots `76..203`).
+
+## Re-check 2026-11-27 (changes 8cb8539b..a108e846)
+
+Commits read (every changed file read in full):
+
+- 719d4380 Trade OK and vault zen boxes are bound to their trade, offer and vault page
+- 53eaa8fe Merge PR #378 into the working branch
+- 98f231d4 fix(client): fix buff value time assignment, outlaw warp check, and extended bag space check
+- be1d1b3e fix(web): trade zen in-game prompt and clean Alt name-tag toggle (Part 9 Item 1)
+
+Evidence:
+
+- main.ts: Alt alone toggles all name boxes (not in Chaos Castle), held Alt shows them; inputs are ignored - same as the owner's Part 9 item 1.
+- main.ts: the outlaw flag of the move window comes from the hero state (HeroStateChanged for the own id), the move window refreshes on stat changes; "bag full" counts the free cells of the bag and the unlocked extensions - fixed.

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "8cb8539b",
+  "generatedAt": "a108e846",
   "maxLines": 6000,
   "units": [
     {
@@ -40,12 +40,12 @@
         "server/src/GameLogic/FeaturePlugInContainer.cs"
       ],
       "files": 32,
-      "lines": 5541,
+      "lines": 5594,
       "status": "Checked",
-      "checkedAt": "8cb8539b",
-      "checkedOn": "2026-11-25",
-      "references": "docs/audit/references/combat-drops-exp-s6-s9.md",
-      "evidence": "docs/audit/findings/unit-server-src-GameLogic-files-1.md",
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "docs/audit/references/combat-drops-exp-s6-s9.md; docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-files-1.md (re-check 2026-11-27, changes to a108e846)",
       "prs": ""
     },
     {
@@ -146,13 +146,13 @@
         "server/src/GameLogic/PathFinderPoolingPolicy.cs"
       ],
       "files": 25,
-      "lines": 4133,
+      "lines": 4140,
       "status": "Checked",
-      "checkedAt": "9321d2af",
-      "checkedOn": "2026-11-24",
-      "references": "Season 6/9 server suites; docs/audit/findings/owner-answers-monsters-2026-11-21.md",
-      "evidence": "All 25 files read (4133 lines): docs/audit/findings/unit-server-src-GameLogic-files-3.md; ref: docs/audit/references/party-exp-and-pk.md",
-      "prs": ""
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "Season 6/9 server suites; docs/audit/findings/owner-answers-monsters-2026-11-21.md; docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-files-3.md (re-check 2026-11-27, changes to a108e846)",
+      "prs": "#418"
     },
     {
       "id": "server/src/GameLogic (files 4)",
@@ -181,13 +181,13 @@
         "server/src/GameLogic/SkillDelays.cs"
       ],
       "files": 21,
-      "lines": 5954,
+      "lines": 5993,
       "status": "Checked",
-      "checkedAt": "8cb8539b",
-      "checkedOn": "2026-11-25",
-      "references": "Season 6/9 server suites; docs/audit/findings/owner-answers-monsters-2026-11-21.md",
-      "evidence": "All 21 files read (5948 lines): docs/audit/findings/unit-server-src-GameLogic-files-4.md; ref: docs/audit/references/skill-delays-and-player-lifecycle.md",
-      "prs": ""
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "Season 6/9 server suites; docs/audit/findings/owner-answers-monsters-2026-11-21.md; docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-files-4.md (re-check 2026-11-27, changes to a108e846)",
+      "prs": "#400, #407"
     },
     {
       "id": "server/src/GameLogic (files 5)",
@@ -208,12 +208,12 @@
         "server/src/GameLogic/WalkingStepsExtensions.cs"
       ],
       "files": 13,
-      "lines": 2372,
+      "lines": 2386,
       "status": "Checked",
-      "checkedAt": "96a69cae",
-      "checkedOn": "2026-11-24",
-      "references": "Core game logic rules (Storage, SkillList, SkillHitValidator, SoccerGameMap, Walker)",
-      "evidence": "docs/audit/findings/unit-server-src-GameLogic-files-5.md",
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "Core game logic rules (Storage, SkillList, SkillHitValidator, SoccerGameMap, Walker); docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-files-5.md (re-check 2026-11-27, changes to a108e846)",
       "prs": ""
     },
     {
@@ -748,12 +748,12 @@
         "server/src/GameLogic/PlayerActions/Character"
       ],
       "files": 8,
-      "lines": 598,
+      "lines": 600,
       "status": "Checked",
-      "checkedAt": "4c299903",
-      "checkedOn": "2026-11-24",
-      "references": "docs/audit/references/common-server-and-character-rules-s6-s9.md",
-      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Character.md",
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "docs/audit/references/common-server-and-character-rules-s6-s9.md; docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Character.md (re-check 2026-11-27, changes to a108e846)",
       "prs": ""
     },
     {
@@ -963,12 +963,12 @@
         "server/src/GameLogic/PlayerActions/Quests"
       ],
       "files": 8,
-      "lines": 627,
+      "lines": 658,
       "status": "Checked",
-      "checkedAt": "8cb8539b",
-      "checkedOn": "2026-11-25",
-      "references": "S6/S9 ClassQuest.xml, Quest_Define.lua, Quest_Info.lua, CommonServer.cfg (docs/audit/references/quests-and-class-progression-s6-s9.md)",
-      "evidence": "Read all 8 files in full; see docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Quests.md (GensAttribution not implemented; no prerequisite-quest check beyond LastFinishedQuest).",
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "S6/S9 ClassQuest.xml, Quest_Define.lua, Quest_Info.lua, CommonServer.cfg (docs/audit/references/quests-and-class-progression-s6-s9.md); docs/owner-decisions.md; needs suite check (owner PC)",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlayerActions-Quests.md (re-check 2026-11-27, changes to a108e846)",
       "prs": ""
     },
     {
@@ -1289,10 +1289,10 @@
       "files": 5,
       "lines": 572,
       "status": "Checked",
-      "checkedAt": "8b9574d1",
-      "checkedOn": "2026-11-24",
-      "references": "docs/audit/references/common-server-and-character-rules-s6-s9.md",
-      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-AntiCheat.md",
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "docs/audit/references/common-server-and-character-rules-s6-s9.md; docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-AntiCheat.md (re-check 2026-11-27, changes to a108e846)",
       "prs": ""
     },
     {
@@ -1564,13 +1564,13 @@
         "server/src/GameLogic/PlugIns/CombiningLeftovers"
       ],
       "files": 11,
-      "lines": 1252,
+      "lines": 1342,
       "status": "Checked",
-      "checkedAt": "8e98a00d",
-      "checkedOn": "2026-11-24",
-      "references": "",
-      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-CombiningLeftovers.md",
-      "prs": ""
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-CombiningLeftovers.md (re-check 2026-11-27, changes to a108e846)",
+      "prs": "#423"
     },
     {
       "id": "server/src/GameLogic/PlugIns/Community",
@@ -1630,10 +1630,10 @@
       "files": 10,
       "lines": 807,
       "status": "Checked",
-      "checkedAt": "8cb8539b",
-      "checkedOn": "2026-11-25",
-      "references": "",
-      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-Economy.md",
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-Economy.md (re-check 2026-11-27, changes to a108e846)",
       "prs": ""
     },
     {
@@ -1801,12 +1801,12 @@
         "server/src/GameLogic/PlugIns/ItemMarket"
       ],
       "files": 12,
-      "lines": 1700,
+      "lines": 1701,
       "status": "Checked",
-      "checkedAt": "2af1fa59",
-      "checkedOn": "2026-11-24",
-      "references": "",
-      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-ItemMarket.md",
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-ItemMarket.md (re-check 2026-11-27, changes to a108e846)",
       "prs": ""
     },
     {
@@ -1833,12 +1833,12 @@
         "server/src/GameLogic/PlugIns/ItemStacks"
       ],
       "files": 4,
-      "lines": 494,
+      "lines": 495,
       "status": "Checked",
-      "checkedAt": "cf8c32b8",
-      "checkedOn": "2026-11-24",
-      "references": "",
-      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-ItemStacks.md",
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-ItemStacks.md (re-check 2026-11-27, changes to a108e846)",
       "prs": ""
     },
     {
@@ -1848,13 +1848,13 @@
         "server/src/GameLogic/PlugIns/JewelBank"
       ],
       "files": 11,
-      "lines": 1238,
+      "lines": 1304,
       "status": "Checked",
-      "checkedAt": "8e98a00d",
-      "checkedOn": "2026-11-24",
-      "references": "",
-      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-JewelBank.md",
-      "prs": ""
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-JewelBank.md (re-check 2026-11-27, changes to a108e846)",
+      "prs": "#423"
     },
     {
       "id": "server/src/GameLogic/PlugIns/LuckyNumber",
@@ -1880,12 +1880,12 @@
         "server/src/GameLogic/PlugIns/Marriage"
       ],
       "files": 10,
-      "lines": 1461,
+      "lines": 1466,
       "status": "Checked",
-      "checkedAt": "ba8c04f4",
-      "checkedOn": "2026-11-24",
-      "references": "",
-      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-Marriage.md",
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-Marriage.md (re-check 2026-11-27, changes to a108e846)",
       "prs": ""
     },
     {
@@ -2004,12 +2004,12 @@
         "server/src/GameLogic/PlugIns/PartyOptions"
       ],
       "files": 8,
-      "lines": 908,
+      "lines": 909,
       "status": "Checked",
-      "checkedAt": "cf8c32b8",
-      "checkedOn": "2026-11-24",
-      "references": "docs/audit/references/common-server-and-character-rules-s6-s9.md",
-      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-PartyOptions.md",
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "docs/audit/references/common-server-and-character-rules-s6-s9.md; docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-PartyOptions.md (re-check 2026-11-27, changes to a108e846)",
       "prs": ""
     },
     {
@@ -2098,12 +2098,12 @@
         "server/src/GameLogic/PlugIns/SeasonPlan"
       ],
       "files": 7,
-      "lines": 789,
+      "lines": 792,
       "status": "Checked",
-      "checkedAt": "8b9574d1",
-      "checkedOn": "2026-11-24",
-      "references": "",
-      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-SeasonPlan.md",
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-SeasonPlan.md (re-check 2026-11-27, changes to a108e846)",
       "prs": ""
     },
     {
@@ -2143,14 +2143,12 @@
         "server/src/GameLogic/PlugIns/Timetable"
       ],
       "files": 12,
-      "lines": 1303,
+      "lines": 1275,
       "status": "Checked",
-      "checkedAt": "8cb8539b",
-      "checkedOn": "2026-11-25",
-      "references": [
-        "None (custom HNMO feature)"
-      ],
-      "evidence": "All 12 Timetable files read in full. Verified DST-aware schedule resolution, source collection, ASCII-escaped JSON serialization, and locked winner history. See docs/audit/findings/unit-server-src-GameLogic-PlugIns-Timetable.md.",
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "None (custom HNMO feature); docs/owner-decisions.md; needs suite check (owner PC)",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-PlugIns-Timetable.md (re-check 2026-11-27, changes to a108e846)",
       "prs": ""
     },
     {
@@ -2301,13 +2299,13 @@
         "server/src/GameLogic/Seasons"
       ],
       "files": 1,
-      "lines": 105,
+      "lines": 180,
       "status": "Checked",
-      "checkedAt": "4c299903",
-      "checkedOn": "2026-11-24",
-      "references": "",
-      "evidence": "docs/audit/findings/unit-server-src-GameLogic-Seasons.md",
-      "prs": ""
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-server-src-GameLogic-Seasons.md (re-check 2026-11-27, changes to a108e846)",
+      "prs": "#393, #407"
     },
     {
       "id": "server/src/GameLogic/ServerImporter",
@@ -3727,17 +3725,12 @@
         "server/src/Persistence/Initialization/Skills"
       ],
       "files": 42,
-      "lines": 4109,
+      "lines": 4104,
       "status": "Checked",
-      "checkedAt": "9f72bccd",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "the Season 6 suite's RegularSkillCalc.lua, MasterSkillCalc.lua, SkillList.xml & BuffEffectManager.xml",
-        "the Season 9 suite's RegularSkillCalc.lua",
-        "docs/audit/data/diff-client-tables.txt",
-        "docs/audit/findings/unit-server-src-Persistence-Initialization-Skills.md"
-      ],
-      "evidence": "Audited all 42 files (4109 lines): docs/audit/findings/unit-server-src-Persistence-Initialization-Skills.md",
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "the Season 6 suite's RegularSkillCalc.lua, MasterSkillCalc.lua, SkillList.xml & BuffEffectManager.xml; the Season 9 suite's RegularSkillCalc.lua; docs/audit/data/diff-client-tables.txt; docs/audit/findings/unit-server-src-Persistence-Initialization-Skills.md; docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-server-src-Persistence-Initialization-Skills.md (re-check 2026-11-27, changes to a108e846)",
       "prs": "#222, #246, #248, #249, #261, #263, #264, #265"
     },
     {
@@ -3854,6 +3847,11 @@
         "server/src/Persistence/Initialization/Updates/AdjustIceArrowFreezeDurationUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/ArenaGuardShopUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/ArenaTitlesUpdatePlugIn.cs",
+        "server/src/Persistence/Initialization/Updates/AuditDataFixesUpdatePlugIn075.cs",
+        "server/src/Persistence/Initialization/Updates/AuditDataFixesUpdatePlugIn095d.cs",
+        "server/src/Persistence/Initialization/Updates/AuditDataFixesUpdatePlugInBase.cs",
+        "server/src/Persistence/Initialization/Updates/AuditDataFixesUpdatePlugInSeason6.cs",
+        "server/src/Persistence/Initialization/Updates/BlessPotionSiegeOnlyUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/BloodCastleDurationUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/ChainLightningUpdatePlugIn.cs",
         "server/src/Persistence/Initialization/Updates/ChaosCastleDataUpdatePlugIn.cs",
@@ -3897,18 +3895,14 @@
         "server/src/Persistence/Initialization/Updates/FixCharStatsForceWavePlugInBase.cs",
         "server/src/Persistence/Initialization/Updates/FixCharStatsForceWavePlugInSeason6.cs"
       ],
-      "files": 48,
-      "lines": 5724,
+      "files": 53,
+      "lines": 5964,
       "status": "Checked",
-      "checkedAt": "668ecbd4",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "the Season 6 suite's BloodCastle.ini, DevilSquare.ini, CommonServer.cfg, MonsterSetBase.txt & MoveReq_eng.bmd",
-        "the Season 9 suite's RegularSkillCalc.lua",
-        "docs/audit/findings/unit-server-src-Persistence-Initialization-Updates-files-2.md"
-      ],
-      "evidence": "Audited all 48 files (5724 lines): docs/audit/findings/unit-server-src-Persistence-Initialization-Updates-files-2.md",
-      "prs": ""
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "the Season 6 suite's BloodCastle.ini, DevilSquare.ini, CommonServer.cfg, MonsterSetBase.txt & MoveReq_eng.bmd; the Season 9 suite's RegularSkillCalc.lua; docs/audit/findings/unit-server-src-Persistence-Initialization-Updates-files-2.md; docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-server-src-Persistence-Initialization-Updates-files-2.md (re-check 2026-11-27, changes to a108e846)",
+      "prs": "audit follow-ups 27 Nov"
     },
     {
       "id": "server/src/Persistence/Initialization/Updates (files 3)",
@@ -4150,16 +4144,11 @@
       "files": 9,
       "lines": 1386,
       "status": "Checked",
-      "checkedAt": "6df27858",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "the Season 6/9 suites' item list files",
-        "the Season 6/9 suites' monster list files",
-        "the Season 6/9 suites' warp table file",
-        "docs/audit/findings/unit-server-src-Persistence-Initialization-Version075-files-1.md"
-      ],
-      "evidence": "Read all 9 files (1386 lines) in Version075 (files 1); found Hanzo shop slot 73 collision and Mace item index bug: docs/audit/findings/unit-server-src-Persistence-Initialization-Version075-files-1.md",
-      "prs": ""
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "the Season 6/9 suites' item list files; the Season 6/9 suites' monster list files; the Season 6/9 suites' warp table file; docs/audit/findings/unit-server-src-Persistence-Initialization-Version075-files-1.md; docs/owner-decisions.md; needs suite check (owner PC)",
+      "evidence": "docs/audit/findings/unit-server-src-Persistence-Initialization-Version075-files-1.md (re-check 2026-11-27, changes to a108e846)",
+      "prs": "audit follow-ups 27 Nov"
     },
     {
       "id": "server/src/Persistence/Initialization/Version075/Items",
@@ -4275,11 +4264,11 @@
       "files": 11,
       "lines": 5487,
       "status": "Checked",
-      "checkedAt": "8ef6758f",
-      "checkedOn": "2026-11-24",
-      "references": "S6/S9 ChaosBox.ini, GateSettings.xml, MoveReq.xml, ShopList.xml, Shops/*.xml, diff-{mixes,gates,shops,monsters}.txt",
-      "evidence": "All 11 files read (5487 lines): docs/audit/findings/unit-server-src-Persistence-Initialization-VersionSeasonSix-files-1.md",
-      "prs": "#192, #223, #240, #250"
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "S6/S9 ChaosBox.ini, GateSettings.xml, MoveReq.xml, ShopList.xml, Shops/*.xml, diff-{mixes,gates,shops,monsters}.txt; docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-server-src-Persistence-Initialization-VersionSeasonSix-files-1.md (re-check 2026-11-27, changes to a108e846)",
+      "prs": "#192, #223, #240, #250, audit follow-ups 27 Nov"
     },
     {
       "id": "server/src/Persistence/Initialization/VersionSeasonSix (files 2)",
@@ -4346,13 +4335,13 @@
         "server/src/Persistence/Initialization/VersionSeasonSix/Items/PackedJewels.cs"
       ],
       "files": 19,
-      "lines": 5964,
+      "lines": 5966,
       "status": "Checked",
-      "checkedAt": "49a5970d",
-      "checkedOn": "2026-11-24",
-      "references": "S6/S9 ItemList.xml, ExcellentOptions.xml, HarmonyItemOption.ini, ItemSetOption.xml",
-      "evidence": "All 19 files read (5964 lines): docs/audit/findings/unit-server-src-Persistence-Initialization-VersionSeasonSix-Items-files-1.md; ref: docs/audit/references/item-options-380-harmony-cashshop.md",
-      "prs": "#218, #242, #252, #258"
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "S6/S9 ItemList.xml, ExcellentOptions.xml, HarmonyItemOption.ini, ItemSetOption.xml; docs/owner-decisions.md; needs suite check (owner PC)",
+      "evidence": "docs/audit/findings/unit-server-src-Persistence-Initialization-VersionSeasonSix-Items-files-1.md (re-check 2026-11-27, changes to a108e846)",
+      "prs": "#218, #242, #252, #258, audit follow-ups 27 Nov"
     },
     {
       "id": "server/src/Persistence/Initialization/VersionSeasonSix/Items (files 2)",
@@ -4503,17 +4492,12 @@
         "server/src/Persistence/Initialization/VersionSeasonSix/TestAccounts"
       ],
       "files": 14,
-      "lines": 2079,
+      "lines": 2078,
       "status": "Checked",
-      "checkedAt": "0b4249a7",
-      "checkedOn": "2026-11-24",
-      "references": [
-        "the Season 6/9 suites' item list files",
-        "the Season 6/9 suites' ancient set type files",
-        "the Season 6/9 suites' class quest config files",
-        "docs/audit/findings/unit-server-src-Persistence-Initialization-VersionSeasonSix-TestAccounts.md"
-      ],
-      "evidence": "Read all 14 files (2079 lines) in VersionSeasonSix/TestAccounts; found GameMaster PendantSlot collision and verified item/set/quest IDs: docs/audit/findings/unit-server-src-Persistence-Initialization-VersionSeasonSix-TestAccounts.md",
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "the Season 6/9 suites' item list files; the Season 6/9 suites' ancient set type files; the Season 6/9 suites' class quest config files; docs/audit/findings/unit-server-src-Persistence-Initialization-VersionSeasonSix-TestAccounts.md; docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-server-src-Persistence-Initialization-VersionSeasonSix-TestAccounts.md (re-check 2026-11-27, changes to a108e846)",
       "prs": ""
     },
     {
@@ -4875,11 +4859,13 @@
         "client/web/src/accountGiftBox.ts",
         "client/web/src/accountIntegrations.ts",
         "client/web/src/accountMissions.ts",
+        "client/web/src/accountMobileNavigation.ts",
         "client/web/src/accountPage.ts",
         "client/web/src/accountPageTexts.ts",
         "client/web/src/accountPassword.ts",
         "client/web/src/accountRegistration.ts",
         "client/web/src/accountSections.ts",
+        "client/web/src/accountStoredItemHistory.ts",
         "client/web/src/accountTrackerPrivacy.ts",
         "client/web/src/accountVip.ts",
         "client/web/src/bmd.ts",
@@ -4892,10 +4878,11 @@
         "client/web/src/gameName.ts",
         "client/web/src/giftBoxTexts.ts",
         "client/web/src/giftCodeIdentity.ts",
-        "client/web/src/i18n.ts"
+        "client/web/src/i18n.ts",
+        "client/web/src/itemHistoryTimeline.ts"
       ],
-      "files": 22,
-      "lines": 3818,
+      "files": 25,
+      "lines": 4015,
       "status": "No game rules",
       "checkedAt": "ddb470bb",
       "checkedOn": "2026-11-24",
@@ -4923,12 +4910,12 @@
         "client/web/src/vipTexts.ts"
       ],
       "files": 9,
-      "lines": 5169,
+      "lines": 5189,
       "status": "Checked",
-      "checkedAt": "8cb8539b",
-      "checkedOn": "2026-11-25",
-      "references": "docs/audit/findings/unit-client-web-src-files-2.md",
-      "evidence": "8f/4,955L: Checked: main.ts char create/CC sparkle/repair NPCs/Friend lv6/MoveWindow outlaw:false bug/bag space/duel blocks; modulusCipher/terrain/vietqr have no rules -> unit-client-web-src-files-2.md.",
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "docs/audit/findings/unit-client-web-src-files-2.md; docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-client-web-src-files-2.md (re-check 2026-11-27, changes to a108e846)",
       "prs": ""
     },
     {
@@ -4961,7 +4948,7 @@
         "client/web/src/world.ts"
       ],
       "files": 24,
-      "lines": 5793,
+      "lines": 5807,
       "status": "No game rules",
       "checkedAt": "92489ee6",
       "checkedOn": "2026-11-24",
@@ -5041,18 +5028,12 @@
         "client/web/src/game/chatExtras.ts"
       ],
       "files": 12,
-      "lines": 5492,
+      "lines": 5587,
       "status": "Checked",
-      "checkedAt": "8cb8539b",
-      "checkedOn": "2026-11-25",
-      "references": [
-        "autoPlay.ts:16-23,588-713",
-        "autoPlayConfig.ts:70-77",
-        "autoPlayExtras.ts:51-67",
-        "characterCalc.ts:95-247",
-        "docs/audit/findings/unit-client-web-src-game-files-1.md"
-      ],
-      "evidence": "12f/5492L: MUHelper defaults (hunting 6, obtain 8, away 10s, heal 60%, potion 40%, durability repair 50%) & characterCalc damage/durability/equip rules match desktop; autoPlayExtras Free/VIP gating is HNMO custom.",
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "autoPlay.ts:16-23,588-713; autoPlayConfig.ts:70-77; autoPlayExtras.ts:51-67; characterCalc.ts:95-247; docs/audit/findings/unit-client-web-src-game-files-1.md; docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-client-web-src-game-files-1.md (re-check 2026-11-27, changes to a108e846)",
       "prs": ""
     },
     {
@@ -5074,17 +5055,12 @@
         "client/web/src/game/guild.ts"
       ],
       "files": 13,
-      "lines": 5977,
+      "lines": 5992,
       "status": "Checked",
-      "checkedAt": "8cb8539b",
-      "checkedOn": "2026-11-25",
-      "references": [
-        "crywolf.ts:19-61",
-        "combat.ts:28-30",
-        "duel.ts:276",
-        "docs/audit/findings/unit-client-web-src-game-files-2.md"
-      ],
-      "evidence": "13f/5968L: Crywolf map 34, >350 Elf altar contract, 10% monster reduction & 5% mix reduction match desktop GMCrywolf1st; combat/duel packet flags match.",
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "crywolf.ts:19-61; combat.ts:28-30; duel.ts:276; docs/audit/findings/unit-client-web-src-game-files-2.md; docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-client-web-src-game-files-2.md (re-check 2026-11-27, changes to a108e846)",
       "prs": ""
     },
     {
@@ -5102,18 +5078,12 @@
         "client/web/src/game/kalima.ts"
       ],
       "files": 9,
-      "lines": 5120,
+      "lines": 5138,
       "status": "Checked",
-      "checkedAt": "8cb8539b",
-      "checkedOn": "2026-11-25",
-      "references": [
-        "kalima.ts:16-85",
-        "itemTooltip.ts:49-100",
-        "itemValue.ts:213-250",
-        "instanceEvents.ts:24-78",
-        "docs/audit/findings/unit-client-web-src-game-files-3.md"
-      ],
-      "evidence": "9f/5120L: Kalima levels [40,131,181,231,281,331,350] / MG-DL-RF [20..350] & 5 Symbols match desktop GMHellas; itemValue/tooltip match ZzzInfomation/ZzzInventory.",
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "kalima.ts:16-85; itemTooltip.ts:49-100; itemValue.ts:213-250; instanceEvents.ts:24-78; docs/audit/findings/unit-client-web-src-game-files-3.md; docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-client-web-src-game-files-3.md (re-check 2026-11-27, changes to a108e846)",
       "prs": ""
     },
     {
@@ -5168,18 +5138,12 @@
         "client/web/src/game/warps.ts"
       ],
       "files": 12,
-      "lines": 3201,
+      "lines": 3216,
       "status": "Checked",
-      "checkedAt": "8cb8539b",
-      "checkedOn": "2026-11-25",
-      "references": [
-        "warps.ts:41-55",
-        "quests.ts:37,47-54",
-        "skills.ts:12-85",
-        "resets.ts:13-96",
-        "docs/audit/findings/unit-client-web-src-game-files-5.md"
-      ],
-      "evidence": "12f/3201L: MG/DL/RF 2/3 warp level (non-400), Icarus/Atlans mount rules & 10 active quest cap match desktop; resets.ts & skills 700..727 are HNMO custom.",
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "warps.ts:41-55; quests.ts:37,47-54; skills.ts:12-85; resets.ts:13-96; docs/audit/findings/unit-client-web-src-game-files-5.md; docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-client-web-src-game-files-5.md (re-check 2026-11-27, changes to a108e846)",
       "prs": ""
     },
     {
@@ -5295,18 +5259,13 @@
         "client/web/src/ui/combatOverlay.ts"
       ],
       "files": 14,
-      "lines": 5907,
+      "lines": 5923,
       "status": "Checked",
-      "checkedAt": "8cb8539b",
-      "checkedOn": "2026-11-25",
-      "references": [
-        "autoPlayWindows.ts:24-95",
-        "addStatsWindow.ts",
-        "arenaWindow.ts",
-        "docs/audit/findings/unit-client-web-src-ui-files-1.md"
-      ],
-      "evidence": "17f/5970L: autoPlayWindows enforces desktop MuHelper UI bounds (Hunting 6, Obtaining 8, 6 slots, Gauge max 10, class features) & edits staged copy.",
-      "prs": ""
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "autoPlayWindows.ts:24-95; addStatsWindow.ts; arenaWindow.ts; docs/audit/findings/unit-client-web-src-ui-files-1.md; docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-client-web-src-ui-files-1.md (re-check 2026-11-27, changes to a108e846)",
+      "prs": "#398"
     },
     {
       "id": "client/web/src/ui (files 2)",
@@ -5332,13 +5291,13 @@
         "client/web/src/ui/guildLevelsWindow.ts"
       ],
       "files": 18,
-      "lines": 5648,
+      "lines": 5774,
       "status": "Checked",
-      "checkedAt": "8cb8539b",
-      "checkedOn": "2026-11-25",
-      "references": "docs/audit/findings/unit-client-web-src-ui-files-2.md",
-      "evidence": "18f: Checked: commandWindow 2-tile check, escrowWindow fee math, event/fieldEvent ticket guards, friend letter cap, gens toggle -> unit-client-web-src-ui-files-2.md.",
-      "prs": ""
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "docs/audit/findings/unit-client-web-src-ui-files-2.md; docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-client-web-src-ui-files-2.md (re-check 2026-11-27, changes to a108e846)",
+      "prs": "#415"
     },
     {
       "id": "client/web/src/ui (files 3)",
@@ -5365,13 +5324,13 @@
         "client/web/src/ui/marriageWindow.ts"
       ],
       "files": 19,
-      "lines": 5756,
+      "lines": 5772,
       "status": "Checked",
-      "checkedAt": "8cb8539b",
-      "checkedOn": "2026-11-25",
-      "references": "docs/audit/findings/unit-client-web-src-ui-files-3.md",
-      "evidence": "19f: Checked: guildWindows member formula/create checks, itemStacks split 1..dur-1, itemWindows equip slots/4 bag extensions, jewelBank 1..50, marriage limits -> unit-client-web-src-ui-files-3.md.",
-      "prs": ""
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "docs/audit/findings/unit-client-web-src-ui-files-3.md; docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-client-web-src-ui-files-3.md (re-check 2026-11-27, changes to a108e846)",
+      "prs": "#410, #414"
     },
     {
       "id": "client/web/src/ui (files 4)",
@@ -5396,12 +5355,12 @@
         "client/web/src/ui/perfReportWindow.ts"
       ],
       "files": 17,
-      "lines": 5737,
+      "lines": 5781,
       "status": "Checked",
-      "checkedAt": "8cb8539b",
-      "checkedOn": "2026-11-25",
-      "references": "docs/audit/findings/unit-client-web-src-ui-files-4.md",
-      "evidence": "17f: Checked: masterLevel prereqs, mixWindow tax/pre-mix checks, moveWindow Strife map 42, partyWindow kick gate -> unit-client-web-src-ui-files-4.md.",
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "docs/audit/findings/unit-client-web-src-ui-files-4.md; docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-client-web-src-ui-files-4.md (re-check 2026-11-27, changes to a108e846)",
       "prs": ""
     },
     {
@@ -5445,13 +5404,13 @@
         "client/web/src/ui/worldBossWindow.ts"
       ],
       "files": 5,
-      "lines": 1136,
+      "lines": 1164,
       "status": "Checked",
-      "checkedAt": "8cb8539b",
-      "checkedOn": "2026-11-25",
-      "references": "docs/audit/findings/unit-client-web-src-ui-files-6.md",
-      "evidence": "5f/1,136L: Checked: tradeWindow lv6/6s wait/bans/scam check & vaultPages unlock gate -> unit-client-web-src-ui-files-6.md.",
-      "prs": ""
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "docs/audit/findings/unit-client-web-src-ui-files-6.md; docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-client-web-src-ui-files-6.md (re-check 2026-11-27, changes to a108e846)",
+      "prs": "#410, #414"
     },
     {
       "id": "client/web/bridge (files 1)",
@@ -5476,13 +5435,13 @@
         "client/web/bridge/Website.cs"
       ],
       "files": 17,
-      "lines": 5938,
+      "lines": 5993,
       "status": "Checked",
-      "checkedAt": "8cb8539b",
-      "checkedOn": "2026-11-25",
-      "references": "docs/audit/findings/unit-client-web-bridge-files-1.md",
-      "evidence": "17f/5,938L: Checked: AccountGuessGuard (10 failures/15m->15m lock), VisitorLimits (6 conns/IP, 30/min, 60 pkt/s, 200 burst) & body bounds -> unit-client-web-bridge-files-1.md.",
-      "prs": ""
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "docs/audit/findings/unit-client-web-bridge-files-1.md; docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-client-web-bridge-files-1.md (re-check 2026-11-27, changes to a108e846)",
+      "prs": "#383, #395"
     },
     {
       "id": "client/web/bridge (files 2)",
@@ -6984,10 +6943,10 @@
       "files": 10,
       "lines": 1006,
       "status": "Checked",
-      "checkedAt": "8cb8539b",
-      "checkedOn": "2026-11-25",
-      "references": "docs/audit/findings/unit-client-src-source-GameLogic-Buffs.md",
-      "evidence": "10f/1,006L: Checked: w_Buff.cpp mutual-exclusion buff groups; BUG in w_BuffStateValueControl.cpp:60-61 overwriting s_Value2 instead of s_Time -> unit-client-src-source-GameLogic-Buffs.md.",
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "docs/audit/findings/unit-client-src-source-GameLogic-Buffs.md; docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-client-src-source-GameLogic-Buffs.md (re-check 2026-11-27, changes to a108e846)",
       "prs": ""
     },
     {
@@ -8987,8 +8946,8 @@
       "paths": [
         "server/src/Web"
       ],
-      "files": 845,
-      "lines": 98622,
+      "files": 847,
+      "lines": 98971,
       "status": "No game rules",
       "checkedAt": "",
       "checkedOn": "",
@@ -9003,20 +8962,13 @@
         "server/src/Persistence/EntityFramework"
       ],
       "files": 251,
-      "lines": 31112,
+      "lines": 31140,
       "status": "Checked",
-      "checkedAt": "8cb8539b",
-      "checkedOn": "2026-11-25",
-      "references": [
-        "PostgresSharedAccountStore.cs:1-66",
-        "PostgresItemSerialDatabase.cs:1-76",
-        "PostgresArenaShared.cs:71-348",
-        "PostgresDbLogRetentionStore.cs:116-200",
-        "PersistenceContextProvider.cs:101-293",
-        "docs/audit/findings/unit-server-src-Persistence-EntityFramework.md"
-      ],
-      "evidence": "251f/30984L checked: EF contexts/migrations/AdminAuth are persistence plumbing; PostgresSharedAccountStore clamps coins>=0, PostgresItemSerialDatabase enforces UUID anti-dupe serials, PostgresArenaShared enforces transactional dailyCap & 2m cross-season license window, PostgresDbLogRetentionStore exports .json.gz before purge.",
-      "prs": ""
+      "checkedAt": "a108e846",
+      "checkedOn": "2026-11-27",
+      "references": "PostgresSharedAccountStore.cs:1-66; PostgresItemSerialDatabase.cs:1-76; PostgresArenaShared.cs:71-348; PostgresDbLogRetentionStore.cs:116-200; PersistenceContextProvider.cs:101-293; docs/audit/findings/unit-server-src-Persistence-EntityFramework.md; docs/owner-decisions.md",
+      "evidence": "docs/audit/findings/unit-server-src-Persistence-EntityFramework.md (re-check 2026-11-27, changes to a108e846)",
+      "prs": "#407"
     },
     {
       "id": "server/src/Discord",

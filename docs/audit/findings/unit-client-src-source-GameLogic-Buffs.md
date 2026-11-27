@@ -15,3 +15,13 @@
 ## Discrepancies / Bugs Found
 
 1. **Bug in `w_BuffStateValueControl.cpp:60-61,66-67`**: `valueinfo.s_Value2 = Item_data.m_Time;` overwrites `s_Value2` instead of assigning `valueinfo.s_Time = Item_data.m_Time;` (similarly `else` sets `s_Value2 = 0` twice and omits `s_Time = 0`). Logged for Part 9 Item 3 fix & test.
+
+## Re-check 2026-11-27 (changes 8cb8539b..a108e846)
+
+Commits read (every changed file read in full):
+
+- 98f231d4 fix(client): fix buff value time assignment, outlaw warp check, and extended bag space check
+
+Evidence:
+
+- w_BuffStateValueControl::SetValue: the item time goes to s_Time (it overwrote s_Value2, so a buff showed its time as its second value and no time) - fixed.

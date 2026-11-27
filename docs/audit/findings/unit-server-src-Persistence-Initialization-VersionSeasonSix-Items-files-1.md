@@ -40,3 +40,15 @@
    - `13:109..115` intentionally match client tooltip stats rather than legacy suite `the suite's item option manager file` values (`+3%` vs `+8%` HP rec, etc.).
 7. **Other verified items in unit**:
    - `Armors.cs`, `CashShopItems.cs`, `CraftingTalismans.cs`, `EventTicketItems.cs`, `GensRewardItems.cs`, `GoblinBoxItems.cs`, `HarmonyOptions.cs` (level 0..13 match S9 `the suite's Harmony item option file`; +14/+15 handled via `HarmonyLevels14And15UpdatePlugIn`), `Jewels.cs`, `LuckyItems.cs` (`Lucky Atlans` skips Helm 71, `Lucky Storm Jahad` skips Gloves 72, matching `ItemRules.cs`), `Orbs.cs`, `PackedJewels.cs` are internally consistent.
+
+## Re-check 2026-11-27 (changes 49a5970d..a108e846)
+
+Commits read (every changed file read in full):
+
+- 1fc60d72 fix(init): fix Kantata exc chance, Blue/DeepBlue boxes, Guardian boots SD, GM DL slots, and Hanzo store
+
+Evidence:
+
+- AncientSets Kantata: ExcellentDamageChance 0.10 (was 10.0 = every hit excellent: AttackableExtensions uses Rand.NextRandomBool(chance)) - fixed for new databases; existing ones by AuditDataFixesUpdatePlugInSeason6 (any set chance >= 1 divided by 100).
+- GuardianOptions boots: MaximumShield 700 (was 200) - fixed; existing databases by the same update. Value: needs suite check.
+- BoxOfLuck: the Blue Chocolate / Deep Blue Candy normal-item groups are now added to their boxes (they were created but never attached, so the boxes only gave Zen/excellent items) and their descriptions localized - fixed for new databases. OPEN: existing databases need an update that rebuilds and attaches these groups.
