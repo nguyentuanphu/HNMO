@@ -240,6 +240,7 @@
     {"profile": "secondTierWing", "slot": ["wings"], "wingTier": ["second"]},
     {"profile": "thirdTierWing", "slot": ["wings"], "wingTier": ["third"]},
     {"profile": "default", "slot": ["wings"]},
+    {"profile": "default", "slot": ["pentagram"]},
     {"profile": "orb", "group": [12], "requirements": ["strength", "dexterity", "energy", "vitality", "leadership"]},
     {"profile": "scroll", "group": [15], "requirements": ["level", "strength", "dexterity", "energy", "vitality", "leadership"]},
     {"profile": "helper", "group": [13, 14], "requirements": ["level"]}

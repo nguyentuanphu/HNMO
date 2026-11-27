@@ -849,6 +849,7 @@
             "ru": "Используется для повышения уровня вашего предмета до 6.",
             "tl": "Ginagamit ito upang taasan ang antas ng iyong item hanggang 6",
             "uk": "Він використовується для підвищення рівня вашого предмета до 6",
+            "vi": "Dùng để nâng cấp vật phẩm lên tối đa cấp 6",
             "zh-CN": "用于将道具等级提升至最高 +6",
             "zh-TW": "它用於將您的物品等級提高到 6"
           }
@@ -889,6 +890,7 @@
             "ru": "Используется для повышения уровня вашего предмета до 7,8,9.",
             "tl": "Ginagamit ito upang mapataas ang antas ng iyong item hanggang 7,8,9",
             "uk": "Використовується для підвищення рівня вашого предмета до 7,8,9",
+            "vi": "Dùng để nâng cấp vật phẩm lên cấp 7, 8, 9",
             "zh-CN": "提高道具等级 +7、+8、+9 时使用",
             "zh-TW": "它用於將您的物品等級提高到7、8、9"
           }
@@ -943,6 +945,7 @@
             "ru": "Увеличивает выбор предмета на 1 уровень.",
             "tl": "Pinapataas ng 1 level ang opsyon sa item",
             "uk": "Збільшує опцію предмета на 1 рівень",
+            "vi": "Tăng tùy chọn của vật phẩm thêm 1 cấp",
             "zh-CN": "道具追加属性提高一个阶段",
             "zh-TW": "將物品選項增加 1 級"
           }
@@ -1207,6 +1210,7 @@
             "ru": "Используется для создания фруктов, повышающих характеристики.",
             "tl": "Ginagamit upang lumikha ng mga prutas na nagpapataas ng mga istatistika",
             "uk": "Використовується для створення фруктів, які підвищують характеристики",
+            "vi": "Dùng để tạo trái cây tăng điểm chỉ số",
             "zh-CN": "用于合成提高属性的果实",
             "zh-TW": "用於製造增加屬性的水果"
           }
@@ -1510,6 +1514,7 @@
             "ru": "Создавайте и улучшайте предметы для осады",
             "tl": "Gumawa at pagbutihin ang mga item para sa pagkubkob",
             "uk": "Створюйте та покращуйте предмети для облоги",
+            "vi": "Tạo và cải tiến vật phẩm dùng trong công thành",
             "zh-CN": "用于制作和强化攻城设施",
             "zh-TW": "創建和改進攻城物品"
           }
@@ -1831,6 +1836,7 @@
             "ru": "Драгоценность с примесями",
             "tl": "Hiyas na may mga dumi",
             "uk": "Коштовний камінь з домішками",
+            "vi": "Ngọc còn lẫn tạp chất",
             "zh-CN": "混有不纯物，无法发挥其力量的宝石",
             "zh-TW": "含有雜質的寶石"
           }
@@ -5438,6 +5444,7 @@
             "ru": "Драгоценный камень, используемый для ремонта счастливого предмета.",
             "tl": "Jewel na ginamit sa pag-aayos ng Lucky Item.",
             "uk": "Коштовний камінь, який використовується для ремонту щасливого предмета.",
+            "vi": "Ngọc dùng để sửa vật phẩm May Mắn.",
             "zh-CN": "用于修理幸运道具耐久度的宝石",
             "zh-TW": "用於修復幸運物品的寶石。"
           }
@@ -5514,8 +5521,8 @@
       },
       "width": 1,
       "height": 2,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "storable": false
     },
     {
@@ -5525,8 +5532,8 @@
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "storable": false
     },
     {
@@ -5536,8 +5543,8 @@
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "storable": false
     },
     {
@@ -5547,8 +5554,8 @@
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "storable": false
     },
     {
@@ -5558,8 +5565,8 @@
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "storable": false
     },
     {
@@ -5579,14 +5586,14 @@
       "number": 170,
       "name": {
         "en": "Lv. 2 letter of Request",
-        "vi": "Thư Yêu Cầu Cấp 2",
         "de": "Anfragebrief Stufe 2",
+        "vi": "Thư Yêu Cầu Cấp 2",
         "zh-CN": "Lv. 2 委托书"
       },
       "width": 1,
       "height": 2,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "storable": false,
       "sellable": false
     },
@@ -5594,14 +5601,14 @@
       "number": 171,
       "name": {
         "en": "Lv. 2 Completion Certificate",
-        "vi": "Chứng Chỉ Hoàn Thành Cấp 2",
         "de": "Abschlusszertifikat Stufe 2",
+        "vi": "Chứng Chỉ Hoàn Thành Cấp 2",
         "zh-CN": "Lv. 2 完成证明"
       },
       "width": 1,
       "height": 2,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "storable": false,
       "sellable": false
     },
@@ -5609,64 +5616,64 @@
       "number": 176,
       "name": {
         "en": "Death King's Bone",
-        "vi": "Xương Vua Tử Thần",
         "de": "Knochen des Todeskönigs",
+        "vi": "Xương Vua Tử Thần",
         "zh-CN": "骷髅王之骨"
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "sellable": false
     },
     {
       "number": 177,
       "name": {
         "en": "Hell Maine's Leather",
-        "vi": "Da Hell Maine",
         "de": "Leder von Hell Maine",
+        "vi": "Da Hell Maine",
         "zh-CN": "地狱犬皮革"
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "sellable": false
     },
     {
       "number": 178,
       "name": {
         "en": "Dark Phoenix Flame",
-        "vi": "Ngọn Lửa Phượng Hoàng Bóng Tối",
         "de": "Flamme des Dunklen Phönix",
+        "vi": "Ngọn Lửa Phượng Hoàng Bóng Tối",
         "zh-CN": "暗黑凤凰之焰"
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "sellable": false
     },
     {
       "number": 179,
       "name": {
         "en": "Death Beam Knight Soul",
-        "vi": "Linh Hồn Hiệp Sĩ Tia Tử Thần",
         "de": "Seele des Todesstrahl-Ritters",
+        "vi": "Linh Hồn Hiệp Sĩ Tia Tử Thần",
         "zh-CN": "死亡射线骑士之魂"
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "sellable": false
     },
     {
       "number": 180,
       "name": {
         "en": "Ice Walker's Mane",
-        "vi": "Bờm Kẻ Đi Băng",
         "de": "Mähne des Eiswandlers",
+        "vi": "Bờm Kẻ Đi Băng",
         "zh-CN": "冰行者鬃毛"
       },
       "width": 1,
@@ -5678,8 +5685,8 @@
       "number": 181,
       "name": {
         "en": "Mammoth's Bundle of Fur",
-        "vi": "Bó Lông Voi Ma Mút",
         "de": "Fellbündel des Mammuts",
+        "vi": "Bó Lông Voi Ma Mút",
         "zh-CN": "猛犸毛束"
       },
       "width": 1,
@@ -5691,8 +5698,8 @@
       "number": 182,
       "name": {
         "en": "Giant's Icicle",
-        "vi": "Băng Nhọn Người Khổng Lồ",
         "de": "Eiszapfen des Riesen",
+        "vi": "Băng Nhọn Người Khổng Lồ",
         "zh-CN": "巨人冰柱"
       },
       "width": 1,
@@ -5704,8 +5711,8 @@
       "number": 183,
       "name": {
         "en": "Coolutin's Poison",
-        "vi": "Độc Dược của Coolutin",
         "de": "Gift von Coolutin",
+        "vi": "Độc Dược của Coolutin",
         "zh-CN": "库鲁廷剧毒"
       },
       "width": 1,
@@ -5717,8 +5724,8 @@
       "number": 184,
       "name": {
         "en": "Iron Knight's Heart",
-        "vi": "Trái Tim Hiệp Sĩ Sắt",
         "de": "Herz des Eisenritters",
+        "vi": "Trái Tim Hiệp Sĩ Sắt",
         "zh-CN": "铁骑士之心"
       },
       "width": 1,
@@ -5730,8 +5737,8 @@
       "number": 185,
       "name": {
         "en": "Dark Mammoth's Horn",
-        "vi": "Sừng Voi Ma Mút Bóng Tối",
         "de": "Horn des Dunklen Mammuts",
+        "vi": "Sừng Voi Ma Mút Bóng Tối",
         "zh-CN": "暗黑猛犸之角"
       },
       "width": 1,
@@ -5743,8 +5750,8 @@
       "number": 186,
       "name": {
         "en": "Dark Giant's Axe",
-        "vi": "Rìu Người Khổng Lồ Bóng Tối",
         "de": "Axt des Dunklen Riesen",
+        "vi": "Rìu Người Khổng Lồ Bóng Tối",
         "zh-CN": "暗黑巨人之斧"
       },
       "width": 1,
@@ -5756,8 +5763,8 @@
       "number": 187,
       "name": {
         "en": "Dark Coolutin's Blood",
-        "vi": "Máu Coolutin Bóng Tối",
         "de": "Blut von Dunkel-Coolutin",
+        "vi": "Máu Coolutin Bóng Tối",
         "zh-CN": "暗黑库鲁廷之血"
       },
       "width": 1,
@@ -5769,8 +5776,8 @@
       "number": 188,
       "name": {
         "en": "Dark Iron Knight's Sword",
-        "vi": "Kiếm Hiệp Sĩ Sắt Bóng Tối",
         "de": "Schwert des Dunklen Eisenritters",
+        "vi": "Kiếm Hiệp Sĩ Sắt Bóng Tối",
         "zh-CN": "暗黑铁骑士之剑"
       },
       "width": 1,
@@ -5782,8 +5789,8 @@
       "number": 189,
       "name": {
         "en": "Elemental Talisman of Luck",
-        "vi": "Bùa May Mắn Nguyên Tố",
         "de": "Elementartalisman des Glücks",
+        "vi": "Bùa May Mắn Nguyên Tố",
         "zh-CN": "元素幸运符"
       },
       "width": 1,
@@ -5796,8 +5803,8 @@
       "number": 190,
       "name": {
         "en": "Elemental Talisman of Chaos",
-        "vi": "Bùa Hỗn Mang Nguyên Tố",
         "de": "Elementartalisman des Chaos",
+        "vi": "Bùa Hỗn Mang Nguyên Tố",
         "zh-CN": "元素混沌符"
       },
       "width": 1,
@@ -5809,8 +5816,8 @@
       "number": 191,
       "name": {
         "en": "Sonic Combination Note",
-        "vi": "Ghi Chú Kết Hợp Sonic",
         "de": "Sonic-Kombinationsnotiz",
+        "vi": "Ghi Chú Kết Hợp Sonic",
         "zh-CN": "音速合成笔记"
       },
       "width": 1,
@@ -5822,8 +5829,8 @@
       "number": 192,
       "name": {
         "en": "Cyclone Combination Note",
-        "vi": "Ghi Chú Kết Hợp Cyclone",
         "de": "Zyklon-Kombinationsnotiz",
+        "vi": "Ghi Chú Kết Hợp Cyclone",
         "zh-CN": "旋风合成笔记"
       },
       "width": 1,
@@ -5835,8 +5842,8 @@
       "number": 193,
       "name": {
         "en": "Blast Combination Note",
-        "vi": "Ghi Chú Kết Hợp Blast",
         "de": "Explosions-Kombinationsnotiz",
+        "vi": "Ghi Chú Kết Hợp Blast",
         "zh-CN": "爆裂合成笔记"
       },
       "width": 1,
@@ -5848,8 +5855,8 @@
       "number": 194,
       "name": {
         "en": "Magma Combination Note",
-        "vi": "Ghi Chú Kết Hợp Magma",
         "de": "Magma-Kombinationsnotiz",
+        "vi": "Ghi Chú Kết Hợp Magma",
         "zh-CN": "岩浆合成笔记"
       },
       "width": 1,
@@ -5861,8 +5868,8 @@
       "number": 195,
       "name": {
         "en": "Horn Combination Note",
-        "vi": "Ghi Chú Kết Hợp Sừng",
         "de": "Horn-Kombinationsnotiz",
+        "vi": "Ghi Chú Kết Hợp Sừng",
         "zh-CN": "角之合成笔记"
       },
       "width": 1,
@@ -5874,8 +5881,8 @@
       "number": 196,
       "name": {
         "en": "Angelic Combination Note",
-        "vi": "Ghi Chú Kết Hợp Thiên Thần",
         "de": "Engel-Kombinationsnotiz",
+        "vi": "Ghi Chú Kết Hợp Thiên Thần",
         "zh-CN": "天使合成笔记"
       },
       "width": 1,
@@ -5887,8 +5894,8 @@
       "number": 197,
       "name": {
         "en": "Devil Cross Combination Note",
-        "vi": "Ghi Chú Kết Hợp Nỏ Quỷ",
         "de": "Teufelsarmbrust-Kombinationsnotiz",
+        "vi": "Ghi Chú Kết Hợp Nỏ Quỷ",
         "zh-CN": "恶魔十字弩合成笔记"
       },
       "width": 1,
@@ -5900,8 +5907,8 @@
       "number": 198,
       "name": {
         "en": "Miracle Combination Note",
-        "vi": "Ghi Chú Kết Hợp Kỳ Tích",
         "de": "Wunder-Kombinationsnotiz",
+        "vi": "Ghi Chú Kết Hợp Kỳ Tích",
         "zh-CN": "奇迹合成笔记"
       },
       "width": 1,
@@ -5913,8 +5920,8 @@
       "number": 199,
       "name": {
         "en": "Spite Combination Note",
-        "vi": "Ghi Chú Kết Hợp Oán Hận",
         "de": "Groll-Kombinationsnotiz",
+        "vi": "Ghi Chú Kết Hợp Oán Hận",
         "zh-CN": "怨恨合成笔记"
       },
       "width": 1,
@@ -5926,8 +5933,8 @@
       "number": 200,
       "name": {
         "en": "Asura Combination Note",
-        "vi": "Ghi Chú Kết Hợp Asura",
         "de": "Asura-Kombinationsnotiz",
+        "vi": "Ghi Chú Kết Hợp Asura",
         "zh-CN": "阿修罗合成笔记"
       },
       "width": 1,
@@ -5939,8 +5946,8 @@
       "number": 201,
       "name": {
         "en": "Thunder Combination Note",
-        "vi": "Ghi Chú Kết Hợp Sấm Sét",
         "de": "Donner-Kombinationsnotiz",
+        "vi": "Ghi Chú Kết Hợp Sấm Sét",
         "zh-CN": "雷霆合成笔记"
       },
       "width": 1,
@@ -5952,8 +5959,8 @@
       "number": 202,
       "name": {
         "en": "Soul Combination Note",
-        "vi": "Ghi Chú Kết Hợp Linh Hồn",
         "de": "Seelen-Kombinationsnotiz",
+        "vi": "Ghi Chú Kết Hợp Linh Hồn",
         "zh-CN": "灵魂合成笔记"
       },
       "width": 1,
@@ -6050,8 +6057,8 @@
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "storable": false,
       "sellable": false
     },
@@ -6062,8 +6069,8 @@
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "storable": false,
       "sellable": false
     },
@@ -6119,8 +6126,8 @@
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "storable": false,
       "sellable": false
     },
@@ -6131,8 +6138,8 @@
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
-      "tradable": false
+      "tradable": false,
+      "droppable": false
     },
     {
       "number": 224,
@@ -6150,8 +6157,8 @@
       },
       "width": 2,
       "height": 2,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "storable": false,
       "sellable": false
     },
@@ -6162,8 +6169,8 @@
       },
       "width": 2,
       "height": 2,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "storable": false,
       "sellable": false
     },
@@ -6174,8 +6181,8 @@
       },
       "width": 2,
       "height": 2,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "storable": false,
       "sellable": false
     },
@@ -6186,8 +6193,8 @@
       },
       "width": 2,
       "height": 2,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "storable": false,
       "sellable": false
     },
@@ -6198,8 +6205,8 @@
       },
       "width": 2,
       "height": 2,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "storable": false,
       "sellable": false
     },
@@ -6210,8 +6217,8 @@
       },
       "width": 2,
       "height": 2,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "storable": false,
       "sellable": false
     },
@@ -6222,8 +6229,8 @@
       },
       "width": 2,
       "height": 2,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "storable": false,
       "sellable": false
     },
@@ -6234,8 +6241,8 @@
       },
       "width": 2,
       "height": 2,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "storable": false,
       "sellable": false
     },
@@ -6246,8 +6253,8 @@
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "storable": false,
       "sellable": false
     },
@@ -6258,21 +6265,21 @@
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
-      "tradable": false
+      "tradable": false,
+      "droppable": false
     },
     {
       "number": 235,
       "name": {
         "en": "Scroll of Swiftness Master",
-        "vi": "Cuộn Bậc Thầy Nhanh Nhẹn",
         "de": "Schriftrolle des Schnelligkeitsmeisters",
+        "vi": "Cuộn Bậc Thầy Nhanh Nhẹn",
         "zh-CN": "敏捷大师卷轴"
       },
       "width": 2,
       "height": 2,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "storable": false,
       "sellable": false
     },
@@ -6280,99 +6287,99 @@
       "number": 236,
       "name": {
         "en": "Reward Jar",
-        "vi": "Hũ Phần Thưởng",
         "de": "Belohnungskrug",
+        "vi": "Hũ Phần Thưởng",
         "zh-CN": "奖励罐"
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "sellable": false
     },
     {
       "number": 237,
       "name": {
         "en": "Reward Jar",
-        "vi": "Hũ Phần Thưởng",
         "de": "Belohnungskrug",
+        "vi": "Hũ Phần Thưởng",
         "zh-CN": "奖励罐"
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "sellable": false
     },
     {
       "number": 238,
       "name": {
         "en": "Reward Jar",
-        "vi": "Hũ Phần Thưởng",
         "de": "Belohnungskrug",
+        "vi": "Hũ Phần Thưởng",
         "zh-CN": "奖励罐"
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "sellable": false
     },
     {
       "number": 239,
       "name": {
         "en": "Reward Jar",
-        "vi": "Hũ Phần Thưởng",
         "de": "Belohnungskrug",
+        "vi": "Hũ Phần Thưởng",
         "zh-CN": "奖励罐"
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "sellable": false
     },
     {
       "number": 240,
       "name": {
         "en": "Reward Jar",
-        "vi": "Hũ Phần Thưởng",
         "de": "Belohnungskrug",
+        "vi": "Hũ Phần Thưởng",
         "zh-CN": "奖励罐"
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "sellable": false
     },
     {
       "number": 241,
       "name": {
         "en": "Valuable Reward Jar",
-        "vi": "Hũ Phần Thưởng Giá Trị",
         "de": "Wertvoller Belohnungskrug",
+        "vi": "Hũ Phần Thưởng Giá Trị",
         "zh-CN": "珍贵奖励罐"
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "sellable": false
     },
     {
       "number": 242,
       "name": {
         "en": "Golden Apple",
-        "vi": "Táo Vàng",
         "de": "Goldener Apfel",
+        "vi": "Táo Vàng",
         "zh-CN": "金苹果"
       },
       "width": 1,
       "height": 1,
       "buyPrice": 5,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "storable": false,
       "sellable": false
     },
@@ -6380,15 +6387,15 @@
       "number": 243,
       "name": {
         "en": "Golden Apple(2)",
-        "vi": "Táo Vàng (2)",
         "de": "Goldener Apfel (2)",
+        "vi": "Táo Vàng (2)",
         "zh-CN": "金苹果(2)"
       },
       "width": 1,
       "height": 1,
       "buyPrice": 5,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "storable": false,
       "sellable": false
     },
@@ -6396,8 +6403,8 @@
       "number": 244,
       "name": {
         "en": "Evomon Summoning Scroll",
-        "vi": "Cuộn Triệu Hồi Evomon",
         "de": "Evomon-Beschwörungsrolle",
+        "vi": "Cuộn Triệu Hồi Evomon",
         "zh-CN": "进化怪召唤卷轴"
       },
       "width": 1,
@@ -6410,8 +6417,8 @@
       "number": 245,
       "name": {
         "en": "Tetra Crystal (Greater)",
-        "vi": "Tinh Thể Tetra (Lớn)",
         "de": "Tetra-Kristall (Groß)",
+        "vi": "Tinh Thể Tetra (Lớn)",
         "zh-CN": "四面体水晶（大）"
       },
       "width": 1,
@@ -6422,8 +6429,8 @@
       "number": 246,
       "name": {
         "en": "Tetra Crystal (Standard)",
-        "vi": "Tinh Thể Tetra (Thường)",
         "de": "Tetra-Kristall (Normal)",
+        "vi": "Tinh Thể Tetra (Thường)",
         "zh-CN": "四面体水晶（标准）"
       },
       "width": 1,
@@ -6434,8 +6441,8 @@
       "number": 247,
       "name": {
         "en": "Tetra Crystal (Minor)",
-        "vi": "Tinh Thể Tetra (Nhỏ)",
         "de": "Tetra-Kristall (Klein)",
+        "vi": "Tinh Thể Tetra (Nhỏ)",
         "zh-CN": "四面体水晶（小）"
       },
       "width": 1,
@@ -6446,92 +6453,92 @@
       "number": 248,
       "name": {
         "en": "Minor Evomon Box",
-        "vi": "Hộp Evomon Nhỏ",
         "de": "Kleine Evomon-Kiste",
+        "vi": "Hộp Evomon Nhỏ",
         "zh-CN": "小型进化怪宝箱"
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "sellable": false
     },
     {
       "number": 249,
       "name": {
         "en": "Standard Evomon Box",
-        "vi": "Hộp Evomon Thường",
         "de": "Normale Evomon-Kiste",
+        "vi": "Hộp Evomon Thường",
         "zh-CN": "标准进化怪宝箱"
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "sellable": false
     },
     {
       "number": 250,
       "name": {
         "en": "Greater Evomon Box",
-        "vi": "Hộp Evomon Lớn",
         "de": "Große Evomon-Kiste",
+        "vi": "Hộp Evomon Lớn",
         "zh-CN": "高级进化怪宝箱"
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "sellable": false
     },
     {
       "number": 251,
       "name": {
         "en": "Luxurious Evomon Box",
-        "vi": "Hộp Evomon Sang Trọng",
         "de": "Luxuriöse Evomon-Kiste",
+        "vi": "Hộp Evomon Sang Trọng",
         "zh-CN": "豪华进化怪宝箱"
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "sellable": false
     },
     {
       "number": 252,
       "name": {
         "en": "Magnificent Evomon Box",
-        "vi": "Hộp Evomon Tráng Lệ",
         "de": "Prächtige Evomon-Kiste",
+        "vi": "Hộp Evomon Tráng Lệ",
         "zh-CN": "华丽进化怪宝箱"
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "sellable": false
     },
     {
       "number": 253,
       "name": {
         "en": "Legendary Evomon Box",
-        "vi": "Hộp Evomon Huyền Thoại",
         "de": "Legendäre Evomon-Kiste",
+        "vi": "Hộp Evomon Huyền Thoại",
         "zh-CN": "传说进化怪宝箱"
       },
       "width": 1,
       "height": 1,
-      "droppable": false,
       "tradable": false,
+      "droppable": false,
       "sellable": false
     },
     {
       "number": 254,
       "name": {
         "en": "Gift of Henchmen",
-        "vi": "Quà Của Thuộc Hạ",
         "de": "Geschenk der Handlanger",
+        "vi": "Quà Của Thuộc Hạ",
         "zh-CN": "部下之礼"
       },
       "width": 1,
@@ -6542,8 +6549,8 @@
       "number": 256,
       "name": {
         "en": "Gift of Knights",
-        "vi": "Quà Của Hiệp Sĩ",
         "de": "Geschenk der Ritter",
+        "vi": "Quà Của Hiệp Sĩ",
         "zh-CN": "骑士之礼"
       },
       "width": 1,
@@ -6554,8 +6561,8 @@
       "number": 257,
       "name": {
         "en": "Gift of High Knights",
-        "vi": "Quà Của Hiệp Sĩ Cao Cấp",
         "de": "Geschenk der Hohen Ritter",
+        "vi": "Quà Của Hiệp Sĩ Cao Cấp",
         "zh-CN": "高阶骑士之礼"
       },
       "width": 1,
@@ -6566,8 +6573,8 @@
       "number": 258,
       "name": {
         "en": "Minor Devil's Box",
-        "vi": "Hộp Ác Quỷ Nhỏ",
         "de": "Kleine Teufelskiste",
+        "vi": "Hộp Ác Quỷ Nhỏ",
         "zh-CN": "小恶魔宝箱"
       },
       "width": 1,
@@ -6578,8 +6585,8 @@
       "number": 259,
       "name": {
         "en": "Devil's Box",
-        "vi": "Hộp Ác Quỷ",
         "de": "Teufelskiste",
+        "vi": "Hộp Ác Quỷ",
         "zh-CN": "恶魔宝箱"
       },
       "width": 1,
@@ -6590,8 +6597,8 @@
       "number": 260,
       "name": {
         "en": "High Devil's Box",
-        "vi": "Hộp Ác Quỷ Cao Cấp",
         "de": "Große Teufelskiste",
+        "vi": "Hộp Ác Quỷ Cao Cấp",
         "zh-CN": "高阶恶魔宝箱"
       },
       "width": 1,
@@ -6602,8 +6609,8 @@
       "number": 261,
       "name": {
         "en": "Guardsman's Box",
-        "vi": "Hộp Vệ Binh",
         "de": "Kiste des Wachmanns",
+        "vi": "Hộp Vệ Binh",
         "zh-CN": "卫兵宝箱"
       },
       "width": 1,
@@ -6614,8 +6621,8 @@
       "number": 262,
       "name": {
         "en": "Guardman Captain's Box",
-        "vi": "Hộp Đội Trưởng Vệ Binh",
         "de": "Kiste des Wachhauptmanns",
+        "vi": "Hộp Đội Trưởng Vệ Binh",
         "zh-CN": "卫队长宝箱"
       },
       "width": 1,
@@ -6626,8 +6633,8 @@
       "number": 263,
       "name": {
         "en": "Bless of Light (Low Grade)",
-        "vi": "Phước Lành Ánh Sáng (Thấp)",
         "de": "Segen des Lichts (Niedrig)",
+        "vi": "Phước Lành Ánh Sáng (Thấp)",
         "zh-CN": "光之祝福（低级）"
       },
       "width": 1,
@@ -6638,8 +6645,8 @@
       "number": 264,
       "name": {
         "en": "Bless of Light (Middle Grade)",
-        "vi": "Phước Lành Ánh Sáng (Trung)",
         "de": "Segen des Lichts (Mittel)",
+        "vi": "Phước Lành Ánh Sáng (Trung)",
         "zh-CN": "光之祝福（中级）"
       },
       "width": 1,
@@ -6650,8 +6657,8 @@
       "number": 277,
       "name": {
         "en": "Special Card",
-        "vi": "Thẻ Đặc Biệt",
         "de": "Spezialkarte",
+        "vi": "Thẻ Đặc Biệt",
         "zh-CN": "特殊卡片"
       },
       "width": 1,
@@ -6664,8 +6671,8 @@
       "number": 278,
       "name": {
         "en": "Summoning Scroll Fragment",
-        "vi": "Mảnh Cuộn Triệu Hồi",
         "de": "Beschwörungsrollen-Fragment",
+        "vi": "Mảnh Cuộn Triệu Hồi",
         "zh-CN": "召唤卷轴碎片"
       },
       "width": 1,

@@ -177,7 +177,7 @@ TEST_CASE("Every shipped item names the stat profile the profile rules give [dat
         itemsWithProfile += definition.statProfile.empty() || hornOfFenrir ? 0 : 1;
     }
     CHECK(DeriveStatProfile(g_ItemDatabase.GetStatProfiles(), *g_ItemDatabase.Find(ITEM_HORN_OF_FENRIR)) == "helper");
-    CHECK(itemsWithProfile == 578);
+    CHECK(itemsWithProfile == 728);
 }
 
 TEST_CASE("The shipped profile rules give each kind of item its profile [data][items]")
@@ -254,7 +254,7 @@ TEST_CASE("The items each shipped profile rule gives its profile [data][items]")
 {
     ShippedItemAttributes items;
     const ItemStatProfiles& profiles = g_ItemDatabase.GetStatProfiles();
-    const std::vector<int> expected = {2, 10, 1, 3, 22, 131, 394, 6, 4, 2, 5, 14, 0, 27, 36, 82};
+    const std::vector<int> expected = {2, 10, 1, 4, 29, 130, 394, 6, 4, 2, 5, 14, 0, 15, 12, 36, 82};
     REQUIRE(profiles.GetRules().size() == expected.size());
     std::vector<int> counts(expected.size());
     int withoutRule = 0;
@@ -273,7 +273,7 @@ TEST_CASE("The items each shipped profile rule gives its profile [data][items]")
         ++counts[static_cast<size_t>(rule)];
     }
     CHECK(counts == expected);
-    CHECK(withoutRule == 515);
+    CHECK(withoutRule == 508);
 }
 
 // The fixed excellent bonus of the three chaos weapons is item data.
