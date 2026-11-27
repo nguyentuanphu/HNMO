@@ -86,6 +86,8 @@
 #include "UI/MuHelper/MuHelperDetailWindow.h"
 #include "UI/Dialogs/GenericConfirmDialog.h"
 #include "UI/Dialogs/GenericMenuDialog.h"
+#include "UI/Windows/MuunWindow.h"
+#include "UI/Windows/PentagramWindow.h"
 
 namespace mu::ui::window
 {
@@ -228,6 +230,8 @@ namespace mu::ui::window
         CMuHelperSkillPicker* m_pMuHelperSkillPicker;
         CGenericConfirmDialog* m_pGenericConfirmDialog;
         CGenericMenuDialog* m_pGenericMenuDialog;
+        CMuunWindow* m_pNewMuunWindow;
+        CPentagramWindow* m_pNewPentagramWindow;
 
         bool CreateChatCommandWindow();
 
