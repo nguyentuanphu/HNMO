@@ -442,6 +442,10 @@ The desktop code stays the reference for how the classic game behaves (parity ru
   same template per class, all 4 modes (1v1 always; 5v5, battle royale, guild war scheduled), rewards = titles,
   arena points shop on home servers, website leaderboard (no coins). Plans: docs/plans/arena-2026-11-20.md,
   docs/plans/anti-dupe-market-2026-11-20.md.
+- Who does what (owner, 2026-11-27 11:55): heavy work and anything that runs on the owner's PC goes to Antigravity;
+  local Claude gets nothing unless the owner asks. Main cloud Claude keeps what the cloud container can do (code,
+  unit tests, the packaged folder as a normal user) and sends Antigravity ONE combined prompt, pasted in the chat
+  (not only saved in a file), replacing every unsent one.
 - Messages for local Claude (owner, 2026-11-20): the owner relays them by hand and can miss some. Send ONE combined,
   copyable message that replaces all earlier unsent ones, and ask in a pop-up whether it was sent. Don't add a new
   message per small change: fold it into the next combined one.
