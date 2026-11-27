@@ -28,3 +28,9 @@ còn lại giao local Claude (docs/local-claude-prompt-2026-11-27-2000.md).
 
 27/11 22:40: anh yêu cầu màn login/chọn server/chọn nhân vật giống client desktop (cảnh 3D). Prompt cho local Claude:
 `docs/local-claude-prompt-2026-11-27-login-character-scenes.md` (làm trước cửa sổ chat đổi kích thước).
+
+28/11 04:10: anh trả lời popup về main: CHƯA gộp main, anh tự kiểm tra thêm. Bản 1.0.1 CÓ Season 9: đợi local Claude xong
+các việc (cảnh đăng nhập/chọn nhân vật 3D, báo lỗi tự động, cửa sổ chat đổi kích thước, #444, #439) rồi gộp hết một lần
+(#419 cùng các PR của local), chạy lại CI đầy đủ, rồi hỏi anh lại trước khi đụng main.
+Nhánh làm việc 5de17640 (có #450, #408, #451, #442...): CI sạch; lỗi nền duy nhất: walk-resume.spec (shard 7) đỏ ở mọi
+nhánh từ 26/11 - cần một việc sửa riêng.
