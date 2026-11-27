@@ -21,8 +21,8 @@ else
     }
 
     <ul class="nav nav-tabs mb-3" id="bug-tabs">
-        <li class="nav-item"><button type="button" class="nav-link @(this._tab == "players" ? "active" : string.Empty)" id="bug-tab-players" @onclick="@(() => this._tab = "players")">@L4("Players' reports", "Người chơi báo", "Meldungen der Spieler", "玩家报告")</button></li>
-        <li class="nav-item"><button type="button" class="nav-link @(this._tab == "auto" ? "active" : string.Empty)" id="bug-tab-auto" @onclick="@(() => this._tab = "auto")">@L4("Automatic", "Tự động", "Automatisch", "自动")<span class="badge bg-secondary ms-1">@this._autoGroups.Count(g => g.Status == AutoErrorStatus.Open)</span></button></li>
+        <li class="nav-item"><button type="button" class="nav-link @(this._tab == "players" ? "active" : string.Empty)" id="bug-tab-players" title="@L4("The reports players wrote in the 🐞 window", "Báo lỗi người chơi viết trong cửa sổ 🐞", "Meldungen, die Spieler im 🐞-Fenster geschrieben haben", "玩家在 🐞 窗口中写的报告")" @onclick="@(() => this._tab = "players")">@L4("Players' reports", "Người chơi báo", "Meldungen der Spieler", "玩家报告")</button></li>
+        <li class="nav-item"><button type="button" class="nav-link @(this._tab == "auto" ? "active" : string.Empty)" id="bug-tab-auto" title="@L4("Errors the web game sent on its own, grouped by error", "Lỗi game web tự gửi, gộp theo lỗi", "Fehler, die das Webspiel selbst gemeldet hat, nach Fehler gruppiert", "网页游戏自动发送的错误，按错误分组")" @onclick="@(() => this._tab = "auto")">@L4("Automatic", "Tự động", "Automatisch", "自动")<span class="badge bg-secondary ms-1">@this._autoGroups.Count(g => g.Status == AutoErrorStatus.Open)</span></button></li>
     </ul>
 
     @if (this._tab == "auto")
@@ -43,7 +43,7 @@ else
             <label for="auto-cap-server">@L4("Server a day", "Cả server một ngày", "Server pro Tag", "服务器每天")</label>
             <input type="number" min="0" class="form-control form-control-sm" style="max-width: 7rem" id="auto-cap-server" @bind="this._autoCapServer" />
             <span class="text-muted small">@L4("(Sydney days)", "(theo ngày Sydney)", "(Tage in Sydney)", "（按悉尼日期）")</span>
-            <button type="button" class="btn btn-sm btn-primary ms-auto" id="auto-save" disabled="@this._saving" @onclick="this.SaveAutoSettingsAsync">@L4("Save", "Lưu", "Speichern", "保存")</button>
+            <button type="button" class="btn btn-sm btn-primary ms-auto" id="auto-save" title="@L4("Save the automatic report settings", "Lưu cài đặt báo lỗi tự động", "Einstellungen der automatischen Meldungen speichern", "保存自动报告设置")" disabled="@this._saving" @onclick="this.SaveAutoSettingsAsync">@L4("Save", "Lưu", "Speichern", "保存")</button>
         </div>
 
         <div class="d-flex flex-wrap gap-2 align-items-center mb-2">
@@ -113,7 +113,7 @@ else
                                     }
                                     @if (g.Status != AutoErrorStatus.Open)
                                     {
-                                        <button type="button" class="btn btn-sm btn-outline-warning auto-open" @onclick="() => this.SetAutoStatusAsync(g.Id, AutoErrorStatus.Open)">@L4("Reopen", "Mở lại", "Wieder öffnen", "重新打开")</button>
+                                        <button type="button" class="btn btn-sm btn-outline-warning auto-open" title="@L4("Show it among the open errors again", "Đưa lại vào danh sách lỗi đang mở", "Wieder zu den offenen Fehlern", "重新放回未处理错误")" @onclick="() => this.SetAutoStatusAsync(g.Id, AutoErrorStatus.Open)">@L4("Reopen", "Mở lại", "Wieder öffnen", "重新打开")</button>
                                     }
                                     <button type="button" class="btn btn-sm btn-outline-primary auto-forward" disabled="@(!this._canForward || g.QueuedUtc is not null)"
                                             title="@L4("Send it to the HNMO developer with this server's weekly report (no login or IP).", "Gửi cho nhà phát triển HNMO cùng báo cáo tuần của server (không có tài khoản hay IP).", "Mit dem Wochenbericht dieses Servers an den HNMO-Entwickler senden (ohne Login oder IP).", "随本服务器的周报发给 HNMO 开发者（不含账号或 IP）。")"
