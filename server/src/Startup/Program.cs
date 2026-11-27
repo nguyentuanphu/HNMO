@@ -241,26 +241,28 @@ internal sealed class Program : IDisposable
         candidates.Add(Path.Combine(folder, PlayerLicense.FileName));
         candidates.Add(Path.Combine(serverDir, PlayerLicense.FileName));
         var file = candidates.FirstOrDefault(File.Exists);
-        var license = PlayerLicense.CheckWithEmbeddedKeys(file is null ? null : File.ReadAllBytes(file), PlayerLicense.MachineId, DateOnly.FromDateTime(DateTime.UtcNow), PlayerLicense.LegacyMachineId);
+        var fileBytes = file is null ? null : File.ReadAllBytes(file);
+        var license = PlayerLicense.CheckWithEmbeddedKeys(fileBytes, PlayerLicense.MachineId, DateOnly.FromDateTime(DateTime.UtcNow), PlayerLicense.LegacyMachineId);
         DeveloperHub.StateFile = Path.Combine(Path.GetDirectoryName(HostSettingsStore.ResolveDefaultPath(serverDir)) ?? serverDir, "developer-hub.json");
         DeveloperHub.MachineId = PlayerLicense.MachineId;
         DeveloperHub.LegacyMachineId = PlayerLicense.LegacyMachineId;
-        DeveloperHub.LicenceFile = file is null ? null : File.ReadAllText(file);
+        DeveloperHub.LicenceFile = fileBytes is null ? null : System.Text.Encoding.UTF8.GetString(fileBytes);
         if (license.IsValid && DeveloperHub.IsWithdrawn(DeveloperHub.LicenceFile))
         {
             license = PlayerLicense.Default("The HNMO developer withdrew this licence: up to 10 players at once.");
         }
 
-        LicensedPlayerLimit.Maximum = license.MaximumPlayers;
-        LicensedPlayerLimit.Licensee = license.IsValid ? license.Licensee : null;
-        this._logger.Information("HNMO license: {Message} (this computer's id: {MachineId})", license.Message, PlayerLicense.MachineId);
+        var enforced = LicensedPlayerLimit.ApplyLicence(fileBytes, DateTime.UtcNow);
+        if (enforced > LicensedPlayerLimit.DefaultMaximum || !license.IsValid)
+        {
+            this._logger.Information("HNMO license: {Message} (this computer's id: {MachineId})", license.Message, PlayerLicense.MachineId);
+        }
     }
 
     /// <summary>
-    /// Verifies the signed HNMO build integrity manifest, if one is present. An unsigned build
-    /// (e.g. a local/development build) logs a warning and continues. A present but invalid
-    /// signature always refuses to start; a changed file in a validly-signed build (a tampered
-    /// release) refuses too, unless the host opted out with <c>Integrity:OnMismatch</c> = <c>warn</c>.
+    /// Verifies the signed HNMO build integrity manifest, if one is present. Rather than loudly refusing
+    /// startup when modified, invalid builds record their status for telemetry and silently enforce the
+    /// unlicensed player cap across startup, login, and weekly checks.
     /// </summary>
     private void VerifyBuildIntegrity()
     {
@@ -268,36 +270,38 @@ internal sealed class Program : IDisposable
         if (publicKeyPem is null)
         {
             DeveloperHub.Integrity = "unsigned";
-            this._logger.Warning("HNMO integrity: no public key is embedded; skipping the build integrity check.");
             return;
         }
 
         var serverDir = AppContext.BaseDirectory;
         var contentRoot = Path.GetFullPath(Path.Combine(serverDir, ".."));
-        var result = IntegrityVerifier.VerifyFolder(serverDir, contentRoot, publicKeyPem);
-        var allowOnMismatch = string.Equals(this._configuration["Integrity:OnMismatch"], "warn", StringComparison.OrdinalIgnoreCase);
+        var cachedResult = IntegrityVerifier.VerifyFolder(serverDir, contentRoot, publicKeyPem);
+        var cachedAtUtc = DateTime.UtcNow;
 
-        DeveloperHub.Integrity = result.Status switch
+        IntegrityStatus CheckIntegrity()
         {
-            IntegrityStatus.Ok => "ok",
-            IntegrityStatus.Unsigned => "unsigned",
-            _ => "modified",
-        };
-        if (result.Status == IntegrityStatus.Ok)
-        {
-            this._logger.Information(result.Message);
-            return;
+            var now = DateTime.UtcNow;
+            if (now - cachedAtUtc >= TimeSpan.FromMinutes(1))
+            {
+                cachedResult = IntegrityVerifier.VerifyFolder(serverDir, contentRoot, publicKeyPem);
+                cachedAtUtc = now;
+            }
+
+            DeveloperHub.Integrity = cachedResult.Status switch
+            {
+                IntegrityStatus.Ok => "ok",
+                IntegrityStatus.Unsigned => "unsigned",
+                _ => "modified",
+            };
+            return cachedResult.Status;
         }
 
-        this._logger.Warning(result.Message);
-        foreach (var file in result.MismatchedFiles)
+        var initialStatus = CheckIntegrity();
+        LicensedPlayerLimit.ConfigureBuildIntegrity(CheckIntegrity);
+        LicensedPlayerLimit.ReevaluateAndEnforce(DateTime.UtcNow);
+        if (initialStatus == IntegrityStatus.Ok)
         {
-            this._logger.Warning("HNMO integrity: {File}", file);
-        }
-
-        if (result.ShouldRefuseStartup(allowOnMismatch))
-        {
-            throw new StartupCancelledException(result.Message);
+            this._logger.Information(cachedResult.Message);
         }
     }
 
@@ -624,9 +628,14 @@ internal sealed class Program : IDisposable
         public LicenseStatusInfo Apply(string? configuredPath)
         {
             var status = this.GetStatus(configuredPath);
-            LicensedPlayerLimit.Maximum = status.MaximumPlayers;
-            LicensedPlayerLimit.Licensee = status.IsValid ? status.Licensee : null;
-            DeveloperHub.LicenceFile = status.Exists ? File.ReadAllText(status.ResolvedPath) : null;
+            var bytes = status.Exists ? File.ReadAllBytes(status.ResolvedPath) : null;
+            DeveloperHub.LicenceFile = bytes is null ? null : System.Text.Encoding.UTF8.GetString(bytes);
+            var enforced = LicensedPlayerLimit.ApplyLicence(bytes, DateTime.UtcNow);
+            if (enforced <= LicensedPlayerLimit.DefaultMaximum)
+            {
+                status = status with { IsValid = false, MaximumPlayers = enforced, Licensee = null };
+            }
+
             if (status.IsValid)
             {
                 // A new licence ends the grace week (it was the reason for it).

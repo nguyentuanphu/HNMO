@@ -220,6 +220,7 @@ public class LoginAction
 
     private static bool TryAdmitLicensed(Player player, string username)
     {
+        var currentMaximum = LicensedPlayerLimit.ReevaluateAndEnforce(DateTime.UtcNow);
         if (LicensedPlayerLimit.TryAdmit(player, username))
         {
             return true;
@@ -228,7 +229,7 @@ public class LoginAction
         player.Logger.LogWarning(
             "Login of [{Username}] refused: the licensed limit of {Maximum} players at once is reached (license.hnmo raises it).",
             username,
-            LicensedPlayerLimit.Maximum);
+            currentMaximum);
         return false;
     }
 

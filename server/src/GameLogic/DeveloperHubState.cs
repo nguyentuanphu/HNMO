@@ -36,4 +36,10 @@ public sealed class DeveloperHubState
 
     /// <summary>Gets or sets the ids of licences the developer withdrew.</summary>
     public List<string> WithdrawnLicences { get; set; } = [];
+
+    /// <summary>Gets or sets when the developer hub was last reached (UTC).</summary>
+    public DateTime? LastHubReachUtc { get; set; }
+
+    /// <summary>Gets or sets when hub unreachability began continuously (UTC); cleared on any response.</summary>
+    public DateTime? FirstHubUnreachableUtc { get; set; }
 }

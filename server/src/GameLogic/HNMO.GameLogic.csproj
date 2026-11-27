@@ -31,6 +31,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AttributeSystem\HNMO.AttributeSystem.csproj" />
     <ProjectReference Include="..\DataModel\HNMO.DataModel.csproj" />
+    <ProjectReference Include="..\Integrity\HNMO.Integrity.csproj" />
     <ProjectReference Include="..\Interfaces\HNMO.Interfaces.csproj" />
     <ProjectReference Include="..\Pathfinding\HNMO.Pathfinding.csproj" />
     <ProjectReference Include="..\Persistence\HNMO.Persistence.csproj" />
