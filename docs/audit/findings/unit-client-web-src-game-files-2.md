@@ -18,3 +18,13 @@
 | Ground item pickup range & Zen display | `groundItems.ts:22-25,65` | `PICKUP_REACH = 2` cells, `ZEN = { group: 14, number: 15 }`, `LABEL_RAISE = 15` | Desktop `Pickup.h` & server pickup distance | Same |
 | Combat target, mount & weapon animation rules | `combat.ts:28-115`, `combatLook.ts:12-429`, `darkSideGhosts.ts:13-80` | `ANIMATION_FRAMES_PER_SECOND = 25`, `TARGET_HIT_SKILLS = [264, 560]`, dual-sword/spear/poleaxe animation tables, RF `MAX_COPIES = 6` Dark Side ghosts | Desktop `ZzzCharacter` & `MonkSystem` | Same |
 | Custom Ranks, audio/visual helpers | `customRanks.ts`, `combatEffects.ts`, `gameSounds.ts` | Custom rank badge lookup (`HnmoCustomRanksState`), Three.js skill effect & sound triggers | Client visual/audio/HNMO display | No game rules |
+
+## Re-check 2026-11-27 (changes 8cb8539b..a108e846)
+
+Commits read (every changed file read in full):
+
+- be1d1b3e fix(web): trade zen in-game prompt and clean Alt name-tag toggle (Part 9 Item 1)
+
+Evidence:
+
+- groundItems.ts: held Alt shows ground item names, Alt alone toggles them, focus loss clears the held state - same as the desktop key behaviour noted in Part 9 item 1.

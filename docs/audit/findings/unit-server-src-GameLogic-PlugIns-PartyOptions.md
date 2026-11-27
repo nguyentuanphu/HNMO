@@ -16,3 +16,13 @@
    - `HandlePartyPassCommandAsync` (`line 144`) validates via `engine.FindByPassword(...)` (which checks `AllowPasswordJoin`), then delegates to `JoinLeaderPartyAsync` (`line 147`).
    - `JoinLeaderPartyAsync` (`line 254`) calls `engine.PlanSpotJoin(...)`, which rejects immediately if `AllowAutoSpotParty == false` (`PartyOptionsEngine.cs:161`).
    - Consequence: if an admin enables password party joins (`AllowPasswordJoin = true`) while disabling the hunting spot finder (`AllowAutoSpotParty = false`), every `/partypass` join attempt fails with `"Party Options are currently disabled."`.
+
+## Re-check 2026-11-27 (changes cf8c32b8..a108e846)
+
+Commits read (every changed file read in full):
+
+- 478f9cf3 fix(plugins): fix stack deposits/consumption, receipt rollback, buff id collision, and partypass
+
+Evidence:
+
+- PartyOptionsEngine.PlanSpotJoin: a join with a password needs AllowPasswordJoin, one without needs AllowAutoSpotParty (the password join was blocked by the auto-spot switch) - fixed.

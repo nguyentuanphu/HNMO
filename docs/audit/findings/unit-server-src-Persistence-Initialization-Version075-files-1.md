@@ -28,3 +28,13 @@
 - `MerchantStores.cs:112-150` (`CreateHanzoTheBlacksmith`):
   - **Bug / differs (`MerchantStores.cs:133`)**: Uses `(ItemGroups.Scepters, 1)` for `Mace` (`Morning Star` is `2:1` at `137`, while `Mace` is `2:0` in the Season 6/9 suites' item list files).
   - **Bug (`MerchantStores.cs:141-142`)**: Places both `Gladius` (`0:6`) and `Falchion` (`0:7`) at the same inventory `itemSlot = 73`.
+
+## Re-check 2026-11-27 (changes 6df27858..a108e846)
+
+Commits read (every changed file read in full):
+
+- 1fc60d72 fix(init): fix Kantata exc chance, Blue/DeepBlue boxes, Guardian boots SD, GM DL slots, and Hanzo store
+
+Evidence:
+
+- MerchantStores (Hanzo 251): Falchion/Serpent Sword/Blade at slots 74/75/76 (two items were in slot 73), slot 50 is the Mace (scepter 0, was the Morning Star) - fixed for new databases; existing ones by AuditDataFixesUpdatePlugIn075 (this re-check). Store contents themselves: needs suite check.
