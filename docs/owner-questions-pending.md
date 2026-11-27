@@ -1,4 +1,4 @@
-# Câu hỏi chờ chủ dự án (cập nhật 27 Nov 2026, 09:20 giờ Sydney)
+# Câu hỏi chờ chủ dự án (cập nhật 27 Nov 2026, 17:50 giờ Sydney)
 
 Đã trả lời (ghi trong `docs/owner-decisions.md`): thứ tự lô merge, PR cũ, hub #2, Q1-Q13, Arena Home (#381), app Mac
 không công chứng; tối 26/11: khóa M cho người PK, phí warp PK, túi zen mỗi trang rương, Gens mặc định, bỏ Season Plan
@@ -9,9 +9,8 @@ dữ liệu #403 rà lại theo desktop, từ ngữ tiếng Việt như game Vi�
 
 Còn chờ anh:
 1. Gộp nhánh làm việc vào `main` và phát hành 1.0.1: anh đã nói "Chờ anh báo".
-2. Luật PK: hiện giết lần hai đặt đúng 43.200 điểm, bằng ngưỡng PK1, nên PK1 chỉ hiện 1 giây rồi về Cảnh cáo.
-   Antigravity đang đọc giá trị luật PK của bộ S6 và S9 trên máy anh (`docs/audit/references/pk-rules-s6-s9.md`,
-   trả lời trên #430). Có số em sẽ đề xuất sửa `OutlawPoints` và hỏi anh trước khi đổi.
+2. Luật PK: anh đã chọn (27/11 17:45) "chơi S6 thì luật S6, chơi S9 thì luật S9". Antigravity làm
+   (`docs/antigravity-prompt-2026-11-27-1750.md`, mục 7); em review và merge.
 3. Cửa sổ chat/messenger đổi kích thước: còn chờ anh chọn.
 
 Việc của riêng anh: chạy thật trên Mac Intel, Mac Apple Silicon, Ubuntu/Debian x64 và ARM64; xóa nhánh
