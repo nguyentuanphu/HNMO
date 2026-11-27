@@ -4,21 +4,21 @@
   <resheader name="version"><value>2.0</value></resheader>
   <data name="Arrows" xml:space="preserve"><value>Mũi tên</value></data>
   <data name="Bolts" xml:space="preserve"><value>Bu lông</value></data>
-  <data name="JewelOfBless" xml:space="preserve"><value>Viên ngọc phước lành</value></data>
-  <data name="JewelOfSoul" xml:space="preserve"><value>Viên ngọc tâm hồn</value></data>
-  <data name="JewelOfChaos" xml:space="preserve"><value>Viên ngọc hỗn loạn</value></data>
-  <data name="JewelOfLife" xml:space="preserve"><value>Viên ngọc cuộc sống</value></data>
-  <data name="JewelOfCreation" xml:space="preserve"><value>Viên ngọc sáng tạo</value></data>
-  <data name="JewelOfGuardian" xml:space="preserve"><value>Viên ngọc bảo vệ</value></data>
-  <data name="GemstoneHarmonyAndRefineStones" xml:space="preserve"><value>Đá quý, Đá quý hài hòa và Đá tinh luyện</value></data>
-  <data name="PackedJewelOfBless" xml:space="preserve"><value>Viên ngọc phước lành được đóng gói</value></data>
-  <data name="PackedJewelOfSoul" xml:space="preserve"><value>Viên ngọc tâm hồn được đóng gói</value></data>
-  <data name="PackedJewelOfChaos" xml:space="preserve"><value>Viên ngọc hỗn loạn được đóng gói</value></data>
-  <data name="PackedJewelOfLife" xml:space="preserve"><value>Viên ngọc cuộc sống được đóng gói</value></data>
-  <data name="PackedJewelOfCreation" xml:space="preserve"><value>Viên ngọc sáng tạo được đóng gói</value></data>
+  <data name="JewelOfBless" xml:space="preserve"><value>Ngọc Ước Nguyện</value></data>
+  <data name="JewelOfSoul" xml:space="preserve"><value>Ngọc Tâm Linh</value></data>
+  <data name="JewelOfChaos" xml:space="preserve"><value>Ngọc Hỗn Nguyên</value></data>
+  <data name="JewelOfLife" xml:space="preserve"><value>Ngọc Sinh Mệnh</value></data>
+  <data name="JewelOfCreation" xml:space="preserve"><value>Ngọc Sáng Tạo</value></data>
+  <data name="JewelOfGuardian" xml:space="preserve"><value>Ngọc Hộ Mệnh</value></data>
+  <data name="GemstoneHarmonyAndRefineStones" xml:space="preserve"><value>Đá quý, Đá Tạo Hóa và Đá tinh luyện</value></data>
+  <data name="PackedJewelOfBless" xml:space="preserve"><value>Gói Ngọc Ước Nguyện</value></data>
+  <data name="PackedJewelOfSoul" xml:space="preserve"><value>Gói Ngọc Tâm Linh</value></data>
+  <data name="PackedJewelOfChaos" xml:space="preserve"><value>Gói Ngọc Hỗn Nguyên</value></data>
+  <data name="PackedJewelOfLife" xml:space="preserve"><value>Gói Ngọc Sinh Mệnh</value></data>
+  <data name="PackedJewelOfCreation" xml:space="preserve"><value>Gói Ngọc Sáng Tạo</value></data>
   <data name="PackedJewelOfGuardian" xml:space="preserve"><value>Viên ngọc đóng gói của người giám hộ</value></data>
-  <data name="PackedGemstoneHarmonyAndRefineStones" xml:space="preserve"><value>Đá quý đóng gói, Viên ngọc hài hòa và Đá tinh luyện</value></data>
-  <data name="Fruits" xml:space="preserve"><value>trái cây</value></data>
+  <data name="PackedGemstoneHarmonyAndRefineStones" xml:space="preserve"><value>Đá quý đóng gói, Đá Tạo Hóa và Đá tinh luyện</value></data>
+  <data name="Fruits" xml:space="preserve"><value>quả</value></data>
   <data name="LochsFeather" xml:space="preserve"><value>Lông của Loch</value></data>
   <data name="LargeHealingAndManaPotion" xml:space="preserve"><value>Thuốc hồi máu và mana lớn</value></data>
   <data name="SiegePotion" xml:space="preserve"><value>Thuốc công thành</value></data>

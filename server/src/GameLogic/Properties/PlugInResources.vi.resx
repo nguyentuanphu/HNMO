@@ -169,10 +169,10 @@
     <value>Plugin xử lý việc dùng táo.</value>
   </data>
   <data name="BlessJewelConsumeHandlerPlugIn_Name" xml:space="preserve">
-    <value>Xử lý dùng ngọc Ước Nguyện</value>
+    <value>Xử lý dùng Ngọc Ước Nguyện</value>
   </data>
   <data name="BlessJewelConsumeHandlerPlugIn_Description" xml:space="preserve">
-    <value>Plugin xử lý việc dùng ngọc Ước Nguyện (Bless).</value>
+    <value>Plugin xử lý việc dùng Ngọc Ước Nguyện (Bless).</value>
   </data>
   <data name="FruitConsumeHandlerPlugIn_Name" xml:space="preserve">
     <value>Xử lý dùng quả</value>
@@ -253,10 +253,10 @@
     <value>Plugin xử lý việc dùng bình SD lớn.</value>
   </data>
   <data name="LifeJewelConsumeHandlerPlugIn_Name" xml:space="preserve">
-    <value>Xử lý dùng ngọc Sinh Mệnh</value>
+    <value>Xử lý dùng Ngọc Sinh Mệnh</value>
   </data>
   <data name="LifeJewelConsumeHandlerPlugIn_Description" xml:space="preserve">
-    <value>Plugin xử lý việc dùng ngọc Sinh Mệnh (Life).</value>
+    <value>Plugin xử lý việc dùng Ngọc Sinh Mệnh (Life).</value>
   </data>
   <data name="LowerRefineStoneConsumeHandlerPlugIn_Name" xml:space="preserve">
     <value>Xử lý dùng đá tinh luyện thấp</value>
@@ -319,10 +319,10 @@
     <value>Plugin xử lý việc dùng bình SD nhỏ.</value>
   </data>
   <data name="SoulJewelConsumeHandlerPlugIn_Name" xml:space="preserve">
-    <value>Xử lý dùng ngọc Tâm Linh</value>
+    <value>Xử lý dùng Ngọc Tâm Linh</value>
   </data>
   <data name="SoulJewelConsumeHandlerPlugIn_Description" xml:space="preserve">
-    <value>Plugin xử lý việc dùng ngọc Tâm Linh (Soul).</value>
+    <value>Plugin xử lý việc dùng Ngọc Tâm Linh (Soul).</value>
   </data>
   <data name="SummoningOrbConsumeHandlerPlugIn_Name" xml:space="preserve">
     <value>Xử lý dùng ngọc triệu hồi</value>
@@ -1336,7 +1336,7 @@
     <value>Số ngọc dự trữ mỗi loại</value>
   </data>
   <data name="BotConfiguration_JewelStockPerKind_Description" xml:space="preserve">
-    <value>Số ngọc Ước Nguyện/Tâm Linh/Sinh Mệnh/Hỗn Nguyên bot giữ cho mỗi loại; vượt quá thì bot ngừng nhặt và bán phần dư.</value>
+    <value>Số Ngọc Ước Nguyện/Tâm Linh/Sinh Mệnh/Hỗn Nguyên bot giữ cho mỗi loại; vượt quá thì bot ngừng nhặt và bán phần dư.</value>
   </data>
   <data name="BotConfiguration_PotionStockCharges_Name" xml:space="preserve">
     <value>Số bình thuốc dự trữ</value>
@@ -2062,7 +2062,7 @@
     <value>Loại dòng</value>
   </data>
   <data name="ItemUpgradeConfiguration_OptionType_Description" xml:space="preserve">
-    <value>Loại dòng vật phẩm được nâng: dòng thường với ngọc Sinh Mệnh, dòng harmony với ngọc Harmony và đá tinh luyện.</value>
+    <value>Loại dòng vật phẩm được nâng: dòng thường với Ngọc Sinh Mệnh, dòng harmony với ngọc Harmony và đá tinh luyện.</value>
   </data>
   <data name="ItemUpgradeConfiguration_AddsOption_Name" xml:space="preserve">
     <value>Thêm dòng</value>

@@ -441,7 +441,7 @@
   <data name="OrbOfRagefulBlow" xml:space="preserve"><value>Quả cầu của đòn cuồng nộ</value></data>
   <data name="OrbOfImpale" xml:space="preserve"><value>Quả cầu xiên</value></data>
   <data name="OrbOfGreaterFortitude" xml:space="preserve"><value>Quả cầu sức mạnh lớn hơn</value></data>
-  <data name="JewelOfChaos" xml:space="preserve"><value>Viên ngọc hỗn loạn</value></data>
+  <data name="JewelOfChaos" xml:space="preserve"><value>Ngọc Hỗn Nguyên</value></data>
   <data name="OrbOfFireSlash" xml:space="preserve"><value>Quả cầu lửa chém</value></data>
   <data name="OrbOfPenetration" xml:space="preserve"><value>Quả cầu xuyên thấu</value></data>
   <data name="OrbOfIceArrow" xml:space="preserve"><value>Quả cầu mũi tên băng</value></data>
@@ -450,8 +450,8 @@
   <data name="ScrollOfSummon" xml:space="preserve"><value>Cuộn giấy triệu tập</value></data>
   <data name="ScrollOfCriticalDamage" xml:space="preserve"><value>Cuộn sát thương chí mạng</value></data>
   <data name="ScrollOfElectricSpark" xml:space="preserve"><value>Cuộn tia lửa điện</value></data>
-  <data name="PackedJewelOfBless" xml:space="preserve"><value>Viên ngọc phước lành được đóng gói</value></data>
-  <data name="PackedJewelOfSoul" xml:space="preserve"><value>Viên ngọc tâm hồn được đóng gói</value></data>
+  <data name="PackedJewelOfBless" xml:space="preserve"><value>Gói Ngọc Ước Nguyện</value></data>
+  <data name="PackedJewelOfSoul" xml:space="preserve"><value>Gói Ngọc Tâm Linh</value></data>
   <data name="RedRibbonBox" xml:space="preserve"><value>Hộp ruy băng đỏ</value></data>
   <data name="GreenRibbonBox" xml:space="preserve"><value>Hộp ruy băng xanh</value></data>
   <data name="BlueRibbonBox" xml:space="preserve"><value>Hộp ruy băng màu xanh</value></data>
@@ -512,14 +512,14 @@
   <data name="SeedSphereWind5" xml:space="preserve"><value>Hạt Giống (Gió) (5)</value></data>
   <data name="SeedSphereLightning5" xml:space="preserve"><value>Quả cầu hạt giống (Sét) (5)</value></data>
   <data name="SeedSphereEarth5" xml:space="preserve"><value>Quả cầu hạt giống (Trái đất) (5)</value></data>
-  <data name="PackedJewelOfLife" xml:space="preserve"><value>Viên ngọc cuộc sống được đóng gói</value></data>
-  <data name="PackedJewelOfCreation" xml:space="preserve"><value>Viên ngọc sáng tạo được đóng gói</value></data>
+  <data name="PackedJewelOfLife" xml:space="preserve"><value>Gói Ngọc Sinh Mệnh</value></data>
+  <data name="PackedJewelOfCreation" xml:space="preserve"><value>Gói Ngọc Sáng Tạo</value></data>
   <data name="PackedJewelOfGuardian" xml:space="preserve"><value>Viên ngọc đóng gói của người giám hộ</value></data>
   <data name="PackedGemstone" xml:space="preserve"><value>Đá quý đóng gói</value></data>
-  <data name="PackedJewelOfHarmony" xml:space="preserve"><value>Viên ngọc hài hòa đóng gói</value></data>
-  <data name="PackedJewelOfChaos" xml:space="preserve"><value>Viên ngọc hỗn loạn được đóng gói</value></data>
-  <data name="PackedLowerRefineStone" xml:space="preserve"><value>Đá tinh chế đóng gói thấp hơn</value></data>
-  <data name="PackedHigherRefineStone" xml:space="preserve"><value>Đá tinh luyện cao hơn được đóng gói</value></data>
+  <data name="PackedJewelOfHarmony" xml:space="preserve"><value>Gói Đá Tạo Hóa</value></data>
+  <data name="PackedJewelOfChaos" xml:space="preserve"><value>Gói Ngọc Hỗn Nguyên</value></data>
+  <data name="PackedLowerRefineStone" xml:space="preserve"><value>Gói Đá Tinh Luyện Cấp Thấp</value></data>
+  <data name="PackedHigherRefineStone" xml:space="preserve"><value>Gói Đá Tinh Luyện Cấp Cao</value></data>
   <data name="GuardianAngel" xml:space="preserve"><value>Thần hộ mệnh</value></data>
   <data name="Imp" xml:space="preserve"><value>Imp</value></data>
   <data name="HornOfUniria" xml:space="preserve"><value>Sừng Uniria</value></data>
@@ -533,7 +533,7 @@
   <data name="PendantOfLighting" xml:space="preserve"><value>Mặt dây chuyền chiếu sáng</value></data>
   <data name="PendantOfFire" xml:space="preserve"><value>Mặt dây chuyền lửa</value></data>
   <data name="LochSFeather" xml:space="preserve"><value>Lông của Loch</value></data>
-  <data name="Fruits" xml:space="preserve"><value>trái cây</value></data>
+  <data name="Fruits" xml:space="preserve"><value>quả</value></data>
   <data name="ScrollOfArchangel" xml:space="preserve"><value>Cuộn tổng lãnh thiên thần</value></data>
   <data name="BloodBone" xml:space="preserve"><value>xương máu</value></data>
   <data name="InvisibilityCloak" xml:space="preserve"><value>Áo choàng tàng hình</value></data>
@@ -587,22 +587,22 @@
   <data name="Ale" xml:space="preserve"><value>bia</value></data>
   <data name="TownPortalScroll" xml:space="preserve"><value>Cuộn cổng thông tin thị trấn</value></data>
   <data name="BoxOfLuck" xml:space="preserve"><value>Hộp may mắn</value></data>
-  <data name="JewelOfBless" xml:space="preserve"><value>Viên ngọc phước lành</value></data>
-  <data name="JewelOfSoul" xml:space="preserve"><value>Viên ngọc tâm hồn</value></data>
-  <data name="JewelOfLife" xml:space="preserve"><value>Viên ngọc cuộc sống</value></data>
+  <data name="JewelOfBless" xml:space="preserve"><value>Ngọc Ước Nguyện</value></data>
+  <data name="JewelOfSoul" xml:space="preserve"><value>Ngọc Tâm Linh</value></data>
+  <data name="JewelOfLife" xml:space="preserve"><value>Ngọc Sinh Mệnh</value></data>
   <data name="DevilSEye" xml:space="preserve"><value>Mắt quỷ</value></data>
   <data name="DevilSKey" xml:space="preserve"><value>Chìa khóa của quỷ</value></data>
   <data name="DevilSInvitation" xml:space="preserve"><value>Lời mời của quỷ</value></data>
   <data name="Rena" xml:space="preserve"><value>Rena</value></data>
   <data name="Stardust" xml:space="preserve"><value>Bụi sao</value></data>
-  <data name="JewelOfCreation" xml:space="preserve"><value>Viên ngọc sáng tạo</value></data>
+  <data name="JewelOfCreation" xml:space="preserve"><value>Ngọc Sáng Tạo</value></data>
   <data name="ScrollOfEmperorRingOfHonor" xml:space="preserve"><value>Cuộn giấy của Hoàng đế;Nhẫn danh dự</value></data>
   <data name="BrokenSwordDarkStone" xml:space="preserve"><value>Kiếm gãy;Đá đen</value></data>
   <data name="TearOfElf" xml:space="preserve"><value>Nước mắt của yêu tinh</value></data>
   <data name="SoulShardOfWizard" xml:space="preserve"><value>Mảnh linh hồn của pháp sư</value></data>
   <data name="LostMap" xml:space="preserve"><value>Bản đồ bị mất</value></data>
   <data name="SymbolOfKundun" xml:space="preserve"><value>Biểu tượng của Kundun</value></data>
-  <data name="JewelOfGuardian" xml:space="preserve"><value>Viên ngọc bảo vệ</value></data>
+  <data name="JewelOfGuardian" xml:space="preserve"><value>Ngọc Hộ Mệnh</value></data>
   <data name="PinkChocolateBox" xml:space="preserve"><value>Hộp sô cô la hồng</value></data>
   <data name="RedChocolateBox" xml:space="preserve"><value>Hộp sô cô la đỏ</value></data>
   <data name="BlueChocolateBox" xml:space="preserve"><value>Hộp sô cô la màu xanh</value></data>
@@ -613,9 +613,9 @@
   <data name="MediumComplexPotion" xml:space="preserve"><value>Thuốc phức tạp trung bình</value></data>
   <data name="LargeComplexPotion" xml:space="preserve"><value>Thuốc phức hợp lớn</value></data>
   <data name="Gemstone" xml:space="preserve"><value>Đá quý</value></data>
-  <data name="JewelOfHarmony" xml:space="preserve"><value>Viên ngọc hài hòa</value></data>
-  <data name="LowerRefineStone" xml:space="preserve"><value>Đá tinh chế thấp hơn</value></data>
-  <data name="HigherRefineStone" xml:space="preserve"><value>Đá tinh chế cao hơn</value></data>
+  <data name="JewelOfHarmony" xml:space="preserve"><value>Đá Tạo Hóa</value></data>
+  <data name="LowerRefineStone" xml:space="preserve"><value>Đá Tinh Luyện Cấp Thấp</value></data>
+  <data name="HigherRefineStone" xml:space="preserve"><value>Đá Tinh Luyện Cấp Cao</value></data>
   <data name="PumpkinOfLuck" xml:space="preserve"><value>Bí ngô may mắn</value></data>
   <data name="JackOLanternBlessings" xml:space="preserve"><value>Lời chúc phúc của Jack O'Lantern</value></data>
   <data name="JackOLanternWrath" xml:space="preserve"><value>Cơn thịnh nộ của Jack O'Lantern</value></data>
@@ -692,11 +692,11 @@
   <data name="RageFighterCharacterCard" xml:space="preserve"><value>Thẻ nhân vật Thiết binh</value></data>
   <data name="SignOfDimensions" xml:space="preserve"><value>Ký hiệu kích thước</value></data>
   <data name="DoppelgangerFreeTicket" xml:space="preserve"><value>Vé miễn phí song trùng</value></data>
-  <data name="ResetFruitStrength" xml:space="preserve"><value>Đặt lại trái cây (Sức mạnh)</value></data>
-  <data name="ResetFruitAgility" xml:space="preserve"><value>Đặt lại trái cây (Nhanh nhẹn)</value></data>
-  <data name="ResetFruitVitality" xml:space="preserve"><value>Đặt lại trái cây (Sức sống)</value></data>
-  <data name="ResetFruitEnergy" xml:space="preserve"><value>Đặt lại trái cây (Năng lượng)</value></data>
-  <data name="ResetFruitCommand" xml:space="preserve"><value>Đặt lại trái cây (Lệnh)</value></data>
+  <data name="ResetFruitStrength" xml:space="preserve"><value>Đặt lại quả (Sức mạnh)</value></data>
+  <data name="ResetFruitAgility" xml:space="preserve"><value>Đặt lại quả (Nhanh nhẹn)</value></data>
+  <data name="ResetFruitVitality" xml:space="preserve"><value>Đặt lại quả (Sức sống)</value></data>
+  <data name="ResetFruitEnergy" xml:space="preserve"><value>Đặt lại quả (Năng lượng)</value></data>
+  <data name="ResetFruitCommand" xml:space="preserve"><value>Đặt lại quả (Lệnh)</value></data>
   <data name="DevilSquareFreeTicket" xml:space="preserve"><value>Vé Quảng Trường Quỷ</value></data>
   <data name="BloodCastleFreeTicket" xml:space="preserve"><value>Vé Lâu Đài Máu</value></data>
   <data name="IllusionTempleFreeTicket" xml:space="preserve"><value>Vé Đền Ảo Ảnh</value></data>
@@ -750,8 +750,8 @@
   <data name="SecondLuckyHelmTicket" xml:space="preserve"><value>Vé mũ may mắn thứ 2</value></data>
   <data name="SecondLuckyGlovesTicket" xml:space="preserve"><value>Vé Găng tay may mắn thứ 2</value></data>
   <data name="SecondLuckyBootsTicket" xml:space="preserve"><value>Vé ủng may mắn thứ 2</value></data>
-  <data name="JewelOfExtension" xml:space="preserve"><value>Viên ngọc mở rộng</value></data>
-  <data name="JewelOfElevation" xml:space="preserve"><value>Viên ngọc của độ cao</value></data>
+  <data name="JewelOfExtension" xml:space="preserve"><value>Ngọc Mở Rộng</value></data>
+  <data name="JewelOfElevation" xml:space="preserve"><value>Ngọc Nâng Cấp</value></data>
   <data name="SealOfAscension" xml:space="preserve"><value>Dấu ấn thăng thiên</value></data>
   <data name="SealOfWealth" xml:space="preserve"><value>Con dấu của cải</value></data>
   <data name="SealOfSustenance" xml:space="preserve"><value>Con dấu dinh dưỡng</value></data>
