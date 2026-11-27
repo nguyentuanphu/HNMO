@@ -144,6 +144,7 @@ public class UpdaterTests
             var newHash = Convert.ToHexString(SHA256.HashData(newBytes)).ToLowerInvariant();
             string? checkBody = null;
             string? authHeader = null;
+            string? machineHeader = null;
             var validHandler = new StubHubHandler(async (req, ct) =>
             {
                 if (req.RequestUri!.AbsolutePath == "/api/update-check")
@@ -153,7 +154,7 @@ public class UpdaterTests
                     {
                       "manifestVersion": "1.0.1",
                       "notes": "Fix",
-                      "downloadBase": "https://cdn.example/files/",
+                      "downloadBase": "https://hub.example/api/update-file",
                       "token": "short-lived-tok",
                       "files": [{"path": "server/app.dll", "sha256": "{{newHash}}", "size": {{newBytes.Length}}, "exec": false}]
                     }
@@ -161,9 +162,10 @@ public class UpdaterTests
                     return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(answer) };
                 }
 
-                if (req.RequestUri.ToString() == $"https://cdn.example/files/{newHash}")
+                if (req.RequestUri.ToString() == "https://hub.example/api/update-file?path=server%2Fapp.dll")
                 {
                     authHeader = req.Headers.Authorization?.ToString();
+                    machineHeader = req.Headers.TryGetValues("X-HNMO-Machine", out var vals) ? vals.FirstOrDefault() : null;
                     return new HttpResponseMessage(HttpStatusCode.OK) { Content = new ByteArrayContent(newBytes) };
                 }
 
@@ -183,6 +185,7 @@ public class UpdaterTests
             var plan = await validUpdater.StageAuthorizedUpdateForTestAsync(CancellationToken.None).ConfigureAwait(false);
             Assert.That(plan, Is.Not.Null);
             Assert.That(authHeader, Is.EqualTo("Bearer short-lived-tok"));
+            Assert.That(machineHeader, Is.EqualTo("aaaa1111bbbb2222"));
             Assert.That(plan!.Copies.Select(c => c.Path), Is.EqualTo(new[] { "server/app.dll" }));
             Assert.That(File.ReadAllBytes(Path.Combine(plan.StagingFolder, newHash)), Is.EqualTo(newBytes));
         }

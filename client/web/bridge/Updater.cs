@@ -382,12 +382,12 @@ internal sealed class HnmoUpdater
                 return;
             }
 
-            var baseWithSlash = downloadBase.EndsWith('/') ? downloadBase : downloadBase + "/";
+            var normalizedBase = downloadBase.TrimEnd('/');
             lock (this._gate)
             {
                 this._latest = manifestVersion;
                 this._notes = Text("notes");
-                this._filesUrl = baseWithSlash;
+                this._filesUrl = normalizedBase;
                 this._updateToken = token;
                 this._authorizedFiles = files;
             }
@@ -450,12 +450,16 @@ internal sealed class HnmoUpdater
         }
 
         this._logger.LogInformation("HNMO update {From} → {To}: {Files} files to download ({Mb} MB), {Removed} to take away.", installed.Version, next.Version, copies.Count, total / (1 << 20), removes.Count);
+        var machineId = (this._machineIdProvider ?? (() => HostMachineIdentity.MachineId))();
         foreach (var file in copies.DistinctBy(c => c.Sha256, StringComparer.OrdinalIgnoreCase))
         {
             var target = Path.Combine(staging, file.Sha256.ToLowerInvariant());
             if (!File.Exists(target) || !string.Equals(await HashAsync(target).ConfigureAwait(false), file.Sha256, StringComparison.OrdinalIgnoreCase))
             {
-                await DownloadAsync(http, filesUrl + file.Sha256.ToLowerInvariant(), target, file.Sha256, bearerToken, cancellationToken).ConfigureAwait(false);
+                var fileUrl = filesUrl.EndsWith("/api/update-file", StringComparison.OrdinalIgnoreCase)
+                    ? $"{filesUrl}?path={Uri.EscapeDataString(file.Path.Replace('\\', '/'))}"
+                    : $"{filesUrl}/{file.Sha256.ToLowerInvariant()}";
+                await DownloadAsync(http, fileUrl, target, file.Sha256, bearerToken, machineId, cancellationToken).ConfigureAwait(false);
             }
 
             done += file.Size;
@@ -575,7 +579,7 @@ internal sealed class HnmoUpdater
         }
     }
 
-    private static async Task DownloadAsync(HttpClient http, string url, string target, string sha256, string? bearerToken, CancellationToken cancellationToken)
+    private static async Task DownloadAsync(HttpClient http, string url, string target, string sha256, string? bearerToken, string machineId, CancellationToken cancellationToken)
     {
         var part = target + ".part";
         for (var attempt = 1; ; attempt++)
@@ -586,6 +590,11 @@ internal sealed class HnmoUpdater
                 if (!string.IsNullOrWhiteSpace(bearerToken))
                 {
                     request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
+                }
+
+                if (!string.IsNullOrWhiteSpace(machineId))
+                {
+                    request.Headers.TryAddWithoutValidation("X-HNMO-Machine", machineId);
                 }
 
                 using (var response = await http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false))
