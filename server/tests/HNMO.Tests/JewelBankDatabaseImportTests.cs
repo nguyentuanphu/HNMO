@@ -7,6 +7,7 @@ namespace HNMO.Tests;
 using System.IO;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic;
+using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.PlugIns.JewelBank;
 using HNMO.Persistence;
 using BasicModel = HNMO.Persistence.BasicModel;
@@ -131,6 +132,65 @@ public class JewelBankDatabaseImportTests
         Assert.That((await player.PersistenceContext.GetJewelBankBalancesAsync(player.Account!.GetId()).ConfigureAwait(false))["bless"], Is.EqualTo(4));
     }
 
+    /// <summary>
+    /// The JSON state file is taken from <c>server/</c> into the save folder (<see cref="HnmoSaveFolder"/>): what was
+    /// imported before the move isn't imported again from the moved file, and nothing is credited twice.
+    /// </summary>
+    /// <returns>A task.</returns>
+    [Test]
+    public async Task WhatWasImportedBeforeTheMoveIsNotImportedAgainAsync()
+    {
+        var (folder, oldFile) = this.CreateFolders();
+        var (plugIn, player) = await this.CreateAsync(oldFile).ConfigureAwait(false);
+        SeedJson(plugIn.GetEngine());
+        var provider = player.GameContext.PersistenceContextProvider;
+        var configuration = player.GameContext.Configuration;
+        var before = await JewelBankDatabaseImport.RunAsync(provider, configuration, plugIn.GetEngine().Store, dryRun: false).ConfigureAwait(false);
+
+        folder.MoveOldStateFiles("s6", DateTime.UtcNow);
+        var moved = JewelBankStore.Open(HnmoStateStore.ResolveStateFilePath(HnmoStateStore.StateFileName, folder, "s6"));
+        var after = await JewelBankDatabaseImport.RunAsync(provider, configuration, moved, dryRun: false).ConfigureAwait(false);
+
+        var balances = await player.PersistenceContext.GetJewelBankBalancesAsync(this._aliceId).ConfigureAwait(false);
+        Assert.Multiple(() =>
+        {
+            Assert.That(File.Exists(oldFile), Is.True, "the original stays for an older version");
+            Assert.That(before.Imported, Has.Count.EqualTo(3));
+            Assert.That(after.InputChecksum, Is.EqualTo(before.InputChecksum), "the moved file holds the same entries");
+            Assert.That(after.Imported, Is.Empty);
+            Assert.That(after.Conflicts, Is.Empty);
+            Assert.That(after.AlreadyImported, Is.EqualTo(3));
+            Assert.That(balances["bless"], Is.EqualTo(7));
+            Assert.That(balances["soul"], Is.EqualTo(1));
+        });
+    }
+
+    /// <summary>An account imported only after the move gets its JSON entries from the moved file, once.</summary>
+    /// <returns>A task.</returns>
+    [Test]
+    public async Task WhatWasNotImportedBeforeTheMoveIsImportedOnceAfterItAsync()
+    {
+        var (folder, oldFile) = this.CreateFolders();
+        var (plugIn, player) = await this.CreateAsync(oldFile).ConfigureAwait(false);
+        SeedJson(plugIn.GetEngine());
+        var provider = player.GameContext.PersistenceContextProvider;
+        var configuration = player.GameContext.Configuration;
+
+        folder.MoveOldStateFiles("s6", DateTime.UtcNow);
+        var moved = JewelBankStore.Open(HnmoStateStore.ResolveStateFilePath(HnmoStateStore.StateFileName, folder, "s6"));
+        var first = await JewelBankDatabaseImport.RunAsync(provider, configuration, moved, dryRun: false).ConfigureAwait(false);
+        var second = await JewelBankDatabaseImport.RunAsync(provider, configuration, moved, dryRun: false).ConfigureAwait(false);
+
+        var balances = await player.PersistenceContext.GetJewelBankBalancesAsync(this._aliceId).ConfigureAwait(false);
+        Assert.Multiple(() =>
+        {
+            Assert.That(first.Imported, Has.Count.EqualTo(3));
+            Assert.That(second.Imported, Is.Empty);
+            Assert.That(second.AlreadyImported, Is.EqualTo(3));
+            Assert.That(balances["bless"], Is.EqualTo(7));
+        });
+    }
+
     private static void SeedJson(JewelBankEngine engine)
     {
         Assert.That(engine.Deposit("alice", "bless", 7, "game", DateTime.UtcNow), Is.EqualTo(JewelBankResult.Ok));
@@ -139,7 +199,16 @@ public class JewelBankDatabaseImportTests
         Assert.That(engine.Deposit("ghost", "bless", 1, "game", DateTime.UtcNow), Is.EqualTo(JewelBankResult.Ok));
     }
 
-    private async Task<(JewelBankPlugIn PlugIn, Player Player)> CreateAsync()
+    private (HnmoSaveFolder Folder, string OldFile) CreateFolders()
+    {
+        var server = Path.Combine(this._tempDir, "server");
+        var save = Path.Combine(this._tempDir, "save");
+        Directory.CreateDirectory(server);
+        Directory.CreateDirectory(save);
+        return (new HnmoSaveFolder(save, [server], server), Path.Combine(server, HnmoStateStore.StateFileName));
+    }
+
+    private async Task<(JewelBankPlugIn PlugIn, Player Player)> CreateAsync(string? fileName = null)
     {
         var context = GameContextTestHelper.CreateGameContext([]);
         var player = await PlayerTestHelper.CreatePlayerAsync(context).ConfigureAwait(false);
@@ -153,7 +222,7 @@ public class JewelBankDatabaseImportTests
         {
             Configuration = new JewelBankConfiguration
             {
-                FileName = Path.Combine(this._tempDir, "hnmo-state.json"),
+                FileName = fileName ?? Path.Combine(this._tempDir, "hnmo-state.json"),
                 SafeZoneOnly = false,
                 Jewels =
                 [
