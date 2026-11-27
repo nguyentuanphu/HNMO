@@ -17,6 +17,12 @@ internal static class AssetOperationTestBarrier
 {
     private static readonly string? Stage = Environment.GetEnvironmentVariable("HNMO_TEST_ASSET_BARRIER");
 
+    /// <summary>
+    /// How many hits of the stage go by before it stops (HNMO_TEST_ASSET_BARRIER_SKIP; a real server's first shared coin
+    /// sync can be a login reward, and the test wants the player's spend after it).
+    /// </summary>
+    private static int skipLeft = int.TryParse(Environment.GetEnvironmentVariable("HNMO_TEST_ASSET_BARRIER_SKIP"), out var skip) ? skip : 0;
+
     /// <summary>Stops at <paramref name="stage"/> when the crash test asks for it.</summary>
     /// <param name="stage">The stage reached.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
@@ -24,6 +30,11 @@ internal static class AssetOperationTestBarrier
     public static async ValueTask ReachAsync(string stage, CancellationToken cancellationToken)
     {
         if (Stage is null || !Matches(Stage, stage))
+        {
+            return;
+        }
+
+        if (Interlocked.Decrement(ref skipLeft) >= 0)
         {
             return;
         }
