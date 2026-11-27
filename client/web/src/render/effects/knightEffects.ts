@@ -19,21 +19,45 @@ import type { Effect, EffectOwner, EffectType, Joint } from './types.js';
 const WHITE = new THREE.Vector3(1, 1, 1);
 const ITEM_GROUP_SPEAR = 3;
 
-/** A see-through copy of the owner's weapon, drawn by the effect (RenderPartObject of o->Owner->Weapon). */
+const WEAPON_COPY_POOL = new WeakMap<THREE.Object3D, THREE.Object3D[]>();
+const WEAPON_COPY_POOL_LIMIT = 8;
+
+/** A see-through copy of the owner's weapon, drawn by the effect (RenderPartObject of o->Owner->Weapon), pooled per weapon model. */
 function weaponCopy(o: Effect, system: EffectSystem): void {
   const weapon = o.owner?.weapon?.();
   if (!weapon) return;
-  const copy = weapon.model.clone(true);
-  copy.traverse((node) => {
-    if (node instanceof THREE.Mesh) {
-      const material = (node.material as THREE.Material).clone();
-      material.transparent = true;
-      node.material = material;
-    }
-  });
-  copy.name = 'effect-weapon';
-  copy.matrixAutoUpdate = true;
+  const source = weapon.model;
+  let pool = WEAPON_COPY_POOL.get(source);
+  if (!pool) {
+    pool = [];
+    WEAPON_COPY_POOL.set(source, pool);
+  }
+  let copy = pool.pop();
+  if (!copy) {
+    copy = source.clone(true);
+    copy.traverse((node) => {
+      if (node instanceof THREE.Mesh) {
+        const material = (node.material as THREE.Material).clone();
+        material.transparent = true;
+        node.material = material;
+      }
+    });
+    copy.name = 'effect-weapon';
+    copy.matrixAutoUpdate = true;
+  }
   copy.visible = false;
+  copy.userData.release = () => {
+    copy!.removeFromParent();
+    copy!.visible = false;
+    const targetPool = WEAPON_COPY_POOL.get(source);
+    if (targetPool && targetPool.length < WEAPON_COPY_POOL_LIMIT) {
+      targetPool.push(copy!);
+    } else {
+      copy!.traverse((node) => {
+        if (node instanceof THREE.Mesh && node.material instanceof THREE.Material) node.material.dispose();
+      });
+    }
+  };
   o.extra = copy;
   o.counter = weapon.group;
   system.root.add(copy);

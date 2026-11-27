@@ -129,8 +129,12 @@ const OBJECT_RECORD_V1_BYTES = OBJECT_RECORD_BYTES + 2;
 export function parseWorldObjects(encrypted: Uint8Array): WorldObjects {
   const data = mapFileDecrypt(encrypted);
   const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
-  const recordBytes = data[0] >= 1 ? OBJECT_RECORD_V1_BYTES : OBJECT_RECORD_BYTES;
   const count = view.getInt16(2, true);
+  // Desktop OpenObjects always reads 30-byte records regardless of header version byte (e.g. S6 World7 has data[0]=228);
+  // only fall back to 32-byte records if the payload size strictly matches V1.
+  const recordBytes = count >= 0 && 4 + count * OBJECT_RECORD_BYTES === data.length
+    ? OBJECT_RECORD_BYTES
+    : (data[0] >= 1 && count >= 0 && 4 + count * OBJECT_RECORD_V1_BYTES === data.length ? OBJECT_RECORD_V1_BYTES : OBJECT_RECORD_BYTES);
   const objects: WorldObject[] = [];
   let p = 4;
   for (let i = 0; i < count && p + OBJECT_RECORD_BYTES <= data.length; i++, p += recordBytes) {

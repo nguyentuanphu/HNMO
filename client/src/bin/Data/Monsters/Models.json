@@ -664,7 +664,7 @@
     {
       "slot": "MONSTER_MODEL_LIFE_STONE",
       "file": "Data/Monster/Monster87.bmd",
-      "textureFolders": ["Monster"],
+      "textureFolders": ["Monster", "Skill"],
       "animations": {"stop1": 0.05, "stop2": 0.05, "walk": 0.1}
     },
     {
@@ -1304,7 +1304,7 @@
     {
       "slot": "MONSTER_MODEL_SELUPAN",
       "file": "Data/Monster/Monster151.bmd",
-      "textureFolders": ["Monster"],
+      "textureFolders": ["Monster", "Skill"],
       "animations": {"walk": 0.2, "attack1": 0.25, "attack2": 0.25, "shock": 0.35, "die": 0.18, "appear": 0.25, "attack3": 0.25, "attack4": 0.25},
       "boundingBox": {"min": [-150, -150, 0], "max": [150, 150, 400]}
     },
@@ -2560,7 +2560,7 @@
     {
       "slot": "MODEL_UNITEDMARKETPLACE_RAUL",
       "file": "Data/NPC/UnitedMarkedPlace_raul.bmd",
-      "textureFolders": ["NPC"],
+      "textureFolders": ["NPC", "Effect", "Item", "Skill", "Monster"],
       "animations": {"stop1": 0.5, "stop2": 0.5, "walk": 0.5}
     },
     {

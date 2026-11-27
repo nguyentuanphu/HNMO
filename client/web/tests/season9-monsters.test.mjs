@@ -30,9 +30,9 @@ test('the Season 9 numbers and slots are new: the game\'s own data is never repl
 });
 
 test('the field monsters of Nars, Ferea and Uruk Mountain and the Season 9 NPCs have an entry', () => {
-  // The numbers the Season 9 server suite's spawn list places that the base game lacks, except the five whose
-  // models are not known yet (580 Captain Slough, 581 Deruvish, 584 Sir Lesnar, 643 Mait, 689 Flame Trap).
-  for (const n of [582, 586, 587, 588, 589, 590, 591, 592, 593, 594, 595, 596, 608, 609, 610, 611, 612, 613, 614, 615, 651, 669, 670, 671, 672, 673, 682]) {
+  // The numbers the Season 9 server suite's spawn list places that the base game lacks, including Captain Slough (580),
+  // Deruvish (581), Jin (583, 604), Sir Lesnar (584), Mait (643), and Flame Trap (689).
+  for (const n of [580, 581, 582, 583, 584, 586, 587, 588, 589, 590, 591, 592, 593, 594, 595, 596, 604, 608, 609, 610, 611, 612, 613, 614, 615, 643, 651, 669, 670, 671, 672, 673, 682, 689]) {
     assert.ok(numbers.includes(n), `${n} has no entry`);
   }
 });
@@ -43,7 +43,7 @@ test('every entry names a model of the list, of its kind, from Season 9\'s files
     assert.ok(model, `${monster.name.en}: no model ${monster.model}`);
     assert.match(monster.model, monster.kind === 'npc' ? /^MODEL_S9_/ : /^MONSTER_MODEL_S9_/, monster.name.en);
     assert.ok(monster.name.en, 'an English name');
-    assert.match(model.file, /^Data\/s9\/(Monster|NPC)\/[^/]+\.bmd$/i, model.slot);
+    assert.match(model.file, /^Data\/s9\/(Monster|NPC)\/(?:[^/]+\/)*[^/]+\.bmd$/i, model.slot);
     assert.deepEqual(model.textureFolders, [path.posix.dirname(model.file.slice('Data/'.length))], model.slot);
   }
 });
