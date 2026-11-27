@@ -21013,6 +21013,110 @@ public readonly struct GameGuardAuthResponse
 
 
 /// <summary>
+/// Is sent by the client when: Sent by the web client in a Season 9 realm to open the pentagram window, wear or take off the pentagram, put an errtel into a slot or take it out, or mix an errtel.
+/// Causes reaction on server side: The server performs the action and responds with HnmoPentagramState (F5 5C).
+/// </summary>
+public readonly struct HnmoPentagramCommand
+{
+    private readonly Memory<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoPentagramCommand"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoPentagramCommand(Memory<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoPentagramCommand"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoPentagramCommand(Memory<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (byte)Math.Min(data.Length, Length);
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC1;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x5B;
+
+    /// <summary>
+    /// Gets the initial length of this data packet. When the size is dynamic, this value may be bigger than actually needed.
+    /// </summary>
+    public static int Length => 7;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C1HeaderWithSubCode Header => new (this._data);
+
+    /// <summary>
+    /// Gets or sets 1 = Request state, 2 = Wear the pentagram of a bag slot, 3 = Take off the pentagram, 4 = Put the errtel of a bag slot into an errtel slot, 5 = Take the errtel of an errtel slot out, 6 = Level up the errtel of a bag slot, 7 = Rank up the errtel of a bag slot with a second one.
+    /// </summary>
+    public byte Action
+    {
+        get => this._data.Span[4];
+        set => this._data.Span[4] = value;
+    }
+
+    /// <summary>
+    /// Gets or sets the bag slot of the pentagram or errtel.
+    /// </summary>
+    public byte Slot
+    {
+        get => this._data.Span[5];
+        set => this._data.Span[5] = value;
+    }
+
+    /// <summary>
+    /// Gets or sets the errtel slot of the pentagram (0..4), or the bag slot of the second errtel of a rank-up.
+    /// </summary>
+    public byte Index
+    {
+        get => this._data.Span[6];
+        set => this._data.Span[6] = value;
+    }
+
+    /// <summary>
+    /// Performs an implicit conversion from a Memory of bytes to a <see cref="HnmoPentagramCommand"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoPentagramCommand(Memory<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoPentagramCommand"/> to a Memory of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Memory<byte>(HnmoPentagramCommand packet) => packet._data; 
+}
+
+
+/// <summary>
 /// Is sent by the client when: Sent by the web client to open the Jewel Bank, deposit or withdraw jewels, or clear master skill points.
 /// Causes reaction on server side: The server performs the action and responds with HnmoJewelBankState (F5 3B).
 /// </summary>
@@ -21301,6 +21405,83 @@ public readonly struct HnmoCatchupCapRequest
     /// <param name="packet">The packet as struct.</param>
     /// <returns>The packet as byte span.</returns>
     public static implicit operator Memory<byte>(HnmoCatchupCapRequest packet) => packet._data; 
+}
+
+
+/// <summary>
+/// Is sent by the client when: Sent by the web client after entering the world in a Season 9 realm.
+/// Causes reaction on server side: The server responds with HnmoSeasonNineClientState (F5 59).
+/// </summary>
+public readonly struct HnmoSeasonNineClientRequest
+{
+    private readonly Memory<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoSeasonNineClientRequest"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoSeasonNineClientRequest(Memory<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoSeasonNineClientRequest"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoSeasonNineClientRequest(Memory<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (byte)Math.Min(data.Length, Length);
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC1;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x58;
+
+    /// <summary>
+    /// Gets the initial length of this data packet. When the size is dynamic, this value may be bigger than actually needed.
+    /// </summary>
+    public static int Length => 4;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C1HeaderWithSubCode Header => new (this._data);
+
+    /// <summary>
+    /// Performs an implicit conversion from a Memory of bytes to a <see cref="HnmoSeasonNineClientRequest"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoSeasonNineClientRequest(Memory<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoSeasonNineClientRequest"/> to a Memory of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Memory<byte>(HnmoSeasonNineClientRequest packet) => packet._data; 
 }
 
 

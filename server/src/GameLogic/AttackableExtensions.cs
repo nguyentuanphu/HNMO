@@ -308,6 +308,14 @@ public static class AttackableExtensions
 
         dmg += (int)attacker.Attributes[Stats.FinalDamageBonus];
 
+        // Season 9: the elemental damage of the attacker's pentagram and errtels (none outside Season 9 realms).
+        var elemental = PlugIns.SeasonNineSystems.Pentagram.ElementalDamage(attacker, defender, isPvp);
+        if (elemental > 0 && attacker is Player elementalAttacker && PlugIns.SeasonNineSystems.Pentagram.Worn(elementalAttacker) is { } worn)
+        {
+            dmg += elemental;
+            await elementalAttacker.InvokeViewPlugInAsync<Views.IHnmoPentagramViewPlugIn>(p => p.ShowElementalHitAsync(defender.Id, elemental, worn.PentagramElement)).ConfigureAwait(false);
+        }
+
         if (isPvp && attacker is not AttackerSurrogate)
         {
             dmg += (int)attacker.Attributes[Stats.FinalDamageIncreasePvp];

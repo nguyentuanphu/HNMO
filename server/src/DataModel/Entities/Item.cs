@@ -87,6 +87,19 @@ public partial class Item
     /// </summary>
     public Guid? Serial { get; set; }
 
+    /// <summary>
+    /// Gets or sets the Season 9 element of a pentagram or an errtel (0: none, 1: fire, 2: water, 3: earth, 4: wind,
+    /// 5: darkness).
+    /// </summary>
+    public byte PentagramElement { get; set; }
+
+    /// <summary>
+    /// Gets or sets the Season 9 errtel data, empty for other items. An errtel: its options, one per rank, as
+    /// <c>option index:level</c> separated by commas. A pentagram: its five errtel slots separated by <c>|</c>, each
+    /// empty or <c>errtel number=element=options</c>.
+    /// </summary>
+    public string? PentagramErrtels { get; set; }
+
     /// <summary>Assigns the origin serial if the item has none, while the caller owns the item.</summary>
     /// <returns>The serial retained across changes of ownership and persistence.</returns>
     public Guid EnsureSerial()
@@ -114,6 +127,8 @@ public partial class Item
         this.SocketCount = otherItem.SocketCount;
         this.PetExperience = otherItem.PetExperience;
         this.Serial = otherItem.Serial;
+        this.PentagramElement = otherItem.PentagramElement;
+        this.PentagramErrtels = otherItem.PentagramErrtels;
         if (otherItem.ItemOptions != null && otherItem.ItemOptions.Any())
         {
             this.ItemOptions.Clear();

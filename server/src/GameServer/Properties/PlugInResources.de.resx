@@ -2667,4 +2667,16 @@
   <data name="ShowItemCraftingPreviewExtendedPlugIn_Description" xml:space="preserve">
     <value>Die erweiterte Implementierung von IShowItemCraftingPreviewPlugIn, die alles mit spezifischen Datenpaketen an den Spielclient weiterleitet.</value>
   </data>
+  <data name="HnmoSeasonNineClientViewPlugIn_Name" xml:space="preserve">
+    <value>HNMO: Season-9-Client-Einstellungen senden</value>
+  </data>
+  <data name="HnmoSeasonNineClientViewPlugIn_Description" xml:space="preserve">
+    <value>Sendet die Client-Einstellungen eines Season-9-Realms (die Season-9-Minimap-Marker) als Antwort auf die Anfrage an das Webspiel.</value>
+  </data>
+  <data name="HnmoSeasonNineClientRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>HNMO: Anfrage der Season-9-Client-Einstellungen</value>
+  </data>
+  <data name="HnmoSeasonNineClientRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Beantwortet die Anfrage des Webspiels mit den Client-Einstellungen des Season-9-Realms; außerhalb eines aktiven Season-9-Realms nichts.</value>
+  </data>
 </root>

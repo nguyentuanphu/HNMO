@@ -48,6 +48,29 @@ public class FinishRageFighterMasterTreePlugIn : UpdatePlugInBase
     public override DateTime CreatedAt => new(2026, 8, 7, 16, 0, 0, DateTimeKind.Utc);
 
     /// <inheritdoc />
+    /// <remarks>Version 2: Equipped Weapon Mastery (571) goes to master level 10, like every other weapon mastery and the
+    /// desktop client's master tree.</remarks>
+    public override int Version => 2;
+
+    /// <inheritdoc />
+    public override DateTime UpdatedAt => new(2026, 11, 27, 0, 0, 0, DateTimeKind.Utc);
+
+    /// <inheritdoc />
+    protected override async ValueTask ApplyAsync(IContext context, GameConfiguration gameConfiguration, int? installedVersion)
+    {
+        // Version one creates attributes and relationships: it runs only where it isn't installed yet.
+        if (installedVersion is null or < 1)
+        {
+            await this.ApplyAsync(context, gameConfiguration).ConfigureAwait(false);
+        }
+
+        if (gameConfiguration.Skills.FirstOrDefault(s => s.Number == (short)SkillNumber.EquippedWeaponMastery)?.MasterDefinition is { } equippedWeaponMastery)
+        {
+            equippedWeaponMastery.MaximumLevel = 10;
+        }
+    }
+
+    /// <inheritdoc />
     protected override async ValueTask ApplyAsync(IContext context, GameConfiguration gameConfiguration)
     {
         // Create new Stats

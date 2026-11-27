@@ -23,7 +23,7 @@ namespace HNMO.Persistence.EntityFramework.CompiledModels.ForAccountContext
                 "HNMO.Persistence.EntityFramework.Model.Item",
                 typeof(HNMO.Persistence.EntityFramework.Model.Item),
                 baseEntityType,
-                propertyCount: 13,
+                propertyCount: 15,
                 navigationCount: 2,
                 foreignKeyCount: 1,
                 unnamedIndexCount: 2,
@@ -87,6 +87,22 @@ namespace HNMO.Persistence.EntityFramework.CompiledModels.ForAccountContext
                 fieldInfo: typeof(HNMO.DataModel.Entities.Item).GetField("<Level>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 sentinel: (byte)0);
             level.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+
+            var pentagramElement = runtimeEntityType.AddProperty(
+                "PentagramElement",
+                typeof(byte),
+                propertyInfo: typeof(HNMO.DataModel.Entities.Item).GetProperty("PentagramElement", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(HNMO.DataModel.Entities.Item).GetField("<PentagramElement>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                sentinel: (byte)0);
+            pentagramElement.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+
+            var pentagramErrtels = runtimeEntityType.AddProperty(
+                "PentagramErrtels",
+                typeof(string),
+                propertyInfo: typeof(HNMO.DataModel.Entities.Item).GetProperty("PentagramErrtels", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(HNMO.DataModel.Entities.Item).GetField("<PentagramErrtels>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
+            pentagramErrtels.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
             var petExperience = runtimeEntityType.AddProperty(
                 "PetExperience",

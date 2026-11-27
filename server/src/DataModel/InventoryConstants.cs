@@ -163,6 +163,11 @@ public static class InventoryConstants
     public static readonly byte WarehouseSize = (byte)(WarehouseRows * RowSize);
 
     /// <summary>
+    /// The slot of the Season 9 pentagram, right after the personal store in the inventory's item storage.
+    /// </summary>
+    public static readonly byte PentagramSlot = (byte)(FirstStoreItemSlotIndex + StoreSize);
+
+    /// <summary>
     /// Gets the size of the inventory with the specified number of extensions.
     /// </summary>
     /// <param name="numberOfExtensions">The number of inventory extensions.</param>

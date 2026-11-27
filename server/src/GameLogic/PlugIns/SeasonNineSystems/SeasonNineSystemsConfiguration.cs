@@ -75,6 +75,54 @@ public sealed class SeasonNineSystemsConfiguration
     /// <summary>Gets or sets flat additive Errtel extraction success bonus percentage (default 0).</summary>
     public int PentagramErrtelExtractBonusPct { get; set; }
 
+    /// <summary>
+    /// Gets or sets the NPC (monster definition number) at which errtels are mixed; 0: in any safe zone. HNMO's default
+    /// until the Season 9 pack's value is known.
+    /// </summary>
+    public int PentagramMixNpcNumber { get; set; }
+
+    /// <summary>Gets or sets the chance (n/10000) that a monster drops a pentagram; 0 (default): no drops.</summary>
+    public int PentagramDropChance { get; set; }
+
+    /// <summary>Gets or sets the chance (n/10000) that a monster drops an errtel; 0 (default): no drops.</summary>
+    public int ErrtelDropChance { get; set; }
+
+    /// <summary>Gets or sets the lowest monster level which drops pentagrams and errtels.</summary>
+    public int PentagramDropMinimumMonsterLevel { get; set; } = 1;
+
+    /// <summary>Gets or sets the Zen of an errtel level-up, per level the errtel goes to (HNMO default).</summary>
+    public int ErrtelLevelUpZenPerLevel { get; set; } = 100_000;
+
+    /// <summary>Gets or sets the success rate (%) of an errtel level-up from level 0 (HNMO default).</summary>
+    public int ErrtelLevelUpBaseRatePct { get; set; } = 90;
+
+    /// <summary>Gets or sets how much the level-up success rate (%) falls per level (HNMO default).</summary>
+    public int ErrtelLevelUpRateStepPct { get; set; } = 5;
+
+    /// <summary>Gets or sets the lowest level-up success rate (%) (HNMO default).</summary>
+    public int ErrtelLevelUpMinimumRatePct { get; set; } = 40;
+
+    /// <summary>Gets or sets the Zen of an errtel rank-up (two errtels of the same kind, element and rank; HNMO default).</summary>
+    public int ErrtelRankUpZen { get; set; } = 1_000_000;
+
+    /// <summary>Gets or sets the success rate (%) of an errtel rank-up (HNMO default).</summary>
+    public int ErrtelRankUpRatePct { get; set; } = 60;
+
+    /// <summary>Gets or sets the Zen of taking an errtel out of a pentagram (HNMO default).</summary>
+    public int ErrtelExtractZen { get; set; } = 100_000;
+
+    /// <summary>Gets or sets the element of each monster (by monster definition number); a monster not listed has none.</summary>
+    public List<PentagramMonsterElement> MonsterElements { get; set; } = [];
+
+    /// <summary>Gets or sets the errtel options; empty: the built-in table (see docs/audit/s9-pentagram-design.md).</summary>
+    public List<ErrtelOptionSetting> ErrtelOptions { get; set; } = [];
+
+    /// <summary>Gets or sets the errtel extraction rates; empty: the built-in table.</summary>
+    public List<ErrtelExtractionRateSetting> ErrtelExtractionRates { get; set; } = [];
+
+    /// <summary>Gets or sets the pentagram grades (usable slots = grade + 2); empty: the built-in table.</summary>
+    public List<PentagramGradeSetting> PentagramGrades { get; set; } = [];
+
     /// <summary>Gets or sets a value indicating whether the 4 Season 9-only skills (618-621) are active.</summary>
     public bool SeasonNineSkillsEnabled { get; set; } = true;
 
