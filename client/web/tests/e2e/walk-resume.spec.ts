@@ -58,8 +58,10 @@ test('a long walk goes on after the server puts the hero back a little', async (
         const sent = original.call(online);
         if (sent && ++parts === 2) {
           online.walkNextPart = original;
-          // After update() has noted the part as sent (continuedAt), as the server's answer comes after it.
-          setTimeout(() => {
+          // After update() has noted the part as sent (continuedAt), as the server's answer comes after it: a microtask
+          // runs as soon as this frame's code is done. A timer doesn't: on a busy test machine setTimeout(0) fired 3 s
+          // and 19 frames later, 9 cells on, and a correction that late rightly ends the walk (not the case tested).
+          queueMicrotask(() => {
             recording = false;
             clearTimeout(timer);
             // A step back, where the server is (it walks a step or two behind): a correction to a cell the server
@@ -74,7 +76,7 @@ test('a long walk goes on after the server puts the hero back a little', async (
             g.connection.dispatch(write('ServerToClient', 'ObjectMoved', { HeaderCode: 0x15, ObjectId: g.online.playerId, PositionX: to.x, PositionY: to.y }));
             // The client's decision, read at once (later frames bring the real server's answers to the walk).
             resolve({ ...to, resumesLeft, endedBefore, goal: g.online.goal ? { x: g.online.goal.x, y: g.online.goal.y } : null });
-          }, 0);
+          });
         }
         return sent;
       };
