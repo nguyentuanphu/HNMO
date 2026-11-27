@@ -42,3 +42,12 @@ them. #438 is next to merge once its e2e is green. New items, after 1 (#438) and
   extra in PARITY.md and guide.html. Reuse what old #380 did if it still fits (check its 3 missing vi strings). e2e
   test: resize, reload, size kept. Draft PR into the working branch.
 ```
+
+Addendum 19:20 Sydney (paste with the block above):
+```
+Hub: #7 (Layer 4) merged (53af6beb). #6 (Layer 1) NOT merged — the token gates nothing (verifyUpdateToken unused,
+files still served from the public UPDATES_URL/files/ that /api/latest hands out). Fix per my review on
+hnmobug#6: gated /api/update-file (token + path-in-manifest + not withdrawn), dedicated UPDATE_TOKEN_SECRET (no
+HUB_KEY fallback), tests for expired / other machine / off-manifest / withdrawn / public URL refused; then the HNMO
+server half (Updater.cs + DeveloperHub.cs) as a draft PR. Note: hub PRs go to the hub's claude/hnmo-main-handover-54co2m.
+```
