@@ -16,7 +16,7 @@
 
 __SEARCH_PATHS__
 
-  <Module file="$(InPath)\HNMO.Persistence.dll">
+  <Module file="$(InPath)/HNMO.Persistence.dll">
     <SkipNamespace name="HNMO.Persistence.BasicModel*" />
     <SkipNamespace name="HNMO.Persistence.EntityFramework*" />
     <SkipNamespace name="HNMO.Persistence.Json*" />
@@ -33,7 +33,7 @@ __SEARCH_PATHS__
     <SkipType name="*Summary*" skipMethods="true" skipProperties="true" skipFields="true" />
   </Module>
 
-  <Module file="$(InPath)\HNMO.Startup.dll">
+  <Module file="$(InPath)/HNMO.Startup.dll">
     <SkipNamespace name="AspNetCoreGeneratedDocument*" />
     <SkipNamespace name="HNMO.Startup.TestActors*" />
     <SkipType name="*AnonymousType*" skipMethods="true" skipProperties="true" skipFields="true" />
@@ -49,7 +49,7 @@ __SEARCH_PATHS__
     <SkipType name="*HostSettings*" skipMethods="true" skipProperties="true" skipFields="true" />
   </Module>
 
-  <Module file="$(InPath)\HNMO.GameLogic.dll">
+  <Module file="$(InPath)/HNMO.GameLogic.dll">
     <SkipNamespace name="HNMO.GameLogic.PlayerActions*" />
     <SkipNamespace name="HNMO.GameLogic.Views*" />
     <SkipNamespace name="HNMO.GameLogic.PlugIns.AnimationCounters*" />
