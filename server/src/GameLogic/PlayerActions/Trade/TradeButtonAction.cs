@@ -1,4 +1,4 @@
-﻿// <copyright file="TradeButtonAction.cs" company="HNMO">
+// <copyright file="TradeButtonAction.cs" company="HNMO">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -23,11 +23,20 @@ public class TradeButtonAction : BaseTradeAction
     private static long _lockOrderCounter;
 
     /// <summary>
-    /// Tries to change the trade button change to the new <paramref name="tradeButtonState"/>.
+    /// Tries to change the trade button state to the new <paramref name="tradeButtonState"/>.
     /// </summary>
     /// <param name="trader">The trader.</param>
     /// <param name="tradeButtonState">The new state of the trade button.</param>
-    public async ValueTask TradeButtonChangedAsync(ITrader trader, TradeButtonState tradeButtonState)
+    public ValueTask TradeButtonChangedAsync(ITrader trader, TradeButtonState tradeButtonState)
+        => this.TradeButtonChangedAsync(trader, tradeButtonState, operationId: null);
+
+    /// <summary>
+    /// Tries to change the trade button state to the new <paramref name="tradeButtonState"/> with an explicit operation id.
+    /// </summary>
+    /// <param name="trader">The trader.</param>
+    /// <param name="tradeButtonState">The new state of the trade button.</param>
+    /// <param name="operationId">Optional idempotent asset operation id for crash recovery tests.</param>
+    internal async ValueTask TradeButtonChangedAsync(ITrader trader, TradeButtonState tradeButtonState, Guid? operationId)
     {
         using var loggerScope = (trader as Player)?.Logger.BeginScope(this.GetType());
         var success = (tradeButtonState == TradeButtonState.Checked && await trader.PlayerState.TryAdvanceToAsync(PlayerState.TradeButtonPressed).ConfigureAwait(false))
@@ -48,7 +57,7 @@ public class TradeButtonAction : BaseTradeAction
             // same order for both, so the second waits instead of deadlocking (each holding its own
             // lock and waiting for the other's), and then finds the trade finished.
             var (first, second) = InLockOrder(trader, tradingPartner);
-            if (await this.InternalFinishTradeAsync(first, second).ConfigureAwait(false) is not { } result)
+            if (await this.InternalFinishTradeAsync(first, second, operationId).ConfigureAwait(false) is not { } result)
             {
                 return;
             }
@@ -110,7 +119,10 @@ public class TradeButtonAction : BaseTradeAction
     /// <param name="trader">The trader whose state machine is locked first.</param>
     /// <param name="tradingPartner">The other trader.</param>
     /// <returns>The result, or <c>null</c> if the other trader finished the trade in the meantime.</returns>
-    private async ValueTask<TradeResult?> InternalFinishTradeAsync(ITrader trader, ITrader tradingPartner)
+    // The inventory's storage is an adapter around the character's stored storage; the database row is the wrapped one.
+    private static ItemStorage? ActualStorageOf(ItemStorage? storage) => storage is ItemStorageAdapter adapter ? adapter.ActualStorage : storage;
+
+    private async ValueTask<TradeResult?> InternalFinishTradeAsync(ITrader trader, ITrader tradingPartner, Guid? operationId = null)
     {
         await using var context = await trader.PlayerState.TryBeginAdvanceToAsync(PlayerState.EnteredWorld).ConfigureAwait(false);
         await using var partnerContext = await tradingPartner.PlayerState.TryBeginAdvanceToAsync(PlayerState.EnteredWorld).ConfigureAwait(false);
@@ -172,7 +184,36 @@ public class TradeButtonAction : BaseTradeAction
         {
             this.DetachItemsFromPersistenceContext(traderItems, trader.PersistenceContext);
             this.DetachItemsFromPersistenceContext(tradePartnerItems, trader.TradingPartner!.PersistenceContext);
-            if (!await itemContext.SaveChangesAsync().ConfigureAwait(false))
+            if (itemContext is IAtomicTradeContext atomicTradeContext
+                && ActualStorageOf(trader.Inventory?.ItemStorage) is { } traderStorage
+                && ActualStorageOf(tradingPartner.Inventory?.ItemStorage) is { } partnerStorage
+                && traderStorage.GetId() != Guid.Empty
+                && partnerStorage.GetId() != Guid.Empty
+                && ((trader as Player)?.Account?.GetId() ?? (tradingPartner as Player)?.Account?.GetId()) is { } receiptAccountId
+                && receiptAccountId != Guid.Empty)
+            {
+                var opId = operationId ?? Guid.NewGuid();
+                var payload = $"{traderStorage.GetId():N}|{partnerStorage.GetId():N}|{traderMoney}|{partnerMoney}|{string.Join(",", traderItems.Concat(tradePartnerItems).Select(i => i.GetId().ToString("N")).OrderBy(s => s))}";
+                var request = new AssetOperationRequest(
+                    opId,
+                    receiptAccountId,
+                    "trade",
+                    AssetOperationCommitter.PayloadHash(payload),
+                    "game",
+                    null,
+                    []);
+                TradeMoneyDelta[] moneyChanges =
+                [
+                    new(traderStorage.GetId(), partnerMoney - traderMoney),
+                    new(partnerStorage.GetId(), traderMoney - partnerMoney),
+                ];
+                var commitStatus = await atomicTradeContext.SaveTradeWithAssetOperationAsync(request, moneyChanges).ConfigureAwait(false);
+                if (commitStatus is not (AssetCommitStatus.Committed or AssetCommitStatus.AlreadyCommitted))
+                {
+                    throw new InvalidOperationException($"Trade asset transaction was not committed ({commitStatus}).");
+                }
+            }
+            else if (!await itemContext.SaveChangesAsync().ConfigureAwait(false))
             {
                 throw new InvalidOperationException("Trade item changes were not saved.");
             }

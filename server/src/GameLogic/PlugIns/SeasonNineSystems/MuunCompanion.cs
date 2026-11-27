@@ -201,7 +201,18 @@ public sealed class MuunCompanion
     /// <param name="player">The player.</param>
     /// <param name="slot">The inventory slot of the Muun.</param>
     /// <returns>A task.</returns>
-    public async ValueTask ConvertAsync(Player player, byte slot)
+    public ValueTask ConvertAsync(Player player, byte slot) => this.ConvertAsync(player, slot, operationId: null);
+
+    /// <summary>
+    /// Converts a Muun of the bag which isn't the active one into energy, with one Muun Energy Converter and an
+    /// optional deterministic <paramref name="operationId"/>, committing item removal, energy state, and receipt in one
+    /// database transaction.
+    /// </summary>
+    /// <param name="player">The player.</param>
+    /// <param name="slot">The inventory slot of the Muun.</param>
+    /// <param name="operationId">Optional idempotent asset operation id.</param>
+    /// <returns>A task.</returns>
+    internal async ValueTask ConvertAsync(Player player, byte slot, Guid? operationId)
     {
         if (!await this.EnsureOnAsync(player).ConfigureAwait(false))
         {
@@ -224,9 +235,16 @@ public sealed class MuunCompanion
         var points = SeasonNineSystemsEngine.CalculateMuunEnergyConversionPoints(muun.Spec.MaxRank, muun.Item.Level, this.Configuration.MuunEvoPointMultiplier);
         var (muunDefinition, muunLevel) = (muun.Item.Definition!, muun.Item.Level);
         var converterSlot = converter.ItemSlot;
+        var nextState = new MuunState { ActiveItemId = state.ActiveItemId, Energy = state.Energy + points };
         await RemoveAsync(player, muun.Item).ConfigureAwait(false);
         await TakeOneAsync(player, converter).ConfigureAwait(false);
-        if (!await player.SaveProgressAsync().ConfigureAwait(false))
+        var committed = await this.CommitStateAndSaveAsync(
+            player,
+            nextState,
+            operationId,
+            "muun-convert",
+            $"{player.SelectedCharacter!.GetId():N}|{muun.Item.GetId():N}|{points}").ConfigureAwait(false);
+        if (!committed)
         {
             await AddAsync(player, muunDefinition, muunLevel, slot).ConfigureAwait(false);
             await AddAsync(player, converter.Definition!, 0, converterSlot, merge: true).ConfigureAwait(false);
@@ -234,18 +252,24 @@ public sealed class MuunCompanion
             return;
         }
 
-        state.Energy += points;
-        this.SaveState(player, state);
         await this.SendStateAsync(player, true, "Converted", $"{muun.Spec.Name} became {points} energy.", $"{muun.Spec.Name} đã thành {points} năng lượng.").ConfigureAwait(false);
     }
 
     /// <summary>
-    /// Levels up the active Muun with energy. The energy is taken before the level is saved: a stop in between loses the
-    /// energy, it never gives a free level.
+    /// Levels up the active Muun with energy.
     /// </summary>
     /// <param name="player">The player.</param>
     /// <returns>A task.</returns>
-    public async ValueTask LevelUpAsync(Player player)
+    public ValueTask LevelUpAsync(Player player) => this.LevelUpAsync(player, operationId: null);
+
+    /// <summary>
+    /// Levels up the active Muun with energy and an optional deterministic <paramref name="operationId"/>, committing
+    /// energy deduction, Muun item level, and receipt in one database transaction.
+    /// </summary>
+    /// <param name="player">The player.</param>
+    /// <param name="operationId">Optional idempotent asset operation id.</param>
+    /// <returns>A task.</returns>
+    internal async ValueTask LevelUpAsync(Player player, Guid? operationId)
     {
         if (!await this.EnsureOnAsync(player).ConfigureAwait(false))
         {
@@ -266,14 +290,17 @@ public sealed class MuunCompanion
             return;
         }
 
-        state.Energy -= cost;
-        this.SaveState(player, state);
+        var nextState = new MuunState { ActiveItemId = state.ActiveItemId, Energy = state.Energy - cost };
         muun.Item.Level++;
-        if (!await player.SaveProgressAsync().ConfigureAwait(false))
+        var committed = await this.CommitStateAndSaveAsync(
+            player,
+            nextState,
+            operationId,
+            "muun-level-up",
+            $"{player.SelectedCharacter!.GetId():N}|{muun.Item.GetId():N}|{muun.Item.Level}|{cost}").ConfigureAwait(false);
+        if (!committed)
         {
             muun.Item.Level--;
-            state.Energy += cost;
-            this.SaveState(player, state);
             await this.SendStateAsync(player, true, "SaveFailed", "The level up couldn't be saved; nothing changed. Please try again.", "Không lưu được lần lên cấp, chưa có gì thay đổi. Vui lòng thử lại.").ConfigureAwait(false);
             return;
         }
@@ -730,12 +757,52 @@ public sealed class MuunCompanion
         }
     }
 
-    private IHnmoPlayerStateRowBackend Backend()
+    private async ValueTask<bool> CommitStateAndSaveAsync(
+        Player player,
+        MuunState nextState,
+        Guid? operationId,
+        string kind,
+        string payload)
+    {
+        if (player.Account is not { } account || player.SelectedCharacter is not { } character)
+        {
+            if (!await player.SaveProgressAsync().ConfigureAwait(false))
+            {
+                return false;
+            }
+
+            this.SaveState(player, nextState);
+            return true;
+        }
+
+        var accountId = account.GetId();
+        var stateJson = JsonSerializer.Serialize(nextState, JsonOptions);
+        var stateWrite = new FeatureStateWrite(
+            FeatureKey,
+            character.GetId().ToString("N"),
+            stateJson,
+            this.UtcNow(),
+            this.ResolveStateFileKey());
+        var request = new AssetOperationRequest(
+            operationId ?? Guid.NewGuid(),
+            accountId,
+            kind,
+            AssetOperationCommitter.PayloadHash(payload),
+            "game",
+            null,
+            [],
+            FeatureState: stateWrite);
+        var status = await AssetOperationCommitter.CommitAsync(player, request).ConfigureAwait(false);
+        return status is AssetCommitStatus.Committed or AssetCommitStatus.AlreadyCommitted;
+    }
+
+    private string ResolveStateFileKey()
     {
         var key = string.IsNullOrWhiteSpace(this.StateFile) ? HnmoStateStore.StateFileName : this.StateFile.Trim();
-        var resolved = HnmoStateStore.ResolveStateFilePath(key) ?? Path.GetFullPath(HnmoStateStore.StateFileName);
-        return HnmoPlayerStateRowStoreRegistry.GetBackend(resolved);
+        return HnmoStateStore.ResolveStateFilePath(key) ?? Path.GetFullPath(HnmoStateStore.StateFileName);
     }
+
+    private IHnmoPlayerStateRowBackend Backend() => HnmoPlayerStateRowStoreRegistry.GetBackend(this.ResolveStateFileKey());
 
     /// <summary>The bonus element currently applied to a player.</summary>
     private sealed class Applied
