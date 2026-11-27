@@ -9,6 +9,11 @@ on:
   pull_request:
     paths: ['server/**', '.github/workflows/server-tests.yml']
 
+# Test runs never report to the real developer hub as a host (setup and weekly reports, licence, update checks).
+# "off", not empty: Windows drops an empty environment variable.
+env:
+  HNMO_DEVELOPER_HUB: "off"
+
 jobs:
   test:
     runs-on: ubuntu-latest

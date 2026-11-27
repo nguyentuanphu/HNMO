@@ -109,6 +109,7 @@ public sealed class BugReportsTest
     {
         var file = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"hnmo-hub-{Guid.NewGuid():N}.json");
         var previous = (GameLogic.DeveloperHub.MachineId, GameLogic.DeveloperHub.LicenceFile, GameLogic.DeveloperHub.StateFile);
+        var previousHub = Environment.GetEnvironmentVariable("HNMO_DEVELOPER_HUB");
         Environment.SetEnvironmentVariable("HNMO_DEVELOPER_HUB", "https://hub.example");
         try
         {
@@ -154,7 +155,7 @@ public sealed class BugReportsTest
         }
         finally
         {
-            Environment.SetEnvironmentVariable("HNMO_DEVELOPER_HUB", null);
+            Environment.SetEnvironmentVariable("HNMO_DEVELOPER_HUB", previousHub); // a test run's "off" stays
             (GameLogic.DeveloperHub.MachineId, GameLogic.DeveloperHub.LicenceFile, GameLogic.DeveloperHub.StateFile) = previous;
             System.IO.File.Delete(file);
         }

@@ -20,6 +20,7 @@ cleanup() {
     done
   fi
   if [ -f "$folder/stop-hnmo.sh" ]; then "$folder/stop-hnmo.sh"; fi
+  if [ "$(uname -s)" = Darwin ] && [ -n "${HNMO_DEVELOPER_HUB+set}" ]; then launchctl unsetenv HNMO_DEVELOPER_HUB || true; fi
 }
 trap cleanup EXIT
 
@@ -27,6 +28,9 @@ if [ "$(uname -s)" = Darwin ]; then
   ditto -x -k "$artifacts/HNMO-macos.zip" "$scratch"
   lipo "$scratch/Start HNMO.app/Contents/MacOS/start" -verify_arch arm64 x86_64
   codesign --verify --strict "$scratch/Start HNMO.app"
+  # An app opened by Finder/open doesn't get this shell's environment: pass the test run's HNMO_DEVELOPER_HUB (CI sets
+  # "off", so the test machine doesn't report to the real hub as a host) through launchd.
+  if [ -n "${HNMO_DEVELOPER_HUB+set}" ]; then launchctl setenv HNMO_DEVELOPER_HUB "$HNMO_DEVELOPER_HUB"; fi
   open "$scratch/Start HNMO.app"
 else
   dpkg-deb -x "$artifacts/HNMO-linux.deb" "$scratch/package"

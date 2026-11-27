@@ -24,6 +24,10 @@ when you learn something new about how they work (see the `hnmo` skill).
   draft PR per area (each fix still with its test); GitHub runs every suite on the PR; main merges only on green checks
   and runs the full suites once per merge batch. Details: `docs/handover-2026-11-21.md` rule 4.
 - **Report:** say what was verified and what wasn't; give download links for builds.
+- **No hub reports from tests:** before running the HNMO server in tests, set `HNMO_DEVELOPER_HUB` to empty (`off` on
+  Windows, which drops empty variables). That covers the packaged folder, the demo server, the bridge, CI and every
+  headless Chromium run. A server that runs more than 10 minutes otherwise sends setup and weekly reports to the real
+  hub as if it were a host. Real hosts' `start-hnmo.sh` / `Start HNMO.bat` don't set it and keep reporting.
 
 ## Layout
 
@@ -51,3 +55,4 @@ start PostgreSQL (port 55432, data in `save/`), the server (admin panel on
 127.0.0.1:8095, connect server 44406) and the web game (port 8080).
 Test accounts: test0…test9, test300, test400 (password = name).
 PostgreSQL refuses to run as root: test as a normal user.
+Test runs first: `export HNMO_DEVELOPER_HUB=off` (PowerShell `$env:HNMO_DEVELOPER_HUB='off'`).

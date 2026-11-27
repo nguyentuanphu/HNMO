@@ -2,6 +2,10 @@
 // (BASE_URL, default the developer web client on port 8081). See tests/e2e/README.md.
 import { defineConfig } from '@playwright/test';
 
+// The servers these tests start (the bridge in control/performance-mode specs) never report to the real developer hub
+// as a host: "off" turns the hub off ("off", not empty: Windows drops an empty environment variable).
+process.env.HNMO_DEVELOPER_HUB ??= 'off';
+
 export default defineConfig({
   testDir: 'tests/e2e',
   timeout: 5 * 60_000,
