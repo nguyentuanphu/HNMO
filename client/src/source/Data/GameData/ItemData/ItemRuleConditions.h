@@ -8,9 +8,9 @@
 // (StatProfileRule) and the option rules (OptionRule). See docs/item-data.md, "Profile rules".
 namespace Data::Items
 {
-constexpr size_t ItemSlotCount = static_cast<size_t>(ItemSlot::Ring) + 1;
+constexpr size_t ItemSlotCount = static_cast<size_t>(ItemSlot::Pentagram) + 1;
 constexpr size_t WingTierCount = static_cast<size_t>(WingTier::Third) + 1;
-constexpr size_t WeaponKindCount = static_cast<size_t>(WeaponKind::Book) + 1;
+constexpr size_t WeaponKindCount = static_cast<size_t>(WeaponKind::Stick) + 1;
 
 // Each condition is a set of values; an item meets it when it has one of them, and an empty set is a condition the
 // rule does not have. A rule without conditions matches every item.

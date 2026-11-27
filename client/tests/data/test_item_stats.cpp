@@ -254,7 +254,7 @@ TEST_CASE("The items each shipped profile rule gives its profile [data][items]")
 {
     ShippedItemAttributes items;
     const ItemStatProfiles& profiles = g_ItemDatabase.GetStatProfiles();
-    const std::vector<int> expected = {2, 10, 3, 22, 113, 327, 6, 4, 2, 5, 7, 0, 12, 36, 32};
+    const std::vector<int> expected = {2, 10, 1, 3, 22, 131, 394, 6, 4, 2, 5, 14, 0, 27, 36, 82};
     REQUIRE(profiles.GetRules().size() == expected.size());
     std::vector<int> counts(expected.size());
     int withoutRule = 0;
@@ -273,7 +273,7 @@ TEST_CASE("The items each shipped profile rule gives its profile [data][items]")
         ++counts[static_cast<size_t>(rule)];
     }
     CHECK(counts == expected);
-    CHECK(withoutRule == 330);
+    CHECK(withoutRule == 515);
 }
 
 // The fixed excellent bonus of the three chaos weapons is item data.

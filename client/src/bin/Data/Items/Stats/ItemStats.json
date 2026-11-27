@@ -229,9 +229,10 @@
   "profileRules": [
     {"profile": "default", "tags": ["ammunition"]},
     {"profile": "sceptre", "tags": ["sceptre"]},
+    {"profile": "sceptre", "weaponKind": ["sceptre"]},
     {"profile": "book", "tags": ["summonerBook"]},
     {"profile": "shield", "weaponKind": ["shield"]},
-    {"profile": "weapon", "weaponKind": ["spear", "bow", "crossbow", "sword", "axe", "mace", "staff", "glove", "book"]},
+    {"profile": "weapon", "weaponKind": ["spear", "bow", "crossbow", "sword", "axe", "mace", "staff", "glove", "book", "claw", "stick"]},
     {"profile": "armor", "slot": ["helm", "armor", "pants", "gloves", "boots"]},
     {"profile": "smallWing", "slot": ["wings"], "wingTier": ["small"]},
     {"profile": "firstTierWing", "slot": ["wings"], "wingTier": ["first"]},
