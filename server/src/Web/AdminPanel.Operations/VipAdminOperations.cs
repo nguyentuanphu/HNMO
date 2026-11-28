@@ -1,4 +1,4 @@
-// <copyright file="VipAdminOperations.cs" company="HNMO">
+﻿// <copyright file="VipAdminOperations.cs" company="HNMO">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -240,7 +240,53 @@ public sealed class VipAdminOperations(IPersistenceContextProvider persistence, 
         using var context = persistence.CreateNewTypedContext(typeof(PlugInConfiguration), false);
         var configurations = await context.GetAsync<PlugInConfiguration>(cancellationToken).ConfigureAwait(false);
         var saved = configurations.SingleOrDefault(value => value.TypeId == plugInType.GUID);
-        return (saved?.IsActive == true, saved?.GetConfiguration<T>(ReferenceHandler.Preserve));
+        return (saved?.IsActive == true, ReadWithoutReferences<T>(saved));
+    }
+
+    /// <summary>
+    /// Reads the saved settings. The data initialization stores every object with an empty "$id" (and lists as "$values"),
+    /// which the reference handler of the JSON serializer rejects as a duplicate identifier; so the markers are dropped.
+    /// </summary>
+    private static T? ReadWithoutReferences<T>(PlugInConfiguration? saved)
+        where T : class
+    {
+        if (saved is null || string.IsNullOrWhiteSpace(saved.CustomConfiguration))
+        {
+            return null;
+        }
+
+        var plain = new PlugInConfiguration { CustomConfiguration = StripReferences(JsonNode.Parse(saved.CustomConfiguration))?.ToJsonString() };
+        return plain.GetConfiguration<T>(null);
+    }
+
+    private static JsonNode? StripReferences(JsonNode? node)
+    {
+        switch (node)
+        {
+            case JsonObject obj when obj["$values"] is JsonArray values:
+                return StripReferences(values.DeepClone());
+            case JsonObject obj:
+                var result = new JsonObject();
+                foreach (var (key, value) in obj)
+                {
+                    if (key is not ("$id" or "$ref"))
+                    {
+                        result[key] = StripReferences(value?.DeepClone());
+                    }
+                }
+
+                return result;
+            case JsonArray array:
+                var list = new JsonArray();
+                foreach (var item in array)
+                {
+                    list.Add(StripReferences(item?.DeepClone()));
+                }
+
+                return list;
+            default:
+                return node;
+        }
     }
 
     private async ValueTask RecordActivityAsync(string account, AdminActor actor, Guid operationId, bool remove, string status, string reason, CancellationToken cancellationToken)
