@@ -696,7 +696,7 @@ public class WorldBossesPlugIn : IPeriodicTaskPlugIn, IAttackableGotHitPlugIn, I
         {
             if (!reward.CoinsGiven && reward.Reward.Coins > 0)
             {
-                await MissionCoinGranter.GrantAsync(gameContext, new CoinGrant(reward.Login, reward.Reward.CoinType, reward.Reward.Coins, reward.Reason, reward.Reference), GrantedBy).ConfigureAwait(false);
+                await MissionCoinGranter.GrantRewardAsync(gameContext, new CoinGrant(reward.Login, reward.Reward.CoinType, reward.Reward.Coins, reward.Reason, reward.Reference), GrantedBy).ConfigureAwait(false);
                 reward.CoinsGiven = true;
             }
 
@@ -730,7 +730,7 @@ public class WorldBossesPlugIn : IPeriodicTaskPlugIn, IAttackableGotHitPlugIn, I
             {
                 if (!reward.CoinsGiven && reward.Reward.Coins > 0)
                 {
-                    await MissionCoinGranter.GrantAsync(player.GameContext, new CoinGrant(reward.Login, reward.Reward.CoinType, reward.Reward.Coins, reward.Reason, reward.Reference), GrantedBy).ConfigureAwait(false);
+                    await MissionCoinGranter.GrantRewardAsync(player.GameContext, new CoinGrant(reward.Login, reward.Reward.CoinType, reward.Reward.Coins, reward.Reason, reward.Reference), GrantedBy).ConfigureAwait(false);
                     reward.CoinsGiven = true;
                 }
 
@@ -846,7 +846,7 @@ public class WorldBossesPlugIn : IPeriodicTaskPlugIn, IAttackableGotHitPlugIn, I
         {
             foreach (var grant in WorldBossEngine.RankingGrants(week))
             {
-                await MissionCoinGranter.GrantAsync(gameContext, grant, GrantedBy).ConfigureAwait(false);
+                await MissionCoinGranter.GrantRewardAsync(gameContext, grant, GrantedBy).ConfigureAwait(false);
             }
 
             var siege = engine.Configuration.CastleSiege;
@@ -895,7 +895,7 @@ public class WorldBossesPlugIn : IPeriodicTaskPlugIn, IAttackableGotHitPlugIn, I
                 continue;
             }
 
-            await MissionCoinGranter.GrantAsync(
+            await MissionCoinGranter.GrantRewardAsync(
                 gameContext,
                 new CoinGrant(login, siege.CoinType, coins, $"Castle siege winners, week of {week} ({name})", $"hnmo-week:{week}:CastleSiege:{memberId}"),
                 GrantedBy).ConfigureAwait(false);

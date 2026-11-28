@@ -11,6 +11,7 @@
 import { currentLanguage, onLanguageChange } from '../i18n.js';
 import { read, type PacketValues } from '../net/packets.js';
 import { openDocument, type RmlDocument, type RmlModel } from './rml.js';
+import { coinRewardsShown } from './coinRewards.js';
 import { typographyScale } from './nativeText.js';
 import { tr } from './missionsWindow.js';
 import { communityLinks } from '../gameName.js';
@@ -218,7 +219,7 @@ export class CommunityWindow {
 
   private reward(reward: Reward): string {
     const parts: string[] = [];
-    if (reward.coins > 0) parts.push(`${number(reward.coins)} ${coinName(reward.coinType)}`);
+    if (reward.coins > 0 && coinRewardsShown()) parts.push(`${number(reward.coins)} ${coinName(reward.coinType)}`);
     parts.push(...this.goods(reward));
     return parts.join(' + ');
   }
@@ -295,7 +296,8 @@ export class CommunityWindow {
     const state = this.current;
     if (!state) { this.doc?.update(); return; }
     const d = state.discord;
-    m.discord_on = d.on;
+    // Discord and Zalo only give coins: none on a season without a cash shop (classic play).
+    m.discord_on = d.on && coinRewardsShown();
     m.discord_done = d.paid;
     m.discord_code = !d.paid && !d.linked ? this.linkCode : '';
     m.can_link = d.on && !d.paid && !d.linked && d.linkAvailable;
@@ -308,7 +310,7 @@ export class CommunityWindow {
           ? tr('Join our Discord and link your account: %s once. Get a link code, then type /link CODE in the Discord server.', `${number(d.coins)} ${coinName(d.coinType)}`)
           : tr('Join our Discord and link your account: %s once (the Discord bot isn\'t set up yet).', `${number(d.coins)} ${coinName(d.coinType)}`);
     const z = state.zalo;
-    m.zalo_on = z.on;
+    m.zalo_on = z.on && coinRewardsShown();
     m.zalo_done = z.status === 'Approved';
     m.zalo_code = z.status === 'Pending' ? z.code ?? '' : '';
     m.can_zalo = z.on && (z.status === 'None' || z.status === 'Rejected');

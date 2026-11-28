@@ -19,6 +19,27 @@ public static class MissionCoinGranter
     public const string GrantedBy = "HNMO missions";
 
     /// <summary>
+    /// Gives coins earned in the game (missions, world bosses, the new-player guide, community, guild levels, lucky
+    /// number, top races, events, bug reports): nothing while this season's cash shop is off (owner 2026-11-28: a classic
+    /// season gives no free coins; only the coins players top up, for VIP, remain). Coins which only change hands (market,
+    /// escrow) or come from a top-up use <see cref="GrantAsync"/>.
+    /// </summary>
+    /// <param name="gameContext">The game context.</param>
+    /// <param name="grant">The grant.</param>
+    /// <param name="grantedBy">The name in the coins history's "granted by" column; <see cref="GrantedBy"/> by default.</param>
+    /// <returns><c>true</c>, if it was given now; <c>false</c>, if not (the cash shop is off, the reference was given already or the account doesn't exist).</returns>
+    public static ValueTask<bool> GrantRewardAsync(IGameContext gameContext, CoinGrant grant, string? grantedBy = null)
+    {
+        return CoinRewardsAllowed(gameContext) ? GrantAsync(gameContext, grant, grantedBy) : ValueTask.FromResult(false);
+    }
+
+    /// <summary>Whether coins earned in the game are given and shown on this season (its cash shop is on).</summary>
+    /// <param name="gameContext">The game context.</param>
+    /// <returns><c>true</c>, if they are.</returns>
+    public static bool CoinRewardsAllowed(IGameContext? gameContext) =>
+        gameContext is not null && CashShopFeaturePlugIn.GetSettings(gameContext) is not null;
+
+    /// <summary>
     /// Gives a grant.
     /// </summary>
     /// <param name="gameContext">The game context.</param>

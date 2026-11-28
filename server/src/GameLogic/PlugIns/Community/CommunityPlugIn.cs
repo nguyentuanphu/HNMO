@@ -123,7 +123,7 @@ public class CommunityPlugIn : IPeriodicTaskPlugIn, IMonsterItemDroppedPlugIn, I
         var (result, grant) = this.GetEngine().ClaimDiscord(login, userId, DateTime.UtcNow);
         if (grant is not null)
         {
-            await MissionCoinGranter.GrantAsync(player.GameContext, grant, GrantedBy).ConfigureAwait(false);
+            await MissionCoinGranter.GrantRewardAsync(player.GameContext, grant, GrantedBy).ConfigureAwait(false);
             player.Logger.LogInformation("Community: {Player} got {Coins} coins for linking Discord.", player, grant.Amount);
             this.Save();
         }
@@ -505,7 +505,7 @@ public class CommunityPlugIn : IPeriodicTaskPlugIn, IMonsterItemDroppedPlugIn, I
         foreach (var grant in engine.ZaloToPay())
         {
             // The reference makes a second payment of a retry a no-op.
-            await MissionCoinGranter.GrantAsync(gameContext, grant, GrantedBy).ConfigureAwait(false);
+            await MissionCoinGranter.GrantRewardAsync(gameContext, grant, GrantedBy).ConfigureAwait(false);
             engine.MarkZaloPaid(grant.LoginName, now);
             gameContext.LoggerFactory.CreateLogger<CommunityPlugIn>().LogInformation("Community: {Login} got {Coins} coins for joining the Zalo group.", grant.LoginName, grant.Amount);
             if (await this.FindByLoginAsync(grant.LoginName).ConfigureAwait(false) is { } player)
@@ -557,7 +557,7 @@ public class CommunityPlugIn : IPeriodicTaskPlugIn, IMonsterItemDroppedPlugIn, I
         var paid = 0;
         foreach (var (entry, grant) in engine.CoinsToPay())
         {
-            if (await MissionCoinGranter.GrantAsync(gameContext, grant, GrantedBy).ConfigureAwait(false))
+            if (await MissionCoinGranter.GrantRewardAsync(gameContext, grant, GrantedBy).ConfigureAwait(false))
             {
                 paid++;
             }

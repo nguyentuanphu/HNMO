@@ -131,9 +131,23 @@ export class Hud {
     window.addEventListener('resize', () => this.place());
   }
 
+  /** Whether this season has a cash shop (its button shows only then). */
+  private cashShopShown = false;
+
+  /**
+   * Whether this season has a cash shop. Without one the button stays in the frame (owner 2026-11-28: a gap there looks
+   * wrong) but opens nothing (the shop's toggle does nothing without the server's script); its hint says why.
+   */
+  setCashShopShown(shown: boolean): void {
+    this.cashShopShown = shown;
+    this.model.cshop_tooltip = shown ? 'Cash shop (X)' : 'No cash shop on this server';
+    this.doc?.update();
+  }
+
   async open(parent: HTMLElement = document.body): Promise<void> {
     this.doc = await openDocument('main_frame', this.model, { parent });
     this.doc.host.style.zIndex = '20';
+    this.setCashShopShown(this.cashShopShown);
     this.doc.root.addEventListener('mouseover', (event) => {
       this.hoveredElement = event.target instanceof Element ? event.target.closest('.slot-frame, .skill-cell') : null;
     }, true);

@@ -133,7 +133,9 @@ public sealed class WebsiteVipController(
                 return await this.ReplyAsync(configuration, wallet, owned, current, request.OperationId, result.Status, result.Rule).ConfigureAwait(false);
             }
 
-            var rewards = new VipDailyCoins(persistence, game, wallet, this._state, logger);
+            // A season whose cash shop is off gives no free coins (owner 2026-11-28, classic play).
+            var (_, cashShopOn, _) = await PlugInSettings.ReadStoredAsync<HNMO.GameLogic.CashShop.CashShopSettings>(persistence, typeof(HNMO.GameLogic.CashShop.CashShopFeaturePlugIn), cancellationToken).ConfigureAwait(false);
+            var rewards = new VipDailyCoins(persistence, game, wallet, this._state, logger, cashShopOn);
             var daily = await rewards.ClaimAsync(owned, current, nowUtc, cancellationToken).ConfigureAwait(false);
             if (daily.Status is "DailyApplied" or "AlreadyClaimed")
             {

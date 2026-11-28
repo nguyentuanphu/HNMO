@@ -9,6 +9,7 @@
 import { currentLanguage, onLanguageChange } from '../i18n.js';
 import { read, type PacketValues } from '../net/packets.js';
 import { openDocument, type RmlDocument, type RmlModel } from './rml.js';
+import { coinRewardsShown } from './coinRewards.js';
 import { typographyScale, uiScale } from './nativeText.js';
 import { tr, rewardText } from './missionsWindow.js';
 import { countdown } from './worldBossWindow.js';
@@ -207,7 +208,7 @@ export class GuildLevelsWindow {
         break;
       case 'ladder':
         say(tr('Guild ladder: your guild was rank %d last week. Reward: %s.', event.rank ?? 0,
-          (event.coins ?? 0) > 0 ? `${number(event.coins ?? 0)} ${coinName(state.rewards.find((r) => (event.rank ?? 0) >= r.from && (event.rank ?? 0) <= r.to)?.coinType ?? 'GoblinPoints')}` : tr('zen and items')));
+          (event.coins ?? 0) > 0 && coinRewardsShown() ? `${number(event.coins ?? 0)} ${coinName(state.rewards.find((r) => (event.rank ?? 0) >= r.from && (event.rank ?? 0) <= r.to)?.coinType ?? 'GoblinPoints')}` : tr('zen and items')));
         break;
       case 'goods':
         if (event.result === 'BagFull') say(tr('Your bag is full: the guild ladder rewards wait. Make room, then take them in the guild window (G).'));
@@ -258,7 +259,7 @@ export class GuildLevelsWindow {
     m.rewards_text = state.ladderOn && state.rewards.length > 0
       ? `${tr('Monday rewards for every member')}: ${state.rewards.map((r) => {
         const ranks = r.from === r.to ? `#${r.from}` : `#${r.from}-${r.to}`;
-        const parts = [r.coins > 0 ? `${number(r.coins)} ${coinName(r.coinType)}` : '', r.zen > 0 ? tr('%s zen', number(r.zen)) : '', ...r.items.map((i) => `${i.name ?? this.options.itemName(i.group, i.number)} x${i.count}`)].filter((p) => p);
+        const parts = [r.coins > 0 && coinRewardsShown() ? `${number(r.coins)} ${coinName(r.coinType)}` : '', r.zen > 0 ? tr('%s zen', number(r.zen)) : '', ...r.items.map((i) => `${i.name ?? this.options.itemName(i.group, i.number)} x${i.count}`)].filter((p) => p);
         return `${ranks} ${parts.join(' + ')}`;
       }).join(' · ')}`
       : '';

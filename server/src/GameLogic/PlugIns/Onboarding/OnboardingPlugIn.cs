@@ -602,7 +602,7 @@ public class OnboardingPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn,
             {
                 if (!reward.CoinsGiven && reward.Coins > 0)
                 {
-                    await MissionCoinGranter.GrantAsync(player.GameContext, new CoinGrant(reward.Login, reward.CoinType, reward.Coins, reward.Reason, reward.Reference), OnboardingEngine.GrantedBy).ConfigureAwait(false);
+                    await MissionCoinGranter.GrantRewardAsync(player.GameContext, new CoinGrant(reward.Login, reward.CoinType, reward.Coins, reward.Reason, reward.Reference), OnboardingEngine.GrantedBy).ConfigureAwait(false);
                     reward.CoinsGiven = true;
                 }
 

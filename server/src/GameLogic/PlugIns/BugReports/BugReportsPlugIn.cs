@@ -182,7 +182,7 @@ public sealed class BugReportsPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn
             && gameContexts.FirstOrDefault() is { } gameContext)
         {
             var grant = new CoinGrant(report.Login, settings.RewardCoinType, settings.RewardAmount, $"Bug report {report.Id}", $"hnmo-bug-{report.Id}-{report.CreatedUtc.Ticks}");
-            if (await MissionCoinGranter.GrantAsync(gameContext, grant, GrantedBy).ConfigureAwait(false))
+            if (await MissionCoinGranter.GrantRewardAsync(gameContext, grant, GrantedBy).ConfigureAwait(false))
             {
                 this.Store.Mutate(data =>
                 {

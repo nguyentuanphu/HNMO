@@ -580,7 +580,7 @@ public class TopRacesPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn, I
         var grant = TopRaceEngine.PrizeGrant(result, table.Class, line, login, memberId, memberName);
         if (grant is not null)
         {
-            await MissionCoinGranter.GrantAsync(gameContext, grant, GrantedBy).ConfigureAwait(false);
+            await MissionCoinGranter.GrantRewardAsync(gameContext, grant, GrantedBy).ConfigureAwait(false);
         }
 
         if (line.Zen > 0 || line.Items.Any(i => i.Count > 0))
