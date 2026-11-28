@@ -23,7 +23,7 @@ using System.Threading;
 /// and the hub keeps the IP it came from with it. All of it is sent silently: the host isn't told or reminded (owner,
 /// 2026-11-21); the host's name and contact come from a licence request.
 /// </summary>
-public static class DeveloperHub
+public static partial class DeveloperHub
 {
     /// <summary>The hub's address unless <c>HNMO_DEVELOPER_HUB</c> names another.</summary>
     public const string DefaultUrl = HNMO.Interfaces.DeveloperHubAddress.Default;
@@ -370,15 +370,43 @@ public static class DeveloperHub
     /// <returns>The status (open, issued, declined; null when there is no request or no answer) and the licence file once issued.</returns>
     public static async Task<(string? Status, string? Licence)> FetchLicenceAsync(HttpClient? client = null)
     {
-        if (ReadState().Request is not { Status: "open" } request)
+        var (status, licence, _) = await FetchLicenceAnswerAsync(client).ConfigureAwait(false);
+        return (status, licence);
+    }
+
+    /// <summary>Asks the hub for the answer to the last licence request, with the wait it asks for before the next ask.</summary>
+    /// <param name="client">The HTTP client (tests).</param>
+    /// <returns>The status, the licence file once issued, and the hub's <c>retryAfterSeconds</c> when it gave one.</returns>
+    internal static async Task<(string? Status, string? Licence, int? RetryAfterSeconds)> FetchLicenceAnswerAsync(HttpClient? client = null)
+    {
+        // An open request, or any request while a purchase or trial waits for its licence.
+        var state = ReadState();
+        if (state.Request is not { } request || (request.Status != "open" && state.Purchase is null))
         {
-            return (null, null);
+            return (null, null, null);
         }
 
-        var (ok, answer, _, _) = await PostAsync("api/licence", new JsonObject { ["request"] = request.Id, ["token"] = request.Token }, client).ConfigureAwait(false);
+        var ask = new JsonObject { ["request"] = request.Id, ["token"] = request.Token };
+        if (!IsForwardingKey(state.AutoErrorKey))
+        {
+            ask["needAutoErrorKey"] = true;
+        }
+
+        var (ok, answer, _, _) = await PostAsync("api/licence", ask, client).ConfigureAwait(false);
+        var now = DateTime.UtcNow;
+        var retryAfter = answer?["retryAfterSeconds"] is JsonValue r && r.TryGetValue<int>(out var seconds) ? seconds : (int?)null;
+        ChangeState(s =>
+        {
+            if (s.Request is { } kept)
+            {
+                kept.LastCheckUtc = now;
+                kept.NotBeforeUtc = retryAfter is > 0 and <= 86_400 ? now.AddSeconds(retryAfter.Value) : null;
+            }
+        });
+        KeepAutoErrorKey(answer);
         if (!ok || answer?["status"]?.GetValue<string>() is not { } status)
         {
-            return (null, null);
+            return (null, null, retryAfter);
         }
 
         var licence = answer["licence"]?.GetValue<string>();
@@ -387,7 +415,7 @@ public static class DeveloperHub
             ChangeState(s => s.Request?.Status = status);
         }
 
-        return (status, licence);
+        return (status, licence, retryAfter);
     }
 
     /// <summary>Gets whether a host credential is configured for forwarding automatic errors.</summary>
@@ -401,8 +429,22 @@ public static class DeveloperHub
             return null;
         }
 
+        // The host's own setting first; else the key the hub gave this computer (it asks for one with the licence).
         var key = Environment.GetEnvironmentVariable("HNMO_AUTO_ERROR_FORWARD_KEY");
-        return key is { Length: >= 32 and <= 256 } && key.All(c => char.IsAsciiLetterOrDigit(c) || c is '-' or '_') ? key : null;
+        return IsForwardingKey(key) ? key : IsForwardingKey(ReadState().AutoErrorKey) ? ReadState().AutoErrorKey : null;
+    }
+
+    private static bool IsForwardingKey(string? key) =>
+        key is { Length: >= 32 and <= 256 } && key.All(c => char.IsAsciiLetterOrDigit(c) || c is '-' or '_');
+
+    /// <summary>Keeps the automatic error key the hub sent in an answer, if any.</summary>
+    /// <param name="answer">The hub's answer.</param>
+    private static void KeepAutoErrorKey(JsonNode? answer)
+    {
+        if (answer?["autoErrorKey"] is JsonValue value && value.TryGetValue<string>(out var key) && IsForwardingKey(key) && ReadState().AutoErrorKey != key)
+        {
+            ChangeState(s => s.AutoErrorKey = key);
+        }
     }
 
     /// <summary>Sends the weekly report.</summary>
@@ -469,7 +511,13 @@ public static class DeveloperHub
         ArgumentNullException.ThrowIfNull(setup);
         var state = ReadState();
         setup["host"] = new JsonObject { ["name"] = state.HostName, ["contact"] = state.HostContact };
-        var (ok, _, en, _) = await PostAsync("api/setup", setup, client).ConfigureAwait(false);
+        if (!IsForwardingKey(state.AutoErrorKey))
+        {
+            setup["needAutoErrorKey"] = true;
+        }
+
+        var (ok, answer, en, _) = await PostAsync("api/setup", setup, client).ConfigureAwait(false);
+        KeepAutoErrorKey(answer);
         var now = DateTime.UtcNow;
         ChangeState(s =>
         {

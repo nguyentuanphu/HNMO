@@ -30,6 +30,37 @@ public enum BankTopUpResult
 
     /// <summary>The amount is below the minimum.</summary>
     BelowMinimum,
+
+    /// <summary>The transfer names a waiting top-up but brings less than it asked for; the host decides by hand.</summary>
+    BelowRequested,
+
+    /// <summary>There's no top-up of this id.</summary>
+    NotFound,
+
+    /// <summary>The top-up was rejected (manual confirmation refused; a later transfer still credits it).</summary>
+    Rejected,
+}
+
+/// <summary>Why a waiting top-up couldn't be created for the top-up page.</summary>
+public enum BankTopUpCreateResult
+{
+    /// <summary>Created, or the same waiting one given again.</summary>
+    Created,
+
+    /// <summary>Bank top-ups are off or have no account.</summary>
+    Off,
+
+    /// <summary>The account doesn't exist.</summary>
+    AccountNotFound,
+
+    /// <summary>The amount is below the minimum or above 100,000,000 VND.</summary>
+    BadAmount,
+
+    /// <summary>The chosen bank account isn't one of the host's.</summary>
+    UnknownBankAccount,
+
+    /// <summary>The account or the server has too many waiting top-ups.</summary>
+    TooMany,
 }
 
 /// <summary>
@@ -39,19 +70,31 @@ public enum BankTopUpResult
 /// </summary>
 public class BankTopUpService
 {
+    /// <summary>The largest amount one top-up may ask for, in VND.</summary>
+    public const long MaximumVnd = 100_000_000;
+
+    /// <summary>One confirmation at a time per top-up in this process; the grant's unique reference covers the rest.</summary>
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, SemaphoreSlim> Gates = new(StringComparer.Ordinal);
+
     private readonly CashShopCoinService _coins;
     private readonly ILogger<BankTopUpService> _logger;
+    private readonly BankTopUpPendingStore? _pendingStore;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BankTopUpService"/> class.
     /// </summary>
     /// <param name="coins">The cash shop coin service.</param>
     /// <param name="logger">The logger.</param>
-    public BankTopUpService(CashShopCoinService coins, ILogger<BankTopUpService> logger)
+    /// <param name="pending">The waiting top-ups; null for the server's state file.</param>
+    public BankTopUpService(CashShopCoinService coins, ILogger<BankTopUpService> logger, BankTopUpPendingStore? pending = null)
     {
         this._coins = coins;
         this._logger = logger;
+        this._pendingStore = pending;
     }
+
+    /// <summary>Gets the waiting top-ups.</summary>
+    public BankTopUpPendingStore Pending => this._pendingStore ?? BankTopUpPendingStore.Open();
 
     /// <summary>
     /// Finds the account name after the transfer word in a transfer message. Banks often add their own
@@ -119,6 +162,23 @@ public class BankTopUpService
             return BankTopUpResult.BelowMinimum;
         }
 
+        foreach (var code in BankTopUpPendingStore.CodesIn(transfer.Message, configuration.TransferPrefix))
+        {
+            if (this.Pending.FindByCode(code) is not { } pending)
+            {
+                continue;
+            }
+
+            if (transfer.AmountVnd < pending.AmountVnd)
+            {
+                this._logger.LogWarning("Top-up {Provider} {Id}: {Amount} VND for {Code}, which asked for {Requested} VND; not credited, decide on the Bank top-ups page.", transfer.Provider, transfer.ProviderId, transfer.AmountVnd, pending.Code, pending.AmountVnd);
+                return BankTopUpResult.BelowRequested;
+            }
+
+            var result = await this.GrantPendingAsync(pending, CoinsFor(transfer.AmountVnd, configuration.VndPerCoin), transfer.AmountVnd, configuration, transfer.Provider, $"Bank transfer {transfer.AmountVnd:N0} VND ({transfer.Provider}, {pending.Code})", cancellationToken).ConfigureAwait(false);
+            return result;
+        }
+
         if (FindAccountName(transfer.Message, configuration.TransferPrefix) is not { } written)
         {
             this._logger.LogWarning("Top-up {Provider} {Id}: {Amount} VND without an account name in the message \"{Message}\"; add the coins by hand.", transfer.Provider, transfer.ProviderId, transfer.AmountVnd, transfer.Message);
@@ -156,5 +216,127 @@ public class BankTopUpService
 
         this._logger.LogWarning("Top-up {Provider} {Id}: {Amount} VND for account \"{Login}\", which doesn't exist; add the coins by hand.", transfer.Provider, transfer.ProviderId, transfer.AmountVnd, written);
         return BankTopUpResult.AccountNotFound;
+    }
+
+    /// <summary>
+    /// Creates a waiting top-up for the top-up page: the player transfers the amount with its code in the message.
+    /// </summary>
+    /// <param name="login">The account's login name as the player wrote it.</param>
+    /// <param name="amountVnd">The amount.</param>
+    /// <param name="bin">The bank id of the chosen host account.</param>
+    /// <param name="number">The chosen host account number.</param>
+    /// <param name="configuration">The top-up configuration (null when off).</param>
+    /// <param name="ticket">The browser's ticket for following it.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>What happened, and the top-up.</returns>
+    public async ValueTask<(BankTopUpCreateResult Result, BankTopUpPending? TopUp)> CreatePendingAsync(string login, long amountVnd, string bin, string number, BankTopUpConfiguration? configuration, string ticket, CancellationToken cancellationToken = default)
+    {
+        if (configuration is null || configuration.UsableAccounts() is not { Count: > 0 } accounts)
+        {
+            return (BankTopUpCreateResult.Off, null);
+        }
+
+        if (amountVnd < configuration.MinimumVnd || amountVnd > MaximumVnd)
+        {
+            return (BankTopUpCreateResult.BadAmount, null);
+        }
+
+        if (accounts.FirstOrDefault(a => a.Bin == bin.Trim() && a.Number.Trim() == number.Trim()) is not { } account)
+        {
+            return (BankTopUpCreateResult.UnknownBankAccount, null);
+        }
+
+        var written = login.Trim();
+        string? found = null;
+        foreach (var candidate in new[] { written, written.ToLowerInvariant(), written.ToUpperInvariant() }.Distinct())
+        {
+            if (candidate.Length is >= 3 and <= 10 && await this._coins.GetSummaryAsync(candidate, cancellationToken).ConfigureAwait(false) is { } summary)
+            {
+                found = summary.LoginName;
+                break;
+            }
+        }
+
+        if (found is null)
+        {
+            return (BankTopUpCreateResult.AccountNotFound, null);
+        }
+
+        var (topUp, refusal) = this.Pending.Create(found, amountVnd, CoinsFor(amountVnd, configuration.VndPerCoin), account, configuration.TransferPrefix, ticket, DateTime.UtcNow);
+        return topUp is null ? (BankTopUpCreateResult.TooMany, null) : (BankTopUpCreateResult.Created, topUp);
+    }
+
+    /// <summary>The host saw the transfer: adds the coins of a waiting top-up, once whoever confirms first.</summary>
+    /// <param name="id">The top-up's id.</param>
+    /// <param name="configuration">The top-up configuration.</param>
+    /// <param name="confirmedBy">The admin's name.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>What happened.</returns>
+    public async ValueTask<BankTopUpResult> ConfirmPendingAsync(string id, BankTopUpConfiguration configuration, string confirmedBy, CancellationToken cancellationToken = default)
+    {
+        if (this.Pending.Find(id) is not { } pending)
+        {
+            return BankTopUpResult.NotFound;
+        }
+
+        if (pending.Status == BankTopUpPendingStatus.Credited)
+        {
+            return BankTopUpResult.AlreadyCredited;
+        }
+
+        return await this.GrantPendingAsync(pending, pending.Coins, pending.AmountVnd, configuration, confirmedBy, $"Bank transfer {pending.AmountVnd:N0} VND (confirmed by {confirmedBy}, {pending.Code})", cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>The host saw no (or a wrong) transfer: rejects a waiting top-up. A credited one stays credited.</summary>
+    /// <param name="id">The top-up's id.</param>
+    /// <param name="rejectedBy">The admin's name.</param>
+    /// <returns>What happened.</returns>
+    public BankTopUpResult RejectPending(string id, string rejectedBy) =>
+        this.Pending.Finish(id, BankTopUpPendingStatus.Rejected, rejectedBy, null, DateTime.UtcNow) switch
+        {
+            null => BankTopUpResult.NotFound,
+            BankTopUpPendingStatus.Credited => BankTopUpResult.AlreadyCredited,
+            _ => BankTopUpResult.Rejected,
+        };
+
+    private async ValueTask<BankTopUpResult> GrantPendingAsync(BankTopUpPending pending, int coins, long amountVnd, BankTopUpConfiguration configuration, string by, string reason, CancellationToken cancellationToken)
+    {
+        var gate = Gates.GetOrAdd(pending.Id, _ => new SemaphoreSlim(1, 1));
+        await gate.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            return await this.GrantPendingLockedAsync(pending, coins, amountVnd, configuration, by, reason, cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            gate.Release();
+        }
+    }
+
+    private async ValueTask<BankTopUpResult> GrantPendingLockedAsync(BankTopUpPending pending, int coins, long amountVnd, BankTopUpConfiguration configuration, string by, string reason, CancellationToken cancellationToken)
+    {
+        var (status, _) = await this._coins.GrantAsync(pending.Login, configuration.CoinType, coins, reason, pending.Reference, by, cancellationToken).ConfigureAwait(false);
+        switch (status)
+        {
+            case CashShopCoinGrantStatus.Created:
+                this.Pending.Finish(pending.Id, BankTopUpPendingStatus.Credited, by, amountVnd, DateTime.UtcNow);
+                var milestoneStore = TopUpMilestoneStore.Open(TopUpMilestonesConfiguration.DefaultFileName);
+                var milestoneEngine = new TopUpMilestoneEngine(new TopUpMilestonesConfiguration(), milestoneStore, enabled: true);
+                milestoneEngine.RecordTopUp(pending.Login, amountVnd, pending.Reference, $"{by} {pending.Code}", DateTime.UtcNow);
+                lock (milestoneStore.Lock)
+                {
+                    milestoneStore.SaveIfChanged();
+                }
+
+                this._logger.LogInformation("Top-up {Code}: {Amount} VND -> {Coins} {CoinType} for {Login} ({By}).", pending.Code, amountVnd, coins, configuration.CoinType, pending.Login, by);
+                return BankTopUpResult.Credited;
+            case CashShopCoinGrantStatus.AlreadyGranted:
+            case CashShopCoinGrantStatus.ReferenceUsedByOtherAccount:
+                this.Pending.Finish(pending.Id, BankTopUpPendingStatus.Credited, by, amountVnd, DateTime.UtcNow);
+                return BankTopUpResult.AlreadyCredited;
+            default:
+                this._logger.LogWarning("Top-up {Code}: the account {Login} no longer exists; not credited.", pending.Code, pending.Login);
+                return BankTopUpResult.AccountNotFound;
+        }
     }
 }

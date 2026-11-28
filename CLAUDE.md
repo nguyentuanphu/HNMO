@@ -14,6 +14,7 @@ when you learn something new about how they work (see the `hnmo` skill).
   Never hard-code a name in visible text: use `gameName()` / `data-game-name`. Code, commits and
   docs still say HNMO.
 - **Time:** read and report all times in Sydney time (Australia/Sydney).
+- **Desktop client paused (owner, 2026-11-28):** do not work on the C++ client and do not mention it in reports. Anything it needs goes into `docs/desktop-client-backlog.md`; the owner will say when to do them all in one pass.
 - **Same as the desktop:** the web game must do everything the desktop client does, the same
   way. Check each feature against the desktop client's code and data before calling it done.
 - **TypeScript:** all web client code is strict TypeScript (`client/web/src`); no `any`

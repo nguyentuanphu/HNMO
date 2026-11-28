@@ -42,4 +42,19 @@ public sealed class DeveloperHubState
 
     /// <summary>Gets or sets when hub unreachability began continuously (UTC); cleared on any response.</summary>
     public DateTime? FirstHubUnreachableUtc { get; set; }
+
+    /// <summary>Gets or sets the key the hub gave this computer for forwarding automatic error reports.</summary>
+    public string? AutoErrorKey { get; set; }
+
+    /// <summary>Gets or sets the purchase or trial whose licence is awaited; none: nothing is awaited.</summary>
+    public DeveloperHubPurchase? Purchase { get; set; }
+
+    /// <summary>Gets or sets whether the hub said this computer already had its free trial.</summary>
+    public bool TrialUsed { get; set; }
+
+    /// <summary>Gets or sets the hub's last licence package list (JSON), kept for <see cref="DeveloperHub.PackageCacheAge"/>.</summary>
+    public string? PackagesJson { get; set; }
+
+    /// <summary>Gets or sets when <see cref="PackagesJson"/> was fetched (UTC).</summary>
+    public DateTime? PackagesFetchedUtc { get; set; }
 }

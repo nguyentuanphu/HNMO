@@ -48,6 +48,7 @@ public partial class NavMenu : IDisposable
         "discord",
         "logfiles",
         "host-settings",
+        "licence",
         "logging-configuration",
         "network-analyzer",
     };

@@ -16,7 +16,7 @@
     a { color: var(--gold); }
     .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: grid; gap: 14px; align-content: start; }
     .panel p { margin: 0; color: var(--muted); font-size: 14px; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 20px; }
     label { display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
     input { background: #151a26; color: var(--text); border: 1px solid #2c3446; border-radius: 6px; padding: 9px 10px; font: inherit; }
     button { font: inherit; border-radius: 6px; padding: 8px 12px; cursor: pointer; border: 1px solid var(--line); background: #151a26; color: var(--text); }
@@ -33,6 +33,12 @@
     .warn { color: var(--gold); font-size: 14px; }
     .off { color: var(--muted); }
     .lang { display: flex; gap: 6px; }
+    .primary { border-color: var(--gold); background: var(--gold); color: #1a1408; font-weight: 600; }
+    .primary[disabled] { opacity: .5; cursor: default; }
+    .state { font-weight: 600; }
+    .state.pending { color: var(--gold); } .state.credited { color: var(--ok); } .state.rejected, .state.expired { color: var(--error); }
+    .history-row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; font-size: 14px; }
+    @media (max-width: 480px) { body { padding-top: 16px; } .panel { padding: 14px; } dl { grid-template-columns: auto 1fr; } dl > button, dl > span { grid-column: 2; justify-self: start; } }
     .milestone-row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: rgba(255, 255, 255, .03); }
     .milestone-row span { color: var(--gold); font-size: 14px; }
   </style>
@@ -59,6 +65,8 @@
         <p><span data-t="youGet">You get</span> <span class="coins" id="coins">0</span> <span id="coinName">W Coin</span></p>
         <h2 data-t="step2">2. Bank</h2>
         <div class="choices" id="banks"></div>
+        <button type="button" class="primary" id="create" data-t="create">Get my transfer code</button>
+        <p id="createError" class="warn" hidden></p>
       </section>
       <section class="panel">
         <h2 data-t="step3">3. Scan with your banking app</h2>
@@ -70,11 +78,17 @@
           <dt data-t="amountShort">Amount</dt><dd id="amountText"></dd><button type="button" class="copy" data-copy="amountRaw" data-t="copy">Copy</button>
           <dt data-t="message">Transfer message</dt><dd id="message"></dd><button type="button" class="copy" data-copy="message" data-t="copy">Copy</button>
         </dl>
+        <p id="status" role="status" hidden><span data-t="statusLabel">Status</span>: <span class="state" id="statusText"></span></p>
         <p class="warn" data-t="keepMessage">Keep the transfer message exactly as shown: it tells the game which account gets the coins.</p>
         <p data-t="arrive">The coins arrive by themselves within a minute or two after the transfer: open the cash shop (X) in the game to see them. On a season without a cash shop (classic play), coins buy VIP (the VIP window or your account page). If they don't come, contact the host with the time of the transfer.</p>
         <span id="amountRaw" hidden></span>
       </section>
     </div>
+
+    <section class="panel" id="history" hidden>
+      <h2 data-t="historyHead">My top-ups on this device</h2>
+      <div id="historyList" style="display:grid;gap:8px;"></div>
+    </section>
 
     <section class="panel" id="testPackages" hidden>
       <h2></h2>
