@@ -112,6 +112,28 @@ public sealed class WorldsPageTests
     }
 
     /// <summary>
+    /// The host writes the text the game's server choice shows for a world, in English and Vietnamese, with a hint on
+    /// each field; saving keeps it with the world.
+    /// </summary>
+    [Test]
+    public void TheServerChoiceTextIsEditedAndSaved()
+    {
+        var cut = this._context.Render<Worlds>();
+        cut.Find("button[title='Load this world into rate editor']").Click();
+
+        Assert.That(cut.Find("label[title^='The text the game']").TextContent.Trim(), Is.EqualTo("Server choice text (EN)"));
+        cut.Find("#editServerChoiceTextEn").Change("Fresh start, friendly rates");
+        cut.Find("#editServerChoiceTextVi").Change("Khởi đầu mới, tỉ lệ thân thiện");
+        cut.FindAll("button").Single(b => b.TextContent.Trim() == "Save Changes").Click();
+
+        cut.WaitForAssertion(() =>
+        {
+            var main = this._registry.GetWorlds().Single(w => w.WorldId == "main");
+            Assert.That((main.ServerChoiceTextEn, main.ServerChoiceTextVi), Is.EqualTo(("Fresh start, friendly rates", "Khởi đầu mới, tỉ lệ thân thiện")));
+        });
+    }
+
+    /// <summary>
     /// Saving a world sets the rates of its own servers. The game's base rates and the servers of other worlds
     /// keep theirs (saving one world used to overwrite the base experience rate for every world).
     /// </summary>

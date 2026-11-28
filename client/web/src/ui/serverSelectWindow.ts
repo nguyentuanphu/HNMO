@@ -1,7 +1,8 @@
 // The server choice over the 3D stage (the desktop's CServerSelWin, server_select.rml in the legacy theme): the groups
 // on the left, the servers of the picked group on the right with their load bars, the group's description under them.
-// As the desktop: no group is open at first, a click on a group shows its servers, a click on a server picks it at once,
-// and a full or overloaded server says so instead (MESSAGE_SERVER_BUSY). The values are the desktop's: LoadState.h
+// As the desktop: with several groups none is open at first (the only one is, owner 2026-11-28), a click on a group
+// shows its servers, a click on a server picks it at once, and a full or overloaded server says so instead in the
+// game's OK box (MESSAGE_SERVER_BUSY). The values are the desktop's: LoadState.h
 // (100 % full, 128 % overloaded), LoadBar.cpp (ten segments of 10 %, segment k mixed k tenths of the way from the base
 // color to the full color in OKLCH, all of them full color once the server is full) and Data/Local/ServerList.json
 // (the button's "({vip} {pvp})" and the load texts).
@@ -145,15 +146,9 @@ export async function openServerSelect<T>(options: ServerSelectOptions<T>): Prom
     pvp_notice_line2: '',
     description_text: '',
     serversel_select_group: (position: number) => {
-      const group = groups[position];
-      if (!group) return;
+      if (!groups[position]) return;
       options.playClick?.('select');
-      open = position;
-      model.groups = groups.map((g, index) => ({ label: g.label, btn_pos: index, checked: index === position }));
-      model.servers = rows(group);
-      model.server_list_visible = true;
-      model.description_text = group.description;
-      requestAnimationFrame(fitLoadTexts);
+      showGroup(position);
     },
     serversel_select_server: (index: number) => {
       const entry = open === null ? undefined : groups[open]?.servers[index];
@@ -167,6 +162,18 @@ export async function openServerSelect<T>(options: ServerSelectOptions<T>): Prom
   // .center-both centres the panel in its document, which has no size here: in the window instead.
   const panel = document.$('#panel');
   if (panel) Object.assign(panel.style, { position: 'fixed', left: '50%', top: '50%' });
+  function showGroup(position: number): void {
+    const group = groups[position];
+    if (!group) return;
+    open = position;
+    model.groups = groups.map((g, index) => ({ label: g.label, btn_pos: index, checked: index === position }));
+    model.servers = rows(group);
+    model.server_list_visible = true;
+    model.description_text = group.description;
+    requestAnimationFrame(fitLoadTexts);
+  }
+  // The only group is open at once (owner 2026-11-28); with several, none is until one is clicked, as on the desktop.
+  if (groups.length === 1) { showGroup(0); document.update(); }
   // A full or overloaded server's text hides the bar's segments under it (CServerSelWin::FitLoadTexts).
   function fitLoadTexts(): void {
     const servers = model.servers as ServerRow[];

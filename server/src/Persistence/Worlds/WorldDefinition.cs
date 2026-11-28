@@ -55,6 +55,15 @@ public sealed class WorldDefinition
     /// <summary>Gets or sets the Vietnamese active event preset summary for this world.</summary>
     public string EventPresetVi { get; set; } = "Lịch chuẩn";
 
+    /// <summary>
+    /// Gets or sets the English text the game's server choice shows under the worlds for this world (the host's own
+    /// words, like the desktop's per-group description). Empty: the game shows its own text.
+    /// </summary>
+    public string ServerChoiceTextEn { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets the Vietnamese text of the server choice for this world (see <see cref="ServerChoiceTextEn"/>).</summary>
+    public string ServerChoiceTextVi { get; set; } = string.Empty;
+
     /// <summary>Gets or sets the template source world ID when created from a template.</summary>
     public string? TemplateSourceWorldId { get; set; }
 

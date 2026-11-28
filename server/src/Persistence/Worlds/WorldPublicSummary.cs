@@ -54,6 +54,12 @@ public sealed class WorldPublicSummary
     /// <summary>Gets or sets the Vietnamese event preset label.</summary>
     public string EventPresetVi { get; set; } = string.Empty;
 
+    /// <summary>Gets or sets the English text of the game's server choice for this world (empty: the game's own).</summary>
+    public string ServerChoiceTextEn { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets the Vietnamese text of the game's server choice for this world (empty: the game's own).</summary>
+    public string ServerChoiceTextVi { get; set; } = string.Empty;
+
     /// <summary>Gets or sets a value indicating whether one-off transfers into this world are allowed.</summary>
     public bool TransferEnabled { get; set; }
 

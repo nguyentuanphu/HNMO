@@ -130,6 +130,7 @@ import { ARROW_RELEASE_DELAY_SECONDS, DeathEffects, ProjectileLayer, arrowKindsF
 import { parseSeason, seasonBadge, setSeason, type SeasonKey } from './dataRoot.js';
 import { chooseServerBySeason, groupBySeason, seasonColumnTexts } from './ui/seasonColumns.js';
 import { openServerSelect, type ServerSelectGroup, type ServerSelectWindow } from './ui/serverSelectWindow.js';
+import { showConfirm } from './ui/gameDialogs.js';
 import { type ServerListEntry, fetchServerList, fetchGameServerAddress, login, loginWithTicket, fetchCharacters, enterWorld, createCharacter, deleteCharacter, creatableClasses, lastUnlockFlags, CLASSES } from './net/session.js';
 import type { WorldData } from './world.js';
 import type { TerrainMesh } from './terrain.js';
@@ -1451,6 +1452,8 @@ interface WebsiteServerMeta {
   /** The season the world plays ('s6' unless the website says otherwise). */
   season?: SeasonKey;
   worldLabel?: string;
+  /** The host's text for the server choice under the worlds (admin panel, Worlds: "Server choice text"). */
+  worldText?: string;
   description?: string;
   vipOnly?: boolean;
   pvpEnabled?: boolean;
@@ -1478,7 +1481,11 @@ async function fetchServerMetadata(url = '/website/data'): Promise<Map<number, W
     if ('worlds' in raw && Array.isArray(raw.worlds)) {
       for (const world of raw.worlds as unknown[]) {
         if (typeof world !== 'object' || world === null) continue;
-        const entry = world as { worldId?: unknown; season?: unknown; nameEn?: unknown; nameVi?: unknown; isOpen?: unknown; openingDateSydney?: unknown; servers?: unknown };
+        const entry = world as { worldId?: unknown; season?: unknown; nameEn?: unknown; nameVi?: unknown; isOpen?: unknown; openingDateSydney?: unknown; servers?: unknown; serverChoiceTextEn?: unknown; serverChoiceTextVi?: unknown };
+        // The host's text for the server choice (Vietnamese, else English; empty: the game's own).
+        const textEn = typeof entry.serverChoiceTextEn === 'string' ? entry.serverChoiceTextEn.trim() : '';
+        const textVi = typeof entry.serverChoiceTextVi === 'string' ? entry.serverChoiceTextVi.trim() : '';
+        const worldText = vi ? textVi || textEn : textEn;
         const worldOrder = (raw.worlds as unknown[]).indexOf(world);
         const name = vi
           ? (typeof entry.nameVi === 'string' && entry.nameVi ? entry.nameVi : typeof entry.nameEn === 'string' ? entry.nameEn : '')
@@ -1493,6 +1500,7 @@ async function fetchServerMetadata(url = '/website/data'): Promise<Map<number, W
             const full = status ? `${name} (${status})` : name;
             const existing = meta.get(id) ?? {};
             if (full) existing.worldLabel = full;
+            if (worldText) existing.worldText = worldText;
             if (typeof entry.worldId === 'string') existing.worldId = entry.worldId;
             existing.worldOrder = worldOrder;
             existing.season = parseSeason(entry.season);
@@ -1675,7 +1683,8 @@ function chooseServerOnStage(servers: SeasonServer[]): Promise<SeasonServer> {
       groups: serverSelectGroups(servers, vi),
       vi,
       onPick: (server) => pickFromWindow(server),
-      onBusy: () => showError(new Error(vi ? 'Máy chủ đã đầy. Hãy chọn máy chủ khác.' : 'The server is full. Please choose another one.')),
+      // The desktop's MESSAGE_SERVER_BUSY box (MsgWin: "The server is full"), as the game's OK box.
+      onBusy: () => { void showConfirm({ lines: [vi ? 'Máy chủ đã đầy.' : 'The server is full.'], tag: 'server-busy' }); },
       playClick: (kind) => { const sound = interfaceClickSound(kind); if (sound) audioSystem().play(sound); },
     });
     if (done || characterStage !== stage) { opened.close(); return; }
@@ -1718,7 +1727,9 @@ function serverSelectGroups(servers: readonly SeasonServer[], vi: boolean): Serv
         if (typeof server.meta?.experienceRate === 'number') rates.push(`EXP ${server.meta.experienceRate}×`);
         if (typeof server.meta?.dropRate === 'number' && server.meta.dropRate !== 1) rates.push(`Drop ${server.meta.dropRate}×`);
         if (typeof server.meta?.zenRate === 'number' && server.meta.zenRate !== 1) rates.push(`Zen ${server.meta.zenRate}×`);
-        group = { label, description: [`${texts.heading[key]}: ${texts.hint[key]}`, ...rates].join(' · '), servers: [] };
+        // The host's text for the world (admin panel), else the season and the rates.
+        const description = server.meta?.worldText || [`${texts.heading[key]}: ${texts.hint[key]}`, ...rates].join(' · ');
+        group = { label, description, servers: [] };
         byWorld.set(world, group);
         groups.push(group);
       }

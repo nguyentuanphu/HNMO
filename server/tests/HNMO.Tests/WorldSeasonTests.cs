@@ -98,6 +98,36 @@ public sealed class WorldSeasonTests
     }
 
     /// <summary>
+    /// The host's text for the game's server choice (admin panel, Worlds), in English and Vietnamese, is kept in the
+    /// registry file and sent to players with the world; a world without one sends it empty (the game's own text).
+    /// </summary>
+    [Test]
+    public void ServerChoiceTextIsKeptAndSentToPlayers()
+    {
+        var registry = new WorldRegistryService(this._file);
+        registry.EnsureDefaultWorld([0]);
+        registry.UpsertWorld(new WorldDefinition
+        {
+            WorldId = "nine",
+            NameEn = "World 9",
+            Season = WorldSeason.Season9,
+            ServerIds = [5],
+            ServerChoiceTextEn = "The newer worlds, weekly sieges",
+            ServerChoiceTextVi = "Thế giới mới, công thành hằng tuần",
+        });
+
+        var reopened = new WorldRegistryService(this._file);
+        var snapshot = reopened.BuildGroupedSnapshot([Server(0), Server(5)], DateTimeOffset.UtcNow);
+
+        var nine = snapshot.Single(w => w.WorldId == "nine");
+        var main = snapshot.Single(w => w.WorldId == "main");
+        Assert.That((nine.ServerChoiceTextEn, nine.ServerChoiceTextVi), Is.EqualTo(("The newer worlds, weekly sieges", "Thế giới mới, công thành hằng tuần")));
+        Assert.That((main.ServerChoiceTextEn, main.ServerChoiceTextVi), Is.EqualTo((string.Empty, string.Empty)));
+        var json = JsonSerializer.Serialize(nine, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+        Assert.That(json, Does.Contain("\"serverChoiceTextEn\":\"The newer worlds, weekly sieges\""), "The web game reads the camel-case name.");
+    }
+
+    /// <summary>
     /// Season 9's server program keeps its own worlds list, which starts with a Season 9 world holding its servers:
     /// the start screen names them as it names Season 6.3's ("World 1 — Origin — Server 0"), not "Server 1".
     /// </summary>
