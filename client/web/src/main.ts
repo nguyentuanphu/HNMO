@@ -109,7 +109,7 @@ import { GateWatcher } from './game/gates.js';
 import { Trade } from './ui/tradeWindow.js';
 import { ChaosMachine } from './ui/mixWindow.js';
 import { PersonalShop } from './ui/personalShop.js';
-import { CashShop } from './ui/cashShop.js';
+import { CashShop, NO_CASH_SHOP_CLASS } from './ui/cashShop.js';
 import { loginMusic } from './audio/index.js';
 import { AUTO_PLAY_DATA_LENGTH, decodeAutoPlayConfig, encodeAutoPlayConfig, initialAutoPlayConfig, type AutoPlayConfig } from './game/autoPlayConfig.js';
 import { AutoPlaySettingsWindow } from './ui/autoPlayWindows.js';
@@ -359,6 +359,8 @@ scene.add(root);
 
 const state: GameState = { world: null, hero: null, online: null, mapNumber: null, camera };
 installErrorLog();
+// The cash shop's buttons wait for the server to name its script (ui/cashShop.ts): none on a season without a shop.
+document.body.classList.add(NO_CASH_SHOP_CLASS);
 state.cooldowns = skillCooldowns;
 state.chat = chat;
 window.__game = state; // for automated tests and debugging from the console
@@ -1722,7 +1724,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     if (except !== 'cashShop') state.cashShop?.close();
   };
   // The cash shop (X or the HUD's shop button), with HNMO's free coins.
-  state.cashShop = new CashShop({ connection, heroName: character.name, safeZone: inSafeZone, walking: () => online.hero.isWalking, closeOthers: () => closeGroupA('cashShop'), onToggle: (open) => state.hud?.setCashShopOpen(open), click: () => sounds.click() });
+  state.cashShop = new CashShop({ connection, heroName: character.name, safeZone: inSafeZone, walking: () => online.hero.isWalking, closeOthers: () => closeGroupA('cashShop'), onToggle: (open) => state.hud?.setCashShopOpen(open), onAvailable: () => state.hud?.setCashShopShown(true), click: () => sounds.click() });
   earlyPackets.forEach((bytes) => state.cashShop?.handle(bytes));
   // Jewels: a jewel dropped on an item is used on it (ConsumeItemRequest with the target slot).
   const onBagDropOnItem: typeof itemWindows.bag.onDropOnItem = (from, slot, target) => {
@@ -2491,6 +2493,8 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   });
   inventory.onChange(() => { hud.refreshItemSlots(); hud.refreshSkills(); });
   hotkeys.onChange(() => hud.refreshItemSlots());
+  // The cash shop button shows only on a season with a cash shop (the server named its script, maybe already).
+  hud.setCashShopShown(state.cashShop?.available ?? false);
   void hud.open();
   // ReceiveQuestPrize (LegacyQuestReward, C1 A3): the class change quests' rewards — level-up
   // points (200, 202) for the hero; a class change (201-203) salutes; all of them light up the player.

@@ -169,7 +169,11 @@ export function installTouchControls(actions: TouchActions): HTMLElement {
   // The "more" button and its windows; full screen.
   const more = document.createElement('div');
   more.id = 'touchMore';
-  for (const entry of MORE) more.append(button(entry.label, entry.title, () => { more.classList.remove('open'); if (entry.event) window.dispatchEvent(new Event(entry.event)); else key(entry.key); }));
+  for (const entry of MORE) {
+    const element = button(entry.label, entry.title, () => { more.classList.remove('open'); if (entry.event) window.dispatchEvent(new Event(entry.event)); else key(entry.key); });
+    if (entry.key) element.dataset.key = entry.key;
+    more.append(element);
+  }
   // Item names on the ground (the desktop's held Alt): a toggle on a touch screen.
   let names = false;
   const namesButton = button('Alt', 'Item names on the ground (Alt)', () => {

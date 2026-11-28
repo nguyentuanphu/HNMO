@@ -131,9 +131,23 @@ export class Hud {
     window.addEventListener('resize', () => this.place());
   }
 
+  /** Whether this season has a cash shop (its button shows only then). */
+  private cashShopShown = false;
+
+  /** Shows or hides the cash shop button (hidden on a season whose host turned the cash shop off). */
+  setCashShopShown(shown: boolean): void {
+    this.cashShopShown = shown;
+    const button = this.doc?.$('#btn_cshop');
+    if (button) {
+      button.style.visibility = shown ? '' : 'hidden';
+      button.style.pointerEvents = shown ? '' : 'none';
+    }
+  }
+
   async open(parent: HTMLElement = document.body): Promise<void> {
     this.doc = await openDocument('main_frame', this.model, { parent });
     this.doc.host.style.zIndex = '20';
+    this.setCashShopShown(this.cashShopShown);
     this.doc.root.addEventListener('mouseover', (event) => {
       this.hoveredElement = event.target instanceof Element ? event.target.closest('.slot-frame, .skill-cell') : null;
     }, true);

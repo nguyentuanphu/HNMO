@@ -1,4 +1,4 @@
-﻿@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/cash-shop-catalog"
 @attribute [Authorize(Policy = AdminPolicies.Administrator)]
 
@@ -13,6 +13,7 @@
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.CashShopCatalog" />
 <h1>@Resources.CashShopCatalog</h1>
 <PageHelp Text="@HelpResources.PageHelpTextCashShopCatalog" />
+<CashShopSwitch />
 
 
 <div class="alert alert-info">@Resources.CashShopCatalogDescription</div>
