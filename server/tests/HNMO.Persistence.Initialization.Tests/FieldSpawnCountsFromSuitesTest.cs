@@ -6,6 +6,8 @@ namespace HNMO.Persistence.Initialization.Tests;
 
 using Microsoft.Extensions.Logging.Abstractions;
 using HNMO.DataModel.Configuration;
+using HNMO.GameLogic;
+using HNMO.PlugIns;
 using HNMO.Persistence.Initialization.Updates;
 using HNMO.Persistence.InMemory;
 
@@ -101,6 +103,65 @@ internal class FieldSpawnCountsFromSuitesTest
         await new FieldSpawnCountsFromSuitesUpdatePlugIn().ApplyUpdateAsync(context, gameConfiguration).ConfigureAwait(false);
 
         Assert.That(Spawns(gameConfiguration, removed.Map), Does.Contain(moved));
+    }
+
+    /// <summary>Version two repairs blocked unmodified spots and preserves host changes.</summary>
+    /// <returns>The task.</returns>
+    [Test]
+    public async Task UpdateMovesOnlyUnmodifiedBlockedAtlansSpawnsAsync()
+    {
+        var provider = new InMemoryPersistenceContextProvider();
+        var configuration = await CreateConfigurationAsync(provider).ConfigureAwait(false);
+        using var context = provider.CreateNewContext();
+        var map = configuration.Maps.Single(map => map.Number == 7 && map.Discriminator == 0);
+        var update = new FieldSpawnCountsFromSuitesUpdatePlugIn();
+        var first = map.MonsterSpawns.Single(spawn => spawn.GetId() == FieldSpawnCountsFromSuitesUpdatePlugIn.Changes.Single(change => change.Map == 7 && change.Number == 438).Id);
+        var second = map.MonsterSpawns.Single(spawn => spawn.GetId() == FieldSpawnCountsFromSuitesUpdatePlugIn.Changes.Single(change => change.Map == 7 && change.Number == 439).Id);
+        byte TerrainAt(MonsterSpawnArea spawn) => map.TerrainData![3 + (spawn.Y1 * 256) + spawn.X1];
+
+        Assert.That(TerrainAt(first), Is.Zero);
+        Assert.That(TerrainAt(second), Is.Zero);
+        await AssertSpawnsAsync(configuration, provider, map, first, second).ConfigureAwait(false);
+        first.X1 = first.X2 = 251;
+        second.X1 = second.X2 = 7;
+        second.Y1 = second.Y2 = 52;
+        first.Direction = Direction.North;
+        Assert.That(TerrainAt(first), Is.EqualTo(4));
+        Assert.That(TerrainAt(second), Is.EqualTo(4));
+
+        await update.ApplyUpdateAsync(context, configuration).ConfigureAwait(false);
+
+        Assert.That(first.X1, Is.EqualTo(251));
+        Assert.That(second.X1, Is.EqualTo(14));
+        Assert.That(second.Y1, Is.EqualTo(51));
+        Assert.That(TerrainAt(second), Is.Zero);
+        await AssertSpawnsAsync(configuration, provider, map, second).ConfigureAwait(false);
+    }
+
+    private static async Task AssertSpawnsAsync(
+        GameConfiguration configuration,
+        InMemoryPersistenceContextProvider provider,
+        GameMapDefinition definition,
+        params MonsterSpawnArea[] spawns)
+    {
+        var initializer = new MapInitializer(configuration, NullLogger<MapInitializer>.Instance, NullDropGenerator.Instance, null);
+        var plugIns = new PlugInManager(null, NullLoggerFactory.Instance, null, null);
+        var game = new GameContext(configuration, provider, initializer, NullLoggerFactory.Instance, plugIns, NullDropGenerator.Instance, new ConfigurationChangeMediator());
+        initializer.PlugInManager = game.PlugInManager;
+        initializer.PathFinderPool = game.PathFinderPool;
+        var map = initializer.CreateGameMap(definition);
+        try
+        {
+            foreach (var spawn in spawns)
+            {
+                var monster = await initializer.InitializeSpawnAsync(0, map, spawn).ConfigureAwait(false);
+                Assert.That(monster, Is.Not.Null, $"Great Bahamut failed to spawn at ({spawn.X1}, {spawn.Y1}).");
+            }
+        }
+        finally
+        {
+            await map.TearDownAsync().ConfigureAwait(false);
+        }
     }
 
     private static void MakeOldSave(IContext context, GameConfiguration gameConfiguration)

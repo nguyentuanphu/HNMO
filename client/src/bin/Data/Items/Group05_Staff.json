@@ -866,6 +866,37 @@
       }
     },
     {
+      "number": 35,
+      "name": {
+        "en": "Miracle Staff",
+        "de": "Wunderstab",
+        "vi": "Gậy Phép Màu",
+        "zh-CN": "奇迹法杖"
+      },
+      "options": ["luck", "wizardryDamageOption", "excellentWizardryAttack"],
+      "width": 1,
+      "height": 4,
+      "slot": "mainHand",
+      "weaponKind": "staff",
+      "statProfile": "weapon",
+      "level": 149,
+      "magicDurability": 80,
+      "damageMin": 67,
+      "damageMax": 69,
+      "attackSpeed": 30,
+      "magicPower": 130,
+      "droppable": false,
+      "requirements": {
+        "level": 400,
+        "strength": 46,
+        "dexterity": 13
+      },
+      "classRequirements": {
+        "darkWizard": 3,
+        "magicGladiator": 3
+      }
+    },
+    {
       "number": 36,
       "name": {
         "en": "Divine Stick of the Archangel",
@@ -905,6 +936,119 @@
       "requirements": {
         "strength": 55,
         "dexterity": 13
+      },
+      "classRequirements": {
+        "summoner": 1
+      }
+    },
+    {
+      "number": 37,
+      "name": {
+        "en": "Spite Staff",
+        "de": "Trotzstab",
+        "vi": "Gậy Oán Hận",
+        "zh-CN": "怨恨法杖"
+      },
+      "options": ["luck", "wizardryDamageOption", "excellentWizardryAttack"],
+      "width": 2,
+      "height": 4,
+      "slot": "mainHand",
+      "weaponKind": "staff",
+      "statProfile": "weapon",
+      "twoHanded": true,
+      "level": 149,
+      "magicDurability": 110,
+      "damageMin": 69,
+      "damageMax": 71,
+      "attackSpeed": 25,
+      "magicPower": 136,
+      "droppable": false,
+      "requirements": {
+        "level": 400,
+        "strength": 48,
+        "dexterity": 11
+      },
+      "classRequirements": {
+        "darkWizard": 3,
+        "magicGladiator": 3
+      }
+    },
+    {
+      "number": 38,
+      "name": {
+        "en": "Legendary Staff-J"
+      },
+      "options": ["luck", "wizardryDamageOption", "excellentWizardryAttack"],
+      "width": 1,
+      "height": 4,
+      "slot": "mainHand",
+      "weaponKind": "staff",
+      "statProfile": "weapon",
+      "level": 59,
+      "magicDurability": 66,
+      "damageMin": 29,
+      "damageMax": 31,
+      "attackSpeed": 30,
+      "magicPower": 59,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 50
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "magicGladiator": 1
+      }
+    },
+    {
+      "number": 39,
+      "name": {
+        "en": "Red Wing Stick-J"
+      },
+      "options": ["luck", "wizardryDamageOption", "excellentWizardryAttack"],
+      "width": 1,
+      "height": 4,
+      "slot": "mainHand",
+      "weaponKind": "stick",
+      "statProfile": "weapon",
+      "level": 59,
+      "magicDurability": 65,
+      "damageMin": 29,
+      "damageMax": 31,
+      "attackSpeed": 30,
+      "magicPower": 59,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 36,
+        "dexterity": 14
+      },
+      "classRequirements": {
+        "summoner": 1
+      }
+    },
+    {
+      "number": 40,
+      "name": {
+        "en": "Book of Neil-J"
+      },
+      "tags": ["summonerBook"],
+      "options": ["luck", "curseDamageOption", "excellentWizardryAttack"],
+      "width": 1,
+      "height": 2,
+      "slot": "offHand",
+      "weaponKind": "book",
+      "statProfile": "book",
+      "skill": 224,
+      "level": 59,
+      "magicDurability": 65,
+      "attackSpeed": 30,
+      "magicPower": 59,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "dexterity": 25,
+        "energy": 168
       },
       "classRequirements": {
         "summoner": 1

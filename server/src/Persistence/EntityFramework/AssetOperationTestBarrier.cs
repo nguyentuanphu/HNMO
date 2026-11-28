@@ -9,7 +9,7 @@ using System.Threading;
 
 /// <summary>
 /// A stop point for the crash tests of the asset operations (tests/asset-crash-harness): when the environment variable
-/// <c>HNMO_TEST_ASSET_BARRIER</c> names a stage (<c>before-save</c>, <c>before-commit</c>, <c>after-commit</c>), the
+/// <c>HNMO_TEST_ASSET_BARRIER</c> names a stage (<c>before-write</c>, <c>before-save</c>, <c>in-transaction</c>/<c>before-commit</c>, <c>after-commit</c>), the
 /// operation writes <c>HNMO_TEST_ASSET_BARRIER_FILE</c> on reaching it and waits there to be killed, or until the file
 /// <c>HNMO_TEST_ASSET_BARRIER_GO</c> exists. Without the variable, nothing happens.
 /// </summary>
@@ -70,6 +70,7 @@ internal static class AssetOperationTestBarrier
         {
             ("before-local-commit", "before-commit") => true,
             ("after-local-commit", "after-commit") => true,
+            ("in-transaction", "before-commit") => true,
             _ => false,
         };
     }

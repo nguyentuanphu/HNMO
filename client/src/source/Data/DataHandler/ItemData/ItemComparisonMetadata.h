@@ -27,7 +27,7 @@ inline constexpr FieldInfo SIMPLE_FIELDS[] = {
     {"DamageMax", FieldType::Word, offsetof(ITEM_ATTRIBUTE, DamageMax), sizeof(ITEM_ATTRIBUTE::DamageMax), -1},
     {"SuccessfulBlocking", FieldType::Byte, offsetof(ITEM_ATTRIBUTE, SuccessfulBlocking),
      sizeof(ITEM_ATTRIBUTE::SuccessfulBlocking), -1},
-    {"Defense", FieldType::Byte, offsetof(ITEM_ATTRIBUTE, Defense), sizeof(ITEM_ATTRIBUTE::Defense), -1},
+    {"Defense", FieldType::Word, offsetof(ITEM_ATTRIBUTE, Defense), sizeof(ITEM_ATTRIBUTE::Defense), -1},
     {"MagicDefense", FieldType::Byte, offsetof(ITEM_ATTRIBUTE, MagicDefense), sizeof(ITEM_ATTRIBUTE::MagicDefense), -1},
     {"WeaponSpeed", FieldType::Byte, offsetof(ITEM_ATTRIBUTE, WeaponSpeed), sizeof(ITEM_ATTRIBUTE::WeaponSpeed), -1},
     {"WalkSpeed", FieldType::Byte, offsetof(ITEM_ATTRIBUTE, WalkSpeed), sizeof(ITEM_ATTRIBUTE::WalkSpeed), -1},

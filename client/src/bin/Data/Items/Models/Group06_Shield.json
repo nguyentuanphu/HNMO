@@ -125,8 +125,7 @@
     },
     {
       "number": 11,
-      "file": "Data/Item/Shield12.bmd",
-      "textureFolders": ["Item"],
+      "model": "shield12",
       "inventory": {
         "rotation": [270, 270, 0]
       },
@@ -161,8 +160,7 @@
     },
     {
       "number": 14,
-      "file": "Data/Item/Shield15.bmd",
-      "textureFolders": ["Item"],
+      "model": "shield15",
       "inventory": {
         "rotation": [270, 270, 0]
       },
@@ -275,6 +273,39 @@
         "meshes": [0]
       },
       "renderStyle": "crossShield"
+    },
+    {
+      "number": 22,
+      "file": "Data/s9/Item/CrazyWind.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 23,
+      "file": "Data/s9/Item/light_road.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 24,
+      "file": "Data/s9/Item/darkdevilS.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 25,
+      "file": "Data/s9/Item/hellnights.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 26,
+      "file": "Data/s9/Item/AmbitionShield.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 27,
+      "model": "shield15"
+    },
+    {
+      "number": 28,
+      "model": "shield12"
     }
   ]
 }

@@ -5311,6 +5311,36 @@
     <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
+      <SubCode>5B</SubCode>
+      <Name>HnmoPentagramCommand</Name>
+      <Length>7</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client in a Season 9 realm to open the pentagram window, wear or take off the pentagram, put an errtel into a slot or take it out, or mix an errtel.</SentWhen>
+      <CausedReaction>The server performs the action and responds with HnmoPentagramState (F5 5C).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Byte</Type>
+          <Name>Action</Name>
+          <Description>1 = Request state, 2 = Wear the pentagram of a bag slot, 3 = Take off the pentagram, 4 = Put the errtel of a bag slot into an errtel slot, 5 = Take the errtel of an errtel slot out, 6 = Level up the errtel of a bag slot, 7 = Rank up the errtel of a bag slot with a second one.</Description>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>Byte</Type>
+          <Name>Slot</Name>
+          <Description>The bag slot of the pentagram or errtel.</Description>
+        </Field>
+        <Field>
+          <Index>6</Index>
+          <Type>Byte</Type>
+          <Name>Index</Name>
+          <Description>The errtel slot of the pentagram (0..4), or the bag slot of the second errtel of a rank-up.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
       <SubCode>3A</SubCode>
       <Name>HnmoJewelBankCommand</Name>
       <Direction>ClientToServer</Direction>
@@ -5346,12 +5376,47 @@
     <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
+      <SubCode>2B</SubCode>
+      <Name>HnmoMuunCommand</Name>
+      <Length>6</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client to open the Season 9 Muun window, make a bag Muun the active one, put it away, evolve it, convert a Muun into energy or level up the active Muun.</SentWhen>
+      <CausedReaction>The server performs the action and responds with HnmoMuunState (F5 2C).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Byte</Type>
+          <Name>Action</Name>
+          <Description>1 = Request state, 2 = Make the Muun in the bag slot active, 3 = Put the active Muun away, 4 = Evolve the active Muun, 5 = Convert the Muun in the bag slot into energy, 6 = Level up the active Muun, 7 = Level up the active Muun by feeding a duplicate Muun from the bag slot.</Description>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>Byte</Type>
+          <Name>Slot</Name>
+          <Description>Inventory slot of the Muun for actions 2 and 5.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
       <SubCode>3C</SubCode>
       <Name>HnmoCatchupCapRequest</Name>
       <Length>4</Length>
       <Direction>ClientToServer</Direction>
       <SentWhen>Sent by the web client to query today's Catch-up Level and Reset Cap state.</SentWhen>
       <CausedReaction>The server responds with HnmoCatchupCapState (F5 3D).</CausedReaction>
+      <Fields />
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>58</SubCode>
+      <Name>HnmoSeasonNineClientRequest</Name>
+      <Length>4</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client after entering the world in a Season 9 realm.</SentWhen>
+      <CausedReaction>The server responds with HnmoSeasonNineClientState (F5 59).</CausedReaction>
       <Fields />
     </Packet>
     <Packet>

@@ -1,77 +1,1562 @@
 {
   "about": "The Season 9 monsters and NPCs the base game's Monsters.json lacks (numbers of the Season 9 server suite's monster list), with the Season 9 models they are drawn with. Each model was told apart by the name its BMD file keeps (devilfairy.SMD, ebeast.SMD, ...). The files are Season 9's own (/data/s9/...), whichever season the world plays: no Season 6.3 file has their names. Read by game/monsterData.ts (loadMonsterCatalog) after Monsters.json and Models.json; a number or slot those files have is not replaced. Sizes, sounds and attack looks are not known yet: the defaults (scale 0.9, no sounds) apply.",
   "monsters": [
-    { "name": { "en": "Devil Fairy" }, "kind": "monster", "model": "MONSTER_MODEL_S9_DEVIL_FAIRY", "numbers": [{ "number": 586, "maps": [91] }] },
-    { "name": { "en": "Elemental Beast" }, "kind": "monster", "model": "MONSTER_MODEL_S9_ELEMENTAL_BEAST", "numbers": [{ "number": 587, "maps": [91] }] },
-    { "name": { "en": "Elemental Knight" }, "kind": "monster", "model": "MONSTER_MODEL_S9_ELEMENTAL_KNIGHT", "numbers": [{ "number": 588, "maps": [91] }] },
-    { "name": { "en": "Ubaid Devil Fairy" }, "kind": "monster", "model": "MONSTER_MODEL_S9_UBAID_DEVIL_FAIRY", "numbers": [{ "number": 589, "maps": [91] }] },
-    { "name": { "en": "Ubaid Elemental Beast" }, "kind": "monster", "model": "MONSTER_MODEL_S9_UBAID_ELEMENTAL_BEAST", "numbers": [{ "number": 590, "maps": [91] }] },
-    { "name": { "en": "Ubaid Elemental Knight" }, "kind": "monster", "model": "MONSTER_MODEL_S9_UBAID_ELEMENTAL_KNIGHT", "numbers": [{ "number": 591, "maps": [91] }] },
-    { "name": { "en": "Undine" }, "kind": "monster", "model": "MONSTER_MODEL_S9_UNDINE", "numbers": [{ "number": 592, "maps": [91] }] },
-    { "name": { "en": "Salamander" }, "kind": "monster", "model": "MONSTER_MODEL_S9_SALAMANDER", "numbers": [{ "number": 593, "maps": [91] }] },
-    { "name": { "en": "Sylphid" }, "kind": "monster", "model": "MONSTER_MODEL_S9_SYLPHID", "numbers": [{ "number": 594, "maps": [91] }] },
-    { "name": { "en": "Gnome" }, "kind": "monster", "model": "MONSTER_MODEL_S9_GNOME", "numbers": [{ "number": 595, "maps": [91] }] },
-    { "name": { "en": "Hellraiser" }, "kind": "monster", "model": "MONSTER_MODEL_S9_HELLRAISER", "numbers": [{ "number": 596, "maps": [91] }] },
-    { "name": { "en": "Debenter Devil Fairy" }, "kind": "monster", "model": "MONSTER_MODEL_S9_DEBENTER_DEVIL_FAIRY", "numbers": [{ "number": 608, "maps": [95] }] },
-    { "name": { "en": "Debenter Elemental Beast" }, "kind": "monster", "model": "MONSTER_MODEL_S9_DEBENTER_ELEMENTAL_BEAST", "numbers": [{ "number": 609, "maps": [95] }] },
-    { "name": { "en": "Debenter Elemental Knight" }, "kind": "monster", "model": "MONSTER_MODEL_S9_DEBENTER_ELEMENTAL_KNIGHT", "numbers": [{ "number": 610, "maps": [95] }] },
-    { "name": { "en": "Sellihoden" }, "kind": "monster", "model": "MONSTER_MODEL_S9_SELLIHODEN", "numbers": [{ "number": 611, "maps": [95] }] },
-    { "name": { "en": "Ukanva" }, "kind": "monster", "model": "MONSTER_MODEL_S9_UKANVA", "numbers": [{ "number": 612, "maps": [95] }] },
-    { "name": { "en": "Silla" }, "kind": "monster", "model": "MONSTER_MODEL_S9_SILLA", "numbers": [{ "number": 613, "maps": [95] }] },
-    { "name": { "en": "Normus" }, "kind": "monster", "model": "MONSTER_MODEL_S9_NORMUS", "numbers": [{ "number": 614, "maps": [95] }] },
-    { "name": { "en": "Muff" }, "kind": "monster", "model": "MONSTER_MODEL_S9_MUFF", "numbers": [{ "number": 615, "maps": [95] }] },
-    { "name": { "en": "Green Snake" }, "kind": "monster", "model": "MONSTER_MODEL_S9_SNAKE_GREEN", "numbers": [{ "number": 647 }] },
-    { "name": { "en": "Yellow Snake" }, "kind": "monster", "model": "MONSTER_MODEL_S9_SNAKE_YELLOW", "numbers": [{ "number": 648 }] },
-    { "name": { "en": "Purple Snake" }, "kind": "monster", "model": "MONSTER_MODEL_S9_SNAKE_PURPLE", "numbers": [{ "number": 649 }] },
-    { "name": { "en": "Red Snake" }, "kind": "monster", "model": "MONSTER_MODEL_S9_SNAKE_RED", "numbers": [{ "number": 650 }] },
-    { "name": { "en": "Uruk Devil Fairy" }, "kind": "monster", "model": "MONSTER_MODEL_S9_URUK_DEVIL_FAIRY", "numbers": [{ "number": 670, "maps": [100] }] },
-    { "name": { "en": "Uruk Elemental Beast" }, "kind": "monster", "model": "MONSTER_MODEL_S9_URUK_ELEMENTAL_BEAST", "numbers": [{ "number": 671, "maps": [100] }] },
-    { "name": { "en": "Uruk Elemental Knight" }, "kind": "monster", "model": "MONSTER_MODEL_S9_URUK_ELEMENTAL_KNIGHT", "numbers": [{ "number": 672, "maps": [100] }] },
-    { "name": { "en": "Lord Silvester" }, "kind": "monster", "model": "MONSTER_MODEL_S9_LORD_SILVESTER", "numbers": [{ "number": 673, "maps": [100] }] },
-    { "name": { "en": "Green Goat" }, "kind": "monster", "model": "MONSTER_MODEL_S9_GOAT_GREEN", "numbers": [{ "number": 726 }] },
-    { "name": { "en": "White Goat" }, "kind": "monster", "model": "MONSTER_MODEL_S9_GOAT_WHITE", "numbers": [{ "number": 727 }] },
-    { "name": { "en": "Purple Goat" }, "kind": "monster", "model": "MONSTER_MODEL_S9_GOAT_PURPLE", "numbers": [{ "number": 728 }] },
-    { "name": { "en": "Red Goat" }, "kind": "monster", "model": "MONSTER_MODEL_S9_GOAT_RED", "numbers": [{ "number": 729 }] },
-    { "name": { "en": "Element Master Adniel" }, "kind": "npc", "model": "MODEL_S9_ADNIEL", "numbers": [{ "number": 582, "maps": [91] }] },
-    { "name": { "en": "Private Store Bulletin Board" }, "kind": "npc", "model": "MODEL_S9_PERSONAL_SHOP_BOARD", "numbers": [{ "number": 651, "maps": [79] }] },
-    { "name": { "en": "Ellin" }, "kind": "npc", "model": "MODEL_S9_ELLIN", "numbers": [{ "number": 669, "maps": [79] }] },
-    { "name": { "en": "Monica" }, "kind": "npc", "model": "MODEL_S9_MONICA", "numbers": [{ "number": 682, "maps": [51] }] }
+    {
+      "name": {
+        "en": "Devil Fairy"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_DEVIL_FAIRY",
+      "numbers": [
+        {
+          "number": 586,
+          "maps": [
+            91
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Elemental Beast"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_ELEMENTAL_BEAST",
+      "numbers": [
+        {
+          "number": 587,
+          "maps": [
+            91
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Elemental Knight"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_ELEMENTAL_KNIGHT",
+      "numbers": [
+        {
+          "number": 588,
+          "maps": [
+            91
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Ubaid Devil Fairy"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_UBAID_DEVIL_FAIRY",
+      "numbers": [
+        {
+          "number": 589,
+          "maps": [
+            91
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Ubaid Elemental Beast"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_UBAID_ELEMENTAL_BEAST",
+      "numbers": [
+        {
+          "number": 590,
+          "maps": [
+            91
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Ubaid Elemental Knight"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_UBAID_ELEMENTAL_KNIGHT",
+      "numbers": [
+        {
+          "number": 591,
+          "maps": [
+            91
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Undine"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_UNDINE",
+      "numbers": [
+        {
+          "number": 592,
+          "maps": [
+            91
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Salamander"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_SALAMANDER",
+      "numbers": [
+        {
+          "number": 593,
+          "maps": [
+            91
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Sylphid"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_SYLPHID",
+      "numbers": [
+        {
+          "number": 594,
+          "maps": [
+            91
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Gnome"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_GNOME",
+      "numbers": [
+        {
+          "number": 595,
+          "maps": [
+            91
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Hellraiser"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_HELLRAISER",
+      "numbers": [
+        {
+          "number": 596,
+          "maps": [
+            91
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Debenter Devil Fairy"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_DEBENTER_DEVIL_FAIRY",
+      "numbers": [
+        {
+          "number": 608,
+          "maps": [
+            95
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Debenter Elemental Beast"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_DEBENTER_ELEMENTAL_BEAST",
+      "numbers": [
+        {
+          "number": 609,
+          "maps": [
+            95
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Debenter Elemental Knight"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_DEBENTER_ELEMENTAL_KNIGHT",
+      "numbers": [
+        {
+          "number": 610,
+          "maps": [
+            95
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Sellihoden"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_SELLIHODEN",
+      "numbers": [
+        {
+          "number": 611,
+          "maps": [
+            95
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Ukanva"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_UKANVA",
+      "numbers": [
+        {
+          "number": 612,
+          "maps": [
+            95
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Silla"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_SILLA",
+      "numbers": [
+        {
+          "number": 613,
+          "maps": [
+            95
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Normus"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_NORMUS",
+      "numbers": [
+        {
+          "number": 614,
+          "maps": [
+            95
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Muff"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_MUFF",
+      "numbers": [
+        {
+          "number": 615,
+          "maps": [
+            95
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Green Snake"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_SNAKE_GREEN",
+      "numbers": [
+        {
+          "number": 647
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Yellow Snake"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_SNAKE_YELLOW",
+      "numbers": [
+        {
+          "number": 648
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Purple Snake"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_SNAKE_PURPLE",
+      "numbers": [
+        {
+          "number": 649
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Red Snake"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_SNAKE_RED",
+      "numbers": [
+        {
+          "number": 650
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Uruk Devil Fairy"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_URUK_DEVIL_FAIRY",
+      "numbers": [
+        {
+          "number": 670,
+          "maps": [
+            100
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Uruk Elemental Beast"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_URUK_ELEMENTAL_BEAST",
+      "numbers": [
+        {
+          "number": 671,
+          "maps": [
+            100
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Uruk Elemental Knight"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_URUK_ELEMENTAL_KNIGHT",
+      "numbers": [
+        {
+          "number": 672,
+          "maps": [
+            100
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Lord Silvester"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_LORD_SILVESTER",
+      "numbers": [
+        {
+          "number": 673,
+          "maps": [
+            100
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Green Goat"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_GOAT_GREEN",
+      "numbers": [
+        {
+          "number": 726
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "White Goat"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_GOAT_WHITE",
+      "numbers": [
+        {
+          "number": 727
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Purple Goat"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_GOAT_PURPLE",
+      "numbers": [
+        {
+          "number": 728
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Red Goat"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_GOAT_RED",
+      "numbers": [
+        {
+          "number": 729
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Element Master Adniel"
+      },
+      "kind": "npc",
+      "model": "MODEL_S9_ADNIEL",
+      "numbers": [
+        {
+          "number": 582,
+          "maps": [
+            91
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Private Store Bulletin Board"
+      },
+      "kind": "npc",
+      "model": "MODEL_S9_PERSONAL_SHOP_BOARD",
+      "numbers": [
+        {
+          "number": 651,
+          "maps": [
+            79
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Ellin"
+      },
+      "kind": "npc",
+      "model": "MODEL_S9_ELLIN",
+      "numbers": [
+        {
+          "number": 669,
+          "maps": [
+            79
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Monica"
+      },
+      "kind": "npc",
+      "model": "MODEL_S9_MONICA",
+      "numbers": [
+        {
+          "number": 682,
+          "maps": [
+            51
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Captain Slough"
+      },
+      "kind": "npc",
+      "model": "MODEL_S9_CAPTAIN_SLOUGH",
+      "numbers": [
+        {
+          "number": 580,
+          "maps": [
+            91
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Deruvish"
+      },
+      "kind": "npc",
+      "model": "MODEL_S9_DERUVISH",
+      "numbers": [
+        {
+          "number": 581,
+          "maps": [
+            91
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Jin"
+      },
+      "kind": "npc",
+      "model": "MODEL_S9_JIN",
+      "numbers": [
+        {
+          "number": 583,
+          "maps": [
+            91
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Sir Lesnar"
+      },
+      "kind": "npc",
+      "model": "MODEL_S9_SIR_LESNAR",
+      "numbers": [
+        {
+          "number": 584,
+          "maps": [
+            0,
+            2,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Fire Tower"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_FIRE_TOWER",
+      "numbers": [
+        {
+          "number": 598,
+          "maps": [
+            92
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Water Tower"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_WATER_TOWER",
+      "numbers": [
+        {
+          "number": 599,
+          "maps": [
+            92
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Earth Tower"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_EARTH_TOWER",
+      "numbers": [
+        {
+          "number": 600,
+          "maps": [
+            92
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Wind Tower"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_WIND_TOWER",
+      "numbers": [
+        {
+          "number": 601,
+          "maps": [
+            92
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Darkness Tower"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_DARKNESS_TOWER",
+      "numbers": [
+        {
+          "number": 602,
+          "maps": [
+            92
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Arca Barrier"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_ARCA_BARRIER",
+      "numbers": [
+        {
+          "number": 603,
+          "maps": [
+            92
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Jin"
+      },
+      "kind": "npc",
+      "model": "MODEL_S9_JIN",
+      "numbers": [
+        {
+          "number": 604,
+          "maps": [
+            92
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "[GM] Romeu"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_GM_HELPER",
+      "numbers": [
+        {
+          "number": 618
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "[VM] Nox"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_GM_HELPER",
+      "numbers": [
+        {
+          "number": 619
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "[VM] Redd"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_GM_HELPER",
+      "numbers": [
+        {
+          "number": 620
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "[EVM] Iza"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_GM_HELPER",
+      "numbers": [
+        {
+          "number": 621
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "[VM] Hail"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_GM_HELPER",
+      "numbers": [
+        {
+          "number": 622
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "[VM] Fast"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_GM_HELPER",
+      "numbers": [
+        {
+          "number": 623
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "[GM] Ceth"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_GM_HELPER",
+      "numbers": [
+        {
+          "number": 624
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Cursed Fire Tower"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_FIRE_TOWER",
+      "numbers": [
+        {
+          "number": 627,
+          "maps": [
+            92
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Cursed Water Tower"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_WATER_TOWER",
+      "numbers": [
+        {
+          "number": 628,
+          "maps": [
+            92
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Cursed Earth Tower"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_EARTH_TOWER",
+      "numbers": [
+        {
+          "number": 629,
+          "maps": [
+            92
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Cursed Wind Tower"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_WIND_TOWER",
+      "numbers": [
+        {
+          "number": 630,
+          "maps": [
+            92
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Cursed Darkness Tower"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_DARKNESS_TOWER",
+      "numbers": [
+        {
+          "number": 631,
+          "maps": [
+            92
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Cursed Undine"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_UNDINE",
+      "numbers": [
+        {
+          "number": 632,
+          "maps": [
+            92
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Cursed Salamander"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_SALAMANDER",
+      "numbers": [
+        {
+          "number": 633,
+          "maps": [
+            92
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Cursed Sylphid"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_SYLPHID",
+      "numbers": [
+        {
+          "number": 634,
+          "maps": [
+            92
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Cursed Gnome"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_GNOME",
+      "numbers": [
+        {
+          "number": 635,
+          "maps": [
+            92
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Cursed Hellraiser"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_HELLRAISER",
+      "numbers": [
+        {
+          "number": 636,
+          "maps": [
+            92
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Cursed Sellihoden"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_SELLIHODEN",
+      "numbers": [
+        {
+          "number": 637,
+          "maps": [
+            96
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Cursed Ukanva"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_UKANVA",
+      "numbers": [
+        {
+          "number": 638,
+          "maps": [
+            96
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Cursed Silla"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_SILLA",
+      "numbers": [
+        {
+          "number": 639,
+          "maps": [
+            96
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Cursed Normus"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_NORMUS",
+      "numbers": [
+        {
+          "number": 640,
+          "maps": [
+            96
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Cursed Muff"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_MUFF",
+      "numbers": [
+        {
+          "number": 641,
+          "maps": [
+            96
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Mait"
+      },
+      "kind": "npc",
+      "model": "MODEL_S9_MAIT",
+      "numbers": [
+        {
+          "number": 643,
+          "maps": [
+            97
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Chaos Castle 8 Warrior"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_CHAOS_CASTLE_8_WARRIOR",
+      "numbers": [
+        {
+          "number": 644,
+          "maps": [
+            97
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Chaos Castle 8 Ranger"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_CHAOS_CASTLE_8_RANGER",
+      "numbers": [
+        {
+          "number": 645,
+          "maps": [
+            97
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Lord Devil Fairy"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_URUK_DEVIL_FAIRY",
+      "numbers": [
+        {
+          "number": 678,
+          "maps": [
+            100
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Lord Elemental Beast"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_URUK_ELEMENTAL_BEAST",
+      "numbers": [
+        {
+          "number": 679,
+          "maps": [
+            100
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Lord Elemental Knight"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_URUK_ELEMENTAL_KNIGHT",
+      "numbers": [
+        {
+          "number": 680,
+          "maps": [
+            100
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Evomon"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_EVOMON",
+      "numbers": [
+        {
+          "number": 681
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Special Evomon"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_SPECIAL_EVOMON",
+      "numbers": [
+        {
+          "number": 690
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "New Year Horse (Green)"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_HORSE_GREEN",
+      "numbers": [
+        {
+          "number": 691
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "New Year Horse (Yellow)"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_HORSE_YELLOW",
+      "numbers": [
+        {
+          "number": 692
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "New Year Horse (Brown)"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_HORSE_BROWN",
+      "numbers": [
+        {
+          "number": 693
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "New Year Horse (Blue)"
+      },
+      "kind": "monster",
+      "model": "MONSTER_MODEL_S9_HORSE_BLUE",
+      "numbers": [
+        {
+          "number": 694
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Evolution Succeeded"
+      },
+      "kind": "npc",
+      "model": "MODEL_S9_EVOLUTION_NOTICE",
+      "numbers": [
+        {
+          "number": 704
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Evolution Failed"
+      },
+      "kind": "npc",
+      "model": "MODEL_S9_EVOLUTION_NOTICE",
+      "numbers": [
+        {
+          "number": 705
+        }
+      ]
+    }
   ],
   "models": [
-    { "slot": "MONSTER_MODEL_S9_DEVIL_FAIRY", "file": "Data/s9/Monster/Monster218.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_ELEMENTAL_BEAST", "file": "Data/s9/Monster/monster219.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_ELEMENTAL_KNIGHT", "file": "Data/s9/Monster/monster220.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_UBAID_DEVIL_FAIRY", "file": "Data/s9/Monster/Monster221.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_UBAID_ELEMENTAL_BEAST", "file": "Data/s9/Monster/monster222.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_UBAID_ELEMENTAL_KNIGHT", "file": "Data/s9/Monster/monster223.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_UNDINE", "file": "Data/s9/Monster/monster224.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_SALAMANDER", "file": "Data/s9/Monster/monster225.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_SYLPHID", "file": "Data/s9/Monster/monster226.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_GNOME", "file": "Data/s9/Monster/Monster227.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_HELLRAISER", "file": "Data/s9/Monster/Monster228.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_DEBENTER_DEVIL_FAIRY", "file": "Data/s9/Monster/Monster240.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_DEBENTER_ELEMENTAL_BEAST", "file": "Data/s9/Monster/Monster241.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_DEBENTER_ELEMENTAL_KNIGHT", "file": "Data/s9/Monster/Monster242.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_SELLIHODEN", "file": "Data/s9/Monster/monster243.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_UKANVA", "file": "Data/s9/Monster/monster244.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_SILLA", "file": "Data/s9/Monster/Monster245.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_NORMUS", "file": "Data/s9/Monster/monster246.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_MUFF", "file": "Data/s9/Monster/Monster247.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_SNAKE_GREEN", "file": "Data/s9/Monster/Monster253.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_SNAKE_YELLOW", "file": "Data/s9/Monster/Monster254.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_SNAKE_PURPLE", "file": "Data/s9/Monster/Monster255.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_SNAKE_RED", "file": "Data/s9/Monster/Monster256.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_URUK_DEVIL_FAIRY", "file": "Data/s9/Monster/Monster260.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_URUK_ELEMENTAL_BEAST", "file": "Data/s9/Monster/Monster261.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_URUK_ELEMENTAL_KNIGHT", "file": "Data/s9/Monster/Monster262.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_LORD_SILVESTER", "file": "Data/s9/Monster/Monster263.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_GOAT_GREEN", "file": "Data/s9/Monster/Monster278.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_GOAT_WHITE", "file": "Data/s9/Monster/Monster279.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_GOAT_PURPLE", "file": "Data/s9/Monster/Monster280.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MONSTER_MODEL_S9_GOAT_RED", "file": "Data/s9/Monster/Monster281.bmd", "textureFolders": ["s9/Monster"] },
-    { "slot": "MODEL_S9_ADNIEL", "file": "Data/s9/NPC/adniel.bmd", "textureFolders": ["s9/NPC"] },
-    { "slot": "MODEL_S9_PERSONAL_SHOP_BOARD", "file": "Data/s9/NPC/so_pershop.bmd", "textureFolders": ["s9/NPC"] },
-    { "slot": "MODEL_S9_ELLIN", "file": "Data/s9/NPC/NpcElin.bmd", "textureFolders": ["s9/NPC"] },
-    { "slot": "MODEL_S9_MONICA", "file": "Data/s9/NPC/monicaNPC.bmd", "textureFolders": ["s9/NPC"] }
+    {
+      "slot": "MONSTER_MODEL_S9_DEVIL_FAIRY",
+      "file": "Data/s9/Monster/Monster218.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_ELEMENTAL_BEAST",
+      "file": "Data/s9/Monster/monster219.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_ELEMENTAL_KNIGHT",
+      "file": "Data/s9/Monster/monster220.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_UBAID_DEVIL_FAIRY",
+      "file": "Data/s9/Monster/Monster221.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_UBAID_ELEMENTAL_BEAST",
+      "file": "Data/s9/Monster/monster222.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_UBAID_ELEMENTAL_KNIGHT",
+      "file": "Data/s9/Monster/monster223.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_UNDINE",
+      "file": "Data/s9/Monster/monster224.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_SALAMANDER",
+      "file": "Data/s9/Monster/monster225.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_SYLPHID",
+      "file": "Data/s9/Monster/monster226.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_GNOME",
+      "file": "Data/s9/Monster/Monster227.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_HELLRAISER",
+      "file": "Data/s9/Monster/Monster228.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_DEBENTER_DEVIL_FAIRY",
+      "file": "Data/s9/Monster/Monster240.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_DEBENTER_ELEMENTAL_BEAST",
+      "file": "Data/s9/Monster/Monster241.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_DEBENTER_ELEMENTAL_KNIGHT",
+      "file": "Data/s9/Monster/Monster242.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_SELLIHODEN",
+      "file": "Data/s9/Monster/monster243.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_UKANVA",
+      "file": "Data/s9/Monster/monster244.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_SILLA",
+      "file": "Data/s9/Monster/Monster245.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_NORMUS",
+      "file": "Data/s9/Monster/monster246.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_MUFF",
+      "file": "Data/s9/Monster/Monster247.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_SNAKE_GREEN",
+      "file": "Data/s9/Monster/Monster253.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_SNAKE_YELLOW",
+      "file": "Data/s9/Monster/Monster254.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_SNAKE_PURPLE",
+      "file": "Data/s9/Monster/Monster255.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_SNAKE_RED",
+      "file": "Data/s9/Monster/Monster256.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_URUK_DEVIL_FAIRY",
+      "file": "Data/s9/Monster/Monster260.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_URUK_ELEMENTAL_BEAST",
+      "file": "Data/s9/Monster/Monster261.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_URUK_ELEMENTAL_KNIGHT",
+      "file": "Data/s9/Monster/Monster262.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_LORD_SILVESTER",
+      "file": "Data/s9/Monster/Monster263.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_GOAT_GREEN",
+      "file": "Data/s9/Monster/Monster278.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_GOAT_WHITE",
+      "file": "Data/s9/Monster/Monster279.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_GOAT_PURPLE",
+      "file": "Data/s9/Monster/Monster280.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_GOAT_RED",
+      "file": "Data/s9/Monster/Monster281.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MODEL_S9_ADNIEL",
+      "file": "Data/s9/NPC/adniel.bmd",
+      "textureFolders": [
+        "s9/NPC"
+      ]
+    },
+    {
+      "slot": "MODEL_S9_PERSONAL_SHOP_BOARD",
+      "file": "Data/s9/NPC/so_pershop.bmd",
+      "textureFolders": [
+        "s9/NPC"
+      ]
+    },
+    {
+      "slot": "MODEL_S9_ELLIN",
+      "file": "Data/s9/NPC/NpcElin.bmd",
+      "textureFolders": [
+        "s9/NPC"
+      ]
+    },
+    {
+      "slot": "MODEL_S9_MONICA",
+      "file": "Data/s9/NPC/monicaNPC.bmd",
+      "textureFolders": [
+        "s9/NPC"
+      ]
+    },
+    {
+      "slot": "MODEL_S9_CAPTAIN_SLOUGH",
+      "file": "Data/s9/NPC/Elf01.bmd",
+      "textureFolders": [
+        "s9/NPC"
+      ]
+    },
+    {
+      "slot": "MODEL_S9_DERUVISH",
+      "file": "Data/s9/NPC/SD_yssyell01.bmd",
+      "textureFolders": [
+        "s9/NPC"
+      ]
+    },
+    {
+      "slot": "MODEL_S9_JIN",
+      "file": "Data/s9/NPC/obj_donkey.bmd",
+      "textureFolders": [
+        "s9/NPC"
+      ]
+    },
+    {
+      "slot": "MODEL_S9_SIR_LESNAR",
+      "file": "Data/s9/NPC/c_mon.bmd",
+      "textureFolders": [
+        "s9/NPC"
+      ]
+    },
+    {
+      "slot": "MODEL_S9_MAIT",
+      "file": "Data/s9/NPC/chaos_npc.bmd",
+      "textureFolders": [
+        "s9/NPC"
+      ]
+    },
+    {
+      "slot": "MODEL_S9_EVOLUTION_NOTICE",
+      "file": "Data/s9/NPC/Refinery_Recovery.bmd",
+      "textureFolders": [
+        "s9/NPC"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_FIRE_TOWER",
+      "file": "Data/s9/Monster/Monster230.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_WATER_TOWER",
+      "file": "Data/s9/Monster/Monster231.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_EARTH_TOWER",
+      "file": "Data/s9/Monster/Monster232.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_WIND_TOWER",
+      "file": "Data/s9/Monster/Monster233.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_DARKNESS_TOWER",
+      "file": "Data/s9/Monster/Monster234.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_ARCA_BARRIER",
+      "file": "Data/s9/Monster/ObeliskSmall.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_GM_HELPER",
+      "file": "Data/s9/Monster/Monster229.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_CHAOS_CASTLE_8_WARRIOR",
+      "file": "Data/s9/Monster/monster257.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_CHAOS_CASTLE_8_RANGER",
+      "file": "Data/s9/Monster/monster258.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_EVOMON",
+      "file": "Data/s9/Monster/Monster264.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_SPECIAL_EVOMON",
+      "file": "Data/s9/Monster/Monster265.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_HORSE_GREEN",
+      "file": "Data/s9/Monster/Monster268.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_HORSE_YELLOW",
+      "file": "Data/s9/Monster/Monster267.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_HORSE_BROWN",
+      "file": "Data/s9/Monster/Monster266.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    },
+    {
+      "slot": "MONSTER_MODEL_S9_HORSE_BLUE",
+      "file": "Data/s9/Monster/Monster269.bmd",
+      "textureFolders": [
+        "s9/Monster"
+      ]
+    }
   ]
 }

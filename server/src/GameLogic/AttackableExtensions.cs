@@ -108,7 +108,10 @@ public static class AttackableExtensions
         var duelDmgDec = GetDuelDamageFactor(attackerPlayer, defender);
 
         DamageAttributes attributes = DamageAttributes.Undefined;
-        bool isCriticalHit = Rand.NextRandomBool(attacker.Attributes[Stats.CriticalDamageChance]);
+
+        // The PvM bonuses (Stats.*Pvm) count only on a hit on a monster, like Stats.FinalDamageIncreasePvp only on a player.
+        bool isCriticalHit = Rand.NextRandomBool(attacker.Attributes[Stats.CriticalDamageChance] + (isPvp ? 0 : attacker.Attributes[Stats.CriticalDamageChancePvm]));
+        var excellentDamageBonus = attacker.Attributes[Stats.ExcellentDamageBonus] + (isPvp ? 0 : attacker.Attributes[Stats.ExcellentDamageBonusPvm]);
         bool isExcellentHit = Rand.NextRandomBool(attacker.Attributes[Stats.ExcellentDamageChance]);
         bool isIgnoringDefense = Rand.NextRandomBool(attacker.Attributes[Stats.DefenseIgnoreChance]);
 
@@ -128,12 +131,19 @@ public static class AttackableExtensions
         }
 
         attacker.GetBaseDmg(skill, out int baseMinDamage, out int baseMaxDamage, out DamageType damageType);
+        if (!isPvp)
+        {
+            var pvmBonus = attacker.Attributes[Stats.BaseDamageBonusPvm] + (skill is not null ? attacker.Attributes[Stats.SkillDamageBonusPvm] : 0);
+            baseMinDamage += (int)pvmBonus;
+            baseMaxDamage += (int)(pvmBonus + attacker.Attributes[Stats.BaseMaxDamageBonusPvm]);
+        }
+
         int dmg;
         if (damageType == DamageType.Physical)
         {
             if (isExcellentHit)
             {
-                dmg = (int)((baseMaxDamage * 1.2) + attacker.Attributes[Stats.ExcellentDamageBonus]);
+                dmg = (int)((baseMaxDamage * 1.2) + excellentDamageBonus);
                 dmg += (int)(attacker.Attributes[Stats.CriticalDamageBonus] + attacker.Attributes[Stats.BerserkerMaxPhysDmgBonus]);
                 attributes |= DamageAttributes.Excellent;
             }
@@ -187,7 +197,7 @@ public static class AttackableExtensions
             if (isExcellentHit)
             {
                 dmg = (int)((baseMaxDamage * duelDmgDec) - defense);
-                dmg = (int)((dmg * 1.2) + attacker.Attributes[Stats.ExcellentDamageBonus]);
+                dmg = (int)((dmg * 1.2) + excellentDamageBonus);
                 attributes |= DamageAttributes.Excellent;
             }
             else if (isCriticalHit)
@@ -297,6 +307,14 @@ public static class AttackableExtensions
         }
 
         dmg += (int)attacker.Attributes[Stats.FinalDamageBonus];
+
+        // Season 9: the elemental damage of the attacker's pentagram and errtels (none outside Season 9 realms).
+        var elemental = PlugIns.SeasonNineSystems.Pentagram.ElementalDamage(attacker, defender, isPvp);
+        if (elemental > 0 && attacker is Player elementalAttacker && PlugIns.SeasonNineSystems.Pentagram.Worn(elementalAttacker) is { } worn)
+        {
+            dmg += elemental;
+            await elementalAttacker.InvokeViewPlugInAsync<Views.IHnmoPentagramViewPlugIn>(p => p.ShowElementalHitAsync(defender.Id, elemental, worn.PentagramElement)).ConfigureAwait(false);
+        }
 
         if (isPvp && attacker is not AttackerSurrogate)
         {

@@ -64,10 +64,15 @@ public class CastleSiegePlugIn : IPeriodicTaskPlugIn, IObjectAddedToMapPlugIn, I
     /// <inheritdoc />
     public async ValueTask ObjectAddedToMapAsync(GameMap map, ILocateable addedObject)
     {
-        if (addedObject is Player player
-            && this.GetContext(player.GameContext) is { } context)
+        if (addedObject is not Player player || !this._contexts.TryGetValue(player.GameContext, out var context))
         {
-            context.TrackPlayer(player, map);
+            return;
+        }
+
+        // Track map changes during the startup snapshot without reading the economy or battle state.
+        context.TrackPlayer(player, map);
+        if (context.IsInitialized)
+        {
             await this.SynchronizePlayerAsync(player, map, context).ConfigureAwait(false);
         }
     }
@@ -82,13 +87,13 @@ public class CastleSiegePlugIn : IPeriodicTaskPlugIn, IObjectAddedToMapPlugIn, I
         }
 
         if (removedObject is not Player player
-            || this.GetContext(player.GameContext) is not { } context)
+            || !this._contexts.TryGetValue(player.GameContext, out var context))
         {
             return;
         }
 
         context.UntrackPlayer(player);
-        if (context.Configuration.CastleSiegeMapDefinition?.Number != map.Definition.Number)
+        if (!context.IsInitialized || context.Configuration.CastleSiegeMapDefinition?.Number != map.Definition.Number)
         {
             return;
         }
@@ -191,7 +196,7 @@ public class CastleSiegePlugIn : IPeriodicTaskPlugIn, IObjectAddedToMapPlugIn, I
     /// <returns>The Castle Siege context, or <see langword="null"/>.</returns>
     public CastleSiegeContext? GetContext(IGameContext gameContext)
     {
-        return this._contexts.TryGetValue(gameContext, out var context) ? context : null;
+        return this._contexts.TryGetValue(gameContext, out var context) && context.IsInitialized ? context : null;
     }
 
     /// <summary>

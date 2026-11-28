@@ -67,6 +67,7 @@
 #include "GameLogic/Items/InventoryUtils.h"
 #include "UI/Inventory/InventoryContents.h"
 #include "GameLogic/Commands/ChatCommandCatalog.h"
+#include "GameLogic/SeasonNine/SeasonNineClientState.h"
 #include "GameLogic/Events/Cinematic/CDirection.h"
 #include "Character/CSParts.h"
 #include "Engine/Physics/PhysicsManager.h"
@@ -1369,6 +1370,8 @@ BOOL ReceiveJoinMapServer(std::span<const BYTE> ReceiveBuffer)
     // ones of a previous character before asking for them again.
     GameLogic::Commands::Catalog().Reset();
     GameLogic::Commands::Catalog().RequestOnce();
+    GameLogic::SeasonNine::ClientState().Reset();
+    GameLogic::SeasonNine::ClientState().RequestAllOnce();
 
     g_ConsoleDebug->Write(MCD_RECEIVE, L"0x03 [ReceiveJoinMapServer]");
 
@@ -13919,7 +13922,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         {
             GameLogic::Commands::Catalog().AddFromPacket(ReceiveBuffer, Size);
         }
-        else
+        else if (!GameLogic::SeasonNine::ClientState().HandlePacket(ReceiveBuffer, Size))
         {
             g_ConsoleDebug->Write(MCD_RECEIVE, L"Recv [0xF5][0x%02x] (unknown)", subcode);
         }

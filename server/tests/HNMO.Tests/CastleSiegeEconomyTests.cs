@@ -4,6 +4,7 @@
 
 namespace HNMO.Tests;
 
+using System.Threading;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using HNMO.DataModel.Configuration;
@@ -16,6 +17,7 @@ using HNMO.GameLogic.Views.CastleSiege;
 using HNMO.GameServer;
 using HNMO.GameServer.MessageHandler.CastleSiege;
 using HNMO.Interfaces;
+using HNMO.Persistence;
 using HNMO.Persistence.InMemory;
 using HNMO.PlugIns;
 using BasicModel = HNMO.Persistence.BasicModel;
@@ -384,7 +386,84 @@ public class CastleSiegeEconomyTests
         });
     }
 
-    private static async ValueTask<TestFixture> CreateFixtureAsync()
+    /// <summary>
+    /// Map callbacks during the initial database read must not see partially loaded siege data.
+    /// </summary>
+    [Test]
+    public async Task MapEntryDuringInitialLoadSynchronizesTaxesAfterwardsAsync()
+    {
+        var loading = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var release = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var firstRead = 0;
+        var fixture = await CreateFixtureAsync(provider =>
+        {
+            var gated = new Mock<IPersistenceContextProvider>();
+            gated.Setup(p => p.CreateNewPlayerContext(It.IsAny<GameConfiguration>()))
+                .Returns((GameConfiguration configuration) => provider.CreateNewPlayerContext(configuration));
+            gated.Setup(p => p.CreateNewContext()).Returns(provider.CreateNewContext);
+            gated.Setup(p => p.CreateNewTypedContext(It.IsAny<Type>(), It.IsAny<bool>(), It.IsAny<GameConfiguration>()))
+                .Returns((Type type, bool cache, GameConfiguration configuration) =>
+                {
+                    if (type != typeof(CastleSiegeData) || Interlocked.Increment(ref firstRead) != 1)
+                    {
+                        return provider.CreateNewTypedContext(type, cache, configuration);
+                    }
+
+                    var context = new Mock<IContext>();
+                    context.Setup(c => c.GetAsync<CastleSiegeData>(It.IsAny<CancellationToken>()))
+                        .Returns(async () =>
+                        {
+                            loading.SetResult();
+                            await release.Task.ConfigureAwait(false);
+                            using var source = provider.CreateNewTypedContext(type, cache, configuration);
+                            return await source.GetAsync<CastleSiegeData>().ConfigureAwait(false);
+                        });
+                    return context.Object;
+                });
+            return gated.Object;
+        }, initializeContext: false).ConfigureAwait(false);
+
+        using (var context = fixture.PersistenceContextProvider.CreateNewContext())
+        {
+            var data = (await context.GetAsync<CastleSiegeData>().ConfigureAwait(false)).Single();
+            data.TaxChaos = 3;
+            data.TaxStore = 2;
+            await context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        var clock = new Mock<TimeProvider>();
+        clock.Setup(c => c.GetUtcNow()).Returns(new DateTimeOffset(2026, 8, 3, 12, 0, 0, TimeSpan.Zero));
+        var plugin = new CastleSiegePlugIn(clock.Object);
+        var normalMap = (await fixture.GameServerContext.GetMapAsync(0).ConfigureAwait(false))!;
+        var siegeMap = (await fixture.GameServerContext.GetMapAsync(30).ConfigureAwait(false))!;
+        var taxView = Mock.Get(fixture.Visitor.ViewPlugIns.GetPlugIn<ICastleSiegeTaxChangeResultPlugIn>()!);
+        var tick = plugin.ExecuteTaskAsync(fixture.GameServerContext).AsTask();
+
+        try
+        {
+            await loading.Task.WaitAsync(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
+            Assert.That(plugin.GetContext(fixture.GameServerContext), Is.Null);
+            await plugin.ObjectAddedToMapAsync(normalMap, fixture.Visitor).ConfigureAwait(false);
+            taxView.Verify(view => view.ShowTaxRateUpdateAsync(It.IsAny<CastleSiegeTaxType>(), It.IsAny<byte>()), Times.Never);
+        }
+        finally
+        {
+            release.TrySetResult();
+            await tick.ConfigureAwait(false);
+        }
+
+        Assert.That(plugin.GetContext(fixture.GameServerContext), Is.Not.Null);
+        taxView.Verify(view => view.ShowTaxRateUpdateAsync(CastleSiegeTaxType.ChaosMachine, 3), Times.Once);
+        taxView.Verify(view => view.ShowTaxRateUpdateAsync(CastleSiegeTaxType.Store, 2), Times.Once);
+        await plugin.ObjectRemovedFromMapAsync(normalMap, fixture.Visitor).ConfigureAwait(false);
+        await plugin.ObjectAddedToMapAsync(siegeMap, fixture.Visitor).ConfigureAwait(false);
+        taxView.Verify(view => view.ShowTaxRateUpdateAsync(CastleSiegeTaxType.ChaosMachine, 3), Times.Exactly(2));
+        taxView.Verify(view => view.ShowTaxRateUpdateAsync(CastleSiegeTaxType.Store, 2), Times.Exactly(2));
+    }
+
+    private static async ValueTask<TestFixture> CreateFixtureAsync(
+        Func<InMemoryPersistenceContextProvider, IPersistenceContextProvider>? wrapProvider = null,
+        bool initializeContext = true)
     {
         var persistenceContextProvider = new InMemoryPersistenceContextProvider();
         BasicModel.GameConfiguration gameConfiguration;
@@ -471,7 +550,7 @@ public class CastleSiegeEconomyTests
             new Mock<IEventPublisher>().Object,
             new Mock<ILoginServer>().Object,
             new Mock<IFriendServer>().Object,
-            persistenceContextProvider,
+            wrapProvider?.Invoke(persistenceContextProvider) ?? persistenceContextProvider,
             mapInitializer,
             NullLoggerFactory.Instance,
             new PlugInManager([], NullLoggerFactory.Instance, null, null),
@@ -487,7 +566,10 @@ public class CastleSiegeEconomyTests
         await gameServerContext.AddPlayerAsync(owner).ConfigureAwait(false);
         await gameServerContext.AddPlayerAsync(visitor).ConfigureAwait(false);
         var context = new CastleSiegeContext(gameServerContext, castleSiegeConfiguration);
-        await context.InitializeAsync(new DateTime(2026, 8, 3, 12, 0, 0, DateTimeKind.Utc)).ConfigureAwait(false);
+        if (initializeContext)
+        {
+            await context.InitializeAsync(new DateTime(2026, 8, 3, 12, 0, 0, DateTimeKind.Utc)).ConfigureAwait(false);
+        }
 
         return new(
             persistenceContextProvider,

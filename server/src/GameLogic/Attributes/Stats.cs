@@ -840,6 +840,36 @@ public class Stats
     public static AttributeDefinition FinalDamageIncreasePvp { get; } = new(new Guid("20BE9BFA-A2DC-4868-8ABF-B6DE4B51D4D2"), "Final Damage Increase (PvP)", string.Empty);
 
     /// <summary>
+    /// Gets the base damage bonus against monsters only (PvM): added to the minimum and maximum base damage of a hit
+    /// on a monster, never on a player (e.g. the Season 9 Muun options marked non-PvP).
+    /// </summary>
+    public static AttributeDefinition BaseDamageBonusPvm { get; } = new(new Guid("FC9DD464-418E-4ED7-BA8A-38A423126B72"), "Base Damage Bonus (PvM)", string.Empty);
+
+    /// <summary>
+    /// Gets the maximum base damage bonus against monsters only (PvM): added to the maximum base damage of a hit on a
+    /// monster, never on a player.
+    /// </summary>
+    public static AttributeDefinition BaseMaxDamageBonusPvm { get; } = new(new Guid("67DAB353-0DC3-490B-B389-64065218DA44"), "Maximum Base Damage Bonus (PvM)", string.Empty);
+
+    /// <summary>
+    /// Gets the skill damage bonus against monsters only (PvM): added to the base damage of a skill hit on a monster,
+    /// never on a player.
+    /// </summary>
+    public static AttributeDefinition SkillDamageBonusPvm { get; } = new(new Guid("BC9839FD-0256-442A-971D-8C09629A8BA7"), "Skill Damage Bonus (PvM)", string.Empty);
+
+    /// <summary>
+    /// Gets the excellent damage bonus against monsters only (PvM): added to an excellent hit on a monster, never on a
+    /// player.
+    /// </summary>
+    public static AttributeDefinition ExcellentDamageBonusPvm { get; } = new(new Guid("E7F67DA4-82BE-4272-9B17-D39AFF3495EA"), "Excellent Damage Bonus (PvM)", string.Empty);
+
+    /// <summary>
+    /// Gets the critical damage chance against monsters only (PvM, 0..1): added to the critical damage chance of a hit
+    /// on a monster, never on a player.
+    /// </summary>
+    public static AttributeDefinition CriticalDamageChancePvm { get; } = new(new Guid("051F86AA-FD2C-4B83-B766-8AAA43329C6B"), "Critical Damage Chance (PvM)", string.Empty);
+
+    /// <summary>
     /// Gets the defense base attribute definition.
     /// </summary>
     /// <remarks>

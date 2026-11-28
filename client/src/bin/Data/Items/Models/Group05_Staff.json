@@ -71,8 +71,7 @@
     },
     {
       "number": 5,
-      "file": "Data/Item/Staff06.bmd",
-      "textureFolders": ["Item"],
+      "model": "staff06",
       "inventory": {
         "anchor": [0.6, 0.55],
         "rotation": [180, 270, 15],
@@ -256,8 +255,7 @@
     },
     {
       "number": 16,
-      "file": "Data/Item/Staff17.bmd",
-      "textureFolders": ["Item"],
+      "model": "staff17",
       "inventory": {
         "anchor": [0.6, 0.55],
         "rotation": [180, 270, 15],
@@ -355,8 +353,7 @@
     },
     {
       "number": 22,
-      "file": "Data/Item/Book_of_Neil.bmd",
-      "textureFolders": ["Item"],
+      "model": "bookOfNeil",
       "inventory": {
         "anchor": [0.6, 0.55],
         "rotation": [0, 0, 0],
@@ -471,6 +468,11 @@
       }
     },
     {
+      "number": 35,
+      "file": "Data/s9/Item/MiracleStaff.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
       "number": 36,
       "file": "Data/Item/Archangelus.bmd",
       "textureFolders": ["Item"],
@@ -482,6 +484,23 @@
       "ground": {
         "rotation": [0, 270, -45]
       }
+    },
+    {
+      "number": 37,
+      "file": "Data/s9/Item/kerberos_spear_dark_road.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 38,
+      "model": "staff06"
+    },
+    {
+      "number": 39,
+      "model": "staff17"
+    },
+    {
+      "number": 40,
+      "model": "bookOfNeil"
     }
   ]
 }

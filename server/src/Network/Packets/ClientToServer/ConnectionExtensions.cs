@@ -6547,6 +6547,38 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoPentagramCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">1 = Request state, 2 = Wear the pentagram of a bag slot, 3 = Take off the pentagram, 4 = Put the errtel of a bag slot into an errtel slot, 5 = Take the errtel of an errtel slot out, 6 = Level up the errtel of a bag slot, 7 = Rank up the errtel of a bag slot with a second one.</param>
+    /// <param name="slot">The bag slot of the pentagram or errtel.</param>
+    /// <param name="index">The errtel slot of the pentagram (0..4), or the bag slot of the second errtel of a rank-up.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client in a Season 9 realm to open the pentagram window, wear or take off the pentagram, put an errtel into a slot or take it out, or mix an errtel.
+    /// Causes reaction on server side: The server performs the action and responds with HnmoPentagramState (F5 5C).
+    /// </remarks>
+    public static async ValueTask SendHnmoPentagramCommandAsync(this IConnection? connection, byte @action, byte @slot, byte @index)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoPentagramCommandRef.Length;
+            var packet = new HnmoPentagramCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Slot = @slot;
+            packet.Index = @index;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="HnmoJewelBankCommand" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>
@@ -6581,6 +6613,36 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoMuunCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">1 = Request state, 2 = Make the Muun in the bag slot active, 3 = Put the active Muun away, 4 = Evolve the active Muun, 5 = Convert the Muun in the bag slot into energy, 6 = Level up the active Muun, 7 = Level up the active Muun by feeding a duplicate Muun from the bag slot.</param>
+    /// <param name="slot">Inventory slot of the Muun for actions 2 and 5.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to open the Season 9 Muun window, make a bag Muun the active one, put it away, evolve it, convert a Muun into energy or level up the active Muun.
+    /// Causes reaction on server side: The server performs the action and responds with HnmoMuunState (F5 2C).
+    /// </remarks>
+    public static async ValueTask SendHnmoMuunCommandAsync(this IConnection? connection, byte @action, byte @slot)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoMuunCommandRef.Length;
+            var packet = new HnmoMuunCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Slot = @slot;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="HnmoCatchupCapRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>
@@ -6599,6 +6661,31 @@ public static class ConnectionExtensions
         {
             var length = HnmoCatchupCapRequestRef.Length;
             var packet = new HnmoCatchupCapRequestRef(connection.Output.GetSpan(length)[..length]);
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoSeasonNineClientRequest" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client after entering the world in a Season 9 realm.
+    /// Causes reaction on server side: The server responds with HnmoSeasonNineClientState (F5 59).
+    /// </remarks>
+    public static async ValueTask SendHnmoSeasonNineClientRequestAsync(this IConnection? connection)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoSeasonNineClientRequestRef.Length;
+            var packet = new HnmoSeasonNineClientRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
 

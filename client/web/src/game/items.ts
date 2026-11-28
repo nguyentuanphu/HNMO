@@ -4,6 +4,7 @@
 
 import { loadItemLooks } from './itemLooks.js';
 import { currentLanguage } from '../i18n.js';
+import { currentSeason, onSeasonChange, type SeasonKey } from '../dataRoot.js';
 
 const GROUP_FILES = ['Group00_Sword', 'Group01_Axe', 'Group02_Mace', 'Group03_Spear', 'Group04_Bow', 'Group05_Staff',
   'Group06_Shield', 'Group07_Helm', 'Group08_Armor', 'Group09_Pants', 'Group10_Gloves', 'Group11_Boots', 'Group12_Wing',
@@ -120,18 +121,33 @@ export interface ItemDefinition {
   [field: string]: unknown;
 }
 
-/** An item override served dynamically from the admin panel via /website/items. */
+/** An item override served dynamically from the admin panel via /website/items or seasonal override tables. */
 export interface WebsiteItemOverride {
   group: number;
   number: number;
   name?: LocalizedText;
   width?: number;
   height?: number;
+  slot?: string;
+  weaponKind?: string;
+  statProfile?: string;
   level?: number;
   maximumItemLevel?: number;
   durability?: number;
+  magicDurability?: number;
+  magicPower?: number;
+  damageMin?: number;
+  damageMax?: number;
+  attackSpeed?: number;
+  defense?: number;
+  skill?: number;
+  options?: string[];
   buyPrice?: number;
+  tradable?: boolean;
+  sellable?: boolean;
+  storable?: boolean;
   requirements?: Partial<Record<string, number | null>>;
+  classRequirements?: Partial<Record<string, number>>;
   glowColor?: string;
   tooltip?: LocalizedText | null;
   modelSourceGroup?: number | null;
@@ -161,6 +177,12 @@ export interface ItemCatalog {
 export interface ItemChoice { group: number; number: number; name: string }
 
 let catalog: ItemCatalog | null = null;
+let loadedSeason: SeasonKey | null = null;
+/** The load running now and the season it is for: a second caller of the same season waits for it. */
+let inFlight: { season: SeasonKey; promise: Promise<ItemCatalog> } | null = null;
+/** Counts season changes: a load started before one publishes nothing (its answers may come after the new season's). */
+let generation = 0;
+onSeasonChange(() => { catalog = null; loadedSeason = null; inFlight = null; generation++; });
 /** The part models (Data/Items/Models/PartModels.json): the +15 armour's decorations, by name. */
 let partModels = new Map<string, ItemModelSource>();
 
@@ -181,8 +203,31 @@ function splitPath(file: string): { dir: string; fileName: string } {
   return { dir: path.slice(0, slash), fileName: path.slice(slash + 1) };
 }
 
-export async function loadItemCatalog(): Promise<ItemCatalog> {
-  if (catalog) return catalog;
+/**
+ * The catalog of the current season. It is built completely (base data, then the Season 9 overrides, then the admin
+ * panel's) before it is published, so a caller never sees a half-built one; a load started before a season change
+ * publishes nothing.
+ */
+export function loadItemCatalog(): Promise<ItemCatalog> {
+  const season = currentSeason();
+  if (catalog && loadedSeason === season) return Promise.resolve(catalog);
+  if (inFlight?.season === season) return inFlight.promise;
+  const started = generation;
+  const promise = buildItemCatalog(season).then(({ built, parts }) => {
+    if (started === generation && currentSeason() === season) {
+      catalog = built;
+      partModels = parts;
+      loadedSeason = season;
+    }
+    return built;
+  }).finally(() => {
+    if (inFlight?.promise === promise) inFlight = null;
+  });
+  inFlight = { season, promise };
+  return promise;
+}
+
+async function buildItemCatalog(season: SeasonKey): Promise<{ built: ItemCatalog; parts: Map<string, ItemModelSource> }> {
   const looks = loadItemLooks();
   const [shared, ...groups] = await Promise.all([
     fetchJson<SharedModelsFile>('/data/Items/Models/SharedModels.json'),
@@ -191,7 +236,7 @@ export async function loadItemCatalog(): Promise<ItemCatalog> {
   const items = await Promise.all(GROUP_FILES.map((name) => fetchJson<ItemDefinitionsFile>(`/data/Items/${name}.json`)));
   const parts = await fetchJson<{ partModels?: (ModelFileData & { name: string; renderStyle?: string })[] }>('/data/Items/Models/PartModels.json')
     .catch(() => ({ partModels: [] }));
-  partModels = new Map((parts.partModels ?? []).filter((part) => part.file).map((part) => [part.name, {
+  const partModelsOfSeason = new Map((parts.partModels ?? []).filter((part) => part.file).map((part) => [part.name, {
     ...splitPath(part.file!), // the filter keeps parts with a file
     textureDir: part.textureFolders?.length ? part.textureFolders : ['Item'],
     look: { renderStyle: part.renderStyle }, glow: {}, inventory: null, ground: null,
@@ -221,15 +266,25 @@ export async function loadItemCatalog(): Promise<ItemCatalog> {
     }
   });
   await looks;
-  catalog = { models, names, definitions };
+  const built: ItemCatalog = { models, names, definitions };
+  if (season === 's9') {
+    const seasonResponse = await fetch('/data/Items/Season9Overrides.json').catch(() => null);
+    if (seasonResponse?.ok) {
+      const seasonPayload = await seasonResponse.json().catch(() => null) as { items?: WebsiteItemOverride[] } | null;
+      if (Array.isArray(seasonPayload?.items) && seasonPayload.items.length > 0) {
+        applyItemOverrides(built, seasonPayload.items);
+      }
+    }
+  }
+  // The admin panel's overrides are the same for every season (one game configuration for all worlds): last, on top.
   const overridesResponse = await fetch('/website/items').catch(() => null);
   if (overridesResponse?.ok) {
     const payload = await overridesResponse.json().catch(() => null) as { items?: WebsiteItemOverride[] } | null;
     if (Array.isArray(payload?.items) && payload.items.length > 0) {
-      applyItemOverrides(catalog, payload.items);
+      applyItemOverrides(built, payload.items);
     }
   }
-  return catalog;
+  return { built, parts: partModelsOfSeason };
 }
 
 /** Applies admin-panel item definition overrides into a loaded item catalog. */
@@ -251,11 +306,26 @@ export function applyItemOverrides(targetCatalog: ItemCatalog, overrides: Websit
       name: mergedName,
       width: entry.width ?? existing?.width ?? 1,
       height: entry.height ?? existing?.height ?? 1,
+      slot: entry.slot ?? existing?.slot,
+      weaponKind: entry.weaponKind ?? existing?.weaponKind,
+      statProfile: entry.statProfile ?? existing?.statProfile,
       level: entry.level ?? existing?.level ?? 0,
       maximumItemLevel: entry.maximumItemLevel ?? existing?.maximumItemLevel,
       durability: entry.durability ?? existing?.durability,
+      magicDurability: entry.magicDurability ?? existing?.magicDurability,
+      magicPower: entry.magicPower ?? existing?.magicPower,
+      damageMin: entry.damageMin ?? existing?.damageMin,
+      damageMax: entry.damageMax ?? existing?.damageMax,
+      attackSpeed: entry.attackSpeed ?? existing?.attackSpeed,
+      defense: entry.defense ?? existing?.defense,
+      skill: entry.skill ?? existing?.skill,
+      options: entry.options ?? existing?.options,
       buyPrice: entry.buyPrice ?? existing?.buyPrice,
+      tradable: entry.tradable ?? existing?.tradable,
+      sellable: entry.sellable ?? existing?.sellable,
+      storable: entry.storable ?? existing?.storable,
       requirements: Object.keys(mergedRequirements).length > 0 ? mergedRequirements : undefined,
+      classRequirements: entry.classRequirements ? { ...(existing?.classRequirements ?? {}), ...entry.classRequirements } : existing?.classRequirements,
       tooltip: entry.tooltip ?? existing?.tooltip,
     };
     targetCatalog.definitions.set(key, merged);

@@ -28,6 +28,7 @@ public class CastleSiegeContext : IEventStateProvider
     private readonly System.Collections.Concurrent.ConcurrentDictionary<Player, byte> _siegeMapPlayers = new();
     private readonly System.Collections.Concurrent.ConcurrentDictionary<uint, CastleSiegeLifeStone> _lifeStones = new();
     private int _requestedState = -1;
+    private volatile bool _isInitialized;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CastleSiegeContext"/> class.
@@ -169,7 +170,7 @@ public class CastleSiegeContext : IEventStateProvider
     /// <summary>
     /// Gets a value indicating whether the context has been initialized.
     /// </summary>
-    internal bool IsInitialized { get; private set; }
+    internal bool IsInitialized => this._isInitialized;
 
     /// <summary>
     /// Gets the game context.
@@ -864,7 +865,7 @@ public class CastleSiegeContext : IEventStateProvider
         this.SetPeriod(period);
         await this.InitializeSiegeMapPlayersAsync().ConfigureAwait(false);
         this.NextNpcSaveUtc = utcNow.AddMinutes(2);
-        this.IsInitialized = true;
+        this._isInitialized = true;
         return period;
     }
 

@@ -5339,6 +5339,21 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   <data name="SeasonsRestartSent" xml:space="preserve">
     <value>Đã gửi yêu cầu khởi động lại. Vui lòng tải lại trang sau vài giây.</value>
   </data>
+  <data name="ItemDefinitions_SeasonNineNotice" xml:space="preserve">
+    <value>Đang bật chế độ Season 9: bản web tự động áp dụng 210 ghi đè vật phẩm dùng chung và danh mục vật phẩm Season 9.</value>
+  </data>
+  <data name="PageHelpTextS9Events" xml:space="preserve">
+    <value>Cấu hình các sự kiện Season 9 (Hộ Vệ Acheron, Chiến Trường Arca, Hỗn Nguyên Lâu Sinh Tồn, Quảng Trường Đau Khổ, Trình Quản Lý Xâm Lăng) và quái Boss Núi Uruk (669-729).</value>
+  </data>
+  <data name="S9EventsTitle" xml:space="preserve">
+    <value>Sự Kiện Season 9 &amp; Núi Uruk</value>
+  </data>
+  <data name="PageHelpTextS9Systems" xml:space="preserve">
+    <value>Cấu hình hệ thống Season 9: giới hạn Master cấp 330, thú cưng Muun (76 loại), Ngũ Hành Pentagram &amp; tỉ lệ Errtel, kỹ năng 618-621 và Minimap Season 9.</value>
+  </data>
+  <data name="S9SystemsTitle" xml:space="preserve">
+    <value>Hệ Thống Season 9 (Muun, Pentagram, Master 330)</value>
+  </data>
   <data name="JewelBankReceiptsHeading" xml:space="preserve">
     <value>Biên lai cơ sở dữ liệu Ngân hàng ngọc gần đây (giờ Sydney)</value>
   </data>

@@ -5,6 +5,7 @@
 // (UI::Skills::Icon::ResolveSkillIcon, the sprites of skill_icons.rcss).
 
 import { fetchBytes } from '../bmd.js';
+import { currentSeason, onSeasonChange } from '../dataRoot.js';
 import { isNewSkill, loadNewSkills, NEW_SKILL_LOOKS } from './newSkills.js';
 import { registerHueShiftedSprite } from '../ui/rml.js';
 import type { Connection } from '../net/connection.js';
@@ -24,6 +25,14 @@ export interface SkillData {
 }
 
 let skillData: SkillData[] | null = null;
+
+onSeasonChange(() => {
+  skillData = null;
+});
+
+interface SeasonNineSkillEntry {
+  number: number; name: string; level: number; mana: number; ability: number; distance: number; delayMs: number; classes: number[];
+}
 
 export async function loadSkillData(): Promise<SkillData[]> {
   if (skillData) return skillData;
@@ -45,6 +54,18 @@ export async function loadSkillData(): Promise<SkillData[]> {
   }
   // HNMO's own skills (700-727) from their list.
   for (const [number, data] of await loadNewSkills().catch(() => new Map<number, SkillData>())) list[number] = data;
+  // Season 9-only skills (618-621) when running against a Season 9 world.
+  if (currentSeason() === 's9') {
+    const s9List = await fetch('/data/Season9/s9-skills.json')
+      .then((r) => (r.ok ? r.json() as Promise<SeasonNineSkillEntry[]> : []))
+      .catch(() => [] as SeasonNineSkillEntry[]);
+    for (const s of s9List) {
+      list[s.number] = {
+        name: s.name, level: s.level, damage: 0, mana: s.mana, ability: s.ability, distance: s.distance, delay: s.delayMs,
+        energy: 0, leadership: 0, masteryType: 0, useType: 0, brand: 0, killCount: 0, classes: s.classes, icon: 0, strength: 0, dexterity: 0, rank: 0,
+      };
+    }
+  }
   skillData = list;
   return list;
 }

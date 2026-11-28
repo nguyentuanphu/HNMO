@@ -70,6 +70,13 @@ public static class AdminNavCatalog
             [
                 new("castle-siege", "events", "oi-shield", "Castle Siege", "Công Thành Chiến", "Schedule Castle Siege stages, guilds, and siege rewards.", "Lịch trình Công Thành Chiến, bang đăng ký và thưởng.", true, "guilds-levels-ladder", "s6-events", "timetable"),
                 new("s6-events", "events", "oi-timer", "S6 Events & Chaos Castle", "Sự kiện S6 & Boss", "Tune Blood Castle, Devil Square, Chaos Castle, and Illusions.", "Tùy chỉnh BC, DV, CC, Huyết Lâu và phần thưởng.", true, "timetable", "world-bosses-rankings", "rate-tuning"),
+                new("s9-events", "events", "oi-fire", "S9 Events & Uruk", "Sự kiện S9 & Núi Uruk", "Configure Acheron Guardian, Arca Battle, Chaos Castle Survival, Tormented Square, Invasions, and Uruk Mountain.", "Cấu hình Hộ Vệ Acheron, Chiến Trường Arca, Hỗn Nguyên Lâu Sinh Tồn, Quảng Trường Đau Khổ, Xâm Lăng và Núi Uruk.", true, "s6-events", "timetable", "world-bosses-rankings")
+                {
+                    TitleDe = "S9-Events & Uruk",
+                    TitleZh = "S9 活动与乌鲁克山",
+                    DescriptionDe = "Acheron Guardian, Arca Battle, Chaos Castle Survival, Tormented Square, Invasionen und Berg Uruk konfigurieren.",
+                    DescriptionZh = "配置阿卡伦守护者、阿卡战争、生存赤色要塞、苦痛广场、入侵管理器与乌鲁克山。",
+                },
                 new("timetable", "events", "oi-calendar", "Timetable", "Lịch sự kiện", "Configure H event calendar, invasions, and alerts in Sydney time.", "Cấu hình lịch sự kiện phím H và xâm lăng theo giờ Sydney.", true, "event-alerts", "s6-events", "world-bosses-rankings"),
                 new("event-alerts", "events", "oi-bell", "Event Alerts", "Thông báo sự kiện", "Manage Web Push VAPID notifications and Discord event posts.", "Quản lý thông báo đẩy Web Push và Discord cho sự kiện.", true, "timetable", "discord", "world-bosses-rankings"),
                 new("world-bosses-rankings", "events", "oi-bolt", "World Bosses & Weekly Coins", "Boss thế giới & Đua tuần", "Configure custom boss spawns, damages, and weekly rewards.", "Cấu hình Boss thế giới, sát thương và thưởng tuần.", true, "timetable", "top-races", "mounts"),
@@ -115,6 +122,13 @@ public static class AdminNavCatalog
                 new("rankings-settings", "world", "oi-list-rich", "In-Game Rankings & Add Stats", "BXH & Cộng điểm nhanh", "Toggle Shift+R live rankings window and Shift+A bulk stat add.", "Bật/tắt bảng xếp hạng Shift+R và cộng điểm nhanh Shift+A.", false, "leaderboards", "resets-relife", "custom-ranks"),
                 new("custom-ranks", "world", "oi-star", "Custom Ranks & Titles", "Danh hiệu tùy chỉnh", "Define unlockable EN/VI nameplate titles and attribute bonuses.", "Tạo danh hiệu hiển thị cạnh tên nhân vật và chỉ số cộng thêm.", false, "rankings-settings", "marriage", "accounts"),
                 new("hnmo-skills", "world", "oi-bolt", "Master Skills", "Kỹ năng Master", "Inspect and adjust custom skill behaviors and scaling.", "Kiểm tra và tinh chỉnh kỹ năng Master.", false, "gameplay-rules", "qol-settings", "accounts"),
+                new("s9-systems", "world", "oi-star", "S9 Systems (Muun / Pentagram)", "Hệ thống S9 (Muun / Ngũ Hành)", "Configure Muun pets, Pentagram elemental combat, S9 skills 618-621, 330 Master cap, and S9 Minimap.", "Cấu hình Muun, Ngũ Hành Pentagram, kỹ năng 618-621, Master cấp 330 và Minimap S9.", true, "hnmo-skills", "rate-tuning", "gameplay-rules")
+                {
+                    TitleDe = "S9-Systeme (Muun / Pentagram)",
+                    TitleZh = "S9 系统 (萌宠 / 五芒星)",
+                    DescriptionDe = "Muun-Begleiter, Pentagramm-Elementarkampf, S9-Fertigkeiten 618-621, 330er-Master-Limit und Minimap konfigurieren.",
+                    DescriptionZh = "配置萌宠、五芒星元素系统、第 9 赛季技能 618-621、330 级大师树与小地图。",
+                },
                 new("map-editor", "world", "oi-grid-four-up", "Map Spawn Editor", "Chỉnh sửa quái bản đồ", "Place monster spawns and NPC positions on 2D map grids.", "Chỉnh sửa vị trí quái và NPC trên bản đồ 2D.", false, "world-editor", "terrain-editor", "teleport-npc"),
                 new("terrain-editor", "world", "oi-brush", "Terrain Safezone & Walk Map", "Vùng an toàn & Địa hình", "Paint safe zones, obstacles, and walkable terrain flags.", "Chỉnh vùng an toàn, vật cản và ô di chuyển được.", false, "map-editor", "world-editor", "worlds"),
                 new("world-editor", "world", "oi-layers", "3D World Editor", "Trình sửa thế giới 3D", "Edit 3D map objects, foliage, and props interactively.", "Chỉnh sửa mô hình vật thể 3D trên từng bản đồ.", false, "map-editor", "terrain-editor", "worlds"),

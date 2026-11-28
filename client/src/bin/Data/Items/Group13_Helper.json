@@ -4562,6 +4562,60 @@
       }
     },
     {
+      "number": 77,
+      "name": {
+        "en": "Brown Panda Ring",
+        "de": "Brauner Panda-Ring",
+        "vi": "Nhẫn Gấu Trúc Nâu",
+        "zh-CN": "棕色熊猫戒指"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "statProfile": "helper",
+      "durability": 255,
+      "droppable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 78,
+      "name": {
+        "en": "Pink Panda Ring",
+        "de": "Rosa Panda-Ring",
+        "vi": "Nhẫn Gấu Trúc Hồng",
+        "zh-CN": "粉色熊猫戒指"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "statProfile": "helper",
+      "durability": 255,
+      "droppable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
       "number": 80,
       "name": {
         "en": "Pet Panda",
@@ -7190,6 +7244,3045 @@
       "sellable": false,
       "personalShopSellable": false,
       "repairable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 145,
+      "name": {
+        "en": "Spirit Map Fragment",
+        "de": "Geisterkarten-Fragment",
+        "vi": "Mảnh Bản Đồ Linh Hồn",
+        "zh-CN": "灵魂地图碎片"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 1,
+      "droppable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 146,
+      "name": {
+        "en": "Spirit Map",
+        "de": "Geisterkarte",
+        "vi": "Bản Đồ Linh Hồn",
+        "zh-CN": "灵魂地图"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "droppable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 147,
+      "name": {
+        "en": "Trophies of Battle",
+        "de": "Kriegstrophäen",
+        "vi": "Chiến Tích Trận Đánh",
+        "zh-CN": "战斗战利品"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 1,
+      "droppable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 148,
+      "name": {
+        "en": "Green Ink",
+        "de": "Grüne Tinte",
+        "vi": "Mực Xanh Lá",
+        "zh-CN": "绿色墨水"
+      },
+      "width": 1,
+      "height": 2,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 149,
+      "name": {
+        "en": "Blue Ink",
+        "de": "Blaue Tinte",
+        "vi": "Mực Xanh Dương",
+        "zh-CN": "蓝色墨水"
+      },
+      "width": 1,
+      "height": 2,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 150,
+      "name": {
+        "en": "Red Ink",
+        "de": "Rote Tinte",
+        "vi": "Mực Đỏ",
+        "zh-CN": "红色墨水"
+      },
+      "width": 1,
+      "height": 2,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 151,
+      "name": {
+        "en": "Parchment of Soul",
+        "de": "Pergament der Seele",
+        "vi": "Giấy Da Linh Hồn",
+        "zh-CN": "灵魂羊皮纸"
+      },
+      "width": 1,
+      "height": 2,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 152,
+      "name": {
+        "en": "Scroll of Green Oblivion",
+        "de": "Schriftrolle der grünen Vergessenheit",
+        "vi": "Cuộn Lãng Quên Xanh Lá",
+        "zh-CN": "绿色遗忘卷轴"
+      },
+      "width": 2,
+      "height": 2,
+      "droppable": false,
+      "sellable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 153,
+      "name": {
+        "en": "Scroll of Blue Oblivion",
+        "de": "Schriftrolle der blauen Vergessenheit",
+        "vi": "Cuộn Lãng Quên Xanh Dương",
+        "zh-CN": "蓝色遗忘卷轴"
+      },
+      "width": 2,
+      "height": 2,
+      "droppable": false,
+      "sellable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 154,
+      "name": {
+        "en": "Scroll of Red Oblivion",
+        "de": "Schriftrolle der roten Vergessenheit",
+        "vi": "Cuộn Lãng Quên Đỏ",
+        "zh-CN": "红色遗忘卷轴"
+      },
+      "width": 2,
+      "height": 2,
+      "droppable": false,
+      "sellable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 155,
+      "name": {
+        "en": "Scroll of Gray Oblivion",
+        "de": "Schriftrolle der grauen Vergessenheit",
+        "vi": "Cuộn Lãng Quên Xám",
+        "zh-CN": "灰色遗忘卷轴"
+      },
+      "width": 2,
+      "height": 2,
+      "droppable": false,
+      "sellable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 156,
+      "name": {
+        "en": "Sealed Green Oblivion Scroll",
+        "de": "Versiegelte grüne Vergessenheitsrolle",
+        "vi": "Cuộn Lãng Quên Xanh Lá Phong Ấn",
+        "zh-CN": "封印的绿色遗忘卷轴"
+      },
+      "width": 2,
+      "height": 2,
+      "tradable": false,
+      "droppable": false,
+      "sellable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 157,
+      "name": {
+        "en": "Sealed Blue Oblivion Scroll",
+        "de": "Versiegelte blaue Vergessenheitsrolle",
+        "vi": "Cuộn Lãng Quên Xanh Dương Phong Ấn",
+        "zh-CN": "封印的蓝色遗忘卷轴"
+      },
+      "width": 2,
+      "height": 2,
+      "tradable": false,
+      "droppable": false,
+      "sellable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 158,
+      "name": {
+        "en": "Sealed Red Oblivion Scroll",
+        "de": "Versiegelte rote Vergessenheitsrolle",
+        "vi": "Cuộn Lãng Quên Đỏ Phong Ấn",
+        "zh-CN": "封印的红色遗忘卷轴"
+      },
+      "width": 2,
+      "height": 2,
+      "tradable": false,
+      "droppable": false,
+      "sellable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 159,
+      "name": {
+        "en": "Sealed Gray Oblivion Scroll",
+        "de": "Versiegelte graue Vergessenheitsrolle",
+        "vi": "Cuộn Lãng Quên Xám Phong Ấn",
+        "zh-CN": "封印的灰色遗忘卷轴"
+      },
+      "width": 2,
+      "height": 2,
+      "tradable": false,
+      "droppable": false,
+      "sellable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 160,
+      "name": {
+        "en": "Protection Talisman",
+        "de": "Schutztalisman",
+        "vi": "Bùa Bảo Hộ",
+        "zh-CN": "保护符咒"
+      },
+      "width": 1,
+      "height": 1,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "sellable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 161,
+      "name": {
+        "en": "Cooperation Talisman",
+        "de": "Kooperationstalisman",
+        "vi": "Bùa Hợp Tác",
+        "zh-CN": "合作符咒"
+      },
+      "width": 1,
+      "height": 1,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "sellable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 163,
+      "name": {
+        "en": "Robot Knight Ring",
+        "de": "Roboterritter-Ring",
+        "vi": "Nhẫn Hiệp Sĩ Robot",
+        "zh-CN": "机器人骑士戒指"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "statProfile": "helper",
+      "durability": 255,
+      "droppable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 164,
+      "name": {
+        "en": "Mini Robot Ring",
+        "de": "Mini-Roboter-Ring",
+        "vi": "Nhẫn Robot Nhỏ",
+        "zh-CN": "迷你机器人戒指"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "statProfile": "helper",
+      "durability": 255,
+      "droppable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 165,
+      "name": {
+        "en": "Great Heavenly Mage Ring",
+        "de": "Großer Himmlischer Magierring",
+        "vi": "Nhẫn Đại Pháp Sư Thiên Đàng",
+        "zh-CN": "大天法师戒指"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "statProfile": "helper",
+      "durability": 255,
+      "droppable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 169,
+      "name": {
+        "en": "Decoration Ring",
+        "de": "Dekorationsring",
+        "vi": "Nhẫn Trang Trí",
+        "zh-CN": "装饰戒指"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "durability": 30,
+      "droppable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 170,
+      "name": {
+        "en": "Blessed Decoration Ring",
+        "de": "Gesegneter Dekorationsring",
+        "vi": "Nhẫn Trang Trí Ban Phước",
+        "zh-CN": "祝福装饰戒指"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "durability": 255,
+      "droppable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 171,
+      "name": {
+        "en": "Necklace of Agony",
+        "de": "Halskette der Qual",
+        "vi": "Dây Chuyền Thống Khổ",
+        "zh-CN": "痛苦项链"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "pendant",
+      "statProfile": "helper",
+      "durability": 60,
+      "droppable": false,
+      "requirements": {
+        "level": 122
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 172,
+      "name": {
+        "en": "Solid Symbol",
+        "de": "Festes Symbol",
+        "vi": "Biểu Tượng Vững Chắc",
+        "zh-CN": "坚固徽章"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "pendant",
+      "statProfile": "helper",
+      "durability": 60,
+      "droppable": false,
+      "requirements": {
+        "level": 110
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 173,
+      "name": {
+        "en": "Ring of Ultimatum",
+        "de": "Ring des Ultimatums",
+        "vi": "Nhẫn Tối Hậu Thư",
+        "zh-CN": "最后通牒戒指"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "statProfile": "helper",
+      "durability": 60,
+      "droppable": false,
+      "requirements": {
+        "level": 98
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 174,
+      "name": {
+        "en": "Ring of Block",
+        "de": "Ring des Blockens",
+        "vi": "Nhẫn Phòng Thủ",
+        "zh-CN": "格挡戒指"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "statProfile": "helper",
+      "durability": 60,
+      "droppable": false,
+      "requirements": {
+        "level": 86
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 175,
+      "name": {
+        "en": "Protector Protection Ring",
+        "de": "Beschützer-Schutzring",
+        "vi": "Nhẫn Bảo Hộ Hộ Vệ",
+        "zh-CN": "守护者保护戒指"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "statProfile": "helper",
+      "durability": 60,
+      "droppable": false,
+      "requirements": {
+        "level": 74
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 176,
+      "name": {
+        "en": "Protection Ring",
+        "de": "Schutzring",
+        "vi": "Nhẫn Bảo Hộ",
+        "zh-CN": "保护戒指"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "statProfile": "helper",
+      "durability": 60,
+      "droppable": false,
+      "requirements": {
+        "level": 62
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 177,
+      "name": {
+        "en": "Talisman of Ascension I",
+        "de": "Talisman des Aufstiegs I",
+        "vi": "Bùa Thăng Hoa I",
+        "zh-CN": "飞升护符 I"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 178,
+      "name": {
+        "en": "Talisman of Ascension II",
+        "de": "Talisman des Aufstiegs II",
+        "vi": "Bùa Thăng Hoa II",
+        "zh-CN": "飞升护符 II"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 179,
+      "name": {
+        "en": "Talisman of Ascension III",
+        "de": "Talisman des Aufstiegs III",
+        "vi": "Bùa Thăng Hoa III",
+        "zh-CN": "飞升护符 III"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 180,
+      "name": {
+        "en": "Seal of Ascension II",
+        "de": "Siegel des Aufstiegs II",
+        "vi": "Ấn Thăng Hoa II",
+        "zh-CN": "飞升印章 II"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "sellable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 181,
+      "name": {
+        "en": "Master Seal of Ascension II",
+        "de": "Meistersiegel des Aufstiegs II",
+        "vi": "Ấn Thăng Hoa Bậc Thầy II",
+        "zh-CN": "大师飞升印章 II"
+      },
+      "width": 1,
+      "height": 1,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "sellable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 210,
+      "name": {
+        "en": "WereRabbit Egg",
+        "de": "Werkaninchen-Ei",
+        "vi": "Trứng Thỏ Ma",
+        "zh-CN": "狼兔蛋"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "sellable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 211,
+      "name": {
+        "en": "Evolution Stone",
+        "de": "Entwicklungsstein",
+        "vi": "Đá Tiến Hóa",
+        "zh-CN": "进化石"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 212,
+      "name": {
+        "en": "Luki",
+        "de": "Luki",
+        "vi": "Luki",
+        "zh-CN": "路基"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 213,
+      "name": {
+        "en": "Luki (Evolved)",
+        "de": "Luki (Entwickelt)",
+        "vi": "Luki (Tiến hóa)",
+        "zh-CN": "路基（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 214,
+      "name": {
+        "en": "Tony",
+        "de": "Tony",
+        "vi": "Tony",
+        "zh-CN": "托尼"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 215,
+      "name": {
+        "en": "Tony (Evolved)",
+        "de": "Tony (Entwickelt)",
+        "vi": "Tony (Tiến hóa)",
+        "zh-CN": "托尼（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 216,
+      "name": {
+        "en": "Nymph",
+        "de": "Nymphe",
+        "vi": "Nữ Thần Rừng",
+        "zh-CN": "仙女"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 217,
+      "name": {
+        "en": "Nymph (Evolved)",
+        "de": "Nymphe (Entwickelt)",
+        "vi": "Nữ Thần Rừng (Tiến hóa)",
+        "zh-CN": "仙女（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 218,
+      "name": {
+        "en": "Safi",
+        "de": "Safi",
+        "vi": "Safi",
+        "zh-CN": "萨菲"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 219,
+      "name": {
+        "en": "Safi (Evolved)",
+        "de": "Safi (Entwickelt)",
+        "vi": "Safi (Tiến hóa)",
+        "zh-CN": "萨菲（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 220,
+      "name": {
+        "en": "Lucky Bag Egg",
+        "de": "Glücksbeutel-Ei",
+        "vi": "Trứng Túi May Mắn",
+        "zh-CN": "幸运袋蛋"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "sellable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 221,
+      "name": {
+        "en": "Fire Flame Ghost Egg",
+        "de": "Flammengeister-Ei",
+        "vi": "Trứng Ma Lửa",
+        "zh-CN": "火焰幽灵蛋"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "sellable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 222,
+      "name": {
+        "en": "Golden Goblin Egg",
+        "de": "Goldenes Goblin-Ei",
+        "vi": "Trứng Yêu Tinh Vàng",
+        "zh-CN": "黄金哥布林蛋"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "sellable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 223,
+      "name": {
+        "en": "William",
+        "de": "William",
+        "vi": "William",
+        "zh-CN": "威廉"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 224,
+      "name": {
+        "en": "William (Evolved)",
+        "de": "William (Entwickelt)",
+        "vi": "William (Tiến hóa)",
+        "zh-CN": "威廉（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 225,
+      "name": {
+        "en": "Paul",
+        "de": "Paul",
+        "vi": "Paul",
+        "zh-CN": "保罗"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 226,
+      "name": {
+        "en": "Paul (Evolved)",
+        "de": "Paul (Entwickelt)",
+        "vi": "Paul (Tiến hóa)",
+        "zh-CN": "保罗（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 227,
+      "name": {
+        "en": "Chiron",
+        "de": "Chiron",
+        "vi": "Chiron",
+        "zh-CN": "喀戎"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 228,
+      "name": {
+        "en": "Chiron (Evolved)",
+        "de": "Chiron (Entwickelt)",
+        "vi": "Chiron (Tiến hóa)",
+        "zh-CN": "喀戎（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 229,
+      "name": {
+        "en": "Wooparoo",
+        "de": "Wooparoo",
+        "vi": "Wooparoo",
+        "zh-CN": "乌帕鲁"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 230,
+      "name": {
+        "en": "Wooparoo (Evolved)",
+        "de": "Wooparoo (Entwickelt)",
+        "vi": "Wooparoo (Tiến hóa)",
+        "zh-CN": "乌帕鲁（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 231,
+      "name": {
+        "en": "Tibetton",
+        "de": "Tibetton",
+        "vi": "Tibetton",
+        "zh-CN": "蒂贝顿"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 232,
+      "name": {
+        "en": "Tibetton (Evolved)",
+        "de": "Tibetton (Entwickelt)",
+        "vi": "Tibetton (Tiến hóa)",
+        "zh-CN": "蒂贝顿（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 233,
+      "name": {
+        "en": "Witch",
+        "de": "Hexe",
+        "vi": "Phù Thủy",
+        "zh-CN": "女巫"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 234,
+      "name": {
+        "en": "Witch (evolved)",
+        "de": "Hexe (Entwickelt)",
+        "vi": "Phù Thủy (Tiến hóa)",
+        "zh-CN": "女巫（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 235,
+      "name": {
+        "en": "Skull",
+        "de": "Schädel",
+        "vi": "Đầu Lâu",
+        "zh-CN": "骷髅"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 236,
+      "name": {
+        "en": "Skull (evolved)",
+        "de": "Schädel (Entwickelt)",
+        "vi": "Đầu Lâu (Tiến hóa)",
+        "zh-CN": "骷髅（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 237,
+      "name": {
+        "en": "Pumpy",
+        "de": "Pumpy",
+        "vi": "Pumpy",
+        "zh-CN": "南瓜仔"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 238,
+      "name": {
+        "en": "Pumpy (evolved)",
+        "de": "Pumpy (Entwickelt)",
+        "vi": "Pumpy (Tiến hóa)",
+        "zh-CN": "南瓜仔（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 239,
+      "name": {
+        "en": "Muun Energy Converter",
+        "de": "Muun-Energiewandler",
+        "vi": "Bộ Chuyển Đổi Năng Lượng Muun",
+        "zh-CN": "萌宠能量转换器"
+      },
+      "width": 1,
+      "height": 1,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 240,
+      "name": {
+        "en": "Wizardry Stone",
+        "de": "Zauberstein",
+        "vi": "Đá Ma Pháp",
+        "zh-CN": "魔力石"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 241,
+      "name": {
+        "en": "Savath",
+        "de": "Savath",
+        "vi": "Savath",
+        "zh-CN": "萨瓦斯"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 242,
+      "name": {
+        "en": "Savath (Evolved)",
+        "de": "Savath (Entwickelt)",
+        "vi": "Savath (Tiến hóa)",
+        "zh-CN": "萨瓦斯（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 243,
+      "name": {
+        "en": "Lycan",
+        "de": "Lykan",
+        "vi": "Người Sói Lycan",
+        "zh-CN": "狼人"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 244,
+      "name": {
+        "en": "Lycan (Evolved)",
+        "de": "Lykan (Entwickelt)",
+        "vi": "Người Sói Lycan (Tiến hóa)",
+        "zh-CN": "狼人（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 245,
+      "name": {
+        "en": "Torby",
+        "de": "Torby",
+        "vi": "Torby",
+        "zh-CN": "托比"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 246,
+      "name": {
+        "en": "Torby (Evolved)",
+        "de": "Torby (Entwickelt)",
+        "vi": "Torby (Tiến hóa)",
+        "zh-CN": "托比（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 252,
+      "name": {
+        "en": "Seiren",
+        "de": "Sirene",
+        "vi": "Mỹ Nhân Ngư Seiren",
+        "zh-CN": "塞壬"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 253,
+      "name": {
+        "en": "Seiren (Evolved)",
+        "de": "Sirene (Entwickelt)",
+        "vi": "Mỹ Nhân Ngư Seiren (Tiến hóa)",
+        "zh-CN": "塞壬（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 254,
+      "name": {
+        "en": "Behemoth",
+        "de": "Behemoth",
+        "vi": "Behemoth",
+        "zh-CN": "巨兽"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 255,
+      "name": {
+        "en": "Behemoth (Evolved)",
+        "de": "Behemoth (Entwickelt)",
+        "vi": "Behemoth (Tiến hóa)",
+        "zh-CN": "巨兽（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 256,
+      "name": {
+        "en": "Loggle",
+        "de": "Loggle",
+        "vi": "Loggle",
+        "zh-CN": "洛格尔"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 257,
+      "name": {
+        "en": "Loggle (Evolved)",
+        "de": "Loggle (Entwickelt)",
+        "vi": "Loggle (Tiến hóa)",
+        "zh-CN": "洛格尔（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 258,
+      "name": {
+        "en": "Mino",
+        "de": "Mino",
+        "vi": "Mino",
+        "zh-CN": "米诺"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 259,
+      "name": {
+        "en": "Mino (Evolved)",
+        "de": "Mino (Entwickelt)",
+        "vi": "Mino (Tiến hóa)",
+        "zh-CN": "米诺（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 260,
+      "name": {
+        "en": "Hound",
+        "de": "Jagdhund",
+        "vi": "Chó Săn",
+        "zh-CN": "猎犬"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 261,
+      "name": {
+        "en": "Hound (Evolved)",
+        "de": "Jagdhund (Entwickelt)",
+        "vi": "Chó Săn (Tiến hóa)",
+        "zh-CN": "猎犬（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 262,
+      "name": {
+        "en": "Trive",
+        "de": "Trive",
+        "vi": "Trive",
+        "zh-CN": "特莱夫"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 263,
+      "name": {
+        "en": "Trive (Evolved)",
+        "de": "Trive (Entwickelt)",
+        "vi": "Trive (Tiến hóa)",
+        "zh-CN": "特莱夫（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 264,
+      "name": {
+        "en": "Vogan",
+        "de": "Vogan",
+        "vi": "Vogan",
+        "zh-CN": "沃甘"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 265,
+      "name": {
+        "en": "Vogan (Evolved)",
+        "de": "Vogan (Entwickelt)",
+        "vi": "Vogan (Tiến hóa)",
+        "zh-CN": "沃甘（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 266,
+      "name": {
+        "en": "Cyclop",
+        "de": "Zyklop",
+        "vi": "Khổng Lồ Một Mắt",
+        "zh-CN": "独眼巨人"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 267,
+      "name": {
+        "en": "Cyclop (Evolved)",
+        "de": "Zyklop (Entwickelt)",
+        "vi": "Khổng Lồ Một Mắt (Tiến hóa)",
+        "zh-CN": "独眼巨人（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 268,
+      "name": {
+        "en": "Dark Transformation Ring",
+        "de": "Dunkler Verwandlungsring",
+        "vi": "Nhẫn Biến Hình Bóng Tối",
+        "zh-CN": "暗黑变身戒指"
+      },
+      "width": 1,
+      "height": 1,
+      "slot": "ring",
+      "statProfile": "helper",
+      "durability": 255,
+      "droppable": false,
+      "requirements": {
+        "level": 400
+      },
+      "classRequirements": {
+        "darkWizard": 3,
+        "darkKnight": 3,
+        "fairyElf": 3,
+        "magicGladiator": 3,
+        "darkLord": 3,
+        "summoner": 3,
+        "rageFighter": 3
+      }
+    },
+    {
+      "number": 270,
+      "name": {
+        "en": "Bonf",
+        "de": "Bonf",
+        "vi": "Bonf",
+        "zh-CN": "邦夫"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 271,
+      "name": {
+        "en": "Bonf (Evolved)",
+        "de": "Bonf (Entwickelt)",
+        "vi": "Bonf (Tiến hóa)",
+        "zh-CN": "邦夫（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 272,
+      "name": {
+        "en": "Hawk",
+        "de": "Falke",
+        "vi": "Diều Hâu",
+        "zh-CN": "猎鹰"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 273,
+      "name": {
+        "en": "Hawk (Evolved)",
+        "de": "Falke (Entwickelt)",
+        "vi": "Diều Hâu (Tiến hóa)",
+        "zh-CN": "猎鹰（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 274,
+      "name": {
+        "en": "Muty",
+        "de": "Muty",
+        "vi": "Muty",
+        "zh-CN": "穆蒂"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 275,
+      "name": {
+        "en": "Muty (Evolved)",
+        "de": "Muty (Entwickelt)",
+        "vi": "Muty (Tiến hóa)",
+        "zh-CN": "穆蒂（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 276,
+      "name": {
+        "en": "Conqueror's Badge",
+        "de": "Abzeichen des Eroberers",
+        "vi": "Huy Hiệu Kẻ Chinh Phục",
+        "zh-CN": "征服者徽章"
+      },
+      "width": 3,
+      "height": 3,
+      "droppable": false,
+      "sellable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 277,
+      "name": {
+        "en": "Badge of Hardships",
+        "de": "Abzeichen der Mühen",
+        "vi": "Huy Hiệu Gian Khổ",
+        "zh-CN": "磨难徽章"
+      },
+      "width": 3,
+      "height": 3,
+      "droppable": false,
+      "sellable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 278,
+      "name": {
+        "en": "Mantis",
+        "de": "Gottesanbeterin",
+        "vi": "Bọ Ngựa",
+        "zh-CN": "螳螂"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 279,
+      "name": {
+        "en": "Mantis (Evolved)",
+        "de": "Gottesanbeterin (Entwickelt)",
+        "vi": "Bọ Ngựa (Tiến hóa)",
+        "zh-CN": "螳螂（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 280,
+      "name": {
+        "en": "Scolpy",
+        "de": "Skorpy",
+        "vi": "Bọ Cạp",
+        "zh-CN": "蝎子"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 281,
+      "name": {
+        "en": "Scolpy (Evolved)",
+        "de": "Skorpy (Entwickelt)",
+        "vi": "Bọ Cạp (Tiến hóa)",
+        "zh-CN": "蝎子（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 282,
+      "name": {
+        "en": "Chafer",
+        "de": "Käfer",
+        "vi": "Bọ Hung",
+        "zh-CN": "圣甲虫"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 283,
+      "name": {
+        "en": "Chafer (Evolved)",
+        "de": "Käfer (Entwickelt)",
+        "vi": "Bọ Hung (Tiến hóa)",
+        "zh-CN": "圣甲虫（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 290,
+      "name": {
+        "en": "Cosplay Girl",
+        "de": "Cosplay-Mädchen",
+        "vi": "Cô Gái Cosplay",
+        "zh-CN": "角色扮演少女"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 291,
+      "name": {
+        "en": "Cosplay Girl (Evolved)",
+        "de": "Cosplay-Mädchen (Entwickelt)",
+        "vi": "Cô Gái Cosplay (Tiến hóa)",
+        "zh-CN": "角色扮演少女（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 292,
+      "name": {
+        "en": "Cheer Girl",
+        "de": "Cheer-Mädchen",
+        "vi": "Cô Gái Cổ Vũ",
+        "zh-CN": "啦啦队少女"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 293,
+      "name": {
+        "en": "Cheer Girl (Evolved)",
+        "de": "Cheer-Mädchen (Entwickelt)",
+        "vi": "Cô Gái Cổ Vũ (Tiến hóa)",
+        "zh-CN": "啦啦队少女（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 294,
+      "name": {
+        "en": "Sporty Girl",
+        "de": "Sport-Mädchen",
+        "vi": "Cô Gái Thể Thao",
+        "zh-CN": "运动少女"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 295,
+      "name": {
+        "en": "Sporty Girl (Evolved)",
+        "de": "Sport-Mädchen (Entwickelt)",
+        "vi": "Cô Gái Thể Thao (Tiến hóa)",
+        "zh-CN": "运动少女（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 296,
+      "name": {
+        "en": "Baal",
+        "de": "Baal",
+        "vi": "Baal",
+        "zh-CN": "巴尔"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 297,
+      "name": {
+        "en": "Baal (Evolved)",
+        "de": "Baal (Entwickelt)",
+        "vi": "Baal (Tiến hóa)",
+        "zh-CN": "巴尔（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 298,
+      "name": {
+        "en": "Gaap",
+        "de": "Gaap",
+        "vi": "Gaap",
+        "zh-CN": "加普"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 299,
+      "name": {
+        "en": "Gaap (Evolved)",
+        "de": "Gaap (Entwickelt)",
+        "vi": "Gaap (Tiến hóa)",
+        "zh-CN": "加普（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 300,
+      "name": {
+        "en": "Taaf",
+        "de": "Taaf",
+        "vi": "Taaf",
+        "zh-CN": "塔夫"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 301,
+      "name": {
+        "en": "Taaf (Evolved)",
+        "de": "Taaf (Entwickelt)",
+        "vi": "Taaf (Tiến hóa)",
+        "zh-CN": "塔夫（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 302,
+      "name": {
+        "en": "Frozen",
+        "de": "Gefroren",
+        "vi": "Băng Giá",
+        "zh-CN": "冰霜"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 303,
+      "name": {
+        "en": "Frozen(Evolved)",
+        "de": "Gefroren (Entwickelt)",
+        "vi": "Băng Giá (Tiến hóa)",
+        "zh-CN": "冰霜（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 304,
+      "name": {
+        "en": "Loor",
+        "de": "Loor",
+        "vi": "Loor",
+        "zh-CN": "卢尔"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 305,
+      "name": {
+        "en": "Loor(Evolved)",
+        "de": "Loor (Entwickelt)",
+        "vi": "Loor (Tiến hóa)",
+        "zh-CN": "卢尔（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 306,
+      "name": {
+        "en": "Purssil",
+        "de": "Purssil",
+        "vi": "Purssil",
+        "zh-CN": "普西尔"
+      },
+      "width": 1,
+      "height": 1,
+      "statProfile": "helper",
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "requirements": {
+        "level": 1
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 307,
+      "name": {
+        "en": "Purssil(Evolved)",
+        "de": "Purssil (Entwickelt)",
+        "vi": "Purssil (Tiến hóa)",
+        "zh-CN": "普西尔（进化）"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 350,
+      "name": {
+        "en": "Roomy Egg",
+        "de": "Geräumiges Ei",
+        "vi": "Trứng Rộng Rãi",
+        "zh-CN": "宽敞魔蛋"
+      },
+      "width": 1,
+      "height": 1,
+      "durability": 255,
+      "tradable": false,
+      "droppable": false,
+      "storable": false,
+      "sellable": false,
       "classRequirements": {
         "darkWizard": 1,
         "darkKnight": 1,

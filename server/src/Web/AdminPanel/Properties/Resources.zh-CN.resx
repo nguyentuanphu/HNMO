@@ -3025,6 +3025,21 @@
   <data name="SeasonsRestartSent" xml:space="preserve">
     <value>已发送重启请求，请在几秒后刷新此页面。</value>
   </data>
+  <data name="ItemDefinitions_SeasonNineNotice" xml:space="preserve">
+    <value>第 9 赛季模式已启用：网页客户端将自动应用 210 项第 9 赛季共享物品覆盖及第 9 赛季物品目录。</value>
+  </data>
+  <data name="PageHelpTextS9Events" xml:space="preserve">
+    <value>配置第 9 赛季活动（阿卡伦守护者、阿卡战争、生存赤色要塞、苦痛广场、入侵管理器）以及乌鲁克山首领护卫波次（669-729）。</value>
+  </data>
+  <data name="S9EventsTitle" xml:space="preserve">
+    <value>第 9 赛季活动与乌鲁克山</value>
+  </data>
+  <data name="PageHelpTextS9Systems" xml:space="preserve">
+    <value>配置第 9 赛季进阶系统：330 级大师树上限、76 种萌宠、五芒星元素克制与艾尔特概率、技能 618-621 以及第 9 赛季小地图。</value>
+  </data>
+  <data name="S9SystemsTitle" xml:space="preserve">
+    <value>第 9 赛季系统 (萌宠、五芒星、330 级大师)</value>
+  </data>
   <data name="JewelBankReceiptsHeading" xml:space="preserve">
     <value>宝石银行近期数据库回执（悉尼时间）</value>
   </data>

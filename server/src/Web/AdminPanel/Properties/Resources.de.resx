@@ -2850,6 +2850,21 @@
   <data name="SeasonsRestartSent" xml:space="preserve">
     <value>Neustart angefordert. Lade diese Seite in ein paar Sekunden neu.</value>
   </data>
+  <data name="ItemDefinitions_SeasonNineNotice" xml:space="preserve">
+    <value>Season-9-Modus aktiv: Der Web-Client wendet automatisch die 210 gemeinsamen Season-9-Gegenstandsüberschreibungen und den Season-9-Katalog an.</value>
+  </data>
+  <data name="PageHelpTextS9Events" xml:space="preserve">
+    <value>Konfigurieren Sie die Season-9-Events (Acheron Guardian, Arca Battle, Chaos Castle Survival, Tormented Square, Invasion Manager) sowie die Boss-Wellen am Berg Uruk (669-729).</value>
+  </data>
+  <data name="S9EventsTitle" xml:space="preserve">
+    <value>Season-9-Events &amp; Berg Uruk</value>
+  </data>
+  <data name="PageHelpTextS9Systems" xml:space="preserve">
+    <value>Konfigurieren Sie die Season-9-Systeme: Master-Limit 330, Muun-Begleiter (76 Gefährten), Pentagramm-Elementarsystem, Errtel-Raten, Fertigkeiten 618-621 und Season-9-Minimap.</value>
+  </data>
+  <data name="S9SystemsTitle" xml:space="preserve">
+    <value>Season-9-Systeme (Muun, Pentagramm, Master 330)</value>
+  </data>
   <data name="JewelBankReceiptsHeading" xml:space="preserve">
     <value>Aktuelle Datenbank-Belege der Juwelenbank (Sydney-Zeit)</value>
   </data>

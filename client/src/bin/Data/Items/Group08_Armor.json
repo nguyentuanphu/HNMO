@@ -1397,6 +1397,132 @@
       "number": 53
     },
     {
+      "number": 54,
+      "name": {
+        "en": "Lazy Wind Armor",
+        "de": "Träger Wind-Rüstung",
+        "vi": "Áo giáp Gió Lười",
+        "zh-CN": "慵懒之风铠甲"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 3,
+      "slot": "armor",
+      "statProfile": "armor",
+      "level": 148,
+      "durability": 90,
+      "defense": 79,
+      "requirements": {
+        "level": 400,
+        "strength": 67,
+        "dexterity": 151
+      },
+      "classRequirements": {
+        "darkKnight": 3
+      }
+    },
+    {
+      "number": 55,
+      "name": {
+        "en": "Dark Devil Armor",
+        "de": "Dunkelteufel-Rüstung",
+        "vi": "Áo giáp Ác Quỷ Bóng Tối",
+        "zh-CN": "暗黑恶魔铠甲"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 3,
+      "slot": "armor",
+      "statProfile": "armor",
+      "level": 148,
+      "durability": 90,
+      "defense": 59,
+      "requirements": {
+        "level": 400,
+        "strength": 45,
+        "dexterity": 13,
+        "energy": 171
+      },
+      "classRequirements": {
+        "darkWizard": 3
+      }
+    },
+    {
+      "number": 56,
+      "name": {
+        "en": "Sticky Armor",
+        "de": "Klebrige-Rüstung",
+        "vi": "Áo giáp Bám Dính",
+        "zh-CN": "粘性铠甲"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "armor",
+      "statProfile": "armor",
+      "level": 148,
+      "durability": 90,
+      "defense": 69,
+      "requirements": {
+        "level": 400,
+        "strength": 48,
+        "dexterity": 180
+      },
+      "classRequirements": {
+        "fairyElf": 3
+      }
+    },
+    {
+      "number": 57,
+      "name": {
+        "en": "Hell Night Armor",
+        "de": "Höllennacht-Rüstung",
+        "vi": "Áo giáp Đêm Địa Ngục",
+        "zh-CN": "地狱之夜铠甲"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 3,
+      "slot": "armor",
+      "statProfile": "armor",
+      "level": 148,
+      "durability": 90,
+      "defense": 89,
+      "requirements": {
+        "level": 400,
+        "strength": 194,
+        "dexterity": 52
+      },
+      "classRequirements": {
+        "magicGladiator": 3
+      }
+    },
+    {
+      "number": 58,
+      "name": {
+        "en": "Ambition Armor",
+        "de": "Ehrgeiz-Rüstung",
+        "vi": "Áo giáp Tham Vọng",
+        "zh-CN": "野心铠甲"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 3,
+      "slot": "armor",
+      "statProfile": "armor",
+      "level": 148,
+      "durability": 90,
+      "defense": 67,
+      "requirements": {
+        "level": 400,
+        "strength": 112,
+        "dexterity": 22
+      },
+      "classRequirements": {
+        "darkLord": 3
+      }
+    },
+    {
       "number": 59,
       "name": {
         "en": "Sacred Fire Armor",
@@ -1851,6 +1977,222 @@
         "level": 380,
         "strength": 97,
         "vitality": 85
+      },
+      "classRequirements": {
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 74,
+      "name": {
+        "en": "Stormwing Armor",
+        "de": "Sturmflügel-Rüstung",
+        "vi": "Áo giáp Cánh Bão",
+        "zh-CN": "风暴之翼铠甲"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 3,
+      "slot": "armor",
+      "statProfile": "armor",
+      "level": 148,
+      "durability": 90,
+      "defense": 90,
+      "requirements": {
+        "level": 400,
+        "strength": 200,
+        "dexterity": 33
+      },
+      "classRequirements": {
+        "darkKnight": 3
+      }
+    },
+    {
+      "number": 75,
+      "name": {
+        "en": "Light Lord Armor",
+        "de": "Lichtlord-Rüstung",
+        "vi": "Áo giáp Chúa Tể Ánh Sáng",
+        "zh-CN": "光之领主铠甲"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "armor",
+      "statProfile": "armor",
+      "level": 148,
+      "durability": 90,
+      "defense": 61,
+      "requirements": {
+        "level": 400,
+        "strength": 14,
+        "dexterity": 31,
+        "energy": 127
+      },
+      "classRequirements": {
+        "fairyElf": 3
+      }
+    },
+    {
+      "number": 76,
+      "name": {
+        "en": "Magic Knight Armor",
+        "de": "Magieritter-Rüstung",
+        "vi": "Áo giáp Hiệp Sĩ Phép Thuật",
+        "zh-CN": "魔剑士铠甲"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 3,
+      "slot": "armor",
+      "statProfile": "armor",
+      "level": 148,
+      "durability": 90,
+      "defense": 75,
+      "requirements": {
+        "level": 400,
+        "strength": 48,
+        "dexterity": 17,
+        "energy": 142
+      },
+      "classRequirements": {
+        "magicGladiator": 3
+      }
+    },
+    {
+      "number": 78,
+      "name": {
+        "en": "Dragon Armor-J"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 3,
+      "slot": "armor",
+      "statProfile": "armor",
+      "level": 59,
+      "durability": 68,
+      "defense": 39,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 120,
+        "dexterity": 30
+      },
+      "classRequirements": {
+        "darkKnight": 1,
+        "magicGladiator": 1
+      }
+    },
+    {
+      "number": 79,
+      "name": {
+        "en": "Legendary Armor-J"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "armor",
+      "statProfile": "armor",
+      "level": 56,
+      "durability": 42,
+      "defense": 24,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 40
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "magicGladiator": 1
+      }
+    },
+    {
+      "number": 80,
+      "name": {
+        "en": "Guardian Armor-J"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "armor",
+      "statProfile": "armor",
+      "level": 57,
+      "durability": 45,
+      "defense": 31,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 40,
+        "dexterity": 80
+      },
+      "classRequirements": {
+        "fairyElf": 1
+      }
+    },
+    {
+      "number": 81,
+      "name": {
+        "en": "Light Plate Armor-J"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 3,
+      "slot": "armor",
+      "statProfile": "armor",
+      "level": 62,
+      "durability": 42,
+      "defense": 27,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 70,
+        "dexterity": 20
+      },
+      "classRequirements": {
+        "darkLord": 1
+      }
+    },
+    {
+      "number": 82,
+      "name": {
+        "en": "Red Wing Armor-J"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "armor",
+      "statProfile": "armor",
+      "level": 56,
+      "durability": 42,
+      "defense": 30,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 35,
+        "dexterity": 8
+      },
+      "classRequirements": {
+        "summoner": 1
+      }
+    },
+    {
+      "number": 83,
+      "name": {
+        "en": "Sacred Fire Armor-J"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 3,
+      "slot": "armor",
+      "statProfile": "armor",
+      "level": 66,
+      "durability": 52,
+      "defense": 45,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 85,
+        "vitality": 75
       },
       "classRequirements": {
         "rageFighter": 1

@@ -38,8 +38,8 @@ internal class Atlans : Version075.Maps.Atlans
         }
 
         // The spots of the Season 6/9 server suites which the older version doesn't have.
-        yield return this.CreateMonsterSpawn(438, this.NpcDictionary[51], 251, 051); // Great Bahamut
-        yield return this.CreateMonsterSpawn(439, this.NpcDictionary[51], 007, 052); // Great Bahamut
+        yield return this.CreateMonsterSpawn(438, this.NpcDictionary[51], 243, 051); // Great Bahamut
+        yield return this.CreateMonsterSpawn(439, this.NpcDictionary[51], 014, 051); // Great Bahamut
     }
 
     /// <inheritdoc />

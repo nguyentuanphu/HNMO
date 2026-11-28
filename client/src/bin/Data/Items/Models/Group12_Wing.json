@@ -1540,6 +1540,202 @@
       "glow": {
         "level": 0
       }
+    },
+    {
+      "number": 144,
+      "model": "s9Attgempiece"
+    },
+    {
+      "number": 145,
+      "file": "Data/s9/Item/attjewel.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 146,
+      "model": "s9Elixirpiece"
+    },
+    {
+      "number": 147,
+      "file": "Data/s9/Item/Elixir.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 148,
+      "model": "s9Attgempiece"
+    },
+    {
+      "number": 149,
+      "model": "s9Elixirpiece"
+    },
+    {
+      "number": 150,
+      "file": "Data/s9/Item/gemmix.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 151,
+      "file": "Data/s9/Item/SpiritDust.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 200,
+      "model": "s9Penta02"
+    },
+    {
+      "number": 201,
+      "model": "s9Penta01"
+    },
+    {
+      "number": 202,
+      "model": "s9Pentaexshi"
+    },
+    {
+      "number": 203,
+      "model": "s9Pentaexshi"
+    },
+    {
+      "number": 204,
+      "model": "s9Pentaliquid"
+    },
+    {
+      "number": 205,
+      "model": "s9Pentaliquid"
+    },
+    {
+      "number": 206,
+      "model": "s9Pentaexdan"
+    },
+    {
+      "number": 207,
+      "model": "s9Pentaexdan"
+    },
+    {
+      "number": 208,
+      "model": "s9Pentaexdan"
+    },
+    {
+      "number": 209,
+      "model": "s9Penta01"
+    },
+    {
+      "number": 210,
+      "model": "s9Pentaexshi"
+    },
+    {
+      "number": 211,
+      "model": "s9Penta02"
+    },
+    {
+      "number": 212,
+      "model": "s9Penta01"
+    },
+    {
+      "number": 213,
+      "model": "s9Pentaexdan"
+    },
+    {
+      "number": 214,
+      "model": "s9Penta01"
+    },
+    {
+      "number": 221,
+      "file": "Data/s9/Item/RageErthel.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 231,
+      "file": "Data/s9/Item/blessing.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 241,
+      "file": "Data/s9/Item/NobleErthel.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 251,
+      "file": "Data/s9/Item/holyE.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 261,
+      "file": "Data/s9/Item/ExtremeErthel.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 262,
+      "file": "Data/s9/Item/cape_of_death.bmd",
+      "textureFolders": ["s9/Item"],
+      "inventory": {
+        "scale": 0.002
+      },
+      "ground": {
+        "rotation": [270, 0, 45]
+      }
+    },
+    {
+      "number": 263,
+      "file": "Data/s9/Item/chaoswing.bmd",
+      "textureFolders": ["s9/Item"],
+      "inventory": {
+        "scale": 0.002
+      },
+      "ground": {
+        "rotation": [270, 0, 45]
+      }
+    },
+    {
+      "number": 264,
+      "file": "Data/s9/Item/magic_wing.bmd",
+      "textureFolders": ["s9/Item"],
+      "inventory": {
+        "scale": 0.002
+      },
+      "ground": {
+        "rotation": [270, 0, 45]
+      }
+    },
+    {
+      "number": 265,
+      "file": "Data/s9/Item/flamewing.bmd",
+      "textureFolders": ["s9/Item"],
+      "inventory": {
+        "scale": 0.002
+      },
+      "ground": {
+        "rotation": [270, 0, 45]
+      }
+    },
+    {
+      "number": 266,
+      "model": "s9Conquerorwing",
+      "inventory": {
+        "scale": 0.002
+      },
+      "ground": {
+        "rotation": [270, 0, 45]
+      }
+    },
+    {
+      "number": 267,
+      "file": "Data/s9/Item/angel_devil_wing.bmd",
+      "textureFolders": ["s9/Item"],
+      "inventory": {
+        "scale": 0.002
+      },
+      "ground": {
+        "rotation": [270, 0, 45]
+      }
+    },
+    {
+      "number": 268,
+      "model": "s9Conquerorwing",
+      "inventory": {
+        "scale": 0.002
+      },
+      "ground": {
+        "rotation": [270, 0, 45]
+      }
     }
   ]
 }

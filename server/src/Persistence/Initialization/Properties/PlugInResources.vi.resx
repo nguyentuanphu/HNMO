@@ -900,6 +900,10 @@
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 10 bản đồ Season 9, tệp địa hình, cổng dịch chuyển (417-461, 474-482) và điểm xuất hiện quái/NPC Season 9 khi chạy Season 9.</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: cửa hàng thử vận may của Moss</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>Thêm 5 phiếu thử vận may của Moss (13-71..75) giá 2.000.000 Zen và trang bị cửa hàng cho Thương nhân Moss (492) nếu đang trống.</value></data>
+  <data name="SeasonNineExtendedSharedItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: quy tắc vật phẩm dùng chung mở rộng</value></data>
+  <data name="SeasonNineExtendedSharedItemsUpdatePlugIn_Description" xml:space="preserve"><value>Áp dụng giá trị Season 9 cho cấp rơi của Sphere (4) (132) và độ bền/chồng của Reset Fruit (10) khi chạy Season 9; giữ nguyên giá trị đã tùy chỉnh.</value></data>
+  <data name="SeasonNineSystemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Master 330 &amp; kỹ năng 618-621</value></data>
+  <data name="SeasonNineSystemsUpdatePlugIn_Description" xml:space="preserve"><value>Nâng giới hạn Master từ 200 lên 330 và thêm 4 kỹ năng Season 9 (618-621) khi chạy ở chế độ Season 9.</value></data>
   <data name="S6EventsMonstersAndItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: quái sự kiện, mỏ đào và vật phẩm bài</value></data>
   <data name="S6EventsMonstersAndItemsUpdatePlugIn_Description" xml:space="preserve"><value>Bổ sung quái Loren Deep (300-303), Yêu tinh Bị nguyền (466), mỏ khoáng sản (605-607), Cuốc Pandora (0-41) và bài Rummy (14-215..216) nếu chưa có.</value></data>
   <data name="MasterPassives314To324UpdatePlugIn_Name" xml:space="preserve"><value>Season 6: kỹ năng master bị động bậc 6-9</value></data>

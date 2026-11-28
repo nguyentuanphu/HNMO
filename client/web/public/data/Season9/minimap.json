@@ -1,0 +1,1814 @@
+{
+  "79": [
+    {
+      "id": 2,
+      "kind": 4,
+      "npcIndex": 546,
+      "x": 131,
+      "y": 109,
+      "syncType": 1,
+      "name": "Jeweller Raul",
+      "battleCore": false
+    },
+    {
+      "id": 3,
+      "kind": 4,
+      "npcIndex": 545,
+      "x": 113,
+      "y": 116,
+      "syncType": 1,
+      "name": "Christine the Merchant",
+      "battleCore": false
+    },
+    {
+      "id": 4,
+      "kind": 2,
+      "npcIndex": 547,
+      "x": 123,
+      "y": 140,
+      "syncType": 1,
+      "name": "Market Union Member Julia",
+      "battleCore": false
+    },
+    {
+      "id": 5,
+      "kind": 2,
+      "npcIndex": 651,
+      "x": 108,
+      "y": 134,
+      "syncType": 1,
+      "name": "Private Store Bulletin Board",
+      "battleCore": false
+    },
+    {
+      "id": 6,
+      "kind": 2,
+      "npcIndex": 651,
+      "x": 138,
+      "y": 143,
+      "syncType": 1,
+      "name": "Private Store Bulletin Board",
+      "battleCore": false
+    },
+    {
+      "id": 7,
+      "kind": 2,
+      "npcIndex": 643,
+      "x": 85,
+      "y": 136,
+      "syncType": 1,
+      "name": "Mait",
+      "battleCore": false
+    },
+    {
+      "id": 9,
+      "kind": 2,
+      "npcIndex": 385,
+      "x": 94,
+      "y": 137,
+      "syncType": 1,
+      "name": "Mirage",
+      "battleCore": false
+    },
+    {
+      "id": 10,
+      "kind": 2,
+      "npcIndex": 669,
+      "x": 113,
+      "y": 132,
+      "syncType": 1,
+      "name": "Ellin",
+      "battleCore": false
+    },
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 643,
+      "x": 113,
+      "y": 127,
+      "syncType": 1,
+      "name": "Mait",
+      "battleCore": true
+    },
+    {
+      "id": 1,
+      "kind": 4,
+      "npcIndex": 683,
+      "x": 128,
+      "y": 121,
+      "syncType": 1,
+      "name": "Marce",
+      "battleCore": true
+    },
+    {
+      "id": 2,
+      "kind": 4,
+      "npcIndex": 684,
+      "x": 128,
+      "y": 133,
+      "syncType": 1,
+      "name": "Silvia",
+      "battleCore": true
+    },
+    {
+      "id": 3,
+      "kind": 4,
+      "npcIndex": 685,
+      "x": 139,
+      "y": 140,
+      "syncType": 1,
+      "name": "Izabel",
+      "battleCore": true
+    },
+    {
+      "id": 4,
+      "kind": 3,
+      "npcIndex": 686,
+      "x": 134,
+      "y": 127,
+      "syncType": 1,
+      "name": "Sophia (repair)",
+      "battleCore": true
+    },
+    {
+      "id": 5,
+      "kind": 3,
+      "npcIndex": 687,
+      "x": 116,
+      "y": 115,
+      "syncType": 1,
+      "name": "Bolo (repair)",
+      "battleCore": true
+    },
+    {
+      "id": 6,
+      "kind": 4,
+      "npcIndex": 688,
+      "x": 135,
+      "y": 112,
+      "syncType": 1,
+      "name": "Christine",
+      "battleCore": true
+    }
+  ],
+  "0": [
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 226,
+      "x": 122,
+      "y": 110,
+      "syncType": 1,
+      "name": "Trainer",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 4,
+      "npcIndex": 230,
+      "x": 62,
+      "y": 130,
+      "syncType": 1,
+      "name": "Wandering Merchant Alex",
+      "battleCore": false
+    },
+    {
+      "id": 2,
+      "kind": 4,
+      "npcIndex": 250,
+      "x": 183,
+      "y": 137,
+      "syncType": 1,
+      "name": "Wandering Merchant Herald",
+      "battleCore": false
+    },
+    {
+      "id": 3,
+      "kind": 4,
+      "npcIndex": 253,
+      "x": 127,
+      "y": 86,
+      "syncType": 1,
+      "name": "Potion Girl Amy",
+      "battleCore": false
+    },
+    {
+      "id": 4,
+      "kind": 3,
+      "npcIndex": 251,
+      "x": 116,
+      "y": 141,
+      "syncType": 1,
+      "name": "Hanzo the Blacksmith",
+      "battleCore": false
+    },
+    {
+      "id": 5,
+      "kind": 4,
+      "npcIndex": 255,
+      "x": 123,
+      "y": 135,
+      "syncType": 1,
+      "name": "Lumen the Barmaid",
+      "battleCore": false
+    },
+    {
+      "id": 6,
+      "kind": 4,
+      "npcIndex": 254,
+      "x": 118,
+      "y": 113,
+      "syncType": 1,
+      "name": "Pasi the Mage",
+      "battleCore": false
+    },
+    {
+      "id": 7,
+      "kind": 2,
+      "npcIndex": 547,
+      "x": 139,
+      "y": 138,
+      "syncType": 1,
+      "name": "Market Union Member Julia",
+      "battleCore": false
+    },
+    {
+      "id": 8,
+      "kind": 5,
+      "npcIndex": 240,
+      "x": 146,
+      "y": 110,
+      "syncType": 1,
+      "name": "Safety Guardian",
+      "battleCore": false
+    },
+    {
+      "id": 9,
+      "kind": 1,
+      "npcIndex": 257,
+      "x": 96,
+      "y": 129,
+      "syncType": 1,
+      "name": "Shadow Phantom Soldier",
+      "battleCore": false
+    },
+    {
+      "id": 10,
+      "kind": 1,
+      "npcIndex": 257,
+      "x": 132,
+      "y": 165,
+      "syncType": 1,
+      "name": "Shadow Phantom Soldier",
+      "battleCore": false
+    },
+    {
+      "id": 11,
+      "kind": 1,
+      "npcIndex": 257,
+      "x": 132,
+      "y": 90,
+      "syncType": 1,
+      "name": "Shadow Phantom Soldier",
+      "battleCore": false
+    },
+    {
+      "id": 12,
+      "kind": 1,
+      "npcIndex": 257,
+      "x": 170,
+      "y": 129,
+      "syncType": 1,
+      "name": "Shadow Phantom Soldier",
+      "battleCore": false
+    },
+    {
+      "id": 13,
+      "kind": 2,
+      "npcIndex": 543,
+      "x": 144,
+      "y": 127,
+      "syncType": 1,
+      "name": "Gens Duprian Steward",
+      "battleCore": false
+    },
+    {
+      "id": 14,
+      "kind": 2,
+      "npcIndex": 375,
+      "x": 130,
+      "y": 161,
+      "syncType": 1,
+      "name": "Chaos Card Master",
+      "battleCore": false
+    },
+    {
+      "id": 15,
+      "kind": 5,
+      "npcIndex": 240,
+      "x": 147,
+      "y": 145,
+      "syncType": 1,
+      "name": "Safety Guardian",
+      "battleCore": false
+    },
+    {
+      "id": 16,
+      "kind": 2,
+      "npcIndex": 584,
+      "x": 114,
+      "y": 132,
+      "syncType": 1,
+      "name": "Sir Lesnar",
+      "battleCore": false
+    },
+    {
+      "id": 17,
+      "kind": 2,
+      "npcIndex": 568,
+      "x": 0,
+      "y": 0,
+      "syncType": 2,
+      "name": "Wandering Merchant Zyro",
+      "battleCore": false
+    },
+    {
+      "id": 18,
+      "kind": 2,
+      "npcIndex": 229,
+      "x": 137,
+      "y": 87,
+      "syncType": 2,
+      "name": "Marlon",
+      "battleCore": false
+    },
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 121,
+      "y": 232,
+      "syncType": 1,
+      "name": "Dungeon Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 1,
+      "y": 38,
+      "syncType": 1,
+      "name": "Devias Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 2,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 216,
+      "y": 248,
+      "syncType": 1,
+      "name": "Noria Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 3,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 242,
+      "y": 15,
+      "syncType": 1,
+      "name": "Valley of Loren Entrance",
+      "battleCore": false
+    }
+  ],
+  "2": [
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 233,
+      "x": 209,
+      "y": 30,
+      "syncType": 1,
+      "name": "Messenger of Archangel",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 2,
+      "npcIndex": 235,
+      "x": 219,
+      "y": 9,
+      "syncType": 1,
+      "name": "Messenger of Archangel",
+      "battleCore": false
+    },
+    {
+      "id": 2,
+      "kind": 4,
+      "npcIndex": 244,
+      "x": 226,
+      "y": 25,
+      "syncType": 1,
+      "name": "Caren the Barmaid",
+      "battleCore": false
+    },
+    {
+      "id": 3,
+      "kind": 2,
+      "npcIndex": 245,
+      "x": 225,
+      "y": 41,
+      "syncType": 1,
+      "name": "Wizard Izabel",
+      "battleCore": false
+    },
+    {
+      "id": 4,
+      "kind": 3,
+      "npcIndex": 246,
+      "x": 186,
+      "y": 47,
+      "syncType": 1,
+      "name": "Weapons Merchant Zienna",
+      "battleCore": false
+    },
+    {
+      "id": 5,
+      "kind": 2,
+      "npcIndex": 241,
+      "x": 215,
+      "y": 45,
+      "syncType": 1,
+      "name": "Royal Guard Captain Lorence",
+      "battleCore": false
+    },
+    {
+      "id": 6,
+      "kind": 5,
+      "npcIndex": 240,
+      "x": 218,
+      "y": 63,
+      "syncType": 1,
+      "name": "Safety Guardian",
+      "battleCore": false
+    },
+    {
+      "id": 7,
+      "kind": 1,
+      "npcIndex": 257,
+      "x": 219,
+      "y": 73,
+      "syncType": 1,
+      "name": "Shadow Phantom Soldier",
+      "battleCore": false
+    },
+    {
+      "id": 8,
+      "kind": 1,
+      "npcIndex": 257,
+      "x": 172,
+      "y": 44,
+      "syncType": 1,
+      "name": "Shadow Phantom Soldier",
+      "battleCore": false
+    },
+    {
+      "id": 9,
+      "kind": 2,
+      "npcIndex": 522,
+      "x": 229,
+      "y": 221,
+      "syncType": 1,
+      "name": "Jerint the Assistant",
+      "battleCore": false
+    },
+    {
+      "id": 10,
+      "kind": 4,
+      "npcIndex": 379,
+      "x": 32,
+      "y": 31,
+      "syncType": 1,
+      "name": "Natasha Firecracker Merchant",
+      "battleCore": false
+    },
+    {
+      "id": 11,
+      "kind": 2,
+      "npcIndex": 566,
+      "x": 204,
+      "y": 61,
+      "syncType": 1,
+      "name": "Mercenary Guild Manager",
+      "battleCore": false
+    },
+    {
+      "id": 12,
+      "kind": 2,
+      "npcIndex": 584,
+      "x": 240,
+      "y": 53,
+      "syncType": 1,
+      "name": "Sir Lesnar",
+      "battleCore": false
+    },
+    {
+      "id": 13,
+      "kind": 2,
+      "npcIndex": 568,
+      "x": 0,
+      "y": 0,
+      "syncType": 2,
+      "name": "Wandering Merchant Zyro",
+      "battleCore": false
+    },
+    {
+      "id": 14,
+      "kind": 2,
+      "npcIndex": 229,
+      "x": 183,
+      "y": 30,
+      "syncType": 2,
+      "name": "Marlon",
+      "battleCore": false
+    },
+    {
+      "id": 15,
+      "kind": 2,
+      "npcIndex": 235,
+      "x": 183,
+      "y": 32,
+      "syncType": 1,
+      "name": "Sebina the Priest",
+      "battleCore": false
+    },
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 244,
+      "y": 34,
+      "syncType": 1,
+      "name": "Lorencia Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 162,
+      "y": 248,
+      "syncType": 1,
+      "name": "Elveland Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 2,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 0,
+      "y": 250,
+      "syncType": 1,
+      "name": "Lost Tower Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 3,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 51,
+      "y": 92,
+      "syncType": 1,
+      "name": "La Cleon Entrance",
+      "battleCore": false
+    }
+  ],
+  "3": [
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 237,
+      "x": 171,
+      "y": 105,
+      "syncType": 1,
+      "name": "Charon",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 4,
+      "npcIndex": 242,
+      "x": 173,
+      "y": 125,
+      "syncType": 1,
+      "name": "Elf Lala",
+      "battleCore": false
+    },
+    {
+      "id": 2,
+      "kind": 3,
+      "npcIndex": 243,
+      "x": 195,
+      "y": 124,
+      "syncType": 1,
+      "name": "Eo the Craftsman",
+      "battleCore": false
+    },
+    {
+      "id": 3,
+      "kind": 5,
+      "npcIndex": 240,
+      "x": 172,
+      "y": 96,
+      "syncType": 1,
+      "name": "Safety Guardian",
+      "battleCore": false
+    },
+    {
+      "id": 4,
+      "kind": 2,
+      "npcIndex": 238,
+      "x": 180,
+      "y": 103,
+      "syncType": 1,
+      "name": "Chaos Goblin",
+      "battleCore": false
+    },
+    {
+      "id": 5,
+      "kind": 1,
+      "npcIndex": 257,
+      "x": 167,
+      "y": 118,
+      "syncType": 1,
+      "name": "Shadow Phantom Soldier",
+      "battleCore": false
+    },
+    {
+      "id": 6,
+      "kind": 1,
+      "npcIndex": 257,
+      "x": 166,
+      "y": 85,
+      "syncType": 1,
+      "name": "Shadow Phantom Soldier",
+      "battleCore": false
+    },
+    {
+      "id": 7,
+      "kind": 1,
+      "npcIndex": 257,
+      "x": 201,
+      "y": 129,
+      "syncType": 1,
+      "name": "Shadow Phantom Soldier",
+      "battleCore": false
+    },
+    {
+      "id": 8,
+      "kind": 2,
+      "npcIndex": 544,
+      "x": 167,
+      "y": 100,
+      "syncType": 1,
+      "name": "Gens Vanert Steward",
+      "battleCore": false
+    },
+    {
+      "id": 9,
+      "kind": 2,
+      "npcIndex": 580,
+      "x": 196,
+      "y": 113,
+      "syncType": 1,
+      "name": "Captain Slough",
+      "battleCore": false
+    },
+    {
+      "id": 10,
+      "kind": 2,
+      "npcIndex": 584,
+      "x": 183,
+      "y": 126,
+      "syncType": 1,
+      "name": "Sir Lesnar",
+      "battleCore": false
+    },
+    {
+      "id": 11,
+      "kind": 2,
+      "npcIndex": 568,
+      "x": 0,
+      "y": 0,
+      "syncType": 2,
+      "name": "Wandering Merchant Zyro",
+      "battleCore": false
+    },
+    {
+      "id": 12,
+      "kind": 2,
+      "npcIndex": 229,
+      "x": 169,
+      "y": 89,
+      "syncType": 2,
+      "name": "Marlon",
+      "battleCore": false
+    },
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 151,
+      "y": 2,
+      "syncType": 1,
+      "name": "Lorencia Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 222,
+      "y": 29,
+      "syncType": 1,
+      "name": "Aida Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 2,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 242,
+      "y": 241,
+      "syncType": 1,
+      "name": "Atlans Entrance",
+      "battleCore": false
+    }
+  ],
+  "33": [
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 369,
+      "x": 78,
+      "y": 13,
+      "syncType": 1,
+      "name": "Osbourne",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 2,
+      "npcIndex": 370,
+      "x": 86,
+      "y": 13,
+      "syncType": 1,
+      "name": "Jerridon",
+      "battleCore": false
+    },
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 72,
+      "y": 10,
+      "syncType": 1,
+      "name": "Noria Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 238,
+      "y": 165,
+      "syncType": 1,
+      "name": "Karutan Entrance",
+      "battleCore": false
+    }
+  ],
+  "34": [
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 406,
+      "x": 228,
+      "y": 48,
+      "syncType": 1,
+      "name": "Apostle Devin",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 2,
+      "npcIndex": 407,
+      "x": 62,
+      "y": 239,
+      "syncType": 1,
+      "name": "Werewolf Quarrel",
+      "battleCore": false
+    },
+    {
+      "id": 2,
+      "kind": 2,
+      "npcIndex": 226,
+      "x": 135,
+      "y": 47,
+      "syncType": 1,
+      "name": "Trainer",
+      "battleCore": false
+    },
+    {
+      "id": 3,
+      "kind": 3,
+      "npcIndex": 248,
+      "x": 99,
+      "y": 40,
+      "syncType": 1,
+      "name": "Wandering Merchant Martin",
+      "battleCore": false
+    },
+    {
+      "id": 4,
+      "kind": 2,
+      "npcIndex": 256,
+      "x": 96,
+      "y": 25,
+      "syncType": 1,
+      "name": "Lahap",
+      "battleCore": false
+    },
+    {
+      "id": 5,
+      "kind": 3,
+      "npcIndex": 251,
+      "x": 145,
+      "y": 14,
+      "syncType": 1,
+      "name": "Hanzo the Blacksmith",
+      "battleCore": false
+    },
+    {
+      "id": 6,
+      "kind": 5,
+      "npcIndex": 240,
+      "x": 113,
+      "y": 56,
+      "syncType": 1,
+      "name": "Safety Guardian",
+      "battleCore": false
+    },
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 238,
+      "y": 42,
+      "syncType": 1,
+      "name": "Valley of Loren Entrance",
+      "battleCore": false
+    }
+  ],
+  "41": [
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 408,
+      "x": 119,
+      "y": 168,
+      "syncType": 1,
+      "name": "Gatekeeper",
+      "battleCore": false
+    }
+  ],
+  "51": [
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 256,
+      "x": 37,
+      "y": 241,
+      "syncType": 1,
+      "name": "Lahap",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 4,
+      "npcIndex": 415,
+      "x": 44,
+      "y": 229,
+      "syncType": 1,
+      "name": "Potion Merchant Silvia",
+      "battleCore": false
+    },
+    {
+      "id": 2,
+      "kind": 3,
+      "npcIndex": 416,
+      "x": 29,
+      "y": 236,
+      "syncType": 1,
+      "name": "Weapons Merchant Rhea",
+      "battleCore": false
+    },
+    {
+      "id": 3,
+      "kind": 4,
+      "npcIndex": 417,
+      "x": 36,
+      "y": 219,
+      "syncType": 1,
+      "name": "Magic Store Marce",
+      "battleCore": false
+    },
+    {
+      "id": 4,
+      "kind": 1,
+      "npcIndex": 257,
+      "x": 43,
+      "y": 191,
+      "syncType": 1,
+      "name": "Shadow Phantom Soldier",
+      "battleCore": false
+    },
+    {
+      "id": 5,
+      "kind": 1,
+      "npcIndex": 257,
+      "x": 57,
+      "y": 232,
+      "syncType": 1,
+      "name": "Shadow Phantom Soldier",
+      "battleCore": false
+    },
+    {
+      "id": 6,
+      "kind": 1,
+      "npcIndex": 257,
+      "x": 73,
+      "y": 220,
+      "syncType": 1,
+      "name": "Shadow Phantom Soldier",
+      "battleCore": false
+    },
+    {
+      "id": 7,
+      "kind": 5,
+      "npcIndex": 240,
+      "x": 50,
+      "y": 229,
+      "syncType": 1,
+      "name": "Safety Guardian",
+      "battleCore": false
+    },
+    {
+      "id": 8,
+      "kind": 2,
+      "npcIndex": 385,
+      "x": 55,
+      "y": 243,
+      "syncType": 1,
+      "name": "Mirage",
+      "battleCore": false
+    },
+    {
+      "id": 9,
+      "kind": 2,
+      "npcIndex": 452,
+      "x": 46,
+      "y": 243,
+      "syncType": 1,
+      "name": "Seed Master",
+      "battleCore": false
+    },
+    {
+      "id": 10,
+      "kind": 2,
+      "npcIndex": 453,
+      "x": 50,
+      "y": 243,
+      "syncType": 1,
+      "name": "Seed Researcher",
+      "battleCore": false
+    },
+    {
+      "id": 11,
+      "kind": 2,
+      "npcIndex": 492,
+      "x": 22,
+      "y": 225,
+      "syncType": 1,
+      "name": "Moss",
+      "battleCore": false
+    },
+    {
+      "id": 12,
+      "kind": 2,
+      "npcIndex": 540,
+      "x": 48,
+      "y": 216,
+      "syncType": 1,
+      "name": "Lugard",
+      "battleCore": false
+    },
+    {
+      "id": 13,
+      "kind": 2,
+      "npcIndex": 568,
+      "x": 55,
+      "y": 199,
+      "syncType": 2,
+      "name": "Wandering Merchant Zyro",
+      "battleCore": false
+    },
+    {
+      "id": 14,
+      "kind": 2,
+      "npcIndex": 579,
+      "x": 20,
+      "y": 214,
+      "syncType": 1,
+      "name": "David",
+      "battleCore": false
+    },
+    {
+      "id": 15,
+      "kind": 2,
+      "npcIndex": 682,
+      "x": 24,
+      "y": 229,
+      "syncType": 1,
+      "name": "Monica",
+      "battleCore": false
+    },
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 248,
+      "y": 149,
+      "syncType": 1,
+      "name": "Atlans Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 19,
+      "y": 27,
+      "syncType": 1,
+      "name": "Devias Entrance",
+      "battleCore": false
+    }
+  ],
+  "63": [
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 479,
+      "x": 122,
+      "y": 135,
+      "syncType": 1,
+      "name": "Doorkeeper Titus",
+      "battleCore": false
+    }
+  ],
+  "80": [
+    {
+      "id": 0,
+      "kind": 4,
+      "npcIndex": 577,
+      "x": 121,
+      "y": 102,
+      "syncType": 1,
+      "name": "Leina the Merchant",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 3,
+      "npcIndex": 578,
+      "x": 117,
+      "y": 126,
+      "syncType": 1,
+      "name": "Weapons Merchant Bolo",
+      "battleCore": false
+    },
+    {
+      "id": 2,
+      "kind": 5,
+      "npcIndex": 240,
+      "x": 123,
+      "y": 132,
+      "syncType": 1,
+      "name": "Safety Guardian",
+      "battleCore": false
+    },
+    {
+      "id": 3,
+      "kind": 5,
+      "npcIndex": 240,
+      "x": 122,
+      "y": 96,
+      "syncType": 1,
+      "name": "Safety Guardian",
+      "battleCore": false
+    },
+    {
+      "id": 4,
+      "kind": 5,
+      "npcIndex": 240,
+      "x": 157,
+      "y": 127,
+      "syncType": 1,
+      "name": "Safety Guardian",
+      "battleCore": false
+    },
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 115,
+      "y": 45,
+      "syncType": 1,
+      "name": "Aida Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 187,
+      "y": 212,
+      "syncType": 1,
+      "name": "Karutan North Entrance",
+      "battleCore": false
+    }
+  ],
+  "91": [
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 581,
+      "x": 29,
+      "y": 210,
+      "syncType": 1,
+      "name": "Acheron Quest Deruvish",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 2,
+      "npcIndex": 582,
+      "x": 38,
+      "y": 216,
+      "syncType": 1,
+      "name": "Errtel Combiner Adniel",
+      "battleCore": false
+    },
+    {
+      "id": 2,
+      "kind": 4,
+      "npcIndex": 583,
+      "x": 56,
+      "y": 202,
+      "syncType": 1,
+      "name": "Potion Merchant Jin",
+      "battleCore": false
+    },
+    {
+      "id": 4,
+      "kind": 5,
+      "npcIndex": 240,
+      "x": 50,
+      "y": 184,
+      "syncType": 1,
+      "name": "Safety Guardian",
+      "battleCore": false
+    },
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 28,
+      "y": 169,
+      "syncType": 1,
+      "name": "Alkmar Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 80,
+      "y": 205,
+      "syncType": 1,
+      "name": "Ubaid Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 2,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 52,
+      "y": 162,
+      "syncType": 1,
+      "name": "Debenter Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 3,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 64,
+      "y": 220,
+      "syncType": 1,
+      "name": "Uruk Mountain Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 4,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 115,
+      "y": 168,
+      "syncType": 1,
+      "name": "Acheron Village Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 5,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 146,
+      "y": 206,
+      "syncType": 1,
+      "name": "Acheron Village Entrance",
+      "battleCore": false
+    }
+  ],
+  "7": [
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 229,
+      "x": 17,
+      "y": 25,
+      "syncType": 2,
+      "name": "Marlon",
+      "battleCore": false
+    },
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 8,
+      "y": 8,
+      "syncType": 1,
+      "name": "Noria Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 9,
+      "y": 18,
+      "syncType": 1,
+      "name": "Elveland Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 2,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 10,
+      "y": 228,
+      "syncType": 1,
+      "name": "Tarkan Entrance",
+      "battleCore": false
+    }
+  ],
+  "24": [
+    {
+      "id": 0,
+      "kind": 4,
+      "npcIndex": 259,
+      "x": 7,
+      "y": 19,
+      "syncType": 1,
+      "name": "Oracle Layla",
+      "battleCore": false
+    }
+  ],
+  "25": [
+    {
+      "id": 0,
+      "kind": 4,
+      "npcIndex": 259,
+      "x": 7,
+      "y": 19,
+      "syncType": 1,
+      "name": "Oracle Layla",
+      "battleCore": false
+    }
+  ],
+  "26": [
+    {
+      "id": 0,
+      "kind": 4,
+      "npcIndex": 259,
+      "x": 7,
+      "y": 19,
+      "syncType": 1,
+      "name": "Oracle Layla",
+      "battleCore": false
+    }
+  ],
+  "27": [
+    {
+      "id": 0,
+      "kind": 4,
+      "npcIndex": 259,
+      "x": 7,
+      "y": 19,
+      "syncType": 1,
+      "name": "Oracle Layla",
+      "battleCore": false
+    }
+  ],
+  "28": [
+    {
+      "id": 0,
+      "kind": 4,
+      "npcIndex": 259,
+      "x": 7,
+      "y": 19,
+      "syncType": 1,
+      "name": "Oracle Layla",
+      "battleCore": false
+    }
+  ],
+  "29": [
+    {
+      "id": 0,
+      "kind": 4,
+      "npcIndex": 259,
+      "x": 7,
+      "y": 19,
+      "syncType": 1,
+      "name": "Oracle Layla",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 2,
+      "npcIndex": 567,
+      "x": 10,
+      "y": 28,
+      "syncType": 1,
+      "name": "Priestess Veina",
+      "battleCore": false
+    }
+  ],
+  "36": [
+    {
+      "id": 0,
+      "kind": 4,
+      "npcIndex": 259,
+      "x": 7,
+      "y": 19,
+      "syncType": 1,
+      "name": "Oracle Layla",
+      "battleCore": false
+    }
+  ],
+  "1": [
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 108,
+      "y": 249,
+      "syncType": 1,
+      "name": "Lorencia Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 238,
+      "y": 150,
+      "syncType": 1,
+      "name": "Dungeon Level 2 Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 2,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 232,
+      "y": 128,
+      "syncType": 1,
+      "name": "Dungeon Level 1 Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 3,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 1,
+      "y": 18,
+      "syncType": 1,
+      "name": "Dungeon Level 3 West Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 4,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 5,
+      "y": 35,
+      "syncType": 1,
+      "name": "Dungeon Level 3 East Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 5,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 1,
+      "y": 85,
+      "syncType": 1,
+      "name": "Dungeon Level 2 West Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 6,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 29,
+      "y": 127,
+      "syncType": 1,
+      "name": "Dungeon Level 2 East Entrance",
+      "battleCore": false
+    }
+  ],
+  "4": [
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 164,
+      "y": 0,
+      "syncType": 1,
+      "name": "Devias Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 190,
+      "y": 5,
+      "syncType": 1,
+      "name": "Lost Tower Level 2 Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 2,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 165,
+      "y": 165,
+      "syncType": 1,
+      "name": "Lost Tower Level 3 Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 3,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 133,
+      "y": 246,
+      "syncType": 1,
+      "name": "Lost Tower Level 4 Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 4,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 133,
+      "y": 136,
+      "syncType": 1,
+      "name": "Lost Tower Level 5 Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 5,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 129,
+      "y": 14,
+      "syncType": 1,
+      "name": "Lost Tower Level 6 Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 6,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 4,
+      "y": 7,
+      "syncType": 1,
+      "name": "Lost Tower Level 7 Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 7,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 16,
+      "y": 250,
+      "syncType": 1,
+      "name": "Icarus Entrance",
+      "battleCore": false
+    }
+  ],
+  "8": [
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 250,
+      "y": 40,
+      "syncType": 1,
+      "name": "Atlans Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 3,
+      "y": 199,
+      "syncType": 1,
+      "name": "Kanturu Ruins Entrance",
+      "battleCore": false
+    }
+  ],
+  "10": [
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 13,
+      "y": 8,
+      "syncType": 1,
+      "name": "Lost Tower Entrance",
+      "battleCore": false
+    }
+  ],
+  "31": [
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 60,
+      "y": 8,
+      "syncType": 1,
+      "name": "Valley of Loren Entrance",
+      "battleCore": false
+    }
+  ],
+  "37": [
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 16,
+      "y": 222,
+      "syncType": 1,
+      "name": "Tarkan Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 89,
+      "y": 91,
+      "syncType": 1,
+      "name": "Kanturu Relics Entrance",
+      "battleCore": false
+    }
+  ],
+  "38": [
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 66,
+      "y": 105,
+      "syncType": 1,
+      "name": "Kanturu Ruins Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 141,
+      "y": 186,
+      "syncType": 1,
+      "name": "Gateway Machine",
+      "battleCore": false
+    }
+  ],
+  "56": [
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 139,
+      "y": 125,
+      "syncType": 1,
+      "name": "Hunting Grounds Entrance (1)",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 124,
+      "y": 109,
+      "syncType": 1,
+      "name": "Hunting Grounds Entrance (2)",
+      "battleCore": false
+    },
+    {
+      "id": 2,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 140,
+      "y": 95,
+      "syncType": 1,
+      "name": "Hunting Grounds Entrance (3)",
+      "battleCore": false
+    },
+    {
+      "id": 3,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 150,
+      "y": 109,
+      "syncType": 1,
+      "name": "Hunting Grounds Entrance (4)",
+      "battleCore": false
+    },
+    {
+      "id": 4,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 185,
+      "y": 188,
+      "syncType": 1,
+      "name": "Safe Zone Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 5,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 56,
+      "y": 177,
+      "syncType": 1,
+      "name": "Safe Zone Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 6,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 68,
+      "y": 52,
+      "syncType": 1,
+      "name": "Safe Zone Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 7,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 197,
+      "y": 13,
+      "syncType": 1,
+      "name": "Safe Zone Entrance",
+      "battleCore": false
+    }
+  ],
+  "57": [
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 224,
+      "y": 214,
+      "syncType": 1,
+      "name": "Devias Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 169,
+      "y": 22,
+      "syncType": 1,
+      "name": "Hatchery Entrance",
+      "battleCore": false
+    }
+  ],
+  "81": [
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 162,
+      "y": 9,
+      "syncType": 1,
+      "name": "Karutan South Entrance",
+      "battleCore": false
+    }
+  ],
+  "95": [
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 17,
+      "y": 107,
+      "syncType": 1,
+      "name": "Acheron Village Entrance",
+      "battleCore": false
+    }
+  ],
+  "100": [
+    {
+      "id": 0,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 24,
+      "y": 90,
+      "syncType": 1,
+      "name": "Acheron Village Entrance",
+      "battleCore": false
+    },
+    {
+      "id": 1,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 40,
+      "y": 82,
+      "syncType": 1,
+      "name": "Portal Field A (Blue)",
+      "battleCore": false
+    },
+    {
+      "id": 2,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 212,
+      "y": 32,
+      "syncType": 1,
+      "name": "Portal Field B (Blue)",
+      "battleCore": false
+    },
+    {
+      "id": 3,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 41,
+      "y": 98,
+      "syncType": 1,
+      "name": "Portal Field A (Red)",
+      "battleCore": false
+    },
+    {
+      "id": 4,
+      "kind": 2,
+      "npcIndex": 0,
+      "x": 109,
+      "y": 230,
+      "syncType": 1,
+      "name": "Portal Field B (Red)",
+      "battleCore": false
+    }
+  ]
+}

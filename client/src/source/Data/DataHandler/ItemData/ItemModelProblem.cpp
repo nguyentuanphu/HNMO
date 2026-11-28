@@ -50,6 +50,8 @@ std::string DescribeProblem(const ItemModelProblem& problem)
     {
     case ItemModelProblemType::ModelFileMissing:
         return "model file " + problem.modelFile + " could not be opened (missing or not a valid .bmd file)";
+    case ItemModelProblemType::PackModelFileMissing:
+        return "pack model file " + problem.modelFile + " is not present; skipped";
     case ItemModelProblemType::TextureMissing:
         return DescribeTextureOfMesh(problem) + NotFoundOrNotReadable + DescribeFolders(problem.searchedFolders);
     case ItemModelProblemType::TextureTypeUnsupported:
@@ -78,6 +80,7 @@ bool IsModelFileProblem(ItemModelProblemType type)
     switch (type)
     {
     case ItemModelProblemType::ModelFileMissing:
+    case ItemModelProblemType::PackModelFileMissing:
     case ItemModelProblemType::TextureMissing:
     case ItemModelProblemType::TextureTypeUnsupported:
     case ItemModelProblemType::TextureOutsideFolders:

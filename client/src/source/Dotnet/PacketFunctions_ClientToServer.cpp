@@ -2504,6 +2504,17 @@ void PacketFunctions_ClientToServer::SendGameGuardAuthResponse(const BYTE* data,
     dotnet_SendGameGuardAuthResponse(this->GetHandle(), data, dataByteLength);
 }
 
+void PacketFunctions_ClientToServer::SendHnmoPentagramCommand(BYTE action, BYTE slot, BYTE index)
+{
+    static const auto dotnet_SendHnmoPentagramCommand = LoadManagedSymbol<::SendHnmoPentagramCommand>("SendHnmoPentagramCommand");
+    if (!dotnet_SendHnmoPentagramCommand)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoPentagramCommand(this->GetHandle(), action, slot, index);
+}
+
 void PacketFunctions_ClientToServer::SendHnmoJewelBankCommand(BYTE action, BYTE slot, uint32_t amount, const char16_t* key)
 {
     static const auto dotnet_SendHnmoJewelBankCommand = LoadManagedSymbol<::SendHnmoJewelBankCommand>("SendHnmoJewelBankCommand");
@@ -2515,6 +2526,17 @@ void PacketFunctions_ClientToServer::SendHnmoJewelBankCommand(BYTE action, BYTE 
     dotnet_SendHnmoJewelBankCommand(this->GetHandle(), action, slot, amount, key);
 }
 
+void PacketFunctions_ClientToServer::SendHnmoMuunCommand(BYTE action, BYTE slot)
+{
+    static const auto dotnet_SendHnmoMuunCommand = LoadManagedSymbol<::SendHnmoMuunCommand>("SendHnmoMuunCommand");
+    if (!dotnet_SendHnmoMuunCommand)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoMuunCommand(this->GetHandle(), action, slot);
+}
+
 void PacketFunctions_ClientToServer::SendHnmoCatchupCapRequest()
 {
     static const auto dotnet_SendHnmoCatchupCapRequest = LoadManagedSymbol<::SendHnmoCatchupCapRequest>("SendHnmoCatchupCapRequest");
@@ -2524,6 +2546,17 @@ void PacketFunctions_ClientToServer::SendHnmoCatchupCapRequest()
     }
 
     dotnet_SendHnmoCatchupCapRequest(this->GetHandle());
+}
+
+void PacketFunctions_ClientToServer::SendHnmoSeasonNineClientRequest()
+{
+    static const auto dotnet_SendHnmoSeasonNineClientRequest = LoadManagedSymbol<::SendHnmoSeasonNineClientRequest>("SendHnmoSeasonNineClientRequest");
+    if (!dotnet_SendHnmoSeasonNineClientRequest)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoSeasonNineClientRequest(this->GetHandle());
 }
 
 void PacketFunctions_ClientToServer::SendHnmoSeasonPlanRequest()
@@ -2645,6 +2678,17 @@ void PacketFunctions_ClientToServer::SendHnmoBugReportCommand(BYTE action, const
     }
 
     dotnet_SendHnmoBugReportCommand(this->GetHandle(), action, json);
+}
+
+void PacketFunctions_ClientToServer::SendHnmoAutoErrorReport(const char16_t* json)
+{
+    static const auto dotnet_SendHnmoAutoErrorReport = LoadManagedSymbol<::SendHnmoAutoErrorReport>("SendHnmoAutoErrorReport");
+    if (!dotnet_SendHnmoAutoErrorReport)
+    {
+        return;
+    }
+
+    dotnet_SendHnmoAutoErrorReport(this->GetHandle(), json);
 }
 
 void PacketFunctions_ClientToServer::SendHnmoArenaTravelRequest(BYTE action, BYTE index)

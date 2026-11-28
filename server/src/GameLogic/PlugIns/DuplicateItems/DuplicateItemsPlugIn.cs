@@ -35,6 +35,12 @@ public sealed class DuplicateItemsPlugIn : IPeriodicTaskPlugIn, IPlayerStateChan
     public DuplicateItemsConfiguration? Configuration { get; set; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether the periodic task leaves the frozen serials alone (tests): the frozen set is
+    /// static, and the game contexts other tests leave running would refresh it from their own state files meanwhile.
+    /// </summary>
+    internal static bool PausePeriodicRefresh { get; set; }
+
+    /// <summary>
     /// Gets a value indicating whether an item is frozen: it shares its serial with another item and the administrator
     /// hasn't decided yet.
     /// </summary>
@@ -120,7 +126,7 @@ public sealed class DuplicateItemsPlugIn : IPeriodicTaskPlugIn, IPlayerStateChan
     {
         var cfg = this.Configuration ?? new DuplicateItemsConfiguration();
         var now = DateTime.UtcNow;
-        if (now >= this._nextRefreshUtc)
+        if (now >= this._nextRefreshUtc && !PausePeriodicRefresh)
         {
             this._nextRefreshUtc = now + FrozenRefresh;
             try

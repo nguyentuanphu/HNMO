@@ -1,0 +1,74 @@
+<rml>
+<head>
+	<title>Pentagram</title>
+	<link type="text/rcss" href="base.rcss"/>
+	<link type="text/rcss" href="docked_panel_frame.rcss"/>
+	<link type="text/rcss" href="pentagram_window.rcss"/>
+</head>
+<body>
+	<div id="panel" data-model="pentagram_window">
+		<div class="frame-piece frame-top"></div>
+		<div class="frame-piece frame-left"></div>
+		<div class="frame-piece frame-right"></div>
+		<div class="frame-piece frame-bottom"></div>
+
+		<span class="sharp-text s9-title" data-style-font-size="text_px + 'px'">{{title}}</span>
+
+		<div class="s9-body">
+			<div class="s9-note" data-if="status_note != ''">
+				<span class="sharp-text s9-text" data-style-font-size="text_px + 'px'">{{status_note}}</span>
+			</div>
+			<div class="s9-summary" data-if="costs_summary != ''">
+				<span class="sharp-text s9-muted" data-style-font-size="text_px + 'px'">{{costs_summary}}</span>
+			</div>
+
+			<div class="s9-card" data-if="has_worn">
+				<div class="s9-line"><span class="sharp-text s9-gold" data-style-font-size="text_px + 'px'">{{worn_summary}}</span></div>
+				<div class="s9-btn-row">
+					<div class="s9-btn" data-event-click="pentagram_action(3, 0, 0)">
+						<span class="sharp-text s9-btn-label" data-style-font-size="text_px + 'px'">Take off</span>
+					</div>
+				</div>
+				<div class="s9-slot-list">
+					<div class="s9-row" data-for="s : slots" data-class-selected="s.selected">
+						<div class="s9-line" data-event-click="pentagram_select_slot(s.index)">
+							<span class="sharp-text s9-text" data-style-font-size="text_px + 'px'">{{s.label}}</span>
+						</div>
+						<div class="s9-btn-row">
+							<div class="s9-btn" data-event-click="pentagram_select_slot(s.index)">
+								<span class="sharp-text s9-btn-label" data-style-font-size="text_px + 'px'">Target</span>
+							</div>
+							<div class="s9-btn" data-if="s.occupied" data-event-click="pentagram_action(5, 0, s.index)">
+								<span class="sharp-text s9-btn-label" data-style-font-size="text_px + 'px'">Remove</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="s9-list scroll-pane">
+				<div class="s9-row" data-for="b : bag_items">
+					<div class="s9-line"><span class="sharp-text s9-text" data-style-font-size="text_px + 'px'">{{b.title}}</span></div>
+					<div class="s9-btn-row">
+						<div class="s9-btn" data-if="b.is_pentagram" data-event-click="pentagram_action(2, b.slot, 0)">
+							<span class="sharp-text s9-btn-label" data-style-font-size="text_px + 'px'">Wear</span>
+						</div>
+						<div class="s9-btn" data-if="!b.is_pentagram" data-event-click="pentagram_attach(b.slot)">
+							<span class="sharp-text s9-btn-label" data-style-font-size="text_px + 'px'">Attach</span>
+						</div>
+						<div class="s9-btn" data-if="!b.is_pentagram" data-event-click="pentagram_action(6, b.slot, 0)">
+							<span class="sharp-text s9-btn-label" data-style-font-size="text_px + 'px'">Lv+</span>
+						</div>
+						<div class="s9-btn" data-if="b.can_rank_up" data-class-selected="b.selected_pair" data-event-click="pentagram_rank_pair(b.slot)">
+							<span class="sharp-text s9-btn-label" data-style-font-size="text_px + 'px'">Rank+</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="btn_exit" data-event-click="pentagram_exit" data-attr-data-hint="exit_tooltip"></div>
+		<div id="frame_corner_close" data-event-click="pentagram_exit"></div>
+	</div>
+</body>
+</rml>
