@@ -13,6 +13,7 @@ using HNMO.GameLogic.PlugIns.GiftBox;
 using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.Persistence.InMemory;
+using HNMO.PlugIns;
 using HNMO.Web.AdminPanel.API;
 using HNMO.Web.AdminPanel.Auth;
 using Microsoft.AspNetCore.Authorization;
@@ -43,6 +44,11 @@ public class WebsiteGiftBoxControllerTests
         using var setup = this._provider.CreateNewContext();
         var game = setup.CreateNew<GameConfiguration>();
         game.MaximumInventoryMoney = 2000000000;
+
+        // The season's cash shop is on (letters give coins only then).
+        var cashShop = setup.CreateNew<PlugInConfiguration>();
+        cashShop.TypeId = typeof(HNMO.GameLogic.CashShop.CashShopFeaturePlugIn).GUID;
+        cashShop.IsActive = true;
         await setup.SaveChangesAsync().ConfigureAwait(false);
         using var players = this._provider.CreateNewPlayerContext(game);
         this._account = players.CreateNew<Account>();
