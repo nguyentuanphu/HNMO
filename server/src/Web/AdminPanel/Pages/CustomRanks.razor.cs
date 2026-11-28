@@ -1,4 +1,4 @@
-// <copyright file="CustomRanks.razor.cs" company="HNMO">
+﻿// <copyright file="CustomRanks.razor.cs" company="HNMO">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -10,6 +10,7 @@ using HNMO.GameLogic.PlugIns.CustomRanks;
 using HNMO.Persistence;
 using HNMO.PlugIns;
 using HNMO.Web.AdminPanel.API;
+using HNMO.Web.AdminPanel.Auth;
 using HNMO.Web.AdminPanel.Operations;
 using HNMO.Web.Shared.Components.Toast;
 using Microsoft.AspNetCore.Components;
@@ -40,6 +41,9 @@ public partial class CustomRanks : ComponentBase
     private IToastService ToastService { get; set; } = null!;
 
     [Inject]
+    private AdminPolicyGuard PolicyGuard { get; set; } = null!;
+
+    [Inject]
     private ILogger<CustomRanks> Logger { get; set; } = null!;
 
     /// <inheritdoc />
@@ -47,6 +51,17 @@ public partial class CustomRanks : ComponentBase
     {
         this._isVi = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("vi", StringComparison.OrdinalIgnoreCase);
         return this.LoadAsync();
+    }
+
+    private async Task<bool> EnsureAdministratorAsync()
+    {
+        if (await this.PolicyGuard.IsAuthorizedAsync(AdminPolicies.Administrator).ConfigureAwait(true))
+        {
+            return true;
+        }
+
+        this.ToastService.ShowError(this.L("The operation is not allowed for this caller.", "Bạn không có quyền thực hiện thao tác này."));
+        return false;
     }
 
     private string L(string en, string vi) => this._isVi ? vi : en;
@@ -99,8 +114,13 @@ public partial class CustomRanks : ComponentBase
         this.ToastService.ShowSuccess(this.L("Restored starter rank tiers (click Save to apply).", "Đã khôi phục danh hiệu mẫu (bấm Lưu để áp dụng)."));
     }
 
-    private void GrantKey()
+    private async Task GrantKeyAsync()
     {
+        if (!await this.EnsureAdministratorAsync().ConfigureAwait(true))
+        {
+            return;
+        }
+
         if (string.IsNullOrWhiteSpace(this._grantCharacter) || string.IsNullOrWhiteSpace(this._grantKey))
         {
             this.ToastService.ShowError(this.L("Enter both character name and achievement key.", "Vui lòng nhập tên nhân vật và mã thành tựu."));
@@ -119,8 +139,13 @@ public partial class CustomRanks : ComponentBase
         }
     }
 
-    private void RevokeKey()
+    private async Task RevokeKeyAsync()
     {
+        if (!await this.EnsureAdministratorAsync().ConfigureAwait(true))
+        {
+            return;
+        }
+
         if (string.IsNullOrWhiteSpace(this._grantCharacter) || string.IsNullOrWhiteSpace(this._grantKey))
         {
             this.ToastService.ShowError(this.L("Enter both character name and achievement key.", "Vui lòng nhập tên nhân vật và mã thành tựu."));

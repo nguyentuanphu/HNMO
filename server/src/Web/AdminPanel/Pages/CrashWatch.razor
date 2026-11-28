@@ -1,4 +1,4 @@
-@page "/crash-watch"
+﻿@page "/crash-watch"
 
 <PageTitle>@L("Crash Watch & Auto-Restart", "Giám Sát Sự Cố & Tự Khởi Động")</PageTitle>
 
@@ -39,7 +39,7 @@
         </div>
         <button type="button" class="btn btn-sm btn-light"
                 title="@L("Dismiss unread crash notice alerts.", "Đánh dấu đã xem các cảnh báo sự cố.")"
-                @onclick="this.AcknowledgeAll">
+                @onclick="this.AcknowledgeAllAsync">
             @L("Acknowledge Notice", "Đã Xem Cảnh Báo") (@this._unacknowledgedCount)
         </button>
     </div>
@@ -74,7 +74,7 @@
             <div class="col-md-2 text-md-end">
                 <button type="button" class="btn btn-primary btn-sm"
                         title="@L("Save Crash Watch settings.", "Lưu cài đặt Giám sát sự cố.")"
-                        @onclick="this.SaveSettings">
+                        @onclick="this.SaveSettingsAsync">
                     @L("Save", "Lưu")
                 </button>
             </div>

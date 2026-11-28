@@ -1,4 +1,4 @@
-@page "/custom-ranks"
+﻿@page "/custom-ranks"
 
 <PageTitle>@L("Custom Ranks & Titles", "Danh Hiệu Tùy Chỉnh")</PageTitle>
 
@@ -160,12 +160,12 @@ else if (this._configuration is { } cfg)
                 <div class="col-md-4">
                     <button type="button" class="btn btn-sm btn-success me-1"
                             title="@L("Grant the achievement key to this character.", "Trao mã danh hiệu đặc biệt cho nhân vật.")"
-                            @onclick="this.GrantKey">
+                            @onclick="this.GrantKeyAsync">
                         @L("Grant Key", "Trao Mã")
                     </button>
                     <button type="button" class="btn btn-sm btn-outline-warning"
                             title="@L("Revoke the achievement key from this character.", "Thu hồi mã danh hiệu đặc biệt khỏi nhân vật.")"
-                            @onclick="this.RevokeKey">
+                            @onclick="this.RevokeKeyAsync">
                         @L("Revoke", "Thu Hồi")
                     </button>
                 </div>

@@ -188,6 +188,10 @@ else
     [Inject]
     public IGameServerInstanceManager? ServerInstanceManager { get; set; }
 
+    /// <summary>Gets or sets the policy guard.</summary>
+    [Inject]
+    public HNMO.Web.AdminPanel.Auth.AdminPolicyGuard PolicyGuard { get; set; } = null!;
+
     /// <summary>Gets or sets the service provider.</summary>
     [Inject]
     public IServiceProvider ServiceProvider { get; set; } = null!;
@@ -271,6 +275,12 @@ else
 
     private async Task OnReloadAndRestartClickAsync()
     {
+      if (!await this.PolicyGuard.IsAuthorizedAsync(HNMO.Web.AdminPanel.Auth.AdminPolicies.Administrator).ConfigureAwait(true))
+      {
+        this._toastService?.ShowError(L("The operation is not allowed for this caller.", "Bạn không có quyền thực hiện thao tác này."));
+        return;
+      }
+
       this._isRestarting = true;
       try
       {
