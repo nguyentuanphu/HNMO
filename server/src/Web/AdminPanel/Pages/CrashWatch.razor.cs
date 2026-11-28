@@ -1,4 +1,4 @@
-// <copyright file="CrashWatch.razor.cs" company="HNMO">
+﻿// <copyright file="CrashWatch.razor.cs" company="HNMO">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -7,6 +7,7 @@ namespace HNMO.Web.AdminPanel.Pages;
 using System.Globalization;
 using System.IO;
 using HNMO.Interfaces;
+using HNMO.Web.AdminPanel.Auth;
 using HNMO.Web.AdminPanel.Services;
 using HNMO.Web.Shared.Components.Toast;
 using Microsoft.AspNetCore.Components;
@@ -31,6 +32,9 @@ public partial class CrashWatch : ComponentBase
     [Inject]
     private IToastService ToastService { get; set; } = null!;
 
+    [Inject]
+    private AdminPolicyGuard PolicyGuard { get; set; } = null!;
+
     /// <inheritdoc />
     protected override void OnInitialized()
     {
@@ -39,6 +43,17 @@ public partial class CrashWatch : ComponentBase
     }
 
     private string SaveDir => Path.GetDirectoryName(this.HostSettingsService.SettingsFilePath) ?? AppContext.BaseDirectory;
+
+    private async Task<bool> EnsureAdministratorAsync()
+    {
+        if (await this.PolicyGuard.IsAuthorizedAsync(AdminPolicies.Administrator).ConfigureAwait(true))
+        {
+            return true;
+        }
+
+        this.ToastService.ShowError(this.L("The operation is not allowed for this caller.", "Bạn không có quyền thực hiện thao tác này."));
+        return false;
+    }
 
     private string L(string en, string vi) => this._isVi ? vi : en;
 
@@ -83,15 +98,25 @@ public partial class CrashWatch : ComponentBase
             : $"{unread.OccurredAtSydney} — {(this._isVi ? unread.SummaryVi : unread.SummaryEn)}";
     }
 
-    private void AcknowledgeAll()
+    private async Task AcknowledgeAllAsync()
     {
+        if (!await this.EnsureAdministratorAsync().ConfigureAwait(true))
+        {
+            return;
+        }
+
         CrashWatchStore.AcknowledgeAll(this.SaveDir);
         this.Refresh();
         this.ToastService.ShowSuccess(this.L("Crash watch notices acknowledged.", "Đã xác nhận cảnh báo sự cố."));
     }
 
-    private void SaveSettings()
+    private async Task SaveSettingsAsync()
     {
+        if (!await this.EnsureAdministratorAsync().ConfigureAwait(true))
+        {
+            return;
+        }
+
         if (!string.IsNullOrWhiteSpace(this._newWebhookUrl))
         {
             this._settings.CrashDiscordWebhookUrl = this._newWebhookUrl.Trim();

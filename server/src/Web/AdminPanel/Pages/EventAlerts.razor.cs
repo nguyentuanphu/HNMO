@@ -1,4 +1,4 @@
-// <copyright file="EventAlerts.razor.cs" company="HNMO">
+﻿// <copyright file="EventAlerts.razor.cs" company="HNMO">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -10,6 +10,7 @@ using HNMO.GameLogic.PlugIns.EventAlerts;
 using HNMO.Persistence;
 using HNMO.PlugIns;
 using HNMO.Web.AdminPanel.API;
+using HNMO.Web.AdminPanel.Auth;
 using HNMO.Web.AdminPanel.Operations;
 using HNMO.Web.Shared.Components.Toast;
 using Microsoft.AspNetCore.Components;
@@ -38,6 +39,9 @@ public partial class EventAlerts : ComponentBase
 
     [Inject]
     private IToastService ToastService { get; set; } = null!;
+
+    [Inject]
+    private AdminPolicyGuard PolicyGuard { get; set; } = null!;
 
     [Inject]
     private ILogger<EventAlerts> Logger { get; set; } = null!;
@@ -72,12 +76,28 @@ public partial class EventAlerts : ComponentBase
             .ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
     }
 
+    private async Task<bool> EnsureAdministratorAsync()
+    {
+        if (await this.PolicyGuard.IsAuthorizedAsync(AdminPolicies.Administrator).ConfigureAwait(true))
+        {
+            return true;
+        }
+
+        this.ToastService.ShowError(this.L("The operation is not allowed for this caller.", "Bạn không có quyền thực hiện thao tác này."));
+        return false;
+    }
+
     private string L(string en, string vi) => this._isVi ? vi : en;
 
     private void SetLanguage(bool vi) => this._isVi = vi;
 
-    private void RegenerateVapidKeys()
+    private async Task RegenerateVapidKeysAsync()
     {
+        if (!await this.EnsureAdministratorAsync().ConfigureAwait(true))
+        {
+            return;
+        }
+
         if (this._configuration is null)
         {
             return;
@@ -92,6 +112,11 @@ public partial class EventAlerts : ComponentBase
 
     private async Task SendTestAlertAsync()
     {
+        if (!await this.EnsureAdministratorAsync().ConfigureAwait(true))
+        {
+            return;
+        }
+
         if (this._configuration is null)
         {
             return;

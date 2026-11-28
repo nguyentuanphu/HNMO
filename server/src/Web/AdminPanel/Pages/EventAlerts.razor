@@ -1,4 +1,4 @@
-@page "/event-alerts"
+﻿@page "/event-alerts"
 
 <PageTitle>@L("Event Alerts (Web Push & Discord)", "Thông Báo Sự Kiện (Web Push & Discord)")</PageTitle>
 
@@ -91,7 +91,7 @@ else if (this._configuration is { } cfg)
                 <div class="col-md-4 d-flex align-items-end gap-2">
                     <button type="button" class="btn btn-outline-warning btn-sm"
                             title="@L("Generate a fresh VAPID keypair (existing browsers must re-subscribe).", "Tạo cặp khóa VAPID mới.")"
-                            @onclick="this.RegenerateVapidKeys">
+                            @onclick="this.RegenerateVapidKeysAsync">
                         @L("Regenerate VAPID Keys", "Tạo Lại Khóa VAPID")
                     </button>
                 </div>
