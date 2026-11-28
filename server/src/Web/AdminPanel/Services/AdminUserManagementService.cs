@@ -4,10 +4,10 @@
 
 namespace HNMO.Web.AdminPanel.Services;
 
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using HNMO.Persistence.AdminAuth;
+using HNMO.PlugIns;
 using HNMO.Web.AdminPanel.Auth;
 using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.Shared.Components.Form.Modal;
@@ -233,7 +233,7 @@ public class AdminUserManagementService
         [MaxLength(100)]
         [MinLength(12)]
         [Required]
-        [PasswordPropertyText]
+        [Secret]
         public string Password { get; set; } = string.Empty;
 
         [Display(ResourceType = typeof(Resources), Name = nameof(Resources.Role))]
@@ -251,7 +251,7 @@ public class AdminUserManagementService
         [MaxLength(100)]
         [MinLength(12)]
         [Required]
-        [PasswordPropertyText]
+        [Secret]
         public string Password { get; set; } = string.Empty;
     }
 }
