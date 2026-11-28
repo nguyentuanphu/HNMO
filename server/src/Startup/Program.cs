@@ -921,6 +921,13 @@ internal sealed class Program : IDisposable
             var inMemoryProvider = new InMemoryPersistenceContextProvider();
             contextProvider = inMemoryProvider;
             await this.InitializeDataAsync(version, loggerFactory, contextProvider).ConfigureAwait(false);
+            if (version == HNMO.Persistence.Initialization.VersionSeasonSix.DataInitialization.Id
+                && Environment.GetEnvironmentVariable("HNMO_SOCIAL_TEST_ACCOUNTS") == "1")
+            {
+                await HNMO.Persistence.Initialization.VersionSeasonSix.TestAccounts.TestAccountsInitialization
+                    .SeedSocialAccountsAsync(inMemoryProvider).ConfigureAwait(false);
+            }
+
             inMemoryProvider.ChangePublisher = changePublisher;
 
             _ = int.TryParse(Environment.GetEnvironmentVariable("HNMO_PORT_OFFSET"), out var portOffset);

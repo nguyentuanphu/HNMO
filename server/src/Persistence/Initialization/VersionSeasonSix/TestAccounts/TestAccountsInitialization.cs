@@ -5,6 +5,7 @@
 namespace HNMO.Persistence.Initialization.VersionSeasonSix.TestAccounts;
 
 using HNMO.DataModel.Configuration;
+using HNMO.DataModel.Entities;
 
 /// <summary>
 /// Initializes the test accounts.
@@ -19,6 +20,29 @@ public class TestAccountsInitialization : InitializerBase
     public TestAccountsInitialization(IContext context, GameConfiguration gameConfiguration)
         : base(context, gameConfiguration)
     {
+    }
+
+    /// <summary>
+    /// Seeds equivalent accounts reserved for the social browser test.
+    /// </summary>
+    /// <param name="provider">The isolated demo persistence provider.</param>
+    public static async Task SeedSocialAccountsAsync(InMemory.InMemoryPersistenceContextProvider provider)
+    {
+        using var context = provider.CreateNewContext();
+        var gameConfiguration = (await context.GetAsync<GameConfiguration>().ConfigureAwait(false)).Single();
+        const string master = "socmas";
+        const string member = "socmem";
+        new Level300(context, gameConfiguration, master).Initialize();
+        new LowLevel(context, gameConfiguration, member, 41).Initialize();
+
+        // These are established characters. Keep first-time onboarding rewards out of the warp fixture.
+        var accounts = await context.GetAsync<Account>().ConfigureAwait(false);
+        foreach (var character in accounts.Where(account => account.LoginName is master or member).SelectMany(account => account.Characters))
+        {
+            character.CreateDate = DateTime.UnixEpoch;
+        }
+
+        await context.SaveChangesAsync().ConfigureAwait(false);
     }
 
     /// <inheritdoc />
