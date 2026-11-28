@@ -21,8 +21,9 @@ internal class Level300 : AccountInitializerBase
     /// </summary>
     /// <param name="context">The context.</param>
     /// <param name="gameConfiguration">The game configuration.</param>
-    public Level300(IContext context, GameConfiguration gameConfiguration)
-        : base(context, gameConfiguration, "test300", 300)
+    /// <param name="accountName">The login name of the account; <c>test300</c> by default.</param>
+    public Level300(IContext context, GameConfiguration gameConfiguration, string accountName = "test300")
+        : base(context, gameConfiguration, accountName, 300)
     {
     }
 
