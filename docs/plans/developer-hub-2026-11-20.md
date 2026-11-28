@@ -144,13 +144,16 @@ add-on purchases) is built separately. Contract:
   another one. No new hub call.
 - **Switch.** The answers of `/api/weekly` and `/api/update-check` may carry `limits: { "enforce": true|false }` (missing:
   false). It is kept in `save/developer-hub.json` (`FolderLimits`) for at most 14 days; older, or the hub unreachable for
-  a week, means off (`DeveloperHub.FolderLimitEnforced`). The launcher's update check writes the same field.
+  a week, means off (`DeveloperHub.FolderLimitEnforced`). The launcher's update check writes the same field. Both
+  writers change the file under one short exclusive lock (`developer-hub.json.lock`, `SharedStateFile`), so neither
+  loses the other's change.
 - **Licence.** The signed payload may add `folders` (1..50, default 1): the folders that may run at once on the licensed
   computer (`PlayerLicense.Folders`). Without a valid licence (the free build too): 1.
 - **Seats** (`FolderSeats`, `FolderSeat`). While the switch is on, at most `folders` folders hold a seat on the
   computer: one file per folder, `<machine id>.<folder code>.seat`, in `%ProgramData%\HNMO\seats` (Windows) or
   `/var/tmp/hnmo-seats` (`/tmp/hnmo-seats` without `/var/tmp`), writable by every user. The programs of a folder share
   its file; it beats every 30 seconds and a dead folder's seat frees itself after 2 minutes. The live folders are lined
-  up by when they first asked: the first ones hold a seat. A folder without a seat lets nobody log in (limit 0), the
+  up by when they started running (the earliest process start of their live programs; equal times by folder code):
+  the first ones hold a seat, so the folder running longest keeps it when the switch goes on. A folder without a seat lets nobody log in (limit 0), the
   admin panel shows why with the computer's id, and the log says so; it takes players again by itself once a seat is
   free or the switch goes off. While the switch is off: no seat file, no warning. Tests `FolderLimitTests`.

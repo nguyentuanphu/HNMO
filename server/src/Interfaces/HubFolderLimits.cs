@@ -36,6 +36,12 @@ public sealed class HubFolderLimits
     /// <summary>Gets or sets when the hub gave it (UTC).</summary>
     public DateTime ReceivedUtc { get; set; }
 
+    /// <summary>
+    /// Gets or sets what runs between reading the state file and writing it in <see cref="Remember"/>; for tests (another
+    /// writer at the worst moment).
+    /// </summary>
+    internal static Action? AfterReadForTests { get; set; }
+
     /// <summary>Whether an answer of the hub asks for the folder limit.</summary>
     /// <param name="answer">The answer; <c>null</c>: none.</param>
     /// <returns><c>true</c> only for <c>limits.enforce == true</c>.</returns>
@@ -65,7 +71,9 @@ public sealed class HubFolderLimits
 
     /// <summary>
     /// Keeps the hub's answer in a folder's state file, for a program which doesn't hold the state itself (the launcher's
-    /// update check). Changes nothing else in the file; a file that can't be read or written is left as it is.
+    /// update check). Changes nothing else in the file: it reads and writes it under the state file's lock
+    /// (<see cref="SharedStateFile"/>), which the server takes too, so a change the server makes meanwhile is kept. A file
+    /// that can't be read or written is left as it is.
     /// </summary>
     /// <param name="stateFile">The state file (<see cref="StateFileName"/> in the save folder).</param>
     /// <param name="enforce">Whether the hub asked for the limit.</param>
@@ -75,6 +83,7 @@ public sealed class HubFolderLimits
     {
         try
         {
+            using var stateLock = SharedStateFile.Lock(stateFile);
             JsonObject root;
             try
             {
@@ -85,15 +94,13 @@ public sealed class HubFolderLimits
                 root = [];
             }
 
+            AfterReadForTests?.Invoke();
             root[StatePropertyName] = new JsonObject
             {
                 [nameof(Enforce)] = enforce,
                 [nameof(ReceivedUtc)] = DateTime.SpecifyKind(nowUtc, DateTimeKind.Utc),
             };
-            Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(stateFile))!);
-            var temporary = $"{stateFile}.{Environment.ProcessId}.tmp";
-            File.WriteAllText(temporary, root.ToJsonString(new JsonSerializerOptions { WriteIndented = true }));
-            File.Move(temporary, stateFile, overwrite: true);
+            SharedStateFile.Replace(stateFile, root.ToJsonString(new JsonSerializerOptions { WriteIndented = true }));
             return true;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
