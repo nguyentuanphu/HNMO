@@ -181,6 +181,7 @@ internal sealed class DeveloperHubWeeklyService : BackgroundService
 
         var bugReports = first is null ? null : BugReportsPlugIn.Get(first);
         var queued = bugReports?.QueuedForDeveloper() ?? [];
+        var autoErrors = AutoErrorOutbox.ReadPending();
         var bugs = new JsonArray();
         foreach (var (_, message) in queued)
         {
@@ -211,13 +212,14 @@ internal sealed class DeveloperHubWeeklyService : BackgroundService
                 ["plugins"] = plugins,
             },
             ["bugs"] = bugs,
+            ["autoErrors"] = new JsonArray(autoErrors.Select(report => (JsonNode?)report.Message).ToArray()),
         };
 
         // The MU's name and its host (owner, 2026-11-21: the console shows every server by them).
         var hubState = DeveloperHub.ReadState();
         weekly["game"] = new JsonObject { ["name"] = first is null ? string.Empty : HostSetupReport.GameName(first) };
         weekly["host"] = new JsonObject { ["name"] = hubState.HostName, ["contact"] = hubState.HostContact };
-        var (ok, withdrawn, error) = await DeveloperHub.SendWeeklyAsync(weekly, client).ConfigureAwait(false);
+        var (ok, withdrawn, error) = await DeveloperHub.SendWeeklyAsync(weekly, client, accepted => AutoErrorOutbox.MarkAccepted(autoErrors, accepted)).ConfigureAwait(false);
         LicensedPlayerLimit.ReevaluateAndEnforce(DateTime.UtcNow);
         if (!ok)
         {
