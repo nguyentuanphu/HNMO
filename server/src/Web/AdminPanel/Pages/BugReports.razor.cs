@@ -9,7 +9,10 @@ using HNMO.GameLogic;
 using HNMO.GameLogic.PlugIns.BugReports;
 using HNMO.Interfaces;
 using HNMO.Persistence;
+using HNMO.PlugIns;
 using HNMO.Web.AdminPanel.API;
+using HNMO.Web.AdminPanel.Auth;
+using HNMO.Web.AdminPanel.Operations;
 using HNMO.Web.Shared.Components.Toast;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
@@ -28,6 +31,19 @@ public partial class BugReports : ComponentBase
     private bool _active;
     private bool _canForward;
     private string _filter = "open";
+    private string _tab = "players";
+    private List<AutoErrorGroup> _autoGroups = [];
+    private string _autoFilter = "open";
+    private bool _autoOn = true;
+    private int _autoCapAccount = 20;
+    private int _autoCapServer = 1000;
+    private bool _saving;
+
+    [Inject]
+    private AdminPolicyGuard PolicyGuard { get; set; } = null!;
+
+    [Inject]
+    private PluginWriteOperations PluginOperations { get; set; } = null!;
 
     [Inject]
     private IPersistenceContextProvider PersistenceContextProvider { get; set; } = null!;
@@ -50,6 +66,31 @@ public partial class BugReports : ComponentBase
 
     private static string L(string en, string vi) =>
         CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("vi", StringComparison.OrdinalIgnoreCase) ? vi : en;
+
+    private static string L4(string en, string vi, string de, string zh) =>
+        CultureInfo.CurrentUICulture.TwoLetterISOLanguageName switch
+        {
+            "vi" => vi,
+            "de" => de,
+            "zh" => zh,
+            _ => en,
+        };
+
+    private static string AutoStatusLabel(AutoErrorGroup group) => group.Status switch
+    {
+        AutoErrorStatus.Fixed => L4("Fixed", "Đã sửa", "Behoben", "已修复"),
+        AutoErrorStatus.Ignored => L4("Ignored", "Bỏ qua", "Ignoriert", "已忽略"),
+        _ when group.Reopened => L4("Back after a fix", "Gặp lại sau khi sửa", "Nach Behebung wieder da", "修复后再次出现"),
+        _ => L4("Open", "Đang mở", "Offen", "未处理"),
+    };
+
+    private static string AutoStatusClass(AutoErrorGroup group) => group.Status switch
+    {
+        AutoErrorStatus.Fixed => "bg-success",
+        AutoErrorStatus.Ignored => "bg-secondary",
+        _ when group.Reopened => "bg-danger",
+        _ => "bg-warning text-dark",
+    };
 
     private static string StatusLabel(BugReportStatus status) => status switch
     {
@@ -85,6 +126,13 @@ public partial class BugReports : ComponentBase
         _ => Enum.TryParse<BugReportStatus>(this._filter, out var status) ? this._reports.Where(r => r.Status == status) : this._reports,
     };
 
+    private IEnumerable<AutoErrorGroup> AutoShown() => this._autoFilter switch
+    {
+        "all" => this._autoGroups,
+        "open" => this._autoGroups.Where(g => g.Status == AutoErrorStatus.Open),
+        _ => Enum.TryParse<AutoErrorStatus>(this._autoFilter, out var status) ? this._autoGroups.Where(g => g.Status == status) : this._autoGroups,
+    };
+
     private IEnumerable<IGameContext> Contexts() =>
         this.ServerProvider.Servers.OfType<IGameServerContextProvider>().Select(s => s.Context);
 
@@ -101,7 +149,11 @@ public partial class BugReports : ComponentBase
             this._configuration = saved ?? new BugReportsConfiguration();
             this._active = active;
             this._canForward = DeveloperHub.Url.Length > 0 || BugReportForwarder.IsDiscordWebhook(this._configuration.DeveloperWebhookUrl);
+            this._autoOn = this._configuration.AutomaticReports;
+            this._autoCapAccount = this._configuration.AutomaticDailyLimitPerAccount;
+            this._autoCapServer = this._configuration.AutomaticDailyLimitPerServer;
             this._reports = this.PlugIn().All();
+            this._autoGroups = this.PlugIn().AutoGroups();
             foreach (var r in this._reports)
             {
                 this._replies.TryAdd(r.Id, string.Empty);
@@ -156,6 +208,76 @@ public partial class BugReports : ComponentBase
         {
             this._replies[id] = string.Empty;
             this.ToastService.ShowSuccess(L("Answered: the player sees it in the game.", "Đã trả lời: người chơi thấy trong game."));
+        }
+
+        await this.LoadAsync().ConfigureAwait(true);
+    }
+
+    private async Task SetAutoStatusAsync(string id, AutoErrorStatus status)
+    {
+        if (this.PlugIn().SetAutoStatus(id, status))
+        {
+            this.ToastService.ShowSuccess($"{id}: {AutoStatusLabel(new AutoErrorGroup { Status = status })}.");
+        }
+
+        await this.LoadAsync().ConfigureAwait(true);
+    }
+
+    private async Task ForwardAutoAsync(string id)
+    {
+        if (!await this.PolicyGuard.IsAuthorizedAsync(AdminPolicies.Administrator).ConfigureAwait(true))
+        {
+            return;
+        }
+
+        var (ok, error) = this.PlugIn().ForwardAuto(id);
+        if (ok)
+        {
+            this.ToastService.ShowSuccess(L4(
+                "It goes to the HNMO developer with this server's weekly report.",
+                "Lỗi sẽ gửi tới nhà phát triển HNMO cùng báo cáo hằng tuần của server.",
+                "Er geht mit dem Wochenbericht dieses Servers an den HNMO-Entwickler.",
+                "它将随本服务器的周报发给 HNMO 开发者。"));
+        }
+        else
+        {
+            this.ToastService.ShowError(error ?? string.Empty);
+        }
+
+        await this.LoadAsync().ConfigureAwait(true);
+    }
+
+    private async Task SaveAutoSettingsAsync()
+    {
+        this._saving = true;
+        try
+        {
+            var (_, _, saved) = await PlugInSettings.ReadStoredAsync<BugReportsConfiguration>(this.PersistenceContextProvider, typeof(BugReportsPlugIn), default).ConfigureAwait(true);
+            var configuration = saved ?? new BugReportsConfiguration();
+            configuration.AutomaticReports = this._autoOn;
+            configuration.AutomaticDailyLimitPerAccount = Math.Max(0, this._autoCapAccount);
+            configuration.AutomaticDailyLimitPerServer = Math.Max(0, this._autoCapServer);
+
+            var serialized = new PlugInConfiguration();
+            serialized.SetConfiguration(configuration, null);
+            var json = serialized.CustomConfiguration ?? "{}";
+            var id = typeof(BugReportsPlugIn).GUID;
+            var preview = await this.PluginOperations.ReplaceFromPanelAsync(id, configuration, json, false, null, default).ConfigureAwait(true);
+            if (preview["confirmationToken"]?.GetValue<string>() is { } token)
+            {
+                await this.PluginOperations.ReplaceFromPanelAsync(id, configuration, json, true, token, default).ConfigureAwait(true);
+            }
+
+            this.ToastService.ShowSuccess(L4("Saved.", "Đã lưu.", "Gespeichert.", "已保存。"));
+        }
+        catch (Exception ex)
+        {
+            this.Logger.LogError(ex, "The automatic error report settings couldn't be saved.");
+            this.ToastService.ShowError(ex.Message);
+        }
+        finally
+        {
+            this._saving = false;
         }
 
         await this.LoadAsync().ConfigureAwait(true);

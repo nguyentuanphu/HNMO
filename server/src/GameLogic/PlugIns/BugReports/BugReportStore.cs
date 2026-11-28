@@ -38,7 +38,7 @@ public sealed class BugReportStore
     {
         lock (this._store.SyncRoot)
         {
-            return reader(this._store.ReadSection<BugReportStoreData>(SectionKey, JsonOptions) ?? new BugReportStoreData());
+            return reader(this.ReadSanitizedData());
         }
     }
 
@@ -50,7 +50,7 @@ public sealed class BugReportStore
     {
         lock (this._store.SyncRoot)
         {
-            var data = this._store.ReadSection<BugReportStoreData>(SectionKey, JsonOptions) ?? new BugReportStoreData();
+            var data = this.ReadSanitizedData();
             var (changed, result) = mutator(data);
             if (changed)
             {
@@ -59,5 +59,39 @@ public sealed class BugReportStore
 
             return result;
         }
+    }
+
+    private BugReportStoreData ReadSanitizedData()
+    {
+        var data = this._store.ReadSection<BugReportStoreData>(SectionKey, JsonOptions) ?? new BugReportStoreData();
+        var changed = false;
+        foreach (var group in data.AutoGroups.Where(g => g.ApprovalId == Guid.Empty))
+        {
+            group.ApprovalId = Guid.NewGuid();
+            group.Kind = AutoErrorPayload.CleanKind(group.Kind);
+            group.Fingerprint = AutoErrorPayload.CleanFingerprint(group.Kind, group.Fingerprint);
+            group.Message = AutoErrorPayload.Label(group.Kind);
+            group.Versions = group.Versions.Select(AutoErrorPayload.CleanVersion).Where(v => v.Length > 0).Distinct().ToList();
+            foreach (var sample in group.Samples)
+            {
+                AutoErrorPayload.CleanSample(sample);
+            }
+
+            // Previous versions acknowledged the whole weekly response even when an auto-error was discarded.
+            // Require fresh approval for legacy groups before anything is sent.
+            group.QueuedUtc = null;
+            group.ForwardedUtc = null;
+            changed = true;
+        }
+
+        if (changed)
+        {
+            // A write copies the previous file to .bak, so the first write would leave the old text there; the second
+            // makes the backup the cleaned file too.
+            this._store.WriteSection(SectionKey, data, JsonOptions);
+            this._store.WriteSection(SectionKey, data, JsonOptions);
+        }
+
+        return data;
     }
 }
