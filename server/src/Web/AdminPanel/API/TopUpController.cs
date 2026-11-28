@@ -28,13 +28,6 @@ using Microsoft.Extensions.Logging;
 [AllowAnonymous]
 public class TopUpController : Controller
 {
-    /// <summary>The VietQR (NAPAS) bank ids.</summary>
-    private static readonly (string Code, string Name, string Bin)[] Banks =
-    [
-        ("TCB", "Techcombank", "970407"),
-        ("VCB", "Vietcombank", "970436"),
-    ];
-
     private readonly IPersistenceContextProvider _contextProvider;
     private readonly BankTopUpService _topUps;
     private readonly ILogger<TopUpController> _logger;
@@ -61,11 +54,7 @@ public class TopUpController : Controller
     {
         this.Response.Headers.CacheControl = "no-cache";
         var config = await this.ReadAsync().ConfigureAwait(false);
-        var accounts = config is null ? [] : Banks
-            .Select(bank => (bank, account: AccountOf(config, bank.Code)))
-            .Where(entry => entry.account.Length > 0)
-            .Select(entry => new { code = entry.bank.Code, name = entry.bank.Name, bin = entry.bank.Bin, account = entry.account })
-            .ToList();
+        var accounts = config?.UsableAccounts() ?? [];
         if (config is null || accounts.Count == 0)
         {
             return this.Json(new { enabled = false });
@@ -74,13 +63,62 @@ public class TopUpController : Controller
         return this.Json(new
         {
             enabled = true,
-            accountName = config.AccountName.Trim(),
-            banks = accounts,
+            accountName = config.HolderOf(accounts[0]),
+            banks = accounts.Select(a => new
+            {
+                code = VietnameseBanks.CodeOf(a.Bin),
+                name = VietnameseBanks.NameOf(a.Bin),
+                bin = a.Bin,
+                account = a.Number.Trim(),
+                holder = config.HolderOf(a),
+            }).ToList(),
             vndPerCoin = config.VndPerCoin,
             minimumVnd = config.MinimumVnd,
+            maximumVnd = BankTopUpService.MaximumVnd,
             coinType = config.CoinType.ToString(),
             prefix = config.TransferPrefix.Trim(),
+            codes = true,
         });
+    }
+
+    /// <summary>
+    /// A player asks for a top-up: { account, amount, bin, number, ticket }. Answers the transfer code to write in the
+    /// message; the coins are added when Casso/SePay report the transfer or the host confirms it on the admin panel.
+    /// The ticket (16-100 characters the browser made up) lets the same browser follow it; only its hash is kept.
+    /// </summary>
+    /// <param name="body">The body.</param>
+    /// <returns>The top-up, or why not.</returns>
+    [HttpPost("pending")]
+    public async Task<IActionResult> PendingAsync([FromBody] JsonElement body)
+    {
+        this.Response.Headers.CacheControl = "no-store";
+        var ticket = body.ValueKind == JsonValueKind.Object ? Text(body, "ticket") : string.Empty;
+        if (ticket.Length is < 16 or > 100 || !ticket.All(char.IsAsciiLetterOrDigit))
+        {
+            return this.BadRequest(new { error = "ticket" });
+        }
+
+        var config = await this.ReadAsync().ConfigureAwait(false);
+        var (result, topUp) = await this._topUps.CreatePendingAsync(Text(body, "account"), Number(body, "amount"), Text(body, "bin"), Text(body, "number"), config, ticket, this.HttpContext.RequestAborted).ConfigureAwait(false);
+        if (topUp is null || config is null)
+        {
+            var error = result.ToString();
+            return result == BankTopUpCreateResult.TooMany ? this.StatusCode(StatusCodes.Status429TooManyRequests, new { error }) : this.BadRequest(new { error });
+        }
+
+        return this.Json(Describe(topUp, config));
+    }
+
+    /// <summary>The top-ups a browser follows: ?t=ticket1,ticket2 (at most 10).</summary>
+    /// <param name="t">The tickets, comma separated.</param>
+    /// <returns>The top-ups, newest first.</returns>
+    [HttpGet("status")]
+    public async Task<IActionResult> StatusAsync([FromQuery] string? t)
+    {
+        this.Response.Headers.CacheControl = "no-store";
+        var tickets = (t ?? string.Empty).Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        var config = await this.ReadAsync().ConfigureAwait(false) ?? new BankTopUpConfiguration();
+        return this.Json(new { topUps = this._topUps.Pending.ForTickets(tickets).Select(p => Describe(p, config)).ToList() });
     }
 
     /// <summary>
@@ -160,12 +198,26 @@ public class TopUpController : Controller
         return this.StatusCode(StatusCodes.Status201Created, new { success = true });
     }
 
-    private static string AccountOf(BankTopUpConfiguration config, string bankCode) => (bankCode switch
+    private static object Describe(BankTopUpPending p, BankTopUpConfiguration config)
     {
-        "TCB" => config.TechcombankAccount,
-        "VCB" => config.VietcombankAccount,
-        _ => string.Empty,
-    }).Trim();
+        var now = DateTime.UtcNow;
+        var account = config.UsableAccounts().FirstOrDefault(a => a.Bin == p.Bin && a.Number.Trim() == p.Number) ?? new BankTopUpAccount { Bin = p.Bin, Number = p.Number };
+        return new
+        {
+            code = p.Code,
+            account = p.Login,
+            amount = p.AmountVnd,
+            coins = p.Coins,
+            bin = p.Bin,
+            bank = VietnameseBanks.NameOf(p.Bin),
+            number = p.Number,
+            holder = config.HolderOf(account),
+            status = p.Status == BankTopUpPendingStatus.Pending && !p.IsOpen(now) ? "expired" : p.Status.ToString().ToLowerInvariant(),
+            created = p.CreatedUtc,
+            expires = p.ExpiresUtc,
+            done = p.DoneUtc,
+        };
+    }
 
     /// <summary>
     /// Compares a sent key with the configured one in constant time; an empty configured key accepts nothing.

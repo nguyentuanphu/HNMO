@@ -405,7 +405,8 @@ app.MapGet("/manifest.webmanifest", async (HttpContext context) =>
 });
 
 // Top-ups by bank transfer: the top-up page's information and the payment services' webhooks (Casso,
-// SePay) go to the admin panel, which only listens on this computer. Only these three paths pass, with
+// SePay), the player's waiting top-ups and their status go to the admin panel, which only listens on this computer.
+// Only these five paths pass, with
 // the body and the webhooks' key headers; the admin panel checks the keys.
 var topUpBase = (app.Configuration["GameName:AdminUrl"] ?? app.Configuration["Launcher:AdminUrl"] ?? "http://127.0.0.1:8095").TrimEnd('/') + "/api/topup/";
 var topUpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(8) };
@@ -445,6 +446,8 @@ async Task ForwardTopUpAsync(HttpContext context, string action)
 }
 
 app.MapGet("/topup/info", (HttpContext context) => ForwardTopUpAsync(context, "info"));
+app.MapPost("/topup/pending", (HttpContext context) => ForwardTopUpAsync(context, "pending")).RequireRateLimiting("per-visitor");
+app.MapGet("/topup/status", (HttpContext context) => ForwardTopUpAsync(context, "status" + context.Request.QueryString.Value)).RequireRateLimiting("per-visitor");
 app.MapPost("/topup/casso", (HttpContext context) => ForwardTopUpAsync(context, "casso")).RequireRateLimiting("per-visitor");
 app.MapPost("/topup/sepay", (HttpContext context) => ForwardTopUpAsync(context, "sepay")).RequireRateLimiting("per-visitor");
 

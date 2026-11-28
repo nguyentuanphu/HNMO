@@ -53,6 +53,7 @@ public static class AdminNavCatalog
             "Kinh tế & Cửa hàng",
             [
                 new("merchants", "economy", "oi-cart", "Merchant Stores", "Cửa hàng NPC", "Edit NPC shop tabs and item stocks cleanly.", "Chỉnh sửa gian hàng và vật phẩm NPC.", true, "item-definitions", "cash-shop-catalog", "edit-item-drops"),
+                new("bank-topups", "economy", "oi-dollar", "Bank Top-ups", "Nạp qua ngân hàng", "Your bank accounts for VietQR top-ups; confirm players' transfers.", "Tài khoản ngân hàng nhận nạp VietQR; xác nhận chuyển khoản của người chơi.", true, "topup-milestones", "cash-shop-catalog", "accounts"),
                 new("cash-shop-catalog", "economy", "oi-credit-card", "Cash Shop Catalog", "Danh mục Cash Shop", "Manage in-game X shop items, coin prices, and limits.", "Quản lý gói Cash Shop X, giá coin và giới hạn.", true, "topup-milestones", "accounts", "merchants"),
                 new("market", "economy", "oi-basket", "Item Market", "Chợ vật phẩm", "Monitor F6 web & NPC item marketplace listings and fees.", "Quản lý chợ vật phẩm F6, thuế và danh sách bán.", true, "escrow-contracts", "economy-dashboard", "account-safety"),
                 new("escrow-contracts", "economy", "oi-briefcase", "Escrow Contracts", "Giao dịch trung gian", "Manage Shift+F6 escrow contracts, holds, and dispute resolution.", "Quản lý hợp đồng giao dịch trung gian Shift+F6 và tranh chấp.", true, "market", "account-safety", "activity-log"),
