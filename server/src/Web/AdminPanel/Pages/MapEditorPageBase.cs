@@ -126,6 +126,16 @@ public abstract class MapEditorPageBase<TEditor> : ComponentBase, IDisposable
         builder.AddAttribute(5, nameof(Breadcrumb.Caption), this.Caption);
         builder.CloseComponent();
 
+        if (this.SelectedMapId != Guid.Empty && this._maps.All(map => map.GetId() != this.SelectedMapId))
+        {
+            builder.OpenElement(6, "p");
+            builder.AddAttribute(7, "class", "alert alert-warning");
+            builder.AddAttribute(8, "role", "alert");
+            builder.AddContent(9, Resources.PageNotFoundDescription);
+            builder.CloseElement();
+            return;
+        }
+
         builder.OpenComponent<CascadingValue<IContext>>(10);
         builder.AddAttribute(11, nameof(CascadingValue<IContext>.Value), this._context);
         builder.AddAttribute(12, nameof(CascadingValue<IContext>.IsFixed), false);
