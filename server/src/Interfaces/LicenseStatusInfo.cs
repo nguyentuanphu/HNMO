@@ -15,6 +15,7 @@ namespace HNMO.Interfaces;
 /// <param name="IsValid">Whether the license's signature, date and computer check out.</param>
 /// <param name="Licensee">Whom the license is for.</param>
 /// <param name="Expires">The last day it is valid, if it has one.</param>
+/// <param name="Seasons">The seasons it covers (s6, s9, arena); null: all.</param>
 public sealed record LicenseStatusInfo(
     int MaximumPlayers,
     string Message,
@@ -23,4 +24,5 @@ public sealed record LicenseStatusInfo(
     bool Exists,
     bool IsValid = false,
     string? Licensee = null,
-    DateOnly? Expires = null);
+    DateOnly? Expires = null,
+    IReadOnlyList<string>? Seasons = null);

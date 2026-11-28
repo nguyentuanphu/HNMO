@@ -85,9 +85,13 @@ internal sealed class DeveloperHubWeeklyService : BackgroundService
     {
         try
         {
-            await this.FetchLicenceAsync().ConfigureAwait(false);
-            var state = DeveloperHub.ReadState();
             var now = DateTime.UtcNow;
+            if (DeveloperHub.IsRequestCheckDue(now))
+            {
+                await this.FetchLicenceAsync().ConfigureAwait(false);
+            }
+
+            var state = DeveloperHub.ReadState();
             if (state.SetupReportedUtc is null && (state.SetupTriedUtc is not { } setupTried || now - setupTried >= TimeSpan.FromHours(6)))
             {
                 await this.SendSetupAsync().ConfigureAwait(false);
@@ -109,23 +113,10 @@ internal sealed class DeveloperHubWeeklyService : BackgroundService
     private async Task FetchLicenceAsync()
     {
         var (status, licence) = await DeveloperHub.FetchLicenceAsync().ConfigureAwait(false);
-        if (status != "issued" || licence is null)
+        if (status == "issued" && licence is not null)
         {
-            return;
+            await HubLicenceInstaller.InstallAsync(licence, this._licences, this._logger).ConfigureAwait(false);
         }
-
-        var check = this._licences.Check(System.Text.Encoding.UTF8.GetBytes(licence));
-        if (!check.IsValid)
-        {
-            this._logger.LogWarning("HNMO developer hub: the issued licence can't be used here: {Message}", check.Message);
-            return;
-        }
-
-        var settings = HostSettingsStore.TryLoad(HostSettingsStore.ResolveDefaultPath(AppContext.BaseDirectory));
-        var path = this._licences.GetStatus(settings?.LicenseFilePath).ResolvedPath;
-        await File.WriteAllTextAsync(path, licence).ConfigureAwait(false);
-        var applied = this._licences.Apply(settings?.LicenseFilePath);
-        this._logger.LogInformation("HNMO developer hub: the licence for {Licensee} arrived and is in use (up to {Players} players).", applied.Licensee, applied.MaximumPlayers);
     }
 
     private async Task SendSetupAsync()

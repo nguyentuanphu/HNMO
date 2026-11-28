@@ -66,6 +66,29 @@ public class PlayerLicenseTests
         Assert.That(license.MaximumPlayers, Is.EqualTo(10));
     }
 
+    /// <summary>A licence that names its seasons covers only those; one that names none covers all (older licences).</summary>
+    /// <param name="seasons">The licence's seasons field (JSON), or null for none.</param>
+    /// <param name="season">This program's season.</param>
+    /// <param name="valid">Whether it is used here.</param>
+    [TestCase("""["s6"]""", "s6", true)]
+    [TestCase("""["s6"]""", "s9", false)]
+    [TestCase("""["s6","s9"]""", "s9", true)]
+    [TestCase("""["s6","s9"]""", "arena", false)]
+    [TestCase("""["s6","s9","arena"]""", "arena", true)]
+    [TestCase(null, "s9", true)]
+    [TestCase(null, "arena", true)]
+    public void SeasonsOfALicence(string? seasons, string season, bool valid)
+    {
+        var field = seasons is null ? string.Empty : $",\"seasons\":{seasons}";
+        var license = PlayerLicense.Check(this.File($$"""{"licensee":"Minh","maxPlayers":200,"expires":null,"machine":null{{field}}}"""), this._publicKeyPem, "abc", Today, season: season);
+        Assert.That(license.IsValid, Is.EqualTo(valid));
+        Assert.That(license.MaximumPlayers, Is.EqualTo(valid ? 200 : PlayerLicense.DefaultMaximumPlayers));
+        if (seasons is not null)
+        {
+            Assert.That(license.Seasons, Is.Not.Null.And.Not.Empty, "the seasons are kept for the License page");
+        }
+    }
+
     /// <summary>A signed license raises the limit.</summary>
     [Test]
     public void SignedLicenseRaisesTheLimit()

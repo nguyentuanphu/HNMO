@@ -203,6 +203,9 @@
                                 <NavLink class="dropdown-item" href="host-settings" @onclick="() => NavigationHistory.Clear()">
                                     <span class="oi oi-wrench" aria-hidden="true"></span> @Resources.HostSettingsPage
                                 </NavLink>
+                                <NavLink class="dropdown-item" href="licence" @onclick="() => NavigationHistory.Clear()">
+                                    <span class="oi oi-key" aria-hidden="true"></span> @L("Licence", "Giấy phép")
+                                </NavLink>
                             </AuthorizeView>
                             <AuthorizeView Policy="@AdminPolicies.Administrator">
                                 <NavLink class="dropdown-item" href="logging-configuration" @onclick="() => NavigationHistory.Clear()">
