@@ -114,6 +114,19 @@
     .stage-label small { font-size: 11px; color: #b9b3a3; }
     .stage-label.picked { opacity: 1; }
     .stage-label.picked b { color: var(--gold); }
+    /* A phone held upright: the five labels share a narrow screen, smaller and tighter (no horizontal scroll). */
+    @media (max-width: 480px) {
+      .stage-label { padding: 1px 3px; font-size: 10px; }
+      .stage-label b { font-size: 11px; }
+      .stage-label small { font-size: 9px; }
+      #stageBrand { font-size: 10px; letter-spacing: .3em; }
+      :root body.stage-world.stage-dialog #login { padding: 8px; }
+      :root body.stage-world.stage-dialog #login .panel { padding: 14px; box-sizing: border-box; max-width: 100%; }
+      :root body.stage-world.stage-dialog #login .panel .row { min-width: 0; }
+      :root body.stage-world.stage-dialog #login .panel input, :root body.stage-world.stage-dialog #login .panel select { min-width: 0; max-width: 100%; box-sizing: border-box; }
+    }
+    /* The game's loading bar (ui/loadingProgress.ts) shows instead of the page's status line while it is up. */
+    body.loading-bar #loading { display: none; }
     #stagePlates { z-index: 30; }
     body.stage-dialog #stagePlates, body.stage-dialog:not(.stage-create) #stageLabels .stage-label { display: none; }
     .season-badge { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: .02em; vertical-align: middle; }

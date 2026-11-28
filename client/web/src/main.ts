@@ -24,7 +24,7 @@ import { ItemWindows } from './ui/itemWindows.js';
 import { CharacterStats, isOutlawHeroState } from './game/stats.js';
 import { Hud } from './ui/hud.js';
 import { setUpGuide } from './ui/guide.js';
-import { setUpSettings, type SettingsWindow } from './ui/settingsWindow.js';
+import { plainScreensOn, setUpSettings, type SettingsWindow } from './ui/settingsWindow.js';
 import { setKtx2Renderer, clearTextureCache, loopKeyCount } from './bmd.js';
 import { FRAME_SECTIONS, PerfRecorder } from './game/perfRecorder.js';
 import { MovementRecorder } from './game/movementRecorder.js';
@@ -90,7 +90,7 @@ import { PartyWindow } from './ui/partyWindow.js';
 import { PartyOptionsWindow } from './ui/partyOptionsWindow.js';
 import { CommandWindow } from './ui/commandWindow.js';
 import { ChatCommandWindow } from './ui/chatCommandWindow.js';
-import { hideLoadingScreen, showLoadingScreen } from './ui/loadingScreen.js';
+import { hideLoadingScreen, loadingScreenProgress, showLoadingScreen } from './ui/loadingScreen.js';
 import { setupSocial, decorateLabel, setCustomRankLookup, type Social } from './game/social.js';
 import { createCustomRanks, type CustomRanksManager } from './game/customRanks.js';
 import { confirmInGame } from './ui/confirmDialog.js';
@@ -130,15 +130,20 @@ import { ARROW_RELEASE_DELAY_SECONDS, DeathEffects, ProjectileLayer, arrowKindsF
 import { parseSeason, seasonBadge, setSeason, type SeasonKey } from './dataRoot.js';
 import { chooseServerBySeason, groupBySeason, seasonColumnTexts } from './ui/seasonColumns.js';
 import { openServerSelect, type ServerSelectGroup, type ServerSelectWindow } from './ui/serverSelectWindow.js';
-import { showConfirm } from './ui/gameDialogs.js';
+import { showConfirm, showMenu } from './ui/gameDialogs.js';
 import { type ServerListEntry, fetchServerList, fetchGameServerAddress, login, loginWithTicket, fetchCharacters, enterWorld, createCharacter, deleteCharacter, creatableClasses, lastUnlockFlags, CLASSES } from './net/session.js';
 import type { WorldData } from './world.js';
 import type { TerrainMesh } from './terrain.js';
 import type { Character } from './game/characters.js';
 import type { EquipmentAppearance, EquipmentSlotName } from './game/items.js';
 import type { CharacterListEntry } from './net/session.js';
-import type { Connection } from './net/connection.js';
+import { Connection } from './net/connection.js';
 import { read } from './net/packets.js';
+import { clearResumePlan, loadResumePlan, Reconnector, RETRY_DELAYS_S, type GiveUpReason, type ResumePlan } from './net/reconnect.js';
+import { ReconnectDialog, type ReconnectStep } from './ui/reconnectDialog.js';
+import { LoadingProgress, loadingWord } from './ui/loadingProgress.js';
+import { LoadMeter, trackLoad } from './loadProgress.js';
+import { requestLoginTicket, signInWebsite } from './websiteSession.js';
 import { HNMO_BUILD_STAMP, HNMO_PROJECT_ID } from './build.js';
 
 // Record the build stamp so it survives bundling/minification and can be read from a
@@ -241,6 +246,8 @@ export interface GameState {
   characterStage?: CharacterStage | null;
   /** The server choice's window over the stage while it shows (ui/serverSelectWindow.ts). */
   serverSelect?: ServerSelectWindow | null;
+  /** The reconnect box while a lost connection is being restored (ui/reconnectDialog.ts, net/reconnect.ts). */
+  reconnect?: ReconnectDialog | null;
   escrow?: EscrowWindow;
   jewelBank?: JewelBankWindow;
   vip?: VipWindow;
@@ -472,12 +479,15 @@ async function loadMap(mapNumber: number): Promise<void> {
 /** Maps being loaded (LoadingWorld): gates wait for them. */
 let mapsLoading = 0;
 
+/** The loading bar's meter while the game world loads after the character choice (ui/loadingProgress.ts). */
+let worldMeter: LoadMeter | null = null;
+
 async function loadMapNow(mapNumber: number): Promise<void> {
   if (state.online || ui.login.hidden) void mapBanner.show(mapNumber, mapName(mapNumber));
   if (state.worldGroup) root.remove(state.worldGroup);
   setStatus(`Loading ${mapName(mapNumber)}…`, 0.05);
   const data = await loadWorldData(mapNumber);
-  const world = await createWorld(data, FOG, (progress) => setStatus('Loading world objects…', 0.1 + progress * 0.8));
+  const world = await createWorld(data, FOG, (progress) => { setStatus('Loading world objects…', 0.1 + progress * 0.8); worldMeter?.progress(progress); });
   state.world = { ...data, terrain: world.terrain };
   state.autoPlaySparkles?.dispose();
   state.autoPlaySparkles = new AutoPlaySparkles({
@@ -1038,6 +1048,8 @@ function saveSettings(settings: Record<string, string>): void {
 }
 
 function showError(error: unknown): void {
+  worldMeter?.dispose();
+  worldMeter = null;
   hideLoadingScreen();
   ui.loginError.textContent = error instanceof Error ? error.message : String(error);
   ui.loginError.hidden = false;
@@ -1121,6 +1133,8 @@ async function chooseCharacter(connection: Connection): Promise<CharacterListEnt
   quickPlayCharacter = null;
   // Quick play skips the list: the stage of the server choice goes before the world loads.
   if (quick) { releaseStage(); return quick; }
+  // Coming back after a lost connection to a character that isn't there any more: the list, as usual.
+  if (resuming) endResume();
   // The 3D stage (the desktop's CharacterScene) behind the list; the list's buttons stay the way in.
   const stage = openCharacterStage(characters);
   try {
@@ -1247,9 +1261,16 @@ function startStage(): CharacterStage {
   });
   characterStage = stage;
   state.characterStage = stage;
-  stageLabelsClose = () => labels.remove();
-  stageLoaded = stage.load()
+  // The loading bar while world 74 comes (its data, its objects, the rings), over the plain list that already works.
+  const bar = new LoadingProgress(loadingWord(), 25);
+  const meter = new LoadMeter((reading) => bar.set(reading));
+  const STAGE_SHARES = { data: 0.1, objects: 0.85, rings: 0.05 } as const;
+  stageLabelsClose = () => { meter.dispose(); bar.close(); labels.remove(); };
+  stageLoaded = stage.load((step) => meter.stage(STAGE_SHARES[step]), (fraction) => meter.progress(fraction))
     .then(() => {
+      meter.finish();
+      // The full bar a moment, then away.
+      window.setTimeout(() => bar.close(), 400);
       if (characterStage !== stage) return false;
       // The world is drawn: the login screen's art and boxes give way to it (index.html, body.stage-world).
       document.body.classList.add('stage-world');
@@ -1257,6 +1278,8 @@ function startStage(): CharacterStage {
       return true;
     })
     .catch((error: unknown) => {
+      meter.dispose();
+      bar.close();
       console.warn('The character stage could not load; the plain list stays.', error);
       if (characterStage === stage) releaseStage();
       return false;
@@ -1286,6 +1309,8 @@ function releaseStage(): void {
  * places, the desktop's char_sel_main window under them.
  */
 function openCharacterStage(characters: CharacterListEntry[]): CharacterStage | null {
+  // The plain screens (game options): the list alone, no world 74.
+  if (plainScreensOn() && !characterStage) return null;
   // The desktop's char_sel_main window: Create, and Delete / OK once a character is picked (CharSelMainWin::UpdateDisplay).
   let plates: RmlDocument | null = null;
   const click = (kind: string) => { const sound = interfaceClickSound(kind); if (sound) audioSystem().play(sound); };
@@ -1321,7 +1346,10 @@ function openCharacterStage(characters: CharacterListEntry[]): CharacterStage | 
   const stage = startStage();
   stageHooks.onSelectionChange = (slot) => mark(slot);
   stageHooks.onEnter = (slot) => characterButton(slot)?.click();
-  stageClose = () => { plates?.close(); plates = null; };
+  // A new window size lays the plates out again (their rem follows the screen, ui/rml.ts sceneRemPx).
+  const onResize = () => plates?.update();
+  window.addEventListener('resize', onResize);
+  stageClose = () => { window.removeEventListener('resize', onResize); plates?.close(); plates = null; };
   stageRefresh = refreshPlates;
   const loaded = stageLoaded ?? Promise.resolve(false);
   loaded
@@ -1333,7 +1361,8 @@ function openCharacterStage(characters: CharacterListEntry[]): CharacterStage | 
       resize();
       const first = characters[0];
       if (first) stage.select(first.slot);
-      plates = await openDocument('char_sel_main', model, { parent: document.body });
+      // On a phone held upright the plates grow to the screen's width: the four buttons need 280 original pixels.
+      plates = await openDocument('char_sel_main', model, { parent: document.body, sceneWidth: () => 280 });
       if (characterStage !== stage) { plates.close(); plates = null; return; }
       plates.host.id = 'stagePlates';
       // The desktop's CharSelMainWin lays the bar out across the window (its #panel spans it; Connect and Delete anchor
@@ -1610,9 +1639,11 @@ async function arenaRunning(): Promise<boolean> {
   }
 }
 
-async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena' | 'home'): Promise<void> {
+async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena' | 'home', resume?: ResumePlan): Promise<void> {
   state.connection?.close();
   state.connection = undefined;
+  // A password login keeps the password in this page only, for a reconnect without a website session (net/reconnect.ts).
+  if (settings.password) reconnectPassword = { account: settings.username, password: settings.password };
   const connectServer = { host: settings.host, port: Number(settings.port) };
   setStatus('Asking the connect server for game servers…');
   // Season 9 and the Arena run as their own programs with their own connect servers (seasons.json says their ports);
@@ -1641,6 +1672,15 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   // Arena travel (a ticket from the Arena window): straight to the Arena's first server, or back to the home server.
   const columnOf = (s: SeasonServer) => s.column ?? s.season;
   const home = go === 'home' ? savedArenaHome() : null;
+  // Coming back after a lost connection: the same server, then the same character.
+  if (resume) {
+    const back = servers.find((s) => columnOf(s) === resume.column && s.id === resume.serverId);
+    if (!back) throw new Error(currentLanguage() === 'vi' ? 'Máy chủ chưa có trong danh sách.' : 'The server is not listed yet.');
+    quickPlayCharacter = resume.character;
+    ui.servers.hidden = true;
+    await enterChosenServer(settings, back, ticket);
+    return;
+  }
   const travelTarget = go === 'arena'
     ? servers.find((s) => s.column === 'arena')
     : home ? servers.find((s) => columnOf(s) === home.column && s.id === home.serverId) : undefined;
@@ -1670,10 +1710,10 @@ function chooseServerOnStage(servers: SeasonServer[]): Promise<SeasonServer> {
   const vi = currentLanguage() === 'vi';
   let pickFromWindow: (server: SeasonServer) => void = () => {};
   const fromWindow = new Promise<SeasonServer>((resolve) => { pickFromWindow = resolve; });
-  const choice = Promise.race([
-    chooseServerBySeason(ui.servers, servers, (s) => s.column ?? s.season, (s) => describeServerChoice(s.id, s.load, s.meta, vi, true), vi),
-    fromWindow,
-  ]);
+  const plainList = chooseServerBySeason(ui.servers, servers, (s) => s.column ?? s.season, (s) => describeServerChoice(s.id, s.load, s.meta, vi, true), vi);
+  // The plain screens (game options): the list alone, no world 74.
+  if (plainScreensOn()) return plainList;
+  const choice = Promise.race([plainList, fromWindow]);
   const stage = startStage();
   let selectWindow: ServerSelectWindow | null = null;
   let done = false;
@@ -1753,10 +1793,18 @@ async function enterChosenServer(settings: LoginSettings, server: SeasonServer, 
   setSeason(server.season);
   const address = await fetchGameServerAddress(settings.relay, server.connect, server.id);
   setStatus(`Logging in to ${address.host}:${address.port}…`);
+  resumeStep('loggingIn');
   const connection = ticket
     ? await loginWithTicket(settings.relay, address, settings.username, ticket)
     : await login(settings.relay, address, settings.username, settings.password);
   state.connection = connection; // tests feed recorded packets through it (dispatch)
+  resumeStep('characters');
+  // A logout the server answers, or a ban notice, closes the connection on purpose: no reconnect after it.
+  let closedByServer = false;
+  connection.onPacket((bytes) => {
+    if ((bytes[0] === 0xc1 || bytes[0] === 0xc3) && bytes[2] === 0xf1 && bytes[3] === 0x02) closedByServer = true; // LogoutResponse
+    if (bytes[0] === 0xc2 && bytes[3] === 0xf5 && bytes[4] === 0x29) closedByServer = true; // HnmoBanNotice
+  });
   // Automatic error reports (autoErrors.ts) go to the server's owner through this connection from now on.
   const scope = await autoErrorScope(address.host, address.port, settings.username);
   connection.onUnexpectedDisconnect = setAutoErrorSender((json) => {
@@ -1766,8 +1814,19 @@ async function enterChosenServer(settings: LoginSettings, server: SeasonServer, 
   const character = await chooseCharacter(connection);
   ui.characters.hidden = true;
   saveQuickPlay({ username: settings.username, column: columnOf(server), serverId: server.id, character: character.name });
+  resumeStep('joining');
+  // What a reconnect comes back to (net/reconnect.ts): this server and this character.
+  const comeBack: Omit<ResumePlan, 'attempt' | 'lostAt'> = {
+    account: settings.username, relay: settings.relay, connect: server.connect, column: columnOf(server), serverId: server.id, character: character.name,
+  };
   showLoadingScreen(); // until the world is ready (CLoadingScene)
-  await Promise.all([loadMonsterCatalog(), loadItemCatalog(), loadGlowColors(), loadSkillData(), loadBuffData()]);
+  // The loading bar follows the loads by stage: the catalogs, entering, the map, the hero, the windows.
+  const loadingBar = loadingScreenProgress();
+  worldMeter?.dispose();
+  const meter = worldMeter = new LoadMeter((reading) => loadingBar?.set(reading));
+  meter.stage(0.1);
+  await Promise.all([loadMonsterCatalog(), loadItemCatalog(), loadGlowColors(), loadSkillData(), loadBuffData()].map((load: Promise<unknown>) => trackLoad(load)));
+  meter.stage(0.05);
   // The server sends who is in view right after the character information, while
   // the map is still loading: keep those packets and replay them once it's ready.
   const earlyPackets: Uint8Array[] = [];
@@ -1810,8 +1869,12 @@ async function enterChosenServer(settings: LoginSettings, server: SeasonServer, 
   wearInventory(character); // what the hero wears now, from the inventory the server sent with the character
   ui.login.hidden = true;
   const playerId = connection.playerId!; // known since login()
+  meter.stage(0.7);
+  loadingBar?.setLabel(`${loadingWord()} ${mapName(info.MapId)}`);
   await loadMap(info.MapId);
+  meter.stage(0.1);
   await placeHero({ id: playerId, name: character.name, bodySet: character.classIndex + 1, equipment: character.equipment, x: info.X, y: info.Y });
+  meter.stage(0.05);
   stopBuffering();
   // The world and the hero are there now; the map changes only come once state.online is set.
   state.online = new OnlineWorld({
@@ -2620,6 +2683,7 @@ async function enterChosenServer(settings: LoginSettings, server: SeasonServer, 
     home: () => playedServer,
     heroCell: () => (state.online ? { ...state.online.hero.cell } : null),
     travel: (account, ticket, to) => {
+      leavingPage = true;
       const params = new URLSearchParams({ account, ticket, go: to });
       location.hash = params.toString();
       location.reload();
@@ -3073,6 +3137,7 @@ async function enterChosenServer(settings: LoginSettings, server: SeasonServer, 
   const leaveWorld = (logOutType: number, question: string) => {
     void confirmInGame(question).then((yes) => {
       if (!yes) return;
+      leavingPage = true; // the server closes the connection after the logout: no reconnect
       try { connection.send('ClientToServer', 'LogOut', { Type: logOutType }); } catch { /* closing */ }
       window.setTimeout(() => window.location.reload(), 120);
     });
@@ -3240,13 +3305,156 @@ async function enterChosenServer(settings: LoginSettings, server: SeasonServer, 
   state.mobileHud.setMode(gameOptionsWindow?.current.hudMode ?? 'auto');
   state.mobileHud.setInWorld(true);
   earlyPackets.forEach((bytes) => online.handle(bytes));
+  meter.finish();
+  worldMeter = null;
   hideLoadingScreen();
-  connection.onClose = () => { vip.reset(); vip.close(); giftBox.reset(); giftBox.close(); setStatus('Disconnected from the server. Reload the page to log in again.'); };
+  // Back after a lost connection: the box goes, and a line in the chat says what happened.
+  if (resuming) {
+    chat.add('Reconnected: the connection to the server was lost.', 'system');
+    endResume();
+  }
+  connection.onClose = () => {
+    vip.reset(); vip.close(); giftBox.reset(); giftBox.close();
+    // The server or the network dropped it while playing (not a logout, the server's logout answer, a ban or the page
+    // being left): the reconnect box, and tries to come back to this server and this character.
+    if (!connection.closedByGame && !closedByServer && !leavingPage) {
+      startReconnect({ ...comeBack, attempt: 0, lostAt: Date.now() });
+      return;
+    }
+    setStatus('Disconnected from the server. Reload the page to log in again.');
+  };
   warmCharacterModels();
   // The touch HUD shows this line as a short toast with touch wording (mobileHud.ts styles #loading).
   setStatus(state.mobileHud.active
     ? `${character.name}: ${currentLanguage() === 'vi' ? 'Kéo cần để đi, chạm quái để đánh, chạm NPC để nói chuyện' : 'Drag the stick to walk, tap a monster to attack, tap an NPC to talk'}`
     : `${character.name} entered the world. Left-click to walk, right-drag to turn, wheel to zoom, I for the inventory, click an NPC to talk.`, 1);
+}
+
+// ---------- reconnect after a lost connection (net/reconnect.ts) ----------
+
+/** The page is being left or the player logged out: a closing connection is no reason to reconnect. */
+let leavingPage = false;
+window.addEventListener('pagehide', () => { leavingPage = true; });
+/** A password login's account and password, in this page only (a reconnect without a website session signs in with it). */
+let reconnectPassword: { account: string; password: string } | null = null;
+/** The plan being come back to after the reload, until the world is there again (or the tries give up). */
+let resuming: ResumePlan | null = null;
+let reconnectBox: ReconnectDialog | null = null;
+let reconnector: Reconnector | null = null;
+
+/** The reconnect box (one), over the world or over the page. */
+function showReconnectBox(over: 'world' | 'page'): ReconnectDialog {
+  reconnectBox ??= new ReconnectDialog({ onCancel: () => { sounds.click(); if (reconnector?.active) reconnector.cancel(); else giveUpReconnect(resuming, 'cancelled'); } });
+  reconnectBox.setDim(over);
+  state.reconnect = reconnectBox;
+  return reconnectBox;
+}
+
+function closeReconnectBox(): void {
+  reconnectBox?.close();
+  reconnectBox = null;
+  state.reconnect = null;
+}
+
+/** The step of a come-back after the reload (the box follows the login). */
+function resumeStep(step: ReconnectStep): void {
+  if (!resuming) return;
+  reconnectBox?.set(step);
+  // Entering: the loading picture and its bar come under the box, seen through the light dim.
+  if (step === 'joining') reconnectBox?.setDim('world');
+}
+
+/** The come-back is over (in the world again, or on the character list): the box and the plan go. */
+function endResume(): void {
+  resuming = null;
+  clearResumePlan();
+  closeReconnectBox();
+}
+
+/** Starts the tries for a plan (a lost connection, the next try after a failed reload, or Retry). */
+function startReconnect(plan: ResumePlan): void {
+  const box = showReconnectBox(state.online ? 'world' : 'page');
+  const run = new Reconnector({
+    show: (step, countdown) => box.set(step, countdown),
+    probe: probeGameServer,
+    ticket: reconnectTicket,
+    resume: (_plan, entry) => {
+      leavingPage = true;
+      location.hash = new URLSearchParams({ ticket: entry.ticket, account: entry.loginName, resume: '1' }).toString();
+      location.reload();
+    },
+    giveUp: (reason) => giveUpReconnect(plan, reason),
+  });
+  reconnector = run;
+  void run.run(plan);
+}
+
+/** The game server is back: the connect server gives its address and the server greets a new connection. */
+async function probeGameServer(plan: ResumePlan): Promise<void> {
+  const address = await fetchGameServerAddress(plan.relay, plan.connect, plan.serverId);
+  const probe = new Connection(plan.relay, { ...address, encrypted: true });
+  const greeted = probe.waitFor(0xf1, 0x00, 4000);
+  greeted.catch(() => undefined);
+  try {
+    await probe.open();
+    await greeted;
+  } finally {
+    probe.close();
+  }
+}
+
+/** A one-time ticket of the website session for the plan's account; a password login signs the website in first. */
+async function reconnectTicket(plan: ResumePlan): Promise<{ ticket: string; loginName: string } | 'signed-out'> {
+  let entry = await requestLoginTicket();
+  if (entry === 'signed-out' && reconnectPassword && reconnectPassword.account.toLowerCase() === plan.account.toLowerCase()) {
+    const signedIn = await signInWebsite(reconnectPassword.account, reconnectPassword.password);
+    if (signedIn.ok) entry = await requestLoginTicket();
+  }
+  // The website signed in as another account: that one's characters aren't these.
+  if (entry !== 'signed-out' && entry.loginName.toLowerCase() !== plan.account.toLowerCase()) return 'signed-out';
+  return entry;
+}
+
+/** The tries stopped: Cancel goes back to the server choice; otherwise the game's box offers Retry or the server choice. */
+function giveUpReconnect(plan: ResumePlan | null, reason: GiveUpReason): void {
+  closeReconnectBox();
+  resuming = null;
+  if (reason === 'cancelled' || !plan) { void backToServerChoice(); return; }
+  clearResumePlan();
+  const vi = currentLanguage() === 'vi';
+  const line = reason === 'signed-out'
+    ? (vi ? 'Phiên đăng nhập trên trang web đã hết. Hãy đăng nhập lại trên trang web rồi thử lại.' : 'Your website session has ended. Log in on the website again, then retry.')
+    : (vi ? 'Không kết nối lại được với máy chủ.' : 'The connection to the server could not be restored.');
+  // The game's menu box: its full-width buttons hold the longer label.
+  void showMenu({
+    title: 'Connection lost',
+    lines: [line],
+    buttons: [
+      { label: vi ? 'Thử lại' : 'Retry', tag: 'reconnect-retry' },
+      { label: vi ? 'Về chọn máy chủ' : 'Back to server choice', tag: 'reconnect-back' },
+    ],
+    tag: 'reconnect-failed',
+  }).then((index) => {
+    if (index === 0) startReconnect({ ...plan, attempt: 0, lostAt: Date.now() });
+    else void backToServerChoice();
+  });
+}
+
+/** Back to the server choice: a new ticket of the website session, else the website's sign-in (or this page's login). */
+async function backToServerChoice(): Promise<void> {
+  clearResumePlan();
+  leavingPage = true;
+  try {
+    const entry = await requestLoginTicket();
+    if (entry !== 'signed-out') {
+      location.hash = new URLSearchParams({ ticket: entry.ticket, account: entry.loginName }).toString();
+      location.reload();
+      return;
+    }
+    location.href = reconnectPassword ? '/index.html' : '/account.html?play=1';
+  } catch {
+    location.href = '/index.html';
+  }
 }
 
 function startGame(play: () => Promise<void>): void {
@@ -3264,10 +3472,17 @@ function startGame(play: () => Promise<void>): void {
     ui.servers.hidden = ui.characters.hidden = true;
     ui.loginForm.querySelector('fieldset')!.disabled = false;
     showError(error);
+    // A come-back that failed after the reload (the server still busy with the old session, say): the next try.
+    const plan = resuming;
+    if (plan) {
+      resuming = null;
+      if (plan.attempt + 1 < RETRY_DELAYS_S.length) startReconnect({ ...plan, attempt: plan.attempt + 1 });
+      else giveUpReconnect(plan, 'failed');
+    }
   });
 }
 
-function readTicketFromHash(): { account: string; ticket: string; go?: 'arena' | 'home' } | null {
+function readTicketFromHash(): { account: string; ticket: string; go?: 'arena' | 'home'; resume: boolean } | null {
   const hash = location.hash.startsWith('#') ? location.hash.slice(1) : location.hash;
   if (!hash) return null;
   const params = new URLSearchParams(hash);
@@ -3278,7 +3493,7 @@ function readTicketFromHash(): { account: string; ticket: string; go?: 'arena' |
   if (!ticket) return null;
   // Remove the one-time ticket from the address bar right away so it doesn't linger in history.
   history.replaceState(null, '', location.pathname + location.search);
-  return { account, ticket, go };
+  return { account, ticket, go, resume: params.get('resume') === '1' };
 }
 
 function updateWebsiteLoginButtonLanguage(): void {
@@ -3419,7 +3634,15 @@ function initLogin() {
     };
     const usernameInput = ui.loginForm.elements.namedItem('username') as HTMLInputElement | null;
     if (usernameInput && form.username) usernameInput.value = form.username;
-    startGame(async () => playOnline(await resolveConnectPort(form), pendingTicket.ticket, pendingTicket.go));
+    // Back after a lost connection (net/reconnect.ts): the same server and character, the box until the world is there.
+    const plan = pendingTicket.resume ? loadResumePlan(form.username) : null;
+    if (plan) {
+      resuming = plan;
+      showReconnectBox('page').set('connecting');
+      startGame(async () => playOnline({ ...(await resolveConnectPort(form)), relay: plan.relay }, pendingTicket.ticket, undefined, plan));
+    } else {
+      startGame(async () => playOnline(await resolveConnectPort(form), pendingTicket.ticket, pendingTicket.go));
+    }
   }
 
   ui.loginForm.addEventListener('submit', (event) => {
@@ -3451,6 +3674,8 @@ gameOptionsWindow = settingsWindow = setUpSettings(
     performanceReport: () => { void perfWindow.open().then(() => perfWindow.record()); },
     textureQualityChanged: () => { clearTextureCache(); },
     hudModeChanged: (mode: HudMode) => { state.mobileHud?.setMode(mode); },
+    // The plain screens switched on while world 74 is up: the plain lists at once (they stay usable without it).
+    plainScreensChanged: (on: boolean) => { if (on && characterStage) releaseStage(); },
   },
 );
 // The login theme (it starts with the first click or key: browsers hold sound back until then).

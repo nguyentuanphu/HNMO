@@ -46,11 +46,18 @@ export async function signOutWebsite(): Promise<void> {
   sessionEvents?.postMessage('changed');
 }
 
-export async function enterGame(): Promise<void> {
-  if (!await hasWebsiteSession()) { location.href = '/account.html?play=1'; return; }
-  const response = await fetch('/portal/login-ticket', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-HNMO-Session': '1' }, credentials: 'same-origin', cache: 'no-store', body: JSON.stringify({ deviceId: deviceId() }) });
-  if (response.status === 401) { location.href = '/account.html?play=1'; return; }
+/** A one-time game login ticket of the website session ('signed-out' when there is none); throws when it can't be had now. */
+export async function requestLoginTicket(): Promise<{ ticket: string; loginName: string } | 'signed-out'> {
+  const response = await fetch('/portal/login-ticket', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-HNMO-Session': '1' }, credentials: 'same-origin', cache: 'no-store', body: JSON.stringify({ deviceId: deviceId() }), signal: AbortSignal.timeout(15000) });
+  if (response.status === 401) return 'signed-out';
   const body: unknown = await response.json();
   if (!response.ok || !body || typeof body !== 'object' || !('ticket' in body) || typeof body.ticket !== 'string' || !('loginName' in body) || typeof body.loginName !== 'string') throw new Error('Game entry was not confirmed.');
-  location.href = `/index.html#${new URLSearchParams({ ticket: body.ticket, account: body.loginName })}`;
+  return { ticket: body.ticket, loginName: body.loginName };
+}
+
+export async function enterGame(): Promise<void> {
+  if (!await hasWebsiteSession()) { location.href = '/account.html?play=1'; return; }
+  const entry = await requestLoginTicket();
+  if (entry === 'signed-out') { location.href = '/account.html?play=1'; return; }
+  location.href = `/index.html#${new URLSearchParams({ ticket: entry.ticket, account: entry.loginName })}`;
 }

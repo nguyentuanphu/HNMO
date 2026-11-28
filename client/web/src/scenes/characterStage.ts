@@ -58,6 +58,15 @@ export function verticalFov(hFovDegrees: number): number {
   return (2 * Math.atan(Math.tan((hFovDegrees * Math.PI) / 360) / (4 / 3)) * 180) / Math.PI;
 }
 
+/**
+ * The scene's vertical FOV on a screen of this aspect: the 4:3 reference's (verticalFov), and on a screen narrower
+ * than 4:3 (a phone held upright) wide enough to keep the reference's 40° across, so the five places stay in view.
+ */
+export function stageVerticalFov(aspect: number): number {
+  if (!(aspect > 0) || aspect >= 4 / 3) return verticalFov(STAGE_CAMERA.hFov);
+  return (2 * Math.atan(Math.tan((STAGE_CAMERA.hFov * Math.PI) / 360) / aspect) * 180) / Math.PI;
+}
+
 /** The light of a character: the scene's base light, plus white for the picked one (PlaceCharactersForDraw). */
 export function stageLight(selected: boolean): number {
   return selected ? 1 : 0.45;
@@ -131,11 +140,17 @@ export class CharacterStage {
   /** The characters standing, by slot. */
   get slots(): number[] { return this.entries.map((e) => e.slot); }
 
-  /** Loads the scene's world and the rings' texture (world 74 first: the characters stand on it). */
-  async load(): Promise<void> {
+  /**
+   * Loads the scene's world and the rings' texture (world 74 first: the characters stand on it). `onStage` hears each
+   * step as it starts (the world's data, its objects, the rings) and `onProgress` how far the objects are (0 to 1).
+   */
+  async load(onStage?: (step: 'data' | 'objects' | 'rings') => void, onProgress?: (fraction: number) => void): Promise<void> {
     const fog = { color: new THREE.Color(0x000000), near: STAGE_CAMERA.fogNear, far: STAGE_CAMERA.fogFar };
+    onStage?.('data');
     const data = await loadWorldData(STAGE_MAP);
-    const world = await createWorld(data, fog);
+    onStage?.('objects');
+    const world = await createWorld(data, fog, onProgress);
+    onStage?.('rings');
     if (this.disposed) { disposeGroup(world.group); return; }
     this.data = data;
     this.world = world;
@@ -323,7 +338,7 @@ export class CharacterStage {
   private placeCamera(): void {
     const camera = this.options.camera;
     this.savedCamera ??= { fov: camera.fov, near: camera.near, far: camera.far };
-    const fov = verticalFov(STAGE_CAMERA.hFov);
+    const fov = stageVerticalFov(camera.aspect);
     if (camera.fov !== fov || camera.near !== STAGE_CAMERA.near || camera.far !== STAGE_CAMERA.far) {
       camera.fov = fov;
       camera.near = STAGE_CAMERA.near;
@@ -358,7 +373,10 @@ export class CharacterStage {
       const shown = point.z >= -1 && point.z <= 1;
       entry.label.style.visibility = shown ? 'visible' : 'hidden';
       if (!shown) continue;
-      const x = canvasRect.left + ((point.x + 1) / 2) * canvasRect.width - parentRect.left;
+      // Kept whole on the screen: a label at a narrow screen's edge moves in rather than out.
+      const half = entry.label.offsetWidth / 2;
+      const across = canvasRect.left + ((point.x + 1) / 2) * canvasRect.width - parentRect.left;
+      const x = parentRect.width > 2 * half + 4 ? Math.min(Math.max(across, half + 2), parentRect.width - half - 2) : across;
       const y = canvasRect.top + ((1 - point.y) / 2) * canvasRect.height - parentRect.top;
       entry.label.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px) translate(-50%, -100%)`;
     }
