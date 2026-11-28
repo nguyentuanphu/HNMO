@@ -5,12 +5,23 @@
 namespace HNMO.Persistence.Initialization.VersionSeasonSix.TestAccounts;
 
 using HNMO.DataModel.Configuration;
+using HNMO.DataModel.Entities;
 
 /// <summary>
 /// Initializes the test accounts.
 /// </summary>
 public class TestAccountsInitialization : InitializerBase
 {
+    /// <summary>
+    /// The login name (and password) of the guild master of the social browser test's own pair of accounts.
+    /// </summary>
+    public const string SocialMasterName = "socmas";
+
+    /// <summary>
+    /// The login name (and password) of the guild member of the social browser test's own pair of accounts.
+    /// </summary>
+    public const string SocialMemberName = "socmem";
+
     /// <summary>
     /// Initializes a new instance of the <see cref="TestAccountsInitialization"/> class.
     /// </summary>
@@ -19,6 +30,30 @@ public class TestAccountsInitialization : InitializerBase
     public TestAccountsInitialization(IContext context, GameConfiguration gameConfiguration)
         : base(context, gameConfiguration)
     {
+    }
+
+    /// <summary>
+    /// Adds the social browser test's own pair of accounts to a demo database: a level 300 guild master and a level 41
+    /// member, like <c>test300</c> and <c>test4</c>. They are established characters (created long ago), so they get no
+    /// first-time rewards when they enter, and no other test uses them, so the guild, friend and letter state of one
+    /// run can't reach another test.
+    /// </summary>
+    /// <param name="provider">The persistence provider of the demo database (in memory).</param>
+    /// <returns>The task.</returns>
+    public static async Task SeedSocialPairAsync(HNMO.Persistence.InMemory.InMemoryPersistenceContextProvider provider)
+    {
+        using var context = provider.CreateNewContext();
+        var gameConfiguration = (await context.GetAsync<GameConfiguration>().ConfigureAwait(false)).Single();
+        new Level300(context, gameConfiguration, SocialMasterName).Initialize();
+        new LowLevel(context, gameConfiguration, SocialMemberName, 41).Initialize();
+
+        var accounts = await context.GetAsync<Account>().ConfigureAwait(false);
+        foreach (var character in accounts.Where(account => account.LoginName is SocialMasterName or SocialMemberName).SelectMany(account => account.Characters))
+        {
+            character.CreateDate = DateTime.UnixEpoch;
+        }
+
+        await context.SaveChangesAsync().ConfigureAwait(false);
     }
 
     /// <inheritdoc />

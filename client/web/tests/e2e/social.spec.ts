@@ -6,9 +6,14 @@
 //  - A whispers B through the whisper box;
 //  - then everything is undone: the letter deleted, the friend removed, B leaves the guild, A
 //    disbands it, both go back to Lorencia.
-// Creating a guild needs level 100 (the server's rule), so A is test300; B is test4.
+// Creating a guild needs level 100 (the server's rule), so A is test300; B is test4. With HNMO_SOCIAL_TEST_ACCOUNTS=1
+// in the environment of both the server (Startup -demo, Season 6.3) and Playwright, the pair is the test's own socmas
+// (level 300) and socmem (level 41): no other spec uses them, they are established characters (no first-time
+// rewards), so nothing else can disturb the guild, the friend and the letter. The test attaches 'social-diagnostics':
+// what each game socket did, with UTC times (socialDiagnostics.ts).
 import { test, expect, type Page } from '@playwright/test';
 import { enterWorld, expectNoPageErrors, screenPointOf } from './helpers.js';
+import { watchSocial, type SocialWatch } from './socialDiagnostics.js';
 
 interface Npc { id: number; name: string; kind: string; monsterNumber: number | null; cell: { x: number; y: number } }
 interface SocialGame {
@@ -49,22 +54,32 @@ async function leaveGuild(page: Page, password: string): Promise<boolean> {
   return true;
 }
 
+const watches: SocialWatch[] = [];
+const [MASTER_ACCOUNT, MEMBER_ACCOUNT] = process.env.HNMO_SOCIAL_TEST_ACCOUNTS === '1' ? ['socmas', 'socmem'] : ['test300', 'test4'];
+
+// Whatever the outcome, the report carries what the sockets did.
+test.afterEach(async ({}, testInfo) => {
+  const events = watches.flatMap((watch) => watch.events).sort((x, y) => x.utc.localeCompare(y.utc));
+  await testInfo.attach('social-diagnostics', { body: JSON.stringify({ accounts: [MASTER_ACCOUNT, MEMBER_ACCOUNT], events }, null, 2), contentType: 'application/json' });
+});
+
 test('guild, friends, a letter and a whisper between two players', async ({ browser }) => {
   test.setTimeout(14 * 60_000);
   const contextA = await browser.newContext(), contextB = await browser.newContext();
   const a = await contextA.newPage(), b = await contextB.newPage();
   const errors: string[] = [];
   for (const page of [a, b]) page.on('pageerror', (error) => errors.push(error.message));
-  await enterWorld(a, 'test300');
-  await enterWorld(b, 'test4');
+  watches.splice(0, watches.length, watchSocial(a, 'A'), watchSocial(b, 'B'));
+  await enterWorld(a, MASTER_ACCOUNT);
+  await enterWorld(b, MEMBER_ACCOUNT);
   const nameA = await game(a, (g) => g.hero.name), nameB = await game(b, (g) => g.hero.name);
 
   // A clean start: no guild, not friends, no letter from A in B's box.
   await a.waitForTimeout(5_000); // the guild and the messenger arrive on entering
-  await leaveGuild(b, 'test4');
+  await leaveGuild(b, MEMBER_ACCOUNT);
   // The server keeps a disbanded guild's master as a member until it enters the game again (its
   // GuildDeletedAsync forgets the guild's players before it lets them go): enter again.
-  if (await leaveGuild(a, 'test300')) { await enterWorld(a, 'test300'); await a.waitForTimeout(5_000); }
+  if (await leaveGuild(a, MASTER_ACCOUNT)) { await enterWorld(a, MASTER_ACCOUNT); await a.waitForTimeout(5_000); }
   if (await game(a, (g) => g.social.messenger.friends.length) > 0) {
     await a.evaluate((name) => (window as unknown as Win).__game.social.messenger.deleteFriend(name), nameB);
   }
@@ -76,6 +91,7 @@ test('guild, friends, a letter and a whisper between two players', async ({ brow
   }
 
   // Both go to Devias; A walks to the guild master and talks to it: its window opens.
+  for (const watch of watches) watch.mark('before warp', { destination: 'devias' });
   for (const page of [a, b]) await page.evaluate(() => (window as unknown as Win).__game.online.say('/move devias'));
   await expect.poll(() => game(a, (g) => g.mapNumber), { timeout: 90_000 }).toBe(2);
   await expect.poll(() => game(b, (g) => g.mapNumber), { timeout: 90_000 }).toBe(2);
@@ -197,8 +213,9 @@ test('guild, friends, a letter and a whisper between two players', async ({ brow
   await expect.poll(() => hasLetter(b, subject), { timeout: 60_000 }).toBe(false);
   await a.evaluate((name) => (window as unknown as Win).__game.social.messenger.deleteFriend(name), nameB);
   await expect.poll(() => game(a, (g) => g.social.messenger.friends.length), { timeout: 60_000 }).toBe(0);
-  await leaveGuild(b, 'test4');
-  await leaveGuild(a, 'test300');
+  await leaveGuild(b, MEMBER_ACCOUNT);
+  await leaveGuild(a, MASTER_ACCOUNT);
+  for (const watch of watches) watch.mark('before warp', { destination: 'lorencia' });
   for (const page of [a, b]) await page.evaluate(() => (window as unknown as Win).__game.online.say('/move lorencia'));
   await expect.poll(() => game(a, (g) => g.mapNumber), { timeout: 90_000 }).toBe(0);
   await expect.poll(() => game(b, (g) => g.mapNumber), { timeout: 90_000 }).toBe(0);
