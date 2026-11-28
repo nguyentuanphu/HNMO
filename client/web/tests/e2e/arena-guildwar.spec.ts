@@ -21,7 +21,7 @@ const FLAGS = [{ x: 79, y: 27 }, { x: 89, y: 27 }, { x: 100, y: 33 }];
 async function enterArena(page: Page, account: string): Promise<void> {
   // With several browsers on the test machine the Arena's server list can come late: start over then.
   await expect(async () => {
-    await page.goto('/index.html');
+    await page.goto('/index.html?devlogin=1');
     await page.fill('#username', account);
     await page.fill('#password', account);
     await page.click('button.primary');

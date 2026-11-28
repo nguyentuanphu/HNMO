@@ -7,7 +7,7 @@ type Win = Window & { __game: { characterStage?: object | null; mapNumber: numbe
 const shots = process.env.HNMO_SHOTS ?? 'test-results';
 
 async function logIn(page: Page, account: string): Promise<void> {
-  await page.goto('/index.html');
+  await page.goto('/index.html?devlogin=1');
   await page.fill('#username', account);
   await page.fill('#password', account);
   await page.click('button.primary');

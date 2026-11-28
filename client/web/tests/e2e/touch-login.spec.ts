@@ -10,7 +10,7 @@ test.use(phone);
 
 test('the login works on a phone held sideways; touch buttons only in the world', async ({ page }) => {
   test.setTimeout(6 * 60_000);
-  await page.goto('/index.html');
+  await page.goto('/index.html?devlogin=1');
   await expect(page.locator('#touchBar')).toBeHidden();
   await expect(page.locator('#touchFight')).toBeHidden();
   await page.screenshot({ path: 'test-results/touch-login.png' });

@@ -1,10 +1,10 @@
 // Reconnect after a lost connection (HNMO, PARITY.md section 1): when the connection to the game server drops while in
 // the world (not a logout, a server's logout answer or a page being left), the game's reconnect box shows over the
-// world, and the game tries again a few times with growing waits: it looks whether the server is back (the connect
-// server knows it and the game server greets), takes a one-time login ticket of the website session, and reloads the
-// page into the same server and the same character with it (the way the Arena travels). A try that fails after the
-// reload goes on with the next one. When every try failed, the box gives the choice: try again, or back to the server
-// choice. The plan (server, character, which try) is kept in this tab's session storage; no password and no ticket.
+// world, and the game tries again until the player presses Cancel, as the game does, with growing waits (capped at
+// 16 seconds): it looks whether the server is back (the connect server knows it and the game server greets), takes a
+// one-time login ticket of the website session, and reloads the page into the same server and the same character with
+// it (the way the Arena travels). A try that fails after the reload goes on with the next one. Cancel goes back to the
+// server choice. The plan (server, character, which try) is kept in this tab's session storage; no password, no ticket.
 
 export interface ResumePlan {
   account: string;
@@ -15,21 +15,26 @@ export interface ResumePlan {
   column: string;
   serverId: number;
   character: string;
-  /** The try the plan is at (0-based, RETRY_DELAYS_S). */
+  /** The try the plan is at (0-based; its wait is retryDelay(attempt)). */
   attempt: number;
   /** When the connection was lost (ms since 1970). */
   lostAt: number;
 }
 
-/** The waits before each try, in seconds: at once, then growing (five tries in about half a minute). */
+/** The waits before the first tries, in seconds: at once, then growing; every later try waits the last one. */
 export const RETRY_DELAYS_S = [0, 2, 4, 8, 16];
 
+/** The wait before a try, in seconds (capped at 16). */
+export function retryDelay(attempt: number): number {
+  return RETRY_DELAYS_S[Math.min(Math.max(attempt, 0), RETRY_DELAYS_S.length - 1)];
+}
+
 const STORAGE_KEY = 'hnmo.reconnect';
-/** A plan older than this is forgotten (a tab left on the box, then reloaded much later). */
+/** A plan not saved again for this long is forgotten (a tab closed on the box, then opened much later). */
 const PLAN_LIFETIME_MS = 10 * 60_000;
 
-export function saveResumePlan(plan: ResumePlan): void {
-  try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(plan)); } catch { /* private window: no resume after the reload */ }
+export function saveResumePlan(plan: ResumePlan, now = Date.now()): void {
+  try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ ...plan, savedAt: now })); } catch { /* private window: no resume after the reload */ }
 }
 
 export function clearResumePlan(): void {
@@ -39,41 +44,39 @@ export function clearResumePlan(): void {
 /** The kept plan (of this account when given), or null. */
 export function loadResumePlan(account?: string, now = Date.now()): ResumePlan | null {
   try {
-    const raw = JSON.parse(sessionStorage.getItem(STORAGE_KEY) ?? 'null') as Partial<ResumePlan> | null;
+    const raw = JSON.parse(sessionStorage.getItem(STORAGE_KEY) ?? 'null') as (Partial<ResumePlan> & { savedAt?: number }) | null;
     if (!raw || typeof raw.account !== 'string' || typeof raw.relay !== 'string' || typeof raw.column !== 'string'
       || typeof raw.serverId !== 'number' || typeof raw.character !== 'string' || typeof raw.attempt !== 'number'
       || typeof raw.lostAt !== 'number' || typeof raw.connect?.host !== 'string' || typeof raw.connect.port !== 'number') return null;
-    if (now - raw.lostAt > PLAN_LIFETIME_MS) { clearResumePlan(); return null; }
+    if (now - (raw.savedAt ?? raw.lostAt) > PLAN_LIFETIME_MS) { clearResumePlan(); return null; }
     if (account !== undefined && raw.account.toLowerCase() !== account.toLowerCase()) return null;
-    return raw as ResumePlan;
+    const { account: a, relay, connect, column, serverId, character, attempt, lostAt } = raw as ResumePlan;
+    return { account: a, relay, connect, column, serverId, character, attempt, lostAt };
   } catch {
     return null;
   }
 }
-
-/** Why the tries stopped without coming back. */
-export type GiveUpReason = 'failed' | 'signed-out' | 'cancelled';
 
 export interface ReconnectDriver {
   /** The step the box shows and the seconds to the next try. */
   show(step: 'probing' | 'connecting', countdown: number): void;
   /** Resolves when the game server is back (throws while it isn't). */
   probe(plan: ResumePlan): Promise<void>;
-  /** A login ticket for the plan's account, or 'signed-out' (no website session: no try can work). */
+  /** A login ticket for the plan's account, or 'signed-out' (no website session now: the next try asks again). */
   ticket(plan: ResumePlan): Promise<{ ticket: string; loginName: string } | 'signed-out'>;
   /** Goes back in with the ticket (the page reloads). */
   resume(plan: ResumePlan, ticket: { ticket: string; loginName: string }): void;
-  /** Every try failed, the session ended or Cancel was pressed. */
-  giveUp(reason: GiveUpReason): void;
+  /** Cancel was pressed: the tries stop. */
+  cancelled(): void;
   /** Waits (tests and the page: a timer). */
   sleep?: (ms: number) => Promise<void>;
 }
 
 const wait = (ms: number) => new Promise<void>((resolve) => { setTimeout(resolve, ms); });
 
-/** One run of tries for a plan, from its `attempt`; cancel() stops it (the box's Cancel). */
+/** Tries for a plan from its `attempt` until one goes back in or cancel() (the box's Cancel) stops them. */
 export class Reconnector {
-  private cancelled = false;
+  private stopped = false;
   private running = false;
 
   constructor(private readonly driver: ReconnectDriver) {}
@@ -82,37 +85,36 @@ export class Reconnector {
 
   cancel(): void {
     if (!this.running) return;
-    this.cancelled = true;
+    this.stopped = true;
   }
 
   async run(plan: ResumePlan): Promise<void> {
     if (this.running) return;
     this.running = true;
-    this.cancelled = false;
+    this.stopped = false;
     const sleep = this.driver.sleep ?? wait;
     try {
-      for (let attempt = plan.attempt; attempt < RETRY_DELAYS_S.length; attempt++) {
-        // The wait before this try, second by second for the box's countdown.
-        for (let left = RETRY_DELAYS_S[attempt]; left > 0; left--) {
-          if (this.cancelled) { this.driver.giveUp('cancelled'); return; }
+      for (let attempt = plan.attempt; ; attempt++) {
+        // The wait before this try, second by second for the box's countdown (and a prompt Cancel).
+        for (let left = retryDelay(attempt); left > 0; left--) {
+          if (this.stopped) { this.driver.cancelled(); return; }
           this.driver.show('probing', left);
           await sleep(1000);
         }
-        if (this.cancelled) { this.driver.giveUp('cancelled'); return; }
+        if (this.stopped) { this.driver.cancelled(); return; }
         this.driver.show('probing', 0);
         try { await this.driver.probe(plan); } catch { continue; }
-        if (this.cancelled) { this.driver.giveUp('cancelled'); return; }
+        if (this.stopped) { this.driver.cancelled(); return; }
         this.driver.show('connecting', 0);
         let entry: { ticket: string; loginName: string } | 'signed-out';
         try { entry = await this.driver.ticket(plan); } catch { continue; }
-        if (entry === 'signed-out') { this.driver.giveUp('signed-out'); return; }
-        if (this.cancelled) { this.driver.giveUp('cancelled'); return; }
+        if (entry === 'signed-out') continue;
+        if (this.stopped) { this.driver.cancelled(); return; }
         const next = { ...plan, attempt };
         saveResumePlan(next);
         this.driver.resume(next, entry);
         return;
       }
-      this.driver.giveUp('failed');
     } finally {
       this.running = false;
     }

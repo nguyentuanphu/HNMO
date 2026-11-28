@@ -45,13 +45,24 @@ function expectForward(seen: Reading[]): void {
 
 test('the loading bar follows the real loads of World 74, then of the game world', async ({ page }) => {
   test.setTimeout(8 * 60_000);
-  // A little slower data files: the bar has time to move.
-  await page.route(/\/data\/(World\d+|Object\d+)\//i, async (route) => { await new Promise((r) => setTimeout(r, 40)); await route.continue(); });
-  await page.goto('/index.html');
+  // The world's data files come one after another, 30 ms apart: the bar has time to move on a fast machine too.
+  let queue = Promise.resolve();
+  await page.route(/\/data\/(World\d+|Object\d+)\//i, async (route) => {
+    const turn = queue.then(() => new Promise<void>((r) => setTimeout(r, 30)));
+    queue = turn;
+    await turn;
+    await route.continue();
+  });
+  await page.goto('/index.html?devlogin=1');
   await page.fill('#username', 'test0');
   await page.fill('#password', 'test0');
   await page.click('button.primary');
-  await page.waitForSelector('#servers .choice, #characters .choice', { timeout: 60_000 });
+  await page.waitForSelector('#servers .choice, #characters .choice', { state: 'attached', timeout: 60_000 });
+
+  // While World 74 comes, no plain list and no login form: the background and the bar only (owner 2026-11-28).
+  await expect(page.locator('.loading-progress #progress_back')).toBeVisible({ timeout: 30_000 });
+  await expect(page.locator('#servers')).toBeHidden();
+  await expect(page.locator('#username')).toBeHidden();
 
   // World 74 behind the choice: the bar, its percent and files, until the scene is drawn; then it goes.
   const stage = await watch(page, async () => (await page.locator('body.stage-world').count()) > 0, `${shots}/loading-progress-world74.png`);

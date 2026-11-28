@@ -130,7 +130,7 @@ import { ARROW_RELEASE_DELAY_SECONDS, DeathEffects, ProjectileLayer, arrowKindsF
 import { parseSeason, seasonBadge, setSeason, type SeasonKey } from './dataRoot.js';
 import { chooseServerBySeason, groupBySeason, seasonColumnTexts } from './ui/seasonColumns.js';
 import { openServerSelect, type ServerSelectGroup, type ServerSelectWindow } from './ui/serverSelectWindow.js';
-import { showConfirm, showMenu } from './ui/gameDialogs.js';
+import { showConfirm } from './ui/gameDialogs.js';
 import { type ServerListEntry, fetchServerList, fetchGameServerAddress, login, loginWithTicket, fetchCharacters, enterWorld, createCharacter, deleteCharacter, creatableClasses, lastUnlockFlags, CLASSES } from './net/session.js';
 import type { WorldData } from './world.js';
 import type { TerrainMesh } from './terrain.js';
@@ -139,7 +139,7 @@ import type { EquipmentAppearance, EquipmentSlotName } from './game/items.js';
 import type { CharacterListEntry } from './net/session.js';
 import { Connection } from './net/connection.js';
 import { read } from './net/packets.js';
-import { clearResumePlan, loadResumePlan, Reconnector, RETRY_DELAYS_S, type GiveUpReason, type ResumePlan } from './net/reconnect.js';
+import { clearResumePlan, loadResumePlan, Reconnector, type ResumePlan } from './net/reconnect.js';
 import { ReconnectDialog, type ReconnectStep } from './ui/reconnectDialog.js';
 import { LoadingProgress, loadingWord } from './ui/loadingProgress.js';
 import { LoadMeter, trackLoad } from './loadProgress.js';
@@ -1237,8 +1237,8 @@ let stageLabelsClose: (() => void) | null = null;
 
 /**
  * Starts the 3D stage: world 74, the world of the server choice and of the character choice (the desktop draws its
- * login and character scenes over it). It loads in the background; the plain lists work at once and stay when it
- * can't load (no WebGL). One stage serves both choices: the world isn't loaded again between them.
+ * login and character scenes over it). While it loads only the background and the loading bar show (body.stage-pending);
+ * the plain lists show when it can't load (no WebGL) or with the plain screens option. One stage serves both choices: the world isn't loaded again between them.
  */
 function startStage(): CharacterStage {
   if (characterStage) return characterStage;
@@ -1261,6 +1261,8 @@ function startStage(): CharacterStage {
   });
   characterStage = stage;
   state.characterStage = stage;
+  // Until world 74 is drawn the plain lists stay out of sight: the background and the loading bar only (index.html).
+  document.body.classList.add('stage-pending');
   // The loading bar while world 74 comes (its data, its objects, the rings), over the plain list that already works.
   const bar = new LoadingProgress(loadingWord(), 25);
   const meter = new LoadMeter((reading) => bar.set(reading));
@@ -1274,6 +1276,7 @@ function startStage(): CharacterStage {
       if (characterStage !== stage) return false;
       // The world is drawn: the login screen's art and boxes give way to it (index.html, body.stage-world).
       document.body.classList.add('stage-world');
+      document.body.classList.remove('stage-pending');
       resize();
       return true;
     })
@@ -1301,7 +1304,8 @@ function releaseStage(): void {
   characterStage = null;
   state.characterStage = null;
   stageLoaded = null;
-  document.body.classList.remove('stage-world', 'character-stage', 'stage-dialog', 'stage-create');
+  // Without the stage (it couldn't load, the plain screens, or the world comes next) the plain lists may show.
+  document.body.classList.remove('stage-world', 'stage-pending', 'character-stage', 'stage-dialog', 'stage-create');
 }
 
 /**
@@ -3337,14 +3341,14 @@ let leavingPage = false;
 window.addEventListener('pagehide', () => { leavingPage = true; });
 /** A password login's account and password, in this page only (a reconnect without a website session signs in with it). */
 let reconnectPassword: { account: string; password: string } | null = null;
-/** The plan being come back to after the reload, until the world is there again (or the tries give up). */
+/** The plan being come back to after the reload, until the world is there again (or Cancel). */
 let resuming: ResumePlan | null = null;
 let reconnectBox: ReconnectDialog | null = null;
 let reconnector: Reconnector | null = null;
 
 /** The reconnect box (one), over the world or over the page. */
 function showReconnectBox(over: 'world' | 'page'): ReconnectDialog {
-  reconnectBox ??= new ReconnectDialog({ onCancel: () => { sounds.click(); if (reconnector?.active) reconnector.cancel(); else giveUpReconnect(resuming, 'cancelled'); } });
+  reconnectBox ??= new ReconnectDialog({ onCancel: () => { sounds.click(); if (reconnector?.active) reconnector.cancel(); else cancelReconnect(); } });
   reconnectBox.setDim(over);
   state.reconnect = reconnectBox;
   return reconnectBox;
@@ -3371,7 +3375,7 @@ function endResume(): void {
   closeReconnectBox();
 }
 
-/** Starts the tries for a plan (a lost connection, the next try after a failed reload, or Retry). */
+/** Starts the tries for a plan (a lost connection, or the next try after a failed reload); they go on until Cancel. */
 function startReconnect(plan: ResumePlan): void {
   const box = showReconnectBox(state.online ? 'world' : 'page');
   const run = new Reconnector({
@@ -3383,7 +3387,7 @@ function startReconnect(plan: ResumePlan): void {
       location.hash = new URLSearchParams({ ticket: entry.ticket, account: entry.loginName, resume: '1' }).toString();
       location.reload();
     },
-    giveUp: (reason) => giveUpReconnect(plan, reason),
+    cancelled: cancelReconnect,
   });
   reconnector = run;
   void run.run(plan);
@@ -3395,10 +3399,13 @@ async function probeGameServer(plan: ResumePlan): Promise<void> {
   const probe = new Connection(plan.relay, { ...address, encrypted: true });
   const greeted = probe.waitFor(0xf1, 0x00, 4000);
   greeted.catch(() => undefined);
+  // A socket closed before it ever opened settles neither way: the probe gives up after a while of its own.
+  let timer = 0;
+  const late = new Promise<never>((_, reject) => { timer = window.setTimeout(() => reject(new Error('No answer from the game server.')), 6000); });
   try {
-    await probe.open();
-    await greeted;
+    await Promise.race([probe.open().then(() => greeted), late]);
   } finally {
+    window.clearTimeout(timer);
     probe.close();
   }
 }
@@ -3415,46 +3422,55 @@ async function reconnectTicket(plan: ResumePlan): Promise<{ ticket: string; logi
   return entry;
 }
 
-/** The tries stopped: Cancel goes back to the server choice; otherwise the game's box offers Retry or the server choice. */
-function giveUpReconnect(plan: ResumePlan | null, reason: GiveUpReason): void {
+/** Cancel (the box's button): the tries stop and the game goes back to the server choice, as the game's Cancel does. */
+function cancelReconnect(): void {
   closeReconnectBox();
   resuming = null;
-  if (reason === 'cancelled' || !plan) { void backToServerChoice(); return; }
-  clearResumePlan();
-  const vi = currentLanguage() === 'vi';
-  const line = reason === 'signed-out'
-    ? (vi ? 'Phiên đăng nhập trên trang web đã hết. Hãy đăng nhập lại trên trang web rồi thử lại.' : 'Your website session has ended. Log in on the website again, then retry.')
-    : (vi ? 'Không kết nối lại được với máy chủ.' : 'The connection to the server could not be restored.');
-  // The game's menu box: its full-width buttons hold the longer label.
-  void showMenu({
-    title: 'Connection lost',
-    lines: [line],
-    buttons: [
-      { label: vi ? 'Thử lại' : 'Retry', tag: 'reconnect-retry' },
-      { label: vi ? 'Về chọn máy chủ' : 'Back to server choice', tag: 'reconnect-back' },
-    ],
-    tag: 'reconnect-failed',
-  }).then((index) => {
-    if (index === 0) startReconnect({ ...plan, attempt: 0, lostAt: Date.now() });
-    else void backToServerChoice();
-  });
+  void backToServerChoice();
 }
 
-/** Back to the server choice: a new ticket of the website session, else the website's sign-in (or this page's login). */
+/**
+ * Back to the server choice (Cancel), the website session checked first by asking it for a ticket (owner 2026-11-28):
+ * valid, the page reloads into the server choice with the new ticket; ended, the login screen with only the website's
+ * login button and a line saying so; the website unreachable, a box saying so with Retry, which asks again (the player
+ * isn't told they are signed out). A page that logged in with the developers' password form goes to its login.
+ */
 async function backToServerChoice(): Promise<void> {
   clearResumePlan();
-  leavingPage = true;
+  let entry: Awaited<ReturnType<typeof requestLoginTicket>>;
   try {
-    const entry = await requestLoginTicket();
-    if (entry !== 'signed-out') {
-      location.hash = new URLSearchParams({ ticket: entry.ticket, account: entry.loginName }).toString();
-      location.reload();
-      return;
-    }
-    location.href = reconnectPassword ? '/index.html' : '/account.html?play=1';
+    entry = await requestLoginTicket();
   } catch {
-    location.href = '/index.html';
+    if (reconnectPassword) { leavingPage = true; location.href = '/index.html'; return; }
+    const vi = currentLanguage() === 'vi';
+    await showConfirm({
+      lines: [vi ? 'Không kết nối được tới máy chủ. Hãy thử lại.' : "Can't reach the server. Try again."],
+      primaryLabel: vi ? 'Thử lại' : 'Retry',
+      tag: 'reconnect-unreachable',
+    });
+    void backToServerChoice();
+    return;
   }
+  leavingPage = true;
+  if (entry !== 'signed-out') {
+    location.hash = new URLSearchParams({ ticket: entry.ticket, account: entry.loginName }).toString();
+    location.reload();
+    return;
+  }
+  location.href = reconnectPassword ? '/index.html' : '/index.html?session=ended';
+}
+
+/** The login screen after a reconnect found the website session ended: one line over the website's login button. */
+function showSessionEnded(): void {
+  const params = new URLSearchParams(location.search);
+  if (params.get('session') !== 'ended') return;
+  params.delete('session');
+  history.replaceState(null, '', location.pathname + (params.toString() ? `?${params}` : '') + location.hash);
+  ui.loginError.textContent = currentLanguage() === 'vi'
+    ? 'Phiên đăng nhập trên trang web đã hết. Hãy đăng nhập lại trên trang web.'
+    : 'Your website session has ended. Log in on the website again.';
+  ui.loginError.hidden = false;
+  ui.loginError.classList.add('session-ended');
 }
 
 function startGame(play: () => Promise<void>): void {
@@ -3471,13 +3487,14 @@ function startGame(play: () => Promise<void>): void {
     ui.login.hidden = false;
     ui.servers.hidden = ui.characters.hidden = true;
     ui.loginForm.querySelector('fieldset')!.disabled = false;
+    // The login screen comes back with the error: the website's login button (the ticket is spent).
+    document.body.classList.remove('stage-pending', 'ticket-entry');
     showError(error);
     // A come-back that failed after the reload (the server still busy with the old session, say): the next try.
     const plan = resuming;
     if (plan) {
       resuming = null;
-      if (plan.attempt + 1 < RETRY_DELAYS_S.length) startReconnect({ ...plan, attempt: plan.attempt + 1 });
-      else giveUpReconnect(plan, 'failed');
+      startReconnect({ ...plan, attempt: plan.attempt + 1 });
     }
   });
 }
@@ -3584,7 +3601,22 @@ function renderSavedAccounts(): void {
   container.append(head, row);
 }
 
+/**
+ * Players log in on the website (owner 2026-11-28): the game's own login form is for developers and the tests only,
+ * shown with ?devlogin=1 in the address (kept for the tab) or localStorage 'hnmo.devLogin' = '1'.
+ */
+function devLoginOn(): boolean {
+  try {
+    if (new URLSearchParams(location.search).get('devlogin') === '1') sessionStorage.setItem('hnmo.devLogin', '1');
+    return sessionStorage.getItem('hnmo.devLogin') === '1' || localStorage.getItem('hnmo.devLogin') === '1';
+  } catch {
+    return new URLSearchParams(location.search).get('devlogin') === '1';
+  }
+}
+
 function initLogin() {
+  document.body.classList.toggle('dev-login', devLoginOn());
+  showSessionEnded();
   const saved = loadSettings();
   // HNMO.Web serves the page and the relay from the same address.
   const defaults = { relay: `${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/relay`, host: '127.0.0.1', port: 44406, username: '' };
@@ -3625,6 +3657,8 @@ function initLogin() {
 
   const pendingTicket = readTicketFromHash();
   if (pendingTicket) {
+    // Entering with the website's ticket: nothing of the login screen shows, only what comes next (index.html).
+    document.body.classList.add('ticket-entry');
     const form: LoginSettings = {
       username: pendingTicket.account || String(initial.username ?? ''),
       password: '',

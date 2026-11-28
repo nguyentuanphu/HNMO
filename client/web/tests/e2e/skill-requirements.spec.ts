@@ -30,7 +30,7 @@ type Win = Window & { __game: ReqGame; __sent: string[]; __skills: number[] };
 const POISON = 1, ENERGY_BALL = 17;
 
 async function enterAsGladiator(page: Page): Promise<void> {
-  await page.goto('/index.html');
+  await page.goto('/index.html?devlogin=1');
   await page.fill('#username', 'testgm');
   await page.fill('#password', 'testgm');
   await page.click('button.primary');

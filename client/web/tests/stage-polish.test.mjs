@@ -40,31 +40,37 @@ test('the meter goes by stage shares, follows the files of a stage and never goe
   files[2](); files[3]();
 });
 
-test('the reconnect tries wait longer each time, resume with a ticket, and give up after the last', { skip: !reconnect && 'reconnect.js not loadable' }, async () => {
-  const { Reconnector, RETRY_DELAYS_S } = reconnect;
+test('the reconnect tries wait longer each time (up to 16 s), resume with a ticket, and go on until Cancel', { skip: !reconnect && 'reconnect.js not loadable' }, async () => {
+  const { Reconnector, RETRY_DELAYS_S, retryDelay } = reconnect;
   assert.deepEqual(RETRY_DELAYS_S, [0, 2, 4, 8, 16]);
+  assert.equal(retryDelay(4), 16);
+  assert.equal(retryDelay(40), 16, 'capped at 16 seconds');
   const plan = { account: 'test2', relay: 'ws://x/relay', connect: { host: '127.0.0.1', port: 44406 }, column: 's6', serverId: 0, character: 'Hero', attempt: 0, lostAt: 0 };
   const waits = [];
   let probes = 0;
   let resumed = null;
-  let gaveUp = null;
-  const run = (driver) => new Reconnector({ show: () => {}, sleep: async (ms) => { waits.push(ms); }, giveUp: (r) => { gaveUp = r; }, resume: (p, t) => { resumed = { p, t }; }, ...driver });
+  let cancelled = false;
+  const run = (driver) => new Reconnector({ show: () => {}, sleep: async (ms) => { waits.push(ms); }, cancelled: () => { cancelled = true; }, resume: (p, t) => { resumed = { p, t }; }, ...driver });
   // The server comes back at the third try.
   await run({ probe: async () => { if (++probes < 3) throw new Error('down'); }, ticket: async () => ({ ticket: 't', loginName: 'test2' }) }).run(plan);
   assert.equal(probes, 3);
   assert.equal(waits.length, 2 + 4, 'two seconds, then four, one by one');
   assert.equal(resumed?.p.attempt, 2);
   assert.equal(resumed?.t.ticket, 't');
-  assert.equal(gaveUp, null);
-  // Never back: every try, then 'failed'.
-  probes = 0; gaveUp = null; resumed = null;
-  await run({ probe: async () => { probes++; throw new Error('down'); }, ticket: async () => ({ ticket: 't', loginName: 'test2' }) }).run(plan);
-  assert.equal(probes, RETRY_DELAYS_S.length);
-  assert.equal(gaveUp, 'failed');
-  // No website session: no try can work.
-  gaveUp = null;
-  await run({ probe: async () => {}, ticket: async () => 'signed-out' }).run(plan);
-  assert.equal(gaveUp, 'signed-out');
+  assert.equal(cancelled, false);
+  // Never back: the tries go on past the fifth, 16 seconds apart, until Cancel.
+  probes = 0; resumed = null; waits.length = 0;
+  const forever = run({ probe: async () => { probes++; if (probes === 8) forever.cancel(); throw new Error('down'); }, ticket: async () => ({ ticket: 't', loginName: 'test2' }) });
+  await forever.run(plan);
+  assert.equal(probes, 8);
+  assert.equal(cancelled, true);
+  assert.equal(resumed, null);
+  assert.equal(waits.length, 2 + 4 + 8 + 16 + 16 + 16 + 16, 'the waits stay at 16 seconds');
+  // No website session yet: the next try asks again.
+  cancelled = false; let asked = 0; resumed = null;
+  await run({ probe: async () => {}, ticket: async () => (++asked < 3 ? 'signed-out' : { ticket: 'v', loginName: 'test2' }) }).run(plan);
+  assert.equal(asked, 3);
+  assert.equal(resumed?.t.ticket, 'v');
   // A failed reload goes on at the next try.
   probes = 0; resumed = null;
   await run({ probe: async () => { probes++; }, ticket: async () => ({ ticket: 'u', loginName: 'test2' }) }).run({ ...plan, attempt: 3 });

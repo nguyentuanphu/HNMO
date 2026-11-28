@@ -125,8 +125,22 @@
       :root body.stage-world.stage-dialog #login .panel .row { min-width: 0; }
       :root body.stage-world.stage-dialog #login .panel input, :root body.stage-world.stage-dialog #login .panel select { min-width: 0; max-width: 100%; box-sizing: border-box; }
     }
+    /* Players log in on the website (owner 2026-11-28): the game's own login form (account, password, server, Connect,
+       saved accounts) is for developers and tests only, behind ?devlogin=1 (main.ts devLoginOn). With a ticket nothing of
+       the form shows; while World 74 comes (body.stage-pending) neither does the plain list, only the background and the
+       loading bar. */
+    body:not(.dev-login) [data-dev-login] { display: none !important; }
+    body.ticket-entry #loginForm > :not(#servers):not(#characters):not(#loginError) { display: none !important; }
+    body.ticket-entry #login .panel:not(:has(> #servers:not([hidden]), > #characters:not([hidden]), > #loginError:not([hidden]))) { visibility: hidden; }
+    body.stage-pending:not(.stage-world) #login .panel { visibility: hidden; }
     /* The game's loading bar (ui/loadingProgress.ts) shows instead of the page's status line while it is up. */
     body.loading-bar #loading { display: none; }
+    /* Under about 400 px the labels would run into each other: only the name over each character, the picked one's level
+       and class too, drawn over its neighbours (owner 2026-11-28). */
+    @media (max-width: 399px) {
+      .stage-label:not(.picked):not(.preview) small { display: none; }
+      .stage-label.picked { z-index: 1; background: rgba(10, 12, 18, .72); }
+    }
     #stagePlates { z-index: 30; }
     body.stage-dialog #stagePlates, body.stage-dialog:not(.stage-create) #stageLabels .stage-label { display: none; }
     .season-badge { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: .02em; vertical-align: middle; }
@@ -257,9 +271,9 @@
       <img data-brand-logo alt="" width="48" height="48" hidden><h1 data-game-name>HenryN Mu Online</h1>
       <a class="website-login" id="websiteLoginButton" href="/account.html?play=1" data-enter-game>Log in on the website</a>
       <fieldset>
-        <div class="row"><label for="username">Account</label><input id="username" name="username" required maxlength="10" autocomplete="username"></div>
-        <div class="row"><label for="password">Password</label><input id="password" name="password" type="password" required maxlength="20" autocomplete="current-password"></div>
-        <details>
+        <div class="row" data-dev-login><label for="username">Account</label><input id="username" name="username" required maxlength="10" autocomplete="username"></div>
+        <div class="row" data-dev-login><label for="password">Password</label><input id="password" name="password" type="password" required maxlength="20" autocomplete="current-password"></div>
+        <details data-dev-login>
           <summary>Server</summary>
           <div class="split">
             <div class="row"><label for="host">Connect server</label><input id="host" name="host" required></div>
@@ -268,11 +282,11 @@
           <div class="row"><label for="relay">Relay</label><input id="relay" name="relay" required></div>
         </details>
         <div class="row"><label>Language / Ngôn ngữ</label><span class="language-picker" id="loginLanguage" data-no-i18n role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-lang="en" aria-pressed="true" title="English">EN</button><button type="button" data-lang="vi" aria-pressed="false" title="Tiếng Việt">VN</button><select class="language-more" title="More languages" aria-label="More languages"><option value="">More…</option></select></span></div>
-        <div class="buttons">
+        <div class="buttons" data-dev-login>
           <button class="primary" type="submit">Connect</button>
         </div>
       </fieldset>
-      <div class="saved-accounts" id="savedAccounts" hidden></div>
+      <div class="saved-accounts" id="savedAccounts" data-dev-login hidden></div>
       <p id="loginError" role="alert" hidden></p>
       <div class="choices" id="servers" hidden></div>
       <div class="choices" id="characters" hidden></div>

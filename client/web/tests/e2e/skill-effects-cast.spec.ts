@@ -44,7 +44,7 @@ const living = (page: Page) => page.evaluate(() => [...(window as unknown as { _
 const idle = (page: Page) => page.waitForFunction(() => { const o = (window as unknown as { __game: G }).__game.online; return !o.goal && !o.hero.isWalking; }, null, { timeout: 60_000 }).catch(() => {});
 
 async function enter(page: Page, account: string, slot: number): Promise<void> {
-  await page.goto('/index.html');
+  await page.goto('/index.html?devlogin=1');
   await page.fill('#username', account);
   await page.fill('#password', account);
   await page.click('button.primary');

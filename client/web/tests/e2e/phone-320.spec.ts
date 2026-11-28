@@ -28,7 +28,7 @@ test('320 px: the server choice, the character stage and its create and delete d
   test.setTimeout(6 * 60_000);
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
-  await page.goto('/index.html');
+  await page.goto('/index.html?devlogin=1');
   await page.fill('#username', 'test3');
   await page.fill('#password', 'test3');
   await page.click('button.primary');
@@ -63,6 +63,21 @@ test('320 px: the server choice, the character stage and its create and delete d
   for (let i = 0; i < slots.length; i++) {
     await expect(labels.nth(i)).toBeVisible();
     await reachable(labels.nth(i), `label ${i}`, 10);
+  }
+  // Under 400 px: only the name over each character; the picked one keeps its level and class. The names don't overlap.
+  await expect(page.locator('.stage-label.picked small')).toBeVisible();
+  const others = page.locator('.stage-label:not(.picked)');
+  const boxes: { x: number; y: number; width: number; height: number }[] = [];
+  for (let i = 0; i < await others.count(); i++) {
+    await expect(others.nth(i).locator('small')).toBeHidden();
+    boxes.push((await others.nth(i).boundingBox())!);
+  }
+  for (let i = 0; i < boxes.length; i++) {
+    for (let j = i + 1; j < boxes.length; j++) {
+      const a = boxes[i], b = boxes[j];
+      const overlap = a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
+      expect(overlap, `labels ${i} and ${j} overlap`).toBe(false);
+    }
   }
   for (const id of ['#btn_create', '#btn_menu', '#btn_connect', '#btn_delete']) await reachable(page.locator(id), id, 30);
   await noSideScroll(page);

@@ -32,7 +32,7 @@ test('PWA service worker, home responsive viewport, and saved multi-account swit
       { username: 'elf02', host: '127.0.0.1', port: '44407', relay: 'ws://127.0.0.1:18080/relay', updatedAt: 90 },
     ]));
   });
-  await page.goto('/index.html');
+  await page.goto('/index.html?devlogin=1');
 
   const savedBox = page.locator('#savedAccounts');
   await expect(savedBox).toBeVisible();
@@ -54,7 +54,7 @@ test('PWA service worker, home responsive viewport, and saved multi-account swit
 });
 
 test('Modern Touch HUD: thumbstick vector, minimap tap-to-walk/zoom, swipeable chat & 5 macros, QoL & EN/VI', async ({ page }) => {
-  await page.goto('/index.html');
+  await page.goto('/index.html?devlogin=1');
   const errors: string[] = [];
   page.on('pageerror', (err) => errors.push(err.message));
 

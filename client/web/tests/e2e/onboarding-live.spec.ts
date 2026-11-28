@@ -28,7 +28,7 @@ test('a new character gets the starter kit and the guide opens by itself', async
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   const account = process.env.ONBOARDING_ACCOUNT ?? 'test3';
-  await page.goto('/index.html');
+  await page.goto('/index.html?devlogin=1');
   await page.fill('#username', account);
   await page.fill('#password', account);
   await page.click('button.primary');
