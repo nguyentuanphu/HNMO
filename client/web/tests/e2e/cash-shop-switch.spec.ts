@@ -35,6 +35,15 @@ async function clickShopButton(page: Page): Promise<void> {
   await page.locator('.rml-main_frame #btn_cshop').click();
 }
 
+// The switch is a server setting shared by every spec after this one on the same demo server (one worker, one shard).
+// The `finally` below turns it on again after a failed check, but not after a test timeout, when Playwright stops the
+// test body: then the shop would stay off for the rest of the shard (cash-shop, auto-play-*, bottom-hud-bar ...). This
+// hook has its own time and runs in both cases; turning on a switch that is already on does nothing.
+test.afterAll(async ({ browser }, testInfo) => {
+  testInfo.setTimeout(3 * 60_000);
+  await setSwitch(browser, true);
+});
+
 test('a season whose cash shop is off keeps the SHOP button, but it and X open nothing', async ({ page, browser }) => {
   test.setTimeout(8 * 60_000);
   try {
