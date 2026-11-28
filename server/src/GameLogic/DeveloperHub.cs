@@ -66,6 +66,12 @@ public static partial class DeveloperHub
     /// <summary>Gets or sets the file the hub's state is kept in (<c>save/developer-hub.json</c>); none: in memory only.</summary>
     public static string? StateFile { get; set; }
 
+    /// <summary>
+    /// Gets or sets this folder's code (<see cref="HNMO.Interfaces.FolderIdentity"/>), sent as <c>folder</c> with the weekly
+    /// and the setup report; empty: not sent.
+    /// </summary>
+    public static string FolderCode { get; set; } = string.Empty;
+
     /// <summary>Gets the HNMO version.</summary>
     public static string Version =>
         typeof(DeveloperHub).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion?.Split('+')[0]
@@ -180,6 +186,30 @@ public static partial class DeveloperHub
     public static bool IsHubUnreachablePastGrace(DateTime nowUtc)
         => ReadState().FirstHubUnreachableUtc is { } firstUnreachable && nowUtc >= firstUnreachable.AddDays(GraceDays);
 
+    /// <summary>
+    /// Gets a value indicating whether the HNMO developer's hub has the licence's folder limit switched on: its last
+    /// answer to the weekly report or an update check said <c>limits.enforce = true</c>, at most
+    /// <see cref="HNMO.Interfaces.HubFolderLimits.KeepDays"/> days ago, and the hub hasn't been unreachable for
+    /// <see cref="GraceDays"/> since. Anything else relaxes the limit: it never locks a folder wrongly.
+    /// </summary>
+    /// <param name="nowUtc">The time.</param>
+    /// <returns><c>true</c>, if the limit holds.</returns>
+    public static bool FolderLimitEnforced(DateTime nowUtc)
+    {
+        var state = ReadState();
+        return HNMO.Interfaces.HubFolderLimits.IsActive(state.FolderLimits, nowUtc)
+            && !(state.FirstHubUnreachableUtc is { } unreachable && nowUtc >= unreachable.AddDays(GraceDays));
+    }
+
+    /// <summary>Keeps the hub's folder limit switch from one of its answers (missing: off).</summary>
+    /// <param name="answer">The answer.</param>
+    /// <param name="nowUtc">The time.</param>
+    internal static void RememberFolderLimits(JsonNode? answer, DateTime nowUtc)
+    {
+        var enforce = HNMO.Interfaces.HubFolderLimits.EnforceOf(answer);
+        ChangeState(s => s.FolderLimits = new HNMO.Interfaces.HubFolderLimits { Enforce = enforce, ReceivedUtc = nowUtc });
+    }
+
     /// <summary>Gets a value indicating whether a licence file's licence was withdrawn by the developer.</summary>
     /// <param name="licenceFile">The licence file's text.</param>
     /// <returns><c>true</c>, if withdrawn.</returns>
@@ -251,6 +281,17 @@ public static partial class DeveloperHub
             using var response = await (client ?? DefaultClient)
                 .PostAsJsonAsync($"{hub}/api/update-check", payload, cancellationToken)
                 .ConfigureAwait(false);
+            var json = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+            if (response.IsSuccessStatusCode)
+            {
+                // The hub's folder limit switch comes with any of its answers (missing: off).
+                RememberFolderLimits(TryParse(json), DateTime.UtcNow);
+            }
+            else if (response.StatusCode is HttpStatusCode.Forbidden or HttpStatusCode.NotFound && TryParse(json) is JsonObject refusal)
+            {
+                RememberFolderLimits(refusal, DateTime.UtcNow);
+            }
+
             if (response.StatusCode == HttpStatusCode.Forbidden)
             {
                 return new HubUpdateCheckResult(false, true, null, null, [], null, null, "Hub denied update authorization (403).");
@@ -266,7 +307,6 @@ public static partial class DeveloperHub
                 return new HubUpdateCheckResult(false, false, null, null, [], null, null, $"Hub returned {(int)response.StatusCode}.");
             }
 
-            var json = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
             using var doc = JsonDocument.Parse(json);
             var root = doc.RootElement;
             var manifestVersion = root.TryGetProperty("manifestVersion", out var mv) && mv.ValueKind == JsonValueKind.String ? mv.GetString() : null;
@@ -454,6 +494,8 @@ public static partial class DeveloperHub
     /// <returns>Whether it was taken, whether the licence was withdrawn, and the EN text of a refusal.</returns>
     public static async Task<(bool Ok, bool Withdrawn, string Error)> SendWeeklyAsync(JsonObject weekly, HttpClient? client = null, Action<IReadOnlySet<Guid>>? acceptAuto = null)
     {
+        ArgumentNullException.ThrowIfNull(weekly);
+        AddFolder(weekly);
         var key = weekly["autoErrors"] is JsonArray { Count: > 0 } ? AutomaticErrorForwardingKey() : null;
         if (key is null)
         {
@@ -478,6 +520,9 @@ public static partial class DeveloperHub
             if (ok)
             {
                 s.LastWeeklyUtc = now;
+
+                // The hub's folder limit switch (missing: off).
+                s.FolderLimits = new HNMO.Interfaces.HubFolderLimits { Enforce = HNMO.Interfaces.HubFolderLimits.EnforceOf(answer), ReceivedUtc = now };
             }
 
             if (withdrawn && LicenceIdOf(LicenceFile) is { } id && !s.WithdrawnLicences.Contains(id))
@@ -509,6 +554,7 @@ public static partial class DeveloperHub
     public static async Task<(bool Ok, string Error)> SendSetupAsync(JsonObject setup, HttpClient? client = null)
     {
         ArgumentNullException.ThrowIfNull(setup);
+        AddFolder(setup);
         var state = ReadState();
         setup["host"] = new JsonObject { ["name"] = state.HostName, ["contact"] = state.HostContact };
         if (!IsForwardingKey(state.AutoErrorKey))
@@ -532,6 +578,28 @@ public static partial class DeveloperHub
 
     /// <summary>For tests: forgets the state kept without a file.</summary>
     internal static void ResetMemoryState() => _memoryState = null;
+
+    /// <summary>Adds this folder's code to a report (<c>folder</c>), when it is known.</summary>
+    /// <param name="report">The report.</param>
+    private static void AddFolder(JsonObject report)
+    {
+        if (FolderCode.Length > 0)
+        {
+            report["folder"] = FolderCode;
+        }
+    }
+
+    private static JsonNode? TryParse(string text)
+    {
+        try
+        {
+            return string.IsNullOrWhiteSpace(text) ? null : JsonNode.Parse(text);
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
+    }
 
     private static async Task<(bool Ok, JsonNode? Answer, string En, string Vi)> PostAsync(string path, JsonObject message, HttpClient? client, string? autoErrorKey = null)
     {

@@ -117,6 +117,12 @@ public static class LicensedPlayerLimit
             return true;
         }
 
+        // A folder without a seat on this computer takes nobody, grace or not (the licence's folder limit).
+        if (FolderSeat.IsBlocked)
+        {
+            return false;
+        }
+
         var effectiveMaximum = ReevaluateAndEnforce(DateTime.UtcNow);
         var elsewhere = Elsewhere();
         lock (Sync)
@@ -177,7 +183,7 @@ public static class LicensedPlayerLimit
         _hasVerificationContext = true;
 
         var now = nowUtc ?? DateTime.UtcNow;
-        var (derived, licensee) = EvaluateSource(now);
+        var (derived, licensee, _) = EvaluateSource(now);
         Volatile.Write(ref _maximum, derived);
         Licensee = derived > DefaultMaximum ? licensee : null;
         return derived;
@@ -191,7 +197,7 @@ public static class LicensedPlayerLimit
     /// <returns>The effective player cap.</returns>
     public static int ReevaluateAndEnforce(DateTime nowUtc)
     {
-        var (derived, licensee) = EvaluateSource(nowUtc);
+        var (derived, licensee, _) = EvaluateSource(nowUtc);
         var current = Volatile.Read(ref _maximum);
         var effective = _hasVerificationContext || current > DefaultMaximum ? Math.Min(current, derived) : current;
         if (_hasVerificationContext || current > DefaultMaximum)
@@ -207,8 +213,17 @@ public static class LicensedPlayerLimit
             }
         }
 
-        return effective;
+        // Without a seat the folder allows nobody; kept apart from the stored maximum, so a free seat gives it back.
+        return FolderSeat.IsBlocked ? 0 : effective;
     }
+
+    /// <summary>
+    /// The HNMO folders which may run at once on this computer while the HNMO developer's hub has the folder limit on:
+    /// the valid licence's <c>folders</c>, and 1 without one (the free build too).
+    /// </summary>
+    /// <param name="nowUtc">The time.</param>
+    /// <returns>The folders allowed.</returns>
+    public static int FoldersAllowed(DateTime nowUtc) => EvaluateSource(nowUtc).Folders;
 
     /// <summary>
     /// Clears verification state and restores defaults; for tests.
@@ -225,44 +240,46 @@ public static class LicensedPlayerLimit
 
     private static int ResolveEffectiveMaximum(DateTime nowUtc)
     {
-        var (derived, _) = EvaluateSource(nowUtc);
+        var (derived, _, _) = EvaluateSource(nowUtc);
         var current = Volatile.Read(ref _maximum);
-        return _hasVerificationContext || current > DefaultMaximum ? Math.Min(current, derived) : current;
+        var effective = _hasVerificationContext || current > DefaultMaximum ? Math.Min(current, derived) : current;
+        return FolderSeat.IsBlocked ? 0 : effective;
     }
 
-    private static (int Maximum, string? Licensee) EvaluateSource(DateTime nowUtc)
+    private static (int Maximum, string? Licensee, int Folders) EvaluateSource(DateTime nowUtc)
     {
+        const int free = PlayerLicense.DefaultFolders;
         var integrity = _integrityStatusProvider?.Invoke() ?? IntegrityStatus.Ok;
         if (integrity is IntegrityStatus.SignatureInvalid or IntegrityStatus.ManifestInvalid or IntegrityStatus.FileMismatch)
         {
-            return (DefaultMaximum, null);
+            return (DefaultMaximum, null, free);
         }
 
         if (DeveloperHub.IsHubUnreachablePastGrace(nowUtc))
         {
-            return (DefaultMaximum, null);
+            return (DefaultMaximum, null, free);
         }
 
         var bytes = _licenceBytes ?? (DeveloperHub.LicenceFile is { Length: > 0 } text ? Encoding.UTF8.GetBytes(text) : null);
         if (bytes is null or { Length: 0 })
         {
-            return (DefaultMaximum, null);
+            return (DefaultMaximum, null, free);
         }
 
         var today = DateOnly.FromDateTime(nowUtc);
         var license = (_licenseEvaluator ?? DefaultLicenseEvaluator)(bytes, today);
         if (!license.IsValid)
         {
-            return (DefaultMaximum, null);
+            return (DefaultMaximum, null, free);
         }
 
         var licenceText = Encoding.UTF8.GetString(bytes);
         if (DeveloperHub.IsWithdrawn(licenceText))
         {
-            return (DefaultMaximum, null);
+            return (DefaultMaximum, null, free);
         }
 
-        return (Math.Max(1, license.MaximumPlayers), license.Licensee);
+        return (Math.Max(1, license.MaximumPlayers), license.Licensee, Math.Clamp(license.Folders, PlayerLicense.DefaultFolders, PlayerLicense.MaximumFolders));
     }
 
     private static PlayerLicense DefaultLicenseEvaluator(byte[]? bytes, DateOnly today)
