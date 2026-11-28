@@ -52,7 +52,7 @@ import { LuckyNumberWindow } from './ui/luckyNumberWindow.js';
 import { MarriageWindow } from './ui/marriageWindow.js';
 import { MarketWindow } from './ui/marketWindow.js';
 import { ArenaWindow, savedArenaHome, type ArenaHome } from './ui/arenaWindow.js';
-import { BugReportWindow, installErrorLog } from './ui/bugReportWindow.js';
+import { BugReportWindow, installErrorLog, isBugReportShortcut } from './ui/bugReportWindow.js';
 import { autoErrorScope, installAutoErrorReports, setAutoErrorSender } from './autoErrors.js';
 import { EscrowWindow } from './ui/escrowWindow.js';
 import { VaultPages } from './ui/vaultPages.js';
@@ -110,7 +110,7 @@ import { GateWatcher } from './game/gates.js';
 import { Trade } from './ui/tradeWindow.js';
 import { ChaosMachine } from './ui/mixWindow.js';
 import { PersonalShop } from './ui/personalShop.js';
-import { CashShop } from './ui/cashShop.js';
+import { CashShop, NO_CASH_SHOP_CLASS } from './ui/cashShop.js';
 import { loginMusic } from './audio/index.js';
 import { audioSystem } from './audio/audioSystem.js';
 import { characterSelectedSound, interfaceClickSound } from './audio/soundEvents.js';
@@ -188,7 +188,8 @@ for (const picker of languagePickers) {
 }
 onLanguageChange(showLanguage);
 showLanguage(savedLanguage());
-void initLanguage();
+// The server choice names its worlds in the player's language: it waits for the language (fetchServerMetadata).
+const languageReady = initLanguage().catch(() => undefined);
 
 // The map the hero is on: its data and the terrain mesh the pointer is cast against.
 export type GameWorld = WorldData & { terrain: TerrainMesh };
@@ -1653,6 +1654,9 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   // Season 9 and the Arena run as their own programs with their own connect servers (seasons.json says their ports);
   // their servers are listed next to Season 6.3's, each asking its own connect server for the address.
   const { s9: seasonNineConnect, arena: arenaConnect } = await otherConnectServers(connectServer);
+  // The world names below are read in the current language: a page loading slowly (the 3D stage) mustn't name them in
+  // English for a Vietnamese player because its texts came later.
+  await languageReady;
   const [seasonSixServers, seasonNineServers, arenaServers, serverMeta, seasonNineMeta] = await Promise.all([
     fetchServerList(settings.relay, connectServer),
     seasonNineConnect ? fetchServerList(settings.relay, seasonNineConnect).catch(() => [] as ServerListEntry[]) : Promise.resolve([] as ServerListEntry[]),
@@ -2192,7 +2196,7 @@ async function enterChosenServer(settings: LoginSettings, server: SeasonServer, 
     if (except !== 'cashShop') state.cashShop?.close();
   };
   // The cash shop (X or the HUD's shop button), with HNMO's free coins.
-  state.cashShop = new CashShop({ connection, heroName: character.name, safeZone: inSafeZone, walking: () => online.hero.isWalking, closeOthers: () => closeGroupA('cashShop'), onToggle: (open) => state.hud?.setCashShopOpen(open), click: () => sounds.click() });
+  state.cashShop = new CashShop({ connection, heroName: character.name, safeZone: inSafeZone, walking: () => online.hero.isWalking, closeOthers: () => closeGroupA('cashShop'), onToggle: (open) => state.hud?.setCashShopOpen(open), onAvailable: () => state.hud?.setCashShopShown(true), click: () => sounds.click() });
   earlyPackets.forEach((bytes) => state.cashShop?.handle(bytes));
   // Jewels: a jewel dropped on an item is used on it (ConsumeItemRequest with the target slot).
   const onBagDropOnItem: typeof itemWindows.bag.onDropOnItem = (from, slot, target) => {
@@ -2700,7 +2704,7 @@ async function enterChosenServer(settings: LoginSettings, server: SeasonServer, 
     if (event.key.toLowerCase() === 'a' && event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) { event.preventDefault(); arena.toggle(); }
   });
   window.addEventListener('hnmo-arena-open', () => { arena.open(); });
-  // Bug reports (Alt+B, 🐞 in the phone menu): to the server's owner, who may send them on to the HNMO developer.
+  // Bug reports (Alt/Option+B, the 🐞 button under the top bar's ⚙ on PCs and Macs, 🐞 in the phone menu): to the server's owner, who may send them on to the HNMO developer.
   const bugReports = new BugReportWindow({
     send: (name, fields) => connection.send('ClientToServer', name, fields),
     message: (text) => chat.add(text, 'system'),
@@ -2710,7 +2714,7 @@ async function enterChosenServer(settings: LoginSettings, server: SeasonServer, 
   connection.onPacket((bytes) => { bugReports.handle(bytes); });
   window.addEventListener('keydown', (event) => {
     if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
-    if (event.key.toLowerCase() === 'b' && event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) { event.preventDefault(); bugReports.toggle(); }
+    if (isBugReportShortcut(event)) { event.preventDefault(); bugReports.toggle(); }
   });
   window.addEventListener('hnmo-bug-report-open', () => { bugReports.open(); });
   // VIP shares the website's reviewed offers and stable retry identifier, using the authenticated game session.
@@ -2962,6 +2966,12 @@ async function enterChosenServer(settings: LoginSettings, server: SeasonServer, 
   });
   inventory.onChange(() => { hud.refreshItemSlots(); hud.refreshSkills(); });
   hotkeys.onChange(() => hud.refreshItemSlots());
+  // The cash shop button shows only on a season with a cash shop (the server named its script, maybe already).
+  hud.setCashShopShown(state.cashShop?.available ?? false);
+  // A season without a cash shop is known only now: the world is in and the server named no shop script (it does so
+  // on entering, before the world loads). Until then the page assumes a shop, so windows opened before entering a
+  // world (and their tests) keep their coin rewards; the script arriving later clears it (ui/cashShop.ts).
+  document.body.classList.toggle(NO_CASH_SHOP_CLASS, !(state.cashShop?.available ?? false));
   void hud.open();
   // ReceiveQuestPrize (LegacyQuestReward, C1 A3): the class change quests' rewards — level-up
   // points (200, 202) for the hero; a class change (201-203) salutes; all of them light up the player.
@@ -3738,6 +3748,7 @@ if (hudTools && hudToolsToggle) {
   });
   document.getElementById('guideButton')?.addEventListener('click', () => setToolsExpanded(false));
   document.getElementById('settingsButton')?.addEventListener('click', () => setToolsExpanded(false));
+  document.getElementById('hnmoBugButton')?.addEventListener('click', () => setToolsExpanded(false));
   document.addEventListener('pointerdown', (e) => {
     if (hudTools.classList.contains('expanded') && !hudTools.contains(e.target as Node)) {
       setToolsExpanded(false);

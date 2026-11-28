@@ -66,6 +66,9 @@ public class CashShopCatalogPageTests
         this._context.Services.AddSingleton(Mock.Of<IToastService>());
         this._context.Services.AddSingleton(Mock.Of<ILogger<CashShopCatalog>>());
         this._context.ComponentFactories.AddStub<HNMO.Web.Shared.Components.Breadcrumb>();
+
+        // The season's switch has its own tests (EveryAdminPageHelpTests, e2e cash-shop-switch.spec.ts).
+        this._context.ComponentFactories.AddStub<HNMO.Web.AdminPanel.Components.CashShopSwitch>();
     }
 
     /// <summary>

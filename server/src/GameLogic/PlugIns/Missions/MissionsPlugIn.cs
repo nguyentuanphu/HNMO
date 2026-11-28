@@ -184,7 +184,7 @@ public class MissionsPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn, I
         {
             if (engine.ReserveOrOwe(grant, now))
             {
-                await MissionCoinGranter.GrantAsync(player.GameContext, grant).ConfigureAwait(false);
+                await MissionCoinGranter.GrantRewardAsync(player.GameContext, grant).ConfigureAwait(false);
                 given = grant.Amount;
             }
             else
@@ -507,7 +507,7 @@ public class MissionsPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn, I
 
         if (reward.Coins > 0)
         {
-            await MissionCoinGranter.GrantAsync(player.GameContext, new CoinGrant(login, reward.CoinType, reward.Coins, reason, reference)).ConfigureAwait(false);
+            await MissionCoinGranter.GrantRewardAsync(player.GameContext, new CoinGrant(login, reward.CoinType, reward.Coins, reason, reference)).ConfigureAwait(false);
         }
 
         player.Logger.LogInformation("Missions: {Player} got the reward of {Reference}.", player, reference);
@@ -533,7 +533,7 @@ public class MissionsPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn, I
                 // The inviting account's coins: under its own cap, given now or when it plays next.
                 if (engine.ReserveOrOwe(grant, now))
                 {
-                    await MissionCoinGranter.GrantAsync(player.GameContext, grant).ConfigureAwait(false);
+                    await MissionCoinGranter.GrantRewardAsync(player.GameContext, grant).ConfigureAwait(false);
                 }
             }
             else
@@ -561,7 +561,7 @@ public class MissionsPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn, I
         string? reason = null;
         foreach (var grant in grants)
         {
-            if ((reserved || engine.ReserveOrOwe(grant, now)) && await MissionCoinGranter.GrantAsync(player.GameContext, grant).ConfigureAwait(false))
+            if ((reserved || engine.ReserveOrOwe(grant, now)) && await MissionCoinGranter.GrantRewardAsync(player.GameContext, grant).ConfigureAwait(false))
             {
                 given += grant.Amount;
                 reason = grant.Reason;

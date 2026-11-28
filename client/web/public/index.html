@@ -80,6 +80,8 @@
     .choices { display: grid; gap: 6px; }
     .choice { text-align: left; display: flex; justify-content: space-between; gap: 8px; }
     .choice small { color: var(--muted); }
+    /* A season without a cash shop (the host turned it off: classic play): its entries in the phone menus are gone (ui/cashShop.ts). */
+    body.hnmo-no-cash-shop .mh-menu-item[data-key="x"], body.hnmo-no-cash-shop #touchMore [data-key="x"] { display: none !important; }
     /* The 3D character stage (scenes/characterStage.ts), owner 2026-11-28: no login box (players log in on the website),
        no list box; each character's name, level and class stand over it (#stageLabels), the desktop's char_sel_main
        plates (Create, Delete, OK) do the rest, and a discreet HNMO mark sits at the top. The list's buttons stay in the
@@ -202,8 +204,9 @@
     #hudToolsToggle:hover, .hud-tools.expanded #hudToolsToggle { border-color: var(--gold); background: rgba(212, 175, 55, 0.16); }
     .hud-tools-items { display: none; position: absolute; left: 0; top: calc(100% + 6px); align-items: center; gap: 3px; min-height: 36px; padding: 3px 8px; background: var(--panel); border: 1px solid var(--gold); border-radius: 999px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65); white-space: nowrap; z-index: 60; touch-action: manipulation; }
     .hud-tools.expanded .hud-tools-items { display: inline-flex; }
-    .hud-tools #soundButton, .hud-tools #guideButton, .hud-tools #settingsButton { width: 30px; height: 30px; background: transparent; border-color: transparent; touch-action: manipulation; }
-    .hud-tools #soundButton:hover, .hud-tools #guideButton:hover, .hud-tools #settingsButton:hover { border-color: var(--gold); }
+    #hnmoBugButton { padding: 0; border-radius: 50%; font: 14px/1 system-ui, sans-serif; color: var(--gold); border: 1px solid transparent; cursor: pointer; }
+    .hud-tools #soundButton, .hud-tools #guideButton, .hud-tools #settingsButton, .hud-tools #hnmoBugButton { width: 30px; height: 30px; background: transparent; border-color: transparent; touch-action: manipulation; }
+    .hud-tools #soundButton:hover, .hud-tools #guideButton:hover, .hud-tools #settingsButton:hover, .hud-tools #hnmoBugButton:hover { border-color: var(--gold); }
     .hud-tools .language-picker button, .hud-tools .language-picker select { height: 28px; background: transparent; border-color: transparent; touch-action: manipulation; }
     .hud-tools .language-picker select { padding: 0 4px; line-height: 26px; vertical-align: middle; }
     .hud-tools .language-picker select option { background: #1b2131; color: var(--text); }
@@ -258,6 +261,7 @@
       <span class="hud-tools-items" id="hudToolsDrawer">
         <button type="button" id="soundButton" title="Sound on / off" aria-label="Sound on or off" aria-pressed="false">♪</button>
         <button type="button" id="guideButton" title="Guide: what to play and what each feature does" aria-label="Open the guide" data-game-name="Open the {game} guide" data-game-name-attr="aria-label">i</button>
+        <button type="button" id="hnmoBugButton" title="Report a bug (Alt+B)" aria-label="Report a bug">🐞</button>
         <span class="hud-sep" aria-hidden="true"></span>
         <span class="language-picker" data-no-i18n role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-lang="en" aria-pressed="true" title="English">EN</button><button type="button" data-lang="vi" aria-pressed="false" title="Tiếng Việt">VN</button><select class="language-more" title="More languages" aria-label="More languages"><option value="">More…</option></select></span>
         <span class="hud-sep" aria-hidden="true"></span>

@@ -18,4 +18,13 @@ public sealed class DeveloperHubRequest
 
     /// <summary>Gets or sets its status: open, issued or declined.</summary>
     public string Status { get; set; } = "open";
+
+    /// <summary>Gets or sets when its answer was last asked for (UTC).</summary>
+    public DateTime? LastCheckUtc { get; set; }
+
+    /// <summary>Gets or sets when the asking schedule started (UTC): the request, or the last purchase.</summary>
+    public DateTime? CheckBaseUtc { get; set; }
+
+    /// <summary>Gets or sets the earliest next ask the hub allowed (its <c>retryAfterSeconds</c>), UTC.</summary>
+    public DateTime? NotBeforeUtc { get; set; }
 }

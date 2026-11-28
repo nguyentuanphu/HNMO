@@ -4,6 +4,8 @@
 
 namespace HNMO.GameLogic.PlugIns.Vip;
 
+using HNMO.GameLogic.PlugIns.Missions;
+
 using HNMO.GameLogic.PlugIns.UltimateAutoPlay;
 
 /// <summary>Connects authenticated live players to the same wallet as the website, under their persistence lock.</summary>
@@ -48,7 +50,7 @@ public sealed class VipGameActions(VipConfiguration configuration, VipStateStore
             }
             else if (request.Action == "daily")
             {
-                var daily = new VipDailyCoins(player.GameContext.PersistenceContextProvider, player.GameContext.Configuration, wallet, store, player.Logger);
+                var daily = new VipDailyCoins(player.GameContext.PersistenceContextProvider, player.GameContext.Configuration, wallet, store, player.Logger, MissionCoinGranter.CoinRewardsAllowed(player.GameContext));
                 status = (await daily.ClaimAsync(context, account, now).ConfigureAwait(false)).Status;
                 if (status is "DailyApplied" or "AlreadyClaimed")
                 {

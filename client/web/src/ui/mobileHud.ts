@@ -1731,6 +1731,7 @@ export class MobileHud {
         const b = document.createElement('button');
         b.type = 'button';
         b.className = 'mh-menu-item';
+        if (entry.key) b.dataset.key = entry.key;
         const icon = document.createElement('span');
         icon.className = 'mh-menu-icon';
         icon.textContent = entry.icon;

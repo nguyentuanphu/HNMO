@@ -1,0 +1,190 @@
+@page "/bank-topups"
+@attribute [Authorize(Policy = AdminPolicies.CashShop)]
+
+@using HNMO.DataModel.Configuration
+@using HNMO.GameLogic.PlugIns
+
+<PageTitle>@L("Bank top-ups", "Nạp qua ngân hàng")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@L("Bank top-ups", "Nạp qua ngân hàng")" />
+
+<h1>@L("Bank top-ups", "Nạp qua ngân hàng")</h1>
+<PageHelp Text="@HelpText" />
+<p class="text-muted">@L("Players transfer to your own bank account from a VietQR code with a transfer code; you see the transfer in your bank app and press Received, or Casso/SePay confirm it for you.", "Người chơi chuyển khoản vào tài khoản ngân hàng của bạn bằng mã VietQR kèm mã chuyển khoản; bạn thấy tiền về trong app ngân hàng rồi bấm Đã nhận, hoặc Casso/SePay tự xác nhận.")</p>
+
+@if (this._loading)
+{
+    <span class="spinner-border spinner-border-sm"></span>
+}
+else
+{
+    @if (this._isAdministrator && this._config is not null)
+    {
+        <div class="card mb-4" id="bank-settings">
+            <div class="card-header d-flex align-items-center gap-2">
+                <strong>@L("Settings", "Cài đặt")</strong>
+                <div class="form-check form-switch ms-auto mb-0">
+                    <input class="form-check-input" type="checkbox" id="bank-active" @bind="this._active" />
+                    <label class="form-check-label" for="bank-active">@L("Players can top up by bank transfer", "Cho người chơi nạp qua chuyển khoản")</label>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-lg-7">
+                        <table class="table table-sm align-middle" id="bank-accounts">
+                            <thead>
+                                <tr>
+                                    <th>@L("Bank", "Ngân hàng")</th>
+                                    <th>@L("Account number", "Số tài khoản")</th>
+                                    <th>@L("Holder (empty: default)", "Chủ tài khoản (trống: mặc định)")</th>
+                                    <th>@L("Shown", "Hiện")</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (var i = 0; i < this._config.Accounts.Count; i++)
+                                {
+                                    var index = i;
+                                    var account = this._config.Accounts[index];
+                                    <tr class="bank-account">
+                                        <td>
+                                            <select class="form-select form-select-sm bank-pick" value="@(IsListed(account.Bin) ? account.Bin : "other")" @onchange="e => this.PickBank(index, e.Value?.ToString())">
+                                                @foreach (var bank in VietnameseBanks.All)
+                                                {
+                                                    <option value="@bank.Bin">@bank.Name (@bank.Code)</option>
+                                                }
+                                                <option value="other">@L("Other (enter the 6-digit id)", "Khác (nhập mã 6 số)")</option>
+                                            </select>
+                                            @if (!IsListed(account.Bin))
+                                            {
+                                                <input class="form-control form-control-sm mt-1 bank-bin" maxlength="6" placeholder="970xxx" @bind="account.Bin" />
+                                            }
+                                        </td>
+                                        <td><input class="form-control form-control-sm bank-number" maxlength="30" @bind="account.Number" @bind:after="this.UpdatePreview" /></td>
+                                        <td><input class="form-control form-control-sm bank-holder" maxlength="80" @bind="account.Holder" /></td>
+                                        <td><input type="checkbox" class="form-check-input bank-shown" @bind="account.Active" /></td>
+                                        <td class="text-nowrap">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary" title="@L("Show this account's QR code on the right", "Xem mã QR của tài khoản này bên phải")" @onclick="() => this.Preview(index)">QR</button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger" title="@L("Remove this account", "Xoá tài khoản này")" @onclick="() => this.RemoveAccount(index)">×</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-sm btn-outline-primary mb-3" id="bank-add" title="@L("Add a bank account players can transfer to", "Thêm tài khoản ngân hàng để người chơi chuyển khoản")" @onclick="this.AddAccount">+ @L("Add an account", "Thêm tài khoản")</button>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <label class="form-label small" for="bank-holder-default">@L("Default account holder (as the bank shows it)", "Chủ tài khoản mặc định (như ngân hàng hiển thị)")</label>
+                                <input class="form-control form-control-sm" id="bank-holder-default" maxlength="80" @bind="this._config.AccountName" />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small" for="bank-rate">@L("VND per coin", "VND cho 1 coin")</label>
+                                <input type="number" class="form-control form-control-sm" id="bank-rate" min="1" @bind="this._config.VndPerCoin" />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small" for="bank-minimum">@L("Minimum (VND)", "Tối thiểu (VND)")</label>
+                                <input type="number" class="form-control form-control-sm" id="bank-minimum" min="1000" step="1000" @bind="this._config.MinimumVnd" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small" for="bank-coin">@L("Coins", "Loại coin")</label>
+                                <select class="form-select form-select-sm" id="bank-coin" @bind="this._config.CoinType">
+                                    @foreach (var type in Enum.GetValues<CashShopCoinType>())
+                                    {
+                                        <option value="@type">@type</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small" for="bank-prefix">@L("Transfer word", "Tiền tố nội dung")</label>
+                                <input class="form-control form-control-sm" id="bank-prefix" maxlength="10" @bind="this._config.TransferPrefix" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small" for="bank-casso">@L("Casso secure token (optional, confirms by itself)", "Casso secure token (không bắt buộc, tự xác nhận)")</label>
+                                <input type="password" class="form-control form-control-sm" id="bank-casso" autocomplete="off" @bind="this._config.CassoSecureToken" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small" for="bank-sepay">@L("SePay API key (optional, confirms by itself)", "SePay API key (không bắt buộc, tự xác nhận)")</label>
+                                <input type="password" class="form-control form-control-sm" id="bank-sepay" autocomplete="off" @bind="this._config.SepayApiKey" />
+                            </div>
+                        </div>
+                        @foreach (var error in this._errors)
+                        {
+                            <div class="text-danger small mt-2">@error</div>
+                        }
+                        <button type="button" class="btn btn-primary mt-3" id="bank-save" disabled="@this._saving" title="@L("Save the bank top-up settings", "Lưu cài đặt nạp qua ngân hàng")" @onclick="this.SaveAsync">@L("Save", "Lưu")</button>
+                    </div>
+                    <div class="col-lg-5 text-center" id="bank-preview">
+                        @if (this._previewSvg is not null)
+                        {
+                            <div class="small text-muted mb-1">@L("What players scan (50,000 VND example):", "Người chơi quét mã này (ví dụ 50.000 đ):")</div>
+                            <div class="d-inline-block border p-2 bg-white" style="max-width:260px">@((MarkupString)this._previewSvg)</div>
+                            <div class="small mt-1">@this._previewCaption</div>
+                        }
+                        else
+                        {
+                            <div class="text-muted small">@L("Add an account with a bank and a number to see its QR code.", "Thêm tài khoản có ngân hàng và số tài khoản để xem mã QR.")</div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="d-flex flex-wrap gap-2 align-items-center mb-2">
+        <h2 class="h5 mb-0 me-2">@L("Top-ups", "Lệnh nạp")</h2>
+        <select class="form-select form-select-sm w-auto" id="bank-filter" @bind="this._filter">
+            <option value="pending">@L("Waiting", "Đang chờ")</option>
+            <option value="credited">@L("Credited", "Đã cộng")</option>
+            <option value="rejected">@L("Rejected", "Đã từ chối")</option>
+            <option value="expired">@L("Expired", "Hết hạn")</option>
+            <option value="all">@L("All", "Tất cả")</option>
+        </select>
+        <input class="form-control form-control-sm w-auto" id="bank-search" placeholder="@L("Account or code", "Tài khoản hoặc mã")" @bind="this._search" @bind:event="oninput" />
+        <button type="button" class="btn btn-sm btn-outline-secondary" id="bank-refresh" title="@L("Load the list again", "Tải lại danh sách")" @onclick="this.Reload">@L("Refresh", "Tải lại")</button>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-sm align-middle" id="bank-topups">
+            <thead>
+                <tr>
+                    <th>@L("Code", "Mã")</th>
+                    <th>@L("Account", "Tài khoản")</th>
+                    <th class="text-end">@L("Amount", "Số tiền")</th>
+                    <th class="text-end">@L("Coins", "Coin")</th>
+                    <th>@L("To", "Vào")</th>
+                    <th>@L("Asked (Sydney)", "Lúc tạo (Sydney)")</th>
+                    <th>@L("Status", "Trạng thái")</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var topUp in this.Shown())
+                {
+                    var state = this.StateOf(topUp);
+                    <tr class="bank-topup" data-code="@topUp.Code">
+                        <td><code>@topUp.Code</code></td>
+                        <td>@topUp.Login</td>
+                        <td class="text-end">@topUp.AmountVnd.ToString("N0") đ</td>
+                        <td class="text-end">@topUp.Coins.ToString("N0")</td>
+                        <td class="small">@VietnameseBanks.NameOf(topUp.Bin) · @topUp.Number</td>
+                        <td class="small">@Sydney(topUp.CreatedUtc)</td>
+                        <td class="small bank-status">@StateLabel(state)@(topUp.DoneBy.Length > 0 ? $" · {topUp.DoneBy} {Sydney(topUp.DoneUtc)}" : string.Empty)</td>
+                        <td class="text-nowrap">
+                            @if (state is "pending" or "expired" or "rejected")
+                            {
+                                <button type="button" class="btn btn-sm btn-success bank-received" disabled="@this._busy" title="@L("The money is in your account: add the coins (once)", "Tiền đã vào tài khoản: cộng coin (một lần)")" @onclick="() => this.ConfirmAsync(topUp.Id)">@L("Received", "Đã nhận")</button>
+                            }
+
+                            @if (state is "pending" or "expired")
+                            {
+                                <button type="button" class="btn btn-sm btn-outline-danger bank-reject" disabled="@this._busy" title="@L("No such transfer arrived: close it without coins", "Không có khoản chuyển này: đóng lại, không cộng coin")" @onclick="() => this.RejectAsync(topUp.Id)">@L("Reject", "Từ chối")</button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    @if (!this.Shown().Any())
+    {
+        <p class="text-muted" id="bank-empty">@L("Nothing here.", "Không có gì.")</p>
+    }
+}

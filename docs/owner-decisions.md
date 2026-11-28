@@ -58,6 +58,10 @@ decision. Add new decisions here as they are made; never turn an agent's habit i
 | 26 Nov | Vault zen with several vault pages | "Mỗi trang một két Zen riêng" (one purse per page; a zen box belongs to its page) |
 | 26 Nov | Gens defaults on servers already running | "Áp cho mọi server" |
 | 26 Nov | #377 master experience at the maximum level waits for the Season Plan | "Bỏ điều kiện Season Plan" (solo and party alike) |
+| 28 Nov | Licence packages and how hosts buy | "Có thêm gói gì nữa không, anh muốn mọi thứ tự động và nhanh, kể cả bên host mình phải làm càng dễ càng tốt cho người ta" |
+| 28 Nov | Updates per package | "Tất cả các gói đều nhận dc updates em nhé, vì chỉ có updates như một kiểu mình có thể check dc người ta và biết license như thế nào" |
+| 28 Nov | A shop signing key on the hub (licences issued right after payment) and VN bank transfer | "Đồng ý cả hai, làm luôn đi em" |
+| 28 Nov | Calls to the hub (each one a paid function call) | As few as possible (relayed by the main session; its words to be copied here) |
 
 Earlier decisions (Maya's body, Fenrir, `/move` in events, the skill sweep points, the socket weapon mix in
 Season 6 and 9, the MUVIETNAM2 purge after the merge into `main`) are summarized in

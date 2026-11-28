@@ -545,6 +545,7 @@ internal sealed class Program : IDisposable
             .AddSingleton<IServerRestartService>(s => new ServerRestartService(s.GetRequiredService<IHostApplicationLifetime>(), this._servers))
             .AddSingleton<IHostLicenseProvider, HostLicenseProvider>()
             .AddHostedService<DeveloperHubWeeklyService>()
+            .AddHostedService<LicencePickupService>()
             .AddSingleton<IDatabasePasswordUpdater, PostgresPasswordUpdater>()
             .AddSingleton<IPacketCaptureService>(CreatePacketCaptureService)
             .AddSingleton<ICollection<PlugInConfiguration>>(this.PlugInConfigurationsFactory)
@@ -669,7 +670,7 @@ internal sealed class Program : IDisposable
                 license = PlayerLicense.Default("The HNMO developer withdrew this licence: up to 10 players at once.");
             }
 
-            return new LicenseStatusInfo(license.MaximumPlayers, license.Message, PlayerLicense.MachineId, resolved, exists, license.IsValid, license.Licensee, license.Expires);
+            return new LicenseStatusInfo(license.MaximumPlayers, license.Message, PlayerLicense.MachineId, resolved, exists, license.IsValid, license.Licensee, license.Expires, license.Seasons);
         }
 
         private static string ResolvePath(string? configuredPath)

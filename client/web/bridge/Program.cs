@@ -296,28 +296,39 @@ app.MapGet("/health", () => "ok");
 
 // The website's "Download HNMO": the newest release's link as the HNMO developer published it on the hub (owner,
 // 2026-11-21: no HNMO folder points at where HNMO is built); the home page while none is published.
+var latestRelease = new LatestReleaseCache();
 app.MapGet("/download", async (HttpContext ctx, IHttpClientFactory clients) =>
 {
     if (HNMO.Interfaces.DeveloperHubAddress.LatestRelease is { Length: > 0 } latestUrl)
     {
-        try
-        {
-            using var timeout = CancellationTokenSource.CreateLinkedTokenSource(ctx.RequestAborted);
-            timeout.CancelAfter(TimeSpan.FromSeconds(5));
-            using var response = await clients.CreateClient().GetAsync(latestUrl, timeout.Token).ConfigureAwait(false);
-            if (response.IsSuccessStatusCode)
+        var link = await latestRelease.GetAsync(
+            async () =>
             {
-                using var document = System.Text.Json.JsonDocument.Parse(await response.Content.ReadAsStringAsync(timeout.Token).ConfigureAwait(false));
-                if (document.RootElement.TryGetProperty("html_url", out var link) && link.GetString() is { } url
-                    && Uri.TryCreate(url, UriKind.Absolute, out var uri) && uri.Scheme == Uri.UriSchemeHttps)
+                try
                 {
-                    return Results.Redirect(uri.ToString());
+                    using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+                    using var response = await clients.CreateClient().GetAsync(latestUrl, timeout.Token).ConfigureAwait(false);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        using var document = System.Text.Json.JsonDocument.Parse(await response.Content.ReadAsStringAsync(timeout.Token).ConfigureAwait(false));
+                        if (document.RootElement.TryGetProperty("html_url", out var found) && found.GetString() is { } url
+                            && Uri.TryCreate(url, UriKind.Absolute, out var uri) && uri.Scheme == Uri.UriSchemeHttps)
+                        {
+                            return uri.ToString();
+                        }
+                    }
                 }
-            }
-        }
-        catch (Exception error) when (error is HttpRequestException or OperationCanceledException or System.Text.Json.JsonException)
+                catch (Exception error) when (error is HttpRequestException or OperationCanceledException or System.Text.Json.JsonException)
+                {
+                    // The hub can't be reached now: the home page, and the hub is asked again in 5 minutes.
+                }
+
+                return null;
+            },
+            DateTime.UtcNow).ConfigureAwait(false);
+        if (link is not null)
         {
-            // The hub can't be reached now: the home page.
+            return Results.Redirect(link);
         }
     }
 
@@ -394,7 +405,8 @@ app.MapGet("/manifest.webmanifest", async (HttpContext context) =>
 });
 
 // Top-ups by bank transfer: the top-up page's information and the payment services' webhooks (Casso,
-// SePay) go to the admin panel, which only listens on this computer. Only these three paths pass, with
+// SePay), the player's waiting top-ups and their status go to the admin panel, which only listens on this computer.
+// Only these five paths pass, with
 // the body and the webhooks' key headers; the admin panel checks the keys.
 var topUpBase = (app.Configuration["GameName:AdminUrl"] ?? app.Configuration["Launcher:AdminUrl"] ?? "http://127.0.0.1:8095").TrimEnd('/') + "/api/topup/";
 var topUpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(8) };
@@ -434,6 +446,8 @@ async Task ForwardTopUpAsync(HttpContext context, string action)
 }
 
 app.MapGet("/topup/info", (HttpContext context) => ForwardTopUpAsync(context, "info"));
+app.MapPost("/topup/pending", (HttpContext context) => ForwardTopUpAsync(context, "pending")).RequireRateLimiting("per-visitor");
+app.MapGet("/topup/status", (HttpContext context) => ForwardTopUpAsync(context, "status" + context.Request.QueryString.Value)).RequireRateLimiting("per-visitor");
 app.MapPost("/topup/casso", (HttpContext context) => ForwardTopUpAsync(context, "casso")).RequireRateLimiting("per-visitor");
 app.MapPost("/topup/sepay", (HttpContext context) => ForwardTopUpAsync(context, "sepay")).RequireRateLimiting("per-visitor");
 
