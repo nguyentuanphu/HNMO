@@ -47,18 +47,13 @@ public class ByteArrayDownloadController : Controller
             .Select(assembly => assembly.GetType(typeString)).FirstOrDefault(t => t != null);
         if (type is null)
         {
-            throw new InvalidOperationException($"Only types of namespace {nameof(HNMO)} can be edited on this page.");
+            return this.NotFound();
         }
 
         var property = type.GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy);
-        if (property is null)
+        if (property?.PropertyType != typeof(byte[]))
         {
-            throw new ArgumentException($"Property {propertyName} not found in type {type}.", nameof(propertyName));
-        }
-
-        if (property.PropertyType != typeof(byte[]))
-        {
-            throw new ArgumentException($"Property {type}.{propertyName} is not a byte array.", nameof(propertyName));
+            return this.NotFound();
         }
 
         using var persistenceContext = this._persistenceContextProvider.CreateNewTypedContext(type, false);
