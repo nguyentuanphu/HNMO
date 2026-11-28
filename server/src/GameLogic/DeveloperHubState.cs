@@ -57,4 +57,10 @@ public sealed class DeveloperHubState
 
     /// <summary>Gets or sets when <see cref="PackagesJson"/> was fetched (UTC).</summary>
     public DateTime? PackagesFetchedUtc { get; set; }
+
+    /// <summary>
+    /// Gets or sets the hub's switch for the licence's folder limit, from its last answer (kept under
+    /// <see cref="HNMO.Interfaces.HubFolderLimits.StatePropertyName"/>, which the launcher writes too); none: off.
+    /// </summary>
+    public HNMO.Interfaces.HubFolderLimits? FolderLimits { get; set; }
 }

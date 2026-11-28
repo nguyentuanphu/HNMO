@@ -17,9 +17,17 @@ using HNMO.Interfaces;
 /// <remarks>
 /// File format (JSON): <c>{ "payload": "&lt;base64 of the license JSON&gt;", "signature": "&lt;base64 Ed25519 signature over the payload bytes&gt;" }</c>;
 /// the license JSON: <c>{ "licensee": "…", "maxPlayers": 50, "expires": "2027-12-31" | null, "machine": "&lt;machine id&gt;" | null, "issued": "…" }</c>.
+/// A licence may add <c>"folders": 1..50</c> (signed like the rest; 1 when missing): how many HNMO folders may run at once
+/// on its computer while the HNMO developer's hub has the folder limit switched on.
 /// </remarks>
-public sealed record PlayerLicense(bool IsValid, int MaximumPlayers, string? Licensee, DateOnly? Expires, string Message, IReadOnlyList<string>? Seasons = null)
+public sealed record PlayerLicense(bool IsValid, int MaximumPlayers, string? Licensee, DateOnly? Expires, string Message, IReadOnlyList<string>? Seasons = null, int Folders = PlayerLicense.DefaultFolders)
 {
+    /// <summary>The HNMO folders a licence lets run at once on its computer when it names none (older licences).</summary>
+    public const int DefaultFolders = 1;
+
+    /// <summary>The most HNMO folders a licence may let run at once on its computer.</summary>
+    public const int MaximumFolders = 50;
+
     /// <summary>The players in the game at once without a license.</summary>
     public const int DefaultMaximumPlayers = 10;
 
@@ -144,11 +152,19 @@ public sealed record PlayerLicense(bool IsValid, int MaximumPlayers, string? Lic
             }
 
             var until = expires is { } last ? $" until {last:yyyy-MM-dd}" : string.Empty;
-            return new PlayerLicense(true, maximum, licensee, expires, $"Licensed to {licensee}: up to {maximum} players at once{until}.", seasons);
+            return new PlayerLicense(true, maximum, licensee, expires, $"Licensed to {licensee}: up to {maximum} players at once{until}.", seasons, FoldersOf(root));
         }
         catch (Exception error) when (error is JsonException or FormatException or KeyNotFoundException or InvalidOperationException)
         {
             return Default($"The license file can't be read: up to {DefaultMaximumPlayers} players at once.");
         }
     }
+
+    /// <summary>The folders a licence's payload allows: its <c>folders</c> within 1..50, or 1 when it names none.</summary>
+    /// <param name="payload">The licence JSON.</param>
+    /// <returns>The folders.</returns>
+    private static int FoldersOf(JsonElement payload)
+        => payload.TryGetProperty("folders", out var folders) && folders.ValueKind == JsonValueKind.Number && folders.TryGetInt32(out var count)
+            ? Math.Clamp(count, DefaultFolders, MaximumFolders)
+            : DefaultFolders;
 }

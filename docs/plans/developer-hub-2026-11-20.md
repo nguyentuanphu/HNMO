@@ -132,3 +132,25 @@ Everything sent to the developer is sent silently: no notice on the setup page, 
 line in Host settings (removed: `HostSetupReportCard`, the host-name banner, `weekly-report-status`). The host's name
 and contact come from the licence request form (`DeveloperHub.RequestLicenceAsync` keeps them for the reports). Still
 visible because the host does them: forwarding a bug report, asking for a licence.
+
+### Folder limit: one HNMO folder per computer (2026-11-28, Sydney; server side)
+
+Off by default: HNMO is in testing and anyone may run it freely. The hub switches it on; the hub's side (console, flag,
+add-on purchases) is built separately. Contract:
+
+- **Folder code.** The weekly (`/api/weekly`) and setup (`/api/setup`) reports carry `folder`: the first 16 hex digits of
+  SHA-256(installId + "|" + the folder's absolute path). The install id is random, made once in `save/install-id`
+  (`FolderIdentity`). Every program of a folder (Season 6.3, Season 9, the Arena) has the same code; a copy elsewhere
+  another one. No new hub call.
+- **Switch.** The answers of `/api/weekly` and `/api/update-check` may carry `limits: { "enforce": true|false }` (missing:
+  false). It is kept in `save/developer-hub.json` (`FolderLimits`) for at most 14 days; older, or the hub unreachable for
+  a week, means off (`DeveloperHub.FolderLimitEnforced`). The launcher's update check writes the same field.
+- **Licence.** The signed payload may add `folders` (1..50, default 1): the folders that may run at once on the licensed
+  computer (`PlayerLicense.Folders`). Without a valid licence (the free build too): 1.
+- **Seats** (`FolderSeats`, `FolderSeat`). While the switch is on, at most `folders` folders hold a seat on the
+  computer: one file per folder, `<machine id>.<folder code>.seat`, in `%ProgramData%\HNMO\seats` (Windows) or
+  `/var/tmp/hnmo-seats` (`/tmp/hnmo-seats` without `/var/tmp`), writable by every user. The programs of a folder share
+  its file; it beats every 30 seconds and a dead folder's seat frees itself after 2 minutes. The live folders are lined
+  up by when they first asked: the first ones hold a seat. A folder without a seat lets nobody log in (limit 0), the
+  admin panel shows why with the computer's id, and the log says so; it takes players again by itself once a seat is
+  free or the switch goes off. While the switch is off: no seat file, no warning. Tests `FolderLimitTests`.

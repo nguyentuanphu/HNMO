@@ -304,6 +304,34 @@ internal sealed class HnmoUpdater
         }
     }
 
+    /// <summary>
+    /// Keeps the hub's switch for the licence's folder limit (<c>limits.enforce</c>, missing: off) in the folder's shared
+    /// state file, where the server programs read it: from any answer of the hub, and from a refusal that is the hub's JSON.
+    /// </summary>
+    /// <param name="status">The answer's status.</param>
+    /// <param name="answer">The answer's text.</param>
+    private void RememberFolderLimits(HttpStatusCode status, string answer)
+    {
+        bool? enforce = null;
+        try
+        {
+            using var document = JsonDocument.Parse(answer);
+            if (document.RootElement.ValueKind == JsonValueKind.Object)
+            {
+                enforce = HubFolderLimits.EnforceOf(document.RootElement);
+            }
+        }
+        catch (JsonException)
+        {
+            // not the hub's JSON
+        }
+
+        if ((int)status is >= 200 and < 300 || (enforce is not null && status is HttpStatusCode.Forbidden or HttpStatusCode.NotFound))
+        {
+            HubFolderLimits.Remember(Path.Combine(this._saveDir, HubFolderLimits.StateFileName), enforce == true, DateTime.UtcNow);
+        }
+    }
+
     private async Task CheckAsync(CancellationToken cancellationToken)
     {
         var url = DeveloperHubAddress.UpdateCheck;
@@ -340,6 +368,8 @@ internal sealed class HnmoUpdater
             using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             timeout.CancelAfter(TimeSpan.FromSeconds(10));
             using var response = await this._clients.CreateClient().PostAsJsonAsync(url, requestBody, timeout.Token).ConfigureAwait(false);
+            var answer = await response.Content.ReadAsStringAsync(timeout.Token).ConfigureAwait(false);
+            this.RememberFolderLimits(response.StatusCode, answer);
             if (response.StatusCode is HttpStatusCode.Forbidden or HttpStatusCode.NotFound)
             {
                 this.ClearAuthorizedOffer();
@@ -347,7 +377,7 @@ internal sealed class HnmoUpdater
             }
 
             response.EnsureSuccessStatusCode();
-            using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync(timeout.Token).ConfigureAwait(false));
+            using var document = JsonDocument.Parse(answer);
             var root = document.RootElement;
             string? Text(string name) => root.TryGetProperty(name, out var value) && value.ValueKind == JsonValueKind.String ? value.GetString() : null;
             var manifestVersion = Text("manifestVersion");
