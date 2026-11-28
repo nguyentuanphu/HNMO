@@ -53,6 +53,7 @@ import { MarriageWindow } from './ui/marriageWindow.js';
 import { MarketWindow } from './ui/marketWindow.js';
 import { ArenaWindow, savedArenaHome, type ArenaHome } from './ui/arenaWindow.js';
 import { BugReportWindow, installErrorLog } from './ui/bugReportWindow.js';
+import { autoErrorScope, installAutoErrorReports, setAutoErrorSender } from './autoErrors.js';
 import { EscrowWindow } from './ui/escrowWindow.js';
 import { VaultPages } from './ui/vaultPages.js';
 import { ItemStacks } from './ui/itemStacks.js';
@@ -359,6 +360,7 @@ scene.add(root);
 
 const state: GameState = { world: null, hero: null, online: null, mapNumber: null, camera };
 installErrorLog();
+installAutoErrorReports();
 // The cash shop's buttons wait for the server to name its script (ui/cashShop.ts): none on a season without a shop.
 document.body.classList.add(NO_CASH_SHOP_CLASS);
 state.cooldowns = skillCooldowns;
@@ -1362,6 +1364,12 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     ? await loginWithTicket(settings.relay, address, settings.username, ticket)
     : await login(settings.relay, address, settings.username, settings.password);
   state.connection = connection; // tests feed recorded packets through it (dispatch)
+  // Automatic error reports (autoErrors.ts) go to the server's owner through this connection from now on.
+  const scope = await autoErrorScope(address.host, address.port, settings.username);
+  connection.onUnexpectedDisconnect = setAutoErrorSender((json) => {
+    if (connection.socket?.readyState !== WebSocket.OPEN) throw new Error('closed');
+    connection.send('ClientToServer', 'HnmoAutoErrorReport', { Json: json });
+  }, scope);
   const character = await chooseCharacter(connection);
   ui.characters.hidden = true;
   saveQuickPlay({ username: settings.username, column: columnOf(server), serverId: server.id, character: character.name });

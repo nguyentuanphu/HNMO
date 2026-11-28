@@ -257,8 +257,10 @@ public sealed class BugReportsPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn
         return (true, null);
     }
 
-    /// <summary>The reports queued for the HNMO developer and not sent yet (the weekly report takes them), at most 50.</summary>
-    /// <returns>The hub's messages of the reports, with their ids.</returns>
+    /// <summary>
+    /// The player reports queued for the HNMO developer (at most 50).
+    /// </summary>
+    /// <returns>The hub's messages, with their ids.</returns>
     public List<(string Id, System.Text.Json.Nodes.JsonObject Message)> QueuedForDeveloper()
     {
         var share = this.Settings.ShareCharacterNames;
@@ -269,7 +271,7 @@ public sealed class BugReportsPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn
             .ToList());
     }
 
-    /// <summary>Marks queued reports as sent (the weekly report was taken).</summary>
+    /// <summary>Marks queued player reports as sent (the weekly report was taken).</summary>
     /// <param name="ids">The reports.</param>
     public void MarkSentToDeveloper(IReadOnlyCollection<string> ids)
     {
@@ -284,6 +286,87 @@ public sealed class BugReportsPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn
             }
 
             return (changed, true);
+        });
+    }
+
+    /// <summary>
+    /// Keeps an automatic error report of the web client (HNMO extra; owner 2026-11-27: they go to this server's owner
+    /// only). The login is kept for the caps and the count of accounts only.
+    /// </summary>
+    /// <param name="player">The player.</param>
+    /// <param name="fingerprint">The fingerprint the client computed.</param>
+    /// <param name="sample">The report.</param>
+    /// <returns>What happened.</returns>
+    public AutoErrorEngine.Outcome SubmitAutomatic(Player player, string? fingerprint, AutoErrorSample sample)
+    {
+        ArgumentNullException.ThrowIfNull(sample);
+        if (player.Account?.LoginName is not { Length: > 0 } login)
+        {
+            return AutoErrorEngine.Outcome.Invalid;
+        }
+
+        var settings = this.Settings;
+        var (outcome, group) = this.Store.Mutate(data =>
+        {
+            var result = AutoErrorEngine.Submit(data, login, fingerprint, sample, settings, DateTime.UtcNow, Sydney);
+            return (result.Group is not null, result);
+        });
+        if (outcome == AutoErrorEngine.Outcome.NewGroup && group is not null)
+        {
+            player.Logger.LogInformation("Automatic error report {Id} ({Kind})", group.Id, group.Kind);
+        }
+
+        return outcome;
+    }
+
+    /// <summary>The groups of automatic error reports, most reports first (admin panel).</summary>
+    /// <returns>The groups.</returns>
+    public List<AutoErrorGroup> AutoGroups() => this.Store.Read(data =>
+    {
+        var groups = AutoErrorEngine.ByCount(data);
+        foreach (var group in groups)
+        {
+            AutoErrorOutbox.ReadStatus(group, HnmoSeasonInstance.Current);
+        }
+
+        return groups;
+    });
+
+    /// <summary>Marks a group of automatic error reports fixed, ignored or open (admin panel).</summary>
+    /// <param name="id">The group.</param>
+    /// <param name="status">The status.</param>
+    /// <returns>Whether it was set.</returns>
+    public bool SetAutoStatus(string id, AutoErrorStatus status) =>
+        this.Store.Mutate(data =>
+        {
+            var group = AutoErrorEngine.SetStatus(data, id, status);
+            return (group is not null, group is not null);
+        });
+
+    /// <summary>
+    /// Puts a group of automatic error reports in the queue for the HNMO developer (admin panel): it goes with the
+    /// server's next weekly report, without any login or IP.
+    /// </summary>
+    /// <param name="id">The group.</param>
+    /// <returns>Whether it was queued, and an error.</returns>
+    public (bool Ok, string? Error) ForwardAuto(string id)
+    {
+        if (!DeveloperHub.CanForwardAutomaticErrors)
+        {
+            return (false, "Automatic error forwarding requires a host credential.");
+        }
+
+        return this.Store.Read<(bool Ok, string? Error)>(data =>
+        {
+            var group = AutoErrorEngine.Find(data, id);
+            if (group is null)
+            {
+                return (false, "There's no such error.");
+            }
+
+            return AutoErrorOutbox.TryApprove(group, HnmoSeasonInstance.Current)
+                ? (true, (string?)null)
+                : (false, "This error has already been approved or the queue is full.");
         });
     }
 
