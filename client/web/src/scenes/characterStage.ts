@@ -365,6 +365,7 @@ export class CharacterStage {
     const canvasRect = this.options.canvas.getBoundingClientRect();
     const parentRect = this.options.labelParent?.getBoundingClientRect();
     if (!parentRect) return;
+    const placed: { label: HTMLDivElement; x: number; y: number; half: number; height: number }[] = [];
     for (const entry of this.preview ? [...this.entries, this.preview] : this.entries) {
       if (!entry.label) continue;
       entry.character.group.updateWorldMatrix(true, false);
@@ -378,7 +379,18 @@ export class CharacterStage {
       const across = canvasRect.left + ((point.x + 1) / 2) * canvasRect.width - parentRect.left;
       const x = parentRect.width > 2 * half + 4 ? Math.min(Math.max(across, half + 2), parentRect.width - half - 2) : across;
       const y = canvasRect.top + ((1 - point.y) / 2) * canvasRect.height - parentRect.top;
-      entry.label.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px) translate(-50%, -100%)`;
+      placed.push({ label: entry.label, x, y, half, height: entry.label.offsetHeight });
+    }
+    // Names that would touch (five or more characters on a narrow screen) go up one row each, left to right,
+    // so every name stays readable.
+    placed.sort((a, b) => a.x - b.x);
+    const rows: { right: number }[][] = [];
+    for (const item of placed) {
+      let row = 0;
+      while (rows[row]?.some((other) => other.right + 2 > item.x - item.half)) row++;
+      (rows[row] ??= []).push({ right: item.x + item.half });
+      const lift = row * (item.height + 2);
+      item.label.style.transform = `translate(${Math.round(item.x)}px, ${Math.round(item.y - lift)}px) translate(-50%, -100%)`;
     }
   }
 

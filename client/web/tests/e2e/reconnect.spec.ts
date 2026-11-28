@@ -1,4 +1,4 @@
-// Reconnect after a lost connection (PARITY.md section 1, net/reconnect.ts): the connection to the game server drops
+﻿// Reconnect after a lost connection (PARITY.md section 1, net/reconnect.ts): the connection to the game server drops
 // while in the world, the game's reconnect box shows over it ("Connection lost", the step, the gauge, Cancel), the game
 // looks whether the server is back, takes a one-time ticket of the website session and comes back to the same server
 // and the same character, with a line in the chat. A logout of the game's own is no reason to reconnect. While the
@@ -84,8 +84,9 @@ async function dropAndWait(page: Page, relay: Relay): Promise<void> {
   relay.gameAway = true;
   relay.drop();
   await expect(page.locator('.reconnect-dialog #panel')).toBeVisible({ timeout: 15_000 });
-  await expect.poll(() => relay.refused, { timeout: 60_000 }).toBeGreaterThanOrEqual(3);
-  await expect(page.locator('.reconnect-dialog #rc_countdown')).toHaveText(/Retrying in \d+ seconds\.\.\./, { timeout: 20_000 });
+  // A slow runner draws the world at about 3 fps and its timers run late (one try took 60 s on CI), so the wait is long.
+  await expect.poll(() => relay.refused, { timeout: 240_000 }).toBeGreaterThanOrEqual(3);
+  await expect(page.locator('.reconnect-dialog #rc_countdown')).toHaveText(/Retrying in \d+ seconds\.\.\./, { timeout: 60_000 });
 }
 test('a dropped connection shows the reconnect box and comes back to the same server and character', async ({ page }) => {
   test.setTimeout(8 * 60_000);
@@ -136,7 +137,7 @@ test('the game closing its own connection does not reconnect', async ({ page }) 
 });
 
 test('the tries go on until Cancel; with a valid website session Cancel lands on the server choice; the box fits 320 px', async ({ page }) => {
-  test.setTimeout(6 * 60_000);
+  test.setTimeout(10 * 60_000);
   const relay = await routeRelay(page);
   let tickets = 0;
   await page.route('**/portal/login-ticket', (route) => { tickets++; return route.fulfill({ json: { loginName: 'test2', ticket: 'server-choice-fixture', expiresInSeconds: 60 } }); });
@@ -173,7 +174,7 @@ test('the tries go on until Cancel; with a valid website session Cancel lands on
 });
 
 test('Cancel with the website session ended shows only the website login button and a line', async ({ page }) => {
-  test.setTimeout(6 * 60_000);
+  test.setTimeout(10 * 60_000);
   const relay = await routeRelay(page);
   let ended = false;
   await page.route('**/portal/login-ticket', (route) => (ended
@@ -191,7 +192,7 @@ test('Cancel with the website session ended shows only the website login button 
 });
 
 test('Cancel with the website unreachable says so and Retry asks again', async ({ page }) => {
-  test.setTimeout(6 * 60_000);
+  test.setTimeout(10 * 60_000);
   const relay = await routeRelay(page);
   let reachable = true;
   await page.route('**/portal/login-ticket', (route) => (reachable
