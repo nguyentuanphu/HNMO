@@ -366,8 +366,6 @@ scene.add(root);
 const state: GameState = { world: null, hero: null, online: null, mapNumber: null, camera };
 installErrorLog();
 installAutoErrorReports();
-// The cash shop's buttons wait for the server to name its script (ui/cashShop.ts): none on a season without a shop.
-document.body.classList.add(NO_CASH_SHOP_CLASS);
 state.cooldowns = skillCooldowns;
 state.chat = chat;
 window.__game = state; // for automated tests and debugging from the console
@@ -2742,6 +2740,10 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   hotkeys.onChange(() => hud.refreshItemSlots());
   // The cash shop button shows only on a season with a cash shop (the server named its script, maybe already).
   hud.setCashShopShown(state.cashShop?.available ?? false);
+  // A season without a cash shop is known only now: the world is in and the server named no shop script (it does so
+  // on entering, before the world loads). Until then the page assumes a shop, so windows opened before entering a
+  // world (and their tests) keep their coin rewards; the script arriving later clears it (ui/cashShop.ts).
+  document.body.classList.toggle(NO_CASH_SHOP_CLASS, !(state.cashShop?.available ?? false));
   void hud.open();
   // ReceiveQuestPrize (LegacyQuestReward, C1 A3): the class change quests' rewards — level-up
   // points (200, 202) for the hero; a class change (201-203) salutes; all of them light up the player.
