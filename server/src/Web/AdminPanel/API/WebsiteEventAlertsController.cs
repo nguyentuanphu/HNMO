@@ -1,4 +1,4 @@
-// <copyright file="WebsiteEventAlertsController.cs" company="HNMO">
+﻿// <copyright file="WebsiteEventAlertsController.cs" company="HNMO">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -59,6 +59,7 @@ public sealed class WebsiteEventAlertsController(IPersistenceContextProvider per
     /// <param name="request">Subscription payload from <c>PushManager.subscribe</c>.</param>
     /// <returns>Success or validation status.</returns>
     [HttpPost("subscribe")]
+    [RequestSizeLimit(16 * 1024)]
     public async Task<IActionResult> SubscribeAsync([FromBody] SubscribeAlertRequest? request)
     {
         var (_, isActive, saved) = await PlugInSettings.ReadStoredAsync<EventAlertsConfiguration>(
@@ -101,6 +102,7 @@ public sealed class WebsiteEventAlertsController(IPersistenceContextProvider per
     /// <param name="request">Endpoint removal payload.</param>
     /// <returns>Success status.</returns>
     [HttpPost("unsubscribe")]
+    [RequestSizeLimit(16 * 1024)]
     public async Task<IActionResult> UnsubscribeAsync([FromBody] UnsubscribeAlertRequest? request)
     {
         var (_, _, saved) = await PlugInSettings.ReadStoredAsync<EventAlertsConfiguration>(

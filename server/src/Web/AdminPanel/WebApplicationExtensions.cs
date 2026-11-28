@@ -1,4 +1,4 @@
-// <copyright file="WebApplicationExtensions.cs" company="HNMO">
+﻿// <copyright file="WebApplicationExtensions.cs" company="HNMO">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -149,6 +149,7 @@ public static class WebApplicationExtensions
         else
         {
             app.UseExceptionHandler("/Error", createScopeForErrors: true);
+            app.UseBadRequestStatus();
         }
 
         // Through the public website: the admin path as the path base, closed while no admin user exists.

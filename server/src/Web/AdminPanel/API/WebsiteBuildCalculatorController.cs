@@ -1,4 +1,4 @@
-// <copyright file="WebsiteBuildCalculatorController.cs" company="HNMO">
+﻿// <copyright file="WebsiteBuildCalculatorController.cs" company="HNMO">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -39,6 +39,7 @@ public sealed class WebsiteBuildCalculatorController(IDataSource<GameConfigurati
     /// <param name="input">Build parameters.</param>
     /// <returns>Computed stats JSON or 400 if class not found.</returns>
     [HttpPost]
+    [RequestSizeLimit(16 * 1024)]
     public async Task<IActionResult> CalculateAsync([FromBody] BuildCalculatorInput input)
     {
         if (input is null)
