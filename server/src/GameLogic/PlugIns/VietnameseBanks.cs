@@ -43,7 +43,7 @@ public static class VietnameseBanks
         ("970419", "NCB", "NCB"),
         ("970430", "PGB", "PGBank"),
         ("970400", "SGICB", "Saigonbank"),
-        ("970406", "DOB", "DongA Bank"),
+        ("970406", "VIKKI", "Vikki Bank (DongA Bank)"),
         ("970424", "SHBVN", "Shinhan Bank"),
         ("970458", "UOB", "UOB"),
         ("970457", "WVN", "Woori Bank"),

@@ -56,7 +56,7 @@ else
                         <div class="col-auto" style="width: 220px">@((MarkupString)(this._bankQrSvg ?? string.Empty))</div>
                         <div class="col">
                             <dl class="mb-2">
-                                <dt>@L("Bank", "Ngân hàng")</dt><dd>@(bank.BankName.Length > 0 ? bank.BankName : $"BIN {bank.Bin}")</dd>
+                                <dt>@L("Bank", "Ngân hàng")</dt><dd>@(bank.BankName.Length > 0 ? bank.BankName : HNMO.GameLogic.PlugIns.VietnameseBanks.NameOf(bank.Bin))</dd>
                                 <dt>@L("Account", "Số tài khoản")</dt>
                                 <dd><code id="bank-account">@bank.Account</code> <button type="button" class="btn btn-sm btn-outline-secondary" title="@L("Copy the account number", "Copy số tài khoản")" @onclick="() => this.CopyAsync(bank.Account)">@L("Copy", "Copy")</button></dd>
                                 <dt>@L("Account name", "Chủ tài khoản")</dt><dd>@bank.AccountName</dd>
