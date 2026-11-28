@@ -53,6 +53,7 @@ import { MarriageWindow } from './ui/marriageWindow.js';
 import { MarketWindow } from './ui/marketWindow.js';
 import { ArenaWindow, savedArenaHome, type ArenaHome } from './ui/arenaWindow.js';
 import { BugReportWindow, installErrorLog } from './ui/bugReportWindow.js';
+import { autoErrorScope, installAutoErrorReports, setAutoErrorSender } from './autoErrors.js';
 import { EscrowWindow } from './ui/escrowWindow.js';
 import { VaultPages } from './ui/vaultPages.js';
 import { ItemStacks } from './ui/itemStacks.js';
@@ -364,6 +365,7 @@ scene.add(root);
 
 const state: GameState = { world: null, hero: null, online: null, mapNumber: null, camera };
 installErrorLog();
+installAutoErrorReports();
 state.cooldowns = skillCooldowns;
 state.chat = chat;
 window.__game = state; // for automated tests and debugging from the console
@@ -1599,6 +1601,12 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     ? await loginWithTicket(settings.relay, address, settings.username, ticket)
     : await login(settings.relay, address, settings.username, settings.password);
   state.connection = connection; // tests feed recorded packets through it (dispatch)
+  // Automatic error reports (autoErrors.ts) go to the server's owner through this connection from now on.
+  const scope = await autoErrorScope(address.host, address.port, settings.username);
+  connection.onUnexpectedDisconnect = setAutoErrorSender((json) => {
+    if (connection.socket?.readyState !== WebSocket.OPEN) throw new Error('closed');
+    connection.send('ClientToServer', 'HnmoAutoErrorReport', { Json: json });
+  }, scope);
   const character = await chooseCharacter(connection);
   ui.characters.hidden = true;
   saveQuickPlay({ username: settings.username, column: columnOf(server), serverId: server.id, character: character.name });
@@ -2140,6 +2148,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     },
     onApply: (config) => autoPlay.setConfig(config),
     onMessage: (text) => chat.add(text, 'system'),
+    onBeforeOpen: () => { if (state.onboarding?.isOpen) state.onboarding.close(); },
   });
   state.settingsWindow = settingsWindow;
   const applyServerConfig = (bytes: Uint8Array) => {
@@ -3296,5 +3305,31 @@ if (soundButton) {
   const show = () => soundButton.setAttribute('aria-pressed', String(sounds.audio.getSettings().muted));
   soundButton.addEventListener('click', () => { sounds.audio.setMuted(!sounds.audio.getSettings().muted); show(); });
   show();
+}
+// Touch-expandable top utility bar next to Autoplay (starts collapsed to the cog icon).
+const hudTools = document.getElementById('hudTools');
+const hudToolsToggle = document.getElementById('hudToolsToggle');
+if (hudTools && hudToolsToggle) {
+  const setToolsExpanded = (open: boolean) => {
+    hudTools.classList.toggle('expanded', open);
+    hudToolsToggle.setAttribute('aria-expanded', String(open));
+  };
+  for (const ev of ['pointerdown', 'touchstart', 'mousedown'] as const) {
+    hudTools.addEventListener(ev, (e) => e.stopPropagation(), { passive: ev === 'touchstart' });
+  }
+  hudToolsToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    setToolsExpanded(!hudTools.classList.contains('expanded'));
+  });
+  document.getElementById('guideButton')?.addEventListener('click', () => setToolsExpanded(false));
+  document.getElementById('settingsButton')?.addEventListener('click', () => setToolsExpanded(false));
+  document.addEventListener('pointerdown', (e) => {
+    if (hudTools.classList.contains('expanded') && !hudTools.contains(e.target as Node)) {
+      setToolsExpanded(false);
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && hudTools.classList.contains('expanded')) setToolsExpanded(false);
+  });
 }
 requestAnimationFrame(frame);

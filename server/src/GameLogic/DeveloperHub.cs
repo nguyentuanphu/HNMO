@@ -34,7 +34,11 @@ public static class DeveloperHub
     /// <summary>The days more players than allowed may play once the limit was first passed (owner, 2026-11-20).</summary>
     public const int GraceDays = 7;
 
+    /// <summary>The hub's error when the automatic error credential doesn't match this computer.</summary>
+    private const string AutomaticCredentialRefused = "automatic report credential";
+
     private static readonly HttpClient DefaultClient = new() { Timeout = TimeSpan.FromSeconds(30) };
+    private static readonly HttpClient AutoErrorClient = new(new HttpClientHandler { AllowAutoRedirect = false }) { Timeout = TimeSpan.FromSeconds(30) };
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
     private static readonly Lock StateLock = new();
     private static int _peakPlayers;
@@ -386,13 +390,44 @@ public static class DeveloperHub
         return (status, licence);
     }
 
+    /// <summary>Gets whether a host credential is configured for forwarding automatic errors.</summary>
+    public static bool CanForwardAutomaticErrors => AutomaticErrorForwardingKey() is not null;
+
+    private static string? AutomaticErrorForwardingKey()
+    {
+        if (!Uri.TryCreate(Url, UriKind.Absolute, out var uri)
+            || (uri.Scheme != Uri.UriSchemeHttps && !(uri.IsLoopback && uri.Scheme == Uri.UriSchemeHttp)))
+        {
+            return null;
+        }
+
+        var key = Environment.GetEnvironmentVariable("HNMO_AUTO_ERROR_FORWARD_KEY");
+        return key is { Length: >= 32 and <= 256 } && key.All(c => char.IsAsciiLetterOrDigit(c) || c is '-' or '_') ? key : null;
+    }
+
     /// <summary>Sends the weekly report.</summary>
     /// <param name="weekly">The report: version, system, players, health, features and bug reports.</param>
     /// <param name="client">The HTTP client (tests).</param>
+    /// <param name="acceptAuto">Handles acknowledgements for individually persisted automatic reports.</param>
     /// <returns>Whether it was taken, whether the licence was withdrawn, and the EN text of a refusal.</returns>
-    public static async Task<(bool Ok, bool Withdrawn, string Error)> SendWeeklyAsync(JsonObject weekly, HttpClient? client = null)
+    public static async Task<(bool Ok, bool Withdrawn, string Error)> SendWeeklyAsync(JsonObject weekly, HttpClient? client = null, Action<IReadOnlySet<Guid>>? acceptAuto = null)
     {
-        var (ok, answer, en, _) = await PostAsync("api/weekly", weekly, client).ConfigureAwait(false);
+        var key = weekly["autoErrors"] is JsonArray { Count: > 0 } ? AutomaticErrorForwardingKey() : null;
+        if (key is null)
+        {
+            weekly.Remove("autoErrors");
+        }
+
+        var (ok, answer, en, _) = await PostAsync("api/weekly", weekly, client, key).ConfigureAwait(false);
+        if (!ok && key is not null && answer?["error"]?.GetValue<string>() == AutomaticCredentialRefused)
+        {
+            // The hub refuses the whole report before it writes anything when the automatic error credential is wrong;
+            // the weekly report and the players' reports go without the automatic errors, which stay in the outbox.
+            weekly.Remove("autoErrors");
+            acceptAuto = null;
+            (ok, answer, en, _) = await PostAsync("api/weekly", weekly, client).ConfigureAwait(false);
+        }
+
         var withdrawn = ok && answer?["revoked"]?.GetValue<bool>() == true;
         var now = DateTime.UtcNow;
         ChangeState(s =>
@@ -408,6 +443,20 @@ public static class DeveloperHub
                 s.WithdrawnLicences.Add(id);
             }
         });
+        if (ok && acceptAuto is not null && answer?["autoAccepted"] is JsonArray approvals)
+        {
+            var accepted = new HashSet<Guid>();
+            foreach (var item in approvals.Take(50).OfType<JsonValue>())
+            {
+                if (item.TryGetValue<string>(out var id) && Guid.TryParseExact(id, "N", out var parsed))
+                {
+                    accepted.Add(parsed);
+                }
+            }
+
+            acceptAuto(accepted);
+        }
+
         return (ok, withdrawn, ok ? string.Empty : en);
     }
 
@@ -436,7 +485,7 @@ public static class DeveloperHub
     /// <summary>For tests: forgets the state kept without a file.</summary>
     internal static void ResetMemoryState() => _memoryState = null;
 
-    private static async Task<(bool Ok, JsonNode? Answer, string En, string Vi)> PostAsync(string path, JsonObject message, HttpClient? client)
+    private static async Task<(bool Ok, JsonNode? Answer, string En, string Vi)> PostAsync(string path, JsonObject message, HttpClient? client, string? autoErrorKey = null)
     {
         var hub = Url;
         if (hub.Length == 0)
@@ -466,7 +515,13 @@ public static class DeveloperHub
         message["licence"] = LicenceFile;
         try
         {
-            using var response = await (client ?? DefaultClient).PostAsJsonAsync($"{hub}/{path}", message).ConfigureAwait(false);
+            using var request = new HttpRequestMessage(HttpMethod.Post, $"{hub}/{path}") { Content = JsonContent.Create(message) };
+            if (autoErrorKey is not null)
+            {
+                request.Headers.Add("X-Hnmo-Auto-Error-Key", autoErrorKey);
+            }
+
+            using var response = await (client ?? (autoErrorKey is null ? DefaultClient : AutoErrorClient)).SendAsync(request).ConfigureAwait(false);
             var now = DateTime.UtcNow;
             ChangeState(s =>
             {

@@ -137,6 +137,7 @@ test('in the game: reset and relife notices, the character window\'s reset count
   await expect.poll(() => sent(page).then((list) => list.find((s) => s.name === 'HnmoResetsAction')?.fields)).toEqual({ Action: 5 });
 
   // Vietnamese.
+  if (await page.locator('#hudToolsToggle').isVisible()) await page.locator('#hudToolsToggle').click();
   await page.locator('.language-picker button[data-lang="vi"]:visible').first().click();
   // The Vietnamese texts load after the click: feed again until the notice is in Vietnamese.
   await expect(async () => {

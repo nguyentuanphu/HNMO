@@ -143,6 +143,7 @@ test('in the game: the gift code window, /code, the results in the chat, waiting
   await expect(panel.locator('.gc-result')).toHaveText('This gift code needs level 50.');
 
   // Vietnamese.
+  if (await page.locator('#hudToolsToggle').isVisible()) await page.locator('#hudToolsToggle').click();
   await page.locator('.language-picker button[data-lang="vi"]:visible').first().click();
   await expect(panel.locator('.gc-send')).toHaveText('Nhập mã');
   await feed(page, STATE({ type: 'redeem', result: 'AlreadyUsedAccount' }));

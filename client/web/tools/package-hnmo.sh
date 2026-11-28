@@ -58,21 +58,84 @@ if [ "$RUNTIME" = portable ]; then
     # The runtime's own licence texts stay with it (ThirdPartyNotices, LICENSE).
   done
 else
-  # The game server as a single self-contained executable (plus the Blazor static-web-assets
-  # manifest, wwwroot and a couple of config files), instead of hundreds of loose DLLs. Plugin
-  # discovery scans the assemblies loaded into the process (AppDomain.GetAssemblies), which load
-  # transparently from the bundle, so [PlugIn] discovery and the admin panel keep working.
-  # .pdb / .xml are dropped to keep the folder small.
+  # The game server with loose HNMO.*.dll files on disk so Obfuscar can harden
+  # HNMO.GameLogic / HNMO.Startup / HNMO.Persistence before the integrity manifest signs them.
+  # Plugin discovery scans loaded assemblies in AppContext/AppDomain, so [PlugIn] and the admin
+  # panel continue to work cleanly. .pdb / .xml are dropped to keep the folder small.
   dotnet publish "$SERVER_SOURCE/src/Startup/HNMO.Startup.csproj" -c Release -r "$RUNTIME" --self-contained \
-    -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true \
+    -p:PublishSingleFile=false \
     -p:DebugType=none -p:DebugSymbols=false -p:GenerateDocumentationFile=false \
     -p:AllowedReferenceRelatedFileExtensions=.no-related-files \
     -o "$OUT/server" -v quiet
+  find "$OUT/server" -maxdepth 1 \( -name "*.pdb" -o -name "HNMO.*.xml" \) -delete
   dotnet publish "$WEB/bridge/HNMO.Web.csproj" -c Release -r "$RUNTIME" --self-contained \
     -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true \
     -p:HnmoServerSource="$SERVER_SOURCE" -p:DebugType=none -p:DebugSymbols=false -p:GenerateDocumentationFile=false \
     -p:AllowedReferenceRelatedFileExtensions=.no-related-files -o "$OUT/web" -v quiet
   find "$OUT/web" -maxdepth 1 \( -name "*.pdb" -o -name "*.xml" \) -delete
+fi
+
+# Layer 3 hardening: obfuscate internal/private symbols in HNMO.GameLogic, HNMO.Startup and
+# HNMO.Persistence while excluding EF Core entities/models/migrations, Blazor components,
+# packet handlers, and plug-in types/configurations/strategies.
+if [ "${HNMO_SKIP_OBFUSCAR:-0}" != 1 ]; then
+  echo "Obfuscating server assemblies (Obfuscar)"
+  to_native_path() {
+    if command -v cygpath >/dev/null 2>&1; then cygpath -w "$1"; else printf '%s' "$1"; fi
+  }
+
+  OBFUSCAR_BIN=""
+  OBFUSCAR_TMP_TOOL=""
+  if command -v obfuscar.console >/dev/null 2>&1; then
+    OBFUSCAR_BIN="$(command -v obfuscar.console)"
+  elif [ -x "$HOME/.dotnet/tools/obfuscar.console" ] || [ -x "$HOME/.dotnet/tools/obfuscar.console.exe" ]; then
+    OBFUSCAR_BIN="$HOME/.dotnet/tools/obfuscar.console"
+  else
+    OBFUSCAR_TMP_TOOL="$(mktemp -d)"
+    dotnet tool install --tool-path "$OBFUSCAR_TMP_TOOL" Obfuscar.GlobalTool --version 2.2.50 >/dev/null
+    OBFUSCAR_BIN="$OBFUSCAR_TMP_TOOL/obfuscar.console"
+  fi
+
+  OBF_WORK="$(mktemp -d)"
+  OBF_OUT="$OBF_WORK/out"
+  mkdir -p "$OBF_OUT"
+  SEARCH_XML="  <AssemblySearchPath path=\"$(to_native_path "$OUT/server")\" />"
+  if [ "$RUNTIME" = portable ]; then
+    NET_BASE="$(dirname "$(dotnet --list-runtimes | awk -v major="$NET_MAJOR" '$1 == "Microsoft.NETCore.App" && index($2, major ".") == 1 {p=$NF; sub(/\[/,"",p); gsub(/\]/,"",p); dir=p} END{print dir}')" 2>/dev/null || true)"
+    # A portable server has no framework assemblies of its own: Obfuscar reads them from the newest installed .NET and
+    # ASP.NET Core runtimes of this major version, one of each (a machine with two .NET runtimes of the major version
+    # would otherwise give two .NET folders and no ASP.NET Core one).
+    for fwname in Microsoft.NETCore.App Microsoft.AspNetCore.App; do
+      fwline="$(dotnet --list-runtimes | awk -v name="$fwname" -v major="$NET_MAJOR" '$1 == name && index($2, major ".") == 1' | sort -V -k2,2 | tail -n 1)"
+      [ -n "$fwline" ] || { echo "ERROR: no $fwname $NET_MAJOR runtime for Obfuscar" >&2; exit 1; }
+      fwver="$(printf '%s' "$fwline" | awk '{print $2}')"
+      fwdir="$(printf '%s' "$fwline" | sed -n 's#.*\[\(.*\)\].*#\1#p')/$fwver"
+      [ -d "$fwdir" ] || { echo "ERROR: $fwdir not found for Obfuscar" >&2; exit 1; }
+      SEARCH_XML="$SEARCH_XML"$'\n'"  <AssemblySearchPath path=\"$(to_native_path "$fwdir")\" />"
+    done
+  fi
+
+  IN_NATIVE="$(to_native_path "$OUT/server")"
+  OUT_NATIVE="$(to_native_path "$OBF_OUT")"
+  export OBF_IN_NATIVE="$IN_NATIVE" OBF_OUT_NATIVE="$OUT_NATIVE" OBF_SEARCH_XML="$SEARCH_XML"
+  node -e '
+const fs = require("fs");
+let tpl = fs.readFileSync(process.argv[1], "utf8");
+tpl = tpl.replace("__IN_PATH__", () => process.env.OBF_IN_NATIVE);
+tpl = tpl.replace("__OUT_PATH__", () => process.env.OBF_OUT_NATIVE);
+tpl = tpl.replace("__SEARCH_PATHS__", () => process.env.OBF_SEARCH_XML);
+fs.writeFileSync(process.argv[2], tpl, "utf8");
+' "$WEB/tools/hnmo/obfuscar.xml.in" "$OBF_WORK/obfuscar.xml"
+
+  "$OBFUSCAR_BIN" "$(to_native_path "$OBF_WORK/obfuscar.xml")"
+  for asm in HNMO.GameLogic.dll HNMO.Startup.dll HNMO.Persistence.dll; do
+    if [ ! -f "$OBF_OUT/$asm" ]; then
+      echo "ERROR: Obfuscar did not produce $asm" >&2
+      exit 1
+    fi
+    cp -f "$OBF_OUT/$asm" "$OUT/server/$asm"
+  done
+  rm -rf "$OBF_WORK" ${OBFUSCAR_TMP_TOOL:+"$OBFUSCAR_TMP_TOOL"}
 fi
 
 # Strip any precompressed .br/.gz copies from server/wwwroot and pack ItemEditor icons into items.zip.

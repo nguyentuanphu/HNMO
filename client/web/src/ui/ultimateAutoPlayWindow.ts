@@ -160,6 +160,8 @@ export class UltimateAutoPlayWindow {
     if (refs.statusText.data !== statusText) refs.statusText.data = statusText;
     const vipDisplay = this.opts.extras.policy.isVip ? 'inline-block' : 'none';
     if (refs.vipTag.style.display !== vipDisplay) refs.vipTag.style.display = vipDisplay;
+    const vipText = (this.opts.extras.policy.vipLevel ?? 0) >= 2 ? 'VIP 2+' : 'VIP';
+    if (refs.vipTag.textContent !== vipText) refs.vipTag.textContent = vipText;
     const killsTitle = tx('Kills', 'Quái');
     if (refs.killsLabel.data !== killsTitle) refs.killsLabel.data = killsTitle;
     const killsStr = String(stats.kills);
