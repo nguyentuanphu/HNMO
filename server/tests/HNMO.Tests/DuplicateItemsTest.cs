@@ -24,6 +24,9 @@ public sealed class DuplicateItemsTest
     public void SetUp()
     {
         this._file = Path.Combine(Path.GetTempPath(), $"hnmo-duplicates-{Guid.NewGuid():N}.json");
+
+        // The frozen serials are static: the game contexts of other tests must not refresh them in the middle of a test.
+        DuplicateItemsPlugIn.PausePeriodicRefresh = true;
         DuplicateItemsPlugIn.Refresh(this._file);
     }
 
@@ -37,6 +40,7 @@ public sealed class DuplicateItemsTest
         }
 
         DuplicateItemsPlugIn.Refresh(this._file);
+        DuplicateItemsPlugIn.PausePeriodicRefresh = false;
     }
 
     /// <summary>A copy of an item keeps its serial; an item gets one only once.</summary>

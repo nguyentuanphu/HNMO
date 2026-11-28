@@ -1,0 +1,6245 @@
+{
+  "maxMasterLevel": 330,
+  "nodes": [
+    {
+      "index": 1,
+      "classCode": 1,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 300,
+      "name": "Durability Reduction (1)"
+    },
+    {
+      "index": 4,
+      "classCode": 1,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 301,
+      "name": "PvP Defence Rate Increase"
+    },
+    {
+      "index": 6,
+      "classCode": 1,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 302,
+      "name": "Maximum SD increase"
+    },
+    {
+      "index": 7,
+      "classCode": 1,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 303,
+      "name": "Automatic Mana Recovery Increase"
+    },
+    {
+      "index": 8,
+      "classCode": 1,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 304,
+      "name": "Poison Resistance Increase"
+    },
+    {
+      "index": 9,
+      "classCode": 1,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        300,
+        0
+      ],
+      "skill": 305,
+      "name": "Durability Reduction (2)"
+    },
+    {
+      "index": 10,
+      "classCode": 1,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        302,
+        0
+      ],
+      "skill": 306,
+      "name": "SD Recovery Speed Increase"
+    },
+    {
+      "index": 11,
+      "classCode": 1,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        303,
+        0
+      ],
+      "skill": 307,
+      "name": "Automatic HP Recovery Increase"
+    },
+    {
+      "index": 12,
+      "classCode": 1,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        304,
+        0
+      ],
+      "skill": 308,
+      "name": "Lightning Resistance Increase"
+    },
+    {
+      "index": 14,
+      "classCode": 1,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 309,
+      "name": "Defense Increase"
+    },
+    {
+      "index": 15,
+      "classCode": 1,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        307,
+        0
+      ],
+      "skill": 310,
+      "name": "Automatic AG Recovery Increase"
+    },
+    {
+      "index": 16,
+      "classCode": 1,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        308,
+        0
+      ],
+      "skill": 311,
+      "name": "Ice Resistance Increase"
+    },
+    {
+      "index": 17,
+      "classCode": 1,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        305,
+        0
+      ],
+      "skill": 312,
+      "name": "Durability Reduction (3)"
+    },
+    {
+      "index": 18,
+      "classCode": 1,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        309,
+        0
+      ],
+      "skill": 313,
+      "name": "Defense Success Rate Increase"
+    },
+    {
+      "index": 22,
+      "classCode": 1,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        313,
+        0
+      ],
+      "skill": 314,
+      "name": "Cast Invincibility"
+    },
+    {
+      "index": 23,
+      "classCode": 1,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 315,
+      "name": "Armor Set Bonus Increase"
+    },
+    {
+      "index": 24,
+      "classCode": 1,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        315,
+        0
+      ],
+      "skill": 316,
+      "name": "Vengeance"
+    },
+    {
+      "index": 25,
+      "classCode": 1,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 317,
+      "name": "Energy Increase"
+    },
+    {
+      "index": 26,
+      "classCode": 1,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 318,
+      "name": "Stamina Increase"
+    },
+    {
+      "index": 27,
+      "classCode": 1,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 319,
+      "name": "Agility Increase"
+    },
+    {
+      "index": 28,
+      "classCode": 1,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 320,
+      "name": "Strength Increase"
+    },
+    {
+      "index": 29,
+      "classCode": 1,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 321,
+      "name": "Wing of Storm Absorption PowUp"
+    },
+    {
+      "index": 30,
+      "classCode": 1,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 322,
+      "name": "Wing of Storm Defense PowUp"
+    },
+    {
+      "index": 34,
+      "classCode": 1,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        322,
+        0
+      ],
+      "skill": 324,
+      "name": "Wing of Storm Attack PowUp"
+    },
+    {
+      "index": 37,
+      "classCode": 1,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 325,
+      "name": "Attack Success Rate Increase"
+    },
+    {
+      "index": 41,
+      "classCode": 1,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 326,
+      "name": "Cyclone Strengthener"
+    },
+    {
+      "index": 42,
+      "classCode": 1,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 327,
+      "name": "Slash Strengthener"
+    },
+    {
+      "index": 43,
+      "classCode": 1,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 328,
+      "name": "Falling Slash Strengthener"
+    },
+    {
+      "index": 44,
+      "classCode": 1,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 329,
+      "name": "Lunge Strengthener"
+    },
+    {
+      "index": 45,
+      "classCode": 1,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 330,
+      "name": "Twisting Slash Strengthener"
+    },
+    {
+      "index": 46,
+      "classCode": 1,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 331,
+      "name": "Rageful Blow Strengthener"
+    },
+    {
+      "index": 49,
+      "classCode": 1,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        330,
+        0
+      ],
+      "skill": 332,
+      "name": "Twisting Slash Mastery"
+    },
+    {
+      "index": 50,
+      "classCode": 1,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        331,
+        0
+      ],
+      "skill": 333,
+      "name": "Rageful Blow Mastery"
+    },
+    {
+      "index": 51,
+      "classCode": 1,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 334,
+      "name": "Maximum Life Increase"
+    },
+    {
+      "index": 52,
+      "classCode": 1,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 335,
+      "name": "Weapon Mastery"
+    },
+    {
+      "index": 53,
+      "classCode": 1,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 336,
+      "name": "Slash Strengthener"
+    },
+    {
+      "index": 54,
+      "classCode": 1,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 337,
+      "name": "Strike of Destruction Strengthener"
+    },
+    {
+      "index": 55,
+      "classCode": 1,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        334,
+        0
+      ],
+      "skill": 338,
+      "name": "Maximum Mana Increase"
+    },
+    {
+      "index": 57,
+      "classCode": 1,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        336,
+        0
+      ],
+      "skill": 339,
+      "name": "Death Stab Proficiency"
+    },
+    {
+      "index": 58,
+      "classCode": 1,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        337,
+        0
+      ],
+      "skill": 340,
+      "name": "Strike of Destruction Proficiency"
+    },
+    {
+      "index": 59,
+      "classCode": 1,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        338,
+        0
+      ],
+      "skill": 341,
+      "name": "Maximum AG Increase"
+    },
+    {
+      "index": 61,
+      "classCode": 1,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        339,
+        0
+      ],
+      "skill": 342,
+      "name": "Death Stab Mastery"
+    },
+    {
+      "index": 62,
+      "classCode": 1,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        340,
+        0
+      ],
+      "skill": 343,
+      "name": "Strike of Destruction Mastery"
+    },
+    {
+      "index": 65,
+      "classCode": 1,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 345,
+      "name": "Combo Strengthener"
+    },
+    {
+      "index": 66,
+      "classCode": 1,
+      "group": 1,
+      "requiredPoints": 10,
+      "maxLevel": 10,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 344,
+      "name": "Blood Storm"
+    },
+    {
+      "index": 70,
+      "classCode": 1,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        344,
+        0
+      ],
+      "skill": 346,
+      "name": "Blood Storm Strengthener"
+    },
+    {
+      "index": 73,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 347,
+      "name": "Attack Rate"
+    },
+    {
+      "index": 77,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 348,
+      "name": "Two-handed Sword Strengthener"
+    },
+    {
+      "index": 78,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 349,
+      "name": "One-handed Sword Strengthener"
+    },
+    {
+      "index": 79,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 350,
+      "name": "Mace Strengthener"
+    },
+    {
+      "index": 80,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 351,
+      "name": "Spear Strengthener"
+    },
+    {
+      "index": 81,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        348,
+        0
+      ],
+      "skill": 352,
+      "name": "Two-handed Sword Mastery"
+    },
+    {
+      "index": 82,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 10,
+      "requires": [
+        349,
+        0
+      ],
+      "skill": 353,
+      "name": "One-handed Sword Mastery"
+    },
+    {
+      "index": 83,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        350,
+        0
+      ],
+      "skill": 354,
+      "name": "Mace Mastery"
+    },
+    {
+      "index": 84,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        351,
+        0
+      ],
+      "skill": 355,
+      "name": "Spear Mastery"
+    },
+    {
+      "index": 85,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 356,
+      "name": "Swell Life Strengthener"
+    },
+    {
+      "index": 86,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 357,
+      "name": "Mana Reduction"
+    },
+    {
+      "index": 87,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 358,
+      "name": "Monster Attack SD Increment"
+    },
+    {
+      "index": 88,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 359,
+      "name": "Monster Attack Life Increment"
+    },
+    {
+      "index": 89,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        356,
+        0
+      ],
+      "skill": 360,
+      "name": "Swell Life Proficiency"
+    },
+    {
+      "index": 90,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 361,
+      "name": "Minimum Attack Power Increase"
+    },
+    {
+      "index": 92,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        359,
+        0
+      ],
+      "skill": 362,
+      "name": "Monster Attack Mana Increment"
+    },
+    {
+      "index": 93,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        360,
+        0
+      ],
+      "skill": 363,
+      "name": "Swell Life Mastery"
+    },
+    {
+      "index": 94,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        361,
+        0
+      ],
+      "skill": 364,
+      "name": "Maximum Attack Power Increase"
+    },
+    {
+      "index": 96,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 366,
+      "name": "Increases critical damage rate"
+    },
+    {
+      "index": 98,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 367,
+      "name": "Restores all Mana"
+    },
+    {
+      "index": 99,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 368,
+      "name": "Restores all HP"
+    },
+    {
+      "index": 100,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        366,
+        0
+      ],
+      "skill": 369,
+      "name": "Increases excellent damage rate"
+    },
+    {
+      "index": 102,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 370,
+      "name": "Increases double damage rate"
+    },
+    {
+      "index": 103,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        368,
+        0
+      ],
+      "skill": 372,
+      "name": "Restores all SD"
+    },
+    {
+      "index": 106,
+      "classCode": 1,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        370,
+        0
+      ],
+      "skill": 371,
+      "name": "Increases chance of ignore Def"
+    },
+    {
+      "index": 1,
+      "classCode": 2,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 300,
+      "name": "Durability Reduction (1)"
+    },
+    {
+      "index": 4,
+      "classCode": 2,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 301,
+      "name": "PvP Defence Rate Increase"
+    },
+    {
+      "index": 6,
+      "classCode": 2,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 302,
+      "name": "Maximum SD increase"
+    },
+    {
+      "index": 7,
+      "classCode": 2,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 303,
+      "name": "Automatic Mana Recovery Increase"
+    },
+    {
+      "index": 8,
+      "classCode": 2,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 304,
+      "name": "Poison Resistance Increase"
+    },
+    {
+      "index": 9,
+      "classCode": 2,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        300,
+        0
+      ],
+      "skill": 305,
+      "name": "Durability Reduction (2)"
+    },
+    {
+      "index": 10,
+      "classCode": 2,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        302,
+        0
+      ],
+      "skill": 306,
+      "name": "SD Recovery Speed Increase"
+    },
+    {
+      "index": 11,
+      "classCode": 2,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        303,
+        0
+      ],
+      "skill": 307,
+      "name": "Automatic HP Recovery Increase"
+    },
+    {
+      "index": 12,
+      "classCode": 2,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        304,
+        0
+      ],
+      "skill": 308,
+      "name": "Lightning Resistance Increase"
+    },
+    {
+      "index": 14,
+      "classCode": 2,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 309,
+      "name": "Defense Increase"
+    },
+    {
+      "index": 15,
+      "classCode": 2,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        307,
+        0
+      ],
+      "skill": 310,
+      "name": "Automatic AG Recovery Increase"
+    },
+    {
+      "index": 16,
+      "classCode": 2,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        308,
+        0
+      ],
+      "skill": 311,
+      "name": "Ice Resistance Increase"
+    },
+    {
+      "index": 17,
+      "classCode": 2,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        305,
+        0
+      ],
+      "skill": 312,
+      "name": "Durability Reduction (3)"
+    },
+    {
+      "index": 18,
+      "classCode": 2,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        309,
+        0
+      ],
+      "skill": 313,
+      "name": "Defense Success Rate Increase"
+    },
+    {
+      "index": 22,
+      "classCode": 2,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        313,
+        0
+      ],
+      "skill": 314,
+      "name": "Cast Invincibility"
+    },
+    {
+      "index": 23,
+      "classCode": 2,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 315,
+      "name": "Armor Set Bonus Increase"
+    },
+    {
+      "index": 24,
+      "classCode": 2,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        315,
+        0
+      ],
+      "skill": 316,
+      "name": "Vengeance"
+    },
+    {
+      "index": 25,
+      "classCode": 2,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 317,
+      "name": "Energy Increase"
+    },
+    {
+      "index": 26,
+      "classCode": 2,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 318,
+      "name": "Stamina Increase"
+    },
+    {
+      "index": 27,
+      "classCode": 2,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 319,
+      "name": "Agility Increase"
+    },
+    {
+      "index": 28,
+      "classCode": 2,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 320,
+      "name": "Strength Increase"
+    },
+    {
+      "index": 29,
+      "classCode": 2,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 374,
+      "name": "Eternal Wings Absorption PowUp"
+    },
+    {
+      "index": 30,
+      "classCode": 2,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 375,
+      "name": "Eternal Wings Defense PowUp"
+    },
+    {
+      "index": 34,
+      "classCode": 2,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        375,
+        0
+      ],
+      "skill": 377,
+      "name": "Eternal Wings Attack PowUp"
+    },
+    {
+      "index": 37,
+      "classCode": 2,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 325,
+      "name": "Attack Success Rate Increase"
+    },
+    {
+      "index": 41,
+      "classCode": 2,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 378,
+      "name": "Flame Strengthener"
+    },
+    {
+      "index": 42,
+      "classCode": 2,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 379,
+      "name": "Lightning Strengthener"
+    },
+    {
+      "index": 43,
+      "classCode": 2,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 380,
+      "name": "Expansion of Wizardry Strengthener"
+    },
+    {
+      "index": 45,
+      "classCode": 2,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        378,
+        0
+      ],
+      "skill": 381,
+      "name": "Inferno Strengthener"
+    },
+    {
+      "index": 46,
+      "classCode": 2,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        379,
+        0
+      ],
+      "skill": 382,
+      "name": "Blast Strengthener"
+    },
+    {
+      "index": 47,
+      "classCode": 2,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        380,
+        0
+      ],
+      "skill": 383,
+      "name": "Expansion of Wizardry Mastery"
+    },
+    {
+      "index": 48,
+      "classCode": 2,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 384,
+      "name": "Poison Strengthener"
+    },
+    {
+      "index": 49,
+      "classCode": 2,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 385,
+      "name": "Evil Spirit Strengthener"
+    },
+    {
+      "index": 50,
+      "classCode": 2,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        385,
+        0
+      ],
+      "skill": 386,
+      "name": "Magic Mastery"
+    },
+    {
+      "index": 51,
+      "classCode": 2,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 334,
+      "name": "Maximum Life Increase"
+    },
+    {
+      "index": 52,
+      "classCode": 2,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        384,
+        0
+      ],
+      "skill": 387,
+      "name": "Decay Strengthener"
+    },
+    {
+      "index": 54,
+      "classCode": 2,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 388,
+      "name": "Hellfire Strengthener"
+    },
+    {
+      "index": 55,
+      "classCode": 2,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        334,
+        0
+      ],
+      "skill": 338,
+      "name": "Maximum Mana Increase"
+    },
+    {
+      "index": 56,
+      "classCode": 2,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 389,
+      "name": "Ice Strengthener"
+    },
+    {
+      "index": 57,
+      "classCode": 2,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 390,
+      "name": "Meteor Strengthener"
+    },
+    {
+      "index": 59,
+      "classCode": 2,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        338,
+        0
+      ],
+      "skill": 341,
+      "name": "Maximum AG Increase"
+    },
+    {
+      "index": 60,
+      "classCode": 2,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        389,
+        0
+      ],
+      "skill": 391,
+      "name": "Ice Storm Strengthener"
+    },
+    {
+      "index": 62,
+      "classCode": 2,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        388,
+        0
+      ],
+      "skill": 392,
+      "name": "Nova Strengthener"
+    },
+    {
+      "index": 64,
+      "classCode": 2,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        391,
+        0
+      ],
+      "skill": 393,
+      "name": "Ice Storm Mastery"
+    },
+    {
+      "index": 65,
+      "classCode": 2,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        390,
+        0
+      ],
+      "skill": 394,
+      "name": "Meteor Mastery"
+    },
+    {
+      "index": 66,
+      "classCode": 2,
+      "group": 1,
+      "requiredPoints": 10,
+      "maxLevel": 10,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 495,
+      "name": "Nova Cast Strengthener"
+    },
+    {
+      "index": 70,
+      "classCode": 2,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        495,
+        0
+      ],
+      "skill": 497,
+      "name": "One-handed Staff Strengthener"
+    },
+    {
+      "index": 73,
+      "classCode": 2,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 347,
+      "name": "Attack Rate"
+    },
+    {
+      "index": 77,
+      "classCode": 2,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 397,
+      "name": "One-handed Staff Strengthener"
+    },
+    {
+      "index": 78,
+      "classCode": 2,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 398,
+      "name": "Two-handed Staff Strengthener"
+    },
+    {
+      "index": 79,
+      "classCode": 2,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 399,
+      "name": "Shield Strengthener"
+    },
+    {
+      "index": 81,
+      "classCode": 2,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 10,
+      "requires": [
+        397,
+        0
+      ],
+      "skill": 400,
+      "name": "One-handed Staff Mastery"
+    },
+    {
+      "index": 82,
+      "classCode": 2,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        398,
+        0
+      ],
+      "skill": 401,
+      "name": "Two-handed Staff Mastery"
+    },
+    {
+      "index": 83,
+      "classCode": 2,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        399,
+        0
+      ],
+      "skill": 402,
+      "name": "Shield Mastery"
+    },
+    {
+      "index": 85,
+      "classCode": 2,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 403,
+      "name": "Soul Barrier Strengthener"
+    },
+    {
+      "index": 86,
+      "classCode": 2,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 357,
+      "name": "Mana Reduction"
+    },
+    {
+      "index": 87,
+      "classCode": 2,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 358,
+      "name": "Monster Attack SD Increment"
+    },
+    {
+      "index": 88,
+      "classCode": 2,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 359,
+      "name": "Monster Attack Life Increment"
+    },
+    {
+      "index": 89,
+      "classCode": 2,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        403,
+        0
+      ],
+      "skill": 404,
+      "name": "Soul Barrier Proficiency"
+    },
+    {
+      "index": 90,
+      "classCode": 2,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 405,
+      "name": "Minimum Wizardry Increase"
+    },
+    {
+      "index": 92,
+      "classCode": 2,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        359,
+        0
+      ],
+      "skill": 362,
+      "name": "Monster Attack Mana Increment"
+    },
+    {
+      "index": 93,
+      "classCode": 2,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        404,
+        0
+      ],
+      "skill": 406,
+      "name": "Soul Barrier Mastery"
+    },
+    {
+      "index": 94,
+      "classCode": 2,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        405,
+        0
+      ],
+      "skill": 407,
+      "name": "Maximum Wizardry Increase"
+    },
+    {
+      "index": 96,
+      "classCode": 2,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 366,
+      "name": "Increases critical damage rate"
+    },
+    {
+      "index": 98,
+      "classCode": 2,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 367,
+      "name": "Restores all Mana"
+    },
+    {
+      "index": 99,
+      "classCode": 2,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 368,
+      "name": "Restores all HP"
+    },
+    {
+      "index": 100,
+      "classCode": 2,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        366,
+        0
+      ],
+      "skill": 369,
+      "name": "Increases excellent damage rate"
+    },
+    {
+      "index": 102,
+      "classCode": 2,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 370,
+      "name": "Increases double damage rate"
+    },
+    {
+      "index": 103,
+      "classCode": 2,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        368,
+        0
+      ],
+      "skill": 372,
+      "name": "Restores all SD"
+    },
+    {
+      "index": 106,
+      "classCode": 2,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        370,
+        0
+      ],
+      "skill": 371,
+      "name": "Increases chance of ignore Def"
+    },
+    {
+      "index": 1,
+      "classCode": 4,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 300,
+      "name": "Durability Reduction (1)"
+    },
+    {
+      "index": 4,
+      "classCode": 4,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 301,
+      "name": "PvP Defence Rate Increase"
+    },
+    {
+      "index": 6,
+      "classCode": 4,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 302,
+      "name": "Maximum SD increase"
+    },
+    {
+      "index": 7,
+      "classCode": 4,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 303,
+      "name": "Automatic Mana Recovery Increase"
+    },
+    {
+      "index": 8,
+      "classCode": 4,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 304,
+      "name": "Poison Resistance Increase"
+    },
+    {
+      "index": 9,
+      "classCode": 4,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        300,
+        0
+      ],
+      "skill": 305,
+      "name": "Durability Reduction (2)"
+    },
+    {
+      "index": 10,
+      "classCode": 4,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        302,
+        0
+      ],
+      "skill": 306,
+      "name": "SD Recovery Speed Increase"
+    },
+    {
+      "index": 11,
+      "classCode": 4,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        303,
+        0
+      ],
+      "skill": 307,
+      "name": "Automatic HP Recovery Increase"
+    },
+    {
+      "index": 12,
+      "classCode": 4,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        304,
+        0
+      ],
+      "skill": 308,
+      "name": "Lightning Resistance Increase"
+    },
+    {
+      "index": 14,
+      "classCode": 4,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 309,
+      "name": "Defense Increase"
+    },
+    {
+      "index": 15,
+      "classCode": 4,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        307,
+        0
+      ],
+      "skill": 310,
+      "name": "Automatic AG Recovery Increase"
+    },
+    {
+      "index": 16,
+      "classCode": 4,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        308,
+        0
+      ],
+      "skill": 311,
+      "name": "Ice Resistance Increase"
+    },
+    {
+      "index": 17,
+      "classCode": 4,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        305,
+        0
+      ],
+      "skill": 312,
+      "name": "Durability Reduction (3)"
+    },
+    {
+      "index": 18,
+      "classCode": 4,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        309,
+        0
+      ],
+      "skill": 313,
+      "name": "Defense Success Rate Increase"
+    },
+    {
+      "index": 22,
+      "classCode": 4,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        313,
+        0
+      ],
+      "skill": 314,
+      "name": "Cast Invincibility"
+    },
+    {
+      "index": 23,
+      "classCode": 4,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 315,
+      "name": "Armor Set Bonus Increase"
+    },
+    {
+      "index": 24,
+      "classCode": 4,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        315,
+        0
+      ],
+      "skill": 316,
+      "name": "Vengeance"
+    },
+    {
+      "index": 25,
+      "classCode": 4,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 317,
+      "name": "Energy Increase"
+    },
+    {
+      "index": 26,
+      "classCode": 4,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 318,
+      "name": "Stamina Increase"
+    },
+    {
+      "index": 27,
+      "classCode": 4,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 319,
+      "name": "Agility Increase"
+    },
+    {
+      "index": 28,
+      "classCode": 4,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 320,
+      "name": "Strength Increase"
+    },
+    {
+      "index": 29,
+      "classCode": 4,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 409,
+      "name": "Illusion Wings Absorption PowUp"
+    },
+    {
+      "index": 30,
+      "classCode": 4,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 410,
+      "name": "Illusion Wings Defense PowUp"
+    },
+    {
+      "index": 34,
+      "classCode": 4,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        410,
+        0
+      ],
+      "skill": 412,
+      "name": "Illusion Wings Attack PowUp"
+    },
+    {
+      "index": 37,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 325,
+      "name": "Attack Success Rate Increase"
+    },
+    {
+      "index": 41,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 413,
+      "name": "Heal Strengthener"
+    },
+    {
+      "index": 43,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 414,
+      "name": "Triple Shot Strengthener"
+    },
+    {
+      "index": 44,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 415,
+      "name": "Summoned Monster Strengthener (1)"
+    },
+    {
+      "index": 45,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 416,
+      "name": "Penetration Strengthener"
+    },
+    {
+      "index": 46,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 417,
+      "name": "Defense Increase Strengthener"
+    },
+    {
+      "index": 47,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 10,
+      "maxLevel": 10,
+      "requires": [
+        414,
+        0
+      ],
+      "skill": 418,
+      "name": "Triple Shot Mastery"
+    },
+    {
+      "index": 48,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        415,
+        0
+      ],
+      "skill": 419,
+      "name": "Summoned Monster Strengthener (2)"
+    },
+    {
+      "index": 49,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 420,
+      "name": "Attack Increase Strengthener"
+    },
+    {
+      "index": 51,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 421,
+      "name": "Weapon Mastery"
+    },
+    {
+      "index": 52,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 334,
+      "name": "Maximum Life Increase"
+    },
+    {
+      "index": 53,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        420,
+        0
+      ],
+      "skill": 422,
+      "name": "Attack Increase Mastery"
+    },
+    {
+      "index": 54,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        417,
+        0
+      ],
+      "skill": 423,
+      "name": "Defense Increase Mastery"
+    },
+    {
+      "index": 55,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 424,
+      "name": "Ice Arrow Strengthener"
+    },
+    {
+      "index": 56,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        334,
+        0
+      ],
+      "skill": 338,
+      "name": "Maximum Mana Increase"
+    },
+    {
+      "index": 58,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 10,
+      "maxLevel": 10,
+      "requires": [
+        423,
+        0
+      ],
+      "skill": 425,
+      "name": "Cure"
+    },
+    {
+      "index": 59,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 411,
+      "name": "Multi-Shot Strengthener"
+    },
+    {
+      "index": 60,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        338,
+        0
+      ],
+      "skill": 341,
+      "name": "Maximum AG Increase"
+    },
+    {
+      "index": 61,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 10,
+      "maxLevel": 10,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 426,
+      "name": "Party Healing"
+    },
+    {
+      "index": 63,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        411,
+        0
+      ],
+      "skill": 431,
+      "name": "Multi-Shot Mastery"
+    },
+    {
+      "index": 64,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 428,
+      "name": "Summoned Monster Strengthener (3)"
+    },
+    {
+      "index": 65,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        426,
+        0
+      ],
+      "skill": 429,
+      "name": "Party Healing Strengthener"
+    },
+    {
+      "index": 66,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 10,
+      "maxLevel": 10,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 430,
+      "name": "Bless"
+    },
+    {
+      "index": 67,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 10,
+      "maxLevel": 10,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 427,
+      "name": "Poison Arrow"
+    },
+    {
+      "index": 68,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 10,
+      "maxLevel": 10,
+      "requires": [
+        428,
+        0
+      ],
+      "skill": 432,
+      "name": "Summon Satyros"
+    },
+    {
+      "index": 70,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        430,
+        0
+      ],
+      "skill": 433,
+      "name": "Bless Strengthener"
+    },
+    {
+      "index": 71,
+      "classCode": 4,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        427,
+        0
+      ],
+      "skill": 434,
+      "name": "Poison Arrow Strengthener"
+    },
+    {
+      "index": 73,
+      "classCode": 4,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 347,
+      "name": "Attack Rate"
+    },
+    {
+      "index": 77,
+      "classCode": 4,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 435,
+      "name": "Bow Strengthener"
+    },
+    {
+      "index": 78,
+      "classCode": 4,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 436,
+      "name": "Crossbow Strengthener"
+    },
+    {
+      "index": 79,
+      "classCode": 4,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 437,
+      "name": "Shield Strengthener"
+    },
+    {
+      "index": 81,
+      "classCode": 4,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 10,
+      "requires": [
+        435,
+        0
+      ],
+      "skill": 438,
+      "name": "Bow Mastery"
+    },
+    {
+      "index": 82,
+      "classCode": 4,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        436,
+        0
+      ],
+      "skill": 439,
+      "name": "Crossbow Mastery"
+    },
+    {
+      "index": 83,
+      "classCode": 4,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        437,
+        0
+      ],
+      "skill": 440,
+      "name": "Shield Mastery"
+    },
+    {
+      "index": 86,
+      "classCode": 4,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 357,
+      "name": "Mana Reduction"
+    },
+    {
+      "index": 87,
+      "classCode": 4,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 358,
+      "name": "Monster Attack SD Increment"
+    },
+    {
+      "index": 88,
+      "classCode": 4,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 359,
+      "name": "Monster Attack Life Increment"
+    },
+    {
+      "index": 89,
+      "classCode": 4,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 441,
+      "name": "Infinity Arrow Strengthener"
+    },
+    {
+      "index": 90,
+      "classCode": 4,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 442,
+      "name": "Minimum Attack Power Increase"
+    },
+    {
+      "index": 92,
+      "classCode": 4,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        359,
+        0
+      ],
+      "skill": 362,
+      "name": "Monster Attack Mana Increment"
+    },
+    {
+      "index": 94,
+      "classCode": 4,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        442,
+        0
+      ],
+      "skill": 443,
+      "name": "Maximum Attack Power Increase"
+    },
+    {
+      "index": 96,
+      "classCode": 4,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 366,
+      "name": "Increases critical damage rate"
+    },
+    {
+      "index": 98,
+      "classCode": 4,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 367,
+      "name": "Restores all Mana"
+    },
+    {
+      "index": 99,
+      "classCode": 4,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 368,
+      "name": "Restores all HP"
+    },
+    {
+      "index": 100,
+      "classCode": 4,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        366,
+        0
+      ],
+      "skill": 369,
+      "name": "Increases excellent damage rate"
+    },
+    {
+      "index": 102,
+      "classCode": 4,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 370,
+      "name": "Increases double damage rate"
+    },
+    {
+      "index": 103,
+      "classCode": 4,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        368,
+        0
+      ],
+      "skill": 372,
+      "name": "Restores all SD"
+    },
+    {
+      "index": 106,
+      "classCode": 4,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        370,
+        0
+      ],
+      "skill": 371,
+      "name": "Increases chance of ignore Def"
+    },
+    {
+      "index": 1,
+      "classCode": 8,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 300,
+      "name": "Durability Reduction (1)"
+    },
+    {
+      "index": 4,
+      "classCode": 8,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 301,
+      "name": "PvP Defence Rate Increase)"
+    },
+    {
+      "index": 6,
+      "classCode": 8,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 302,
+      "name": "Maximum SD increase)"
+    },
+    {
+      "index": 7,
+      "classCode": 8,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 303,
+      "name": "Automatic Mana Recovery Increase)"
+    },
+    {
+      "index": 8,
+      "classCode": 8,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 304,
+      "name": "Poison Resistance Increase)"
+    },
+    {
+      "index": 9,
+      "classCode": 8,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        300,
+        0
+      ],
+      "skill": 305,
+      "name": "Durability Reduction (2))"
+    },
+    {
+      "index": 10,
+      "classCode": 8,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        302,
+        0
+      ],
+      "skill": 306,
+      "name": "SD Recovery Speed Increase)"
+    },
+    {
+      "index": 11,
+      "classCode": 8,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        303,
+        0
+      ],
+      "skill": 307,
+      "name": "Automatic HP Recovery Increase)"
+    },
+    {
+      "index": 12,
+      "classCode": 8,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        304,
+        0
+      ],
+      "skill": 308,
+      "name": "Lightning Resistance Increase)"
+    },
+    {
+      "index": 14,
+      "classCode": 8,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 309,
+      "name": "Defense Increase)"
+    },
+    {
+      "index": 15,
+      "classCode": 8,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        307,
+        0
+      ],
+      "skill": 310,
+      "name": "Automatic AG Recovery Increase)"
+    },
+    {
+      "index": 16,
+      "classCode": 8,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        308,
+        0
+      ],
+      "skill": 311,
+      "name": "Ice Resistance Increase)"
+    },
+    {
+      "index": 17,
+      "classCode": 8,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        305,
+        0
+      ],
+      "skill": 312,
+      "name": "Durability Reduction (3))"
+    },
+    {
+      "index": 18,
+      "classCode": 8,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        309,
+        0
+      ],
+      "skill": 313,
+      "name": "Defense Success Rate Increase)"
+    },
+    {
+      "index": 23,
+      "classCode": 8,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 315,
+      "name": "Armor Set Bonus Increase)"
+    },
+    {
+      "index": 24,
+      "classCode": 8,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        315,
+        0
+      ],
+      "skill": 316,
+      "name": "Vengeance)"
+    },
+    {
+      "index": 25,
+      "classCode": 8,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 317,
+      "name": "Energy Increase)"
+    },
+    {
+      "index": 26,
+      "classCode": 8,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 318,
+      "name": "Stamina Increase)"
+    },
+    {
+      "index": 27,
+      "classCode": 8,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 319,
+      "name": "Agility Increase)"
+    },
+    {
+      "index": 28,
+      "classCode": 8,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 320,
+      "name": "Strength Increase)"
+    },
+    {
+      "index": 30,
+      "classCode": 8,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 446,
+      "name": "DimensionWings Defense PowUp)"
+    },
+    {
+      "index": 34,
+      "classCode": 8,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        446,
+        0
+      ],
+      "skill": 447,
+      "name": "DimensionWings Attack PowUp)"
+    },
+    {
+      "index": 37,
+      "classCode": 8,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 325,
+      "name": "Attack Success Rate Increase"
+    },
+    {
+      "index": 41,
+      "classCode": 8,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 448,
+      "name": "Fire Tome Strengthener"
+    },
+    {
+      "index": 42,
+      "classCode": 8,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 449,
+      "name": "Wind Tome Strengthener"
+    },
+    {
+      "index": 43,
+      "classCode": 8,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 450,
+      "name": "Lightning Tome Strengthener"
+    },
+    {
+      "index": 45,
+      "classCode": 8,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        448,
+        0
+      ],
+      "skill": 451,
+      "name": "Fire Tome Mastery"
+    },
+    {
+      "index": 46,
+      "classCode": 8,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        449,
+        0
+      ],
+      "skill": 452,
+      "name": "Wind Tome Mastery"
+    },
+    {
+      "index": 47,
+      "classCode": 8,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        450,
+        0
+      ],
+      "skill": 453,
+      "name": "Lightning Tome Mastery"
+    },
+    {
+      "index": 48,
+      "classCode": 8,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 454,
+      "name": "Sleep Strengthener"
+    },
+    {
+      "index": 49,
+      "classCode": 8,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 455,
+      "name": "Chain Lightning Strengthener"
+    },
+    {
+      "index": 50,
+      "classCode": 8,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 456,
+      "name": "Lightning Shock Strengthener"
+    },
+    {
+      "index": 52,
+      "classCode": 8,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 334,
+      "name": "Maximum Life Increase"
+    },
+    {
+      "index": 53,
+      "classCode": 8,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 457,
+      "name": "Magic Mastery"
+    },
+    {
+      "index": 55,
+      "classCode": 8,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 458,
+      "name": "Drain Life Strengthener"
+    },
+    {
+      "index": 56,
+      "classCode": 8,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        334,
+        0
+      ],
+      "skill": 338,
+      "name": "Maximum Mana Increase"
+    },
+    {
+      "index": 58,
+      "classCode": 8,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 460,
+      "name": "Innovation Strengthener"
+    },
+    {
+      "index": 60,
+      "classCode": 8,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        338,
+        0
+      ],
+      "skill": 341,
+      "name": "Infinity Arrow Strengthener"
+    },
+    {
+      "index": 61,
+      "classCode": 8,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 459,
+      "name": "Weakness Strengthener"
+    },
+    {
+      "index": 63,
+      "classCode": 8,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        458,
+        0
+      ],
+      "skill": 462,
+      "name": "Drain Life Mastery"
+    },
+    {
+      "index": 66,
+      "classCode": 8,
+      "group": 1,
+      "requiredPoints": 10,
+      "maxLevel": 10,
+      "requires": [
+        459,
+        460
+      ],
+      "skill": 461,
+      "name": "Blind"
+    },
+    {
+      "index": 70,
+      "classCode": 8,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        461,
+        0
+      ],
+      "skill": 463,
+      "name": "Blind Strengthener"
+    },
+    {
+      "index": 73,
+      "classCode": 8,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 347,
+      "name": "DimensionWings Attack PowUp"
+    },
+    {
+      "index": 77,
+      "classCode": 8,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 465,
+      "name": "Stick Strengthener"
+    },
+    {
+      "index": 78,
+      "classCode": 8,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 466,
+      "name": "Other World Tome Strengthener"
+    },
+    {
+      "index": 81,
+      "classCode": 8,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        465,
+        0
+      ],
+      "skill": 467,
+      "name": "Stick Mastery"
+    },
+    {
+      "index": 82,
+      "classCode": 8,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 10,
+      "requires": [
+        466,
+        0
+      ],
+      "skill": 468,
+      "name": "Other World Tome Mastery"
+    },
+    {
+      "index": 85,
+      "classCode": 8,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 469,
+      "name": "Berserker Strengthener"
+    },
+    {
+      "index": 86,
+      "classCode": 8,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 357,
+      "name": "Mana Reduction"
+    },
+    {
+      "index": 87,
+      "classCode": 8,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 358,
+      "name": "Monster Attack SD Increment"
+    },
+    {
+      "index": 88,
+      "classCode": 8,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 359,
+      "name": "Monster Attack Life Increment"
+    },
+    {
+      "index": 89,
+      "classCode": 8,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        469,
+        0
+      ],
+      "skill": 470,
+      "name": "Berserker Proficiency"
+    },
+    {
+      "index": 90,
+      "classCode": 8,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 471,
+      "name": "Minimum Wizardry/Curse Increase"
+    },
+    {
+      "index": 92,
+      "classCode": 8,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        359,
+        0
+      ],
+      "skill": 362,
+      "name": "Monster Attack Mana Increment"
+    },
+    {
+      "index": 93,
+      "classCode": 8,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        470,
+        0
+      ],
+      "skill": 472,
+      "name": "Berserker Mastery"
+    },
+    {
+      "index": 94,
+      "classCode": 8,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        471,
+        0
+      ],
+      "skill": 473,
+      "name": "Maximum Wizardry/Curse Increase"
+    },
+    {
+      "index": 96,
+      "classCode": 8,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 366,
+      "name": "Increases critical damage rate"
+    },
+    {
+      "index": 98,
+      "classCode": 8,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 367,
+      "name": "Restores all Mana"
+    },
+    {
+      "index": 99,
+      "classCode": 8,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 368,
+      "name": "Restores all HP"
+    },
+    {
+      "index": 100,
+      "classCode": 8,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        366,
+        0
+      ],
+      "skill": 369,
+      "name": "Increases excellent damage rate"
+    },
+    {
+      "index": 102,
+      "classCode": 8,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 370,
+      "name": "Increases double damage rate"
+    },
+    {
+      "index": 103,
+      "classCode": 8,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        368,
+        0
+      ],
+      "skill": 372,
+      "name": "Restores all SD"
+    },
+    {
+      "index": 106,
+      "classCode": 8,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        370,
+        0
+      ],
+      "skill": 371,
+      "name": "Increases chance of ignore Def"
+    },
+    {
+      "index": 1,
+      "classCode": 16,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 300,
+      "name": "Durability Reduction (1)"
+    },
+    {
+      "index": 4,
+      "classCode": 16,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 301,
+      "name": "PvP Defence Rate Increase"
+    },
+    {
+      "index": 6,
+      "classCode": 16,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 302,
+      "name": "Maximum SD increase"
+    },
+    {
+      "index": 7,
+      "classCode": 16,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 303,
+      "name": "Automatic Mana Recovery Increase"
+    },
+    {
+      "index": 8,
+      "classCode": 16,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 304,
+      "name": "Poison Resistance Increase"
+    },
+    {
+      "index": 9,
+      "classCode": 16,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        300,
+        0
+      ],
+      "skill": 305,
+      "name": "Durability Reduction (2)"
+    },
+    {
+      "index": 10,
+      "classCode": 16,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        302,
+        0
+      ],
+      "skill": 306,
+      "name": "SD Recovery Speed Increase"
+    },
+    {
+      "index": 11,
+      "classCode": 16,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        303,
+        0
+      ],
+      "skill": 307,
+      "name": "Automatic HP Recovery Increase"
+    },
+    {
+      "index": 12,
+      "classCode": 16,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        304,
+        0
+      ],
+      "skill": 308,
+      "name": "Lightning Resistance Increase"
+    },
+    {
+      "index": 14,
+      "classCode": 16,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 309,
+      "name": "Defense Increase"
+    },
+    {
+      "index": 15,
+      "classCode": 16,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        307,
+        0
+      ],
+      "skill": 310,
+      "name": "Automatic AG Recovery Increase"
+    },
+    {
+      "index": 16,
+      "classCode": 16,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        308,
+        0
+      ],
+      "skill": 311,
+      "name": "Ice Resistance Increase"
+    },
+    {
+      "index": 17,
+      "classCode": 16,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        305,
+        0
+      ],
+      "skill": 312,
+      "name": "Durability Reduction (3)"
+    },
+    {
+      "index": 18,
+      "classCode": 16,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        309,
+        0
+      ],
+      "skill": 313,
+      "name": "Defense Success Rate Increase"
+    },
+    {
+      "index": 23,
+      "classCode": 16,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 315,
+      "name": "Armor Set Bonus Increase"
+    },
+    {
+      "index": 24,
+      "classCode": 16,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        315,
+        0
+      ],
+      "skill": 316,
+      "name": "Vengeance"
+    },
+    {
+      "index": 25,
+      "classCode": 16,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 317,
+      "name": "Energy Increase"
+    },
+    {
+      "index": 26,
+      "classCode": 16,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 318,
+      "name": "Stamina Increase"
+    },
+    {
+      "index": 27,
+      "classCode": 16,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 319,
+      "name": "Agility Increase"
+    },
+    {
+      "index": 28,
+      "classCode": 16,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 320,
+      "name": "Strength Increase"
+    },
+    {
+      "index": 30,
+      "classCode": 16,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 476,
+      "name": "Wing of Ruin Defense PowUp"
+    },
+    {
+      "index": 34,
+      "classCode": 16,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        476,
+        0
+      ],
+      "skill": 478,
+      "name": "Wing of Ruin Attack PowUp"
+    },
+    {
+      "index": 37,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 325,
+      "name": "Attack Success Rate Increase"
+    },
+    {
+      "index": 41,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 479,
+      "name": "Cyclone Strengthener"
+    },
+    {
+      "index": 42,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 480,
+      "name": "Lightning Strengthener"
+    },
+    {
+      "index": 43,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 481,
+      "name": "Twisting Slash Strengthener"
+    },
+    {
+      "index": 44,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 482,
+      "name": "Power Slash Strengthener"
+    },
+    {
+      "index": 45,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 483,
+      "name": "Flame Strengthener"
+    },
+    {
+      "index": 46,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        480,
+        0
+      ],
+      "skill": 484,
+      "name": "Blast Strengthener"
+    },
+    {
+      "index": 48,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        481,
+        482
+      ],
+      "skill": 485,
+      "name": "Weapon Mastery"
+    },
+    {
+      "index": 49,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        483,
+        0
+      ],
+      "skill": 486,
+      "name": "Inferno Strengthener"
+    },
+    {
+      "index": 50,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 487,
+      "name": "Evil Spirit Strengthener"
+    },
+    {
+      "index": 51,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        487,
+        0
+      ],
+      "skill": 488,
+      "name": "Magic Mastery"
+    },
+    {
+      "index": 52,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 334,
+      "name": "Maximum Life Increase"
+    },
+    {
+      "index": 54,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 490,
+      "name": "Blood Attack Strengthener"
+    },
+    {
+      "index": 55,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 489,
+      "name": "Ice Strengthener"
+    },
+    {
+      "index": 56,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        334,
+        0
+      ],
+      "skill": 338,
+      "name": "Maximum Mana Increase"
+    },
+    {
+      "index": 57,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 492,
+      "name": "Flame Strike Strengthener"
+    },
+    {
+      "index": 59,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        489,
+        0
+      ],
+      "skill": 491,
+      "name": "Ice Mastery"
+    },
+    {
+      "index": 60,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        338,
+        0
+      ],
+      "skill": 341,
+      "name": "Maximum AG Increase"
+    },
+    {
+      "index": 61,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        492,
+        0
+      ],
+      "skill": 494,
+      "name": "Flame Strike Mastery"
+    },
+    {
+      "index": 62,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        490,
+        0
+      ],
+      "skill": 493,
+      "name": "Fire Slash Mastery"
+    },
+    {
+      "index": 63,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 496,
+      "name": "Gigantic Storm Strengthener"
+    },
+    {
+      "index": 66,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 10,
+      "maxLevel": 10,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 344,
+      "name": "Blood Storm"
+    },
+    {
+      "index": 67,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 10,
+      "maxLevel": 10,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 495,
+      "name": "Earth Prison"
+    },
+    {
+      "index": 70,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        344,
+        0
+      ],
+      "skill": 346,
+      "name": "Blood Storm Strengthener"
+    },
+    {
+      "index": 71,
+      "classCode": 16,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        495,
+        0
+      ],
+      "skill": 497,
+      "name": "Earth Prison Strengthener"
+    },
+    {
+      "index": 73,
+      "classCode": 16,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 347,
+      "name": "Attack Rate"
+    },
+    {
+      "index": 77,
+      "classCode": 16,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 348,
+      "name": "Two-handed Sword Strengthener"
+    },
+    {
+      "index": 78,
+      "classCode": 16,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 349,
+      "name": "One-handed Sword Strengthener"
+    },
+    {
+      "index": 79,
+      "classCode": 16,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 397,
+      "name": "One-handed Staff Strengthener"
+    },
+    {
+      "index": 80,
+      "classCode": 16,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 398,
+      "name": "Two-handed Staff Strengthener"
+    },
+    {
+      "index": 81,
+      "classCode": 16,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        348,
+        0
+      ],
+      "skill": 352,
+      "name": "Two-handed Sword Mastery"
+    },
+    {
+      "index": 82,
+      "classCode": 16,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 10,
+      "requires": [
+        349,
+        0
+      ],
+      "skill": 353,
+      "name": "One-handed Sword Mastery"
+    },
+    {
+      "index": 83,
+      "classCode": 16,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 10,
+      "requires": [
+        397,
+        0
+      ],
+      "skill": 400,
+      "name": "One-handed Staff Mastery"
+    },
+    {
+      "index": 84,
+      "classCode": 16,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        398,
+        0
+      ],
+      "skill": 401,
+      "name": "Two-handed Staff Mastery"
+    },
+    {
+      "index": 86,
+      "classCode": 16,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 357,
+      "name": "Mana Reduction"
+    },
+    {
+      "index": 87,
+      "classCode": 16,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 358,
+      "name": "Monster Attack SD Increment"
+    },
+    {
+      "index": 88,
+      "classCode": 16,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 359,
+      "name": "Monster Attack Life Increment"
+    },
+    {
+      "index": 89,
+      "classCode": 16,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 405,
+      "name": "Minimum Wizardry Increase"
+    },
+    {
+      "index": 90,
+      "classCode": 16,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 361,
+      "name": "Minimum Attack Power Increase"
+    },
+    {
+      "index": 92,
+      "classCode": 16,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        359,
+        0
+      ],
+      "skill": 362,
+      "name": "Monster Attack Mana Increment"
+    },
+    {
+      "index": 93,
+      "classCode": 16,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        405,
+        0
+      ],
+      "skill": 407,
+      "name": "Maximum Wizardry Increase"
+    },
+    {
+      "index": 94,
+      "classCode": 16,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        361,
+        0
+      ],
+      "skill": 364,
+      "name": "Maximum Attack Power Increase"
+    },
+    {
+      "index": 96,
+      "classCode": 16,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 366,
+      "name": "Increases critical damage rate"
+    },
+    {
+      "index": 98,
+      "classCode": 16,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 367,
+      "name": "Restores all Mana"
+    },
+    {
+      "index": 99,
+      "classCode": 16,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 368,
+      "name": "Restores all HP"
+    },
+    {
+      "index": 100,
+      "classCode": 16,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        366,
+        0
+      ],
+      "skill": 369,
+      "name": "Increases excellent damage rate"
+    },
+    {
+      "index": 102,
+      "classCode": 16,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 370,
+      "name": "Increases double damage rate"
+    },
+    {
+      "index": 103,
+      "classCode": 16,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        368,
+        0
+      ],
+      "skill": 372,
+      "name": "Restores all SD"
+    },
+    {
+      "index": 106,
+      "classCode": 16,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        370,
+        0
+      ],
+      "skill": 371,
+      "name": "Increases chance of ignore Def"
+    },
+    {
+      "index": 1,
+      "classCode": 32,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 300,
+      "name": "Durability Reduction (1)"
+    },
+    {
+      "index": 4,
+      "classCode": 32,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 301,
+      "name": "PvP Defence Rate Increase"
+    },
+    {
+      "index": 6,
+      "classCode": 32,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 302,
+      "name": "Maximum SD increase"
+    },
+    {
+      "index": 7,
+      "classCode": 32,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 303,
+      "name": "Automatic Mana Recovery Increase"
+    },
+    {
+      "index": 8,
+      "classCode": 32,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 304,
+      "name": "Poison Resistance Increase"
+    },
+    {
+      "index": 9,
+      "classCode": 32,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        300,
+        0
+      ],
+      "skill": 305,
+      "name": "Durability Reduction (2)"
+    },
+    {
+      "index": 10,
+      "classCode": 32,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        302,
+        0
+      ],
+      "skill": 306,
+      "name": "SD Recovery Speed Increase"
+    },
+    {
+      "index": 11,
+      "classCode": 32,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        303,
+        0
+      ],
+      "skill": 307,
+      "name": "Automatic HP Recovery Increase"
+    },
+    {
+      "index": 12,
+      "classCode": 32,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        304,
+        0
+      ],
+      "skill": 308,
+      "name": "Lightning Resistance Increase"
+    },
+    {
+      "index": 14,
+      "classCode": 32,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 309,
+      "name": "Defense Increase"
+    },
+    {
+      "index": 15,
+      "classCode": 32,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        307,
+        0
+      ],
+      "skill": 310,
+      "name": "Automatic AG Recovery Increase"
+    },
+    {
+      "index": 16,
+      "classCode": 32,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        308,
+        0
+      ],
+      "skill": 311,
+      "name": "Ice Resistance Increase"
+    },
+    {
+      "index": 17,
+      "classCode": 32,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        305,
+        0
+      ],
+      "skill": 312,
+      "name": "Durability Reduction (3)"
+    },
+    {
+      "index": 18,
+      "classCode": 32,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        309,
+        0
+      ],
+      "skill": 313,
+      "name": "Defense Success Rate Increase"
+    },
+    {
+      "index": 23,
+      "classCode": 32,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 315,
+      "name": "Armor Set Bonus Increase"
+    },
+    {
+      "index": 24,
+      "classCode": 32,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        315,
+        0
+      ],
+      "skill": 316,
+      "name": "Vengeance"
+    },
+    {
+      "index": 25,
+      "classCode": 32,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 317,
+      "name": "Energy Increase"
+    },
+    {
+      "index": 26,
+      "classCode": 32,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 318,
+      "name": "Stamina Increase"
+    },
+    {
+      "index": 27,
+      "classCode": 32,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 319,
+      "name": "Agility Increase"
+    },
+    {
+      "index": 28,
+      "classCode": 32,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 320,
+      "name": "Strength Increase"
+    },
+    {
+      "index": 30,
+      "classCode": 32,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 505,
+      "name": "Emperor Cape Defense PowUp"
+    },
+    {
+      "index": 31,
+      "classCode": 32,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 506,
+      "name": "Adds Command Stat"
+    },
+    {
+      "index": 34,
+      "classCode": 32,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        505,
+        0
+      ],
+      "skill": 507,
+      "name": "Emperor Cape Attack PowUp"
+    },
+    {
+      "index": 37,
+      "classCode": 32,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 325,
+      "name": "Attack Success Rate Increase"
+    },
+    {
+      "index": 41,
+      "classCode": 32,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 508,
+      "name": "Fire Burst Strengthener"
+    },
+    {
+      "index": 42,
+      "classCode": 32,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 509,
+      "name": "Force Wave Strengthener"
+    },
+    {
+      "index": 43,
+      "classCode": 32,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 510,
+      "name": "Dark Horse Strengthener (1)"
+    },
+    {
+      "index": 46,
+      "classCode": 32,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 511,
+      "name": "Critical DMG Increase PowUp"
+    },
+    {
+      "index": 47,
+      "classCode": 32,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        510,
+        0
+      ],
+      "skill": 512,
+      "name": "Earthshake Strengthener"
+    },
+    {
+      "index": 48,
+      "classCode": 32,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 513,
+      "name": "Weapon Mastery"
+    },
+    {
+      "index": 49,
+      "classCode": 32,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        508,
+        0
+      ],
+      "skill": 514,
+      "name": "Fire Burst Mastery"
+    },
+    {
+      "index": 50,
+      "classCode": 32,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        511,
+        0
+      ],
+      "skill": 515,
+      "name": "Critical DMG Increase PowUp (2)"
+    },
+    {
+      "index": 51,
+      "classCode": 32,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        512,
+        0
+      ],
+      "skill": 516,
+      "name": "Earthshake Mastery"
+    },
+    {
+      "index": 52,
+      "classCode": 32,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 334,
+      "name": "Maximum Life Increase"
+    },
+    {
+      "index": 54,
+      "classCode": 32,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        515,
+        0
+      ],
+      "skill": 517,
+      "name": "Critical DMG Increase PowUp (3)"
+    },
+    {
+      "index": 55,
+      "classCode": 32,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 518,
+      "name": "Fire Scream Strengthener"
+    },
+    {
+      "index": 56,
+      "classCode": 32,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        334,
+        0
+      ],
+      "skill": 338,
+      "name": "Maximum Mana Increase"
+    },
+    {
+      "index": 57,
+      "classCode": 32,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 519,
+      "name": "Electric Spark Strengthener"
+    },
+    {
+      "index": 59,
+      "classCode": 32,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        518,
+        0
+      ],
+      "skill": 520,
+      "name": "Fire Scream Mastery"
+    },
+    {
+      "index": 60,
+      "classCode": 32,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        338,
+        0
+      ],
+      "skill": 341,
+      "name": "Maximum AG Increase"
+    },
+    {
+      "index": 62,
+      "classCode": 32,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        517,
+        0
+      ],
+      "skill": 522,
+      "name": "Critical Damage Increase Mastery"
+    },
+    {
+      "index": 63,
+      "classCode": 32,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 523,
+      "name": "Chaotic Diseier Strengthener"
+    },
+    {
+      "index": 66,
+      "classCode": 32,
+      "group": 1,
+      "requiredPoints": 10,
+      "maxLevel": 10,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 521,
+      "name": "Iron Defense"
+    },
+    {
+      "index": 70,
+      "classCode": 32,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        521,
+        0
+      ],
+      "skill": 524,
+      "name": "Iron Defense Strengthener"
+    },
+    {
+      "index": 73,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 347,
+      "name": "Attack Rate"
+    },
+    {
+      "index": 77,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 526,
+      "name": "Dark Spirit Strengthener"
+    },
+    {
+      "index": 78,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 527,
+      "name": "Scepter Strengthener"
+    },
+    {
+      "index": 79,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 528,
+      "name": "Shield Strengthener"
+    },
+    {
+      "index": 80,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 529,
+      "name": "Use Scepter : Pet Strengthener"
+    },
+    {
+      "index": 81,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        526,
+        0
+      ],
+      "skill": 530,
+      "name": "Dark Spirit Strengthener (2)"
+    },
+    {
+      "index": 82,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        527,
+        0
+      ],
+      "skill": 531,
+      "name": "Scepter Mastery"
+    },
+    {
+      "index": 83,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        528,
+        0
+      ],
+      "skill": 532,
+      "name": "Shield Mastery"
+    },
+    {
+      "index": 84,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        529,
+        0
+      ],
+      "skill": 533,
+      "name": "Command Attack Increase"
+    },
+    {
+      "index": 86,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 357,
+      "name": "Mana Reduction"
+    },
+    {
+      "index": 87,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 358,
+      "name": "Monster Attack SD Increment"
+    },
+    {
+      "index": 88,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 359,
+      "name": "Monster Attack Life Increment"
+    },
+    {
+      "index": 89,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        530,
+        0
+      ],
+      "skill": 534,
+      "name": "Dark Spirit Strengthener (3)"
+    },
+    {
+      "index": 90,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 535,
+      "name": "Pet Durability Strengthener"
+    },
+    {
+      "index": 91,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 361,
+      "name": "Minimum Attack Power Increase"
+    },
+    {
+      "index": 92,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        359,
+        0
+      ],
+      "skill": 362,
+      "name": "Monster Attack Mana Increment"
+    },
+    {
+      "index": 93,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 536,
+      "name": "Dark Spirit Strengthener (4)"
+    },
+    {
+      "index": 94,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 366,
+      "name": "Increases critical damage rate"
+    },
+    {
+      "index": 95,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        361,
+        0
+      ],
+      "skill": 364,
+      "name": "Maximum Attack Power Increase"
+    },
+    {
+      "index": 97,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 538,
+      "name": "Dark Spirit Strengthener (5)"
+    },
+    {
+      "index": 98,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        366,
+        0
+      ],
+      "skill": 369,
+      "name": "Increases excellent damage rate"
+    },
+    {
+      "index": 99,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 367,
+      "name": "Restores all Mana"
+    },
+    {
+      "index": 100,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 368,
+      "name": "Restores all HP"
+    },
+    {
+      "index": 101,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        538,
+        0
+      ],
+      "skill": 539,
+      "name": "Spirit Lord"
+    },
+    {
+      "index": 103,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 370,
+      "name": "Increases double damage rate"
+    },
+    {
+      "index": 104,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        368,
+        0
+      ],
+      "skill": 372,
+      "name": "Restores all SD"
+    },
+    {
+      "index": 107,
+      "classCode": 32,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        370,
+        0
+      ],
+      "skill": 371,
+      "name": "Increases chance of ignore Def"
+    },
+    {
+      "index": 1,
+      "classCode": 64,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 578,
+      "name": "Durability Reduction (1)"
+    },
+    {
+      "index": 4,
+      "classCode": 64,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 579,
+      "name": "Increase PvP Defense Rate"
+    },
+    {
+      "index": 6,
+      "classCode": 64,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 580,
+      "name": "Increase Maximum SD"
+    },
+    {
+      "index": 7,
+      "classCode": 64,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 581,
+      "name": "Increase Mana Recovery Rate"
+    },
+    {
+      "index": 8,
+      "classCode": 64,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 582,
+      "name": "Increase Poison Resistance"
+    },
+    {
+      "index": 9,
+      "classCode": 64,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        578,
+        0
+      ],
+      "skill": 583,
+      "name": "Durability Reduction (2)"
+    },
+    {
+      "index": 10,
+      "classCode": 64,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        580,
+        0
+      ],
+      "skill": 584,
+      "name": "Increase SD Recovery Rate"
+    },
+    {
+      "index": 11,
+      "classCode": 64,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        581,
+        0
+      ],
+      "skill": 585,
+      "name": "Increase HP Recovery Rate"
+    },
+    {
+      "index": 12,
+      "classCode": 64,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        582,
+        0
+      ],
+      "skill": 586,
+      "name": "Increase Lightning Resistance"
+    },
+    {
+      "index": 14,
+      "classCode": 64,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 587,
+      "name": "Increases Defense"
+    },
+    {
+      "index": 15,
+      "classCode": 64,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        585,
+        0
+      ],
+      "skill": 588,
+      "name": "Increases AG Recovery Rate"
+    },
+    {
+      "index": 16,
+      "classCode": 64,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        586,
+        0
+      ],
+      "skill": 589,
+      "name": "Increase Ice Resistance"
+    },
+    {
+      "index": 17,
+      "classCode": 64,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        583,
+        0
+      ],
+      "skill": 590,
+      "name": "Durability Reduction(3)"
+    },
+    {
+      "index": 18,
+      "classCode": 64,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        587,
+        0
+      ],
+      "skill": 591,
+      "name": "Increase Defense Success Rate"
+    },
+    {
+      "index": 22,
+      "classCode": 64,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        591,
+        0
+      ],
+      "skill": 592,
+      "name": "Cast Invincibility"
+    },
+    {
+      "index": 23,
+      "classCode": 64,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 593,
+      "name": "Increase Set Defense"
+    },
+    {
+      "index": 24,
+      "classCode": 64,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        593,
+        0
+      ],
+      "skill": 594,
+      "name": "Vengeance"
+    },
+    {
+      "index": 25,
+      "classCode": 64,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 595,
+      "name": "Increase Energy"
+    },
+    {
+      "index": 26,
+      "classCode": 64,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 596,
+      "name": "Increase HP"
+    },
+    {
+      "index": 27,
+      "classCode": 64,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 597,
+      "name": "Increase Agility"
+    },
+    {
+      "index": 28,
+      "classCode": 64,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 598,
+      "name": "Increase Strength"
+    },
+    {
+      "index": 29,
+      "classCode": 64,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 548,
+      "name": "Reigning Cloak Absorption PowUp"
+    },
+    {
+      "index": 30,
+      "classCode": 64,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 549,
+      "name": "Reigning Cloak Defense PowUp"
+    },
+    {
+      "index": 34,
+      "classCode": 64,
+      "group": 0,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        549,
+        0
+      ],
+      "skill": 550,
+      "name": "Reigning Cloak Attack PowUp"
+    },
+    {
+      "index": 37,
+      "classCode": 64,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 599,
+      "name": "Increase Attack Success Rate"
+    },
+    {
+      "index": 41,
+      "classCode": 64,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 551,
+      "name": "Killing Blow Strengthener"
+    },
+    {
+      "index": 42,
+      "classCode": 64,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 552,
+      "name": "Beast Uppercut Strengthener"
+    },
+    {
+      "index": 45,
+      "classCode": 64,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        551,
+        0
+      ],
+      "skill": 554,
+      "name": "Killing Blow Mastery"
+    },
+    {
+      "index": 46,
+      "classCode": 64,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        552,
+        0
+      ],
+      "skill": 555,
+      "name": "Beast Uppercut Mastery"
+    },
+    {
+      "index": 51,
+      "classCode": 64,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 600,
+      "name": "Increase Maximum HP"
+    },
+    {
+      "index": 52,
+      "classCode": 64,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 557,
+      "name": "Weapon Mastery"
+    },
+    {
+      "index": 53,
+      "classCode": 64,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 558,
+      "name": "Chain Drive Strengthener"
+    },
+    {
+      "index": 54,
+      "classCode": 64,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 559,
+      "name": "Dark Side Strengthener"
+    },
+    {
+      "index": 55,
+      "classCode": 64,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        600,
+        0
+      ],
+      "skill": 601,
+      "name": "Increase Maximum Mana"
+    },
+    {
+      "index": 56,
+      "classCode": 64,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 560,
+      "name": "Dragon Roar Strengthener"
+    },
+    {
+      "index": 59,
+      "classCode": 64,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        601,
+        0
+      ],
+      "skill": 602,
+      "name": "Increase Maximum AG"
+    },
+    {
+      "index": 60,
+      "classCode": 64,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        560,
+        0
+      ],
+      "skill": 561,
+      "name": "Dragon Roar Mastery"
+    },
+    {
+      "index": 61,
+      "classCode": 64,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        558,
+        0
+      ],
+      "skill": 562,
+      "name": "Chain Drive Mastery"
+    },
+    {
+      "index": 62,
+      "classCode": 64,
+      "group": 1,
+      "requiredPoints": 10,
+      "maxLevel": 10,
+      "requires": [
+        559,
+        0
+      ],
+      "skill": 563,
+      "name": "Dark Side Mastery"
+    },
+    {
+      "index": 63,
+      "classCode": 64,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 564,
+      "name": "Dragon Slasher Strengthener"
+    },
+    {
+      "index": 66,
+      "classCode": 64,
+      "group": 1,
+      "requiredPoints": 10,
+      "maxLevel": 10,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 565,
+      "name": "Blood Howling"
+    },
+    {
+      "index": 67,
+      "classCode": 64,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        564,
+        0
+      ],
+      "skill": 566,
+      "name": "Dragon Slasher Mastery"
+    },
+    {
+      "index": 70,
+      "classCode": 64,
+      "group": 1,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        565,
+        0
+      ],
+      "skill": 567,
+      "name": "Blood Howling Strengthener"
+    },
+    {
+      "index": 73,
+      "classCode": 64,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 603,
+      "name": "Increase PvP Attack Rate"
+    },
+    {
+      "index": 77,
+      "classCode": 64,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 568,
+      "name": "Equipped Weapon Strengthener"
+    },
+    {
+      "index": 78,
+      "classCode": 64,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 569,
+      "name": "Def SuccessRate Increase PowUp"
+    },
+    {
+      "index": 81,
+      "classCode": 64,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 10,
+      "requires": [
+        568,
+        0
+      ],
+      "skill": 571,
+      "name": "Equipped Weapon Mastery"
+    },
+    {
+      "index": 82,
+      "classCode": 64,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        569,
+        0
+      ],
+      "skill": 572,
+      "name": "DefSuccessRate Increase Mastery"
+    },
+    {
+      "index": 85,
+      "classCode": 64,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 573,
+      "name": "Stamina Increase Strengthener"
+    },
+    {
+      "index": 86,
+      "classCode": 64,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 604,
+      "name": "Decrease Mana"
+    },
+    {
+      "index": 87,
+      "classCode": 64,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 605,
+      "name": "Recover SD from Monster Kills"
+    },
+    {
+      "index": 88,
+      "classCode": 64,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 606,
+      "name": "Recover HP from Monster Kills"
+    },
+    {
+      "index": 90,
+      "classCode": 64,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 607,
+      "name": "Increase Minimum Attack Power"
+    },
+    {
+      "index": 92,
+      "classCode": 64,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        606,
+        0
+      ],
+      "skill": 608,
+      "name": "Recover Mana from Monster Kills"
+    },
+    {
+      "index": 94,
+      "classCode": 64,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        607,
+        0
+      ],
+      "skill": 609,
+      "name": "Increase Maximum Attack Power"
+    },
+    {
+      "index": 96,
+      "classCode": 64,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 610,
+      "name": "Increases Critical Damage Chance"
+    },
+    {
+      "index": 98,
+      "classCode": 64,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 611,
+      "name": "Recover Mana Fully"
+    },
+    {
+      "index": 99,
+      "classCode": 64,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 612,
+      "name": "Recovers HP Fully"
+    },
+    {
+      "index": 100,
+      "classCode": 64,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        610,
+        0
+      ],
+      "skill": 613,
+      "name": "Increase Excellent Damage Chance"
+    },
+    {
+      "index": 102,
+      "classCode": 64,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        0,
+        0
+      ],
+      "skill": 614,
+      "name": "Increase Double Damage Chance"
+    },
+    {
+      "index": 103,
+      "classCode": 64,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        612,
+        0
+      ],
+      "skill": 616,
+      "name": "Recovers SD Fully"
+    },
+    {
+      "index": 106,
+      "classCode": 64,
+      "group": 2,
+      "requiredPoints": 1,
+      "maxLevel": 20,
+      "requires": [
+        614,
+        0
+      ],
+      "skill": 615,
+      "name": "Increase Ignore Def Chance"
+    }
+  ]
+}

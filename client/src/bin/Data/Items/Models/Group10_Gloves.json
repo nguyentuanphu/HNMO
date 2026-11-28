@@ -994,6 +994,28 @@
       }
     },
     {
+      "number": 54,
+      "model": "s9Glovemale75"
+    },
+    {
+      "number": 55,
+      "file": "Data/s9/Item/GloveMale56.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 56,
+      "model": "s9Glovemail3003"
+    },
+    {
+      "number": 57,
+      "model": "s9Glovemale4003"
+    },
+    {
+      "number": 58,
+      "file": "Data/s9/Item/GloveMale4005.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
       "number": 62,
       "file": "Data/Player/LuckyItem/62/new_Glove01.bmd",
       "textureFolders": ["Player/LuckyItem/62"],
@@ -1132,6 +1154,43 @@
         "rotation": [270, 0, -45],
         "bodyHeight": -70
       }
+    },
+    {
+      "number": 74,
+      "model": "s9Glovemale75"
+    },
+    {
+      "number": 75,
+      "model": "s9Glovemail3003"
+    },
+    {
+      "number": 76,
+      "model": "s9Glovemale4003"
+    },
+    {
+      "number": 78,
+      "file": "Data/s9/Item/GloveMale02.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 79,
+      "file": "Data/s9/Item/GloveMale04.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 80,
+      "file": "Data/s9/Item/GloveElf05.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 81,
+      "file": "Data/s9/Item/GloveMale26.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 82,
+      "file": "Data/s9/Item/GloveMale41.bmd",
+      "textureFolders": ["s9/Item"]
     }
   ]
 }

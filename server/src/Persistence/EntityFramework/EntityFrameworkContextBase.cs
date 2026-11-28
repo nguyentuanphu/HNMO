@@ -388,6 +388,7 @@ internal class EntityFrameworkContextBase : IContext, IConfigurationEditContext
             throw new InvalidOperationException("Only a player context saves an asset operation.");
         }
 
+        await AssetOperationTestBarrier.ReachAsync("before-write", cancellationToken).ConfigureAwait(false);
         try
         {
             await using var transaction = await context.Database.BeginTransactionAsync(cancellationToken).ConfigureAwait(false);

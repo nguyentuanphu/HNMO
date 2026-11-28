@@ -4,8 +4,7 @@
   "models": [
     {
       "number": 0,
-      "file": "Data/Item/Book01.bmd",
-      "textureFolders": ["Item"]
+      "model": "book01"
     },
     {
       "number": 1,

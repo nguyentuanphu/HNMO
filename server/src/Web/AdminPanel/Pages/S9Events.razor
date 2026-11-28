@@ -1,0 +1,279 @@
+@page "/s9-events"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using Microsoft.AspNetCore.Authorization
+@using HNMO.DataModel.Configuration
+@using HNMO.GameLogic.PlugIns.SeasonNineEvents
+@using HNMO.Web.AdminPanel.Auth
+
+<PageTitle>@HNMO.Web.AdminPanel.Properties.Resources.S9EventsTitle</PageTitle>
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+    <div class="d-flex align-items-center gap-2">
+        <h3 class="mb-0">@HNMO.Web.AdminPanel.Properties.Resources.S9EventsTitle</h3>
+        <button type="button"
+                class="btn btn-sm btn-outline-info"
+                title="@this.T("Show or hide setup instructions.", "Hiện hoặc ẩn hướng dẫn.", "Hilfe anzeigen oder ausblenden.", "显示或隐藏说明。")"
+                @onclick="() => this._showHelp = !this._showHelp">
+            ?
+        </button>
+    </div>
+    <PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextS9Events" />
+    <div class="btn-group btn-group-sm" role="group" aria-label="Language">
+        <button type="button" class="btn @(this._lang == "en" ? "btn-primary" : "btn-outline-secondary")" title="@this.T("Show this page in English.", "Hiện trang này bằng tiếng Anh.", "Diese Seite auf Englisch anzeigen.", "以英文显示此页面。")" @onclick='() => this.SetLanguage("en")'>EN</button>
+        <button type="button" class="btn @(this._lang == "vi" ? "btn-primary" : "btn-outline-secondary")" title="@this.T("Show this page in Vietnamese.", "Hiện trang này bằng tiếng Việt.", "Diese Seite auf Vietnamesisch anzeigen.", "以越南文显示此页面。")" @onclick='() => this.SetLanguage("vi")'>VI</button>
+        <button type="button" class="btn @(this._lang == "de" ? "btn-primary" : "btn-outline-secondary")" title="@this.T("Show this page in German.", "Hiện trang này bằng tiếng Đức.", "Diese Seite auf Deutsch anzeigen.", "以德文显示此页面。")" @onclick='() => this.SetLanguage("de")'>DE</button>
+        <button type="button" class="btn @(this._lang == "zh-CN" ? "btn-primary" : "btn-outline-secondary")" title="@this.T("Show this page in Chinese.", "Hiện trang này bằng tiếng Trung.", "Diese Seite auf Chinesisch anzeigen.", "以中文显示此页面。")" @onclick='() => this.SetLanguage("zh-CN")'>中文</button>
+    </div>
+</div>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info mb-3" role="note">
+        @HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextS9Events
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(this._statusMessage))
+{
+    <div class="alert @(this._statusIsError ? "alert-danger" : "alert-success") py-2 mb-3">@this._statusMessage</div>
+}
+
+@if (this._isLoading || this._configuration is null)
+{
+    <p>@this.T("Loading...", "Đang tải...", "Wird geladen...", "正在加载...")</p>
+}
+else
+{
+    <div class="card mb-3">
+        <div class="card-header">@this.T("Global Controls", "Điều Khiển Chung", "Globale Steuerung", "全局控制")</div>
+        <div class="card-body row g-3 align-items-end">
+            <div class="col-md-6 d-flex flex-wrap gap-3">
+                <div class="form-check form-switch">
+                    <input id="s9Active" class="form-check-input" type="checkbox" @bind="this._isActive" />
+                    <label class="form-check-label" for="s9Active">@this.T("Plug-in Active", "Kích hoạt Plug-in", "Plugin aktiv", "启用插件")</label>
+                </div>
+                <div class="form-check form-switch">
+                    <input id="s9Enabled" class="form-check-input" type="checkbox" @bind="this._configuration.Enabled" />
+                    <label class="form-check-label" for="s9Enabled">@this.T("Events Enabled", "Bật sự kiện", "Events aktiv", "启用活动")</label>
+                </div>
+                <div class="form-check form-switch">
+                    <input id="s9SeasonOnly" class="form-check-input" type="checkbox" @bind="this._configuration.SeasonNineOnly" />
+                    <label class="form-check-label" for="s9SeasonOnly">@this.T("Season 9 Only", "Chỉ chạy ở Season 9", "Nur Season 9", "仅第 9 赛季生效")</label>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">@this.T("Schedule Timezone", "Múi giờ lịch", "Zeitzone", "时区")</label>
+                <input type="text" class="form-control form-control-sm" @bind="this._configuration.TimeZone" />
+            </div>
+            <div class="col-md-2 text-end">
+                <button type="button" class="btn btn-primary btn-sm" title="@this.T("Save every setting on this page.", "Lưu mọi thiết lập trên trang này.", "Alle Einstellungen dieser Seite speichern.", "保存此页面的所有设置。")" disabled="@this._isSaving" @onclick="this.SaveAsync">
+                    @(this._isSaving ? this.T("Saving...", "Đang lưu...", "Speichern...", "保存中...") : this.T("Save All", "Lưu tất cả", "Alles speichern", "保存全部"))
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>@this.T("1. Acheron Guardian (/acheron)", "1. Hộ Vệ Acheron (/acheron)", "1. Acheron Guardian (/acheron)", "1. 阿卡伦守护者 (/acheron)")</span>
+            <button type="button" class="btn btn-sm btn-outline-warning" title="@this.T("Start this event now, without waiting for its time.", "Bắt đầu sự kiện này ngay, không chờ đến giờ.", "Dieses Ereignis sofort starten, ohne auf seine Zeit zu warten.", "立即开始此活动，无需等待时间。")" @onclick='() => this.TriggerEventNowAsync("acheron")'>@this.T("Trigger Now", "Chạy ngay", "Jetzt starten", "立即触发")</button>
+        </div>
+        <div class="card-body row g-2">
+            <div class="col-md-2 form-check ms-2">
+                <input id="acheronEn" class="form-check-input" type="checkbox" @bind="this._configuration.AcheronGuardianEnabled" />
+                <label class="form-check-label" for="acheronEn">@this.T("Enabled", "Bật", "Aktiv", "启用")</label>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">@this.T("Active Days", "Ngày chạy", "Aktive Tage", "开启星期")</label>
+                <input type="text" class="form-control form-control-sm" @bind="this._configuration.AcheronGuardianActiveDays" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">@this.T("Daily Times (HH:mm)", "Giờ chạy (HH:mm)", "Uhrzeiten (HH:mm)", "每日时间 (HH:mm)")</label>
+                <input type="text" class="form-control form-control-sm" @bind="this._acheronTimesText" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@this.T("Duration (min)", "Thời lượng (phút)", "Dauer (Min.)", "时长(分钟)")</label>
+                <input type="number" class="form-control form-control-sm" min="1" max="120" @bind="this._configuration.AcheronGuardianDurationMinutes" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@this.T("Reward Coins", "Thưởng Coin", "Belohnung Coins", "奖励代币")</label>
+                <input type="number" class="form-control form-control-sm" min="0" @bind="this._configuration.AcheronGuardianRewardCoins" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">@this.T("Reward Zen", "Thưởng Zen", "Belohnung Zen", "奖励 Zen")</label>
+                <input type="number" class="form-control form-control-sm" min="0" @bind="this._configuration.AcheronGuardianRewardZen" />
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>@this.T("2. Arca Battle & Trophy Mix (/arcabattle)", "2. Chiến Trường Arca (/arcabattle)", "2. Arca Battle (/arcabattle)", "2. 阿卡战争 (/arcabattle)")</span>
+            <button type="button" class="btn btn-sm btn-outline-warning" title="@this.T("Start this event now, without waiting for its time.", "Bắt đầu sự kiện này ngay, không chờ đến giờ.", "Dieses Ereignis sofort starten, ohne auf seine Zeit zu warten.", "立即开始此活动，无需等待时间。")" @onclick='() => this.TriggerEventNowAsync("arca")'>@this.T("Trigger Now", "Chạy ngay", "Jetzt starten", "立即触发")</button>
+        </div>
+        <div class="card-body row g-2">
+            <div class="col-md-2 form-check ms-2">
+                <input id="arcaEn" class="form-check-input" type="checkbox" @bind="this._configuration.ArcaBattleEnabled" />
+                <label class="form-check-label" for="arcaEn">@this.T("Enabled", "Bật", "Aktiv", "启用")</label>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@this.T("Active Days", "Ngày chạy", "Aktive Tage", "开启星期")</label>
+                <input type="text" class="form-control form-control-sm" @bind="this._configuration.ArcaBattleActiveDays" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@this.T("Daily Times", "Giờ chạy", "Uhrzeiten", "每日时间")</label>
+                <input type="text" class="form-control form-control-sm" @bind="this._arcaTimesText" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@this.T("Min Guild Members", "TV Bang tối thiểu", "Min. Gildenmitglieder", "最少战盟成员")</label>
+                <input type="number" class="form-control form-control-sm" min="1" max="80" @bind="this._configuration.ArcaBattleMinGuildMembers" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@this.T("Duration (min)", "Thời lượng (phút)", "Dauer (Min.)", "时长(分钟)")</label>
+                <input type="number" class="form-control form-control-sm" min="1" max="120" @bind="this._configuration.ArcaBattleDurationMinutes" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@this.T("Trophy Mix +%/ea", "Tỷ lệ +%/Chiến Lợi", "Trophy-Mix +%/Stk", "战利品每件加成%")</label>
+                <input type="number" class="form-control form-control-sm" min="1" max="20" @bind="this._configuration.ArcaBattleTrophyMixAddRate" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@this.T("Winner Coins", "Coin thắng", "Sieger-Coins", "胜者代币")</label>
+                <input type="number" class="form-control form-control-sm" min="0" @bind="this._configuration.ArcaBattleWinnerCoins" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">@this.T("Winner Zen", "Zen thắng", "Sieger-Zen", "胜者 Zen")</label>
+                <input type="number" class="form-control form-control-sm" min="0" @bind="this._configuration.ArcaBattleWinnerZen" />
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>@this.T("3. Chaos Castle Survival (/ccs)", "3. Hỗn Nguyên Lâu Sinh Tồn (/ccs)", "3. Chaos Castle Survival (/ccs)", "3. 生存赤色要塞 (/ccs)")</span>
+            <button type="button" class="btn btn-sm btn-outline-warning" title="@this.T("Start this event now, without waiting for its time.", "Bắt đầu sự kiện này ngay, không chờ đến giờ.", "Dieses Ereignis sofort starten, ohne auf seine Zeit zu warten.", "立即开始此活动，无需等待时间。")" @onclick='() => this.TriggerEventNowAsync("ccs")'>@this.T("Trigger Now", "Chạy ngay", "Jetzt starten", "立即触发")</button>
+        </div>
+        <div class="card-body row g-2">
+            <div class="col-md-2 form-check ms-2">
+                <input id="ccsEn" class="form-check-input" type="checkbox" @bind="this._configuration.ChaosCastleSurvivalEnabled" />
+                <label class="form-check-label" for="ccsEn">@this.T("Enabled", "Bật", "Aktiv", "启用")</label>
+            </div>
+            <div class="col-md-5">
+                <label class="form-label">@this.T("Daily Slots (HH:mm CSV)", "Khung giờ hàng ngày", "Tägliche Zeiten (CSV)", "每日场次 (CSV)")</label>
+                <input type="text" class="form-control form-control-sm" @bind="this._ccsTimesText" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@this.T("Min Level", "Cấp tối thiểu", "Min. Level", "最低等级")</label>
+                <input type="number" class="form-control form-control-sm" min="1" max="1000" @bind="this._configuration.ChaosCastleSurvivalMinLevel" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@this.T("Min Players", "Số người tối thiểu", "Min. Spieler", "最少人数")</label>
+                <input type="number" class="form-control form-control-sm" min="1" max="100" @bind="this._configuration.ChaosCastleSurvivalMinPlayers" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@this.T("Elim Days", "Ngày vòng loại", "Elim.-Tage", "淘汰赛日期")</label>
+                <input type="text" class="form-control form-control-sm" @bind="this._configuration.ChaosCastleSurvivalEliminationDays" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@this.T("Semi Days", "Ngày bán kết", "Halbfinal-Tage", "半决赛日期")</label>
+                <input type="text" class="form-control form-control-sm" @bind="this._configuration.ChaosCastleSurvivalSemiFinalDays" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@this.T("Final Day", "Ngày chung kết", "Finaltag", "决赛日期")</label>
+                <input type="number" class="form-control form-control-sm" min="1" max="31" @bind="this._configuration.ChaosCastleSurvivalFinalDay" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@this.T("Winner Coins", "Coin thắng", "Sieger-Coins", "冠军代币")</label>
+                <input type="number" class="form-control form-control-sm" min="0" @bind="this._configuration.ChaosCastleSurvivalWinnerCoins" />
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>@this.T("4. Tormented Square (/tsquare)", "4. Quảng Trường Đau Khổ (/tsquare)", "4. Tormented Square (/tsquare)", "4. 苦痛广场 (/tsquare)")</span>
+            <button type="button" class="btn btn-sm btn-outline-warning" title="@this.T("Start this event now, without waiting for its time.", "Bắt đầu sự kiện này ngay, không chờ đến giờ.", "Dieses Ereignis sofort starten, ohne auf seine Zeit zu warten.", "立即开始此活动，无需等待时间。")" @onclick='() => this.TriggerEventNowAsync("tsquare")'>@this.T("Trigger Now", "Chạy ngay", "Jetzt starten", "立即触发")</button>
+        </div>
+        <div class="card-body row g-2">
+            <div class="col-md-2 form-check ms-2">
+                <input id="tsEn" class="form-check-input" type="checkbox" @bind="this._configuration.TormentedSquareEnabled" />
+                <label class="form-check-label" for="tsEn">@this.T("Enabled", "Bật", "Aktiv", "启用")</label>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">@this.T("Daily Times (HH:mm)", "Giờ chạy (HH:mm)", "Uhrzeiten (HH:mm)", "每日时间 (HH:mm)")</label>
+                <input type="text" class="form-control form-control-sm" @bind="this._tsTimesText" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@this.T("Rounds (1..15)", "Số hiệp (1..15)", "Runden (1..15)", "回合数 (1..15)")</label>
+                <input type="number" class="form-control form-control-sm" min="1" max="15" @bind="this._configuration.TormentedSquareRoundsCount" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@this.T("Round (min)", "Phút/hiệp", "Min./Runde", "每回合分钟")</label>
+                <input type="number" class="form-control form-control-sm" min="1" max="15" @bind="this._configuration.TormentedSquareRoundMinutes" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@this.T("Winner Coins", "Coin thắng", "Sieger-Coins", "胜者代币")</label>
+                <input type="number" class="form-control form-control-sm" min="0" @bind="this._configuration.TormentedSquareWinnerCoins" />
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>@this.T("5. Invasion Manager (674-694, 726-729) & Uruk Mountain (673, 678-680)", "5. Trình Quản Lý Xâm Lăng & Núi Uruk (673, 678-680)", "5. Invasion Manager & Berg Uruk (673, 678-680)", "5. 入侵管理器与乌鲁克山 (673, 678-680)")</span>
+            <button type="button" class="btn btn-sm btn-outline-warning" title="@this.T("Call the Uruk Mountain guards now, without waiting for their time.", "Triệu hồi hộ vệ núi Uruk ngay, không chờ đến giờ.", "Die Wachen des Uruk-Bergs sofort rufen, ohne auf ihre Zeit zu warten.", "立即召唤乌鲁克山护卫，无需等待时间。")" @onclick='() => this.TriggerEventNowAsync("uruk")'>@this.T("Spawn Uruk Guards", "Triệu hồi hộ vệ Uruk", "Uruk-Wachen rufen", "召唤乌鲁克护卫")</button>
+        </div>
+        <div class="card-body">
+            <div class="row g-2 mb-3">
+                <div class="col-md-3 form-check ms-2">
+                    <input id="invEn" class="form-check-input" type="checkbox" @bind="this._configuration.InvasionManagerEnabled" />
+                    <label class="form-check-label" for="invEn">@this.T("Invasion Manager Enabled", "Bật Trình Xâm Lăng", "Invasion Manager aktiv", "启用入侵管理器")</label>
+                </div>
+                <div class="col-md-3 form-check">
+                    <input id="urukEn" class="form-check-input" type="checkbox" @bind="this._configuration.UrukMountainBossGuardsEnabled" />
+                    <label class="form-check-label" for="urukEn">@this.T("Lord Silvester Guards (678-680)", "Hộ Vệ Silvester (678-680)", "Silvester-Wachen (678-680)", "西尔维斯特护卫 (678-680)")</label>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">@this.T("Uruk Kill Coins", "Coin hạ Silvester", "Silvester-Coins", "击杀代币")</label>
+                    <input type="number" class="form-control form-control-sm" min="0" @bind="this._configuration.UrukMountainBossRewardCoins" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">@this.T("Guard Cooldown (s)", "Hồi chiêu hộ vệ (s)", "Wachen-Cooldown (s)", "护卫冷却(秒)")</label>
+                    <input type="number" class="form-control form-control-sm" min="10" @bind="this._configuration.UrukMountainGuardCooldownSeconds" />
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-sm align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>@this.T("On", "Bật", "An", "启用")</th>
+                            <th>@this.T("Invasion", "Xâm lăng", "Invasion", "入侵名称")</th>
+                            <th>@this.T("Mob #", "Mã quái", "Mob-Nr.", "怪物编号")</th>
+                            <th>@this.T("Count", "Số lượng", "Anzahl", "数量")</th>
+                            <th>@this.T("Maps", "Bản đồ", "Karten", "地图")</th>
+                            <th>@this.T("Daily Times", "Khung giờ", "Uhrzeiten", "每日时间")</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var row in this._invasionRows)
+                        {
+                            <tr>
+                                <td><input class="form-check-input" type="checkbox" @bind="row.Entry.Enabled" /></td>
+                                <td>@(this._lang == "vi" ? row.Entry.NameVi : row.Entry.NameEn)</td>
+                                <td><input type="number" class="form-control form-control-sm" style="width:80px" @bind="row.Entry.MonsterNumber" /></td>
+                                <td><input type="number" class="form-control form-control-sm" style="width:75px" @bind="row.Entry.MobCount" /></td>
+                                <td><input type="text" class="form-control form-control-sm" @bind="row.MapsText" /></td>
+                                <td><input type="text" class="form-control form-control-sm" @bind="row.TimesText" /></td>
+                                <td>
+                                    <button type="button" class="btn btn-xs btn-outline-secondary" title="@this.T("Start this invasion now, without waiting for its time.", "Bắt đầu cuộc xâm lăng này ngay, không chờ đến giờ.", "Diese Invasion sofort starten, ohne auf ihre Zeit zu warten.", "立即开始此入侵，无需等待时间。")" @onclick='() => this.TriggerEventNowAsync($"invasion:{row.Entry.Id}")'>@this.T("Run", "Chạy", "Start", "运行")</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}

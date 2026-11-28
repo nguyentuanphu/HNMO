@@ -6269,5 +6269,88 @@ namespace HNMO.GameLogic.Properties {
         /// <summary>Gets the localized Monster AI Rules plug-in description.</summary>
         public static string MonsterAiPlugIn_Description => ResourceManager.GetString("MonsterAiPlugIn_Description", resourceCulture)!;
 
+        /// <summary>Gets the localized Season Nine Events plug-in name.</summary>
+        public static string SeasonNineEventsPlugIn_Name => ResourceManager.GetString("SeasonNineEventsPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Season Nine Events plug-in description.</summary>
+        public static string SeasonNineEventsPlugIn_Description => ResourceManager.GetString("SeasonNineEventsPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized Acheron chat command plug-in name.</summary>
+        public static string AcheronChatCommandPlugIn_Name => ResourceManager.GetString("AcheronChatCommandPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Acheron chat command plug-in description.</summary>
+        public static string AcheronChatCommandPlugIn_Description => ResourceManager.GetString("AcheronChatCommandPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized Arca Battle chat command plug-in name.</summary>
+        public static string ArcaBattleChatCommandPlugIn_Name => ResourceManager.GetString("ArcaBattleChatCommandPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Arca Battle chat command plug-in description.</summary>
+        public static string ArcaBattleChatCommandPlugIn_Description => ResourceManager.GetString("ArcaBattleChatCommandPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized Chaos Castle Survival chat command plug-in name.</summary>
+        public static string ChaosCastleSurvivalChatCommandPlugIn_Name => ResourceManager.GetString("ChaosCastleSurvivalChatCommandPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Chaos Castle Survival chat command plug-in description.</summary>
+        public static string ChaosCastleSurvivalChatCommandPlugIn_Description => ResourceManager.GetString("ChaosCastleSurvivalChatCommandPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized Tormented Square chat command plug-in name.</summary>
+        public static string TormentedSquareChatCommandPlugIn_Name => ResourceManager.GetString("TormentedSquareChatCommandPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Tormented Square chat command plug-in description.</summary>
+        public static string TormentedSquareChatCommandPlugIn_Description => ResourceManager.GetString("TormentedSquareChatCommandPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized Season Nine Systems plug-in name.</summary>
+        public static string SeasonNineSystemsPlugIn_Name => ResourceManager.GetString("SeasonNineSystemsPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Season Nine Systems plug-in description.</summary>
+        public static string SeasonNineSystemsPlugIn_Description => ResourceManager.GetString("SeasonNineSystemsPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized Muun chat command plug-in name.</summary>
+        public static string MuunChatCommandPlugIn_Name => ResourceManager.GetString("MuunChatCommandPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Muun chat command plug-in description.</summary>
+        public static string MuunChatCommandPlugIn_Description => ResourceManager.GetString("MuunChatCommandPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized Pentagram chat command plug-in name.</summary>
+        public static string PentagramChatCommandPlugIn_Name => ResourceManager.GetString("PentagramChatCommandPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Pentagram chat command plug-in description.</summary>
+        public static string PentagramChatCommandPlugIn_Description => ResourceManager.GetString("PentagramChatCommandPlugIn_Description", resourceCulture)!;
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Season 9 skill: Shield-Burn.
+        /// </summary>
+        public static string ShieldBurnSkillPlugIn_Name {
+            get {
+                return ResourceManager.GetString("ShieldBurnSkillPlugIn_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Burns a part of the target player&apos;s shield (SD) and leaves the health as it is..
+        /// </summary>
+        public static string ShieldBurnSkillPlugIn_Description {
+            get {
+                return ResourceManager.GetString("ShieldBurnSkillPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized Spell of Protection skill plug-in name.</summary>
+        public static string SpellOfProtectionSkillPlugIn_Name => ResourceManager.GetString("SpellOfProtectionSkillPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Spell of Protection skill plug-in description.</summary>
+        public static string SpellOfProtectionSkillPlugIn_Description => ResourceManager.GetString("SpellOfProtectionSkillPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized Spell of Restriction skill plug-in name.</summary>
+        public static string SpellOfRestrictionSkillPlugIn_Name => ResourceManager.GetString("SpellOfRestrictionSkillPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Spell of Restriction skill plug-in description.</summary>
+        public static string SpellOfRestrictionSkillPlugIn_Description => ResourceManager.GetString("SpellOfRestrictionSkillPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized Spell of Pursuit skill plug-in name.</summary>
+        public static string SpellOfPursuitSkillPlugIn_Name => ResourceManager.GetString("SpellOfPursuitSkillPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized Spell of Pursuit skill plug-in description.</summary>
+        public static string SpellOfPursuitSkillPlugIn_Description => ResourceManager.GetString("SpellOfPursuitSkillPlugIn_Description", resourceCulture)!;
     }
 }

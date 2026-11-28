@@ -1,0 +1,238 @@
+// <copyright file="SeasonNineSystemsPlugIn.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.GameLogic.PlugIns.SeasonNineSystems;
+
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using HNMO.GameLogic;
+using HNMO.GameLogic.PlugIns.ChatCommands;
+using HNMO.GameLogic.Properties;
+using HNMO.Interfaces;
+using HNMO.PlugIns;
+
+/// <summary>
+/// Runtime controller for Season 9 gameplay systems (disabled by default):
+/// applies 330-level Master Level cap, Muun pet condition/bonus summaries (<c>/muun</c>),
+/// Pentagram elemental info &amp; Errtel rates (<c>/pentagram</c>), and Season 9 skills 618-621 balance knobs.
+/// </summary>
+[PlugIn]
+[Display(Name = nameof(PlugInResources.SeasonNineSystemsPlugIn_Name), Description = nameof(PlugInResources.SeasonNineSystemsPlugIn_Description), ResourceType = typeof(PlugInResources))]
+[Guid("7C2E9D14-5B08-4F61-8A32-1E9B4C7D8E05")]
+public sealed class SeasonNineSystemsPlugIn :
+    IPeriodicTaskPlugIn,
+    IPlayerStateChangedPlugIn,
+    IAttackableGotKilledPlugIn,
+    ISupportCustomConfiguration<SeasonNineSystemsConfiguration>,
+    ISupportDefaultCustomConfiguration,
+    IDisabledByDefault
+{
+    private static readonly TimeZoneInfo RealmTimeZone = FindRealmTimeZone();
+
+    private short _realmMasterCap;
+
+    private MuunCompanion? _muuns;
+
+    /// <inheritdoc />
+    public SeasonNineSystemsConfiguration? Configuration { get; set; }
+
+    /// <summary>Gets the Muun companions of this plug-in.</summary>
+    public MuunCompanion Muuns => this._muuns ??= new MuunCompanion(this);
+
+    /// <summary>Gets or sets the season check (tests); the realm's <see cref="HnmoSeasonInstance.IsSeasonNine"/> by default.</summary>
+    internal Func<bool> IsSeasonNineRealm { get; set; } = static () => HnmoSeasonInstance.IsSeasonNine;
+
+    /// <summary>Gets active <see cref="SeasonNineSystemsPlugIn"/> from <paramref name="gameContext"/>.</summary>
+    /// <param name="gameContext">Game context.</param>
+    /// <returns>Active instance or <c>null</c>.</returns>
+    public static SeasonNineSystemsPlugIn? Get(IGameContext gameContext) =>
+        gameContext.PlugInManager.GetActivePlugInsOf<IPeriodicTaskPlugIn>().OfType<SeasonNineSystemsPlugIn>().FirstOrDefault();
+
+    /// <summary>The realm's local time (Sydney, as HNMO's other time rules) of a UTC time.</summary>
+    /// <param name="utc">The UTC time.</param>
+    /// <returns>The local time.</returns>
+    public static DateTime ToRealmTime(DateTime utc) => TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(utc, DateTimeKind.Utc), RealmTimeZone);
+
+    /// <summary>
+    /// Gets a value indicating whether the Season 9 systems run: switched on, and only in a Season 9 realm. Season 6.3
+    /// and Arena never run them, whatever <see cref="SeasonNineSystemsConfiguration.SeasonNineOnly"/> says.
+    /// </summary>
+    /// <returns><c>true</c> when they run.</returns>
+    public bool IsActive() => this.Configuration is { Enabled: true } && this.IsSeasonNineRealm();
+
+    /// <summary>
+    /// Gets the realm's Season 9 client settings as plain-ASCII JSON, or <c>null</c> outside an active Season 9 realm (the
+    /// web client then keeps its defaults).
+    /// </summary>
+    /// <returns>The JSON, or <c>null</c>.</returns>
+    public string? ClientStateJson() =>
+        this.IsActive() && this.Configuration is { } cfg
+            ? System.Text.Json.JsonSerializer.Serialize(new { v = 1, minimap = cfg.SeasonNineMinimapEnabled })
+            : null;
+
+    /// <summary>Sends the realm's Season 9 client settings to the player (the answer to the web client's request).</summary>
+    /// <param name="player">The player.</param>
+    /// <returns>A task.</returns>
+    public async ValueTask SendClientStateAsync(Player player)
+    {
+        if (this.ClientStateJson() is { } json)
+        {
+            await player.InvokeViewPlugInAsync<Views.IHnmoSeasonNineClientViewPlugIn>(p => p.ShowSeasonNineClientStateAsync(json)).ConfigureAwait(false);
+        }
+    }
+
+    /// <inheritdoc />
+    public object CreateDefaultConfig() => new SeasonNineSystemsConfiguration();
+
+    /// <inheritdoc />
+    public void ForceStart()
+    {
+    }
+
+    /// <inheritdoc />
+    public async ValueTask ExecuteTaskAsync(GameContext gameContext)
+    {
+        await this.ApplyMasterCapAsync(gameContext).ConfigureAwait(false);
+
+        // The Muun bonuses follow the map, the level, the hour and the weekday; when the systems are off they go.
+        foreach (var player in await gameContext.GetPlayersAsync().ConfigureAwait(false))
+        {
+            if (player.SelectedCharacter is not null && player.Attributes is not null)
+            {
+                await this.Muuns.RefreshAsync(player).ConfigureAwait(false);
+            }
+        }
+    }
+
+    /// <inheritdoc />
+    public async ValueTask PlayerStateChangedAsync(Player player, State previousState, State currentState)
+    {
+        if (currentState != PlayerState.EnteredWorld)
+        {
+            return;
+        }
+
+        await this.Muuns.RecomputeAsync(player).ConfigureAwait(false);
+        if (!this.IsActive() || this.Configuration is not { } cfg)
+        {
+            return;
+        }
+
+        await player.InvokeViewPlugInAsync<Views.IHnmoPentagramViewPlugIn>(p => p.ShowPentagramAsync(PentagramStateWriter.Write(player))).ConfigureAwait(false);
+        var isVi = string.Equals(player.Culture.TwoLetterISOLanguageName, "vi", StringComparison.OrdinalIgnoreCase);
+        await player.ShowBlueMessageAsync(
+            isVi
+                ? $"Season 9 Systems đang bật (Master Cap {cfg.MasterLevelMaxCap}, {SeasonNineSystemsCatalog.Muuns.Count} Muun, {SeasonNineSystemsCatalog.Pentagrams.Count} Pentagram)."
+                : $"Season 9 Systems active (Master Cap {cfg.MasterLevelMaxCap}, {SeasonNineSystemsCatalog.Muuns.Count} Muun, {SeasonNineSystemsCatalog.Pentagrams.Count} Pentagram).").ConfigureAwait(false);
+    }
+
+    /// <summary>Executes <c>/muun</c> or <c>/pentagram</c> status command cleanly.</summary>
+    /// <param name="player">Issuing player.</param>
+    /// <param name="topic"><c>muun</c> or <c>pentagram</c>.</param>
+    /// <returns>A task representing completion.</returns>
+    public static async ValueTask ExecuteStatusCommandAsync(Player player, string topic)
+    {
+        var isVi = string.Equals(player.Culture.TwoLetterISOLanguageName, "vi", StringComparison.OrdinalIgnoreCase);
+        if (Get(player.GameContext) is not { Configuration: { } cfg } plugIn || !plugIn.IsActive())
+        {
+            await player.ShowBlueMessageAsync(
+                isVi ? "Hệ thống Muun / Pentagram Season 9 đang tắt." : "Season 9 Muun / Pentagram system is disabled.").ConfigureAwait(false);
+            return;
+        }
+
+        if (topic == "muun")
+        {
+            await plugIn.Muuns.SendStateAsync(player, requested: true).ConfigureAwait(false);
+            await player.ShowBlueMessageAsync(
+                isVi
+                    ? $"[Muun] {(cfg.MuunEnabled ? "Bật" : "Tắt")} | {SeasonNineSystemsCatalog.Muuns.Count} Muun | Hệ số Tiến Hóa x{cfg.MuunEvoPointMultiplier:0.##}"
+                    : $"[Muun] {(cfg.MuunEnabled ? "On" : "Off")} | {SeasonNineSystemsCatalog.Muuns.Count} Pets | Evo Mult x{cfg.MuunEvoPointMultiplier:0.##}").ConfigureAwait(false);
+        }
+        else
+        {
+            await player.ShowBlueMessageAsync(
+                isVi
+                    ? $"[Pentagram] {(cfg.PentagramEnabled ? "Bật" : "Tắt")} | Lợi thế Ngũ Hành +{cfg.PentagramElementalAdvantageBonusPct}% | Cộng tỉ lệ ép Errtel +{cfg.PentagramErrtelMixBonusPct}%"
+                    : $"[Pentagram] {(cfg.PentagramEnabled ? "On" : "Off")} | Elemental Advantage +{cfg.PentagramElementalAdvantageBonusPct}% | Errtel Mix Bonus +{cfg.PentagramErrtelMixBonusPct}%").ConfigureAwait(false);
+        }
+    }
+
+    private static TimeZoneInfo FindRealmTimeZone()
+    {
+        try
+        {
+            return TimeZoneInfo.FindSystemTimeZoneById("Australia/Sydney");
+        }
+        catch (TimeZoneNotFoundException)
+        {
+            try
+            {
+                return TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time");
+            }
+            catch (TimeZoneNotFoundException)
+            {
+                return TimeZoneInfo.Utc;
+            }
+        }
+    }
+
+    private ValueTask ApplyMasterCapAsync(GameContext gameContext)
+    {
+        var configuration = gameContext.Configuration;
+        if (!this.IsActive())
+        {
+            // Off (or not a Season 9 realm): the realm's own cap comes back. Characters above it keep their level; they
+            // just gain no master experience there.
+            if (this._realmMasterCap > 0)
+            {
+                configuration.MaximumMasterLevel = this._realmMasterCap;
+                this._realmMasterCap = 0;
+                gameContext.RefreshExperienceTables();
+            }
+
+            return ValueTask.CompletedTask;
+        }
+
+        var targetCap = Math.Clamp(this.Configuration!.MasterLevelMaxCap, (short)200, (short)400);
+        if (configuration.MaximumMasterLevel != targetCap)
+        {
+            if (this._realmMasterCap == 0)
+            {
+                this._realmMasterCap = configuration.MaximumMasterLevel;
+            }
+
+            configuration.MaximumMasterLevel = targetCap;
+            gameContext.RefreshExperienceTables();
+        }
+
+        return ValueTask.CompletedTask;
+    }
+
+    /// <summary>
+    /// Drops a pentagram or an errtel from a killed monster with the admin's chances (off by default). A pentagram gets
+    /// a random element; an errtel a random kind and element, with one option of rank 1 at level 0.
+    /// </summary>
+    /// <param name="killed">The killed object.</param>
+    /// <param name="killer">The killer.</param>
+    /// <returns>A task.</returns>
+    public async ValueTask AttackableGotKilledAsync(IAttackable killed, IAttacker? killer)
+    {
+        if (killed is not NPC.Monster monster || killer is not Player player || !this.IsActive()
+            || this.Configuration is not { PentagramEnabled: true } cfg
+            || monster.Definition[Attributes.Stats.Level] < cfg.PentagramDropMinimumMonsterLevel
+            || monster.CurrentMap is not { } map)
+        {
+            return;
+        }
+
+        if (PentagramDrops.Roll(player.GameContext, cfg) is { } item)
+        {
+            var owners = player.Party?.PartyList.AsEnumerable() ?? player.GetAsEnumerable();
+            await map.AddAsync(new DroppedItem(item, monster.Position, map, null, owners)).ConfigureAwait(false);
+        }
+    }
+}

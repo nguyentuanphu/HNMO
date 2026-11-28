@@ -3299,6 +3299,14 @@
       ]
     },
     {
+      "name": {"en": "Monster 284"},
+      "kind": "monster",
+      "model": "none",
+      "numbers": [
+        {"number": 284}
+      ]
+    },
+    {
       "name": {"en": "Guardian", "es": "Guardián", "pt": "Guardião"},
       "kind": "monster",
       "model": "MONSTER_MODEL_GUARDIAN_STATUE",
@@ -6838,6 +6846,127 @@
       ]
     },
     {
+      "name": {"en": "Summoned Satyros"},
+      "kind": "monster",
+      "model": "MONSTER_MODEL_SATYROS",
+      "numbers": [
+        {"number": 597}
+      ]
+    },
+    {
+      "name": {"en": "Mining Area (Small)"},
+      "kind": "monster",
+      "model": "none",
+      "numbers": [
+        {"number": 605}
+      ]
+    },
+    {
+      "name": {"en": "Mining Area (Medium)"},
+      "kind": "monster",
+      "model": "none",
+      "numbers": [
+        {"number": 606}
+      ]
+    },
+    {
+      "name": {"en": "Mining Area (Large)"},
+      "kind": "monster",
+      "model": "none",
+      "numbers": [
+        {"number": 607}
+      ]
+    },
+    {
+      "name": {"en": "Brown Panda Transformation Ring"},
+      "kind": "npc",
+      "model": "player",
+      "numbers": [
+        {"number": 616},
+        {"number": 646}
+      ]
+    },
+    {
+      "name": {"en": "Pink Panda Transformation Ring"},
+      "kind": "npc",
+      "model": "player",
+      "numbers": [
+        {"number": 617}
+      ]
+    },
+    {
+      "name": {"en": "Robot Knight Transformation Ring"},
+      "kind": "npc",
+      "model": "player",
+      "numbers": [
+        {"number": 625}
+      ]
+    },
+    {
+      "name": {"en": "Mini Robot Transformation Ring"},
+      "kind": "npc",
+      "model": "player",
+      "numbers": [
+        {"number": 626}
+      ]
+    },
+    {
+      "name": {"en": "Great Heavenly Mage Transformation Ring"},
+      "kind": "npc",
+      "model": "player",
+      "numbers": [
+        {"number": 642}
+      ]
+    },
+    {
+      "name": {"en": "Golden Goblin"},
+      "kind": "monster",
+      "model": "MONSTER_MODEL_GOBLIN",
+      "numbers": [
+        {"number": 652}
+      ]
+    },
+    {
+      "name": {"en": "Golden Titan"},
+      "kind": "monster",
+      "model": "MONSTER_MODEL_TITAN",
+      "numbers": [
+        {"number": 653}
+      ]
+    },
+    {
+      "name": {"en": "Golden Tantalos"},
+      "kind": "monster",
+      "model": "MONSTER_MODEL_TANTALLOS",
+      "numbers": [
+        {"number": 654}
+      ]
+    },
+    {
+      "name": {"en": "Golden Erohim"},
+      "kind": "monster",
+      "model": "MONSTER_MODEL_EROHIM",
+      "numbers": [
+        {"number": 655}
+      ]
+    },
+    {
+      "name": {"en": "Golden Hell Maine"},
+      "kind": "monster",
+      "model": "MONSTER_MODEL_HELL_MAINE",
+      "numbers": [
+        {"number": 656}
+      ]
+    },
+    {
+      "name": {"en": "Golden Kundun"},
+      "kind": "monster",
+      "model": "MONSTER_MODEL_ILLUSION_OF_KUNDUN",
+      "numbers": [
+        {"number": 657}
+      ]
+    },
+    {
       "name": {"en": "Cursed Statue"},
       "kind": "monster",
       "model": "MODEL_CURSEDTEMPLE_STATUE",
@@ -6945,6 +7074,102 @@
       "shadow": false,
       "numbers": [
         {"number": 668, "maps": [45, 46, 47, 48, 49, 50]}
+      ]
+    },
+    {
+      "name": {"en": "Moon Rabbit"},
+      "kind": "monster",
+      "model": "MONSTER_MODEL_LUNAR_RABBIT",
+      "numbers": [
+        {"number": 674}
+      ]
+    },
+    {
+      "name": {"en": "Pouch of Blessing"},
+      "kind": "monster",
+      "model": "MONSTER_MODEL_POUCH_OF_BLESSING",
+      "numbers": [
+        {"number": 675}
+      ]
+    },
+    {
+      "name": {"en": "Fire Flame Ghost"},
+      "kind": "monster",
+      "model": "MONSTER_MODEL_FIRE_FLAME_GHOST",
+      "numbers": [
+        {"number": 676}
+      ]
+    },
+    {
+      "name": {"en": "Golden Goblin"},
+      "kind": "monster",
+      "model": "MONSTER_MODEL_GOBLIN",
+      "numbers": [
+        {"number": 677}
+      ]
+    },
+    {
+      "name": {"en": "Marce"},
+      "kind": "npc",
+      "model": "MODEL_ELBELAND_MARCE",
+      "numbers": [
+        {"number": 683}
+      ]
+    },
+    {
+      "name": {"en": "Silvia"},
+      "kind": "npc",
+      "model": "MODEL_ELBELAND_SILVIA",
+      "numbers": [
+        {"number": 684}
+      ]
+    },
+    {
+      "name": {"en": "Izabel"},
+      "kind": "npc",
+      "model": "MODEL_SNOW_WIZARD",
+      "numbers": [
+        {"number": 685}
+      ]
+    },
+    {
+      "name": {"en": "Sophia (repair)"},
+      "kind": "npc",
+      "model": "MODEL_ELF_WIZARD",
+      "numbers": [
+        {"number": 686}
+      ]
+    },
+    {
+      "name": {"en": "Bolo (repair)"},
+      "kind": "npc",
+      "model": "MODEL_KARUTAN_NPC_VOLVO",
+      "numbers": [
+        {"number": 687}
+      ]
+    },
+    {
+      "name": {"en": "Christine"},
+      "kind": "npc",
+      "model": "MODEL_UNITEDMARKETPLACE_CHRISTIN",
+      "numbers": [
+        {"number": 688}
+      ]
+    },
+    {
+      "name": {"en": "Flame Trap"},
+      "kind": "monster",
+      "model": "none",
+      "numbers": [
+        {"number": 689}
+      ]
+    },
+    {
+      "name": {"en": "Darkness Transformation Ring"},
+      "kind": "npc",
+      "model": "player",
+      "numbers": [
+        {"number": 706}
       ]
     },
     {

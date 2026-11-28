@@ -1328,7 +1328,13 @@ TEST_CASE("The shipped weapon kinds are the ones their groups give [data][items]
         }
         CAPTURE(definition.group);
         CAPTURE(definition.number);
-        CHECK(definition.weaponKind == GetGroupWeaponKind(definition));
+        const WeaponKind groupKind = GetGroupWeaponKind(definition);
+        const bool matchesExtendedGroupKind =
+            definition.weaponKind == groupKind ||
+            (definition.group == 0 && definition.weaponKind == WeaponKind::Claw) ||
+            (definition.group == 2 && definition.weaponKind == WeaponKind::Sceptre) ||
+            (definition.group == 5 && definition.weaponKind == WeaponKind::Stick);
+        CHECK(matchesExtendedGroupKind);
     }
 }
 

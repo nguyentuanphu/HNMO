@@ -41,6 +41,12 @@ public class FieldSpawnCountsFromSuitesUpdatePlugIn : UpdatePlugInBase
     /// <inheritdoc />
     public override DateTime CreatedAt => new(2026, 11, 21, 16, 50, 0, DateTimeKind.Utc);
 
+    /// <inheritdoc />
+    public override int Version => 2;
+
+    /// <inheritdoc />
+    public override DateTime UpdatedAt => new(2026, 11, 28, 0, 0, 0, DateTimeKind.Utc);
+
     /// <summary>
     /// Gets the changed spots: map, spawn number, monster, area, quantity, and whether the spot is added (or removed).
     /// </summary>
@@ -64,8 +70,8 @@ public class FieldSpawnCountsFromSuitesUpdatePlugIn : UpdatePlugInBase
         new(4, 105, 40, 10, 100, 10, 100, 1, false), // Death Knight
         new(4, 106, 40, 12, 100, 12, 100, 1, false), // Death Knight
         new(7, 297, 51, 240, 51, 240, 51, 1, false), // Great Bahamut
-        new(7, 438, 51, 251, 51, 251, 51, 1, true), // Great Bahamut
-        new(7, 439, 51, 7, 52, 7, 52, 1, true), // Great Bahamut
+        new(7, 438, 51, 243, 51, 243, 51, 1, true), // Great Bahamut
+        new(7, 439, 51, 14, 51, 14, 51, 1, true), // Great Bahamut
         new(10, 132, 69, 21, 39, 21, 39, 1, false), // Alquamos
         new(10, 164, 69, 36, 29, 36, 29, 1, true), // Alquamos
         new(10, 165, 69, 37, 41, 37, 41, 1, true), // Alquamos
@@ -158,8 +164,13 @@ public class FieldSpawnCountsFromSuitesUpdatePlugIn : UpdatePlugInBase
                 continue;
             }
 
-            if (existing is not null
-                || gameConfiguration.Monsters.FirstOrDefault(m => m.Number == change.Monster) is not { } monster)
+            if (existing is not null)
+            {
+                MoveBlockedAtlansSpawn(existing, change);
+                continue;
+            }
+
+            if (gameConfiguration.Monsters.FirstOrDefault(m => m.Number == change.Monster) is not { } monster)
             {
                 continue;
             }
@@ -179,6 +190,25 @@ public class FieldSpawnCountsFromSuitesUpdatePlugIn : UpdatePlugInBase
         }
 
         return ValueTask.CompletedTask;
+    }
+
+    private static void MoveBlockedAtlansSpawn(MonsterSpawnArea spawn, SpawnChange change)
+    {
+        var oldLocation = (change.Map, change.Number) switch
+        {
+            (7, 438) => (X: (byte)251, Y: (byte)51),
+            (7, 439) => (X: (byte)7, Y: (byte)52),
+            _ => ((byte X, byte Y)?)null,
+        };
+        if (oldLocation is not { } old || spawn.Direction != Direction.Undefined
+            || spawn.SpawnTrigger != SpawnTrigger.Automatic
+            || !IsSpawnOf(spawn, change with { X1 = old.X, X2 = old.X, Y1 = old.Y, Y2 = old.Y }))
+        {
+            return;
+        }
+
+        spawn.X1 = spawn.X2 = change.X1;
+        spawn.Y1 = spawn.Y2 = change.Y1;
     }
 
     /// <summary>

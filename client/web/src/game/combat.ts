@@ -14,7 +14,8 @@ import type { Character } from './characters.js';
 import type { OnlineWorld } from './online.js';
 import type { Inventory, Item } from './inventory.js';
 import {
-  attackRange, CharacterClass, PlayerActions, damageTexts, deathAction, hitPlaysShock, killDamageText, monsterAnimationReaction, monsterShockAction,
+  attackRange, CharacterClass, DAMAGE_TEXT_BASE_HEIGHT, DAMAGE_TEXT_SCALE, PlayerActions, damageTexts, deathAction, hitPlaysShock, killDamageText,
+  monsterAnimationReaction, monsterShockAction,
   monsterAttackAction, newMonsterAttackState, playerAnimationReaction, isFemaleClass, playerAttackAction, playerShockAction, ServerAnimation,
   type AttackLookInput, type DamageText, type HandItem, type MonsterAttackState, type Mount,
 } from './combatLook.js';
@@ -384,6 +385,13 @@ export class Combat {
       if (!(hits.state === 2 && hits.action === PlayerActions.SKILL_GIANTSWING)) hero.faceTo(target.cell);
       if (this.sendInstantMove(target)) this.connection.send('ClientToServer', 'TargetedSkill', { SkillId: hits.skill, TargetId: target.id });
     }
+  }
+
+  /** Shows the elemental part of a hit (Season 9 pentagram) above its target, in the element's colour. */
+  public showElementalHit(targetId: number, damage: number, color: [number, number, number]): void {
+    const target = this.characterById(targetId & ID_MASK);
+    if (!target || damage <= 0) return;
+    this.events.onDamage?.(target, [{ text: String(damage), color, scale: DAMAGE_TEXT_SCALE, heightOffset: DAMAGE_TEXT_BASE_HEIGHT + 40 }]);
   }
 
   private characterById(id: number): Character | null {

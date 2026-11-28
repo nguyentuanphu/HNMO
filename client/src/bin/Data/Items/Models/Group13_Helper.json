@@ -964,6 +964,16 @@
       }
     },
     {
+      "number": 77,
+      "file": "Data/s9/Item/PandaPetRing_brown.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 78,
+      "file": "Data/s9/Item/PandaPetRing_pink.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
       "number": 80,
       "file": "Data/Item/PandaPet.bmd",
       "textureFolders": ["Item"],
@@ -1191,6 +1201,11 @@
         "shineBelowPlus3": "seal"
       },
       "renderStyle": "sealOfWealth"
+    },
+    {
+      "number": 96,
+      "file": "Data/Item/strongmark.bmd",
+      "textureFolders": ["Item"]
     },
     {
       "number": 97,
@@ -1563,6 +1578,16 @@
       "textureFolders": ["Item"]
     },
     {
+      "number": 130,
+      "file": "Data/Item/ork_cham.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
+      "number": 132,
+      "file": "Data/Item/goldenork_cham.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
       "number": 134,
       "file": "Data/Item/horseshoe.bmd",
       "textureFolders": ["Item"]
@@ -1706,6 +1731,578 @@
         "rotation": [90, 0, -45],
         "scale": 0.2
       }
+    },
+    {
+      "number": 145,
+      "file": "Data/s9/Item/SpiritMapPiece.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 146,
+      "file": "Data/s9/Item/SpiritMap.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 147,
+      "file": "Data/s9/Item/trophy.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 148,
+      "file": "Data/s9/Item/FRpotionD.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 149,
+      "file": "Data/s9/Item/FRpotionA.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 150,
+      "file": "Data/s9/Item/FRpotionC.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 151,
+      "model": "skillParchment"
+    },
+    {
+      "number": 152,
+      "model": "s9Msiitemgreen"
+    },
+    {
+      "number": 153,
+      "model": "s9Msiitemblue"
+    },
+    {
+      "number": 154,
+      "model": "s9Msiitemred"
+    },
+    {
+      "number": 155,
+      "model": "s9Msiitemblack"
+    },
+    {
+      "number": 156,
+      "model": "s9Msiitemgreen"
+    },
+    {
+      "number": 157,
+      "model": "s9Msiitemblue"
+    },
+    {
+      "number": 158,
+      "model": "s9Msiitemred"
+    },
+    {
+      "number": 159,
+      "model": "s9Msiitemblack"
+    },
+    {
+      "number": 160,
+      "model": "s9Suhocham01"
+    },
+    {
+      "number": 161,
+      "model": "s9Suhocham01"
+    },
+    {
+      "number": 163,
+      "file": "Data/s9/Item/RobotRing.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 164,
+      "file": "Data/s9/Item/RobotRing_gold.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 165,
+      "file": "Data/s9/Item/monkyRing.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 169,
+      "model": "transformationRing"
+    },
+    {
+      "number": 170,
+      "model": "transformationRing"
+    },
+    {
+      "number": 171,
+      "file": "Data/s9/Item/necklace.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 172,
+      "file": "Data/s9/Item/hardnecklace.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 173,
+      "file": "Data/s9/Item/finalgori.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 175,
+      "file": "Data/s9/Item/ProGuardRing.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 176,
+      "file": "Data/s9/Item/GuardRing.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 177,
+      "model": "s9Ivmonmarka"
+    },
+    {
+      "number": 178,
+      "model": "s9Ivmonmarka"
+    },
+    {
+      "number": 179,
+      "model": "s9Ivmonmarka"
+    },
+    {
+      "number": 180,
+      "model": "s9Ivmonmarkb"
+    },
+    {
+      "number": 181,
+      "model": "s9Ivmonmarkb"
+    },
+    {
+      "number": 210,
+      "model": "s9Petegg"
+    },
+    {
+      "number": 211,
+      "file": "Data/s9/Item/evolutionstone.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 212,
+      "file": "Data/s9/Item/dragonpet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 213,
+      "file": "Data/s9/Item/dragonpet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 214,
+      "file": "Data/s9/Item/stonepet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 215,
+      "file": "Data/s9/Item/stonepet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 216,
+      "file": "Data/s9/Item/mermaidpet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 217,
+      "file": "Data/s9/Item/mermaidpet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 218,
+      "file": "Data/s9/Item/satanpet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 219,
+      "file": "Data/s9/Item/satanpet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 220,
+      "model": "s9Petegg"
+    },
+    {
+      "number": 221,
+      "model": "s9Petegg"
+    },
+    {
+      "number": 222,
+      "model": "s9Petegg"
+    },
+    {
+      "number": 223,
+      "file": "Data/s9/Item/williumpet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 224,
+      "file": "Data/s9/Item/williumpet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 225,
+      "file": "Data/s9/Item/polpet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 226,
+      "file": "Data/s9/Item/polpet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 227,
+      "file": "Data/s9/Item/Kironpet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 228,
+      "file": "Data/s9/Item/Kironpet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 229,
+      "file": "Data/s9/Item/wooparoopet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 230,
+      "file": "Data/s9/Item/wooparoopet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 231,
+      "file": "Data/s9/Item/wolfpet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 232,
+      "file": "Data/s9/Item/wolfpet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 233,
+      "file": "Data/s9/Item/Witchpet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 234,
+      "file": "Data/s9/Item/Witchpet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 235,
+      "file": "Data/s9/Item/Skullpet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 236,
+      "file": "Data/s9/Item/Skullpet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 237,
+      "file": "Data/s9/Item/pumpipet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 238,
+      "file": "Data/s9/Item/pumpipet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 239,
+      "file": "Data/s9/Item/spellst01.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 240,
+      "file": "Data/s9/Item/spellst02.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 241,
+      "file": "Data/s9/Item/sabatpet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 242,
+      "file": "Data/s9/Item/sabatpet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 243,
+      "file": "Data/s9/Item/Lycanpet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 244,
+      "file": "Data/s9/Item/Lycanpet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 245,
+      "file": "Data/s9/Item/tobypet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 246,
+      "file": "Data/s9/Item/tobypet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 252,
+      "file": "Data/s9/Item/seirenpet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 253,
+      "file": "Data/s9/Item/seirenpet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 254,
+      "file": "Data/s9/Item/Behemothpet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 255,
+      "file": "Data/s9/Item/Behemothpet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 256,
+      "file": "Data/s9/Item/loglepet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 257,
+      "file": "Data/s9/Item/loglepet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 258,
+      "file": "Data/s9/Item/minopet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 259,
+      "file": "Data/s9/Item/minopet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 260,
+      "file": "Data/s9/Item/houndpet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 261,
+      "file": "Data/s9/Item/houndpet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 262,
+      "file": "Data/s9/Item/tribepet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 263,
+      "file": "Data/s9/Item/tribepet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 264,
+      "file": "Data/s9/Item/bogeonpet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 265,
+      "file": "Data/s9/Item/bogeonpet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 266,
+      "file": "Data/s9/Item/cyclopspet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 267,
+      "file": "Data/s9/Item/cyclopspet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 268,
+      "file": "Data/s9/Item/DarknessRing.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 270,
+      "file": "Data/s9/Item/Bonpeupet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 271,
+      "file": "Data/s9/Item/Bonpeupet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 272,
+      "file": "Data/s9/Item/hawkpet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 273,
+      "file": "Data/s9/Item/hawkpet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 274,
+      "file": "Data/s9/Item/MuTpet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 275,
+      "file": "Data/s9/Item/MuTpet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 276,
+      "file": "Data/s9/Item/ProofOfConqueror.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 277,
+      "file": "Data/s9/Item/ProofOfOrdeal.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 278,
+      "file": "Data/s9/Item/mantispet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 279,
+      "file": "Data/s9/Item/mantispet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 280,
+      "file": "Data/s9/Item/scolpipet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 281,
+      "file": "Data/s9/Item/scolpipet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 282,
+      "file": "Data/s9/Item/chaferpet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 283,
+      "file": "Data/s9/Item/chaferpet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 290,
+      "file": "Data/s9/Item/cosgirlpet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 291,
+      "file": "Data/s9/Item/cosgirlpet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 292,
+      "file": "Data/s9/Item/taegeukgirlpet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 293,
+      "file": "Data/s9/Item/taegeukgirlpet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 294,
+      "file": "Data/s9/Item/SportyGirlpet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 295,
+      "file": "Data/s9/Item/SportyGirlpet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 296,
+      "file": "Data/s9/Item/baelpet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 297,
+      "file": "Data/s9/Item/baelpet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 298,
+      "file": "Data/s9/Item/gapppet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 299,
+      "file": "Data/s9/Item/gapppet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 300,
+      "file": "Data/s9/Item/tapppet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 301,
+      "file": "Data/s9/Item/tapppet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 302,
+      "file": "Data/s9/Item/Frozenpet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 303,
+      "file": "Data/s9/Item/Frozenpet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 304,
+      "file": "Data/s9/Item/lurepet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 305,
+      "file": "Data/s9/Item/lurepet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 306,
+      "file": "Data/s9/Item/persilpet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 307,
+      "file": "Data/s9/Item/persilpet_evol.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 350,
+      "model": "s9Petegg"
     }
   ]
 }

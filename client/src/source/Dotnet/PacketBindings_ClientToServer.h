@@ -472,9 +472,15 @@ typedef void(CORECLR_DELEGATE_CALLTYPE* SendGameServerChannelRequest)(int32_t, B
 
 typedef void(CORECLR_DELEGATE_CALLTYPE* SendGameGuardAuthResponse)(int32_t, const BYTE* , uint32_t);
 
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoPentagramCommand)(int32_t, BYTE , BYTE , BYTE );
+
 typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoJewelBankCommand)(int32_t, BYTE , BYTE , uint32_t , const char16_t* );
 
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoMuunCommand)(int32_t, BYTE , BYTE );
+
 typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoCatchupCapRequest)(int32_t);
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoSeasonNineClientRequest)(int32_t);
 
 typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoSeasonPlanRequest)(int32_t);
 
@@ -497,6 +503,8 @@ typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoVaultPageCommand)(int32_t, BYTE 
 typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoUltimateAutoPlayRequest)(int32_t);
 
 typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoBugReportCommand)(int32_t, BYTE , const char16_t* );
+
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoAutoErrorReport)(int32_t, const char16_t* );
 
 typedef void(CORECLR_DELEGATE_CALLTYPE* SendHnmoArenaTravelRequest)(int32_t, BYTE , BYTE );
 

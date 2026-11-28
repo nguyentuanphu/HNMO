@@ -621,6 +621,96 @@
       "classRequirements": {
         "darkLord": 1
       }
+    },
+    {
+      "number": 19,
+      "name": {
+        "en": "Thunderbolt",
+        "de": "Donnerkeil",
+        "vi": "Sấm Sét",
+        "zh-CN": "雷霆权杖"
+      },
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "width": 1,
+      "height": 4,
+      "slot": "mainHand",
+      "weaponKind": "mace",
+      "statProfile": "weapon",
+      "skill": 66,
+      "level": 149,
+      "durability": 78,
+      "damageMin": 127,
+      "damageMax": 154,
+      "attackSpeed": 40,
+      "magicPower": 76,
+      "droppable": false,
+      "requirements": {
+        "level": 400,
+        "strength": 111,
+        "dexterity": 22
+      },
+      "classRequirements": {
+        "darkLord": 3
+      }
+    },
+    {
+      "number": 20,
+      "name": {
+        "en": "Horn of Steal",
+        "de": "Stahlhorn",
+        "vi": "Sừng Thép",
+        "zh-CN": "钢铁之角"
+      },
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "width": 2,
+      "height": 4,
+      "slot": "mainHand",
+      "weaponKind": "mace",
+      "statProfile": "weapon",
+      "twoHanded": true,
+      "skill": 19,
+      "level": 149,
+      "durability": 120,
+      "damageMin": 177,
+      "damageMax": 206,
+      "attackSpeed": 25,
+      "droppable": false,
+      "requirements": {
+        "level": 400,
+        "strength": 182,
+        "dexterity": 50
+      },
+      "classRequirements": {
+        "darkKnight": 3
+      }
+    },
+    {
+      "number": 21,
+      "name": {
+        "en": "Master Scepter-J"
+      },
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "width": 1,
+      "height": 3,
+      "slot": "mainHand",
+      "weaponKind": "sceptre",
+      "statProfile": "sceptre",
+      "skill": 66,
+      "level": 72,
+      "durability": 45,
+      "damageMin": 57,
+      "damageMax": 68,
+      "attackSpeed": 50,
+      "magicPower": 20,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 87,
+        "dexterity": 18
+      },
+      "classRequirements": {
+        "darkLord": 1
+      }
     }
   ]
 }

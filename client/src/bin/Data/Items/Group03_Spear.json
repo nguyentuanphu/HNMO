@@ -389,6 +389,37 @@
         "darkKnight": 2,
         "magicGladiator": 1
       }
+    },
+    {
+      "number": 12,
+      "name": {
+        "en": "Magmus Peer",
+        "de": "Magmus-Speer",
+        "vi": "Thương Magmus",
+        "zh-CN": "岩浆之矛"
+      },
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "width": 2,
+      "height": 4,
+      "slot": "mainHand",
+      "weaponKind": "spear",
+      "statProfile": "weapon",
+      "twoHanded": true,
+      "skill": 20,
+      "level": 149,
+      "durability": 85,
+      "damageMin": 135,
+      "damageMax": 236,
+      "attackSpeed": 35,
+      "droppable": false,
+      "requirements": {
+        "level": 400,
+        "strength": 49,
+        "dexterity": 162
+      },
+      "classRequirements": {
+        "darkKnight": 3
+      }
     }
   ]
 }

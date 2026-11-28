@@ -1441,6 +1441,137 @@
       "number": 53
     },
     {
+      "number": 54,
+      "name": {
+        "en": "Lazy Wind Gloves",
+        "de": "Träger Wind-Handschuhe",
+        "vi": "Găng tay Gió Lười",
+        "zh-CN": "慵懒之风护手"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 142,
+      "durability": 90,
+      "defense": 59,
+      "attackSpeed": 7,
+      "requirements": {
+        "level": 400,
+        "strength": 67,
+        "dexterity": 151
+      },
+      "classRequirements": {
+        "darkKnight": 3
+      }
+    },
+    {
+      "number": 55,
+      "name": {
+        "en": "Dark Devil Gloves",
+        "de": "Dunkelteufel-Handschuhe",
+        "vi": "Găng tay Ác Quỷ Bóng Tối",
+        "zh-CN": "暗黑恶魔护手"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 142,
+      "durability": 90,
+      "defense": 40,
+      "attackSpeed": 7,
+      "requirements": {
+        "level": 400,
+        "strength": 45,
+        "dexterity": 13,
+        "energy": 171
+      },
+      "classRequirements": {
+        "darkWizard": 3
+      }
+    },
+    {
+      "number": 56,
+      "name": {
+        "en": "Sticky Gloves",
+        "de": "Klebrige-Handschuhe",
+        "vi": "Găng tay Bám Dính",
+        "zh-CN": "粘性护手"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 142,
+      "durability": 90,
+      "defense": 52,
+      "attackSpeed": 7,
+      "requirements": {
+        "level": 400,
+        "strength": 48,
+        "dexterity": 180
+      },
+      "classRequirements": {
+        "fairyElf": 3
+      }
+    },
+    {
+      "number": 57,
+      "name": {
+        "en": "Hell Night Gloves",
+        "de": "Höllennacht-Handschuhe",
+        "vi": "Găng tay Đêm Địa Ngục",
+        "zh-CN": "地狱之夜护手"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 142,
+      "durability": 90,
+      "defense": 58,
+      "attackSpeed": 7,
+      "requirements": {
+        "level": 400,
+        "strength": 194,
+        "dexterity": 52
+      },
+      "classRequirements": {
+        "magicGladiator": 3
+      }
+    },
+    {
+      "number": 58,
+      "name": {
+        "en": "Ambition Gloves",
+        "de": "Ehrgeiz-Handschuhe",
+        "vi": "Găng tay Tham Vọng",
+        "zh-CN": "野心护手"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 142,
+      "durability": 90,
+      "defense": 43,
+      "attackSpeed": 7,
+      "requirements": {
+        "level": 400,
+        "strength": 112,
+        "dexterity": 22
+      },
+      "classRequirements": {
+        "darkLord": 3
+      }
+    },
+    {
       "number": 62,
       "name": {
         "en": "Scale Gloves",
@@ -1772,6 +1903,206 @@
       },
       "classRequirements": {
         "magicGladiator": 1
+      }
+    },
+    {
+      "number": 74,
+      "name": {
+        "en": "Stormwing Gloves",
+        "de": "Sturmflügel-Handschuhe",
+        "vi": "Găng tay Cánh Bão",
+        "zh-CN": "风暴之翼护手"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 142,
+      "durability": 90,
+      "defense": 65,
+      "attackSpeed": 7,
+      "requirements": {
+        "level": 400,
+        "strength": 200,
+        "dexterity": 33
+      },
+      "classRequirements": {
+        "darkKnight": 3
+      }
+    },
+    {
+      "number": 75,
+      "name": {
+        "en": "Light Lord Gloves",
+        "de": "Lichtlord-Handschuhe",
+        "vi": "Găng tay Chúa Tể Ánh Sáng",
+        "zh-CN": "光之领主护手"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 142,
+      "durability": 90,
+      "defense": 45,
+      "attackSpeed": 7,
+      "requirements": {
+        "level": 400,
+        "strength": 14,
+        "dexterity": 31,
+        "energy": 127
+      },
+      "classRequirements": {
+        "fairyElf": 3
+      }
+    },
+    {
+      "number": 76,
+      "name": {
+        "en": "Magic Knight Gloves",
+        "de": "Magieritter-Handschuhe",
+        "vi": "Găng tay Hiệp Sĩ Phép Thuật",
+        "zh-CN": "魔剑士护手"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 142,
+      "durability": 90,
+      "defense": 49,
+      "attackSpeed": 7,
+      "requirements": {
+        "level": 400,
+        "strength": 48,
+        "dexterity": 17,
+        "energy": 142
+      },
+      "classRequirements": {
+        "magicGladiator": 3
+      }
+    },
+    {
+      "number": 78,
+      "name": {
+        "en": "Dragon Gloves-J"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 52,
+      "durability": 68,
+      "defense": 16,
+      "attackSpeed": 6,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 120,
+        "dexterity": 30
+      },
+      "classRequirements": {
+        "darkKnight": 1,
+        "magicGladiator": 1
+      }
+    },
+    {
+      "number": 79,
+      "name": {
+        "en": "Legendary Gloves-J"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 44,
+      "durability": 42,
+      "defense": 13,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 20
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "magicGladiator": 1
+      }
+    },
+    {
+      "number": 80,
+      "name": {
+        "en": "Guardian Gloves-J"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 50,
+      "durability": 45,
+      "defense": 17,
+      "attackSpeed": 6,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 40,
+        "dexterity": 80
+      },
+      "classRequirements": {
+        "fairyElf": 1
+      }
+    },
+    {
+      "number": 81,
+      "name": {
+        "en": "Light Plate Gloves-J"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 42,
+      "durability": 42,
+      "defense": 14,
+      "attackSpeed": 7,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 70,
+        "dexterity": 20
+      },
+      "classRequirements": {
+        "darkLord": 1
+      }
+    },
+    {
+      "number": 82,
+      "name": {
+        "en": "Red Wing Gloves-J"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "gloves",
+      "statProfile": "armor",
+      "level": 44,
+      "durability": 42,
+      "defense": 15,
+      "attackSpeed": 8,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 18,
+        "dexterity": 4
+      },
+      "classRequirements": {
+        "summoner": 1
       }
     }
   ]

@@ -53,6 +53,12 @@
                     @L("Running in packed/DB mode: web game reads live changes directly via /website/items.", "Đang chạy chế độ gói nén/CSDL: bản web nhận thay đổi trực tiếp qua /website/items.")
                 }
             </div>
+            @if (HNMO.Interfaces.HnmoSeasonInstance.IsSeasonNine)
+            {
+                <div class="small text-info mt-1">
+                    @HNMO.Web.AdminPanel.Properties.Resources.ItemDefinitions_SeasonNineNotice
+                </div>
+            }
         </div>
         <div class="d-flex flex-wrap gap-2">
             <button type="button"

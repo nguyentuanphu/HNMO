@@ -1040,6 +1040,28 @@
       "renderStyleValues": {"inventoryTexture": "Player/SkinClass706_upperitem.tga"}
     },
     {
+      "number": 54,
+      "model": "s9Armormale75"
+    },
+    {
+      "number": 55,
+      "file": "Data/s9/Item/ArmorMale56.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 56,
+      "model": "s9Armormail3003"
+    },
+    {
+      "number": 57,
+      "model": "s9Armormale4003"
+    },
+    {
+      "number": 58,
+      "file": "Data/s9/Item/ArmorMale4005.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
       "number": 59,
       "file": "Data/Player/ArmorMale60.bmd",
       "textureFolders": ["Player"],
@@ -1294,6 +1316,48 @@
         "excellentMesh": 2
       },
       "renderStyle": "phoenixSoulArmor"
+    },
+    {
+      "number": 74,
+      "model": "s9Armormale75"
+    },
+    {
+      "number": 75,
+      "model": "s9Armormail3003"
+    },
+    {
+      "number": 76,
+      "model": "s9Armormale4003"
+    },
+    {
+      "number": 78,
+      "file": "Data/s9/Item/ArmorMale02.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 79,
+      "file": "Data/s9/Item/ArmorMale04.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 80,
+      "file": "Data/s9/Item/ArmorElf05.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 81,
+      "file": "Data/s9/Item/ArmorMale26.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 82,
+      "file": "Data/s9/Item/ArmorMale41.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 83,
+      "file": "Data/s9/Item/ArmorMale60.bmd",
+      "textureFolders": ["s9/Item"]
     }
   ]
 }

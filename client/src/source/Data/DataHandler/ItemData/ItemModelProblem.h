@@ -13,6 +13,9 @@ enum class ItemModelProblemType
     // The .bmd file of the model could not be opened or read; the item is
     // not drawn.
     ModelFileMissing,
+    // An optional pack-only .bmd file (e.g. Data/s9/) is not present; skipped
+    // with a warning without stopping loading.
+    PackModelFileMissing,
     // No texture folder has the texture (or it could not be read) and no
     // other model loaded it; the mesh is drawn without it.
     TextureMissing,
