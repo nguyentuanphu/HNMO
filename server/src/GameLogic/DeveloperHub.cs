@@ -130,7 +130,10 @@ public static partial class DeveloperHub
         }
     }
 
-    /// <summary>Changes the saved state.</summary>
+    /// <summary>
+    /// Changes the saved state. The file is read and written under its lock (<see cref="HNMO.Interfaces.SharedStateFile"/>),
+    /// which the folder's other programs (the other seasons, the launcher) take too, so none of them loses another's change.
+    /// </summary>
     /// <param name="change">The change.</param>
     /// <returns>The state after it.</returns>
     public static DeveloperHubState ChangeState(Action<DeveloperHubState> change)
@@ -138,13 +141,13 @@ public static partial class DeveloperHub
         ArgumentNullException.ThrowIfNull(change);
         lock (StateLock)
         {
+            var file = StateFile;
+            using var fileLock = file is null ? null : HNMO.Interfaces.SharedStateFile.Lock(file);
             var state = ReadState();
             change(state);
-            if (StateFile is { } file)
+            if (file is not null)
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(file)!);
-                File.WriteAllText(file + ".tmp", JsonSerializer.Serialize(state, JsonOptions));
-                File.Move(file + ".tmp", file, overwrite: true);
+                HNMO.Interfaces.SharedStateFile.Replace(file, JsonSerializer.Serialize(state, JsonOptions));
             }
 
             return state;

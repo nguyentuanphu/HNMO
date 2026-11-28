@@ -331,6 +331,153 @@ public class FolderLimitTests
         Assert.That(DeveloperHub.FolderLimitEnforced(this._now), Is.True);
     }
 
+    /// <summary>
+    /// (c) The folder which has been running longest holds the seat, though a younger one asked first (the hub switched
+    /// the limit on while both ran).
+    /// </summary>
+    [Test]
+    public void TheFolderRunningLongestKeepsTheSeat()
+    {
+        var seatDir = Path.Combine(this._dir.FullName, "seats");
+        var olderStart = this._now.AddHours(-5);
+        var older = this.Seats(seatDir, "bbbbbbbbbbbbbbbb", "/srv/B", olderStart);
+        var younger = this.Seats(seatDir, "aaaaaaaaaaaaaaaa", "/srv/A", this._now.AddMinutes(-10));
+
+        Assert.That(younger.Refresh(1).HasSeat, Is.True, "alone, the younger folder holds the seat");
+        this._now = this._now.AddSeconds(1);
+        var first = older.Refresh(1);
+        Assert.That(first.HasSeat, Is.True, "the older folder, though it asked second (and its code sorts later)");
+        Assert.That(first.OtherHolders, Is.Empty);
+        var waiting = younger.Refresh(1);
+        Assert.That(waiting.HasSeat, Is.False, "the younger folder waits");
+        Assert.That(waiting.OtherHolders, Is.EqualTo(new[] { "/srv/B" }));
+        Assert.That(SinceIn(older), Is.EqualTo(olderStart), "the file holds the process start");
+    }
+
+    /// <summary>(c) Two programs of one folder share one seat, and the seat file keeps the earliest start of them.</summary>
+    [Test]
+    public void ProgramsOfOneFolderShareASeatFromTheirEarliestStart()
+    {
+        var seatDir = Path.Combine(this._dir.FullName, "seats");
+        var start = this._now;
+        var seasonNine = this.Seats(seatDir, "aaaaaaaaaaaaaaaa", "/srv/A", start.AddMinutes(-5));
+        var seasonSix = this.Seats(seatDir, "aaaaaaaaaaaaaaaa", "/srv/A", start.AddMinutes(-30));
+        var other = this.Seats(seatDir, "bbbbbbbbbbbbbbbb", "/srv/B", start.AddMinutes(-20));
+
+        Assert.That(seasonNine.Refresh(1).HasSeat, Is.True);
+        Assert.That(SinceIn(seasonNine), Is.EqualTo(start.AddMinutes(-5)));
+        Assert.That(other.Refresh(1).HasSeat, Is.True, "B started before A's first program");
+        Assert.That(seasonNine.Refresh(1).HasSeat, Is.False, "so A waits");
+
+        this._now = this._now.AddSeconds(5);
+        Assert.That(seasonSix.Refresh(1).HasSeat, Is.True, "A's second program started before B");
+        Assert.That(SinceIn(seasonSix), Is.EqualTo(start.AddMinutes(-30)), "the earliest start");
+        this._now = this._now.AddSeconds(5);
+        Assert.That(seasonNine.Refresh(1).HasSeat, Is.True, "both programs of A share the seat");
+        Assert.That(SinceIn(seasonNine), Is.EqualTo(start.AddMinutes(-30)), "a later program doesn't move it forward");
+        Assert.That(Directory.GetFiles(seatDir, "*.seat"), Has.Length.EqualTo(2), "one file per folder");
+        Assert.That(other.Refresh(1).HasSeat, Is.False);
+    }
+
+    /// <summary>(c) Folders which started at the same time line up by folder code, whichever asked first.</summary>
+    [Test]
+    public void EqualStartsLineUpByFolderCode()
+    {
+        var seatDir = Path.Combine(this._dir.FullName, "seats");
+        var started = this._now.AddMinutes(-1);
+        var b = this.Seats(seatDir, "bbbbbbbbbbbbbbbb", "/srv/B", started);
+        var a = this.Seats(seatDir, "aaaaaaaaaaaaaaaa", "/srv/A", started);
+        Assert.That(b.Refresh(1).HasSeat, Is.True, "alone");
+        Assert.That(a.Refresh(1).HasSeat, Is.True, "the lower code");
+        Assert.That(b.Refresh(1).HasSeat, Is.False);
+        Assert.That(a.Refresh(1).HasSeat, Is.True, "stable");
+    }
+
+    /// <summary>
+    /// (c) An older folder which stops beating still frees its seat after the expiry; started again it is a young folder,
+    /// and a program which only hung lines up from when it came back.
+    /// </summary>
+    [Test]
+    public void ADeadOlderFolderStillReleasesItsSeat()
+    {
+        var seatDir = Path.Combine(this._dir.FullName, "seats");
+        var older = this.Seats(seatDir, "aaaaaaaaaaaaaaaa", "/srv/A", this._now.AddHours(-3));
+        var younger = this.Seats(seatDir, "bbbbbbbbbbbbbbbb", "/srv/B", this._now.AddHours(-1));
+        Assert.That(older.Refresh(1).HasSeat, Is.True);
+        Assert.That(younger.Refresh(1).HasSeat, Is.False);
+
+        this._now = this._now.AddMinutes(1);
+        Assert.That(younger.Refresh(1).HasSeat, Is.False, "A beat a minute ago");
+        this._now = this._now.AddSeconds(90);
+        Assert.That(younger.Refresh(1).HasSeat, Is.True, "A's seat expired");
+        Assert.That(File.Exists(older.OwnFile), Is.False, "the dead seat file is removed");
+
+        Assert.That(older.Refresh(1).HasSeat, Is.False, "the same program back after hanging lines up from now");
+        Assert.That(SinceIn(older), Is.EqualTo(this._now));
+        var restarted = this.Seats(seatDir, "aaaaaaaaaaaaaaaa", "/srv/A", this._now.AddSeconds(-10));
+        Assert.That(restarted.Refresh(1).HasSeat, Is.False, "A started again is younger than B");
+        Assert.That(younger.Refresh(1).HasSeat, Is.True);
+    }
+
+    /// <summary>
+    /// The launcher's write keeps a change the server makes to the same state file meanwhile: the server's write, started
+    /// between the launcher's read and write, waits for the lock and lands after it, on top of the launcher's.
+    /// </summary>
+    [Test]
+    public void TheLauncherDoesNotLoseAServerWriteMadeWhileItWrites()
+    {
+        var file = Path.Combine(this._dir.FullName, HubFolderLimits.StateFileName);
+        DeveloperHub.StateFile = file;
+        DeveloperHub.ChangeState(s => s.HostName = "Minh");
+        Task<DeveloperHubState>? server = null;
+        var serverWaited = false;
+        HubFolderLimits.AfterReadForTests = () =>
+        {
+            server = Task.Run(() => DeveloperHub.ChangeState(s => s.HostContact = "zalo 0123"));
+            serverWaited = !server.Wait(TimeSpan.FromMilliseconds(300));
+        };
+        try
+        {
+            Assert.That(HubFolderLimits.Remember(file, enforce: true, this._now), Is.True);
+        }
+        finally
+        {
+            HubFolderLimits.AfterReadForTests = null;
+        }
+
+        Assert.That(serverWaited, Is.True, "the server's write waited for the launcher's lock");
+        Assert.That(server!.Wait(TimeSpan.FromSeconds(10)), Is.True, "and then went through");
+        var state = DeveloperHub.ReadState();
+        Assert.That(state.HostName, Is.EqualTo("Minh"), "kept from before");
+        Assert.That(state.HostContact, Is.EqualTo("zalo 0123"), "the server's write is kept");
+        Assert.That(state.FolderLimits, Is.Not.Null, "the launcher's write is kept");
+        Assert.That(state.FolderLimits!.Enforce, Is.True);
+        Assert.That(state.FolderLimits.ReceivedUtc, Is.EqualTo(this._now));
+    }
+
+    /// <summary>
+    /// The state file's lock is exclusive, is free again once given back, and a writer which can't get it in time writes
+    /// all the same rather than not at all.
+    /// </summary>
+    [Test]
+    public void TheStateFileLockIsExclusiveAndNeverStopsAWriter()
+    {
+        var file = Path.Combine(this._dir.FullName, HubFolderLimits.StateFileName);
+        using (var held = SharedStateFile.Lock(file))
+        {
+            Assert.That(held, Is.Not.Null);
+            Assert.That(SharedStateFile.Lock(file, TimeSpan.Zero), Is.Null, "a second writer doesn't get it");
+            Assert.That(HubFolderLimits.Remember(file, enforce: true, this._now), Is.True, "after the wait, written without it");
+        }
+
+        using (var again = SharedStateFile.Lock(file, TimeSpan.Zero))
+        {
+            Assert.That(again, Is.Not.Null, "free once given back");
+        }
+
+        Assert.That(Directory.GetFiles(this._dir.FullName, "*.tmp"), Is.Empty, "no temporary file left");
+    }
+
     private static (Ed25519PrivateKeyParameters Key, byte[] Pem) NewKey()
     {
         var generator = new Ed25519KeyPairGenerator();
@@ -351,7 +498,11 @@ public class FolderLimitTests
         return Encoding.UTF8.GetBytes($$"""{"payload":"{{Convert.ToBase64String(payload)}}","signature":"{{Convert.ToBase64String(signature)}}"}""");
     }
 
-    private FolderSeats Seats(string directory, string folderCode, string path) => new(directory, "machine1", folderCode, path, () => this._now);
+    private static DateTime SinceIn(FolderSeats seats)
+        => JsonNode.Parse(File.ReadAllText(seats.OwnFile))!["since"]!.GetValue<DateTime>();
+
+    private FolderSeats Seats(string directory, string folderCode, string path, DateTime? started = null)
+        => new(directory, "machine1", folderCode, path, () => this._now, started ?? this._now);
 
     private sealed class ThrowingHandler : HttpMessageHandler
     {
