@@ -47,7 +47,20 @@ public static class FolderSeat
     public static void Start()
     {
         Evaluate(DateTime.UtcNow);
-        _timer ??= new Timer(_ => Evaluate(DateTime.UtcNow), null, FolderSeats.Heartbeat, FolderSeats.Heartbeat);
+        _timer ??= new Timer(_ => Beat(), null, FolderSeats.Heartbeat, FolderSeats.Heartbeat);
+    }
+
+    /// <summary>One timer tick: never lets an error leave the timer's thread (it would end the server).</summary>
+    private static void Beat()
+    {
+        try
+        {
+            Evaluate(DateTime.UtcNow);
+        }
+        catch (Exception ex)
+        {
+            _logger?.LogWarning(ex, "HNMO licence: the folder seat check failed; it tries again at the next beat.");
+        }
     }
 
     /// <summary>Beats and checks the seat: whether the limit is on, and whether this folder holds a seat.</summary>
