@@ -95,6 +95,11 @@ async function loadTokens(): Promise<Record<string, string>> {
   return values;
 }
 
+/** A token of the theme in use (tokens.ini, e.g. "server-load-base"), for values a window computes itself. */
+export async function themeToken(name: string): Promise<string | undefined> {
+  return (await loadTokens())[name];
+}
+
 // ---------- images ----------
 
 // An image of the game's data as a canvas: .jpg/.tga (served from the .OZJ/.OZT files).
