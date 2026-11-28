@@ -9,6 +9,12 @@ DLL=bin/Release/AssetCrashHarness.dll
 [ -f "$DLL" ] || DLL=bin/Release/net10.0/AssetCrashHarness.dll
 work() { dotnet "$DLL" "$@"; }
 fail=0
+new_uuid() {
+  if [ -r /proc/sys/kernel/random/uuid ]; then cat /proc/sys/kernel/random/uuid
+  elif command -v uuidgen >/dev/null 2>&1; then uuidgen | tr '[:upper:]' '[:lower:]'
+  else python -c 'import uuid; print(uuid.uuid4())'
+  fi
+}
 check() { # expected actual label
   if [ "$1" == "$2" ]; then echo "  ok   $3: $2"; else echo "  FAIL $3: expected '$1', got '$2'"; fail=1; fi
 }
@@ -27,7 +33,7 @@ work setup | tail -1
 for stage in before-save before-commit after-commit; do
   echo "deposit killed at $stage"
   work reset > /dev/null
-  op=$(cat /proc/sys/kernel/random/uuid)
+  op=$(new_uuid)
   killed_at "$stage" deposit "$op"
   after=$(work state "$op")
   if [ "$stage" == "after-commit" ]; then check "vault 0 bank 4 receipts 1" "$after" "after the kill"; else check "vault 4 bank 0 receipts 0" "$after" "after the kill"; fi
@@ -37,7 +43,7 @@ for stage in before-save before-commit after-commit; do
   check "vault 0 bank 4 receipts 1" "$(work state "$op")" "after a second retry"
 
   echo "withdraw killed at $stage"
-  op2=$(cat /proc/sys/kernel/random/uuid)
+  op2=$(new_uuid)
   killed_at "$stage" withdraw "$op2"
   after=$(work state "$op2")
   if [ "$stage" == "after-commit" ]; then check "vault 3 bank 1 receipts 1" "$after" "after the kill"; else check "vault 0 bank 4 receipts 0" "$after" "after the kill"; fi
@@ -45,7 +51,7 @@ done
 
 echo "two retries of the same deposit at once"
 work reset > /dev/null
-op=$(cat /proc/sys/kernel/random/uuid)
+op=$(new_uuid)
 work deposit "$op" > /tmp/hnmo-crash-a.txt 2>&1 & a=$!
 work deposit "$op" > /tmp/hnmo-crash-b.txt 2>&1 & b=$!
 wait $a $b
@@ -54,7 +60,7 @@ check "vault 0 bank 4 receipts 1" "$(work state "$op")" "after both"
 
 echo "the database connection is cut right before the commit"
 work reset > /dev/null
-op=$(cat /proc/sys/kernel/random/uuid)
+op=$(new_uuid)
 flag=$(mktemp -u); go=$(mktemp -u)
 HNMO_TEST_ASSET_BARRIER=before-commit HNMO_TEST_ASSET_BARRIER_FILE="$flag" HNMO_TEST_ASSET_BARRIER_GO="$go" work deposit "$op" > /tmp/hnmo-crash-c.txt 2>&1 & c=$!
 for _ in $(seq 1 600); do [ -f "$flag" ] && break; sleep 0.1; done
@@ -73,7 +79,7 @@ coin_work coin-setup | tail -1
 for stage in before-prepare after-prepare before-local-commit after-local-commit before-canonical-commit after-canonical-commit; do
   echo "coin-spend killed at $stage"
   coin_work coin-reset > /dev/null
-  op=$(cat /proc/sys/kernel/random/uuid)
+  op=$(new_uuid)
   flag=$(mktemp -u)
   ( export HNMO_SEASON=s9 HNMO_REALM_ID=s9 HNMO_TEST_ASSET_BARRIER="$stage" HNMO_TEST_ASSET_BARRIER_FILE="$flag"; exec dotnet "$DLL" coin-spend "$op" 40 s9 > /dev/null 2>&1 ) &
   pid=$!
@@ -93,7 +99,7 @@ done
 
 echo "insufficient shared balance refused in full"
 coin_work coin-reset > /dev/null
-op_ins=$(cat /proc/sys/kernel/random/uuid)
+op_ins=$(new_uuid)
 out_ins=$(coin_work coin-spend "$op_ins" 150 s9)
 check "outcome=Refused afterC=0" "$out_ins" "refused in full"
 check "canon=100 local=100 items=0 receipts=0 prepared=0" "$(coin_work coin-state "$op_ins")" "state untouched on refusal"

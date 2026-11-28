@@ -16,6 +16,13 @@ using Npgsql;
 
 const string Login = "crashtest";
 HNMO.PlugIns.JsonConverterRegistry.RegisterConverter(new HNMO.Persistence.EntityFramework.Json.BinaryAsHexJsonConverter());
+// Every command reads the connection settings, some (coin-recover) before any context exists: set them up first, as
+// the server's start does. Without it coin-recover stopped at "Call Initialize before." and never recovered anything.
+if (!ConnectionConfigurator.IsInitialized)
+{
+    ConnectionConfigurator.Initialize(new ConfigFileDatabaseConnectionStringProvider());
+}
+
 var provider = new PersistenceContextProvider(new NullLoggerFactory(), null);
 var command = args.Length > 0 ? args[0] : "state";
 
