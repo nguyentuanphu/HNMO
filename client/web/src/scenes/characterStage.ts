@@ -115,6 +115,9 @@ export class CharacterStage {
   private readonly rings: THREE.Mesh[] = [];
   private readonly listeners: [string, EventListener][] = [];
   private selected: number | null = null;
+  /** The class of a character being created, standing on the first free place. */
+  private preview: StageEntry | null = null;
+  private previewRequest = 0;
   private hovered: number | null = null;
   private time = 0;
   private savedCamera: { fov: number; near: number; far: number } | null = null;
@@ -165,38 +168,69 @@ export class CharacterStage {
       if (!wanted.has(`${entry.slot}:${entry.name}`)) this.removeEntry(entry);
     }
     await Promise.all(list.filter((c) => !this.entries.some((e) => e.slot === c.slot && e.name === c.name)).map(async (c) => {
-      const place = STAGE_SLOTS[c.slot];
-      if (!place) return;
-      const character = await createPlayerCharacter({ id: 0x7f00 + c.slot, name: c.name, bodySet: c.classIndex + 1, equipment: c.equipment });
-      if (this.disposed) return;
-      character.position.set(place.x, place.y);
-      character.cell = { x: Math.floor(place.x / 100), y: Math.floor(place.y / 100) };
-      character.angle = (place.angle * Math.PI) / 180;
-      character.fixedAngle = character.angle;
-      character.fixedHeight = STAGE_HEIGHT;
-      // CreateHero: 1.2, a Rage Fighter 1.35.
-      character.group.scale.setScalar(c.classIndex === 6 ? 1.35 : 1.2);
-      character.bodyTint = new THREE.Color().setScalar(stageLight(false));
-      character.group.name = `character-stage-${c.slot}`;
-      let label: HTMLDivElement | null = null;
-      if (this.options.labelParent) {
-        // Name, level and class over the character (owner 2026-11-28: on each character, not in a box).
-        label = document.createElement('div');
-        label.className = 'stage-label';
-        label.dataset.slot = String(c.slot);
-        const nameLine = document.createElement('b');
-        nameLine.textContent = c.name;
-        const infoLine = document.createElement('small');
-        infoLine.textContent = [c.level !== undefined ? `Lv ${c.level}` : '', c.className ?? ''].filter(Boolean).join(' · ');
-        label.append(nameLine, infoLine);
-        label.style.visibility = 'hidden';
-        this.options.labelParent.append(label);
-      }
-      this.entries.push({ slot: c.slot, name: c.name, character, label });
-      this.options.root.add(character.group);
+      const entry = await this.standOn(c.slot, c.name, c.classIndex, c.equipment, [c.level !== undefined ? `Lv ${c.level}` : '', c.className ?? ''].filter(Boolean).join(' · '));
+      if (!entry) return;
+      entry.label?.setAttribute('data-slot', String(c.slot));
+      this.entries.push(entry);
     }));
     if (this.selected !== null && !this.entries.some((e) => e.slot === this.selected)) this.select(null);
     else this.refreshLights();
+  }
+
+  /**
+   * The class a new character will have, standing on the first free place in full light (the desktop's CharMakeWin
+   * shows the class's model; here it stands where the character will stand). Null takes it away.
+   */
+  async showPreview(classIndex: number | null, className = ''): Promise<void> {
+    const request = ++this.previewRequest;
+    if (this.preview) { this.removeEntry(this.preview); this.preview = null; }
+    if (classIndex === null) return;
+    const slot = STAGE_SLOTS.findIndex((_, index) => !this.entries.some((e) => e.slot === index));
+    if (slot < 0) return;
+    const entry = await this.standOn(slot, 'new', classIndex, undefined, className);
+    if (!entry) return;
+    if (request !== this.previewRequest) { this.removeEntry(entry); return; }
+    entry.character.bodyTint?.setScalar(1);
+    entry.label?.classList.add('preview');
+    entry.label?.setAttribute('data-preview', '1');
+    const nameLine = entry.label?.querySelector('b');
+    if (nameLine) nameLine.textContent = '✦';
+    this.preview = entry;
+  }
+
+  /** The class shown for a new character, or null. */
+  get previewClass(): number | null { return this.preview?.character.classIndex ?? null; }
+
+  /** A character on a place of the scene, with its label (not yet in the list). */
+  private async standOn(slot: number, name: string, classIndex: number, equipment: EquipmentAppearance | undefined, info: string): Promise<StageEntry | null> {
+    const place = STAGE_SLOTS[slot];
+    if (!place) return null;
+    const character = await createPlayerCharacter({ id: 0x7f00 + slot, name, bodySet: classIndex + 1, equipment });
+    if (this.disposed) return null;
+    character.position.set(place.x, place.y);
+    character.cell = { x: Math.floor(place.x / 100), y: Math.floor(place.y / 100) };
+    character.angle = (place.angle * Math.PI) / 180;
+    character.fixedAngle = character.angle;
+    character.fixedHeight = STAGE_HEIGHT;
+    // CreateHero: 1.2, a Rage Fighter 1.35.
+    character.group.scale.setScalar(classIndex === 6 ? 1.35 : 1.2);
+    character.bodyTint = new THREE.Color().setScalar(stageLight(false));
+    character.group.name = `character-stage-${slot}`;
+    let label: HTMLDivElement | null = null;
+    if (this.options.labelParent) {
+      // Name, level and class over the character (owner 2026-11-28: on each character, not in a box).
+      label = document.createElement('div');
+      label.className = 'stage-label';
+      const nameLine = document.createElement('b');
+      nameLine.textContent = name;
+      const infoLine = document.createElement('small');
+      infoLine.textContent = info;
+      label.append(nameLine, infoLine);
+      label.style.visibility = 'hidden';
+      this.options.labelParent.append(label);
+    }
+    this.options.root.add(character.group);
+    return { slot, name, character, label };
   }
 
   /** Picks a character by slot (null: none), with the click sound when asked. */
@@ -247,6 +281,7 @@ export class CharacterStage {
     this.placeCamera();
     const world = { heights: this.data.heights, flags: this.data.flags, light: this.data.light, mapNumber: STAGE_MAP };
     for (const entry of this.entries) entry.character.update(dt, world);
+    this.preview?.character.update(dt, world);
     this.placeLabels();
     const picked = this.entries.find((e) => e.slot === this.selected);
     const lumi = ringBrightness(this.time);
@@ -267,6 +302,7 @@ export class CharacterStage {
     for (const [type, listener] of this.listeners) this.options.canvas.removeEventListener(type, listener);
     this.listeners.length = 0;
     for (const entry of [...this.entries]) this.removeEntry(entry);
+    if (this.preview) { this.removeEntry(this.preview); this.preview = null; }
     for (const ring of this.rings) {
       this.options.root.remove(ring);
       ring.geometry.dispose();
@@ -314,7 +350,7 @@ export class CharacterStage {
     const canvasRect = this.options.canvas.getBoundingClientRect();
     const parentRect = this.options.labelParent?.getBoundingClientRect();
     if (!parentRect) return;
-    for (const entry of this.entries) {
+    for (const entry of this.preview ? [...this.entries, this.preview] : this.entries) {
       if (!entry.label) continue;
       entry.character.group.updateWorldMatrix(true, false);
       // A little over the head of the scaled body.
@@ -331,7 +367,8 @@ export class CharacterStage {
   private removeEntry(entry: StageEntry): void {
     entry.label?.remove();
     this.options.root.remove(entry.character.group);
-    this.entries.splice(this.entries.indexOf(entry), 1);
+    const index = this.entries.indexOf(entry);
+    if (index >= 0) this.entries.splice(index, 1);
   }
 
   private listen(): void {

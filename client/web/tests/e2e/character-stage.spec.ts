@@ -99,6 +99,33 @@ test('a picked character is deleted after a yes and the account\'s code; a wrong
   await expect.poll(() => page.evaluate((s) => (window as unknown as Win).__game.characterStage?.slots.includes(s) ?? true, slot), { timeout: 30_000 }).toBe(false);
 });
 
+test('Create shows the chosen class in 3D where the new character will stand; locked classes are greyed out', async ({ page }) => {
+  test.setTimeout(4 * 60_000);
+  await toCharacters(page, 'test7');
+  await expect(page.locator('body.character-stage')).toHaveCount(1, { timeout: 120_000 });
+  const create = page.locator('#btn_create');
+  test.skip(await page.locator('#characters .choice[data-create]').count() === 0, 'test7 has five characters already');
+  await expect(create).toBeVisible({ timeout: 30_000 });
+  await create.click();
+  await expect(page.locator('#newClass')).toBeVisible();
+  const preview = page.locator('.stage-label[data-preview]');
+  await expect(preview).toBeVisible({ timeout: 60_000 });
+  const firstClass = await page.locator('#newClass option:checked').textContent();
+  await expect(preview).toContainText(firstClass!.trim());
+  // Another class: the preview follows.
+  await page.selectOption('#newClass', '2');
+  await expect(preview).toContainText('Fairy Elf', { timeout: 60_000 });
+  await page.waitForTimeout(1500);
+  await page.screenshot({ path: 'test-results/character-stage-create.png' });
+  // Locked classes (by the account's unlock flags) can't be picked.
+  const disabled = await page.locator('#newClass option[disabled]').allTextContents();
+  for (const text of disabled) expect(text).toMatch(/locked|chưa mở/);
+  // Back: the preview goes.
+  await page.click('#cancelIt');
+  await expect(preview).toHaveCount(0, { timeout: 30_000 });
+  await expect(page.locator('#btn_create')).toBeVisible();
+});
+
 test('the list buttons still enter at once, as every other spec does', async ({ page }) => {
   test.setTimeout(4 * 60_000);
   await toCharacters(page, 'test4');

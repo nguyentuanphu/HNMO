@@ -128,7 +128,7 @@ import { GroundItems } from './game/groundItems.js';
 import { ARROW_RELEASE_DELAY_SECONDS, DeathEffects, ProjectileLayer, arrowKindsForMonster, arrowKindsForWeapons, loadCombatEffectsData } from './game/combatEffects.js';
 import { parseSeason, seasonBadge, setSeason, type SeasonKey } from './dataRoot.js';
 import { chooseServerBySeason } from './ui/seasonColumns.js';
-import { type ServerListEntry, fetchServerList, fetchGameServerAddress, login, loginWithTicket, fetchCharacters, enterWorld, createCharacter, deleteCharacter, CLASSES } from './net/session.js';
+import { type ServerListEntry, fetchServerList, fetchGameServerAddress, login, loginWithTicket, fetchCharacters, enterWorld, createCharacter, deleteCharacter, creatableClasses, lastUnlockFlags, CLASSES } from './net/session.js';
 import type { WorldData } from './world.js';
 import type { TerrainMesh } from './terrain.js';
 import type { Character } from './game/characters.js';
@@ -1196,7 +1196,7 @@ async function chooseCharacter(connection: Connection): Promise<CharacterListEnt
     stageRefresh = null;
     characterStage = null;
     state.characterStage = null;
-    document.body.classList.remove('character-stage', 'stage-dialog');
+    document.body.classList.remove('character-stage', 'stage-dialog', 'stage-create');
   }
 }
 
@@ -1346,13 +1346,16 @@ function askDeleteCharacter(name: string): Promise<string | null> {
 }
 
 function askNewCharacter(): Promise<{ name: string; classIndex: number } | null> {
-  document.body.classList.add('stage-dialog');
+  document.body.classList.add('stage-dialog', 'stage-create');
   ui.characters.replaceChildren();
+  // The classes this account may create (the character list's unlock flags, as the desktop's CharMakeWin).
+  const creatable = creatableClasses(lastUnlockFlags);
+  const locked = currentLanguage() === 'vi' ? 'chưa mở' : 'locked';
   const form = document.createElement('div');
   form.className = 'choices';
   form.innerHTML = `
     <label class="row"><span>Character name</span><input id="newName" maxlength="10" required autocomplete="off"><button type="button" id="randomName" title="Random name" style="min-width:40px">🎲</button></label>
-    <label class="row"><span>Class</span><select id="newClass">${CLASSES.map((name, index) => `<option value="${index}">${name}</option>`).join('')}</select></label>
+    <label class="row"><span>Class</span><select id="newClass">${CLASSES.map((name, index) => `<option value="${index}"${creatable[index] ? '' : ' disabled'}>${name}${creatable[index] ? '' : ` (${locked})`}</option>`).join('')}</select></label>
     <div id="newClassSkills" class="row" style="font-size:12px;opacity:.85;flex-wrap:wrap;gap:4px"></div>
     <div class="buttons"><button type="button" class="primary" id="createIt">Create</button><button type="button" id="cancelIt">Back</button></div>`;
   ui.characters.append(form);
@@ -1360,18 +1363,30 @@ function askNewCharacter(): Promise<{ name: string; classIndex: number } | null>
   const nameInput = form.querySelector<HTMLInputElement>('#newName')!;
   const classSelect = form.querySelector<HTMLSelectElement>('#newClass')!;
   const skillsRow = form.querySelector<HTMLDivElement>('#newClassSkills')!;
-  const showSkills = () => { skillsRow.textContent = `✦ ${(CLASS_SIGNATURE_SKILLS[Number(classSelect.value)] ?? []).join(' · ')}`; };
-  classSelect.addEventListener('change', showSkills);
-  showSkills();
+  classSelect.value = String(Math.max(0, creatable.indexOf(true)));
+  // The class shows in 3D where the new character will stand (the stage's preview), and its signature skills.
+  const showClass = () => {
+    const index = Number(classSelect.value);
+    skillsRow.textContent = `✦ ${(CLASS_SIGNATURE_SKILLS[index] ?? []).join(' · ')}`;
+    void characterStage?.showPreview(index, CLASSES[index]);
+  };
+  classSelect.addEventListener('change', showClass);
+  showClass();
   form.querySelector('#randomName')!.addEventListener('click', () => { nameInput.value = randomCharacterName(); });
   nameInput.focus();
+  const done = (value: { name: string; classIndex: number } | null, resolve: (v: { name: string; classIndex: number } | null) => void) => {
+    void characterStage?.showPreview(null);
+    document.body.classList.remove('stage-create');
+    resolve(value);
+  };
   return new Promise((resolve) => {
-    form.querySelector('#cancelIt')!.addEventListener('click', () => resolve(null), { once: true });
+    form.querySelector('#cancelIt')!.addEventListener('click', () => done(null, resolve), { once: true });
     form.querySelector('#createIt')!.addEventListener('click', () => {
       const name = nameInput.value.trim();
       if (name.length < 4 || name.length > 10) { showError(new Error('A character name has 4 to 10 letters or digits.')); return; }
+      if (!creatable[Number(classSelect.value)]) return;
       ui.loginError.hidden = true;
-      resolve({ name, classIndex: Number(classSelect.value) });
+      done({ name, classIndex: Number(classSelect.value) }, resolve);
     });
   });
 }

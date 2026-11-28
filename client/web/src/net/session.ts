@@ -44,6 +44,8 @@ interface ConnectionInfo extends PacketValues { IpAddress: string; Port: number 
 interface GameServerEntered extends PacketValues { PlayerId: number }
 interface LoginResponse extends PacketValues { Success: number }
 interface CharacterList extends PacketValues {
+  /** CharacterCreationUnlockFlags (read as its number, or a name when the reader names enums). */
+  UnlockFlags?: number | string;
   Characters: { SlotIndex: number; Name: string; Level: number; Appearance: Uint8Array }[];
 }
 
@@ -224,8 +226,21 @@ export function classOfAppearance(appearance: ArrayLike<number> | undefined): nu
   return Math.min(baseClass, CLASSES.length - 1);
 }
 
+/**
+ * The classes the account may create, from the character list's UnlockFlags (CharacterCreationUnlockFlags: Summoner 1,
+ * Dark Lord 2, Magic Gladiator 4, Rage Fighter 8), as the desktop's CharMakeWin reads its card bits: Dark Wizard,
+ * Dark Knight, Fairy Elf and Rage Fighter always, Magic Gladiator, Dark Lord and Summoner only with their flag.
+ */
+export function creatableClasses(unlockFlags: number): boolean[] {
+  return [true, true, true, (unlockFlags & 4) !== 0, (unlockFlags & 2) !== 0, (unlockFlags & 1) !== 0, true];
+}
+
+/** The account's class unlock flags of the last character list (CharacterListExtended.UnlockFlags). */
+export let lastUnlockFlags = 0;
+
 export async function fetchCharacters(connection: Connection): Promise<CharacterListEntry[]> {
   const list = await connection.request<CharacterList>('ClientToServer', 'RequestCharacterList', { Language: 0 }, 'ServerToClient', 'CharacterListExtended');
+  lastUnlockFlags = typeof list.UnlockFlags === 'number' ? list.UnlockFlags : 0;
   return list.Characters.map((character) => ({
     slot: character.SlotIndex,
     name: character.Name,
