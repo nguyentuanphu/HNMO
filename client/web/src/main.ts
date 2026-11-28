@@ -143,6 +143,7 @@ import { clearResumePlan, loadResumePlan, Reconnector, type ResumePlan } from '.
 import { ReconnectDialog, type ReconnectStep } from './ui/reconnectDialog.js';
 import { LoadingProgress, loadingWord } from './ui/loadingProgress.js';
 import { LoadMeter, trackLoad } from './loadProgress.js';
+import { devLoginOn } from './devLogin.js';
 import { requestLoginTicket, signInWebsite } from './websiteSession.js';
 import { HNMO_BUILD_STAMP, HNMO_PROJECT_ID } from './build.js';
 
@@ -3609,19 +3610,6 @@ function renderSavedAccounts(): void {
     row.append(chip);
   }
   container.append(head, row);
-}
-
-/**
- * Players log in on the website (owner 2026-11-28): the game's own login form is for developers and the tests only,
- * shown with ?devlogin=1 in the address (kept for the tab) or localStorage 'hnmo.devLogin' = '1'.
- */
-function devLoginOn(): boolean {
-  try {
-    if (new URLSearchParams(location.search).get('devlogin') === '1') sessionStorage.setItem('hnmo.devLogin', '1');
-    return sessionStorage.getItem('hnmo.devLogin') === '1' || localStorage.getItem('hnmo.devLogin') === '1';
-  } catch {
-    return new URLSearchParams(location.search).get('devlogin') === '1';
-  }
 }
 
 function initLogin() {

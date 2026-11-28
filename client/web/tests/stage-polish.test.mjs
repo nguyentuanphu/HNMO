@@ -1,6 +1,7 @@
 // Unit tests of the stage polish (C step 3): the loading meter (src/loadProgress.ts), the reconnect tries
 // (src/net/reconnect.ts), the scene windows' rem on a narrow screen (src/ui/rml.ts sceneRemPx) and the stage's field of
-// view on a phone held upright (src/scenes/characterStage.ts stageVerticalFov).
+// view on a phone held upright (src/scenes/characterStage.ts stageVerticalFov), the developers' login switch on test
+// hosts only (src/devLogin.ts).
 // Run: node --test client/web/tests/*.test.mjs (after npm run build).
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -15,6 +16,28 @@ const progress = await load('loadProgress.js');
 const reconnect = await load('net/reconnect.js');
 const rml = await load('ui/rml.js');
 const stage = await load('scenes/characterStage.js');
+const devLogin = await load('devLogin.js');
+
+test('the developers\' login form shows only on test hosts, never on the real site', { skip: !devLogin && 'devLogin.js not loadable' }, () => {
+  const { isTestHost, devLoginOn } = devLogin;
+  for (const host of ['localhost', '127.0.0.1', '[::1]', '::1', 'game.localhost', 'hnmo.test', 'LOCALHOST']) assert.equal(isTestHost(host), true, host);
+  for (const host of ['play.example.com', 'devlogin.example.com', 'localhost.example.com', 'test.example.com', 'example.test.com', '127.0.0.2', '']) {
+    assert.equal(isTestHost(host), false, host);
+  }
+  // On the real site the switch is ignored, and nothing is remembered for the tab.
+  const kept = new Map();
+  globalThis.sessionStorage = { getItem: (k) => kept.get(k) ?? null, setItem: (k, v) => kept.set(k, v) };
+  globalThis.localStorage = { getItem: () => '1' };
+  try {
+    assert.equal(devLoginOn({ hostname: 'play.example.com', search: '?devlogin=1' }), false);
+    assert.equal(kept.size, 0, 'not remembered on the real site');
+    assert.equal(devLoginOn({ hostname: '127.0.0.1', search: '?devlogin=1' }), true);
+    assert.equal(kept.get('hnmo.devLogin'), '1');
+  } finally {
+    delete globalThis.sessionStorage;
+    delete globalThis.localStorage;
+  }
+});
 
 test('the meter goes by stage shares, follows the files of a stage and never goes back', { skip: !progress && 'loadProgress.js not loadable' }, async () => {
   const { LoadMeter, trackLoad } = progress;

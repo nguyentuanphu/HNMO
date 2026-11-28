@@ -128,7 +128,7 @@
       :root body.stage-world.stage-dialog #login .panel input, :root body.stage-world.stage-dialog #login .panel select { min-width: 0; max-width: 100%; box-sizing: border-box; }
     }
     /* Players log in on the website (owner 2026-11-28): the game's own login form (account, password, server, Connect,
-       saved accounts) is for developers and tests only, behind ?devlogin=1 (main.ts devLoginOn). With a ticket nothing of
+       saved accounts) is for developers and tests only, behind ?devlogin=1 on test hosts only (devLogin.ts). With a ticket nothing of
        the form shows; while World 74 comes (body.stage-pending) neither does the plain list, only the background and the
        loading bar. */
     body:not(.dev-login) [data-dev-login] { display: none !important; }
