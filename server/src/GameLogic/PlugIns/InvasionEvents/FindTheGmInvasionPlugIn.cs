@@ -77,7 +77,7 @@ public sealed class FindTheGmInvasionPlugIn : BaseInvasionPlugIn<FindTheGmConfig
 
         if (config.RewardCoins > 0)
         {
-            await MissionCoinGranter.GrantAsync(
+            await MissionCoinGranter.GrantRewardAsync(
                 player.GameContext,
                 new CoinGrant(accountKey, config.RewardCoinType, config.RewardCoins, "Find the GM", $"findgm:{run.RunId}:{rank}:{accountKey}"),
                 "HNMO Find the GM").ConfigureAwait(false);

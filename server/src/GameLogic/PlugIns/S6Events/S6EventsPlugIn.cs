@@ -1009,7 +1009,7 @@ public sealed class S6EventsPlugIn :
     {
         if (coins > 0 && !string.IsNullOrWhiteSpace(loginName))
         {
-            await MissionCoinGranter.GrantAsync(
+            await MissionCoinGranter.GrantRewardAsync(
                 gameContext,
                 new CoinGrant(loginName, coinType, coins, reasonEn, reference),
                 GrantedBy).ConfigureAwait(false);

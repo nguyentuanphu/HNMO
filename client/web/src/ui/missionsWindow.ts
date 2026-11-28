@@ -10,6 +10,7 @@ import { currentLanguage, onLanguageChange, translate } from '../i18n.js';
 import { read, type PacketValues } from '../net/packets.js';
 import { openDocument, type RmlDocument, type RmlModel } from './rml.js';
 import { typographyScale } from './nativeText.js';
+import { coinRewardsShown } from './coinRewards.js';
 
 type CoinType = 'WCoinC' | 'WCoinP' | 'GoblinPoints';
 interface RewardItem { group: number; number: number; level: number; count: number }
@@ -79,7 +80,7 @@ function number(value: number): string {
 export function rewardText(reward: Reward, itemName: (group: number, number: number) => string): string {
   const parts: string[] = [];
   if (reward.zen > 0) parts.push(tr('%s zen', number(reward.zen)));
-  if (reward.coins > 0) parts.push(`${number(reward.coins)} ${coinName(reward.coinType)}`);
+  if (reward.coins > 0 && coinRewardsShown()) parts.push(`${number(reward.coins)} ${coinName(reward.coinType)}`);
   for (const item of reward.items) parts.push(`${itemName(item.group, item.number)}${item.level > 0 ? ` +${item.level}` : ''} x${item.count}`);
   return parts.length > 0 ? `${tr('Reward')}: ${parts.join(' · ')}` : '';
 }
@@ -287,13 +288,14 @@ export class MissionsWindow {
     }));
     const o = board.online;
     m.online_on = o.enabled;
-    m.online_text = tr('Online time: %d / %d %s today (%d per hour%s).', o.coinsToday, o.cap, coinName(o.coinType), o.coinsPerHour, o.autoPlayHalf ? tr(', auto play counts half') : '');
+    // Coins for online time and invites: none on a season without a cash shop (classic play).
+    m.online_text = coinRewardsShown() ? tr('Online time: %d / %d %s today (%d per hour%s).', o.coinsToday, o.cap, coinName(o.coinType), o.coinsPerHour, o.autoPlayHalf ? tr(', auto play counts half') : '') : '';
     m.earned_text = tr('All earned coins today: %d / %d.', board.earned.today, board.earned.cap) + (board.earned.owed > 0 ? ` ${tr('%d more come on the next days.', board.earned.owed)}` : '');
     m.milestones_on = board.milestones.enabled;
     m.milestones_text = tr('Levels %s and each reset (%d) pay once per character.', board.milestones.levels.map((l) => `${l.level} (${l.coins})`).join(', '), board.milestones.coinsPerReset);
     const i = board.invite;
     m.invite_on = i.enabled;
-    m.invite_text = tr('When a friend you invited reaches level %d, you get %d %s (and the friend %d).', i.requiredLevel, i.inviterCoins, coinName(i.coinType), i.invitedCoins);
+    m.invite_text = coinRewardsShown() ? tr('When a friend you invited reaches level %d, you get %d %s (and the friend %d).', i.requiredLevel, i.inviterCoins, coinName(i.coinType), i.invitedCoins) : '';
     m.invite_code = `${tr('Your code')}: ${i.code ?? '-'}${i.invitedBy ? ` · ${tr('Invited by')}: ${i.invitedBy}` : ''}`;
     m.can_invite = !i.invitedBy;
     this.doc?.update();

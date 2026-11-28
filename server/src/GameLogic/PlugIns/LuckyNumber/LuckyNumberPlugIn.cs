@@ -85,7 +85,7 @@ public sealed class LuckyNumberPlugIn :
             foreach (var winner in outcome.Winners.Where(w => w.Coins > 0 && !w.CoinsGranted))
             {
                 var reference = $"lucky:{outcome.DateKey}:{winner.Number}:{winner.LoginName}";
-                var granted = await MissionCoinGranter.GrantAsync(
+                var granted = await MissionCoinGranter.GrantRewardAsync(
                     gameContext,
                     new CoinGrant(winner.LoginName, winner.CoinType, winner.Coins, $"Daily lucky number {outcome.DateKey} ({winner.Tier})", reference),
                     "HNMO Lucky Number").ConfigureAwait(false);

@@ -51,6 +51,14 @@ test('a season whose cash shop is off keeps the SHOP button, but it and X open n
     await expect(page.locator('.rml-in_game_shop')).toHaveCount(0);
     await expect(page.locator('.message-dialog')).toHaveCount(0);
     await page.screenshot({ path: 'test-results/cash-shop-off-game.png' });
+    // No free coins either: the missions window (J) promises none.
+    await page.keyboard.press('j');
+    const missionsText = () => page.evaluate(() => document.querySelector('.rml-hnmo_missions')?.shadowRoot?.textContent ?? '');
+    await expect.poll(async () => (await missionsText()).length, { timeout: 60_000 }).toBeGreaterThan(40);
+    await page.waitForTimeout(2_000);
+    expect(await missionsText()).not.toMatch(/Goblin Point|W Coin/);
+    await page.screenshot({ path: 'test-results/cash-shop-off-missions.png' });
+    await page.keyboard.press('j');
   } finally {
     await setSwitch(browser, true);
   }

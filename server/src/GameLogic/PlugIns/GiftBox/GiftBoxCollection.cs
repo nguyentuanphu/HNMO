@@ -20,7 +20,8 @@ using HNMO.Persistence;
 /// <param name="dispatch">The existing immutable mailbox.</param>
 /// <param name="configuration">The authoritative inventory limits and item definitions.</param>
 /// <param name="logger">The operational logger; no credentials or private mail bodies are logged.</param>
-public sealed class GiftBoxCollection(GiftBoxDispatch dispatch, GameConfiguration configuration, ILogger logger)
+/// <param name="coinRewardsAllowed">Whether letters may give coins: not on a season whose cash shop is off (owner 2026-11-28).</param>
+public sealed class GiftBoxCollection(GiftBoxDispatch dispatch, GameConfiguration configuration, ILogger logger, bool coinRewardsAllowed = true)
 {
     /// <summary>The receipt owner, distinct from arbitrary host coin grants.</summary>
     public const string GrantedBy = "Gift box";
@@ -203,7 +204,10 @@ public sealed class GiftBoxCollection(GiftBoxDispatch dispatch, GameConfiguratio
             }
 
             inventory.Money += reward.Zen;
-            account.SetCashShopCoins(reward.CoinType, coins + reward.Coins);
+            if (coinRewardsAllowed)
+            {
+                account.SetCashShopCoins(reward.CoinType, coins + reward.Coins);
+            }
             tracked.Add(letterId, created);
             if (!await this.TrySaveAsync(save, created.Reference).ConfigureAwait(false))
             {

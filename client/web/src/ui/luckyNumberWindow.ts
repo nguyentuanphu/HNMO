@@ -4,6 +4,15 @@
 import { currentLanguage } from '../i18n.js';
 import { read, type PacketValues } from '../net/packets.js';
 import { HnmoModalPanel } from './hnmoPanel.js';
+import { coinRewardsShown } from './coinRewards.js';
+
+/** A prize's coins and jewels; no coins on a season without a cash shop (classic play). */
+function prizeText(prize: { coins: number; coinType: string; jewelCount: number; jewelName: string }): string {
+  const parts: string[] = [];
+  if (prize.coins > 0 && coinRewardsShown()) parts.push(`${prize.coins} ${prize.coinType}`);
+  if (prize.jewelCount > 0) parts.push(`${prize.jewelCount}x ${prize.jewelName}`);
+  return parts.join(' + ') || '-';
+}
 
 export interface LuckyNumberStatePayload {
   v: number;
@@ -156,10 +165,10 @@ export class LuckyNumberWindow {
     summary.append(
       this.countdownEl,
       el('div', L(`Range: ${s.minNumber}–${s.maxNumber} · Odds: ${s.odds.exactPercent}% exact`, `Khoảng số: ${s.minNumber}–${s.maxNumber} · Tỷ lệ trúng đúng: ${s.odds.exactPercent}%`) + (s.prizes.lastDigit.enabled ? L(` · ${s.odds.lastDigitPercent}% last digit`, ` · ${s.odds.lastDigitPercent}% số cuối`) : ''), 'hnmo-muted'),
-      el('div', L(`Exact prize: ${s.prizes.exact.coins} ${s.prizes.exact.coinType}` + (s.prizes.exact.jewelCount > 0 ? ` + ${s.prizes.exact.jewelCount}x ${s.prizes.exact.jewelName}` : ''), `Giải chính: ${s.prizes.exact.coins} ${s.prizes.exact.coinType}` + (s.prizes.exact.jewelCount > 0 ? ` + ${s.prizes.exact.jewelCount}x ${s.prizes.exact.jewelName}` : ''))),
+      el('div', L(`Exact prize: ${prizeText(s.prizes.exact)}`, `Giải chính: ${prizeText(s.prizes.exact)}`)),
     );
     if (s.prizes.lastDigit.enabled) {
-      summary.append(el('div', L(`Last-digit prize: ${s.prizes.lastDigit.coins} ${s.prizes.lastDigit.coinType}` + (s.prizes.lastDigit.jewelCount > 0 ? ` + ${s.prizes.lastDigit.jewelCount}x ${s.prizes.lastDigit.jewelName}` : ''), `Giải số cuối: ${s.prizes.lastDigit.coins} ${s.prizes.lastDigit.coinType}` + (s.prizes.lastDigit.jewelCount > 0 ? ` + ${s.prizes.lastDigit.jewelCount}x ${s.prizes.lastDigit.jewelName}` : '')), 'hnmo-muted'));
+      summary.append(el('div', L(`Last-digit prize: ${prizeText(s.prizes.lastDigit)}`, `Giải số cuối: ${prizeText(s.prizes.lastDigit)}`), 'hnmo-muted'));
     }
     body.append(summary);
 

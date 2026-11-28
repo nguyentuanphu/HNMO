@@ -17,7 +17,8 @@ using HNMO.Persistence;
 /// <param name="wallet">The paid entitlement reader.</param>
 /// <param name="store">The shared vip section, used only as a day-claim projection.</param>
 /// <param name="logger">The operational logger.</param>
-public sealed class VipDailyCoins(IPersistenceContextProvider persistence, GameConfiguration gameConfiguration, VipWallet wallet, VipStateStore store, ILogger logger)
+/// <param name="coinRewardsAllowed">Whether this season gives free coins: not when its cash shop is off (owner 2026-11-28, classic play).</param>
+public sealed class VipDailyCoins(IPersistenceContextProvider persistence, GameConfiguration gameConfiguration, VipWallet wallet, VipStateStore store, ILogger logger, bool coinRewardsAllowed = true)
 {
     private const string ReceiptKind = "vip-daily-v1";
     private static readonly TimeZoneInfo Sydney = HnmoStateStore.ResolveTimeZone(null);
@@ -58,7 +59,7 @@ public sealed class VipDailyCoins(IPersistenceContextProvider persistence, GameC
     /// <returns>The durable reward outcome; Pending never means a credit has been confirmed.</returns>
     public async ValueTask<VipDailyResult> ClaimAsync(IPlayerContext ownedContext, Account account, DateTime nowUtc, CancellationToken cancellationToken = default)
     {
-        if (account.GetId() == Guid.Empty || nowUtc.Kind != DateTimeKind.Utc)
+        if (!coinRewardsAllowed || account.GetId() == Guid.Empty || nowUtc.Kind != DateTimeKind.Utc)
         {
             return new("DailyUnavailable");
         }
