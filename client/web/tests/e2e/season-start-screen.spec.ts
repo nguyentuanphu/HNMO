@@ -8,8 +8,6 @@ const SHOTS = process.env.SHOTS_DIR;
 for (const language of ['en', 'vi'] as const) {
   test(`servers stand in a Season 6.3 and a Season 9 column (${language})`, async ({ page }) => {
     await page.addInitScript((lang) => { try { localStorage.setItem('hnmo.language', lang); } catch { /* private window */ } }, language);
-    // The season columns are the plain list: shown with the plain screens option (else World 74's server choice).
-    await page.addInitScript(() => { try { localStorage.setItem('hnmo.settings', JSON.stringify({ plainScreens: true })); } catch { /* private window */ } });
     // Even server ids play Season 6.3, odd ones Season 9.
     const ids = Array.from({ length: 20 }, (_, i) => i);
     await page.route('**/website/data', (route) => route.fulfill({
