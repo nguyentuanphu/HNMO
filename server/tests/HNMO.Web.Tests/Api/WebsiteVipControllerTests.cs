@@ -35,6 +35,7 @@ public class WebsiteVipControllerTests
     private GameConfiguration _game = null!;
     private Account _account = null!;
     private PlugInConfiguration _plugin = null!;
+    private PlugInConfiguration _cashShop = null!;
     private Mock<ILoginServer> _login = null!;
     private WebsiteVipController _controller = null!;
 
@@ -55,6 +56,11 @@ public class WebsiteVipControllerTests
         this._plugin.TypeId = typeof(VipPlugIn).GUID;
         this._plugin.IsActive = true;
         this._plugin.CustomConfiguration = JsonSerializer.Serialize(new VipConfiguration { Enabled = true });
+
+        // The season's cash shop is on (its daily coins are given only then).
+        this._cashShop = setup.CreateNew<PlugInConfiguration>();
+        this._cashShop.TypeId = typeof(HNMO.GameLogic.CashShop.CashShopFeaturePlugIn).GUID;
+        this._cashShop.IsActive = true;
         await setup.SaveChangesAsync().ConfigureAwait(false);
         using var players = this._provider.CreateNewPlayerContext(this._game);
         this._account = players.CreateNew<Account>();
@@ -194,6 +200,20 @@ public class WebsiteVipControllerTests
         Assert.That(second.GetProperty("status").GetString(), Is.EqualTo("AlreadyClaimed"));
         Assert.That(second.GetProperty("daily").GetProperty("claimed").GetBoolean(), Is.True);
         Assert.That(this._account.GoblinPoints, Is.EqualTo(10));
+        Assert.That(this._account.WCoinC, Is.EqualTo(900));
+    }
+
+    /// <summary>A season whose cash shop is off still sells VIP for coins, but gives no daily coins (owner 2026-11-28).</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task NoDailyCoinsWhileTheCashShopIsOffAsync()
+    {
+        this._cashShop.IsActive = false;
+        var purchase = Content(await this._controller.PurchaseAsync(await this.PurchaseRequestAsync().ConfigureAwait(false)).ConfigureAwait(false));
+        Assert.That(purchase.GetProperty("status").GetString(), Is.EqualTo("Applied"));
+        var daily = Content(await this._controller.DailyAsync(new("ann", "secret")).ConfigureAwait(false));
+        Assert.That(daily.GetProperty("status").GetString(), Is.EqualTo("DailyUnavailable"));
+        Assert.That(this._account.GoblinPoints, Is.EqualTo(0));
         Assert.That(this._account.WCoinC, Is.EqualTo(900));
     }
 

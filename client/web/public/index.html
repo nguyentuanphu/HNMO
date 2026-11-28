@@ -80,6 +80,8 @@
     .choices { display: grid; gap: 6px; }
     .choice { text-align: left; display: flex; justify-content: space-between; gap: 8px; }
     .choice small { color: var(--muted); }
+    /* A season without a cash shop (the host turned it off: classic play): its entries in the phone menus are gone (ui/cashShop.ts). */
+    body.hnmo-no-cash-shop .mh-menu-item[data-key="x"], body.hnmo-no-cash-shop #touchMore [data-key="x"] { display: none !important; }
     /* The 3D character stage (scenes/characterStage.ts), owner 2026-11-28: no login box (players log in on the website),
        no list box; each character's name, level and class stand over it (#stageLabels), the desktop's char_sel_main
        plates (Create, Delete, OK) do the rest, and a discreet HNMO mark sits at the top. The list's buttons stay in the

@@ -105,7 +105,9 @@ public sealed class WebsiteGiftBoxController(IPersistenceContextProvider persist
             }
 
             token.ThrowIfCancellationRequested();
-            var collection = new GiftBoxCollection(box, game, logger);
+            // A season whose cash shop is off gives no coins from letters (owner 2026-11-28, classic play).
+            var (_, cashShopOn, _) = await PlugInSettings.ReadStoredAsync<HNMO.GameLogic.CashShop.CashShopSettings>(persistence, typeof(HNMO.GameLogic.CashShop.CashShopFeaturePlugIn), token).ConfigureAwait(false);
+            var collection = new GiftBoxCollection(box, game, logger, cashShopOn);
             var now = this._clock.GetUtcNow().UtcDateTime;
             var result = await collection.CollectAsync(owned, current, selection.LetterId!.Value, selection.CharacterId!.Value, now, () => owned.SaveChangesAsync(token)).ConfigureAwait(false);
             if (this._injectedRows is null && result.Status == "Applied" && result.Receipt is { } receipt)

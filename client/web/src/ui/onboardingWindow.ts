@@ -11,6 +11,7 @@ import { currentLanguage, onLanguageChange } from '../i18n.js';
 import { onboardingTargetCell } from '../game/sparkleGoal.js';
 import { read, type PacketValues } from '../net/packets.js';
 import { openDocument, type RmlDocument, type RmlModel } from './rml.js';
+import { coinRewardsShown } from './coinRewards.js';
 import { typographyScale } from './nativeText.js';
 import { tr, rewardText } from './missionsWindow.js';
 
@@ -238,7 +239,7 @@ export class OnboardingWindow {
     const parts: string[] = [];
     if (kit.items.length > 0) parts.push(this.kitItems(kit.items));
     if (kit.zen > 0) parts.push(tr('%s zen', kit.zen.toLocaleString(vi() ? 'vi-VN' : 'en-AU')));
-    if (kit.coins > 0) parts.push(`${kit.coins} ${kit.coinType === 'GoblinPoints' ? tr('Goblin Points') : kit.coinType === 'WCoinP' ? tr('W Coin (P)') : tr('W Coin (C)')}`);
+    if (kit.coins > 0 && coinRewardsShown()) parts.push(`${kit.coins} ${kit.coinType === 'GoblinPoints' ? tr('Goblin Points') : kit.coinType === 'WCoinP' ? tr('W Coin (P)') : tr('W Coin (C)')}`);
     if (kit.points > 0) parts.push(tr('%d stat points', kit.points));
     if (kit.buffMinutes > 0) parts.push(tr('an EXP buff for %d minutes', kit.buffMinutes));
     this.options.message(tr('Welcome! Your starter kit: %s.', parts.join(' · ')));

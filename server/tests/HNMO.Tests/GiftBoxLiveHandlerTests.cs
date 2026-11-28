@@ -95,8 +95,26 @@ public class GiftBoxLiveHandlerTests
         Assert.That(activities[0].Character, Is.EqualTo("AnnLiveDk"));
     }
 
-    /// <summary>An uncertain live save disconnects the player before unlocking and never reveals goods.</summary>
+    /// <summary>A season whose cash shop is off gives a letter's zen and items, but not its coins (owner 2026-11-28, classic play).</summary>
     /// <returns>The test task.</returns>
+    [Test]
+    public async Task NoCoinsFromLettersWhileTheCashShopIsOffAsync()
+    {
+        var rows = new InMemoryHnmoPlayerStateRowBackend();
+        var (player, account, character) = await CreateLivePlayerAsync("AnnClassic", cashShopOn: false).ConfigureAwait(false);
+        var dispatch = new GiftBoxDispatch(rows);
+        var letterId = Guid.NewGuid();
+        dispatch.Send(letterId, "host", "classic check", [account.GetId()], "Event", "Su kien", "Enjoy", "Chuc vui", new GiftCodeReward { Coins = 50, CoinType = CashShopCoinType.WCoinC, Zen = 1000 }, Now);
+
+        var actions = new GiftBoxGameActions(rows, new FixedTimeProvider(Now));
+        var json = await actions.HandleAsync(player, new GiftBoxRequest("collect", 0, letterId, character.GetId(), "en")).ConfigureAwait(false);
+
+        Assert.That(json, Is.Not.Null);
+        Assert.That(account.WCoinC, Is.EqualTo(10));
+        Assert.That(character.Inventory!.Money, Is.EqualTo(1500));
+    }
+
+    /// <summary>An uncertain live save disconnects the player before unlocking and never reveals goods.</summary>    /// <returns>The test task.</returns>
     [Test]
     public async Task UncertainSaveDisconnectsPlayerBeforeReleasingLockAsync()
     {
@@ -129,7 +147,7 @@ public class GiftBoxLiveHandlerTests
         Mock.Get(player.ViewPlugIns.GetPlugIn<IItemAppearPlugIn>()!).Verify(v => v.ItemAppearAsync(It.IsAny<Item>()), Times.Never);
     }
 
-    private static async ValueTask<(LiveTestPlayer Player, Account Account, Character Character)> CreateLivePlayerAsync(string login)
+    private static async ValueTask<(LiveTestPlayer Player, Account Account, Character Character)> CreateLivePlayerAsync(string login, bool cashShopOn = true)
     {
         var provider = new InMemoryPersistenceContextProvider();
         using var setup = provider.CreateNewContext();
@@ -185,6 +203,11 @@ public class GiftBoxLiveHandlerTests
         var gameContext = new GameContext(config, provider, mapInitializer, NullLoggerFactory.Instance, new HNMO.PlugIns.PlugInManager(null, NullLoggerFactory.Instance, null, null), NullDropGenerator.Instance, new ConfigurationChangeMediator());
         mapInitializer.PlugInManager = gameContext.PlugInManager;
         mapInitializer.PathFinderPool = gameContext.PathFinderPool;
+        if (cashShopOn)
+        {
+            gameContext.FeaturePlugIns.AddPlugIn(new HNMO.GameLogic.CashShop.CashShopFeaturePlugIn(), true);
+        }
+
         var player = new LiveTestPlayer(gameContext);
         var account = (await player.PersistenceContext.GetAccountByLoginNameAsync(login).ConfigureAwait(false))!;
         var character = account.Characters.Single();

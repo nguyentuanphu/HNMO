@@ -62,7 +62,7 @@ public sealed class GiftBoxGameActions(
             GiftBoxReceipt? confirmedReceipt = null;
             if (request.Action == "collect")
             {
-                var collection = new GiftBoxCollection(dispatch, config, player.Logger);
+                var collection = new GiftBoxCollection(dispatch, config, player.Logger, HNMO.GameLogic.PlugIns.Missions.MissionCoinGranter.CoinRewardsAllowed(player.GameContext));
                 var result = await collection.CollectAsync(
                     context,
                     account,

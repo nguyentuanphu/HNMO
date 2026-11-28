@@ -70,7 +70,7 @@ const TEXT: Record<'vi' | 'en', Record<string, string>> = {
     copy: 'Sao chép',
     copied: 'Đã chép',
     keepMessage: 'Giữ nguyên nội dung chuyển khoản như trên: game dựa vào đó để biết tài khoản nào nhận coin.',
-    arrive: 'Coin sẽ tự động vào tài khoản trong 1–2 phút sau khi chuyển hoặc sau khi admin xác nhận: mở cửa hàng (X) trong game để thấy.',
+    arrive: 'Coin sẽ tự động vào tài khoản trong 1–2 phút sau khi chuyển hoặc sau khi admin xác nhận: mở cửa hàng (X) trong game để thấy. Trên season không có cửa hàng (classic), coin dùng để mua VIP (cửa sổ VIP hoặc trang tài khoản).',
     minimum: 'Tối thiểu',
     milestonesHead: 'Thưởng mốc nạp tích lũy',
     milestonesNote: 'Mỗi mốc nhận một lần khi tổng tiền nạp đạt ngưỡng (mở U trong game hoặc trang tài khoản để nhận).',

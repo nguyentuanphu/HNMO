@@ -768,7 +768,7 @@ public class GuildsPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn, IMi
             var grant = GuildEngine.LadderGrant(week.Week, line, reward, memberId, name, login, string.Equals(name, master, StringComparison.Ordinal));
             if (grant is not null)
             {
-                await MissionCoinGranter.GrantAsync(gameContext, grant, GrantedBy).ConfigureAwait(false);
+                await MissionCoinGranter.GrantRewardAsync(gameContext, grant, GrantedBy).ConfigureAwait(false);
             }
 
             if (reward.ZenPerMember > 0 || reward.Items.Any(i => i.Count > 0))

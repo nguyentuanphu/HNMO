@@ -110,7 +110,7 @@ import { GateWatcher } from './game/gates.js';
 import { Trade } from './ui/tradeWindow.js';
 import { ChaosMachine } from './ui/mixWindow.js';
 import { PersonalShop } from './ui/personalShop.js';
-import { CashShop } from './ui/cashShop.js';
+import { CashShop, NO_CASH_SHOP_CLASS } from './ui/cashShop.js';
 import { loginMusic } from './audio/index.js';
 import { audioSystem } from './audio/audioSystem.js';
 import { characterSelectedSound, interfaceClickSound } from './audio/soundEvents.js';
@@ -1969,7 +1969,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     if (except !== 'cashShop') state.cashShop?.close();
   };
   // The cash shop (X or the HUD's shop button), with HNMO's free coins.
-  state.cashShop = new CashShop({ connection, heroName: character.name, safeZone: inSafeZone, walking: () => online.hero.isWalking, closeOthers: () => closeGroupA('cashShop'), onToggle: (open) => state.hud?.setCashShopOpen(open), click: () => sounds.click() });
+  state.cashShop = new CashShop({ connection, heroName: character.name, safeZone: inSafeZone, walking: () => online.hero.isWalking, closeOthers: () => closeGroupA('cashShop'), onToggle: (open) => state.hud?.setCashShopOpen(open), onAvailable: () => state.hud?.setCashShopShown(true), click: () => sounds.click() });
   earlyPackets.forEach((bytes) => state.cashShop?.handle(bytes));
   // Jewels: a jewel dropped on an item is used on it (ConsumeItemRequest with the target slot).
   const onBagDropOnItem: typeof itemWindows.bag.onDropOnItem = (from, slot, target) => {
@@ -2738,6 +2738,12 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   });
   inventory.onChange(() => { hud.refreshItemSlots(); hud.refreshSkills(); });
   hotkeys.onChange(() => hud.refreshItemSlots());
+  // The cash shop button shows only on a season with a cash shop (the server named its script, maybe already).
+  hud.setCashShopShown(state.cashShop?.available ?? false);
+  // A season without a cash shop is known only now: the world is in and the server named no shop script (it does so
+  // on entering, before the world loads). Until then the page assumes a shop, so windows opened before entering a
+  // world (and their tests) keep their coin rewards; the script arriving later clears it (ui/cashShop.ts).
+  document.body.classList.toggle(NO_CASH_SHOP_CLASS, !(state.cashShop?.available ?? false));
   void hud.open();
   // ReceiveQuestPrize (LegacyQuestReward, C1 A3): the class change quests' rewards — level-up
   // points (200, 202) for the hero; a class change (201-203) salutes; all of them light up the player.

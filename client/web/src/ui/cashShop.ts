@@ -142,7 +142,15 @@ export interface StorageItem {
 /** A price option of a package (GameShop::BuyOption). */
 interface BuyOption { priceSeq: number; cashType: number; itemCode: number; name: string; price: string; period: string }
 
+/**
+ * On the page's body until the server names the shop's script: the buttons of the cash shop are hidden (a season whose
+ * host turned the cash shop off, owner 2026-11-28: classic play without pay to win).
+ */
+export const NO_CASH_SHOP_CLASS = 'hnmo-no-cash-shop';
+
 export interface CashShopOptions {
+  /** The server named the shop's script: this season has a cash shop (the HUD shows its button). */
+  onAvailable?: () => void;
   connection: Connection;
   /** The hero's name. */
   heroName: string;
@@ -213,6 +221,9 @@ export class CashShop {
 
   get isOpen(): boolean { return this.doc !== null; }
 
+  /** Whether this season has a cash shop (the server named its script). */
+  get available(): boolean { return this.scriptVersion !== null; }
+
   private send(name: string, values: Record<string, number | boolean | string> = {}): void {
     this.options.connection.send('ClientToServer', name, values);
   }
@@ -223,7 +234,9 @@ export class CashShop {
     // IsInGameShopOpen: not while walking, only in a safe zone, only once the server named the script.
     if (this.options.walking?.()) return;
     if (!this.options.safeZone()) { void messageInGame(IGS_TEXT.error, IGS_TEXT.safeZoneOnly); return; }
-    if (!this.scriptVersion) { void messageInGame(IGS_TEXT.error, IGS_TEXT.reconnect); return; }
+    // No script version: this season's server has no cash shop (the host turned it off, classic play), and its buttons
+    // are hidden; nothing opens.
+    if (!this.scriptVersion) return;
     try {
       const v = this.scriptVersion;
       this.script = await loadCashShopScript(scriptFolder(v.zone, v.year, v.id));
@@ -670,8 +683,11 @@ export class CashShop {
     const sub = bytes[3];
     const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
     if (sub === 0x0c && bytes.length >= 10) {
-      // CashShopScriptVersion: the shop can open (ShopOpenUnLock).
+      // CashShopScriptVersion: the shop can open (ShopOpenUnLock). The server sends it on entering the world only when
+      // this season has a cash shop: its buttons show from now on.
       this.scriptVersion = { zone: view.getUint16(4, true), year: view.getUint16(6, true), id: view.getUint16(8, true) };
+      document.body.classList.remove(NO_CASH_SHOP_CLASS);
+      this.options.onAvailable?.();
     } else if (sub === 0x15 && bytes.length >= 10) {
       this.bannerVersion = { zone: view.getUint16(4, true), year: view.getUint16(6, true), id: view.getUint16(8, true) };
     } else if (sub === 0x02) {
