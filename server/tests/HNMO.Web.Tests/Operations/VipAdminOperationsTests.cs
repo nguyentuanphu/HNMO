@@ -1,4 +1,4 @@
-// <copyright file="VipAdminOperationsTests.cs" company="HNMO">
+﻿// <copyright file="VipAdminOperationsTests.cs" company="HNMO">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -122,6 +122,47 @@ public class VipAdminOperationsTests
         Assert.That(exact.Accounts.Single().LoginName, Is.EqualTo("ann"));
         Assert.That(indexed.Configuration.Enabled, Is.False);
         Assert.That(indexed.Accounts.Single().UntilUtc, Is.EqualTo(TestClock.Now.UtcDateTime.AddDays(7)));
+    }
+
+    /// <summary>The settings which the data initialization stored (every object with an empty "$id", lists as "$values") are readable.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task SettingsStoredWithEmptyReferenceIdsAreReadableAsync()
+    {
+        using (var context = this._provider.CreateNewContext())
+        {
+            var stored = (await context.GetAsync<PlugInConfiguration>().ConfigureAwait(false)).Single(c => c.TypeId == typeof(VipPlugIn).GUID);
+            stored.CustomConfiguration = WithEmptyReferenceIds(System.Text.Json.JsonSerializer.SerializeToNode(new VipConfiguration()))!.ToJsonString();
+            await context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        var snapshot = await this._operations.ReadAsync(null, default).ConfigureAwait(false);
+        Assert.That(snapshot.Configuration.Levels, Has.Count.EqualTo(new VipConfiguration().Levels.Count));
+    }
+
+    private static JsonNode? WithEmptyReferenceIds(JsonNode? node)
+    {
+        switch (node)
+        {
+            case JsonObject obj:
+                var result = new JsonObject { ["$id"] = string.Empty };
+                foreach (var (key, value) in obj)
+                {
+                    result[key] = WithEmptyReferenceIds(value?.DeepClone());
+                }
+
+                return result;
+            case JsonArray array:
+                var values = new JsonArray();
+                foreach (var item in array)
+                {
+                    values.Add(WithEmptyReferenceIds(item?.DeepClone()));
+                }
+
+                return new JsonObject { ["$id"] = string.Empty, ["$values"] = values };
+            default:
+                return node;
+        }
     }
 
     /// <summary>An online account cannot be changed and a failed reservation cannot clear another server's ownership.</summary>

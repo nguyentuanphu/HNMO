@@ -1,4 +1,4 @@
-// <copyright file="NewsAdminOperations.cs" company="HNMO">
+﻿// <copyright file="NewsAdminOperations.cs" company="HNMO">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -171,7 +171,7 @@ public sealed class NewsAdminOperations(
 
     private async ValueTask<(bool IsActive, NewsConfiguration Configuration)> ReadConfigurationAsync(CancellationToken cancellationToken)
     {
-        using var context = persistence.CreateNewTypedContext(typeof(GameConfiguration), true);
+        using var context = persistence.CreateNewTypedContext(typeof(PlugInConfiguration), false);
         var configs = await context.GetAsync<PlugInConfiguration>(cancellationToken).ConfigureAwait(false);
         var match = configs.FirstOrDefault(c => c.TypeId == typeof(NewsPlugIn).GUID);
         if (match is null)
