@@ -86,21 +86,29 @@
        no list box; each character's name, level and class stand over it (#stageLabels), the desktop's char_sel_main
        plates (Create, Delete, OK) do the rest, and a discreet HNMO mark sits at the top. The list's buttons stay in the
        page as tiny invisible hooks (keyboard and tests use them). :root raises these over the website theme's #login art. */
-    :root body.character-stage #login { background: transparent; pointer-events: none; padding: 16px; }
-    :root body.character-stage:not(.stage-dialog) #login .panel { pointer-events: auto; position: fixed; left: 0; bottom: 0; width: auto; padding: 0; gap: 0; background: transparent; border: 0; box-shadow: none; backdrop-filter: none; }
-    :root body.character-stage:not(.stage-dialog) #loginForm > :not(#characters, #loginError) { display: none; }
-    :root body.character-stage:not(.stage-dialog) #characters { display: flex; gap: 0; }
-    :root body.character-stage:not(.stage-dialog) #characters .choice, :root body.character-stage:not(.stage-dialog) #characters .character-actions,
-    :root body.character-stage:not(.stage-dialog) #characters .character-actions button { width: 2px; height: 2px; min-width: 0; min-height: 0; margin: 0; padding: 0; border: 0; overflow: hidden; font-size: 0; opacity: 0; }
-    :root body.character-stage:not(.stage-dialog) #loginError { position: fixed; top: 44px; left: 50%; transform: translateX(-50%); max-width: min(520px, 90vw); padding: 6px 12px; border-radius: 6px; background: rgba(10, 12, 18, .86); }
-    :root body.character-stage.stage-dialog #login { place-items: center; }
+    :root body.stage-world #login { background: transparent; pointer-events: none; padding: 16px; }
+    :root body.stage-world:not(.stage-dialog) #login .panel { pointer-events: auto; position: fixed; left: 0; bottom: 0; width: auto; padding: 0; gap: 0; background: transparent; border: 0; box-shadow: none; backdrop-filter: none; }
+    :root body.stage-world:not(.stage-dialog) #loginForm > :not(#characters, #servers, #loginError) { display: none; }
+    :root body.stage-world:not(.stage-dialog) #characters:not([hidden]) { display: flex; gap: 0; }
+    /* The server choice over the stage is the desktop's server_select window (#stageServers); the plain list's server
+       buttons stay as tiny invisible hooks, its headings go. "Play now" stays a button at the bottom. */
+    :root body.stage-world:not(.stage-dialog) #login .panel:has(#servers.seasons:not([hidden])) { width: auto; }
+    :root body.stage-world:not(.stage-dialog) #servers.seasons:not([hidden]), :root body.stage-world:not(.stage-dialog) #servers .season-column { display: flex; gap: 0; padding: 0; border: 0; background: none; }
+    :root body.stage-world:not(.stage-dialog) #servers .seasons-title, :root body.stage-world:not(.stage-dialog) #servers h2, :root body.stage-world:not(.stage-dialog) #servers .season-empty { display: none; }
+    :root body.stage-world:not(.stage-dialog) #servers .choice { width: 2px; height: 2px; min-width: 0; min-height: 0; margin: 0; padding: 0; border: 0; overflow: hidden; font-size: 0; opacity: 0; }
+    :root body.stage-world:not(.stage-dialog) #servers #quickPlay { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); flex: none; width: auto; display: grid; gap: 2px; text-align: center; }
+    #stageServers { z-index: 30; }
+    :root body.stage-world:not(.stage-dialog) #characters .choice, :root body.stage-world:not(.stage-dialog) #characters .character-actions,
+    :root body.stage-world:not(.stage-dialog) #characters .character-actions button { width: 2px; height: 2px; min-width: 0; min-height: 0; margin: 0; padding: 0; border: 0; overflow: hidden; font-size: 0; opacity: 0; }
+    :root body.stage-world:not(.stage-dialog) #loginError { position: fixed; top: 44px; left: 50%; transform: translateX(-50%); max-width: min(520px, 90vw); padding: 6px 12px; border-radius: 6px; background: rgba(10, 12, 18, .86); }
+    :root body.stage-world.stage-dialog #login { place-items: center; }
     /* Creating: the form on the right, the class standing in 3D where the new character will stand (the stage's preview). */
-    :root body.character-stage.stage-dialog.stage-create #login { place-items: start end; }
+    :root body.stage-world.stage-dialog.stage-create #login { place-items: start end; }
     .stage-label.preview b { color: var(--gold); }
-    :root body.character-stage.stage-dialog #login .panel { pointer-events: auto; width: min(360px, 100%); background: rgba(10, 12, 18, .9); }
-    :root body.character-stage.stage-dialog #loginForm > :not(#characters, #loginError) { display: none; }
+    :root body.stage-world.stage-dialog #login .panel { pointer-events: auto; width: min(360px, 100%); background: rgba(10, 12, 18, .9); }
+    :root body.stage-world.stage-dialog #loginForm > :not(#characters, #loginError) { display: none; }
     body:not(.character-stage) #characters .character-actions { display: none; }
-    :root body.character-stage .website-back-home, :root body.character-stage #loading { display: none; }
+    :root body.stage-world .website-back-home, :root body.stage-world #loading { display: none; }
     #stageLabels { position: fixed; inset: 0; pointer-events: none; z-index: 20; overflow: hidden; }
     #stageBrand { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); font: 600 12px/1 Georgia, serif; letter-spacing: .4em; color: var(--gold); opacity: .55; text-shadow: 0 1px 2px #000; }
     .stage-label { position: absolute; left: 0; top: 0; display: grid; justify-items: center; gap: 1px; padding: 2px 8px; border-radius: 4px; white-space: nowrap; text-shadow: 0 1px 2px #000, 0 0 6px #000; color: #d8d2c0; font: 12px/1.2 system-ui, sans-serif; opacity: .8; }

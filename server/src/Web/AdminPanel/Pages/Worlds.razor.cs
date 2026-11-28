@@ -123,6 +123,8 @@ public partial class Worlds
             ZenMultiplier = world.ZenMultiplier,
             EventPresetEn = world.EventPresetEn,
             EventPresetVi = world.EventPresetVi,
+            ServerChoiceTextEn = world.ServerChoiceTextEn,
+            ServerChoiceTextVi = world.ServerChoiceTextVi,
             TemplateSourceWorldId = world.TemplateSourceWorldId,
             TemplateMode = world.TemplateMode,
             OpeningDateUtc = world.OpeningDateUtc,

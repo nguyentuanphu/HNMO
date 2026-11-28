@@ -128,7 +128,9 @@ import { CombatOverlay } from './ui/combatOverlay.js';
 import { GroundItems } from './game/groundItems.js';
 import { ARROW_RELEASE_DELAY_SECONDS, DeathEffects, ProjectileLayer, arrowKindsForMonster, arrowKindsForWeapons, loadCombatEffectsData } from './game/combatEffects.js';
 import { parseSeason, seasonBadge, setSeason, type SeasonKey } from './dataRoot.js';
-import { chooseServerBySeason } from './ui/seasonColumns.js';
+import { chooseServerBySeason, groupBySeason, seasonColumnTexts } from './ui/seasonColumns.js';
+import { openServerSelect, type ServerSelectGroup, type ServerSelectWindow } from './ui/serverSelectWindow.js';
+import { showConfirm } from './ui/gameDialogs.js';
 import { type ServerListEntry, fetchServerList, fetchGameServerAddress, login, loginWithTicket, fetchCharacters, enterWorld, createCharacter, deleteCharacter, creatableClasses, lastUnlockFlags, CLASSES } from './net/session.js';
 import type { WorldData } from './world.js';
 import type { TerrainMesh } from './terrain.js';
@@ -181,7 +183,8 @@ for (const picker of languagePickers) {
 }
 onLanguageChange(showLanguage);
 showLanguage(savedLanguage());
-void initLanguage();
+// The server choice names its worlds in the player's language: it waits for the language (fetchServerMetadata).
+const languageReady = initLanguage().catch(() => undefined);
 
 // The map the hero is on: its data and the terrain mesh the pointer is cast against.
 export type GameWorld = WorldData & { terrain: TerrainMesh };
@@ -237,6 +240,8 @@ export interface GameState {
   bugReports?: BugReportWindow;
   /** The 3D character stage while the character choice shows (scenes/characterStage.ts). */
   characterStage?: CharacterStage | null;
+  /** The server choice's window over the stage while it shows (ui/serverSelectWindow.ts). */
+  serverSelect?: ServerSelectWindow | null;
   escrow?: EscrowWindow;
   jewelBank?: JewelBankWindow;
   vip?: VipWindow;
@@ -1115,7 +1120,8 @@ async function chooseCharacter(connection: Connection): Promise<CharacterListEnt
   const characters = await fetchCharacters(connection);
   const quick = quickPlayCharacter ? characters.find((c) => c.name === quickPlayCharacter) : undefined;
   quickPlayCharacter = null;
-  if (quick) return quick;
+  // Quick play skips the list: the stage of the server choice goes before the world loads.
+  if (quick) { releaseStage(); return quick; }
   // The 3D stage (the desktop's CharacterScene) behind the list; the list's buttons stay the way in.
   const stage = openCharacterStage(characters);
   try {
@@ -1192,13 +1198,7 @@ async function chooseCharacter(connection: Connection): Promise<CharacterListEnt
     }
   } finally {
     // Released before the world loads (the stage's world, models and listeners).
-    stage?.dispose();
-    stageClose?.();
-    stageClose = null;
-    stageRefresh = null;
-    characterStage = null;
-    state.characterStage = null;
-    document.body.classList.remove('character-stage', 'stage-dialog', 'stage-create');
+    releaseStage();
   }
 }
 
@@ -1215,11 +1215,20 @@ function characterButton(slot: number): HTMLButtonElement | null {
   return ui.characters.querySelector<HTMLButtonElement>(`button.choice[data-slot="${slot}"]`);
 }
 
+/** What the stage tells the character choice (set while it shows; the stage itself may be older, from the server choice). */
+const stageHooks: { onSelectionChange: ((slot: number | null) => void) | null; onEnter: ((slot: number) => void) | null } = { onSelectionChange: null, onEnter: null };
+/** World 74 is up (true) or couldn't load (false); null while no stage runs. */
+let stageLoaded: Promise<boolean> | null = null;
+/** Takes the stage's labels and mark away. */
+let stageLabelsClose: (() => void) | null = null;
+
 /**
- * Starts the 3D character stage (world 74 loads in the background; the list works at once). Without WebGL, or when it
- * can't load, the plain list stays.
+ * Starts the 3D stage: world 74, the world of the server choice and of the character choice (the desktop draws its
+ * login and character scenes over it). It loads in the background; the plain lists work at once and stay when it
+ * can't load (no WebGL). One stage serves both choices: the world isn't loaded again between them.
  */
-function openCharacterStage(characters: CharacterListEntry[]): CharacterStage | null {
+function startStage(): CharacterStage {
+  if (characterStage) return characterStage;
   // The labels over the characters and the discreet HNMO mark at the top (owner 2026-11-28).
   const labels = document.createElement('div');
   labels.id = 'stageLabels';
@@ -1228,6 +1237,56 @@ function openCharacterStage(characters: CharacterListEntry[]): CharacterStage | 
   brand.textContent = 'HNMO';
   labels.append(brand);
   document.body.append(labels);
+  const stage = new CharacterStage({
+    root,
+    camera,
+    canvas: ui.canvas,
+    labelParent: labels,
+    playSound: () => { const sound = characterSelectedSound(); if (sound) audioSystem().play(sound); },
+    onSelectionChange: (slot) => stageHooks.onSelectionChange?.(slot),
+    onEnter: (slot) => stageHooks.onEnter?.(slot),
+  });
+  characterStage = stage;
+  state.characterStage = stage;
+  stageLabelsClose = () => labels.remove();
+  stageLoaded = stage.load()
+    .then(() => {
+      if (characterStage !== stage) return false;
+      // The world is drawn: the login screen's art and boxes give way to it (index.html, body.stage-world).
+      document.body.classList.add('stage-world');
+      resize();
+      return true;
+    })
+    .catch((error: unknown) => {
+      console.warn('The character stage could not load; the plain list stays.', error);
+      if (characterStage === stage) releaseStage();
+      return false;
+    });
+  return stage;
+}
+
+/** Puts the stage away: its world, models, listeners, windows and labels (before the game world loads, or on an error). */
+function releaseStage(): void {
+  serverSelectClose?.();
+  characterStage?.dispose();
+  stageClose?.();
+  stageClose = null;
+  stageRefresh = null;
+  stageLabelsClose?.();
+  stageLabelsClose = null;
+  stageHooks.onSelectionChange = null;
+  stageHooks.onEnter = null;
+  characterStage = null;
+  state.characterStage = null;
+  stageLoaded = null;
+  document.body.classList.remove('stage-world', 'character-stage', 'stage-dialog', 'stage-create');
+}
+
+/**
+ * The character choice on the stage (started by the server choice already, or now): the characters stand on their
+ * places, the desktop's char_sel_main window under them.
+ */
+function openCharacterStage(characters: CharacterListEntry[]): CharacterStage | null {
   // The desktop's char_sel_main window: Create, and Delete / OK once a character is picked (CharSelMainWin::UpdateDisplay).
   let plates: RmlDocument | null = null;
   const click = (kind: string) => { const sound = interfaceClickSound(kind); if (sound) audioSystem().play(sound); };
@@ -1260,22 +1319,16 @@ function openCharacterStage(characters: CharacterListEntry[]): CharacterStage | 
     if (slot !== null) characterButton(slot)?.classList.add('selected');
     refreshPlates();
   };
-  const stage = new CharacterStage({
-    root,
-    camera,
-    canvas: ui.canvas,
-    labelParent: labels,
-    playSound: () => { const sound = characterSelectedSound(); if (sound) audioSystem().play(sound); },
-    onSelectionChange: (slot) => mark(slot),
-    onEnter: (slot) => characterButton(slot)?.click(),
-  });
-  characterStage = stage;
-  state.characterStage = stage;
-  stageClose = () => { plates?.close(); plates = null; labels.remove(); };
+  const stage = startStage();
+  stageHooks.onSelectionChange = (slot) => mark(slot);
+  stageHooks.onEnter = (slot) => characterButton(slot)?.click();
+  stageClose = () => { plates?.close(); plates = null; };
   stageRefresh = refreshPlates;
-  stage.load()
-    .then(() => stage.setCharacters(stageList(characters)))
-    .then(async () => {
+  const loaded = stageLoaded ?? Promise.resolve(false);
+  loaded
+    .then(async (ok) => {
+      if (!ok || characterStage !== stage) return;
+      await stage.setCharacters(stageList(characters));
       if (characterStage !== stage) return;
       document.body.classList.add('character-stage');
       resize();
@@ -1292,7 +1345,7 @@ function openCharacterStage(characters: CharacterListEntry[]): CharacterStage | 
     })
     .catch((error: unknown) => {
       console.warn('The character stage could not load; the plain list stays.', error);
-      if (characterStage === stage) { stage.dispose(); stageClose?.(); characterStage = null; document.body.classList.remove('character-stage'); }
+      if (characterStage === stage) releaseStage();
     });
   return stage;
 }
@@ -1400,6 +1453,8 @@ interface WebsiteServerMeta {
   /** The season the world plays ('s6' unless the website says otherwise). */
   season?: SeasonKey;
   worldLabel?: string;
+  /** The host's text for the server choice under the worlds (admin panel, Worlds: "Server choice text"). */
+  worldText?: string;
   description?: string;
   vipOnly?: boolean;
   pvpEnabled?: boolean;
@@ -1427,7 +1482,11 @@ async function fetchServerMetadata(url = '/website/data'): Promise<Map<number, W
     if ('worlds' in raw && Array.isArray(raw.worlds)) {
       for (const world of raw.worlds as unknown[]) {
         if (typeof world !== 'object' || world === null) continue;
-        const entry = world as { worldId?: unknown; season?: unknown; nameEn?: unknown; nameVi?: unknown; isOpen?: unknown; openingDateSydney?: unknown; servers?: unknown };
+        const entry = world as { worldId?: unknown; season?: unknown; nameEn?: unknown; nameVi?: unknown; isOpen?: unknown; openingDateSydney?: unknown; servers?: unknown; serverChoiceTextEn?: unknown; serverChoiceTextVi?: unknown };
+        // The host's text for the server choice (Vietnamese, else English; empty: the game's own).
+        const textEn = typeof entry.serverChoiceTextEn === 'string' ? entry.serverChoiceTextEn.trim() : '';
+        const textVi = typeof entry.serverChoiceTextVi === 'string' ? entry.serverChoiceTextVi.trim() : '';
+        const worldText = vi ? textVi || textEn : textEn;
         const worldOrder = (raw.worlds as unknown[]).indexOf(world);
         const name = vi
           ? (typeof entry.nameVi === 'string' && entry.nameVi ? entry.nameVi : typeof entry.nameEn === 'string' ? entry.nameEn : '')
@@ -1442,6 +1501,7 @@ async function fetchServerMetadata(url = '/website/data'): Promise<Map<number, W
             const full = status ? `${name} (${status})` : name;
             const existing = meta.get(id) ?? {};
             if (full) existing.worldLabel = full;
+            if (worldText) existing.worldText = worldText;
             if (typeof entry.worldId === 'string') existing.worldId = entry.worldId;
             existing.worldOrder = worldOrder;
             existing.season = parseSeason(entry.season);
@@ -1559,6 +1619,9 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   // Season 9 and the Arena run as their own programs with their own connect servers (seasons.json says their ports);
   // their servers are listed next to Season 6.3's, each asking its own connect server for the address.
   const { s9: seasonNineConnect, arena: arenaConnect } = await otherConnectServers(connectServer);
+  // The world names below are read in the current language: a page loading slowly (the 3D stage) mustn't name them in
+  // English for a Vietnamese player because its texts came later.
+  await languageReady;
   const [seasonSixServers, seasonNineServers, arenaServers, serverMeta, seasonNineMeta] = await Promise.all([
     fetchServerList(settings.relay, connectServer),
     seasonNineConnect ? fetchServerList(settings.relay, seasonNineConnect).catch(() => [] as ServerListEntry[]) : Promise.resolve([] as ServerListEntry[]),
@@ -1589,9 +1652,106 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   const quickServer = quick && quick.username === settings.username ? servers.find((s) => columnOf(s) === quick.column && s.id === quick.serverId) : undefined;
   const server = travelTarget ?? (servers.length === 1
     ? servers[0]
-    : await withQuickPlay(ui.servers, chooseServerBySeason(ui.servers, servers, (s) => s.column ?? s.season, (s) => describeServerChoice(s.id, s.load, s.meta, currentLanguage() === 'vi', true), currentLanguage() === 'vi'),
+    : await withQuickPlay(ui.servers, chooseServerOnStage(servers),
       quickServer, quick, quickServer ? (quickServer.meta?.description || quickServer.meta?.worldLabel || `${currentLanguage() === 'vi' ? 'Máy chủ' : 'Server'} ${quickServer.id + 1}`) : ''));
   ui.servers.hidden = true;
+  serverSelectClose?.();
+  try {
+    await enterChosenServer(settings, server, ticket);
+  } catch (error) {
+    // The stage of the server choice goes with the error: the login screen comes back.
+    releaseStage();
+    throw error;
+  }
+}
+
+/**
+ * The server choice over world 74 (the desktop's login scene: CServerSelWin over the scene's world), the stage that the
+ * character choice goes on with. The plain list stays in the page: before the world is up it is the choice, then its
+ * buttons are invisible hooks (keyboard and tests).
+ */
+function chooseServerOnStage(servers: SeasonServer[]): Promise<SeasonServer> {
+  const vi = currentLanguage() === 'vi';
+  let pickFromWindow: (server: SeasonServer) => void = () => {};
+  const fromWindow = new Promise<SeasonServer>((resolve) => { pickFromWindow = resolve; });
+  const choice = Promise.race([
+    chooseServerBySeason(ui.servers, servers, (s) => s.column ?? s.season, (s) => describeServerChoice(s.id, s.load, s.meta, vi, true), vi),
+    fromWindow,
+  ]);
+  const stage = startStage();
+  let selectWindow: ServerSelectWindow | null = null;
+  let done = false;
+  void (stageLoaded ?? Promise.resolve(false)).then(async (ok) => {
+    if (!ok || done || characterStage !== stage) return;
+    const opened = await openServerSelect({
+      groups: serverSelectGroups(servers, vi),
+      vi,
+      onPick: (server) => pickFromWindow(server),
+      // The desktop's MESSAGE_SERVER_BUSY box (MsgWin: "The server is full"), as the game's OK box.
+      onBusy: () => { void showConfirm({ lines: [vi ? 'Máy chủ đã đầy.' : 'The server is full.'], tag: 'server-busy' }); },
+      playClick: (kind) => { const sound = interfaceClickSound(kind); if (sound) audioSystem().play(sound); },
+    });
+    if (done || characterStage !== stage) { opened.close(); return; }
+    opened.document.host.id = 'stageServers';
+    selectWindow = opened;
+    state.serverSelect = opened;
+  }).catch((error: unknown) => console.warn('The server choice window could not open; the plain list stays.', error));
+  const close = () => {
+    done = true;
+    selectWindow?.close();
+    selectWindow = null;
+    state.serverSelect = null;
+    if (serverSelectClose === close) serverSelectClose = null;
+  };
+  serverSelectClose = close;
+  return choice.finally(close);
+}
+
+/** Closes the server choice's window (also when quick play answered the choice instead). */
+let serverSelectClose: (() => void) | null = null;
+
+/**
+ * The groups of the server choice: the worlds of the website's data, each season's (and the Arena's) in its column's
+ * order; a season's column is one group when the website names no worlds. With more than one season, a world's name
+ * says its season.
+ */
+function serverSelectGroups(servers: readonly SeasonServer[], vi: boolean): ServerSelectGroup<SeasonServer>[] {
+  const texts = seasonColumnTexts(vi);
+  const columns = groupBySeason(servers, (s) => s.column ?? s.season);
+  const manySeasons = (['s6', 's9', 'arena'] as const).filter((key) => columns[key].length).length > 1;
+  const groups: ServerSelectGroup<SeasonServer>[] = [];
+  for (const key of ['s6', 's9', 'arena'] as const) {
+    const byWorld = new Map<string, ServerSelectGroup<SeasonServer>>();
+    for (const server of columns[key]) {
+      const world = key === 'arena' ? '' : server.meta?.worldLabel ?? '';
+      let group = byWorld.get(world);
+      if (!group) {
+        const label = !world ? texts.heading[key] : manySeasons ? `${world} (${seasonBadge(server.season)})` : world;
+        const rates: string[] = [];
+        if (typeof server.meta?.experienceRate === 'number') rates.push(`EXP ${server.meta.experienceRate}×`);
+        if (typeof server.meta?.dropRate === 'number' && server.meta.dropRate !== 1) rates.push(`Drop ${server.meta.dropRate}×`);
+        if (typeof server.meta?.zenRate === 'number' && server.meta.zenRate !== 1) rates.push(`Zen ${server.meta.zenRate}×`);
+        // The host's text for the world (admin panel), else the season and the rates.
+        const description = server.meta?.worldText || [`${texts.heading[key]}: ${texts.hint[key]}`, ...rates].join(' · ');
+        group = { label, description, servers: [] };
+        byWorld.set(world, group);
+        groups.push(group);
+      }
+      group.servers.push({
+        server,
+        name: server.meta?.description || `${vi ? 'Máy chủ' : 'Server'} ${server.id + 1}`,
+        load: server.load,
+        vip: server.meta?.vipOnly,
+        nonPvp: server.meta?.pvpEnabled === undefined ? undefined : !server.meta.pvpEnabled,
+      });
+    }
+  }
+  return groups;
+}
+
+/** Logs in to the picked server and plays: the character choice, then the world. */
+async function enterChosenServer(settings: LoginSettings, server: SeasonServer, ticket?: string): Promise<void> {
+  const columnOf = (s: SeasonServer) => s.column ?? s.season;
   playedServer = { column: columnOf(server), serverId: server.id };
   // The game data of the picked world's season, before anything of the world is loaded.
   setSeason(server.season);

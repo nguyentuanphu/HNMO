@@ -29,16 +29,29 @@ for (const language of ['en', 'vi'] as const) {
 
     const s6 = page.locator('#servers .season-column.season-s6');
     const s9 = page.locator('#servers .season-column.season-s9');
-    await expect(s6.locator('h2')).toContainText('Season 6.3');
-    await expect(s9.locator('h2')).toContainText('Season 9');
-    await expect(page.locator('#servers .seasons-title')).toHaveText(language === 'vi' ? 'Chọn máy chủ' : 'Choose a server');
-    // Every server is in its world's column, and the first button is still a Season 6.3 server.
+    // Every server is in its world's column, and the first button is still a Season 6.3 server (in both screens: over
+    // World 74 the list stays as the server choice's hooks).
     const total = await page.locator('#servers .choice').count();
     expect(await s6.locator('.choice').count() + await s9.locator('.choice').count()).toBe(total);
     await expect(s6.locator('.choice .season-badge')).toHaveCount(0); // the column says the season
     if (await s9.locator('.choice').count() > 0) await expect(s9.locator('.choice').first()).toContainText(language === 'vi' ? 'Thế giới mới' : 'New world');
-    else await expect(s9.locator('.season-empty')).toBeVisible();
     await expect(page.locator('#servers .choice').first()).toContainText(language === 'vi' ? 'Cổ điển' : 'Classic');
+
+    // Over World 74 (C step 2) the server choice window shows the two worlds as its groups; the plain list's columns,
+    // headings and layout below are the screen only without the 3D stage (no WebGL).
+    await page.waitForTimeout(2_000);
+    if (await page.locator('body.stage-world').count() > 0) {
+      const groups = page.locator('#stageServers .server-group-btn');
+      await expect(groups).toHaveCount(2, { timeout: 30_000 });
+      await expect(groups.nth(0)).toContainText(language === 'vi' ? 'Cổ điển' : 'Classic');
+      await expect(groups.nth(1)).toContainText(language === 'vi' ? 'Thế giới mới' : 'New world');
+      if (SHOTS) await page.screenshot({ path: `${SHOTS}/season-start-screen-${language}.png` });
+      return;
+    }
+    await expect(s6.locator('h2')).toContainText('Season 6.3');
+    await expect(s9.locator('h2')).toContainText('Season 9');
+    await expect(page.locator('#servers .seasons-title')).toHaveText(language === 'vi' ? 'Chọn máy chủ' : 'Choose a server');
+    if (await s9.locator('.choice').count() === 0) await expect(s9.locator('.season-empty')).toBeVisible();
     // Side by side on a wide screen.
     const a = await s6.boundingBox();
     const b = await s9.boundingBox();

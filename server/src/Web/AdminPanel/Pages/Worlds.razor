@@ -211,6 +211,14 @@
                     <label class="form-label" title="@this.T("Event preset note in Vietnamese", "Ghi chú lịch sự kiện VI")">@this.T("Event Preset (VI)", "Lịch Sự kiện (VI)")</label>
                     <input class="form-control" @bind="this._editingWorld.EventPresetVi" />
                 </div>
+                <div class="col-md-6">
+                    <label class="form-label" title="@this.T("The text the game's server choice shows under the worlds for this world, in English. Empty: the game's own text (season and rates)", "Dòng chữ màn hình chọn máy chủ trong game hiện dưới danh sách thế giới cho thế giới này, tiếng Anh. Để trống: dòng chữ mặc định của game (season và tỉ lệ)")">@this.T("Server choice text (EN)", "Chữ màn hình chọn máy chủ (EN)")</label>
+                    <input id="editServerChoiceTextEn" class="form-control" maxlength="200" @bind="this._editingWorld.ServerChoiceTextEn" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" title="@this.T("The text the game's server choice shows under the worlds for this world, in Vietnamese. Empty: the game's own text (season and rates)", "Dòng chữ màn hình chọn máy chủ trong game hiện dưới danh sách thế giới cho thế giới này, tiếng Việt. Để trống: dòng chữ mặc định của game (season và tỉ lệ)")">@this.T("Server choice text (VI)", "Chữ màn hình chọn máy chủ (VI)")</label>
+                    <input id="editServerChoiceTextVi" class="form-control" maxlength="200" @bind="this._editingWorld.ServerChoiceTextVi" />
+                </div>
                 <div class="col-12">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="editTransfer" @bind="this._editingWorld.TransferEnabled" />
