@@ -154,6 +154,7 @@ public static class AdminNavCatalog
                     DescriptionZh = "管理本地服务、日志、更新、端口和备份。",
                 },
                 new("seasons", "host", "oi-globe", "Seasons & Worlds", "Các Season & Thế giới", "Enable Season 9 and Arena alongside Season 6.3 and inspect ports.", "Bật/tắt Season 9 và Arena cùng Season 6.3 và xem cổng.", true, "host-settings", "season-plan", "setup"),
+                new("licence", "host", "oi-key", "Licence", "Giấy phép", "Your HNMO licence: players, seasons, expiry; buy, renew or start the trial.", "Giấy phép HNMO: số người chơi, season, hạn dùng; mua, gia hạn hoặc dùng thử.", true, "host-settings", "seasons", "server-control"),
                 new("host-settings", "host", "oi-wrench", "Host & VietQR Settings", "Cài đặt Host & VietQR", "Edit centralized ports, DB connection, SMTP email, and VietQR.", "Cấu hình cổng, PostgreSQL, SMTP gửi email và ngân hàng VietQR.", true, "crash-watch", "topup-milestones", "setup"),
                 new("crash-watch", "host", "oi-warning", "Crash Watch", "Giám sát sự cố", "Inspect unexpected process exits, restart history, and logs.", "Theo dõi sự cố dừng server bất thường và tự khởi động lại.", true, "host-settings", "logfiles", "maintenance-tools"),
                 new("import-server", "host", "oi-cloud-upload", "Import Another Server", "Nhập dữ liệu máy chủ khác", "Dry-run and import accounts, characters, shops, and drops safely.", "Xem thử và nhập tài khoản, nhân vật, shop từ máy chủ cũ.", false, "worlds", "setup", "maintenance-tools"),

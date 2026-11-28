@@ -77,59 +77,8 @@ public partial class BankTopUps
     /// <param name="amount">The amount in VND (0: none).</param>
     /// <param name="message">The transfer message.</param>
     /// <returns>The payload.</returns>
-    public static string VietQrPayload(string bin, string account, string holder, long amount, string message)
-    {
-        static string Tlv(string tag, string value) => tag + value.Length.ToString("00", CultureInfo.InvariantCulture) + value;
-        static string Ascii(string text)
-        {
-            var plain = new StringBuilder();
-            foreach (var c in text.Normalize(NormalizationForm.FormD))
-            {
-                if (CharUnicodeInfo.GetUnicodeCategory(c) == UnicodeCategory.NonSpacingMark)
-                {
-                    continue;
-                }
-
-                plain.Append(c switch { 'đ' => 'd', 'Đ' => 'D', >= ' ' and <= '~' => c, _ => ' ' });
-            }
-
-            return string.Join(' ', plain.ToString().Split(' ', StringSplitOptions.RemoveEmptyEntries));
-        }
-
-        var beneficiary = Tlv("00", bin.Trim()) + Tlv("01", account.Trim());
-        var payload = Tlv("00", "01") + Tlv("01", amount > 0 ? "12" : "11")
-            + Tlv("38", Tlv("00", "A000000727") + Tlv("01", beneficiary) + Tlv("02", "QRIBFTTA")) + Tlv("53", "704");
-        if (amount > 0)
-        {
-            payload += Tlv("54", amount.ToString(CultureInfo.InvariantCulture));
-        }
-
-        payload += Tlv("58", "VN");
-        var name = Ascii(holder);
-        if (name.Length > 0)
-        {
-            payload += Tlv("59", name[..Math.Min(25, name.Length)]);
-        }
-
-        var note = Ascii(message);
-        if (note.Length > 0)
-        {
-            payload += Tlv("62", Tlv("08", note[..Math.Min(50, note.Length)]));
-        }
-
-        payload += "6304";
-        ushort crc = 0xFFFF;
-        foreach (var c in payload)
-        {
-            crc ^= (ushort)(c << 8);
-            for (var bit = 0; bit < 8; bit++)
-            {
-                crc = (crc & 0x8000) != 0 ? (ushort)((crc << 1) ^ 0x1021) : (ushort)(crc << 1);
-            }
-        }
-
-        return payload + crc.ToString("X4", CultureInfo.InvariantCulture);
-    }
+    public static string VietQrPayload(string bin, string account, string holder, long amount, string message) =>
+        HNMO.GameLogic.PlugIns.VietQr.BuildPayload(bin, account, holder, amount, message);
 
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
