@@ -70,6 +70,20 @@ public class FolderLimitTests
         this._dir.Delete(recursive: true);
     }
 
+    /// <summary>A state file another program holds open is the same as no state: no exception, so the seat timer can't end the server.</summary>
+    [Test]
+    public void ALockedStateFileIsReadAsNoStateAndTheSeatCheckSurvives()
+    {
+        var file = Path.Combine(this._dir.FullName, "developer-hub.json");
+        File.WriteAllText(file, "{}");
+        DeveloperHub.StateFile = file;
+        using var held = new FileStream(file, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+
+        Assert.DoesNotThrow(() => DeveloperHub.ReadState());
+        Assert.That(DeveloperHub.FolderLimitEnforced(this._now), Is.False);
+        Assert.DoesNotThrow(() => FolderSeat.Evaluate(this._now));
+    }
+
     /// <summary>(a) The code: the first 16 hex digits of SHA-256 of "installId|path".</summary>
     [Test]
     public void TheFolderCodeIsTheHashOfInstallIdAndPath()

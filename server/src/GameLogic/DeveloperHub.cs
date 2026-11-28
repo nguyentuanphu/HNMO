@@ -123,8 +123,9 @@ public static partial class DeveloperHub
                     ? JsonSerializer.Deserialize<DeveloperHubState>(File.ReadAllText(StateFile)) ?? new DeveloperHubState()
                     : new DeveloperHubState();
             }
-            catch (JsonException)
+            catch (Exception ex) when (ex is JsonException or IOException or UnauthorizedAccessException)
             {
+                // Unreadable or briefly locked by another program of the folder: the same as no state, never a crash.
                 return new DeveloperHubState();
             }
         }
