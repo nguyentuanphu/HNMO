@@ -82,6 +82,34 @@
     .choice small { color: var(--muted); }
     /* A season without a cash shop (the host turned it off: classic play): its entries in the phone menus are gone (ui/cashShop.ts). */
     body.hnmo-no-cash-shop .mh-menu-item[data-key="x"], body.hnmo-no-cash-shop #touchMore [data-key="x"] { display: none !important; }
+    /* The 3D character stage (scenes/characterStage.ts), owner 2026-11-28: no login box (players log in on the website),
+       no list box; each character's name, level and class stand over it (#stageLabels), the desktop's char_sel_main
+       plates (Create, Delete, OK) do the rest, and a discreet HNMO mark sits at the top. The list's buttons stay in the
+       page as tiny invisible hooks (keyboard and tests use them). :root raises these over the website theme's #login art. */
+    :root body.character-stage #login { background: transparent; pointer-events: none; padding: 16px; }
+    :root body.character-stage:not(.stage-dialog) #login .panel { pointer-events: auto; position: fixed; left: 0; bottom: 0; width: auto; padding: 0; gap: 0; background: transparent; border: 0; box-shadow: none; backdrop-filter: none; }
+    :root body.character-stage:not(.stage-dialog) #loginForm > :not(#characters, #loginError) { display: none; }
+    :root body.character-stage:not(.stage-dialog) #characters { display: flex; gap: 0; }
+    :root body.character-stage:not(.stage-dialog) #characters .choice, :root body.character-stage:not(.stage-dialog) #characters .character-actions,
+    :root body.character-stage:not(.stage-dialog) #characters .character-actions button { width: 2px; height: 2px; min-width: 0; min-height: 0; margin: 0; padding: 0; border: 0; overflow: hidden; font-size: 0; opacity: 0; }
+    :root body.character-stage:not(.stage-dialog) #loginError { position: fixed; top: 44px; left: 50%; transform: translateX(-50%); max-width: min(520px, 90vw); padding: 6px 12px; border-radius: 6px; background: rgba(10, 12, 18, .86); }
+    :root body.character-stage.stage-dialog #login { place-items: center; }
+    /* Creating: the form on the right, the class standing in 3D where the new character will stand (the stage's preview). */
+    :root body.character-stage.stage-dialog.stage-create #login { place-items: start end; }
+    .stage-label.preview b { color: var(--gold); }
+    :root body.character-stage.stage-dialog #login .panel { pointer-events: auto; width: min(360px, 100%); background: rgba(10, 12, 18, .9); }
+    :root body.character-stage.stage-dialog #loginForm > :not(#characters, #loginError) { display: none; }
+    body:not(.character-stage) #characters .character-actions { display: none; }
+    :root body.character-stage .website-back-home, :root body.character-stage #loading { display: none; }
+    #stageLabels { position: fixed; inset: 0; pointer-events: none; z-index: 20; overflow: hidden; }
+    #stageBrand { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); font: 600 12px/1 Georgia, serif; letter-spacing: .4em; color: var(--gold); opacity: .55; text-shadow: 0 1px 2px #000; }
+    .stage-label { position: absolute; left: 0; top: 0; display: grid; justify-items: center; gap: 1px; padding: 2px 8px; border-radius: 4px; white-space: nowrap; text-shadow: 0 1px 2px #000, 0 0 6px #000; color: #d8d2c0; font: 12px/1.2 system-ui, sans-serif; opacity: .8; }
+    .stage-label b { font-size: 13px; color: #f2e6c4; }
+    .stage-label small { font-size: 11px; color: #b9b3a3; }
+    .stage-label.picked { opacity: 1; }
+    .stage-label.picked b { color: var(--gold); }
+    #stagePlates { z-index: 30; }
+    body.stage-dialog #stagePlates, body.stage-dialog:not(.stage-create) #stageLabels .stage-label { display: none; }
     .season-badge { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: .02em; vertical-align: middle; }
     .season-badge.season-s6 { background: #3a3324; color: #e3c07a; border: 1px solid #6b5a36; }
     .season-badge.season-s9 { background: #1f3340; color: #8fd3f0; border: 1px solid #3b6d85; }

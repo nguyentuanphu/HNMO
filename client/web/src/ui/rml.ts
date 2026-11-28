@@ -618,7 +618,11 @@ export async function openDocument(name: string, model: RmlModel, { parent = doc
       }
       const measured = probe.getBoundingClientRect().width / 100;
       const rootScale = measured > 0 ? measured : 1;
-      const rem = `${(nativeTextPx() / (rootScale || 1)).toFixed(3)}px`;
+      // The scene windows the original drew at fixed pixels (class scene-bar-scale / scene-window-scale on their body,
+      // RmlNativeText.h): a rem is one original pixel at the screen's scale of the 640x480 layout, not the text size.
+      const sceneScaled = root.classList.contains('scene-bar-scale') || root.classList.contains('scene-window-scale');
+      const remPx = sceneScaled ? Math.min(window.innerWidth / 640, window.innerHeight / REFERENCE_HEIGHT) : nativeTextPx();
+      const rem = `${(remPx / (rootScale || 1)).toFixed(3)}px`;
       if (root.style.getPropertyValue('--rml-rem') !== rem) root.style.setProperty('--rml-rem', rem);
     }
     fitTextToBoxes(shadow);
