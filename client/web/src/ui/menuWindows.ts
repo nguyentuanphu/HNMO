@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // The bottom HUD's menu window (CWindowMenu, window_menu.rml, U / #btn_window) and the
 // system menu (CSysMenuWin, sys_menu.rml, System (Esc) / Escape).
 import { openDocument, prepareDocument, type RmlDocument, type RmlModel } from './rml.js';
@@ -43,7 +44,7 @@ export class WindowMenu {
   private readonly model: WindowMenuModel;
   private readonly onResize = () => this.place();
   private readonly onKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Escape' && this.isOpen) {
+    if (panelKey(event, 'Escape') && this.isOpen) {
       this.close();
       this.options.click?.();
     }

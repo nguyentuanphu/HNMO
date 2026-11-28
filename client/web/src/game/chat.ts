@@ -1,3 +1,4 @@
+import { canHandleKey, hasKeyboardControl, hasTextInput, matchesModifiers } from './keyboardShortcuts.js';
 // The chat, as the desktop client draws and runs it:
 //  - the chat log (CChatLogWindow, chat_log.rml): the said lines ("name : text"), each kind in its
 //    colour, long lines broken in two, at most 200 lines kept; F2 shows only whispers; the frame (F5
@@ -644,9 +645,12 @@ export class Chat {
   }
 
   private onKey(event: KeyboardEvent): void {
-    if (!this.enabled) return;
+    if (!this.enabled || !canHandleKey(event) || !matchesModifiers(event)) return;
     const field = this.focusedField();
     const handled = () => { event.preventDefault(); event.stopImmediatePropagation(); };
+    // Escape closes the open box wherever focus moved, once composition is finished.
+    if (this.open && event.key === 'Escape') { handled(); this.close(); this.options.click?.(); return; }
+    if (!field && hasTextInput(event)) return;
     if (event.key === 'F2') {
       this.setTab(this.tab === 1 ? 0 : 1); // the desktop's whisper-only view
       this.options.click?.();
@@ -676,15 +680,12 @@ export class Chat {
     if (!this.open) {
       if (event.key !== 'Enter' || event.repeat) return;
       // Enter opens the box, unless a window or dialog with its own text field has the keys.
-      const target = event.composedPath()[0];
-      if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) return;
+      if (hasKeyboardControl(event)) return;
       if (document.querySelector('.confirm-dialog')) return;
       this.openInput();
       if (this.open) handled();
       return;
     }
-    // Escape closes the open box wherever the focus is (after a button click too).
-    if (event.key === 'Escape') { handled(); this.close(); this.options.click?.(); return; }
     if (!field) return;
     if (event.key === 'Enter') { handled(); this.submit(); return; }
     if (event.key === 'Tab') {

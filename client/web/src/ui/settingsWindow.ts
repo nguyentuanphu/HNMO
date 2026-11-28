@@ -1,3 +1,4 @@
+import { gameKey, optionKey, panelKey } from '../game/keyboardShortcuts.js';
 // The settings window (O, or the ⚙ button): the desktop's option window (option_window.rml in the
 // window_shell frame, COptionWindow) with what the web game can switch. HNMO extras:
 //  - Display: render scale (the desktop's resolution row), windowed / full screen, the FPS limit
@@ -215,30 +216,27 @@ export class SettingsWindow {
 
     document.getElementById('settingsButton')?.addEventListener('click', () => { void this.toggle(); });
     window.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && this.doc) { this.close(); return; }
-      if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
-      const key = event.key.toLowerCase();
-      if (key === 'o' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void this.toggle(); return; }
-      if (!event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
-      if (key === 'p') {
+      if (panelKey(event, 'Escape') && this.doc) { this.close(); return; }
+      if (gameKey(event, 'o')) { event.preventDefault(); void this.toggle(); return; }
+      if (optionKey(event, 'KeyP')) {
         event.preventDefault();
         const enable = !isPerformanceMode(this.settings.quality);
         this.setQuality(enable ? { ...PERFORMANCE_MODE } : { hideOtherPlayers: false, hideWingsPets: false, reducedEffects: false, viewDistance: 1 });
         this.update();
         this.showPerfToast('Performance mode', 'Chế độ mượt', enable);
-      } else if (key === 'o') {
+      } else if (optionKey(event, 'KeyO')) {
         event.preventDefault();
         const enable = !this.settings.quality.hideOtherPlayers;
         this.setQuality({ hideOtherPlayers: enable });
         this.update();
         this.showPerfToast('Hide other players', 'Ẩn người chơi khác', enable);
-      } else if (key === 'w') {
+      } else if (optionKey(event, 'KeyW')) {
         event.preventDefault();
         const enable = !this.settings.quality.hideWingsPets;
         this.setQuality({ hideWingsPets: enable });
         this.update();
         this.showPerfToast('Hide wings & pets', 'Ẩn cánh và thú cưng', enable);
-      } else if (key === 'e') {
+      } else if (optionKey(event, 'KeyE')) {
         event.preventDefault();
         const enable = !this.settings.quality.reducedEffects;
         this.setQuality({ reducedEffects: enable });

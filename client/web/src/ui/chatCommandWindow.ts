@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // The chat command list (CChatCommandWindow, chat_command.rml): opened from the Command window's
 // Special button or by pressing J. Shows server-provided slash commands (`AvailableChatCommand`,
 // 0xF5 0x01), parameters with validation/cycling/own-value hints, favourites and templates.
@@ -186,7 +187,7 @@ export class ChatCommandWindow {
   private readonly onResize = () => this.place();
   private readonly onKeyDown = (event: KeyboardEvent) => {
     if (!this.isOpen) return;
-    if (event.key === 'Escape') {
+    if (panelKey(event, 'Escape')) {
       event.preventDefault();
       if (this.editedParam >= 0) {
         this.commitEditedValue();
@@ -200,7 +201,7 @@ export class ChatCommandWindow {
       this.options.click?.();
       return;
     }
-    if (this.editedParam >= 0 && event.key === 'Enter') {
+    if (this.editedParam >= 0 && panelKey(event, 'Enter')) {
       event.preventDefault();
       this.commitEditedValue();
       this.editedParam = -1;

@@ -1,3 +1,4 @@
+import { canUseGameShortcut, matchesModifiers, panelKey } from '../game/keyboardShortcuts.js';
 // Screenshots, as the desktop's Print Screen: the key saves a JPG of the game named Screen(MM_DD-HH_MM)-NNNN.jpg (the
 // month, day, hour and minute of the player's clock and a rolling counter, as the desktop names them) and tells it in
 // the chat with the game and the character, like the desktop's "screenshot saved" line with the server's title.
@@ -109,7 +110,7 @@ export class Screenshots {
     // Print Screen: the desktop's key. Browsers on some systems only send its key-up.
     const onKey = (event: KeyboardEvent) => {
       if (event.key !== 'PrintScreen' && event.code !== 'PrintScreen') return;
-      if (event.target instanceof Element && event.target.closest('input, textarea')) return;
+      if (!canUseGameShortcut(event) || !matchesModifiers(event)) return;
       const now = performance.now();
       if (now - this.lastKeyAt < 400) return;
       this.lastKeyAt = now;
@@ -118,7 +119,7 @@ export class Screenshots {
     };
     window.addEventListener('keydown', onKey);
     window.addEventListener('keyup', onKey);
-    window.addEventListener('keydown', (event) => { if (event.key === 'Escape' && this.isOpen) this.close(); });
+    window.addEventListener('keydown', (event) => { if (panelKey(event, 'Escape') && this.isOpen) this.close(); });
     window.addEventListener('hnmo-share-open', () => this.open());
   }
 

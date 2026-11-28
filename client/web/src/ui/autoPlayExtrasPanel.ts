@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // The HNMO extras of auto play (not in the desktop helper): a small settings window, kept in this
 // browser per character. Opened with Shift + Z (and from the auto play settings). It has no desktop
 // window, so it is HNMO's own interface document (public/data/Interface/RmlUi/hnmo_auto_play_extras.rml)
@@ -46,7 +47,7 @@ export class AutoPlayExtrasPanel {
     };
     window.addEventListener('resize', () => this.place());
     window.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && this.isOpen) { event.preventDefault(); this.close(); }
+      if (panelKey(event, 'Escape') && this.isOpen) { event.preventDefault(); this.close(); }
     });
   }
 

@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // The guild windows, docked at the right edge like the desktop's:
 //  - the guild window (CGuildInfoWindow, guild_info.rml), G: without a guild, how to join one; with
 //    one, the Guild tab (mark, score, members, rival, notices, Leave / Disband), the Members tab
@@ -84,7 +85,7 @@ abstract class DockedWindow<M extends RmlModel & { text_px: number }> {
   protected constructor(private readonly documentName: string, protected readonly model: M, protected readonly docked: DockedWindowOptions) {
     prepareDocument(documentName).catch((error: unknown) => console.warn('Interface', error));
     window.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && this.isOpen && !document.querySelector('.confirm-dialog')) { this.close(); this.docked.click?.(); }
+      if (panelKey(event, 'Escape') && this.isOpen && !document.querySelector('.confirm-dialog')) { this.close(); this.docked.click?.(); }
     });
     window.addEventListener('resize', () => this.place());
   }

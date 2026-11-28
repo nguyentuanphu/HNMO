@@ -1,3 +1,4 @@
+import { gameKey, panelKey } from '../game/keyboardShortcuts.js';
 // The inventory (my_inventory.rml) and the vault (storage.rml), as the desktop client's
 // CMyInventory and CStorageInventory: the equipment slots and the 8 x 8 bag, the vault's 8 x 15
 // grid, the money, and moving items by clicking an item to pick it up and clicking where it goes.
@@ -1012,13 +1013,12 @@ export class ItemWindows {
       this.refresh();
     });
     window.addEventListener('keydown', (event) => {
-      if (event.target instanceof Element && event.target.closest('input, textarea')) return;
-      const key = event.key.toLowerCase();
-      if (key === 'i' || key === 'v') { event.preventDefault(); this.toggle(); }
-      if (key === 'k' && this.bag.isOpen && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void this.toggleExtension(); }
-      if (key === 'escape' && (this.bag.isOpen || this.extension.isOpen || this.vault.isOpen || this.shop.isOpen || this.trade.isOpen || this.docked.some((d) => d.window.isOpen))) this.closeAll();
+      if (gameKey(event, 'i') || gameKey(event, 'v')) { event.preventDefault(); this.toggle(); }
+      if (gameKey(event, 'k') && this.bag.isOpen) { event.preventDefault(); void this.toggleExtension(); }
+      if (panelKey(event, 'Escape') && (this.bag.isOpen || this.extension.isOpen || this.vault.isOpen || this.shop.isOpen || this.trade.isOpen || this.docked.some((d) => d.window.isOpen))) this.closeAll();
       // L: the repair mode of a repair shop; Shift + L repairs everything (CNPCShop::UpdateKeyEvent).
-      if (key === 'l' && this.shop.isOpen && this.shop.repairShop) {
+      if ((gameKey(event, 'l') || gameKey(event, 'l', 'shift')) && this.shop.isOpen && this.shop.repairShop) {
+        event.preventDefault();
         if (event.shiftKey) this.inventory.repair(0xff, false);
         else this.repairMode = !this.repairMode;
       }

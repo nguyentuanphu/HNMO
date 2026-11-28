@@ -113,11 +113,6 @@ function statusName(row: BugReportRow): string {
   }
 }
 
-/** Whether a key press is the window's shortcut, Alt+B (Option+B on a Mac, whose key gives "∫", so by the key's place). */
-export function isBugReportShortcut(event: Pick<KeyboardEvent, 'code' | 'altKey' | 'ctrlKey' | 'metaKey' | 'shiftKey'>): boolean {
-  return event.code === 'KeyB' && event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey;
-}
-
 /**
  * The 🐞 button for PCs and Macs, in the drawer of the top bar's ⚙, next to the guide's "i" (index.html; phones have it in their
  * menus).

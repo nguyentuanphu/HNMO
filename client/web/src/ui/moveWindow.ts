@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // The move window (M, CMoveCommandWindow, move_command.rml): the warp list with each map's level and
 // zen; a click on a map the hero may enter warps there (WarpCommandRequest with the server's key).
 
@@ -25,7 +26,7 @@ export class MoveWindow {
       movecommand_wheel: () => undefined,
     };
     window.addEventListener('resize', () => this.place());
-    window.addEventListener('keydown', (event) => { if (event.key === 'Escape' && this.doc) this.close(); });
+    window.addEventListener('keydown', (event) => { if (panelKey(event, 'Escape') && this.doc) this.close(); });
   }
 
   get isOpen(): boolean { return this.doc !== null; }

@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // Shared gold-framed dark modal panel for HNMO game windows (reuses game typography and i18n).
 
 import { onLanguageChange } from '../i18n.js';
@@ -152,7 +153,7 @@ export class HnmoModalPanel {
     document.body.append(this.root);
 
     window.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && this.openState) {
+      if (panelKey(event, 'Escape') && this.openState) {
         event.preventDefault();
         this.close();
       }
@@ -310,7 +311,7 @@ export function createHnmoPanel(id: string, title: string, onClose?: () => void)
     if (e.target === backdrop) close();
   });
   window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && backdrop.style.display !== 'none') {
+    if (panelKey(e, 'Escape') && backdrop.style.display !== 'none') {
       e.stopPropagation();
       close();
     }

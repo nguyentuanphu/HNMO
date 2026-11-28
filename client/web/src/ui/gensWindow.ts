@@ -1,3 +1,4 @@
+import { gameKey, panelKey } from '../game/keyboardShortcuts.js';
 // The Gens windows:
 //   gens_ranking.rml   CGensRanking (B): the family's mark for the hero's rank, the family, the title,
 //                      the ranking and the contribution, how much the next rank needs, the rewards text.
@@ -43,9 +44,8 @@ export class GensRankingWindow {
     options.gens.onChange(() => this.sync());
     window.addEventListener('resize', () => this.place());
     window.addEventListener('keydown', (event) => {
-      if (event.target instanceof Element && event.target.closest('input, textarea')) return;
-      if (event.key === 'Escape' && this.isOpen) { this.close(); return; }
-      if (event.key.toLowerCase() === 'b' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void this.toggle(); }
+      if (panelKey(event, 'Escape') && this.isOpen) { this.close(); return; }
+      if (gameKey(event, 'b')) { event.preventDefault(); void this.toggle(); }
     });
   }
 

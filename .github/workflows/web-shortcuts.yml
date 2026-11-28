@@ -1,0 +1,43 @@
+name: Web keyboard shortcuts
+on:
+  workflow_dispatch:
+  pull_request:
+    paths: ['client/web/**', 'server/**', '.github/workflows/web-shortcuts.yml']
+
+jobs:
+  shortcuts:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-15]
+    env:
+      SHORTCUTS_IN_GAME: '1'
+      SHORTCUTS_START_DEMO: '1'
+      HNMO_DEVELOPER_HUB: 'off'
+      BASE_URL: http://127.0.0.1:8081
+      ADMIN_URL: http://127.0.0.1:8095
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --prefix client/web
+      - run: npm run build --prefix client/web
+      - run: npm run typecheck --prefix client/web
+      - run: npm run test:unit --prefix client/web
+      - run: dotnet build server/src/Startup/HNMO.Startup.csproj -c Release -p:ci=true
+      - run: dotnet build client/web/bridge/HNMO.Web.csproj -c Release -p:ci=true
+      - working-directory: client/web
+        run: npx playwright install chromium firefox webkit
+      - working-directory: client/web
+        run: npx playwright test -c playwright.shortcuts.config.ts
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: web-shortcuts-${{ matrix.os }}
+          path: client/web/test-results

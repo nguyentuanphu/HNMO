@@ -36,7 +36,7 @@
   "Open the guide": "Mở hướng dẫn",
   "Open the settings": "Mở cài đặt",
   "Report a bug": "Báo lỗi",
-  "Report a bug (Alt+B)": "Báo lỗi (Alt+B)",
+  "Report a bug (Alt/Option+B)": "Báo lỗi (Alt/Option+B)",
   "Log in to the server, or explore offline.": "Đăng nhập vào máy chủ, hoặc khám phá ngoại tuyến.",
   "Read the guide": "Đọc hướng dẫn",
   "Loading…": "Đang tải…",
@@ -8094,5 +8094,16 @@
   "Extras": "Tuỳ chọn thêm",
   "Drag to resize": "Kéo để đổi kích thước",
   "Drag to resize window": "Kéo để đổi kích thước cửa sổ",
-  "Drag to resize chat window": "Kéo để đổi kích thước cửa sổ chat"
+  "Drag to resize chat window": "Kéo để đổi kích thước cửa sổ chat",
+"Chat Commands": "Lệnh trò chuyện",
+"Available when the server provides commands.": "Hiện khi máy chủ cung cấp lệnh.",
+"Window Menu, Mount Chain, and top-up milestones": "Menu cửa sổ, Bộ sưu tập thú cưỡi và Thưởng mốc nạp",
+"opens Quests.": "mở Nhiệm vụ.",
+"⚙ → i / 🐞 / Settings": "⚙ → i / 🐞 / Cài đặt",
+"Guide, bug report, and game settings": "Hướng dẫn, báo lỗi và cài đặt game",
+"Use Alt on Windows/Linux or Option on Mac. The touch menu also opens bug reports.": "Dùng Alt trên Windows/Linux hoặc Option trên Mac. Menu cảm ứng cũng mở được mục báo lỗi.",
+"VIP and Gift Box / Mailbox": "VIP và Hộp quà / Hộp thư",
+"Choose these windows from the touch menu on phones.": "Trên điện thoại, mở các cửa sổ này từ menu cảm ứng.",
+"Autoplay Window 1 opens Hunting, Extras, or Ultimate.": "Cửa sổ Autoplay 1 mở tab Đi săn, Mở rộng hoặc Ultimate.",
+"Enable the floating Ultimate bar from the Ultimate tab. It starts hidden.": "Bật thanh Ultimate nổi trong tab Ultimate. Thanh này mặc định ẩn."
 }

@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // The full-screen mini map (CMiniMap, mini_map.rml; Tab or the window menu's Map row): the world's
 // mini_map picture and its NPC and gate markers turned 45 degrees around the window centre with the
 // hero's cell there, the hero arrow, the frame, the close button and the hovered marker's name.
@@ -211,7 +212,7 @@ export class MiniMap {
     window.addEventListener('resize', () => { this.lastKey = ''; this.update(); });
     // UpdateKeyEvent(): Escape closes it (Tab, which also does, is the game's hot key).
     window.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && this.doc) { event.preventDefault(); this.close(); }
+      if (panelKey(event, 'Escape') && this.doc) { event.preventDefault(); this.close(); }
     });
     window.addEventListener('mousemove', (event) => {
       this.pointer = { x: event.clientX, y: event.clientY };

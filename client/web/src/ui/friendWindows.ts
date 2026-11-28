@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // The messenger's windows, as the desktop draws them in the window_shell frame (UI/Social):
 //  - the friend window (CUIFriendWindow / FriendShell, friend_shell.rml), F: the friends list with
 //    each friend's server (add, delete, write), the letter box (write, read, reply, delete the checked
@@ -304,7 +305,7 @@ export class FriendWindow extends ShellWindow<FriendShellModel> {
       }
     });
     window.addEventListener('keydown', (event) => {
-      if (event.key !== 'Escape' || document.querySelector('.confirm-dialog')) return;
+      if (!panelKey(event, 'Escape') || document.querySelector('.confirm-dialog')) return;
       if (this.isOpen) { this.hide(); this.options.click?.(); }
     });
   }

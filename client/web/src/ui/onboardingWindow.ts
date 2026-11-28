@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // HNMO's new-player guide in the web game: a small panel on the right (Y) with the current step, its hint, the count,
 // the reward, where to go (with an arrow on the screen towards the NPC or spot), the other steps, the final reward and
 // the rewards waiting for room in the bag; "Skip step" for optional steps and "Skip guide" (after a confirmation). It
@@ -127,7 +128,7 @@ export class OnboardingWindow {
     // The touch HUD (mobileHud.ts) comes and goes with the body's class: the panel moves with it.
     new MutationObserver(() => this.place()).observe(document.body, { attributes: true, attributeFilter: ['class'] });
     window.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && this.isOpen) { event.preventDefault(); this.close(); }
+      if (panelKey(event, 'Escape') && this.isOpen) { event.preventDefault(); this.close(); }
     });
     onLanguageChange(() => this.fill());
   }

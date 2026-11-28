@@ -1,3 +1,4 @@
+import type { trackAltNames } from './keyboardShortcuts.js';
 // Items and zen on the ground, as the desktop client shows them (CreateItemDrop, ItemAngle,
 // RenderItemName, GameLogic::Automation::PickUpItem):
 // - each drop is the item's own model, turned and scaled as its "ground" display says;
@@ -79,13 +80,11 @@ export class GroundItems {
   private readonly layer: HTMLDivElement;
   private pickupTarget: GroundDrop | null = null;
   private requested: number | null = null;
-  private altHeld = false;
-  private showNames = false;
-  private altPressedAlone = false;
   private hovered: GroundDrop | null = null;
   private readonly stop: () => void;
 
   constructor(
+    private readonly names: ReturnType<typeof trackAltNames>,
     connection: Connection,
     private readonly root: THREE.Object3D,
     private readonly camera: THREE.Camera,
@@ -98,32 +97,11 @@ export class GroundItems {
     void loadLabels();
     void loadTooltipData();
     this.stop = connection.onPacket((bytes) => this.handle(bytes));
-    window.addEventListener('keydown', (event) => {
-      if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
-      if (event.key === 'Alt') {
-        this.altHeld = true;
-        this.altPressedAlone = event.isTrusted && !event.repeat && !event.ctrlKey && !event.metaKey && !event.shiftKey;
-        event.preventDefault();
-      } else {
-        this.altPressedAlone = false;
-      }
-    });
-    window.addEventListener('keyup', (event) => {
-      if (event.key !== 'Alt') return;
-      this.altHeld = false;
-      if (event.isTrusted && this.altPressedAlone) {
-        this.altPressedAlone = false;
-        if (!(event.target instanceof Element && event.target.closest('input, textarea, select'))) {
-          this.showNames = !this.showNames;
-          event.preventDefault();
-        }
-      }
-    });
-    window.addEventListener('blur', () => { this.altHeld = false; this.altPressedAlone = false; });
+
   }
 
   /** Whether ground item names are shown (held Alt or toggled on). */
-  get namesShown(): boolean { return this.altHeld || this.showNames; }
+  get namesShown(): boolean { return this.names.held || this.names.toggled; }
 
   handle(bytes: Uint8Array): void {
     try {
@@ -253,7 +231,7 @@ export class GroundItems {
     for (const drop of this.drops.values()) {
       const x = cellCenter(drop.cell.x), y = cellCenter(drop.cell.y);
       drop.group.position.set(x, y, sampleHeight(world.heights, x, y));
-      const show = this.altHeld || this.showNames || this.hovered === drop;
+      const show = this.names.held || this.names.toggled || this.hovered === drop;
       const at = show ? this.screenOf(drop) : null;
       if (!at) { drop.label.style.display = 'none'; continue; }
       Object.assign(drop.label.style, { display: 'block', left: `${at.x}px`, top: `${at.y - LABEL_RAISE * scale}px`, fontSize: `${nativeTextPx()}px` });

@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // The party window (CPartyInfoWindow, party_info.rml), docked at the right edge: P or the HUD's party
 // button. Asks the server for the list when it opens (PartyListRequest); each member's group box with
 // the leader's flag, the map, the position, the life bar and "life / max"; the X for the leader (on
@@ -57,7 +58,7 @@ export class PartyWindow {
     };
     prepareDocument('party_info').catch((error: unknown) => console.warn('Interface', error));
     window.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && this.isOpen) { this.close(); this.options.click?.(); }
+      if (panelKey(event, 'Escape') && this.isOpen) { this.close(); this.options.click?.(); }
     });
     window.addEventListener('resize', () => this.place());
   }

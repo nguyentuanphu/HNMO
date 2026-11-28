@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // The character window (character_info.rml), as the desktop client's CCharacterInfoWindow
 // (UI/Character/CharacterInfoWindow.cpp): the name, class and server, the level, experience and points to spend,
 // the five stats with the lines below them (damage and rates, defense, speed, life, mana, wizardry, curse and
@@ -177,7 +178,7 @@ export class CharacterWindow {
     // Get the document and data ready in the background, so it opens at once.
     prepareDocument('character_info').catch((error: unknown) => console.warn('Interface', error));
     window.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && this.isOpen) this.close();
+      if (panelKey(event, 'Escape') && this.isOpen) this.close();
     });
     window.addEventListener('resize', () => this.place());
   }

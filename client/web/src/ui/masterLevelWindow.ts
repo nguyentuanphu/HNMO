@@ -1,3 +1,4 @@
+import { gameKey, panelKey } from '../game/keyboardShortcuts.js';
 // The master skill tree (master_level.rml with master_level_band.rml under the HUD), as the desktop
 // client's CMasterLevel (UI/HUD/MasterLevel.cpp) shows it: the class's tree in its three columns, each node's
 // box, lit or grey icon, arrow and level, the header (class, master level, level points, the master
@@ -124,8 +125,7 @@ export class MasterLevelWindow {
     options.master.onChange(() => this.refresh());
     window.addEventListener('resize', () => this.place());
     window.addEventListener('keydown', (event) => {
-      if (event.target instanceof Element && event.target.closest('input, textarea')) return;
-      if (event.key === 'Escape' && this.isOpen) { this.close(); this.options.click?.(); }
+      if (panelKey(event, 'Escape') && this.isOpen) { this.close(); this.options.click?.(); }
     });
   }
 
@@ -371,8 +371,7 @@ export function setupMasterLevel(setup: MasterLevelSetup): { master: MasterLevel
     ? { experience: master.experience, start: masterLevelStart(master.level), next: master.nextExperience } : null));
   master.onChange(() => hud.refresh());
   globalThis.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
-    if (event.key.toLowerCase() !== 'a' || event.ctrlKey || event.altKey || event.metaKey) return;
+    if (!gameKey(event, 'a')) return;
     event.preventDefault();
     if (master.isMaster) void window.toggle();
     setup.click?.();

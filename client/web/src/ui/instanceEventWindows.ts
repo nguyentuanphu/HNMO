@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // The windows of Illusion Temple, Doppelganger and Imperial Guardian, the desktop's own RML documents
 // (Data/Interface/RmlUi):
 //   cursed_temple_enter      CCursedTempleEnter: centred, 80 units down the 640x480 stage
@@ -128,7 +129,7 @@ class TempleEntryWindow {
     };
     prepareDocument('cursed_temple_enter').catch((error: unknown) => console.warn('Interface', error));
     window.addEventListener('resize', () => this.place());
-    window.addEventListener('keydown', (event) => { if (event.key === 'Escape' && this.isOpen) this.close(); });
+    window.addEventListener('keydown', (event) => { if (panelKey(event, 'Escape') && this.isOpen) this.close(); });
   }
 
   get isOpen(): boolean { return this.doc !== null || this.opening; }
@@ -366,7 +367,7 @@ class TempleResultWindow {
     };
     prepareDocument('cursed_temple_result').catch((error: unknown) => console.warn('Interface', error));
     window.addEventListener('resize', () => this.place());
-    window.addEventListener('keydown', (event) => { if (event.key === 'Escape' && this.doc) this.close(); });
+    window.addEventListener('keydown', (event) => { if (panelKey(event, 'Escape') && this.doc) this.close(); });
   }
 
   get isOpen(): boolean { return this.doc !== null; }
@@ -511,7 +512,7 @@ class ItemEntryWindow {
     };
     prepareDocument(options.document).catch((error: unknown) => console.warn('Interface', error));
     window.addEventListener('resize', () => this.place());
-    window.addEventListener('keydown', (event) => { if (event.key === 'Escape' && this.doc) { this.close(); this.options.click(); } });
+    window.addEventListener('keydown', (event) => { if (panelKey(event, 'Escape') && this.doc) { this.close(); this.options.click(); } });
   }
 
   get isOpen(): boolean { return this.doc !== null || this.opening; }

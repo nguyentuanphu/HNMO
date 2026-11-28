@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // HNMO's gift code window in the web game (the community window's "Gift code" button, the touch "more" menu, and the
 // chat command /code without a code): a field for a code, the result of the last code, the rewards which wait for room
 // in the bag (with Take) and the account's last codes. It has no desktop window, so it is HNMO's own interface document
@@ -86,7 +87,7 @@ export class GiftCodesWindow {
     };
     window.addEventListener('resize', () => this.place());
     window.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && this.isOpen) { event.preventDefault(); this.close(); }
+      if (panelKey(event, 'Escape') && this.isOpen) { event.preventDefault(); this.close(); }
     });
     onLanguageChange(() => this.fill());
   }
@@ -130,7 +131,7 @@ export class GiftCodesWindow {
       // Typing goes into the field, not to the game's hotkeys; Enter sends the code.
       doc.root.addEventListener('keydown', (event) => {
         if (event.key !== 'Escape') event.stopPropagation();
-        if (event.key === 'Enter' && event.target instanceof HTMLInputElement) this.model.gc_send();
+        if (panelKey(event, 'Enter') && event.target instanceof HTMLInputElement) this.model.gc_send();
       });
       this.place();
       this.fill();

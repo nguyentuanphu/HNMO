@@ -1,3 +1,4 @@
+import { gameKey } from './keyboardShortcuts.js';
 // The social side of the game in one place, set up once when the hero enters the world:
 //  - the guild (game/guild.ts): the guild window (G), the guild master NPC's window, /guild, /union,
 //    /rival, /rivaloff, the guild's name and mark over its members' heads (the desktop's name box);
@@ -137,11 +138,8 @@ export function setupSocial(options: SocialOptions): Social {
 
   // G: the guild window; F: the friend window from level 6 (CHotKey).
   window.addEventListener('keydown', (event) => {
-    if (event.ctrlKey || event.altKey || event.metaKey || event.repeat) return;
-    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
-    const key = event.key.toLowerCase();
-    if (key === 'g') { event.preventDefault(); void guildWindow.toggle(); }
-    else if (key === 'f') {
+    if (gameKey(event, 'g')) { event.preventDefault(); void guildWindow.toggle(); }
+    else if (gameKey(event, 'f')) {
       event.preventDefault();
       if (options.hero().level < FRIEND_LEVEL) { say("You must be at least level 6 to use the 'My Friend' function."); options.click(); return; }
       void friendWindow.toggle();

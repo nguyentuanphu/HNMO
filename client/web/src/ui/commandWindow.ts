@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // The command window (CCommandWindow, command_window.rml), docked at the right: D opens and closes
 // it (not in Chaos Castle). A button arms its command; the next right click on a player within two
 // cells runs it (RunCommand): trade, buy from the store, party, whisper, guild, alliance, hostility,
@@ -74,7 +75,7 @@ export class CommandWindow {
     };
     prepareDocument('command_window').catch((error: unknown) => console.warn('Interface', error));
     window.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && this.isOpen && !document.querySelector('.confirm-dialog')) { this.close(); this.options.click?.(); }
+      if (panelKey(event, 'Escape') && this.isOpen && !document.querySelector('.confirm-dialog')) { this.close(); this.options.click?.(); }
     });
     window.addEventListener('resize', () => this.place());
     window.addEventListener('pointermove', (event) => this.track(event), { passive: true });

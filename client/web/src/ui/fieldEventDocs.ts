@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // What the field event windows (Kalima, Crywolf, Castle Siege) share: the desktop's RML documents
 // docked at the right or laid on the 640x480 HUD board, their <img> art, their text sizes, the
 // generic_confirm_dialog OK boxes, questions and the amount entry, and message_box_view's
@@ -111,7 +112,7 @@ export class DockedWindow<M extends RmlModel> {
     prepareDocument(name).catch((error: unknown) => console.warn('Interface', error));
     window.addEventListener('resize', () => this.refresh());
     window.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && this.isOpen) { this.close(); this.options.click(); }
+      if (panelKey(event, 'Escape') && this.isOpen) { this.close(); this.options.click(); }
     });
     // The desktop syncs its windows every frame: the server's answers show without a click.
     setInterval(() => { if (this.doc) this.refresh(); }, REFRESH_MS);
@@ -181,8 +182,8 @@ export class FieldDialogs {
     window.addEventListener('resize', () => { if (this.doc) { placeBoard(this.doc); this.doc.update(); } });
     window.addEventListener('keydown', (event) => {
       if (!this.current) return;
-      if (event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); this.finish(true); }
-      else if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); this.finish(false); }
+      if (panelKey(event, 'Enter')) { event.preventDefault(); event.stopPropagation(); this.finish(true); }
+      else if (panelKey(event, 'Escape')) { event.preventDefault(); event.stopPropagation(); this.finish(false); }
     }, true);
   }
 

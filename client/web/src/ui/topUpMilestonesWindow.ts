@@ -99,7 +99,7 @@ export class TopUpMilestonesWindow {
     const L = (en: string, v: string): string => (vi ? v : en);
     const fmt = (n: number): string => n.toLocaleString(vi ? 'vi-VN' : 'en-AU');
 
-    this.panel.setTitle(L('Top-up milestones (U)', 'Thưởng mốc nạp (U)'));
+    this.panel.setTitle(L('Top-up milestones (Shift+T)', 'Thưởng mốc nạp (Shift+T)'));
     const body = this.panel.body;
     body.replaceChildren();
 

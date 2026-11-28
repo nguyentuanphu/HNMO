@@ -1,3 +1,4 @@
+import { gameKey } from '../game/keyboardShortcuts.js';
 // The personal store, as the desktop client's CMyShopInventory (my_shop.rml), CPurchaseShopInventory
 // (purchase_shop.rml), CPersonalShopTitleImp (the store titles over the sellers' heads) and their packet
 // handlers (WSclient.cpp ReceiveCreateShopTitleViewport … ReceiveRefreshItemList, NotifySoldItem,
@@ -499,8 +500,7 @@ export class PersonalShop {
     this.hookInventoryButton();
     // S with the inventory open (CMyInventory::UpdateKeyEvent) opens or closes the own store.
     window.addEventListener('keydown', (event) => {
-      if (event.target instanceof Element && event.target.closest('input, textarea')) return;
-      if (event.key.toLowerCase() !== 's' || event.ctrlKey || event.altKey || event.metaKey) return;
+      if (!gameKey(event, 's')) return;
       if (!itemWindows.bag.isOpen || !this.canOpenMyShop() || options.level() < STORE_MIN_LEVEL) return;
       event.preventDefault();
       if (this.myShop.isOpen) this.closeMyShop(); else void this.showMyShop();

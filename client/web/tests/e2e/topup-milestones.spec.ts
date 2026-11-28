@@ -51,7 +51,7 @@ test('the top-up milestones game window renders progress and sends claims', asyn
     });
   });
 
-  await page.keyboard.press('u');
+  await page.keyboard.press('Shift+t');
   await expect(page.locator('#hnmo_topup_milestones')).toBeVisible();
   const initialSent = await page.evaluate(() => (window as unknown as Win).__sent);
   expect(initialSent[0].name).toBe('HnmoTopUpMilestonesCommand');

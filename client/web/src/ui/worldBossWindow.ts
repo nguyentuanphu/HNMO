@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // HNMO's world bosses in the web game: a line on the screen while a boss is alive (the boss, its map, the time
 // left and your damage rank) and a window (N) with every boss, its next spawn in Sydney time and the player's own
 // time, the damage table of a boss on a map, the waiting rewards and the boss-hunt points of the week. It has no
@@ -117,7 +118,7 @@ export class WorldBossWindow {
     document.body.append(this.line);
     window.addEventListener('resize', () => this.place());
     window.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && this.isOpen) { event.preventDefault(); this.close(); }
+      if (panelKey(event, 'Escape') && this.isOpen) { event.preventDefault(); this.close(); }
     });
     onLanguageChange(() => this.fill());
   }

@@ -1,3 +1,4 @@
+import { canHandleKey, canUseGameShortcut, gameKey, hasKeyboardControl, hasTextInput, installKeyboardShortcuts, matchesModifiers, optionKey, trackAltNames } from './game/keyboardShortcuts.js';
 // The web client: log in through the relay and play on the HNMO server. Left-click walks, right-drag turns the camera, the wheel zooms.
 
 import { availableLanguages, currentLanguage, initLanguage, onLanguageChange, savedLanguage, setLanguage, translate, type Language } from './i18n.js';
@@ -52,7 +53,7 @@ import { LuckyNumberWindow } from './ui/luckyNumberWindow.js';
 import { MarriageWindow } from './ui/marriageWindow.js';
 import { MarketWindow } from './ui/marketWindow.js';
 import { ArenaWindow, savedArenaHome, type ArenaHome } from './ui/arenaWindow.js';
-import { BugReportWindow, installErrorLog, isBugReportShortcut } from './ui/bugReportWindow.js';
+import { BugReportWindow, installErrorLog } from './ui/bugReportWindow.js';
 import { autoErrorScope, installAutoErrorReports, setAutoErrorSender } from './autoErrors.js';
 import { EscrowWindow } from './ui/escrowWindow.js';
 import { VaultPages } from './ui/vaultPages.js';
@@ -368,6 +369,7 @@ installErrorLog();
 installAutoErrorReports();
 state.cooldowns = skillCooldowns;
 state.chat = chat;
+installKeyboardShortcuts(() => chat.isOpen);
 window.__game = state; // for automated tests and debugging from the console
 
 // HNMO extra: the performance report (Settings, or Ctrl+Shift+P): what the frames cost on the player's computer.
@@ -764,28 +766,9 @@ function stepThumbstickWalk(): void {
 // has its name over its head (not in Chaos Castle); the pointer is looked at once a frame.
 const labelElements = new Map<Character, HTMLSpanElement>();
 let labelPointer: MouseEvent | null = null;
-let alwaysShowNames = false;
-let altPressedAlone = false;
+const altNames = trackAltNames();
 ui.canvas.addEventListener('pointermove', (event) => { labelPointer = event; }, { passive: true });
 ui.canvas.addEventListener('pointerleave', () => { labelPointer = null; });
-window.addEventListener('keydown', (event) => {
-  if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
-  if (event.key === 'Alt' && !event.repeat && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
-    altPressedAlone = true;
-  } else if (event.key !== 'Alt') {
-    altPressedAlone = false;
-  }
-});
-window.addEventListener('keyup', (event) => {
-  if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
-  if (event.key === 'Alt' && altPressedAlone) {
-    altPressedAlone = false;
-    alwaysShowNames = !alwaysShowNames;
-    event.preventDefault();
-  }
-});
-window.addEventListener('blur', () => { altPressedAlone = false; });
-
 const labelsShown = new Set<Character>();
 const speechBalloons = new Map<Character, { lines: string[]; expiresAt: number }>();
 function showSpeechBalloon(speaker: Character | null, message: string): void {
@@ -814,7 +797,7 @@ function updateLabels(): void {
     for (const character of candidates) {
       const balloon = speechBalloons.get(character);
       // A pointed player's name box (with its Gens mark and guild line) is the Gens marks' (ui/gensWindow.ts).
-      const showByAlt = alwaysShowNames && !inChaosCastle;
+      const showByAlt = altNames.toggled && !inChaosCastle;
       if (!balloon && !showByAlt && (character !== pointed || character.kind === 'player') && character.kind !== 'kalimaGate') continue; // a Kalima gate keeps its name box
       const dx = character.cell.x - hero.cell.x, dy = character.cell.y - hero.cell.y;
       if (Math.hypot(dx, dy) > LABEL_RANGE_CELLS) continue;
@@ -1682,7 +1665,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   setPlayerAnimationSpeeds(num('AttackSpeed'), num('MagicSpeed'));
   const overlay = new CombatOverlay(camera, ui.canvas, root);
   state.overlay = overlay;
-  state.ground = new GroundItems(connection, root, camera, ui.canvas, {
+  state.ground = new GroundItems(altNames, connection, root, camera, ui.canvas, {
     hero: () => online.hero,
     walkTo: (cell) => { online.walkTo(cell); },
     send: (id) => connection.send('ClientToServer', 'PickupItemRequest', { ItemId: id }),
@@ -1990,19 +1973,17 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   online.onTalk = (npc) => { itemWindows.shop.repairShop = [243, 246, 251, 416, 578].includes(npc.monsterNumber ?? -1); };
   inventory.onChange((what) => { if (what === 'buyFailed') chat.add('You cannot buy this item.', 'system'); });
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
     const slot = HOTKEY_LETTERS.indexOf(event.key.toUpperCase() as typeof HOTKEY_LETTERS[number]);
-    if (slot < 0 || event.altKey || event.metaKey) return;
-    event.preventDefault();
-    if (event.ctrlKey) {
+    if (slot < 0 || !canUseGameShortcut(event)) return;
+    if (matchesModifiers(event, 'ctrl')) {
       // Ctrl + Q/W/E/R over a bag item binds the key to it (CMyInventory::UpdateKeyEvent).
       const hovered = (itemWindows.bag.isOpen ? itemWindows.bag.hoverSlot : null)
         ?? (itemWindows.extension.isOpen ? itemWindows.extension.hoverSlot : null);
       const item = hovered !== null && hovered >= 12 ? inventory.items.get(hovered) : undefined;
-      if (item) hotkeys.bind(slot, item);
+      if (item) { event.preventDefault(); hotkeys.bind(slot, item); }
       return;
     }
-    if (!event.repeat) useHotkey(slot);
+    if (matchesModifiers(event)) { event.preventDefault(); useHotkey(slot); }
   });
   // The character window (C): the rightmost docked window; the inventory moves left of it while it's open.
   const petInfoWindow = new PetInfoWindow({
@@ -2040,8 +2021,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     },
   });
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
-    if (event.key.toLowerCase() === 'c' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void characterWindow.toggle(); }
+    if (gameKey(event, 'c')) { event.preventDefault(); void characterWindow.toggle(); }
   });
   const toggleFriends = () => {
     if (eventOfMap(state.mapNumber ?? null) === 'chaosCastle') return;
@@ -2171,8 +2151,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     warp: (warp) => connection.send('ClientToServer', 'WarpCommandRequest', { CommandKey: moveCommandKey, WarpInfoIndex: warp.index }),
   });
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
-    if (event.key.toLowerCase() === 'm' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void moveWindow.toggle(); }
+    if (gameKey(event, 'm')) { event.preventDefault(); void moveWindow.toggle(); }
   });
   inventory.onChange(() => moveWindow.refresh());
   stats.onChange(() => moveWindow.refresh());
@@ -2194,8 +2173,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   });
   state.miniMap = miniMap;
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
-    if (event.key === 'Tab' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void miniMap.toggle(); }
+    if (gameKey(event, 'Tab') && !hasKeyboardControl(event)) { event.preventDefault(); void miniMap.toggle(); }
   });
   // Ready in the background, so M opens at once (compiling a window's stylesheets takes a while).
   void loadWarps().then(() => prepareDocument('move_command')).then(() => prepareDocument('map_name')).catch((error: unknown) => console.warn('Move window', error));
@@ -2318,8 +2296,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   state.missions = missions;
   connection.onPacket((bytes) => { missions.handle(bytes); });
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
-    if (event.key.toLowerCase() === 'j' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); missions.toggle(); }
+    if (gameKey(event, 'j')) { event.preventDefault(); missions.toggle(); }
   });
   // HNMO's world bosses (N): the line on the screen while a boss is alive, the window, the announcements in the chat.
   const worldBosses = new WorldBossWindow({
@@ -2339,8 +2316,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   state.seasonPlan = seasonPlan;
   connection.onPacket((bytes) => { seasonPlan.handle(bytes); });
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
-    if (event.key === 'F8' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); seasonPlan.toggle(); }
+    if (gameKey(event, 'F8')) { event.preventDefault(); seasonPlan.toggle(); }
   });
   window.addEventListener('hnmo-season-plan-open', () => { seasonPlan.open(); });
   const leftovers = new LeftoversWindow((name, fields) => connection.send('ClientToServer', name, fields));
@@ -2348,20 +2324,17 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   connection.onPacket((bytes) => { leftovers.handle(bytes); });
   window.addEventListener('hnmo-leftovers-open', () => { leftovers.open(); });
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
-    if (event.key === 'F10' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); leftovers.toggle(); }
+    if (gameKey(event, 'F10')) { event.preventDefault(); leftovers.toggle(); }
   });
   const mountChain = new MountChainWindow((name, fields) => connection.send('ClientToServer', name, fields));
   state.mountChain = mountChain;
   connection.onPacket((bytes) => { mountChain.handle(bytes); });
   window.addEventListener('hnmo-mount-chain-open', () => { mountChain.open(); });
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
-    if ((event.key === 'U' || event.key === 'u') && event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); mountChain.toggle(); }
+    if (gameKey(event, 'u', 'shift')) { event.preventDefault(); mountChain.toggle(); }
   });
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
-    if (event.key.toLowerCase() === 'n' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); worldBosses.toggle(); }
+    if (gameKey(event, 'n')) { event.preventDefault(); worldBosses.toggle(); }
   });
   // HNMO's event & boss timetable (H): every event, invasion and world boss with Sydney/local times, maps and drops.
   const eventAlerts = new EventAlertsWindow();
@@ -2374,8 +2347,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   connection.onPacket((bytes) => { timetable.handle(bytes); });
   timetable.start();
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
-    if (event.key.toLowerCase() === 'h' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); timetable.toggle(); }
+    if (gameKey(event, 'h')) { event.preventDefault(); timetable.toggle(); }
   });
   window.addEventListener('hnmo-timetable-open', () => timetable.open());
   // HNMO's daily lucky number (L): pick a number, view draw odds/prizes and claim waiting jewels.
@@ -2387,8 +2359,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   connection.onPacket((bytes) => { luckyNumber.handle(bytes); });
   luckyNumber.start();
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
-    if (event.key.toLowerCase() === 'l' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); luckyNumber.toggle(); }
+    if (gameKey(event, 'l') && !(itemWindows.shop.isOpen && itemWindows.shop.repairShop)) { event.preventDefault(); luckyNumber.toggle(); }
   });
   // HNMO's marriage system (Shift+M, /marry): proposals, Devias Church ceremonies, couple title, hunting bonus.
   const marriage = new MarriageWindow({
@@ -2399,8 +2370,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   connection.onPacket((bytes) => { marriage.handle(bytes); });
   marriage.start();
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
-    if (event.key.toLowerCase() === 'm' && event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); marriage.toggle(); }
+    if (gameKey(event, 'm', 'shift')) { event.preventDefault(); marriage.toggle(); }
   });
   window.addEventListener('hnmo-marriage-open', () => marriage.open());
   // HNMO's item market (F6, or NPC 547 Market Julia): escrow listings for Zen or CashShop coins.
@@ -2411,8 +2381,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   state.market = market;
   connection.onPacket((bytes) => { market.handle(bytes); });
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
-    if (event.key === 'F6' && !event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); market.toggle(); }
+    if (gameKey(event, 'F6')) { event.preventDefault(); market.toggle(); }
   });
   window.addEventListener('hnmo-market-open', () => { market.open(); });
   // HNMO's bigger stacks (F5 50 / 51): counts on every stack kind, Shift + click splits, unlocks from the vault.
@@ -2451,9 +2420,8 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   connection.onPacket((bytes) => { escrow.handlePacket(bytes); });
   for (const bytes of earlyPackets) escrow.handlePacket(bytes);
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
     // Shift+F6, next to the item market (F6): F9 is the top races window's (owner, 2026-11-16).
-    if (event.key === 'F6' && event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); escrow.toggle(); }
+    if (gameKey(event, 'F6', 'shift')) { event.preventDefault(); escrow.toggle(); }
   });
   window.addEventListener('hnmo-escrow-open', () => { escrow.open(); });
   // HNMO Arena (Alt+A, 🏟 in the phone menu): travel to the Arena and back with a one-time ticket (ui/arenaWindow.ts).
@@ -2472,8 +2440,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   state.arena = arena;
   connection.onPacket((bytes) => { arena.handle(bytes); });
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
-    if (event.key.toLowerCase() === 'a' && event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) { event.preventDefault(); arena.toggle(); }
+    if (optionKey(event, 'KeyA')) { event.preventDefault(); arena.toggle(); }
   });
   window.addEventListener('hnmo-arena-open', () => { arena.open(); });
   // Bug reports (Alt/Option+B, the 🐞 button under the top bar's ⚙ on PCs and Macs, 🐞 in the phone menu): to the server's owner, who may send them on to the HNMO developer.
@@ -2485,8 +2452,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   state.bugReports = bugReports;
   connection.onPacket((bytes) => { bugReports.handle(bytes); });
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
-    if (isBugReportShortcut(event)) { event.preventDefault(); bugReports.toggle(); }
+    if (optionKey(event, 'KeyB')) { event.preventDefault(); bugReports.toggle(); }
   });
   window.addEventListener('hnmo-bug-report-open', () => { bugReports.open(); });
   // VIP shares the website's reviewed offers and stable retry identifier, using the authenticated game session.
@@ -2494,8 +2460,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   state.vip = vip;
   connection.onPacket((bytes) => { vip.handle(bytes); });
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
-    if (event.key.toLowerCase() === 'u' && event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) { event.preventDefault(); vip.toggle(); }
+    if (optionKey(event, 'KeyU')) { event.preventDefault(); vip.toggle(); }
   });
   window.addEventListener('hnmo-vip-open', () => { vip.open(); });
   // Account & event mailbox (Alt+M): works even while in-world via F5 27 / F5 28 under persistence lock.
@@ -2503,8 +2468,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   state.giftBox = giftBox;
   connection.onPacket((bytes) => { giftBox.handle(bytes); });
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
-    if (event.key.toLowerCase() === 'm' && event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) { event.preventDefault(); giftBox.toggle(); }
+    if (optionKey(event, 'KeyM')) { event.preventDefault(); giftBox.toggle(); }
   });
   window.addEventListener('hnmo-giftbox-open', () => { giftBox.open(); });
   // HNMO's Jewel Bank & master skill clear (F7).
@@ -2515,8 +2479,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   state.jewelBank = jewelBank;
   connection.onPacket((bytes) => { jewelBank.handle(bytes); });
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
-    if (event.key === 'F7' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); jewelBank.toggle(); }
+    if (gameKey(event, 'F7')) { event.preventDefault(); jewelBank.toggle(); }
   });
   window.addEventListener('hnmo-jewel-bank-open', () => { jewelBank.open(); });
   // HNMO's guild levels: a panel next to the guild window (G) with the level, the experience, this week's ladder rank and
@@ -2569,8 +2532,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   for (const bytes of earlyPackets) community.handle(bytes);
   community.start();
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
-    if (event.key.toLowerCase() === 'k' && !event.ctrlKey && !event.altKey && !event.metaKey && !itemWindows.bag.isOpen) { event.preventDefault(); community.toggle(); }
+    if (gameKey(event, 'k') && !itemWindows.bag.isOpen) { event.preventDefault(); community.toggle(); }
   });
   // HNMO's top races (F9, a key the desktop doesn't use; also the touch "more" menu): the running races, the player's
   // rank, the top 10, the prizes, the time left, the past winners; starts, ends and prizes are told in the chat.
@@ -2584,8 +2546,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   for (const bytes of earlyPackets) topRaces.handle(bytes);
   topRaces.start();
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
-    if (event.key === 'F9' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); topRaces.toggle(); }
+    if (gameKey(event, 'F9')) { event.preventDefault(); topRaces.toggle(); }
   });
   window.addEventListener('hnmo-top-races-open', () => topRaces.toggle());
   // HNMO's gift codes: a window (the community window's button, the touch "more" menu, /code without a code) with a field
@@ -2601,7 +2562,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   for (const bytes of earlyPackets) giftCodes.handle(bytes);
   giftCodes.start();
   window.addEventListener('hnmo-gift-codes-open', () => giftCodes.open());
-  // HNMO's top-up milestones ("thưởng mốc nạp", U key): cumulative VND rewards claimed once per step.
+  // HNMO's top-up milestones ("thưởng mốc nạp", Shift+T): cumulative VND rewards claimed once per step.
   const topUpMilestones = new TopUpMilestonesWindow({
     send: (name, fields) => connection.send('ClientToServer', name, fields),
     message: (text) => chat.add(text, 'system'),
@@ -2611,8 +2572,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   for (const bytes of earlyPackets) topUpMilestones.handlePacket(bytes);
   topUpMilestones.requestState();
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
-    if (event.key.toLowerCase() === 'u' && !event.ctrlKey && !event.altKey && !event.metaKey) {
+    if (gameKey(event, 't', 'shift')) {
       event.preventDefault();
       topUpMilestones.toggle();
     }
@@ -2687,16 +2647,14 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   const talkBeforeGuide = online.onTalk;
   online.onTalk = (npc) => { talkBeforeGuide?.(npc); if (onboarding.isOpen) onboarding.close(); };
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
-    if (event.key.toLowerCase() === 'y' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); onboarding.toggle(); }
+    if (gameKey(event, 'y')) { event.preventDefault(); onboarding.toggle(); }
   });
   window.addEventListener('hnmo-onboarding-open', () => onboarding.open());
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
-    if (event.key === 'Home') { event.preventDefault(); autoPlay.toggle(); }
-    if (event.key.toLowerCase() === 'z' && event.altKey) { event.preventDefault(); void settingsWindow.toggleTab(4); }
-    else if (event.key.toLowerCase() === 'z' && event.shiftKey) { event.preventDefault(); void settingsWindow.toggleTab(3); }
-    else if (event.key.toLowerCase() === 'z' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void settingsWindow.toggle(); }
+    if (gameKey(event, 'Home')) { event.preventDefault(); autoPlay.toggle(); }
+    if (optionKey(event, 'KeyZ')) { event.preventDefault(); void settingsWindow.toggleTab(4); }
+    else if (gameKey(event, 'z', 'shift')) { event.preventDefault(); void settingsWindow.toggleTab(3); }
+    else if (gameKey(event, 'z')) { event.preventDefault(); void settingsWindow.toggle(); }
   });
   hud.setSkills({
     list: skills,
@@ -2729,12 +2687,15 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   // The number keys pick the current skill (CSkillList::UpdateKeyEvent); Ctrl + a number over a skill
   // of the popup puts it on that key.
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
-    if (!/^Digit[0-9]$/.test(event.code) || event.altKey || event.metaKey) return;
+    if (!/^Digit[0-9]$/.test(event.code) || !canUseGameShortcut(event)) return;
     const hotkey = Number(event.code.slice(5));
-    event.preventDefault();
-    if (event.ctrlKey) { if (hud.hoveredSkill >= 0) skills.setHotkey(hotkey, hud.hoveredSkill); return; }
-    skills.useHotkey(hotkey);
+    if (matchesModifiers(event, 'ctrl') && hud.hoveredSkill >= 0 && skills.skillAt(hud.hoveredSkill)) {
+      event.preventDefault();
+      skills.setHotkey(hotkey, hud.hoveredSkill);
+    } else if (matchesModifiers(event)) {
+      event.preventDefault();
+      skills.useHotkey(hotkey);
+    }
   });
   inventory.onChange(() => { hud.refreshItemSlots(); hud.refreshSkills(); });
   hotkeys.onChange(() => hud.refreshItemSlots());
@@ -2799,11 +2760,10 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   window.addEventListener('hnmo-ranking-open', () => { ranking.open(); });
   window.addEventListener('hnmo-add-stats-open', () => { addStats.open(); });
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
-    if (event.key.toLowerCase() === 'r' && event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) {
+    if (gameKey(event, 'r', 'shift')) {
       event.preventDefault();
       ranking.toggle();
-    } else if (event.key.toLowerCase() === 'a' && event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) {
+    } else if (gameKey(event, 'a', 'shift')) {
       event.preventDefault();
       addStats.toggle();
     }
@@ -2817,8 +2777,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   });
   state.partyWindow = partyWindow;
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
-    if (event.key.toLowerCase() === 'p' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void partyWindow.toggle(); }
+    if (gameKey(event, 'p')) { event.preventDefault(); void partyWindow.toggle(); }
   });
   // The command window (D): a button arms a command for the next right click on a player (ui/commandWindow.ts).
   const say = (text: string, kind: 'system' | 'error' = 'system') => chat.add(text, kind);
@@ -2875,9 +2834,8 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     onToggle: (open) => { itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); },
   });
   window.addEventListener('keydown', (event) => {
-    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
-    if (event.key.toLowerCase() === 'd' && !event.ctrlKey && !event.altKey && !event.metaKey && !event.repeat) { event.preventDefault(); void state.commandWindow?.toggle(); }
-    else if (event.key.toLowerCase() === 'j' && !event.ctrlKey && !event.altKey && !event.metaKey && !event.repeat) {
+    if (gameKey(event, 'd')) { event.preventDefault(); void state.commandWindow?.toggle(); }
+    else if (gameKey(event, 'j', 'shift')) {
       if (chatCommandWindow.commandCount > 0 || chatCommandWindow.isOpen) { event.preventDefault(); void chatCommandWindow.toggle(); }
     }
   });
@@ -2967,7 +2925,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   };
   const escapeHandledByOther = new WeakSet<KeyboardEvent>();
   window.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape') return;
+    if (!canHandleKey(event) || event.key !== 'Escape' || !matchesModifiers(event) || chat.isOpen) return;
     if (sysMenu.isOpen) {
       sysMenu.close();
       sounds.click();
@@ -2975,21 +2933,20 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
       event.stopImmediatePropagation();
       return;
     }
-    if (hasOtherOverlayOpen() || document.activeElement?.matches('input, textarea, select')) {
+    if (hasOtherOverlayOpen() || hasTextInput(event)) {
       escapeHandledByOther.add(event);
     }
   }, true);
   window.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && !escapeHandledByOther.has(event) && !event.defaultPrevented && !event.ctrlKey && !event.altKey && !event.metaKey) {
+    if (gameKey(event, 'Escape') && !escapeHandledByOther.has(event)) {
       event.preventDefault();
       void sysMenu.open();
       return;
     }
-    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
-    if (event.key === 'F1' && !event.ctrlKey && !event.altKey && !event.metaKey) {
+    if (gameKey(event, 'F1')) {
       event.preventDefault();
       toggleGuide();
-    } else if (event.key.toLowerCase() === 'u' && !event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey && !event.repeat) {
+    } else if (gameKey(event, 'u')) {
       event.preventDefault();
       void windowMenu.toggle();
     }
@@ -3335,8 +3292,11 @@ if (hudTools && hudToolsToggle) {
       setToolsExpanded(false);
     }
   });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && hudTools.classList.contains('expanded')) setToolsExpanded(false);
-  });
+  window.addEventListener('keydown', (event) => {
+    if (!gameKey(event, 'Escape') || !hudTools.classList.contains('expanded')) return;
+    setToolsExpanded(false);
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }, true);
 }
 requestAnimationFrame(frame);

@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // The (i) button: the HNMO guide (public/guide.html) over the game — what to play and what each
 // feature does. An HNMO extra; the page loads on first open.
 
@@ -27,7 +28,7 @@ export function setUpGuide(): void {
     window.dispatchEvent(new Event('hnmo-timetable-open'));
   });
   overlay.addEventListener('click', (event) => { if (event.target === overlay) hide(); });
-  window.addEventListener('keydown', (event) => { if (event.key === 'Escape' && !overlay.hidden) hide(); });
+  window.addEventListener('keydown', (event) => { if (panelKey(event, 'Escape') && !overlay.hidden) hide(); });
   // Keys pressed while the guide is open stay in the guide.
   button.addEventListener('pointerdown', (event) => event.stopPropagation());
   overlay.addEventListener('pointerdown', (event) => event.stopPropagation());

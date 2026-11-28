@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // HNMO's missions window (J): the daily and weekly missions with their progress and claim buttons, the daily
 // streak, the monthly login calendar, the earned coins of the day and the invite code. It has no desktop window,
 // so it is HNMO's own interface document (public/data/Interface/RmlUi/hnmo_missions.rml) in the game's message
@@ -121,7 +122,7 @@ export class MissionsWindow {
     };
     window.addEventListener('resize', () => this.place());
     window.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && this.isOpen) { event.preventDefault(); this.close(); }
+      if (panelKey(event, 'Escape') && this.isOpen) { event.preventDefault(); this.close(); }
     });
     onLanguageChange(() => this.fill());
   }
@@ -157,7 +158,7 @@ export class MissionsWindow {
       // Typing goes into the invite field, not to the game's hotkeys.
       doc.root.addEventListener('keydown', (event) => {
         if (event.key !== 'Escape') event.stopPropagation();
-        if (event.key === 'Enter' && event.target instanceof HTMLInputElement) this.model.mi_invite();
+        if (panelKey(event, 'Enter') && event.target instanceof HTMLInputElement) this.model.mi_invite();
       });
       this.place();
       this.fill();

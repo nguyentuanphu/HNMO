@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // HNMO's top races in the web game: a window (F9, and the touch "more" menu) with the running races (what they count,
 // who takes part, the time left in Sydney time and the player's own time), the player's rank and value, the top 10 of
 // the player's table, the prizes, the races to come, the past winners and the prizes waiting for room in the bag. It
@@ -171,7 +172,7 @@ export class TopRacesWindow {
     };
     window.addEventListener('resize', () => this.place());
     window.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && this.isOpen) { event.preventDefault(); this.close(); }
+      if (panelKey(event, 'Escape') && this.isOpen) { event.preventDefault(); this.close(); }
     });
     onLanguageChange(() => this.fill());
   }

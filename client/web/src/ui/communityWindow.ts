@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // HNMO's community window in the web game (K, when the inventory isn't open; also in the touch "more" menu): the
 // one-time coins for linking the account to Discord (a link code from the server, typed as /link CODE in the Discord
 // server, where the bot only answers members) and for joining the Zalo group (a claim code posted in the group, which
@@ -113,7 +114,7 @@ export class CommunityWindow {
     };
     window.addEventListener('resize', () => this.place());
     window.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && this.isOpen) { event.preventDefault(); this.close(); }
+      if (panelKey(event, 'Escape') && this.isOpen) { event.preventDefault(); this.close(); }
     });
     onLanguageChange(() => this.fill());
   }
@@ -157,7 +158,7 @@ export class CommunityWindow {
       // Typing goes into the fields, not to the game's hotkeys.
       doc.root.addEventListener('keydown', (event) => {
         if (event.key !== 'Escape') event.stopPropagation();
-        if (event.key === 'Enter' && event.target instanceof HTMLInputElement) {
+        if (panelKey(event, 'Enter') && event.target instanceof HTMLInputElement) {
           if (event.target.classList.contains('cm-code-input')) this.model.cm_code(); else this.model.cm_zalo();
         }
       });

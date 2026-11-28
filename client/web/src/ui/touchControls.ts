@@ -162,7 +162,7 @@ export function installTouchControls(actions: TouchActions): HTMLElement {
     element.addEventListener('pointerdown', (event) => event.stopPropagation());
     element.addEventListener('click', (event) => {
       event.stopPropagation();
-      window.dispatchEvent(new KeyboardEvent('keydown', { key: button.key, bubbles: true }));
+      key(button.key);
     });
     bar.append(element);
   }

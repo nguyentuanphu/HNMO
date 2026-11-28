@@ -41,8 +41,8 @@ test('Command Window Special button opens Chat Command list and all 12 buttons r
   await chatCmd.locator('#btn_exit').click();
   await expect(chatCmd).toHaveCount(0);
 
-  // J hotkey toggles Chat Command window open and Escape closes it.
-  await page.keyboard.press('j');
+  // Shift+J toggles Chat Command window open and Escape closes it.
+  await page.keyboard.press('Shift+j');
   await expect(chatCmd.locator('#panel')).toBeVisible(OPEN);
   await page.keyboard.press('Escape');
   await expect(chatCmd).toHaveCount(0);

@@ -1,3 +1,4 @@
+import { canHandleKey, gameKey, matchesModifiers, panelKey } from '../game/keyboardShortcuts.js';
 // The cash shop (HNMO gives its coins for free), as the desktop client's CInGameShop (in_game_shop.rml),
 // CMsgBoxIGSBuyPackageItem / CMsgBoxIGSBuySelectItem (igs_buy_package.rml, igs_buy_select.rml), the buy, use and
 // storage item dialogs (MsgBoxIGS*.cpp) and their packets (WSclient.cpp ReceiveIGS_*): X or the HUD's shop button
@@ -211,10 +212,8 @@ export class CashShop {
     };
     options.connection.onPacket((bytes) => this.handle(bytes));
     window.addEventListener('keydown', (event) => {
-      if (event.target instanceof Element && event.target.closest('input, textarea')) return;
-      if (event.ctrlKey || event.altKey || event.metaKey) return;
-      if (event.key === 'Escape' && this.doc && !this.dialog) { this.close(); return; }
-      if (event.key.toLowerCase() === 'x') { event.preventDefault(); void this.toggle(); }
+      if (panelKey(event, 'Escape') && this.doc && !this.dialog) { this.close(); return; }
+      if (gameKey(event, 'x')) { event.preventDefault(); void this.toggle(); }
     });
     window.addEventListener('resize', () => this.place());
   }
@@ -609,7 +608,7 @@ export class CashShop {
     for (const field of [id, message] as (HTMLElement | null)[]) {
       field?.addEventListener('keydown', (event: KeyboardEvent) => {
         event.stopPropagation();
-        if (event.key === 'Tab') { event.preventDefault(); (field === id ? message : id)?.focus(); }
+        if (event.key === 'Tab' && canHandleKey(event) && matchesModifiers(event)) { event.preventDefault(); (field === id ? message : id)?.focus(); }
       });
     }
     this.placeDialog();

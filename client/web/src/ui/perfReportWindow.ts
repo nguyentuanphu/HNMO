@@ -1,3 +1,4 @@
+import { canUseGameShortcut, matchesModifiers, panelKey } from '../game/keyboardShortcuts.js';
 // HNMO extra: the performance report window (the settings window's "Performance report" button, or
 // Ctrl+Shift+P). It records about 15 seconds of play with game/perfRecorder.ts, shows what it found
 // (frame times, the slowest frames and the game's parts in them, long tasks, the functions that took the
@@ -105,11 +106,11 @@ export class PerfReportWindow {
       pr_close: () => { this.options.click(); this.close(); },
     };
     window.addEventListener('keydown', (event) => {
-      if (event.ctrlKey && event.shiftKey && !event.altKey && event.code === 'KeyP') {
+      if (event.code === 'KeyP' && matchesModifiers(event, 'ctrl-shift') && canUseGameShortcut(event)) {
         event.preventDefault();
         if (this.recorder.recording) return;
         void this.open().then(() => this.record());
-      } else if (event.key === 'Escape' && this.wanted && !this.recorder.recording) this.close();
+      } else if (panelKey(event, 'Escape') && this.wanted && !this.recorder.recording) this.close();
     });
     window.addEventListener('resize', () => this.place());
     onLanguageChange(() => this.fill());

@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // The auto play settings windows, as the desktop client's helper windows: the settings window
 // (mu_helper_config.rml, CMuHelperConfigWindow) with its three tabs, the detail panel beside it
 // (mu_helper_detail.rml, CMuHelperDetailWindow: a skill's activation condition, the recovery
@@ -500,7 +501,7 @@ export class AutoPlaySettingsWindow {
     configDoc.$('#item_name')?.setAttribute('maxlength', String(MAX_ITEM_NAME));
     for (const id of ['buff_interval', 'buff_interval_elf']) detailDoc.$(`#${id}`)?.setAttribute('maxlength', String(MAX_NUMBER_DIGITS));
 
-    const keydown = (event: KeyboardEvent) => { if (event.key === 'Escape') this.escape(); };
+    const keydown = (event: KeyboardEvent) => { if (panelKey(event, 'Escape')) this.escape(); };
     const resize = () => this.place();
     const stopLang = onLanguageChange(() => {
       this.hnmoTabs?.refreshContent(this.activeTab);
@@ -534,7 +535,7 @@ export class AutoPlaySettingsWindow {
       doc.root.addEventListener(type, (event) => {
         if (!(event.target instanceof HTMLInputElement) && !(event.target instanceof HTMLSelectElement)) return;
         event.stopPropagation();
-        if (type === 'keydown' && event.key === 'Escape') this.escape();
+        if (type === 'keydown' && panelKey(event, 'Escape')) this.escape();
       });
     }
   }

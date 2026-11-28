@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // The game's small dialogs, drawn with the desktop's own interface documents:
 //   generic_confirm_dialog  CGenericConfirmDialog: OK boxes, questions, a text field, a title, an item
 //   generic_menu_dialog     CGenericMenuDialog: a title and a list of buttons with their own lines
@@ -112,8 +113,8 @@ class ConfirmDialog {
     // A true modal: Enter and Escape are the box's before any window's (GetKeyEventOrder 100).
     window.addEventListener('keydown', (event) => {
       if (!this.current) return;
-      if (event.key === 'Enter') { event.preventDefault(); event.stopImmediatePropagation(); this.finish('primary'); }
-      else if (event.key === 'Escape') { event.preventDefault(); event.stopImmediatePropagation(); this.finish('cancel', true); }
+      if (panelKey(event, 'Enter')) { event.preventDefault(); event.stopImmediatePropagation(); this.finish('primary'); }
+      else if (panelKey(event, 'Escape')) { event.preventDefault(); event.stopImmediatePropagation(); this.finish('cancel', true); }
       else if (this.model.has_input) event.stopImmediatePropagation(); // typing stays in the field
     }, true);
   }
@@ -289,7 +290,7 @@ class MenuDialog {
   constructor() {
     window.addEventListener('resize', () => this.place());
     window.addEventListener('keydown', (event) => {
-      if (!this.current || event.key !== 'Escape') return;
+      if (!this.current || !panelKey(event, 'Escape')) return;
       event.preventDefault(); event.stopImmediatePropagation();
       this.finish(null);
     }, true);
@@ -398,7 +399,7 @@ export class MessageBox {
   private readonly model: BoxModel;
   private readonly onResize = () => { if (this.doc) { placeStage(this.doc); this.doc.update(); } };
   private readonly onKey = (event: KeyboardEvent) => {
-    if (event.key !== 'Escape') return;
+    if (!panelKey(event, 'Escape')) return;
     event.preventDefault(); event.stopImmediatePropagation();
     this.close();
     this.onEscape?.();

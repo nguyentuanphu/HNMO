@@ -1,3 +1,4 @@
+import { gameKey, panelKey } from '../game/keyboardShortcuts.js';
 // The NPC dialogue and quest windows, the game's own RML documents docked at the right edge like the desktop's:
 //  - npc_dialogue.rml (CNPCDialogue, UI/NPCs/NPCDialogue.cpp): the NPC's words with paging, then its answers (or,
 //    after "Accept a quest", the NPC's quests) with paging; an answer leads to another state or does what the
@@ -733,11 +734,10 @@ export class QuestWindows implements QuestEvents {
       for (const bytes of this.pending.splice(0)) this.log.handle(bytes);
     }).catch((error: unknown) => console.warn('Quest data', error));
     window.addEventListener('keydown', (event) => {
-      if (event.target instanceof Element && event.target.closest('input, textarea')) return;
-      if (event.key === 'Escape') {
+      if (panelKey(event, 'Escape')) {
         const open = this.windows().find((w) => w.view.isOpen);
         if (open) this.hide(open);
-      } else if (event.key.toLowerCase() === 't' && !event.ctrlKey && !event.altKey && !event.metaKey) {
+      } else if (gameKey(event, 't')) {
         event.preventDefault();
         this.toggleMyQuest();
       }

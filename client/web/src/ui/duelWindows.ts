@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // The duel windows, the desktop's own RML documents (Data/Interface/RmlUi):
 //   generic_confirm_dialog   the duel questions over the duel art (ShowConfirm with a duelCaption)
 //   duel_window              CDuelWindow: both duellists' names and scores above the HUD's right end
@@ -73,8 +74,8 @@ export class DuelDialog {
     window.addEventListener('resize', () => { if (this.doc) { placeBoard(this.doc); this.doc.update(); } });
     window.addEventListener('keydown', (event) => {
       if (!this.current) return;
-      if (event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); this.finish(true); }
-      else if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); this.finish(false); }
+      if (panelKey(event, 'Enter')) { event.preventDefault(); event.stopPropagation(); this.finish(true); }
+      else if (panelKey(event, 'Escape')) { event.preventDefault(); event.stopPropagation(); this.finish(false); }
     }, true);
   }
 
@@ -190,7 +191,7 @@ export class DuelWatchWindow {
     prepareDocument('duel_watch').catch((error: unknown) => console.warn('Interface', error));
     window.addEventListener('resize', () => this.place());
     window.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && this.isOpen) { this.close(); this.options.click(); }
+      if (panelKey(event, 'Escape') && this.isOpen) { this.close(); this.options.click(); }
     });
   }
 

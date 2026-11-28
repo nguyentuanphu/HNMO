@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // The pet info window (CPetInfoWindow, pet_info.rml): opened from CharacterWindow's Pet button.
 // Displays Dark Horse (slot 8, group 13 number 4) and Dark Raven / Dark Spirit (slot 1, group 13
 // number 5) level, life, EXP, calculated damage/speed, charisma requirement, and Dark Raven commands.
@@ -85,7 +86,7 @@ export class PetInfoWindow {
   private readonly model: PetInfoModel;
   private readonly onResize = () => this.place();
   private readonly onKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Escape' && this.isOpen) {
+    if (panelKey(event, 'Escape') && this.isOpen) {
       this.close();
       this.options.click?.();
     }

@@ -1,3 +1,4 @@
+import { panelKey } from '../game/keyboardShortcuts.js';
 // The event windows, the desktop's own RML documents (Data/Interface/RmlUi):
 //   blood_castle_enter / devil_square_enter   CEnterBloodCastle / CEnterDevilSquare (EventEntryView), docked at the right
 //   blood_castle_time / chaos_castle_time     CBloodCastle / CChaosCastleTime (EventTimerView), above the HUD's right end
@@ -64,7 +65,7 @@ export class EventEntryWindow {
     prepareDocument('devil_square_enter').catch((error: unknown) => console.warn('Interface', error));
     window.addEventListener('resize', () => this.place());
     window.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && this.isOpen) { this.close(); this.options.click(); }
+      if (panelKey(event, 'Escape') && this.isOpen) { this.close(); this.options.click(); }
     });
   }
 
@@ -311,8 +312,8 @@ export class EventDialogs {
     window.addEventListener('resize', () => { if (this.doc) { placeBoard(this.doc); this.doc.update(); } });
     window.addEventListener('keydown', (event) => {
       if (!this.current) return;
-      if (event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); this.finish(true); }
-      else if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); this.finish(false); }
+      if (panelKey(event, 'Enter')) { event.preventDefault(); event.stopPropagation(); this.finish(true); }
+      else if (panelKey(event, 'Escape')) { event.preventDefault(); event.stopPropagation(); this.finish(false); }
     }, true);
   }
 
