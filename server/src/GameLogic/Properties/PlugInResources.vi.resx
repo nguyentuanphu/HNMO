@@ -2490,6 +2490,46 @@
   <data name="MossGambleConfiguration_Enabled_Description" xml:space="preserve"><value>Khi tắt, người chơi không thể mua phiếu quay thưởng tại Moss (492) và không bị trừ Zen.</value></data>
   <data name="MossGambleConfiguration_PriceZen_Name" xml:space="preserve"><value>Giá quay (Zen)</value></data>
   <data name="MossGambleConfiguration_PriceZen_Description" xml:space="preserve"><value>Số Zen trừ mỗi lần mua phiếu tại Moss (mặc định 2.000.000 Zen).</value></data>
+  <data name="SeasonNineEventsPlugIn_Name" xml:space="preserve"><value>Sự kiện Season 9 &amp; Núi Uruk</value></data>
+  <data name="SeasonNineEventsPlugIn_Description" xml:space="preserve"><value>Lập lịch và phát thưởng Hộ Vệ Acheron, Chiến Trường Arca, Hỗn Nguyên Lâu Sinh Tồn, Quảng Trường Đau Khổ, Xâm Lăng và Boss Núi Uruk (669-729).</value></data>
+  <data name="AcheronChatCommandPlugIn_Name" xml:space="preserve"><value>Lệnh Hộ Vệ Acheron (/acheron)</value></data>
+  <data name="AcheronChatCommandPlugIn_Description" xml:space="preserve"><value>Tham gia hoặc xem lịch sự kiện Hộ Vệ Acheron.</value></data>
+  <data name="ArcaBattleChatCommandPlugIn_Name" xml:space="preserve"><value>Lệnh Chiến Trường Arca (/arcabattle)</value></data>
+  <data name="ArcaBattleChatCommandPlugIn_Description" xml:space="preserve"><value>Tham gia hoặc xem lịch Chiến Trường Arca.</value></data>
+  <data name="ChaosCastleSurvivalChatCommandPlugIn_Name" xml:space="preserve"><value>Lệnh Hỗn Nguyên Lâu Sinh Tồn (/ccs)</value></data>
+  <data name="ChaosCastleSurvivalChatCommandPlugIn_Description" xml:space="preserve"><value>Tham gia hoặc xem vòng đấu Hỗn Nguyên Lâu Sinh Tồn.</value></data>
+  <data name="TormentedSquareChatCommandPlugIn_Name" xml:space="preserve"><value>Lệnh Quảng Trường Đau Khổ (/tsquare)</value></data>
+  <data name="TormentedSquareChatCommandPlugIn_Description" xml:space="preserve"><value>Tham gia hoặc xem lịch Quảng Trường Đau Khổ.</value></data>
+  <data name="SeasonNineSystemsPlugIn_Name" xml:space="preserve"><value>Hệ thống Season 9 (Muun, Pentagram, Master 330)</value></data>
+  <data name="SeasonNineSystemsPlugIn_Description" xml:space="preserve"><value>Cấu hình Muun, Ngũ Hành Pentagram, tỉ lệ ép/tháo Errtel, kỹ năng 618-621, Master 330 và Minimap Season 9.</value></data>
+  <data name="MuunChatCommandPlugIn_Name" xml:space="preserve"><value>Lệnh Muun (/muun)</value></data>
+  <data name="MuunChatCommandPlugIn_Description" xml:space="preserve"><value>Xem trạng thái thú cưng Muun và hệ số tiến hóa.</value></data>
+  <data name="PentagramChatCommandPlugIn_Name" xml:space="preserve"><value>Lệnh Pentagram (/pentagram)</value></data>
+  <data name="PentagramChatCommandPlugIn_Description" xml:space="preserve"><value>Xem trạng thái Ngũ Hành Pentagram và tỉ lệ Errtel.</value></data>
+  <data name="ShieldBurnSkillPlugIn_Name" xml:space="preserve">
+    <value>Kỹ năng Season 9: Thiêu Đốt Khiên SD</value>
+  </data>
+  <data name="ShieldBurnSkillPlugIn_Description" xml:space="preserve">
+    <value>Đốt một phần khiên (SD) của người chơi mục tiêu, không trừ máu. Chỉ chạy ở realm Season 9 khi bật hệ thống và kỹ năng Season 9.</value>
+  </data>
   <data name="MossGambleConfiguration_UseWeightedExcellentSelection_Name" xml:space="preserve"><value>Dùng tỷ lệ dòng Hoàn Hảo theo trọng số</value></data>
   <data name="MossGambleConfiguration_UseWeightedExcellentSelection_Description" xml:space="preserve"><value>Chọn dòng Hoàn Hảo theo trọng số bộ máy chủ Season 6/9 (10% / 20% / 20% / 20% / 20% / 10%) thay vì chọn đều.</value></data>
+  <data name="SpellOfProtectionSkillPlugIn_Name" xml:space="preserve">
+    <value>Kỹ năng Season 9: Phép Bảo Hộ</value>
+  </data>
+  <data name="SpellOfProtectionSkillPlugIn_Description" xml:space="preserve">
+    <value>Tạo lớp bảo hộ giảm sát thương tạm thời khi bật hệ thống và kỹ năng Season 9.</value>
+  </data>
+  <data name="SpellOfRestrictionSkillPlugIn_Name" xml:space="preserve">
+    <value>Kỹ năng Season 9: Phép Trói Buộc</value>
+  </data>
+  <data name="SpellOfRestrictionSkillPlugIn_Description" xml:space="preserve">
+    <value>Giữ chân mục tiêu tạm thời khi bật hệ thống và kỹ năng Season 9.</value>
+  </data>
+  <data name="SpellOfPursuitSkillPlugIn_Name" xml:space="preserve">
+    <value>Kỹ năng Season 9: Phép Truy Đuổi</value>
+  </data>
+  <data name="SpellOfPursuitSkillPlugIn_Description" xml:space="preserve">
+    <value>Dịch chuyển người thi triển tới cạnh mục tiêu khi bật hệ thống và kỹ năng Season 9.</value>
+  </data>
 </root>

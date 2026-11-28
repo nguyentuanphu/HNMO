@@ -16,7 +16,7 @@
     X(DamageMin, ByteInFile, 1, 70.0f, MinDamage)                                                                      \
     X(DamageMax, ByteInFile, 1, 70.0f, MaxDamage)                                                                      \
     X(SuccessfulBlocking, Byte, 1, 70.0f, BlockRate)                                                                   \
-    X(Defense, Byte, 1, 70.0f, Defense)                                                                                \
+    X(Defense, ByteInFile, 1, 70.0f, Defense)                                                                          \
     X(MagicDefense, Byte, 1, 80.0f, MagicDefense)                                                                      \
     X(WeaponSpeed, Byte, 1, 80.0f, AttackSpeed)                                                                        \
     X(WalkSpeed, Byte, 1, 80.0f, MoveSpeed)                                                                            \

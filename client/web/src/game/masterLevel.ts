@@ -7,6 +7,7 @@
 // CheckBeforeSkill, CheckSkillPoint, IsNonWeaponSkillOrIsSkillEquipped).
 
 import { fetchBytes } from '../bmd.js';
+import { currentSeason, onSeasonChange } from '../dataRoot.js';
 import { read } from '../net/packets.js';
 import type { Connection } from '../net/connection.js';
 import { masterSkillToBaseSkill, skillInfo, SkillUseType } from './skills.js';
@@ -19,6 +20,8 @@ export const MASTER_SKILL_BEGIN = 300;
 export const MASTER_SKILL_END = 608;
 export const MASTER_SKILL_CATEGORIES = 3;
 export const MASTER_SKILL_LEVEL_REQ_FOR_NEXT_RANK = 10;
+export const SEASON_SIX_MAX_MASTER_LEVEL = 200;
+export const SEASON_NINE_MAX_MASTER_LEVEL = 330;
 const MAX_MASTER_TREE_RANK = 10;
 /** Master levels unlock at this character level (kMasterExperienceUnlockLevel). */
 export const MASTER_EXPERIENCE_UNLOCK_LEVEL = 400;
@@ -69,6 +72,15 @@ const text = (view: DataView, at: number, size: number): string => {
 
 let treeData: Promise<MasterTreeData> | null = null;
 
+onSeasonChange(() => {
+  treeData = null;
+});
+
+/** Maximum Master Level for the active season (200 in Season 6, 330 in Season 9). */
+export function maxMasterLevelForSeason(): number {
+  return currentSeason() === 's9' ? SEASON_NINE_MAX_MASTER_LEVEL : SEASON_SIX_MAX_MASTER_LEVEL;
+}
+
 // OpenMasterSkillTreeData and OpenMasterSkillTooltip: each record BuxConvert'ed, the lists end at the first empty one.
 export function loadMasterTreeData(): Promise<MasterTreeData> {
   treeData ??= (async () => {
@@ -83,6 +95,30 @@ export function loadMasterTreeData(): Promise<MasterTreeData> {
         arrow: v.getUint8(7), requires: [v.getInt32(8, true), v.getInt32(12, true)], skill: v.getInt32(16, true),
         defaultValue: v.getFloat32(20, true),
       });
+    }
+    if (currentSeason() === 's9') {
+      const s9Tree = await fetch('/data/Season9/master-tree.json')
+        .then((r) => (r.ok ? r.json() as Promise<{ nodes?: Array<{ index: number; classCode: number; group: number; requiredPoints: number; maxLevel: number; requires: [number, number]; skill: number }> }> : null))
+        .catch(() => null);
+      if (s9Tree?.nodes?.length) {
+        const seen = new Set(nodes.map((n) => `${n.classCode}:${n.skill}`));
+        for (const extra of s9Tree.nodes) {
+          const key = `${extra.classCode}:${extra.skill}`;
+          if (seen.has(key)) continue;
+          seen.add(key);
+          nodes.push({
+            index: extra.index,
+            classCode: extra.classCode,
+            group: extra.group,
+            requiredPoints: extra.requiredPoints,
+            maxLevel: extra.maxLevel,
+            arrow: 0,
+            requires: extra.requires,
+            skill: extra.skill,
+            defaultValue: 0,
+          });
+        }
+      }
     }
     const tooltips: MasterTooltip[] = [];
     for (let i = 0; i < MAX_MASTER_SKILL_DATA && (i + 1) * TOOLTIP_RECORD <= tooltip.length; i++) {

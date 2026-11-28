@@ -491,7 +491,7 @@ public class ServerImporterTests
             Assert.That(tuning.PartyExpBonuses.Select(p => (p.PartySize, p.ExpPercent, p.DifferentClassesExpPercent)), Is.EqualTo(new[] { (2, 160, 0), (3, 180, 230) }));
             Assert.That((guild.MinimumCreateLevel, guild.MaximumMembers), Is.EqualTo((150, 80)));
             Assert.That(pkClear.ZenCostPerKill, Is.EqualTo(1_000_000));
-            Assert.That(config.MaximumMasterLevel, Is.EqualTo((short)200), "master levels above 200 are not applied");
+            Assert.That(config.MaximumMasterLevel, Is.EqualTo((short)330), "the Season 9 master level 330 is applied");
             Assert.That(lorencia.ExpMultiplier, Is.EqualTo(1.002).Within(1e-6));
         });
 

@@ -494,6 +494,10 @@
   <data name="SeasonNineMapsAndGatesUpdatePlugIn_Description" xml:space="preserve"><value>Adds the 10 Season 9 maps, terrain files, gates (417-461, 474-482), and Season 9 field spawns when running as Season 9.</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: Moss the Merchant gamble shop</value></data>
   <data name="MossMerchantShopUpdatePlugIn_Description" xml:space="preserve"><value>Adds the 5 Moss gamble vouchers (13-71..75) at 2,000,000 Zen and equips Moss the Merchant (492) with his gamble shop when empty.</value></data>
+  <data name="SeasonNineExtendedSharedItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: extended shared item rules</value></data>
+  <data name="SeasonNineExtendedSharedItemsUpdatePlugIn_Description" xml:space="preserve"><value>Applies the Season 9 values for Sphere (4) drop level (132) and Reset Fruit stack durability (10) when running as Season 9, leaving customized values unchanged.</value></data>
+  <data name="SeasonNineSystemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 9: Master 330 cap &amp; skills 618-621</value></data>
+  <data name="SeasonNineSystemsUpdatePlugIn_Description" xml:space="preserve"><value>Raises Maximum Master Level from 200 to 330 and registers Season 9 skills 618-621 (Spell of Protection, Restriction, Pursuit, Shield-Burn) when running as Season 9.</value></data>
   <data name="S6EventsMonstersAndItemsUpdatePlugIn_Name" xml:space="preserve"><value>Season 6: event monsters, mining nodes, and card items</value></data>
   <data name="S6EventsMonstersAndItemsUpdatePlugIn_Description" xml:space="preserve"><value>Adds Loren Deep assault monsters (300-303), Cursed Goblin (466), Mining Area nodes (605-607), Pandora Pick (0-41), and Rummy card items (14-215..216) when missing.</value></data>
   <data name="MasterPassives314To324UpdatePlugIn_Name" xml:space="preserve"><value>Season 6: Rank 6-9 master passives</value></data>

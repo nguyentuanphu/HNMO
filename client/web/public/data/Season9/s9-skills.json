@@ -1,0 +1,74 @@
+[
+  {
+    "number": 618,
+    "name": "Spell of Protection",
+    "level": 0,
+    "mana": 30,
+    "ability": 0,
+    "distance": 0,
+    "delayMs": 60000,
+    "classes": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0
+    ]
+  },
+  {
+    "number": 619,
+    "name": "Spell of Restriction",
+    "level": 0,
+    "mana": 30,
+    "ability": 0,
+    "distance": 3,
+    "delayMs": 60000,
+    "classes": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0
+    ]
+  },
+  {
+    "number": 620,
+    "name": "Spell of Pursuit",
+    "level": 0,
+    "mana": 30,
+    "ability": 0,
+    "distance": 0,
+    "delayMs": 120000,
+    "classes": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0
+    ]
+  },
+  {
+    "number": 621,
+    "name": "Shield-Burn",
+    "level": 0,
+    "mana": 30,
+    "ability": 0,
+    "distance": 3,
+    "delayMs": 60000,
+    "classes": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0
+    ]
+  }
+]

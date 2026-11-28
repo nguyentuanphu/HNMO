@@ -127,6 +127,14 @@
         <ToastContainer />
 
         <article class="content px-4 py-3">
+            @if (HNMO.GameLogic.FolderSeat.Status is { IsBlocked: true } folderSeat)
+            {
+                var holders = folderSeat.OtherHolders.Count > 0 ? string.Join("; ", folderSeat.OtherHolders) : "?";
+                <div class="alert alert-danger" role="alert" id="folder-seat-banner">
+                    @L($"No player can log in to this HNMO folder: the licence lets {folderSeat.Allowed} HNMO folder(s) run at once on this computer, and these already run: {holders}. Stop one of them, or get a licence for more folders from the HNMO developer; this folder then takes players again by itself within a minute. This computer's id: {folderSeat.MachineId}.", $"Không người chơi nào đăng nhập được vào thư mục HNMO này: giấy phép chỉ cho {folderSeat.Allowed} thư mục HNMO chạy cùng lúc trên máy này, và các thư mục sau đang chạy: {holders}. Hãy tắt một thư mục, hoặc xin nhà phát triển HNMO giấy phép cho nhiều thư mục hơn; sau đó thư mục này tự nhận người chơi lại trong vòng một phút. Mã máy này: {folderSeat.MachineId}.")
+                </div>
+            }
+
             @if (HNMO.GameLogic.DeveloperHub.ReadState().GraceStartedUtc is { } graceStarted)
             {
                 var graceEnds = graceStarted.AddDays(HNMO.GameLogic.DeveloperHub.GraceDays);

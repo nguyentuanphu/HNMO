@@ -7933,6 +7933,44 @@ public unsafe partial class ConnectionManager
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoPentagramCommand" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">1 = Request state, 2 = Wear the pentagram of a bag slot, 3 = Take off the pentagram, 4 = Put the errtel of a bag slot into an errtel slot, 5 = Take the errtel of an errtel slot out, 6 = Level up the errtel of a bag slot, 7 = Rank up the errtel of a bag slot with a second one.</param>
+    /// <param name="slot">The bag slot of the pentagram or errtel.</param>
+    /// <param name="index">The errtel slot of the pentagram (0..4), or the bag slot of the second errtel of a rank-up.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client in a Season 9 realm to open the pentagram window, wear or take off the pentagram, put an errtel into a slot or take it out, or mix an errtel.
+    /// Causes reaction on server side: The server performs the action and responds with HnmoPentagramState (F5 5C).
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoPentagramCommand")]
+    public static void SendHnmoPentagramCommand(int handle, byte @action, byte @slot, byte @index)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoPentagramCommandRef.Length;
+                var packet = new HnmoPentagramCommandRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Slot = @slot;
+                packet.Index = @index;
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
     /// Sends a <see cref="HnmoJewelBankCommand" /> to this connection.
     /// </summary>
     /// <param name="handle">The handle of the connection.</param>
@@ -7973,6 +8011,42 @@ public unsafe partial class ConnectionManager
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoMuunCommand" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="action">1 = Request state, 2 = Make the Muun in the bag slot active, 3 = Put the active Muun away, 4 = Evolve the active Muun, 5 = Convert the Muun in the bag slot into energy, 6 = Level up the active Muun, 7 = Level up the active Muun by feeding a duplicate Muun from the bag slot.</param>
+    /// <param name="slot">Inventory slot of the Muun for actions 2 and 5.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to open the Season 9 Muun window, make a bag Muun the active one, put it away, evolve it, convert a Muun into energy or level up the active Muun.
+    /// Causes reaction on server side: The server performs the action and responds with HnmoMuunState (F5 2C).
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoMuunCommand")]
+    public static void SendHnmoMuunCommand(int handle, byte @action, byte @slot)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoMuunCommandRef.Length;
+                var packet = new HnmoMuunCommandRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Action = @action;
+                packet.Slot = @slot;
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
     /// Sends a <see cref="HnmoCatchupCapRequest" /> to this connection.
     /// </summary>
     /// <param name="handle">The handle of the connection.</param>
@@ -7994,6 +8068,37 @@ public unsafe partial class ConnectionManager
             {
                 var length = HnmoCatchupCapRequestRef.Length;
                 var packet = new HnmoCatchupCapRequestRef(pipeWriter.GetSpan(length)[..length]);
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoSeasonNineClientRequest" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client after entering the world in a Season 9 realm.
+    /// Causes reaction on server side: The server responds with HnmoSeasonNineClientState (F5 59).
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoSeasonNineClientRequest")]
+    public static void SendHnmoSeasonNineClientRequest(int handle)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoSeasonNineClientRequestRef.Length;
+                var packet = new HnmoSeasonNineClientRequestRef(pipeWriter.GetSpan(length)[..length]);
                 return length;
             });
         }
@@ -8378,6 +8483,40 @@ public unsafe partial class ConnectionManager
                 var length = HnmoBugReportCommandRef.GetRequiredSize(Encoding.UTF8.GetByteCount(NativeInterop.PtrToWideString(@json)!));
                 var packet = new HnmoBugReportCommandRef(pipeWriter.GetSpan(length)[..length]);
                 packet.Action = @action;
+                packet.Json = NativeInterop.PtrToWideString(@json);
+
+                return length;
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoAutoErrorReport" /> to this connection.
+    /// </summary>
+    /// <param name="handle">The handle of the connection.</param>
+    /// <param name="json">Flat plain-ASCII JSON of strings, no terminator from the web client (the C# writer adds one NUL; both are read): fingerprint (kind|file|line), kind, version, browser, os. Older clients' message, stack, device, map and gpu are accepted and dropped; any other field, a repeated field or more than 16 KiB rejects the packet. Never the login, ticket, password or chat text.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client on its own when the page meets an error: an uncaught error, an unhandled promise rejection, a packet its handlers failed on, a lost WebGL context or an unexpected disconnect (each kind of error once per page load, at most 5 an hour per browser).
+    /// Causes reaction on server side: The server groups it by its fingerprint for the server's owner (admin panel, Bug reports, Automatic); no answer.
+    /// </remarks>
+    [UnmanagedCallersOnly(EntryPoint = "SendHnmoAutoErrorReport")]
+    public static void SendHnmoAutoErrorReport(int handle, IntPtr @json)
+    {
+        if (!Connections.TryGetValue(handle, out var connection))
+        {
+            return;
+        }
+
+        try
+        {
+            connection.CreateAndSend(pipeWriter =>
+            {
+                var length = HnmoAutoErrorReportRef.GetRequiredSize(Encoding.UTF8.GetByteCount(NativeInterop.PtrToWideString(@json)!));
+                var packet = new HnmoAutoErrorReportRef(pipeWriter.GetSpan(length)[..length]);
                 packet.Json = NativeInterop.PtrToWideString(@json);
 
                 return length;

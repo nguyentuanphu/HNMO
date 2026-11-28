@@ -30,6 +30,10 @@ test('the Season 9 numbers and slots are new: the game\'s own data is never repl
 });
 
 test('the field monsters of Nars, Ferea and Uruk Mountain and the Season 9 NPCs have an entry', () => {
+  const known = new Set(monsters.monsters.flatMap((monster) => monster.numbers.map((own) => own.number)));
+  for (const n of [616, 617]) {
+    assert.ok(known.has(n), `${n} has no base entry`);
+  }
   // The numbers the Season 9 server suite's spawn list places that the base game lacks, except the five whose
   // models are not known yet (580 Captain Slough, 581 Deruvish, 584 Sir Lesnar, 643 Mait, 689 Flame Trap).
   for (const n of [582, 586, 587, 588, 589, 590, 591, 592, 593, 594, 595, 596, 608, 609, 610, 611, 612, 613, 614, 615, 651, 669, 670, 671, 672, 673, 682]) {

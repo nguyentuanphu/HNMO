@@ -252,7 +252,7 @@ public class PersistenceContextProvider : IMigratableDatabaseContextProvider
     /// <inheritdoc />
     public IContext CreateNewTradeContext()
     {
-        return new CachingEntityFrameworkContext(new TradeContext(), this.RepositoryProvider, null, this._loggerFactory.CreateLogger<CachingEntityFrameworkContext>());
+        return new TradeAssetContext(new TradeContext(), this.RepositoryProvider, null, this._loggerFactory.CreateLogger<CachingEntityFrameworkContext>());
     }
 
     /// <inheritdoc />

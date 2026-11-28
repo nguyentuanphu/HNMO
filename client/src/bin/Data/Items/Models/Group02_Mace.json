@@ -4,8 +4,7 @@
   "models": [
     {
       "number": 0,
-      "file": "Data/Item/Mace01.bmd",
-      "textureFolders": ["Item"],
+      "model": "mace01",
       "inventory": {
         "anchor": [0.8, 0.7],
         "rotation": [180, 270, 15]
@@ -128,8 +127,7 @@
     },
     {
       "number": 9,
-      "file": "Data/Item/Mace10.bmd",
-      "textureFolders": ["Item"],
+      "model": "mace10",
       "inventory": {
         "anchor": [0.8, 0.7],
         "rotation": [180, 270, 15],
@@ -284,6 +282,20 @@
         "meshes": [0]
       },
       "renderStyle": "strikerScepter"
+    },
+    {
+      "number": 19,
+      "file": "Data/s9/Item/thunder_bolt.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 20,
+      "file": "Data/s9/Item/hornofsteel.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 21,
+      "model": "mace10"
     }
   ]
 }

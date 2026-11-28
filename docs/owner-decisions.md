@@ -37,7 +37,8 @@ decision. Add new decisions here as they are made; never turn an agent's habit i
 | 26 Nov | #381 Arena Home | Fix the PR text (Home is only the standing and respawn rectangle, walkable, not a safe zone); no new protection rule ("Sửa mô tả PR cho đúng") |
 | 26 Nov | Autoplay tiers & floating HUD bar (#367) | Keep Extras town automation at VIP Lv 1+ (`VipOnly`), keep the 3-tier Free / VIP Lv 1+ / Higher VIP Lv 2+ split (Sparkle, Stats, Auto-Pick Free; 6 Ultimate groups + Presets at Higher VIP Lv 2+), and keep the floating Ultimate HUD bar hidden by default (`showUltimateHud: false`, opt-in in Tab 4) |
 | 27 Nov | Two local branches (asset integrity in the database, Season 9 part c) | Popup answer: "Push cả hai" — draft PRs #423 and #424 |
-| 27 Nov | How skills 618–621 are learned | Popup answer: "Qua master tree" |
+| 27 Nov | How skills 618–621 are learned | Popup answer: "Qua master tree" (superseded by the 28 Nov decision below) |
+| 28 Nov | Season 9 skills 618–621 | Owner confirmed "Giữ cho event/siege". Reserve the spells for events and sieges and keep them out of the Master Tree. |
 | 27 Nov | Effects of skills 618–620 | Popup answer: "Theo client desktop S9" |
 | 27 Nov | Muun and Pentagram/Errtel | Popup answer: "Làm cả hai" (full: slot, packets, damage, desktop and web UI) |
 | 27 Nov | Weapon Mastery 571 (server 20 levels, web tree 10) | Popup answer: "Theo desktop client" |

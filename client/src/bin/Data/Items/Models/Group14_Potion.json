@@ -4,8 +4,7 @@
   "models": [
     {
       "number": 0,
-      "file": "Data/Item/Potion01.bmd",
-      "textureFolders": ["Item"],
+      "model": "potion01",
       "inventory": {
         "anchor": [0.5, 0.95],
         "scale": 0.0035
@@ -385,8 +384,7 @@
     },
     {
       "number": 33,
-      "file": "Data/Item/giftbox_br.bmd",
-      "textureFolders": ["Item"],
+      "model": "giftboxBr",
       "inventory": {
         "anchor": [0.5, 0.95],
         "offset": [0, 0.05],
@@ -400,8 +398,7 @@
     },
     {
       "number": 34,
-      "file": "Data/Item/giftbox_bb.bmd",
-      "textureFolders": ["Item"],
+      "model": "giftboxBb",
       "inventory": {
         "anchor": [0.5, 0.95],
         "offset": [0, 0.05],
@@ -618,8 +615,7 @@
     },
     {
       "number": 52,
-      "file": "Data/Item/GM02.bmd",
-      "textureFolders": ["Item"],
+      "model": "gm02",
       "inventory": {
         "anchor": [0.5, 0.95],
         "rotation": [270, -25, 0],
@@ -1358,8 +1354,7 @@
     },
     {
       "number": 101,
-      "file": "Data/Item/doubt_paper.bmd",
-      "textureFolders": ["Item"],
+      "model": "doubtPaper",
       "inventory": {
         "anchor": [0.5, 0.95],
         "offset": [0.005, 0],
@@ -1936,6 +1931,14 @@
       "renderStyle": "rareItemTicket12"
     },
     {
+      "number": 151,
+      "model": "skillParchment"
+    },
+    {
+      "number": 152,
+      "model": "skillParchment"
+    },
+    {
       "number": 153,
       "model": "songss",
       "inventory": {
@@ -1947,6 +1950,20 @@
       "ground": {
         "scale": 0.8
       }
+    },
+    {
+      "number": 154,
+      "file": "Data/Item/hydra_jewel.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
+      "number": 155,
+      "file": "Data/Item/tan.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
+      "number": 156,
+      "model": "mace01"
     },
     {
       "number": 157,
@@ -2061,6 +2078,403 @@
         "rotation": [270, 0, -45],
         "scale": 1
       }
+    },
+    {
+      "number": 170,
+      "model": "skillParchment"
+    },
+    {
+      "number": 171,
+      "model": "skillParchment"
+    },
+    {
+      "number": 176,
+      "file": "Data/s9/Item/DeathKingBone.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 177,
+      "file": "Data/s9/Item/hellmine.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 178,
+      "file": "Data/s9/Item/DarkPhoenixBz.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 179,
+      "file": "Data/s9/Item/deathsoul.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 180,
+      "file": "Data/s9/Item/icewalker.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 181,
+      "file": "Data/s9/Item/MDfur.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 182,
+      "file": "Data/s9/Item/GiantIce.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 183,
+      "file": "Data/s9/Item/coulposion.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 184,
+      "file": "Data/s9/Item/inightheart.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 185,
+      "file": "Data/s9/Item/DMhorn.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 186,
+      "file": "Data/s9/Item/DarkGiantAx.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 187,
+      "file": "Data/s9/Item/dcoulblood.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 188,
+      "file": "Data/s9/Item/DarkIKsword.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 189,
+      "file": "Data/s9/Item/bujuck01_blue.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 190,
+      "file": "Data/s9/Item/StrengamuletBlue.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 191,
+      "model": "doubtPaper"
+    },
+    {
+      "number": 192,
+      "model": "doubtPaper"
+    },
+    {
+      "number": 193,
+      "model": "doubtPaper"
+    },
+    {
+      "number": 194,
+      "model": "doubtPaper"
+    },
+    {
+      "number": 195,
+      "model": "doubtPaper"
+    },
+    {
+      "number": 196,
+      "model": "doubtPaper"
+    },
+    {
+      "number": 197,
+      "model": "doubtPaper"
+    },
+    {
+      "number": 198,
+      "model": "doubtPaper"
+    },
+    {
+      "number": 199,
+      "model": "doubtPaper"
+    },
+    {
+      "number": 200,
+      "model": "doubtPaper"
+    },
+    {
+      "number": 201,
+      "model": "doubtPaper"
+    },
+    {
+      "number": 202,
+      "model": "doubtPaper"
+    },
+    {
+      "number": 206,
+      "model": "giftBoxBluePurple"
+    },
+    {
+      "number": 207,
+      "model": "giftboxBr"
+    },
+    {
+      "number": 208,
+      "model": "giftboxBb"
+    },
+    {
+      "number": 209,
+      "file": "Data/s9/Item/TIstamp.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 210,
+      "model": "doubtPaper"
+    },
+    {
+      "number": 211,
+      "model": "doubtPaper"
+    },
+    {
+      "number": 212,
+      "model": "doubtPaper"
+    },
+    {
+      "number": 213,
+      "model": "doubtPaper"
+    },
+    {
+      "number": 215,
+      "file": "Data/s9/Item/cards01_minigame.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 216,
+      "file": "Data/s9/Item/cards_minigame.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 217,
+      "model": "book01"
+    },
+    {
+      "number": 218,
+      "model": "book01"
+    },
+    {
+      "number": 219,
+      "model": "book01"
+    },
+    {
+      "number": 220,
+      "model": "book01"
+    },
+    {
+      "number": 221,
+      "model": "book01"
+    },
+    {
+      "number": 222,
+      "model": "s9ItemboxGold"
+    },
+    {
+      "number": 223,
+      "model": "songss"
+    },
+    {
+      "number": 224,
+      "model": "s9Ivmonmarkc"
+    },
+    {
+      "number": 225,
+      "file": "Data/s9/Item/MLdepencescroll.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 226,
+      "file": "Data/s9/Item/MLmagicscroll.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 227,
+      "file": "Data/s9/Item/MLstrenthscroll.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 228,
+      "file": "Data/s9/Item/MLmanascroll.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 229,
+      "file": "Data/s9/Item/MLangerscroll.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 230,
+      "file": "Data/s9/Item/MLhealingscroll.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 231,
+      "file": "Data/s9/Item/MLbattlescroll.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 232,
+      "file": "Data/s9/Item/MLstrengscroll.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 233,
+      "model": "s9ItemboxGold"
+    },
+    {
+      "number": 234,
+      "model": "book01"
+    },
+    {
+      "number": 235,
+      "file": "Data/s9/Item/MLquickscroll.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 236,
+      "file": "Data/s9/Item/IllusionBead_violet.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 237,
+      "file": "Data/s9/Item/IllusionBead_pink.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 238,
+      "file": "Data/s9/Item/IllusionBead_green.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 239,
+      "file": "Data/s9/Item/IllusionBead_cyan.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 240,
+      "file": "Data/s9/Item/IllusionBead_blue.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 241,
+      "model": "s9Billusionbead"
+    },
+    {
+      "number": 242,
+      "model": "potion01"
+    },
+    {
+      "number": 243,
+      "model": "potion01"
+    },
+    {
+      "number": 244,
+      "model": "book01"
+    },
+    {
+      "number": 245,
+      "file": "Data/s9/Item/crystal01.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 246,
+      "file": "Data/s9/Item/crystal02.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 247,
+      "file": "Data/s9/Item/crystal03.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 248,
+      "file": "Data/s9/Item/rewardbox01.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 249,
+      "file": "Data/s9/Item/rewardbox02.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 250,
+      "file": "Data/s9/Item/rewardbox03.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 251,
+      "file": "Data/s9/Item/rewardbox04.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 252,
+      "file": "Data/s9/Item/rewardbox05.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 253,
+      "file": "Data/s9/Item/rewardbox06.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 254,
+      "model": "gm02"
+    },
+    {
+      "number": 256,
+      "model": "gm02"
+    },
+    {
+      "number": 257,
+      "model": "gm02"
+    },
+    {
+      "number": 258,
+      "model": "s9Billusionbead"
+    },
+    {
+      "number": 259,
+      "model": "s9Billusionbead"
+    },
+    {
+      "number": 260,
+      "model": "s9Billusionbead"
+    },
+    {
+      "number": 261,
+      "file": "Data/Item/roboxred.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
+      "number": 262,
+      "file": "Data/Item/roboxpurple.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
+      "number": 263,
+      "model": "s9Ivmonmarkc"
+    },
+    {
+      "number": 264,
+      "model": "s9Ivmonmarkc"
+    },
+    {
+      "number": 277,
+      "file": "Data/s9/Item/RummyCard.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 278,
+      "file": "Data/s9/Item/BookPiece.bmd",
+      "textureFolders": ["s9/Item"]
     }
   ]
 }

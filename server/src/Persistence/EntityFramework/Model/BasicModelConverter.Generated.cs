@@ -1851,6 +1851,8 @@ internal sealed class BasicModelConverter
         target.StorePriceCoinType = source.StorePriceCoinType;
         target.PetExperience = source.PetExperience;
         target.Serial = source.Serial;
+        target.PentagramElement = source.PentagramElement;
+        target.PentagramErrtels = source.PentagramErrtels;
         return target;
     }
 

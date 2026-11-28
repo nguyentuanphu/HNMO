@@ -20,13 +20,14 @@ const UNKNOWN_LOOKS: Record<number, string> = { 76: 'noModel', 252: 'noModel', 2
 /** Models whose data names textures their folders lack (the same files on the desktop): Life Stone, Selupan, Jeweler Raul. */
 const KNOWN_UNTEXTURED = [278, 459, 546];
 /** Player-shaped transformation looks: their skin is drawn for a (transformed) player only, so as monsters they show no body. */
-const PLAYER_ONLY_LOOKS = [372, 373, 374, 378, 404, 405, 503, 548];
+const PLAYER_ONLY_LOOKS = [372, 373, 374, 378, 404, 405, 503, 548, 616, 617, 625, 626, 642, 646, 706];
 /**
  * Bodies the desktop does not draw either: the Crywolf altars (an effect of the map), Maya (the map's own code), and
  * the Laser Trap in Kanturu, whose map object (Object39/Object52.bmd) the data lacks; the Imperial Guardian's trap
- * (model "none"); and Trap 104, a map object of no listed map (drawn on the map the server places it on).
+ * (model "none"); Trap 104, a map object of no listed map (drawn on the map the server places it on); and
+ * Season 9 mining/flame/placeholder entries (model "none").
  */
-const NO_BODY = [104, 106, 205, 206, 207, 208, 209, 364, 523];
+const NO_BODY = [104, 106, 205, 206, 207, 208, 209, 284, 364, 523, 605, 606, 607, 689];
 
 const VIEWER_PAGE = '/monster-viewer.html';
 

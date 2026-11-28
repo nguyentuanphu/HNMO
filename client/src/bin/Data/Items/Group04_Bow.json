@@ -801,6 +801,96 @@
       "classRequirements": {
         "fairyElf": 2
       }
+    },
+    {
+      "number": 25,
+      "name": {
+        "en": "Angelic Bow",
+        "de": "Engelsbogen",
+        "vi": "Cung Thiên Thần",
+        "zh-CN": "天使之弓"
+      },
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "width": 2,
+      "height": 4,
+      "slot": "offHand",
+      "weaponKind": "bow",
+      "statProfile": "weapon",
+      "twoHanded": true,
+      "skill": 24,
+      "level": 149,
+      "durability": 70,
+      "damageMin": 179,
+      "damageMax": 202,
+      "attackSpeed": 45,
+      "droppable": false,
+      "requirements": {
+        "level": 400,
+        "strength": 30,
+        "dexterity": 193
+      },
+      "classRequirements": {
+        "fairyElf": 3
+      }
+    },
+    {
+      "number": 26,
+      "name": {
+        "en": "Devil Crossbow",
+        "de": "Teufelsarmbrust",
+        "vi": "Nỏ Ác Quỷ",
+        "zh-CN": "恶魔之弩"
+      },
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "width": 2,
+      "height": 3,
+      "slot": "mainHand",
+      "weaponKind": "crossbow",
+      "statProfile": "weapon",
+      "twoHanded": true,
+      "skill": 24,
+      "level": 149,
+      "durability": 90,
+      "damageMin": 167,
+      "damageMax": 218,
+      "attackSpeed": 40,
+      "droppable": false,
+      "requirements": {
+        "level": 400,
+        "strength": 30,
+        "dexterity": 193
+      },
+      "classRequirements": {
+        "fairyElf": 3
+      }
+    },
+    {
+      "number": 27,
+      "name": {
+        "en": "Silver Bow-J"
+      },
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "width": 2,
+      "height": 4,
+      "slot": "offHand",
+      "weaponKind": "bow",
+      "statProfile": "weapon",
+      "twoHanded": true,
+      "skill": 24,
+      "level": 56,
+      "durability": 48,
+      "damageMin": 59,
+      "damageMax": 71,
+      "attackSpeed": 45,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 30,
+        "dexterity": 100
+      },
+      "classRequirements": {
+        "fairyElf": 1
+      }
     }
   ]
 }

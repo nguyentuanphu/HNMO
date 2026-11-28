@@ -87,6 +87,8 @@ CSystem::CSystem()
     m_pMuHelperDetail = nullptr;
     m_pNewHelpWindow = nullptr;
     m_pNewChatCommandWindow = nullptr;
+    m_pNewMuunWindow = nullptr;
+    m_pNewPentagramWindow = nullptr;
     m_pNewItemExplanationWindow = nullptr;
     m_pNewSetItemExplanation = nullptr;
     m_pNewQuickCommandWindow = nullptr;
@@ -548,6 +550,14 @@ bool CSystem::LoadMainSceneInterface()
     if (m_pMuHelperSkillPicker->Create(m_pNewUIMng) == false)
         return false;
 
+    m_pNewMuunWindow = new CMuunWindow;
+    if (m_pNewMuunWindow->Create(m_pNewUIMng) == false)
+        return false;
+
+    m_pNewPentagramWindow = new CPentagramWindow;
+    if (m_pNewPentagramWindow->Create(m_pNewUIMng) == false)
+        return false;
+
     // Windows the theme's workspace places. The members are re-created per main scene, so each
     // getter reads the member when it runs.
     const auto slot = [](DWORD windowId, const char* slotName, auto*& window, const char* document = nullptr)
@@ -561,6 +571,8 @@ bool CSystem::LoadMainSceneInterface()
     slot(INTERFACE_GUILDINFO, "guild_info", m_pNewGuildInfoWindow, "guild_info.rml");
     slot(INTERFACE_COMMAND, "command", m_pNewCommandWindow, "command_window.rml");
     slot(INTERFACE_COMMAND_LIST, "command_list", m_pNewChatCommandWindow, "chat_command.rml");
+    slot(INTERFACE_MUUN, "muun", m_pNewMuunWindow, "muun_window.rml");
+    slot(INTERFACE_PENTAGRAM, "pentagram", m_pNewPentagramWindow, "pentagram_window.rml");
     slot(INTERFACE_GOLD_BOWMAN, "gold_bowman", m_pNewGoldBowman, "gold_bowman.rml");
     slot(INTERFACE_GOLD_BOWMAN_LENA, "gold_bowman_lena", m_pNewGoldBowmanLena, "gold_bowman_lena.rml");
     slot(INTERFACE_NPC_DIALOGUE, "npc_dialogue", m_pNewNPCDialogue, "npc_dialogue.rml");
@@ -636,6 +648,8 @@ void CSystem::UnloadMainSceneInterface()
 
     SAFE_DELETE(m_pNewHelpWindow);
     SAFE_DELETE(m_pNewChatCommandWindow);
+    SAFE_DELETE(m_pNewMuunWindow);
+    SAFE_DELETE(m_pNewPentagramWindow);
     SAFE_DELETE(m_pNewItemExplanationWindow);
     SAFE_DELETE(m_pNewSetItemExplanation);
     SAFE_DELETE(m_pNewQuickCommandWindow);
@@ -911,6 +925,16 @@ void CSystem::Show(DWORD dwKey)
     {
         HideAllGroupA();
         m_pNewChatCommandWindow->OpenningProcess();
+    }
+    else if (dwKey == INTERFACE_MUUN)
+    {
+        HideAllGroupA();
+        m_pNewMuunWindow->OpenningProcess();
+    }
+    else if (dwKey == INTERFACE_PENTAGRAM)
+    {
+        HideAllGroupA();
+        m_pNewPentagramWindow->OpenningProcess();
     }
     else if (dwKey == INTERFACE_GUILDINFO)
     {
@@ -1349,6 +1373,14 @@ void CSystem::Hide(DWORD dwKey)
     {
         m_pNewChatCommandWindow->ClosingProcess();
     }
+    else if (dwKey == INTERFACE_MUUN)
+    {
+        m_pNewMuunWindow->ClosingProcess();
+    }
+    else if (dwKey == INTERFACE_PENTAGRAM)
+    {
+        m_pNewPentagramWindow->ClosingProcess();
+    }
     else if (dwKey == INTERFACE_WINDOW_MENU)
     {
         g_pMainFrame->SetBtnState(MAINFRAME_BTN_WINDOW, false);
@@ -1566,6 +1598,8 @@ void CSystem::HideAllGroupA()
         INTERFACE_GUARDSMAN,
         INTERFACE_COMMAND,
         INTERFACE_COMMAND_LIST,
+        INTERFACE_MUUN,
+        INTERFACE_PENTAGRAM,
         INTERFACE_GUILDINFO,
         INTERFACE_KANTURU2ND_ENTERNPC,
         INTERFACE_DUELWATCH,
@@ -1615,6 +1649,8 @@ void CSystem::HideAllGroupB()
         INTERFACE_GUARDSMAN,
         INTERFACE_COMMAND,
         INTERFACE_COMMAND_LIST,
+        INTERFACE_MUUN,
+        INTERFACE_PENTAGRAM,
         INTERFACE_GUILDINFO,
         INTERFACE_KANTURU2ND_ENTERNPC,
         INTERFACE_CURSEDTEMPLE_NPC,

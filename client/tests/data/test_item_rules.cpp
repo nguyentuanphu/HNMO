@@ -304,8 +304,8 @@ TEST_CASE("Weapon kinds come from the item data [data][items][rules]")
 {
     ShippedItemsScope items;
     // Numbers without item data in the bow and shield groups.
-    const int noBow = ITEM_BOW + 27;
-    const int noShield = ITEM_SHIELD + 27;
+    const int noBow = ITEM_BOW + 200;
+    const int noShield = ITEM_SHIELD + 200;
     const ITEM smallShield = MakeItem(ITEM_SHIELD);
     const ITEM shortBow = MakeItem(ITEM_BOW);
     const ITEM crossbow = MakeItem(ITEM_CROSSBOW);
@@ -350,9 +350,9 @@ TEST_CASE("Swords, gloves, staffs, books, sceptres and magic swords come from th
 {
     ShippedItemsScope items;
     // Numbers without item data in the sword, staff and mace groups.
-    const int noGlove = MakeItemType(0, 40);
-    const int noBook = MakeItemType(5, 40);
-    const int noSceptre = MakeItemType(2, 21);
+    const int noGlove = MakeItemType(0, 200);
+    const int noBook = MakeItemType(5, 200);
+    const int noSceptre = MakeItemType(2, 200);
     const ITEM kris = MakeItem(KrisType);
     const ITEM bolt = MakeItem(ITEM_BOLT);
     const ITEM bookOfSahamutt = MakeItem(ITEM_BOOK_OF_SAHAMUTT);

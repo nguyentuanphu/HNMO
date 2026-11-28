@@ -84,7 +84,7 @@ template <typename TDefinition, typename TVisitor> void VisitStatFields(TDefinit
     visit("damageMin", definition.damageMin, WORD{0});
     visit("damageMax", definition.damageMax, WORD{0});
     visit("blockRate", definition.blockRate, BYTE{0});
-    visit("defense", definition.defense, BYTE{0});
+    visit("defense", definition.defense, WORD{0});
     visit("magicDefense", definition.magicDefense, BYTE{0});
     visit("attackSpeed", definition.attackSpeed, BYTE{0});
     visit("walkSpeed", definition.walkSpeed, BYTE{0});

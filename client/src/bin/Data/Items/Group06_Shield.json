@@ -660,6 +660,200 @@
       "classRequirements": {
         "darkLord": 1
       }
+    },
+    {
+      "number": 22,
+      "name": {
+        "en": "Lazy Wind Shield",
+        "de": "Träger-Wind-Schild",
+        "vi": "Khiên Gió Lười",
+        "zh-CN": "慵懒之风盾"
+      },
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "offHand",
+      "weaponKind": "shield",
+      "statProfile": "shield",
+      "skill": 18,
+      "level": 129,
+      "durability": 90,
+      "blockRate": 108,
+      "defense": 36,
+      "requirements": {
+        "level": 400,
+        "strength": 67,
+        "dexterity": 56
+      },
+      "classRequirements": {
+        "darkKnight": 3
+      }
+    },
+    {
+      "number": 23,
+      "name": {
+        "en": "Light Lord Shield",
+        "de": "Lichtlord-Schild",
+        "vi": "Khiên Chúa Tể Ánh Sáng",
+        "zh-CN": "光之领主盾"
+      },
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "offHand",
+      "weaponKind": "shield",
+      "statProfile": "shield",
+      "level": 124,
+      "durability": 90,
+      "blockRate": 69,
+      "defense": 23,
+      "requirements": {
+        "level": 400,
+        "strength": 16,
+        "dexterity": 35,
+        "energy": 35
+      },
+      "classRequirements": {
+        "fairyElf": 3
+      }
+    },
+    {
+      "number": 24,
+      "name": {
+        "en": "Dark Devil Shield",
+        "de": "Dunkelteufel-Schild",
+        "vi": "Khiên Ác Quỷ Bóng Tối",
+        "zh-CN": "暗黑恶魔盾"
+      },
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "offHand",
+      "weaponKind": "shield",
+      "statProfile": "shield",
+      "level": 122,
+      "durability": 90,
+      "blockRate": 63,
+      "defense": 21,
+      "requirements": {
+        "level": 400,
+        "strength": 52,
+        "dexterity": 15
+      },
+      "classRequirements": {
+        "darkWizard": 3
+      }
+    },
+    {
+      "number": 25,
+      "name": {
+        "en": "Magic Knight Shield",
+        "de": "Magieritter-Schild",
+        "vi": "Khiên Hiệp Sĩ Phép Thuật",
+        "zh-CN": "魔剑士之盾"
+      },
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "offHand",
+      "weaponKind": "shield",
+      "statProfile": "shield",
+      "skill": 18,
+      "level": 128,
+      "durability": 90,
+      "blockRate": 87,
+      "defense": 29,
+      "requirements": {
+        "level": 400,
+        "strength": 53,
+        "dexterity": 18
+      },
+      "classRequirements": {
+        "magicGladiator": 3
+      }
+    },
+    {
+      "number": 26,
+      "name": {
+        "en": "Ambition Shield",
+        "de": "Ehrgeiz-Schild",
+        "vi": "Khiên Tham Vọng",
+        "zh-CN": "野心之盾"
+      },
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "offHand",
+      "weaponKind": "shield",
+      "statProfile": "shield",
+      "skill": 18,
+      "level": 131,
+      "durability": 90,
+      "blockRate": 75,
+      "defense": 25,
+      "requirements": {
+        "level": 400,
+        "strength": 104,
+        "dexterity": 24
+      },
+      "classRequirements": {
+        "darkLord": 3
+      }
+    },
+    {
+      "number": 27,
+      "name": {
+        "en": "Legendary Shield-J"
+      },
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "width": 2,
+      "height": 3,
+      "slot": "offHand",
+      "weaponKind": "shield",
+      "statProfile": "shield",
+      "level": 48,
+      "durability": 50,
+      "blockRate": 48,
+      "defense": 9,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 90,
+        "dexterity": 25
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1
+      }
+    },
+    {
+      "number": 28,
+      "name": {
+        "en": "Serpent Shield-J"
+      },
+      "options": ["luck", "defenseRateOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "offHand",
+      "weaponKind": "shield",
+      "statProfile": "shield",
+      "skill": 18,
+      "level": 45,
+      "durability": 48,
+      "blockRate": 45,
+      "defense": 14,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 130
+      },
+      "classRequirements": {
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1
+      }
     }
   ]
 }

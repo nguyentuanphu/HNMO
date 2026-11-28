@@ -16420,6 +16420,39 @@ namespace HNMO.Web.AdminPanel.Properties {
         }
 
         /// <summary>Looks up a localized string.</summary>
+        public static string ItemDefinitions_SeasonNineNotice {
+            get {
+                return ResourceManager.GetString("ItemDefinitions_SeasonNineNotice", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextS9Events {
+            get {
+                return ResourceManager.GetString("PageHelpTextS9Events", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string S9EventsTitle {
+            get {
+                return ResourceManager.GetString("S9EventsTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextS9Systems {
+            get {
+                return ResourceManager.GetString("PageHelpTextS9Systems", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string S9SystemsTitle {
+            get {
+                return ResourceManager.GetString("S9SystemsTitle", resourceCulture);
+            }
+        }
         public static string JewelBankReceiptsHeading => ResourceManager.GetString("JewelBankReceiptsHeading", resourceCulture);
 
         /// <summary>Looks up a localized string.</summary>

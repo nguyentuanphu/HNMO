@@ -177,8 +177,7 @@
     },
     {
       "number": 14,
-      "file": "Data/Item/Sword15.bmd",
-      "textureFolders": ["Item"],
+      "model": "sword15",
       "inventory": {
         "anchor": [0.8, 0.85],
         "rotation": [180, 270, 15]
@@ -409,6 +408,15 @@
       "renderStyle": "runeBastardSword"
     },
     {
+      "number": 29,
+      "model": "s9BalhallaSword"
+    },
+    {
+      "number": 30,
+      "file": "Data/s9/Item/asura.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
       "number": 31,
       "file": "Data/Item/Sword32.bmd",
       "textureFolders": ["Item"],
@@ -428,8 +436,7 @@
     },
     {
       "number": 32,
-      "file": "Data/Item/Sword33.bmd",
-      "textureFolders": ["Player"],
+      "model": "sword33",
       "inventory": {
         "anchor": [0.55, 0.6],
         "offset": [0.005, 0.015],
@@ -497,6 +504,28 @@
         "color": "ice"
       },
       "renderStyle": "phoenixSoulStar"
+    },
+    {
+      "number": 36,
+      "model": "s9BalhallaSword"
+    },
+    {
+      "number": 37,
+      "file": "Data/s9/Item/blastbreak.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 39,
+      "model": "sword15"
+    },
+    {
+      "number": 40,
+      "model": "sword33"
+    },
+    {
+      "number": 41,
+      "file": "Data/s9/Item/cokcangki.bmd",
+      "textureFolders": ["s9/Item"]
     }
   ]
 }

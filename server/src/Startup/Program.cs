@@ -273,6 +273,34 @@ internal sealed class Program : IDisposable
         {
             this._logger.Information("HNMO license: {Message} (this computer's id: {MachineId})", license.Message, PlayerLicense.MachineId);
         }
+
+        this.StartFolderSeat();
+    }
+
+    /// <summary>
+    /// Gives the folder its code for the hub's reports and starts the licence's folder limit, which does nothing until the
+    /// HNMO developer's hub switches it on (<see cref="FolderSeat"/>).
+    /// </summary>
+    private void StartFolderSeat()
+    {
+        if (Path.GetDirectoryName(DeveloperHub.StateFile) is not { Length: > 0 } saveDir)
+        {
+            return;
+        }
+
+        try
+        {
+            DeveloperHub.FolderCode = FolderIdentity.CodeForSaveDirectory(saveDir);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            this._logger.Warning(ex, "HNMO folder: the install id in {SaveDir} can't be written; the folder limit doesn't apply.", saveDir);
+            return;
+        }
+
+        var logger = new Serilog.Extensions.Logging.SerilogLoggerFactory(this._logger).CreateLogger(typeof(FolderSeat).FullName!);
+        FolderSeat.Configure(new FolderSeats(FolderSeats.DefaultDirectory(), DeveloperHub.MachineId, DeveloperHub.FolderCode, FolderIdentity.FolderOf(saveDir)), logger);
+        FolderSeat.Start();
     }
 
     /// <summary>

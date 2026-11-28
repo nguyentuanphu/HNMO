@@ -944,6 +944,68 @@
       }
     },
     {
+      "number": 29,
+      "name": {
+        "en": "Sonic Blade",
+        "de": "Schallklinge",
+        "vi": "Thanh kiếm Sonic",
+        "zh-CN": "音速之刃"
+      },
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "width": 1,
+      "height": 4,
+      "slot": "mainHand",
+      "weaponKind": "sword",
+      "statProfile": "weapon",
+      "skill": 22,
+      "level": 149,
+      "durability": 80,
+      "damageMin": 109,
+      "damageMax": 116,
+      "attackSpeed": 35,
+      "droppable": false,
+      "requirements": {
+        "level": 400,
+        "strength": 49,
+        "dexterity": 162
+      },
+      "classRequirements": {
+        "darkKnight": 3
+      }
+    },
+    {
+      "number": 30,
+      "name": {
+        "en": "Asura",
+        "de": "Asura",
+        "vi": "Asura",
+        "zh-CN": "阿修罗"
+      },
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "width": 1,
+      "height": 4,
+      "slot": "mainHand",
+      "weaponKind": "sword",
+      "statProfile": "weapon",
+      "skill": 56,
+      "level": 149,
+      "durability": 90,
+      "damageMin": 115,
+      "damageMax": 140,
+      "attackSpeed": 45,
+      "magicPower": 112,
+      "droppable": false,
+      "requirements": {
+        "level": 400,
+        "strength": 86,
+        "dexterity": 70,
+        "energy": 16
+      },
+      "classRequirements": {
+        "magicGladiator": 3
+      }
+    },
+    {
       "number": 31,
       "name": {
         "en": "Rune Blade",
@@ -1092,6 +1154,151 @@
         "dexterity": 51
       },
       "classRequirements": {
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 36,
+      "name": {
+        "en": "Cyclone Sword",
+        "de": "Zyklonschwert",
+        "vi": "Kiếm Lốc Xoáy",
+        "zh-CN": "旋风之剑"
+      },
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "width": 1,
+      "height": 4,
+      "slot": "mainHand",
+      "weaponKind": "sword",
+      "statProfile": "weapon",
+      "skill": 22,
+      "level": 149,
+      "durability": 90,
+      "damageMin": 129,
+      "damageMax": 144,
+      "attackSpeed": 40,
+      "droppable": false,
+      "requirements": {
+        "level": 400,
+        "strength": 182,
+        "dexterity": 50
+      },
+      "classRequirements": {
+        "darkKnight": 3
+      }
+    },
+    {
+      "number": 37,
+      "name": {
+        "en": "Blast Break",
+        "de": "Explosionsbrecher",
+        "vi": "Kiếm Phá Hủy",
+        "zh-CN": "爆裂破坏剑"
+      },
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "width": 2,
+      "height": 4,
+      "slot": "mainHand",
+      "weaponKind": "sword",
+      "statProfile": "weapon",
+      "twoHanded": true,
+      "skill": 23,
+      "level": 149,
+      "durability": 130,
+      "damageMin": 163,
+      "damageMax": 216,
+      "attackSpeed": 30,
+      "droppable": false,
+      "requirements": {
+        "level": 400,
+        "strength": 182,
+        "dexterity": 50
+      },
+      "classRequirements": {
+        "darkKnight": 3,
+        "magicGladiator": 3
+      }
+    },
+    {
+      "number": 39,
+      "name": {
+        "en": "Lighting Sword-J"
+      },
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "width": 1,
+      "height": 3,
+      "slot": "mainHand",
+      "weaponKind": "sword",
+      "statProfile": "weapon",
+      "skill": 22,
+      "level": 59,
+      "durability": 50,
+      "damageMin": 59,
+      "damageMax": 67,
+      "attackSpeed": 35,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 90,
+        "dexterity": 50
+      },
+      "classRequirements": {
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1
+      }
+    },
+    {
+      "number": 40,
+      "name": {
+        "en": "Sacred Glove-J"
+      },
+      "options": ["luck", "physicalDamageOption", "excellentPhysicalAttack"],
+      "width": 1,
+      "height": 2,
+      "slot": "mainHand",
+      "weaponKind": "claw",
+      "statProfile": "weapon",
+      "skill": 260,
+      "level": 52,
+      "durability": 65,
+      "damageMin": 52,
+      "damageMax": 58,
+      "attackSpeed": 30,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 85,
+        "dexterity": 35
+      },
+      "classRequirements": {
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 41,
+      "name": {
+        "en": "Pandora Pick (two-handed)",
+        "de": "Pandora-Spitzhacke (Zweihand)",
+        "vi": "Cuốc Pandora (hai tay)",
+        "zh-CN": "潘多拉矿镐（双手）"
+      },
+      "width": 2,
+      "height": 2,
+      "slot": "mainHand",
+      "weaponKind": "sword",
+      "statProfile": "weapon",
+      "twoHanded": true,
+      "durability": 255,
+      "droppable": false,
+      "sellable": false,
+      "classRequirements": {
+        "darkWizard": 1,
+        "darkKnight": 1,
+        "fairyElf": 1,
+        "magicGladiator": 1,
+        "darkLord": 1,
+        "summoner": 1,
         "rageFighter": 1
       }
     }

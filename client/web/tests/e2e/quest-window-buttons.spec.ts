@@ -52,10 +52,11 @@ test('Quest Window closes CashShop overlay and all tabs + bottom buttons respond
   // Bottom Scroll (#btn_quest_open) & Book (#btn_quest_giveup) are unoccluded and explain when locked.
   await clickQuestButton(page, '#btn_quest_open');
   await expect.poll(() => chatText(page)).toMatch(/quest/i);
-  const afterOpenLen = (await chatText(page)).length;
 
+  // The Book explains itself with a new line. Not measured by the chat's length: the system log keeps 6 lines
+  // (CSystemLogWindow), so with a full log the new line pushes the oldest out and the length can shrink.
   await clickQuestButton(page, '#btn_quest_giveup');
-  await expect.poll(async () => (await chatText(page)).length).toBeGreaterThan(afterOpenLen);
+  await expect.poll(async () => (await chatText(page)).split('\n').at(-1) ?? '').toMatch(/give up/i);
 
   // Bottom Exit (#btn_exit) closes Quest Window on real click.
   await clickQuestButton(page, '#btn_exit');

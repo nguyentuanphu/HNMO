@@ -1211,6 +1211,17 @@ namespace HNMO.Persistence.Initialization.Properties {
         /// <summary>Gets the localized MossMerchantShopUpdatePlugIn_Description text.</summary>
         public static string MossMerchantShopUpdatePlugIn_Description => ResourceManager.GetString("MossMerchantShopUpdatePlugIn_Description", resourceCulture)!;
 
+        /// <summary>Gets the localized SeasonNineExtendedSharedItemsUpdatePlugIn_Name text.</summary>
+        public static string SeasonNineExtendedSharedItemsUpdatePlugIn_Name => ResourceManager.GetString("SeasonNineExtendedSharedItemsUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized SeasonNineExtendedSharedItemsUpdatePlugIn_Description text.</summary>
+        public static string SeasonNineExtendedSharedItemsUpdatePlugIn_Description => ResourceManager.GetString("SeasonNineExtendedSharedItemsUpdatePlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized SeasonNineSystemsUpdatePlugIn_Name text.</summary>
+        public static string SeasonNineSystemsUpdatePlugIn_Name => ResourceManager.GetString("SeasonNineSystemsUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized SeasonNineSystemsUpdatePlugIn_Description text.</summary>
+        public static string SeasonNineSystemsUpdatePlugIn_Description => ResourceManager.GetString("SeasonNineSystemsUpdatePlugIn_Description", resourceCulture)!;
         /// <summary>Gets the localized S6EventsMonstersAndItemsUpdatePlugIn_Name text.</summary>
         public static string S6EventsMonstersAndItemsUpdatePlugIn_Name => ResourceManager.GetString("S6EventsMonstersAndItemsUpdatePlugIn_Name", resourceCulture)!;
 

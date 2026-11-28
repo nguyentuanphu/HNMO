@@ -226,6 +226,17 @@ public class LoginAction
             return true;
         }
 
+        if (FolderSeat.Status is { IsBlocked: true } seat)
+        {
+            player.Logger.LogWarning(
+                "Login of [{Username}] refused: this HNMO folder has no seat on this computer (id {MachineId}); the licence lets {Allowed} HNMO folder(s) run at once and these already do: {Holders}.",
+                username,
+                seat.MachineId,
+                seat.Allowed,
+                string.Join("; ", seat.OtherHolders));
+            return false;
+        }
+
         player.Logger.LogWarning(
             "Login of [{Username}] refused: the licensed limit of {Maximum} players at once is reached (license.hnmo raises it).",
             username,

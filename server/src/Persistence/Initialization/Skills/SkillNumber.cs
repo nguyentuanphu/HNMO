@@ -412,6 +412,10 @@ internal enum SkillNumber
     IncreaseIgnoreDefChance = 615,
     RecoversSdFully = 616,
     IncreaseTripleDamageChance = 617,
+    SpellOfProtection = 618,
+    SpellOfRestriction = 619,
+    SpellOfPursuit = 620,
+    ShieldBurnS9 = 621,
     #endregion
 
     #region HNMO skills

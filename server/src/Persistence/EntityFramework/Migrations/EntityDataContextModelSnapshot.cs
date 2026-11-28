@@ -2343,6 +2343,12 @@ namespace HNMO.Persistence.EntityFramework.Migrations
                     b.Property<byte>("Level")
                         .HasColumnType("smallint");
 
+                    b.Property<byte>("PentagramElement")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("PentagramErrtels")
+                        .HasColumnType("text");
+
                     b.Property<int>("PetExperience")
                         .HasColumnType("integer");
 

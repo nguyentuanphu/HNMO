@@ -60,8 +60,7 @@
     },
     {
       "number": 5,
-      "file": "Data/Item/Bow06.bmd",
-      "textureFolders": ["Item"],
+      "model": "bow06",
       "inventory": {
         "rotation": [180, 270, 25]
       },
@@ -350,6 +349,20 @@
         "color": "periwinkle",
         "meshes": [0]
       }
+    },
+    {
+      "number": 25,
+      "file": "Data/s9/Item/bow26.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 26,
+      "file": "Data/s9/Item/devilcrossbow.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 27,
+      "model": "bow06"
     }
   ]
 }

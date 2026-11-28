@@ -1410,6 +1410,132 @@
       "number": 53
     },
     {
+      "number": 54,
+      "name": {
+        "en": "Lazy Wind Boots",
+        "de": "Träger Wind-Stiefel",
+        "vi": "Ủng Gió Lười",
+        "zh-CN": "慵懒之风靴子"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "boots",
+      "statProfile": "armor",
+      "level": 140,
+      "durability": 90,
+      "defense": 62,
+      "requirements": {
+        "level": 400,
+        "strength": 67,
+        "dexterity": 151
+      },
+      "classRequirements": {
+        "darkKnight": 3
+      }
+    },
+    {
+      "number": 55,
+      "name": {
+        "en": "Dark Devil Boots",
+        "de": "Dunkelteufel-Stiefel",
+        "vi": "Ủng Ác Quỷ Bóng Tối",
+        "zh-CN": "暗黑恶魔靴子"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "boots",
+      "statProfile": "armor",
+      "level": 140,
+      "durability": 90,
+      "defense": 43,
+      "requirements": {
+        "level": 400,
+        "strength": 45,
+        "dexterity": 13,
+        "energy": 171
+      },
+      "classRequirements": {
+        "darkWizard": 3
+      }
+    },
+    {
+      "number": 56,
+      "name": {
+        "en": "Sticky Boots",
+        "de": "Klebrige-Stiefel",
+        "vi": "Ủng Bám Dính",
+        "zh-CN": "粘性靴子"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "boots",
+      "statProfile": "armor",
+      "level": 140,
+      "durability": 90,
+      "defense": 51,
+      "requirements": {
+        "level": 400,
+        "strength": 48,
+        "dexterity": 180
+      },
+      "classRequirements": {
+        "fairyElf": 3
+      }
+    },
+    {
+      "number": 57,
+      "name": {
+        "en": "Hell Night Boots",
+        "de": "Höllennacht-Stiefel",
+        "vi": "Ủng Đêm Địa Ngục",
+        "zh-CN": "地狱之夜靴子"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "boots",
+      "statProfile": "armor",
+      "level": 140,
+      "durability": 90,
+      "defense": 63,
+      "requirements": {
+        "level": 400,
+        "strength": 194,
+        "dexterity": 52
+      },
+      "classRequirements": {
+        "magicGladiator": 3
+      }
+    },
+    {
+      "number": 58,
+      "name": {
+        "en": "Ambition Boots",
+        "de": "Ehrgeiz-Stiefel",
+        "vi": "Ủng Tham Vọng",
+        "zh-CN": "野心靴子"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "boots",
+      "statProfile": "armor",
+      "level": 140,
+      "durability": 90,
+      "defense": 47,
+      "requirements": {
+        "level": 400,
+        "strength": 112,
+        "dexterity": 22
+      },
+      "classRequirements": {
+        "darkLord": 3
+      }
+    },
+    {
       "number": 59,
       "name": {
         "en": "Sacred Fire Boots",
@@ -1868,6 +1994,222 @@
         "level": 380,
         "strength": 97,
         "vitality": 85
+      },
+      "classRequirements": {
+        "rageFighter": 1
+      }
+    },
+    {
+      "number": 74,
+      "name": {
+        "en": "Stormwing Boots",
+        "de": "Sturmflügel-Stiefel",
+        "vi": "Ủng Cánh Bão",
+        "zh-CN": "风暴之翼靴子"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "boots",
+      "statProfile": "armor",
+      "level": 140,
+      "durability": 90,
+      "defense": 66,
+      "requirements": {
+        "level": 400,
+        "strength": 200,
+        "dexterity": 33
+      },
+      "classRequirements": {
+        "darkKnight": 3
+      }
+    },
+    {
+      "number": 75,
+      "name": {
+        "en": "Light Lord Boots",
+        "de": "Lichtlord-Stiefel",
+        "vi": "Ủng Chúa Tể Ánh Sáng",
+        "zh-CN": "光之领主靴子"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "boots",
+      "statProfile": "armor",
+      "level": 140,
+      "durability": 90,
+      "defense": 44,
+      "requirements": {
+        "level": 400,
+        "strength": 14,
+        "dexterity": 31,
+        "energy": 127
+      },
+      "classRequirements": {
+        "fairyElf": 3
+      }
+    },
+    {
+      "number": 76,
+      "name": {
+        "en": "Magic Knight Boots",
+        "de": "Magieritter-Stiefel",
+        "vi": "Ủng Hiệp Sĩ Phép Thuật",
+        "zh-CN": "魔剑士靴子"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "boots",
+      "statProfile": "armor",
+      "level": 140,
+      "durability": 90,
+      "defense": 53,
+      "requirements": {
+        "level": 400,
+        "strength": 48,
+        "dexterity": 17,
+        "energy": 142
+      },
+      "classRequirements": {
+        "magicGladiator": 3
+      }
+    },
+    {
+      "number": 78,
+      "name": {
+        "en": "Dragon Boots-J"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "boots",
+      "statProfile": "armor",
+      "level": 54,
+      "durability": 68,
+      "defense": 17,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 120,
+        "dexterity": 30
+      },
+      "classRequirements": {
+        "darkKnight": 1,
+        "magicGladiator": 1
+      }
+    },
+    {
+      "number": 79,
+      "name": {
+        "en": "Legendary Boots-J"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "boots",
+      "statProfile": "armor",
+      "level": 46,
+      "durability": 42,
+      "defense": 14,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 30
+      },
+      "classRequirements": {
+        "darkWizard": 1,
+        "magicGladiator": 1
+      }
+    },
+    {
+      "number": 80,
+      "name": {
+        "en": "Guardian Boots-J"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "boots",
+      "statProfile": "armor",
+      "level": 52,
+      "durability": 45,
+      "defense": 18,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 40,
+        "dexterity": 80
+      },
+      "classRequirements": {
+        "fairyElf": 1
+      }
+    },
+    {
+      "number": 81,
+      "name": {
+        "en": "Light Plate Boots-J"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "boots",
+      "statProfile": "armor",
+      "level": 45,
+      "durability": 42,
+      "defense": 15,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 70,
+        "dexterity": 20
+      },
+      "classRequirements": {
+        "darkLord": 1
+      }
+    },
+    {
+      "number": 82,
+      "name": {
+        "en": "Red Wing Boots-J"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "boots",
+      "statProfile": "armor",
+      "level": 46,
+      "durability": 42,
+      "defense": 17,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 25,
+        "dexterity": 4
+      },
+      "classRequirements": {
+        "summoner": 1
+      }
+    },
+    {
+      "number": 83,
+      "name": {
+        "en": "Sacred Fire Boots-J"
+      },
+      "options": ["luck", "defenseOption", "excellentDefense"],
+      "width": 2,
+      "height": 2,
+      "slot": "boots",
+      "statProfile": "armor",
+      "level": 50,
+      "durability": 52,
+      "defense": 22,
+      "tradable": false,
+      "droppable": false,
+      "requirements": {
+        "strength": 85,
+        "vitality": 75
       },
       "classRequirements": {
         "rageFighter": 1

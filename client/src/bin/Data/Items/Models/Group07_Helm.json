@@ -865,6 +865,24 @@
       "renderStyle": "onlyMesh2WithoutSkin"
     },
     {
+      "number": 54,
+      "model": "s9Helmmale75"
+    },
+    {
+      "number": 55,
+      "file": "Data/s9/Item/HelmMale56.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 56,
+      "model": "s9Helmmail3003"
+    },
+    {
+      "number": 58,
+      "file": "Data/s9/Item/HelmMale4005.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
       "number": 59,
       "file": "Data/Player/HelmMale60.bmd",
       "textureFolders": ["Player"],
@@ -1099,6 +1117,44 @@
         "excellentMesh": 0
       },
       "renderStyle": "phoenixSoulHelmet"
+    },
+    {
+      "number": 74,
+      "model": "s9Helmmale75"
+    },
+    {
+      "number": 75,
+      "model": "s9Helmmail3003"
+    },
+    {
+      "number": 78,
+      "file": "Data/s9/Item/HelmMale02.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 79,
+      "file": "Data/s9/Item/HelmMale04.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 80,
+      "file": "Data/s9/Item/HelmElf05.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 81,
+      "file": "Data/s9/Item/HelmMale26.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 82,
+      "file": "Data/s9/Item/HelmMale41.bmd",
+      "textureFolders": ["s9/Item"]
+    },
+    {
+      "number": 83,
+      "file": "Data/s9/Item/HelmMale60.bmd",
+      "textureFolders": ["s9/Item"]
     }
   ]
 }
