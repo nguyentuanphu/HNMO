@@ -110,6 +110,26 @@ const FALLBACK_FULL = '#e0483e';
 /** ServerList.json colors.loadRed in the legacy theme: the load texts. */
 const LOAD_RED = '#FF5A5A';
 
+/** A screen narrower than 520 px and taller than wide (a phone held upright): the stacked layout. */
+export function narrowScreen(width = window.innerWidth, height = window.innerHeight): boolean {
+  return width < 520 && height > width;
+}
+
+/** The stacked window's width in original pixels (its panel and padding). */
+const NARROW_WIDTH = 256;
+
+/** One original pixel of the window, as rml.ts writes the documents' rem. */
+const rem = (px: number) => `calc(${px} * var(--rml-rem, 12px))`;
+
+/** The stacked layout: the groups over the servers, each column as tall as it needs up to a height, then scrolling. */
+const NARROW_CSS = `
+.narrow #panel { width: ${rem(236)}; }
+.narrow #columns { flex-direction: column; align-items: center; height: auto; gap: ${rem(8)}; }
+.narrow #group_col { width: auto; height: auto; max-height: ${rem(124)}; justify-content: flex-start; }
+.narrow #server_col { height: calc(var(--narrow-rows, 3) * ${rem(42)}); max-height: ${rem(216)}; padding: 0 ${rem(6)}; }
+.narrow #desc_panel { white-space: normal; overflow-wrap: anywhere; }
+`;
+
 export async function openServerSelect<T>(options: ServerSelectOptions<T>): Promise<ServerSelectWindow> {
   const { groups, vi } = options;
   const [base, full] = await Promise.all([themeToken('server-load-base'), themeToken('server-load-full')]);
@@ -158,10 +178,16 @@ export async function openServerSelect<T>(options: ServerSelectOptions<T>): Prom
       else options.onBusy(entry.server);
     },
   };
-  const document = await openDocument('server_select', model, { parent: options.parent });
+  const document = await openDocument('server_select', model, { parent: options.parent, sceneWidth: () => (narrowScreen() ? NARROW_WIDTH : 640) });
   // .center-both centres the panel in its document, which has no size here: in the window instead.
   const panel = document.$('#panel');
   if (panel) Object.assign(panel.style, { position: 'fixed', left: '50%', top: '50%' });
+  // On a phone held upright the two columns stand one over the other, so the window can be as wide as the screen.
+  const narrowStyle = window.document.createElement('style');
+  narrowStyle.textContent = NARROW_CSS;
+  document.root.before(narrowStyle);
+  const layOut = () => document.root.classList.toggle('narrow', narrowScreen());
+  layOut();
   function showGroup(position: number): void {
     const group = groups[position];
     if (!group) return;
@@ -169,6 +195,8 @@ export async function openServerSelect<T>(options: ServerSelectOptions<T>): Prom
     model.groups = groups.map((g, index) => ({ label: g.label, btn_pos: index, checked: index === position }));
     model.servers = rows(group);
     model.server_list_visible = true;
+    // The stacked layout's server column is as tall as its rows (a row and its gap: 42 original pixels), up to a height.
+    document.root.style.setProperty('--narrow-rows', String(Math.max(1, group.servers.length)));
     model.description_text = group.description;
     requestAnimationFrame(fitLoadTexts);
   }
@@ -195,7 +223,7 @@ export async function openServerSelect<T>(options: ServerSelectOptions<T>): Prom
     if (changed) document.update();
   }
   // A rem is one original pixel at the window's scale (scene-window-scale): a new window size lays it out again.
-  const onResize = () => { document.update(); requestAnimationFrame(fitLoadTexts); };
+  const onResize = () => { layOut(); document.update(); requestAnimationFrame(fitLoadTexts); };
   window.addEventListener('resize', onResize);
   return {
     document,

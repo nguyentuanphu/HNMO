@@ -34,7 +34,7 @@ const BLOOD_SLASH = 701;
 const FIELDS = [{ x: 152, y: 116 }, { x: 148, y: 125 }, { x: 147, y: 91 }, { x: 140, y: 84 }, { x: 155, y: 120 }, { x: 143, y: 100 }];
 
 async function enterAsKnight(page: Page): Promise<void> {
-  await page.goto('/index.html');
+  await page.goto('/index.html?devlogin=1');
   await page.fill('#username', 'testgm');
   await page.fill('#password', 'testgm');
   await page.click('button.primary');

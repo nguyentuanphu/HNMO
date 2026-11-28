@@ -34,6 +34,8 @@ export class Connection {
   waiters: Waiter[];
   backlog: Uint8Array[];
   closed: boolean;
+  /** The game closed it (close()); otherwise the server or the network did. */
+  closedByGame = false;
   onClose: (() => void) | null;
   onUnexpectedDisconnect?: () => void;
   socket?: WebSocket;
@@ -137,6 +139,7 @@ export class Connection {
 
   close(): void {
     this.closed = true;
+    this.closedByGame = true;
     this.socket?.close();
   }
 }

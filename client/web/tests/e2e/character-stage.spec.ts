@@ -7,7 +7,7 @@ interface StageView { slots: number[]; selectedSlot: number | null; screenPointO
 type Win = Window & { __game: { characterStage?: StageView | null; mapNumber: number | null }; __viewerReady?: boolean };
 
 async function toCharacters(page: Page, account: string): Promise<void> {
-  await page.goto('/index.html');
+  await page.goto('/index.html?devlogin=1');
   await page.fill('#username', account);
   await page.fill('#password', account);
   await page.click('button.primary');

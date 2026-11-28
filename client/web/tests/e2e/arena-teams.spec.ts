@@ -21,7 +21,7 @@ const BLUE_GATE = { x1: 112, y1: 24, x2: 118, y2: 30 };
 const LONG = { timeout: 15 * 60_000 };
 
 async function enterArena(page: Page, account: string): Promise<void> {
-  await page.goto('/index.html');
+  await page.goto('/index.html?devlogin=1');
   await page.fill('#username', account);
   await page.fill('#password', account);
   await page.click('button.primary');

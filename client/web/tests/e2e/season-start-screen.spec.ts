@@ -20,7 +20,7 @@ for (const language of ['en', 'vi'] as const) {
         servers: [],
       }),
     }));
-    await page.goto('/index.html');
+    await page.goto('/index.html?devlogin=1');
     await page.fill('#username', 'test8');
     await page.fill('#password', 'test8');
     await page.click('button.primary');

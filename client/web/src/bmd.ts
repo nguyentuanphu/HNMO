@@ -9,6 +9,7 @@ import { parseBMD, decodeTGA } from './formats.js';
 import { getTextureQuality } from './ui/settingsWindow.js';
 import type { BMDModel, BMDMesh, BMDBoneFrames } from './formats.js';
 import { onSeasonChange, seasonDataUrl } from './dataRoot.js';
+import { trackLoad } from './loadProgress.js';
 
 const ALPHA_TEST = 0.25;
 
@@ -56,10 +57,11 @@ export function clearTextureCache(): void {
 export async function fetchBytes(url: string): Promise<Uint8Array> {
   const resolved = resolveDataUrl(url);
   if (!fileCache.has(resolved)) {
-    fileCache.set(resolved, fetch(resolved).then(async (response) => {
+    // Counted for the loading bars (loadProgress.ts): once per file, from its start until it is in.
+    fileCache.set(resolved, trackLoad(fetch(resolved).then(async (response) => {
       if (!response.ok) throw new Error(`${response.status} ${resolved}`);
       return new Uint8Array(await response.arrayBuffer());
-    }));
+    })));
   }
   return fileCache.get(resolved)!;
 }
@@ -121,7 +123,7 @@ async function tryLoadKtx2(url: string): Promise<THREE.Texture | null> {
   const ktx2Url = url.replace(/\.(ozj|ozt|jpe?g|tga)$/i, '.ktx2');
   if (ktx2Url === url) return null;
   try {
-    const response = await fetch(resolveDataUrl(ktx2Url));
+    const response = await trackLoad(fetch(resolveDataUrl(ktx2Url)));
     if (!response.ok) return null;
     const blobUrl = URL.createObjectURL(await response.blob());
     try {

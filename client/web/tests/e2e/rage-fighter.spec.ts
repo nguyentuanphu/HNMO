@@ -37,7 +37,7 @@ interface RageGame {
 type Win = Window & { __game: RageGame };
 
 async function enterAsFighter(page: Page): Promise<void> {
-  await page.goto('/index.html');
+  await page.goto('/index.html?devlogin=1');
   await page.fill('#username', 'testgm2');
   await page.fill('#password', 'testgm2');
   await page.click('button.primary');

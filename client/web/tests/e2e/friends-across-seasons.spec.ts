@@ -10,7 +10,7 @@ type Win = Window & { __game: FriendGame };
 
 async function enterArena(page: Page, account: string): Promise<void> {
   await expect(async () => {
-    await page.goto('/index.html');
+    await page.goto('/index.html?devlogin=1');
     await page.fill('#username', account);
     await page.fill('#password', account);
     await page.click('button.primary');

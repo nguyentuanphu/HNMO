@@ -19,7 +19,7 @@ const PLAYERS = Number(process.env.ROYALE_PLAYERS ?? 4);
 const GM = process.env.GM_ACCOUNT ?? 'testgm';
 
 async function enterArena(page: Page, account: string): Promise<void> {
-  await page.goto('/index.html');
+  await page.goto('/index.html?devlogin=1');
   await page.fill('#username', account);
   await page.fill('#password', account);
   await page.click('button.primary');

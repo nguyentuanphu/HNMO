@@ -578,7 +578,29 @@ export function prepareDocument(name: string): Promise<PreparedDocument> {
   return compiled.get(name)!;
 }
 
-export async function openDocument(name: string, model: RmlModel, { parent = document.body as HTMLElement, scale = 1 } = {}): Promise<RmlDocument> {
+/** How much larger than the 640x480 layout's a scene window's rem may grow on a narrow screen. */
+const NARROW_SCENE_MAX_REM = 1.25;
+
+/**
+ * A scene window's rem in screen pixels (scene-bar-scale / scene-window-scale): one original pixel at the 640x480
+ * layout's scale. On a screen narrower than the layout (a phone held upright) the layout's scale would shrink the window
+ * to half and its texts and buttons with it: a window that needs only `sceneWidth` original pixels across then grows to
+ * the screen's width (up to 1.25 times, and never taller than the layout's height allows).
+ */
+export function sceneRemPx(width: number, height: number, sceneWidth?: number): number {
+  const layout = Math.min(width / 640, height / REFERENCE_HEIGHT);
+  if (!sceneWidth || sceneWidth >= 640 || width >= 640) return layout;
+  return Math.max(layout, Math.min(width / sceneWidth, height / REFERENCE_HEIGHT, NARROW_SCENE_MAX_REM));
+}
+
+export interface OpenDocumentOptions {
+  parent?: HTMLElement;
+  scale?: number;
+  /** A scene window's width in original pixels on a narrow screen (sceneRemPx), asked again at each layout. */
+  sceneWidth?: () => number;
+}
+
+export async function openDocument(name: string, model: RmlModel, { parent = document.body as HTMLElement, scale = 1, sceneWidth }: OpenDocumentOptions = {}): Promise<RmlDocument> {
   const { xml, css } = await prepareDocument(name);
 
   const host = document.createElement('div');
@@ -626,7 +648,7 @@ export async function openDocument(name: string, model: RmlModel, { parent = doc
       // The scene windows the original drew at fixed pixels (class scene-bar-scale / scene-window-scale on their body,
       // RmlNativeText.h): a rem is one original pixel at the screen's scale of the 640x480 layout, not the text size.
       const sceneScaled = root.classList.contains('scene-bar-scale') || root.classList.contains('scene-window-scale');
-      const remPx = sceneScaled ? Math.min(window.innerWidth / 640, window.innerHeight / REFERENCE_HEIGHT) : nativeTextPx();
+      const remPx = sceneScaled ? sceneRemPx(window.innerWidth, window.innerHeight, sceneWidth?.()) : nativeTextPx();
       const rem = `${(remPx / (rootScale || 1)).toFixed(3)}px`;
       if (root.style.getPropertyValue('--rml-rem') !== rem) root.style.setProperty('--rml-rem', rem);
     }

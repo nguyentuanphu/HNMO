@@ -2,7 +2,8 @@
 // window_shell frame, COptionWindow) with what the web game can switch. HNMO extras:
 //  - Display: render scale (the desktop's resolution row), windowed / full screen, the FPS limit
 //    (the desktop's choices), the UI size (the desktop's 75-150 %, plus 175 and 200 % for large screens;
-//    never larger than the window fits) and the text size (small / normal / large).
+//    never larger than the window fits) and the text size (small / normal / large); the plain screens
+//    (the server and character choice as plain lists, without the 3D World 74 scene, for weak devices).
 //  - Graphics: a low-spec mode switch, the view distance and skill effects off (render/quality.ts).
 //  - Audio: the desktop's sound and music volume bars (levels 0..10, audioSystem) and a mute
 //    switch (the same as the ♪ button).
@@ -51,6 +52,8 @@ export interface GameSettings {
   textureQuality: TextureQuality;
   wakeLock: boolean;
   hudMode: HudMode;
+  /** The server and character choice as plain lists, without the 3D World 74 scene (weak devices). Off by default. */
+  plainScreens: boolean;
 }
 
 const DEFAULT_SETTINGS: GameSettings = {
@@ -61,6 +64,7 @@ const DEFAULT_SETTINGS: GameSettings = {
   textureQuality: 'compressed',
   wakeLock: false,
   hudMode: 'auto',
+  plainScreens: false,
 };
 
 function pick<T>(list: readonly T[], value: unknown, fallback: T): T {
@@ -80,6 +84,7 @@ export function loadSettings(): GameSettings {
       textureQuality?: unknown;
       wakeLock?: unknown;
       hudMode?: unknown;
+      plainScreens?: unknown;
     };
     const q = saved.quality ?? {};
     settings.quality = {
@@ -98,10 +103,16 @@ export function loadSettings(): GameSettings {
     if (typeof saved.wakeLock === 'boolean') settings.wakeLock = saved.wakeLock;
     else settings.wakeLock = typeof window !== 'undefined' && (window.matchMedia?.('(pointer: coarse)').matches ?? false);
     settings.hudMode = pick(HUD_MODES, saved.hudMode, 'auto');
+    settings.plainScreens = saved.plainScreens === true;
   } catch {
     /* storage unavailable or damaged: defaults */
   }
   return settings;
+}
+
+/** Whether the server and character choice are plain lists, without the 3D scene (the saved setting). */
+export function plainScreensOn(): boolean {
+  return loadSettings().plainScreens;
 }
 
 /** Returns the active texture quality setting ('compressed' or 'original'). */
@@ -165,6 +176,8 @@ export interface SettingsActions {
   textureQualityChanged?: (quality: TextureQuality) => void;
   /** Called when the player changes touch HUD layout mode (auto / modern / classic). */
   hudModeChanged?: (mode: HudMode) => void;
+  /** Called when the player switches the plain server and character screens on or off. */
+  plainScreensChanged?: (on: boolean) => void;
 }
 
 export class SettingsWindow {
@@ -173,7 +186,7 @@ export class SettingsWindow {
   private readonly settings: GameSettings = loadSettings();
   private readonly model: OptionModel;
   private extras: {
-    lowSpec?: HTMLDivElement; batterySaver?: HTMLDivElement; wakeLock?: HTMLDivElement; perfMode?: HTMLDivElement; hidePlayers?: HTMLDivElement; hideWingsPets?: HTMLDivElement; reducedEffects?: HTMLDivElement;
+    lowSpec?: HTMLDivElement; batterySaver?: HTMLDivElement; wakeLock?: HTMLDivElement; plainScreens?: HTMLDivElement; perfMode?: HTMLDivElement; hidePlayers?: HTMLDivElement; hideWingsPets?: HTMLDivElement; reducedEffects?: HTMLDivElement;
     mute?: HTMLDivElement; viewValue?: HTMLDivElement; viewList?: HTMLDivElement; viewOptions: HTMLDivElement[];
     texValue?: HTMLDivElement; texList?: HTMLDivElement; texOptions: HTMLDivElement[];
     hudValue?: HTMLDivElement; hudList?: HTMLDivElement; hudOptions: HTMLDivElement[];
@@ -344,6 +357,13 @@ export class SettingsWindow {
     this.settings.wakeLock = enabled;
     setWakeLockEnabled(enabled);
     saveSettings(this.settings);
+    this.update();
+  }
+
+  setPlainScreens(on: boolean): void {
+    this.settings.plainScreens = on;
+    saveSettings(this.settings);
+    this.actions.plainScreensChanged?.(on);
     this.update();
   }
 
@@ -522,7 +542,18 @@ export class SettingsWindow {
       });
       wake.row.id = 'hnmo_wake_lock';
       hud.row.after(wake.row);
-      this.extras = { ...this.extras, textValue: value, textList: list, textOptions: options, hudValue: hud.value, hudList: hud.list, hudOptions: hud.options, wakeLock: wake.box };
+      // The server and character choice without the 3D scene (weak devices); applies to the next choice, and at once
+      // to a scene on screen.
+      const vi = currentLanguage() === 'vi';
+      const plain = checkboxRow(vi ? 'Màn hình chọn đơn giản (không 3D)' : 'Plain server and character screens', () => {
+        this.setPlainScreens(!this.settings.plainScreens);
+      });
+      plain.row.id = 'hnmo_plain_screens';
+      plain.row.title = vi
+        ? 'Chọn máy chủ và nhân vật bằng danh sách, không tải cảnh 3D (cho máy yếu)'
+        : 'Pick the server and the character from plain lists, without loading the 3D scene (for weak devices)';
+      wake.row.after(plain.row);
+      this.extras = { ...this.extras, textValue: value, textList: list, textOptions: options, hudValue: hud.value, hudList: hud.list, hudOptions: hud.options, wakeLock: wake.box, plainScreens: plain.box };
     }
     const interfaceTab = panels[4];
     if (interfaceTab) {
@@ -577,6 +608,7 @@ export class SettingsWindow {
     hudList?.classList.toggle('hidden', this.model.open_dropdown !== HUD_MODE_DROPDOWN);
     hudOptions.forEach((option, i) => option.classList.toggle('selected', i === hudIndex));
     wakeLock?.classList.toggle('checked', this.settings.wakeLock);
+    this.extras.plainScreens?.classList.toggle('checked', this.settings.plainScreens);
     const q = this.settings.quality;
     lowSpec?.classList.toggle('checked', isLowSpec(q));
     batterySaver?.classList.toggle('checked', isBatterySaver(q));
