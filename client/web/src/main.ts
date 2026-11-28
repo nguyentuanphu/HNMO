@@ -183,7 +183,8 @@ for (const picker of languagePickers) {
 }
 onLanguageChange(showLanguage);
 showLanguage(savedLanguage());
-void initLanguage();
+// The server choice names its worlds in the player's language: it waits for the language (fetchServerMetadata).
+const languageReady = initLanguage().catch(() => undefined);
 
 // The map the hero is on: its data and the terrain mesh the pointer is cast against.
 export type GameWorld = WorldData & { terrain: TerrainMesh };
@@ -1618,6 +1619,9 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   // Season 9 and the Arena run as their own programs with their own connect servers (seasons.json says their ports);
   // their servers are listed next to Season 6.3's, each asking its own connect server for the address.
   const { s9: seasonNineConnect, arena: arenaConnect } = await otherConnectServers(connectServer);
+  // The world names below are read in the current language: a page loading slowly (the 3D stage) mustn't name them in
+  // English for a Vietnamese player because its texts came later.
+  await languageReady;
   const [seasonSixServers, seasonNineServers, arenaServers, serverMeta, seasonNineMeta] = await Promise.all([
     fetchServerList(settings.relay, connectServer),
     seasonNineConnect ? fetchServerList(settings.relay, seasonNineConnect).catch(() => [] as ServerListEntry[]) : Promise.resolve([] as ServerListEntry[]),
