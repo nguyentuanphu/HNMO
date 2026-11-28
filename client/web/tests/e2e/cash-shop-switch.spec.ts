@@ -1,6 +1,6 @@
 // The cash shop switch of a season (owner 2026-11-28, classic play without pay to win): the admin panel's Cash Shop
-// Catalog page turns the cash shop off; a player who enters the game then has no SHOP button, X opens nothing, and the
-// phone menus' entries are gone. Turned on again, the button is back. The switch is always turned on again at the end.
+// Catalog page turns the cash shop off; a player who enters the game keeps the SHOP button in the frame (no gap) but it,
+// and X, open nothing, and the phone menus' entries are gone. Turned on again, the button opens the shop. The switch is always turned on again at the end.
 import { test, expect, type Page, type Browser } from '@playwright/test';
 import { enterWorld } from './helpers.js';
 
@@ -31,7 +31,11 @@ async function shopButtonShown(page: Page): Promise<boolean> {
   });
 }
 
-test('a season whose cash shop is off has no shop button, and X opens nothing', async ({ page, browser }) => {
+async function clickShopButton(page: Page): Promise<void> {
+  await page.locator('.rml-main_frame #btn_cshop').click();
+}
+
+test('a season whose cash shop is off keeps the SHOP button, but it and X open nothing', async ({ page, browser }) => {
   test.setTimeout(8 * 60_000);
   try {
     await setSwitch(browser, false);
@@ -39,7 +43,9 @@ test('a season whose cash shop is off has no shop button, and X opens nothing', 
     await expect(page.locator('.rml-main_frame #hud_layout')).toBeVisible({ timeout: 60_000 });
     await page.waitForTimeout(3_000);
     await expect(page.locator('body.hnmo-no-cash-shop')).toHaveCount(1);
-    expect(await shopButtonShown(page)).toBe(false);
+    // The button stays in the frame (no gap) but opens nothing; neither does X.
+    expect(await shopButtonShown(page)).toBe(true);
+    await clickShopButton(page);
     await page.keyboard.press('x');
     await page.waitForTimeout(2_000);
     await expect(page.locator('.rml-in_game_shop')).toHaveCount(0);
@@ -52,6 +58,8 @@ test('a season whose cash shop is off has no shop button, and X opens nothing', 
   // On again: a player entering the game has the button.
   await enterWorld(page, 'test5');
   await expect(page.locator('.rml-main_frame #hud_layout')).toBeVisible({ timeout: 60_000 });
-  await expect.poll(() => shopButtonShown(page), { timeout: 30_000 }).toBe(true);
-  await expect(page.locator('body.hnmo-no-cash-shop')).toHaveCount(0);
+  await expect(page.locator('body.hnmo-no-cash-shop')).toHaveCount(0, { timeout: 30_000 });
+  expect(await shopButtonShown(page)).toBe(true);
+  await clickShopButton(page);
+  await expect(page.locator('.rml-in_game_shop #panel')).toBeVisible({ timeout: 90_000 });
 });

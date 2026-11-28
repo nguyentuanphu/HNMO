@@ -134,14 +134,14 @@ export class Hud {
   /** Whether this season has a cash shop (its button shows only then). */
   private cashShopShown = false;
 
-  /** Shows or hides the cash shop button (hidden on a season whose host turned the cash shop off). */
+  /**
+   * Whether this season has a cash shop. Without one the button stays in the frame (owner 2026-11-28: a gap there looks
+   * wrong) but opens nothing (the shop's toggle does nothing without the server's script); its hint says why.
+   */
   setCashShopShown(shown: boolean): void {
     this.cashShopShown = shown;
-    const button = this.doc?.$('#btn_cshop');
-    if (button) {
-      button.style.visibility = shown ? '' : 'hidden';
-      button.style.pointerEvents = shown ? '' : 'none';
-    }
+    this.model.cshop_tooltip = shown ? 'Cash shop (X)' : 'No cash shop on this server';
+    this.doc?.update();
   }
 
   async open(parent: HTMLElement = document.body): Promise<void> {
