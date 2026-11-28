@@ -20,7 +20,7 @@ internal static class PlugInSettings
     private static readonly JsonSerializerOptions Options = new()
     {
         PropertyNameCaseInsensitive = true,
-        Converters = { new JsonStringEnumConverter() },
+        Converters = { new JsonStringEnumConverter(), new HNMO.Interfaces.LocalizedStringJsonConverter() },
     };
 
     /// <summary>
