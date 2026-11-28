@@ -1920,6 +1920,8 @@
 "Repair all (A)": "Sửa toàn bộ (Shift+L)",
 "Repairing cost: %s": "Phí sửa chữa %s",
 "Reply": "Trả lời",
+"Report a bug": "Báo lỗi",
+"Report a bug (Alt+B)": "Báo lỗi (Alt+B)",
 "Req LV": "Cấp độ cần thiết",
 "Request has been cancelled.": "Yêu cầu đã bị hủy bỏ",
 "Request to %s cancel the status as a hostile guild.": "Gửi thư xin hòa giải đến Hội của %s",
