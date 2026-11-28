@@ -1,0 +1,216 @@
+@page "/licence"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using System.Globalization
+@using HNMO.GameLogic
+
+<PageTitle>HNMO: @L("Licence", "Giấy phép")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@L("Licence", "Giấy phép")" />
+<h1>@L("Licence", "Giấy phép")</h1>
+<PageHelp Text="@L("Buy, renew or try a licence for this server. Pick a package and pay by card or bank transfer; the licence arrives here by itself and is used at once, without a restart. Every package gets every HNMO update.", "Mua, gia hạn hoặc dùng thử giấy phép cho server này. Chọn gói rồi trả bằng thẻ hoặc chuyển khoản; giấy phép tự về đây và được dùng ngay, không cần khởi động lại. Mọi gói đều nhận mọi bản cập nhật HNMO.")" />
+
+@if (this._message is { Length: > 0 })
+{
+    <div class="alert @(this._messageIsError ? "alert-warning" : "alert-info")" id="licence-message">@this._message</div>
+}
+
+<section class="card mb-3" id="licence-current">
+    <div class="card-body">
+        <h2 class="h5">@L("In use now", "Đang dùng")</h2>
+        @if (this._status is { IsValid: true } status)
+        {
+            <p class="mb-1"><strong>@status.Licensee</strong>: @L($"up to {status.MaximumPlayers} players at once", $"tối đa {status.MaximumPlayers} người chơi cùng lúc")</p>
+            <p class="mb-1">@L("Seasons", "Season"): @(status.Seasons is { Count: > 0 } seasons ? string.Join(", ", seasons.Select(SeasonText)) : L("all", "tất cả"))</p>
+            <p class="mb-1">@L("Valid until", "Hiệu lực đến"): @(status.Expires is { } end ? end.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) : L("for good", "vĩnh viễn"))</p>
+        }
+        else
+        {
+            <p class="mb-1">@L($"No licence: up to {LicensedPlayerLimit.DefaultMaximum} players at once (free).", $"Chưa có giấy phép: tối đa {LicensedPlayerLimit.DefaultMaximum} người chơi cùng lúc (miễn phí).")</p>
+            @if (this._status is { Message.Length: > 0 } info)
+            {
+                <p class="small text-muted mb-1">@info.Message</p>
+            }
+        }
+
+        @if (this._hub.LastHubReachUtc is { } reached)
+        {
+            <p class="small text-muted mb-0">@L("Last contact with the HNMO hub", "Lần cuối liên lạc hub HNMO"): @BugReportsPlugInTime(reached) (Sydney)</p>
+        }
+    </div>
+</section>
+
+@if (HubOff)
+{
+    <div class="alert alert-secondary" id="licence-hub-off">@L("This server doesn't talk to the HNMO developer's hub (it is turned off), so licences can't be bought here. Ask the HNMO developer for a licence file and add it under Host settings.", "Server này không liên lạc với hub của nhà phát triển HNMO (đã tắt), nên không mua giấy phép ở đây được. Hãy xin nhà phát triển HNMO tệp giấy phép rồi thêm ở Host settings.")</div>
+}
+else
+{
+    @if (this.Waiting)
+    {
+        <section class="card mb-3 border-primary" id="licence-waiting">
+            <div class="card-body">
+                <h2 class="h5">@L("Waiting for the payment", "Đang chờ thanh toán")</h2>
+                @if (this._bank is { } bank)
+                {
+                    <div class="row g-3 align-items-start" id="licence-bank">
+                        <div class="col-auto" style="width: 220px">@((MarkupString)(this._bankQrSvg ?? string.Empty))</div>
+                        <div class="col">
+                            <dl class="mb-2">
+                                <dt>@L("Bank", "Ngân hàng")</dt><dd>@(bank.BankName.Length > 0 ? bank.BankName : $"BIN {bank.Bin}")</dd>
+                                <dt>@L("Account", "Số tài khoản")</dt>
+                                <dd><code id="bank-account">@bank.Account</code> <button type="button" class="btn btn-sm btn-outline-secondary" title="@L("Copy the account number", "Copy số tài khoản")" @onclick="() => this.CopyAsync(bank.Account)">@L("Copy", "Copy")</button></dd>
+                                <dt>@L("Account name", "Chủ tài khoản")</dt><dd>@bank.AccountName</dd>
+                                <dt>@L("Exact amount", "Số tiền chính xác")</dt>
+                                <dd><strong id="bank-amount">@PriceText("vnd", bank.Amount)</strong> <button type="button" class="btn btn-sm btn-outline-secondary" title="@L("Copy the amount", "Copy số tiền")" @onclick="() => this.CopyAsync(bank.Amount.ToString(CultureInfo.InvariantCulture))">@L("Copy", "Copy")</button></dd>
+                                <dt>@L("Transfer note", "Nội dung chuyển khoản")</dt>
+                                <dd><code id="bank-note">@bank.Note</code> <button type="button" class="btn btn-sm btn-outline-secondary" title="@L("Copy the transfer note", "Copy nội dung chuyển khoản")" @onclick="() => this.CopyAsync(bank.Note)">@L("Copy", "Copy")</button></dd>
+                            </dl>
+                            <p class="small mb-0">@L("Scan the QR code with your banking app, or type these in. The licence arrives after the HNMO developer confirms the transfer (usually within a few hours).", "Quét mã QR bằng app ngân hàng, hoặc nhập các thông tin trên. Giấy phép sẽ về sau khi nhà phát triển HNMO xác nhận chuyển khoản (thường trong vài giờ).")</p>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <p>@L("Finish the payment in the tab that opened. The licence arrives here by itself, usually within a minute.", "Hãy hoàn tất thanh toán ở tab vừa mở. Giấy phép sẽ tự về đây, thường trong vòng một phút.")</p>
+                    @if (this._payUrl is { } url)
+                    {
+                        <p><a href="@url" target="_blank" rel="noopener" id="licence-pay-link">@L("Open the payment page again", "Mở lại trang thanh toán")</a></p>
+                    }
+                }
+
+                <div class="d-flex gap-2 mt-2">
+                    <button type="button" class="btn btn-primary btn-sm" id="licence-check" title="@L("Ask the HNMO hub now whether the licence is ready (once in 30 seconds)", "Hỏi hub HNMO ngay xem giấy phép đã có chưa (30 giây một lần)")" @onclick="() => this.CheckNowAsync(fromButton: true)">@L("I've paid — check now", "Tôi đã trả — kiểm tra ngay")</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" id="licence-cancel" title="@L("Stop waiting for this payment", "Thôi chờ khoản thanh toán này")" @onclick="this.CancelWait">@L("Cancel", "Huỷ")</button>
+                </div>
+            </div>
+        </section>
+    }
+
+    @if (this._catalogue is null)
+    {
+        <p>@L("Loading the packages…", "Đang tải các gói…")</p>
+    }
+    else if (!this._catalogue.Ok && this._catalogue.Packages.Count == 0)
+    {
+        <div class="alert alert-warning" id="licence-hub-error">@L("The HNMO hub can't be reached right now; try again later.", "Hiện không kết nối được hub HNMO; hãy thử lại sau.") <span class="small text-muted">@this._catalogue.Error</span></div>
+    }
+    else
+    {
+        <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+            <div class="btn-group" role="group" id="licence-billing">
+                @foreach (var (billing, en, vi) in new[] { ("month", "Monthly", "Theo tháng"), ("year", "Yearly", "Theo năm"), ("lifetime", "For good", "Vĩnh viễn") })
+                {
+                    var b = billing;
+                    <button type="button" class="btn btn-sm @(this._billing == b ? "btn-primary" : "btn-outline-primary")" title="@L($"Show the {en.ToLowerInvariant()} packages", $"Xem các gói {vi.ToLowerInvariant()}")" @onclick="() => this._billing = b">@L(en, vi)</button>
+                }
+            </div>
+            <select class="form-select form-select-sm w-auto" id="licence-currency" title="@L("The currency of the prices", "Đơn vị tiền của giá")" @bind="this._currency">
+                @foreach (var c in this.Currencies())
+                {
+                    <option value="@c">@c.ToUpperInvariant()</option>
+                }
+            </select>
+            <button type="button" class="btn btn-sm btn-outline-secondary ms-auto" id="licence-refresh" title="@L("Ask the HNMO hub for the packages again (once in 5 minutes)", "Hỏi lại hub HNMO các gói (5 phút một lần)")" @onclick="this.RefreshPackagesAsync">@L("Refresh", "Làm mới")</button>
+        </div>
+
+        @if (this.Trial() is { } trial)
+        {
+            <div class="alert alert-success d-flex align-items-center gap-2" id="licence-trial">
+                <span>@Localized(trial.NameEn, trial.NameVi): @Localized(trial.DescriptionEn, trial.DescriptionVi)</span>
+                <button type="button" class="btn btn-success btn-sm ms-auto" id="licence-trial-start" disabled="@this._busy" title="@L("Get the free trial licence now (once per computer)", "Nhận giấy phép dùng thử miễn phí ngay (mỗi máy một lần)")" @onclick="this.StartTrialAsync">@L("Start the 14-day trial", "Dùng thử 14 ngày")</button>
+            </div>
+        }
+
+        <div class="row row-cols-1 row-cols-md-3 g-3 mb-4" id="licence-plans">
+            @foreach (var p in this.Plans())
+            {
+                var package = p;
+                <div class="col">
+                    <div class="card h-100 licence-package @(p.Highlight ? "border-primary" : string.Empty)" data-package="@p.Id">
+                        <div class="card-body d-flex flex-column">
+                            <h3 class="h5">@Localized(p.NameEn, p.NameVi) @if (p.Highlight) { <span class="badge bg-primary">@L("Suggested", "Nên chọn")</span> }</h3>
+                            <p class="display-6 mb-1 licence-price">@PriceText(this._currency, p.Prices[this._currency])</p>
+                            <p class="small text-muted">@BillingText(p)</p>
+                            <ul class="small">
+                                <li>@L($"Up to {p.MaxPlayers} players at once", $"Tối đa {p.MaxPlayers} người chơi cùng lúc")</li>
+                                <li>@string.Join(" + ", p.Seasons.Select(SeasonText))</li>
+                                <li>@L("Every HNMO update", "Mọi bản cập nhật HNMO")</li>
+                            </ul>
+                            <p class="small">@Localized(p.DescriptionEn, p.DescriptionVi)</p>
+                            <div class="mt-auto d-grid gap-2">
+                                @if (this._catalogue.Stripe)
+                                {
+                                    <button type="button" class="btn btn-primary btn-sm licence-buy-card" disabled="@this._busy" title="@L("Pay by card on a secure payment page", "Trả bằng thẻ trên trang thanh toán an toàn")" @onclick='() => this.BuyAsync(package, "stripe")'>@L("Buy with card", "Mua bằng thẻ")</button>
+                                }
+
+                                @if (this._catalogue.PayOs && p.Prices.ContainsKey("vnd"))
+                                {
+                                    <button type="button" class="btn btn-outline-primary btn-sm licence-buy-payos" disabled="@this._busy" title="@L("Pay by bank transfer through PayOS (confirmed at once)", "Chuyển khoản qua PayOS (xác nhận ngay)")" @onclick='() => this.BuyAsync(package, "payos")'>@L("Pay by bank transfer (VietQR)", "Chuyển khoản (VietQR)")</button>
+                                }
+
+                                @if (this._catalogue.Bank && p.Prices.ContainsKey("vnd"))
+                                {
+                                    <button type="button" class="btn btn-outline-secondary btn-sm licence-buy-bank" disabled="@this._busy" title="@L("Transfer to the HNMO developer's bank account; the licence comes once the transfer is confirmed", "Chuyển khoản tới tài khoản của nhà phát triển HNMO; giấy phép về khi chuyển khoản được xác nhận")" @onclick='() => this.BuyAsync(package, "bank")'>@L("Bank transfer (VietQR)", "Chuyển khoản ngân hàng (VietQR)")</button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        @if (this.AddOns().Any() && this._status is not { IsValid: true })
+        {
+            <p class="small text-muted" id="licence-addons-need">@L("Add-ons (more players, upgrade, moving or a second computer) are for servers with a licence.", "Gói thêm (thêm người chơi, nâng cấp, chuyển máy, máy thứ hai) dành cho server đã có giấy phép.")</p>
+        }
+        else if (this.AddOns().Any())
+        {
+            <h2 class="h5">@L("Add-ons", "Gói thêm")</h2>
+            <div class="row row-cols-1 row-cols-md-3 g-3" id="licence-addons">
+                @foreach (var a in this.AddOns())
+                {
+                    var package = a;
+                    <div class="col">
+                        <div class="card h-100 licence-package" data-package="@a.Id">
+                            <div class="card-body d-flex flex-column">
+                                <h3 class="h6">@Localized(a.NameEn, a.NameVi)</h3>
+                                <p class="mb-1 licence-price">@PriceText(this._currency, a.Prices[this._currency])</p>
+                                <p class="small">@Localized(a.DescriptionEn, a.DescriptionVi)</p>
+                                @if (a.Addon == "upgrade")
+                                {
+                                    <select class="form-select form-select-sm mb-2 licence-upgrade-to" title="@L("The package to move up to", "Gói muốn nâng lên")" @bind="this._upgradeTo">
+                                        <option value="">@L("Move up to…", "Nâng lên gói…")</option>
+                                        @foreach (var target in this.UpgradeTargets())
+                                        {
+                                            <option value="@target.Id">@Localized(target.NameEn, target.NameVi)</option>
+                                        }
+                                    </select>
+                                }
+                                else if (a.Addon is "move" or "second-machine")
+                                {
+                                    <input class="form-control form-control-sm mb-2 licence-to-machine" maxlength="64" title="@L("The other computer's id, from its Host settings page", "Mã máy kia, lấy ở trang Host settings của máy đó")" placeholder="@L("Other computer's id", "Mã máy kia")" @bind="this._toMachine" />
+                                }
+
+                                <div class="mt-auto d-grid gap-2">
+                                    @if (this._catalogue.Stripe)
+                                    {
+                                        <button type="button" class="btn btn-outline-primary btn-sm licence-buy-card" disabled="@this._busy" title="@L("Pay by card on a secure payment page", "Trả bằng thẻ trên trang thanh toán an toàn")" @onclick='() => this.BuyAsync(package, "stripe")'>@L("Buy with card", "Mua bằng thẻ")</button>
+                                    }
+
+                                    @if (this._catalogue.Bank && a.Prices.ContainsKey("vnd"))
+                                    {
+                                        <button type="button" class="btn btn-outline-secondary btn-sm licence-buy-bank" disabled="@this._busy" title="@L("Transfer to the HNMO developer's bank account; the licence comes once the transfer is confirmed", "Chuyển khoản tới tài khoản của nhà phát triển HNMO; giấy phép về khi chuyển khoản được xác nhận")" @onclick='() => this.BuyAsync(package, "bank")'>@L("Bank transfer (VietQR)", "Chuyển khoản ngân hàng (VietQR)")</button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    }
+}
+
+@code {
+    private static string BugReportsPlugInTime(DateTime utc) => HNMO.GameLogic.PlugIns.BugReports.BugReportsPlugIn.SydneyText(utc);
+}

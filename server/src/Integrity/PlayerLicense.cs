@@ -18,7 +18,7 @@ using HNMO.Interfaces;
 /// File format (JSON): <c>{ "payload": "&lt;base64 of the license JSON&gt;", "signature": "&lt;base64 Ed25519 signature over the payload bytes&gt;" }</c>;
 /// the license JSON: <c>{ "licensee": "…", "maxPlayers": 50, "expires": "2027-12-31" | null, "machine": "&lt;machine id&gt;" | null, "issued": "…" }</c>.
 /// </remarks>
-public sealed record PlayerLicense(bool IsValid, int MaximumPlayers, string? Licensee, DateOnly? Expires, string Message)
+public sealed record PlayerLicense(bool IsValid, int MaximumPlayers, string? Licensee, DateOnly? Expires, string Message, IReadOnlyList<string>? Seasons = null)
 {
     /// <summary>The players in the game at once without a license.</summary>
     public const int DefaultMaximumPlayers = 10;
@@ -58,7 +58,7 @@ public sealed record PlayerLicense(bool IsValid, int MaximumPlayers, string? Lic
     /// <param name="today">Today's date.</param>
     /// <returns>The license, or the default limit with the reason.</returns>
     /// <param name="legacyMachineId">The id earlier versions used for this computer, also accepted (<see cref="LegacyMachineId"/>).</param>
-    public static PlayerLicense CheckWithEmbeddedKeys(byte[]? fileBytes, string machineId, DateOnly today, string? legacyMachineId = null)
+    public static PlayerLicense CheckWithEmbeddedKeys(byte[]? fileBytes, string machineId, DateOnly today, string? legacyMachineId = null, string? season = null)
     {
         var buildKey = IntegrityVerifier.LoadEmbeddedPublicKeyPem();
         if (buildKey is null)
@@ -66,10 +66,10 @@ public sealed record PlayerLicense(bool IsValid, int MaximumPlayers, string? Lic
             return Default($"No public key is embedded: up to {DefaultMaximumPlayers} players at once.");
         }
 
-        var result = Check(fileBytes, buildKey, machineId, today, legacyMachineId);
+        var result = Check(fileBytes, buildKey, machineId, today, legacyMachineId, season);
         if (!result.IsValid && IntegrityVerifier.LoadEmbeddedLicenceKeyPem() is { } licenceKey)
         {
-            var withLicenceKey = Check(fileBytes, licenceKey, machineId, today, legacyMachineId);
+            var withLicenceKey = Check(fileBytes, licenceKey, machineId, today, legacyMachineId, season);
             if (withLicenceKey.IsValid || !withLicenceKey.Message.Contains("signature", StringComparison.Ordinal))
             {
                 return withLicenceKey;
@@ -88,7 +88,9 @@ public sealed record PlayerLicense(bool IsValid, int MaximumPlayers, string? Lic
     /// <param name="today">Today's date.</param>
     /// <returns>The license, or the default limit with the reason.</returns>
     /// <param name="legacyMachineId">The id earlier versions used for this computer, also accepted.</param>
-    public static PlayerLicense Check(byte[]? fileBytes, byte[] publicKeyPem, string machineId, DateOnly today, string? legacyMachineId = null)
+    /// <param name="season">The season of this program (<see cref="HnmoSeasonInstance.Current"/> when null): a licence that
+    /// names its seasons covers only those; one that names none covers all (older licences).</param>
+    public static PlayerLicense Check(byte[]? fileBytes, byte[] publicKeyPem, string machineId, DateOnly today, string? legacyMachineId = null, string? season = null)
     {
         if (fileBytes is null)
         {
@@ -130,8 +132,19 @@ public sealed record PlayerLicense(bool IsValid, int MaximumPlayers, string? Lic
                 return Default($"The license of {licensee} is for another computer (this one is {machineId}): up to {DefaultMaximumPlayers} players at once.");
             }
 
+            List<string>? seasons = null;
+            if (root.TryGetProperty("seasons", out var list) && list.ValueKind == JsonValueKind.Array)
+            {
+                seasons = list.EnumerateArray().Where(e => e.ValueKind == JsonValueKind.String).Select(e => HnmoSeasonInstance.Parse(e.GetString())).Distinct().ToList();
+                var current = HnmoSeasonInstance.Parse(season ?? HnmoSeasonInstance.Current);
+                if (!seasons.Contains(current))
+                {
+                    return Default($"The license of {licensee} doesn't include this season ({current}): up to {DefaultMaximumPlayers} players at once.") with { Seasons = seasons };
+                }
+            }
+
             var until = expires is { } last ? $" until {last:yyyy-MM-dd}" : string.Empty;
-            return new PlayerLicense(true, maximum, licensee, expires, $"Licensed to {licensee}: up to {maximum} players at once{until}.");
+            return new PlayerLicense(true, maximum, licensee, expires, $"Licensed to {licensee}: up to {maximum} players at once{until}.", seasons);
         }
         catch (Exception error) when (error is JsonException or FormatException or KeyNotFoundException or InvalidOperationException)
         {
