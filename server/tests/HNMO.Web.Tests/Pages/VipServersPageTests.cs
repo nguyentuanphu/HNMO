@@ -16,6 +16,7 @@ using HNMO.Persistence.InMemory;
 using HNMO.Web.AdminPanel.Components;
 using HNMO.Web.AdminPanel.Operations;
 using HNMO.Web.AdminPanel.Pages;
+using HNMO.Web.Tests.AdminAuth;
 using HNMO.Web.Shared.Components;
 using HNMO.Web.Shared.Components.Toast;
 using HNMO.Web.Tests.Mcp;
@@ -116,6 +117,7 @@ public class VipServersPageTests
             var ops = new ServerSettingsOperations(provider, serverProvider.Object, AdminOperationTestServices.CreateExecutor());
 
             using var ctx = new BunitContext();
+            ctx.AddAdministratorAuthorization();
             ctx.JSInterop.Mode = JSRuntimeMode.Loose;
             ctx.Services.AddSingleton<IPersistenceContextProvider>(provider);
             ctx.Services.AddSingleton(serverProvider.Object);
