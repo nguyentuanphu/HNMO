@@ -20,10 +20,15 @@ public class CultureController : Controller
     /// <param name="culture">The culture name to set, for example &quot;en-US&quot; or &quot;de-DE&quot;. If <see langword="null"/>, the culture is not changed.</param>
     /// <param name="redirectUri">The URI to which the client should be redirected after the culture has been set.</param>
     /// <returns>
-    /// An <see cref="IActionResult"/> that performs a local redirect to the specified <paramref name="redirectUri"/>.
+    /// A local redirect to <paramref name="redirectUri"/>, or a bad request if it is missing or non-local.
     /// </returns>
-    public IActionResult Set(string? culture, string redirectUri)
+    public IActionResult Set(string? culture, string? redirectUri)
     {
+        if (string.IsNullOrEmpty(redirectUri) || !this.Url.IsLocalUrl(redirectUri))
+        {
+            return this.BadRequest();
+        }
+
         if (culture is not null)
         {
             var requestCulture = new RequestCulture(culture, culture);
